@@ -1139,7 +1139,8 @@ void wxD2DPathData::Flush()
         }
 
         m_figureOpened = false;
-        m_geometrySink->Close();
+        HRESULT hr = m_geometrySink->Close();
+        wxCHECK_HRESULT_RET(hr);
 
         m_geometryWritable = false;
     }
@@ -1147,16 +1148,21 @@ void wxD2DPathData::Flush()
 
 void wxD2DPathData::EnsureGeometryOpen()
 {
-    if (!m_geometryWritable) {
+    if (!m_geometryWritable)
+    {
         wxCOMPtr<ID2D1PathGeometry> newPathGeometry;
-        m_direct2dfactory->CreatePathGeometry(&newPathGeometry);
+        HRESULT hr;
+        hr = m_direct2dfactory->CreatePathGeometry(&newPathGeometry);
+        wxCHECK_HRESULT_RET(hr);
 
         m_geometrySink.reset();
-        newPathGeometry->Open(&m_geometrySink);
+        hr = newPathGeometry->Open(&m_geometrySink);
+        wxCHECK_HRESULT_RET(hr);
 
         if (m_pathGeometry != NULL)
         {
-            m_pathGeometry->Stream(m_geometrySink);
+            hr = m_pathGeometry->Stream(m_geometrySink);
+            wxCHECK_HRESULT_RET(hr);
         }
 
         m_pathGeometry = newPathGeometry;
@@ -1170,8 +1176,8 @@ void wxD2DPathData::EnsureSinkOpen()
 
     if (m_geometrySink == NULL)
     {
-        m_geometrySink = NULL;
-        m_pathGeometry->Open(&m_geometrySink);
+        HRESULT hr = m_pathGeometry->Open(&m_geometrySink);
+        wxCHECK_HRESULT_RET(hr);
     }
 }
 
