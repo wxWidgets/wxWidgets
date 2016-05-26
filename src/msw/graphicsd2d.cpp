@@ -1133,16 +1133,18 @@ void wxD2DPathData::Flush()
 {
     if (m_geometrySink != NULL)
     {
-        if (m_figureOpened)
+        if ( m_figureOpened )
         {
             m_geometrySink->EndFigure(D2D1_FIGURE_END_OPEN);
+            m_figureOpened = false;
         }
 
-        m_figureOpened = false;
-        HRESULT hr = m_geometrySink->Close();
-        wxCHECK_HRESULT_RET(hr);
-
-        m_geometryWritable = false;
+        if( m_geometryWritable )
+        {
+            HRESULT hr = m_geometrySink->Close();
+            wxCHECK_HRESULT_RET(hr);
+            m_geometryWritable = false;
+        }
     }
 }
 
