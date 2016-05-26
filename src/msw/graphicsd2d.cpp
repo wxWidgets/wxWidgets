@@ -981,6 +981,11 @@ const wxD2DMatrixData* wxGetD2DMatrixData(const wxGraphicsMatrix& matrix)
 // wxD2DPathData declaration
 //-----------------------------------------------------------------------------
 
+bool operator==(const D2D1_POINT_2F& lhs, const D2D1_POINT_2F& rhs)
+{
+    return lhs.x == rhs.x && lhs.y == rhs.y;
+}
+
 class wxD2DPathData : public wxGraphicsPathData
 {
 public :
@@ -1048,9 +1053,25 @@ private:
 
     void EnsureSinkOpen();
 
-    void EnsureFigureOpen(wxDouble x = 0, wxDouble y = 0);
+    void EnsureFigureOpen(const D2D1_POINT_2F& pos);
 
     void EndFigure(D2D1_FIGURE_END figureEnd);
+
+    ID2D1Geometry* GetFullGeometry() const;
+
+    bool IsStateSafeForFlush() const;
+
+    struct GeometryStateData
+    {
+        bool m_isCurrentPointSet;
+        D2D1_POINT_2F m_currentPoint;
+        bool m_isFigureOpen;
+        D2D1_POINT_2F m_figureStart;
+        bool m_isFigureLogStartSet;
+        D2D1_POINT_2F m_figureLogStart;
+    };
+    void SaveGeometryState(GeometryStateData& data) const;
+    void RestoreGeometryState(const GeometryStateData& data);
 
 private :
     wxCOMPtr<ID2D1PathGeometry> m_pathGeometry;
@@ -1059,15 +1080,16 @@ private :
 
     wxCOMPtr<ID2D1Factory> m_direct2dfactory;
 
-    mutable wxCOMPtr<ID2D1TransformedGeometry> m_transformedGeometry;
+    mutable wxCOMPtr<ID2D1GeometryGroup> m_combinedGeometry;
+    wxVector<ID2D1Geometry*> m_pTransformedGeometries;
 
     bool m_currentPointSet;
     D2D1_POINT_2F m_currentPoint;
 
-    D2D1_MATRIX_3X2_F m_transformMatrix;
-
     bool m_figureOpened;
     D2D1_POINT_2F m_figureStart;
+    bool m_figureLogStartSet;
+    D2D1_POINT_2F m_figureLogStart;
 
     bool m_geometryWritable;
 };
@@ -1077,12 +1099,14 @@ private :
 //-----------------------------------------------------------------------------
 
 wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFactory) :
-    wxGraphicsPathData(renderer), m_direct2dfactory(d2dFactory),
+    wxGraphicsPathData(renderer),
+    m_direct2dfactory(d2dFactory),
     m_currentPointSet(false),
     m_currentPoint(D2D1::Point2F(0.0f, 0.0f)),
-    m_transformMatrix(D2D1::Matrix3x2F::Identity()),
     m_figureOpened(false),
     m_figureStart(D2D1::Point2F(0.0f, 0.0f)),
+    m_figureLogStartSet(false),
+    m_figureLogStart(D2D1::Point2F(0.0f, 0.0f)),
     m_geometryWritable(true)
 {
     m_direct2dfactory->CreatePathGeometry(&m_pathGeometry);
@@ -1094,6 +1118,10 @@ wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
 wxD2DPathData::~wxD2DPathData()
 {
     Flush();
+    for( size_t i = 0; i < m_pTransformedGeometries.size(); i++ )
+    {
+        m_pTransformedGeometries[i]->Release();
+    }
 }
 
 ID2D1PathGeometry* wxD2DPathData::GetPathGeometry()
@@ -1122,7 +1150,6 @@ wxD2DPathData::wxGraphicsObjectRefData* wxD2DPathData::Clone() const
     }
     // Copy auxiliary data.
     newPathData->m_currentPoint = m_currentPoint;
-    newPathData->m_transformMatrix = m_transformMatrix;
     newPathData->m_figureOpened = m_figureOpened;
     newPathData->m_figureStart = m_figureStart;
 
@@ -1183,13 +1210,13 @@ void wxD2DPathData::EnsureSinkOpen()
     }
 }
 
-void wxD2DPathData::EnsureFigureOpen(wxDouble x, wxDouble y)
+void wxD2DPathData::EnsureFigureOpen(const D2D1_POINT_2F& pos)
 {
     EnsureSinkOpen();
 
     if (!m_figureOpened)
     {
-        m_figureStart = D2D1::Point2F(x, y);
+        m_figureStart = pos;
         m_geometrySink->BeginFigure(m_figureStart, D2D1_FIGURE_BEGIN_FILLED);
         m_figureOpened = true;
         m_currentPoint = m_figureStart;
@@ -1204,8 +1231,27 @@ void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
         if( figureEnd == D2D1_FIGURE_END_CLOSED )
             m_geometrySink->AddLine(m_currentPoint);
 
-        m_geometrySink->EndFigure(figureEnd);
+        if( figureEnd == D2D1_FIGURE_END_OPEN ||
+            !m_figureLogStartSet ||
+            m_figureLogStart == m_figureStart )
+        {
+            // If figure will remain open or if its logical startpoint
+            // is not used or if it is the same as the actual
+            // startpoint then we can end the figure in a standard way.
+            m_geometrySink->EndFigure(figureEnd);
+        }
+        else
+        {
+            // If we want to end and close the figure for which
+            // logical startpoint is not the same as actual startpoint
+            // we have to fill the gap between the actual and logical
+            // endpoints on our own.
+            m_geometrySink->AddLine(m_figureLogStart);
+            m_geometrySink->EndFigure(D2D1_FIGURE_END_OPEN);
+            m_figureStart = m_figureLogStart;
+        }
         m_figureOpened = false;
+        m_figureLogStartSet = false;
 
         // If the figure is closed then current point
         // should be moved to the beginning of the figure.
@@ -1214,14 +1260,98 @@ void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
     }
 }
 
+ID2D1Geometry* wxD2DPathData::GetFullGeometry() const
+{
+    // Our final path geometry is represented by geometry group
+    // which contains all transformed geometries plus current geometry.
+
+    // We have to store pointers to all transformed geometries
+    // as well as pointer to the current geometry in the auxiliary array.
+    const size_t numGeometries = m_pTransformedGeometries.size();
+    ID2D1Geometry** pGeometries = new ID2D1Geometry*[numGeometries+1];
+    for( size_t i = 0; i < numGeometries; i++ )
+        pGeometries[i] = m_pTransformedGeometries[i];
+
+    pGeometries[numGeometries] = m_pathGeometry;
+
+    // And use this array as a source to create geometry group.
+    m_combinedGeometry.reset();
+    HRESULT hr = m_direct2dfactory->CreateGeometryGroup(D2D1_FILL_MODE_ALTERNATE,
+                                  pGeometries, numGeometries+1, &m_combinedGeometry);
+    wxFAILED_HRESULT_MSG(hr);
+    delete []pGeometries;
+
+    return m_combinedGeometry;
+}
+
+bool wxD2DPathData::IsStateSafeForFlush() const
+{
+    // Only geometry with not yet started figure
+    // or with started but empty figure can be fully
+    // restored to its initial state after invoking Flush().
+    if( !m_figureOpened )
+        return true;
+
+    D2D1_POINT_2F actFigureStart = m_figureLogStartSet ?
+                        m_figureLogStart : m_figureStart;
+    return m_currentPoint == actFigureStart;
+}
+
+void wxD2DPathData::SaveGeometryState(GeometryStateData& data) const
+{
+    data.m_isFigureOpen = m_figureOpened;
+    data.m_isFigureLogStartSet = m_figureLogStartSet;
+    data.m_isCurrentPointSet = m_currentPointSet;
+    data.m_currentPoint = m_currentPoint;
+    data.m_figureStart = m_figureStart;
+    data.m_figureLogStart = m_figureLogStart;
+}
+
+void wxD2DPathData::RestoreGeometryState(const GeometryStateData& data)
+{
+    if( data.m_isFigureOpen )
+    {
+        // If the figure has to be re-started at the startpoint
+        // which is not the current point then we have to start it
+        // physically at the current point but with storing also its
+        // logical startpoint to use it later on to close the figure,
+        // if necessary.
+        // Ending and closing the figure using this proxy startpoint
+        // is only a simulation of regular closure and figure can behave
+        // in a slightly different way than figure closed with physical
+        // startpoint so this action should be avoided if only possible.
+        D2D1_POINT_2F actFigureStart = data.m_isFigureLogStartSet ?
+                         data.m_figureLogStart : data.m_figureStart;
+        if ( !(data.m_currentPoint == actFigureStart) )
+        {
+            m_figureLogStart = actFigureStart;
+            m_figureLogStartSet = true;
+            EnsureFigureOpen(data.m_currentPoint);
+        }
+        else
+        {
+            EnsureFigureOpen(actFigureStart);
+        }
+    }
+    else
+    {
+        m_figureOpened = false;
+    }
+
+    m_currentPointSet = data.m_isCurrentPointSet;
+    m_currentPoint = data.m_isCurrentPointSet ?
+                data.m_currentPoint : D2D1::Point2F(0.0F, 0.0F);
+}
+
 void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
 {
     // Close current sub-path (leaving the figure as is).
     EndFigure(D2D1_FIGURE_END_OPEN);
     // And open a new sub-path.
-    EnsureFigureOpen(x, y);
+    D2D1_POINT_2F p = D2D1::Point2F(x, y);
+    EnsureFigureOpen(p);
 
-    m_currentPoint = D2D1::Point2F(x, y);
+    m_currentPoint = p;
     m_currentPointSet = true;
 }
 
@@ -1236,7 +1366,7 @@ void wxD2DPathData::AddLineToPoint(wxDouble x, wxDouble y)
         return;
     }
 
-    EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
+    EnsureFigureOpen(m_currentPoint);
     m_geometrySink->AddLine(D2D1::Point2F(x, y));
 
     m_currentPoint = D2D1::Point2F(x, y);
@@ -1248,7 +1378,7 @@ void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wx
     // If no current point is set then this function should behave
     // as if preceded by a call to MoveToPoint(cx1, cy1).
     if( m_currentPointSet )
-        EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
+        EnsureFigureOpen(m_currentPoint);
     else
         MoveToPoint(cx1, cy1);
 
@@ -1356,10 +1486,8 @@ void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 // gets the last point of the current path, (0,0) if not yet set
 void wxD2DPathData::GetCurrentPoint(wxDouble* x, wxDouble* y) const
 {
-    D2D1_POINT_2F transformedPoint = D2D1::Matrix3x2F::ReinterpretBaseType(&m_transformMatrix)->TransformPoint(m_currentPoint);
-
-    if (x != NULL) *x = transformedPoint.x;
-    if (y != NULL) *y = transformedPoint.y;
+    if (x != NULL) *x = m_currentPoint.x;
+    if (y != NULL) *y = m_currentPoint.y;
 }
 
 // adds another path
@@ -1435,20 +1563,98 @@ void wxD2DPathData::CloseSubpath()
 
 void* wxD2DPathData::GetNativePath() const
 {
-    m_transformedGeometry.reset();
-    m_direct2dfactory->CreateTransformedGeometry(m_pathGeometry, m_transformMatrix, &m_transformedGeometry);
-    return m_transformedGeometry;
+    return GetFullGeometry();
 }
 
 void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
 {
-    m_transformMatrix = *((D2D1_MATRIX_3X2_F*)(matrix->GetNativeMatrix()));
+    // Unfortunately, it looks there is no straightforward way to apply
+    // transformation to the current underlying path geometry
+    // (ID2D1PathGeometry object) "in-place" (ie. transform it and use
+    // for further graphics operations, including next transformations too).
+    // Some simple methods offered by D2D are not useful for these purposes:
+    // 1. ID2D1Factory::CreateTransformedGeometry() converts ID2D1PathGeometry
+    // object to ID2D1TransformedGeometry object but ID2D1TransformedGeometry
+    // inherits from ID2D1Geometry (not from ID2D1PathGeometry)
+    // and hence cannot be used for further path operations.
+    // 2. ID2D1Geometry::CombineWithGeometry() which could be used to get final
+    // path geometry by combining empty geometry with transformed geometry
+    // doesn't offer any combine mode which would produce a "sum" of geometries
+    // (D2D1_COMBINE_MODE_UNION produces kind of outline). Moreover the result
+    // is stored in ID2D1SimplifiedGeometrySink not in ID2DGeometrySink.
+
+    // So, it seems that ability to transform the wxGraphicsPath
+    // (several times) and still use it after this operation(s)
+    // can be achieved (only?) by using a geometry group object
+    // (ID2D1GeometryGroup) this way:
+    // 1. After applying transformation to the current path geometry with
+    // ID2D1Factory::CreateTransformedGeometry() the result is stored
+    // in the collection of transformed geometries (an auxiliary array)
+    // and after that a new (empty) geometry is open (in the same state
+    // as just closed one) and this geometry is used as a current one
+    // for further graphics operations.
+    // 2. Since above steps are done at every transformation so our effective
+    // geometry will be a superposition of all previously transformed
+    // geometries stored in the collection (array) and the current
+    // operational geometry.
+    // 3. If there is necessary to use this combined effective geometry
+    // in any operation then ID2D1GeometryGroup created with
+    // ID2D1Factory::CreateGeometryGroup() from the collection
+    // of stored geometries will act as a proxy geometry.
+
+    const D2D1::Matrix3x2F* m = static_cast<D2D1::Matrix3x2F*>(matrix->GetNativeMatrix());
+
+    // Save current positional data.
+    GeometryStateData curState;
+    SaveGeometryState(curState);
+    // We need to close the geometry what requires also to end a figure
+    // (if started). This ended figure should be re-started in its initial
+    // state when all path processing is done but due to the Direct2D
+    // constraints this can be fully done only if open figure was empty.
+    // So, Transform() can be safely called if path doesn't contain the open
+    // sub-path or if open sub-path is empty.
+    wxASSERT_MSG( IsStateSafeForFlush(),
+            wxS("Consider closing sub-path before calling Transform()") );
+    // Close current geometry.
+    Flush();
+
+    HRESULT hr;
+    ID2D1TransformedGeometry* pTransformedGeometry;
+    // Apply given transformation to all previously stored geometries too.
+    for( size_t i = 0; i < m_pTransformedGeometries.size(); i++ )
+    {
+        pTransformedGeometry = NULL;
+        hr = m_direct2dfactory->CreateTransformedGeometry(m_pTransformedGeometries[i], m, &pTransformedGeometry);
+        wxCHECK_HRESULT_RET(hr);
+
+        m_pTransformedGeometries[i]->Release();
+        m_pTransformedGeometries[i] = pTransformedGeometry;
+    }
+
+    // Transform current geometry and add the result
+    // to the collection of transformed geometries.
+    pTransformedGeometry = NULL;
+    hr = m_direct2dfactory->CreateTransformedGeometry(m_pathGeometry, m, &pTransformedGeometry);
+    wxCHECK_HRESULT_RET(hr);
+    m_pTransformedGeometries.push_back(pTransformedGeometry);
+
+    // Clear and reopen current geometry.
+    m_pathGeometry.reset();
+    EnsureGeometryOpen();
+    // Restore the figure with transformed positional data.
+    // This operation fully restores geometry to the required state
+    // only if IsStateSafeForFlush() returns true.
+    curState.m_currentPoint = m->TransformPoint(curState.m_currentPoint);
+    curState.m_figureLogStart = m->TransformPoint(curState.m_figureLogStart);
+    curState.m_figureStart = m->TransformPoint(curState.m_figureStart);
+    RestoreGeometryState(curState);
 }
 
 void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) const
 {
     D2D1_RECT_F bounds;
-    m_pathGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
+    ID2D1Geometry *curGeometry = GetFullGeometry();
+    curGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
     if (x != NULL) *x = bounds.left;
     if (y != NULL) *y = bounds.top;
     if (w != NULL) *w = bounds.right - bounds.left;
@@ -1458,8 +1664,9 @@ void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) c
 bool wxD2DPathData::Contains(wxDouble x, wxDouble y, wxPolygonFillMode WXUNUSED(fillStyle)) const
 {
     BOOL result;
-    m_pathGeometry->FillContainsPoint(D2D1::Point2F(x, y), D2D1::Matrix3x2F::Identity(), &result);
-    return result != 0;
+    ID2D1Geometry *curGeometry = GetFullGeometry();
+    curGeometry->FillContainsPoint(D2D1::Point2F(x, y), D2D1::Matrix3x2F::Identity(), &result);
+    return result != FALSE;
 }
 
 wxD2DPathData* wxGetD2DPathData(const wxGraphicsPath& path)

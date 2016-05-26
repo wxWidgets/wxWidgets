@@ -181,6 +181,8 @@ public:
 
     /**
         Transforms each point of this path by the matrix.
+        For Direct2D the current path shouldn't contain
+        a started non-empty subpath when this function is called.
     */
     virtual void Transform(const wxGraphicsMatrix& matrix);
 
