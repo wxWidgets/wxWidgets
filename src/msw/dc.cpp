@@ -240,13 +240,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule);
 
 #endif // USE_DYNAMIC_GDI_FUNCS
 
-// Namespace for the wrapper functions, hopefully one day we'll be able to get
-// rid of all of them and then it will be easy to find all occurrences of their
-// use by just searching for this namespace name.
-//
-// All of the functions in this namespace must work *exactly* like the standard
-// functions with the same name and just return an error if dynamically loading
-// them failed.
 namespace wxDynLoadWrappers
 {
 
@@ -317,19 +310,16 @@ BOOL GradientFill(HDC hdc, PTRIVERTEX pVert, ULONG numVert,
 
 #elif defined(USE_STATIC_GDI_FUNCS)
 
-inline
 DWORD GetLayout(HDC hdc)
 {
     return ::GetLayout(hdc);
 }
 
-inline
 DWORD SetLayout(HDC hdc, DWORD dwLayout)
 {
     return ::SetLayout(hdc, dwLayout);
 }
 
-inline
 BOOL AlphaBlend(HDC hdcDest, int xDest, int yDest, int wDest, int hDest,
                 HDC hdcSrc, int xSrc, int ySrc, int wSrc, int hSrc,
                 BLENDFUNCTION bf)
@@ -339,7 +329,6 @@ BOOL AlphaBlend(HDC hdcDest, int xDest, int yDest, int wDest, int hDest,
                         bf);
 }
 
-inline
 BOOL GradientFill(HDC hdc, PTRIVERTEX pVert, ULONG numVert,
                   PVOID pMesh, ULONG numMesh, ULONG mode)
 {
