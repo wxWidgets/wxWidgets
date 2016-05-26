@@ -1059,6 +1059,7 @@ private:
 
     ID2D1Geometry* GetFullGeometry() const;
 
+    bool IsEmpty() const;
     bool IsStateSafeForFlush() const;
 
     struct GeometryStateData
@@ -1284,6 +1285,12 @@ ID2D1Geometry* wxD2DPathData::GetFullGeometry() const
     return m_combinedGeometry;
 }
 
+bool wxD2DPathData::IsEmpty() const
+{
+    return !m_currentPointSet && !m_figureOpened &&
+            m_pTransformedGeometries.size() == 0;
+}
+
 bool wxD2DPathData::IsStateSafeForFlush() const
 {
     // Only geometry with not yet started figure
@@ -1493,61 +1500,87 @@ void wxD2DPathData::GetCurrentPoint(wxDouble* x, wxDouble* y) const
 // adds another path
 void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
 {
-    wxD2DPathData* d2dPath =
+    wxD2DPathData* pathSrc =
          const_cast<wxD2DPathData*>(static_cast<const wxD2DPathData*>(path));
 
     // Nothing to do if geometry of appended path is not initialized.
-    if ( d2dPath->m_pathGeometry == NULL || d2dPath->m_geometrySink == NULL )
+    if ( pathSrc->m_pathGeometry == NULL || pathSrc->m_geometrySink == NULL )
         return;
 
-    // Close current sub-path (leaving the figure as is).
-    EndFigure(D2D1_FIGURE_END_OPEN);
-
-    // Because only geometry with closed sink (immutable)
+    // Because only closed geometry (with closed sink)
     // can be transferred to another geometry object with
-    // ID2D1PathGeometry::Stream() so we have to make
-    // a writable copy of the appended geometry
-    // and re-assign it to the source path after actual appending.
+    // ID2D1PathGeometry::Stream() so we have to close it
+    // before any operation and to re-open afterwards.
+    // Unfortunately, to close the sink it is also necessary
+    // to end the figure it contains, if it was open.
+    // After re-opening the geometry we should also re-start
+    // the figure (if it was open) and restore its state but
+    // it seems there is no straightforward way to do so
+    // if the figure is not empty.
+    //
+    // So, only if appended path has a sub-path closed or
+    // has an empty sub-path open there is possible to restore
+    // its state after appending it to the current path and only
+    // in this case the operation doesn't introduce side effects.
 
-    // Close appended geometry sink.
-    d2dPath->EndFigure(D2D1_FIGURE_END_OPEN);
+    // Nothing to do if appended path is empty.
+    if ( pathSrc->IsEmpty() )
+        return;
+
+    // Save positional and auxiliary data
+    // of the appended path and its geometry.
+    GeometryStateData curStateSrc;
+    pathSrc->SaveGeometryState(curStateSrc);
+
+    // Raise warning if appended path has an open non-empty sub-path.
+    wxASSERT_MSG( pathSrc->IsStateSafeForFlush(),
+        wxS("Sub-path in appended path should be closed prior to this operation") );
+    // Close appended geometry.
+    pathSrc->Flush();
+
+    // Close current geometry (leaving the figure as is).
+    Flush();
+
     HRESULT hr;
-    hr = d2dPath->m_geometrySink->Close();
-    wxFAILED_HRESULT_MSG(hr);
+    ID2D1TransformedGeometry* pTransformedGeometry = NULL;
+    // Add current geometry to the collection transformed geometries.
+    hr = m_direct2dfactory->CreateTransformedGeometry(m_pathGeometry,
+                        D2D1::Matrix3x2F::Identity(), &pTransformedGeometry);
+    wxCHECK_HRESULT_RET(hr);
+    m_pTransformedGeometries.push_back(pTransformedGeometry);
 
-    // Transfer appended geometry to the current geometry sink.
-    hr = d2dPath->m_pathGeometry->Stream(m_geometrySink);
-    wxFAILED_HRESULT_MSG(hr);
-    // Copy auxiliary data if appended path is non-empty.
-    UINT32 segCount = 0;
-    UINT32 figCount = 0;
-    hr = d2dPath->m_pathGeometry->GetSegmentCount(&segCount);
-    wxFAILED_HRESULT_MSG(hr);
-    hr = d2dPath->m_pathGeometry->GetFigureCount(&figCount);
-    wxFAILED_HRESULT_MSG(hr);
-    if( segCount > 0 || figCount > 0 || d2dPath->m_currentPointSet || d2dPath->m_figureOpened )
+    // Add to the collection transformed geometries from the appended path.
+    for ( size_t i = 0; i < pathSrc->m_pTransformedGeometries.size(); i++ )
     {
-        m_currentPointSet = d2dPath->m_currentPointSet;
-        m_currentPoint = d2dPath->m_currentPoint;
-        m_figureOpened = d2dPath->m_figureOpened;
-        m_figureStart = d2dPath->m_figureStart;
+        pTransformedGeometry = NULL;
+        hr = m_direct2dfactory->CreateTransformedGeometry(
+                    pathSrc->m_pTransformedGeometries[i],
+                    D2D1::Matrix3x2F::Identity(), &pTransformedGeometry);
+        wxCHECK_HRESULT_RET(hr);
+        m_pTransformedGeometries.push_back(pTransformedGeometry);
     }
 
-    // Make a writable copy of the appended geometry.
-    wxCOMPtr<ID2D1PathGeometry> srcPathGeometry;
-    wxCOMPtr<ID2D1GeometrySink> srcGeometrySink;
-    hr = m_direct2dfactory->CreatePathGeometry(&srcPathGeometry);
-    wxFAILED_HRESULT_MSG(hr);
-    hr = srcPathGeometry->Open(&srcGeometrySink);
-    wxFAILED_HRESULT_MSG(hr);
-    // Transfer appended geometry.
-    hr = d2dPath->m_pathGeometry->Stream(srcGeometrySink);
-    wxFAILED_HRESULT_MSG(hr);
+    // Clear and reopen current geometry.
+    m_pathGeometry.reset();
+    EnsureGeometryOpen();
 
-    // Assign a writable copy of the appendeed
-    // geometry back to the source path.
-    d2dPath->m_pathGeometry = srcPathGeometry;
-    d2dPath->m_geometrySink = srcGeometrySink;
+    // Transfer appended geometry to the current geometry sink.
+    hr = pathSrc->m_pathGeometry->Stream(m_geometrySink);
+    wxCHECK_HRESULT_RET(hr);
+
+    // Apply to the current path positional data from the appended path.
+    // This operation fully sets geometry to the required state
+    // only if it represents geometry without started figure
+    // or with started but empty figure.
+    RestoreGeometryState(curStateSrc);
+
+    // Reopen appended geometry.
+    pathSrc->EnsureGeometryOpen();
+    // Restore its positional data.
+    // This operation fully restores geometry to the required state
+    // only if it represents geometry without started figure
+    // or with started but empty figure.
+    pathSrc->RestoreGeometryState(curStateSrc);
 }
 
 // closes the current sub-path

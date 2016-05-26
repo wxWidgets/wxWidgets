@@ -98,6 +98,8 @@ public:
     /**
         Adds another path onto the current path. After this call the current
         point will be at the added path's current point.
+        For Direct2D the path being appended shouldn't contain
+        a started non-empty subpath when this function is called.
     */
     virtual void AddPath(const wxGraphicsPath& path);
 
