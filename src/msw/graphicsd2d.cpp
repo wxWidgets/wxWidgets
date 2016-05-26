@@ -1136,8 +1136,8 @@ wxD2DPathData::wxGraphicsObjectRefData* wxD2DPathData::Clone() const
 
     newPathData->EnsureGeometryOpen();
 
-    // Only geometry with closed sink (immutable)
-    // can be transferred to another geometry object with
+    // Only geometry with closed sink can be
+    // transferred to another geometry object with
     // ID2D1PathGeometry::Stream() so we have to check
     // if actual transfer succeeded.
 
@@ -1149,10 +1149,23 @@ wxD2DPathData::wxGraphicsObjectRefData* wxD2DPathData::Clone() const
         delete newPathData;
         return NULL;
     }
-    // Copy auxiliary data.
-    newPathData->m_currentPoint = m_currentPoint;
-    newPathData->m_figureOpened = m_figureOpened;
-    newPathData->m_figureStart = m_figureStart;
+
+    // Copy the collection of transformed geometries.
+    ID2D1TransformedGeometry* pTransformedGeometry;
+    for ( size_t i = 0; i < m_pTransformedGeometries.size(); i++ )
+    {
+        pTransformedGeometry = NULL;
+        hr = m_direct2dfactory->CreateTransformedGeometry(
+                    m_pTransformedGeometries[i],
+                    D2D1::Matrix3x2F::Identity(), &pTransformedGeometry);
+        wxASSERT_MSG( SUCCEEDED(hr), wxFAILED_HRESULT_MSG(hr) );
+        newPathData->m_pTransformedGeometries.push_back(pTransformedGeometry);
+    }
+
+    // Copy positional data.
+    GeometryStateData curState;
+    SaveGeometryState(curState);
+    newPathData->RestoreGeometryState(curState);
 
     return newPathData;
 }
