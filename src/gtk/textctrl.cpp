@@ -1823,16 +1823,13 @@ void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
     {
         GdkRGBA fg_orig, bg_orig;
         GtkStyleContext* context = gtk_widget_get_style_context(m_text);
+        gtk_style_context_save(context);
         if (IsMultiLine())
-        {
-            gtk_style_context_save(context);
             gtk_style_context_add_class(context, GTK_STYLE_CLASS_VIEW);
-        }
         gtk_style_context_set_state(context, selectedFocused);
         gtk_style_context_get_color(context, selectedFocused, &fg_orig);
         gtk_style_context_get_background_color(context, selectedFocused, &bg_orig);
-        if (IsMultiLine())
-            gtk_style_context_restore(context);
+        gtk_style_context_restore(context);
 
         if (fg_ok)
             gtk_widget_override_color(m_text, selectedFocused, &fg_orig);

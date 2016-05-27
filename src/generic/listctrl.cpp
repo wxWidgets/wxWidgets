@@ -2994,6 +2994,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                     SetItemState(item,
                                  wxLIST_STATE_FOCUSED | wxLIST_STATE_SELECTED,
                                  wxLIST_STATE_FOCUSED | wxLIST_STATE_SELECTED);
+                    EnsureVisible(item);
 
                     // Reset the bell flag if it had been temporarily disabled
                     // before.

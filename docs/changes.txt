@@ -581,6 +581,7 @@ All:
 
 - Fix wxFileName::MakeRelativeTo() for directory relatively to itself.
 - Fix wxLocale::IsOk() return true even if setting the locale failed.
+- Null-terminate wxApp::argv for compatibility with the real argv.
 
 Unix:
 
@@ -614,6 +615,7 @@ wxGTK:
 - Fix coordinates of wxSetCursorEvent propagated to parent windows.
 - Fix GTK+ warnings when refreshing wxListCtrl items (Scott Talbert).
 - Fix using wxHTTP and wxFTP from worker thread.
+- Make items selected from keyboard visible in wxListCtrl (Jonathan Dagresta).
 
 wxMSW:
 

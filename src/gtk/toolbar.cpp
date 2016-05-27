@@ -388,7 +388,12 @@ bool wxToolBar::Create( wxWindow *parent,
 #endif
     GtkSetStyle();
 
-    if (style & wxTB_DOCKABLE)
+    if ((style & wxTB_DOCKABLE)
+#ifdef __WXGTK3__
+        // using GtkHandleBox prevents toolbar from drawing with GTK+ >= 3.19.7
+        && gtk_check_version(3,19,7)
+#endif
+        )
     {
         m_widget = gtk_handle_box_new();
 
