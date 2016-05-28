@@ -38,7 +38,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll secretstore shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -99,6 +99,7 @@ clean:
 	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C sashtest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C scroll -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C secretstore -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C shaped -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C sockets -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C sound -f makefile.gcc $(MAKEARGS) clean
@@ -292,6 +293,9 @@ sashtest:
 scroll: 
 	$(MAKE) -C scroll -f makefile.gcc $(MAKEARGS) all
 
+secretstore:
+	$(MAKE) -C secretstore -f makefile.gcc $(MAKEARGS) all
+
 shaped: 
 	$(MAKE) -C shaped -f makefile.gcc $(MAKEARGS) all
 
@@ -369,9 +373,9 @@ memcheck:
 	erase event except exec font grid help htlbox html image internat ipc joytest \
 	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
 	opengl ownerdrw popup power preferences printing propgrid regtest render ribbon \
-	richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg \
-	taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll \
-	webview widgets wizard wrapsizer xrc memcheck
+	richtext sashtest scroll secretstore shaped sockets sound splash splitter statbar \
+	stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate \
+	vscroll webview widgets wizard wrapsizer xrc memcheck
 
 
 SHELL := $(COMSPEC)

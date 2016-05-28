@@ -435,6 +435,13 @@
 // Recommended setting: 1 (but may be safely disabled if you don't use it)
 #define wxUSE_FSVOLUME      1
 
+// Use wxSecretStore class for storing passwords using OS-specific facilities.
+//
+// Default is 1
+//
+// Recommended setting: 1 (but may be safely disabled if you don't use it)
+#define wxUSE_SECRETSTORE   1
+
 // Use wxStandardPaths class which allows to retrieve some standard locations
 // in the file system
 //

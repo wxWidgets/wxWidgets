@@ -277,6 +277,14 @@
 #   endif
 #endif /* !defined(wxUSE_REGEX) */
 
+#ifndef wxUSE_SECRETSTORE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SECRETSTORE must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_SECRETSTORE 1
+#   endif
+#endif /* !defined(wxUSE_SECRETSTORE) */
+
 #ifndef wxUSE_STDPATHS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_STDPATHS must be defined, please read comment near the top of this file."

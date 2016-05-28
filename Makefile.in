@@ -528,6 +528,7 @@ ALL_BASE_HEADERS =  \
 	wx/meta/removeref.h \
 	wx/fswatcher.h \
 	wx/generic/fswatcher.h \
+	wx/secretstore.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
@@ -709,6 +710,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/meta/removeref.h \
 	wx/fswatcher.h \
 	wx/generic/fswatcher.h \
+	wx/secretstore.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -845,6 +847,7 @@ ALL_BASE_SOURCES =  \
 	src/common/zstream.cpp \
 	src/common/fswatchercmn.cpp \
 	src/generic/fswatcherg.cpp \
+	src/common/secretstore.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -863,6 +866,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/mimetype.cpp \
 	src/unix/fswatcher_inotify.cpp \
 	src/unix/stdpaths.cpp \
+	src/unix/secretstore.cpp \
 	src/msw/basemsw.cpp \
 	src/msw/crashrpt.cpp \
 	src/msw/debughlp.cpp \
@@ -882,6 +886,7 @@ ALL_BASE_SOURCES =  \
 	src/msw/utils.cpp \
 	src/msw/utilsexc.cpp \
 	src/msw/fswatcher.cpp \
+	src/msw/secretstore.cpp \
 	$(BASE_OSX_SRC) \
 	src/common/event.cpp \
 	src/common/fs_mem.cpp \
@@ -1023,6 +1028,7 @@ MONODLL_OBJECTS =  \
 	monodll_zstream.o \
 	monodll_fswatchercmn.o \
 	monodll_fswatcherg.o \
+	monodll_common_secretstore.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS) \
 	monodll_event.o \
 	monodll_fs_mem.o \
@@ -1161,6 +1167,7 @@ MONOLIB_OBJECTS =  \
 	monolib_zstream.o \
 	monolib_fswatchercmn.o \
 	monolib_fswatcherg.o \
+	monolib_common_secretstore.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_1) \
 	monolib_event.o \
 	monolib_fs_mem.o \
@@ -1291,6 +1298,7 @@ BASEDLL_OBJECTS =  \
 	basedll_zstream.o \
 	basedll_fswatchercmn.o \
 	basedll_fswatcherg.o \
+	basedll_common_secretstore.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_2) \
 	basedll_event.o \
 	basedll_fs_mem.o \
@@ -1404,6 +1412,7 @@ BASELIB_OBJECTS =  \
 	baselib_zstream.o \
 	baselib_fswatchercmn.o \
 	baselib_fswatcherg.o \
+	baselib_common_secretstore.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_3) \
 	baselib_event.o \
 	baselib_fs_mem.o \
@@ -2238,6 +2247,7 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -2263,6 +2273,7 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
 	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -2302,7 +2313,8 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
-	src/osx/cocoa/utils_base.mm
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2325,7 +2337,8 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
-	src/osx/cocoa/utils_base.mm
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
 COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2348,7 +2361,8 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
-	src/osx/cocoa/utils_base.mm
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
 COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2371,7 +2385,8 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
-	src/osx/cocoa/utils_base.mm
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_MOTIF@BASE_OSX_SRC = $(COND_TOOLKIT_MOTIF_BASE_OSX_SRC)
 COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2394,7 +2409,8 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
-	src/osx/cocoa/utils_base.mm
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp
 @COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfdataref.h \
@@ -4100,6 +4116,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_strconv_cf.o \
 	monodll_utilsexc_base.o \
 	monodll_utils_base.o \
+	monodll_core_secretstore.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -4136,7 +4153,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fswatcher_kqueue.o \
 	monodll_unix_mimetype.o \
 	monodll_fswatcher_inotify.o \
-	monodll_unix_stdpaths.o
+	monodll_unix_stdpaths.o \
+	monodll_unix_secretstore.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -4157,7 +4175,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_msw_timer.o \
 	monodll_msw_utils.o \
 	monodll_utilsexc.o \
-	monodll_fswatcher.o
+	monodll_fswatcher.o \
+	monodll_msw_secretstore.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_WIN32_1@	= monodll_msw_main.o monodll_volume.o
@@ -6115,6 +6134,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_strconv_cf.o \
 	monolib_utilsexc_base.o \
 	monolib_utils_base.o \
+	monolib_core_secretstore.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -6151,7 +6171,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fswatcher_kqueue.o \
 	monolib_unix_mimetype.o \
 	monolib_fswatcher_inotify.o \
-	monolib_unix_stdpaths.o
+	monolib_unix_stdpaths.o \
+	monolib_unix_secretstore.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -6172,7 +6193,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_msw_timer.o \
 	monolib_msw_utils.o \
 	monolib_utilsexc.o \
-	monolib_fswatcher.o
+	monolib_fswatcher.o \
+	monolib_msw_secretstore.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_WIN32_1@	= monolib_msw_main.o monolib_volume.o
@@ -8181,6 +8203,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_strconv_cf.o \
 	basedll_utilsexc_base.o \
 	basedll_utils_base.o \
+	basedll_core_secretstore.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -8217,7 +8240,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fswatcher_kqueue.o \
 	basedll_unix_mimetype.o \
 	basedll_fswatcher_inotify.o \
-	basedll_unix_stdpaths.o
+	basedll_unix_stdpaths.o \
+	basedll_unix_secretstore.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -8238,7 +8262,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_timer.o \
 	basedll_msw_utils.o \
 	basedll_utilsexc.o \
-	basedll_fswatcher.o
+	basedll_fswatcher.o \
+	basedll_msw_secretstore.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_volume.o
@@ -8262,6 +8287,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_strconv_cf.o \
 	baselib_utilsexc_base.o \
 	baselib_utils_base.o \
+	baselib_core_secretstore.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -8298,7 +8324,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fswatcher_kqueue.o \
 	baselib_unix_mimetype.o \
 	baselib_fswatcher_inotify.o \
-	baselib_unix_stdpaths.o
+	baselib_unix_stdpaths.o \
+	baselib_unix_secretstore.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -8319,7 +8346,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_timer.o \
 	baselib_msw_utils.o \
 	baselib_utilsexc.o \
-	baselib_fswatcher.o
+	baselib_fswatcher.o \
+	baselib_msw_secretstore.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_volume.o
@@ -15828,6 +15856,9 @@ monodll_fswatchercmn.o: $(srcdir)/src/common/fswatchercmn.cpp $(MONODLL_ODEP)
 monodll_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fswatcherg.cpp
 
+monodll_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/secretstore.cpp
+
 monodll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -15836,6 +15867,9 @@ monodll_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(MONODLL_
 
 monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+monodll_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
 
 monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -15894,6 +15928,9 @@ monodll_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(MONODLL_ODEP)
 monodll_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
+monodll_msw_secretstore.o: $(srcdir)/src/msw/secretstore.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/secretstore.cpp
+
 monodll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/mimetype.cpp
 
@@ -15911,6 +15948,9 @@ monodll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONODLL_ODEP
 
 monodll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
+
+monodll_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
 
 monodll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -20661,6 +20701,9 @@ monolib_fswatchercmn.o: $(srcdir)/src/common/fswatchercmn.cpp $(MONOLIB_ODEP)
 monolib_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fswatcherg.cpp
 
+monolib_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/secretstore.cpp
+
 monolib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -20669,6 +20712,9 @@ monolib_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(MONOLIB_
 
 monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+monolib_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
 
 monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -20727,6 +20773,9 @@ monolib_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(MONOLIB_ODEP)
 monolib_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
+monolib_msw_secretstore.o: $(srcdir)/src/msw/secretstore.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/secretstore.cpp
+
 monolib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/mimetype.cpp
 
@@ -20744,6 +20793,9 @@ monolib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONOLIB_ODEP
 
 monolib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
+
+monolib_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
 
 monolib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -25494,6 +25546,9 @@ basedll_fswatchercmn.o: $(srcdir)/src/common/fswatchercmn.cpp $(BASEDLL_ODEP)
 basedll_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/generic/fswatcherg.cpp
 
+basedll_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/secretstore.cpp
+
 basedll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -25502,6 +25557,9 @@ basedll_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(BASEDLL_
 
 basedll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+basedll_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
 
 basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -25560,6 +25618,9 @@ basedll_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(BASEDLL_ODEP)
 basedll_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
+basedll_msw_secretstore.o: $(srcdir)/src/msw/secretstore.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/secretstore.cpp
+
 basedll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/mimetype.cpp
 
@@ -25577,6 +25638,9 @@ basedll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASEDLL_ODEP
 
 basedll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
+
+basedll_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
 
 basedll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -25959,6 +26023,9 @@ baselib_fswatchercmn.o: $(srcdir)/src/common/fswatchercmn.cpp $(BASELIB_ODEP)
 baselib_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/generic/fswatcherg.cpp
 
+baselib_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/secretstore.cpp
+
 baselib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -25967,6 +26034,9 @@ baselib_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(BASELIB_
 
 baselib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+baselib_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
 
 baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -26025,6 +26095,9 @@ baselib_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(BASELIB_ODEP)
 baselib_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
+baselib_msw_secretstore.o: $(srcdir)/src/msw/secretstore.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/secretstore.cpp
+
 baselib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/mimetype.cpp
 
@@ -26042,6 +26115,9 @@ baselib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASELIB_ODEP
 
 baselib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
+
+baselib_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
 
 baselib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
