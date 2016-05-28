@@ -177,6 +177,12 @@
 
 #endif /* __GNUWIN32__ */
 
+/* MinGW32 doesn't provide wincred.h defining the API needed by this */
+#ifdef __MINGW32_TOOLCHAIN__
+    #undef wxUSE_SECRETSTORE
+    #define wxUSE_SECRETSTORE 0
+#endif
+
 #if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
 #   undef wxUSE_CHECKLISTBOX
 #   define wxUSE_CHECKLISTBOX 0

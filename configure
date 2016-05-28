@@ -954,6 +954,8 @@ GTKPRINT_CFLAGS
 SDL_LIBS
 SDL_CFLAGS
 SDL_CONFIG
+LIBSECRET_LIBS
+LIBSECRET_CFLAGS
 GXX_VERSION
 LIBICONV
 CXXFLAGS_VISIBILITY
@@ -1177,6 +1179,7 @@ enable_log
 enable_longlong
 enable_mimetype
 enable_printfposparam
+enable_secretstore
 enable_snglinst
 enable_sound
 enable_stdpaths
@@ -1391,6 +1394,8 @@ GLU_CFLAGS
 GLU_LIBS
 MesaGL_CFLAGS
 MesaGL_LIBS
+LIBSECRET_CFLAGS
+LIBSECRET_LIBS
 GTKPRINT_CFLAGS
 GTKPRINT_LIBS
 GNOMEVFS_CFLAGS
@@ -2110,6 +2115,7 @@ Optional Features:
   --enable-longlong       use wxLongLong class
   --enable-mimetype       use wxMimeTypesManager
   --enable-printfposparam use wxVsnprintf() which supports positional parameters
+  --enable-secretstore    use wxSecretStore class
   --enable-snglinst       use wxSingleInstanceChecker class
   --enable-sound          use wxSound class
   --enable-stdpaths       use wxStandardPaths class
@@ -2379,6 +2385,10 @@ Some influential environment variables:
   MesaGL_CFLAGS
               C compiler flags for MesaGL, overriding pkg-config
   MesaGL_LIBS linker flags for MesaGL, overriding pkg-config
+  LIBSECRET_CFLAGS
+              C compiler flags for LIBSECRET, overriding pkg-config
+  LIBSECRET_LIBS
+              linker flags for LIBSECRET, overriding pkg-config
   GTKPRINT_CFLAGS
               C compiler flags for GTKPRINT, overriding pkg-config
   GTKPRINT_LIBS
@@ -7221,6 +7231,35 @@ fi
 
 
           eval "$wx_cv_use_printfposparam"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-secretstore was given.
+if test "${enable_secretstore+set}" = set; then :
+  enableval=$enable_secretstore;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_secretstore='wxUSE_SECRETSTORE=yes'
+                          else
+                            wx_cv_use_secretstore='wxUSE_SECRETSTORE=no'
+                          fi
+
+else
+
+                          wx_cv_use_secretstore='wxUSE_SECRETSTORE=${'DEFAULT_wxUSE_SECRETSTORE":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_secretstore"
 
 
           enablestring=
@@ -31315,6 +31354,104 @@ $as_echo "$as_me: WARNING: wxFileSystemWatcher disabled due to --disable-threads
     else
         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxFileSystemWatcher won't be available on this platform" >&5
 $as_echo "$as_me: WARNING: wxFileSystemWatcher won't be available on this platform" >&2;}
+    fi
+fi
+
+
+if test "$wxUSE_SECRETSTORE" = "yes"; then
+            if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBSECRET" >&5
+$as_echo_n "checking for LIBSECRET... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBSECRET_CFLAGS"; then
+        pkg_cv_LIBSECRET_CFLAGS="$LIBSECRET_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsecret-1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libsecret-1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBSECRET_CFLAGS=`$PKG_CONFIG --cflags "libsecret-1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBSECRET_LIBS"; then
+        pkg_cv_LIBSECRET_LIBS="$LIBSECRET_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsecret-1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libsecret-1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBSECRET_LIBS=`$PKG_CONFIG --libs "libsecret-1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBSECRET_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libsecret-1"`
+        else
+	        LIBSECRET_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libsecret-1"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBSECRET_PKG_ERRORS" >&5
+
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret not found, wxSecretStore won't be available" >&5
+$as_echo "$as_me: WARNING: libsecret not found, wxSecretStore won't be available" >&2;}
+                wxUSE_SECRETSTORE=no
+
+
+elif test $pkg_failed = untried; then
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret not found, wxSecretStore won't be available" >&5
+$as_echo "$as_me: WARNING: libsecret not found, wxSecretStore won't be available" >&2;}
+                wxUSE_SECRETSTORE=no
+
+
+else
+	LIBSECRET_CFLAGS=$pkg_cv_LIBSECRET_CFLAGS
+	LIBSECRET_LIBS=$pkg_cv_LIBSECRET_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                CXXFLAGS="$LIBSECRET_CFLAGS $CXXFLAGS"
+                LIBS="$LIBSECRET_LIBS $LIBS"
+
+fi
+    fi
+
+    if test "$wxUSE_SECRETSTORE" = "yes"; then
+        if test "$USE_DARWIN" = 1; then
+            LIBS="-framework Security $LIBS"
+        fi
+
+        $as_echo "#define wxUSE_SECRETSTORE 1" >>confdefs.h
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS secretstore"
     fi
 fi
 
