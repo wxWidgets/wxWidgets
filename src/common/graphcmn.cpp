@@ -447,37 +447,66 @@ void wxGraphicsPathData::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w
 void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
 {
     wxPoint2DDouble current;
-    GetCurrentPoint(&current.m_x,&current.m_y);
-    wxPoint2DDouble p1(x1,y1);
-    wxPoint2DDouble p2(x2,y2);
+    GetCurrentPoint(&current.m_x, &current.m_y);
+    wxPoint2DDouble p1(x1, y1);
+    wxPoint2DDouble p2(x2, y2);
 
     wxPoint2DDouble v1 = current - p1;
-    v1.Normalize();
+    wxDouble v1Length = v1.GetVectorLength();
     wxPoint2DDouble v2 = p2 - p1;
-    v2.Normalize();
+    wxDouble v2Length = v2.GetVectorLength();
 
     wxDouble alpha = v1.GetVectorAngle() - v2.GetVectorAngle();
-
+    // Reduce angle value to the range [0..180] degrees.
     if ( alpha < 0 )
         alpha = 360 + alpha;
-    // TODO obtuse angles
+    if ( alpha > 180 )
+        alpha = 360 - alpha;
 
-    alpha = wxDegToRad(alpha);
+    // Degenerated cases: there is no need
+    // to draw an arc connecting points when:
+    // - There are no 3 different points provided,
+    // - Points (and lines) are colinear,
+    // - Radius equals zero.
+    if ( v1Length == 0 || v2Length == 0 ||
+         alpha == 0 || alpha == 180 || r == 0 )
+    {
+        AddLineToPoint(p1.m_x, p1.m_y);
+        AddLineToPoint(p2.m_x, p2.m_y);
+        return;
+    }
 
-    wxDouble dist = r / sin(alpha/2) * cos(alpha/2);
-    // calculate tangential points
-    wxPoint2DDouble t1 = dist*v1 + p1;
+    // Determine spatial relation between the vectors.
+    bool drawClockwiseArc = v1.GetCrossProduct(v2) < 0;
 
-    wxPoint2DDouble nv1 = v1;
-    nv1.SetVectorAngle(v1.GetVectorAngle()-90);
-    wxPoint2DDouble c = t1 + r*nv1;
+    alpha = wxDegToRad(alpha) / 2.0;
+    wxDouble distT = r / sin(alpha) * cos(alpha);
+    wxDouble distC = r / sin(alpha);
+    wxASSERT_MSG( distT <= v1Length && distT <= v2Length,
+                  wxS("Radius is too big to fit the arc to given points") );
+    // Calculate tangential points
+    v1.Normalize();
+    v2.Normalize();
+    wxPoint2DDouble t1 = distT*v1 + p1;
+    wxPoint2DDouble t2 = distT*v2 + p1;
+    // Calculate the angle bisector vector
+    // (because central point is located on the bisector).
+    wxPoint2DDouble v = v1 + v2;
+    if ( v.GetVectorLength() > 0 )
+        v.Normalize();
+    // Calculate center of the arc
+    wxPoint2DDouble c = distC*v + p1;
+    // Calculate normal vectors at tangential points
+    // (with inverted directions to make angle calculations easier).
+    wxPoint2DDouble nv1 = t1 - c;
+    wxPoint2DDouble nv2 = t2 - c;
+    // Calculate start and end angle of the arc.
+    wxDouble a1 = nv1.GetVectorAngle();
+    wxDouble a2 = nv2.GetVectorAngle();
 
-    wxDouble a1 = v1.GetVectorAngle()+90;
-    wxDouble a2 = v2.GetVectorAngle()-90;
-
-    AddLineToPoint(t1.m_x,t1.m_y);
-    AddArc(c.m_x,c.m_y,r,wxDegToRad(a1),wxDegToRad(a2),true);
-    AddLineToPoint(p2.m_x,p2.m_y);
+    AddLineToPoint(t1.m_x, t1.m_y);
+    AddArc(c.m_x, c.m_y, r, wxDegToRad(a1), wxDegToRad(a2), drawClockwiseArc);
+    AddLineToPoint(p2.m_x, p2.m_y);
 }
 
 //-----------------------------------------------------------------------------
