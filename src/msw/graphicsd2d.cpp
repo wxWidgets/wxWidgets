@@ -1428,31 +1428,33 @@ void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAng
     }
 
     double angle = (end.GetVectorAngle() - start.GetVectorAngle());
-
-    if (!clockwise)
+    if ( angle == 360 || angle == -360 )
     {
-        angle = 360 - angle;
+        AddCircle(center.m_x, center.m_y, r);
+        return;
     }
+
+    if ( !clockwise )
+        angle = -angle;
+
+    if ( angle < 0 )
+        angle += 360;
 
     while (abs(angle) > 360)
     {
         angle -= (angle / abs(angle)) * 360;
     }
 
-    if (angle == 360)
-    {
-        AddCircle(center.m_x, center.m_y, start.GetVectorLength());
-        return;
-    }
+    D2D1_SWEEP_DIRECTION sweepDirection = clockwise ?
+       D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
 
-    D2D1_SWEEP_DIRECTION sweepDirection = clockwise ? D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
-
-    D2D1_ARC_SIZE arcSize = angle > 180 ? D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL;
+    D2D1_ARC_SIZE arcSize = angle > 180 ?
+       D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL;
 
     D2D1_ARC_SEGMENT arcSegment = {
-        { (FLOAT)(end.m_x + x), (FLOAT)(end.m_y + y) },     // end point
-        { (FLOAT)r, (FLOAT) r },                         // size
-        0,                              // rotation
+        D2D1::Point2((FLOAT)(end.m_x + x), (FLOAT)(end.m_y + y)),  // end point
+        D2D1::SizeF((FLOAT)r, (FLOAT)r),                           // size
+        0.0f,                           // rotation
         sweepDirection,                 // sweep direction
         arcSize                         // arc size
     };
