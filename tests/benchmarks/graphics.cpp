@@ -70,6 +70,8 @@ struct GraphicsBenchmarkOptions
         useDC =
         useGC =
         useGL = false;
+
+        renderer = Default;
     }
 
     long mapMode,
@@ -91,6 +93,13 @@ struct GraphicsBenchmarkOptions
     bool useDC,
          useGC,
          useGL;
+
+#ifdef __WXMSW__
+    enum GraphRenderer { Default, GDIPlus, Direct2D, Cairo };
+#else
+    enum GraphicsRenderer { Default };
+#endif // __WXMSW__ / !__WXMSW__
+    GraphRenderer renderer;
 } opts;
 
 class GraphicsBenchmarkFrame : public wxFrame
@@ -141,6 +150,35 @@ public:
         m_bitmapARGB.Create(64, 64, 32);
         m_bitmapARGB.UseAlpha(true);
         m_bitmapRGB.Create(64, 64, 24);
+
+        m_renderer = NULL;
+        if ( opts.useGC )
+        {
+#ifdef __WXMSW__
+            if ( opts.renderer == GraphicsBenchmarkOptions::GDIPlus )
+                m_renderer = wxGraphicsRenderer::GetGDIPlusRenderer();
+            else if ( opts.renderer == GraphicsBenchmarkOptions::Direct2D )
+                m_renderer = wxGraphicsRenderer::GetDirect2DRenderer();
+            else if ( opts.renderer == GraphicsBenchmarkOptions::Cairo )
+                m_renderer = wxGraphicsRenderer::GetCairoRenderer();
+            // Check if selected renderer is operational.
+            if ( m_renderer )
+            {
+                wxBitmap bmp(16, 16);
+                wxMemoryDC memDC(bmp);
+                wxGraphicsContext* gc = m_renderer->CreateContext(memDC);
+                if ( !gc )
+                {
+                    wxPrintf("Couldn't initialize '%s' graphics renderer.\n", m_renderer->GetName().c_str());
+                    m_renderer = NULL;
+                }
+                delete gc;
+            }
+#endif // __WXMSW__
+
+            if( !m_renderer )
+                m_renderer = wxGraphicsRenderer::GetDefaultRenderer();
+        }
 
         Show();
     }
@@ -218,14 +256,24 @@ private:
         if ( opts.usePaint )
         {
             wxPaintDC dc(this);
-            wxGCDC gcdc(dc);
+            wxGCDC gcdc;
+            if ( m_renderer )
+            {
+                wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                gcdc.SetGraphicsContext(gc);
+            }
             BenchmarkDCAndGC("paint", dc, gcdc);
         }
 
         if ( opts.useClient )
         {
             wxClientDC dc(this);
-            wxGCDC gcdc(dc);
+            wxGCDC gcdc;
+            if ( m_renderer )
+            {
+                wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                gcdc.SetGraphicsContext(gc);
+            }
             BenchmarkDCAndGC("client", dc, gcdc);
         }
 
@@ -234,27 +282,47 @@ private:
             {
                 wxBitmap bmp(opts.width, opts.height);
                 wxMemoryDC dc(bmp);
-                wxGCDC gcdc(dc);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
                 BenchmarkDCAndGC("default memory", dc, gcdc);
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 24);
                 wxMemoryDC dc(bmp);
-                wxGCDC gcdc(dc);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
                 BenchmarkDCAndGC("RGB memory", dc, gcdc);
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 32);
                 bmp.UseAlpha(false);
                 wxMemoryDC dc(bmp);
-                wxGCDC gcdc(dc);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
                 BenchmarkDCAndGC("0RGB memory", dc, gcdc);
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 32);
                 bmp.UseAlpha(true);
                 wxMemoryDC dc(bmp);
-                wxGCDC gcdc(dc);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
                 BenchmarkDCAndGC("ARGB memory", dc, gcdc);
             }
 
@@ -266,9 +334,14 @@ private:
     void BenchmarkDCAndGC(const char* dckind, wxDC& dc, wxGCDC& gcdc)
     {
         if ( opts.useDC )
+        {
             BenchmarkAll(wxString::Format("%6s DC", dckind), dc);
-        if ( opts.useGC )
-            BenchmarkAll(wxString::Format("%6s GC", dckind), gcdc);
+        }
+        else if ( opts.useGC && gcdc.IsOk() )
+        {
+            wxString rendName = gcdc.GetGraphicsContext()->GetRenderer()->GetName();
+            BenchmarkAll(wxString::Format("%6s GC (%s)", dckind, rendName.c_str()), gcdc);
+        }
     }
 
     void BenchmarkAll(const wxString& msg, wxDC& dc)
@@ -471,6 +544,7 @@ private:
     wxGLCanvas* m_glCanvas;
     wxGLContext* m_glContext;
 #endif // wxUSE_GLCANVAS
+    wxGraphicsRenderer* m_renderer;
 };
 
 class GraphicsBenchmarkApp : public wxApp
@@ -499,6 +573,9 @@ public:
             { wxCMD_LINE_OPTION, "h", "height", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "I", "images", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "N", "number-of-iterations", "", wxCMD_LINE_VAL_NUMBER },
+#ifdef __WXMSW__
+            { wxCMD_LINE_OPTION, "r", "renderer", "gdiplus | direct2d | cairo", wxCMD_LINE_VAL_STRING },
+#endif // __WXMSW__
             { wxCMD_LINE_NONE },
         };
 
@@ -566,6 +643,39 @@ public:
                 opts.useGC = true;
             }
         }
+
+        opts.renderer = GraphicsBenchmarkOptions::Default;
+#ifdef __WXMSW__
+        wxString rendererName;
+        if ( parser.Found("renderer", &rendererName) )
+        {
+            if ( !opts.useGC )
+            {
+                wxLogError("Renderer can be specified only when using graphics.");
+                return false;
+            }
+            if ( !rendererName.empty() )
+            {
+                if ( rendererName == wxS("gdiplus") )
+                {
+                    opts.renderer = GraphicsBenchmarkOptions::GDIPlus;
+                }
+                else if ( rendererName == wxS("direct2d") )
+                {
+                    opts.renderer = GraphicsBenchmarkOptions::Direct2D;
+                }
+                else if ( rendererName == wxS("cairo") )
+                {
+                    opts.renderer = GraphicsBenchmarkOptions::Cairo;
+                }
+                else
+                {
+                    wxLogError( wxS("Unknown renderer name.") );
+                    return false;
+                }
+            }
+        }
+#endif // __WXMSW__
 
         return true;
     }
