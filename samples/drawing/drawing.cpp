@@ -1079,7 +1079,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     path.CloseSubpath();
     path.AddRectangle(-BASE4, -BASE4/2, BASE2, BASE4);
 
-    // Now use that path to demonstrate various capabilites of the graphics context
+    // Now use that path to demonstrate various capabilities of the graphics context
     gc->PushState(); // save current translation/scale/other state
     gc->Translate(60, 75); // reposition the context origin
 
