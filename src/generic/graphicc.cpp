@@ -155,13 +155,16 @@ public :
     // using the primitives from above
     //
 
-    /*
-
     // appends a rectangle as a new closed subpath
-    virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) ;
-    // appends an ellipsis as a new closed subpath fitting the passed rectangle
-    virtual void AddEllipsis( wxDouble x, wxDouble y, wxDouble w , wxDouble h ) ;
+    virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
 
+    // appends a circle as a new closed subpath
+    virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r) wxOVERRIDE;
+
+    // appends an ellipse as a new closed subpath fitting the passed rectangle
+    virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+
+    /*
     // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )  ;
     */
@@ -1206,6 +1209,33 @@ bool wxCairoPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillSt
 {
     cairo_set_fill_rule(m_pathContext,fillStyle==wxODDEVEN_RULE ? CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING);
     return cairo_in_fill( m_pathContext, x, y) != 0;
+}
+
+// Convenience functions
+
+void wxCairoPathData::AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+{
+    cairo_rectangle(m_pathContext, x, y, w, h);
+}
+
+void wxCairoPathData::AddCircle(wxDouble x, wxDouble y, wxDouble r)
+{
+    cairo_move_to(m_pathContext, x+r, y);
+    cairo_arc(m_pathContext, x, y, r, 0.0, 2*M_PI);
+    cairo_close_path(m_pathContext);
+}
+
+void wxCairoPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+{
+    cairo_move_to(m_pathContext, x+w, y+h/2.0);
+    w /= 2.0;
+    h /= 2.0;
+    cairo_save(m_pathContext);
+    cairo_translate(m_pathContext, x+w, y+h);
+    cairo_scale(m_pathContext, w, h);
+    cairo_arc(m_pathContext, 0.0, 0.0, 1.0, 0.0, 2*M_PI);
+    cairo_restore(m_pathContext);
+    cairo_close_path(m_pathContext);
 }
 
 //-----------------------------------------------------------------------------
