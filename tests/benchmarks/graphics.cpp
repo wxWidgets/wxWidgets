@@ -61,7 +61,9 @@ struct GraphicsBenchmarkOptions
         testImages =
         testLines =
         testRawBitmaps =
-        testRectangles = false;
+        testRectangles =
+        testCircles =
+        testEllipses = false;
 
         usePaint =
         useClient =
@@ -84,7 +86,9 @@ struct GraphicsBenchmarkOptions
          testImages,
          testLines,
          testRawBitmaps,
-         testRectangles;
+         testRectangles,
+         testCircles,
+         testEllipses;
 
     bool usePaint,
          useClient,
@@ -255,26 +259,40 @@ private:
     {
         if ( opts.usePaint )
         {
-            wxPaintDC dc(this);
-            wxGCDC gcdc;
-            if ( m_renderer )
             {
-                wxGraphicsContext* gc = m_renderer->CreateContext(dc);
-                gcdc.SetGraphicsContext(gc);
+                wxPaintDC dc(this);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
+                BenchmarkDCAndGC("paint", dc, gcdc);
             }
-            BenchmarkDCAndGC("paint", dc, gcdc);
+            // Since some renderers use back buffers and hence
+            // drawing results are not displayed when the test
+            // is running then wait a second after graphics
+            // contents is commited to DC to present the output.
+            wxSleep(1);
         }
 
         if ( opts.useClient )
         {
-            wxClientDC dc(this);
-            wxGCDC gcdc;
-            if ( m_renderer )
             {
-                wxGraphicsContext* gc = m_renderer->CreateContext(dc);
-                gcdc.SetGraphicsContext(gc);
+                wxClientDC dc(this);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
+                BenchmarkDCAndGC("client", dc, gcdc);
             }
-            BenchmarkDCAndGC("client", dc, gcdc);
+            // Since some renderers use back buffers and hence
+            // drawing results are not displayed when the test
+            // is running then wait a second after graphics
+            // contents is commited to DC to present the output.
+            wxSleep(1);
         }
 
         if ( opts.useMemory )
@@ -351,6 +369,8 @@ private:
         BenchmarkLines(msg, dc);
         BenchmarkRawBitmaps(msg, dc);
         BenchmarkRectangles(msg, dc);
+        BenchmarkCircles(msg, dc);
+        BenchmarkEllipses(msg, dc);
     }
 
     void BenchmarkLines(const wxString& msg, wxDC& dc)
@@ -414,6 +434,66 @@ private:
         const long t = sw.Time();
 
         wxPrintf("%ld rects done in %ldms = %gus/rect\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters);
+    }
+
+    void BenchmarkCircles(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testCircles )
+            return;
+
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+        if ( opts.penWidth != 0 )
+            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+
+        dc.SetBrush( *wxGREEN_BRUSH );
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        wxStopWatch sw;
+        for ( long n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawCircle(x, y, 32);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld circles done in %ldms = %gus/circle\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters);
+    }
+
+    void BenchmarkEllipses(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testEllipses )
+            return;
+
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+        if ( opts.penWidth != 0 )
+            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+
+        dc.SetBrush( *wxBLUE_BRUSH );
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        wxStopWatch sw;
+        for ( long n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawEllipse(x, y, 48, 32);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld ellipses done in %ldms = %gus/ellipse\n",
                  opts.numIters, t, (1000. * t)/opts.numIters);
     }
 
@@ -559,6 +639,8 @@ public:
             { wxCMD_LINE_SWITCH, "",  "lines" },
             { wxCMD_LINE_SWITCH, "",  "rawbmp" },
             { wxCMD_LINE_SWITCH, "",  "rectangles" },
+            { wxCMD_LINE_SWITCH, "",  "circles" },
+            { wxCMD_LINE_SWITCH, "",  "ellipses" },
             { wxCMD_LINE_SWITCH, "",  "paint" },
             { wxCMD_LINE_SWITCH, "",  "client" },
             { wxCMD_LINE_SWITCH, "",  "memory" },
@@ -601,15 +683,20 @@ public:
         opts.testLines = parser.Found("lines");
         opts.testRawBitmaps = parser.Found("rawbmp");
         opts.testRectangles = parser.Found("rectangles");
+        opts.testCircles = parser.Found("circles");
+        opts.testEllipses = parser.Found("ellipses");
         if ( !(opts.testBitmaps || opts.testImages || opts.testLines
-                    || opts.testRawBitmaps || opts.testRectangles) )
+                    || opts.testRawBitmaps || opts.testRectangles
+                    || opts.testCircles || opts.testEllipses) )
         {
             // Do everything by default.
             opts.testBitmaps =
             opts.testImages =
             opts.testLines =
             opts.testRawBitmaps =
-            opts.testRectangles = true;
+            opts.testRectangles =
+            opts.testCircles =
+            opts.testEllipses = true;
         }
 
         opts.usePaint = parser.Found("paint");
