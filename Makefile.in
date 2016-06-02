@@ -219,7 +219,7 @@ WXEXPAT_OBJECTS =  \
 	wxexpat_xmltok.o
 WXSCINTILLA_CXXFLAGS = -DNDEBUG -I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	$(__wxscintilla_usingdll_p) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(____SHARED) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
@@ -915,7 +915,7 @@ MONODLL_CFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
 	$(__INC_EXPAT_p) -I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	-DwxUSE_BASE=1 -DWXMAKINGDLL $(PIC_FLAG) $(CPPFLAGS) $(CFLAGS)
 MONODLL_CXXFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -924,7 +924,7 @@ MONODLL_CXXFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	-DwxUSE_BASE=1 -DWXMAKINGDLL $(PIC_FLAG) $(CXXWARNINGS) $(CPPFLAGS) \
 	$(CXXFLAGS)
 MONODLL_OBJCXXFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ \
@@ -934,7 +934,7 @@ MONODLL_OBJCXXFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	-DwxUSE_BASE=1 -DWXMAKINGDLL $(PIC_FLAG) $(CPPFLAGS) $(OBJCXXFLAGS)
 MONODLL_OBJECTS =  \
 	monodll_any.o \
@@ -1054,7 +1054,7 @@ MONOLIB_CFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
 	$(__INC_EXPAT_p) -I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	-DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 MONOLIB_CXXFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1063,7 +1063,7 @@ MONOLIB_CXXFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	-DwxUSE_BASE=1 $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJCXXFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1072,7 +1072,7 @@ MONOLIB_OBJCXXFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	-DwxUSE_BASE=1 $(CPPFLAGS) $(OBJCXXFLAGS)
 MONOLIB_OBJECTS =  \
 	monolib_any.o \
@@ -2022,7 +2022,7 @@ STCDLL_CXXFLAGS = $(__stcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
 	$(__INC_EXPAT_p) -I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	-DWXUSINGDLL -DWXMAKINGDLL_STC $(PIC_FLAG) $(CXXWARNINGS) $(CPPFLAGS) \
 	$(CXXFLAGS)
 STCDLL_OBJECTS =  \
@@ -2037,7 +2037,7 @@ STCLIB_CXXFLAGS = $(__stclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
 	$(__INC_EXPAT_p) -I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX -DLINK_LEXERS \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	stclib_stc.o \
