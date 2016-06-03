@@ -113,11 +113,6 @@ you may need to perform the build several times because the projects
 are not always built in the correct order, and this may result in link
 errors. Simply do the build again, up to 3 times, to fix this.
 
-Notice that x64 configurations are only included in VC10 and later project
-currently. If you want to build Win64 libraries with the previous
-compiler versions, the simplest solution is to use the makefiles as
-described above.
-
 
 Special notes for Visual Studio 2010+:
 
