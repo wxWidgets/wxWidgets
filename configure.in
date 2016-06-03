@@ -721,6 +721,7 @@ WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wx
 WX_ARG_FEATURE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
 WX_ARG_FEATURE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_FEATURE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
+WX_ARG_FEATURE(secretstore,   [  --enable-secretstore    use wxSecretStore class], wxUSE_SECRETSTORE)
 WX_ARG_FEATURE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 WX_ARG_FEATURE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_FEATURE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths class], wxUSE_STDPATHS)
@@ -5318,6 +5319,36 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
     else
         AC_MSG_WARN([wxFileSystemWatcher won't be available on this platform])
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl Secret storage
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_SECRETSTORE" = "yes"; then
+    dnl The required APIs are always available under MSW and OS X but we must
+    dnl have GNOME libsecret under Unix to be able to compile this class.
+    if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
+        PKG_CHECK_MODULES(LIBSECRET, [libsecret-1],
+            [
+                CXXFLAGS="$LIBSECRET_CFLAGS $CXXFLAGS"
+                LIBS="$LIBSECRET_LIBS $LIBS"
+            ],
+            [
+                AC_MSG_WARN([libsecret not found, wxSecretStore won't be available])
+                wxUSE_SECRETSTORE=no
+            ]
+        )
+    fi
+
+    if test "$wxUSE_SECRETSTORE" = "yes"; then
+        if test "$USE_DARWIN" = 1; then
+            LIBS="-framework Security $LIBS"
+        fi
+
+        AC_DEFINE(wxUSE_SECRETSTORE)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS secretstore"
     fi
 fi
 
