@@ -236,6 +236,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexHex.o \
 	$(OBJS)\wxscintilla_LexHTML.o \
 	$(OBJS)\wxscintilla_LexInno.o \
+	$(OBJS)\wxscintilla_LexJSON.o \
 	$(OBJS)\wxscintilla_LexKix.o \
 	$(OBJS)\wxscintilla_LexKVIrc.o \
 	$(OBJS)\wxscintilla_LexLaTeX.o \
@@ -6279,6 +6280,9 @@ $(OBJS)\wxscintilla_LexHTML.o: ../../src/stc/scintilla/lexers/LexHTML.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexInno.o: ../../src/stc/scintilla/lexers/LexInno.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexJSON.o: ../../src/stc/scintilla/lexers/LexJSON.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexKix.o: ../../src/stc/scintilla/lexers/LexKix.cxx

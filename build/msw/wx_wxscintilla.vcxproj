@@ -465,6 +465,7 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexHaskell.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexHex.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexInno.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexJSON.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexKix.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexKVIrc.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexLatex.cxx" />
