@@ -267,6 +267,7 @@ library:
 @itemdef{wxUSE_LIBSDL, Use SDL for wxSound implementation.}
 @itemdef{wxUSE_PLUGINS, See also wxUSE_LIBSDL.}
 @itemdef{wxUSE_UNIX, Enabled on Unix Platform.}
+@itemdef(wxUSE_XTEST, Use XTest extension.}
 @endDefList
 
 

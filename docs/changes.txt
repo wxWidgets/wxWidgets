@@ -88,6 +88,7 @@ All (GUI):
 
 wxGTK:
 
+- Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
 - Implement setting link colours in wxHyperlinkCtrl for GTK+3 (Hanmac).
 - Support background colour in wxDataViewCtrl attributes.
 - Improve wxSpinCtrl best size calculation.

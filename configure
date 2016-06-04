@@ -945,6 +945,8 @@ WEBKIT_LIBS
 WEBKIT_CFLAGS
 COND_PYTHON
 PYTHON
+XTST_LIBS
+XTST_CFLAGS
 LIBNOTIFY_LIBS
 LIBNOTIFY_CFLAGS
 GNOMEVFS_LIBS
@@ -1094,6 +1096,7 @@ with_gtkprint
 with_gnomevfs
 with_libnotify
 with_opengl
+with_xtest
 with_dmalloc
 with_sdl
 with_regex
@@ -1402,6 +1405,8 @@ GNOMEVFS_CFLAGS
 GNOMEVFS_LIBS
 LIBNOTIFY_CFLAGS
 LIBNOTIFY_LIBS
+XTST_CFLAGS
+XTST_LIBS
 WEBKIT_CFLAGS
 WEBKIT_LIBS
 CAIRO_CFLAGS
@@ -2324,6 +2329,7 @@ Optional Packages:
   --with-gnomevfs         use GNOME VFS for associating MIME types
   --with-libnotify        use libnotify for notifications
   --with-opengl           use OpenGL (or Mesa)
+  --with-xtest            use XTest extension
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-sdl              use SDL for audio on Unix
   --with-regex            enable support for wxRegEx class
@@ -2401,6 +2407,8 @@ Some influential environment variables:
               C compiler flags for LIBNOTIFY, overriding pkg-config
   LIBNOTIFY_LIBS
               linker flags for LIBNOTIFY, overriding pkg-config
+  XTST_CFLAGS C compiler flags for XTST, overriding pkg-config
+  XTST_LIBS   linker flags for XTST, overriding pkg-config
   WEBKIT_CFLAGS
               C compiler flags for WEBKIT, overriding pkg-config
   WEBKIT_LIBS linker flags for WEBKIT, overriding pkg-config
@@ -4831,6 +4839,35 @@ fi
 
 
           eval "$wx_cv_use_opengl"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-xtest was given.
+if test "${with_xtest+set}" = set; then :
+  withval=$with_xtest;
+                        if test "$withval" = yes; then
+                          wx_cv_use_xtest='wxUSE_XTEST=yes'
+                        else
+                          wx_cv_use_xtest='wxUSE_XTEST=no'
+                        fi
+
+else
+
+                        wx_cv_use_xtest='wxUSE_XTEST=${'DEFAULT_wxUSE_XTEST":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_xtest"
 
 
 fi
@@ -33666,9 +33703,109 @@ if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
 fi
 
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
-    $as_echo "#define wxUSE_UIACTIONSIMULATOR 1" >>confdefs.h
+    if test "$wxUSE_GTK" = 1 -o "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1; then
+        if test "$wxUSE_XTEST" = "yes" ; then
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for XTST" >&5
+$as_echo_n "checking for XTST... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$XTST_CFLAGS"; then
+        pkg_cv_XTST_CFLAGS="$XTST_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xtst\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "xtst") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_XTST_CFLAGS=`$PKG_CONFIG --cflags "xtst" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$XTST_LIBS"; then
+        pkg_cv_XTST_LIBS="$XTST_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xtst\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "xtst") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_XTST_LIBS=`$PKG_CONFIG --libs "xtst" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        XTST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "xtst"`
+        else
+	        XTST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "xtst"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$XTST_PKG_ERRORS" >&5
+
+
+                    if test "$WXGTK3" = 1; then
+                                                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest not found, disabling wxUIActionSimulator" >&5
+$as_echo "$as_me: WARNING: XTest not found, disabling wxUIActionSimulator" >&2;}
+                        wxUSE_UIACTIONSIMULATOR=no
+                    fi
+                                        wxUSE_XTEST="no"
+
+
+elif test $pkg_failed = untried; then
+
+                    if test "$WXGTK3" = 1; then
+                                                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest not found, disabling wxUIActionSimulator" >&5
+$as_echo "$as_me: WARNING: XTest not found, disabling wxUIActionSimulator" >&2;}
+                        wxUSE_UIACTIONSIMULATOR=no
+                    fi
+                                        wxUSE_XTEST="no"
+
+
+else
+	XTST_CFLAGS=$pkg_cv_XTST_CFLAGS
+	XTST_LIBS=$pkg_cv_XTST_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XTST_LIBS"
+                    CFLAGS="$XTST_CFLAGS $CFLAGS"
+                    CXXFLAGS="$XTST_CFLAGS $CXXFLAGS"
+                    $as_echo "#define wxUSE_XTEST 1" >>confdefs.h
+
+
+fi
+        elif test "$WXGTK3" = 1; then
+                                                wxUSE_UIACTIONSIMULATOR=no
+        fi
+    fi
+
+    if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
+        $as_echo "#define wxUSE_UIACTIONSIMULATOR 1" >>confdefs.h
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+    fi
 fi
 
 if test "$wxUSE_DC_TRANSFORM_MATRIX" = "yes" ; then

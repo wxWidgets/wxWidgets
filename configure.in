@@ -542,6 +542,7 @@ WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing sup
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
+WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 
 fi
 dnl for GUI only
@@ -6389,8 +6390,38 @@ if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
 fi
 
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
-    AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+    if test "$wxUSE_GTK" = 1 -o "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1; then
+        if test "$wxUSE_XTEST" = "yes" ; then
+            PKG_CHECK_MODULES(XTST, xtst,
+                [
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XTST_LIBS"
+                    CFLAGS="$XTST_CFLAGS $CFLAGS"
+                    CXXFLAGS="$XTST_CFLAGS $CXXFLAGS"
+                    AC_DEFINE(wxUSE_XTEST)
+                ],
+                [
+                    if test "$WXGTK3" = 1; then
+                        dnl This class can't work without XTest with GTK+ 3
+                        dnl which uses XInput2 and so ignores XSendEvent().
+                        AC_MSG_WARN([XTest not found, disabling wxUIActionSimulator])
+                        wxUSE_UIACTIONSIMULATOR=no
+                    fi
+                    dnl The other ports can use XSendEvent(), so don't warn
+                    wxUSE_XTEST="no"
+                ]
+            )
+        elif test "$WXGTK3" = 1; then
+            dnl As per above, wxUIActionSimulator can't be used in this case,
+            dnl but there is no need to warn, presumably the user knows what
+            dnl he's doing if --without-xtest was explicitly specified.
+            wxUSE_UIACTIONSIMULATOR=no
+        fi
+    fi
+
+    if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
+        AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+    fi
 fi
 
 if test "$wxUSE_DC_TRANSFORM_MATRIX" = "yes" ; then

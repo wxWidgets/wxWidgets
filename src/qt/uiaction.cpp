@@ -12,13 +12,15 @@
     #pragma hdrstop
 #endif
 
+#include "wx/uiaction.h"
+#include "wx/private/uiaction.h"
+
 #include <QtTest/QtTestGui>
 #include <QApplication>
 #include <QWidget>
 
 #include "wx/qt/defs.h"
 #include "wx/qt/private/utils.h"
-#include "wx/uiaction.h"
 #include "wx/qt/private/converter.h"
 
 
@@ -36,6 +38,31 @@ inline QWindow* argForEvents(QWidget* w) { return w->windowHandle(); }
 #else
 inline QWidget* argForEvents(QWidget* w) { return w; }
 #endif
+
+class wxUIActionSimulatorQtImpl : public wxUIActionSimulatorImpl
+{
+public:
+    // Returns a pointer to the global simulator object: as it's stateless, we
+    // can reuse the same one without having to allocate it on the heap all the
+    // time.
+    static wxUIActionSimulatorQtImpl* Get()
+    {
+        static wxUIActionSimulatorQtImpl s_impl;
+        return &s_impl;
+    }
+
+    virtual bool MouseMove(long x, long y) wxOVERRIDE;
+    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+
+    virtual bool DoKey(int keycode, int modifiers, bool isDown) wxOVERRIDE;
+
+private:
+    // This class has no public ctors, use Get() instead.
+    wxUIActionSimulatorQtImpl() { }
+
+    wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorQtImpl);
+};
 
 static MouseButton ConvertMouseButton( int button )
 {
@@ -95,24 +122,24 @@ static bool SimulateKeyboardKey( KeyAction keyAction, Key key )
     return widget != NULL;
 }
 
-bool wxUIActionSimulator::MouseDown( int button )
+bool wxUIActionSimulatorQtImpl::MouseDown( int button )
 {
     return SimulateMouseButton( MousePress, ConvertMouseButton( button ));
 }
 
-bool wxUIActionSimulator::MouseUp(int button)
+bool wxUIActionSimulatorQtImpl::MouseUp(int button)
 {
     return SimulateMouseButton( MouseRelease, ConvertMouseButton( button ));
 }
 
-bool wxUIActionSimulator::MouseMove(long x, long y)
+bool wxUIActionSimulatorQtImpl::MouseMove(long x, long y)
 {
     QCursor::setPos( x, y );
 
     return true;
 }
 
-bool wxUIActionSimulator::DoKey(int keyCode, int modifiers, bool isDown)
+bool wxUIActionSimulatorQtImpl::DoKey(int keyCode, int modifiers, bool isDown)
 {
     Qt::KeyboardModifiers qtmodifiers;
     enum Key key;
@@ -124,5 +151,16 @@ bool wxUIActionSimulator::DoKey(int keyCode, int modifiers, bool isDown)
     return SimulateKeyboardKey( keyAction, key );
 }
 
-#endif // wxUSE_UIACTIONSIMULATOR
 
+wxUIActionSimulator::wxUIActionSimulator()
+                   : m_impl(wxUIActionSimulatorQtImpl::Get())
+{
+}
+
+wxUIActionSimulator::~wxUIActionSimulator()
+{
+    // We can use a static wxUIActionSimulatorQtImpl object because it's
+    // stateless, so no need to delete it.
+}
+
+#endif // wxUSE_UIACTIONSIMULATOR
