@@ -2277,6 +2277,10 @@ wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxD
                                                 int align ) :
     wxDataViewRenderer( varianttype, mode, align )
 {
+#if wxUSE_MARKUP
+    m_useMarkup = false;
+#endif // wxUSE_MARKUP
+
     GtkWxCellRendererText *text_renderer = gtk_wx_cell_renderer_text_new();
     text_renderer->wx_renderer = this;
     m_renderer = (GtkCellRenderer*) text_renderer;
@@ -2298,12 +2302,29 @@ wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxD
     SetAlignment(align);
 }
 
+#if wxUSE_MARKUP
+void wxDataViewTextRenderer::EnableMarkup(bool enable)
+{
+    m_useMarkup = enable;
+}
+#endif // wxUSE_MARKUP
+
+const char* wxDataViewTextRenderer::GetTextPropertyName() const
+{
+#if wxUSE_MARKUP
+    if ( m_useMarkup )
+        return "markup";
+#endif // wxUSE_MARKUP
+
+    return "text";
+}
+
 bool wxDataViewTextRenderer::SetTextValue(const wxString& str)
 {
     GValue gvalue = G_VALUE_INIT;
     g_value_init( &gvalue, G_TYPE_STRING );
     g_value_set_string( &gvalue, wxGTK_CONV_FONT( str, GetOwner()->GetOwner()->GetFont() ) );
-    g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
+    g_object_set_property( G_OBJECT(m_renderer), GetTextPropertyName(), &gvalue );
     g_value_unset( &gvalue );
 
     return true;
@@ -2313,7 +2334,7 @@ bool wxDataViewTextRenderer::GetTextValue(wxString& str) const
 {
     GValue gvalue = G_VALUE_INIT;
     g_value_init( &gvalue, G_TYPE_STRING );
-    g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
+    g_object_get_property( G_OBJECT(m_renderer), GetTextPropertyName(), &gvalue );
     str = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ), const_cast<wxDataViewTextRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
     g_value_unset( &gvalue );
 

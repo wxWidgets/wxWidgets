@@ -53,6 +53,11 @@ public:
     wxDataViewTextRenderer( const wxString &varianttype = GetDefaultType(),
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int align = wxDVR_DEFAULT_ALIGNMENT );
+    virtual ~wxDataViewTextRenderer();
+
+#if wxUSE_MARKUP
+    void EnableMarkup(bool enable = true);
+#endif // wxUSE_MARKUP
 
     virtual bool SetValue( const wxVariant &value );
     virtual bool GetValue( wxVariant &value ) const;
@@ -69,7 +74,11 @@ public:
 protected:
     wxString   m_text;
 
-protected:
+private:
+#if wxUSE_MARKUP
+    class wxMarkupText *m_markupText;
+#endif // wxUSE_MARKUP
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);
 };
 
