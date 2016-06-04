@@ -104,6 +104,19 @@ const void *wxSecretValue::GetData() const
     return m_impl ? m_impl->GetData() : NULL;
 }
 
+wxString wxSecretValue::GetAsString(const wxMBConv& conv) const
+{
+    if ( !m_impl )
+        return wxString();
+
+    return wxString
+           (
+                static_cast<const char*>(m_impl->GetData()),
+                conv,
+                m_impl->GetSize()
+           );
+}
+
 #ifndef __WINDOWS__
 
 /* static */
@@ -116,6 +129,13 @@ void wxSecretValue::Wipe(size_t size, void *data)
 }
 
 #endif // __WINDOWS__
+
+/* static */
+void wxSecretValue::WipeString(wxString& str)
+{
+    for ( wxString::iterator it = str.begin(); it != str.end(); ++it )
+        *it = '*';
+}
 
 // ============================================================================
 // wxSecretStore implementation

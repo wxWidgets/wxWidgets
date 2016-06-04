@@ -31,12 +31,17 @@ public:
 
         The @a data argument may contain NUL bytes and doesn't need to be
         NUL-terminated.
-
-        Under MSW the secret size is effectively limited to 511 bytes and
-        while constructing longer values will still succeed, saving it will
-        fail with an error.
      */
     wxSecretValue(size_t size, const void *data);
+
+    /**
+        Creates a secret value from the given string.
+
+        The @a secret argument may contain NUL bytes.
+
+        The secret value will stored serialized in UTF-8 encoding.
+     */
+    explicit wxSecretValue(const wxSecretValue& secret);
 
     /**
         Creates a copy of an existing secret.
@@ -88,14 +93,42 @@ public:
         Get read-only access to the secret data.
 
         Don't assume it is NUL-terminated, use GetSize() instead.
+
+        @see GetAsString()
      */
     const void *GetData() const;
+
+    /**
+        Get the secret data as a string.
+
+        This is a more convenient but less secure alternative to using
+        GetSize() and GetData(), as this function creates another copy of a
+        secret which won't be wiped when this object is destroyed and you will
+        need to call WipeString() to overwrite the content of the returned
+        string, as well all its copies, if any, manually to avoid the secret
+        being left in memory.
+
+        This function uses the specified @a conv object to convert binary
+        secret data to string form. As the secret data may have been created
+        by external programs not using wxWidgets API, it may be not a valid
+        UTF-8-encoded string, so by default ::wxConvWhateverWorks, which tries
+        to interpret it in any way not avoiding loss of data, is used. However
+        if the secrets are only saved by the program itself and are known to be
+        always encoded in UTF-8, it may be better to pass ::wxConvUTF8 as the
+        converter to use.
+     */
+    wxString GetAsString(const wxMBConv& conv = wxConvWhateverWorks) const;
 
     /**
         Erase the given area of memory overwriting its presumably sensitive
         content.
      */
     static void Wipe(size_t size, void *data);
+
+    /**
+        Overwrite the contents of the given string.
+     */
+    static void WipeString(wxString& str);
 };
 
 /**

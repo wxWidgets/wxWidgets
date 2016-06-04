@@ -14,6 +14,8 @@
 
 #if wxUSE_SECRETSTORE
 
+#include "wx/string.h"
+
 class wxSecretStoreImpl;
 class wxSecretValueImpl;
 
@@ -33,6 +35,13 @@ public:
     wxSecretValue(size_t size, const void *data)
         : m_impl(NewImpl(size, data))
     {
+    }
+
+    // Creates a secret value from string.
+    explicit wxSecretValue(const wxString& secret)
+    {
+        const wxScopedCharBuffer buf(secret.utf8_str());
+        m_impl = NewImpl(buf.length(), buf.data());
     }
 
     wxSecretValue(const wxSecretValue& other);
@@ -58,9 +67,18 @@ public:
     // Don't assume it is NUL-terminated, use GetSize() instead.
     const void *GetData() const;
 
+    // Get the secret data as a string.
+    //
+    // Notice that you may want to overwrite the string contents after using it
+    // by calling WipeString().
+    wxString GetAsString(const wxMBConv& conv = wxConvWhateverWorks) const;
+
     // Erase the given area of memory overwriting its presumably sensitive
     // content.
     static void Wipe(size_t size, void *data);
+
+    // Overwrite the contents of the given wxString.
+    static void WipeString(wxString& str);
 
 private:
     // This method is implemented in platform-specific code and must return a

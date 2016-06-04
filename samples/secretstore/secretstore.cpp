@@ -40,8 +40,13 @@ bool Save(wxSecretStore& store, const wxString& service, const wxString& user)
         return false;
     }
 
-    const size_t size = wxStrlen(password) - 1;
-    password[size] = 0; // Strip trailing new line.
+    size_t size = wxStrlen(password);
+    if ( size )
+    {
+        // Strip trailing new line.
+        --size;
+        password[size] = 0;
+    }
 
     wxSecretValue secret(size, password);
 
@@ -74,18 +79,15 @@ bool Load(wxSecretStore& store, const wxString& service, const wxString& user)
         return false;
     }
 
+    // Create a temporary variable just to make it possible to wipe it after
+    // using it.
+    wxString str(secret.GetAsString());
+
     const size_t size = secret.GetSize();
-    wxPrintf("Password for %s/%s is %zu bytes long: \"",
-             service, user, size);
+    wxPrintf("Password for %s/%s is %zu bytes long: \"%s\"\n",
+             service, user, size, str);
 
-    // We can't easily print a non-NUL-terminated string and copying it into a
-    // wxString or std::string would leave the password in memory, so do it the
-    // hard way.
-    const char* p = static_cast<const char *>(secret.GetData());
-    for ( size_t n = 0; n < size; n++ )
-        wxPutc(*p++, stdout);
-
-    wxPrintf("\"\n");
+    wxSecretValue::WipeString(str);
 
     return true;
 }
