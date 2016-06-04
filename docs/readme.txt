@@ -30,7 +30,7 @@ Changes
 Compared to the stable 3.0.x series, this version brings many
 improvements and even more bug fixes, please see the change log
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.2/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1/docs/changes.txt
 
 for the incomplete list of the most important ones. Here is the
 maximally condensed summary:

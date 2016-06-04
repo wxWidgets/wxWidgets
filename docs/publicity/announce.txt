@@ -2,15 +2,15 @@ February 29, 2016 -- The wxWidgets team is pleased to announce a new
 release of our open source framework for the development of native
 cross-platform applications in C++.
 
-wxWidgets 3.1.0 is the first release in the new development 3.1.0
+wxWidgets 3.1.1 is the second release in the 3.1 development
 branch and is now available at
 
-    https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.0
+    https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.1
 
 Compared to the stable 3.0.x series, this version brings many
 improvements and even more bug fixes, please see the change log
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.2/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1/docs/changes.txt
 
 for the incomplete list of the most important ones. Here is the
 maximally condensed summary:
