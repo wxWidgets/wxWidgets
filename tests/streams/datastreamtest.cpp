@@ -39,6 +39,7 @@ private:
     CPPUNIT_TEST_SUITE( DataStreamTestCase );
         CPPUNIT_TEST( FloatRW );
         CPPUNIT_TEST( DoubleRW );
+        CPPUNIT_TEST( StringRW );
 #if wxUSE_LONGLONG
         CPPUNIT_TEST( LongLongRW );
 #endif
@@ -66,6 +67,7 @@ private:
 
     void FloatRW();
     void DoubleRW();
+    void StringRW();
 #if wxUSE_LONGLONG
     void LongLongRW();
 #endif
@@ -234,6 +236,19 @@ void DataStreamTestCase::DoubleRW()
 {
     CPPUNIT_ASSERT( TestFloatRW(2132131.1232132) == 2132131.1232132 );
     CPPUNIT_ASSERT( TestFloatRW(21321343431.1232143432) == 21321343431.1232143432 );
+}
+
+void DataStreamTestCase::StringRW()
+{
+    wxString s(wxT("Test1"));
+    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
+
+    s.append(2, wxT('\0'));
+    s.append(wxT("Test2"));
+    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
+
+    s = wxString::FromUTF8("\xc3\xbc"); // U+00FC LATIN SMALL LETTER U WITH DIAERESIS
+    CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
 }
 
 #if wxUSE_LONGLONG

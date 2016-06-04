@@ -187,7 +187,7 @@ wxString wxDataInputStream::ReadString()
         if ( tmp )
         {
             m_input->Read(tmp.data(), len);
-            ret = m_conv->cMB2WX(tmp.data());
+            ret = m_conv->cMB2WC(tmp.data(), len, NULL);
         }
 #else
         wxStringBuffer buf(ret, len);
@@ -590,10 +590,11 @@ void wxDataOutputStream::WriteString(const wxString& string)
 {
 #if wxUSE_UNICODE
   const wxWX2MBbuf buf = string.mb_str(*m_conv);
+  size_t len = buf.length();
 #else
   const wxWX2MBbuf buf = string.mb_str();
+  size_t len = string.size();
 #endif
-  size_t len = strlen(buf);
   Write32(len);
   if (len > 0)
       m_output->Write(buf, len);
