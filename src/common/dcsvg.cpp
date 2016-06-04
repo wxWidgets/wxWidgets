@@ -922,8 +922,12 @@ void wxSVGFileDCImpl::DoStartNewGraphics()
             sPenJoin = wxT("stroke-linejoin:round; ");
     }
 
-    sLast.Printf( wxT("stroke-width:%d\" \n   transform=\"translate(%s %s) scale(%s %s)\">"),
-                m_pen.GetWidth(), NumStr(m_logicalOriginX), NumStr(m_logicalOriginY), NumStr(m_scaleX), NumStr(m_scaleY)  );
+    sLast.Printf(wxT("stroke-width:%d\" transform=\"translate(%s %s) scale(%s %s)\">"),
+                 m_pen.GetWidth(),
+                 NumStr((m_deviceOriginX - m_logicalOriginX)* m_signX),
+                 NumStr((m_deviceOriginY - m_logicalOriginY)* m_signY),
+                 NumStr(m_scaleX * m_signX),
+                 NumStr(m_scaleY * m_signY));
 
     s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + wxT("\n");
     write(s);

@@ -83,6 +83,24 @@ public:
         return wxCOPY;
     }
 
+    virtual void SetLogicalOrigin(wxCoord x, wxCoord y)
+    {
+        wxDCImpl::SetLogicalOrigin(x, y);
+        m_graphics_changed = true;
+    }
+
+    virtual void SetDeviceOrigin(wxCoord x, wxCoord y)
+    {
+        wxDCImpl::SetDeviceOrigin(x, y);
+        m_graphics_changed = true;
+    }
+
+    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp)
+    {
+        wxDCImpl::SetAxisOrientation(xLeftRight, yBottomUp);
+        m_graphics_changed = true;
+    }
+
     virtual void SetBackground( const wxBrush &brush );
     virtual void SetBackgroundMode( int mode );
     virtual void SetBrush(const wxBrush& brush);
