@@ -715,12 +715,11 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     write(s);
 }
 
-void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
+void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h, double sa, double ea)
 {
     /*
     Draws an arc of an ellipse. The current pen is used for drawing the arc
-    and the current brush is used for drawing the pie. This function is
-    currently only available for X window and PostScript device contexts.
+    and the current brush is used for drawing the pie.
 
     x and y specify the x and y coordinates of the upper-left corner of the
     rectangle that contains the ellipse.
@@ -734,45 +733,78 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
     counter-clockwise motion. If start is equal to end, a complete ellipse
     will be drawn. */
 
-    //known bug: SVG draws with the current pen along the radii, but this does not happen in wxMSW
-
-    NewGraphicsIfNeeded();
-
-    wxString s;
     //radius
-    double rx = w / 2;
-    double ry = h / 2;
+    double rx = w / 2.0;
+    double ry = h / 2.0;
     // center
     double xc = x + rx;
     double yc = y + ry;
 
+    // start and end coords
     double xs, ys, xe, ye;
     xs = xc + rx * cos (DegToRad(sa));
     xe = xc + rx * cos (DegToRad(ea));
     ys = yc - ry * sin (DegToRad(sa));
     ye = yc - ry * sin (DegToRad(ea));
 
-    ///now same as circle arc...
+    // svg arcs have 0 degrees at 12-o'clock instead of 3-o'clock
+    double start = (sa - 90);
+    if (start < 0)
+        start += 360;
+    while (abs(start) > 360)
+        start -= (start / abs(start)) * 360;
 
-    double theta1 = atan2(ys-yc, xs-xc);
-    double theta2 = atan2(ye-yc, xe-xc);
+    double end = (ea - 90);
+    if (end < 0)
+        end += 360;
+    while (abs(end) > 360)
+        end -= (end / abs(end)) * 360;
 
-    int fArc;                  // flag for large or small arc 0 means less than 180 degrees
-    if ( (theta2 - theta1) > 0 ) fArc = 1; else fArc = 0;
+    // svg arcs are in clockwise direction, reverse angle
+    double angle = end - start;
+    if (angle <= 0)
+        angle += 360;
 
-    int fSweep;
-    if ( fabs(theta2 - theta1) > M_PI) fSweep = 1; else fSweep = 0;
+    int fArc = angle > 180 ? 1 : 0; // flag for large or small arc
+    int fSweep = 0;                 // flag for sweep always 0
 
-    s.Printf ( wxT("<path d=\"M%d %d A%d %d 0.0 %d %d  %d %d L %d %d z "),
-        int(xs), int(ys), int(rx), int(ry),
-        fArc, fSweep, int(xe), int(ye), int(xc), int(yc)  );
-
-    s += wxT(" \" /> \n");
-
-    if (m_OK)
+    wxString arcPath;
+    if (angle == 360)
     {
-        write(s);
+        // Drawing full circle fails with default arc. Draw two half arcs instead.
+        fArc = 1;
+        arcPath = wxString::Format(wxS("  <path d=\"M%s %s a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
+            NumStr(x), NumStr(y + ry),
+            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr( rx * 2), NumStr(0),
+            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(-rx * 2), NumStr(0));
     }
+    else
+    {
+        arcPath = wxString::Format(wxS("  <path d=\"M%s %s A%s %s 0 %d %d %s %s"),
+            NumStr(xs), NumStr(ys),
+            NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(xe), NumStr(ye));
+    }
+
+    // Workaround so SVG does not draw an extra line from the centre of the drawn arc
+    // to the start point of the arc.
+    // First draw the arc with the current brush, without a border,
+    // then draw the border without filling the arc.
+    if (GetBrush().GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+    {
+        wxDCPenChanger setTransp(*GetOwner(), *wxTRANSPARENT_PEN);
+        NewGraphicsIfNeeded();
+
+        wxString arcFill = arcPath;
+        arcFill += wxString::Format(wxS(" L%s %s z"), NumStr(xc), NumStr(yc));
+        arcFill += wxS("\"/>\n");
+        write(arcFill);
+    }
+
+    wxDCBrushChanger setTransp(*GetOwner(), *wxTRANSPARENT_BRUSH);
+    NewGraphicsIfNeeded();
+
+    wxString arcLine = arcPath + wxS("\"/>\n");
+    write(arcLine);
 }
 
 void wxSVGFileDCImpl::DoSetClippingRegion(int x, int y, int width, int height)
