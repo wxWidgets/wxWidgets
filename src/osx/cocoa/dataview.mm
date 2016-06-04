@@ -30,6 +30,10 @@
 #include "wx/stopwatch.h"
 #include "wx/dcgraph.h"
 
+#if wxUSE_MARKUP
+    #include "wx/osx/cocoa/private/markuptoattr.h"
+#endif // wxUSE_MARKUP
+
 // ============================================================================
 // Constants used locally
 // ============================================================================
@@ -2730,6 +2734,10 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(const wxString& varianttype,
                                                int align)
     : wxDataViewRenderer(varianttype,mode,align)
 {
+#if wxUSE_MARKUP
+    m_useMarkup = false;
+#endif // wxUSE_MARKUP
+
     NSTextFieldCell* cell;
 
 
@@ -2739,8 +2747,27 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(const wxString& varianttype,
     [cell release];
 }
 
+#if wxUSE_MARKUP
+
+void wxDataViewTextRenderer::EnableMarkup(bool enable)
+{
+    m_useMarkup = enable;
+}
+
+#endif // wxUSE_MARKUP
+
 bool wxDataViewTextRenderer::MacRender()
 {
+#if wxUSE_MARKUP
+    if ( m_useMarkup )
+    {
+        wxMarkupToAttrString toAttr(GetView(), GetValue().GetString());
+
+        [GetNativeData()->GetItemCell() setAttributedStringValue:toAttr.GetNSAttributedString()];
+        return true;
+    }
+#endif // wxUSE_MARKUP
+
     [GetNativeData()->GetItemCell() setObjectValue:wxCFStringRef(GetValue().GetString()).AsNSString()];
     return true;
 }
