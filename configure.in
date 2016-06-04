@@ -6379,6 +6379,11 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
                     wxUSE_XTEST="no"
                 ]
             )
+        elif test "$WXGTK3" = 1; then
+            dnl As per above, wxUIActionSimulator can't be used in this case,
+            dnl but there is no need to warn, presumably the user knows what
+            dnl he's doing if --without-xtest was explicitly specified.
+            wxUSE_UIACTIONSIMULATOR=no
         fi
     fi
 

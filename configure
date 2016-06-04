@@ -33659,6 +33659,8 @@ $as_echo "yes" >&6; }
 
 
 fi
+        elif test "$WXGTK3" = 1; then
+                                                wxUSE_UIACTIONSIMULATOR=no
         fi
     fi
 
