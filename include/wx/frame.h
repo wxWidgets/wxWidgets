@@ -152,8 +152,8 @@ public:
 
     // event handlers
 #if wxUSE_MENUS
-#if wxUSE_STATUSBAR
     void OnMenuOpen(wxMenuEvent& event);
+#if wxUSE_STATUSBAR
     void OnMenuClose(wxMenuEvent& event);
     void OnMenuHighlight(wxMenuEvent& event);
 #endif // wxUSE_STATUSBAR

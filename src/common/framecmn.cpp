@@ -42,14 +42,14 @@ extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[] = "status_line";
 
 #if wxUSE_MENUS
 
-#if wxUSE_STATUSBAR
 wxBEGIN_EVENT_TABLE(wxFrameBase, wxTopLevelWindow)
     EVT_MENU_OPEN(wxFrameBase::OnMenuOpen)
+#if wxUSE_STATUSBAR
     EVT_MENU_CLOSE(wxFrameBase::OnMenuClose)
 
     EVT_MENU_HIGHLIGHT_ALL(wxFrameBase::OnMenuHighlight)
-wxEND_EVENT_TABLE()
 #endif // wxUSE_STATUSBAR
+wxEND_EVENT_TABLE()
 
 /* static */
 bool wxFrameBase::ShouldUpdateMenuFromIdle()
@@ -324,16 +324,7 @@ void wxFrameBase::UpdateWindowUI(long flags)
 // event handlers for status bar updates from menus
 // ----------------------------------------------------------------------------
 
-#if wxUSE_MENUS && wxUSE_STATUSBAR
-
-void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
-{
-    event.Skip();
-
-#if wxUSE_STATUSBAR
-    (void)ShowMenuHelp(event.GetMenuId());
-#endif // wxUSE_STATUSBAR
-}
+#if wxUSE_MENUS
 
 void wxFrameBase::OnMenuOpen(wxMenuEvent& event)
 {
@@ -346,6 +337,15 @@ void wxFrameBase::OnMenuOpen(wxMenuEvent& event)
     }
 }
 
+#if wxUSE_STATUSBAR
+
+void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
+{
+    event.Skip();
+
+    (void)ShowMenuHelp(event.GetMenuId());
+}
+
 void wxFrameBase::OnMenuClose(wxMenuEvent& event)
 {
     event.Skip();
@@ -353,7 +353,9 @@ void wxFrameBase::OnMenuClose(wxMenuEvent& event)
     DoGiveHelp(wxEmptyString, false);
 }
 
-#endif // wxUSE_MENUS && wxUSE_STATUSBAR
+#endif // wxUSE_STATUSBAR
+
+#endif // wxUSE_MENUS
 
 // Implement internal behaviour (menu updating on some platforms)
 void wxFrameBase::OnInternalIdle()
