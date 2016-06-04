@@ -31,6 +31,12 @@ public:
         return &m_error;
     }
 
+    // Check if any error actually occurred.
+    operator bool() const
+    {
+        return m_error != NULL;
+    }
+
     wxString GetMessage() const
     {
         return wxString::FromUTF8(m_error->message);

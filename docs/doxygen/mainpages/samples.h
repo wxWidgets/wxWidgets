@@ -651,6 +651,20 @@ on screen.
 
 @sampledir{scroll}
 
+@section page_samples_secretstore Secret Store Sample
+
+@sampleabout{wxSecretStore}
+
+This console-mode sample shows the use of wxSecretStore class for remembering
+the user-entered passwords. It should be run from the command line with the
+first argument of @c save, @c load or @c delete, followed by the "service" and
+"user" arguments as used by wxSecretStore methods. After storing some password,
+you can check that it can be retrieved later and also that it can be seen in
+the OS-provided password manager (e.g. credential manager under MSW or keychain
+utility under OS X).
+
+@sampledir{secretstore}
+
 @section page_samples_shaped Shaped Window Sample
 
 @sampleabout{how to implement a shaped or transparent window\, and a window showing/hiding with effect}
