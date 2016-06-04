@@ -1414,7 +1414,39 @@ void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wx
 // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise)
 {
-    wxPoint2DDouble center = wxPoint2DDouble(x, y);
+    double angle;
+
+    // For the sake of consistency normalize angles the same way
+    // as it is done in Cairo.
+    if ( clockwise )
+    {
+        // If endAngle < startAngle it needs to be progressively
+        // increased by 2*M_PI until endAngle > startAngle.
+        if ( endAngle < startAngle )
+        {
+            while ( endAngle <= startAngle )
+            {
+                endAngle += 2.0*M_PI;
+            }
+        }
+
+        angle = endAngle - startAngle;
+    }
+    else
+    {
+        // If endAngle > startAngle it needs to be progressively
+        // decreased by 2*M_PI until endAngle < startAngle.
+        if ( endAngle > startAngle )
+        {
+            while ( endAngle >= startAngle )
+            {
+                endAngle -= 2.0*M_PI;
+            }
+        }
+
+        angle = startAngle - endAngle;
+    }
+
     wxPoint2DDouble start = wxPoint2DDouble(cos(startAngle) * r, sin(startAngle) * r);
     wxPoint2DDouble end = wxPoint2DDouble(cos(endAngle) * r, sin(endAngle) * r);
 
@@ -1427,41 +1459,68 @@ void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAng
         MoveToPoint(start.m_x + x, start.m_y + y);
     }
 
-    double angle = (end.GetVectorAngle() - start.GetVectorAngle());
-    if ( angle == 360 || angle == -360 )
-    {
-        AddCircle(center.m_x, center.m_y, r);
-        return;
-    }
-
-    if ( !clockwise )
-        angle = -angle;
-
-    if ( angle < 0 )
-        angle += 360;
-
-    while (abs(angle) > 360)
-    {
-        angle -= (angle / abs(angle)) * 360;
-    }
-
     D2D1_SWEEP_DIRECTION sweepDirection = clockwise ?
        D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
+    D2D1_SIZE_F size = D2D1::SizeF((FLOAT)r, (FLOAT)r);
 
-    D2D1_ARC_SIZE arcSize = angle > 180 ?
+    if ( angle >= 2.0*M_PI )
+    {
+        // In addition to arc we need to draw full circle(s).
+        // Remarks:
+        // 1. Parity of the number of the circles has to be
+        // preserved because this matters when path would be
+        // filled with wxODDEVEN_RULE flag set (using
+        // D2D1_FILL_MODE_ALTERNATE mode) when number of the
+        // edges is counted.
+        // 2. ID2D1GeometrySink::AddArc() doesn't work
+        // with 360-degree arcs so we need to construct
+        // the circle from two halves.
+        D2D1_ARC_SEGMENT circleSegment1 =
+        {
+            D2D1::Point2((FLOAT)(x - start.m_x), (FLOAT)(y - start.m_y)),  // end point
+            size,                     // size
+            0.0f,                     // rotation
+            sweepDirection,           // sweep direction
+            D2D1_ARC_SIZE_SMALL       // arc size
+        };
+        D2D1_ARC_SEGMENT circleSegment2 =
+        {
+            D2D1::Point2((FLOAT)(x + start.m_x), (FLOAT)(y + start.m_y)),  // end point
+            size,                     // size
+            0.0f,                     // rotation
+            sweepDirection,           // sweep direction
+            D2D1_ARC_SIZE_SMALL       // arc size
+        };
+
+        int numCircles = (int)(angle / (2.0*M_PI));
+        numCircles = (numCircles - 1) % 2 + 1;
+        for( int i = 0; i < numCircles; i++ )
+        {
+            m_geometrySink->AddArc(circleSegment1);
+            m_geometrySink->AddArc(circleSegment2);
+        }
+
+        // Reduce the angle to [0..2*M_PI) range.
+        angle = fmod(angle, 2.0*M_PI);
+    }
+
+    D2D1_ARC_SIZE arcSize = angle > M_PI ?
        D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL;
+    D2D1_POINT_2F endPoint =
+       D2D1::Point2((FLOAT)(end.m_x + x), (FLOAT)(end.m_y + y));
 
-    D2D1_ARC_SEGMENT arcSegment = {
-        D2D1::Point2((FLOAT)(end.m_x + x), (FLOAT)(end.m_y + y)),  // end point
-        D2D1::SizeF((FLOAT)r, (FLOAT)r),                           // size
-        0.0f,                           // rotation
-        sweepDirection,                 // sweep direction
-        arcSize                         // arc size
+    D2D1_ARC_SEGMENT arcSegment =
+    {
+        endPoint,                     // end point
+        size,                         // size
+        0.0f,                         // rotation
+        sweepDirection,               // sweep direction
+        arcSize                       // arc size
     };
 
     m_geometrySink->AddArc(arcSegment);
 
-    m_currentPoint = D2D1::Point2F(end.m_x + x, end.m_y + y);
+    m_currentPoint = endPoint;
 }
 
 // appends an ellipsis as a new closed subpath fitting the passed rectangle
