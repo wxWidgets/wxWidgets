@@ -231,9 +231,10 @@ private:
 // OSX-specific implementation of common methods
 // ============================================================================
 
-wxSecretValue::wxSecretValue(size_t size, const void *data)
-    : m_impl(new wxSecretValueGenericImpl(size, data))
+/* static */
+wxSecretValueImpl* wxSecretValue::NewImpl(size_t size, const void *data)
 {
+    return new wxSecretValueGenericImpl(size, data);
 }
 
 /* static */

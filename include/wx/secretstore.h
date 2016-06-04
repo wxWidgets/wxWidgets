@@ -30,7 +30,10 @@ public:
     wxSecretValue() : m_impl(NULL) { }
 
     // Creates a secret value from the given data.
-    wxSecretValue(size_t size, const void *data);
+    wxSecretValue(size_t size, const void *data)
+        : m_impl(NewImpl(size, data))
+    {
+    }
 
     wxSecretValue(const wxSecretValue& other);
     wxSecretValue& operator=(const wxSecretValue& other);
@@ -60,6 +63,10 @@ public:
     static void Wipe(size_t size, void *data);
 
 private:
+    // This method is implemented in platform-specific code and must return a
+    // new heap-allocated object initialized with the given data.
+    static wxSecretValueImpl* NewImpl(size_t size, const void *data);
+
     // This ctor is only used by wxSecretStore and takes ownership of the
     // provided existing impl pointer.
     explicit wxSecretValue(wxSecretValueImpl* impl) : m_impl(impl) { }

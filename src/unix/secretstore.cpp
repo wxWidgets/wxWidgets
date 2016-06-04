@@ -251,9 +251,10 @@ const char* wxSecretStoreLibSecretImpl::FIELD_USER = "user";
 // LibSecret-specific implementation of common methods
 // ============================================================================
 
-wxSecretValue::wxSecretValue(size_t size, const void *data)
-    : m_impl(new wxSecretValueLibSecretImpl(size, data))
+/* static */
+wxSecretValueImpl* wxSecretValue::NewImpl(size_t size, const void *data)
 {
+    return new wxSecretValueLibSecretImpl(size, data);
 }
 
 /* static */
