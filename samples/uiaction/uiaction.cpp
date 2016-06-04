@@ -82,6 +82,7 @@ public:
     void OnRunSimulation(wxCommandEvent& event);
     void OnSimulateText(wxCommandEvent& event);
     void OnExit(wxCommandEvent& WXUNUSED(event)) { Close(); }
+    void OnAbout(wxCommandEvent& event);
 
 private:
     wxButton* m_button;
@@ -96,6 +97,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(RunSimulation, MyFrame::OnRunSimulation)
     EVT_MENU(SimulateText, MyFrame::OnSimulateText)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
 #endif // wxUSE_UIACTIONSIMULATOR
@@ -151,8 +153,12 @@ MyFrame::MyFrame(const wxString& title)
 
     fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit this program");
 
+    wxMenu* const helpMenu = new wxMenu;
+    helpMenu->Append(wxID_ABOUT);
+
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(fileMenu, "&File");
+    menuBar->Append(helpMenu, "&Help");
 
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
@@ -248,6 +254,17 @@ void MyFrame::OnSimulateText(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnButtonPressed(wxCommandEvent& WXUNUSED(event))
 {
     m_text->AppendText("Button pressed.\n");
+}
+
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageBox
+    (
+        "Shows how to use wxUIActionSimulator to simulate user actions",
+        "About wxWidgets uiaction sample",
+        wxOK | wxICON_INFORMATION,
+        this
+    );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
