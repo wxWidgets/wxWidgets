@@ -761,6 +761,9 @@ void SCI_METHOD LexerCPP::Lex(Sci_PositionU startPos, Sci_Position length, int i
 				lineCurrent++;
 				lineEndNext = styler.LineEnd(lineCurrent);
 				vlls.Add(lineCurrent, preproc);
+				if (rawStringTerminator != "") {
+					rawSTNew.Set(lineCurrent-1, rawStringTerminator);
+				}
 				sc.Forward();
 				if (sc.ch == '\r' && sc.chNext == '\n') {
 					// Even in UTF-8, \r and \n are separate
@@ -1349,14 +1352,14 @@ void SCI_METHOD LexerCPP::Fold(Sci_PositionU startPos, Sci_Position length, int 
 			}
 		}
 		if (options.foldSyntaxBased && (style == SCE_C_OPERATOR)) {
-			if (ch == '{' || ch == '[') {
+			if (ch == '{' || ch == '[' || ch == '(') {
 				// Measure the minimum before a '{' to allow
 				// folding on "} else {"
 				if (levelMinCurrent > levelNext) {
 					levelMinCurrent = levelNext;
 				}
 				levelNext++;
-			} else if (ch == '}' || ch == ']') {
+			} else if (ch == '}' || ch == ']' || ch == ')') {
 				levelNext--;
 			}
 		}

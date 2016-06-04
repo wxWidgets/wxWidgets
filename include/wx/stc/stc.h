@@ -560,6 +560,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_SREC 117
 #define wxSTC_LEX_IHEX 118
 #define wxSTC_LEX_TEHEX 119
+#define wxSTC_LEX_JSON 120
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2431,6 +2432,24 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_HEX_CHECKSUM 16
 #define wxSTC_HEX_CHECKSUM_WRONG 17
 #define wxSTC_HEX_GARBAGE 18
+
+/// Lexical state for SCLEX_IHEX (shared with Srec)
+/// Lexical state for SCLEX_TEHEX (shared with Srec)
+/// Lexical states for SCLEX_JSON
+#define wxSTC_JSON_DEFAULT 0
+#define wxSTC_JSON_NUMBER 1
+#define wxSTC_JSON_STRING 2
+#define wxSTC_JSON_STRINGEOL 3
+#define wxSTC_JSON_PROPERTYNAME 4
+#define wxSTC_JSON_ESCAPESEQUENCE 5
+#define wxSTC_JSON_LINECOMMENT 6
+#define wxSTC_JSON_BLOCKCOMMENT 7
+#define wxSTC_JSON_OPERATOR 8
+#define wxSTC_JSON_URI 9
+#define wxSTC_JSON_COMPACTIRI 10
+#define wxSTC_JSON_KEYWORD 11
+#define wxSTC_JSON_LDKEYWORD 12
+#define wxSTC_JSON_ERROR 13
 
 //}}}
 //----------------------------------------------------------------------
@@ -5000,6 +5019,9 @@ public:
 
     // Retrieve the selected text.
     wxCharBuffer GetSelectedTextRaw();
+
+    // Retrieve the target text.
+    wxCharBuffer GetTargetTextRaw();
 
     // Retrieve a range of text.
     wxCharBuffer GetTextRangeRaw(int startPos, int endPos);

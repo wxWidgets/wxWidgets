@@ -5009,6 +5009,17 @@ wxCharBuffer wxStyledTextCtrl::GetSelectedTextRaw()
     return buf;
 }
 
+wxCharBuffer wxStyledTextCtrl::GetTargetTextRaw()
+{
+    // Calculate the length needed first.
+    const int len = SendMsg(SCI_GETTARGETEND, 0, 0) - SendMsg(SCI_GETTARGETSTART, 0, 0);
+
+    // And then really get the data.
+    wxCharBuffer buf(len);
+    SendMsg(SCI_GETTARGETTEXT, 0, (sptr_t)buf.data());
+    return buf;
+}
+
 wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
 {
     if (endPos < startPos) {
@@ -5502,7 +5513,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 6, 3, "Scintilla 3.6.3");
+    return wxVersionInfo("Scintilla", 3, 6, 6, "Scintilla 3.6.6");
 }
 
 #endif // wxUSE_STC

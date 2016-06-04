@@ -828,7 +828,7 @@ static void ColouriseHyperTextDoc(Sci_PositionU startPos, Sci_Position length, i
 		// handle end of Mako comment line
 		else if (isMako && makoComment && (ch == '\r' || ch == '\n')) {
 			makoComment = 0;
-			styler.ColourTo(i, StateToPrint);
+			styler.ColourTo(i - 1, StateToPrint);
 			if (scriptLanguage == eScriptPython) {
 				state = SCE_HP_DEFAULT;
 			} else {

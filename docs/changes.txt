@@ -77,7 +77,7 @@ All (GUI):
 
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
-- Update Scintilla to v3.6.3 (Paul Kulchenko).
+- Update Scintilla to v3.6.6 (Paul Kulchenko).
 - Fix bug with not being able to select AUI tab after dragging.
 - Make wxDataViewCtrl::Expand() expand ancestors in native ports too.
 - Add wxDataViewCtrl::SetHeaderAttr().
