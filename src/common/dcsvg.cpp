@@ -634,17 +634,16 @@ void wxSVGFileDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoint 
     }
 }
 
-void wxSVGFileDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)
-
+void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     NewGraphicsIfNeeded();
 
-    int rh = height /2;
-    int rw = width  /2;
+    int rh = height / 2;
+    int rw = width / 2;
 
     wxString s;
-    s.Printf ( wxT("<ellipse cx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\" "), x+rw,y+rh, rw, rh );
-    s += wxT(" /> \n");
+    s = wxString::Format(wxS("  <ellipse cx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\""), x + rw, y + rh, rw, rh);
+    s += wxS("/>\n");
 
     write(s);
 
@@ -670,35 +669,50 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     double r1 = sqrt ( double( (x1-xc)*(x1-xc) ) + double( (y1-yc)*(y1-yc) ) );
     double r2 = sqrt ( double( (x2-xc)*(x2-xc) ) + double( (y2-yc)*(y2-yc) ) );
 
-    wxASSERT_MSG( (fabs ( r2-r1 ) <= 3), wxT("wxSVGFileDC::DoDrawArc Error in getting radii of circle"));
+    wxASSERT_MSG( (fabs ( r2-r1 ) <= 3), wxS("wxSVGFileDC::DoDrawArc Error in getting radii of circle"));
     if ( fabs ( r2-r1 ) > 3 )    //pixels
     {
-        s = wxT("<!--- wxSVGFileDC::DoDrawArc Error in getting radii of circle --> \n");
+        s = wxS("<!--- wxSVGFileDC::DoDrawArc Error in getting radii of circle -->\n");
         write(s);
     }
 
-    double theta1 = atan2((double)(yc-y1),(double)(x1-xc));
-    if ( theta1 < 0 ) theta1 = theta1 + M_PI * 2;
-    double theta2 = atan2((double)(yc-y2), (double)(x2-xc));
-    if ( theta2 < 0 ) theta2 = theta2 + M_PI * 2;
-    if ( theta2 < theta1 ) theta2 = theta2 + M_PI *2;
+    double theta1 = atan2((double)(yc - y1), (double)(x1 - xc));
+    if (theta1 < 0)
+        theta1 = theta1 + M_PI * 2;
+
+    double theta2 = atan2((double)(yc - y2), (double)(x2 - xc));
+    if (theta2 < 0)
+        theta2 = theta2 + M_PI * 2;
+    if (theta2 < theta1) theta2 = theta2 + M_PI * 2;
 
     int fArc;                  // flag for large or small arc 0 means less than 180 degrees
-    if ( fabs(theta2 - theta1) > M_PI ) fArc = 1; else fArc = 0;
+    if (fabs(theta2 - theta1) > M_PI)
+        fArc = 1; else fArc = 0;
 
     int fSweep = 0;             // flag for sweep always 0
 
-    s.Printf ( wxT("<path d=\"M%d %d A%s %s 0.0 %d %d %d %d L%d %d z "),
-        x1,y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, xc, yc );
-
-    // the z means close the path and fill
-    s += wxT(" \" /> \n");
-
-
-    if (m_OK)
+    if (x1 == x2 && y1 == y2)
     {
-        write(s);
+        // drawing full circle fails with default arc. Draw two half arcs instead.
+        s = wxString::Format(wxS("  <path d=\"M%d %d a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
+            x1, y1,
+            NumStr(r1), NumStr(r2), fArc, fSweep, NumStr( r1 * 2), NumStr(0),
+            NumStr(r1), NumStr(r2), fArc, fSweep, NumStr(-r1 * 2), NumStr(0));
     }
+    else
+    {
+        // comply to wxDC specs by drawing closing line if brush is not transparent
+        wxString line;
+        if (GetBrush().GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+            line = wxString::Format(wxS("L%d %d z"), xc, yc);
+
+        s = wxString::Format(wxS("  <path d=\"M%d %d A%s %s 0 %d %d %d %d %s"),
+            x1, y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, line);
+    }
+
+    s += wxS("\"/>\n");
+
+    write(s);
 }
 
 void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
