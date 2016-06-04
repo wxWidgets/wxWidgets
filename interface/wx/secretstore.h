@@ -31,6 +31,10 @@ public:
 
         The @a data argument may contain NUL bytes and doesn't need to be
         NUL-terminated.
+
+        Notice that at least under MSW the maximal size of the secret is
+        limited. The exact limit depends on the OS version and is e.g. 2560 for
+        Windows 7.
      */
     wxSecretValue(size_t size, const void *data);
 
