@@ -1416,7 +1416,7 @@ void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAng
 {
     double angle;
 
-    // For the sake of consistency normalize angles the same way
+    // For the sake of compatibility normalize angles the same way
     // as it is done in Cairo.
     if ( clockwise )
     {
@@ -1450,6 +1450,9 @@ void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAng
     wxPoint2DDouble start = wxPoint2DDouble(cos(startAngle) * r, sin(startAngle) * r);
     wxPoint2DDouble end = wxPoint2DDouble(cos(endAngle) * r, sin(endAngle) * r);
 
+    // To ensure compatibility with Cairo an initial
+    // line segment to the beginning of the arc needs
+    // to be added to the path.
     if (m_figureOpened)
     {
         AddLineToPoint(start.m_x + x, start.m_y + y);

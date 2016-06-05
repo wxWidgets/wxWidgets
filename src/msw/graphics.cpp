@@ -1295,7 +1295,7 @@ void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double start
 {
     double angle;
 
-    // For the sake of consistency normalize angles the same way
+    // For the sake of compatibility normalize angles the same way
     // as it is done in Cairo.
     if ( clockwise )
     {
@@ -1326,22 +1326,17 @@ void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double start
         angle = startAngle - endAngle;
     }
 
-    // Native GraphicsPath.AddArc() does nothing when sweep
-    // angle equals 0 (even current point is not updated)
-    // so we have to handle this case on our own.
+    // To ensure compatibility with Cairo an initial
+    // line segment to the beginning of the arc needs
+    // to be added to the path.
+    AddLineToPoint(r*cos(startAngle) + x, r*sin(startAngle) + y);
+
+    // Native GraphicsPath.AddArc() does nothing
+    // (even current point is not updated)
+    // when sweep angle equals 0 so we can skip
+    // any further actions.
     if ( angle == 0 )
     {
-        wxPoint2DDouble start = wxPoint2DDouble(cos(startAngle) * r, sin(startAngle) * r);
-
-        if (m_figureOpened)
-        {
-            AddLineToPoint(start.m_x + x, start.m_y + y);
-        }
-        else
-        {
-            MoveToPoint(start.m_x + x, start.m_y + y);
-        }
-
         return;
     }
 
