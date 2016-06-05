@@ -31,6 +31,9 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
+#if wxUSE_MIMETYPE
+#include "wx/gtk/mimetype.h"
+#endif
 //-----------------------------------------------------------------------------
 // link GnomeVFS
 //-----------------------------------------------------------------------------
@@ -434,6 +437,10 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         wxLogError(_("Unable to initialize GTK+, is DISPLAY set properly?"));
         return false;
     }
+
+#if wxUSE_MIMETYPE
+    wxMimeTypesManagerFactory::Set(new wxGTKMimeTypesManagerFactory());
+#endif
 
     // we cannot enter threads before gtk_init is done
     gdk_threads_enter();
