@@ -31,9 +31,7 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
-#if wxUSE_MIMETYPE
 #include "wx/gtk/mimetype.h"
-#endif
 //-----------------------------------------------------------------------------
 // link GnomeVFS
 //-----------------------------------------------------------------------------
