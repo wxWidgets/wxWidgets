@@ -31,8 +31,9 @@
 
 // Somewhat surprisingly, wincred.h is not self-contained and relies on some
 // standard Windows macros being defined without including the headers defining
-// them on its own.
-#include "wx/msw/wrapwin.h"
+// them on its own, so we must include <windows.h> (from our private header)
+// before including it.
+#include "wx/msw/private.h"
 #include <wincred.h>
 
 namespace
@@ -65,7 +66,8 @@ public:
     {
         const wxString target = MakeTargetName(service, user);
 
-        CREDENTIAL cred = { 0 };
+        CREDENTIAL cred;
+        wxZeroMemory(cred);
         cred.Type = CRED_TYPE_GENERIC;
         cred.TargetName = const_cast<TCHAR*>(target.t_str());
         cred.UserName = const_cast<TCHAR*>(user.t_str());

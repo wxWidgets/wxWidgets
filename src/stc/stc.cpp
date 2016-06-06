@@ -5038,6 +5038,7 @@ wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
     tr.lpstrText = buf.data();
     tr.chrg.cpMin = startPos;
     tr.chrg.cpMax = endPos;
+    tr.lpstrText[0] = '\0'; // initialize with 0 in case the range is invalid
     SendMsg(SCI_GETTEXTRANGE, 0, (sptr_t)&tr);
     return buf;
 }

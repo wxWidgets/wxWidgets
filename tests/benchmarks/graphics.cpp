@@ -369,6 +369,7 @@ private:
         BenchmarkLines(msg, dc);
         BenchmarkRawBitmaps(msg, dc);
         BenchmarkRectangles(msg, dc);
+        BenchmarkRoundedRectangles(msg, dc);
         BenchmarkCircles(msg, dc);
         BenchmarkEllipses(msg, dc);
     }
@@ -434,6 +435,36 @@ private:
         const long t = sw.Time();
 
         wxPrintf("%ld rects done in %ldms = %gus/rect\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters);
+    }
+
+    void BenchmarkRoundedRectangles(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testRectangles )
+            return;
+
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+        if ( opts.penWidth != 0 )
+            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+
+        dc.SetBrush( *wxCYAN_BRUSH );
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        wxStopWatch sw;
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawRoundedRectangle(x, y, 48, 32, 8);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld rounded rects done in %ldms = %gus/rect\n",
                  opts.numIters, t, (1000. * t)/opts.numIters);
     }
 

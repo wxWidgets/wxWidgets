@@ -434,11 +434,11 @@ void wxGraphicsPathData::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w
         AddRectangle(x,y,w,h);
     else
     {
-        MoveToPoint( x + w, y + h / 2);
-        AddArcToPoint(x + w, y + h, x + w / 2, y + h, radius);
-        AddArcToPoint(x, y + h, x, y + h / 2, radius);
-        AddArcToPoint(x, y , x + w / 2, y, radius);
-        AddArcToPoint(x + w, y, x + w, y + h / 2, radius);
+        MoveToPoint(x+w, y+h/2);
+        AddArc(x+w-radius, y+h-radius, radius, 0.0, M_PI/2.0, true);
+        AddArc(x+radius, y+h-radius, radius, M_PI/2.0, M_PI, true);
+        AddArc(x+radius, y+radius, radius, M_PI, 3.0*M_PI/2.0, true);
+        AddArc(x+w-radius, y+radius, radius, 3.0*M_PI/2.0, 2.0*M_PI, true);
         CloseSubpath();
     }
 }
