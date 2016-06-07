@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 24 February 2016                                                   *
+ * Date : 7 June 2016                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -269,6 +269,8 @@ typedef pid_t GPid;
 #define wxUSE_FFILE         1
 
 #define wxUSE_FSVOLUME      1
+
+#define wxUSE_SECRETSTORE   1
 
 #define wxUSE_STDPATHS      1
 
@@ -708,6 +710,16 @@ typedef pid_t GPid;
 #define wxUSE_GSTREAMER 0
 
 #define wxUSE_GSTREAMER_PLAYER 0
+
+/*
+   Use XTest extension to implement wxUIActionSimulator?
+
+   Default is 1, it is set to 0 if the necessary headers/libraries are not
+   found by configure.
+
+   Recommended setting: 1, wxUIActionSimulator won't work in wxGTK3 without it.
+ */
+#define wxUSE_XTEST 1
 
 /* --- start MSW options --- */
 
