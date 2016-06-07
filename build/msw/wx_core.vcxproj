@@ -799,7 +799,6 @@
     <ClCompile Include="..\..\src\msw\ole\safearray.cpp" />
     <ClCompile Include="..\..\src\msw\ownerdrw.cpp" />
     <ClCompile Include="..\..\src\msw\palette.cpp" />
-    <ClCompile Include="..\..\src\msw\panel.cpp" />
     <ClCompile Include="..\..\src\msw\pen.cpp" />
     <ClCompile Include="..\..\src\msw\popupwin.cpp" />
     <ClCompile Include="..\..\src\msw\printdlg.cpp" />

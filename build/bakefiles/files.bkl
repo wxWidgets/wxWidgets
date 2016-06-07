@@ -1969,7 +1969,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
-    src/msw/panel.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
