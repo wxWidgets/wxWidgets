@@ -945,8 +945,11 @@ void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
         else
         {
             wxString type, desc, open;
+            wxIconLocation loc;
+
             filetype->GetMimeType(&type);
             filetype->GetDescription(&desc);
+            filetype->GetIcon(&loc);
 
             wxString filename = wxT("filename");
             filename << wxT(".") << ext;
@@ -958,6 +961,8 @@ void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
                      << wxT("\tDescription: ") << ( !desc ? wxString(wxEmptyString) : desc )
                         << wxT('\n')
                      << wxT("\tCommand to open: ") << ( !open ? wxString("no") : open )
+                        << wxT('\n')
+                     << wxT("\tIcon: ") << ( loc.IsOk() ? loc.GetFileName() : wxString("no") )
                         << wxT('\n');
 
             delete filetype;
