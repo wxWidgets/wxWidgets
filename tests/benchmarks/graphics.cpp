@@ -61,7 +61,9 @@ struct GraphicsBenchmarkOptions
         testImages =
         testLines =
         testRawBitmaps =
-        testRectangles = false;
+        testRectangles =
+        testCircles =
+        testEllipses = false;
 
         usePaint =
         useClient =
@@ -70,6 +72,8 @@ struct GraphicsBenchmarkOptions
         useDC =
         useGC =
         useGL = false;
+
+        renderer = Default;
     }
 
     long mapMode,
@@ -82,7 +86,9 @@ struct GraphicsBenchmarkOptions
          testImages,
          testLines,
          testRawBitmaps,
-         testRectangles;
+         testRectangles,
+         testCircles,
+         testEllipses;
 
     bool usePaint,
          useClient,
@@ -91,6 +97,13 @@ struct GraphicsBenchmarkOptions
     bool useDC,
          useGC,
          useGL;
+
+#ifdef __WXMSW__
+    enum GraphRenderer { Default, GDIPlus, Direct2D, Cairo };
+#else
+    enum GraphicsRenderer { Default };
+#endif // __WXMSW__ / !__WXMSW__
+    GraphRenderer renderer;
 } opts;
 
 class GraphicsBenchmarkFrame : public wxFrame
@@ -141,6 +154,35 @@ public:
         m_bitmapARGB.Create(64, 64, 32);
         m_bitmapARGB.UseAlpha(true);
         m_bitmapRGB.Create(64, 64, 24);
+
+        m_renderer = NULL;
+        if ( opts.useGC )
+        {
+#ifdef __WXMSW__
+            if ( opts.renderer == GraphicsBenchmarkOptions::GDIPlus )
+                m_renderer = wxGraphicsRenderer::GetGDIPlusRenderer();
+            else if ( opts.renderer == GraphicsBenchmarkOptions::Direct2D )
+                m_renderer = wxGraphicsRenderer::GetDirect2DRenderer();
+            else if ( opts.renderer == GraphicsBenchmarkOptions::Cairo )
+                m_renderer = wxGraphicsRenderer::GetCairoRenderer();
+            // Check if selected renderer is operational.
+            if ( m_renderer )
+            {
+                wxBitmap bmp(16, 16);
+                wxMemoryDC memDC(bmp);
+                wxGraphicsContext* gc = m_renderer->CreateContext(memDC);
+                if ( !gc )
+                {
+                    wxPrintf("Couldn't initialize '%s' graphics renderer.\n", m_renderer->GetName().c_str());
+                    m_renderer = NULL;
+                }
+                delete gc;
+            }
+#endif // __WXMSW__
+
+            if( !m_renderer )
+                m_renderer = wxGraphicsRenderer::GetDefaultRenderer();
+        }
 
         Show();
     }
@@ -217,16 +259,40 @@ private:
     {
         if ( opts.usePaint )
         {
-            wxPaintDC dc(this);
-            wxGCDC gcdc(dc);
-            BenchmarkDCAndGC("paint", dc, gcdc);
+            {
+                wxPaintDC dc(this);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
+                BenchmarkDCAndGC("paint", dc, gcdc);
+            }
+            // Since some renderers use back buffers and hence
+            // drawing results are not displayed when the test
+            // is running then wait a second after graphics
+            // contents is commited to DC to present the output.
+            wxSleep(1);
         }
 
         if ( opts.useClient )
         {
-            wxClientDC dc(this);
-            wxGCDC gcdc(dc);
-            BenchmarkDCAndGC("client", dc, gcdc);
+            {
+                wxClientDC dc(this);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
+                BenchmarkDCAndGC("client", dc, gcdc);
+            }
+            // Since some renderers use back buffers and hence
+            // drawing results are not displayed when the test
+            // is running then wait a second after graphics
+            // contents is commited to DC to present the output.
+            wxSleep(1);
         }
 
         if ( opts.useMemory )
@@ -234,27 +300,47 @@ private:
             {
                 wxBitmap bmp(opts.width, opts.height);
                 wxMemoryDC dc(bmp);
-                wxGCDC gcdc(dc);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
                 BenchmarkDCAndGC("default memory", dc, gcdc);
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 24);
                 wxMemoryDC dc(bmp);
-                wxGCDC gcdc(dc);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
                 BenchmarkDCAndGC("RGB memory", dc, gcdc);
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 32);
                 bmp.UseAlpha(false);
                 wxMemoryDC dc(bmp);
-                wxGCDC gcdc(dc);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
                 BenchmarkDCAndGC("0RGB memory", dc, gcdc);
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 32);
                 bmp.UseAlpha(true);
                 wxMemoryDC dc(bmp);
-                wxGCDC gcdc(dc);
+                wxGCDC gcdc;
+                if ( m_renderer )
+                {
+                    wxGraphicsContext* gc = m_renderer->CreateContext(dc);
+                    gcdc.SetGraphicsContext(gc);
+                }
                 BenchmarkDCAndGC("ARGB memory", dc, gcdc);
             }
 
@@ -266,9 +352,14 @@ private:
     void BenchmarkDCAndGC(const char* dckind, wxDC& dc, wxGCDC& gcdc)
     {
         if ( opts.useDC )
+        {
             BenchmarkAll(wxString::Format("%6s DC", dckind), dc);
-        if ( opts.useGC )
-            BenchmarkAll(wxString::Format("%6s GC", dckind), gcdc);
+        }
+        else if ( opts.useGC && gcdc.IsOk() )
+        {
+            wxString rendName = gcdc.GetGraphicsContext()->GetRenderer()->GetName();
+            BenchmarkAll(wxString::Format("%6s GC (%s)", dckind, rendName.c_str()), gcdc);
+        }
     }
 
     void BenchmarkAll(const wxString& msg, wxDC& dc)
@@ -278,6 +369,9 @@ private:
         BenchmarkLines(msg, dc);
         BenchmarkRawBitmaps(msg, dc);
         BenchmarkRectangles(msg, dc);
+        BenchmarkRoundedRectangles(msg, dc);
+        BenchmarkCircles(msg, dc);
+        BenchmarkEllipses(msg, dc);
     }
 
     void BenchmarkLines(const wxString& msg, wxDC& dc)
@@ -341,6 +435,96 @@ private:
         const long t = sw.Time();
 
         wxPrintf("%ld rects done in %ldms = %gus/rect\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters);
+    }
+
+    void BenchmarkRoundedRectangles(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testRectangles )
+            return;
+
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+        if ( opts.penWidth != 0 )
+            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+
+        dc.SetBrush( *wxCYAN_BRUSH );
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        wxStopWatch sw;
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawRoundedRectangle(x, y, 48, 32, 8);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld rounded rects done in %ldms = %gus/rect\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters);
+    }
+
+    void BenchmarkCircles(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testCircles )
+            return;
+
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+        if ( opts.penWidth != 0 )
+            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+
+        dc.SetBrush( *wxGREEN_BRUSH );
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        wxStopWatch sw;
+        for ( long n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawCircle(x, y, 32);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld circles done in %ldms = %gus/circle\n",
+                 opts.numIters, t, (1000. * t)/opts.numIters);
+    }
+
+    void BenchmarkEllipses(const wxString& msg, wxDC& dc)
+    {
+        if ( !opts.testEllipses )
+            return;
+
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+        if ( opts.penWidth != 0 )
+            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+
+        dc.SetBrush( *wxBLUE_BRUSH );
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        wxStopWatch sw;
+        for ( long n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawEllipse(x, y, 48, 32);
+        }
+
+        const long t = sw.Time();
+
+        wxPrintf("%ld ellipses done in %ldms = %gus/ellipse\n",
                  opts.numIters, t, (1000. * t)/opts.numIters);
     }
 
@@ -471,6 +655,7 @@ private:
     wxGLCanvas* m_glCanvas;
     wxGLContext* m_glContext;
 #endif // wxUSE_GLCANVAS
+    wxGraphicsRenderer* m_renderer;
 };
 
 class GraphicsBenchmarkApp : public wxApp
@@ -485,6 +670,8 @@ public:
             { wxCMD_LINE_SWITCH, "",  "lines" },
             { wxCMD_LINE_SWITCH, "",  "rawbmp" },
             { wxCMD_LINE_SWITCH, "",  "rectangles" },
+            { wxCMD_LINE_SWITCH, "",  "circles" },
+            { wxCMD_LINE_SWITCH, "",  "ellipses" },
             { wxCMD_LINE_SWITCH, "",  "paint" },
             { wxCMD_LINE_SWITCH, "",  "client" },
             { wxCMD_LINE_SWITCH, "",  "memory" },
@@ -499,6 +686,9 @@ public:
             { wxCMD_LINE_OPTION, "h", "height", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "I", "images", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "N", "number-of-iterations", "", wxCMD_LINE_VAL_NUMBER },
+#ifdef __WXMSW__
+            { wxCMD_LINE_OPTION, "r", "renderer", "gdiplus | direct2d | cairo", wxCMD_LINE_VAL_STRING },
+#endif // __WXMSW__
             { wxCMD_LINE_NONE },
         };
 
@@ -524,15 +714,20 @@ public:
         opts.testLines = parser.Found("lines");
         opts.testRawBitmaps = parser.Found("rawbmp");
         opts.testRectangles = parser.Found("rectangles");
+        opts.testCircles = parser.Found("circles");
+        opts.testEllipses = parser.Found("ellipses");
         if ( !(opts.testBitmaps || opts.testImages || opts.testLines
-                    || opts.testRawBitmaps || opts.testRectangles) )
+                    || opts.testRawBitmaps || opts.testRectangles
+                    || opts.testCircles || opts.testEllipses) )
         {
             // Do everything by default.
             opts.testBitmaps =
             opts.testImages =
             opts.testLines =
             opts.testRawBitmaps =
-            opts.testRectangles = true;
+            opts.testRectangles =
+            opts.testCircles =
+            opts.testEllipses = true;
         }
 
         opts.usePaint = parser.Found("paint");
@@ -566,6 +761,39 @@ public:
                 opts.useGC = true;
             }
         }
+
+        opts.renderer = GraphicsBenchmarkOptions::Default;
+#ifdef __WXMSW__
+        wxString rendererName;
+        if ( parser.Found("renderer", &rendererName) )
+        {
+            if ( !opts.useGC )
+            {
+                wxLogError("Renderer can be specified only when using graphics.");
+                return false;
+            }
+            if ( !rendererName.empty() )
+            {
+                if ( rendererName == wxS("gdiplus") )
+                {
+                    opts.renderer = GraphicsBenchmarkOptions::GDIPlus;
+                }
+                else if ( rendererName == wxS("direct2d") )
+                {
+                    opts.renderer = GraphicsBenchmarkOptions::Direct2D;
+                }
+                else if ( rendererName == wxS("cairo") )
+                {
+                    opts.renderer = GraphicsBenchmarkOptions::Cairo;
+                }
+                else
+                {
+                    wxLogError( wxS("Unknown renderer name.") );
+                    return false;
+                }
+            }
+        }
+#endif // __WXMSW__
 
         return true;
     }

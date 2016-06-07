@@ -176,17 +176,19 @@ bool wxColourBase::FromString(const wxString& str)
         // because this place can be called from constructor
         // and 'this' could not be available yet
         wxColour clr = wxTheColourDatabase->Find(str);
-        if (clr.IsOk())
-            Set((unsigned char)clr.Red(),
-                (unsigned char)clr.Green(),
-                (unsigned char)clr.Blue());
+        if (!clr.IsOk())
+            return false;
+
+        Set((unsigned char)clr.Red(),
+            (unsigned char)clr.Green(),
+            (unsigned char)clr.Blue());
+    }
+    else // unrecognized
+    {
+        return false;
     }
 
-    if (IsOk())
-        return true;
-
-    wxLogDebug(wxT("wxColour::Set - couldn't set to colour string '%s'"), str);
-    return false;
+    return true;
 }
 
 wxString wxColourBase::GetAsString(long flags) const

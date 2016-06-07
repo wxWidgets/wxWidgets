@@ -155,15 +155,18 @@ public :
     //
 
     // appends a rectangle as a new closed subpath
-    virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) ;
+    virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+
+    // appends a circle as a new closed subpath
+    virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r) wxOVERRIDE;
+
+    // appends an ellipse as a new closed subpath fitting the passed rectangle
+    virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+
     /*
-
-    // appends an ellipsis as a new closed subpath fitting the passed rectangle
-    virtual void AddEllipsis( wxDouble x, wxDouble y, wxDouble w , wxDouble h ) ;
-
     // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )  ;
-*/
+    */
 
     // returns the native path
     virtual void * GetNativePath() const { return m_path; }
@@ -1290,26 +1293,83 @@ void wxGDIPlusPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 
 void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise )
 {
-    double sweepAngle = endAngle - startAngle ;
-    if( fabs(sweepAngle) >= 2*M_PI)
+    double angle;
+
+    // For the sake of compatibility normalize angles the same way
+    // as it is done in Cairo.
+    if ( clockwise )
     {
-        sweepAngle = 2 * M_PI;
+        // If endAngle < startAngle it needs to be progressively
+        // increased by 2*M_PI until endAngle > startAngle.
+        if ( endAngle < startAngle )
+        {
+            while ( endAngle <= startAngle )
+            {
+                endAngle += 2.0*M_PI;
+            }
+        }
+
+        angle = endAngle - startAngle;
     }
     else
     {
-        if ( clockwise )
+        // If endAngle > startAngle it needs to be progressively
+        // decreased by 2*M_PI until endAngle < startAngle.
+        if ( endAngle > startAngle )
         {
-            if( sweepAngle < 0 )
-                sweepAngle += 2 * M_PI;
+            while ( endAngle >= startAngle )
+            {
+                endAngle -= 2.0*M_PI;
+            }
         }
-        else
-        {
-            if( sweepAngle > 0 )
-                sweepAngle -= 2 * M_PI;
 
+        angle = startAngle - endAngle;
+    }
+
+    // To ensure compatibility with Cairo an initial
+    // line segment to the beginning of the arc needs
+    // to be added to the path.
+    AddLineToPoint(r*cos(startAngle) + x, r*sin(startAngle) + y);
+
+    // Native GraphicsPath.AddArc() does nothing
+    // (even current point is not updated)
+    // when sweep angle equals 0 so we can skip
+    // any further actions.
+    if ( angle == 0 )
+    {
+        return;
+    }
+
+    REAL x0 = (REAL)(x-r);
+    REAL y0 = (REAL)(y-r);
+    REAL dim = (REAL)(2*r);
+    if ( angle >= 2.0*M_PI )
+    {
+        // In addition to arc we need to draw full circle(s).
+        // Remarks:
+        // 1. Parity of the number of the circles has to be
+        // preserved because this matters when path would be
+        // filled with wxODDEVEN_RULE flag set (using
+        // FillModeAlternate mode) when number of the edges
+        // is counted.
+        // 2. With GraphicsPath.AddEllipse() we cannot
+        // control the start point of the drawn circle
+        // so we need to construct it from two arcs (halves).
+        int numCircles = (int)(angle / (2.0*M_PI));
+        numCircles = (numCircles - 1) % 2 + 1;
+        for( int i = 0; i < numCircles; i++ )
+        {
+            m_path->AddArc(x0, y0, dim, dim,
+                           wxRadToDeg(startAngle), clockwise ? 180 : -180);
+            m_path->AddArc(x0, y0, dim, dim,
+                           wxRadToDeg(startAngle+M_PI), clockwise ? 180 : -180);
         }
-   }
-   m_path->AddArc((REAL) (x-r),(REAL) (y-r),(REAL) (2*r),(REAL) (2*r),wxRadToDeg(startAngle),wxRadToDeg(sweepAngle));
+        // We need to reduce the angle to [0..2*M_PI) range
+        angle = fmod(angle, 2.0*M_PI);
+    }
+
+    m_path->AddArc(x0, y0, dim, dim, wxRadToDeg(startAngle),
+                   wxRadToDeg(clockwise ? angle : -angle));
    // After calling AddArc() the native current point will be updated and can be used.
    m_logCurrentPointSet = false;
 }
@@ -1322,6 +1382,16 @@ void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
     // (the same case as with CloseFigure) so we need to maintain it
     // on our own in this case.
     MoveToPoint(x, y);
+}
+
+void wxGDIPlusPathData::AddCircle(wxDouble x, wxDouble y, wxDouble r)
+{
+    m_path->AddEllipse((REAL)(x-r), (REAL)(y-r), (REAL)(2.0*r), (REAL)(2.0*r));
+}
+
+void wxGDIPlusPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+{
+    m_path->AddEllipse((REAL)x, (REAL)y, (REAL)w, (REAL)h);
 }
 
 void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )

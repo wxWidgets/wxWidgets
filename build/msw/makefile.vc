@@ -210,7 +210,7 @@ WXSCINTILLA_CXXFLAGS = /M$(__RUNTIME_LIBS_100)$(__DEBUGRUNTIME) /DWIN32 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) /DNDEBUG /D_CRT_SECURE_NO_WARNINGS \
 	/I..\..\src\stc\scintilla\include /I..\..\src\stc\scintilla\lexlib \
-	/I..\..\src\stc\scintilla\src /D__WX__ /DSCI_LEXER /DLINK_LEXERS \
+	/I..\..\src\stc\scintilla\src /D__WX__ /DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS \
 	/I$(SETUPHDIR) /I..\..\include $(__wxscintilla_usingdll_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
@@ -259,6 +259,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexHex.obj \
 	$(OBJS)\wxscintilla_LexHTML.obj \
 	$(OBJS)\wxscintilla_LexInno.obj \
+	$(OBJS)\wxscintilla_LexJSON.obj \
 	$(OBJS)\wxscintilla_LexKix.obj \
 	$(OBJS)\wxscintilla_LexKVIrc.obj \
 	$(OBJS)\wxscintilla_LexLaTeX.obj \
@@ -367,7 +368,7 @@ MONODLL_CFLAGS = /M$(__RUNTIME_LIBS_116)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
 MONODLL_CXXFLAGS = /M$(__RUNTIME_LIBS_116)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).pdb \
@@ -380,7 +381,7 @@ MONODLL_CXXFLAGS = /M$(__RUNTIME_LIBS_116)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL $(__RTTIFLAG) \
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monodll.pch" \
 	$(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
@@ -472,6 +473,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_zstream.obj \
 	$(OBJS)\monodll_fswatchercmn.obj \
 	$(OBJS)\monodll_fswatcherg.obj \
+	$(OBJS)\monodll_common_secretstore.obj \
 	$(OBJS)\monodll_basemsw.obj \
 	$(OBJS)\monodll_crashrpt.obj \
 	$(OBJS)\monodll_debughlp.obj \
@@ -491,6 +493,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_utils.obj \
 	$(OBJS)\monodll_utilsexc.obj \
 	$(OBJS)\monodll_fswatcher.obj \
+	$(OBJS)\monodll_msw_secretstore.obj \
 	$(OBJS)\monodll_event.obj \
 	$(OBJS)\monodll_fs_mem.obj \
 	$(OBJS)\monodll_msgout.obj \
@@ -526,7 +529,7 @@ MONOLIB_CFLAGS = /M$(__RUNTIME_LIBS_131)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DLINK_LEXERS /DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 MONOLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_131)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).pdb \
@@ -539,7 +542,7 @@ MONOLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_131)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DLINK_LEXERS /DwxUSE_BASE=1 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monolib.pch" $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
@@ -630,6 +633,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_zstream.obj \
 	$(OBJS)\monolib_fswatchercmn.obj \
 	$(OBJS)\monolib_fswatcherg.obj \
+	$(OBJS)\monolib_common_secretstore.obj \
 	$(OBJS)\monolib_basemsw.obj \
 	$(OBJS)\monolib_crashrpt.obj \
 	$(OBJS)\monolib_debughlp.obj \
@@ -649,6 +653,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_utils.obj \
 	$(OBJS)\monolib_utilsexc.obj \
 	$(OBJS)\monolib_fswatcher.obj \
+	$(OBJS)\monolib_msw_secretstore.obj \
 	$(OBJS)\monolib_event.obj \
 	$(OBJS)\monolib_fs_mem.obj \
 	$(OBJS)\monolib_msgout.obj \
@@ -784,6 +789,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_zstream.obj \
 	$(OBJS)\basedll_fswatchercmn.obj \
 	$(OBJS)\basedll_fswatcherg.obj \
+	$(OBJS)\basedll_common_secretstore.obj \
 	$(OBJS)\basedll_basemsw.obj \
 	$(OBJS)\basedll_crashrpt.obj \
 	$(OBJS)\basedll_debughlp.obj \
@@ -803,6 +809,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_utils.obj \
 	$(OBJS)\basedll_utilsexc.obj \
 	$(OBJS)\basedll_fswatcher.obj \
+	$(OBJS)\basedll_msw_secretstore.obj \
 	$(OBJS)\basedll_event.obj \
 	$(OBJS)\basedll_fs_mem.obj \
 	$(OBJS)\basedll_msgout.obj \
@@ -924,6 +931,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_zstream.obj \
 	$(OBJS)\baselib_fswatchercmn.obj \
 	$(OBJS)\baselib_fswatcherg.obj \
+	$(OBJS)\baselib_common_secretstore.obj \
 	$(OBJS)\baselib_basemsw.obj \
 	$(OBJS)\baselib_crashrpt.obj \
 	$(OBJS)\baselib_debughlp.obj \
@@ -943,6 +951,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_utils.obj \
 	$(OBJS)\baselib_utilsexc.obj \
 	$(OBJS)\baselib_fswatcher.obj \
+	$(OBJS)\baselib_msw_secretstore.obj \
 	$(OBJS)\baselib_event.obj \
 	$(OBJS)\baselib_fs_mem.obj \
 	$(OBJS)\baselib_msgout.obj \
@@ -1698,7 +1707,7 @@ STCDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_581)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DLINK_LEXERS /DWXUSINGDLL /DWXMAKINGDLL_STC $(__RTTIFLAG) \
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DWXUSINGDLL /DWXMAKINGDLL_STC $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_stcdll.pch" \
 	$(CPPFLAGS) $(CXXFLAGS)
 STCDLL_OBJECTS =  \
@@ -1720,7 +1729,7 @@ STCLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_596)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_stclib.pch" $(CPPFLAGS) $(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_dummy.obj \
@@ -6798,6 +6807,9 @@ $(OBJS)\wxscintilla_LexHTML.obj: ..\..\src\stc\scintilla\lexers\LexHTML.cxx
 $(OBJS)\wxscintilla_LexInno.obj: ..\..\src\stc\scintilla\lexers\LexInno.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexInno.cxx
 
+$(OBJS)\wxscintilla_LexJSON.obj: ..\..\src\stc\scintilla\lexers\LexJSON.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexJSON.cxx
+
 $(OBJS)\wxscintilla_LexKix.obj: ..\..\src\stc\scintilla\lexers\LexKix.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexKix.cxx
 
@@ -7350,6 +7362,9 @@ $(OBJS)\monodll_fswatchercmn.obj: ..\..\src\common\fswatchercmn.cpp
 $(OBJS)\monodll_fswatcherg.obj: ..\..\src\generic\fswatcherg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\fswatcherg.cpp
 
+$(OBJS)\monodll_common_secretstore.obj: ..\..\src\common\secretstore.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\secretstore.cpp
+
 $(OBJS)\monodll_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\basemsw.cpp
 
@@ -7406,6 +7421,9 @@ $(OBJS)\monodll_utilsexc.obj: ..\..\src\msw\utilsexc.cpp
 
 $(OBJS)\monodll_fswatcher.obj: ..\..\src\msw\fswatcher.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\fswatcher.cpp
+
+$(OBJS)\monodll_msw_secretstore.obj: ..\..\src\msw\secretstore.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\secretstore.cpp
 
 $(OBJS)\monodll_event.obj: ..\..\src\common\event.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\event.cpp
@@ -9622,7 +9640,7 @@ $(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
 !endif
 
 $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_72)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\lexlib /i ..\..\src\stc\scintilla\src /d __WX__ /d SCI_LEXER /d LINK_LEXERS /d wxUSE_BASE=1 /d WXMAKINGDLL ..\..\src\msw\version.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_72)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\lexlib /i ..\..\src\stc\scintilla\src /d __WX__ /d SCI_LEXER /d NO_CXX11_REGEX /d LINK_LEXERS /d wxUSE_BASE=1 /d WXMAKINGDLL ..\..\src\msw\version.rc
 
 $(OBJS)\monolib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
@@ -9888,6 +9906,9 @@ $(OBJS)\monolib_fswatchercmn.obj: ..\..\src\common\fswatchercmn.cpp
 $(OBJS)\monolib_fswatcherg.obj: ..\..\src\generic\fswatcherg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\fswatcherg.cpp
 
+$(OBJS)\monolib_common_secretstore.obj: ..\..\src\common\secretstore.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\secretstore.cpp
+
 $(OBJS)\monolib_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\basemsw.cpp
 
@@ -9944,6 +9965,9 @@ $(OBJS)\monolib_utilsexc.obj: ..\..\src\msw\utilsexc.cpp
 
 $(OBJS)\monolib_fswatcher.obj: ..\..\src\msw\fswatcher.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\fswatcher.cpp
+
+$(OBJS)\monolib_msw_secretstore.obj: ..\..\src\msw\secretstore.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\secretstore.cpp
 
 $(OBJS)\monolib_event.obj: ..\..\src\common\event.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\event.cpp
@@ -12426,6 +12450,9 @@ $(OBJS)\basedll_fswatchercmn.obj: ..\..\src\common\fswatchercmn.cpp
 $(OBJS)\basedll_fswatcherg.obj: ..\..\src\generic\fswatcherg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\generic\fswatcherg.cpp
 
+$(OBJS)\basedll_common_secretstore.obj: ..\..\src\common\secretstore.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\secretstore.cpp
+
 $(OBJS)\basedll_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\basemsw.cpp
 
@@ -12482,6 +12509,9 @@ $(OBJS)\basedll_utilsexc.obj: ..\..\src\msw\utilsexc.cpp
 
 $(OBJS)\basedll_fswatcher.obj: ..\..\src\msw\fswatcher.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\fswatcher.cpp
+
+$(OBJS)\basedll_msw_secretstore.obj: ..\..\src\msw\secretstore.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\secretstore.cpp
 
 $(OBJS)\basedll_event.obj: ..\..\src\common\event.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\event.cpp
@@ -12765,6 +12795,9 @@ $(OBJS)\baselib_fswatchercmn.obj: ..\..\src\common\fswatchercmn.cpp
 $(OBJS)\baselib_fswatcherg.obj: ..\..\src\generic\fswatcherg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\generic\fswatcherg.cpp
 
+$(OBJS)\baselib_common_secretstore.obj: ..\..\src\common\secretstore.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\secretstore.cpp
+
 $(OBJS)\baselib_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\basemsw.cpp
 
@@ -12821,6 +12854,9 @@ $(OBJS)\baselib_utilsexc.obj: ..\..\src\msw\utilsexc.cpp
 
 $(OBJS)\baselib_fswatcher.obj: ..\..\src\msw\fswatcher.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\fswatcher.cpp
+
+$(OBJS)\baselib_msw_secretstore.obj: ..\..\src\msw\secretstore.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\secretstore.cpp
 
 $(OBJS)\baselib_event.obj: ..\..\src\common\event.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\event.cpp
@@ -17187,7 +17223,7 @@ $(OBJS)\stcdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(STCDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
 $(OBJS)\stcdll_version.res: ..\..\src\msw\version.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_72)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\lexlib /i ..\..\src\stc\scintilla\src /d __WX__ /d SCI_LEXER /d LINK_LEXERS /d WXUSINGDLL /d WXMAKINGDLL_STC ..\..\src\msw\version.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_72)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\lexlib /i ..\..\src\stc\scintilla\src /d __WX__ /d SCI_LEXER /d NO_CXX11_REGEX /d LINK_LEXERS /d WXUSINGDLL /d WXMAKINGDLL_STC ..\..\src\msw\version.rc
 
 $(OBJS)\stcdll_stc.obj: ..\..\src\stc\stc.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(STCDLL_CXXFLAGS) ..\..\src\stc\stc.cpp

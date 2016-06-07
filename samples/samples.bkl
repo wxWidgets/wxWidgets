@@ -68,6 +68,7 @@
     <subproject id="richtext" template="sub"/>
     <subproject id="sashtest" template="sub"/>
     <subproject id="scroll" template="sub"/>
+    <subproject id="secretstore" template="sub"/>
     <subproject id="shaped" template="sub"/>
     <subproject id="sockets" template="sub"/>
     <subproject id="sound" template="sub"/>

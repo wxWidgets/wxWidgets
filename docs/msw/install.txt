@@ -106,17 +106,12 @@ Ready to use project files are provided for VC++ versions 7, 8, 9,
 10, 11, 12 and 14 (also known as MSVS 2003, 2005, 2008, 2010, 2012, 2013
 and 2015 respectively).
 
-Simply open wx_vcN.sln (for N=7, 8, 9, 10, 11 or 12) file,
+Simply open wx_vcN.sln (for N=7, 8, 9, 10, 11, 12, or 14) file,
 select the appropriate configuration (Debug or Release, static or DLL)
 and build the solution. Notice that when building a DLL configuration,
 you may need to perform the build several times because the projects
 are not always built in the correct order, and this may result in link
 errors. Simply do the build again, up to 3 times, to fix this.
-
-Notice that x64 configurations are only included in VC10 and later project
-currently. If you want to build Win64 libraries with the previous
-compiler versions, the simplest solution is to use the makefiles as
-described above.
 
 
 Special notes for Visual Studio 2010+:

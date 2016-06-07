@@ -9,7 +9,6 @@
 /** TODO:
 WebSpeed support in html lexer
 Support "end triggers" expression of the triggers phrase
-Support more than 6 comments levels
 **/
 #include <stdlib.h>
 #include <string.h>
@@ -44,13 +43,26 @@ static inline bool IsAWordStart(int ch) {
 enum SentenceStart { SetSentenceStart = 0xf, ResetSentenceStart = 0x10}; // true -> bit = 0
 
 static void Colourise4glDoc(Sci_PositionU startPos, Sci_Position length, int initStyle, WordList *keywordlists[],
-                            Accessor &styler) {
+							Accessor &styler) {
 
-    WordList &keywords1 = *keywordlists[0];   // regular keywords
-    WordList &keywords2 = *keywordlists[1];   // block opening keywords, only when SentenceStart
-    WordList &keywords3 = *keywordlists[2];   // block opening keywords
-    //WordList &keywords4 = *keywordlists[3]; // preprocessor keywords. Not implemented
+	WordList &keywords1 = *keywordlists[0];   // regular keywords
+	WordList &keywords2 = *keywordlists[1];   // block opening keywords, only when SentenceStart
+	WordList &keywords3 = *keywordlists[2];   // block opening keywords
+	//WordList &keywords4 = *keywordlists[3]; // preprocessor keywords. Not implemented
 
+	Sci_Position currentLine = styler.GetLine(startPos);
+	// Initialize the block comment /* */ nesting level, if we are inside such a comment.
+	int blockCommentLevel = 0;
+	if (initStyle == SCE_4GL_COMMENT1 ||
+		initStyle == SCE_4GL_COMMENT1_) {
+		blockCommentLevel = styler.GetLineState(currentLine - 1);
+	}
+
+	// Do not leak single-line comments onto next line
+	if (initStyle == SCE_4GL_COMMENT2 ||
+		initStyle == SCE_4GL_COMMENT2_) {
+		initStyle = SCE_4GL_DEFAULT;
+	}
 
 	int visibleChars = 0;
 	int mask;
@@ -63,6 +75,19 @@ static void Colourise4glDoc(Sci_PositionU startPos, Sci_Position length, int ini
 			// Reset states to begining of colourise so no surprises
 			// if different sets of lines lexed.
 			visibleChars = 0;
+		}
+
+		if (sc.atLineEnd) {
+			// Update the line state, so it can be seen by next line
+			currentLine = styler.GetLine(sc.currentPos);
+			if (sc.state == SCE_4GL_COMMENT1 ||
+				sc.state == SCE_4GL_COMMENT1_) {
+				// Inside a block comment, we set the line state
+				styler.SetLineState(currentLine, blockCommentLevel);
+			} else {
+				// Reset the line state
+				styler.SetLineState(currentLine, 0);
+			}
 		}
 
 		// Handle line continuation generically.
@@ -96,7 +121,9 @@ static void Colourise4glDoc(Sci_PositionU startPos, Sci_Position length, int ini
 				sc.SetState(SCE_4GL_DEFAULT | mask);
 				break;
 			case SCE_4GL_NUMBER:
-				if (!(IsADigit(sc.ch))) {
+				// Hex numbers (0xnnnn) are supported so accept any
+				// alphanumeric character if it follows a leading digit.
+				if (!(IsAlphaNumeric(sc.ch))) {
 					sc.SetState(SCE_4GL_DEFAULT | mask);
 				}
 				break;
@@ -104,10 +131,10 @@ static void Colourise4glDoc(Sci_PositionU startPos, Sci_Position length, int ini
 				if (!IsAWordChar(sc.ch) && sc.ch != '-') {
 					char s[1000];
 					sc.GetCurrentLowered(s, sizeof(s));
-					if ((((sc.state & 0x10) == 0) && keywords2.InList(s)) || keywords3.InList(s)) {
+					if ((((sc.state & 0x10) == 0) && keywords2.InListAbbreviated(s, '(')) || keywords3.InListAbbreviated(s, '(')) {
 						sc.ChangeState(SCE_4GL_BLOCK | ResetSentenceStart);
 					}
-					else if (keywords1.InList(s)) {
+					else if (keywords1.InListAbbreviated(s, '(')) {
 						if ((s[0] == 'e' && s[1] =='n' && s[2] == 'd' && !isalnum(s[3]) && s[3] != '-') ||
 							(s[0] == 'f' && s[1] =='o' && s[2] == 'r' && s[3] == 'w' && s[4] =='a' && s[5] == 'r' && s[6] == 'd'&& !isalnum(s[7]))) {
 							sc.ChangeState(SCE_4GL_END | ResetSentenceStart);
@@ -141,20 +168,23 @@ static void Colourise4glDoc(Sci_PositionU startPos, Sci_Position length, int ini
 					sc.ForwardSetState(SCE_4GL_DEFAULT | mask);
 				}
 				break;
-			default:
-				if ((sc.state & 0xf) >= SCE_4GL_COMMENT1) {
-					if (sc.ch == '*' && sc.chNext == '/') {
-						sc.Forward();
-						if ((sc.state & 0xf) == SCE_4GL_COMMENT1) {
-							sc.ForwardSetState(SCE_4GL_DEFAULT | mask);
-						}
-						else
-							sc.SetState((sc.state & 0x1f) - 1);
-					} else if (sc.ch == '/' && sc.chNext == '*') {
-						sc.Forward();
-						sc.SetState((sc.state & 0x1f) + 1);
+			case SCE_4GL_COMMENT1:
+				if (sc.Match('/', '*')) {
+					blockCommentLevel++;
+					sc.Forward();
+				} else if (sc.Match('*', '/') && blockCommentLevel > 0) {
+					blockCommentLevel--;
+					sc.Forward();
+					if (blockCommentLevel == 0) {
+						sc.ForwardSetState(SCE_4GL_DEFAULT | mask);
 					}
 				}
+				break;
+			case SCE_4GL_COMMENT2:
+				if (sc.atLineEnd) {
+					sc.ForwardSetState(SCE_4GL_DEFAULT | mask);
+				}
+				break;
 		}
 
 		// Determine if a new state should be entered.
@@ -164,9 +194,13 @@ static void Colourise4glDoc(Sci_PositionU startPos, Sci_Position length, int ini
 				sc.SetState(SCE_4GL_NUMBER | ResetSentenceStart);
 			} else if (IsAWordStart(sc.ch) || (sc.ch == '@')) {
 				sc.SetState(SCE_4GL_IDENTIFIER | mask);
-			} else if (sc.ch == '/' && sc.chNext == '*') {
+			} else if (sc.Match('/', '*')) {
+				blockCommentLevel = 1;
 				sc.SetState(SCE_4GL_COMMENT1 | mask);
 				sc.Forward();
+			} else if (sc.Match('/', '/') &&
+					   (sc.atLineStart || sc.chPrev == ' ' || sc.chPrev == '\t')) {
+				sc.SetState(SCE_4GL_COMMENT2 | mask);
 			} else if (sc.ch == '\"') {
 				sc.SetState(SCE_4GL_STRING | ResetSentenceStart);
 			} else if (sc.ch == '\'') {
@@ -199,7 +233,7 @@ static void Colourise4glDoc(Sci_PositionU startPos, Sci_Position length, int ini
 }
 
 static bool IsStreamCommentStyle(int style) {
-	return (style & 0xf) >= SCE_4GL_COMMENT1 ;
+	return (style & 0xf) == SCE_4GL_COMMENT1 ;
 }
 
 // Store both the current line's fold level and the next lines in the

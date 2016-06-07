@@ -31,6 +31,15 @@ public:
         The angles are measured in radians but, contrary to the usual
         mathematical convention, are always @e clockwise from the horizontal
         axis.
+
+        If for clockwise arc @a endAngle is less than @a startAngle it will be
+        progressively increased by 2*pi until it is greater than @a startAngle.
+        If for counter-clockwise arc @a endAngle is greater than @a startAngle
+        it will be progressively decreased by 2*pi until it is less than
+        @a startAngle.
+
+        If there is a current point set, an initial line segment will be added
+        to the path to connect the current point to the beginning of the arc.
     */
     //@{
     virtual void AddArc(wxDouble x, wxDouble y, wxDouble r,
@@ -98,6 +107,8 @@ public:
     /**
         Adds another path onto the current path. After this call the current
         point will be at the added path's current point.
+        For Direct2D the path being appended shouldn't contain
+        a started non-empty subpath when this function is called.
     */
     virtual void AddPath(const wxGraphicsPath& path);
 
@@ -181,6 +192,8 @@ public:
 
     /**
         Transforms each point of this path by the matrix.
+        For Direct2D the current path shouldn't contain
+        a started non-empty subpath when this function is called.
     */
     virtual void Transform(const wxGraphicsMatrix& matrix);
 

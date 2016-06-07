@@ -23,12 +23,27 @@
     #pragma hdrstop
 #endif
 
-// See comment about this hack in time.cpp: here we do it for environ external
-// variable which can't be easily declared when using MinGW in strict ANSI mode.
+// This is a needed to get the declaration of the global "environ" variable
+// from MinGW headers which don't declare it there when in strict ANSI mode. We
+// can't use the usual wxDECL_FOR_STRICT_MINGW32() hack for it because it's not
+// even a variable, but a macro expanding to a function or a variable depending
+// on the build and this is horribly brittle but there just doesn't seem to be
+// any other alternative.
 #ifdef wxNEEDS_STRICT_ANSI_WORKAROUNDS
-    #undef __STRICT_ANSI__
+    // Notice that undefining __STRICT_ANSI__ and including it here doesn't
+    // work because it could have been already included, e.g. when using PCH.
     #include <stdlib.h>
-    #define __STRICT_ANSI__
+
+    #ifndef environ
+        // This just reproduces what stdlib.h does in MinGW 4.8.1.
+        #ifdef __MSVCRT__
+            wxDECL_FOR_STRICT_MINGW32(char ***, __p__environ, (void));
+            #define environ (*__p__environ())
+        #else
+            extern char *** _imp___environ_dll;
+            #define environ (*_imp___environ_dll)
+        #endif
+    #endif // defined(environ)
 #endif
 
 #ifndef WX_PRECOMP

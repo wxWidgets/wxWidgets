@@ -2799,6 +2799,7 @@ val SCLEX_BIBTEX=116
 val SCLEX_SREC=117
 val SCLEX_IHEX=118
 val SCLEX_TEHEX=119
+val SCLEX_JSON=120
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -4677,6 +4678,22 @@ val SCE_HEX_GARBAGE=18
 lex IHex=SCLEX_IHEX SCE_HEX_
 # Lexical state for SCLEX_TEHEX (shared with Srec)
 lex TEHex=SCLEX_TEHEX SCE_HEX_
+# Lexical states for SCLEX_JSON
+lex JSON=SCLEX_JSON SCE_JSON_
+val SCE_JSON_DEFAULT=0
+val SCE_JSON_NUMBER=1
+val SCE_JSON_STRING=2
+val SCE_JSON_STRINGEOL=3
+val SCE_JSON_PROPERTYNAME=4
+val SCE_JSON_ESCAPESEQUENCE=5
+val SCE_JSON_LINECOMMENT=6
+val SCE_JSON_BLOCKCOMMENT=7
+val SCE_JSON_OPERATOR=8
+val SCE_JSON_URI=9
+val SCE_JSON_COMPACTIRI=10
+val SCE_JSON_KEYWORD=11
+val SCE_JSON_LDKEYWORD=12
+val SCE_JSON_ERROR=13
 
 # Events
 
@@ -4712,7 +4729,7 @@ evt void FocusIn=2028(void)
 evt void FocusOut=2029(void)
 evt void AutoCCompleted=2030(string text, int position, int ch, CompletionMethods listCompletionMethod)
 
-# There are no provisional features currently
+# There are no provisional APIs currently, but some arguments to SCI_SETTECHNOLOGY are provisional.
 
 cat Provisional
 

@@ -47,7 +47,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
@@ -55,7 +55,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
@@ -131,7 +131,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
@@ -139,7 +139,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -157,7 +157,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
@@ -213,7 +213,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
@@ -221,7 +221,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -241,7 +241,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw311ud_stc_vc_custom;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw311ud_stc_vc_custom;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
@@ -306,7 +306,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
@@ -314,7 +314,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -332,7 +332,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw311u_stc_vc_custom;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw311u_stc_vc_custom;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
@@ -399,7 +399,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
@@ -407,7 +407,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -427,7 +427,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
@@ -483,7 +483,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
@@ -491,7 +491,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -509,7 +509,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
@@ -565,7 +565,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
@@ -573,7 +573,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -593,7 +593,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw311ud_stc_vc_custom;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw311ud_stc_vc_custom;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
@@ -658,7 +658,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
@@ -666,7 +666,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -684,7 +684,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw311u_stc_vc_custom;__WX__;SCI_LEXER;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw311u_stc_vc_custom;__WX__;SCI_LEXER;NO_CXX11_REGEX;LINK_LEXERS;WXUSINGDLL;WXMAKINGDLL_STC"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_x64_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\lexlib;..\..\src\stc\scintilla\src"
 			/>

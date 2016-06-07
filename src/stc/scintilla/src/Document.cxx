@@ -16,7 +16,7 @@
 #include <vector>
 #include <algorithm>
 
-#ifdef CXX11_REGEX
+#ifndef NO_CXX11_REGEX
 #include <regex>
 #endif
 
@@ -436,12 +436,12 @@ static bool IsSubordinate(int levelStart, int levelTry) {
 	if (levelTry & SC_FOLDLEVELWHITEFLAG)
 		return true;
 	else
-		return (levelStart & SC_FOLDLEVELNUMBERMASK) < (levelTry & SC_FOLDLEVELNUMBERMASK);
+		return LevelNumber(levelStart) < LevelNumber(levelTry);
 }
 
 int Document::GetLastChild(int lineParent, int level, int lastLine) {
 	if (level == -1)
-		level = GetLevel(lineParent) & SC_FOLDLEVELNUMBERMASK;
+		level = LevelNumber(GetLevel(lineParent));
 	int maxLine = LinesTotal();
 	int lookLastLine = (lastLine != -1) ? Platform::Minimum(LinesTotal() - 1, lastLine) : -1;
 	int lineMaxSubord = lineParent;
@@ -454,7 +454,7 @@ int Document::GetLastChild(int lineParent, int level, int lastLine) {
 		lineMaxSubord++;
 	}
 	if (lineMaxSubord > lineParent) {
-		if (level > (GetLevel(lineMaxSubord + 1) & SC_FOLDLEVELNUMBERMASK)) {
+		if (level > LevelNumber(GetLevel(lineMaxSubord + 1))) {
 			// Have chewed up some whitespace that belongs to a parent so seek back
 			if (GetLevel(lineMaxSubord) & SC_FOLDLEVELWHITEFLAG) {
 				lineMaxSubord--;
@@ -465,16 +465,16 @@ int Document::GetLastChild(int lineParent, int level, int lastLine) {
 }
 
 int Document::GetFoldParent(int line) const {
-	int level = GetLevel(line) & SC_FOLDLEVELNUMBERMASK;
+	int level = LevelNumber(GetLevel(line));
 	int lineLook = line - 1;
 	while ((lineLook > 0) && (
 	            (!(GetLevel(lineLook) & SC_FOLDLEVELHEADERFLAG)) ||
-	            ((GetLevel(lineLook) & SC_FOLDLEVELNUMBERMASK) >= level))
+	            (LevelNumber(GetLevel(lineLook)) >= level))
 	      ) {
 		lineLook--;
 	}
 	if ((GetLevel(lineLook) & SC_FOLDLEVELHEADERFLAG) &&
-	        ((GetLevel(lineLook) & SC_FOLDLEVELNUMBERMASK) < level)) {
+	        (LevelNumber(GetLevel(lineLook)) < level)) {
 		return lineLook;
 	} else {
 		return -1;
@@ -487,11 +487,11 @@ void Document::GetHighlightDelimiters(HighlightDelimiter &highlightDelimiter, in
 
 	int lookLine = line;
 	int lookLineLevel = level;
-	int lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+	int lookLineLevelNum = LevelNumber(lookLineLevel);
 	while ((lookLine > 0) && ((lookLineLevel & SC_FOLDLEVELWHITEFLAG) ||
-		((lookLineLevel & SC_FOLDLEVELHEADERFLAG) && (lookLineLevelNum >= (GetLevel(lookLine + 1) & SC_FOLDLEVELNUMBERMASK))))) {
+		((lookLineLevel & SC_FOLDLEVELHEADERFLAG) && (lookLineLevelNum >= LevelNumber(GetLevel(lookLine + 1)))))) {
 		lookLineLevel = GetLevel(--lookLine);
-		lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+		lookLineLevelNum = LevelNumber(lookLineLevel);
 	}
 
 	int beginFoldBlock = (lookLineLevel & SC_FOLDLEVELHEADERFLAG) ? lookLine : GetFoldParent(lookLine);
@@ -505,7 +505,7 @@ void Document::GetHighlightDelimiters(HighlightDelimiter &highlightDelimiter, in
 	if (endFoldBlock < line) {
 		lookLine = beginFoldBlock - 1;
 		lookLineLevel = GetLevel(lookLine);
-		lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+		lookLineLevelNum = LevelNumber(lookLineLevel);
 		while ((lookLine >= 0) && (lookLineLevelNum >= SC_FOLDLEVELBASE)) {
 			if (lookLineLevel & SC_FOLDLEVELHEADERFLAG) {
 				if (GetLastChild(lookLine, -1, lookLastLine) == line) {
@@ -514,17 +514,17 @@ void Document::GetHighlightDelimiters(HighlightDelimiter &highlightDelimiter, in
 					firstChangeableLineBefore = line - 1;
 				}
 			}
-			if ((lookLine > 0) && (lookLineLevelNum == SC_FOLDLEVELBASE) && ((GetLevel(lookLine - 1) & SC_FOLDLEVELNUMBERMASK) > lookLineLevelNum))
+			if ((lookLine > 0) && (lookLineLevelNum == SC_FOLDLEVELBASE) && (LevelNumber(GetLevel(lookLine - 1)) > lookLineLevelNum))
 				break;
 			lookLineLevel = GetLevel(--lookLine);
-			lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+			lookLineLevelNum = LevelNumber(lookLineLevel);
 		}
 	}
 	if (firstChangeableLineBefore == -1) {
-		for (lookLine = line - 1, lookLineLevel = GetLevel(lookLine), lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+		for (lookLine = line - 1, lookLineLevel = GetLevel(lookLine), lookLineLevelNum = LevelNumber(lookLineLevel);
 			lookLine >= beginFoldBlock;
-			lookLineLevel = GetLevel(--lookLine), lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK) {
-			if ((lookLineLevel & SC_FOLDLEVELWHITEFLAG) || (lookLineLevelNum > (level & SC_FOLDLEVELNUMBERMASK))) {
+			lookLineLevel = GetLevel(--lookLine), lookLineLevelNum = LevelNumber(lookLineLevel)) {
+			if ((lookLineLevel & SC_FOLDLEVELWHITEFLAG) || (lookLineLevelNum > LevelNumber(level))) {
 				firstChangeableLineBefore = lookLine;
 				break;
 			}
@@ -534,10 +534,10 @@ void Document::GetHighlightDelimiters(HighlightDelimiter &highlightDelimiter, in
 		firstChangeableLineBefore = beginFoldBlock - 1;
 
 	int firstChangeableLineAfter = -1;
-	for (lookLine = line + 1, lookLineLevel = GetLevel(lookLine), lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK;
+	for (lookLine = line + 1, lookLineLevel = GetLevel(lookLine), lookLineLevelNum = LevelNumber(lookLineLevel);
 		lookLine <= endFoldBlock;
-		lookLineLevel = GetLevel(++lookLine), lookLineLevelNum = lookLineLevel & SC_FOLDLEVELNUMBERMASK) {
-		if ((lookLineLevel & SC_FOLDLEVELHEADERFLAG) && (lookLineLevelNum < (GetLevel(lookLine + 1) & SC_FOLDLEVELNUMBERMASK))) {
+		lookLineLevel = GetLevel(++lookLine), lookLineLevelNum = LevelNumber(lookLineLevel)) {
+		if ((lookLineLevel & SC_FOLDLEVELHEADERFLAG) && (lookLineLevelNum < LevelNumber(GetLevel(lookLine + 1)))) {
 			firstChangeableLineAfter = lookLine;
 			break;
 		}
@@ -2336,7 +2336,7 @@ public:
 	}
 };
 
-#ifdef CXX11_REGEX
+#ifndef NO_CXX11_REGEX
 
 class ByteIterator : public std::iterator<std::bidirectional_iterator_tag, char> {
 public:
@@ -2617,9 +2617,9 @@ bool MatchOnLines(const Document *doc, const Regex &regexp, const RESearchRange 
 		for (size_t co = 0; co < match.size(); co++) {
 			search.bopat[co] = match[co].first.Pos();
 			search.eopat[co] = match[co].second.PosRoundUp();
-			size_t lenMatch = search.eopat[co] - search.bopat[co];
+			Sci::Position lenMatch = search.eopat[co] - search.bopat[co];
 			search.pat[co].resize(lenMatch);
-			for (size_t iPos = 0; iPos < lenMatch; iPos++) {
+			for (Sci::Position iPos = 0; iPos < lenMatch; iPos++) {
 				search.pat[co][iPos] = doc->CharAt(iPos + search.bopat[co]);
 			}
 		}
@@ -2696,7 +2696,7 @@ long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s
                         bool caseSensitive, bool, bool, int flags,
                         int *length) {
 
-#ifdef CXX11_REGEX
+#ifndef NO_CXX11_REGEX
 	if (flags & SCFIND_CXX11REGEX) {
 			return Cxx11RegexFindText(doc, minPos, maxPos, s,
 			caseSensitive, length, search);

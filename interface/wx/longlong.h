@@ -14,6 +14,11 @@
     the other cases which ensures that it is the most efficient solution for
     working with 64 bit integers independently of the architecture.
 
+    @note This class is obsolete as there are no supported implementations not
+    providing a native 64 bit integer type any longer and the application code
+    can safely use "long long" or "std::int64_t" directly instead of using this
+    class.
+
     wxLongLong defines all usual arithmetic operations such as addition,
     subtraction, bitwise shifts and logical operations as well as multiplication
     and division (not yet for the machines without native @e long long).
@@ -22,8 +27,8 @@
 
     You would usually use this type in exactly the same manner as any other
     (built-in) arithmetic type. Note that wxLongLong is a signed type, if you
-    want unsigned values use wxULongLong which has exactly the same API as
-    wxLongLong except when explicitly mentioned otherwise.
+    want unsigned values use wxULongLong which has almost exactly the same API
+    as wxLongLong.
 
     If a native (i.e. supported directly by the compiler) 64 bit integer type was
     found to exist, @e wxLongLong_t macro will be defined to correspond to it.
@@ -57,7 +62,7 @@ public:
     //@{
     /**
         Returns an absolute value of wxLongLong - either making a copy (const version)
-        or modifying it in place (the second one). Not in wxULongLong.
+        or modifying it in place (the second one).
     */
     wxLongLong Abs() const;
     wxLongLong& Abs();
@@ -67,7 +72,7 @@ public:
         This allows to convert a double value to wxLongLong type.
 
         Such conversion is not always possible in which case the result will be
-        silently truncated in a platform-dependent way. Not in wxULongLong.
+        silently truncated in a platform-dependent way.
     */
     wxLongLong Assign(double d);
 
@@ -143,7 +148,7 @@ public:
     //@}
 
     /**
-        Returns the value of this wxLongLong with opposite sign. Not in wxULongLong.
+        Returns the value of this wxLongLong with opposite sign.
     */
     wxLongLong operator-() const;
 
@@ -188,14 +193,134 @@ public:
 
     This class represents an unsigned 64 bit long number.
 
-    Since wxULongLong has exactly the same API as wxLongLong, please refer
-    to wxLongLong documentation (this page exists only as redirection).
+    See wxLongLong for more details.
 
     @library{wxbase}
     @category{data}
 */
 class wxULongLong
 {
+public:
+    /**
+        Default constructor initializes the object to 0.
+    */
+    wxULongLong();
+
+    /**
+        Constructor from native unsigned long long (only for compilers
+        supporting it).
+    */
+    wxULongLong(wxLongLong_t ll);
+
+    /**
+        Constructor from 2 longs: the high and low part are combined into one
+        wxULongLong.
+    */
+    wxULongLong(wxUint32 hi, wxUint32 lo);
+
+    /**
+        Returns the high 32 bits of 64 bit integer.
+    */
+    wxUint32 GetHi() const;
+
+    /**
+        Returns the low 32 bits of 64 bit integer.
+    */
+    wxUint32 long GetLo() const;
+
+    /**
+        Convert to native long long (only for compilers supporting it).
+    */
+    wxULongLong_t GetValue() const;
+
+    /**
+        Returns the value as @c double.
+    */
+    double ToDouble() const;
+
+    /**
+        Truncate wxULongLong to long. If the conversion loses data (i.e. the wxULongLong
+        value is outside the range of built-in long type), an assert will be triggered
+        in debug mode.
+    */
+    unsigned long ToULong() const;
+
+    /**
+        Returns the string representation of a wxULongLong.
+    */
+    wxString ToString() const;
+
+
+    /**
+        Adds 2 wxLongLongs together and returns the result.
+    */
+    wxULongLong operator+(const wxULongLong& ll) const;
+
+    /**
+        Add another wxULongLong to this one.
+    */
+    wxULongLong& operator+(const wxULongLong& ll);
+
+
+    /**
+        Subtracts 2 wxLongLongs and returns the result.
+    */
+    wxULongLong operator-(const wxULongLong& ll) const;
+
+    /**
+        Subtracts another wxULongLong from this one.
+    */
+    wxULongLong& operator-(const wxULongLong& ll);
+
+
+    //@{
+    /**
+        Pre/post increment operator.
+    */
+    wxULongLong operator++();
+    wxULongLong operator++(int);
+    //@}
+
+    //@{
+    /**
+        Pre/post decrement operator.
+    */
+    wxULongLong operator--();
+    wxULongLong operator--(int);
+    //@}
+
+    /**
+        Assignment operator from signed long long. The sign bit will be copied too.
+
+        @since 2.7.0
+    */
+    wxULongLong& operator=(const wxLongLong& ll);
+
+    /**
+        Assignment operator from native long long (only for compilers supporting it).
+    */
+    wxULongLong& operator=(wxLongLong_t ll);
+
+    /**
+        Assignment operator from native unsigned long long (only for compilers supporting it).
+
+        @since 2.7.0
+    */
+    wxULongLong& operator=(wxULongLong_t ll);
+
+    /**
+        Assignment operator from long.
+
+        @since 2.7.0
+    */
+    wxULongLong& operator=(long l);
+
+    /**
+        Assignment operator from unsigned long.
+
+        @since 2.7.0
+    */
+    wxULongLong& operator=(unsigned long l);
 };
 
 

@@ -64,6 +64,7 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
 
 All:
 
+- Add wxSecretStore for storing passwords using the OS-provided facilities.
 - Add support for the micro version (third component) to OS and toolkit version
   functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
 - wxLogInfo() now logs messages if the log level is high enough, even without
@@ -71,12 +72,14 @@ All:
 - Add wxFileType::GetExpandedCommand() (troelsk).
 - Make it easier to convert to/from UTF-8-encoded std::string (ARATA Mizuki).
 - Add support for loading dynamic lexer in wxStyledTextCtrl (New Pagodi).
+- Handle strings with embedded NULs in wxDataStream (Nitch).
 
 All (GUI):
 
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
-- Update Scintilla to v3.6.3 (Paul Kulchenko).
+- Update Scintilla to v3.6.6 (Paul Kulchenko).
+- Fix vertical scrollbar visibility in wxStyledTextCtrl (yenwu, NewPagodi).
 - Fix bug with not being able to select AUI tab after dragging.
 - Make wxDataViewCtrl::Expand() expand ancestors in native ports too.
 - Add wxDataViewCtrl::SetHeaderAttr().
@@ -85,6 +88,7 @@ All (GUI):
 
 wxGTK:
 
+- Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
 - Implement setting link colours in wxHyperlinkCtrl for GTK+3 (Hanmac).
 - Support background colour in wxDataViewCtrl attributes.
 - Improve wxSpinCtrl best size calculation.

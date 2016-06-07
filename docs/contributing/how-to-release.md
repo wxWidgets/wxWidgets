@@ -19,20 +19,27 @@ Add the missing installed folder locations of any executables to your Path.
 
 * Update `docs/readme.txt`. Please review its contents in addition to just
   changing the version number.
-* Update `docs/release.md` (except for the release sha1sums).
+* Update `docs/release.md` (the release sha1sums should be set to zeroes).
 * Put a date on the release line in `docs/changes.txt`.
 * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
 * Update the release announcement post in `docs/publicity/announce.txt`.
 
-Finally, tag the release:
+Commit the changes and finally tag the release, preferably GPG-signed:
 
-    git tag vX.Y.Z -m 'Tag X.Y.Z release.'
+    git tag -s -m 'Tag X.Y.Z release' vX.Y.Z
+
+and otherwise unsigned:
+
+    git tag -m 'Tag X.Y.Z release' vX.Y.Z
+
+Don't overwrite existing tags. For non-final releases use e.g. `X.Y.Z-rc1`
+instead of `X.Y.Z`.
 
 ## Creating Release Files
 
 The release scripts can be run from any working directory, and they will
 generate all release package files under `distrib/release/x.y.z`. The scripts
-build the release packages based on the current HEAD commit, so always
+mostly build the release packages based on the current HEAD commit, so always
 ensure you have the appropriate tag or commit checked out.
 
 1. Run `./build/tools/release.sh x.y.z` to create source archives
@@ -42,7 +49,11 @@ ensure you have the appropriate tag or commit checked out.
 2. Copy just the `wxWidgets-x.y.z.zip` package into the same
    `distrib\release\x.y.z` folder on Windows.
 
-3. Run `build/tools/release.bat x.y.z` in a Windows command prompt.
+3. Run `build/tools/release.bat x.y.z` in a Windows command prompt. To avoid
+   confusion note that, unlike other generated files, the Windows installer is
+   created based on files as well as instructions (`build/tools/wxwidgets.iss`)
+   contained in the copied release ZIP and not from the current working wx
+   directory.
 
 4. Copy these Windows packages back to your Linux or OSX `distrib/release/x.y.z`
    directory so you can continue with the upload step with all packages
@@ -51,13 +62,13 @@ ensure you have the appropriate tag or commit checked out.
     wxMSW-x.y.z-Setup.exe
     wxWidgets-x.y.z.chm
 
-5. Update the sha1sums in `docs/release.md`.
+5. Update the sha1sums in `docs/release.md` and commit the changes.
 
 ## Uploading
 
 Create a new release on GitHub using vX.Y.Z tag and title.
 
-Use `docs/release.md` for the release description box.
+Use the content of `docs/release.md` for the release description box.
 
 Attach the following files to it:
 

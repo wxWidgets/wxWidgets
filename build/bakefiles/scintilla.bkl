@@ -35,6 +35,7 @@
         <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
         <define>__WX__</define>
         <define>SCI_LEXER</define>
+        <define>NO_CXX11_REGEX</define>
         <define>LINK_LEXERS</define>
         <cppflags-borland>-w-8027</cppflags-borland>
     </template>
@@ -100,6 +101,7 @@
             src/stc/scintilla/lexers/LexHex.cxx
             src/stc/scintilla/lexers/LexHTML.cxx
             src/stc/scintilla/lexers/LexInno.cxx
+            src/stc/scintilla/lexers/LexJSON.cxx
             src/stc/scintilla/lexers/LexKix.cxx
             src/stc/scintilla/lexers/LexKVIrc.cxx
             src/stc/scintilla/lexers/LexLaTeX.cxx

@@ -542,6 +542,7 @@ WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing sup
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
+WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 
 fi
 dnl for GUI only
@@ -721,6 +722,7 @@ WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wx
 WX_ARG_FEATURE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
 WX_ARG_FEATURE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_FEATURE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
+WX_ARG_FEATURE(secretstore,   [  --enable-secretstore    use wxSecretStore class], wxUSE_SECRETSTORE)
 WX_ARG_FEATURE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 WX_ARG_FEATURE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_FEATURE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths class], wxUSE_STDPATHS)
@@ -5322,6 +5324,36 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl Secret storage
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_SECRETSTORE" = "yes"; then
+    dnl The required APIs are always available under MSW and OS X but we must
+    dnl have GNOME libsecret under Unix to be able to compile this class.
+    if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
+        PKG_CHECK_MODULES(LIBSECRET, [libsecret-1],
+            [
+                CXXFLAGS="$LIBSECRET_CFLAGS $CXXFLAGS"
+                LIBS="$LIBSECRET_LIBS $LIBS"
+            ],
+            [
+                AC_MSG_WARN([libsecret not found, wxSecretStore won't be available])
+                wxUSE_SECRETSTORE=no
+            ]
+        )
+    fi
+
+    if test "$wxUSE_SECRETSTORE" = "yes"; then
+        if test "$USE_DARWIN" = 1; then
+            LIBS="-framework Security $LIBS"
+        fi
+
+        AC_DEFINE(wxUSE_SECRETSTORE)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS secretstore"
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl Register non-GUI class options for makefiles and setup.h
 dnl ---------------------------------------------------------------------------
 
@@ -6358,8 +6390,38 @@ if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
 fi
 
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
-    AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+    if test "$wxUSE_GTK" = 1 -o "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1; then
+        if test "$wxUSE_XTEST" = "yes" ; then
+            PKG_CHECK_MODULES(XTST, xtst,
+                [
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XTST_LIBS"
+                    CFLAGS="$XTST_CFLAGS $CFLAGS"
+                    CXXFLAGS="$XTST_CFLAGS $CXXFLAGS"
+                    AC_DEFINE(wxUSE_XTEST)
+                ],
+                [
+                    if test "$WXGTK3" = 1; then
+                        dnl This class can't work without XTest with GTK+ 3
+                        dnl which uses XInput2 and so ignores XSendEvent().
+                        AC_MSG_WARN([XTest not found, disabling wxUIActionSimulator])
+                        wxUSE_UIACTIONSIMULATOR=no
+                    fi
+                    dnl The other ports can use XSendEvent(), so don't warn
+                    wxUSE_XTEST="no"
+                ]
+            )
+        elif test "$WXGTK3" = 1; then
+            dnl As per above, wxUIActionSimulator can't be used in this case,
+            dnl but there is no need to warn, presumably the user knows what
+            dnl he's doing if --without-xtest was explicitly specified.
+            wxUSE_UIACTIONSIMULATOR=no
+        fi
+    fi
+
+    if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
+        AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+    fi
 fi
 
 if test "$wxUSE_DC_TRANSFORM_MATRIX" = "yes" ; then
