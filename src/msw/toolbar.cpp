@@ -279,7 +279,7 @@ static RECT wxGetTBItemRect(HWND hwnd, int index, int id = wxID_NONE)
     return r;
 }
 
-inline bool MSWShouldBeChecked(const wxToolBarToolBase *tool)
+static bool MSWShouldBeChecked(const wxToolBarToolBase *tool)
 {
     // Apparently, "checked" state image overrides the "disabled" image
     // so we need to enforce our custom "disabled" image (if there is any)
