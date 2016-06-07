@@ -1164,6 +1164,7 @@ GTK_LOWLEVEL_SRC =
     src/gtk/filehistory.cpp
     src/gtk/font.cpp
     src/gtk/sockgtk.cpp
+    src/gtk/mimetype.cpp
     src/gtk/minifram.cpp
     src/gtk/nonownedwnd.cpp
     src/gtk/pen.cpp
@@ -1203,6 +1204,7 @@ GTK_LOWLEVEL_HDR =
     wx/gtk/evtloopsrc.h
     wx/gtk/font.h
     wx/gtk/filehistory.h
+    wx/gtk/mimetype.h
     wx/gtk/minifram.h
     wx/gtk/nonownedwnd.h
     wx/gtk/pen.h

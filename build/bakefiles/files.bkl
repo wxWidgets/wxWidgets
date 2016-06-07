@@ -1292,6 +1292,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/utilsgtk.cpp
     src/gtk/win_gtk.cpp
     src/gtk/window.cpp
+    src/gtk/mimetype.cpp
 </set>
 <set var="GTK2_LOWLEVEL_SRC" hints="files">
     $(GTK_LOWLEVEL_SRC)
@@ -1326,6 +1327,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/tooltip.h
     wx/gtk/toplevel.h
     wx/gtk/window.h
+    wx/gtk/mimetype.h
 </set>
 <set var="GTK_SRC" hints="files">
     <!-- Generic implementations used by wxGTK: -->

@@ -210,9 +210,9 @@ WXSCINTILLA_CXXFLAGS = /M$(__RUNTIME_LIBS_100)$(__DEBUGRUNTIME) /DWIN32 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) /DNDEBUG /D_CRT_SECURE_NO_WARNINGS \
 	/I..\..\src\stc\scintilla\include /I..\..\src\stc\scintilla\lexlib \
-	/I..\..\src\stc\scintilla\src /D__WX__ /DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS \
-	/I$(SETUPHDIR) /I..\..\include $(__wxscintilla_usingdll_p) /D__WXMSW__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	/I..\..\src\stc\scintilla\src /D__WX__ /DSCI_LEXER /DNO_CXX11_REGEX \
+	/DLINK_LEXERS /I$(SETUPHDIR) /I..\..\include $(__wxscintilla_usingdll_p) \
+	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexA68k.obj \
@@ -368,7 +368,8 @@ MONODLL_CFLAGS = /M$(__RUNTIME_LIBS_116)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL \
+	$(CPPFLAGS) $(CFLAGS)
 MONODLL_CXXFLAGS = /M$(__RUNTIME_LIBS_116)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).pdb \
@@ -381,9 +382,9 @@ MONODLL_CXXFLAGS = /M$(__RUNTIME_LIBS_116)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monodll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_monodll.pch" $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.obj \
 	$(OBJS)\monodll_any.obj \
@@ -529,7 +530,8 @@ MONOLIB_CFLAGS = /M$(__RUNTIME_LIBS_131)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 $(CPPFLAGS) \
+	$(CFLAGS)
 MONOLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_131)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).pdb \
@@ -542,8 +544,9 @@ MONOLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_131)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monolib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monolib.pch" \
+	$(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
 	$(OBJS)\monolib_any.obj \
@@ -1707,9 +1710,9 @@ STCDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_581)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DWXUSINGDLL /DWXMAKINGDLL_STC $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_stcdll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DWXUSINGDLL /DWXMAKINGDLL_STC \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_stcdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_dummy.obj \
 	$(OBJS)\stcdll_stc.obj \
@@ -1729,8 +1732,8 @@ STCLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_596)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
-	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_stclib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_stclib.pch" $(CPPFLAGS) $(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_dummy.obj \
 	$(OBJS)\stclib_stc.obj \
