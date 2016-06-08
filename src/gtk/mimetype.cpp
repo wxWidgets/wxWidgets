@@ -31,17 +31,30 @@ wxString wxGTKMimeTypesManagerImpl::GetIconFromMimeType(const wxString& mime)
     if ( !theme )
         return wxString();
 
-    wxGtkObject<GtkIconInfo> giconinfo(gtk_icon_theme_lookup_by_gicon
-                                       (
-                                            theme,
-                                            gicon,
-                                            256,
-                                            GTK_ICON_LOOKUP_NO_SVG
-                                       ));
-    if ( !giconinfo )
-        return wxString();
+    // Notice that we can't use wxGtkObject here because a special function
+    // needs to be used for freeing this object in GTK+ 2. We should switch to
+    // using wxGtkObject when support for GTK+ 2 is dropped.
+    GtkIconInfo* const giconinfo = gtk_icon_theme_lookup_by_gicon
+                                   (
+                                        theme,
+                                        gicon,
+                                        256,
+                                        GTK_ICON_LOOKUP_NO_SVG
+                                   );
 
-    return wxString::FromUTF8(gtk_icon_info_get_filename(giconinfo));
+    wxString icon;
+    if ( giconinfo )
+    {
+        icon = wxString::FromUTF8(gtk_icon_info_get_filename(giconinfo));
+
+#ifdef __WXGTK3__
+        g_object_unref(giconinfo);
+#else
+        gtk_icon_info_free(giconinfo);
+#endif
+    }
+
+    return icon;
 }
 
 wxMimeTypesManagerImpl *wxGTKMimeTypesManagerFactory::CreateMimeTypesManagerImpl()
