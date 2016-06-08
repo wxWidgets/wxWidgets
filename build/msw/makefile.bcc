@@ -1772,7 +1772,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_ribbon_control.obj \
 	$(OBJS)\monodll_gallery.obj \
 	$(OBJS)\monodll_page.obj \
-	$(OBJS)\monodll_ribbon_panel.obj \
+	$(OBJS)\monodll_panel.obj \
 	$(OBJS)\monodll_ribbon_toolbar.obj \
 	$(OBJS)\monodll_xh_ribbon.obj \
 	$(OBJS)\monodll_richtextbuffer.obj \
@@ -1887,7 +1887,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_notebook.obj \
 	$(OBJS)\monodll_access.obj \
 	$(OBJS)\monodll_ownerdrw.obj \
-	$(OBJS)\monodll_msw_panel.obj \
 	$(OBJS)\monodll_progdlg.obj \
 	$(OBJS)\monodll_msw_radiobox.obj \
 	$(OBJS)\monodll_msw_radiobut.obj \
@@ -2604,7 +2603,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_ribbon_control.obj \
 	$(OBJS)\monolib_gallery.obj \
 	$(OBJS)\monolib_page.obj \
-	$(OBJS)\monolib_ribbon_panel.obj \
+	$(OBJS)\monolib_panel.obj \
 	$(OBJS)\monolib_ribbon_toolbar.obj \
 	$(OBJS)\monolib_xh_ribbon.obj \
 	$(OBJS)\monolib_richtextbuffer.obj \
@@ -2719,7 +2718,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_notebook.obj \
 	$(OBJS)\monolib_access.obj \
 	$(OBJS)\monolib_ownerdrw.obj \
-	$(OBJS)\monolib_msw_panel.obj \
 	$(OBJS)\monolib_progdlg.obj \
 	$(OBJS)\monolib_msw_radiobox.obj \
 	$(OBJS)\monolib_msw_radiobut.obj \
@@ -3423,7 +3421,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_notebook.obj \
 	$(OBJS)\coredll_access.obj \
 	$(OBJS)\coredll_ownerdrw.obj \
-	$(OBJS)\coredll_panel.obj \
 	$(OBJS)\coredll_progdlg.obj \
 	$(OBJS)\coredll_msw_radiobox.obj \
 	$(OBJS)\coredll_msw_radiobut.obj \
@@ -3995,7 +3992,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_notebook.obj \
 	$(OBJS)\corelib_access.obj \
 	$(OBJS)\corelib_ownerdrw.obj \
-	$(OBJS)\corelib_panel.obj \
 	$(OBJS)\corelib_progdlg.obj \
 	$(OBJS)\corelib_msw_radiobox.obj \
 	$(OBJS)\corelib_msw_radiobut.obj \
@@ -6888,9 +6884,6 @@ $(OBJS)\monodll_access.obj: ..\..\src\msw\ole\access.cpp
 $(OBJS)\monodll_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
-$(OBJS)\monodll_msw_panel.obj: ..\..\src\msw\panel.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\panel.cpp
-
 $(OBJS)\monodll_progdlg.obj: ..\..\src\msw\progdlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\progdlg.cpp
 
@@ -7527,7 +7520,7 @@ $(OBJS)\monodll_gallery.obj: ..\..\src\ribbon\gallery.cpp
 $(OBJS)\monodll_page.obj: ..\..\src\ribbon\page.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\page.cpp
 
-$(OBJS)\monodll_ribbon_panel.obj: ..\..\src\ribbon\panel.cpp
+$(OBJS)\monodll_panel.obj: ..\..\src\ribbon\panel.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\panel.cpp
 
 $(OBJS)\monodll_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
@@ -9432,9 +9425,6 @@ $(OBJS)\monolib_access.obj: ..\..\src\msw\ole\access.cpp
 $(OBJS)\monolib_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
-$(OBJS)\monolib_msw_panel.obj: ..\..\src\msw\panel.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\panel.cpp
-
 $(OBJS)\monolib_progdlg.obj: ..\..\src\msw\progdlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\progdlg.cpp
 
@@ -10071,7 +10061,7 @@ $(OBJS)\monolib_gallery.obj: ..\..\src\ribbon\gallery.cpp
 $(OBJS)\monolib_page.obj: ..\..\src\ribbon\page.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\page.cpp
 
-$(OBJS)\monolib_ribbon_panel.obj: ..\..\src\ribbon\panel.cpp
+$(OBJS)\monolib_panel.obj: ..\..\src\ribbon\panel.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\panel.cpp
 
 $(OBJS)\monolib_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
@@ -12390,9 +12380,6 @@ $(OBJS)\coredll_access.obj: ..\..\src\msw\ole\access.cpp
 $(OBJS)\coredll_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
-$(OBJS)\coredll_panel.obj: ..\..\src\msw\panel.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\panel.cpp
-
 $(OBJS)\coredll_progdlg.obj: ..\..\src\msw\progdlg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\progdlg.cpp
 
@@ -13869,9 +13856,6 @@ $(OBJS)\corelib_access.obj: ..\..\src\msw\ole\access.cpp
 
 $(OBJS)\corelib_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
-
-$(OBJS)\corelib_panel.obj: ..\..\src\msw\panel.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\panel.cpp
 
 $(OBJS)\corelib_progdlg.obj: ..\..\src\msw\progdlg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\progdlg.cpp

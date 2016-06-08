@@ -1643,10 +1643,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\panel.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\msw\pen.cpp"
 				>
 			</File>

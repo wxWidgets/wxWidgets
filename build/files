@@ -1827,7 +1827,6 @@ MSW_SRC =
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
-    src/msw/panel.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp

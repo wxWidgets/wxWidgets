@@ -786,9 +786,6 @@
     <ClCompile Include="..\..\src\msw\palette.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\panel.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\msw\pen.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>

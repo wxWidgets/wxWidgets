@@ -1894,17 +1894,24 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     // ... and don't do anything (avoiding flicker) if it's already ok unless
     // we're forced to resize the window
-    if ( x == currentX && y == currentY &&
-         width == currentW && height == currentH &&
-            !(sizeFlags & wxSIZE_FORCE) )
+    if ( !(sizeFlags & wxSIZE_FORCE) )
     {
-        if (sizeFlags & wxSIZE_FORCE_EVENT)
+        if ( width == currentW && height == currentH )
         {
-            wxSizeEvent event( wxSize(width,height), GetId() );
-            event.SetEventObject( this );
-            HandleWindowEvent( event );
+            // We need to send wxSizeEvent ourselves because Windows won't do
+            // it if the size doesn't change.
+            if ( sizeFlags & wxSIZE_FORCE_EVENT )
+            {
+                wxSizeEvent event( wxSize(width,height), GetId() );
+                event.SetEventObject( this );
+                HandleWindowEvent( event );
+            }
+
+            // Still call DoMoveWindow() below if we need to change the
+            // position, otherwise we're done.
+            if ( x == currentX && y == currentY )
+                return;
         }
-        return;
     }
 
     if ( x == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )

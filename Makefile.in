@@ -4325,7 +4325,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_ribbon_control.o \
 	monodll_gallery.o \
 	monodll_page.o \
-	monodll_ribbon_panel.o \
+	monodll_panel.o \
 	monodll_ribbon_toolbar.o \
 	monodll_xh_ribbon.o \
 	monodll_richtextbuffer.o \
@@ -5357,7 +5357,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_notebook.o \
 	monodll_access.o \
 	monodll_ownerdrw.o \
-	monodll_msw_panel.o \
 	monodll_progdlg.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
@@ -6347,7 +6346,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_ribbon_control.o \
 	monolib_gallery.o \
 	monolib_page.o \
-	monolib_ribbon_panel.o \
+	monolib_panel.o \
 	monolib_ribbon_toolbar.o \
 	monolib_xh_ribbon.o \
 	monolib_richtextbuffer.o \
@@ -7379,7 +7378,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_notebook.o \
 	monolib_access.o \
 	monolib_ownerdrw.o \
-	monolib_msw_panel.o \
 	monolib_progdlg.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
@@ -9545,7 +9543,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_notebook.o \
 	coredll_access.o \
 	coredll_ownerdrw.o \
-	coredll_panel.o \
 	coredll_progdlg.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
@@ -11019,7 +11016,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_notebook.o \
 	corelib_access.o \
 	corelib_ownerdrw.o \
-	corelib_panel.o \
 	corelib_progdlg.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
@@ -16396,9 +16392,6 @@ monodll_access.o: $(srcdir)/src/msw/ole/access.cpp $(MONODLL_ODEP)
 monodll_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
-monodll_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
 monodll_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
 
@@ -17182,7 +17175,7 @@ monodll_gallery.o: $(srcdir)/src/ribbon/gallery.cpp $(MONODLL_ODEP)
 monodll_page.o: $(srcdir)/src/ribbon/page.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/page.cpp
 
-monodll_ribbon_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONODLL_ODEP)
+monodll_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/panel.cpp
 
 monodll_ribbon_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(MONODLL_ODEP)
@@ -21247,9 +21240,6 @@ monolib_access.o: $(srcdir)/src/msw/ole/access.cpp $(MONOLIB_ODEP)
 monolib_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
-monolib_msw_panel.o: $(srcdir)/src/msw/panel.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
 monolib_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
 
@@ -22033,7 +22023,7 @@ monolib_gallery.o: $(srcdir)/src/ribbon/gallery.cpp $(MONOLIB_ODEP)
 monolib_page.o: $(srcdir)/src/ribbon/page.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/page.cpp
 
-monolib_ribbon_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONOLIB_ODEP)
+monolib_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/panel.cpp
 
 monolib_ribbon_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(MONOLIB_ODEP)
@@ -26761,9 +26751,6 @@ coredll_access.o: $(srcdir)/src/msw/ole/access.cpp $(COREDLL_ODEP)
 coredll_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
-coredll_panel.o: $(srcdir)/src/msw/panel.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
-
 coredll_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
 
@@ -30156,9 +30143,6 @@ corelib_access.o: $(srcdir)/src/msw/ole/access.cpp $(CORELIB_ODEP)
 
 corelib_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
-
-corelib_panel.o: $(srcdir)/src/msw/panel.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/panel.cpp
 
 corelib_progdlg.o: $(srcdir)/src/msw/progdlg.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/progdlg.cpp
