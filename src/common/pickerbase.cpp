@@ -133,6 +133,8 @@ void wxPickerBase::PostCreation()
     SetSizer(m_sizer);
 
     SetInitialSize( GetMinSize() );
+
+    Layout();
 }
 
 #if wxUSE_TOOLTIPS
