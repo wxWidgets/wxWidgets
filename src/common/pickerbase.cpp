@@ -153,6 +153,26 @@ void wxPickerBase::DoSetToolTip(wxToolTip *tip)
 
 #endif // wxUSE_TOOLTIPS
 
+void wxPickerBase::DoSetGrowableFlagFor(wxSizerItem* item, bool grow)
+{
+    // We assume that our controls use either wxALIGN_CENTER_VERTICAL or wxGROW
+    // style, this code would need to be changed in the unlikely event any
+    // other style is used for them.
+    int f = item->GetFlag();
+    if ( grow )
+    {
+        f &= ~wxALIGN_CENTER_VERTICAL;
+        f |= wxGROW;
+    }
+    else
+    {
+        f &= ~wxGROW;
+        f |= wxALIGN_CENTER_VERTICAL;
+    }
+
+    item->SetFlag(f);
+}
+
 // ----------------------------------------------------------------------------
 // wxPickerBase - event handlers
 // ----------------------------------------------------------------------------
