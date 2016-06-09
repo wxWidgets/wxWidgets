@@ -73,6 +73,7 @@ All:
 - Make it easier to convert to/from UTF-8-encoded std::string (ARATA Mizuki).
 - Add support for loading dynamic lexer in wxStyledTextCtrl (New Pagodi).
 - Handle strings with embedded NULs in wxDataStream (Nitch).
+- Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
 
 All (GUI):
 

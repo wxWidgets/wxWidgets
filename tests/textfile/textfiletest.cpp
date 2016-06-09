@@ -117,6 +117,9 @@ void TextFileTestCase::ReadEmpty()
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
 
     CPPUNIT_ASSERT_EQUAL( (size_t)0, f.GetLineCount() );
+    CPPUNIT_ASSERT( f.Eof() );
+    CPPUNIT_ASSERT_EQUAL( "", f.GetFirstLine() );
+    CPPUNIT_ASSERT_EQUAL( "", f.GetLastLine() );
 }
 
 void TextFileTestCase::ReadDOS()
