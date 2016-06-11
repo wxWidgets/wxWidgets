@@ -74,6 +74,7 @@ All:
 - Add support for loading dynamic lexer in wxStyledTextCtrl (New Pagodi).
 - Handle strings with embedded NULs in wxDataStream (Nitch).
 - Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
+- Many fixes and improvements in Direct2D, Cairo, and GDI+ graphics renderers.
 
 All (GUI):
 
