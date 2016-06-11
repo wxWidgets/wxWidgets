@@ -3179,6 +3179,8 @@ protected:
 
         hr = renderTarget->BindDC(m_hdc, &r);
         wxCHECK_HRESULT_RET(hr);
+        renderTarget->SetTransform(
+                       D2D1::Matrix3x2F::Translation(-r.left, -r.top));
 
         m_nativeResource = renderTarget;
     }
@@ -3414,6 +3416,7 @@ private:
 
     ID2D1RenderTarget* m_cachedRenderTarget;
 
+    D2D1::Matrix3x2F m_initTransform;
 private:
     wxDECLARE_NO_COPY_CLASS(wxD2DContext);
 };
@@ -3694,7 +3697,9 @@ void wxD2DContext::SetTransform(const wxGraphicsMatrix& matrix)
 {
     EnsureInitialized();
 
-    GetRenderTarget()->SetTransform(wxGetD2DMatrixData(matrix)->GetMatrix3x2F());
+    D2D1::Matrix3x2F m;
+    m.SetProduct(wxGetD2DMatrixData(matrix)->GetMatrix3x2F(), m_initTransform);
+    GetRenderTarget()->SetTransform(&m);
 }
 
 wxGraphicsMatrix wxD2DContext::GetTransform() const
@@ -3704,6 +3709,16 @@ wxGraphicsMatrix wxD2DContext::GetTransform() const
     if (GetRenderTarget() != NULL)
     {
         GetRenderTarget()->GetTransform(&transformMatrix);
+
+        if ( m_initTransform.IsInvertible() )
+        {
+            D2D1::Matrix3x2F invMatrix = m_initTransform;
+            invMatrix.Invert();
+
+            D2D1::Matrix3x2F m;
+            m.SetProduct(transformMatrix, invMatrix);
+            transformMatrix = m;
+        }
     }
     else
     {
@@ -3825,7 +3840,7 @@ void wxD2DContext::EnsureInitialized()
     if (!m_renderTargetHolder->IsResourceAcquired())
     {
         m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
-        GetRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+        GetRenderTarget()->GetTransform(&m_initTransform);
         GetRenderTarget()->BeginDraw();
     }
     else
