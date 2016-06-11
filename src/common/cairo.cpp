@@ -238,6 +238,8 @@
        (), () , NULL ) \
     m( cairo_surface_t*, cairo_surface_create_similar_image, \
        (cairo_surface_t *other, cairo_format_t format, int width, int height), (other, format, width, height), NULL) \
+    m( cairo_status_t, cairo_surface_status, \
+       (cairo_surface_t *surface), (surface), CAIRO_STATUS_SUCCESS) \
     wxCAIRO_PLATFORM_METHODS(m)
 
 #define wxCAIRO_DECLARE_TYPE(rettype, name, args, argnames, defret) \
