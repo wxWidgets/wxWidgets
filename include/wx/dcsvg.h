@@ -18,11 +18,6 @@
 
 #define wxSVGVersion wxT("v0101")
 
-#ifdef __BORLANDC__
-#pragma warn -8008
-#pragma warn -8066
-#endif
-
 class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
 
 class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
