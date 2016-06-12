@@ -1476,7 +1476,10 @@ public:
 
     /**
         Changes the default style to use for the new text which is going to be
-        added to the control using WriteText() or AppendText().
+        added to the control.
+
+        This applies both to the text added programmatically using WriteText()
+        or AppendText() and to the text entered by the user interactively.
 
         If either of the font, foreground, or background colour is not set in
         @a style, the values of the previous default style are used for them.
