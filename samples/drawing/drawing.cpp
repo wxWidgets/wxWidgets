@@ -39,6 +39,9 @@
 #include "wx/filename.h"
 #include "wx/metafile.h"
 #include "wx/settings.h"
+#if wxUSE_SVG
+#include "wx/dcsvg.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // resources
@@ -106,6 +109,7 @@ public:
     void OnMouseUp(wxMouseEvent &event);
 
     void ToShow(int show) { m_show = show; Refresh(); }
+    int GetPage() { return m_show; }
 
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
@@ -120,6 +124,7 @@ public:
     {   if ( !m_renderer ) return name.empty();
         return m_renderer->GetName() == name;
     }
+    wxGraphicsRenderer* GetRenderer() const { return m_renderer; }
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
 
@@ -573,6 +578,8 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
     dc.DrawPolygon(WXSIZEOF(star), star, 0, 30);
     dc.DrawPolygon(WXSIZEOF(star), star, 160, 30, wxWINDING_RULE);
 
+    wxBrush brushHatchGreen(*wxGREEN, wxBRUSHSTYLE_FDIAGONAL_HATCH);
+    dc.SetBrush(brushHatchGreen);
     wxPoint star2[10];
     star2[0] = wxPoint(0, 100);
     star2[1] = wxPoint(-59, -81);
@@ -901,7 +908,7 @@ void MyCanvas::DrawText(wxDC& dc)
     wxCoord y = 150;
     dc.SetLogicalFunction(wxINVERT);
     // text drawing should ignore logical function
-    dc.DrawText( wxT("There should be a text below"), 110, 150 );
+    dc.DrawText( wxT("There should be a text below"), 110, y );
     dc.DrawRectangle( 110, y, 100, height );
 
     y += height;
@@ -1836,7 +1843,7 @@ void MyCanvas::Draw(wxDC& pdc)
         case File_ShowGradients:
             DrawGradients(dc);
             break;
-            
+
         case File_ShowSystemColours:
             DrawSystemColours(dc);
             break;
@@ -2169,14 +2176,43 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_LIBPNG
                      wxT("PNG image (*.png)|*.png;*.PNG|")
 #endif
+#if wxUSE_SVG
+                     wxT("SVG image (*.svg)|*.svg;*.SVG|")
+#endif
                      wxT("Bitmap image (*.bmp)|*.bmp;*.BMP"),
                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() == wxID_OK)
     {
-        wxBitmap bmp(500, 800);
-        wxMemoryDC mdc(bmp);
-        m_canvas->Draw(mdc);
-        bmp.ConvertToImage().SaveFile(dlg.GetPath());
+        int width, height;
+        m_canvas->GetVirtualSize(&width, &height);
+#if wxUSE_SVG
+        wxString ext = dlg.GetPath().AfterLast('.').Lower();
+        if (ext.Lower() == wxT("svg"))
+        {
+            // Graphics screen can only be drawn using GraphicsContext
+            if (m_canvas->GetPage() == File_ShowGraphics) {
+                wxLogMessage("Graphics screen can not be saved as SVG.");
+                return;
+            }
+#if wxUSE_GRAPHICS_CONTEXT
+            wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
+            m_canvas->UseGraphicRenderer(NULL);
+#endif
+            wxSVGFileDC svgdc(dlg.GetPath(), width, height, 72, wxT("Drawing sample"));
+            svgdc.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
+            m_canvas->Draw(svgdc);
+#if wxUSE_GRAPHICS_CONTEXT
+            m_canvas->UseGraphicRenderer(tempRenderer);
+#endif
+        }
+        else
+#endif
+        {
+            wxBitmap bmp(width, height);
+            wxMemoryDC mdc(bmp);
+            m_canvas->Draw(mdc);
+            bmp.ConvertToImage().SaveFile(dlg.GetPath());
+        }
     }
 }
 

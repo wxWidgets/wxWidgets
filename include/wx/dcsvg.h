@@ -16,12 +16,7 @@
 
 #if wxUSE_SVG
 
-#define wxSVGVersion wxT("v0100")
-
-#ifdef __BORLANDC__
-#pragma warn -8008
-#pragma warn -8066
-#endif
+#define wxSVGVersion wxT("v0101")
 
 class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
 
@@ -66,7 +61,8 @@ class WXDLLIMPEXP_CORE wxSVGFileDCImpl : public wxDCImpl
 {
 public:
     wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename,
-                     int width=320, int height=240, double dpi=72.0 );
+                     int width = 320, int height = 240, double dpi = 72.0,
+                     const wxString &title = wxString() );
 
     virtual ~wxSVGFileDCImpl();
 
@@ -81,20 +77,17 @@ public:
         return -1;
     }
 
-    virtual void Clear() wxOVERRIDE
-    {
-        wxFAIL_MSG(wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?"));
-    }
+    virtual void Clear() wxOVERRIDE;
 
     virtual void DestroyClippingRegion() wxOVERRIDE;
 
     virtual wxCoord GetCharHeight() const wxOVERRIDE;
     virtual wxCoord GetCharWidth() const wxOVERRIDE;
 
-    virtual void SetClippingRegion(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                                   wxCoord WXUNUSED(w), wxCoord WXUNUSED(h))
+    virtual void SetClippingRegion(wxCoord x, wxCoord y,
+                                   wxCoord w, wxCoord h)
     {
-        wxFAIL_MSG(wxT("wxSVGFILEDC::SetClippingRegion not implemented"));
+        DoSetClippingRegion(x, y, w, h);
     }
 
     virtual void SetPalette(const wxPalette&  WXUNUSED(palette)) wxOVERRIDE
@@ -102,10 +95,10 @@ public:
         wxFAIL_MSG(wxT("wxSVGFILEDC::SetPalette not implemented"));
     }
 
-    virtual void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y),
-                                wxCoord *WXUNUSED(w), wxCoord *WXUNUSED(h))
+    virtual void GetClippingBox(wxCoord *x, wxCoord *y,
+                                wxCoord *w, wxCoord *h)
     {
-        wxFAIL_MSG(wxT("wxSVGFILEDC::GetClippingBox not implemented"));
+        DoGetClippingBox(x, y, w, h);
     }
 
     virtual void SetLogicalFunction(wxRasterOperationMode WXUNUSED(function)) wxOVERRIDE
@@ -117,6 +110,24 @@ public:
     {
         wxFAIL_MSG(wxT("wxSVGFILEDC::GetLogicalFunction() not implemented"));
         return wxCOPY;
+    }
+
+    virtual void SetLogicalOrigin(wxCoord x, wxCoord y) wxOVERRIDE
+    {
+        wxDCImpl::SetLogicalOrigin(x, y);
+        m_graphics_changed = true;
+    }
+
+    virtual void SetDeviceOrigin(wxCoord x, wxCoord y) wxOVERRIDE
+    {
+        wxDCImpl::SetDeviceOrigin(x, y);
+        m_graphics_changed = true;
+    }
+
+    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp) wxOVERRIDE
+    {
+        wxDCImpl::SetAxisOrientation(xLeftRight, yBottomUp);
+        m_graphics_changed = true;
     }
 
     virtual void SetBackground( const wxBrush &brush ) wxOVERRIDE;
@@ -169,6 +180,10 @@ private:
                               wxCoord xoffset, wxCoord yoffset,
                               wxPolygonFillMode fillStyle) wxOVERRIDE;
 
+   virtual void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
+                                  wxCoord xoffset, wxCoord yoffset,
+                                  wxPolygonFillMode fillStyle) wxOVERRIDE;
+
    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h) wxOVERRIDE;
 
    virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -201,9 +216,10 @@ private:
                                 wxCoord *externalLeading = NULL,
                                 const wxFont *font = NULL) const wxOVERRIDE;
 
-   virtual void DoSetDeviceClippingRegion(const wxRegion& WXUNUSED(region)) wxOVERRIDE
+   virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE
    {
-       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetDeviceClippingRegion not yet implemented"));
+        DoSetClippingRegion(region.GetBox().x, region.GetBox().y,
+                            region.GetBox().width, region.GetBox().height);
    }
 
    virtual void DoSetClippingRegion(int x,  int y, int width, int height) wxOVERRIDE;
@@ -212,7 +228,8 @@ private:
 
    virtual wxSize GetPPI() const wxOVERRIDE;
 
-   void Init (const wxString &filename, int width, int height, double dpi);
+   void Init (const wxString &filename, int width, int height,
+              double dpi, const wxString &title);
 
    void write( const wxString &s );
 
@@ -225,14 +242,14 @@ private:
    // their current values in wxDC.
    void DoStartNewGraphics();
 
-   wxFileOutputStream *m_outfile;
    wxString            m_filename;
    int                 m_sub_images; // number of png format images we have
    bool                m_OK;
    bool                m_graphics_changed;  // set by Set{Brush,Pen}()
    int                 m_width, m_height;
    double              m_dpi;
-   wxSVGBitmapHandler* m_bmp_handler; // class to handle bitmaps
+   wxScopedPtr<wxFileOutputStream> m_outfile;
+   wxScopedPtr<wxSVGBitmapHandler> m_bmp_handler; // class to handle bitmaps
 
    // The clipping nesting level is incremented by every call to
    // SetClippingRegion() and reset when DestroyClippingRegion() is called.
@@ -252,8 +269,9 @@ public:
     wxSVGFileDC(const wxString& filename,
                 int width = 320,
                 int height = 240,
-                double dpi = 72.0)
-        : wxDC(new wxSVGFileDCImpl(this, filename, width, height, dpi))
+                double dpi = 72.0,
+                const wxString& title = wxString())
+        : wxDC(new wxSVGFileDCImpl(this, filename, width, height, dpi, title))
     {
     }
 
