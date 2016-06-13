@@ -1750,6 +1750,196 @@ protected:
     void Empty();
 };
 
+/** @class wxPGCellRenderer
+
+    Base class for wxPropertyGrid cell renderers.
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class WXDLLIMPEXP_PROPGRID wxPGCellRenderer : public wxObjectRefData
+{
+public:
+    wxPGCellRenderer();
+    virtual ~wxPGCellRenderer();
+
+    /**
+        @anchor pgcellrenderer_render_flags
+
+        Flags for wxPGCellRenderer::Render(), wxPGCellRenderer::PreDrawCell()
+        and wxPGCellRenderer::PostDrawCell().
+    */
+    enum
+    {
+        /** We are painting selected item.
+        */
+        Selected        = 0x00010000,
+
+        /** We are painting item in choice popup.
+        */
+        ChoicePopup     = 0x00020000,
+
+        /**
+            We are rendering wxOwnerDrawnComboBox control
+            or other owner drawn control, but that is only
+            officially supported one ATM).
+        */
+        Control         = 0x00040000,
+
+        /** We are painting a disable property.
+        */
+        Disabled        = 0x00080000,
+
+        /**
+            We are painting selected, disabled, or similar
+            item that dictates fore- and background colours,
+            overriding any cell values.
+        */
+        DontUseCellFgCol    = 0x00100000,
+        DontUseCellBgCol    = 0x00200000,
+        DontUseCellColours  = DontUseCellFgCol |
+                              DontUseCellBgCol
+    };
+
+    /**
+        Returns @true if rendered something in the foreground (text or
+        bitmap).
+
+        @param flags
+            See @ref pgcellrenderer_render_flags "list of render flags".
+    */
+    virtual bool Render( wxDC& dc,
+                         const wxRect& rect,
+                         const wxPropertyGrid* propertyGrid,
+                         wxPGProperty* property,
+                         int column,
+                         int item,
+                         int flags ) const = 0;
+
+    /** Returns size of the image in front of the editable area.
+
+        @remarks
+        If property is NULL, then this call is for a custom value. In that case
+        the item is index to wxPropertyGrid's custom values.
+    */
+    virtual wxSize GetImageSize( const wxPGProperty* property,
+                                 int column,
+                                 int item ) const;
+
+    /** Paints property category selection rectangle.
+    */
+    virtual void DrawCaptionSelectionRect(wxWindow *win, wxDC& dc,
+                                          int x, int y, int w, int h) const;
+
+    /** Utility to draw vertically centered text.
+    */
+    void DrawText( wxDC& dc,
+                   const wxRect& rect,
+                   int imageWidth,
+                   const wxString& text ) const;
+
+    /**
+        Utility to draw editor's value, or vertically aligned text if editor is
+        NULL.
+    */
+    void DrawEditorValue( wxDC& dc, const wxRect& rect,
+                          int xOffset, const wxString& text,
+                          wxPGProperty* property,
+                          const wxPGEditor* editor ) const;
+
+    /** Utility to render cell bitmap and set text colour plus bg brush
+        colour.
+
+        @param flags
+            See @ref pgcellrenderer_render_flags "list of render flags".
+
+        @return Returns image width, which, for instance, can be passed to
+                DrawText.
+    */
+    int PreDrawCell( wxDC& dc,
+                     const wxRect& rect,
+                     const wxPGCell& cell,
+                     int flags ) const;
+
+    /**
+        Utility to be called after drawing is done, to revert whatever
+        changes PreDrawCell() did.
+
+        @param flags
+            Same as those passed to PreDrawCell().
+            See @ref pgcellrenderer_render_flags "list of render flags".
+    */
+    void PostDrawCell( wxDC& dc,
+                       const wxPropertyGrid* propGrid,
+                       const wxPGCell& cell,
+                       int flags ) const;
+};
+
+
+/**
+    @class wxPGDefaultRenderer
+
+    Default cell renderer, that can handles the common
+    scenarios.
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class WXDLLIMPEXP_PROPGRID wxPGDefaultRenderer : public wxPGCellRenderer
+{
+public:
+    /**
+        Returns @true if rendered something in the foreground (text or
+        bitmap.
+
+        @param flags
+            See @ref pgcellrenderer_render_flags "list of render flags".
+    */
+    virtual bool Render( wxDC& dc,
+                         const wxRect& rect,
+                         const wxPropertyGrid* propertyGrid,
+                         wxPGProperty* property,
+                         int column,
+                         int item,
+                         int flags ) const;
+
+    virtual wxSize GetImageSize( const wxPGProperty* property,
+                                 int column,
+                                 int item ) const;
+};
+
+/**
+    @class wxPGCellData
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGCellData : public wxObjectRefData
+{
+    friend class wxPGCell;
+public:
+    wxPGCellData();
+
+    void SetText( const wxString& text );
+    void SetBitmap( const wxBitmap& bitmap );
+    void SetFgCol( const wxColour& col );
+    void SetBgCol( const wxColour& col );
+    void SetFont( const wxFont& font );
+
+protected:
+    virtual ~wxPGCellData();
+
+    wxString    m_text;
+    wxBitmap    m_bitmap;
+    wxColour    m_fgCol;
+    wxColour    m_bgCol;
+    wxFont      m_font;
+
+    /** True if m_text is valid and specified.
+    */
+    bool        m_hasValidText;
+};
+
 
 /**
     @class wxPGCell

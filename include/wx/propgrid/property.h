@@ -58,10 +58,7 @@ struct wxPGPaintData
 #define wxPG_CAPRECTYMARGIN             1
 
 
-/** @class wxPGCellRenderer
-
-    Base class for wxPropertyGrid cell renderers.
-*/
+// Base class for wxPropertyGrid cell renderers.
 class WXDLLIMPEXP_PROPGRID wxPGCellRenderer : public wxObjectRefData
 {
 public:
@@ -96,10 +93,8 @@ public:
                               DontUseCellBgCol
     };
 
-    /**
-        Returns @true if rendered something in the foreground (text or
-        bitmap.
-    */
+    // Returns true if rendered something in the foreground
+    // (text or bitmap).
     virtual bool Render( wxDC& dc,
                          const wxRect& rect,
                          const wxPropertyGrid* propertyGrid,
@@ -108,17 +103,14 @@ public:
                          int item,
                          int flags ) const = 0;
 
-    /** Returns size of the image in front of the editable area.
-        @remarks
-        If property is NULL, then this call is for a custom value. In that case
-        the item is index to wxPropertyGrid's custom values.
-    */
+    // Returns size of the image in front of the editable area.
+    // If property is NULL, then this call is for a custom value.
+    // In that case the item is index to wxPropertyGrid's custom values.
     virtual wxSize GetImageSize( const wxPGProperty* property,
                                  int column,
                                  int item ) const;
 
-    /** Paints property category selection rectangle.
-    */
+    // Paints property category selection rectangle.
 #if WXWIN_COMPATIBILITY_3_0
     virtual void DrawCaptionSelectionRect( wxDC& dc,
                                            int x, int y,
@@ -128,40 +120,31 @@ public:
                                           int x, int y, int w, int h) const;
 #endif // WXWIN_COMPATIBILITY_3_0
 
-    /** Utility to draw vertically centered text.
-    */
+    // Utility to draw vertically centered text.
     void DrawText( wxDC& dc,
                    const wxRect& rect,
                    int imageWidth,
                    const wxString& text ) const;
 
-    /**
-        Utility to draw editor's value, or vertically aligned text if editor is
-        NULL.
-    */
+    // Utility to draw editor's value, or vertically
+    // aligned text if editor is NULL.
     void DrawEditorValue( wxDC& dc, const wxRect& rect,
                           int xOffset, const wxString& text,
                           wxPGProperty* property,
                           const wxPGEditor* editor ) const;
 
-    /** Utility to render cell bitmap and set text colour plus bg brush
-        colour.
-
-        @return Returns image width, which, for instance, can be passed to
-                DrawText.
-    */
+    // Utility to render cell bitmap and set text
+    // colour plus bg brush colour.
+    // Returns image width, which, for instance,
+    // can be passed to DrawText.
     int PreDrawCell( wxDC& dc,
                      const wxRect& rect,
                      const wxPGCell& cell,
                      int flags ) const;
 
-    /**
-        Utility to be called after drawing is done, to revert whatever
-        changes PreDrawCell() did.
-
-        @param flags
-            Same as those passed to PreDrawCell().
-    */
+    // Utility to be called after drawing is done, to revert
+    // whatever changes PreDrawCell() did.
+    // Flags are the same as those passed to PreDrawCell().
     void PostDrawCell( wxDC& dc,
                        const wxPropertyGrid* propGrid,
                        const wxPGCell& cell,
@@ -169,12 +152,8 @@ public:
 };
 
 
-/**
-    @class wxPGDefaultRenderer
-
-    Default cell renderer, that can handles the common
-    scenarios.
-*/
+// Default cell renderer, that can handles the common
+// scenarios.
 class WXDLLIMPEXP_PROPGRID wxPGDefaultRenderer : public wxPGCellRenderer
 {
 public:
