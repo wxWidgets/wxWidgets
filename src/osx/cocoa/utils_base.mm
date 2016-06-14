@@ -109,7 +109,8 @@ wxString wxGetOsDescription()
     // Notice that neither the OS name itself nor the code names seem to be
     // ever translated, OS X itself uses the English words even for the
     // languages not using Roman alphabet.
-    wxString osBrand = "OS X";
+    // Starting with 10.12 the macOS branding is used
+    wxString osBrand = wxCheckOsVersion(10, 12) ? "macOS" : "OS X";
     wxString osName;
     if (majorVer == 10)
     {
@@ -131,6 +132,9 @@ wxString wxGetOsDescription()
                 break;
             case 11:
                 osName = "El Capitan";
+                break;
+            case 12:
+                osName = "Sierra";
                 break;
         };
     }

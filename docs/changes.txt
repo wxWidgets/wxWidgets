@@ -114,6 +114,7 @@ wxOSX:
 - Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
 - Implement wxDataViewChoiceByIndexRenderer (wanup).
 - Fix unnecessary indentation in list-like wxDataViewCtrl (Andreas Falkenhahn).
+- Recognize macOS 10.12 Sierra in wxGetOsDescription() (Tobias Taschner).
 
 Unix:
 
