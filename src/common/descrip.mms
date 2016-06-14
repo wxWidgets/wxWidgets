@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 2 May 2016                                                          *
+# Date : 14 June 2016                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -226,7 +226,8 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		valnum.obj,numformatter.obj,markupparser.obj,\
 		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
 		textmeasurecmn.obj,modalhook.obj,threadinfo.obj,\
-		addremovectrl.obj,notifmsgcmn.obj
+		addremovectrl.obj,notifmsgcmn.obj,graphcmn.obj,dcsvg.obj,\
+		dcgraph.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -431,7 +432,7 @@ SOURCES = \
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
 		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
 		richtooltipcmn.cpp persist.cpp time.cpp textmeasurecmn.cpp \
-		modalhook.cpp
+		modalhook.cpp graphcmn.cpp dcsvg.cpp dcgraph.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -724,3 +725,6 @@ modalhook.obj : modalhook.cpp
 threadinfo.obj : threadinfo.cpp
 addremovectrl.obj : addremovectrl.cpp
 notifmsgcmn.obj : notifmsgcmn.cpp
+graphcmn.obj : graphcmn.cpp
+dcsvg.obj : dcsvg.cpp
+dcgraph.obj : dcgraph.cpp
