@@ -1789,6 +1789,11 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
         if ( font.SetNativeFontInfo(wxString(pangoFontString)) )
             style.SetFont(font);
 
+        if ( pattr->appearance.underline != PANGO_UNDERLINE_NONE )
+            style.SetFontUnderlined(true);
+        if ( pattr->appearance.strikethrough )
+            style.SetFontStrikethrough(true);
+
         // TODO: set alignment, tabs and indents
     }
 
