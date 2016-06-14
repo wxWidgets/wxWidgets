@@ -531,11 +531,8 @@ MyFrame::MyFrame()
     fileMenu->AppendSubMenu(stockSubMenu, wxT("&Standard items demo"));
 
 #if USE_LOG_WINDOW
-    wxMenu* sub = new wxMenu;
-    sub->Append(wxID_OPEN);
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
-                                      wxT("Clear &log\tCtrl-L"),
-                                      "", wxITEM_NORMAL, sub);
+                                      wxT("Clear &log\tCtrl-L"));
     item->SetBitmap(copy_xpm);
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
