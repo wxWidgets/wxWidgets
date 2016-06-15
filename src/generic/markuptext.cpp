@@ -30,6 +30,8 @@
     #include "wx/dc.h"
 #endif // WX_PRECOMP
 
+#include "wx/renderer.h"
+
 #include "wx/generic/private/markuptext.h"
 
 #include "wx/private/markupparserattr.h"
@@ -132,35 +134,6 @@ public:
         m_origTextBackground = dc.GetTextBackground();
     }
 
-    virtual void OnText(const wxString& text_) wxOVERRIDE
-    {
-        wxString text;
-        int indexAccel = wxControl::FindAccelIndex(text_, &text);
-        if ( !(m_flags & wxMarkupText::Render_ShowAccels) )
-            indexAccel = wxNOT_FOUND;
-
-        // Adjust the position (unfortunately we need to do this manually as
-        // there is no notion of current text position in wx API) rectangle to
-        // ensure that all text segments use the same baseline (as there is
-        // nothing equivalent to Windows SetTextAlign(TA_BASELINE) neither).
-        wxRect rect(m_rect);
-        rect.x = m_pos;
-
-        int descent;
-        m_dc.GetTextExtent(text, &rect.width, &rect.height, &descent);
-        rect.height -= descent;
-        rect.y += m_rect.height - rect.height;
-
-        wxRect bounds;
-        m_dc.DrawLabel(text, wxBitmap(),
-                       rect, wxALIGN_LEFT | wxALIGN_TOP,
-                       indexAccel,
-                       &bounds);
-
-        // TODO-MULTILINE-MARKUP: Must update vertical position too.
-        m_pos += bounds.width;
-    }
-
     virtual void OnAttrStart(const Attr& attr) wxOVERRIDE
     {
         m_dc.SetFont(attr.font);
@@ -202,7 +175,7 @@ public:
         }
     }
 
-private:
+protected:
     wxDC& m_dc;
     const wxRect m_rect;
     const int m_flags;
@@ -217,11 +190,95 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxMarkupParserRenderOutput);
 };
 
+// An output renderer suitable for control labels.
+class wxMarkupParserRenderLabelOutput : public wxMarkupParserRenderOutput
+{
+public:
+    wxMarkupParserRenderLabelOutput(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags)
+        : wxMarkupParserRenderOutput(dc, rect, flags)
+    {
+    }
+
+    virtual void OnText(const wxString& text_) wxOVERRIDE
+    {
+        wxString text;
+        int indexAccel = wxControl::FindAccelIndex(text_, &text);
+        if ( !(m_flags & wxMarkupText::Render_ShowAccels) )
+            indexAccel = wxNOT_FOUND;
+
+        // Adjust the position (unfortunately we need to do this manually as
+        // there is no notion of current text position in wx API) rectangle to
+        // ensure that all text segments use the same baseline (as there is
+        // nothing equivalent to Windows SetTextAlign(TA_BASELINE) neither).
+        wxRect rect(m_rect);
+        rect.x = m_pos;
+
+        int descent;
+        m_dc.GetTextExtent(text, &rect.width, &rect.height, &descent);
+        rect.height -= descent;
+        rect.y += m_rect.height - rect.height;
+
+        wxRect bounds;
+        m_dc.DrawLabel(text, wxBitmap(),
+                       rect, wxALIGN_LEFT | wxALIGN_TOP,
+                       indexAccel,
+                       &bounds);
+
+        m_pos += bounds.width;
+    }
+};
+
+// An output renderer suitable for multi-item controls items.
+class wxMarkupParserRenderItemOutput : public wxMarkupParserRenderOutput
+{
+public:
+    wxMarkupParserRenderItemOutput(wxWindow *win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int rendererFlags)
+        : wxMarkupParserRenderOutput(dc, rect, wxMarkupText::Render_Default),
+          m_win(win),
+          m_rendererFlags(rendererFlags),
+          m_renderer(&wxRendererNative::Get())
+    {
+    }
+
+    virtual void OnText(const wxString& text) wxOVERRIDE
+    {
+        wxRect rect(m_rect);
+        rect.x = m_pos;
+
+        m_renderer->DrawItemText(m_win,
+                                 m_dc,
+                                 wxControl::RemoveMnemonics(text),
+                                 rect,
+                                 wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL,
+                                 m_rendererFlags,
+                                 wxELLIPSIZE_NONE);
+
+        m_pos += m_dc.GetTextExtent(text).x;
+    }
+
+private:
+    wxWindow* const m_win;
+    int const m_rendererFlags;
+    wxRendererNative* const m_renderer;
+
+    wxDECLARE_NO_COPY_CLASS(wxMarkupParserRenderItemOutput);
+};
+
 } // anonymous namespace
 
 // ============================================================================
 // wxMarkupText implementation
 // ============================================================================
+
+void wxMarkupText::SetMarkupText(const wxString& markup)
+{
+    m_markup = wxControl::EscapeMnemonics(markup);
+}
 
 wxSize wxMarkupText::Measure(wxDC& dc, int *visibleHeight) const
 {
@@ -245,7 +302,17 @@ void wxMarkupText::Render(wxDC& dc, const wxRect& rect, int flags)
     wxRect rectText(rect.GetPosition(), Measure(dc, &visibleHeight));
     rectText.height = visibleHeight;
 
-    wxMarkupParserRenderOutput out(dc, rectText.CentreIn(rect), flags);
+    wxMarkupParserRenderLabelOutput out(dc, rectText.CentreIn(rect), flags);
+    wxMarkupParser parser(out);
+    parser.Parse(m_markup);
+}
+
+void wxMarkupText::RenderItemText(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int rendererFlags)
+{
+    wxMarkupParserRenderItemOutput out(win, dc, rect, rendererFlags);
     wxMarkupParser parser(out);
     parser.Parse(m_markup);
 }
