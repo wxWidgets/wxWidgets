@@ -85,8 +85,10 @@ All (GUI):
 - Fix vertical scrollbar visibility in wxStyledTextCtrl (yenwu, NewPagodi).
 - Fix bug with not being able to select AUI tab after dragging.
 - Make wxDataViewCtrl::Expand() expand ancestors in native ports too.
+- Add wxDataViewTextRenderer::EnableMarkup().
 - Add wxDataViewCtrl::SetHeaderAttr().
 - Add wxListCtrl::SetHeaderAttr().
+- Add support for using markup in wxDataViewCtrl text items.
 - Implement auto complete in generic wxSearchCtrl (Eric Jensen).
 
 wxGTK:

@@ -50,6 +50,7 @@
 #include "wx/selstore.h"
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
+#include "wx/generic/private/markuptext.h"
 #include "wx/generic/private/widthcalc.h"
 
 //-----------------------------------------------------------------------------
@@ -1004,11 +1005,47 @@ wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype,
                                                 wxDataViewCellMode mode, int align ) :
     wxDataViewRenderer( varianttype, mode, align )
 {
+#if wxUSE_MARKUP
+    m_markupText = NULL;
+#endif // wxUSE_MARKUP
 }
+
+wxDataViewTextRenderer::~wxDataViewTextRenderer()
+{
+#if wxUSE_MARKUP
+    delete m_markupText;
+#endif // wxUSE_MARKUP
+}
+
+#if wxUSE_MARKUP
+void wxDataViewTextRenderer::EnableMarkup(bool enable)
+{
+    if ( enable )
+    {
+        if ( !m_markupText )
+        {
+            m_markupText = new wxMarkupText(wxString());
+        }
+    }
+    else
+    {
+        if ( m_markupText )
+        {
+            delete m_markupText;
+            m_markupText = NULL;
+        }
+    }
+}
+#endif // wxUSE_MARKUP
 
 bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
 {
     m_text = value.GetString();
+
+#if wxUSE_MARKUP
+    if ( m_markupText )
+        m_markupText->SetMarkupText(m_text);
+#endif // wxUSE_MARKUP
 
     return true;
 }
@@ -1038,14 +1075,39 @@ bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxWindow *editor, wxVariant
 
 bool wxDataViewTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 {
-    RenderText(m_text, 0, rect, dc, state);
+#if wxUSE_MARKUP
+    if ( m_markupText )
+    {
+        int flags = 0;
+        if ( state & wxDATAVIEW_CELL_SELECTED )
+            flags |= wxCONTROL_SELECTED;
+        m_markupText->RenderItemText(GetView(), *dc, rect, flags);
+    }
+    else
+#endif // wxUSE_MARKUP
+        RenderText(m_text, 0, rect, dc, state);
+
     return true;
 }
 
 wxSize wxDataViewTextRenderer::GetSize() const
 {
     if (!m_text.empty())
+    {
+#if wxUSE_MARKUP
+        if ( m_markupText )
+        {
+            wxDataViewCtrl* const view = GetView();
+            wxClientDC dc(view);
+            if ( GetAttr().HasFont() )
+                dc.SetFont(GetAttr().GetEffectiveFont(view->GetFont()));
+
+            return m_markupText->Measure(dc);
+        }
+#endif // wxUSE_MARKUP
+
         return GetTextExtent(m_text);
+    }
     else
         return wxSize(wxDVC_DEFAULT_RENDERER_SIZE,wxDVC_DEFAULT_RENDERER_SIZE);
 }

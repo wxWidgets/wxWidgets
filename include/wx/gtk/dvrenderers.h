@@ -31,6 +31,10 @@ public:
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int align = wxDVR_DEFAULT_ALIGNMENT );
 
+#if wxUSE_MARKUP
+    void EnableMarkup(bool enable = true);
+#endif // wxUSE_MARKUP
+
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE
     {
         return SetTextValue(value);
@@ -58,6 +62,14 @@ protected:
     bool SetTextValue(const wxString& str);
     bool GetTextValue(wxString& str) const;
 
+    // Return the name of the GtkCellRendererText property to use: "text" or
+    // "markup".
+    const char* GetTextPropertyName() const;
+
+#if wxUSE_MARKUP
+    // True if we should interpret markup in our text.
+    bool m_useMarkup;
+#endif // wxUSE_MARKUP
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);
 };

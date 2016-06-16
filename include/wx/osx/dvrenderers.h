@@ -55,6 +55,10 @@ public:
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                            int align = wxDVR_DEFAULT_ALIGNMENT);
 
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+    void EnableMarkup(bool enable = true);
+#endif // wxUSE_MARKUP && Cocoa
+
     virtual bool MacRender();
 
     virtual void OSXOnCellChanged(NSObject *value,
@@ -62,6 +66,11 @@ public:
                                   unsigned col);
 
 private:
+#if wxUSE_MARKUP && wxOSX_USE_COCOA
+    // True if we should interpret markup in our text.
+    bool m_useMarkup;
+#endif // wxUSE_MARKUP && Cocoa
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);
 };
 

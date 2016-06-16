@@ -1966,6 +1966,49 @@ public:
     wxDataViewTextRenderer(const wxString& varianttype = GetDefaultType(),
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                            int align = wxDVR_DEFAULT_ALIGNMENT );
+
+    /**
+        Enable interpretation of markup in the item data.
+
+        If this method is called with @true argument, markup (@ref
+        wxControl::SetLabelMarkup()) in the data of the items in this column
+        will be interpreted, which can be used for a more fine-grained
+        appearance control than just setting an attribute, which affects all of
+        the item text.
+
+        For example, as shown in the @ref page_samples_dataview, after creating
+        a column using a markup-enabled renderer:
+        @code
+            wxDataViewTextRenderer* renderer = new wxDataViewTextRenderer();
+            renderer->EnableMarkup();
+            dataViewCtrl->AppendColumn(new wxDataViewColumn("title", renderer, 0));
+        @endcode
+
+        The overridden model wxDataViewModel::GetValue() method may return
+        values containing markup for this column:
+        @code
+        void MyModel::GetValue(wxVariant& variant,
+                               const wxDataViewItem& item,
+                               unsigned int col) const
+        {
+            if ( col == 0 && item == ... )
+            {
+                variant = "<span color=\"#87ceeb\">light</span> and "
+                          "<span color=\"#000080\">dark</span> blue";
+            }
+
+            ...
+        }
+        @endcode
+
+        @note Currently wxDataViewIconTextRenderer only provides EnableMarkup()
+            EnableMarkup() in wxGTK, but not under the other platforms, so you
+            should only use it for plain wxDataViewTextRenderer columns,
+            without icons, in portable code.
+
+        @since 3.1.1
+     */
+    void EnableMarkup(bool enable = true);
 };
 
 

@@ -1005,7 +1005,7 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
 
     int flags = 0;
     if ( state & wxDATAVIEW_CELL_SELECTED )
-        flags |= wxCONTROL_SELECTED | wxCONTROL_FOCUSED;
+        flags |= wxCONTROL_SELECTED;
     if ( !GetOwner()->GetOwner()->IsEnabled() )
         flags |= wxCONTROL_DISABLED;
 
