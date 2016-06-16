@@ -702,9 +702,14 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 
             m_ctrl[1]->AppendDateColumn("date",
                                         MyListModel::Col_Date);
+
+            wxDataViewTextRenderer* const markupRenderer = new wxDataViewTextRenderer();
+#if wxUSE_MARKUP
+            markupRenderer->EnableMarkup();
+#endif // wxUSE_MARKUP
             m_attributes =
                 new wxDataViewColumn("attributes",
-                                     new wxDataViewTextRenderer,
+                                     markupRenderer,
                                      MyListModel::Col_TextWithAttr,
                                      wxCOL_WIDTH_AUTOSIZE,
                                      wxALIGN_RIGHT,

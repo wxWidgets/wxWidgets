@@ -938,14 +938,7 @@ wxRendererGeneric::DrawItemText(wxWindow* WXUNUSED(win),
     wxColour textColour;
     if ( flags & wxCONTROL_SELECTED )
     {
-        if ( flags & wxCONTROL_FOCUSED )
-        {
-            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-        }
-        else // !focused
-        {
-            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
-        }
+        textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     }
     else if ( flags & wxCONTROL_DISABLED )
     {
