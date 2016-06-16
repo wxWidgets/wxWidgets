@@ -2441,7 +2441,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             evtCtx.SetEventObject(GetParent());
             GetParent()->GetEventHandler()->ProcessEvent(evtCtx);
         }
-        else
+        else if (event.LeftDown())
         {
             // reset the selection and bail out
             HighlightAll(false);
