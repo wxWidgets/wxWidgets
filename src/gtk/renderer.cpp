@@ -269,8 +269,7 @@ int wxRendererGTK::GetHeaderButtonHeight(wxWindow *WXUNUSED(win))
 
 int wxRendererGTK::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
 {
-    wxFAIL_MSG( "GetHeaderButtonMargin() not implemented" );
-    return -1;
+    return 0; // TODO: How to determine the real margin?
 }
 
 
