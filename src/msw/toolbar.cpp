@@ -148,14 +148,16 @@ public:
     {
         if ( IsControl() && !m_label.empty() )
         {
-            // create a control to render the control's label
+            // Create a control to render the control's label.
+            // It has the same witdh as the control.
+            wxSize size(control->GetSize().GetWidth(), wxDefaultCoord);
             m_staticText = new wxStaticText
                                (
                                  m_tbar,
                                  wxID_ANY,
                                  m_label,
                                  wxDefaultPosition,
-                                 wxDefaultSize,
+                                 size,
                                  wxALIGN_CENTRE | wxST_NO_AUTORESIZE
                                );
         }
@@ -172,20 +174,53 @@ public:
         delete m_staticText;
     }
 
-    virtual void SetLabel(const wxString& label)
+    virtual void SetLabel(const wxString& label) wxOVERRIDE
     {
+        wxASSERT_MSG( IsControl() || IsButton(),
+           wxS("Label can be set for control or button tool only") );
+
         if ( label == m_label )
             return;
 
         wxToolBarToolBase::SetLabel(label);
 
-        if ( m_staticText )
-            m_staticText->SetLabel(label);
-
-        // we need to update the label shown in the toolbar because it has a
-        // pointer to the internal buffer of the old label
-        //
-        // TODO: use TB_SETBUTTONINFO
+        if ( IsControl() )
+        {
+            if ( m_staticText )
+            {
+                 if ( !label.empty() )
+                 {
+                    m_staticText->SetLabel(label);
+                 }
+                 else
+                 {
+                    delete m_staticText;
+                    m_staticText = NULL;
+                 }
+            }
+            else
+            {
+                 if ( !label.empty() )
+                 {
+                    // Create a control to render the control's label.
+                    // It has the same witdh as the control.
+                    wxSize size(m_control->GetSize().GetWidth(), wxDefaultCoord);
+                    m_staticText = new wxStaticText(m_tbar, wxID_ANY, label,
+                                        wxDefaultPosition, size,
+                                        wxALIGN_CENTRE | wxST_NO_AUTORESIZE);
+                 }
+            }
+        }
+        else if ( IsButton() )
+        {
+            // Because new label can have different length than the old one
+            // so updating button's label with TB_SETBUTTONINFO would require
+            // also manual re-positionining items in the control tools located
+            // to the right in the toolbar and recalculation of stretchable
+            // spacers so it is easier just to recreate the toolbar with
+            // Realize(). Performance penalty should be negligible.
+            m_tbar->Realize();
+        }
     }
 
     wxStaticText* GetStaticText()
