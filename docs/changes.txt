@@ -90,6 +90,7 @@ All (GUI):
 - Add wxListCtrl::SetHeaderAttr().
 - Add support for using markup in wxDataViewCtrl text items.
 - Implement auto complete in generic wxSearchCtrl (Eric Jensen).
+- Fix preserving selection when changing selection mode in wxGrid (jonkraber).
 
 wxGTK:
 
