@@ -150,6 +150,7 @@ wxMSW:
   methods return wxAccStatus::wxACC_NOT_SUPPORTED.
 - Return null BSTR from wxIAccessible if string returned from wxAccesible
   method is empty.
+- Handle Ctrl-A in non-rich multiline text controls (Jens Göpfert).
 
 wxOSX:
 

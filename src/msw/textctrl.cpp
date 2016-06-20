@@ -2054,13 +2054,26 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
         }
     }
 
-    // Default window procedure of multiline edit controls posts WM_CLOSE to
-    // the parent window when it gets Escape key press for some reason, prevent
-    // it from doing this as this resulted in dialog boxes being closed on
-    // Escape even when they shouldn't be (we do handle Escape ourselves
-    // correctly in the situations when it should close them).
-    if ( event.GetKeyCode() == WXK_ESCAPE && IsMultiLine() )
-        return;
+    if ( IsMultiLine() )
+    {
+        // Default window procedure of multiline edit controls posts WM_CLOSE to
+        // the parent window when it gets Escape key press for some reason, prevent
+        // it from doing this as this resulted in dialog boxes being closed on
+        // Escape even when they shouldn't be (we do handle Escape ourselves
+        // correctly in the situations when it should close them).
+        if ( event.GetKeyCode() == WXK_ESCAPE )
+            return;
+
+        // We also handle Ctrl-A as the native EDIT control doesn't do it by
+        // default (but RICHEDIT one does, so there is no need to check for it
+        // in the switch above), however it's a de facto standard accelerator
+        // and people expect it to work.
+        if ( event.GetModifiers() == wxMOD_CONTROL && event.GetKeyCode() == 'A' )
+        {
+            SelectAll();
+            return;
+        }
+    }
 
     // no, we didn't process it
     event.Skip();
