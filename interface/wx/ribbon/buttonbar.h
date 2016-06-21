@@ -559,3 +559,7 @@ public:
     */
     bool PopupMenu(wxMenu* menu);
 };
+
+
+wxEventType wxEVT_RIBBONBUTTONBAR_CLICKED;
+wxEventType wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED;

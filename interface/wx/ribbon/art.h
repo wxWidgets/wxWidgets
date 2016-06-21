@@ -274,7 +274,7 @@ public:
         
         @see SetColourScheme()
     */
-    virtual void SetColour(int id, const wxColor& colour) = 0;
+    virtual void SetColour(int id, const wxColour& colour) = 0;
     
     /**
         @see wxRibbonArtProvider::GetColour()
@@ -582,7 +582,7 @@ public:
                         wxDC& dc,
                         wxWindow* wnd,
                         const wxRect& rect,
-                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
                         const wxBitmap& bitmap_large,
@@ -946,7 +946,7 @@ public:
     virtual bool GetButtonBarButtonSize(
                         wxDC& dc,
                         wxWindow* wnd,
-                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
                         wxSize bitmap_size_large,

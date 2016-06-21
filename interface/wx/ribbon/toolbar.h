@@ -5,6 +5,7 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+
 /**
     @class wxRibbonToolBar
     
@@ -492,3 +493,20 @@ public:
     */
     virtual void ToggleTool(int tool_id, bool checked);
 };
+
+
+class wxRibbonToolBarEvent : public wxCommandEvent
+{
+public:
+    wxRibbonToolBarEvent(wxEventType command_type = wxEVT_NULL,
+                       int win_id = 0,
+                         wxRibbonToolBar* bar = NULL);
+
+    wxRibbonToolBar* GetBar();
+    void SetBar(wxRibbonToolBar* bar);
+    bool PopupMenu(wxMenu* menu);
+};
+
+
+wxEventType wxEVT_RIBBONTOOLBAR_CLICKED;
+wxEventType wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED;
