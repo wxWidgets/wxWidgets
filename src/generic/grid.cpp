@@ -2322,6 +2322,17 @@ wxGrid::SetTable(wxGridTableBase *table,
 
         if (m_table)
         {
+            // We can't leave the in-place control editing the data of the
+            // table alive, as it would try to use the table object that we
+            // don't have any more later otherwise, so hide it manually.
+            //
+            // Notice that we can't call DisableCellEditControl() from here
+            // which would try to save the current editor value into the table
+            // which might be half-deleted by now, so we have to manually mark
+            // the edit control as being disabled.
+            HideCellEditControl();
+            m_cellEditCtrlEnabled = false;
+
             m_table->SetView(0);
             if( m_ownTable )
                 delete m_table;
@@ -7933,12 +7944,18 @@ void wxGrid::RegisterDataType(const wxString& typeName,
 
 wxGridCellEditor * wxGrid::GetDefaultEditorForCell(int row, int col) const
 {
+    if ( !m_table )
+        return NULL;
+
     wxString typeName = m_table->GetTypeName(row, col);
     return GetDefaultEditorForType(typeName);
 }
 
 wxGridCellRenderer * wxGrid::GetDefaultRendererForCell(int row, int col) const
 {
+    if ( !m_table )
+        return NULL;
+
     wxString typeName = m_table->GetTypeName(row, col);
     return GetDefaultRendererForType(typeName);
 }
