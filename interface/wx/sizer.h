@@ -50,8 +50,8 @@
 
     @section wxsizer_flags wxSizer flags
 
-    The "flag" argument accepted by wxSizeItem constructors and other
-    functions, e.g. wxSizer::Add(), is OR-combination of the following flags.
+    The "flag" argument accepted by wxSizerItem constructors and other
+    functions, e.g. wxSizer::Add(), is an OR-combination of the following flags.
     Two main behaviours are defined using these flags. One is the border around
     a window: the border parameter determines the border width whereas the
     flags given here determine which side(s) of the item that the border will
