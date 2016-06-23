@@ -459,7 +459,11 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
     {
         // Such buttons are typically used alongside a text control or similar,
         // so make them as high as it.
-        sizeBtn.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(size.y);
+        int yText;
+        wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
+        yText = EDIT_HEIGHT_FROM_CHAR_HEIGHT(yText);
+
+        sizeBtn.IncTo(wxSize(-1, yText));
     }
 
     btn->CacheBestSize(sizeBtn);
