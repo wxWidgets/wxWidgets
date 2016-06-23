@@ -2264,8 +2264,7 @@ wxCairoContext::~wxCairoContext()
 #ifdef __WXMSW__
     if ( m_mswSurface )
     {
-//        HDC hdc = cairo_win32_surface_get_dc(m_mswSurface);
-        HDC hdc = 0;
+        HDC hdc = cairo_win32_surface_get_dc(m_mswSurface);
 
         cairo_surface_destroy(m_mswSurface);
 
