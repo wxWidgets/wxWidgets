@@ -289,6 +289,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexVHDL.o \
 	$(OBJS)\wxscintilla_LexVisualProlog.o \
 	$(OBJS)\wxscintilla_LexYAML.o \
+	$(OBJS)\wxscintilla_LexCsky.o \
 	$(OBJS)\wxscintilla_Accessor.o \
 	$(OBJS)\wxscintilla_CharacterCategory.o \
 	$(OBJS)\wxscintilla_CharacterSet.o \
@@ -6429,6 +6430,9 @@ $(OBJS)\wxscintilla_LexVisualProlog.o: ../../src/stc/scintilla/lexers/LexVisualP
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexYAML.o: ../../src/stc/scintilla/lexers/LexYAML.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+	
+$(OBJS)\wxscintilla_LexCsky.o: ../../src/stc/scintilla/lexers/LexCsky.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_Accessor.o: ../../src/stc/scintilla/lexlib/Accessor.cxx

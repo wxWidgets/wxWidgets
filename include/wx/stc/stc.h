@@ -548,6 +548,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_SREC 117
 #define wxSTC_LEX_IHEX 118
 #define wxSTC_LEX_TEHEX 119
+#define wxSTC_LEX_CSKY 120
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2400,6 +2401,25 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_HEX_CHECKSUM 16
 #define wxSTC_HEX_CHECKSUM_WRONG 17
 #define wxSTC_HEX_GARBAGE 18
+
+/// Lexical state for SCLEX_IHEX (shared with Srec)
+/// Lexical state for SCLEX_TEHEX (shared with Srec)
+/// Lexical states for SCLEX_CSKY, SCLEX_CSKY
+#define wxSTC_CSKY_DEFAULT 0
+#define wxSTC_CSKY_COMMENT 1
+#define wxSTC_CSKY_NUMBER 2
+#define wxSTC_CSKY_STRING 3
+#define wxSTC_CSKY_OPERATOR 4
+#define wxSTC_CSKY_IDENTIFIER 5
+#define wxSTC_CSKY_CPUINSTRUCTION 6
+#define wxSTC_CSKY_MATHINSTRUCTION 7
+#define wxSTC_CSKY_REGISTER 8
+#define wxSTC_CSKY_DIRECTIVE 9
+#define wxSTC_CSKY_DIRECTIVEOPERAND 10
+#define wxSTC_CSKY_COMMENTLINE 11
+#define wxSTC_CSKY_CHARACTER 12
+#define wxSTC_CSKY_STRINGEOL 13
+#define wxSTC_CSKY_EXTINSTRUCTION 14
 
 //}}}
 //----------------------------------------------------------------------
@@ -5254,7 +5274,7 @@ public:
     int  GetToken() const                 { return m_token; }
     int  GetAnnotationsLinesAdded() const { return m_annotationLinesAdded; }
     int  GetUpdated() const               { return m_updated; }
-    
+
 #ifdef STC_USE_DND
     // Kept for backwards compatibility, use GetString().
     wxString GetDragText()           { return GetString(); }
@@ -5295,8 +5315,8 @@ private:
     int m_x;
     int m_y;
 
-    int m_token;                // wxEVT_STC__MODIFIED with SC_MOD_CONTAINER 
-    int m_annotationLinesAdded; // wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION 
+    int m_token;                // wxEVT_STC__MODIFIED with SC_MOD_CONTAINER
+    int m_annotationLinesAdded; // wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION
     int m_updated;              // wxEVT_STC_UPDATEUI
 
 #if wxUSE_DRAG_AND_DROP
