@@ -45,7 +45,7 @@ public:
 
         The secret value will stored serialized in UTF-8 encoding.
      */
-    explicit wxSecretValue(const wxSecretValue& secret);
+    explicit wxSecretValue(const wxString& secret);
 
     /**
         Creates a copy of an existing secret.
