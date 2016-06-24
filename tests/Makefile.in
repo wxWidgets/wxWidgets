@@ -391,7 +391,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr
+all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr ja
 
 install: 
 
@@ -493,6 +493,18 @@ fr:
 	fi; \
 	case "$$x" in ?*) \
 	cp -pRf $(srcdir)/intl/fr/$$f ./intl/fr ;; \
+	esac; \
+	done
+
+ja:
+	@mkdir -p ./intl/ja
+	@for f in internat.po internat.mo; do \
+	if test ! -f ./intl/ja/$$f -a ! -d ./intl/ja/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/intl/ja/$$f -newer ./intl/ja/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/intl/ja/$$f ./intl/ja ;; \
 	esac; \
 	done
 
@@ -1075,4 +1087,4 @@ failtest_weakref:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean test_gui_bundle data data-images fr
+.PHONY: all install uninstall clean distclean test_gui_bundle data data-images fr ja

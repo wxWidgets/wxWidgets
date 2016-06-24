@@ -86,6 +86,7 @@ private:
         CPPUNIT_TEST( EnableTop );
         CPPUNIT_TEST( Count );
         CPPUNIT_TEST( Labels );
+        CPPUNIT_TEST( i18n );
         CPPUNIT_TEST( RadioItems );
         CPPUNIT_TEST( RemoveAdd );
         CPPUNIT_TEST( ChangeBitmap );
@@ -99,6 +100,7 @@ private:
     void EnableTop();
     void Count();
     void Labels();
+    void i18n();
     void RadioItems();
     void RemoveAdd();
     void ChangeBitmap();
@@ -332,6 +334,36 @@ void MenuTestCase::Labels()
     // wxMenuItem
     CPPUNIT_ASSERT_EQUAL( "Foo", itemFoo->GetItemLabelText() );
     CPPUNIT_ASSERT_EQUAL( "Foo", wxMenuItem::GetLabelText("&Foo\tCtrl-F") );
+}
+
+void MenuTestCase::i18n()
+{
+    // Check that appended mnemonics are correctly stripped;
+    // see http://trac.wxwidgets.org/ticket/16736
+    wxLocale::AddCatalogLookupPathPrefix("./intl");
+    CPPUNIT_ASSERT( wxLocale::IsAvailable(wxLANGUAGE_JAPANESE) );
+
+    wxLocale locale(wxLANGUAGE_JAPANESE, wxLOCALE_DONT_LOAD_DEFAULT);
+    locale.AddCatalog("internat");
+
+    // Check the translation is being used:
+    CPPUNIT_ASSERT( wxString("&File") != wxString(_("&File")) );
+
+    wxString filemenu = m_frame->GetMenuBar()->GetMenuLabel(0);
+    CPPUNIT_ASSERT_EQUAL
+        ( wxStripMenuCodes(_("&File")),
+          wxStripMenuCodes(wxGetTranslation(filemenu))
+        );
+
+    // Test strings that have shortcuts. Duplicate non-mnemonic translations
+    // exist for both "Edit" and "View", for ease of comparison
+    CPPUNIT_ASSERT_EQUAL( _("Edit"), wxStripMenuCodes(_("E&dit\tCtrl+E")) );
+
+    //"Vie&w" also has a space before the (&W)
+    CPPUNIT_ASSERT_EQUAL( _("View"), wxStripMenuCodes(_("Vie&w\tCtrl+V")) );
+
+    // Test a 'normal' mnemonic too: the translation is "Preten&d"
+    CPPUNIT_ASSERT_EQUAL( "Pretend", wxStripMenuCodes(_("B&ogus")) );
 }
 
 void MenuTestCase::RadioItems()

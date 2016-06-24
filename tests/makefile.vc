@@ -651,7 +651,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr ja
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -707,6 +707,10 @@ data-images:
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%f copy .\intl\fr\%f $(OBJS)\intl\fr
+
+ja:
+	if not exist $(OBJS)\intl\ja mkdir $(OBJS)\intl\ja
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\ja\%f copy .\intl\ja\%f $(OBJS)\intl\ja
 
 $(OBJS)\test_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) /Yctestprec.h .\dummy.cpp
