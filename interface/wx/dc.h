@@ -162,7 +162,7 @@ struct wxFontMetrics
     wxColour use the colour's alpha values when stroking or filling.
 
 
-    @section Support for Transformation Matrix
+    @section dc_transform_support Support for Transformation Matrix
 
     On some platforms (currently only under MSW) wxDC has support for applying 
     an arbitrary affine transformation matrix to its coordinate system. Call
