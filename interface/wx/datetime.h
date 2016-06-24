@@ -567,6 +567,15 @@ public:
     time_t GetTicks() const;
 
     /**
+        Returns the number of milliseconds since Jan 1, 1970 UTC.
+
+        Directly returns the internal representation of wxDateTime object as
+        the number of milliseconds (positive or negative) since the Unix/C
+        epoch.
+     */
+    wxLongLong GetValue() const;
+
+    /**
         Returns broken down representation of the date and time.
     */
     Tm GetTm(const TimeZone& tz = Local) const;
