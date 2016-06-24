@@ -504,7 +504,7 @@ WX_DECLARE_EXPORTED_LIST( wxSizerItem, wxSizerItemList );
 // wxSizer
 //---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxSizer: public wxObject, public wxClientDataContainer
+class WXDLLIMPEXP_CORE wxSizer: public wxObject
 {
 public:
     wxSizer() { m_containingWindow = NULL; }

@@ -123,7 +123,7 @@ class wxGridDirectionOperations;
 //     class is not documented and is not public at all
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridCellWorker : public wxClientDataContainer, public wxRefCounter
+class WXDLLIMPEXP_ADV wxGridCellWorker : public wxRefCounter
 {
 public:
     wxGridCellWorker() { }
@@ -409,7 +409,7 @@ public:
 // class may be returned by wxGridTable::GetAttr().
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
+class WXDLLIMPEXP_ADV wxGridCellAttr : public wxRefCounter
 {
 public:
     enum wxAttrKind
@@ -467,6 +467,8 @@ public:
         { wxSafeDecRef(m_renderer); m_renderer = renderer; }
     void SetEditor(wxGridCellEditor* editor)
         { wxSafeDecRef(m_editor); m_editor = editor; }
+    void SetClientDataContainer(wxClientDataContainer* clientDataContainer)
+        { wxSafeDecRef(m_clientDataContainer); m_clientDataContainer = clientDataContainer; }
 
     void SetKind(wxAttrKind kind) { m_attrkind = kind; }
 
@@ -509,12 +511,18 @@ public:
 
     void SetDefAttr(wxGridCellAttr* defAttr) { m_defGridAttr = defAttr; }
 
+    void SetClientObject( wxClientData *data );
+    wxClientData *GetClientObject() const;
+    void SetClientData( void *data );
+    void *GetClientData() const;
+
 protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellAttr()
     {
         wxSafeDecRef(m_renderer);
         wxSafeDecRef(m_editor);
+        wxSafeDecRef(m_clientDataContainer);
     }
 
 private:
@@ -554,6 +562,8 @@ private:
 
     wxAttrKind m_attrkind;
 
+    wxClientDataContainer* m_clientDataContainer;
+    
     // use Clone() instead
     wxDECLARE_NO_COPY_CLASS(wxGridCellAttr);
 
@@ -574,7 +584,7 @@ private:
 // the default implementation is reasonably efficient for the generic case,
 // but you might still wish to implement your own for some specific situations
 // if you have performance problems with the stock one
-class WXDLLIMPEXP_ADV wxGridCellAttrProvider : public wxClientDataContainer
+class WXDLLIMPEXP_ADV wxGridCellAttrProvider
 {
 public:
     wxGridCellAttrProvider();
@@ -675,8 +685,7 @@ WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
 // ----------------------------------------------------------------------------
 
 // the abstract base class
-class WXDLLIMPEXP_ADV wxGridTableBase : public wxObject,
-                                        public wxClientDataContainer
+class WXDLLIMPEXP_ADV wxGridTableBase : public wxObject
 {
 public:
     wxGridTableBase();

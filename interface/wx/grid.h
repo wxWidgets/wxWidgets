@@ -22,7 +22,7 @@
          wxGridCellFloatRenderer, wxGridCellNumberRenderer,
          wxGridCellStringRenderer
 */
-class wxGridCellRenderer : public wxClientDataContainer, public wxRefCounter
+class wxGridCellRenderer : public wxRefCounter
 {
 public:
     wxGridCellRenderer();
@@ -380,7 +380,7 @@ public:
          wxGridCellFloatEditor, wxGridCellNumberEditor,
          wxGridCellTextEditor
 */
-class wxGridCellEditor : public wxClientDataContainer, public wxRefCounter
+class wxGridCellEditor : public wxRefCounter
 {
 public:
     /**
@@ -781,7 +781,7 @@ protected:
     @library{wxadv}
     @category{grid}
 */
-class wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
+class wxGridCellAttr : public wxRefCounter
 {
 public:
     /**
@@ -978,6 +978,16 @@ public:
     */
     void SetTextColour(const wxColour& colText);
 
+    /**
+        Sets the client data container. Takes ownership of the pointer.
+    */
+    void SetClientDataContainer(wxClientDataContainer* clientDataContainer)
+
+    void SetClientObject( wxClientData *data );
+    wxClientData *GetClientObject() const;
+    void SetClientData( void *data );
+    void *GetClientData() const;
+
 protected:
 
     /**
@@ -1165,7 +1175,7 @@ public:
 
     Notice that objects of this class can't be copied.
  */
-class wxGridCellAttrProvider : public wxClientDataContainer
+class wxGridCellAttrProvider
 {
 public:
     /// Trivial default constructor.

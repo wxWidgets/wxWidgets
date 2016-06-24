@@ -122,7 +122,7 @@ private:
 // NOTE:  This functionality is currently duplicated in wxEvtHandler in order
 //        to avoid having more than one vtable in that class hierarchy.
 
-class WXDLLIMPEXP_BASE wxClientDataContainer
+class WXDLLIMPEXP_BASE wxClientDataContainer : public wxRefCounter
 {
 public:
     wxClientDataContainer();

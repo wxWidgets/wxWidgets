@@ -23,7 +23,7 @@
 
     @see wxEvtHandler, wxClientData
 */
-class wxClientDataContainer
+class wxClientDataContainer : public wxRefCounter
 {
 public:
     /**
