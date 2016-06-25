@@ -157,20 +157,10 @@ public:
         All loaded catalogs will be used for message lookup by GetString() for
         the current locale.
 
-        In this overload, @c msgid strings are assumed
+        Bu default, i.e. if @a msgIdLanguage is not given, @c msgid strings are assumed
         to be in English and written only using 7-bit ASCII characters.
         If you have to deal with non-English strings or 8-bit characters in the
         source code, see the instructions in @ref overview_nonenglish.
-
-        @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
-     */
-    bool AddCatalog(const wxString& domain);
-
-    /**
-        Same as AddCatalog(const wxString&), but takes an additional argument,
-        @a msgIdLanguage.
 
         @param domain
             The catalog domain to add.
@@ -186,7 +176,8 @@ public:
             @true if catalog was successfully loaded, @false otherwise (which might
             mean that the catalog is not found or that it isn't in the correct format).
      */
-    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+    bool AddCatalog(const wxString& domain,
+                    wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 
     /**
         Same as AddCatalog(const wxString&, wxLanguage), but takes two
