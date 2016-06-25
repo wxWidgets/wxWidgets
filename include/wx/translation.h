@@ -149,6 +149,10 @@ public:
                     const wxString& msgIdCharset);
 #endif
 
+    bool AddCatalogFor(wxLanguage lang,
+                       const wxString& domain,
+                       wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
+
     // check if the given catalog is loaded
     bool IsLoaded(const wxString& domain) const;
 
