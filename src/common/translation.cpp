@@ -1485,12 +1485,6 @@ bool wxTranslations::AddStdCatalog()
     return true;
 }
 
-
-bool wxTranslations::AddCatalog(const wxString& domain)
-{
-    return AddCatalog(domain, wxLANGUAGE_ENGLISH_US);
-}
-
 #if !wxUSE_UNICODE
 bool wxTranslations::AddCatalog(const wxString& domain,
                                 wxLanguage msgIdLanguage,
