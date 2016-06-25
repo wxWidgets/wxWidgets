@@ -316,8 +316,6 @@ void wxGridCellAttr::Init(wxGridCellAttr *attrDefault)
     m_overflow = UnsetOverflow;
 
     SetDefAttr(attrDefault);
-    
-    m_clientDataContainer = NULL;
 }
 
 wxGridCellAttr *wxGridCellAttr::Clone() const
@@ -344,11 +342,6 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
     {
         attr->SetEditor(m_editor);
         m_editor->IncRef();
-    }
-    if ( m_clientDataContainer )
-    {
-        attr->SetClientDataContainer(m_clientDataContainer);
-        m_clientDataContainer->IncRef();
     }
 
     if ( IsReadOnly() )
@@ -391,12 +384,6 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
         m_editor =  mergefrom->m_editor;
         m_editor->IncRef();
     }
-    if ( !m_clientDataContainer && mergefrom->m_clientDataContainer )
-    {
-        m_clientDataContainer = mergefrom->m_clientDataContainer;
-        m_clientDataContainer->IncRef();
-    }
-    
     if ( !HasReadWriteMode() && mergefrom->HasReadWriteMode() )
         SetReadOnly(mergefrom->IsReadOnly());
 
@@ -606,34 +593,6 @@ wxGridCellEditor* wxGridCellAttr::GetEditor(const wxGrid* grid, int row, int col
     wxASSERT_MSG(editor, wxT("Missing default cell editor"));
 
     return editor;
-}
-
-void wxGridCellAttr::SetClientObject( wxClientData *data )
-{
-    if ( !m_clientDataContainer )
-    {
-        m_clientDataContainer = new wxClientDataContainer;
-    }
-    m_clientDataContainer->SetClientObject(data);
-}
-
-wxClientData *wxGridCellAttr::GetClientObject() const
-{
-    return ( m_clientDataContainer ) ? m_clientDataContainer->GetClientObject() : NULL;
-}
-
-void wxGridCellAttr::SetClientData( void *data )
-{
-    if ( !m_clientDataContainer )
-    {
-        m_clientDataContainer = new wxClientDataContainer;
-    }
-    m_clientDataContainer->SetClientData(data);
-}
-
-void *wxGridCellAttr::GetClientData() const
-{
-    return ( m_clientDataContainer ) ? m_clientDataContainer->GetClientData() : NULL;
 }
 
 // ----------------------------------------------------------------------------
