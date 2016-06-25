@@ -377,6 +377,13 @@ public:
     }
     @endcode
 
+    @remarks For some renderers (like Direct2D or Cairo) processing
+    of drawing operations may be deferred (Direct2D render target normally
+    builds up a batch of rendering commands but defers processing of these
+    commands, Cairo operates on a separate surface) so to make drawing
+    results visible you need to update the content of the context
+    by calling wxGraphicsContext::Flush() or by destroying the context.
+
     @library{wxcore}
     @category{gdi,dc}
 
@@ -1041,7 +1048,7 @@ public:
     used. There may be multiple instances on a system, if there are different
     rendering engines present, but there is always only one instance per
     engine. This instance is pointed back to by all objects created by it
-    (wxGraphicsContext, wxGraphicsPath etc) and can be retrieved through their
+    (wxGraphicsContext, wxGraphicsPath etc.) and can be retrieved through their
     wxGraphicsObject::GetRenderer() method. Therefore you can create an
     additional instance of a path etc. by calling
     wxGraphicsObject::GetRenderer() and then using the appropriate CreateXXX()
@@ -1112,7 +1119,8 @@ public:
     virtual wxGraphicsContext* CreateContext(const wxMemoryDC& memoryDC) = 0 ;
 
     /**
-        Creates a wxGraphicsContext from a wxPrinterDC
+        Creates a wxGraphicsContext from a wxPrinterDC.
+        @remarks Not implemented for Direct2D renderer (on MSW).
     */
     virtual wxGraphicsContext* CreateContext(const wxPrinterDC& printerDC) = 0 ;
 
@@ -1120,7 +1128,7 @@ public:
         Creates a wxGraphicsContext from a wxEnhMetaFileDC.
 
         This function, as wxEnhMetaFileDC class itself, is only available only
-        under MSW.
+        under MSW (but not for Direct2D renderer).
     */
     virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& metaFileDC) = 0;
 
@@ -1142,7 +1150,9 @@ public:
     /**
         Creates a wxGraphicsContext from a native context. This native context
         must be a CGContextRef for Core Graphics, a Graphics pointer for
-        GDIPlus, or a cairo_t pointer for cairo.
+        GDIPlus, an ID2D1RenderTarget pointer for Direct2D, a cairo_t pointer
+        or HDC for Cairo on MSW, or a cairo_t pointer for Cairo on any other
+        platform.
     */
     virtual wxGraphicsContext* CreateContextFromNativeContext(void* context) = 0;
 
@@ -1237,9 +1247,6 @@ public:
 
     /**
         Extracts a sub-bitmap from an existing bitmap.
-
-        Currently this function is implemented in the native MSW and OS X
-        versions but not when using Cairo.
      */
     virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
                                              wxDouble x, wxDouble y,
@@ -1248,11 +1255,12 @@ public:
     /**
         Returns the name of the technology used by the renderer.
 
-        Currently this function returns "gdiplus" for Windows GDI+ implementation,
+        Currently this function returns "gdiplus" for Windows GDI+
+        implementation, "direct2d" for Windows Direct2D implementation,
         "cairo" for Cairo implementation and "cg" for OS X CoreGraphics
         implementation.
 
-        Note: the string returned by this method is not user-readable and is
+        @remarks The string returned by this method is not user-readable and is
         expected to be used internally by the program only.
 
         @since 3.1.0
@@ -1276,11 +1284,21 @@ public:
     /**
         Returns the default renderer on this platform. On OS X this is the Core
         Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and
-        on GTK we currently default to the cairo renderer.
+        on GTK we currently default to the Cairo renderer.
     */
     static wxGraphicsRenderer* GetDefaultRenderer();
+    /**
+        Returns Cairo renderer.
+    */
     static wxGraphicsRenderer* GetCairoRenderer();
-
+    /**
+        Returns GDI+ renderer (MSW only).
+    */
+    static wxGraphicsRenderer* GetGDIPlusRenderer();
+    /**
+        Returns Direct2D renderer (MSW only).
+    */
+    static wxGraphicsRenderer* GetDirect2DRenderer();
 };
 
 
