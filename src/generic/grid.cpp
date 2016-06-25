@@ -343,7 +343,11 @@ wxGridCellAttr *wxGridCellAttr::Clone() const
         attr->SetEditor(m_editor);
         m_editor->IncRef();
     }
-
+    if ( m_clientDataContainer.get() )
+    {
+        attr->m_clientDataContainer = m_clientDataContainer;
+    }
+ 
     if ( IsReadOnly() )
         attr->SetReadOnly();
 
@@ -383,6 +387,10 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
     {
         m_editor =  mergefrom->m_editor;
         m_editor->IncRef();
+    }
+    if ( !m_clientDataContainer.get() && mergefrom->m_clientDataContainer.get() )
+    {
+        m_clientDataContainer = mergefrom->m_clientDataContainer;
     }
     if ( !HasReadWriteMode() && mergefrom->HasReadWriteMode() )
         SetReadOnly(mergefrom->IsReadOnly());
@@ -595,6 +603,34 @@ wxGridCellEditor* wxGridCellAttr::GetEditor(const wxGrid* grid, int row, int col
     return editor;
 }
 
+void wxGridCellAttr::SetClientObject( wxClientData *data )
+{
+    if ( !m_clientDataContainer.get() )
+    {
+        m_clientDataContainer = new wxClientDataContainer;
+    }
+    m_clientDataContainer->SetClientObject(data);
+}
+
+wxClientData *wxGridCellAttr::GetClientObject() const
+{
+    return ( m_clientDataContainer.get() ) ? m_clientDataContainer->GetClientObject() : NULL;
+}
+
+void wxGridCellAttr::SetClientData( void *data )
+{
+    if ( !m_clientDataContainer.get() )
+    {
+        m_clientDataContainer = new wxClientDataContainer;
+    }
+    m_clientDataContainer->SetClientData(data);
+}
+
+void *wxGridCellAttr::GetClientData() const
+{
+    return ( m_clientDataContainer.get() ) ? m_clientDataContainer->GetClientData() : NULL;
+}
+ 
 // ----------------------------------------------------------------------------
 // wxGridCellAttrData
 // ----------------------------------------------------------------------------

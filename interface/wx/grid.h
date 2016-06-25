@@ -781,7 +781,7 @@ protected:
     @library{wxadv}
     @category{grid}
 */
-class wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
+class wxGridCellAttr : public wxRefCounter
 {
 public:
     /**
@@ -978,6 +978,11 @@ public:
     */
     void SetTextColour(const wxColour& colText);
 
+    void SetClientObject( wxClientData *data );
+    wxClientData *GetClientObject() const;
+    void SetClientData( void *data );
+    void *GetClientData() const;
+ 
 protected:
 
     /**

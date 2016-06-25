@@ -19,6 +19,8 @@
 
 #include "wx/scrolwin.h"
 
+#include <wx/sharedptr.h>
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -409,7 +411,7 @@ public:
 // class may be returned by wxGridTable::GetAttr().
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
+class WXDLLIMPEXP_ADV wxGridCellAttr : public wxRefCounter
 {
 public:
     enum wxAttrKind
@@ -509,6 +511,11 @@ public:
 
     void SetDefAttr(wxGridCellAttr* defAttr) { m_defGridAttr = defAttr; }
 
+    void SetClientObject( wxClientData *data );
+    wxClientData *GetClientObject() const;
+    void SetClientData( void *data );
+    void *GetClientData() const;
+ 
 protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellAttr()
@@ -553,6 +560,8 @@ private:
     wxAttrReadMode m_isReadOnly;
 
     wxAttrKind m_attrkind;
+
+    wxSharedPtr< wxClientDataContainer > m_clientDataContainer;
 
     // use Clone() instead
     wxDECLARE_NO_COPY_CLASS(wxGridCellAttr);
