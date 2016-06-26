@@ -1095,7 +1095,7 @@ bool wxToolBar::Realize()
                 // automatically according to the size of their bitmap and text
                 // label, if present. They look hideously ugly without autosizing
                 // when the labels have even slightly different lengths.
-                if ( !IsVertical() )
+                if ( HasFlag(wxTB_HORZ_LAYOUT) )
                 {
                     button.fsStyle |= TBSTYLE_AUTOSIZE;
                 }
