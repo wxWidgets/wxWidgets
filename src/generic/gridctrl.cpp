@@ -95,6 +95,8 @@ wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
     renderer->m_dateDef = m_dateDef;
     renderer->m_tz = m_tz;
 
+    renderer->SetClientDataContainer( GetClientDataContainer() );
+
     return renderer;
 }
 
@@ -187,6 +189,9 @@ wxGridCellRenderer *wxGridCellEnumRenderer::Clone() const
 {
     wxGridCellEnumRenderer *renderer = new wxGridCellEnumRenderer;
     renderer->m_choices = m_choices;
+
+    renderer->SetClientDataContainer( GetClientDataContainer() );
+
     return renderer;
 }
 
@@ -725,6 +730,8 @@ wxGridCellRenderer *wxGridCellFloatRenderer::Clone() const
     renderer->m_precision = m_precision;
     renderer->m_style = m_style;
     renderer->m_format = m_format;
+
+    renderer->SetClientDataContainer( GetClientDataContainer() );
 
     return renderer;
 }

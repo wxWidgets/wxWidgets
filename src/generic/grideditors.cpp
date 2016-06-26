@@ -656,6 +656,9 @@ wxGridCellEditor *wxGridCellTextEditor::Clone() const
         editor->SetValidator(*m_validator);
     }
 #endif
+
+    editor->SetClientDataContainer( GetClientDataContainer() );
+
     return editor;
 }
 
@@ -875,6 +878,15 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
     }
 }
 
+wxGridCellEditor *wxGridCellNumberEditor::Clone() const
+{
+    wxGridCellNumberEditor *editor = new wxGridCellNumberEditor(m_min, m_max);
+
+    editor->SetClientDataContainer( GetClientDataContainer() );
+
+    return editor;
+}
+
 // return the value in the spin control if it is there (the text control otherwise)
 wxString wxGridCellNumberEditor::GetValue() const
 {
@@ -1019,6 +1031,15 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
     }
 
     event.Skip();
+}
+
+wxGridCellEditor *wxGridCellFloatEditor::Clone() const
+{
+    wxGridCellFloatEditor *editor = new wxGridCellFloatEditor(m_width, m_precision);
+
+    editor->SetClientDataContainer( GetClientDataContainer() );
+
+    return editor;
 }
 
 void wxGridCellFloatEditor::SetParameters(const wxString& params)
@@ -1377,6 +1398,15 @@ void wxGridCellBoolEditor::StartingKey(wxKeyEvent& event)
     }
 }
 
+wxGridCellEditor *wxGridCellBoolEditor::Clone() const
+{
+    wxGridCellBoolEditor *editor = new wxGridCellBoolEditor;
+
+    editor->SetClientDataContainer( GetClientDataContainer() );
+
+    return editor;
+}
+
 wxString wxGridCellBoolEditor::GetValue() const
 {
   return ms_stringValues[CBox()->GetValue()];
@@ -1429,6 +1459,8 @@ wxGridCellEditor *wxGridCellChoiceEditor::Clone() const
     wxGridCellChoiceEditor *editor = new wxGridCellChoiceEditor;
     editor->m_allowOthers = m_allowOthers;
     editor->m_choices = m_choices;
+
+    editor->SetClientDataContainer( GetClientDataContainer() );
 
     return editor;
 }
@@ -1612,6 +1644,9 @@ wxGridCellEditor *wxGridCellEnumEditor::Clone() const
 {
     wxGridCellEnumEditor *editor = new wxGridCellEnumEditor();
     editor->m_index = m_index;
+
+    editor->SetClientDataContainer( GetClientDataContainer() );
+
     return editor;
 }
 
@@ -1710,5 +1745,13 @@ wxGridCellAutoWrapStringEditor::Create(wxWindow* parent,
                                     wxTE_MULTILINE | wxTE_RICH);
 }
 
+wxGridCellEditor *wxGridCellAutoWrapStringEditor::Clone() const
+{
+    wxGridCellAutoWrapStringEditor *editor = new wxGridCellAutoWrapStringEditor;
+
+    editor->SetClientDataContainer( GetClientDataContainer() );
+
+    return editor;
+}
 
 #endif // wxUSE_GRID

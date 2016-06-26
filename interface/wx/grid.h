@@ -22,7 +22,7 @@
          wxGridCellFloatRenderer, wxGridCellNumberRenderer,
          wxGridCellStringRenderer
 */
-class wxGridCellRenderer : public wxClientDataContainer, public wxRefCounter
+class wxGridCellRenderer : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
     wxGridCellRenderer();
@@ -380,7 +380,7 @@ public:
          wxGridCellFloatEditor, wxGridCellNumberEditor,
          wxGridCellTextEditor
 */
-class wxGridCellEditor : public wxClientDataContainer, public wxRefCounter
+class wxGridCellEditor : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
     /**
@@ -781,7 +781,7 @@ protected:
     @library{wxadv}
     @category{grid}
 */
-class wxGridCellAttr : public wxRefCounter
+class wxGridCellAttr : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
     /**
@@ -978,11 +978,6 @@ public:
     */
     void SetTextColour(const wxColour& colText);
 
-    void SetClientObject( wxClientData *data );
-    wxClientData *GetClientObject() const;
-    void SetClientData( void *data );
-    void *GetClientData() const;
- 
 protected:
 
     /**

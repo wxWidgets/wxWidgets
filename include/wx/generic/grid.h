@@ -123,7 +123,7 @@ class wxGridDirectionOperations;
 //     class is not documented and is not public at all
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridCellWorker : public wxClientDataContainer, public wxRefCounter
+class WXDLLIMPEXP_ADV wxGridCellWorker : public wxSharedClientDataContainer, public wxRefCounter
 {
 public:
     wxGridCellWorker() { }
