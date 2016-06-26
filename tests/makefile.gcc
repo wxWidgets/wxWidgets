@@ -465,7 +465,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr ja
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -506,6 +506,10 @@ data-images:
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%%f copy .\intl\fr\%%f $(OBJS)\intl\fr
+
+ja:
+	if not exist $(OBJS)\intl\ja mkdir $(OBJS)\intl\ja
+	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\ja\%%f copy .\intl\ja\%%f $(OBJS)\intl\ja
 
 $(OBJS)\test_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
@@ -1056,7 +1060,7 @@ $(OBJS)\test_gui_setsize.o: ./window/setsize.cpp
 $(OBJS)\test_gui_xrctest.o: ./xml/xrctest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean data data-images fr
+.PHONY: all clean data data-images fr ja
 
 
 SHELL := $(COMSPEC)

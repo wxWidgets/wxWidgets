@@ -328,6 +328,7 @@
     </template>
 
     <wx-data id="fr" template="catalog"/>
+    <wx-data id="ja" template="catalog"/>
 
 
     <fragment format="autoconf">

@@ -1155,6 +1155,29 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
     size_t len = in.length();
     out.reserve(len);
 
+    // In some East Asian languages _("&File") translates as "<translation>(&F)"
+    // Check for this first, otherwise fall through to the standard situation
+    if (flags & wxStrip_Mnemonics)
+    {
+        wxString label(in), accel;
+        int pos = in.Find('\t');
+        if (pos != wxNOT_FOUND)
+        {
+            label = in.Left(pos+1).Trim();
+            if (!(flags & wxStrip_Accel))
+            {
+                accel = in.Mid(pos);
+            }
+        }
+
+        // The initial '?' means we match "Foo(&F)" but not "(&F)"
+        if (label.Matches("?*(&?)") > 0)
+        {
+            label = label.Left( label.Len()-4 ).Trim();
+            return label + accel;
+        }
+    }
+
     for ( wxString::const_iterator it = in.begin(); it != in.end(); ++it )
     {
         wxChar ch = *it;
