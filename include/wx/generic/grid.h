@@ -515,7 +515,9 @@ public:
     wxClientData *GetClientObject() const;
     void SetClientData( void *data );
     void *GetClientData() const;
- 
+private:
+    wxSharedPtr< wxClientDataContainer > GetValidClientDataContainer();
+
 protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellAttr()
