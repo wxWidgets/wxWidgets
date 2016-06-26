@@ -36,7 +36,7 @@ wxDEFINE_EVENT(wxEVT_RIBBONGALLERY_CLICKED, wxRibbonGalleryEvent);
 wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonGalleryEvent, wxCommandEvent);
 wxIMPLEMENT_CLASS(wxRibbonGallery, wxRibbonControl);
 
-class wxRibbonGalleryItem
+class wxRibbonGalleryItem : public wxSharedClientDataContainer
 {
 public:
     wxRibbonGalleryItem()
@@ -56,14 +56,8 @@ public:
     bool IsVisible() const {return m_is_visible;}
     const wxRect& GetPosition() const {return m_position;}
 
-    void SetClientObject(wxClientData *data) {m_client_data.SetClientObject(data);}
-    wxClientData *GetClientObject() const {return m_client_data.GetClientObject();}
-    void SetClientData(void *data) {m_client_data.SetClientData(data);}
-    void *GetClientData() const {return m_client_data.GetClientData();}
-
 protected:
     wxBitmap m_bitmap;
-    wxClientDataContainer m_client_data;
     wxRect m_position;
     int m_id;
     bool m_is_visible;

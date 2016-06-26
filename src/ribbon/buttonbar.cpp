@@ -63,7 +63,7 @@ public:
     wxRibbonButtonBarButtonState size;
 };
 
-class wxRibbonButtonBarButtonBase
+class wxRibbonButtonBarButtonBase : public wxSharedClientDataContainer
 {
 public:
     wxRibbonButtonBarButtonInstance NewInstance()
@@ -119,7 +119,6 @@ public:
     wxBitmap bitmap_small;
     wxBitmap bitmap_small_disabled;
     wxRibbonButtonBarButtonSizeInfo sizes[3];
-    wxClientDataContainer client_data;
     int id;
     wxRibbonButtonKind kind;
     long state;
@@ -376,7 +375,7 @@ wxRibbonButtonBar::SetItemClientObject(wxRibbonButtonBarButtonBase* item,
 {
     wxCHECK_RET( item, "Can't associate client object with an invalid item" );
 
-    item->client_data.SetClientObject(data);
+    item->SetClientObject(data);
 }
 
 wxClientData*
@@ -384,7 +383,7 @@ wxRibbonButtonBar::GetItemClientObject(const wxRibbonButtonBarButtonBase* item) 
 {
     wxCHECK_MSG( item, NULL, "Can't get client object for an invalid item" );
 
-    return item->client_data.GetClientObject();
+    return item->GetClientObject();
 }
 
 void
@@ -393,7 +392,7 @@ wxRibbonButtonBar::SetItemClientData(wxRibbonButtonBarButtonBase* item,
 {
     wxCHECK_RET( item, "Can't associate client data with an invalid item" );
 
-    item->client_data.SetClientData(data);
+    item->SetClientData(data);
 }
 
 void*
@@ -401,7 +400,7 @@ wxRibbonButtonBar::GetItemClientData(const wxRibbonButtonBarButtonBase* item) co
 {
     wxCHECK_MSG( item, NULL, "Can't get client data for an invalid item" );
 
-    return item->client_data.GetClientData();
+    return item->GetClientData();
 }
 
 
