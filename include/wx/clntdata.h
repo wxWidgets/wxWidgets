@@ -14,6 +14,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/hashmap.h"
+#include "wx/sharedptr.h"
 
 typedef int (*wxShadowObjectMethod)(void*, void*);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
@@ -158,5 +159,23 @@ protected:
 
 };
 
-#endif // _WX_CLNTDATAH__
+class WXDLLIMPEXP_BASE wxSharedClientDataContainer
+{
+public:
+    void SetClientObject(wxClientData *data);
+    wxClientData *GetClientObject() const;
+    void SetClientData(void *data);
+    void *GetClientData() const;
 
+protected:
+    bool HasClientDataContainer() const {return NULL != m_data.get();}
+    wxSharedPtr<wxClientDataContainer> GetClientDataContainer() const {return m_data;}
+    void SetClientDataContainer(wxSharedPtr<wxClientDataContainer> data) {m_data = data;}
+
+private:
+    wxClientDataContainer *GetValidClientData();
+
+    wxSharedPtr<wxClientDataContainer> m_data;
+};
+
+#endif // _WX_CLNTDATAH__
