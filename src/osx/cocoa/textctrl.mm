@@ -561,25 +561,43 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 // wxNSTextViewControl
 
-wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
+wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxWidgetCocoaImpl(wxPeer, w),
       wxTextWidgetImpl(wxPeer)
 {
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
 
-    [m_scrollView setHasVerticalScroller:YES];
-    [m_scrollView setHasHorizontalScroller:NO];
-    // TODO Remove if no regression, this was causing automatic resizes of multi-line textfields when the tlw changed
-    // [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    NSSize contentSize = [m_scrollView contentSize];
+    const bool hasHScroll = (style & wxHSCROLL) != 0;
 
-    wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
-            contentSize.width, contentSize.height)];
+    [m_scrollView setHasVerticalScroller:YES];
+    [m_scrollView setHasHorizontalScroller:hasHScroll];
+    NSSize contentSize = [m_scrollView contentSize];
+    NSRect viewFrame = NSMakeRect(
+            0, 0,
+            hasHScroll ? FLT_MAX : contentSize.width, contentSize.height
+        );
+
+    wxNSTextView* const tv = [[wxNSTextView alloc] initWithFrame: viewFrame];
     m_textView = tv;
     [tv setVerticallyResizable:YES];
-    [tv setHorizontallyResizable:NO];
+    [tv setHorizontallyResizable:hasHScroll];
     [tv setAutoresizingMask:NSViewWidthSizable];
+
+    if ( hasHScroll )
+    {
+        [[tv textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+        [[tv textContainer] setWidthTracksTextView:NO];
+    }
+
+    if ( style & wxTE_RIGHT)
+    {
+        [tv setAlignment:NSRightTextAlignment];
+    }
+    else if ( style & wxTE_CENTRE)
+    {
+        [tv setAlignment:NSCenterTextAlignment];
+    }
 
     if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
     {
@@ -1055,7 +1073,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
-        c = new wxNSTextViewControl( wxpeer, v );
+        c = new wxNSTextViewControl( wxpeer, v, style );
         c->SetNeedsFocusRect( true );
     }
     else
