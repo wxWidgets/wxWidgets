@@ -484,6 +484,9 @@ public:
             focus and wxEVT_TEXT events, you must call wxEvent::Skip() on them
             so that the generic implementation works correctly.
 
+            Another limitation is that hints are ignored for the controls with
+            @c wxTE_PASSWORD style.
+
         @remarks Hints can be used for single line text controls under all
             platforms, but only MSW and GTK+ 2 support them for multi-line text
             controls, they are ignored for them under the other platforms.

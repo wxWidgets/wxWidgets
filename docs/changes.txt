@@ -91,6 +91,7 @@ All (GUI):
 - Add support for using markup in wxDataViewCtrl text items.
 - Implement auto complete in generic wxSearchCtrl (Eric Jensen).
 - Fix preserving selection when changing selection mode in wxGrid (jonkraber).
+- Fix wxTextEntry::SetHint() with wxTE_PASSWORD in generic implementation.
 
 wxGTK:
 

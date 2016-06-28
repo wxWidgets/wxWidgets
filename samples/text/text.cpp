@@ -1102,6 +1102,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_password = new MyTextCtrl( this, wxID_ANY, wxT(""),
       wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
+    m_password->SetHint("Don't use 12345 here");
 
     m_limited = new MyTextCtrl(this, wxID_ANY, "",
                               wxPoint(10, 90), wxDefaultSize);
