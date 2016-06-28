@@ -27,6 +27,7 @@
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dataobj.h"
+    #include "wx/textctrl.h"            // Only needed for wxTE_PASSWORD.
 #endif //WX_PRECOMP
 
 #include "wx/textentry.h"
