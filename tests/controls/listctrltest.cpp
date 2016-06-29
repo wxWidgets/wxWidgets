@@ -82,7 +82,7 @@ void ListCtrlTestCase::setUp()
 
 void ListCtrlTestCase::tearDown()
 {
-    delete m_list;
+    DeleteTestWindow(m_list);
     m_list = NULL;
 }
 

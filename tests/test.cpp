@@ -513,6 +513,25 @@ static Test *GetTestByName(const wxString& name)
     return test;
 }
 
+#if wxUSE_GUI
+
+void DeleteTestWindow(wxWindow* win)
+{
+    if ( !win )
+        return;
+
+    wxWindow* const capture = wxWindow::GetCapture();
+    if ( capture )
+    {
+        if ( capture == win ||
+                capture->GetMainWindowOfCompositeControl() == win )
+            capture->ReleaseMouse();
+    }
+
+    delete win;
+}
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // TestApp
