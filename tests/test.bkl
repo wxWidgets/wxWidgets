@@ -180,6 +180,7 @@
             graphics/measuring.cpp
             graphics/affinematrix.cpp
             graphics/boundingbox.cpp
+            graphics/clippingbox.cpp
             config/config.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
