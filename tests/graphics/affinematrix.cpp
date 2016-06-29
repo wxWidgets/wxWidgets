@@ -193,7 +193,8 @@ void AffineTransformTestCase::CompareToGraphicsContext()
 
 
     // Create graphics matrix and transform it
-    wxMemoryDC mDc;
+    wxBitmap bmp(10, 10);
+    wxMemoryDC mDc(bmp);
     wxGraphicsContext* gDc = wxGraphicsContext::Create(mDc);
     wxGraphicsMatrix matrixG1 = gDc->CreateMatrix();
     wxGraphicsMatrix matrixG2 = gDc->CreateMatrix();
