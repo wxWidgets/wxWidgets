@@ -52,6 +52,9 @@ public:
     void SetPanel(wxRibbonPanel* page);
 };
 
+wxEventType wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED;
+
+
 /**
     @class wxRibbonPanel
 
