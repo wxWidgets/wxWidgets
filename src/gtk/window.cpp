@@ -2604,15 +2604,12 @@ wxWindowGTK::~wxWindowGTK()
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
 
-    // Unlike the above cases, which can happen in normal circumstances, a
-    // window shouldn't be destroyed while it still has capture, so even though
-    // we still reset the global pointer to avoid leaving it dangling and
-    // crashing afterwards, also complain about it.
+    // This is a real error, unlike the above, but it's already checked for in
+    // the base class dtor and asserting here results is useless and, even
+    // worse, results in abnormal termination when running unit tests which
+    // throw exceptions from their assert handler, so don't assert here.
     if ( g_captureWindow == this )
-    {
-        wxFAIL_MSG( wxS("Destroying window with mouse capture") );
         g_captureWindow = NULL;
-    }
 
     if (m_wxwindow)
     {
