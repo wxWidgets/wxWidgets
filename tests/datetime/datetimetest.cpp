@@ -1346,6 +1346,10 @@ void DateTimeTestCase::TestTimeArithmetics()
 
     // And a reverse. Now we should use days in Jun (again 30 => 4w 1d)
     CPPUNIT_ASSERT_EQUAL( wxDateSpan(0, -10, -4, -1), dtd1.DiffAsDateSpan(dtd2) );
+
+    const wxTimeSpan ts1 = wxTimeSpan::Seconds(30);
+    const wxTimeSpan ts2 = wxTimeSpan::Seconds(5);
+    CPPUNIT_ASSERT_EQUAL( wxTimeSpan::Seconds(25), ts1 - ts2 );
 }
 
 void DateTimeTestCase::TestDSTBug()

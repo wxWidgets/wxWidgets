@@ -1210,7 +1210,7 @@ public:
     inline wxTimeSpan& Subtract(const wxTimeSpan& diff);
         // subtract another timespan
     wxTimeSpan& operator-=(const wxTimeSpan& diff) { return Subtract(diff); }
-    inline wxTimeSpan operator-(const wxTimeSpan& ts)
+    inline wxTimeSpan operator-(const wxTimeSpan& ts) const
     {
         return wxTimeSpan(GetValue() - ts.GetValue());
     }
