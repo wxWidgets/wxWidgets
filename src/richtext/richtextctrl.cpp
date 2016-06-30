@@ -738,7 +738,9 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
         }
 #endif
 
-        if ((hit != wxRICHTEXT_HITTEST_NONE) && !(hit & wxRICHTEXT_HITTEST_OUTSIDE))
+        // Don't process left click if there was a selection, which implies that a selection may just have been
+        // extended
+        if ((hit != wxRICHTEXT_HITTEST_NONE) && !(hit & wxRICHTEXT_HITTEST_OUTSIDE) && !HasSelection())
         {
             wxRichTextEvent cmdEvent(
                 wxEVT_RICHTEXT_LEFT_CLICK,
