@@ -616,7 +616,7 @@ wxSize wxListBox::DoGetBestClientSize() const
     // give it some reasonable default value if there are no strings in the
     // list
     if ( wListbox == 0 )
-        wListbox = 100;
+        wListbox = 6*GetCharWidth();
 
     // the listbox should be slightly larger than the widest string
     wListbox += 3*GetCharWidth();
