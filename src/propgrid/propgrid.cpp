@@ -4674,8 +4674,8 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
         }
         else
         {
-            int w = m_doubleBuffer->GetWidth();
-            int h = m_doubleBuffer->GetHeight();
+            int w = m_doubleBuffer->GetScaledWidth();
+            int h = m_doubleBuffer->GetScaledHeight();
 
             // Double buffer must be large enough
             if ( w < width || h < (height+dblh) )
