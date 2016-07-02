@@ -18,113 +18,312 @@
 
 #include "wx/bitmap.h"
 #include "wx/dcmemory.h"
+#if wxUSE_GRAPHICS_CONTEXT
 #include "wx/dcgraph.h"
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class ClippingBoxTestCase : public CppUnit::TestCase
+static const wxSize s_dcSize(100, 105);
+static const wxColour s_bgColour(*wxWHITE); // colour to draw outside clipping box
+static const wxColour s_fgColour(*wxGREEN); // colour to draw inside clipping box
+
+class ClippingBoxTestCaseBase : public CppUnit::TestCase
 {
 public:
-    ClippingBoxTestCase()
+    ClippingBoxTestCaseBase()
     {
-        m_bmp.Create(100, 100);
-        m_dc.SelectObject(m_bmp);
-        m_gcdc = new wxGCDC(m_dc);
+        m_dc = NULL;
+        m_bmp.Create(s_dcSize);
     }
 
-    ~ClippingBoxTestCase()
+    virtual ~ClippingBoxTestCaseBase()
     {
-        delete m_gcdc;
-        m_dc.SelectObject(wxNullBitmap);
         m_bmp = wxNullBitmap;
+    }
+
+    virtual void setUp() { wxASSERT( m_dc ); }
+
+private:
+    void CheckBox(int x, int y, int width, int height);
+
+protected:
+    void InitialState();
+    void OneRegion();
+    void OneLargeRegion();
+    void OneOuterRegion();
+    void OneRegionNegDim();
+    void OneRegionAndReset();
+    void OneRegionAndEmpty();
+    void TwoRegionsOverlapping();
+    void TwoRegionsOverlappingNegDim();
+    void TwoRegionsNonOverlapping();
+    void TwoRegionsNonOverlappingNegDim();
+
+    virtual void FlushDC() = 0;
+
+    wxBitmap m_bmp;
+    wxDC* m_dc;
+
+    wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseBase);
+};
+
+
+// wxDC tests
+class ClippingBoxTestCaseDC : public ClippingBoxTestCaseBase
+{
+public:
+    ClippingBoxTestCaseDC()
+    {
+        m_mdc.SelectObject(m_bmp);
+        m_dc = &m_mdc;
+    }
+
+    virtual ~ClippingBoxTestCaseDC()
+    {
+        m_mdc.SelectObject(wxNullBitmap);
     }
 
     virtual void setUp()
     {
-        m_dc.DestroyClippingRegion();
-        m_gcdc->DestroyClippingRegion();
+        m_mdc.DestroyClippingRegion();
+        wxBrush bgBrush(s_bgColour, wxBRUSHSTYLE_SOLID);
+        m_mdc.SetBackground(bgBrush);
+        m_mdc.Clear();
     }
 
+    virtual void FlushDC() {}
+
 private:
-    CPPUNIT_TEST_SUITE( ClippingBoxTestCase );
-        CPPUNIT_TEST( InitialStateDC );
-        CPPUNIT_TEST( OneRegionDC );
-        CPPUNIT_TEST( OneLargeRegionDC );
-        CPPUNIT_TEST( OneRegionNegDimDC );
-        CPPUNIT_TEST( OneRegionAndResetDC );
-        CPPUNIT_TEST( OneRegionAndEmptyDC );
-        CPPUNIT_TEST( TwoRegionsOverlappingDC );
-        CPPUNIT_TEST( TwoRegionsOverlappingNegDimDC );
-        CPPUNIT_TEST( TwoRegionsNonOverlappingDC );
-        CPPUNIT_TEST( TwoRegionsNonOverlappingNegDimDC );
-
-        CPPUNIT_TEST( InitialStateGCDC );
-        CPPUNIT_TEST( OneRegionGCDC );
-        CPPUNIT_TEST( OneLargeRegionGCDC );
-        CPPUNIT_TEST( OneRegionNegDimGCDC );
-        CPPUNIT_TEST( OneRegionAndResetGCDC );
-        CPPUNIT_TEST( OneRegionAndEmptyGCDC );
-        CPPUNIT_TEST( TwoRegionsOverlappingGCDC );
-        CPPUNIT_TEST( TwoRegionsOverlappingNegDimGCDC );
-        CPPUNIT_TEST( TwoRegionsNonOverlappingGCDC );
-        CPPUNIT_TEST( TwoRegionsNonOverlappingNegDimGCDC );
+    CPPUNIT_TEST_SUITE( ClippingBoxTestCaseDC );
+        CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( OneRegion );
+        CPPUNIT_TEST( OneLargeRegion );
+        CPPUNIT_TEST( OneOuterRegion );
+        CPPUNIT_TEST( OneRegionNegDim );
+        CPPUNIT_TEST( OneRegionAndReset );
+        CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( TwoRegionsOverlapping );
+        CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
+        CPPUNIT_TEST( TwoRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
     CPPUNIT_TEST_SUITE_END();
+protected:
+    wxMemoryDC m_mdc;
 
-    void CheckBox(const wxDC& dc, int x, int y, int width, int height);
-
-    void InitialStateDC();
-    void OneRegionDC();
-    void OneLargeRegionDC();
-    void OneRegionNegDimDC();
-    void OneRegionAndResetDC();
-    void OneRegionAndEmptyDC();
-    void TwoRegionsOverlappingDC();
-    void TwoRegionsOverlappingNegDimDC();
-    void TwoRegionsNonOverlappingDC();
-    void TwoRegionsNonOverlappingNegDimDC();
-
-    void InitialStateGCDC();
-    void OneRegionGCDC();
-    void OneLargeRegionGCDC();
-    void OneRegionNegDimGCDC();
-    void OneRegionAndResetGCDC();
-    void OneRegionAndEmptyGCDC();
-    void TwoRegionsOverlappingGCDC();
-    void TwoRegionsOverlappingNegDimGCDC();
-    void TwoRegionsNonOverlappingGCDC();
-    void TwoRegionsNonOverlappingNegDimGCDC();
-
-    void InitialState(wxDC& dc);
-    void OneRegion(wxDC& dc);
-    void OneLargeRegion(wxDC& dc);
-    void OneRegionNegDim(wxDC& dc);
-    void OneRegionAndReset(wxDC& dc);
-    void OneRegionAndEmpty(wxDC& dc);
-    void TwoRegionsOverlapping(wxDC& dc);
-    void TwoRegionsOverlappingNegDim(wxDC& dc);
-    void TwoRegionsNonOverlapping(wxDC& dc);
-    void TwoRegionsNonOverlappingNegDim(wxDC& dc);
-
-    wxBitmap m_bmp;
-    wxMemoryDC m_dc;
-    wxGCDC *m_gcdc;
-
-    wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCase);
+    wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseDC);
 };
 
 // register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCase );
+CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseDC );
 
 // also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCase, "ClippingBoxTestCase" );
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseDC, "ClippingBoxTestCaseDC" );
 
-void ClippingBoxTestCase::CheckBox(const wxDC& dc, int x, int y, int width, int height)
+// wxGCDC tests
+#if wxUSE_GRAPHICS_CONTEXT
+
+class ClippingBoxTestCaseGCDC : public ClippingBoxTestCaseDC
 {
+public:
+    ClippingBoxTestCaseGCDC()
+    {
+        m_gcdc = new wxGCDC(m_mdc);
+        m_dc = m_gcdc;
+    }
+
+    virtual ~ClippingBoxTestCaseGCDC()
+    {
+        delete m_gcdc;
+    }
+
+    virtual void setUp()
+    {
+        CPPUNIT_ASSERT_MESSAGE("Invalid wxGCDC", m_gcdc);
+
+        wxGraphicsContext* ctx = m_gcdc->GetGraphicsContext();
+        ctx->SetAntialiasMode(wxANTIALIAS_NONE);
+        ctx->DisableOffset();
+        m_gcdc->DestroyClippingRegion();
+        wxBrush bgBrush(s_bgColour, wxBRUSHSTYLE_SOLID);
+        m_gcdc->SetBackground(bgBrush);
+        m_gcdc->Clear();
+    }
+
+    virtual void FlushDC()
+    {
+        m_gcdc->GetGraphicsContext()->Flush();
+    }
+
+private:
+    CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGCDC );
+        CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( OneRegion );
+        CPPUNIT_TEST( OneLargeRegion );
+        CPPUNIT_TEST( OneOuterRegion );
+        CPPUNIT_TEST( OneRegionNegDim );
+        CPPUNIT_TEST( OneRegionAndReset );
+        CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( TwoRegionsOverlapping );
+        CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
+        CPPUNIT_TEST( TwoRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+    wxGCDC* m_gcdc;
+
+    wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGCDC);
+};
+
+// For MSW we have individual test cases for each graphics renderer
+// so we don't need to test wxGCDC with default renderer.
+#ifndef __WXMSW__
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCDC );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCDC, "ClippingBoxTestCaseGCDC" );
+#endif // !__WXMSW__
+
+#if wxUSE_GRAPHICS_GDIPLUS
+class ClippingBoxTestCaseGDIPlus : public ClippingBoxTestCaseGCDC
+{
+public:
+    ClippingBoxTestCaseGDIPlus()
+    {
+        wxGraphicsRenderer* rend = wxGraphicsRenderer::GetGDIPlusRenderer();
+        wxGraphicsContext* ctx = rend->CreateContext(m_mdc);
+        m_gcdc->SetGraphicsContext(ctx);
+    }
+
+    virtual ~ClippingBoxTestCaseGDIPlus() {}
+
+private:
+    CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGDIPlus );
+        CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( OneRegion );
+        CPPUNIT_TEST( OneLargeRegion );
+        CPPUNIT_TEST( OneOuterRegion );
+        CPPUNIT_TEST( OneRegionNegDim );
+        CPPUNIT_TEST( OneRegionAndReset );
+        CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( TwoRegionsOverlapping );
+        CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
+        CPPUNIT_TEST( TwoRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+
+    wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGDIPlus);
+};
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGDIPlus );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGDIPlus, "ClippingBoxTestCaseGDIPlus" );
+
+#endif // wxUSE_GRAPHICS_GDIPLUS
+
+#if wxUSE_GRAPHICS_DIRECT2D
+class ClippingBoxTestCaseDirect2D : public ClippingBoxTestCaseGCDC
+{
+public:
+    ClippingBoxTestCaseDirect2D()
+    {
+        wxGraphicsRenderer* rend = wxGraphicsRenderer::GetDirect2DRenderer();
+        wxGraphicsContext* ctx = rend->CreateContext(m_mdc);
+        m_gcdc->SetGraphicsContext(ctx);
+    }
+
+    virtual ~ClippingBoxTestCaseDirect2D() {}
+
+private:
+    CPPUNIT_TEST_SUITE( ClippingBoxTestCaseDirect2D );
+        CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( OneRegion );
+        CPPUNIT_TEST( OneLargeRegion );
+        CPPUNIT_TEST( OneOuterRegion );
+        CPPUNIT_TEST( OneRegionNegDim );
+        CPPUNIT_TEST( OneRegionAndReset );
+        CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( TwoRegionsOverlapping );
+        CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
+        CPPUNIT_TEST( TwoRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+
+    wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseDirect2D);
+};
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseDirect2D );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseDirect2D, "ClippingBoxTestCaseDirect2D" );
+
+#endif // wxUSE_GRAPHICS_DIRECT2D
+
+#if wxUSE_CAIRO
+class ClippingBoxTestCaseCairo : public ClippingBoxTestCaseGCDC
+{
+public:
+    ClippingBoxTestCaseCairo()
+    {
+        wxGraphicsRenderer* rend = wxGraphicsRenderer::GetCairoRenderer();
+        wxGraphicsContext* ctx = rend->CreateContext(m_mdc);
+        m_gcdc->SetGraphicsContext(ctx);
+    }
+
+    virtual ~ClippingBoxTestCaseCairo() {}
+
+private:
+    CPPUNIT_TEST_SUITE( ClippingBoxTestCaseCairo );
+        CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( OneRegion );
+        CPPUNIT_TEST( OneLargeRegion );
+        CPPUNIT_TEST( OneOuterRegion );
+        CPPUNIT_TEST( OneRegionNegDim );
+        CPPUNIT_TEST( OneRegionAndReset );
+        CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( TwoRegionsOverlapping );
+        CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
+        CPPUNIT_TEST( TwoRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+
+    wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseCairo);
+};
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseCairo );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseCairo, "ClippingBoxTestCaseCairo" );
+
+#endif // wxUSE_CAIRO
+
+#endif //  wxUSE_GRAPHICS_CONTEXT
+
+// =====  Implementation  =====
+
+void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
+{
+    // Update wxDC contents.
+    FlushDC();
+
+    // Check clipping box boundaries.
     int clipX, clipY, clipW, clipH;
-    dc.GetClippingBox(&clipX, &clipY, &clipW, &clipH);
+    m_dc->GetClippingBox(&clipX, &clipY, &clipW, &clipH);
 
     wxString msgPos;
     if ( x != clipX || y != clipY )
@@ -156,6 +355,144 @@ void ClippingBoxTestCase::CheckBox(const wxDC& dc, int x, int y, int width, int 
         msg = msgDim;
     }
 
+    // Check whether diagonal corners of the clipping box
+    // are actually drawn at the edge of the clipping region.
+#if wxUSE_IMAGE
+    // For some renderers is's not possible to get pixels
+    // value from wxDC so we would have to examine pixels
+    // in the underlying bitmap.
+    wxImage img;
+    img = m_bmp.ConvertToImage();
+#endif // wxUSE_IMAGE
+
+    // Check area near the top-left corner
+    int ymin = y-1;
+    int xmin = x-1;
+    int ymax = y+1;
+    int xmax = x+1;
+    ymin = wxMin(wxMax(ymin, 0), s_dcSize.GetHeight()-1);
+    xmin = wxMin(wxMax(xmin, 0), s_dcSize.GetWidth()-1);
+    ymax = wxMin(wxMax(ymax, 0), s_dcSize.GetHeight()-1);
+    xmax = wxMin(wxMax(xmax, 0), s_dcSize.GetWidth()-1);
+
+    for( int py = ymin; py <= ymax; py++ )
+        for( int px = xmin; px <= xmax; px++ )
+        {
+            wxColour c;
+            if ( !m_dc->GetPixel(px, py, &c) )
+            {
+#if wxUSE_IMAGE
+                unsigned char r = img.GetRed(px, py);
+                unsigned char g = img.GetGreen(px, py);
+                unsigned char b = img.GetBlue(px, py);
+                c.Set(r, g, b);
+#else
+                // We cannot get pixel value
+                break;
+#endif // wxUSE_IMAGE / !wxUSE_IMAGE
+            }
+
+            wxString msgColour;
+            if ( px >= x && px <= x + (width-1) &&
+                 py >= y && py <= y + (height-1) )
+            {
+                // Pixel inside the box.
+                if ( c != s_fgColour )
+                {
+                    msgColour =
+                        wxString::Format(wxS("Invalid colour drawn at (%i, %i): Actual: %s  Expected: %s"),
+                                px, py, c.GetAsString().mbc_str(), s_fgColour.GetAsString().mbc_str());
+
+                }
+            }
+            else
+            {
+                // Pixel outside the box.
+                if ( c != s_bgColour )
+                {
+                    msgColour =
+                        wxString::Format(wxS("Invalid colour drawn at (%i, %i): Actual: %s  Expected: %s"),
+                                px, py, c.GetAsString().mbc_str(), s_bgColour.GetAsString().mbc_str());
+                }
+            }
+
+            if ( !msgColour.empty() )
+            {
+                if ( !msg.empty() )
+                {
+                    msg += wxS("\n- ");
+                    msg += msgColour;
+                }
+                else
+                {
+                    msg = msgColour;
+                }
+            }
+        }
+
+    // Check area near the bottom-right corner
+    ymin = y+(height-1)-1;
+    xmin = x+(width-1)-1;
+    ymax = y+(height-1)+1;
+    xmax = x+(width-1)+1;
+    ymin = wxMin(wxMax(ymin, 0), s_dcSize.GetHeight()-1);
+    xmin = wxMin(wxMax(xmin, 0), s_dcSize.GetWidth()-1);
+    ymax = wxMin(wxMax(ymax, 0), s_dcSize.GetHeight()-1);
+    xmax = wxMin(wxMax(ymax, 0), s_dcSize.GetWidth()-1);
+    for( int py = ymin; py <= ymax; py++ )
+        for( int px = xmin; px <= xmax; px++ )
+        {
+            wxColour c;
+            if ( !m_dc->GetPixel(px, py, &c) )
+            {
+#if wxUSE_IMAGE
+                unsigned char r = img.GetRed(px, py);
+                unsigned char g = img.GetGreen(px, py);
+                unsigned char b = img.GetBlue(px, py);
+                c.Set(r, g, b);
+#else
+                // We cannot get pixel value
+                break;
+#endif // wxUSE_IMAGE / !wxUSE_IMAGE
+            }
+
+            wxString msgColour;
+            if ( px >= x && px <= x + (width-1) &&
+                 py >= y && py <= y + (height-1) )
+            {
+                // Pixel inside the box.
+                if ( c != s_fgColour )
+                {
+                    msgColour =
+                        wxString::Format(wxS("Invalid colour drawn at (%i, %i): Actual: %s  Expected: %s"),
+                                px, py, c.GetAsString().mbc_str(), s_fgColour.GetAsString().mbc_str());
+                }
+            }
+            else
+            {
+                // Pixel outside the box.
+                if ( c != s_bgColour )
+                {
+                    msgColour =
+                        wxString::Format(wxS("Invalid colour drawn at (%i, %i): Actual: %s  Expected: %s"),
+                                px, py, c.GetAsString().mbc_str(), s_bgColour.GetAsString().mbc_str());
+                }
+            }
+
+            if ( !msgColour.empty() )
+            {
+                if ( !msg.empty() )
+                {
+                    msg += wxS("\n- ");
+                    msg += msgColour;
+                }
+                else
+                {
+                    msg = msgColour;
+                }
+            }
+        }
+
     if( !msg.empty() )
     {
         wxCharBuffer buffer = msg.ToUTF8();
@@ -163,173 +500,121 @@ void ClippingBoxTestCase::CheckBox(const wxDC& dc, int x, int y, int width, int 
     }
 }
 
-// wxDC tests
-
-void ClippingBoxTestCase::InitialStateDC()
-{
-    InitialState(m_dc);
-}
-
-void ClippingBoxTestCase::OneRegionDC()
-{
-    OneRegion(m_dc);
-}
-
-void ClippingBoxTestCase::OneLargeRegionDC()
-{
-    OneLargeRegion(m_dc);
-}
-
-void ClippingBoxTestCase::OneRegionNegDimDC()
-{
-    OneRegionNegDim(m_dc);
-}
-
-void ClippingBoxTestCase::OneRegionAndResetDC()
-{
-    OneRegionAndReset(m_dc);
-}
-
-void ClippingBoxTestCase::OneRegionAndEmptyDC()
-{
-    OneRegionAndEmpty(m_dc);
-}
-
-void ClippingBoxTestCase::TwoRegionsOverlappingDC()
-{
-    TwoRegionsOverlapping(m_dc);
-}
-
-void ClippingBoxTestCase::TwoRegionsOverlappingNegDimDC()
-{
-    TwoRegionsOverlappingNegDim(m_dc);
-}
-
-void ClippingBoxTestCase::TwoRegionsNonOverlappingDC()
-{
-    TwoRegionsNonOverlapping(m_dc);
-}
-
-void ClippingBoxTestCase::TwoRegionsNonOverlappingNegDimDC()
-{
-    TwoRegionsNonOverlappingNegDim(m_dc);
-}
-
-// wxGCDC tests
-
-void ClippingBoxTestCase::InitialStateGCDC()
-{
-    InitialState(*m_gcdc);
-}
-
-void ClippingBoxTestCase::OneRegionGCDC()
-{
-    OneRegion(*m_gcdc);
-}
-
-void ClippingBoxTestCase::OneLargeRegionGCDC()
-{
-    OneLargeRegion(*m_gcdc);
-}
-
-void ClippingBoxTestCase::OneRegionNegDimGCDC()
-{
-    OneRegionNegDim(*m_gcdc);
-}
-
-void ClippingBoxTestCase::OneRegionAndResetGCDC()
-{
-    OneRegionAndReset(*m_gcdc);
-}
-
-void ClippingBoxTestCase::OneRegionAndEmptyGCDC()
-{
-    OneRegionAndEmpty(*m_gcdc);
-}
-
-void ClippingBoxTestCase::TwoRegionsOverlappingGCDC()
-{
-    TwoRegionsOverlapping(*m_gcdc);
-}
-
-void ClippingBoxTestCase::TwoRegionsOverlappingNegDimGCDC()
-{
-    TwoRegionsOverlappingNegDim(*m_gcdc);
-}
-
-void ClippingBoxTestCase::TwoRegionsNonOverlappingGCDC()
-{
-    TwoRegionsNonOverlapping(*m_gcdc);
-}
-
-void ClippingBoxTestCase::TwoRegionsNonOverlappingNegDimGCDC()
-{
-    TwoRegionsNonOverlappingNegDim(*m_gcdc);
-}
-
 // Actual tests
 
-void ClippingBoxTestCase::InitialState(wxDC& dc)
+void ClippingBoxTestCaseBase::InitialState()
 {
-    CheckBox(dc, 0, 0, 0, 0);
+    // Initial clipping box should be the same as the entire DC surface.
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
-void ClippingBoxTestCase::OneRegion(wxDC& dc)
+void ClippingBoxTestCaseBase::OneRegion()
 {
-    dc.SetClippingRegion(10, 20, 80, 75);
-    CheckBox(dc, 10, 20, 80, 75);
+    // Setting one clipping box inside DC area.
+    m_dc->SetClippingRegion(10, 20, 80, 75);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(10, 20, 80, 75);
 }
 
-void ClippingBoxTestCase::OneLargeRegion(wxDC& dc)
+void ClippingBoxTestCaseBase::OneLargeRegion()
 {
-    dc.SetClippingRegion(-10, -20, 130, 150);
-    CheckBox(dc, 0, 0, 100, 100);
+    // Setting one clipping box larger then DC surface.
+    // Final clipping box should be limited to the DC extents.
+    m_dc->SetClippingRegion(-10, -20,
+                         s_dcSize.GetWidth()+30, s_dcSize.GetHeight()+50);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
-void ClippingBoxTestCase::OneRegionNegDim(wxDC& dc)
+void ClippingBoxTestCaseBase::OneOuterRegion()
 {
-    dc.SetClippingRegion(10, 20, -80, -75);
-    CheckBox(dc, 0, 0, 11, 21);
+    // Setting one clipping box entirely outside DC surface.
+    // Final clipping box should be empty.
+    m_dc->SetClippingRegion(-100, -80, 20, 40);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 0, 0);
 }
 
-void ClippingBoxTestCase::OneRegionAndReset(wxDC& dc)
+void ClippingBoxTestCaseBase::OneRegionNegDim()
 {
-    dc.SetClippingRegion(10, 20, 80, 75);
-    dc.DestroyClippingRegion();
-    CheckBox(dc, 0, 0, 0, 0);
+    // Setting one clipping box with negative sizes values.
+    // Final clipping box should have standard positive size values.
+    m_dc->SetClippingRegion(10, 20, -80, -75);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 11, 21);
 }
 
-void ClippingBoxTestCase::OneRegionAndEmpty(wxDC& dc)
+void ClippingBoxTestCaseBase::OneRegionAndReset()
 {
-    dc.SetClippingRegion(10, 20, 80, 75);
-    dc.SetClippingRegion(0, 0, 0, 0);
-    CheckBox(dc, 0, 0, 0, 0);
+    // Setting one clipping box and next destroy it.
+    // Final clipping box should be the same as DC surface.
+    m_dc->SetClippingRegion(10, 20, 80, 75);
+    m_dc->DestroyClippingRegion();
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
-void ClippingBoxTestCase::TwoRegionsOverlapping(wxDC& dc)
+void ClippingBoxTestCaseBase::OneRegionAndEmpty()
 {
-    dc.SetClippingRegion(10, 20, 80, 75);
-    dc.SetClippingRegion(50, 60, 50, 40);
-    CheckBox(dc, 50, 60, 40, 35);
+    // Setting one clipping box and next an empty box.
+    // Final clipping box should empty.
+    m_dc->SetClippingRegion(10, 20, 80, 75);
+    m_dc->SetClippingRegion(0, 0, 0, 0);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 0, 0);
 }
 
-void ClippingBoxTestCase::TwoRegionsOverlappingNegDim(wxDC& dc)
+void ClippingBoxTestCaseBase::TwoRegionsOverlapping()
 {
-    dc.SetClippingRegion(90, 95, -80, -75);
-    dc.SetClippingRegion(50, 60, 50, 40);
-    CheckBox(dc, 50, 60, 41, 36);
+    // Setting one clipping box and next another box (partially overlapping).
+    // Final clipping box should be an intersection of these two boxes.
+    m_dc->SetClippingRegion(10, 20, 80, 75);
+    m_dc->SetClippingRegion(50, 60, 50, 40);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(50, 60, 40, 35);
 }
 
-void ClippingBoxTestCase::TwoRegionsNonOverlapping(wxDC& dc)
+void ClippingBoxTestCaseBase::TwoRegionsOverlappingNegDim()
 {
-    dc.SetClippingRegion(10, 20, 30, 30);
-    dc.SetClippingRegion(50, 60, 50, 40);
-    CheckBox(dc, 0, 0, 0, 0);
+    // Setting one clipping box with negative size values
+    // and next another box (partially overlapping).
+    // Final clipping box should be an intersection of these two boxes
+    // with positive size values.
+    m_dc->SetClippingRegion(90, 95, -80, -75);
+    m_dc->SetClippingRegion(50, 60, 50, 40);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(50, 60, 41, 36);
 }
 
-void ClippingBoxTestCase::TwoRegionsNonOverlappingNegDim(wxDC& dc)
+void ClippingBoxTestCaseBase::TwoRegionsNonOverlapping()
 {
-    dc.SetClippingRegion(10, 20, -80, -75);
-    dc.SetClippingRegion(50, 60, 50, 40);
-    CheckBox(dc, 0, 0, 0, 0);
+    // Setting one clipping box and next another box (non-overlapping).
+    // Final clipping box should be empty.
+    m_dc->SetClippingRegion(10, 20, 30, 30);
+    m_dc->SetClippingRegion(50, 60, 50, 40);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 0, 0);
+}
+
+void ClippingBoxTestCaseBase::TwoRegionsNonOverlappingNegDim()
+{
+    // Setting one clipping box with negative size values
+    // and next another box (non-overlapping).
+    // Final clipping box should be empty.
+    m_dc->SetClippingRegion(10, 20, -80, -75);
+    m_dc->SetClippingRegion(50, 60, 50, 40);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 0, 0);
 }
