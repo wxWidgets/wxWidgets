@@ -53,6 +53,7 @@ public:
     // override/implement base class virtuals
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
+    virtual void WakeUp();
 
 protected:
     virtual void OnNextIteration();

@@ -110,6 +110,7 @@ wxMSW:
 - Fix wxScreenDC::GetSize() with multiple monitors (iwbnwif).
 - Fix background colour returned by wxTextCtrl::GetStyle() (Andreas Falkenhahn).
 - Revert to using equally-sized buttons in wxToolBar by default.
+- Restore dispatching wxThreadEvent while resizing the window broken in 3.1.0.
 
 wxOSX:
 

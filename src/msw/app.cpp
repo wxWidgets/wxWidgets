@@ -225,16 +225,23 @@ WXDWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
     // have a running event loop as we would never remove them from the message
     // queue then and so we would enter an infinite loop as
     // MsgWaitForMultipleObjects() keeps returning WAIT_OBJECT_0 + 1.
-    if ( flags == wxTHREAD_WAIT_YIELD && wxIsMainThread() )
+    if ( flags == wxTHREAD_WAIT_BLOCK ||
+            !wxIsMainThread() ||
+                !wxEventLoop::GetActive() )
     {
-        wxMSWEventLoopBase* const
-            evtLoop = static_cast<wxMSWEventLoopBase *>(wxEventLoop::GetActive());
-        if ( evtLoop )
-            return evtLoop->MSWWaitForThread(hThread);
+        // Simple blocking wait.
+        return DoSimpleWaitForThread(hThread);
     }
 
-    // Simple blocking wait.
-    return DoSimpleWaitForThread(hThread);
+    return ::MsgWaitForMultipleObjects
+             (
+               1,                   // number of objects to wait for
+               (HANDLE *)&hThread,  // the objects
+               false,               // wait for any objects, not all
+               INFINITE,            // no timeout
+               QS_ALLINPUT |        // return as soon as there are any events
+               QS_ALLPOSTMESSAGE
+             );
 }
 #endif // wxUSE_THREADS
 
@@ -747,16 +754,42 @@ void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
 
 void wxApp::WakeUpIdle()
 {
-    wxEventLoopBase * const evtLoop = wxEventLoop::GetActive();
-    if ( !evtLoop )
+    // Send the top window a dummy message so idle handler processing will
+    // start up again.  Doing it this way ensures that the idle handler
+    // wakes up in the right thread (see also wxWakeUpMainThread() which does
+    // the same for the main app thread only)
+    wxWindow * const topWindow = wxTheApp->GetTopWindow();
+    if ( topWindow )
     {
-        // We can't wake up the event loop if there is none and there is just
-        // no need to do anything in this case, any pending events will be
-        // handled when the event loop starts.
-        return;
-    }
+        HWND hwndTop = GetHwndOf(topWindow);
 
-    evtLoop->WakeUp();
+        // Do not post WM_NULL if there's already a pending WM_NULL to avoid
+        // overflowing the message queue.
+        //
+        // Notice that due to a limitation of PeekMessage() API (which handles
+        // 0,0 range specially), we have to check the range from 0-1 instead.
+        // This still makes it possible to overflow the queue with WM_NULLs by
+        // interspersing the calles to WakeUpIdle() with windows creation but
+        // it should be rather hard to do it accidentally.
+        MSG msg;
+        if ( !::PeekMessage(&msg, hwndTop, 0, 1, PM_NOREMOVE) ||
+              ::PeekMessage(&msg, hwndTop, 1, 1, PM_NOREMOVE) )
+        {
+            // If this fails too, there is really not much we can do, but then
+            // neither do we need to, as it normally indicates that the window
+            // queue is full to the brim with the messages and so the main loop
+            // is running and doesn't need to be woken up.
+            //
+            // Notice that we especially should not try use wxLogLastError()
+            // here as this would lead to another call to wxWakeUpIdle() from
+            // inside wxLog and stack overflow due to the resulting recursion.
+            ::PostMessage(hwndTop, WM_NULL, 0, 0);
+        }
+    }
+#if wxUSE_THREADS
+    else
+        wxWakeUpMainThread();
+#endif // wxUSE_THREADS
 }
 
 // ----------------------------------------------------------------------------
