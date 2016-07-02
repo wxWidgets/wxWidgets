@@ -697,7 +697,9 @@ void wxAppConsoleBase::OnUnhandledException()
     }
 
     wxMessageOutputBest().Printf(
-        "Unhandled %s; terminating\n", what
+        "Unhandled %s; terminating %s.\n",
+        what,
+        wxIsMainThread() ? "the application" : "the thread in which it happened"
     );
 }
 
