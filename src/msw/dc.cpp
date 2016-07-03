@@ -625,6 +625,19 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
     // manually
     //
     // FIXME: possible +/-1 error here, to check!
+    // (x,y) has to represent the left-top corner of the region
+    // so if size values are negative we need to recalculate
+    // parameters of the region to get (x,y) at this corner.
+    if ( w < 0 )
+    {
+        w = -w;
+        x -= (w - 1);
+    }
+    if ( h < 0 )
+    {
+        h = -h;
+        y -= (h - 1);
+    }
     HRGN hrgn = ::CreateRectRgn(LogicalToDeviceX(x),
                                 LogicalToDeviceY(y),
                                 LogicalToDeviceX(x + w),
