@@ -74,11 +74,6 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
 
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
 
-inline bool IsDarkColour(const wxColour& c)
-{
-    return (c.Red() + c.Green() + c.Blue()) * c.Alpha() * 2 < 3 * 255 * 255;
-}
-
 static void DrawButtons(wxDC& dc,
                         const wxRect& _rect,
                         const wxBitmap& bmp,
@@ -421,7 +416,6 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     int drawn_tab_height = border_points[0].y - border_points[1].y;
 
 
-    wxColour text_colour;
     if (page.active)
     {
         // draw active tab
@@ -436,8 +430,6 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
         dc.SetPen(*wxWHITE_PEN);
         dc.SetBrush(*wxWHITE_BRUSH);
         dc.DrawRectangle(r.x+2, r.y+1, r.width-3, r.height-4);
-
-        text_colour = *wxBLACK;
 
         // these two points help the rounded corners appear more antialiased
         dc.SetPen(wxPen(m_activeColour));
@@ -472,11 +464,9 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
         r.height--;
 
         // -- draw top gradient fill for glossy look
-        wxColor top_color = m_baseColour.ChangeLightness(160);
-        wxColor bottom_color = m_baseColour;
-        dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
-
-        text_colour = IsDarkColour(bottom_color) ? *wxWHITE : *wxBLACK;
+        wxColor top_color = m_baseColour;
+        wxColor bottom_color = top_color.ChangeLightness(160);
+        dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
 
         r.y += r.height;
         r.y--;
@@ -542,7 +532,6 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
     // draw tab text
-    dc.SetTextForeground(text_colour);
     dc.DrawText(draw_text,
                 text_offset,
                 drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);
@@ -874,9 +863,6 @@ wxAuiSimpleTabArt::wxAuiSimpleTabArt()
     wxColour normaltabColour = baseColour;
     wxColour selectedtabColour = *wxWHITE;
 
-    m_normalTextColour = IsDarkColour(baseColour) ? *wxWHITE : *wxBLACK;
-    m_selectedTextColour = *wxBLACK;
-
     m_bkBrush = wxBrush(backgroundColour);
     m_normalBkBrush = wxBrush(normaltabColour);
     m_normalBkPen = wxPen(normaltabColour);
@@ -1098,7 +1084,6 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
     // draw tab text
-    dc.SetTextForeground(page.active ? m_selectedTextColour : m_normalTextColour);
     dc.DrawText(draw_text,
                  text_offset,
                  (tab_y + tab_height)/2 - (texty/2) + 1);

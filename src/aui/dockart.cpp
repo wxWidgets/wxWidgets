@@ -172,21 +172,26 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     }
 
     m_baseColour = baseColour;
+    wxColor darker1Colour = baseColour.ChangeLightness(85);
+    wxColor darker2Colour = baseColour.ChangeLightness(75);
+    wxColor darker3Colour = baseColour.ChangeLightness(60);
+    //wxColor darker4Colour = baseColour.ChangeLightness(50);
+    wxColor darker5Colour = baseColour.ChangeLightness(40);
 
-    m_activeCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION);
-    m_activeCaptionGradientColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRADIENTACTIVECAPTION);
-    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
-    m_inactiveCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION);
-    m_inactiveCaptionGradientColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRADIENTINACTIVECAPTION);
-    m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+    m_activeCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    m_activeCaptionGradientColour = wxAuiLightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    m_inactiveCaptionColour = darker1Colour;
+    m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
+    m_inactiveCaptionTextColour = *wxBLACK;
 
     m_sashBrush = wxBrush(baseColour);
     m_backgroundBrush = wxBrush(baseColour);
     m_gripperBrush = wxBrush(baseColour);
 
-    m_borderPen = wxPen(baseColour.ChangeLightness(75));
-    m_gripperPen1 = wxPen(baseColour.ChangeLightness(40));
-    m_gripperPen2 = wxPen(baseColour.ChangeLightness(60));
+    m_borderPen = wxPen(darker2Colour);
+    m_gripperPen1 = wxPen(darker5Colour);
+    m_gripperPen2 = wxPen(darker3Colour);
     m_gripperPen3 = *wxWHITE_PEN;
 
 #ifdef __WXMAC__
