@@ -279,6 +279,20 @@ void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoSetClippingRegion - invalid DC") );
 
+    // Generally, renderers accept negative values of width/height
+    // but for internal calculations we need to have a box definition
+    // in the standard form, with (x,y) pointing to the top-left
+    // corner of the box and with non-negative width and height.
+    if ( w < 0 )
+    {
+        w = -w;
+        x -= (w - 1);
+    }
+    if ( h < 0 )
+    {
+        h = -h;
+        y -= (h - 1);
+    }
     m_graphicContext->Clip( x, y, w, h );
 
     wxDCImpl::DoSetClippingRegion(x, y, w, h);
