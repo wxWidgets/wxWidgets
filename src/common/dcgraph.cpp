@@ -346,7 +346,7 @@ void wxGCDCImpl::DestroyClippingRegion()
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
 
-    m_clipping = false;
+    ResetClipping();
 }
 
 void wxGCDCImpl::DoGetSizeMM( int* width, int* height ) const
