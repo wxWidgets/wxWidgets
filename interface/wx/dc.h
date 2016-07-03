@@ -767,13 +767,15 @@ public:
         uses for the clipping region are for clipping text or for speeding up
         window redraws when only a known area of the screen is damaged.
 
-        Notice that you need to call DestroyClippingRegion() if you want to set
+        @remarks
+        - Calling GetClippingBox() can only make the clipping region smaller,
+        never larger.
+
+        - You need to call DestroyClippingRegion() if you want to set
         the clipping region exactly to the region specified.
 
-        Also note that if the clipping region is empty, any previously set
-        clipping region is destroyed, i.e. it is equivalent to calling
-        DestroyClippingRegion(), and not to clipping out all drawing on the DC
-        as might be expected.
+        - If resulting clipping region is empty, then all drawing on the DC is
+        clipped out (all changes made by drawing operations are masked out).
 
         @see DestroyClippingRegion(), wxRegion
     */
