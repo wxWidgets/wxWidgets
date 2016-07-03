@@ -189,6 +189,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCDC );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCDC, "ClippingBoxTestCaseGCDC" );
 #endif // !__WXMSW__
 
+#ifdef __WXMSW__
+// GDI+ and Direct2D are available only under MSW.
+
 #if wxUSE_GRAPHICS_GDIPLUS
 class ClippingBoxTestCaseGDIPlus : public ClippingBoxTestCaseGCDC
 {
@@ -270,6 +273,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseDirect2D );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseDirect2D, "ClippingBoxTestCaseDirect2D" );
 
 #endif // wxUSE_GRAPHICS_DIRECT2D
+
+#endif // __WXMSW__
 
 #if wxUSE_CAIRO
 class ClippingBoxTestCaseCairo : public ClippingBoxTestCaseGCDC
