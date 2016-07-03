@@ -591,9 +591,6 @@ wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) co
     {
         wxMSWDCImpl *self = wxConstCast(this, wxMSWDCImpl);
         self->UpdateClipBox();
-
-        if ( !m_clipX1 && !m_clipX2 )
-            self->m_clipping = false;
     }
 
     wxDCImpl::DoGetClippingBox(x, y, w, h);
