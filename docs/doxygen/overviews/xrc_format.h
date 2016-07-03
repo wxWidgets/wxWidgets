@@ -257,6 +257,10 @@ where x and y are integers. Either of the components (or both) may be "-1" to
 signify default value. As a shortcut, empty string is equivalent to "-1,-1"
 (= wxDefaultSize or wxDefaultPosition).
 
+Notice that the dialog unit suffix "d" applies to both @c x and @c y if it's
+specified and cannot be specified after the first component, but only at the
+end.
+
 Examples:
 @code
 42,-1
