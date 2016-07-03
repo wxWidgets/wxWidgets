@@ -445,14 +445,17 @@ public:
     virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
                                   wxCoord *w, wxCoord *h) const
     {
+        int dcWidth, dcHeight;
+        DoGetSize(&dcWidth, &dcHeight);
+
         if ( x )
-            *x = m_clipX1;
+            *x = m_clipping ? m_clipX1 : 0;
         if ( y )
-            *y = m_clipY1;
+            *y = m_clipping ? m_clipY1 : 0;
         if ( w )
-            *w = m_clipX2 - m_clipX1;
+            *w = m_clipping ? m_clipX2 - m_clipX1 : dcWidth;
         if ( h )
-            *h = m_clipY2 - m_clipY1;
+            *h = m_clipping ? m_clipY2 - m_clipY1 : dcHeight;
     }
 
     virtual void DestroyClippingRegion() { ResetClipping(); }

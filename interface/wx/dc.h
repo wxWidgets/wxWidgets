@@ -755,6 +755,8 @@ public:
 
     /**
         Gets the rectangle surrounding the current clipping region.
+        If no clipping region is set this function returns the extent
+        of the device context.
     */
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
 
