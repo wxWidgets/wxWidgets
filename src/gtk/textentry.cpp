@@ -120,7 +120,13 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
     }
 
     if ( handled )
+    {
+        // We must update the position to point after the newly inserted text,
+        // as expected by GTK+.
+        *position = text->GetInsertionPoint();
+
         g_signal_stop_emission_by_name (editable, "insert_text");
+    }
 }
 
 //-----------------------------------------------------------------------------
