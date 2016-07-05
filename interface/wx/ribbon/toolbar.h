@@ -144,7 +144,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* clientData = NULL);
 
     /**
         Add a separator to the tool bar.
@@ -249,7 +249,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* clientData = NULL);
 
     /**
         Insert a separator to the tool bar at the specified position.
