@@ -110,9 +110,9 @@ struct wxFontMetrics
     abstract API for drawing on any of them.
 
     wxWidgets offers an alternative drawing API based on the modern drawing
-    backends GDI+, CoreGraphics and Cairo. See wxGraphicsContext, wxGraphicsRenderer
-    and related classes. There is also a wxGCDC linking the APIs by offering
-    the wxDC API on top of a wxGraphicsContext.
+    backends GDI+, CoreGraphics, Cairo and Direct2D. See wxGraphicsContext,
+    wxGraphicsRenderer and related classes. There is also a wxGCDC linking
+    the APIs by offering the wxDC API on top of a wxGraphicsContext.
 
     wxDC is an abstract base class and cannot be created directly.
     Use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or
@@ -770,10 +770,10 @@ public:
         window redraws when only a known area of the screen is damaged.
 
         @remarks
-        - Calling GetClippingBox() can only make the clipping region smaller,
+        - Calling this function can only make the clipping region smaller,
         never larger.
 
-        - You need to call DestroyClippingRegion() if you want to set
+        - You need to call DestroyClippingRegion() first if you want to set
         the clipping region exactly to the region specified.
 
         - If resulting clipping region is empty, then all drawing on the DC is

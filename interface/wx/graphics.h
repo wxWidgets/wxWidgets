@@ -451,12 +451,24 @@ public:
     static wxGraphicsContext* Create();
 
     /**
-        Clips drawings to the specified region.
+        Sets the clipping region to the intersection of the given region
+        and the previously set clipping region.
+        The clipping region is an area to which drawing is restricted.
+
+        @remarks
+        - Calling this function can only make the clipping region smaller,
+        never larger.
+
+        - You need to call ResetClip() first if you want to set the clipping
+        region exactly to the region specified.
+
+        - If resulting clipping region is empty, then all drawing upon the context
+        is clipped out (all changes made by drawing operations are masked out).
     */
     virtual void Clip(const wxRegion& region) = 0;
 
     /**
-        Clips drawings to the specified rectangle.
+        @overload
     */
     virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) = 0;
 

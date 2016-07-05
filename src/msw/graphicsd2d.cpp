@@ -3388,11 +3388,18 @@ private:
     ID2D1RenderTarget* GetRenderTarget() const;
 
 private:
-    enum ClipMode
+    enum LayerType
     {
-        CLIP_MODE_NONE,
-        CLIP_MODE_AXIS_ALIGNED_RECTANGLE,
-        CLIP_MODE_GEOMETRY
+        CLIP_AXIS_ALIGNED_RECT,
+        CLIP_LAYER,
+        OTHER_LAYER
+    };
+
+    struct LayerData
+    {
+        LayerType type;
+        D2D1_LAYER_PARAMETERS params;
+        wxCOMPtr<ID2D1Layer> layer;
     };
 
 private:
@@ -3405,14 +3412,7 @@ private:
     // The context owns these pointers and is responsible for releasing them.
     wxStack<wxCOMPtr<ID2D1DrawingStateBlock> > m_stateStack;
 
-    ClipMode m_clipMode;
-
-    bool m_clipLayerAcquired;
-
-    // A direct2d layer is a device-dependent resource.
-    wxCOMPtr<ID2D1Layer> m_clipLayer;
-
-    wxStack<wxCOMPtr<ID2D1Layer> > m_layers;
+    wxStack<LayerData> m_layers;
 
     ID2D1RenderTarget* m_cachedRenderTarget;
 
@@ -3472,9 +3472,7 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
 void wxD2DContext::Init()
 {
     m_cachedRenderTarget = NULL;
-    m_clipMode = CLIP_MODE_NONE;
     m_composition = wxCOMPOSITION_OVER;
-    m_clipLayerAcquired = false;
     m_renderTargetHolder->Bind(this);
     m_enableOffset = true;
     EnsureInitialized();
@@ -3482,11 +3480,20 @@ void wxD2DContext::Init()
 
 wxD2DContext::~wxD2DContext()
 {
-    ResetClip();
-
-    while (!m_layers.empty())
+    // Remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
     {
-        EndLayer();
+        LayerData ld = m_layers.top();
+        m_layers.pop();
+
+        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
+        {
+            GetRenderTarget()->PopAxisAlignedClip();
+        }
+        else
+        {
+            GetRenderTarget()->PopLayer();
+        }
     }
 
     HRESULT result = GetRenderTarget()->EndDraw();
@@ -3502,47 +3509,74 @@ ID2D1RenderTarget* wxD2DContext::GetRenderTarget() const
 
 void wxD2DContext::Clip(const wxRegion& region)
 {
-    GetRenderTarget()->Flush();
-    ResetClip();
-
     wxCOMPtr<ID2D1Geometry> clipGeometry = wxD2DConvertRegionToGeometry(m_direct2dFactory, region);
 
-    if (!m_clipLayerAcquired)
-    {
-        GetRenderTarget()->CreateLayer(&m_clipLayer);
-        m_clipLayerAcquired = true;
-    }
+    wxCOMPtr<ID2D1Layer> clipLayer;
+    GetRenderTarget()->CreateLayer(&clipLayer);
 
-    GetRenderTarget()->PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry), m_clipLayer);
+    LayerData ld;
+    ld.type = CLIP_LAYER;
+    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry);
+    ld.layer = clipLayer;
 
-    m_clipMode = CLIP_MODE_GEOMETRY;
+    GetRenderTarget()->PushLayer(ld.params, clipLayer);
+    // Store layer parameters.
+    m_layers.push(ld);
 }
 
 void wxD2DContext::Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
-    GetRenderTarget()->Flush();
-    ResetClip();
+    LayerData ld;
+    ld.type = CLIP_AXIS_ALIGNED_RECT;
+    ld.params = D2D1::LayerParameters(D2D1::RectF(x, y, x + w, y + h),
+                          NULL, D2D1_ANTIALIAS_MODE_ALIASED);
 
-    GetRenderTarget()->PushAxisAlignedClip(
-        D2D1::RectF(x, y, x + w, y + h),
-        D2D1_ANTIALIAS_MODE_ALIASED);
-
-    m_clipMode = CLIP_MODE_AXIS_ALIGNED_RECTANGLE;
+    GetRenderTarget()->PushAxisAlignedClip(ld.params.contentBounds,
+                                           D2D1_ANTIALIAS_MODE_ALIASED);
+    // Store layer parameters.
+    m_layers.push(ld);
 }
 
 void wxD2DContext::ResetClip()
 {
-    if (m_clipMode == CLIP_MODE_AXIS_ALIGNED_RECTANGLE)
+    wxStack<LayerData> layersToRestore;
+    // Remove all clipping layers from the stack of layers.
+    while ( !m_layers.empty() )
     {
-        GetRenderTarget()->PopAxisAlignedClip();
-    }
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
-    if (m_clipMode == CLIP_MODE_GEOMETRY)
-    {
+        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
+        {
+            GetRenderTarget()->PopAxisAlignedClip();
+            continue;
+        }
+
+        if ( ld.type == CLIP_LAYER )
+        {
+            GetRenderTarget()->PopLayer();
+            ld.layer.reset();
+            continue;
+        }
+
         GetRenderTarget()->PopLayer();
+        // Save non-clipping layer
+        layersToRestore.push(ld);
     }
 
-    m_clipMode = CLIP_MODE_NONE;
+    HRESULT hr = GetRenderTarget()->Flush();
+    wxCHECK_HRESULT_RET(hr);
+
+    // Re-apply all remaining non-clipping layers.
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
 }
 
 void* wxD2DContext::GetNativeContext()
@@ -3633,28 +3667,79 @@ void wxD2DContext::BeginLayer(wxDouble opacity)
 {
     wxCOMPtr<ID2D1Layer> layer;
     GetRenderTarget()->CreateLayer(&layer);
-    m_layers.push(layer);
 
-    GetRenderTarget()->PushLayer(
-        D2D1::LayerParameters(D2D1::InfiniteRect(),
-            NULL,
-            D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
-            D2D1::IdentityMatrix(), opacity),
-        layer);
+    LayerData ld;
+    ld.type = OTHER_LAYER;
+    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(),
+                        NULL,
+                        D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
+                        D2D1::IdentityMatrix(), opacity);
+    ld.layer = layer;
+
+    GetRenderTarget()->PushLayer(ld.params, layer);
+
+    // Store layer parameters.
+    m_layers.push(ld);
 }
 
 void wxD2DContext::EndLayer()
 {
-    if (!m_layers.empty())
+    wxStack<LayerData> layersToRestore;
+    // Temporarily remove all clipping layers
+    // above the first standard layer
+    // and next permanently remove this layer.
+    while ( !m_layers.empty() )
     {
-        wxCOMPtr<ID2D1Layer> topLayer = m_layers.top();
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
+        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
+        {
+            GetRenderTarget()->PopAxisAlignedClip();
+            layersToRestore.push(ld);
+            continue;
+        }
+
+        if ( ld.type == CLIP_LAYER )
+        {
+            GetRenderTarget()->PopLayer();
+            layersToRestore.push(ld);
+            continue;
+        }
+
+        // We found a non-clipping layer to remove.
         GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        break;
+    }
 
+    if ( m_layers.empty() )
+    {
         HRESULT hr = GetRenderTarget()->Flush();
         wxCHECK_HRESULT_RET(hr);
+    }
 
-        m_layers.pop();
+    // Re-apply all stored clipping layers.
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
+        {
+            GetRenderTarget()->PushAxisAlignedClip(ld.params.contentBounds,
+                                                   ld.params.maskAntialiasMode);
+        }
+        else if ( ld.type == CLIP_LAYER )
+        {
+            GetRenderTarget()->PushLayer(ld.params, ld.layer);
+        }
+        else
+        {
+            wxFAIL_MSG( wxS("Invalid layer type") );
+        }
+        // Store layer parameters.
+        m_layers.push(ld);
     }
 }
 
@@ -3880,9 +3965,6 @@ void wxD2DContext::AdjustRenderTargetSize()
 void wxD2DContext::ReleaseDeviceDependentResources()
 {
     ReleaseResources();
-
-    m_clipLayer.reset();
-    m_clipLayerAcquired = false;
 }
 
 void wxD2DContext::DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
@@ -3975,11 +4057,54 @@ void wxD2DContext::DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 
 void wxD2DContext::Flush()
 {
-    HRESULT result = m_renderTargetHolder->Flush();
+    wxStack<LayerData> layersToRestore;
+    // Temporarily remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
+    {
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
-    if (result == (HRESULT)D2DERR_RECREATE_TARGET)
+        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
+        {
+            GetRenderTarget()->PopAxisAlignedClip();
+        }
+        else
+        {
+            GetRenderTarget()->PopLayer();
+        }
+
+        // Save layer data.
+        layersToRestore.push(ld);
+    }
+
+    HRESULT hr = m_renderTargetHolder->Flush();
+
+    if ( hr == (HRESULT)D2DERR_RECREATE_TARGET )
     {
         ReleaseDeviceDependentResources();
+    }
+    else
+    {
+        wxCHECK_HRESULT_RET(hr);
+    }
+
+    // Re-apply all layers.
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
+        {
+            GetRenderTarget()->PushAxisAlignedClip(ld.params.contentBounds,
+                                                   ld.params.maskAntialiasMode);
+        }
+        else
+        {
+            GetRenderTarget()->PushLayer(ld.params, ld.layer);
+        }
+        // Store layer parameters.
+        m_layers.push(ld);
     }
 }
 
