@@ -39,7 +39,7 @@ public:
     */
     wxRibbonPanelEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonPanel* panel = NULL)
+                       wxRibbonPanel* panel = NULL);
 
     /**
         Returns the panel relating to this event.
