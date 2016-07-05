@@ -246,6 +246,16 @@ public:
 
     virtual ~ClippingBoxTestCaseDirect2D() {}
 
+    virtual void FlushDC()
+    {
+        // Apparently, flushing native Direct2D renderer
+        // is not enough to update underlying DC (bitmap)
+        // and therefore we have to destroy the renderer
+        // to do so.
+        ClippingBoxTestCaseGCDC::FlushDC();
+        m_gcdc->SetGraphicsContext(NULL);
+    }
+
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseDirect2D );
         CPPUNIT_TEST( InitialState );
@@ -323,9 +333,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseCairo, "ClippingBoxTes
 
 void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
 {
-    // Update wxDC contents.
-    FlushDC();
-
     // Check clipping box boundaries.
     int clipX, clipY, clipW, clipH;
     m_dc->GetClippingBox(&clipX, &clipY, &clipW, &clipH);
@@ -359,6 +366,9 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
     {
         msg = msgDim;
     }
+
+    // Update wxDC contents.
+    FlushDC();
 
     // Check whether diagonal corners of the clipping box
     // are actually drawn at the edge of the clipping region.
