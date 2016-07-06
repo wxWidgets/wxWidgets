@@ -1581,7 +1581,7 @@ can also have some optional XML @em attributes (not properties!):
 @beginTable
 @hdr3col{attribute, type, description}
 @row3col{tooltip, @ref overview_xrcformat_type_string,
-     Tooltip to show over this ratio button (default: none).}
+     Tooltip to show over this radio button (default: none).}
 @row3col{helptext, @ref overview_xrcformat_type_string,
      Contextual help for this radio button (default: none).}
 @row3col{enabled, @ref overview_xrcformat_type_bool,
