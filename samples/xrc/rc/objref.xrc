@@ -12,7 +12,6 @@
                     <value>This dialog demonstrates the use of object references and ID arrays.\n\nAs you turn the pages of the notebook, you will notice that each has an identical section at the bottom. Instead of writing that section's xml several times, this is done just once, as a wxPanel named 'bottom__panel'. The panel is then added to each page's sizer by the single line:   &lt;object__ref ref=&quot;bottom__panel&quot;/&gt;</value>
                     <style>wxTE_MULTILINE|wxTE_READONLY</style>
                   </object>
-                  <option>1</option>
                   <flag>wxALL|wxEXPAND</flag>
                   <border>5</border>
                 </object>
@@ -42,7 +41,6 @@
                     <value>ID ranges are a way to simplify the management of several similar controls, especially their event-handling.\nAn ID range is declared by putting something like this into the XRC file:\n  &lt;ids-range name=&quot;check&quot; size=&quot;3&quot; start=&quot;10000&quot; /&gt;\n'size' and 'start' being optional.\n\nIf you then give an item the name 'check[2]', it will be allocated that ID in the range.\n\nBy default the IDs in a range are negative, being assigned by wxWindow::NewControlId. If you wish, you can specify the start of the range; if so, the IDs *must* be positive (and it's your responsibility to avoid clashes, so start above wxID__HIGHEST).</value>
                     <style>wxTE_MULTILINE|wxTE_READONLY</style>
                   </object>
-                  <option>1</option>
                   <flag>wxALL|wxEXPAND</flag>
                   <border>5</border>
                 </object>
@@ -145,7 +143,6 @@
                 </object>
                 <object class="sizeritem">
                   <object_ref ref="bottom_panel"/>
-                  <option>1</option>
                   <flag>wxEXPAND</flag>
                 </object>
                 <cols>1</cols>
@@ -166,7 +163,6 @@
                     <value>This not very useful calculator demonstrates some features of ID ranges. One range is defined for the number keys, and another for the operators.\n\nIf you look at the .xrc file, you'll see that I wrote:\n    &lt;ids-range name=&quot;digits&quot; size=&quot;8&quot;/&gt;\ncreating that range with a size of 8 (I must have forgotten to count my thumbs). The code will still work, though: the actual number of range items is counted when the file is loaded, and the range extended if necessary to accommodate them. However if the size is too big, it isn't truncated.\n\nAn ID range always has the special items defined: &lt;rangename&gt;[start] and  &lt;rangename&gt;[end]. So, for the range 'digits', digits[start] == digits[0], and digits[end] == digits[9].  [end] will always refer to the end of the range, even if there's no object with that ID.\n\nThe digits of the calculator are named 'digits[0]' to 'digits[9]'. Adjacent range items are guaranteed to be assigned consecutive IDs, so code such as this will work as expected:\n    for (int n=XRCID(&quot;digits[start]&quot;); n &lt; XRCID(&quot;digits[end]&quot;); ++n) { DoFoo(n); }\nor\n    int index = event.GetId() - XRCID(&quot;digits[0]&quot;);</value>
                     <style>wxTE_MULTILINE|wxTE_READONLY</style>
                   </object>
-                  <option>1</option>
                   <flag>wxALL|wxEXPAND</flag>
                   <border>5</border>
                 </object>
@@ -322,7 +318,6 @@
                 </object>
                 <object class="sizeritem">
                   <object_ref ref="bottom_panel"/>
-                  <option>1</option>
                   <flag>wxEXPAND</flag>
                 </object>
                 <cols>1</cols>
@@ -336,7 +331,6 @@
             <label>Calc</label>
           </object>
         </object>
-        <option>1</option>
         <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
         <border>5</border>
       </object>
