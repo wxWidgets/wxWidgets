@@ -13865,7 +13865,10 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_FLOAT);
+        RemoveFlag(wxTEXT_BOX_ATTR_FLOAT);
+    }
 
     if (attr.HasClearMode())
     {
@@ -13884,7 +13887,10 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_CLEAR);
+        RemoveFlag(wxTEXT_BOX_ATTR_CLEAR);
+    }
 
     if (attr.HasCollapseBorders())
     {
@@ -13903,7 +13909,10 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_COLLAPSE_BORDERS);
+        RemoveFlag(wxTEXT_BOX_ATTR_COLLAPSE_BORDERS);
+    }
 
     if (attr.HasVerticalAlignment())
     {
@@ -13922,7 +13931,10 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT);
+        RemoveFlag(wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT);
+    }
 
     if (attr.HasWhitespaceMode())
     {
@@ -13941,7 +13953,10 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_WHITESPACE);
+        RemoveFlag(wxTEXT_BOX_ATTR_WHITESPACE);
+    }
 
     if (attr.HasCornerRadius())
     {
@@ -13961,7 +13976,10 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
+        RemoveFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
+    }
 
     if (attr.HasBoxStyleName())
     {
@@ -13980,7 +13998,10 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME);
+        RemoveFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME);
+    }
 
     m_margins.CollectCommonAttributes(attr.m_margins, clashingAttr.m_margins, absentAttr.m_margins);
     m_padding.CollectCommonAttributes(attr.m_padding, clashingAttr.m_padding, absentAttr.m_padding);
@@ -14140,7 +14161,10 @@ void wxTextAttrBorder::CollectCommonAttributes(const wxTextAttrBorder& attr, wxT
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_STYLE);
+        RemoveFlag(wxTEXT_BOX_ATTR_BORDER_STYLE);
+    }
 
     if (attr.HasColour())
     {
@@ -14159,7 +14183,10 @@ void wxTextAttrBorder::CollectCommonAttributes(const wxTextAttrBorder& attr, wxT
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+        RemoveFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+    }
 
     m_borderWidth.CollectCommonAttributes(attr.m_borderWidth, clashingAttr.m_borderWidth, absentAttr.m_borderWidth);
 }
@@ -14280,7 +14307,11 @@ void wxTextAttrDimension::CollectCommonAttributes(const wxTextAttrDimension& att
         }
     }
     else
+    {
         absentAttr.SetValid(true);
+        SetValue(0, 0);
+        SetValid(false);
+    }
 }
 
 wxTextAttrDimensionConverter::wxTextAttrDimensionConverter(wxDC& dc, double scale, const wxSize& parentSize)
@@ -14461,6 +14492,10 @@ void wxTextAttrCollectCommonAttributes(wxTextAttr& currentStyle, const wxTextAtt
 {
     absentAttr.SetFlags(absentAttr.GetFlags() | (~attr.GetFlags() & wxTEXT_ATTR_ALL));
     absentAttr.SetTextEffectFlags(absentAttr.GetTextEffectFlags() | (~attr.GetTextEffectFlags() & 0xFFFF));
+
+    // Remove flags for attributes that are absent
+    currentStyle.SetFlags(currentStyle.GetFlags() & ~absentAttr.GetFlags());
+    currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~absentAttr.GetTextEffectFlags());
 
     long forbiddenFlags = clashingAttr.GetFlags()|absentAttr.GetFlags();
 
@@ -15744,7 +15779,10 @@ void wxTextAttrShadow::CollectCommonAttributes(const wxTextAttrShadow& attr, wxT
         }
     }
     else
+    {
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+        RemoveFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+    }
 }
 
 #endif
