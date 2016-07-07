@@ -862,7 +862,7 @@ public:
     /**
         Calculate the client size of a wxRibbonGallery control for a given
         size. This should act as the inverse to GetGallerySize(), and decrement
-        the given size by enough to fir the gallery border, buttons, and other
+        the given size by enough to fit the gallery border, buttons, and other
         chrome.
         
         @param dc
