@@ -669,7 +669,16 @@ wxPropertyGridInterface::SetPropertyBackgroundColour( wxPGPropArg id,
 {
     wxPG_PROP_ARG_CALL_PROLOG()
     p->SetBackgroundColour(colour, flags);
-    RefreshProperty(p);
+
+    // Redraw the control
+    wxPropertyGrid* pg = m_pState->GetGrid();
+    if ( pg == p->GetGrid() )
+    {
+        if ( flags & wxPG_RECURSE )
+            pg->DrawItemAndChildren(p);
+        else
+            pg->DrawItem(p);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -680,7 +689,16 @@ void wxPropertyGridInterface::SetPropertyTextColour( wxPGPropArg id,
 {
     wxPG_PROP_ARG_CALL_PROLOG()
     p->SetTextColour(colour, flags);
-    RefreshProperty(p);
+
+    // Redraw the control
+    wxPropertyGrid* pg = m_pState->GetGrid();
+    if ( pg == p->GetGrid() )
+    {
+        if ( flags & wxPG_RECURSE )
+            pg->DrawItemAndChildren(p);
+        else
+            pg->DrawItem(p);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -695,8 +713,17 @@ void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id)
 void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id, int flags)
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-
     p->SetDefaultColours(flags);
+
+    // Redraw the control
+    wxPropertyGrid* pg = m_pState->GetGrid();
+    if ( pg == p->GetGrid() )
+    {
+        if ( flags & wxPG_RECURSE )
+            pg->DrawItemAndChildren(p);
+        else
+            pg->DrawItem(p);
+    }
 }
 
 // -----------------------------------------------------------------------

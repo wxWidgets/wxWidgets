@@ -156,6 +156,9 @@ public:
     /**
         Disables a property.
 
+        @remarks
+        Property is refreshed with new settings.
+
         @see EnableProperty(), wxPGProperty::Enable()
     */
     bool DisableProperty( wxPGPropArg id );
@@ -175,6 +178,9 @@ public:
             Name or pointer to a property.
         @param enable
             If @false, property is disabled instead.
+
+        @remarks
+        Property is refreshed with new settings.
 
         @see wxPGProperty::Enable()
     */
@@ -603,6 +609,9 @@ public:
     /**
         Disables (limit = @true) or enables (limit = @false) wxTextCtrl editor
         of a property, if it is not the sole mean to edit the value.
+
+        @remarks
+        Property is refreshed with new settings.
     */
     void LimitPropertyEditing( wxPGPropArg id, bool limit = true );
 
@@ -768,8 +777,10 @@ public:
             Optional.
             Use wxPG_RECURSE to set the attribute to child properties recursively.
 
-        @remarks Setting attribute's value to wxNullVariant will simply remove it
-                 from property's set of attributes.
+        @remarks
+        - Setting attribute's value to wxNullVariant will simply remove it
+        from property's set of attributes.
+        - Property is refreshed with new settings.
     */
     void SetPropertyAttribute( wxPGPropArg id, const wxString& attrName,
                                wxVariant value, long argFlags = 0 );
@@ -778,11 +789,14 @@ public:
         Sets property attribute for all applicapple properties.
         Be sure to use this method only after all properties have been
         added to the grid.
+
+        @remarks
+        Properties are refreshed with new settings.
     */
     void SetPropertyAttributeAll( const wxString& attrName, wxVariant value );
 
     /**
-        Sets background colour of a property.
+        Sets background colour of given property.
 
         @param id
             Property name or pointer.
@@ -794,6 +808,10 @@ public:
             Default is wxPG_RECURSE which causes colour to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
+
+        @remarks
+        - If category is tried to set recursively, only its children are affected.
+        - Property is redrawn with new colour.
     */
     void SetPropertyBackgroundColour( wxPGPropArg id,
                                       const wxColour& colour,
@@ -823,12 +841,17 @@ public:
 
     /**
         Resets text and background colours of given property.
+
         @param id
             Property name or pointer.
 
         @param flags
             Default is wxPG_DONT_RECURSE which causes colour to be reset
             only for the property in question (for backward compatibility).
+
+        @remarks
+        - If category is tried to set recursively, only its children are affected.
+        - Property is redrawn with new colours.
     */
     void SetPropertyColoursToDefault(wxPGPropArg id, int flags = wxPG_DONT_RECURSE);
 
@@ -887,8 +910,10 @@ public:
             By default changes are applied recursively. Set this parameter
             to wxPG_DONT_RECURSE to prevent this.
 
-        @remarks This is mainly for use with textctrl editor. Only some other
-                 editors fully support it.
+        @remarks
+        - This is mainly for use with textctrl editor. Only some other
+        editors fully support it.
+        - Property is refreshed with new settings.
     */
     void SetPropertyReadOnly( wxPGPropArg id, bool set = true,
                               int flags = wxPG_RECURSE );
@@ -936,18 +961,22 @@ public:
 
 
     /**
-        Sets text colour of a property.
+        Sets text colour of given property.
 
         @param id
             Property name or pointer.
 
         @param colour
-            New background colour.
+            New text colour.
 
         @param flags
             Default is wxPG_RECURSE which causes colour to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
+
+        @remarks
+        - If category is tried to set recursively, only its children are affected.
+        - Property is redrawn with new colour.
     */
     void SetPropertyTextColour( wxPGPropArg id,
                                 const wxColour& colour,

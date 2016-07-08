@@ -1664,6 +1664,10 @@ public:
             Default is wxPG_RECURSE which causes colour to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
+
+        @remarks
+        Unlike wxPropertyGridInterface::SetPropertyBackgroundColour(),
+        this does not automatically update the display.
     */
     void SetBackgroundColour( const wxColour& colour,
                               int flags = wxPG_RECURSE );
@@ -1753,8 +1757,11 @@ public:
     /**
         Sets property's label.
 
-        @remarks Properties under same parent may have same labels. However,
-                property names must still remain unique.
+        @remarks
+        - Properties under same parent may have same labels. However,
+        property names must still remain unique.
+        - Unlike wxPropertyGridInterface::SetPropertyLabel(),
+        this does not automatically update the display.
     */
     void SetLabel( const wxString& label );
 
@@ -1796,6 +1803,10 @@ public:
             Default is wxPG_RECURSE which causes colour to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
+
+        @remarks
+        Unlike wxPropertyGridInterface::SetPropertyTextColour(),
+        this does not automatically update the display.
     */
     void SetTextColour( const wxColour& colour,
                         int flags = wxPG_RECURSE );
@@ -1807,6 +1818,10 @@ public:
             Default is wxPG_RECURSE which causes colours to be set recursively.
             Omit this flag to only set colours for the property in question
             and not any of its children.
+
+        @remarks
+        Unlike wxPropertyGridInterface::SetPropertyColoursToDefault(),
+        this does not automatically update the display.
     */
     void SetDefaultColours(int flags = wxPG_RECURSE);
 
