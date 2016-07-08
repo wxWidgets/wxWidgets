@@ -319,6 +319,8 @@ WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
 
 enum wxPG_GETPROPERTYVALUES_FLAGS
 {
+/** Flags for wxPropertyGrid::SetPropertyAttribute() etc */
+wxPG_DONT_RECURSE                 = 0x00000000,
 
 /** Flags for wxPropertyGridInterface::GetPropertyValues */
 wxPG_KEEP_STRUCTURE               = 0x00000010,
@@ -339,11 +341,7 @@ wxPG_FORCE                        = 0x00000100,
     Sorting done by wxPG_AUTO_SORT option uses this.
 */
 wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
-
 };
-
-/** Flags for wxPropertyGrid::SetPropertyAttribute() etc */
-#define wxPG_DONT_RECURSE         0x00000000
 
 // -----------------------------------------------------------------------
 
