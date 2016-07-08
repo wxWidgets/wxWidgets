@@ -427,7 +427,7 @@ public:
 
         @since 2.9.5
     */
-    virtual int GetItemId(wxRibbonButtonBarButtonBase *) const;
+    virtual int GetItemId(wxRibbonButtonBarButtonBase *item) const;
 
     /**
         Calculate button layouts and positions.
