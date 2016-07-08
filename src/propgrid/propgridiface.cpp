@@ -279,9 +279,17 @@ void wxPropertyGridInterface::SetPropertyReadOnly( wxPGPropArg id, bool set, int
     wxPG_PROP_ARG_CALL_PROLOG()
 
     if ( flags & wxPG_RECURSE )
+    {
         p->SetFlagRecursively(wxPG_PROP_READONLY, set);
+    }
     else
+    {
+        // Do nothing if flag is already set.
+        if ( p->HasFlag(wxPG_PROP_READONLY) )
+            return;
+
         p->ChangeFlag(wxPG_PROP_READONLY, set);
+    }
 
     wxPropertyGridPageState* state = p->GetParentState();
     if( state )
@@ -556,6 +564,15 @@ wxPGProperty* wxPropertyGridInterface::GetPropertyByName( const wxString& name )
 bool wxPropertyGridInterface::HideProperty( wxPGPropArg id, bool hide, int flags )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
+
+    // Do nothing if single property is already hidden/visible as requested.
+    if ( !(flags & wxPG_RECURSE) )
+    {
+        if ( hide && p->HasFlag(wxPG_PROP_HIDDEN) )
+            return false;
+        if ( !hide && !p->HasFlag(wxPG_PROP_HIDDEN) )
+            return false;
+    }
 
     wxPropertyGrid* pg = m_pState->GetGrid();
 
