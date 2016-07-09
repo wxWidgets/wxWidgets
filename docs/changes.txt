@@ -101,6 +101,7 @@ wxGTK:
 - Support background colour in wxDataViewCtrl attributes.
 - Improve wxSpinCtrl best size calculation.
 - Implement support for icon locations in wxMimeTypesManager (Hanmac).
+- Cosmetic fix for empty wxCheckBoxes display (Chuddah).
 
 wxMSW:
 
