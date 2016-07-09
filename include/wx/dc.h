@@ -449,13 +449,13 @@ public:
         DoGetSize(&dcWidth, &dcHeight);
 
         if ( x )
-            *x = m_clipping ? m_clipX1 : 0;
+            *x = m_clipping ? m_clipX1 : DeviceToLogicalX(0);
         if ( y )
-            *y = m_clipping ? m_clipY1 : 0;
+            *y = m_clipping ? m_clipY1 : DeviceToLogicalY(0);
         if ( w )
-            *w = m_clipping ? m_clipX2 - m_clipX1 : dcWidth;
+            *w = m_clipping ? m_clipX2 - m_clipX1 : DeviceToLogicalXRel(dcWidth);
         if ( h )
-            *h = m_clipping ? m_clipY2 - m_clipY1 : dcHeight;
+            *h = m_clipping ? m_clipY2 - m_clipY1 : DeviceToLogicalYRel(dcHeight);
     }
 
     virtual void DestroyClippingRegion() { ResetClipping(); }
