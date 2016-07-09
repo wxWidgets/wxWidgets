@@ -1202,9 +1202,10 @@ void wxGCDCImpl::Clear(void)
     wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
     m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
     // maximum positive coordinate Cairo can handle is 2^23 - 1
+    // Use a value slightly less than this to be sure we avoid the limit
     DoDrawRectangle(
         DeviceToLogicalX(0), DeviceToLogicalY(0),
-        DeviceToLogicalXRel(0x007fffff), DeviceToLogicalYRel(0x007fffff));
+        DeviceToLogicalXRel(0x800000 - 64), DeviceToLogicalYRel(0x800000 - 64));
     m_graphicContext->SetCompositionMode(formerMode);
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
