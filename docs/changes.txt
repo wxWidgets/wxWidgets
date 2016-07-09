@@ -626,6 +626,7 @@ wxGTK:
 - Fix GTK+ warnings when refreshing wxListCtrl items (Scott Talbert).
 - Fix using wxHTTP and wxFTP from worker thread.
 - Make items selected from keyboard visible in wxListCtrl (Jonathan Dagresta).
+- Cosmetic fix for empty wxCheckBoxes display (Chuddah).
 - Fix crashes in wxFileSystemWatcher implementation (David Hart).
 
 wxMSW:
