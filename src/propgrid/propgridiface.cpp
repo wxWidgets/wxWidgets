@@ -635,6 +635,9 @@ void wxPropertyGridInterface::SetPropertyLabel( wxPGPropArg id, const wxString& 
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
+    if ( p->GetLabel() == newproplabel )
+        return;
+
     p->SetLabel( newproplabel );
 
     wxPropertyGridPageState* state = p->GetParentState();
@@ -646,9 +649,19 @@ void wxPropertyGridInterface::SetPropertyLabel( wxPGPropArg id, const wxString& 
     if ( pg->GetState() == state )
     {
         if ( pg->HasFlag(wxPG_AUTO_SORT) )
+        {
             pg->Refresh();
+            // If any property is selected it has to
+            // be refreshed in the new location.
+            if ( pg == p->GetGrid() && pg->GetSelectedProperty() )
+            {
+                RefreshProperty(pg->GetSelectedProperty());
+            }
+        }
         else
+        {
             pg->DrawItem( p );
+        }
     }
 }
 
