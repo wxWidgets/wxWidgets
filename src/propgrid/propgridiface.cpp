@@ -284,8 +284,10 @@ void wxPropertyGridInterface::SetPropertyReadOnly( wxPGPropArg id, bool set, int
     }
     else
     {
-        // Do nothing if flag is already set.
-        if ( p->HasFlag(wxPG_PROP_READONLY) )
+        // Do nothing if flag is already set as required.
+        if ( set && p->HasFlag(wxPG_PROP_READONLY) )
+            return;
+        if ( !set && !p->HasFlag(wxPG_PROP_READONLY) )
             return;
 
         p->ChangeFlag(wxPG_PROP_READONLY, set);
