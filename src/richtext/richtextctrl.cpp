@@ -5018,6 +5018,26 @@ bool wxRichTextCtrl::SetFocusObject(wxRichTextParagraphLayoutBox* obj, bool setC
 }
 
 #if wxUSE_DRAG_AND_DROP
+// Helper function for OnDrop. Returns true if the target is contained within source,
+// and if it is, also returns the position relative to the source so we can properly check if it's
+// within the current selection.
+static bool wxRichTextCtrlIsContainedIn(wxRichTextParagraphLayoutBox* source, wxRichTextParagraphLayoutBox* target,
+                                        long& position)
+{
+    wxRichTextObject* t = target;
+    while (t)
+    {
+        if (t->GetParent() == source)
+        {
+            position = t->GetRange().GetStart();
+            return true;
+        }
+
+        t = t->GetParent();
+    }
+    return false;
+}
+
 void wxRichTextCtrl::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResult def, wxDataObject* DataObj)
 {
     m_preDrag = false;
@@ -5039,16 +5059,23 @@ void wxRichTextCtrl::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResu
     if (richTextBuffer)
     {
         long position = GetCaretPosition();
+        long positionRelativeToSource = position;
         wxRichTextRange selectionrange = GetInternalSelectionRange();
-        if (selectionrange.Contains(position) && (def == wxDragMove))
+        if (def == wxDragMove)
         {
-            // It doesn't make sense to move onto itself
-            return;
+            // Are the containers the same, or is one contained within the other?
+            if (((originContainer == destContainer) ||
+                 wxRichTextCtrlIsContainedIn(originContainer, destContainer, positionRelativeToSource)) &&
+                selectionrange.Contains(positionRelativeToSource))
+            {
+                // It doesn't make sense to move onto itself
+                return;
+            }
         }
 
         // If we're moving, and the data is being moved forward, we need to drop first, then delete the selection
         // If moving backwards, we need to delete then drop. If we're copying (or doing nothing) we don't delete anyway
-        bool DeleteAfter = (def == wxDragMove) && (position > selectionrange.GetEnd());
+        bool DeleteAfter = (def == wxDragMove) && (positionRelativeToSource > selectionrange.GetEnd());
         if ((def == wxDragMove) && !DeleteAfter)
         {
             // We can't use e.g. DeleteSelectedContent() as it uses the focus container
