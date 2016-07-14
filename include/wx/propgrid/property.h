@@ -1527,8 +1527,8 @@ public:
 
     // Hides or reveals the property.
     // hide - true for hide, false for reveal.
-    // flags - By default changes are applied recursively. Set this paramter
-    //   wxPG_DONT_RECURSE to prevent this.
+    // flags - By default changes are applied recursively. Set this
+    //   parameter to wxPG_DONT_RECURSE to prevent this.
     bool Hide( bool hide, int flags = wxPG_RECURSE );
 
     // Returns true if property has visible children.

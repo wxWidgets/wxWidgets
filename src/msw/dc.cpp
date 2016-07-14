@@ -709,30 +709,19 @@ int wxMSWDCImpl::GetDepth() const
 
 void wxMSWDCImpl::Clear()
 {
-    RECT rect;
-    if (m_window)
-    {
-        GetClientRect((HWND) m_window->GetHWND(), &rect);
-    }
-    else
+    if ( !m_window )
     {
         // No, I think we should simply ignore this if printing on e.g.
         // a printer DC.
         // wxCHECK_RET( m_selectedBitmap.IsOk(), wxT("this DC can't be cleared") );
         if (!m_selectedBitmap.IsOk())
             return;
-
-        rect.left = rect.top = 0;
-        rect.right = m_selectedBitmap.GetWidth();
-        rect.bottom = m_selectedBitmap.GetHeight();
     }
-
-    ::OffsetRect(&rect, -m_deviceOriginX, -m_deviceOriginY);
-
-    (void) ::SetMapMode(GetHdc(), MM_TEXT);
 
     DWORD colour = ::GetBkColor(GetHdc());
     HBRUSH brush = ::CreateSolidBrush(colour);
+    RECT rect;
+    ::GetClipBox(GetHdc(), &rect);
     ::FillRect(GetHdc(), &rect, brush);
     ::DeleteObject(brush);
 

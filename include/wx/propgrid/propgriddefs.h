@@ -317,33 +317,37 @@ WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
 
 // -----------------------------------------------------------------------
 
-enum wxPG_GETPROPERTYVALUES_FLAGS
+enum wxPG_PROPERTYVALUES_FLAGS
 {
+// Flag for wxPropertyGridInterface::SetProperty* functions,
+// wxPropertyGridInterface::HideProperty(), etc.
+// Apply changes only for the property in question.
+wxPG_DONT_RECURSE                 = 0x00000000,
 
-/** Flags for wxPropertyGridInterface::GetPropertyValues */
+// Flag for wxPropertyGridInterface::GetPropertyValues().
+// Use this flag to retain category structure; each sub-category
+// will be its own wxVariantList of wxVariant.
 wxPG_KEEP_STRUCTURE               = 0x00000010,
 
-/** Flags for wxPropertyGrid::SetPropertyAttribute() etc */
+// Flag for wxPropertyGridInterface::SetProperty* functions,
+// wxPropertyGridInterface::HideProperty(), etc.
+// Apply changes recursively for the property and all its children.
 wxPG_RECURSE                      = 0x00000020,
 
-/** Include attributes for GetPropertyValues. */
+// Flag for wxPropertyGridInterface::GetPropertyValues().
+// Use this flag to include property attributes as well.
 wxPG_INC_ATTRIBUTES               = 0x00000040,
 
-/** Used when first starting recursion. */
+// Used when first starting recursion.
 wxPG_RECURSE_STARTS               = 0x00000080,
 
-/** Force value change. */
+// Force value change.
 wxPG_FORCE                        = 0x00000100,
 
-/** Only sort categories and their immediate children.
-    Sorting done by wxPG_AUTO_SORT option uses this.
-*/
+// Only sort categories and their immediate children.
+// Sorting done by wxPG_AUTO_SORT option uses this.
 wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
-
 };
-
-/** Flags for wxPropertyGrid::SetPropertyAttribute() etc */
-#define wxPG_DONT_RECURSE         0x00000000
 
 // -----------------------------------------------------------------------
 

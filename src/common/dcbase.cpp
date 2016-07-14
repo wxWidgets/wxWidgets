@@ -387,7 +387,8 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
         // of required clipping box and DC surface.
         int dcWidth, dcHeight;
         DoGetSize(&dcWidth, &dcHeight);
-        wxRect dcRect(wxSize(dcWidth, dcHeight));
+        wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
+                      DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
         clipRegion = dcRect.Intersect(newRegion);
 
         m_clipping = true;

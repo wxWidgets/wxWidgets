@@ -82,7 +82,7 @@
 #endif
 
 // TODO: Borland probably has _wgetcwd as well?
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     #define HAVE_WGETCWD
 #endif
 

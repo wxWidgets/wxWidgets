@@ -27,7 +27,7 @@
 // test class
 // ----------------------------------------------------------------------------
 
-static const wxSize s_dcSize(100, 105);
+static const wxSize s_dcSize(100, 120);
 static const wxColour s_bgColour(*wxWHITE); // colour to draw outside clipping box
 static const wxColour s_fgColour(*wxGREEN); // colour to draw inside clipping box
 
@@ -52,12 +52,14 @@ private:
 
 protected:
     void InitialState();
+    void InitialStateWithTransformedDC();
     void OneRegion();
     void OneLargeRegion();
     void OneOuterRegion();
     void OneRegionNegDim();
     void OneRegionAndReset();
     void OneRegionAndEmpty();
+    void OneRegionWithTransformedDC();
     void TwoRegionsOverlapping();
     void TwoRegionsOverlappingNegDim();
     void TwoRegionsNonOverlapping();
@@ -100,12 +102,14 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseDC );
         CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( InitialStateWithTransformedDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
         CPPUNIT_TEST( OneRegionNegDim );
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( OneRegionWithTransformedDC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -161,12 +165,14 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGCDC );
         CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( InitialStateWithTransformedDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
         CPPUNIT_TEST( OneRegionNegDim );
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( OneRegionWithTransformedDC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -208,12 +214,14 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGDIPlus );
         CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( InitialStateWithTransformedDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
         CPPUNIT_TEST( OneRegionNegDim );
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( OneRegionWithTransformedDC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -259,12 +267,14 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseDirect2D );
         CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( InitialStateWithTransformedDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
         CPPUNIT_TEST( OneRegionNegDim );
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( OneRegionWithTransformedDC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -302,12 +312,14 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseCairo );
         CPPUNIT_TEST( InitialState );
+        CPPUNIT_TEST( InitialStateWithTransformedDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
         CPPUNIT_TEST( OneRegionNegDim );
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
+        CPPUNIT_TEST( OneRegionWithTransformedDC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -367,17 +379,26 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
         msg = msgDim;
     }
 
+    // We will examine pixels directly in the underlying bitmap
+    // so we need to get device coordinates of examined area.
+    x = m_dc->LogicalToDeviceX(x);
+    y = m_dc->LogicalToDeviceY(y);
+    width = m_dc->LogicalToDeviceXRel(width);
+    height = m_dc->LogicalToDeviceYRel(height);
+
     // Update wxDC contents.
     FlushDC();
 
     // Check whether diagonal corners of the clipping box
     // are actually drawn at the edge of the clipping region.
 #if wxUSE_IMAGE
-    // For some renderers is's not possible to get pixels
+    // For some renderers it's not possible to get pixels
     // value from wxDC so we would have to examine pixels
     // in the underlying bitmap.
     wxImage img;
     img = m_bmp.ConvertToImage();
+#else
+    return;
 #endif // wxUSE_IMAGE
 
     // Check area near the top-left corner
@@ -394,18 +415,15 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
         for( int px = xmin; px <= xmax; px++ )
         {
             wxColour c;
-            if ( !m_dc->GetPixel(px, py, &c) )
-            {
 #if wxUSE_IMAGE
-                unsigned char r = img.GetRed(px, py);
-                unsigned char g = img.GetGreen(px, py);
-                unsigned char b = img.GetBlue(px, py);
-                c.Set(r, g, b);
+            unsigned char r = img.GetRed(px, py);
+            unsigned char g = img.GetGreen(px, py);
+            unsigned char b = img.GetBlue(px, py);
+            c.Set(r, g, b);
 #else
-                // We cannot get pixel value
-                break;
+            // We cannot get pixel value
+            break;
 #endif // wxUSE_IMAGE / !wxUSE_IMAGE
-            }
 
             wxString msgColour;
             if ( px >= x && px <= x + (width-1) &&
@@ -458,18 +476,15 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
         for( int px = xmin; px <= xmax; px++ )
         {
             wxColour c;
-            if ( !m_dc->GetPixel(px, py, &c) )
-            {
 #if wxUSE_IMAGE
-                unsigned char r = img.GetRed(px, py);
-                unsigned char g = img.GetGreen(px, py);
-                unsigned char b = img.GetBlue(px, py);
-                c.Set(r, g, b);
+            unsigned char r = img.GetRed(px, py);
+            unsigned char g = img.GetGreen(px, py);
+            unsigned char b = img.GetBlue(px, py);
+            c.Set(r, g, b);
 #else
-                // We cannot get pixel value
-                break;
+            // We cannot get pixel value
+            break;
 #endif // wxUSE_IMAGE / !wxUSE_IMAGE
-            }
 
             wxString msgColour;
             if ( px >= x && px <= x + (width-1) &&
@@ -523,6 +538,18 @@ void ClippingBoxTestCaseBase::InitialState()
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
     CheckBox(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+}
+
+void ClippingBoxTestCaseBase::InitialStateWithTransformedDC()
+{
+    // Initial clipping box with transformed DC.
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(-20, -25, 50, 40);
 }
 
 void ClippingBoxTestCaseBase::OneRegion()
@@ -585,6 +612,20 @@ void ClippingBoxTestCaseBase::OneRegionAndEmpty()
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
     CheckBox(0, 0, 0, 0);
+}
+
+void ClippingBoxTestCaseBase::OneRegionWithTransformedDC()
+{
+    // Setting one clipping box inside DC area
+    // with applied some transformations.
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    m_dc->SetClippingRegion(-10, -20, 80, 75);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(-10, -20, 40, 35);
 }
 
 void ClippingBoxTestCaseBase::TwoRegionsOverlapping()

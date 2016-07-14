@@ -633,7 +633,7 @@ bool TestApp::OnInit()
 
     Connect(wxEVT_IDLE, wxIdleEventHandler(TestApp::OnIdle));
 
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
     g_log_set_default_handler(wxTestGLogHandler, NULL);
 #endif // __WXGTK__
 

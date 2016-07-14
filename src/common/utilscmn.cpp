@@ -1171,7 +1171,7 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
         }
 
         // The initial '?' means we match "Foo(&F)" but not "(&F)"
-        if (label.Matches("?*(&?)") > 0)
+        if (label.Matches("?*(&?)"))
         {
             label = label.Left( label.Len()-4 ).Trim();
             return label + accel;
