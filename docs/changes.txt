@@ -127,6 +127,12 @@ Changes in behaviour not resulting in compilation errors, please read this!
   to check if the changes correspond to your expectations. And if you do need
   the old behaviour please contact us at wx-dev to let us know about it!
 
+- Revert to using equally-sized buttons in wxToolBar by default: restore the
+  behaviour of the pre-3.0 versions in which toolbar buttons had the same
+  width for the toolbars not using wxTB_HORZ_LAYOUT style. Toolbars with this
+  style still size their buttons appropriately for their contents as they
+  already did in the previous 3.0.x releases.
+
 - wxWindow::Freeze/Thaw() are not virtual any more, if you overrode them in
   your code you need to override DoFreeze/DoThaw() instead now.
 
