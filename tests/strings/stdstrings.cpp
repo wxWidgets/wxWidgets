@@ -20,6 +20,8 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
+#include <algorithm>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -50,6 +52,7 @@ private:
 #if wxUSE_STD_STRING
         CPPUNIT_TEST( StdConversion );
 #endif
+        CPPUNIT_TEST( StdAlgo );
     CPPUNIT_TEST_SUITE_END();
 
     void StdConstructors();
@@ -71,6 +74,7 @@ private:
 #if wxUSE_STD_STRING
     void StdConversion();
 #endif
+    void StdAlgo();
 
     wxDECLARE_NO_COPY_CLASS(StdStringTestCase);
 };
@@ -617,3 +621,10 @@ void StdStringTestCase::StdConversion()
     CPPUNIT_ASSERT_EQUAL( wxString::FromUTF8(s11), "" );
 }
 #endif // wxUSE_STD_STRING
+
+void StdStringTestCase::StdAlgo()
+{
+    wxString s("AB");
+    std::reverse(s.begin(), s.end());
+    CPPUNIT_ASSERT_EQUAL( "BA", s );
+}
