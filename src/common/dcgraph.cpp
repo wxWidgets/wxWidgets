@@ -303,34 +303,63 @@ void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
     // region is in device coordinates
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoSetDeviceClippingRegion - invalid DC") );
 
-    if (region.Empty())
+    // Convert device coordinates to logical coordinates
+    // for all region components.
+    wxRegion logRegion;
+    if ( region.IsEmpty() )
     {
-        //DestroyClippingRegion();
-        return;
-    }
-
-    wxRegion logRegion( region );
-    wxCoord x, y, w, h;
-
-    logRegion.Offset( DeviceToLogicalX(0), DeviceToLogicalY(0) );
-    logRegion.GetBox( x, y, w, h );
-
-    m_graphicContext->Clip( logRegion );
-    if ( m_clipping )
-    {
-        m_clipX1 = wxMax( m_clipX1, x );
-        m_clipY1 = wxMax( m_clipY1, y );
-        m_clipX2 = wxMin( m_clipX2, (x + w) );
-        m_clipY2 = wxMin( m_clipY2, (y + h) );
+        // Empty region is skipped by iterator
+        // so we have to copy it directly.
+        logRegion = region;
     }
     else
     {
-        m_clipping = true;
+        wxRegionIterator ri(region);
+        while (ri)
+        {
+            logRegion.Union(DeviceToLogicalX(ri.GetX()),
+                            DeviceToLogicalY(ri.GetY()),
+                            DeviceToLogicalXRel(ri.GetWidth()),
+                            DeviceToLogicalYRel(ri.GetHeight()));
+            ++ri;
+        }
+    }
 
-        m_clipX1 = x;
-        m_clipY1 = y;
-        m_clipX2 = x + w;
-        m_clipY2 = y + h;
+    m_graphicContext->Clip(logRegion);
+
+    wxRect newRegion = logRegion.GetBox();
+
+    wxRect clipRegion;
+    if ( m_clipping )
+    {
+        // New clipping box is an intersection
+        // of required clipping box and the current one.
+        wxRect curRegion(m_clipX1, m_clipY1, m_clipX2 - m_clipX1, m_clipY2 - m_clipY1);
+        clipRegion = curRegion.Intersect(newRegion);
+    }
+    else
+    {
+        // Effective clipping box is an intersection
+        // of required clipping box and DC surface.
+        int dcWidth, dcHeight;
+        DoGetSize(&dcWidth, &dcHeight);
+        wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
+                      DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
+        clipRegion = dcRect.Intersect(newRegion);
+
+        m_clipping = true;
+    }
+
+    if ( clipRegion.IsEmpty() )
+    {
+        m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0;
+    }
+    else
+    {
+        m_clipX1 = clipRegion.GetLeft();
+        m_clipY1 = clipRegion.GetTop();
+        m_clipX2 = clipRegion.GetRight() + 1;
+        m_clipY2 = clipRegion.GetBottom() + 1;
     }
 }
 
