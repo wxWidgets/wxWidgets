@@ -757,6 +757,9 @@ public:
         Gets the rectangle surrounding the current clipping region.
         If no clipping region is set this function returns the extent
         of the device context.
+
+        @remarks
+        Clipping region is given in logical coordinates.
     */
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
 
@@ -770,6 +773,8 @@ public:
         window redraws when only a known area of the screen is damaged.
 
         @remarks
+        - Clipping region should be given in logical coordinates.
+
         - Calling this function can only make the clipping region smaller,
         never larger.
 

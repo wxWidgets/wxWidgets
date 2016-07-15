@@ -446,9 +446,36 @@ public:
     static wxGraphicsContext* Create(wxImage& image);
 
     /**
+        Creates a wxGraphicsContext from a native context. This native context
+        must be a CGContextRef for Core Graphics, a Graphics pointer for
+        GDIPlus, or a cairo_t pointer for cairo.
+
+        @see wxGraphicsRenderer::CreateContextFromNativeContext()
+    */
+    static wxGraphicsContext* CreateFromNative(void* context);
+
+    /**
+        Creates a wxGraphicsContext from a native window.
+
+        @see wxGraphicsRenderer::CreateContextFromNativeWindow()
+    */
+    static wxGraphicsContext* CreateFromNativeWindow(void* window);
+
+    /**
        Create a lightweight context that can be used only for measuring text.
     */
     static wxGraphicsContext* Create();
+
+    /**
+        @name Clipping region functions
+
+        @{
+    */
+
+    /**
+        Resets the clipping to original shape.
+    */
+    virtual void ResetClip() = 0;
 
     /**
         Sets the clipping region to the intersection of the given region
@@ -456,6 +483,8 @@ public:
         The clipping region is an area to which drawing is restricted.
 
         @remarks
+        - Clipping region should be given in logical coordinates.
+
         - Calling this function can only make the clipping region smaller,
         never larger.
 
@@ -472,6 +501,32 @@ public:
     */
     virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) = 0;
 
+    /** @}
+    */
+
+    /**
+        @name Transformation matrix
+
+        @{
+    */
+
+    /**
+        Creates a native affine transformation matrix from the passed in
+        values. The default parameters result in an identity matrix.
+    */
+    virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
+                                          wxDouble c = 0.0, wxDouble d = 1.0,
+                                          wxDouble tx = 0.0,
+                                          wxDouble ty = 0.0) const;
+
+    /**
+        Creates a native affine transformation matrix from the passed
+        generic one.
+
+        @since 2.9.4
+    */
+    wxGraphicsMatrix CreateMatrix(const wxAffineMatrix2DBase& mat) const;
+
     /**
         Concatenates the passed in transform with the current transform of this
         context.
@@ -479,70 +534,43 @@ public:
     virtual void ConcatTransform(const wxGraphicsMatrix& matrix) = 0;
 
     /**
-        Creates wxGraphicsBitmap from an existing wxBitmap.
-
-        Returns an invalid wxNullGraphicsBitmap on failure.
-     */
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+        Gets the current transformation matrix of this context.
+    */
+    virtual wxGraphicsMatrix GetTransform() const = 0;
 
     /**
-        Creates wxGraphicsBitmap from an existing wxImage.
-
-        This method is more efficient than converting wxImage to wxBitmap first
-        and then calling CreateBitmap() but otherwise has the same effect.
-
-        Returns an invalid wxNullGraphicsBitmap on failure.
-
-        @since 2.9.3
-     */
-    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+        Rotates the current transformation matrix (in radians).
+    */
+    virtual void Rotate(wxDouble angle) = 0;
 
     /**
-        Extracts a sub-bitmap from an existing bitmap.
-     */
-    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
-                                             wxDouble x, wxDouble y,
-                                             wxDouble w, wxDouble h) = 0;
+        Scales the current transformation matrix.
+    */
+    virtual void Scale(wxDouble xScale, wxDouble yScale) = 0;
+
+    /**
+        Sets the current transformation matrix of this context
+    */
+    virtual void SetTransform(const wxGraphicsMatrix& matrix) = 0;
+
+    /**
+        Translates the current transformation matrix.
+    */
+    virtual void Translate(wxDouble dx, wxDouble dy) = 0;
+
+    /** @}
+    */
+
+    /**
+        @name Brush and pen functions
+
+        @{
+    */
 
     /**
         Creates a native brush from a wxBrush.
     */
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) const;
-
-    /**
-        Creates a native graphics font from a wxFont and a text colour.
-    */
-    virtual wxGraphicsFont CreateFont(const wxFont& font,
-                                      const wxColour& col = *wxBLACK) const;
-
-    /**
-        Creates a font object with the specified attributes.
-
-        The use of overload taking wxFont is preferred, see
-        wxGraphicsRenderer::CreateFont() for more details.
-
-        @since 2.9.3
-     */
-    virtual wxGraphicsFont CreateFont(double sizeInPixels,
-                                      const wxString& facename,
-                                      int flags = wxFONTFLAG_DEFAULT,
-                                      const wxColour& col = *wxBLACK) const;
-
-    /**
-        Creates a wxGraphicsContext from a native context. This native context
-        must be a CGContextRef for Core Graphics, a Graphics pointer for
-        GDIPlus, or a cairo_t pointer for cairo.
-
-        @see wxGraphicsRenderer::CreateContextFromNativeContext()
-    */
-    static wxGraphicsContext* CreateFromNative(void* context);
-
-    /**
-        Creates a wxGraphicsContext from a native window.
-
-        @see wxGraphicsRenderer::CreateContextFromNativeWindow()
-    */
-    static wxGraphicsContext* CreateFromNativeWindow(void* window);
 
     /**
         Creates a native brush with a linear gradient.
@@ -564,33 +592,6 @@ public:
                               wxDouble x2, wxDouble y2,
                               const wxGraphicsGradientStops& stops) const;
     //@}
-
-    /**
-        Creates a native affine transformation matrix from the passed in
-        values. The default parameters result in an identity matrix.
-    */
-    virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
-                                          wxDouble c = 0.0, wxDouble d = 1.0,
-                                          wxDouble tx = 0.0,
-                                          wxDouble ty = 0.0) const;
-
-    /**
-        Creates a native affine transformation matrix from the passed
-        generic one.
-
-        @since 2.9.4
-    */
-    wxGraphicsMatrix CreateMatrix(const wxAffineMatrix2DBase& mat) const;
-
-    /**
-        Creates a native graphics path which is initially empty.
-    */
-    wxGraphicsPath CreatePath() const;
-
-    /**
-        Creates a native pen from a wxPen.
-    */
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
 
     /**
         Creates a native brush with a radial gradient.
@@ -617,6 +618,40 @@ public:
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops) = 0;
     //@}
+
+    /**
+        Sets the brush for filling paths.
+    */
+    void SetBrush(const wxBrush& brush);
+
+    /**
+        Sets the brush for filling paths.
+    */
+    virtual void SetBrush(const wxGraphicsBrush& brush);
+
+    /**
+        Creates a native pen from a wxPen.
+    */
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+
+    /**
+        Sets the pen used for stroking.
+    */
+    void SetPen(const wxPen& pen);
+
+    /**
+        Sets the pen used for stroking.
+    */
+    virtual void SetPen(const wxGraphicsPen& pen);
+
+    /** @}
+    */
+
+    /**
+        @name Drawing functions
+
+        @{
+    */
 
     /**
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask
@@ -715,17 +750,43 @@ public:
     void DrawText(const wxString& str, wxDouble x, wxDouble y,
                   wxDouble angle, const wxGraphicsBrush& backgroundBrush);
 
-    /**
-        Fills the path with the current brush.
+    /** @}
     */
-    virtual void FillPath(const wxGraphicsPath& path,
-                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) = 0;
 
     /**
-        Returns the native context (CGContextRef for Core Graphics, Graphics
-        pointer for GDIPlus and cairo_t pointer for cairo).
+        @name Text functions
+
+        @{
     */
-    virtual void* GetNativeContext() = 0;
+
+    /**
+        Creates a native graphics font from a wxFont and a text colour.
+    */
+    virtual wxGraphicsFont CreateFont(const wxFont& font,
+                                      const wxColour& col = *wxBLACK) const;
+
+    /**
+        Creates a font object with the specified attributes.
+
+        The use of overload taking wxFont is preferred, see
+        wxGraphicsRenderer::CreateFont() for more details.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK) const;
+
+    /**
+        Sets the font for drawing text.
+    */
+    void SetFont(const wxFont& font, const wxColour& colour);
+
+    /**
+        Sets the font for drawing text.
+    */
+    virtual void SetFont(const wxGraphicsFont& font);
 
     /**
         Fills the @a widths array with the widths from the beginning of
@@ -754,57 +815,82 @@ public:
                                wxDouble* height, wxDouble* descent,
                                wxDouble* externalLeading) const = 0;
 
-    /**
-        Gets the current transformation matrix of this context.
+    /** @}
     */
-    virtual wxGraphicsMatrix GetTransform() const = 0;
 
     /**
-        Resets the clipping to original shape.
+        @name Page and document start/end functions
+
+        @{
     */
-    virtual void ResetClip() = 0;
 
     /**
-        Rotates the current transformation matrix (in radians).
+       Begin a new document (relevant only for printing / pdf etc.)
+       If there is a progress dialog, message will be shown.
     */
-    virtual void Rotate(wxDouble angle) = 0;
+    virtual bool StartDoc( const wxString& message );
 
     /**
-        Scales the current transformation matrix.
+       Done with that document (relevant only for printing / pdf etc.)
     */
-    virtual void Scale(wxDouble xScale, wxDouble yScale) = 0;
+    virtual void EndDoc();
 
     /**
-        Sets the brush for filling paths.
+       Opens a new page (relevant only for printing / pdf etc.) with the given
+       size in points.  (If both are null the default page size will be used.)
     */
-    void SetBrush(const wxBrush& brush);
-    /**
-        Sets the brush for filling paths.
-    */
-    virtual void SetBrush(const wxGraphicsBrush& brush);
+    virtual void StartPage( wxDouble width = 0, wxDouble height = 0 );
 
     /**
-        Sets the font for drawing text.
+       Ends the current page  (relevant only for printing / pdf etc.)
     */
-    void SetFont(const wxFont& font, const wxColour& colour);
-    /**
-        Sets the font for drawing text.
+    virtual void EndPage();
+
+    /** @}
     */
-    virtual void SetFont(const wxGraphicsFont& font);
 
     /**
-        Sets the pen used for stroking.
+        Creates a native graphics path which is initially empty.
     */
-    void SetPen(const wxPen& pen);
-    /**
-        Sets the pen used for stroking.
-    */
-    virtual void SetPen(const wxGraphicsPen& pen);
+    wxGraphicsPath CreatePath() const;
 
     /**
-        Sets the current transformation matrix of this context
+        Fills the path with the current brush.
     */
-    virtual void SetTransform(const wxGraphicsMatrix& matrix) = 0;
+    virtual void FillPath(const wxGraphicsPath& path,
+                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) = 0;
+
+    /**
+        Creates wxGraphicsBitmap from an existing wxBitmap.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+     */
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+
+    /**
+        Creates wxGraphicsBitmap from an existing wxImage.
+
+        This method is more efficient than converting wxImage to wxBitmap first
+        and then calling CreateBitmap() but otherwise has the same effect.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+
+    /**
+        Extracts a sub-bitmap from an existing bitmap.
+     */
+    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
+                                             wxDouble x, wxDouble y,
+                                             wxDouble w, wxDouble h) = 0;
+
+    /**
+        Returns the native context (CGContextRef for Core Graphics, Graphics
+        pointer for GDIPlus and cairo_t pointer for cairo).
+    */
+    virtual void* GetNativeContext() = 0;
 
     /**
         Strokes a single line.
@@ -829,11 +915,6 @@ public:
         Strokes along a path with the current pen.
     */
     virtual void StrokePath(const wxGraphicsPath& path) = 0;
-
-    /**
-        Translates the current transformation matrix.
-    */
-    virtual void Translate(wxDouble dx, wxDouble dy) = 0;
 
     /**
         Redirects all rendering is done into a fully transparent temporary context
@@ -900,28 +981,6 @@ public:
     virtual void EnableOffset(bool enable = true);
     void DisableOffset();
     bool OffsetEnabled();
-
-    /**
-       Begin a new document (relevant only for printing / pdf etc.)
-       If there is a progress dialog, message will be shown.
-    */
-    virtual bool StartDoc( const wxString& message );
-
-    /**
-       Done with that document (relevant only for printing / pdf etc.)
-    */
-    virtual void EndDoc();
-
-    /**
-       Opens a new page (relevant only for printing / pdf etc.) with the given
-       size in points.  (If both are null the default page size will be used.)
-    */
-    virtual void StartPage( wxDouble width = 0, wxDouble height = 0 );
-
-    /**
-       Ends the current page  (relevant only for printing / pdf etc.)
-    */
-    virtual void EndPage();
 
     /**
        Make sure that the current content of this context is immediately visible.
