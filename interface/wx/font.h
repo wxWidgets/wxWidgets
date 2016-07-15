@@ -466,7 +466,7 @@ public:
 
         @since 2.9.5
      */
-    wxFont(const wxFontInfo& font);
+    wxFont(const wxFontInfo& fontInfo);
 
     /**
         Creates a font object with the specified attributes and size in points.
