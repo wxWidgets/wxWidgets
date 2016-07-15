@@ -400,10 +400,10 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     }
     else
     {
-        m_clipX1 = clipRegion.GetLeftTop().x;
-        m_clipY1 = clipRegion.GetLeftTop().y;
-        m_clipX2 = clipRegion.GetBottomRight().x + 1;
-        m_clipY2 = clipRegion.GetBottomRight().y + 1;
+        m_clipX1 = clipRegion.GetLeft();
+        m_clipY1 = clipRegion.GetTop();
+        m_clipX2 = clipRegion.GetRight() + 1;
+        m_clipY2 = clipRegion.GetBottom() + 1;
     }
 }
 
