@@ -3991,7 +3991,10 @@ namespace std
 // iterator::reference being different from "iterator::value_type&", in C++11
 // iter_swap() just calls swap() by default and this doesn't work for us as
 // wxUniCharRef is not the same as "wxUniChar&".
-#if __cplusplus >= 201103L
+//
+// Unfortunately currently iter_swap() can't be specialized when using libc++,
+// see https://llvm.org/bugs/show_bug.cgi?id=28559
+#if (__cplusplus >= 201103L) && !defined(_LIBCPP_VERSION)
 
 namespace std
 {
