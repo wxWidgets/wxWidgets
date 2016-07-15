@@ -94,22 +94,40 @@ wxRegion::wxRegion(WXHRGN hRegion)
     M_REGION = (HRGN) hRegion;
 }
 
+static HRGN CreateRectRgnMSW(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+{
+    // (x,y) has to represent the left-top corner of the region
+    // so if size values are negative we need to recalculate
+    // parameters of the region to get (x,y) at this corner.
+    if ( w < 0 )
+    {
+        w = -w;
+        x -= (w - 1);
+    }
+    if ( h < 0 )
+    {
+        h = -h;
+        y -= (h - 1);
+    }
+    return ::CreateRectRgn(x, y, x + w, y + h);
+}
+
 wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     m_refData = new wxRegionRefData;
-    M_REGION = ::CreateRectRgn(x, y, x + w, y + h);
+    M_REGION = CreateRectRgnMSW(x, y, w, h);
 }
 
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
     m_refData = new wxRegionRefData;
-    M_REGION = ::CreateRectRgn(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+    M_REGION = CreateRectRgnMSW(topLeft.x, topLeft.y, bottomRight.x-topLeft.x, bottomRight.y-topLeft.y);
 }
 
 wxRegion::wxRegion(const wxRect& rect)
 {
     m_refData = new wxRegionRefData;
-    M_REGION = ::CreateRectRgn(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
+    M_REGION = CreateRectRgnMSW(rect.x, rect.y, rect.width, rect.height);
 }
 
 wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
