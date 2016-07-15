@@ -64,6 +64,16 @@ protected:
     void TwoRegionsOverlappingNegDim();
     void TwoRegionsNonOverlapping();
     void TwoRegionsNonOverlappingNegDim();
+    void OneDevRegion();
+    void OneLargeDevRegion();
+    void OneOuterDevRegion();
+    void OneDevRegionNegDim();
+    void OneDevRegionAndReset();
+    void OneDevRegionAndEmpty();
+    void TwoDevRegionsOverlapping();
+    void TwoDevRegionsOverlappingNegDim();
+    void TwoDevRegionsNonOverlapping();
+    void TwoDevRegionsNonOverlappingNegDim();
 
     virtual void FlushDC() = 0;
 
@@ -114,6 +124,16 @@ private:
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
         CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( OneDevRegion);
+        CPPUNIT_TEST( OneLargeDevRegion );
+        CPPUNIT_TEST( OneOuterDevRegion );
+        CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionAndReset);
+        CPPUNIT_TEST( OneDevRegionAndEmpty );
+        CPPUNIT_TEST( TwoDevRegionsOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
+        CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
     CPPUNIT_TEST_SUITE_END();
 protected:
     wxMemoryDC m_mdc;
@@ -177,6 +197,16 @@ private:
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
         CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( OneDevRegion);
+        CPPUNIT_TEST( OneLargeDevRegion );
+        CPPUNIT_TEST( OneOuterDevRegion );
+        CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionAndReset);
+        CPPUNIT_TEST( OneDevRegionAndEmpty );
+        CPPUNIT_TEST( TwoDevRegionsOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
+        CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -226,6 +256,16 @@ private:
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
         CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( OneDevRegion);
+        CPPUNIT_TEST( OneLargeDevRegion );
+        CPPUNIT_TEST( OneOuterDevRegion );
+        CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionAndReset);
+        CPPUNIT_TEST( OneDevRegionAndEmpty );
+        CPPUNIT_TEST( TwoDevRegionsOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
+        CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -279,6 +319,16 @@ private:
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
         CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( OneDevRegion);
+        CPPUNIT_TEST( OneLargeDevRegion );
+        CPPUNIT_TEST( OneOuterDevRegion );
+        CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionAndReset);
+        CPPUNIT_TEST( OneDevRegionAndEmpty );
+        CPPUNIT_TEST( TwoDevRegionsOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
+        CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -324,6 +374,16 @@ private:
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
         CPPUNIT_TEST( TwoRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( OneDevRegion);
+        CPPUNIT_TEST( OneLargeDevRegion );
+        CPPUNIT_TEST( OneOuterDevRegion );
+        CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionAndReset);
+        CPPUNIT_TEST( OneDevRegionAndEmpty );
+        CPPUNIT_TEST( TwoDevRegionsOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
+        CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
+        CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -340,6 +400,30 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseCairo, "ClippingBoxTes
 #endif // wxUSE_CAIRO
 
 #endif //  wxUSE_GRAPHICS_CONTEXT
+
+// Helper class to hold rectangle
+// which size is guaranteed to be >= 0
+class wxClipRect : public wxRect
+{
+public:
+    wxClipRect(int xx, int yy, int w, int h)
+    {
+        if ( w < 0 )
+        {
+            w = -w;
+            xx -= (w - 1);
+        }
+        if ( h < 0 )
+        {
+            h = -h;
+            yy -= (h - 1);
+        }
+        x = xx;
+        y = yy;
+        width = w;
+        height = h;
+    }
+};
 
 // =====  Implementation  =====
 
@@ -377,6 +461,12 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
     else if ( !msgDim.empty() )
     {
         msg = msgDim;
+    }
+
+    if( !msg.empty() )
+    {
+        wxCharBuffer buffer = msg.ToUTF8();
+        CPPUNIT_FAIL( buffer.data() );
     }
 
     // We will examine pixels directly in the underlying bitmap
@@ -549,21 +639,29 @@ void ClippingBoxTestCaseBase::InitialStateWithTransformedDC()
     m_dc->SetLogicalOrigin(-15, -20);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
-    CheckBox(-20, -25, 50, 40);
+    CheckBox(m_dc->DeviceToLogicalX(0),
+             m_dc->DeviceToLogicalY(0),
+             m_dc->DeviceToLogicalXRel(s_dcSize.GetWidth()),
+             m_dc->DeviceToLogicalYRel(s_dcSize.GetHeight()));
 }
 
 void ClippingBoxTestCaseBase::OneRegion()
 {
-    // Setting one clipping box inside DC area.
-    m_dc->SetClippingRegion(10, 20, 80, 75);
+    // Setting one clipping region inside DC area.
+    const int x = 10;
+    const int y = 20;
+    const int w = 80;
+    const int h = 75;
+
+    m_dc->SetClippingRegion(x, y, w, h);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
-    CheckBox(10, 20, 80, 75);
+    CheckBox(x, y, w, h);
 }
 
 void ClippingBoxTestCaseBase::OneLargeRegion()
 {
-    // Setting one clipping box larger then DC surface.
+    // Setting one clipping region larger then DC surface.
     // Final clipping box should be limited to the DC extents.
     m_dc->SetClippingRegion(-10, -20,
                          s_dcSize.GetWidth()+30, s_dcSize.GetHeight()+50);
@@ -574,7 +672,7 @@ void ClippingBoxTestCaseBase::OneLargeRegion()
 
 void ClippingBoxTestCaseBase::OneOuterRegion()
 {
-    // Setting one clipping box entirely outside DC surface.
+    // Setting one clipping region entirely outside DC surface.
     // Final clipping box should be empty.
     m_dc->SetClippingRegion(-100, -80, 20, 40);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
@@ -584,17 +682,29 @@ void ClippingBoxTestCaseBase::OneOuterRegion()
 
 void ClippingBoxTestCaseBase::OneRegionNegDim()
 {
-    // Setting one clipping box with negative sizes values.
+    // Setting one clipping region with negative sizes values.
     // Final clipping box should have standard positive size values.
-    m_dc->SetClippingRegion(10, 20, -80, -75);
+    const int x = 10;
+    const int y = 20;
+    const int w = -80;
+    const int h = -75;
+    wxClipRect r1(x, y, w, h);
+    wxRect r2(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+    wxRect r = r1.Intersect(r2);
+    wxASSERT( !r.IsEmpty() );
+
+    m_dc->SetClippingRegion(x, y, w, h);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
-    CheckBox(0, 0, 11, 21);
+    CheckBox(r.GetLeft(),
+             r.GetTop(),
+             r.GetWidth(),
+             r.GetHeight());
 }
 
 void ClippingBoxTestCaseBase::OneRegionAndReset()
 {
-    // Setting one clipping box and next destroy it.
+    // Setting one clipping region and next destroy it.
     // Final clipping box should be the same as DC surface.
     m_dc->SetClippingRegion(10, 20, 80, 75);
     m_dc->DestroyClippingRegion();
@@ -605,7 +715,7 @@ void ClippingBoxTestCaseBase::OneRegionAndReset()
 
 void ClippingBoxTestCaseBase::OneRegionAndEmpty()
 {
-    // Setting one clipping box and next an empty box.
+    // Setting one clipping region and next an empty box.
     // Final clipping box should empty.
     m_dc->SetClippingRegion(10, 20, 80, 75);
     m_dc->SetClippingRegion(0, 0, 0, 0);
@@ -616,48 +726,87 @@ void ClippingBoxTestCaseBase::OneRegionAndEmpty()
 
 void ClippingBoxTestCaseBase::OneRegionWithTransformedDC()
 {
-    // Setting one clipping box inside DC area
+    // Setting one clipping region inside DC area
     // with applied some transformations.
+    wxRect r1(-10, -20, 80, 75);
+
     m_dc->SetDeviceOrigin(10, 15);
     m_dc->SetUserScale(0.5, 1.5);
     m_dc->SetLogicalScale(4.0, 2.0);
     m_dc->SetLogicalOrigin(-15, -20);
-    m_dc->SetClippingRegion(-10, -20, 80, 75);
+    m_dc->SetClippingRegion(r1);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
-    CheckBox(-10, -20, 40, 35);
+    wxRect r2(m_dc->DeviceToLogicalX(0),
+              m_dc->DeviceToLogicalY(0),
+              m_dc->DeviceToLogicalXRel(s_dcSize.GetWidth()),
+              m_dc->DeviceToLogicalYRel(s_dcSize.GetHeight()));
+    wxRect r = r1.Intersect(r2);
+    wxASSERT( !r.IsEmpty() );
+    CheckBox(r.GetLeft(),
+             r.GetTop(),
+             r.GetWidth(),
+             r.GetHeight());
 }
 
 void ClippingBoxTestCaseBase::TwoRegionsOverlapping()
 {
-    // Setting one clipping box and next another box (partially overlapping).
+    // Setting one clipping region and next another region (partially overlapping).
     // Final clipping box should be an intersection of these two boxes.
-    m_dc->SetClippingRegion(10, 20, 80, 75);
-    m_dc->SetClippingRegion(50, 60, 50, 40);
+    wxRect r1(10, 20, 80, 75);
+    wxRect r2(50, 60, 50, 40);
+    wxRect r = r1.Intersect(r2);
+    wxASSERT( !r.IsEmpty() );
+
+    m_dc->SetClippingRegion(r1);
+    m_dc->SetClippingRegion(r2);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
-    CheckBox(50, 60, 40, 35);
+    CheckBox(r.GetLeft(),
+             r.GetTop(),
+             r.GetWidth(),
+             r.GetHeight());
 }
 
 void ClippingBoxTestCaseBase::TwoRegionsOverlappingNegDim()
 {
-    // Setting one clipping box with negative size values
-    // and next another box (partially overlapping).
+    // Setting one clipping region with negative size values
+    // and next another region (partially overlapping).
     // Final clipping box should be an intersection of these two boxes
     // with positive size values.
-    m_dc->SetClippingRegion(90, 95, -80, -75);
-    m_dc->SetClippingRegion(50, 60, 50, 40);
+    const int x1 = 90;
+    const int y1 = 95;
+    const int w1 = -80;
+    const int h1 = -75;
+
+    const int x2 = 50;
+    const int y2 = 60;
+    const int w2 = 50;
+    const int h2 = 40;
+    wxClipRect r1(x1, y1, w1, h1);
+    wxRect r2(x2, y2, w2, h2);
+    wxRect r = r1.Intersect(r2);
+
+    m_dc->SetClippingRegion(x1, y1, w1, h1);
+    m_dc->SetClippingRegion(x2, y2, w2, h2);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
-    CheckBox(50, 60, 41, 36);
+    CheckBox(r.GetLeft(),
+             r.GetTop(),
+             r.GetWidth(),
+             r.GetHeight());
 }
 
 void ClippingBoxTestCaseBase::TwoRegionsNonOverlapping()
 {
-    // Setting one clipping box and next another box (non-overlapping).
+    // Setting one clipping region and next another rwgion (non-overlapping).
     // Final clipping box should be empty.
-    m_dc->SetClippingRegion(10, 20, 30, 30);
-    m_dc->SetClippingRegion(50, 60, 50, 40);
+    wxRect r1(10, 20, 30, 30);
+    wxRect r2(50, 60, 50, 40);
+    wxASSERT( !r1.Intersects(r2) );
+
+    m_dc->SetClippingRegion(r1);
+    m_dc->SetClippingRegion(r2);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
     CheckBox(0, 0, 0, 0);
@@ -665,11 +814,263 @@ void ClippingBoxTestCaseBase::TwoRegionsNonOverlapping()
 
 void ClippingBoxTestCaseBase::TwoRegionsNonOverlappingNegDim()
 {
-    // Setting one clipping box with negative size values
-    // and next another box (non-overlapping).
+    // Setting one clipping region with negative size values
+    // and next another region (non-overlapping).
     // Final clipping box should be empty.
-    m_dc->SetClippingRegion(10, 20, -80, -75);
-    m_dc->SetClippingRegion(50, 60, 50, 40);
+    const int x1 = 10;
+    const int y1 = 20;
+    const int w1 = -80;
+    const int h1 = -75;
+
+    const int x2 = 50;
+    const int y2 = 60;
+    const int w2 = 50;
+    const int h2 = 40;
+    wxClipRect r1(x1, y1, w1, h1);
+    wxRect r2(x2, y2, w2, h2);
+    wxASSERT( !r1.Intersects(r2) );
+
+    m_dc->SetClippingRegion(x1, y1, w1, h1);
+    m_dc->SetClippingRegion(x2, y2, w2, h2);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 0, 0);
+}
+
+void ClippingBoxTestCaseBase::OneDevRegion()
+{
+    // Setting one clipping region in device coordinates
+    // inside transformed DC area.
+    const int x = 10;
+    const int y = 21;
+    const int w = 80;
+    const int h = 75;
+
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg(x, y, w, h);
+    m_dc->SetDeviceClippingRegion(reg);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(m_dc->DeviceToLogicalX(x),
+             m_dc->DeviceToLogicalY(y),
+             m_dc->DeviceToLogicalXRel(w),
+             m_dc->DeviceToLogicalYRel(h));
+}
+
+void ClippingBoxTestCaseBase::OneLargeDevRegion()
+{
+    // Setting one clipping region in device coordinates larger
+    // then transformed DC surface.
+    // Final clipping box should be limited to the DC extents.
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg(-10, -20, s_dcSize.GetWidth()+30, s_dcSize.GetHeight()+50);
+    m_dc->SetDeviceClippingRegion(reg);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(m_dc->DeviceToLogicalX(0),
+             m_dc->DeviceToLogicalY(0),
+             m_dc->DeviceToLogicalXRel(s_dcSize.GetWidth()),
+             m_dc->DeviceToLogicalYRel(s_dcSize.GetHeight()));
+}
+
+void ClippingBoxTestCaseBase::OneOuterDevRegion()
+{
+    // Setting one clipping region in device coordinates
+    // entirely outside transformed DC surface.
+    // Final clipping box should be empty.
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg(200, 80, 20, 40);
+    m_dc->SetDeviceClippingRegion(reg);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 0, 0);
+}
+
+void ClippingBoxTestCaseBase::OneDevRegionNegDim()
+{
+    // Setting one clipping region in device coordinates
+    // with negative sizes values.
+    // Final clipping box should have standard positive size values.
+    const int x = 19;
+    const int y = 23;
+    const int w = -80;
+    const int h = -75;
+    wxClipRect r1(x, y, w, h);
+    wxRect r2(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+    wxRect r = r1.Intersect(r2);
+    wxASSERT( !r.IsEmpty() );
+
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg(x, y, w, h);
+    m_dc->SetDeviceClippingRegion(reg);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(m_dc->DeviceToLogicalX(r.GetLeft()),
+             m_dc->DeviceToLogicalY(r.GetTop()),
+             m_dc->DeviceToLogicalXRel(r.GetWidth()),
+             m_dc->DeviceToLogicalYRel(r.GetHeight()));
+}
+
+void ClippingBoxTestCaseBase::OneDevRegionAndReset()
+{
+    // Setting one clipping region in device coordinates
+    // and next destroy it.
+    // Final clipping box should be the same as DC surface.
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg(10, 20, 80, 75);
+    m_dc->SetDeviceClippingRegion(reg);
+    m_dc->DestroyClippingRegion();
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(m_dc->DeviceToLogicalX(0),
+             m_dc->DeviceToLogicalY(0),
+             m_dc->DeviceToLogicalXRel(s_dcSize.GetWidth()),
+             m_dc->DeviceToLogicalYRel(s_dcSize.GetHeight()));
+}
+
+void ClippingBoxTestCaseBase::OneDevRegionAndEmpty()
+{
+    // Setting one clipping region in device coordinates
+    // and next an empty region.
+    // Final clipping box should empty.
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg1(10, 20, 80, 75);
+    m_dc->SetDeviceClippingRegion(reg1);
+    wxRegion reg2(0, 0, 0, 0);
+    m_dc->SetDeviceClippingRegion(reg2);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 0, 0);
+}
+
+void ClippingBoxTestCaseBase::TwoDevRegionsOverlapping()
+{
+    // Setting one clipping region in device coordinates
+    // and next another region in device coordinates (partially overlapping).
+    // Final clipping box should be an intersection of these two regions.
+    wxRect r1(30, 40, 40, 30);
+    wxRect r2(60, 51, 40, 30);
+    wxRect r = r1.Intersect(r2);
+    wxASSERT( !r.IsEmpty() );
+
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg1(r1);
+    m_dc->SetDeviceClippingRegion(reg1);
+    wxRegion reg2(r2);
+    m_dc->SetDeviceClippingRegion(reg2);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(m_dc->DeviceToLogicalX(r.GetLeft()),
+             m_dc->DeviceToLogicalY(r.GetTop()),
+             m_dc->DeviceToLogicalXRel(r.GetWidth()),
+             m_dc->DeviceToLogicalYRel(r.GetHeight()));
+}
+
+void ClippingBoxTestCaseBase::TwoDevRegionsOverlappingNegDim()
+{
+    // Setting one clipping region in device coordinates with negative size values
+    // and next another region in device coordinates (partially overlapping).
+    // Final clipping box should be an intersection of these two regions
+    // with positive size values.
+    const int x1 = 31;
+    const int y1 = 20;
+    const int w1 = -80;
+    const int h1 = -75;
+
+    const int x2 = 20;
+    const int y2 = 5;
+    const int w2 = 40;
+    const int h2 = 30;
+    wxClipRect r1(x1, y1, w1, h1);
+    wxRect r2(x2, y2, w2, h2);
+    wxRect r = r1.Intersect(r2);
+    wxASSERT( !r.IsEmpty() );
+
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg1(x1, y1, w1, h1);
+    m_dc->SetDeviceClippingRegion(reg1);
+    wxRegion reg2(x2, y2, w2, h2);
+    m_dc->SetDeviceClippingRegion(reg2);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(m_dc->DeviceToLogicalX(r.GetLeft()),
+             m_dc->DeviceToLogicalY(r.GetTop()),
+             m_dc->DeviceToLogicalXRel(r.GetWidth()),
+             m_dc->DeviceToLogicalYRel(r.GetHeight()));
+}
+
+void ClippingBoxTestCaseBase::TwoDevRegionsNonOverlapping()
+{
+    // Setting one clipping region in device coordinates
+    // and next another region in device coordinates (non-overlapping).
+    // Final clipping box should be empty.
+    wxRect r1(10, 20, 30, 30);
+    wxRect r2(50, 60, 50, 40);
+    wxASSERT( !r1.Intersects(r2) );
+
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg1(r1);
+    m_dc->SetDeviceClippingRegion(reg1);
+    wxRegion reg2(r2);
+    m_dc->SetDeviceClippingRegion(reg2);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckBox(0, 0, 0, 0);
+}
+
+void ClippingBoxTestCaseBase::TwoDevRegionsNonOverlappingNegDim()
+{
+    // Setting one clipping region in device coordinates with negative size values
+    // and next another region (non-overlapping).
+    // Final clipping box should be empty.
+    const int x1 = 10;
+    const int y1 = 20;
+    const int w1 = -80;
+    const int h1 = -75;
+
+    const int x2 = 50;
+    const int y2 = 60;
+    const int w2 = 50;
+    const int h2 = 40;
+    wxClipRect r1(x1, y1, w1, h1);
+    wxRect r2(x2, y2, w2, h2);
+    wxASSERT( !r1.Intersects(r2) );
+
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion reg1(x1, y1, w1, h1);
+    m_dc->SetDeviceClippingRegion(reg1);
+    wxRegion reg2(x2, y2, w2, h2);
+    m_dc->SetDeviceClippingRegion(reg2);
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
     CheckBox(0, 0, 0, 0);
