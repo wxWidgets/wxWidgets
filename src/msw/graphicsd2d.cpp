@@ -757,40 +757,62 @@ D2D1_RECT_F wxD2DConvertRect(const wxRect& rect)
 
 wxCOMPtr<ID2D1Geometry> wxD2DConvertRegionToGeometry(ID2D1Factory* direct2dFactory, const wxRegion& region)
 {
-    wxRegionIterator regionIterator(region);
-
-    // Count the number of rectangles which compose the region
-    int rectCount = 0;
-    while(regionIterator++)
-        rectCount++;
-
     // Build the array of geometries
-    ID2D1Geometry** geometries = new ID2D1Geometry*[rectCount];
-    regionIterator.Reset(region);
-
-    int i = 0;
-    while(regionIterator)
+    HRESULT hr;
+    int i;
+    ID2D1Geometry** geometries;
+    int rectCount;
+    if ( region.IsEmpty() )
     {
-        geometries[i] = NULL;
+        // Empty region is skipped by iterator
+        // so we have to create it in a special way.
+        rectCount = 1;
+        geometries = new ID2D1Geometry*[rectCount];
 
-        wxRect rect = regionIterator.GetRect();
-        rect.SetWidth(rect.GetWidth() + 1);
-        rect.SetHeight(rect.GetHeight() + 1);
+        geometries[0] = NULL;
+        hr = direct2dFactory->CreateRectangleGeometry(
+                        D2D1::RectF(0.0F, 0.0F, 0.0F, 0.0F),
+                        (ID2D1RectangleGeometry**)(&geometries[0]));
+        wxFAILED_HRESULT_MSG(hr);
+    }
+    else
+    {
+        // Count the number of rectangles which compose the region
+        wxRegionIterator regionIterator(region);
+        rectCount = 0;
+        while(regionIterator++)
+            rectCount++;
 
-        direct2dFactory->CreateRectangleGeometry(
-            wxD2DConvertRect(rect),
-            (ID2D1RectangleGeometry**)(&geometries[i]));
+        geometries = new ID2D1Geometry*[rectCount];
+        regionIterator.Reset(region);
 
-        i++; regionIterator++;
+        i = 0;
+        while(regionIterator)
+        {
+            geometries[i] = NULL;
+
+            wxRect rect = regionIterator.GetRect();
+            rect.SetWidth(rect.GetWidth() + 1);
+            rect.SetHeight(rect.GetHeight() + 1);
+
+            hr = direct2dFactory->CreateRectangleGeometry(
+                wxD2DConvertRect(rect),
+                (ID2D1RectangleGeometry**)(&geometries[i]));
+            wxFAILED_HRESULT_MSG(hr);
+
+            i++;
+            ++regionIterator;
+        }
     }
 
     // Create a geometry group to hold all the rectangles
     wxCOMPtr<ID2D1GeometryGroup> resultGeometry;
-    direct2dFactory->CreateGeometryGroup(
+    hr = direct2dFactory->CreateGeometryGroup(
         D2D1_FILL_MODE_WINDING,
         geometries,
         rectCount,
         &resultGeometry);
+    wxFAILED_HRESULT_MSG(hr);
 
     // Cleanup temporaries
     for (i = 0; i < rectCount; ++i)
@@ -3400,6 +3422,7 @@ private:
         LayerType type;
         D2D1_LAYER_PARAMETERS params;
         wxCOMPtr<ID2D1Layer> layer;
+        wxCOMPtr<ID2D1Geometry> geometry;
     };
 
 private:
@@ -3493,6 +3516,8 @@ wxD2DContext::~wxD2DContext()
         else
         {
             GetRenderTarget()->PopLayer();
+            ld.layer.reset();
+            ld.geometry.reset();
         }
     }
 
@@ -3512,12 +3537,14 @@ void wxD2DContext::Clip(const wxRegion& region)
     wxCOMPtr<ID2D1Geometry> clipGeometry = wxD2DConvertRegionToGeometry(m_direct2dFactory, region);
 
     wxCOMPtr<ID2D1Layer> clipLayer;
-    GetRenderTarget()->CreateLayer(&clipLayer);
+    HRESULT hr = GetRenderTarget()->CreateLayer(&clipLayer);
+    wxCHECK_HRESULT_RET(hr);
 
     LayerData ld;
     ld.type = CLIP_LAYER;
     ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry);
     ld.layer = clipLayer;
+    ld.geometry = clipGeometry;
 
     GetRenderTarget()->PushLayer(ld.params, clipLayer);
     // Store layer parameters.
@@ -3556,6 +3583,7 @@ void wxD2DContext::ResetClip()
         {
             GetRenderTarget()->PopLayer();
             ld.layer.reset();
+            ld.geometry.reset();
             continue;
         }
 
@@ -3666,7 +3694,8 @@ bool wxD2DContext::SetCompositionMode(wxCompositionMode compositionMode)
 void wxD2DContext::BeginLayer(wxDouble opacity)
 {
     wxCOMPtr<ID2D1Layer> layer;
-    GetRenderTarget()->CreateLayer(&layer);
+    HRESULT hr = GetRenderTarget()->CreateLayer(&layer);
+    wxCHECK_HRESULT_RET(hr);
 
     LayerData ld;
     ld.type = OTHER_LAYER;
