@@ -398,11 +398,43 @@ wxGTKDCImpl::~wxGTKDCImpl()
 
 void wxGTKDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-    m_clipping = TRUE;
-    m_clipX1 = x;
-    m_clipY1 = y;
-    m_clipX2 = x + width;
-    m_clipY2 = y + height;
+    wxASSERT_MSG( width >= 0 && height >= 0,
+                  "Clipping box size values cannot be negative" );
+
+    wxRect newRegion(x, y, width, height);
+
+    wxRect clipRegion;
+    if ( m_clipping )
+    {
+        // New clipping box is an intersection
+        // of required clipping box and the current one.
+        wxRect curRegion(m_clipX1, m_clipY1, m_clipX2 - m_clipX1, m_clipY2 - m_clipY1);
+        clipRegion = curRegion.Intersect(newRegion);
+    }
+    else
+    {
+        // Effective clipping box is an intersection
+        // of required clipping box and DC surface.
+        int dcWidth, dcHeight;
+        DoGetSize(&dcWidth, &dcHeight);
+        wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
+                      DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
+        clipRegion = dcRect.Intersect(newRegion);
+
+        m_clipping = true;
+    }
+
+    if ( clipRegion.IsEmpty() )
+    {
+        m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0;
+    }
+    else
+    {
+        m_clipX1 = clipRegion.GetLeftTop().x;
+        m_clipY1 = clipRegion.GetLeftTop().y;
+        m_clipX2 = clipRegion.GetBottomRight().x + 1;
+        m_clipY2 = clipRegion.GetBottomRight().y + 1;
+    }
 }
 
 // ---------------------------------------------------------------------------

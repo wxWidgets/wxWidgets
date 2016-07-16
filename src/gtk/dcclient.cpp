@@ -1918,7 +1918,8 @@ void wxWindowDCImpl::DoSetDeviceClippingRegion( const wxRegion &region  )
 
     wxCoord xx, yy, ww, hh;
     m_currentClippingRegion.GetBox( xx, yy, ww, hh );
-    wxGTKDCImpl::DoSetClippingRegion( xx, yy, ww, hh );
+    wxGTKDCImpl::DoSetClippingRegion(DeviceToLogicalX(xx), DeviceToLogicalY(yy),
+                                     DeviceToLogicalXRel(ww), DeviceToLogicalYRel(hh));
 
     GdkRegion* gdkRegion = m_currentClippingRegion.GetRegion();
     gdk_gc_set_clip_region(m_penGC,   gdkRegion);
