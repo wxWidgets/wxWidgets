@@ -1904,12 +1904,6 @@ void wxWindowDCImpl::DoSetDeviceClippingRegion( const wxRegion &region  )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if (region.Empty())
-    {
-        DestroyClippingRegion();
-        return;
-    }
-
     if (!m_gdkwindow) return;
 
     if (!m_currentClippingRegion.IsNull())
