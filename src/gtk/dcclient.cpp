@@ -1871,6 +1871,20 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
 
     if (!m_gdkwindow) return;
 
+    // For internal calculations we need to have box definition
+    // in the canonical form, with (x,y) pointing to the top-left
+    // corner of the box and with non-negative width and height.
+    if ( width < 0 )
+    {
+        width = -width;
+        x -= (width - 1);
+    }
+    if ( height < 0 )
+    {
+        height = -height;
+        y -= (height - 1);
+    }
+
     wxRect rect;
     rect.x = XLOG2DEV(x);
     rect.y = YLOG2DEV(y);
