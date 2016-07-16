@@ -966,7 +966,7 @@ void ClippingBoxTestCaseBase::TwoDevRegionsOverlapping()
     // Setting one clipping region in device coordinates
     // and next another region in device coordinates (partially overlapping).
     // Final clipping box should be an intersection of these two regions.
-    wxRect r1(30, 40, 40, 30);
+    wxRect r1(30, 39, 40, 30);
     wxRect r2(60, 51, 40, 30);
     wxRect r = r1.Intersect(r2);
     wxASSERT( !r.IsEmpty() );
@@ -999,7 +999,7 @@ void ClippingBoxTestCaseBase::TwoDevRegionsOverlappingNegDim()
     const int h1 = -75;
 
     const int x2 = 20;
-    const int y2 = 5;
+    const int y2 = 6;
     const int w2 = 40;
     const int h2 = 30;
     wxClipRect r1(x1, y1, w1, h1);
