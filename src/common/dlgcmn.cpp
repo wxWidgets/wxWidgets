@@ -275,7 +275,12 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 
     if (flags & wxCANCEL)
     {
-        wxButton *cancel = new wxButton(this, wxID_CANCEL);
+        // Avoid Cmd+C closing dialog on Mac.
+        wxString cancelLabel(_("&Cancel"));
+#ifdef __WXMAC__
+        cancelLabel.Replace("&",wxEmptyString);
+#endif
+        wxButton *cancel = new wxButton(this, wxID_CANCEL, cancelLabel);
         sizer->AddButton(cancel);
     }
 
