@@ -581,17 +581,18 @@ public:
 
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
     */
-    //@{
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxColour& c1, const wxColour& c2) const;
 
+    /**
+        @overload
+    */
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxGraphicsGradientStops& stops) const;
-    //@}
 
     /**
         Creates a native brush with a radial gradient.
@@ -604,7 +605,6 @@ public:
 
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
     */
-    //@{
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                               wxDouble xc, wxDouble yc,
@@ -612,12 +612,14 @@ public:
                               const wxColour& oColor,
                               const wxColour& cColor) const;
 
+    /**
+        @overload
+    */
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                               wxDouble xc, wxDouble yc,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops) = 0;
-    //@}
 
     /**
         Sets the brush for filling paths.
@@ -657,14 +659,16 @@ public:
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask
         and the current brushed is used for filling.
     */
-    //@{
     virtual void DrawBitmap(const wxGraphicsBitmap& bmp,
                             wxDouble x, wxDouble y,
                             wxDouble w, wxDouble h ) = 0;
+
+    /**
+        @overload
+    */
     virtual void DrawBitmap(const wxBitmap& bmp,
                             wxDouble x, wxDouble y,
                             wxDouble w, wxDouble h) = 0;
-    //@}
 
     /**
         Draws an ellipse.
@@ -704,6 +708,7 @@ public:
         Draws text at the defined position.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y);
+
     /**
         Draws text at the defined position.
 
@@ -718,6 +723,7 @@ public:
             the string.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y, wxDouble angle);
+
     /**
         Draws text at the defined position.
 
@@ -749,6 +755,42 @@ public:
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y,
                   wxDouble angle, const wxGraphicsBrush& backgroundBrush);
+
+    /**
+        Creates a native graphics path which is initially empty.
+    */
+    wxGraphicsPath CreatePath() const;
+
+    /**
+        Fills the path with the current brush.
+    */
+    virtual void FillPath(const wxGraphicsPath& path,
+                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) = 0;
+
+    /**
+        Strokes a single line.
+    */
+    virtual void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
+
+    /**
+        Stroke disconnected lines from begin to end points, fastest method
+        available for this purpose.
+    */
+
+    virtual void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
+                             const wxPoint2DDouble* endPoints);
+    /**
+        Stroke lines connecting all the points.
+
+        Unlike the other overload of this function, this method draws a single
+        polyline and not a number of disconnected lines.
+    */
+    virtual void StrokeLines(size_t n, const wxPoint2DDouble* points);
+
+    /**
+        Strokes along a path with the current pen.
+    */
+    virtual void StrokePath(const wxGraphicsPath& path) = 0;
 
     /** @}
     */
@@ -850,15 +892,10 @@ public:
     */
 
     /**
-        Creates a native graphics path which is initially empty.
-    */
-    wxGraphicsPath CreatePath() const;
+        @name Bitmap functions
 
-    /**
-        Fills the path with the current brush.
+        @{
     */
-    virtual void FillPath(const wxGraphicsPath& path,
-                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) = 0;
 
     /**
         Creates wxGraphicsBitmap from an existing wxBitmap.
@@ -886,46 +923,63 @@ public:
                                              wxDouble x, wxDouble y,
                                              wxDouble w, wxDouble h) = 0;
 
-    /**
-        Returns the native context (CGContextRef for Core Graphics, Graphics
-        pointer for GDIPlus and cairo_t pointer for cairo).
+    /** @}
     */
-    virtual void* GetNativeContext() = 0;
 
     /**
-        Strokes a single line.
+        @name Modifying the state
+
+        @{
     */
-    virtual void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
 
     /**
-        Stroke disconnected lines from begin to end points, fastest method
-        available for this purpose.
-    */
-    virtual void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
-                             const wxPoint2DDouble* endPoints);
-    /**
-        Stroke lines connecting all the points.
-
-        Unlike the other overload of this function, this method draws a single
-        polyline and not a number of disconnected lines.
-    */
-    virtual void StrokeLines(size_t n, const wxPoint2DDouble* points);
-
-    /**
-        Strokes along a path with the current pen.
-    */
-    virtual void StrokePath(const wxGraphicsPath& path) = 0;
-
-    /**
-        Redirects all rendering is done into a fully transparent temporary context
+        All rendering will be done into a fully transparent temporary context.
+        Layers can be nested by making balanced calls to BeginLayer()/EndLayer().
     */
     virtual void BeginLayer(wxDouble opacity) = 0;
 
     /**
         Composites back the drawings into the context with the opacity given at
-        the BeginLayer call
+        the BeginLayer() call.
     */
     virtual void EndLayer() = 0;
+
+    /**
+       Push the current state of the context (eg. transformation matrix) on a
+       stack.
+       Multiple balanced calls to PushState() and PopState() can be nested.
+
+       @see PopState()
+    */
+    virtual void PushState() = 0;
+
+    /**
+       Sets current state of the context to the state saved by a preceding call
+       to PushState() and removes that state from the stack of saved states.
+
+       @see PushState()
+    */
+    virtual void PopState() = 0;
+
+    /**
+       Make sure that the current content of this context is immediately visible.
+    */
+    virtual void Flush();
+
+    /** @}
+    */
+
+    /**
+        @name Getting/setting parameters
+
+        @{
+    */
+
+    /**
+        Returns the native context (CGContextRef for Core Graphics, Graphics
+        pointer for GDIPlus and cairo_t pointer for cairo).
+    */
+    virtual void* GetNativeContext() = 0;
 
     /**
         Sets the antialiasing mode, returns true if it supported
@@ -940,6 +994,7 @@ public:
     /**
         Sets the interpolation quality, returns true if it is supported.
 
+        @remarks
         Not implemented in Cairo backend currently.
      */
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
@@ -959,44 +1014,43 @@ public:
     */
     virtual wxCompositionMode GetCompositionMode() const;
 
-
-    /**
-       Push the current state of the context's transformation matrix on a
-       stack.
-
-       @see wxGraphicsContext::PopState
-    */
-    virtual void PushState() = 0;
-
-    /**
-       Pops a stored state from the stack and sets the current transformation
-       matrix to that state.
-
-       @see wxGraphicsContext::PopState
-    */
-    virtual void PopState() = 0;
-
-
-    virtual bool ShouldOffset() const;
-    virtual void EnableOffset(bool enable = true);
-    void DisableOffset();
-    bool OffsetEnabled();
-
-    /**
-       Make sure that the current content of this context is immediately visible.
-    */
-    virtual void Flush();
-
     /**
        Returns the size of the graphics context in device coordinates.
     */
     void GetSize(wxDouble* width, wxDouble* height) const;
-    
+
     /**
        Returns the resolution of the graphics context in device points per inch.
     */
     virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
 
+    /** @}
+    */
+
+    /**
+        @name Offset management
+
+        @{
+    */
+
+    /**
+        Helper to determine if a 0.5 offset should be applied
+        for the drawing operation.
+    */
+    virtual bool ShouldOffset() const;
+
+    /**
+        Indicates whether the context should try to offset for pixel
+        boundaries. This only makes sense on bitmap devices like screen.
+        By default this is turned off.
+    */
+    virtual void EnableOffset(bool enable = true);
+
+    void DisableOffset();
+    bool OffsetEnabled();
+
+    /** @}
+    */
 };
 
 /**
