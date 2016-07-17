@@ -4749,7 +4749,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
         }
 #else
         int key = evt.GetKeyCode();
-        if (key <= WXK_START || key > WXK_COMMAND) {
+        if (key < WXK_START) {
             m_swx->DoAddChar(key);
             return;
         }
