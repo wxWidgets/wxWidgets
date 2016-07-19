@@ -761,7 +761,7 @@
 
 // notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
 // included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 #   define wxUSE_GRAPHICS_CONTEXT 1
 #else
     // Disable support for other Windows compilers, enable it if your compiler
