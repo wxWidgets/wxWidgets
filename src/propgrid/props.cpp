@@ -607,25 +607,6 @@ enum
     wxPG_UINT_TEMPLATE_MAX
 };
 
-static const wxStringCharType* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
-    wxS("%lx"),wxS("0x%lx"),wxS("$%lx"),
-    wxS("%lX"),wxS("0x%lX"),wxS("$%lX"),
-    wxS("%lu"),wxS("%lo")
-};
-
-#if wxUSE_LONGLONG
-static const wxStringCharType* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
-    wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
-    wxS("0x%") wxS(wxLongLongFmtSpec) wxS("x"),
-    wxS("$%") wxS(wxLongLongFmtSpec) wxS("x"),
-    wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
-    wxS("0x%") wxS(wxLongLongFmtSpec) wxS("X"),
-    wxS("$%") wxS(wxLongLongFmtSpec) wxS("X"),
-    wxS("%") wxS(wxLongLongFmtSpec) wxS("u"),
-    wxS("%") wxS(wxLongLongFmtSpec) wxS("o")
-};
-#endif // wxUSE_LONGLONG
-
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxPGProperty,TextCtrl)
 
 void wxUIntProperty::Init()
@@ -653,9 +634,52 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
 
 wxUIntProperty::~wxUIntProperty() { }
 
-wxString wxUIntProperty::ValueToString( wxVariant& value,
-                                        int WXUNUSED(argFlags) ) const
+wxString wxUIntProperty::ValueToString(wxVariant& value, int argFlags) const
 {
+    static const wxStringCharType* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] =
+    {
+        wxS("%lx"), wxS("0x%lx"), wxS("$%lx"),
+        wxS("%lX"), wxS("0x%lX"), wxS("$%lX"),
+        wxS("%lu"), wxS("%lo")
+    };
+
+    // In the edit mode we want to display just the numeric value,
+    // without prefixes.
+    static const wxStringCharType* const gs_uintEditTemplates32[wxPG_UINT_TEMPLATE_MAX] =
+    {
+        wxS("%lx"), wxS("%lx"), wxS("%lx"),
+        wxS("%lX"), wxS("%lX"), wxS("%lX"),
+        wxS("%lu"), wxS("%lo")
+    };
+
+#if wxUSE_LONGLONG
+    static const wxStringCharType* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] =
+    {
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("0x%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("$%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("0x%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("$%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("u"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("o")
+    };
+
+    // In the edit mode we want to display just the numeric value,
+    // without prefixes.
+    static const wxStringCharType* const gs_uintEditTemplates64[wxPG_UINT_TEMPLATE_MAX] =
+    {
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("u"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("o")
+    };
+#endif // wxUSE_LONGLONG
+
     size_t index = m_base + m_prefix;
     if ( index >= wxPG_UINT_TEMPLATE_MAX )
         index = wxPG_UINT_DEC;
@@ -663,14 +687,19 @@ wxString wxUIntProperty::ValueToString( wxVariant& value,
     const wxString valType(value.GetType());
     if ( valType == wxPG_VARIANT_TYPE_LONG )
     {
-        return wxString::Format(gs_uintTemplates32[index],
-                                (unsigned long)value.GetLong());
+        const wxStringCharType* fmt = argFlags & wxPG_EDITABLE_VALUE ?
+                                        gs_uintEditTemplates32[index] :
+                                        gs_uintTemplates32[index];
+        return wxString::Format(fmt, (unsigned long)value.GetLong());
     }
 #if wxUSE_LONGLONG
     else if ( valType == wxPG_VARIANT_TYPE_ULONGLONG )
     {
+        const wxStringCharType* fmt = argFlags & wxPG_EDITABLE_VALUE ?
+                                        gs_uintEditTemplates64[index] :
+                                        gs_uintTemplates64[index];
         wxULongLong ull = value.GetULongLong();
-        return wxString::Format(gs_uintTemplates64[index], ull.GetValue());
+        return wxString::Format(fmt, ull.GetValue());
     }
 #endif
     return wxEmptyString;
