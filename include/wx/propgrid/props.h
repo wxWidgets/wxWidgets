@@ -242,13 +242,21 @@ public:
 
     /** Validation helpers.
     */
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
+#if wxUSE_LONGLONG
+    static bool DoValidation( const wxPGProperty* property,
+                              wxLongLong& value,
+                              wxPGValidationInfo* pValidationInfo,
+                              int mode =
+                                wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
+
+#if defined(wxLongLong_t)
     static bool DoValidation( const wxPGProperty* property,
                               wxLongLong_t& value,
                               wxPGValidationInfo* pValidationInfo,
                               int mode =
                                 wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
-#endif
+#endif // wxLongLong_t
+#endif // wxUSE_LONGLONG
     static bool DoValidation(const wxPGProperty* property,
                              long& value,
                              wxPGValidationInfo* pValidationInfo,
@@ -311,12 +319,18 @@ private:
     void Init();
 
     // Validation helpers.
-#if defined(wxULongLong_t) && wxUSE_LONGLONG
+#if wxUSE_LONGLONG
+    static bool DoValidation(const wxPGProperty* property,
+                             wxULongLong& value,
+                             wxPGValidationInfo* pValidationInfo,
+                             int mode =wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+#if defined(wxULongLong_t)
     static bool DoValidation(const wxPGProperty* property,
                              wxULongLong_t& value,
                              wxPGValidationInfo* pValidationInfo,
                              int mode =wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
-#endif
+#endif // wxULongLong_t
+#endif // wxUSE_LONGLONG
     static bool DoValidation(const wxPGProperty* property,
                              long& value,
                              wxPGValidationInfo* pValidationInfo,
