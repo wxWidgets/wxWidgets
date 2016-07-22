@@ -576,20 +576,33 @@ inline int BoxBetween(int value, int low, int high)
 void ResampleBoxPrecalc(wxVector<BoxPrecalc>& boxes, int oldDim)
 {
     const int newDim = boxes.size();
-    const double scale_factor_1 = double(oldDim) / newDim;
-    const int scale_factor_2 = (int)(scale_factor_1 / 2);
-
-    for ( int dst = 0; dst < newDim; ++dst )
+    wxASSERT( oldDim > 0 && newDim > 0 );
+    if ( newDim > 1 )
     {
-        // Source pixel in the Y direction
-        const int src_p = int(dst * scale_factor_1);
+        // We want to map pixels in the range [0..newDim-1]
+        // to the range [0..oldDim-1]
+        const double scale_factor_1 = double(oldDim-1) / (newDim-1);
+        const int scale_factor_2 = (int)(scale_factor_1 / 2);
 
-        BoxPrecalc& precalc = boxes[dst];
-        precalc.boxStart = BoxBetween(int(src_p - scale_factor_1/2.0 + 1),
-                                      0, oldDim - 1);
-        precalc.boxEnd = BoxBetween(wxMax(precalc.boxStart + 1,
-                                          int(src_p + scale_factor_2)),
-                                    0, oldDim - 1);
+        for ( int dst = 0; dst < newDim; ++dst )
+        {
+            // Source pixel in the Y direction
+            const int src_p = int(dst * scale_factor_1);
+
+            BoxPrecalc& precalc = boxes[dst];
+            precalc.boxStart = BoxBetween(int(src_p - scale_factor_1/2.0 + 1),
+                                          0, oldDim - 1);
+            precalc.boxEnd = BoxBetween(wxMax(precalc.boxStart + 1,
+                                              int(src_p + scale_factor_2)),
+                                        0, oldDim - 1);
+        }
+    }
+    else
+    {
+        // Let's take entire source image.
+        BoxPrecalc& precalc = boxes[0];
+        precalc.boxStart = 0;
+        precalc.boxEnd = oldDim - 1;
     }
 }
 
@@ -680,33 +693,50 @@ struct BilinearPrecalc
     double dd1;
 };
 
+inline void DoCalc(BilinearPrecalc& precalc, double srcpix, int srcpixmax)
+{
+    int srcpix1 = int(srcpix);
+    int srcpix2 = srcpix1 == srcpixmax ? srcpix1 : srcpix1 + 1;
+
+    precalc.dd = srcpix - (int)srcpix;
+    precalc.dd1 = 1.0 - precalc.dd;
+    precalc.offset1 = srcpix1 < 0.0
+                        ? 0
+                        : srcpix1 > srcpixmax
+                            ? srcpixmax
+                            : (int)srcpix1;
+    precalc.offset2 = srcpix2 < 0.0
+                        ? 0
+                        : srcpix2 > srcpixmax
+                            ? srcpixmax
+                            : (int)srcpix2;
+}
+
 void ResampleBilinearPrecalc(wxVector<BilinearPrecalc>& precalcs, int oldDim)
 {
     const int newDim = precalcs.size();
-    const double scale_factor = double(oldDim) / newDim;
+    wxASSERT( oldDim > 0 && newDim > 0 );
     const int srcpixmax = oldDim - 1;
-
-    for ( int dsty = 0; dsty < newDim; dsty++ )
+    if ( newDim > 1 )
     {
-        // We need to calculate the source pixel to interpolate from - Y-axis
-        double srcpix = double(dsty) * scale_factor;
-        double srcpix1 = int(srcpix);
-        double srcpix2 = srcpix1 == srcpixmax ? srcpix1 : srcpix1 + 1.0;
+        // We want to map pixels in the range [0..newDim-1]
+        // to the range [0..oldDim-1]
+        const double scale_factor = double(oldDim-1) / (newDim-1);
 
-        BilinearPrecalc& precalc = precalcs[dsty];
+        for ( int dsty = 0; dsty < newDim; dsty++ )
+        {
+            // We need to calculate the source pixel to interpolate from - Y-axis
+            double srcpix = (double)dsty * scale_factor;
 
-        precalc.dd = srcpix - (int)srcpix;
-        precalc.dd1 = 1.0 - precalc.dd;
-        precalc.offset1 = srcpix1 < 0.0
-                            ? 0
-                            : srcpix1 > srcpixmax
-                                ? srcpixmax
-                                : (int)srcpix1;
-        precalc.offset2 = srcpix2 < 0.0
-                            ? 0
-                            : srcpix2 > srcpixmax
-                                ? srcpixmax
-                                : (int)srcpix2;
+            DoCalc(precalcs[dsty], srcpix, srcpixmax);
+        }
+    }
+    else
+    {
+        // Let's take the pixel from the center of the source image.
+        double srcpix = (double)srcpixmax / 2.0;
+
+        DoCalc(precalcs[0], srcpix, srcpixmax);
     }
 }
 
@@ -816,27 +846,47 @@ struct BicubicPrecalc
     int offset[4];
 };
 
+inline void DoCalc(BicubicPrecalc& precalc, double srcpixd, int oldDim)
+{
+    const double dd = srcpixd - static_cast<int>(srcpixd);
+
+    for ( int k = -1; k <= 2; k++ )
+    {
+        precalc.offset[k + 1] = srcpixd + k < 0.0
+            ? 0
+            : srcpixd + k >= oldDim
+                ? oldDim - 1
+                : static_cast<int>(srcpixd + k);
+
+        precalc.weight[k + 1] = spline_weight(k - dd);
+    }
+}
+
 void ResampleBicubicPrecalc(wxVector<BicubicPrecalc> &aWeight, int oldDim)
 {
     const int newDim = aWeight.size();
-    for ( int dstd = 0; dstd < newDim; dstd++ )
+    wxASSERT( oldDim > 0 && newDim > 0 );
+
+    if ( newDim > 1 )
     {
-        // We need to calculate the source pixel to interpolate from - Y-axis
-        const double srcpixd = static_cast<double>(dstd * oldDim) / newDim;
-        const double dd = srcpixd - static_cast<int>(srcpixd);
+        // We want to map pixels in the range [0..newDim-1]
+        // to the range [0..oldDim-1]
+        const double scale_factor = static_cast<double>(oldDim-1) / (newDim-1);
 
-        BicubicPrecalc &precalc = aWeight[dstd];
-
-        for ( int k = -1; k <= 2; k++ )
+        for ( int dstd = 0; dstd < newDim; dstd++ )
         {
-            precalc.offset[k + 1] = srcpixd + k < 0.0
-                ? 0
-                : srcpixd + k >= oldDim
-                    ? oldDim - 1
-                    : static_cast<int>(srcpixd + k);
+            // We need to calculate the source pixel to interpolate from - Y-axis
+            const double srcpixd = static_cast<double>(dstd) * scale_factor;
 
-            precalc.weight[k + 1] = spline_weight(k - dd);
+            DoCalc(aWeight[dstd], srcpixd, oldDim);
         }
+    }
+    else
+    {
+        // Let's take the pixel from the center of the source image.
+        const double srcpixd = static_cast<double>(oldDim - 1) / 2.0;
+
+        DoCalc(aWeight[0], srcpixd, oldDim);
     }
 }
 
