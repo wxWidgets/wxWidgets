@@ -93,7 +93,9 @@ All (GUI):
 - Fix wxTextEntry::SetHint() with wxTE_PASSWORD in generic implementation.
 - Many fixes and improvements in Direct2D, Cairo, and GDI+ graphics renderers.
 - Fix and unify clipping region support for MSW and GTK+.
-- Fix rescaling of wxImage
+- Fix rescaling of wxImage.
+- Fix displaying edited value of wxUIntProperty (wxPropertyGrid).
+- Fix displaying validation errors for numeric wxPropertyGrid properties.
 
 wxGTK:
 
