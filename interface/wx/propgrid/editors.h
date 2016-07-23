@@ -116,14 +116,17 @@ public:
         Default implementation  sets foreground colour, background colour,
         font, plus text for wxTextCtrl and wxComboCtrl.
 
-        The parameter @a appearance represents the new appearance to be applied.
+        @param appearance
+            New appearance to be applied.
 
-        The parameter @a oldAppearance is the previously applied appearance. 
-        Used to detect which control attributes need to be changed (e.g. so we only
-        change background colour if really needed).
+        @param oldAppearance
+            Previously applied appearance.  Used to detect which control
+            attributes need to be changed (e.g. so we onlychange background
+            colour if really needed).
 
-        Finally, the parameter @a unspecified if @true tells this function that
-        the new appearance represents an unspecified property value.
+        @param unspecified
+            If @true tells this function that the new appearance represents
+            an unspecified property value.
     */
     virtual void SetControlAppearance( wxPropertyGrid* pg,
                                        wxPGProperty* property,
@@ -333,3 +336,35 @@ public:
     wxSize GetPrimarySize() const;
 };
 
+/** @class wxPGEditorDialogAdapter
+
+    Derive a class from this to adapt an existing editor dialog or function to
+    be used when editor button of a property is pushed.
+
+    You only need to derive class and implement DoShowDialog() to create and
+    show the dialog, and finally submit the value returned by the dialog
+    via SetValue().
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGEditorDialogAdapter : public wxObject
+{
+public:
+    wxPGEditorDialogAdapter();
+
+    virtual ~wxPGEditorDialogAdapter();
+
+    bool ShowDialog( wxPropertyGrid* propGrid, wxPGProperty* property );
+
+    virtual bool DoShowDialog( wxPropertyGrid* propGrid,
+                               wxPGProperty* property ) = 0;
+
+    void SetValue( wxVariant value );
+
+    /**
+        This method is typically only used if deriving class from existing
+        adapter with value conversion purposes.
+    */
+    wxVariant& GetValue();
+};

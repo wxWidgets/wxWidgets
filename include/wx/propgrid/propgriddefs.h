@@ -224,11 +224,7 @@ class wxPGValidationInfo;
 
 // -----------------------------------------------------------------------
 
-/** @section propgrid_misc wxPropertyGrid Miscellaneous
-
-    This section describes some miscellaneous values, types and macros.
-    @{
-*/
+// Some miscellaneous values, types and macros.
 
 // Used to tell wxPGProperty to use label as name as well
 #define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
@@ -240,14 +236,12 @@ class wxPGValidationInfo;
 #endif // WXWIN_COMPATIBILITY_3_0
 #define wxPG_COLOUR_BLACK       (*wxBLACK)
 
-/** Convert Red, Green and Blue to a single 32-bit value.
-*/
+// Convert Red, Green and Blue to a single 32-bit value.
 #define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
 
 
-/** If property is supposed to have custom-painted image, then returning
-    this in OnMeasureImage() will usually be enough.
-*/
+// If property is supposed to have custom-painted image, then returning
+// this in OnMeasureImage() will usually be enough.
 #define wxPG_DEFAULT_IMAGE_SIZE  wxDefaultSize
 
 
@@ -270,9 +264,6 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 #if WXWIN_COMPATIBILITY_3_0
 typedef wxString wxPGCachedString;
 #endif
-
-/** @}
-*/
 
 // -----------------------------------------------------------------------
 

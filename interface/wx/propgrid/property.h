@@ -427,11 +427,15 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     @subsection wxStringProperty
 
-    Simple string property. wxPG_STRING_PASSWORD attribute may be used
-    to echo value as asterisks and use wxTE_PASSWORD for wxTextCtrl.
-    wxPG_ATTR_AUTOCOMPLETE attribute may be used to enable auto-completion
+    Simple string property.
+
+    Supported special attributes:
+    - wxPG_STRING_PASSWORD: Set to @true in order to echo value as asterisks and
+    to use wxTE_PASSWORD on the editor (wxTextCtrl).
+    - wxPG_ATTR_AUTOCOMPLETE: Set to @true to enable auto-completion
     (use a wxArrayString value), and is also supported by any property that
     happens to use a wxTextCtrl-based editor.
+    @see propgrid_property_attributes
 
     @remarks wxStringProperty has a special trait: if it has value of
             "<composed>", and also has child properties, then its displayed
@@ -441,9 +445,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     @subsection wxIntProperty
 
     Like wxStringProperty, but converts text to a signed long integer.
-    wxIntProperty seamlessly supports 64-bit integers (ie. wxLongLong).
+    wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overlfow.
     To safely convert variant to integer, use code like this:
-
     @code
         wxLongLong ll;
         ll << property->GetValue();
@@ -452,15 +455,55 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
         wxLongLong ll = propertyGrid->GetPropertyValueAsLong(property);
     @endcode
 
+    Getting 64-bit value:
+    @code
+        wxLongLong_t value = pg->GetPropertyValueAsLongLong();
+
+        // or
+
+        wxLongLong value;
+        wxVariant variant = property->GetValue();
+        if ( variant.IsType(wxPG_VARIANT_TYPE_LONGLONG) )
+            value = variant.GetLongLong();
+        else
+            value = variant.GetLong();
+    @endcode
+
+    Setting 64-bit value:
+    @code
+        pg->SetPropertyValue(longLongVal);
+
+        // or
+
+        property->SetValue(WXVARIANT(longLongVal));
+    @endcode
+
+    Supported special attributes:
+    - wxPG_ATTR_MIN, wxPG_ATTR_MAX to specify acceptable value range.
+
     @subsection wxUIntProperty
 
     Like wxIntProperty, but displays value as unsigned int. To set
     the prefix used globally, manipulate wxPG_UINT_PREFIX string attribute.
     To set the globally used base, manipulate wxPG_UINT_BASE int
     attribute. Regardless of current prefix, understands (hex) values starting
-    with both "0x" and "$".
+    with both "0x" and "$" (apart from edit mode).
     Like wxIntProperty, wxUIntProperty seamlessly supports 64-bit unsigned
-    integers (ie. wxULongLong). Same wxVariant safety rules apply.
+    integers (i.e. wxULongLong). Same wxVariant safety rules apply.
+
+    Supported special attributes:
+    - wxPG_ATTR_MIN, wxPG_ATTR_MAX: Specifies acceptable value range.
+    - wxPG_UINT_BASE: Defines base. Valid constants are wxPG_BASE_OCT,
+    wxPG_BASE_DEC, wxPG_BASE_HEX and wxPG_BASE_HEXL (lowercase characters).
+    Arbitrary bases are <b>not</b> supported.
+    - wxPG_UINT_PREFIX: Defines displayed prefix. Possible values are
+    wxPG_PREFIX_NONE, wxPG_PREFIX_0x and wxPG_PREFIX_DOLLAR_SIGN.
+    Only wxPG_PREFIX_NONE works with decimal and octal numbers.
+    @see propgrid_property_attributes
+
+    @remarks
+    For example how to use seamless 64-bit integer support, see wxIntProperty
+    documentation (just use wxULongLong instead of wxLongLong).
 
     @subsection wxFloatProperty
 
@@ -474,11 +517,26 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     what C standard library does, but should result in better end-user
     experience in almost all cases.
 
+    Supported special attributes:
+    - wxPG_ATTR_MIN, wxPG_ATTR_MAX: Specifies acceptable value range.
+    <b>Supported special attributes:</b>
+    - wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
+    value is rendered as text. The default -1 means shortest floating-point
+    6-digit representation.
+    @see propgrid_property_attributes
+
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
-    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true in order to
+    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to @true in order to
     use check box instead.
+
+    Supported special attributes:
+    - wxPG_BOOL_USE_CHECKBOX: If set to @true uses check box editor instead
+    of combo box.
+    - wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING: If set to @true cycles combo box
+    instead showing the list.
+    @see propgrid_property_attributes
 
     @subsection wxLongStringProperty
 
@@ -520,15 +578,27 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     @subsection wxDirProperty
 
     Like wxLongStringProperty, but the button triggers dir selector instead.
-    Supported properties (all with string value): wxPG_DIR_DIALOG_MESSAGE.
+
+    Supported special attributes:
+    - wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
+    @see propgrid_property_attributes
 
     @subsection wxFileProperty
 
     Like wxLongStringProperty, but the button triggers file selector instead.
     Default wildcard is "All files..." but this can be changed by setting
-    wxPG_FILE_WILDCARD attribute (see wxFileDialog for format details).
-    Attribute wxPG_FILE_SHOW_FULL_PATH can be set to @false in order to show
-    only the filename, not the entire path.
+    wxPG_FILE_WILDCARD attribute.
+
+    Supported special attributes:
+    - wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
+    files..." is default.
+    - wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
+    (i.e. drive and directory are hidden).
+   - wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
+    given path string.
+    - wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
+    - wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
+    @see propgrid_property_attributes
 
     @subsection wxEnumProperty
 
@@ -550,22 +620,35 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     @subsection wxArrayStringProperty
 
-    Allows editing of a list of strings in wxTextCtrl and in a separate
-    dialog. Supports "Delimiter" attribute, which defaults to comma (',').
+    Property that manages a list of strings. Allows editing of a list
+    of strings in wxTextCtrl and in a separate dialog.
+
+    Supported special attributes:
+    - wxPG_ARRAY_DELIMITER: Sets string delimiter character.
+    Default is comma (',').
+    @see propgrid_property_attributes
 
     @subsection wxDateProperty
 
-    wxDateTime property. Default editor is DatePickerCtrl, although TextCtrl
-    should work as well. wxPG_DATE_FORMAT attribute can be used to change
-    string wxDateTime::Format uses (although default is recommended as it is
-    locale-dependent), and wxPG_DATE_PICKER_STYLE allows changing window
-    style given to DatePickerCtrl (default is wxDP_DEFAULT|wxDP_SHOWCENTURY).
-    Using wxDP_ALLOWNONE will enable better unspecified value support.
+    Property representing wxDateTime. Default editor is DatePickerCtrl,
+    although TextCtrl should work as well.
+
+    Supported special attributes:
+    - wxPG_DATE_FORMAT: Determines displayed date format (with wxDateTime::Format).
+    Default is recommended as it is locale-dependent.
+    - wxPG_DATE_PICKER_STYLE: Determines window style used with wxDatePickerCtrl.
+       Default is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE
+       enables additional support for unspecified property value.
+    @see propgrid_property_attributes
 
     @subsection wxEditEnumProperty
 
     Represents a string that can be freely edited or selected from list of choices -
     custom combobox control is used to edit the value.
+
+    @remarks
+    Uses int value, similar to wxEnumProperty, unless text entered by user is
+    is not in choices (in which case string value is used).
 
     @subsection wxMultiChoiceProperty
 
@@ -573,10 +656,18 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     property is pretty much built around concept of wxMultiChoiceDialog.
     It uses wxArrayString value.
 
+    Supported special attributes:
+    - wxPG_ATTR_MULTICHOICE_USERSTRINGMODE: If > 0, allows user to manually
+    enter strings that are not in the list of choices. If this value is 1,
+    user strings are preferably placed in front of valid choices. If value
+    is 2, then those strings will placed behind valid choices.
+    @see propgrid_property_attributes
+
     @subsection wxImageFileProperty
 
-    Like wxFileProperty, but has thumbnail of the image in front of
-    the filename and autogenerates wildcard from available image handlers.
+    Property representing image file(name). Like wxFileProperty,
+    but has thumbnail of the image in front of the filename
+    and autogenerates wildcard from available image handlers.
 
     @subsection wxColourProperty
 
@@ -586,8 +677,10 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     There are various sub-classing opportunities with this class. See
     below in wxSystemColourProperty section for details.
 
-    Setting "HasAlpha" attribute to @true for this property allows user to
-    edit the alpha colour component.
+    Supported special attributes:
+    - wxPG_COLOUR_HAS_ALPHA: If set to @true allows user to edit the alpha
+    colour component.
+    @see propgrid_property_attributes
 
     @subsection wxFontProperty
 
@@ -618,7 +711,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
         };
     @endcode
 
-    in wxSystemColourProperty, and its derived class wxColourProperty, there
+    In wxSystemColourProperty, and its derived class wxColourProperty, there
     are various sub-classing features. To set a basic list of colour
     names, call wxPGProperty::SetChoices().
 
@@ -1488,19 +1581,19 @@ public:
     wxPGProperty* GetItemAtY( unsigned int y ) const;
 
     /**
-        Returns true if property has given flag set.
+        Returns @true if property has given flag set.
 
         @see propgrid_propflags
     */
     bool HasFlag(wxPGPropertyFlags flag) const;
 
     /**
-        Returns true if property has given flag set.
+        Returns @true if property has given flag set.
     */
     bool HasFlag(FlagType flag) const;
 
     /**
-        Returns true if property has all given flags set.
+        Returns @true if property has all given flags set.
     */
     bool HasFlagsExact(FlagType flags) const;
 

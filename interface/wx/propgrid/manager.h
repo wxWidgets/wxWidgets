@@ -81,6 +81,16 @@ public:
     int GetSplitterPosition( int col = 0 ) const;
 
     /**
+        Returns pointer to contained property grid state.
+    */
+    wxPropertyGridPageState* GetStatePtr();
+
+    /**
+        Returns pointer to contained property grid state.
+    */
+    const wxPropertyGridPageState* GetStatePtr() const;
+
+    /**
         Returns id of the tool bar item that represents this page on
         wxPropertyGridManager's wxToolBar.
     */
@@ -95,7 +105,7 @@ public:
     virtual void Init();
 
     /**
-        Return false here to indicate unhandled events should be
+        Return @false here to indicate unhandled events should be
         propagated to manager's parent, as normal.
     */
     virtual bool IsHandlingAllEvents() const;
@@ -201,6 +211,21 @@ class wxPropertyGridManager : public wxPanel, public wxPropertyGridInterface
 {
 public:
     /**
+        The default constructor. The styles to be used are styles valid for
+        the wxWindow.
+    */
+    wxPropertyGridManager( wxWindow *parent, wxWindowID id = wxID_ANY,
+                           const wxPoint& pos = wxDefaultPosition,
+                           const wxSize& size = wxDefaultSize,
+                           long style = wxPGMAN_DEFAULT_STYLE,
+                           const wxString& name = wxPropertyGridManagerNameStr );
+
+    /**
+        Destructor.
+    */
+    virtual ~wxPropertyGridManager();
+
+    /**
         Creates new property page. Note that the first page is not created
         automatically.
 
@@ -259,7 +284,7 @@ public:
         Enables or disables (shows/hides) categories according to parameter enable.
 
         @remarks
-            Calling his may not properly update toolbar buttons.
+            Calling this may not properly update toolbar buttons.
     */
     bool EnableCategories( bool enable );
 
@@ -291,7 +316,7 @@ public:
     wxPropertyGrid* GetGrid();
 
     /**
-        Similar to GetIterator, but instead returns wxPGVIterator instance,
+        Similar to GetIterator(), but instead returns wxPGVIterator instance,
         which can be useful for forward-iterating through arbitrary property
         containers.
     */
@@ -317,6 +342,12 @@ public:
         returned.
     */
     int GetPageByName( const wxString& name ) const;
+
+    /**
+        Returns index for a relevant propertygrid state.
+        If no match is found, wxNOT_FOUND is returned.
+    */
+    int GetPageByState( const wxPropertyGridPageState* pstate ) const;
 
     /**
         Returns number of managed pages.
@@ -365,7 +396,7 @@ public:
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this
-            object. If NULL, default page object is constructed.
+            object. If @NULL, default page object is constructed.
 
         @return Returns pointer to created page.
     */

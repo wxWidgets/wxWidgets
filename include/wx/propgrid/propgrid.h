@@ -353,10 +353,7 @@ protected:
 
 // -----------------------------------------------------------------------
 
-/** @section propgrid_vfbflags wxPropertyGrid Validation Failure behaviour Flags
-    @{
-*/
-
+// wxPropertyGrid Validation Failure behaviour Flags
 enum wxPG_VALIDATION_FAILURE_BEHAVIOR_FLAGS
 {
 
@@ -1637,7 +1634,7 @@ protected:
 
 #if WXWIN_COMPATIBILITY_3_0
     // Unused variable.
-    /** When drawing next time, clear this many item slots at the end. */
+    // When drawing next time, clear this many item slots at the end.
     int                 m_clearThisMany;
 #endif
 
@@ -2101,7 +2098,7 @@ public:
         return m_property->GetMainParent();
     }
 
-    /** Returns id of associated property. */
+    // Returns property associated with this event.
     wxPGProperty* GetProperty() const
     {
         return m_property;
