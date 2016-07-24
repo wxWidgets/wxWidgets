@@ -393,6 +393,12 @@ class wxGraphicsContext : public wxGraphicsObject
 {
 public:
     /**
+        @name Creating a context
+
+        @{
+    */
+
+    /**
         Creates a wxGraphicsContext from a wxWindow.
 
         @see wxGraphicsRenderer::CreateContext()
@@ -465,6 +471,9 @@ public:
        Create a lightweight context that can be used only for measuring text.
     */
     static wxGraphicsContext* Create();
+
+    /** @}
+    */
 
     /**
         @name Clipping region functions

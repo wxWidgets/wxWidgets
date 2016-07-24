@@ -430,12 +430,12 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     Simple string property.
 
     Supported special attributes:
-    - wxPG_STRING_PASSWORD: Set to @true in order to echo value as asterisks and
-    to use wxTE_PASSWORD on the editor (wxTextCtrl).
-    - wxPG_ATTR_AUTOCOMPLETE: Set to @true to enable auto-completion
+    - @c wxPG_STRING_PASSWORD: Set to @true in order to echo value as asterisks and
+    to use @c wxTE_PASSWORD on the editor (wxTextCtrl).
+    - @c wxPG_ATTR_AUTOCOMPLETE: Set to @true to enable auto-completion
     (use a wxArrayString value), and is also supported by any property that
     happens to use a wxTextCtrl-based editor.
-    @see propgrid_property_attributes
+    @see @ref propgrid_property_attributes
 
     @remarks wxStringProperty has a special trait: if it has value of
             "<composed>", and also has child properties, then its displayed
@@ -479,27 +479,27 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     @endcode
 
     Supported special attributes:
-    - wxPG_ATTR_MIN, wxPG_ATTR_MAX to specify acceptable value range.
+    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX to specify acceptable value range.
 
     @subsection wxUIntProperty
 
     Like wxIntProperty, but displays value as unsigned int. To set
-    the prefix used globally, manipulate wxPG_UINT_PREFIX string attribute.
-    To set the globally used base, manipulate wxPG_UINT_BASE int
+    the prefix used globally, manipulate @c wxPG_UINT_PREFIX string attribute.
+    To set the globally used base, manipulate @c wxPG_UINT_BASE int
     attribute. Regardless of current prefix, understands (hex) values starting
     with both "0x" and "$" (apart from edit mode).
     Like wxIntProperty, wxUIntProperty seamlessly supports 64-bit unsigned
     integers (i.e. wxULongLong). Same wxVariant safety rules apply.
 
     Supported special attributes:
-    - wxPG_ATTR_MIN, wxPG_ATTR_MAX: Specifies acceptable value range.
-    - wxPG_UINT_BASE: Defines base. Valid constants are wxPG_BASE_OCT,
-    wxPG_BASE_DEC, wxPG_BASE_HEX and wxPG_BASE_HEXL (lowercase characters).
+    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX: Specifies acceptable value range.
+    - @c wxPG_UINT_BASE: Defines base. Valid constants are @c wxPG_BASE_OCT,
+    @c wxPG_BASE_DEC, @c wxPG_BASE_HEX and @c wxPG_BASE_HEXL (lowercase characters).
     Arbitrary bases are <b>not</b> supported.
-    - wxPG_UINT_PREFIX: Defines displayed prefix. Possible values are
-    wxPG_PREFIX_NONE, wxPG_PREFIX_0x and wxPG_PREFIX_DOLLAR_SIGN.
-    Only wxPG_PREFIX_NONE works with decimal and octal numbers.
-    @see propgrid_property_attributes
+    - @c wxPG_UINT_PREFIX: Defines displayed prefix. Possible values are
+    @c wxPG_PREFIX_NONE, @c wxPG_PREFIX_0x and @c wxPG_PREFIX_DOLLAR_SIGN.
+    Only @c wxPG_PREFIX_NONE works with decimal and octal numbers.
+    @see @ref propgrid_property_attributes
 
     @remarks
     For example how to use seamless 64-bit integer support, see wxIntProperty
@@ -509,7 +509,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Like wxStringProperty, but converts text to a double-precision floating point.
     Default float-to-text precision is 6 decimals, but this can be changed
-    by modifying wxPG_FLOAT_PRECISION attribute.
+    by modifying @c wxPG_FLOAT_PRECISION attribute.
 
     Note that when displaying the value, sign is omitted if the resulting
     textual representation is effectively zero (for example, -0.0001 with
@@ -518,25 +518,24 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     experience in almost all cases.
 
     Supported special attributes:
-    - wxPG_ATTR_MIN, wxPG_ATTR_MAX: Specifies acceptable value range.
-    <b>Supported special attributes:</b>
-    - wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
+    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX: Specifies acceptable value range.
+    - @c wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
     value is rendered as text. The default -1 means shortest floating-point
     6-digit representation.
-    @see propgrid_property_attributes
+    @see @ref propgrid_property_attributes
 
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
-    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to @true in order to
+    default. @c wxPG_BOOL_USE_CHECKBOX attribute can be set to @true in order to
     use check box instead.
 
     Supported special attributes:
-    - wxPG_BOOL_USE_CHECKBOX: If set to @true uses check box editor instead
+    - @c wxPG_BOOL_USE_CHECKBOX: If set to @true uses check box editor instead
     of combo box.
-    - wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING: If set to @true cycles combo box
+    - @c wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING: If set to @true cycles combo box
     instead showing the list.
-    @see propgrid_property_attributes
+    @see @ref propgrid_property_attributes
 
     @subsection wxLongStringProperty
 
@@ -580,25 +579,25 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     Like wxLongStringProperty, but the button triggers dir selector instead.
 
     Supported special attributes:
-    - wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
-    @see propgrid_property_attributes
+    - @c wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
+    @see @ref propgrid_property_attributes
 
     @subsection wxFileProperty
 
     Like wxLongStringProperty, but the button triggers file selector instead.
     Default wildcard is "All files..." but this can be changed by setting
-    wxPG_FILE_WILDCARD attribute.
+    @c wxPG_FILE_WILDCARD attribute.
 
     Supported special attributes:
-    - wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
+    - @c wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
     files..." is default.
-    - wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
+    - @c wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
     (i.e. drive and directory are hidden).
-   - wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
+   - @c wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
     given path string.
-    - wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
-    - wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
-    @see propgrid_property_attributes
+    - @c wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
+    - @c wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
+    @see @ref propgrid_property_attributes
 
     @subsection wxEnumProperty
 
@@ -624,9 +623,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     of strings in wxTextCtrl and in a separate dialog.
 
     Supported special attributes:
-    - wxPG_ARRAY_DELIMITER: Sets string delimiter character.
+    - @c wxPG_ARRAY_DELIMITER: Sets string delimiter character.
     Default is comma (',').
-    @see propgrid_property_attributes
+    @see @ref propgrid_property_attributes
 
     @subsection wxDateProperty
 
@@ -634,12 +633,12 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     although TextCtrl should work as well.
 
     Supported special attributes:
-    - wxPG_DATE_FORMAT: Determines displayed date format (with wxDateTime::Format).
+    - @c wxPG_DATE_FORMAT: Determines displayed date format (with wxDateTime::Format).
     Default is recommended as it is locale-dependent.
-    - wxPG_DATE_PICKER_STYLE: Determines window style used with wxDatePickerCtrl.
-       Default is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE
+    - @c wxPG_DATE_PICKER_STYLE: Determines window style used with wxDatePickerCtrl.
+       Default is @c wxDP_DEFAULT | @c wxDP_SHOWCENTURY. Using @c wxDP_ALLOWNONE
        enables additional support for unspecified property value.
-    @see propgrid_property_attributes
+    @see @ref propgrid_property_attributes
 
     @subsection wxEditEnumProperty
 
@@ -657,11 +656,11 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     It uses wxArrayString value.
 
     Supported special attributes:
-    - wxPG_ATTR_MULTICHOICE_USERSTRINGMODE: If > 0, allows user to manually
+    - @c wxPG_ATTR_MULTICHOICE_USERSTRINGMODE: If > 0, allows user to manually
     enter strings that are not in the list of choices. If this value is 1,
     user strings are preferably placed in front of valid choices. If value
     is 2, then those strings will placed behind valid choices.
-    @see propgrid_property_attributes
+    @see @ref propgrid_property_attributes
 
     @subsection wxImageFileProperty
 
@@ -678,9 +677,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     below in wxSystemColourProperty section for details.
 
     Supported special attributes:
-    - wxPG_COLOUR_HAS_ALPHA: If set to @true allows user to edit the alpha
+    - @c wxPG_COLOUR_HAS_ALPHA: If set to @true allows user to edit the alpha
     colour component.
-    @see propgrid_property_attributes
+    @see @ref propgrid_property_attributes
 
     @subsection wxFontProperty
 
