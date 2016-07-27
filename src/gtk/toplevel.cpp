@@ -1153,7 +1153,12 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 extern "C" {
 static gboolean reset_size_request(void* data)
 {
-    gtk_widget_set_size_request(GTK_WIDGET(data), -1, -1);
+    if ( GTK_IS_WIDGET(data) )
+    {
+        gtk_widget_set_size_request(GTK_WIDGET(data), -1, -1);
+    }
+    //else: the window has probably been deleted before the idle callback was
+    //      invoked
     return false;
 }
 }
