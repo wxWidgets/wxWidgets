@@ -303,31 +303,34 @@ void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
     // region is in device coordinates
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoSetDeviceClippingRegion - invalid DC") );
 
-    // Convert device coordinates to logical coordinates
-    // for all region components.
-    wxRegion logRegion;
-    if ( region.IsEmpty() )
-    {
-        // Empty region is skipped by iterator
-        // so we have to copy it directly.
-        logRegion = region;
-    }
-    else
-    {
-        wxRegionIterator ri(region);
-        while (ri)
-        {
-            logRegion.Union(DeviceToLogicalX(ri.GetX()),
-                            DeviceToLogicalY(ri.GetY()),
-                            DeviceToLogicalXRel(ri.GetWidth()),
-                            DeviceToLogicalYRel(ri.GetHeight()));
-            ++ri;
-        }
-    }
+    // Because graphics context works with logical coordinates
+    // and clipping region is given in device coordinates
+    // we need temporarily reset graphics context's coordinate system
+    // to the initial state in which logical and device coordinate
+    // systems are equivalent.
+    // So, at first save current transformation parameters.
+    wxGraphicsMatrix currTransform = m_graphicContext->CreateMatrix();
+    currTransform = m_graphicContext->GetTransform();
+    // Reset coordinate system with identity transformation matrix
+    // to make logical coordinates the same as device coordinates.
+    wxGraphicsMatrix m = m_graphicContext->CreateMatrix();
+    m_graphicContext->SetTransform(m);
 
-    m_graphicContext->Clip(logRegion);
+    // Set clipping region
+    m_graphicContext->Clip(region);
 
-    wxRect newRegion = logRegion.GetBox();
+    // Restore original transformation settings.
+    m_graphicContext->SetTransform(currTransform);
+
+    // Convert bounding box of the region to logical coordinates
+    // for further use.
+    wxRect newRegion = region.GetBox();
+    wxPoint logPos = wxPoint(DeviceToLogicalX(newRegion.GetLeft()),
+                             DeviceToLogicalY(newRegion.GetTop()));
+    wxSize logSize = wxSize(DeviceToLogicalXRel(newRegion.GetWidth()),
+                            DeviceToLogicalYRel(newRegion.GetHeight()));
+    newRegion.SetPosition(logPos);
+    newRegion.SetSize(logSize);
 
     wxRect clipRegion;
     if ( m_clipping )
