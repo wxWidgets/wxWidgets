@@ -31,6 +31,56 @@ static const wxSize s_dcSize(100, 120);
 static const wxColour s_bgColour(*wxWHITE); // colour to draw outside clipping box
 static const wxColour s_fgColour(*wxGREEN); // colour to draw inside clipping box
 
+static bool CompareImageFuzzy(const wxImage& img1, const wxImage& img2, int posTolerance = 0)
+{
+    // For each (x,y) pixel in the image1 we check
+    // if there is a pixel of the same value in the square
+    // area (x-d..x+d, y-d..y+d) around the pixel (x,y)
+    // in the image2. If not, we consider pixels
+    // and images as different.
+
+    if ( img1.GetWidth() != img2.GetWidth() )
+        return false;
+
+    if ( img1.GetHeight() != img2.GetHeight() )
+        return false;
+
+    const int w = img1.GetWidth();
+    const int h = img1.GetHeight();
+    for ( int y1 = 0; y1 < h; y1++ )
+    {
+        int y2min = wxMax(y1 - posTolerance, 0);
+        int y2max = wxMin(y1 + posTolerance, h);
+        for( int x1 = 0; x1 < w; x1++ )
+        {
+            int x2min = wxMax(x1 - posTolerance, 0);
+            int x2max = wxMin(x1 + posTolerance, w);
+
+            unsigned char r1 = img1.GetRed(x1, y1);
+            unsigned char g1 = img1.GetGreen(x1, y1);
+            unsigned char b1 = img1.GetBlue(x1, y1);
+
+            bool pix2Found = false;
+            for( int y2 = y2min; y2 <= y2max && !pix2Found; y2++ )
+                for( int x2 = x2min; x2 <= x2max; x2++ )
+                {
+                    if( r1 == img2.GetRed(x2, y2) &&
+                        g1 == img2.GetGreen(x2, y2) &&
+                        b1 == img2.GetBlue(x2, y2))
+                    {
+                        pix2Found = true;
+                        break;
+                    }
+                }
+
+            if ( !pix2Found )
+                return false;
+        }
+    }
+
+    return true;
+}
+
 class ClippingBoxTestCaseBase : public CppUnit::TestCase
 {
 public:
@@ -46,9 +96,11 @@ public:
     }
 
     virtual void setUp() { wxASSERT( m_dc ); }
+    virtual wxDC* GetDC(wxMemoryDC* dc) = 0;
 
 private:
-    void CheckBox(int x, int y, int width, int height);
+    void CheckBox(int x, int y, int width, int height,
+                  const wxBitmap& bmpRef = wxNullBitmap, int posTolerance = 0);
 
 protected:
     void InitialState();
@@ -68,6 +120,7 @@ protected:
     void OneLargeDevRegion();
     void OneOuterDevRegion();
     void OneDevRegionNegDim();
+    void OneDevRegionNonRect();
     void OneDevRegionAndReset();
     void OneDevRegionAndEmpty();
     void TwoDevRegionsOverlapping();
@@ -99,7 +152,7 @@ public:
         m_mdc.SelectObject(wxNullBitmap);
     }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         m_mdc.DestroyClippingRegion();
         wxBrush bgBrush(s_bgColour, wxBRUSHSTYLE_SOLID);
@@ -107,7 +160,13 @@ public:
         m_mdc.Clear();
     }
 
-    virtual void FlushDC() {}
+    virtual wxDC* GetDC(wxMemoryDC* dc) wxOVERRIDE
+    {
+        return dc;
+    }
+
+protected:
+    virtual void FlushDC() wxOVERRIDE {}
 
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseDC );
@@ -128,6 +187,7 @@ private:
         CPPUNIT_TEST( OneLargeDevRegion );
         CPPUNIT_TEST( OneOuterDevRegion );
         CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionNonRect );
         CPPUNIT_TEST( OneDevRegionAndReset);
         CPPUNIT_TEST( OneDevRegionAndEmpty );
         CPPUNIT_TEST( TwoDevRegionsOverlapping );
@@ -164,7 +224,7 @@ public:
         delete m_gcdc;
     }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         CPPUNIT_ASSERT_MESSAGE("Invalid wxGCDC", m_gcdc);
 
@@ -177,7 +237,17 @@ public:
         m_gcdc->Clear();
     }
 
-    virtual void FlushDC()
+    virtual wxDC* GetDC(wxMemoryDC* dc) wxOVERRIDE
+    {
+        wxGraphicsRenderer* rend = m_gcdc->GetGraphicsContext()->GetRenderer();
+        wxGraphicsContext* ctx = rend->CreateContext(*dc);
+        ctx->SetAntialiasMode(wxANTIALIAS_NONE);
+        ctx->DisableOffset();
+        return new wxGCDC(ctx);
+    }
+
+protected:
+    virtual void FlushDC() wxOVERRIDE
     {
         m_gcdc->GetGraphicsContext()->Flush();
     }
@@ -201,6 +271,7 @@ private:
         CPPUNIT_TEST( OneLargeDevRegion );
         CPPUNIT_TEST( OneOuterDevRegion );
         CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionNonRect );
         CPPUNIT_TEST( OneDevRegionAndReset);
         CPPUNIT_TEST( OneDevRegionAndEmpty );
         CPPUNIT_TEST( TwoDevRegionsOverlapping );
@@ -260,6 +331,7 @@ private:
         CPPUNIT_TEST( OneLargeDevRegion );
         CPPUNIT_TEST( OneOuterDevRegion );
         CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionNonRect );
         CPPUNIT_TEST( OneDevRegionAndReset);
         CPPUNIT_TEST( OneDevRegionAndEmpty );
         CPPUNIT_TEST( TwoDevRegionsOverlapping );
@@ -323,6 +395,7 @@ private:
         CPPUNIT_TEST( OneLargeDevRegion );
         CPPUNIT_TEST( OneOuterDevRegion );
         CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionNonRect );
         CPPUNIT_TEST( OneDevRegionAndReset);
         CPPUNIT_TEST( OneDevRegionAndEmpty );
         CPPUNIT_TEST( TwoDevRegionsOverlapping );
@@ -378,6 +451,7 @@ private:
         CPPUNIT_TEST( OneLargeDevRegion );
         CPPUNIT_TEST( OneOuterDevRegion );
         CPPUNIT_TEST( OneDevRegionNegDim );
+        CPPUNIT_TEST( OneDevRegionNonRect );
         CPPUNIT_TEST( OneDevRegionAndReset);
         CPPUNIT_TEST( OneDevRegionAndEmpty );
         CPPUNIT_TEST( TwoDevRegionsOverlapping );
@@ -427,7 +501,8 @@ public:
 
 // =====  Implementation  =====
 
-void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
+void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
+                                       const wxBitmap& bmpRef, int posTolerance)
 {
     // Check clipping box boundaries.
     int clipX, clipY, clipW, clipH;
@@ -479,17 +554,35 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height)
     // Update wxDC contents.
     FlushDC();
 
-    // Check whether diagonal corners of the clipping box
-    // are actually drawn at the edge of the clipping region.
 #if wxUSE_IMAGE
     // For some renderers it's not possible to get pixels
     // value from wxDC so we would have to examine pixels
     // in the underlying bitmap.
-    wxImage img;
-    img = m_bmp.ConvertToImage();
+    wxImage img = m_bmp.ConvertToImage();
 #else
     return;
 #endif // wxUSE_IMAGE
+
+    // If reference bitmap is given then it has to be
+    // compared with current bitmap.
+    if ( bmpRef.IsOk() )
+    {
+        wxImage imgRef = bmpRef.ConvertToImage();
+        // Figures created by clipping and drawing procedures
+        // can be slightly different (shifted by few pixels) due
+        // to the different algorithms they can use so we need
+        // to perform a "fuzzy" comparison of the images,
+        // tolerating some drift of the pixels.
+        if ( !CompareImageFuzzy(img, imgRef, posTolerance) )
+            CPPUNIT_FAIL( "Invalid shape ot the clipping region" );
+
+        return;
+    }
+
+    // If no reference bitmap is given then rectangular
+    // clipping region is assumed and we check whether
+    // diagonal corners of the clipping box are actually
+    // drawn at the edge of the clipping region.
 
     // Check area near the top-left corner
     int ymin = y-1;
@@ -921,6 +1014,54 @@ void ClippingBoxTestCaseBase::OneDevRegionNegDim()
              m_dc->DeviceToLogicalY(r.GetTop()),
              m_dc->DeviceToLogicalXRel(r.GetWidth()),
              m_dc->DeviceToLogicalYRel(r.GetHeight()));
+}
+
+void ClippingBoxTestCaseBase::OneDevRegionNonRect()
+{
+    // Setting one triangular clipping region in device coordinates.
+    const wxPoint poly[3] =
+    {
+        wxPoint(3, 5),
+        wxPoint(68, 18),
+        wxPoint(40, 72)
+    };
+    // Expected clipping box in device coordinates.
+    const int clipX = 4;
+    const int clipY = 6;
+    const int clipW = 64;
+    const int clipH = 66;
+
+    // Draw image with reference triangle.
+    wxBitmap bmpRef(s_dcSize);
+    wxMemoryDC* memDC = new wxMemoryDC(bmpRef);
+    wxDC* dcRef = GetDC(memDC);
+    dcRef->SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
+    dcRef->Clear();
+    dcRef->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    dcRef->SetPen(wxPen(s_fgColour));
+    dcRef->DrawPolygon(WXSIZEOF(poly), poly);
+    delete dcRef;
+
+    m_dc->SetDeviceOrigin(10, 15);
+    m_dc->SetUserScale(0.5, 1.5);
+    m_dc->SetLogicalScale(4.0, 2.0);
+    m_dc->SetLogicalOrigin(-15, -20);
+    wxRegion r(WXSIZEOF(poly), poly);
+    m_dc->SetDeviceClippingRegion(r);
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    // Check clipping box parameters and compare
+    // filled in clipping region with reference triangle.
+    // Triangles created by clipping and drawing procedures
+    // can be slightly different (shifted by few pixels) due
+    // to the different algorithms used for different operations
+    // so we need to perform a "fuzzy" comparison of the images,
+    // tolerating some drift of the pixels.
+    CheckBox(m_dc->DeviceToLogicalX(clipX),
+             m_dc->DeviceToLogicalY(clipY),
+             m_dc->DeviceToLogicalXRel(clipW),
+             m_dc->DeviceToLogicalYRel(clipH),
+             bmpRef, 1);
 }
 
 void ClippingBoxTestCaseBase::OneDevRegionAndReset()
