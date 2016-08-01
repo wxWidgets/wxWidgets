@@ -51,6 +51,7 @@
 #include "wx/thread.h"
 #include "wx/scopeguard.h"
 #include "wx/vector.h"
+#include "wx/weakref.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
@@ -137,13 +138,15 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 // AfterChildWaitLoop()
 struct ChildWaitLoopData
 {
-    ChildWaitLoopData(wxWindowDisabler *wd_, wxWindow *winActive_)
+    ChildWaitLoopData(wxWindowDisabler *wd_, wxWindow *focused_, wxWindow *winActive_)
     {
         wd = wd_;
+        focused = focused_;
         winActive = winActive_;
     }
 
     wxWindowDisabler *wd;
+    wxWeakRef<wxWindow> focused;
     wxWindow *winActive;
 };
 
@@ -167,6 +170,8 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
      */
     wxBeginBusyCursor();
 
+    wxWindow* const focus = wxWindow::FindFocus();
+
     // first disable all existing windows
     wxWindowDisabler *wd = new wxWindowDisabler;
 
@@ -183,7 +188,7 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
                     );
     winActive->Show();
 
-    return new ChildWaitLoopData(wd, winActive);
+    return new ChildWaitLoopData(wd, focus, winActive);
 }
 
 void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
@@ -193,6 +198,9 @@ void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
     ChildWaitLoopData * const data = (ChildWaitLoopData *)dataOrig;
 
     delete data->wd;
+
+    if ( data->focused )
+        data->focused->SetFocus();
 
     // finally delete the dummy dialog and, as wd has been already destroyed
     // and the other windows reenabled, the activation is going to return to
