@@ -1422,6 +1422,44 @@ public:
         admittedly rare case when the user wants to rename it to an empty string).
     */
     bool IsEditCancelled() const;
+
+    
+    /**
+       @see GetKeyCode()
+    */
+    void SetKeyCode(int code);
+
+    /**
+       @see GetIndex()
+    */
+    void SetIndex(long index);
+
+    /**
+       @see GetColumn()
+    */
+    void SetColumn(int col);
+
+    /**
+       @see GetPoint()
+    */
+    void SetPoint(const wxPoint& point);
+
+    /**
+       @see GetItem()
+    */
+    void SetItem(const wxListItem& item);
+
+
+    /**
+       @see GetCacheFrom()
+    */
+    void SetCacheFrom(long cacheFrom);
+
+    /**
+       @see GetCacheTo()
+    */
+    void SetCacheTo(long cacheTo);
+
 };
 
 

@@ -514,9 +514,17 @@ public:
     long GetMask() const { return m_item.m_mask; }
     const wxListItem& GetItem() const { return m_item; }
 
+    void SetKeyCode(int code) { m_code = code; }
+    void SetIndex(long index) { m_itemIndex = index; }
+    void SetColumn(int col) { m_col = col; }
+    void SetPoint(const wxPoint& point) { m_pointDrag = point; }
+    void SetItem(const wxListItem& item) { m_item = item; }
+
     // for wxEVT_LIST_CACHE_HINT only
     long GetCacheFrom() const { return m_oldItemIndex; }
     long GetCacheTo() const { return m_itemIndex; }
+    void SetCacheFrom(long cacheFrom) { m_oldItemIndex = cacheFrom; }
+    void SetCacheTo(long cacheTo) { m_itemIndex = cacheTo; }
 
     // was label editing canceled? (for wxEVT_LIST_END_LABEL_EDIT only)
     bool IsEditCancelled() const { return m_editCancelled; }
