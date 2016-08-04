@@ -2548,7 +2548,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
                 {
                     wxCommandEvent event(wxEVT_MENU, res);
                     event.SetEventObject(this);
-                    GetParent()->GetEventHandler()->ProcessEvent(event);
+                    GetEventHandler()->ProcessEvent(event);
                 }
             }
 
