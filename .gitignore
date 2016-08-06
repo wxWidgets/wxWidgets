@@ -397,6 +397,7 @@
 /utils/**/*.vcxproj*
 /utils/**/*.suo
 /utils/**/*.sdf
+/utils/**/gcc_mswuddll
 
 # /utils/emulator/src/
 /utils/emulator/src/*.sln
@@ -414,6 +415,3 @@
 
 # /utils/wxrc/
 /utils/wxrc/*.sln
-
-# /include
-/include/**/*.gch
