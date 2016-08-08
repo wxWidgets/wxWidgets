@@ -89,7 +89,14 @@ wxArrayString::wxArrayString(const wxArrayString& src)
 wxArrayString& wxArrayString::operator=(const wxArrayString& src)
 {
   if ( m_nSize > 0 )
+  {
+    // Do this test here to avoid unnecessary overhead when assigning to an
+    // empty array, in that case there is no harm in self-assignment.
+    if ( &src == this )
+        return *this;
+
     Clear();
+  }
 
   Copy(src);
 
