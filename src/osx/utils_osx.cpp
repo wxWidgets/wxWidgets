@@ -157,15 +157,11 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-    wxDisplaySize(width, height);
-    // on mac 72 is fixed (at least now;-)
-    double cvPt2Mm = 25.4 / 72;
-
-    if (width != NULL)
-        *width = int( *width * cvPt2Mm );
-
-    if (height != NULL)
-        *height = int( *height * cvPt2Mm );
+    CGSize size = CGDisplayScreenSize(CGMainDisplayID());
+    if ( width )
+        *width = (int)size.width ;
+    if ( height )
+        *height = (int)size.height;
 }
 
 
