@@ -81,7 +81,10 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 #endif
         {
             const gchar *name = pango_font_family_get_name(families[i]);
-            OnFacename(wxString(name, wxConvUTF8));
+            if ( !OnFacename(wxString(name, wxConvUTF8)) )
+            {
+                break;
+            }
         }
     }
     g_free(families);
