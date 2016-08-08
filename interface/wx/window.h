@@ -989,7 +989,7 @@ public:
     static wxPoint FromDIP(const wxPoint& pt, const wxWindow* w);
 
     /// @overload
-    static wxSize FromDIP(const wxSize& sz, const wxWindow* w);
+    static wxSize FromDIP(int d, const wxWindow* w);
 
 
     /**
@@ -1056,7 +1056,7 @@ public:
     static wxPoint ToDIP(const wxPoint& pt, const wxWindow* w);
 
     /// @overload
-    static wxSize ToDIP(const wxSize& sz, const wxWindow* w);
+    static wxSize ToDIP(int d, const wxWindow* w);
 
     /**
         This functions returns the best acceptable minimal size for the window.
