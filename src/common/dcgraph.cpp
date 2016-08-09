@@ -322,8 +322,7 @@ void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
     // to the initial state in which logical and device coordinate
     // systems are equivalent.
     // So, at first save current transformation parameters.
-    wxGraphicsMatrix currTransform = m_graphicContext->CreateMatrix();
-    currTransform = m_graphicContext->GetTransform();
+    wxGraphicsMatrix currTransform = m_graphicContext->GetTransform();
     // Reset coordinate system with identity transformation matrix
     // to make logical coordinates the same as device coordinates.
     wxGraphicsMatrix m = m_graphicContext->CreateMatrix();
