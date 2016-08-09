@@ -3409,10 +3409,11 @@ private:
 
     ID2D1RenderTarget* GetRenderTarget() const;
 
+    void SetClipLayer(ID2D1Geometry* clipGeometry);
+
 private:
     enum LayerType
     {
-        CLIP_AXIS_ALIGNED_RECT,
         CLIP_LAYER,
         OTHER_LAYER
     };
@@ -3509,16 +3510,9 @@ wxD2DContext::~wxD2DContext()
         LayerData ld = m_layers.top();
         m_layers.pop();
 
-        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
-        {
-            GetRenderTarget()->PopAxisAlignedClip();
-        }
-        else
-        {
-            GetRenderTarget()->PopLayer();
-            ld.layer.reset();
-            ld.geometry.reset();
-        }
+        GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        ld.geometry.reset();
     }
 
     HRESULT result = GetRenderTarget()->EndDraw();
@@ -3536,30 +3530,33 @@ void wxD2DContext::Clip(const wxRegion& region)
 {
     wxCOMPtr<ID2D1Geometry> clipGeometry = wxD2DConvertRegionToGeometry(m_direct2dFactory, region);
 
+    SetClipLayer(clipGeometry);
+}
+
+void wxD2DContext::Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
+{
+    wxCOMPtr<ID2D1RectangleGeometry> clipGeometry;
+    HRESULT hr = m_direct2dFactory->CreateRectangleGeometry(
+                        D2D1::RectF(x, y, x + w, y + h), &clipGeometry);
+    wxCHECK_HRESULT_RET(hr);
+
+    SetClipLayer(clipGeometry);
+}
+
+void wxD2DContext::SetClipLayer(ID2D1Geometry* clipGeometry)
+{
     wxCOMPtr<ID2D1Layer> clipLayer;
     HRESULT hr = GetRenderTarget()->CreateLayer(&clipLayer);
     wxCHECK_HRESULT_RET(hr);
 
     LayerData ld;
     ld.type = CLIP_LAYER;
-    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry);
+    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry,
+                                      wxD2DConvertAntialiasMode(m_antialias));
     ld.layer = clipLayer;
     ld.geometry = clipGeometry;
 
     GetRenderTarget()->PushLayer(ld.params, clipLayer);
-    // Store layer parameters.
-    m_layers.push(ld);
-}
-
-void wxD2DContext::Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
-{
-    LayerData ld;
-    ld.type = CLIP_AXIS_ALIGNED_RECT;
-    ld.params = D2D1::LayerParameters(D2D1::RectF(x, y, x + w, y + h),
-                          NULL, D2D1_ANTIALIAS_MODE_ALIASED);
-
-    GetRenderTarget()->PushAxisAlignedClip(ld.params.contentBounds,
-                                           D2D1_ANTIALIAS_MODE_ALIASED);
     // Store layer parameters.
     m_layers.push(ld);
 }
@@ -3572,12 +3569,6 @@ void wxD2DContext::ResetClip()
     {
         LayerData ld = m_layers.top();
         m_layers.pop();
-
-        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
-        {
-            GetRenderTarget()->PopAxisAlignedClip();
-            continue;
-        }
 
         if ( ld.type == CLIP_LAYER )
         {
@@ -3722,13 +3713,6 @@ void wxD2DContext::EndLayer()
         LayerData ld = m_layers.top();
         m_layers.pop();
 
-        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
-        {
-            GetRenderTarget()->PopAxisAlignedClip();
-            layersToRestore.push(ld);
-            continue;
-        }
-
         if ( ld.type == CLIP_LAYER )
         {
             GetRenderTarget()->PopLayer();
@@ -3754,12 +3738,7 @@ void wxD2DContext::EndLayer()
         LayerData ld = layersToRestore.top();
         layersToRestore.pop();
 
-        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
-        {
-            GetRenderTarget()->PushAxisAlignedClip(ld.params.contentBounds,
-                                                   ld.params.maskAntialiasMode);
-        }
-        else if ( ld.type == CLIP_LAYER )
+        if ( ld.type == CLIP_LAYER )
         {
             GetRenderTarget()->PushLayer(ld.params, ld.layer);
         }
@@ -4093,14 +4072,7 @@ void wxD2DContext::Flush()
         LayerData ld = m_layers.top();
         m_layers.pop();
 
-        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
-        {
-            GetRenderTarget()->PopAxisAlignedClip();
-        }
-        else
-        {
-            GetRenderTarget()->PopLayer();
-        }
+        GetRenderTarget()->PopLayer();
 
         // Save layer data.
         layersToRestore.push(ld);
@@ -4123,15 +4095,8 @@ void wxD2DContext::Flush()
         LayerData ld = layersToRestore.top();
         layersToRestore.pop();
 
-        if ( ld.type == CLIP_AXIS_ALIGNED_RECT )
-        {
-            GetRenderTarget()->PushAxisAlignedClip(ld.params.contentBounds,
-                                                   ld.params.maskAntialiasMode);
-        }
-        else
-        {
-            GetRenderTarget()->PushLayer(ld.params, ld.layer);
-        }
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+
         // Store layer parameters.
         m_layers.push(ld);
     }
