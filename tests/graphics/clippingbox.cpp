@@ -100,11 +100,11 @@ public:
     virtual void setUp() { wxASSERT( m_dc ); }
     virtual wxDC* GetDC(wxMemoryDC* dc) = 0;
 
-private:
+protected:
     void CheckBox(int x, int y, int width, int height,
                   const wxBitmap& bmpRef = wxNullBitmap, int posTolerance = 0);
+    void CheckClipWithBitmap(const wxBitmap& bmpRef, int posTolerance = 0);
 
-protected:
     void InitialState();
     void InitialStateWithTransformedDC();
     void OneRegion();
@@ -258,6 +258,8 @@ protected:
         m_gcdc->GetGraphicsContext()->Flush();
     }
 
+    void OneRegionWithRotatedGC();
+
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGCDC );
         CPPUNIT_TEST( InitialState );
@@ -269,6 +271,7 @@ private:
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
         CPPUNIT_TEST( OneRegionWithTransformedDC );
+        CPPUNIT_TEST( OneRegionWithRotatedGC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -329,6 +332,7 @@ private:
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
         CPPUNIT_TEST( OneRegionWithTransformedDC );
+        CPPUNIT_TEST( OneRegionWithRotatedGC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -393,6 +397,7 @@ private:
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
         CPPUNIT_TEST( OneRegionWithTransformedDC );
+        CPPUNIT_TEST( OneRegionWithRotatedGC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -449,6 +454,7 @@ private:
         CPPUNIT_TEST( OneRegionAndReset );
         CPPUNIT_TEST( OneRegionAndEmpty );
         CPPUNIT_TEST( OneRegionWithTransformedDC );
+        CPPUNIT_TEST( OneRegionWithRotatedGC );
         CPPUNIT_TEST( TwoRegionsOverlapping );
         CPPUNIT_TEST( TwoRegionsOverlappingNegDim );
         CPPUNIT_TEST( TwoRegionsNonOverlapping );
@@ -715,6 +721,30 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
     {
         wxCharBuffer buffer = msg.ToUTF8();
         CPPUNIT_FAIL( buffer.data() );
+    }
+#endif // wxUSE_IMAGE
+}
+
+void ClippingBoxTestCaseBase::CheckClipWithBitmap(const wxBitmap& bmpRef, int posTolerance)
+{
+    // Update wxDC contents.
+    FlushDC();
+
+#if wxUSE_IMAGE
+    wxImage img = m_bmp.ConvertToImage();
+
+    // If reference bitmap is given then it has to be
+    // compared with current bitmap.
+    if ( bmpRef.IsOk() )
+    {
+        wxImage imgRef = bmpRef.ConvertToImage();
+        // Figures created by clipping and drawing procedures
+        // can be slightly different (shifted by few pixels) due
+        // to the different algorithms they can use so we need
+        // to perform a "fuzzy" comparison of the images,
+        // tolerating some drift of the pixels.
+        if ( !CompareImageFuzzy(img, imgRef, posTolerance) )
+            CPPUNIT_FAIL( "Invalid shape of the clipping region" );
     }
 #endif // wxUSE_IMAGE
 }
@@ -1221,4 +1251,50 @@ void ClippingBoxTestCaseBase::TwoDevRegionsNonOverlappingNegDim()
     m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     m_dc->Clear();
     CheckBox(0, 0, 0, 0);
+}
+
+void ClippingBoxTestCaseGCDC::OneRegionWithRotatedGC()
+{
+    // Setting one rectangular clipping region for rotated graphics context.
+    const double rotAngle = 1.0*M_PI/180.0;
+    const int rectX = 16;
+    const int rectY = 14;
+    const int rectW = 60;
+    const int rectH = 55;
+
+    // Draw image with reference rectangle (rotated).
+    wxBitmap bmpRef(s_dcSize);
+    {
+        wxMemoryDC memDC(bmpRef);
+        wxGraphicsRenderer* r = m_gcdc->GetGraphicsContext()->GetRenderer();
+        wxGraphicsContext* gcRef = r->CreateContext(memDC);
+        gcRef->SetAntialiasMode(wxANTIALIAS_NONE);
+        gcRef->DisableOffset();
+        gcRef->SetBrush(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
+        gcRef->SetPen(*wxTRANSPARENT_PEN);
+        gcRef->DrawRectangle(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+        gcRef->Rotate(rotAngle);
+        gcRef->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+        gcRef->SetPen(wxPen(s_fgColour));
+        gcRef->DrawRectangle(rectX, rectY, rectW, rectH);
+        delete gcRef;
+    }
+
+    // Set clipping region for rotated wxGC.
+    wxGraphicsContext* gc = m_gcdc->GetGraphicsContext();
+    gc->SetAntialiasMode(wxANTIALIAS_NONE);
+    gc->DisableOffset();
+    gc->Rotate(rotAngle);
+    gc->Clip(rectX, rectY, rectW, rectH);
+    // Fill in clipping region.
+    gc->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    gc->DrawRectangle(-50, -50, s_dcSize.GetWidth()+100, s_dcSize.GetHeight()+100);
+
+    // Compare filled in clipping region with reference rectangle.
+    // Rotated rectangles created by clipping and drawing procedures
+    // can be slightly different (shifted by few pixels) due
+    // to the different algorithms used for different operations
+    // so we need to perform a "fuzzy" comparison of the images,
+    // tolerating some drift of the pixels.
+    CheckClipWithBitmap(bmpRef, 1);
 }
