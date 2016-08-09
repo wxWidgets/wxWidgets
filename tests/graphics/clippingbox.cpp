@@ -31,6 +31,7 @@ static const wxSize s_dcSize(100, 120);
 static const wxColour s_bgColour(*wxWHITE); // colour to draw outside clipping box
 static const wxColour s_fgColour(*wxGREEN); // colour to draw inside clipping box
 
+#if wxUSE_IMAGE
 static bool CompareImageFuzzy(const wxImage& img1, const wxImage& img2, int posTolerance = 0)
 {
     // For each (x,y) pixel in the image1 we check
@@ -80,6 +81,7 @@ static bool CompareImageFuzzy(const wxImage& img1, const wxImage& img2, int posT
 
     return true;
 }
+#endif // wxUSE_IMAGE
 
 class ClippingBoxTestCaseBase : public CppUnit::TestCase
 {
@@ -201,11 +203,15 @@ protected:
     wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseDC);
 };
 
+// For GTK+ 3 wxDC is equivalent to wxGCDC
+// and hence doesn't need to be tested individually.
+#if !defined(__WXGTK3__)
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseDC );
 
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseDC, "ClippingBoxTestCaseDC" );
+#endif // !__WXGTK3__
 
 // wxGCDC tests
 #if wxUSE_GRAPHICS_CONTEXT
@@ -501,6 +507,11 @@ public:
 
 // =====  Implementation  =====
 
+static bool inline IsCoordEqual(int pos1, int pos2, int posTolerance = 0)
+{
+    return abs(pos1 - pos2) <= posTolerance;
+}
+
 void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
                                        const wxBitmap& bmpRef, int posTolerance)
 {
@@ -509,14 +520,16 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
     m_dc->GetClippingBox(&clipX, &clipY, &clipW, &clipH);
 
     wxString msgPos;
-    if ( x != clipX || y != clipY )
+    if ( !IsCoordEqual(x, clipX, posTolerance) ||
+         !IsCoordEqual(y, clipY, posTolerance) )
     {
         msgPos =
             wxString::Format(wxS("Invalid position: Actual: (%i, %i)  Expected: (%i, %i)"),
                                 clipX, clipY, x, y);
     }
     wxString msgDim;
-    if ( width != clipW || height != clipH )
+    if ( !IsCoordEqual(x + width, clipX + clipW, posTolerance) ||
+         !IsCoordEqual(y + height, clipY + clipH, posTolerance) )
     {
         msgDim =
             wxString::Format(wxS("Invalid dimension: Actual: %i x %i  Expected: %i x %i"),
@@ -559,9 +572,6 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
     // value from wxDC so we would have to examine pixels
     // in the underlying bitmap.
     wxImage img = m_bmp.ConvertToImage();
-#else
-    return;
-#endif // wxUSE_IMAGE
 
     // If reference bitmap is given then it has to be
     // compared with current bitmap.
@@ -574,7 +584,7 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
         // to perform a "fuzzy" comparison of the images,
         // tolerating some drift of the pixels.
         if ( !CompareImageFuzzy(img, imgRef, posTolerance) )
-            CPPUNIT_FAIL( "Invalid shape ot the clipping region" );
+            CPPUNIT_FAIL( "Invalid shape of the clipping region" );
 
         return;
     }
@@ -583,6 +593,11 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
     // clipping region is assumed and we check whether
     // diagonal corners of the clipping box are actually
     // drawn at the edge of the clipping region.
+
+    // Rectangular clipping region can be checked
+    // only with exact pixel comparison.
+    if ( posTolerance != 0 )
+        return;
 
     // Check area near the top-left corner
     int ymin = y-1;
@@ -598,15 +613,10 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
         for( int px = xmin; px <= xmax; px++ )
         {
             wxColour c;
-#if wxUSE_IMAGE
             unsigned char r = img.GetRed(px, py);
             unsigned char g = img.GetGreen(px, py);
             unsigned char b = img.GetBlue(px, py);
             c.Set(r, g, b);
-#else
-            // We cannot get pixel value
-            break;
-#endif // wxUSE_IMAGE / !wxUSE_IMAGE
 
             wxString msgColour;
             if ( px >= x && px <= x + (width-1) &&
@@ -659,15 +669,10 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
         for( int px = xmin; px <= xmax; px++ )
         {
             wxColour c;
-#if wxUSE_IMAGE
             unsigned char r = img.GetRed(px, py);
             unsigned char g = img.GetGreen(px, py);
             unsigned char b = img.GetBlue(px, py);
             c.Set(r, g, b);
-#else
-            // We cannot get pixel value
-            break;
-#endif // wxUSE_IMAGE / !wxUSE_IMAGE
 
             wxString msgColour;
             if ( px >= x && px <= x + (width-1) &&
@@ -711,6 +716,7 @@ void ClippingBoxTestCaseBase::CheckBox(int x, int y, int width, int height,
         wxCharBuffer buffer = msg.ToUTF8();
         CPPUNIT_FAIL( buffer.data() );
     }
+#endif // wxUSE_IMAGE
 }
 
 // Actual tests
