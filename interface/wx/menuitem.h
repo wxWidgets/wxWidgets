@@ -423,23 +423,68 @@ public:
         other platforms @c RAWCTRL is the same as plain @c CTRL.
 
         The accelerator may be any alphanumeric character, any function key
-        (from F1 to F12) or one of the special characters listed in the table
-        below (again, case doesn't matter):
-        - @c DEL or @c DELETE: Delete key
-        - @c BACK : Backspace key
-        - @c INS or @c INSERT: Insert key
-        - @c ENTER or @c RETURN: Enter key
-        - @c PGUP: PageUp key
-        - @c PGDN: PageDown key
-        - @c LEFT: Left cursor arrow key
-        - @c RIGHT: Right cursor arrow key
-        - @c UP: Up cursor arrow key
-        - @c DOWN: Down cursor arrow key
-        - @c HOME: Home key
-        - @c END: End key
-        - @c SPACE: Space
-        - @c TAB: Tab key
-        - @c ESC or @c ESCAPE: Escape key (Windows only)
+        (from @c F1 to @c F12), any numpad digit key using @c KP_ prefix (i.e.
+        from @c KP_0 to @c KP_9) or one of the special strings listed below
+        (again, case doesn't matter) corresponding to the specified key code:
+        - @c Del  or @c Delete:   WXK_DELETE
+        - @c Back:                WXK_BACK
+        - @c Ins or @c Insert:    WXK_INSERT
+        - @c Enter or @c Return:  WXK_RETURN
+        - @c PgUp or @c PageUp:   WXK_PAGEUP
+        - @c PgDn or @c PageDown: WXK_PAGEDOWN
+        - @c Left:                WXK_LEFT
+        - @c Right:               WXK_RIGHT
+        - @c Up:                  WXK_UP
+        - @c Down:                WXK_DOWN
+        - @c Home:                WXK_HOME
+        - @c End:                 WXK_END
+        - @c Space:               WXK_SPACE
+        - @c Tab:                 WXK_TAB
+        - @c Esc or @c Escape:    WXK_ESCAPE
+        - @c Cancel:              WXK_CANCEL
+        - @c Clear:               WXK_CLEAR
+        - @c Menu:                WXK_MENU
+        - @c Pause:               WXK_PAUSE
+        - @c Capital:             WXK_CAPITAL
+        - @c Select:              WXK_SELECT
+        - @c Print:               WXK_PRINT
+        - @c Execute:             WXK_EXECUTE
+        - @c Snapshot:            WXK_SNAPSHOT
+        - @c Help:                WXK_HELP
+        - @c Add:                 WXK_ADD
+        - @c Separator:           WXK_SEPARATOR
+        - @c Subtract:            WXK_SUBTRACT
+        - @c Decimal:             WXK_DECIMAL
+        - @c Divide:              WXK_DIVIDE
+        - @c Num_lock:            WXK_NUMLOCK
+        - @c Scroll_lock:         WXK_SCROLL
+        - @c KP_Space:            WXK_NUMPAD_SPACE
+        - @c KP_Tab:              WXK_NUMPAD_TAB
+        - @c KP_Enter:            WXK_NUMPAD_ENTER
+        - @c KP_Home:             WXK_NUMPAD_HOME
+        - @c KP_Left:             WXK_NUMPAD_LEFT
+        - @c KP_Up:               WXK_NUMPAD_UP
+        - @c KP_Right:            WXK_NUMPAD_RIGHT
+        - @c KP_Down:             WXK_NUMPAD_DOWN
+        - @c KP_PageUp:           WXK_NUMPAD_PAGEUP
+        - @c KP_PageDown:         WXK_NUMPAD_PAGEDOWN
+        - @c KP_Prior:            WXK_NUMPAD_PAGEUP
+        - @c KP_Next:             WXK_NUMPAD_PAGEDOWN
+        - @c KP_End:              WXK_NUMPAD_END
+        - @c KP_Begin:            WXK_NUMPAD_BEGIN
+        - @c KP_Insert:           WXK_NUMPAD_INSERT
+        - @c KP_Delete:           WXK_NUMPAD_DELETE
+        - @c KP_Equal:            WXK_NUMPAD_EQUAL
+        - @c KP_Multiply:         WXK_NUMPAD_MULTIPLY
+        - @c KP_Add:              WXK_NUMPAD_ADD
+        - @c KP_Separator:        WXK_NUMPAD_SEPARATOR
+        - @c KP_Subtract:         WXK_NUMPAD_SUBTRACT
+        - @c KP_Decimal:          WXK_NUMPAD_DECIMAL
+        - @c KP_Divide:           WXK_NUMPAD_DIVIDE
+        - @c Windows_Left:        WXK_WINDOWS_LEFT
+        - @c Windows_Right:       WXK_WINDOWS_RIGHT
+        - @c Windows_Menu:        WXK_WINDOWS_MENU
+        - @c Command:             WXK_COMMAND
 
         Examples:
 
