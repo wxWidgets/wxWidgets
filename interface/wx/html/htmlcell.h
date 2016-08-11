@@ -435,6 +435,13 @@ public:
         Sets the cell's position within parent container.
     */
     virtual void SetPos(int x, int y);
+
+    /**
+       Converts the cell into text representation. If sel != NULL then
+       only part of the cell inside the selection is converted.
+    */
+    virtual wxString ConvertToText(wxHtmlSelection* sel) const;
+
 };
 
 
