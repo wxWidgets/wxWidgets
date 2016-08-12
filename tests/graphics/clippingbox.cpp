@@ -259,6 +259,7 @@ protected:
     }
 
     void OneRegionWithRotatedGC();
+    void RegionsAndPushPopStateGC();
 
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGCDC );
@@ -287,6 +288,7 @@ private:
         CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
         CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
         CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( RegionsAndPushPopStateGC );
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -348,6 +350,7 @@ private:
         CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
         CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
         CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( RegionsAndPushPopStateGC );
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -413,6 +416,7 @@ private:
         CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
         CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
         CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( RegionsAndPushPopStateGC );
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -470,6 +474,7 @@ private:
         CPPUNIT_TEST( TwoDevRegionsOverlappingNegDim);
         CPPUNIT_TEST( TwoDevRegionsNonOverlapping );
         CPPUNIT_TEST( TwoDevRegionsNonOverlappingNegDim );
+        CPPUNIT_TEST( RegionsAndPushPopStateGC );
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1262,7 +1267,18 @@ void ClippingBoxTestCaseGCDC::OneRegionWithRotatedGC()
     const int rectW = 60;
     const int rectH = 55;
 
-    // Draw image with reference rectangle (rotated).
+    // Set clipping region for rotated wxGC.
+    wxGraphicsContext* gc = m_gcdc->GetGraphicsContext();
+    gc->SetAntialiasMode(wxANTIALIAS_NONE);
+    gc->DisableOffset();
+    gc->Rotate(rotAngle);
+    gc->Clip(rectX, rectY, rectW, rectH);
+    // Fill in clipping region.
+    gc->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    gc->DrawRectangle(-50, -50, s_dcSize.GetWidth()+100, s_dcSize.GetHeight()+100);
+
+    // Draw reference image with rotated rectangle which
+    // should look the same as rectangle drawn with Clip().
     wxBitmap bmpRef(s_dcSize);
     {
         wxMemoryDC memDC(bmpRef);
@@ -1280,17 +1296,89 @@ void ClippingBoxTestCaseGCDC::OneRegionWithRotatedGC()
         delete gcRef;
     }
 
-    // Set clipping region for rotated wxGC.
+    // Compare filled in clipping region with reference rectangle.
+    // Rotated rectangles created by clipping and drawing procedures
+    // can be slightly different (shifted by few pixels) due
+    // to the different algorithms used for different operations
+    // so we need to perform a "fuzzy" comparison of the images,
+    // tolerating some drift of the pixels.
+    CheckClipWithBitmap(bmpRef, 1);
+}
+
+void ClippingBoxTestCaseGCDC::RegionsAndPushPopStateGC()
+{
+    // Setting muliple rectangular clipping regions
+    // for transformed wxGC and store/restore them.
+
+    // Set clipping regions and store/restore them.
     wxGraphicsContext* gc = m_gcdc->GetGraphicsContext();
     gc->SetAntialiasMode(wxANTIALIAS_NONE);
     gc->DisableOffset();
-    gc->Rotate(rotAngle);
-    gc->Clip(rectX, rectY, rectW, rectH);
-    // Fill in clipping region.
+
+    gc->SetBrush(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
+    gc->SetPen(*wxTRANSPARENT_PEN);
+    gc->DrawRectangle(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+
     gc->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    gc->SetPen(wxPen(s_fgColour));
+
+    gc->Translate(5, 5);
+    gc->Rotate(5*M_PI/180);
+    gc->Clip(20, 15, 50, 45);
+    gc->PushState();
+
+    gc->Rotate(5*M_PI/180);
+    gc->ResetClip();
+    gc->Clip(10, 5, 60, 15);
+    gc->PushState();
+
+    gc->Rotate(-15*M_PI/180);
+    gc->ResetClip();
+    gc->Clip(5, 10, 30, 35);
     gc->DrawRectangle(-50, -50, s_dcSize.GetWidth()+100, s_dcSize.GetHeight()+100);
 
-    // Compare filled in clipping region with reference rectangle.
+    gc->PopState();
+    gc->DrawRectangle(-50, -50, s_dcSize.GetWidth()+100, s_dcSize.GetHeight()+100);
+
+    gc->PopState();
+    gc->DrawRectangle(-50, -50, s_dcSize.GetWidth()+100, s_dcSize.GetHeight()+100);
+
+    // Draw reference image with rotated rectangles which
+    // should look the same as rectangles drawn with Clip().
+    wxBitmap bmpRef(s_dcSize);
+    {
+        wxMemoryDC memDC(bmpRef);
+        wxGraphicsRenderer* r = m_gcdc->GetGraphicsContext()->GetRenderer();
+        wxGraphicsContext* gcRef = r->CreateContext(memDC);
+        gcRef->SetAntialiasMode(wxANTIALIAS_NONE);
+        gcRef->DisableOffset();
+        gcRef->SetBrush(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
+        gcRef->SetPen(*wxTRANSPARENT_PEN);
+        gcRef->DrawRectangle(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+
+        gcRef->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+        gcRef->SetPen(wxPen(s_fgColour));
+
+        gcRef->Translate(5, 5);
+        gcRef->Rotate(5*M_PI/180);
+        gcRef->PushState();
+
+        gcRef->Rotate(5*M_PI/180);
+        gcRef->PushState();
+
+        gcRef->Rotate(-15*M_PI/180);
+        gcRef->DrawRectangle(5, 10, 30, 35);
+
+        gcRef->PopState();
+        gcRef->DrawRectangle(10, 5, 60, 15);
+
+        gcRef->PopState();
+        gcRef->DrawRectangle(20, 15, 50, 45);
+
+        delete gcRef;
+    }
+
+    // Compare filled in clipping regions with reference image.
     // Rotated rectangles created by clipping and drawing procedures
     // can be slightly different (shifted by few pixels) due
     // to the different algorithms used for different operations
