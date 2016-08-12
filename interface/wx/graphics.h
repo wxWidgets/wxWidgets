@@ -954,8 +954,8 @@ public:
     virtual void EndLayer() = 0;
 
     /**
-       Push the current state of the context (eg. transformation matrix) on a
-       stack.
+       Push the current state (like transformations, clipping region and quality
+       settings) of the context on a stack.
        Multiple balanced calls to PushState() and PopState() can be nested.
 
        @see PopState()

@@ -3424,6 +3424,17 @@ private:
         D2D1_LAYER_PARAMETERS params;
         wxCOMPtr<ID2D1Layer> layer;
         wxCOMPtr<ID2D1Geometry> geometry;
+        D2D1_MATRIX_3X2_F transformMatrix;
+    };
+
+    struct StateData
+    {
+        // A ID2D1DrawingStateBlock represents the drawing state of a render target:
+        // the anti aliasing mode, transform, tags, and text-rendering options.
+        // The context owns these pointers and is responsible for releasing them.
+        wxCOMPtr<ID2D1DrawingStateBlock> drawingState;
+        // We need to store also current layers.
+        wxStack<LayerData> layers;
     };
 
 private:
@@ -3431,10 +3442,7 @@ private:
 
     wxSharedPtr<wxD2DRenderTargetResourceHolder> m_renderTargetHolder;
 
-    // A ID2D1DrawingStateBlock represents the drawing state of a render target:
-    // the anti aliasing mode, transform, tags, and text-rendering options.
-    // The context owns these pointers and is responsible for releasing them.
-    wxStack<wxCOMPtr<ID2D1DrawingStateBlock> > m_stateStack;
+    wxStack<StateData> m_stateStack;
 
     wxStack<LayerData> m_layers;
 
@@ -3545,6 +3553,8 @@ void wxD2DContext::Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 
 void wxD2DContext::SetClipLayer(ID2D1Geometry* clipGeometry)
 {
+    EnsureInitialized();
+
     wxCOMPtr<ID2D1Layer> clipLayer;
     HRESULT hr = GetRenderTarget()->CreateLayer(&clipLayer);
     wxCHECK_HRESULT_RET(hr);
@@ -3555,6 +3565,9 @@ void wxD2DContext::SetClipLayer(ID2D1Geometry* clipGeometry)
                                       wxD2DConvertAntialiasMode(m_antialias));
     ld.layer = clipLayer;
     ld.geometry = clipGeometry;
+    // We need to store CTM to be able to re-apply
+    // the layer at the original position later on.
+    GetRenderTarget()->GetTransform(&ld.transformMatrix);
 
     GetRenderTarget()->PushLayer(ld.params, clipLayer);
     // Store layer parameters.
@@ -3587,15 +3600,22 @@ void wxD2DContext::ResetClip()
     wxCHECK_HRESULT_RET(hr);
 
     // Re-apply all remaining non-clipping layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
     while ( !layersToRestore.empty() )
     {
         LayerData ld = layersToRestore.top();
         layersToRestore.pop();
 
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
         GetRenderTarget()->PushLayer(ld.params, ld.layer);
         // Store layer parameters.
         m_layers.push(ld);
     }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
 }
 
 void* wxD2DContext::GetNativeContext()
@@ -3684,6 +3704,8 @@ bool wxD2DContext::SetCompositionMode(wxCompositionMode compositionMode)
 
 void wxD2DContext::BeginLayer(wxDouble opacity)
 {
+    EnsureInitialized();
+
     wxCOMPtr<ID2D1Layer> layer;
     HRESULT hr = GetRenderTarget()->CreateLayer(&layer);
     wxCHECK_HRESULT_RET(hr);
@@ -3695,6 +3717,9 @@ void wxD2DContext::BeginLayer(wxDouble opacity)
                         D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
                         D2D1::IdentityMatrix(), opacity);
     ld.layer = layer;
+    // We need to store CTM to be able to re-apply
+    // the layer at the original position later on.
+    GetRenderTarget()->GetTransform(&ld.transformMatrix);
 
     GetRenderTarget()->PushLayer(ld.params, layer);
 
@@ -3733,6 +3758,9 @@ void wxD2DContext::EndLayer()
     }
 
     // Re-apply all stored clipping layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
     while ( !layersToRestore.empty() )
     {
         LayerData ld = layersToRestore.top();
@@ -3740,6 +3768,8 @@ void wxD2DContext::EndLayer()
 
         if ( ld.type == CLIP_LAYER )
         {
+            // Restore layer at original position.
+            GetRenderTarget()->SetTransform(&ld.transformMatrix);
             GetRenderTarget()->PushLayer(ld.params, ld.layer);
         }
         else
@@ -3749,6 +3779,8 @@ void wxD2DContext::EndLayer()
         // Store layer parameters.
         m_layers.push(ld);
     }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
 }
 
 void wxD2DContext::Translate(wxDouble dx, wxDouble dy)
@@ -3855,23 +3887,63 @@ void wxD2DContext::DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y, wxDouble
 
 void wxD2DContext::PushState()
 {
-    ID2D1Factory* wxGetD2DFactory(wxGraphicsRenderer* renderer);
+    EnsureInitialized();
 
-    wxCOMPtr<ID2D1DrawingStateBlock> drawStateBlock;
-    wxGetD2DFactory(GetRenderer())->CreateDrawingStateBlock(&drawStateBlock);
-    GetRenderTarget()->SaveDrawingState(drawStateBlock);
+    StateData state;
+    m_direct2dFactory->CreateDrawingStateBlock(&state.drawingState);
+    GetRenderTarget()->SaveDrawingState(state.drawingState);
+    state.layers = m_layers;
 
-    m_stateStack.push(drawStateBlock);
+    m_stateStack.push(state);
 }
 
 void wxD2DContext::PopState()
 {
-    wxCHECK_RET(!m_stateStack.empty(), wxT("No state to pop"));
+    wxCHECK_RET(!m_stateStack.empty(), wxS("No state to pop"));
 
-    wxCOMPtr<ID2D1DrawingStateBlock> drawStateBlock = m_stateStack.top();
+    // Remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
+    {
+        LayerData ld = m_layers.top();
+        m_layers.pop();
+
+        GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        ld.geometry.reset();
+    }
+
+    // Retrieve state data.
+    StateData state;
+    state = m_stateStack.top();
     m_stateStack.pop();
 
-    GetRenderTarget()->RestoreDrawingState(drawStateBlock);
+    // Restore all saved layers.
+    wxStack<LayerData> layersToRestore;
+    // We have to restore layers on the stack from "bottom" to "top",
+    // so we have to create a "reverted" stack.
+    while ( !state.layers.empty() )
+    {
+        LayerData ld = state.layers.top();
+        state.layers.pop();
+
+        layersToRestore.push(ld);
+    }
+    // And next set layers from the top of "reverted" stack.
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+
+    // Restore drawing state.
+    GetRenderTarget()->RestoreDrawingState(state.drawingState);
 }
 
 void wxD2DContext::GetTextExtent(
@@ -4090,16 +4162,23 @@ void wxD2DContext::Flush()
     }
 
     // Re-apply all layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
     while ( !layersToRestore.empty() )
     {
         LayerData ld = layersToRestore.top();
         layersToRestore.pop();
 
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
         GetRenderTarget()->PushLayer(ld.params, ld.layer);
 
         // Store layer parameters.
         m_layers.push(ld);
     }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
 }
 
 void wxD2DContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY)
