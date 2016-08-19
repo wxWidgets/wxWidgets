@@ -19,8 +19,6 @@
 #include "wx/fontutil.h"
 #include "wx/fontenum.h"
 
-#include <stdint.h>
-
 #include <gtk/gtk.h>
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/gtk/private/gtk2-compat.h"
@@ -620,7 +618,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                 // blinks and we handle any value that would overflow int after
                 // multiplication in the same manner as it looks quite
                 // unnecessary to support cursor blinking once a month.
-                if (timeout > 0 && timeout < INT32_MAX / 1000)
+                if (timeout > 0 && timeout < 2147483647 / 1000)
                     return timeout * 1000;
 
                 return -1;  // no timeout, blink forever
