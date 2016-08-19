@@ -421,6 +421,11 @@ bool wxApp::DoInitGui()
     }
     gNSLayoutManager = [[NSLayoutManager alloc] init];
     
+    // This call makes it so that appplication:openFile: doesn't get bogus calls
+    // from Cocoa doing its own parsing of the argument string. And yes, we need
+    // to use a string with a boolean value in it. That's just how it works.
+    [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"NSTreatUnknownArgumentsAsOpen"];
+
     return true;
 }
 

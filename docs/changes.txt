@@ -128,6 +128,7 @@ wxOSX:
 - Implement wxDataViewChoiceByIndexRenderer (wanup).
 - Fix unnecessary indentation in list-like wxDataViewCtrl (Andreas Falkenhahn).
 - Recognize macOS 10.12 Sierra in wxGetOsDescription() (Tobias Taschner).
+- Don't try to open command line arguments as files (Jeff Hostetler).
 
 Unix:
 
