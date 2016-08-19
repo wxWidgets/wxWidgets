@@ -129,8 +129,20 @@ public:
         int ret = DoRemoveInotify(watch.get());
         if (ret == -1)
         {
-            wxLogSysError( _("Unable to remove inotify watch") );
-            return false;
+            // Failures can happen if a dir is deleted just before we try to
+            // remove the watch. I think there's a race between calling this
+            // code and IN_DELETE_SELF arriving. So just warn.
+            wxFileSystemWatcherEvent
+                event
+                (
+                    wxFSW_EVENT_WARNING, wxFSW_WARNING_GENERAL,
+                    wxString::Format
+                    (
+                     _("Unable to remove inotify watch %i"),
+                     watch->GetWatchDescriptor()
+                    )
+                );
+            SendEvent(event);
         }
 
         if (m_watchMap.erase(watch->GetWatchDescriptor()) != 1)
