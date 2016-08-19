@@ -385,6 +385,7 @@ protected:
             // if the wd isn't found: repeated IN_DELETE_SELFs can occur
             wxFileName fn = GetEventPath(watch, inevt);
             wxString path(fn.GetPathWithSep());
+            const wxString filespec(watch.GetFilespec());
 
             if (m_watchMap.erase(inevt.wd) == 1)
             {
@@ -406,7 +407,7 @@ protected:
 
             // Tell the owner, in case it's interested
             // If there's a filespec, assume he's not
-            if (watch.GetFilespec().empty())
+            if (filespec.empty())
             {
                 wxFileSystemWatcherEvent event(flags, fn, fn);
                 SendEvent(event);

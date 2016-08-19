@@ -107,6 +107,7 @@ wxGTK:
 - Improve wxSpinCtrl best size calculation.
 - Implement support for icon locations in wxMimeTypesManager (Hanmac).
 - Cosmetic fix for empty wxCheckBoxes display (Chuddah).
+- Fix crashes in wxFileSystemWatcher implementation (David Hart).
 
 wxMSW:
 
