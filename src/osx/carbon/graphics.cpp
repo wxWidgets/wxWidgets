@@ -1355,6 +1355,9 @@ public:
     // resets the clipping to original extent
     virtual void ResetClip() wxOVERRIDE;
 
+    // returns bounding box of the clipping region
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+
     virtual void * GetNativeContext() wxOVERRIDE;
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
@@ -1962,6 +1965,38 @@ void wxMacCoreGraphicsContext::ResetClip()
 #endif
     }
     CheckInvariants();    
+}
+
+void wxMacCoreGraphicsContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
+{
+    // This function is not yet tested.
+    // TODO: Do the tests.
+    CGRect r;
+
+    if ( m_cgContext )
+    {
+        r = CGContextGetClipBoundingBox(m_cgContext);
+    }
+    else
+    {
+#if wxOSX_USE_COCOA_OR_CARBON
+        HIShapeGetBounds(m_clipRgn, &r);
+#else
+        r = CGRectMake(0, 0, 0, 0);
+    // allow usage as measuring context
+    // wxFAIL_MSG( "Needs a valid context for clipping" );
+#endif
+    }
+    CheckInvariants();
+
+    if ( x )
+        *x = r.origin.x;
+    if ( y )
+        *y = r.origin.y;
+    if ( w )
+        *w = r.size.width;
+    if ( h )
+        *h = r.size.height;
 }
 
 void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
