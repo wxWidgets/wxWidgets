@@ -35,6 +35,7 @@
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
+    #include <float.h> // for FLT_MAX, FLT_MIN
 #endif
 
 #include "wx/stack.h"
