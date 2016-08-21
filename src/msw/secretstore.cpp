@@ -69,8 +69,8 @@ public:
         CREDENTIAL cred;
         wxZeroMemory(cred);
         cred.Type = CRED_TYPE_GENERIC;
-        cred.TargetName = const_cast<TCHAR*>(target.t_str());
-        cred.UserName = const_cast<TCHAR*>(user.t_str());
+        cred.TargetName = const_cast<TCHAR*>(static_cast<const TCHAR*>(target.t_str()));
+        cred.UserName = const_cast<TCHAR*>(static_cast<const TCHAR*>(user.t_str()));
         cred.CredentialBlobSize = secret.GetSize();
         cred.CredentialBlob = static_cast<BYTE *>(const_cast<void*>(secret.GetData()));
 
