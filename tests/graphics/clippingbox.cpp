@@ -134,6 +134,7 @@ protected:
 
     void InitialState();
     void InitialStateWithTransformedDC();
+    void InitialStateWithRotatedDC();
     void OneRegion();
     void OneLargeRegion();
     void OneOuterRegion();
@@ -202,6 +203,7 @@ private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseDC );
         CPPUNIT_TEST( InitialState );
         CPPUNIT_TEST( InitialStateWithTransformedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
@@ -288,10 +290,14 @@ protected:
         m_gcdc->GetGraphicsContext()->Flush();
     }
 
+    void InitialStateWithRotatedGCForDC();
+
 private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGCDC );
         CPPUNIT_TEST( InitialState );
         CPPUNIT_TEST( InitialStateWithTransformedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedGCForDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
@@ -352,6 +358,8 @@ private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGCDCGDIPlus );
         CPPUNIT_TEST( InitialState );
         CPPUNIT_TEST( InitialStateWithTransformedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedGCForDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
@@ -416,6 +424,8 @@ private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGCDCDirect2D );
         CPPUNIT_TEST( InitialState );
         CPPUNIT_TEST( InitialStateWithTransformedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedGCForDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
@@ -472,6 +482,8 @@ private:
     CPPUNIT_TEST_SUITE( ClippingBoxTestCaseGCDCCairo );
         CPPUNIT_TEST( InitialState );
         CPPUNIT_TEST( InitialStateWithTransformedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedDC );
+        CPPUNIT_TEST( InitialStateWithRotatedGCForDC );
         CPPUNIT_TEST( OneRegion );
         CPPUNIT_TEST( OneLargeRegion );
         CPPUNIT_TEST( OneOuterRegion );
@@ -760,6 +772,22 @@ void ClippingBoxTestCaseDCBase::InitialStateWithTransformedDC()
              m_dc->DeviceToLogicalY(0),
              m_dc->DeviceToLogicalXRel(s_dcSize.GetWidth()),
              m_dc->DeviceToLogicalYRel(s_dcSize.GetHeight()));
+}
+
+void ClippingBoxTestCaseDCBase::InitialStateWithRotatedDC()
+{
+#if wxUSE_DC_TRANSFORM_MATRIX
+    // Initial clipping box with rotated DC.
+    if ( m_dc->CanUseTransformMatrix() )
+    {
+        wxAffineMatrix2D m = m_dc->GetTransformMatrix();
+        m.Rotate(6*M_PI/180.0);
+        m_dc->SetTransformMatrix(m);
+    }
+    m_dc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_dc->Clear();
+    CheckClipBox(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
 void ClippingBoxTestCaseDCBase::OneRegion()
@@ -1235,10 +1263,24 @@ void ClippingBoxTestCaseDCBase::TwoDevRegionsNonOverlappingNegDim()
     CheckClipBox(0, 0, 0, 0);
 }
 
+// Tests specific to wxGCDC
 #if wxUSE_GRAPHICS_CONTEXT
+void ClippingBoxTestCaseGCDC::InitialStateWithRotatedGCForDC()
+{
+    // Initial wxGCDC clipping box with rotated wxGraphicsContext.
+    wxGraphicsContext* gc = m_gcdc->GetGraphicsContext();
+    gc->Rotate(6*M_PI/180.0);
+
+    m_gcdc->SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
+    m_gcdc->Clear();
+    CheckClipBox(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+}
+#endif // wxUSE_GRAPHICS_CONTEXT
+
 // ========================
 // wxGraphicsContext tests
 // ========================
+#if wxUSE_GRAPHICS_CONTEXT
 
 class ClippingBoxTestCaseGCBase : public ClippingBoxTestCaseBase
 {
