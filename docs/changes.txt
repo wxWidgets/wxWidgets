@@ -98,6 +98,7 @@ All (GUI):
 - Fix displaying validation errors for numeric wxPropertyGrid properties.
 - Add wxSYS_CARET_{ON,OFF,TIMEOUT}_MSEC system settings (brawer).
 - Add wxGraphicsContext::GetClipBox().
+- Fix wxGCDC::Clear() for rotated graphics context.
 
 wxGTK:
 

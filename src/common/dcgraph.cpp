@@ -1189,17 +1189,30 @@ wxCoord wxGCDCImpl::GetCharHeight(void) const
 void wxGCDCImpl::Clear(void)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::Clear - invalid DC") );
-    // TODO better implementation / incorporate size info into wxGCDC or context
     m_graphicContext->SetBrush( m_backgroundBrush );
     wxPen p = *wxTRANSPARENT_PEN;
     m_graphicContext->SetPen( p );
     wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
     m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
+#ifdef __WXOSX__
+    // This is a legacy implementation which doesn't take advantage
+    // of clipping region bounds retrieved by wxMacCoreGraphicsContext::GetClipBox
+    // because this function is not yet verified.
+    // Note: Legacy implmentation might not work work properly
+    // if graphics context is rotated
+    // TODO: Do the tests of wxMacCoreGraphicsContext::GetClipBox
+    // and switch to the implmenentation used by other renderers (code below).
+    //
     // maximum positive coordinate Cairo can handle is 2^23 - 1
     // Use a value slightly less than this to be sure we avoid the limit
     DoDrawRectangle(
         DeviceToLogicalX(0), DeviceToLogicalY(0),
         DeviceToLogicalXRel(0x800000 - 64), DeviceToLogicalYRel(0x800000 - 64));
+#else
+    double x, y, w, h;
+    m_graphicContext->GetClipBox(&x, &y, &w, &h);
+    m_graphicContext->DrawRectangle(x, y, w, h);
+#endif // __WXOSX__ / !__WXOSX__
     m_graphicContext->SetCompositionMode(formerMode);
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
