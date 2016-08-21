@@ -122,6 +122,7 @@ wxMSW:
 - Revert to using equally-sized buttons in wxToolBar by default.
 - Restore dispatching wxThreadEvent while resizing the window broken in 3.1.0.
 - Fix wxGraphicsMatrix::TransformDistance for Direct2D renderer.
+- Fix wxDC::Clear() for rotated DC.
 
 wxOSX:
 

@@ -722,6 +722,10 @@ void wxMSWDCImpl::Clear()
     HBRUSH brush = ::CreateSolidBrush(colour);
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
+    // Inflate the box by 1 unit in each direction
+    // to compensate rounding errors if DC is the subject
+    // of complex transformation (is e.g. rotated).
+    ::InflateRect(&rect, 1, 1);
     ::FillRect(GetHdc(), &rect, brush);
     ::DeleteObject(brush);
 
