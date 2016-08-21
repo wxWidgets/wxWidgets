@@ -54,6 +54,15 @@
 #include <commdlg.h>
 #endif
 
+// Define REAL_MAX, REAL_MIN
+// if it isn't done in GDI+ header(s).
+#ifndef REAL_MAX
+    #define REAL_MAX    FLT_MAX
+#endif // REAL_MAX
+#ifndef REAL_MIN
+    #define REAL_MIN    FLT_MIN
+#endif // REAL_MIN
+
 namespace
 {
 
