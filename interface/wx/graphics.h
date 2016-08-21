@@ -510,6 +510,17 @@ public:
     */
     virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) = 0;
 
+    /**
+        Returns bounding box of the current clipping region.
+
+        @remarks
+        - If clipping region is empty, then empty rectangle is returned
+        (@a x, @a y, @a w, @a h are set to zero).
+
+        @since 3.1.1
+    */
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) = 0;
+
     /** @}
     */
 

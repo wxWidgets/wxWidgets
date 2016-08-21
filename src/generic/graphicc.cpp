@@ -458,6 +458,9 @@ public:
     // resets the clipping to original extent
     virtual void ResetClip() wxOVERRIDE;
 
+    // returns bounding box of the clipping region
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+
     virtual void * GetNativeContext() wxOVERRIDE;
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
@@ -2371,6 +2374,23 @@ void wxCairoContext::ResetClip()
     cairo_reset_clip(m_context);
 }
 
+void wxCairoContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
+{
+    double x1, y1, x2, y2;
+    cairo_clip_extents(m_context, &x1, &y1, &x2, &y2);
+    // Check if we have an empty clipping box.
+    if ( x2 - x1 <= DBL_MIN || y2 - y1 <= DBL_MIN )
+        x1 = x2 = y1 = y2 = 0.0;
+
+    if ( x )
+        *x = x1;
+    if ( y )
+        *y = y1;
+    if ( w )
+        *w = x2 - x1;
+    if ( h )
+        *h = y2 - y1;
+}
 
 void wxCairoContext::StrokePath( const wxGraphicsPath& path )
 {

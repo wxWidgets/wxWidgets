@@ -3230,6 +3230,7 @@ public:
     void Clip(const wxRegion&) wxOVERRIDE {}
     void Clip(wxDouble, wxDouble, wxDouble, wxDouble) wxOVERRIDE {}
     void ResetClip() wxOVERRIDE {}
+    void GetClipBox(wxDouble*, wxDouble*, wxDouble*, wxDouble*) wxOVERRIDE {}
     void* GetNativeContext() wxOVERRIDE { return NULL; }
     bool SetAntialiasMode(wxAntialiasMode) wxOVERRIDE { return false; }
     bool SetInterpolationQuality(wxInterpolationQuality) wxOVERRIDE { return false; }
@@ -3326,6 +3327,8 @@ public:
     void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
 
     void ResetClip() wxOVERRIDE;
+
+    void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
 
     // The native context used by wxD2DContext is a Direct2D render target.
     void* GetNativeContext() wxOVERRIDE;
@@ -3616,6 +3619,102 @@ void wxD2DContext::ResetClip()
     }
     // Restore current transformation matrix.
     GetRenderTarget()->SetTransform(&currTransform);
+}
+
+void wxD2DContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
+{
+    // To obtain actual clipping box we have to start with rectangle
+    // covering the entire render target and interesect with this rectangle
+    // all clipping layers. Bounding box of the final geometry
+    // (being intersection of all clipping layers) is a clipping box.
+
+    HRESULT hr;
+    wxCOMPtr<ID2D1RectangleGeometry> rectGeometry;
+    hr = m_direct2dFactory->CreateRectangleGeometry(
+                D2D1::RectF(0.0F, 0.0F, (FLOAT)m_width, (FLOAT)m_height),
+                &rectGeometry);
+    wxCHECK_HRESULT_RET(hr);
+
+    wxCOMPtr<ID2D1Geometry> clipGeometry(rectGeometry);
+
+    wxStack<LayerData> layers(m_layers);
+    while( !layers.empty() )
+    {
+        LayerData ld = layers.top();
+        layers.pop();
+
+        if ( ld.type == CLIP_LAYER )
+        {
+            // If current geometry is empty (null region)
+            // or there is no intersection between geometries
+            // then final result is "null" rectangle geometry.
+            FLOAT area;
+            hr = ld.geometry->ComputeArea(ld.transformMatrix, &area);
+            wxCHECK_HRESULT_RET(hr);
+            D2D1_GEOMETRY_RELATION geomRel;
+            hr = clipGeometry->CompareWithGeometry(ld.geometry, ld.transformMatrix, &geomRel);
+            wxCHECK_HRESULT_RET(hr);
+            if ( area <= FLT_MIN || geomRel == D2D1_GEOMETRY_RELATION_DISJOINT )
+            {
+                wxCOMPtr<ID2D1RectangleGeometry> nullGeometry;
+                hr = m_direct2dFactory->CreateRectangleGeometry(
+                            D2D1::RectF(0.0F, 0.0F, 0.0F, 0.0F), &nullGeometry);
+                wxCHECK_HRESULT_RET(hr);
+
+                clipGeometry.reset();
+                clipGeometry = nullGeometry;
+                break;
+            }
+
+            wxCOMPtr<ID2D1PathGeometry> pathGeometryClip;
+            hr = m_direct2dFactory->CreatePathGeometry(&pathGeometryClip);
+            wxCHECK_HRESULT_RET(hr);
+            wxCOMPtr<ID2D1GeometrySink> pGeometrySink;
+            hr = pathGeometryClip->Open(&pGeometrySink);
+            wxCHECK_HRESULT_RET(hr);
+
+            hr = clipGeometry->CombineWithGeometry(ld.geometry, D2D1_COMBINE_MODE_INTERSECT,
+                                                   ld.transformMatrix, pGeometrySink);
+            wxCHECK_HRESULT_RET(hr);
+            hr = pGeometrySink->Close();
+            wxCHECK_HRESULT_RET(hr);
+            pGeometrySink.reset();
+
+            clipGeometry = pathGeometryClip;
+            pathGeometryClip.reset();
+        }
+    }
+
+    // Final clipping geometry is given in device coordinates
+    // so we need to transform its bounds to logical coordinates.
+    D2D1::Matrix3x2F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
+    currTransform.Invert();
+
+    D2D1_RECT_F bounds;
+    // First check if clip region is empty.
+    FLOAT clipArea;
+    hr = clipGeometry->ComputeArea(currTransform, &clipArea);
+    wxCHECK_HRESULT_RET(hr);
+    if ( clipArea <= FLT_MIN )
+    {
+        bounds.left = bounds.top = bounds.right = bounds.bottom = 0.0F;
+    }
+    else
+    {
+        // If it is not empty then get it bounds.
+        hr = clipGeometry->GetBounds(currTransform, &bounds);
+        wxCHECK_HRESULT_RET(hr);
+    }
+
+    if ( x )
+        *x = bounds.left;
+    if ( y )
+        *y = bounds.top;
+    if ( w )
+        *w = (double)bounds.right - bounds.left;
+    if ( h )
+        *h = (double)bounds.bottom - bounds.top;
 }
 
 void* wxD2DContext::GetNativeContext()

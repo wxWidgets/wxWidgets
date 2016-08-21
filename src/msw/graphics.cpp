@@ -364,6 +364,9 @@ public:
     // resets the clipping to original extent
     virtual void ResetClip();
 
+    // returns bounding box of the clipping region
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+
     virtual void * GetNativeContext();
 
     virtual void StrokePath( const wxGraphicsPath& p );
@@ -1661,6 +1664,26 @@ void wxGDIPlusContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 void wxGDIPlusContext::ResetClip()
 {
     m_context->ResetClip();
+}
+
+void wxGDIPlusContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
+{
+    RectF r;
+    m_context->SetPixelOffsetMode(PixelOffsetModeNone);
+    m_context->GetVisibleClipBounds(&r);
+    m_context->SetPixelOffsetMode(PixelOffsetModeHalf);
+    // Check if we have an empty clipping box.
+    if ( r.Width <= REAL_MIN || r.Height <= REAL_MIN )
+        r.X = r.Y = r.Width = r.Height = 0.0F;
+
+    if ( x )
+        *x = r.X;
+    if ( y )
+        *y = r.Y;
+    if ( w )
+        *w = r.Width;
+    if ( h )
+        *h = r.Height;
 }
 
 void wxGDIPlusContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )

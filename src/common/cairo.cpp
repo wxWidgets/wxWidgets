@@ -172,6 +172,8 @@
        (cairo_t *cr, cairo_surface_t *surface, double x, double y), (cr, surface, x, y) ) \
     m( cairo_matrix_init_identity, \
        (cairo_matrix_t *matrix), (matrix) ) \
+    m( cairo_clip_extents, \
+       (cairo_t *cr, double *x1, double *y1, double *x2, double *y2), (cr, x1, y1, x2, y2) ) \
 
 #ifdef __WXMAC__
 #define wxCAIRO_PLATFORM_METHODS(m) \

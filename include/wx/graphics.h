@@ -544,6 +544,9 @@ public:
     // resets the clipping to original extent
     virtual void ResetClip() = 0;
 
+    // returns bounding box of the clipping region
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) = 0;
+
     // returns the native context
     virtual void * GetNativeContext() = 0;
 
