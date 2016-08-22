@@ -35,7 +35,6 @@
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
-    #include <float.h> // for FLT_MAX, FLT_MIN
 #endif
 
 #include "wx/stack.h"
@@ -54,6 +53,7 @@
 #if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>
 #endif
+#include <float.h> // for FLT_MAX, FLT_MIN
 
 // Define REAL_MAX, REAL_MIN
 // if it isn't done in GDI+ header(s).
