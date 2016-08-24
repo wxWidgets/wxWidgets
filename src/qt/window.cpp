@@ -562,9 +562,8 @@ void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int r
 void wxWindowQt::SetScrollPos( int orientation, int pos, bool WXUNUSED( refresh ))
 {
     wxScrollBar *scrollBar = QtGetScrollBar( orientation );
-    wxCHECK_RET( scrollBar, "Invalid scrollbar" );
-
-    scrollBar->SetThumbPosition( pos );
+    if(scrollBar)
+        scrollBar->SetThumbPosition( pos );
 }
 
 int wxWindowQt::GetScrollPos( int orientation ) const

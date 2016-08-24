@@ -115,7 +115,9 @@ int wxQtEventLoopBase::DispatchTimeout(unsigned long timeout)
 
 void wxQtEventLoopBase::WakeUp()
 {
-    QAbstractEventDispatcher::instance()->wakeUp();
+    QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
+    if(instance)
+        instance->wakeUp();
 }
 
 void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)

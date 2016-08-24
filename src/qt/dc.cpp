@@ -24,6 +24,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
+#include <QtGui/QScreen>
+#include <QtWidgets/QApplication>
 
 static void SetPenColour( QPainter *qtPainter, QColor col )
 {
@@ -124,7 +126,10 @@ int wxQtDCImpl::GetDepth() const
 
 wxSize wxQtDCImpl::GetPPI() const
 {
-    return wxSize(m_qtPainter->device()->logicalDpiX(), m_qtPainter->device()->logicalDpiY());
+    QScreen *srn = QApplication::screens().at(0);
+    qreal dotsPerInch = (qreal)srn->logicalDotsPerInch();
+    return wxSize(round(dotsPerInch), round(dotsPerInch));
+//    return wxSize(m_qtPainter->device()->logicalDpiX(), m_qtPainter->device()->logicalDpiY());
 }
 
 void wxQtDCImpl::SetFont(const wxFont& font)
