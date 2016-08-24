@@ -78,6 +78,13 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     }
 }
 
+wxBitmap wxMemoryDCImpl::DoGetAsBitmap(const wxRect *subrect) const
+{
+    if(!subrect)
+        return m_selected;
+    return m_selected.GetSubBitmap(*subrect);
+}
+
 const wxBitmap& wxMemoryDCImpl::GetSelectedBitmap() const
 {
     return m_selected;
