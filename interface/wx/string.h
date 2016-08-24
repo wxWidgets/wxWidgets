@@ -1574,13 +1574,17 @@ public:
 
     const_iterator begin() const;
     iterator begin();
+    const_iterator cbegin() const;
     const_iterator end() const;
     iterator end();
+    const_iterator cend() const;
 
     const_reverse_iterator rbegin() const;
     reverse_iterator rbegin();
+    const_reverse_iterator crbegin() const;
     const_reverse_iterator rend() const;
     reverse_iterator rend();
+    const_reverse_iterator crend() const;
 
     //@}
 
