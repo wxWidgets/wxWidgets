@@ -51,7 +51,6 @@ bool wxStaticText::Create(wxWindow *parent,
 
     m_qtLabel->setBuddy( m_qtLabel );
     m_qtLabel->setTextInteractionFlags( Qt::NoTextInteraction );
-    m_qtLabel->setWordWrap( true );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
