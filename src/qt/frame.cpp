@@ -31,6 +31,7 @@ public:
     wxQtMainWindow( wxWindow *parent, wxFrame *handler );
 
 private:
+    virtual bool focusNextPrevChild(bool) { return false; }
 };
 
 // Central widget helper (container to show scroll bars and receive events):
