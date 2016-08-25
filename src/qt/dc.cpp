@@ -93,7 +93,7 @@ void wxQtDCImpl::QtPreparePainter( )
     }
     else
     {
-        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter not active!"));
+//        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter not active!"));
     }
 }
 
@@ -157,7 +157,7 @@ void wxQtDCImpl::SetBrush(const wxBrush& brush)
     {
         // Use a monochrome mask: use foreground color for the mask
         QBrush b(brush.GetHandle());
-        b.setColor(m_textForegroundColour.GetHandle());
+        b.setColor(m_textForegroundColour.GetQColor());
         b.setTexture(b.texture().mask());
         m_qtPainter->setBrush(b);
     }
@@ -584,7 +584,7 @@ void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
         // Save pen/brush
         savedBrush = m_qtPainter->brush();
         // Fill with text background color ("no fill" like in wxGTK):
-        m_qtPainter->setBrush(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter->setBrush(QBrush(m_textBackgroundColour.GetQColor()));
     }
 
     // Draw
@@ -629,8 +629,8 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         QPen savedPen = m_qtPainter->pen();
         
         //Use text colors
-        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetHandle()));
-        m_qtPainter->setPen(QPen(m_textForegroundColour.GetHandle()));
+        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
+        m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
         //Draw
         m_qtPainter->drawPixmap(x, y, pix);
@@ -660,7 +660,7 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     QPen savedPen = m_qtPainter->pen();
-    m_qtPainter->setPen(QPen(m_textForegroundColour.GetHandle()));
+    m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
     // Disable logical function
     QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
@@ -674,7 +674,7 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
         QBrush savedBrush = m_qtPainter->background();
 
         //Use text colors
-        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
 
         //Draw
         m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
@@ -703,7 +703,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     m_qtPainter->rotate(-angle);
 
     QPen savedPen = m_qtPainter->pen();
-    m_qtPainter->setPen(QPen(m_textForegroundColour.GetHandle()));
+    m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
     // Disable logical function
     QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
@@ -717,7 +717,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
         QBrush savedBrush = m_qtPainter->background();
         
         //Use text colors
-        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
         
         //Draw
         m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));

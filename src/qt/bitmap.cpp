@@ -215,7 +215,7 @@ wxBitmap::wxBitmap(const wxCursor& cursor)
     // note that pixmap could be invalid if is not a pixmap cursor
     // also, a wxCursor::GetHandle method could be implemented instead of 
     // accessing the member variable directly  
-    QPixmap pix = cursor.m_qtCursor.pixmap();
+    QPixmap pix = cursor.GetHandle().pixmap();
     m_refData = new wxBitmapRefData(pix);
 }
 
@@ -511,7 +511,7 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
         return false;
 
     delete m_qtBitmap;
-    m_qtBitmap = new QBitmap(bitmap.GetHandle()->createMaskFromColor(colour.GetHandle()));
+    m_qtBitmap = new QBitmap(bitmap.GetHandle()->createMaskFromColor(colour.GetQColor()));
 
     return true;
 }

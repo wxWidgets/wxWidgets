@@ -82,6 +82,7 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
 
+    virtual bool SetCursor( const wxCursor &cursor ) wxOVERRIDE;
     virtual bool SetFont(const wxFont& font);
     
     // get the (average) character size for the current font

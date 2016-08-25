@@ -228,13 +228,11 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
                 QtSetScrollBar( wxVERTICAL );
         }
         else
-        {
             m_qtWindow = new wxQtWidget( parent, this );
-        }
-
-        GetHandle()->setMouseTracking(true);
     }
 
+    
+    GetHandle()->setMouseTracking(true);
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         return false;
 
@@ -433,6 +431,15 @@ void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
     }
 }
 
+bool wxWindowQt::SetCursor( const wxCursor &cursor )
+{
+    if (!wxWindowBase::SetCursor(cursor))
+        return false;
+
+    GetHandle()->setCursor(cursor.GetHandle());
+    
+    return true;
+}
 
 bool wxWindowQt::SetFont( const wxFont &font )
 {
@@ -1131,6 +1138,8 @@ bool wxWindowQt::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEven
 bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent *event )
 {
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
+    e.SetPosition( wxQtConvertPoint( event->pos() ) );
+
     e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
     e.m_wheelRotation = event->delta();
     e.m_linesPerAction = 3;
