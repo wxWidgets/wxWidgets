@@ -131,7 +131,7 @@ public:
 
     /** Sets value in control to unspecified. */
     virtual void SetValueToUnspecified( wxPGProperty* property,
-                                        wxWindow* ctrl ) const = 0;
+                                        wxWindow* ctrl ) const;
 
     /**
         Called by property grid to set new appearance for the control.
