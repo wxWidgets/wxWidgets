@@ -20,19 +20,19 @@
 #endif // WX_PRECOMP
 
 #include "wx/cursor.h"
-
+#include "wx/qt/private/converter.h"
 
 void wxSetCursor(const wxCursor& cursor)
 {
-    if (cursor.m_qtCursor.shape() == Qt::ArrowCursor)
+    if (cursor.GetHandle().shape() == Qt::ArrowCursor)
         QApplication::restoreOverrideCursor();
     else
-        QApplication::setOverrideCursor(cursor.m_qtCursor);
+        QApplication::setOverrideCursor(cursor.GetHandle());
 }
 
 void wxBeginBusyCursor(const wxCursor *cursor)
 {
-    QApplication::setOverrideCursor(cursor->m_qtCursor);
+    QApplication::setOverrideCursor(cursor->GetHandle());
 }
 
 bool wxIsBusy()
@@ -45,13 +45,22 @@ void wxEndBusyCursor()
     QApplication::restoreOverrideCursor();
 }
 
+//-----------------------------------------------------------------------------
+// wxCursorRefData
+//-----------------------------------------------------------------------------
+
+class wxCursorRefData: public wxGDIRefData
+{
+public:
+    wxCursorRefData() {}
+    wxCursorRefData( const wxCursorRefData& data ) : m_qtCursor(data.m_qtCursor) {}
+    wxCursorRefData( QCursor &c ) : m_qtCursor(c) {}
+
+    QCursor m_qtCursor;
+};
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject);
 
-wxCursor::wxCursor( const wxCursor &cursor )
-{
-    m_qtCursor = cursor.m_qtCursor;
-}
 
 #if wxUSE_IMAGE
 wxCursor::wxCursor(const wxString& cursor_file,
@@ -77,14 +86,26 @@ wxCursor::wxCursor(const wxImage& img)
 }
 #endif
 
+wxPoint wxCursor::GetHotSpot() const
+{
+    return wxQtConvertPoint(GetHandle().hotSpot());
+}
+
+QCursor &wxCursor::GetHandle() const
+{
+    return static_cast<wxCursorRefData*>(m_refData)->m_qtCursor;
+}
+
 void wxCursor::InitFromStock( wxStockCursor cursorId )
 {
+    AllocExclusive();
+
     Qt::CursorShape qt_cur;
     switch (cursorId)
     {
     case wxCURSOR_BLANK:
     {
-        m_qtCursor = QBitmap();
+        GetHandle() = QBitmap();
         return;
     }
 //    case wxCURSOR_ARROW: 
@@ -125,28 +146,29 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
         break;
     }
 
-    m_qtCursor.setShape(qt_cur);
+    GetHandle().setShape(qt_cur);
 }
 
 #if wxUSE_IMAGE
 
 void wxCursor::InitFromImage( const wxImage & image )
 {
-    m_qtCursor = *wxBitmap(image).GetHandle();
+    AllocExclusive();
+    GetHandle() = QCursor(*wxBitmap(image).GetHandle(), 
+                           image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) ?
+                           image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) : -1,
+                           image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ?
+                           image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y) : -1);
 }
 
 #endif // wxUSE_IMAGE
 
 wxGDIRefData *wxCursor::CreateGDIRefData() const
 {
-    //return new wxCursorRefData;
-    return NULL;
+    return new wxCursorRefData;
 }
 
-wxGDIRefData *
-wxCursor::CloneGDIRefData(const wxGDIRefData * data) const
+wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
 {
-//    return new wxCursorRefData(data->bitmap());
-    return NULL;
-
+    return new wxCursorRefData(*(wxCursorRefData *)data);
 }

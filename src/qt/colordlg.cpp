@@ -29,10 +29,10 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data )
     if ( m_data.GetChooseFull() )
     {
         for (int i=0; i<wxColourData::NUM_CUSTOM; i++)
-            QColorDialog::setCustomColor(i, m_data.GetCustomColour(i).GetHandle());
+            QColorDialog::setCustomColor(i, m_data.GetCustomColour(i).GetQColor());
     }
 
-    GetHandle()->setCurrentColor(m_data.GetColour().GetHandle());
+    GetHandle()->setCurrentColor(m_data.GetColour().GetQColor());
 
     return wxTopLevelWindow::Create( parent, wxID_ANY, "");
 }

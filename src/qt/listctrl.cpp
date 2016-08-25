@@ -344,9 +344,9 @@ bool wxListCtrl::SetItem(wxListItem& info)
             if ( info.GetFont().IsOk() )
                 qitem->setFont(col, info.GetFont().GetHandle() );
             if ( info.GetTextColour().IsOk() )
-                qitem->setTextColor(col, info.GetTextColour().GetHandle());
+                qitem->setTextColor(col, info.GetTextColour().GetQColor());
             if ( info.GetBackgroundColour().IsOk() )
-                qitem->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+                qitem->setBackgroundColor(col, info.GetBackgroundColour().GetQColor());
         }
         return true;
     }
