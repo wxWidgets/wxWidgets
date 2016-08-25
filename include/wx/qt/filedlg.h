@@ -8,7 +8,7 @@
 #ifndef _WX_QT_FILEDLG_H_
 #define _WX_QT_FILEDLG_H_
 
-#include <QtWidgets/QFileDialog>
+class QFileDialog;
 
 class WXDLLIMPEXP_CORE wxFileDialog : public wxFileDialogBase
 {
@@ -48,7 +48,7 @@ public:
 
     virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
 
-    virtual QFileDialog *GetHandle() const;
+    virtual QFileDialog *GetQFileDialog() const;
 
 private:
 

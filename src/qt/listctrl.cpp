@@ -22,6 +22,7 @@
 #include "wx/imaglist.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QTreeWidget>
 
 class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 {
@@ -916,7 +917,7 @@ int wxListCtrl::OnGetItemColumnImage(long item, long column) const
     return -1;
 }
 
-QTreeWidget *wxListCtrl::GetHandle() const
+QWidget *wxListCtrl::GetHandle() const
 {
     return m_qtTreeWidget;
 }

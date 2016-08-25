@@ -10,13 +10,15 @@
 
 #include "wx/statusbr.h"
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QStatusBar>
+class QLabel;
+class QStatusBar;
+
+template < class T > class QList;
 
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
 public:
-    wxStatusBar() {}
+    wxStatusBar();
     wxStatusBar(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
@@ -32,8 +34,9 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
 
-    virtual QStatusBar *GetHandle() const;
-
+    QStatusBar *GetQStatusBar() const { return m_qtStatusBar; }
+    QWidget *GetHandle() const;
+    
 protected:
     virtual void DoUpdateStatusText(int number);
 
@@ -42,7 +45,7 @@ private:
     void UpdateFields();
 
     QStatusBar *m_qtStatusBar;
-    QList< QLabel* > m_qtPanes;
+    QList< QLabel* > *m_qtPanes;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBar);
 };

@@ -5,7 +5,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include <QtWidgets/QToolBar>
+class QToolBar;
 
 #ifndef _WX_QT_TOOLBAR_H_
 #define _WX_QT_TOOLBAR_H_
@@ -41,7 +41,7 @@ public:
                 const wxString& name = wxToolBarNameStr);
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
-    virtual QToolBar *GetHandle() const;
+    virtual QToolBar *GetQToolBar() const { return m_qtToolBar; }
 
     virtual void SetWindowStyleFlag( long style );
     virtual bool Realize() wxOVERRIDE;
@@ -57,7 +57,8 @@ public:
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label);
-
+    QWidget *GetHandle() const;
+    
 protected:
 
     QActionGroup* GetActionGroup(size_t pos);
@@ -68,7 +69,7 @@ protected:
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
 
 private:
-    Qt::ToolButtonStyle GetButtonStyle();
+    long GetButtonStyle();
 
     QToolBar *m_qtToolBar;
 

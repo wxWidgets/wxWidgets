@@ -12,6 +12,8 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
 
 static void ApplyStyle( QMenu *qtMenu, long style )
 {
@@ -245,7 +247,7 @@ void wxMenuBar::Detach()
     wxMenuBarBase::Detach();
 }
 
-QMenuBar *wxMenuBar::GetHandle() const
+QWidget *wxMenuBar::GetHandle() const
 {
     return m_qtMenuBar;
 }

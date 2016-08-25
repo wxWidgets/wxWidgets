@@ -8,8 +8,6 @@
 #ifndef _WX_QT_PEN_H_
 #define _WX_QT_PEN_H_
 
-#include <QtCore/Qt>
-
 class QPen;
 
 class WXDLLIMPEXP_CORE wxPen : public wxPenBase

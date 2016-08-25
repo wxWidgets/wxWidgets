@@ -18,6 +18,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QShortcut>
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -150,6 +152,7 @@ void wxWindowQt::Init()
 #if wxUSE_ACCEL
     m_qtShortcutHandler = new wxQtShortcutHandler( this );
     m_processingShortcut = false;
+    m_qtShortcuts = NULL;
 #endif
     m_qtWindow = NULL;
     m_qtContainer = NULL;
@@ -185,6 +188,7 @@ wxWindowQt::~wxWindowQt()
 
 #if wxUSE_ACCEL
     m_qtShortcutHandler->deleteLater();
+    delete m_qtShortcuts;
 #endif
 
     // Delete only if the qt widget was created or assigned to this base class
@@ -505,7 +509,7 @@ wxScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
  * passed as parameter */
 wxScrollBar *wxWindowQt::QtSetScrollBar( int orientation, wxScrollBar *scrollBar )
 {
-    QAbstractScrollArea *scrollArea = QtGetScrollBarsContainer();
+    QScrollArea *scrollArea = QtGetScrollBarsContainer();
     wxCHECK_MSG( scrollArea, NULL, "Window without scrolling area" );
 
     // Create a new scrollbar if needed
@@ -529,12 +533,12 @@ wxScrollBar *wxWindowQt::QtSetScrollBar( int orientation, wxScrollBar *scrollBar
     // Let Qt handle layout
     if ( orientation == wxHORIZONTAL )
     {
-        scrollArea->setHorizontalScrollBar( scrollBar->GetHandle() );
+        scrollArea->setHorizontalScrollBar( scrollBar->GetQScrollBar() );
         m_horzScrollBar = scrollBar;
     }
     else
     {
-        scrollArea->setVerticalScrollBar( scrollBar->GetHandle() );
+        scrollArea->setVerticalScrollBar( scrollBar->GetQScrollBar() );
         m_vertScrollBar = scrollBar;
     }
     return scrollBar;
@@ -932,15 +936,16 @@ void wxWindowQt::SetAcceleratorTable( const wxAcceleratorTable& accel )
     wxWindowBase::SetAcceleratorTable( accel );
 
     // Disable previously set accelerators
-    while ( !m_qtShortcuts.isEmpty() )
-        delete m_qtShortcuts.takeFirst();
+    while ( !m_qtShortcuts->isEmpty() )
+        delete m_qtShortcuts->takeFirst();
 
     // Create new shortcuts (use GetHandle() so all events inside
     // the window are handled, not only in the container subwindow)
+    delete m_qtShortcuts;
     m_qtShortcuts = accel.ConvertShortcutTable( GetHandle() );
 
     // Connect shortcuts to window
-    Q_FOREACH( QShortcut *s, m_qtShortcuts )
+    Q_FOREACH( QShortcut *s, *m_qtShortcuts )
     {
         QObject::connect( s, &QShortcut::activated, m_qtShortcutHandler, &wxQtShortcutHandler::activated );
         QObject::connect( s, &QShortcut::activatedAmbiguously, m_qtShortcutHandler, &wxQtShortcutHandler::activated );
@@ -1470,7 +1475,7 @@ QWidget *wxWindowQt::GetHandle() const
     return m_qtWindow;
 }
 
-QAbstractScrollArea *wxWindowQt::QtGetScrollBarsContainer() const
+QScrollArea *wxWindowQt::QtGetScrollBarsContainer() const
 {
     return m_qtContainer;
 }

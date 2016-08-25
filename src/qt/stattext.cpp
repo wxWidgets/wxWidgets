@@ -12,6 +12,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QLabel>
+
 class wxQtStaticText : public wxQtEventSignalHandler< QLabel, wxStaticText >
 {
 public:
@@ -60,7 +62,7 @@ void wxStaticText::SetLabel(const wxString& label)
     m_qtLabel->setText( wxQtConvertString( label ) );
 }
 
-QLabel *wxStaticText::GetHandle() const
+QWidget *wxStaticText::GetHandle() const
 {
     return m_qtLabel;
 }

@@ -15,6 +15,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QSpinBox>
+
 template< typename T, typename Widget >
 wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt()
 {
@@ -117,7 +119,7 @@ void wxSpinCtrlQt< T, Widget >::SetSelection(long WXUNUSED(WXUNUSED(from)), long
 }
 
 template< typename T, typename Widget >
-Widget *wxSpinCtrlQt< T, Widget >::GetHandle() const
+QWidget *wxSpinCtrlQt< T, Widget >::GetHandle() const
 {
     return m_qtSpinBox;
 }

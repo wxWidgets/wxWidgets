@@ -20,6 +20,7 @@
 #include "wx/scopeguard.h"
 #include "wx/qt/private/converter.h"
 
+#include <QtCore/QMimeData>
 
 // ----------------------------------------------------------------------------
 // wxClipboard ctor/dtor
@@ -108,7 +109,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 
         QByteArray bytearray(size, 0);
         data->GetDataHere(format, bytearray.data());
-        MimeData->setData(format.m_MimeType, bytearray);
+        MimeData->setData(wxQtConvertString(format.m_MimeType), bytearray);
     }
 
     delete data;
@@ -143,7 +144,7 @@ bool wxClipboard::GetData( wxDataObject& data )
         const wxDataFormat format(formats[i]);
         
         // is this format supported by clipboard ?
-        if( !MimeData->hasFormat(format.m_MimeType) )
+        if( !MimeData->hasFormat(wxQtConvertString(format.m_MimeType)) )
             continue;
 
         wxTextDataObject *textdata = dynamic_cast<wxTextDataObject*>(&data);
@@ -151,7 +152,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             textdata->SetText(wxQtConvertString(MimeData->text()));
         else
         {
-            QByteArray bytearray = MimeData->data( format.m_MimeType ).data();
+            QByteArray bytearray = MimeData->data( wxQtConvertString(format.m_MimeType) ).data();
             data.SetData(format, bytearray.size(), bytearray.constData());
         }
 
@@ -169,7 +170,7 @@ void wxClipboard::Clear()
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
     const QMimeData *data = QtClipboard->mimeData( (QClipboard::Mode)Mode() );
-    return data->hasFormat(format.m_MimeType);
+    return data->hasFormat(wxQtConvertString(format.m_MimeType));
 }
 
 bool wxClipboard::IsSupportedAsync(wxEvtHandler *sink)

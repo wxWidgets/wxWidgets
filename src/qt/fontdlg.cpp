@@ -11,6 +11,8 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/fontdlg.h"
 
+#include <QtWidgets/QFontDialog>
+
 class wxQtFontDialog : public wxQtEventSignalHandler< QFontDialog, wxFontDialog >
 {
 public:
@@ -31,7 +33,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 bool wxFontDialog::DoCreate(wxWindow *parent)
 {
     m_qtWindow = new wxQtFontDialog( parent, this );
-    GetHandle()->setCurrentFont(m_fontData.GetInitialFont().GetHandle());
+    static_cast<QFontDialog*>(m_qtWindow)->setCurrentFont(m_fontData.GetInitialFont().GetHandle());
     return wxFontDialogBase::DoCreate(parent);
 }
 

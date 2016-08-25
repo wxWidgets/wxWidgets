@@ -12,6 +12,7 @@
 #include "wx/list.h"
 #include "wx/qt/private/converter.h"
 #include <QtCore/QVariant>
+#include <QtWidgets/QShortcut>
 
 // ----------------------------------------------------------------------------
 // wxAccelList: a list of wxAcceleratorEntries
@@ -81,13 +82,13 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     }
 }
 
-QList< QShortcut* > wxAcceleratorTable::ConvertShortcutTable( QWidget *parent ) const
+QList< QShortcut* > *wxAcceleratorTable::ConvertShortcutTable( QWidget *parent ) const
 {   
-    QList< QShortcut* > qtList;
+    QList< QShortcut* > *qtList = new QList< QShortcut* >;
     
     for ( wxAccelList::Node *node = M_ACCELDATA->m_accels.GetFirst(); node; node = node->GetNext() )
     {
-        qtList << ConvertAccelerator( node->GetData(), parent );
+        qtList->push_back(ConvertAccelerator( node->GetData(), parent ));
     }
     
     return qtList;

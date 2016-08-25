@@ -10,7 +10,7 @@
 
 #include "wx/image.h"
 
-#include <QtGui/QCursor>
+class QCursor;
 
 class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 {
@@ -36,7 +36,8 @@ protected:
     void InitFromImage( const wxImage & image );
 #endif
 
-protected:
+private:
+    void Init();
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 

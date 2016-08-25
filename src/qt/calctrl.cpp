@@ -22,7 +22,7 @@
 #include "wx/qt/private/winevent.h"
 
 #include <QtGui/QTextCharFormat>
-
+#include <QtWidgets/QCalendarWidget>
 
 class wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
 {
@@ -316,7 +316,7 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
     m_qtCalendar->setDateTextFormat(date, format);
 }
 
-QCalendarWidget *wxCalendarCtrl::GetHandle() const
+QWidget *wxCalendarCtrl::GetHandle() const
 {
     return m_qtCalendar;
 }

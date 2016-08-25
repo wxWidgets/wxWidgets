@@ -13,6 +13,8 @@
 #endif
 
 #include <QtGui/QBitmap>
+#include <QtGui/QPen>
+#include <QtGui/QPainter>
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
@@ -47,6 +49,8 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     m_clippingRegion = new wxRegion;
     m_qtImage = NULL;
     m_rasterColourOp = wxQtNONE;
+    m_qtPenColor = new QColor;
+    m_qtBrushColor = new QColor;
     m_ok = true;
 }
 
@@ -60,8 +64,10 @@ wxQtDCImpl::~wxQtDCImpl()
         }
         delete m_qtPainter;
     }
-    if ( m_clippingRegion != NULL )
-        delete m_clippingRegion;
+
+    delete m_clippingRegion;
+    delete m_qtPenColor;
+    delete m_qtBrushColor;
 }
 
 void wxQtDCImpl::QtPreparePainter( )
@@ -197,6 +203,10 @@ void wxQtDCImpl::SetBackgroundMode(int mode)
     m_backgroundMode = mode;
 }
 
+#include <QtGui/QPen>
+#include <QtGui/QPainter>
+#include <QtGui/QScreen>
+#include <QtWidgets/QApplication>
 
 #if wxUSE_PALETTE
 void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
@@ -284,8 +294,8 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
         m_rasterColourOp = rasterColourOp;
 
         // Restore original colours and apply new mode
-        SetPenColour( m_qtPainter, m_qtPenColor );
-        SetBrushColour( m_qtPainter, m_qtPenColor );
+        SetPenColour( m_qtPainter, *m_qtPenColor );
+        SetBrushColour( m_qtPainter, *m_qtPenColor );
 
         ApplyRasterColourOp();
     }
@@ -294,8 +304,8 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 void wxQtDCImpl::ApplyRasterColourOp()
 {
     // Save colours
-    m_qtPenColor = m_qtPainter->pen().color();
-    m_qtBrushColor = m_qtPainter->brush().color();
+    *m_qtPenColor = m_qtPainter->pen().color();
+    *m_qtBrushColor = m_qtPainter->brush().color();
 
     // Apply op
     switch ( m_rasterColourOp )
@@ -309,8 +319,8 @@ void wxQtDCImpl::ApplyRasterColourOp()
             SetBrushColour( m_qtPainter, QColor( Qt::black ) );
             break;
         case wxQtINVERT:
-            SetPenColour( m_qtPainter, QColor( ~m_qtPenColor.rgb() ) );
-            SetBrushColour( m_qtPainter, QColor( ~m_qtBrushColor.rgb() ) );
+            SetPenColour( m_qtPainter, QColor( ~m_qtPenColor->rgb() ) );
+            SetBrushColour( m_qtPainter, QColor( ~m_qtBrushColor->rgb() ) );
             break;
         case wxQtNONE:
             // No op

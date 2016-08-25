@@ -16,6 +16,23 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QSocketNotifier>
+#include <QtCore/QTimer>
+
+#include <QtWidgets/QApplication>
+
+class wxQtIdleTimer : public QTimer
+{
+
+public:
+    wxQtIdleTimer( wxQtEventLoopBase *eventLoop );
+    virtual bool eventFilter( QObject * watched, QEvent * event  );
+
+private:
+    void idle();
+
+private:
+    wxQtEventLoopBase *m_eventLoop;
+};
 
 wxQtIdleTimer::wxQtIdleTimer( wxQtEventLoopBase *eventLoop )
 {
