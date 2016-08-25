@@ -12,6 +12,8 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/glcanvas.h"
 
+#include <QtOpenGL/QGLWidget>
+
 class wxQtGLWidget : public wxQtEventSignalHandler< QGLWidget, wxGLCanvas >
 {
 public:
@@ -378,7 +380,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
 bool wxGLCanvas::SwapBuffers()
 {
-    GetHandle()->swapBuffers();
+    static_cast<QGLWidget *>(m_qtWindow)->swapBuffers();
     return true;
 }
 

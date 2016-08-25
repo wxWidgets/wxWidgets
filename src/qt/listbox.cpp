@@ -11,6 +11,7 @@
 #include "wx/listbox.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QListWidget>
 
 class wxQtListWidget : public wxQtEventSignalHandler< QListWidget, wxListBox >
 {
@@ -225,7 +226,7 @@ void wxListBox::DoDeleteOneItem(unsigned int pos)
     delete item;
 }
 
-QListWidget *wxListBox::GetHandle() const
+QWidget *wxListBox::GetHandle() const
 {
     return m_qtListWidget;
 }

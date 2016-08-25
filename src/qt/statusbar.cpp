@@ -13,6 +13,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QLabel>
 
 class wxQtStatusBar : public wxQtEventSignalHandler< QStatusBar, wxStatusBar >
 {
@@ -28,10 +30,17 @@ wxQtStatusBar::wxQtStatusBar( wxWindow *parent, wxStatusBar *handler )
 
 //==============================================================================
 
+
+wxStatusBar::wxStatusBar()
+{
+    Init();
+}
+
 wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
             long style,
             const wxString& name)
 {
+    Init();
     Create( parent, winid, style, name );
 }
 
@@ -41,6 +50,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
     wxMISSING_IMPLEMENTATION( "wxStatusBar::Create parameters" );
 
     m_qtStatusBar = new wxQtStatusBar( parent, this );
+    m_qtPanes = new QList < QLabel* >;
 
     if(style & wxSTB_SIZEGRIP)
         m_qtStatusBar->setSizeGripEnabled(true);
@@ -57,7 +67,7 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
     wxCHECK_MSG( (i >= 0) && ((size_t)i < m_panes.GetCount()), false,
                  "invalid statusbar field index" );
 
-    rect = wxQtConvertRect(m_qtPanes[i]->geometry());
+    rect = wxQtConvertRect((*m_qtPanes)[i]->geometry());
     return true;
 }
 
@@ -78,7 +88,7 @@ int wxStatusBar::GetBorderY() const
 
 void wxStatusBar::DoUpdateStatusText(int number)
 {
-    m_qtPanes[number]->setText( wxQtConvertString( m_panes[number].GetText() ) );
+    (*m_qtPanes)[number]->setText( wxQtConvertString( m_panes[number].GetText() ) );
 }
 
 // Called each time number/size of panes changes
@@ -89,14 +99,20 @@ void wxStatusBar::Refresh( bool eraseBackground, const wxRect *rect )
     wxWindow::Refresh( eraseBackground, rect );
 }
 
+void wxStatusBar::Init()
+{
+    m_qtPanes = NULL;
+}
+
+
 void wxStatusBar::UpdateFields()
 {
     // is it a good idea to recreate all the panes every update?
 
-    while ( !m_qtPanes.isEmpty() )
+    while ( !m_qtPanes->isEmpty() )
     {
         //Remove all panes
-        delete m_qtPanes.takeLast();
+        delete m_qtPanes->takeLast();
     }
 
     for (size_t i = 0; i < m_panes.GetCount(); i++)
@@ -105,7 +121,7 @@ void wxStatusBar::UpdateFields()
         int width = m_panes[i].GetWidth();
 
         QLabel *pane = new QLabel( m_qtStatusBar );
-        m_qtPanes.append( pane );
+        m_qtPanes->append( pane );
 
         if ( width >= 0 )
         {
@@ -120,7 +136,7 @@ void wxStatusBar::UpdateFields()
     }
 }
 
-QStatusBar *wxStatusBar::GetHandle() const
+QWidget *wxStatusBar::GetHandle() const
 {
     return m_qtStatusBar;
 }

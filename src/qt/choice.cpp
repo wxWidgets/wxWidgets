@@ -174,7 +174,7 @@ void wxChoice::DoDeleteOneItem(unsigned int pos)
     m_qtComboBox->removeItem(pos);
 }
 
-QComboBox *wxChoice::GetHandle() const
+QWidget *wxChoice::GetHandle() const
 {
     return m_qtComboBox;
 }

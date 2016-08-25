@@ -11,6 +11,7 @@
 #include "wx/toplevel.h"
 #include "wx/qt/private/converter.h"
 #include <QtGui/QIcon>
+#include <QtWidgets/QWidget>
 
 wxTopLevelWindowQt::wxTopLevelWindowQt()
 {

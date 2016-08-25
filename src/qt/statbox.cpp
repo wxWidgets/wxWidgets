@@ -50,7 +50,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
-QGroupBox *wxStaticBox::GetHandle() const
+QWidget *wxStaticBox::GetHandle() const
 {
     return m_qtGroupBox;
 }

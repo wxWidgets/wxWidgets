@@ -9,8 +9,27 @@
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QScrollArea>
+#include <list>
+
+class QWidget;
+class QScrollWindow;
+class QAbstractScrollArea;
+class QScrollArea;
+class QPicture;
+class QPainter;
+
+class QPaintEvent;
+class QResizeEvent;
+class QWheelEvent;
+class QKeyEvent;
+class QMouseEvent;
+class QEvent;
+class QMoveEvent;
+class QEvent;
+class QEvent;
+class QCloseEvent;
+class QContextMenuEvent;
+class QFocusEvent;
 
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
@@ -112,7 +131,7 @@ public:
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent() { return true; }
 
-    virtual WXWidget GetHandle() const;
+    QWidget *GetHandle() const;
 
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     
@@ -148,7 +167,7 @@ public:
     virtual void QtHandleShortcut ( int command );
 #endif // wxUSE_ACCEL
 
-    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const;
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 protected:
     virtual void DoGetTextExtent(const wxString& string,
@@ -206,7 +225,7 @@ private:
     bool m_mouseInside;
 
 #if wxUSE_ACCEL
-    QList< QShortcut* > m_qtShortcuts;
+    QList< QShortcut* > *m_qtShortcuts;
     wxQtShortcutHandler *m_qtShortcutHandler;
     bool m_processingShortcut;
 #endif // wxUSE_ACCEL

@@ -215,9 +215,9 @@ bool wxRegion::DoXor(const wxRegion& region)
     return true;
 }
 
-QRegion wxRegion::GetHandle() const
+const QRegion &wxRegion::GetHandle() const
 {
-    wxCHECK_MSG( IsOk(), QRegion(), "Invalid region" );
+    wxCHECK_MSG( IsOk(), GetHandle(), "Invalid region" );
 
     return M_REGIONDATA;
 }

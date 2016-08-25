@@ -24062,7 +24062,7 @@ $as_echo "yes" >&6; }
                 GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
                 if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
                                         SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
-                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
+                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS"
                 fi
 
 fi

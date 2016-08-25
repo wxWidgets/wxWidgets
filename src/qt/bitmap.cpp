@@ -24,6 +24,7 @@
 #include "wx/bitmap.h"
 #include "wx/cursor.h"
 #include "wx/rawbmp.h"
+#include "wx/qt/colour.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
@@ -213,8 +214,6 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale) )
 wxBitmap::wxBitmap(const wxCursor& cursor)
 {
     // note that pixmap could be invalid if is not a pixmap cursor
-    // also, a wxCursor::GetHandle method could be implemented instead of 
-    // accessing the member variable directly  
     QPixmap pix = cursor.GetHandle().pixmap();
     m_refData = new wxBitmapRefData(pix);
 }

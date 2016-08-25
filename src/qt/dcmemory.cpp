@@ -11,6 +11,8 @@
 #include "wx/dcmemory.h"
 #include "wx/qt/dcmemory.h"
 
+#include <QtGui/QPainter>
+
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
     : wxQtDCImpl( owner )
 {

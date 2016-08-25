@@ -8,7 +8,7 @@
 #ifndef _WX_QT_SLIDER_H_
 #define _WX_QT_SLIDER_H_
 
-#include <QtWidgets/QSlider>
+class QSlider;
 
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {
@@ -50,7 +50,7 @@ public:
     virtual void SetThumbLength(int lenPixels);
     virtual int GetThumbLength() const;
 
-    virtual QSlider *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 private:
     QSlider *m_qtSlider;

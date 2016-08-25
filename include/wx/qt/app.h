@@ -9,8 +9,7 @@
 #ifndef _WX_QT_APP_H_
 #define _WX_QT_APP_H_
 
-#include <QtWidgets/QApplication>
-
+class QApplication;
 class WXDLLIMPEXP_CORE wxApp : public wxAppBase
 {
 public:

@@ -14,6 +14,9 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/utils.h"
 
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QTextEdit>
+
 class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 {
 public:

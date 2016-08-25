@@ -22,6 +22,8 @@
 #include "wx/dcclient.h"
 #include "wx/qt/dcclient.h"
 
+#include <QtWidgets/QScrollArea>
+#include <QtGui/QPainter>
 
 //##############################################################################
 

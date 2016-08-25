@@ -8,8 +8,8 @@
 #ifndef _WX_QT_SPINCTRL_H_
 #define _WX_QT_SPINCTRL_H_
 
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QDoubleSpinBox>
+class QSpinBox;
+class QDoubleSpinBox;
 
 // Take advantage of the Qt compile time polymorphy and use a template to avoid
 // copy&paste code for the usage of QSpinBox/QDoubleSpinBox.
@@ -45,7 +45,7 @@ public:
     T GetMax() const;
     T GetIncrement() const;
 
-    virtual Widget *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     Widget *m_qtSpinBox;
