@@ -301,6 +301,8 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 bool wxListCtrl::SetItem(wxListItem& info)
 {
     const long id = info.GetId();
+    if(id < 0)
+        return false;
     QTreeWidgetItem *qitem = QtGetItem(id);
     if ( qitem != NULL )
     {
