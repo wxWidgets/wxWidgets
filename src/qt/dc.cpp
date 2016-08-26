@@ -649,20 +649,8 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         m_qtPainter->setBackground(savedBrush);
         m_qtPainter->setPen(savedPen);
     } else {
-        if ( !useMask && bmp.GetMask() )
-        {
-            // Temporarly disable mask
-            QBitmap mask;
-            mask = pix.mask();
-            pix.setMask( QBitmap() );
-
-            // Draw
-            m_qtPainter->drawPixmap(x, y, pix);
-
-            // Restore saved mask
-            pix.setMask( mask );
-        }
-        else
+            if(useMask && bmp.GetMask() && bmp.GetMask()->GetHandle())
+                pix.setMask(*bmp.GetMask()->GetHandle());
             m_qtPainter->drawPixmap(x, y, pix);
     }
 }

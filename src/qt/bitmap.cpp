@@ -124,7 +124,7 @@ static QImage ConvertImage( const wxImage &image )
 class wxBitmapRefData: public wxGDIRefData
 {
     public:
-        wxBitmapRefData() { }
+        wxBitmapRefData() { m_mask = NULL; }
         
         wxBitmapRefData( int width, int height, int depth )
         {
@@ -132,15 +132,23 @@ class wxBitmapRefData: public wxGDIRefData
                 m_qtPixmap = QBitmap( width, height );
             else
                 m_qtPixmap = QPixmap( width, height );
+            m_mask = NULL;
         }
         
         wxBitmapRefData( QPixmap pix )
         {
             m_qtPixmap = pix;
+            m_mask = NULL;
         }
 
+        virtual ~wxBitmapRefData() { delete m_mask; }
+
         QPixmap m_qtPixmap;
-        wxMask m_mask;
+        wxMask *m_mask;
+
+private:
+    wxBitmapRefData(const wxBitmapRefData&other);
+    wxBitmapRefData& operator=(const wxBitmapRefData&other);
 };
 
 //-----------------------------------------------------------------------------
@@ -255,26 +263,25 @@ int wxBitmap::GetDepth() const
 #if wxUSE_IMAGE
 wxImage wxBitmap::ConvertToImage() const
 {
-    return ConvertImage(M_PIXDATA.toImage());
+    QPixmap pixmap(M_PIXDATA);
+    if(M_MASK && M_MASK->GetHandle())
+        pixmap.setMask(*M_MASK->GetHandle());
+    return ConvertImage(pixmap.toImage());
 }
 
 #endif // wxUSE_IMAGE
 
 wxMask *wxBitmap::GetMask() const
 {
-    return M_MASK.GetHandle() ? &M_MASK : NULL;
+    return M_MASK;
 }
 
 void wxBitmap::SetMask(wxMask *mask)
 {
-    if(mask && mask->GetHandle() )
-    {
-        M_MASK = *mask;
-        M_PIXDATA.setMask( *mask->GetHandle() );
-    } else
-        M_MASK = wxMask();
+    AllocExclusive();
+    delete M_MASK;
+    M_MASK = mask;
 }
-
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 {
@@ -438,9 +445,8 @@ wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 {
     const wxBitmapRefData* oldRef = static_cast<const wxBitmapRefData*>(data);
     wxBitmapRefData *d = new wxBitmapRefData;
-    d->m_qtPixmap = oldRef->m_qtPixmap.copy();// copy not needed
-    d->m_mask = oldRef->m_mask;
-
+    d->m_qtPixmap = oldRef->m_qtPixmap; //.copy();// copy not needed
+    d->m_mask = oldRef->m_mask ? new wxMask(*oldRef->m_mask) : NULL;
     return d;
 }
 
