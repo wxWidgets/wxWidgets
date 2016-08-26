@@ -69,8 +69,12 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
     m_selected = bitmap;
     if ( bitmap.IsOk() && !bitmap.GetHandle()->isNull() ) {
+        QPixmap pixmap(*bitmap.GetHandle());
+        // apply mask before converting to image
+        if(bitmap.GetMask() && bitmap.GetMask()->GetHandle())
+            pixmap.setMask(*bitmap.GetMask()->GetHandle());
         // create the intermediate image for the pixmap:
-        m_qtImage = new QImage( bitmap.GetHandle()->toImage() );
+        m_qtImage = new QImage( pixmap.toImage() );
         // start drawing on the intermediary device:
         m_ok = m_qtPainter->begin( m_qtImage );
 
