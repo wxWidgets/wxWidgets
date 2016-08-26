@@ -158,11 +158,6 @@ void wxListBox::SetString(unsigned int n, const wxString& WXUNUSED(s))
     }
 }
 
-void wxListBox::SetSelection(int n)
-{
-    return m_qtListWidget->setCurrentRow(n);
-}
-
 int wxListBox::GetSelection() const
 {
     return m_qtListWidget->currentIndex().row();
