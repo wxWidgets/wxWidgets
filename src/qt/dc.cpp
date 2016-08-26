@@ -745,7 +745,7 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
 {
     wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
     
-    QImage *qtSource = implSource->m_qtImage;
+    QImage *qtSource = implSource->GetQImage();
     
     // Not a CHECK on purpose
     if ( !qtSource )

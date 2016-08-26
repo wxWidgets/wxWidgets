@@ -35,6 +35,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
 {
     m_qtImage = NULL;
     m_ok = false;
+    m_qtPainter = new QPainter();
 }
 
 wxMemoryDCImpl::~wxMemoryDCImpl()

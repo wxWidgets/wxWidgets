@@ -24,8 +24,6 @@ public:
     virtual const wxBitmap& GetSelectedBitmap() const;
     virtual wxBitmap& GetSelectedBitmap();
 
-protected:
-
 private:
     wxBitmap m_selected;
 };
