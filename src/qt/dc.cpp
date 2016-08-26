@@ -347,9 +347,11 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
                              wxCoord *externalLeading,
                              const wxFont *theFont ) const
 {
-    QFont f = m_qtPainter->font();
+    QFont f;
     if (theFont != NULL)
         f = theFont->GetHandle();
+    else
+        f = m_font.GetHandle();
 
     QFontMetrics metrics(f);
     if (x != NULL || y != NULL)
