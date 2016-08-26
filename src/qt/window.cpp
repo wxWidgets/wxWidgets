@@ -741,6 +741,9 @@ void wxWindowQt::SetWindowStyleFlag( long style )
 //        qtFrame->setFrameShadow( QFrame::Plain );
 //    }
 
+    if(!GetHandle())
+        return;
+
     Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
 
     if ( HasFlag( wxFRAME_NO_TASKBAR ) )
