@@ -1418,12 +1418,7 @@ bool wxWindowQt::QtHandleCloseEvent ( QWidget *handler, QCloseEvent *WXUNUSED( e
     if ( GetHandle() != handler )
         return false;
 
-    int close = Close();
-    if ( close )
-    {
-        Destroy();
-    }
-    return close;
+    return Close();
 }
 
 bool wxWindowQt::QtHandleContextMenuEvent ( QWidget *WXUNUSED( handler ), QContextMenuEvent *event )
