@@ -111,6 +111,8 @@ public:
     virtual void* GetHandle() const { return (void*) m_qtPainter; }
 
 protected:
+    virtual QImage *GetQImage() { return m_qtImage; }
+    
     QPainter *m_qtPainter;
     QImage *m_qtImage;
 
