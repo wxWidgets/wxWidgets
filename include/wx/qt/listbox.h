@@ -56,7 +56,6 @@ public:
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
     
-    virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
     virtual QWidget *GetHandle() const;
