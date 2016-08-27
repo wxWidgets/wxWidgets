@@ -702,7 +702,7 @@ public:
   typedef const wxChar* const_pointer;
 
   typedef size_t size_type;
-  typedef wxUniChar const_reference;
+  typedef const wxUniChar const_reference;
 
 #if wxUSE_STD_STRING
   #if wxUSE_UNICODE_UTF8
@@ -951,7 +951,7 @@ public:
       const_iterator(const const_iterator& i) : m_cur(i.m_cur) {}
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
 
-      reference operator*() const
+      const_reference operator*() const
         { return wxStringOperations::DecodeChar(m_cur); }
 
       const_iterator operator+(ptrdiff_t n) const
