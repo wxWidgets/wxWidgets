@@ -107,11 +107,12 @@ wxEND_EVENT_TABLE()
 @endcode
 
 As in all programs there must be a "main" function. Under wxWidgets main is
-implemented using this macro, which creates an application instance and starts
-the program.
+implemented inside ::wxIMPLEMENT_APP() macro, which creates an application
+instance of the specified class and starts running the GUI event loop. It is
+used simply as:
 
 @code
-wxIMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 @endcode
 
 As mentioned above, wxApp::OnInit() is called upon startup and should be used
