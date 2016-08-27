@@ -102,7 +102,7 @@
         non existing (presumably for the superstitious reasons) VC13, so we now
         need to account for this with an extra offset.
      */
-#   define wxVISUALC_VERSION(major) ( (6 + (major >= 14 ? 1 : 0) + major) * 100 )
+#   define wxVISUALC_VERSION(major) ( (6 - (major >= 14 ? 1 : 0) + major) * 100 )
 #   define wxCHECK_VISUALC_VERSION(major) ( __VISUALC__ >= wxVISUALC_VERSION(major) )
 #endif
 
