@@ -477,7 +477,7 @@ public:
 
         @since 3.1.0
     */
-    static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
+    static wxCursor GetDefaultHTMLCursor(wxHtmlWindowInterface::HTMLCursor type);
 
     /**
         Sets the default cursor for a given HTMLCursor type.
@@ -492,7 +492,7 @@ public:
 
         @since 3.1.0
     */
-    static void SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor);
+    static void SetDefaultHTMLCursor(wxHtmlWindowInterface::HTMLCursor type, const wxCursor& cursor);
 
 protected:
 
