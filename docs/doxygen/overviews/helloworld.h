@@ -61,7 +61,7 @@ virtual nor public.
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame();
 
 private:
     void OnHello(wxCommandEvent& event);
@@ -117,14 +117,15 @@ wxIMPLEMENT_APP(MyApp);
 
 As mentioned above, wxApp::OnInit() is called upon startup and should be used
 to initialize the program, maybe showing a "splash screen" and creating the
-main window (or several). The frame should get a title bar text ("Hello World")
-and a position and start-up size. One frame can also be declared to be the top
-window. Returning @true indicates a successful initialization.
+main window (or several). As frames are created hidden by default, to allow
+creating their child windows before showing them, we also need to explicitly
+show it to make it appear on the screen. Finally, we return @true from this
+method to indicate successful initialization:
 
 @code
 bool MyApp::OnInit()
 {
-    MyFrame *frame = new MyFrame( "Hello World", wxPoint(50, 50), wxSize(450, 340) );
+    MyFrame *frame = new MyFrame();
     frame->Show( true );
     return true;
 }
@@ -135,8 +136,8 @@ menu items as well as a status bar to be shown at the bottom of the main
 window. Both have to be associated with the frame with respective calls.
 
 @code
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-        : wxFrame(NULL, wxID_ANY, title, pos, size)
+MyFrame::MyFrame()
+        : wxFrame(NULL, wxID_ANY, "Hello World")
 {
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
@@ -219,7 +220,7 @@ public:
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame();
 
 private:
     void OnHello(wxCommandEvent& event);
@@ -244,13 +245,13 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-    MyFrame *frame = new MyFrame( "Hello World", wxPoint(50, 50), wxSize(450, 340) );
+    MyFrame *frame = new MyFrame();
     frame->Show( true );
     return true;
 }
 
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-        : wxFrame(NULL, wxID_ANY, title, pos, size)
+MyFrame::MyFrame()
+        : wxFrame(NULL, wxID_ANY, "Hello World")
 {
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
