@@ -589,7 +589,7 @@ void wxMouseEvent::Assign(const wxMouseEvent& event)
     m_linesPerAction = event.m_linesPerAction;
     m_columnsPerAction = event.m_columnsPerAction;
     m_wheelAxis = event.m_wheelAxis;
-    
+
     m_magnification = event.m_magnification;
 }
 
@@ -1760,13 +1760,19 @@ wxEvtHandler::DoUnbind(int id,
             // Notice that we rely on "cookie" being just the index into the
             // vector, which is not guaranteed by our API, but here we can use
             // this implementation detail.
-            (*m_dynamicEvents)[cookie] = NULL;
+            EraseCurrentDynamicEntry(cookie);
 
             delete entry;
             return true;
         }
     }
     return false;
+}
+
+void
+wxEvtHandler::EraseCurrentDynamicEntry(size_t& cookie)
+{
+    (*m_dynamicEvents)[cookie] = NULL;
 }
 
 wxDynamicEventTableEntry*
@@ -1940,7 +1946,7 @@ void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
 
             // Just as in DoUnbind(), we use our knowledge of
             // GetNextDynamicEntry() implementation here.
-            (*m_dynamicEvents)[cookie] = NULL;
+            EraseCurrentDynamicEntry(cookie);
         }
     }
 }

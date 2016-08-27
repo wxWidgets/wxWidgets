@@ -3609,6 +3609,7 @@ public:
     // These functions are for internal use only.
     wxDynamicEventTableEntry* GetFirstDynamicEntry(size_t& cookie) const;
     wxDynamicEventTableEntry* GetNextDynamicEntry(size_t& cookie) const;
+    void EraseCurrentDynamicEntry(size_t& cookie);
 
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
     bool SearchDynamicEventTable( wxEvent& event );
