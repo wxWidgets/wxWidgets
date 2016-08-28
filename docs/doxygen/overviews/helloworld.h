@@ -209,6 +209,17 @@ void MyFrame::OnHello(wxCommandEvent& event)
 }
 @endcode
 
+@note In C++11 programs, it can be convenient to use unnamed lambdas instead of
+    functions for event handlers, especially when handling events from the
+    controls as this allows to keep the code creating the control and handling
+    its event together in the same place. Here, for example, we could replace
+    the wxID_EXIT handler with just
+
+@code
+    Bind(wxEVT_MENU, [=](wxCommandEvent&) { Close(true); }, wxID_EXIT);
+@endcode
+
+
 Here is the entire program that can be copied and pasted:
 
 @code
