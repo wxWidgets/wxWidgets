@@ -942,7 +942,7 @@ private:
                 { return it.m_node == m_node; }                             \
         };                                                                  \
                                                                             \
-        wxEXPLICIT name(size_type n, const_reference v = value_type())      \
+        explicit name(size_type n, const_reference v = value_type())        \
             { assign(n, v); }                                               \
         name(const const_iterator& first, const const_iterator& last)       \
             { assign(first, last); }                                        \

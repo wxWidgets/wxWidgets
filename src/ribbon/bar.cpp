@@ -490,7 +490,7 @@ void wxRibbonBar::SetTabCtrlMargins(int left, int right)
 
 struct PageComparedBySmallWidthAsc
 {
-    wxEXPLICIT PageComparedBySmallWidthAsc(wxRibbonPageTabInfo* page)
+    explicit PageComparedBySmallWidthAsc(wxRibbonPageTabInfo* page)
         : m_page(page)
     {
     }

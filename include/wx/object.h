@@ -268,7 +268,7 @@ class wxObjectDataPtr
 public:
     typedef T element_type;
 
-    wxEXPLICIT wxObjectDataPtr(T *ptr = NULL) : m_ptr(ptr) {}
+    explicit wxObjectDataPtr(T *ptr = NULL) : m_ptr(ptr) {}
 
     // copy ctor
     wxObjectDataPtr(const wxObjectDataPtr<T> &tocopy)

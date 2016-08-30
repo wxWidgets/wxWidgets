@@ -47,7 +47,7 @@ private:
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase
 {
 public:
-    wxEXPLICIT // avoid implicitly converting a wxWindow* to wxGLCanvas
+    explicit // avoid implicitly converting a wxWindow* to wxGLCanvas
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
                wxWindowID id = wxID_ANY,
@@ -57,7 +57,7 @@ public:
                const wxString& name = wxGLCanvasName,
                const wxPalette& palette = wxNullPalette);
 
-    wxEXPLICIT
+    explicit
     wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
                const int *attribList = NULL,

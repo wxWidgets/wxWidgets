@@ -98,7 +98,7 @@ public:
     }
 
     // Convert from wxCursor
-    wxEXPLICIT wxBitmap(const wxCursor& cursor)
+    explicit wxBitmap(const wxCursor& cursor)
     {
         (void)CopyFromCursor(cursor, wxBitmapTransparency_Auto);
     }

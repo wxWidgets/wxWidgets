@@ -13,7 +13,7 @@
 class wxPipeInputStream : public wxInputStream
 {
 public:
-    wxEXPLICIT wxPipeInputStream(HANDLE hInput);
+    explicit wxPipeInputStream(HANDLE hInput);
     virtual ~wxPipeInputStream();
 
     // returns true if the pipe is still opened
@@ -34,7 +34,7 @@ protected:
 class wxPipeOutputStream: public wxOutputStream
 {
 public:
-    wxEXPLICIT wxPipeOutputStream(HANDLE hOutput);
+    explicit wxPipeOutputStream(HANDLE hOutput);
     virtual ~wxPipeOutputStream() { Close(); }
     bool Close();
 

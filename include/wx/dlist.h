@@ -739,7 +739,7 @@ public:
             { return it.m_node == m_node; }
     };
 
-    wxEXPLICIT wxDList(size_type n, const_reference v = value_type())
+    explicit wxDList(size_type n, const_reference v = value_type())
         { assign(n, v); }
     wxDList(const const_iterator& first, const const_iterator& last)
         { assign(first, last); }

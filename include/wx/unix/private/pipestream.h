@@ -15,7 +15,7 @@
 class wxPipeInputStream : public wxFileInputStream
 {
 public:
-    wxEXPLICIT wxPipeInputStream(int fd) : wxFileInputStream(fd) { }
+    explicit wxPipeInputStream(int fd) : wxFileInputStream(fd) { }
 
     // return true if the pipe is still opened
     bool IsOpened() const { return !Eof(); }

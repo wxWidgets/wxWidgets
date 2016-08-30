@@ -23,7 +23,7 @@ class wxSharedPtr
 public:
     typedef T element_type;
 
-    wxEXPLICIT wxSharedPtr( T* ptr = NULL )
+    explicit wxSharedPtr( T* ptr = NULL )
         : m_ref(NULL)
     {
         if (ptr)
@@ -31,7 +31,7 @@ public:
     }
 
     template<typename Deleter>
-    wxEXPLICIT wxSharedPtr(T* ptr, Deleter d)
+    explicit wxSharedPtr(T* ptr, Deleter d)
         : m_ref(NULL)
     {
         if (ptr)

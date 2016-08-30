@@ -82,7 +82,7 @@ wxDEFINE_SCOPED_PTR(wxAppConsole, wxAppPtrBase)
 class wxAppPtr : public wxAppPtrBase
 {
 public:
-    wxEXPLICIT wxAppPtr(wxAppConsole *ptr = NULL) : wxAppPtrBase(ptr) { }
+    explicit wxAppPtr(wxAppConsole *ptr = NULL) : wxAppPtrBase(ptr) { }
     ~wxAppPtr()
     {
         if ( get() )

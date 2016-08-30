@@ -229,23 +229,8 @@ typedef short int WXTYPE;
 /*  wrap it in this guard, but such cases should still be relatively rare. */
 #define wxUSE_NESTED_CLASSES    1
 
-/*  check for explicit keyword support */
-#ifndef HAVE_EXPLICIT
-    #if defined(__VISUALC__)
-        #define HAVE_EXPLICIT
-    #elif defined(__GNUC__)
-        #define HAVE_EXPLICIT
-    #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
-        /*  BC++ 4.52 doesn't support explicit, CBuilder 1 does */
-        #define HAVE_EXPLICIT
-    #endif
-#endif /*  !HAVE_EXPLICIT */
-
-#ifdef HAVE_EXPLICIT
-    #define wxEXPLICIT explicit
-#else /*  !HAVE_EXPLICIT */
-    #define wxEXPLICIT
-#endif /*  HAVE_EXPLICIT/!HAVE_EXPLICIT */
+/* This macro is obsolete, use the 'explicit' keyword in the new code. */
+#define wxEXPLICIT explicit
 
 /* check for override keyword support */
 #ifndef HAVE_OVERRIDE

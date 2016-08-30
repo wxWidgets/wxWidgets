@@ -64,7 +64,7 @@ enum wxScrollbarVisibility
 class WXDLLIMPEXP_CORE wxAnyScrollHelperBase
 {
 public:
-    wxEXPLICIT wxAnyScrollHelperBase(wxWindow* win);
+    explicit wxAnyScrollHelperBase(wxWindow* win);
     virtual ~wxAnyScrollHelperBase() {}
 
     // Disable use of keyboard keys for scrolling. By default cursor movement

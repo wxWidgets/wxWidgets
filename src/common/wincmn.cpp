@@ -2022,7 +2022,7 @@ namespace
 class ValidationTraverserBase
 {
 public:
-    wxEXPLICIT ValidationTraverserBase(wxWindowBase* win)
+    explicit ValidationTraverserBase(wxWindowBase* win)
         : m_win(static_cast<wxWindow*>(win))
     {
     }
@@ -2084,7 +2084,7 @@ bool wxWindowBase::Validate()
     class ValidateTraverser : public ValidationTraverserBase
     {
     public:
-        wxEXPLICIT ValidateTraverser(wxWindowBase* win)
+        explicit ValidateTraverser(wxWindowBase* win)
             : ValidationTraverserBase(win)
         {
         }
@@ -2112,7 +2112,7 @@ bool wxWindowBase::TransferDataToWindow()
     class DataToWindowTraverser : public ValidationTraverserBase
     {
     public:
-        wxEXPLICIT DataToWindowTraverser(wxWindowBase* win)
+        explicit DataToWindowTraverser(wxWindowBase* win)
             : ValidationTraverserBase(win)
         {
         }

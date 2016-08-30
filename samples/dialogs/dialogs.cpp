@@ -1368,7 +1368,7 @@ void MyFrame::AddRemove(wxCommandEvent& WXUNUSED(event))
     class ListBoxAdaptor : public wxAddRemoveAdaptor
     {
     public:
-        wxEXPLICIT ListBoxAdaptor(wxListBox* lbox)
+        explicit ListBoxAdaptor(wxListBox* lbox)
             : m_lbox(lbox)
         {
         }

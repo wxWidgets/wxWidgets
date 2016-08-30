@@ -581,7 +581,7 @@ public:
     public:
         // Notice that window can be NULL here, for convenience. In this case
         // this class simply doesn't do anything.
-        wxEXPLICIT ChildrenRepositioningGuard(wxWindowBase* win)
+        explicit ChildrenRepositioningGuard(wxWindowBase* win)
             : m_win(win),
               m_callEnd(win && win->BeginRepositioningChildren())
         {
