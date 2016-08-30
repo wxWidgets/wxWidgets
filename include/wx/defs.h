@@ -444,31 +444,6 @@ typedef short int WXTYPE;
 #endif /* HAVE_WOSTREAM */
 
 /*  ---------------------------------------------------------------------------- */
-/*  other C++ features */
-/*  ---------------------------------------------------------------------------- */
-
-#ifndef HAVE_PARTIAL_SPECIALIZATION
-    /* be optimistic by default */
-    #define HAVE_PARTIAL_SPECIALIZATION
-#endif
-
-#ifdef __VISUALC__
-    #if __VISUALC__ < 1310
-        #undef HAVE_PARTIAL_SPECIALIZATION
-    #endif
-#endif /* __VISUALC__ */
-
-
-#ifndef HAVE_TEMPLATE_OVERLOAD_RESOLUTION
-    /* assume the compiler can use type or const expressions as template
-       arguments if it supports partial specialization -- except if it's a
-       Borland one which can't */
-    #if defined(HAVE_PARTIAL_SPECIALIZATION) && !defined(__BORLANDC__)
-        #define HAVE_TEMPLATE_OVERLOAD_RESOLUTION
-    #endif /* (HAVE_PARTIAL_SPECIALIZATION) && !defined(__BORLANDC__) */
-#endif /* !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION) */
-
-/*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
 /*  ---------------------------------------------------------------------------- */
 

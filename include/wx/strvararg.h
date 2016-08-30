@@ -362,17 +362,12 @@ struct wxFormatStringSpecifier
     //
     // Furthermore, if the compiler doesn't have partial template
     // specialization, we didn't cover pointers either.
-#ifdef HAVE_PARTIAL_SPECIALIZATION
     enum { value = wxFormatString::Arg_Int };
-#else
-    enum { value = wxFormatString::Arg_Int | wxFormatString::Arg_Pointer };
-#endif
 };
 
 #endif // HAVE_TR1_TYPE_TRAITS/!HAVE_TR1_TYPE_TRAITS
 
 
-#ifdef HAVE_PARTIAL_SPECIALIZATION
 template<typename T>
 struct wxFormatStringSpecifier<T*>
 {
@@ -384,7 +379,6 @@ struct wxFormatStringSpecifier<const T*>
 {
     enum { value = wxFormatString::Arg_Pointer };
 };
-#endif // !HAVE_PARTIAL_SPECIALIZATION
 
 
 #define wxFORMAT_STRING_SPECIFIER(T, arg)                                   \
