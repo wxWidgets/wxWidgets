@@ -671,7 +671,7 @@ bool wxGLCanvasX11::InitXVisualInfo(const wxGLAttributes& dispAttrs,
     {
         *pFBC = NULL;
         *pXVisual = glXChooseVisual(dpy, DefaultScreen(dpy),
-                                   wx_const_cast(int*, attrsListGLX) );
+                                    const_cast<int*>(attrsListGLX) );
     }
 
     return *pXVisual != NULL;

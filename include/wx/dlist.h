@@ -238,7 +238,7 @@ public:
         Node *GetNext() const      { return m_next; }
         Node *GetPrevious() const  { return m_previous; }
         T *GetData() const         { return m_data; }
-        T **GetDataPtr() const     { return &(wx_const_cast(nodetype*,this)->m_data); }
+        T **GetDataPtr() const     { return &(const_cast<nodetype*>(this)->m_data); }
         void SetData( T *data )    { m_data = data; }
 
         int IndexOf() const

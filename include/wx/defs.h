@@ -337,7 +337,7 @@ typedef short int WXTYPE;
 #endif
 
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
-#define wxConstCast(obj, className) wx_const_cast(className *, obj)
+#define wxConstCast(obj, className) const_cast<className *>(obj)
 
 #ifndef HAVE_STD_WSTRING
     #if __cplusplus >= 201103L
@@ -1284,7 +1284,7 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
     #pragma warning(disable: 1684)
 #endif
 
-    return wx_reinterpret_cast(wxUIntPtr, p);
+    return reinterpret_cast<wxUIntPtr>(p);
 
 #if defined(__VISUALC__) || defined(__INTELC__)
     #pragma warning(pop)
@@ -1303,7 +1303,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
     #pragma warning(disable: 171)
 #endif
 
-    return wx_reinterpret_cast(void *, p);
+    return reinterpret_cast<void *>(p);
 
 #if defined(__VISUALC__) || defined(__INTELC__)
     #pragma warning(pop)

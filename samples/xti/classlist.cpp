@@ -262,7 +262,7 @@ void ClassListDialog::InitControls()
 
 bool ClassListDialog::IsToDiscard(const wxString &classname) const
 {
-    wxCheckBox *cb = wx_static_cast(wxCheckBox*, FindWindow(ID_SHOW_ONLY_XTI));
+    wxCheckBox *cb = static_cast<wxCheckBox*>(FindWindow(ID_SHOW_ONLY_XTI));
     if (!cb || !cb->IsChecked())
         return false;
 
@@ -288,7 +288,7 @@ void ClassListDialog::UpdateFilterText()
 void ClassListDialog::UpdateClassInfo(const wxString &itemName)
 {
     wxString classname = itemName.BeforeFirst(wxT(' '));
-    wxCheckBox *cb = wx_static_cast(wxCheckBox*, FindWindow(ID_SHOW_PROPERTIES_RECURSIVELY));
+    wxCheckBox *cb = static_cast<wxCheckBox*>(FindWindow(ID_SHOW_PROPERTIES_RECURSIVELY));
 
     m_pTextCtrl->SetValue(
         DumpClassInfo(wxClassInfo::FindClass(classname), cb->IsChecked()));
