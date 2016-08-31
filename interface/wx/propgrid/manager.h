@@ -36,8 +36,9 @@
     @library{wxpropgrid}
     @category{propgrid}
 */
-class WXDLLIMPEXP_PROPGRID wxPropertyGridPage : public wxEvtHandler,
-                                                public wxPropertyGridInterface
+class wxPropertyGridPage : public wxEvtHandler,
+                           public wxPropertyGridInterface,
+                           public wxPropertyGridPageState
 {
     friend class wxPropertyGridManager;
 
