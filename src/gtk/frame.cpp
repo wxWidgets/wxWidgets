@@ -280,8 +280,6 @@ void wxFrame::DetachMenuBar()
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
         hildon_window_set_menu(HILDON_WINDOW(m_widget), NULL);
 #else // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
-        g_object_ref( m_frameMenuBar->m_widget );
-
         gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
 #endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2 /!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
     }
