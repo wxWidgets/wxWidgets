@@ -763,14 +763,20 @@ int wxListBox::GetTopItem() const
 {
     int idx = wxNOT_FOUND;
 
+#if GTK_CHECK_VERSION(2,8,0)
     wxGtkTreePath start;
-    if ( gtk_tree_view_get_visible_range(m_treeview, start.ByRef(), NULL) )
+    if (
+#ifndef __WXGTK3__
+        gtk_check_version(2,8,0) == NULL &&
+#endif
+        gtk_tree_view_get_visible_range(m_treeview, start.ByRef(), NULL))
     {
         gint *ptr = gtk_tree_path_get_indices(start);
 
         if ( ptr )
             idx = *ptr;
     }
+#endif
 
     return idx;
 }
