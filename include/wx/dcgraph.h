@@ -185,6 +185,8 @@ public:
     virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE;
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height) wxOVERRIDE;
+    virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
+                                  wxCoord *w, wxCoord *h) const wxOVERRIDE;
 
     virtual void DoGetTextExtent(const wxString& string,
         wxCoord *x, wxCoord *y,
@@ -197,6 +199,9 @@ public:
 #ifdef __WXMSW__
     virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const;
 #endif // __WXMSW__
+
+    // update the internal clip box variables
+    void UpdateClipBox();
 
 protected:
     // unused int parameter distinguishes this version, which does not create a
@@ -211,6 +216,8 @@ protected:
     double m_formerScaleX, m_formerScaleY;
 
     wxGraphicsContext* m_graphicContext;
+
+    bool m_isClipBoxValid;
 
 private:
     void Init(wxGraphicsContext*);

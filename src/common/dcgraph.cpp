@@ -191,6 +191,8 @@ void wxGCDCImpl::Init(wxGraphicsContext* ctx)
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
+    m_isClipBoxValid = false;
+
     m_graphicContext = NULL;
     if (ctx)
         SetGraphicsContext(ctx);
@@ -275,6 +277,51 @@ void wxGCDCImpl::Flush()
     m_graphicContext->Flush();
 }
 
+void wxGCDCImpl::UpdateClipBox()
+{
+    double x, y, w, h;
+    m_graphicContext->GetClipBox(&x, &y, &w, &h);
+
+    m_clipX1 = wxRound(x);
+    m_clipY1 = wxRound(y);
+    m_clipX2 = wxRound(x+w);
+    m_clipY2 = wxRound(y+h);
+    m_isClipBoxValid = true;
+}
+
+void wxGCDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+{
+    wxCHECK_RET( IsOk(), wxS("wxGCDC::DoGetClippingRegion - invalid GC") );
+#ifdef __WXOSX__
+    // This is a legacy implementation which doesn't
+    // return proper values if graphics context coordinates
+    // were transformed after the call to SetClippingRegion().
+    // TODO: Check wxMacCoreGraphics::GetClipBox()
+    // and switch to the code used by other ports (below).
+    wxDCImpl::DoGetClippingBox(x, y, w, h);
+#else
+    // Check if we should retrieve the clipping region possibly not set
+    // by SetClippingRegion() but modified by application: this can
+    // happen when we're associated with an existing graphics context using
+    // SetGraphicsContext() or when wxGCDC logical coordinates are transformed
+    // with SetDeviceOrigin(), SetLogicalOrigin(), SetUserScale(), SetLogicalScale().
+    if ( !m_isClipBoxValid )
+    {
+        wxGCDCImpl *self = wxConstCast(this, wxGCDCImpl);
+        self->UpdateClipBox();
+    }
+
+    if ( x )
+        *x = m_clipX1;
+    if ( y )
+        *y = m_clipY1;
+    if ( w )
+        *w = m_clipX2 - m_clipX1;
+    if ( h )
+        *h = m_clipY2 - m_clipY1;
+#endif // __WXOSX__ / !__WXOSX__
+}
+
 void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoSetClippingRegion - invalid DC") );
@@ -295,7 +342,16 @@ void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h
     }
     m_graphicContext->Clip( x, y, w, h );
 
+#ifdef __WXOSX__
+    // This is a legacy implementation which has to be used
+    // because wxMacCoreGraphics::GetClipBox() is not yet tested.
+    // TODO: Check wxMacCoreGraphics::GetClipBox()
+    // and switch to the code used by other ports (below).
     wxDCImpl::DoSetClippingRegion(x, y, w, h);
+#else
+    m_clipping = true;
+    UpdateClipBox();
+#endif // __WXOSX__ / !__WXOSX__
 }
 
 void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
@@ -309,12 +365,15 @@ void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
     // (only offset of the origin is taken into account,
     // but e.g. scale is not).
     // Solution with full conversion doesn't seem to work under WXOSX.
-    // TODO: check wxMacCoreGraphics
+    // TODO: Check wxMacCoreGraphics::Clip() and GetClipBox()
+    // and switch to the code used by other renderers (below).
     wxRegion logRegion(region);
 
     logRegion.Offset(DeviceToLogicalX(0), DeviceToLogicalY(0));
     m_graphicContext->Clip(logRegion);
     wxRect newRegion = logRegion.GetBox();
+    wxDCImpl::DoSetClippingRegion(newRegion.GetLeft(), newRegion.GetTop(),
+                                  newRegion.GetWidth(), newRegion.GetHeight());
 #else
     // Because graphics context works with logical coordinates
     // and clipping region is given in device coordinates
@@ -334,49 +393,9 @@ void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
     // Restore original transformation settings.
     m_graphicContext->SetTransform(currTransform);
 
-    // Convert bounding box of the region to logical coordinates
-    // for further use.
-    wxRect newRegion = region.GetBox();
-    wxPoint logPos = wxPoint(DeviceToLogicalX(newRegion.GetLeft()),
-                             DeviceToLogicalY(newRegion.GetTop()));
-    wxSize logSize = wxSize(DeviceToLogicalXRel(newRegion.GetWidth()),
-                            DeviceToLogicalYRel(newRegion.GetHeight()));
-    newRegion.SetPosition(logPos);
-    newRegion.SetSize(logSize);
+    m_clipping = true;
+    UpdateClipBox();
 #endif // __WXOSX__ / !__WXOSX__
-
-    wxRect clipRegion;
-    if ( m_clipping )
-    {
-        // New clipping box is an intersection
-        // of required clipping box and the current one.
-        wxRect curRegion(m_clipX1, m_clipY1, m_clipX2 - m_clipX1, m_clipY2 - m_clipY1);
-        clipRegion = curRegion.Intersect(newRegion);
-    }
-    else
-    {
-        // Effective clipping box is an intersection
-        // of required clipping box and DC surface.
-        int dcWidth, dcHeight;
-        DoGetSize(&dcWidth, &dcHeight);
-        wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
-                      DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
-        clipRegion = dcRect.Intersect(newRegion);
-
-        m_clipping = true;
-    }
-
-    if ( clipRegion.IsEmpty() )
-    {
-        m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0;
-    }
-    else
-    {
-        m_clipX1 = clipRegion.GetLeft();
-        m_clipY1 = clipRegion.GetTop();
-        m_clipX2 = clipRegion.GetRight() + 1;
-        m_clipY2 = clipRegion.GetBottom() + 1;
-    }
 }
 
 void wxGCDCImpl::DestroyClippingRegion()
@@ -392,6 +411,7 @@ void wxGCDCImpl::DestroyClippingRegion()
     m_graphicContext->SetBrush( m_brush );
 
     ResetClipping();
+    m_isClipBoxValid = false;
 }
 
 void wxGCDCImpl::DoGetSizeMM( int* width, int* height ) const
@@ -452,6 +472,7 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
 
         m_graphicContext->SetTransform( m_matrixOriginal );
         m_graphicContext->ConcatTransform( m_matrixCurrent );
+        m_isClipBoxValid = false;
     }
 }
 

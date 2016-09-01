@@ -100,6 +100,7 @@ All (GUI):
 - Add wxSYS_CARET_{ON,OFF,TIMEOUT}_MSEC system settings (brawer).
 - Add wxGraphicsContext::GetClipBox().
 - Fix wxGCDC::Clear() for rotated graphics context.
+- Fix wxGCDC::GetClippingBox() for transformed wxDC (MSW, GTK+).
 
 wxGTK:
 
