@@ -54,6 +54,8 @@
 #pragma hdrstop
 #endif
 
+#include <float.h> // for FLT_MAX, FLT_MIN
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/dcclient.h"
@@ -62,7 +64,6 @@
     #include "wx/module.h"
     #include "wx/window.h"
     #include "wx/msw/private.h"
-    #include <float.h> // for FLT_MAX
 #endif // !WX_PRECOMP
 
 #include "wx/graphics.h"
@@ -3442,16 +3443,15 @@ private:
 
 private:
     ID2D1Factory* m_direct2dFactory;
-
     wxSharedPtr<wxD2DRenderTargetResourceHolder> m_renderTargetHolder;
-
     wxStack<StateData> m_stateStack;
-
     wxStack<LayerData> m_layers;
-
     ID2D1RenderTarget* m_cachedRenderTarget;
-
     D2D1::Matrix3x2F m_initTransform;
+    // Clipping box
+    bool m_isClipBoxValid;
+    double m_clipX1, m_clipY1, m_clipX2, m_clipY2;
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxD2DContext);
 };
@@ -3510,6 +3510,8 @@ void wxD2DContext::Init()
     m_composition = wxCOMPOSITION_OVER;
     m_renderTargetHolder->Bind(this);
     m_enableOffset = true;
+    m_isClipBoxValid = false;
+    m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0.0;
     EnsureInitialized();
 }
 
@@ -3575,6 +3577,8 @@ void wxD2DContext::SetClipLayer(ID2D1Geometry* clipGeometry)
     GetRenderTarget()->PushLayer(ld.params, clipLayer);
     // Store layer parameters.
     m_layers.push(ld);
+
+    m_isClipBoxValid = false;
 }
 
 void wxD2DContext::ResetClip()
@@ -3619,102 +3623,113 @@ void wxD2DContext::ResetClip()
     }
     // Restore current transformation matrix.
     GetRenderTarget()->SetTransform(&currTransform);
+
+    m_isClipBoxValid = false;
 }
 
 void wxD2DContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
 {
-    // To obtain actual clipping box we have to start with rectangle
-    // covering the entire render target and interesect with this rectangle
-    // all clipping layers. Bounding box of the final geometry
-    // (being intersection of all clipping layers) is a clipping box.
-
-    HRESULT hr;
-    wxCOMPtr<ID2D1RectangleGeometry> rectGeometry;
-    hr = m_direct2dFactory->CreateRectangleGeometry(
-                D2D1::RectF(0.0F, 0.0F, (FLOAT)m_width, (FLOAT)m_height),
-                &rectGeometry);
-    wxCHECK_HRESULT_RET(hr);
-
-    wxCOMPtr<ID2D1Geometry> clipGeometry(rectGeometry);
-
-    wxStack<LayerData> layers(m_layers);
-    while( !layers.empty() )
+    if ( !m_isClipBoxValid )
     {
-        LayerData ld = layers.top();
-        layers.pop();
+        // To obtain actual clipping box we have to start with rectangle
+        // covering the entire render target and interesect with this rectangle
+        // all clipping layers. Bounding box of the final geometry
+        // (being intersection of all clipping layers) is a clipping box.
 
-        if ( ld.type == CLIP_LAYER )
+        HRESULT hr;
+        wxCOMPtr<ID2D1RectangleGeometry> rectGeometry;
+        hr = m_direct2dFactory->CreateRectangleGeometry(
+                    D2D1::RectF(0.0F, 0.0F, (FLOAT)m_width, (FLOAT)m_height),
+                    &rectGeometry);
+        wxCHECK_HRESULT_RET(hr);
+
+        wxCOMPtr<ID2D1Geometry> clipGeometry(rectGeometry);
+
+        wxStack<LayerData> layers(m_layers);
+        while( !layers.empty() )
         {
-            // If current geometry is empty (null region)
-            // or there is no intersection between geometries
-            // then final result is "null" rectangle geometry.
-            FLOAT area;
-            hr = ld.geometry->ComputeArea(ld.transformMatrix, &area);
-            wxCHECK_HRESULT_RET(hr);
-            D2D1_GEOMETRY_RELATION geomRel;
-            hr = clipGeometry->CompareWithGeometry(ld.geometry, ld.transformMatrix, &geomRel);
-            wxCHECK_HRESULT_RET(hr);
-            if ( area <= FLT_MIN || geomRel == D2D1_GEOMETRY_RELATION_DISJOINT )
+            LayerData ld = layers.top();
+            layers.pop();
+
+            if ( ld.type == CLIP_LAYER )
             {
-                wxCOMPtr<ID2D1RectangleGeometry> nullGeometry;
-                hr = m_direct2dFactory->CreateRectangleGeometry(
-                            D2D1::RectF(0.0F, 0.0F, 0.0F, 0.0F), &nullGeometry);
+                // If current geometry is empty (null region)
+                // or there is no intersection between geometries
+                // then final result is "null" rectangle geometry.
+                FLOAT area;
+                hr = ld.geometry->ComputeArea(ld.transformMatrix, &area);
+                wxCHECK_HRESULT_RET(hr);
+                D2D1_GEOMETRY_RELATION geomRel;
+                hr = clipGeometry->CompareWithGeometry(ld.geometry, ld.transformMatrix, &geomRel);
+                wxCHECK_HRESULT_RET(hr);
+                if ( area <= FLT_MIN || geomRel == D2D1_GEOMETRY_RELATION_DISJOINT )
+                {
+                    wxCOMPtr<ID2D1RectangleGeometry> nullGeometry;
+                    hr = m_direct2dFactory->CreateRectangleGeometry(
+                                D2D1::RectF(0.0F, 0.0F, 0.0F, 0.0F), &nullGeometry);
+                    wxCHECK_HRESULT_RET(hr);
+
+                    clipGeometry.reset();
+                    clipGeometry = nullGeometry;
+                    break;
+                }
+
+                wxCOMPtr<ID2D1PathGeometry> pathGeometryClip;
+                hr = m_direct2dFactory->CreatePathGeometry(&pathGeometryClip);
+                wxCHECK_HRESULT_RET(hr);
+                wxCOMPtr<ID2D1GeometrySink> pGeometrySink;
+                hr = pathGeometryClip->Open(&pGeometrySink);
                 wxCHECK_HRESULT_RET(hr);
 
-                clipGeometry.reset();
-                clipGeometry = nullGeometry;
-                break;
+                hr = clipGeometry->CombineWithGeometry(ld.geometry, D2D1_COMBINE_MODE_INTERSECT,
+                                                       ld.transformMatrix, pGeometrySink);
+                wxCHECK_HRESULT_RET(hr);
+                hr = pGeometrySink->Close();
+                wxCHECK_HRESULT_RET(hr);
+                pGeometrySink.reset();
+
+                clipGeometry = pathGeometryClip;
+                pathGeometryClip.reset();
             }
-
-            wxCOMPtr<ID2D1PathGeometry> pathGeometryClip;
-            hr = m_direct2dFactory->CreatePathGeometry(&pathGeometryClip);
-            wxCHECK_HRESULT_RET(hr);
-            wxCOMPtr<ID2D1GeometrySink> pGeometrySink;
-            hr = pathGeometryClip->Open(&pGeometrySink);
-            wxCHECK_HRESULT_RET(hr);
-
-            hr = clipGeometry->CombineWithGeometry(ld.geometry, D2D1_COMBINE_MODE_INTERSECT,
-                                                   ld.transformMatrix, pGeometrySink);
-            wxCHECK_HRESULT_RET(hr);
-            hr = pGeometrySink->Close();
-            wxCHECK_HRESULT_RET(hr);
-            pGeometrySink.reset();
-
-            clipGeometry = pathGeometryClip;
-            pathGeometryClip.reset();
         }
-    }
 
-    // Final clipping geometry is given in device coordinates
-    // so we need to transform its bounds to logical coordinates.
-    D2D1::Matrix3x2F currTransform;
-    GetRenderTarget()->GetTransform(&currTransform);
-    currTransform.Invert();
+        // Final clipping geometry is given in device coordinates
+        // so we need to transform its bounds to logical coordinates.
+        D2D1::Matrix3x2F currTransform;
+        GetRenderTarget()->GetTransform(&currTransform);
+        currTransform.Invert();
 
-    D2D1_RECT_F bounds;
-    // First check if clip region is empty.
-    FLOAT clipArea;
-    hr = clipGeometry->ComputeArea(currTransform, &clipArea);
-    wxCHECK_HRESULT_RET(hr);
-    if ( clipArea <= FLT_MIN )
-    {
-        bounds.left = bounds.top = bounds.right = bounds.bottom = 0.0F;
-    }
-    else
-    {
-        // If it is not empty then get it bounds.
-        hr = clipGeometry->GetBounds(currTransform, &bounds);
+        D2D1_RECT_F bounds;
+        // First check if clip region is empty.
+        FLOAT clipArea;
+        hr = clipGeometry->ComputeArea(currTransform, &clipArea);
         wxCHECK_HRESULT_RET(hr);
+        if ( clipArea <= FLT_MIN )
+        {
+            bounds.left = bounds.top = bounds.right = bounds.bottom = 0.0F;
+        }
+        else
+        {
+            // If it is not empty then get it bounds.
+            hr = clipGeometry->GetBounds(currTransform, &bounds);
+            wxCHECK_HRESULT_RET(hr);
+        }
+
+        m_clipX1 = bounds.left;
+        m_clipY1 = bounds.top;
+        m_clipX2 = bounds.right;
+        m_clipY2 = bounds.bottom;
+        m_isClipBoxValid = true;
     }
 
     if ( x )
-        *x = bounds.left;
+        *x = m_clipX1;
     if ( y )
-        *y = bounds.top;
+        *y = m_clipY1;
     if ( w )
-        *w = (double)bounds.right - bounds.left;
+        *w = m_clipX2 - m_clipX1;
     if ( h )
-        *h = (double)bounds.bottom - bounds.top;
+        *h = m_clipY2 - m_clipY1;
 }
 
 void* wxD2DContext::GetNativeContext()
@@ -3924,6 +3939,8 @@ void wxD2DContext::SetTransform(const wxGraphicsMatrix& matrix)
     D2D1::Matrix3x2F m;
     m.SetProduct(wxGetD2DMatrixData(matrix)->GetMatrix3x2F(), m_initTransform);
     GetRenderTarget()->SetTransform(&m);
+
+    m_isClipBoxValid = false;
 }
 
 wxGraphicsMatrix wxD2DContext::GetTransform() const
@@ -4043,6 +4060,8 @@ void wxD2DContext::PopState()
 
     // Restore drawing state.
     GetRenderTarget()->RestoreDrawingState(state.drawingState);
+
+    m_isClipBoxValid = false;
 }
 
 void wxD2DContext::GetTextExtent(
