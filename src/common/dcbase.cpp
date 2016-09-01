@@ -371,15 +371,14 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     wxASSERT_MSG( w >= 0 && h >= 0,
                   wxS("Clipping box size values cannot be negative") );
 
-    wxRect newRegion(x, y, w, h);
+    wxRect clipRegion(x, y, w, h);
 
-    wxRect clipRegion;
     if ( m_clipping )
     {
         // New clipping box is an intersection
         // of required clipping box and the current one.
         wxRect curRegion(m_clipX1, m_clipY1, m_clipX2 - m_clipX1, m_clipY2 - m_clipY1);
-        clipRegion = curRegion.Intersect(newRegion);
+        clipRegion.Intersect(curRegion);
     }
     else
     {
@@ -389,7 +388,7 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
         DoGetSize(&dcWidth, &dcHeight);
         wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
                       DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
-        clipRegion = dcRect.Intersect(newRegion);
+        clipRegion.Intersect(dcRect);
 
         m_clipping = true;
     }
