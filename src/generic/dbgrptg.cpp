@@ -75,7 +75,7 @@ wxDumpPreviewDlg::wxDumpPreviewDlg(wxWindow *parent,
                                    const wxString& text)
                 : wxDialog(parent, wxID_ANY, title,
                            wxDefaultPosition, wxDefaultSize,
-                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
 {
     // create controls
     // ---------------
@@ -301,21 +301,18 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
                               dbgrpt.GetReportName().c_str()),
                               wxDefaultPosition,
                               wxDefaultSize,
-                              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER),
+                              wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX),
                      m_dbgrpt(dbgrpt)
 {
     // upper part of the dialog: explanatory message
     wxString msg;
-    wxString debugDir = dbgrpt.GetDirectory();
 
     // The temporary directory can be the short form on Windows;
     // normalize it for the benefit of users.
-#ifdef __WXMSW__
-    wxFileName debugDirFilename(debugDir, wxEmptyString);
+    wxFileName debugDirFilename(dbgrpt.GetSaveLocation());
     debugDirFilename.Normalize(wxPATH_NORM_LONG);
-    debugDir = debugDirFilename.GetPath();
-#endif
-    msg << _("A debug report has been generated in the directory\n")
+    wxString debugDir = debugDirFilename.GetFullPath();
+    msg << (debugDirFilename.IsDir() ? _("A debug report has been generated in the directory\n") : _("The following debug report will be generated\n"))
         << wxT('\n')
         << wxT("             \"") << debugDir << wxT("\"\n")
         << wxT('\n')
