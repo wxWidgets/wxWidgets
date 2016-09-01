@@ -71,6 +71,7 @@ public:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
     virtual void DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height ) wxOVERRIDE;
     virtual void DoSetDeviceClippingRegion( const wxRegion &region ) wxOVERRIDE;
+    virtual void DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const wxOVERRIDE;
 
     virtual wxCoord GetCharWidth() const wxOVERRIDE;
     virtual wxCoord GetCharHeight() const wxOVERRIDE;
@@ -110,6 +111,7 @@ public:
     bool          m_isScreenDC;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
+    bool          m_isClipBoxValid;
 
     // PangoContext stuff for GTK 2.0
     PangoContext *m_context;
@@ -122,6 +124,9 @@ public:
     virtual void ComputeScaleAndOrigin() wxOVERRIDE;
 
     virtual GdkWindow *GetGDKWindow() const wxOVERRIDE { return m_gdkwindow; }
+
+    // Update the internal clip box variables
+    void UpdateClipBox();
 
 private:
     void DrawingSetup(GdkGC*& gc, bool& originChanged);

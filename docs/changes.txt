@@ -113,6 +113,7 @@ wxGTK:
 - Cosmetic fix for empty wxCheckBoxes display (Chuddah).
 - Fix crashes in wxFileSystemWatcher implementation (David Hart).
 - Fix wxBitmap ctor from XBM for non-square bitmaps.
+- Fix wxDC::GetClippingBox() for transformed wxDC.
 
 wxMSW:
 
