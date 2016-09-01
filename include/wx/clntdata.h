@@ -159,6 +159,17 @@ protected:
 
 };
 
+
+// This class is a replacement for wxClientDataContainer, and unlike
+// wxClientDataContainer the wxSharedClientDataContainer client data is
+// possible to copy (as a shared ptr) when instances of it are cloned.
+// Like wxClientDataContainer, wxSharedClientDataContainer is a mixin
+// that provides storage and management of "client data.". The client data
+// is reference counted and managed by the container.
+//
+// NOTE:  If your class has a clone function and needs to store client data,
+//        use wxSharedClientDataContainer and not wxClientDataContainer!
+
 class WXDLLIMPEXP_BASE wxSharedClientDataContainer
 {
 public:
@@ -173,8 +184,12 @@ protected:
     void SetClientDataContainer(wxSharedPtr<wxClientDataContainer> data) {m_data = data;}
 
 private:
+    //Helper function that will create m_data if it is currently NULL
     wxClientDataContainer *GetValidClientData();
 
+    //m_data is shared, not deep copied, when cloned. If you make changes to
+    //the data in one instance of your class, you change it for all cloned
+    //instances!
     wxSharedPtr<wxClientDataContainer> m_data;
 };
 
