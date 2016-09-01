@@ -124,6 +124,7 @@ wxMSW:
 - Restore dispatching wxThreadEvent while resizing the window broken in 3.1.0.
 - Fix wxGraphicsMatrix::TransformDistance for Direct2D renderer.
 - Fix wxDC::Clear() for rotated DC.
+- Fix wxDC::GetClippingBox() for transformed wxDC.
 
 wxOSX:
 

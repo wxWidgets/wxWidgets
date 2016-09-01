@@ -579,21 +579,32 @@ void wxMSWDCImpl::UpdateClipBox()
     m_clipY1 = (wxCoord) YDEV2LOG(rect.top);
     m_clipX2 = (wxCoord) XDEV2LOG(rect.right);
     m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom);
+    m_isClipBoxValid = true;
 }
 
 void
 wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
 {
     // check if we should try to retrieve the clipping region possibly not set
-    // by our SetClippingRegion() but preset by Windows:this can only happen
-    // when we're associated with an existing HDC usign SetHDC(), see there
-    if ( m_clipping && !m_clipX1 && !m_clipX2 )
+    // by our SetClippingRegion() but preset or modified by Windows: this
+    // can happen when we're associated with an existing HDC using SetHDC() or
+    // when wxDC logical coordinates are transformed with SetDeviceOrigin(),
+    // SetLogicalOrigin(), SetUserScale(), SetLogicalScale(),
+    // SetTransformMatrix(), ResetTransformMatrix().
+    if ( !m_isClipBoxValid )
     {
         wxMSWDCImpl *self = wxConstCast(this, wxMSWDCImpl);
         self->UpdateClipBox();
     }
 
-    wxDCImpl::DoGetClippingBox(x, y, w, h);
+    if ( x )
+        *x = m_clipX1;
+    if ( y )
+        *y = m_clipY1;
+    if ( w )
+        *w = m_clipX2 - m_clipX1;
+    if ( h )
+        *h = m_clipY2 - m_clipY1;
 }
 
 // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
@@ -679,6 +690,7 @@ void wxMSWDCImpl::DestroyClippingRegion()
     }
 
     wxDCImpl::DestroyClippingRegion();
+    m_isClipBoxValid = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -1868,6 +1880,8 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
 
     ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
+
+    m_isClipBoxValid = false;
 }
 
 void wxMSWDCImpl::SetMapMode(wxMappingMode mode)
@@ -1977,6 +1991,8 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
     wxDCImpl::SetDeviceOrigin( x, y );
 
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
+
+    m_isClipBoxValid = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -2022,6 +2038,7 @@ bool wxMSWDCImpl::SetTransformMatrix(const wxAffineMatrix2D &matrix)
         return false;
     }
 
+    m_isClipBoxValid = false;
     return true;
 }
 
@@ -2047,6 +2064,7 @@ void wxMSWDCImpl::ResetTransformMatrix()
 {
     ::ModifyWorldTransform(GetHdc(), NULL, MWT_IDENTITY);
     ::SetGraphicsMode(GetHdc(), GM_COMPATIBLE);
+    m_isClipBoxValid = false;
 }
 
 #endif // wxUSE_DC_TRANSFORM_MATRIX

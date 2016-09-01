@@ -121,8 +121,7 @@ public:
         // return it if asked -- but avoid calling ::GetClipBox() right now as
         // it could be unnecessary wasteful
         m_clipping = true;
-        m_clipX1 =
-        m_clipX2 = 0;
+        m_isClipBoxValid = false;
     }
 
     void* GetHandle() const { return (void*)GetHDC(); }
@@ -164,6 +163,7 @@ protected:
 #if wxUSE_PALETTE
         m_oldPalette = NULL;
 #endif // wxUSE_PALETTE
+        m_isClipBoxValid = false;
     }
 
     // create an uninitialized DC: this should be only used by the derived
@@ -322,6 +322,8 @@ protected:
     static wxObjectList     sm_bitmapCache;
     static wxObjectList     sm_dcCache;
 #endif
+
+    bool m_isClipBoxValid;
 
     wxDECLARE_CLASS(wxMSWDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxMSWDCImpl);
