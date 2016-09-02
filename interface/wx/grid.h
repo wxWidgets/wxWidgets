@@ -801,7 +801,10 @@ public:
         Row,
 
         /// Return the attribute set for this cells column.
-        Col
+        Col,
+
+        Default,
+        Merged
     };
 
     /**
@@ -977,6 +980,22 @@ public:
         Sets the text colour.
     */
     void SetTextColour(const wxColour& colText);
+
+    
+    void MergeWith(wxGridCellAttr *mergefrom);
+
+    void SetSize(int num_rows, int num_cols);
+    void SetOverflow(bool allow = true);
+    void SetKind(wxAttrKind kind);
+
+    bool HasReadWriteMode() const;
+    bool HasOverflowMode() const;
+    bool HasSize() const;
+
+    void GetSize(int *num_rows, int *num_cols) const;
+    bool GetOverflow() const;
+    wxAttrKind GetKind();
+
 
 protected:
 
