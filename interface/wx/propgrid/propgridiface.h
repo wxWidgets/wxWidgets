@@ -5,7 +5,41 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// -----------------------------------------------------------------------
+
+/**
+    @class wxPGPropArgCls
+
+    Most property grid functions have this type as their argument, as it can
+    convey a property by either a pointer or name.
+*/
+class wxPGPropArgCls
+{
+public:
+    wxPGPropArgCls( const wxPGProperty* property );
+    wxPGPropArgCls( const wxString& str );
+    wxPGPropArgCls( const wxPGPropArgCls& id );
+
+    // This is only needed for wxPython bindings
+    wxPGPropArgCls( wxString* str, bool deallocPtr );
+    ~wxPGPropArgCls();
+
+    wxPGProperty* GetPtr() const;
+    wxPGPropArgCls( const char* str );
+    wxPGPropArgCls( const wchar_t* str );
+    /** This constructor is required for NULL. */
+    wxPGPropArgCls( int );
+
+    wxPGProperty* GetPtr( wxPropertyGridInterface* iface ) const;
+    wxPGProperty* GetPtr( const wxPropertyGridInterface* iface ) const;
+    wxPGProperty* GetPtr0() const;
+    bool HasName() const;
+    const wxString& GetName() const;
+};
+
+typedef const wxPGPropArgCls& wxPGPropArg;
+
+
+
 
 /**
     @class wxPropertyGridInterface
@@ -24,7 +58,7 @@
     @library{wxpropgrid}
     @category{propgrid}
 */
-class WXDLLIMPEXP_PROPGRID wxPropertyGridInterface
+class wxPropertyGridInterface
 {
 public:
 
@@ -289,7 +323,7 @@ public:
     void GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
                                 wxPGProperty::FlagType flags,
                                 bool inverse = false,
-                                int iterFlags = (wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES) ) const;
+                                int iterFlags = wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES ) const;
 
     /**
         Returns value of given attribute. If none found, returns wxNullVariant.
