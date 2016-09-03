@@ -2535,7 +2535,7 @@ int wxUnicodeCharXToWX(WXKeySym keySym)
 // check current state of a key
 // ----------------------------------------------------------------------------
 
-bool wxGetKeyState(wxKeyCode key)
+static bool wxGetKeyStateX11(wxKeyCode key)
 {
     wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
         WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
@@ -2581,6 +2581,62 @@ bool wxGetKeyState(wxKeyCode key)
 }
 
 #endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
+
+// We need to use GDK functions when using wxGTK with a non-X11 backend, the
+// X11 code above can't work in this case.
+#ifdef __WXGTK__
+
+// gdk_keymap_get_modifier_state() is only available since 3.4
+#if GTK_CHECK_VERSION(3,4,0)
+
+#define wxHAS_GETKEYSTATE_GTK
+
+static bool wxGetKeyStateGTK(wxKeyCode key)
+{
+    if (gtk_check_version(3,4,0) != NULL)
+        return false;
+
+    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+    GdkKeymap* keymap = gdk_keymap_get_for_display(display);
+    guint state = gdk_keymap_get_modifier_state(keymap);
+    guint mask = 0;
+    switch (key)
+    {
+        case WXK_ALT:
+            mask = GDK_MOD1_MASK;
+            break;
+
+        case WXK_CONTROL:
+            mask = GDK_CONTROL_MASK;
+            break;
+
+        case WXK_SHIFT:
+            mask = GDK_SHIFT_MASK;
+            break;
+
+        default:
+            wxASSERT_MSG(wxS("Unsupported key, only modifiers can be used"));
+            return false;
+    }
+    return state & mask;
+}
+
+#endif // GTK+ 3.4
+#endif // __WXGTK__
+
+bool wxGetKeyState(wxKeyCode key)
+{
+#ifdef wxHAS_GETKEYSTATE_GTK
+    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
+    if (strcmp(name, "GdkX11Display") != 0)
+    {
+        return wxGetKeyStateGTK(key);
+    }
+#endif // GTK+ 3.4+
+
+    return wxGetKeyStateX11(key);
+}
 
 // ----------------------------------------------------------------------------
 // Launch document with default app
