@@ -4646,7 +4646,7 @@ wxFont wxStyledTextCtrl::StyleGetFont(int style) {
 
 // Set style size, face, bold, italic, and underline attributes from
 // a wxFont's attributes.
-void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
+void wxStyledTextCtrl::StyleSetFont(int styleNum, const wxFont& font) {
 #ifdef __WXGTK__
     // Ensure that the native font is initialized
     int x, y;
