@@ -4899,7 +4899,7 @@ public:
 
     // Set style size, face, bold, italic, and underline attributes from
     // a wxFont's attributes.
-    void StyleSetFont(int styleNum, wxFont& font);
+    void StyleSetFont(int styleNum, const wxFont& font);
 
 
 
