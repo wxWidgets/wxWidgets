@@ -107,6 +107,13 @@ public:
 
     virtual void* GetHandle() const wxOVERRIDE;
 
+#if wxUSE_DC_TRANSFORM_MATRIX
+    virtual bool CanUseTransformMatrix() const wxOVERRIDE;
+    virtual bool SetTransformMatrix(const wxAffineMatrix2D& matrix) wxOVERRIDE;
+    virtual wxAffineMatrix2D GetTransformMatrix() const wxOVERRIDE;
+    virtual void ResetTransformMatrix() wxOVERRIDE;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              wxFloodFillStyle style = wxFLOOD_SURFACE) wxOVERRIDE;

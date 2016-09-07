@@ -101,6 +101,7 @@ All (GUI):
 - Add wxGraphicsContext::GetClipBox().
 - Fix wxGCDC::Clear() for rotated graphics context.
 - Fix wxGCDC::GetClippingBox() for transformed wxDC (MSW, GTK+).
+- Add support for affine transformation matrix in wxGCDC.
 
 wxGTK:
 
@@ -114,6 +115,7 @@ wxGTK:
 - Fix crashes in wxFileSystemWatcher implementation (David Hart).
 - Fix wxBitmap ctor from XBM for non-square bitmaps.
 - Fix wxDC::GetClippingBox() for transformed wxDC.
+- Add support for affine transformation matrix in wxDC (GTK+ 3).
 
 wxMSW:
 

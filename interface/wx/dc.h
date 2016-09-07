@@ -155,7 +155,7 @@ struct wxFontMetrics
     In general wxDC methods don't support alpha transparency and the alpha
     component of wxColour is simply ignored and you need to use wxGraphicsContext
     for full transparency support. There are, however, a few exceptions: first,
-    under OS X colours with alpha channel are supported in all the normal
+    under OS X and GTK+ 3 colours with alpha channel are supported in all the normal
     wxDC-derived classes as they use wxGraphicsContext internally. Second,
     under all platforms wxSVGFileDC also fully supports alpha channel. In both
     of these cases the instances of wxPen or wxBrush that are built from
@@ -164,12 +164,15 @@ struct wxFontMetrics
 
     @section dc_transform_support Support for Transformation Matrix
 
-    On some platforms (currently only under MSW) wxDC has support for applying 
-    an arbitrary affine transformation matrix to its coordinate system. Call
-    CanUseTransformMatrix() to check if this support is available and then call
-    SetTransformMatrix() if it is. If the transformation matrix is not
+    On some platforms (currently under MSW, GTK+ 3) wxDC has support for applying
+    an arbitrary affine transformation matrix to its coordinate system. (Since
+    3.1.1 this feature is also supported by wxGCDC in all ports.)
+    Call CanUseTransformMatrix() to check if this support is available and then
+    call SetTransformMatrix() if it is. If the transformation matrix is not
     supported, SetTransformMatrix() always simply returns false and doesn't do
     anything.
+    This feature is only available when @c wxUSE_DC_TRANSFORM_MATRIX build
+    option is enabled.
 
 
     @library{wxcore}
@@ -1530,7 +1533,8 @@ public:
         Check if the use of transformation matrix is supported by the current
         system.
 
-        Currently this function always returns @false for non-MSW platforms.
+        This function returns @true for MSW and GTK+ 3 platforms and since
+        3.1.1 also for wxGCDC in all ports.
 
         @since 2.9.2
     */

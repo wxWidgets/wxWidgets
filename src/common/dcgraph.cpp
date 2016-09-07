@@ -545,6 +545,47 @@ void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
         m_graphicContext->SetAntialiasMode(wxANTIALIAS_DEFAULT);
 }
 
+// ----------------------------------------------------------------------------
+// Transform matrix
+// ----------------------------------------------------------------------------
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+
+bool wxGCDCImpl::CanUseTransformMatrix() const
+{
+    return true;
+}
+
+bool wxGCDCImpl::SetTransformMatrix(const wxAffineMatrix2D &matrix)
+{
+    wxGraphicsMatrix matGr = m_graphicContext->CreateMatrix(matrix);
+    m_graphicContext->SetTransform(matGr);
+
+    m_isClipBoxValid = false;
+    return true;
+}
+
+wxAffineMatrix2D wxGCDCImpl::GetTransformMatrix() const
+{
+    wxMatrix2D mat2D;
+    wxPoint2DDouble tr;
+    wxGraphicsMatrix matGr = m_graphicContext->GetTransform();
+    matGr.Get(&mat2D.m_11, &mat2D.m_12, &mat2D.m_21, &mat2D.m_22, &tr.m_x, &tr.m_y);
+
+    wxAffineMatrix2D matrix;
+    matrix.Set(mat2D, tr);
+    return matrix;
+}
+
+void wxGCDCImpl::ResetTransformMatrix()
+{
+    wxGraphicsMatrix matGr = m_graphicContext->CreateMatrix();
+    m_graphicContext->SetTransform(matGr);
+    m_isClipBoxValid = false;
+}
+
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+
 bool wxGCDCImpl::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                              const wxColour& WXUNUSED(col),
                              wxFloodFillStyle WXUNUSED(style))
