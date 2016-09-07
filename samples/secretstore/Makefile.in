@@ -36,7 +36,7 @@ wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
 
-DESTDIR =
+DESTDIR = 
 WX_RELEASE = 3.1
 LIBDIRNAME = $(wx_top_builddir)/lib
 SECRETSTORE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -60,7 +60,7 @@ SECRETSTORE_OBJECTS =  \
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) \
 @COND_MONOLITHIC_1@	$(EXTRALIBS_XML) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
-@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI =
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
 @COND_PLATFORM_MAC_0@__secretstore___mac_setfilecmd = @true
 @COND_PLATFORM_MAC_1@__secretstore___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL secretstore$(EXEEXT)
@@ -100,13 +100,13 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 all: secretstore$(EXEEXT)
 
-install:
+install: 
 
-uninstall:
+uninstall: 
 
 install-strip: install
 
-clean:
+clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f secretstore$(EXEEXT)
@@ -116,7 +116,7 @@ distclean: clean
 
 secretstore$(EXEEXT): $(SECRETSTORE_OBJECTS)
 	$(CXX) -o $@ $(SECRETSTORE_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
-
+	
 	$(__secretstore___mac_setfilecmd)
 
 secretstore_secretstore.o: $(srcdir)/secretstore.cpp

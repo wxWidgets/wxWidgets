@@ -712,7 +712,7 @@ scroll:
 	call scroll.bat
 	@del scroll.bat
 
-secretstore:
+secretstore: 
 	@echo cd secretstore >secretstore.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>secretstore.bat
 	call secretstore.bat

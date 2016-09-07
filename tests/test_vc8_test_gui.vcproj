@@ -863,10 +863,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\graphics\clippingbox.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\sizers\boxsizer.cpp"
 				>
 			</File>
@@ -892,6 +888,10 @@
 			</File>
 			<File
 				RelativePath=".\window\clientsize.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\graphics\clippingbox.cpp"
 				>
 			</File>
 			<File

@@ -572,7 +572,7 @@ sub_scroll:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
-sub_secretstore:
+sub_secretstore: 
 	cd secretstore
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"

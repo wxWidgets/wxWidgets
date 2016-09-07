@@ -497,7 +497,7 @@ fr:
 	esac; \
 	done
 
-ja:
+ja: 
 	@mkdir -p ./intl/ja
 	@for f in internat.po internat.mo; do \
 	if test ! -f ./intl/ja/$$f -a ! -d ./intl/ja/$$f ; \

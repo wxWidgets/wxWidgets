@@ -293,7 +293,7 @@ sashtest:
 scroll: 
 	$(MAKE) -C scroll -f makefile.gcc $(MAKEARGS) all
 
-secretstore:
+secretstore: 
 	$(MAKE) -C secretstore -f makefile.gcc $(MAKEARGS) all
 
 shaped: 

@@ -508,7 +508,7 @@ fr:
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%%f copy .\intl\fr\%%f $(OBJS)\intl\fr
 
-ja:
+ja: 
 	if not exist $(OBJS)\intl\ja mkdir $(OBJS)\intl\ja
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\ja\%%f copy .\intl\ja\%%f $(OBJS)\intl\ja
 
