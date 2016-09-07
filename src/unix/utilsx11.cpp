@@ -2615,7 +2615,7 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
             break;
 
         default:
-            wxASSERT_MSG(wxS("Unsupported key, only modifiers can be used"));
+            wxFAIL_MSG(wxS("Unsupported key, only modifiers can be used"));
             return false;
     }
     return state & mask;
