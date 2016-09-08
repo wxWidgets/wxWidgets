@@ -865,12 +865,14 @@ static bool wxGetKeyStateX11(wxKeyCode key)
 
 #define wxHAS_GETKEYSTATE_GTK
 
+extern GtkWidget *wxGetRootWindow();
+
 static bool wxGetKeyStateGTK(wxKeyCode key)
 {
     if (gtk_check_version(3,4,0) != NULL)
         return false;
 
-    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+    GdkDisplay* display = gtk_widget_get_display(wxGetRootWindow());
     GdkKeymap* keymap = gdk_keymap_get_for_display(display);
     guint state = gdk_keymap_get_modifier_state(keymap);
     guint mask = 0;
@@ -901,7 +903,7 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
 bool wxGetKeyState(wxKeyCode key)
 {
 #ifdef wxHAS_GETKEYSTATE_GTK
-    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+    GdkDisplay* display = gtk_widget_get_display(wxGetRootWindow());
     const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
     if (strcmp(name, "GdkX11Display") != 0)
     {
