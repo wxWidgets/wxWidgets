@@ -808,12 +808,16 @@ WXKeySym wxCharCodeWXToX(int id)
     return keySym;
 }
 
+#ifdef __WXX11__
 // all Xlib keysym-unicode charactor pair that could
 // type from keyboard directly under variety layout
 // Credits: This tab just modified around a public domain keysym dataset
 // write by Markus G. Kuhn. See the link below.
 // http://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt
-CodePair keySymTab[] = {
+static const struct {
+    unsigned keySym;
+    int uniChar;
+} keySymTab[] = {
     {0x0020, 0x0020},    // space
     {0x0021, 0x0021},    // exclam
     {0x0022, 0x0022},    // quotedbl
@@ -2507,7 +2511,7 @@ int wxUnicodeCharXToWX(WXKeySym keySym)
         return id;
 
     int min = 0;
-    int max = sizeof(keySymTab) / sizeof(CodePair) - 1;
+    int max = int(WXSIZEOF(keySymTab) - 1);
     int mid;
 
     /* also check for directly encoded 24-bit UCS characters */
@@ -2530,6 +2534,7 @@ int wxUnicodeCharXToWX(WXKeySym keySym)
     // no matching keycode value found
     return WXK_NONE;
 }
+#endif // __WXX11__
 
 // ----------------------------------------------------------------------------
 // check current state of a key
