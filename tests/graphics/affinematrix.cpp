@@ -20,46 +20,27 @@
 #include "wx/dcmemory.h"
 #include "wx/affinematrix2d.h"
 #include "wx/math.h"
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/dcgraph.h"
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 #include "testimage.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// Affine transform test class
 // ----------------------------------------------------------------------------
 
 class AffineTransformTestCase : public CppUnit::TestCase
 {
 public:
-    AffineTransformTestCase()
-    {
-        wxImage::AddHandler(new wxJPEGHandler);
-    }
-
-    virtual void setUp();
+    AffineTransformTestCase() {}
 
 private:
     CPPUNIT_TEST_SUITE( AffineTransformTestCase );
         CPPUNIT_TEST( InvertMatrix );
-#if wxUSE_DC_TRANSFORM_MATRIX
-        CPPUNIT_TEST( VMirrorAndTranslate );
-        CPPUNIT_TEST( Rotate90Clockwise );
-#if wxUSE_GRAPHICS_CONTEXT
-        CPPUNIT_TEST( CompareToGraphicsContext );
-#endif // wxUSE_GRAPHICS_CONTEXT
-#endif // wxUSE_DC_TRANSFORM_MATRIX
     CPPUNIT_TEST_SUITE_END();
 
     void InvertMatrix();
-#if wxUSE_DC_TRANSFORM_MATRIX
-    void VMirrorAndTranslate();
-    void Rotate90Clockwise();
-#if wxUSE_GRAPHICS_CONTEXT
-    void CompareToGraphicsContext();
-#endif // wxUSE_GRAPHICS_CONTEXT
-
-    wxImage m_imgOrig;
-    wxBitmap m_bmpOrig;
-#endif // wxUSE_DC_TRANSFORM_MATRIX
 
     wxDECLARE_NO_COPY_CLASS(AffineTransformTestCase);
 };
@@ -69,17 +50,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION( AffineTransformTestCase );
 
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( AffineTransformTestCase, "AffineTransformTestCase" );
-
-void AffineTransformTestCase::setUp()
-{
-#if wxUSE_DC_TRANSFORM_MATRIX
-    m_imgOrig.LoadFile("horse.jpg");
-
-    CPPUNIT_ASSERT( m_imgOrig.IsOk() );
-
-    m_bmpOrig = wxBitmap(m_imgOrig);
-#endif // wxUSE_DC_TRANSFORM_MATRIX
-}
 
 void AffineTransformTestCase::InvertMatrix()
 {
@@ -105,53 +75,336 @@ void AffineTransformTestCase::InvertMatrix()
 }
 
 #if wxUSE_DC_TRANSFORM_MATRIX
+// -------------------------------
+//  Transform matrix test classes
+// -------------------------------
 
-void AffineTransformTestCase::VMirrorAndTranslate()
+// ====================
+// wxDC / wxGCDC tests
+// ====================
+
+class TransformMatrixTestCaseDCBase : public CppUnit::TestCase
 {
-    wxBitmap bmpUsingMatrix(m_bmpOrig.GetWidth(), m_bmpOrig.GetHeight());
-
-    // build the mirrored image using the transformation matrix
+public:
+    TransformMatrixTestCaseDCBase()
     {
-        wxMemoryDC dc(bmpUsingMatrix);
-
-        if ( !dc.CanUseTransformMatrix() )
-            return;
-
-        wxAffineMatrix2D matrix;
-        matrix.Mirror(wxVERTICAL);
-        matrix.Translate(0, -m_bmpOrig.GetHeight() + 1);
-        dc.SetTransformMatrix(matrix);
-        dc.DrawBitmap(m_bmpOrig, 0, 0);
+        m_dc = NULL;
+        wxImage::AddHandler(new wxJPEGHandler);
+        m_imgOrig.LoadFile(wxS("horse.jpg"));
+        CPPUNIT_ASSERT( m_imgOrig.IsOk() );
     }
 
-    CPPUNIT_ASSERT_EQUAL( bmpUsingMatrix.ConvertToImage(),
+    virtual ~TransformMatrixTestCaseDCBase()
+    {
+    }
+
+    virtual void setUp()
+    {
+        m_bmpOrig = wxBitmap(m_imgOrig);
+        m_bmpUsingMatrix.Create(m_bmpOrig.GetSize(), m_bmpOrig.GetDepth());
+    }
+
+protected:
+    virtual void FlushDC() = 0;
+
+    void VMirrorAndTranslate();
+    void Rotate90Clockwise();
+#if wxUSE_GRAPHICS_CONTEXT
+    void CompareToGraphicsContext();
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+protected:
+    wxImage m_imgOrig;
+    wxBitmap m_bmpOrig;
+
+    wxBitmap m_bmpUsingMatrix;
+    wxDC* m_dc;
+
+    wxDECLARE_NO_COPY_CLASS(TransformMatrixTestCaseDCBase);
+};
+
+// ===========
+// wxDC tests
+// ===========
+
+class TransformMatrixTestCaseDC : public TransformMatrixTestCaseDCBase
+{
+public:
+    TransformMatrixTestCaseDC()
+    {
+        m_dc = &m_mdc;
+    }
+
+    virtual ~TransformMatrixTestCaseDC()
+    {
+    }
+
+    virtual void setUp() wxOVERRIDE
+    {
+        TransformMatrixTestCaseDCBase::setUp();
+        m_mdc.SelectObject(m_bmpUsingMatrix);
+    }
+
+    virtual void tearDown() wxOVERRIDE
+    {
+        m_mdc.SelectObject(wxNullBitmap);
+        TransformMatrixTestCaseDCBase::tearDown();
+    }
+
+protected:
+    virtual void FlushDC() wxOVERRIDE {}
+
+private:
+    CPPUNIT_TEST_SUITE( TransformMatrixTestCaseDC );
+        CPPUNIT_TEST( VMirrorAndTranslate );
+        CPPUNIT_TEST( Rotate90Clockwise );
+#if wxUSE_GRAPHICS_CONTEXT
+        CPPUNIT_TEST( CompareToGraphicsContext );
+#endif // wxUSE_GRAPHICS_CONTEXT
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+    wxMemoryDC m_mdc;
+
+    wxDECLARE_NO_COPY_CLASS(TransformMatrixTestCaseDC);
+};
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( TransformMatrixTestCaseDC );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TransformMatrixTestCaseDC, "TransformMatrixTestCaseDC" );
+
+#if wxUSE_GRAPHICS_CONTEXT
+// =============
+// wxGCDC tests
+// =============
+
+class TransformMatrixTestCaseGCDC : public TransformMatrixTestCaseDC
+{
+public:
+    TransformMatrixTestCaseGCDC() {}
+
+    virtual ~TransformMatrixTestCaseGCDC() {}
+
+    virtual void setUp() wxOVERRIDE
+    {
+        TransformMatrixTestCaseDC::setUp();
+
+        m_gcdc = new wxGCDC(m_mdc);
+        m_dc = m_gcdc;
+
+        wxGraphicsContext* ctx = m_gcdc->GetGraphicsContext();
+        ctx->SetAntialiasMode(wxANTIALIAS_NONE);
+    }
+
+    virtual void tearDown() wxOVERRIDE
+    {
+        delete m_gcdc;
+        TransformMatrixTestCaseDC::tearDown();
+    }
+
+protected:
+    virtual void FlushDC() wxOVERRIDE
+    {
+        m_gcdc->GetGraphicsContext()->Flush();
+    }
+
+private:
+    CPPUNIT_TEST_SUITE( TransformMatrixTestCaseGCDC );
+        CPPUNIT_TEST( VMirrorAndTranslate );
+        CPPUNIT_TEST( Rotate90Clockwise );
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+    wxGCDC* m_gcdc;
+
+    wxDECLARE_NO_COPY_CLASS(TransformMatrixTestCaseGCDC);
+};
+
+// For MSW we have individual test cases for each graphics renderer
+// so we don't need to test wxGCDC with default renderer.
+#ifndef __WXMSW__
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( TransformMatrixTestCaseGCDC );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TransformMatrixTestCaseGCDC, "TransformMatrixTestCaseGCDC" );
+#endif // !__WXMSW__
+
+#ifdef __WXMSW__
+// GDI+ and Direct2D are available only under MSW.
+
+#if wxUSE_GRAPHICS_GDIPLUS
+class TransformMatrixTestCaseGCDCGDIPlus : public TransformMatrixTestCaseGCDC
+{
+public:
+    TransformMatrixTestCaseGCDCGDIPlus() {}
+
+    virtual ~TransformMatrixTestCaseGCDCGDIPlus() {}
+
+    virtual void setUp() wxOVERRIDE
+    {
+        TransformMatrixTestCaseGCDC::setUp();
+
+        wxGraphicsRenderer* rend = wxGraphicsRenderer::GetGDIPlusRenderer();
+        wxGraphicsContext* ctx = rend->CreateContext(m_mdc);
+        m_gcdc->SetGraphicsContext(ctx);
+    }
+
+private:
+    CPPUNIT_TEST_SUITE( TransformMatrixTestCaseGCDCGDIPlus );
+        CPPUNIT_TEST( VMirrorAndTranslate );
+        CPPUNIT_TEST( Rotate90Clockwise );
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+
+    wxDECLARE_NO_COPY_CLASS(TransformMatrixTestCaseGCDCGDIPlus);
+};
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( TransformMatrixTestCaseGCDCGDIPlus );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TransformMatrixTestCaseGCDCGDIPlus, "TransformMatrixTestCaseGCDCGDIPlus" );
+
+#endif // wxUSE_GRAPHICS_GDIPLUS
+
+#if wxUSE_GRAPHICS_DIRECT2D
+class TransformMatrixTestCaseGCDCDirect2D : public TransformMatrixTestCaseGCDC
+{
+public:
+    TransformMatrixTestCaseGCDCDirect2D() {}
+
+    virtual ~TransformMatrixTestCaseGCDCDirect2D() {}
+
+    virtual void setUp() wxOVERRIDE
+    {
+        TransformMatrixTestCaseGCDC::setUp();
+
+        wxGraphicsRenderer* rend = wxGraphicsRenderer::GetDirect2DRenderer();
+        wxGraphicsContext* ctx = rend->CreateContext(m_mdc);
+        m_gcdc->SetGraphicsContext(ctx);
+    }
+
+    virtual void FlushDC()
+    {
+        // Apparently, flushing native Direct2D renderer
+        // is not enough to update underlying DC (bitmap)
+        // and therefore we have to destroy the renderer
+        // to do so.
+        TransformMatrixTestCaseGCDC::FlushDC();
+        m_gcdc->SetGraphicsContext(NULL);
+    }
+
+private:
+    CPPUNIT_TEST_SUITE( TransformMatrixTestCaseGCDCDirect2D );
+        CPPUNIT_TEST( VMirrorAndTranslate );
+        CPPUNIT_TEST( Rotate90Clockwise );
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+
+    wxDECLARE_NO_COPY_CLASS(TransformMatrixTestCaseGCDCDirect2D);
+};
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( TransformMatrixTestCaseGCDCDirect2D );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TransformMatrixTestCaseGCDCDirect2D, "TransformMatrixTestCaseGCDCDirect2D" );
+
+#endif // wxUSE_GRAPHICS_DIRECT2D
+
+#endif // __WXMSW__
+
+#if wxUSE_CAIRO
+class TransformMatrixTestCaseGCDCCairo : public TransformMatrixTestCaseGCDC
+{
+public:
+    TransformMatrixTestCaseGCDCCairo() {}
+
+    virtual ~TransformMatrixTestCaseGCDCCairo() {}
+
+    virtual void setUp() wxOVERRIDE
+    {
+        TransformMatrixTestCaseGCDC::setUp();
+
+        wxGraphicsRenderer* rend = wxGraphicsRenderer::GetCairoRenderer();
+        wxGraphicsContext* ctx = rend->CreateContext(m_mdc);
+        m_gcdc->SetGraphicsContext(ctx);
+    }
+
+private:
+    CPPUNIT_TEST_SUITE( TransformMatrixTestCaseGCDCCairo );
+        CPPUNIT_TEST( VMirrorAndTranslate );
+        CPPUNIT_TEST( Rotate90Clockwise );
+    CPPUNIT_TEST_SUITE_END();
+
+protected:
+
+    wxDECLARE_NO_COPY_CLASS(TransformMatrixTestCaseGCDCCairo);
+};
+
+// register in the unnamed registry so that these tests are run by default
+CPPUNIT_TEST_SUITE_REGISTRATION( TransformMatrixTestCaseGCDCCairo );
+
+// also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TransformMatrixTestCaseGCDCCairo, "TransformMatrixTestCaseGCDCCairo" );
+
+#endif // wxUSE_CAIRO
+
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+void TransformMatrixTestCaseDCBase::VMirrorAndTranslate()
+{
+    // build the mirrored image using the transformation matrix
+    if ( !m_dc->CanUseTransformMatrix() )
+        return;
+
+    wxAffineMatrix2D matrix;
+    matrix.Mirror(wxVERTICAL);
+    // For wxDC pixel center is at (0, 0) so row 0 of the bitmap is the axis
+    // of mirroring and it is left intact by the transformation. In this case
+    // mirrored bitmap needs to be shifted by dim-1 pixels.
+    // For wxGCDC pixel center of underlying wxGraphicsContext is at (0.5, 0.5)
+    // so the axis of mirroring is above row 0 of the bitmap and this row
+    // is affected by the transformation. In this case mirrored bitmap
+    // needs to be shifthed by dim pixels.
+    int ty;
+    if ( m_dc->GetGraphicsContext() )
+        ty = m_bmpOrig.GetHeight();
+    else
+        ty = m_bmpOrig.GetHeight() - 1;
+    matrix.Translate(0, -ty);
+    m_dc->SetTransformMatrix(matrix);
+    m_dc->DrawBitmap(m_bmpOrig, 0, 0);
+    FlushDC();
+
+    CPPUNIT_ASSERT_EQUAL( m_bmpUsingMatrix.ConvertToImage(),
                           m_imgOrig.Mirror(false) );
 }
 
-void AffineTransformTestCase::Rotate90Clockwise()
+void TransformMatrixTestCaseDCBase::Rotate90Clockwise()
 {
-    wxBitmap bmpUsingMatrix(m_bmpOrig.GetHeight(), m_bmpOrig.GetWidth());
-
     // build the rotated image using the transformation matrix
-    {
-        wxMemoryDC dc(bmpUsingMatrix);
+    if ( !m_dc->CanUseTransformMatrix() )
+        return;
 
-        if ( !dc.CanUseTransformMatrix() )
-            return;
+    wxAffineMatrix2D matrix;
+    matrix.Rotate(0.5 * M_PI);
+    matrix.Translate(0, -m_bmpOrig.GetHeight());
+    m_dc->SetTransformMatrix(matrix);
+    m_dc->DrawBitmap(m_bmpOrig, 0, 0);
+    FlushDC();
 
-        wxAffineMatrix2D matrix;
-        matrix.Rotate(0.5 * M_PI);
-        matrix.Translate(0, -m_bmpOrig.GetHeight());
-        dc.SetTransformMatrix(matrix);
-        dc.DrawBitmap(m_bmpOrig, 0, 0);
-    }
-
-    CPPUNIT_ASSERT_EQUAL( bmpUsingMatrix.ConvertToImage(),
+    CPPUNIT_ASSERT_EQUAL( m_bmpUsingMatrix.ConvertToImage(),
                           m_imgOrig.Rotate90(true) );
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
-void AffineTransformTestCase::CompareToGraphicsContext()
+void TransformMatrixTestCaseDCBase::CompareToGraphicsContext()
 {
     wxPoint2DDouble pointA1(1.0, 3.0), pointA2(60.0, 50.0),
                     pointG1(1.0, 3.0), pointG2(60.0, 50.0);
@@ -170,7 +423,7 @@ void AffineTransformTestCase::CompareToGraphicsContext()
     matrixA1.Invert();
 
     // Create image using first matrix
-    wxBitmap bmpUsingMatrixA1(m_bmpOrig.GetHeight(), m_bmpOrig.GetWidth());
+    wxBitmap bmpUsingMatrixA1(m_bmpOrig.GetSize(), m_bmpOrig.GetDepth());
 
     // Build the transformed image using the transformation matrix
     {
@@ -193,9 +446,19 @@ void AffineTransformTestCase::CompareToGraphicsContext()
 
 
     // Create graphics matrix and transform it
+    wxGraphicsRenderer* r;
+    if ( m_dc->GetGraphicsContext() )
+    {
+        r = m_dc->GetGraphicsContext()->GetRenderer();
+    }
+    else
+    {
+        r = wxGraphicsRenderer::GetDefaultRenderer();
+    }
+
     wxBitmap bmp(10, 10);
     wxMemoryDC mDc(bmp);
-    wxGraphicsContext* gDc = wxGraphicsContext::Create(mDc);
+    wxGraphicsContext* gDc = r->CreateContext(mDc);
     wxGraphicsMatrix matrixG1 = gDc->CreateMatrix();
     wxGraphicsMatrix matrixG2 = gDc->CreateMatrix();
     matrixG2.Rotate(M_PI / 3);
