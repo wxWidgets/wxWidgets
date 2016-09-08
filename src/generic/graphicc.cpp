@@ -494,6 +494,7 @@ public:
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
     virtual void PushState() wxOVERRIDE;
     virtual void PopState() wxOVERRIDE;
+    virtual void Flush() wxOVERRIDE;
 
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                 wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
@@ -2474,6 +2475,22 @@ void wxCairoContext::PushState()
 void wxCairoContext::PopState()
 {
     cairo_restore(m_context);
+}
+
+void wxCairoContext::Flush()
+{
+#ifdef __WXMSW__
+    if ( m_mswSurface )
+    {
+        cairo_surface_flush(m_mswSurface);
+    }
+#endif
+#ifdef __WXQT__
+    if ( m_qtSurface )
+    {
+        cairo_surface_flush(m_qtSurface);
+    }
+#endif
 }
 
 void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
