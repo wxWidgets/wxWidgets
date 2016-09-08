@@ -2577,7 +2577,7 @@ static bool wxGetKeyStateX11(wxKeyCode key)
     // with the least-significant bit in the byte representing key 8N.
     char key_vector[32];
     XQueryKeymap(pDisplay, key_vector);
-    return key_vector[keyCode >> 3] & (1 << (keyCode & 7));
+    return (key_vector[keyCode >> 3] & (1 << (keyCode & 7))) != 0;
 }
 
 #endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
@@ -2618,7 +2618,7 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
             wxFAIL_MSG(wxS("Unsupported key, only modifiers can be used"));
             return false;
     }
-    return state & mask;
+    return (state & mask) != 0;
 }
 
 #endif // GTK+ 3.4
