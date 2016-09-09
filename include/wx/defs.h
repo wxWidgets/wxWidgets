@@ -258,7 +258,7 @@ typedef short int WXTYPE;
     #define wxOVERRIDE override
 #else /*  !HAVE_OVERRIDE */
     #define wxOVERRIDE
-#endif /*  HAVE_OVERRIDE/!HAVE_EXPLICIT */
+#endif /*  HAVE_OVERRIDE */
 
 /* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
 

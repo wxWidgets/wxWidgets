@@ -713,11 +713,6 @@
 /* --- end MSW options --- */
 
 /*
- * Define if your compiler supports the explicit keyword
- */
-#undef HAVE_EXPLICIT
-
-/*
  * Define if your compiler has C99 va_copy
  */
 #undef HAVE_VA_COPY
