@@ -873,7 +873,8 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         data->SeparatorMargin.ApplyTo(rcSeparator);
 
         RECT rcGutter = rcSelection;
-        rcGutter.right = data->ItemMargin.cxLeftWidth
+        rcGutter.right = rcGutter.left
+                       + data->ItemMargin.cxLeftWidth
                        + data->CheckBgMargin.cxLeftWidth
                        + data->CheckMargin.cxLeftWidth
                        + imgWidth

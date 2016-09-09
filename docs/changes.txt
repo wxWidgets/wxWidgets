@@ -629,6 +629,7 @@ wxGTK:
 wxMSW:
 
 - Fix compilation with g++ 4.9 in non-C++11 mode.
+- Fix rendering of owner drawn multi-column menus (Pete Bannister).
 - Fix regression in accessibility support (Leland Lucius).
 - Fix regression in wxDC drawing with bottom-to-top y axis (Artur Wieczorek).
 - Fix compilation with C++Builder XE compiler (Nichka).
