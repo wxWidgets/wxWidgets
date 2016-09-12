@@ -18,12 +18,12 @@ public:
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
     wxColour(const QColor& color);
 
-    virtual bool IsOk() const;
+    virtual bool IsOk() const { return valid; }
 
-    unsigned char Red() const;
-    unsigned char Green() const;
-    unsigned char Blue()  const;
-    unsigned char Alpha() const;
+    ChannelType Red() const   { return m_red;   }
+    ChannelType Green() const { return m_green; }
+    ChannelType Blue()  const { return m_blue;  }
+    ChannelType Alpha() const { return m_alpha; }
 
     bool operator==(const wxColour& color) const;
     bool operator!=(const wxColour& color) const;
@@ -37,7 +37,7 @@ protected:
     virtual void InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a);
 
 private:
-    unsigned char red, green, blue, alpha;
+    ChannelType m_red, m_green, m_blue, m_alpha;
     bool valid;
 
     wxDECLARE_DYNAMIC_CLASS(wxColour);
