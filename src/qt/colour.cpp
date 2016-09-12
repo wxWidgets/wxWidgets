@@ -28,16 +28,9 @@ wxColour::wxColour(const QColor& color)
     InitRGBA(color.red(), color.green(), color.blue(), color.alpha());
 }
 
-bool wxColour::IsOk() const { return valid; }
-
-unsigned char wxColour::Red() const { return red;   }
-unsigned char wxColour::Green() const { return green; }
-unsigned char wxColour::Blue()  const { return blue;  }
-unsigned char wxColour::Alpha() const { return alpha; }
-
 bool wxColour::operator==(const wxColour& color) const
 {
-    return red == color.red && green == color.green && blue == color.blue && alpha == color.alpha;
+    return m_red == color.m_red && m_green == color.m_green && m_blue == color.m_blue && m_alpha == color.m_alpha;
 }
 
 bool wxColour::operator!=(const wxColour& color) const
@@ -54,17 +47,18 @@ int wxColour::GetPixel() const
 QColor wxColour::GetQColor() const
 {
     if( valid )
-        return QColor(red, green, blue, alpha);
+        return QColor(m_red, m_green, m_blue, m_alpha);
     return QColor();
 }
 
 void wxColour::Init()
 {
+    m_red = m_green = m_blue = m_alpha = 0;
     valid = false;
 }
 
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
-    red = r, green = g, blue = b, alpha = a;
+    m_red = r, m_green = g, m_blue = b, m_alpha = a;
     valid = true;
 }
