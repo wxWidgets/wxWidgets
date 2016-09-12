@@ -70,7 +70,7 @@ int wxDialog::ShowModal()
     wxCHECK_MSG( GetHandle() != NULL, -1, "Invalid dialog" );
 
     bool ret = GetDialogHandle()->exec();
-    if(GetReturnCode() == 0)
+    if ( GetReturnCode() == 0 )
         return ret ? wxID_OK : wxID_CANCEL;
     return GetReturnCode();
 }

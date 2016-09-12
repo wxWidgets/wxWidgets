@@ -46,7 +46,7 @@ int wxColour::GetPixel() const
 
 QColor wxColour::GetQColor() const
 {
-    if( valid )
+    if ( valid )
         return QColor(m_red, m_green, m_blue, m_alpha);
     return QColor();
 }

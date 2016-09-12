@@ -96,12 +96,12 @@ wxRegion::wxRegion(const wxBitmap& bmp)
 
 wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
 {
-    if(!bmp.GetHandle()) {
+    if ( !bmp.GetHandle() ) {
         m_refData = new wxRegionRefData();
         return;
     }
 
-    if(tolerance == 0) {
+    if ( tolerance == 0 ) {
         m_refData = new wxRegionRefData(bmp.GetHandle()->createMaskFromColor(transp.GetQColor()));
         return;
     }
@@ -111,15 +111,17 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
 
     QImage img(bmp.GetHandle()->toImage());
     int r = transp.Red(), g = transp.Green(), b = transp.Blue();
-    for(int y=0; y<img.height(); y++) {
-        for(int x=0; x<img.width(); x++) {
+    for(int y=0; y<img.height(); y++)
+    {
+        for(int x=0; x<img.width(); x++)
+        {
             QColor c = img.pixel(x, y);
-            if(abs(c.red()   - r) > tolerance ||
+            if ( abs(c.red()   - r ) > tolerance ||
                abs(c.green() - g) > tolerance ||
                abs(c.blue()  - b) > tolerance) {
                     int ind = y*img.width()+x;
                     raw[ind>>3] |= 1<<(ind&7);
-                }
+            }
         }
     }
             

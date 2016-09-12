@@ -264,7 +264,7 @@ int wxBitmap::GetDepth() const
 wxImage wxBitmap::ConvertToImage() const
 {
     QPixmap pixmap(M_PIXDATA);
-    if(M_MASK && M_MASK->GetHandle())
+    if ( M_MASK && M_MASK->GetHandle() )
         pixmap.setMask(*M_MASK->GetHandle());
     return ConvertImage(pixmap.toImage());
 }

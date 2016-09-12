@@ -243,7 +243,7 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     parent->AddChild( this );
 
     wxPoint p;
-    if(pos != wxDefaultPosition)
+    if ( pos != wxDefaultPosition )
         p = pos;
 
     DoMoveWindow( p.x, p.y, size.GetWidth(), size.GetHeight() );
@@ -573,7 +573,7 @@ void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int r
 void wxWindowQt::SetScrollPos( int orientation, int pos, bool WXUNUSED( refresh ))
 {
     wxScrollBar *scrollBar = QtGetScrollBar( orientation );
-    if(scrollBar)
+    if ( scrollBar )
         scrollBar->SetThumbPosition( pos );
 }
 
@@ -741,7 +741,7 @@ void wxWindowQt::SetWindowStyleFlag( long style )
 //        qtFrame->setFrameShadow( QFrame::Plain );
 //    }
 
-    if(!GetHandle())
+    if ( !GetHandle() )
         return;
 
     Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
@@ -1163,7 +1163,7 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
     // qt sends keyup and keydown events for autorepeat, but this is not
     // normal for wx which only sends repeated keydown events
     // discard repeated keyup events
-    if(event->isAutoRepeat() && event->type() == QEvent::KeyRelease)
+    if ( event->isAutoRepeat() && event->type() == QEvent::KeyRelease )
         return true;
 
 #if wxUSE_ACCEL

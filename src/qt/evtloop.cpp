@@ -133,7 +133,7 @@ int wxQtEventLoopBase::DispatchTimeout(unsigned long timeout)
 void wxQtEventLoopBase::WakeUp()
 {
     QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
-    if(instance)
+    if ( instance )
         instance->wakeUp();
 }
 
@@ -243,7 +243,7 @@ wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHa
 {
     wxGUIAppTraits *AppTraits = dynamic_cast<wxGUIAppTraits *>(wxApp::GetTraitsIfExists());
 
-    if(AppTraits)
+    if ( AppTraits )
         return AppTraits->GetEventLoopSourcesManager()->AddSourceForFD(fd, handler, flags);
 
     return NULL;

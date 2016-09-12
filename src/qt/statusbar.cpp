@@ -50,7 +50,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
     m_qtStatusBar = new wxQtStatusBar( parent, this );
     m_qtPanes = new QList < QLabel* >;
 
-    if(style & wxSTB_SIZEGRIP)
+    if ( style & wxSTB_SIZEGRIP )
         m_qtStatusBar->setSizeGripEnabled(true);
 
     PostCreation();
@@ -65,7 +65,7 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
     wxCHECK_MSG( (i >= 0) && ((size_t)i < m_panes.GetCount()), false,
                  "invalid statusbar field index" );
 
-    if(m_qtPanes->count() != m_panes.GetCount())
+    if ( m_qtPanes->count() != m_panes.GetCount() )
         const_cast<wxStatusBar*>(this)->UpdateFields();
     
     rect = wxQtConvertRect((*m_qtPanes)[i]->geometry());
@@ -89,7 +89,7 @@ int wxStatusBar::GetBorderY() const
 
 void wxStatusBar::DoUpdateStatusText(int number)
 {
-    if(m_qtPanes->count() != m_panes.GetCount())
+    if ( m_qtPanes->count() != m_panes.GetCount() )
         UpdateFields();
 
     (*m_qtPanes)[number]->setText( wxQtConvertString( m_panes[number].GetText() ) );

@@ -34,10 +34,10 @@ bool wxSpinCtrlQt< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     const wxString& value, const wxPoint& pos, const wxSize& size, long style,
     T min, T max, T initial, T inc, const wxString& name )
 {
-    if(!(style & wxSP_ARROW_KEYS))
+    if ( !(style & wxSP_ARROW_KEYS) )
         m_qtSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
 
-    if(style & wxSP_WRAP)
+    if ( style & wxSP_WRAP )
         m_qtSpinBox->setWrapping(true);
 
     m_qtSpinBox->setAccelerated(true); // to match gtk behavior

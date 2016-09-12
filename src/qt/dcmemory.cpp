@@ -72,7 +72,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     if ( bitmap.IsOk() && !bitmap.GetHandle()->isNull() ) {
         QPixmap pixmap(*bitmap.GetHandle());
         // apply mask before converting to image
-        if(bitmap.GetMask() && bitmap.GetMask()->GetHandle())
+        if ( bitmap.GetMask() && bitmap.GetMask()->GetHandle() )
             pixmap.setMask(*bitmap.GetMask()->GetHandle());
         // create the intermediate image for the pixmap:
         m_qtImage = new QImage( pixmap.toImage() );
@@ -87,7 +87,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
 wxBitmap wxMemoryDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
-    if(!subrect)
+    if ( !subrect )
         return m_selected;
     return m_selected.GetSubBitmap(*subrect);
 }
