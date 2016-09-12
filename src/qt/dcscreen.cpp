@@ -46,7 +46,7 @@ bool wxScreenDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 // defered allocation for blit
 QImage *wxScreenDCImpl::GetQImage()
 {
-    if(!m_qtImage)
+    if ( !m_qtImage )
         m_qtImage = new QImage(QApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId()).toImage());
     return m_qtImage;
 }

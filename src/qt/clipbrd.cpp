@@ -43,7 +43,7 @@ public:
 private:
     void changed( QClipboard::Mode mode)
     {
-        if(mode != m_clipboard->Mode() || !m_clipboard->m_sink)
+        if ( mode != m_clipboard->Mode() || !m_clipboard->m_sink )
             return;
 
         wxClipboardEvent *event = new wxClipboardEvent(wxEVT_CLIPBOARD_CHANGED);
@@ -148,7 +148,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             continue;
 
         wxTextDataObject *textdata = dynamic_cast<wxTextDataObject*>(&data);
-        if(textdata)
+        if ( textdata )
             textdata->SetText(wxQtConvertString(MimeData->text()));
         else
         {

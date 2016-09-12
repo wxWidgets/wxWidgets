@@ -62,7 +62,7 @@ wxDataFormat::wxDataFormat(const wxString &id)
 
 wxDataFormat::wxDataFormat(const wxChar *id)
 {
-    m_MimeType = (wxString)id;
+    m_MimeType = id;
 }
 
 wxDataFormat::wxDataFormat(const QString &id)
@@ -72,7 +72,7 @@ wxDataFormat::wxDataFormat(const QString &id)
 
 void wxDataFormat::SetId( const wxChar *id )
 {
-    m_MimeType = (wxString)id;
+    m_MimeType = id;
 }
 
 void wxDataFormat::SetId( const wxString& id )

@@ -25,7 +25,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data )
 {
     m_qtWindow = new wxQtColorDialog( parent, this );
 
-    if(data)
+    if ( data )
         m_data = *data;
 
     if ( m_data.GetChooseFull() )

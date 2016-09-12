@@ -484,7 +484,7 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
         }
 
         if ( !isBoolAttr ) {
-            if(!v)
+            if ( !v )
                 return false; // zero parameter
             arg++;
         }

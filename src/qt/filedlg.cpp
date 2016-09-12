@@ -122,7 +122,7 @@ wxString wxFileDialog::GetFilename() const
 {
     wxArrayString filenames;
     GetFilenames(filenames);
-    if(filenames.size() == 0)
+    if ( filenames.size() == 0 )
         return "";
 
     return filenames[0];

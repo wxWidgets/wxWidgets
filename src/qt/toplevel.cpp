@@ -126,7 +126,7 @@ void wxTopLevelWindowQt::SetWindowStyleFlag( long style )
         Centre();
     }
 
-    if(!GetHandle())
+    if ( !GetHandle() )
         return;
 
     Qt::WindowFlags qtFlags = GetHandle()->windowFlags();

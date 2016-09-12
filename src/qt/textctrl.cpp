@@ -293,8 +293,8 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
         QTextCursor cursor = m_qtTextEdit->textCursor();
         *from = cursor.selectionStart();
         *to = cursor.selectionEnd();
-        if(cursor.hasSelection())
-                return;
+        if ( cursor.hasSelection() )
+            return;
     }
     else // single line
     {
