@@ -372,6 +372,9 @@ wxString wxGetDisplayName();
     Even though there are virtual key codes defined for mouse buttons, they
     cannot be used with this function currently.
 
+    In wxGTK, this function can be only used with modifier keys (@c WXK_ALT, @c
+    WXK_CONTROL and @c WXK_SHIFT) when not using X11 backend currently.
+
     @header{wx/utils.h}
 */
 bool wxGetKeyState(wxKeyCode key);
