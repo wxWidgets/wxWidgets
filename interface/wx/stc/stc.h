@@ -6470,6 +6470,7 @@ public:
     void SetToken(int val);
     void SetAnnotationLinesAdded(int val);
     void SetUpdated(int val);
+    void SetListCompletionMethod(int val);
     void SetDragText(const wxString& val);
     void SetDragFlags(int flags);
     void SetDragResult(wxDragResult val);
@@ -6497,6 +6498,7 @@ public:
     int  GetToken() const;
     int  GetAnnotationsLinesAdded() const;
     int  GetUpdated() const;
+    int  GetListCompletionMethod() const;
     
     /**
         @deprecated Use GetString() instead.

@@ -103,6 +103,7 @@ All (GUI):
 - Fix wxGCDC::GetClippingBox() for transformed wxDC (MSW, GTK+).
 - Add support for affine transformation matrix in wxGCDC.
 - Add wxGraphicsContext::Flush() for Cairo renderer.
+- Add wxStyledTextEvent::GetListCompletionMethod() (NewPagodi).
 
 wxGTK:
 

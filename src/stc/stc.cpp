@@ -5368,6 +5368,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
         evt.SetPosition(scn.lParam);
+        evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
     case SCN_USERLISTSELECTION:
@@ -5375,6 +5376,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
         evt.SetPosition(scn.lParam);
+        evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
     case SCN_URIDROPPED:
@@ -5464,6 +5466,7 @@ wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
     m_token = 0;
     m_annotationLinesAdded = 0;
     m_updated = 0;
+    m_listCompletionMethod = 0;
 
 #if wxUSE_DRAG_AND_DROP
     m_dragFlags = wxDrag_CopyOnly;
@@ -5502,6 +5505,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
     m_token =        event.m_token;
     m_annotationLinesAdded = event.m_annotationLinesAdded;
     m_updated =      event.m_updated;
+    m_listCompletionMethod = event.m_listCompletionMethod;
 
 #if wxUSE_DRAG_AND_DROP
     m_dragFlags =    event.m_dragFlags;
