@@ -14,26 +14,9 @@ Building steps:
 and be able to build wxWidgets as described in docs/msw/install.txt
 
 2. wxGTK/Win32 is disabled by default in wxWidgets, you need to enable it
-in bakefiles manually. TOOLKIT variable should not be a constantly MSW
-for required bakefile formats.
+in bakefiles manually. Apply following patch manually or using Cygwin:
 
-
-diff build/bakefiles/config.bkl build/bakefiles/config.bkl
---- build/bakefiles/config.bkl
-+++ build/bakefiles/config.bkl
-@@ -67,9 +67,9 @@
-         </if>
- 
-         <!-- We must make TOOLKIT a constant under Windows -->
--        <if cond="FORMAT in ['borland','mingw','msvc','watcom', 'msvc6prj', 'msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
-+        <!--if cond="FORMAT in ['borland','mingw','msvc','watcom', 'msvc6prj', 'msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
-             <set var="TOOLKIT">MSW</set>
--        </if>
-+        </if-->
-     </if>
- 
-     <!--
-
+    patch -p0 < docs/msw/gtkfix.patch
 
 Regenerate required make/project files:
     cd build\bakefiles
