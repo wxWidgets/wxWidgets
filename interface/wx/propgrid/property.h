@@ -1447,7 +1447,7 @@ public:
     double GetAttributeAsDouble( const wxString& name, double defVal ) const;
 
     /**
-        Returns comma-delimited string of property attributes.
+        Returns attributes as list wxVariant.
     */
     const wxPGAttributeStorage& GetAttributes() const;
 
@@ -1755,9 +1755,10 @@ public:
     bool IsRoot() const;
 
     /**
-        Returns true if this is a sub-property.
+       Returns true if this is a sub-property.
     */
     bool IsSubProperty() const;
+
 
     /**
         Returns @true if candidateParent is some parent of this property.
@@ -1819,8 +1820,9 @@ public:
     */
     void SetAttribute( const wxString& name, wxVariant value );
 
+    
     void SetAttributes( const wxPGAttributeStorage& attributes );
-
+    
     /**
         Set if user can change the property's value to unspecified by
         modifying the value of the editor control (usually by clearing
@@ -2063,34 +2065,7 @@ public:
 
 protected:
     /**
-        Sets property cell in fashion that reduces number of exclusive
-        copies of cell data. Used when setting, for instance, same
-        background colour for a number of properties.
-
-        @param firstCol
-            First column to affect.
-
-        @param lastCol
-            Last column to affect.
-
-        @param preparedCell
-            Pre-prepared cell that is used for those which cell data
-            before this matched unmodCellData.
-
-        @param srcData
-            If unmodCellData did not match, valid cell data from this
-            is merged into cell (usually generating new exclusive copy
-            of cell's data).
-
-        @param unmodCellData
-            If cell's cell data matches this, its cell is now set to
-            preparedCell.
-
-        @param ignoreWithFlags
-            Properties with any one of these flags are skipped.
-
-        @param recursively
-            If @true, apply this operation recursively in child properties.
+       Helper for language bindings.
     */
     void AdaptiveSetCell( unsigned int firstCol,
                           unsigned int lastCol,
@@ -2137,6 +2112,9 @@ protected:
         Returns true if child property is selected.
     */
     bool IsChildSelected( bool recursive = false ) const;
+
+    void SetFlag( wxPGPropertyFlags flag );
+    void ClearFlag( FlagType flag );
 };
 
 // -----------------------------------------------------------------------
