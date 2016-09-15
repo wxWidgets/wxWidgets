@@ -229,9 +229,9 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
-        // Set the tooltip for the item (for EVT\_TREE\_ITEM\_GETTOOLTIP events)
+        // Set the tooltip for the item (for EVT_TREE_ITEM_GETTOOLTIP events)
     void SetToolTip(const wxString& toolTip) { m_label = toolTip; }
-    wxString GetToolTip() { return m_label; }
+    wxString GetToolTip() const { return m_label; }
 
 private:
     // not all of the members are used (or initialized) for all events
