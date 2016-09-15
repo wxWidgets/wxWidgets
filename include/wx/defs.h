@@ -229,23 +229,8 @@ typedef short int WXTYPE;
 /*  wrap it in this guard, but such cases should still be relatively rare. */
 #define wxUSE_NESTED_CLASSES    1
 
-/*  check for explicit keyword support */
-#ifndef HAVE_EXPLICIT
-    #if defined(__VISUALC__)
-        #define HAVE_EXPLICIT
-    #elif defined(__GNUC__)
-        #define HAVE_EXPLICIT
-    #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
-        /*  BC++ 4.52 doesn't support explicit, CBuilder 1 does */
-        #define HAVE_EXPLICIT
-    #endif
-#endif /*  !HAVE_EXPLICIT */
-
-#ifdef HAVE_EXPLICIT
-    #define wxEXPLICIT explicit
-#else /*  !HAVE_EXPLICIT */
-    #define wxEXPLICIT
-#endif /*  HAVE_EXPLICIT/!HAVE_EXPLICIT */
+/* This macro is obsolete, use the 'explicit' keyword in the new code. */
+#define wxEXPLICIT explicit
 
 /* check for override keyword support */
 #ifndef HAVE_OVERRIDE
@@ -273,7 +258,7 @@ typedef short int WXTYPE;
     #define wxOVERRIDE override
 #else /*  !HAVE_OVERRIDE */
     #define wxOVERRIDE
-#endif /*  HAVE_OVERRIDE/!HAVE_EXPLICIT */
+#endif /*  HAVE_OVERRIDE */
 
 /* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
 
@@ -337,7 +322,7 @@ typedef short int WXTYPE;
 #endif
 
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
-#define wxConstCast(obj, className) wx_const_cast(className *, obj)
+#define wxConstCast(obj, className) const_cast<className *>(obj)
 
 #ifndef HAVE_STD_WSTRING
     #if __cplusplus >= 201103L
@@ -457,31 +442,6 @@ typedef short int WXTYPE;
 
     #undef wxNO_WOSTREAM
 #endif /* HAVE_WOSTREAM */
-
-/*  ---------------------------------------------------------------------------- */
-/*  other C++ features */
-/*  ---------------------------------------------------------------------------- */
-
-#ifndef HAVE_PARTIAL_SPECIALIZATION
-    /* be optimistic by default */
-    #define HAVE_PARTIAL_SPECIALIZATION
-#endif
-
-#ifdef __VISUALC__
-    #if __VISUALC__ < 1310
-        #undef HAVE_PARTIAL_SPECIALIZATION
-    #endif
-#endif /* __VISUALC__ */
-
-
-#ifndef HAVE_TEMPLATE_OVERLOAD_RESOLUTION
-    /* assume the compiler can use type or const expressions as template
-       arguments if it supports partial specialization -- except if it's a
-       Borland one which can't */
-    #if defined(HAVE_PARTIAL_SPECIALIZATION) && !defined(__BORLANDC__)
-        #define HAVE_TEMPLATE_OVERLOAD_RESOLUTION
-    #endif /* (HAVE_PARTIAL_SPECIALIZATION) && !defined(__BORLANDC__) */
-#endif /* !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION) */
 
 /*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
@@ -1284,7 +1244,7 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
     #pragma warning(disable: 1684)
 #endif
 
-    return wx_reinterpret_cast(wxUIntPtr, p);
+    return reinterpret_cast<wxUIntPtr>(p);
 
 #if defined(__VISUALC__) || defined(__INTELC__)
     #pragma warning(pop)
@@ -1303,7 +1263,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
     #pragma warning(disable: 171)
 #endif
 
-    return wx_reinterpret_cast(void *, p);
+    return reinterpret_cast<void *>(p);
 
 #if defined(__VISUALC__) || defined(__INTELC__)
     #pragma warning(pop)

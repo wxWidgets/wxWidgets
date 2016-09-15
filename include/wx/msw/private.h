@@ -157,7 +157,7 @@ template <wxUIntPtr INVALID_VALUE = (wxUIntPtr)INVALID_HANDLE_VALUE>
 class AutoHANDLE
 {
 public:
-    wxEXPLICIT AutoHANDLE(HANDLE handle = InvalidHandle()) : m_handle(handle) { }
+    explicit AutoHANDLE(HANDLE handle = InvalidHandle()) : m_handle(handle) { }
 
     bool IsOk() const { return m_handle != InvalidHandle(); }
     operator HANDLE() const { return m_handle; }

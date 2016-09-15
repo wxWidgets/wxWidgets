@@ -145,7 +145,7 @@ public:
     {
     public:
         reverse_iterator() : m_ptr(NULL) { }
-        wxEXPLICIT reverse_iterator(iterator it) : m_ptr(it) { }
+        explicit reverse_iterator(iterator it) : m_ptr(it) { }
         reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
 
         reference operator*() const { return *m_ptr; }
@@ -189,7 +189,7 @@ public:
     {
     public:
         const_reverse_iterator() : m_ptr(NULL) { }
-        wxEXPLICIT const_reverse_iterator(const_iterator it) : m_ptr(it) { }
+        explicit const_reverse_iterator(const_iterator it) : m_ptr(it) { }
         const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
         const_reverse_iterator(const const_reverse_iterator& it) : m_ptr(it.m_ptr) { }
 

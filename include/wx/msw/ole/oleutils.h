@@ -285,7 +285,7 @@ private:
 class WXDLLIMPEXP_CORE wxVariantDataSafeArray : public wxVariantData
 {
 public:
-    wxEXPLICIT wxVariantDataSafeArray(SAFEARRAY* value = NULL)
+    explicit wxVariantDataSafeArray(SAFEARRAY* value = NULL)
     {
         m_value = value;
     }

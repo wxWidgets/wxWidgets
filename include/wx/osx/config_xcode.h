@@ -21,7 +21,6 @@
 #define __DARWIN__ 1
 #define wx_USE_NANOX 0
 
-#define HAVE_EXPLICIT 1
 #define HAVE_VA_COPY 1
 #define HAVE_VARIADIC_MACROS 1
 #define HAVE_STD_WSTRING 1

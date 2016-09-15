@@ -1802,9 +1802,6 @@ if test "$HAVE_CXX11" != "1" ; then
 dnl check for iostream (as opposed to iostream.h) standard header
 WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 
-dnl check whether C++ compiler supports explicit keyword
-WX_CPP_EXPLICIT
-
 dnl the next few tests are all for C++ features and so need to be done using
 dnl C++ compiler
 AC_LANG_PUSH(C++)

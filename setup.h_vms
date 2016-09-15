@@ -782,11 +782,6 @@ typedef pid_t GPid;
 /* --- end MSW options --- */
 
 /*
- * Define if your compiler supports the explicit keyword
- */
-#define HAVE_EXPLICIT 1
-
-/*
  * Define if your compiler has C99 va_copy
  */
 #undef HAVE_VA_COPY

@@ -87,7 +87,7 @@ class wxDataViewItem : public wxItemId<void*>
 {
 public:
     wxDataViewItem() : wxItemId<void*>() { }
-    wxEXPLICIT wxDataViewItem(void* pItem) : wxItemId<void*>(pItem) { }
+    explicit wxDataViewItem(void* pItem) : wxItemId<void*>(pItem) { }
 };
 
 WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
