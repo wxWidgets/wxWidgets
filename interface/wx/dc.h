@@ -1865,7 +1865,7 @@ public:
         Set the font to use.
 
         This method is meant to be called once only and only on the objects
-        created with the constructor overload not taking wxColour argument and
+        created with the constructor overload not taking wxFont argument and
         has the same effect as the other constructor, i.e. sets the font to
         the given @a font and ensures that the old value is restored when this
         object is destroyed.
