@@ -2055,6 +2055,9 @@ public:
 protected:
     /** Deletes all child properties. */
     void Empty();
+
+    void SetFlag( wxPGPropertyFlags flag );
+    void ClearFlag( FlagType flag );
 };
 
 
