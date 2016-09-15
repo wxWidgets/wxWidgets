@@ -577,3 +577,11 @@ public:
     wxSize GetPrimarySize() const;
 };
 
+
+extern wxPGEditor* wxPGEditor_TextCtrl;
+extern wxPGEditor* wxPGEditor_Choice;
+extern wxPGEditor* wxPGEditor_ComboBox;
+extern wxPGEditor* wxPGEditor_TextCtrlAndButton;
+extern wxPGEditor* wxPGEditor_CheckBox;
+extern wxPGEditor* wxPGEditor_ChoiceAndButton;
+

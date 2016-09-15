@@ -346,3 +346,6 @@ public:
         wxWindow* wnd, wxEvent& event ) const;
 };
 
+
+extern wxPGEditor* wxPGEditor_SpinCtrl;
+extern wxPGEditor* wxPGEditor_DatePickerCtrl;
