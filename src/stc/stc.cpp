@@ -136,6 +136,7 @@ wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_COPY, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
 
 
 
@@ -5363,14 +5364,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_PAINTED);
         break;
 
-    case SCN_AUTOCSELECTION:
-        evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION);
-        evt.SetListType(scn.listType);
-        SetEventText(evt, scn.text, strlen(scn.text));
-        evt.SetPosition(scn.lParam);
-        evt.SetListCompletionMethod(scn.listCompletionMethod);
-        break;
-
     case SCN_USERLISTSELECTION:
         evt.SetEventType(wxEVT_STC_USERLISTSELECTION);
         evt.SetListType(scn.listType);
@@ -5408,8 +5401,8 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_HOTSPOT_DCLICK);
         break;
 
-    case SCN_CALLTIPCLICK:
-        evt.SetEventType(wxEVT_STC_CALLTIP_CLICK);
+    case SCN_HOTSPOTRELEASECLICK:
+        evt.SetEventType(wxEVT_STC_HOTSPOT_RELEASE_CLICK);
         break;
 
     case SCN_INDICATORCLICK:
@@ -5420,6 +5413,18 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_INDICATOR_RELEASE);
         break;
 
+    case SCN_CALLTIPCLICK:
+        evt.SetEventType(wxEVT_STC_CALLTIP_CLICK);
+        break;
+
+    case SCN_AUTOCSELECTION:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION);
+        evt.SetListType(scn.listType);
+        SetEventText(evt, scn.text, strlen(scn.text));
+        evt.SetPosition(scn.lParam);
+        evt.SetListCompletionMethod(scn.listCompletionMethod);
+        break;
+
     case SCN_AUTOCCANCELLED:
         evt.SetEventType(wxEVT_STC_AUTOCOMP_CANCELLED);
         break;
@@ -5428,8 +5433,12 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_AUTOCOMP_CHAR_DELETED);
         break;
 
-    case SCN_HOTSPOTRELEASECLICK:
-        evt.SetEventType(wxEVT_STC_HOTSPOT_RELEASE_CLICK);
+    case SCN_AUTOCCOMPLETED:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_COMPLETED);
+        evt.SetListType(scn.listType);
+        SetEventText(evt, scn.text, strlen(scn.text));
+        evt.SetPosition(scn.lParam);
+        evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
     default:

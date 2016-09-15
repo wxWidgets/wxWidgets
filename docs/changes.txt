@@ -104,6 +104,7 @@ All (GUI):
 - Add support for affine transformation matrix in wxGCDC.
 - Add wxGraphicsContext::Flush() for Cairo renderer.
 - Add wxStyledTextEvent::GetListCompletionMethod() (NewPagodi).
+- Add wxEVT_STC_AUTOCOMP_COMPLETED event (NewPagodi).
 
 wxGTK:
 

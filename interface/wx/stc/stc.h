@@ -2801,6 +2801,10 @@
         Process a @c wxEVT_STC_CLIPBOARD_PASTE event, generated when text is being pasted from the clipboard. Use wxStyledTextEvent::SetString() to modify the text that will be inserted into the control. Valid event functions: @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink.
         @since 3.1.0
 
+    @event{EVT_STC_AUTOCOMP_COMPLETED(id, fn)}
+        Process a @c wxEVT_STC_AUTOCOMP_COMPLETED event, generated after an autocompletion list has closed and inserted its text into the control. Valid event functions: @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::GetKey GetKey@endlink, @link wxStyledTextEvent::GetListCompletionMethod GetListCompletionMethod@endlink.
+        @since 3.1.1
+
     @endEventTable
 
     @library{wxstc}
