@@ -105,6 +105,7 @@ All (GUI):
 - Add wxGraphicsContext::Flush() for Cairo renderer.
 - Add wxStyledTextEvent::GetListCompletionMethod() (NewPagodi).
 - Add wxEVT_STC_AUTOCOMP_COMPLETED event (NewPagodi).
+- Fix retrieving bounding box for wxDC with transformed coordinates.
 
 wxGTK:
 

@@ -325,6 +325,9 @@ public:
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)
     {
+      // Bounding box is internally stored in device units.
+      x = LogicalToDeviceX(x);
+      y = LogicalToDeviceY(y);
       if ( m_isBBoxValid )
       {
          if ( x < m_minX ) m_minX = x;
@@ -349,10 +352,11 @@ public:
         m_minX = m_maxX = m_minY = m_maxY = 0;
     }
 
-    wxCoord MinX() const { return m_minX; }
-    wxCoord MaxX() const { return m_maxX; }
-    wxCoord MinY() const { return m_minY; }
-    wxCoord MaxY() const { return m_maxY; }
+    // Get bounding box in logical units.
+    wxCoord MinX() const { return m_isBBoxValid ? DeviceToLogicalX(m_minX) : 0; }
+    wxCoord MaxX() const { return m_isBBoxValid ? DeviceToLogicalX(m_maxX) : 0; }
+    wxCoord MinY() const { return m_isBBoxValid ? DeviceToLogicalY(m_minY) : 0; }
+    wxCoord MaxY() const { return m_isBBoxValid ? DeviceToLogicalY(m_maxY) : 0; }
 
     // setters and getters
 
@@ -712,8 +716,8 @@ protected:
                  m_mm_to_pix_y;
 
     // bounding and clipping boxes
-    wxCoord m_minX, m_minY, m_maxX, m_maxY;
-    wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;
+    wxCoord m_minX, m_minY, m_maxX, m_maxY; // Bounding box is stored in device units.
+    wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;  // Clipping box is stored in logical units.
 
     wxRasterOperationMode m_logicalFunction;
     int m_backgroundMode;
