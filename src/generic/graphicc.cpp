@@ -1266,7 +1266,8 @@ wxGraphicsObjectRefData *wxCairoMatrixData::Clone() const
 // concatenates the matrix
 void wxCairoMatrixData::Concat( const wxGraphicsMatrixData *t )
 {
-    cairo_matrix_multiply( &m_matrix, &m_matrix, (cairo_matrix_t*) t->GetNativeMatrix());
+    // The parameter matrix (t) is the multiplicand.
+    cairo_matrix_multiply(&m_matrix, (cairo_matrix_t*) t->GetNativeMatrix(), &m_matrix);
 }
 
 // sets the matrix to the respective values
