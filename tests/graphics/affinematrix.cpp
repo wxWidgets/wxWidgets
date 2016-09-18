@@ -38,9 +38,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( AffineTransformTestCase );
         CPPUNIT_TEST( InvertMatrix );
+        CPPUNIT_TEST( Concat );
     CPPUNIT_TEST_SUITE_END();
 
     void InvertMatrix();
+    void Concat();
 
     wxDECLARE_NO_COPY_CLASS(AffineTransformTestCase);
 };
@@ -72,6 +74,27 @@ void AffineTransformTestCase::InvertMatrix()
 
     matrix2.Concat(matrix1);
     CPPUNIT_ASSERT( matrix2.IsIdentity() );
+}
+
+void AffineTransformTestCase::Concat()
+{
+    wxAffineMatrix2D m1;
+    m1.Set(wxMatrix2D(0.9, 0.4, -0.4, 0.9), wxPoint2DDouble(0.0, 0.0));
+    wxAffineMatrix2D m2;
+    m2.Set(wxMatrix2D(1.0, 0.0, 0.0, 1.0), wxPoint2DDouble(3.0, 5.0));
+    m1.Concat(m2);
+
+    wxMatrix2D m;
+    wxPoint2DDouble p;
+    m1.Get(&m, &p);
+
+    const double delta = 0.01;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.9, m.m_11, delta );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.4, m.m_12, delta );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( -0.4, m.m_21, delta );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.9, m.m_22, delta );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.7, p.m_x, delta );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 5.7, p.m_y, delta );
 }
 
 #if wxUSE_DC_TRANSFORM_MATRIX
