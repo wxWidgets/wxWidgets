@@ -867,6 +867,8 @@ public:
     wxD2DMatrixData(wxGraphicsRenderer* renderer);
     wxD2DMatrixData(wxGraphicsRenderer* renderer, const D2D1::Matrix3x2F& matrix);
 
+    virtual wxGraphicsObjectRefData* Clone() const wxOVERRIDE;
+
     void Concat(const wxGraphicsMatrixData* t) wxOVERRIDE;
 
     void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
@@ -911,6 +913,11 @@ wxD2DMatrixData::wxD2DMatrixData(wxGraphicsRenderer* renderer) : wxGraphicsMatri
 wxD2DMatrixData::wxD2DMatrixData(wxGraphicsRenderer* renderer, const D2D1::Matrix3x2F& matrix) :
     wxGraphicsMatrixData(renderer), m_matrix(matrix)
 {
+}
+
+wxGraphicsObjectRefData* wxD2DMatrixData::Clone() const
+{
+    return new wxD2DMatrixData(GetRenderer(), m_matrix);
 }
 
 void wxD2DMatrixData::Concat(const wxGraphicsMatrixData* t)
