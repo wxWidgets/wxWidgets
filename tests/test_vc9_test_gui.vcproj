@@ -991,6 +991,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\graphics\graphmatrix.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sizers\gridsizer.cpp"
 				>
 			</File>

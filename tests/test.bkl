@@ -181,6 +181,7 @@
             graphics/affinematrix.cpp
             graphics/boundingbox.cpp
             graphics/clippingbox.cpp
+            graphics/graphmatrix.cpp
             config/config.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
