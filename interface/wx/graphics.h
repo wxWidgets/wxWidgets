@@ -1525,10 +1525,21 @@ class wxGraphicsMatrix : public wxGraphicsObject
 public:
     /**
         Concatenates the matrix passed with the current matrix.
+        The effect of the resulting transformation is to first apply
+        the transformation in @a t to the coordinates and then apply
+        the transformation in the current matrix to the coordinates.
+
+        @code
+        // matrix = t x matrix
+        @endcode
+
+        @param t
+            The parameter matrix is the multiplicand.
     */
     virtual void Concat(const wxGraphicsMatrix* t);
+
     /**
-        Concatenates the matrix passed with the current matrix.
+        @overload
     */
     void Concat(const wxGraphicsMatrix& t);
 

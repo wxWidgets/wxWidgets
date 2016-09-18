@@ -915,7 +915,12 @@ wxD2DMatrixData::wxD2DMatrixData(wxGraphicsRenderer* renderer, const D2D1::Matri
 
 void wxD2DMatrixData::Concat(const wxGraphicsMatrixData* t)
 {
-    m_matrix.SetProduct(m_matrix, static_cast<const wxD2DMatrixData*>(t)->m_matrix);
+    // Elements of resulting matrix are modified in-place in SetProduct()
+    // so multiplied matrices cannot be the instances of the resulting matrix.
+    // Note that parameter matrix (t) is the multiplicand.
+    const D2D1::Matrix3x2F m1(static_cast<const wxD2DMatrixData*>(t)->m_matrix);
+    const D2D1::Matrix3x2F m2(m_matrix);
+    m_matrix.SetProduct(m1, m2);
 }
 
 void wxD2DMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, wxDouble tx, wxDouble ty)
