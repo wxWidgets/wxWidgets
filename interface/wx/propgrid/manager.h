@@ -106,7 +106,7 @@ public:
     virtual void Init();
 
     /**
-        Return @false here to indicate unhandled events should be
+        Return false here to indicate unhandled events should be
         propagated to manager's parent, as normal.
     */
     virtual bool IsHandlingAllEvents() const;
@@ -143,8 +143,8 @@ public:
 
     wxPropertyGridManager inherits from wxPropertyGridInterface, and as such
     it has most property manipulation functions. However, only some of them affect
-    properties on all pages (e.g. GetPropertyByName() and ExpandAll()), while some
-    (e.g. Append()) only apply to the currently selected page.
+    properties on all pages (eg. GetPropertyByName() and ExpandAll()), while some
+    (eg. Append()) only apply to the currently selected page.
 
     To operate explicitly on properties on specific page, use
     wxPropertyGridManager::GetPage() to obtain pointer to page's
@@ -172,6 +172,8 @@ public:
             wxPG_TOOLBAR |
             // Include description box.
             wxPG_DESCRIPTION |
+            // Include compactor.
+            wxPG_COMPACTOR |
             // Plus defaults.
             wxPGMAN_DEFAULT_STYLE
            );
@@ -212,8 +214,16 @@ class wxPropertyGridManager : public wxPanel, public wxPropertyGridInterface
 {
 public:
     /**
-        The default constructor. The styles to be used are styles valid for
-        the wxWindow.
+        Two step constructor.
+        Call Create when this constructor is called to build up the
+        wxPropertyGridManager.
+      */
+    wxPropertyGridManager();
+
+    /**
+       The default constructor. The styles to be used are styles valid for
+       the wxWindow.
+       @see @link wndflags Additional Window Styles @endlink
     */
     wxPropertyGridManager( wxWindow *parent, wxWindowID id = wxID_ANY,
                            const wxPoint& pos = wxDefaultPosition,
@@ -221,9 +231,7 @@ public:
                            long style = wxPGMAN_DEFAULT_STYLE,
                            const wxString& name = wxPropertyGridManagerNameStr );
 
-    /**
-        Destructor.
-    */
+    /** Destructor */
     virtual ~wxPropertyGridManager();
 
     /**
@@ -285,7 +293,7 @@ public:
         Enables or disables (shows/hides) categories according to parameter enable.
 
         @remarks
-            Calling this may not properly update toolbar buttons.
+            Calling his may not properly update toolbar buttons.
     */
     bool EnableCategories( bool enable );
 
@@ -317,7 +325,7 @@ public:
     wxPropertyGrid* GetGrid();
 
     /**
-        Similar to GetIterator(), but instead returns wxPGVIterator instance,
+        Similar to GetIterator, but instead returns wxPGVIterator instance,
         which can be useful for forward-iterating through arbitrary property
         containers.
     */
@@ -397,7 +405,7 @@ public:
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this
-            object. If @NULL, default page object is constructed.
+            object. If NULL, default page object is constructed.
 
         @return Returns pointer to created page.
     */
@@ -437,7 +445,7 @@ public:
         Select and displays a given page.
 
         @param index
-            Index of page being selected. Can be -1 to select nothing.
+            Index of page being seleced. Can be -1 to select nothing.
     */
     void SelectPage( int index );
 
