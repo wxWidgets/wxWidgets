@@ -561,7 +561,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
         }
 
         wxArrayString dirs;
-        wxStringTokenizer tokenizer(xdgDataDirs, ":");
+        wxStringTokenizer tokenizer(xdgDataDirs, ":", wxTOKEN_STRTOK);
         while ( tokenizer.HasMoreTokens() )
         {
             wxString p = tokenizer.GetNextToken();
