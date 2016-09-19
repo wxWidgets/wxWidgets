@@ -204,6 +204,27 @@ class wxPropertyGridManager : public wxPanel, public wxPropertyGridInterface
 {
 public:
     /**
+        Two step constructor.
+        Call Create when this constructor is called to build up the
+        wxPropertyGridManager.
+      */
+    wxPropertyGridManager();
+
+    /**
+       The default constructor. The styles to be used are styles valid for
+       the wxWindow.
+       @see @link wndflags Additional Window Styles @endlink
+    */
+    wxPropertyGridManager( wxWindow *parent, wxWindowID id = wxID_ANY,
+                           const wxPoint& pos = wxDefaultPosition,
+                           const wxSize& size = wxDefaultSize,
+                           long style = wxPGMAN_DEFAULT_STYLE,
+                           const wxString& name = wxPropertyGridManagerNameStr );
+
+    /** Destructor */
+    virtual ~wxPropertyGridManager();
+
+    /**
         Creates new property page. Note that the first page is not created
         automatically.
 
