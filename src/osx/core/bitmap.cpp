@@ -35,10 +35,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 #include "wx/osx/private.h"
 #endif
 
-#ifndef __WXOSX_IPHONE__
-#include <QuickTime/QuickTime.h>
-#endif
-
 CGColorSpaceRef wxMacGetGenericRGBColorSpace();
 CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
 

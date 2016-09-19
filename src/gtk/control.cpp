@@ -250,6 +250,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         stateFlag = GTK_STATE_FLAG_ACTIVE;
     }
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
+    gtk_style_context_save(sc);
     GdkRGBA c;
     gtk_style_context_set_state(sc, stateFlag);
     gtk_style_context_get_color(sc, stateFlag, &c);
@@ -260,6 +261,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     gtk_style_context_get(
         sc, stateFlag, GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
     attr.font = wxFont(info);
+    gtk_style_context_restore(sc);
 #else
     GtkStyle* style;
 

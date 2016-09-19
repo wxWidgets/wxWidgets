@@ -613,11 +613,13 @@ All (GUI):
 - Accept wxALIGN_CENTRE_HORIZONTAL in wxStaticText XRC handler (David Hart).
 - Fix appearance after updating a wxGrid with hidden rows/columns (iwbnwif).
 - Make wxAuiNotebookXmlHandler actually work.
+- Fix key handling in wxStyledTextCtrl in non-Unicode build (David Costanzo).
 
 wxGTK:
 
 - Fix infinite sizing loop with GTK3 when using wxScrolled with a non-default
   target window.
+- Fix wxBitmap ctor from XBM for non-square bitmaps.
 - Fix crashes in wxGTK3 when running with non-X11 backend (Marco Trevisan).
 - Fix coordinates of wxSetCursorEvent propagated to parent windows.
 - Fix GTK+ warnings when refreshing wxListCtrl items (Scott Talbert).
@@ -627,6 +629,7 @@ wxGTK:
 wxMSW:
 
 - Fix compilation with g++ 4.9 in non-C++11 mode.
+- Fix rendering of owner drawn multi-column menus (Pete Bannister).
 - Fix regression in accessibility support (Leland Lucius).
 - Fix regression in wxDC drawing with bottom-to-top y axis (Artur Wieczorek).
 - Fix compilation with C++Builder XE compiler (Nichka).
