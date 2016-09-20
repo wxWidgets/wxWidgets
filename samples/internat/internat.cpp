@@ -94,7 +94,16 @@ enum
     INTERNAT_TEST_1,
     INTERNAT_TEST_2,
     INTERNAT_TEST_3,
-    INTERNAT_TEST_MSGBOX
+    INTERNAT_TEST_MSGBOX,
+    INTERNAT_MACRO_1,
+    INTERNAT_MACRO_2,
+    INTERNAT_MACRO_3,
+    INTERNAT_MACRO_4,
+    INTERNAT_MACRO_5,
+    INTERNAT_MACRO_6,
+    INTERNAT_MACRO_7,
+    INTERNAT_MACRO_8,
+    INTERNAT_MACRO_9
 };
 
 // language data
@@ -308,9 +317,21 @@ MyFrame::MyFrame(wxLocale& locale)
     test_menu->Append(INTERNAT_TEST_MSGBOX, _("&Message box test"),
                       _("Tests message box buttons labels translation"));
 
+    wxMenu *macro_menu = new wxMenu;
+    macro_menu->Append(INTERNAT_MACRO_1, _("item"));
+    macro_menu->Append(INTERNAT_MACRO_2, wxCONTEXT("cont1", "item"));
+    macro_menu->Append(INTERNAT_MACRO_3, wxCONTEXT("cont2", "item"));
+    macro_menu->Append(INTERNAT_MACRO_4, wxPLURAL("sing", "plur", 1));
+    macro_menu->Append(INTERNAT_MACRO_5, wxPLURAL("sing", "plur", 2));
+    macro_menu->Append(INTERNAT_MACRO_6, wxCONTEXTPLURAL("cont1", "sing", "plur", 1));
+    macro_menu->Append(INTERNAT_MACRO_7, wxCONTEXTPLURAL("cont1", "sing", "plur", 2));
+    macro_menu->Append(INTERNAT_MACRO_8, wxCONTEXTPLURAL("cont2", "sing", "plur", 1));
+    macro_menu->Append(INTERNAT_MACRO_9, wxCONTEXTPLURAL("cont2", "sing", "plur", 2));
+
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _("&File"));
     menu_bar->Append(test_menu, _("&Test"));
+    menu_bar->Append(macro_menu, _("&Macro"));
     SetMenuBar(menu_bar);
 
     // this demonstrates RTL support in wxStatusBar:
