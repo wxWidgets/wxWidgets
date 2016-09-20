@@ -223,8 +223,6 @@ protected:
     wxAffineMatrix2D m_matrixExtTransform;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
-    double m_formerScaleX, m_formerScaleY;
-
     wxGraphicsContext* m_graphicContext;
 
     bool m_isClipBoxValid;
