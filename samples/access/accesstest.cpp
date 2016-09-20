@@ -637,7 +637,7 @@ wxAccStatus SplitterWindowAccessible::HitTest(const wxPoint& pt, int* childId, w
         if (splitter->IsSplit())
         {
             wxPoint clientPt = splitter->ScreenToClient(pt);
-            if (splitter->SashHitTest(clientPt.x, clientPt.y, 1))
+            if (splitter->SashHitTest(clientPt.x, clientPt.y))
             {
                 // We're over the sash
                 *childId = 2;
