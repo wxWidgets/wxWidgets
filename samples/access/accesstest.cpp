@@ -533,7 +533,6 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
 
         if (S_OK == obj->get_accChild(var, & pDisp) && pDisp)
         {
-            wxString str;
             str.Printf(wxT("This is a real object."));
             str.Pad(indent+4, wxT(' '), false);
             Log(str);
@@ -547,7 +546,6 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
         }
         else
         {
-            wxString str;
             str.Printf(wxT("This is an element."));
             str.Pad(indent+4, wxT(' '), false);
             Log(str);
