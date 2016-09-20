@@ -106,6 +106,7 @@ All (GUI):
 - Add wxStyledTextEvent::GetListCompletionMethod() (NewPagodi).
 - Add wxEVT_STC_AUTOCOMP_COMPLETED event (NewPagodi).
 - Fix retrieving bounding box for wxDC with transformed coordinates.
+- Fix wxGraphicsMatrixData::Concat() for Direct2D and Cairo renderers.
 
 wxGTK:
 
