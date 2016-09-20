@@ -1352,7 +1352,7 @@ wxMsgCatalog *wxMsgCatalog::CreateFromData(const wxScopedCharBuffer& data,
     return cat.release();
 }
 
-const wxString *wxMsgCatalog::GetString(const wxString& str, unsigned n) const
+const wxString *wxMsgCatalog::GetString(const wxString& str, unsigned n, const wxString& context) const
 {
     int index = 0;
     if (n != UINT_MAX)
@@ -1362,11 +1362,17 @@ const wxString *wxMsgCatalog::GetString(const wxString& str, unsigned n) const
     wxStringToStringHashMap::const_iterator i;
     if (index != 0)
     {
-        i = m_messages.find(wxString(str) + wxChar(index));   // plural
+        if (context.IsEmpty())
+            i = m_messages.find(wxString(str) + wxChar(index));   // plural, no context
+        else
+            i = m_messages.find(wxString(context) + wxString('\x04') + wxString(str) + wxChar(index));   // plural, context
     }
     else
     {
-        i = m_messages.find(str);
+        if (context.IsEmpty())
+            i = m_messages.find(str); // no context
+        else
+            i = m_messages.find(wxString(context) + wxString('\x04') + wxString(str)); // context
     }
 
     if ( i != m_messages.end() )
@@ -1631,14 +1637,16 @@ const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
-                                                    const wxString& domain) const
+                                                    const wxString& domain,
+                                                    const wxString& context) const
 {
-    return GetTranslatedString(origString, UINT_MAX, domain);
+    return GetTranslatedString(origString, UINT_MAX, domain, context);
 }
 
 const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
                                                     unsigned n,
-                                                    const wxString& domain) const
+                                                    const wxString& domain,
+                                                    const wxString& context) const
 {
     if ( origString.empty() )
         return NULL;
@@ -1652,14 +1660,14 @@ const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
 
         // does the catalog exist?
         if ( pMsgCat != NULL )
-            trans = pMsgCat->GetString(origString, n);
+            trans = pMsgCat->GetString(origString, n, context);
     }
     else
     {
         // search in all domains
         for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
         {
-            trans = pMsgCat->GetString(origString, n);
+            trans = pMsgCat->GetString(origString, n, context);
             if ( trans != NULL )   // take the first found
                 break;
         }
@@ -1670,17 +1678,17 @@ const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
         wxLogTrace
         (
             TRACE_I18N,
-            "string \"%s\"%s not found in %slocale '%s'.",
+            "string \"%s\"%s not found in %s%slocale '%s'.",
             origString,
             (n != UINT_MAX ? wxString::Format("[%ld]", (long)n) : wxString()),
             (!domain.empty() ? wxString::Format("domain '%s' ", domain) : wxString()),
+            (!context.empty() ? wxString::Format("context '%s' ", context) : wxString()),
             m_lang
         );
     }
 
     return trans;
 }
-
 
 wxString wxTranslations::GetHeaderValue(const wxString& header,
                                         const wxString& domain) const

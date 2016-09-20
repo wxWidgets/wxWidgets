@@ -32,11 +32,14 @@
 // ----------------------------------------------------------------------------
 
 // gettext() style macros (notice that xgettext should be invoked with
-// --keyword="_" --keyword="wxPLURAL:1,2" options
-// to extract the strings from the sources)
+// --keyword="_" --keyword="wxPLURAL:1,2" --keyword="wxCONTEXT:1c,2" 
+// --keyword="wxCONTEXTPLURAL:1c,2,3" options to extract the strings from the
+// sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-    #define _(s)                     wxGetTranslation((s))
-    #define wxPLURAL(sing, plur, n)  wxGetTranslation((sing), (plur), n)
+    #define _(s)                               wxGetTranslation((s))
+    #define wxPLURAL(sing, plur, n)            wxGetTranslation((sing), (plur), n)
+    #define wxCONTEXT(c, s)                    wxGetTranslation((s), wxString(), c)
+    #define wxCONTEXTPLURAL(c, sing, plur, n)  wxGetTranslation((sing), (plur), n, wxString(), c)
 #endif
 
 // another one which just marks the strings for extraction, but doesn't
@@ -79,7 +82,7 @@ public:
     wxString GetDomain() const { return m_domain; }
 
     // get the translated string: returns NULL if not found
-    const wxString *GetString(const wxString& sz, unsigned n = UINT_MAX) const;
+    const wxString *GetString(const wxString& sz, unsigned n = UINT_MAX, const wxString& ct = wxEmptyString) const;
 
 protected:
     wxMsgCatalog(const wxString& domain)
@@ -154,10 +157,12 @@ public:
 
     // access to translations
     const wxString *GetTranslatedString(const wxString& origString,
-                                        const wxString& domain = wxEmptyString) const;
+                                        const wxString& domain = wxEmptyString,
+                                        const wxString& context = wxEmptyString) const;
     const wxString *GetTranslatedString(const wxString& origString,
                                         unsigned n,
-                                        const wxString& domain = wxEmptyString) const;
+                                        const wxString& domain = wxEmptyString,
+                                        const wxString& context = wxEmptyString) const;
 
     wxString GetHeaderValue(const wxString& header,
                             const wxString& domain = wxEmptyString) const;
@@ -247,10 +252,11 @@ protected:
 
 // get the translation of the string in the current locale
 inline const wxString& wxGetTranslation(const wxString& str,
-                                        const wxString& domain = wxString())
+                                        const wxString& domain = wxString(),
+                                        const wxString& context = wxString())
 {
     wxTranslations *trans = wxTranslations::Get();
-    const wxString *transStr = trans ? trans->GetTranslatedString(str, domain)
+    const wxString *transStr = trans ? trans->GetTranslatedString(str, domain, context)
                                      : NULL;
     if ( transStr )
         return *transStr;
@@ -263,10 +269,11 @@ inline const wxString& wxGetTranslation(const wxString& str,
 inline const wxString& wxGetTranslation(const wxString& str1,
                                         const wxString& str2,
                                         unsigned n,
-                                        const wxString& domain = wxString())
+                                        const wxString& domain = wxString(),
+                                        const wxString& context = wxString())
 {
     wxTranslations *trans = wxTranslations::Get();
-    const wxString *transStr = trans ? trans->GetTranslatedString(str1, n, domain)
+    const wxString *transStr = trans ? trans->GetTranslatedString(str1, n, domain, context)
                                      : NULL;
     if ( transStr )
         return *transStr;
@@ -304,6 +311,10 @@ template<typename TString, typename TDomain>
 inline TString wxGetTranslation(TString str, TDomain WXUNUSED(domain))
     { return str; }
 
+template<typename TString, typename TDomain, typename TContext>
+inline TString wxGetTranslation(TString str, TDomain WXUNUSED(domain), TContext WXUNUSED(context))
+    { return str; }
+
 template<typename TString, typename TDomain>
 inline TString wxGetTranslation(TString str1, TString str2, size_t n)
     { return n == 1 ? str1 : str2; }
@@ -311,6 +322,12 @@ inline TString wxGetTranslation(TString str1, TString str2, size_t n)
 template<typename TString, typename TDomain>
 inline TString wxGetTranslation(TString str1, TString str2, size_t n,
                                 TDomain WXUNUSED(domain))
+    { return n == 1 ? str1 : str2; }
+
+template<typename TString, typename TDomain, typename TContext>
+inline TString wxGetTranslation(TString str1, TString str2, size_t n,
+                                TDomain WXUNUSED(domain), 
+                                TContext WXUNUSED(context))
     { return n == 1 ? str1 : str2; }
 
 #endif // wxUSE_INTL/!wxUSE_INTL
