@@ -164,13 +164,14 @@ struct wxFontMetrics
 
     @section dc_transform_support Support for Transformation Matrix
 
-    On some platforms (currently under MSW, GTK+ 3) wxDC has support for applying
-    an arbitrary affine transformation matrix to its coordinate system. (Since
-    3.1.1 this feature is also supported by wxGCDC in all ports.)
+    On some platforms (currently under MSW, GTK+ 3, OS X) wxDC has support for
+    applying an arbitrary affine transformation matrix to its coordinate system
+    (since 3.1.1 this feature is also supported by wxGCDC in all ports).
     Call CanUseTransformMatrix() to check if this support is available and then
     call SetTransformMatrix() if it is. If the transformation matrix is not
-    supported, SetTransformMatrix() always simply returns false and doesn't do
-    anything.
+    supported, SetTransformMatrix() always simply returns @c false and doesn't
+    do anything.
+
     This feature is only available when @c wxUSE_DC_TRANSFORM_MATRIX build
     option is enabled.
 

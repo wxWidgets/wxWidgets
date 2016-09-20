@@ -471,6 +471,11 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
         m_matrixCurrent.Scale( m_scaleX * m_signX, m_scaleY * m_signY );
 
         m_graphicContext->SetTransform( m_matrixOriginal );
+#if wxUSE_DC_TRANSFORM_MATRIX
+        // Concatenate extended transform (affine) with basic transform of coordinate system.
+        wxGraphicsMatrix mtxExt = m_graphicContext->CreateMatrix(m_matrixExtTransform);
+        m_matrixCurrent.Concat(mtxExt);
+#endif // wxUSE_DC_TRANSFORM_MATRIX
         m_graphicContext->ConcatTransform( m_matrixCurrent );
         m_isClipBoxValid = false;
     }
@@ -558,30 +563,23 @@ bool wxGCDCImpl::CanUseTransformMatrix() const
 
 bool wxGCDCImpl::SetTransformMatrix(const wxAffineMatrix2D &matrix)
 {
-    wxGraphicsMatrix matGr = m_graphicContext->CreateMatrix(matrix);
-    m_graphicContext->SetTransform(matGr);
-
-    m_isClipBoxValid = false;
+    // Passed affine transform will be concatenated
+    // with current basic transform of the coordinate system.
+    m_matrixExtTransform = matrix;
+    ComputeScaleAndOrigin();
     return true;
 }
 
 wxAffineMatrix2D wxGCDCImpl::GetTransformMatrix() const
 {
-    wxMatrix2D mat2D;
-    wxPoint2DDouble tr;
-    wxGraphicsMatrix matGr = m_graphicContext->GetTransform();
-    matGr.Get(&mat2D.m_11, &mat2D.m_12, &mat2D.m_21, &mat2D.m_22, &tr.m_x, &tr.m_y);
-
-    wxAffineMatrix2D matrix;
-    matrix.Set(mat2D, tr);
-    return matrix;
+    return m_matrixExtTransform;
 }
 
 void wxGCDCImpl::ResetTransformMatrix()
 {
-    wxGraphicsMatrix matGr = m_graphicContext->CreateMatrix();
-    m_graphicContext->SetTransform(matGr);
-    m_isClipBoxValid = false;
+    // Reset affine transfrom matrix (extended) to identity matrix.
+    m_matrixExtTransform.Set(wxMatrix2D(), wxPoint2DDouble());
+    ComputeScaleAndOrigin();
 }
 
 #endif // wxUSE_DC_TRANSFORM_MATRIX

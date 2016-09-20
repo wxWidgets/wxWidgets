@@ -219,6 +219,9 @@ protected:
     bool m_logicalFunctionSupported;
     wxGraphicsMatrix m_matrixOriginal;
     wxGraphicsMatrix m_matrixCurrent;
+#if wxUSE_DC_TRANSFORM_MATRIX
+    wxAffineMatrix2D m_matrixExtTransform;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
     double m_formerScaleX, m_formerScaleY;
 
