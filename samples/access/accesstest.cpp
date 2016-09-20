@@ -404,7 +404,7 @@ void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
 {
     m_textCtrl->Clear();
     IAccessible* accessibleFrame = NULL;
-    if (S_OK != AccessibleObjectFromWindow((HWND) GetHWND(), OBJID_CLIENT,
+    if (S_OK != AccessibleObjectFromWindow((HWND) GetHWND(), (DWORD)OBJID_CLIENT,
         IID_IAccessible, (void**) & accessibleFrame))
     {
         Log(wxT("Could not get object."));
