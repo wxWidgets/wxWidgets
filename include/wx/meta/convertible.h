@@ -10,6 +10,8 @@
 #ifndef _WX_META_CONVERTIBLE_H_
 #define _WX_META_CONVERTIBLE_H_
 
+#include <stdlib.h>
+
 //
 // Introduce an extra class to make this header compilable with g++3.2
 //
