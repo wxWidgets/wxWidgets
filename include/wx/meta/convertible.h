@@ -18,8 +18,13 @@
 template <class D, class B>
 struct wxConvertibleTo_SizeHelper
 {
-    static char Match(B* pb);
-    static int  Match(...);
+    static char Match(B*, int);
+
+    // This needs to be a template in order to be able to rely on SFINAE in
+    // case D inherits from B but uses non-public inheritance, so that the cast
+    // from D* to B* exists but is inaccessible.
+    template <typename T>
+    static int  Match(D*, T);
 };
 
 // Helper to decide if an object of type D is convertible to type B (the test
@@ -30,7 +35,7 @@ struct wxConvertibleTo
     enum
     {
         value =
-            sizeof(wxConvertibleTo_SizeHelper<D,B>::Match(static_cast<D*>(NULL)))
+            sizeof(wxConvertibleTo_SizeHelper<D,B>::Match(static_cast<D*>(NULL), 0))
             ==
             sizeof(char)
     };

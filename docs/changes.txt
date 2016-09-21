@@ -75,6 +75,7 @@ All:
 - Handle strings with embedded NULs in wxDataStream (Nitch).
 - Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
 - Add wxString::cbegin() and cend() method (Lauri Nurmi).
+- Fix problem with Bind() in classes inheriting from wxEvtHandler non-publicly.
 
 All (GUI):
 
