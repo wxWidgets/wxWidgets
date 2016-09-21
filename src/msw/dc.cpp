@@ -2294,8 +2294,10 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         // if we already have a DIB, draw it using StretchDIBits(), otherwise
         // use StretchBlt() if available and finally fall back to BitBlt()
 
+        // Notice that we can't use StretchDIBits() when source and destination
+        // are the same as it can't, apparently, handle overlapping surfaces.
         const int caps = ::GetDeviceCaps(GetHdc(), RASTERCAPS);
-        if ( bmpSrc.IsOk() && (caps & RC_STRETCHDIB) )
+        if ( bmpSrc.IsOk() && (GetHdc() != hdcSrc) && (caps & RC_STRETCHDIB) )
         {
             DIBSECTION ds;
             wxZeroMemory(ds);
