@@ -134,6 +134,7 @@ wxMSW:
 - Fix wxGraphicsMatrix::TransformDistance for Direct2D renderer.
 - Fix wxDC::Clear() for rotated DC.
 - Fix wxDC::GetClippingBox() for transformed wxDC.
+- Fix wxMemoryDC::Blit() with itself as source (Tim Roberts).
 
 wxOSX:
 
