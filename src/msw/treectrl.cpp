@@ -579,7 +579,7 @@ public:
                 DoTraverse(tree->GetRootItem());
         }
 
-    virtual bool OnVisit(const wxTreeItemId& item)
+    virtual bool OnVisit(const wxTreeItemId& item) wxOVERRIDE
     {
         const wxTreeCtrl * const tree = GetTree();
 
@@ -619,7 +619,7 @@ public:
             DoTraverse(root, recursively);
         }
 
-    virtual bool OnVisit(const wxTreeItemId& WXUNUSED(item))
+    virtual bool OnVisit(const wxTreeItemId& WXUNUSED(item)) wxOVERRIDE
     {
         m_count++;
 

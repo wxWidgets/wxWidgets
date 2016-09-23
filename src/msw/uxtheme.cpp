@@ -43,8 +43,8 @@
 class wxUxThemeModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit()
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE
     {
         if ( wxUxThemeEngine::ms_themeEngine )
         {

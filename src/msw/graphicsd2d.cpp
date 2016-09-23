@@ -3193,7 +3193,7 @@ public:
     }
 
 protected:
-    void DoAcquireResource()
+    void DoAcquireResource() wxOVERRIDE
     {
         wxCOMPtr<ID2D1DCRenderTarget> renderTarget;
         D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties = D2D1::RenderTargetProperties(

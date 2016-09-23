@@ -80,27 +80,27 @@ public:
 
     // resolve ambiguities among virtual functions inherited from both base
     // classes
-    virtual void Clear();
-    virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
-    virtual wxString GetStringSelection() const
+    virtual void Clear() wxOVERRIDE;
+    virtual wxString GetValue() const wxOVERRIDE;
+    virtual void SetValue(const wxString& value) wxOVERRIDE;
+    virtual wxString GetStringSelection() const wxOVERRIDE
         { return wxChoice::GetStringSelection(); }
     virtual void Popup() { MSWDoPopupOrDismiss(true); }
     virtual void Dismiss() { MSWDoPopupOrDismiss(false); }
-    virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
-    virtual void SetSelection(long from, long to)
+    virtual void SetSelection(int n) wxOVERRIDE { wxChoice::SetSelection(n); }
+    virtual void SetSelection(long from, long to) wxOVERRIDE
         { wxTextEntry::SetSelection(from, to); }
-    virtual int GetSelection() const { return wxChoice::GetSelection(); }
-    virtual bool ContainsHWND(WXHWND hWnd) const;
-    virtual void GetSelection(long *from, long *to) const;
+    virtual int GetSelection() const wxOVERRIDE { return wxChoice::GetSelection(); }
+    virtual bool ContainsHWND(WXHWND hWnd) const wxOVERRIDE;
+    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
 
-    virtual bool IsEditable() const;
+    virtual bool IsEditable() const wxOVERRIDE;
 
     // implementation only from now on
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
     bool MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-    bool MSWShouldPreProcessMessage(WXMSG *pMsg);
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    bool MSWShouldPreProcessMessage(WXMSG *pMsg) wxOVERRIDE;
 
     // Standard event handling
     void OnCut(wxCommandEvent& event);
@@ -119,24 +119,24 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
 
 #if wxUSE_UXTHEME
     // override wxTextEntry method to work around Windows bug
-    virtual bool SetHint(const wxString& hint);
+    virtual bool SetHint(const wxString& hint) wxOVERRIDE;
 #endif // wxUSE_UXTHEME
 
     virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
 
 protected:
 #if wxUSE_TOOLTIPS
-    virtual void DoSetToolTip(wxToolTip *tip);
+    virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE;
 #endif
 
-    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
 
     // Override this one to avoid eating events from our popup listbox.
-    virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const;
+    virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const wxOVERRIDE;
 
     // this is the implementation of GetEditHWND() which can also be used when
     // we don't have the edit control, it simply returns NULL then
@@ -147,7 +147,7 @@ protected:
     // just testing for IsEditable() and using GetEditHWND() should be enough
     WXHWND GetEditHWNDIfAvailable() const;
 
-    virtual void EnableTextChangedEvents(bool enable)
+    virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE
     {
         m_allowTextEvents = enable;
     }
@@ -155,8 +155,8 @@ protected:
 private:
     // there are the overridden wxTextEntry methods which should only be called
     // when we do have an edit control so they assert if this is not the case
-    virtual wxWindow *GetEditableWindow();
-    virtual WXHWND GetEditHWND() const;
+    virtual wxWindow *GetEditableWindow() wxOVERRIDE;
+    virtual WXHWND GetEditHWND() const wxOVERRIDE;
 
     // common part of all ctors
     void Init()

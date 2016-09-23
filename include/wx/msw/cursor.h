@@ -39,7 +39,7 @@ public:
 protected:
     void InitFromStock(wxStockCursor);
 
-    virtual wxGDIImageRefData *CreateData() const;
+    virtual wxGDIImageRefData *CreateData() const wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxCursor);

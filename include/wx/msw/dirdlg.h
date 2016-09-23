@@ -22,9 +22,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
 
-    void SetPath(const wxString& path);
+    void SetPath(const wxString& path) wxOVERRIDE;
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
 private:
     // The real implementations of ShowModal(), used for Windows versions

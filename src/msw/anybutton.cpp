@@ -158,32 +158,32 @@ public:
         }
     }
 
-    virtual wxBitmap GetBitmap(wxAnyButton::State which) const
+    virtual wxBitmap GetBitmap(wxAnyButton::State which) const wxOVERRIDE
     {
         return m_bitmaps[which];
     }
 
-    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which)
+    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) wxOVERRIDE
     {
         m_bitmaps[which] = bitmap;
     }
 
-    virtual wxSize GetBitmapMargins() const
+    virtual wxSize GetBitmapMargins() const wxOVERRIDE
     {
         return m_margin;
     }
 
-    virtual void SetBitmapMargins(wxCoord x, wxCoord y)
+    virtual void SetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE
     {
         m_margin = wxSize(x, y);
     }
 
-    virtual wxDirection GetBitmapPosition() const
+    virtual wxDirection GetBitmapPosition() const wxOVERRIDE
     {
         return m_dir;
     }
 
-    virtual void SetBitmapPosition(wxDirection dir)
+    virtual void SetBitmapPosition(wxDirection dir) wxOVERRIDE
     {
         m_dir = dir;
     }
@@ -254,12 +254,12 @@ public:
         UpdateImageInfo();
     }
 
-    virtual wxBitmap GetBitmap(wxAnyButton::State which) const
+    virtual wxBitmap GetBitmap(wxAnyButton::State which) const wxOVERRIDE
     {
         return m_iml.GetBitmap(which);
     }
 
-    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which)
+    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) wxOVERRIDE
     {
         m_iml.Replace(which, bitmap);
 
@@ -271,12 +271,12 @@ public:
         UpdateImageInfo();
     }
 
-    virtual wxSize GetBitmapMargins() const
+    virtual wxSize GetBitmapMargins() const wxOVERRIDE
     {
         return wxSize(m_data.margin.left, m_data.margin.top);
     }
 
-    virtual void SetBitmapMargins(wxCoord x, wxCoord y)
+    virtual void SetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE
     {
         RECT& margin = m_data.margin;
         margin.left =
@@ -290,7 +290,7 @@ public:
         }
     }
 
-    virtual wxDirection GetBitmapPosition() const
+    virtual wxDirection GetBitmapPosition() const wxOVERRIDE
     {
         switch ( m_data.uAlign )
         {
@@ -312,7 +312,7 @@ public:
         }
     }
 
-    virtual void SetBitmapPosition(wxDirection dir)
+    virtual void SetBitmapPosition(wxDirection dir) wxOVERRIDE
     {
         UINT alignNew;
         switch ( dir )

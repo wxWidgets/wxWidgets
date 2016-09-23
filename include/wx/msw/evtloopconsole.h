@@ -17,7 +17,7 @@ public:
     wxMSWEventLoopBase();
 
     // implement base class pure virtuals
-    virtual bool Pending() const;
+    virtual bool Pending() const wxOVERRIDE;
 
 protected:
     // get the next message from queue and return true or return false if we
@@ -37,15 +37,15 @@ public:
     wxConsoleEventLoop() { }
 
     // override/implement base class virtuals
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
-    virtual void WakeUp();
+    virtual bool Dispatch() wxOVERRIDE;
+    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
+    virtual void WakeUp() wxOVERRIDE;
 
     // Windows-specific function to process a single message
     virtual void ProcessMessage(WXMSG *msg);
 
 protected:
-    virtual void DoYieldFor(long eventsToProcess);
+    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
 };
 
 #endif // wxUSE_CONSOLE_EVENTLOOP

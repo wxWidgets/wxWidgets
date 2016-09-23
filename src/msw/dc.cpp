@@ -210,8 +210,8 @@ static bool gs_triedToLoadSetLayout = false;
 class wxGDIDLLsCleanupModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit()
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE
     {
         wxMSIMG32DLL.Unload();
         wxGDI32DLL.Unload();
@@ -2566,8 +2566,8 @@ void wxMSWDCImpl::ClearCache()
 class wxDCModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxMSWDCImpl::ClearCache(); }
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE { wxMSWDCImpl::ClearCache(); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxDCModule);

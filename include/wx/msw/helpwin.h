@@ -26,19 +26,19 @@ public:
     virtual ~wxWinHelpController() {}
 
     // Must call this to set the filename
-    virtual bool Initialize(const wxString& file);
-    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) { return Initialize( file ); }
+    virtual bool Initialize(const wxString& file) wxOVERRIDE;
+    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) wxOVERRIDE { return Initialize( file ); }
 
     // If file is "", reloads file given in Initialize
-    virtual bool LoadFile(const wxString& file = wxEmptyString);
-    virtual bool DisplayContents();
-    virtual bool DisplaySection(int sectionNo);
-    virtual bool DisplaySection(const wxString& section) { return KeywordSearch(section); }
-    virtual bool DisplayBlock(long blockNo);
-    virtual bool DisplayContextPopup(int contextId);
+    virtual bool LoadFile(const wxString& file = wxEmptyString) wxOVERRIDE;
+    virtual bool DisplayContents() wxOVERRIDE;
+    virtual bool DisplaySection(int sectionNo) wxOVERRIDE;
+    virtual bool DisplaySection(const wxString& section) wxOVERRIDE { return KeywordSearch(section); }
+    virtual bool DisplayBlock(long blockNo) wxOVERRIDE;
+    virtual bool DisplayContextPopup(int contextId) wxOVERRIDE;
     virtual bool KeywordSearch(const wxString& k,
-                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
-    virtual bool Quit();
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL) wxOVERRIDE;
+    virtual bool Quit() wxOVERRIDE;
 
     inline wxString GetHelpFile() const { return m_helpFile; }
 

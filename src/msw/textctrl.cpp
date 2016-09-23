@@ -126,8 +126,8 @@ public:
         Version_Max
     };
 
-    virtual bool OnInit();
-    virtual void OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE;
 
     // load the richedit DLL for the specified version of rich edit
     static bool Load(Version version);

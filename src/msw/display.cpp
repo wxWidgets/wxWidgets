@@ -83,14 +83,14 @@ public:
     {
     }
 
-    virtual wxRect GetGeometry() const;
-    virtual wxRect GetClientArea() const;
-    virtual wxString GetName() const;
-    virtual bool IsPrimary() const;
+    virtual wxRect GetGeometry() const wxOVERRIDE;
+    virtual wxRect GetClientArea() const wxOVERRIDE;
+    virtual wxString GetName() const wxOVERRIDE;
+    virtual bool IsPrimary() const wxOVERRIDE;
 
-    virtual wxVideoMode GetCurrentMode() const;
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
-    virtual bool ChangeMode(const wxVideoMode& mode);
+    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
+    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
 
 protected:
     // convert a DEVMODE to our wxVideoMode
@@ -135,10 +135,10 @@ public:
 
     bool IsOk() const { return !m_displays.empty(); }
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n);
-    virtual unsigned GetCount() { return unsigned(m_displays.size()); }
-    virtual int GetFromPoint(const wxPoint& pt);
-    virtual int GetFromWindow(const wxWindow *window);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual unsigned GetCount() wxOVERRIDE { return unsigned(m_displays.size()); }
+    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
 
     // Called when we receive WM_SETTINGCHANGE to refresh the list of monitor
     // handles.

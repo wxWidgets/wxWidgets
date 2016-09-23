@@ -92,7 +92,7 @@ public:
         m_icon = icon;
     }
 
-    virtual bool AddAction(wxWindowID WXUNUSED(actionid), const wxString &WXUNUSED(label))
+    virtual bool AddAction(wxWindowID WXUNUSED(actionid), const wxString &WXUNUSED(label)) wxOVERRIDE
     {
         // Actions are not supported in balloon notifications
         return false;

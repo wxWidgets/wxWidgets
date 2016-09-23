@@ -73,17 +73,17 @@ static WSAAsyncSelect_t gs_WSAAsyncSelect = NULL;
 class wxSocketMSWManager : public wxSocketManager
 {
 public:
-    virtual bool OnInit();
-    virtual void OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE;
 
-    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) wxOVERRIDE
     {
         return new wxSocketImplMSW(wxsocket);
     }
     virtual void Install_Callback(wxSocketImpl *socket,
-                                  wxSocketNotify event = wxSOCKET_LOST);
+                                  wxSocketNotify event = wxSOCKET_LOST) wxOVERRIDE;
     virtual void Uninstall_Callback(wxSocketImpl *socket,
-                                    wxSocketNotify event = wxSOCKET_LOST);
+                                    wxSocketNotify event = wxSOCKET_LOST) wxOVERRIDE;
 
 private:
     static wxDynamicLibrary gs_wsock32dll;

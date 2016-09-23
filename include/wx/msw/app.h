@@ -29,12 +29,12 @@ public:
     virtual ~wxApp();
 
     // override base class (pure) virtuals
-    virtual bool Initialize(int& argc, wxChar **argv);
-    virtual void CleanUp();
+    virtual bool Initialize(int& argc, wxChar **argv) wxOVERRIDE;
+    virtual void CleanUp() wxOVERRIDE;
 
-    virtual void WakeUpIdle();
+    virtual void WakeUpIdle() wxOVERRIDE;
 
-    virtual void SetPrintMode(int mode) { m_printMode = mode; }
+    virtual void SetPrintMode(int mode) wxOVERRIDE { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
 
     // implementation only
@@ -43,7 +43,7 @@ public:
     void OnQueryEndSession(wxCloseEvent& event);
 
 #if wxUSE_EXCEPTIONS
-    virtual bool OnExceptionInMainLoop();
+    virtual bool OnExceptionInMainLoop() wxOVERRIDE;
 #endif // wxUSE_EXCEPTIONS
 
     // MSW-specific from now on

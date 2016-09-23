@@ -54,25 +54,25 @@ public:
 
 protected:
     // override wxWindow methods which must be implemented by a new control
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     
 private:
     // implement base class pure virtuals
-    virtual void DoSetCount(unsigned int count);
-    virtual unsigned int DoGetCount() const;
-    virtual void DoUpdate(unsigned int idx);
+    virtual void DoSetCount(unsigned int count) wxOVERRIDE;
+    virtual unsigned int DoGetCount() const wxOVERRIDE;
+    virtual void DoUpdate(unsigned int idx) wxOVERRIDE;
 
-    virtual void DoScrollHorz(int dx);
+    virtual void DoScrollHorz(int dx) wxOVERRIDE;
 
-    virtual void DoSetColumnsOrder(const wxArrayInt& order);
-    virtual wxArrayInt DoGetColumnsOrder() const;
+    virtual void DoSetColumnsOrder(const wxArrayInt& order) wxOVERRIDE;
+    virtual wxArrayInt DoGetColumnsOrder() const wxOVERRIDE;
 
     // override MSW-specific methods needed for new control
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
 
     // common part of all ctors
     void Init();

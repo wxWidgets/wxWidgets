@@ -39,26 +39,26 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxCheckBoxNameStr);
 
-    virtual void SetValue(bool value);
-    virtual bool GetValue() const;
+    virtual void SetValue(bool value) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
     // override some base class virtuals
-    virtual void SetLabel(const wxString& label);
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
 
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual void Command(wxCommandEvent& event);
+    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
+    virtual void Command(wxCommandEvent& event) wxOVERRIDE;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const { return false; }
+    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 
     // implementation only from now on
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const wxOVERRIDE;
 
 protected:
-    virtual wxSize DoGetBestClientSize() const;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
-    virtual void DoSet3StateValue(wxCheckBoxState value);
-    virtual wxCheckBoxState DoGet3StateValue() const;
+    virtual void DoSet3StateValue(wxCheckBoxState value) wxOVERRIDE;
+    virtual wxCheckBoxState DoGet3StateValue() const wxOVERRIDE;
 
     // Implement wxMSWOwnerDrawnButtonBase methods.
     virtual int MSWGetButtonStyle() const wxOVERRIDE;

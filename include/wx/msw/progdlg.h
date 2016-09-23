@@ -23,8 +23,8 @@ public:
 
     virtual ~wxProgressDialog();
 
-    virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
-    virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
+    virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL) wxOVERRIDE;
+    virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL) wxOVERRIDE;
 
     void Resume();
 
@@ -38,15 +38,15 @@ public:
     bool WasSkipped() const;
     bool WasCancelled() const;
 
-    virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle() const;
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+    virtual wxString GetTitle() const wxOVERRIDE;
 
-    virtual bool Show( bool show = true );
+    virtual bool Show( bool show = true ) wxOVERRIDE;
 
     // Must provide overload to avoid hiding it (and warnings about it)
-    virtual void Update() { wxGenericProgressDialog::Update(); }
+    virtual void Update() wxOVERRIDE { wxGenericProgressDialog::Update(); }
 
-    virtual WXWidget GetHandle() const;
+    virtual WXWidget GetHandle() const wxOVERRIDE;
 
 private:
     // Performs common routines to Update() and Pulse(). Requires the
