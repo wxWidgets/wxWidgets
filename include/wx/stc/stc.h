@@ -5356,7 +5356,7 @@ public:
     bool GetControl() const;
     bool GetAlt() const;
 
-    virtual wxEvent* Clone() const { return new wxStyledTextEvent(*this); }
+    virtual wxEvent* Clone() const wxOVERRIDE { return new wxStyledTextEvent(*this); }
 
 #ifndef SWIG
 private:

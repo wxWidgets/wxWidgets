@@ -78,7 +78,7 @@ class WXDLLIMPEXP_ADV wxRegTipProvider : public wxTipProvider
 public:
     wxRegTipProvider(const wxString& keyname);
 
-    virtual wxString GetTip();
+    virtual wxString GetTip() wxOVERRIDE;
 };
 
 // Empty implementation for now to keep the linker happy

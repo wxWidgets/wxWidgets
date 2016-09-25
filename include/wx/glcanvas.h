@@ -339,7 +339,7 @@ class WXDLLIMPEXP_GL wxGLApp : public wxGLAppBase
 public:
     wxGLApp() : wxGLAppBase() { }
 
-    virtual bool InitGLVisual(const int *attribList);
+    virtual bool InitGLVisual(const int *attribList) wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGLApp);

@@ -59,9 +59,9 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
     static void _GetInterface(cls *self, REFIID iid, void **_interface, const char *&desc);\
     public:\
     LONG GetRefCount();\
-    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject);\
-    ULONG STDMETHODCALLTYPE AddRef();\
-    ULONG STDMETHODCALLTYPE Release();\
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject) wxOVERRIDE;\
+    ULONG STDMETHODCALLTYPE AddRef() wxOVERRIDE;\
+    ULONG STDMETHODCALLTYPE Release() wxOVERRIDE;\
     ULONG STDMETHODCALLTYPE AddLock();\
     ULONG STDMETHODCALLTYPE ReleaseLock()
 
@@ -228,16 +228,16 @@ public:
     //***************************IDispatch*****************************
     HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID, OLECHAR ** ,
                                             unsigned int , LCID ,
-                                            DISPID * )
+                                            DISPID * ) wxOVERRIDE
     {   return E_NOTIMPL;   }
-    STDMETHOD(GetTypeInfo)(unsigned int, LCID, ITypeInfo **)
+    STDMETHOD(GetTypeInfo)(unsigned int, LCID, ITypeInfo **) wxOVERRIDE
     {   return E_NOTIMPL;   }
-    HRESULT STDMETHODCALLTYPE GetTypeInfoCount(unsigned int *)
+    HRESULT STDMETHODCALLTYPE GetTypeInfoCount(unsigned int *) wxOVERRIDE
     {   return E_NOTIMPL;   }
     HRESULT STDMETHODCALLTYPE Invoke(DISPID dispIdMember, REFIID, LCID,
                             WORD wFlags, DISPPARAMS *,
                             VARIANT * pVarResult, EXCEPINFO *,
-                            unsigned int *)
+                            unsigned int *) wxOVERRIDE
     {
         if (!(wFlags & DISPATCH_PROPERTYGET))
             return S_OK;
@@ -309,32 +309,32 @@ public:
     }
 
     //**************************IOleWindow***************************
-    HRESULT STDMETHODCALLTYPE GetWindow(HWND * phwnd)
+    HRESULT STDMETHODCALLTYPE GetWindow(HWND * phwnd) wxOVERRIDE
     {
         if (phwnd == NULL)
             return E_INVALIDARG;
         (*phwnd) = m_hWndParent;
         return S_OK;
     }
-    HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL)
+    HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL) wxOVERRIDE
     {return S_OK;}
     //**************************IOleInPlaceUIWindow*****************
-    HRESULT STDMETHODCALLTYPE GetBorder(LPRECT lprectBorder)
+    HRESULT STDMETHODCALLTYPE GetBorder(LPRECT lprectBorder) wxOVERRIDE
     {
         if (lprectBorder == NULL)
             return E_INVALIDARG;
         return INPLACE_E_NOTOOLSPACE;
     }
-    HRESULT STDMETHODCALLTYPE RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
+    HRESULT STDMETHODCALLTYPE RequestBorderSpace(LPCBORDERWIDTHS pborderwidths) wxOVERRIDE
     {
         if (pborderwidths == NULL)
             return E_INVALIDARG;
         return INPLACE_E_NOTOOLSPACE;
     }
-    HRESULT STDMETHODCALLTYPE SetBorderSpace(LPCBORDERWIDTHS)
+    HRESULT STDMETHODCALLTYPE SetBorderSpace(LPCBORDERWIDTHS) wxOVERRIDE
     {return S_OK;}
     HRESULT STDMETHODCALLTYPE SetActiveObject(
-        IOleInPlaceActiveObject *pActiveObject, LPCOLESTR)
+        IOleInPlaceActiveObject *pActiveObject, LPCOLESTR) wxOVERRIDE
     {
         if (pActiveObject)
             pActiveObject->AddRef();
@@ -345,12 +345,12 @@ public:
 
     //********************IOleInPlaceFrame************************
 
-    STDMETHOD(InsertMenus)(HMENU, LPOLEMENUGROUPWIDTHS){return S_OK;}
-    STDMETHOD(SetMenu)(HMENU, HOLEMENU, HWND){  return S_OK;}
-    STDMETHOD(RemoveMenus)(HMENU){return S_OK;}
-    STDMETHOD(SetStatusText)(LPCOLESTR){ return S_OK;}
-    HRESULT STDMETHODCALLTYPE EnableModeless(BOOL){return S_OK;}
-    HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG lpmsg, WORD)
+    STDMETHOD(InsertMenus)(HMENU, LPOLEMENUGROUPWIDTHS) wxOVERRIDE {return S_OK;}
+    STDMETHOD(SetMenu)(HMENU, HOLEMENU, HWND) wxOVERRIDE {return S_OK;}
+    STDMETHOD(RemoveMenus)(HMENU) wxOVERRIDE {return S_OK;}
+    STDMETHOD(SetStatusText)(LPCOLESTR) wxOVERRIDE {return S_OK;}
+    HRESULT STDMETHODCALLTYPE EnableModeless(BOOL) wxOVERRIDE {return S_OK;}
+    HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG lpmsg, WORD) wxOVERRIDE
     {
         // TODO: send an event with this id
         if (m_window->m_oleInPlaceActiveObject.IsOk())
@@ -359,16 +359,16 @@ public:
     }
 
     //*******************IOleInPlaceSite**************************
-    HRESULT STDMETHODCALLTYPE CanInPlaceActivate(){return S_OK;}
-    HRESULT STDMETHODCALLTYPE OnInPlaceActivate()
+    HRESULT STDMETHODCALLTYPE CanInPlaceActivate() wxOVERRIDE {return S_OK;}
+    HRESULT STDMETHODCALLTYPE OnInPlaceActivate() wxOVERRIDE
     {   m_bInPlaceActive = true;    return S_OK;    }
-    HRESULT STDMETHODCALLTYPE OnUIActivate()
+    HRESULT STDMETHODCALLTYPE OnUIActivate() wxOVERRIDE
     {   m_bUIActive = true;         return S_OK;    }
     HRESULT STDMETHODCALLTYPE GetWindowContext(IOleInPlaceFrame **ppFrame,
                                         IOleInPlaceUIWindow **ppDoc,
                                         LPRECT lprcPosRect,
                                         LPRECT lprcClipRect,
-                                        LPOLEINPLACEFRAMEINFO lpFrameInfo)
+                                        LPOLEINPLACEFRAMEINFO lpFrameInfo) wxOVERRIDE
     {
         if (ppFrame == NULL || ppDoc == NULL || lprcPosRect == NULL ||
             lprcClipRect == NULL || lpFrameInfo == NULL)
@@ -415,14 +415,14 @@ public:
 
         return S_OK;
     }
-    HRESULT STDMETHODCALLTYPE Scroll(SIZE){return S_OK;}
-    HRESULT STDMETHODCALLTYPE OnUIDeactivate(BOOL)
+    HRESULT STDMETHODCALLTYPE Scroll(SIZE) wxOVERRIDE {return S_OK;}
+    HRESULT STDMETHODCALLTYPE OnUIDeactivate(BOOL) wxOVERRIDE
     {   m_bUIActive = false;         return S_OK;    }
-    HRESULT STDMETHODCALLTYPE OnInPlaceDeactivate()
+    HRESULT STDMETHODCALLTYPE OnInPlaceDeactivate() wxOVERRIDE
     {   m_bInPlaceActive = false;    return S_OK;    }
-    HRESULT STDMETHODCALLTYPE DiscardUndoState(){return S_OK;}
-    HRESULT STDMETHODCALLTYPE DeactivateAndUndo(){return S_OK; }
-    HRESULT STDMETHODCALLTYPE OnPosRectChange(LPCRECT lprcPosRect)
+    HRESULT STDMETHODCALLTYPE DiscardUndoState() wxOVERRIDE {return S_OK;}
+    HRESULT STDMETHODCALLTYPE DeactivateAndUndo() wxOVERRIDE {return S_OK; }
+    HRESULT STDMETHODCALLTYPE OnPosRectChange(LPCRECT lprcPosRect) wxOVERRIDE
     {
         if (m_window->m_oleInPlaceObject.IsOk() && lprcPosRect)
         {
@@ -442,7 +442,7 @@ public:
         return S_OK;
     }
     //*************************IOleInPlaceSiteEx***********************
-    HRESULT STDMETHODCALLTYPE OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD)
+    HRESULT STDMETHODCALLTYPE OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD) wxOVERRIDE
     {
         OleLockRunning(m_window->m_ActiveX, TRUE, FALSE);
         if (pfNoRedraw)
@@ -450,14 +450,14 @@ public:
         return S_OK;
     }
 
-    HRESULT STDMETHODCALLTYPE OnInPlaceDeactivateEx(BOOL)
+    HRESULT STDMETHODCALLTYPE OnInPlaceDeactivateEx(BOOL) wxOVERRIDE
     {
         OleLockRunning(m_window->m_ActiveX, FALSE, FALSE);
         return S_OK;
     }
-    STDMETHOD(RequestUIActivate)(){ return S_OK;}
+    STDMETHOD(RequestUIActivate)() wxOVERRIDE { return S_OK;}
     //*************************IOleClientSite**************************
-    HRESULT STDMETHODCALLTYPE SaveObject(){return S_OK;}
+    HRESULT STDMETHODCALLTYPE SaveObject() wxOVERRIDE {return S_OK;}
     const char *OleGetMonikerToStr(DWORD dwAssign)
     {
         switch (dwAssign)
@@ -480,8 +480,8 @@ public:
         default                     : return "Bad Enum";
         }
     }
-    STDMETHOD(GetMoniker)(DWORD, DWORD, IMoniker **){return E_FAIL;}
-    HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER * ppContainer)
+    STDMETHOD(GetMoniker)(DWORD, DWORD, IMoniker **) wxOVERRIDE {return E_FAIL;}
+    HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER * ppContainer) wxOVERRIDE
     {
         if (ppContainer == NULL)
             return E_INVALIDARG;
@@ -490,20 +490,20 @@ public:
         wxASSERT(SUCCEEDED(hr));
         return hr;
     }
-    HRESULT STDMETHODCALLTYPE ShowObject()
+    HRESULT STDMETHODCALLTYPE ShowObject() wxOVERRIDE
     {
         if (m_window->m_oleObjectHWND)
             ::ShowWindow(m_window->m_oleObjectHWND, SW_SHOW);
         return S_OK;
     }
-    STDMETHOD(OnShowWindow)(BOOL){return S_OK;}
-    STDMETHOD(RequestNewObjectLayout)(){return E_NOTIMPL;}
+    STDMETHOD(OnShowWindow)(BOOL) wxOVERRIDE {return S_OK;}
+    STDMETHOD(RequestNewObjectLayout)() wxOVERRIDE {return E_NOTIMPL;}
     //********************IParseDisplayName***************************
     HRESULT STDMETHODCALLTYPE ParseDisplayName(
-        IBindCtx *, LPOLESTR, ULONG *, IMoniker **){return E_NOTIMPL;}
+        IBindCtx *, LPOLESTR, ULONG *, IMoniker **) wxOVERRIDE {return E_NOTIMPL;}
     //********************IOleContainer*******************************
-    STDMETHOD(EnumObjects)(DWORD, IEnumUnknown **){return E_NOTIMPL;}
-    HRESULT STDMETHODCALLTYPE LockContainer(BOOL){return S_OK;}
+    STDMETHOD(EnumObjects)(DWORD, IEnumUnknown **) wxOVERRIDE {return E_NOTIMPL;}
+    HRESULT STDMETHODCALLTYPE LockContainer(BOOL) wxOVERRIDE {return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
     #if defined(_UNICODE)
@@ -511,7 +511,7 @@ public:
     #else
     GetObjectA
     #endif
-    (LPOLESTR pszItem, DWORD, IBindCtx *, REFIID, void ** ppvObject)
+    (LPOLESTR pszItem, DWORD, IBindCtx *, REFIID, void ** ppvObject) wxOVERRIDE
     {
         if (pszItem == NULL || ppvObject == NULL)
             return E_INVALIDARG;
@@ -519,43 +519,43 @@ public:
         return MK_E_NOOBJECT;
     }
     HRESULT STDMETHODCALLTYPE GetObjectStorage(
-        LPOLESTR pszItem, IBindCtx * , REFIID, void ** ppvStorage)
+        LPOLESTR pszItem, IBindCtx * , REFIID, void ** ppvStorage) wxOVERRIDE
     {
         if (pszItem == NULL || ppvStorage == NULL)
             return E_INVALIDARG;
         *ppvStorage = NULL;
         return MK_E_NOOBJECT;
     }
-    HRESULT STDMETHODCALLTYPE IsRunning(LPOLESTR pszItem)
+    HRESULT STDMETHODCALLTYPE IsRunning(LPOLESTR pszItem) wxOVERRIDE
     {
         if (pszItem == NULL)
             return E_INVALIDARG;
         return MK_E_NOOBJECT;
     }
     //***********************IOleControlSite*****************************
-    HRESULT STDMETHODCALLTYPE OnControlInfoChanged()
+    HRESULT STDMETHODCALLTYPE OnControlInfoChanged() wxOVERRIDE
     {return S_OK;}
-    HRESULT STDMETHODCALLTYPE LockInPlaceActive(BOOL fLock)
+    HRESULT STDMETHODCALLTYPE LockInPlaceActive(BOOL fLock) wxOVERRIDE
     {
         m_bInPlaceLocked = (fLock) ? true : false;
         return S_OK;
     }
-    HRESULT STDMETHODCALLTYPE GetExtendedControl(IDispatch **)
+    HRESULT STDMETHODCALLTYPE GetExtendedControl(IDispatch **) wxOVERRIDE
     {return E_NOTIMPL;}
     HRESULT STDMETHODCALLTYPE TransformCoords(
-        POINTL * pPtlHimetric, POINTF * pPtfContainer, DWORD)
+        POINTL * pPtlHimetric, POINTF * pPtfContainer, DWORD) wxOVERRIDE
     {
         if (pPtlHimetric == NULL || pPtfContainer == NULL)
             return E_INVALIDARG;
         return E_NOTIMPL;
     }
-    HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG, DWORD)
+    HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG, DWORD) wxOVERRIDE
     {return E_NOTIMPL;}
-    HRESULT STDMETHODCALLTYPE OnFocus(BOOL){return S_OK;}
-    HRESULT STDMETHODCALLTYPE ShowPropertyFrame(){return E_NOTIMPL;}
+    HRESULT STDMETHODCALLTYPE OnFocus(BOOL) wxOVERRIDE {return S_OK;}
+    HRESULT STDMETHODCALLTYPE ShowPropertyFrame() wxOVERRIDE {return E_NOTIMPL;}
     //**************************IOleCommandTarget***********************
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG cCmds,
-                                OLECMD prgCmds[], OLECMDTEXT *)
+                                OLECMD prgCmds[], OLECMDTEXT *) wxOVERRIDE
     {
         if (prgCmds == NULL) return E_INVALIDARG;
         for (ULONG nCmd = 0; nCmd < cCmds; nCmd++)
@@ -567,19 +567,19 @@ public:
     }
 
     HRESULT STDMETHODCALLTYPE Exec(const GUID *, DWORD,
-                            DWORD, VARIANTARG *, VARIANTARG *)
+                            DWORD, VARIANTARG *, VARIANTARG *) wxOVERRIDE
     {return OLECMDERR_E_NOTSUPPORTED;}
 
     //**********************IAdviseSink************************************
-    void STDMETHODCALLTYPE OnDataChange(FORMATETC *, STGMEDIUM *) {}
-    void STDMETHODCALLTYPE OnViewChange(DWORD, LONG) {}
-    void STDMETHODCALLTYPE OnRename(IMoniker *){}
-    void STDMETHODCALLTYPE OnSave(){}
-    void STDMETHODCALLTYPE OnClose(){}
+    void STDMETHODCALLTYPE OnDataChange(FORMATETC *, STGMEDIUM *) wxOVERRIDE {}
+    void STDMETHODCALLTYPE OnViewChange(DWORD, LONG) wxOVERRIDE {}
+    void STDMETHODCALLTYPE OnRename(IMoniker *) wxOVERRIDE {}
+    void STDMETHODCALLTYPE OnSave() wxOVERRIDE {}
+    void STDMETHODCALLTYPE OnClose() wxOVERRIDE {}
 
     //**********************IOleDocumentSite***************************
     HRESULT STDMETHODCALLTYPE ActivateMe(
-        IOleDocumentView __RPC_FAR *pViewToActivate)
+        IOleDocumentView __RPC_FAR *pViewToActivate) wxOVERRIDE
     {
         wxAutoIOleInPlaceSite inPlaceSite(
             IID_IOleInPlaceSite, (IDispatch *) this);
@@ -690,17 +690,17 @@ public:
     }
 
     // IDispatch
-    STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR**, unsigned int, LCID, DISPID*)
+    STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR**, unsigned int, LCID, DISPID*) wxOVERRIDE
     {
         return E_NOTIMPL;
     }
 
-    STDMETHODIMP GetTypeInfo(unsigned int, LCID, ITypeInfo**)
+    STDMETHODIMP GetTypeInfo(unsigned int, LCID, ITypeInfo**) wxOVERRIDE
     {
         return E_NOTIMPL;
     }
 
-    STDMETHODIMP GetTypeInfoCount(unsigned int*)
+    STDMETHODIMP GetTypeInfoCount(unsigned int*) wxOVERRIDE
     {
         return E_NOTIMPL;
     }
@@ -710,7 +710,7 @@ public:
                         LCID lcid,
                           WORD wFlags, DISPPARAMS * pDispParams,
                           VARIANT * pVarResult, EXCEPINFO * pExcepInfo,
-                          unsigned int * puArgErr)
+                          unsigned int * puArgErr) wxOVERRIDE
     {
         if (wFlags & (DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
             return E_NOTIMPL;

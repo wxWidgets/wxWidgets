@@ -44,8 +44,8 @@ public:
     // Must be implemented to return all the completions for the given prefix.
     virtual void GetCompletions(const wxString& prefix, wxArrayString& res) = 0;
 
-    virtual bool Start(const wxString& prefix);
-    virtual wxString GetNext();
+    virtual bool Start(const wxString& prefix) wxOVERRIDE;
+    virtual wxString GetNext() wxOVERRIDE;
 
 private:
     wxArrayString m_completions;
@@ -72,7 +72,7 @@ public:
     }
 
     virtual void GetCompletions(const wxString& WXUNUSED(prefix),
-                                wxArrayString& res)
+                                wxArrayString& res) wxOVERRIDE
     {
         res = m_strings;
     }
