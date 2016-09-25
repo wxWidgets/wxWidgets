@@ -356,7 +356,7 @@ public:
         CheckHandlerArgument(static_cast<EventClass *>(NULL));
     }
 
-    virtual void operator()(wxEvtHandler *handler, wxEvent& event)
+    virtual void operator()(wxEvtHandler *handler, wxEvent& event) wxOVERRIDE
     {
         Class * realHandler = m_handler;
         if ( !realHandler )
@@ -373,7 +373,7 @@ public:
         (realHandler->*m_method)(static_cast<EventArg&>(event));
     }
 
-    virtual bool IsMatching(const wxEventFunctor& functor) const
+    virtual bool IsMatching(const wxEventFunctor& functor) const wxOVERRIDE
     {
         if ( wxTypeId(functor) != wxTypeId(*this) )
             return false;
@@ -388,10 +388,10 @@ public:
                (m_handler == other.m_handler || other.m_handler == NULL);
     }
 
-    virtual wxEvtHandler *GetEvtHandler() const
+    virtual wxEvtHandler *GetEvtHandler() const wxOVERRIDE
         { return this->ConvertToEvtHandler(m_handler); }
 
-    virtual wxEventFunction GetEvtMethod() const
+    virtual wxEventFunction GetEvtMethod() const wxOVERRIDE
         { return this->ConvertToEvtMethod(m_method); }
 
 private:

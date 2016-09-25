@@ -290,10 +290,10 @@ public:
     virtual bool SetData(const wxDataFormat& format, size_t len, const void *buf) wxOVERRIDE;
 #if defined(__WXMSW__)
     virtual const void* GetSizeFromBuffer( const void* buffer, size_t* size,
-                                           const wxDataFormat& format );
+                                           const wxDataFormat& format ) wxOVERRIDE;
     virtual void* SetSizeInBuffer( void* buffer, size_t size,
-                                   const wxDataFormat& format );
-    virtual size_t GetBufferOffset( const wxDataFormat& format );
+                                   const wxDataFormat& format ) wxOVERRIDE;
+    virtual size_t GetBufferOffset( const wxDataFormat& format ) wxOVERRIDE;
 #endif
 
 private:
@@ -408,19 +408,19 @@ public:
     bool GetDataHere(const wxDataFormat& format, void *pBuf) const wxOVERRIDE;
     bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf) wxOVERRIDE;
 #else // !wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
+    virtual size_t GetDataSize() const wxOVERRIDE;
+    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const
+    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
     {
         return SetData(len, buf);
     }

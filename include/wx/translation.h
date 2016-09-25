@@ -227,9 +227,9 @@ class WXDLLIMPEXP_BASE wxResourceTranslationsLoader
 {
 public:
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
-                                      const wxString& lang);
+                                      const wxString& lang) wxOVERRIDE;
 
-    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const;
+    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const wxOVERRIDE;
 
 protected:
     // returns resource type to use for translations

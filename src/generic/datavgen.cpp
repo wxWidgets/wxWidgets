@@ -273,12 +273,12 @@ public:
 protected:
     // implement/override wxHeaderCtrl functions by forwarding them to the main
     // control
-    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
     {
         return *(GetOwner()->GetColumn(idx));
     }
 
-    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
+    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle) wxOVERRIDE
     {
         wxDataViewCtrl * const owner = GetOwner();
 
@@ -402,7 +402,7 @@ private:
 
 public:
     wxDataViewRenameTimer( wxDataViewMainWindow *owner );
-    void Notify();
+    void Notify() wxOVERRIDE;
 };
 
 //-----------------------------------------------------------------------------
@@ -648,7 +648,7 @@ public:
 
     // Override the base class method to resort if needed, i.e. if
     // SortPrepare() was called -- and ignored -- while we were frozen.
-    virtual void DoThaw()
+    virtual void DoThaw() wxOVERRIDE
     {
         if ( m_sortColumn == SortColumn_OnThaw )
         {
@@ -716,11 +716,11 @@ public:
 
     void UpdateDisplay();
     void RecalculateDisplay();
-    void OnInternalIdle();
+    void OnInternalIdle() wxOVERRIDE;
 
     void OnRenameTimer();
 
-    void ScrollWindow( int dx, int dy, const wxRect *rect = NULL );
+    void ScrollWindow( int dx, int dy, const wxRect *rect = NULL ) wxOVERRIDE;
     void ScrollTo( int rows, int column );
 
     unsigned GetCurrentRow() const { return m_currentRow; }
@@ -921,17 +921,17 @@ public:
     wxGenericDataViewModelNotifier( wxDataViewMainWindow *mainWindow )
         { m_mainWindow = mainWindow; }
 
-    virtual bool ItemAdded( const wxDataViewItem & parent, const wxDataViewItem & item )
+    virtual bool ItemAdded( const wxDataViewItem & parent, const wxDataViewItem & item ) wxOVERRIDE
         { return m_mainWindow->ItemAdded( parent , item ); }
-    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
+    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) wxOVERRIDE
         { return m_mainWindow->ItemDeleted( parent, item ); }
-    virtual bool ItemChanged( const wxDataViewItem & item )
+    virtual bool ItemChanged( const wxDataViewItem & item ) wxOVERRIDE
         { return m_mainWindow->ItemChanged(item);  }
-    virtual bool ValueChanged( const wxDataViewItem & item , unsigned int col )
+    virtual bool ValueChanged( const wxDataViewItem & item , unsigned int col ) wxOVERRIDE
         { return m_mainWindow->ValueChanged( item, col ); }
-    virtual bool Cleared()
+    virtual bool Cleared() wxOVERRIDE
         { return m_mainWindow->Cleared(); }
-    virtual void Resort()
+    virtual void Resort() wxOVERRIDE
         { m_mainWindow->Resort(); }
 
     wxDataViewMainWindow    *m_mainWindow;
@@ -1417,7 +1417,7 @@ public:
         delete m_hint;
     }
 
-    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect) )
+    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect) ) wxOVERRIDE
     {
         wxPoint pos = wxGetMousePosition();
 
@@ -1468,7 +1468,7 @@ public:
         m_win = win;
     }
 
-    virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
+    virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) wxOVERRIDE
     {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
@@ -1476,7 +1476,7 @@ public:
         return m_win->OnDragOver( format, x, y, def);
     }
 
-    virtual bool OnDrop( wxCoord x, wxCoord y )
+    virtual bool OnDrop( wxCoord x, wxCoord y ) wxOVERRIDE
     {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
@@ -1484,7 +1484,7 @@ public:
         return m_win->OnDrop( format, x, y );
     }
 
-    virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def )
+    virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) wxOVERRIDE
     {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
@@ -1494,7 +1494,7 @@ public:
         return m_win->OnData( format, x, y, def );
     }
 
-    virtual void OnLeave()
+    virtual void OnLeave() wxOVERRIDE
         { m_win->OnLeave(); }
 
     wxDataViewMainWindow   *m_win;
@@ -3071,7 +3071,7 @@ public:
         parent = node;
     }
 
-    virtual int operator() ( wxDataViewTreeNode * node )
+    virtual int operator() ( wxDataViewTreeNode * node ) wxOVERRIDE
     {
         current ++;
         if( current == static_cast<int>(row))
@@ -3456,7 +3456,7 @@ public:
     }
 
     // Maybe binary search will help to speed up this process
-    virtual int operator() ( wxDataViewTreeNode * node)
+    virtual int operator() ( wxDataViewTreeNode * node) wxOVERRIDE
     {
         ret ++;
         if( node->GetItem() == item )

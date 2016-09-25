@@ -2569,7 +2569,7 @@ public:
     }
 #endif // wxUSE_FONTMAP
 
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const wxOVERRIDE
     {
         // note that we have to use MB_ERR_INVALID_CHARS flag as it without it
         // the behaviour is not compatible with the Unix version (using iconv)
@@ -2608,7 +2608,7 @@ public:
         return len - 1;
     }
 
-    virtual size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const
+    virtual size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const wxOVERRIDE
     {
         /*
             We need to WC_NO_BEST_FIT_CHARS to prevent WideCharToMultiByte()
@@ -2693,7 +2693,7 @@ public:
         return len - 1;
     }
 
-    virtual size_t GetMBNulLen() const
+    virtual size_t GetMBNulLen() const wxOVERRIDE
     {
         if ( m_minMBCharWidth == 0 )
         {
@@ -2732,7 +2732,7 @@ public:
         return m_minMBCharWidth;
     }
 
-    virtual wxMBConv *Clone() const { return new wxMBConv_win32(*this); }
+    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConv_win32(*this); }
 
     bool IsOk() const { return m_CodePage != -1; }
 

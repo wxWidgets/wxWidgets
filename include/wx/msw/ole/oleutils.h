@@ -124,9 +124,9 @@ private:
 
 #define   DECLARE_IUNKNOWN_METHODS                                            \
   public:                                                                     \
-    STDMETHODIMP          QueryInterface(REFIID, void **);                    \
-    STDMETHODIMP_(ULONG)  AddRef();                                           \
-    STDMETHODIMP_(ULONG)  Release();                                          \
+    STDMETHODIMP          QueryInterface(REFIID, void **) wxOVERRIDE;         \
+    STDMETHODIMP_(ULONG)  AddRef() wxOVERRIDE;                                \
+    STDMETHODIMP_(ULONG)  Release() wxOVERRIDE;                               \
   private:                                                                    \
     static  const IID    *ms_aIids[];                                         \
     wxAutoULong           m_cRef
@@ -239,15 +239,15 @@ public:
     CURRENCY GetValue() const { return m_value; }
     void SetValue(CURRENCY value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const;
+    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const;
+    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
 #endif
-    virtual bool Write(wxString& str) const;
+    virtual bool Write(wxString& str) const wxOVERRIDE;
 
-    wxVariantData* Clone() const { return new wxVariantDataCurrency(m_value); }
-    virtual wxString GetType() const { return wxS("currency"); }
+    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataCurrency(m_value); }
+    virtual wxString GetType() const wxOVERRIDE { return wxS("currency"); }
 
     DECLARE_WXANY_CONVERSION()
 
@@ -265,15 +265,15 @@ public:
     SCODE GetValue() const { return m_value; }
     void SetValue(SCODE value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const;
+    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const;
+    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
 #endif
-    virtual bool Write(wxString& str) const;
+    virtual bool Write(wxString& str) const wxOVERRIDE;
 
-    wxVariantData* Clone() const { return new wxVariantDataErrorCode(m_value); }
-    virtual wxString GetType() const { return wxS("errorcode"); }
+    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataErrorCode(m_value); }
+    virtual wxString GetType() const wxOVERRIDE { return wxS("errorcode"); }
 
     DECLARE_WXANY_CONVERSION()
 
@@ -293,15 +293,15 @@ public:
     SAFEARRAY* GetValue() const { return m_value; }
     void SetValue(SAFEARRAY* value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const;
+    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const;
+    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
 #endif
-    virtual bool Write(wxString& str) const;
+    virtual bool Write(wxString& str) const wxOVERRIDE;
 
-    wxVariantData* Clone() const { return new wxVariantDataSafeArray(m_value); }
-    virtual wxString GetType() const { return wxS("safearray"); }
+    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataSafeArray(m_value); }
+    virtual wxString GetType() const wxOVERRIDE { return wxS("safearray"); }
 
     DECLARE_WXANY_CONVERSION()
 

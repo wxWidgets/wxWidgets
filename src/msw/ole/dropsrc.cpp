@@ -49,8 +49,8 @@ public:
   virtual ~wxIDropSource() { }
 
   // IDropSource
-  STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState);
-  STDMETHODIMP GiveFeedback(DWORD dwEffect);
+  STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState) wxOVERRIDE;
+  STDMETHODIMP GiveFeedback(DWORD dwEffect) wxOVERRIDE;
 
     DECLARE_IUNKNOWN_METHODS;
 

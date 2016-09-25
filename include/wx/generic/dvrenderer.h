@@ -23,19 +23,19 @@ public:
                         int align = wxDVR_DEFAULT_ALIGNMENT );
     virtual ~wxDataViewRenderer();
 
-    virtual wxDC *GetDC();
+    virtual wxDC *GetDC() wxOVERRIDE;
 
-    virtual void SetAlignment( int align );
-    virtual int GetAlignment() const;
+    virtual void SetAlignment( int align ) wxOVERRIDE;
+    virtual int GetAlignment() const wxOVERRIDE;
 
-    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE)
+    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE) wxOVERRIDE
         { m_ellipsizeMode = mode; }
-    virtual wxEllipsizeMode GetEllipsizeMode() const
+    virtual wxEllipsizeMode GetEllipsizeMode() const wxOVERRIDE
         { return m_ellipsizeMode; }
 
-    virtual void SetMode( wxDataViewCellMode mode )
+    virtual void SetMode( wxDataViewCellMode mode ) wxOVERRIDE
         { m_mode = mode; }
-    virtual wxDataViewCellMode GetMode() const
+    virtual wxDataViewCellMode GetMode() const wxOVERRIDE
         { return m_mode; }
 
     // implementation

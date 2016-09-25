@@ -164,7 +164,7 @@ public:
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                          wxDC& dc,
                                          const wxRect& rect,
-                                         int flags = 0) = 0;
+                                         int flags = 0) wxOVERRIDE = 0;
 };
 
 // ----------------------------------------------------------------------------
