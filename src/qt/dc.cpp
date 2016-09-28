@@ -651,7 +651,9 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         //Restore saved settings
         m_qtPainter->setBackground(savedBrush);
         m_qtPainter->setPen(savedPen);
-    } else {
+    }
+    else
+    {
             if ( useMask && bmp.GetMask() && bmp.GetMask()->GetHandle() )
                 pix.setMask(*bmp.GetMask()->GetHandle());
             m_qtPainter->drawPixmap(x, y, pix);

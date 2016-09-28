@@ -105,7 +105,7 @@ wxString wxFileDialog::GetPath() const
 {
     wxArrayString paths;
     GetPaths(paths);
-    if (paths.size() == 0)
+    if (paths.empty())
         return "";
 
     return paths[0];
@@ -122,7 +122,7 @@ wxString wxFileDialog::GetFilename() const
 {
     wxArrayString filenames;
     GetFilenames(filenames);
-    if ( filenames.size() == 0 )
+    if ( filenames.empty() )
         return "";
 
     return filenames[0];

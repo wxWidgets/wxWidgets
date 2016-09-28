@@ -18,7 +18,7 @@ public:
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
     wxColour(const QColor& color);
 
-    virtual bool IsOk() const { return valid; }
+    virtual bool IsOk() const { return m_valid; }
 
     ChannelType Red() const   { return m_red;   }
     ChannelType Green() const { return m_green; }
@@ -38,7 +38,7 @@ protected:
 
 private:
     ChannelType m_red, m_green, m_blue, m_alpha;
-    bool valid;
+    bool m_valid;
 
     wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
