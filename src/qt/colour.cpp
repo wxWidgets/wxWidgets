@@ -46,7 +46,7 @@ int wxColour::GetPixel() const
 
 QColor wxColour::GetQColor() const
 {
-    if ( valid )
+    if ( m_valid )
         return QColor(m_red, m_green, m_blue, m_alpha);
     return QColor();
 }
@@ -54,11 +54,11 @@ QColor wxColour::GetQColor() const
 void wxColour::Init()
 {
     m_red = m_green = m_blue = m_alpha = 0;
-    valid = false;
+    m_valid = false;
 }
 
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
     m_red = r, m_green = g, m_blue = b, m_alpha = a;
-    valid = true;
+    m_valid = true;
 }
