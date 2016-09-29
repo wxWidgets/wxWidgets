@@ -113,7 +113,7 @@ STDMETHODIMP wxIEnumVARIANT::Next(ULONG      celt,
         return S_FALSE;
     }
 
-    if (m_variant.GetType() != wxT("list"))
+    if ( !m_variant.IsType(wxS("list")) )
         return S_FALSE;
 
     if ( m_nCurrent < (int) m_variant.GetList().GetCount() ) {
@@ -137,7 +137,7 @@ STDMETHODIMP wxIEnumVARIANT::Skip(ULONG celt)
 {
     wxLogTrace(wxTRACE_OleCalls, wxT("wxIEnumVARIANT::Skip"));
 
-    if (m_variant.GetType() != wxT("list"))
+    if ( !m_variant.IsType(wxS("list")) )
         return S_FALSE;
 
     m_nCurrent += celt;
@@ -1509,14 +1509,14 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
 
             return S_OK;
         }
-        else if (selections.GetType() == wxT("long"))
+        else if ( selections.IsType(wxS("long")) )
         {
             pVarChildren->vt = VT_I4;
             pVarChildren->lVal = selections.GetLong();
 
             return S_OK;
         }
-        else if (selections.GetType() == wxT("void*"))
+        else if ( selections.IsType(wxS("void*")) )
         {
             wxAccessible* childObject = (wxAccessible*) selections.GetVoidPtr();
             wxIAccessible* childIA = childObject->GetIAccessible();
@@ -1530,7 +1530,7 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
 
             return S_OK;
         }
-        else if (selections.GetType() == wxT("list"))
+        else if ( selections.IsType(wxS("list")) )
         {
             wxASSERT_MSG( selections.GetCount() > 1,
                           wxS("Multiple child objects should be selected") );
