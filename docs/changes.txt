@@ -75,6 +75,8 @@ All:
 - Handle strings with embedded NULs in wxDataStream (Nitch).
 - Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
 - Add wxString::cbegin() and cend() method (Lauri Nurmi).
+- Return proper value from wxIAccessible::get_accSelection() if no children
+  are selected.
 
 All (GUI):
 

@@ -1503,7 +1503,13 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
     }
     else
     {
-        if (selections.GetType() == wxT("long"))
+        if ( selections.IsNull() )
+        {
+            pVarChildren->vt = VT_EMPTY;
+
+            return S_OK;
+        }
+        else if (selections.GetType() == wxT("long"))
         {
             pVarChildren->vt = VT_I4;
             pVarChildren->lVal = selections.GetLong();
@@ -1526,6 +1532,8 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
         }
         else if (selections.GetType() == wxT("list"))
         {
+            wxASSERT_MSG( selections.GetCount() > 1,
+                          wxS("Multiple child objects should be selected") );
             // TODO: should we AddRef for every "void*" member??
 
             wxIEnumVARIANT* enumVariant = new wxIEnumVARIANT(selections);

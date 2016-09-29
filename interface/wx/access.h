@@ -355,11 +355,13 @@ public:
         Gets a variant representing the selected children of this object.
 
         Acceptable values are:
-        @li a null variant (IsNull() returns @true)
-        @li a list variant (GetType() == "list")
+        @li a null variant (@c IsNull() returns @true) if no children
+            are selected
+        @li a @c void* pointer to a wxAccessible of selected child object
         @li an integer representing the selected child element,
-            or 0 if this object is selected (GetType() == "long")
-        @li a "void*" pointer to a wxAccessible child object
+            or 0 if this object is selected (@c GetType() @c == @c "long")
+        @li a list variant (@c GetType() @c == @c "list") if multiple child
+            objects are selected
     */
     virtual wxAccStatus GetSelections(wxVariant* selections);
 
