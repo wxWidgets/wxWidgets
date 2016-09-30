@@ -109,7 +109,7 @@ public:
     virtual wxWindow* GetContentWindow() const;
 
     // Set and get the inner sizer
-    void SetInnerSize(wxSizer* sizer) { m_innerSizer = sizer; }
+    void SetInnerSizer(wxSizer* sizer) { m_innerSizer = sizer; }
     wxSizer* GetInnerSizer() const { return m_innerSizer ; }
 
     // Set and get the book style
