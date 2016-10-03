@@ -152,7 +152,6 @@ wxOSX:
 - Implement wxGetDisplaySizeMM() and fix printing DPI (David Vanderson).
 - Remove extra borders around wxFilePickerCtrl (John Roberts).
 - Set up extensions filter correctly in wxFileDialog (nick863).
-- Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
 - Implement wxDataViewChoiceByIndexRenderer (wanup).
 - Fix unnecessary indentation in list-like wxDataViewCtrl (Andreas Falkenhahn).
 - Recognize macOS 10.12 Sierra in wxGetOsDescription() (Tobias Taschner).
