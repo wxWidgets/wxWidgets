@@ -16,7 +16,12 @@ enum wxAccStatus
     wxACC_FALSE,           //!< The function returned false.
     wxACC_OK,              //!< The function completed successfully.
     wxACC_NOT_IMPLEMENTED, //!< The function is not implemented.
-    wxACC_NOT_SUPPORTED    //!< The function is not supported.
+    wxACC_NOT_SUPPORTED,   //!< The function is not supported.
+    /**
+        An argument is not valid (e.g. it does not make sense
+        for the specified object).
+    */
+    wxACC_INVALID_ARG
 };
 
 

@@ -27,7 +27,8 @@ enum wxAccStatus
     wxACC_FALSE,
     wxACC_OK,
     wxACC_NOT_IMPLEMENTED,
-    wxACC_NOT_SUPPORTED
+    wxACC_NOT_SUPPORTED,
+    wxACC_INVALID_ARG
 };
 
 // Child ids are integer identifiers from 1 up.

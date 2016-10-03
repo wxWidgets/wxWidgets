@@ -385,6 +385,8 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
 
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -451,6 +453,8 @@ STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWi
     wxAccStatus status = m_pAccessible->GetLocation(rect, varID.lVal);
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -570,6 +574,12 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
         return E_FAIL;
     }
 
+    if (status == wxACC_INVALID_ARG)
+    {
+        wxLogTrace(wxS("access"), wxS("Invalid argument passed to wxAccessible::Navigate"));
+        return E_INVALIDARG;
+    }
+
     if (status == wxACC_FALSE)
     {
         wxLogTrace(wxT("access"), wxT("wxAccessible::Navigate found no object in this direction"));
@@ -669,6 +679,11 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
     {
         wxLogTrace(wxT("access"), wxT("GetChild failed"));
         return E_FAIL;
+    }
+    if (status == wxACC_INVALID_ARG)
+    {
+        wxLogTrace(wxS("access"), wxS("Invalid argument passed to GetChild"));
+        return E_INVALIDARG;
     }
 
     if (status == wxACC_NOT_IMPLEMENTED)
@@ -844,6 +859,9 @@ STDMETHODIMP wxIAccessible::accDoDefaultAction(VARIANT varID)
     if (status == wxACC_NOT_SUPPORTED)
         return DISP_E_MEMBERNOTFOUND;
 
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -886,6 +904,9 @@ STDMETHODIMP wxIAccessible::get_accDefaultAction ( VARIANT varID, BSTR* pszDefau
     wxAccStatus status = m_pAccessible->GetDefaultAction(varID.lVal, & defaultAction);
     if (status == wxACC_FAIL)
         return E_FAIL;
+
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_SUPPORTED)
         return DISP_E_MEMBERNOTFOUND;
@@ -946,6 +967,8 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
     wxAccStatus status = m_pAccessible->GetDescription(varID.lVal, & description);
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1003,6 +1026,8 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
     wxAccStatus status = m_pAccessible->GetHelpText(varID.lVal, & helpString);
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1108,6 +1133,8 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
     wxAccStatus status = m_pAccessible->GetKeyboardShortcut(varID.lVal, & keyboardShortcut);
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1170,6 +1197,9 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
     if (status == wxACC_FAIL)
         return E_FAIL;
 
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1222,6 +1252,9 @@ STDMETHODIMP wxIAccessible::get_accRole ( VARIANT varID, VARIANT* pVarRole)
 
     if (status == wxACC_FAIL)
         return E_FAIL;
+
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1279,6 +1312,8 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
     wxAccStatus status = m_pAccessible->GetState(varID.lVal, & wxstate);
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1332,6 +1367,9 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
     if (status == wxACC_FAIL)
         return E_FAIL;
 
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1382,6 +1420,8 @@ STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
     wxAccStatus status = m_pAccessible->Select(varID.lVal, wxsel);
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_INVALID_ARG)
+        return E_INVALIDARG;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {

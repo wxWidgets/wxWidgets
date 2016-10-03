@@ -137,6 +137,8 @@ wxMSW:
 - Fix wxMemoryDC::Blit() with itself as source (Tim Roberts).
 - Return proper value from wxIAccessible::get_accSelection() if no children
   are selected.
+- Add wxAccStatus::wxACC_INVALID_ARG error code to indicate argument-related
+  errors in wxAccessible methods.
 
 wxOSX:
 
