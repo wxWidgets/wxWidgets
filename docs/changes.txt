@@ -107,6 +107,7 @@ All (GUI):
 - Add wxEVT_STC_AUTOCOMP_COMPLETED event (NewPagodi).
 - Fix retrieving bounding box for wxDC with transformed coordinates.
 - Fix wxGraphicsMatrixData::Concat() for Direct2D and Cairo renderers.
+- Fix calculating point position in wxDataViewCtrl::HitTest().
 
 wxGTK:
 

@@ -5340,7 +5340,10 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataVie
 void wxDataViewCtrl::HitTest( const wxPoint & point, wxDataViewItem & item,
                               wxDataViewColumn* &column ) const
 {
-    m_clientArea->HitTest(point, item, column);
+    // Convert from wxDataViewCtrl coordinates to wxDataViewMainWindow coordinates.
+    // (They can be different due to the presence of the header.).
+    const wxPoint clientPt = m_clientArea->ScreenToClient(ClientToScreen(point));
+    m_clientArea->HitTest(clientPt, item, column);
 }
 
 wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem & item,

@@ -1485,7 +1485,9 @@ public:
     bool HasSelection() const;
 
     /**
-        Hittest.
+        Retrieves item and column at the given point.
+        The point coordinates are specified in wxDataViewCtrl client area
+        coordinates.
     */
     virtual void HitTest(const wxPoint& point, wxDataViewItem& item,
                          wxDataViewColumn*& col) const;
@@ -2398,8 +2400,7 @@ public:
                           const wxDataViewItem & item,
                           unsigned int col);
 
-
-    /**
+/**
         Override this to render the cell.
         Before this is called, wxDataViewRenderer::SetValue was called
         so that this instance knows what to render.
