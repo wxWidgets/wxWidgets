@@ -108,6 +108,7 @@ All (GUI):
 - Fix retrieving bounding box for wxDC with transformed coordinates.
 - Fix wxGraphicsMatrixData::Concat() for Direct2D and Cairo renderers.
 - Fix calculating point position in wxDataViewCtrl::HitTest().
+- Fix position of the rectangle returned by wxDataViewCtrl::GetItemRect().
 
 wxGTK:
 

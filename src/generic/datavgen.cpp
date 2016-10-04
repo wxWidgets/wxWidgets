@@ -5349,7 +5349,12 @@ void wxDataViewCtrl::HitTest( const wxPoint & point, wxDataViewItem & item,
 wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem & item,
                                     const wxDataViewColumn* column ) const
 {
-    return m_clientArea->GetItemRect(item, column);
+    // Convert position from the main window coordinates to the control coordinates.
+    // (They can be different due to the presence of the header.).
+    wxRect r = m_clientArea->GetItemRect(item, column);
+    const wxPoint ctrlPos = ScreenToClient(m_clientArea->ClientToScreen(r.GetPosition()));
+    r.SetPosition(ctrlPos);
+    return r;
 }
 
 wxDataViewItem wxDataViewCtrl::GetItemByRow( unsigned int row ) const
