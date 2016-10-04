@@ -294,7 +294,7 @@ INPUT                  = mainpages \
                          overviews \
                          ../../interface
 INPUT_ENCODING         = UTF-8
-FILE_PATTERNS          = *.h
+FILE_PATTERNS          = *.h *.md
 RECURSIVE              = YES # Default: NO
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
