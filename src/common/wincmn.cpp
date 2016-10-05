@@ -1712,6 +1712,8 @@ wxFont wxWindowBase::GetFont() const
         if ( !font.IsOk() )
             font = GetClassDefaultAttributes().font;
 
+        font.SetPPI(MSWGetActiveDPI().y);
+
         return font;
     }
     else
@@ -1720,13 +1722,22 @@ wxFont wxWindowBase::GetFont() const
 
 bool wxWindowBase::SetFont(const wxFont& font)
 {
-    if ( font == m_font )
+    bool setPPI = !font.IsOk() || (font.GetPPI() != MSWGetActiveDPI().y) || MSWIsDPIUpdating();
+
+    if (font == m_font && !setPPI)
     {
         // no change
         return false;
     }
 
     m_font = font;
+
+    if (!m_font.IsOk())
+        m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+
+    if (setPPI)
+        m_font.SetPPI(MSWGetActiveDPI().y);
+
     m_hasFont = font.IsOk();
     m_inheritFont = m_hasFont;
 

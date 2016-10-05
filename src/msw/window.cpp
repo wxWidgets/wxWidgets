@@ -465,6 +465,7 @@ void wxWindowMSW::Init()
 #endif // wxUSE_DEFERRED_SIZING
 
     m_activeDPI = wxDefaultSize;
+    m_updatingDPI = false;
     m_perMonitorDPIaware = false;
 }
 
@@ -4694,6 +4695,24 @@ void wxWindowMSW::MSWInheritDPI(wxWindow* parent)
     }
 }
 
+wxSize wxWindowMSW::MSWGetActiveDPI() const
+{
+    wxSize dpi = m_activeDPI;
+
+    if (dpi == wxDefaultSize)
+    {
+        bool temp;
+        DetermineActiveDPI(dpi, temp);
+    }
+
+    return dpi;
+}
+
+bool wxWindowMSW::MSWIsDPIUpdating() const
+{
+    return m_updatingDPI || (GetParent() && GetParent()->MSWIsDPIUpdating());
+}
+
 void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
 {
     wxSize dpi = wxDefaultSize;
@@ -4800,6 +4819,12 @@ void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize newDPI) const
 
     win->InvalidateBestSize();
 
+    // update font
+    wxFont newFont(win->GetFont());
+    newFont.SetPPI(newDPI.y);
+    win->m_font = newFont; // needs to be set here explicitly, so wxSubWindows uses correct font
+    win->SetFont(win->m_font);
+
     // update children
     wxWindowList::compatibility_iterator current = win->GetChildren().GetFirst();
     while (current)
@@ -4814,6 +4839,9 @@ void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize newDPI) const
 
         current = current->GetNext();
     }
+
+    // update font again after updating children
+    win->SetFont(win->m_font);
 }
 
 // ---------------------------------------------------------------------------

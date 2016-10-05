@@ -609,6 +609,7 @@ protected:
 
     // dpi related
     wxSize                m_activeDPI;
+    bool                  m_updatingDPI;
     bool                  m_perMonitorDPIaware;
 
     // implement the base class pure virtuals
@@ -721,7 +722,9 @@ protected:
     bool HandleDPIChange(const wxSize newDPI, const wxRect newRect);
     void HandleDPIChange(wxWindow* win, const wxSize newDPI) const;
 
+    virtual wxSize MSWGetActiveDPI() const wxOVERRIDE;
     virtual void MSWInheritDPI(wxWindow* parent) wxOVERRIDE;
+    virtual bool MSWIsDPIUpdating() const wxOVERRIDE;
 
 private:
     // common part of all ctors
