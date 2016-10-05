@@ -721,6 +721,8 @@ protected:
     bool HandleDPIChange(const wxSize newDPI, const wxRect newRect);
     void HandleDPIChange(wxWindow* win, const wxSize newDPI) const;
 
+    virtual void MSWInheritDPI(wxWindow* parent) wxOVERRIDE;
+
 private:
     // common part of all ctors
     void Init();

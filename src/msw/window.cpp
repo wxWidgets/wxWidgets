@@ -523,6 +523,9 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
 
     parent->AddChild(this);
 
+    m_perMonitorDPIaware = parent->m_perMonitorDPIaware;
+    m_activeDPI = parent->m_activeDPI;
+
     WXDWORD exstyle;
     DWORD msflags = MSWGetCreateWindowFlags(&exstyle);
 
@@ -4681,6 +4684,15 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 // ---------------------------------------------------------------------------
 // DPI
 // ---------------------------------------------------------------------------
+
+void wxWindowMSW::MSWInheritDPI(wxWindow* parent)
+{
+    if (parent)
+    {
+        m_activeDPI = parent->m_activeDPI;
+        m_perMonitorDPIaware = parent->m_perMonitorDPIaware;
+    }
+}
 
 void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
 {

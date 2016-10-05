@@ -1356,6 +1356,8 @@ void wxWindowBase::SetParent(wxWindowBase *parent)
     wxASSERT_MSG( parent != this, wxS("Can't use window as its own parent") );
 
     m_parent = (wxWindow *)parent;
+
+    MSWInheritDPI(m_parent);
 }
 
 bool wxWindowBase::Reparent(wxWindowBase *newParent)

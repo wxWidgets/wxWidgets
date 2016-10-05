@@ -1890,6 +1890,8 @@ protected:
     // wxMouseCaptureLostEvent to windows on capture stack.
     static void NotifyCaptureLost();
 
+    virtual void MSWInheritDPI(wxWindow* WXUNUSED(parent)) { };
+
 private:
     // recursively call our own and our children DoEnable() when the
     // enabled/disabled status changed because a parent window had been
