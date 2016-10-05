@@ -586,6 +586,10 @@ public:
     // Should be overridden by all classes storing the "last focused" window.
     virtual void WXDoUpdatePendingFocus(wxWindow* WXUNUSED(win)) {}
 
+    // Called from WM_DPICHANGED handler for all windows to let them update
+    // any sizes and fonts used internally when the DPI changes.
+    void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
+
 protected:
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from
