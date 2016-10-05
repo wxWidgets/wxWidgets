@@ -117,6 +117,7 @@ public:
     wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_) { }
 
     LOGFONT      lf;
+    int          m_ppi;
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
@@ -253,6 +254,7 @@ public:
     // accessors and modifiers for the font elements
     int GetPointSize() const;
     wxSize GetPixelSize() const;
+    int GetPPI() const;
     wxFontStyle GetStyle() const;
     wxFontWeight GetWeight() const;
     bool GetUnderlined() const;
@@ -263,6 +265,7 @@ public:
 
     void SetPointSize(int pointsize);
     void SetPixelSize(const wxSize& pixelSize);
+    void SetPPI(int ppi);
     void SetStyle(wxFontStyle style);
     void SetWeight(wxFontWeight weight);
     void SetUnderlined(bool underlined);

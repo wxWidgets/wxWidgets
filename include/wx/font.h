@@ -340,6 +340,7 @@ public:
     // accessors: get the font characteristics
     virtual int GetPointSize() const = 0;
     virtual wxSize GetPixelSize() const;
+    virtual int GetPPI() const { return -1; }
     virtual bool IsUsingSizeInPixels() const;
     wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const = 0;
@@ -358,6 +359,7 @@ public:
     // change the font characteristics
     virtual void SetPointSize( int pointSize ) = 0;
     virtual void SetPixelSize( const wxSize& pixelSize );
+    virtual void SetPPI(int WXUNUSED(dpi)) {}
     virtual void SetFamily( wxFontFamily family ) = 0;
     virtual void SetStyle( wxFontStyle style ) = 0;
     virtual void SetWeight( wxFontWeight weight ) = 0;

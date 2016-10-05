@@ -108,6 +108,11 @@ public:
         return m_nativeFontInfo.GetPixelSize();
     }
 
+    int GetPPI() const
+    {
+        return m_nativeFontInfo.GetPPI();
+    }
+
     bool IsUsingSizeInPixels() const
     {
         return m_sizeUsingPixels;
@@ -193,6 +198,13 @@ public:
 
         m_nativeFontInfo.SetPixelSize(pixelSize);
         m_sizeUsingPixels = true;
+    }
+
+    void SetPPI(int ppi)
+    {
+        Free();
+
+        m_nativeFontInfo.SetPPI(ppi);
     }
 
     void SetFamily(wxFontFamily family)
@@ -426,6 +438,7 @@ void wxFontRefData::Free()
 void wxNativeFontInfo::Init()
 {
     wxZeroMemory(lf);
+    m_ppi = (int)::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
     // we get better font quality if we use PROOF_QUALITY instead of
     // DEFAULT_QUALITY but some fonts (e.g. "Terminal 6pt") are not available
@@ -438,12 +451,7 @@ void wxNativeFontInfo::Init()
 
 int wxNativeFontInfo::GetPointSize() const
 {
-    // FIXME: using the screen here results in incorrect font size calculation
-    //        for printing!
-    const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-
-    // BC++ 2007 doesn't provide abs(long) overload, hence the cast
-    return (int) (((72.0*abs((int)lf.lfHeight)) / (double) ppInch) + 0.5);
+    return (int)(((72.0*abs((int)lf.lfHeight)) / (double)m_ppi) + 0.5);
 }
 
 wxSize wxNativeFontInfo::GetPixelSize() const
@@ -452,6 +460,11 @@ wxSize wxNativeFontInfo::GetPixelSize() const
     ret.SetHeight(abs((int)lf.lfHeight));
     ret.SetWidth(lf.lfWidth);
     return ret;
+}
+
+int wxNativeFontInfo::GetPPI() const
+{
+    return m_ppi;
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
@@ -532,11 +545,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {
-    // FIXME: using the screen here results in incorrect font size calculation
-    //        for printing!
-    const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-
-    lf.lfHeight = -(int)((pointsize*((double)ppInch)/72.0) + 0.5);
+    lf.lfHeight = -(int)((pointsize*((double)m_ppi) / 72.0) + 0.5);
 }
 
 void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
@@ -552,6 +561,13 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
     // versions by passing a negative value explicitly itself.
     lf.lfHeight = -abs(pixelSize.GetHeight());
     lf.lfWidth = pixelSize.GetWidth();
+}
+
+void wxNativeFontInfo::SetPPI(int ppi)
+{
+    int ps = GetPointSize();
+    m_ppi = ppi;
+    SetPointSize(ps);
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -921,6 +937,14 @@ void wxFont::SetPixelSize(const wxSize& pixelSize)
     M_FONTDATA->SetPixelSize(pixelSize);
 }
 
+void wxFont::SetPPI(int ppi)
+{
+    AllocExclusive();
+
+    M_FONTDATA->Free();
+    M_FONTDATA->SetPPI(ppi);
+}
+
 void wxFont::SetFamily(wxFontFamily family)
 {
     AllocExclusive();
@@ -1003,6 +1027,13 @@ wxSize wxFont::GetPixelSize() const
     wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid font") );
 
     return M_FONTDATA->GetPixelSize();
+}
+
+int wxFont::GetPPI() const
+{
+    wxCHECK_MSG(IsOk(), 0, wxT("invalid font"));
+
+    return M_FONTDATA->GetPPI();
 }
 
 bool wxFont::IsUsingSizeInPixels() const

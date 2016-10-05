@@ -87,6 +87,7 @@ public:
     // implement base class pure virtuals
     virtual int GetPointSize() const wxOVERRIDE;
     virtual wxSize GetPixelSize() const wxOVERRIDE;
+    virtual int GetPPI() const wxOVERRIDE;
     virtual bool IsUsingSizeInPixels() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const wxOVERRIDE;
     virtual wxFontWeight GetWeight() const wxOVERRIDE;
@@ -98,6 +99,7 @@ public:
 
     virtual void SetPointSize(int pointSize) wxOVERRIDE;
     virtual void SetPixelSize(const wxSize& pixelSize) wxOVERRIDE;
+    virtual void SetPPI(int ppi) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
     virtual void SetWeight(wxFontWeight weight) wxOVERRIDE;
