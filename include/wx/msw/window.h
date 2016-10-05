@@ -719,6 +719,7 @@ protected:
     // per-monitor DPI related functions
     void DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const;
     bool HandleDPIChange(const wxSize newDPI, const wxRect newRect);
+    void HandleDPIChange(wxWindow* win, const wxSize newDPI) const;
 
 private:
     // common part of all ctors

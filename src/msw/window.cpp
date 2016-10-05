@@ -4738,7 +4738,70 @@ void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware
 
 bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
 {
+    wxSize const oldDPI = m_activeDPI;
+
+    m_updatingDPI = true;
+
+    if (oldDPI != newDPI)
+    {
+        HandleDPIChange(this, newDPI);
+    }
+
+    SetSize(newRect);
+    Layout();
+
+    m_updatingDPI = false;
+
+    Refresh();
+
     return true;
+}
+
+void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize newDPI) const
+{
+    wxSize const oldDPI = win->m_activeDPI;
+    win->m_activeDPI = newDPI;
+
+    // update min and max size
+    double const scaleFactor = (double)newDPI.y / oldDPI.y;
+
+    if (win->m_minHeight != wxDefaultCoord)
+    {
+        double const newMinHeight = win->m_minHeight * scaleFactor;
+        win->m_minHeight = (scaleFactor > 1.0) ? ceil(newMinHeight) : floor(newMinHeight);
+    }
+    if (win->m_minWidth != wxDefaultCoord)
+    {
+        double const newMinWidth = win->m_minWidth * scaleFactor;
+        win->m_minWidth = (scaleFactor > 1.0) ? ceil(newMinWidth) : floor(newMinWidth);
+    }
+    if (win->m_maxHeight != wxDefaultCoord)
+    {
+        double const newMaxHeight = win->m_maxHeight * scaleFactor;
+        win->m_maxHeight = (scaleFactor > 1.0) ? ceil(newMaxHeight) : floor(newMaxHeight);
+    }
+    if (win->m_maxWidth != wxDefaultCoord)
+    {
+        double const newMaxWidth = win->m_maxWidth * scaleFactor;
+        win->m_maxWidth = (scaleFactor > 1.0) ? ceil(newMaxWidth) : floor(newMaxWidth);
+    }
+
+    win->InvalidateBestSize();
+
+    // update children
+    wxWindowList::compatibility_iterator current = win->GetChildren().GetFirst();
+    while (current)
+    {
+        wxWindow *childWin = current->GetData();
+        // Update all children, except other top-level windows.
+        // These could be on a different monitor and will get their own dpi-changed event.
+        if (childWin && !childWin->IsTopLevel())
+        {
+            HandleDPIChange(childWin, newDPI);
+        }
+
+        current = current->GetNext();
+    }
 }
 
 // ---------------------------------------------------------------------------
