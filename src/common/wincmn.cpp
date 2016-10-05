@@ -792,13 +792,13 @@ wxSize wxWindowBase::DoGetBestSize() const
 
 double wxWindowBase::GetContentScaleFactor() const
 {
-    // Currently we don't support per-monitor DPI, so it's useless to construct
-    // a DC associated with this window, just use the global value.
-    //
-    // We also use just the vertical component of the DPI because it's the one
+    // We use just the vertical component of the DPI because it's the one
     // that counts most and, in practice, it's equal to the horizontal one
     // anyhow.
-    return double(wxScreenDC().GetPPI().y) / BASELINE_DPI;
+    if (MSWGetActiveDPI() != wxDefaultSize)
+        return double(MSWGetActiveDPI().y) / BASELINE_DPI;
+    else
+        return double(wxScreenDC().GetPPI().y) / BASELINE_DPI;
 }
 
 // helper of GetWindowBorderSize(): as many ports don't implement support for
@@ -2875,9 +2875,13 @@ void wxWindowBase::OnInternalIdle()
 
 /* static */
 wxSize
-wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* w)
 {
-    const wxSize dpi = wxScreenDC().GetPPI();
+    wxSize dpi;
+    if (w && w->MSWGetActiveDPI() != wxDefaultSize)
+        dpi = w->MSWGetActiveDPI();
+    else
+        dpi = wxScreenDC().GetPPI();
 
     // Take care to not scale -1 because it has a special meaning of
     // "unspecified" which should be preserved.
@@ -2887,9 +2891,13 @@ wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
 
 /* static */
 wxSize
-wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 {
-    const wxSize dpi = wxScreenDC().GetPPI();
+    wxSize dpi;
+    if (w && w->MSWGetActiveDPI() != wxDefaultSize)
+        dpi = w->MSWGetActiveDPI();
+    else
+        dpi = wxScreenDC().GetPPI();
 
     // Take care to not scale -1 because it has a special meaning of
     // "unspecified" which should be preserved.

@@ -28,6 +28,7 @@
     #include "wx/button.h"
     #include "wx/statbox.h"
     #include "wx/toplevel.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/display.h"
@@ -107,7 +108,7 @@ int wxSizerFlags::DoGetDefaultBorderInPx()
     // have any associated window, so this is wrong on systems using multiple
     // monitors with different resolutions too -- but, again, without changes
     // in the API, there is nothing we can do about this.
-    return wxWindow::FromDIP(5, NULL);
+    return wxWindow::FromDIP(5, wxTheApp->GetTopWindow());
 }
 
 #endif // wxNEEDS_BORDER_IN_PX
