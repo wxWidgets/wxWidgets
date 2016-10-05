@@ -44,3 +44,38 @@ perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
 bash -lc "g++ --version"
 bash -lc "LDFLAGS=-L/usr/lib/w32api ./configure --disable-optimise --disable-shared && make -j3"
 goto :eof
+
+:cmake
+echo --- Tools versions:
+cmake --version | head -1
+echo.
+echo --- Generating project files
+echo.
+set WX_INSTALL_PATH=%HOMEDRIVE%%HOMEPATH%\wx_install_target
+mkdir %WX_INSTALL_PATH%
+mkdir build_cmake_vs
+pushd build_cmake_vs
+cmake -G "%GENERATOR%" -DCMAKE_INSTALL_PREFIX=%WX_INSTALL_PATH% -DwxBUILD_SHARED=%SHARED% ..
+echo.
+echo --- Starting the build
+echo.
+cmake --build . --config %CONFIGURATION%
+echo.
+echo --- Installing
+echo.
+cmake --build . --config %CONFIGURATION% --target install
+popd
+
+echo.
+echo --- Test installed library
+echo.
+set WXWIN=%WX_INSTALL_PATH%
+mkdir build_cmake_install_test
+pushd build_cmake_install_test
+echo --- Configure minimal sample
+cmake -G "%GENERATOR%" ..\samples\minimal
+echo --- Building minimal sample with installed library
+cmake --build . --config %CONFIGURATION%
+popd
+
+goto :eof

@@ -26,6 +26,10 @@ environment:
   - TOOLSET: msys2
     MSYSTEM: MINGW32
   - TOOLSET: cygwin
+  - TOOLSET: cmake
+    GENERATOR: 'Visual Studio 12'
+    SHARED: ON
+    CONFIGURATION: Release
 
 clone_depth: 50
 
