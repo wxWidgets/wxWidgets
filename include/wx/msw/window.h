@@ -587,7 +587,8 @@ public:
     virtual void WXDoUpdatePendingFocus(wxWindow* WXUNUSED(win)) {}
 
     // Called from WM_DPICHANGED handler for all windows to let them update
-    // any sizes and fonts used internally when the DPI changes.
+    // any sizes and fonts used internally when the DPI changes and generate
+    // wxDPIChangedEvent to let the user code do the same thing as well.
     void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
 
 protected:

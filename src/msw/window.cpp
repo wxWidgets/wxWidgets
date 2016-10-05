@@ -4876,6 +4876,10 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 
         current = current->GetNext();
     }
+
+    wxDPIChangedEvent event(oldDPI, newDPI);
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
 }
 
 // ---------------------------------------------------------------------------

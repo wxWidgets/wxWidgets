@@ -2044,7 +2044,7 @@ public:
 
         If the DPI is not available, returns @c wxSize(0,0) object.
 
-        @see wxDisplay::GetPPI()
+        @see wxDisplay::GetPPI(), wxDPIChangedEvent
 
         @since 3.1.3
      */

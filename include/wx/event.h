@@ -641,6 +641,7 @@ class WXDLLIMPEXP_FWD_CORE wxMenuEvent;
 class WXDLLIMPEXP_FWD_CORE wxContextMenuEvent;
 class WXDLLIMPEXP_FWD_CORE wxSysColourChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxDisplayChangedEvent;
+class WXDLLIMPEXP_FWD_CORE wxDPIChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxQueryNewPaletteEvent;
 class WXDLLIMPEXP_FWD_CORE wxPaletteChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxJoystickEvent;
@@ -793,6 +794,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_MENU_HIGHLIGHT, wxMenuEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_CONTEXT_MENU, wxContextMenuEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DISPLAY_CHANGED, wxDisplayChangedEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DPI_CHANGED, wxDPIChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_QUERY_NEW_PALETTE, wxQueryNewPaletteEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PALETTE_CHANGED, wxPaletteChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_JOY_BUTTON_DOWN, wxJoystickEvent);
@@ -3045,6 +3047,32 @@ public:
 };
 
 /*
+ wxEVT_DPI_CHANGED
+ */
+class WXDLLIMPEXP_CORE wxDPIChangedEvent : public wxEvent
+{
+public:
+    explicit
+    wxDPIChangedEvent(const wxSize& oldDPI = wxDefaultSize,
+                      const wxSize& newDPI = wxDefaultSize)
+        : wxEvent(0, wxEVT_DPI_CHANGED),
+          m_oldDPI(oldDPI),
+          m_newDPI(newDPI)
+        { }
+
+    wxSize GetOldDPI() const { return m_oldDPI; }
+    wxSize GetNewDPI() const { return m_newDPI; }
+
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxDPIChangedEvent(*this); }
+
+private:
+    wxSize m_oldDPI;
+    wxSize m_newDPI;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDPIChangedEvent);
+};
+
+/*
  wxEVT_PALETTE_CHANGED
  */
 
@@ -4121,6 +4149,7 @@ typedef void (wxEvtHandler::*wxDropFilesEventFunction)(wxDropFilesEvent&);
 typedef void (wxEvtHandler::*wxInitDialogEventFunction)(wxInitDialogEvent&);
 typedef void (wxEvtHandler::*wxSysColourChangedEventFunction)(wxSysColourChangedEvent&);
 typedef void (wxEvtHandler::*wxDisplayChangedEventFunction)(wxDisplayChangedEvent&);
+typedef void (wxEvtHandler::*wxDPIChangedEventFunction)(wxDPIChangedEvent&);
 typedef void (wxEvtHandler::*wxUpdateUIEventFunction)(wxUpdateUIEvent&);
 typedef void (wxEvtHandler::*wxCloseEventFunction)(wxCloseEvent&);
 typedef void (wxEvtHandler::*wxShowEventFunction)(wxShowEvent&);
@@ -4184,6 +4213,8 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
     wxEVENT_HANDLER_CAST(wxSysColourChangedEventFunction, func)
 #define wxDisplayChangedEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxDisplayChangedEventFunction, func)
+#define wxDPIChangedEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxDPIChangedEventFunction, func)
 #define wxUpdateUIEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxUpdateUIEventFunction, func)
 #define wxCloseEventHandler(func) \
@@ -4443,6 +4474,7 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
 #define EVT_INIT_DIALOG(func)  wx__DECLARE_EVT0(wxEVT_INIT_DIALOG, wxInitDialogEventHandler(func))
 #define EVT_SYS_COLOUR_CHANGED(func) wx__DECLARE_EVT0(wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler(func))
 #define EVT_DISPLAY_CHANGED(func)  wx__DECLARE_EVT0(wxEVT_DISPLAY_CHANGED, wxDisplayChangedEventHandler(func))
+#define EVT_DPI_CHANGED(func)  wx__DECLARE_EVT0(wxEVT_DPI_CHANGED, wxDPIChangedEventHandler(func))
 #define EVT_SHOW(func) wx__DECLARE_EVT0(wxEVT_SHOW, wxShowEventHandler(func))
 #define EVT_MAXIMIZE(func) wx__DECLARE_EVT0(wxEVT_MAXIMIZE, wxMaximizeEventHandler(func))
 #define EVT_ICONIZE(func) wx__DECLARE_EVT0(wxEVT_ICONIZE, wxIconizeEventHandler(func))
