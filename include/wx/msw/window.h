@@ -607,6 +607,10 @@ protected:
     int                   m_xThumbSize;
     int                   m_yThumbSize;
 
+    // dpi related
+    wxSize                m_activeDPI;
+    bool                  m_perMonitorDPIaware;
+
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
@@ -711,6 +715,10 @@ protected:
     {
         return NULL;
     }
+
+    // per-monitor DPI related functions
+    void DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const;
+    bool HandleDPIChange(const wxSize newDPI, const wxRect newRect);
 
 private:
     // common part of all ctors

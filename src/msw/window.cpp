@@ -464,6 +464,8 @@ void wxWindowMSW::Init()
     m_pendingSize = wxDefaultSize;
 #endif // wxUSE_DEFERRED_SIZING
 
+    m_activeDPI = wxDefaultSize;
+    m_perMonitorDPIaware = false;
 }
 
 // Destructor
@@ -2944,6 +2946,20 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
+        case WM_DPICHANGED:
+            if (m_perMonitorDPIaware)
+            {
+                int const xDPI = (int)LOWORD(wParam);
+                int const yDPI = (int)HIWORD(wParam);
+                wxSize const newDPI(xDPI, yDPI);
+
+                RECT* const prcNewWindow = (RECT*)lParam;
+                wxRect const newRect(prcNewWindow->left, prcNewWindow->top, prcNewWindow->right - prcNewWindow->left, prcNewWindow->bottom - prcNewWindow->top);
+
+                processed = HandleDPIChange(newDPI, newRect);
+            }
+            break;
+
         case WM_DESTROY:
             // never set processed to true and *always* pass WM_DESTROY to
             // DefWindowProc() as Windows may do some internal cleanup when
@@ -4660,6 +4676,69 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 #endif // wxUSE_OWNER_DRAWN && wxUSE_MENUS_NATIVE
 
     return false;
+}
+
+// ---------------------------------------------------------------------------
+// DPI
+// ---------------------------------------------------------------------------
+
+void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
+{
+    wxSize dpi = wxDefaultSize;
+    PROCESS_DPI_AWARENESS dpiAware = PROCESS_DPI_UNAWARE;
+
+#if wxUSE_DYNLIB_CLASS
+
+    // determine if process is per-monitor DPI aware
+    wxDynamicLibrary dllShCore;
+    if (dllShCore.Load(wxS("Shcore.dll"), wxDL_VERBATIM | wxDL_QUIET))
+    {
+        typedef HRESULT(WINAPI *GetProcessDpiAwareness_t)(HANDLE hprocess, PROCESS_DPI_AWARENESS *value);
+        GetProcessDpiAwareness_t wxDL_INIT_FUNC(pfn, GetProcessDpiAwareness, dllShCore);
+
+        if (pfnGetProcessDpiAwareness)
+        {
+            if (pfnGetProcessDpiAwareness(NULL, &dpiAware) != 0 /*S_OK*/)
+            {
+                dpiAware = PROCESS_DPI_UNAWARE;
+            }
+        }
+    }
+
+    // determine active DPI of the window
+    wxDynamicLibrary dllUser32;
+    if (dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+    {
+        typedef UINT(WINAPI *GetDpiForWindow_t)(HWND hwnd);
+        GetDpiForWindow_t wxDL_INIT_FUNC(pfn, GetDpiForWindow, dllUser32);
+
+        if (pfnGetDpiForWindow)
+        {
+            UINT dpiWindow = pfnGetDpiForWindow(GetHwnd());
+            if (dpiWindow != 0)
+            {
+                dpi = wxSize((int)dpiWindow, (int)dpiWindow);
+            }
+        }
+    }
+
+#endif // wxUSE_DYNLIB_CLASS
+
+    // not initialized above, use old method
+    if (dpi == wxDefaultSize)
+    {
+        HDC hdc = GetDC(GetHwnd());
+        dpi.x = ::GetDeviceCaps(hdc, LOGPIXELSX);
+        dpi.y = ::GetDeviceCaps(hdc, LOGPIXELSY);
+    }
+
+    activeDPI = dpi;
+    perMonitorDPIaware = (dpiAware == PROCESS_PER_MONITOR_DPI_AWARE);
+}
+
+bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
+{
+    return true;
 }
 
 // ---------------------------------------------------------------------------
