@@ -1933,6 +1933,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
 void wxCocoaDataViewControl::InitOutlineView(long style)
 {
     [m_OutlineView setImplementation:this];
+    [m_OutlineView setFocusRingType:NSFocusRingTypeNone];
     [m_OutlineView setColumnAutoresizingStyle:NSTableViewLastColumnOnlyAutoresizingStyle];
     [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
     NSUInteger maskGridStyle(NSTableViewGridNone);
