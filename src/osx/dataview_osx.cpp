@@ -589,6 +589,10 @@ void wxDataViewCtrl::SelectAll()
 
 void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
 {
+    wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer());
+
+    dataViewWidgetPtr->UnselectAll();
+
     size_t const noOfSelections = sel.GetCount();
 
     size_t i;
@@ -608,8 +612,6 @@ void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
     }
 
    // finally select the items:
-    wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer()); // variable definition for abbreviational purposes
-
     for (i=0; i<noOfSelections; ++i)
       dataViewWidgetPtr->Select(sel[i]);
 }
