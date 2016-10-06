@@ -501,13 +501,7 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
         return E_FAIL;
     wxLogTrace(wxT("access"), wxString(wxT("accNavigate for ")) + m_pAccessible->GetWindow()->GetClassInfo()->GetClassName());
 
-    if ((varStart.vt != VT_I4 && varStart.vt != VT_EMPTY)
-                                                          #if 0
-                                                          // according to MSDN and sources varStart.vt is unsigned
-                                                          // so below line cause warning "Condition is always false"
-                                                          || varStart.vt < 0
-                                                          #endif
-                                                          )
+    if ( varStart.vt != VT_I4 || varStart.lVal < 0 )
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for accNavigate"));
         return E_INVALIDARG;
@@ -595,7 +589,7 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
         wxLogTrace(wxT("access"), wxT("Navigate not implemented"));
 
         // Try to use child object directly.
-        if (varStart.vt == VT_I4 && varStart.lVal > 0)
+        if (varStart.lVal > 0)
         {
             IAccessible* childAccessible = GetChildAccessible(varStart.lVal);
             if (childAccessible)
@@ -663,7 +657,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varChildID.vt != VT_I4)
+    if (varChildID.vt != VT_I4 || varChildID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accChild"));
         return E_INVALIDARG;
@@ -850,7 +844,7 @@ STDMETHODIMP wxIAccessible::accDoDefaultAction(VARIANT varID)
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for accDoDefaultAction"));
         return E_INVALIDARG;
@@ -898,7 +892,7 @@ STDMETHODIMP wxIAccessible::get_accDefaultAction ( VARIANT varID, BSTR* pszDefau
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accDefaultAction"));
         return E_INVALIDARG;
@@ -961,7 +955,7 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accDescription"));
         return E_INVALIDARG;
@@ -1022,7 +1016,7 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accHelp"));
         return E_INVALIDARG;
@@ -1086,7 +1080,7 @@ STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChi
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varChild.vt != VT_I4)
+    if (varChild.vt != VT_I4 || varChild.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accHelpTopic"));
         return E_INVALIDARG;
@@ -1133,7 +1127,7 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accKeyboardShortcut"));
         return E_INVALIDARG;
@@ -1196,7 +1190,7 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accName"));
         return E_INVALIDARG;
@@ -1258,7 +1252,7 @@ STDMETHODIMP wxIAccessible::get_accRole ( VARIANT varID, VARIANT* pVarRole)
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accRole"));
         return E_INVALIDARG;
@@ -1321,7 +1315,7 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4 && varID.vt != VT_EMPTY)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accState"));
         return E_INVALIDARG;
@@ -1374,7 +1368,7 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for get_accValue"));
         return E_INVALIDARG;
@@ -1440,7 +1434,7 @@ STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
     if (!m_pAccessible)
         return E_FAIL;
 
-    if (varID.vt != VT_I4 && varID.vt != VT_EMPTY)
+    if (varID.vt != VT_I4 || varID.lVal < 0)
     {
         wxLogTrace(wxT("access"), wxT("Invalid arg for accSelect"));
         return E_INVALIDARG;
@@ -1459,7 +1453,7 @@ STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
-        if (varID.lVal > 0 && varID.lVal > 0)
+        if (varID.lVal > 0)
         {
             IAccessible* childAccessible = GetChildAccessible(varID.lVal);
             if (childAccessible)
