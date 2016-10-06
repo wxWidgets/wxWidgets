@@ -40,6 +40,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -215,6 +216,8 @@ int wxColourDialog::ShowModal()
     // Set the global pointer for the duration of the modal dialog life-time.
     gs_activeDialog = this;
     wxON_BLOCK_EXIT_NULL(gs_activeDialog);
+
+    AutoSystemDpiAware dpiAwareness;
 
     // do show the modal dialog
     if ( !::ChooseColor(&chooseColorStruct) )
