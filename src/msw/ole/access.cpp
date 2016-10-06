@@ -1233,8 +1233,16 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
     }
     else
     {
-        wxBasicString basicString(name);
-        *pszName = basicString.Get();
+        if ( name.empty() )
+        {
+            *pszName = NULL;
+            return S_FALSE;
+        }
+        else
+        {
+            wxBasicString basicString(name);
+            *pszName = basicString.Get();
+        }
         return S_OK;
     }
     return E_NOTIMPL;
@@ -1406,9 +1414,17 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
     }
     else
     {
-        wxBasicString basicString(strValue);
-        * pszValue = basicString.Get();
-        return S_OK;
+        if ( strValue.empty() )
+        {
+            *pszValue = NULL;
+            return S_FALSE;
+        }
+        else
+        {
+            wxBasicString basicString(strValue);
+            * pszValue = basicString.Get();
+            return S_OK;
+        }
     }
     return E_NOTIMPL;
 }
