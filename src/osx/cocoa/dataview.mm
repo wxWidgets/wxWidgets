@@ -1697,6 +1697,15 @@ outlineView:(NSOutlineView*)outlineView
     }
 }
 
+-(void) outlineView:(NSOutlineView *)outlineView mouseDownInHeaderOfTableColumn:(NSTableColumn *)tableColumn
+{
+    // Implements per-column reordering in NSTableView per Apple's Q&A:
+    // https://developer.apple.com/library/content/qa/qa1503/_index.html
+    wxDataViewColumn* const
+        col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+    [outlineView setAllowsColumnReordering:col->IsReorderable()];
+}
+
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {
     wxUnusedVar(outlineView);
