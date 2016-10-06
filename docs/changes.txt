@@ -141,6 +141,8 @@ wxMSW:
   are selected.
 - Add wxAccStatus::wxACC_INVALID_ARG error code to indicate argument-related
   errors in wxAccessible methods.
+- Return DISP_E_MEMBERNOTFOUND error code from wxIAccessible if wxAccessible
+  methods return wxAccStatus::wxACC_NOT_SUPPORTED.
 
 wxOSX:
 

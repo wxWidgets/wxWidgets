@@ -387,6 +387,8 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
         return E_FAIL;
     if (status == wxACC_INVALID_ARG)
         return E_INVALIDARG;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -455,6 +457,8 @@ STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWi
         return E_FAIL;
     if (status == wxACC_INVALID_ARG)
         return E_INVALIDARG;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -969,6 +973,8 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
         return E_FAIL;
     if (status == wxACC_INVALID_ARG)
         return E_INVALIDARG;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1028,6 +1034,8 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
         return E_FAIL;
     if (status == wxACC_INVALID_ARG)
         return E_INVALIDARG;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1087,6 +1095,8 @@ STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChi
     wxAccStatus status = wxACC_NOT_IMPLEMENTED;
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1135,6 +1145,8 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
         return E_FAIL;
     if (status == wxACC_INVALID_ARG)
         return E_INVALIDARG;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1370,6 +1382,9 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
     if (status == wxACC_INVALID_ARG)
         return E_INVALIDARG;
 
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
+
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Try to use child object directly.
@@ -1422,6 +1437,8 @@ STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
         return E_FAIL;
     if (status == wxACC_INVALID_ARG)
         return E_INVALIDARG;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1465,6 +1482,8 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
     wxAccStatus status = m_pAccessible->GetFocus(& childId, & childObject);
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
@@ -1481,7 +1500,8 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
         {
             pVarID->vt = VT_I4;
             pVarID->lVal = CHILDID_SELF;
-            return S_OK;        }
+            return S_OK;
+        }
         else
         {
             wxIAccessible* childIA = childObject->GetIAccessible();
@@ -1531,6 +1551,8 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
     wxAccStatus status = m_pAccessible->GetSelections(& selections);
     if (status == wxACC_FAIL)
         return E_FAIL;
+    if (status == wxACC_NOT_SUPPORTED)
+        return DISP_E_MEMBERNOTFOUND;
 
     if (status == wxACC_NOT_IMPLEMENTED)
     {
