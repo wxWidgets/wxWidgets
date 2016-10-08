@@ -2358,7 +2358,7 @@ void wxDataViewTextRenderer::SetAlignment( int align )
         pangoAlign = PANGO_ALIGN_CENTER;
 
     GValue gvalue = G_VALUE_INIT;
-    g_value_init( &gvalue, gtk_cell_renderer_mode_get_type() );
+    g_value_init( &gvalue, pango_alignment_get_type() );
     g_value_set_enum( &gvalue, pangoAlign );
     g_object_set_property( G_OBJECT(m_renderer), "alignment", &gvalue );
     g_value_unset( &gvalue );
@@ -2885,7 +2885,7 @@ void wxDataViewChoiceRenderer::SetAlignment( int align )
         pangoAlign = PANGO_ALIGN_CENTER;
 
     GValue gvalue = G_VALUE_INIT;
-    g_value_init( &gvalue, gtk_cell_renderer_mode_get_type() );
+    g_value_init( &gvalue, pango_alignment_get_type() );
     g_value_set_enum( &gvalue, pangoAlign );
     g_object_set_property( G_OBJECT(m_renderer), "alignment", &gvalue );
     g_value_unset( &gvalue );
