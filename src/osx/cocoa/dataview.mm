@@ -1229,6 +1229,21 @@ outlineView:(NSOutlineView*)outlineView
 // ============================================================================
 // wxImageTextCell
 // ============================================================================
+@implementation wxImageCell
+
+-(NSSize) cellSize
+{
+    if ([self image] != nil)
+        return [[self image] size];
+    else
+        return NSZeroSize;
+}
+
+@end
+
+// ============================================================================
+// wxImageTextCell
+// ============================================================================
 @implementation wxImageTextCell
 //
 // initialization
@@ -2804,10 +2819,7 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(const wxString& varianttype,
                                                    int align)
     : wxDataViewRenderer(varianttype,mode,align)
 {
-    NSImageCell* cell;
-
-
-    cell = [[NSImageCell alloc] init];
+    NSCell* cell = [[wxImageCell alloc] init];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
 }
