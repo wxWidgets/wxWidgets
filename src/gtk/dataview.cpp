@@ -2421,14 +2421,14 @@ bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 
         // GetPixbuf() may create a Pixbuf representation in the wxBitmap
         // object (and it will stay there and remain owned by wxBitmap)
-        SetPixbufProp(m_renderer, bitmap.GetPixbuf());
+        SetPixbufProp(m_renderer, bitmap.IsOk() ? bitmap.GetPixbuf() : NULL);
     }
     else if (value.GetType() == wxT("wxIcon"))
     {
         wxIcon icon;
         icon << value;
 
-        SetPixbufProp(m_renderer, icon.GetPixbuf());
+        SetPixbufProp(m_renderer, icon.IsOk() ? icon.GetPixbuf() : NULL);
     }
     else
     {
