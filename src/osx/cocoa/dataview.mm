@@ -2820,11 +2820,20 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(const wxString& varianttype,
 // In all other cases the method returns 'false'.
 bool wxDataViewBitmapRenderer::MacRender()
 {
-    wxBitmap bitmap;
-
-    bitmap << GetValue();
-    if (bitmap.IsOk())
-        [GetNativeData()->GetItemCell() setObjectValue:[[bitmap.GetNSImage() retain] autorelease]];
+    if (GetValue().GetType() == wxS("wxBitmap"))
+    {
+        wxBitmap bitmap;
+        bitmap << GetValue();
+        if (bitmap.IsOk())
+            [GetNativeData()->GetItemCell() setObjectValue:[[bitmap.GetNSImage() retain] autorelease]];
+    }
+    else if (GetValue().GetType() == wxS("wxIcon"))
+    {
+        wxIcon icon;
+        icon << GetValue();
+        if (icon.IsOk())
+            [GetNativeData()->GetItemCell() setObjectValue:[[icon.GetNSImage() retain] autorelease]];
+    }
     return true;
 }
 
