@@ -3662,7 +3662,7 @@ wxAccStatus wxWindowAccessible::GetLocation(wxRect& rect, int elementId)
     wxCHECK( GetWindow() != NULL, wxACC_FAIL );
 
     wxWindow* win = NULL;
-    if (elementId == 0)
+    if (elementId == wxACC_SELF)
     {
         win = GetWindow();
     }
@@ -3718,7 +3718,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
         {
             wxWindowList::compatibility_iterator node =
                 wxWindowList::compatibility_iterator();
-            if (fromId == 0)
+            if (fromId == wxACC_SELF)
             {
                 // Can't navigate to sibling of this window
                 // if we're a top-level window.
@@ -3748,7 +3748,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
         {
             wxWindowList::compatibility_iterator node =
                 wxWindowList::compatibility_iterator();
-            if (fromId == 0)
+            if (fromId == wxACC_SELF)
             {
                 // Can't navigate to sibling of this window
                 // if we're a top-level window.
@@ -3825,7 +3825,7 @@ wxAccStatus wxWindowAccessible::GetChild(int childId, wxAccessible** child)
 {
     wxCHECK( GetWindow() != NULL, wxACC_FAIL );
 
-    if (childId == 0)
+    if (childId == wxACC_SELF)
     {
         *child = this;
         return wxACC_OK;
