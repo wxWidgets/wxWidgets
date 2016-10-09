@@ -506,6 +506,7 @@ public:
     virtual void HitTest(const wxPoint& point,
                          wxDataViewItem& item,
                          wxDataViewColumn*& columnPtr) const;
+    virtual void SetRowHeight(int height);
     virtual void SetRowHeight(const wxDataViewItem& item, unsigned int height);
     virtual void OnSize();
     
@@ -520,6 +521,7 @@ public:
 
 private:
     void InitOutlineView(long style);
+    int GetDefaultRowHeight() const;
 
     wxCocoaOutlineDataSource* m_DataSource;
 

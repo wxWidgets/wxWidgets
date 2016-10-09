@@ -568,6 +568,12 @@ void wxDataViewCtrl::HitTest(wxPoint const& point, wxDataViewItem& item, wxDataV
   return GetDataViewPeer()->HitTest(point,item,columnPtr);
 }
 
+bool wxDataViewCtrl::SetRowHeight(int rowHeight)
+{
+  GetDataViewPeer()->SetRowHeight(rowHeight);
+  return true;
+}
+
 bool wxDataViewCtrl::IsSelected(wxDataViewItem const& item) const
 {
   return GetDataViewPeer()->IsSelected(item);

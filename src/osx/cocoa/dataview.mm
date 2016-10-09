@@ -1975,6 +1975,8 @@ wxCocoaDataViewControl::~wxCocoaDataViewControl()
 //
 bool wxCocoaDataViewControl::ClearColumns()
 {
+    CGFloat rowHeight = [m_OutlineView rowHeight];
+
     // as there is a bug in NSOutlineView version (OSX 10.5.6 #6555162) the
     // columns cannot be deleted if there is an outline column in the view;
     // therefore, the whole view is deleted and newly constructed:
@@ -1984,6 +1986,8 @@ bool wxCocoaDataViewControl::ClearColumns()
     [m_OutlineView setDataSource:m_DataSource];
 
     InitOutlineView(GetDataViewCtrl()->GetWindowStyle());
+
+    [m_OutlineView setRowHeight:rowHeight];
 
     return true;
 }
@@ -2416,6 +2420,24 @@ void wxCocoaDataViewControl::HitTest(const wxPoint& point, wxDataViewItem& item,
         columnPtr = NULL;
         item      = wxDataViewItem();
     }
+}
+
+void wxCocoaDataViewControl::SetRowHeight(int height)
+{
+    [m_OutlineView setRowHeight:wxMax(height, GetDefaultRowHeight())];
+}
+
+int wxCocoaDataViewControl::GetDefaultRowHeight() const
+{
+    const int MINIMUM_NATIVE_HEIGHT = 17;
+    // Custom setup of NSLayoutManager is necessary to match NSTableView sizing.
+    // See http://stackoverflow.com/questions/17095927/dynamically-changing-row-height-after-font-size-of-entire-nstableview-nsoutlin
+    NSLayoutManager *lm = [[NSLayoutManager alloc] init];
+    [lm setTypesetterBehavior:NSTypesetterBehavior_10_2_WithCompatibility];
+    [lm setUsesScreenFonts:NO];
+    CGFloat height = [lm defaultLineHeightForFont:GetWXPeer()->GetFont().OSXGetNSFont()];
+    [lm release];
+    return wxMax(MINIMUM_NATIVE_HEIGHT, int(height));
 }
 
 void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), unsigned int WXUNUSED(height))

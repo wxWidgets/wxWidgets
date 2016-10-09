@@ -1596,8 +1596,8 @@ public:
         This function can only be used when all rows have the same height, i.e.
         when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
 
-        Currently this is implemented in the generic and native GTK versions
-        only and nothing is done (and @false returned) when using OS X port.
+        Currently this is implemented in the generic and native GTK and OS X
+        (since 3.1.1) versions.
 
         Also notice that this method can only be used to increase the row
         height compared with the default one (as determined by the return value
