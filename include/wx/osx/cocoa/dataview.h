@@ -204,6 +204,10 @@ public:
     // Set the line break mode for the given cell using our m_ellipsizeMode
     void ApplyLineBreakMode(NSCell *cell);
 
+    // Does the rendered use a font that the control can't override?
+    void SetHasCustomFont(bool has) { m_hasCustomFont = has; }
+    bool HasCustomFont() const { return m_hasCustomFont; }
+
 private:
     // common part of all ctors
     void Init();
@@ -224,6 +228,8 @@ private:
     NSColor *m_origTextColour;
 
     wxEllipsizeMode m_ellipsizeMode;
+
+    bool m_hasCustomFont;
 };
 
 // ============================================================================
@@ -518,6 +524,8 @@ public:
 
     // Cocoa-specific helpers
     id GetItemAtRow(int row) const;
+
+    virtual void SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack = true);
 
 private:
     void InitOutlineView(long style);

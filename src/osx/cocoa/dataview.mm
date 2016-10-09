@@ -392,6 +392,10 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     [[nativeColumn dataCell] setWraps:NO];
     // setting the default data cell:
     [nativeColumn setDataCell:renderData->GetColumnCell()];
+
+    if (!renderData->HasCustomFont())
+        [renderData->GetColumnCell() setFont:column->GetOwner()->GetFont().OSXGetNSFont()];
+
     // setting the editablility:
     const bool isEditable = renderer->GetMode() == wxDATAVIEW_CELL_EDITABLE;
 
@@ -2547,6 +2551,13 @@ id wxCocoaDataViewControl::GetItemAtRow(int row) const
     return [m_OutlineView itemAtRow:row];
 }
 
+void wxCocoaDataViewControl::SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack)
+{
+    wxWidgetCocoaImpl::SetFont(font, foreground, windowStyle, ignoreBlack);
+    SetRowHeight(0/*will use default/minimum height*/);
+}
+
+
 // ----------------------------------------------------------------------------
 // wxDataViewRendererNativeData
 // ----------------------------------------------------------------------------
@@ -2556,6 +2567,7 @@ void wxDataViewRendererNativeData::Init()
     m_origFont = NULL;
     m_origTextColour = NULL;
     m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
+    m_hasCustomFont = false;
 
     if ( m_ColumnCell )
         ApplyLineBreakMode(m_ColumnCell);
@@ -2890,7 +2902,9 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
     [cell setFont:[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
     for (size_t i=0; i<choices.GetCount(); ++i)
         [cell addItemWithTitle:wxCFStringRef(choices[i]).AsNSString()];
-    SetNativeData(new wxDataViewRendererNativeData(cell));
+    wxDataViewRendererNativeData *data = new wxDataViewRendererNativeData(cell);
+    data->SetHasCustomFont(true);
+    SetNativeData(data);
     [cell release];
 }
 
