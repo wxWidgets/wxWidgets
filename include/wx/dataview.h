@@ -54,6 +54,9 @@ class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
 class WXDLLIMPEXP_FWD_ADV wxDataViewRenderer;
 class WXDLLIMPEXP_FWD_ADV wxDataViewModelNotifier;
+#if wxUSE_ACCESSIBILITY
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlAccessible;
+#endif // wxUSE_ACCESSIBILITY
 
 extern WXDLLIMPEXP_DATA_ADV(const char) wxDataViewCtrlNameStr[];
 
@@ -1301,9 +1304,17 @@ public:
 
 //-----------------------------------------------------------------------------
 
+#if wxUSE_ACCESSIBILITY
+class WXDLLIMPEXP_FWD_ADV wxDataViewTreeCtrlAccessible;
+#endif // wxUSE_ACCESSIBILITY
+
 class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl,
                                           public wxWithImages
 {
+#if wxUSE_ACCESSIBILITY
+    friend class wxDataViewTreeCtrlAccessible;
+#endif // wxUSE_ACCESSIBILITY
+
 public:
     wxDataViewTreeCtrl() { }
     wxDataViewTreeCtrl(wxWindow *parent,
@@ -1400,6 +1411,21 @@ private:
 #define wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG             wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
 #define wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE          wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE
 #define wxEVT_COMMAND_DATAVIEW_ITEM_DROP                   wxEVT_DATAVIEW_ITEM_DROP
+
+#if wxUSE_ACCESSIBILITY
+//-----------------------------------------------------------------------------
+// wxDataViewTreeCtrlAccessible
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewTreeCtrlAccessible: public wxDataViewCtrlAccessible
+{
+public:
+    wxDataViewTreeCtrlAccessible(wxDataViewTreeCtrl* win);
+    virtual ~wxDataViewTreeCtrlAccessible() {};
+
+    virtual wxAccStatus GetName(int childId, wxString* name) wxOVERRIDE;
+};
+#endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_DATAVIEWCTRL
 

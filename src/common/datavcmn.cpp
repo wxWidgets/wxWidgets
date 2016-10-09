@@ -31,6 +31,9 @@
 #include "wx/choice.h"
 #include "wx/imaglist.h"
 #include "wx/renderer.h"
+#if wxUSE_ACCESSIBILITY
+    #include "wx/access.h"
+#endif // wxUSE_ACCESSIBILITY
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
@@ -2567,6 +2570,10 @@ bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
         0                           // not resizable
     );
 
+#if wxUSE_ACCESSIBILITY
+    SetAccessible(new wxDataViewTreeCtrlAccessible(this));
+#endif // wxUSE_ACCESSIBILITY
+
     return true;
 }
 
@@ -2735,6 +2742,51 @@ void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
 #endif
     event.Skip( true );
 }
+
+#if wxUSE_ACCESSIBILITY
+//-----------------------------------------------------------------------------
+// wxDataViewTreeCtrlAccessible
+//-----------------------------------------------------------------------------
+
+wxDataViewTreeCtrlAccessible::wxDataViewTreeCtrlAccessible(wxDataViewTreeCtrl* win)
+    : wxDataViewCtrlAccessible(win)
+{
+}
+
+// Gets the name of the specified object.
+wxAccStatus wxDataViewTreeCtrlAccessible::GetName(int childId, wxString* name)
+{
+    wxDataViewTreeCtrl* dvCtrl = wxDynamicCast(GetWindow(), wxDataViewTreeCtrl);
+    wxCHECK( dvCtrl, wxACC_FAIL );
+
+    if ( childId == wxACC_SELF )
+    {
+        *name = dvCtrl->GetName();
+    }
+    else
+    {
+        wxDataViewItem item = dvCtrl->GetItemByRow(childId-1);
+        if ( !item.IsOk() )
+        {
+            return wxACC_NOT_IMPLEMENTED;
+        }
+
+        wxString itemName = dvCtrl->GetItemText(item);
+        if ( itemName.empty() )
+        {
+            // Return row number if not textual column found.
+            // Rows are numbered from 1.
+            *name = _("Row") + wxString::Format(wxS(" %i"), childId);
+        }
+        else
+        {
+            *name = itemName;
+        }
+    }
+
+    return wxACC_OK;
+}
+#endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_DATAVIEWCTRL
 
