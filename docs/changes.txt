@@ -157,6 +157,8 @@ wxOSX:
 - Recognize macOS 10.12 Sierra in wxGetOsDescription() (Tobias Taschner).
 - Don't try to open command line arguments as files (Jeff Hostetler).
 - Implement wxDataViewCtrl::SetRowHeight().
+- Add OSXEnableAutomaticQuoteSubstitution(), OSXEnableAutomaticDashSubstitution()
+  and OSXDisableAllSmartSubstitutions() to control wxTextCtrl smart behavior.
 
 Unix:
 

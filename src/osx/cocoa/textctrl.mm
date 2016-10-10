@@ -863,6 +863,18 @@ void wxNSTextViewControl::CheckSpelling(bool check)
         [m_textView setContinuousSpellCheckingEnabled: check];
 }
 
+void wxNSTextViewControl::EnableAutomaticQuoteSubstitution(bool enable)
+{
+    if (m_textView)
+        [m_textView setAutomaticQuoteSubstitutionEnabled:enable];
+}
+
+void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
+{
+    if (m_textView)
+        [m_textView setAutomaticDashSubstitutionEnabled:enable];
+}
+
 wxSize wxNSTextViewControl::GetBestSize() const
 {
     if (m_textView && [m_textView layoutManager])
