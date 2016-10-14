@@ -5716,7 +5716,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetName(int childId, wxString* name)
                     if ( colName.empty() )
                     {
                         // Columns are numbered from 1.
-                        colName = _("Column") + wxString::Format(wxS(" %u"), col+1);
+                        colName = wxString::Format(_("Column %u"), col+1);
                     }
                     itemName = colName + wxS(": ") + vs;
                     break;
@@ -5728,7 +5728,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetName(int childId, wxString* name)
         {
             // Return row number if no textual column found.
             // Rows are numbered from 1.
-            *name = _("Row") + wxString::Format(wxS(" %i"), childId);
+            *name = wxString::Format(_("Row %i"), childId);
         }
         else
         {
@@ -5813,8 +5813,10 @@ wxAccStatus wxDataViewCtrlAccessible::GetDefaultAction(int childId, wxString* ac
                 if ( node->HasChildren() )
                 {
                     if ( node->IsOpen() )
+                        /* TRANSLATORS: Action for manipulating a tree control */
                         action = _("Collapse");
                     else
+                        /* TRANSLATORS: Action for manipulating a tree control */
                         action = _("Expand");
                 }
             }
@@ -5833,9 +5835,9 @@ wxAccStatus wxDataViewCtrlAccessible::GetDescription(int childId, wxString* desc
 
     if ( childId == wxACC_SELF )
     {
-        *description = wxString::Format(_("This %s has %u columns"),
-                                        dvCtrl->GetName().c_str(),
-                                        dvCtrl->GetColumnCount());
+        wxDataViewMainWindow* dvWnd = wxDynamicCast(dvCtrl->GetMainWindow(), wxDataViewMainWindow);
+        *description = wxString::Format(_("%s (%d items)"),
+                                        dvCtrl->GetName().c_str(), dvWnd->GetRowCount());
     }
     else
     {
@@ -5893,7 +5895,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetDescription(int childId, wxString* desc
                 if ( colName.empty() )
                 {
                     // Columns are numbered from 1.
-                    colName = _("Column") + wxString::Format(wxS(" %u"), col+1);
+                    colName = wxString::Format(_("Column %u"), col+1);
                 }
 
                 if ( !itemDesc.empty() )
@@ -5955,8 +5957,10 @@ wxAccStatus wxDataViewCtrlAccessible::GetKeyboardShortcut(int childId, wxString*
                 if ( node->HasChildren() )
                 {
                     if ( node->IsOpen() )
+                        /* TRANSLATORS: Keystroke for manipulating a tree control */
                         *shortcut = _("Left");
                     else
+                        /* TRANSLATORS: Keystroke for manipulating a tree control */
                         *shortcut = _("Right");
 
                     return wxACC_OK;
