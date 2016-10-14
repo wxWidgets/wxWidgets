@@ -5560,18 +5560,17 @@ wxAccStatus wxDataViewCtrlAccessible::GetLocation(wxRect& rect, int elementId)
 {
     wxDataViewCtrl* dvCtrl = wxDynamicCast(GetWindow(), wxDataViewCtrl);
     wxCHECK( dvCtrl, wxACC_FAIL );
+    wxDataViewMainWindow* dvWnd = wxDynamicCast(dvCtrl->GetMainWindow(), wxDataViewMainWindow);
 
     if ( elementId == wxACC_SELF )
     {
         // Header accesibility requestes are handled separately
         // so header is excluded from effective client area
         // and hence only main window area is reported.
-        wxDataViewMainWindow* dvWnd = wxDynamicCast(dvCtrl->GetMainWindow(), wxDataViewMainWindow);
         rect = dvWnd->GetScreenRect();
     }
     else
     {
-        wxDataViewMainWindow* dvWnd = wxDynamicCast(dvCtrl->GetMainWindow(), wxDataViewMainWindow);
         wxDataViewItem item = dvWnd->GetItemByRow(elementId-1);
         if ( !item.IsOk() )
         {
@@ -5727,7 +5726,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetName(int childId, wxString* name)
 
         if ( itemName.empty() )
         {
-            // Return row number if not textual column found.
+            // Return row number if no textual column found.
             // Rows are numbered from 1.
             *name = _("Row") + wxString::Format(wxS(" %i"), childId);
         }
@@ -5992,29 +5991,38 @@ wxAccStatus wxDataViewCtrlAccessible::GetState(int childId, long* state)
     wxDataViewMainWindow* dvWnd = wxDynamicCast(dvCtrl->GetMainWindow(), wxDataViewMainWindow);
 
     long st = 0;
+    // State flags common to the object and its children.
+    if ( !dvWnd->IsEnabled() )
+        st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+    if ( !dvWnd->IsShown() )
+        st |= wxACC_STATE_SYSTEM_INVISIBLE;
+
     if ( childId == wxACC_SELF )
     {
         if( dvWnd->IsFocusable() )
             st |= wxACC_STATE_SYSTEM_FOCUSABLE;
-
         if ( dvWnd->HasFocus() )
             st |=  wxACC_STATE_SYSTEM_FOCUSED;
     }
     else
     {
+        const unsigned int rowNum = childId-1;
+
         if( dvWnd->IsFocusable() )
             st |= wxACC_STATE_SYSTEM_FOCUSABLE | wxACC_STATE_SYSTEM_SELECTABLE;
         if ( !dvWnd->IsSingleSel() )
             st |= wxACC_STATE_SYSTEM_MULTISELECTABLE | wxACC_STATE_SYSTEM_EXTSELECTABLE;
 
-        if ( dvWnd->GetCurrentRow() == (unsigned int)childId-1 )
+        if ( rowNum < dvWnd->GetFirstVisibleRow() || rowNum > dvWnd->GetLastVisibleRow() )
+            st |= wxACC_STATE_SYSTEM_OFFSCREEN;
+        if ( dvWnd->GetCurrentRow() == rowNum )
             st |= wxACC_STATE_SYSTEM_FOCUSED;
-        if ( dvWnd->IsRowSelected(childId-1) )
+        if ( dvWnd->IsRowSelected(rowNum) )
             st |= wxACC_STATE_SYSTEM_SELECTED;
 
         if ( !dvWnd->IsList() )
         {
-            wxDataViewTreeNode* node = dvWnd->GetTreeNodeByRow(childId-1);
+            wxDataViewTreeNode* node = dvWnd->GetTreeNodeByRow(rowNum);
             if ( node )
             {
                 if ( node->HasChildren() )
@@ -6027,7 +6035,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetState(int childId, long* state)
             }
         }
 
-        wxDataViewItem item = dvWnd->GetItemByRow(childId-1);
+        wxDataViewItem item = dvWnd->GetItemByRow(rowNum);
         if ( item.IsOk() )
         {
             if ( !dvWnd->HasEditableColumn(item) )
