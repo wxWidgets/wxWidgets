@@ -2762,11 +2762,10 @@ unsigned int wxDataViewMainWindow::GetFirstVisibleRow() const
 unsigned int wxDataViewMainWindow::GetLastVisibleRow()
 {
     wxSize client_size = GetClientSize();
-    m_owner->CalcUnscrolledPosition( client_size.x, client_size.y,
+    // Find row occupying the bottom line of the client area (dimY-1).
+    m_owner->CalcUnscrolledPosition( client_size.x, client_size.y-1,
                                     &client_size.x, &client_size.y );
-
-    // we should deal with the pixel here
-    unsigned int row = GetLineAt(client_size.y) - 1;
+    unsigned int row = GetLineAt(client_size.y);
 
     return wxMin( GetRowCount()-1, row );
 }
