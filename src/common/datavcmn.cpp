@@ -2776,7 +2776,7 @@ wxAccStatus wxDataViewTreeCtrlAccessible::GetName(int childId, wxString* name)
         {
             // Return row number if not textual column found.
             // Rows are numbered from 1.
-            *name = _("Row") + wxString::Format(wxS(" %i"), childId);
+            *name = wxString::Format(_("Row %i"), childId);
         }
         else
         {
