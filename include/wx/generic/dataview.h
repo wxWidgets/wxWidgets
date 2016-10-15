@@ -433,9 +433,7 @@ public:
 
     virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) wxOVERRIDE;
 
-#if wxUSE_VARIANT
     virtual wxAccStatus GetSelections(wxVariant* selections) wxOVERRIDE;
-#endif // wxUSE_VARIANT
 };
 #endif // wxUSE_ACCESSIBILITY
 

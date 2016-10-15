@@ -6250,7 +6250,6 @@ wxAccStatus wxDataViewCtrlAccessible::GetFocus(int* childId, wxAccessible** chil
     return wxACC_OK;
 }
 
-#if wxUSE_VARIANT
 // Gets a variant representing the selected children
 // of this object.
 // Acceptable values:
@@ -6290,7 +6289,6 @@ wxAccStatus wxDataViewCtrlAccessible::GetSelections(wxVariant* selections)
 
     return wxACC_OK;
 }
-#endif // wxUSE_VARIANT
 
 #endif // wxUSE_ACCESSIBILITY
 
