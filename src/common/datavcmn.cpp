@@ -2570,10 +2570,6 @@ bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
         0                           // not resizable
     );
 
-#if wxUSE_ACCESSIBILITY
-    SetAccessible(new wxDataViewTreeCtrlAccessible(this));
-#endif // wxUSE_ACCESSIBILITY
-
     return true;
 }
 
@@ -2742,6 +2738,13 @@ void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
 #endif
     event.Skip( true );
 }
+
+#if wxUSE_ACCESSIBILITY
+wxAccessible* wxDataViewTreeCtrl::CreateAccessible()
+{
+    return new wxDataViewTreeCtrlAccessible(this);
+}
+#endif // wxUSE_ACCESSIBILITY
 
 #if wxUSE_ACCESSIBILITY
 //-----------------------------------------------------------------------------

@@ -329,6 +329,10 @@ public:     // utility functions not part of the API
 
     virtual void OnInternalIdle() wxOVERRIDE;
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
+
 private:
     virtual wxDataViewItem DoGetCurrentItem() const wxOVERRIDE;
     virtual void DoSetCurrentItem(const wxDataViewItem& item) wxOVERRIDE;

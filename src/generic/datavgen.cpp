@@ -241,12 +241,6 @@ public:
     wxDataViewHeaderWindow(wxDataViewCtrl *parent)
         : wxHeaderCtrl(parent)
     {
-#if wxUSE_ACCESSIBILITY
-        // Under MSW wxHeadrCtrl is a native control
-        // so we just need to pass all requests
-        // to the accessibility framework.
-        SetAccessible(new wxAccessible(this));
-#endif // wxUSE_ACCESSIBILITY
     }
 
     wxDataViewCtrl *GetOwner() const
@@ -275,6 +269,16 @@ public:
             SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, column);
         }
     }
+
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() wxOVERRIDE
+    {
+        // Under MSW wxHeadrCtrl is a native control
+        // so we just need to pass all requests
+        // to the accessibility framework.
+        return new wxAccessible(this);
+    }
+#endif // wxUSE_ACCESSIBILITY
 
 protected:
     // implement/override wxHeaderCtrl functions by forwarding them to the main
@@ -4668,10 +4672,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 
     m_clientArea = new wxDataViewMainWindow( this, wxID_ANY );
 
-#if wxUSE_ACCESSIBILITY
-    SetAccessible(new wxDataViewCtrlAccessible(this));
-#endif // wxUSE_ACCESSIBILITY
-
     // We use the cursor keys for moving the selection, not scrolling, so call
     // this method to ensure wxScrollHelperEvtHandler doesn't catch all
     // keyboard events forwarded to us from wxListMainWindow.
@@ -5495,7 +5495,12 @@ void wxDataViewCtrl::DoEnableSystemTheme(bool enable, wxWindow* window)
         Base::DoEnableSystemTheme(enable, m_headerArea);
 }
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#if wxUSE_ACCESSIBILITY
+wxAccessible* wxDataViewCtrl::CreateAccessible()
+{
+    return new wxDataViewCtrlAccessible(this);
+}
+#endif // wxUSE_ACCESSIBILITY
 
 #if wxUSE_ACCESSIBILITY
 //-----------------------------------------------------------------------------
@@ -6236,15 +6241,31 @@ wxAccStatus wxDataViewCtrlAccessible::GetFocus(int* childId, wxAccessible** chil
         *childId = row+1;
         *child = NULL;
     }
-    else if ( dvWnd->HasFocus() )
-    {
-        *childId = wxACC_SELF;
-        *child = this;
-    }
     else
     {
-        *childId = 0;
-        *child = NULL;
+        // First check if header is focused because header control
+        // handles accesibility requestes on its own.
+        wxHeaderCtrl* dvHdr = dvCtrl->GenericGetHeader();
+        if ( dvHdr )
+        {
+            if ( dvHdr->HasFocus() )
+            {
+                *childId = wxACC_SELF;
+                *child = dvHdr->GetOrCreateAccessible();
+                return wxACC_OK;
+            }
+        }
+
+        if ( dvWnd->HasFocus() )
+        {
+            *childId = wxACC_SELF;
+            *child = this;
+        }
+        else
+        {
+            *childId = 0;
+            *child = NULL;
+        }
     }
 
     return wxACC_OK;
@@ -6289,7 +6310,8 @@ wxAccStatus wxDataViewCtrlAccessible::GetSelections(wxVariant* selections)
 
     return wxACC_OK;
 }
-
 #endif // wxUSE_ACCESSIBILITY
+
+#endif // !wxUSE_GENERICDATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

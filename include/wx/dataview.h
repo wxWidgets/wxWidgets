@@ -1386,6 +1386,10 @@ public:
     void OnCollapsed( wxDataViewEvent &event );
     void OnSize( wxSizeEvent &event );
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
+
 private:
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewTreeCtrl);
