@@ -159,6 +159,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
     EVT_KILL_FOCUS              (wxStyledTextCtrl::OnLoseFocus)
     EVT_SET_FOCUS               (wxStyledTextCtrl::OnGainFocus)
+    EVT_DPI_CHANGED             (wxStyledTextCtrl::OnDPIChanged)
     EVT_SYS_COLOUR_CHANGED      (wxStyledTextCtrl::OnSysColourChanged)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
@@ -237,6 +238,16 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
 
 #if wxUSE_GRAPHICS_DIRECT2D
     SetFontQuality(wxSTC_EFF_QUALITY_DEFAULT);
+#endif
+
+#ifdef __WXMSW__
+    // Set zoom for DPI
+    double baseDPI = ::GetDeviceCaps(WindowHDC(parent->GetHWND()), LOGPIXELSY);
+    double activeDPI = parent->GetDPI().y;
+
+    int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
+    int ptSizeNew = (int)wxMulDivInt32(ptSizeOld, activeDPI, baseDPI);
+    SetZoom(GetZoom() + (ptSizeNew - ptSizeOld));
 #endif
 
     return true;
@@ -5432,6 +5443,19 @@ void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& evt) {
 }
 
 
+void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt)
+{
+    int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
+    int ptSizeNew = (int)wxMulDivInt32(ptSizeOld, evt.GetNewDPI().y, evt.GetOldDPI().y);
+    SetZoom(GetZoom() + (ptSizeNew - ptSizeOld));
+
+    for ( int i = 0; i < SC_MAX_MARGIN; ++i )
+    {
+        SetMarginWidth(i, (int)wxMulDivInt32(GetMarginWidth(i), evt.GetNewDPI().y, evt.GetOldDPI().y));
+    }
+}
+
+
 void wxStyledTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(evt)) {
     m_swx->DoSysColourChange();
 }
@@ -5467,7 +5491,7 @@ wxSize wxStyledTextCtrl::DoGetBestSize() const
 {
     // What would be the best size for a wxSTC?
     // Just give a reasonable minimum until something else can be figured out.
-    return wxSize(200,100);
+    return FromDIP(wxSize(200,100));
 }
 
 
