@@ -872,6 +872,11 @@
 #define wxUSE_WEBKIT 0
 
 /*
+ * wxMediaCtrl on OS X
+ */
+#undef wxOSX_USE_QTKIT
+
+/*
  * Objective-C class name uniquifying
  */
 #define wxUSE_OBJC_UNIQUIFYING 0
