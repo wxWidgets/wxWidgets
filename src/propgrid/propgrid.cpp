@@ -5969,7 +5969,9 @@ bool wxPropertyGrid::IsEditorFocused() const
     wxWindow* focus = wxWindow::FindFocus();
 
     if ( focus == m_wndEditor || focus == m_wndEditor2 ||
-         focus == GetEditorControl() )
+         focus == GetEditorControl() ||
+         // In case a combobox text control is focused
+         (focus && focus->GetParent() && (focus->GetParent() == m_wndEditor)) )
          return true;
 
     return false;
