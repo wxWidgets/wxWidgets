@@ -7411,7 +7411,25 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         else
             dnl We always have the necessary libraries under Mac
             dnl but we need to link with it explicitly.
-            GST_LIBS="-framework QTKit"
+            dnl QTKit is no longer available as of 10.12 SDK
+
+            old_CPPFLAGS="$CPPFLAGS"
+            CPPFLAGS="-x objective-c++ $CPPFLAGS"
+            AC_CHECK_HEADER([QTKit/QTKit.h],
+                            [
+                                GST_LIBS="-framework QTKit"
+                            ],
+                            [
+                                AC_DEFINE(wxOSX_USE_QTKIT,0)
+                                GST_LIBS="-framework AVFoundation -framework CoreMedia"
+                            ])
+            dnl AVKit is only available since OS X 10.9
+            AC_CHECK_HEADER([AVKit/AVKit.h],
+                            [
+                                GST_LIBS="$GST_LIBS -framework AVKit"
+                            ])
+            CPPFLAGS="$old_CPPFLAGS"
+
         fi
     fi
 
