@@ -107,7 +107,7 @@ void wxButtonCocoaImpl::SetBitmap(const wxBitmap& bitmap)
 #if wxUSE_MARKUP
 void wxButtonCocoaImpl::SetLabelMarkup(const wxString& markup)
 {
-    wxMarkupToAttrString toAttr(GetWXPeer(), markup);
+    wxMarkupToAttrString toAttr(GetWXPeer()->GetFont(), markup);
     NSMutableAttributedString *attrString = toAttr.GetNSAttributedString();
     
     // Button text is always centered.
