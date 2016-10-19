@@ -35364,27 +35364,11 @@ fi
         fi
 
     elif test "$wxUSE_MAC" = 1; then
-        if test "$wxUSE_OSX_IPHONE" = 1; then
                         GST_LIBS="-framework AVFoundation -framework CoreMedia"
-        else
-
-            old_CPPFLAGS="$CPPFLAGS"
+        if test "$wxUSE_OSX_IPHONE" != 1; then
+                                    old_CPPFLAGS="$CPPFLAGS"
             CPPFLAGS="-x objective-c++ $CPPFLAGS"
-            ac_fn_c_check_header_mongrel "$LINENO" "QTKit/QTKit.h" "ac_cv_header_QTKit_QTKit_h" "$ac_includes_default"
-if test "x$ac_cv_header_QTKit_QTKit_h" = xyes; then :
-
-                                GST_LIBS="-framework QTKit"
-
-else
-
-                                $as_echo "#define wxOSX_USE_QTKIT 0" >>confdefs.h
-
-                                GST_LIBS="-framework AVFoundation -framework CoreMedia"
-
-fi
-
-
-                        ac_fn_c_check_header_mongrel "$LINENO" "AVKit/AVKit.h" "ac_cv_header_AVKit_AVKit_h" "$ac_includes_default"
+            ac_fn_c_check_header_mongrel "$LINENO" "AVKit/AVKit.h" "ac_cv_header_AVKit_AVKit_h" "$ac_includes_default"
 if test "x$ac_cv_header_AVKit_AVKit_h" = xyes; then :
 
                                 GST_LIBS="$GST_LIBS -framework AVKit"
@@ -35393,7 +35377,6 @@ fi
 
 
             CPPFLAGS="$old_CPPFLAGS"
-
         fi
     fi
 
