@@ -386,6 +386,27 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     {
         wxLogLastError(wxT("Header_InsertItem()"));
     }
+
+    // Resizing cursor that correctly reflects per-column IsResizable() cannot
+    // be implemented, it is per-control rather than per-column in the native
+    // control. Enable resizing cursor if at least one column is resizeble.
+    bool hasResizableColumns = false;
+    for ( unsigned n = 0; n < GetColumnCount(); n++ )
+    {
+        const wxHeaderColumn& c = GetColumn(n);
+        if (c.IsShown() && c.IsResizeable())
+        {
+            hasResizableColumns = true;
+            break;
+        }
+    }
+
+    long controlStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+    if ( hasResizableColumns )
+        controlStyle &= ~HDS_NOSIZING;
+    else
+        controlStyle |= HDS_NOSIZING;
+    ::SetWindowLong(GetHwnd(), GWL_STYLE, controlStyle);
 }
 
 void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
