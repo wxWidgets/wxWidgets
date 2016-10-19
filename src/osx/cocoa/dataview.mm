@@ -2825,17 +2825,29 @@ void wxDataViewTextRenderer::EnableMarkup(bool enable)
 
 bool wxDataViewTextRenderer::MacRender()
 {
+    NSCell *cell = GetNativeData()->GetItemCell();
 #if wxUSE_MARKUP
     if ( m_useMarkup )
     {
         wxMarkupToAttrString toAttr(GetView(), GetValue().GetString());
+        NSMutableAttributedString *str = toAttr.GetNSAttributedString();
 
-        [GetNativeData()->GetItemCell() setAttributedStringValue:toAttr.GetNSAttributedString()];
+        if ( [cell lineBreakMode] != NSLineBreakByClipping )
+        {
+            NSMutableParagraphStyle *par = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+            [par setLineBreakMode:[cell lineBreakMode]];
+            [str addAttribute:NSParagraphStyleAttributeName
+                        value:par
+                        range:NSMakeRange(0, [str length])];
+            [par release];
+        }
+
+        [cell setAttributedStringValue:str];
         return true;
     }
 #endif // wxUSE_MARKUP
 
-    [GetNativeData()->GetItemCell() setObjectValue:wxCFStringRef(GetValue().GetString()).AsNSString()];
+    [cell setObjectValue:wxCFStringRef(GetValue().GetString()).AsNSString()];
     return true;
 }
 
