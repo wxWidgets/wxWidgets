@@ -156,11 +156,11 @@ public:
 
         // ...but we only need to restore the colours if we had changed them.
         if ( attr.foreground.IsOk() )
-            m_dc.SetTextForeground(GetAttr().foreground);
+            m_dc.SetTextForeground(GetAttr().effectiveForeground);
 
         if ( attr.background.IsOk() )
         {
-            wxColour background = GetAttr().background;
+            wxColour background = GetAttr().effectiveBackground;
             if ( !background.IsOk() )
             {
                 // Invalid background colour indicates that the background
