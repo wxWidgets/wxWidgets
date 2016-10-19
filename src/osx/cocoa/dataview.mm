@@ -2733,7 +2733,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         //else: can't change font if the cell doesn't have any
     }
 
-    if ( attr.HasColour() )
+    if ( attr.HasColour() && ![cell isHighlighted] )
     {
         // we can set font for any cell but only NSTextFieldCell provides
         // a method for setting text colour so check that this method is
@@ -2840,6 +2840,12 @@ bool wxDataViewTextRenderer::MacRender()
                         value:par
                         range:NSMakeRange(0, [str length])];
             [par release];
+        }
+
+        if ( [cell isHighlighted] )
+        {
+            [str removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [str length])];
+            [str removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, [str length])];
         }
 
         [cell setAttributedStringValue:str];
