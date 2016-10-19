@@ -1035,9 +1035,18 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
 bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 {
     if (value.GetType() == wxT("wxBitmap"))
+    {
         m_bitmap << value;
-    if (value.GetType() == wxT("wxIcon"))
+    }
+    else if (value.GetType() == wxT("wxIcon"))
+    {
         m_icon << value;
+    }
+    else
+    {
+        m_icon = wxNullIcon;
+        m_bitmap = wxNullBitmap;
+    }
 
     return true;
 }

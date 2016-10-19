@@ -2288,7 +2288,7 @@ bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
     }
     else
     {
-        return false;
+        SetPixbufProp(m_renderer, NULL);
     }
 
     return true;
