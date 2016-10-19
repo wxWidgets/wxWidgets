@@ -2328,18 +2328,28 @@ bool wxWidgetCocoaImpl::GetNeedsDisplay() const
 
 bool wxWidgetCocoaImpl::CanFocus() const
 {
-    return [m_osxView canBecomeKeyView] == YES;
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
+    return [targetView canBecomeKeyView] == YES;
 }
 
 bool wxWidgetCocoaImpl::HasFocus() const
 {
-    return ( FindFocus() == m_osxView );
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
+    return ( FindFocus() == targetView );
 }
 
 bool wxWidgetCocoaImpl::SetFocus()
 {
     if ( !CanFocus() )
         return false;
+
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
 
     // TODO remove if no issues arise: should not raise the window, only assign focus
     //[[m_osxView window] makeKeyAndOrderFront:nil] ;

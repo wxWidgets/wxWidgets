@@ -1915,6 +1915,14 @@ outlineView:(NSOutlineView*)outlineView
     }
 }
 
+-(BOOL) becomeFirstResponder
+{
+    BOOL r = [super becomeFirstResponder];
+    if ( r )
+        implementation->DoNotifyFocusSet();
+    return r;
+}
+
 @end
 
 // ============================================================================
@@ -1942,15 +1950,16 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
     [scrollview setAutohidesScrollers:YES];
     [scrollview setDocumentView:m_OutlineView];
 
-    // we cannot call InstallHandler(m_OutlineView) here, because we are handling
-    // our action:s ourselves, only associate the view with this impl
-    Associate(m_OutlineView,this);
     // initialize the native control itself too
     InitOutlineView(style);
 }
 
 void wxCocoaDataViewControl::InitOutlineView(long style)
 {
+    // we cannot call InstallHandler(m_OutlineView) here, because we are handling
+    // our action:s ourselves, only associate the view with this impl
+    Associate(m_OutlineView,this);
+
     [m_OutlineView setImplementation:this];
     [m_OutlineView setFocusRingType:NSFocusRingTypeNone];
     [m_OutlineView setColumnAutoresizingStyle:NSTableViewLastColumnOnlyAutoresizingStyle];
