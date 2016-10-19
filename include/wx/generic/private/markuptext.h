@@ -11,9 +11,9 @@
 #define _WX_GENERIC_PRIVATE_MARKUPTEXT_H_
 
 #include "wx/defs.h"
+#include "wx/gdicmn.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
-class WXDLLIMPEXP_FWD_CORE wxRect;
 
 class wxMarkupParserOutput;
 
@@ -84,10 +84,14 @@ public:
     // The meaning of the flags here is different than in the overload above:
     // they're passed to DrawItemText() and Render_ShowAccels is not supported
     // here.
+    //
+    // Currently the only supported ellipsize modes are wxELLIPSIZE_NONE and
+    // wxELLIPSIZE_END, the others are treated as wxELLIPSIZE_END.
     void RenderItemText(wxWindow *win,
                         wxDC& dc,
                         const wxRect& rect,
-                        int rendererFlags);
+                        int rendererFlags,
+                        wxEllipsizeMode ellipsizeMode);
 
 private:
     wxString m_markup;

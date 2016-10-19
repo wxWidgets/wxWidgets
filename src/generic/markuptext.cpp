@@ -237,18 +237,22 @@ public:
     wxMarkupParserRenderItemOutput(wxWindow *win,
                                    wxDC& dc,
                                    const wxRect& rect,
-                                   int rendererFlags)
+                                   int rendererFlags,
+                                   wxEllipsizeMode ellipsizeMode)
         : wxMarkupParserRenderOutput(dc, rect, wxMarkupText::Render_Default),
           m_win(win),
           m_rendererFlags(rendererFlags),
           m_renderer(&wxRendererNative::Get())
     {
+        // TODO: Support all ellipsizing modes
+        m_ellipsizeMode = ellipsizeMode == wxELLIPSIZE_NONE ? wxELLIPSIZE_NONE : wxELLIPSIZE_END;
     }
 
     virtual void OnText(const wxString& text) wxOVERRIDE
     {
         wxRect rect(m_rect);
         rect.x = m_pos;
+        rect.SetRight(m_rect.GetRight());
 
         m_renderer->DrawItemText(m_win,
                                  m_dc,
@@ -256,7 +260,7 @@ public:
                                  rect,
                                  wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL,
                                  m_rendererFlags,
-                                 wxELLIPSIZE_NONE);
+                                 m_ellipsizeMode);
 
         m_pos += m_dc.GetTextExtent(text).x;
     }
@@ -264,6 +268,7 @@ public:
 private:
     wxWindow* const m_win;
     int const m_rendererFlags;
+    wxEllipsizeMode m_ellipsizeMode;
     wxRendererNative* const m_renderer;
 
     wxDECLARE_NO_COPY_CLASS(wxMarkupParserRenderItemOutput);
@@ -310,9 +315,10 @@ void wxMarkupText::Render(wxDC& dc, const wxRect& rect, int flags)
 void wxMarkupText::RenderItemText(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int rendererFlags)
+                                  int rendererFlags,
+                                  wxEllipsizeMode ellipsizeMode)
 {
-    wxMarkupParserRenderItemOutput out(win, dc, rect, rendererFlags);
+    wxMarkupParserRenderItemOutput out(win, dc, rect, rendererFlags, ellipsizeMode);
     wxMarkupParser parser(out);
     parser.Parse(m_markup);
 }
