@@ -393,7 +393,7 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
+        IAccessible* stdInterface = m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
             return E_NOTIMPL;
         else
@@ -474,10 +474,10 @@ STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWi
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varID);
+                return m_pAccessible->GetIAccessibleStd()->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varID);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varID);
+            return m_pAccessible->GetIAccessibleStd()->accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varID);
     }
     else
     {
@@ -600,10 +600,10 @@ STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accNavigate(navDir, varStart, pVarEnd);
+                return m_pAccessible->GetIAccessibleStd()->accNavigate(navDir, varStart, pVarEnd);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accNavigate(navDir, varStart, pVarEnd);
+            return m_pAccessible->GetIAccessibleStd()->accNavigate(navDir, varStart, pVarEnd);
     }
     else
     {
@@ -687,7 +687,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
+        IAccessible* stdInterface = m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
             return E_NOTIMPL;
         else
@@ -744,7 +744,7 @@ STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
+        IAccessible* stdInterface = m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
             return E_NOTIMPL;
         else
@@ -793,7 +793,7 @@ STDMETHODIMP wxIAccessible::get_accParent ( IDispatch** ppDispParent)
     {
         wxLogTrace(wxT("access"), wxT("Using standard interface to get the parent."));
         // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
+        IAccessible* stdInterface = m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
             return E_NOTIMPL;
         else
@@ -874,10 +874,10 @@ STDMETHODIMP wxIAccessible::accDoDefaultAction(VARIANT varID)
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accDoDefaultAction(varID);
+                return m_pAccessible->GetIAccessibleStd()->accDoDefaultAction(varID);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accDoDefaultAction(varID);
+            return m_pAccessible->GetIAccessibleStd()->accDoDefaultAction(varID);
     }
     return E_FAIL;
 }
@@ -923,10 +923,10 @@ STDMETHODIMP wxIAccessible::get_accDefaultAction ( VARIANT varID, BSTR* pszDefau
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accDefaultAction(varID, pszDefaultAction);
+                return m_pAccessible->GetIAccessibleStd()->get_accDefaultAction(varID, pszDefaultAction);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accDefaultAction(varID, pszDefaultAction);
+            return m_pAccessible->GetIAccessibleStd()->get_accDefaultAction(varID, pszDefaultAction);
     }
     else
     {
@@ -984,10 +984,10 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accDescription(varID, pszDescription);
+                return m_pAccessible->GetIAccessibleStd()->get_accDescription(varID, pszDescription);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accDescription(varID, pszDescription);
+            return m_pAccessible->GetIAccessibleStd()->get_accDescription(varID, pszDescription);
     }
     else
     {
@@ -1045,10 +1045,10 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accHelp(varID, pszHelp);
+                return m_pAccessible->GetIAccessibleStd()->get_accHelp(varID, pszHelp);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accHelp (varID, pszHelp);
+            return m_pAccessible->GetIAccessibleStd()->get_accHelp (varID, pszHelp);
     }
     else
     {
@@ -1106,10 +1106,10 @@ STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChi
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accHelpTopic(pszHelpFile, varChild, pidTopic);
+                return m_pAccessible->GetIAccessibleStd()->get_accHelpTopic(pszHelpFile, varChild, pidTopic);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accHelpTopic (pszHelpFile, varChild, pidTopic);
+            return m_pAccessible->GetIAccessibleStd()->get_accHelpTopic (pszHelpFile, varChild, pidTopic);
     }
     return E_NOTIMPL;
 }
@@ -1156,10 +1156,10 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accKeyboardShortcut(varID, pszKeyboardShortcut);
+                return m_pAccessible->GetIAccessibleStd()->get_accKeyboardShortcut(varID, pszKeyboardShortcut);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accKeyboardShortcut (varID, pszKeyboardShortcut);
+            return m_pAccessible->GetIAccessibleStd()->get_accKeyboardShortcut (varID, pszKeyboardShortcut);
     }
     else
     {
@@ -1220,10 +1220,10 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accName(varID, pszName);
+                return m_pAccessible->GetIAccessibleStd()->get_accName(varID, pszName);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accName (varID, pszName);
+            return m_pAccessible->GetIAccessibleStd()->get_accName (varID, pszName);
     }
     else
     {
@@ -1284,10 +1284,10 @@ STDMETHODIMP wxIAccessible::get_accRole ( VARIANT varID, VARIANT* pVarRole)
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accRole(varID, pVarRole);
+                return m_pAccessible->GetIAccessibleStd()->get_accRole(varID, pVarRole);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accRole (varID, pVarRole);
+            return m_pAccessible->GetIAccessibleStd()->get_accRole (varID, pVarRole);
     }
     else
     {
@@ -1343,10 +1343,10 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accState(varID, pVarState);
+                return m_pAccessible->GetIAccessibleStd()->get_accState(varID, pVarState);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accState (varID, pVarState);
+            return m_pAccessible->GetIAccessibleStd()->get_accState (varID, pVarState);
     }
     else
     {
@@ -1401,10 +1401,10 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accValue(varID, pszValue);
+                return m_pAccessible->GetIAccessibleStd()->get_accValue(varID, pszValue);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->get_accValue (varID, pszValue);
+            return m_pAccessible->GetIAccessibleStd()->get_accValue (varID, pszValue);
     }
     else
     {
@@ -1464,10 +1464,10 @@ STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
                 return hResult;
             }
             else if (m_pAccessible->GetIAccessibleStd())
-                return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accSelect(flagsSelect, varID);
+                return m_pAccessible->GetIAccessibleStd()->accSelect(flagsSelect, varID);
         }
         else if (m_pAccessible->GetIAccessibleStd())
-            return ((IAccessible*) m_pAccessible->GetIAccessibleStd())->accSelect(flagsSelect, varID);
+            return m_pAccessible->GetIAccessibleStd()->accSelect(flagsSelect, varID);
     }
     else
         return S_OK;
@@ -1498,7 +1498,7 @@ STDMETHODIMP wxIAccessible::get_accFocus ( VARIANT* pVarID)
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
+        IAccessible* stdInterface = m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
             return E_NOTIMPL;
         else
@@ -1567,7 +1567,7 @@ STDMETHODIMP wxIAccessible::get_accSelection ( VARIANT * pVarChildren)
     if (status == wxACC_NOT_IMPLEMENTED)
     {
         // Use standard interface instead.
-        IAccessible* stdInterface = (IAccessible*)m_pAccessible->GetIAccessibleStd();
+        IAccessible* stdInterface = m_pAccessible->GetIAccessibleStd();
         if (!stdInterface)
             return E_NOTIMPL;
         else
@@ -1664,7 +1664,7 @@ IAccessible* wxIAccessible::GetChildStdAccessible(int id)
 {
     if (id == 0)
     {
-        IAccessible* obj = (IAccessible*)m_pAccessible->GetIAccessibleStd();
+        IAccessible* obj = m_pAccessible->GetIAccessibleStd();
 
         obj->AddRef();
         return obj;
@@ -1683,7 +1683,7 @@ IAccessible* wxIAccessible::GetChildStdAccessible(int id)
             {
                 pDispatch->Release();
                 wxIAccessible* c = (wxIAccessible*) childAccessible;
-                IAccessible* stdChildAccessible = (IAccessible*) c->m_pAccessible->GetIAccessibleStd();
+                IAccessible* stdChildAccessible = c->m_pAccessible->GetIAccessibleStd();
                 stdChildAccessible->AddRef();
                 childAccessible->Release();
                 return stdChildAccessible;
@@ -1796,11 +1796,11 @@ wxAccessible::~wxAccessible()
     m_pIAccessible->Quiesce();
     m_pIAccessible->Release();
     if (m_pIAccessibleStd)
-        ((IAccessible*)m_pIAccessibleStd)->Release();
+        m_pIAccessibleStd->Release();
 }
 
 // Gets or creates a standard interface for this object.
-void* wxAccessible::GetIAccessibleStd()
+IAccessible *wxAccessible::GetIAccessibleStd()
 {
     if (m_pIAccessibleStd)
         return m_pIAccessibleStd;
