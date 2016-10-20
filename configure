@@ -1238,6 +1238,7 @@ enable_svg
 enable_webkit
 enable_webview
 enable_graphics_ctx
+enable_qtkit
 enable_clipboard
 enable_dnd
 enable_controls
@@ -2169,6 +2170,7 @@ Optional Features:
   --enable-webkit         use wxWebKitCtrl (Mac-only, use wxWebView instead)
   --enable-webview        use wxWebView library
   --enable-graphics_ctx   use graphics context 2D drawing API
+  --disable-qtkit         force AVFoundation instead of QTKit (requires OS X 10.7+)
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
   --disable-controls      disable compilation of all standard controls
@@ -11009,6 +11011,51 @@ fi
             fi
           else
             result=$wxUSE_GRAPHICS_CONTEXT
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+else
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-qtkit" >&5
+$as_echo_n "checking for --${enablestring:-enable}-qtkit... " >&6; }
+          # Check whether --enable-qtkit was given.
+if test "${enable_qtkit+set}" = set; then :
+  enableval=$enable_qtkit;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_qtkit='wxOSX_USE_QTKIT=yes'
+                          else
+                            wx_cv_use_qtkit='wxOSX_USE_QTKIT=no'
+                          fi
+
+else
+
+                          wx_cv_use_qtkit='wxOSX_USE_QTKIT=${'DEFAULT_wxOSX_USE_QTKIT":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_qtkit"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxOSX_USE_QTKIT = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxOSX_USE_QTKIT
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -37462,20 +37509,26 @@ fi
 
             old_CPPFLAGS="$CPPFLAGS"
             CPPFLAGS="-x objective-c++ $CPPFLAGS"
-            ac_fn_c_check_header_mongrel "$LINENO" "QTKit/QTKit.h" "ac_cv_header_QTKit_QTKit_h" "$ac_includes_default"
+            if test "$wxOSX_USE_QTKIT" = "no"; then
+                                $as_echo "#define wxOSX_USE_QTKIT 0" >>confdefs.h
+
+                GST_LIBS="-framework AVFoundation -framework CoreMedia"
+            else
+                                ac_fn_c_check_header_mongrel "$LINENO" "QTKit/QTKit.h" "ac_cv_header_QTKit_QTKit_h" "$ac_includes_default"
 if test "x$ac_cv_header_QTKit_QTKit_h" = xyes; then :
 
-                                GST_LIBS="-framework QTKit"
+                                    GST_LIBS="-framework QTKit"
 
 else
 
-                                $as_echo "#define wxOSX_USE_QTKIT 0" >>confdefs.h
+                                    $as_echo "#define wxOSX_USE_QTKIT 0" >>confdefs.h
 
-                                GST_LIBS="-framework AVFoundation -framework CoreMedia"
+                                    GST_LIBS="-framework AVFoundation -framework CoreMedia"
 
 fi
 
 
+            fi
                         ac_fn_c_check_header_mongrel "$LINENO" "AVKit/AVKit.h" "ac_cv_header_AVKit_AVKit_h" "$ac_includes_default"
 if test "x$ac_cv_header_AVKit_AVKit_h" = xyes; then :
 
