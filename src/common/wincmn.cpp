@@ -3186,12 +3186,6 @@ wxAccessible* wxWindowBase::GetOrCreateAccessible()
     return m_accessible;
 }
 
-// Override to create a specific accessible object.
-wxAccessible* wxWindowBase::CreateAccessible()
-{
-    return new wxWindowAccessible((wxWindow*) this);
-}
-
 #endif
 
 // ----------------------------------------------------------------------------
