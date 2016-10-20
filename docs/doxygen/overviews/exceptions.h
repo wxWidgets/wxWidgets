@@ -114,10 +114,10 @@ documentation of these functions for more details.
 To use any kind of exception support in the library you need to build it
 with @c wxUSE_EXCEPTIONS set to 1. It is turned on by default but you may
 wish to check @c include/wx/msw/setup.h file under Windows or run @c configure
-with explicit @c --enable-exceptions argument under Unix.
+with explicit @c \--enable-exceptions argument under Unix.
 
 On the other hand, if you do not plan to use exceptions, setting this
-flag to 0 or using @c --disable-exceptions could result in a leaner and
+flag to 0 or using @c \--disable-exceptions could result in a leaner and
 slightly faster library.
 
 As for any other library feature, there is a sample (@c except)

@@ -184,7 +184,7 @@ under all systems. Thus, under Microsoft Windows, UCS-2 (simplified version of
 UTF-16 without support for surrogate characters) is used as @c wchar_t is 2
 bytes on this platform. Under Unix systems, including OS X, UCS-4 (also
 known as UTF-32) is used by default, however it is also possible to build
-wxWidgets to use UTF-8 internally by passing @c --enable-utf8 option to
+wxWidgets to use UTF-8 internally by passing @c \--enable-utf8 option to
 configure.
 
 The interface provided by wxString is the same independently of the format used
@@ -208,7 +208,7 @@ of conversions (and also reduced memory usage of UTF-8 compared to UTF-32 for
 the European languages) can be important. If the environment in which your
 program is running is under your control -- as is quite often the case in such
 scenarios -- consider ensuring that the system always uses UTF-8 locale and
-use @c --enable-utf8only configure option to disable support for the other
+use @c \--enable-utf8only configure option to disable support for the other
 locales and consider all strings to be in UTF-8. This further reduces the code
 size and removes the need for conversions in more cases.
 
@@ -216,7 +216,7 @@ size and removes the need for conversions in more cases.
 @subsection overview_unicode_settings Unicode Related Preprocessor Symbols
 
 @c wxUSE_UNICODE is defined as 1 now to indicate Unicode support. It can be
-explicitly set to 0 in @c setup.h under MSW or you can use @c --disable-unicode
+explicitly set to 0 in @c setup.h under MSW or you can use @c \--disable-unicode
 under Unix but doing this is strongly discouraged. By default, @c
 wxUSE_UNICODE_WCHAR is also defined as 1, however in UTF-8 build (described in
 the previous section), it is set to 0 and @c wxUSE_UNICODE_UTF8, which is

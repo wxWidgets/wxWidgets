@@ -1282,7 +1282,7 @@ void wxVLogInfo(const char* formatString, va_list argPtr);
     activated by calling wxLog::SetVerbose().
 
     Notice that this is done automatically by wxWidgets, unless the standard
-    command line handling is overridden, if @c --verbose option is specified on
+    command line handling is overridden, if @c \--verbose option is specified on
     the program command line, so using these functions provides a simple way of
     having some diagnostic messages not shown by default but which can be
     easily shown by the user if needed.

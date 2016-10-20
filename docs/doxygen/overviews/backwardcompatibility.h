@@ -87,7 +87,7 @@ next earlier stable branch the default is 0, so @c WXWIN_COMPATIBILITY_2_4 = 0
 for 2.8.x. Earlier than that, obsolete features are removed.
 
 These macros can be changed in @c setup.h. Or on UNIX-like systems you can set
-them using the @c --disable-compat26 and @c --enable-compat24 options to
+them using the @c \--disable-compat26 and @c \--enable-compat24 options to
 configure.
 
 They can be useful in two ways:
