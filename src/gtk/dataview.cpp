@@ -2213,6 +2213,9 @@ void wxDataViewTextRenderer::SetAlignment( int align )
         return;
 #endif
 
+    if (align == -1)
+        return;
+
     // horizontal alignment:
     PangoAlignment pangoAlign = PANGO_ALIGN_LEFT;
     if (align & wxALIGN_RIGHT)
@@ -2277,18 +2280,18 @@ bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
 
         // GetPixbuf() may create a Pixbuf representation in the wxBitmap
         // object (and it will stay there and remain owned by wxBitmap)
-        SetPixbufProp(m_renderer, bitmap.GetPixbuf());
+        SetPixbufProp(m_renderer, bitmap.IsOk() ? bitmap.GetPixbuf() : NULL);
     }
     else if (value.GetType() == wxT("wxIcon"))
     {
         wxIcon icon;
         icon << value;
 
-        SetPixbufProp(m_renderer, icon.GetPixbuf());
+        SetPixbufProp(m_renderer, icon.IsOk() ? icon.GetPixbuf() : NULL);
     }
     else
     {
-        return false;
+        SetPixbufProp(m_renderer, NULL);
     }
 
     return true;

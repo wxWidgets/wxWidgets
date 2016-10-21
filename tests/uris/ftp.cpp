@@ -57,6 +57,7 @@ private:
         CPPUNIT_TEST( List );
         CPPUNIT_TEST( Download );
         CPPUNIT_TEST( FileSize );
+        CPPUNIT_TEST( Pwd );
         CPPUNIT_TEST( Misc );
 #ifndef FTP_ANONYMOUS
         CPPUNIT_TEST( Upload );
@@ -66,6 +67,7 @@ private:
     void List();
     void Download();
     void FileSize();
+    void Pwd();
     void Misc();
     void Upload();
 
@@ -94,6 +96,8 @@ void FTPTestCase::setUp()
     m_ftp->SetUser(user);
     m_ftp->SetPassword(password);
 #endif // FTP_ANONYMOUS/!FTP_ANONYMOUS
+
+    CPPUNIT_ASSERT( m_ftp->Connect(hostname) );
 }
 
 void FTPTestCase::tearDown()
@@ -105,8 +109,6 @@ void FTPTestCase::tearDown()
 
 void FTPTestCase::List()
 {
-    CPPUNIT_ASSERT( m_ftp->Connect(hostname) );
-
     // test CWD
     CPPUNIT_ASSERT( m_ftp->ChDir(directory) );
 
@@ -120,7 +122,6 @@ void FTPTestCase::List()
 
 void FTPTestCase::Download()
 {
-    CPPUNIT_ASSERT( m_ftp->Connect(hostname) );
     CPPUNIT_ASSERT( m_ftp->ChDir(directory) );
 
     // test RETR
@@ -141,8 +142,6 @@ void FTPTestCase::Download()
 
 void FTPTestCase::FileSize()
 {
-    CPPUNIT_ASSERT( m_ftp->Connect(hostname) );
-
     CPPUNIT_ASSERT( m_ftp->ChDir(directory) );
     
     CPPUNIT_ASSERT( m_ftp->FileExists(valid_filename) );
@@ -151,10 +150,16 @@ void FTPTestCase::FileSize()
     CPPUNIT_ASSERT( size != -1 );
 }
 
+void FTPTestCase::Pwd()
+{
+    CPPUNIT_ASSERT_EQUAL( "/", m_ftp->Pwd() );
+
+    CPPUNIT_ASSERT( m_ftp->ChDir(directory) );
+    CPPUNIT_ASSERT_EQUAL( directory, m_ftp->Pwd() );
+}
+
 void FTPTestCase::Misc()
 {
-    CPPUNIT_ASSERT( m_ftp->Connect(hostname) );
-
     CPPUNIT_ASSERT( m_ftp->SendCommand(wxT("STAT")) == '2' );
     CPPUNIT_ASSERT( m_ftp->SendCommand(wxT("HELP SITE")) == '2' );
 }
@@ -162,8 +167,6 @@ void FTPTestCase::Misc()
 #ifndef FTP_ANONYMOUS
 void FTPTestCase::Upload()
 {
-    CPPUNIT_ASSERT( m_ftp->Connect(hostname) );
-
     // upload a file
     static const wxChar *file1 = wxT("test1");
     wxOutputStream *out = m_ftp->GetOutputStream(file1);
