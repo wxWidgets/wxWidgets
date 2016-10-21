@@ -180,6 +180,10 @@ public:
     // wxDVR_DEFAULT_ALIGNMENT.
     int GetEffectiveAlignment() const;
 
+    // Like GetEffectiveAlignment(), but returns wxDVR_DEFAULT_ALIGNMENT if
+    // the owner isn't set and GetAlignment() is default.
+    int GetEffectiveAlignmentIfKnown() const;
+
     // Send wxEVT_DATAVIEW_ITEM_EDITING_STARTED event.
     void NotifyEditingStarted(const wxDataViewItem& item);
 

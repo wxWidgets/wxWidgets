@@ -2056,18 +2056,9 @@ wxDataViewCellMode wxDataViewRenderer::GetMode() const
 
 void wxDataViewRenderer::GtkApplyAlignment(GtkCellRenderer *renderer)
 {
-    int align = m_alignment;
-
-    // query alignment from column ?
-    if (align == -1)
-    {
-        // None there yet
-        if (GetOwner() == NULL)
-            return;
-
-        align = GetOwner()->GetAlignment();
-        align |= wxALIGN_CENTRE_VERTICAL;
-    }
+    int align = GetEffectiveAlignmentIfKnown();
+    if ( align == wxDVR_DEFAULT_ALIGNMENT )
+        return; // none set yet
 
     // horizontal alignment:
 
@@ -2341,14 +2332,18 @@ bool wxDataViewTextRenderer::GetTextValue(wxString& str) const
     return true;
 }
 
-void wxDataViewTextRenderer::SetAlignment( int align )
+void wxDataViewTextRenderer::GtkUpdateAlignment()
 {
-    wxDataViewRenderer::SetAlignment(align);
+    wxDataViewRenderer::GtkUpdateAlignment();
 
 #ifndef __WXGTK3__
     if (gtk_check_version(2,10,0))
         return;
 #endif
+
+    int align = GetEffectiveAlignmentIfKnown();
+    if ( align == wxDVR_DEFAULT_ALIGNMENT )
+        return; // none set yet
 
     // horizontal alignment:
     PangoAlignment pangoAlign = PANGO_ALIGN_LEFT;
@@ -2585,6 +2580,14 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
         m_renderer = NULL;
     else
         Init(mode, align);
+}
+
+void wxDataViewCustomRenderer::GtkUpdateAlignment()
+{
+    wxDataViewCustomRendererBase::GtkUpdateAlignment();
+
+    if ( m_text_renderer )
+        GtkApplyAlignment(GTK_CELL_RENDERER(m_text_renderer));
 }
 
 void wxDataViewCustomRenderer::GtkInitTextRenderer()
@@ -2868,14 +2871,18 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
-void wxDataViewChoiceRenderer::SetAlignment( int align )
+void wxDataViewChoiceRenderer::GtkUpdateAlignment()
 {
-    wxDataViewCustomRenderer::SetAlignment(align);
+    wxDataViewCustomRenderer::GtkUpdateAlignment();
 
 #ifndef __WXGTK3__
     if (gtk_check_version(2,10,0))
         return;
 #endif
+
+    int align = GetEffectiveAlignmentIfKnown();
+    if ( align == wxDVR_DEFAULT_ALIGNMENT )
+        return; // none set yet
 
     // horizontal alignment:
     PangoAlignment pangoAlign = PANGO_ALIGN_LEFT;

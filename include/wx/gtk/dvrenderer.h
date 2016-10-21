@@ -53,7 +53,7 @@ public:
 
     GtkCellRenderer* GetGtkHandle() { return m_renderer; }
     void GtkInitHandlers();
-    void GtkUpdateAlignment() { GtkApplyAlignment(m_renderer); }
+    virtual void GtkUpdateAlignment() { GtkApplyAlignment(m_renderer); }
 
     // return the text renderer used by this renderer for setting text cell
     // specific attributes: can return NULL if this renderer doesn't render any

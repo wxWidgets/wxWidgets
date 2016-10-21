@@ -873,13 +873,24 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
 
 int wxDataViewRendererBase::GetEffectiveAlignment() const
 {
+    int alignment = GetEffectiveAlignmentIfKnown();
+    wxASSERT( alignment != wxDVR_DEFAULT_ALIGNMENT );
+    return alignment;
+}
+
+
+int wxDataViewRendererBase::GetEffectiveAlignmentIfKnown() const
+{
     int alignment = GetAlignment();
 
     if ( alignment == wxDVR_DEFAULT_ALIGNMENT )
     {
-        // if we don't have an explicit alignment ourselves, use that of the
-        // column in horizontal direction and default vertical alignment
-        alignment = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+        if ( GetOwner() != NULL )
+        {
+            // if we don't have an explicit alignment ourselves, use that of the
+            // column in horizontal direction and default vertical alignment
+            alignment = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+        }
     }
 
     return alignment;
