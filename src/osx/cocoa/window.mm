@@ -2044,7 +2044,7 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
     {
         // what is a good default duration? Windows uses 200ms, Web frameworks
         // use anything from 250ms to 1s... choose something in the middle
-        timeout = 500;
+        timeout = 200;
     }
 
     [anim setDuration:timeout/1000.];   // duration is in seconds here
