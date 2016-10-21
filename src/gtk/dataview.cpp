@@ -2213,6 +2213,9 @@ void wxDataViewTextRenderer::SetAlignment( int align )
         return;
 #endif
 
+    if (align == -1)
+        return;
+
     // horizontal alignment:
     PangoAlignment pangoAlign = PANGO_ALIGN_LEFT;
     if (align & wxALIGN_RIGHT)
