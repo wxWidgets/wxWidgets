@@ -234,6 +234,13 @@ public:
 
     virtual bool GetValue( wxVariant &WXUNUSED(value) ) const wxOVERRIDE { return true; }
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE
+    {
+        return m_value;
+    }
+#endif // wxUSE_ACCESSIBILITY
+
     virtual bool HasEditorCtrl() const wxOVERRIDE { return true; }
 
     virtual wxWindow*
