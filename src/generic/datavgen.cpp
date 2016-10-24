@@ -5765,21 +5765,16 @@ wxAccStatus wxDataViewCtrlAccessible::GetName(int childId, wxString* name)
 
             wxVariant value;
             model->GetValue(value, item, dvCol->GetModelColumn());
-            if ( !value.IsNull() && !value.IsType(wxS("bool")) )
+            if ( value.IsNull() || value.IsType(wxS("bool")) )
+                continue; // Skip non-textual items
+
+            wxDataViewRenderer* r = dvCol->GetRenderer();
+            r->PrepareForItem(model, item, dvCol->GetModelColumn());
+            wxString vs = r->GetAccessibleDescription();
+            if ( !vs.empty() )
             {
-                wxString vs = value.MakeString();
-                if ( !vs.empty() )
-                {
-                    wxString colName = dvCol->GetTitle();
-                    // If column has no label then present its index.
-                    if ( colName.empty() )
-                    {
-                        // Columns are numbered from 1.
-                        colName = wxString::Format(_("Column %u"), col+1);
-                    }
-                    itemName = colName + wxS(": ") + vs;
-                    break;
-                }
+                itemName = vs;
+                break;
             }
         }
 
@@ -5924,27 +5919,17 @@ wxAccStatus wxDataViewCtrlAccessible::GetDescription(int childId, wxString* desc
             if ( dvCol->IsHidden() )
                 continue; // skip it
 
-            wxString valStr;
             wxVariant value;
             model->GetValue(value, item, dvCol->GetModelColumn());
-            if ( value.IsNull() )
+
+            wxDataViewRenderer* r = dvCol->GetRenderer();
+            r->PrepareForItem(model, item, dvCol->GetModelColumn());
+            wxString valStr = r->GetAccessibleDescription();
+            // Skip first textual item
+            if ( !firstTextSkipped && !value.IsNull() && !value.IsType(wxS("bool")) && !valStr.empty() )
             {
-                valStr = _("null");
-            }
-            else if ( value.IsType(wxS("bool")) )
-            {
-                valStr = value.GetBool() ? _("yes") : _("no");
-            }
-            else
-            {
-                // First textual item is returned as Name property
-                // so it needs to be skipped for Description.
-                valStr = value.MakeString();
-                if ( !valStr.empty() &&  !firstTextSkipped )
-                {
-                    firstTextSkipped = true;
-                    valStr.Empty();
-                }
+                firstTextSkipped = true;
+                continue;
             }
 
             if ( !valStr.empty() )
