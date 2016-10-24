@@ -1095,7 +1095,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
         // returned string is capitalized and ended with '\r\n' - bad
         s_szBuf[0] = (wxChar)wxTolower(s_szBuf[0]);
         size_t len = wxStrlen(s_szBuf);
-        if ( len > 0 ) {
+        if ( len >= 2 ) {
             // truncate string
             if ( s_szBuf[len - 2] == wxS('\r') )
                 s_szBuf[len - 2] = wxS('\0');
