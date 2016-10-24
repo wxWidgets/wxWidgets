@@ -1586,10 +1586,7 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     if (context)
         nativeContext = context->GetNativeContext();
     if (cr != nativeContext)
-    {
-        cairo_reference(cr);
         dc->SetGraphicsContext(wxGraphicsContext::CreateFromNative(cr));
-    }
 #else
     wxWindowDCImpl *impl = (wxWindowDCImpl *) dc->GetImpl();
 
