@@ -466,6 +466,35 @@ public:
         return false;
     }
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE
+    {
+        wxString text = m_value.GetText();
+        if ( !text.empty() )
+        {
+            text += wxS(" ");
+        }
+
+        switch ( m_value.m_checkedState )
+        {
+            case wxCHK_CHECKED:
+                /* TRANSLATORS: Checkbox state name */
+                text += _("checked");
+                break;
+            case wxCHK_UNCHECKED:
+                /* TRANSLATORS: Checkbox state name */
+                text += _("unchecked");
+                break;
+            case wxCHK_UNDETERMINED:
+                /* TRANSLATORS: Checkbox state name */
+                text += _("undetermined");
+                break;
+        }
+
+        return text;
+    }
+#endif // wxUSE_ACCESSIBILITY
+
     wxSize GetSize() const wxOVERRIDE
     {
         wxSize size = GetCheckSize();

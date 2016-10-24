@@ -1713,6 +1713,13 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewSpinRenderer::GetAccessibleDescription() const
+{
+    return wxString::Format(wxS("%li"), m_data);
+}
+#endif // wxUSE_ACCESSIBILITY
+
 #endif // wxUSE_SPINCTRL
 
 // -------------------------------------
@@ -1784,6 +1791,13 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewChoiceRenderer::GetAccessibleDescription() const
+{
+    return m_data;
+}
+#endif // wxUSE_ACCESSIBILITY
+
 // ----------------------------------------------------------------------------
 // wxDataViewChoiceByIndexRenderer
 // ----------------------------------------------------------------------------
@@ -1828,7 +1842,18 @@ bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
-#endif
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewChoiceByIndexRenderer::GetAccessibleDescription() const
+{
+    wxVariant strVal;
+    if ( wxDataViewChoiceRenderer::GetValue(strVal) )
+        return strVal;
+
+    return wxString::Format(wxS("%li"), (long)GetChoices().Index(strVal.GetString()));
+}
+#endif // wxUSE_ACCESSIBILITY
+
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
 
 // ---------------------------------------------------------
 // wxDataViewDateRenderer
@@ -1873,6 +1898,13 @@ bool wxDataViewDateRenderer::GetValue(wxVariant& value) const
     value = m_date;
     return true;
 }
+
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewDateRenderer::GetAccessibleDescription() const
+{
+    return m_date.FormatDate();
+}
+#endif // wxUSE_ACCESSIBILITY
 
 bool wxDataViewDateRenderer::Render(wxRect cell, wxDC* dc, int state)
 {

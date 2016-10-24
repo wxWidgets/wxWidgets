@@ -1854,6 +1854,18 @@ public:
     void DisableEllipsize();
 
     /**
+        This method returns a string describing the content of the renderer
+        to the class implementing accessibility features in wxDataViewCtrl.
+
+        @note
+        The method is implemented if @c wxUSE_ACCESSIBILITY setup symbol is set
+        to 1.
+
+        @since 3.1.1
+    */
+    virtual wxString GetAccessibleDescription() const = 0;
+
+    /**
         Returns the alignment. See SetAlignment()
     */
     virtual int GetAlignment() const;
@@ -2222,7 +2234,9 @@ public:
     order to write a new renderer.
 
     You need to override at least wxDataViewRenderer::SetValue, wxDataViewRenderer::GetValue,
-    wxDataViewCustomRenderer::GetSize and wxDataViewCustomRenderer::Render.
+    wxDataViewCustomRenderer::GetSize and wxDataViewCustomRenderer::Render and, if
+    @c wxUSE_ACCESSIBILITY setup symbol is set to 1, also
+    wxDataViewRenderer::GetAccessibleDescription.
 
     If you want your renderer to support in-place editing then you also need to override
     wxDataViewCustomRenderer::HasEditorCtrl, wxDataViewCustomRenderer::CreateEditorCtrl

@@ -52,6 +52,9 @@
 #include "wx/weakref.h"
 #include "wx/generic/private/markuptext.h"
 #include "wx/generic/private/widthcalc.h"
+#if wxUSE_ACCESSIBILITY
+#include "wx/private/markupparser.h"
+#endif // wxUSE_ACCESSIBILITY
 
 //-----------------------------------------------------------------------------
 // classes
@@ -1069,6 +1072,17 @@ bool wxDataViewTextRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
     return false;
 }
 
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewTextRenderer::GetAccessibleDescription() const
+{
+#if wxUSE_MARKUP
+    if ( m_markupText )
+        return wxMarkupParser::Strip(m_text);
+#endif // wxUSE_MARKUP
+    return m_text;
+}
+#endif // wxUSE_ACCESSIBILITY
+
 bool wxDataViewTextRenderer::HasEditorCtrl() const
 {
     return true;
@@ -1162,6 +1176,13 @@ bool wxDataViewBitmapRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
     return false;
 }
 
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewBitmapRenderer::GetAccessibleDescription() const
+{
+    return wxEmptyString;
+}
+#endif // wxUSE_ACCESSIBILITY
+
 bool wxDataViewBitmapRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     if (m_bitmap.IsOk())
@@ -1206,6 +1227,16 @@ bool wxDataViewToggleRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
 {
     return false;
 }
+
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewToggleRenderer::GetAccessibleDescription() const
+{
+    /* TRANSLATORS: Checkbox state name */
+    return m_toggle ? _("checked")
+    /* TRANSLATORS: Checkbox state name */
+                    : _("unchecked");
+}
+#endif // wxUSE_ACCESSIBILITY
 
 bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
@@ -1286,6 +1317,13 @@ bool wxDataViewProgressRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewProgressRenderer::GetAccessibleDescription() const
+{
+    return wxString::Format(wxS("%i"), m_value);
+}
+#endif // wxUSE_ACCESSIBILITY
+
 bool
 wxDataViewProgressRenderer::Render(wxRect rect, wxDC *dc, int WXUNUSED(state))
 {
@@ -1332,6 +1370,13 @@ bool wxDataViewIconTextRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
 {
     return false;
 }
+
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewIconTextRenderer::GetAccessibleDescription() const
+{
+    return m_value.GetText();
+}
+#endif // wxUSE_ACCESSIBILITY
 
 bool wxDataViewIconTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 {

@@ -114,6 +114,9 @@ public:
     // before a cell is rendered using this renderer
     virtual bool SetValue(const wxVariant& value) = 0;
     virtual bool GetValue(wxVariant& value) const = 0;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const = 0;
+#endif // wxUSE_ACCESSIBILITY
 
     wxString GetVariantType() const             { return m_variantType; }
 
@@ -384,6 +387,9 @@ public:
     virtual wxSize GetSize() const wxOVERRIDE;
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
 private:
     long    m_data;
@@ -411,6 +417,9 @@ public:
     virtual wxSize GetSize() const wxOVERRIDE;
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
     wxString GetChoice(size_t index) const { return m_choices[index]; }
     const wxArrayString& GetChoices() const { return m_choices; }
@@ -436,6 +445,9 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 };
 
 
@@ -462,6 +474,9 @@ public:
     virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant &value) wxOVERRIDE;
     virtual bool SetValue(const wxVariant &value) wxOVERRIDE;
     virtual bool GetValue(wxVariant& value) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
     virtual bool Render( wxRect cell, wxDC *dc, int state ) wxOVERRIDE;
     virtual wxSize GetSize() const wxOVERRIDE;
 

@@ -61,6 +61,9 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
     virtual bool Render(wxRect cell, wxDC *dc, int state) wxOVERRIDE;
     virtual wxSize GetSize() const wxOVERRIDE;
@@ -97,6 +100,9 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
     virtual bool Render( wxRect cell, wxDC *dc, int state ) wxOVERRIDE;
     virtual wxSize GetSize() const wxOVERRIDE;
@@ -124,6 +130,9 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
     virtual bool Render( wxRect cell, wxDC *dc, int state ) wxOVERRIDE;
     virtual wxSize GetSize() const wxOVERRIDE;
@@ -157,6 +166,9 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant& value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
     virtual bool Render(wxRect cell, wxDC *dc, int state) wxOVERRIDE;
     virtual wxSize GetSize() const wxOVERRIDE;
@@ -184,6 +196,9 @@ public:
 
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
     virtual bool Render(wxRect cell, wxDC *dc, int state) wxOVERRIDE;
     virtual wxSize GetSize() const wxOVERRIDE;
