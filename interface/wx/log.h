@@ -1226,6 +1226,23 @@ unsigned long wxSysErrorCode();
     @a errCode is 0 (default), the last error code (as returned by
     wxSysErrorCode()) is used.
 
+    Use this function instead of wxSysErrorMsg(), as the latter one is not
+    thread-safe.
+
+    @see wxSysErrorCode(), wxLogSysError()
+
+    @header{wx/log.h}
+*/
+wxString wxSysErrorMsgStr(unsigned long errCode = 0);
+
+/**
+    Returns the error message corresponding to the given system error code. If
+    @a errCode is 0 (default), the last error code (as returned by
+    wxSysErrorCode()) is used.
+
+    Use wxSysErrorMsgStr() instead of this function especially in a
+    multi-threaded application.
+
     @see wxSysErrorCode(), wxLogSysError()
 
     @header{wx/log.h}

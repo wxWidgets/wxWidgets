@@ -1188,6 +1188,9 @@ WXDLLIMPEXP_BASE unsigned long wxSysErrorCode();
 // return the error message for given (or last if 0) error code
 WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
+// return the error message for given (or last if 0) error code
+WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
+
 // ----------------------------------------------------------------------------
 // define wxLog<level>() functions which can be used by application instead of
 // stdio, iostream &c for log messages for easy redirection
@@ -1393,6 +1396,7 @@ public:
 // Dummy macros to replace some functions.
 #define wxSysErrorCode() (unsigned long)0
 #define wxSysErrorMsg( X ) (const wxChar*)NULL
+#define wxSysErrorMsgStr( X ) wxEmptyString
 
 // Fake symbolic trace masks... for those that are used frequently
 #define wxTRACE_OleCalls wxEmptyString // OLE interface calls
