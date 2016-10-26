@@ -290,7 +290,7 @@ wxCursor *wxHtmlWindow::ms_cursorText = NULL;
 void wxHtmlWindow::CleanUpStatics()
 {
     wxDELETE(m_DefaultFilter);
-    m_Filters.Clear();
+    WX_CLEAR_LIST(wxList, m_Filters);
     if (m_GlobalProcessors)
         WX_CLEAR_LIST(wxHtmlProcessorList, *m_GlobalProcessors);
     wxDELETE(m_GlobalProcessors);
