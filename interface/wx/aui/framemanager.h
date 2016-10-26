@@ -1023,3 +1023,12 @@ public:
     void Veto(bool veto = true);
 };
 
+
+
+wxEventType wxEVT_AUI_PANE_BUTTON;
+wxEventType wxEVT_AUI_PANE_CLOSE;
+wxEventType wxEVT_AUI_PANE_MAXIMIZE;
+wxEventType wxEVT_AUI_PANE_RESTORE;
+wxEventType wxEVT_AUI_PANE_ACTIVATED;
+wxEventType wxEVT_AUI_RENDER;
+wxEventType wxEVT_AUI_FIND_MANAGER;
