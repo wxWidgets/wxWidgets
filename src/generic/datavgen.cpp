@@ -5828,13 +5828,17 @@ wxAccStatus wxDataViewCtrlAccessible::DoDefaultAction(int childId)
         wxDataViewMainWindow* dvWnd = wxDynamicCast(dvCtrl->GetMainWindow(), wxDataViewMainWindow);
         if ( !dvWnd->IsList() )
         {
-            wxDataViewTreeNode* node = dvWnd->GetTreeNodeByRow(childId-1);
+            const unsigned int row = childId-1;
+            wxDataViewTreeNode* node = dvWnd->GetTreeNodeByRow(row);
             if ( node )
             {
                 if ( node->HasChildren() )
                 {
                     // Expand or collapse the node.
-                    node->ToggleOpen();
+                    if ( node->IsOpen() )
+                        dvWnd->Collapse(row);
+                    else
+                        dvWnd->Expand(row);
                     return wxACC_OK;
                 }
             }
