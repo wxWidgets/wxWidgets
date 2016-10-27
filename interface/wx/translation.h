@@ -475,8 +475,11 @@ public:
     // use elements[n] as usual
     @endcode
 
-    The code wouldn't compile because the function calls are forbidden in the
-    array initializer. So instead you should do this:
+    The code would compile and run, but there would be no translations for the
+    strings because static variables are initialized at a very early stage of
+    program execution; that is, before the locale and paths to message catalog
+    files have been set up.
+    So instead you should do this:
 
     @code
     static const char * const elements[] = { wxTRANSLATE("Hydrogen"),
@@ -485,10 +488,10 @@ public:
     // use wxGetTranslation(elements[n])
     @endcode
 
-    Note that although the code @b would compile if you simply omit
-    wxTRANSLATE() in the above, it wouldn't work as expected because there
-    would be no translations for the element names in the program message
-    catalog and wxGetTranslation() wouldn't find them.
+    Note that if you simply omit wxTRANSLATE() above, those strings would not
+    be marked for translation, and would therefore not be included in the
+    message catalog. Consequently, wxGetTranslation() would not find
+    translations for them.
 
     @return A const wxChar*.
 
