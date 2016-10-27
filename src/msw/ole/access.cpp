@@ -851,6 +851,9 @@ STDMETHODIMP wxIAccessible::accDoDefaultAction(VARIANT varID)
     }
 
     wxAccStatus status = m_pAccessible->DoDefaultAction(varID.lVal);
+    if (status == wxACC_OK)
+        return S_OK;
+
     if (status == wxACC_FAIL)
         return E_FAIL;
 
