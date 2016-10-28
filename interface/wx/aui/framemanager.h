@@ -1032,3 +1032,65 @@ wxEventType wxEVT_AUI_PANE_RESTORE;
 wxEventType wxEVT_AUI_PANE_ACTIVATED;
 wxEventType wxEVT_AUI_RENDER;
 wxEventType wxEVT_AUI_FIND_MANAGER;
+
+
+
+class wxAuiDockInfo
+{
+public:
+    wxAuiDockInfo();
+    wxAuiDockInfo(const wxAuiDockInfo& c);
+    wxAuiDockInfo& operator=(const wxAuiDockInfo& c);
+
+    bool IsOk() const;
+    bool IsHorizontal() const;
+    bool IsVertical() const;
+    
+    wxAuiPaneInfoPtrArray panes; // array of panes
+    wxRect rect;              // current rectangle
+    int dock_direction;       // dock direction (top, bottom, left, right, center)
+    int dock_layer;           // layer number (0 = innermost layer)
+    int dock_row;             // row number on the docking bar (0 = first row)
+    int size;                 // size of the dock
+    int min_size;             // minimum size of a dock (0 if there is no min)
+    bool resizable;           // flag indicating whether the dock is resizable
+    bool toolbar;             // flag indicating dock contains only toolbars
+    bool fixed;               // flag indicating that the dock operates on
+                              // absolute coordinates as opposed to proportional
+    bool reserved1;
+};
+
+
+class wxAuiDockUIPart
+{
+public:
+    enum
+    {
+        typeCaption,
+        typeGripper,
+        typeDock,
+        typeDockSizer,
+        typePane,
+        typePaneSizer,
+        typeBackground,
+        typePaneBorder,
+        typePaneButton
+    };
+
+    int type;                // ui part type (see enum above)
+    int orientation;         // orientation (either wxHORIZONTAL or wxVERTICAL)
+    wxAuiDockInfo* dock;        // which dock the item is associated with
+    wxAuiPaneInfo* pane;        // which pane the item is associated with
+    wxAuiPaneButton* button;    // which pane button the item is associated with
+    wxSizer* cont_sizer;     // the part's containing sizer
+    wxSizerItem* sizer_item; // the sizer item of the part
+    wxRect rect;             // client coord rectangle of the part itself
+};
+
+
+
+class wxAuiPaneButton
+{
+public:
+    int button_id;        // id of the button (e.g. buttonClose)
+};
