@@ -78,7 +78,6 @@
     m_isUnderline = m_isStrikethrough = false;
     for (id key in attribs) {
         NSNumber *number = static_cast<NSNumber *>([attribs objectForKey:key]);
-        int i = [number intValue];
         if ([key isEqual:NSUnderlineStyleAttributeName]) {
             m_isUnderline = [number intValue] != NSUnderlineStyleNone;
         } else if ([key isEqual:NSStrikethroughStyleAttributeName]) {
