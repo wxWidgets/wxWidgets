@@ -917,6 +917,63 @@ public:
         Makes a copy of the wxAuiPaneInfo object.
     */
     wxAuiPaneInfo& operator=(const wxAuiPaneInfo& c);
+
+    
+    /// name of the pane
+    wxString name;
+
+    /// caption displayed on the window
+    wxString caption;
+
+    /// icon of the pane, may be invalid
+    wxBitmap icon;        
+
+    /// window that is in this pane
+    wxWindow* window;
+
+    /// floating frame window that holds the pane
+    wxFrame* frame;
+
+    /// a combination of wxPaneState values
+    unsigned int state;
+
+    /// dock direction (top, bottom, left, right, center)
+    int dock_direction;
+
+    /// layer number (0 = innermost layer)
+    int dock_layer;
+
+    /// row number on the docking bar (0 = first row)
+    int dock_row;
+
+    /// position inside the row (0 = first position)
+    int dock_pos;
+
+    /// size that the layout engine will prefer
+    wxSize best_size;
+
+    /// minimum size the pane window can tolerate
+    wxSize min_size;
+
+    /// maximum size the pane window can tolerate
+    wxSize max_size;
+
+    /// position while floating
+    wxPoint floating_pos;
+
+    /// size while floating
+    wxSize floating_size;
+
+    /// proportion while docked
+    int dock_proportion;
+
+    /// buttons on the pane
+    wxAuiPaneButtonArray buttons; 
+
+    /// current rectangle (populated by wxAUI)
+    wxRect rect;
+
+    bool IsValid() const;    
 };
 
 
