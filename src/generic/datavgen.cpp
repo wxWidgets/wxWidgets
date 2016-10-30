@@ -2845,6 +2845,9 @@ void wxDataViewMainWindow::ChangeCurrentRow( unsigned int row )
     m_currentRow = row;
 
     // send event
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, m_owner, wxOBJID_CLIENT, m_currentRow+1);
+#endif // wxUSE_ACCESSIBILITY
 }
 
 bool wxDataViewMainWindow::UnselectAllRows(unsigned int except)
@@ -2923,6 +2926,10 @@ bool wxDataViewMainWindow::IsRowSelected( unsigned int row )
 
 void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item)
 {
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_SELECTIONWITHIN, m_owner, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
+
     wxDataViewEvent le(wxEVT_DATAVIEW_SELECTION_CHANGED, m_owner, item);
     m_owner->ProcessWindowEvent(le);
 }
@@ -3215,6 +3222,11 @@ bool
 wxDataViewMainWindow::SendExpanderEvent(wxEventType type,
                                         const wxDataViewItem& item)
 {
+#if wxUSE_ACCESSIBILITY
+    if ( type == wxEVT_DATAVIEW_ITEM_EXPANDED || type == wxEVT_DATAVIEW_ITEM_COLLAPSED )
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_REORDER, m_owner, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
+
     wxDataViewEvent le(type, m_owner, item);
     return !m_owner->ProcessWindowEvent(le) || le.IsAllowed();
 }
@@ -4597,7 +4609,15 @@ void wxDataViewMainWindow::OnSetFocus( wxFocusEvent &event )
     }
 
     if (HasCurrentRow())
+    {
         Refresh();
+    }
+#if wxUSE_ACCESSIBILITY
+    else
+    {
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, m_owner, wxOBJID_CLIENT, wxACC_SELF);
+    }
+#endif // wxUSE_ACCESSIBILITY
 
     event.Skip();
 }
@@ -4686,6 +4706,10 @@ wxDataViewCtrl::~wxDataViewCtrl()
 
     m_cols.Clear();
     m_colsBestWidths.clear();
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_DESTROY, this, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
 }
 
 void wxDataViewCtrl::Init()
@@ -4745,6 +4769,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     SetSizer( sizer );
 
     EnableSystemTheme();
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_CREATE, this, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
 
     return true;
 }
@@ -4841,7 +4869,47 @@ bool wxDataViewCtrl::SetFont(const wxFont & font)
     return true;
 }
 
+#if wxUSE_ACCESSIBILITY
+bool wxDataViewCtrl::Show(bool show)
+{
+    bool changed = wxControl::Show(show);
+    if ( changed )
+    {
+        wxAccessible::NotifyEvent(show ? wxACC_EVENT_OBJECT_SHOW : wxACC_EVENT_OBJECT_HIDE,
+                                  this, wxOBJID_CLIENT, wxACC_SELF);
+    }
 
+    return changed;
+}
+
+bool wxDataViewCtrl::Enable(bool enable)
+{
+    bool changed = wxControl::Enable(enable);
+    if ( changed )
+    {
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+    }
+
+    return changed;
+}
+
+void wxDataViewCtrl::SetName(const wxString &name)
+{
+    wxControl::SetName(name);
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_NAMECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+}
+
+bool wxDataViewCtrl::Reparent(wxWindowBase *newParent)
+{
+    bool changed = wxControl::Reparent(newParent);
+    if ( changed )
+    {
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_PARENTCHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+    }
+
+    return changed;
+}
+#endif // wxUSE_ACCESIBILITY
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {
