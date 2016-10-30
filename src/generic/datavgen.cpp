@@ -1012,6 +1012,29 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
 {
 }
 
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewCustomRenderer::GetAccessibleDescription() const
+{
+    wxVariant val;
+    GetValue(val);
+
+    wxString strVal;
+    if ( val.IsType(wxS("bool")) )
+    {
+        /* TRANSLATORS: Name of Boolean true value */
+        strVal = val.GetBool() ? _("true")
+        /* TRANSLATORS: Name of Boolean false value */
+                               : _("false");
+    }
+    else
+    {
+        strVal = val.MakeString();
+    }
+
+    return strVal;
+}
+#endif // wxUSE_ACCESSIBILITY
+
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------

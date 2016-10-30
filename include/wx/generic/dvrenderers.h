@@ -36,6 +36,10 @@ public:
         return ActivateCell(cell, model, item, col, mouseEvent);
     }
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
+
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer);
 };

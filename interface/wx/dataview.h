@@ -2234,13 +2234,14 @@ public:
     order to write a new renderer.
 
     You need to override at least wxDataViewRenderer::SetValue, wxDataViewRenderer::GetValue,
-    wxDataViewCustomRenderer::GetSize and wxDataViewCustomRenderer::Render and, if
-    @c wxUSE_ACCESSIBILITY setup symbol is set to 1, also
-    wxDataViewRenderer::GetAccessibleDescription.
+    wxDataViewCustomRenderer::GetSize and wxDataViewCustomRenderer::Render.
 
     If you want your renderer to support in-place editing then you also need to override
     wxDataViewCustomRenderer::HasEditorCtrl, wxDataViewCustomRenderer::CreateEditorCtrl
     and wxDataViewCustomRenderer::GetValueFromEditorCtrl.
+
+    If @c wxUSE_ACCESSIBILITY setup symbol is set to 1, you might need to override also
+    wxDataViewRenderer::GetAccessibleDescription.
 
     Note that a special event handler will be pushed onto that editor control
     which handles @e \<ENTER\> and focus out events in order to end the editing.
