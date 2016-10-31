@@ -321,7 +321,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
 // been recalculated and cached by us. We want GTK+ information.
 wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
 {
-    GtkRequisition req;
+    GtkRequisition req = { 0, 0 };
 #ifdef __WXGTK3__
     int w, h;
     gtk_widget_get_size_request(widget, &w, &h);
