@@ -221,6 +221,8 @@ int          g_lastButtonNumber = 0;
 
 #ifdef __WXGTK3__
 static GList* gs_sizeRevalidateList;
+static GSList* gs_queueResizeList;
+static bool gs_inSizeAllocate;
 #endif
 
 //-----------------------------------------------------------------------------
@@ -2200,6 +2202,54 @@ static void frame_clock_layout(GdkFrameClock*, wxWindow* win)
 }
 #endif // GTK_CHECK_VERSION(3,8,0)
 
+#ifdef __WXGTK3__
+//-----------------------------------------------------------------------------
+// "check-resize"
+//-----------------------------------------------------------------------------
+
+static void check_resize(GtkContainer*, wxWindow*)
+{
+    gs_inSizeAllocate = true;
+}
+
+static void check_resize_after(GtkContainer*, wxWindow*)
+{
+    gs_inSizeAllocate = false;
+    if (gs_queueResizeList)
+    {
+        for (GSList* p = gs_queueResizeList; p; p = p->next)
+        {
+            if (p->data == NULL)
+                continue;
+
+            wxWindowGTK* w = static_cast<wxWindowGTK*>(p->data);
+            g_object_remove_weak_pointer(G_OBJECT(w->m_widget), &p->data);
+            gtk_widget_set_size_request(w->m_widget, w->m_width, w->m_height);
+
+            // in case only the position is changing
+            gtk_widget_queue_resize(w->m_widget);
+
+            // need to force the queue-resize up to the TLW with GTK >= 3.20
+            if (gtk_check_version(3,20,0) == NULL)
+            {
+                GtkWidget* widget = w->m_widget;
+                for (;;)
+                {
+                    widget = gtk_widget_get_parent(widget);
+                    if (widget == NULL)
+                        break;
+                    gtk_widget_queue_resize(widget);
+                    if (gtk_widget_is_toplevel(widget))
+                        break;
+                }
+            }
+        }
+        g_slist_free(gs_queueResizeList);
+        gs_queueResizeList = NULL;
+    }
+}
+#endif // __WXGTK3__
+
 } // extern "C"
 
 void wxWindowGTK::GTKHandleRealized()
@@ -2772,6 +2822,13 @@ void wxWindowGTK::PostCreation()
         g_signal_connect(m_wxwindow ? m_wxwindow : m_widget, "size_allocate",
             G_CALLBACK(size_allocate), this);
     }
+#ifdef __WXGTK3__
+    else
+    {
+        g_signal_connect(m_widget, "check-resize", G_CALLBACK(check_resize), this);
+        g_signal_connect_after(m_widget, "check-resize", G_CALLBACK(check_resize_after), this);
+    }
+#endif
 
 #if GTK_CHECK_VERSION(2, 8, 0)
 #ifndef __WXGTK3__
@@ -2880,46 +2937,39 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_leave_callback), this);
 }
 
-static GSList* gs_queueResizeList;
-
-extern "C" {
-static gboolean queue_resize(void*)
-{
-    gdk_threads_enter();
-    for (GSList* p = gs_queueResizeList; p; p = p->next)
-    {
-        if (p->data)
-        {
-            gtk_widget_queue_resize(GTK_WIDGET(p->data));
-            g_object_remove_weak_pointer(G_OBJECT(p->data), &p->data);
-        }
-    }
-    g_slist_free(gs_queueResizeList);
-    gs_queueResizeList = NULL;
-    gdk_threads_leave();
-    return false;
-}
-}
-
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
-    gtk_widget_set_size_request(m_widget, width, height);
     GtkWidget* parent = gtk_widget_get_parent(m_widget);
     if (WX_IS_PIZZA(parent))
+    {
         WX_PIZZA(parent)->move(m_widget, x, y, width, height);
+        if (
+#ifdef __WXGTK3__
+            !gs_inSizeAllocate &&
+#endif
+            gtk_widget_get_visible(m_widget))
+        {
+            // in case only the position is changing
+            gtk_widget_queue_resize(m_widget);
+        }
+    }
 
+#ifdef __WXGTK3__
     // With GTK3, gtk_widget_queue_resize() is ignored while a size-allocate
     // is in progress. This situation is common in wxWidgets, since
     // size-allocate can generate wxSizeEvent and size event handlers often
     // call SetSize(), directly or indirectly. Work around this by deferring
     // the queue-resize until after size-allocate processing is finished.
-    if (g_slist_find(gs_queueResizeList, m_widget) == NULL)
+    if (!gs_inSizeAllocate || !gtk_widget_get_visible(m_widget))
+        gtk_widget_set_size_request(m_widget, width, height);
+    else
     {
-        if (gs_queueResizeList == NULL)
-            g_idle_add_full(GTK_PRIORITY_RESIZE, queue_resize, NULL, NULL);
-        gs_queueResizeList = g_slist_prepend(gs_queueResizeList, m_widget);
+        gs_queueResizeList = g_slist_prepend(gs_queueResizeList, this);
         g_object_add_weak_pointer(G_OBJECT(m_widget), &gs_queueResizeList->data);
     }
+#else // !__WXGTK3__
+    gtk_widget_set_size_request(m_widget, width, height);
+#endif // !__WXGTK3__
 }
 
 void wxWindowGTK::ConstrainSize()
