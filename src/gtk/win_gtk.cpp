@@ -232,6 +232,14 @@ static void pizza_get_preferred_height(GtkWidget* widget, int* minimum, int* nat
         *natural = 0;
 }
 
+static void pizza_adjust_size_request(GtkWidget* widget, GtkOrientation orientation, int* minimum, int* natural)
+{
+    parent_class->adjust_size_request(widget, orientation, minimum, natural);
+    // Override adjustments to minimum size. GtkWidgetClass.adjust_size_request()
+    // will use the size request, if set, as the minimum.
+    *minimum = 0;
+}
+
 // Needed to implement GtkScrollable interface, but we don't care about the
 // properties. wxWindowGTK handles the adjustments and scroll policy.
 static void pizza_get_property(GObject*, guint, GValue*, GParamSpec*)
@@ -301,6 +309,7 @@ static void class_init(void* g_class, void*)
 #ifdef __WXGTK3__
     widget_class->get_preferred_width = pizza_get_preferred_width;
     widget_class->get_preferred_height = pizza_get_preferred_height;
+    widget_class->adjust_size_request = pizza_adjust_size_request;
     GObjectClass *gobject_class = G_OBJECT_CLASS(g_class);
     gobject_class->set_property = pizza_set_property;
     gobject_class->get_property = pizza_get_property;
