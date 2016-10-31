@@ -1343,7 +1343,7 @@ bool wxDataViewProgressRenderer::GetValue( wxVariant &value ) const
 #if wxUSE_ACCESSIBILITY
 wxString wxDataViewProgressRenderer::GetAccessibleDescription() const
 {
-    return wxString::Format(wxS("%i"), m_value);
+    return wxString::Format(wxS("%i %%"), m_value);
 }
 #endif // wxUSE_ACCESSIBILITY
 
