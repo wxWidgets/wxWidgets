@@ -30,7 +30,7 @@ wxBEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
-#define WX_MAC_STATUSBAR_HEIGHT 18
+#define WX_MAC_STATUSBAR_HEIGHT 24
 
 // ----------------------------------------------------------------------------
 // creation/destruction
@@ -205,6 +205,11 @@ void wxFrame::OnActivate(wxActivateEvent& event)
         }
 #endif
     }
+
+#if wxUSE_STATUSBAR
+    if ( GetStatusBar() && GetStatusBar()->IsShown() )
+        GetStatusBar()->Refresh();
+#endif
 }
 
 #if wxUSE_MENUS
