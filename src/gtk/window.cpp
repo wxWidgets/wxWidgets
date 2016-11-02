@@ -222,6 +222,7 @@ int          g_lastButtonNumber = 0;
 #ifdef __WXGTK3__
 static GList* gs_sizeRevalidateList;
 static GSList* gs_queueResizeList;
+GList* wx_sizeEventList;
 static bool gs_inSizeAllocate;
 void wxGTKSizeRevalidate(wxWindow*);
 #endif
@@ -2583,7 +2584,8 @@ wxWindowGTK::~wxWindowGTK()
     if (m_styleProvider)
         g_object_unref(m_styleProvider);
 
-    gs_sizeRevalidateList = g_list_remove(gs_sizeRevalidateList, this);
+    gs_sizeRevalidateList = g_list_remove_all(gs_sizeRevalidateList, this);
+    wx_sizeEventList = g_list_remove(wx_sizeEventList, this);
 #endif
 
     gs_needCursorResetMap.erase(this);
@@ -2924,11 +2926,18 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     if (height == -1)
         height = m_height;
 
-    const bool sizeChange = m_width != width || m_height != height;
+    bool sizeChange = m_width != width || m_height != height;
 
     if (sizeChange)
         m_useCachedClientSize = false;
 
+#ifdef __WXGTK3__
+    if (GList* p = g_list_find(wx_sizeEventList, this))
+    {
+        sizeChange = true;
+        wx_sizeEventList = g_list_delete_link(wx_sizeEventList, p);
+    }
+#endif
     if (sizeChange || m_x != x || m_y != y)
     {
         m_x = x;
@@ -4738,6 +4747,15 @@ void wxGTKSizeRevalidate(wxWindow* tlw)
         {
             win->InvalidateBestSize();
             gs_sizeRevalidateList = g_list_delete_link(gs_sizeRevalidateList, p);
+            for (;;)
+            {
+                win = win->GetParent();
+                if (win == NULL || g_list_find(wx_sizeEventList, win))
+                    break;
+                wx_sizeEventList = g_list_prepend(wx_sizeEventList, win);
+                if (win->IsTopLevel())
+                    break;
+            }
         }
     }
 }
@@ -4772,14 +4790,14 @@ bool wxWindowGTK::SetFont( const wxFont &font )
     // invalidate the best size right before the style cache is updated, so any
     // subsequent best size requests use the correct font.
     if (gtk_check_version(3,8,0) == NULL)
-        gs_sizeRevalidateList = g_list_append(gs_sizeRevalidateList, this);
+        gs_sizeRevalidateList = g_list_prepend(gs_sizeRevalidateList, this);
     else if (gtk_check_version(3,6,0) == NULL)
     {
         wxWindow* tlw = wxGetTopLevelParent(static_cast<wxWindow*>(this));
         if (tlw->m_widget && gtk_widget_get_visible(tlw->m_widget))
             g_idle_add_full(GTK_PRIORITY_RESIZE - 1, before_resize, this, NULL);
         else
-            gs_sizeRevalidateList = g_list_append(gs_sizeRevalidateList, this);
+            gs_sizeRevalidateList = g_list_prepend(gs_sizeRevalidateList, this);
     }
 #endif
 

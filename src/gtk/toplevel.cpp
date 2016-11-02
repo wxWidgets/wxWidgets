@@ -53,6 +53,7 @@
 #endif // wxUSE_LIBHILDON2
 
 #ifdef __WXGTK3__
+extern GList* wx_sizeEventList;
 void wxGTKSizeRevalidate(wxWindow*);
 #endif
 
@@ -1049,9 +1050,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         // size_allocate signals occur in reverse order (bottom to top).
         // Things work better if the initial wxSizeEvents are sent (from the
         // top down), before the initial size_allocate signals occur.
-        wxSizeEvent event(GetSize(), GetId());
-        event.SetEventObject(this);
-        HandleWindowEvent(event);
+        SendSizeEvent();
 
 #ifdef __WXGTK3__
         wxGTKSizeRevalidate(this);
@@ -1059,6 +1058,14 @@ bool wxTopLevelWindowGTK::Show( bool show )
     }
 
     bool change = base_type::Show(show);
+
+#ifdef __WXGTK3__
+    if (GList* p = g_list_find(wx_sizeEventList, this))
+    {
+        wx_sizeEventList = g_list_delete_link(wx_sizeEventList, p);
+        SendSizeEvent();
+    }
+#endif
 
     if (change && !show)
     {
@@ -1366,15 +1373,20 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
         // gtk_widget_show() was deferred, do it now
         m_deferShow = false;
         DoGetClientSize(&m_clientWidth, &m_clientHeight);
-        wxSizeEvent sizeEvent(GetSize(), GetId());
-        sizeEvent.SetEventObject(this);
-        HandleWindowEvent(sizeEvent);
+        SendSizeEvent();
 
 #ifdef __WXGTK3__
         wxGTKSizeRevalidate(this);
 #endif
         gtk_widget_show(m_widget);
 
+#ifdef __WXGTK3__
+        if (GList* p = g_list_find(wx_sizeEventList, this))
+        {
+            wx_sizeEventList = g_list_delete_link(wx_sizeEventList, p);
+            SendSizeEvent();
+        }
+#endif
         wxShowEvent showEvent(GetId(), true);
         showEvent.SetEventObject(this);
         HandleWindowEvent(showEvent);
