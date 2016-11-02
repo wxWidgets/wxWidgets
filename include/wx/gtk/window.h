@@ -443,6 +443,8 @@ protected:
 #ifdef __WXGTK3__
     static GdkWindow* GTKFindWindow(GtkWidget* widget);
     static void GTKFindWindow(GtkWidget* widget, wxArrayGdkWindows& windows);
+
+    bool m_needSizeEvent;
 #endif
 
 private:

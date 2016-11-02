@@ -2472,6 +2472,7 @@ void wxWindowGTK::Init()
 #ifdef __WXGTK3__
     m_paintContext = NULL;
     m_styleProvider = NULL;
+    m_needSizeEvent = false;
 #endif
 
     m_isScrolling = false;
@@ -3059,8 +3060,15 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         DoMoveWindow(x, y, width, height);
     }
 
-    if ((sizeChange && !m_nativeSizeEvent) || (sizeFlags & wxSIZE_FORCE_EVENT))
+    if (((sizeChange
+#ifdef __WXGTK3__
+                     || m_needSizeEvent
+#endif
+                                       ) && !m_nativeSizeEvent) || (sizeFlags & wxSIZE_FORCE_EVENT))
     {
+#ifdef __WXGTK3__
+        m_needSizeEvent = false;
+#endif
         // update these variables to keep size_allocate handler
         // from sending another size event for this change
         DoGetClientSize(&m_clientWidth, &m_clientHeight);
@@ -4865,6 +4873,15 @@ void wxWindowGTK::GTKSizeRevalidate()
         {
             win->InvalidateBestSize();
             gs_sizeRevalidateList = g_list_delete_link(gs_sizeRevalidateList, p);
+            for (;;)
+            {
+                win = win->m_parent;
+                if (win == NULL || win->m_needSizeEvent)
+                    break;
+                win->m_needSizeEvent = true;
+                if (win->IsTopLevel())
+                    break;
+            }
         }
     }
 }
