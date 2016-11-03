@@ -4731,6 +4731,7 @@ wxDataViewCtrl::~wxDataViewCtrl()
     m_colsBestWidths.clear();
 
 #if wxUSE_ACCESSIBILITY
+    SetAccessible(NULL);
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_DESTROY, this, wxOBJID_CLIENT, wxACC_SELF);
 #endif // wxUSE_ACCESSIBILITY
 }
