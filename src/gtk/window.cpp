@@ -2688,7 +2688,7 @@ wxWindowGTK::~wxWindowGTK()
     if (m_styleProvider)
         g_object_unref(m_styleProvider);
 
-    gs_sizeRevalidateList = g_list_remove(gs_sizeRevalidateList, this);
+    gs_sizeRevalidateList = g_list_remove_all(gs_sizeRevalidateList, this);
 #endif
 
     if (m_widget)
@@ -4928,14 +4928,14 @@ bool wxWindowGTK::SetFont( const wxFont &font )
     // invalidate the best size right before the style cache is updated, so any
     // subsequent best size requests use the correct font.
     if (gtk_check_version(3,8,0) == NULL)
-        gs_sizeRevalidateList = g_list_append(gs_sizeRevalidateList, this);
+        gs_sizeRevalidateList = g_list_prepend(gs_sizeRevalidateList, this);
     else if (gtk_check_version(3,6,0) == NULL)
     {
         wxWindow* tlw = wxGetTopLevelParent(static_cast<wxWindow*>(this));
         if (tlw->m_widget && gtk_widget_get_visible(tlw->m_widget))
             g_idle_add_full(GTK_PRIORITY_RESIZE - 1, before_resize, this, NULL);
         else
-            gs_sizeRevalidateList = g_list_append(gs_sizeRevalidateList, this);
+            gs_sizeRevalidateList = g_list_prepend(gs_sizeRevalidateList, this);
     }
 #endif
 
