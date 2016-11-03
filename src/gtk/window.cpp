@@ -3305,7 +3305,11 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
         return;
     }
 
-    wxCHECK_RET(source, "ClientToScreen failed on unrealized window");
+    if (source == NULL)
+    {
+        wxLogDebug("ClientToScreen cannot work when toplevel window is not shown");
+        return;
+    }
 
     int org_x = 0;
     int org_y = 0;
@@ -3375,7 +3379,11 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
         return;
     }
 
-    wxCHECK_RET(source, "ScreenToClient failed on unrealized window");
+    if (source == NULL)
+    {
+        wxLogDebug("ScreenToClient cannot work when toplevel window is not shown");
+        return;
+    }
 
     int org_x = 0;
     int org_y = 0;
