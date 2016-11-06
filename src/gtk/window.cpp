@@ -1693,7 +1693,7 @@ static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
             break;
 
         w = w->GetParent();
-        if ( !w )
+        if (w == NULL || w->m_widget == NULL || !gtk_widget_get_visible(w->m_widget))
             break;
         posClient = w->ScreenToClient(posScreen);
     }
