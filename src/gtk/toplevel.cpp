@@ -1193,6 +1193,7 @@ extern "C" {
 static gboolean reset_size_request(void* data)
 {
     gtk_widget_set_size_request(GTK_WIDGET(data), -1, -1);
+    g_object_unref(data);
     return false;
 }
 }
@@ -1221,7 +1222,8 @@ void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
         {
             gtk_widget_set_size_request(m_wxwindow, m_clientWidth, m_clientHeight);
             // Cancel size request at next idle to allow resizing
-            g_idle_add_full(G_PRIORITY_LOW, reset_size_request, m_wxwindow, NULL);
+            g_idle_add_full(G_PRIORITY_LOW - 1, reset_size_request, m_wxwindow, NULL);
+            g_object_ref(m_wxwindow);
         }
     }
 }
