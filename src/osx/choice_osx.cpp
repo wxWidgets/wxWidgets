@@ -247,7 +247,7 @@ wxSize wxChoice::DoGetBestSize() const
     // computed by the base class method to account for the arrow.
     const int lbHeight = wxWindow::DoGetBestSize().y;
 
-    return wxSize(wxChoiceBase::DoGetBestSize().x + 2*lbHeight + GetCharWidth(),
+    return wxSize(wxChoiceBase::DoGetBestSize().x + 4*GetCharWidth(),
                   lbHeight);
 }
 
