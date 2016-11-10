@@ -4352,6 +4352,15 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
                                     0, 0, w, h);
 #endif // !__WXGTK3__
             }
+#ifdef __WXGTK3__
+            else if (m_backgroundColour.IsOk() && gtk_check_version(3,20,0) == NULL)
+            {
+                cairo_save(cr);
+                gdk_cairo_set_source_rgba(cr, m_backgroundColour);
+                cairo_paint(cr);
+                cairo_restore(cr);
+            }
+#endif
             break;
 
         case wxBG_STYLE_PAINT:
