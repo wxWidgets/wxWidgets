@@ -399,6 +399,12 @@ public:
         and returns @true if a selection was made.
     */
     bool ShowWindowMenu();
+
+
+    /**
+        Returns the image index for the given page.
+    */
+    virtual int GetPageImage(size_t nPage) const;
 };
 
 
