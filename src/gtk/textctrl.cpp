@@ -731,6 +731,11 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // a single-line text control: no need for scrollbars
         m_widget =
         m_text = gtk_entry_new();
+
+        // Set a minimal width for preferred size to avoid GTK3 debug warnings
+        // about size allocations smaller than preferred size
+        gtk_entry_set_width_chars((GtkEntry*)m_text, 1);
+
         // work around probable bug in GTK+ 2.18 when calling WriteText on a
         // new, empty control, see http://trac.wxwidgets.org/ticket/11409
         gtk_entry_get_text((GtkEntry*)m_text);
