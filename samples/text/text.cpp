@@ -164,7 +164,7 @@ private:
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h);
+    MyFrame(const wxString& title, int x, int y);
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -454,9 +454,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *) NULL,
-            wxT("Text wxWidgets sample"), 50, 50, 700, 550);
-    frame->SetSizeHints( 500, 400 );
+    MyFrame *frame = new MyFrame(wxS("Text wxWidgets sample"), 50, 50);
 
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(TEXT_SAVE, wxT("&Save file\tCtrl-S"),
@@ -1425,8 +1423,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_IDLE(MyFrame::OnIdle)
 wxEND_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h)
-       : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h) )
+MyFrame::MyFrame(const wxString& title, int x, int y)
+       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y))
 {
     SetIcon(wxICON(sample));
 
@@ -1435,6 +1433,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h
 #endif // wxUSE_STATUSBAR
 
     m_panel = new MyPanel( this, 10, 10, 300, 100 );
+    m_panel->GetSizer()->Fit(this);
 }
 
 void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
