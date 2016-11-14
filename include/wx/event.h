@@ -3386,6 +3386,18 @@ public:
         // NOTE: uses AddPendingEvent(); call only from secondary threads
 #endif
 
+#if wxUSE_EXCEPTIONS
+    // This is a private function which handles any exceptions arising during
+    // the execution of user-defined code called in the event loop context by
+    // forwarding them to wxApp::OnExceptionInMainLoop() and, if it rethrows,
+    // to wxApp::OnUnhandledException(). In any case this function ensures that
+    // no exceptions ever escape from it and so is useful to call at module
+    // boundary.
+    //
+    // It must be only called when handling an active exception.
+    static void WXConsumeException();
+#endif // wxUSE_EXCEPTIONS
+
 #ifdef wxHAS_CALL_AFTER
     // Asynchronous method calls: these methods schedule the given method
     // pointer for a later call (during the next idle event loop iteration).
