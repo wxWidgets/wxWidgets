@@ -399,6 +399,22 @@ wxGtkPrintNativeData::~wxGtkPrintNativeData()
     g_object_unref(m_config);
 }
 
+void wxGtkPrintNativeData::SetPrintJob(GtkPrintOperation* job)
+{
+    m_job = job;
+#if GTK_CHECK_VERSION(2,18,0)
+    if (job)
+    {
+#ifndef __WXGTK3__
+        if (gtk_check_version(2,18,0) == NULL)
+#endif
+        {
+            gtk_print_operation_set_embed_page_setup(job, true);
+        }
+    }
+#endif
+}
+
 // Convert datas stored in m_config to a wxPrintData.
 // Called by wxPrintData::ConvertFromNative().
 bool wxGtkPrintNativeData::TransferTo( wxPrintData &data )
