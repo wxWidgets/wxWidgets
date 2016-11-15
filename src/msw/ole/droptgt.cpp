@@ -32,6 +32,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/comptr.h"
 
 #include "wx/msw/wrapshl.h"            // for DROPFILES structure
 
@@ -90,7 +91,9 @@ public:
     DECLARE_IUNKNOWN_METHODS;
 
 protected:
-    IDataObject  *m_pIDataObject; // !NULL between DragEnter and DragLeave/Drop
+    // This pointer is !NULL between the calls to DragEnter and DragLeave/Drop
+    wxCOMPtr<IDataObject> m_pIDataObject;
+
     wxDropTarget *m_pTarget;      // the real target (we're just a proxy)
 
     HWND          m_hwnd;         // window we're associated with
@@ -153,7 +156,6 @@ DWORD wxIDropTarget::GetDropEffect(DWORD flags,
 wxIDropTarget::wxIDropTarget(wxDropTarget *pTarget)
 {
   m_pTarget      = pTarget;
-  m_pIDataObject = NULL;
 }
 
 wxIDropTarget::~wxIDropTarget()
@@ -186,8 +188,8 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     {
         wxLogTrace(wxTRACE_OleCalls, wxT("IDropTarget::DragEnter"));
 
-        wxASSERT_MSG( m_pIDataObject == NULL,
-                      wxT("drop target must have data object") );
+        wxASSERT_MSG( !m_pIDataObject,
+                      wxT("drop target can't already have a data object") );
 
         // show the list of formats supported by the source data object for the
         // debugging purposes, this is quite useful sometimes - please don't remove
@@ -225,7 +227,6 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
 
         // get hold of the data object
         m_pIDataObject = pIDataSource;
-        m_pIDataObject->AddRef();
 
         // we need client coordinates to pass to wxWin functions
         if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
@@ -317,7 +318,7 @@ STDMETHODIMP wxIDropTarget::DragLeave()
         m_pTarget->OnLeave();
 
         // release the held object
-        RELEASE_AND_NULL(m_pIDataObject);
+        m_pIDataObject.reset();
 
         // update drag image
         m_pTarget->MSWUpdateDragImageOnLeave();
@@ -378,7 +379,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
         }
 
         // release the held object
-        RELEASE_AND_NULL(m_pIDataObject);
+        m_pIDataObject.reset();
 
         // update drag image
         m_pTarget->MSWUpdateDragImageOnData(pt.x, pt.y,
