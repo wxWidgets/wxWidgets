@@ -101,6 +101,21 @@ protected:
     // get default drop effect for given keyboard flags
     static DWORD GetDropEffect(DWORD flags, wxDragResult defaultAction, DWORD pdwEffect);
 
+#if wxUSE_EXCEPTIONS
+    // Helper function called if an exceptions happens in any of the
+    // user-defined methods: it ensures that the exception doesn't escape and
+    // also resets the data object, as drag-and-drop operation will be aborted
+    // if this happens.
+    HRESULT HandleException()
+    {
+        wxEvtHandler::WXConsumeException();
+
+        m_pIDataObject.reset();
+
+        return E_UNEXPECTED;
+    }
+#endif // wxUSE_EXCEPTIONS
+
     wxDECLARE_NO_COPY_CLASS(wxIDropTarget);
 };
 
@@ -248,7 +263,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
 
         return S_OK;
     }
-    wxCATCH_ALL( wxEvtHandler::WXConsumeException(); return E_UNEXPECTED; )
+    wxCATCH_ALL( return HandleException(); )
 }
 
 
@@ -301,7 +316,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
 
         return S_OK;
     }
-    wxCATCH_ALL( wxEvtHandler::WXConsumeException(); return E_UNEXPECTED; )
+    wxCATCH_ALL( return HandleException(); )
 }
 
 // Name    : wxIDropTarget::DragLeave
@@ -325,7 +340,7 @@ STDMETHODIMP wxIDropTarget::DragLeave()
 
         return S_OK;
     }
-    wxCATCH_ALL( wxEvtHandler::WXConsumeException(); return E_UNEXPECTED; )
+    wxCATCH_ALL( return HandleException(); )
 }
 
 // Name    : wxIDropTarget::Drop
@@ -387,7 +402,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
 
         return S_OK;
     }
-    wxCATCH_ALL( wxEvtHandler::WXConsumeException(); return E_UNEXPECTED; )
+    wxCATCH_ALL( return HandleException(); )
 }
 
 // ============================================================================
