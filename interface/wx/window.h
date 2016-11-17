@@ -2902,6 +2902,9 @@ public:
 
     /**
         Sets the layout direction for this window.
+
+        This function is only supported under MSW and GTK platforms, but not
+        under Mac currently.
     */
     virtual void SetLayoutDirection(wxLayoutDirection dir);
 
