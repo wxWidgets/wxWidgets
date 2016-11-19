@@ -46,7 +46,7 @@
     @style{wxLB_NEEDED_SB}
         Only create a vertical scrollbar if needed.
     @style{wxLB_NO_SB}
-        Don't create vertical scrollbar (wxMSW only).
+        Don't create vertical scrollbar (wxMSW and wxGTK only).
     @style{wxLB_SORT}
         The listbox contents are sorted in alphabetical order.
     @endStyleTable

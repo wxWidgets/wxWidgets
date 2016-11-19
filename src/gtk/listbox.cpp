@@ -273,16 +273,15 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_scrolled_window_new( NULL, NULL );
     g_object_ref(m_widget);
+
+    GtkPolicyType vPolicy = GTK_POLICY_AUTOMATIC;
     if (style & wxLB_ALWAYS_SB)
-    {
-      gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
-        GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS );
-    }
-    else
-    {
-      gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
-        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
-    }
+        vPolicy = GTK_POLICY_ALWAYS;
+    else if (style & wxLB_NO_SB)
+        vPolicy = GTK_POLICY_NEVER;
+
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(m_widget),
+        GTK_POLICY_AUTOMATIC, vPolicy);
 
 
     GTKScrolledWindowSetBorder(m_widget, style);
