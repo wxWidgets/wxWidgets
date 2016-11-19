@@ -838,6 +838,8 @@ dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 dnl can't be disabled, don't even provide an option to do it
 if test "$wxUSE_MAC" != 1; then
 WX_ARG_FEATURE(graphics_ctx,[  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
+else
+WX_ARG_DISABLE(qtkit,       [  --disable-qtkit         force AVFoundation instead of QTKit (requires OS X 10.7+)], wxOSX_USE_QTKIT)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -7590,10 +7592,50 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
             USE_MEDIA=0
         fi
 
-    elif test "$wxUSE_MAC" = 1; then 
-         dnl We always have the necessary libraries under Mac 
-         dnl but we need to link with it explicitly.
-         GST_LIBS="-framework QTKit"
+    elif test "$wxUSE_MAC" = 1; then
+        if test "$wxUSE_OSX_IPHONE" = 1; then
+            dnl this will also be used for cocoa in the future
+            GST_LIBS="-framework AVFoundation -framework CoreMedia"
+        else
+            dnl We always have the necessary libraries under Mac
+            dnl but we need to link with it explicitly.
+            dnl QTKit is no longer available as of 10.12 SDK
+
+            old_CPPFLAGS="$CPPFLAGS"
+            CPPFLAGS="-x objective-c++ $CPPFLAGS"
+            if test "$wxOSX_USE_QTKIT" = "no"; then
+                dnl Do not test for QTKit if has been disabled from the command line
+                AC_DEFINE(wxOSX_USE_QTKIT,0)
+                GST_LIBS="-framework AVFoundation -framework CoreMedia"
+            else
+                dnl check if QTKit is available, otherwise force AVFoundation usage
+                AC_CHECK_HEADER([QTKit/QTKit.h],
+                                [
+                                    GST_LIBS="-framework QTKit"
+                                ],
+                                [
+                                    AC_DEFINE(wxOSX_USE_QTKIT,0)
+                                    wxOSX_USE_QTKIT=no
+                                    GST_LIBS="-framework AVFoundation -framework CoreMedia"
+                                ])
+            fi
+            if test "$wxOSX_USE_QTKIT" = "no"; then
+                dnl AVKit is only available since OS X 10.9
+                AC_MSG_CHECKING([if AVKit is availble])
+                AC_TRY_COMPILE(
+                    [#include "AvailabilityMacros.h"],
+                    [
+                        #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+                            // AVKit available
+                        #else
+                            choke me
+                        #endif
+                    ],
+                    GST_LIBS="$GST_LIBS -framework AVKit"
+                )
+            fi
+            CPPFLAGS="$old_CPPFLAGS"
+        fi
     fi
 
     if test $USE_MEDIA = 1; then

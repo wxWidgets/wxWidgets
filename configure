@@ -1238,6 +1238,7 @@ enable_svg
 enable_webkit
 enable_webview
 enable_graphics_ctx
+enable_qtkit
 enable_clipboard
 enable_dnd
 enable_controls
@@ -2169,6 +2170,7 @@ Optional Features:
   --enable-webkit         use wxWebKitCtrl (Mac-only, use wxWebView instead)
   --enable-webview        use wxWebView library
   --enable-graphics_ctx   use graphics context 2D drawing API
+  --disable-qtkit         force AVFoundation instead of QTKit (requires OS X 10.7+)
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
   --disable-controls      disable compilation of all standard controls
@@ -3339,6 +3341,97 @@ fi
   as_fn_set_status $ac_retval
 
 } # ac_fn_cxx_try_run
+
+# ac_fn_c_check_header_mongrel LINENO HEADER VAR INCLUDES
+# -------------------------------------------------------
+# Tests whether HEADER exists, giving a warning if it cannot be compiled using
+# the include files in INCLUDES and setting the cache variable VAR
+# accordingly.
+ac_fn_c_check_header_mongrel ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  if eval \${$3+:} false; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+else
+  # Is the header compilable?
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 usability" >&5
+$as_echo_n "checking $2 usability... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+$4
+#include <$2>
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ac_header_compiler=yes
+else
+  ac_header_compiler=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_compiler" >&5
+$as_echo "$ac_header_compiler" >&6; }
+
+# Is the header present?
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 presence" >&5
+$as_echo_n "checking $2 presence... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <$2>
+_ACEOF
+if ac_fn_c_try_cpp "$LINENO"; then :
+  ac_header_preproc=yes
+else
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_preproc" >&5
+$as_echo "$ac_header_preproc" >&6; }
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in #((
+  yes:no: )
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&5
+$as_echo "$as_me: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
+$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
+    ;;
+  no:yes:* )
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: present but cannot be compiled" >&5
+$as_echo "$as_me: WARNING: $2: present but cannot be compiled" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     check for missing prerequisite headers?" >&5
+$as_echo "$as_me: WARNING: $2:     check for missing prerequisite headers?" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: see the Autoconf documentation" >&5
+$as_echo "$as_me: WARNING: $2: see the Autoconf documentation" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&5
+$as_echo "$as_me: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
+$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
+( $as_echo "## ----------------------------------------- ##
+## Report this to wx-dev@lists.wxwidgets.org ##
+## ----------------------------------------- ##"
+     ) | sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  eval "$3=\$ac_header_compiler"
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+fi
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+
+} # ac_fn_c_check_header_mongrel
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -10918,6 +11011,51 @@ fi
             fi
           else
             result=$wxUSE_GRAPHICS_CONTEXT
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+else
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-qtkit" >&5
+$as_echo_n "checking for --${enablestring:-enable}-qtkit... " >&6; }
+          # Check whether --enable-qtkit was given.
+if test "${enable_qtkit+set}" = set; then :
+  enableval=$enable_qtkit;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_qtkit='wxOSX_USE_QTKIT=yes'
+                          else
+                            wx_cv_use_qtkit='wxOSX_USE_QTKIT=no'
+                          fi
+
+else
+
+                          wx_cv_use_qtkit='wxOSX_USE_QTKIT=${'DEFAULT_wxOSX_USE_QTKIT":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_qtkit"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxOSX_USE_QTKIT = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxOSX_USE_QTKIT
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -37365,7 +37503,61 @@ fi
         fi
 
     elif test "$wxUSE_MAC" = 1; then
-                           GST_LIBS="-framework QTKit"
+        if test "$wxUSE_OSX_IPHONE" = 1; then
+                        GST_LIBS="-framework AVFoundation -framework CoreMedia"
+        else
+
+            old_CPPFLAGS="$CPPFLAGS"
+            CPPFLAGS="-x objective-c++ $CPPFLAGS"
+            if test "$wxOSX_USE_QTKIT" = "no"; then
+                                $as_echo "#define wxOSX_USE_QTKIT 0" >>confdefs.h
+
+                GST_LIBS="-framework AVFoundation -framework CoreMedia"
+            else
+                                ac_fn_c_check_header_mongrel "$LINENO" "QTKit/QTKit.h" "ac_cv_header_QTKit_QTKit_h" "$ac_includes_default"
+if test "x$ac_cv_header_QTKit_QTKit_h" = xyes; then :
+
+                                    GST_LIBS="-framework QTKit"
+
+else
+
+                                    $as_echo "#define wxOSX_USE_QTKIT 0" >>confdefs.h
+
+                                    wxOSX_USE_QTKIT=no
+                                    GST_LIBS="-framework AVFoundation -framework CoreMedia"
+
+fi
+
+
+            fi
+            if test "$wxOSX_USE_QTKIT" = "no"; then
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if AVKit is availble" >&5
+$as_echo_n "checking if AVKit is availble... " >&6; }
+                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include "AvailabilityMacros.h"
+int
+main ()
+{
+
+                        #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+                            // AVKit available
+                        #else
+                            choke me
+                        #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  GST_LIBS="$GST_LIBS -framework AVKit"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+            fi
+            CPPFLAGS="$old_CPPFLAGS"
+        fi
     fi
 
     if test $USE_MEDIA = 1; then
