@@ -1578,7 +1578,13 @@ void MyCanvas::DrawGradients(wxDC& dc)
 
 void MyCanvas::DrawSystemColours(wxDC& dc)
 {
-    wxSize textSize = dc.GetTextExtent("#WWWWgy");
+    wxFont mono(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
+    wxSize textSize;
+    {
+        wxDCFontChanger setMono(dc, mono);
+        textSize = dc.GetTextExtent(wxS("#01234567"));
+    }
+
     int lineHeight = textSize.GetHeight();
     wxRect r(textSize.GetWidth() + 10, 10, 100, lineHeight);
 
@@ -1621,8 +1627,6 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
         "wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT"
     };
 
-    wxFont mono(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
-
     for (int i = 0; i < wxSYS_COLOUR_MAX; i++)
     {
         wxSystemColour sysColour = (wxSystemColour)i;
@@ -1641,7 +1645,7 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
 
         dc.DrawText(colourName, r.GetRight() + 10, r.y);
 
-        r.y += lineHeight + 4;
+        r.y += lineHeight;
     }
 }
 
@@ -1745,7 +1749,7 @@ void MyCanvas::Draw(wxDC& pdc)
         gdc.SetGraphicsContext(context);
     }
 
-    wxDC &dc = m_renderer ? (wxDC&) gdc : (wxDC&) pdc ;
+    wxDC &dc = m_renderer ? static_cast<wxDC&>(gdc) : pdc;
 #else
     wxDC &dc = pdc ;
 #endif
