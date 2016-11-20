@@ -753,14 +753,14 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     double start = (sa - 90);
     if (start < 0)
         start += 360;
-    while (abs(start) > 360)
-        start -= (start / abs(start)) * 360;
+    while (fabs(start) > 360)
+        start -= (start / fabs(start)) * 360;
 
     double end = (ea - 90);
     if (end < 0)
         end += 360;
-    while (abs(end) > 360)
-        end -= (end / abs(end)) * 360;
+    while (fabs(end) > 360)
+        end -= (end / fabs(end)) * 360;
 
     // svg arcs are in clockwise direction, reverse angle
     double angle = end - start;
