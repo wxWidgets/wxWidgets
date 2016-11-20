@@ -27,7 +27,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapwin.h"
-    #include "wx/except.h"
     #include "wx/log.h"
 #endif
 
