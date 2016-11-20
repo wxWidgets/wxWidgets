@@ -38,6 +38,10 @@ Changes in behaviour not resulting in compilation errors
   for getting the micro version. If you override GetToolkitVersion() you need
   to add this new third parameter.
 
+- wxWindow::CreateAccessible() doesn't return accessible object by default
+  anymore and GetOrCreateAccessible() may return NULL, indicating that native
+  system-provided accessibility should be used.
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
