@@ -37,6 +37,7 @@
 #include "wx/msw/wrapshl.h"            // for DROPFILES structure
 
 #include "wx/dnd.h"
+#include "wx/except.h"
 
 #include "wx/msw/ole/oleutils.h"
 
