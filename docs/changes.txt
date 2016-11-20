@@ -167,6 +167,7 @@ wxOSX:
   and OSXDisableAllSmartSubstitutions() to control wxTextCtrl smart behavior.
 - Don't allow interacting with disabled wxSlider (Andreas Falkenhahn).
 - Fix setting alignment in wxTextCtrl with wxTE_DONTWRAP (Andreas Falkenhahn).
+- Allow pasting using Cmd+V in wxTextCtrl with wxTE_PASSWORD style.
 
 Unix:
 

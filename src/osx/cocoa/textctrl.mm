@@ -258,6 +258,25 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                      }
                 }
             }
+            else if ( commandSelector == @selector(noop:) )
+            {
+                // We are called with this strange "noop:" selector when an
+                // attempt to paste the text into a password text control using
+                // Cmd+V is made. Check if we're really in this case and, if
+                // we're, do paste as otherwise nothing happens by default
+                // which is annoying, it is pretty common and useful to paste
+                // passwords, e.g. from a password manager.
+                NSEvent* cevent = [[NSApplication sharedApplication] currentEvent];
+                if ( [cevent type] == NSKeyDown &&
+                        [cevent keyCode] == 9 /* V */ &&
+                            ([cevent modifierFlags] & NSCommandKeyMask) == NSCommandKeyMask )
+                {
+                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+                    wxTextEntry * const entry = impl->GetTextEntry();
+                    entry->Paste();
+                    handled = YES;
+                }
+            }
         }
     }
     
