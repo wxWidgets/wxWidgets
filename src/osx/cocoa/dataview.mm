@@ -2948,7 +2948,6 @@ bool wxDataViewTextRenderer::MacRender()
         if ( [cell backgroundStyle] == NSBackgroundStyleDark )
         {
             [str removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [str length])];
-            [str removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, [str length])];
         }
 
         [cell setAttributedStringValue:str];
