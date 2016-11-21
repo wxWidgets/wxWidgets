@@ -70,6 +70,7 @@ enum wxCompositionMode
     wxCOMPOSITION_ADD /* R = S + D */
 };
 
+class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -435,6 +436,11 @@ public:
 #if wxUSE_ENH_METAFILE
     static wxGraphicsContext * Create( const wxEnhMetaFileDC& dc);
 #endif
+#endif
+
+#ifndef wxNO_RTTI
+    // Create a context from a DC of unknown type, if supported, returns NULL otherwise
+    static wxGraphicsContext* CreateFromUnknownDC(const wxDC& dc);
 #endif
 
     static wxGraphicsContext* CreateFromNative( void * context );
