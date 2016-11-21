@@ -2645,7 +2645,14 @@ wxDataViewRenderer::~wxDataViewRenderer()
 void wxDataViewRenderer::SetAlignment(int align)
 {
     m_alignment = align;
-    [GetNativeData()->GetColumnCell() setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
+    OSXUpdateAlignment();
+}
+
+void wxDataViewRenderer::OSXUpdateAlignment()
+{
+    int align = GetEffectiveAlignment();
+    NSCell *cell = GetNativeData()->GetColumnCell();
+    [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
 }
 
 void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
@@ -3261,7 +3268,7 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title,
     InitCommon(width, align, flags);
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-        renderer->SetAlignment(align);
+        renderer->OSXUpdateAlignment();
     SetResizeable((flags & wxDATAVIEW_COL_RESIZABLE) != 0);
 }
 
@@ -3277,7 +3284,7 @@ wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap,
     InitCommon(width, align, flags);
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-        renderer->SetAlignment(align);
+        renderer->OSXUpdateAlignment();
 }
 
 wxDataViewColumn::~wxDataViewColumn()
@@ -3302,7 +3309,7 @@ void wxDataViewColumn::SetAlignment(wxAlignment align)
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
     if (m_renderer && !m_renderer->IsCustomRenderer() &&
         (m_renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-        m_renderer->SetAlignment(align);
+        m_renderer->OSXUpdateAlignment();
 }
 
 void wxDataViewColumn::SetBitmap(const wxBitmap& bitmap)

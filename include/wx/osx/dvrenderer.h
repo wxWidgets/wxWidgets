@@ -76,6 +76,7 @@ public:
 
     void SetNativeData(wxDataViewRendererNativeData* newNativeDataPtr);
 
+    void OSXUpdateAlignment();
 
 #if wxOSX_USE_COCOA
     // called when a value was edited by user
