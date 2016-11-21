@@ -165,6 +165,7 @@ wxOSX:
 - Implement wxDataViewCtrl::SetRowHeight().
 - Add OSXEnableAutomaticQuoteSubstitution(), OSXEnableAutomaticDashSubstitution()
   and OSXDisableAllSmartSubstitutions() to control wxTextCtrl smart behavior.
+- Allow pasting using Cmd+V in wxTextCtrl with wxTE_PASSWORD style.
 
 Unix:
 
