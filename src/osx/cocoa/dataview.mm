@@ -40,6 +40,9 @@
 
 #define DataViewPboardType @"OutlineViewItem"
 
+static const int MINIMUM_NATIVE_ROW_HEIGHT = 17;
+
+
 // ============================================================================
 // Classes used locally in dataview.mm
 // ============================================================================
@@ -1231,7 +1234,7 @@ outlineView:(NSOutlineView*)outlineView
 @end
 
 // ============================================================================
-// wxImageTextCell
+// wxImageCell
 // ============================================================================
 @implementation wxImageCell
 
@@ -1244,6 +1247,84 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 @end
+
+// ============================================================================
+// wxTextFieldCell
+// ============================================================================
+
+@interface wxTextFieldCell ()
+{
+    int _wxAlignment;
+    BOOL _adjustRect;
+}
+@end
+
+@implementation wxTextFieldCell
+
+- (void)setWXAlignment:(int)alignment
+{
+    _wxAlignment = alignment;
+    _adjustRect = (alignment & (wxALIGN_CENTRE_VERTICAL | wxALIGN_BOTTOM)) != 0;
+}
+
+// These three overrides implement vertical alignment of text cells.
+// The solution is described by Daniel Jalkut at
+// https://red-sweater.com/blog/148/what-a-difference-a-cell-makes
+
+- (NSRect)drawingRectForBounds:(NSRect)theRect
+{
+	// Get the parent's idea of where we should draw
+	NSRect r = [super drawingRectForBounds:theRect];
+
+    if (!_adjustRect)
+        return r;
+    if (theRect.size.height <= MINIMUM_NATIVE_ROW_HEIGHT)
+        return r;  // don't mess with default-sized rows as they are centered
+
+    NSSize bestSize = [self cellSizeForBounds:theRect];
+    if (bestSize.height < r.size.height)
+    {
+        if (_wxAlignment & wxALIGN_CENTER_VERTICAL)
+        {
+            r.origin.y += int(r.size.height - bestSize.height) / 2;
+            r.size.height = bestSize.height;
+        }
+        else if (_wxAlignment & wxALIGN_BOTTOM)
+        {
+            r.origin.y += r.size.height - bestSize.height;
+            r.size.height = bestSize.height;
+        }
+    }
+
+	return r;
+}
+
+- (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
+{
+    BOOL oldAdjustRect = _adjustRect;
+    if (oldAdjustRect)
+    {
+        aRect = [self drawingRectForBounds:aRect];
+        _adjustRect = NO;
+    }
+	[super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
+	_adjustRect = oldAdjustRect;
+}
+
+- (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
+{	
+    BOOL oldAdjustRect = _adjustRect;
+    if (oldAdjustRect)
+    {
+        aRect = [self drawingRectForBounds:aRect];
+        _adjustRect = NO;
+    }
+	[super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
+	_adjustRect = oldAdjustRect;
+}
+
+@end
+
 
 // ============================================================================
 // wxImageTextCell
@@ -2441,7 +2522,6 @@ void wxCocoaDataViewControl::SetRowHeight(int height)
 
 int wxCocoaDataViewControl::GetDefaultRowHeight() const
 {
-    const int MINIMUM_NATIVE_HEIGHT = 17;
     // Custom setup of NSLayoutManager is necessary to match NSTableView sizing.
     // See http://stackoverflow.com/questions/17095927/dynamically-changing-row-height-after-font-size-of-entire-nstableview-nsoutlin
     NSLayoutManager *lm = [[NSLayoutManager alloc] init];
@@ -2449,7 +2529,7 @@ int wxCocoaDataViewControl::GetDefaultRowHeight() const
     [lm setUsesScreenFonts:NO];
     CGFloat height = [lm defaultLineHeightForFont:GetWXPeer()->GetFont().OSXGetNSFont()];
     [lm release];
-    return wxMax(MINIMUM_NATIVE_HEIGHT, int(height));
+    return wxMax(MINIMUM_NATIVE_ROW_HEIGHT, int(height));
 }
 
 void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), unsigned int WXUNUSED(height))
@@ -2653,6 +2733,8 @@ void wxDataViewRenderer::OSXUpdateAlignment()
     int align = GetEffectiveAlignment();
     NSCell *cell = GetNativeData()->GetColumnCell();
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
+    if ([cell respondsToSelector:@selector(setWXAlignment:)])
+        [(wxTextFieldCell*)cell setWXAlignment:align];
 }
 
 void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
@@ -2829,7 +2911,7 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(const wxString& varianttype,
     NSTextFieldCell* cell;
 
 
-    cell = [[NSTextFieldCell alloc] init];
+    cell = [[wxTextFieldCell alloc] init];
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
@@ -3050,7 +3132,7 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(const wxString& varianttype,
     dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
-    cell = [[NSTextFieldCell alloc] init];
+    cell = [[wxTextFieldCell alloc] init];
     [cell setFormatter:dateFormatter];
     SetNativeData(new wxDataViewRendererNativeData(cell,[NSDate dateWithString:@"2000-12-30 20:00:00 +0000"]));
     [cell          release];

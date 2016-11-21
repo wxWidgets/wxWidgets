@@ -367,6 +367,16 @@ private:
     -(NSSize) cellSize;
 @end
 
+
+// ============================================================================
+// NSTextFieldCell customized to allow vertical alignment
+// ============================================================================
+
+@interface wxTextFieldCell : NSTextFieldCell
+    -(void) setWXAlignment:(int)alignment;
+@end
+
+
 // ============================================================================
 // wxImageTextCell
 // ============================================================================
@@ -382,7 +392,7 @@ private:
 // into their reserved space. Smaller or not existing images use the fixed
 // reserved size and are scaled if necessary.
 //
-@interface wxImageTextCell : NSTextFieldCell
+@interface wxImageTextCell : wxTextFieldCell
 {
 @private
     CGFloat xImageShift;    // shift for the image in x-direction from border
