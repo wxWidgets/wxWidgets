@@ -36,6 +36,11 @@
 
 #include "wx/private/markupparserattr.h"
 
+#if wxUSE_GRAPHICS_CONTEXT
+    #include "wx/graphics.h"
+    #include "wx/scopedptr.h"
+#endif
+
 namespace
 {
 
@@ -254,6 +259,31 @@ public:
         rect.x = m_pos;
         rect.SetRight(m_rect.GetRight());
 
+        const wxSize extent = m_dc.GetTextExtent(text);
+
+        // DrawItemText() ignores background color, so render it outselves 
+        if ( m_dc.GetBackgroundMode() == wxSOLID )
+        {
+#if wxUSE_GRAPHICS_CONTEXT
+            // Prefer to use wxGraphicsContext because it supports alpha channel; fall back to wxDC
+            if ( !m_gc )
+                m_gc.reset(wxGraphicsContext::CreateFromUnknownDC(m_dc));
+ 
+            if ( m_gc )
+            {
+                m_gc->SetBrush(wxBrush(m_dc.GetTextBackground()));
+                m_gc->SetPen(*wxTRANSPARENT_PEN);
+                m_gc->DrawRectangle(rect.x, rect.y, extent.x, extent.y);
+            }
+            else
+#endif // wxUSE_GRAPHICS_CONTEXT
+            {
+                wxDCPenChanger pen(m_dc, *wxTRANSPARENT_PEN);
+                wxDCBrushChanger brush(m_dc, wxBrush(m_dc.GetTextBackground()));
+                m_dc.DrawRectangle(rect.x, rect.y, extent.x, extent.y);
+            }
+        }
+
         m_renderer->DrawItemText(m_win,
                                  m_dc,
                                  wxControl::RemoveMnemonics(text),
@@ -262,10 +292,13 @@ public:
                                  m_rendererFlags,
                                  m_ellipsizeMode);
 
-        m_pos += m_dc.GetTextExtent(text).x;
+        m_pos += extent.x;
     }
 
 private:
+#if wxUSE_GRAPHICS_CONTEXT
+    wxScopedPtr<wxGraphicsContext> m_gc;
+#endif
     wxWindow* const m_win;
     int const m_rendererFlags;
     wxEllipsizeMode m_ellipsizeMode;
