@@ -96,6 +96,16 @@ enum wxDataViewCellRenderState
     wxDATAVIEW_CELL_FOCUSED     = 8
 };
 
+// helper for fine-tuning rendering of values depending on row's state
+class WXDLLIMPEXP_ADV wxDataViewValueAdjuster
+{
+public:
+    virtual ~wxDataViewValueAdjuster() {}
+
+    // changes the value to have appearance suitable for highlighted rows
+    virtual wxVariant MakeHighlighted(const wxVariant& value) const { return value; }
+};
+
 class WXDLLIMPEXP_ADV wxDataViewRendererBase: public wxObject
 {
 public:
@@ -190,12 +200,20 @@ public:
     // Send wxEVT_DATAVIEW_ITEM_EDITING_STARTED event.
     void NotifyEditingStarted(const wxDataViewItem& item);
 
+    // Sets the transformer for fine-tuning rendering of values depending on row's state
+    void SetValueAdjuster(wxDataViewValueAdjuster *transformer)
+        { delete m_valueAdjuster; m_valueAdjuster = transformer; }
+
 protected:
     // These methods are called from PrepareForItem() and should do whatever is
     // needed for the current platform to ensure that the item is rendered
     // using the given attributes and enabled/disabled state.
     virtual void SetAttr(const wxDataViewItemAttr& attr) = 0;
     virtual void SetEnabled(bool enabled) = 0;
+
+    // Return whether the currently rendered item is on a highlighted row
+    // (typically selection with dark background). For internal use only.
+    virtual bool IsHighlighted() const = 0;
 
     // Called from {Cancel,Finish}Editing() to cleanup m_editorCtrl
     void DestroyEditControl();
@@ -210,6 +228,8 @@ protected:
     wxDataViewColumn       *m_owner;
     wxWeakRef<wxWindow>     m_editorCtrl;
     wxDataViewItem          m_item; // Item being currently edited, if valid.
+
+    wxDataViewValueAdjuster *m_valueAdjuster;
 
     // internal utility, may be used anywhere the window associated with the
     // renderer is required

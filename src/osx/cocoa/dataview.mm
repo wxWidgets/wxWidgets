@@ -2767,6 +2767,11 @@ wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
     return GetNativeData()->GetEllipsizeMode();
 }
 
+bool wxDataViewRenderer::IsHighlighted() const
+{
+    return [GetNativeData()->GetColumnCell() backgroundStyle] == NSBackgroundStyleDark;
+}
+
 void
 wxDataViewRenderer::OSXOnCellChanged(NSObject *object,
                                      const wxDataViewItem& item,

@@ -2128,6 +2128,12 @@ wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
     return mode;
 }
 
+bool wxDataViewRenderer::IsHighlighted() const
+{
+    return m_itemBeingRendered.IsOk() &&
+           GetOwner()->GetOwner()->IsSelected(m_itemBeingRendered);
+}
+
 void
 wxDataViewRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
 {
@@ -3078,6 +3084,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
             return;
     }
 
+    cell->GtkSetCurrentItem(item);
     cell->PrepareForItem(wx_model, item, column);
 }
 

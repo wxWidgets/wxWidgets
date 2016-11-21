@@ -1926,6 +1926,28 @@ public:
     virtual bool SetValue(const wxVariant& value) = 0;
 
     /**
+        Set the transformer object to be used to customize values before they
+        are rendered.
+
+        Can be used to change the value if it is shown on a highlighted row
+        (i.e. in selection) which typically has dark background. It is useful
+        in combination with wxDataViewTextRenderer with markup and can be used
+        e.g. to remove background color attributes inside selection, as a
+        lightweight alternative to implementing an entire
+        wxDataViewCustomRenderer specialization.
+
+        @a transformer can be @NULL to reset any transformer currently being
+        used.
+
+        Takes ownership of @a transformer.
+
+        @see wxDataViewValueAdjuster
+
+        @since 3.1.1
+    */
+    void SetValueAdjuster(wxDataViewValueAdjuster *transformer);
+
+    /**
         Before data is committed to the data model, it is passed to this
         method where it can be checked for validity. This can also be
         used for checking a valid range or limiting the user input in
@@ -3662,3 +3684,66 @@ public:
 
 };
 
+
+/**
+    @class wxDataViewValueAdjuster
+
+    This class can be used with wxDataViewRenderer::SetValueAdjuster() to
+    customize rendering of model values with standard renderers.
+
+    Can be used to change the value if it is shown on a highlighted row (i.e.
+    in selection) which typically has dark background. It is useful in
+    combination with wxDataViewTextRenderer with markup and can be used e.g. to
+    remove background color attributes inside selection, as a lightweight
+    alternative to implementing an entire wxDataViewCustomRenderer
+    specialization.
+
+    @example
+    // Markup renderer that removes bgcolor attributes when in selection
+    class DataViewMarkupRenderer : public wxDataViewTextRenderer
+    {
+    public:
+        DataViewMarkupRenderer()
+        {
+            EnableMarkup();
+            SetValueAdjuster(new Adjuster());
+        }
+
+    private:
+        class Adjuster : public wxDataViewValueAdjuster
+        {
+        public:
+            wxVariant MakeHighlighted(const wxVariant& value) const override
+            {
+                wxString s = value.GetString();
+                size_t pos = s.find(" bgcolor=\"");
+                if (pos != wxString::npos)
+                {
+                    size_t pos2 = s.find('"', pos + 10);
+                    s.erase(pos, pos2 - pos + 1);
+                    return s;
+                }
+                return value;
+            }
+        };
+    };
+    @endexample
+
+    @since 3.1.1
+
+    @library{wxadv}
+    @category{dvc}
+*/
+class wxDataViewValueAdjuster
+{
+public:
+    /**
+        Change value for rendering when highlighted.
+
+        Override to customize the value when it is shown in a highlighted
+        (selected) row, typically on a dark background.
+
+        Default implementation returns @a value unmodified.
+    */
+    virtual wxVariant MakeHighlighted(const wxVariant& value) const;
+};
