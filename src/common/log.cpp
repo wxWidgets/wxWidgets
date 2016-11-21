@@ -418,7 +418,7 @@ wxLog::CallDoLogNow(wxLogLevel level,
     {
         const long err = static_cast<long>(num);
 
-        suffix.Printf(_(" (error %ld: %s)"), err, wxSysErrorMsg(err));
+        suffix.Printf(_(" (error %ld: %s)"), err, wxSysErrorMsgStr(err));
     }
 
 #if wxUSE_LOG_TRACE

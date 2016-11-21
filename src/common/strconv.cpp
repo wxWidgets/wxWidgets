@@ -2411,7 +2411,7 @@ wxMBConv_iconv::ToWChar(wchar_t *dst, size_t dstLen,
     if (ICONV_FAILED(cres, srcLen))
     {
         //VS: it is ok if iconv fails, hence trace only
-        wxLogTrace(TRACE_STRCONV, wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
+        wxLogTrace(TRACE_STRCONV, wxT("iconv failed: %s"), wxSysErrorMsgStr(wxSysErrorCode()));
         return wxCONV_FAILED;
     }
 
@@ -2479,7 +2479,7 @@ size_t wxMBConv_iconv::FromWChar(char *dst, size_t dstLen,
 
     if (ICONV_FAILED(cres, inbuflen))
     {
-        wxLogTrace(TRACE_STRCONV, wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
+        wxLogTrace(TRACE_STRCONV, wxT("iconv failed: %s"), wxSysErrorMsgStr(wxSysErrorCode()));
         return wxCONV_FAILED;
     }
 

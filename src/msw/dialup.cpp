@@ -470,7 +470,7 @@ wxString wxDialUpManagerMSW::GetErrorString(DWORD error)
     {
         case ERROR_INVALID_PARAMETER:
             // this was a standard Win32 error probably
-            return wxString(wxSysErrorMsg(error));
+            return wxSysErrorMsgStr(error);
 
         default:
             {
@@ -1258,7 +1258,7 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
                 (
                     wxT("WaitForMultipleObjects(RasMonitor) failed: 0x%08lx (%s)"),
                     err,
-                    wxSysErrorMsg(err)
+                    wxSysErrorMsgStr(err)
                 );
 
                 // no sense in continuing, who knows if the handles we're
