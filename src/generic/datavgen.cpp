@@ -969,6 +969,7 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype,
     m_mode = mode;
     m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
     m_dc = NULL;
+    m_state = 0;
 }
 
 wxDataViewRenderer::~wxDataViewRenderer()
@@ -2264,10 +2265,16 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             cell_rect.y = GetLineStart( item );
             cell_rect.height = GetLineHeight( item );
 
+            bool selected = m_selection.IsSelected(item);
+
+            int state = 0;
+            if (m_hasFocus && selected)
+                state |= wxDATAVIEW_CELL_SELECTED;
+
+            cell->SetState(state);
             cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
-            bool selected = m_selection.IsSelected(item);
             if ( !selected )
                 DrawCellBackground( cell, dc, cell_rect );
 
@@ -2322,10 +2329,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             if ( item_rect.width <= 0 )
                 continue;
-
-            int state = 0;
-            if (m_hasFocus && selected)
-                state |= wxDATAVIEW_CELL_SELECTED;
 
             // TODO: it would be much more efficient to create a clipping
             //       region for the entire column being rendered (in the OnPaint

@@ -93,6 +93,8 @@ protected:
     void SetEnabled(bool WXUNUSED(enabled)) wxOVERRIDE { };
 #endif
 
+    virtual bool IsHighlighted() const wxOVERRIDE;
+
 private:
     // contains the alignment flags
     int m_alignment;

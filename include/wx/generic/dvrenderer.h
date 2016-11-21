@@ -52,6 +52,12 @@ public:
                                 const wxMouseEvent* WXUNUSED(mouseEvent))
         { return false; }
 
+    void SetState(int state) { m_state = state; }
+
+protected:
+    virtual bool IsHighlighted() const wxOVERRIDE
+        { return m_state & wxDATAVIEW_CELL_SELECTED; }
+
 private:
     int                          m_align;
     wxDataViewCellMode           m_mode;
@@ -59,6 +65,8 @@ private:
     wxEllipsizeMode m_ellipsizeMode;
 
     wxDC *m_dc;
+
+    int m_state;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer);
 };
