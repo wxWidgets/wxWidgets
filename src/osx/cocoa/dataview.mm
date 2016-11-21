@@ -1213,7 +1213,7 @@ outlineView:(NSOutlineView*)outlineView
     dc.SetGraphicsContext(gc);
 
     int state = 0;
-    if ( [self isHighlighted] )
+    if ( [self backgroundStyle] == NSBackgroundStyleDark )
         state |= wxDATAVIEW_CELL_SELECTED;
 
     renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), &dc, state);
@@ -2836,7 +2836,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         //else: can't change font if the cell doesn't have any
     }
 
-    if ( attr.HasColour() && ![cell isHighlighted] )
+    if ( attr.HasColour() && [cell backgroundStyle] == NSBackgroundStyleLight )
     {
         // we can set font for any cell but only NSTextFieldCell provides
         // a method for setting text colour so check that this method is
@@ -2945,7 +2945,7 @@ bool wxDataViewTextRenderer::MacRender()
             [par release];
         }
 
-        if ( [cell isHighlighted] )
+        if ( [cell backgroundStyle] == NSBackgroundStyleDark )
         {
             [str removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [str length])];
             [str removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, [str length])];
