@@ -114,6 +114,7 @@ All (GUI):
 - Fix calculating point position in wxDataViewCtrl::HitTest().
 - Fix position of the rectangle returned by wxDataViewCtrl::GetItemRect().
 - Add wxDataViewRenderer::GetAccessibleDescription().
+- Improve wxImage::Scale() handling of pixels with alpha channel (Tim Kosse).
 
 wxGTK:
 
