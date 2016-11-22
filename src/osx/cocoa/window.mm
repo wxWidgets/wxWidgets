@@ -985,7 +985,9 @@ void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event)
     if (impl == NULL)
         return;
 
-    impl->mouseEvent(event, self, _cmd);
+    // We shouldn't let disabled windows get mouse events.
+    if (impl->GetWXPeer()->IsEnabled())
+        impl->mouseEvent(event, self, _cmd);
 }
 
 void wxOSX_cursorUpdate(NSView* self, SEL _cmd, NSEvent *event)

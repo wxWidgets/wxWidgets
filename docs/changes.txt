@@ -165,6 +165,7 @@ wxOSX:
 - Implement wxDataViewCtrl::SetRowHeight().
 - Add OSXEnableAutomaticQuoteSubstitution(), OSXEnableAutomaticDashSubstitution()
   and OSXDisableAllSmartSubstitutions() to control wxTextCtrl smart behavior.
+- Don't allow interacting with disabled wxSlider (Andreas Falkenhahn).
 
 Unix:
 
