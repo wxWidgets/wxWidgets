@@ -598,6 +598,13 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 // wxNSTextViewControl
 
+// Official Apple docs suggest to use FLT_MAX when embedding an NSTextView
+// object inside an NSScrollView, see here:
+// https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html
+// However, when using FLT_MAX, "setAlignment" doesn't work any more; using
+// 1000000 instead of FLT_MAX fixes this
+#define MAX_WIDTH 1000000
+
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxWidgetCocoaImpl(wxPeer, w),
       wxTextWidgetImpl(wxPeer)
@@ -612,7 +619,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     NSSize contentSize = [m_scrollView contentSize];
     NSRect viewFrame = NSMakeRect(
             0, 0,
-            hasHScroll ? FLT_MAX : contentSize.width, contentSize.height
+            hasHScroll ? MAX_WIDTH : contentSize.width, contentSize.height
         );
 
     wxNSTextView* const tv = [[wxNSTextView alloc] initWithFrame: viewFrame];
@@ -623,7 +630,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     
     if ( hasHScroll )
     {
-        [[tv textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+        [[tv textContainer] setContainerSize:NSMakeSize(MAX_WIDTH, MAX_WIDTH)];
         [[tv textContainer] setWidthTracksTextView:NO];
     }
 
