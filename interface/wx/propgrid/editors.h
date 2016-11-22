@@ -38,7 +38,7 @@ public:
       calling wxPropertyGrid::RegisterAdditionalEditors() prior use.
 
     - Pointer to built-in editor is available as wxPGEditor_EditorName
-      (eg. wxPGEditor_TextCtrl).
+      (e.g. wxPGEditor_TextCtrl).
 
     - Before you start using new editor you just created, you need to register
       it using static function
@@ -113,7 +113,7 @@ public:
         @remarks wxPropertyGrid will automatically unfocus the editor when
                  @c wxEVT_TEXT_ENTER is received and when it results in
                  property value being modified. This happens regardless of
-                 editor type (ie. behaviour is same for any wxTextCtrl and
+                 editor type (i.e. behaviour is same for any wxTextCtrl and
                  wxComboBox based editor).
     */
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,

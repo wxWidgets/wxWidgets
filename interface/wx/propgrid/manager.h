@@ -143,8 +143,8 @@ public:
 
     wxPropertyGridManager inherits from wxPropertyGridInterface, and as such
     it has most property manipulation functions. However, only some of them affect
-    properties on all pages (eg. GetPropertyByName() and ExpandAll()), while some
-    (eg. Append()) only apply to the currently selected page.
+    properties on all pages (e.g. GetPropertyByName() and ExpandAll()), while some
+    (e.g. Append()) only apply to the currently selected page.
 
     To operate explicitly on properties on specific page, use
     wxPropertyGridManager::GetPage() to obtain pointer to page's
@@ -419,7 +419,7 @@ public:
     bool IsAnyModified() const;
 
     /**
-        Returns @true if updating is frozen (ie. Freeze() called but not yet Thaw() ).
+        Returns @true if updating is frozen (i.e. Freeze() called but not yet Thaw() ).
     */
     bool IsFrozen() const;
 
@@ -496,7 +496,7 @@ public:
         labels to be shown in full.
 
         @param subProps
-            If @false, will still allow sub-properties (ie. properties which
+            If @false, will still allow sub-properties (i.e. properties which
             parent is not root or category) to be cropped.
 
         @param allPages
@@ -550,7 +550,7 @@ protected:
     /**
         Creates property grid for the manager. Reimplement in derived class to
         use subclassed wxPropertyGrid. However, if you do this then you
-        must also use the two-step construction (ie. default constructor and
+        must also use the two-step construction (i.e. default constructor and
         Create() instead of constructor with arguments) when creating the
         manager.
     */

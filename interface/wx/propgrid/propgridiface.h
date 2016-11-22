@@ -142,7 +142,7 @@ public:
           Refresh() when calling this function after control has been shown for
           the first time.
         - This functions deselects selected property, if any. Validation
-          failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+          failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
           selection is cleared even if editor had invalid value.
     */
     wxPGProperty* Append( wxPGProperty* property );
@@ -171,7 +171,7 @@ public:
         Deletes all properties.
 
         @remarks This functions deselects selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     virtual void Clear() = 0;
@@ -206,7 +206,7 @@ public:
         @return Returns @true if actually collapsed.
 
         @remarks This function may deselect selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     bool Collapse( wxPGPropArg id );
@@ -218,7 +218,7 @@ public:
         Return @false if failed (may fail if editor value cannot be validated).
 
         @remarks This functions clears selection. Validation failure option
-                wxPG_VFB_STAY_IN_PROPERTY is not respected, ie. selection
+                wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e. selection
                 is cleared even if editor had invalid value.
     */
     bool CollapseAll();
@@ -244,7 +244,7 @@ public:
 
                  This functions deselects selected property, if any.
                  Validation failure option wxPG_VFB_STAY_IN_PROPERTY is not
-                 respected, ie. selection is cleared even if editor had
+                 respected, i.e. selection is cleared even if editor had
                  invalid value.
     */
     void DeleteProperty( wxPGPropArg id );
@@ -295,7 +295,7 @@ public:
         @return Returns @true if actually expanded.
 
         @remarks This function may deselect selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     bool Expand( wxPGPropArg id );
@@ -304,7 +304,7 @@ public:
         Expands all items that can be expanded.
 
         @remarks This functions clears selection. Validation failure option
-                wxPG_VFB_STAY_IN_PROPERTY is not respected, ie. selection
+                wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e. selection
                 is cleared even if editor had invalid value.
     */
     bool ExpandAll( bool expand = true );
@@ -626,7 +626,7 @@ public:
           especially true if current mode is non-categoric.
 
         - This functions deselects selected property, if any. Validation
-          failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+          failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
           selection is cleared even if editor had invalid value.
 
         Example of use:

@@ -422,7 +422,7 @@ wxPG_PROP_CUSTOMIMAGE               = 0x0008,
 */
 wxPG_PROP_NOEDITOR                  = 0x0010,
 
-/** Property is collapsed, ie. it's children are hidden.
+/** Property is collapsed, i.e. it's children are hidden.
 */
 wxPG_PROP_COLLAPSED                 = 0x0020,
 
@@ -606,7 +606,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     @subsection wxIntProperty
 
     Like wxStringProperty, but converts text to a signed long integer.
-    wxIntProperty seamlessly supports 64-bit integers (ie. wxLongLong).
+    wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong).
     To safely convert variant to integer, use code like this:
 
     @code
@@ -625,7 +625,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     attribute. Regardless of current prefix, understands (hex) values starting
     with both "0x" and "$".
     Like wxIntProperty, wxUIntProperty seamlessly supports 64-bit unsigned
-    integers (ie. wxULongLong). Same wxVariant safety rules apply.
+    integers (i.e. wxULongLong). Same wxVariant safety rules apply.
 
     @subsection wxFloatProperty
 
@@ -707,7 +707,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     manually edit the flags as a text; a continuous sequence of spaces, commas
     and semicolons are considered as a flag id separator.
 
-    <b>Note:</b> When changing "choices" (ie. flag labels) of wxFlagsProperty,
+    <b>Note:</b> When changing "choices" (i.e. flag labels) of wxFlagsProperty,
     you will need to use wxPGProperty::SetChoices() - otherwise they will not
     get updated properly.
 
@@ -937,7 +937,7 @@ public:
         This virtual function is called after m_value has been set.
 
         @remarks
-        - If m_value was set to Null variant (ie. unspecified value), OnSetValue()
+        - If m_value was set to Null variant (i.e. unspecified value), OnSetValue()
           will not be called.
         - m_value may be of any variant type. Typically properties internally support only
           one variant type, and as such OnSetValue() provides a good opportunity to convert
@@ -1294,7 +1294,7 @@ public:
         Returns instance of a new wxPGEditorDialogAdapter instance, which is
         used when user presses the (optional) button next to the editor control;
 
-        Default implementation returns @NULL (ie. no action is generated when
+        Default implementation returns @NULL (i.e. no action is generated when
         button is pressed).
     */
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
@@ -1348,7 +1348,7 @@ public:
     void AdaptListToValue( wxVariant& list, wxVariant* value ) const;
 
     /**
-        Use this member function to add independent (ie. regular) children to
+        Use this member function to add independent (i.e. regular) children to
         a property.
 
         @return Appended childProperty.
@@ -1461,7 +1461,7 @@ public:
     */
     const wxPGEditor* GetColumnEditor( int column ) const;
 
-    /** Returns property's base name (ie. parent's name is not added in any case) */
+    /** Returns property's base name (i.e. parent's name is not added in any case) */
     const wxString& GetBaseName() const;
 
     /**
@@ -1707,7 +1707,7 @@ public:
     int Index( const wxPGProperty* p ) const;
 
     /**
-        Use this member function to add independent (ie. regular) children to
+        Use this member function to add independent (i.e. regular) children to
         a property.
 
         @return Inserted childProperty.
@@ -2037,13 +2037,13 @@ public:
     void SetValueInEvent( wxVariant value ) const;
 
     /**
-        Sets property's value to unspecified (ie. Null variant).
+        Sets property's value to unspecified (i.e. Null variant).
     */
     void SetValueToUnspecified();
 
     /**
         Call with @false in OnSetValue() to cancel value changes after all
-        (ie. cancel @true returned by StringToValue() or IntToValue()).
+        (i.e. cancel @true returned by StringToValue() or IntToValue()).
     */
     void SetWasModified( bool set = true );
 

@@ -920,7 +920,7 @@ public:
     bool IsEditorFocused() const;
 
     /**
-        Returns true if updating is frozen (ie. Freeze() called but not
+        Returns true if updating is frozen (i.e. Freeze() called but not
         yet Thaw() ).
     */
     bool IsFrozen() const;
