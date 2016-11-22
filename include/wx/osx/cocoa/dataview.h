@@ -534,6 +534,8 @@ private:
     wxCocoaOutlineDataSource* m_DataSource;
 
     wxCocoaOutlineView* m_OutlineView;
+
+    bool m_removeIndentIfNecessary;
 };
 
 #endif // _WX_DATAVIEWCTRL_COCOOA_H_
