@@ -862,6 +862,22 @@ void wxNSTextViewControl::SetStyle(long start,
         if ( style.HasTextColour() )
             [storage addAttribute:NSForegroundColorAttributeName value:style.GetTextColour().OSXGetNSColor() range:range];
     }
+        
+    if ( style.HasAlignment() )
+    {
+        switch ( style.GetAlignment() )
+        {
+            case wxTEXT_ALIGNMENT_RIGHT:
+                [m_textView setAlignment:NSRightTextAlignment];
+                break;
+            case wxTEXT_ALIGNMENT_CENTER:
+                [m_textView setAlignment:NSCenterTextAlignment];
+                break;
+            default:
+                [m_textView setAlignment:NSLeftTextAlignment];
+                break;
+        }
+    }
 }
 
 void wxNSTextViewControl::CheckSpelling(bool check)
