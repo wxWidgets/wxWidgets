@@ -5,6 +5,32 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+enum wxAuiNotebookOption
+{
+    wxAUI_NB_TOP                 = 1 << 0,
+    wxAUI_NB_LEFT                = 1 << 1,  // not implemented yet
+    wxAUI_NB_RIGHT               = 1 << 2,  // not implemented yet
+    wxAUI_NB_BOTTOM              = 1 << 3,
+    wxAUI_NB_TAB_SPLIT           = 1 << 4,
+    wxAUI_NB_TAB_MOVE            = 1 << 5,
+    wxAUI_NB_TAB_EXTERNAL_MOVE   = 1 << 6,
+    wxAUI_NB_TAB_FIXED_WIDTH     = 1 << 7,
+    wxAUI_NB_SCROLL_BUTTONS      = 1 << 8,
+    wxAUI_NB_WINDOWLIST_BUTTON   = 1 << 9,
+    wxAUI_NB_CLOSE_BUTTON        = 1 << 10,
+    wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 11,
+    wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 12,
+    wxAUI_NB_MIDDLE_CLICK_CLOSE  = 1 << 13,
+
+    wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
+                             wxAUI_NB_TAB_SPLIT |
+                             wxAUI_NB_TAB_MOVE |
+                             wxAUI_NB_SCROLL_BUTTONS |
+                             wxAUI_NB_CLOSE_ON_ACTIVE_TAB |
+                             wxAUI_NB_MIDDLE_CLICK_CLOSE
+};
+
+
 /**
     @class wxAuiNotebook
 
@@ -270,7 +296,7 @@ public:
         @since 2.9.3
     */
     virtual bool InsertPage(size_t index, wxWindow *page, const wxString &text,
-                            bool select=false, int imageId=NO_IMAGE);
+                            bool select, int imageId);
 
     /**
         Removes a page, without deleting the window pointer.
@@ -373,7 +399,34 @@ public:
         and returns @true if a selection was made.
     */
     bool ShowWindowMenu();
+
+
+    /**
+        Returns the image index for the given page.
+    */
+    virtual int GetPageImage(size_t nPage) const;
 };
+
+
+/**
+    @class wxAuiNotebookPage
+
+    A simple class which holds information about the notebook's pages and their state.
+
+    @library{wxaui}
+    @category{aui}
+*/
+class wxAuiNotebookPage
+{
+public:
+    wxWindow* window;     // page's associated window
+    wxString caption;     // caption displayed on the tab
+    wxString tooltip;     // tooltip displayed when hovering over tab title
+    wxBitmap bitmap;      // tab's bitmap
+    wxRect rect;          // tab's hit rectangle
+    bool active;          // true if the page is currently active
+};
+
 
 /**
     @class wxAuiTabContainerButton
@@ -653,6 +706,23 @@ public:
 
     wxEvent *Clone();
 };
+
+wxEventType wxEVT_AUINOTEBOOK_PAGE_CLOSE;
+wxEventType wxEVT_AUINOTEBOOK_PAGE_CLOSED;
+wxEventType wxEVT_AUINOTEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_AUINOTEBOOK_PAGE_CHANGING;
+wxEventType wxEVT_AUINOTEBOOK_BUTTON;
+wxEventType wxEVT_AUINOTEBOOK_BEGIN_DRAG;
+wxEventType wxEVT_AUINOTEBOOK_END_DRAG;
+wxEventType wxEVT_AUINOTEBOOK_DRAG_MOTION;
+wxEventType wxEVT_AUINOTEBOOK_ALLOW_DND;
+wxEventType wxEVT_AUINOTEBOOK_DRAG_DONE;
+wxEventType wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN;
+wxEventType wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP;
+wxEventType wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN;
+wxEventType wxEVT_AUINOTEBOOK_TAB_RIGHT_UP;
+wxEventType wxEVT_AUINOTEBOOK_BG_DCLICK;
+
 
 /**
     Default art provider for wxAuiNotebook.
