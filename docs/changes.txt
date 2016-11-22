@@ -157,6 +157,7 @@ All (GUI):
 - Fix escaping/unescaping characters in wxLongStringProperty in wxPG (mikek).
 - Ensure that navigation order reflects layout of wxStdDialogButtonSizer.
 - Add Scintilla FineTicker methods to wxSTC (NewPagodi).
+- Add wxFontPickerCtrl::SetMinPointSize() (Andreas Falkenhahn).
 
 wxGTK:
 
