@@ -15,6 +15,12 @@ rem ========================================================
 
 set compvers="Unknown"
 
+if "%1" == "vc141" (
+  @echo Building for vc141 / vs2017
+  set comp=141
+  set compvers=vc141
+  call "%VS150COMNTOOLS%VsDevCmd.bat"
+)
 if "%1" == "vc140" (
   @echo Building for vc140 / vs2015
   set comp=140
@@ -72,6 +78,7 @@ del %compvers%x86_Release.txt
 del %compvers%x64_Debug.txt
 del %compvers%x64_Release.txt
 
+if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x64
 if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64
 if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x64
 if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x64
@@ -93,6 +100,7 @@ nmake -f makefile.vc BUILD=debug SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
+if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x86
 if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86
@@ -143,6 +151,7 @@ goto End
 :VERSIONS
    @echo.
    @echo Compiler Version: One of -
+   @echo vc141
    @echo vc140
    @echo vc120
    @echo vc110
