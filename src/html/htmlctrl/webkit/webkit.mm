@@ -130,7 +130,7 @@ inline int wxNavTypeFromWebNavType(int type){
     return wxWEBKIT_NAV_OTHER;
 }
 
-@interface MyFrameLoadMonitor : NSObject
+@interface MyFrameLoadMonitor : NSObject <WebFrameLoadDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -139,7 +139,7 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
-@interface MyPolicyDelegate : NSObject
+@interface MyPolicyDelegate : NSObject <WebPolicyDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }
@@ -148,7 +148,7 @@ inline int wxNavTypeFromWebNavType(int type){
 
 @end
 
-@interface MyUIDelegate : NSObject
+@interface MyUIDelegate : NSObject <WebUIDelegate>
 {
     wxWebKitCtrl* webKitWindow;
 }

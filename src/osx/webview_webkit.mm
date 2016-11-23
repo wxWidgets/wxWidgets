@@ -50,7 +50,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 wxBEGIN_EVENT_TABLE(wxWebViewWebKit, wxControl)
 wxEND_EVENT_TABLE()
 
-@interface WebViewLoadDelegate : NSObject
+@interface WebViewLoadDelegate : NSObject <WebFrameLoadDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -59,7 +59,7 @@ wxEND_EVENT_TABLE()
 
 @end
 
-@interface WebViewPolicyDelegate : NSObject
+@interface WebViewPolicyDelegate : NSObject <WebPolicyDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
@@ -68,7 +68,7 @@ wxEND_EVENT_TABLE()
 
 @end
 
-@interface WebViewUIDelegate : NSObject
+@interface WebViewUIDelegate : NSObject <WebUIDelegate>
 {
     wxWebViewWebKit* webKitWindow;
 }
