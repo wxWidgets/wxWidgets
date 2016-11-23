@@ -1,3 +1,4 @@
+start cmd /k Call officialbuild.bat vc141
 start cmd /k Call officialbuild.bat vc140
 start cmd /k Call officialbuild.bat vc120
 start cmd /k Call officialbuild.bat vc110
