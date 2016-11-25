@@ -182,10 +182,13 @@ void XmlStackWalker::OnStackFrame(const wxStackFrame& frame)
 // initialization and cleanup
 // ----------------------------------------------------------------------------
 
-wxDebugReport::wxDebugReport()
+wxDebugReport::wxDebugReport(const wxString &tmpDir)
 {
     // get a temporary directory name
     wxString appname = GetReportName();
+
+    // use default temporary directory, if no custom one specified
+    wxString dir = tmpDir.IsEmpty() ? wxFileName::GetTempDir() : tmpDir;
 
     // we can't use CreateTempFileName() because it creates a file, not a
     // directory, so do our best to create a unique name ourselves
@@ -193,12 +196,12 @@ wxDebugReport::wxDebugReport()
     // of course, this doesn't protect us against malicious users...
 #if wxUSE_DATETIME
     m_dir.Printf(wxT("%s%c%s_dbgrpt-%lu-%s"),
-                 wxFileName::GetTempDir(), wxFILE_SEP_PATH, appname,
+                 dir, wxFILE_SEP_PATH, appname,
                  wxGetProcessId(),
                  wxDateTime::Now().Format(wxT("%Y%m%dT%H%M%S")));
 #else
     m_dir.Printf(wxT("%s%c%s_dbgrpt-%lu"),
-                 wxFileName::GetTempDir(), wxFILE_SEP_PATH, appname,
+                 dir, wxFILE_SEP_PATH, appname,
                  wxGetProcessId());
 #endif
 
@@ -603,6 +606,12 @@ bool wxDebugReport::DoProcess()
 // ----------------------------------------------------------------------------
 // wxDebugReportCompress
 // ----------------------------------------------------------------------------
+
+wxDebugReportCompress::wxDebugReportCompress(const wxString &tmpDir)
+                     : wxDebugReport(tmpDir)
+{
+    // nothing here
+}
 
 void wxDebugReportCompress::SetCompressedFileDirectory(const wxString& dir)
 {
