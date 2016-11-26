@@ -24,7 +24,6 @@
 #define HAVE_VA_COPY 1
 #define HAVE_VARIADIC_MACROS 1
 #define HAVE_STD_WSTRING 1
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 #if __GNUC__ > 4 || (  __GNUC__ == 4 && __GNUC_MINOR__ >= 2 )
   #if !defined(__has_include)
     #define HAVE_TR1_UNORDERED_MAP 1
@@ -32,7 +31,6 @@
     #define HAVE_TR1_TYPE_TRAITS 1
   #endif
   #define HAVE_GCC_ATOMIC_BUILTINS 1
-#endif
 #endif
 #define HAVE_VISIBILITY 1
 #define wxHAVE_PTHREAD_CLEANUP 1

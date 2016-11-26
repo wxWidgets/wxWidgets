@@ -41,13 +41,10 @@
 
 /*
    Use the more efficient FSEvents API instead of kqueue
-   events for file system watcher, but only on OS X >= 10.7 since
-   that version introduced a flag that allows watching files as
-   well as sub directories.
+   events for file system watcher since that version introduced a flag that
+   allows watching files as well as sub directories.
  */
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
-    #define wxHAVE_FSEVENTS_FILE_NOTIFICATIONS 1
-#endif
+#define wxHAVE_FSEVENTS_FILE_NOTIFICATIONS 1
 
 /*
  * turning off capabilities that don't work under cocoa yet
