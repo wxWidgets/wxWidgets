@@ -223,6 +223,9 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
     int csidl;
     switch (userDir)
     {
+        case Dir_Cache:
+            csidl = CSIDL_LOCAL_APPDATA;
+            break;
         case Dir_Desktop:
             csidl = CSIDL_DESKTOPDIRECTORY;
             break;
