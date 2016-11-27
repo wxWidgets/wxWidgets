@@ -19,6 +19,7 @@
 
 #if wxUSE_STDPATHS
 
+#include "wx/filename.h"
 #include "wx/stdpaths.h"
 #include "wx/osx/private.h"
 #include "wx/osx/core/cfstring.h"
@@ -127,6 +128,13 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
     }
     
     return GetFMDirectory(dirType, NSUserDomainMask);
+}
+
+wxString wxStandardPaths::MakeConfigFileName(const wxString& basename, int WXUNUSED(style)) const
+{
+    wxFileName fn(wxEmptyString, basename);
+    fn.SetName(fn.GetName() + wxT(" Preferences"));
+    return fn.GetFullName();
 }
 
 #endif // wxUSE_STDPATHS

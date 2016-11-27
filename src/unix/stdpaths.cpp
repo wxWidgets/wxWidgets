@@ -33,6 +33,7 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
+#include "wx/fileconf.h"
 #include "wx/filename.h"
 #include "wx/log.h"
 #include "wx/textfile.h"
@@ -307,5 +308,15 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
 }
 
 #endif // __VMS/!__VMS
+
+wxString wxStandardPaths::MakeConfigFileName(const wxString& basename, int style) const
+{
+    wxFileName fn(wxEmptyString, basename);
+    if (style & wxCONFIG_USE_SUBDIR)
+        fn.SetExt(wxT("conf"));
+    else
+        fn.SetName(wxT('.') + fn.GetName());
+    return fn.GetFullName();
+}
 
 #endif // wxUSE_STDPATHS

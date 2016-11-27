@@ -444,6 +444,18 @@ public:
     */
     void UseAppInfo(int info);
 
+    /**
+        Return the file name which would be used by wxFileConfig as local,
+        user-specific, file if it were constructed with @a basename.
+
+        @a style has the same meaning as in @ref wxConfigBase::wxConfigBase "wxConfig constructor"
+        and can contain any combination of styles but only wxCONFIG_USE_SUBDIR bit is
+        examined by this function.
+
+        Notice that this function cannot be used if @a basename is already a full path name.
+    */
+    virtual wxString MakeConfigFileName(const wxString& basename, int style) const;
+
 protected:
     /**
         Protected default constructor.

@@ -155,6 +155,8 @@ public:
 
     virtual wxString GetUserDir(Dir userDir) const;
 
+    virtual wxString MakeConfigFileName(const wxString& basename, int style) const = 0;
+
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();
 

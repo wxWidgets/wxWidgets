@@ -369,6 +369,14 @@ wxString wxStandardPaths::GetPluginsDir() const
     return GetAppDir();
 }
 
+
+wxString wxStandardPaths::MakeConfigFileName(const wxString& basename, int WXUNUSED(style)) const
+{
+    wxFileName fn(wxEmptyString, basename);
+    fn.SetExt(wxT("ini"));
+    return fn.GetFullName();
+}
+
 // ============================================================================
 // wxStandardPathsWin16 implementation
 // ============================================================================

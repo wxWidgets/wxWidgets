@@ -247,26 +247,6 @@ public:
 // static functions
 // ----------------------------------------------------------------------------
 
-// this function modifies in place the given wxFileName object if it doesn't
-// already have an extension
-//
-// note that it's slightly misnamed under Mac as there it doesn't add an
-// extension but modifies the file name instead, so you shouldn't suppose that
-// fn.HasExt() is true after it returns
-static void AddConfFileExtIfNeeded(wxFileName& fn)
-{
-    if ( !fn.HasExt() )
-    {
-#if defined( __WXMAC__ )
-        fn.SetName(fn.GetName() + wxT(" Preferences"));
-#elif defined( __UNIX__ )
-        fn.SetExt(wxT("conf"));
-#else   // Windows
-        fn.SetExt(wxT("ini"));
-#endif  // UNIX/Win
-    }
-}
-
 wxString wxFileConfig::GetGlobalDir()
 {
     return wxStandardPaths::Get().GetConfigDir();
@@ -286,30 +266,13 @@ wxString wxFileConfig::GetLocalDir(int style)
 
 wxFileName wxFileConfig::GetGlobalFile(const wxString& szFile)
 {
-    wxFileName fn(GetGlobalDir(), szFile);
-
-    AddConfFileExtIfNeeded(fn);
-
+    wxFileName fn(GetGlobalDir(), wxStandardPaths::Get().MakeConfigFileName(szFile, wxCONFIG_USE_SUBDIR));
     return fn;
 }
 
 wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
 {
-    wxFileName fn(GetLocalDir(style), szFile);
-
-#if defined( __UNIX__ ) && !defined( __WXMAC__ )
-    if ( !(style & wxCONFIG_USE_SUBDIR) )
-    {
-        // dot-files under Unix start with, well, a dot (but OTOH they usually
-        // don't have any specific extension)
-        fn.SetName(wxT('.') + fn.GetName());
-    }
-    else // we do append ".conf" extension to config files in subdirectories
-#endif // defined( __UNIX__ ) && !defined( __WXMAC__ )
-    {
-        AddConfFileExtIfNeeded(fn);
-    }
-
+    wxFileName fn(GetLocalDir(style), wxStandardPaths::Get().MakeConfigFileName(szFile, style));
     return fn;
 }
 
