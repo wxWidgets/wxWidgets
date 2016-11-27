@@ -212,7 +212,7 @@ const wxString& wxDbgHelpDLL::GetErrorMessage()
 void wxDbgHelpDLL::LogError(const wxChar *func)
 {
     ::OutputDebugString(wxString::Format(wxT("dbghelp: %s() failed: %s\r\n"),
-                        func, wxSysErrorMsg(::GetLastError())).t_str());
+                        func, wxSysErrorMsgStr(::GetLastError())).t_str());
 }
 
 // ----------------------------------------------------------------------------

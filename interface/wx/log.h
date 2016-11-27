@@ -1215,7 +1215,7 @@ void wxSafeShowMessage(const wxString& title, const wxString& text);
     Returns the error code from the last system call. This function uses
     @c errno on Unix platforms and @c GetLastError under Win32.
 
-    @see wxSysErrorMsg(), wxLogSysError()
+    @see wxSysErrorMsgStr(), wxLogSysError()
 
     @header{wx/log.h}
 */
@@ -1225,6 +1225,25 @@ unsigned long wxSysErrorCode();
     Returns the error message corresponding to the given system error code. If
     @a errCode is 0 (default), the last error code (as returned by
     wxSysErrorCode()) is used.
+
+    Use this function instead of wxSysErrorMsg(), as the latter one is not
+    thread-safe.
+
+    @since 3.1.0
+
+    @see wxSysErrorCode(), wxLogSysError()
+
+    @header{wx/log.h}
+*/
+wxString wxSysErrorMsgStr(unsigned long errCode = 0);
+
+/**
+    Returns the error message corresponding to the given system error code. If
+    @a errCode is 0 (default), the last error code (as returned by
+    wxSysErrorCode()) is used.
+
+    Use wxSysErrorMsgStr() instead of this function especially in a
+    multi-threaded application.
 
     @see wxSysErrorCode(), wxLogSysError()
 
@@ -1440,7 +1459,7 @@ void wxVLogStatus(const char* formatString, va_list argPtr);
     form of this function takes the error code explicitly as the first
     argument.
 
-    @see wxSysErrorCode(), wxSysErrorMsg()
+    @see wxSysErrorCode(), wxSysErrorMsgStr()
 
     @header{wx/log.h}
 */
