@@ -20,7 +20,11 @@
 
 #include "wx/utils.h"
 
-#define USE_PUTENV (!defined(HAVE_SETENV) && defined(HAVE_PUTENV))
+#if !defined(HAVE_SETENV) && defined(HAVE_PUTENV)
+    #define USE_PUTENV 1
+#else
+    #define USE_PUTENV 0
+#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
