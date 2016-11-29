@@ -238,6 +238,14 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
     {
         wxLogNull logNull;
         wxString homeDir = wxFileName::GetHomeDir();
+        if (userDir == Dir_Cache)
+        {
+           if (wxGetenv(wxT("XDG_CACHE_HOME")))
+              return wxGetenv(wxT("XDG_CACHE_HOME"));
+           else
+              return homeDir + wxT("/.cache");
+        }
+
         wxString configPath;
         if (wxGetenv(wxT("XDG_CONFIG_HOME")))
             configPath = wxGetenv(wxT("XDG_CONFIG_HOME"));

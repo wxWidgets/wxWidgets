@@ -103,6 +103,9 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
     NSSearchPathDirectory dirType;
     switch (userDir)
     {
+        case Dir_Cache:
+            dirType = NSCachesDirectory;
+            break;
         case Dir_Desktop:
             dirType = NSDesktopDirectory;
             break;
