@@ -25,6 +25,7 @@
 #define cairo_public 
 
 #include <cairo.h>
+#include <float.h>
 
 bool wxCairoInit();
 

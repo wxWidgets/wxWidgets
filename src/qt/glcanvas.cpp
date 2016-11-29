@@ -16,7 +16,7 @@ class wxQtGLWidget : public wxQtEventSignalHandler< QGLWidget, wxGLCanvas >
 {
 public:
     wxQtGLWidget(wxWindow *parent, wxGLCanvas *handler, QGLFormat format)
-        : wxQtEventSignalHandler(parent, handler)
+        : wxQtEventSignalHandler<QGLWidget,wxGLCanvas>(parent, handler)
         {
             setFormat(format);
             setAutoBufferSwap( false );
