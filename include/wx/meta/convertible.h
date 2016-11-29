@@ -34,5 +34,27 @@ struct wxConvertibleTo
     };
 };
 
+// This is similar to wxConvertibleTo, except that when using a C++11 compiler,
+// the case of D deriving from B non-publicly will be detected and the correct
+// value (false) will be deduced instead of getting a compile-time error as
+// with wxConvertibleTo. For pre-C++11 compilers there is no difference between
+// this helper and wxConvertibleTo.
+template <class D, class B>
+struct wxIsPubliclyDerived
+{
+    enum
+    {
+#if __cplusplus >= 201103 || (defined(_MSC_VER) && _MSC_VER >= 1600)
+        // If C++11 is available we use this, as on most compilers it's a
+        // built-in and will be evaluated at compile-time.
+        value = std::is_base_of<B, D>::value && std::is_convertible<D*, B*>::value
+#else
+        // When not using C++11, we fall back to wxConvertibleTo, which fails
+        // at compile-time if D doesn't publicly derive from B.
+        value = wxConvertibleTo<D, B>::value
+#endif
+    };
+};
+
 #endif // _WX_META_CONVERTIBLE_H_
 

@@ -19,7 +19,7 @@
 template <class T>
 struct wxIsStaticTrackable
 {
-    enum { value = wxConvertibleTo<T, wxTrackable>::value };
+    enum { value = wxIsPubliclyDerived<T, wxTrackable>::value };
 };
 
 
