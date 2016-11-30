@@ -1057,7 +1057,7 @@ unsigned long wxSysErrorCode()
 #endif  //Win/Unix
 }
 
-static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t len, unsigned long nErrCode)
+static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long nErrCode)
 {
     if ( nErrCode == 0 )
         nErrCode = wxSysErrorCode();
@@ -1087,7 +1087,7 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t len, unsigned long nEr
     // Crashes on SmartPhone (FIXME)
     if( lpMsgBuf != 0 )
     {
-        wxStrlcpy(szBuf, (const wxChar *)lpMsgBuf, len);
+        wxStrlcpy(szBuf, (const wxChar *)lpMsgBuf, sizeBuf);
 
         LocalFree(lpMsgBuf);
 
@@ -1121,10 +1121,10 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t len, unsigned long nEr
         // at this point errorMsg might not point to buffer anymore
         szBuf[0] = wxS('\0');
     #if wxUSE_UNICODE
-        wxConvCurrent->MB2WC(szBuf, errorMsg, len - 1);
-        szBuf[len - 1] = wxS('\0');
+        wxConvCurrent->MB2WC(szBuf, errorMsg, sizeBuf - 1);
+        szBuf[sizeBuf - 1] = wxS('\0');
     #else
-        wxStrlcpy(szBuf, errorMsg, len);
+        wxStrlcpy(szBuf, errorMsg, sizeBuf);
     #endif
         return szBuf;
 #endif  // __WINDOWS__/!__WINDOWS__
