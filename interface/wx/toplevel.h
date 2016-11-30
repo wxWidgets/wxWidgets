@@ -316,6 +316,18 @@ public:
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     /**
+        Restore a previously iconized or maximized window to its normal state.
+
+        In wxGTK this method currently doesn't return the maximized window to
+        its normal state and you must use Maximize() with @false argument
+        explicitly for this. In the other ports, it both unmaximizes the
+        maximized windows and uniconizes the iconized ones.
+
+        @see Iconize(), Maximize()
+     */
+    void Restore();
+
+    /**
         Changes the default item for the panel, usually @a win is a button.
 
         @see GetDefaultItem()
