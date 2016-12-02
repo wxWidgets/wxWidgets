@@ -105,8 +105,8 @@ bool wxColourBase::FromString(const wxString& str)
             // use point as decimal separator, regardless of locale. So parse
             // the tail of the string manually by putting it in a buffer and
             // using wxString::ToCDouble() below. Notice that we can't use "%s"
-            // for this as it stops at white space and we need "%c" to avoid
-            // this and really get all the rest of the string into the buffer.
+            // for this as it stops at white space, so we use "[^)] )" to take
+            // everything until the closing bracket.
 
             const unsigned len = str.length(); // always big enough
             wxCharBuffer alphaBuf(len);
@@ -118,7 +118,7 @@ bool wxColourBase::FromString(const wxString& str)
             // Construct the format string which ensures that the last argument
             // receives all the rest of the string.
             wxString formatStr;
-            formatStr << wxS("( %d , %d , %d , %") << len << 'c';
+            formatStr << wxS("( %d , %d , %d , %") << len << wxS("[^)] )");
 
             // Notice that we use sscanf() here because if the string is not
             // ASCII it can't represent a valid RGB colour specification anyhow
@@ -134,10 +134,9 @@ bool wxColourBase::FromString(const wxString& str)
             // Notice that we must explicitly specify the length to get rid of
             // trailing NULs.
             wxString alphaStr(alphaPtr, wxStrlen(alphaPtr));
-            if ( alphaStr.empty() || alphaStr.Last() != ')' )
+            if ( alphaStr.empty() )
                 return false;
 
-            alphaStr.RemoveLast();
             alphaStr.Trim();
 
             double a;
