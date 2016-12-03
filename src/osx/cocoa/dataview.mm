@@ -2456,6 +2456,7 @@ void wxCocoaDataViewControl::Unselect(const wxDataViewItem& item)
 void wxCocoaDataViewControl::UnselectAll()
 {
     [m_OutlineView deselectAll:m_OutlineView];
+    [m_OutlineView setNeedsDisplay:YES];
 }
 
 //
