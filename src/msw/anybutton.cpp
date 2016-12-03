@@ -1131,7 +1131,7 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
     ::InflateRect(&rectBtn, -XP_BUTTON_EXTRA_MARGIN, -XP_BUTTON_EXTRA_MARGIN);
 
-    if ( button->UseBgCol() )
+    if ( button->UseBgCol() && iState != PBS_HOT )
     {
         COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
         AutoHBRUSH hbrushBackground(colBg);
