@@ -27,12 +27,6 @@
 #endif
 
 /*
- * text rendering system
- */
-
-#define wxOSX_USE_ATSU_TEXT 0
-
-/*
  * Audio System
  */
 
