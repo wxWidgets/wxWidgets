@@ -1140,7 +1140,19 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
         RECT rectClient;
         ::CopyRect(&rectClient, &rectBtn);
         ::InflateRect(&rectClient, -1, -1);
-        FillRect(hdc, &rectClient, hbrushBackground);
+
+        if ( wxGetWinVersion() >= wxWinVersion_10 )
+        {
+            // buttons have flat appearance so we can fully color them
+            // even outside the "safe" rectangle
+            SelectInHDC brush(hdc, hbrushBackground);
+            COLORREF colTheme = GetPixel(hdc, rectClient.left, rectClient.top);
+            ExtFloodFill(hdc, rectClient.left, rectClient.top, colTheme, FLOODFILLSURFACE);
+        }
+        else
+        {
+            FillRect(hdc, &rectClient, hbrushBackground);
+        }
     }
 }
 #endif // wxUSE_UXTHEME
