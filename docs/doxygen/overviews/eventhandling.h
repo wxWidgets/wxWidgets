@@ -242,7 +242,7 @@ Now let us describe the semantic differences:
 
     <li>
         As a slight extension of the above, the handlers can also be unbound at
-        any time with Unbind<>() (and maybe rebound later). Of course,
+        any time with Unbind<>() (and may be rebound later). Of course,
         it's also possible to emulate this behaviour with the classic
         static (i.e., bound via event tables) handlers by using an internal
         flag indicating whether the handler is currently enabled and returning
@@ -349,6 +349,33 @@ MyFrame::MyFrame()
 }
 @endcode
 
+You can also bind functions that are members of any class provided that the
+class publicly derives from wxTrackable from somewhere down the line and that
+you have a pointer to that class object.
+For example:
+
+@code
+class MyFrame : public wxFrame
+{
+private:
+    void OnExit(wxCloseEvent& event);
+}
+
+void MyFrame::OnExit(wxCloseEvent& event)
+{
+    // ...
+}
+
+MyFrame::MyFrame()
+{
+    Bind(wxEVT_CLOSE_WINDOW, &MyFrame::OnExit, this);
+}
+@endcode
+
+You can also bind functions for classes that don't publicly derive from wxTrackable
+somewhere down the line, provided that your compiler supports C++11.
+Do note that in such cases event propagation will @b not work).
+
 And finally you can bind to an arbitrary functor and use it as an event
 handler:
 
@@ -411,7 +438,7 @@ MyFrame::MyFrame()
 @endcode
 
 
-With the aid of @c bind<>() you can even use methods or functions which
+With the aid of @c Bind<>() you can even use methods or functions which
 don't quite have the correct signature:
 
 @code
