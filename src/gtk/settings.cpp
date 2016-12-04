@@ -123,6 +123,7 @@ static GtkWidget* ToolTipWidget()
         if (gtk_check_version(2, 11, 0))
             name = "gtk-tooltips";
         gtk_widget_set_name(s_widget, name);
+        gtk_widget_ensure_style(s_widget);
     }
     return s_widget;
 }
