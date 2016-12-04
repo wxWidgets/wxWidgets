@@ -210,20 +210,34 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
 
     if ( m_modalSession )
     {
-        NSInteger response = [NSApp runModalSession:(NSModalSession)m_modalSession];
+        NSInteger response =
+                [NSApp runModalSession:(NSModalSession)m_modalSession];
         
         switch (response) 
         {
             case NSRunContinuesResponse:
             {
-                if ( [[NSApplication sharedApplication]
+                // runModalSession is supposed to handle event dispatching, but
+                // for some reason we need to dequeue and send events here as
+                // well (see #17737).
+                NSEvent *event = [[NSApplication sharedApplication]
                         nextEventMatchingMask: NSAnyEventMask
                         untilDate: [NSDate dateWithTimeIntervalSinceNow: timeout/1000.0]
                         inMode: NSDefaultRunLoopMode
-                        dequeue: NO] != nil )
-                    return 1;
-                
-                return -1;
+                        dequeue: YES];
+
+                if ( event == nil )
+                    return -1;
+
+                // Only dispatch events for the modal window, or events not
+                // associated with any window, as other windows should not be
+                // responsive to inputs when a modal is present.
+                NSWindow *modalWindow =
+                        m_modalWindow->MacGetTopLevelWindowRef();
+                if ( event.window == nil || event.window == modalWindow )
+                    [NSApp sendEvent: event];
+
+                return 1;
             }
             case NSRunStoppedResponse:
             case NSRunAbortedResponse:
