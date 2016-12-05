@@ -417,6 +417,33 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
     //else: it is a separator, they can't have accels, nothing to do
 }
 
+void wxMenu::RemoveAccel(wxMenuItem *item)
+{
+    // recurse upwards: we should only modify m_accels of the top level
+    // menus, not of the submenus as wxMenuBar doesn't look at them
+    // (alternative and arguable cleaner solution would be to recurse
+    // downwards in GetAccelCount() and CopyAccels())
+    if ( GetParent() )
+    {
+        GetParent()->RemoveAccel(item);
+        return;
+    }
+
+    // remove the corresponding accel from the accel table
+    int n = FindAccel(item->GetId());
+    if ( n != wxNOT_FOUND )
+    {
+        delete m_accels[n];
+
+        m_accels.RemoveAt(n);
+
+#if wxUSE_OWNER_DRAWN
+        ResetMaxAccelWidth();
+#endif
+    }
+    //else: this item doesn't have an accel, nothing to do
+}
+
 #endif // wxUSE_ACCEL
 
 namespace
@@ -735,19 +762,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     }
 
 #if wxUSE_ACCEL
-    // remove the corresponding accel from the accel table
-    int n = FindAccel(item->GetId());
-    if ( n != wxNOT_FOUND )
-    {
-        delete m_accels[n];
-
-        m_accels.RemoveAt(n);
-
-#if wxUSE_OWNER_DRAWN
-        ResetMaxAccelWidth();
-#endif
-    }
-    //else: this item doesn't have an accel, nothing to do
+    RemoveAccel(item);
 #endif // wxUSE_ACCEL
 
     // Update indices of radio groups.

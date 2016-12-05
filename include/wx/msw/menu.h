@@ -76,6 +76,7 @@ public:
 
     // called by wxMenuItem when its accels changes
     void UpdateAccel(wxMenuItem *item);
+    void RemoveAccel(wxMenuItem *item);
 
     // helper used by wxMenu itself (returns the index in m_accels)
     int FindAccel(int id) const;
