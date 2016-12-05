@@ -94,6 +94,9 @@ public:
 
     // called by wxMenuItem when its accels changes
     void UpdateAccel(wxMenuItem *item);
+#if wxABI_VERSION >= 30002
+    void RemoveAccel(wxMenuItem *item);
+#endif
 
     // helper used by wxMenu itself (returns the index in m_accels)
     int FindAccel(int id) const;
