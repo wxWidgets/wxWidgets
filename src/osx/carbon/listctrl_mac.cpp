@@ -553,7 +553,6 @@ void wxListCtrl::OnDblClick(wxMouseEvent& event)
     event.Skip();
 }
 
-#if wxABI_VERSION >= 20801
 void wxListCtrl::OnRightDown(wxMouseEvent& event)
 {
     if (m_dbImpl)
@@ -636,7 +635,6 @@ void wxListCtrl::OnChar(wxKeyEvent& event)
     }
     event.Skip();
 }
-#endif
 
 bool wxListCtrl::Create(wxWindow *parent,
                         wxWindowID id,

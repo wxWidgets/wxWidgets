@@ -5117,12 +5117,10 @@ wxTextCtrl *wxGenericListCtrl::EditLabel(long item,
     return m_mainWin->EditLabel( item, textControlClass );
 }
 
-#if wxABI_VERSION >= 30002
 bool wxGenericListCtrl::EndEditLabel(bool cancel)
 {
     return m_mainWin->EndEditLabel(cancel);
 }
-#endif
 
 wxTextCtrl *wxGenericListCtrl::GetEditControl() const
 {
