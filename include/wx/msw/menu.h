@@ -94,7 +94,7 @@ public:
 
     // called by wxMenuItem when its accels changes
     void UpdateAccel(wxMenuItem *item);
-#if wxABI_VERSION >= 30002
+#if wxABI_VERSION >= 30003
     void RemoveAccel(wxMenuItem *item);
 #endif
 
