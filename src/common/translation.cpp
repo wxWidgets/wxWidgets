@@ -1802,6 +1802,12 @@ wxArrayString GetSearchPrefixes()
     stdp = wxStandardPaths::Get().GetResourcesDir();
     if ( paths.Index(stdp) == wxNOT_FOUND )
         paths.Add(stdp);
+
+  #if defined(__UNIX__) && !defined(__WXOSX_COCOA__) && !defined(__WXOSX_IPHONE__) && !defined(__DARWIN__)
+    stdp = wxStandardPaths::Get().GetInstallPrefix() + "/share/locale";
+    if ( paths.Index(stdp) == wxNOT_FOUND )
+        paths.Add(stdp);
+  #endif
 #endif // wxUSE_STDPATHS
 
     // last look in default locations
