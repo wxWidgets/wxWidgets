@@ -15,6 +15,7 @@
 
 #if wxUSE_VALIDATORS
 
+#include "wx/textentry.h"
 #include "wx/validate.h"
 
 #include <limits>
