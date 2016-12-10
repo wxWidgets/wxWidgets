@@ -1610,7 +1610,12 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
 
     bool selected = IsSelected(item);
 
-    if ( !MSWDeleteItem(item) || !selected )
+    // attempt to delete the item, and continue only if it succedes
+    if ( !MSWDeleteItem(item) )
+        return;
+
+    // if the item was not selected we don't need to do anything about the selection
+    if ( !selected )
         return;
 
     if ( HasFlag(wxTR_MULTIPLE) )
@@ -1627,6 +1632,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
 
     wxTreeEvent changingEvent(wxEVT_TREE_SEL_CHANGING, this, next);
 
+    // if "selection changing" event is allowed, send "selection changed" too
     if ( IsTreeEventAllowed(changingEvent) )
     {
         wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, this, next);
