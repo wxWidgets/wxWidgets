@@ -221,7 +221,6 @@ int          g_lastButtonNumber = 0;
 
 #ifdef __WXGTK3__
 static GList* gs_sizeRevalidateList;
-static GSList* gs_queueResizeList;
 static bool gs_inSizeAllocate;
 #endif
 
@@ -2215,38 +2214,6 @@ static void check_resize(GtkContainer*, wxWindow*)
 static void check_resize_after(GtkContainer*, wxWindow*)
 {
     gs_inSizeAllocate = false;
-    if (gs_queueResizeList)
-    {
-        for (GSList* p = gs_queueResizeList; p; p = p->next)
-        {
-            if (p->data == NULL)
-                continue;
-
-            wxWindowGTK* w = static_cast<wxWindowGTK*>(p->data);
-            g_object_remove_weak_pointer(G_OBJECT(w->m_widget), &p->data);
-            gtk_widget_set_size_request(w->m_widget, w->m_width, w->m_height);
-
-            // in case only the position is changing
-            gtk_widget_queue_resize(w->m_widget);
-
-            // need to force the queue-resize up to the TLW with GTK >= 3.20
-            if (gtk_check_version(3,20,0) == NULL)
-            {
-                GtkWidget* widget = w->m_widget;
-                for (;;)
-                {
-                    widget = gtk_widget_get_parent(widget);
-                    if (widget == NULL)
-                        break;
-                    gtk_widget_queue_resize(widget);
-                    if (gtk_widget_is_toplevel(widget))
-                        break;
-                }
-            }
-        }
-        g_slist_free(gs_queueResizeList);
-        gs_queueResizeList = NULL;
-    }
 }
 #endif // __WXGTK3__
 
@@ -2941,9 +2908,11 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
     GtkWidget* parent = gtk_widget_get_parent(m_widget);
+    wxPizza* pizza = NULL;
     if (WX_IS_PIZZA(parent))
     {
-        WX_PIZZA(parent)->move(m_widget, x, y, width, height);
+        pizza = WX_PIZZA(parent);
+        pizza->move(m_widget, x, y, width, height);
         if (
 #ifdef __WXGTK3__
             !gs_inSizeAllocate &&
@@ -2955,22 +2924,29 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
         }
     }
 
+    gtk_widget_set_size_request(m_widget, width, height);
+
 #ifdef __WXGTK3__
     // With GTK3, gtk_widget_queue_resize() is ignored while a size-allocate
     // is in progress. This situation is common in wxWidgets, since
     // size-allocate can generate wxSizeEvent and size event handlers often
-    // call SetSize(), directly or indirectly. Work around this by deferring
-    // the queue-resize until after size-allocate processing is finished.
-    if (!gs_inSizeAllocate || !gtk_widget_get_visible(m_widget))
-        gtk_widget_set_size_request(m_widget, width, height);
-    else
+    // call SetSize(), directly or indirectly. It should be fine to call
+    // gtk_widget_size_allocate() immediately in this case.
+    if (gs_inSizeAllocate && gtk_widget_get_visible(m_widget) && width > 0 && height > 0)
     {
-        gs_queueResizeList = g_slist_prepend(gs_queueResizeList, this);
-        g_object_add_weak_pointer(G_OBJECT(m_widget), &gs_queueResizeList->data);
+        // obligatory size request before size allocate to avoid GTK3 warnings
+        GtkRequisition req;
+        gtk_widget_get_preferred_size(m_widget, &req, NULL);
+
+        if (pizza)
+            pizza->size_allocate_child(m_widget, x, y, width, height);
+        else
+        {
+            GtkAllocation a = { x, y, width, height };
+            gtk_widget_size_allocate(m_widget, &a);
+        }
     }
-#else // !__WXGTK3__
-    gtk_widget_set_size_request(m_widget, width, height);
-#endif // !__WXGTK3__
+#endif // __WXGTK3__
 }
 
 void wxWindowGTK::ConstrainSize()

@@ -105,24 +105,8 @@ static void pizza_size_allocate(GtkWidget* widget, GtkAllocation* alloc)
         const wxPizzaChild* child = static_cast<wxPizzaChild*>(p->data);
         if (gtk_widget_get_visible(child->widget))
         {
-            GtkAllocation child_alloc;
-            // note that child positions do not take border into
-            // account, they need to be relative to widget->window,
-            // which has already been adjusted
-            child_alloc.x = child->x - pizza->m_scroll_x;
-            child_alloc.y = child->y - pizza->m_scroll_y;
-            child_alloc.width  = child->width;
-            child_alloc.height = child->height;
-            if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
-                child_alloc.x = w - child_alloc.x - child_alloc.width;
-
-            // GTK+3 doesn't like allocating 0 size, so don't do it.
-#ifdef __WXGTK3__
-            if (child_alloc.width && child_alloc.height)
-#endif
-            {
-                gtk_widget_size_allocate(child->widget, &child_alloc);
-            }
+            pizza->size_allocate_child(
+                child->widget, child->x, child->y, child->width, child->height, w);
         }
     }
 }
@@ -407,6 +391,34 @@ void wxPizza::move(GtkWidget* widget, int x, int y, int width, int height)
             break;
         }
     }
+}
+
+void wxPizza::size_allocate_child(
+    GtkWidget* child, int x, int y, int width, int height, int parent_width)
+{
+    if (width <= 0 || height <= 0)
+        return;
+
+    GtkAllocation child_alloc;
+    // note that child positions do not take border into account, they need to
+    // be relative to widget->window, which has already been adjusted
+    child_alloc.x = x - m_scroll_x;
+    child_alloc.y = y - m_scroll_y;
+    child_alloc.width  = width;
+    child_alloc.height = height;
+    if (gtk_widget_get_direction(GTK_WIDGET(this)) == GTK_TEXT_DIR_RTL)
+    {
+        if (parent_width < 0)
+        {
+            GtkBorder border;
+            get_border(border);
+            GtkAllocation alloc;
+            gtk_widget_get_allocation(GTK_WIDGET(this), &alloc);
+            parent_width = alloc.width - border.left - border.right;
+        }
+        child_alloc.x = parent_width - child_alloc.x - child_alloc.width;
+    }
+    gtk_widget_size_allocate(child, &child_alloc);
 }
 
 void wxPizza::put(GtkWidget* widget, int x, int y, int width, int height)

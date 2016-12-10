@@ -24,6 +24,8 @@ struct WXDLLIMPEXP_CORE wxPizza
     void put(GtkWidget* widget, int x, int y, int width, int height);
     void scroll(int dx, int dy);
     void get_border(GtkBorder& border);
+    void size_allocate_child(
+        GtkWidget* child, int x, int y, int width, int height, int parent_width = -1);
 
     GtkFixed m_fixed;
     GList* m_children;
