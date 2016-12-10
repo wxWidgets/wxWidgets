@@ -53,6 +53,16 @@ void wxStandardPaths::SetInstallPrefix(const wxString& prefix)
 
 wxString wxStandardPaths::GetUserConfigDir() const
 {
+    if (GetFileLayout() & FileLayout_XDG)
+    {
+        wxString configPath;
+        if (wxGetenv(wxT("XDG_CONFIG_HOME")))
+            configPath = wxGetenv(wxT("XDG_CONFIG_HOME"));
+        else
+            configPath = wxFileName::GetHomeDir() + wxT("/.config");
+        return configPath;
+    }
+
     return wxFileName::GetHomeDir();
 }
 
@@ -236,6 +246,7 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxString& lang,
 
 wxString wxStandardPaths::GetUserDir(Dir userDir) const
 {
+    if (GetFileLayout() & FileLayout_XDG)
     {
         wxLogNull logNull;
         wxString homeDir = wxFileName::GetHomeDir();
@@ -312,7 +323,7 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
 wxString wxStandardPaths::MakeConfigFileName(const wxString& basename, int style) const
 {
     wxFileName fn(wxEmptyString, basename);
-    if (style & wxCONFIG_USE_SUBDIR)
+    if (style & wxCONFIG_USE_SUBDIR || GetFileLayout() & FileLayout_XDG)
         fn.SetExt(wxT("conf"));
     else
         fn.SetName(wxT('.') + fn.GetName());

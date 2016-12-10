@@ -60,6 +60,12 @@ public:
         Dir_Videos
     };
 
+    enum
+    {
+        FileLayout_Classic    = 0,
+        FileLayout_XDG        = 1
+    };
+
     // return the global standard paths object
     static wxStandardPaths& Get();
 
@@ -168,6 +174,15 @@ public:
 
     bool UsesAppInfo(int info) const { return (m_usedAppInfo & info) != 0; }
 
+    void SetFileLayout(int layout)
+    {
+        m_usedFileLayout = layout;
+    }
+
+    int GetFileLayout() const
+    {
+        return m_usedFileLayout;
+    }
 
 protected:
     // Ctor is protected as this is a base class which should never be created
@@ -184,6 +199,7 @@ protected:
 
     // combination of AppInfo_XXX flags used by AppendAppInfo()
     int m_usedAppInfo;
+    int m_usedFileLayout;
 };
 
 #if wxUSE_STDPATHS

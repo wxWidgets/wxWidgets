@@ -135,6 +135,19 @@ public:
         Dir_Videos
     };
 
+    enum
+    {
+	/**
+            Use the classic file layout
+	*/
+        FileLayout_Classic,
+
+	/**
+            Use a XDG styled file layout (Unix)
+	*/
+        FileLayout_XDG
+    };
+
     /**
         MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
 
@@ -443,6 +456,19 @@ public:
         @since 2.9.0
     */
     void UseAppInfo(int info);
+
+    /**
+        Returns the current file layout
+	Valid values for @a are:
+         - @c FileLayout_Classic,
+         - @c FileLayout_XDG
+    */
+    void SetFileLayout(int layout);
+
+    /**
+        Returns the current file layout
+    */
+    int GetFileLayout() const;
 
     /**
         Return the file name which would be used by wxFileConfig as local,
