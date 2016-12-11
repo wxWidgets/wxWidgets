@@ -231,8 +231,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         GtkStyleContext* sc = gtk_widget_get_style_context(button);
         gtk_style_context_save(sc);
         gtk_style_context_set_state(sc, stateTypeToFlags[state]);
-        gtk_render_background(sc, cr, rect.x - x_diff+4, rect.y+4, rect.width-8, rect.height-8);
-        gtk_render_frame(sc, cr, rect.x - x_diff+4, rect.y+4, rect.width-8, rect.height-8);
+        gtk_render_background(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
+        gtk_render_frame(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
         gtk_style_context_restore(sc);
     }
 #else
