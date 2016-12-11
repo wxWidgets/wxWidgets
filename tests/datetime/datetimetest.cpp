@@ -233,6 +233,8 @@ private:
         CPPUNIT_TEST( TestDSTBug );
         CPPUNIT_TEST( TestDateOnly );
         CPPUNIT_TEST( TestTranslateFromUnicodeFormat );
+        CPPUNIT_TEST( TestSetFunctionsBeforeDST );
+        CPPUNIT_TEST( TestSetFunctionsAfterDST );
     CPPUNIT_TEST_SUITE_END();
 
     void TestLeapYears();
@@ -254,6 +256,9 @@ private:
     void TestDSTBug();
     void TestDateOnly();
     void TestTranslateFromUnicodeFormat();
+    void TestSetFunctionsBeforeDST();
+    void TestSetFunctionsAfterDST();
+    void DoTestSetFunctionsOnDST(const wxDateTime &orig);
 
     wxDECLARE_NO_COPY_CLASS(DateTimeTestCase);
 };
@@ -1489,6 +1494,64 @@ void DateTimeTestCase::TestTranslateFromUnicodeFormat()
     CPPUNIT_ASSERT_EQUAL("'%H o'clock: It's about time'",
         wxTranslateFromUnicodeFormat("''H 'o''clock: It''s about time'''"));
 #endif // ports having wxTranslateFromUnicodeFormat()
+}
+
+void DateTimeTestCase::TestSetFunctionsBeforeDST()
+{
+    // Get the dst end time
+    wxDateTime dst = wxDateTime::GetEndDST();
+
+    if (!dst.IsValid())
+        return; // Skip test if DST is not applicable on this system
+
+    // End DST is the 2nd 1am after DST ends so go back an hour to the first 1am
+    DoTestSetFunctionsOnDST(dst - wxTimeSpan::Hour());
+}
+
+void DateTimeTestCase::TestSetFunctionsAfterDST()
+{
+    // Get the dst end time
+    wxDateTime dst = wxDateTime::GetEndDST();
+
+    if (!dst.IsValid())
+        return; // Skip test if DST is not applicable on this system
+
+    DoTestSetFunctionsOnDST(dst);
+}
+
+void DateTimeTestCase::DoTestSetFunctionsOnDST(const wxDateTime &orig)
+{
+#define DST_TEST_FUN(func) \
+    { \
+        wxDateTime copy = orig; \
+        copy.func; \
+        CPPUNIT_ASSERT_EQUAL(orig.IsDST(), copy.IsDST()); \
+        CPPUNIT_ASSERT_EQUAL(orig.GetHour(), copy.GetHour()); \
+    }
+
+    // Test the functions by just calling them with their existing values
+    // This is primarily just ensuring that we're not converting to a Tm and back
+    // but also if we do that we're handling it properly
+    DST_TEST_FUN(SetMinute(orig.GetMinute()));
+    DST_TEST_FUN(SetSecond(orig.GetSecond()));
+    DST_TEST_FUN(SetMillisecond(orig.GetMillisecond()));
+    DST_TEST_FUN(SetDay(orig.GetDay()));
+    DST_TEST_FUN(SetMonth(orig.GetMonth()));
+    DST_TEST_FUN(SetYear(orig.GetYear()));
+
+    // Test again by actually changing the time (this shouldn't affect DST)
+    // Can't test changing the date because that WILL affect DST
+    DST_TEST_FUN(SetMinute((orig.GetMinute() + 1) % 60));
+    DST_TEST_FUN(SetSecond((orig.GetSecond() + 1) % 60));
+    DST_TEST_FUN(SetMillisecond((orig.GetMillisecond() + 1) % 1000));
+
+    {
+        // Special case for set hour since it's ambiguous at DST we don't care if IsDST matches
+        wxDateTime copy = orig;
+        copy.SetHour(orig.GetHour());
+        CPPUNIT_ASSERT_EQUAL(orig.GetHour(), copy.GetHour());
+    }
+#undef DST_TEST_FUN
 }
 
 #endif // wxUSE_DATETIME

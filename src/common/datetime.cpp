@@ -1514,40 +1514,27 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
 wxDateTime& wxDateTime::SetYear(int year)
 {
     wxASSERT_MSG( IsValid(), wxT("invalid wxDateTime") );
-
-    Tm tm(GetTm());
-    tm.year = year;
-    Set(tm);
-
-    return *this;
+    return Add(wxDateSpan::Years(year - GetYear()));
 }
 
 wxDateTime& wxDateTime::SetMonth(Month month)
 {
     wxASSERT_MSG( IsValid(), wxT("invalid wxDateTime") );
-
-    Tm tm(GetTm());
-    tm.mon = month;
-    Set(tm);
-
-    return *this;
+    return Add(wxDateSpan::Months(month - GetMonth()));
 }
 
 wxDateTime& wxDateTime::SetDay(wxDateTime_t mday)
 {
     wxASSERT_MSG( IsValid(), wxT("invalid wxDateTime") );
-
-    Tm tm(GetTm());
-    tm.mday = mday;
-    Set(tm);
-
-    return *this;
+    return Add(wxDateSpan::Days(mday - GetDay()));
 }
 
 wxDateTime& wxDateTime::SetHour(wxDateTime_t hour)
 {
     wxASSERT_MSG( IsValid(), wxT("invalid wxDateTime") );
 
+    // This is the only place where conversion to Tm and back should be acceptable
+    // The reason is because hour is ambiguous because there can be two 1am's for DST
     Tm tm(GetTm());
     tm.hour = hour;
     Set(tm);
@@ -1558,23 +1545,13 @@ wxDateTime& wxDateTime::SetHour(wxDateTime_t hour)
 wxDateTime& wxDateTime::SetMinute(wxDateTime_t min)
 {
     wxASSERT_MSG( IsValid(), wxT("invalid wxDateTime") );
-
-    Tm tm(GetTm());
-    tm.min = min;
-    Set(tm);
-
-    return *this;
+    return Add(wxTimeSpan::Minutes(min - GetMinute()));
 }
 
 wxDateTime& wxDateTime::SetSecond(wxDateTime_t sec)
 {
     wxASSERT_MSG( IsValid(), wxT("invalid wxDateTime") );
-
-    Tm tm(GetTm());
-    tm.sec = sec;
-    Set(tm);
-
-    return *this;
+    return Add(wxTimeSpan::Seconds(sec - GetSecond()));
 }
 
 wxDateTime& wxDateTime::SetMillisecond(wxDateTime_t millisecond)
@@ -1614,7 +1591,31 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
 
     tm.AddDays(diff.GetTotalDays());
 
+    // Keep a copy so we can determine if we were previously in dst or not
+    wxDateTime copy = *this;
+
     Set(tm);
+
+    // Since the time should not be changing we should try to keep the same hour from before
+    // Set(Tm) may use a different 1am since the hour can be ambiguous with DST transitions
+    if (copy.IsValid())
+    {
+        // Note that we intentionally avoid calling IsDST until we know this is an ambiguous hour case
+        // This is because IsDST may call this function and cause infinite recursion
+        // But this won't happen in these ambiguous hour cases so we can avoid having to test re-entrancy this way
+        wxDateTime prevHour = (*this - wxTimeSpan::Hour());
+        wxDateTime nextHour = (*this + wxTimeSpan::Hour());
+        if (prevHour.GetHour() == GetHour())
+        {
+            if (prevHour.IsDST() == copy.IsDST())
+                *this = prevHour;
+        }
+        else if (nextHour.GetHour() == GetHour())
+        {
+            if (nextHour.IsDST() == copy.IsDST())
+                *this = nextHour;
+        }
+    }
 
     wxASSERT_MSG( IsSameTime(tm),
                   wxT("Add(wxDateSpan) shouldn't modify time") );
