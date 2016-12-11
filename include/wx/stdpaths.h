@@ -194,6 +194,7 @@ protected:
     #elif defined(__UNIX__)
         #include "wx/unix/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
+        #define wxHAS_STDPATHS_INSTALL_PREFIX
     #endif
 #endif
 
@@ -205,6 +206,7 @@ protected:
 //     wxUSE_STDPATHS=0, so that our code can still use wxStandardPaths.
 
 #ifndef wxHAS_NATIVE_STDPATHS
+#define wxHAS_STDPATHS_INSTALL_PREFIX
 class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 {
 public:
