@@ -328,6 +328,9 @@ static int GetGtkSplitterFullSize(GtkWidget* widget)
 {
     gint handle_size;
     gtk_widget_style_get(widget, "handle_size", &handle_size, NULL);
+    // Narrow handles don't work well with wxSplitterWindow
+    if (handle_size < 5)
+        handle_size = 5;
 
     return handle_size;
 }
@@ -399,13 +402,36 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
         x_diff = rect.width;
 
 #ifdef __WXGTK3__
-    cairo_t* cr = wxGetGTKDrawable(win, dc);
-    if (cr)
+    GtkWidgetPath* path = gtk_widget_path_new();
+    GtkStyleContext* sc = gtk_style_context_new();
+    GtkStyleContext* sc1 = NULL;
+    gtk_widget_path_append_type(path, GTK_TYPE_PANED);
+#if GTK_CHECK_VERSION(3,20,0)
+    if (gtk_check_version(3,20,0) == NULL)
     {
-        gtk_widget_set_state_flags(widget, stateTypeToFlags[flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL], true);
-        GtkStyleContext* sc = gtk_widget_get_style_context(widget);
-        gtk_render_handle(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
+        gtk_widget_path_iter_set_object_name(path, -1, "paned");
+        sc1 = gtk_style_context_new();
+        gtk_style_context_set_path(sc1, path);
+        gtk_widget_path_append_type(path, G_TYPE_NONE);
+        gtk_widget_path_iter_set_object_name(path, -1, "separator");
+        gtk_style_context_set_path(sc, path);
+        gtk_style_context_set_parent(sc, sc1);
     }
+    else
+#endif
+    {
+        gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PANE_SEPARATOR);
+        gtk_style_context_set_path(sc, path);
+    }
+
+    gtk_style_context_set_state(sc,
+        flags & wxCONTROL_CURRENT ? GTK_STATE_FLAG_PRELIGHT : GTK_STATE_FLAG_NORMAL);
+    gtk_render_handle(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
+
+    gtk_widget_path_unref(path);
+    g_object_unref(sc);
+    if (sc1)
+        g_object_unref(sc1);
 #else
     GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
     if (gdk_window == NULL)
