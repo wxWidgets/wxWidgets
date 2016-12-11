@@ -815,6 +815,30 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
     if (drawable == NULL)
         return;
 
+#ifdef __WXGTK3__
+    int state = GTK_STATE_FLAG_NORMAL;
+    if (flags & wxCONTROL_FOCUSED)
+        state = GTK_STATE_FLAG_FOCUSED;
+    if (flags & wxCONTROL_DISABLED)
+        state = GTK_STATE_FLAG_INSENSITIVE;
+
+    GtkWidgetPath* path = gtk_widget_path_new();
+    GtkStyleContext* sc = gtk_style_context_new();
+    gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
+#if GTK_CHECK_VERSION(3,20,0)
+    if (gtk_check_version(3,20,0) == NULL)
+        gtk_widget_path_iter_set_object_name(path, -1, "entry");
+#endif
+    gtk_widget_path_iter_add_class(path, -1, "entry");
+    gtk_style_context_set_path(sc, path);
+
+    gtk_style_context_set_state(sc, GtkStateFlags(state));
+    gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_render_frame(sc, drawable, rect.x, rect.y, rect.width, rect.height);
+
+    gtk_widget_path_unref(path);
+    g_object_unref(sc);
+#else
     GtkWidget* entry = wxGTKPrivate::GetTextEntryWidget();
 
     GtkStateType state = GTK_STATE_NORMAL;
@@ -823,14 +847,6 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
 
     gtk_widget_set_can_focus(entry, (flags & wxCONTROL_CURRENT) != 0);
 
-#ifdef __WXGTK3__
-    GtkStyleContext* sc = gtk_widget_get_style_context(entry);
-    gtk_style_context_save(sc);
-    gtk_style_context_set_state(sc, stateTypeToFlags[state]);
-    gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
-    gtk_render_frame(sc, drawable, rect.x, rect.y, rect.width, rect.height);
-    gtk_style_context_restore(sc);
-#else
     gtk_paint_shadow
     (
         gtk_widget_get_style(entry),
