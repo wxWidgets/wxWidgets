@@ -6181,15 +6181,6 @@ wxAccStatus wxDataViewCtrlAccessible::GetState(int childId, long* state)
                 }
             }
         }
-
-        wxDataViewItem item = dvWnd->GetItemByRow(rowNum);
-        if ( item.IsOk() )
-        {
-            if ( !dvWnd->HasEditableColumn(item) )
-            {
-                st |= wxACC_STATE_SYSTEM_READONLY;
-            }
-        }
     }
     *state = st;
     return wxACC_OK;
