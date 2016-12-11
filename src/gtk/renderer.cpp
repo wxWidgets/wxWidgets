@@ -278,35 +278,52 @@ void
 wxRendererGTK::DrawTreeItemButton(wxWindow* win,
                                   wxDC& dc, const wxRect& rect, int flags)
 {
-    GtkWidget *tree = wxGTKPrivate::GetTreeWidget();
+    wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    if (drawable == NULL)
+        return;
 
-    GtkStateType state;
-    if ( flags & wxCONTROL_CURRENT )
-        state = GTK_STATE_PRELIGHT;
-    else
-        state = GTK_STATE_NORMAL;
+    GtkWidget *tree = wxGTKPrivate::GetTreeWidget();
 
     int x_diff = 0;
     if (win->GetLayoutDirection() == wxLayout_RightToLeft)
         x_diff = rect.width;
 
 #ifdef __WXGTK3__
-    cairo_t* cr = wxGetGTKDrawable(win, dc);
-    if (cr)
+    int state = GTK_STATE_FLAG_NORMAL;
+    if (flags & wxCONTROL_EXPANDED)
     {
-        gtk_widget_set_state_flags(tree, stateTypeToFlags[state], true);
-        GtkStyleContext* sc = gtk_widget_get_style_context(tree);
-        gtk_render_expander(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
+        state = GTK_STATE_FLAG_ACTIVE;
+        if (gtk_check_version(3,14,0) == NULL)
+            state = GTK_STATE_FLAG_CHECKED;
     }
+    if (flags & wxCONTROL_CURRENT)
+        state |= GTK_STATE_FLAG_PRELIGHT;
+
+    int expander_size;
+    gtk_widget_style_get(tree, "expander-size", &expander_size, NULL);
+    // +1 to match GtkTreeView behavior
+    expander_size++;
+    const int x = rect.x + (rect.width - expander_size) / 2;
+    const int y = rect.y + (rect.width - expander_size) / 2;
+
+    GtkStyleContext* sc = gtk_widget_get_style_context(tree);
+    gtk_style_context_save(sc);
+    gtk_style_context_set_state(sc, GtkStateFlags(state));
+    gtk_style_context_add_class(sc, GTK_STYLE_CLASS_EXPANDER);
+    gtk_render_expander(sc, drawable, x - x_diff, y, expander_size, expander_size);
+    gtk_style_context_restore(sc);
 #else
+    GtkStateType state;
+    if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
+    else
+        state = GTK_STATE_NORMAL;
+
     // x and y parameters specify the center of the expander
-    GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
-    if (gdk_window == NULL)
-        return;
     gtk_paint_expander
     (
         gtk_widget_get_style(tree),
-        gdk_window,
+        drawable,
         state,
         NULL,
         tree,
