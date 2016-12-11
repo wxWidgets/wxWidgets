@@ -28,6 +28,7 @@
 #include "wx/access.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/msw/wrapwin.h"
     #include "wx/window.h"
     #include "wx/log.h"
@@ -1823,12 +1824,36 @@ IAccessible *wxAccessible::GetIAccessibleStd()
     return NULL;
 }
 
+namespace
+{
+
+struct SendNotification
+{
+    SendNotification(DWORD eventType_, HWND hwnd_, LONG idObject_, LONG idChild_)
+        : eventType(eventType_), hwnd(hwnd_), idObject(idObject_), idChild(idChild_)
+    {}
+
+    void operator()(void)
+    {
+        ::NotifyWinEvent(eventType, hwnd, idObject, idChild);
+    }
+
+    DWORD eventType;
+    HWND hwnd;
+    LONG idObject, idChild;
+};
+
+} // anonymous namespace
+
 // Sends an event when something changes in an accessible object.
 void wxAccessible::NotifyEvent(int eventType, wxWindow* window, wxAccObject objectType,
                         int objectId)
 {
-    ::NotifyWinEvent((DWORD) eventType, (HWND) window->GetHWND(),
-        (LONG) objectType, (LONG) objectId);
+    // send the notification in idle time to be sure it is sent after the change
+    // was fully done in wx code
+    const HWND hwnd = (HWND)window->GetHWND();
+    SendNotification delayed((DWORD)eventType, hwnd, (LONG)objectType, (LONG)objectId);
+    wxTheApp->CallAfter(delayed);
 }
 
 // Utilities
