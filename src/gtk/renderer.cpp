@@ -226,7 +226,67 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 
 #ifdef __WXGTK3__
     cairo_t* cr = wxGetGTKDrawable(win, dc);
-    if (cr)
+    if (cr == NULL)
+        return 0;
+
+#if GTK_CHECK_VERSION(3,20,0)
+    if (gtk_check_version(3,20,0) == NULL)
+    {
+        GtkWidgetPath* path = gtk_widget_path_new();
+        GtkStyleContext* parent;
+        GtkStyleContext* sc = gtk_style_context_new();
+
+        gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+        gtk_widget_path_iter_set_object_name(path, -1, "window");
+        gtk_widget_path_iter_add_class(path, -1, "background");
+        gtk_style_context_set_path(sc, path);
+
+        parent = sc;
+        sc = gtk_style_context_new();
+        gtk_widget_path_append_type(path, GTK_TYPE_TREE_VIEW);
+        gtk_widget_path_iter_set_object_name(path, -1, "treeview");
+        gtk_widget_path_iter_add_class(path, -1, "view");
+        gtk_style_context_set_path(sc, path);
+        gtk_style_context_set_parent(sc, parent);
+        g_object_unref(parent);
+
+        parent = sc;
+        sc = gtk_style_context_new();
+        gtk_widget_path_append_type(path, G_TYPE_NONE);
+        gtk_widget_path_iter_set_object_name(path, -1, "header");
+        gtk_style_context_set_path(sc, path);
+        gtk_style_context_set_parent(sc, parent);
+        g_object_unref(parent);
+
+        parent = sc;
+        sc = gtk_style_context_new();
+        int pos = 1;
+        if (flags & wxCONTROL_SPECIAL)
+            pos = 0;
+        if (flags & wxCONTROL_DIRTY)
+            pos = 2;
+        GtkWidgetPath* siblings = gtk_widget_path_new();
+        gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
+        gtk_widget_path_iter_set_object_name(siblings, -1, "button");
+        gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
+        gtk_widget_path_iter_set_object_name(siblings, -1, "button");
+        gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
+        gtk_widget_path_iter_set_object_name(siblings, -1, "button");
+        gtk_widget_path_append_with_siblings(path, siblings, pos);
+        gtk_widget_path_unref(siblings);
+        gtk_style_context_set_path(sc, path);
+        gtk_style_context_set_parent(sc, parent);
+        g_object_unref(parent);
+        gtk_widget_path_unref(path);
+
+        gtk_style_context_set_state(sc, stateTypeToFlags[state]);
+        gtk_render_background(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
+        gtk_render_frame(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
+
+        g_object_unref(sc);
+    }
+    else
+#endif
     {
         GtkStyleContext* sc = gtk_widget_get_style_context(button);
         gtk_style_context_save(sc);
