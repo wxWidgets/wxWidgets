@@ -921,7 +921,9 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
     if ( flags & wxEXEC_SYNC )
     {
         // handler may be !NULL for capturing program output, but we don't use
-        // it wxExecuteData struct in this case
+        // it in wxExecuteData struct in this case because it's only needed
+        // there for calling OnTerminate() on it and we don't do this when
+        // executing synchronously
         data->handler = NULL;
     }
     else
