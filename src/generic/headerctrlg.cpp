@@ -485,9 +485,6 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxAutoBufferedPaintDC dc(this);
 
-    dc.SetBackground(GetBackgroundColour());
-    dc.Clear();
-
     // account for the horizontal scrollbar offset in the parent window
     dc.SetDeviceOrigin(m_scrollOffset, 0);
 
@@ -533,7 +530,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         params.m_labelAlignment = col.GetAlignment();
 
 #ifdef __WXGTK__
-        if (i == count-1)
+        if (i == count-1 && xpos + colWidth >= w)
         {
 //            colWidth = wxMax( colWidth, vw - xpos );
             state |= wxCONTROL_DIRTY;
@@ -551,6 +548,14 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                                 );
 
         xpos += colWidth;
+    }
+    if (xpos < w)
+    {
+        int state = wxCONTROL_DIRTY;
+        if (!IsEnabled())
+            state |= wxCONTROL_DISABLED;
+        wxRendererNative::Get().DrawHeaderButton(
+            this, dc, wxRect(xpos, 0, w - xpos, h), state);
     }
 }
 
