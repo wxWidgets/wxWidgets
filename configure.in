@@ -7413,17 +7413,18 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
             dnl AVKit is only available since OS X 10.9
             old_CPPFLAGS="$CPPFLAGS"
             CPPFLAGS="-x objective-c++ $CPPFLAGS"
-            AC_MSG_CHECKING([if AVKit is availble])
+            AC_MSG_CHECKING([if AVKit is available])
             AC_TRY_COMPILE(
                 [#include "AvailabilityMacros.h"],
                 [
-                    #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+                    #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
                         // AVKit available
                     #else
                         choke me
                     #endif
                 ],
-                GST_LIBS="$GST_LIBS -framework AVKit"
+                [GST_LIBS="$GST_LIBS -framework AVKit"; AC_MSG_RESULT(yes)],
+                AC_MSG_RESULT(no)
             )
             CPPFLAGS="$old_CPPFLAGS"
         fi
