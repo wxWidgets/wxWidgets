@@ -918,6 +918,10 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
     data->dwProcessId = pi.dwProcessId;
     data->hWnd        = hwnd;
     data->state       = (flags & wxEXEC_SYNC) != 0;
+
+    if ( handler )
+        handler->SetPid(pi.dwProcessId);
+
     if ( flags & wxEXEC_SYNC )
     {
         // handler may be !NULL for capturing program output, but we don't use
@@ -930,9 +934,6 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
     {
         // may be NULL or not
         data->handler = handler;
-
-        if (handler)
-            handler->SetPid(pi.dwProcessId);
     }
 
     DWORD tid;
