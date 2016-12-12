@@ -1083,7 +1083,8 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec "L"
-#elif defined(__MINGW32__) && (__USE_MINGW_ANSI_STDIO != 1)
+#elif defined(__MINGW32__) && \
+    (defined(__USE_MINGW_ANSI_STDIO) && (__USE_MINGW_ANSI_STDIO != 1))
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
     #define wxLongLongFmtSpec "I64"
