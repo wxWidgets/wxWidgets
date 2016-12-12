@@ -5117,9 +5117,7 @@ int wxWindowGTK::GetScrollRange( int orient ) const
 //   difference due to possible inexactness in floating point arithmetic
 static inline bool IsScrollIncrement(double increment, double x)
 {
-    wxASSERT(increment >= 0);
-    if ( increment == 0. )
-        return false;
+    wxASSERT(increment > 0);
     const double tolerance = 1.0 / 1024;
     return fabs(increment - fabs(x)) < tolerance;
 }
@@ -5130,14 +5128,18 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
 
     const int barIndex = range == m_scrollBar[1];
 
-    const double value = gtk_range_get_value(range);
+    GtkAdjustment* adj = gtk_range_get_adjustment(range);
+    const double value = gtk_adjustment_get_value(adj);
 
     // save previous position
     const double oldPos = m_scrollPos[barIndex];
     // update current position
     m_scrollPos[barIndex] = value;
     // If event should be ignored, or integral position has not changed
-    if (g_blockEventsOnDrag || wxRound(value) == wxRound(oldPos))
+    // or scrollbar is disabled (webkitgtk is known to cause a "value-changed"
+    // by setting the GtkAdjustment to all zeros)
+    if (g_blockEventsOnDrag || wxRound(value) == wxRound(oldPos) ||
+        gtk_adjustment_get_upper(adj) <= gtk_adjustment_get_page_size(adj))
     {
         return wxEVT_NULL;
     }
@@ -5149,7 +5151,6 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
         const double diff = value - oldPos;
         const bool isDown = diff > 0;
 
-        GtkAdjustment* adj = gtk_range_get_adjustment(range);
         if (IsScrollIncrement(gtk_adjustment_get_step_increment(adj), diff))
         {
             eventType = isDown ? wxEVT_SCROLL_LINEDOWN : wxEVT_SCROLL_LINEUP;
