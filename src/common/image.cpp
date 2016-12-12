@@ -1005,23 +1005,48 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
 
                     // Create a sum of all velues for each color channel
                     // adjusted for the pixel's calculated weight
-                    sum_r += src_data[src_pixel_index * 3 + 0] * pixel_weight;
-                    sum_g += src_data[src_pixel_index * 3 + 1] * pixel_weight;
-                    sum_b += src_data[src_pixel_index * 3 + 2] * pixel_weight;
                     if ( src_alpha )
-                        sum_a += src_alpha[src_pixel_index] * pixel_weight;
+                    {
+                        const unsigned char a = src_alpha[src_pixel_index];
+                        sum_r += src_data[src_pixel_index * 3 + 0] * pixel_weight * a;
+                        sum_g += src_data[src_pixel_index * 3 + 1] * pixel_weight * a;
+                        sum_b += src_data[src_pixel_index * 3 + 2] * pixel_weight * a;
+                        sum_a += a * pixel_weight;
+                    }
+                    else
+                    {
+                        sum_r += src_data[src_pixel_index * 3 + 0] * pixel_weight;
+                        sum_g += src_data[src_pixel_index * 3 + 1] * pixel_weight;
+                        sum_b += src_data[src_pixel_index * 3 + 2] * pixel_weight;
+                    }
                 }
             }
 
             // Put the data into the destination image.  The summed values are
             // of double data type and are rounded here for accuracy
-            dst_data[0] = (unsigned char)(sum_r + 0.5);
-            dst_data[1] = (unsigned char)(sum_g + 0.5);
-            dst_data[2] = (unsigned char)(sum_b + 0.5);
-            dst_data += 3;
-
             if ( src_alpha )
+            {
+                if ( sum_a )
+                {
+                     dst_data[0] = (unsigned char)(sum_r / sum_a + 0.5);
+                     dst_data[1] = (unsigned char)(sum_g / sum_a + 0.5);
+                     dst_data[2] = (unsigned char)(sum_b / sum_a + 0.5);
+                }
+                else
+                {
+                    dst_data[0] = 0;
+                    dst_data[1] = 0;
+                    dst_data[2] = 0;
+                }
                 *dst_alpha++ = (unsigned char)sum_a;
+            }
+            else
+            {
+                dst_data[0] = (unsigned char)(sum_r + 0.5);
+                dst_data[1] = (unsigned char)(sum_g + 0.5);
+                dst_data[2] = (unsigned char)(sum_b + 0.5);
+            }
+            dst_data += 3;
         }
     }
 
