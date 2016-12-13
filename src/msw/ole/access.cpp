@@ -181,6 +181,7 @@ class wxIAccessible : public IAccessible
 {
 public:
     wxIAccessible(wxAccessible *pAccessible);
+    virtual ~wxIAccessible() {}
 
     // Called to indicate object should prepare to be deleted.
     void Quiesce();
