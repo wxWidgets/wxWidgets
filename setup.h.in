@@ -544,7 +544,11 @@
 
 #define wxUSE_DRAG_AND_DROP 0
 
+#ifdef __WXMSW__
+#define wxUSE_ACCESSIBILITY 1
+#else
 #define wxUSE_ACCESSIBILITY 0
+#endif
 
 
 #define wxUSE_SNGLINST_CHECKER  0
