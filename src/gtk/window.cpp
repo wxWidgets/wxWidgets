@@ -2167,21 +2167,6 @@ gtk_window_grab_broken( GtkWidget*,
 #endif
 
 //-----------------------------------------------------------------------------
-// "style_set"/"style_updated"
-//-----------------------------------------------------------------------------
-
-#ifdef __WXGTK3__
-static void style_updated(GtkWidget*, wxWindow* win)
-#else
-static void style_updated(GtkWidget*, GtkStyle*, wxWindow* win)
-#endif
-{
-    wxSysColourChangedEvent event;
-    event.SetEventObject(win);
-    win->GTKProcessEvent(event);
-}
-
-//-----------------------------------------------------------------------------
 // "unrealize"
 //-----------------------------------------------------------------------------
 
@@ -2283,21 +2268,6 @@ void wxWindowGTK::GTKHandleRealized()
     GTKProcessEvent( event );
 
     GTKUpdateCursor(false, true);
-
-    if (m_wxwindow && isTopLevel)
-    {
-        // attaching to style changed signal after realization avoids initial
-        // changes we don't care about
-        const gchar *detailed_signal =
-#ifdef __WXGTK3__
-            "style_updated";
-#else
-            "style_set";
-#endif
-        g_signal_connect(m_wxwindow,
-            detailed_signal,
-            G_CALLBACK(style_updated), this);
-    }
 }
 
 void wxWindowGTK::GTKHandleUnrealize()
@@ -2308,12 +2278,6 @@ void wxWindowGTK::GTKHandleUnrealize()
     {
         if (m_imContext)
             gtk_im_context_set_client_window(m_imContext, NULL);
-
-        if (IsTopLevel())
-        {
-            g_signal_handlers_disconnect_by_func(
-                m_wxwindow, (void*)style_updated, this);
-        }
     }
 }
 
@@ -4599,24 +4563,7 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
 void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     GtkWidget* widget = m_wxwindow ? m_wxwindow : m_widget;
-
-    // block the signal temporarily to avoid sending
-    // wxSysColourChangedEvents when we change the colours ourselves
-    bool unblock = false;
-    if (m_wxwindow && IsTopLevel())
-    {
-        unblock = true;
-        g_signal_handlers_block_by_func(
-            m_wxwindow, (void*)style_updated, this);
-    }
-
     GTKApplyStyle(widget, style);
-
-    if (unblock)
-    {
-        g_signal_handlers_unblock_by_func(
-            m_wxwindow, (void*)style_updated, this);
-    }
 }
 
 void wxWindowGTK::GTKApplyStyle(GtkWidget* widget, GtkRcStyle* WXUNUSED_IN_GTK3(style))

@@ -440,6 +440,19 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+// "notify::gtk-theme-name" from GtkSettings
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void notify_gtk_theme_name(GObject*, GParamSpec*, wxTopLevelWindowGTK* win)
+{
+    wxSysColourChangedEvent event;
+    event.SetEventObject(win);
+    win->HandleWindowEvent(event);
+}
+}
+
+//-----------------------------------------------------------------------------
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
 {
@@ -780,6 +793,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         gtk_widget_set_size_request(m_widget, w, h);
     }
 
+    g_signal_connect(gtk_settings_get_default(), "notify::gtk-theme-name",
+        G_CALLBACK(notify_gtk_theme_name), this);
+
     return true;
 }
 
@@ -808,6 +824,9 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 
     if (g_activeFrame == this)
         g_activeFrame = NULL;
+
+    g_signal_handlers_disconnect_by_func(
+        gtk_settings_get_default(), (void*)notify_gtk_theme_name, this);
 }
 
 bool wxTopLevelWindowGTK::EnableCloseButton( bool enable )
