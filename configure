@@ -11329,6 +11329,10 @@ fi
 
 
 
+if test "$wxUSE_MSW" = 1 ; then
+    DEFAULT_wxUSE_ACCESSIBILITY=yes
+fi
+
 
           enablestring=
           defaultval=$wxUSE_ALL_FEATURES
