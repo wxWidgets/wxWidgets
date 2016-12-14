@@ -2250,9 +2250,8 @@ void wxWindowGTK::GTKHandleRealized()
     }
 #endif
 
-    const bool isTopLevel = IsTopLevel();
 #if GTK_CHECK_VERSION(3,8,0)
-    if (isTopLevel && gtk_check_version(3,8,0) == NULL)
+    if (IsTopLevel() && gtk_check_version(3,8,0) == NULL)
     {
         GdkFrameClock* clock = gtk_widget_get_frame_clock(m_widget);
         if (clock &&
