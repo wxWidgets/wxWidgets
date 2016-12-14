@@ -1124,11 +1124,11 @@ bool wxRegKey::GetFirstValue(wxString& strValueName, long& lIndex)
 
 bool wxRegKey::GetNextValue(wxString& strValueName, long& lIndex) const
 {
-  wxASSERT( IsOpened() );
+    wxASSERT( IsOpened() );
 
-  // are we already at the end of enumeration?
-  if ( lIndex == -1 )
-    return false;
+    // are we already at the end of enumeration?
+    if ( lIndex == -1 )
+        return false;
 
     wxChar  szValueName[1024];                  // @@ use RegQueryInfoKey...
     DWORD dwValueLen = WXSIZEOF(szValueName);
