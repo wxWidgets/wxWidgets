@@ -14,6 +14,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/toplevel.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -958,3 +959,23 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
             return false;
     }
 }
+
+#ifdef __WXGTK3__
+class wxSystemSettingsModule: public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit();
+    wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
+};
+wxIMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule);
+
+void wxSystemSettingsModule::OnExit()
+{
+    GtkSettings* settings = gtk_settings_get_default();
+    g_signal_handlers_disconnect_by_func(settings,
+        (void*)notify_gtk_theme_name, NULL);
+    g_signal_handlers_disconnect_by_func(settings,
+        (void*)notify_gtk_font_name, NULL);
+}
+#endif
