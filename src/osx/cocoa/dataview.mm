@@ -2874,6 +2874,12 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 
 void wxDataViewRenderer::SetEnabled(bool enabled)
 {
+    // setting the appearance to disabled grey should only be done for
+    // the active cells which are disabled, not for the cells which can
+    // never be edited at all
+    if ( GetMode() == wxDATAVIEW_CELL_INERT )
+        enabled = true;
+
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
