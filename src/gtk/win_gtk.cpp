@@ -327,7 +327,10 @@ GType wxPizza::type()
     {
         type = g_type_from_name("wxPizza");
         if (type)
+        {
+            parent_class = GTK_WIDGET_CLASS(g_type_class_peek_parent(g_type_class_peek(type)));
             return type;
+        }
 
         const GTypeInfo info = {
             sizeof(wxPizzaClass),
