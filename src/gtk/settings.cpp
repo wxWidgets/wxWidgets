@@ -33,14 +33,16 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
 static wxFont gs_fontSystem;
 
 #ifndef __WXGTK3__
+static GtkWidget* gs_tlw_parent;
+
 static GtkContainer* ContainerWidget()
 {
     static GtkContainer* s_widget;
     if (s_widget == NULL)
     {
         s_widget = GTK_CONTAINER(gtk_fixed_new());
-        GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-        gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(s_widget));
+        gs_tlw_parent = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        gtk_container_add(GTK_CONTAINER(gs_tlw_parent), GTK_WIDGET(s_widget));
     }
     return s_widget;
 }
@@ -1010,7 +1012,6 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
     }
 }
 
-#ifdef __WXGTK3__
 class wxSystemSettingsModule: public wxModule
 {
 public:
@@ -1022,5 +1023,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule);
 
 void wxSystemSettingsModule::OnExit()
 {
-}
+#ifdef __WXGTK3__
+#else
+    if (gs_tlw_parent)
+        gtk_widget_destroy(gs_tlw_parent);
 #endif
+}
