@@ -334,10 +334,6 @@ GType wxPizza::type()
     static GType type;
     if (type == 0)
     {
-        type = g_type_from_name("wxPizza");
-        if (type)
-            return type;
-
         const GTypeInfo info = {
             sizeof(wxPizzaClass),
             NULL, NULL,
