@@ -281,6 +281,4 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(WidgetsCleanupModule, wxModule);
 
-static WidgetsCleanupModule gs_widgetsCleanupModule;
-
 } // wxGTKPrivate namespace
