@@ -230,8 +230,11 @@ public:
     // get the HWND to be used as parent of this window with CreateWindow()
     virtual WXHWND MSWGetParent() const;
 
-    // get the Win32 window class name used by all wxWindow objects by default
-    static const wxChar *MSWGetRegisteredClassName();
+    // Return the name of the Win32 class that should be used by this wxWindow
+    // object, taking into account wxFULL_REPAINT_ON_RESIZE style (if it's not
+    // specified, the wxApp::GetNoRedrawClassSuffix()-suffixed version of the
+    // class is used).
+    const wxChar *GetMSWClassName() const;
 
     // creates the window of specified Windows class with given style, extended
     // style, title and geometry (default values

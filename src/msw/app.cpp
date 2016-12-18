@@ -112,6 +112,13 @@ struct ClassRegInfo
     {
     }
 
+    // Return the appropriate string depending on the presence of
+    // RegClass_ReturnNR bit in the flags.
+    const wxChar* GetRequestedName(int flags) const
+    {
+        return (flags & wxApp::RegClass_ReturnNR ? regnameNR : regname).t_str();
+    }
+
     // the name of the registered class with and without CS_[HV]REDRAW styles
     wxString regname;
     wxString regnameNR;
@@ -630,13 +637,14 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 /* static */
 const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
                                             int bgBrushCol,
-                                            int extraStyles)
+                                            int extraStyles,
+                                            int flags)
 {
     const size_t count = gs_regClassesInfo.size();
     for ( size_t n = 0; n < count; n++ )
     {
         if ( gs_regClassesInfo[n].regname == name )
-            return gs_regClassesInfo[n].regname.c_str();
+            return gs_regClassesInfo[n].GetRequestedName(flags);
     }
 
     // we need to register this class
@@ -675,7 +683,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     // function returns (it could be invalidated later if new elements are
     // added to the vector and it's reallocated but this shouldn't matter as
     // this pointer should be used right now, not stored)
-    return gs_regClassesInfo.back().regname.t_str();
+    return gs_regClassesInfo.back().GetRequestedName(flags);
 }
 
 bool wxApp::IsRegisteredClassName(const wxString& name)
