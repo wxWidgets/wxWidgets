@@ -41,6 +41,7 @@ static GtkContainer* ContainerWidget()
     if (s_widget == NULL)
     {
         s_widget = GTK_CONTAINER(gtk_fixed_new());
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gs_tlw_parent = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         gtk_container_add(GTK_CONTAINER(gs_tlw_parent), GTK_WIDGET(s_widget));
     }
@@ -60,6 +61,7 @@ static GtkWidget* ButtonWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_button_new();
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
         gtk_widget_ensure_style(s_widget);
         g_signal_connect(s_widget, "style_set", G_CALLBACK(style_set), NULL);
@@ -74,6 +76,7 @@ static GtkWidget* ListWidget()
     {
         s_widget = gtk_tree_view_new_with_model(
             GTK_TREE_MODEL(gtk_list_store_new(1, G_TYPE_INT)));
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
         gtk_widget_ensure_style(s_widget);
     }
@@ -86,6 +89,7 @@ static GtkWidget* TextCtrlWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_text_view_new();
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
         gtk_widget_ensure_style(s_widget);
     }
@@ -98,6 +102,7 @@ static GtkWidget* MenuItemWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_menu_item_new();
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
         gtk_widget_ensure_style(s_widget);
     }
@@ -110,6 +115,7 @@ static GtkWidget* MenuBarWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_menu_bar_new();
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
         gtk_widget_ensure_style(s_widget);
     }
@@ -122,6 +128,9 @@ static GtkWidget* ToolTipWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_window_new(GTK_WINDOW_POPUP);
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
+        g_signal_connect_swapped(ContainerWidget(), "destroy",
+            G_CALLBACK(gtk_widget_destroy), s_widget);
         const char* name = "gtk-tooltip";
         if (gtk_check_version(2, 11, 0))
             name = "gtk-tooltips";
@@ -1031,6 +1040,9 @@ void wxSystemSettingsModule::OnExit()
         (void*)notify_gtk_font_name, NULL);
 #else
     if (gs_tlw_parent)
+    {
         gtk_widget_destroy(gs_tlw_parent);
+        gs_tlw_parent = NULL;
+    }
 #endif
 }
