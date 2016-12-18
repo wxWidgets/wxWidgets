@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
     #ifdef __WXMSW__
+        #include "wx/app.h"          // GetRegisteredClassName()
         #include "wx/msw/private.h"
         #include "wx/msw/wrapwin.h"
         #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
@@ -1689,9 +1690,26 @@ wxBEGIN_EVENT_TABLE(wxDataViewMainWindow,wxWindow)
 wxEND_EVENT_TABLE()
 
 wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID id,
-    const wxPoint &pos, const wxSize &size, const wxString &name ) :
-    wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name )
+    const wxPoint &pos, const wxSize &size, const wxString &name )
 {
+    // We want to use a specific class name for this window in wxMSW to make it
+    // possible to configure screen readers to handle it specifically.
+#ifdef __WXMSW__
+    CreateUsingMSWClass
+    (
+      wxApp::GetRegisteredClassName
+             (
+                  wxT("wxDataView"),
+                  -1, // no specific background brush
+                  0, // no special styles neither
+                  wxApp::RegClass_OnlyNR
+             ),
+      parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name
+    );
+#else
+    Create( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name )
+#endif
+
     SetOwner( parent );
 
     m_editorRenderer = NULL;
