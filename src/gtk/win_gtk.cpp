@@ -325,6 +325,13 @@ GType wxPizza::type()
     static GType type;
     if (type == 0)
     {
+        const char* name = "wxPizza";
+        char buf[30];
+        for (unsigned i = 0; g_type_from_name(name); i++)
+        {
+            g_snprintf(buf, sizeof(buf), "wxPizza%u", i);
+            name = buf;
+        }
         const GTypeInfo info = {
             sizeof(wxPizzaClass),
             NULL, NULL,
@@ -334,7 +341,7 @@ GType wxPizza::type()
             NULL, NULL
         };
         type = g_type_register_static(
-            GTK_TYPE_FIXED, "wxPizza", &info, GTypeFlags(0));
+            GTK_TYPE_FIXED, name, &info, GTypeFlags(0));
 #ifdef __WXGTK3__
         const GInterfaceInfo interface_info = { NULL, NULL, NULL };
         g_type_add_interface_static(type, GTK_TYPE_SCROLLABLE, &interface_info);

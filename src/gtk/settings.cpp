@@ -1024,6 +1024,11 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule);
 void wxSystemSettingsModule::OnExit()
 {
 #ifdef __WXGTK3__
+    GtkSettings* settings = gtk_settings_get_default();
+    g_signal_handlers_disconnect_by_func(settings,
+        (void*)notify_gtk_theme_name, NULL);
+    g_signal_handlers_disconnect_by_func(settings,
+        (void*)notify_gtk_font_name, NULL);
 #else
     if (gs_tlw_parent)
         gtk_widget_destroy(gs_tlw_parent);
