@@ -106,10 +106,22 @@ extern void wxSetKeyboardHook(bool doIt);
 // see http://article.gmane.org/gmane.comp.lib.wxwidgets.devel/110282
 struct ClassRegInfo
 {
-    ClassRegInfo(const wxChar *name)
-        : regname(name),
-          regnameNR(regname + wxApp::GetNoRedrawClassSuffix())
+    ClassRegInfo(const wxChar *name, int flags)
     {
+        if ( (flags & wxApp::RegClass_OnlyNR) == wxApp::RegClass_OnlyNR )
+        {
+            // We don't register the "normal" variant, so leave its name empty
+            // to indicate that it's not used and use the given name for the
+            // class that we do register: we don't need the "NR" suffix to
+            // distinguish it in this case as there is only a single variant.
+            regnameNR = name;
+        }
+        else // Register both normal and NR variants.
+        {
+            // Here we use a special suffix to make the class names unique.
+            regname = name;
+            regnameNR = regname + wxApp::GetNoRedrawClassSuffix();
+        }
     }
 
     // Return the appropriate string depending on the presence of
@@ -643,7 +655,8 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     const size_t count = gs_regClassesInfo.size();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( gs_regClassesInfo[n].regname == name )
+        if ( gs_regClassesInfo[n].regname == name ||
+                gs_regClassesInfo[n].regnameNR == name )
             return gs_regClassesInfo[n].GetRequestedName(flags);
     }
 
@@ -658,13 +671,16 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | extraStyles;
 
 
-    ClassRegInfo regClass(name);
-    wndclass.lpszClassName = regClass.regname.t_str();
-    if ( !::RegisterClass(&wndclass) )
+    ClassRegInfo regClass(name, flags);
+    if ( !regClass.regname.empty() )
     {
-        wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
-                       regClass.regname));
-        return NULL;
+        wndclass.lpszClassName = regClass.regname.t_str();
+        if ( !::RegisterClass(&wndclass) )
+        {
+            wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
+                           regClass.regname));
+            return NULL;
+        }
     }
 
     wndclass.style &= ~(CS_HREDRAW | CS_VREDRAW);
@@ -705,10 +721,13 @@ void wxApp::UnregisterWindowClasses()
     for ( size_t n = 0; n < count; n++ )
     {
         const ClassRegInfo& regClass = gs_regClassesInfo[n];
-        if ( !::UnregisterClass(regClass.regname.c_str(), wxGetInstance()) )
+        if ( !regClass.regname.empty() )
         {
-            wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
-                           regClass.regname));
+            if ( !::UnregisterClass(regClass.regname.c_str(), wxGetInstance()) )
+            {
+                wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
+                               regClass.regname));
+            }
         }
 
         if ( !::UnregisterClass(regClass.regnameNR.c_str(), wxGetInstance()) )

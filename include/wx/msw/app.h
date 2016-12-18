@@ -60,7 +60,14 @@ public:
         RegClass_Default = 0,
 
         // Return the name with the GetNoRedrawClassSuffix() appended to it.
-        RegClass_ReturnNR = 1
+        RegClass_ReturnNR = 1,
+
+        // Don't register the class with CS_[HV]REDRAW styles. This is useful
+        // for internal windows for which we can guarantee that they will be
+        // never created with wxFULL_REPAINT_ON_RESIZE flag.
+        //
+        // Notice that this implies RegClass_ReturnNR.
+        RegClass_OnlyNR = 3
     };
 
     // get the name of the registered Win32 class with the given (unique) base
