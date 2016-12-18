@@ -52,7 +52,23 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxPanelNameStr)
+    {
+        return CreateUsingMSWClass(GetMSWClassName(),
+                                   parent, id, pos, size, style, name);
+    }
+
+    // Non-portable, MSW-specific Create() variant allowing to create the
+    // window with a custom Windows class name. This can be useful to assign a
+    // custom Windows class, that can be recognized from the outside of the
+    // application, for windows of specific type.
+    bool CreateUsingMSWClass(const wxChar* classname,
+                             wxWindow *parent,
+                             wxWindowID id,
+                             const wxPoint& pos = wxDefaultPosition,
+                             const wxSize& size = wxDefaultSize,
+                             long style = 0,
+                             const wxString& name = wxPanelNameStr);
 
     // implement base class pure virtuals
     virtual void SetLabel(const wxString& label) wxOVERRIDE;

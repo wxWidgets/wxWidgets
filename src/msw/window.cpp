@@ -481,12 +481,13 @@ const wxChar *wxWindowMSW::GetMSWClassName() const
 }
 
 // real construction (Init() must have been called before!)
-bool wxWindowMSW::Create(wxWindow *parent,
-                         wxWindowID id,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         long style,
-                         const wxString& name)
+bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
+                                      wxWindow *parent,
+                                      wxWindowID id,
+                                      const wxPoint& pos,
+                                      const wxSize& size,
+                                      long style,
+                                      const wxString& name)
 {
     wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
 
@@ -512,7 +513,7 @@ bool wxWindowMSW::Create(wxWindow *parent,
         msflags |= WS_VISIBLE;
     }
 
-    if ( !MSWCreate(GetMSWClassName(), NULL, pos, size, msflags, exstyle) )
+    if ( !MSWCreate(classname, NULL, pos, size, msflags, exstyle) )
         return false;
 
     InheritAttributes();
