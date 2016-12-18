@@ -1533,7 +1533,7 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_MACCENTRALEUR:  ret = 10029; break;
         case wxFONTENCODING_MACCROATIAN:    ret = 10082; break;
         case wxFONTENCODING_MACICELANDIC:   ret = 10079; break;
-        case wxFONTENCODING_MACROMANIAN:    ret = 10009; break;
+        case wxFONTENCODING_MACROMANIAN:    ret = 10010; break;
 
         case wxFONTENCODING_ISO2022_JP:     ret = 50222; break;
 
