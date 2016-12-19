@@ -722,6 +722,7 @@ void wxTreeCtrl::Init()
     m_changingSelection = false;
     m_triggerStateImageClick = false;
     m_mouseUpDeselect = false;
+    m_pendingFreeze = false;
 
     // initialize the global array of events now as it can't be done statically
     // with the wxEVT_XXX values being allocated during run-time only
@@ -1533,6 +1534,10 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
         param->SetData(data);
         data->SetId(id);
     }
+
+    // If we're frozen and pending a freeze complete the freeze process now that we have an item
+    if (IsFrozen() && m_pendingFreeze)
+        DoFreeze();
 
     return wxTreeItemId(id);
 }
@@ -3895,42 +3900,33 @@ void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 // doesn't seem to do anything in other ones (e.g. under Windows 7 the tree
 // control keeps updating its scrollbars while the items are added to it,
 // resulting in horrible flicker when adding even a couple of dozen items).
-// So we resize it to the smallest possible size instead of freezing -- this
-// still flickers, but actually not as badly as it would if we didn't do it.
+// So we wait until at least one item (excluding virtual root) is added
 
 void wxTreeCtrl::DoFreeze()
 {
     if ( IsShown() )
     {
-        RECT rc;
-        ::GetWindowRect(GetHwnd(), &rc);
-        m_thawnSize = wxRectFromRECT(rc).GetSize();
+        m_pendingFreeze = true;
 
-        ::SetWindowPos(GetHwnd(), 0, 0, 0, 1, 1,
-                       SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW | SWP_NOACTIVATE);
+        // We can't freeze if we have no items added
+        wxTreeItemId root = GetRootItem();
+        if (!root.IsOk())
+            return;
+
+        // Ensure that the only item added isn't just a virtual root
+        // Must be an actual item
+        if (HasFlag(wxTR_HIDE_ROOT) && !HasChildren(root))
+            return;
+
+        m_pendingFreeze = false;
+        wxTreeCtrlBase::DoFreeze();
     }
 }
 
 void wxTreeCtrl::DoThaw()
 {
-    if ( IsShown() )
-    {
-        if ( m_thawnSize != wxDefaultSize )
-        {
-            ::SetWindowPos(GetHwnd(), 0, 0, 0, m_thawnSize.x, m_thawnSize.y,
-                           SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-        }
-    }
-}
-
-// We also need to override DoSetSize() to ensure that m_thawnSize is reset if
-// the window is resized while being frozen -- in this case, we need to avoid
-// resizing it back to its original, pre-freeze, size when it's thawed.
-void wxTreeCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    m_thawnSize = wxDefaultSize;
-
-    wxTreeCtrlBase::DoSetSize(x, y, width, height, sizeFlags);
+    if (!m_pendingFreeze)
+        wxTreeCtrlBase::DoThaw();
 }
 
 #endif // wxUSE_TREECTRL
