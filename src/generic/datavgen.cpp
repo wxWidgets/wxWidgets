@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
     #ifdef __WXMSW__
+        #include "wx/app.h"          // GetRegisteredClassName()
         #include "wx/msw/private.h"
         #include "wx/msw/wrapwin.h"
         #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
@@ -1706,7 +1707,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
       parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name
     );
 #else
-    wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name )
+    Create( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name )
 #endif
 
     SetOwner( parent );
