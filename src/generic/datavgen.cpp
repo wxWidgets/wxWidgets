@@ -6365,7 +6365,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetFocus(int* childId, wxAccessible** chil
     wxDataViewMainWindow* dvWnd = wxDynamicCast(dvCtrl->GetMainWindow(), wxDataViewMainWindow);
 
     const unsigned int row = dvWnd->GetCurrentRow();
-    if ( row != (unsigned int)childId-1 )
+    if ( row != (unsigned int)*childId-1 )
     {
         *childId = row+1;
         *child = NULL;
