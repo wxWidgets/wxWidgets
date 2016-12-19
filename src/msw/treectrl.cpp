@@ -1538,10 +1538,7 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     // If we've been waiting for an item to be added before freezing the
     // control, our wait is over.
     if ( m_pendingFreeze )
-    {
-        m_pendingFreeze = false;
         DoFreeze();
-    }
 
     return wxTreeItemId(id);
 }
@@ -3928,9 +3925,15 @@ void wxTreeCtrl::DoFreeze()
 
 void wxTreeCtrl::DoThaw()
 {
-    if ( !m_pendingFreeze )
-        wxTreeCtrlBase::DoThaw();
-    //else: we never froze the control in the first place
+    if ( m_pendingFreeze )
+    {
+        // We never froze the control in the first place, so no need to thaw
+        // it. But we do need to reset the flag for the next time.
+        m_pendingFreeze = false;
+        return;
+    }
+
+    wxTreeCtrlBase::DoThaw();
 }
 
 #endif // wxUSE_TREECTRL
