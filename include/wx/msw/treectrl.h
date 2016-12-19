@@ -330,7 +330,7 @@ private:
     // whether we need to deselect other items on mouse up
     bool m_mouseUpDeselect;
 
-    // whether we are waiting to freeze once the right conditions are met
+    // whether we are waiting to freeze once the control becomes non-empty
     bool m_pendingFreeze;
 
     friend class wxTreeItemIndirectData;

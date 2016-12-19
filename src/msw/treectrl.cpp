@@ -1535,9 +1535,13 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
         data->SetId(id);
     }
 
-    // If we're frozen and pending a freeze complete the freeze process now that we have an item
-    if (IsFrozen() && m_pendingFreeze)
+    // If we've been waiting for an item to be added before freezing the
+    // control, our wait is over.
+    if ( m_pendingFreeze )
+    {
+        m_pendingFreeze = false;
         DoFreeze();
+    }
 
     return wxTreeItemId(id);
 }
@@ -3895,12 +3899,11 @@ void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 // Update locking.
 // ----------------------------------------------------------------------------
 
-// Using WM_SETREDRAW with the native control is a bad idea as it's broken in
-// some Windows versions (see http://support.microsoft.com/kb/130611) and
-// doesn't seem to do anything in other ones (e.g. under Windows 7 the tree
-// control keeps updating its scrollbars while the items are added to it,
-// resulting in horrible flicker when adding even a couple of dozen items).
-// So we wait until at least one item (excluding virtual root) is added
+// MSDN article at http://support.microsoft.com/kb/130611 states that we
+// shouldn't use "WM_SETREDRAW <...> while adding items to the control", but it
+// seems like it's really trying to say that we shouldn't send WM_SETREDRAW to
+// the control when it's empty, so we need to wait until at least one item
+// (excluding virtual root) is added to it before really freezing it.
 
 void wxTreeCtrl::DoFreeze()
 {
@@ -3908,14 +3911,14 @@ void wxTreeCtrl::DoFreeze()
     {
         m_pendingFreeze = true;
 
-        // We can't freeze if we have no items added
+        // We can't freeze if we have no items added.
         wxTreeItemId root = GetRootItem();
-        if (!root.IsOk())
+        if ( !root.IsOk() )
             return;
 
-        // Ensure that the only item added isn't just a virtual root
-        // Must be an actual item
-        if (HasFlag(wxTR_HIDE_ROOT) && !HasChildren(root))
+        // Ensure that we have at least one actual item, virtual root doesn't
+        // count.
+        if ( HasFlag(wxTR_HIDE_ROOT) && !HasChildren(root) )
             return;
 
         m_pendingFreeze = false;
@@ -3925,8 +3928,9 @@ void wxTreeCtrl::DoFreeze()
 
 void wxTreeCtrl::DoThaw()
 {
-    if (!m_pendingFreeze)
+    if ( !m_pendingFreeze )
         wxTreeCtrlBase::DoThaw();
+    //else: we never froze the control in the first place
 }
 
 #endif // wxUSE_TREECTRL
