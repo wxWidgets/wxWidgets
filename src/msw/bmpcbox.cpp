@@ -212,6 +212,10 @@ void wxBitmapComboBox::RecreateControl()
     // Revert the old string value
     if ( !HasFlag(wxCB_READONLY) )
         ChangeValue(value);
+
+    // If disabled we'll have to disable it again after re-creating
+    if ( !IsEnabled() )
+        DoEnable(false);
 }
 
 wxBitmapComboBox::~wxBitmapComboBox()
