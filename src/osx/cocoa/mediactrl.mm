@@ -332,7 +332,7 @@ private:
     }
 }
 
-- (id) initWithFrame:(NSRect)rect player:(AVPlayer*) player
+- (id) initWithFrame:(NSRect)rect player:(wxAVPlayer*) player
 {
     if ( !(self=[super initWithFrame:rect]) )
         return nil;
