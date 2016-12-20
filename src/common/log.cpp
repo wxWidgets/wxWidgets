@@ -1114,6 +1114,8 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long
         // necessarily copy anything to the buffer given; use return
         // value instead.
         errorMsg = strerror_r((int)nErrCode, buffer, sizeof(buffer));
+#elif defined( __VMS )
+        errorMsg = strerror((int)nErrCode);
 #else // XSI-compliant strerror_r
         strerror_r((int)nErrCode, buffer, sizeof(buffer));
 #endif
