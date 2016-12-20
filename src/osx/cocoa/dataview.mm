@@ -1273,8 +1273,8 @@ outlineView:(NSOutlineView*)outlineView
 
 - (NSRect)drawingRectForBounds:(NSRect)theRect
 {
-	// Get the parent's idea of where we should draw
-	NSRect r = [super drawingRectForBounds:theRect];
+    // Get the parent's idea of where we should draw
+    NSRect r = [super drawingRectForBounds:theRect];
 
     if (!_adjustRect)
         return r;
@@ -1296,7 +1296,7 @@ outlineView:(NSOutlineView*)outlineView
         }
     }
 
-	return r;
+    return r;
 }
 
 - (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
@@ -1307,20 +1307,20 @@ outlineView:(NSOutlineView*)outlineView
         aRect = [self drawingRectForBounds:aRect];
         _adjustRect = NO;
     }
-	[super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
-	_adjustRect = oldAdjustRect;
+    [super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
+    _adjustRect = oldAdjustRect;
 }
 
 - (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
-{	
+{
     BOOL oldAdjustRect = _adjustRect;
     if (oldAdjustRect)
     {
         aRect = [self drawingRectForBounds:aRect];
         _adjustRect = NO;
     }
-	[super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
-	_adjustRect = oldAdjustRect;
+    [super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
+    _adjustRect = oldAdjustRect;
 }
 
 @end
