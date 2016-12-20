@@ -295,6 +295,7 @@ srchctlg.obj : srchctlg.cpp
 notifmsgg.obj : notifmsgg.cpp
 stattextg.obj : stattextg.cpp
 headerctrlg.obj : headerctrlg.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(INTTRUNCATED) headerctrlg.cpp
 grideditors.obj : grideditors.cpp
 infobar.obj : infobar.cpp
 datavgen.obj : datavgen.cpp
