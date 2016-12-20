@@ -468,19 +468,26 @@ wxWindowMSW::~wxWindowMSW()
 
 }
 
-/* static */
-const wxChar *wxWindowMSW::MSWGetRegisteredClassName()
+const wxChar *wxWindowMSW::GetMSWClassName() const
 {
-    return wxApp::GetRegisteredClassName(wxT("wxWindow"), COLOR_BTNFACE);
+    return wxApp::GetRegisteredClassName
+                  (
+                    wxT("wxWindow"),
+                    COLOR_BTNFACE,
+                    0, // no special extra style
+                    HasFlag(wxFULL_REPAINT_ON_RESIZE) ? wxApp::RegClass_Default
+                                                      : wxApp::RegClass_ReturnNR
+                  );
 }
 
 // real construction (Init() must have been called before!)
-bool wxWindowMSW::Create(wxWindow *parent,
-                         wxWindowID id,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         long style,
-                         const wxString& name)
+bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
+                                      wxWindow *parent,
+                                      wxWindowID id,
+                                      const wxPoint& pos,
+                                      const wxSize& size,
+                                      long style,
+                                      const wxString& name)
 {
     wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
 
@@ -506,8 +513,7 @@ bool wxWindowMSW::Create(wxWindow *parent,
         msflags |= WS_VISIBLE;
     }
 
-    if ( !MSWCreate(MSWGetRegisteredClassName(),
-                    NULL, pos, size, msflags, exstyle) )
+    if ( !MSWCreate(classname, NULL, pos, size, msflags, exstyle) )
         return false;
 
     InheritAttributes();
@@ -3695,22 +3701,13 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // unless we're creating a child window
     int controlId = style & WS_CHILD ? GetId() : 0;
 
-    // for each class "Foo" we have we also have "FooNR" ("no repaint") class
-    // which is the same but without CS_[HV]REDRAW class styles so using it
-    // ensures that the window is not fully repainted on each resize
-    wxString className(wclass);
-    if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) )
-    {
-        className += wxApp::GetNoRedrawClassSuffix();
-    }
-
     // do create the window
     wxWindowCreationHook hook(this);
 
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         extendedStyle,
-                        className.t_str(),
+                        wclass,
                         title ? title : m_windowName.t_str(),
                         style,
                         x, y, w, h,
@@ -3722,7 +3719,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 
     if ( !m_hWnd )
     {
-        wxLogSysError(_("Can't create window of class %s"), className.c_str());
+        wxLogSysError(_("Can't create window of class %s"), wclass);
 
         return false;
     }

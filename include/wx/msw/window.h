@@ -52,7 +52,23 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = wxPanelNameStr)
+    {
+        return CreateUsingMSWClass(GetMSWClassName(),
+                                   parent, id, pos, size, style, name);
+    }
+
+    // Non-portable, MSW-specific Create() variant allowing to create the
+    // window with a custom Windows class name. This can be useful to assign a
+    // custom Windows class, that can be recognized from the outside of the
+    // application, for windows of specific type.
+    bool CreateUsingMSWClass(const wxChar* classname,
+                             wxWindow *parent,
+                             wxWindowID id,
+                             const wxPoint& pos = wxDefaultPosition,
+                             const wxSize& size = wxDefaultSize,
+                             long style = 0,
+                             const wxString& name = wxPanelNameStr);
 
     // implement base class pure virtuals
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
@@ -230,8 +246,11 @@ public:
     // get the HWND to be used as parent of this window with CreateWindow()
     virtual WXHWND MSWGetParent() const;
 
-    // get the Win32 window class name used by all wxWindow objects by default
-    static const wxChar *MSWGetRegisteredClassName();
+    // Return the name of the Win32 class that should be used by this wxWindow
+    // object, taking into account wxFULL_REPAINT_ON_RESIZE style (if it's not
+    // specified, the wxApp::GetNoRedrawClassSuffix()-suffixed version of the
+    // class is used).
+    const wxChar *GetMSWClassName() const;
 
     // creates the window of specified Windows class with given style, extended
     // style, title and geometry (default values
