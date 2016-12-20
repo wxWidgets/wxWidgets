@@ -670,6 +670,10 @@ static /* const */ wxEventType gs_expandEvents[IDX_WHAT_MAX][IDX_HOW_MAX];
 };
 */
 
+wxBEGIN_EVENT_TABLE(wxTreeCtrl, wxTreeCtrlBase)
+    EVT_ERASE_BACKGROUND(wxTreeCtrl::OnEraseBackground)
+wxEND_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -789,6 +793,20 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     }
 
     return true;
+}
+
+bool wxTreeCtrl::IsDoubleBuffered() const
+{
+    return (GetHwnd() && ((DWORD)::SendMessage(GetHwnd(), TVM_GETEXTENDEDSTYLE, 0, 0) & TVS_EX_DOUBLEBUFFER) != 0);
+}
+
+void wxTreeCtrl::SetDoubleBuffered(bool on)
+{
+    // Check for required support before enabling double buffering
+    if (GetHwnd() && wxApp::GetComCtl32Version() >= 610)
+    {
+        ::SendMessage(GetHwnd(), TVM_SETEXTENDEDSTYLE, TVS_EX_DOUBLEBUFFER, on ? TVS_EX_DOUBLEBUFFER : 0);
+    }
 }
 
 wxTreeCtrl::~wxTreeCtrl()
@@ -2625,6 +2643,12 @@ bool wxTreeCtrl::MSWHandleTreeKeyDownEvent(WXWPARAM wParam, WXLPARAM lParam)
     }
 
     return processed;
+}
+
+void wxTreeCtrl::OnEraseBackground(wxEraseEvent& event)
+{
+    // If double buffered then don't skip this event because the control will paint its own background
+    event.Skip(!IsDoubleBuffered());
 }
 
 // we hook into WndProc to process WM_MOUSEMOVE/WM_BUTTONUP messages - as we

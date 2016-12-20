@@ -202,6 +202,10 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 
+    virtual bool IsDoubleBuffered() const wxOVERRIDE;
+
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
+
 protected:
     // Implement "update locking" in a custom way for this control.
     virtual void DoFreeze() wxOVERRIDE;
@@ -259,6 +263,10 @@ protected:
     //
     // return true if the key was processed, false otherwise
     bool MSWHandleSelectionKey(unsigned vkey);
+
+    // Event handlers
+    ////////////////////////////////////////////////////////////////////////////
+    void OnEraseBackground(wxEraseEvent& event);
 
 
     // data used only while editing the item label:
@@ -342,6 +350,7 @@ private:
 
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxUSE_TREECTRL
