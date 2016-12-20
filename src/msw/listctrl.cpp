@@ -260,6 +260,7 @@ private:
 
 wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
+    EVT_ERASE_BACKGROUND(wxListCtrl::OnEraseBackground)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
 wxEND_EVENT_TABLE()
 
@@ -508,6 +509,11 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 
         Refresh();
     }
+}
+
+bool wxListCtrl::IsDoubleBuffered() const
+{
+    return (GetHwnd() && (ListView_GetExtendedListViewStyle(GetHwnd()) & LVS_EX_DOUBLEBUFFER) != 0);
 }
 
 // ----------------------------------------------------------------------------
@@ -3129,6 +3135,12 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             }
         }
     }
+}
+
+void wxListCtrl::OnEraseBackground(wxEraseEvent& event)
+{
+    // If double buffered then don't skip this event because the control will paint its own background
+    event.Skip(!IsDoubleBuffered());
 }
 
 void wxListCtrl::OnCharHook(wxKeyEvent& event)
