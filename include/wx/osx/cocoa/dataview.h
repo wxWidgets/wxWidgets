@@ -373,6 +373,12 @@ private:
 // ============================================================================
 
 @interface wxTextFieldCell : NSTextFieldCell
+{
+@private
+    int _wxAlignment;
+    BOOL _adjustRect;
+}
+
     -(void) setWXAlignment:(int)alignment;
 @end
 

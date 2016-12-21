@@ -1252,18 +1252,8 @@ outlineView:(NSOutlineView*)outlineView
 // wxTextFieldCell
 // ============================================================================
 
-#ifndef _LP64
-    // The code below doesn't compile in 32 bits failing with
-    //
-    //      error: instance variables may not be placed in class extension
-    //
-    // Until this can be fixed, disable it to at least fix compilation.
-    #define wxTextFieldCell NSTextFieldCell
-#else
 @interface wxTextFieldCell ()
 {
-    int _wxAlignment;
-    BOOL _adjustRect;
 }
 @end
 
@@ -1332,7 +1322,6 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 @end
-#endif // 32/64 bits
 
 
 // ============================================================================
@@ -2743,10 +2732,8 @@ void wxDataViewRenderer::OSXUpdateAlignment()
     int align = GetEffectiveAlignment();
     NSCell *cell = GetNativeData()->GetColumnCell();
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-#ifdef _LP64
     if ([cell respondsToSelector:@selector(setWXAlignment:)])
         [(wxTextFieldCell*)cell setWXAlignment:align];
-#endif // _LP64
 }
 
 void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
