@@ -135,10 +135,10 @@ public:
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
-#endif // wxUSE_DRAG_AND_DROP
 
     // Accept files for dragging
     virtual void DragAcceptFiles(bool accept) wxOVERRIDE;
+#endif // wxUSE_DRAG_AND_DROP
 
 #ifndef __WXUNIVERSAL__
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
