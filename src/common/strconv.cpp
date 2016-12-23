@@ -2535,8 +2535,8 @@ bool wxMBConv_iconv::IsUTF8() const
 // from utils.cpp
 #if wxUSE_FONTMAP
 extern WXDLLIMPEXP_BASE long wxCharsetToCodepage(const char *charset);
-extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
 #endif
+extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
 
 class wxMBConv_win32 : public wxMBConv
 {
@@ -2560,13 +2560,13 @@ public:
         m_CodePage = wxCharsetToCodepage(name);
         m_minMBCharWidth = 0;
     }
+#endif // wxUSE_FONTMAP
 
     wxMBConv_win32(wxFontEncoding encoding)
     {
         m_CodePage = wxEncodingToCodepage(encoding);
         m_minMBCharWidth = 0;
     }
-#endif // wxUSE_FONTMAP
 
     virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
     {
@@ -3185,13 +3185,13 @@ wxMBConv *wxCSConv::DoCreate() const
 #if wxUSE_FONTMAP
         wxMBConv_win32 *conv = m_name ? new wxMBConv_win32(m_name)
                                       : new wxMBConv_win32(m_encoding);
+#else
+        wxMBConv_win32* conv = new wxMBConv_win32(m_encoding);
+#endif
         if ( conv->IsOk() )
             return conv;
 
         delete conv;
-#else
-        return NULL;
-#endif
     }
 #endif // wxHAVE_WIN32_MB2WC
 

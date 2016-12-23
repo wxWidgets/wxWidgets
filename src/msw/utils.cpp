@@ -36,6 +36,7 @@
 #include "wx/dynload.h"
 #include "wx/scopeguard.h"
 #include "wx/filename.h"
+#include "wx/fontenc.h"
 
 #include "wx/confbase.h"        // for wxExpandEnvVars()
 
@@ -1607,9 +1608,6 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding)
 // looks up the vlaues in the registry and the new one which is more
 // politically correct and has more chances to work on other Windows versions
 // as well but the old version is still needed for !wxUSE_FONTMAP case
-#if wxUSE_FONTMAP
-
-#include "wx/fontmap.h"
 
 extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
 {
@@ -1693,6 +1691,10 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
 
     return (long) ret;
 }
+
+#if wxUSE_FONTMAP
+
+#include "wx/fontmap.h"
 
 extern long wxCharsetToCodepage(const char *name)
 {
