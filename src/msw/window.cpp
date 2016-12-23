@@ -1701,7 +1701,6 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
         m_dropTarget->Register(m_hWnd);
     }
 }
-#endif // wxUSE_DRAG_AND_DROP
 
 // old-style file manager drag&drop support: we retain the old-style
 // DragAcceptFiles in parallel with SetDropTarget.
@@ -1716,6 +1715,7 @@ void wxWindowMSW::DragAcceptFiles(bool WXUNUSED_IN_WINCE(accept))
     }
 #endif
 }
+#endif // wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------
 // tooltips
