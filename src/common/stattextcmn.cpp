@@ -40,6 +40,8 @@
 
 #include "wx/private/markupparser.h"
 
+#include <algorithm>
+
 extern WXDLLEXPORT_DATA(const char) wxStaticTextNameStr[] = "staticText";
 
 // ----------------------------------------------------------------------------
@@ -103,52 +105,52 @@ wxCONSTRUCTOR_6( wxStaticText, wxWindow*, Parent, wxWindowID, Id, \
 
 void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
-    wxString line;
+    const wxClientDC dc(win);
 
-    wxString::const_iterator lastSpace = text.end();
-    wxString::const_iterator lineStart = text.begin();
-    for ( wxString::const_iterator p = lineStart; ; ++p )
+    const wxArrayString ls = wxSplit(text, '\n', '\0');
+    for ( wxArrayString::const_iterator i = ls.begin(); i != ls.end(); ++i )
     {
-        if ( IsStartOfNewLine() )
+        wxString line = *i;
+
+        if ( i != ls.begin() )
         {
+            // Do this even if the line is empty, except if it's the first one.
             OnNewLine();
-
-            lastSpace = text.end();
-            line.clear();
-            lineStart = p;
         }
 
-        if ( p == text.end() || *p == wxT('\n') )
+        for ( bool newLine = false; !line.empty(); newLine = true )
         {
-            DoOutputLine(line);
+            if ( newLine )
+                OnNewLine();
 
-            if ( p == text.end() )
-                break;
-        }
-        else // not EOL
-        {
-            if ( *p == wxT(' ') )
-                lastSpace = p;
+            wxArrayInt widths;
+            dc.GetPartialTextExtents(line, widths);
 
-            line += *p;
+            const size_t posEnd = std::lower_bound(widths.begin(),
+                                                   widths.end(),
+                                                   widthMax) - widths.begin();
 
-            if ( widthMax >= 0 && lastSpace != text.end() )
+            // Does the entire remaining line fit?
+            if ( posEnd == line.length() )
             {
-                int width;
-                win->GetTextExtent(line, &width, NULL);
-
-                if ( width > widthMax )
-                {
-                    // remove the last word from this line
-                    line.erase(lastSpace - lineStart, p + 1 - lineStart);
-                    DoOutputLine(line);
-
-                    // go back to the last word of this line which we didn't
-                    // output yet
-                    p = lastSpace;
-                }
+                DoOutputLine(line);
+                break;
             }
-            //else: no wrapping at all or impossible to wrap
+
+            // Find the last word to chop off.
+            const size_t lastSpace = line.rfind(' ', posEnd);
+            if ( lastSpace == wxString::npos )
+            {
+                // No spaces, so can't wrap.
+                DoOutputLine(line);
+                break;
+            }
+
+            // Output the part that fits.
+            DoOutputLine(line.substr(0, lastSpace));
+
+            // And redo the layout with the rest.
+            line = line.substr(lastSpace + 1);
         }
     }
 }

@@ -41,8 +41,8 @@ public:
 
     virtual wxWindow *GetPane() const = 0;
 
-    virtual wxString GetLabel() const = 0;
-    virtual void SetLabel(const wxString& label) = 0;
+    virtual wxString GetLabel() const wxOVERRIDE = 0;
+    virtual void SetLabel(const wxString& label) wxOVERRIDE = 0;
 };
 
 

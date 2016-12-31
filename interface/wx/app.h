@@ -311,7 +311,7 @@ public:
     virtual bool OnCmdLineError(wxCmdLineParser& parser);
 
     /**
-        Called when the help option (@c --help) was specified on the command line.
+        Called when the help option (@c \--help) was specified on the command line.
         The default behaviour is to show the program usage text and abort the program.
 
         Return @true to continue normal execution or @false to return

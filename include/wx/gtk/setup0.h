@@ -1359,12 +1359,16 @@
 #define wxUSE_DRAG_AND_DROP 1
 
 // Use wxAccessible for enhanced and customisable accessibility.
-// Depends on wxUSE_OLE.
+// Depends on wxUSE_OLE on MSW.
 //
-// Default is 0.
+// Default is 1 on MSW, 0 elsewhere.
 //
-// Recommended setting (at present): 0
+// Recommended setting (at present): 1 (MSW-only)
+#ifdef __WXMSW__
+#define wxUSE_ACCESSIBILITY 1
+#else
 #define wxUSE_ACCESSIBILITY 0
+#endif
 
 // ----------------------------------------------------------------------------
 // miscellaneous settings

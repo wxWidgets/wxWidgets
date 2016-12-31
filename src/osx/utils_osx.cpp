@@ -63,13 +63,6 @@ bool wxColourDisplay()
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1070) && (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
-// bring back declaration so that we can support deployment targets < 10_6
-CG_EXTERN size_t CGDisplayBitsPerPixel(CGDirectDisplayID display)
-CG_AVAILABLE_BUT_DEPRECATED(__MAC_10_0, __MAC_10_6,
-                            __IPHONE_NA, __IPHONE_NA);
-#endif
-
 // Returns depth of screen
 int wxDisplayDepth()
 {

@@ -1026,6 +1026,16 @@ pass2_no_dither (j_decompress_ptr cinfo,
   }
 }
 
+#ifdef __VISUALC__
+/*
+  for (yet) unknown reasons, the following code produces
+  bad results or even crashes if the code optimization is
+  enabled in VC++
+
+  disable optimization for now until the reason is discovered
+*/
+  #pragma optimize ("", off)
+#endif
 
 void
 pass2_fs_dither (j_decompress_ptr cinfo,
@@ -1167,7 +1177,9 @@ pass2_fs_dither (j_decompress_ptr cinfo,
     errorptr[2] = (FSERROR) bpreverr2;
   }
 }
-
+#ifdef __VISUALC__
+  #pragma optimize ("", on)
+#endif
 
 /*
  * Initialize the error-limiting transfer function (lookup table).

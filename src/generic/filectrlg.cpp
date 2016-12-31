@@ -364,6 +364,7 @@ wxBEGIN_EVENT_TABLE(wxFileListCtrl,wxListCtrl)
     EVT_LIST_DELETE_ALL_ITEMS(wxID_ANY, wxFileListCtrl::OnListDeleteAllItems)
     EVT_LIST_END_LABEL_EDIT(wxID_ANY, wxFileListCtrl::OnListEndLabelEdit)
     EVT_LIST_COL_CLICK(wxID_ANY, wxFileListCtrl::OnListColClick)
+    EVT_SIZE (wxFileListCtrl::OnSize)
 wxEND_EVENT_TABLE()
 
 
@@ -807,6 +808,25 @@ void wxFileListCtrl::OnListColClick( wxListEvent &event )
         m_sort_field = (wxFileData::fileListFieldType)col;
 
     SortItems(m_sort_field, m_sort_forward);
+}
+
+void wxFileListCtrl::OnSize( wxSizeEvent &event )
+{
+    event.Skip();
+
+    if ( InReportView() )
+    {
+        // In report mode, set name column to use remaining width.
+        int newNameWidth = GetClientSize().GetWidth();
+        for ( int i = 1; i < GetColumnCount(); i++ )
+        {
+            newNameWidth -= GetColumnWidth(i);
+            if ( newNameWidth <= 0 )
+                return;
+        }
+
+        SetColumnWidth(0, newNameWidth);
+    }
 }
 
 void wxFileListCtrl::SortItems(wxFileData::fileListFieldType field, bool forward)

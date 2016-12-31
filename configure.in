@@ -970,6 +970,10 @@ dnl ---------------------------------------------------------------------------
 dnl misc GUI options
 dnl ---------------------------------------------------------------------------
 
+if test "$wxUSE_MSW" = 1 ; then
+    DEFAULT_wxUSE_ACCESSIBILITY=yes
+fi
+
 WX_ARG_FEATURE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes], wxUSE_MENUS)
 WX_ARG_FEATURE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
 WX_ARG_FEATURE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
@@ -7405,13 +7409,28 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         fi
 
     elif test "$wxUSE_MAC" = 1; then
-        if test "$wxUSE_OSX_IPHONE" = 1; then
-            dnl this will also be used for cocoa in the future
-            GST_LIBS="-framework AVFoundation -framework CoreMedia"
-        else
-            dnl We always have the necessary libraries under Mac
-            dnl but we need to link with it explicitly.
-            GST_LIBS="-framework QTKit"
+        dnl We always have the necessary libraries under Mac
+        dnl but we need to link with it explicitly.
+        GST_LIBS="-framework AVFoundation -framework CoreMedia"
+        if test "$wxUSE_OSX_IPHONE" != 1; then
+            dnl In addition to AVFoundation AVKit may be used when available
+            dnl AVKit is only available since OS X 10.9
+            old_CPPFLAGS="$CPPFLAGS"
+            CPPFLAGS="-x objective-c++ $CPPFLAGS"
+            AC_MSG_CHECKING([if AVKit is available])
+            AC_TRY_COMPILE(
+                [#include "AvailabilityMacros.h"],
+                [
+                    #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+                        // AVKit available
+                    #else
+                        choke me
+                    #endif
+                ],
+                [GST_LIBS="$GST_LIBS -framework AVKit"; AC_MSG_RESULT(yes)],
+                AC_MSG_RESULT(no)
+            )
+            CPPFLAGS="$old_CPPFLAGS"
         fi
     fi
 

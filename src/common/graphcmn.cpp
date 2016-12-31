@@ -22,10 +22,16 @@
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
     #include "wx/bitmap.h"
+    #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/dcprint.h"
     #include "wx/math.h"
     #include "wx/region.h"
     #include "wx/log.h"
+#endif
+
+#ifdef __WXMSW__
+    #include "wx/msw/enhmeta.h"
 #endif
 
 #include "wx/private/graphics.h"
@@ -918,6 +924,31 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
 #endif
+#endif
+
+#ifndef wxNO_RTTI
+wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
+{
+    if ( const wxWindowDC *windc = dynamic_cast<const wxWindowDC*>(&dc) )
+        return Create(*windc);
+
+    if ( const wxMemoryDC *memdc = dynamic_cast<const wxMemoryDC*>(&dc) )
+        return Create(*memdc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if ( const wxPrinterDC *printdc = dynamic_cast<const wxPrinterDC*>(&dc) )
+        return Create(*printdc);
+#endif
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    if ( const wxEnhMetaFileDC *mfdc = dynamic_cast<const wxEnhMetaFileDC*>(&dc) )
+        return Create(*mfdc);
+#endif
+#endif
+
+    return NULL;
+}
 #endif
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )

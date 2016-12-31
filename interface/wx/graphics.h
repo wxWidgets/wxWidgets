@@ -439,6 +439,21 @@ public:
     static wxGraphicsContext* Create(const wxEnhMetaFileDC& metaFileDC);
 
     /**
+        Creates a wxGraphicsContext from a DC of unknown specific type.
+
+        Creates a wxGraphicsContext if @a dc is a supported type (i.e. has a
+        corresponding Create() method, e.g. wxWindowDC or wxMemoryDC).
+        Returns @NULL if the DC is unsupported.
+
+        This method is only useful as a helper in generic code that operates
+        with wxDC and doesn't known its exact type. Use Create() instead if
+        you know that the DC is e.g. wxWindowDC.
+
+        @since 3.1.1
+     */
+    static wxGraphicsContext* CreateFromUnknownDC(wxDC& dc);
+
+    /**
         Creates a wxGraphicsContext associated with a wxImage.
 
         The image specifies the size of the context as well as whether alpha is

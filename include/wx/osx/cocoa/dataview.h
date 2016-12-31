@@ -204,6 +204,10 @@ public:
     // Set the line break mode for the given cell using our m_ellipsizeMode
     void ApplyLineBreakMode(NSCell *cell);
 
+    // Does the rendered use a font that the control can't override?
+    void SetHasCustomFont(bool has) { m_hasCustomFont = has; }
+    bool HasCustomFont() const { return m_hasCustomFont; }
+
 private:
     // common part of all ctors
     void Init();
@@ -224,6 +228,8 @@ private:
     NSColor *m_origTextColour;
 
     wxEllipsizeMode m_ellipsizeMode;
+
+    bool m_hasCustomFont;
 };
 
 // ============================================================================
@@ -351,6 +357,27 @@ private:
 @end
 
 // ============================================================================
+// wxImageCell: used for bitmap renderer
+// ============================================================================
+
+@interface wxImageCell : NSImageCell
+{
+}
+
+    -(NSSize) cellSize;
+@end
+
+
+// ============================================================================
+// NSTextFieldCell customized to allow vertical alignment
+// ============================================================================
+
+@interface wxTextFieldCell : NSTextFieldCell
+    -(void) setWXAlignment:(int)alignment;
+@end
+
+
+// ============================================================================
 // wxImageTextCell
 // ============================================================================
 //
@@ -365,7 +392,7 @@ private:
 // into their reserved space. Smaller or not existing images use the fixed
 // reserved size and are scaled if necessary.
 //
-@interface wxImageTextCell : NSTextFieldCell
+@interface wxImageTextCell : wxTextFieldCell
 {
 @private
     CGFloat xImageShift;    // shift for the image in x-direction from border
@@ -495,6 +522,7 @@ public:
     virtual void HitTest(const wxPoint& point,
                          wxDataViewItem& item,
                          wxDataViewColumn*& columnPtr) const;
+    virtual void SetRowHeight(int height);
     virtual void SetRowHeight(const wxDataViewItem& item, unsigned int height);
     virtual void OnSize();
     
@@ -507,12 +535,17 @@ public:
     // Cocoa-specific helpers
     id GetItemAtRow(int row) const;
 
+    virtual void SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack = true);
+
 private:
     void InitOutlineView(long style);
+    int GetDefaultRowHeight() const;
 
     wxCocoaOutlineDataSource* m_DataSource;
 
     wxCocoaOutlineView* m_OutlineView;
+
+    bool m_removeIndentIfNecessary;
 };
 
 #endif // _WX_DATAVIEWCTRL_COCOOA_H_

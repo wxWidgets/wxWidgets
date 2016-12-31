@@ -377,6 +377,8 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     // get the first visible item so for now do at least this.
     SetFirstItem(startpos);
 
+    InvalidateBestSize();
+
     UpdateOldSelections();
 
     return idx;

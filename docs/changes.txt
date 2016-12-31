@@ -38,6 +38,10 @@ Changes in behaviour not resulting in compilation errors
   for getting the micro version. If you override GetToolkitVersion() you need
   to add this new third parameter.
 
+- wxWindow::CreateAccessible() doesn't return accessible object by default
+  anymore and GetOrCreateAccessible() may return NULL, indicating that native
+  system-provided accessibility should be used.
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
@@ -75,6 +79,8 @@ All:
 - Handle strings with embedded NULs in wxDataStream (Nitch).
 - Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
 - Add wxString::cbegin() and cend() method (Lauri Nurmi).
+- Allow using Bind() with event handlers non-publicly deriving from
+  wxEvtHandler and/or wxTrackable in C++11 code (Raul Tambre, mmarsan).
 
 All (GUI):
 
@@ -107,12 +113,16 @@ All (GUI):
 - Add wxEVT_STC_AUTOCOMP_COMPLETED event (NewPagodi).
 - Fix retrieving bounding box for wxDC with transformed coordinates.
 - Fix wxGraphicsMatrixData::Concat() for Direct2D and Cairo renderers.
+- Fix calculating point position in wxDataViewCtrl::HitTest().
+- Fix position of the rectangle returned by wxDataViewCtrl::GetItemRect().
+- Add wxDataViewRenderer::GetAccessibleDescription().
+- Improve wxImage::Scale() handling of pixels with alpha channel (Tim Kosse).
+- Fix parsing of RGBA strings in wxColour (Laurent Poujoulat).
 
 wxGTK:
 
 - Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
 - Apply wxTextCtrl::SetDefaultStyle() to user-entered text (Andreas Falkenhahn).
-- Implement setting link colours in wxHyperlinkCtrl for GTK+3 (Hanmac).
 - Support background colour in wxDataViewCtrl attributes.
 - Improve wxSpinCtrl best size calculation.
 - Implement support for icon locations in wxMimeTypesManager (Hanmac).
@@ -135,6 +145,15 @@ wxMSW:
 - Fix wxDC::Clear() for rotated DC.
 - Fix wxDC::GetClippingBox() for transformed wxDC.
 - Fix wxMemoryDC::Blit() with itself as source (Tim Roberts).
+- Return proper value from wxIAccessible::get_accSelection() if no children
+  are selected.
+- Add wxAccStatus::wxACC_INVALID_ARG error code to indicate argument-related
+  errors in wxAccessible methods.
+- Return DISP_E_MEMBERNOTFOUND error code from wxIAccessible if wxAccessible
+  methods return wxAccStatus::wxACC_NOT_SUPPORTED.
+- Return null BSTR from wxIAccessible if string returned from wxAccesible
+  method is empty.
+- Handle Ctrl-A in non-rich multiline text controls (Jens Göpfert).
 
 wxOSX:
 
@@ -142,11 +161,16 @@ wxOSX:
 - Implement wxGetDisplaySizeMM() and fix printing DPI (David Vanderson).
 - Remove extra borders around wxFilePickerCtrl (John Roberts).
 - Set up extensions filter correctly in wxFileDialog (nick863).
-- Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
 - Implement wxDataViewChoiceByIndexRenderer (wanup).
 - Fix unnecessary indentation in list-like wxDataViewCtrl (Andreas Falkenhahn).
 - Recognize macOS 10.12 Sierra in wxGetOsDescription() (Tobias Taschner).
 - Don't try to open command line arguments as files (Jeff Hostetler).
+- Implement wxDataViewCtrl::SetRowHeight().
+- Add OSXEnableAutomaticQuoteSubstitution(), OSXEnableAutomaticDashSubstitution()
+  and OSXDisableAllSmartSubstitutions() to control wxTextCtrl smart behavior.
+- Don't allow interacting with disabled wxSlider (Andreas Falkenhahn).
+- Fix setting alignment in wxTextCtrl with wxTE_DONTWRAP (Andreas Falkenhahn).
+- Allow pasting using Cmd+V in wxTextCtrl with wxTE_PASSWORD style.
 
 Unix:
 

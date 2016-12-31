@@ -194,7 +194,7 @@ public:
     void SetPrintConfig( GtkPrintSettings * config );
 
     GtkPrintOperation* GetPrintJob() { return m_job; }
-    void SetPrintJob(GtkPrintOperation *job) { m_job = job; }
+    void SetPrintJob(GtkPrintOperation *job);
 
     GtkPrintContext *GetPrintContext() { return m_context; }
     void SetPrintContext(GtkPrintContext *context) {m_context = context; }

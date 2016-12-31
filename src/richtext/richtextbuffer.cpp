@@ -9931,11 +9931,14 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
     bool multipleCells = false;
     wxRichTextAttr attr;
 
-    if (table && buffer && buffer->GetRichTextCtrl() && buffer->GetRichTextCtrl()->GetSelection().IsValid() &&
-        buffer->GetRichTextCtrl()->GetSelection().GetContainer() == GetParent())
+    wxRichTextSelection sel;
+    if (buffer->GetRichTextCtrl())
+        sel = buffer->GetRichTextCtrl()->GetSelection();
+        
+    if (table && buffer && buffer->GetRichTextCtrl() && sel.IsValid() &&
+        sel.GetContainer() == GetParent())
     {
         wxRichTextAttr clashingAttr, absentAttr;
-        const wxRichTextSelection& sel = buffer->GetRichTextCtrl()->GetSelection();
         size_t i;
         int selectedCellCount = 0;
         for (i = 0; i < sel.GetCount(); i++)
@@ -9984,7 +9987,6 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
         {
             if (multipleCells)
             {
-                const wxRichTextSelection& sel = buffer->GetRichTextCtrl()->GetSelection();
                 // Apply the style; we interpret indeterminate attributes as 'don't touch this attribute'
                 // since it may represent clashing attributes across multiple objects.
                 table->SetCellStyle(sel, attr);

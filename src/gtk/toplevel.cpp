@@ -440,6 +440,19 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+// "notify::gtk-theme-name" from GtkSettings
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void notify_gtk_theme_name(GObject*, GParamSpec*, wxTopLevelWindowGTK* win)
+{
+    wxSysColourChangedEvent event;
+    event.SetEventObject(win);
+    win->HandleWindowEvent(event);
+}
+}
+
+//-----------------------------------------------------------------------------
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
 {
@@ -661,10 +674,17 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
     PostCreation();
 
-#ifndef __WXGTK3__
-    if (pos != wxDefaultPosition)
+    if (pos.IsFullySpecified())
+    {
+#ifdef __WXGTK3__
+        GtkWindowPosition windowPos;
+        g_object_get(m_widget, "window-position", &windowPos, NULL);
+        if (windowPos == GTK_WIN_POS_NONE)
+            gtk_window_move(GTK_WINDOW(m_widget), m_x, m_y);
+#else
         gtk_widget_set_uposition( m_widget, m_x, m_y );
 #endif
+    }
 
     // for some reported size corrections
     g_signal_connect (m_widget, "map_event",
@@ -773,6 +793,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         gtk_widget_set_size_request(m_widget, w, h);
     }
 
+    g_signal_connect(gtk_settings_get_default(), "notify::gtk-theme-name",
+        G_CALLBACK(notify_gtk_theme_name), this);
+
     return true;
 }
 
@@ -801,6 +824,9 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 
     if (g_activeFrame == this)
         g_activeFrame = NULL;
+
+    g_signal_handlers_disconnect_by_func(
+        gtk_settings_get_default(), (void*)notify_gtk_theme_name, this);
 }
 
 bool wxTopLevelWindowGTK::EnableCloseButton( bool enable )
@@ -1020,9 +1046,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         // size_allocate signals occur in reverse order (bottom to top).
         // Things work better if the initial wxSizeEvents are sent (from the
         // top down), before the initial size_allocate signals occur.
-        wxSizeEvent event(GetSize(), GetId());
-        event.SetEventObject(this);
-        HandleWindowEvent(event);
+        SendSizeEvent();
 
 #ifdef __WXGTK3__
         GTKSizeRevalidate();
@@ -1030,6 +1054,14 @@ bool wxTopLevelWindowGTK::Show( bool show )
     }
 
     bool change = base_type::Show(show);
+
+#ifdef __WXGTK3__
+    if (m_needSizeEvent)
+    {
+        m_needSizeEvent = false;
+        SendSizeEvent();
+    }
+#endif
 
     if (change && !show)
     {
@@ -1139,12 +1171,8 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 extern "C" {
 static gboolean reset_size_request(void* data)
 {
-    if ( GTK_IS_WIDGET(data) )
-    {
-        gtk_widget_set_size_request(GTK_WIDGET(data), -1, -1);
-    }
-    //else: the window has probably been deleted before the idle callback was
-    //      invoked
+    gtk_widget_set_size_request(GTK_WIDGET(data), -1, -1);
+    g_object_unref(data);
     return false;
 }
 }
@@ -1173,7 +1201,8 @@ void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
         {
             gtk_widget_set_size_request(m_wxwindow, m_clientWidth, m_clientHeight);
             // Cancel size request at next idle to allow resizing
-            g_idle_add_full(G_PRIORITY_LOW, reset_size_request, m_wxwindow, NULL);
+            g_idle_add_full(G_PRIORITY_LOW - 1, reset_size_request, m_wxwindow, NULL);
+            g_object_ref(m_wxwindow);
         }
     }
 }
@@ -1325,15 +1354,20 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
         // gtk_widget_show() was deferred, do it now
         m_deferShow = false;
         DoGetClientSize(&m_clientWidth, &m_clientHeight);
-        wxSizeEvent sizeEvent(GetSize(), GetId());
-        sizeEvent.SetEventObject(this);
-        HandleWindowEvent(sizeEvent);
+        SendSizeEvent();
 
 #ifdef __WXGTK3__
         GTKSizeRevalidate();
 #endif
         gtk_widget_show(m_widget);
 
+#ifdef __WXGTK3__
+        if (m_needSizeEvent)
+        {
+            m_needSizeEvent = false;
+            SendSizeEvent();
+        }
+#endif
         wxShowEvent showEvent(GetId(), true);
         showEvent.SetEventObject(this);
         HandleWindowEvent(showEvent);

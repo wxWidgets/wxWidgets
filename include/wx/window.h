@@ -1449,7 +1449,7 @@ public:
     // ----------------------
 #if wxUSE_ACCESSIBILITY
     // Override to create a specific accessible object.
-    virtual wxAccessible* CreateAccessible();
+    virtual wxAccessible* CreateAccessible() { return NULL; }
 
     // Sets the accessible object.
     void SetAccessible(wxAccessible* accessible) ;
@@ -1457,7 +1457,8 @@ public:
     // Returns the accessible object.
     wxAccessible* GetAccessible() { return m_accessible; }
 
-    // Returns the accessible object, creating if necessary.
+    // Returns the accessible object, calling CreateAccessible if necessary.
+    // May return NULL, in which case system-provide accessible is used.
     wxAccessible* GetOrCreateAccessible() ;
 #endif
 

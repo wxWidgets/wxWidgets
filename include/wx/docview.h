@@ -717,7 +717,7 @@ public:
         return true;
     }
 
-    virtual bool Destroy()
+    virtual bool Destroy() wxOVERRIDE
     {
         // FIXME: why exactly do we do this? to avoid activation events during
         //        destructions maybe?
@@ -727,7 +727,7 @@ public:
 
 protected:
     // hook the child view into event handlers chain here
-    virtual bool TryBefore(wxEvent& event)
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE
     {
         return TryProcessEvent(event) || BaseClass::TryBefore(event);
     }
@@ -882,7 +882,7 @@ public:
 
 protected:
     // hook the document manager into event handling chain here
-    virtual bool TryBefore(wxEvent& event)
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE
     {
         // It is important to send the event to the base class first as
         // wxMDIParentFrame overrides its TryBefore() to send the menu events

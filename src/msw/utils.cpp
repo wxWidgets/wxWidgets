@@ -36,6 +36,7 @@
 #include "wx/dynload.h"
 #include "wx/scopeguard.h"
 #include "wx/filename.h"
+#include "wx/fontenc.h"
 
 #include "wx/confbase.h"        // for wxExpandEnvVars()
 
@@ -1466,9 +1467,6 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding)
 // looks up the vlaues in the registry and the new one which is more
 // politically correct and has more chances to work on other Windows versions
 // as well but the old version is still needed for !wxUSE_FONTMAP case
-#if wxUSE_FONTMAP
-
-#include "wx/fontmap.h"
 
 extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
 {
@@ -1517,6 +1515,7 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_CP1255:         ret = 1255; break;
         case wxFONTENCODING_CP1256:         ret = 1256; break;
         case wxFONTENCODING_CP1257:         ret = 1257; break;
+        case wxFONTENCODING_CP1258:         ret = 1258; break;
 
         case wxFONTENCODING_EUC_JP:         ret = 20932; break;
 
@@ -1533,7 +1532,7 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_MACCENTRALEUR:  ret = 10029; break;
         case wxFONTENCODING_MACCROATIAN:    ret = 10082; break;
         case wxFONTENCODING_MACICELANDIC:   ret = 10079; break;
-        case wxFONTENCODING_MACROMANIAN:    ret = 10009; break;
+        case wxFONTENCODING_MACROMANIAN:    ret = 10010; break;
 
         case wxFONTENCODING_ISO2022_JP:     ret = 50222; break;
 
@@ -1552,6 +1551,10 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
 
     return (long) ret;
 }
+
+#if wxUSE_FONTMAP
+
+#include "wx/fontmap.h"
 
 extern long wxCharsetToCodepage(const char *name)
 {

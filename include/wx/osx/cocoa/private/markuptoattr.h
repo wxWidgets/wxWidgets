@@ -22,8 +22,8 @@ public:
     // We don't care about the original colours because we never use them but
     // we do need the correct initial font as we apply modifiers (e.g. create a
     // font larger than it) to it and so it must be valid.
-    wxMarkupToAttrString(wxWindow *win, const wxString& markup)
-        : wxMarkupParserAttrOutput(win->GetFont(), wxColour(), wxColour())
+    wxMarkupToAttrString(const wxFont& font, const wxString& markup)
+        : wxMarkupParserAttrOutput(font, wxColour(), wxColour())
     {
         const wxCFStringRef
             label(wxControl::RemoveMnemonics(wxMarkupParser::Strip(markup)));
@@ -39,7 +39,7 @@ public:
         // default which is different from the system "Lucida Grande" font. So
         // we need to explicitly change the font for the entire string.
         [m_attrString addAttribute:NSFontAttributeName
-                      value:win->GetFont().OSXGetNSFont()
+                      value:font.OSXGetNSFont()
                       range:NSMakeRange(0, [m_attrString length])];
 
         // Now translate the markup tags to corresponding attributes.

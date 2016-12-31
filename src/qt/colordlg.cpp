@@ -15,7 +15,7 @@ class wxQtColorDialog : public wxQtEventSignalHandler< QColorDialog, wxDialog >
 {
 public:
     wxQtColorDialog( wxWindow *parent, wxDialog *handler)
-        : wxQtEventSignalHandler(parent, handler)
+        : wxQtEventSignalHandler<QColorDialog,wxDialog>(parent, handler)
         { }
 };
 

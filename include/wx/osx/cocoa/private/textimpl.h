@@ -95,6 +95,9 @@ public:
     virtual bool HasOwnContextMenu() const { return true; }
 
     virtual void CheckSpelling(bool check);
+    virtual void EnableAutomaticQuoteSubstitution(bool enable);
+    virtual void EnableAutomaticDashSubstitution(bool enable);
+
     virtual wxSize GetBestSize() const;
 
 protected:

@@ -1608,54 +1608,40 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
     // tree ctrl will eventually crash after item deletion
     TreeItemUnlocker unlock_all;
 
+    const bool selected = IsSelected(item);
+
+    // attempt to delete the item, and continue only if it succeeds
+    if ( !MSWDeleteItem(item) )
+        return;
+
+    // if the item was not selected we don't need to do anything about the selection
+    if ( !selected )
+        return;
+
     if ( HasFlag(wxTR_MULTIPLE) )
     {
-        bool selected = IsSelected(item);
-        wxTreeItemId next;
-
-        if ( selected )
-        {
-            next = TreeView_GetNextVisible(GetHwnd(), HITEM(item));
-
-            if ( !next.IsOk() )
-            {
-                next = TreeView_GetPrevVisible(GetHwnd(), HITEM(item));
-            }
-        }
-
-        if ( !MSWDeleteItem(item) )
-            return;
-
-        if ( !selected )
-        {
-            return;
-        }
-
         if ( item == m_htSelStart )
             m_htSelStart.Unset();
 
         if ( item == m_htClickedItem )
             m_htClickedItem.Unset();
-
-        if ( next.IsOk() )
-        {
-            wxTreeEvent changingEvent(wxEVT_TREE_SEL_CHANGING, this, next);
-
-            if ( IsTreeEventAllowed(changingEvent) )
-            {
-                wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, this, next);
-                (void)HandleTreeEvent(changedEvent);
-            }
-            else
-            {
-                DoUnselectItem(next);
-                ClearFocusedItem();
-            }
-        }
     }
-    else
+
+    // if a selected item was deleted announce that selection changed, no matter what
+    const wxTreeItemId next = GetFocusedItem();
+
+    wxTreeEvent changingEvent(wxEVT_TREE_SEL_CHANGING, this, next);
+
+    // if "selection changing" event is allowed, send "selection changed" too
+    if ( IsTreeEventAllowed(changingEvent) )
     {
-        MSWDeleteItem(item);
+        wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, this, next);
+        HandleTreeEvent(changedEvent);
+    }
+    else if ( next.IsOk() )
+    {
+        DoUnselectItem(next);
+        ClearFocusedItem();
     }
 }
 

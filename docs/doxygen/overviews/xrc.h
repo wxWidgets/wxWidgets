@@ -255,19 +255,19 @@ To compile binary resource files, use the command-line @c wxrc utility. It
 takes one or more file parameters (the input XRC files) and the following
 switches and options:
 
-@li -h (--help): Show a help message.
-@li -v (--verbose): Show verbose logging information.
-@li -c (--cpp-code): Write C++ source rather than a XRS file.
-@li -e (--extra-cpp-code): If used together with -c, generates C++ header file
+@li -h (\--help): Show a help message.
+@li -v (\--verbose): Show verbose logging information.
+@li -c (\--cpp-code): Write C++ source rather than a XRS file.
+@li -e (\--extra-cpp-code): If used together with -c, generates C++ header file
     containing class definitions for the windows defined by the XRC file (see
     special subsection).
-@li -u (--uncompressed): Do not compress XML files (C++ only).
-@li -g (--gettext): Output underscore-wrapped strings that poEdit or gettext
+@li -u (\--uncompressed): Do not compress XML files (C++ only).
+@li -g (\--gettext): Output underscore-wrapped strings that poEdit or gettext
     can scan. Outputs to stdout, or a file if -o is used.
-@li -n (--function) @<name@>: Specify C++ function name (use with -c).
-@li -o (--output) @<filename@>: Specify the output file, such as resource.xrs
+@li -n (\--function) @<name@>: Specify C++ function name (use with -c).
+@li -o (\--output) @<filename@>: Specify the output file, such as resource.xrs
     or resource.cpp.
-@li -l (--list-of-handlers) @<filename@>: Output a list of necessary handlers
+@li -l (\--list-of-handlers) @<filename@>: Output a list of necessary handlers
     to this file.
 
 For example:

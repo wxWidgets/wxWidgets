@@ -135,8 +135,8 @@ public:
 class wxExecuteModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit()
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE
     {
         if ( gs_heventShutdown.IsOk() )
         {
@@ -918,19 +918,22 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
     data->dwProcessId = pi.dwProcessId;
     data->hWnd        = hwnd;
     data->state       = (flags & wxEXEC_SYNC) != 0;
+
+    if ( handler )
+        handler->SetPid(pi.dwProcessId);
+
     if ( flags & wxEXEC_SYNC )
     {
         // handler may be !NULL for capturing program output, but we don't use
-        // it wxExecuteData struct in this case
+        // it in wxExecuteData struct in this case because it's only needed
+        // there for calling OnTerminate() on it and we don't do this when
+        // executing synchronously
         data->handler = NULL;
     }
     else
     {
         // may be NULL or not
         data->handler = handler;
-
-        if (handler)
-            handler->SetPid(pi.dwProcessId);
     }
 
     DWORD tid;

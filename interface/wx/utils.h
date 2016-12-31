@@ -58,12 +58,15 @@ enum wxShutdownFlags
 /**
     @class wxWindowDisabler
 
-    This class disables all windows of the application (may be with the
-    exception of one of them) in its constructor and enables them back in its
-    destructor.
+    This class disables all top level windows of the application (maybe with
+    the exception of one of them) in its constructor and enables them back in
+    its destructor.
 
     This is useful when you want to indicate to the user that the application
     is currently busy and cannot respond to user input.
+
+    @note When instantiated, this affects only windows shown on the screen and
+          not already disabled.
 
     @library{wxcore}
     @category{misc}

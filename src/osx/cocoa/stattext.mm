@@ -104,7 +104,7 @@ public:
 #if wxUSE_MARKUP
     virtual void SetLabelMarkup( const wxString& markup) wxOVERRIDE
     {
-        wxMarkupToAttrString toAttr(GetWXPeer(), markup);
+        wxMarkupToAttrString toAttr(GetWXPeer()->GetFont(), markup);
 
         DoSetAttrString(toAttr.GetNSAttributedString());
     }

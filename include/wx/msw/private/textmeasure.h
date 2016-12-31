@@ -34,18 +34,18 @@ public:
 protected:
     void Init();
 
-    virtual void BeginMeasuring();
-    virtual void EndMeasuring();
+    virtual void BeginMeasuring() wxOVERRIDE;
+    virtual void EndMeasuring() wxOVERRIDE;
 
     virtual void DoGetTextExtent(const wxString& string,
                                wxCoord *width,
                                wxCoord *height,
                                wxCoord *descent = NULL,
-                               wxCoord *externalLeading = NULL);
+                               wxCoord *externalLeading = NULL) wxOVERRIDE;
 
     virtual bool DoGetPartialTextExtents(const wxString& text,
                                          wxArrayInt& widths,
-                                         double scaleX);
+                                         double scaleX) wxOVERRIDE;
 
 
 

@@ -15,6 +15,7 @@
 
 #if wxUSE_VALIDATORS
 
+#include "wx/textentry.h"
 #include "wx/validate.h"
 
 #include <limits>
@@ -157,7 +158,7 @@ public:
         SetMax(max);
     }
 
-    virtual bool TransferToWindow()
+    virtual bool TransferToWindow()  wxOVERRIDE
     {
         if ( m_value )
         {
@@ -171,7 +172,7 @@ public:
         return true;
     }
 
-    virtual bool TransferFromWindow()
+    virtual bool TransferFromWindow() wxOVERRIDE
     {
         if ( m_value )
         {
@@ -204,7 +205,7 @@ protected:
 
     // Implement wxNumValidatorBase virtual method which is the same for
     // both integer and floating point numbers.
-    virtual wxString NormalizeString(const wxString& s) const
+    virtual wxString NormalizeString(const wxString& s) const wxOVERRIDE
     {
         LongestValueType value;
         return BaseValidator::FromString(s, &value) ? NormalizeValue(value)
@@ -312,7 +313,7 @@ public:
         this->DoSetMax(std::numeric_limits<ValueType>::max());
     }
 
-    virtual wxObject *Clone() const { return new wxIntegerValidator(*this); }
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxIntegerValidator(*this); }
 
 private:
     wxDECLARE_NO_ASSIGN_CLASS(wxIntegerValidator);
@@ -417,7 +418,7 @@ public:
         this->SetPrecision(precision);
     }
 
-    virtual wxObject *Clone() const
+    virtual wxObject *Clone() const wxOVERRIDE
     {
         return new wxFloatingPointValidator(*this);
     }

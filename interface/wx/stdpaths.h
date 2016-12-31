@@ -70,6 +70,16 @@ public:
     enum Dir
     {
         /**
+            Directory for caching files.
+
+            Example return values:
+            - Unix: @c ~/.cache
+            - Windows: @c "C:\Users\username\AppData\Local"
+            - Mac: @c ~/Library/Caches
+        */
+        Dir_Cache,
+
+        /**
             Directory containing user documents.
 
             Example return values:

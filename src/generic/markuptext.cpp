@@ -36,6 +36,11 @@
 
 #include "wx/private/markupparserattr.h"
 
+#if wxUSE_GRAPHICS_CONTEXT
+    #include "wx/graphics.h"
+    #include "wx/scopedptr.h"
+#endif
+
 namespace
 {
 
@@ -156,11 +161,11 @@ public:
 
         // ...but we only need to restore the colours if we had changed them.
         if ( attr.foreground.IsOk() )
-            m_dc.SetTextForeground(GetAttr().foreground);
+            m_dc.SetTextForeground(GetAttr().effectiveForeground);
 
         if ( attr.background.IsOk() )
         {
-            wxColour background = GetAttr().background;
+            wxColour background = GetAttr().effectiveBackground;
             if ( !background.IsOk() )
             {
                 // Invalid background colour indicates that the background
@@ -237,18 +242,47 @@ public:
     wxMarkupParserRenderItemOutput(wxWindow *win,
                                    wxDC& dc,
                                    const wxRect& rect,
-                                   int rendererFlags)
+                                   int rendererFlags,
+                                   wxEllipsizeMode ellipsizeMode)
         : wxMarkupParserRenderOutput(dc, rect, wxMarkupText::Render_Default),
           m_win(win),
           m_rendererFlags(rendererFlags),
           m_renderer(&wxRendererNative::Get())
     {
+        // TODO: Support all ellipsizing modes
+        m_ellipsizeMode = ellipsizeMode == wxELLIPSIZE_NONE ? wxELLIPSIZE_NONE : wxELLIPSIZE_END;
     }
 
     virtual void OnText(const wxString& text) wxOVERRIDE
     {
         wxRect rect(m_rect);
         rect.x = m_pos;
+        rect.SetRight(m_rect.GetRight());
+
+        const wxSize extent = m_dc.GetTextExtent(text);
+
+        // DrawItemText() ignores background color, so render it outselves 
+        if ( m_dc.GetBackgroundMode() == wxSOLID )
+        {
+#if wxUSE_GRAPHICS_CONTEXT
+            // Prefer to use wxGraphicsContext because it supports alpha channel; fall back to wxDC
+            if ( !m_gc )
+                m_gc.reset(wxGraphicsContext::CreateFromUnknownDC(m_dc));
+ 
+            if ( m_gc )
+            {
+                m_gc->SetBrush(wxBrush(m_dc.GetTextBackground()));
+                m_gc->SetPen(*wxTRANSPARENT_PEN);
+                m_gc->DrawRectangle(rect.x, rect.y, extent.x, extent.y);
+            }
+            else
+#endif // wxUSE_GRAPHICS_CONTEXT
+            {
+                wxDCPenChanger pen(m_dc, *wxTRANSPARENT_PEN);
+                wxDCBrushChanger brush(m_dc, wxBrush(m_dc.GetTextBackground()));
+                m_dc.DrawRectangle(rect.x, rect.y, extent.x, extent.y);
+            }
+        }
 
         m_renderer->DrawItemText(m_win,
                                  m_dc,
@@ -256,14 +290,18 @@ public:
                                  rect,
                                  wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL,
                                  m_rendererFlags,
-                                 wxELLIPSIZE_NONE);
+                                 m_ellipsizeMode);
 
-        m_pos += m_dc.GetTextExtent(text).x;
+        m_pos += extent.x;
     }
 
 private:
+#if wxUSE_GRAPHICS_CONTEXT
+    wxScopedPtr<wxGraphicsContext> m_gc;
+#endif
     wxWindow* const m_win;
     int const m_rendererFlags;
+    wxEllipsizeMode m_ellipsizeMode;
     wxRendererNative* const m_renderer;
 
     wxDECLARE_NO_COPY_CLASS(wxMarkupParserRenderItemOutput);
@@ -310,9 +348,10 @@ void wxMarkupText::Render(wxDC& dc, const wxRect& rect, int flags)
 void wxMarkupText::RenderItemText(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int rendererFlags)
+                                  int rendererFlags,
+                                  wxEllipsizeMode ellipsizeMode)
 {
-    wxMarkupParserRenderItemOutput out(win, dc, rect, rendererFlags);
+    wxMarkupParserRenderItemOutput out(win, dc, rect, rendererFlags, ellipsizeMode);
     wxMarkupParser parser(out);
     parser.Parse(m_markup);
 }

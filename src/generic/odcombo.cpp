@@ -85,7 +85,7 @@ bool wxVListBoxComboPopup::Create(wxWindow* parent)
     wxVListBox::SetItemCount(m_strings.GetCount());
 
     // TODO: Move this to SetFont
-    m_itemHeight = GetCharHeight() + 0;
+    m_itemHeight = m_combo->GetCharHeight();
 
     return true;
 }

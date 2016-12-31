@@ -31,6 +31,9 @@
 #include "wx/choice.h"
 #include "wx/imaglist.h"
 #include "wx/renderer.h"
+#if wxUSE_ACCESSIBILITY
+    #include "wx/access.h"
+#endif // wxUSE_ACCESSIBILITY
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
@@ -655,12 +658,14 @@ wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype,
 {
     m_variantType = varianttype;
     m_owner = NULL;
+    m_valueAdjuster = NULL;
 }
 
 wxDataViewRendererBase::~wxDataViewRendererBase()
 {
     if ( m_editorCtrl )
         DestroyEditControl();
+    delete m_valueAdjuster;
 }
 
 wxDataViewCtrl* wxDataViewRendererBase::GetView() const
@@ -827,7 +832,14 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
     // Now check if we have a value and remember it for rendering it later.
     // Notice that we do it even if it's null, as the cell should be empty then
     // and not show the last used value.
-    const wxVariant& value = CheckedGetValue(model, item, column);
+    wxVariant value = CheckedGetValue(model, item, column);
+
+    if ( m_valueAdjuster )
+    {
+        if ( IsHighlighted() )
+            value = m_valueAdjuster->MakeHighlighted(value);
+    }
+
     SetValue(value);
 
     if ( !value.IsNull() )
@@ -870,13 +882,24 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
 
 int wxDataViewRendererBase::GetEffectiveAlignment() const
 {
+    int alignment = GetEffectiveAlignmentIfKnown();
+    wxASSERT( alignment != wxDVR_DEFAULT_ALIGNMENT );
+    return alignment;
+}
+
+
+int wxDataViewRendererBase::GetEffectiveAlignmentIfKnown() const
+{
     int alignment = GetAlignment();
 
     if ( alignment == wxDVR_DEFAULT_ALIGNMENT )
     {
-        // if we don't have an explicit alignment ourselves, use that of the
-        // column in horizontal direction and default vertical alignment
-        alignment = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+        if ( GetOwner() != NULL )
+        {
+            // if we don't have an explicit alignment ourselves, use that of the
+            // column in horizontal direction and default vertical alignment
+            alignment = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+        }
     }
 
     return alignment;
@@ -1699,6 +1722,13 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewSpinRenderer::GetAccessibleDescription() const
+{
+    return wxString::Format(wxS("%li"), m_data);
+}
+#endif // wxUSE_ACCESSIBILITY
+
 #endif // wxUSE_SPINCTRL
 
 // -------------------------------------
@@ -1770,6 +1800,13 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewChoiceRenderer::GetAccessibleDescription() const
+{
+    return m_data;
+}
+#endif // wxUSE_ACCESSIBILITY
+
 // ----------------------------------------------------------------------------
 // wxDataViewChoiceByIndexRenderer
 // ----------------------------------------------------------------------------
@@ -1814,7 +1851,18 @@ bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
-#endif
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewChoiceByIndexRenderer::GetAccessibleDescription() const
+{
+    wxVariant strVal;
+    if ( wxDataViewChoiceRenderer::GetValue(strVal) )
+        return strVal;
+
+    return wxString::Format(wxS("%li"), (long)GetChoices().Index(strVal.GetString()));
+}
+#endif // wxUSE_ACCESSIBILITY
+
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
 
 // ---------------------------------------------------------
 // wxDataViewDateRenderer
@@ -1859,6 +1907,13 @@ bool wxDataViewDateRenderer::GetValue(wxVariant& value) const
     value = m_date;
     return true;
 }
+
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewDateRenderer::GetAccessibleDescription() const
+{
+    return m_date.FormatDate();
+}
+#endif // wxUSE_ACCESSIBILITY
 
 bool wxDataViewDateRenderer::Render(wxRect cell, wxDC* dc, int state)
 {
@@ -2737,4 +2792,3 @@ void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
 }
 
 #endif // wxUSE_DATAVIEWCTRL
-

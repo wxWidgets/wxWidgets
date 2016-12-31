@@ -179,6 +179,8 @@ public:
 
   virtual void HitTest(const wxPoint& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const wxOVERRIDE;
 
+  virtual bool SetRowHeight(int rowHeight) wxOVERRIDE;
+
   virtual bool IsSelected(const wxDataViewItem& item) const wxOVERRIDE;
 
   virtual void SelectAll() wxOVERRIDE;

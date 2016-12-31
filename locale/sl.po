@@ -1,20 +1,19 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.0\n"
+"Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 22:46+0400\n"
-"PO-Revision-Date: 2012-12-30 00:14+0100\n"
-"Last-Translator: filmsi\n"
+"POT-Creation-Date: 2016-12-16 12:30+0100\n"
+"PO-Revision-Date: 2016-12-16 12:36+0100\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Slovenian\n"
-"X-Poedit-Country: SLOVENIA\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -111,7 +110,7 @@ msgstr "kuverta #9, 3 7/8 x 8 7/8 pal."
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
 msgid "%"
-msgstr ""
+msgstr " %"
 
 # html/helpfrm.cpp:718
 # html/helpfrm.cpp:719
@@ -169,9 +168,9 @@ msgid "%s Information"
 msgstr "Informacija %s"
 
 #: ../src/generic/preferencesg.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "Možnosti"
+msgstr "Možnosti %s"
 
 # generic/logg.cpp:247
 #: ../src/generic/logg.cpp:233
@@ -195,9 +194,9 @@ msgstr "datoteke %s (%s)|%s"
 # html/helpfrm.cpp:1277
 # html/helpfrm.cpp:1304
 #: ../src/html/helpwnd.cpp:1716
-#, fuzzy, c-format
+#, c-format
 msgid "%u of %u"
-msgstr "%lu od %lu"
+msgstr "%u od %u"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
@@ -253,7 +252,7 @@ msgstr "&Barva ozadja:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:299
 msgid "&Blur distance:"
-msgstr ""
+msgstr "O&ddaljenost zabrisanosti:"
 
 # generic/fontdlgg.cpp:217
 #: ../src/common/stockitem.cpp:143
@@ -261,9 +260,8 @@ msgid "&Bold"
 msgstr "&Krepko"
 
 #: ../src/common/stockitem.cpp:144
-#, fuzzy
 msgid "&Bottom"
-msgstr "&Dno"
+msgstr "&Spodaj"
 
 #: ../src/richtext/richtextborderspage.cpp:347
 #: ../src/richtext/richtextborderspage.cpp:516
@@ -271,15 +269,13 @@ msgstr "&Dno"
 #: ../src/richtext/richtextmarginspage.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:637
 #: ../src/richtext/richtextsizepage.cpp:644
-#, fuzzy
 msgid "&Bottom:"
-msgstr "&Dno:"
+msgstr "&Spodaj:"
 
 # generic/fontdlgg.cpp:217
 #: ../include/wx/richtext/richtextbuffer.h:3860
-#, fuzzy
 msgid "&Box"
-msgstr "&Krepko"
+msgstr "&Polje"
 
 #: ../src/richtext/richtextbulletspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:210
@@ -410,7 +406,7 @@ msgstr "&Uredi slog ..."
 
 #: ../src/common/stockitem.cpp:155
 msgid "&Execute"
-msgstr ""
+msgstr "&Izvedi"
 
 # generic/filedlgg.cpp:534
 #: ../src/common/stockitem.cpp:157 ../src/html/helpfrm.cpp:146
@@ -502,7 +498,7 @@ msgstr "&Domov"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:213
 msgid "&Horizontal offset:"
-msgstr ""
+msgstr "&Vodoravni odmik:"
 
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
@@ -588,8 +584,7 @@ msgid "&New"
 msgstr "&Nov"
 
 # msw/mdi.cpp:188
-#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100
-#: ../src/msw/mdi.cpp:180
+#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100 ../src/msw/mdi.cpp:180
 msgid "&Next"
 msgstr "&Naslednji"
 
@@ -686,8 +681,7 @@ msgid "&Preferences"
 msgstr "&Možnosti"
 
 # html/helpfrm.cpp:512
-#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:181
+#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101 ../src/msw/mdi.cpp:181
 msgid "&Previous"
 msgstr "&Prejšnji"
 
@@ -833,7 +827,7 @@ msgstr "&Simbol:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Uskladi vrednosti"
 
 #: ../include/wx/richtext/richtextbuffer.h:6063
 msgid "&Table"
@@ -890,9 +884,8 @@ msgid "&Vertical alignment:"
 msgstr "&Navpična poravnava:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:236
-#, fuzzy
 msgid "&Vertical offset:"
-msgstr "&Navpična poravnava:"
+msgstr "&Navpični odmik:"
 
 # generic/logg.cpp:473
 # generic/logg.cpp:774
@@ -929,15 +922,15 @@ msgstr "&Da"
 
 # common/valtext.cpp:166
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' sme vsebovati samo črkovne znake."
+msgstr "»%s« vsebuje neveljavne znake."
 
 # common/valtext.cpp:166
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' sme vsebovati samo črkovne znake."
+msgstr "»%s« ni sestavljen le iz veljavnih znakov."
 
 # common/config.cpp:396
 # msw/regconf.cpp:264
@@ -960,15 +953,15 @@ msgstr "'%s' ni veljaven katalog sporočil."
 
 # common/intl.cpp:412
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' ni veljaven katalog sporočil."
+msgstr "»%s« ni veljavno sporočilo."
 
 # common/valtext.cpp:140
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' je neveljaven"
+msgstr "»%s« je neveljavno sporočilo."
 
 #: ../src/common/textbuf.cpp:237
 #, c-format
@@ -1385,9 +1378,8 @@ msgid "About %s"
 msgstr "O programu %s ..."
 
 #: ../src/osx/menu_osx.cpp:597
-#, fuzzy
 msgid "About..."
-msgstr "O programu"
+msgstr "O programu …"
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1396,14 +1388,13 @@ msgstr "Absolutno"
 # generic/fontdlgg.cpp:208
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:859
-#, fuzzy
 msgid "ActiveBorder"
-msgstr "Obroba"
+msgstr "DejavnaObroba"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:860
 msgid "ActiveCaption"
-msgstr ""
+msgstr "DejavniNapis"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Actual Size"
@@ -1416,11 +1407,11 @@ msgstr "Dodaj"
 
 #: ../src/richtext/richtextbuffer.cpp:11446
 msgid "Add Column"
-msgstr ""
+msgstr "Dodaj stolpec"
 
 #: ../src/richtext/richtextbuffer.cpp:11383
 msgid "Add Row"
-msgstr ""
+msgstr "Dodaj vrstico"
 
 # html/helpfrm.cpp:270
 #: ../src/html/helpwnd.cpp:432
@@ -1456,7 +1447,7 @@ msgstr ""
 
 #: ../src/common/preferencescmn.cpp:43
 msgid "Advanced"
-msgstr ""
+msgstr "Napredno"
 
 #: ../src/richtext/richtextliststylepage.cpp:435
 msgid "After a paragraph:"
@@ -1554,7 +1545,7 @@ msgstr "Uporabi"
 
 #: ../src/propgrid/advprops.cpp:1570
 msgid "Aqua"
-msgstr ""
+msgstr "Aqua"
 
 #: ../src/richtext/richtextbulletspage.cpp:274
 #: ../src/richtext/richtextliststylepage.cpp:482
@@ -1573,9 +1564,8 @@ msgstr "Argumenta %u ni mogoče najti."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1714
-#, fuzzy
 msgid "Arrow"
-msgstr "jutri"
+msgstr "Puščica"
 
 #: ../src/generic/aboutdlgg.cpp:184
 msgid "Artists"
@@ -1706,9 +1696,8 @@ msgstr "Barva ozadja"
 # generic/helpwxht.cpp:157
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgid "Backspace"
-msgstr "Nazaj"
+msgstr "Vračalka"
 
 #: ../src/common/fmapbase.cpp:160
 msgid "Baltic (ISO-8859-13)"
@@ -1733,16 +1722,16 @@ msgstr "Upodobitelj bitnih slik ne more upodobiti vrednosti; vrsta vrednosti: "
 
 #: ../src/propgrid/advprops.cpp:1555
 msgid "Black"
-msgstr ""
+msgstr "Črna"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1716
 msgid "Blank"
-msgstr ""
+msgstr "Prazno"
 
 #: ../src/propgrid/advprops.cpp:1564
 msgid "Blue"
-msgstr ""
+msgstr "Modra"
 
 # generic/fontdlgg.cpp:217
 #: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
@@ -1762,9 +1751,8 @@ msgid "Borders"
 msgstr "Obrobe"
 
 #: ../src/common/stockitem.cpp:144 ../src/richtext/richtextsizepage.cpp:288
-#, fuzzy
 msgid "Bottom"
-msgstr "Dno"
+msgstr "Na dnu"
 
 # generic/prntdlgg.cpp:662
 #: ../src/generic/prntdlgg.cpp:893
@@ -1773,19 +1761,16 @@ msgstr "Spodnji rob (mm):"
 
 # html/helpfrm.cpp:512
 #: ../src/richtext/richtextbuffer.cpp:9376
-#, fuzzy
 msgid "Box Properties"
 msgstr "Lastnosti polja"
 
 #: ../src/richtext/richtextstyles.cpp:1065
-#, fuzzy
 msgid "Box styles"
 msgstr "Slogi polja"
 
 #: ../src/propgrid/advprops.cpp:1563
-#, fuzzy
 msgid "Brown"
-msgstr "Prebrskaj"
+msgstr "Rjava"
 
 #: ../src/common/filepickercmn.cpp:43 ../src/common/filepickercmn.cpp:44
 msgid "Browse"
@@ -1806,29 +1791,28 @@ msgstr "Oznake"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1717
-#, fuzzy
 msgid "Bullseye"
-msgstr "Slog oznak"
+msgstr "Tarča"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:861
 msgid "ButtonFace"
-msgstr ""
+msgstr "PloskevGumba"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:862
 msgid "ButtonHighlight"
-msgstr ""
+msgstr "PoudarekGumba"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:863
 msgid "ButtonShadow"
-msgstr ""
+msgstr "SencaGumba"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:864
 msgid "ButtonText"
-msgstr ""
+msgstr "BesediloGumba"
 
 # generic/dcpsg.cpp:2547
 #: ../src/common/paper.cpp:99
@@ -2007,7 +1991,7 @@ msgstr "Ni mogoče inicializirati napihovalnega toka zlib."
 #: ../src/msw/fswatcher.cpp:476
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
-msgstr ""
+msgstr "Sprememb v neobstoječi mapi »%s« ni mogoče spremljati."
 
 # msw/registry.cpp:374
 #: ../src/msw/registry.cpp:445
@@ -2272,14 +2256,13 @@ msgstr "Ustavitve niti ni mogoče pričakati."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgid "Capital"
-msgstr "Ve&like začetnice"
+msgstr "Velike začetnice"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:865
 msgid "CaptionText"
-msgstr ""
+msgstr "BesediloNapisa"
 
 # html/helpfrm.cpp:398
 #: ../src/html/helpwnd.cpp:533
@@ -2288,7 +2271,7 @@ msgstr "Razlikovanje malih/velikih črk"
 
 #: ../src/propgrid/manager.cpp:1500
 msgid "Categorized Mode"
-msgstr ""
+msgstr "Kategoriziran način"
 
 # html/helpfrm.cpp:512
 #: ../src/richtext/richtextbuffer.cpp:9958
@@ -2371,15 +2354,14 @@ msgstr "Spremembe ne bodo shranjene v izogib prepisu obstoječe datoteke \"%s\""
 #
 # msw/registry.cpp:399
 #: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "Mape \"%s\" ni mogoče ustvariti."
+msgstr "Sprememba iz trenutne mape v »%s« je spodletela."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1718
-#, fuzzy
 msgid "Character"
-msgstr "&Koda znaka:"
+msgstr "Znak"
 
 #: ../src/richtext/richtextstyles.cpp:1063
 msgid "Character styles"
@@ -2578,7 +2560,6 @@ msgstr "Kliknite za potrditev izbire pisave."
 
 #: ../src/richtext/richtextstyledlg.cpp:244
 #: ../src/richtext/richtextstyledlg.cpp:246
-#, fuzzy
 msgid "Click to create a new box style."
 msgstr "Kliknite za tvorbo novega sloga polja."
 
@@ -2695,8 +2676,9 @@ msgstr "Širine stolpca ni mogoče nastaviti."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:112
+#, fuzzy
 msgid "Command"
-msgstr ""
+msgstr "Ukaz"
 
 #: ../src/common/init.cpp:196
 #, c-format
@@ -2707,9 +2689,9 @@ msgstr ""
 "Argumenta ukazne vrstice %d ni mogoče pretvoriti v Unicode, zato bo prezrt."
 
 #: ../src/msw/fontdlg.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Common dialog failed with error code %0lx."
-msgstr "Pogovorno okno izbirnika barv ni uspelo, z napako %0lx."
+msgstr "Pogovorno okno je spodletelo z napako %0lx."
 
 #: ../src/gtk/window.cpp:4557
 msgid ""
@@ -2756,12 +2738,12 @@ msgstr "Vsebina"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:866
 msgid "ControlDark"
-msgstr ""
+msgstr "KrmilnikTemno"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:867
 msgid "ControlLight"
-msgstr ""
+msgstr "KrmilnikSvetlo"
 
 #: ../src/common/strconv.cpp:2251
 #, c-format
@@ -2797,16 +2779,16 @@ msgstr "Kopiraj izbor"
 
 #: ../src/msw/glcanvas.cpp:183 ../src/unix/glx11.cpp:136
 msgid "Core OpenGL profile is not supported by the OpenGL driver."
-msgstr ""
+msgstr "Gonilnik OpenGL ne podpira profila Core OpenGL."
 
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Oglišče"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "Polmer o&glišča:"
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
@@ -3058,10 +3040,10 @@ msgid "Couldn't terminate thread"
 msgstr "Niti ni mogoče končati."
 
 #: ../src/common/xtistrm.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Create Parameter %s not found in declared RTTI Parameters"
 msgstr ""
-"V prijavljenih spremenljivkah RTTI ustvarjenega parametra ni mogoče najti."
+"V prijavljenih spremenljivkah RTTI ustvarjenega parametra %s ni mogoče najti."
 
 # generic/dirdlgg.cpp:572
 #: ../src/generic/dirdlgg.cpp:317
@@ -3074,9 +3056,9 @@ msgid "Create new directory"
 msgstr "Ustvari novo mapo"
 
 #: ../src/xrc/xmlres.cpp:2441
-#, fuzzy, c-format
+#, c-format
 msgid "Creating %s \"%s\" failed."
-msgstr "Iztis '%s' v '%s' ni uspel."
+msgstr "Ustvarjanje %s »%s« ni uspelo."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1719
@@ -3102,9 +3084,8 @@ msgstr "Trenutna mapa:"
 #. TRANSLATORS: Custom colour choice entry
 #: ../src/propgrid/advprops.cpp:882 ../src/propgrid/advprops.cpp:1535
 #: ../src/propgrid/advprops.cpp:1573
-#, fuzzy
 msgid "Custom"
-msgstr "Velikost po meri"
+msgstr "Po meri"
 
 # html/helpfrm.cpp:899
 #: ../src/gtk/print.cpp:217
@@ -3169,7 +3150,6 @@ msgid "DL Envelope, 110 x 220 mm"
 msgstr "kuverta DL, 110 x 220 mm"
 
 #: ../src/richtext/richtextborderspage.cpp:616
-#, fuzzy
 msgid "Dashed"
 msgstr "Črtkano"
 
@@ -3198,7 +3178,7 @@ msgstr "Tvorba poročila o razhroščevanju ni uspela."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
 msgid "Decimal"
-msgstr ""
+msgstr "Decimalno"
 
 # generic/fontdlgg.cpp:207
 #: ../src/generic/fontdlgg.cpp:323
@@ -3207,9 +3187,8 @@ msgstr "Okrasno"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1713
-#, fuzzy
 msgid "Default"
-msgstr "privzeto"
+msgstr "Privzeto"
 
 #: ../src/common/fmapbase.cpp:796
 msgid "Default encoding"
@@ -3225,9 +3204,8 @@ msgstr "Privzeti tiskalnik"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgid "Del"
-msgstr "Izbriši"
+msgstr "Brisalka"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
@@ -3243,14 +3221,12 @@ msgstr "Izbriši &vse"
 
 # generic/dirdlgg.cpp:191
 #: ../src/richtext/richtextbuffer.cpp:11332
-#, fuzzy
 msgid "Delete Column"
-msgstr "Izbriši izbor"
+msgstr "Izbriši stolpec"
 
 #: ../src/richtext/richtextbuffer.cpp:11282
-#, fuzzy
 msgid "Delete Row"
-msgstr "Izbriši"
+msgstr "Izbriši vrstico"
 
 #: ../src/richtext/richtextstyledlg.cpp:782
 msgid "Delete Style"
@@ -3321,7 +3297,7 @@ msgid "Did you know..."
 msgstr "Ali ste vedeli, da ..."
 
 #: ../src/dfb/wrapdfb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
 msgstr "Pojavila se je napaka DirectFB %d."
 
@@ -3429,14 +3405,12 @@ msgstr "Končano."
 
 # html/htmlwin.cpp:216
 #: ../src/richtext/richtextborderspage.cpp:615
-#, fuzzy
 msgid "Dotted"
 msgstr "Pikčasto"
 
 #: ../src/richtext/richtextborderspage.cpp:617
-#, fuzzy
 msgid "Double"
-msgstr "dvojno"
+msgstr "Dvojno"
 
 #: ../src/common/paper.cpp:177
 msgid "Double Japanese Postcard Rotated 148 x 200 mm"
@@ -3455,7 +3429,6 @@ msgid "Down"
 msgstr "Dol"
 
 #: ../src/richtext/richtextctrl.cpp:859
-#, fuzzy
 msgid "Drag"
 msgstr "Povleci"
 
@@ -3479,7 +3452,7 @@ msgstr "Uredi element"
 
 #: ../include/wx/generic/progdlgg.h:84
 msgid "Elapsed time:"
-msgstr ""
+msgstr "Pretekli čas:"
 
 #: ../src/richtext/richtextsizepage.cpp:353
 #: ../src/richtext/richtextsizepage.cpp:355
@@ -3526,51 +3499,44 @@ msgstr "Omogoči barvo ozadja."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:197
 #: ../src/richtext/richtextbackgroundpage.cpp:199
-#, fuzzy
 msgid "Enables a shadow."
-msgstr "Omogoči barvo ozadja."
+msgstr "Omogoči senco."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:301
 #: ../src/richtext/richtextbackgroundpage.cpp:303
-#, fuzzy
 msgid "Enables the blur distance."
-msgstr "Omogoči vrednost širine."
+msgstr "Omogoči oddaljenost zabrisanosti."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:261
 #: ../src/richtext/richtextbackgroundpage.cpp:263
-#, fuzzy
 msgid "Enables the shadow colour."
-msgstr "Omogoči barvo ozadja."
+msgstr "Omogoči barvo sence."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:328
 #: ../src/richtext/richtextbackgroundpage.cpp:330
-#, fuzzy
 msgid "Enables the shadow opacity."
-msgstr "Omogoči vrednost širine."
+msgstr "Omogoči prekrivnost sence."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:274
 #: ../src/richtext/richtextbackgroundpage.cpp:276
-#, fuzzy
 msgid "Enables the shadow spread."
-msgstr "Omogoči vrednost širine."
+msgstr "Omogoči razširjanje sence."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
 msgid "End"
-msgstr ""
+msgstr "Konec"
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgid "Enter"
-msgstr "Tiskalnik"
+msgstr "Vnašalka"
 
 #: ../src/richtext/richtextstyledlg.cpp:934
-#, fuzzy
 msgid "Enter a box style name"
-msgstr "Vnesite ime novega sloga"
+msgstr "Vnesite ime sloga polja"
 
 #: ../src/richtext/richtextstyledlg.cpp:606
 msgid "Enter a character style name"
@@ -3680,16 +3646,15 @@ msgstr "Napaka:"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
 msgid "Esc"
-msgstr ""
+msgstr "Ubežnica"
 
 # generic/dcpsg.cpp:2262
 # generic/prntdlgg.cpp:441
 # generic/prntdlgg.cpp:637
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgid "Escape"
-msgstr "Ležeče"
+msgstr "Ubežnica"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Esperanto (ISO-8859-3)"
@@ -3697,7 +3662,7 @@ msgstr "esperantsko (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
 msgid "Estimated time:"
-msgstr ""
+msgstr "Predviden čas:"
 
 #: ../src/generic/dbgrptg.cpp:234
 msgid "Executable files (*.exe)|*.exe|"
@@ -3706,7 +3671,7 @@ msgstr "Izvršljive datoteke (*.exe)|*.exe|"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:76 ../src/common/stockitem.cpp:155
 msgid "Execute"
-msgstr ""
+msgstr "Izvedi"
 
 # msw/utilsexc.cpp:585
 #: ../src/msw/utilsexc.cpp:892
@@ -3741,9 +3706,8 @@ msgstr "F"
 # generic/filedlgg.cpp:610
 #. TRANSLATORS: Label of font face name
 #: ../src/propgrid/advprops.cpp:658
-#, fuzzy
 msgid "Face Name"
-msgstr "NovoIme"
+msgstr "Ime pisave"
 
 #: ../src/unix/snglinst.cpp:269
 msgid "Failed to access lock file."
@@ -3987,9 +3951,9 @@ msgstr "curl ni bilo mogoče izvesti, prosimo, namestite ga v poti PATH."
 
 # generic/dirdlgg.cpp:550
 #: ../src/msw/ole/automtn.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find CLSID of \"%s\""
-msgstr "Zaslona \"%s\" ni mogoče odpreti."
+msgstr "CLSID za »%s« ni mogoče najti."
 
 #: ../src/common/regex.cpp:431 ../src/common/regex.cpp:479
 #, c-format
@@ -4129,9 +4093,9 @@ msgstr "Deljene knjižnice '%s' ni mogoče odpreti."
 
 # common/ffile.cpp:182
 #: ../src/osx/core/sound.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "Vira \"%s\" ni mogoče naložiti."
+msgstr "Vira iz »%s« ni mogoče naložiti (napaka %d)."
 
 # common/ffile.cpp:182
 #: ../src/msw/utils.cpp:1022
@@ -4213,15 +4177,15 @@ msgstr "Odložišča ni mogoče odpreti."
 
 # html/helpdata.cpp:353
 #: ../src/common/translation.cpp:1184
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
-msgstr "Množinskih oblik ni mogoče razčleniti: '%s'"
+msgstr "Množinskih oblik ni mogoče razčleniti: »%s«"
 
 # generic/dirdlgg.cpp:550
 #: ../src/unix/mediactrl.cpp:1266
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "Zaslona \"%s\" ni mogoče odpreti."
+msgstr "Predvajanja »%s« ni mogoče pripraviti."
 
 # msw/clipbrd.cpp:539
 #: ../src/msw/clipbrd.cpp:645
@@ -4485,9 +4449,8 @@ msgstr "V datoteko zaklopa '%s' ni mogoče pisati."
 # generic/filedlgg.cpp:534
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/propgrid/propgrid.cpp:208
-#, fuzzy
 msgid "False"
-msgstr "Neresnično"
+msgstr "Ne velja"
 
 # html/helpfrm.cpp:899
 #. TRANSLATORS: Label of font family
@@ -4585,7 +4548,6 @@ msgstr "Prva stran"
 
 # html/helpfrm.cpp:889
 #: ../src/richtext/richtextsizepage.cpp:521
-#, fuzzy
 msgid "Fixed"
 msgstr "Nespremenljivo"
 
@@ -4666,7 +4628,7 @@ msgstr "Od:"
 
 #: ../src/propgrid/advprops.cpp:1565
 msgid "Fuchsia"
-msgstr ""
+msgstr "Fuksija"
 
 #: ../src/common/imaggif.cpp:160
 msgid "GIF: Invalid gif index."
@@ -4704,7 +4666,7 @@ msgstr "Tema GTK+"
 
 #: ../src/common/preferencescmn.cpp:40
 msgid "General"
-msgstr ""
+msgstr "Splošno"
 
 # generic/prntdlgg.cpp:272
 #: ../src/common/prntbase.cpp:258
@@ -4762,21 +4724,20 @@ msgstr "Avtor grafik "
 
 #: ../src/propgrid/advprops.cpp:1560
 msgid "Gray"
-msgstr ""
+msgstr "Siva"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:869
 msgid "GrayText"
-msgstr ""
+msgstr "SivoBesedilo"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
 msgstr "grško (ISO-8859-7)"
 
 #: ../src/propgrid/advprops.cpp:1561
-#, fuzzy
 msgid "Green"
-msgstr "Mac, grški"
+msgstr "Zelena"
 
 #: ../src/richtext/richtextborderspage.cpp:618
 msgid "Groove"
@@ -4803,7 +4764,7 @@ msgstr "Datoteke HTML (*.html;*.htm)|*.html;*.htm|"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1720
 msgid "Hand"
-msgstr ""
+msgstr "Roka"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Harddisk"
@@ -4910,9 +4871,8 @@ msgstr "Domača mapa"
 
 #: ../src/richtext/richtextsizepage.cpp:253
 #: ../src/richtext/richtextsizepage.cpp:255
-#, fuzzy
 msgid "How the object will float relative to the text."
-msgstr "Kako bo plaval predmet glede na besedilo."
+msgstr "Kako bo plaval predmet relativno glede na besedilo."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1721
@@ -5005,12 +4965,10 @@ msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "Neveljavni razred predmetov (ne wxEvtHandler) kot izvor dogodka."
 
 #: ../src/common/xti.cpp:513
-#, fuzzy
 msgid "Illegal Parameter Count for ConstructObject Method"
 msgstr "Neveljavno število parametrov za metodo ConstructObject"
 
 #: ../src/common/xti.cpp:501
-#, fuzzy
 msgid "Illegal Parameter Count for Create Method"
 msgstr "Neveljavno število parametrov za metodo ustvarjanja"
 
@@ -5072,19 +5030,18 @@ msgstr "Pravic za datoteko '%s' ni mogoče nastaviti."
 # generic/fontdlgg.cpp:208
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:872
-#, fuzzy
 msgid "InactiveBorder"
-msgstr "Obroba"
+msgstr "NedejavnaObroba"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:873
 msgid "InactiveCaption"
-msgstr ""
+msgstr "NedejavenNapis"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:874
 msgid "InactiveCaptionText"
-msgstr ""
+msgstr "BesediloNedejavnegaNapisa"
 
 #: ../src/common/gifdecod.cpp:792
 #, c-format
@@ -5115,7 +5072,7 @@ msgstr "indijsko (ISO-8859-12)"
 
 #: ../src/common/stockitem.cpp:167
 msgid "Info"
-msgstr ""
+msgstr "Podatki"
 
 #: ../src/common/init.cpp:287
 msgid "Initialization failed in post init, aborting."
@@ -5124,9 +5081,8 @@ msgstr "Inicializacija ni uspela v po-inicializaciji, sledi prekinitev."
 # html/helpfrm.cpp:372
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgid "Ins"
-msgstr "Vdelano"
+msgstr "Vstavljalka"
 
 # html/helpfrm.cpp:372
 #. TRANSLATORS: Name of keyboard key
@@ -5161,9 +5117,8 @@ msgstr "Vstavi prelom strani pred odstavek."
 
 # html/helpfrm.cpp:372
 #: ../src/richtext/richtextborderspage.cpp:620
-#, fuzzy
 msgid "Inset"
-msgstr "Vdelano"
+msgstr "Vstavek"
 
 #: ../src/gtk/app.cpp:413
 #, c-format
@@ -5326,137 +5281,126 @@ msgstr "KP_"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgid "KP_Add"
-msgstr "KP_DODAJ"
+msgstr "KP_Dodaj"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "KP_Begin"
-msgstr ""
+msgstr "ŠT_Začni"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "KP_Decimal"
-msgstr ""
+msgstr "ŠT_Vejica"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "KP_Delete"
-msgstr "Izbriši"
+msgstr "KP_Brisalka"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "KP_Divide"
-msgstr ""
+msgstr "ŠT_Deli"
 
 # html/htmlwin.cpp:216
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "KP_Down"
-msgstr "Dol"
+msgstr "KP_Navzdol"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgid "KP_End"
-msgstr "KP_KONEC"
+msgstr "KP_Konec"
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgid "KP_Enter"
-msgstr "Tiskalnik"
+msgstr "KP_Vnašalka"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "KP_Equal"
-msgstr ""
+msgstr "ŠT_Enako"
 
 # generic/dirdlgg.cpp:212
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "KP_Home"
-msgstr "Domov"
+msgstr "KP_Začetek"
 
 # html/helpfrm.cpp:372
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "KP_Insert"
-msgstr "Vstavi"
+msgstr "KP_Vstavljalka"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgid "KP_Left"
-msgstr "Levo"
+msgstr "KP_Levo"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "KP_Multiply"
-msgstr ""
+msgstr "ŠT_Množi"
 
 # msw/mdi.cpp:188
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgid "KP_Next"
-msgstr "Naslednji"
+msgstr "KP_Naslednji"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "KP_PageDown"
-msgstr ""
+msgstr "ŠT_Naslednjastran"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "KP_PageUp"
-msgstr ""
+msgstr "ŠT_Prejšnjastran"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:96
+#, fuzzy
 msgid "KP_Prior"
-msgstr ""
+msgstr "ŠT_Prior"
 
 # generic/fontdlgg.cpp:216
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "KP_Right"
-msgstr "Desno"
+msgstr "KP_Desno"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "KP_Separator"
-msgstr ""
+msgstr "ŠT_Ločilo"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "KP_Space"
-msgstr ""
+msgstr "ŠT_Preslednica"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "KP_Subtract"
-msgstr ""
+msgstr "ŠT_Odštej"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgid "KP_Tab"
-msgstr "KP_TABULATORKA"
+msgstr "KP_Tabulatorka"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgid "KP_Up"
-msgstr "KP_GOR"
+msgstr "KP_Navzgor"
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
@@ -5511,7 +5455,7 @@ msgstr "Levo (&prva vrstica):"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1722
 msgid "Left Button"
-msgstr ""
+msgstr "Levi gumb"
 
 # generic/prntdlgg.cpp:649
 #: ../src/generic/prntdlgg.cpp:880
@@ -5572,7 +5516,7 @@ msgstr "Svetlo"
 
 #: ../src/propgrid/advprops.cpp:1569
 msgid "Lime"
-msgstr ""
+msgstr "Limetna"
 
 #: ../src/generic/helpext.cpp:294
 #, c-format
@@ -5677,17 +5621,14 @@ msgid "MacBengali"
 msgstr "Mac, bengalski"
 
 #: ../src/common/fmapbase.cpp:217
-#, fuzzy
 msgid "MacBurmese"
 msgstr "Mac, burmanski"
 
 #: ../src/common/fmapbase.cpp:236
-#, fuzzy
 msgid "MacCeltic"
 msgstr "Mac, keltski"
 
 #: ../src/common/fmapbase.cpp:227
-#, fuzzy
 msgid "MacCentralEurRoman"
 msgstr "Mac, srednjeevropski, latinični"
 
@@ -5712,7 +5653,6 @@ msgid "MacDevanagari"
 msgstr "Mac, devanagarski"
 
 #: ../src/common/fmapbase.cpp:231
-#, fuzzy
 msgid "MacDingbats"
 msgstr "Mac, znakovni"
 
@@ -5721,12 +5661,10 @@ msgid "MacEthiopic"
 msgstr "Mac, etiopski"
 
 #: ../src/common/fmapbase.cpp:229
-#, fuzzy
 msgid "MacExtArabic"
-msgstr "Mac, arabski"
+msgstr "Mac, arabski, razširjeni"
 
 #: ../src/common/fmapbase.cpp:237
-#, fuzzy
 msgid "MacGaelic"
 msgstr "Mac, galski"
 
@@ -5759,7 +5697,6 @@ msgid "MacJapanese"
 msgstr "Mac, japonski"
 
 #: ../src/common/fmapbase.cpp:214
-#, fuzzy
 msgid "MacKannada"
 msgstr "Mac, kanareški"
 
@@ -5793,9 +5730,8 @@ msgstr "Mac, orijski"
 
 # generic/fontdlgg.cpp:206
 #: ../src/common/fmapbase.cpp:199
-#, fuzzy
 msgid "MacRoman"
-msgstr "Mac, latinski"
+msgstr "Mac, latinični"
 
 # generic/fontdlgg.cpp:206
 #: ../src/common/fmapbase.cpp:235
@@ -5837,7 +5773,7 @@ msgstr "Mac, vietnamski"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1723
 msgid "Magnifier"
-msgstr ""
+msgstr "Povečevalo"
 
 # generic/dirdlgg.cpp:191
 #: ../src/propgrid/advprops.cpp:2104
@@ -5851,7 +5787,7 @@ msgstr "Robovi"
 
 #: ../src/propgrid/advprops.cpp:1556
 msgid "Maroon"
-msgstr ""
+msgstr "Kostanjeva"
 
 #: ../src/generic/fdrepdlg.cpp:147
 msgid "Match case"
@@ -5903,7 +5839,7 @@ msgstr "Po&manjšaj"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1724
 msgid "Middle Button"
-msgstr ""
+msgstr "Srednji gumb"
 
 #: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
@@ -5968,7 +5904,7 @@ msgstr "Ime"
 
 #: ../src/propgrid/advprops.cpp:1557
 msgid "Navy"
-msgstr ""
+msgstr "Mornarska"
 
 #: ../src/common/stockitem.cpp:175
 msgid "Network"
@@ -5980,9 +5916,8 @@ msgid "New"
 msgstr "Nov"
 
 #: ../src/richtext/richtextstyledlg.cpp:243
-#, fuzzy
 msgid "New &Box Style..."
-msgstr "Nov &seznamski slog ..."
+msgstr "Nov slog po&lja ..."
 
 #: ../src/richtext/richtextstyledlg.cpp:225
 msgid "New &Character Style..."
@@ -6044,7 +5979,7 @@ msgstr "Ne"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1725
 msgid "No Entry"
-msgstr ""
+msgstr "Ni vnosa"
 
 # common/image.cpp:766
 # common/image.cpp:800
@@ -6365,7 +6300,7 @@ msgstr "V redu"
 #: ../src/msw/ole/automtn.cpp:698
 #, c-format
 msgid "OLE Automation error in %s: %s"
-msgstr ""
+msgstr "Napaka pri avtomatizaciji OLE v %s: %s"
 
 # html/helpfrm.cpp:512
 #: ../include/wx/richtext/richtextimagedlg.h:37
@@ -6382,11 +6317,11 @@ msgstr "Objekti morajo imeti atribut id"
 
 #: ../src/propgrid/advprops.cpp:1562
 msgid "Olive"
-msgstr ""
+msgstr "Oljčna"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:326
 msgid "Opaci&ty:"
-msgstr ""
+msgstr "Pre&krivnost:"
 
 #: ../src/common/docview.cpp:1776 ../src/common/docview.cpp:1818
 msgid "Open File"
@@ -6448,7 +6383,7 @@ msgstr "Možnosti"
 
 #: ../src/propgrid/advprops.cpp:1567
 msgid "Orange"
-msgstr ""
+msgstr "Oranžna"
 
 # generic/prntdlgg.cpp:443
 # generic/prntdlgg.cpp:638
@@ -6467,7 +6402,7 @@ msgstr "Oris"
 
 #: ../src/richtext/richtextborderspage.cpp:621
 msgid "Outset"
-msgstr ""
+msgstr "Izraščeno"
 
 #: ../src/msw/ole/automtn.cpp:662
 msgid "Overflow while coercing argument values."
@@ -6627,7 +6562,7 @@ msgstr "kuverta PRC #9 rotirano, 324 x 229 mm"
 
 #: ../src/richtext/richtextmarginspage.cpp:285
 msgid "Padding"
-msgstr ""
+msgstr "Blazinjenje"
 
 # common/prntbase.cpp:731
 #: ../src/common/prntbase.cpp:2074
@@ -6644,9 +6579,8 @@ msgstr "Stran %d od %d"
 # common/prntbase.cpp:731
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "Page Down"
-msgstr "Stran %d"
+msgstr "Naslednja stran"
 
 # generic/prntdlgg.cpp:604
 #: ../src/gtk/print.cpp:810
@@ -6656,9 +6590,8 @@ msgstr "Nastavitev strani"
 # common/prntbase.cpp:731
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "Page Up"
-msgstr "Stran %d"
+msgstr "Prejšnja stran"
 
 # generic/prntdlgg.cpp:604
 #: ../src/common/prntbase.cpp:484 ../src/generic/prntdlgg.cpp:828
@@ -6668,16 +6601,14 @@ msgstr "Nastavitev strani"
 # html/htmlwin.cpp:216
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "PageDown"
-msgstr "Dol"
+msgstr "NaslStran"
 
 # generic/prntdlgg.cpp:164
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "PageUp"
-msgstr "Strani"
+msgstr "PrejStran"
 
 # generic/prntdlgg.cpp:164
 #: ../src/generic/prntdlgg.cpp:216
@@ -6687,7 +6618,7 @@ msgstr "Strani"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1726
 msgid "Paint Brush"
-msgstr ""
+msgstr "Čopič"
 
 # generic/prntdlgg.cpp:433
 # generic/prntdlgg.cpp:615
@@ -6724,12 +6655,12 @@ msgstr "Prilepi izbor"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:72
 msgid "Pause"
-msgstr ""
+msgstr "Prekinitev"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1727
 msgid "Pencil"
-msgstr ""
+msgstr "Pisalo"
 
 #: ../src/richtext/richtextbulletspage.cpp:159
 #: ../src/richtext/richtextliststylepage.cpp:222
@@ -6744,12 +6675,12 @@ msgstr "Dovoljenja"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:58
 msgid "PgDn"
-msgstr ""
+msgstr "Naslednja stran"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:57
 msgid "PgUp"
-msgstr ""
+msgstr "Prejšnja stran"
 
 # html/helpfrm.cpp:512
 #: ../src/richtext/richtextbuffer.cpp:12815
@@ -6794,7 +6725,7 @@ msgstr ""
 
 #: ../src/common/headerctrlcmn.cpp:59
 msgid "Please select the columns to show and define their order:"
-msgstr ""
+msgstr "Izberite stolpce za prikaz in določite njihovo razvrstitev:"
 
 #: ../src/common/prntbase.cpp:538
 msgid "Please wait while printing..."
@@ -6803,16 +6734,14 @@ msgstr "Prosimo, počakajte, dokler poteka tiskanje ..."
 # html/helpfrm.cpp:899
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1728
-#, fuzzy
 msgid "Point Left"
-msgstr "Velikost točke"
+msgstr "Usmeri levo"
 
 # generic/fontdlgg.cpp:216
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1729
-#, fuzzy
 msgid "Point Right"
-msgstr "Poravnaj desno"
+msgstr "Usmeri desno"
 
 # html/helpfrm.cpp:899
 #. TRANSLATORS: Label of font point size
@@ -7001,9 +6930,9 @@ msgstr "Napaka pri tiskanju"
 
 # generic/printps.cpp:232
 #: ../src/common/prntbase.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d"
-msgstr "Tiskanje strani %d ..."
+msgstr "Tiskanje strani %d"
 
 # generic/printps.cpp:232
 #: ../src/common/prntbase.cpp:570
@@ -7026,9 +6955,8 @@ msgstr "Tiskanje ..."
 # generic/prntdlgg.cpp:127
 #: ../include/wx/prntbase.h:267 ../include/wx/richtext/richtextprint.h:109
 #: ../src/common/docview.cpp:2135
-#, fuzzy
 msgid "Printout"
-msgstr "Tiskanje"
+msgstr "Izpis"
 
 #: ../src/common/debugrpt.cpp:565
 #, c-format
@@ -7064,7 +6992,7 @@ msgstr "Napaka lastnosti"
 
 #: ../src/propgrid/advprops.cpp:1558
 msgid "Purple"
-msgstr ""
+msgstr "Škrlatna"
 
 # generic/dcpsg.cpp:2547
 #: ../src/common/paper.cpp:113
@@ -7079,9 +7007,8 @@ msgstr "Vprašanje"
 # generic/logg.cpp:1023
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1730
-#, fuzzy
 msgid "Question Arrow"
-msgstr "Vprašanje"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:156
 msgid "Quit"
@@ -7117,9 +7044,8 @@ msgstr "Pripravljen"
 # common/docview.cpp:1945
 # common/docview.cpp:1956
 #: ../src/propgrid/advprops.cpp:1566
-#, fuzzy
 msgid "Red"
-msgstr "Ponovi"
+msgstr "Rdeča"
 
 # common/docview.cpp:1945
 # common/docview.cpp:1956
@@ -7182,7 +7108,7 @@ msgstr "Ustrezni naslovi:"
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Remaining time:"
-msgstr ""
+msgstr "Preostali čas:"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Remove"
@@ -7249,7 +7175,7 @@ msgstr "Zamenjaj z:"
 
 #: ../src/common/valtext.cpp:163
 msgid "Required information entry is empty."
-msgstr ""
+msgstr "Vnos z zahtevanimi podatki je prazen."
 
 # common/intl.cpp:412
 #: ../src/common/translation.cpp:1975
@@ -7260,7 +7186,7 @@ msgstr "Vir '%s' ni veljaven katalog sporočil."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
 msgid "Return"
-msgstr ""
+msgstr "Vračalka"
 
 #: ../src/common/stockitem.cpp:189
 msgid "Revert to Saved"
@@ -7274,7 +7200,7 @@ msgstr "Desno"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "Z de&sne na levo"
 
 # generic/fontdlgg.cpp:216
 #. TRANSLATORS: Name of keyboard key
@@ -7287,14 +7213,13 @@ msgstr "Desno"
 # generic/fontdlgg.cpp:216
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1715
-#, fuzzy
 msgid "Right Arrow"
-msgstr "Desno"
+msgstr "Smerna tipka desno"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1731
 msgid "Right Button"
-msgstr ""
+msgstr "Desni gumb"
 
 # generic/prntdlgg.cpp:661
 #: ../src/generic/prntdlgg.cpp:892
@@ -7383,7 +7308,7 @@ msgstr ""
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:876
 msgid "Scrollbar"
-msgstr ""
+msgstr "Drsnik"
 
 # generic/helpwxht.cpp:161
 # html/helpfrm.cpp:414
@@ -7498,7 +7423,7 @@ msgstr "Izbere raven seznama za urejanje."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:80
 msgid "Separator"
-msgstr ""
+msgstr "Ločilo"
 
 # common/cmdline.cpp:627
 #: ../src/common/cmdline.cpp:1083
@@ -7508,7 +7433,7 @@ msgstr "Po možnosti '%s' je pričakovano ločilo."
 
 #: ../src/osx/menu_osx.cpp:610
 msgid "Services"
-msgstr ""
+msgstr "Storitve"
 
 #: ../src/richtext/richtextbuffer.cpp:11208
 msgid "Set Cell Style"
@@ -7535,16 +7460,15 @@ msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:272
 msgid "Sh&adow spread:"
-msgstr ""
+msgstr "Raz&širjanje sence:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:180
 msgid "Shadow"
-msgstr ""
+msgstr "Senca"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:259
-#, fuzzy
 msgid "Shadow c&olour:"
-msgstr "Izberite barvo"
+msgstr "Barva sen&ce:"
 
 # common/utilscmn.cpp:468
 #: ../src/common/accelcmn.cpp:325
@@ -7622,7 +7546,7 @@ msgstr "Prikaže predogled pisave."
 
 #: ../src/propgrid/advprops.cpp:1568
 msgid "Silver"
-msgstr ""
+msgstr "Srebrna"
 
 #: ../src/univ/themes/mono.cpp:516
 msgid "Simple monochrome theme"
@@ -7680,18 +7604,16 @@ msgid "Slant"
 msgstr "Levo kurzivno"
 
 #: ../src/richtext/richtextfontpage.cpp:289
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "Ve&like začetnice"
+msgstr "&Male začetnice"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:77
 msgid "Snapshot"
-msgstr ""
+msgstr "Posnetek"
 
 # generic/fontdlgg.cpp:217
 #: ../src/richtext/richtextborderspage.cpp:614
-#, fuzzy
 msgid "Solid"
 msgstr "Zapolnjeno"
 
@@ -7734,9 +7656,8 @@ msgstr "Zvočna datoteka '%s' je v nepodprtem zapisu."
 # html/helpfrm.cpp:628
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgid "Space"
-msgstr "Razmik"
+msgstr "Preslednica"
 
 # html/helpfrm.cpp:628
 #: ../src/richtext/richtextliststylepage.cpp:467
@@ -7750,7 +7671,7 @@ msgstr "Preveri črkovanje"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1737
 msgid "Spraycan"
-msgstr ""
+msgstr "Pršilka"
 
 #: ../src/richtext/richtextbulletspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:490
@@ -7764,7 +7685,6 @@ msgstr "Statement, 5 1/2 x 8 1/2 pal."
 # generic/logg.cpp:598
 #: ../src/richtext/richtextsizepage.cpp:518
 #: ../src/richtext/richtextsizepage.cpp:523
-#, fuzzy
 msgid "Static"
 msgstr "Statično"
 
@@ -7808,7 +7728,7 @@ msgstr "Po&dpisano"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:81
 msgid "Subtract"
-msgstr ""
+msgstr "Odštej"
 
 # generic/fontdlgg.cpp:209
 #: ../src/richtext/richtextfontpage.cpp:296
@@ -7825,7 +7745,7 @@ msgstr "SuperB/SuperB/A3, 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Preskoči deljenje &besed"
 
 # generic/fontdlgg.cpp:210
 #: ../src/generic/fontdlgg.cpp:326
@@ -7844,9 +7764,8 @@ msgid "Symbol &font:"
 msgstr "P&isava posebnih znakov:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
-msgstr "Simbol"
+msgstr "Simboli"
 
 # common/imagtiff.cpp:192
 # common/imagtiff.cpp:203
@@ -7882,9 +7801,8 @@ msgstr "TIFF: slika je nenaravno velika."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgid "Tab"
-msgstr "Tabulatorji"
+msgstr "Tabulatorka"
 
 # html/helpfrm.cpp:512
 #: ../src/richtext/richtextbuffer.cpp:11489
@@ -7905,7 +7823,7 @@ msgstr "Tabulatorji"
 
 #: ../src/propgrid/advprops.cpp:1559
 msgid "Teal"
-msgstr ""
+msgstr "Modrozelena"
 
 # generic/fontdlgg.cpp:211
 #: ../src/generic/fontdlgg.cpp:327
@@ -7966,9 +7884,8 @@ msgstr "Barva ozadja."
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "Slog pisave."
+msgstr "Slog obrobe."
 
 # html/helpfrm.cpp:899
 #: ../src/richtext/richtextmarginspage.cpp:267
@@ -8117,9 +8034,8 @@ msgstr "Vrste datoteke '%s' ni mogoče ugotoviti."
 # msw/mdi.cpp:184
 #: ../src/richtext/richtextbackgroundpage.cpp:220
 #: ../src/richtext/richtextbackgroundpage.cpp:222
-#, fuzzy
 msgid "The horizontal offset."
-msgstr "Razporedi &vodoravno"
+msgstr "Vodoravni odmik."
 
 #: ../src/richtext/richtextindentspage.cpp:199
 #: ../src/richtext/richtextindentspage.cpp:201
@@ -8162,7 +8078,6 @@ msgid "The list item number."
 msgstr "Številka elementa seznama."
 
 #: ../src/msw/ole/automtn.cpp:670
-#, fuzzy
 msgid "The locale ID is unknown."
 msgstr "ID krajevnih nastavitev ni znan."
 
@@ -8264,23 +8179,22 @@ msgstr "Desni položaj."
 #: ../src/richtext/richtextbackgroundpage.cpp:310
 #: ../src/richtext/richtextbackgroundpage.cpp:312
 msgid "The shadow blur distance."
-msgstr ""
+msgstr "Oddaljenost zabrisanosti sence."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:267
 #: ../src/richtext/richtextbackgroundpage.cpp:269
-#, fuzzy
 msgid "The shadow colour."
-msgstr "Barva pisave."
+msgstr "Barva sence."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:337
 #: ../src/richtext/richtextbackgroundpage.cpp:339
 msgid "The shadow opacity."
-msgstr ""
+msgstr "Prekrivnost sence."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:283
 #: ../src/richtext/richtextbackgroundpage.cpp:285
 msgid "The shadow spread."
-msgstr ""
+msgstr "Razširjanje sence."
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -8360,7 +8274,7 @@ msgstr "Vrednost opcije '%s' mora biti podana."
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Vrednost polmera koda."
 
 #: ../src/msw/dialup.cpp:443
 #, c-format
@@ -8376,9 +8290,8 @@ msgstr ""
 # msw/printwin.cpp:252
 #: ../src/richtext/richtextbackgroundpage.cpp:243
 #: ../src/richtext/richtextbackgroundpage.cpp:245
-#, fuzzy
 msgid "The vertical offset."
-msgstr "Omogoči navpično poravnavo."
+msgstr "Navpični odmik."
 
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
@@ -8495,19 +8408,18 @@ msgstr "V PNG je preveč barv, slika bo morda malce neostra."
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:877
 msgid "Tooltip"
-msgstr ""
+msgstr "Orodni namig"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:878
 msgid "TooltipText"
-msgstr ""
+msgstr "BesediloOrodnegaNamiga"
 
 # generic/prntdlgg.cpp:191
 #: ../src/common/stockitem.cpp:200 ../src/richtext/richtextsizepage.cpp:286
 #: ../src/richtext/richtextsizepage.cpp:290
-#, fuzzy
 msgid "Top"
-msgstr "Vrh"
+msgstr "Na vrhu"
 
 # generic/prntdlgg.cpp:650
 #: ../src/generic/prntdlgg.cpp:881
@@ -8524,7 +8436,6 @@ msgstr "Prevajalci"
 
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/propgrid/propgrid.cpp:210
-#, fuzzy
 msgid "True"
 msgstr "Resnično"
 
@@ -8682,9 +8593,8 @@ msgstr ""
 
 # common/file.cpp:285
 #: ../src/unix/fswatcher_inotify.cpp:543
-#, fuzzy
 msgid "Unable to read from inotify descriptor"
-msgstr "ni mogoče brati iz deskriptorja %d"
+msgstr "Ni mogoče brati iz deskriptorja inotify"
 
 #: ../src/unix/fswatcher_inotify.cpp:132
 msgid "Unable to remove inotify watch"
@@ -8696,9 +8606,9 @@ msgstr ""
 
 # common/ffile.cpp:182
 #: ../src/msw/fswatcher.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to set up watch for '%s'"
-msgstr "Datoteke '%s' se ni mogoče dotakniti."
+msgstr "Datoteki »%s« ni mogoče določiti opazovanja."
 
 #: ../src/msw/fswatcher.cpp:91
 msgid "Unable to start IOCP worker thread"
@@ -8817,7 +8727,7 @@ msgstr "Enote za širino spodnjega orisa."
 #: ../src/richtext/richtextmarginspage.cpp:391
 #: ../src/richtext/richtextmarginspage.cpp:393
 msgid "Units for the bottom padding."
-msgstr ""
+msgstr "Enote za zapolnjevanje ne dnu."
 
 # msw/thread.cpp:871
 #: ../src/richtext/richtextsizepage.cpp:664
@@ -8828,9 +8738,8 @@ msgstr "Enote za spodnji položaj."
 # msw/thread.cpp:871
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Enote za gornji rob."
+msgstr "Enote za polmer oglišča."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -8850,7 +8759,7 @@ msgstr "Enote za širino levega orisa."
 #: ../src/richtext/richtextmarginspage.cpp:318
 #: ../src/richtext/richtextmarginspage.cpp:320
 msgid "Units for the left padding."
-msgstr ""
+msgstr "Enote za zapolnjevanje na levi."
 
 # msw/thread.cpp:871
 #: ../src/richtext/richtextsizepage.cpp:559
@@ -8906,7 +8815,7 @@ msgstr "Enote za širino desnega orisa."
 #: ../src/richtext/richtextmarginspage.cpp:343
 #: ../src/richtext/richtextmarginspage.cpp:345
 msgid "Units for the right padding."
-msgstr ""
+msgstr "Enote za zapolnjevanje na desni."
 
 # msw/thread.cpp:871
 #: ../src/richtext/richtextsizepage.cpp:629
@@ -8933,7 +8842,7 @@ msgstr "Enote za širino gornjega orisa."
 #: ../src/richtext/richtextmarginspage.cpp:366
 #: ../src/richtext/richtextmarginspage.cpp:368
 msgid "Units for the top padding."
-msgstr ""
+msgstr "Enote za zapolnjevanje na vrhu."
 
 # msw/thread.cpp:871
 #: ../src/richtext/richtextsizepage.cpp:594
@@ -8949,9 +8858,8 @@ msgstr "Enote za gornji položaj."
 #: ../src/richtext/richtextbackgroundpage.cpp:296
 #: ../src/richtext/richtextbackgroundpage.cpp:321
 #: ../src/richtext/richtextbackgroundpage.cpp:323
-#, fuzzy
 msgid "Units for this value."
-msgstr "Enote za levi rob."
+msgstr "Enote za to vrednost."
 
 # generic/progdlgg.cpp:241
 #: ../src/generic/progdlgg.cpp:385 ../src/generic/progdlgg.cpp:658
@@ -9083,7 +8991,7 @@ msgstr "Uporaba: %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:195
 msgid "Use &shadow"
-msgstr ""
+msgstr "Uporabi &senco"
 
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
@@ -9150,12 +9058,12 @@ msgstr "Pogledi"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1738
 msgid "Wait"
-msgstr ""
+msgstr "Čakaj"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1740
 msgid "Wait Arrow"
-msgstr ""
+msgstr "Puščica čakanja"
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
@@ -9170,7 +9078,7 @@ msgstr "Opozorilo:"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1739
 msgid "Watch"
-msgstr ""
+msgstr "Opazuj"
 
 # generic/fontdlgg.cpp:216
 #. TRANSLATORS: Label of font weight
@@ -9192,7 +9100,7 @@ msgstr "Če je pisava podčrtana ali ne."
 
 #: ../src/propgrid/advprops.cpp:1572
 msgid "White"
-msgstr ""
+msgstr "Bela"
 
 # html/helpfrm.cpp:406
 #: ../src/generic/fdrepdlg.cpp:144
@@ -9218,33 +9126,29 @@ msgstr "Win32s na Windows 3.1"
 # msw/window.cpp:2286
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:879
-#, fuzzy
 msgid "Window"
-msgstr "&Okno"
+msgstr "Okno"
 
 # msw/mdi.cpp:1287
 # msw/mdi.cpp:1294
 # msw/window.cpp:2286
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:880
-#, fuzzy
 msgid "WindowFrame"
-msgstr "&Okno"
+msgstr "OkvirOkna"
 
 # msw/mdi.cpp:1287
 # msw/mdi.cpp:1294
 # msw/window.cpp:2286
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:881
-#, fuzzy
 msgid "WindowText"
-msgstr "&Okno"
+msgstr "BesediloOkna"
 
 # msw/utils.cpp:549
 #: ../src/msw/utils.cpp:1233
-#, fuzzy
 msgid "Windows 10"
-msgstr "Windows 98"
+msgstr "Windows 10"
 
 # msw/utils.cpp:549
 #: ../src/msw/utils.cpp:1183
@@ -9258,15 +9162,13 @@ msgstr "Windows 7"
 
 # msw/utils.cpp:549
 #: ../src/msw/utils.cpp:1221
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 # msw/utils.cpp:549
 #: ../src/msw/utils.cpp:1227
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 # msw/utils.cpp:549
 #: ../src/msw/utils.cpp:1147
@@ -9313,12 +9215,10 @@ msgid "Windows Central European (CP 1250)"
 msgstr "Windows - srednjeevropsko (CP 1250)"
 
 #: ../src/common/fmapbase.cpp:168
-#, fuzzy
 msgid "Windows Chinese Simplified (CP 936) or GB-2312"
 msgstr "Windows - kitajsko, poenostavljeno (CP 936) ali GB-2312"
 
 #: ../src/common/fmapbase.cpp:170
-#, fuzzy
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
 msgstr "Windows - kitajsko, tradicionalno (CP 950) ali Big-5"
 
@@ -9335,14 +9235,12 @@ msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows - hebrejsko (CP 1255)"
 
 #: ../src/common/fmapbase.cpp:167
-#, fuzzy
 msgid "Windows Japanese (CP 932) or Shift-JIS"
-msgstr "Windows - japonsko (CP 932) - ali Shift-JIS"
+msgstr "Windows - japonsko (CP 932) ali Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows - arabsko (CP 1256)"
+msgstr "Windows - johabsko (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:169
 msgid "Windows Korean (CP 949)"
@@ -9359,9 +9257,8 @@ msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
 #: ../src/msw/utils.cpp:1232
-#, fuzzy
 msgid "Windows Server 10"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 10"
 
 #: ../src/msw/utils.cpp:1192
 msgid "Windows Server 2003"
@@ -9376,14 +9273,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1220
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1226
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
@@ -9422,23 +9317,20 @@ msgstr "Windows/DOS OEM - cirilično (CP 866)"
 # msw/utils.cpp:549
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgid "Windows_Left"
-msgstr "Windows 7"
+msgstr "Windows_Levo"
 
 # msw/utils.cpp:549
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgid "Windows_Menu"
-msgstr "Windows ME"
+msgstr "Windows_Meni"
 
 # msw/utils.cpp:549
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgid "Windows_Right"
-msgstr "Windows Vista"
+msgstr "Windows_Desno"
 
 # common/ffile.cpp:168
 #: ../src/common/ffile.cpp:150
@@ -9480,7 +9372,7 @@ msgstr "XPM: nedokončani podatki slike v vrstici %d!"
 
 #: ../src/propgrid/advprops.cpp:1571
 msgid "Yellow"
-msgstr ""
+msgstr "Rumena"
 
 # common/dlgcmn.cpp:109
 # common/dlgcmn.cpp:116
@@ -10359,29 +10251,24 @@ msgid "specify the theme to use"
 msgstr "določi temo za uporabo"
 
 #: ../src/richtext/richtextbuffer.cpp:9333
-#, fuzzy
 msgid "standard/circle"
-msgstr "Navadno/krog"
+msgstr "navadno/krog"
 
 #: ../src/richtext/richtextbuffer.cpp:9334
-#, fuzzy
 msgid "standard/circle-outline"
-msgstr "Navadno/oris-kroga"
+msgstr "navadno/oris-kroga"
 
 #: ../src/richtext/richtextbuffer.cpp:9336
-#, fuzzy
 msgid "standard/diamond"
-msgstr "Navadno/karo"
+msgstr "navadno/karo"
 
 #: ../src/richtext/richtextbuffer.cpp:9335
-#, fuzzy
 msgid "standard/square"
-msgstr "Navadno/kvadrat"
+msgstr "navadno/kvadrat"
 
 #: ../src/richtext/richtextbuffer.cpp:9337
-#, fuzzy
 msgid "standard/triangle"
-msgstr "Navadno/trikotnik"
+msgstr "navadno/trikotnik"
 
 #: ../src/common/zipstrm.cpp:1745
 msgid "stored file length not in Zip header"
@@ -10567,293 +10454,3 @@ msgstr "napaka zlib %d"
 #: ../src/richtext/richtextliststylepage.cpp:496
 msgid "~"
 msgstr "~"
-
-#~ msgid "ADD"
-#~ msgstr "DODAJ"
-
-#~ msgid "BACK"
-#~ msgstr "VRAČALKA"
-
-#~ msgid "CANCEL"
-#~ msgstr "PREKLIČI"
-
-#~ msgid "CAPITAL"
-#~ msgstr "VELIKEČRKE"
-
-#~ msgid "CLEAR"
-#~ msgstr "POČISTI"
-
-#~ msgid "COMMAND"
-#~ msgstr "UKAZ"
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-# msw/thread.cpp:519
-#~ msgid "Cannot create mutex."
-#~ msgstr "Mutexa ni mogoče ustvariti."
-
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-# msw/thread.cpp:519
-#~ msgid "Cannot resume thread %lu"
-#~ msgstr "Niti %lu ni mogoče nadaljevati."
-
-#~ msgid "Cannot suspend thread %lu"
-#~ msgstr "Niti %lu ni mogoče začasno ustaviti."
-
-# common/imagbmp.cpp:266
-# common/imagbmp.cpp:278
-#~ msgid "Couldn't acquire a mutex lock"
-#~ msgstr "Zaklopa mutexa ne morem pridobiti."
-
-#~ msgid "Couldn't get hatch style from wxBrush."
-#~ msgstr "Iz wxBrush ni mogoče dobiti sloga šrafiranja."
-
-# common/imagbmp.cpp:266
-# common/imagbmp.cpp:278
-#~ msgid "Couldn't release a mutex"
-#~ msgstr "Ne morem sprostiti mutexa."
-
-#~ msgid "DECIMAL"
-#~ msgstr "DECIMALNO"
-
-#~ msgid "DEL"
-#~ msgstr "BRI"
-
-#~ msgid "DELETE"
-#~ msgstr "BRISALKA"
-
-# generic/filedlgg.cpp:356
-#~ msgid "DIVIDE"
-#~ msgstr "DELI"
-
-#~ msgid "DOWN"
-#~ msgstr "NAVZDOL"
-
-#~ msgid "END"
-#~ msgstr "KONEC"
-
-#~ msgid "ENTER"
-#~ msgstr "VNAŠALKA"
-
-#~ msgid "ESC"
-#~ msgstr "UBEŽNICA"
-
-#~ msgid "ESCAPE"
-#~ msgstr "UBEŽNICA"
-
-#~ msgid "EXECUTE"
-#~ msgstr "IZVRŠEVALKA"
-
-#~ msgid "Execution of command '%s' failed with error: %ul"
-#~ msgstr "Izvajanje ukaza '%s' neuspešno z napako: %ul"
-
-# generic/filedlgg.cpp:1074
-#~ msgid ""
-#~ "File '%s' already exists.\n"
-#~ "Do you want to replace it?"
-#~ msgstr ""
-#~ "Datoteka '%s' že obstaja.\n"
-#~ "Jo želite prepisati?"
-
-#~ msgid "HELP"
-#~ msgstr "POMOČ"
-
-#~ msgid "HOME"
-#~ msgstr "HOME"
-
-#~ msgid "INS"
-#~ msgstr "VST"
-
-#~ msgid "INSERT"
-#~ msgstr "VSTAVI"
-
-#~ msgid "KP_BEGIN"
-#~ msgstr "KP_ZAČNI"
-
-#~ msgid "KP_DECIMAL"
-#~ msgstr "KP_DECIMALNO"
-
-#~ msgid "KP_DELETE"
-#~ msgstr "KP_DELETE"
-
-#~ msgid "KP_DIVIDE"
-#~ msgstr "KP_DELJENO"
-
-#~ msgid "KP_DOWN"
-#~ msgstr "KP_DOL"
-
-#~ msgid "KP_ENTER"
-#~ msgstr "KP_VNAŠALKA"
-
-#~ msgid "KP_EQUAL"
-#~ msgstr "KP_JEENAKO"
-
-#~ msgid "KP_HOME"
-#~ msgstr "KP_HOME"
-
-#~ msgid "KP_INSERT"
-#~ msgstr "KP_INSERT"
-
-#~ msgid "KP_LEFT"
-#~ msgstr "KP_LEVO"
-
-#~ msgid "KP_MULTIPLY"
-#~ msgstr "KP_KRAT"
-
-#~ msgid "KP_NEXT"
-#~ msgstr "KP_NASLEDNJI"
-
-#~ msgid "KP_PAGEDOWN"
-#~ msgstr "KP_NASLEDNJASTRAN"
-
-#~ msgid "KP_PAGEUP"
-#~ msgstr "KP_PREJŠNJASTRAN"
-
-#~ msgid "KP_PRIOR"
-#~ msgstr "KP_PREJŠNJI"
-
-#~ msgid "KP_RIGHT"
-#~ msgstr "KP_DESNO"
-
-#~ msgid "KP_SEPARATOR"
-#~ msgstr "KP_LOČILO"
-
-#~ msgid "KP_SPACE"
-#~ msgstr "KP_PRESLEDNICA"
-
-#~ msgid "KP_SUBTRACT"
-#~ msgstr "KP_MINUS"
-
-#~ msgid "LEFT"
-#~ msgstr "LEVO"
-
-#~ msgid "MENU"
-#~ msgstr "MENI"
-
-#~ msgid "NUM_LOCK"
-#~ msgstr "NUM_LOCK"
-
-#~ msgid "PAGEDOWN"
-#~ msgstr "NASLEDNJASTRAN"
-
-#~ msgid "PAGEUP"
-#~ msgstr "PREJŠNJASTRAN"
-
-#~ msgid "PAUSE"
-#~ msgstr "PREMOR"
-
-#~ msgid "PGDN"
-#~ msgstr "PGDN"
-
-#~ msgid "PGUP"
-#~ msgstr "PGUP"
-
-#~ msgid "PRINT"
-#~ msgstr "NATISNI"
-
-#~ msgid "RETURN"
-#~ msgstr "RETURN"
-
-#~ msgid "RIGHT"
-#~ msgstr "DESNO"
-
-#~ msgid "SCROLL_LOCK"
-#~ msgstr "SCROLL_LOCK"
-
-#~ msgid "SELECT"
-#~ msgstr "IZBERI"
-
-#~ msgid "SEPARATOR"
-#~ msgstr "LOČILO"
-
-#~ msgid "SNAPSHOT"
-#~ msgstr "SNAPSHOT"
-
-#~ msgid "SPACE"
-#~ msgstr "PRESLEDNICA"
-
-#~ msgid "SUBTRACT"
-#~ msgstr "MINUS"
-
-#~ msgid "TAB"
-#~ msgstr "TAB"
-
-#~ msgid "The print dialog returned an error."
-#~ msgstr "Pogovorno okno za tiskanje je vrnilo napako."
-
-#~ msgid "The wxGtkPrinterDC cannot be used."
-#~ msgstr "wxGtkPrinterDC ni mogoče uporabiti."
-
-#~ msgid "Timer creation failed."
-#~ msgstr "Ustvarjanje časovnika (timer) ni uspelo."
-
-#~ msgid "UP"
-#~ msgstr "GOR"
-
-#~ msgid "WINDOWS_LEFT"
-#~ msgstr "WINDOWS_LEVO"
-
-#~ msgid "WINDOWS_MENU"
-#~ msgstr "WINDOWS_MENI"
-
-#~ msgid "WINDOWS_RIGHT"
-#~ msgstr "WINDOWS_DESNO"
-
-#~ msgid "buffer is too small for Windows directory."
-#~ msgstr "medpomnilnik je za mapo Windows premajhen"
-
-#~ msgid "not implemented"
-#~ msgstr "ni implementirano"
-
-#~ msgid "wxPrintout::GetPageInfo gives a null maxPage."
-#~ msgstr "wxPrintout::GetPageInfo vrne ničelno vrednost maxPage."
-
-#, fuzzy
-#~ msgid "Event queue overflowed"
-#~ msgstr "Vrsta dogodka prekoračena"
-
-#~ msgid "percent"
-#~ msgstr "odstotek"
-
-# common/docview.cpp:897
-#~ msgid "Print preview"
-#~ msgstr "Predogled tiskanja"
-
-#, fuzzy
-#~ msgid "'"
-#~ msgstr "'"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "6"
-#~ msgstr "6"
-
-#~ msgid "7"
-#~ msgstr "7"
-
-#~ msgid "8"
-#~ msgstr "8"
-
-#~ msgid "9"
-#~ msgstr "9"
-
-#~ msgid "File system containing watched object was unmounted"
-#~ msgstr "Datotečni sistem, ki vsebuje opazovani predmet, je bil odklopljen"

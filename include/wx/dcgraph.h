@@ -39,8 +39,8 @@ public:
 #ifdef __WXMSW__
     // override wxDC virtual functions to provide access to HDC associated with
     // this Graphics object (implemented in src/msw/graphics.cpp)
-    virtual WXHDC AcquireHDC();
-    virtual void ReleaseHDC(WXHDC hdc);
+    virtual WXHDC AcquireHDC() wxOVERRIDE;
+    virtual void ReleaseHDC(WXHDC hdc) wxOVERRIDE;
 #endif // __WXMSW__
 
 private:
@@ -204,7 +204,7 @@ public:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
 
 #ifdef __WXMSW__
-    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const;
+    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const wxOVERRIDE;
 #endif // __WXMSW__
 
     // update the internal clip box variables

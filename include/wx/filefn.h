@@ -527,17 +527,17 @@ WXDLLIMPEXP_BASE bool wxIsWild(const wxString& pattern);
 WXDLLIMPEXP_BASE bool wxMatchWild(const wxString& pattern,  const wxString& text, bool dot_special = true);
 
 // Concatenate two files to form third
-WXDLLIMPEXP_BASE bool wxConcatFiles(const wxString& file1, const wxString& file2, const wxString& file3);
+WXDLLIMPEXP_BASE bool wxConcatFiles(const wxString& src1, const wxString& src2, const wxString& dest);
 
-// Copy file1 to file2
-WXDLLIMPEXP_BASE bool wxCopyFile(const wxString& file1, const wxString& file2,
+// Copy file
+WXDLLIMPEXP_BASE bool wxCopyFile(const wxString& src, const wxString& dest,
                                  bool overwrite = true);
 
 // Remove file
 WXDLLIMPEXP_BASE bool wxRemoveFile(const wxString& file);
 
 // Rename file
-WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite = true);
+WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& oldpath, const wxString& newpath, bool overwrite = true);
 
 // Get current working directory.
 WXDLLIMPEXP_BASE wxString wxGetCwd();

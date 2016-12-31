@@ -1802,6 +1802,12 @@ wxArrayString GetSearchPrefixes()
     stdp = wxStandardPaths::Get().GetResourcesDir();
     if ( paths.Index(stdp) == wxNOT_FOUND )
         paths.Add(stdp);
+
+  #ifdef wxHAS_STDPATHS_INSTALL_PREFIX
+    stdp = wxStandardPaths::Get().GetInstallPrefix() + "/share/locale";
+    if ( paths.Index(stdp) == wxNOT_FOUND )
+        paths.Add(stdp);
+  #endif
 #endif // wxUSE_STDPATHS
 
     // last look in default locations

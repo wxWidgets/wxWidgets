@@ -51,7 +51,7 @@ public:
         return true;
     }
 
-    virtual void SetAlignment( int align ) wxOVERRIDE;
+    virtual void GtkUpdateAlignment() wxOVERRIDE;
 
     virtual GtkCellRendererText *GtkGetTextRenderer() const wxOVERRIDE;
 
@@ -150,6 +150,8 @@ public:
 
     virtual GtkCellRendererText *GtkGetTextRenderer() const wxOVERRIDE;
     virtual GtkWidget* GtkGetEditorWidget() const wxOVERRIDE;
+
+    virtual void GtkUpdateAlignment() wxOVERRIDE;
 
 private:
     bool Init(wxDataViewCellMode mode, int align);
@@ -254,7 +256,7 @@ public:
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
-    void SetAlignment( int align ) wxOVERRIDE;
+    virtual void GtkUpdateAlignment() wxOVERRIDE;
 
     wxString GetChoice(size_t index) const { return m_choices[index]; }
     const wxArrayString& GetChoices() const { return m_choices; }

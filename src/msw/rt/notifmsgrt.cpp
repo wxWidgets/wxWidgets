@@ -13,13 +13,14 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/rt/private/notifmsg.h"
 
-#if wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT
 #include "wx/notifmsg.h"
 #include "wx/msw/rt/utils.h"
 #include "wx/msw/private/comptr.h"
@@ -507,8 +508,6 @@ private:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxToastNotifMsgModule, wxModule);
 
-#endif // wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT
-
 //
 // wxToastNotificationHelper
 //
@@ -543,3 +542,5 @@ wxNotificationMessageImpl* wxToastNotificationHelper::CreateInstance(wxNotificat
     return NULL;
 #endif
 }
+
+#endif // wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT

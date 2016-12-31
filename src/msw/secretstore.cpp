@@ -27,7 +27,7 @@
 #include "wx/secretstore.h"
 #include "wx/private/secretstore.h"
 
-#include "wx/log.h"                     // wxSysErrorMsg()
+#include "wx/log.h"                     // wxSysErrorMsgStr()
 
 // Somewhat surprisingly, wincred.h is not self-contained and relies on some
 // standard Windows macros being defined without including the headers defining
@@ -84,7 +84,7 @@ public:
 
         if ( !::CredWrite(&cred, 0) )
         {
-            errmsg = wxSysErrorMsg();
+            errmsg = wxSysErrorMsgStr();
             return false;
         }
 
@@ -103,7 +103,7 @@ public:
             // Not having the password for this service/user combination is not
             // an error, but anything else is.
             if ( ::GetLastError() != ERROR_NOT_FOUND )
-                errmsg = wxSysErrorMsg();
+                errmsg = wxSysErrorMsgStr();
 
             return NULL;
         }
@@ -123,7 +123,7 @@ public:
         {
             // Same logic as in Load() above.
             if ( ::GetLastError() != ERROR_NOT_FOUND )
-                errmsg = wxSysErrorMsg();
+                errmsg = wxSysErrorMsgStr();
 
             return false;
         }

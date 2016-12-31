@@ -168,17 +168,17 @@ public:
     wxTextCtrlOleCallback(wxTextCtrl *text) : m_textCtrl(text), m_menu(NULL) {}
     virtual ~wxTextCtrlOleCallback() { DeleteContextMenuObject(); }
 
-    STDMETHODIMP ContextSensitiveHelp(BOOL WXUNUSED(enterMode)) { return E_NOTIMPL; }
-    STDMETHODIMP DeleteObject(LPOLEOBJECT WXUNUSED(oleobj)) { return E_NOTIMPL; }
-    STDMETHODIMP GetClipboardData(CHARRANGE* WXUNUSED(chrg), DWORD WXUNUSED(reco), LPDATAOBJECT* WXUNUSED(dataobj)) { return E_NOTIMPL; }
-    STDMETHODIMP GetDragDropEffect(BOOL WXUNUSED(drag), DWORD WXUNUSED(grfKeyState), LPDWORD WXUNUSED(effect)) { return E_NOTIMPL; }
-    STDMETHODIMP GetInPlaceContext(LPOLEINPLACEFRAME* WXUNUSED(frame), LPOLEINPLACEUIWINDOW* WXUNUSED(doc), LPOLEINPLACEFRAMEINFO WXUNUSED(frameInfo)) { return E_NOTIMPL; }
-    STDMETHODIMP GetNewStorage(LPSTORAGE *WXUNUSED(stg)) { return E_NOTIMPL; }
-    STDMETHODIMP QueryAcceptData(LPDATAOBJECT WXUNUSED(dataobj), CLIPFORMAT* WXUNUSED(format), DWORD WXUNUSED(reco), BOOL WXUNUSED(really), HGLOBAL WXUNUSED(hMetaPict)) { return E_NOTIMPL; }
-    STDMETHODIMP QueryInsertObject(LPCLSID WXUNUSED(clsid), LPSTORAGE WXUNUSED(stg), LONG WXUNUSED(cp)) { return E_NOTIMPL; }
-    STDMETHODIMP ShowContainerUI(BOOL WXUNUSED(show)) { return E_NOTIMPL; }
+    STDMETHODIMP ContextSensitiveHelp(BOOL WXUNUSED(enterMode)) wxOVERRIDE { return E_NOTIMPL; }
+    STDMETHODIMP DeleteObject(LPOLEOBJECT WXUNUSED(oleobj)) wxOVERRIDE { return E_NOTIMPL; }
+    STDMETHODIMP GetClipboardData(CHARRANGE* WXUNUSED(chrg), DWORD WXUNUSED(reco), LPDATAOBJECT* WXUNUSED(dataobj)) wxOVERRIDE { return E_NOTIMPL; }
+    STDMETHODIMP GetDragDropEffect(BOOL WXUNUSED(drag), DWORD WXUNUSED(grfKeyState), LPDWORD WXUNUSED(effect)) wxOVERRIDE { return E_NOTIMPL; }
+    STDMETHODIMP GetInPlaceContext(LPOLEINPLACEFRAME* WXUNUSED(frame), LPOLEINPLACEUIWINDOW* WXUNUSED(doc), LPOLEINPLACEFRAMEINFO WXUNUSED(frameInfo)) wxOVERRIDE { return E_NOTIMPL; }
+    STDMETHODIMP GetNewStorage(LPSTORAGE *WXUNUSED(stg)) wxOVERRIDE { return E_NOTIMPL; }
+    STDMETHODIMP QueryAcceptData(LPDATAOBJECT WXUNUSED(dataobj), CLIPFORMAT* WXUNUSED(format), DWORD WXUNUSED(reco), BOOL WXUNUSED(really), HGLOBAL WXUNUSED(hMetaPict)) wxOVERRIDE { return E_NOTIMPL; }
+    STDMETHODIMP QueryInsertObject(LPCLSID WXUNUSED(clsid), LPSTORAGE WXUNUSED(stg), LONG WXUNUSED(cp)) wxOVERRIDE { return E_NOTIMPL; }
+    STDMETHODIMP ShowContainerUI(BOOL WXUNUSED(show)) wxOVERRIDE { return E_NOTIMPL; }
 
-    STDMETHODIMP GetContextMenu(WORD WXUNUSED(seltype), LPOLEOBJECT WXUNUSED(oleobj), CHARRANGE* WXUNUSED(chrg), HMENU *menu)
+    STDMETHODIMP GetContextMenu(WORD WXUNUSED(seltype), LPOLEOBJECT WXUNUSED(oleobj), CHARRANGE* WXUNUSED(chrg), HMENU *menu) wxOVERRIDE
     {
         // 'menu' will be shown and destroyed by the caller. We need to keep
         // its wx counterpart, the wxMenu instance, around until it is
@@ -2054,13 +2054,26 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
         }
     }
 
-    // Default window procedure of multiline edit controls posts WM_CLOSE to
-    // the parent window when it gets Escape key press for some reason, prevent
-    // it from doing this as this resulted in dialog boxes being closed on
-    // Escape even when they shouldn't be (we do handle Escape ourselves
-    // correctly in the situations when it should close them).
-    if ( event.GetKeyCode() == WXK_ESCAPE && IsMultiLine() )
-        return;
+    if ( IsMultiLine() )
+    {
+        // Default window procedure of multiline edit controls posts WM_CLOSE to
+        // the parent window when it gets Escape key press for some reason, prevent
+        // it from doing this as this resulted in dialog boxes being closed on
+        // Escape even when they shouldn't be (we do handle Escape ourselves
+        // correctly in the situations when it should close them).
+        if ( event.GetKeyCode() == WXK_ESCAPE )
+            return;
+
+        // We also handle Ctrl-A as the native EDIT control doesn't do it by
+        // default (but RICHEDIT one does, so there is no need to check for it
+        // in the switch above), however it's a de facto standard accelerator
+        // and people expect it to work.
+        if ( event.GetModifiers() == wxMOD_CONTROL && event.GetKeyCode() == 'A' )
+        {
+            SelectAll();
+            return;
+        }
+    }
 
     // no, we didn't process it
     event.Skip();

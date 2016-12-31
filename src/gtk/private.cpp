@@ -57,6 +57,7 @@ GtkWidget *GetButtonWidget()
     if ( !s_button )
     {
         s_button = gtk_button_new();
+        g_object_add_weak_pointer(G_OBJECT(s_button), (void**)&s_button);
         gtk_container_add(GetContainer(), s_button);
         gtk_widget_realize(s_button);
     }
@@ -71,6 +72,7 @@ GtkWidget *GetNotebookWidget()
     if ( !s_notebook )
     {
         s_notebook = gtk_notebook_new();
+        g_object_add_weak_pointer(G_OBJECT(s_notebook), (void**)&s_notebook);
         gtk_container_add(GetContainer(), s_notebook);
         gtk_widget_realize(s_notebook);
     }
@@ -85,6 +87,7 @@ GtkWidget *GetCheckButtonWidget()
     if ( !s_button )
     {
         s_button = gtk_check_button_new();
+        g_object_add_weak_pointer(G_OBJECT(s_button), (void**)&s_button);
         gtk_container_add(GetContainer(), s_button);
         gtk_widget_realize(s_button);
     }
@@ -95,14 +98,12 @@ GtkWidget *GetCheckButtonWidget()
 GtkWidget * GetComboBoxWidget()
 {
     static GtkWidget *s_button = NULL;
-    static GtkWidget *s_window = NULL;
 
     if ( !s_button )
     {
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
         s_button = gtk_combo_box_new();
-        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        g_object_add_weak_pointer(G_OBJECT(s_button), (void**)&s_button);
+        gtk_container_add(GetContainer(), s_button);
         gtk_widget_realize( s_button );
     }
 
@@ -117,6 +118,7 @@ GtkWidget *GetEntryWidget()
     if ( !s_entry )
     {
         s_entry = gtk_entry_new();
+        g_object_add_weak_pointer(G_OBJECT(s_entry), (void**)&s_entry);
         gtk_container_add(GetContainer(), s_entry);
         gtk_widget_realize(s_entry);
     }
@@ -145,6 +147,7 @@ static void CreateHeaderButtons()
         s_first_button = column->button;
 #endif
         wxASSERT(s_first_button);
+        g_object_add_weak_pointer(G_OBJECT(s_first_button), (void**)&s_first_button);
 
         column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
@@ -153,6 +156,7 @@ static void CreateHeaderButtons()
 #else
         s_other_button = column->button;
 #endif
+        g_object_add_weak_pointer(G_OBJECT(s_other_button), (void**)&s_other_button);
 
         column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
@@ -161,6 +165,7 @@ static void CreateHeaderButtons()
 #else
         s_last_button = column->button;
 #endif
+        g_object_add_weak_pointer(G_OBJECT(s_last_button), (void**)&s_last_button);
 }
 
 GtkWidget *GetHeaderButtonWidgetFirst()
@@ -190,14 +195,12 @@ GtkWidget *GetHeaderButtonWidget()
 GtkWidget * GetRadioButtonWidget()
 {
     static GtkWidget *s_button = NULL;
-    static GtkWidget *s_window = NULL;
 
     if ( !s_button )
     {
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
         s_button = gtk_radio_button_new(NULL);
-        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        g_object_add_weak_pointer(G_OBJECT(s_button), (void**)&s_button);
+        gtk_container_add(GetContainer(), s_button);
         gtk_widget_realize( s_button );
     }
 
@@ -220,6 +223,7 @@ GtkWidget* GetSplitterWidget(wxOrientation orient)
         else
             widget = gtk_vpaned_new();
 #endif
+        g_object_add_weak_pointer(G_OBJECT(widget), (void**)&widgets[gtkOrient]);
         gtk_container_add(GetContainer(), widget);
         gtk_widget_realize(widget);
     }
@@ -230,14 +234,12 @@ GtkWidget* GetSplitterWidget(wxOrientation orient)
 GtkWidget * GetTextEntryWidget()
 {
     static GtkWidget *s_button = NULL;
-    static GtkWidget *s_window = NULL;
 
     if ( !s_button )
     {
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
         s_button = gtk_entry_new();
-        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        g_object_add_weak_pointer(G_OBJECT(s_button), (void**)&s_button);
+        gtk_container_add(GetContainer(), s_button);
         gtk_widget_realize( s_button );
     }
 
@@ -251,6 +253,7 @@ GtkWidget *GetTreeWidget()
     if ( !s_tree )
     {
         s_tree = gtk_tree_view_new();
+        g_object_add_weak_pointer(G_OBJECT(s_tree), (void**)&s_tree);
         gtk_container_add(GetContainer(), s_tree);
         gtk_widget_realize(s_tree);
     }
@@ -273,6 +276,7 @@ public:
         {
             GtkWidget* parent = gtk_widget_get_parent(gs_container);
             gtk_widget_destroy(parent);
+            gs_container = NULL;
         }
     }
 
@@ -280,7 +284,5 @@ public:
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(WidgetsCleanupModule, wxModule);
-
-static WidgetsCleanupModule gs_widgetsCleanupModule;
 
 } // wxGTKPrivate namespace

@@ -1578,58 +1578,62 @@ void MyCanvas::DrawGradients(wxDC& dc)
 
 void MyCanvas::DrawSystemColours(wxDC& dc)
 {
-    wxSize textSize = dc.GetTextExtent("#WWWWgy");
+    wxFont mono(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
+    wxSize textSize;
+    {
+        wxDCFontChanger setMono(dc, mono);
+        textSize = dc.GetTextExtent(wxS("#01234567"));
+    }
+
     int lineHeight = textSize.GetHeight();
     wxRect r(textSize.GetWidth() + 10, 10, 100, lineHeight);
 
     dc.SetPen(*wxTRANSPARENT_PEN);
 
-    static const char* sysColNames[] =
+    static const struct {
+        wxSystemColour index;
+        const char* name;
+    } sysColours[] =
     {
-        "wxSYS_COLOUR_SCROLLBAR",
-        "wxSYS_COLOUR_DESKTOP",
-        "wxSYS_COLOUR_ACTIVECAPTION",
-        "wxSYS_COLOUR_INACTIVECAPTION",
-        "wxSYS_COLOUR_MENU",
-        "wxSYS_COLOUR_WINDOW",
-        "wxSYS_COLOUR_WINDOWFRAME",
-        "wxSYS_COLOUR_MENUTEXT",
-        "wxSYS_COLOUR_WINDOWTEXT",
-        "wxSYS_COLOUR_CAPTIONTEXT",
-        "wxSYS_COLOUR_ACTIVEBORDER",
-        "wxSYS_COLOUR_INACTIVEBORDER",
-        "wxSYS_COLOUR_APPWORKSPACE",
-        "wxSYS_COLOUR_HIGHLIGHT",
-        "wxSYS_COLOUR_HIGHLIGHTTEXT",
-        "wxSYS_COLOUR_BTNFACE",
-        "wxSYS_COLOUR_BTNSHADOW",
-        "wxSYS_COLOUR_GRAYTEXT",
-        "wxSYS_COLOUR_BTNTEXT",
-        "wxSYS_COLOUR_INACTIVECAPTIONTEXT",
-        "wxSYS_COLOUR_BTNHIGHLIGHT",
-        "wxSYS_COLOUR_3DDKSHADOW",
-        "wxSYS_COLOUR_3DLIGHT",
-        "wxSYS_COLOUR_INFOTEXT",
-        "wxSYS_COLOUR_INFOBK",
-        "wxSYS_COLOUR_LISTBOX",
-        "wxSYS_COLOUR_HOTLIGHT",
-        "wxSYS_COLOUR_GRADIENTACTIVECAPTION",
-        "wxSYS_COLOUR_GRADIENTINACTIVECAPTION",
-        "wxSYS_COLOUR_MENUHILIGHT",
-        "wxSYS_COLOUR_MENUBAR",
-        "wxSYS_COLOUR_LISTBOXTEXT",
-        "wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT"
+        { wxSYS_COLOUR_3DDKSHADOW, "wxSYS_COLOUR_3DDKSHADOW" },
+        { wxSYS_COLOUR_3DLIGHT, "wxSYS_COLOUR_3DLIGHT" },
+        { wxSYS_COLOUR_ACTIVEBORDER, "wxSYS_COLOUR_ACTIVEBORDER" },
+        { wxSYS_COLOUR_ACTIVECAPTION, "wxSYS_COLOUR_ACTIVECAPTION" },
+        { wxSYS_COLOUR_APPWORKSPACE, "wxSYS_COLOUR_APPWORKSPACE" },
+        { wxSYS_COLOUR_BTNFACE, "wxSYS_COLOUR_BTNFACE" },
+        { wxSYS_COLOUR_BTNHIGHLIGHT, "wxSYS_COLOUR_BTNHIGHLIGHT" },
+        { wxSYS_COLOUR_BTNSHADOW, "wxSYS_COLOUR_BTNSHADOW" },
+        { wxSYS_COLOUR_BTNTEXT, "wxSYS_COLOUR_BTNTEXT" },
+        { wxSYS_COLOUR_CAPTIONTEXT, "wxSYS_COLOUR_CAPTIONTEXT" },
+        { wxSYS_COLOUR_DESKTOP, "wxSYS_COLOUR_DESKTOP" },
+        { wxSYS_COLOUR_GRADIENTACTIVECAPTION, "wxSYS_COLOUR_GRADIENTACTIVECAPTION" },
+        { wxSYS_COLOUR_GRADIENTINACTIVECAPTION, "wxSYS_COLOUR_GRADIENTINACTIVECAPTION" },
+        { wxSYS_COLOUR_GRAYTEXT, "wxSYS_COLOUR_GRAYTEXT" },
+        { wxSYS_COLOUR_HIGHLIGHTTEXT, "wxSYS_COLOUR_HIGHLIGHTTEXT" },
+        { wxSYS_COLOUR_HIGHLIGHT, "wxSYS_COLOUR_HIGHLIGHT" },
+        { wxSYS_COLOUR_HOTLIGHT, "wxSYS_COLOUR_HOTLIGHT" },
+        { wxSYS_COLOUR_INACTIVEBORDER, "wxSYS_COLOUR_INACTIVEBORDER" },
+        { wxSYS_COLOUR_INACTIVECAPTIONTEXT, "wxSYS_COLOUR_INACTIVECAPTIONTEXT" },
+        { wxSYS_COLOUR_INACTIVECAPTION, "wxSYS_COLOUR_INACTIVECAPTION" },
+        { wxSYS_COLOUR_INFOBK, "wxSYS_COLOUR_INFOBK" },
+        { wxSYS_COLOUR_INFOTEXT, "wxSYS_COLOUR_INFOTEXT" },
+        { wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT, "wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT" },
+        { wxSYS_COLOUR_LISTBOXTEXT, "wxSYS_COLOUR_LISTBOXTEXT" },
+        { wxSYS_COLOUR_LISTBOX, "wxSYS_COLOUR_LISTBOX" },
+        { wxSYS_COLOUR_MENUBAR, "wxSYS_COLOUR_MENUBAR" },
+        { wxSYS_COLOUR_MENUHILIGHT, "wxSYS_COLOUR_MENUHILIGHT" },
+        { wxSYS_COLOUR_MENUTEXT, "wxSYS_COLOUR_MENUTEXT" },
+        { wxSYS_COLOUR_MENU, "wxSYS_COLOUR_MENU" },
+        { wxSYS_COLOUR_SCROLLBAR, "wxSYS_COLOUR_SCROLLBAR" },
+        { wxSYS_COLOUR_WINDOWFRAME, "wxSYS_COLOUR_WINDOWFRAME" },
+        { wxSYS_COLOUR_WINDOWTEXT, "wxSYS_COLOUR_WINDOWTEXT" },
+        { wxSYS_COLOUR_WINDOW, "wxSYS_COLOUR_WINDOW" }
     };
-
-    wxFont mono(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
 
     for (int i = 0; i < wxSYS_COLOUR_MAX; i++)
     {
-        wxSystemColour sysColour = (wxSystemColour)i;
-
-        wxString colourName = sysColNames[sysColour];
-
-        wxColour c = wxSystemSettings::GetColour(sysColour);
+        wxString colourName(sysColours[i].name);
+        wxColour c(wxSystemSettings::GetColour(sysColours[i].index));
 
         {
             wxDCFontChanger setMono(dc, mono);
@@ -1641,7 +1645,7 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
 
         dc.DrawText(colourName, r.GetRight() + 10, r.y);
 
-        r.y += lineHeight + 4;
+        r.y += lineHeight;
     }
 }
 
@@ -1745,7 +1749,7 @@ void MyCanvas::Draw(wxDC& pdc)
         gdc.SetGraphicsContext(context);
     }
 
-    wxDC &dc = m_renderer ? (wxDC&) gdc : (wxDC&) pdc ;
+    wxDC &dc = m_renderer ? static_cast<wxDC&>(gdc) : pdc;
 #else
     wxDC &dc = pdc ;
 #endif
