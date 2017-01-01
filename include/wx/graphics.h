@@ -438,10 +438,8 @@ public:
 #endif
 #endif
 
-#ifndef wxNO_RTTI
     // Create a context from a DC of unknown type, if supported, returns NULL otherwise
     static wxGraphicsContext* CreateFromUnknownDC(const wxDC& dc);
-#endif
 
     static wxGraphicsContext* CreateFromNative( void * context );
 

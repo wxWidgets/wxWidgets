@@ -926,9 +926,9 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 #endif
 #endif
 
-#ifndef wxNO_RTTI
 wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
 {
+#ifndef wxNO_RTTI
     if ( const wxWindowDC *windc = dynamic_cast<const wxWindowDC*>(&dc) )
         return Create(*windc);
 
@@ -946,10 +946,10 @@ wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
         return Create(*mfdc);
 #endif
 #endif
+#endif // !wxNO_RTTI
 
     return NULL;
 }
-#endif
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {
