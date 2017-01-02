@@ -383,7 +383,7 @@ MONODLL_CXXFLAGS = /M$(__RUNTIME_LIBS_116)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
 	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 /DWXMAKINGDLL \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_monodll.pch" $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.obj \
@@ -545,8 +545,8 @@ MONOLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_131)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
 	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DwxUSE_BASE=1 $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_monolib.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_monolib.pch" $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
 	$(OBJS)\monolib_any.obj \
@@ -701,7 +701,7 @@ BASEDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_147)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DwxUSE_GUI=0 /DWXMAKINGDLL_BASE /DwxUSE_BASE=1 \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_basedll.pch" $(CPPFLAGS) $(CXXFLAGS)
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.obj \
@@ -843,8 +843,8 @@ BASELIB_CXXFLAGS = /M$(__RUNTIME_LIBS_162)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DwxUSE_GUI=0 /DwxUSE_BASE=1 $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_baselib.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_baselib.pch" $(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.obj \
 	$(OBJS)\baselib_any.obj \
@@ -972,7 +972,7 @@ NETDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_178)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DwxUSE_GUI=0 /DWXUSINGDLL /DWXMAKINGDLL_NET \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_netdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_dummy.obj \
@@ -1001,7 +1001,8 @@ NETLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_193)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_netlib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	$(RTTI_CXXFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_netlib.pch" $(CPPFLAGS) \
+	$(CXXFLAGS)
 NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_dummy.obj \
 	$(OBJS)\netlib_fs_inet.obj \
@@ -1027,7 +1028,7 @@ COREDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_209)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_CORE /DwxUSE_BASE=0 \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_coredll.pch" $(CPPFLAGS) $(CXXFLAGS)
 COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_dummy.obj \
@@ -1051,7 +1052,8 @@ CORELIB_CXXFLAGS = /M$(__RUNTIME_LIBS_224)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DwxUSE_BASE=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_corelib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	$(RTTI_CXXFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_corelib.pch" \
+	$(CPPFLAGS) $(CXXFLAGS)
 CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_dummy.obj \
 	$(OBJS)\corelib_event.obj \
@@ -1072,8 +1074,8 @@ ADVDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_240)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_ADV $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_advdll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_advdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_dummy.obj \
 	$(____ADVANCED_SRC_FILENAMES_2_OBJECTS)
@@ -1089,8 +1091,8 @@ ADVLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_255)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_advlib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_advlib.pch" $(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_dummy.obj \
 	$(____ADVANCED_SRC_FILENAMES_3_OBJECTS)
@@ -1105,8 +1107,8 @@ MEDIADLL_CXXFLAGS = /M$(__RUNTIME_LIBS_271)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_MEDIA $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_mediadll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_mediadll.pch" $(CPPFLAGS) $(CXXFLAGS)
 MEDIADLL_OBJECTS =  \
 	$(OBJS)\mediadll_dummy.obj \
 	$(OBJS)\mediadll_mediactrlcmn.obj \
@@ -1125,8 +1127,8 @@ MEDIALIB_CXXFLAGS = /M$(__RUNTIME_LIBS_286)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_medialib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_medialib.pch" $(CPPFLAGS) $(CXXFLAGS)
 MEDIALIB_OBJECTS =  \
 	$(OBJS)\medialib_dummy.obj \
 	$(OBJS)\medialib_mediactrlcmn.obj \
@@ -1144,8 +1146,8 @@ HTMLDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_302)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_HTML $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_htmldll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_htmldll.pch" $(CPPFLAGS) $(CXXFLAGS)
 HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_dummy.obj \
 	$(OBJS)\htmldll_helpbest.obj \
@@ -1187,8 +1189,8 @@ HTMLLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_317)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_htmllib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_htmllib.pch" $(CPPFLAGS) $(CXXFLAGS)
 HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_dummy.obj \
 	$(OBJS)\htmllib_helpbest.obj \
@@ -1229,8 +1231,8 @@ WEBVIEWDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_333)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_WEBVIEW $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_webviewdll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_webviewdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWDLL_OBJECTS =  \
 	$(OBJS)\webviewdll_dummy.obj \
 	$(OBJS)\webviewdll_webview_ie.obj \
@@ -1249,8 +1251,8 @@ WEBVIEWLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_348)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_webviewlib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_webviewlib.pch" $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWLIB_OBJECTS =  \
 	$(OBJS)\webviewlib_dummy.obj \
 	$(OBJS)\webviewlib_webview_ie.obj \
@@ -1268,8 +1270,8 @@ QADLL_CXXFLAGS = /M$(__RUNTIME_LIBS_364)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_QA $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_qadll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_qadll.pch" $(CPPFLAGS) $(CXXFLAGS)
 QADLL_OBJECTS =  \
 	$(OBJS)\qadll_dummy.obj \
 	$(OBJS)\qadll_debugrpt.obj \
@@ -1286,8 +1288,8 @@ QALIB_CXXFLAGS = /M$(__RUNTIME_LIBS_379)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_qalib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_qalib.pch" $(CPPFLAGS) $(CXXFLAGS)
 QALIB_OBJECTS =  \
 	$(OBJS)\qalib_dummy.obj \
 	$(OBJS)\qalib_debugrpt.obj \
@@ -1303,7 +1305,7 @@ XMLDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_395)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DwxUSE_GUI=0 /DWXUSINGDLL /DWXMAKINGDLL_XML \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_xmldll.pch" $(CPPFLAGS) $(CXXFLAGS)
 XMLDLL_OBJECTS =  \
 	$(OBJS)\xmldll_dummy.obj \
@@ -1322,7 +1324,8 @@ XMLLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_410)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xmllib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	$(RTTI_CXXFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xmllib.pch" $(CPPFLAGS) \
+	$(CXXFLAGS)
 XMLLIB_OBJECTS =  \
 	$(OBJS)\xmllib_dummy.obj \
 	$(OBJS)\xmllib_xml.obj \
@@ -1338,8 +1341,8 @@ XRCDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_426)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_XRC $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xrcdll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_xrcdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.obj \
 	$(OBJS)\xrcdll_xh_activityindicator.obj \
@@ -1421,8 +1424,8 @@ XRCLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_441)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_xrclib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xrclib.pch" $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_dummy.obj \
 	$(OBJS)\xrclib_xh_activityindicator.obj \
@@ -1503,8 +1506,8 @@ AUIDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_457)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_AUI $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_auidll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_auidll.pch" $(CPPFLAGS) $(CXXFLAGS)
 AUIDLL_OBJECTS =  \
 	$(OBJS)\auidll_dummy.obj \
 	$(OBJS)\auidll_framemanager.obj \
@@ -1530,8 +1533,8 @@ AUILIB_CXXFLAGS = /M$(__RUNTIME_LIBS_472)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_auilib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_auilib.pch" $(CPPFLAGS) $(CXXFLAGS)
 AUILIB_OBJECTS =  \
 	$(OBJS)\auilib_dummy.obj \
 	$(OBJS)\auilib_framemanager.obj \
@@ -1556,8 +1559,8 @@ RIBBONDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_488)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_RIBBON $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_ribbondll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_ribbondll.pch" $(CPPFLAGS) $(CXXFLAGS)
 RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_dummy.obj \
 	$(OBJS)\ribbondll_art_internal.obj \
@@ -1583,8 +1586,8 @@ RIBBONLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_503)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_ribbonlib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_ribbonlib.pch" $(CPPFLAGS) $(CXXFLAGS)
 RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_dummy.obj \
 	$(OBJS)\ribbonlib_art_internal.obj \
@@ -1609,8 +1612,8 @@ PROPGRIDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_519)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_PROPGRID $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_propgriddll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_propgriddll.pch" $(CPPFLAGS) $(CXXFLAGS)
 PROPGRIDDLL_OBJECTS =  \
 	$(OBJS)\propgriddll_dummy.obj \
 	$(OBJS)\propgriddll_advprops.obj \
@@ -1633,8 +1636,9 @@ PROPGRIDLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_534)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_propgridlib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_propgridlib.pch" $(CPPFLAGS) \
+	$(CXXFLAGS)
 PROPGRIDLIB_OBJECTS =  \
 	$(OBJS)\propgridlib_dummy.obj \
 	$(OBJS)\propgridlib_advprops.obj \
@@ -1656,8 +1660,8 @@ RICHTEXTDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_550)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_RICHTEXT $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_richtextdll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_richtextdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTDLL_OBJECTS =  \
 	$(OBJS)\richtextdll_dummy.obj \
 	$(OBJS)\richtextdll_richtextbuffer.obj \
@@ -1683,8 +1687,9 @@ RICHTEXTLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_565)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_richtextlib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_richtextlib.pch" $(CPPFLAGS) \
+	$(CXXFLAGS)
 RICHTEXTLIB_OBJECTS =  \
 	$(OBJS)\richtextlib_dummy.obj \
 	$(OBJS)\richtextlib_richtextbuffer.obj \
@@ -1711,7 +1716,7 @@ STCDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_581)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
 	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS /DWXUSINGDLL /DWXMAKINGDLL_STC \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_stcdll.pch" $(CPPFLAGS) $(CXXFLAGS)
 STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_dummy.obj \
@@ -1733,7 +1738,8 @@ STCLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_596)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\expat\lib /I..\..\src\stc\scintilla\include \
 	/I..\..\src\stc\scintilla\lexlib /I..\..\src\stc\scintilla\src /D__WX__ \
 	/DSCI_LEXER /DNO_CXX11_REGEX /DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_stclib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	$(RTTI_CXXFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_stclib.pch" $(CPPFLAGS) \
+	$(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_dummy.obj \
 	$(OBJS)\stclib_stc.obj \
@@ -1750,8 +1756,8 @@ GLDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_612)$(__DEBUGRUNTIME) /DWIN32 \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
 	/I..\..\src\expat\lib /DWXUSINGDLL /DWXMAKINGDLL_GL $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gldll.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_gldll.pch" $(CPPFLAGS) $(CXXFLAGS)
 GLDLL_OBJECTS =  \
 	$(OBJS)\gldll_dummy.obj \
 	$(OBJS)\gldll_glcmn.obj \
@@ -1768,8 +1774,8 @@ GLLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_627)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /DWXBUILDING /I..\..\src\tiff\libtiff \
 	/I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib /I..\..\src\regex \
-	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_gllib.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(RTTI_CXXFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gllib.pch" $(CPPFLAGS) $(CXXFLAGS)
 GLLIB_OBJECTS =  \
 	$(OBJS)\gllib_dummy.obj \
 	$(OBJS)\gllib_glcmn.obj \
@@ -1837,6 +1843,9 @@ LIBTYPE_SUFFIX = lib
 !endif
 !if "$(SHARED)" == "1"
 LIBTYPE_SUFFIX = dll
+!endif
+!if "$(USE_RTTI)" == "0"
+RTTI_CXXFLAG = /GR-
 !endif
 !if "$(TARGET_CPU)" == "AMD64"
 LINK_TARGET_CPU = /MACHINE:X64

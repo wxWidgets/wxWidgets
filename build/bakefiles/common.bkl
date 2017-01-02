@@ -271,6 +271,9 @@
     <set var="RTTI_DEFINE">
         <if cond="USE_RTTI=='0'">wxNO_RTTI</if>
     </set>
+    <set var="RTTI_CXXFLAG">
+        <if cond="FORMAT=='msvc' and USE_RTTI=='0'">/GR-</if>
+    </set>
     <set var="EXCEPTIONS_DEFINE">
         <if cond="USE_EXCEPTIONS=='0'">wxNO_EXCEPTIONS</if>
     </set>
@@ -515,6 +518,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <lib-path>$(LIBDIRNAME)</lib-path>
 
         <warnings>max</warnings>
+        <cxxflags>$(RTTI_CXXFLAG)</cxxflags>
         <cxxflags cond="FORMAT=='autoconf'">$(CXXWARNINGS)</cxxflags>
         <cppflags-watcom>
             -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
