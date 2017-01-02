@@ -158,22 +158,30 @@ wxStaticBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
-    GtkAllocation alloc, child_alloc;
-    gtk_widget_get_allocation(m_widget, &alloc);
-    const int w_save = alloc.width;
-    const int h_save = alloc.height;
-    if (alloc.width < 50) alloc.width = 50;
-    if (alloc.height < 50) alloc.height = 50;
-    gtk_widget_set_allocation(m_widget, &alloc);
-
-    GTK_FRAME_GET_CLASS(m_widget)->compute_child_allocation(GTK_FRAME(m_widget), &child_alloc);
-
-    alloc.width = w_save;
-    alloc.height = h_save;
-    gtk_widget_set_allocation(m_widget, &alloc);
-
-    *borderTop = child_alloc.y - alloc.y;
-    *borderOther = child_alloc.x - alloc.x;
+    GtkWidget* label = gtk_frame_get_label_widget(GTK_FRAME(m_widget));
+#ifdef __WXGTK3__
+    *borderOther = 0;
+    *borderTop = 0;
+    if (label)
+    {
+        int nat_width;
+        gtk_widget_get_preferred_width(label, NULL, &nat_width);
+        gtk_widget_get_preferred_height_for_width(label, nat_width, borderTop, NULL);
+    }
+#else
+    gtk_widget_ensure_style(m_widget);
+    const int border_width = GTK_CONTAINER(m_widget)->border_width;
+    *borderOther = border_width + m_widget->style->xthickness;
+    *borderTop = border_width;
+    if (label)
+    {
+        GtkRequisition req;
+        gtk_widget_size_request(label, &req);
+        *borderTop += req.height;
+    }
+    else
+        *borderTop += m_widget->style->ythickness;
+#endif
 }
 
 #endif // wxUSE_STATBOX
