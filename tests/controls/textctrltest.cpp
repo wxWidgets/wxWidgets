@@ -496,7 +496,8 @@ void TextCtrlTestCase::Lines()
     CPPUNIT_ASSERT_EQUAL(0, m_text->GetLineLength(3));
     CPPUNIT_ASSERT_EQUAL("", m_text->GetLineText(3));
 
-    // Verify that wrapped lines count as 2 lines.
+    // Verify that wrapped lines count as (at least) lines (but it can be more
+    // if it's wrapped more than once).
     //
     // This currently doesn't work neither in wxGTK, wxUniv, or wxOSX/Cocoa, see
     // #12366, where GetNumberOfLines() always returns the number of logical,
@@ -505,7 +506,7 @@ void TextCtrlTestCase::Lines()
 #if defined(__WXGTK__) || defined(__WXOSX_COCOA__) || defined(__WXUNIVERSAL__)
     CPPUNIT_ASSERT_EQUAL(6, m_text->GetNumberOfLines());
 #else
-    CPPUNIT_ASSERT_EQUAL(7, m_text->GetNumberOfLines());
+    CPPUNIT_ASSERT(m_text->GetNumberOfLines() > 6);
 #endif
 }
 
