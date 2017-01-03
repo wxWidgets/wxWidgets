@@ -792,7 +792,7 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 
             GetBitmapData()->m_depth = d;
         }
-        else // d == 0, create bitmap compatible with the screen
+        else // No valid depth, create bitmap compatible with the screen
         {
             ScreenHDC dc;
             hbmp = ::CreateCompatibleBitmap(dc, w, h);
