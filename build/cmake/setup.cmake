@@ -45,6 +45,9 @@ endif()
 if(UNIX)
     wx_setup_definition(wxUSE_UNIX)
     wx_setup_definition(__UNIX__)
+endif()
+
+if(UNIX AND NOT APPLE)
     wx_setup_definition(_GNU_SOURCE)
 endif()
 
