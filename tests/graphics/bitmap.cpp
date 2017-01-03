@@ -110,8 +110,8 @@ void BitmapTestCase::OverlappingBlit()
 
     // Now, lines 0 and 1 should be red, lines 2++ should still be white.
 
-    wxNativePixelData npd( m_bmp );
-    wxNativePixelData::Iterator it( npd );
+    wxAlphaPixelData npd( m_bmp );
+    wxAlphaPixelData::Iterator it( npd );
 
     ASSERT_EQUAL_RGB( it, 255, 0, 0 );
     it.OffsetY( npd, 1 );
