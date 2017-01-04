@@ -566,7 +566,9 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
                      know if it is here so just add it unconditionally -->
                 <sys-lib>wininet</sys-lib>
             </if>
-            <if cond="FORMAT=='borland'">
+            <!-- For MSVC this library is conditionally included from
+                 wx/msw/libraries.h when wxUSE_ACCESSIBILITY==1 -->
+            <if cond="IS_MSVC=='0'">
                 <sys-lib>oleacc</sys-lib>
             </if>
         </if>
