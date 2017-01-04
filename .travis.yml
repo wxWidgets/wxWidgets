@@ -51,7 +51,7 @@ script: |
     popd &&
     echo -en 'travis_fold:end:script.3\\r' &&
     echo 'Building the samples...' && echo -en 'travis_fold:start:script.4\\r' &&
-    (test -n "$wxSKIP_SAMPLES" && make samples || echo "*** Skipping building samples ***) &&
+    (test -n "$wxSKIP_SAMPLES" && make samples || echo "*** Skipping building samples ***") &&
     echo -en 'travis_fold:end:script.4\\r' &&
     echo 'Installing...' && echo -en 'travis_fold:start:script.5\\r' &&
     sudo make install &&
