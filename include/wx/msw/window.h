@@ -54,7 +54,7 @@ public:
                 long style = 0,
                 const wxString& name = wxPanelNameStr)
     {
-        return CreateUsingMSWClass(GetMSWClassName(),
+        return CreateUsingMSWClass(GetMSWClassName(style),
                                    parent, id, pos, size, style, name);
     }
 
@@ -250,7 +250,7 @@ public:
     // object, taking into account wxFULL_REPAINT_ON_RESIZE style (if it's not
     // specified, the wxApp::GetNoRedrawClassSuffix()-suffixed version of the
     // class is used).
-    const wxChar *GetMSWClassName() const;
+    static const wxChar *GetMSWClassName(long style);
 
     // creates the window of specified Windows class with given style, extended
     // style, title and geometry (default values
