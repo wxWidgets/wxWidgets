@@ -343,6 +343,7 @@ public :
                         FindBestFromWXWidget(WXWidget control);
     
     static void         RemoveAssociations( wxWidgetImpl* impl);
+    static void         RemoveAssociation(WXWidget control);
 
     static void         Associate( WXWidget control, wxWidgetImpl *impl );
 
