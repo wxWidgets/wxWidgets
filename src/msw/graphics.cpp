@@ -553,6 +553,8 @@ public :
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) wxOVERRIDE;
 
+    virtual wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) wxOVERRIDE;
+
     virtual wxGraphicsContext * CreateContext( wxWindow* window ) wxOVERRIDE;
 
 #if wxUSE_IMAGE
@@ -2407,6 +2409,12 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeWindow( void * win
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     return new wxGDIPlusContext(this,(HWND) window);
+}
+
+wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeHDC(WXHDC dc)
+{
+    ENSURE_LOADED_OR_RETURN(NULL);
+    return new wxGDIPlusContext(this, new Graphics((HDC)dc));
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( wxWindow* window )

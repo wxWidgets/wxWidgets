@@ -445,6 +445,10 @@ public:
 
     static wxGraphicsContext* CreateFromNativeWindow( void * window );
 
+#ifdef __WXMSW__
+    static wxGraphicsContext* CreateFromNativeHDC(WXHDC dc);
+#endif
+
     static wxGraphicsContext* Create( wxWindow* window );
 
 #if wxUSE_IMAGE
@@ -829,6 +833,10 @@ public:
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) = 0;
+
+#ifdef __WXMSW__
+    virtual wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) = 0;
+#endif
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window ) = 0;
 
