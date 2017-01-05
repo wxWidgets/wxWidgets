@@ -1707,7 +1707,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
       parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name
     );
 #else
-    Create( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name )
+    Create( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name );
 #endif
 
     SetOwner( parent );
