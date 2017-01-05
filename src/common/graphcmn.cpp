@@ -961,6 +961,13 @@ wxGraphicsContext* wxGraphicsContext::CreateFromNativeWindow( void * window )
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeWindow(window);
 }
 
+#ifdef __WXMSW__
+wxGraphicsContext* wxGraphicsContext::CreateFromNativeHDC(WXHDC dc)
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeHDC(dc);
+}
+#endif
+
 wxGraphicsContext* wxGraphicsContext::Create( wxWindow* window )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(window);

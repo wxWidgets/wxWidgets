@@ -483,6 +483,15 @@ public:
     static wxGraphicsContext* CreateFromNativeWindow(void* window);
 
     /**
+        Creates a wxGraphicsContext from a native DC handle. Windows only.
+
+        @see wxGraphicsRenderer::CreateContextFromNativeHDC()
+
+        @since 3.1.1
+    */
+    static wxGraphicsContext* CreateFromNativeHDC(WXHDC dc);
+
+    /**
        Create a lightweight context that can be used only for measuring text.
     */
     static wxGraphicsContext* Create();
@@ -1320,6 +1329,13 @@ public:
         Creates a wxGraphicsContext from a native window.
     */
     virtual wxGraphicsContext* CreateContextFromNativeWindow(void* window) = 0;
+
+    /**
+        Creates a wxGraphicsContext from a native DC handle. Windows only.
+
+        @since 3.1.1
+    */
+    static wxGraphicsContext* CreateContextFromNativeHDC(WXHDC dc);
 
     /**
         Creates a wxGraphicsContext that can be used for measuring texts only.

@@ -2823,6 +2823,11 @@ public :
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) wxOVERRIDE;
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) wxOVERRIDE;
+
+#ifdef __WXMSW__
+    virtual wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) wxOVERRIDE;
+#endif
+
 #if wxUSE_IMAGE
     virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) wxOVERRIDE;
 #endif // wxUSE_IMAGE
@@ -2960,6 +2965,14 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * windo
     return NULL;
 #endif
 }
+
+#ifdef __WXMSW__
+wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeHDC(WXHDC dc)
+{
+    ENSURE_LOADED_OR_RETURN(NULL);
+    return new wxCairoContext(this, (HDC)dc);
+}
+#endif
 
 #if wxUSE_IMAGE
 wxGraphicsContext * wxCairoRenderer::CreateContextFromImage(wxImage& image)

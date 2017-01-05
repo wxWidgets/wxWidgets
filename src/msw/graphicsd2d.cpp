@@ -4346,6 +4346,8 @@ public :
 
     wxGraphicsContext* CreateContextFromNativeWindow(void* window) wxOVERRIDE;
 
+    wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) wxOVERRIDE;
+
     wxGraphicsContext* CreateContext(wxWindow* window) wxOVERRIDE;
 
 #if wxUSE_IMAGE
@@ -4484,6 +4486,11 @@ wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeContext(void* nativeCon
 wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeWindow(void* window)
 {
     return new wxD2DContext(this, m_direct2dFactory, (HWND)window);
+}
+
+wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeHDC(WXHDC dc)
+{
+    return new wxD2DContext(this, m_direct2dFactory, (HDC)dc, wxSize(0, 0));
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(wxWindow* window)
