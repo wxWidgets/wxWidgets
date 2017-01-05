@@ -407,7 +407,7 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
         exflags |= WS_EX_LAYOUTRTL;
 
-    return MSWCreate(GetMSWClassName(), title.t_str(), pos, sz, flags, exflags);
+    return MSWCreate(GetMSWClassName(GetWindowStyle()), title.t_str(), pos, sz, flags, exflags);
 }
 
 bool wxTopLevelWindowMSW::Create(wxWindow *parent,

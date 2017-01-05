@@ -468,15 +468,15 @@ wxWindowMSW::~wxWindowMSW()
 
 }
 
-const wxChar *wxWindowMSW::GetMSWClassName() const
+const wxChar *wxWindowMSW::GetMSWClassName(long style)
 {
     return wxApp::GetRegisteredClassName
                   (
                     wxT("wxWindow"),
                     COLOR_BTNFACE,
                     0, // no special extra style
-                    HasFlag(wxFULL_REPAINT_ON_RESIZE) ? wxApp::RegClass_Default
-                                                      : wxApp::RegClass_ReturnNR
+                    (style & wxFULL_REPAINT_ON_RESIZE) ? wxApp::RegClass_Default
+                                                       : wxApp::RegClass_ReturnNR
                   );
 }
 
