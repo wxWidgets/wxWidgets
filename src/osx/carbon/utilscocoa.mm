@@ -345,6 +345,11 @@ WXWindow wxOSXGetMainWindow()
     return [NSApp mainWindow];
 }
 
+WXWindow wxOSXGetKeyWindow()
+{
+    return [NSApp keyWindow];
+}
+
 #endif
 // ----------------------------------------------------------------------------
 // NSImage Utils
