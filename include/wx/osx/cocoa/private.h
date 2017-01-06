@@ -40,6 +40,7 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
 
 wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
+WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 
