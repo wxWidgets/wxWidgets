@@ -71,7 +71,24 @@ NSView* GetFocusedViewInWindow( NSWindow* keyWindow )
 
 WXWidget wxWidgetImpl::FindFocus()
 {
-    return GetFocusedViewInWindow( [NSApp keyWindow] );;
+    NSWindow *key = [NSApp keyWindow];
+    if ( key == nil )
+    {
+        // Application's keyWindow property may still not be updated and be
+        // nil when windowDidBecomeKey: is called and even if the
+        // just-activated's window isKeyWindow already returns YES. To get
+        // accurate information about where the focus is at all times, we have
+        // to explicitly check all application windos as well:
+        for ( NSWindow *w in [NSApp windows] )
+        {
+            if ( [w isKeyWindow] )
+            {
+                key = w;
+                break;
+            }
+        }
+    }
+    return key ? GetFocusedViewInWindow(key) : nil;
 }
 
 wxWidgetImpl* wxWidgetImpl::FindBestFromWXWidget(WXWidget control)
