@@ -352,14 +352,14 @@ void wxMessageDialog::AdjustButtonLabels()
     // resize the message box to be wider if needed
     const int wBoxOld = wxGetClientRect(GetHwnd()).right;
 
-    const int CHAR_WIDTH = GetCharWidth();
-    const int MARGIN_OUTER = 2*CHAR_WIDTH;  // margin between box and buttons
-    const int MARGIN_INNER = CHAR_WIDTH;    // margin between buttons
+    const int char_width = GetCharWidth();
+    const int margin_outer = 2*char_width;  // margin between box and buttons
+    const int margin_inner = char_width;    // margin between buttons
 
     RECT rcBox = wxGetWindowRect(GetHwnd());
 
-    const int wAllButtons = numButtons*(wBtnNew + MARGIN_INNER) - MARGIN_INNER;
-    int wBoxNew = 2*MARGIN_OUTER + wAllButtons;
+    const int wAllButtons = numButtons*(wBtnNew + margin_inner) - margin_inner;
+    int wBoxNew = 2*margin_outer + wAllButtons;
     if ( wBoxNew > wBoxOld )
     {
         const int dw = wBoxNew - wBoxOld;
@@ -394,8 +394,8 @@ void wxMessageDialog::AdjustButtonLabels()
 
         MoveWindowToScreenRect(hwndBtn, rcBtn);
 
-        rcBtn.left += wBtnNew + MARGIN_INNER;
-        rcBtn.right += wBtnNew + MARGIN_INNER;
+        rcBtn.left += wBtnNew + margin_inner;
+        rcBtn.right += wBtnNew + margin_inner;
     }
 }
 
