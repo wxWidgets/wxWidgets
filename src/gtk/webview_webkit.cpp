@@ -407,7 +407,16 @@ wxgtk_webview_webkit_context_menu(WebKitWebView *,
     if(webKitCtrl->IsContextMenuEnabled())
         return FALSE;
     else
-        return TRUE;
+    {
+        wxContextMenuEvent evtCtx(
+            wxEVT_CONTEXT_MENU,
+            webKitCtrl->GetId(),
+            webKitCtrl->ClientToScreen(wxDefaultPosition));
+        evtCtx.SetEventObject(webKitCtrl);
+        webKitCtrl->GTKProcessEvent(evtCtx);
+        
+        return TRUE;        
+    }
 }
 
 #endif
