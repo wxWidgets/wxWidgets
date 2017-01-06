@@ -552,6 +552,7 @@ option WRITE_ANCILLARY_CHUNKS requires WRITE
 
 # These options disable *all* the text chunks if turned off
 
+option TEXT disabled
 option READ_TEXT requires READ_ANCILLARY_CHUNKS enables TEXT
 option WRITE_TEXT requires WRITE_ANCILLARY_CHUNKS enables TEXT
 
@@ -873,8 +874,11 @@ option SIMPLIFIED_READ_BGR enables FORMAT_BGR,
 
 # Write:
 option SIMPLIFIED_WRITE,
-   requires WRITE STDIO, SETJMP, WRITE_SWAP, WRITE_PACK,
+   requires WRITE, SETJMP, WRITE_SWAP, WRITE_PACK,
       WRITE_tRNS, WRITE_gAMA, WRITE_sRGB, WRITE_cHRM
+
+# 1.6.22: allow simplified write without stdio support:
+option SIMPLIFIED_WRITE_STDIO requires SIMPLIFIED_WRITE STDIO
 
 option SIMPLIFIED_WRITE_AFIRST enables FORMAT_AFIRST,
    requires SIMPLIFIED_WRITE WRITE_SWAP_ALPHA

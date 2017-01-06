@@ -78,6 +78,15 @@
 /* Enable ARM Neon optimizations */
 #undef PNG_ARM_NEON_OPT
 
+/* Turn on MIPS MSA optimizations at run-time */
+#undef PNG_MIPS_MSA_API_SUPPORTED
+
+/* Check for MIPS MSA support at run-time */
+#undef PNG_MIPS_MSA_CHECK_SUPPORTED
+
+/* Enable MIPS MSA optimizations */
+#undef PNG_MIPS_MSA_OPT
+
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
