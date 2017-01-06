@@ -142,5 +142,6 @@ Example updating libpng files under MSW:
 3) in libpng root dir run:
    mingw32-make png.lo
    (will generate pnglibconf.h and pngprefix.h, among others)
-4) copy files from libpng root dir and scripts subfolder to src/png, updating old files only (other new files were not needed);
-5) commit the changes.
+4) edit pnglibconf.h and change the value of PNG_ZLIB_VERNUM to 0.
+5) copy files from libpng root dir and scripts subfolder to src/png, updating old files only (other new files were not needed);
+6) commit the changes.
