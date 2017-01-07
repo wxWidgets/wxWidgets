@@ -54,5 +54,6 @@ script:
     - sudo make install
     - echo -en 'travis_fold:end:script.install\\r'
     - echo 'Testing installation...' && echo -en 'travis_fold:start:script.testinstall\\r'
+    - make -C samples/minimal -f makefile.unx clean
     - make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS
     - echo -en 'travis_fold:end:script.testinstall\\r'
