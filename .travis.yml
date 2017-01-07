@@ -38,21 +38,21 @@ notifications:
 before_install: ./build/tools/before_install.sh
 
 script:
-    - set -e && echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
+    - set -e && echo -n 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
     - ./configure --disable-optimise $wxCONFIGURE_FLAGS
     - echo -en 'travis_fold:end:script.configure\\r'
-    - echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
+    - echo -n 'Building...' && echo -en 'travis_fold:start:script.build\\r'
     - make
     - echo -en 'travis_fold:end:script.build\\r'
-    - echo 'Testing...' && echo -en 'travis_fold:start:script.test\\r'
+    - echo -n 'Testing...' && echo -en 'travis_fold:start:script.test\\r'
     - make -C tests && pushd tests && ./test -t && popd
     - echo -en 'travis_fold:end:script.test\\r'
-    - echo 'Building samples...' && echo -en 'travis_fold:start:script.samples\\r'
-    - (test -n $wxSKIP_SAMPLES && echo 'SKIPPED') || make samples
+    - echo -n 'Building samples...' && echo -en 'travis_fold:start:script.samples\\r'
+    - (test -n "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make samples
     - echo -en 'travis_fold:end:script.samples\\r'
-    - echo 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
+    - echo -n 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
     - sudo make install
     - echo -en 'travis_fold:end:script.install\\r'
-    - echo 'Testing installation...' && echo -en 'travis_fold:start:script.testinstall\\r'
+    - echo -n 'Testing installation...' && echo -en 'travis_fold:start:script.testinstall\\r'
     - make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS
     - echo -en 'travis_fold:end:script.testinstall\\r'
