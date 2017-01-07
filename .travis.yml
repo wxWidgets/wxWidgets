@@ -21,7 +21,7 @@ matrix:
         - os: osx
           osx_image: xcode6.4
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS='-std=c++11 -stdlib=libc++'" wxSKIP_SAMPLES=1
+          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxSKIP_SAMPLES=1
 
 branches:
     only:
