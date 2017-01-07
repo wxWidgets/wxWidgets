@@ -1,6 +1,6 @@
-.TH LIBPNG 3 "January 15, 2016"
+.TH LIBPNG 3 "January 5, 2017"
 .SH NAME
-libpng \- Portable Network Graphics (PNG) Reference Library 1.6.21
+libpng \- Portable Network Graphics (PNG) Reference Library 1.6.28
 .SH SYNOPSIS
 \fB
 #include <png.h>\fP
@@ -228,6 +228,8 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.6.21
 \fBvoid png_image_free (png_imagep \fIimage\fP\fB);\fP
 
 \fBint png_image_write_to_file (png_imagep \fP\fIimage\fP\fB, const char \fP\fI*file\fP\fB, int \fP\fIconvert_to_8bit\fP\fB, const void \fP\fI*buffer\fP\fB, png_int_32 \fP\fIrow_stride\fP\fB, void \fI*colormap\fP\fB);\fP
+
+\fBint png_image_write_to_memory (png_imagep \fP\fIimage\fP\fB, void \fP\fI*memory\fP\fB, png_alloc_size_t * PNG_RESTRICT \fP\fImemory_bytes\fP\fB, int \fP\fIconvert_to_8_bit\fP\fB, const void \fP\fI*buffer\fP\fB, png_int_32 \fP\fIrow_stride\fP\fB, const void \fI*colormap)\fP\fB);\fP
 
 \fBint png_image_write_to_stdio (png_imagep \fP\fIimage\fP\fB, FILE \fP\fI*file\fP\fB, int \fP\fIconvert_to_8_bit\fP\fB, const void \fP\fI*buffer\fP\fB, png_int_32 \fP\fIrow_stride\fP\fB, void \fI*colormap)\fP\fB);\fP
 
@@ -508,7 +510,7 @@ Following is a copy of the libpng-manual.txt file that accompanies libpng.
 .SH LIBPNG.TXT
 libpng-manual.txt - A description on how to use and modify libpng
 
- libpng version 1.6.21 - January 15, 2016
+ libpng version 1.6.28 - January 5, 2017
  Updated and distributed by Glenn Randers-Pehrson
  <glennrp at users.sourceforge.net>
  Copyright (c) 1998-2016 Glenn Randers-Pehrson
@@ -519,7 +521,7 @@ libpng-manual.txt - A description on how to use and modify libpng
 
  Based on:
 
- libpng versions 0.97, January 1998, through 1.6.21 - January 15, 2016
+ libpng versions 0.97, January 1998, through 1.6.28 - January 5, 2017
  Updated and distributed by Glenn Randers-Pehrson
  Copyright (c) 1998-2016 Glenn Randers-Pehrson
 
@@ -582,7 +584,7 @@ The PNG-1.2 specification is available at
 It is technically equivalent
 to the PNG specification (second edition) but has some additional material.
 
-The PNG-1.0 specification is available as RFC 2083
+The PNG-1.0 specification is available as RFC 2083 
 <http://png-mng.sourceforge.net/pub/png/spec/1.0/> and as a
 W3C Recommendation <http://www.w3.org/TR/REC-png-961001>.
 
@@ -975,8 +977,9 @@ the default, use
 
 The values for png_set_crc_action() say how libpng is to handle CRC errors in
 ancillary and critical chunks, and whether to use the data contained
-therein.  Note that it is impossible to "discard" data in a critical
-chunk.
+therein. Starting with libpng-1.6.26, this also governs how an ADLER32 error
+is handled while reading the IDAT chunk. Note that it is impossible to
+"discard" data in a critical chunk.
 
 Choices for (int) crit_action are
    PNG_CRC_DEFAULT      0  error/quit
@@ -992,6 +995,9 @@ Choices for (int) ancil_action are
    PNG_CRC_WARN_USE     3  warn/use data
    PNG_CRC_QUIET_USE    4  quiet/use data
    PNG_CRC_NO_CHANGE    5  use the current value
+
+When the setting for crit_action is PNG_CRC_QUIET_USE, the CRC and ADLER32
+checksums are not only ignored, but they are not evaluated.
 
 .SS Setting up callback code
 
@@ -1067,7 +1073,7 @@ non-interlaced case the row that was just handled is simply one less than the
 passed in row number, and pass will always be 0.  For the interlaced case the
 same applies unless the row value is 0, in which case the row just handled was
 the last one from one of the preceding passes.  Because interlacing may skip a
-pass you cannot be sure that the preceding pass is just 'pass\-1', if you really
+pass you cannot be sure that the preceding pass is just 'pass\-1'; if you really
 need to know what the last pass is record (row,pass) from the callback and use
 the last recorded value each time.
 
@@ -1379,7 +1385,7 @@ described below (the latter being the two common names for associated alpha
 color channels). Note that PNG files always contain non-associated color
 channels; png_set_alpha_mode() with one of the modes causes the decoder to
 convert the pixels to an associated form before returning them to your
-application.
+application. 
 
 Since it is not necessary to perform arithmetic on opaque color values so
 long as they are not to be resampled and are in the final color space it is
@@ -2738,7 +2744,8 @@ is exactly the same.  If you are planning on displaying the image
 after each pass, the "rectangle" effect is generally considered the
 better looking one.
 
-If you only want the "sparkle" effect, just call png_read_rows() as
+If you only want the "sparkle" effect, just call png_read_row() or
+png_read_rows() as
 normal, with the third parameter NULL.  Make sure you make pass over
 the image number_of_passes times, and you don't change the data in the
 rows between calls.  You can change the locations of the data, just
@@ -2747,6 +2754,8 @@ pass, and assumes the data from previous passes is still valid.
 
     png_read_rows(png_ptr, row_pointers, NULL,
         number_of_rows);
+    or
+    png_read_row(png_ptr, row_pointers, NULL);
 
 If you only want the first effect (the rectangles), do the same as
 before except pass the row buffer in the third parameter, and leave
@@ -2754,6 +2763,8 @@ the second parameter NULL.
 
     png_read_rows(png_ptr, NULL, row_pointers,
         number_of_rows);
+    or
+    png_read_row(png_ptr, NULL, row_pointers);
 
 If you don't want libpng to handle the interlacing details, just call
 png_read_rows() PNG_INTERLACE_ADAM7_PASSES times to read in all the images.
@@ -3350,7 +3361,7 @@ filter types.
        PNG_FILTER_UP    | PNG_FILTER_VALUE_UP   |
        PNG_FILTER_AVG   | PNG_FILTER_VALUE_AVG  |
        PNG_FILTER_PAETH | PNG_FILTER_VALUE_PAETH|
-       PNG_ALL_FILTERS);
+       PNG_ALL_FILTERS  | PNG_FAST_FILTERS);
 
 If an application wants to start and stop using particular filters during
 compression, it should start out with all of the filters (to ensure that
@@ -4611,6 +4622,13 @@ be written:
 
       Write the image to the named file.
 
+   int png_image_write_to_memory (png_imagep image, void *memory,
+      png_alloc_size_t * PNG_RESTRICT memory_bytes,
+      int convert_to_8_bit, const void *buffer, ptrdiff_t row_stride,
+      const void *colormap));
+
+      Write the image to memory.
+
    int png_image_write_to_stdio(png_imagep image, FILE *file,
       int convert_to_8_bit, const void *buffer,
       png_int_32 row_stride, const void *colormap)
@@ -4888,8 +4906,9 @@ for any images with bit depths less than 8 bits/pixel.
 The 'method' parameter sets the main filtering method, which is
 currently only '0' in the PNG 1.2 specification.  The 'filters'
 parameter sets which filter(s), if any, should be used for each
-scanline.  Possible values are PNG_ALL_FILTERS and PNG_NO_FILTERS
-to turn filtering on and off, respectively.
+scanline.  Possible values are PNG_ALL_FILTERS, PNG_NO_FILTERS,
+or PNG_FAST_FILTERS to turn filtering on and off, or to turn on
+just the fast-decoding subset of filters, respectively.
 
 Individual filter types are PNG_FILTER_NONE, PNG_FILTER_SUB,
 PNG_FILTER_UP, PNG_FILTER_AVG, PNG_FILTER_PAETH, which can be bitwise
@@ -4903,12 +4922,19 @@ means the first row must always be adaptively filtered, because libpng
 currently does not allocate the filter buffers until png_write_row()
 is called for the first time.)
 
-    filters = PNG_FILTER_NONE | PNG_FILTER_SUB
+    filters = PNG_NO_FILTERS;
+    filters = PNG_ALL_FILTERS;
+    filters = PNG_FAST_FILTERS;
+
+    or
+
+    filters = PNG_FILTER_NONE | PNG_FILTER_SUB |
               PNG_FILTER_UP | PNG_FILTER_AVG |
-              PNG_FILTER_PAETH | PNG_ALL_FILTERS;
+              PNG_FILTER_PAETH;
 
     png_set_filter(png_ptr, PNG_FILTER_TYPE_BASE,
        filters);
+
               The second parameter can also be
               PNG_INTRAPIXEL_DIFFERENCING if you are
               writing a PNG to be embedded in a MNG
@@ -5283,7 +5309,8 @@ There are no substantial API changes between the non-deprecated parts of
 the 1.4.5 API and the 1.5.0 API; however, the ability to directly access
 members of the main libpng control structures, png_struct and png_info,
 deprecated in earlier versions of libpng, has been completely removed from
-libpng 1.5.
+libpng 1.5, and new private "pngstruct.h", "pnginfo.h", and "pngdebug.h"
+header files were created.
 
 We no longer include zlib.h in png.h.  The include statement has been moved
 to pngstruct.h, where it is not accessible by applications. Applications that
@@ -5523,6 +5550,7 @@ includes the following:
      png_image_free()
    write functions
      png_image_write_to_file()
+     png_image_write_to_memory()
      png_image_write_to_stdio()
 
 Starting with libpng-1.6.0, you can configure libpng to prefix all exported
@@ -5797,7 +5825,7 @@ Prior to libpng-1.6.0 we used a "png_sizeof()" macro, formatted as
 though it were a function.
 
 Control keywords if, for, while, and switch are always followed by a space
-to distinguish them from function calls, which have no trailing space.
+to distinguish them from function calls, which have no trailing space. 
 
 We put a space after each comma and after each semicolon
 in "for" statements, and we put spaces before and after each
@@ -5821,8 +5849,9 @@ with an even number of lower-case hex digits, and to make them unsigned
 We prefer to use underscores rather than camelCase in names, except
 for a few type names that we inherit from zlib.h.
 
-We prefer "if (something != 0)" and "if (something == 0)"
-over "if (something)" and if "(!something)", respectively.
+We prefer "if (something != 0)" and "if (something == 0)" over
+"if (something)" and if "(!something)", respectively, and for pointers
+we prefer "if (some_pointer != NULL)" or "if (some_pointer == NULL)". 
 
 We do not use the TAB character for indentation in the C sources.
 
@@ -5836,7 +5865,7 @@ Since the PNG Development group is an ad-hoc body, we can't make
 an official declaration.
 
 This is your unofficial assurance that libpng from version 0.71 and
-upward through 1.6.21 are Y2K compliant.  It is my belief that earlier
+upward through 1.6.28 are Y2K compliant.  It is my belief that earlier
 versions were also Y2K compliant.
 
 Libpng only has two year fields.  One is a 2-byte unsigned integer
@@ -5934,11 +5963,11 @@ the first widely used release:
  ...
  1.0.19                  10    10019  10.so.0.19[.0]
  ...
- 1.2.53                  13    10253  12.so.0.53[.0]
+ 1.2.57                  13    10257  12.so.0.56[.0]
  ...
- 1.5.23                  15    10523  15.so.15.23[.0]
+ 1.5.28                  15    10528  15.so.15.28[.0]
  ...
- 1.6.21                  16    10621  16.so.16.21[.0]
+ 1.6.28                  16    10628  16.so.16.28[.0]
 
 Henceforth the source version will match the shared-library minor
 and patch numbers; the shared-library major version number will be
@@ -5994,7 +6023,7 @@ possible without all of you.
 
 Thanks to Frank J. T. Wojcik for helping with the documentation.
 
-Libpng version 1.6.21 - January 15, 2016:
+Libpng version 1.6.28 - January 5, 2017:
 Initially created in 1995 by Guy Eric Schalnat, then of Group 42, Inc.
 Currently maintained by Glenn Randers-Pehrson (glennrp at users.sourceforge.net).
 
@@ -6019,8 +6048,8 @@ this sentence.
 
 This code is released under the libpng license.
 
-libpng versions 1.0.7, July 1, 2000, through 1.6.21, January 15, 2016, are
-Copyright (c) 2000-2002, 2004, 2006-2016 Glenn Randers-Pehrson, are
+libpng versions 1.0.7, July 1, 2000 through 1.6.28, January 5, 2017 are
+Copyright (c) 2000-2002, 2004, 2006-2017 Glenn Randers-Pehrson, are
 derived from libpng-1.0.6, and are distributed according to the same
 disclaimer and license as libpng-1.0.6 with the following individuals
 added to the list of Contributing Authors:
@@ -6031,6 +6060,7 @@ added to the list of Contributing Authors:
    Cosmin Truta
    Gilles Vollant
    James Yu
+   Mandar Sahastrabuddhe
 
 and with the following additions to the disclaimer:
 
@@ -6040,6 +6070,10 @@ and with the following additions to the disclaimer:
    or needs.  This library is provided with all faults, and the entire
    risk of satisfactory quality, performance, accuracy, and effort is with
    the user.
+
+Some files in the "contrib" directory and some configure-generated
+files that are distributed with libpng have other copyright owners and
+are released under other open source licenses.
 
 libpng versions 0.97, January 1998, through 1.0.6, March 20, 2000, are
 Copyright (c) 1998-2000 Glenn Randers-Pehrson, are derived from
@@ -6063,6 +6097,9 @@ Contributing Authors:
    Magnus Holmgren
    Greg Roelofs
    Tom Tanner
+
+Some files in the "scripts" directory have other copyright owners
+but are released under this license.
 
 libpng versions 0.5, May 1995, through 0.88, January 1996, are
 Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.
@@ -6104,6 +6141,29 @@ appreciated.
 
 END OF COPYRIGHT NOTICE, DISCLAIMER, and LICENSE.
 
+TRADEMARK:
+
+The name "libpng" has not been registered by the Copyright owner
+as a trademark in any jurisdiction.  However, because libpng has
+been distributed and maintained world-wide, continually since 1995,
+the Copyright owner claims "common-law trademark protection" in any
+jurisdiction where common-law trademark is recognized.
+
+OSI CERTIFICATION:
+
+Libpng is OSI Certified Open Source Software.  OSI Certified Open Source is
+a certification mark of the Open Source Initiative. OSI has not addressed
+the additional disclaimers inserted at version 1.0.7.
+
+EXPORT CONTROL:
+
+The Copyright owner believes that the Export Control Classification
+Number (ECCN) for libpng is EAR99, which means not subject to export
+controls or International Traffic in Arms Regulations (ITAR) because
+it is open source, publicly available software, that does not contain
+any encryption software.  See the EAR, paragraphs 734.3(b)(3) and
+734.7(b).
+
 A "png_get_copyright" function is available, for convenient use in "about"
 boxes and the like:
 
@@ -6112,13 +6172,9 @@ boxes and the like:
 Also, the PNG logo (in PNG format, of course) is supplied in the
 files "pngbar.png" and "pngbar.jpg (88x31) and "pngnow.png" (98x31).
 
-Libpng is OSI Certified Open Source Software.  OSI Certified Open Source is
-a certification mark of the Open Source Initiative. OSI has not addressed
-the additional disclaimers inserted at version 1.0.7.
-
 Glenn Randers-Pehrson
 glennrp at users.sourceforge.net
-January 15, 2016
+January 5, 2017
 
 .\" end of man page
 

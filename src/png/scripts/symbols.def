@@ -1,4 +1,4 @@
-;Version 1.6.21
+;Version 1.6.28
 ;--------------------------------------------------------------
 ; LIBPNG symbol list as a Win32 DEF file
 ; Contains all the symbols that can be exported from libpng
@@ -249,3 +249,4 @@ EXPORTS
  png_set_check_for_invalid_index @242
  png_get_palette_max @243
  png_set_option @244
+ png_image_write_to_memory @245

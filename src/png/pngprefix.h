@@ -55,18 +55,12 @@
 #define png_do_read_interlace wx_png_do_read_interlace
 #define png_do_write_interlace wx_png_do_write_interlace
 #define png_read_filter_row wx_png_read_filter_row
-#define png_read_filter_row_up_neon wx_png_read_filter_row_up_neon
-#define png_read_filter_row_sub3_neon wx_png_read_filter_row_sub3_neon
-#define png_read_filter_row_sub4_neon wx_png_read_filter_row_sub4_neon
-#define png_read_filter_row_avg3_neon wx_png_read_filter_row_avg3_neon
-#define png_read_filter_row_avg4_neon wx_png_read_filter_row_avg4_neon
-#define png_read_filter_row_paeth3_neon wx_png_read_filter_row_paeth3_neon
-#define png_read_filter_row_paeth4_neon wx_png_read_filter_row_paeth4_neon
 #define png_write_find_filter wx_png_write_find_filter
 #define png_read_IDAT_data wx_png_read_IDAT_data
 #define png_read_finish_IDAT wx_png_read_finish_IDAT
 #define png_read_finish_row wx_png_read_finish_row
 #define png_read_start_row wx_png_read_start_row
+#define png_zlib_inflate wx_png_zlib_inflate
 #define png_read_transform_info wx_png_read_transform_info
 #define png_do_strip_channel wx_png_do_strip_channel
 #define png_do_swap wx_png_do_swap
@@ -162,5 +156,4 @@
 #define png_safe_warning wx_png_safe_warning
 #define png_safe_execute wx_png_safe_execute
 #define png_image_error wx_png_image_error
-#define png_init_filter_functions_neon wx_png_init_filter_functions_neon
 #define png_check_keyword wx_png_check_keyword
