@@ -38,8 +38,7 @@ notifications:
 before_install: ./build/tools/before_install.sh
 
 script:
-    - set -e
-    - echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
+    - set -e && echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
     - ./configure --disable-optimise $wxCONFIGURE_FLAGS
     - echo -en 'travis_fold:end:script.configure\\r'
     - echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
@@ -48,10 +47,9 @@ script:
     - echo 'Testing...' && echo -en 'travis_fold:start:script.test\\r'
     - make -C tests && pushd tests && ./test -t && popd
     - echo -en 'travis_fold:end:script.test\\r'
-    - test -z $wxSKIP_SAMPLES &&
-      echo 'Building samples...' && echo -en 'travis_fold:start:script.samples\\r' &&
-      make samples &&
-      echo -en 'travis_fold:end:script.samples\\r'
+    - echo 'Building samples...' && echo -en 'travis_fold:start:script.samples\\r'
+    - (test -n $wxSKIP_SAMPLES && echo 'SKIPPED') || make samples
+    - echo -en 'travis_fold:end:script.samples\\r'
     - echo 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
     - sudo make install
     - echo -en 'travis_fold:end:script.install\\r'
