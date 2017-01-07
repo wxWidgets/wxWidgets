@@ -1064,7 +1064,18 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     if(webKitWindow->IsContextMenuEnabled())
         return defaultMenuItems;
     else
+    {        
+        wxWebViewEvent event(wxEVT_CONTEXT_MENU,
+                             webKitWindow->GetId(),
+                             webKitWindow->ClientToScreen(wxDefaultPosition) 
+                             target);
+        event.SetEventObject(this);
+
+        if (webKitWindow && webKitWindow->GetEventHandler())
+            webKitWindow->GetEventHandler()->ProcessEvent(event);
+        
         return nil;
+    }
 }
 @end
 
