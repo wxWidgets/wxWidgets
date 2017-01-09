@@ -83,6 +83,7 @@ All:
 - Allow using Bind() with event handlers non-publicly deriving from
   wxEvtHandler and/or wxTrackable in C++11 code (Raul Tambre, mmarsan).
 - Update bundled expat to 2.2.0 (Catalin Raceanu).
+- Add wxCMD_LINE_HIDDEN wxCmdLineParser flag (Lauri Nurmi).
 
 All (GUI):
 
