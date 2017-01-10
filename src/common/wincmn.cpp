@@ -3886,12 +3886,15 @@ wxAccStatus wxWindowAccessible::GetDescription(int WXUNUSED(childId), wxString* 
 {
     wxCHECK( GetWindow() != NULL, wxACC_FAIL );
 
+#if wxUSE_HELP
     wxString ht(GetWindow()->GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Keyboard));
     if (!ht.empty())
     {
         *description = ht;
         return wxACC_OK;
     }
+#endif // wxUSE_HELP
+
     return wxACC_NOT_IMPLEMENTED;
 }
 
@@ -3900,12 +3903,15 @@ wxAccStatus wxWindowAccessible::GetHelpText(int WXUNUSED(childId), wxString* hel
 {
     wxCHECK( GetWindow() != NULL, wxACC_FAIL );
 
+#if wxUSE_HELP
     wxString ht(GetWindow()->GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Keyboard));
     if (!ht.empty())
     {
         *helpText = ht;
         return wxACC_OK;
     }
+#endif // wxUSE_HELP
+
     return wxACC_NOT_IMPLEMENTED;
 }
 
