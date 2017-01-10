@@ -624,6 +624,7 @@ bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
   return false;
 }
 
+#if wxUSE_BASE64
 bool wxRegConfig::DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
 {
     wxCHECK_MSG( buf, false, wxT("wxRegConfig::Read(): NULL param") );
@@ -657,6 +658,7 @@ bool wxRegConfig::DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
 
   return false;
 }
+#endif // wxUSE_BASE64
 
 bool wxRegConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
@@ -682,6 +684,7 @@ bool wxRegConfig::DoWriteLong(const wxString& key, long lValue)
   return LocalKey().SetValue(path.Name(), lValue);
 }
 
+#if wxUSE_BASE64
 bool wxRegConfig::DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
 {
   wxConfigPathChanger path(this, key);
@@ -693,6 +696,7 @@ bool wxRegConfig::DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
 
   return LocalKey().SetValue(path.Name(), buf);
 }
+#endif // wxUSE_BASE64
 
 // ----------------------------------------------------------------------------
 // renaming
