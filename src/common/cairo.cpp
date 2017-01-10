@@ -185,6 +185,8 @@
 #define wxCAIRO_PLATFORM_METHODS(m) \
     m( cairo_surface_t*, cairo_win32_surface_create, \
         (HDC hdc), (hdc), NULL ) \
+    m( cairo_surface_t*, cairo_win32_surface_create_with_format, \
+        (HDC hdc, cairo_format_t format), (hdc, format), NULL ) \
     m( cairo_surface_t*, cairo_win32_printing_surface_create, \
         (HDC hdc), (hdc), NULL ) \
     m( HDC, cairo_win32_surface_get_dc, \

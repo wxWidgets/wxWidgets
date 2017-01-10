@@ -1881,9 +1881,17 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
                                         // transformation settings from source
                                         // wxDC to Cairo context on our own.
 
-    // cairo_win32_surface_create creates a 24-bit bitmap,
-    // so if we 32bpp bitmap, we need to create a 32-bit surface instead.
-    if ( bmp.GetDepth() == 32 )
+    // Prior to 1.15.4 creating surface from HDC could be done only with
+    // cairo_win32_surface_create() supporting only 24 bpp RGB surface.
+    // So, in case of a 32 bpp ARGB bitmap, it was necessary to create
+    // a 32 bpp surface directly from bitmap data with cairo_image_surface_create_for_data().
+    // New API cairo_win32_surface_create_with_format() introduced in 1.15.4
+    // supports creating also 32 bpp ARGB surface so this function
+    // can be used to create a surface from both RGB and ARGB bitmaps.
+    // For 0RGB bitmaps, surface still has to be created in the old way, from
+    // bitmap data.
+    if ( bmp.GetDepth() == 32 &&
+         (cairo_version() < CAIRO_VERSION_ENCODE(1, 15, 4) || !bmp.HasAlpha()) )
     {
 #if wxUSE_WXDIB
         // We need to convert the currently selected bitmap to a DIB
@@ -1972,7 +1980,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         }
     }
 
-    // Fallback if Cairo surface hasn't been created from 32bpp bitmap.
+    // Fallback if Cairo surface hasn't been created from bitmap data.
     if( !hasBitmap )
     {
         // When x- or y-coordinate of DC origin > 0 then surface
@@ -1998,7 +2006,17 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         }
 #endif // Cairo <= 1.15.2
 
-        m_mswSurface = cairo_win32_surface_create(hdc);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
+        if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 15, 4) )
+        {
+            m_mswSurface = cairo_win32_surface_create_with_format(hdc,
+                             bmp.HasAlpha() ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24);
+        }
+        else
+#endif // Cairo >= 1.15.4
+        {
+            m_mswSurface = cairo_win32_surface_create(hdc);
+        }
         wxASSERT_MSG( cairo_surface_status(m_mswSurface) == CAIRO_STATUS_SUCCESS,
                       wxS("wxCairoContext ctor - Error creating Cairo surface") );
     }

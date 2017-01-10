@@ -156,6 +156,8 @@ wxMSW:
 - Return null BSTR from wxIAccessible if string returned from wxAccesible
   method is empty.
 - Handle Ctrl-A in non-rich multiline text controls (Jens Göpfert).
+- Use cairo_win32_surface_create_with_format() to create ARGB surface from
+  wxMemoryDC (Cairo >= 1.15.4).
 
 wxOSX:
 
