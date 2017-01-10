@@ -119,6 +119,7 @@ All (GUI):
 - Add wxDataViewRenderer::GetAccessibleDescription().
 - Improve wxImage::Scale() handling of pixels with alpha channel (Tim Kosse).
 - Fix parsing of RGBA strings in wxColour (Laurent Poujoulat).
+- Refactor code in wxQuantize() for MSVC to avoid crash.
 
 wxGTK:
 
