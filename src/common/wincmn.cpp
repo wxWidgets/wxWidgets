@@ -47,6 +47,7 @@
     #include "wx/layout.h"
     #include "wx/sizer.h"
     #include "wx/menu.h"
+    #include "wx/button.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_DRAG_AND_DROP
