@@ -946,7 +946,25 @@ wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
         return Create(*mfdc);
 #endif
 #endif
-#endif // !wxNO_RTTI
+#else // wxNO_RTTI
+    if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
+        return Create(*windc);
+
+    if ( const wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
+        return Create(*memdc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if ( const wxPrinterDC *printdc = wxDynamicCast(&dc, wxPrinterDC) )
+        return Create(*printdc);
+#endif
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    if ( const wxEnhMetaFileDC *mfdc = wxDynamicCast(&dc, wxEnhMetaFileDC) )
+        return Create(*mfdc);
+#endif
+#endif
+#endif // !wxNO_RTTI/wxNO_RTTI
 
     return NULL;
 }
