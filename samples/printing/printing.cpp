@@ -217,25 +217,7 @@ void MyApp::Draw(wxDC&dc)
         dc.DrawBitmap( m_bitmap, 10, 10 );
 
 #if wxUSE_GRAPHICS_CONTEXT
-    wxGraphicsContext *gc = NULL;
-
-    wxPrinterDC *printer_dc = wxDynamicCast( &dc, wxPrinterDC );
-    if (printer_dc)
-        gc = wxGraphicsContext::Create( *printer_dc );
-
-    wxWindowDC *window_dc = wxDynamicCast( &dc, wxWindowDC );
-    if (window_dc)
-        gc = wxGraphicsContext::Create( *window_dc );
-
-    wxMemoryDC *memory_dc = wxDynamicCast( &dc, wxMemoryDC );
-    if (memory_dc)
-        gc = wxGraphicsContext::Create( *memory_dc );
-
-#ifdef __WXMSW__
-    wxEnhMetaFileDC *emf_dc = wxDynamicCast( &dc, wxEnhMetaFileDC );
-    if (emf_dc)
-        gc = wxGraphicsContext::Create( *emf_dc );
-#endif
+    wxGraphicsContext *gc = wxGraphicsContext::CreateFromUnknownDC(dc);
 
     if (gc)
     {
