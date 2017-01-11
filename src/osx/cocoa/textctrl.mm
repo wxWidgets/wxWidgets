@@ -448,6 +448,37 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     return NO;
 }
 
+- (BOOL)_handleClipboardEvent:(wxEventType)type
+{
+    wxWidgetImpl *impl = wxWidgetImpl::FindFromWXWidget(self);
+    wxWindow* wxpeer = impl ? impl->GetWXPeer() : NULL;
+    if ( wxpeer )
+    {
+        wxClipboardTextEvent evt(type, wxpeer->GetId());
+        evt.SetEventObject(wxpeer);
+        return wxpeer->HandleWindowEvent(evt);
+    }
+    return false;
+}
+
+- (void)copy:(id)sender
+{
+    if ( ![self _handleClipboardEvent:wxEVT_TEXT_COPY] )
+        [super copy:sender];
+}
+
+- (void)cut:(id)sender
+{
+    if ( ![self _handleClipboardEvent:wxEVT_TEXT_CUT] )
+        [super cut:sender];
+}
+
+- (void)paste:(id)sender
+{
+    if ( ![self _handleClipboardEvent:wxEVT_TEXT_PASTE] )
+        [super paste:sender];
+}
+
 @end
 
 @implementation wxNSTextField
