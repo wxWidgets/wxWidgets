@@ -756,6 +756,7 @@ public:
     // the displaying number of the tree are changing along with the
     // expanding/collapsing of the tree nodes
     unsigned int GetLastVisibleRow();
+    unsigned int GetLastFullyVisibleRow();
     unsigned int GetRowCount() const;
 
     const wxSelectionStore& GetSelections() const { return m_selection; }
@@ -2870,6 +2871,19 @@ unsigned int wxDataViewMainWindow::GetLastVisibleRow()
     unsigned int row = GetLineAt(client_size.y);
 
     return wxMin( GetRowCount()-1, row );
+}
+
+unsigned int wxDataViewMainWindow::GetLastFullyVisibleRow()
+{
+    unsigned int row = GetLastVisibleRow();
+
+    int bottom = GetLineStart(row) + GetLineHeight(row);
+    m_owner->CalcScrolledPosition(-1, bottom, NULL, &bottom);
+
+    if ( bottom > GetClientSize().y )
+        return wxMax(0, row - 1);
+    else
+        return row;
 }
 
 unsigned int wxDataViewMainWindow::GetRowCount() const
@@ -5491,7 +5505,7 @@ void wxDataViewCtrl::EnsureVisibleRowCol( int row, int column )
         row = m_clientArea->GetRowCount();
 
     int first = m_clientArea->GetFirstVisibleRow();
-    int last = m_clientArea->GetLastVisibleRow();
+    int last = m_clientArea->GetLastFullyVisibleRow();
     if( row < first )
         m_clientArea->ScrollTo( row, column );
     else if( row > last )
@@ -6178,7 +6192,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetState(int childId, long* state)
         if ( !dvWnd->IsSingleSel() )
             st |= wxACC_STATE_SYSTEM_MULTISELECTABLE | wxACC_STATE_SYSTEM_EXTSELECTABLE;
 
-        if ( rowNum < dvWnd->GetFirstVisibleRow() || rowNum > dvWnd->GetLastVisibleRow() )
+        if ( rowNum < dvWnd->GetFirstVisibleRow() || rowNum > dvWnd->GetLastFullyVisibleRow() )
             st |= wxACC_STATE_SYSTEM_OFFSCREEN;
         if ( dvWnd->GetCurrentRow() == rowNum )
             st |= wxACC_STATE_SYSTEM_FOCUSED;
