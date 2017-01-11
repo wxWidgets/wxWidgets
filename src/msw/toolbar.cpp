@@ -46,10 +46,12 @@
 #include "wx/artprov.h"
 #include "wx/sysopt.h"
 #include "wx/dcclient.h"
+#include "wx/rawbmp.h"
 #include "wx/scopedarray.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
+#include "wx/msw/dib.h"
 
 #if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"
@@ -734,10 +736,10 @@ bool wxToolBar::Realize()
     // remap the buttons on 8bpp displays as otherwise the bitmaps usually look
     // much worse after remapping
     static const wxChar *remapOption = wxT("msw.remap");
-    const int remapValue = wxSystemOptions::HasOption(remapOption)
-                                ? wxSystemOptions::GetOptionInt(remapOption)
-                                : wxDisplayDepth() <= 8 ? Remap_Buttons
-                                                        : Remap_None;
+    int remapValue = wxSystemOptions::HasOption(remapOption)
+                          ? wxSystemOptions::GetOptionInt(remapOption)
+                          : wxDisplayDepth() <= 8 ? Remap_Buttons
+                                                  : Remap_None;
 
 
     // delete all old buttons, if any
@@ -768,9 +770,43 @@ bool wxToolBar::Realize()
         // Create a bitmap and copy all the tool bitmaps into it
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
+
+        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+        {
+            wxToolBarToolBase *tool = node->GetData();
+            if ( tool->IsButton() &&
+                 tool->GetNormalBitmap().IsOk() && tool->GetNormalBitmap().HasAlpha() )
+            {
+                // By default bitmaps don't have alpha in wxMSW, but if we
+                // use a bitmap tool with alpha, we should use alpha for
+                // the combined bitmap as well.
+                bitmap.UseAlpha();
+#ifdef wxHAS_RAW_BITMAP
+                // Clear the combined bitmap to have (0,0,0,0) pixels so that
+                // alpha blending bitmaps onto it doesn't change their appearance.
+                wxAlphaPixelData data(bitmap);
+                if ( data )
+                {
+                    wxAlphaPixelData::Iterator p(data);
+                    for (int y = 0; y < totalBitmapHeight; y++)
+                    {
+                        wxAlphaPixelData::Iterator rowStart = p;
+                        for (int x = 0; x < totalBitmapWidth; ++x, ++p)
+                        {
+                            p.Red() = p.Green() = p.Blue() = p.Alpha() = 0;
+                        }
+                        p = rowStart;
+                        p.OffsetY(data, 1);
+                    }
+#endif
+                }
+                break;
+            }
+        }
+
         dcAllButtons.SelectObject(bitmap);
 
-        if ( remapValue != Remap_TransparentBg )
+        if ( remapValue != Remap_TransparentBg && !bitmap.HasAlpha() )
         {
             dcAllButtons.SetBackground(GetBackgroundColour());
             dcAllButtons.Clear();
@@ -809,12 +845,6 @@ bool wxToolBar::Realize()
 
                 if ( bmp.IsOk() )
                 {
-                    // By default bitmaps don't have alpha in wxMSW, but if we
-                    // use a bitmap tool with alpha, we should use alpha for
-                    // the combined bitmap as well.
-                    if ( bmp.HasAlpha() )
-                        bitmap.UseAlpha();
-
                     int xOffset = wxMax(0, (m_defaultWidth - w)/2);
                     int yOffset = wxMax(0, (m_defaultHeight - h)/2);
 
@@ -882,8 +912,23 @@ bool wxToolBar::Realize()
 
         dcAllButtons.SelectObject(wxNullBitmap);
 
-        // don't delete this HBITMAP!
-        bitmap.SetHBITMAP(0);
+#if wxUSE_WXDIB
+        if ( bitmap.HasAlpha() )
+        {
+            // Strangely, toolbar expects bitmaps with transparency to not
+            // be premultiplied, unlike most of the rest of win32. Without this
+            // conversion, e.g. antialiased lines would be subtly, but
+            // noticeably misrendered. 
+            hBitmap = wxDIB(bitmap.ConvertToImage(),
+                            wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        }
+        else
+#endif
+        {
+            hBitmap = GetHbitmapOf(bitmap);
+            // don't delete this HBITMAP!
+            bitmap.SetHBITMAP(0);
+        }
 
         if ( remapValue == Remap_Buttons )
         {
