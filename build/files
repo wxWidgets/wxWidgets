@@ -124,6 +124,7 @@ BASE_WIN32_HDR =
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
     wx/msw/winundef.h
+    wx/msw/winver.h
     wx/msw/wrapcctl.h
     wx/msw/wrapcdlg.h
     wx/msw/wrapwin.h

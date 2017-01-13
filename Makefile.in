@@ -743,6 +743,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/stackwalk.h \
 	wx/msw/stdpaths.h \
 	wx/msw/winundef.h \
+	wx/msw/winver.h \
 	wx/msw/wrapcctl.h \
 	wx/msw/wrapcdlg.h \
 	wx/msw/wrapwin.h \
@@ -2581,6 +2582,7 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/stackwalk.h \
 	wx/msw/stdpaths.h \
 	wx/msw/winundef.h \
+	wx/msw/winver.h \
 	wx/msw/wrapcctl.h \
 	wx/msw/wrapcdlg.h \
 	wx/msw/wrapwin.h \
