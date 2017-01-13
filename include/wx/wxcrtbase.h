@@ -230,8 +230,15 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
     #define wxCRT_StricmpA stricmp
     #define wxCRT_StrnicmpA strnicmp
 #elif defined(__VISUALC__) || defined(__MINGW32__)
-    wxDECL_FOR_STRICT_MINGW32(int, _stricmp, (const char*, const char*))
-    wxDECL_FOR_STRICT_MINGW32(int, _strnicmp, (const char*, const char*, size_t))
+    /*
+        Due to MinGW 5.3 bug (https://sourceforge.net/p/mingw/bugs/2322/),
+        _stricmp() and _strnicmp() are not declared in its standard headers
+        when compiling without optimizations. Work around this by always
+        declaring them ourselves (notice that if/when this bug were fixed, we'd
+        still need to use wxDECL_FOR_STRICT_MINGW32() for them here.
+     */
+    wxDECL_FOR_MINGW32_ALWAYS(int, _stricmp, (const char*, const char*))
+    wxDECL_FOR_MINGW32_ALWAYS(int, _strnicmp, (const char*, const char*, size_t))
 
     #define wxCRT_StricmpA _stricmp
     #define wxCRT_StrnicmpA _strnicmp

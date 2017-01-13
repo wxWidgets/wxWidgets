@@ -358,6 +358,7 @@
 #    define wxCHECK_W32API_VERSION(maj, min) (0)
 #    undef wxCHECK_MINGW32_VERSION
 #    define wxCHECK_MINGW32_VERSION( major, minor ) (0)
+#    define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params)
 #    define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
 #endif
 

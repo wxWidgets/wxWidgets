@@ -149,26 +149,34 @@
     the new C++11 features and not disable the use of POSIX functions, we just
     manually declare the functions we need in this case if necessary.
  */
-#if defined(__MINGW32_TOOLCHAIN__) && defined(__STRICT_ANSI__)
-    #define wxNEEDS_STRICT_ANSI_WORKAROUNDS
-
+#ifdef __MINGW32_TOOLCHAIN__
     /*
         This macro is somewhat unusual as it takes the list of parameters
         inside parentheses and includes semicolon inside it as putting the
         semicolon outside wouldn't do the right thing when this macro is empty.
      */
-    #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params) \
+    #define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params) \
         extern "C" _CRTIMP rettype __cdecl __MINGW_NOTHROW func params ;
 
-    /*
-        There is a bug resulting in a compilation error in MinGW standard
-        math.h header, see https://sourceforge.net/p/mingw/bugs/2250/, work
-        around it here because math.h is also included from several other
-        standard headers (e.g. <algorithm>) and we don't want to duplicate this
-        hack everywhere this happens.
-     */
-    wxDECL_FOR_STRICT_MINGW32(double, _hypot, (double, double))
+    #ifdef __STRICT_ANSI__
+        #define wxNEEDS_STRICT_ANSI_WORKAROUNDS
+
+        #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params) \
+            wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params)
+
+        /*
+            There is a bug resulting in a compilation error in MinGW standard
+            math.h header, see https://sourceforge.net/p/mingw/bugs/2250/, work
+            around it here because math.h is also included from several other
+            standard headers (e.g. <algorithm>) and we don't want to duplicate this
+            hack everywhere this happens.
+         */
+        wxDECL_FOR_STRICT_MINGW32(double, _hypot, (double, double))
+    #else
+        #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
+    #endif
 #else
+    #define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params)
     #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
 #endif
 
