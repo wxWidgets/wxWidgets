@@ -479,9 +479,8 @@ public:
     }
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
-    // construct an adapter from a vector of strings (of any type)
-    template <class T>
-    wxArrayStringsAdapter(const std::vector<T>& strings)
+    // construct an adapter from a vector of strings
+    wxArrayStringsAdapter(const std::vector<wxString>& strings)
         : m_type(wxSTRING_POINTER), m_size(strings.size())
     {
         m_data.ptr = &strings[0];
