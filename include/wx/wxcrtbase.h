@@ -221,6 +221,13 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
 #endif
 
 #ifdef HAVE_WCSNLEN
+    /*
+        When using MinGW, wcsnlen() is not declared, but is still found by
+        configure -- just declare it in this case as it seems better to use it
+        if it's available (see https://sourceforge.net/p/mingw/bugs/2332/)
+     */
+    wxDECL_FOR_MINGW32_ALWAYS(size_t, wcsnlen, (const wchar_t*, size_t))
+
     #define wxCRT_StrnlenW  wcsnlen
 #endif
 
