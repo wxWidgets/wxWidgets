@@ -33,6 +33,14 @@
         #endif
     #endif
 
+    /*
+        MinGW 5.3.0 (and presumably later) predefines _WIN32_WINNT and WINVER
+        in sdkddkver.h included from _mingw.h to very low (Windows 2000!)
+        values. We really want to predefine them ourselves instead, so do it
+        before including _mingw.h.
+     */
+    #include "wx/msw/winver.h"
+
     #include <_mingw.h>
 
     /*
