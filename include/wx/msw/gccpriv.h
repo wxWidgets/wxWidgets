@@ -151,12 +151,22 @@
  */
 #ifdef __MINGW32_TOOLCHAIN__
     /*
+        The macro below is used in wx/wxcrtbase.h included from C regex library
+        code, so make sure it compiles in non-C++ code too.
+     */
+    #ifdef __cplusplus
+        #define wxEXTERNC extern "C"
+    #else
+        #define wxEXTERNC
+    #endif
+
+    /*
         This macro is somewhat unusual as it takes the list of parameters
         inside parentheses and includes semicolon inside it as putting the
         semicolon outside wouldn't do the right thing when this macro is empty.
      */
     #define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params) \
-        extern "C" _CRTIMP rettype __cdecl __MINGW_NOTHROW func params ;
+        wxEXTERNC _CRTIMP rettype __cdecl __MINGW_NOTHROW func params ;
 
     #ifdef __STRICT_ANSI__
         #define wxNEEDS_STRICT_ANSI_WORKAROUNDS
