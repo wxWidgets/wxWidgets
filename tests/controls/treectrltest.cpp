@@ -66,6 +66,7 @@ private:
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
         CPPUNIT_TEST( SelectItemMulti );
+        CPPUNIT_TEST( DeleteItemMulti );
         CPPUNIT_TEST( PseudoTest_SetHiddenRoot );
         CPPUNIT_TEST( HasChildren );
     CPPUNIT_TEST_SUITE_END();
@@ -92,6 +93,7 @@ private:
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
+    void DeleteItemMulti();
     void PseudoTest_MultiSelect() { ms_multiSelect = true; }
     void PseudoTest_SetHiddenRoot() { ms_hiddenRoot = true; }
 
@@ -235,6 +237,24 @@ void TreeCtrlTestCase::SelectItemMulti()
     CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
 }
 
+void TreeCtrlTestCase::DeleteItemMulti()
+{
+    // this test should be only ran in multi-selection control
+    CPPUNIT_ASSERT(m_tree->HasFlag(wxTR_MULTIPLE));
+
+    // selecting 2 items
+    m_tree->SelectItem(m_child1);
+    m_tree->SelectItem(m_child2);
+
+    // deleting one of the items should send events and leave the others selected
+    EventCounter selchanging(m_tree, wxEVT_TREE_SEL_CHANGING);
+    EventCounter selchanged(m_tree, wxEVT_TREE_SEL_CHANGED);
+    m_tree->Delete(m_child1);
+    CPPUNIT_ASSERT_EQUAL(1, selchanging.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, selchanged.GetCount());
+    CPPUNIT_ASSERT(m_tree->IsSelected(m_child2));
+}
+
 void TreeCtrlTestCase::ItemClick()
 {
 #if wxUSE_UIACTIONSIMULATOR
@@ -265,6 +285,8 @@ void TreeCtrlTestCase::ItemClick()
 
 void TreeCtrlTestCase::DeleteItem()
 {
+    // #1
+    // test deleting not selected item
     EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
@@ -273,6 +295,16 @@ void TreeCtrlTestCase::DeleteItem()
     // are not generated.
 
     CPPUNIT_ASSERT_EQUAL(1, deleteitem.GetCount());
+
+    // #2
+    // test deleting selected item
+    todelete = m_tree->AppendItem(m_root, "deleteme");
+    m_tree->SelectItem(todelete);
+    EventCounter selchanging(m_tree, wxEVT_TREE_SEL_CHANGING);
+    EventCounter selchanged(m_tree, wxEVT_TREE_SEL_CHANGED);
+    m_tree->Delete(todelete);
+    CPPUNIT_ASSERT_EQUAL(1, selchanging.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, selchanged.GetCount());
 }
 
 #if wxUSE_UIACTIONSIMULATOR
