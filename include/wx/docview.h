@@ -669,9 +669,12 @@ private:
 // wxMDIParentFrame.
 // ----------------------------------------------------------------------------
 
+// Note that we intentionally do not use WXDLLIMPEXP_CORE for this class as it
+// has only inline methods.
+
 template <class ChildFrame, class ParentFrame>
-class WXDLLIMPEXP_CORE wxDocChildFrameAny : public ChildFrame,
-                                            public wxDocChildFrameAnyBase
+class wxDocChildFrameAny : public ChildFrame,
+                           public wxDocChildFrameAnyBase
 {
 public:
     typedef ChildFrame BaseClass;
@@ -840,8 +843,8 @@ protected:
 // This is similar to wxDocChildFrameAny and is used to provide common
 // implementation for both wxDocParentFrame and wxDocMDIParentFrame
 template <class BaseFrame>
-class WXDLLIMPEXP_CORE wxDocParentFrameAny : public BaseFrame,
-                                             public wxDocParentFrameAnyBase
+class wxDocParentFrameAny : public BaseFrame,
+                            public wxDocParentFrameAnyBase
 {
 public:
     wxDocParentFrameAny() : wxDocParentFrameAnyBase(this) { }
