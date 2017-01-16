@@ -27,9 +27,9 @@ To verify your download please use the following SHA-1 checksums:
 
 We provide pre-built binary files for the following compilers:
 
-* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0 and 14.0
+* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0 and 14.1
   (corresponding to marketing product names of Microsoft Visual Studio 2008,
-   2010, 2012, 2013 and 2015 respectively).
+   2010, 2012, 2013, 2015 and 2017 respectively).
 * MinGW-TDM versions 4.9 and 5.1 (with the default SJLJ exceptions propagation
   method, using C++11).
 
