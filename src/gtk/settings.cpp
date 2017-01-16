@@ -186,6 +186,8 @@ static GtkStyleContext* StyleContext(
 #if GTK_CHECK_VERSION(3,20,0)
     if (gtk_check_version(3,20,0) == NULL)
         gtk_widget_path_iter_set_object_name(path, -1, objectName);
+#else
+    wxUnusedVar(objectName);
 #endif
     if (className1)
         gtk_widget_path_iter_add_class(path, -1, className1);
