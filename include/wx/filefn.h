@@ -293,8 +293,12 @@ enum wxPosixPermissions
             #define wxCRT_OpenW       _wopen
         #endif
 
+        wxDECL_FOR_STRICT_MINGW32(int, _wopen, (const wchar_t*, int, ...))
+        wxDECL_FOR_STRICT_MINGW32(int, _waccess, (const wchar_t*, int))
+        wxDECL_FOR_STRICT_MINGW32(int, _wchmod, (const wchar_t*, int))
         wxDECL_FOR_STRICT_MINGW32(int, _wmkdir, (const wchar_t*))
         wxDECL_FOR_STRICT_MINGW32(int, _wrmdir, (const wchar_t*))
+        wxDECL_FOR_STRICT_MINGW32(int, _wstati64, (const wchar_t*, struct _stati64*))
 
         #define   wxCRT_AccessW     _waccess
         #define   wxCRT_ChmodW      _wchmod

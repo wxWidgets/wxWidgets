@@ -182,6 +182,10 @@ int wxGetTimeZone()
     #if defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
         return WX_TIMEZONE;
     #elif defined(__BORLANDC__) || defined(__MINGW32__)
+        #if defined(__MINGW32_TOOLCHAIN__) && defined(__STRICT_ANSI__)
+            extern long _timezone;
+        #endif
+
         return _timezone;
     #else // unknown platform -- assume it has timezone
         return timezone;

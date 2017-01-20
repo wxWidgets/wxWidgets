@@ -83,6 +83,8 @@
 
 // TODO: Borland probably has _wgetcwd as well?
 #if defined(_MSC_VER) || defined(__MINGW32__)
+    wxDECL_FOR_STRICT_MINGW32(wchar_t*, _wgetcwd, (wchar_t*, int))
+
     #define HAVE_WGETCWD
 #endif
 
