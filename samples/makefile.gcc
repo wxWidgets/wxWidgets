@@ -34,11 +34,29 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Conditionally set variables: ###
 
+ifeq ($(USE_HTML),1)
+__aui___depname = aui
+endif
+ifeq ($(USE_HTML),1)
+__help___depname = help
+endif
+ifeq ($(USE_HTML),1)
+__htlbox___depname = htlbox
+endif
+ifeq ($(USE_HTML),1)
+__html___depname = html
+endif
+ifeq ($(USE_HTML),1)
+__richtext___depname = richtext
+endif
+ifeq ($(USE_HTML),1)
+__xrc___depname = xrc
+endif
 
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll secretstore shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
+all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon $(__richtext___depname) sashtest scroll secretstore shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -134,8 +152,10 @@ animate:
 artprov: 
 	$(MAKE) -C artprov -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_HTML),1)
 aui: 
 	$(MAKE) -C aui -f makefile.gcc $(MAKEARGS) all
+endif
 
 calendar: 
 	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) all
@@ -203,14 +223,20 @@ font:
 grid: 
 	$(MAKE) -C grid -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_HTML),1)
 help: 
 	$(MAKE) -C help -f makefile.gcc $(MAKEARGS) all
+endif
 
+ifeq ($(USE_HTML),1)
 htlbox: 
 	$(MAKE) -C htlbox -f makefile.gcc $(MAKEARGS) all
+endif
 
+ifeq ($(USE_HTML),1)
 html: 
 	$(MAKE) -C html -f makefile.gcc $(MAKEARGS) all
+endif
 
 image: 
 	$(MAKE) -C image -f makefile.gcc $(MAKEARGS) all
@@ -284,8 +310,10 @@ render:
 ribbon: 
 	$(MAKE) -C ribbon -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_HTML),1)
 richtext: 
 	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) all
+endif
 
 sashtest: 
 	$(MAKE) -C sashtest -f makefile.gcc $(MAKEARGS) all
@@ -362,8 +390,10 @@ wizard:
 wrapsizer: 
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_HTML),1)
 xrc: 
 	$(MAKE) -C xrc -f makefile.gcc $(MAKEARGS) all
+endif
 
 memcheck: 
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all

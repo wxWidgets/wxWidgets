@@ -15,7 +15,7 @@
     <subproject id="access" template="sub"/>
     <subproject id="animate" template="sub"/>
     <subproject id="artprov" template="sub"/>
-    <subproject id="aui" template="sub"/>
+    <subproject id="aui" template="sub" cond="USE_HTML=='1'"/>
     <subproject id="calendar" template="sub"/>
     <subproject id="caret" template="sub"/>
     <subproject id="clipboard" template="sub"/>
@@ -38,9 +38,9 @@
     <subproject id="exec" template="sub"/>
     <subproject id="font" template="sub"/>
     <subproject id="grid" template="sub"/>
-    <subproject id="help" template="sub"/>
-    <subproject id="htlbox" template="sub"/>
-    <subproject id="html" template="sub"/>
+    <subproject id="help" template="sub" cond="USE_HTML=='1'"/>
+    <subproject id="htlbox" template="sub" cond="USE_HTML=='1'"/>
+    <subproject id="html" template="sub" cond="USE_HTML=='1'"/>
     <subproject id="image" template="sub"/>
     <subproject id="internat" template="sub"/>
     <subproject id="ipc" template="sub"/>
@@ -65,7 +65,7 @@
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
     <subproject id="ribbon" template="sub"/>
-    <subproject id="richtext" template="sub"/>
+    <subproject id="richtext" template="sub" cond="USE_HTML=='1'"/>
     <subproject id="sashtest" template="sub"/>
     <subproject id="scroll" template="sub"/>
     <subproject id="secretstore" template="sub"/>
@@ -91,7 +91,7 @@
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>
-    <subproject id="xrc" template="sub"/>
+    <subproject id="xrc" template="sub" cond="USE_HTML=='1'"/>
 
     <!--
         These samples don't always build (they need non-default wxWidgets

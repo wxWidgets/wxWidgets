@@ -41,11 +41,29 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Conditionally set variables: ###
 
+!if "$(USE_HTML)" == "1"
+__aui___depname = aui
+!endif
+!if "$(USE_HTML)" == "1"
+__help___depname = help
+!endif
+!if "$(USE_HTML)" == "1"
+__htlbox___depname = htlbox
+!endif
+!if "$(USE_HTML)" == "1"
+__html___depname = html
+!endif
+!if "$(USE_HTML)" == "1"
+__richtext___depname = richtext
+!endif
+!if "$(USE_HTML)" == "1"
+__xrc___depname = xrc
+!endif
 
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll secretstore shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
+all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon $(__richtext___depname) sashtest scroll secretstore shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -394,11 +412,13 @@ artprov:
 	call artprov.bat
 	@del artprov.bat
 
+!if "$(USE_HTML)" == "1"
 aui: 
 	@echo cd aui >aui.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>aui.bat
 	call aui.bat
 	@del aui.bat
+!endif
 
 calendar: 
 	@echo cd calendar >calendar.bat
@@ -532,23 +552,29 @@ grid:
 	call grid.bat
 	@del grid.bat
 
+!if "$(USE_HTML)" == "1"
 help: 
 	@echo cd help >help.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>help.bat
 	call help.bat
 	@del help.bat
+!endif
 
+!if "$(USE_HTML)" == "1"
 htlbox: 
 	@echo cd htlbox >htlbox.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>htlbox.bat
 	call htlbox.bat
 	@del htlbox.bat
+!endif
 
+!if "$(USE_HTML)" == "1"
 html: 
 	@echo cd html >html.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>html.bat
 	call html.bat
 	@del html.bat
+!endif
 
 image: 
 	@echo cd image >image.bat
@@ -694,11 +720,13 @@ ribbon:
 	call ribbon.bat
 	@del ribbon.bat
 
+!if "$(USE_HTML)" == "1"
 richtext: 
 	@echo cd richtext >richtext.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>richtext.bat
 	call richtext.bat
 	@del richtext.bat
+!endif
 
 sashtest: 
 	@echo cd sashtest >sashtest.bat
@@ -850,11 +878,13 @@ wrapsizer:
 	call wrapsizer.bat
 	@del wrapsizer.bat
 
+!if "$(USE_HTML)" == "1"
 xrc: 
 	@echo cd xrc >xrc.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>xrc.bat
 	call xrc.bat
 	@del xrc.bat
+!endif
 
 memcheck: 
 	@echo cd memcheck >memcheck.bat
