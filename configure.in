@@ -7548,27 +7548,43 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         dnl Test for at least 0.8 gstreamer module from pkg-config
         dnl Even totem doesn't accept 0.9 evidently.
         dnl
-        dnl So, we first check to see if 0.10 if available - if not we
-        dnl try the older 0.8 version
+        dnl So, we first check to see if 1.0 if available - if not we
+        dnl try the older 0.10 and 0.8 versions
         dnl -------------------------------------------------------------------
-        GST_VERSION_MAJOR=0
-        GST_VERSION_MINOR=10
+        GST_VERSION_MAJOR=1
+        GST_VERSION_MINOR=0
         GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
         if test "$wxUSE_GSTREAMER8" = "no"; then
             PKG_CHECK_MODULES(GST,
-                [gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION],
+                [gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION],
                 [
                     wxUSE_GSTREAMER="yes"
-                    GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
                 ],
                 [
-                    AC_MSG_WARN([GStreamer 0.10 not available, falling back to 0.8])
-                    GST_VERSION_MINOR=8
+                    AC_MSG_WARN([GStreamer 1.0 not available, falling back to 0.10])
+                    GST_VERSION_MAJOR=0
+                    GST_VERSION_MINOR=10
+                    GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
                 ]
             )
+
+            if test $GST_VERSION_MINOR = "10"; then
+                PKG_CHECK_MODULES(GST,
+                    [gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION],
+                    [
+                        wxUSE_GSTREAMER="yes"
+                        GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
+                    ],
+                    [
+                        AC_MSG_WARN([GStreamer 0.10 not available, falling back to 0.8])
+                    ]
+                )
+            fi
+
         else
             dnl check only for 0.8
+            GST_VERSION_MAJOR=0
             GST_VERSION_MINOR=8
         fi
 
@@ -7578,7 +7594,7 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
                 [gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION],
                 wxUSE_GSTREAMER="yes",
                 [
-                    AC_MSG_WARN([GStreamer 0.8/0.10 not available.])
+                    AC_MSG_WARN([GStreamer 0.8/0.10/1.0 not available.])
                 ])
         fi
 
