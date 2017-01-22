@@ -205,7 +205,7 @@ public:
     Used to have functions dealing with all properties work with both
     wxPropertyGrid and wxPropertyGridManager.
 */
-class wxPGVIterator : public wxObjectRefData
+class wxPGVIterator
 {
 public:
     wxPGVIterator();
