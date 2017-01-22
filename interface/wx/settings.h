@@ -265,7 +265,7 @@ enum wxSystemScreenType
 
     @see wxFont, wxColour, wxSystemOptions
 */
-class wxSystemSettings : public wxObject
+class wxSystemSettings
 {
 public:
     /**
