@@ -1464,10 +1464,16 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
         }
     }
 
+    // Calculate bottom-left coordinates of the rotated text
+    wxCoord text_descent;
+    GetOwner()->GetTextExtent(text, NULL, NULL, &text_descent);
     int size = m_font.GetPointSize();
+    double rad = wxDegToRad(angle);
+    wxCoord bx = wxRound(x + (size - text_descent) * sin(rad));
+    wxCoord by = wxRound(y + (size - text_descent) * cos(rad));
 
     wxString buffer;
-    buffer.Printf( "%f %f moveto\n", XLOG2DEV(x), YLOG2DEV(y));
+    buffer.Printf( "%f %f moveto\n", XLOG2DEV(bx), YLOG2DEV(by));
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
