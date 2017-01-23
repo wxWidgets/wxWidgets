@@ -144,6 +144,7 @@ public:
     void OnFindText(wxCommandEvent& evt);
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
+    void OnContextMenu(wxContextMenuEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -224,7 +225,7 @@ bool WebApp::OnInit()
 
     // Create the memory files
     wxImage::AddHandler(new wxPNGHandler);
-    wxMemoryFSHandler::AddFile("logo.png", 
+    wxMemoryFSHandler::AddFile("logo.png",
         wxBitmap(wxlogo_xpm), wxBITMAP_TYPE_PNG);
     wxMemoryFSHandler::AddFile("page1.htm",
         "<html><head><title>File System Example</title>"
@@ -458,6 +459,8 @@ WebFrame::WebFrame(const wxString& url) :
             wxWebViewEventHandler(WebFrame::OnNewWindow), NULL, this);
     Connect(m_browser->GetId(), wxEVT_WEBVIEW_TITLE_CHANGED,
             wxWebViewEventHandler(WebFrame::OnTitleChanged), NULL, this);
+    Connect(m_browser->GetId(), wxEVT_CONTEXT_MENU,
+            wxContextMenuEventHandler(WebFrame::OnContextMenu), NULL, this);
 
     // Connect the menu events
     Connect(viewSource->GetId(), wxEVT_MENU,
@@ -811,6 +814,16 @@ void WebFrame::OnTitleChanged(wxWebViewEvent& evt)
     wxLogMessage("%s", "Title changed; title='" + evt.GetString() + "'");
 }
 
+void WebFrame::OnContextMenu(wxContextMenuEvent& WXUNUSED(evt))
+{
+    //menu shown when default menu is disabled
+    wxMenu *menu = new wxMenu();
+    menu->Append(wxID_ANY , _("Print"));
+    menu->Append(wxID_ANY , _("View Source"));
+    menu->Append(wxID_ANY, _("View Text"));
+    PopupMenu(menu);
+}
+
 /**
   * Invoked when user selects the "View Source" menu item
   */
@@ -997,7 +1010,7 @@ void WebFrame::OnSelectAll(wxCommandEvent& WXUNUSED(evt))
   * Callback invoked when a loading error occurs
   */
 void WebFrame::OnError(wxWebViewEvent& evt)
-{   
+{
 #define WX_ERROR_CASE(type) \
     case type: \
         category = #type; \
