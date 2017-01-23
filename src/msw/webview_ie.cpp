@@ -1546,10 +1546,18 @@ HRESULT wxSTDCALL DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
     wxUnusedVar(ppt);
     wxUnusedVar(pcmdtReserved);
     wxUnusedVar(pdispReserved);
-    if(m_browser->IsContextMenuEnabled()) 
-        return E_NOTIMPL; 
-    else 
-        return S_OK; 
+    if(m_browser->IsContextMenuEnabled())
+    {
+        wxContextMenuEvent event(wxEVT_CONTEXT_MENU,
+                             GetId(),
+                             m_browser->ClientToScreen(wxDefaultPosition));
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
+
+        return S_FALSE;
+    }
+    else
+        return S_OK;
 }
 
 HRESULT wxSTDCALL DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
