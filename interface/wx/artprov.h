@@ -409,7 +409,7 @@ protected:
             wxArtID unique identifier of the bitmap.
         @param client
             wxArtClient identifier of the client (i.e. who is asking for the bitmap).
-            This only servers as a hint.
+            This only serves as a hint.
         @param size
             Preferred size of the bitmap. The function may return a bitmap of different
             dimensions, it will be automatically rescaled to meet client's request.

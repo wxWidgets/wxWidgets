@@ -222,6 +222,11 @@ public:
     wxString GetOpenedPageTitle() const;
 
     /**
+       Returns a pointer to the current parser.
+    */
+    wxHtmlWinParser *GetParser() const;
+
+    /**
         Returns the related frame.
     */
     wxFrame* GetRelatedFrame() const;

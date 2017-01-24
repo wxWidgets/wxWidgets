@@ -146,6 +146,8 @@ struct wxPGPaintData
 
 /** Specific to wxFileProperty and derivatives, long, default is 0.
     Sets a specific wxFileDialog style for the file dialog, e.g. ::wxFD_SAVE.
+
+    @since 2.9.4
 */
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
 
@@ -337,12 +339,12 @@ wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
 */
 wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
 
-/** Indicates the bit usable by derived properties.
+/** Indicates the bit useable by derived properties.
     @hideinitializer
 */
 wxPG_PROP_CLASS_SPECIFIC_1          = 0x00080000,
 
-/** Indicates the bit usable by derived properties.
+/** Indicates the bit useable by derived properties.
     @hideinitializer
 */
 wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000,
@@ -447,6 +449,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     Like wxStringProperty, but converts text to a signed long integer.
     wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overlfow.
     To safely convert variant to integer, use code like this:
+
     @code
         wxLongLong ll;
         ll << property->GetValue();
@@ -611,7 +614,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     manually edit the flags as a text; a continuous sequence of spaces, commas
     and semicolons are considered as a flag id separator.
 
-    <b>Note:</b> When changing "choices" (ie. flag labels) of wxFlagsProperty,
+    <b>Note:</b> When changing "choices" (i.e. flag labels) of wxFlagsProperty,
     you will need to use wxPGProperty::SetChoices() - otherwise they will not
     get updated properly.
 
@@ -1251,6 +1254,15 @@ public:
     int AddChoice( const wxString& label, int value = wxPG_INVALID_VALUE );
 
     /**
+        Adds a private child property.
+
+        @deprecated Use AddPrivateChild() instead.
+
+        @see AddPrivateChild()
+    */
+    void AddChild( wxPGProperty* prop );
+
+    /**
         Adds a private child property. If you use this instead of
         wxPropertyGridInterface::Insert() or
         wxPropertyGridInterface::AppendIn(), then property's parental
@@ -1379,7 +1391,7 @@ public:
     */
     const wxPGEditor* GetColumnEditor( int column ) const;
 
-    /** Returns property's base name (ie. parent's name is not added
+    /** Returns property's base name (i.e. parent's name is not added
         in any case).
     */
     const wxString& GetBaseName() const;
@@ -1559,6 +1571,14 @@ public:
     */
     virtual wxString GetValueAsString( int argFlags = 0 ) const;
 
+    /** Synonymous to GetValueAsString().
+
+        @deprecated Use GetValueAsString() instead.
+
+        @see GetValueAsString()
+    */
+    wxString GetValueString( int argFlags = 0 ) const;
+
     /**
         Returns value type used by this property.
     */
@@ -1667,9 +1687,10 @@ public:
     bool IsRoot() const;
 
     /**
-        Returns true if this is a sub-property.
+       Returns true if this is a sub-property.
     */
     bool IsSubProperty() const;
+
 
     /**
         Returns @true if candidateParent is some parent of this property.
@@ -2367,6 +2388,55 @@ public:
 };
 
 // -----------------------------------------------------------------------
+
+
+/**
+    @class wxPGChoiceEntry
+    Data of a single wxPGChoices choice.
+*/
+class wxPGChoiceEntry : public wxPGCell
+{
+public:
+    wxPGChoiceEntry();
+    wxPGChoiceEntry(const wxPGChoiceEntry& other);
+    wxPGChoiceEntry( const wxString& label,
+                     int value = wxPG_INVALID_VALUE );
+
+    virtual ~wxPGChoiceEntry();
+
+    void SetValue( int value );
+    int GetValue() const;
+
+    wxPGChoiceEntry& operator=( const wxPGChoiceEntry& other );
+};
+
+
+class wxPGChoicesData : public wxObjectRefData
+{
+public:
+    // Constructor sets m_refCount to 1.
+    wxPGChoicesData();
+
+    void CopyDataFrom( wxPGChoicesData* data );
+
+    wxPGChoiceEntry& Insert( int index, const wxPGChoiceEntry& item );
+
+    // Delete all entries
+    void Clear();
+
+    unsigned int GetCount() const;
+
+    const wxPGChoiceEntry& Item( unsigned int i ) const;
+    wxPGChoiceEntry& Item( unsigned int i );
+
+protected:
+    virtual ~wxPGChoicesData();
+};
+
+#define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)
+
+
+
 
 /**
     @class wxPGChoices

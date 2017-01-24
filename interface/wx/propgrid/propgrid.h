@@ -331,7 +331,7 @@ wxPG_VFB_DEFAULT                    = wxPG_VFB_MARK_CELL |
 #define wxPGVFBFlags unsigned char
 
 /**
-    wxPGValidationInfo
+    @class wxPGValidationInfo
 
     Used to convey validation information to and from functions that
     actually perform validation. Mostly used in custom property classes.
@@ -920,7 +920,7 @@ public:
     bool IsEditorFocused() const;
 
     /**
-        Returns true if updating is frozen (ie. Freeze() called but not
+        Returns true if updating is frozen (i.e. Freeze() called but not
         yet Thaw() ).
     */
     bool IsFrozen() const;
