@@ -1623,9 +1623,7 @@ void wxPostScriptDCImpl::DoGetSize(int* width, int* height) const
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
     {
-        int tmp = w;
-        w = h;
-        h = tmp;
+        wxSwap(w, h);
     }
 
     if (width)
@@ -1653,9 +1651,7 @@ void wxPostScriptDCImpl::DoGetSizeMM(int *width, int *height) const
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
     {
-        int tmp = w;
-        w = h;
-        h = tmp;
+        wxSwap(w, h);
     }
 
     if (width) *width = w;
@@ -1789,8 +1785,8 @@ void wxPostScriptDCImpl::EndDoc ()
     wxCoord maxY = (wxCoord) YLOG2DEV(m_maxY);
 
     // LOG2DEV may have changed the minimum to maximum vice versa
-    if ( minX > maxX ) { wxCoord tmp = minX; minX = maxX; maxX = tmp; }
-    if ( minY > maxY ) { wxCoord tmp = minY; minY = maxY; maxY = tmp; }
+    if ( minX > maxX ) { wxSwap(minX, maxX); }
+    if ( minY > maxY ) { wxSwap(minY, maxY); }
 
     // account for used scaling (boundingbox is before scaling in ps-file)
     double scale_x = m_printData.GetPrinterScaleX() / ms_PSScaleFactor;
@@ -1807,9 +1803,8 @@ void wxPostScriptDCImpl::EndDoc ()
     // If we're landscape, our sense of "x" and "y" is reversed.
     if (m_printData.GetOrientation() == wxLANDSCAPE)
     {
-        wxCoord tmp;
-        tmp = llx; llx = lly; lly = tmp;
-        tmp = urx; urx = ury; ury = tmp;
+        wxSwap(llx, lly);
+        wxSwap(urx, ury);
 
         // We need either the two lines that follow, or we need to subtract
         // min_x from real_translate_y, which is commented out below.
