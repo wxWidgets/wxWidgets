@@ -1309,13 +1309,12 @@ void wxPostScriptDCImpl::SetBrush( const wxBrush& brush )
     }
 }
 
-void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
+// Common part of DoDrawText() and DoDrawRotatedText()
+void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDescent)
 {
-    wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
+    wxCHECK_RET( textbuf, wxS("Invalid text buffer") );
 
-    const wxWX2MBbuf textbuf = text.mb_str();
-    if ( !textbuf )
-        return;
+    wxString buffer;
 
     if (m_textForegroundColour.IsOk())
     {
@@ -1343,7 +1342,6 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
             double bluePS = (double)(blue) / 255.0;
             double greenPS = (double)(green) / 255.0;
 
-            wxString buffer;
             buffer.Printf( "%f %f %f setrgbcolor\n", redPS, greenPS, bluePS );
             buffer.Replace( ",", "." );
             PsPrint( buffer );
@@ -1354,23 +1352,7 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
         }
     }
 
-    wxCoord text_descent;
-
-    GetOwner()->GetTextExtent(text, NULL, NULL, &text_descent);
-
-    int size = m_font.GetPointSize();
-
-//    wxCoord by = y + (wxCoord)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
-//    commented by V. Slavik and replaced by accurate version
-//        - note that there is still rounding error in text_descent!
-    wxCoord by = y + size - text_descent; // baseline
-
-    wxString buffer;
-    buffer.Printf( "%f %f moveto\n", XLOG2DEV(x), YLOG2DEV(by) );
-    buffer.Replace( ",", "." );
-    PsPrint( buffer );
     PsPrint( "(" );
-
     for ( const char *p = textbuf; *p != '\0'; p++ )
     {
         int c = (unsigned char)*p;
@@ -1391,7 +1373,6 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
             PsPrint( (char) c );
         }
     }
-
     PsPrint( ")\n" );
 
     if (m_font.GetUnderlined())
@@ -1408,13 +1389,40 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
                        "dup stringwidth rlineto\n"
                        "stroke\n"
                        "grestore\n",
-                        -YLOG2DEVREL(text_descent - m_underlinePosition),
+                        -YLOG2DEVREL(textDescent - m_underlinePosition),
                         m_underlineThickness );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
     }
 
     PsPrint("show\n");
+}
+
+void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
+{
+    wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
+
+    const wxWX2MBbuf textbuf = text.mb_str();
+    if ( !textbuf )
+        return;
+
+    SetFont( m_font );
+
+    wxCoord text_descent;
+    GetOwner()->GetTextExtent(text, NULL, NULL, &text_descent);
+    int size = m_font.GetPointSize();
+
+//    wxCoord by = y + (wxCoord)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
+//    commented by V. Slavik and replaced by accurate version
+//        - note that there is still rounding error in text_descent!
+    wxCoord by = y + size - text_descent; // baseline
+
+    wxString buffer;
+    buffer.Printf( "%f %f moveto\n", XLOG2DEV(x), YLOG2DEV(by) );
+    buffer.Replace( ",", "." );
+    PsPrint( buffer );
+
+    DrawAnyText(textbuf, text_descent);
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + size * text.length() * 2/3 , y );
@@ -1430,44 +1438,11 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
 
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
+    const wxWX2MBbuf textbuf = text.mb_str();
+    if ( !textbuf )
+        return;
+
     SetFont( m_font );
-
-    if (m_textForegroundColour.IsOk())
-    {
-        unsigned char red = m_textForegroundColour.Red();
-        unsigned char blue = m_textForegroundColour.Blue();
-        unsigned char green = m_textForegroundColour.Green();
-
-        if (!m_colour)
-        {
-            // Anything not white is black
-            if (! (red == (unsigned char) 255 &&
-                   blue == (unsigned char) 255 &&
-                   green == (unsigned char) 255))
-            {
-                red = (unsigned char) 0;
-                green = (unsigned char) 0;
-                blue = (unsigned char) 0;
-            }
-        }
-
-        // maybe setgray here ?
-        if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
-        {
-            double redPS = (double)(red) / 255.0;
-            double bluePS = (double)(blue) / 255.0;
-            double greenPS = (double)(green) / 255.0;
-
-            wxString buffer;
-            buffer.Printf( "%f %f %f setrgbcolor\n", redPS, greenPS, bluePS );
-            buffer.Replace( ",", "." );
-            PsPrint( buffer );
-
-            m_currentRed = red;
-            m_currentBlue = blue;
-            m_currentGreen = green;
-        }
-    }
 
     // Calculate bottom-left coordinates of the rotated text
     wxCoord text_descent;
@@ -1486,55 +1461,8 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
-    PsPrint( "(" );
-    const wxWX2MBbuf textbuf = text.mb_str();
-    if ( textbuf )
-    {
-        for ( const char *p = textbuf; *p != '\0'; p++ )
-        {
-            int c = (unsigned char)*p;
-            if (c == ')' || c == '(' || c == '\\')
-            {
-                /* Cope with special characters */
-                PsPrint( "\\" );
-                PsPrint( (char) c );
-            }
-            else if ( c >= 128 )
-            {
-                /* Cope with character codes > 127 */
-                buffer.Printf( "\\%o", c);
-                PsPrint( buffer );
-            }
-            else
-            {
-                PsPrint( (char) c );
-            }
-        }
-    }
+    DrawAnyText(textbuf, text_descent);
 
-    PsPrint( ")\n" );
-
-    if (m_font.GetUnderlined())
-    {
-        // We need relative underline position with reference
-        // to the baseline in rotated coordinate system:
-        // uy = y + size - m_underlinePosition =>
-        // uy = by + text_descent - m_underlinePosition =>
-        // dy = -(text_descent - m_underlinePosition)
-        // It's negated due to the orientation of Y-axis.
-        buffer.Printf( "gsave\n"
-                       "0.0 %f rmoveto\n"
-                       "%f setlinewidth\n"
-                       "dup stringwidth rlineto\n"
-                       "stroke\n"
-                       "grestore\n",
-                        -YLOG2DEVREL(text_descent - m_underlinePosition),
-                        m_underlineThickness );
-        buffer.Replace( ",", "." );
-        PsPrint( buffer );
-    }
-
-    PsPrint("show\n");
     buffer.Printf( "%f rotate\n", -angle );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
