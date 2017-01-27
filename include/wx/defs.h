@@ -645,7 +645,7 @@ typedef short int WXTYPE;
 #    define wxCLANG_HAS_WARNING(x) __has_warning(x) /* allow macro expansion for the warning name */
 #    define wxCLANG_IF_VALID_WARNING(x,y) \
          wxCONCAT(wxCLANG_IF_VALID_WARNING_,wxCLANG_HAS_WARNING(wxSTRINGIZE(wxCONCAT(-W,x))))(y)
-#    define wxCLANG_IF_VALID_WARNING_0(x)
+#    define wxCLANG_IF_VALID_WARNING_0()
 #    define wxCLANG_IF_VALID_WARNING_1(x) x
 #    define wxCLANG_WARNING_SUPPRESS(x) \
          wxCLANG_IF_VALID_WARNING(x,wxGCC_WARNING_SUPPRESS(x))
