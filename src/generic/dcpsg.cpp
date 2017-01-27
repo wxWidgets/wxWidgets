@@ -1354,9 +1354,9 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
         }
     }
 
-    wxCoord text_w, text_h, text_descent;
+    wxCoord text_descent;
 
-    GetOwner()->GetTextExtent(text, &text_w, &text_h, &text_descent);
+    GetOwner()->GetTextExtent(text, NULL, NULL, &text_descent);
 
     int size = m_font.GetPointSize();
 
@@ -1392,24 +1392,29 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
         }
     }
 
-    PsPrint( ") show\n" );
+    PsPrint( ")\n" );
 
     if (m_font.GetUnderlined())
     {
-        wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
-
+        // We need relative underline position
+        // with reference to the baseline:
+        // uy = y + size - m_underlinePosition =>
+        // uy = by + text_descent - m_underlinePosition =>
+        // dy = -(text_descent - m_underlinePosition)
+        // It's negated due to the orientation of Y-axis.
         buffer.Printf( "gsave\n"
-                       "%f %f moveto\n"
+                       "0.0 %f rmoveto\n"
                        "%f setlinewidth\n"
-                       "%f %f lineto\n"
+                       "dup stringwidth rlineto\n"
                        "stroke\n"
                        "grestore\n",
-                XLOG2DEV(x), YLOG2DEV(uy),
-                m_underlineThickness,
-                XLOG2DEV(x + text_w), YLOG2DEV(uy) );
+                        -YLOG2DEVREL(text_descent - m_underlinePosition),
+                        m_underlineThickness );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
     }
+
+    PsPrint("show\n");
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + size * text.length() * 2/3 , y );
@@ -1507,31 +1512,32 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
         }
     }
 
-    PsPrint( ") show\n" );
-
-    buffer.Printf( "%f rotate\n", -angle );
-    buffer.Replace( ",", "." );
-    PsPrint( buffer );
+    PsPrint( ")\n" );
 
     if (m_font.GetUnderlined())
     {
-        wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
-        wxCoord w, h;
-        GetOwner()->GetTextExtent(text, &w, &h);
-
-        buffer.Printf(
-                "gsave\n"
-                "%f %f moveto\n"
-                "%f setlinewidth\n"
-                "%f %f lineto\n"
-                "stroke\n"
-                "grestore\n",
-                XLOG2DEV(x), YLOG2DEV(uy),
-                m_underlineThickness,
-                XLOG2DEV(x + w), YLOG2DEV(uy) );
+        // We need relative underline position with reference
+        // to the baseline in rotated coordinate system:
+        // uy = y + size - m_underlinePosition =>
+        // uy = by + text_descent - m_underlinePosition =>
+        // dy = -(text_descent - m_underlinePosition)
+        // It's negated due to the orientation of Y-axis.
+        buffer.Printf( "gsave\n"
+                       "0.0 %f rmoveto\n"
+                       "%f setlinewidth\n"
+                       "dup stringwidth rlineto\n"
+                       "stroke\n"
+                       "grestore\n",
+                        -YLOG2DEVREL(text_descent - m_underlinePosition),
+                        m_underlineThickness );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
     }
+
+    PsPrint("show\n");
+    buffer.Printf( "%f rotate\n", -angle );
+    buffer.Replace( ",", "." );
+    PsPrint( buffer );
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + size * text.length() * 2/3 , y );
