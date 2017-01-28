@@ -2610,7 +2610,8 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     wxCHECK_HRESULT_RET(hr);
 
     LOGFONTW logfont;
-    GetObjectW(font.GetHFONT(), sizeof(logfont), &logfont);
+    int n = GetObjectW(font.GetHFONT(), sizeof(logfont), &logfont);
+    wxCHECK_RET( n > 0, wxS("Failed to obtain font info") );
 
     // Ensure the LOGFONT object contains the correct font face name
     if (logfont.lfFaceName[0] == '\0')
@@ -2622,19 +2623,24 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     }
 
     hr = gdiInterop->CreateFontFromLOGFONT(&logfont, &m_font);
-    wxCHECK_HRESULT_RET(hr);
+    wxCHECK_RET( SUCCEEDED(hr),
+                 wxString::Format("Failed to create font '%s' (HRESULT = %x)", logfont.lfFaceName, hr) );
 
     wxCOMPtr<IDWriteFontFamily> fontFamily;
-    m_font->GetFontFamily(&fontFamily);
+    hr = m_font->GetFontFamily(&fontFamily);
+    wxCHECK_HRESULT_RET(hr);
 
     wxCOMPtr<IDWriteLocalizedStrings> familyNames;
-    fontFamily->GetFamilyNames(&familyNames);
+    hr = fontFamily->GetFamilyNames(&familyNames);
+    wxCHECK_HRESULT_RET(hr);
 
     UINT32 length;
-    familyNames->GetStringLength(0, &length);
+    hr = familyNames->GetStringLength(0, &length);
+    wxCHECK_HRESULT_RET(hr);
 
     wchar_t* name = new wchar_t[length+1];
-    familyNames->GetString(0, name, length+1);
+    hr = familyNames->GetString(0, name, length+1);
+    wxCHECK_HRESULT_RET(hr);
 
     FLOAT dpiX, dpiY;
     d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
