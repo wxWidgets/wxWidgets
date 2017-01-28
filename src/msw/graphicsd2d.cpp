@@ -2614,12 +2614,16 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     wxCHECK_RET( n > 0, wxS("Failed to obtain font info") );
 
     // Ensure the LOGFONT object contains the correct font face name
-    if (logfont.lfFaceName[0] == '\0')
+    if (lstrlen(logfont.lfFaceName) == 0)
     {
-        for (unsigned int i = 0; i < font.GetFaceName().Length(); ++i)
+        // The length of the font name must not exceed LF_FACESIZE TCHARs,
+        // including the terminating NULL.
+        wxString name = font.GetFaceName().Mid(0, WXSIZEOF(logfont.lfFaceName)-1);
+        for (unsigned int i = 0; i < name.Length(); ++i)
         {
-            logfont.lfFaceName[i] = font.GetFaceName().GetChar(i);
+            logfont.lfFaceName[i] = name.GetChar(i);
         }
+        logfont.lfFaceName[name.Length()] = L'\0';
     }
 
     hr = gdiInterop->CreateFontFromLOGFONT(&logfont, &m_font);
