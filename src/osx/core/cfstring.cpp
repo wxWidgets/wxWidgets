@@ -34,9 +34,9 @@ void wxMacConvertNewlines13To10( char * data )
     }
 }
 
-void wxMacConvertNewlines13To10( char * data, size_t len )
+void wxMacConvertNewlines13To10( wxChar16 * data )
 {
-    for ( ; len; ++data, --len )
+    for ( ; *data; ++data )
     {
         if ( *data == 0x0d )
             *data = 0x0a;
