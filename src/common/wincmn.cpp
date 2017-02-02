@@ -3887,6 +3887,7 @@ wxAccStatus wxWindowAccessible::GetDescription(int WXUNUSED(childId), wxString* 
 {
     wxCHECK( GetWindow() != NULL, wxACC_FAIL );
 
+    (void)description;
 #if wxUSE_HELP
     wxString ht(GetWindow()->GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Keyboard));
     if (!ht.empty())
@@ -3904,6 +3905,7 @@ wxAccStatus wxWindowAccessible::GetHelpText(int WXUNUSED(childId), wxString* hel
 {
     wxCHECK( GetWindow() != NULL, wxACC_FAIL );
 
+    (void)helpText;
 #if wxUSE_HELP
     wxString ht(GetWindow()->GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Keyboard));
     if (!ht.empty())

@@ -6093,6 +6093,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetHelpText(int childId, wxString* helpTex
     wxDataViewCtrl* dvCtrl = wxDynamicCast(GetWindow(), wxDataViewCtrl);
     wxCHECK( dvCtrl, wxACC_FAIL );
 
+#if wxUSE_HELP
     if ( childId == wxACC_SELF )
     {
         *helpText = dvCtrl->GetHelpText();
@@ -6112,6 +6113,11 @@ wxAccStatus wxDataViewCtrlAccessible::GetHelpText(int childId, wxString* helpTex
         }
     }
     return wxACC_OK;
+#else
+    (void)childId;
+    (void)helpText;
+    return wxACC_NOT_IMPLEMENTED;
+#endif
 }
 
 // Returns the keyboard shortcut for this object or child.
