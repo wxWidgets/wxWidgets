@@ -494,7 +494,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
     {
         // See windowDidResignKey: -- we emulate corresponding focus set
         // event for the first responder here as well:
-        NSView *firstResponder = [window firstResponder];
+        NSResponder *firstResponder = [window firstResponder];
         wxWidgetCocoaImpl *focused = firstResponder
                 ? (wxWidgetCocoaImpl*)wxWidgetImpl::FindFromWXWidget(wxOSXGetViewFromResponder(firstResponder))
                 : NULL;
@@ -521,7 +521,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
             // As for wx the deactivation also means losing focus, we
             // must emulate focus events _without_ resetting first responder
             // (because that would subtly break other things in Cocoa/macOS):
-            NSView *firstResponder = [window firstResponder];
+            NSResponder *firstResponder = [window firstResponder];
             wxWidgetCocoaImpl *focused = firstResponder
                     ? (wxWidgetCocoaImpl*)wxWidgetImpl::FindFromWXWidget(wxOSXGetViewFromResponder(firstResponder))
                     : NULL;
