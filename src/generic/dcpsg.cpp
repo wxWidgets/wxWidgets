@@ -1832,10 +1832,13 @@ void wxPostScriptDCImpl::EndDoc ()
 #endif
 
 #ifndef __WXMSW__
+    // Pointer to PrintNativeData not always points to wxPostScriptPrintNativeData,
+    // e.g. under wxGTK it can point to wxGtkPrintNativeData and so calling
+    // wxPostScriptPrintNativeData methods on it crashes.
     wxPostScriptPrintNativeData *data =
-        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+        wxDynamicCast(m_printData.GetNativeData(), wxPostScriptPrintNativeData);
 
-    if (m_ok && (m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))
+    if (m_ok && data && (m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))
     {
         wxString command;
         command += data->GetPrinterCommand();
@@ -1860,7 +1863,8 @@ void wxPostScriptDCImpl::StartPage()
 
 #if 0
     wxPostScriptPrintNativeData *data =
-        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+        wxDynamicCast(m_printData.GetNativeData(), wxPostScriptPrintNativeData);
+    wxCHECK_RET( data, wxS("No PostScript print data") );
 
     wxCoord translate_x = (wxCoord)data->GetPrinterTranslateX();
     wxCoord translate_y = (wxCoord)data->GetPrinterTranslateY();
@@ -1931,15 +1935,18 @@ void wxPostScriptDCImpl::PsPrint( const wxString& str )
 {
     const wxCharBuffer psdata(str.utf8_str());
 
-    wxPostScriptPrintNativeData *data =
-        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
-
     switch (m_printData.GetPrintMode())
     {
 #if wxUSE_STREAMS
         // append to output stream
         case wxPRINT_MODE_STREAM:
             {
+                // Pointer to PrintNativeData not always points to wxPostScriptPrintNativeData,
+                // e.g. under wxGTK it can point to wxGtkPrintNativeData and so calling
+                // wxPostScriptPrintNativeData methods on it crashes.
+                wxPostScriptPrintNativeData *data =
+                    wxDynamicCast(m_printData.GetNativeData(), wxPostScriptPrintNativeData);
+                wxCHECK_RET( data, wxS("Cannot obtain output stream") );
                 wxOutputStream* outputstream = data->GetOutputStream();
                 wxCHECK_RET( outputstream, wxT("invalid outputstream") );
                 outputstream->Write( psdata, strlen( psdata ) );
