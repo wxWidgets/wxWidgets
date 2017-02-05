@@ -127,6 +127,9 @@ without -DHAVE_CONFIG_H as it works just fine without it on any ANSI C system
 (i.e. anywhere by now).
 
 
+EXAMPLES
+----------------------------------
+
 Example updating libpng files under MSW:
     Since configure looked for zlib, the following 2 steps were also needed:
     a) get zlib source code (www.zlib.net) to a separate location;
@@ -145,3 +148,11 @@ Example updating libpng files under MSW:
 4) edit pnglibconf.h and change the value of PNG_ZLIB_VERNUM to 0.
 5) copy files from libpng root dir and scripts subfolder to src/png, updating old files only (other new files were not needed);
 6) commit the changes.
+
+
+Example updating libexpat files under MSW:
+1) get libexpat source code (sourceforge.net/projects/expat/files/expat/) to a separate location;
+2) delete all files in src/expat;
+3) copy all files from libexpat to src/expat;
+4) commit the changes, including new and deleted files;
+5) define XML_STATIC in src/expat/lib/expat_external.h, see git log for the exact changes, and apply them in a separate commit.
