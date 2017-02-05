@@ -56,8 +56,14 @@ __htlbox___depname = htlbox
 !if "$(USE_HTML)" == "1"
 __html___depname = html
 !endif
+!if "$(USE_MEDIA)" == "1"
+__mediaplayer___depname = mediaplayer
+!endif
 !if "$(USE_HTML)" == "1"
 __richtext___depname = richtext
+!endif
+!if "$(USE_MEDIA)" == "1"
+__splash___depname = splash
 !endif
 !if "$(USE_HTML)" == "1"
 __xrc___depname = xrc
@@ -66,7 +72,7 @@ __xrc___depname = xrc
 
 ### Targets: ###
 
-all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon $(__richtext___depname) sashtest scroll secretstore shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
+all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -629,11 +635,13 @@ mdi:
 	call mdi.bat
 	@del mdi.bat
 
+!if "$(USE_MEDIA)" == "1"
 mediaplayer: 
 	@echo cd mediaplayer >mediaplayer.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>mediaplayer.bat
 	call mediaplayer.bat
 	@del mediaplayer.bat
+!endif
 
 menu: 
 	@echo cd menu >menu.bat
@@ -769,11 +777,13 @@ sound:
 	call sound.bat
 	@del sound.bat
 
+!if "$(USE_MEDIA)" == "1"
 splash: 
 	@echo cd splash >splash.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>splash.bat
 	call splash.bat
 	@del splash.bat
+!endif
 
 splitter: 
 	@echo cd splitter >splitter.bat

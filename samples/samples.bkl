@@ -49,7 +49,7 @@
     <subproject id="layout" template="sub"/>
     <subproject id="listctrl" template="sub"/>
     <subproject id="mdi" template="sub"/>
-    <subproject id="mediaplayer" template="sub"/>
+    <subproject id="mediaplayer" template="sub" cond="USE_MEDIA=='1'"/>
     <subproject id="menu" template="sub"/>
     <subproject id="minimal" template="sub"/>
     <subproject id="nativdlg" template="sub"/>
@@ -72,7 +72,7 @@
     <subproject id="shaped" template="sub"/>
     <subproject id="sockets" template="sub"/>
     <subproject id="sound" template="sub"/>
-    <subproject id="splash" template="sub"/>
+    <subproject id="splash" template="sub" cond="USE_MEDIA=='1'"/>
     <subproject id="splitter" template="sub"/>
     <subproject id="statbar" template="sub"/>
     <subproject id="stc" template="sub"/>
