@@ -59,6 +59,9 @@ __html___depname = html
 !if "$(USE_MEDIA)" == "1"
 __mediaplayer___depname = mediaplayer
 !endif
+!if "$(USE_PROPGRID)" == "1"
+__propgrid___depname = propgrid
+!endif
 !if "$(USE_HTML)" == "1"
 __richtext___depname = richtext
 !endif
@@ -72,7 +75,7 @@ __xrc___depname = xrc
 
 ### Targets: ###
 
-all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
+all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render ribbon $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -709,11 +712,13 @@ printing:
 	call printing.bat
 	@del printing.bat
 
+!if "$(USE_PROPGRID)" == "1"
 propgrid: 
 	@echo cd propgrid >propgrid.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>propgrid.bat
 	call propgrid.bat
 	@del propgrid.bat
+!endif
 
 regtest: 
 	@echo cd regtest >regtest.bat

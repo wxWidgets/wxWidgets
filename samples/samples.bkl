@@ -61,7 +61,7 @@
     <subproject id="power" template="sub"/>
     <subproject id="preferences" template="sub"/>
     <subproject id="printing" template="sub"/>
-    <subproject id="propgrid" template="sub"/>
+    <subproject id="propgrid" template="sub" cond="USE_PROPGRID=='1'"/>
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
     <subproject id="ribbon" template="sub"/>
