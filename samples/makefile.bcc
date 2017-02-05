@@ -71,6 +71,12 @@ __richtext___depname = richtext
 !if "$(USE_MEDIA)" == "1"
 __splash___depname = splash
 !endif
+!if "$(USE_STC)" == "1"
+__stc___depname = stc
+!endif
+!if "$(USE_STC)" == "1"
+__webview___depname = webview
+!endif
 !if "$(USE_HTML)" == "1" && "$(USE_RIBBON)" == "1"
 __xrc___depname = xrc
 !endif
@@ -78,7 +84,7 @@ __xrc___depname = xrc
 
 ### Targets: ###
 
-all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
+all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -807,11 +813,13 @@ statbar:
 	call statbar.bat
 	@del statbar.bat
 
+!if "$(USE_STC)" == "1"
 stc: 
 	@echo cd stc >stc.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>stc.bat
 	call stc.bat
 	@del stc.bat
+!endif
 
 svg: 
 	@echo cd svg >svg.bat
@@ -879,11 +887,13 @@ vscroll:
 	call vscroll.bat
 	@del vscroll.bat
 
+!if "$(USE_STC)" == "1"
 webview: 
 	@echo cd webview >webview.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>webview.bat
 	call webview.bat
 	@del webview.bat
+!endif
 
 widgets: 
 	@echo cd widgets >widgets.bat
