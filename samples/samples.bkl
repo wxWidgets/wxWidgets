@@ -34,7 +34,7 @@
     <subproject id="drawing" template="sub"/>
     <subproject id="erase" template="sub"/>
     <subproject id="event" template="sub"/>
-    <subproject id="except" template="sub"/>
+    <subproject id="except" template="sub" cond="USE_EXCEPTIONS=='1'"/>
     <subproject id="exec" template="sub"/>
     <subproject id="font" template="sub"/>
     <subproject id="grid" template="sub"/>

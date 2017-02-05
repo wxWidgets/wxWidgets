@@ -44,6 +44,9 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 !if "$(USE_HTML)" == "1"
 __aui___depname = aui
 !endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__except___depname = except
+!endif
 !if "$(USE_HTML)" == "1"
 __help___depname = help
 !endif
@@ -63,7 +66,7 @@ __xrc___depname = xrc
 
 ### Targets: ###
 
-all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon $(__richtext___depname) sashtest scroll secretstore shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
+all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon $(__richtext___depname) sashtest scroll secretstore shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -528,11 +531,13 @@ event:
 	call event.bat
 	@del event.bat
 
+!if "$(USE_EXCEPTIONS)" == "1"
 except: 
 	@echo cd except >except.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>except.bat
 	call except.bat
 	@del except.bat
+!endif
 
 exec: 
 	@echo cd exec >exec.bat
