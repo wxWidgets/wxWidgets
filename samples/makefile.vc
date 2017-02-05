@@ -56,7 +56,7 @@ __propgrid___depname = sub_propgrid
 !if "$(USE_RIBBON)" == "1"
 __ribbon___depname = sub_ribbon
 !endif
-!if "$(USE_HTML)" == "1"
+!if "$(USE_HTML)" == "1" && "$(USE_RICHTEXT)" == "1"
 __richtext___depname = sub_richtext
 !endif
 !if "$(USE_MEDIA)" == "1"
@@ -606,7 +606,7 @@ sub_ribbon:
 	cd "$(MAKEDIR)"
 !endif
 
-!if "$(USE_HTML)" == "1"
+!if "$(USE_HTML)" == "1" && "$(USE_RICHTEXT)" == "1"
 sub_richtext: 
 	cd richtext
 	$(MAKE) -f makefile.vc $(MAKEARGS) all

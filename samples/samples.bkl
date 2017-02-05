@@ -65,7 +65,7 @@
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
     <subproject id="ribbon" template="sub" cond="USE_RIBBON=='1'"/>
-    <subproject id="richtext" template="sub" cond="USE_HTML=='1'"/>
+    <subproject id="richtext" template="sub" cond="USE_HTML=='1' and USE_RICHTEXT=='1'"/>
     <subproject id="sashtest" template="sub"/>
     <subproject id="scroll" template="sub"/>
     <subproject id="secretstore" template="sub"/>

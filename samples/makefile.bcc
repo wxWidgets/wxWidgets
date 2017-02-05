@@ -65,7 +65,7 @@ __propgrid___depname = propgrid
 !if "$(USE_RIBBON)" == "1"
 __ribbon___depname = ribbon
 !endif
-!if "$(USE_HTML)" == "1"
+!if "$(USE_HTML)" == "1" && "$(USE_RICHTEXT)" == "1"
 __richtext___depname = richtext
 !endif
 !if "$(USE_MEDIA)" == "1"
@@ -743,7 +743,7 @@ ribbon:
 	@del ribbon.bat
 !endif
 
-!if "$(USE_HTML)" == "1"
+!if "$(USE_HTML)" == "1" && "$(USE_RICHTEXT)" == "1"
 richtext: 
 	@echo cd richtext >richtext.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>richtext.bat

@@ -59,7 +59,9 @@ ifeq ($(USE_RIBBON),1)
 __ribbon___depname = ribbon
 endif
 ifeq ($(USE_HTML),1)
+ifeq ($(USE_RICHTEXT),1)
 __richtext___depname = richtext
+endif
 endif
 ifeq ($(USE_MEDIA),1)
 __splash___depname = splash
@@ -336,8 +338,10 @@ ribbon:
 endif
 
 ifeq ($(USE_HTML),1)
+ifeq ($(USE_RICHTEXT),1)
 richtext: 
 	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) all
+endif
 endif
 
 sashtest: 
