@@ -60,9 +60,11 @@
 /build/msw/vc*_mswud
 /build/msw/wx_vc8arm_*.vcproj
 /build/msw/wx_vc8arm.sln
-/build/msw/ipch
-/build/msw/wx_vc12.opensdf
-/build/msw/wx_vc12.sdf
+/build/msw/ipch/
+/build/msw/*.opensdf
+/build/msw/*.sdf
+/build/msw/*.VC.db
+/build/msw/*.VC.VC.opendb
 /build/msw/*.suo
 /build/msw/.vs/
 
