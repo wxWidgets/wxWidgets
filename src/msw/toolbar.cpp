@@ -838,7 +838,7 @@ bool wxToolBar::Realize()
             wxToolBarToolBase *tool = node->GetData();
             if ( tool->IsButton() )
             {
-                const wxBitmap& bmp = tool->GetNormalBitmap();
+                wxBitmap bmp = tool->GetNormalBitmap();
 
                 const int w = bmp.GetWidth();
                 const int h = bmp.GetHeight();
@@ -847,6 +847,17 @@ bool wxToolBar::Realize()
                 {
                     int xOffset = wxMax(0, (m_defaultWidth - w)/2);
                     int yOffset = wxMax(0, (m_defaultHeight - h)/2);
+
+#if wxUSE_IMAGE
+                    // If a mix of icons with alpha and without is used,
+                    // convert them all to use alpha.
+                    if (bitmap.HasAlpha() && !bmp.HasAlpha())
+                    {
+                        wxImage img = bmp.ConvertToImage();
+                        img.InitAlpha();
+                        bmp = wxBitmap(img);
+                    }
+#endif
 
                     // notice the last parameter: do use mask
                     dcAllButtons.DrawBitmap(bmp, x + xOffset, yOffset, true);
