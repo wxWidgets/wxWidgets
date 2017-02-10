@@ -671,7 +671,7 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     [m_macWindow setAcceptsMouseMovedEvents:YES];
 
-    CGWindowLevel level = kCGNormalWindowLevel;
+    NSInteger level = NSNormalWindowLevel;
 
     if ( style & wxFRAME_TOOL_WINDOW )
     {
@@ -679,7 +679,7 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     }
     else if ( ( style & wxPOPUP_WINDOW ) )
     {
-        level = kCGPopUpMenuWindowLevel;
+        level = NSPopUpMenuWindowLevel;
     }
     else if ( ( style & wxFRAME_DRAWER ) )
     {
@@ -890,7 +890,7 @@ void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
     // don't mess with native wrapped windows, they might throw an exception when their level is changed
     if (!m_wxPeer->IsNativeWindowWrapper() && m_macWindow)
     {
-        CGWindowLevel level = kCGNormalWindowLevel;
+        NSInteger level = NSNormalWindowLevel;
         
         if (style & wxSTAY_ON_TOP)
             level = NSModalPanelWindowLevel;
