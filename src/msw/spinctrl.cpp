@@ -55,15 +55,6 @@ wxEND_EVENT_TABLE()
 
 #define GetBuddyHwnd()      (HWND)(m_hwndBuddy)
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// the margin between the up-down control and its buddy (can be arbitrary,
-// choose what you like - or may be decide during run-time depending on the
-// font size?)
-static const int MARGIN_BETWEEN = 1;
-
 
 // ---------------------------------------------------------------------------
 // global vars
@@ -278,9 +269,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int min, int max, int initial,
                         const wxString& name)
 {
-    // before using DoGetBestSize(), have to set style to let the base class
-    // know whether this is a horizontal or vertical control (we're always
-    // vertical)
+    // set style to the base class
     style |= wxSP_VERTICAL;
 
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
@@ -301,27 +290,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     else if ( style & wxALIGN_CENTER )
         msStyle |= ES_CENTER;
 
-    // calculate the sizes: the size given is the total size for both controls
-    // and we need to fit them both in the given width (height is the same)
-    wxSize sizeText(size), sizeBtn(size);
-    sizeBtn.x = wxSpinButton::DoGetBestSize().x;
-    if ( sizeText.x <= 0 )
-    {
-        // DEFAULT_ITEM_WIDTH is the default width for the text control
-        sizeText.x = FromDIP(DEFAULT_ITEM_WIDTH) + MARGIN_BETWEEN + sizeBtn.x;
-    }
-
-    sizeText.x -= sizeBtn.x + MARGIN_BETWEEN;
-    if ( sizeText.x <= 0 )
-    {
-        wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
-                   wxS("at least %d pixels needed."),
-                   name, size.x, sizeBtn.x + MARGIN_BETWEEN + 1);
-    }
-
-    wxPoint posBtn(pos);
-    posBtn.x += sizeText.x + MARGIN_BETWEEN;
-
     // we must create the text control before the spin button for the purpose
     // of the dialog navigation: if there is a static text just before the spin
     // control, activating it by Alt-letter should give focus to the text
@@ -333,7 +301,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     m_hwndBuddy = (WXHWND)::CreateWindowEx
                     (
                      exStyle,                // sunken border
-                     wxT("EDIT"),             // window class
+                     wxT("EDIT"),            // window class
                      NULL,                   // no window title
                      msStyle,                // style (will be shown later)
                      pos.x, pos.y,           // position
@@ -353,7 +321,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
 
     // create the spin button
-    if ( !wxSpinButton::Create(parent, id, posBtn, sizeBtn, style, name) )
+    if ( !wxSpinButton::Create(parent, id, wxPoint(0,0), wxSize(0,0), style, name) )
     {
         return false;
     }
@@ -366,27 +334,35 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     m_wndProcBuddy = (WXFARPROC)wxSetWindowProc(GetBuddyHwnd(),
                                                 wxBuddyTextWndProc);
 
+    // associate the text window with the spin button
+    (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
+
     // set up fonts and colours  (This is nomally done in MSWCreateControl)
     InheritAttributes();
     if (!m_hasFont)
         SetFont(GetDefaultAttributes().font);
 
-    // set the size of the text window - can do it only now, because we
-    // couldn't call DoGetBestSize() before as font wasn't set
-    if ( sizeText.y <= 0 )
+    // the given width is the total width for both controls
+    // adjust invalid width for text control
+    wxSize sizeCtrl(size);
+    if ( sizeCtrl.x <= 0 )
+    {
+        // DEFAULT_ITEM_WIDTH is the default width for the text control
+        sizeCtrl.x = FromDIP(DEFAULT_ITEM_WIDTH);
+    }
+
+    // adjust an invalid height for text control
+    if ( sizeCtrl.y <= 0 )
     {
         int cx, cy;
         wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
-        sizeText.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+        sizeCtrl.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
     }
 
-    SetInitialSize(size);
+    SetInitialSize(sizeCtrl);
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
-
-    // associate the text window with the spin button
-    (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
     // If the initial text value is actually a number, it overrides the
     // "initial" argument specified later.
@@ -632,7 +608,7 @@ bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
 
     // create and initialize the new one
     if ( !wxSpinButton::Create(GetParent(), GetId(),
-                               rect.GetPosition(), rect.GetSize(),
+                               wxPoint(0, 0), wxSize(0, 0), // it will have a buddy
                                GetWindowStyle(), GetName()) )
         return false;
 
@@ -640,13 +616,13 @@ bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
     wxSpinButton::SetValue(GetValue());
     SetRange(m_min, m_max);
 
-    // also set the size again with wxSIZE_ALLOW_MINUS_ONE flag: this is
-    // necessary if our original position used -1 for either x or y
-    SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
-
     // associate it with the buddy control again
     ::SetParent(GetBuddyHwnd(), GetHwndOf(GetParent()));
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)GetBuddyHwnd(), 0);
+
+    // also set the size again with wxSIZE_ALLOW_MINUS_ONE flag: this is
+    // necessary if our original position used -1 for either x or y
+    SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
 
     return true;
 }
@@ -748,7 +724,7 @@ wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     // that's too big. So never use the height calculated
     // from wxSpinButton::DoGetBestSize().
 
-    wxSize tsize(xlen + sizeBtn.x + MARGIN_BETWEEN + 3*y/10 + 10,
+    wxSize tsize(xlen + sizeBtn.x + GetOverlap(),
                  EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
 
     // Check if the user requested a non-standard height.
@@ -758,10 +734,24 @@ wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     return tsize;
 }
 
+int wxSpinCtrl::GetOverlap() const
+{
+    RECT rectText;
+    ::GetWindowRect(m_hwndBuddy, &rectText);
+    RECT rectBtn;
+    ::GetWindowRect(GetHwnd(), &rectBtn);
+    int overlap = rectText.right - rectBtn.left;
+
+    return overlap;
+}
+
 void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
+    // make sure the given width will be the total of both controls
+    int overlap = GetOverlap();
     int widthBtn = wxSpinButton::DoGetBestSize().x;
-    int widthText = width - widthBtn - MARGIN_BETWEEN;
+    int widthText = width - widthBtn + overlap;
+
     if ( widthText < 0 )
     {
         // This can happen during the initial window layout when it's total
@@ -775,6 +765,9 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
         widthText = 0;
     }
 
+    if ( widthBtn > width )
+        widthBtn = width;
+
     // Because both subcontrols are positioned relatively
     // to the parent which can have different layout direction
     // then our control, we need to mirror their positions manually.
@@ -785,9 +778,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
         DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
 
         // 2) The button window
-        if ( widthText > 0 )
-            x += widthText + MARGIN_BETWEEN;
-        wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
+        wxSpinButton::DoMoveWindow(x + widthText - overlap, y, widthBtn, height);
     }
     else
     {
@@ -796,8 +787,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
         wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
 
         // 2) The buddy window
-        x += widthBtn + MARGIN_BETWEEN;
-        DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
+        DoMoveSibling(m_hwndBuddy, x + widthBtn - overlap, y, widthText, height);
     }
 }
 

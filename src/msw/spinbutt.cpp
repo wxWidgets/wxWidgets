@@ -93,7 +93,15 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     // translate the styles
     DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | /*  WS_CLIPSIBLINGS | */
-                   UDS_NOTHOUSANDS | // never useful, sometimes harmful
+
+                   // Positions the up-down control next to the edge of the buddy
+                   // window, if any. The width of the buddy window is decreased
+                   // to accommodate the width of the up-down control.
+                   UDS_ALIGNRIGHT |
+
+                   // does not insert a thousands separator between every three
+                   // decimal digits
+                   UDS_NOTHOUSANDS |
                    UDS_SETBUDDYINT;  // it doesn't harm if we don't have buddy
 
     if ( m_windowStyle & wxCLIP_SIBLINGS )
