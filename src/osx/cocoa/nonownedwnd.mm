@@ -709,10 +709,10 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         windowstyle |= NSTexturedBackgroundWindowMask;
 
     if ( ( style & wxFRAME_FLOAT_ON_PARENT ) || ( style & wxFRAME_TOOL_WINDOW ) )
-        level = kCGFloatingWindowLevel;
+        level = NSFloatingWindowLevel;
 
     if ( ( style & wxSTAY_ON_TOP ) )
-        level = kCGUtilityWindowLevel;
+        level = NSModalPanelWindowLevel;
 
     NSRect r = wxToNSRect( NULL, wxRect( pos, size) );
 
@@ -734,20 +734,20 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     }
     
     // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
-    // to be in kCGUtilityWindowLevel and not kCGFloatingWindowLevel to stay
+    // to be in NSModalPanelWindowLevel and not NSFloatingWindowLevel to stay
     // above the parent.
     wxDialog * const parentDialog = parent == NULL ? NULL : wxDynamicCast(parent->MacGetTopLevelWindow(), wxDialog);
     if (parentDialog && parentDialog->IsModal())
     {
-        if (level == kCGFloatingWindowLevel)
+        if (level == NSFloatingWindowLevel)
         {
-            level = kCGUtilityWindowLevel;
+            level = NSModalPanelWindowLevel;
         }
 
         // Cocoa's modal loop does not process other windows by default, but
         // don't call this on normal window levels so nested modal dialogs will
         // still behave modally.
-        if (level != kCGNormalWindowLevel)
+        if (level != NSNormalWindowLevel)
         {
             if ([m_macWindow isKindOfClass:[NSPanel class]])
             {
@@ -815,10 +815,11 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
                     if ( parentNSWindow ) {
                         [parentNSWindow addChildWindow:m_macWindow ordered:NSWindowAbove];
                         // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
-                        // to be in kCGUtilityWindowLevel and not kCGFloatingWindowLevel to stay
+                        // to be in NSModalPanelWindowLevel and not NSFloatingWindowLevel to stay
                         // above the parent.
-                        if ([m_macWindow level] == kCGFloatingWindowLevel) {
-                            m_macWindowLevel = kCGUtilityWindowLevel;
+                        if ([m_macWindow level] == NSFloatingWindowLevel ||
+                            [m_macWindow level] == NSModalPanelWindowLevel) {
+                            m_macWindowLevel = NSModalPanelWindowLevel;
                             [m_macWindow setLevel:m_macWindowLevel];
                         }
                     }
@@ -892,9 +893,9 @@ void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
         CGWindowLevel level = kCGNormalWindowLevel;
         
         if (style & wxSTAY_ON_TOP)
-            level = kCGUtilityWindowLevel;
+            level = NSModalPanelWindowLevel;
         else if (( style & wxFRAME_FLOAT_ON_PARENT ) || ( style & wxFRAME_TOOL_WINDOW ))
-            level = kCGFloatingWindowLevel;
+            level = NSFloatingWindowLevel;
         
         [m_macWindow setLevel: level];
         m_macWindowLevel = level;
