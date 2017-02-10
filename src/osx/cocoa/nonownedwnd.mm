@@ -806,7 +806,7 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
         {
             // add to parent window before showing
             wxDialog * const dialog = wxDynamicCast(wxpeer, wxDialog);
-            if ( wxpeer->GetParent() && dialog && dialog->IsModal())
+            if ( wxpeer->GetParent() && dialog )
             {
                 NSView * parentView = wxpeer->GetParent()->GetPeer()->GetWXWidget();
                 if ( parentView )
