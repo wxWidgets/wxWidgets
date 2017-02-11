@@ -319,7 +319,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
 
     // create the spin button
-    if ( !wxSpinButton::Create(parent, id, wxPoint(0, 0), wxSize(0, 0), style, name) )
+    if ( !wxSpinButton::Create(parent, id, pos, wxSize(0, 0), style, name) )
     {
         return false;
     }
