@@ -1263,7 +1263,9 @@ public:
     // they conflict with the implicit conversions to "const char/wchar_t *"
     // which we use for backwards compatibility but do provide them if
     // explicitly requested.
+#if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
   operator wxStringToStdStringRetType() const { return ToStdString(); }
+#endif // wxUSE_UNSAFE_WXSTRING_CONV
   operator wxStringToStdWstringRetType() const { return ToStdWstring(); }
 #endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
 
@@ -1517,13 +1519,16 @@ public:
     // messages for the code which relies on implicit conversion to char* in
     // STL build
 #if !wxUSE_STD_STRING_CONV_IN_WXSTRING
-    operator const char*() const { return c_str(); }
     operator const wchar_t*() const { return c_str(); }
 
+#if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
+    operator const char*() const { return c_str(); }
     // implicit conversion to untyped pointer for compatibility with previous
     // wxWidgets versions: this is the same as conversion to const char * so it
     // may fail!
     operator const void*() const { return c_str(); }
+#endif // wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
+
 #endif // !wxUSE_STD_STRING_CONV_IN_WXSTRING
 
     // identical to c_str(), for MFC compatibility

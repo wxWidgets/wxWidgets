@@ -373,6 +373,14 @@
 #   endif
 #endif /* !defined(wxUSE_UNICODE) */
 
+#ifndef wxUSE_UNSAFE_WXSTRING_CONV
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_UNSAFE_WXSTRING_CONV must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_UNSAFE_WXSTRING_CONV 0
+#   endif
+#endif /* !defined(wxUSE_UNSAFE_WXSTRING_CONV) */
+
 #ifndef wxUSE_URL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_URL must be defined, please read comment near the top of this file."

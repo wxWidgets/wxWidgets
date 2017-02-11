@@ -54,6 +54,18 @@
 // Recommended setting: 0
 #define wxDIALOG_UNIT_COMPATIBILITY   0
 
+// Provide unsafe implicit conversions in wxString to "const char*" or
+// "std::string" (depending on wxUSE_STD_STRING_CONV_IN_WXSTRING value).
+//
+// Default is 1 but only for compatibility reasons, it is recommended to set
+// this to 0 because converting wxString to a narrow (non-Unicode) string may
+// fail unless a locale using UTF-8 encoding is used, which is never the case
+// under MSW, for example, hence such conversions can result in silent data
+// loss.
+//
+// Recommended setting: 0
+#define wxUSE_UNSAFE_WXSTRING_CONV 1
+
 // ----------------------------------------------------------------------------
 // debugging settings
 // ----------------------------------------------------------------------------
