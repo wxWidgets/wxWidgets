@@ -286,6 +286,14 @@ more details.
          wxMSW-specific setting which can be set to 1 to make
          wxWindow::GetCharWidth() and wxWindow::GetCharHeight() more compatible
          with old wxWidgets versions. Changing it is not recommended.}
+@itemdef{wxUSE_UNSAFE_WXSTRING_CONV,
+         this option determines if unsafe implicit conversions of wxString to
+         @c char* or @c std::string (depending on whether @c wxUSE_STL is 0 or
+         1) are defined. It is set to 1 by default for compatibility reasons,
+         however it is recommended to set it to 0 for the new projects. See
+         also @c wxNO_UNSAFE_WXSTRING_CONV below for an alternative way of
+         disabling these unsafe conversions not requiring rebuilding the
+         library.}
 @endDefList
 
 @section page_cppconst_miscellaneous Miscellaneous
@@ -326,6 +334,15 @@ more details.
         don't include compiler flags needed for multithreaded code generation. This
         implies that wxUSE_THREADS is 0 and also that other (non-wx-based) threading
         packages cannot be used neither.}
+@itemdef{wxNO_UNSAFE_WXSTRING_CONV,
+        this symbol is not defined by wxWidgets itself, but can be defined by
+        the applications using the library to disable unsafe implicit
+        conversions in wxString class. This is especially useful when using
+        standard build of the library, e.g. installed by the system package
+        manager under Unix, which is compiled with @c wxUSE_UNSAFE_WXSTRING_CONV
+        set to 1 for compatibility reasons as @c -DwxNO_UNSAFE_WXSTRING_CONV
+        can be used only compiling the application code, without rebuilding the
+        library. Support for this option appeared in wxWidgets 3.1.1.}
 @itemdef{WXMAKINGDLL_XXX,
         used internally and defined when building the
         library @c XXX as a DLL; when a monolithic wxWidgets build is used only a

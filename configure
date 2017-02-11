@@ -1119,6 +1119,7 @@ enable_std_containers_compat
 enable_std_iostreams
 enable_std_string
 enable_std_string_conv_in_wxstring
+enable_unsafe_conv_in_wxstring
 enable_unicode
 enable_utf8
 enable_utf8only
@@ -2057,6 +2058,7 @@ Optional Features:
   --enable-std_iostreams  use standard C++ stream classes
   --enable-std_string     use standard C++ string classes
  --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
+ --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString
   --disable-unicode       compile without Unicode support
   --enable-utf8           use UTF-8 representation for strings (Unix only)
   --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)
@@ -5467,6 +5469,35 @@ fi
 
 
           eval "$wx_cv_use_std_string_conv_in_wxstring"
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-unsafe_conv_in_wxstring was given.
+if test "${enable_unsafe_conv_in_wxstring+set}" = set; then :
+  enableval=$enable_unsafe_conv_in_wxstring;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_unsafe_conv_in_wxstring='wxUSE_UNSAFE_WXSTRING_CONV=yes'
+                          else
+                            wx_cv_use_unsafe_conv_in_wxstring='wxUSE_UNSAFE_WXSTRING_CONV=no'
+                          fi
+
+else
+
+                          wx_cv_use_unsafe_conv_in_wxstring='wxUSE_UNSAFE_WXSTRING_CONV=${'DEFAULT_wxUSE_UNSAFE_WXSTRING_CONV":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_unsafe_conv_in_wxstring"
 
 
           enablestring=disable
@@ -32524,6 +32555,11 @@ fi
 
 if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
   $as_echo "#define wxUSE_STD_STRING_CONV_IN_WXSTRING 1" >>confdefs.h
+
+fi
+
+if test "$wxUSE_UNSAFE_WXSTRING_CONV" = "yes"; then
+  $as_echo "#define wxUSE_UNSAFE_WXSTRING_CONV 1" >>confdefs.h
 
 fi
 
