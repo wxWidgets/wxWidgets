@@ -991,6 +991,15 @@ void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, b
     ButtonDown(pt, curTime, shift, ctrl, alt);
 }
 
+void ScintillaWX::DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
+    if (!PointInSelection(pt)) {
+        CancelModes();
+        SetEmptySelection(PositionFromLocation(pt));
+    }
+
+    RightButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt));
+}
+
 void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
     ButtonUp(pt, curTime, ctrl);
 }
@@ -1135,7 +1144,7 @@ void ScintillaWX::DoCommand(int ID) {
 
 
 void ScintillaWX::DoContextMenu(Point pt) {
-    if (displayPopupMenu)
+    if (ShouldDisplayPopup(pt))
         ContextMenu(pt);
 }
 

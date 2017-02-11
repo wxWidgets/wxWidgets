@@ -223,6 +223,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexDMAP.o \
 	$(OBJS)\wxscintilla_LexDMIS.o \
 	$(OBJS)\wxscintilla_LexECL.o \
+	$(OBJS)\wxscintilla_LexEDIFACT.o \
 	$(OBJS)\wxscintilla_LexEiffel.o \
 	$(OBJS)\wxscintilla_LexErlang.o \
 	$(OBJS)\wxscintilla_LexErrorList.o \
@@ -6248,6 +6249,9 @@ $(OBJS)\wxscintilla_LexDMIS.o: ../../src/stc/scintilla/lexers/LexDMIS.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexECL.o: ../../src/stc/scintilla/lexers/LexECL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexEDIFACT.o: ../../src/stc/scintilla/lexers/LexEDIFACT.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexEiffel.o: ../../src/stc/scintilla/lexers/LexEiffel.cxx

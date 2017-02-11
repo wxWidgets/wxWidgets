@@ -140,7 +140,7 @@ methodOverrideMap = {
         }
         int len = endPos - startPos;
         if (!len) return buf;
-        TextRange tr;
+        Sci_TextRange tr;
         tr.lpstrText = (char*)buf.GetWriteBuf(len*2+1);
         tr.chrg.cpMin = startPos;
         tr.chrg.cpMax = endPos;
@@ -180,8 +180,6 @@ methodOverrideMap = {
         return stc2wx(buf);''',
 
      0),
-
-    'SetUsePalette' : (None, 0,0,0),
 
     'MarkerSetFore' : ('MarkerSetForeground', 0, 0, 0),
     'MarkerSetBack' : ('MarkerSetBackground', 0, 0, 0),
@@ -228,7 +226,10 @@ methodOverrideMap = {
         ''',
      ('Define a marker from a bitmap',)),
 
-
+    'GetMargins' : ('GetMarginCount', 0, 0, 0),
+    'SetMargins' : ('SetMarginCount', 0, 0, 0),
+    'GetMarginBackN' : ('GetMarginBackground', 0, 0, 0),
+    'SetMarginBackN' : ('SetMarginBackground', 0, 0, 0),
     'SetMarginTypeN' : ('SetMarginType', 0, 0, 0),
     'GetMarginTypeN' : ('GetMarginType', 0, 0, 0),
     'SetMarginWidthN' : ('SetMarginWidth', 0, 0, 0),
@@ -351,6 +352,16 @@ methodOverrideMap = {
 
     'ClearAllCmdKeys' : ('CmdKeyClearAll', 0, 0, 0),
 
+    'StartStyling' :
+    (0,
+     'void %s(int start, int unused=0);',
+
+     '''void %s(int start, int unused) {
+        wxASSERT_MSG(unused==0,
+                     "The second argument passed to StartStyling should be 0");
+
+        SendMsg(%s, start, unused);''',
+     0),
 
     'SetStylingEx' :
     ('SetStyleBytes',
@@ -449,8 +460,6 @@ methodOverrideMap = {
 
     'GetCaretFore' : ('GetCaretForeground', 0, 0, 0),
 
-    'GetUsePalette' : (None, 0, 0, 0),
-
     'FindText' :
     (0,
      '''int %s(int minPos, int maxPos, const wxString& text, int flags=0);''',
@@ -458,7 +467,7 @@ methodOverrideMap = {
      '''int %s(int minPos, int maxPos,
                const wxString& text,
                int flags) {
-            TextToFind  ft;
+            Sci_TextToFind  ft;
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
@@ -483,7 +492,7 @@ methodOverrideMap = {
                 wxDC*  target,
                 wxRect renderRect,
                 wxRect pageRect) {
-             RangeToFormat fr;
+             Sci_RangeToFormat fr;
 
              if (endPos < startPos) {
                  int temp = startPos;
@@ -558,7 +567,7 @@ methodOverrideMap = {
          if (!len) return wxEmptyString;
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len);
-         TextRange tr;
+         Sci_TextRange tr;
          tr.lpstrText = buf;
          tr.chrg.cpMin = startPos;
          tr.chrg.cpMax = endPos;
@@ -710,10 +719,23 @@ methodOverrideMap = {
      ("Retrieve a 'property' value previously set with SetProperty,",
       "with '$()' variable replacement on returned buffer.")),
 
-    'GetPropertyInt'   : (0, 0, 0,
+    'GetPropertyInt' :
+    (0,
+    'int %s(const wxString &key, int defaultValue=0) const;',
+    '''int %s(const wxString &key, int defaultValue) const {
+        return SendMsg(%s, (uptr_t)(const char*)wx2stc(key), defaultValue);''',
        ("Retrieve a 'property' value previously set with SetProperty,",
         "interpreted as an int AFTER any '$()' variable replacement.")),
 
+    'BraceMatch' :
+    (0,
+    'int %s(int pos, int maxReStyle=0);',
+    '''int %s(int pos, int maxReStyle){
+        wxASSERT_MSG(maxReStyle==0,
+                     "The second argument passed to BraceMatch should be 0");
+
+        return SendMsg(%s, pos, maxReStyle);''',
+     0),
 
     'GetDocPointer' :
     (0,

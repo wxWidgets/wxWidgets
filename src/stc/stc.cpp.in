@@ -137,7 +137,7 @@ wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_COPY, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
-
+wxDEFINE_EVENT( wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
 
 
 wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -146,6 +146,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SCROLL                  (wxStyledTextCtrl::OnScroll)
     EVT_SIZE                    (wxStyledTextCtrl::OnSize)
     EVT_LEFT_DOWN               (wxStyledTextCtrl::OnMouseLeftDown)
+    EVT_RIGHT_DOWN              (wxStyledTextCtrl::OnMouseRightDown)
     // Let Scintilla see the double click as a second click
     EVT_LEFT_DCLICK             (wxStyledTextCtrl::OnMouseLeftDown)
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
@@ -741,7 +742,7 @@ wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
     }
 
     wxCharBuffer buf(len);
-    TextRange tr;
+    Sci_TextRange tr;
     tr.lpstrText = buf.data();
     tr.chrg.cpMin = startPos;
     tr.chrg.cpMax = endPos;
@@ -770,9 +771,11 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
     SendMsg(SCI_APPENDTEXT, length, (sptr_t)text);
 }
 
-
-
-
+// Deprecated since Scintilla 3.7.2
+void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
+{
+    SendMsg(SCI_USEPOPUP, allowPopUp ? SC_POPUP_ALL : SC_POPUP_NEVER, 0);
+}
 
 //----------------------------------------------------------------------
 // Event handlers
@@ -817,6 +820,13 @@ void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
                       evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
 }
 
+void wxStyledTextCtrl::OnMouseRightDown(wxMouseEvent& evt) {
+    SetFocus();
+    wxPoint pt = evt.GetPosition();
+    m_swx->DoRightButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
+                      evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
+}
+
 void wxStyledTextCtrl::OnMouseMove(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
     m_swx->DoLeftButtonMove(Point(pt.x, pt.y));
@@ -857,6 +867,22 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
+    // if the mouse wheel is not captured, test if the mouse
+    // pointer is over the editor window and if not, don't
+    // handle the message but pass it on.
+    if ( !GetMouseWheelCaptures() ) {
+        if ( !GetRect().Contains(evt.GetPosition()) ) {
+            wxWindow* parent = GetParent();
+            if (parent != NULL) {
+                wxMouseEvent newevt(evt);
+                newevt.SetPosition(
+                    parent->ScreenToClient(ClientToScreen(evt.GetPosition())));
+                parent->ProcessWindowEvent(newevt);
+            }
+            return;
+        }
+    }
+
     m_swx->DoMouseWheel(evt.GetWheelAxis(),
                         evt.GetWheelRotation(),
                         evt.GetWheelDelta(),
@@ -1147,6 +1173,11 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
+    case SCN_MARGINRIGHTCLICK:
+        evt.SetEventType(wxEVT_STC_MARGIN_RIGHT_CLICK);
+        evt.SetMargin(scn.margin);
+        break;
+
     default:
         return;
     }
@@ -1233,7 +1264,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 6, 6, "Scintilla 3.6.6");
+    return wxVersionInfo("Scintilla", 3, 7, 2, "Scintilla 3.7.2");
 }
 
 #endif // wxUSE_STC

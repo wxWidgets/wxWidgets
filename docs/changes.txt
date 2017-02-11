@@ -89,7 +89,7 @@ All (GUI):
 - Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
-- Update Scintilla to v3.6.6 (Paul Kulchenko).
+- Update Scintilla to v3.7.2 (NewPagodi, Paul Kulchenko).
 - Update bundled libpng to 1.6.28 (Catalin Raceanu).
 - Fix vertical scrollbar visibility in wxStyledTextCtrl (yenwu, NewPagodi).
 - Fix bug with not being able to select AUI tab after dragging.
