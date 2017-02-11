@@ -230,6 +230,19 @@ static const char wxPostScriptHeaderReencodeISO2[] =
 "/yacute/thorn/ydieresis\n"
         "] def\n\n";
 
+// Split multiline string and store each line in the array.
+static const char *wxPostScriptHeaderStrSplit =
+"/strsplit {\n"      // str delim
+"  [ 3 1 roll\n"     // [ str delim
+"    {\n"            // [ str-items str delim
+"      search {\n"   // [ str-items post match pre
+"        3 1 roll\n" // [ str-items pre post match => [ str-items new-item remaining-str delim
+"      }{\n"         // [ str-items str
+"      exit\n"       // [ str-items str => exit from loop
+"      }ifelse\n"
+"    }loop\n"        // [ str-items
+"  ]\n"              // [ str-items ]
+"} def\n";
 //-------------------------------------------------------------------------------
 // wxPostScriptDC
 //-------------------------------------------------------------------------------
@@ -1310,7 +1323,7 @@ void wxPostScriptDCImpl::SetBrush( const wxBrush& brush )
 }
 
 // Common part of DoDrawText() and DoDrawRotatedText()
-void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDescent)
+void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDescent, double lineHeight)
 {
     wxCHECK_RET( textbuf, wxS("Invalid text buffer") );
 
@@ -1373,8 +1386,15 @@ void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDesc
             PsPrint( (char) c );
         }
     }
-    PsPrint( ")\n" );
+    PsPrint( ")" );
 
+    // Split multiline text and store individual lines in the array.
+    PsPrint( " (\\n) strsplit\n" );
+
+    // Print each line individually by fetching lines from the array
+    PsPrint(           "{\n" );
+     // Preserve current point.
+    PsPrint(           "  currentpoint 3 -1 roll\n" ); // x y (str)
     if (m_font.GetUnderlined())
     {
         // We need relative underline position
@@ -1383,19 +1403,24 @@ void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDesc
         // uy = by + text_descent - m_underlinePosition =>
         // dy = -(text_descent - m_underlinePosition)
         // It's negated due to the orientation of Y-axis.
-        buffer.Printf( "gsave\n"
-                       "0.0 %f rmoveto\n"
-                       "%f setlinewidth\n"
-                       "dup stringwidth rlineto\n"
-                       "stroke\n"
-                       "grestore\n",
+        buffer.Printf( "  gsave\n"
+                       "  0.0 %f rmoveto\n"
+                       "  %f setlinewidth\n"
+                       "  dup stringwidth rlineto\n"
+                       "  stroke\n"
+                       "  grestore\n",
                         -YLOG2DEVREL(textDescent - m_underlinePosition),
                         m_underlineThickness );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
     }
-
-    PsPrint("show\n");
+    PsPrint(           "  show\n" ); // x y
+    // Advance to the beginning of th next line.
+    buffer.Printf(     "  %f add moveto\n", -YLOG2DEVREL(lineHeight) );
+    buffer.Replace( ",", "." );
+    PsPrint( buffer );
+    // Execute above statements for all elements of the array
+    PsPrint(           "} forall\n" );
 }
 
 void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
@@ -1422,7 +1447,7 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
-    DrawAnyText(textbuf, text_descent);
+    DrawAnyText(textbuf, text_descent, size);
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + size * text.length() * 2/3 , y );
@@ -1461,7 +1486,7 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
-    DrawAnyText(textbuf, text_descent);
+    DrawAnyText(textbuf, text_descent, size);
 
     buffer.Printf( "%f rotate\n", -angle );
     buffer.Replace( ",", "." );
@@ -1737,6 +1762,7 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
     PsPrint( wxPostScriptHeaderReencodeISO2 );
     if (wxPostScriptHeaderSpline)
         PsPrint( wxPostScriptHeaderSpline );
+    PsPrint( wxPostScriptHeaderStrSplit );
     PsPrint( "%%EndProlog\n" );
 
     SetBrush( *wxBLACK_BRUSH );

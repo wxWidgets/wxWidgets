@@ -138,7 +138,7 @@ protected:
     void DoGetSizeMM(int *width, int *height) const wxOVERRIDE;
 
     // Common part of DoDrawText() and DoDrawRotatedText()
-    void DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord testDescent);
+    void DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord testDescent, double lineHeight);
 
     FILE*             m_pstream;    // PostScript output stream
     unsigned char     m_currentRed;
