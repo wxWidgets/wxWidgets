@@ -69,6 +69,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_WS_VISIBLEALWAYS 1
 #define wxSTC_WS_VISIBLEAFTERINDENT 2
 #define wxSTC_WS_VISIBLEONLYININDENT 3
+#define wxSTC_SCTD_LONGARROW 0
+#define wxSTC_SCTD_STRIKEOUT 1
 #define wxSTC_EOL_CRLF 0
 #define wxSTC_EOL_CR 1
 #define wxSTC_EOL_LF 2
@@ -133,6 +135,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MARGIN_FORE 3
 #define wxSTC_MARGIN_TEXT 4
 #define wxSTC_MARGIN_RTEXT 5
+#define wxSTC_MARGIN_COLOUR 6
 
 /// Styles in range 32..38 are predefined for parts of the UI and are not used as normal styles.
 /// Style 39 is for future use.
@@ -143,6 +146,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_STYLE_CONTROLCHAR 36
 #define wxSTC_STYLE_INDENTGUIDE 37
 #define wxSTC_STYLE_CALLTIP 38
+#define wxSTC_STYLE_FOLDDISPLAYTEXT 39
 #define wxSTC_STYLE_LASTPREDEFINED 39
 #define wxSTC_STYLE_MAX 255
 
@@ -198,6 +202,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_INDIC_COMPOSITIONTHIN 15
 #define wxSTC_INDIC_FULLBOX 16
 #define wxSTC_INDIC_TEXTFORE 17
+#define wxSTC_INDIC_POINT 18
+#define wxSTC_INDIC_POINTCHARACTER 19
 #define wxSTC_INDIC_IME 32
 #define wxSTC_INDIC_IME_MAX 35
 #define wxSTC_INDIC_MAX 35
@@ -238,6 +244,9 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
 #define wxSTC_FOLDLEVELNUMBERMASK 0x0FFF
+#define wxSTC_FOLDDISPLAYTEXT_HIDDEN 0
+#define wxSTC_FOLDDISPLAYTEXT_STANDARD 1
+#define wxSTC_FOLDDISPLAYTEXT_BOXED 2
 #define wxSTC_FOLDACTION_CONTRACT 0
 #define wxSTC_FOLDACTION_EXPAND 1
 #define wxSTC_FOLDACTION_TOGGLE 2
@@ -288,6 +297,10 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_EDGE_NONE 0
 #define wxSTC_EDGE_LINE 1
 #define wxSTC_EDGE_BACKGROUND 2
+#define wxSTC_EDGE_MULTILINE 3
+#define wxSTC_POPUP_NEVER 0
+#define wxSTC_POPUP_ALL 1
+#define wxSTC_POPUP_TEXT 2
 #define wxSTC_STATUS_OK 0
 #define wxSTC_STATUS_FAILURE 1
 #define wxSTC_STATUS_BADALLOC 2
@@ -357,6 +370,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_SCVS_NONE 0
 #define wxSTC_SCVS_RECTANGULARSELECTION 1
 #define wxSTC_SCVS_USERACCESSIBLE 2
+#define wxSTC_SCVS_NOWRAPLINESTART 4
 #define wxSTC_TECHNOLOGY_DEFAULT 0
 #define wxSTC_TECHNOLOGY_DIRECTWRITE 1
 #define wxSTC_TECHNOLOGY_DIRECTWRITERETAIN 2
@@ -561,6 +575,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_IHEX 118
 #define wxSTC_LEX_TEHEX 119
 #define wxSTC_LEX_JSON 120
+#define wxSTC_LEX_EDIFACT 121
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -1094,6 +1109,20 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_BAAN_IDENTIFIER 8
 #define wxSTC_BAAN_STRINGEOL 9
 #define wxSTC_BAAN_WORD2 10
+#define wxSTC_BAAN_WORD3 11
+#define wxSTC_BAAN_WORD4 12
+#define wxSTC_BAAN_WORD5 13
+#define wxSTC_BAAN_WORD6 14
+#define wxSTC_BAAN_WORD7 15
+#define wxSTC_BAAN_WORD8 16
+#define wxSTC_BAAN_WORD9 17
+#define wxSTC_BAAN_TABLEDEF 18
+#define wxSTC_BAAN_TABLESQL 19
+#define wxSTC_BAAN_FUNCTION 20
+#define wxSTC_BAAN_DOMDEF 21
+#define wxSTC_BAAN_FUNCDEF 22
+#define wxSTC_BAAN_OBJECTDEF 23
+#define wxSTC_BAAN_DEFINEDEF 24
 
 /// Lexical states for SCLEX_LISP
 #define wxSTC_LISP_DEFAULT 0
@@ -1865,38 +1894,19 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_PLM_KEYWORD 7
 
 /// Lexical state for SCLEX_PROGRESS
-#define wxSTC_4GL_DEFAULT 0
-#define wxSTC_4GL_NUMBER 1
-#define wxSTC_4GL_WORD 2
-#define wxSTC_4GL_STRING 3
-#define wxSTC_4GL_CHARACTER 4
-#define wxSTC_4GL_PREPROCESSOR 5
-#define wxSTC_4GL_OPERATOR 6
-#define wxSTC_4GL_IDENTIFIER 7
-#define wxSTC_4GL_BLOCK 8
-#define wxSTC_4GL_END 9
-#define wxSTC_4GL_COMMENT1 10
-#define wxSTC_4GL_COMMENT2 11
-#define wxSTC_4GL_COMMENT3 12
-#define wxSTC_4GL_COMMENT4 13
-#define wxSTC_4GL_COMMENT5 14
-#define wxSTC_4GL_COMMENT6 15
-#define wxSTC_4GL_DEFAULT_ 16
-#define wxSTC_4GL_NUMBER_ 17
-#define wxSTC_4GL_WORD_ 18
-#define wxSTC_4GL_STRING_ 19
-#define wxSTC_4GL_CHARACTER_ 20
-#define wxSTC_4GL_PREPROCESSOR_ 21
-#define wxSTC_4GL_OPERATOR_ 22
-#define wxSTC_4GL_IDENTIFIER_ 23
-#define wxSTC_4GL_BLOCK_ 24
-#define wxSTC_4GL_END_ 25
-#define wxSTC_4GL_COMMENT1_ 26
-#define wxSTC_4GL_COMMENT2_ 27
-#define wxSTC_4GL_COMMENT3_ 28
-#define wxSTC_4GL_COMMENT4_ 29
-#define wxSTC_4GL_COMMENT5_ 30
-#define wxSTC_4GL_COMMENT6_ 31
+#define wxSTC_ABL_DEFAULT 0
+#define wxSTC_ABL_NUMBER 1
+#define wxSTC_ABL_WORD 2
+#define wxSTC_ABL_STRING 3
+#define wxSTC_ABL_CHARACTER 4
+#define wxSTC_ABL_PREPROCESSOR 5
+#define wxSTC_ABL_OPERATOR 6
+#define wxSTC_ABL_IDENTIFIER 7
+#define wxSTC_ABL_BLOCK 8
+#define wxSTC_ABL_END 9
+#define wxSTC_ABL_COMMENT 10
+#define wxSTC_ABL_TASKMARKER 11
+#define wxSTC_ABL_LINECOMMENT 12
 
 /// Lexical states for SCLEX_ABAQUS
 #define wxSTC_ABAQUS_DEFAULT 0
@@ -2450,6 +2460,15 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_JSON_KEYWORD 11
 #define wxSTC_JSON_LDKEYWORD 12
 #define wxSTC_JSON_ERROR 13
+#define wxSTC_EDI_DEFAULT 0
+#define wxSTC_EDI_SEGMENTSTART 1
+#define wxSTC_EDI_SEGMENTEND 2
+#define wxSTC_EDI_SEP_ELEMENT 3
+#define wxSTC_EDI_SEP_COMPOSITE 4
+#define wxSTC_EDI_SEP_RELEASE 5
+#define wxSTC_EDI_UNA 6
+#define wxSTC_EDI_UNH 7
+#define wxSTC_EDI_BADSEGMENT 8
 
 //}}}
 //----------------------------------------------------------------------
@@ -2637,16 +2656,28 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// caret position.
 #define wxSTC_CMD_LINEENDDISPLAYEXTEND 2348
 
-/// These are like their namesakes Home(Extend)?, LineEnd(Extend)?, VCHome(Extend)?
-/// except they behave differently when word-wrap is enabled:
-/// They go first to the start / end of the display line, like (Home|LineEnd)Display
-/// The difference is that, the cursor is already at the point, it goes on to the start
-/// or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
+/// Like Home but when word-wrap is enabled goes first to start of display line
+/// HomeDisplay, then to start of document line Home.
 #define wxSTC_CMD_HOMEWRAP 2349
+
+/// Like HomeExtend but when word-wrap is enabled extends first to start of display line
+/// HomeDisplayExtend, then to start of document line HomeExtend.
 #define wxSTC_CMD_HOMEWRAPEXTEND 2450
+
+/// Like LineEnd but when word-wrap is enabled goes first to end of display line
+/// LineEndDisplay, then to start of document line LineEnd.
 #define wxSTC_CMD_LINEENDWRAP 2451
+
+/// Like LineEndExtend but when word-wrap is enabled extends first to end of display line
+/// LineEndDisplayExtend, then to start of document line LineEndExtend.
 #define wxSTC_CMD_LINEENDWRAPEXTEND 2452
+
+/// Like VCHome but when word-wrap is enabled goes first to start of display line
+/// VCHomeDisplay, then behaves like VCHome.
 #define wxSTC_CMD_VCHOMEWRAP 2453
+
+/// Like VCHomeExtend but when word-wrap is enabled extends first to start of display line
+/// VCHomeDisplayExtend, then behaves like VCHomeExtend.
 #define wxSTC_CMD_VCHOMEWRAPEXTEND 2454
 
 /// Copy the line containing the caret.
@@ -2672,10 +2703,16 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// Delete forwards from the current position to the end of the line.
 #define wxSTC_CMD_DELLINERIGHT 2396
 
-/// Move caret between paragraphs (delimited by empty lines).
+/// Move caret down one paragraph (delimited by empty lines).
 #define wxSTC_CMD_PARADOWN 2413
+
+/// Extend selection down one paragraph (delimited by empty lines).
 #define wxSTC_CMD_PARADOWNEXTEND 2414
+
+/// Move caret up one paragraph (delimited by empty lines).
 #define wxSTC_CMD_PARAUP 2415
+
+/// Extend selection up one paragraph (delimited by empty lines).
 #define wxSTC_CMD_PARAUPEXTEND 2416
 
 /// Move caret down one line, extending rectangular selection to new caret position.
@@ -2823,7 +2860,7 @@ public:
     void ClearAll();
 
     // Delete a range of text in the document.
-    void DeleteRange(int pos, int deleteLength);
+    void DeleteRange(int start, int lengthDelete);
 
     // Set all style bytes to 0, remove all folding information.
     void ClearDocumentStyle();
@@ -2864,10 +2901,10 @@ public:
     bool CanRedo() const wxOVERRIDE;
 
     // Retrieve the line number at which a particular marker is located.
-    int MarkerLineFromHandle(int handle);
+    int MarkerLineFromHandle(int markerHandle);
 
     // Delete a marker.
-    void MarkerDeleteHandle(int handle);
+    void MarkerDeleteHandle(int markerHandle);
 
     // Is undo history being collected?
     bool GetUndoCollection() const;
@@ -2878,6 +2915,13 @@ public:
 
     // Make white space characters invisible, always visible or visible outside indentation.
     void SetViewWhiteSpace(int viewWS);
+
+    // Retrieve the current tab draw mode.
+    // Returns one of SCTD_* constants.
+    int GetTabDrawMode() const;
+
+    // Set how tabs are drawn when visible.
+    void SetTabDrawMode(int tabDrawMode);
 
     // Find the position from a point within the window.
     int PositionFromPoint(wxPoint pt) const;
@@ -2890,11 +2934,11 @@ public:
     void GotoLine(int line);
 
     // Set caret to a position and ensure it is visible.
-    void GotoPos(int pos);
+    void GotoPos(int caret);
 
     // Set the selection anchor to a position. The anchor is the opposite
     // end of the selection from the caret.
-    void SetAnchor(int posAnchor);
+    void SetAnchor(int anchor);
 
     // Retrieve the text of the line containing the caret.
     // Returns the index of the caret on the line.
@@ -2917,9 +2961,9 @@ public:
     // Set the current end of line mode.
     void SetEOLMode(int eolMode);
 
-    // Set the current styling position to pos and the styling mask to mask.
-    // The styling mask can be used to protect some bits in each styling byte from modification.
-    void StartStyling(int pos, int mask);
+    // Set the current styling position to start.
+    // The unused parameter is no longer used and should be set to 0.
+    void StartStyling(int start, int unused=0);
 
     // Change style from current styling position for length characters to a style
     // and move the current styling position to after this newly styled segment.
@@ -2997,7 +3041,7 @@ public:
     void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
 
     // Add a set of markers to a line.
-    void MarkerAddSet(int line, int set);
+    void MarkerAddSet(int line, int markerSet);
 
     // Set the alpha used for a marker that is drawn in the text area, not the margin.
     void MarkerSetAlpha(int markerNumber, int alpha);
@@ -3032,6 +3076,18 @@ public:
     // Retrieve the cursor shown in a margin.
     int GetMarginCursor(int margin) const;
 
+    // Set the background colour of a margin. Only visible for SC_MARGIN_COLOUR.
+    void SetMarginBackground(int margin, const wxColour& back);
+
+    // Retrieve the background colour of a margin
+    wxColour GetMarginBackground(int margin) const;
+
+    // Allocate a non-standard number of margins.
+    void SetMarginCount(int margins);
+
+    // How many margins are there?.
+    int GetMarginCount() const;
+
     // Clear all the styles and make equivalent to the global default style.
     void StyleClearAll();
 
@@ -3054,7 +3110,7 @@ public:
     void StyleSetFaceName(int style, const wxString& fontName);
 
     // Set a style to have its end of line filled or not.
-    void StyleSetEOLFilled(int style, bool filled);
+    void StyleSetEOLFilled(int style, bool eolFilled);
 
     // Reset the default style to its state at startup
     void StyleResetDefault();
@@ -3103,10 +3159,10 @@ public:
     bool StyleGetHotSpot(int style) const;
 
     // Set a style to be mixed case, or to force upper or lower case.
-    void StyleSetCase(int style, int caseForce);
+    void StyleSetCase(int style, int caseVisible);
 
     // Set the size of characters of a style. Size is in points multiplied by 100.
-    void StyleSetSizeFractional(int style, int caseForce);
+    void StyleSetSizeFractional(int style, int sizeHundredthPoints);
 
     // Get the size of characters of a style in points multiplied by 100
     int StyleGetSizeFractional(int style) const;
@@ -3141,10 +3197,10 @@ public:
     // Set the foreground colour of the caret.
     void SetCaretForeground(const wxColour& fore);
 
-    // When key+modifier combination km is pressed perform msg.
+    // When key+modifier combination keyDefinition is pressed perform sciCommand.
     void CmdKeyAssign(int key, int modifiers, int cmd);
 
-    // When key+modifier combination km is pressed do nothing.
+    // When key+modifier combination keyDefinition is pressed do nothing.
     void CmdKeyClear(int key, int modifiers);
 
     // Drop all key mappings.
@@ -3177,40 +3233,40 @@ public:
     void EndUndoAction();
 
     // Set an indicator to plain, squiggle or TT.
-    void IndicatorSetStyle(int indic, int style);
+    void IndicatorSetStyle(int indicator, int indicatorStyle);
 
     // Retrieve the style of an indicator.
-    int IndicatorGetStyle(int indic) const;
+    int IndicatorGetStyle(int indicator) const;
 
     // Set the foreground colour of an indicator.
-    void IndicatorSetForeground(int indic, const wxColour& fore);
+    void IndicatorSetForeground(int indicator, const wxColour& fore);
 
     // Retrieve the foreground colour of an indicator.
-    wxColour IndicatorGetForeground(int indic) const;
+    wxColour IndicatorGetForeground(int indicator) const;
 
     // Set an indicator to draw under text or over(default).
-    void IndicatorSetUnder(int indic, bool under);
+    void IndicatorSetUnder(int indicator, bool under);
 
     // Retrieve whether indicator drawn under or over text.
-    bool IndicatorGetUnder(int indic) const;
+    bool IndicatorGetUnder(int indicator) const;
 
     // Set a hover indicator to plain, squiggle or TT.
-    void IndicatorSetHoverStyle(int indic, int style);
+    void IndicatorSetHoverStyle(int indicator, int indicatorStyle);
 
     // Retrieve the hover style of an indicator.
-    int IndicatorGetHoverStyle(int indic) const;
+    int IndicatorGetHoverStyle(int indicator) const;
 
     // Set the foreground hover colour of an indicator.
-    void IndicatorSetHoverForeground(int indic, const wxColour& fore);
+    void IndicatorSetHoverForeground(int indicator, const wxColour& fore);
 
     // Retrieve the foreground hover colour of an indicator.
-    wxColour IndicatorGetHoverForeground(int indic) const;
+    wxColour IndicatorGetHoverForeground(int indicator) const;
 
     // Set the attributes of an indicator.
-    void IndicatorSetFlags(int indic, int flags);
+    void IndicatorSetFlags(int indicator, int flags);
 
     // Retrieve the attributes of an indicator.
-    int IndicatorGetFlags(int indic) const;
+    int IndicatorGetFlags(int indicator) const;
 
     // Set the foreground colour of all whitespace and whether to use this setting.
     void SetWhitespaceForeground(bool useSetting, const wxColour& fore);
@@ -3258,9 +3314,9 @@ public:
     void StyleSetChangeable(int style, bool changeable);
 
     // Display a auto-completion list.
-    // The lenEntered parameter indicates how many characters before
+    // The lengthEntered parameter indicates how many characters before
     // the caret should be used to provide context.
-    void AutoCompShow(int lenEntered, const wxString& itemList);
+    void AutoCompShow(int lengthEntered, const wxString& itemList);
 
     // Remove the auto-completion list from the screen.
     void AutoCompCancel();
@@ -3285,7 +3341,7 @@ public:
     int AutoCompGetSeparator() const;
 
     // Select the item in the auto-completion list that starts with a string.
-    void AutoCompSelect(const wxString& text);
+    void AutoCompSelect(const wxString& select);
 
     // Should the auto-completion list be cancelled if the user backspaces to a
     // position before where the box was created.
@@ -3368,7 +3424,7 @@ public:
     bool GetUseTabs() const;
 
     // Change the indentation of a line to a number of columns.
-    void SetLineIndentation(int line, int indentSize);
+    void SetLineIndentation(int line, int indentation);
 
     // Retrieve the number of columns that a line is indented.
     int GetLineIndentation(int line) const;
@@ -3380,10 +3436,10 @@ public:
     int GetColumn(int pos) const;
 
     // Count characters between two positions.
-    int CountCharacters(int startPos, int endPos);
+    int CountCharacters(int start, int end);
 
     // Show or hide the horizontal scroll bar.
-    void SetUseHorizontalScrollBar(bool show);
+    void SetUseHorizontalScrollBar(bool visible);
 
     // Is the horizontal scroll bar visible?
     bool GetUseHorizontalScrollBar() const;
@@ -3414,22 +3470,22 @@ public:
     bool GetReadOnly() const;
 
     // Sets the position of the caret.
-    void SetCurrentPos(int pos);
+    void SetCurrentPos(int caret);
 
     // Sets the position that starts the selection - this becomes the anchor.
-    void SetSelectionStart(int pos);
+    void SetSelectionStart(int anchor);
 
     // Returns the position at the start of the selection.
     int GetSelectionStart() const;
 
-    // Sets the position that ends the selection - this becomes the currentPosition.
-    void SetSelectionEnd(int pos);
+    // Sets the position that ends the selection - this becomes the caret.
+    void SetSelectionEnd(int caret);
 
     // Returns the position at the end of the selection.
     int GetSelectionEnd() const;
 
     // Set caret to a position, while removing any existing selection.
-    void SetEmptySelection(int pos);
+    void SetEmptySelection(int caret);
 
     // Sets the print magnification added to the point size of each style for printing.
     void SetPrintMagnification(int magnification);
@@ -3486,7 +3542,7 @@ public:
     wxString GetTextRange(int startPos, int endPos);
 
     // Draw the selection in normal style or with selection highlighted.
-    void HideSelection(bool normal);
+    void HideSelection(bool hide);
 
     // Retrieve the line containing a position.
     int LineFromPosition(int pos) const;
@@ -3552,7 +3608,7 @@ public:
     void* GetDirectPointer() const;
 
     // Set to overtype (true) or insert mode.
-    void SetOvertype(bool overtype);
+    void SetOvertype(bool overType);
 
     // Returns true if overtype mode is active otherwise false is returned.
     bool GetOvertype() const;
@@ -3565,14 +3621,14 @@ public:
 
     // Sets the position that starts the target which is used for updating the
     // document without affecting the scroll position.
-    void SetTargetStart(int pos);
+    void SetTargetStart(int start);
 
     // Get the position that starts the target.
     int GetTargetStart() const;
 
     // Sets the position that ends the target which is used for updating the
     // document without affecting the scroll position.
-    void SetTargetEnd(int pos);
+    void SetTargetEnd(int end);
 
     // Get the position that ends the target.
     int GetTargetEnd() const;
@@ -3608,7 +3664,7 @@ public:
     int SearchInTarget(const wxString& text);
 
     // Set the search flags used by SearchInTarget.
-    void SetSearchFlags(int flags);
+    void SetSearchFlags(int searchFlags);
 
     // Get the search flags used by SearchInTarget.
     int GetSearchFlags() const;
@@ -3629,7 +3685,7 @@ public:
     void CallTipSetPosAtStart(int posStart);
 
     // Highlight a segment of the definition.
-    void CallTipSetHighlight(int start, int end);
+    void CallTipSetHighlight(int highlightStart, int highlightEnd);
 
     // Set the background colour for the call tip.
     void CallTipSetBackground(const wxColour& back);
@@ -3647,13 +3703,13 @@ public:
     void CallTipSetPosition(bool above);
 
     // Find the display line of a document line taking hidden lines into account.
-    int VisibleFromDocLine(int line);
+    int VisibleFromDocLine(int docLine);
 
     // Find the document line of a display line taking hidden lines into account.
-    int DocLineFromVisible(int lineDisplay);
+    int DocLineFromVisible(int displayLine);
 
     // The number of display lines needed to wrap a document line
-    int WrapCount(int line);
+    int WrapCount(int docLine);
 
     // Set the fold level of a line.
     // This encodes an integer level along with flags indicating whether the
@@ -3689,6 +3745,12 @@ public:
 
     // Switch a header line between expanded and contracted.
     void ToggleFold(int line);
+
+    // Switch a header line between expanded and contracted and show some text after the line.
+    void ToggleFoldShowText(int line, const wxString& text);
+
+    // Set the style of fold display text
+    void FoldDisplayTextSetStyle(int style);
 
     // Expand or contract a fold header.
     void FoldLine(int line, int action);
@@ -3752,7 +3814,7 @@ public:
     int GetIdleStyling() const;
 
     // Sets whether text is word wrapped.
-    void SetWrapMode(int mode);
+    void SetWrapMode(int wrapMode);
 
     // Retrieve whether text is word wrapped.
     int GetWrapMode() const;
@@ -3776,13 +3838,13 @@ public:
     int GetWrapStartIndent() const;
 
     // Sets how wrapped sublines are placed. Default is fixed.
-    void SetWrapIndentMode(int mode);
+    void SetWrapIndentMode(int wrapIndentMode);
 
     // Retrieve how wrapped sublines are placed. Default is fixed.
     int GetWrapIndentMode() const;
 
     // Sets the degree of caching of layout information.
-    void SetLayoutCache(int mode);
+    void SetLayoutCache(int cacheMode);
 
     // Retrieve the degree of caching of layout information.
     int GetLayoutCache() const;
@@ -3817,7 +3879,7 @@ public:
     int TextHeight(int line);
 
     // Show or hide the vertical scroll bar.
-    void SetUseVerticalScrollBar(bool show);
+    void SetUseVerticalScrollBar(bool visible);
 
     // Is the vertical scroll bar visible?
     bool GetUseVerticalScrollBar() const;
@@ -3842,7 +3904,7 @@ public:
     void SetPhasesDraw(int phases);
 
     // Scroll so that a display line is at the top of the display.
-    void SetFirstVisibleLine(int lineDisplay);
+    void SetFirstVisibleLine(int displayLine);
 
     // Change the effect of pasting when there are multiple selections.
     void SetMultiPaste(int multiPaste);
@@ -3861,8 +3923,10 @@ public:
     // where possible.
     void LinesSplit(int pixelWidth);
 
-    // Set the colours used as a chequerboard pattern in the fold margin
+    // Set one of the colours used as a chequerboard pattern in the fold margin
     void SetFoldMarginColour(bool useSetting, const wxColour& back);
+
+    // Set the other colour used as a chequerboard pattern in the fold margin
     void SetFoldMarginHiColour(bool useSetting, const wxColour& fore);
 
     // Move caret down one line.
@@ -4023,16 +4087,28 @@ public:
     // caret position.
     void LineEndDisplayExtend();
 
-    // These are like their namesakes Home(Extend)?, LineEnd(Extend)?, VCHome(Extend)?
-    // except they behave differently when word-wrap is enabled:
-    // They go first to the start / end of the display line, like (Home|LineEnd)Display
-    // The difference is that, the cursor is already at the point, it goes on to the start
-    // or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
+    // Like Home but when word-wrap is enabled goes first to start of display line
+    // HomeDisplay, then to start of document line Home.
     void HomeWrap();
+
+    // Like HomeExtend but when word-wrap is enabled extends first to start of display line
+    // HomeDisplayExtend, then to start of document line HomeExtend.
     void HomeWrapExtend();
+
+    // Like LineEnd but when word-wrap is enabled goes first to end of display line
+    // LineEndDisplay, then to start of document line LineEnd.
     void LineEndWrap();
+
+    // Like LineEndExtend but when word-wrap is enabled extends first to end of display line
+    // LineEndDisplayExtend, then to start of document line LineEndExtend.
     void LineEndWrapExtend();
+
+    // Like VCHome but when word-wrap is enabled goes first to start of display line
+    // VCHomeDisplay, then behaves like VCHome.
     void VCHomeWrap();
+
+    // Like VCHomeExtend but when word-wrap is enabled extends first to start of display line
+    // VCHomeDisplayExtend, then behaves like VCHomeExtend.
     void VCHomeWrapExtend();
 
     // Copy the line containing the caret.
@@ -4045,19 +4121,20 @@ public:
     int LineLength(int line) const;
 
     // Highlight the characters at two positions.
-    void BraceHighlight(int pos1, int pos2);
+    void BraceHighlight(int posA, int posB);
 
     // Use specified indicator to highlight matching braces instead of changing their style.
-    void BraceHighlightIndicator(bool useBraceHighlightIndicator, int indicator);
+    void BraceHighlightIndicator(bool useSetting, int indicator);
 
     // Highlight the character at a position indicating there is no matching brace.
     void BraceBadLight(int pos);
 
     // Use specified indicator to highlight non matching brace instead of changing its style.
-    void BraceBadLightIndicator(bool useBraceBadLightIndicator, int indicator);
+    void BraceBadLightIndicator(bool useSetting, int indicator);
 
     // Find the position of a matching brace or INVALID_POSITION if no match.
-    int BraceMatch(int pos);
+    // The maxReStyle must be 0 for now. It may be defined in a future release.
+    int BraceMatch(int pos, int maxReStyle=0);
 
     // Are the end of line characters visible?
     bool GetViewEOL() const;
@@ -4072,7 +4149,7 @@ public:
     void SetDocPointer(void* docPointer);
 
     // Set which document modification events are sent to the container.
-    void SetModEventMask(int mask);
+    void SetModEventMask(int eventMask);
 
     // Retrieve the column number which text should be kept within.
     int GetEdgeColumn() const;
@@ -4084,9 +4161,9 @@ public:
     // Retrieve the edge highlight mode.
     int GetEdgeMode() const;
 
-    // The edge may be displayed by a line (EDGE_LINE) or by highlighting text that
+    // The edge may be displayed by a line (EDGE_LINE/EDGE_MULTILINE) or by highlighting text that
     // goes beyond it (EDGE_BACKGROUND) or not displayed at all (EDGE_NONE).
-    void SetEdgeMode(int mode);
+    void SetEdgeMode(int edgeMode);
 
     // Retrieve the colour used in edge indication.
     wxColour GetEdgeColour() const;
@@ -4094,30 +4171,36 @@ public:
     // Change the colour used in edge indication.
     void SetEdgeColour(const wxColour& edgeColour);
 
+    // Add a new vertical edge to the view.
+    void MultiEdgeAddLine(int column, const wxColour& edgeColour);
+
+    // Clear all vertical edges.
+    void MultiEdgeClearAll();
+
     // Sets the current caret position to be the search anchor.
     void SearchAnchor();
 
     // Find some text starting at the search anchor.
     // Does not ensure the selection is visible.
-    int SearchNext(int flags, const wxString& text);
+    int SearchNext(int searchFlags, const wxString& text);
 
     // Find some text starting at the search anchor and moving backwards.
     // Does not ensure the selection is visible.
-    int SearchPrev(int flags, const wxString& text);
+    int SearchPrev(int searchFlags, const wxString& text);
 
     // Retrieves the number of lines completely visible.
     int LinesOnScreen() const;
 
     // Set whether a pop up menu is displayed automatically when the user presses
-    // the wrong mouse button.
-    void UsePopUp(bool allowPopUp);
+    // the wrong mouse button on certain areas.
+    void UsePopUp(int popUpMode);
 
     // Is the selection rectangular? The alternative is the more common stream selection.
     bool SelectionIsRectangle() const;
 
     // Set the zoom level. This number of points is added to the size of all fonts.
     // It may be positive to magnify or negative to reduce.
-    void SetZoom(int zoom);
+    void SetZoom(int zoomInPoints);
 
     // Retrieve the zoom level.
     int GetZoom() const;
@@ -4142,7 +4225,7 @@ public:
     bool GetSTCFocus() const;
 
     // Change error status - 0 = OK.
-    void SetStatus(int statusCode);
+    void SetStatus(int status);
 
     // Get error status.
     int GetStatus() const;
@@ -4152,6 +4235,12 @@ public:
 
     // Get whether mouse gets captured.
     bool GetMouseDownCaptures() const;
+
+    // Set whether the mouse wheel can be active outside the window.
+    void SetMouseWheelCaptures(bool captures);
+
+    // Get whether mouse wheel can be active outside the window.
+    bool GetMouseWheelCaptures() const;
 
     // Sets the cursor to one of the SC_CURSOR* values.
     void SetSTCCursor(int cursorType);
@@ -4191,7 +4280,7 @@ public:
     void DelLineRight();
 
     // Get and Set the xOffset (ie, horizontal scroll position).
-    void SetXOffset(int newOffset);
+    void SetXOffset(int xOffset);
     int GetXOffset() const;
 
     // Set the last x chosen value to be the caret x position.
@@ -4206,7 +4295,7 @@ public:
     void SetYCaretPolicy(int caretPolicy, int caretSlop);
 
     // Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
-    void SetPrintWrapMode(int mode);
+    void SetPrintWrapMode(int wrapMode);
 
     // Is printing line wrapped?
     int GetPrintWrapMode() const;
@@ -4235,10 +4324,16 @@ public:
     // Get the HotspotSingleLine property
     bool GetHotspotSingleLine() const;
 
-    // Move caret between paragraphs (delimited by empty lines).
+    // Move caret down one paragraph (delimited by empty lines).
     void ParaDown();
+
+    // Extend selection down one paragraph (delimited by empty lines).
     void ParaDownExtend();
+
+    // Move caret up one paragraph (delimited by empty lines).
     void ParaUp();
+
+    // Extend selection up one paragraph (delimited by empty lines).
     void ParaUpExtend();
 
     // Given a valid document position, return the previous position taking code
@@ -4261,7 +4356,7 @@ public:
 
     // Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
     // by lines (SC_SEL_LINES).
-    void SetSelectionMode(int mode);
+    void SetSelectionMode(int selectionMode);
 
     // Get the mode of the current selection.
     int GetSelectionMode() const;
@@ -4413,22 +4508,22 @@ public:
     int GetIndicatorValue() const;
 
     // Turn a indicator on over a range.
-    void IndicatorFillRange(int position, int fillLength);
+    void IndicatorFillRange(int start, int lengthFill);
 
     // Turn a indicator off over a range.
-    void IndicatorClearRange(int position, int clearLength);
+    void IndicatorClearRange(int start, int lengthClear);
 
-    // Are any indicators present at position?
-    int IndicatorAllOnFor(int position);
+    // Are any indicators present at pos?
+    int IndicatorAllOnFor(int pos);
 
-    // What value does a particular indicator have at at a position?
-    int IndicatorValueAt(int indicator, int position);
+    // What value does a particular indicator have at a position?
+    int IndicatorValueAt(int indicator, int pos);
 
     // Where does a particular indicator start?
-    int IndicatorStart(int indicator, int position);
+    int IndicatorStart(int indicator, int pos);
 
     // Where does a particular indicator end?
-    int IndicatorEnd(int indicator, int position);
+    int IndicatorEnd(int indicator, int pos);
 
     // Set number of entries in position cache
     void SetPositionCacheSize(int size);
@@ -4445,7 +4540,7 @@ public:
 
     // Return a read-only pointer to a range of characters in the document.
     // May move the gap so that the range is contiguous, but will only move up
-    // to rangeLength bytes.
+    // to lengthRange bytes.
     const char* GetRangePointer(int position, int rangeLength) const;
 
     // Return a position which, to avoid performance costs, should not be within
@@ -4589,7 +4684,7 @@ public:
     bool GetAdditionalCaretsBlink() const;
 
     // Set whether additional carets are visible
-    void SetAdditionalCaretsVisible(bool additionalCaretsBlink);
+    void SetAdditionalCaretsVisible(bool additionalCaretsVisible);
 
     // Whether additional carets are visible
     bool GetAdditionalCaretsVisible() const;
@@ -4614,35 +4709,71 @@ public:
 
     // Which selection is the main selection
     int GetMainSelection() const;
-    void SetSelectionNCaret(int selection, int pos);
+
+    // Set the caret position of the nth selection.
+    void SetSelectionNCaret(int selection, int caret);
+
+    // Return the caret position of the nth selection.
     int GetSelectionNCaret(int selection) const;
-    void SetSelectionNAnchor(int selection, int posAnchor);
+
+    // Set the anchor position of the nth selection.
+    void SetSelectionNAnchor(int selection, int anchor);
+
+    // Return the anchor position of the nth selection.
     int GetSelectionNAnchor(int selection) const;
+
+    // Set the virtual space of the caret of the nth selection.
     void SetSelectionNCaretVirtualSpace(int selection, int space);
+
+    // Return the virtual space of the caret of the nth selection.
     int GetSelectionNCaretVirtualSpace(int selection) const;
+
+    // Set the virtual space of the anchor of the nth selection.
     void SetSelectionNAnchorVirtualSpace(int selection, int space);
+
+    // Return the virtual space of the anchor of the nth selection.
     int GetSelectionNAnchorVirtualSpace(int selection) const;
 
     // Sets the position that starts the selection - this becomes the anchor.
-    void SetSelectionNStart(int selection, int pos);
+    void SetSelectionNStart(int selection, int anchor);
 
     // Returns the position at the start of the selection.
     int GetSelectionNStart(int selection) const;
 
     // Sets the position that ends the selection - this becomes the currentPosition.
-    void SetSelectionNEnd(int selection, int pos);
+    void SetSelectionNEnd(int selection, int caret);
 
     // Returns the position at the end of the selection.
     int GetSelectionNEnd(int selection) const;
-    void SetRectangularSelectionCaret(int pos);
+
+    // Set the caret position of the rectangular selection.
+    void SetRectangularSelectionCaret(int caret);
+
+    // Return the caret position of the rectangular selection.
     int GetRectangularSelectionCaret() const;
-    void SetRectangularSelectionAnchor(int posAnchor);
+
+    // Set the anchor position of the rectangular selection.
+    void SetRectangularSelectionAnchor(int anchor);
+
+    // Return the anchor position of the rectangular selection.
     int GetRectangularSelectionAnchor() const;
+
+    // Set the virtual space of the caret of the rectangular selection.
     void SetRectangularSelectionCaretVirtualSpace(int space);
+
+    // Return the virtual space of the caret of the rectangular selection.
     int GetRectangularSelectionCaretVirtualSpace() const;
+
+    // Set the virtual space of the anchor of the rectangular selection.
     void SetRectangularSelectionAnchorVirtualSpace(int space);
+
+    // Return the virtual space of the anchor of the rectangular selection.
     int GetRectangularSelectionAnchorVirtualSpace() const;
+
+    // Set options for virtual space behaviour.
     void SetVirtualSpaceOptions(int virtualSpaceOptions);
+
+    // Return options for virtual space behaviour.
     int GetVirtualSpaceOptions() const;
 
     // On GTK+, allow selecting the modifier key to use for mouse-based
@@ -4794,7 +4925,7 @@ public:
     void SetProperty(const wxString& key, const wxString& value);
 
     // Set up the key words used by the lexer.
-    void SetKeyWords(int keywordSet, const wxString& keyWords);
+    void SetKeyWords(int keyWordSet, const wxString& keyWords);
 
     // Set the lexing language of the document based on string name.
     void SetLexerLanguage(const wxString& language);
@@ -4811,7 +4942,7 @@ public:
 
     // Retrieve a 'property' value previously set with SetProperty,
     // interpreted as an int AFTER any '$()' variable replacement.
-    int GetPropertyInt(const wxString& key) const;
+    int GetPropertyInt(const wxString &key, int defaultValue=0) const;
 
     // Retrieve the number of bits the current lexer needs for styling.
     int GetStyleBitsNeeded() const;
@@ -5214,6 +5345,13 @@ public:
         return wxTextAreaBase::HitTest(pt, col, row);
     }
 
+    // methods deprecated due to changes in the scintilla library
+    // ---------------------------------------------
+
+    wxDEPRECATED_MSG("use UsePopUp(int) instead.")
+    void UsePopUp(bool allowPopUp);
+
+
     static wxVersionInfo GetLibraryVersionInfo();
 
 protected:
@@ -5231,6 +5369,7 @@ protected:
     void OnScroll(wxScrollEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnMouseLeftDown(wxMouseEvent& evt);
+    void OnMouseRightDown(wxMouseEvent& evt);
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeftUp(wxMouseEvent& evt);
     void OnMouseRightUp(wxMouseEvent& evt);
@@ -5432,6 +5571,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxSt
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_CLIPBOARD_COPY, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
+
 #else
     enum {
         wxEVT_STC_CHANGE,
@@ -5467,7 +5608,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_COMPLETED, wxStyle
         wxEVT_STC_HOTSPOT_RELEASE_CLICK,
         wxEVT_STC_CLIPBOARD_COPY,
         wxEVT_STC_CLIPBOARD_PASTE,
-        wxEVT_STC_AUTOCOMP_COMPLETED
+        wxEVT_STC_AUTOCOMP_COMPLETED,
+        wxEVT_STC_MARGIN_RIGHT_CLICK
     };
 #endif
 
@@ -5513,6 +5655,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_CLIPBOARD_COPY(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CLIPBOARD_COPY,        id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_CLIPBOARD_PASTE(id, fn)       wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CLIPBOARD_PASTE,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_COMPLETED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_COMPLETED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
+#define EVT_STC_MARGIN_RIGHT_CLICK(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGIN_RIGHT_CLICK,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 
 #endif
 

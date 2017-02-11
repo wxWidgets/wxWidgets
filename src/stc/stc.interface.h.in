@@ -120,6 +120,10 @@
         Process a @c wxEVT_STC_AUTOCOMP_COMPLETED event, generated after an autocompletion list has closed and inserted its text into the control. Valid event functions: @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::GetKey GetKey@endlink, @link wxStyledTextEvent::GetListCompletionMethod GetListCompletionMethod@endlink.
         @since 3.1.1
 
+    @event{EVT_STC_MARGIN_RIGHT_CLICK(id, fn)}
+        Process a @c wxEVT_STC_MARGIN_RIGHT_CLICK event. Valid event functions: @link wxStyledTextEvent::GetMargin GetMargin@endlink, @link wxStyledTextEvent::GetModifiers GetModifiers@endlink, @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetAlt GetAlt@endlink, @link wxStyledTextEvent::GetControl GetControl@endlink, @link wxStyledTextEvent::GetShift GetShift@endlink.
+        @since 3.1.1
+
     @endEventTable
 
     @library{wxstc}
