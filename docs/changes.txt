@@ -141,6 +141,7 @@ wxMSW:
 - Add support for building with Microsoft Visual Studio 2017 (Tobias Taschner).
 - Enable wxStackWalker in MinGW64 builds.
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
+- Fix wxSpinCtrl appearance: show arrows inside the control (Catalin Raceanu).
 - Fix MDI menu display after failure to create a child frame (troelsk).
 - Fix wxScreenDC::GetSize() with multiple monitors (iwbnwif).
 - Fix background colour returned by wxTextCtrl::GetStyle() (Andreas Falkenhahn).

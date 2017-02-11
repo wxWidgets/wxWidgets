@@ -159,6 +159,9 @@ private:
     // hexadecimal prefix, ...) in it.
     void UpdateBuddyStyle();
 
+    // Determine the (horizontal) pixel overlap between the spin button
+    // (up-down control) and the text control (buddy window).
+    int GetOverlap() const;
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
     wxDECLARE_EVENT_TABLE();

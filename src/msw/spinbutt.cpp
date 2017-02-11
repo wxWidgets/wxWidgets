@@ -94,7 +94,8 @@ bool wxSpinButton::Create(wxWindow *parent,
     // translate the styles
     DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_TABSTOP | /*  WS_CLIPSIBLINGS | */
                    UDS_NOTHOUSANDS | // never useful, sometimes harmful
-                   UDS_SETBUDDYINT;  // it doesn't harm if we don't have buddy
+                   UDS_ALIGNRIGHT  | // these styles are effectively used only
+                   UDS_SETBUDDYINT;  //  by wxSpinCtrl but do no harm otherwise
 
     if ( m_windowStyle & wxCLIP_SIBLINGS )
         wstyle |= WS_CLIPSIBLINGS;
