@@ -642,6 +642,7 @@ WX_ARG_ENABLE(std_containers_compat, [  --enable-std_containers_compat     use s
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
 WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
+WX_ARG_DISABLE(unsafe_conv_in_wxstring,     [ --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString], wxUSE_UNSAFE_WXSTRING_CONV)
 WX_ARG_DISABLE(unicode,      [  --disable-unicode       compile without Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
 WX_ARG_ENABLE(utf8only,      [  --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
@@ -5663,6 +5664,10 @@ fi
 
 if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
   AC_DEFINE(wxUSE_STD_STRING_CONV_IN_WXSTRING)
+fi
+
+if test "$wxUSE_UNSAFE_WXSTRING_CONV" = "yes"; then
+  AC_DEFINE(wxUSE_UNSAFE_WXSTRING_CONV)
 fi
 
 if test "$wxUSE_STDPATHS" = "yes"; then

@@ -56,6 +56,18 @@
 // Recommended setting: 0
 #define wxDIALOG_UNIT_COMPATIBILITY   0
 
+// Provide unsafe implicit conversions in wxString to "const char*" or
+// "std::string" (depending on wxUSE_STD_STRING_CONV_IN_WXSTRING value).
+//
+// Default is 1 but only for compatibility reasons, it is recommended to set
+// this to 0 because converting wxString to a narrow (non-Unicode) string may
+// fail unless a locale using UTF-8 encoding is used, which is never the case
+// under MSW, for example, hence such conversions can result in silent data
+// loss.
+//
+// Recommended setting: 0
+#define wxUSE_UNSAFE_WXSTRING_CONV 1
+
 // ----------------------------------------------------------------------------
 // debugging settings
 // ----------------------------------------------------------------------------
@@ -1433,9 +1445,9 @@
 // Should wxDC provide SetTransformMatrix() and related methods?
 //
 // Default is 1 but can be set to 0 if this functionality is not used. Notice
-// that currently only wxMSW supports this so setting this to 0 doesn't change
-// much for non-MSW platforms (although it will still save a few bytes
-// probably).
+// that currently wxMSW, wxGTK3 support this for wxDC and all platforms support
+// this for wxGCDC so setting this to 0 doesn't change much if neither of these
+// is used (although it will still save a few bytes probably).
 //
 // Recommended setting: 1.
 #define wxUSE_DC_TRANSFORM_MATRIX 1
