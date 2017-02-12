@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-28 15:59+0100\n"
-"PO-Revision-Date: 2017-01-28 16:50+0100\n"
+"PO-Revision-Date: 2017-02-12 11:06+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language: sl\n"
@@ -834,7 +834,6 @@ msgid "&Table"
 msgstr "&Tabela"
 
 #: ../src/common/stockitem.cpp:200
-#, fuzzy
 msgid "&Top"
 msgstr "&Vrh"
 
@@ -845,7 +844,6 @@ msgstr "&Vrh"
 #: ../src/richtext/richtextmarginspage.cpp:348
 #: ../src/richtext/richtextsizepage.cpp:567
 #: ../src/richtext/richtextsizepage.cpp:574
-#, fuzzy
 msgid "&Top:"
 msgstr "&Vrh:"
 
@@ -1439,11 +1437,11 @@ msgstr "Dodajanje knjige %s"
 
 #: ../src/osx/carbon/dataview.cpp:1931
 msgid "Adding flavor TEXT failed"
-msgstr ""
+msgstr "Dodajanje podpore TEXT je spodletelo"
 
 #: ../src/osx/carbon/dataview.cpp:1952
 msgid "Adding flavor utxt failed"
-msgstr ""
+msgstr "Dodajanje podpore utxt je spodletelo"
 
 #: ../src/common/preferencescmn.cpp:43
 msgid "Advanced"
@@ -1510,7 +1508,7 @@ msgstr "Dvigalka+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Neobvezni polmer kotov za zaobljanje robov."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -2395,7 +2393,6 @@ msgstr "Označite polje za umestitev oznake med oklepaj in zaklepaj."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
 msgstr "Potrdite za spremembo smeri besedila v D-L."
 
@@ -2428,7 +2425,6 @@ msgstr "Označite za besedilo v velikih začetnicah."
 
 #: ../src/richtext/richtextfontpage.cpp:291
 #: ../src/richtext/richtextfontpage.cpp:293
-#, fuzzy
 msgid "Check to show the text in small capitals."
 msgstr "Potrdite za besedilo v malih začetnicah."
 
@@ -2696,6 +2692,7 @@ msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
+"Sestavljanja ta sistem ne podpira, omogočite ga v svojem upravitelju oken."
 
 #: ../src/html/helpwnd.cpp:1551
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
@@ -5868,7 +5865,7 @@ msgstr "kuverta Monarch, 3 7/8 x 7 1/2 in"
 
 #: ../src/msw/fswatcher.cpp:143
 msgid "Monitoring individual files for changes is not supported currently."
-msgstr ""
+msgstr "Spremljanje posameznih datotek za spremembe trenutno ni podprto."
 
 #: ../src/generic/editlbox.cpp:276
 msgid "Move down"
@@ -7185,7 +7182,7 @@ msgstr "Povrni v shranjeno"
 #: ../src/richtext/richtextborderspage.cpp:619
 #, fuzzy
 msgid "Ridge"
-msgstr "Desno"
+msgstr "Brazda"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
@@ -7356,9 +7353,8 @@ msgstr "Najdi napako na datoteki '%s' (velike datoteke niso podprte v stdio)"
 # generic/dirdlgg.cpp:191
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgid "Select"
-msgstr "Izbira"
+msgstr "Izbiralka"
 
 # common/docview.cpp:1371
 # common/docview.cpp:1422
@@ -7433,7 +7429,7 @@ msgstr ""
 
 #: ../src/common/filename.cpp:2599
 msgid "Setting directory access times is not supported under this OS version"
-msgstr ""
+msgstr "Določanje časov dostopa do map ni podprto v tej različici OS"
 
 # generic/prntdlgg.cpp:155
 #: ../src/generic/prntdlgg.cpp:188
@@ -7559,27 +7555,27 @@ msgstr "Velikost:"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1736
 msgid "Sizing"
-msgstr ""
+msgstr "Določanje velikosti"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1733
 msgid "Sizing N-S"
-msgstr ""
+msgstr "Določanje velikosti S-J"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1732
 msgid "Sizing NE-SW"
-msgstr ""
+msgstr "Določanje velikosti SV-JZ"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1734
 msgid "Sizing NW-SE"
-msgstr ""
+msgstr "Določanje velikosti SZ-JV"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1735
 msgid "Sizing W-E"
-msgstr ""
+msgstr "Določanje velikosti Z-V"
 
 #: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:776
 #: ../src/msw/progdlg.cpp:801
@@ -7884,7 +7880,6 @@ msgstr "Velikost spodnjega roba."
 # html/helpfrm.cpp:899
 #: ../src/richtext/richtextmarginspage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:383
-#, fuzzy
 msgid "The bottom padding size."
 msgstr "Velikost zapolnjevanja na dnu."
 
@@ -7953,6 +7948,9 @@ msgid ""
 "\n"
 "Would you like to proceed with printing it nevertheless?"
 msgstr ""
+"Dokument »%s« vodoravno presega mere strani in bo pri tiskanju porezan.\n"
+"\n"
+"Želite kljub temu nadaljevati z njegovim tiskanjem?"
 
 # common/docview.cpp:1676
 #: ../src/common/docview.cpp:1205
@@ -8041,7 +8039,6 @@ msgstr "Velikost levega roba."
 # html/helpfrm.cpp:899
 #: ../src/richtext/richtextmarginspage.cpp:308
 #: ../src/richtext/richtextmarginspage.cpp:310
-#, fuzzy
 msgid "The left padding size."
 msgstr "Velikost zapolnjevanja na levi."
 
@@ -8152,7 +8149,6 @@ msgstr "Velikost desnega roba."
 
 #: ../src/richtext/richtextmarginspage.cpp:333
 #: ../src/richtext/richtextmarginspage.cpp:335
-#, fuzzy
 msgid "The right padding size."
 msgstr "Velikost zapolnjevanja na desni."
 
@@ -8241,7 +8237,6 @@ msgstr "Velikost vrhnjega roba."
 # html/helpfrm.cpp:899
 #: ../src/richtext/richtextmarginspage.cpp:356
 #: ../src/richtext/richtextmarginspage.cpp:358
-#, fuzzy
 msgid "The top padding size."
 msgstr "Velikost zapolnjevanja na vrhu."
 
@@ -8632,6 +8627,7 @@ msgstr "Parametru '%s' sledijo nepričakovani znaki."
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
+"Nepričakovan dogodek za »%s«: ni ujemajočega opazovalnega deskriptorja."
 
 # common/cmdline.cpp:712
 #: ../src/common/cmdline.cpp:1195
