@@ -123,6 +123,7 @@ All (GUI):
 - Fix parsing of RGBA strings in wxColour (Laurent Poujoulat).
 - Refactor code in wxQuantize() for MSVC to avoid crash.
 - Fix drawing rotated and/or underlined text on wxPostScriptDC.
+- Support multiline strings in wxPostScriptDC::DrawText(), DrawRotatedText().
 
 wxGTK:
 
