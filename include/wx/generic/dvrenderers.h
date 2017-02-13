@@ -83,7 +83,7 @@ protected:
 
 private:
 #if wxUSE_MARKUP
-    class wxMarkupText *m_markupText;
+    class wxItemMarkupText *m_markupText;
 #endif // wxUSE_MARKUP
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);

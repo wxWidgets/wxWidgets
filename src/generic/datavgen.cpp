@@ -1067,7 +1067,7 @@ void wxDataViewTextRenderer::EnableMarkup(bool enable)
     {
         if ( !m_markupText )
         {
-            m_markupText = new wxMarkupText(wxString());
+            m_markupText = new wxItemMarkupText(wxString());
         }
     }
     else
@@ -1087,7 +1087,7 @@ bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
 
 #if wxUSE_MARKUP
     if ( m_markupText )
-        m_markupText->SetMarkupText(m_text);
+        m_markupText->SetMarkup(m_text);
 #endif // wxUSE_MARKUP
 
     return true;
@@ -1135,7 +1135,7 @@ bool wxDataViewTextRenderer::Render(wxRect rect, wxDC *dc, int state)
         int flags = 0;
         if ( state & wxDATAVIEW_CELL_SELECTED )
             flags |= wxCONTROL_SELECTED;
-        m_markupText->RenderItemText(GetView(), *dc, rect, flags, GetEllipsizeMode());
+        m_markupText->Render(GetView(), *dc, rect, flags, GetEllipsizeMode());
     }
     else
 #endif // wxUSE_MARKUP

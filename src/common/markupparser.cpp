@@ -371,12 +371,7 @@ bool wxMarkupParser::Parse(const wxString& text)
                         if ( text.compare(pos, xmlEnt.len, xmlEnt.name) == 0
                                 && text[pos + xmlEnt.len] == ';' )
                         {
-                            // Escape the ampersands if needed to protect them
-                            // from being interpreted as mnemonics indicators.
-                            if ( xmlEnt.value == '&' )
-                                current += "&&";
-                            else
-                                current += xmlEnt.value;
+                            current += xmlEnt.value;
 
                             it += xmlEnt.len + 1; // +1 for '&' itself
 
