@@ -253,8 +253,10 @@ public:
         m_ellipsizeMode = ellipsizeMode == wxELLIPSIZE_NONE ? wxELLIPSIZE_NONE : wxELLIPSIZE_END;
     }
 
-    virtual void OnText(const wxString& text) wxOVERRIDE
+    virtual void OnText(const wxString& text_) wxOVERRIDE
     {
+        const wxString text(wxControl::RemoveMnemonics(text_));
+
         wxRect rect(m_rect);
         rect.x = m_pos;
         rect.SetRight(m_rect.GetRight());
@@ -286,7 +288,7 @@ public:
 
         m_renderer->DrawItemText(m_win,
                                  m_dc,
-                                 wxControl::RemoveMnemonics(text),
+                                 text,
                                  rect,
                                  wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL,
                                  m_rendererFlags,
