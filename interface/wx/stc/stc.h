@@ -2780,8 +2780,6 @@
         TOWRITE
     @event{EVT_STC_ROMODIFYATTEMPT(id, fn)}
         TOWRITE
-    @event{EVT_STC_KEY(id, fn)}
-        TOWRITE
     @event{EVT_STC_DOUBLECLICK(id, fn)}
         TOWRITE
     @event{EVT_STC_UPDATEUI(id, fn)}
@@ -2797,8 +2795,6 @@
     @event{EVT_STC_PAINTED(id, fn)}
         TOWRITE
     @event{EVT_STC_USERLISTSELECTION(id, fn)}
-        TOWRITE
-    @event{EVT_STC_URIDROPPED(id, fn)}
         TOWRITE
     @event{EVT_STC_DWELLSTART(id, fn)}
         TOWRITE
@@ -2847,6 +2843,16 @@
         @since 3.1.1
 
     @endEventTable
+
+    Most of the scintilla notifications are mapped to a similarly named
+    wxStyledTextEvent.  However a few of the notifications would only offer
+    information available in other wxWidgets event types, and in those cases a
+    corresponding wxStyledTextEvent is not defined. Currently, the
+    @c wxEVT_KEY_DOWN event is used instead of the SCN_KEY notification.  The
+    regular wxWidgets drag and drop functionality can be used instead of the
+    SCN_URIDROPPED notification. The @c wxEVT_SET_FOCUS event is used instead
+    of the SCN_FOCUSIN notification.  And the @c wxEVT_KILL_FOCUS event is used
+    instead of the SCN_FOCUSOUT notification.
 
     @library{wxstc}
     @category{stc}

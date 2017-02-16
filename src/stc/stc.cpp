@@ -5476,10 +5476,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_ROMODIFYATTEMPT);
         break;
 
-    case SCN_KEY:
-        evt.SetEventType(wxEVT_STC_KEY);
-        break;
-
     case SCN_DOUBLECLICK:
         evt.SetEventType(wxEVT_STC_DOUBLECLICK);
         evt.SetLine(scn.line);
@@ -5530,11 +5526,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         SetEventText(evt, scn.text, strlen(scn.text));
         evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
-        break;
-
-    case SCN_URIDROPPED:
-        evt.SetEventType(wxEVT_STC_URIDROPPED);
-        SetEventText(evt, scn.text, strlen(scn.text));
         break;
 
     case SCN_DWELLSTART:

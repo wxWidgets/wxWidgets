@@ -124,6 +124,7 @@ All (GUI):
 - Refactor code in wxQuantize() for MSVC to avoid crash.
 - Fix drawing rotated and/or underlined text on wxPostScriptDC.
 - Support multiline strings in wxPostScriptDC::DrawText(), DrawRotatedText().
+- Deprecate wxEVT_STC_KEY and wxEVT_STC_URIDROPPED events (NewPagodi).
 
 wxGTK:
 
