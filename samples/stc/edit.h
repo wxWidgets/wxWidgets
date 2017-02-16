@@ -104,7 +104,6 @@ public:
     // stc
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);
-    void OnKey  (wxStyledTextEvent &event);
 
     void OnKeyDown(wxKeyEvent &event);
 

@@ -114,7 +114,6 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
-    EVT_STC_KEY( wxID_ANY , Edit::OnKey )
 
     EVT_KEY_DOWN( Edit::OnKeyDown )
 wxEND_EVENT_TABLE()
@@ -208,11 +207,6 @@ void Edit::OnEditUndo (wxCommandEvent &WXUNUSED(event)) {
 void Edit::OnEditClear (wxCommandEvent &WXUNUSED(event)) {
     if (GetReadOnly()) return;
     Clear ();
-}
-
-void Edit::OnKey (wxStyledTextEvent &WXUNUSED(event))
-{
-    wxMessageBox("OnKey");
 }
 
 void Edit::OnKeyDown (wxKeyEvent &event)
