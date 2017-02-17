@@ -383,12 +383,12 @@
 #           define wxUSE_MEDIACTRL 0
 #       endif
 #   endif
-#    if wxUSE_WEB
+#    if wxUSE_WEBVIEW
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxWebView requires wxActiveXContainer under MSW"
 #       else
-#           undef wxUSE_WEB
-#           define wxUSE_WEB 0
+#           undef wxUSE_WEBVIEW
+#           define wxUSE_WEBVIEW 0
 #       endif
 #   endif
 #endif /* !wxUSE_ACTIVEX */
@@ -431,12 +431,12 @@
 
 
 #if !wxUSE_OLE_AUTOMATION
-#    if wxUSE_WEB
+#    if wxUSE_WEBVIEW
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxWebView requires wxUSE_OLE_AUTOMATION under MSW"
 #       else
-#           undef wxUSE_WEB
-#           define wxUSE_WEB 0
+#           undef wxUSE_WEBVIEW
+#           define wxUSE_WEBVIEW 0
 #       endif
 #   endif
 #endif /* !wxUSE_OLE_AUTOMATION */
