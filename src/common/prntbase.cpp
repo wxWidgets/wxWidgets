@@ -1632,7 +1632,7 @@ void wxPreviewControlBar::SetZoomControl(int zoom)
 
 int wxPreviewControlBar::GetZoomControl()
 {
-    if (m_zoomControl && (m_zoomControl->GetStringSelection() != wxEmptyString))
+    if (m_zoomControl && !m_zoomControl->GetStringSelection().empty())
     {
         long val;
         if (m_zoomControl->GetStringSelection().BeforeFirst(wxT('%')).ToLong(&val))

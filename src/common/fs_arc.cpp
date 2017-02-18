@@ -478,7 +478,7 @@ wxString wxArchiveFSHandler::DoFind()
     wxString namestr, dir, filename;
     wxString match;
 
-    while (match == wxEmptyString)
+    while (match.empty())
     {
         m_FindEntry = m_Archive->GetNext(m_FindEntry);
 
