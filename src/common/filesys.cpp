@@ -242,7 +242,7 @@ wxString wxFileSystemHandler::GetAnchor(const wxString& location)
         if (c == wxT('#'))
             return location.Right(l-i-1);
         else if ((c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':')))
-            return wxEmptyString;
+            break;
     }
     return wxEmptyString;
 }

@@ -269,7 +269,7 @@ wxString wxGetStockHelpString(wxWindowID id, wxStockHelpStringClient client)
 
         default:
             // there's no stock help string for this ID / client
-            return wxEmptyString;
+            break;
     }
 
     #undef STOCKITEM
