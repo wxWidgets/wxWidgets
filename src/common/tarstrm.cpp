@@ -596,7 +596,7 @@ wxString wxTarEntry::GetInternalName(const wxString& name,
     while (!internal.empty() && internal.compare(0, 2, wxT("./")) == 0)
         internal.erase(0, 2);
     if (internal == wxT(".") || internal == wxT(".."))
-        internal = wxEmptyString;
+        internal.clear();
 
     return internal;
 }

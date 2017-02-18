@@ -535,7 +535,7 @@ bool wxLocale::Init(int language, int flags)
         ret = false;
 #elif defined(__WXMAC__)
     if (lang == wxLANGUAGE_DEFAULT)
-        locale = wxEmptyString;
+        locale.clear();
     else
         locale = info->CanonicalName;
 

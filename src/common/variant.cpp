@@ -72,7 +72,7 @@ void wxVariant::MakeNull()
 
 void wxVariant::Clear()
 {
-    m_name = wxEmptyString;
+    m_name.clear();
 }
 
 wxVariant::wxVariant(const wxVariant& variant)
@@ -2071,7 +2071,7 @@ bool wxVariantDataList::Write(wxSTD ostream& str) const
 
 bool wxVariantDataList::Write(wxString& str) const
 {
-    str = wxEmptyString;
+    str.clear();
     wxVariantList::compatibility_iterator node = m_value.GetFirst();
     while (node)
     {

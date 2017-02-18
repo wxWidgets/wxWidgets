@@ -86,7 +86,7 @@ private:
 static int wxFSEventsToWatcherFlags(FSEventStreamEventFlags flags,
 wxFSWWarningType& warning, wxString& msg)
 {
-    msg = "";
+    msg.clear();
     warning = wxFSW_WARNING_NONE;
 
     // see https://developer.apple.com/library/mac/documentation/Darwin/Reference/FSEvents_Ref/index.html
