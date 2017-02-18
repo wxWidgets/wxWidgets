@@ -20,7 +20,11 @@
 #endif  //__BORLANDC__
 
 #ifndef wxUSE_CONFIG_NATIVE
-    #define wxUSE_CONFIG_NATIVE 1
+    #if defined(__WINDOWS__) && !wxUSE_REGKEY
+        #define wxUSE_CONFIG_NATIVE 0
+    #else
+        #define wxUSE_CONFIG_NATIVE 1
+    #endif
 #endif
 
 #include "wx/config.h"

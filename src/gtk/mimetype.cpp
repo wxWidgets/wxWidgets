@@ -9,7 +9,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_MIMETYPE
+#if wxUSE_MIMETYPE && !defined(__WINDOWS__)
 
 #include "wx/gtk/mimetype.h"
 
@@ -64,4 +64,4 @@ wxMimeTypesManagerImpl *wxGTKMimeTypesManagerFactory::CreateMimeTypesManagerImpl
     return new wxGTKMimeTypesManagerImpl();
 }
 
-#endif // wxUSE_MIMETYPE
+#endif // wxUSE_MIMETYPE && !defined(__WINDOWS__)

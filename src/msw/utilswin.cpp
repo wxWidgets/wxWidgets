@@ -68,7 +68,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 
 bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
-#if wxUSE_IPC
+#if wxUSE_IPC && wxUSE_REGKEY
     if ( params.flags & wxBROWSER_NEW_WINDOW )
     {
         // ShellExecuteEx() opens the URL in an existing window by default so
@@ -134,7 +134,7 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
             }
         }
     }
-#endif // wxUSE_IPC
+#endif // wxUSE_IPC && wxUSE_REGKEY
 
     WinStruct<SHELLEXECUTEINFO> sei;
     sei.lpFile = params.GetPathOrURL().t_str();
