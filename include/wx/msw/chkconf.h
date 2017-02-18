@@ -183,7 +183,7 @@
     #define wxUSE_SECRETSTORE 0
 #endif
 
-#if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
+#if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__) && defined(__WXMSW__)
 #   undef wxUSE_CHECKLISTBOX
 #   define wxUSE_CHECKLISTBOX 0
 #endif
