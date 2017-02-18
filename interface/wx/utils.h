@@ -1184,10 +1184,10 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
     In wxPerl this function is called @c Wx::ExecuteArgs.
     @endWxPerlOnly
 */
-long wxExecute(char** argv, int flags = wxEXEC_ASYNC,
+long wxExecute(const char* const* argv, int flags = wxEXEC_ASYNC,
                 wxProcess* callback = NULL,
                 const wxExecuteEnv *env = NULL);
-long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
+long wxExecute(const wchar_t* const* argv, int flags = wxEXEC_ASYNC,
                 wxProcess* callback = NULL,
                 const wxExecuteEnv *env = NULL);
 //@}

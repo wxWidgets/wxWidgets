@@ -1071,7 +1071,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
 }
 
 template <typename CharType>
-long wxExecuteImpl(CharType **argv, int flags, wxProcess *handler,
+long wxExecuteImpl(const CharType* const* argv, int flags, wxProcess* handler,
                    const wxExecuteEnv *env)
 {
     wxString command;
@@ -1114,7 +1114,7 @@ long wxExecuteImpl(CharType **argv, int flags, wxProcess *handler,
     return wxExecute(command, flags, handler, env);
 }
 
-long wxExecute(char **argv, int flags, wxProcess *handler,
+long wxExecute(const char* const* argv, int flags, wxProcess* handler,
                const wxExecuteEnv *env)
 {
     return wxExecuteImpl(argv, flags, handler, env);
@@ -1122,7 +1122,7 @@ long wxExecute(char **argv, int flags, wxProcess *handler,
 
 #if wxUSE_UNICODE
 
-long wxExecute(wchar_t **argv, int flags, wxProcess *handler,
+long wxExecute(const wchar_t* const* argv, int flags, wxProcess* handler,
                const wxExecuteEnv *env)
 {
     return wxExecuteImpl(argv, flags, handler, env);

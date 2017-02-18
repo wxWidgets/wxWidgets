@@ -381,12 +381,12 @@ WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL,
                                 const wxExecuteEnv *env = NULL);
-WXDLLIMPEXP_BASE long wxExecute(char **argv,
+WXDLLIMPEXP_BASE long wxExecute(const char* const* argv,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL,
                                 const wxExecuteEnv *env = NULL);
 #if wxUSE_UNICODE
-WXDLLIMPEXP_BASE long wxExecute(wchar_t **argv,
+WXDLLIMPEXP_BASE long wxExecute(const wchar_t* const* argv,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL,
                                 const wxExecuteEnv *env = NULL);
