@@ -655,8 +655,8 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewRendererBase, wxObject);
 wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype,
                                                 wxDataViewCellMode WXUNUSED(mode),
                                                 int WXUNUSED(align) )
+    : m_variantType(varianttype)
 {
-    m_variantType = varianttype;
     m_owner = NULL;
     m_valueAdjuster = NULL;
 }
@@ -2204,10 +2204,10 @@ void wxDataViewListCtrl::OnSize( wxSizeEvent &event )
 wxDataViewTreeStoreNode::wxDataViewTreeStoreNode(
         wxDataViewTreeStoreNode *parent,
         const wxString &text, const wxIcon &icon, wxClientData *data )
+    : m_text(text)
+    , m_icon(icon)
 {
     m_parent = parent;
-    m_text = text;
-    m_icon = icon;
     m_data = data;
 }
 
@@ -2222,10 +2222,10 @@ WX_DEFINE_LIST(wxDataViewTreeStoreNodeList)
 
 wxDataViewTreeStoreContainerNode::wxDataViewTreeStoreContainerNode(
         wxDataViewTreeStoreNode *parent, const wxString &text,
-        const wxIcon &icon, const wxIcon &expanded, wxClientData *data ) :
-    wxDataViewTreeStoreNode( parent, text, icon, data )
+        const wxIcon &icon, const wxIcon &expanded, wxClientData *data )
+    : wxDataViewTreeStoreNode( parent, text, icon, data )
+    , m_iconExpanded(expanded)
 {
-    m_iconExpanded = expanded;
     m_isExpanded = false;
     m_children.DeleteContents(true);
 }
