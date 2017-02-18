@@ -312,7 +312,6 @@ wxArchiveFSHandler::wxArchiveFSHandler()
 {
     m_Archive = NULL;
     m_FindEntry = NULL;
-    m_ZipFile = m_Pattern = m_BaseDir = wxEmptyString;
     m_AllowDirs = m_AllowFiles = true;
     m_DirsFound = NULL;
     m_cache = NULL;
@@ -477,7 +476,7 @@ wxString wxArchiveFSHandler::FindNext()
 wxString wxArchiveFSHandler::DoFind()
 {
     wxString namestr, dir, filename;
-    wxString match = wxEmptyString;
+    wxString match;
 
     while (match == wxEmptyString)
     {

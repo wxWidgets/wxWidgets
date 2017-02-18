@@ -153,7 +153,7 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 /* static */
 wxString wxFileSystemHandler::GetProtocol(const wxString& location)
 {
-    wxString s = wxEmptyString;
+    wxString s;
     int i, l = location.length();
     bool fnd = false;
 
