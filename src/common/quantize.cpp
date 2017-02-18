@@ -52,6 +52,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+namespace
+{
+
 #define RGB_RED       0
 #define RGB_GREEN     1
 #define RGB_BLUE      2
@@ -993,6 +996,7 @@ fill_inverse_cmap (j_decompress_ptr cinfo, int c0, int c1, int c2)
  * Map some rows of pixels to the output colormapped representation.
  */
 
+#if 0
 void
 pass2_no_dither (j_decompress_ptr cinfo,
          JSAMPARRAY input_buf, JSAMPARRAY output_buf, int num_rows)
@@ -1025,6 +1029,7 @@ pass2_no_dither (j_decompress_ptr cinfo,
     }
   }
 }
+#endif
 
 void
 pass2_fs_dither (j_decompress_ptr cinfo,
@@ -1409,7 +1414,7 @@ prepare_range_limit_table (j_decompress_ptr cinfo)
       cinfo->sample_range_limit, CENTERJSAMPLE * sizeof(JSAMPLE));
 }
 
-
+} // anonymous namespace
 
 
 /*
