@@ -139,13 +139,10 @@ bool wxVariant::operator!= (const wxVariant& variant) const
 
 wxString wxVariant::MakeString() const
 {
+    wxString str;
     if (!IsNull())
-    {
-        wxString str;
-        if (GetData()->Write(str))
-            return str;
-    }
-    return wxEmptyString;
+        GetData()->Write(str);
+    return str;
 }
 
 void wxVariant::SetData(wxVariantData* data)

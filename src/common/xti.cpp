@@ -946,10 +946,11 @@ void wxGenericPropertyAccessor::GetProperty(const wxObject *object, wxAny& value
 
 wxString wxAnyGetAsString( const wxAny& data)
 {
-    if ( data.IsNull() || data.GetTypeInfo()==NULL )
-        return wxEmptyString;
-
     wxString s;
+
+    if ( data.IsNull() || data.GetTypeInfo()==NULL )
+        return s;
+
     data.GetTypeInfo()->ConvertToString(data,s);
     return s;
 }

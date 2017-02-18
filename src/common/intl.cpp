@@ -976,27 +976,31 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
 /* static */
 wxString wxLocale::GetLanguageName(int lang)
 {
+    wxString string;
+
     if ( lang == wxLANGUAGE_DEFAULT || lang == wxLANGUAGE_UNKNOWN )
-        return wxEmptyString;
+        return string;
 
     const wxLanguageInfo *info = GetLanguageInfo(lang);
-    if ( !info )
-        return wxEmptyString;
-    else
-        return info->Description;
+    if (info)
+        string = info->Description;
+
+    return string;
 }
 
 /* static */
 wxString wxLocale::GetLanguageCanonicalName(int lang)
 {
+    wxString string;
+
     if ( lang == wxLANGUAGE_DEFAULT || lang == wxLANGUAGE_UNKNOWN )
-        return wxEmptyString;
+        return string;
 
     const wxLanguageInfo *info = GetLanguageInfo(lang);
-    if ( !info )
-        return wxEmptyString;
-    else
-        return info->CanonicalName;
+    if (info)
+        string = info->CanonicalName;
+
+    return string;
 }
 
 /* static */

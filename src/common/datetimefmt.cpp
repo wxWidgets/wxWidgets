@@ -2247,18 +2247,20 @@ enum TimeSpanPart
 //  %l          milliseconds (000 - 999)
 wxString wxTimeSpan::Format(const wxString& format) const
 {
+    wxString str;
+
     // we deal with only positive time spans here and just add the sign in
     // front for the negative ones
     if ( IsNegative() )
     {
-        wxString str(Negate().Format(format));
-        return "-" + str;
+        str = "-";
+        str << Negate().Format(format);
+        return str;
     }
 
-    wxCHECK_MSG( !format.empty(), wxEmptyString,
+    wxCHECK_MSG( !format.empty(), str,
                  wxT("NULL format in wxTimeSpan::Format") );
 
-    wxString str;
     str.Alloc(format.length());
 
     // Suppose we have wxTimeSpan ts(1 /* hour */, 2 /* min */, 3 /* sec */)
