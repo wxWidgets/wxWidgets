@@ -488,6 +488,7 @@ void wxSearchCtrl::LayoutControls()
     int horizontalBorder = 1 + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
     int x = horizontalBorder;
     width -= horizontalBorder*2;
+    if (width < 0) width = 0;
 
     wxSize sizeSearch(0,0);
     wxSize sizeCancel(0,0);
