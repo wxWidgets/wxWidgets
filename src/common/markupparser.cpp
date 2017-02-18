@@ -442,7 +442,7 @@ wxString wxMarkupParser::Strip(const wxString& text)
 
         const wxString& GetText() const { return m_text; }
 
-        virtual void OnText(const wxString& text) wxOVERRIDE { m_text += text; }
+        virtual void OnText(const wxString& string) wxOVERRIDE { m_text += string; }
 
         virtual void OnBoldStart() wxOVERRIDE { }
         virtual void OnBoldEnd() wxOVERRIDE { }
