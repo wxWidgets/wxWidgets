@@ -1449,8 +1449,10 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
 
     DrawAnyText(textbuf, text_descent, size);
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + size * text.length() * 2/3 , y );
+    wxCoord w, h;
+    GetOwner()->GetMultiLineTextExtent(text, &w, &h);
+    CalcBoundingBox(x, y);
+    CalcBoundingBox(x + w , y + h);
 }
 
 void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )
@@ -1492,8 +1494,16 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + size * text.length() * 2/3 , y );
+    wxCoord w, h;
+    GetOwner()->GetMultiLineTextExtent(text, &w, &h);
+    // "upper left" and "upper right"
+    CalcBoundingBox(x, y);
+    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    // "bottom left" and "bottom right"
+    x += (wxCoord)(h*sin(rad));
+    y += (wxCoord)(h*cos(rad));
+    CalcBoundingBox(x, y);
+    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 }
 
 void wxPostScriptDCImpl::SetBackground (const wxBrush& brush)
