@@ -478,6 +478,8 @@ t_imagelist  = (
 
 t_list_of_numbers = xsd:string { pattern = "\d+(,\d+)*" }
 
+t_list_of_numbers_with_weights = xsd:string { pattern = "\d+(:\d+)?(,\d+(:\d+)?)*" }
+
 
 #
 # Handlers for non-<object> content:
@@ -1899,8 +1901,8 @@ wxFlexGridSizer =
         [xrc:p="o"] element nonflexiblegrowmode {_, ("wxFLEX_GROWMODE_NONE" |
                                                      "wxFLEX_GROWMODE_SPECIFIED" |
                                                      "wxFLEX_GROWMODE_ALL") }* &
-        [xrc:p="o"] element growablerows        {_, t_list_of_numbers }* &
-        [xrc:p="o"] element growablecols        {_, t_list_of_numbers }* &
+        [xrc:p="o"] element growablerows        {_, t_list_of_numbers_with_weights }* &
+        [xrc:p="o"] element growablecols        {_, t_list_of_numbers_with_weights }* &
         (wxGridSizer_item | objectRef)*
     }
 
@@ -1915,8 +1917,8 @@ wxGridBagSizer =
         [xrc:p="o"] element nonflexiblegrowmode {_, ("wxFLEX_GROWMODE_NONE" |
                                                      "wxFLEX_GROWMODE_SPECIFIED" |
                                                      "wxFLEX_GROWMODE_ALL") }* &
-        [xrc:p="o"] element growablerows        {_, t_list_of_numbers }* &
-        [xrc:p="o"] element growablecols        {_, t_list_of_numbers }* &
+        [xrc:p="o"] element growablerows        {_, t_list_of_numbers_with_weights }* &
+        [xrc:p="o"] element growablecols        {_, t_list_of_numbers_with_weights }* &
         (wxSizerGB_item | objectRef)*
     }
 
