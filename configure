@@ -23642,7 +23642,7 @@ $as_echo "found in $ac_find_includes" >&6; }
     fi
   fi
 
-            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
+            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
         else
             save_CFLAGS=$CFLAGS
             CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
@@ -23715,7 +23715,7 @@ $as_echo "found in $ac_find_libraries" >&6; }
     fi
   fi
 
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
         else
                                                 save_CFLAGS=$CFLAGS
             CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
@@ -23769,7 +23769,7 @@ $as_echo_n "checking if we need -lXp and/or -lSM -lICE... " >&6; }
                 for libsm_ice in "" " -lSM -lICE"; do
                     if test "$libs_found" = 0; then
                         save_LIBS="$LIBS"
-                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
+                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt ${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
                         CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
@@ -23796,8 +23796,8 @@ if ac_fn_c_try_link "$LINENO"; then :
 
                                 libp_link="$libp"
                                 libsm_ice_link="$libsm_ice"
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: result: need${libp_link}${libsm_ice_link}" >&5
-$as_echo "need${libp_link}${libsm_ice_link}" >&6; }
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: result: need ${libp_link} ${libsm_ice_link}" >&5
+$as_echo "need ${libp_link} ${libsm_ice_link}" >&6; }
                                 libs_found=1
 
 fi
@@ -23942,7 +23942,7 @@ $as_echo "$wx_cv_lib_lesstif" >&6; }
 
         CFLAGS=$save_CFLAGS
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY ${libsgm_link} -lXm ${libp_link} -lXmu -lXext -lXt ${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
     fi
@@ -23977,7 +23977,7 @@ $as_echo_n "checking for Xpm library... " >&6; }
     fi
   fi
 
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: found in $ac_find_libraries" >&5
 $as_echo "found in $ac_find_libraries" >&6; }
 
@@ -26288,7 +26288,7 @@ fi
 
                         if test "$ac_path_to_link" != " -L/usr/lib" -a \
                                 "$ac_path_to_link" != "$LDFLAGS_GL" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
 
@@ -26654,7 +26654,7 @@ fi
   fi
 
                         if test "$ac_path_to_link" != " -L/usr/lib" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
                       OPENGL_LIBS="-lMesaGL -lMesaGLU"
@@ -31043,7 +31043,7 @@ if test "x$ac_cv_lib_dl_dlopen" = xyes; then :
                                 $as_echo "#define HAVE_DLOPEN 1" >>confdefs.h
 
                                 HAVE_DL_FUNCS=1
-                                DL_LINK=" -ldl$DL_LINK"
+                                DL_LINK="-ldl $DL_LINK"
 
 else
 
@@ -31100,7 +31100,7 @@ $as_echo "$ac_cv_lib_shl_load_dld" >&6; }
 if test "x$ac_cv_lib_shl_load_dld" = xyes; then :
 
                                                                 HAVE_SHL_FUNCS=1
-                                                                DL_LINK=" -ldld$DL_LINK"
+                                                                DL_LINK="-ldld $DL_LINK"
 
 fi
 
@@ -33560,7 +33560,7 @@ $as_echo "yes" >&6; }
                             WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fvtable-thunks"
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-            LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
+            LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
                 $as_echo "#define wxUSE_OLE 1" >>confdefs.h
 

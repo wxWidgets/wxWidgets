@@ -3042,7 +3042,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found in $ac_find_includes)
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
+            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
         else
             save_CFLAGS=$CFLAGS
             CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
@@ -3076,7 +3076,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             AC_MSG_RESULT(found in $ac_find_libraries)
 
             WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
         else
             dnl it might happen that we found headers in one of the standard
             dnl paths but the libs are elsewhere but still in default (linker)
@@ -3117,7 +3117,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 for libsm_ice in "" " -lSM -lICE"; do
                     if test "$libs_found" = 0; then
                         save_LIBS="$LIBS"
-                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
+                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt ${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
                         CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
@@ -3136,7 +3136,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                                 libp_link="$libp"
                                 libsm_ice_link="$libsm_ice"
                                 AC_MSG_RESULT(
-                                    [need${libp_link}${libsm_ice_link}])
+                                    [need ${libp_link} ${libsm_ice_link}])
                                 libs_found=1
                             ], []
                         )
@@ -3199,7 +3199,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         CFLAGS=$save_CFLAGS
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY ${libsgm_link} -lXm ${libp_link} -lXmu -lXext -lXt ${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
     fi
@@ -3212,7 +3212,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             WX_PATH_FIND_LIBRARIES(Xpm)
             if test "$ac_find_libraries" != "" ; then
                 WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
                 AC_MSG_RESULT(found in $ac_find_libraries)
 
                 AC_CACHE_CHECK([for X11/xpm.h],
@@ -3485,7 +3485,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                         if test "$ac_path_to_link" != " -L/usr/lib" -a \
                                 "$ac_path_to_link" != "$LDFLAGS_GL" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
 
@@ -3500,7 +3500,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                       if test "$ac_find_libraries" != "std" ; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                         if test "$ac_path_to_link" != " -L/usr/lib" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
                       OPENGL_LIBS="-lMesaGL -lMesaGLU"
@@ -5201,7 +5201,7 @@ if test "$TOOLKIT" != "MSW"; then
                             [
                                 AC_DEFINE(HAVE_DLOPEN)
                                 HAVE_DL_FUNCS=1
-                                DL_LINK=" -ldl$DL_LINK"
+                                DL_LINK="-ldl $DL_LINK"
                             ],
                             [
                                 AC_CHECK_FUNCS(shl_load,
@@ -5213,7 +5213,7 @@ if test "$TOOLKIT" != "MSW"; then
                                                 AC_CHECK_LIB(shl_load, dld,
                                                              [
                                                                 HAVE_SHL_FUNCS=1
-                                                                DL_LINK=" -ldld$DL_LINK"
+                                                                DL_LINK="-ldld $DL_LINK"
                                                              ])
                                               ])
                             ])
@@ -6308,7 +6308,7 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                            [AC_MSG_RESULT(no)],
                            [AC_MSG_RESULT(yes)
                             WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fvtable-thunks"])
-            LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
+            LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
                 AC_DEFINE(wxUSE_OLE)
                 AC_DEFINE(wxUSE_OLE_AUTOMATION)
