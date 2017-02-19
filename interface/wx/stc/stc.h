@@ -2768,91 +2768,81 @@
     documentation can be found in the Scintilla website (http://www.scintilla.org/).
 
     @beginEventEmissionTable{wxStyledTextEvent}
-    @event{EVT_STC_CHANGE(id, fn)}
-        TOWRITE
-    @event{EVT_STC_STYLENEEDED(id, fn)}
-        TOWRITE
-    @event{EVT_STC_CHARADDED(id, fn)}
-        TOWRITE
-    @event{EVT_STC_SAVEPOINTREACHED(id, fn)}
-        TOWRITE
-    @event{EVT_STC_SAVEPOINTLEFT(id, fn)}
-        TOWRITE
-    @event{EVT_STC_ROMODIFYATTEMPT(id, fn)}
-        TOWRITE
-    @event{EVT_STC_DOUBLECLICK(id, fn)}
-        TOWRITE
-    @event{EVT_STC_UPDATEUI(id, fn)}
-        TOWRITE
-    @event{EVT_STC_MODIFIED(id, fn)}
-        TOWRITE
-    @event{EVT_STC_MACRORECORD(id, fn)}
-        TOWRITE
-    @event{EVT_STC_MARGINCLICK(id, fn)}
-        TOWRITE
-    @event{EVT_STC_NEEDSHOWN(id, fn)}
-        TOWRITE
-    @event{EVT_STC_PAINTED(id, fn)}
-        TOWRITE
-    @event{EVT_STC_USERLISTSELECTION(id, fn)}
-        TOWRITE
-    @event{EVT_STC_DWELLSTART(id, fn)}
-        TOWRITE
-    @event{EVT_STC_DWELLEND(id, fn)}
-        TOWRITE
-    @event{EVT_STC_START_DRAG(id, fn)}
-        Process a @c wxEVT_STC_START_DRAG event, generated when text is being dragged from the control. Details of the drag may be altered by changing the respective fields of the event; in particular, set an empty string to prohibit the drag entirely. Valid event functions: @link wxStyledTextEvent::GetDragFlags GetDragFlags@endlink, @link wxStyledTextEvent::SetDragFlags SetDragFlags@endlink, @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink.
-    @event{EVT_STC_DRAG_OVER(id, fn)}
-        TOWRITE
-    @event{EVT_STC_DO_DROP(id, fn)}
-        Process a @c wxEVT_STC_DO_DROP event, generated when text is being dropped into the control. Details of the drag may be altered by changing the respective fields of the event. Valid event functions: @link wxStyledTextEvent::GetDragResult GetDragResult@endlink, @link wxStyledTextEvent::SetDragResult SetDragResult@endlink, @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::SetPosition SetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink, @link wxStyledTextEvent::GetX GetX@endlink, @link wxStyledTextEvent::GetY GetY@endlink.
-    @event{EVT_STC_ZOOM(id, fn)}
-        TOWRITE
-    @event{EVT_STC_HOTSPOT_CLICK(id, fn)}
-        TOWRITE
-    @event{EVT_STC_HOTSPOT_DCLICK(id, fn)}
-        TOWRITE
-    @event{EVT_STC_CALLTIP_CLICK(id, fn)}
-        TOWRITE
-    @event{EVT_STC_AUTOCOMP_SELECTION(id, fn)}
-        TOWRITE
-    @event{EVT_STC_INDICATOR_CLICK(id, fn)}
-        TOWRITE
-    @event{EVT_STC_INDICATOR_RELEASE(id, fn)}
-        TOWRITE
     @event{EVT_STC_AUTOCOMP_CANCELLED(id, fn)}
-        TOWRITE
+        Process a @c wxEVT_STC_AUTOCOMP_CANCELLED event.
     @event{EVT_STC_AUTOCOMP_CHAR_DELETED(id, fn)}
-        TOWRITE
-    @event{EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn)}
-        TOWRITE
+        Process a @c wxEVT_STC_AUTOCOMP_CHAR_DELETED event.
+    @event{EVT_STC_AUTOCOMP_COMPLETED(id, fn)}
+        Process a @c wxEVT_STC_AUTOCOMP_COMPLETED event.
+        @since 3.1.1
+
+    @event{EVT_STC_AUTOCOMP_SELECTION(id, fn)}
+        Process a @c wxEVT_STC_AUTOCOMP_SELECTION event.
+    @event{EVT_STC_CALLTIP_CLICK(id, fn)}
+        Process a @c wxEVT_STC_CALLTIP_CLICK event.
+    @event{EVT_STC_CHANGE(id, fn)}
+        Process a @c wxEVT_STC_CHANGE event.
+    @event{EVT_STC_CHARADDED(id, fn)}
+        Process a @c wxEVT_STC_CHARADDED event.
     @event{EVT_STC_CLIPBOARD_COPY(id, fn)}
-        Process a @c wxEVT_STC_CLIPBOARD_COPY event, generated when text is being cut or copied to the clipboard. Use wxStyledTextEvent::SetString() to modify the text that will be placed on the clipboard. Valid event functions: @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink.
+        Process a @c wxEVT_STC_CLIPBOARD_COPY event.
         @since 3.1.0
 
     @event{EVT_STC_CLIPBOARD_PASTE(id, fn)}
-        Process a @c wxEVT_STC_CLIPBOARD_PASTE event, generated when text is being pasted from the clipboard. Use wxStyledTextEvent::SetString() to modify the text that will be inserted into the control. Valid event functions: @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink.
+        Process a @c wxEVT_STC_CLIPBOARD_PASTE event.
         @since 3.1.0
 
-    @event{EVT_STC_AUTOCOMP_COMPLETED(id, fn)}
-        Process a @c wxEVT_STC_AUTOCOMP_COMPLETED event, generated after an autocompletion list has closed and inserted its text into the control. Valid event functions: @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::GetKey GetKey@endlink, @link wxStyledTextEvent::GetListCompletionMethod GetListCompletionMethod@endlink.
-        @since 3.1.1
-
+    @event{EVT_STC_DO_DROP(id, fn)}
+        Process a @c wxEVT_STC_DO_DROP event.
+    @event{EVT_STC_DOUBLECLICK(id, fn)}
+        Process a @c wxEVT_STC_DOUBLECLICK event.
+    @event{EVT_STC_DRAG_OVER(id, fn)}
+        Process a @c wxEVT_STC_DRAG_OVER event.
+    @event{EVT_STC_DWELLEND(id, fn)}
+        Process a @c wxEVT_STC_DWELLEND event.
+    @event{EVT_STC_DWELLSTART(id, fn)}
+        Process a @c wxEVT_STC_DWELLSTART event.
+    @event{EVT_STC_HOTSPOT_CLICK(id, fn)}
+        Process a @c wxEVT_STC_HOTSPOT_CLICK event.
+    @event{EVT_STC_HOTSPOT_DCLICK(id, fn)}
+        Process a @c wxEVT_STC_HOTSPOT_DCLICK event.
+    @event{EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn)}
+        Process a @c wxEVT_STC_HOTSPOT_RELEASE_CLICK event.
+    @event{EVT_STC_INDICATOR_CLICK(id, fn)}
+        Process a @c wxEVT_STC_INDICATOR_CLICK event.
+    @event{EVT_STC_INDICATOR_RELEASE(id, fn)}
+        Process a @c wxEVT_STC_INDICATOR_RELEASE event.
+    @event{EVT_STC_MACRORECORD(id, fn)}
+        Process a @c wxEVT_STC_MACRORECORD event.
     @event{EVT_STC_MARGIN_RIGHT_CLICK(id, fn)}
-        Process a @c wxEVT_STC_MARGIN_RIGHT_CLICK event. Valid event functions: @link wxStyledTextEvent::GetMargin GetMargin@endlink, @link wxStyledTextEvent::GetModifiers GetModifiers@endlink, @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetAlt GetAlt@endlink, @link wxStyledTextEvent::GetControl GetControl@endlink, @link wxStyledTextEvent::GetShift GetShift@endlink.
+        Process a @c wxEVT_STC_MARGIN_RIGHT_CLICK event.
         @since 3.1.1
 
+    @event{EVT_STC_MARGINCLICK(id, fn)}
+        Process a @c wxEVT_STC_MARGINCLICK event.
+    @event{EVT_STC_MODIFIED(id, fn)}
+        Process a @c wxEVT_STC_MODIFIED event.
+    @event{EVT_STC_NEEDSHOWN(id, fn)}
+        Process a @c wxEVT_STC_NEEDSHOWN event.
+    @event{EVT_STC_PAINTED(id, fn)}
+        Process a @c wxEVT_STC_PAINTED event.
+    @event{EVT_STC_ROMODIFYATTEMPT(id, fn)}
+        Process a @c wxEVT_STC_ROMODIFYATTEMPT event.
+    @event{EVT_STC_SAVEPOINTLEFT(id, fn)}
+        Process a @c wxEVT_STC_SAVEPOINTLEFT event.
+    @event{EVT_STC_SAVEPOINTREACHED(id, fn)}
+        Process a @c wxEVT_STC_SAVEPOINTREACHED event.
+    @event{EVT_STC_START_DRAG(id, fn)}
+        Process a @c wxEVT_STC_START_DRAG event.
+    @event{EVT_STC_STYLENEEDED(id, fn)}
+        Process a @c wxEVT_STC_STYLENEEDED event.
+    @event{EVT_STC_UPDATEUI(id, fn)}
+        Process a @c wxEVT_STC_UPDATEUI event.
+    @event{EVT_STC_USERLISTSELECTION(id, fn)}
+        Process a @c wxEVT_STC_USERLISTSELECTION event.
+    @event{EVT_STC_ZOOM(id, fn)}
+        Process a @c wxEVT_STC_ZOOM event.
     @endEventTable
-
-    Most of the scintilla notifications are mapped to a similarly named
-    wxStyledTextEvent.  However a few of the notifications would only offer
-    information available in other wxWidgets event types, and in those cases a
-    corresponding wxStyledTextEvent is not defined. Currently, the
-    @c wxEVT_KEY_DOWN event is used instead of the SCN_KEY notification.  The
-    regular wxWidgets drag and drop functionality can be used instead of the
-    SCN_URIDROPPED notification. The @c wxEVT_SET_FOCUS event is used instead
-    of the SCN_FOCUSIN notification.  And the @c wxEVT_KILL_FOCUS event is used
-    instead of the SCN_FOCUSOUT notification.
 
     @library{wxstc}
     @category{stc}
@@ -6661,7 +6651,445 @@ public:
 
     The type of events sent from wxStyledTextCtrl.
 
-    @todo list styled text ctrl events.
+    @beginEventTable{wxStyledTextEvent}
+    @event{EVT_STC_AUTOCOMP_CANCELLED(id, fn)}
+        Process a @c wxEVT_STC_AUTOCOMP_CANCELLED event.
+    @event{EVT_STC_AUTOCOMP_CHAR_DELETED(id, fn)}
+        Process a @c wxEVT_STC_AUTOCOMP_CHAR_DELETED event.
+    @event{EVT_STC_AUTOCOMP_COMPLETED(id, fn)}
+        Process a @c wxEVT_STC_AUTOCOMP_COMPLETED event.
+        @since 3.1.1
+
+    @event{EVT_STC_AUTOCOMP_SELECTION(id, fn)}
+        Process a @c wxEVT_STC_AUTOCOMP_SELECTION event.
+    @event{EVT_STC_CALLTIP_CLICK(id, fn)}
+        Process a @c wxEVT_STC_CALLTIP_CLICK event.
+    @event{EVT_STC_CHANGE(id, fn)}
+        Process a @c wxEVT_STC_CHANGE event.
+    @event{EVT_STC_CHARADDED(id, fn)}
+        Process a @c wxEVT_STC_CHARADDED event.
+    @event{EVT_STC_CLIPBOARD_COPY(id, fn)}
+        Process a @c wxEVT_STC_CLIPBOARD_COPY event.
+        @since 3.1.0
+
+    @event{EVT_STC_CLIPBOARD_PASTE(id, fn)}
+        Process a @c wxEVT_STC_CLIPBOARD_PASTE event.
+        @since 3.1.0
+
+    @event{EVT_STC_DO_DROP(id, fn)}
+        Process a @c wxEVT_STC_DO_DROP event.
+    @event{EVT_STC_DOUBLECLICK(id, fn)}
+        Process a @c wxEVT_STC_DOUBLECLICK event.
+    @event{EVT_STC_DRAG_OVER(id, fn)}
+        Process a @c wxEVT_STC_DRAG_OVER event.
+    @event{EVT_STC_DWELLEND(id, fn)}
+        Process a @c wxEVT_STC_DWELLEND event.
+    @event{EVT_STC_DWELLSTART(id, fn)}
+        Process a @c wxEVT_STC_DWELLSTART event.
+    @event{EVT_STC_HOTSPOT_CLICK(id, fn)}
+        Process a @c wxEVT_STC_HOTSPOT_CLICK event.
+    @event{EVT_STC_HOTSPOT_DCLICK(id, fn)}
+        Process a @c wxEVT_STC_HOTSPOT_DCLICK event.
+    @event{EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn)}
+        Process a @c wxEVT_STC_HOTSPOT_RELEASE_CLICK event.
+    @event{EVT_STC_INDICATOR_CLICK(id, fn)}
+        Process a @c wxEVT_STC_INDICATOR_CLICK event.
+    @event{EVT_STC_INDICATOR_RELEASE(id, fn)}
+        Process a @c wxEVT_STC_INDICATOR_RELEASE event.
+    @event{EVT_STC_MACRORECORD(id, fn)}
+        Process a @c wxEVT_STC_MACRORECORD event.
+    @event{EVT_STC_MARGIN_RIGHT_CLICK(id, fn)}
+        Process a @c wxEVT_STC_MARGIN_RIGHT_CLICK event.
+        @since 3.1.1
+
+    @event{EVT_STC_MARGINCLICK(id, fn)}
+        Process a @c wxEVT_STC_MARGINCLICK event.
+    @event{EVT_STC_MODIFIED(id, fn)}
+        Process a @c wxEVT_STC_MODIFIED event.
+    @event{EVT_STC_NEEDSHOWN(id, fn)}
+        Process a @c wxEVT_STC_NEEDSHOWN event.
+    @event{EVT_STC_PAINTED(id, fn)}
+        Process a @c wxEVT_STC_PAINTED event.
+    @event{EVT_STC_ROMODIFYATTEMPT(id, fn)}
+        Process a @c wxEVT_STC_ROMODIFYATTEMPT event.
+    @event{EVT_STC_SAVEPOINTLEFT(id, fn)}
+        Process a @c wxEVT_STC_SAVEPOINTLEFT event.
+    @event{EVT_STC_SAVEPOINTREACHED(id, fn)}
+        Process a @c wxEVT_STC_SAVEPOINTREACHED event.
+    @event{EVT_STC_START_DRAG(id, fn)}
+        Process a @c wxEVT_STC_START_DRAG event.
+    @event{EVT_STC_STYLENEEDED(id, fn)}
+        Process a @c wxEVT_STC_STYLENEEDED event.
+    @event{EVT_STC_UPDATEUI(id, fn)}
+        Process a @c wxEVT_STC_UPDATEUI event.
+    @event{EVT_STC_USERLISTSELECTION(id, fn)}
+        Process a @c wxEVT_STC_USERLISTSELECTION event.
+    @event{EVT_STC_ZOOM(id, fn)}
+        Process a @c wxEVT_STC_ZOOM event.
+    @endEventTable
+
+    Most of the Scintilla notifications are mapped to a similarly named
+    wxStyledTextEvent.  However a few of the notifications would only offer
+    information available in other wxWidgets event types, and in those cases a
+    corresponding wxStyledTextEvent is not defined. Currently, the
+    @c wxEVT_KEY_DOWN event is used instead of the @c SCN_KEY notification.  The
+    regular wxWidgets drag and drop functionality can be used instead of the
+    @c SCN_URIDROPPED notification. The @c wxEVT_SET_FOCUS event is used instead
+    of the @c SCN_FOCUSIN notification.  And the @c wxEVT_KILL_FOCUS event is
+    used instead of the @c SCN_FOCUSOUT notification.
+
+    @section event_types Event Types
+
+    The following is a brief description of when the control generates these
+    events and a list of which methods provide relevent information.  Additional
+    details can be found in the Scintilla documentation
+    (http://www.scintilla.org/ScintillaDoc.html#Notifications).
+
+    @c wxEVT_STC_AUTOCOMP_CANCELLED
+
+    - Generated when an autocompletion list has been canceled.
+
+    - Valid event functions: none.
+
+    @c wxEVT_STC_AUTOCOMP_CHAR_DELETED
+
+    - Generated when a character has been deleted from an autocompletion list.
+
+    - Valid event functions: none.
+
+    @c wxEVT_STC_AUTOCOMP_COMPLETED
+
+    - Generated after an autocompletion list has closed and inserted its text
+    into the control.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetKey GetKey@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::GetListCompletionMethod GetListCompletionMethod@endlink.
+
+    @c wxEVT_STC_AUTOCOMP_SELECTION
+
+    - Generated when an entry has been selected in an autocompletion list but
+    before the text has been inserted.
+
+    - To prevent the insertion, call @link wxStyledTextCtrl::AutoCompCancel
+    wxStyledTextCtrl::AutoCompCancel@endlink in the event handler.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetKey GetKey@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::GetListCompletionMethod GetListCompletionMethod@endlink.
+
+    @c wxEVT_STC_CALLTIP_CLICK
+
+    - Generated when a calltip has been clicked.
+
+    - @link wxStyledTextEvent::GetPosition GetPosition@endlink will return 1 if
+    the up arrow has been clicked, 2 if the down arrow has been clicked, and 0
+    for all other clicks.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink.
+
+    @c wxEVT_STC_CHANGE
+
+    - Generated when the text of the document has changed.
+
+    - This an older style event and should probably not be used in new code.
+
+    - Valid event functions: none.
+
+    @c wxEVT_STC_CHARADDED
+
+    - Generated when a character has been added to the control.
+
+    - Valid event functions: @link wxStyledTextEvent::GetKey GetKey@endlink.
+
+    @c wxEVT_STC_CLIPBOARD_COPY
+
+    - Generated when text is being cut or copied to the clipboard.
+
+    - Use wxStyledTextEvent::SetString() to modify the text that will be placed
+    on the clipboard.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::SetString SetString@endlink.
+
+    @c wxEVT_STC_CLIPBOARD_PASTE
+
+    - Generated when text is being pasted from the clipboard.
+
+    - Use wxStyledTextEvent::SetString() to modify the text that will be
+    inserted into the control.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::SetString SetString@endlink.
+
+    @c wxEVT_STC_DO_DROP
+
+    - Generated when text is being dropped into the control.
+
+    - Details of the drag may be altered by changing the respective fields of
+    the event.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetDragResult GetDragResult@endlink,
+    @link wxStyledTextEvent::SetDragResult SetDragResult@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::SetPosition SetPosition@endlink,
+    @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::SetString SetString@endlink,
+    @link wxStyledTextEvent::GetX GetX@endlink,
+    @link wxStyledTextEvent::GetY GetY@endlink.
+
+    @c wxEVT_STC_DOUBLECLICK
+
+    - Generated when the control has been double-clicked.
+
+    - Valid event functions: @link wxStyledTextEvent::GetLine GetLine@endlink,
+    @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetAlt GetAlt@endlink,
+    @link wxStyledTextEvent::GetControl GetControl@endlink,
+    @link wxStyledTextEvent::GetShift GetShift@endlink.
+
+    @c wxEVT_STC_DRAG_OVER
+
+    - Generated repeatedly as text is being dragged inside the control.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetDragResult GetDragResult@endlink,
+    @link wxStyledTextEvent::SetDragResult SetDragResult@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetX GetX@endlink,
+    @link wxStyledTextEvent::GetY GetY@endlink.
+
+    @c wxEVT_STC_DWELLEND
+
+    - Generated when the mouse has been moved after a
+    @c wxEVT_STC_DWELLSTART event.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetX GetX@endlink,
+    @link wxStyledTextEvent::GetY GetY@endlink.
+
+    @c wxEVT_STC_DWELLSTART
+
+    - Generated when the mouse has remained still for a certain amount of time.
+
+    - The amount of time can be specified with
+    @link wxStyledTextCtrl::SetMouseDwellTime
+    wxStyledTextCtrl::SetMouseDwellTime@endlink.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetX GetX@endlink,
+    @link wxStyledTextEvent::GetY GetY@endlink.
+
+    @c wxEVT_STC_HOTSPOT_CLICK
+
+    - Generated when a hotspot has been clicked.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetAlt GetAlt@endlink,
+    @link wxStyledTextEvent::GetControl GetControl@endlink,
+    @link wxStyledTextEvent::GetShift GetShift@endlink.
+
+    @c wxEVT_STC_HOTSPOT_DCLICK
+
+    - Generated when a hotspot has been double-clicked.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetAlt GetAlt@endlink,
+    @link wxStyledTextEvent::GetControl GetControl@endlink,
+    @link wxStyledTextEvent::GetShift GetShift@endlink.
+
+    @c wxEVT_STC_HOTSPOT_RELEASE_CLICK
+
+    - Generated when a click over a hotspot has been released.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetAlt GetAlt@endlink,
+    @link wxStyledTextEvent::GetControl GetControl@endlink,
+    @link wxStyledTextEvent::GetShift GetShift@endlink.
+
+    @c wxEVT_STC_INDICATOR_CLICK
+
+    - Generated when a indicator has been clicked.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetAlt GetAlt@endlink,
+    @link wxStyledTextEvent::GetControl GetControl@endlink,
+    @link wxStyledTextEvent::GetShift GetShift@endlink.
+
+    @c wxEVT_STC_INDICATOR_RELEASE
+
+    - Generated when a click over a indicator has been released.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetAlt GetAlt@endlink,
+    @link wxStyledTextEvent::GetControl GetControl@endlink,
+    @link wxStyledTextEvent::GetShift GetShift@endlink.
+
+    @c wxEVT_STC_MACRORECORD
+
+    - Generated while macro recording is in progress.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetMessage GetMessage@endlink,
+    @link wxStyledTextEvent::GetLParam GetLParam@endlink,
+    @link wxStyledTextEvent::GetWParam GetWParam@endlink.
+
+    @c wxEVT_STC_MARGIN_RIGHT_CLICK
+
+    - Generated when one of the margins is clicked with the right mouse button.
+
+    - This event is only generated if @link wxStyledTextCtrl::SetMarginSensitive
+    SetMarginSensitive@endlink has been called for one or more of the margins.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetMargin GetMargin@endlink,
+    @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetAlt GetAlt@endlink,
+    @link wxStyledTextEvent::GetControl GetControl@endlink,
+    @link wxStyledTextEvent::GetShift GetShift@endlink.
+
+    @c wxEVT_STC_MARGINCLICK
+
+    - Generated when one of the margins is clicked.
+
+    - This event is only generated if @link wxStyledTextCtrl::SetMarginSensitive
+    SetMarginSensitive@endlink has been called for one or more of the margins.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetMargin GetMargin@endlink,
+    @link wxStyledTextEvent::GetModifiers GetModifiers@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetAlt GetAlt@endlink,
+    @link wxStyledTextEvent::GetControl GetControl@endlink,
+    @link wxStyledTextEvent::GetShift GetShift@endlink.
+
+    @c wxEVT_STC_MODIFIED
+
+    - Generated when the contents of the control have changed or are about to
+    change.
+    - You should not attempt to make any changes to the control inside a
+    handler for this event.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetAnnotationsLinesAdded GetAnnotationsLinesAdded@endlink,
+    @link wxStyledTextEvent::GetFoldLevelNow GetFoldLevelNow@endlink,
+    @link wxStyledTextEvent::GetFoldLevelPrev GetFoldLevelPrev@endlink,
+    @link wxStyledTextEvent::GetLength GetLength@endlink,
+    @link wxStyledTextEvent::GetLine GetLine@endlink,
+    @link wxStyledTextEvent::GetLinesAdded GetLinesAdded@endlink,
+    @link wxStyledTextEvent::GetModificationType GetModificationType@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::GetToken GetToken@endlink.
+
+    @c wxEVT_STC_NEEDSHOWN
+
+    - Generated when certain lines should be made visible by scrolling the text
+    in the control.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetLength GetLength@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink.
+
+    @c wxEVT_STC_PAINTED
+
+    - Generated when the control has been refreshed.
+
+    - Valid event functions: none.
+
+    @c wxEVT_STC_ROMODIFYATTEMPT
+
+    - Generated when an attempt has been made to change the control's text after
+    it has been set read-only.
+
+    - Valid event functions: none.
+
+    @c wxEVT_STC_SAVEPOINTREACHED
+
+    - Generated when the undo history has been made empty.
+
+    - Valid event functions: none.
+
+    @c wxEVT_STC_SAVEPOINTLEFT
+
+    - Generated when the undo history is no longer empty.
+
+    - Valid event functions: none.
+
+    @c wxEVT_STC_START_DRAG
+
+    - Generated when text is being dragged from the control.
+
+    - Details of the drag may be altered by changing the respective fields of
+    the event; in particular, set an empty string to prohibit the drag entirely.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetDragFlags GetDragFlags@endlink,
+    @link wxStyledTextEvent::SetDragFlags SetDragFlags@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::SetString SetString@endlink.
+
+    @c wxEVT_STC_STYLENEEDED
+
+    - Generated when the control has determined that style bytes should be set
+    for a portion of the document.
+    - These events are only sent if the lexer is set to
+    @link wxStyledTextEvent::wxSTC_LEX_CONTAINER wxSTC_LEX_CONTAINER@endlink.
+
+    - Valid event functions: @link wxStyledTextEvent::GetPosition
+    GetPosition@endlink.
+
+    @c wxEVT_STC_UPDATEUI
+
+    - Generated when the text, style, cursor position, selection, or scrolling
+    of the control has changed.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetUpdated GetUpdated@endlink.
+
+    @c wxEVT_STC_USERLISTSELECTION
+
+    - Generated when a selection has been made from a user list.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetListType GetListType@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::GetKey GetKey@endlink,
+    @link wxStyledTextEvent::GetListCompletionMethod GetListCompletionMethod@endlink.
+
+    @c wxEVT_STC_ZOOM
+
+    - Generated when the zoom factor of the control has been changed either by
+    the user or a call to @link wxStyledTextCtrl::ZoomIn
+    wxStyledTextCtrl::ZoomIn@endlink/@link wxStyledTextCtrl::ZoomOut
+    ZoomOut@endlink.
+
+    - Valid event functions: none.
 
     @library{wxstc}
     @category{events,stc}
@@ -6669,70 +7097,545 @@ public:
 
 class wxStyledTextEvent : public wxCommandEvent {
 public:
+    /**
+        Constructor
+    */
     wxStyledTextEvent(wxEventType commandType=0, int id=0);
+
+    /**
+        Copy constructor
+    */
     wxStyledTextEvent(const wxStyledTextEvent& event);
+
+    /**
+        Destructor
+    */
     ~wxStyledTextEvent();
 
-    void SetPosition(int pos);
-    void SetKey(int k);
-    void SetModifiers(int m);
-    void SetModificationType(int t);
-    void SetText(const wxString& t);
-    void SetLength(int len);
-    void SetLinesAdded(int num);
-    void SetLine(int val);
-    void SetFoldLevelNow(int val);
-    void SetFoldLevelPrev(int val);
-    void SetMargin(int val);
-    void SetMessage(int val);
-    void SetWParam(int val);
-    void SetLParam(int val);
-    void SetListType(int val);
-    void SetX(int val);
-    void SetY(int val);
-    void SetToken(int val);
-    void SetAnnotationLinesAdded(int val);
-    void SetUpdated(int val);
-    void SetListCompletionMethod(int val);
-    void SetDragText(const wxString& val);
-    void SetDragFlags(int flags);
-    void SetDragResult(wxDragResult val);
-
-    int  GetPosition() const;
-    int  GetKey()  const;
-    int  GetModifiers() const;
-    int  GetModificationType() const;
     /**
-        @deprecated Use GetString() instead.
-     */
-    wxString GetText() const;
-    int  GetLength() const;
-    int  GetLinesAdded() const;
-    int  GetLine() const;
-    int  GetFoldLevelNow() const;
-    int  GetFoldLevelPrev() const;
-    int  GetMargin() const;
-    int  GetMessage() const;
-    int  GetWParam() const;
-    int  GetLParam() const;
-    int  GetListType() const;
-    int  GetX() const;
-    int  GetY() const;
-    int  GetToken() const;
+        Returns true if the Alt key is pressed.
+
+        This method is valid for the following event types:
+        - @c wxEVT_STC_DOUBLECLICK
+        - @c wxEVT_STC_MARGINCLICK
+        - @c wxEVT_STC_HOTSPOT_CLICK
+        - @c wxEVT_STC_HOTSPOT_DCLICK
+        - @c wxEVT_STC_HOTSPOT_RELEASE_CLICK
+        - @c wxEVT_STC_INDICATOR_CLICK
+        - @c wxEVT_STC_INDICATOR_RELEASE
+        - @c wxEVT_STC_MARGIN_RIGHT_CLICK
+    */
+    bool GetAlt() const;
+
+    /**
+        Returns the number of lines that have been added to or removed from an
+        annotation.
+
+        This method is valid for @c wxEVT_STC_MODIFIED events when the result of
+        GetModificationType() includes
+        @link wxStyledTextEvent::wxSTC_MOD_CHANGEANNOTATION
+        wxSTC_MOD_CHANGEANNOTATION@endlink.
+    */
     int  GetAnnotationsLinesAdded() const;
-    int  GetUpdated() const;
-    int  GetListCompletionMethod() const;
-    
+
+    /**
+        Returns true if the Control key is pressed.
+
+        This method is valid for the following event types:
+        - @c wxEVT_STC_DOUBLECLICK
+        - @c wxEVT_STC_MARGINCLICK
+        - @c wxEVT_STC_HOTSPOT_CLICK
+        - @c wxEVT_STC_HOTSPOT_DCLICK
+        - @c wxEVT_STC_HOTSPOT_RELEASE_CLICK
+        - @c wxEVT_STC_INDICATOR_CLICK
+        - @c wxEVT_STC_INDICATOR_RELEASE
+        - @c wxEVT_STC_MARGIN_RIGHT_CLICK
+    */
+    bool GetControl() const;
+
+    /**
+        Returns flags for the drag operation associated with this event.
+
+        This method is valid for @c wxEVT_STC_START_DRAG events.
+    */
+    int GetDragFlags();
+
+    /**
+        Returns drag result for this event.
+
+        This method is valid for @c wxEVT_STC_DRAG_OVER and
+        @c wxEVT_STC_DO_DROP events.
+    */
+    wxDragResult GetDragResult();
+
     /**
         @deprecated Use GetString() instead.
      */
     wxString GetDragText();
-    int GetDragFlags();
-    wxDragResult GetDragResult();
 
+    /**
+        Returns the current fold level for the line.
+
+        This method is valid for @c wxEVT_STC_MODIFIED events when the result of
+        GetModificationType() includes @link
+        wxStyledTextEvent::wxSTC_MOD_CHANGEFOLD wxSTC_MOD_CHANGEFOLD@endlink.
+    */
+    int  GetFoldLevelNow() const;
+
+    /**
+        Returns previous fold level for the line.
+
+        This method is valid for @c wxEVT_STC_MODIFIED events when the result of
+        GetModificationType() includes @link
+        wxStyledTextEvent::wxSTC_MOD_CHANGEFOLD wxSTC_MOD_CHANGEFOLD@endlink.
+    */
+    int  GetFoldLevelPrev() const;
+
+    /**
+        Returns the key code of the key that generated this event.
+
+        This method is valid for the following event types:
+        - @c wxEVT_STC_CHARADDED
+        - @c wxEVT_STC_USERLISTSELECTION
+        - @c wxEVT_STC_AUTOCOMP_SELECTION
+        - @c wxEVT_STC_AUTOCOMP_COMPLETED
+    */
+    int  GetKey()  const;
+
+    /**
+        Returns the length (number of characters) of this event.
+
+        This method is valid for @c wxEVT_STC_MODIFIED and
+        @c wxEVT_STC_NEEDSHOWN events.
+    */
+    int  GetLength() const;
+
+    /**
+        Returns zero-based line number for this event.
+
+        This method is valid for @c wxEVT_STC_DOUBLECLICK and
+        @c wxEVT_STC_MODIFIED events.
+    */
+    int  GetLine() const;
+
+    /**
+        Returns the number of lines added or deleted with this event.
+
+        This method is valid for @c wxEVT_STC_MODIFIED events when the result of
+        GetModificationType() includes @link
+        wxStyledTextEvent::wxSTC_MOD_INSERTTEXT wxSTC_MOD_INSERTTEXT @endlink or
+        @link wxStyledTextEvent::wxSTC_MOD_DELETETEXT
+        wxSTC_MOD_DELETETEXT@endlink.
+    */
+    int  GetLinesAdded() const;
+
+    /**
+        Returns a value describing the action that closed the list.
+
+        The returned value will be one of the following constants:
+
+        <table>
+          <tr>
+             <td>@link wxStyledTextEvent::wxSTC_AC_FILLUP wxSTC_AC_FILLUP@endlink</td>
+             <td>A fillup character caused the completion.</td>
+          </tr>
+          <tr>
+             <td>@link wxStyledTextEvent::wxSTC_AC_DOUBLECLICK wxSTC_AC_DOUBLECLICK@endlink</td>
+             <td>A double-click caused the completion.</td>
+          </tr>
+          <tr>
+             <td>@link wxStyledTextEvent::wxSTC_AC_TAB wxSTC_AC_TAB@endlink</td>
+             <td>The tab key caused the completion.</td>
+          </tr>
+          <tr>
+             <td>@link wxStyledTextEvent::wxSTC_AC_NEWLINE wxSTC_AC_NEWLINE@endlink</td>
+             <td>The enter key caused the completion.</td>
+          </tr>
+          <tr>
+             <td>@link wxStyledTextEvent::wxSTC_AC_COMMAND wxSTC_AC_COMMAND@endlink</td>
+             <td>The @link wxStyledTextCtrl::AutoCompComplete
+                 wxStyledTextCtrl::AutoCompComplete@endlink method was called.</td>
+          </tr>
+        </table>
+
+        This method is valid for @c wxEVT_STC_USERLISTSELECTION,
+        @c wxEVT_STC_AUTOCOMP_SELECTION, and @c wxEVT_STC_AUTOCOMP_COMPLETED
+        events.
+
+        @since 3.1.1
+    */
+    int  GetListCompletionMethod() const;
+
+    /**
+        Returns the list type for this event.
+
+        The list type is an integer passed to a list when it is created with
+        the @link wxStyledTextCtrl::UserListShow
+        wxStyledTextCtrl::UserListShow @endlink method and can be used to
+        distinguish lists if more than one is used.
+
+        This method is valid for @c wxEVT_STC_USERLISTSELECTION events.
+    */
+    int  GetListType() const;
+
+    /**
+        Returns the value of the LParam field for this event.
+
+        This method is valid for @c wxEVT_STC_MACRORECORD events.
+    */
+    int  GetLParam() const;
+
+    /**
+        Returns the zero-based index of the margin that generated this event.
+
+        This method is valid for @c wxEVT_STC_MARGINCLICK and
+        @c wxEVT_STC_MARGIN_RIGHT_CLICK events.
+    */
+    int  GetMargin() const;
+
+    /**
+        Returns a message number while a macro is being recorded.
+
+        Many of the wxStyledTextCtrl methods such as @link
+        wxStyledTextCtrl::InsertText InsertText@endlink and @link
+        wxStyledTextCtrl::Paste Paste@endlink have an event number associated
+        with them.  This method returns that number while a macro is being
+        recorded so that the macro can be played back later.
+
+        This method is valid for @c wxEVT_STC_MACRORECORD events.
+    */
+    int  GetMessage() const;
+
+    /**
+        Returns the modification type for this event.
+
+        The modification type is a bit list that describes the change that
+        generated this event.  It may contain one or more of the following
+        values:
+
+        - @link wxStyledTextEvent::wxSTC_MOD_INSERTTEXT wxSTC_MOD_INSERTTEXT
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_DELETETEXT wxSTC_MOD_DELETETEXT
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CHANGESTYLE wxSTC_MOD_CHANGESTYLE
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CHANGEFOLD wxSTC_MOD_CHANGEFOLD
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_PERFORMED_USER wxSTC_PERFORMED_USER
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_PERFORMED_UNDO wxSTC_PERFORMED_UNDO
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_PERFORMED_REDO wxSTC_PERFORMED_REDO
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MULTISTEPUNDOREDO
+          wxSTC_MULTISTEPUNDOREDO
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_LASTSTEPINUNDOREDO
+          wxSTC_LASTSTEPINUNDOREDO
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CHANGEMARKER
+          wxSTC_MOD_CHANGEMARKER @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_BEFOREINSERT
+          wxSTC_MOD_BEFOREINSERT
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_BEFOREDELETE
+          wxSTC_MOD_BEFOREDELETE
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MULTILINEUNDOREDO
+          wxSTC_MULTILINEUNDOREDO
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_STARTACTION wxSTC_STARTACTION
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CHANGEINDICATOR
+          wxSTC_MOD_CHANGEINDICATOR
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CHANGELINESTATE
+          wxSTC_MOD_CHANGELINESTATE
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CHANGEMARGIN
+          wxSTC_MOD_CHANGEMARGIN
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CHANGEANNOTATION
+          wxSTC_MOD_CHANGEANNOTATION
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CONTAINER
+          wxSTC_MOD_CONTAINER
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_LEXERSTATE
+          wxSTC_MOD_LEXERSTATE
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_INSERTCHECK
+          wxSTC_MOD_INSERTCHECK
+          @endlink
+        - @link wxStyledTextEvent::wxSTC_MOD_CHANGETABSTOPS
+          wxSTC_MOD_CHANGETABSTOPS
+          @endlink
+
+        This method is valid for @c wxEVT_STC_MODIFIED events.
+    */
+    int  GetModificationType() const;
+
+    /**
+        Returns the modifiers of the key press or mouse click for this event.
+
+        The returned value is a bit list that may contain one or more of the
+        following values:
+
+        - @link wxStyledTextEvent::wxSTC_SCMOD_SHIFT wxSTC_SCMOD_SHIFT @endlink
+        - @link wxStyledTextEvent::wxSTC_SCMOD_CTRL wxSTC_SCMOD_CTRL @endlink
+        - @link wxStyledTextEvent::wxSTC_SCMOD_ALT wxSTC_SCMOD_ALT @endlink
+        - @link wxStyledTextEvent::wxSTC_SCMOD_SUPER wxSTC_SCMOD_SUPER @endlink
+        - @link wxStyledTextEvent::wxSTC_SCMOD_META wxSTC_SCMOD_META @endlink
+
+        In addition, the value can be checked for equality with @link
+        wxStyledTextEvent::wxSTC_SCMOD_NORM wxSTC_SCMOD_NORM @endlink to test
+        if no modifiers are present.
+
+        This method is valid for the following event types:
+        - @c wxEVT_STC_DOUBLECLICK
+        - @c wxEVT_STC_MARGINCLICK
+        - @c wxEVT_STC_HOTSPOT_CLICK
+        - @c wxEVT_STC_HOTSPOT_DCLICK
+        - @c wxEVT_STC_HOTSPOT_RELEASE_CLICK
+        - @c wxEVT_STC_INDICATOR_CLICK
+        - @c wxEVT_STC_INDICATOR_RELEASE
+        - @c wxEVT_STC_MARGIN_RIGHT_CLICK
+    */
+    int  GetModifiers() const;
+
+    /**
+        Returns the zero-based text position associated this event.
+
+        This method is valid for the following event types:
+        - @c wxEVT_STC_STYLENEEDED
+        - @c wxEVT_STC_DOUBLECLICK
+        - @c wxEVT_STC_MODIFIED
+        - @c wxEVT_STC_MARGINCLICK
+        - @c wxEVT_STC_NEEDSHOWN
+        - @c wxEVT_STC_USERLISTSELECTION
+        - @c wxEVT_STC_DWELLSTART
+        - @c wxEVT_STC_DWELLEND
+        - @c wxEVT_STC_HOTSPOT_CLICK
+        - @c wxEVT_STC_HOTSPOT_DCLICK
+        - @c wxEVT_STC_HOTSPOT_RELEASE_CLICK
+        - @c wxEVT_STC_INDICATOR_CLICK
+        - @c wxEVT_STC_INDICATOR_RELEASE
+        - @c wxEVT_STC_CALLTIP_CLICK
+        - @c wxEVT_STC_AUTOCOMP_SELECTION
+        - @c wxEVT_STC_AUTOCOMP_COMPLETED
+        - @c wxEVT_STC_MARGIN_RIGHT_CLICK
+    */
+    int  GetPosition() const;
+
+    /**
+        Returns true if the Shift key is pressed.
+
+        This method is valid for the following event types:
+        - @c wxEVT_STC_DOUBLECLICK
+        - @c wxEVT_STC_MARGINCLICK
+        - @c wxEVT_STC_HOTSPOT_CLICK
+        - @c wxEVT_STC_HOTSPOT_DCLICK
+        - @c wxEVT_STC_HOTSPOT_RELEASE_CLICK
+        - @c wxEVT_STC_INDICATOR_CLICK
+        - @c wxEVT_STC_INDICATOR_RELEASE
+        - @c wxEVT_STC_MARGIN_RIGHT_CLICK
+    */
     bool GetShift() const;
-    bool GetControl() const;
-    bool GetAlt() const;
+
+    /**
+        @deprecated Use GetString() instead.
+     */
+    wxString GetText() const;
+
+    /**
+        Returns the token value for this event.
+
+        The token is an integer value that can be set with a call to the
+        @link wxStyledTextCtrl::AddUndoAction
+        wxStyledTextCtrl::AddUndoAction@endlink method.
+
+        This method is valid for @c wxEVT_STC_MODIFIED events when the result of
+        GetModificationType() includes  @link
+        wxStyledTextEvent::wxSTC_MOD_CONTAINER wxSTC_MOD_CONTAINER@endlink.
+    */
+    int  GetToken() const;
+
+    /**
+        Returns the value of the updated field for this event.
+
+        The value of this field is a bit list that describes the change that
+        generated this event.  It may contain one or more of the following
+        values:
+
+        - @link wxStyledTextEvent::wxSTC_UPDATE_CONTENT wxSTC_UPDATE_CONTENT
+        @endlink
+        - @link wxStyledTextEvent::wxSTC_UPDATE_SELECTION wxSTC_UPDATE_SELECTION
+        @endlink
+        - @link wxStyledTextEvent::wxSTC_UPDATE_V_SCROLL wxSTC_UPDATE_V_SCROLL
+        @endlink
+        - @link wxStyledTextEvent::wxSTC_UPDATE_H_SCROLL wxSTC_UPDATE_H_SCROLL
+        @endlink
+
+        This method is valid for @c wxEVT_STC_UPDATEUI events.
+    */
+    int  GetUpdated() const;
+
+    /**
+        Returns value of the WParam field for this event.
+
+        This method is valid for @c wxEVT_STC_MACRORECORD events.
+    */
+    int  GetWParam() const;
+
+    /**
+        Returns the X coordinate of the mouse for this event.
+
+        This method is valid for the following event types:
+        - @c wxEVT_STC_DWELLSTART
+        - @c wxEVT_STC_DWELLEND
+        - @c wxEVT_STC_START_DRAG
+        - @c wxEVT_STC_DRAG_OVER
+        - @c wxEVT_STC_DO_DROP
+    */
+    int  GetX() const;
+
+    /**
+        Returns the Y coordinate of the mouse for this event.
+
+        This method is valid for the following event types:
+        - @c wxEVT_STC_DWELLSTART
+        - @c wxEVT_STC_DWELLEND
+        - @c wxEVT_STC_START_DRAG
+        - @c wxEVT_STC_DRAG_OVER
+        - @c wxEVT_STC_DO_DROP
+    */
+    int  GetY() const;
+
+    /**
+        Sets the annotation lines added value for this event.
+    */
+    void SetAnnotationLinesAdded(int val);
+
+    /**
+        Sets the drag flags for this event.
+    */
+    void SetDragFlags(int flags);
+
+    /**
+        Sets the drag result for this event.
+    */
+    void SetDragResult(wxDragResult val);
+
+    /**
+        Sets the drag text for this event.
+
+        @deprecated
+    */
+    void SetDragText(const wxString& val);
+
+    /**
+        Sets the current fold level for this event.
+    */
+    void SetFoldLevelNow(int val);
+
+    /**
+        Sets the previous fold level for this event.
+    */
+    void SetFoldLevelPrev(int val);
+
+    /**
+        Sets the key code for this event.
+    */
+    void SetKey(int k);
+
+    /**
+        Sets the length value for this event.
+    */
+    void SetLength(int len);
+
+    /**
+        Sets line number for this event.
+    */
+    void SetLine(int val);
+
+    /**
+        Sets the number of lines added for this event.
+    */
+    void SetLinesAdded(int num);
+
+    /**
+        Sets the list completion method for this event.
+
+        @since 3.1.1
+    */
+    void SetListCompletionMethod(int val);
+
+    /**
+        Sets the list type for this event.
+    */
+    void SetListType(int val);
+
+    /**
+        Sets value of the LParam field for this event.
+    */
+    void SetLParam(int val);
+
+    /**
+        Sets margin number for this event.
+    */
+    void SetMargin(int val);
+
+    /**
+        Sets message number for this event.
+    */
+    void SetMessage(int val);
+
+    /**
+        Sets the modification type for this event.
+    */
+    void SetModificationType(int t);
+
+    /**
+        Sets the value of the modifiers field for this event.
+    */
+    void SetModifiers(int m);
+
+    /**
+        Sets file position for this event.
+    */
+    void SetPosition(int pos);
+
+    /**
+        Sets the text for this event.
+
+        @deprecated
+    */
+    void SetText(const wxString& t);
+
+    /**
+        Sets the token for this event.
+    */
+    void SetToken(int val);
+
+    /**
+        Sets the value of the updated field for this event.
+    */
+    void SetUpdated(int val);
+
+    /**
+        Sets the value of the WParam field for this event.
+    */
+    void SetWParam(int val);
+
+    /**
+        Sets the X value for this event.
+    */
+    void SetX(int val);
+
+    /**
+        Sets the Y value for this event.
+    */
+    void SetY(int val);
 };
 
 
