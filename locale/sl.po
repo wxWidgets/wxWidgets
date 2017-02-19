@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-28 15:59+0100\n"
-"PO-Revision-Date: 2017-02-12 11:06+0100\n"
+"PO-Revision-Date: 2017-02-19 11:19+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language: sl\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Generator: Poedit 2.0beta2\n"
+"X-Generator: Poedit 2.0beta3\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -1423,11 +1423,11 @@ msgstr "Dodaj k predelanim barvam"
 
 #: ../include/wx/xtiprop.h:255
 msgid "AddToPropertyCollection called on a generic accessor"
-msgstr ""
+msgstr "AddToPropertyCollection klicana na splošnem dostopniku"
 
 #: ../include/wx/xtiprop.h:193
 msgid "AddToPropertyCollection called w/o valid adder"
-msgstr ""
+msgstr "AddToPropertyCollection klicana brez veljavnega dodajalnika"
 
 # html/helpctrl.cpp:83
 #: ../src/html/helpctrl.cpp:159
@@ -1522,7 +1522,7 @@ msgstr "Datoteka animacije ni vrste %ld."
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:858
 msgid "AppWorkspace"
-msgstr ""
+msgstr "Delovna površina programa"
 
 # generic/logg.cpp:1021
 #: ../src/generic/logg.cpp:1034
@@ -1865,7 +1865,7 @@ msgstr "Nemogoča &razveljavitev"
 
 #: ../src/common/image.cpp:2690
 msgid "Can't automatically determine the image format for non-seekable input."
-msgstr ""
+msgstr "Ni mogoče samodejno določiti obliko slike za vnos brez iskanja."
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
@@ -2670,9 +2670,8 @@ msgstr "Širine stolpca ni mogoče nastaviti."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:112
-#, fuzzy
 msgid "Command"
-msgstr "Ukaz"
+msgstr "Ukazovalka"
 
 #: ../src/common/init.cpp:196
 #, c-format
@@ -4365,7 +4364,7 @@ msgstr "Prioritete niti %d ni bilo mogoče nastaviti."
 
 #: ../src/unix/utilsunx.cpp:779
 msgid "Failed to set up non-blocking pipe, the program might hang."
-msgstr ""
+msgstr "Neuspešno vzpostavljena neblokirana cev, program se lahko obesi."
 
 # common/fs_mem.cpp:167
 #: ../src/common/fs_mem.cpp:261
@@ -4676,15 +4675,15 @@ msgstr "German Std Fanfold, 8 1/2 x 12 pal."
 
 #: ../include/wx/xtiprop.h:184
 msgid "GetProperty called w/o valid getter"
-msgstr ""
+msgstr "GetProperty klicana brez veljavnega pridobivalnika"
 
 #: ../include/wx/xtiprop.h:262
 msgid "GetPropertyCollection called on a generic accessor"
-msgstr ""
+msgstr "GetPropertyCollection klicana na splošnem dostopniku"
 
 #: ../include/wx/xtiprop.h:202
 msgid "GetPropertyCollection called w/o valid collection getter"
-msgstr ""
+msgstr "GetPropertyCollection klicana brez veljavnega pridobivalnika zbirke"
 
 # html/helpfrm.cpp:501
 #: ../src/html/helpwnd.cpp:660
@@ -4925,6 +4924,7 @@ msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
 msgstr ""
+"Če je mogoče, poskusite spremeniti parametre postavitve, da bo izpis ožji."
 
 #: ../src/generic/dbgrptg.cpp:358
 msgid ""
@@ -5359,9 +5359,8 @@ msgstr "ŠT_Prejšnjastran"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:96
-#, fuzzy
 msgid "KP_Prior"
-msgstr "ŠT_Prior"
+msgstr "ŠT_Prejšnji"
 
 # generic/fontdlgg.cpp:216
 #. TRANSLATORS: Name of keyboard key
@@ -5419,10 +5418,10 @@ msgstr "Zadnja stran"
 #, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Zadnje ponovljeno sporočilo (»%s«, %u-krat) ni bilo izpisano"
+msgstr[1] "Zadnje ponovljeno sporočilo (»%s«, %u-krat) ni bilo izpisano"
+msgstr[2] "Zadnje ponovljeno sporočilo (»%s«, %u-krat) ni bilo izpisano"
+msgstr[3] "Zadnje ponovljeno sporočilo (»%s«, %u-krat) ni bilo izpisano"
 
 #: ../src/common/paper.cpp:104
 msgid "Ledger, 17 x 11 in"
@@ -5694,7 +5693,7 @@ msgstr "Mac, kanareški"
 
 #: ../src/common/fmapbase.cpp:238
 msgid "MacKeyboardGlyphs"
-msgstr ""
+msgstr "Mac, pismenke tipkovnice"
 
 #: ../src/common/fmapbase.cpp:218
 msgid "MacKhmer"
@@ -6295,7 +6294,7 @@ msgstr "Lastnosti predmeta"
 
 #: ../src/msw/ole/automtn.cpp:666
 msgid "Object implementation does not support named arguments."
-msgstr ""
+msgstr "Implementacija predmeta ne podpira imenovanih argumentov."
 
 #: ../src/common/xtixml.cpp:264
 msgid "Objects must have an id attribute"
@@ -6392,7 +6391,7 @@ msgstr "Izraščeno"
 
 #: ../src/msw/ole/automtn.cpp:662
 msgid "Overflow while coercing argument values."
-msgstr ""
+msgstr "Prekoračitev med prisiljevanjem vrednosti argumentov."
 
 # common/imagpcx.cpp:448
 # common/imagpcx.cpp:471
@@ -6994,7 +6993,7 @@ msgstr "Vprašanje"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1730
 msgid "Question Arrow"
-msgstr ""
+msgstr "Vprašaj s puščico"
 
 #: ../src/common/stockitem.cpp:156
 msgid "Quit"
@@ -7012,9 +7011,8 @@ msgstr "Zapri ta program"
 
 # common/utilscmn.cpp:464
 #: ../src/common/accelcmn.cpp:328
-#, fuzzy
 msgid "RawCtrl+"
-msgstr "Krmilka-"
+msgstr "SurovaKrmilka-"
 
 # common/ffile.cpp:133
 # common/ffile.cpp:154
@@ -7180,7 +7178,6 @@ msgstr "Povrni v shranjeno"
 
 # generic/fontdlgg.cpp:216
 #: ../src/richtext/richtextborderspage.cpp:619
-#, fuzzy
 msgid "Ridge"
 msgstr "Brazda"
 
@@ -7425,7 +7422,7 @@ msgstr "Določite slog celice"
 
 #: ../include/wx/xtiprop.h:175
 msgid "SetProperty called w/o valid setter"
-msgstr ""
+msgstr "SetProperty klicana brez veljavnega nastavljavca"
 
 #: ../src/common/filename.cpp:2599
 msgid "Setting directory access times is not supported under this OS version"
@@ -8463,6 +8460,8 @@ msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
+"Operacija »%s« je spodletela: lastnost z oznako »%s« je vrste »%s« in NE "
+"»%s«."
 
 #: ../src/common/paper.cpp:134
 msgid "US Std Fanfold, 14 7/8 x 11 in"
@@ -8474,20 +8473,20 @@ msgstr "US-ASCII"
 
 #: ../src/unix/fswatcher_inotify.cpp:109
 msgid "Unable to add inotify watch"
-msgstr ""
+msgstr "Ni mogoče dodati opazovalnice inotify."
 
 #: ../src/unix/fswatcher_kqueue.cpp:136
 msgid "Unable to add kqueue watch"
-msgstr ""
+msgstr "Ni mogoče dodati opazovalnice kqueue"
 
 #: ../include/wx/msw/private/fswatcher.h:142
 msgid "Unable to associate handle with I/O completion port"
-msgstr ""
+msgstr "Ni mogoče povezati ročice z vrati dokončanja V/I."
 
 # common/ffile.cpp:182
 #: ../include/wx/msw/private/fswatcher.h:125
 msgid "Unable to close I/O completion port handle"
-msgstr ""
+msgstr "Ni mogoče zapreti ročice vrat dokončanja V/I."
 
 # common/ffile.cpp:182
 #: ../src/unix/fswatcher_inotify.cpp:97
@@ -8510,12 +8509,12 @@ msgstr "Datotečne ročice za '%s' ni mogoče zapreti."
 # common/imagbmp.cpp:278
 #: ../include/wx/msw/private/fswatcher.h:273
 msgid "Unable to create I/O completion port"
-msgstr ""
+msgstr "Ni mogoče ustvariti ročice vrat dokončanja V/I."
 
 # msw/mdi.cpp:428
 #: ../src/msw/fswatcher.cpp:84
 msgid "Unable to create IOCP worker thread"
-msgstr ""
+msgstr "Ni mogoče ustvariti niti delovanja IOCP"
 
 # msw/dde.cpp:934
 #: ../src/unix/fswatcher_inotify.cpp:74
@@ -8529,7 +8528,7 @@ msgstr "Instance kqueue ni mogoče ustvariti."
 
 #: ../include/wx/msw/private/fswatcher.h:262
 msgid "Unable to dequeue completion packet"
-msgstr ""
+msgstr "Paketa dokončanja ni mogoče postaviti iz vrste"
 
 #: ../src/unix/fswatcher_kqueue.cpp:185
 msgid "Unable to get events from kqueue"
@@ -8537,7 +8536,7 @@ msgstr "Ni mogoče pridobiti dogodkov iz kqueue"
 
 #: ../src/osx/carbon/dataview.cpp:1901
 msgid "Unable to handle native drag&drop data"
-msgstr ""
+msgstr "Ni mogoče ravnati domorodnih podatkov povleci-in-spusti."
 
 #: ../src/gtk/app.cpp:423
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
@@ -8566,7 +8565,7 @@ msgstr "Zvoka ni bilo mogoče predvajati nesinhrono."
 
 #: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
-msgstr ""
+msgstr "Ni mogoče objaviti stanje dokončanosti."
 
 # common/file.cpp:285
 #: ../src/unix/fswatcher_inotify.cpp:543
@@ -8575,11 +8574,11 @@ msgstr "Ni mogoče brati iz deskriptorja inotify"
 
 #: ../src/unix/fswatcher_inotify.cpp:132
 msgid "Unable to remove inotify watch"
-msgstr ""
+msgstr "Ni mogoče odstraniti opazovalnice inotify."
 
 #: ../src/unix/fswatcher_kqueue.cpp:153
 msgid "Unable to remove kqueue watch"
-msgstr ""
+msgstr "Ni mogoče odstraniti opazovalnice kqueue."
 
 # common/ffile.cpp:182
 #: ../src/msw/fswatcher.cpp:168
@@ -8589,7 +8588,7 @@ msgstr "Datoteki »%s« ni mogoče določiti opazovanja."
 
 #: ../src/msw/fswatcher.cpp:91
 msgid "Unable to start IOCP worker thread"
-msgstr ""
+msgstr "Ni mogoče začeti niti delovanja IOCP"
 
 # generic/fontdlgg.cpp:242
 #: ../src/common/stockitem.cpp:201
@@ -8637,12 +8636,12 @@ msgstr "Nepričakovan parameter '%s'"
 
 #: ../include/wx/msw/private/fswatcher.h:148
 msgid "Unexpectedly new I/O completion port was created"
-msgstr ""
+msgstr "Nepričakovano so ustvarjena nova vrata dokončanja V/I."
 
 # msw/thread.cpp:871
 #: ../src/msw/fswatcher.cpp:70
 msgid "Ungraceful worker thread termination"
-msgstr ""
+msgstr "Nerodno dokončanje niti delovanja"
 
 #: ../src/richtext/richtextsymboldlg.cpp:459
 #: ../src/richtext/richtextsymboldlg.cpp:460
@@ -10052,9 +10051,8 @@ msgstr "opis konteksta procesa"
 #: ../src/richtext/richtextborderspage.cpp:596
 #: ../src/richtext/richtextfontpage.cpp:177
 #: ../src/richtext/richtextfontpage.cpp:180
-#, fuzzy
 msgid "pt"
-msgstr "slik. točka"
+msgstr "pk"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:226
 #: ../src/richtext/richtextbackgroundpage.cpp:229
@@ -10150,13 +10148,11 @@ msgstr "slik. točka"
 #: ../src/richtext/richtextsizepage.cpp:659
 #: ../src/richtext/richtextsizepage.cpp:662
 #: ../src/richtext/richtextsizepage.cpp:663
-#, fuzzy
 msgid "px"
-msgstr "px"
+msgstr "sl. točka"
 
 # common/utilscmn.cpp:464
 #: ../src/common/accelcmn.cpp:189
-#, fuzzy
 msgid "rawctrl"
 msgstr "surovakrmilka"
 
