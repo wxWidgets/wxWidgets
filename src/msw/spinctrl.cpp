@@ -358,8 +358,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                    wxS("at least %d pixels needed."),
                    name, size.x, effectiveBtnWidth);
     }
-    {
-    }
 
     // adjust an invalid height for text control
     if ( sizeCtrl.y <= 0 )
