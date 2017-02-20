@@ -345,18 +345,17 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // finally deal with the size, now that both windows are created and the
     // font is set
     const wxSize sizeBtn = wxSpinButton::DoGetBestSize();
-    const int effectiveBtnWidth = sizeBtn.x - GetOverlap();
     wxSize sizeCtrl(size);
     if ( sizeCtrl.x <= 0 )
     {
         // DEFAULT_ITEM_WIDTH is the default width for the text control
-        sizeCtrl.x = FromDIP(DEFAULT_ITEM_WIDTH) + effectiveBtnWidth;
+        sizeCtrl.x = FromDIP(DEFAULT_ITEM_WIDTH) + sizeBtn.x - GetOverlap();
     }
-    else if ( sizeCtrl.x <= effectiveBtnWidth )
+    else if ( sizeCtrl.x <= sizeBtn.x )
     {
         wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
                    wxS("at least %d pixels needed."),
-                   name, size.x, effectiveBtnWidth);
+                   name, size.x, sizeBtn.x);
     }
 
     // adjust an invalid height for text control
