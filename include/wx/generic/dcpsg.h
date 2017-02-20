@@ -150,6 +150,7 @@ protected:
     double            m_underlineThickness;
     wxPrintData       m_printData;
     double            m_pageHeight;
+    wxArrayString     m_definedPSFonts;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPostScriptDCImpl);

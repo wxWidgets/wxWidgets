@@ -1124,8 +1124,13 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
     if (!m_pstream)
         return;
 
-    PsPrint( name );
-    PsPrint( " reencodeISO def\n" );
+    // Generate PS code to register the font only once.
+    if ( m_definedPSFonts.Index(name) == wxNOT_FOUND )
+    {
+        PsPrint( name );
+        PsPrint( " reencodeISO def\n" );
+        m_definedPSFonts.Add(name);
+    }
     PsPrint( name );
     PsPrint( " findfont\n" );
 
@@ -1784,6 +1789,9 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
     SetDeviceOrigin( 0,0 );
 
     m_pageNumber = 1;
+    // Reset the list of fonts for which PS font registration code was generated.
+    m_definedPSFonts.Empty();
+
     return true;
 }
 
@@ -1801,6 +1809,9 @@ void wxPostScriptDCImpl::EndDoc ()
         fclose( m_pstream );
         m_pstream = NULL;
     }
+
+    // Reset the list of fonts for which PS font registration code was generated.
+    m_definedPSFonts.Empty();
 
 #if 0
     // THE FOLLOWING HAS BEEN CONTRIBUTED BY Andy Fyfe <andy@hyperparallel.com>

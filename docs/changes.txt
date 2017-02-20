@@ -126,6 +126,7 @@ All (GUI):
 - Fix drawing rotated and/or underlined text on wxPostScriptDC.
 - Support multiline strings in wxPostScriptDC::DrawText(), DrawRotatedText().
 - Deprecate wxEVT_STC_KEY and wxEVT_STC_URIDROPPED events (NewPagodi).
+- Optimize font registration in PostScript code emitted by wxPostScriptDC.
 
 wxGTK:
 
