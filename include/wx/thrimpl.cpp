@@ -71,8 +71,8 @@ wxMutexError wxMutex::Unlock()
 // wxConditionInternal
 // --------------------------------------------------------------------------
 
-// Win32 and OS/2 don't have explicit support for the POSIX condition
-// variables and their events/event semaphores have quite different semantics,
+// Win32 doesn't have explicit support for the POSIX condition
+// variables and its events/event semaphores have quite different semantics,
 // so we reimplement the conditions from scratch using the mutexes and
 // semaphores
 #if defined(__WINDOWS__)

@@ -675,11 +675,10 @@ void wxFrame::IconizeChildFrames(bool bIconize)
     {
         wxWindow *win = node->GetData();
 
-        // iconizing the frames with this style under Win95 shell puts them at
-        // the bottom of the screen (as the MDI children) instead of making
-        // them appear in the taskbar because they are, by virtue of this
-        // style, not managed by the taskbar - instead leave Windows take care
-        // of them
+        // iconizing the frames with this style puts them at the bottom of
+        // the screen (as the MDI children) instead of making them appear
+        // in the taskbar because they are, by virtue of this style, not
+        // managed by the taskbar - instead leave Windows take care of them
         if ( win->GetWindowStyle() & wxFRAME_TOOL_WINDOW )
             continue;
 

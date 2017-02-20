@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/slider.cpp
-// Purpose:     wxSlider, using the Win95 (and later) trackbar control
+// Purpose:     wxSlider, using trackbar control
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98

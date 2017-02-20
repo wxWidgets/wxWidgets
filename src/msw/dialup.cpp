@@ -263,8 +263,6 @@ private:
     static RASRENAMEENTRY ms_pfnRasRenameEntry;
     static RASDELETEENTRY ms_pfnRasDeleteEntry;
     static RASVALIDATEENTRYNAME ms_pfnRasValidateEntryName;
-
-    // this function is not supported by Win95
     static RASCONNECTIONNOTIFICATION ms_pfnRasConnectionNotification;
 
     // if this flag is different from -1, it overrides IsOnline()
@@ -1035,9 +1033,6 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
 
     if ( ok )
     {
-        // we're running under NT 4.0, Windows 98 or later and can use
-        // RasConnectionNotification() to be notified by a secondary thread
-
         // first, see if we don't have this thread already running
         if ( m_hThread != 0 )
         {
@@ -1160,8 +1155,6 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         }
     }
 
-    // we're running under Windows 95 and have to poll ourselves
-    // (or, alternatively, the code above for NT/98 failed)
     m_timerStatusPolling.Stop();
     if ( nSeconds == 0 )
     {

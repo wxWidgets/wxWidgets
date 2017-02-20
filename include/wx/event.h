@@ -153,8 +153,8 @@ private:
 // These are needed for the functor definitions
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 
-// We had some trouble (specifically with eVC for ARM WinCE build) with using
-// wxEventFunction in the past so we had introduced wxObjectEventFunction which
+// We had some trouble with using wxEventFunction
+// in the past so we had introduced wxObjectEventFunction which
 // used to be a typedef for a member of wxObject and not wxEvtHandler to work
 // around this but as eVC is not really supported any longer we now only keep
 // this for backwards compatibility and, despite its name, this is a typedef
@@ -3106,8 +3106,7 @@ private:
 
 
 /* TODO
- wxEVT_MOUSE_CAPTURE_CHANGED,
- wxEVT_SETTING_CHANGED, // WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
+ wxEVT_SETTING_CHANGED, // WM_WININICHANGE
 // wxEVT_FONT_CHANGED,  // WM_FONTCHANGE: roll into wxEVT_SETTING_CHANGED, but remember to propagate
                         // wxEVT_FONT_CHANGED to all other windows (maybe).
  wxEVT_DRAW_ITEM, // Leave these three as virtual functions in wxControl?? Platform-specific.

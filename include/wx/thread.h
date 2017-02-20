@@ -863,7 +863,7 @@ public:
     // wxApp then should block all "dangerous" messages
     extern bool WXDLLIMPEXP_BASE wxIsWaitingForThread();
 #endif
-#endif // MSW, OS/2
+#endif // MSW, OSX
 
 #endif // wxUSE_THREADS
 

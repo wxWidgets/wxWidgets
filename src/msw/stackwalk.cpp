@@ -200,8 +200,8 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
 
     // according to MSDN, the first parameter should be just a unique value and
     // not process handle (although the parameter is prototyped as "HANDLE
-    // hProcess") and actually it advises to use the process id and not handle
-    // for Win9x, but then we need to use the same value in StackWalk() call
+    // hProcess") and actually it advises to use the process id and not handle,
+    // but then we need to use the same value in StackWalk() call
     // below which should be a real handle... so this is what we use
     const HANDLE hProcess = ::GetCurrentProcess();
 
