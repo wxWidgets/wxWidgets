@@ -170,6 +170,7 @@ wxMSW:
 wxOSX:
 
 - Fix handling of non-BMP characters in GetPartialTextExtents() (ARATA Mizuki).
+- Fix dialogs using wxFRAME_FLOAT_ON_PARENT frame as parent (Lauri Nurmi).
 - Implement wxGetDisplaySizeMM() and fix printing DPI (David Vanderson).
 - Remove extra borders around wxFilePickerCtrl (John Roberts).
 - Set up extensions filter correctly in wxFileDialog (nick863).
