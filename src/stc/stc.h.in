@@ -164,10 +164,6 @@ public:
                           wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
 
 
-    // Set the character set of the font in a style.  Converts the Scintilla
-    // character set values to a wxFontEncoding.
-    void StyleSetCharacterSet(int style, int characterSet);
-
     // Set the font encoding to be used by a style.
     void StyleSetFontEncoding(int style, wxFontEncoding encoding);
 
@@ -178,10 +174,6 @@ public:
 
     // Set the left and right margin in the edit area, measured in pixels.
     void SetMargins(int left, int right);
-
-
-    // Retrieve the point in the window where a position is displayed.
-    wxPoint PointFromPosition(int pos);
 
 
     // Scroll enough to make the given line visible

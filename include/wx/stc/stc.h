@@ -3173,6 +3173,10 @@ public:
     // Get the weight of characters of a style.
     int StyleGetWeight(int style) const;
 
+    // Set the character set of the font in a style.
+    // Converts the Scintilla character set values to a wxFontEncoding.
+    void StyleSetCharacterSet(int style, int characterSet);
+
     // Set a style to be a hotspot or not.
     void StyleSetHotSpot(int style, bool hotspot);
 
@@ -3543,6 +3547,9 @@ public:
 
     // Draw the selection in normal style or with selection highlighted.
     void HideSelection(bool hide);
+
+    // Retrieve the point in the window where a position is displayed.
+    wxPoint PointFromPosition(int pos);
 
     // Retrieve the line containing a position.
     int LineFromPosition(int pos) const;
@@ -5042,10 +5049,6 @@ public:
                           wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
 
 
-    // Set the character set of the font in a style.  Converts the Scintilla
-    // character set values to a wxFontEncoding.
-    void StyleSetCharacterSet(int style, int characterSet);
-
     // Set the font encoding to be used by a style.
     void StyleSetFontEncoding(int style, wxFontEncoding encoding);
 
@@ -5056,10 +5059,6 @@ public:
 
     // Set the left and right margin in the edit area, measured in pixels.
     void SetMargins(int left, int right);
-
-
-    // Retrieve the point in the window where a position is displayed.
-    wxPoint PointFromPosition(int pos);
 
 
     // Scroll enough to make the given line visible

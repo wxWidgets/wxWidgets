@@ -957,6 +957,104 @@ int wxStyledTextCtrl::StyleGetWeight(int style) const
     return SendMsg(SCI_STYLEGETWEIGHT, style, 0);
 }
 
+// Set the character set of the font in a style.
+// Converts the Scintilla character set values to a wxFontEncoding.
+void wxStyledTextCtrl::StyleSetCharacterSet(int style, int characterSet) {
+        wxFontEncoding encoding;
+
+        // Translate the Scintilla characterSet to a wxFontEncoding
+        switch (characterSet) {
+            default:
+            case wxSTC_CHARSET_ANSI:
+            case wxSTC_CHARSET_DEFAULT:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_BALTIC:
+                encoding = wxFONTENCODING_ISO8859_13;
+                break;
+
+            case wxSTC_CHARSET_CHINESEBIG5:
+                encoding = wxFONTENCODING_CP950;
+                break;
+
+            case wxSTC_CHARSET_EASTEUROPE:
+                encoding = wxFONTENCODING_ISO8859_2;
+                break;
+
+            case wxSTC_CHARSET_GB2312:
+                encoding = wxFONTENCODING_CP936;
+                break;
+
+            case wxSTC_CHARSET_GREEK:
+                encoding = wxFONTENCODING_ISO8859_7;
+                break;
+
+            case wxSTC_CHARSET_HANGUL:
+                encoding = wxFONTENCODING_CP949;
+                break;
+
+            case wxSTC_CHARSET_MAC:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_OEM:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_RUSSIAN:
+                encoding = wxFONTENCODING_KOI8;
+                break;
+
+            case wxSTC_CHARSET_SHIFTJIS:
+                encoding = wxFONTENCODING_CP932;
+                break;
+
+            case wxSTC_CHARSET_SYMBOL:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_TURKISH:
+                encoding = wxFONTENCODING_ISO8859_9;
+                break;
+
+            case wxSTC_CHARSET_JOHAB:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_HEBREW:
+                encoding = wxFONTENCODING_ISO8859_8;
+                break;
+
+            case wxSTC_CHARSET_ARABIC:
+                encoding = wxFONTENCODING_ISO8859_6;
+                break;
+
+            case wxSTC_CHARSET_VIETNAMESE:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_THAI:
+                encoding = wxFONTENCODING_ISO8859_11;
+                break;
+
+            case wxSTC_CHARSET_CYRILLIC:
+                encoding = wxFONTENCODING_ISO8859_5;
+                break;
+
+            case wxSTC_CHARSET_8859_15:
+                encoding = wxFONTENCODING_ISO8859_15;
+                break;
+        }
+
+        // We just have Scintilla track the wxFontEncoding for us.  It gets used
+        // in Font::Create in PlatWX.cpp.  We add one to the value so that the
+        // effective wxFONENCODING_DEFAULT == SC_SHARSET_DEFAULT and so when
+        // Scintilla internally uses SC_CHARSET_DEFAULT we will translate it back
+        // to wxFONENCODING_DEFAULT in Font::Create.
+        SendMsg(SCI_STYLESETCHARACTERSET, style, encoding+1);
+}
+
 // Set a style to be a hotspot or not.
 void wxStyledTextCtrl::StyleSetHotSpot(int style, bool hotspot)
 {
@@ -1749,6 +1847,13 @@ wxString wxStyledTextCtrl::GetTextRange(int startPos, int endPos) {
 void wxStyledTextCtrl::HideSelection(bool hide)
 {
     SendMsg(SCI_HIDESELECTION, hide, 0);
+}
+
+// Retrieve the point in the window where a position is displayed.
+wxPoint wxStyledTextCtrl::PointFromPosition(int pos) {
+         int x = SendMsg(SCI_POINTXFROMPOSITION, 0, pos);
+         int y = SendMsg(SCI_POINTYFROMPOSITION, 0, pos);
+         return wxPoint(x, y);
 }
 
 // Retrieve the line containing a position.
@@ -4813,106 +4918,6 @@ void wxStyledTextCtrl::StyleSetFontAttr(int styleNum, int size,
 }
 
 
-// Set the character set of the font in a style.  Converts the Scintilla
-// character set values to a wxFontEncoding.
-void wxStyledTextCtrl::StyleSetCharacterSet(int style, int characterSet)
-{
-    wxFontEncoding encoding;
-
-    // Translate the Scintilla characterSet to a wxFontEncoding
-    switch (characterSet) {
-        default:
-        case wxSTC_CHARSET_ANSI:
-        case wxSTC_CHARSET_DEFAULT:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_BALTIC:
-            encoding = wxFONTENCODING_ISO8859_13;
-            break;
-
-        case wxSTC_CHARSET_CHINESEBIG5:
-            encoding = wxFONTENCODING_CP950;
-            break;
-
-        case wxSTC_CHARSET_EASTEUROPE:
-            encoding = wxFONTENCODING_ISO8859_2;
-            break;
-
-        case wxSTC_CHARSET_GB2312:
-            encoding = wxFONTENCODING_CP936;
-            break;
-
-        case wxSTC_CHARSET_GREEK:
-            encoding = wxFONTENCODING_ISO8859_7;
-            break;
-
-        case wxSTC_CHARSET_HANGUL:
-            encoding = wxFONTENCODING_CP949;
-            break;
-
-        case wxSTC_CHARSET_MAC:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_OEM:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_RUSSIAN:
-            encoding = wxFONTENCODING_KOI8;
-            break;
-
-        case wxSTC_CHARSET_SHIFTJIS:
-            encoding = wxFONTENCODING_CP932;
-            break;
-
-        case wxSTC_CHARSET_SYMBOL:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_TURKISH:
-            encoding = wxFONTENCODING_ISO8859_9;
-            break;
-
-        case wxSTC_CHARSET_JOHAB:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_HEBREW:
-            encoding = wxFONTENCODING_ISO8859_8;
-            break;
-
-        case wxSTC_CHARSET_ARABIC:
-            encoding = wxFONTENCODING_ISO8859_6;
-            break;
-
-        case wxSTC_CHARSET_VIETNAMESE:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_THAI:
-            encoding = wxFONTENCODING_ISO8859_11;
-            break;
-
-        case wxSTC_CHARSET_CYRILLIC:
-            encoding = wxFONTENCODING_ISO8859_5;
-            break;
-
-        case wxSTC_CHARSET_8859_15:
-            encoding = wxFONTENCODING_ISO8859_15;;
-            break;
-    }
-
-    // We just have Scintilla track the wxFontEncoding for us.  It gets used
-    // in Font::Create in PlatWX.cpp.  We add one to the value so that the
-    // effective wxFONENCODING_DEFAULT == SC_SHARSET_DEFAULT and so when
-    // Scintilla internally uses SC_CHARSET_DEFAULT we will translate it back
-    // to wxFONENCODING_DEFAULT in Font::Create.
-    SendMsg(SCI_STYLESETCHARACTERSET, style, encoding+1);
-}
-
-
 // Set the font encoding to be used by a style.
 void wxStyledTextCtrl::StyleSetFontEncoding(int style, wxFontEncoding encoding)
 {
@@ -4932,13 +4937,6 @@ void wxStyledTextCtrl::SetMargins(int left, int right) {
     SetMarginRight(right);
 }
 
-
-// Retrieve the point in the window where a position is displayed.
-wxPoint wxStyledTextCtrl::PointFromPosition(int pos) {
-    int x = SendMsg(SCI_POINTXFROMPOSITION, 0, pos);
-    int y = SendMsg(SCI_POINTYFROMPOSITION, 0, pos);
-    return wxPoint(x, y);
-}
 
 // Scroll enough to make the given line visible
 void wxStyledTextCtrl::ScrollToLine(int line) {
