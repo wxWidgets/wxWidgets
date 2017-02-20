@@ -1711,7 +1711,7 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
 
     if (m_printData.GetPrintMode() != wxPRINT_MODE_STREAM )
     {
-        if (m_printData.GetFilename() == wxEmptyString)
+        if ( m_printData.GetFilename().empty() )
         {
             wxString filename = wxFileName::CreateTempFileName( wxT("ps") );
             m_printData.SetFilename(filename);
