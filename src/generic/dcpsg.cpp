@@ -483,51 +483,56 @@ void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
             (y2 - yc < 0) ? 90.0 : -90.0 :
                 wxRadToDeg(-atan2(double(y2-yc), double(x2-xc)));
     }
-    while (alpha1 <= 0)   alpha1 += 360;
-    while (alpha2 <= 0)   alpha2 += 360; // adjust angles to be between
+    while (alpha1 < 0)    alpha1 += 360;
+    while (alpha2 < 0)    alpha2 += 360; // adjust angles to be between
     while (alpha1 > 360)  alpha1 -= 360; // 0 and 360 degree
     while (alpha2 > 360)  alpha2 -= 360;
 
     int i_radius = wxRound( radius );
 
-    if ( m_brush.IsNonTransparent() )
+    // Draw the arc (open)
+    wxString buffer;
+    if ( m_brush.IsNonTransparent() || m_pen.IsNonTransparent() )
     {
-        SetBrush( m_brush );
-
-        wxString buffer;
         buffer.Printf( "newpath\n"
-                       "%f %f %f %f %f %f ellipse\n"
-                       "%f %f lineto\n"
-                       "closepath\n"
-                       "fill\n",
-                XLOG2DEV(xc), YLOG2DEV(yc),
-                XLOG2DEVREL(i_radius), YLOG2DEVREL(i_radius),
-                alpha1, alpha2,
-                XLOG2DEV(xc), YLOG2DEV(yc) );
-        buffer.Replace( ",", "." );
-        PsPrint( buffer );
-
-        CalcBoundingBox( xc-i_radius, yc-i_radius );
-        CalcBoundingBox( xc+i_radius, yc+i_radius );
-    }
-
-    if ( m_pen.IsNonTransparent() )
-    {
-        SetPen( m_pen );
-
-        wxString buffer;
-        buffer.Printf( "newpath\n"
-                       "%f %f %f %f %f %f ellipse\n"
-                       "stroke\n",
+                       "%f %f %f %f %f %f ellipse\n",
                 XLOG2DEV(xc), YLOG2DEV(yc),
                 XLOG2DEVREL(i_radius), YLOG2DEVREL(i_radius),
                 alpha1, alpha2 );
         buffer.Replace( ",", "." );
         PsPrint( buffer );
-
-        CalcBoundingBox( xc-i_radius, yc-i_radius );
-        CalcBoundingBox( xc+i_radius, yc+i_radius );
     }
+
+    // Close and fill the arc if brush is not transparent.
+    if ( m_brush.IsNonTransparent() )
+    {
+        // Lines connecting the centre with endpoints
+        // shouldn't be drawn if arc is full.
+        if ( x1 != x2 || y1 != y2 )
+        {
+            buffer.Printf( "%f %f lineto\n",
+                    XLOG2DEV(xc), YLOG2DEV(yc) );
+            buffer.Replace( ",", "." );
+            PsPrint( buffer );
+        }
+        PsPrint( "closepath\n" );
+
+        SetBrush(m_brush);
+        // We need to preserve current path to draw the contour int the next step.
+        if ( m_pen.IsNonTransparent() )
+            PsPrint( "gsave fill grestore\n" );
+        else
+            PsPrint( "fill\n" );
+    }
+
+    if ( m_pen.IsNonTransparent() )
+    {
+        SetPen(m_pen);
+        PsPrint( "stroke\n" );
+    }
+
+    CalcBoundingBox( xc-i_radius, yc-i_radius );
+    CalcBoundingBox( xc+i_radius, yc+i_radius );
 }
 
 void wxPostScriptDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
