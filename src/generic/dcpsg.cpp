@@ -75,25 +75,18 @@ static const char *wxPostScriptHeaderConicTo = "\
 }  bind def\n\
 ";
 
-static const char *wxPostScriptHeaderEllipse = "\
-/ellipsedict 8 dict def\n\
-ellipsedict /mtrx matrix put\n\
-/ellipse {\n\
-    ellipsedict begin\n\
-    /endangle exch def\n\
-    /startangle exch def\n\
-    /yrad exch def\n\
-    /xrad exch def\n\
-    /y exch def\n\
-    /x exch def\n\
-    /savematrix mtrx currentmatrix def\n\
-    x y translate\n\
-    xrad yrad scale\n\
-    0 0 1 startangle endangle arc\n\
-    savematrix setmatrix\n\
-    end\n\
-    } def\n\
-";
+static const char *wxPostScriptHeaderEllipse =
+"/ellipse {\n"             // x y xrad yrad startangle endangle
+"  matrix currentmatrix\n" // x y xrad yrad startangle endangle CTM
+"  0 0 1\n"                // x y xrad yrad startangle endangle CTM 0 0 1
+"  10 4 roll\n"            // CTM 0 0 1 x y xrad yrad startangle endangle
+"  6 2 roll\n"             // CTM 0 0 1 startangle endangle x y xrad yrad
+"  4 2 roll\n"             // CTM 0 0 1 startangle endangle xrad yrad x y
+"  translate\n"            // CTM 0 0 1 startangle endangle xrad yrad
+"  scale\n"                // CTM 0 0 1 startangle endangle
+"  arc\n"                  // CTM
+"  setmatrix\n"            // -> restore transformation matrix
+"} def\n";
 
 static const char *wxPostScriptHeaderEllipticArc= "\
 /ellipticarcdict 8 dict def\n\
