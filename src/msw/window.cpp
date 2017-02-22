@@ -71,9 +71,6 @@
     #include "wx/access.h"
     #include <ole2.h>
     #include <oleacc.h>
-    #ifndef WM_GETOBJECT
-        #define WM_GETOBJECT 0x003D
-    #endif
     #ifndef OBJID_CLIENT
         #define OBJID_CLIENT 0xFFFFFFFC
     #endif
@@ -3292,7 +3289,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
 #endif
 
-#if defined(WM_HELP)
         case WM_HELP:
             {
                 // by default, WM_HELP is propagated by DefWindowProc() upwards
@@ -3328,7 +3324,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 }
             }
             break;
-#endif // WM_HELP
 
         case WM_CONTEXTMENU:
             {

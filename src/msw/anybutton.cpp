@@ -90,10 +90,6 @@ using namespace wxMSWImpl;
     #endif
 #endif // wxUSE_UXTHEME
 
-#ifndef WM_THEMECHANGED
-    #define WM_THEMECHANGED     0x031A
-#endif
-
 #ifndef ODS_NOACCEL
     #define ODS_NOACCEL         0x0100
 #endif

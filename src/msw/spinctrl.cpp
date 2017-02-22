@@ -101,12 +101,10 @@ wxBuddyTextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         case WM_DEADCHAR:
         case WM_KEYUP:
         case WM_KEYDOWN:
-#ifdef WM_HELP
         // we need to forward WM_HELP too to ensure that the context help
         // associated with wxSpinCtrl is shown when the text control part of it
         // is clicked with the "?" cursor
         case WM_HELP:
-#endif
             {
                 WXLRESULT result;
                 if ( spin->MSWHandleMessage(&result, message, wParam, lParam) )
