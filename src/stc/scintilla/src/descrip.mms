@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 8 June 2016                                                         *
+# Date : 21 February 2017                                                    *
 #                                                                            *
 #*****************************************************************************
 
@@ -104,6 +104,8 @@ Document.obj : Document.cxx
 Editor.obj : Editor.cxx
 	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn Editor.cxx
 ExternalLexer.obj : ExternalLexer.cxx
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(CONPTRLOSBIT)\
+	ExternalLexer.cxx
 Indicator.obj : Indicator.cxx
 KeyMap.obj : KeyMap.cxx
 LineMarker.obj : LineMarker.cxx
@@ -112,6 +114,8 @@ PositionCache.obj : PositionCache.cxx
 RESearch.obj : RESearch.cxx
 RunStyles.obj : RunStyles.cxx
 ScintillaBase.obj : ScintillaBase.cxx
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(CONPTRLOSBIT)\
+	ScintillaBase.cxx
 Selection.obj : Selection.cxx
 Style.obj : Style.cxx
 UniConversion.obj : UniConversion.cxx

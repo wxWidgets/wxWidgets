@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 14 June 2016                                                        *
+# Date : 21 Februsary 2017                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -639,7 +639,9 @@ wincmn.obj : wincmn.cpp
 wxcrt.obj : wxcrt.cpp
 xpmdecod.obj : xpmdecod.cpp
 zipstrm.obj : zipstrm.cpp
+	cxx$(CXX_DEFINE)/warn=disable=(MACROREDEF)/obj=zipstrm.obj zipstrm.cpp
 zstream.obj : zstream.cpp
+	cxx$(CXX_DEFINE)/warn=disable=(MACROREDEF)/obj=zstream.obj zstream.cpp
 accesscmn.obj : accesscmn.cpp
 dndcmn.obj : dndcmn.cpp
 dpycmn.obj : dpycmn.cpp
