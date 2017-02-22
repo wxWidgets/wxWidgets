@@ -88,27 +88,22 @@ static const char *wxPostScriptHeaderEllipse =
 "  setmatrix\n"            // -> restore transformation matrix
 "} def\n";
 
-static const char *wxPostScriptHeaderEllipticArc= "\
-/ellipticarcdict 8 dict def\n\
-ellipticarcdict /mtrx matrix put\n\
-/ellipticarc\n\
-{ ellipticarcdict begin\n\
-  /do_fill exch def\n\
-  /endangle exch def\n\
-  /startangle exch def\n\
-  /yrad exch def\n\
-  /xrad exch def \n\
-  /y exch def\n\
-  /x exch def\n\
-  /savematrix mtrx currentmatrix def\n\
-  x y translate\n\
-  xrad yrad scale\n\
-  do_fill { 0 0 moveto } if\n\
-  0 0 1 startangle endangle arc\n\
-  savematrix setmatrix\n\
-  do_fill { fill }{ stroke } ifelse\n\
-  end\n\
-} def\n";
+static const char *wxPostScriptHeaderEllipticArc=
+"/ellipticarc {\n"         // x y xrad yrad startangle endangle do_fill
+"  dup\n"                  // x y xrad yrad startangle endangle do_fill do_fill
+"  8 1 roll\n"             // do_fill x y xrad yrad startangle endangle do_fill
+"  matrix currentmatrix\n" // do_fill x y xrad yrad startangle endangle do_fill CTM
+"  0 0 1\n"                // do_fill x y xrad yrad startangle endangle do_fill CTM 0 0 1
+"  11 4 roll\n"            // do_fill CTM 0 0 1 x y xrad yrad startangle endangle do_fill
+"  7 3 roll\n"             // do_fill CTM 0 0 1 startangle endangle do_fill x y xrad yrad
+"  4 2 roll\n"             // do_fill CTM 0 0 1 startangle endangle do_fill xrad yrad x y
+"  translate\n"            // do_fill CTM 0 0 1 startangle endangle do_fill xrad yrad
+"  scale\n"                // do_fill CTM 0 0 1 startangle endangle do_fill
+"  { 0 0 moveto } if\n"    // do_fill CTM 0 0 1 startangle endangle
+"  arc\n"                  // do_fill CTM -> draw arc
+"  setmatrix\n"            // do_fill  -> restore transformation matrix
+"  { fill }{ stroke } ifelse\n" // -> fill or stroke
+"} def\n";
 
 static const char *wxPostScriptHeaderSpline = "\
 /DrawSplineSection {\n\
