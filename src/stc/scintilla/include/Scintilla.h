@@ -30,6 +30,8 @@ int Scintilla_LinkLexers(void);
 #if defined(_MSC_VER)
 // Older releases of MSVC did not have stdint.h.
 #include <stddef.h>
+#elif defined( __VMS )
+#include <inttypes.h>
 #else
 #include <stdint.h>
 #endif
