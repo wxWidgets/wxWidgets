@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/strings/hexconv.cpp
-// Purpose:     wxDecToHex unit test
+// Purpose:     wxDecToHex, wxHexToDec unit test
 // Author:      Artur Wieczorek
 // Created:     2017-02-23
 // Copyright:   (c) 2017 wxWidgets development team
@@ -32,11 +32,15 @@ private:
         CPPUNIT_TEST( DecToHex1 ); // Conversion to wxString
         CPPUNIT_TEST( DecToHex2 ); // Conversion to wxChar string
         CPPUNIT_TEST( DecToHex3 ); // Conversion to 2 characters
+        CPPUNIT_TEST( HexToDec1 ); // Conversion from char string
+        CPPUNIT_TEST( HexToDec2 ); // Conversion from wxString
     CPPUNIT_TEST_SUITE_END();
 
     void DecToHex1();
     void DecToHex2();
     void DecToHex3();
+    void HexToDec1();
+    void HexToDec2();
 
     wxDECLARE_NO_COPY_CLASS(HexConvTestCase);
 };
@@ -100,5 +104,32 @@ void HexConvTestCase::DecToHex3()
 
         CPPUNIT_ASSERT_EQUAL( c1, szHexStrRef[0] );
         CPPUNIT_ASSERT_EQUAL( c2, szHexStrRef[1] );
+    }
+}
+
+void HexConvTestCase::HexToDec1()
+{
+    // Conversion from char string
+    for ( int i = 0; i < 256; i++ )
+    {
+        char szHexStr[16];
+        sprintf(szHexStr, "%02X", i);
+
+        int n = wxHexToDec(szHexStr);
+        CPPUNIT_ASSERT_EQUAL( n, i );
+    }
+}
+
+void HexConvTestCase::HexToDec2()
+{
+    // Conversion from wxString
+    for ( int i = 0; i < 256; i++ )
+    {
+        char szHexStr[16];
+        sprintf(szHexStr, "%02X", i);
+        wxString hexStr = wxString(szHexStr);
+
+        int n = wxHexToDec(hexStr);
+        CPPUNIT_ASSERT_EQUAL( n, i );
     }
 }
