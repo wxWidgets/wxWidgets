@@ -607,8 +607,10 @@ void StdStringTestCase::StdConversion()
 #endif
     CPPUNIT_ASSERT_EQUAL( "hello", s6 );
 
+#if wxUSE_UNSAFE_WXSTRING_CONV
     std::string s7(s4);
     CPPUNIT_ASSERT( s7 == "hello" );
+#endif
 
     wxStdWideString s8(s4);
     CPPUNIT_ASSERT( s8 == "hello" );
