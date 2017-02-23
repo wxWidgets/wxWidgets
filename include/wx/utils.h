@@ -296,15 +296,23 @@ inline int wxHexToDec(const char* buf)
 
     if (buf[0] >= 'A')
         firstDigit = buf[0] - 'A' + 10;
-    else
+    else if (buf[0] >= '0')
         firstDigit = buf[0] - '0';
+    else
+        firstDigit = -1;
+
+    wxCHECK_MSG( firstDigit >= 0 && firstDigit <= 15, -1, wxS("Invalid argument") );
 
     if (buf[1] >= 'A')
         secondDigit = buf[1] - 'A' + 10;
-    else
+    else if (buf[1] >= '0')
         secondDigit = buf[1] - '0';
+    else
+        secondDigit = -1;
 
-    return (firstDigit & 0xF) * 16 + (secondDigit & 0xF );
+    wxCHECK_MSG( secondDigit >= 0 && secondDigit <= 15, -1, wxS("Invalid argument") );
+
+    return firstDigit * 16 + secondDigit;
 }
 
 

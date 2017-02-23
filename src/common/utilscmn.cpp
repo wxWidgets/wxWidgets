@@ -122,10 +122,12 @@ static const char hexArray[] = "0123456789ABCDEF";
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& str)
 {
+    wxCHECK_MSG( str.Length() >= 2, -1, wxS("Invalid argument") );
+
     char buf[2];
     buf[0] = str.GetChar(0);
     buf[1] = str.GetChar(1);
-    return wxHexToDec((const char*) buf);
+    return wxHexToDec(buf);
 }
 
 // Convert decimal integer to 2-character hex string (not prefixed by 0x).
