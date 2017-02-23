@@ -117,7 +117,7 @@
 // ============================================================================
 
 // Array used in DecToHex conversion routine.
-static const wxChar hexArray[] = wxT("0123456789ABCDEF");
+static const char hexArray[] = "0123456789ABCDEF";
 
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& str)
@@ -128,27 +128,25 @@ int wxHexToDec(const wxString& str)
     return wxHexToDec((const char*) buf);
 }
 
-// Convert decimal integer to 2-character hex string
-void wxDecToHex(int dec, wxChar *buf)
+// Convert decimal integer to 2-character hex string (not prefixed by 0x).
+void wxDecToHex(unsigned char dec, wxChar *buf)
 {
-    int firstDigit = (int)(dec/16.0);
-    int secondDigit = (int)(dec - (firstDigit*16.0));
-    buf[0] = hexArray[firstDigit];
-    buf[1] = hexArray[secondDigit];
+    wxASSERT_MSG( buf, wxS("Invalid argument") );
+    buf[0] = hexArray[dec >> 4];
+    buf[1] = hexArray[dec & 0x0F];
     buf[2] = 0;
 }
 
 // Convert decimal integer to 2 characters
-void wxDecToHex(int dec, char* ch1, char* ch2)
+void wxDecToHex(unsigned char dec, char* ch1, char* ch2)
 {
-    int firstDigit = (int)(dec/16.0);
-    int secondDigit = (int)(dec - (firstDigit*16.0));
-    (*ch1) = (char) hexArray[firstDigit];
-    (*ch2) = (char) hexArray[secondDigit];
+    wxASSERT_MSG( ch1 && ch2, wxS("Invalid argument(s)") );
+    *ch1 = hexArray[dec >> 4];
+    *ch2 = hexArray[dec & 0x0F];
 }
 
-// Convert decimal integer to 2-character hex string
-wxString wxDecToHex(int dec)
+// Convert decimal integer to 2-character hex string (not prefixed by 0x).
+wxString wxDecToHex(unsigned char dec)
 {
     wxChar buf[3];
     wxDecToHex(dec, buf);

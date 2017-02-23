@@ -309,9 +309,9 @@ inline int wxHexToDec(const char* buf)
 
 
 // Convert decimal integer to 2-character hex string
-WXDLLIMPEXP_BASE void wxDecToHex(int dec, wxChar *buf);
-WXDLLIMPEXP_BASE void wxDecToHex(int dec, char* ch1, char* ch2);
-WXDLLIMPEXP_BASE wxString wxDecToHex(int dec);
+WXDLLIMPEXP_BASE void wxDecToHex(unsigned char dec, wxChar *buf);
+WXDLLIMPEXP_BASE void wxDecToHex(unsigned char dec, char* ch1, char* ch2);
+WXDLLIMPEXP_BASE wxString wxDecToHex(unsigned char dec);
 
 // ----------------------------------------------------------------------------
 // Process management

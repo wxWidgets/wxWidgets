@@ -1423,3 +1423,55 @@ void wxUsleep(unsigned long milliseconds);
 
 //@}
 
+
+/** @addtogroup group_funcmacro_misc */
+//@{
+/**
+    Convert decimal integer to 2-character hexadecimal string.
+
+    @param dec
+        A number to be converted.
+    @param buf
+        A pointer to the buffer that receives hexadecimal string (not prefixed
+        by @c 0x). This buffer should be large enough to hold at least
+        3 characters: 2 hexadecimal digits and the terminating null character.
+
+    @remarks
+        Returned string is composed of uppercase hexdecimal characters.
+
+    @header{wx/utils.h}
+*/
+void wxDecToHex(unsigned char dec, wxChar *buf);
+
+/**
+    Convert decimal integer to 2-character hexadecimal string.
+
+    @param dec
+        A number to be converted.
+    @return
+        String containing hexadecimal string, not prefixed by @c 0x,
+        composed of uppercase characters.
+
+    @header{wx/utils.h}
+*/
+wxString wxDecToHex(unsigned char dec);
+
+/**
+    Returns 2 characters of hexadecimal representation of a given number.
+
+    @param dec
+        A number to be converted.
+    @param ch1
+        Pointer to the variable that receives 1st hexadecimal character.
+        It must not be @NULL.
+    @param ch2
+        Pointer to the variable that receives 2nd hexadecimal character.
+        It must not be @NULL.
+
+    @remarks
+        Returned characters are uppercase.
+
+    @header{wx/utils.h}
+*/
+void wxDecToHex(unsigned char dec, char* ch1, char* ch2);
+//@}
