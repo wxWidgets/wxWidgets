@@ -963,9 +963,6 @@ void wxPostScriptDCImpl::DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y )
     DoDrawBitmap( icon, x, y, true );
 }
 
-/* this has to be char, not wxChar */
-static const char hexArray[] = "0123456789ABCDEF";
-
 void wxPostScriptDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool WXUNUSED(useMask) )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
@@ -1006,7 +1003,6 @@ void wxPostScriptDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
 
     // size of the buffer = width*rgb(3)*hexa(2)+'\n'
     wxCharBuffer charbuffer(w*6 + 1);
-    int firstDigit, secondDigit;
 
     //rows
     for (int j = 0; j < h; j++)
@@ -1016,10 +1012,10 @@ void wxPostScriptDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
         //cols
         for (int i = 0; i < w*3; i++)
         {
-            firstDigit = (int)(*data/16.0);
-            secondDigit = (int)(*data - (firstDigit*16.0));
-            *(bufferindex++) = hexArray[firstDigit];
-            *(bufferindex++) = hexArray[secondDigit];
+            char c1, c2;
+            wxDecToHex(*data, &c1, &c2);
+            *(bufferindex++) = c1;
+            *(bufferindex++) = c2;
 
             data++;
         }
