@@ -87,6 +87,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_vararg.o \
 	$(OBJS)\test_crt.o \
 	$(OBJS)\test_vsnprintf.o \
+	$(OBJS)\test_hexconv.o \
 	$(OBJS)\test_bstream.o \
 	$(OBJS)\test_datastreamtest.o \
 	$(OBJS)\test_ffilestream.o \
@@ -685,6 +686,9 @@ $(OBJS)\test_crt.o: ./strings/crt.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_vsnprintf.o: ./strings/vsnprintf.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_hexconv.o: ./strings/hexconv.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_bstream.o: ./streams/bstream.cpp

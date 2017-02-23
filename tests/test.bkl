@@ -84,6 +84,7 @@
             strings/vararg.cpp
             strings/crt.cpp
             strings/vsnprintf.cpp
+            strings/hexconv.cpp
             streams/bstream.cpp
             streams/datastreamtest.cpp
             streams/ffilestream.cpp

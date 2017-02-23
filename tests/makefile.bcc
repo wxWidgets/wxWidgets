@@ -95,6 +95,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_vararg.obj \
 	$(OBJS)\test_crt.obj \
 	$(OBJS)\test_vsnprintf.obj \
+	$(OBJS)\test_hexconv.obj \
 	$(OBJS)\test_bstream.obj \
 	$(OBJS)\test_datastreamtest.obj \
 	$(OBJS)\test_ffilestream.obj \
@@ -710,6 +711,9 @@ $(OBJS)\test_crt.obj: .\strings\crt.cpp
 
 $(OBJS)\test_vsnprintf.obj: .\strings\vsnprintf.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\strings\vsnprintf.cpp
+
+$(OBJS)\test_hexconv.obj: .\strings\hexconv.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\strings\hexconv.cpp
 
 $(OBJS)\test_bstream.obj: .\streams\bstream.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\streams\bstream.cpp
