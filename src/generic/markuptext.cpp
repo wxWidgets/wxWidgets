@@ -263,14 +263,14 @@ public:
 
         const wxSize extent = m_dc.GetTextExtent(text);
 
-        // DrawItemText() ignores background color, so render it outselves 
+        // DrawItemText() ignores background color, so render it ourselves
         if ( m_dc.GetBackgroundMode() == wxSOLID )
         {
 #if wxUSE_GRAPHICS_CONTEXT
             // Prefer to use wxGraphicsContext because it supports alpha channel; fall back to wxDC
             if ( !m_gc )
                 m_gc.reset(wxGraphicsContext::CreateFromUnknownDC(m_dc));
- 
+
             if ( m_gc )
             {
                 m_gc->SetBrush(wxBrush(m_dc.GetTextBackground()));
