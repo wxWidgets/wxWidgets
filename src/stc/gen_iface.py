@@ -40,6 +40,7 @@ valPrefixes = [('SCI_', ''),
                ('SCK_', 'KEY_'),
                ('SCFIND_', 'FIND_'),
                ('SCWS_', 'WS_'),
+               ('SCTD_', 'TD_'),
 ]
 
 # Message function values that should have a CMD_ constant generated

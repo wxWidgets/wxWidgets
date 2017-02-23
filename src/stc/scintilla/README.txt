@@ -42,7 +42,9 @@ Foreground and Background.  If there is a new method that could be
 considered a "command function" (something that takes no parameters
 and could conceivably be bound to a key event) then I make sure that
 it's ID is in cmdValues or included in one of the existing ranges in
-that list.
+that list. Also, for any enums that begin with 'SCXX_' instead of
+'SC_', add an entry to valPrefixes to make sure the new names for
+constants are generated consistently.
 
 7. Run gen_iface.py.
 
