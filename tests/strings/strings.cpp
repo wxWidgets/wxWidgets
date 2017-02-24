@@ -1028,7 +1028,9 @@ void StringTestCase::CStrDataImplicitConversion()
     // implicit conversion of wxString is not available in STL build
 #if !wxUSE_STL
     CPPUNIT_ASSERT( CheckStrConstWChar(s, s) );
+#if wxUSE_UNSAFE_WXSTRING_CONV
     CPPUNIT_ASSERT( CheckStrConstChar(s, s) );
+#endif
 #endif
 }
 
