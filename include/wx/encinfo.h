@@ -23,8 +23,8 @@
 // Under X, it contains the last 2 elements of the font specifications
 // (registry and encoding).
 //
-// Under Windows, it contains a number which is one of predefined CHARSET_XXX
-// values.
+// Under Windows, it contains a number which is one of predefined XXX_CHARSET
+// values (https://msdn.microsoft.com/en-us/library/cc250412.aspx).
 //
 // Under all platforms it also contains a facename string which should be
 // used, if not empty, to create fonts in this encoding (this is the only way
