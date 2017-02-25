@@ -323,10 +323,10 @@
 #define wxSTC_ANNOTATION_BOXED 2
 #define wxSTC_ANNOTATION_INDENTED 3
 #define wxSTC_UNDO_MAY_COALESCE 1
-#define wxSTC_SCVS_NONE 0
-#define wxSTC_SCVS_RECTANGULARSELECTION 1
-#define wxSTC_SCVS_USERACCESSIBLE 2
-#define wxSTC_SCVS_NOWRAPLINESTART 4
+#define wxSTC_VS_NONE 0
+#define wxSTC_VS_RECTANGULARSELECTION 1
+#define wxSTC_VS_USERACCESSIBLE 2
+#define wxSTC_VS_NOWRAPLINESTART 4
 #define wxSTC_TECHNOLOGY_DEFAULT 0
 #define wxSTC_TECHNOLOGY_DIRECTWRITE 1
 #define wxSTC_TECHNOLOGY_DIRECTWRITERETAIN 2
@@ -399,12 +399,12 @@
 #define wxSTC_KEY_WIN 313
 #define wxSTC_KEY_RWIN 314
 #define wxSTC_KEY_MENU 315
-#define wxSTC_SCMOD_NORM 0
-#define wxSTC_SCMOD_SHIFT 1
-#define wxSTC_SCMOD_CTRL 2
-#define wxSTC_SCMOD_ALT 4
-#define wxSTC_SCMOD_SUPER 8
-#define wxSTC_SCMOD_META 16
+#define wxSTC_KEYMOD_NORM 0
+#define wxSTC_KEYMOD_SHIFT 1
+#define wxSTC_KEYMOD_CTRL 2
+#define wxSTC_KEYMOD_ALT 4
+#define wxSTC_KEYMOD_SUPER 8
+#define wxSTC_KEYMOD_META 16
 #define wxSTC_AC_FILLUP 1
 #define wxSTC_AC_DOUBLECLICK 2
 #define wxSTC_AC_TAB 3
@@ -7748,14 +7748,14 @@ public:
         The returned value is a bit list that may contain one or more of the
         following values:
 
-        - @link wxStyledTextEvent::wxSTC_SCMOD_SHIFT wxSTC_SCMOD_SHIFT @endlink
-        - @link wxStyledTextEvent::wxSTC_SCMOD_CTRL wxSTC_SCMOD_CTRL @endlink
-        - @link wxStyledTextEvent::wxSTC_SCMOD_ALT wxSTC_SCMOD_ALT @endlink
-        - @link wxStyledTextEvent::wxSTC_SCMOD_SUPER wxSTC_SCMOD_SUPER @endlink
-        - @link wxStyledTextEvent::wxSTC_SCMOD_META wxSTC_SCMOD_META @endlink
+        - @link wxStyledTextEvent::wxSTC_KEYMOD_SHIFT wxSTC_KEYMOD_SHIFT @endlink
+        - @link wxStyledTextEvent::wxSTC_KEYMOD_CTRL wxSTC_KEYMOD_CTRL @endlink
+        - @link wxStyledTextEvent::wxSTC_KEYMOD_ALT wxSTC_KEYMOD_ALT @endlink
+        - @link wxStyledTextEvent::wxSTC_KEYMOD_SUPER wxSTC_KEYMOD_SUPER @endlink
+        - @link wxStyledTextEvent::wxSTC_KEYMOD_META wxSTC_KEYMOD_META @endlink
 
         In addition, the value can be checked for equality with @link
-        wxStyledTextEvent::wxSTC_SCMOD_NORM wxSTC_SCMOD_NORM @endlink to test
+        wxStyledTextEvent::wxSTC_KEYMOD_NORM wxSTC_KEYMOD_NORM @endlink to test
         if no modifiers are present.
 
         This method is valid for the following event types:

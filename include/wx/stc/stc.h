@@ -367,10 +367,10 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_ANNOTATION_BOXED 2
 #define wxSTC_ANNOTATION_INDENTED 3
 #define wxSTC_UNDO_MAY_COALESCE 1
-#define wxSTC_SCVS_NONE 0
-#define wxSTC_SCVS_RECTANGULARSELECTION 1
-#define wxSTC_SCVS_USERACCESSIBLE 2
-#define wxSTC_SCVS_NOWRAPLINESTART 4
+#define wxSTC_VS_NONE 0
+#define wxSTC_VS_RECTANGULARSELECTION 1
+#define wxSTC_VS_USERACCESSIBLE 2
+#define wxSTC_VS_NOWRAPLINESTART 4
 #define wxSTC_TECHNOLOGY_DEFAULT 0
 #define wxSTC_TECHNOLOGY_DIRECTWRITE 1
 #define wxSTC_TECHNOLOGY_DIRECTWRITERETAIN 2
@@ -443,12 +443,12 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_KEY_WIN 313
 #define wxSTC_KEY_RWIN 314
 #define wxSTC_KEY_MENU 315
-#define wxSTC_SCMOD_NORM 0
-#define wxSTC_SCMOD_SHIFT 1
-#define wxSTC_SCMOD_CTRL 2
-#define wxSTC_SCMOD_ALT 4
-#define wxSTC_SCMOD_SUPER 8
-#define wxSTC_SCMOD_META 16
+#define wxSTC_KEYMOD_NORM 0
+#define wxSTC_KEYMOD_SHIFT 1
+#define wxSTC_KEYMOD_CTRL 2
+#define wxSTC_KEYMOD_ALT 4
+#define wxSTC_KEYMOD_SUPER 8
+#define wxSTC_KEYMOD_META 16
 #define wxSTC_AC_FILLUP 1
 #define wxSTC_AC_DOUBLECLICK 2
 #define wxSTC_AC_TAB 3
@@ -2472,6 +2472,23 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 //}}}
 //----------------------------------------------------------------------
+// The following entries have non-conformant prefixes.  Although preserved
+// here for backwards compatibility, these should be considered deprecated.
+
+// Instead of the following, use the wxSTC_KEYMOD_* entries defined above
+#define wxSTC_SCMOD_NORM 0
+#define wxSTC_SCMOD_SHIFT 1
+#define wxSTC_SCMOD_CTRL 2
+#define wxSTC_SCMOD_ALT 4
+#define wxSTC_SCMOD_SUPER 8
+#define wxSTC_SCMOD_META 16
+
+// Instead of the following, use the wxSTC_VS_* entries defined above
+#define wxSTC_SCVS_NONE 0
+#define wxSTC_SCVS_RECTANGULARSELECTION 1
+#define wxSTC_SCVS_USERACCESSIBLE 2
+#define wxSTC_SCVS_NOWRAPLINESTART 4
+
 
 //----------------------------------------------------------------------
 // Commands that can be bound to keystrokes section {{{

@@ -62,6 +62,23 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 //}}}
 //----------------------------------------------------------------------
+// The following entries have non-conformant prefixes.  Although preserved
+// here for backwards compatibility, these should be considered deprecated.
+
+// Instead of the following, use the wxSTC_KEYMOD_* entries defined above
+#define wxSTC_SCMOD_NORM 0
+#define wxSTC_SCMOD_SHIFT 1
+#define wxSTC_SCMOD_CTRL 2
+#define wxSTC_SCMOD_ALT 4
+#define wxSTC_SCMOD_SUPER 8
+#define wxSTC_SCMOD_META 16
+
+// Instead of the following, use the wxSTC_VS_* entries defined above
+#define wxSTC_SCVS_NONE 0
+#define wxSTC_SCVS_RECTANGULARSELECTION 1
+#define wxSTC_SCVS_USERACCESSIBLE 2
+#define wxSTC_SCVS_NOWRAPLINESTART 4
+
 
 //----------------------------------------------------------------------
 // Commands that can be bound to keystrokes section {{{
