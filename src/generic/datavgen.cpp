@@ -227,7 +227,7 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
         m_owner->UseColumnForSorting(idx);
         m_sort = true;
     }
-    
+
    m_sortAscending = ascending;
 
     // Call this directly instead of using UpdateDisplay() as we already have
@@ -3381,42 +3381,42 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
     if (!node->HasChildren())
         return;
 
-        if (node->IsOpen())
+    if (node->IsOpen())
+    {
+        if ( !SendExpanderEvent(wxEVT_DATAVIEW_ITEM_COLLAPSING,node->GetItem()) )
         {
-            if ( !SendExpanderEvent(wxEVT_DATAVIEW_ITEM_COLLAPSING,node->GetItem()) )
-            {
-                // Vetoed by the event handler.
-                return;
-            }
-
-            const unsigned countDeletedRows = node->GetSubTreeCount();
-
-            if ( m_selection.OnItemsDeleted(row + 1, countDeletedRows) )
-            {
-                SendSelectionChangedEvent(GetItemByRow(row));
-            }
-
-            node->ToggleOpen();
-
-            // Adjust the current row if necessary.
-            if ( m_currentRow > row )
-            {
-                // If the current row was among the collapsed items, make the
-                // parent itself current.
-                if ( m_currentRow <= row + countDeletedRows )
-                    ChangeCurrentRow(row);
-                else // Otherwise just update the index.
-                    ChangeCurrentRow(m_currentRow - countDeletedRows);
-            }
-
-            if ( m_count != -1 )
-                m_count -= countDeletedRows;
-
-            GetOwner()->InvalidateColBestWidths();
-
-            UpdateDisplay();
-            SendExpanderEvent(wxEVT_DATAVIEW_ITEM_COLLAPSED,node->GetItem());
+            // Vetoed by the event handler.
+            return;
         }
+
+        const unsigned countDeletedRows = node->GetSubTreeCount();
+
+        if ( m_selection.OnItemsDeleted(row + 1, countDeletedRows) )
+        {
+            SendSelectionChangedEvent(GetItemByRow(row));
+        }
+
+        node->ToggleOpen();
+
+        // Adjust the current row if necessary.
+        if ( m_currentRow > row )
+        {
+            // If the current row was among the collapsed items, make the
+            // parent itself current.
+            if ( m_currentRow <= row + countDeletedRows )
+                ChangeCurrentRow(row);
+            else // Otherwise just update the index.
+                ChangeCurrentRow(m_currentRow - countDeletedRows);
+        }
+
+        if ( m_count != -1 )
+            m_count -= countDeletedRows;
+
+        GetOwner()->InvalidateColBestWidths();
+
+        UpdateDisplay();
+        SendExpanderEvent(wxEVT_DATAVIEW_ITEM_COLLAPSED,node->GetItem());
+    }
 }
 
 wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item )

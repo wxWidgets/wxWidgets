@@ -1633,7 +1633,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
         // it's a separator or there is no tool at all there
         return NULL;
 
-        return m_tools.Item((size_t)index)->GetData();
+    return m_tools.Item((size_t)index)->GetData();
 }
 
 void wxToolBar::UpdateSize()

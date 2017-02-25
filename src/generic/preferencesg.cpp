@@ -156,7 +156,7 @@ public:
             m_win->Destroy();
     }
 
-    virtual void Show(wxWindow* parent)
+    virtual void Show(wxWindow* parent) wxOVERRIDE
     {
         if ( !m_win )
         {
@@ -174,7 +174,7 @@ public:
         }
     }
 
-    virtual void Dismiss()
+    virtual void Dismiss() wxOVERRIDE
     {
         if ( m_win )
         {

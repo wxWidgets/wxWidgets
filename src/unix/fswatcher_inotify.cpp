@@ -61,7 +61,7 @@ public:
         delete m_handler;
     }
 
-    bool Init()
+    bool Init() wxOVERRIDE
     {
         wxCHECK_MSG( !IsOk(), false, "Inotify already initialized" );
 
@@ -98,7 +98,7 @@ public:
         }
     }
 
-    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch)
+    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -121,7 +121,7 @@ public:
         return true;
     }
 
-    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch)
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -157,7 +157,7 @@ public:
         return true;
     }
 
-    virtual bool RemoveAll()
+    virtual bool RemoveAll() wxOVERRIDE
     {
         wxFSWatchEntries::iterator it = m_watches.begin();
         for ( ; it != m_watches.end(); ++it )
