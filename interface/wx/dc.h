@@ -870,8 +870,7 @@ public:
                                 const wxFont* font = NULL) const;
     /**
         Gets the dimensions of the string using the currently selected font.
-        @a string is the text string to measure, @e heightLine, if non @NULL,
-        is where to store the height of a single line.
+        @a string is the text string to measure.
 
         @return The text extent as a wxSize object.
 
