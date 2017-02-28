@@ -287,7 +287,7 @@ void wxStyledTextCtrl::InsertText(int pos, const wxString& text)
     SendMsg(SCI_INSERTTEXT, pos, (sptr_t)(const char*)wx2stc(text));
 }
 
-// Change the text that is being inserted in response to SC_MOD_INSERTCHECK
+// Change the text that is being inserted in response to wxSTC_MOD_INSERTCHECK
 void wxStyledTextCtrl::ChangeInsertion(int length, const wxString& text)
 {
     SendMsg(SCI_CHANGEINSERTION, length, (sptr_t)(const char*)wx2stc(text));
@@ -409,7 +409,7 @@ bool wxStyledTextCtrl::GetUndoCollection() const
 }
 
 // Are white space characters currently visible?
-// Returns one of SCWS_* constants.
+// Returns one of wxSTC_WS_* constants.
 int wxStyledTextCtrl::GetViewWhiteSpace() const
 {
     return SendMsg(SCI_GETVIEWWS, 0, 0);
@@ -422,7 +422,7 @@ void wxStyledTextCtrl::SetViewWhiteSpace(int viewWS)
 }
 
 // Retrieve the current tab draw mode.
-// Returns one of SCTD_* constants.
+// Returns one of wxSTC_TD_* constants.
 int wxStyledTextCtrl::GetTabDrawMode() const
 {
     return SendMsg(SCI_GETTABDRAWMODE, 0, 0);
@@ -440,7 +440,7 @@ int wxStyledTextCtrl::PositionFromPoint(wxPoint pt) const {
 }
 
 // Find the position from a point within the window but return
-// INVALID_POSITION if not close to text.
+// wxSTC_INVALID_POSITION if not close to text.
 int wxStyledTextCtrl::PositionFromPointClose(int x, int y)
 {
     return SendMsg(SCI_POSITIONFROMPOINTCLOSE, x, y);
@@ -466,8 +466,6 @@ void wxStyledTextCtrl::SetAnchor(int anchor)
 }
 
 // Retrieve the text of the line containing the caret.
-// Returns the index of the caret on the line.
-// Result is NUL-terminated.
 wxString wxStyledTextCtrl::GetCurLine(int* linePos) {
         int len = LineLength(GetCurrentLine());
         if (!len) {
@@ -497,7 +495,7 @@ void wxStyledTextCtrl::ConvertEOLs(int eolMode)
     SendMsg(SCI_CONVERTEOLS, eolMode, 0);
 }
 
-// Retrieve the current end of line mode - one of CRLF, CR, or LF.
+// Retrieve the current end of line mode - one of wxSTC_EOL_CRLF, wxSTC_EOL_CR, or wxSTC_EOL_LF.
 int wxStyledTextCtrl::GetEOLMode() const
 {
     return SendMsg(SCI_GETEOLMODE, 0, 0);
@@ -755,7 +753,7 @@ int wxStyledTextCtrl::GetMarginCursor(int margin) const
     return SendMsg(SCI_GETMARGINCURSORN, margin, 0);
 }
 
-// Set the background colour of a margin. Only visible for SC_MARGIN_COLOUR.
+// Set the background colour of a margin. Only visible for wxSTC_MARGIN_COLOUR.
 void wxStyledTextCtrl::SetMarginBackground(int margin, const wxColour& back)
 {
     SendMsg(SCI_SETMARGINBACKN, margin, wxColourAsLong(back));
@@ -958,7 +956,6 @@ int wxStyledTextCtrl::StyleGetWeight(int style) const
 }
 
 // Set the character set of the font in a style.
-// Converts the Scintilla character set values to a wxFontEncoding.
 void wxStyledTextCtrl::StyleSetCharacterSet(int style, int characterSet) {
         wxFontEncoding encoding;
 
@@ -2074,7 +2071,7 @@ void wxStyledTextCtrl::TargetWholeDocument()
 // Replace the target text with the argument text after \\d processing.
 // Text is counted so it can contain NULs.
 // Looks for \\d where d is between 1 and 9 and replaces these with the strings
-// matched in the last search operation which were surrounded by \( and \).
+// matched in the last search operation which were surrounded by \\( and \\).
 // Returns the length of the replacement text including any change
 // caused by processing the \\d patterns.
 
@@ -2158,7 +2155,7 @@ void wxStyledTextCtrl::CallTipSetForegroundHighlight(const wxColour& fore)
     SendMsg(SCI_CALLTIPSETFOREHLT, wxColourAsLong(fore), 0);
 }
 
-// Enable use of STYLE_CALLTIP and set call tip tab size in pixels.
+// Enable use of wxSTC_STYLE_CALLTIP and set call tip tab size in pixels.
 void wxStyledTextCtrl::CallTipUseStyle(int tabSize)
 {
     SendMsg(SCI_CALLTIPUSESTYLE, tabSize, 0);
@@ -2437,13 +2434,13 @@ int wxStyledTextCtrl::GetWrapStartIndent() const
     return SendMsg(SCI_GETWRAPSTARTINDENT, 0, 0);
 }
 
-// Sets how wrapped sublines are placed. Default is fixed.
+// Sets how wrapped sublines are placed. Default is wxSTC_WRAPINDENT_FIXED.
 void wxStyledTextCtrl::SetWrapIndentMode(int wrapIndentMode)
 {
     SendMsg(SCI_SETWRAPINDENTMODE, wrapIndentMode, 0);
 }
 
-// Retrieve how wrapped sublines are placed. Default is fixed.
+// Retrieve how wrapped sublines are placed. Default is wxSTC_WRAPINDENT_FIXED.
 int wxStyledTextCtrl::GetWrapIndentMode() const
 {
     return SendMsg(SCI_GETWRAPINDENTMODE, 0, 0);
@@ -2486,7 +2483,6 @@ bool wxStyledTextCtrl::GetScrollWidthTracking() const
 }
 
 // Measure the pixel width of some text in a particular style.
-// NUL terminated text argument.
 // Does not handle tab or control characters.
 int wxStyledTextCtrl::TextWidth(int style, const wxString& text)
 {
@@ -2579,7 +2575,6 @@ int wxStyledTextCtrl::GetMultiPaste() const
 }
 
 // Retrieve the value of a tag from a regular expression search.
-// Result is NUL-terminated.
 wxString wxStyledTextCtrl::GetTag(int tagNumber) const {
          const int msg = SCI_GETTAG;
          int len = SendMsg(msg, tagNumber, (sptr_t)NULL);
@@ -3013,7 +3008,7 @@ void wxStyledTextCtrl::BraceBadLightIndicator(bool useSetting, int indicator)
     SendMsg(SCI_BRACEBADLIGHTINDICATOR, useSetting, indicator);
 }
 
-// Find the position of a matching brace or INVALID_POSITION if no match.
+// Find the position of a matching brace or wxSTC_INVALID_POSITION if no match.
 // The maxReStyle must be 0 for now. It may be defined in a future release.
 int wxStyledTextCtrl::BraceMatch(int pos, int maxReStyle){
         wxASSERT_MSG(maxReStyle==0,
@@ -3069,8 +3064,8 @@ int wxStyledTextCtrl::GetEdgeMode() const
     return SendMsg(SCI_GETEDGEMODE, 0, 0);
 }
 
-// The edge may be displayed by a line (EDGE_LINE/EDGE_MULTILINE) or by highlighting text that
-// goes beyond it (EDGE_BACKGROUND) or not displayed at all (EDGE_NONE).
+// The edge may be displayed by a line (wxSTC_EDGE_LINE/wxSTC_EDGE_MULTILINE) or by highlighting text that
+// goes beyond it (wxSTC_EDGE_BACKGROUND) or not displayed at all (wxSTC_EDGE_NONE).
 void wxStyledTextCtrl::SetEdgeMode(int edgeMode)
 {
     SendMsg(SCI_SETEDGEMODE, edgeMode, 0);
@@ -3223,7 +3218,7 @@ bool wxStyledTextCtrl::GetMouseWheelCaptures() const
     return SendMsg(SCI_GETMOUSEWHEELCAPTURES, 0, 0) != 0;
 }
 
-// Sets the cursor to one of the SC_CURSOR* values.
+// Sets the cursor to one of the wxSTC_CURSOR* values.
 void wxStyledTextCtrl::SetSTCCursor(int cursorType)
 {
     SendMsg(SCI_SETCURSOR, cursorType, 0);
@@ -3293,11 +3288,13 @@ void wxStyledTextCtrl::DelLineRight()
     SendMsg(SCI_DELLINERIGHT, 0, 0);
 }
 
-// Get and Set the xOffset (ie, horizontal scroll position).
+// Set the xOffset (ie, horizontal scroll position).
 void wxStyledTextCtrl::SetXOffset(int xOffset)
 {
     SendMsg(SCI_SETXOFFSET, xOffset, 0);
 }
+
+// Get the xOffset (ie, horizontal scroll position).
 int wxStyledTextCtrl::GetXOffset() const
 {
     return SendMsg(SCI_GETXOFFSET, 0, 0);
@@ -3323,7 +3320,7 @@ void wxStyledTextCtrl::SetYCaretPolicy(int caretPolicy, int caretSlop)
     SendMsg(SCI_SETYCARETPOLICY, caretPolicy, caretSlop);
 }
 
-// Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
+// Set printing to line wrapped (wxSTC_WRAP_WORD) or not line wrapped (wxSTC_WRAP_NONE).
 void wxStyledTextCtrl::SetPrintWrapMode(int wrapMode)
 {
     SendMsg(SCI_SETPRINTWRAPMODE, wrapMode, 0);
@@ -3442,8 +3439,8 @@ void wxStyledTextCtrl::CopyText(int length, const wxString& text)
     SendMsg(SCI_COPYTEXT, length, (sptr_t)(const char*)wx2stc(text));
 }
 
-// Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
-// by lines (SC_SEL_LINES).
+// Set the selection mode to stream (wxSTC_SEL_STREAM) or rectangular (wxSTC_SEL_RECTANGLE/wxSTC_SEL_THIN) or
+// by lines (wxSTC_SEL_LINES).
 void wxStyledTextCtrl::SetSelectionMode(int selectionMode)
 {
     SendMsg(SCI_SETSELECTIONMODE, selectionMode, 0);
@@ -3455,13 +3452,13 @@ int wxStyledTextCtrl::GetSelectionMode() const
     return SendMsg(SCI_GETSELECTIONMODE, 0, 0);
 }
 
-// Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
+// Retrieve the position of the start of the selection at the given line (wxSTC_INVALID_POSITION if no selection on this line).
 int wxStyledTextCtrl::GetLineSelStartPosition(int line)
 {
     return SendMsg(SCI_GETLINESELSTARTPOSITION, line, 0);
 }
 
-// Retrieve the position of the end of the selection at the given line (INVALID_POSITION if no selection on this line).
+// Retrieve the position of the end of the selection at the given line (wxSTC_INVALID_POSITION if no selection on this line).
 int wxStyledTextCtrl::GetLineSelEndPosition(int line)
 {
     return SendMsg(SCI_GETLINESELENDPOSITION, line, 0);
@@ -4077,7 +4074,7 @@ int wxStyledTextCtrl::CharPositionFromPoint(int x, int y)
 }
 
 // Find the position of a character from a point within the window.
-// Return INVALID_POSITION if not close to text.
+// Return wxSTC_INVALID_POSITION if not close to text.
 int wxStyledTextCtrl::CharPositionFromPointClose(int x, int y)
 {
     return SendMsg(SCI_CHARPOSITIONFROMPOINTCLOSE, x, y);
@@ -4320,7 +4317,7 @@ int wxStyledTextCtrl::GetVirtualSpaceOptions() const
 // On GTK+, allow selecting the modifier key to use for mouse-based
 // rectangular selection. Often the window manager requires Alt+Mouse Drag
 // for moving windows.
-// Valid values are SCMOD_CTRL(default), SCMOD_ALT, or SCMOD_SUPER.
+// Valid values are wxSTC_KEYMOD_CTRL (default), wxSTC_KEYMOD_ALT, or wxSTC_KEYMOD_SUPER.
 void wxStyledTextCtrl::SetRectangularSelectionModifier(int modifier)
 {
     SendMsg(SCI_SETRECTANGULARSELECTIONMODIFIER, modifier, 0);
@@ -4550,7 +4547,6 @@ void wxStyledTextCtrl::SetRepresentation(const wxString& encodedCharacter, const
 }
 
 // Set the way a character is drawn.
-// Result is NUL-terminated.
 wxString wxStyledTextCtrl::GetRepresentation(const wxString& encodedCharacter) const {
          int msg = SCI_GETREPRESENTATION;
          int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)NULL);
@@ -4624,7 +4620,7 @@ void wxStyledTextCtrl::LoadLexerLibrary(const wxString& path)
     SendMsg(SCI_LOADLEXERLIBRARY, 0, (sptr_t)(const char*)wx2stc(path));
 }
 
-// Retrieve a 'property' value previously set with SetProperty.
+// Retrieve a "property" value previously set with SetProperty.
 wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
          int len = SendMsg(SCI_GETPROPERTY, (sptr_t)(const char*)wx2stc(key), 0);
          if (!len) return wxEmptyString;
@@ -4637,8 +4633,8 @@ wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
          return stc2wx(buf);
 }
 
-// Retrieve a 'property' value previously set with SetProperty,
-// with '$()' variable replacement on returned buffer.
+// Retrieve a "property" value previously set with SetProperty,
+// with "$()" variable replacement on returned buffer.
 wxString wxStyledTextCtrl::GetPropertyExpanded(const wxString& key) {
          int len = SendMsg(SCI_GETPROPERTYEXPANDED, (uptr_t)(const char*)wx2stc(key), 0);
          if (!len) return wxEmptyString;
@@ -4651,8 +4647,8 @@ wxString wxStyledTextCtrl::GetPropertyExpanded(const wxString& key) {
          return stc2wx(buf);
 }
 
-// Retrieve a 'property' value previously set with SetProperty,
-// interpreted as an int AFTER any '$()' variable replacement.
+// Retrieve a "property" value previously set with SetProperty,
+// interpreted as an int AFTER any "$()" variable replacement.
 int wxStyledTextCtrl::GetPropertyInt(const wxString &key, int defaultValue) const {
         return SendMsg(SCI_GETPROPERTYINT, (uptr_t)(const char*)wx2stc(key), defaultValue);
 }
@@ -4682,8 +4678,7 @@ void* wxStyledTextCtrl::PrivateLexerCall(int operation, void* pointer) {
            return (void*)(sptr_t)SendMsg(SCI_PRIVATELEXERCALL, operation, (sptr_t)pointer); 
 }
 
-// Retrieve a '\n' separated list of properties understood by the current lexer.
-// Result is NUL-terminated.
+// Retrieve a '\\n' separated list of properties understood by the current lexer.
 wxString wxStyledTextCtrl::PropertyNames() const {
          const int msg = SCI_PROPERTYNAMES;
          int len = SendMsg(msg, 0, (sptr_t)NULL);
@@ -4704,7 +4699,6 @@ int wxStyledTextCtrl::PropertyType(const wxString& name)
 }
 
 // Describe a property.
-// Result is NUL-terminated.
 wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
          const int msg = SCI_DESCRIBEPROPERTY;
          int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)NULL);
@@ -4718,8 +4712,7 @@ wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
          return stc2wx(buf);
 }
 
-// Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
-// Result is NUL-terminated.
+// Retrieve a '\\n' separated list of descriptions of the keyword sets understood by the current lexer.
 wxString wxStyledTextCtrl::DescribeKeyWordSets() const {
          const int msg = SCI_DESCRIBEKEYWORDSETS;
          int len = SendMsg(msg, 0, (sptr_t)NULL);
@@ -4790,7 +4783,6 @@ int wxStyledTextCtrl::DistanceToSecondaryStyles() const
 }
 
 // Get the set of base styles that can be extended with sub styles
-// Result is NUL-terminated.
 wxString wxStyledTextCtrl::GetSubStyleBases() const {
          int msg = SCI_GETSUBSTYLEBASES;
          int len = SendMsg(msg, 0, (sptr_t)NULL);

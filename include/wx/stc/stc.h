@@ -2870,7 +2870,7 @@ public:
     // Insert string at a position.
     void InsertText(int pos, const wxString& text);
 
-    // Change the text that is being inserted in response to SC_MOD_INSERTCHECK
+    // Change the text that is being inserted in response to wxSTC_MOD_INSERTCHECK
     void ChangeInsertion(int length, const wxString& text);
 
     // Delete all text in the document.
@@ -2927,14 +2927,14 @@ public:
     bool GetUndoCollection() const;
 
     // Are white space characters currently visible?
-    // Returns one of SCWS_* constants.
+    // Returns one of wxSTC_WS_* constants.
     int GetViewWhiteSpace() const;
 
     // Make white space characters invisible, always visible or visible outside indentation.
     void SetViewWhiteSpace(int viewWS);
 
     // Retrieve the current tab draw mode.
-    // Returns one of SCTD_* constants.
+    // Returns one of wxSTC_TD_* constants.
     int GetTabDrawMode() const;
 
     // Set how tabs are drawn when visible.
@@ -2944,7 +2944,7 @@ public:
     int PositionFromPoint(wxPoint pt) const;
 
     // Find the position from a point within the window but return
-    // INVALID_POSITION if not close to text.
+    // wxSTC_INVALID_POSITION if not close to text.
     int PositionFromPointClose(int x, int y);
 
     // Set caret to start of a line and ensure it is visible.
@@ -2958,8 +2958,6 @@ public:
     void SetAnchor(int anchor);
 
     // Retrieve the text of the line containing the caret.
-    // Returns the index of the caret on the line.
-    // Result is NUL-terminated.
     #ifdef SWIG
     wxString GetCurLine(int* OUTPUT);
 #else
@@ -2972,7 +2970,7 @@ public:
     // Convert all line endings in the document to one mode.
     void ConvertEOLs(int eolMode);
 
-    // Retrieve the current end of line mode - one of CRLF, CR, or LF.
+    // Retrieve the current end of line mode - one of wxSTC_EOL_CRLF, wxSTC_EOL_CR, or wxSTC_EOL_LF.
     int GetEOLMode() const;
 
     // Set the current end of line mode.
@@ -3093,7 +3091,7 @@ public:
     // Retrieve the cursor shown in a margin.
     int GetMarginCursor(int margin) const;
 
-    // Set the background colour of a margin. Only visible for SC_MARGIN_COLOUR.
+    // Set the background colour of a margin. Only visible for wxSTC_MARGIN_COLOUR.
     void SetMarginBackground(int margin, const wxColour& back);
 
     // Retrieve the background colour of a margin
@@ -3191,7 +3189,6 @@ public:
     int StyleGetWeight(int style) const;
 
     // Set the character set of the font in a style.
-    // Converts the Scintilla character set values to a wxFontEncoding.
     void StyleSetCharacterSet(int style, int characterSet);
 
     // Set a style to be a hotspot or not.
@@ -3677,7 +3674,7 @@ public:
     // Replace the target text with the argument text after \\d processing.
     // Text is counted so it can contain NULs.
     // Looks for \\d where d is between 1 and 9 and replaces these with the strings
-    // matched in the last search operation which were surrounded by \( and \).
+    // matched in the last search operation which were surrounded by \\( and \\).
     // Returns the length of the replacement text including any change
     // caused by processing the \\d patterns.
     int ReplaceTargetRE(const wxString& text);
@@ -3720,7 +3717,7 @@ public:
     // Set the foreground colour for the highlighted part of the call tip.
     void CallTipSetForegroundHighlight(const wxColour& fore);
 
-    // Enable use of STYLE_CALLTIP and set call tip tab size in pixels.
+    // Enable use of wxSTC_STYLE_CALLTIP and set call tip tab size in pixels.
     void CallTipUseStyle(int tabSize);
 
     // Set position of calltip, above or below text.
@@ -3861,10 +3858,10 @@ public:
     // Retrive the start indent for wrapped lines.
     int GetWrapStartIndent() const;
 
-    // Sets how wrapped sublines are placed. Default is fixed.
+    // Sets how wrapped sublines are placed. Default is wxSTC_WRAPINDENT_FIXED.
     void SetWrapIndentMode(int wrapIndentMode);
 
-    // Retrieve how wrapped sublines are placed. Default is fixed.
+    // Retrieve how wrapped sublines are placed. Default is wxSTC_WRAPINDENT_FIXED.
     int GetWrapIndentMode() const;
 
     // Sets the degree of caching of layout information.
@@ -3886,7 +3883,6 @@ public:
     bool GetScrollWidthTracking() const;
 
     // Measure the pixel width of some text in a particular style.
-    // NUL terminated text argument.
     // Does not handle tab or control characters.
     int TextWidth(int style, const wxString& text);
 
@@ -3937,7 +3933,6 @@ public:
     int GetMultiPaste() const;
 
     // Retrieve the value of a tag from a regular expression search.
-    // Result is NUL-terminated.
     wxString GetTag(int tagNumber) const;
 
     // Join the lines in the target.
@@ -4156,7 +4151,7 @@ public:
     // Use specified indicator to highlight non matching brace instead of changing its style.
     void BraceBadLightIndicator(bool useSetting, int indicator);
 
-    // Find the position of a matching brace or INVALID_POSITION if no match.
+    // Find the position of a matching brace or wxSTC_INVALID_POSITION if no match.
     // The maxReStyle must be 0 for now. It may be defined in a future release.
     int BraceMatch(int pos, int maxReStyle=0);
 
@@ -4185,8 +4180,8 @@ public:
     // Retrieve the edge highlight mode.
     int GetEdgeMode() const;
 
-    // The edge may be displayed by a line (EDGE_LINE/EDGE_MULTILINE) or by highlighting text that
-    // goes beyond it (EDGE_BACKGROUND) or not displayed at all (EDGE_NONE).
+    // The edge may be displayed by a line (wxSTC_EDGE_LINE/wxSTC_EDGE_MULTILINE) or by highlighting text that
+    // goes beyond it (wxSTC_EDGE_BACKGROUND) or not displayed at all (wxSTC_EDGE_NONE).
     void SetEdgeMode(int edgeMode);
 
     // Retrieve the colour used in edge indication.
@@ -4266,7 +4261,7 @@ public:
     // Get whether mouse wheel can be active outside the window.
     bool GetMouseWheelCaptures() const;
 
-    // Sets the cursor to one of the SC_CURSOR* values.
+    // Sets the cursor to one of the wxSTC_CURSOR* values.
     void SetSTCCursor(int cursorType);
 
     // Get cursor type.
@@ -4303,8 +4298,10 @@ public:
     // Delete forwards from the current position to the end of the line.
     void DelLineRight();
 
-    // Get and Set the xOffset (ie, horizontal scroll position).
+    // Set the xOffset (ie, horizontal scroll position).
     void SetXOffset(int xOffset);
+
+    // Get the xOffset (ie, horizontal scroll position).
     int GetXOffset() const;
 
     // Set the last x chosen value to be the caret x position.
@@ -4318,7 +4315,7 @@ public:
     // The exclusion zone is given in lines.
     void SetYCaretPolicy(int caretPolicy, int caretSlop);
 
-    // Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
+    // Set printing to line wrapped (wxSTC_WRAP_WORD) or not line wrapped (wxSTC_WRAP_NONE).
     void SetPrintWrapMode(int wrapMode);
 
     // Is printing line wrapped?
@@ -4378,17 +4375,17 @@ public:
     // Copy argument text to the clipboard.
     void CopyText(int length, const wxString& text);
 
-    // Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
-    // by lines (SC_SEL_LINES).
+    // Set the selection mode to stream (wxSTC_SEL_STREAM) or rectangular (wxSTC_SEL_RECTANGLE/wxSTC_SEL_THIN) or
+    // by lines (wxSTC_SEL_LINES).
     void SetSelectionMode(int selectionMode);
 
     // Get the mode of the current selection.
     int GetSelectionMode() const;
 
-    // Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
+    // Retrieve the position of the start of the selection at the given line (wxSTC_INVALID_POSITION if no selection on this line).
     int GetLineSelStartPosition(int line);
 
-    // Retrieve the position of the end of the selection at the given line (INVALID_POSITION if no selection on this line).
+    // Retrieve the position of the end of the selection at the given line (wxSTC_INVALID_POSITION if no selection on this line).
     int GetLineSelEndPosition(int line);
 
     // Move caret down one line, extending rectangular selection to new caret position.
@@ -4680,7 +4677,7 @@ public:
     int CharPositionFromPoint(int x, int y);
 
     // Find the position of a character from a point within the window.
-    // Return INVALID_POSITION if not close to text.
+    // Return wxSTC_INVALID_POSITION if not close to text.
     int CharPositionFromPointClose(int x, int y);
 
     // Set whether switching to rectangular mode while selecting with the mouse is allowed.
@@ -4803,7 +4800,7 @@ public:
     // On GTK+, allow selecting the modifier key to use for mouse-based
     // rectangular selection. Often the window manager requires Alt+Mouse Drag
     // for moving windows.
-    // Valid values are SCMOD_CTRL(default), SCMOD_ALT, or SCMOD_SUPER.
+    // Valid values are wxSTC_KEYMOD_CTRL (default), wxSTC_KEYMOD_ALT, or wxSTC_KEYMOD_SUPER.
     void SetRectangularSelectionModifier(int modifier);
 
     // Get the modifier key used for rectangular selection.
@@ -4924,7 +4921,6 @@ public:
     void SetRepresentation(const wxString& encodedCharacter, const wxString& representation);
 
     // Set the way a character is drawn.
-    // Result is NUL-terminated.
     wxString GetRepresentation(const wxString& encodedCharacter) const;
 
     // Remove a character representation.
@@ -4957,15 +4953,15 @@ public:
     // Load a lexer library (dll / so).
     void LoadLexerLibrary(const wxString& path);
 
-    // Retrieve a 'property' value previously set with SetProperty.
+    // Retrieve a "property" value previously set with SetProperty.
     wxString GetProperty(const wxString& key);
 
-    // Retrieve a 'property' value previously set with SetProperty,
-    // with '$()' variable replacement on returned buffer.
+    // Retrieve a "property" value previously set with SetProperty,
+    // with "$()" variable replacement on returned buffer.
     wxString GetPropertyExpanded(const wxString& key);
 
-    // Retrieve a 'property' value previously set with SetProperty,
-    // interpreted as an int AFTER any '$()' variable replacement.
+    // Retrieve a "property" value previously set with SetProperty,
+    // interpreted as an int AFTER any "$()" variable replacement.
     int GetPropertyInt(const wxString &key, int defaultValue=0) const;
 
     // Retrieve the number of bits the current lexer needs for styling.
@@ -4977,19 +4973,16 @@ public:
     // For private communication between an application and a known lexer.
     void* PrivateLexerCall(int operation, void* pointer);
 
-    // Retrieve a '\n' separated list of properties understood by the current lexer.
-    // Result is NUL-terminated.
+    // Retrieve a '\\n' separated list of properties understood by the current lexer.
     wxString PropertyNames() const;
 
     // Retrieve the type of a property.
     int PropertyType(const wxString& name);
 
     // Describe a property.
-    // Result is NUL-terminated.
     wxString DescribeProperty(const wxString& name) const;
 
-    // Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
-    // Result is NUL-terminated.
+    // Retrieve a '\\n' separated list of descriptions of the keyword sets understood by the current lexer.
     wxString DescribeKeyWordSets() const;
 
     // Bit set of LineEndType enumertion for which line ends beyond the standard
@@ -5022,7 +5015,6 @@ public:
     int DistanceToSecondaryStyles() const;
 
     // Get the set of base styles that can be extended with sub styles
-    // Result is NUL-terminated.
     wxString GetSubStyleBases() const;
 
     //}}}

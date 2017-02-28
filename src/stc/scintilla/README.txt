@@ -46,7 +46,8 @@ that list. Also, for any enums that begin with 'SCXX_' instead of
 'SC_', add an entry to valPrefixes to make sure the new names for
 constants are generated consistently.
 
-7. Run gen_iface.py.
+7. Run gen_iface.py.  It's best to use python 2.6 or later.  If
+using an earlier version, please delete any .pyc files generated.
 
 8. Any other new methods should be checked to ensure that the
 generated code is appropriate for what they are doing and if not then
@@ -56,7 +57,8 @@ instead.
 9. Add documentation code for any new methods to
 interface/wx/stc/stc.h, also check any documentation-only changes from
 Scintilla.iface and see if the existing docs for those items should be
-updated too.
+updated too.  For new functions in Scintilla.iface, an entry should be
+added to the docsMap and sinceAnnotations dictionaries in gen_docs.py.
 
 10. Apply the fix for scintilla/src/UniConversion.h based on commit by
 Vadim Zeitlin <vadim@wxwidgets.org> from March 5th, 2016.
