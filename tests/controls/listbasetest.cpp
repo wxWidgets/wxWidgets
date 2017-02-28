@@ -445,6 +445,65 @@ void ListBaseTestCase::ImageList()
     CPPUNIT_ASSERT_EQUAL(imglist, list->GetImageList(wxIMAGE_LIST_NORMAL));
 }
 
+void ListBaseTestCase::HitTest()
+{
+#ifdef __WXMSW__ // ..until proven to work with other platforms
+    wxListCtrl* const list = GetList();
+    list->SetWindowStyle(wxLC_REPORT);
+
+    // set small image list
+    wxSize size(16, 16);
+    wxImageList* m_imglistSmall = new wxImageList(size.x, size.y);
+    m_imglistSmall->Add(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_LIST, size));
+    list->AssignImageList(m_imglistSmall, wxIMAGE_LIST_SMALL);
+
+    // insert 2 columns
+    list->InsertColumn(0, "Column 0");
+    list->InsertColumn(1, "Column 1");
+
+    // and a couple of test items too
+    list->InsertItem(0, "Item 0", 0);
+    list->SetItem(0, 1, "0, 1");
+
+    list->InsertItem(1, "Item 1", 0);
+
+    // enable checkboxes to test state icon
+    list->EnableCheckBoxes();
+
+    // get coordinates
+    wxRect rectSubItem0, rectIcon;
+    list->GetSubItemRect(0, 0, rectSubItem0); // column 0
+    list->GetItemRect(0, rectIcon, wxLIST_RECT_ICON); // icon
+    int y = rectSubItem0.GetTop() + (rectSubItem0.GetBottom() -
+            rectSubItem0.GetTop()) / 2;
+    int flags = 0;
+
+    // state icon (checkbox)
+    int xCheckBox = rectSubItem0.GetLeft() + (rectIcon.GetLeft() -
+                    rectSubItem0.GetLeft()) / 2;
+    list->HitTest(wxPoint(xCheckBox, y), flags);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected wxLIST_HITTEST_ONITEMSTATEICON",
+        wxLIST_HITTEST_ONITEMSTATEICON, flags);
+
+    // icon
+    int xIcon = rectIcon.GetLeft() + (rectIcon.GetRight() - rectIcon.GetLeft()) / 2;
+    list->HitTest(wxPoint(xIcon, y), flags);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected wxLIST_HITTEST_ONITEMICON",
+        wxLIST_HITTEST_ONITEMICON, flags);
+
+    // label, beyond column 0
+    wxRect rectItem;
+    list->GetItemRect(0, rectItem); // entire item
+    int xHit = rectSubItem0.GetRight() + (rectItem.GetRight() - rectSubItem0.GetRight()) / 2;
+    list->HitTest(wxPoint(xHit, y), flags);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected wxLIST_HITTEST_ONITEMLABEL",
+        wxLIST_HITTEST_ONITEMLABEL, flags);
+
+    //tidy up when we are finished
+    list->ClearAll();
+#endif // __WXMSW__
+}
+
 namespace
 {
     //From the sample but fixed so it actually inverts
