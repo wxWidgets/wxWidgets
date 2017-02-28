@@ -423,14 +423,7 @@ void wxListCtrl::UpdateStyle()
 
         // Only set the window style if the view bits have changed.
         if ( dwStyleOld != dwStyleNew )
-        {
             ::SetWindowLong(GetHwnd(), GWL_STYLE, dwStyleNew);
-
-            // if we switched to the report view, set the extended styles for
-            // it too
-            if ( !(dwStyleOld & LVS_REPORT) && (dwStyleNew & LVS_REPORT) )
-                MSWSetExListStyles();
-        }
     }
 }
 
@@ -502,9 +495,16 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 {
     if ( flag != m_windowStyle )
     {
+        long oldStyle = m_windowStyle;
+
         wxListCtrlBase::SetWindowStyleFlag(flag);
 
         UpdateStyle();
+
+        // if we switched to the report view, set the extended styles for
+        // it too
+        if ( !(oldStyle & wxLC_REPORT) && (m_windowStyle & wxLC_REPORT) )
+            MSWSetExListStyles();
 
         Refresh();
     }
