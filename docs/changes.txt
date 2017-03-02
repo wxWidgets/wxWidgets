@@ -169,6 +169,7 @@ wxMSW:
 - Handle Ctrl-A in non-rich multiline text controls (Jens Göpfert).
 - Use cairo_win32_surface_create_with_format() to create ARGB surface from
   wxMemoryDC (Cairo >= 1.15.4).
+- Fix updating bounding box in wxDC::DrawSpline().
 
 wxOSX:
 
