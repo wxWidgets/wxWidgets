@@ -1114,6 +1114,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     bezier_pos++;
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
+    CalcBoundingBox(x1, y1);
 
     node = node->GetNext();
     p = node->GetData();
@@ -1127,6 +1128,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     bezier_pos++;
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
+    CalcBoundingBox(x2, y2);
 
 #if !wxUSE_STD_CONTAINERS
     while ((node = node->GetNext()) != NULL)
@@ -1156,6 +1158,8 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
         bezier_pos++;
         cx1 = cx4;
         cy1 = cy4;
+
+        CalcBoundingBox(x2, y2);
     }
 
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
