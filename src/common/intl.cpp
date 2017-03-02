@@ -824,15 +824,11 @@ wxString wxLocale::GetSystemEncodingName()
     // to Unix98)
     char *oldLocale = strdup(setlocale(LC_CTYPE, NULL));
     setlocale(LC_CTYPE, "");
-    const char *alang = nl_langinfo(CODESET);
+    encname = wxString::FromAscii(nl_langinfo(CODESET));
     setlocale(LC_CTYPE, oldLocale);
     free(oldLocale);
 
-    if ( alang )
-    {
-        encname = wxString::FromAscii( alang );
-    }
-    else // nl_langinfo() failed
+    if (encname.empty())
 #endif // HAVE_LANGINFO_H
     {
         // if we can't get at the character set directly, try to see if it's in
