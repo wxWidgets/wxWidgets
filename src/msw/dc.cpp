@@ -1103,7 +1103,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     wxASSERT_MSG( n_points > 2 , wxT("incomplete list of spline points?") );
 
     const size_t n_bezier_points = n_points * 3 + 1;
-    POINT *lppt = (POINT *)malloc(n_bezier_points*sizeof(POINT));
+    POINT *lppt = new POINT[n_bezier_points];
     size_t bezier_pos = 0;
     wxCoord x1, y1, x2, y2, cx1, cy1, cx4, cy4;
 
@@ -1172,7 +1172,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
 
     ::PolyBezier( GetHdc(), lppt, bezier_pos );
 
-    free(lppt);
+    delete []lppt;
 }
 #endif // wxUSE_SPLINES
 
