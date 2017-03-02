@@ -127,6 +127,7 @@ public:
     wxGraphicsRenderer* GetRenderer() const { return m_renderer; }
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
+    void ShowBoundingBox(bool show) { m_showBBox = show; Refresh(); }
 
     void Draw(wxDC& dc);
 
@@ -173,6 +174,7 @@ private:
     wxGraphicsRenderer* m_renderer;
 #endif
     bool         m_useBuffer;
+    bool         m_showBBox;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -253,6 +255,8 @@ public:
     void OnSave(wxCommandEvent& event);
     void OnShow(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
+    void OnBoundingBox(wxCommandEvent& evt);
+    void OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt);
 
 #if wxUSE_COLOURDLG
     wxColour SelectColour();
@@ -326,6 +330,7 @@ enum
 #endif
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
+    File_BBox,
     File_Clip,
     File_Buffer,
     File_Copy,
@@ -512,6 +517,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_renderer = NULL;
 #endif
     m_useBuffer = false;
+    m_showBBox = false;
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -1855,6 +1861,15 @@ void MyCanvas::Draw(wxDC& pdc)
         default:
             break;
     }
+
+    // For drawing with raw wxGraphicsContext
+    // there is no bounding box to obtain.
+    if ( m_showBBox && m_show != File_ShowGraphics)
+    {
+        dc.SetPen(wxPen(wxColor(0, 128, 0), 1, wxPENSTYLE_DOT));
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(dc.MinX(), dc.MinY(), dc.MaxX()-dc.MinX()+1, dc.MaxY()-dc.MinY()+1);
+    }
 }
 
 void MyCanvas::OnMouseMove(wxMouseEvent &event)
@@ -1994,6 +2009,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
     EVT_MENU      (File_Copy,     MyFrame::OnCopy)
     EVT_MENU      (File_Save,     MyFrame::OnSave)
+    EVT_MENU      (File_BBox,     MyFrame::OnBoundingBox)
+    EVT_UPDATE_UI (File_BBox,     MyFrame::OnBoundingBoxUpdateUI)
 
     EVT_MENU_RANGE(MenuShow_First,   MenuShow_Last,   MyFrame::OnShow)
 
@@ -2046,6 +2063,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
     menuFile->AppendSeparator();
+    menuFile->AppendCheckItem(File_BBox, wxS("Show bounding box\tCtrl-B"),
+                              wxS("Show extents used in drawing operations"));
     menuFile->AppendCheckItem(File_Clip, wxT("&Clip\tCtrl-C"), wxT("Clip/unclip drawing"));
     menuFile->AppendCheckItem(File_Buffer, wxT("&Use wx&BufferedPaintDC\tCtrl-Z"), wxT("Buffer painting"));
     menuFile->AppendSeparator();
@@ -2348,6 +2367,16 @@ void MyFrame::OnOption(wxCommandEvent& event)
     }
 
     m_canvas->Refresh();
+}
+
+void MyFrame::OnBoundingBox(wxCommandEvent& evt)
+{
+    m_canvas->ShowBoundingBox(evt.IsChecked());
+}
+
+void MyFrame::OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt)
+{
+    evt.Enable(m_canvas->GetPage() != File_ShowGraphics);
 }
 
 void MyFrame::PrepareDC(wxDC& dc)
