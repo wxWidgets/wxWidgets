@@ -1,0 +1,74 @@
+Building wxGTK port with Win32 MSys2 GDK backend
+------------------------------------------------
+
+GTK+ widget toolkit has multiple GDK backends and one of them is Win32.
+It is a wrapper around Windows API.
+
+These notes don't consider building wxGTK with X11 backend under Windows.
+
+The MSys2 website is http://www.msys2.org/
+
+These building steps are NOT the normal way to build MSys2 MinGW packages.
+But, they are a way the wxWidgets developers can test that wxWidgets
+can build the wxGTK/Win32 libraries under MSys2 MinGW.
+
+For the MSys2 way please see https://github.com/Alexpux/MINGW-packages
+
+Building steps:
+
+#Note: The "#" is used in front of a comment to help the people who cut
+#      and paste these directions.
+#Warning: At the time these directions were written the GTK version 3
+#         was NOT able to create wxGTK/Win32 libraries that were usable.
+
+#1. Install the mingw32 packages needed to build wxGTK/Win32 using the 
+#   configure/make build method. 
+#   From the MSys2 prompt or MSys2 MinGW prompt:
+
+#   The 32 bit Mingw packages are prefixed with "mingw-w64-i686-";
+#   Change the prefix to "mingw-w64-x86_64-" if you wish to do 64 bit.
+
+pacman -S make
+pacman -S mingw-w64-i686-cppunit
+pacman -S mingw-w64-i686-libjpeg-turbo
+pacman -S mingw-w64-i686-libpng
+pacman -S mingw-w64-i686-libtiff
+# Not all of toolchain is needed; but, easiest to install all of it.
+pacman -S mingw-w64-i686-toolchain
+# gtk2 takes a very long time after install fontconfig updating font cache
+pacman -S mingw-w64-i686-webkitgtk2
+
+# Packages that are needed but are normally installed already.
+pacman -S mingw-w64-i686-gcc-libs
+pacman -S mingw-w64-i686-expat
+pacman -S mingw-w64-i686-xz
+pacman -S mingw-w64-i686-zlib
+pacman -S mingw-w64-i686-gdk-pixbuf2
+pacman -S mingw-w64-i686-gtk2 
+
+
+#2. Build the wxGTK/Win32 static library
+#2a.Open MSys2 MinGW Prompt
+#   (These steps were tested on MinGW32; but, should work under MinGW64)
+#2b.Use the cd command to change directory to the wxWidgets top folder.
+
+
+#2c.Create the "build-gtk2-static" folder to build the static libraries
+mkdir -p build-gtk2-static
+
+#2d.Configure wxWidgets
+cd build-gtk2-static && \
+  ../configure --with-gtk=2 \
+    --disable-shared \
+  && cd ..
+
+#2e.make the wxGTK static libraries
+cd build-gtk2-static && make && cd ..
+
+
+#3  Build and run the minimal static sample
+#3a.Build the minimal sample
+cd build-gtk2-static/samples/minimal && make && cd ../../..
+
+#3b.Run the minimal sample
+cd samples && ../build-gtk2-static/samples/minimal/minimal.exe && cd ..
