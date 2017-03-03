@@ -2095,7 +2095,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
     menuFile->AppendSeparator();
-    menuFile->AppendCheckItem(File_BBox, wxS("Show bounding box\tCtrl-B"),
+    menuFile->AppendCheckItem(File_BBox, wxS("Show bounding box\tCtrl-E"),
                               wxS("Show extents used in drawing operations"));
     menuFile->AppendCheckItem(File_Clip, wxT("&Clip\tCtrl-C"), wxT("Clip/unclip drawing"));
     menuFile->AppendCheckItem(File_Buffer, wxT("&Use wx&BufferedPaintDC\tCtrl-Z"), wxT("Buffer painting"));
