@@ -42,6 +42,9 @@
 #if wxUSE_SVG
 #include "wx/dcsvg.h"
 #endif
+#if wxUSE_POSTSCRIPT
+#include "wx/dcps.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // resources
@@ -2224,22 +2227,28 @@ void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
-    wxFileDialog dlg(this, wxT("Save as bitmap"), wxT(""), wxT(""),
+    wxString wildCard = wxS("Bitmap image (*.bmp)|*.bmp;*.BMP");
 #if wxUSE_LIBPNG
-                     wxT("PNG image (*.png)|*.png;*.PNG|")
+    wildCard.Append(wxS("|PNG image (*.png)|*.png;*.PNG"));
 #endif
 #if wxUSE_SVG
-                     wxT("SVG image (*.svg)|*.svg;*.SVG|")
+    wildCard.Append(wxS("|SVG image (*.svg)|*.svg;*.SVG"));
 #endif
-                     wxT("Bitmap image (*.bmp)|*.bmp;*.BMP"),
+#if wxUSE_POSTSCRIPT
+    wildCard.Append(wxS("|PostScript file (*.ps)|*.ps;*.PS"));
+#endif
+
+    wxFileDialog dlg(this, wxT("Save as bitmap"), wxEmptyString, wxEmptyString,
+                     wildCard,
                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() == wxID_OK)
     {
         int width, height;
         m_canvas->GetDrawingSize(&width, &height);
+        wxFileName fn(dlg.GetPath());
+        wxString ext = fn.GetExt().Lower();
 #if wxUSE_SVG
-        wxString ext = dlg.GetPath().AfterLast('.').Lower();
-        if (ext.Lower() == wxT("svg"))
+        if (ext == wxT("svg"))
         {
             // Graphics screen can only be drawn using GraphicsContext
             if (m_canvas->GetPage() == File_ShowGraphics) {
@@ -2259,6 +2268,50 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         }
         else
 #endif
+#if wxUSE_POSTSCRIPT
+        if ( ext == wxS("ps") )
+        {
+            // Graphics screen can only be drawn using wxGraphicsContext
+            if ( m_canvas->GetPage() == File_ShowGraphics )
+            {
+                wxLogMessage("Graphics screen can not be saved as PostScript file.");
+                return;
+            }
+#if wxUSE_GRAPHICS_CONTEXT
+            wxGraphicsRenderer* curRenderer = m_canvas->GetRenderer();
+            m_canvas->UseGraphicRenderer(NULL);
+#endif // wxUSE_GRAPHICS_CONTEXT
+            wxPrintData printData;
+            printData.SetPrintMode(wxPRINT_MODE_FILE);
+            printData.SetFilename(dlg.GetPath());
+            printData.SetOrientation(wxPORTRAIT);
+            printData.SetPaperId(wxPAPER_A4);
+            wxPostScriptDC psdc(printData);
+            // Save current scale factor
+            const double curUserScaleX = m_xUserScale;
+            const double curUserScaleY = m_yUserScale;
+            // Change the scale temporarily to fit the drawing into the page.
+            int w, h;
+            psdc.GetSize(&w, &h);
+            double sc = wxMin((double)w / width, (double)h / height);
+            m_xUserScale *= sc;
+            m_yUserScale *= sc;
+            psdc.StartDoc(wxS("Drawing sample"));
+            // Define default font.
+            psdc.SetFont( wxFontInfo(10).Family(wxFONTFAMILY_MODERN) );
+            psdc.StartPage();
+            m_canvas->Draw(psdc);
+            psdc.EndPage();
+            psdc.EndDoc();
+            // Restore original scale facor
+            m_xUserScale = curUserScaleX;
+            m_yUserScale = curUserScaleY;
+#if wxUSE_GRAPHICS_CONTEXT
+            m_canvas->UseGraphicRenderer(curRenderer);
+#endif // wxUSE_GRAPHICS_CONTEXT
+        }
+        else
+#endif // wxUSE_POSTSCRIPT
         {
             wxBitmap bmp(width, height);
             wxMemoryDC mdc(bmp);
