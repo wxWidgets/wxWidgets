@@ -128,6 +128,7 @@ public:
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
     void ShowBoundingBox(bool show) { m_showBBox = show; Refresh(); }
+    void GetDrawingSize(int* width, int* height) const;
 
     void Draw(wxDC& dc);
 
@@ -175,6 +176,8 @@ private:
 #endif
     bool         m_useBuffer;
     bool         m_showBBox;
+    wxCoord      m_sizeX;
+    wxCoord      m_sizeY;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -518,6 +521,8 @@ MyCanvas::MyCanvas(MyFrame *parent)
 #endif
     m_useBuffer = false;
     m_showBBox = false;
+    m_sizeX = 0;
+    m_sizeY = 0;
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -1710,6 +1715,15 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     }
 }
 
+void MyCanvas::GetDrawingSize(int* width, int* height) const
+{
+    if ( width )
+        *width = m_sizeX;
+
+    if ( height )
+        *height = m_sizeY;
+}
+
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     if ( m_useBuffer )
@@ -1760,7 +1774,12 @@ void MyCanvas::Draw(wxDC& pdc)
     wxDC &dc = pdc ;
 #endif
 
-    PrepareDC(dc);
+    // Adjust scrolled contents for screen drawing operations only.
+    if ( wxDynamicCast(&pdc, wxBufferedPaintDC) ||
+         wxDynamicCast(&pdc, wxPaintDC) )
+    {
+        PrepareDC(dc);
+    }
 
     m_owner->PrepareDC(dc);
 
@@ -1869,6 +1888,16 @@ void MyCanvas::Draw(wxDC& pdc)
         dc.SetPen(wxPen(wxColor(0, 128, 0), 1, wxPENSTYLE_DOT));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
         dc.DrawRectangle(dc.MinX(), dc.MinY(), dc.MaxX()-dc.MinX()+1, dc.MaxY()-dc.MinY()+1);
+    }
+
+    // Adjust drawing area dimensions only if screen drawing is invoked.
+    if ( wxDynamicCast(&pdc, wxBufferedPaintDC) ||
+         wxDynamicCast(&pdc, wxPaintDC) )
+    {
+        wxCoord x0, y0;
+        dc.GetDeviceOrigin(&x0, &y0);
+        m_sizeX = dc.LogicalToDeviceX(dc.MaxX()) - x0 + 1;
+        m_sizeY = dc.LogicalToDeviceY(dc.MaxY()) - y0 + 1;
     }
 }
 
@@ -2207,7 +2236,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
     if (dlg.ShowModal() == wxID_OK)
     {
         int width, height;
-        m_canvas->GetVirtualSize(&width, &height);
+        m_canvas->GetDrawingSize(&width, &height);
 #if wxUSE_SVG
         wxString ext = dlg.GetPath().AfterLast('.').Lower();
         if (ext.Lower() == wxT("svg"))
