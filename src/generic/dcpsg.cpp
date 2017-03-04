@@ -323,6 +323,7 @@ void wxPostScriptDCImpl::Init()
     m_underlinePosition = 0.0;
     m_underlineThickness = 0.0;
 
+    m_isFontChanged = false;
 }
 
 wxPostScriptDCImpl::~wxPostScriptDCImpl ()
@@ -1038,13 +1039,27 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
 
     if (!font.IsOk())  return;
 
+    // Note that we may legitimately call SetFont even before BeginDoc.
+    if ( font == m_font ) // No change
+        return;
+
     m_font = font;
+    m_isFontChanged = true;
+}
+
+// Actually set PostScript font.
+void wxPostScriptDCImpl::SetPSFont()
+{
+    wxASSERT_MSG( m_font.IsOk(), wxS("Font is not yet set") );
+
+    if ( !m_isFontChanged )
+        return;
 
     wxFontStyle Style = m_font.GetStyle();
     wxFontWeight Weight = m_font.GetWeight();
 
-    const char *name;
-    switch (m_font.GetFamily())
+    wxString name;
+    switch ( m_font.GetFamily() )
     {
         case wxTELETYPE:
         case wxMODERN:
@@ -1052,16 +1067,16 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
             if (Style == wxFONTSTYLE_ITALIC)
             {
                 if (Weight == wxFONTWEIGHT_BOLD)
-                    name = "/Courier-BoldOblique";
+                    name = wxS("/Courier-BoldOblique");
                 else
-                    name = "/Courier-Oblique";
+                    name = wxS("/Courier-Oblique");
             }
             else
             {
                 if (Weight == wxFONTWEIGHT_BOLD)
-                    name = "/Courier-Bold";
+                    name = wxS("/Courier-Bold");
                 else
-                    name = "/Courier";
+                    name = wxS("/Courier");
             }
             break;
         }
@@ -1070,22 +1085,22 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
             if (Style == wxFONTSTYLE_ITALIC)
             {
                 if (Weight == wxFONTWEIGHT_BOLD)
-                    name = "/Times-BoldItalic";
+                    name = wxS("/Times-BoldItalic");
                 else
-                    name = "/Times-Italic";
+                    name = wxS("/Times-Italic");
             }
             else
             {
                 if (Weight == wxFONTWEIGHT_BOLD)
-                    name = "/Times-Bold";
+                    name = wxS("/Times-Bold");
                 else
-                    name = "/Times-Roman";
+                    name = wxS("/Times-Roman");
             }
             break;
         }
         case wxSCRIPT:
         {
-            name = "/ZapfChancery-MediumItalic";
+            name = wxS("/ZapfChancery-MediumItalic");
             break;
         }
         case wxSWISS:
@@ -1094,42 +1109,37 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
             if (Style == wxFONTSTYLE_ITALIC)
             {
                 if (Weight == wxFONTWEIGHT_BOLD)
-                    name = "/Helvetica-BoldOblique";
+                    name = wxS("/Helvetica-BoldOblique");
                 else
-                    name = "/Helvetica-Oblique";
+                    name = wxS("/Helvetica-Oblique");
             }
             else
             {
                 if (Weight == wxFONTWEIGHT_BOLD)
-                    name = "/Helvetica-Bold";
+                    name = wxS("/Helvetica-Bold");
                 else
-                    name = "/Helvetica";
+                    name = wxS("/Helvetica");
             }
             break;
         }
     }
 
-    // We may legitimately call SetFont before BeginDoc
-    if (!m_pstream)
-        return;
-
+    wxString buffer;
     // Generate PS code to register the font only once.
     if ( m_definedPSFonts.Index(name) == wxNOT_FOUND )
     {
-        PsPrint( name );
-        PsPrint( " reencodeISO def\n" );
+        buffer.Printf( "%s reencodeISO def\n", name.c_str() );
+        PsPrint( buffer );
         m_definedPSFonts.Add(name);
     }
-    PsPrint( name );
-    PsPrint( " findfont\n" );
 
-
-    float size = float(m_font.GetPointSize());
-    size = size * GetFontPointSizeAdjustment(DPI);
-    wxString buffer;
-    buffer.Printf( "%f scalefont setfont\n", size * m_scaleX );
+    // Select font
+    float size = (float)m_font.GetPointSize() * GetFontPointSizeAdjustment(DPI);
+    buffer.Printf( "%s findfont %f scalefont setfont\n", name.c_str(), size * m_scaleX );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
+
+    m_isFontChanged = false;
 }
 
 void wxPostScriptDCImpl::SetPen( const wxPen& pen )
@@ -1425,7 +1435,7 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
     if ( !textbuf )
         return;
 
-    SetFont( m_font );
+    SetPSFont();
 
     wxCoord text_descent;
     GetOwner()->GetTextExtent(text, NULL, NULL, &text_descent);
@@ -1463,7 +1473,7 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
     if ( !textbuf )
         return;
 
-    SetFont( m_font );
+    SetPSFont();
 
     // Calculate bottom-left coordinates of the rotated text
     wxCoord text_descent;
@@ -1626,11 +1636,13 @@ void wxPostScriptDCImpl::ComputeScaleAndOrigin()
     wxDCImpl::ComputeScaleAndOrigin();
 
     // If scale has changed call SetPen to recalculate the line width
-    // and SetFont to recalculate font size
-    if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.IsOk() )
+    // and request for recalculating the font size at nearest opportunity.
+    if ( wxRealPoint(m_scaleX, m_scaleY) != origScale )
     {
-        SetPen( m_pen );
-        SetFont( m_font  );
+        if ( m_pen.IsOk() )
+            SetPen( m_pen );
+
+        m_isFontChanged = true;
     }
 }
 

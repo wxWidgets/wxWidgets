@@ -139,6 +139,8 @@ protected:
 
     // Common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord testDescent, double lineHeight);
+    // Actually set PostScript font
+    void SetPSFont();
 
     FILE*             m_pstream;    // PostScript output stream
     unsigned char     m_currentRed;
@@ -151,6 +153,7 @@ protected:
     wxPrintData       m_printData;
     double            m_pageHeight;
     wxArrayString     m_definedPSFonts;
+    bool              m_isFontChanged;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPostScriptDCImpl);
