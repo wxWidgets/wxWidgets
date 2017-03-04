@@ -141,6 +141,8 @@ protected:
     void DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord testDescent, double lineHeight);
     // Actually set PostScript font
     void SetPSFont();
+    // Set PostScript color
+    void SetPSColour(const wxColour& col);
 
     FILE*             m_pstream;    // PostScript output stream
     unsigned char     m_currentRed;

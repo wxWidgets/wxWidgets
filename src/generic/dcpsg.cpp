@@ -507,7 +507,7 @@ void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
         PsPrint( "closepath\n" );
 
         SetBrush(m_brush);
-        // We need to preserve current path to draw the contour int the next step.
+        // We need to preserve current path to draw the contour in the next step.
         if ( m_pen.IsNonTransparent() )
             PsPrint( "gsave fill grestore\n" );
         else
@@ -1033,6 +1033,42 @@ void wxPostScriptDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     PsPrint( "origstate restore\n" );
 }
 
+// Set PostScript color
+void wxPostScriptDCImpl::SetPSColour(const wxColor& col)
+{
+    unsigned char red = col.Red();
+    unsigned char blue = col.Blue();
+    unsigned char green = col.Green();
+
+    if ( !m_colour )
+    {
+        // Anything not white is black
+        if ( !(red == 255 && blue == 255 && green == 255) )
+        {
+            red = 0;
+            green = 0;
+            blue = 0;
+        }
+        // setgray here ?
+    }
+
+    if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
+    {
+        double redPS = (double)red / 255.0;
+        double bluePS = (double)blue / 255.0;
+        double greenPS = (double)green / 255.0;
+
+        wxString buffer;
+        buffer.Printf( "%f %f %f setrgbcolor\n", redPS, greenPS, bluePS );
+        buffer.Replace( ",", "." );
+        PsPrint( buffer );
+
+        m_currentRed = red;
+        m_currentBlue = blue;
+        m_currentGreen = green;
+    }
+}
+
 void wxPostScriptDCImpl::SetFont( const wxFont& font )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
@@ -1248,38 +1284,7 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
     }
 
     // Line colour
-    unsigned char red = m_pen.GetColour().Red();
-    unsigned char blue = m_pen.GetColour().Blue();
-    unsigned char green = m_pen.GetColour().Green();
-
-    if (!m_colour)
-    {
-        // Anything not white is black
-        if (! (red == (unsigned char) 255 &&
-               blue == (unsigned char) 255 &&
-               green == (unsigned char) 255) )
-        {
-            red = (unsigned char) 0;
-            green = (unsigned char) 0;
-            blue = (unsigned char) 0;
-        }
-        // setgray here ?
-    }
-
-    if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
-    {
-        double redPS = (double)(red) / 255.0;
-        double bluePS = (double)(blue) / 255.0;
-        double greenPS = (double)(green) / 255.0;
-
-        buffer.Printf( "%f %f %f setrgbcolor\n", redPS, greenPS, bluePS );
-        buffer.Replace( ",", "." );
-        PsPrint( buffer );
-
-        m_currentRed = red;
-        m_currentBlue = blue;
-        m_currentGreen = green;
-    }
+    SetPSColour(m_pen.GetColour());
 }
 
 void wxPostScriptDCImpl::SetBrush( const wxBrush& brush )
@@ -1291,39 +1296,7 @@ void wxPostScriptDCImpl::SetBrush( const wxBrush& brush )
     m_brush = brush;
 
     // Brush colour
-    unsigned char red = m_brush.GetColour().Red();
-    unsigned char blue = m_brush.GetColour().Blue();
-    unsigned char green = m_brush.GetColour().Green();
-
-    if (!m_colour)
-    {
-        // Anything not white is black
-        if (! (red == (unsigned char) 255 &&
-               blue == (unsigned char) 255 &&
-               green == (unsigned char) 255) )
-        {
-            red = (unsigned char) 0;
-            green = (unsigned char) 0;
-            blue = (unsigned char) 0;
-        }
-        // setgray here ?
-    }
-
-    if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
-    {
-        double redPS = (double)(red) / 255.0;
-        double bluePS = (double)(blue) / 255.0;
-        double greenPS = (double)(green) / 255.0;
-
-        wxString buffer;
-        buffer.Printf( "%f %f %f setrgbcolor\n", redPS, greenPS, bluePS );
-        buffer.Replace( ",", "." );
-        PsPrint( buffer );
-
-        m_currentRed = red;
-        m_currentBlue = blue;
-        m_currentGreen = green;
-    }
+    SetPSColour(m_brush.GetColour());
 }
 
 // Common part of DoDrawText() and DoDrawRotatedText()
@@ -1333,40 +1306,9 @@ void wxPostScriptDCImpl::DrawAnyText(const wxWX2MBbuf& textbuf, wxCoord textDesc
 
     wxString buffer;
 
-    if (m_textForegroundColour.IsOk())
+    if ( m_textForegroundColour.IsOk() )
     {
-        unsigned char red = m_textForegroundColour.Red();
-        unsigned char blue = m_textForegroundColour.Blue();
-        unsigned char green = m_textForegroundColour.Green();
-
-        if (!m_colour)
-        {
-            // Anything not white is black
-            if (! (red == (unsigned char) 255 &&
-                        blue == (unsigned char) 255 &&
-                        green == (unsigned char) 255))
-            {
-                red = (unsigned char) 0;
-                green = (unsigned char) 0;
-                blue = (unsigned char) 0;
-            }
-        }
-
-        // maybe setgray here ?
-        if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
-        {
-            double redPS = (double)(red) / 255.0;
-            double bluePS = (double)(blue) / 255.0;
-            double greenPS = (double)(green) / 255.0;
-
-            buffer.Printf( "%f %f %f setrgbcolor\n", redPS, greenPS, bluePS );
-            buffer.Replace( ",", "." );
-            PsPrint( buffer );
-
-            m_currentRed = red;
-            m_currentBlue = blue;
-            m_currentGreen = green;
-        }
+        SetPSColour(m_textForegroundColour);
     }
 
     PsPrint( "(" );
