@@ -35,10 +35,6 @@
 #include "wx/msw/missing.h" // for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
 #include "wx/msw/private/metrics.h"
 
-#ifndef SPI_GETFLATMENU
-#define SPI_GETFLATMENU                     0x1022
-#endif
-
 #include "wx/fontutil.h"
 #include "wx/fontenum.h"
 
