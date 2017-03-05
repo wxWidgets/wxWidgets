@@ -147,16 +147,8 @@ DEFINE_GUID(IID_IFileDialog,
 // constants
 // ----------------------------------------------------------------------------
 
-#ifndef BIF_NEWDIALOGSTYLE
-    #define BIF_NEWDIALOGSTYLE 0x0040
-#endif
-
 #ifndef BIF_NONEWFOLDERBUTTON
     #define BIF_NONEWFOLDERBUTTON  0x0200
-#endif
-
-#ifndef BIF_EDITBOX
-    #define BIF_EDITBOX 16
 #endif
 
 // ----------------------------------------------------------------------------
