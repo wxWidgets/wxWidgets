@@ -126,10 +126,6 @@
     #define TDLGEBS_EXPANDEDPRESSED 6
 #endif
 
-#ifndef DFCS_HOT
-    #define DFCS_HOT 0x1000
-#endif
-
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
 // ----------------------------------------------------------------------------
