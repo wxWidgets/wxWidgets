@@ -33,27 +33,6 @@
 #include "wx/platinfo.h"
 #include "wx/msw/private.h"
 
-#ifndef NIN_BALLOONTIMEOUT
-    #define NIN_BALLOONTIMEOUT      0x0404
-    #define NIN_BALLOONUSERCLICK    0x0405
-#endif
-
-#ifndef NIM_SETVERSION
-    #define NIM_SETVERSION  0x00000004
-#endif
-
-#ifndef NIF_INFO
-    #define NIF_INFO        0x00000010
-#endif
-
-#ifndef NOTIFYICONDATA_V2_SIZE
-    #ifdef UNICODE
-        #define NOTIFYICONDATA_V2_SIZE 0x03A8
-    #else
-        #define NOTIFYICONDATA_V2_SIZE 0x01E8
-    #endif
-#endif
-
 // initialized on demand
 static UINT gs_msgTaskbar = 0;
 static UINT gs_msgRestartTaskbar = 0;
