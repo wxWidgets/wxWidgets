@@ -39,10 +39,6 @@
 
 #include "wx/msw/ole/oleutils.h"
 
-#ifndef CHILDID_SELF
-#define CHILDID_SELF 0
-#endif
-
 #ifndef OBJID_CLIENT
 #define OBJID_CLIENT 0xFFFFFFFC
 #endif
