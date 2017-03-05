@@ -92,9 +92,6 @@ void ListBaseTestCase::ColumnsOrder()
     li.SetColumn(2);
     CPPUNIT_ASSERT( list->GetItem(li) );
     CPPUNIT_ASSERT_EQUAL( "second in second", li.GetText() );
-
-    //tidy up when we are finished
-    list->ClearAll();
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
 }
 
@@ -143,10 +140,6 @@ void ListBaseTestCase::ItemRect()
     list->SetWindowStyle(wxLC_REPORT | wxLC_NO_HEADER);
     CPPUNIT_ASSERT( list->GetItemRect(0, r) );
     CPPUNIT_ASSERT_EQUAL( 0, r.y );
-
-
-    //tidy up when we are finished
-    list->ClearAll();
 }
 
 void ListBaseTestCase::ItemText()
@@ -182,9 +175,6 @@ void ListBaseTestCase::ChangeMode()
     list->SetWindowStyle(wxLC_REPORT);
     CPPUNIT_ASSERT_EQUAL( 2, list->GetItemCount() );
     CPPUNIT_ASSERT_EQUAL( "First", list->GetItemText(0) );
-
-    //tidy up when we are finished
-    list->ClearAll();
 }
 
 void ListBaseTestCase::ItemClick()
@@ -247,9 +237,6 @@ void ListBaseTestCase::ItemClick()
 #endif
     CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
-
-    //tidy up when we are finished
-    list->ClearAll();
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
@@ -498,9 +485,6 @@ void ListBaseTestCase::HitTest()
     list->HitTest(wxPoint(xHit, y), flags);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected wxLIST_HITTEST_ONITEMLABEL",
         wxLIST_HITTEST_ONITEMLABEL, flags);
-
-    //tidy up when we are finished
-    list->ClearAll();
 #endif // __WXMSW__
 }
 
