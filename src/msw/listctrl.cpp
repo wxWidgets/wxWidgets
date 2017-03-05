@@ -1781,8 +1781,7 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
     // 1) in report mode, when there are 2 or more columns, if you click to the
     //    right of the first column, ListView_HitTest() returns LVHT_ONITEM
     //    (LVHT_ONITEMICON|LVHT_ONITEMLABEL|LVHT_ONITEMSTATEICON).
-    else if ( hitTestInfo.flags == LVHT_ONITEMLABEL ||
-              (hitTestInfo.flags == LVHT_ONITEM && InReportView()) )
+    else if ( hitTestInfo.flags & LVHT_ONITEMLABEL )
         flags = wxLIST_HITTEST_ONITEMLABEL;
     // note another bug in comctl32.dll:
     // 2) LVHT_ONITEMSTATEICON and LVHT_ABOVE have the same value. However, the
