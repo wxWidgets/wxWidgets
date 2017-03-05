@@ -2933,7 +2933,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-#ifdef MM_JOY1MOVE
         case MM_JOY1MOVE:
         case MM_JOY2MOVE:
         case MM_JOY1ZMOVE:
@@ -2947,7 +2946,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                             HIWORD(lParam),
                                             wParam);
             break;
-#endif // MM_JOY1MOVE
 
         case WM_COMMAND:
             {
@@ -3064,13 +3062,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     case VK_OEM_PERIOD:
                         break;
 
-#ifdef VK_APPS
                     // special case of VK_APPS: treat it the same as right mouse
                     // click because both usually pop up a context menu
                     case VK_APPS:
                         processed = HandleMouseEvent(WM_RBUTTONDOWN, -1, -1, 0);
                         break;
-#endif // VK_APPS
 
                     default:
                         if ( (wParam >= '0' && wParam <= '9') ||
@@ -3107,14 +3103,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_SYSKEYUP:
         case WM_KEYUP:
-#ifdef VK_APPS
             // special case of VK_APPS: treat it the same as right mouse button
             if ( wParam == VK_APPS )
             {
                 processed = HandleMouseEvent(WM_RBUTTONUP, -1, -1, 0);
             }
             else
-#endif // VK_APPS
             {
                 processed = HandleKeyUp((WORD) wParam, lParam);
             }
@@ -3864,7 +3858,6 @@ bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
 
 bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 {
-#ifdef ENDSESSION_LOGOFF
     wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(true);
@@ -3880,16 +3873,10 @@ bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
     }
 
     return rc;
-#else
-    wxUnusedVar(logOff);
-    wxUnusedVar(mayEnd);
-    return false;
-#endif
 }
 
 bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 {
-#ifdef ENDSESSION_LOGOFF
     // do nothing if the session isn't ending
     if ( !endSession )
         return false;
@@ -3904,11 +3891,6 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
     event.SetLoggingOff((logOff & ENDSESSION_LOGOFF) != 0);
 
     return wxTheApp->ProcessEvent(event);
-#else
-    wxUnusedVar(endSession);
-    wxUnusedVar(logOff);
-    return false;
-#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -4222,9 +4204,7 @@ bool wxWindowMSW::HandlePower(WXWPARAM wParam,
         case PBT_APMPOWERSTATUSCHANGE:
         case PBT_APMOEMEVENT:
         case PBT_APMRESUMECRITICAL:
-#ifdef PBT_APMRESUMEAUTOMATIC
         case PBT_APMRESUMEAUTOMATIC:
-#endif
             evtType = wxEVT_NULL;
             break;
     }
@@ -5757,7 +5737,6 @@ bool wxWindowMSW::HandleClipboardEvent(WXUINT nMsg)
 
 bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
 {
-#ifdef JOY_BUTTON1
     int change = 0;
     if ( flags & JOY_BUTTON1CHG )
         change = wxJOY_BUTTON1;
@@ -5837,13 +5816,6 @@ bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
     event.SetEventObject(this);
 
     return HandleWindowEvent(event);
-#else
-    wxUnusedVar(msg);
-    wxUnusedVar(x);
-    wxUnusedVar(y);
-    wxUnusedVar(flags);
-    return false;
-#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -6074,11 +6046,9 @@ const struct wxKeyMapping
     { VK_NUMLOCK,       WXK_NUMLOCK },
     { VK_SCROLL,        WXK_SCROLL },
 
-#ifdef VK_APPS
     { VK_LWIN,          WXK_WINDOWS_LEFT },
     { VK_RWIN,          WXK_WINDOWS_RIGHT },
     { VK_APPS,          WXK_WINDOWS_MENU },
-#endif // VK_APPS defined
 
     { VK_BROWSER_BACK,        WXK_BROWSER_BACK },
     { VK_BROWSER_FORWARD,     WXK_BROWSER_FORWARD },
@@ -6349,8 +6319,6 @@ WXWORD WXToVK(int wxk, bool *isExtended)
 // small helper for wxGetKeyState() and wxGetMouseState()
 static inline bool wxIsKeyDown(WXWORD vk)
 {
-    // SM_SWAPBUTTON is not available under CE, so don't swap buttons there
-#ifdef SM_SWAPBUTTON
     if ( vk == VK_LBUTTON || vk == VK_RBUTTON )
     {
         if ( ::GetSystemMetrics(SM_SWAPBUTTON) )
@@ -6361,7 +6329,6 @@ static inline bool wxIsKeyDown(WXWORD vk)
                 vk = VK_LBUTTON;
         }
     }
-#endif // SM_SWAPBUTTON
 
     // the low order bit indicates whether the key was pressed since the last
     // call and the high order one indicates whether it is down right now and
