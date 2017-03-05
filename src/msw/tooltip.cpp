@@ -38,10 +38,6 @@
 #include "wx/vector.h"
 #include "wx/msw/private.h"
 
-#ifndef TTTOOLINFO_V1_SIZE
-    #define TTTOOLINFO_V1_SIZE 0x28
-#endif
-
 #ifndef TTF_TRANSPARENT
     #define TTF_TRANSPARENT 0x0100
 #endif
