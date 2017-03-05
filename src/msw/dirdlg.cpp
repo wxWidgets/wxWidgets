@@ -459,7 +459,6 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 {
     switch(uMsg)
     {
-#ifdef BFFM_SETSELECTION
         case BFFM_INITIALIZED:
             // sent immediately after initialisation and so we may set the
             // initial selection here
@@ -467,8 +466,6 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
             // wParam = TRUE => lParam is a string and not a PIDL
             ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
             break;
-#endif // BFFM_SETSELECTION
-
 
         case BFFM_SELCHANGED:
             // note that this doesn't work with the new style UI (MSDN doesn't
