@@ -66,18 +66,6 @@
     #endif
 #endif
 
-#ifndef ACO_UPDOWNKEYDROPSLIST
-    #define ACO_UPDOWNKEYDROPSLIST 0x20
-#endif
-
-#ifndef SHACF_FILESYS_ONLY
-    #define SHACF_FILESYS_ONLY 0x00000010
-#endif
-
-#ifndef SHACF_FILESYS_DIRS
-    #define SHACF_FILESYS_DIRS 0x00000020
-#endif
-
 // This must be the last header included to only affect the DEFINE_GUID()
 // occurrences below but not any GUIDs declared in the standard files included
 // above.
@@ -103,10 +91,6 @@ DEFINE_GUID(wxIID_IAutoCompleteDropDown,
 
 DEFINE_GUID(wxCLSID_AutoComplete,
     0x00bb2763, 0x6a77, 0x11d0, 0xa5, 0x35, 0x00, 0xc0, 0x4f, 0xd7, 0xd0, 0x62);
-
-#ifndef ACDD_VISIBLE
-    #define ACDD_VISIBLE 0x0001
-#endif
 
 // Small helper class which can be used to ensure thread safety even when
 // wxUSE_THREADS==0 (and hence wxCriticalSection does nothing).
