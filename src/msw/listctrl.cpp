@@ -669,16 +669,10 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
         }
     }
 
-    // the column images were not supported in older versions but how to check
-    // for this? we can't use _WIN32_IE because we always define it to a very
-    // high value, so see if another symbol which is only defined starting from
-    // comctl32.dll 4.70 is available
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         item.m_image = lvCol.iImage;
     }
-#endif // LVCOLUMN::iImage exists
 
     return success;
 }
@@ -2487,12 +2481,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-#ifdef NM_CUSTOMDRAW
             case NM_CUSTOMDRAW:
                 *result = OnCustomDraw(lParam);
 
                 return *result != CDRF_DODEFAULT;
-#endif // _WIN32_IE >= 0x300
 
             case LVN_ODCACHEHINT:
                 {
@@ -2642,13 +2634,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         wxStrlcpy(lvi.pszText, text.c_str(), lvi.cchTextMax);
                     }
 
-                    // see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW
                     if ( lvi.mask & LVIF_IMAGE )
                     {
                         lvi.iImage = OnGetItemColumnImage(item, lvi.iSubItem);
                     }
-#endif // NM_CUSTOMDRAW
 
                     // even though we never use LVM_SETCALLBACKMASK, we still
                     // can get messages with LVIF_STATE in lvi.mask under Vista
@@ -2755,9 +2744,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // ----------------------------------------------------------------------------
 // custom draw stuff
 // ----------------------------------------------------------------------------
-
-// see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
 
 static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 {
@@ -3042,8 +3028,6 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 
     return CDRF_DODEFAULT;
 }
-
-#endif // NM_CUSTOMDRAW supported
 
 // Necessary for drawing hrules and vrules, if specified
 void wxListCtrl::OnPaint(wxPaintEvent& event)
@@ -3446,8 +3430,6 @@ static void wxConvertToMSWListCol(HWND hwndList,
             lvCol.cx = item.m_width;
     }
 
-    // see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         lvCol.mask |= LVCF_IMAGE;
@@ -3481,7 +3463,6 @@ static void wxConvertToMSWListCol(HWND hwndList,
 
         lvCol.iImage = item.m_image;
     }
-#endif // _WIN32_IE >= 0x0300
 }
 
 #endif // wxUSE_LISTCTRL
