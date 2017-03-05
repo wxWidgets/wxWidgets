@@ -79,14 +79,6 @@
 
 using namespace wxMSWImpl;
 
-#ifndef AC_SRC_ALPHA
-    #define AC_SRC_ALPHA 1
-#endif
-
-#ifndef LAYOUT_RTL
-    #define LAYOUT_RTL 1
-#endif
-
 /* Quaternary raster codes */
 #ifndef MAKEROP4
 #define MAKEROP4(fore,back) (DWORD)((((back) << 8) & 0xFF000000) | (fore))
