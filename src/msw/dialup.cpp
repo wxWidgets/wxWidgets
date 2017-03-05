@@ -57,14 +57,6 @@ wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 
 #include <wininet.h>
 
-// Not in VC++ 5
-#ifndef INTERNET_CONNECTION_LAN
-#define INTERNET_CONNECTION_LAN 2
-#endif
-#ifndef INTERNET_CONNECTION_PROXY
-#define INTERNET_CONNECTION_PROXY 4
-#endif
-
 static const wxChar *
     wxMSWDIALUP_WNDCLASSNAME = wxT("_wxDialUpManager_Internal_Class");
 static const wxChar *gs_classForDialUpWindow = NULL;
