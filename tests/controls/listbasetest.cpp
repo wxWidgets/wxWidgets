@@ -447,6 +447,7 @@ void ListBaseTestCase::ImageList()
 
 void ListBaseTestCase::HitTest()
 {
+#ifdef __WXMSW__ // ..until proven to work with other platforms
     wxListCtrl* const list = GetList();
     list->SetWindowStyle(wxLC_REPORT);
 
@@ -500,6 +501,7 @@ void ListBaseTestCase::HitTest()
 
     //tidy up when we are finished
     list->ClearAll();
+#endif // __WXMSW__
 }
 
 namespace
