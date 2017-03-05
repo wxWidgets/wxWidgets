@@ -66,6 +66,14 @@
     #endif
 #endif
 
+#ifndef SHACF_FILESYS_ONLY
+    #define SHACF_FILESYS_ONLY 0x00000010
+#endif
+
+#ifndef SHACF_FILESYS_DIRS
+    #define SHACF_FILESYS_DIRS 0x00000020
+#endif
+
 // This must be the last header included to only affect the DEFINE_GUID()
 // occurrences below but not any GUIDs declared in the standard files included
 // above.
