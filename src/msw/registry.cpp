@@ -49,18 +49,6 @@
 typedef unsigned char *RegString;
 typedef BYTE* RegBinary;
 
-#ifndef HKEY_PERFORMANCE_DATA // (Obsolete under XP and later)
-    #define HKEY_PERFORMANCE_DATA ((HKEY)0x80000004)
-#endif
-
-#ifndef HKEY_CURRENT_CONFIG
-    #define HKEY_CURRENT_CONFIG ((HKEY)0x80000005)
-#endif
-
-#ifndef HKEY_DYN_DATA // (Obsolete under XP and later)
-    #define HKEY_DYN_DATA ((HKEY)0x80000006)
-#endif
-
 #ifndef KEY_WOW64_64KEY
     #define KEY_WOW64_64KEY 0x0100
 #endif
