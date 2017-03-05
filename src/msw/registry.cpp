@@ -939,10 +939,6 @@ bool wxRegKey::QueryValue(const wxString& szValue, long *plValue) const
 
 bool wxRegKey::SetValue(const wxString& szValue, const wxMemoryBuffer& buffer)
 {
-#ifdef __TWIN32__
-  wxFAIL_MSG("RegSetValueEx not implemented by TWIN32");
-  return false;
-#else
   if ( CONST_CAST Open() ) {
     m_dwLastError = RegSetValueEx((HKEY) m_hKey, RegValueStr(szValue),
                                   (DWORD) RESERVED, REG_BINARY,
@@ -954,7 +950,6 @@ bool wxRegKey::SetValue(const wxString& szValue, const wxMemoryBuffer& buffer)
   wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
                 GetFullName(this, szValue));
   return false;
-#endif
 }
 
 bool wxRegKey::QueryValue(const wxString& szValue, wxMemoryBuffer& buffer) const
