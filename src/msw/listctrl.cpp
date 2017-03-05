@@ -1777,14 +1777,14 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
     // test whether an actual item was hit or not
     if ( hitTestInfo.flags == LVHT_ONITEMICON )
         flags = wxLIST_HITTEST_ONITEMICON;
-    // note a bug in comtl32.dll:
+    // note a bug in comctl32.dll:
     // 1) in report mode, when there are 2 or more columns, if you click to the
     //    right of the first column, ListView_HitTest() returns LVHT_ONITEM
     //    (LVHT_ONITEMICON|LVHT_ONITEMLABEL|LVHT_ONITEMSTATEICON).
     else if ( hitTestInfo.flags == LVHT_ONITEMLABEL ||
               (hitTestInfo.flags == LVHT_ONITEM && InReportView()) )
         flags = wxLIST_HITTEST_ONITEMLABEL;
-    // note another bug in comtl32.dll:
+    // note another bug in comctl32.dll:
     // 2) LVHT_ONITEMSTATEICON and LVHT_ABOVE have the same value. However, the
     //    former (used for the checkbox when LVS_EX_CHECKBOXES is used) can
     //    only occur when y >= 0, while the latter ("above the control's client
