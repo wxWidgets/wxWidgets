@@ -2315,6 +2315,8 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         {
             wxBitmap bmp(width, height);
             wxMemoryDC mdc(bmp);
+            mdc.SetBackground(*wxWHITE_BRUSH);
+            mdc.Clear();
             m_canvas->Draw(mdc);
             bmp.ConvertToImage().SaveFile(dlg.GetPath());
         }
