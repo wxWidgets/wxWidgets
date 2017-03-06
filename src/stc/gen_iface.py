@@ -68,6 +68,18 @@ cmdValues = [ 2011,
 # Should a function be also generated for the CMDs?
 FUNC_FOR_CMD = 1
 
+# Should methods and values be generated for the provisional Scintilla items?
+GENERATE_PROVISIONAL_ITEMS = 0
+
+# No wxSTC value will be generated for the following Scintilla values.
+notMappedSciValues = {
+    'SC_TECHNOLOGY_DIRECTWRITERETAIN',
+    'SC_TECHNOLOGY_DIRECTWRITEDC',
+    'INDIC0_MASK',
+    'INDIC1_MASK',
+    'INDIC2_MASK',
+    'INDICS_MASK'
+}
 
 # Map some generic typenames to wx types, using return value syntax
 retTypeMap = {
@@ -452,13 +464,10 @@ methodOverrideMap = {
 
     'StartStyling' :
     (0,
-     'void %s(int start, int unused=0);',
+     'void %s(int start);',
 
-     '''void %s(int start, int unused) {
-        wxASSERT_MSG(unused==0,
-                     "The second argument passed to StartStyling should be 0");
-
-        SendMsg(%s, start, unused);'''
+     '''void %s(int start) {
+        SendMsg(%s, start, 0);'''
     ),
 
     'SetStylingEx' :
@@ -1111,6 +1120,9 @@ methodOverrideMap = {
          return stc2wx(buf);'''
     ),
 
+    'SetKeysUnicode' : (None,0,0),
+    'GetKeysUnicode' : (None,0,0),
+
     '' : ('', 0, 0),
 
     }
@@ -1150,6 +1162,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     values = []
     methods = []
     cmds = []
+    icat = 'Basics'
 
     # parse iface file
     fi = FileInput(iface)
@@ -1164,16 +1177,16 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
             curDocStrings.append(line[2:])
 
         elif op == 'val ':
-            parseVal(line[4:], values, curDocStrings)
+            parseVal(line[4:], values, curDocStrings, icat)
             curDocStrings = []
 
         elif op == 'fun ' or op == 'set ' or op == 'get ':
-            parseFun(line[4:], methods, curDocStrings, cmds, op == 'get ', msgcodes)
+            parseFun(line[4:], methods, curDocStrings, cmds, op == 'get ', msgcodes, icat)
             curDocStrings = []
 
         elif op == 'cat ':
-            if line[4:].strip() == 'Deprecated':
-                break    # skip the rest of the file
+            icat = line[4:].strip()
+            curDocStrings = []
 
         elif op == 'evt ':
             pass
@@ -1277,16 +1290,19 @@ def processMethods(methods):
     for c in categoriesList:
         piecesForInterface[c[0]]=[]
 
-    for retType, interfName, number, param1, param2, docs, is_const, is_override in methods:
+    for retType, interfName, number, param1, param2, docs, is_const, is_override, icat  in methods:
         retType = retTypeMap.get(retType, retType)
         params = makeParamString(param1, param2)
+
+        if icat=='Provisional' and not GENERATE_PROVISIONAL_ITEMS:
+            continue
 
         name, theDef, theImp = checkMethodOverride(interfName, number)
 
         if name is None:
             continue
 
-        category, docs, docsLong = buildDocs(interfName, docs)
+        category, docs, docsLong = buildDocs(interfName, docs, icat)
 
         # Build docstrings
         st = 'DocStr(wxStyledTextCtrl::%s,\n' \
@@ -1305,6 +1321,9 @@ def processMethods(methods):
             if is_override:
                 theDef = theDef + ' wxOVERRIDE'
             theDef = theDef + ';'
+        if category=='DeprecatedMessages' or icat=='Deprecated':
+            defs.append('    wxDEPRECATED_MSG( "This method uses a function '
+                        'deprecated in the Scintilla library." )')
         defs.append(theDef)
 
         # Skip override from the interface file
@@ -1434,8 +1453,22 @@ def makeParamString(param1, param2):
 
 #----------------------------------------------------------------------------
 
-def parseVal(line, values, docs):
+def parseVal(line, values, docs, icat):
     name, val = line.split('=')
+
+    if name in notMappedSciValues:
+            return
+
+    if icat=='Deprecated':
+        docs.append('@deprecated')
+
+    if icat=='Provisional':
+        if GENERATE_PROVISIONAL_ITEMS:
+            docs.append('This item is a provisional value and is subject '
+                        'to change')
+            docs.append('in future versions of wxStyledTextCtrl.')
+        else:
+            return
 
     # remove prefixes such as SCI, etc.
     for old, new in valPrefixes:
@@ -1456,7 +1489,7 @@ funregex = re.compile(r'\s*([a-zA-Z0-9_]+)'  # <ws>return type
                       '\(([ a-zA-Z0-9_]*),'  # (param,
                       '([ a-zA-Z0-9_]*),*\)')  # param)
 
-def parseFun(line, methods, docs, values, is_const, msgcodes):
+def parseFun(line, methods, docs, values, is_const, msgcodes, icat):
     def parseParam(param):
         param = param.strip()
         if param == '':
@@ -1478,7 +1511,7 @@ def parseFun(line, methods, docs, values, is_const, msgcodes):
     num = int(number)
     for v in cmdValues:
         if (type(v) == type(()) and v[0] <= num <= v[1]) or v == num:
-            parseVal('CMD_%s=%s' % (name.upper(), number), values, docs)
+            parseVal('CMD_%s=%s' % (name.upper(), number), values, docs, 'Basics')
 
             # if we are not also doing a function for CMD values, then
             # just return, otherwise fall through to the append blow.
@@ -1491,7 +1524,8 @@ def parseFun(line, methods, docs, values, is_const, msgcodes):
     else:
         code = number
     methods.append( (retType, name, code, param1, param2, tuple(docs),
-                     is_const or name in constNonGetterMethods, name in overrideNeeded) )
+                     is_const or name in constNonGetterMethods,
+                     name in overrideNeeded, icat) )
 
 
 #----------------------------------------------------------------------------

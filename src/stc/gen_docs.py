@@ -806,6 +806,8 @@ docSubstitutions = {
     'TextWidth':{'NUL terminated text argument.':''},
     'GetCurLine':{'Result is NUL-terminated.':'',
         'Returns the index of the caret on the line.':''},
+    'StartStyling':
+        {'The unused parameter is no longer used and should be set to 0.':''},
 
     'DescribeKeyWordSets':{'\\n':'\\\\n','Result is NUL-terminated.':''},
     'PropertyNames':{'\\n':'\\\\n','Result is NUL-terminated.':''},
@@ -1355,7 +1357,7 @@ sinceAnnotations= {
 
 #----------------------------------------------------------------------------
 
-def buildDocs(name, docs):
+def buildDocs(name, docs, icat):
     docsLong = 0
 
     # If an item does not have a category or the category to which it is
@@ -1384,6 +1386,14 @@ def buildDocs(name, docs):
     if name in extendedDocs:
         docsLong = extendedDocs[name]
 
+    if icat=='Provisional':
+        note = ('','This method is provisional and is subject to change'
+                'in future versions of wxStyledTextCtrl.',)
+        if docsLong==0:
+            docsLong = note
+        else:
+            docsLong = docsLong + note
+
     if name in sinceAnnotations:
         note = ('@since '+sinceAnnotations[name],)
         if docsLong==0:
@@ -1391,7 +1401,7 @@ def buildDocs(name, docs):
         else:
             docsLong = docsLong + note
 
-    if category=='DeprecatedMessages':
+    if category=='DeprecatedMessages' or icat=='Deprecated':
         note = ('@deprecated',)
         if docsLong==0:
             docsLong = note

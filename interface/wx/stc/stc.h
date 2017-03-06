@@ -164,10 +164,6 @@
 #define wxSTC_INDIC_IME_MAX 35
 #define wxSTC_INDIC_MAX 35
 #define wxSTC_INDIC_CONTAINER 8
-#define wxSTC_INDIC0_MASK 0x20
-#define wxSTC_INDIC1_MASK 0x40
-#define wxSTC_INDIC2_MASK 0x80
-#define wxSTC_INDICS_MASK 0xE0
 #define wxSTC_INDICVALUEBIT 0x1000000
 #define wxSTC_INDICVALUEMASK 0xFFFFFF
 #define wxSTC_INDICFLAG_VALUEFORE 1
@@ -329,8 +325,6 @@
 #define wxSTC_VS_NOWRAPLINESTART 4
 #define wxSTC_TECHNOLOGY_DEFAULT 0
 #define wxSTC_TECHNOLOGY_DIRECTWRITE 1
-#define wxSTC_TECHNOLOGY_DIRECTWRITERETAIN 2
-#define wxSTC_TECHNOLOGY_DIRECTWRITEDC 3
 
 /// Line end types which may be used in addition to LF, CR, and CRLF
 /// SC_LINE_END_TYPE_UNICODE includes U+2028 Line Separator,
@@ -2428,6 +2422,22 @@
 
 //}}}
 
+
+//The following values are deprecated in the Scintilla library
+
+///@deprecated
+#define wxSTC_INDIC0_MASK 0x20
+
+///@deprecated
+#define wxSTC_INDIC1_MASK 0x40
+
+///@deprecated
+#define wxSTC_INDIC2_MASK 0x80
+
+///@deprecated
+#define wxSTC_INDICS_MASK 0xE0
+
+
 // Commands that can be bound to keystrokes {{{
 
 
@@ -4317,9 +4327,8 @@ public:
 
     /**
         Set the current styling position to start.
-        The unused parameter is no longer used and should be set to 0.
     */
-    void StartStyling(int start, int unused=0);
+    void StartStyling(int start);
 
     /**
         Change style from current styling position for length characters to a style

@@ -508,12 +508,8 @@ void wxStyledTextCtrl::SetEOLMode(int eolMode)
 }
 
 // Set the current styling position to start.
-// The unused parameter is no longer used and should be set to 0.
-void wxStyledTextCtrl::StartStyling(int start, int unused) {
-        wxASSERT_MSG(unused==0,
-                     "The second argument passed to StartStyling should be 0");
-
-        SendMsg(SCI_STARTSTYLING, start, unused);
+void wxStyledTextCtrl::StartStyling(int start) {
+        SendMsg(SCI_STARTSTYLING, start, 0);
 }
 
 // Change style from current styling position for length characters to a style
@@ -5193,6 +5189,14 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
 void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
 {
     SendMsg(SCI_USEPOPUP, allowPopUp ? SC_POPUP_ALL : SC_POPUP_NEVER, 0);
+}
+
+void wxStyledTextCtrl::StartStyling(int start, int unused)
+{
+        wxASSERT_MSG(unused==0,
+                     "The second argument passed to StartStyling should be 0");
+
+        SendMsg(SCI_STARTSTYLING, start, unused);
 }
 
 //----------------------------------------------------------------------

@@ -18,6 +18,22 @@
 
 //}}}
 
+
+//The following values are deprecated in the Scintilla library
+
+///@deprecated
+#define wxSTC_INDIC0_MASK 0x20
+
+///@deprecated
+#define wxSTC_INDIC1_MASK 0x40
+
+///@deprecated
+#define wxSTC_INDIC2_MASK 0x80
+
+///@deprecated
+#define wxSTC_INDICS_MASK 0xE0
+
+
 // Commands that can be bound to keystrokes {{{
 
 %(CMDS)s

@@ -208,10 +208,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_INDIC_IME_MAX 35
 #define wxSTC_INDIC_MAX 35
 #define wxSTC_INDIC_CONTAINER 8
-#define wxSTC_INDIC0_MASK 0x20
-#define wxSTC_INDIC1_MASK 0x40
-#define wxSTC_INDIC2_MASK 0x80
-#define wxSTC_INDICS_MASK 0xE0
 #define wxSTC_INDICVALUEBIT 0x1000000
 #define wxSTC_INDICVALUEMASK 0xFFFFFF
 #define wxSTC_INDICFLAG_VALUEFORE 1
@@ -373,8 +369,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_VS_NOWRAPLINESTART 4
 #define wxSTC_TECHNOLOGY_DEFAULT 0
 #define wxSTC_TECHNOLOGY_DIRECTWRITE 1
-#define wxSTC_TECHNOLOGY_DIRECTWRITERETAIN 2
-#define wxSTC_TECHNOLOGY_DIRECTWRITEDC 3
 
 /// Line end types which may be used in addition to LF, CR, and CRLF
 /// SC_LINE_END_TYPE_UNICODE includes U+2028 Line Separator,
@@ -2472,22 +2466,64 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 //}}}
 //----------------------------------------------------------------------
-// The following entries have non-conformant prefixes.  Although preserved
-// here for backwards compatibility, these should be considered deprecated.
 
-// Instead of the following, use the wxSTC_KEYMOD_* entries defined above
-#define wxSTC_SCMOD_NORM 0
-#define wxSTC_SCMOD_SHIFT 1
-#define wxSTC_SCMOD_CTRL 2
-#define wxSTC_SCMOD_ALT 4
-#define wxSTC_SCMOD_SUPER 8
-#define wxSTC_SCMOD_META 16
 
-// Instead of the following, use the wxSTC_VS_* entries defined above
-#define wxSTC_SCVS_NONE 0
-#define wxSTC_SCVS_RECTANGULARSELECTION 1
-#define wxSTC_SCVS_USERACCESSIBLE 2
-#define wxSTC_SCVS_NOWRAPLINESTART 4
+#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 5)
+    #define wxSTC_STRINGIFY(X) #X
+    #define wxSTC_DEPRECATED_MACRO_VALUE(value,msg) \
+        _Pragma(wxSTC_STRINGIFY(GCC warning msg)) value
+#else
+    #define wxSTC_DEPRECATED_MACRO_VALUE(value,msg) value
+#endif
+
+
+// The wxSTC_INDIC{0,1,2,S}_MASK values are no longer used in Scintilla
+
+#if wxCHECK_VISUALC_VERSION(10)
+    #pragma deprecated(wxSTC_INDIC0_MASK, wxSTC_INDIC1_MASK, \
+                       wxSTC_INDIC2_MASK, wxSTC_INDICS_MASK)
+#endif
+
+#define wxSTC_INDIC0_MASK wxSTC_DEPRECATED_MACRO_VALUE(0x20,\
+    "wxSTC_INDIC0_MASK is deprecated. Style byte indicators are no longer used.")
+#define wxSTC_INDIC1_MASK wxSTC_DEPRECATED_MACRO_VALUE(0x40,\
+    "wxSTC_INDIC1_MASK is deprecated. Style byte indicators are no longer used.")
+#define wxSTC_INDIC2_MASK wxSTC_DEPRECATED_MACRO_VALUE(0x80,\
+    "wxSTC_INDIC2_MASK is deprecated. Style byte indicators are no longer used.")
+#define wxSTC_INDICS_MASK wxSTC_DEPRECATED_MACRO_VALUE(0xE0,\
+    "wxSTC_INDICS_MASK is deprecated. Style byte indicators are no longer used.")
+
+
+// The following entries have non-conformant prefixes.
+
+#if wxCHECK_VISUALC_VERSION(10)
+    #pragma deprecated(wxSTC_SCMOD_NORM, wxSTC_SCMOD_SHIFT, wxSTC_SCMOD_CTRL, \
+                       wxSTC_SCMOD_ALT, wxSTC_SCMOD_SUPER, wxSTC_SCMOD_META, \
+                       wxSTC_SCVS_NONE, wxSTC_SCVS_RECTANGULARSELECTION, \
+                       wxSTC_SCVS_USERACCESSIBLE, wxSTC_SCVS_NOWRAPLINESTART)
+#endif
+
+#define wxSTC_SCMOD_NORM wxSTC_DEPRECATED_MACRO_VALUE(0,\
+    "wxSTC_SCMOD_NORM is deprecated. Use wxSTC_KEYMOD_NORM instead.")
+#define wxSTC_SCMOD_SHIFT wxSTC_DEPRECATED_MACRO_VALUE(1,\
+    "wxSTC_SCMOD_SHIFT is deprecated. Use wxSTC_KEYMOD_SHIFT instead.")
+#define wxSTC_SCMOD_CTRL wxSTC_DEPRECATED_MACRO_VALUE(2,\
+    "wxSTC_SCMOD_CTRL is deprecated. Use wxSTC_KEYMOD_CTRL instead.")
+#define wxSTC_SCMOD_ALT wxSTC_DEPRECATED_MACRO_VALUE(4,\
+    "wxSTC_SCMOD_ALT is deprecated. Use wxSTC_KEYMOD_ALT instead.")
+#define wxSTC_SCMOD_SUPER wxSTC_DEPRECATED_MACRO_VALUE(8,\
+    "wxSTC_SCMOD_SUPER is deprecated. Use wxSTC_KEYMOD_SUPER instead.")
+#define wxSTC_SCMOD_META wxSTC_DEPRECATED_MACRO_VALUE(16,\
+    "wxSTC_SCMOD_META is deprecated. Use wxSTC_KEYMOD_META instead.")
+
+#define wxSTC_SCVS_NONE wxSTC_DEPRECATED_MACRO_VALUE(0, \
+    "wxSTC_SCVS_NONE is deprecated. Use wxSTC_VS_NONE instead.")
+#define wxSTC_SCVS_RECTANGULARSELECTION wxSTC_DEPRECATED_MACRO_VALUE(1, \
+    "wxSTC_SCVS_RECTANGULARSELECTION is deprecated. Use wxSTC_VS_RECTANGULARSELECTION instead.")
+#define wxSTC_SCVS_USERACCESSIBLE wxSTC_DEPRECATED_MACRO_VALUE(2, \
+    "wxSTC_SCVS_USERACCESSIBLE is deprecated. Use wxSTC_VS_USERACCESSIBLE instead.")
+#define wxSTC_SCVS_NOWRAPLINESTART wxSTC_DEPRECATED_MACRO_VALUE(4, \
+    "wxSTC_SCVS_NOWRAPLINESTART is deprecated. Use wxSTC_VS_NOWRAPLINESTART instead.")
 
 
 //----------------------------------------------------------------------
@@ -2977,8 +3013,7 @@ public:
     void SetEOLMode(int eolMode);
 
     // Set the current styling position to start.
-    // The unused parameter is no longer used and should be set to 0.
-    void StartStyling(int start, int unused=0);
+    void StartStyling(int start);
 
     // Change style from current styling position for length characters to a style
     // and move the current styling position to after this newly styled segment.
@@ -3301,9 +3336,11 @@ public:
     // Divide each styling byte into lexical class bits (default: 5) and indicator
     // bits (default: 3). If a lexer requires more than 32 lexical states, then this
     // is used to expand the possible states.
+    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
     void SetStyleBits(int bits);
 
     // Retrieve number of bits in style bytes used to hold the lexical state.
+    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
     int GetStyleBits() const;
 
     // Used to hold extra styling information for each line.
@@ -4965,6 +5002,7 @@ public:
     int GetPropertyInt(const wxString &key, int defaultValue=0) const;
 
     // Retrieve the number of bits the current lexer needs for styling.
+    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
     int GetStyleBitsNeeded() const;
 
     // Retrieve the lexing language of the document.
@@ -5358,6 +5396,9 @@ public:
 
     wxDEPRECATED_MSG("use UsePopUp(int) instead.")
     void UsePopUp(bool allowPopUp);
+
+    wxDEPRECATED_MSG("use StartStyling(int start) instead.")
+    void StartStyling(int start, int unused);
 
 
     static wxVersionInfo GetLibraryVersionInfo();
