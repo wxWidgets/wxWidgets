@@ -5950,7 +5950,7 @@ if test "$wxUSE_SOCKETS" = "yes"; then
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
-    dnl under Windows we always have sockets
+    dnl under Windows we do not use getsockname
     if test "$USE_WIN32" != 1 ; then
         dnl determine the type of third argument for getsockname
         dnl This test needs to be done in C++ mode since gsocket.cpp now
