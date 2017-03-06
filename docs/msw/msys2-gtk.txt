@@ -33,10 +33,11 @@ pacman -S mingw-w64-i686-cppunit
 pacman -S mingw-w64-i686-libjpeg-turbo
 pacman -S mingw-w64-i686-libpng
 pacman -S mingw-w64-i686-libtiff
-# Not all of toolchain is needed; but, easiest to install all of it.
-pacman -S mingw-w64-i686-toolchain
-# gtk2 takes a very long time after install fontconfig updating font cache
-pacman -S mingw-w64-i686-webkitgtk2
+pacman -S mingw-w64-i686-gcc
+pacman -S mingw-w64-i686-pkg-config
+## gtk2 can take a long time to update/find fonts
+pacman -S mingw-w64-i686-gtk2
+
 
 # Packages that are needed but are normally installed already.
 pacman -S mingw-w64-i686-gcc-libs
@@ -44,7 +45,6 @@ pacman -S mingw-w64-i686-expat
 pacman -S mingw-w64-i686-xz
 pacman -S mingw-w64-i686-zlib
 pacman -S mingw-w64-i686-gdk-pixbuf2
-pacman -S mingw-w64-i686-gtk2 
 
 
 #2. Build the wxGTK/Win32 static library
@@ -57,9 +57,14 @@ pacman -S mingw-w64-i686-gtk2
 mkdir -p build-gtk2-static
 
 #2d.Configure wxWidgets
+#   Option "--disable-precomp-headers" is NOT needed.
+#   I am doing it to check for compile issues;
+#   And, I think my old 32 bit Windows machine
+#   works best with it disabled.
 cd build-gtk2-static && \
   ../configure --with-gtk=2 \
     --disable-shared \
+    --disable-precomp-headers \
   && cd ..
 
 #2e.make the wxGTK static libraries
@@ -71,4 +76,21 @@ cd build-gtk2-static && make && cd ..
 cd build-gtk2-static/samples/minimal && make && cd ../../..
 
 #3b.Run the minimal sample
-cd samples && ../build-gtk2-static/samples/minimal/minimal.exe && cd ..
+./build-gtk2-static/samples/minimal/minimal.exe
+
+
+#4  Build and run the typetest static sample to verify MIME database works
+cd build-gtk2-static/samples/typetest && make && cd ../../..
+./build-gtk2-static/samples/typetest/typetest.exe
+
+#5  Build and run the drawing static sample
+cd build-gtk2-static/samples/drawing && make && cd ../../..
+cd samples/drawing && ../../build-gtk2-static/samples/drawing/drawing.exe && cd ../..
+
+#6  Build and run the splash static sample
+cd build-gtk2-static/samples/splash && make && cd ../../..
+cd samples/splash && ../../build-gtk2-static/samples/splash/splash.exe && cd ../..
+
+#7  Build and run the widgets static sample
+cd build-gtk2-static/samples/widgets && make && cd ../../..
+cd samples/widgets && ../../build-gtk2-static/samples/widgets/widgets.exe && cd ../..
