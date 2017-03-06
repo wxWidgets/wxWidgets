@@ -1452,6 +1452,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
         wxGraphicsContext           *gc = gdc.GetGraphicsContext();
         wxGraphicsPath              pth;
         wxGraphicsGradientStops     stops;
+        double boxX, boxY, boxWidth, boxHeight;
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Linear Gradient with Stops"), gfr.x, gfr.y);
@@ -1471,6 +1472,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         wxGraphicsGradientStops simpleStops(*wxRED, *wxBLUE);
 
@@ -1493,6 +1497,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Radial Gradient from Red to Blue with Yellow and Green Stops"),
@@ -1512,6 +1519,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Linear Gradient with Stops and Gaps"), gfr.x, gfr.y);
@@ -1533,6 +1543,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Radial Gradient with Stops and Gaps"), gfr.x, gfr.y);
@@ -1551,6 +1564,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Gradients with Stops and Transparency"), gfr.x, gfr.y);
@@ -1586,6 +1602,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
                                                    gfr.x + gfr.width, gfr.y,
                                                    stops));
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
