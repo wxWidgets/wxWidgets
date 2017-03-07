@@ -25,8 +25,6 @@ class WXDLLIMPEXP_CORE wxGTKMimeTypesManagerImpl : public wxMimeTypesManagerImpl
 protected:
 #if defined(__UNIX__)
     wxString GetIconFromMimeType(const wxString& mime) wxOVERRIDE;
-#else
-    wxString GetIconFromMimeType(const wxString& mime);
 #endif
 };
 
