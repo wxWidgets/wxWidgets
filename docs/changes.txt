@@ -129,6 +129,7 @@ All (GUI):
 - Optimize font registration in PostScript code emitted by wxPostScriptDC.
 - Fix drawing filled arc with wxPostScriptDC::DrawArc().
 - Optimize PostScript code emitted by wxPostScriptDC to draw elliptic arcs.
+- Add wxStyledTextCtrl::AutoCompGetCurrentText() (NewPagodi).
 
 wxGTK:
 

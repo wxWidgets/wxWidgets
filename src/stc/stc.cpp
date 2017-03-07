@@ -3618,6 +3618,19 @@ int wxStyledTextCtrl::AutoCompGetCurrent() const
     return SendMsg(SCI_AUTOCGETCURRENT, 0, 0);
 }
 
+// Get currently selected item text in the auto-completion list
+wxString wxStyledTextCtrl::AutoCompGetCurrentText() const {
+         const int msg = SCI_AUTOCGETCURRENTTEXT;
+         long len = SendMsg(msg, 0, 0);
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, 0, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);
+}
+
 // Set auto-completion case insensitive behaviour to either prefer case-sensitive matches or have no preference.
 void wxStyledTextCtrl::AutoCompSetCaseInsensitiveBehaviour(int behaviour)
 {

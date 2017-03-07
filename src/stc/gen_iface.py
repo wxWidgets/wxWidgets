@@ -522,7 +522,23 @@ methodOverrideMap = {
     'AutoCGetTypeSeparator' : ('AutoCompGetTypeSeparator', 0, 0),
     'AutoCSetTypeSeparator' : ('AutoCompSetTypeSeparator', 0, 0),
     'AutoCGetCurrent'       : ('AutoCompGetCurrent', 0, 0),
-    'AutoCGetCurrentText'   : (None, 0, 0),
+
+    'AutoCGetCurrentText' :
+    ('AutoCompGetCurrentText',
+    'wxString %s() const;',
+
+     '''wxString %s() const {
+         const int msg = %s;
+         long len = SendMsg(msg, 0, 0);
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, 0, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);'''
+    ),
+
     'AutoCSetMaxWidth'      : ('AutoCompSetMaxWidth', 0, 0),
     'AutoCGetMaxWidth'      : ('AutoCompGetMaxWidth', 0, 0),
     'AutoCSetMaxHeight'     : ('AutoCompSetMaxHeight', 0, 0),

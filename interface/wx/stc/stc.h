@@ -5758,6 +5758,13 @@ public:
     int AutoCompGetCurrent() const;
 
     /**
+        Get currently selected item text in the auto-completion list
+
+        @since 3.1.1
+    */
+    wxString AutoCompGetCurrentText() const;
+
+    /**
         Set auto-completion case insensitive behaviour to either prefer case-sensitive matches or have no preference.
 
         The input should be one of the

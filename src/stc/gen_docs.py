@@ -85,6 +85,7 @@ docsMap = {
     'AutoCGetCaseInsensitiveBehaviour':'Autocompletion',
     'AutoCGetChooseSingle':'Autocompletion',
     'AutoCGetCurrent':'Autocompletion',
+    'AutoCGetCurrentText':'Autocompletion',
     'AutoCGetDropRestOfWord':'Autocompletion',
     'AutoCGetIgnoreCase':'Autocompletion',
     'AutoCGetMaxHeight':'Autocompletion',
@@ -806,6 +807,8 @@ docSubstitutions = {
     'TextWidth':{'NUL terminated text argument.':''},
     'GetCurLine':{'Result is NUL-terminated.':'',
         'Returns the index of the caret on the line.':''},
+    'AutoCGetCurrentText':{'Result is NUL-terminated.':'',
+        'Returns the length of the item text':''},
     'StartStyling':
         {'The unused parameter is no longer used and should be set to 0.':''},
 
@@ -1330,6 +1333,7 @@ sinceAnnotations= {
     'VCHomeDisplay':'3.1.0',
     'VCHomeDisplayExtend':'3.1.0',
 
+    'AutoCGetCurrentText':'3.1.1',
     'FoldDisplayTextSetStyle':'3.1.1',
     'GetDirectFunction':'3.1.1',
     'GetDirectPointer':'3.1.1',
