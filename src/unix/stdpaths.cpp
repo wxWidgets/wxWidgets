@@ -278,8 +278,8 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
         return cacheDir;
     }
 
-    wxString dirsFile = GetXDGConfigHome() + wxT("/user-dirs.dirs");
-    if (wxFileExists(dirsFile))
+    const wxFileName dirsFile(GetXDGConfigHome(), wxS("user-dirs.dirs"));
+    if ( dirsFile.FileExists() )
     {
         wxString userDirId;
         switch (userDir)
@@ -305,7 +305,7 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
         }
 
         wxTextFile textFile;
-        if (textFile.Open(dirsFile))
+        if ( textFile.Open(dirsFile.GetFullPath()) )
         {
             size_t i;
             for (i = 0; i < textFile.GetLineCount(); i++)
