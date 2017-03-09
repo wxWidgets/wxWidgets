@@ -135,16 +135,34 @@ public:
         Dir_Videos
     };
 
-    enum
+    /**
+        Possible values for SetFileLayout() argument.
+
+        The elements of this enum correspond to the different file layout
+        standards under Unix systems.
+
+        @since 3.1.1
+     */
+    enum FileLayout
     {
-	/**
-            Use the classic file layout
-	*/
+        /**
+            Use the classic file layout.
+
+            User configuration and data files are located directly in the home
+            directory.
+
+            This is the default behaviour for compatibility reasons.
+        */
         FileLayout_Classic,
 
-	/**
-            Use a XDG styled file layout (Unix)
-	*/
+        /**
+            Use a XDG styled file layout.
+
+            File layout follows the XDG Base Directory Specification (see
+            https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+
+            This is the recommended layout for new applications.
+        */
         FileLayout_XDG
     };
 
@@ -313,8 +331,11 @@ public:
     virtual wxString GetTempDir() const;
 
     /**
-        Return the directory for the user config files:
-        - Unix: @c ~ (the home directory)
+        Return the directory for the user config files.
+
+        This directory is:
+        - Unix: @c ~ (the home directory) or @c XDG_CONFIG_HOME depending on
+            GetFileLayout() return value
         - Windows: @c "C:\Users\username\AppData\Roaming" or
                    @c "C:\Documents and Settings\username\Application Data"
         - Mac: @c ~/Library/Preferences
@@ -339,7 +360,8 @@ public:
 
         If the value could not be determined the users home directory is returned.
 
-        @note On Unix this supports the xdg user dirs specification.
+        @note On Unix this method respects the XDG base directory specification
+        only if SetFileLayout() with @c FileLayout_XDG had been called.
 
         @since 3.1.0
     */
@@ -458,17 +480,24 @@ public:
     void UseAppInfo(int info);
 
     /**
-        Returns the current file layout
-	Valid values for @a are:
-         - @c FileLayout_Classic,
-         - @c FileLayout_XDG
+        Returns the current file layout.
+
+        The default layout is @c FileLayout_Classic for compatibility, however
+        newer applications are encouraged to set it to @c FileLayout_XDG on
+        program startup.
+
+        @since 3.1.1
     */
-    void SetFileLayout(int layout);
+    void SetFileLayout(FileLayout layout);
 
     /**
-        Returns the current file layout
+        Returns the current file layout.
+
+        @see SetFileLayout()
+
+        @since 3.1.1
     */
-    int GetFileLayout() const;
+    FileLayout GetFileLayout() const;
 
     /**
         Return the file name which would be used by wxFileConfig as local,

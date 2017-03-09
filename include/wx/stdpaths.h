@@ -60,10 +60,11 @@ public:
         Dir_Videos
     };
 
-    enum
+    // Layout to use for user config/data files under Unix.
+    enum FileLayout
     {
-        FileLayout_Classic    = 0,
-        FileLayout_XDG        = 1
+        FileLayout_Classic,     // Default: use home directory.
+        FileLayout_XDG          // Recommended: use XDG specification.
     };
 
     // return the global standard paths object
@@ -174,14 +175,14 @@ public:
 
     bool UsesAppInfo(int info) const { return (m_usedAppInfo & info) != 0; }
 
-    void SetFileLayout(int layout)
+    void SetFileLayout(FileLayout layout)
     {
-        m_usedFileLayout = layout;
+        m_fileLayout = layout;
     }
 
-    int GetFileLayout() const
+    FileLayout GetFileLayout() const
     {
-        return m_usedFileLayout;
+        return m_fileLayout;
     }
 
 protected:
@@ -199,7 +200,9 @@ protected:
 
     // combination of AppInfo_XXX flags used by AppendAppInfo()
     int m_usedAppInfo;
-    int m_usedFileLayout;
+
+    // The file layout to use, currently only used under Unix.
+    FileLayout m_fileLayout;
 };
 
 #if wxUSE_STDPATHS
