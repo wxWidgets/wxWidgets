@@ -307,10 +307,10 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
         wxTextFile textFile;
         if ( textFile.Open(dirsFile.GetFullPath()) )
         {
-            size_t i;
-            for (i = 0; i < textFile.GetLineCount(); i++)
+            for ( wxString line = textFile.GetFirstLine();
+                  !textFile.Eof();
+                  line = textFile.GetNextLine() )
             {
-                wxString line(textFile[i]);
                 int pos = line.Find(userDirId);
                 if (pos != wxNOT_FOUND)
                 {
