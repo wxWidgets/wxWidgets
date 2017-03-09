@@ -50,6 +50,16 @@ void wxStandardPaths::SetInstallPrefix(const wxString& prefix)
     m_prefix = prefix;
 }
 
+// Helper function returning the value of XDG_CONFIG_HOME environment variable
+// or its default value if it is not defined.
+static wxString GetXDGConfigHome()
+{
+    wxString dir;
+    if ( !wxGetEnv(wxS("XDG_CONFIG_HOME"), &dir) || dir.empty() )
+        dir = wxFileName::GetHomeDir() + wxS("/.config");
+    return dir;
+}
+
 wxString wxStandardPaths::GetUserConfigDir() const
 {
     wxString dir;
@@ -61,8 +71,7 @@ wxString wxStandardPaths::GetUserConfigDir() const
             break;
 
         case FileLayout_XDG:
-            if ( !wxGetEnv(wxS("XDG_CONFIG_HOME"), &dir) || dir.empty() )
-                dir = wxFileName::GetHomeDir() + wxS("/.config");
+            dir = GetXDGConfigHome();
             break;
     }
 
@@ -268,12 +277,7 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
           return homeDir + wxT("/.cache");
     }
 
-    wxString configPath;
-    if (wxGetenv(wxT("XDG_CONFIG_HOME")))
-        configPath = wxGetenv(wxT("XDG_CONFIG_HOME"));
-    else
-        configPath = homeDir + wxT("/.config");
-    wxString dirsFile = configPath + wxT("/user-dirs.dirs");
+    wxString dirsFile = GetXDGConfigHome() + wxT("/user-dirs.dirs");
     if (wxFileExists(dirsFile))
     {
         wxString userDirId;
