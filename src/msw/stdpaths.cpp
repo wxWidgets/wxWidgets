@@ -370,7 +370,9 @@ wxString wxStandardPaths::GetPluginsDir() const
 }
 
 
-wxString wxStandardPaths::MakeConfigFileName(const wxString& basename, int WXUNUSED(style)) const
+wxString
+wxStandardPaths::MakeConfigFileName(const wxString& basename,
+                                    ConfigFileConv WXUNUSED(conv)) const
 {
     wxFileName fn(wxEmptyString, basename);
     fn.SetExt(wxT("ini"));

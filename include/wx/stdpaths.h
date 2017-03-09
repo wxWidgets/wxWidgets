@@ -67,6 +67,14 @@ public:
         FileLayout_XDG          // Recommended: use XDG specification.
     };
 
+    // Naming convention for the config files under Unix.
+    enum ConfigFileConv
+    {
+        ConfigFileConv_Dot,     // Classic Unix dot-file convention.
+        ConfigFileConv_Ext      // Use .conf extension.
+    };
+
+
     // return the global standard paths object
     static wxStandardPaths& Get();
 
@@ -162,7 +170,9 @@ public:
 
     virtual wxString GetUserDir(Dir userDir) const;
 
-    virtual wxString MakeConfigFileName(const wxString& basename, int style) const = 0;
+    virtual wxString
+    MakeConfigFileName(const wxString& basename,
+                       ConfigFileConv conv = ConfigFileConv_Ext) const = 0;
 
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();

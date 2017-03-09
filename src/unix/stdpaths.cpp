@@ -33,7 +33,6 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
-#include "wx/fileconf.h"
 #include "wx/filename.h"
 #include "wx/log.h"
 #include "wx/textfile.h"
@@ -334,29 +333,37 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
 
 #endif // __VMS/!__VMS
 
-wxString wxStandardPaths::MakeConfigFileName(const wxString& basename, int style) const
+wxString
+wxStandardPaths::MakeConfigFileName(const wxString& basename,
+                                    ConfigFileConv conv) const
 {
     wxFileName fn(wxEmptyString, basename);
+
+    bool addExt = false;
+
     switch ( GetFileLayout() )
     {
         case FileLayout_Classic:
-            if ( !(style & wxCONFIG_USE_SUBDIR) )
+            switch ( conv )
             {
-                // The standard convention is to not use the extensions for the
-                // config files in the home directory and just prepend a dot to
-                // them instead.
-                fn.SetName(wxT('.') + fn.GetName());
-                break;
+                case ConfigFileConv_Dot:
+                    fn.SetName(wxT('.') + fn.GetName());
+                    break;
+
+                case ConfigFileConv_Ext:
+                    addExt = true;
+                    break;
             }
-            //else: fall through to add the extension
-            wxFALLTHROUGH;
+            break;
 
         case FileLayout_XDG:
-            // We always use the extension for the config files when using XDG
-            // layout as they don't go to the home directory anyhow.
-            fn.SetExt(wxS("conf"));
+            // Dot files are never used in XDG mode.
+            addExt = true;
             break;
     }
+
+    if ( addExt )
+        fn.SetExt(wxS("conf"));
 
     return fn.GetFullName();
 }

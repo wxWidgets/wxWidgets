@@ -266,14 +266,28 @@ wxString wxFileConfig::GetLocalDir(int style)
 
 wxFileName wxFileConfig::GetGlobalFile(const wxString& szFile)
 {
-    wxFileName fn(GetGlobalDir(), wxStandardPaths::Get().MakeConfigFileName(szFile, wxCONFIG_USE_SUBDIR));
-    return fn;
+    wxStandardPathsBase& stdp = wxStandardPaths::Get();
+
+    return wxFileName(GetGlobalDir(), stdp.MakeConfigFileName(szFile));
 }
 
 wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
 {
-    wxFileName fn(GetLocalDir(style), wxStandardPaths::Get().MakeConfigFileName(szFile, style));
-    return fn;
+    wxStandardPathsBase& stdp = wxStandardPaths::Get();
+
+    // If the config file is located in a subdirectory, we always use an
+    // extension for it, but we use just the leading dot if it is located
+    // directly in the home directory. Note that if wxStandardPaths is
+    // configured to follow XDG specification, all config files go to a
+    // subdirectory of XDG_CONFIG_HOME anyhow, so in this case we'll still end
+    // up using the extension even if wxCONFIG_USE_SUBDIR is not set, but this
+    // is the correct and expected (if a little confusing) behaviour.
+    const wxStandardPaths::ConfigFileConv
+        conv = style & wxCONFIG_USE_SUBDIR
+                ? wxStandardPaths::ConfigFileConv_Ext
+                : wxStandardPaths::ConfigFileConv_Dot;
+
+    return wxFileName(GetLocalDir(style), stdp.MakeConfigFileName(szFile, conv));
 }
 
 // ----------------------------------------------------------------------------

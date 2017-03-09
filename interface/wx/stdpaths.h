@@ -167,6 +167,35 @@ public:
     };
 
     /**
+        Possible values for MakeConfigFileName() naming convention argument.
+
+        The values in this enum are only used under Unix and only when using
+        the classic Unix convention for file layout, in XDG mode, XDG naming
+        convention is used unconditionally.
+
+        @since 3.1.1
+     */
+    enum ConfigFileConv
+    {
+        /**
+            Use the class Unix dot-file convention.
+
+            Prepend the dot to the file base name.
+
+            This value is ignored when in XDG mode, where MakeConfigFileName()
+            always behaves as if ConfigFileConv_Ext was specified.
+        */
+        ConfigFileConv_Dot,
+
+        /**
+            Use @c .conf extension for the file names.
+
+            This convention is always used in XDG mode.
+         */
+        ConfigFileConv_Ext
+    };
+
+    /**
         MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
 
         After a call to this function the program directory will be exactly the
@@ -500,16 +529,22 @@ public:
     FileLayout GetFileLayout() const;
 
     /**
-        Return the file name which would be used by wxFileConfig as local,
-        user-specific, file if it were constructed with @a basename.
+        Return the file name which would be used by wxFileConfig if it were
+        constructed with @a basename.
 
-        @a style has the same meaning as in @ref wxConfigBase::wxConfigBase "wxConfig constructor"
-        and can contain any combination of styles but only wxCONFIG_USE_SUBDIR bit is
-        examined by this function.
+        @a conv is used to construct the name of the file under Unix and only
+        matters when using the class file layout, i.e. if SetFileLayout() had
+        @e not been called with @c FileLayout_XDG argument. In this case, this
+        argument is used to determine whether to use an extension or a leading
+        dot. When following XDG specification, the function always appends the
+        extension, regardless of @a conv value. Finally, this argument is not
+        used at all under non-Unix platforms.
 
-        Notice that this function cannot be used if @a basename is already a full path name.
+        @since 3.1.1
     */
-    virtual wxString MakeConfigFileName(const wxString& basename, int style) const;
+    virtual wxString
+    MakeConfigFileName(const wxString& basename,
+                       ConfigFileConv conv = ConfigFileConv_Ext) const;
 
 protected:
     /**

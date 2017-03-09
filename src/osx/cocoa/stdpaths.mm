@@ -130,7 +130,9 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
     return GetFMDirectory(dirType, NSUserDomainMask);
 }
 
-wxString wxStandardPaths::MakeConfigFileName(const wxString& basename, int WXUNUSED(style)) const
+wxString
+wxStandardPaths::MakeConfigFileName(const wxString& basename,
+                                    ConfigFileConv WXUNUSED(conv)) const
 {
     wxFileName fn(wxEmptyString, basename);
     fn.SetName(fn.GetName() + wxT(" Preferences"));
