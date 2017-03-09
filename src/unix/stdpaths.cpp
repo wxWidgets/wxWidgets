@@ -268,13 +268,14 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
     // the version of wxWidgets used by the application.
 
     wxLogNull logNull;
-    wxString homeDir = wxFileName::GetHomeDir();
+    const wxString homeDir = wxFileName::GetHomeDir();
     if (userDir == Dir_Cache)
     {
-       if (wxGetenv(wxT("XDG_CACHE_HOME")))
-          return wxGetenv(wxT("XDG_CACHE_HOME"));
-       else
-          return homeDir + wxT("/.cache");
+        wxString cacheDir;
+        if ( !wxGetEnv(wxS("XDG_CACHE_HOME"), &cacheDir) )
+          cacheDir = homeDir + wxS("/.cache");
+
+        return cacheDir;
     }
 
     wxString dirsFile = GetXDGConfigHome() + wxT("/user-dirs.dirs");
