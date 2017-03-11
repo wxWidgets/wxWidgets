@@ -49,18 +49,6 @@
 typedef unsigned char *RegString;
 typedef BYTE* RegBinary;
 
-#ifndef HKEY_PERFORMANCE_DATA // (Obsolete under XP and later)
-    #define HKEY_PERFORMANCE_DATA ((HKEY)0x80000004)
-#endif
-
-#ifndef HKEY_CURRENT_CONFIG
-    #define HKEY_CURRENT_CONFIG ((HKEY)0x80000005)
-#endif
-
-#ifndef HKEY_DYN_DATA // (Obsolete under XP and later)
-    #define HKEY_DYN_DATA ((HKEY)0x80000006)
-#endif
-
 #ifndef KEY_WOW64_64KEY
     #define KEY_WOW64_64KEY 0x0100
 #endif
@@ -939,10 +927,6 @@ bool wxRegKey::QueryValue(const wxString& szValue, long *plValue) const
 
 bool wxRegKey::SetValue(const wxString& szValue, const wxMemoryBuffer& buffer)
 {
-#ifdef __TWIN32__
-  wxFAIL_MSG("RegSetValueEx not implemented by TWIN32");
-  return false;
-#else
   if ( CONST_CAST Open() ) {
     m_dwLastError = RegSetValueEx((HKEY) m_hKey, RegValueStr(szValue),
                                   (DWORD) RESERVED, REG_BINARY,
@@ -954,7 +938,6 @@ bool wxRegKey::SetValue(const wxString& szValue, const wxMemoryBuffer& buffer)
   wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
                 GetFullName(this, szValue));
   return false;
-#endif
 }
 
 bool wxRegKey::QueryValue(const wxString& szValue, wxMemoryBuffer& buffer) const

@@ -47,14 +47,6 @@
 
 #include "wx/display.h"
 
-#ifndef ICON_BIG
-    #define ICON_BIG 1
-#endif
-
-#ifndef ICON_SMALL
-    #define ICON_SMALL 0
-#endif
-
 // NB: wxDlgProc must be defined here and not in dialog.cpp because the latter
 //     is not included by wxUniv build which does need wxDlgProc
 LONG APIENTRY

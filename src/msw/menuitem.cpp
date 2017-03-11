@@ -143,10 +143,6 @@ inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 #include "wx/fontutil.h"
 #include "wx/msw/private/metrics.h"
 
-#ifndef SPI_GETKEYBOARDCUES
-#define SPI_GETKEYBOARDCUES 0x100A
-#endif
-
 #if wxUSE_UXTHEME
 
 enum MENUPARTS

@@ -393,10 +393,6 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
     return true;
 }
 
-#ifndef VT_TYPEMASK
-#define VT_TYPEMASK 0xfff
-#endif
-
 WXDLLEXPORT bool
 wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long flags)
 {

@@ -92,10 +92,6 @@
     typedef HRESULT (CALLBACK* DLLGETVERSIONPROC)(DLLVERSIONINFO *);
 #endif // defined(DLLVERSIONINFO)
 
-#ifndef ATTACH_PARENT_PROCESS
-    #define ATTACH_PARENT_PROCESS ((DWORD)-1)
-#endif
-
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------

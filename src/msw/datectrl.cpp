@@ -74,11 +74,9 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
         styleMSW |= DTS_UPDOWN;
     //else: drop down by default
 
-#ifdef DTS_SHORTDATECENTURYFORMAT
     if ( style & wxDP_SHOWCENTURY )
         styleMSW |= DTS_SHORTDATECENTURYFORMAT;
     else
-#endif // DTS_SHORTDATECENTURYFORMAT
         styleMSW |= DTS_SHORTDATEFORMAT;
 
     if ( style & wxDP_ALLOWNONE )

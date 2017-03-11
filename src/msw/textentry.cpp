@@ -66,10 +66,6 @@
     #endif
 #endif
 
-#ifndef ACO_UPDOWNKEYDROPSLIST
-    #define ACO_UPDOWNKEYDROPSLIST 0x20
-#endif
-
 #ifndef SHACF_FILESYS_ONLY
     #define SHACF_FILESYS_ONLY 0x00000010
 #endif
