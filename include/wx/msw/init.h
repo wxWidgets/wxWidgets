@@ -15,6 +15,14 @@
 // Windows-specific wxEntry() overload and wxIMPLEMENT_WXWIN_MAIN definition
 // ----------------------------------------------------------------------------
 
+// wxEntry() overload using the command line for the current process, instead
+// of argc/argv provided by the CRT. This is only really useful when using
+// Unicode with a compiler not providing wmain() or similar entry point, but is
+// always provided for consistency.
+extern int WXDLLIMPEXP_BASE wxEntry();
+
+#if wxUSE_GUI
+
 // we need HINSTANCE declaration to define WinMain()
 #include "wx/msw/wrapwin.h"
 
@@ -81,5 +89,6 @@ extern WXDLLIMPEXP_CORE int
     }                                                                       \
     wxIMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD
 
+#endif // wxUSE_GUI
 
 #endif // _WX_MSW_INIT_H_

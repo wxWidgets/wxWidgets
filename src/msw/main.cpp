@@ -194,8 +194,6 @@ int wxEntry(int& argc, wxChar **argv)
 
 #endif // wxUSE_BASE
 
-#if wxUSE_GUI
-
 // ----------------------------------------------------------------------------
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
@@ -204,8 +202,17 @@ struct wxMSWCommandLineArguments
 {
     wxMSWCommandLineArguments() { argc = 0; argv = NULL; }
 
-    void Init(const wxArrayString& args)
+    // Initialize this object from the current process command line.
+    void Init()
     {
+        // Get the command line.
+        const wxChar* const cmdLine = ::GetCommandLine();
+        if ( !cmdLine )
+            return;
+
+        // And tokenize it.
+        const wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
+
         argc = args.size();
 
         // +1 here for the terminating NULL
@@ -239,6 +246,8 @@ struct wxMSWCommandLineArguments
 
 static wxMSWCommandLineArguments wxArgs;
 
+#if wxUSE_GUI
+
 // common part of wxMSW-specific wxEntryStart() and wxEntry() overloads
 static bool
 wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
@@ -249,20 +258,7 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
     wxApp::m_nCmdShow = nCmdShow;
 #endif
 
-    // parse the command line: we can't use pCmdLine in Unicode build so it is
-    // simpler to never use it at all (this also results in a more correct
-    // argv[0])
-
-    // break the command line in words
-    wxArrayString args;
-
-    const wxChar *cmdLine = ::GetCommandLine();
-    if ( cmdLine )
-    {
-        args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
-    }
-
-    wxArgs.Init(args);
+    wxArgs.Init();
 
     return true;
 }
@@ -289,7 +285,16 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     return wxEntry(wxArgs.argc, wxArgs.argv);
 }
 
-#endif // wxUSE_GUI
+#else // !wxUSE_GUI
+
+int wxEntry()
+{
+    wxArgs.Init();
+
+    return wxEntry(wxArgs.argc, wxArgs.argv);
+}
+
+#endif // wxUSE_GUI/!wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // global HINSTANCE
