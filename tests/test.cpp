@@ -521,6 +521,10 @@ extern bool IsAutomaticTest()
         username.MakeLower();
         s_isAutomatic = username == "buildbot" ||
                             username.Matches("sandbox*");
+
+        // Also recognize Travis CI environment.
+        if ( !s_isAutomatic )
+            s_isAutomatic = wxGetEnv("TRAVIS", NULL)
     }
 
     return s_isAutomatic == 1;
