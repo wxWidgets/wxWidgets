@@ -524,7 +524,7 @@ extern bool IsAutomaticTest()
 
         // Also recognize Travis CI environment.
         if ( !s_isAutomatic )
-            s_isAutomatic = wxGetEnv("TRAVIS", NULL)
+            s_isAutomatic = wxGetEnv("TRAVIS", NULL);
     }
 
     return s_isAutomatic == 1;
