@@ -29,7 +29,10 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
-#include "wx/cmdline.h"
+// wxCmdLineParser is only used when we can't use ::CommandLineToArgvW().
+#if !wxUSE_UNICODE
+    #include "wx/cmdline.h"
+#endif
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
@@ -203,6 +206,22 @@ struct wxMSWCommandLineArguments
     wxMSWCommandLineArguments() { argc = 0; argv = NULL; }
 
     // Initialize this object from the current process command line.
+    //
+    // In Unicode build prefer to use the standard function for tokenizing the
+    // command line, but we can't use it with narrow strings, so use our own
+    // approximation instead then.
+#if wxUSE_UNICODE
+    void Init()
+    {
+        argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+    }
+
+    ~wxMSWCommandLineArguments()
+    {
+        if ( argc )
+            ::LocalFree(argv);
+    }
+#else // !wxUSE_UNICODE
     void Init()
     {
         // Get the command line.
@@ -239,6 +258,7 @@ struct wxMSWCommandLineArguments
         wxDELETEA(argv);
         argc = 0;
     }
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     int argc;
     wxChar **argv;
