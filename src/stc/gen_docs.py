@@ -1258,7 +1258,11 @@ extendedDocs = {
 
     'UsePopUp':
         ('The input should be one of the',
-        '@link wxStyledTextCtrl::wxSTC_POPUP_NEVER wxSTC_POPUP_* @endlink constants.',),
+        '@link wxStyledTextCtrl::wxSTC_POPUP_NEVER wxSTC_POPUP_* @endlink constants.',
+        '@remarks',
+        'When wxContextMenuEvent is used to create a custom popup menu,',
+        'this function should be called with wxSTC_POPUP_NEVER.  Otherwise both',
+        'the custom and the default popup menus may be shown.',),
 
     'PropertyType':
         ('The return value will be one of the',

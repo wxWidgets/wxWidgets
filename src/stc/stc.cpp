@@ -5260,6 +5260,9 @@ void wxStyledTextCtrl::OnMouseRightDown(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
     m_swx->DoRightButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
+    // we need to call evt.Skip() to ensure the context menu event
+    // is generated with wxGTK and wxOSX
+    evt.Skip();
 }
 
 void wxStyledTextCtrl::OnMouseMove(wxMouseEvent& evt) {
