@@ -3091,10 +3091,32 @@ public:
     /**
         Find some text in the document.
 
-        The fourth argument should be a bit list containing one or more of the
-        @link wxStyledTextCtrl::wxSTC_FIND_WHOLEWORD wxSTC_FIND_* @endlink constants.
+        @param minPos
+            The position (starting from zero) in the document at which to begin
+            the search
+        @param maxPos
+            The last position (starting from zero) in the document to which
+            the search will be restricted.
+        @param text
+            The text to search for.
+        @param flags
+            (Optional)  The search flags.  This should be a bit list containing
+             one or more of the @link wxStyledTextCtrl::wxSTC_FIND_WHOLEWORD
+            wxSTC_FIND_* @endlink constants.
+        @param findEnd
+            (Optional)  This parameter can optionally be used to receive the
+            end position (starting from zero) of the found text.  This is
+            primarily needed when searching using regular expressions.
+            This parameter is available since wxWidgets 3.1.1.
+        @return
+            The position (starting from zero) in the document at which the text
+            was found or wxSTC_INVALID_POSITION if the search fails.
+        @remarks
+            A backwards search can be performed by setting minPos to be greater
+            than maxPos.
     */
-    int FindText(int minPos, int maxPos, const wxString& text, int flags=0);
+    int FindText(int minPos, int maxPos, const wxString& text, int flags=0,
+                 int* findEnd=NULL);
 
     /**
         Sets the position that starts the target which is used for updating the

@@ -130,6 +130,8 @@ All (GUI):
 - Fix drawing filled arc with wxPostScriptDC::DrawArc().
 - Optimize PostScript code emitted by wxPostScriptDC to draw elliptic arcs.
 - Add wxStyledTextCtrl::AutoCompGetCurrentText() (NewPagodi).
+- Extend wxStyledTextCtrl::FindText() to return end position of matched
+  text (NewPagodi).
 
 wxGTK:
 

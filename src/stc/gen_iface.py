@@ -580,18 +580,20 @@ methodOverrideMap = {
 
     'FindText' :
     (0,
-     '''int %s(int minPos, int maxPos, const wxString& text, int flags=0);''',
+     '''int %s(int minPos, int maxPos, const wxString& text, int flags=0,
+                 int* findEnd=NULL);''',
 
-     '''int %s(int minPos, int maxPos,
-               const wxString& text,
-               int flags) {
+     '''int %s(int minPos, int maxPos, const wxString& text,
+                               int flags, int* findEnd) {
             Sci_TextToFind  ft;
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
             ft.lpstrText = (char*)(const char*)buf;
 
-            return SendMsg(%s, flags, (sptr_t)&ft);'''
+            int pos = SendMsg(%s, flags, (sptr_t)&ft);
+            if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);
+            return pos;'''
     ),
 
     'FormatRange' :
