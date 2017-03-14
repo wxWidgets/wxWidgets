@@ -29,7 +29,10 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
-#include "wx/cmdline.h"
+// wxCmdLineParser is only used when we can't use ::CommandLineToArgvW().
+#if !wxUSE_UNICODE
+    #include "wx/cmdline.h"
+#endif
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
@@ -194,8 +197,6 @@ int wxEntry(int& argc, wxChar **argv)
 
 #endif // wxUSE_BASE
 
-#if wxUSE_GUI
-
 // ----------------------------------------------------------------------------
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
@@ -204,8 +205,33 @@ struct wxMSWCommandLineArguments
 {
     wxMSWCommandLineArguments() { argc = 0; argv = NULL; }
 
-    void Init(const wxArrayString& args)
+    // Initialize this object from the current process command line.
+    //
+    // In Unicode build prefer to use the standard function for tokenizing the
+    // command line, but we can't use it with narrow strings, so use our own
+    // approximation instead then.
+#if wxUSE_UNICODE
+    void Init()
     {
+        argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+    }
+
+    ~wxMSWCommandLineArguments()
+    {
+        if ( argc )
+            ::LocalFree(argv);
+    }
+#else // !wxUSE_UNICODE
+    void Init()
+    {
+        // Get the command line.
+        const wxChar* const cmdLine = ::GetCommandLine();
+        if ( !cmdLine )
+            return;
+
+        // And tokenize it.
+        const wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
+
         argc = args.size();
 
         // +1 here for the terminating NULL
@@ -232,12 +258,15 @@ struct wxMSWCommandLineArguments
         wxDELETEA(argv);
         argc = 0;
     }
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     int argc;
     wxChar **argv;
 };
 
 static wxMSWCommandLineArguments wxArgs;
+
+#if wxUSE_GUI
 
 // common part of wxMSW-specific wxEntryStart() and wxEntry() overloads
 static bool
@@ -249,20 +278,7 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
     wxApp::m_nCmdShow = nCmdShow;
 #endif
 
-    // parse the command line: we can't use pCmdLine in Unicode build so it is
-    // simpler to never use it at all (this also results in a more correct
-    // argv[0])
-
-    // break the command line in words
-    wxArrayString args;
-
-    const wxChar *cmdLine = ::GetCommandLine();
-    if ( cmdLine )
-    {
-        args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
-    }
-
-    wxArgs.Init(args);
+    wxArgs.Init();
 
     return true;
 }
@@ -289,7 +305,16 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     return wxEntry(wxArgs.argc, wxArgs.argv);
 }
 
-#endif // wxUSE_GUI
+#else // !wxUSE_GUI
+
+int wxEntry()
+{
+    wxArgs.Init();
+
+    return wxEntry(wxArgs.argc, wxArgs.argv);
+}
+
+#endif // wxUSE_GUI/!wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // global HINSTANCE
