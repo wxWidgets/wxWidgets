@@ -183,12 +183,8 @@ methodOverrideMap = {
             return wxEmptyString;
         }
 
-        wxMemoryBuffer mbuf(len+1);
-        char* buf = (char*)mbuf.GetWriteBuf(len+1);
-
-        int pos = SendMsg(%s, len+1, (sptr_t)buf);
-        mbuf.UngetWriteBuf(len);
-        mbuf.AppendByte(0);
+        wxCharBuffer buf(len);
+        int pos = SendMsg(%s, len+1, (sptr_t)buf.data());
         if (linePos)  *linePos = pos;
         return stc2wx(buf);'''
     ),
@@ -259,11 +255,8 @@ methodOverrideMap = {
          const int msg = %s;
          long len = SendMsg(msg, line, 0);
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, line, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -295,12 +288,10 @@ methodOverrideMap = {
      '''wxString %s(int line) const {
          const int msg = %s;
          long len = SendMsg(msg, line, 0);
+         if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, line, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -334,11 +325,10 @@ methodOverrideMap = {
       '''wxString %s(int style) {
          const int msg = %s;
          long len = SendMsg(msg, style, 0);
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, style, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, style, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -528,12 +518,10 @@ methodOverrideMap = {
      '''wxString %s() const {
          const int msg = %s;
          long len = SendMsg(msg, 0, 0);
+         if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -640,11 +628,8 @@ methodOverrideMap = {
          int len = LineLength(line);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(%s, line, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -655,14 +640,12 @@ methodOverrideMap = {
      'wxString %s();',
 
      '''wxString %s() {
-         const int len = SendMsg(SCI_GETSELTEXT, 0, (sptr_t)0);
+         const int msg = %s;
+         long len = SendMsg(msg, 0, (sptr_t)0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+2);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -674,17 +657,16 @@ methodOverrideMap = {
          if (endPos < startPos) {
              wxSwap(startPos, endPos);
          }
-         int   len  = endPos - startPos;
+         int len = endPos - startPos;
          if (!len) return wxEmptyString;
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len);
+
+         wxCharBuffer buf(len);
          Sci_TextRange tr;
-         tr.lpstrText = buf;
+         tr.lpstrText = buf.data();
          tr.chrg.cpMin = startPos;
          tr.chrg.cpMax = endPos;
+         tr.lpstrText[0] = '\\0'; // initialize with 0 in case the range is invalid
          SendMsg(%s, 0, (sptr_t)&tr);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
          return stc2wx(buf);'''
     ),
 
@@ -708,12 +690,11 @@ methodOverrideMap = {
      'wxString %s() const;',
 
      '''wxString %s() const {
-         int len  = GetTextLength();
-         wxMemoryBuffer mbuf(len+1);   // leave room for the null...
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, len+1, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         int len = GetTextLength();
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(%s, len+1, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -736,13 +717,9 @@ methodOverrideMap = {
      'wxString %s() const;',
 
      '''wxString %s() const {
-         int startPos = GetTargetStart();
-         int endPos = GetTargetEnd();
-         wxMemoryBuffer mbuf(endPos-startPos+1);   // leave room for the null...
-         char* buf = (char*)mbuf.GetWriteBuf(endPos-startPos+1);
-         SendMsg(%s, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(endPos-startPos);
-         mbuf.AppendByte(0);
+         int len = GetTargetEnd() - GetTargetStart();
+         wxCharBuffer buf(len);
+         SendMsg(%s, 0, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -802,14 +779,13 @@ methodOverrideMap = {
      'wxString %s(const wxString& key);',
 
      '''wxString %s(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTY, (sptr_t)(const char*)wx2stc(key), 0);
+         const int msg = %s;
+         const wxWX2MBbuf keyBuf = wx2stc(key);
+         long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, (uptr_t)(const char*)wx2stc(key), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -818,14 +794,13 @@ methodOverrideMap = {
      'wxString %s(const wxString& key);',
 
      '''wxString %s(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (uptr_t)(const char*)wx2stc(key), 0);
+         const int msg = %s;
+         const wxWX2MBbuf keyBuf = wx2stc(key);
+         long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, (uptr_t)(const char*)wx2stc(key), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -915,11 +890,8 @@ methodOverrideMap = {
          int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -962,14 +934,11 @@ methodOverrideMap = {
 
      '''wxString %s(int tagNumber) const {
          const int msg = %s;
-         int len = SendMsg(msg, tagNumber, (sptr_t)NULL);
+         long len = SendMsg(msg, tagNumber, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, tagNumber, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, tagNumber, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -1015,14 +984,11 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -1034,14 +1000,12 @@ methodOverrideMap = {
 
      '''wxString %s(const wxString& name) const {
          const int msg = %s;
-         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)NULL);
+         const wxWX2MBbuf nameBuf = wx2stc(name);
+         long len = SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -1053,14 +1017,11 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -1097,15 +1058,13 @@ methodOverrideMap = {
     (0,
      'wxString %s(const wxString& encodedCharacter) const;',
      '''wxString %s(const wxString& encodedCharacter) const {
-         int msg = %s;
-         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)NULL);
+         const int msg = %s;
+         const wxWX2MBbuf encCharBuf = wx2stc(encodedCharacter);
+         long len = SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 
@@ -1120,15 +1079,12 @@ methodOverrideMap = {
     (0,
      'wxString %s() const;',
      '''wxString %s() const {
-         int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         const int msg = %s;
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);'''
     ),
 

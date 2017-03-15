@@ -471,12 +471,8 @@ wxString wxStyledTextCtrl::GetCurLine(int* linePos) {
             return wxEmptyString;
         }
 
-        wxMemoryBuffer mbuf(len+1);
-        char* buf = (char*)mbuf.GetWriteBuf(len+1);
-
-        int pos = SendMsg(SCI_GETCURLINE, len+1, (sptr_t)buf);
-        mbuf.UngetWriteBuf(len);
-        mbuf.AppendByte(0);
+        wxCharBuffer buf(len);
+        int pos = SendMsg(SCI_GETCURLINE, len+1, (sptr_t)buf.data());
         if (linePos)  *linePos = pos;
         return stc2wx(buf);
 }
@@ -868,11 +864,10 @@ int wxStyledTextCtrl::StyleGetSize(int style) const
 wxString wxStyledTextCtrl::StyleGetFaceName(int style) {
          const int msg = SCI_STYLEGETFONT;
          long len = SendMsg(msg, style, 0);
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, style, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, style, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -1755,11 +1750,8 @@ wxString wxStyledTextCtrl::GetLine(int line) const {
          int len = LineLength(line);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(SCI_GETLINE, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(SCI_GETLINE, line, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -1801,14 +1793,12 @@ bool wxStyledTextCtrl::GetModify() const
 
 // Retrieve the selected text.
 wxString wxStyledTextCtrl::GetSelectedText() {
-         const int len = SendMsg(SCI_GETSELTEXT, 0, (sptr_t)0);
+         const int msg = SCI_GETSELTEXT;
+         long len = SendMsg(msg, 0, (sptr_t)0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+2);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(SCI_GETSELTEXT, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -1817,17 +1807,16 @@ wxString wxStyledTextCtrl::GetTextRange(int startPos, int endPos) {
          if (endPos < startPos) {
              wxSwap(startPos, endPos);
          }
-         int   len  = endPos - startPos;
+         int len = endPos - startPos;
          if (!len) return wxEmptyString;
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len);
+
+         wxCharBuffer buf(len);
          Sci_TextRange tr;
-         tr.lpstrText = buf;
+         tr.lpstrText = buf.data();
          tr.chrg.cpMin = startPos;
          tr.chrg.cpMax = endPos;
+         tr.lpstrText[0] = '\0'; // initialize with 0 in case the range is invalid
          SendMsg(SCI_GETTEXTRANGE, 0, (sptr_t)&tr);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
          return stc2wx(buf);
 }
 
@@ -1944,12 +1933,11 @@ void wxStyledTextCtrl::SetText(const wxString& text)
 
 // Retrieve all the text in the document.
 wxString wxStyledTextCtrl::GetText() const {
-         int len  = GetTextLength();
-         wxMemoryBuffer mbuf(len+1);   // leave room for the null...
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(SCI_GETTEXT, len+1, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         int len = GetTextLength();
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(SCI_GETTEXT, len+1, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -2028,13 +2016,9 @@ void wxStyledTextCtrl::SetTargetRange(int start, int end)
 
 // Retrieve the text in the target.
 wxString wxStyledTextCtrl::GetTargetText() const {
-         int startPos = GetTargetStart();
-         int endPos = GetTargetEnd();
-         wxMemoryBuffer mbuf(endPos-startPos+1);   // leave room for the null...
-         char* buf = (char*)mbuf.GetWriteBuf(endPos-startPos+1);
-         SendMsg(SCI_GETTARGETTEXT, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(endPos-startPos);
-         mbuf.AppendByte(0);
+         int len = GetTargetEnd() - GetTargetStart();
+         wxCharBuffer buf(len);
+         SendMsg(SCI_GETTARGETTEXT, 0, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -2568,14 +2552,11 @@ int wxStyledTextCtrl::GetMultiPaste() const
 // Retrieve the value of a tag from a regular expression search.
 wxString wxStyledTextCtrl::GetTag(int tagNumber) const {
          const int msg = SCI_GETTAG;
-         int len = SendMsg(msg, tagNumber, (sptr_t)NULL);
+         long len = SendMsg(msg, tagNumber, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, tagNumber, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, tagNumber, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -3617,12 +3598,10 @@ int wxStyledTextCtrl::AutoCompGetCurrent() const
 wxString wxStyledTextCtrl::AutoCompGetCurrentText() const {
          const int msg = SCI_AUTOCGETCURRENTTEXT;
          long len = SendMsg(msg, 0, 0);
+         if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -3898,11 +3877,8 @@ wxString wxStyledTextCtrl::MarginGetText(int line) const {
          const int msg = SCI_MARGINGETTEXT;
          long len = SendMsg(msg, line, 0);
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, line, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -3977,12 +3953,10 @@ void wxStyledTextCtrl::AnnotationSetText(int line, const wxString& text)
 wxString wxStyledTextCtrl::AnnotationGetText(int line) const {
          const int msg = SCI_ANNOTATIONGETTEXT;
          long len = SendMsg(msg, line, 0);
+         if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, line, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -4552,15 +4526,13 @@ void wxStyledTextCtrl::SetRepresentation(const wxString& encodedCharacter, const
 
 // Set the way a character is drawn.
 wxString wxStyledTextCtrl::GetRepresentation(const wxString& encodedCharacter) const {
-         int msg = SCI_GETREPRESENTATION;
-         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)NULL);
+         const int msg = SCI_GETREPRESENTATION;
+         const wxWX2MBbuf encCharBuf = wx2stc(encodedCharacter);
+         long len = SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -4626,28 +4598,26 @@ void wxStyledTextCtrl::LoadLexerLibrary(const wxString& path)
 
 // Retrieve a "property" value previously set with SetProperty.
 wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTY, (sptr_t)(const char*)wx2stc(key), 0);
+         const int msg = SCI_GETPROPERTY;
+         const wxWX2MBbuf keyBuf = wx2stc(key);
+         long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(SCI_GETPROPERTY, (uptr_t)(const char*)wx2stc(key), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
 // Retrieve a "property" value previously set with SetProperty,
 // with "$()" variable replacement on returned buffer.
 wxString wxStyledTextCtrl::GetPropertyExpanded(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (uptr_t)(const char*)wx2stc(key), 0);
+         const int msg = SCI_GETPROPERTYEXPANDED;
+         const wxWX2MBbuf keyBuf = wx2stc(key);
+         long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(SCI_GETPROPERTYEXPANDED, (uptr_t)(const char*)wx2stc(key), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -4669,11 +4639,8 @@ wxString wxStyledTextCtrl::GetLexerLanguage() const {
          int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -4685,14 +4652,11 @@ void* wxStyledTextCtrl::PrivateLexerCall(int operation, void* pointer) {
 // Retrieve a '\\n' separated list of properties understood by the current lexer.
 wxString wxStyledTextCtrl::PropertyNames() const {
          const int msg = SCI_PROPERTYNAMES;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -4705,28 +4669,23 @@ int wxStyledTextCtrl::PropertyType(const wxString& name)
 // Describe a property.
 wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
          const int msg = SCI_DESCRIBEPROPERTY;
-         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)NULL);
+         const wxWX2MBbuf nameBuf = wx2stc(name);
+         long len = SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
 // Retrieve a '\\n' separated list of descriptions of the keyword sets understood by the current lexer.
 wxString wxStyledTextCtrl::DescribeKeyWordSets() const {
          const int msg = SCI_DESCRIBEKEYWORDSETS;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
@@ -4788,15 +4747,12 @@ int wxStyledTextCtrl::DistanceToSecondaryStyles() const
 
 // Get the set of base styles that can be extended with sub styles
 wxString wxStyledTextCtrl::GetSubStyleBases() const {
-         int msg = SCI_GETSUBSTYLEBASES;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         const int msg = SCI_GETSUBSTYLEBASES;
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
          return stc2wx(buf);
 }
 
