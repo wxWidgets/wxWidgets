@@ -624,9 +624,7 @@ wxCharBuffer wxStyledTextCtrl::GetTargetTextRaw()
 wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
 {
     if (endPos < startPos) {
-        int temp = startPos;
-        startPos = endPos;
-        endPos = temp;
+        wxSwap(startPos, endPos);
     }
     int len  = endPos - startPos;
     if (!len) {

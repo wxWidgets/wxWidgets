@@ -150,9 +150,7 @@ methodOverrideMap = {
      '''wxMemoryBuffer %s(int startPos, int endPos) {
         wxMemoryBuffer buf;
         if (endPos < startPos) {
-            int temp = startPos;
-            startPos = endPos;
-            endPos = temp;
+            wxSwap(startPos, endPos);
         }
         int len = endPos - startPos;
         if (!len) return buf;
@@ -615,9 +613,7 @@ methodOverrideMap = {
              Sci_RangeToFormat fr;
 
              if (endPos < startPos) {
-                 int temp = startPos;
-                 startPos = endPos;
-                 endPos = temp;
+                 wxSwap(startPos, endPos);
              }
              fr.hdc = draw;
              fr.hdcTarget = target;
@@ -676,9 +672,7 @@ methodOverrideMap = {
 
      '''wxString %s(int startPos, int endPos) {
          if (endPos < startPos) {
-             int temp = startPos;
-             startPos = endPos;
-             endPos = temp;
+             wxSwap(startPos, endPos);
          }
          int   len  = endPos - startPos;
          if (!len) return wxEmptyString;
