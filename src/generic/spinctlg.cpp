@@ -410,8 +410,8 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 
 void wxSpinCtrlGenericBase::OnTextLostFocus(wxFocusEvent& event)
 {
-    SyncSpinToText(SendEvent_Text);
-    DoSendEvent();
+    if ( SyncSpinToText(SendEvent_Text) )
+        DoSendEvent();
 
     event.Skip();
 }
