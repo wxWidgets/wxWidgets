@@ -125,6 +125,13 @@
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
 
+#ifndef MAPVK_VK_TO_CHAR
+    // Contrary to MS claims that this is present starting with Win2k, it is
+    // missing from the SDK released for Windows 5.2 build 3790, aka XP 64-bit
+    // and also from tdm32-gcc-5.1.0.
+    #define MAPVK_VK_TO_CHAR 2
+#endif
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
