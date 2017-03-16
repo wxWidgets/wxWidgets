@@ -101,6 +101,7 @@ public:
     void OnMultipleSelections(wxCommandEvent& event);
     void OnMultiPaste(wxCommandEvent& event);
     void OnMultipleSelectionsTyping(wxCommandEvent& event);
+    void OnCustomPopup(wxCommandEvent& evt);
     // stc
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);

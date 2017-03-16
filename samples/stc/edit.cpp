@@ -111,6 +111,7 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU(myID_MULTIPLE_SELECTIONS,          Edit::OnMultipleSelections)
     EVT_MENU(myID_MULTI_PASTE,                  Edit::OnMultiPaste)
     EVT_MENU(myID_MULTIPLE_SELECTIONS_TYPING,   Edit::OnMultipleSelectionsTyping)
+    EVT_MENU(myID_CUSTOM_POPUP,                 Edit::OnCustomPopup)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
@@ -175,7 +176,7 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     m_FoldingMargin = 16;
     CmdKeyClear (wxSTC_KEY_TAB, 0); // this is done by the menu accelerator key
     SetLayoutCache (wxSTC_CACHE_PAGE);
-
+    UsePopUp(wxSTC_POPUP_ALL);
 }
 
 Edit::~Edit () {}
@@ -451,6 +452,11 @@ void Edit::OnMultiPaste(wxCommandEvent& WXUNUSED(event)) {
 void Edit::OnMultipleSelectionsTyping(wxCommandEvent& WXUNUSED(event)) {
     bool isSet = GetAdditionalSelectionTyping();
     SetAdditionalSelectionTyping(!isSet);
+}
+
+void Edit::OnCustomPopup(wxCommandEvent& evt)
+{
+    UsePopUp(evt.IsChecked() ? wxSTC_POPUP_NEVER : wxSTC_POPUP_ALL);
 }
 
 //! misc
