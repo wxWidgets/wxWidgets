@@ -5248,7 +5248,8 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
     if (ht != wxHT_WINDOW_INSIDE) {
         pt = this->PointFromPosition(this->GetCurrentPos());
     }
-    m_swx->DoContextMenu(Point(pt.x, pt.y));
+    if ( !m_swx->DoContextMenu(Point(pt.x, pt.y)) )
+        evt.Skip();
 }
 
 

@@ -179,7 +179,7 @@ public:
 #endif
 
     void DoCommand(int ID);
-    void DoContextMenu(Point pt);
+    bool DoContextMenu(Point pt);
     void DoOnListBox();
 
 

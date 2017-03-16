@@ -1143,9 +1143,13 @@ void ScintillaWX::DoCommand(int ID) {
 }
 
 
-void ScintillaWX::DoContextMenu(Point pt) {
+bool ScintillaWX::DoContextMenu(Point pt) {
     if (ShouldDisplayPopup(pt))
+    {
         ContextMenu(pt);
+        return true;
+    }
+    return false;
 }
 
 void ScintillaWX::DoOnListBox() {
