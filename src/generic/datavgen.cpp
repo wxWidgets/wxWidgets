@@ -2005,6 +2005,10 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             (int)(GetRowCount( ) - item_start));
     unsigned int item_last = item_start + item_count;
 
+    unsigned int line_start = GetLineStart(item_start);
+    unsigned int cell_height;
+    unsigned int ty;
+
     // Send the event to wxDataViewCtrl itself.
     wxDataViewEvent cache_event(wxEVT_DATAVIEW_CACHE_HINT, m_owner, NULL);
     cache_event.SetCache(item_start, item_last - 1);
@@ -2070,15 +2074,18 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // We only need to draw the visible part, so limit the rectangle to it.
         const int xRect = m_owner->CalcUnscrolledPosition(wxPoint(0, 0)).x;
         const int widthRect = size.x;
+        ty = line_start;
         for (unsigned int item = item_start; item < item_last; item++)
         {
+            cell_height = GetLineHeight(item);
             if ( item % 2 )
             {
                 dc.DrawRectangle(xRect,
-                                 GetLineStart(item),
+                                 ty,
                                  widthRect,
                                  GetLineHeight(item));
             }
+            ty += cell_height;
         }
     }
 
@@ -2088,10 +2095,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetPen(m_penRule);
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
+        ty = line_start;
         for (unsigned int i = item_start; i <= item_last; i++)
         {
-            int y = GetLineStart( i );
-            dc.DrawLine(x_start, y, x_last, y);
+            cell_height = GetLineHeight(i);
+            dc.DrawLine(x_start, ty, x_last, ty);
+            ty += cell_height;
         }
     }
 
@@ -2107,6 +2116,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         //     rule at the most-left side of the control.
 
         int x = x_start - 1;
+        int line_last = GetLineStart(item_last);
         for (unsigned int i = col_start; i < col_last; i++)
         {
             wxDataViewColumn *col = GetOwner()->GetColumnAt(i);
@@ -2115,20 +2125,22 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             x += col->GetWidth();
 
-            dc.DrawLine(x, GetLineStart( item_start ),
-                        x, GetLineStart( item_last ) );
+            dc.DrawLine(x, line_start,
+                        x, line_last);
         }
     }
 
     // redraw the background for the items which are selected/current
+    ty = line_start;
     for (unsigned int item = item_start; item < item_last; item++)
     {
         bool selected = m_selection.IsSelected(item);
+        cell_height = GetLineHeight(item);
 
         if (selected || item == m_currentRow)
         {
-            wxRect rowRect( x_start, GetLineStart( item ),
-                         x_last - x_start, GetLineHeight( item ) );
+            wxRect rowRect( x_start, ty,
+                         x_last - x_start, cell_height );
 
             bool renderColumnFocus = false;
 
@@ -2227,6 +2239,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                     );
             }
         }
+        ty += cell_height;
     }
 
 #if wxUSE_DRAG_AND_DROP
@@ -2255,17 +2268,21 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if ( col->IsHidden() || cell_rect.width <= 0 )
             continue;       // skip it!
 
+        cell_rect.y = line_start;
         for (unsigned int item = item_start; item < item_last; item++)
         {
             // get the cell value and set it into the renderer
             wxDataViewTreeNode *node = NULL;
             wxDataViewItem dataitem;
+            cell_height = GetLineHeight(item);
 
             if (!IsVirtualList())
             {
                 node = GetTreeNodeByRow(item);
-                if( node == NULL )
+                if (node == NULL) {
+                    cell_rect.y += cell_height;
                     continue;
+                }
 
                 dataitem = node->GetItem();
 
@@ -2273,8 +2290,10 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 // column itself unless HasContainerColumns() overrides this.
                 if ( col != expander &&
                         model->IsContainer(dataitem) &&
-                            !model->HasContainerColumns(dataitem) )
+                            !model->HasContainerColumns(dataitem) ) {
+                    cell_rect.y += cell_height;
                     continue;
+                }
             }
             else
             {
@@ -2282,8 +2301,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             }
 
             // update cell_rect
-            cell_rect.y = GetLineStart( item );
-            cell_rect.height = GetLineHeight( item );
+            cell_rect.height = cell_height;
 
             bool selected = m_selection.IsSelected(item);
 
@@ -2347,8 +2365,10 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             item_rect.x += indent;
             item_rect.width -= indent;
 
-            if ( item_rect.width <= 0 )
-                continue;
+            if ( item_rect.width <= 0 ) {
+	            cell_rect.y += cell_height;
+	            continue;
+            }
 
             // TODO: it would be much more efficient to create a clipping
             //       region for the entire column being rendered (in the OnPaint
@@ -2360,6 +2380,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxDCClipper clip(dc, item_rect);
 
             cell->WXCallRender(item_rect, &dc, state);
+
+            cell_rect.y += cell_height;
         }
 
         cell_rect.x += cell_rect.width;
