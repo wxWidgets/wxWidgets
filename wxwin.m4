@@ -144,15 +144,15 @@ dnl ---------------------------------------------------------------------------
 dnl WX_CONFIG_CHECK(VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl                  [, WX-LIBS [, ADDITIONAL-WX-CONFIG-FLAGS]]]])
 dnl
-dnl Test for wxWidgets, and define WX_C*FLAGS, WX_LIBS and WX_LIBS_STATIC
-dnl (the latter is for static linking against wxWidgets). Set WX_CONFIG_NAME
-dnl environment variable to override the default name of the wx-config script
-dnl to use. Set WX_CONFIG_PATH to specify the full path to wx-config - in this
+dnl Test for wxWidgets, and define WX_C*FLAGS and WX_LIBS
+dnl Set WX_CONFIG_NAME environment variable to override the 
+dnl default name of the wx-config script dnl to use. 
+dnl Set WX_CONFIG_PATH to specify the full path to wx-config - in this
 dnl case the macro won't even waste time on tests for its existence.
 dnl
 dnl Optional WX-LIBS argument contains comma- or space-separated list of
-dnl wxWidgets libraries to link against. If it is not specified then WX_LIBS
-dnl and WX_LIBS_STATIC will contain flags to link with all of the core
+dnl wxWidgets libraries to link against. If it is not specified then 
+dnl WX_LIBS will contain flags to link with all of the core
 dnl wxWidgets libraries.
 dnl
 dnl Optional ADDITIONAL-WX-CONFIG-FLAGS argument is appended to wx-config
@@ -237,18 +237,6 @@ AC_DEFUN([WX_CONFIG_CHECK],
       AC_MSG_RESULT(yes (version $WX_VERSION))
       WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs $4`
 
-      dnl is this even still appropriate?  --static is a real option now
-      dnl and WX_CONFIG_WITH_ARGS is likely to contain it if that is
-      dnl what the user actually wants, making this redundant at best.
-      dnl For now keep it in case anyone actually used it in the past.
-      AC_MSG_CHECKING([for wxWidgets static library])
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs $4 2>/dev/null`
-      if test "x$WX_LIBS_STATIC" = "x"; then
-        AC_MSG_RESULT(no)
-      else
-        AC_MSG_RESULT(yes)
-      fi
-
       dnl starting with version 2.2.6 wx-config has --cppflags argument
       wx_has_cppflags=""
       if test $wx_config_major_version -gt 2; then
@@ -318,7 +306,6 @@ AC_DEFUN([WX_CONFIG_CHECK],
        WX_CPPFLAGS=""
        WX_CXXFLAGS=""
        WX_LIBS=""
-       WX_LIBS_STATIC=""
        WX_RESCOMP=""
 
        if test ! -z "$5"; then
@@ -354,7 +341,6 @@ AC_DEFUN([WX_CONFIG_CHECK],
     WX_CPPFLAGS=""
     WX_CXXFLAGS=""
     WX_LIBS=""
-    WX_LIBS_STATIC=""
     WX_RESCOMP=""
 
     ifelse([$3], , :, [$3])
@@ -367,7 +353,6 @@ AC_DEFUN([WX_CONFIG_CHECK],
   AC_SUBST(WX_CFLAGS_ONLY)
   AC_SUBST(WX_CXXFLAGS_ONLY)
   AC_SUBST(WX_LIBS)
-  AC_SUBST(WX_LIBS_STATIC)
   AC_SUBST(WX_VERSION)
   AC_SUBST(WX_RESCOMP)
 
