@@ -641,7 +641,7 @@ typedef short int WXTYPE;
         virtual wxClassInfo *GetClassInfo() const
         wxCLANG_WARNING_RESTORE(inconsistent-missing-override)
 */
-#if defined(__has_warning)
+#if defined(__clang__) && defined(__has_warning)
 #    define wxCLANG_HAS_WARNING(x) __has_warning(x) /* allow macro expansion for the warning name */
 #    define wxCLANG_IF_VALID_WARNING(x,y) \
          wxCONCAT(wxCLANG_IF_VALID_WARNING_,wxCLANG_HAS_WARNING(wxSTRINGIZE(wxCONCAT(-W,x))))(y)
