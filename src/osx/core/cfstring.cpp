@@ -630,9 +630,16 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
 #else
     #error "unsupported Unicode representation"
 #endif
-
-        reset( CFStringCreateWithBytes( kCFAllocatorDefault,
-            (const UInt8*)data, size, cfencoding, false /* no BOM */ ) );
+        CFStringref ref = CFStringCreateWithBytes( kCFAllocatorDefault,
+            (const UInt8*)data, size, cfencoding, false /* no BOM */ );
+        if (ref)
+        {
+            reset( ref );
+        }
+        else
+        {
+            reset( wxCFRetain( CFSTR("") ) );
+        }
 #else // not wxUSE_UNICODE
         reset( CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
             wxMacGetSystemEncFromFontEnc( encoding ) ) );
