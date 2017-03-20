@@ -1375,7 +1375,7 @@ void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
     // work with it for some reason) is moved over it.
     aboutInfo.SetWebSite(wxT("http://www.wxwidgets.org"));
 
-    wxAboutBox(aboutInfo);
+    wxAboutBox(aboutInfo, this);
 }
 
 

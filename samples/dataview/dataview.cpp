@@ -955,7 +955,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
     info.AddDeveloper("Robert Roebling");
     info.AddDeveloper("Francesco Montorsi");
 
-    wxAboutBox(info);
+    wxAboutBox(info, this);
 }
 
 
