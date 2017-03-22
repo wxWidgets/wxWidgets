@@ -262,9 +262,9 @@ A very simple example:
     // Using wxArrayString
     //
     wxArrayString arrDiet;
-    arr.Add("Herbivore");
-    arr.Add("Carnivore");
-    arr.Add("Omnivore");
+    arrDiet.Add("Herbivore");
+    arrDiet.Add("Carnivore");
+    arrDiet.Add("Omnivore");
 
     pg->Append( new wxEnumProperty("Diet",
                                    wxPG_LABEL,
@@ -290,9 +290,9 @@ Here's extended example using values as well:
     // Using wxArrayString and wxArrayInt
     //
     wxArrayString arrDiet;
-    arr.Add("Herbivore");
-    arr.Add("Carnivore");
-    arr.Add("Omnivore");
+    arrDiet.Add("Herbivore");
+    arrDiet.Add("Carnivore");
+    arrDiet.Add("Omnivore");
 
     wxArrayInt arrIds;
     arrIds.Add(40);
