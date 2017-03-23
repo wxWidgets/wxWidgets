@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # This will be a RC, unless "final" is given as the first argument!
 
 # go to new release branch
@@ -16,7 +18,7 @@ then
     # silently commit changes to new release branch, if any
     git commit -a -m "changes for a new release" &> /dev/null
     if [ $? != 0 ]; then exit $?; fi
-	echo Committed pending changes!
+    echo Committed pending changes!
 fi
 
 # use sign key or not
@@ -35,10 +37,10 @@ ver_string=`grep '#define wxVERSION_STRING ' ./../../include/wx/version.h | sed 
 rc_string=
 if [[ $# = 0 ]] || [ "$1" != "final" ]
 then
-	# get the next RC index for this release
-	rc_count=`git tag | grep v"$ver_string"-rc | wc -l`
-	((rc_count++))
-	rc_string=-rc"$rc_count"
+    # get the next RC index for this release
+    rc_count=`git tag | grep v"$ver_string"-rc | wc -l`
+    ((rc_count++))
+    rc_string=-rc"$rc_count"
 fi
 
 # create the new tag
