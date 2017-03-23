@@ -187,6 +187,9 @@
 /lib/evc_armv4_lib
 /lib/evc_emulator_lib
 /lib/expat*.lib
+/lib/gcc_dll
+/lib/gcc_dll32
+/lib/gcc_dll64
 /lib/gcc_lib
 /lib/gcc_lib32
 /lib/gcc_lib64
