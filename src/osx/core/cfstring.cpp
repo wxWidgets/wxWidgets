@@ -630,7 +630,7 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
 #else
     #error "unsupported Unicode representation"
 #endif
-        CFStringref ref = CFStringCreateWithBytes( kCFAllocatorDefault,
+        CFStringRef ref = CFStringCreateWithBytes( kCFAllocatorDefault,
             (const UInt8*)data, size, cfencoding, false /* no BOM */ );
         if (ref)
         {
