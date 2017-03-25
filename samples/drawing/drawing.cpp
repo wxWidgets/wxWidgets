@@ -1905,7 +1905,11 @@ void MyCanvas::Draw(wxDC& pdc)
 
     // For drawing with raw wxGraphicsContext
     // there is no bounding box to obtain.
-    if ( m_showBBox && m_show != File_ShowGraphics)
+    if ( m_showBBox
+#if wxUSE_GRAPHICS_CONTEXT
+         && m_show != File_ShowGraphics
+#endif // wxUSE_GRAPHICS_CONTEXT
+       )
     {
         dc.SetPen(wxPen(wxColor(0, 128, 0), 1, wxPENSTYLE_DOT));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -2269,12 +2273,12 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_SVG
         if (ext == wxT("svg"))
         {
+#if wxUSE_GRAPHICS_CONTEXT
             // Graphics screen can only be drawn using GraphicsContext
             if (m_canvas->GetPage() == File_ShowGraphics) {
                 wxLogMessage("Graphics screen can not be saved as SVG.");
                 return;
             }
-#if wxUSE_GRAPHICS_CONTEXT
             wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
             m_canvas->UseGraphicRenderer(NULL);
 #endif
@@ -2290,13 +2294,13 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_POSTSCRIPT
         if ( ext == wxS("ps") )
         {
+#if wxUSE_GRAPHICS_CONTEXT
             // Graphics screen can only be drawn using wxGraphicsContext
-            if ( m_canvas->GetPage() == File_ShowGraphics )
+            if (m_canvas->GetPage() == File_ShowGraphics)
             {
                 wxLogMessage("Graphics screen can not be saved as PostScript file.");
                 return;
             }
-#if wxUSE_GRAPHICS_CONTEXT
             wxGraphicsRenderer* curRenderer = m_canvas->GetRenderer();
             m_canvas->UseGraphicRenderer(NULL);
 #endif // wxUSE_GRAPHICS_CONTEXT
@@ -2479,7 +2483,11 @@ void MyFrame::OnBoundingBox(wxCommandEvent& evt)
 
 void MyFrame::OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt)
 {
+#if wxUSE_GRAPHICS_CONTEXT
     evt.Enable(m_canvas->GetPage() != File_ShowGraphics);
+#else
+    wxUnusedVar(evt);
+#endif // wxUSE_GRAPHICS_CONTEXT / !wxUSE_GRAPHICS_CONTEXT
 }
 
 void MyFrame::PrepareDC(wxDC& dc)
