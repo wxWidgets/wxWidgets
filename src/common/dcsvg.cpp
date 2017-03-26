@@ -28,7 +28,9 @@
 #include "wx/filename.h"
 #include "wx/scopedarray.h"
 
-#include "wx/private/markupparser.h"
+#if wxUSE_MARKUP
+    #include "wx/private/markupparser.h"
+#endif
 
 // ----------------------------------------------------------
 // Global utilities
@@ -544,7 +546,11 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         s += wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
         s += wxString::Format(wxS("stroke-width:0;\" transform=\"rotate(%s %d %d)\""), NumStr(-angle), xx, yy);
         s += wxS(" xml:space=\"preserve\">");
-        s += wxMarkupParser::Quote(lines[lineNum]) + wxS("</text>\n");
+        #if wxUSE_MARKUP
+            s += wxMarkupParser::Quote(lines[lineNum]) + wxS("</text>\n");
+        #else
+            s += lines[lineNum] + wxS("</text>\n");
+        #endif
 
         write(s);
     }
