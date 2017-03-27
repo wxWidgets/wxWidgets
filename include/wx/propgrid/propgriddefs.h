@@ -348,6 +348,7 @@ enum wxPG_MISC_ARG_FLAGS
     // Get/Store full value instead of displayed value.
     wxPG_FULL_VALUE                     = 0x00000001,
 
+    // Perform special action in case of unsuccessful conversion.
     wxPG_REPORT_ERROR                   = 0x00000002,
 
     wxPG_PROPERTY_SPECIFIC              = 0x00000004,

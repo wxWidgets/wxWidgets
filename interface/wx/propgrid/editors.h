@@ -120,7 +120,7 @@ public:
         wxWindow* wnd_primary, wxEvent& event ) const = 0;
 
     /**
-        Returns value from control, via parameter 'variant'.
+        Returns value from control, via parameter @a variant.
         Usually ends up calling property's StringToValue() or IntToValue().
         Returns @true if value was different.
     */

@@ -513,7 +513,7 @@ public:
     // category will be its own wxVariantList of wxVariant.
     // Use wxPG_INC_ATTRIBUTES to include property attributes as well.
     // Each attribute will be stored as list variant named
-    // "@@<propname>@@attr."
+    // "@<propname>@attr."
     wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
         wxPGProperty* baseparent = NULL, long flags = 0 ) const
     {

@@ -971,7 +971,14 @@ public:
         @param text
             String to get the value from.
         @param flags
-            @todo docme
+            If @c wxPG_FULL_VALUE is set, the function sets complete, storable
+            value instead of displayable one (they may be different).
+            @c wxPG_PROGRAMMATIC_VALUE flag is used to indicate that value is
+            being set programmatically (i.e. operation is not caused by user
+            input).
+            If @c wxPG_REPORT_ERROR is set, a special action should be
+            performed if string couldn't have been successfully converted
+            to the valid value (e.g. a special value can be set in this case).
 
         @return @true if value was changed.
     */
