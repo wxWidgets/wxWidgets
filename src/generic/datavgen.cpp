@@ -2664,6 +2664,11 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         {
             // There's no sorting, so we need to select an insertion position
 
+			// FIXME: What is the purpose of keeping the unsorted model and node
+			// lists in sync? There's an awful lot of comparison and copying
+			// going on here, and it becomes painfully slow when a lot of items
+			// are added to a parent.
+
             wxDataViewItemArray modelSiblings;
             GetModel()->GetChildren(parent, modelSiblings);
             const int modelSiblingsSize = modelSiblings.size();
