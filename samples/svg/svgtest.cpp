@@ -2,7 +2,6 @@
 // Name:        svgtest.cpp
 // Purpose:     SVG sample
 // Author:      Chris Elliott
-// Modified by:
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -159,7 +158,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox(wxT("wxWidgets SVG sample\n")
-        wxT("Author: Chris Elliott (c) 2002-2009\n")
+        wxT("Authors:\n")
+        wxT("   Chris Elliott (c) 2002-2009\n")
+        wxT("   Prashant Kumar Nirmal (c) 2017\n")
         wxT("Usage: click File|Save to Save the Selected SVG Test"),
         wxT("About SVG Test"));
 }
