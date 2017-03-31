@@ -7252,22 +7252,37 @@ fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW_WEBKIT=0
+    USE_WEBVIEW_WEBKIT2=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
-            webkitgtk=webkit-1.0
             if test "$WXGTK3" = 1; then
-                webkitgtk=webkitgtk-3.0
+                PKG_CHECK_MODULES([WEBKIT],
+                                  [webkit2gtk-4.0],
+                                  [
+                                    USE_WEBVIEW_WEBKIT2=1
+                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                  ],
+                                  [
+                                    AC_MSG_WARN([webkit2gtk not found, falling back to webkitgtk])
+                                  ])
             fi
-            PKG_CHECK_MODULES([WEBKIT],
-                              [$webkitgtk >= 1.3.1],
-                              [
-                                USE_WEBVIEW_WEBKIT=1
-                                CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
-                                EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
-                              ],
-                              [
-                                AC_MSG_WARN([webkitgtk not found.])
-                              ])
+            if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+                webkitgtk=webkit-1.0
+                if test "$WXGTK3" = 1; then
+                    webkitgtk=webkitgtk-3.0
+                fi
+                PKG_CHECK_MODULES([WEBKIT],
+                                  [$webkitgtk >= 1.3.1],
+                                  [
+                                    USE_WEBVIEW_WEBKIT=1
+                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                  ],
+                                  [
+                                    AC_MSG_WARN([webkitgtk not found.])
+                                  ])
+            fi
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
             dnl Under Mac we always have the libraries but check for the
             dnl headers
@@ -7294,6 +7309,9 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         if test "$USE_WEBVIEW_WEBKIT" = 1; then
             wxUSE_WEBVIEW="yes"
             AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+        elif test "$USE_WEBVIEW_WEBKIT2" = 1; then
+            wxUSE_WEBVIEW="yes"
+            AC_DEFINE(wxUSE_WEBVIEW_WEBKIT2)
         else
             AC_MSG_WARN([WebKit not available, disabling wxWebView])
         fi
