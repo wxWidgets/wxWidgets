@@ -62,8 +62,6 @@ public:
     MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
             const wxPoint& pos, const wxSize& size);
 
-    MyPage *CreateNewPage(int index);
-
     void FileSavePicture(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
@@ -148,15 +146,9 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
     {
         wxString svgTitle;
         svgTitle.Printf(wxT("SVG Test %d"), i);
-        m_notebook->AddPage(CreateNewPage(i), svgTitle);
+        m_notebook->AddPage(new MyPage(m_notebook, i), svgTitle);
 
     }
-}
-
-MyPage *MyFrame::CreateNewPage(int index)
-{
-    MyPage *page = new MyPage(m_notebook, index);
-    return page;
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
