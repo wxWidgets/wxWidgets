@@ -231,9 +231,7 @@ bool MyPage::OnSave(wxString filename)
 void MyPage::OnDraw(wxDC& dc)
 {
      // vars to use ...
-#if wxUSE_STATUSBAR
     wxString s;
-#endif // wxUSE_STATUSBAR
     wxPen wP;
     wxBrush wB;
     wxPoint points[6];
@@ -257,9 +255,7 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawPoint (25,15);
             dc.DrawLine(50, 30, 200, 30);
             dc.DrawSpline(50, 200, 50, 100, 200, 10);
-#if wxUSE_STATUSBAR
             s = wxT("Green Cross, Cyan Line and spline");
-#endif // wxUSE_STATUSBAR
             break;
 
         case 1:
@@ -282,9 +278,7 @@ void MyPage::OnDraw(wxDC& dc)
 
             dc.DrawPolygon(5, points);
             dc.DrawLines (6, points, 160);
-#if wxUSE_STATUSBAR
             s = wxT("Blue rectangle, red edge, clear rounded rectangle, gold ellipse, gold and clear stars");
-#endif // wxUSE_STATUSBAR
             break;
 
         case 2:
@@ -306,9 +300,7 @@ void MyPage::OnDraw(wxDC& dc)
                         .Italic().Bold());
             dc.SetTextForeground (wC);
             dc.DrawText(wxT("This is a Times-style string"), 50, 60);
-#if wxUSE_STATUSBAR
             s = wxT("Swiss, Times text; red text, rotated and colored orange");
-#endif // wxUSE_STATUSBAR
             break;
 
         case 3 :
@@ -342,9 +334,7 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawEllipticArc(300, 50,200,100,90.0,145.0);
             dc.DrawEllipticArc(300,100,200,100,90.0,345.0);
 
-#if wxUSE_STATUSBAR
             s = wxT("This is an arc test page");
-#endif // wxUSE_STATUSBAR
             break;
 
         case 4:
@@ -352,9 +342,7 @@ void MyPage::OnDraw(wxDC& dc)
             dc.SetBrush (wxBrush (wxT("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
             dc.DrawCheckMark ( 80,50,75,75);
             dc.DrawRectangle ( 80,50,75,75);
-#if wxUSE_STATUSBAR
             s = wxT("Two check marks");
-#endif // wxUSE_STATUSBAR
             break;
 
         case 5:
@@ -386,17 +374,13 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
             dc.DrawText(wxT("This is an 18pt string in MapMode"), 50, 60);
-#if wxUSE_STATUSBAR
             s = wxT("Scaling test page");
-#endif // wxUSE_STATUSBAR
             break;
 
         case 6:
             dc.DrawIcon( wxICON(sample), 10, 10 );
             dc.DrawBitmap ( wxBitmap(svgbitmap_xpm), 50,15);
-#if wxUSE_STATUSBAR
             s = wxT("Icon and Bitmap ");
-#endif // wxUSE_STATUSBAR
             break;
 
         case 7:
@@ -456,9 +440,7 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DestroyClippingRegion();
             */
 
-#if wxUSE_STATUSBAR
             s = wxT("Clipping region");
-#endif // wxUSE_STATUSBAR
             break;
 
         case 8:
@@ -500,13 +482,10 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawLine(txtX - padding, txtY, txtX - padding + lenH, txtY + lenH);
             dc.DrawLine(txtX - padding + lenH, txtY + lenH, txtX - padding + lenH + lenW, txtY + (lenH - lenW)); // bottom
             dc.DrawRotatedText(txtStr, txtX, txtY, 45);
-#if wxUSE_STATUSBAR
             s = wxT("Text position test page");
-#endif // wxUSE_STATUSBAR
             break;
     }
-#if wxUSE_STATUSBAR
-   ( (wxFrame *)wxGetTopLevelParent(this) )->SetStatusText(s);
-#endif // wxUSE_STATUSBAR
+
+   wxLogStatus("%s", s);
 }
 
