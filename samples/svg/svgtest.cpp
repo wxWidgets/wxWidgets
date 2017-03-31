@@ -77,26 +77,13 @@ private:
 };
 
 // ---------------------------------------------------------------------------
-// constants
-// ---------------------------------------------------------------------------
-
-// menu items ids
-
-enum
-{
-    ID_SAVE = 100,
-    ID_ABOUT,
-    ID_QUIT
-};
-
-// ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(ID_ABOUT, MyFrame::OnAbout)
-    EVT_MENU(ID_QUIT, MyFrame::OnQuit)
-    EVT_MENU(ID_SAVE, MyFrame::FileSavePicture)
+    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+    EVT_MENU(wxID_SAVE, MyFrame::FileSavePicture)
 wxEND_EVENT_TABLE()
 
 // ===========================================================================
@@ -140,11 +127,11 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(ID_SAVE, wxT("&Save As..\tCtrl+S"));
-    file_menu->Append(ID_QUIT, wxT("&Exit\tAlt+X"));
+    file_menu->Append(wxID_SAVE);
+    file_menu->Append(wxID_EXIT);
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(ID_ABOUT, wxT("&About"));
+    help_menu->Append(wxID_ABOUT);
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -192,7 +179,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox(wxT("wxWidgets SVG sample\n")
         wxT("Author: Chris Elliott (c) 2002-2009\n")
-        wxT("Usage: click File|Save As.. to Save the Selected SVG Test"),
+        wxT("Usage: click File|Save to Save the Selected SVG Test"),
         wxT("About SVG Test"));
 }
 
