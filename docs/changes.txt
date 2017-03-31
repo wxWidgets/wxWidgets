@@ -580,6 +580,14 @@ Major new features in this release
 
 
 
+3.0.4: (released 2017-??-??)
+----------------------------
+
+wxGTK:
+
+- Allow using more recent WebKit2GTK+ in wxWebView (Scott Talbert).
+
+
 3.0.3: (released 2017-05-02)
 ----------------------------
 

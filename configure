@@ -675,6 +675,7 @@ COND_WXUNIV_0
 COND_WITH_PLUGIN_SDL_1
 COND_WINDOWS_IMPLIB_1
 COND_USE_XRC_1
+COND_USE_WEBVIEW_WEBKIT2_1
 COND_USE_THREADS_1
 COND_USE_THREADS_0
 COND_USE_STC_1
@@ -37295,12 +37296,95 @@ fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW_WEBKIT=0
+    USE_WEBVIEW_WEBKIT2=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
-            webkitgtk=webkit-1.0
             if test "$WXGTK3" = 1; then
-                webkitgtk=webkitgtk-3.0
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
+$as_echo_n "checking for WEBKIT... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$WEBKIT_CFLAGS"; then
+        pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$WEBKIT_LIBS"; then
+        pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "webkit2gtk-4.0"`
+        else
+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "webkit2gtk-4.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$WEBKIT_PKG_ERRORS" >&5
+
+
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk not found, falling back to webkitgtk" >&5
+$as_echo "$as_me: WARNING: webkit2gtk not found, falling back to webkitgtk" >&2;}
+
+elif test $pkg_failed = untried; then
+
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk not found, falling back to webkitgtk" >&5
+$as_echo "$as_me: WARNING: webkit2gtk not found, falling back to webkitgtk" >&2;}
+
+else
+	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
+	WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                                    USE_WEBVIEW_WEBKIT2=1
+                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+
+fi
             fi
+            if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+                webkitgtk=webkit-1.0
+                if test "$WXGTK3" = 1; then
+                    webkitgtk=webkitgtk-3.0
+                fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
@@ -37361,12 +37445,12 @@ fi
 	echo "$WEBKIT_PKG_ERRORS" >&5
 
 
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
 $as_echo "$as_me: WARNING: webkitgtk not found." >&2;}
 
 elif test $pkg_failed = untried; then
 
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
 $as_echo "$as_me: WARNING: webkitgtk not found." >&2;}
 
 else
@@ -37375,11 +37459,12 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                USE_WEBVIEW_WEBKIT=1
-                                CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
-                                EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                    USE_WEBVIEW_WEBKIT=1
+                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
 
 fi
+            fi
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
                                     old_CPPFLAGS="$CPPFLAGS"
             CPPFLAGS="-x objective-c++ $CPPFLAGS"
@@ -37410,6 +37495,10 @@ fi
         if test "$USE_WEBVIEW_WEBKIT" = 1; then
             wxUSE_WEBVIEW="yes"
             $as_echo "#define wxUSE_WEBVIEW_WEBKIT 1" >>confdefs.h
+
+        elif test "$USE_WEBVIEW_WEBKIT2" = 1; then
+            wxUSE_WEBVIEW="yes"
+            $as_echo "#define wxUSE_WEBVIEW_WEBKIT2 1" >>confdefs.h
 
         else
             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKit not available, disabling wxWebView" >&5
@@ -41663,6 +41752,11 @@ EOF
     COND_USE_THREADS_1="#"
     if test "x$USE_THREADS" = "x1" ; then
         COND_USE_THREADS_1=""
+    fi
+
+    COND_USE_WEBVIEW_WEBKIT2_1="#"
+    if test "x$USE_WEBVIEW_WEBKIT2" = "x1" ; then
+        COND_USE_WEBVIEW_WEBKIT2_1=""
     fi
 
     COND_USE_XRC_1="#"

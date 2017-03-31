@@ -2190,7 +2190,7 @@
 #   endif
 #endif /* wxUSE_TREELISTCTRL */
 
-#if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)
+#if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WEBVIEW requires at least one backend"
 #   else

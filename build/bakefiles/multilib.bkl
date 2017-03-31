@@ -180,6 +180,7 @@
          cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_WEBVIEW</define>
+        <define>WX_WEB_EXTENSIONS_DIRECTORY="$(PLUGINS_INST_DIR)/web-extensions"</define>
         <sources>$(WEBVIEW_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
