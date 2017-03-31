@@ -175,11 +175,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::FileSavePicture(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_FILEDLG
-    MyPage *page = (MyPage *) m_notebook->GetCurrentPage();
-    if (page == NULL)
-    {
-        return;
-    }
+    MyPage * const page = (MyPage *) m_notebook->GetCurrentPage();
 
     wxFileDialog dialog(this, wxT("Save Picture as"), wxEmptyString,
         m_notebook->GetPageText(m_notebook->GetSelection()),
