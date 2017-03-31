@@ -11,5 +11,10 @@
         <ldlibs>$(EXTRALIBS_SDL)</ldlibs>
     </wx-base-plugin>
 
+    <wx-base-plugin id="webkit2_ext" cond="USE_WEBVIEW_WEBKIT2=='1'">
+        <sources>$(WEBVIEW_WEBKIT2_EXTENSION_SRC)</sources>
+        <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
+        <install-to>$(PLUGINS_INST_DIR)/web-extensions</install-to>
+    </wx-base-plugin>
 
 </makefile>
