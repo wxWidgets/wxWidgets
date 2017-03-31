@@ -140,12 +140,12 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
 
-    //Panel containing a notebook
+    // Panel containing a notebook
     m_panel = new wxPanel(this);
-    m_sizerFrame= new wxBoxSizer(wxVERTICAL);
+    m_sizerFrame = new wxBoxSizer(wxVERTICAL);
     m_panel->SetSizer(m_sizerFrame);
 
-    //Create a notebook
+    // Create a notebook
     m_notebook = new wxNotebook(m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBK_TOP);
 
     //Add SVG Windows to a notebook
@@ -157,7 +157,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
 
     }
 
-    //Add a notebook
+    // Add a notebook
     m_sizerFrame->Insert(0, m_notebook, wxSizerFlags(5).Expand().Border());
     m_notebook->ChangeSelection(0);
     m_sizerFrame->Layout();
