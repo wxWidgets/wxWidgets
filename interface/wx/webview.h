@@ -571,11 +571,15 @@ public:
 
     /**
         Clear the history, this will also remove the visible page.
+
+        @note This is not implemented on the WebKit2GTK+ backend.
     */
     virtual void ClearHistory() = 0;
 
     /**
         Enable or disable the history. This will also clear the history.
+
+        @note This is not implemented on the WebKit2GTK+ backend.
     */
     virtual void EnableHistory(bool enable = true) = 0;
 
