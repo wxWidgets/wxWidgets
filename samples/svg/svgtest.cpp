@@ -23,16 +23,12 @@
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
-#include "wx/mdi.h"
 #endif
 
-#include "wx/toolbar.h"
 #include "wx/dcsvg.h"
 #include "wx/vector.h"
+#include <wx/notebook.h>
 
-#include "bitmaps/new.xpm"
-#include "bitmaps/save.xpm"
-#include "bitmaps/help.xpm"
 #include "SVGlogo24.xpm"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -40,9 +36,6 @@
 #endif
 
 #include <math.h>
-
-class MyChild;
-class MyCanvas;
 
 // ---------------------------------------------------------------------------
 // classes
@@ -54,61 +47,31 @@ public:
     bool OnInit() wxOVERRIDE;
 };
 
-class MyFrame : public wxMDIParentFrame
+class MyPage : public wxScrolledWindow
+{
+public:
+    MyPage(wxNotebook *parent, int index);
+    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    bool OnSave(wxString);
+private:
+    int m_index;
+};
+
+class MyFrame : public wxFrame
 {
 public:
     MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
-            const wxPoint& pos, const wxSize& size, const long style);
+            const wxPoint& pos, const wxSize& size);
 
-    void InitToolBar(wxToolBar* toolBar);
+    MyPage *CreateNewPage(int index);
 
-    void OnSize(wxSizeEvent& event);
+    void FileSavePicture(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnNewWindow(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
-    void FileSavePicture (wxCommandEvent& event);
-
-    unsigned int GetCountOfChildren() const
-        { return m_nWinCreated; }
-
 private:
-    unsigned int m_nWinCreated;
-
-    wxDECLARE_EVENT_TABLE();
-};
-
-class MyChild: public wxMDIChildFrame
-{
-public:
-    MyChild(wxMDIParentFrame *parent, const wxString& title,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            const long style = wxDEFAULT_FRAME_STYLE);
-    ~MyChild();
-
-    void OnActivate(wxActivateEvent& event);
-    void OnQuit(wxCommandEvent& event);
-    bool OnSave(wxString filename);
-
-    MyFrame* GetFrame()
-        { return m_frame; }
-
-private:
-    MyCanvas *m_canvas;
-    MyFrame  *m_frame;
-
-    wxDECLARE_EVENT_TABLE();
-};
-
-class MyCanvas : public wxScrolledWindow
-{
-public:
-    MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size);
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
-
-private:
-    int m_index;
-    MyChild* m_child;
+    wxNotebook *m_notebook;
+    wxPanel *m_panel;
+    wxBoxSizer *m_sizerFrame;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -118,27 +81,22 @@ private:
 // ---------------------------------------------------------------------------
 
 // menu items ids
+
 enum
 {
-    MDI_QUIT = 100,
-    MDI_NEW_WINDOW,
-    MDI_SAVE,
-    MDI_REFRESH,
-    MDI_CHILD_QUIT,
-    MDI_ABOUT
+    ID_SAVE = 100,
+    ID_ABOUT,
+    ID_QUIT
 };
 
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
 
-wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
-    EVT_MENU(MDI_ABOUT, MyFrame::OnAbout)
-    EVT_MENU(MDI_NEW_WINDOW, MyFrame::OnNewWindow)
-    EVT_MENU(MDI_QUIT, MyFrame::OnQuit)
-    EVT_MENU (MDI_SAVE, MyFrame::FileSavePicture)
-
-    EVT_SIZE(MyFrame::OnSize)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(ID_ABOUT, MyFrame::OnAbout)
+    EVT_MENU(ID_QUIT, MyFrame::OnQuit)
+    EVT_MENU(ID_SAVE, MyFrame::FileSavePicture)
 wxEND_EVENT_TABLE()
 
 // ===========================================================================
@@ -155,37 +113,38 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame((wxFrame *)NULL, -1, wxT("SVG Demo"),
-                                 wxDefaultPosition, wxSize(500, 400),
-                                 wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
+    MyFrame* frame = new MyFrame(NULL, -1, wxT("SVG Demo"),
+                                 wxDefaultPosition, wxSize(500, 400));
 
     frame->Show(true);
 
     return true;
 }
 
-
 // ---------------------------------------------------------------------------
 // MyFrame
 // ---------------------------------------------------------------------------
 
 // Define my frame constructor
-MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
-                 const wxPoint& pos, const wxSize& size, const long style)
-        : wxMDIParentFrame(parent, id, title, pos, size, style)
-{
-    m_nWinCreated = 0;
 
+MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
+                 const wxPoint& pos, const wxSize& size)
+        : wxFrame(parent, id, title, pos, size)
+{
     SetIcon(wxICON(sample));
+
+    #if wxUSE_STATUSBAR
+    CreateStatusBar();
+    #endif // wxUSE_STATUSBAR
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(MDI_NEW_WINDOW, wxT("&New test\tCtrl+N"));
-    file_menu->Append(MDI_QUIT, wxT("&Exit\tAlt+X"));
+    file_menu->Append(ID_SAVE, wxT("&Save As..\tCtrl+S"));
+    file_menu->Append(ID_QUIT, wxT("&Exit\tAlt+X"));
 
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(MDI_ABOUT, wxT("&About"));
+    help_menu->Append(ID_ABOUT, wxT("&About"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -195,12 +154,33 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
 
-#if wxUSE_STATUSBAR
-    CreateStatusBar();
-#endif // wxUSE_STATUSBAR
+    //Panel containing a notebook
+    m_panel = new wxPanel(this);
+    m_sizerFrame= new wxBoxSizer(wxVERTICAL);
+    m_panel->SetSizer(m_sizerFrame);
 
-    CreateToolBar(wxNO_BORDER | wxTB_FLAT | wxTB_HORIZONTAL);
-    InitToolBar(GetToolBar());
+    //Create a notebook
+    m_notebook = new wxNotebook(m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBK_TOP);
+
+    //Add SVG Windows to a notebook
+    for (int i = 0; i <= 8; ++i)
+    {
+        wxString svgTitle;
+        svgTitle.Printf(wxT("SVG Test %d"), i);
+        m_notebook->AddPage(CreateNewPage(i), svgTitle, true);
+
+    }
+
+    //Add a notebook
+    m_sizerFrame->Insert(0, m_notebook, wxSizerFlags(5).Expand().Border());
+    m_notebook->ChangeSelection(0);
+    m_sizerFrame->Layout();
+}
+
+MyPage *MyFrame::CreateNewPage(int index)
+{
+    MyPage *page = new MyPage(m_notebook, index);
+    return page;
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -208,97 +188,31 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close();
 }
 
-void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox(wxT("wxWidgets SVG sample\n")
         wxT("Author: Chris Elliott (c) 2002-2009\n")
-        wxT("Usage: click File|New to show tests"),
+        wxT("Usage: click File|Save As.. to Save the Selected SVG Test"),
         wxT("About SVG Test"));
 }
 
-void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
-{
-    // Make another frame, containing a canvas
-    MyChild *subframe = new MyChild(this, wxT("SVG Frame"));
-
-    wxString title;
-    title.Printf(wxT("SVG Test Window %d"), m_nWinCreated );
-
-    // counts number of children previously, even if now closed
-    m_nWinCreated ++;
-
-    // Give it a title and icon
-    subframe->SetTitle(title);
-    subframe->SetIcon(wxICON(sample));
-
-    // Make a menubar
-    wxMenu *file_menu = new wxMenu;
-
-    file_menu->Append(MDI_NEW_WINDOW, wxT("&Another test\tCtrl+N"));
-    file_menu->Append(MDI_SAVE, wxT("&Save\tCtrl+S"), wxT("Save in SVG format"));
-    file_menu->Append(MDI_CHILD_QUIT, wxT("&Close child\tCtrl+F4"));
-    file_menu->Append(MDI_QUIT, wxT("&Exit\tAlt+X"));
-
-    wxMenu *help_menu = new wxMenu;
-    help_menu->Append(MDI_ABOUT, wxT("&About"));
-
-    wxMenuBar *menu_bar = new wxMenuBar;
-
-    menu_bar->Append(file_menu, wxT("&File"));
-    menu_bar->Append(help_menu, wxT("&Help"));
-
-    // Associate the menu bar with the frame
-    subframe->SetMenuBar(menu_bar);
-
-    subframe->Show(true);
-}
-
-void MyFrame::OnSize(wxSizeEvent& event)
-{
-    int w, h;
-    GetClientSize(&w, &h);
-
-    GetClientWindow()->SetSize(0, 0, w, h);
-    event.Skip();
-}
-
-void MyFrame::InitToolBar(wxToolBar* toolBar)
-{
-    const int maxBitmaps = 3;
-    wxBitmap* bitmaps[maxBitmaps];
-
-    bitmaps[0] = new wxBitmap( new_xpm );
-    bitmaps[1] = new wxBitmap( save_xpm );
-    bitmaps[2] = new wxBitmap( help_xpm );
-
-    toolBar->AddTool(MDI_NEW_WINDOW, wxEmptyString, *(bitmaps[0]), wxS("New SVG test window"));
-    toolBar->AddTool(MDI_SAVE, wxEmptyString, *bitmaps[1], wxS("Save test in SVG format"));
-    toolBar->AddSeparator();
-    toolBar->AddTool(MDI_ABOUT, wxEmptyString, *bitmaps[2], wxS("Help"));
-
-    toolBar->Realize();
-
-    int i;
-    for (i = 0; i < maxBitmaps; i++)
-        delete bitmaps[i];
-}
-
-void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
+void MyFrame::FileSavePicture(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_FILEDLG
-    MyChild * pChild = (MyChild *)GetActiveChild();
-    if (pChild == NULL)
+    MyPage *page = (MyPage *) m_notebook->GetCurrentPage();
+    if (page == NULL)
     {
         return;
     }
 
-    wxFileDialog dialog(this, wxT("Save Picture as"), wxEmptyString, pChild->GetTitle(),
+    wxFileDialog dialog(this, wxT("Save Picture as"), wxEmptyString,
+        m_notebook->GetPageText(m_notebook->GetSelection()),
         wxT("SVG vector picture files (*.svg)|*.svg"),
         wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        if (!pChild->OnSave ( dialog.GetPath() ))
+        if (!page->OnSave ( dialog.GetPath() ))
         {
             return;
         }
@@ -307,28 +221,30 @@ void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
 #endif // wxUSE_FILEDLG
 }
 
-
 // ---------------------------------------------------------------------------
-// MyCanvas
+// MyPage
 // ---------------------------------------------------------------------------
 
-wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-wxEND_EVENT_TABLE()
-
-// Define a constructor for my canvas
-MyCanvas::MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size)
-    : wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
+// Define a constructor for my page
+MyPage::MyPage(wxNotebook *parent, int index)
+    : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL)
 {
     SetBackgroundColour(*wxWHITE);
+    SetScrollbars(20, 20, 50, 50);
+    m_index = index;
+}
 
-    m_child = parent;
-    m_index = m_child->GetFrame()->GetCountOfChildren() % 9;
+bool MyPage::OnSave(wxString filename)
+{
+    wxSVGFileDC svgDC (filename, 600, 650);
+    OnDraw (svgDC);
+    return svgDC.IsOk();
 }
 
 // Define the repainting behaviour
-void MyCanvas::OnDraw(wxDC& dc)
+void MyPage::OnDraw(wxDC& dc)
 {
-    // vars to use ...
+     // vars to use ...
 #if wxUSE_STATUSBAR
     wxString s;
 #endif // wxUSE_STATUSBAR
@@ -604,59 +520,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             break;
     }
 #if wxUSE_STATUSBAR
-    m_child->SetStatusText(s);
+   ( (wxFrame *)wxGetTopLevelParent(this) )->SetStatusText(s);
 #endif // wxUSE_STATUSBAR
-}
-
-
-// ---------------------------------------------------------------------------
-// MyChild
-// ---------------------------------------------------------------------------
-
-// Note that MDI_NEW_WINDOW and MDI_ABOUT commands get passed
-// to the parent window for processing, so no need to
-// duplicate event handlers here.
-wxBEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
-    EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
-wxEND_EVENT_TABLE()
-
-MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title,
-                 const wxPoint& pos, const wxSize& size,
-                 const long style)
-    : wxMDIChildFrame(parent, wxID_ANY, title, pos, size, style)
-{
-    m_frame = (MyFrame *) parent;
-
-#if wxUSE_STATUSBAR
-    CreateStatusBar();
-    SetStatusText(title);
-#endif // wxUSE_STATUSBAR
-
-    m_canvas = new MyCanvas(this, wxPoint(0, 0), GetClientSize());
-
-    // Give it scrollbars
-    m_canvas->SetScrollbars(20, 20, 50, 50);
-}
-
-MyChild::~MyChild()
-{
-}
-
-void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
-{
-    Close(true);
-}
-
-bool MyChild::OnSave(wxString filename)
-{
-    wxSVGFileDC svgDC (filename, 600, 650);
-    m_canvas->OnDraw (svgDC);
-    return svgDC.IsOk();
-}
-
-void MyChild::OnActivate(wxActivateEvent& event)
-{
-    if ( event.GetActive() && m_canvas )
-        m_canvas->SetFocus();
 }
 
