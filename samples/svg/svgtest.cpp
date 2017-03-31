@@ -26,7 +26,7 @@
 #endif
 
 #include "wx/dcsvg.h"
-#include <wx/notebook.h>
+#include "wx/notebook.h"
 
 #include "SVGlogo24.xpm"
 
