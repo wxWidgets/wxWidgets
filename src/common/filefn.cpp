@@ -1607,7 +1607,7 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
         return false;
     }
 
-    HANDLE h = ::CreateFile
+    const HANDLE h = ::CreateFile
                  (
                     path.t_str(),
                     access,
