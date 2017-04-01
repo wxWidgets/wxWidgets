@@ -290,7 +290,7 @@ public:
         //vert->Add(1, 1, 1, wxEXPAND);
 
         wxBoxSizer* s1 = new wxBoxSizer(wxHORIZONTAL);
-        m_border_size = new wxSpinCtrl(this, ID_PaneBorderSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE)), wxDefaultPosition, wxSize(50,20), wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+        m_border_size = new wxSpinCtrl(this, ID_PaneBorderSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
         s1->Add(1, 1, 1, wxEXPAND);
         s1->Add(new wxStaticText(this, wxID_ANY, wxT("Pane Border Size:")));
         s1->Add(m_border_size);
@@ -299,7 +299,7 @@ public:
         //vert->Add(s1, 0, wxEXPAND | wxLEFT | wxBOTTOM, 5);
 
         wxBoxSizer* s2 = new wxBoxSizer(wxHORIZONTAL);
-        m_sash_size = new wxSpinCtrl(this, ID_SashSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE)), wxDefaultPosition, wxSize(50,20), wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
+        m_sash_size = new wxSpinCtrl(this, ID_SashSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
         s2->Add(1, 1, 1, wxEXPAND);
         s2->Add(new wxStaticText(this, wxID_ANY, wxT("Sash Size:")));
         s2->Add(m_sash_size);
@@ -308,7 +308,7 @@ public:
         //vert->Add(s2, 0, wxEXPAND | wxLEFT | wxBOTTOM, 5);
 
         wxBoxSizer* s3 = new wxBoxSizer(wxHORIZONTAL);
-        m_caption_size = new wxSpinCtrl(this, ID_CaptionSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE)), wxDefaultPosition, wxSize(50,20), wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
+        m_caption_size = new wxSpinCtrl(this, ID_CaptionSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
         s3->Add(1, 1, 1, wxEXPAND);
         s3->Add(new wxStaticText(this, wxID_ANY, wxT("Caption Size:")));
         s3->Add(m_caption_size);
@@ -1655,7 +1655,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1)),
                 1, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( new wxStaticText( panel, -1, wxT("wxSpinCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxSize(100,-1),
+   flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxDefaultSize,
                 wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
    panel->SetSizer( flex );
