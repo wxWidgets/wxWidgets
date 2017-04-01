@@ -524,7 +524,7 @@ void FileFunctionsTestCase::PathOnly()
 // Rmdir fails on them on Linux. See ticket #17644.
 void FileFunctionsTestCase::Mkdir()
 {
-    wxString dirname = wxT("__wxMkdir_test_dir");
+    wxString dirname = wxString::FromUTF8("__wxMkdir_test_dir_with_\xc3\xb6");
     const std::string msg = wxString::Format("Dir: %s", dirname).ToStdString();
     CPPUNIT_ASSERT_MESSAGE( msg, wxMkdir(dirname) );
     CPPUNIT_ASSERT_MESSAGE( msg, wxDirExists(dirname) );
@@ -533,7 +533,7 @@ void FileFunctionsTestCase::Mkdir()
 
 void FileFunctionsTestCase::Rmdir()
 {
-    wxString dirname = wxT("__wxRmdir_test_dir");
+    wxString dirname = wxString::FromUTF8("__wxRmdir_test_dir_with_\xc3\xb6");
     const std::string msg = wxString::Format("Dir: %s", dirname).ToStdString();
 
     CPPUNIT_ASSERT_MESSAGE( msg, wxMkdir(dirname) );
