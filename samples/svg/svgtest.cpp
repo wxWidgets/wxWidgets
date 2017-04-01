@@ -45,6 +45,51 @@ public:
     bool OnInit() wxOVERRIDE;
 };
 
+// Existing pages:
+enum Page
+{
+    Page_Lines,
+    Page_Polygons,
+    Page_Text,
+    Page_Arcs,
+    Page_Checkmarks,
+    Page_ScaledText,
+    Page_Bitmaps,
+    Page_Clipping,
+    Page_TextPos,
+    Page_Max
+};
+
+static const char* pageNames[] =
+{
+    "Lines",
+    "Polygons",
+    "Text",
+    "Arcs",
+    "Checkmarks",
+    "Scaled text",
+    "Bitmaps",
+    "Clipping",
+    "Text position",
+};
+
+wxCOMPILE_TIME_ASSERT( WXSIZEOF(pageNames) == Page_Max, PageNamesMismatch );
+
+static const char* pageDescriptions[] =
+{
+     "Green Cross, Cyan Line and spline",
+     "Blue rectangle, red edge, clear rounded rectangle, gold ellipse, gold and clear stars",
+     "Swiss, Times text; red text, rotated and colored orange",
+     "This is an arc test page",
+     "Two check marks",
+     "Scaling test page",
+     "Icon and Bitmap ",
+     "Clipping region",
+     "Text position test page",
+};
+
+wxCOMPILE_TIME_ASSERT( WXSIZEOF(pageDescriptions) == Page_Max, PageDescriptionsMismatch );
+
 class MyPage : public wxScrolledWindow
 {
 public:
@@ -141,11 +186,9 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
     m_notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBK_TOP);
 
     //Add SVG Windows to a notebook
-    for (int i = 0; i <= 8; ++i)
+    for (int i = 0; i < Page_Max; ++i)
     {
-        wxString svgTitle;
-        svgTitle.Printf(wxT("SVG Test %d"), i);
-        m_notebook->AddPage(new MyPage(m_notebook, i), svgTitle);
+        m_notebook->AddPage(new MyPage(m_notebook, i), pageNames[i]);
 
     }
 }
@@ -210,7 +253,6 @@ bool MyPage::OnSave(wxString filename)
 void MyPage::OnDraw(wxDC& dc)
 {
      // vars to use ...
-    wxString s;
     wxPen wP;
     wxBrush wB;
     wxPoint points[6];
@@ -221,8 +263,7 @@ void MyPage::OnDraw(wxDC& dc)
 
     switch (m_index)
     {
-        default:
-        case 0:
+        case Page_Lines:
             // draw lines to make a cross
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
@@ -234,10 +275,9 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawPoint (25,15);
             dc.DrawLine(50, 30, 200, 30);
             dc.DrawSpline(50, 200, 50, 100, 200, 10);
-            s = wxT("Green Cross, Cyan Line and spline");
             break;
 
-        case 1:
+        case Page_Polygons:
             // draw standard shapes
             dc.SetBrush(*wxCYAN_BRUSH);
             dc.SetPen(*wxRED_PEN);
@@ -257,10 +297,9 @@ void MyPage::OnDraw(wxDC& dc)
 
             dc.DrawPolygon(5, points);
             dc.DrawLines (6, points, 160);
-            s = wxT("Blue rectangle, red edge, clear rounded rectangle, gold ellipse, gold and clear stars");
             break;
 
-        case 2:
+        case Page_Text:
             // draw text in Arial or similar font
             dc.DrawLine(50,25,50,35);
             dc.DrawLine(45,30,55,30);
@@ -279,10 +318,9 @@ void MyPage::OnDraw(wxDC& dc)
                         .Italic().Bold());
             dc.SetTextForeground (wC);
             dc.DrawText(wxT("This is a Times-style string"), 50, 60);
-            s = wxT("Swiss, Times text; red text, rotated and colored orange");
             break;
 
-        case 3 :
+        case Page_Arcs:
             // four arcs start and end points, center
             dc.SetBrush(*wxGREEN_BRUSH);
             dc.DrawArc ( 200,300, 370,230, 300,300 );
@@ -313,18 +351,16 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawEllipticArc(300, 50,200,100,90.0,145.0);
             dc.DrawEllipticArc(300,100,200,100,90.0,345.0);
 
-            s = wxT("This is an arc test page");
             break;
 
-        case 4:
+        case Page_Checkmarks:
             dc.DrawCheckMark ( 30,30,25,25);
             dc.SetBrush (wxBrush (wxT("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
             dc.DrawCheckMark ( 80,50,75,75);
             dc.DrawRectangle ( 80,50,75,75);
-            s = wxT("Two check marks");
             break;
 
-        case 5:
+        case Page_ScaledText:
             dc.SetFont(wxFontInfo(18)
                         .FaceName("Times New Roman")
                         .Family(wxFONTFAMILY_ROMAN)
@@ -353,16 +389,14 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
             dc.DrawText(wxT("This is an 18pt string in MapMode"), 50, 60);
-            s = wxT("Scaling test page");
             break;
 
-        case 6:
+        case Page_Bitmaps:
             dc.DrawIcon( wxICON(sample), 10, 10 );
             dc.DrawBitmap ( wxBitmap(svgbitmap_xpm), 50,15);
-            s = wxT("Icon and Bitmap ");
             break;
 
-        case 7:
+        case Page_Clipping:
             dc.SetTextForeground(wxT("RED"));
             dc.DrawText(wxT("Red = Clipping Off"), 30, 5);
             dc.SetTextForeground(wxT("GREEN"));
@@ -419,10 +453,9 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DestroyClippingRegion();
             */
 
-            s = wxT("Clipping region");
             break;
 
-        case 8:
+        case Page_TextPos:
             wxString txtStr;
             wxCoord txtX, txtY, txtW, txtH, txtDescent, txtEL;
             wxCoord txtPad = 0;
@@ -461,10 +494,9 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawLine(txtX - padding, txtY, txtX - padding + lenH, txtY + lenH);
             dc.DrawLine(txtX - padding + lenH, txtY + lenH, txtX - padding + lenH + lenW, txtY + (lenH - lenW)); // bottom
             dc.DrawRotatedText(txtStr, txtX, txtY, 45);
-            s = wxT("Text position test page");
             break;
     }
 
-   wxLogStatus("%s", s);
+   wxLogStatus("%s", pageDescriptions[m_index]);
 }
 
