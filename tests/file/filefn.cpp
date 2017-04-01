@@ -50,6 +50,11 @@ private:
         CPPUNIT_TEST( GetCwd );
         CPPUNIT_TEST( FileEof );
         CPPUNIT_TEST( FileError );
+        CPPUNIT_TEST( DirExists );
+        CPPUNIT_TEST( IsAbsolutePath );
+        CPPUNIT_TEST( PathOnly );
+        CPPUNIT_TEST( Mkdir );
+        CPPUNIT_TEST( Rmdir );
     CPPUNIT_TEST_SUITE_END();
 
     void GetTempFolder();
@@ -64,6 +69,11 @@ private:
     void GetCwd();
     void FileEof();
     void FileError();
+    void DirExists();
+    void IsAbsolutePath();
+    void PathOnly();
+    void Mkdir();
+    void Rmdir();
 
     // Helper methods
     void DoCreateFile(const wxString& filePath);
@@ -482,27 +492,70 @@ void FileFunctionsTestCase::FileError()
 }
 
 
+void FileFunctionsTestCase::DirExists()
+{
+    wxString cwd = wxGetCwd();
+    const char *pUnitMsg = (const char*) cwd.mb_str(wxConvUTF8);
+    // Current working directory must exist
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, wxDirExists(cwd));
+}
+
+void FileFunctionsTestCase::IsAbsolutePath()
+{
+    wxString name = wxT("horse.bmp");
+    const char *pUnitMsg = (const char*) name.mb_str(wxConvUTF8);
+    // File name is given as relative path
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, !wxIsAbsolutePath(name) );
+
+    wxFileName filename(name);
+    CPPUNIT_ASSERT( filename.MakeAbsolute() );
+    // wxFileName::GetFullPath returns absolute path
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, wxIsAbsolutePath(filename.GetFullPath()));
+}
+
+void FileFunctionsTestCase::PathOnly()
+{
+    wxString name = wxT("horse.bmp");
+    // Get absolute path to horse.bmp
+    wxFileName filename(filename);
+    CPPUNIT_ASSERT( filename.MakeAbsolute() );
+
+    wxString pathOnly = wxPathOnly(filename.GetFullPath());
+    const char *pUnitMsg = (const char*) (pathOnly).mb_str(wxConvUTF8);
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, wxDirExists(pathOnly) || pathOnly.empty() );
+}
+
+// Unit tests for Mkdir and Rmdir doesn't cover non-ASCII directory names.
+// Rmdir fails on them on Linux. See ticket #17644.
+void FileFunctionsTestCase::Mkdir()
+{
+    wxString dirname = wxT("__wxMkdir_test_dir");
+    const char *pUnitMsg = (const char*) (dirname).mb_str(wxConvUTF8);
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, wxMkdir(dirname) );
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, wxDirExists(dirname) );
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, wxRmdir(dirname) );
+}
+
+void FileFunctionsTestCase::Rmdir()
+{
+    wxString dirname = wxT("__wxRmdir_test_dir");
+    const char *pUnitMsg = (const char*) (dirname).mb_str(wxConvUTF8);
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, wxMkdir(dirname) );
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, wxRmdir(dirname) );
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, !wxDirExists(dirname) );
+}
+
 /*
     TODO: other file functions to test:
 
-bool wxDirExists(const wxString& pathName);
-
-bool wxIsAbsolutePath(const wxString& filename);
-
 wxChar* wxFileNameFromPath(wxChar *path);
 wxString wxFileNameFromPath(const wxString& path);
-
-wxString wxPathOnly(const wxString& path);
 
 bool wxIsWild(const wxString& pattern);
 
 bool wxMatchWild(const wxString& pattern,  const wxString& text, bool dot_special = true);
 
 bool wxSetWorkingDirectory(const wxString& d);
-
-bool wxMkdir(const wxString& dir, int perm = wxS_DIR_DEFAULT);
-
-bool wxRmdir(const wxString& dir, int flags = 0);
 
 wxFileKind wxGetFileKind(int fd);
 wxFileKind wxGetFileKind(FILE *fp);
