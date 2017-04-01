@@ -281,4 +281,18 @@ wxFileOffset wxFFile::Length() const
     return wxInvalidOffset;
 }
 
+bool wxFFile::Eof() const
+{
+    wxCHECK_MSG( IsOpened(), false,
+                 wxT("wxFFile::Eof(): file is closed!") );
+    return feof(m_fp) != 0;
+}
+
+bool wxFFile::Error() const
+{
+    wxCHECK_MSG( IsOpened(), false,
+                 wxT("wxFFile::Error(): file is closed!") );
+    return ferror(m_fp) != 0;
+}
+
 #endif // wxUSE_FFILE

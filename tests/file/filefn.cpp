@@ -48,6 +48,8 @@ private:
         CPPUNIT_TEST( RenameFile );
         CPPUNIT_TEST( ConcatenateFiles );
         CPPUNIT_TEST( GetCwd );
+        CPPUNIT_TEST( FileEof );
+        CPPUNIT_TEST( FileError );
     CPPUNIT_TEST_SUITE_END();
 
     void GetTempFolder();
@@ -60,6 +62,8 @@ private:
     void RenameFile();
     void ConcatenateFiles();
     void GetCwd();
+    void FileEof();
+    void FileError();
 
     // Helper methods
     void DoCreateFile(const wxString& filePath);
@@ -422,6 +426,61 @@ void FileFunctionsTestCase::GetCwd()
 
     CPPUNIT_ASSERT( !cwd.IsEmpty() );
 }
+
+void FileFunctionsTestCase::FileEof()
+{
+    const wxString filename(wxT("horse.bmp"));
+    const wxString msg = wxString::Format(wxT("File: %s"), filename.c_str());
+    const char *pUnitMsg = (const char*) msg.mb_str(wxConvUTF8);
+    wxFFile file(filename, wxT("r"));
+    // wxFFile::Eof must be false at start
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, !file.Eof() );
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, file.SeekEnd() );
+    // wxFFile::Eof returns true only after attempt to read last byte
+    char array[1];
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, file.Read(array, 1) == 0 );
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, file.Eof() );
+
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, file.Close() );
+    // wxFFile::Eof after close should not cause crash but fail instead
+    bool failed = true;
+    try
+    {
+	file.Eof();
+        failed = false;
+    }
+    catch (...)
+    {
+    }
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, failed );
+}
+
+void FileFunctionsTestCase::FileError()
+{
+    const wxString filename(wxT("horse.bmp"));
+    const wxString msg = wxString::Format(wxT("File: %s"), filename.c_str());
+    const char *pUnitMsg = (const char*) msg.mb_str(wxConvUTF8);
+    wxFFile file(filename, wxT("r"));
+    // wxFFile::Error must be false at start assuming file "horse.bmp" exists.
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, !file.Error() );
+    // Attempt to write to file opened in readonly mode should cause error
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, !file.Write(filename) );
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, file.Error() );
+
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, file.Close() );
+    // wxFFile::Error after close should not cause crash but fail instead
+    bool failed = true;
+    try
+    {
+        file.Error();
+        failed = false;
+    }
+    catch (...)
+    {
+    }
+    CPPUNIT_ASSERT_MESSAGE( pUnitMsg, failed );
+}
+
 
 /*
     TODO: other file functions to test:

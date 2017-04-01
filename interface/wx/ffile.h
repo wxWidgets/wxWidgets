@@ -89,10 +89,7 @@ public:
         Note that the behaviour of the file descriptor based class  wxFile is different as
         wxFile::Eof() will return @true here as soon as the last byte of the file has been read.
 
-        Also note that this method may only be called for opened files and may crash if
-        the file is not opened.
-
-        @todo THIS METHOD MAY CRASH? DOESN'T SOUND GOOD
+        Also note that this method may only be called for opened files. Otherwise it asserts and returns false.
 
         @see IsOpened()
     */
@@ -102,10 +99,7 @@ public:
         Returns @true if an error has occurred on this file, similar to the standard
         @c ferror() function.
 
-        Please note that this method may only be called for opened files and may crash
-        if the file is not opened.
-
-        @todo THIS METHOD MAY CRASH? DOESN'T SOUND GOOD
+        Please note that this method may only be called for opened files. Otherwise it asserts and returns false.
 
         @see IsOpened()
     */

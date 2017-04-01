@@ -84,6 +84,7 @@ All:
   wxEvtHandler and/or wxTrackable in C++11 code (Raul Tambre, mmarsan).
 - Update bundled expat to 2.2.0 (Catalin Raceanu).
 - Add wxCMD_LINE_HIDDEN wxCmdLineParser flag (Lauri Nurmi).
+- Don't crash in wxFFile::Eof() or Error() on closed file (jprotopopov).
 
 All (GUI):
 
