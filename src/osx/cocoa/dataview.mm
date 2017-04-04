@@ -2963,6 +2963,22 @@ bool wxDataViewTextRenderer::MacRender()
         {
             NSMutableParagraphStyle *par = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
             [par setLineBreakMode:[cell lineBreakMode]];
+            // Tightening looks very ugly when combined with non-tightened rows,
+            // so disabled it on OS X version where it's used:
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
+            if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_11)
+            {
+                [par setAllowsDefaultTighteningForTruncation:NO];
+            }
+            else
+#endif
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+            if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_10)
+            {
+                [par setTighteningFactorForTruncation:0.0];
+            }
+#endif
+
             [str addAttribute:NSParagraphStyleAttributeName
                         value:par
                         range:NSMakeRange(0, [str length])];
