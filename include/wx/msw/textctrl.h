@@ -171,10 +171,12 @@ public:
     // EDIT control has one already)
     void OnContextMenu(wxContextMenuEvent& event);
 
+#if wxUSE_RICHEDIT
     // Create context menu for RICHEDIT controls. This may be called once during
     // the control's lifetime or every time the menu is shown, depending on
     // implementation.
     virtual wxMenu *MSWCreateContextMenu();
+#endif // wxUSE_RICHEDIT
 
     // be sure the caret remains invisible if the user
     // called HideNativeCaret() before
