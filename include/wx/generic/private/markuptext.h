@@ -35,10 +35,12 @@ public:
     // Initialize with the given string containing markup (which is supposed to
     // be valid, the caller must check for it before constructing this object).
     //
-    // Notice that the usual rules for mnemonics apply to the markup text: if
-    // it contains any '&' characters they must be escaped by doubling them,
-    // otherwise they indicate that the next character is the mnemonic for this
-    // field.
+    // Notice that the usual rules for mnemonics apply to the markup text if it
+    // is used with Render() later, i.e. if it contains any '&' characters they
+    // must be escaped by doubling them, otherwise they indicate that the next
+    // character is the mnemonic for this field. However mnemonics are not
+    // interpreted at all by RenderItemText(), so when using it, literal
+    // ampersands shouldn't be escaped/doubled.
     //
     // TODO-MULTILINE-MARKUP: Currently only single line labels are supported,
     // search for other occurrences of this comment to find the places which
@@ -54,11 +56,6 @@ public:
     //
     // The same rules for mnemonics as in the ctor apply to this string.
     void SetMarkup(const wxString& markup) { m_markup = markup; }
-
-    // This is a convenience method which can be used with the string in which
-    // mnemonics should be completely ignored, i.e. not interpreted in any way
-    // but just handled as ordinary characters.
-    void SetMarkupText(const wxString& markup);
 
 
     // Return the width and height required by the given string and optionally

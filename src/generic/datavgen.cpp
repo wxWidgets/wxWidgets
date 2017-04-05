@@ -1087,7 +1087,7 @@ bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
 
 #if wxUSE_MARKUP
     if ( m_markupText )
-        m_markupText->SetMarkupText(m_text);
+        m_markupText->SetMarkup(m_text);
 #endif // wxUSE_MARKUP
 
     return true;

@@ -66,10 +66,8 @@ public:
     const wxSize& GetSize() const { return m_size; }
 
 
-    virtual void OnText(const wxString& text_) wxOVERRIDE
+    virtual void OnText(const wxString& text) wxOVERRIDE
     {
-        const wxString text(wxControl::RemoveMnemonics(text_));
-
         // TODO-MULTILINE-MARKUP: Must use GetMultiLineTextExtent().
         const wxSize size = m_dc.GetTextExtent(text);
 
@@ -253,24 +251,22 @@ public:
         m_ellipsizeMode = ellipsizeMode == wxELLIPSIZE_NONE ? wxELLIPSIZE_NONE : wxELLIPSIZE_END;
     }
 
-    virtual void OnText(const wxString& text_) wxOVERRIDE
+    virtual void OnText(const wxString& text) wxOVERRIDE
     {
-        const wxString text(wxControl::RemoveMnemonics(text_));
-
         wxRect rect(m_rect);
         rect.x = m_pos;
         rect.SetRight(m_rect.GetRight());
 
         const wxSize extent = m_dc.GetTextExtent(text);
 
-        // DrawItemText() ignores background color, so render it outselves 
+        // DrawItemText() ignores background color, so render it ourselves
         if ( m_dc.GetBackgroundMode() == wxSOLID )
         {
 #if wxUSE_GRAPHICS_CONTEXT
             // Prefer to use wxGraphicsContext because it supports alpha channel; fall back to wxDC
             if ( !m_gc )
                 m_gc.reset(wxGraphicsContext::CreateFromUnknownDC(m_dc));
- 
+
             if ( m_gc )
             {
                 m_gc->SetBrush(wxBrush(m_dc.GetTextBackground()));
@@ -314,11 +310,6 @@ private:
 // ============================================================================
 // wxMarkupText implementation
 // ============================================================================
-
-void wxMarkupText::SetMarkupText(const wxString& markup)
-{
-    m_markup = wxControl::EscapeMnemonics(markup);
-}
 
 wxSize wxMarkupText::Measure(wxDC& dc, int *visibleHeight) const
 {
