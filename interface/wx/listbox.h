@@ -301,7 +301,9 @@ public:
         Return the number of items that can fit vertically in the visible area of
         the listbox.
 
-        Returns -1 if the number of items per page couldn't be determined.
+        Returns -1 if the number of items per page couldn't be determined. On
+        wxGTK this method can only determine the number of items per page if
+        there is at least one item in the listbox.
 
         @since 3.1.0
     */

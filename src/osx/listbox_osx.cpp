@@ -150,6 +150,11 @@ int wxListBox::GetTopItem() const
     return GetListPeer()->ListGetTopItem();
 }
 
+int wxListBox::GetCountPerPage() const
+{
+    return GetListPeer()->ListGetCountPerPage();
+}
+
 void wxListBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::Delete") );
