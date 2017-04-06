@@ -751,6 +751,7 @@ public:
     int GetCountPerPage() const;
     int GetEndOfLastCol() const;
     unsigned int GetFirstVisibleRow() const;
+    wxDataViewItem GetTopItem() const;
 
     // I change this method to un const because in the tree view,
     // the displaying number of the tree are changing along with the
@@ -2836,6 +2837,27 @@ int wxDataViewMainWindow::GetCountPerPage() const
 {
     wxSize size = GetClientSize();
     return size.y / m_lineHeight;
+}
+
+wxDataViewItem wxDataViewMainWindow::GetTopItem() const
+{
+    unsigned int item = GetFirstVisibleRow();
+    wxDataViewTreeNode *node = NULL;
+    wxDataViewItem dataitem;
+
+    if ( !IsVirtualList() )
+    {
+        node = GetTreeNodeByRow(item);
+        if( node == NULL ) return wxDataViewItem(0);
+
+        dataitem = node->GetItem();
+    }
+    else
+    {
+        dataitem = wxDataViewItem( wxUIntToPtr(item+1) );
+    }
+
+    return dataitem;
 }
 
 int wxDataViewMainWindow::GetEndOfLastCol() const
@@ -5380,6 +5402,16 @@ wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
 int wxDataViewCtrl::GetSelectedItemsCount() const
 {
     return m_clientArea->GetSelections().GetSelectedCount();
+}
+
+wxDataViewItem wxDataViewCtrl::GetTopItem() const
+{
+    return m_clientArea->GetTopItem();
+}
+
+int wxDataViewCtrl::GetCountPerPage() const
+{
+    return m_clientArea->GetCountPerPage();
 }
 
 int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
