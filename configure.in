@@ -4117,7 +4117,9 @@ if test "$TOOLKIT" != "MSW"; then
 
 dnl check for available version of iconv()
 if test "$wxUSE_LIBICONV" != "no" ; then
+    AC_LANG_PUSH(C++)
     AM_ICONV
+    AC_LANG_POP()
     LIBS="$LIBICONV $LIBS"
 fi
 
