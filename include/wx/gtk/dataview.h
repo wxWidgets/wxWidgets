@@ -169,6 +169,9 @@ public:
 
     virtual wxDataViewColumn *GetCurrentColumn() const wxOVERRIDE;
 
+    virtual wxDataViewItem GetTopItem() const wxOVERRIDE;
+    virtual int GetCountPerPage() const wxOVERRIDE;
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 

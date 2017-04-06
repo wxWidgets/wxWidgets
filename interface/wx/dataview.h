@@ -1647,6 +1647,28 @@ public:
         @since 3.1.0
     */
     virtual void ToggleSortByColumn(int column);
+
+    /**
+        Return the number of items that can fit vertically in the visible area of
+        the control.
+
+        Returns -1 if the number of items per page couldn't be determined. On
+        wxGTK this method can only determine the number of items per page if
+        there is at least one item in the control.
+
+        @since 3.1.1
+    */
+    int GetCountPerPage() const;
+
+    /**
+        Return the topmost visible item.
+
+        Returns an invalid item if there is no topmost visible item or if the method
+        is not implemented for the current platform.
+
+        @since 3.1.1
+    */
+    wxDataViewItem GetTopItem() const;
 };
 
 

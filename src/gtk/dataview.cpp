@@ -4917,6 +4917,53 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     gtk_tree_view_set_cursor(GTK_TREE_VIEW(m_treeview), path, NULL, FALSE);
 }
 
+wxDataViewItem wxDataViewCtrl::GetTopItem() const
+{
+    wxGtkTreePath start;
+    if ( !gtk_tree_view_get_visible_range
+          (
+           GTK_TREE_VIEW(m_treeview),
+           start.ByRef(),
+           NULL
+          ) )
+    {
+        return wxDataViewItem();
+    }
+
+    return GTKPathToItem(start);
+}
+
+int wxDataViewCtrl::GetCountPerPage() const
+{
+    wxGtkTreePath path;
+    GtkTreeViewColumn *column;
+
+    if ( !gtk_tree_view_get_path_at_pos
+          (
+            GTK_TREE_VIEW(m_treeview),
+            0,
+            0,
+            path.ByRef(),
+            &column,
+            NULL,
+            NULL
+          ) )
+    {
+        return -1;
+    }
+
+    GdkRectangle rect;
+    gtk_tree_view_get_cell_area(GTK_TREE_VIEW(m_treeview), path, column, &rect);
+
+    if ( !rect.height )
+        return -1;
+
+    GdkRectangle vis;
+    gtk_tree_view_get_visible_rect(GTK_TREE_VIEW(m_treeview), &vis);
+
+    return vis.height / rect.height;
+}
+
 wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
 {
     // The tree doesn't have any current item if it hadn't been created yet but

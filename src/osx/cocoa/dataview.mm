@@ -2313,6 +2313,27 @@ unsigned int wxCocoaDataViewControl::GetCount() const
     return [m_OutlineView numberOfRows];
 }
 
+int wxCocoaDataViewControl::GetCountPerPage() const
+{
+    NSScrollView *scrollView = [m_OutlineView enclosingScrollView];
+    NSTableHeaderView *headerView = [m_OutlineView headerView];
+    NSRect visibleRect = scrollView.contentView.visibleRect;
+    if ( headerView )
+        visibleRect.size.height -= headerView.visibleRect.size.height;
+    return (int) (visibleRect.size.height / [m_OutlineView rowHeight]);
+}
+
+wxDataViewItem wxCocoaDataViewControl::GetTopItem() const
+{
+    NSScrollView *scrollView = [m_OutlineView enclosingScrollView];
+    NSTableHeaderView *headerView = [m_OutlineView headerView];
+    NSRect visibleRect = scrollView.contentView.visibleRect;
+    if ( headerView )
+        visibleRect.origin.y += headerView.visibleRect.size.height;
+    NSRange range = [m_OutlineView rowsInRect:visibleRect];
+    return wxDataViewItem([[m_OutlineView itemAtRow:range.location] pointer]);
+}
+
 wxRect wxCocoaDataViewControl::GetRectangle(const wxDataViewItem& item, const wxDataViewColumn *columnPtr)
 {
     return wxFromNSRect([m_osxView superview],[m_OutlineView frameOfCellAtColumn:GetColumnPosition(columnPtr)

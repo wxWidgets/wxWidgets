@@ -226,6 +226,9 @@ public:
     virtual wxDataViewColumn *GetSortingColumn() const wxOVERRIDE;
     virtual wxVector<wxDataViewColumn *> GetSortingColumns() const wxOVERRIDE;
 
+    virtual wxDataViewItem GetTopItem() const wxOVERRIDE;
+    virtual int GetCountPerPage() const wxOVERRIDE;
+
     virtual int GetSelectedItemsCount() const wxOVERRIDE;
     virtual int GetSelections( wxDataViewItemArray & sel ) const wxOVERRIDE;
     virtual void SetSelections( const wxDataViewItemArray & sel ) wxOVERRIDE;
