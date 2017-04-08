@@ -118,6 +118,13 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             OnNewLine();
         }
 
+        // Is this a special case when wrapping is disabled?
+        if ( widthMax < 0 )
+        {
+            DoOutputLine(line);
+            continue;
+        }
+
         for ( bool newLine = false; !line.empty(); newLine = true )
         {
             if ( newLine )
