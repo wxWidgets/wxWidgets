@@ -512,7 +512,7 @@ void FileFunctionsTestCase::PathOnly()
 {
     wxString name = wxT("horse.bmp");
     // Get absolute path to horse.bmp
-    wxFileName filename(filename);
+    wxFileName filename(name);
     CPPUNIT_ASSERT( filename.MakeAbsolute() );
 
     wxString pathOnly = wxPathOnly(filename.GetFullPath());
