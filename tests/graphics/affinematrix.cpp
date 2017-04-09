@@ -396,9 +396,11 @@ void TransformMatrixTestCaseDCBase::VMirrorAndTranslate()
     // is affected by the transformation. In this case mirrored bitmap
     // needs to be shifthed by dim pixels.
     int ty;
+#if wxUSE_GRAPHICS_CONTEXT
     if ( m_dc->GetGraphicsContext() )
         ty = m_bmpOrig.GetHeight();
     else
+#endif // wxUSE_GRAPHICS_CONTEXT
         ty = m_bmpOrig.GetHeight() - 1;
     matrix.Translate(0, -ty);
     m_dc->SetTransformMatrix(matrix);

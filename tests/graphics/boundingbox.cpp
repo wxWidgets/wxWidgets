@@ -17,13 +17,14 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_GRAPHICS_CONTEXT
+
 #include "wx/bitmap.h"
 #include "wx/dcmemory.h"
 #include "wx/dcgraph.h"
 #include "wx/icon.h"
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
-
 
 // ----------------------------------------------------------------------------
 // test class
@@ -54,6 +55,7 @@ public:
 private:
     wxBitmap m_bmp;
     wxMemoryDC m_dc;
+
     wxGCDC *m_gcdc;
 
     void AssertBox(int minX, int minY, int width, int height, int margin = 0)
@@ -361,3 +363,5 @@ void GCDCBoundingBoxTestCase::DrawRectsOnTransformedDC()
     m_gcdc->SetDeviceOrigin(5, 10);
     AssertBox(5, 5, 65, 60);
 }
+
+#endif // wxUSE_GRAPHICS_CONTEXT
