@@ -277,12 +277,13 @@ typedef short int WXTYPE;
 #endif /*  HAVE_EXPLICIT/!HAVE_EXPLICIT */
 
 /* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
-
+#ifdef __cplusplus
 #if __cplusplus >= 201103L && defined(__has_warning)
     #if WX_HAS_CLANG_FEATURE(cxx_attributes)
         #define wxFALLTHROUGH [[clang::fallthrough]]
     #endif
 #endif
+#endif /* __cplusplus */
 
 #ifndef wxFALLTHROUGH
     #define wxFALLTHROUGH ((void)0)
