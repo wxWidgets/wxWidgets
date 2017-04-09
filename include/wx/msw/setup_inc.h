@@ -26,11 +26,12 @@
 // Default is 1 for compilers which support it, i.e. VC10+ currently. If you
 // use an earlier MSVC version or another compiler and installed the necessary
 // SDK components manually, you need to change this setting.
+// MingW-64 is also shipped with the headers and libraries.
 //
 // Recommended setting: 1 for faster and better quality graphics under Windows
 // 7 and later systems (if wxUSE_GRAPHICS_GDIPLUS is also enabled, earlier
 // systems will fall back on using GDI+).
-#if defined(_MSC_VER) && _MSC_VER >= 1600
+#if (defined(_MSC_VER) && _MSC_VER >= 1600) || defined(__MINGW64_TOOLCHAIN__)
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0

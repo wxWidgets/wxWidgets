@@ -16,6 +16,21 @@
 // global settings
 // ----------------------------------------------------------------------------
 
+// in waiting the fix for this def to be systematically included at each step of
+// compilation time, you can force it, if you want, for building under "MingW-w64"
+// as it is also shipped with the headers and libraries for GDI+ and Direct 2D,
+// by un-commenting the line below (for either 32 bits or 64 bits compilations).
+
+//#define __MINGW64_TOOLCHAIN__ 1
+
+// Little helper to debug the problem above (uncomment it, if you wanna use it) :
+/*
+#ifndef __MINGW64_TOOLCHAIN__
+#error "__MINGW64_TOOLCHAIN__ is not defined !!"
+#endif
+*/
+// TODO : to be removed in the future ;-)
+
 // define this to 0 when building wxBase library - this can also be done from
 // makefile/project file overriding the value here
 #ifndef wxUSE_GUI
@@ -766,6 +781,7 @@
 // as only MSVC is known to ship with at least gdiplus.h which is required to
 // compile GDI+-based implementation of wxGraphicsContext (MSVC10 and later
 // versions also include d2d1.h required for Direct2D-based implementation).
+// MingW-64 is also shipped with the headers and libraries.
 // For other compilers (e.g. mingw32) you may need to install the headers (and
 // just the headers) yourself. If you do, change the setting below manually.
 //
@@ -773,15 +789,15 @@
 
 // notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
 // included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
-#ifdef _MSC_VER
-#   define wxUSE_GRAPHICS_CONTEXT 1
+#if defined(_MSC_VER) || defined(__MINGW64_TOOLCHAIN__)
+    #define wxUSE_GRAPHICS_CONTEXT 1
 #else
     // Disable support for other Windows compilers, enable it if your compiler
     // comes with new enough SDK or you installed the headers manually.
     //
     // Notice that this will be set by configure under non-Windows platforms
     // anyhow so the value there is not important.
-#   define wxUSE_GRAPHICS_CONTEXT 0
+    #define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
 // Enable wxGraphicsContext implementation using Cairo library.
@@ -1537,11 +1553,12 @@
 // Default is 1 for compilers which support it, i.e. VC10+ currently. If you
 // use an earlier MSVC version or another compiler and installed the necessary
 // SDK components manually, you need to change this setting.
+// MingW-64 is also shipped with the headers and libraries.
 //
 // Recommended setting: 1 for faster and better quality graphics under Windows
 // 7 and later systems (if wxUSE_GRAPHICS_GDIPLUS is also enabled, earlier
 // systems will fall back on using GDI+).
-#if defined(_MSC_VER) && _MSC_VER >= 1600
+#if (defined(_MSC_VER) && _MSC_VER >= 1600) || defined(__MINGW64_TOOLCHAIN__)
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
