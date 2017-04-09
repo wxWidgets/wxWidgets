@@ -388,13 +388,13 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
     // TODO:  do something with cornerSize
     wxUnusedVar(cornerSize);
 
-    int x, y;
     wxRect r = wxRectFromPRectangle(rc);
     wxBitmap bmp(r.width, r.height, 32);
 
     // This block is needed to ensure that the changes done to the bitmap via
     // pixel data object are committed before the bitmap is drawn.
     {
+        int px, py;
         wxAlphaPixelData pixData(bmp);
 
         // Set the fill pixels
@@ -404,9 +404,9 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
         int blue  = cdf.GetBlue();
 
         wxAlphaPixelData::Iterator p(pixData);
-        for (y=0; y<r.height; y++) {
-            p.MoveTo(pixData, 0, y);
-            for (x=0; x<r.width; x++) {
+        for (py=0; py<r.height; py++) {
+            p.MoveTo(pixData, 0, py);
+            for (px=0; px<r.width; px++) {
                 p.Red()   = wxPy_premultiply(red,   alphaFill);
                 p.Green() = wxPy_premultiply(green, alphaFill);
                 p.Blue()  = wxPy_premultiply(blue,  alphaFill);
@@ -420,26 +420,26 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
         red   = cdo.GetRed();
         green = cdo.GetGreen();
         blue  = cdo.GetBlue();
-        for (x=0; x<r.width; x++) {
-            p.MoveTo(pixData, x, 0);
+        for (px=0; px<r.width; px++) {
+            p.MoveTo(pixData, px, 0);
             p.Red()   = wxPy_premultiply(red,   alphaOutline);
             p.Green() = wxPy_premultiply(green, alphaOutline);
             p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
             p.Alpha() = alphaOutline;
-            p.MoveTo(pixData, x, r.height-1);
+            p.MoveTo(pixData, px, r.height-1);
             p.Red()   = wxPy_premultiply(red,   alphaOutline);
             p.Green() = wxPy_premultiply(green, alphaOutline);
             p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
             p.Alpha() = alphaOutline;
         }
 
-        for (y=0; y<r.height; y++) {
-            p.MoveTo(pixData, 0, y);
+        for (py=0; py<r.height; py++) {
+            p.MoveTo(pixData, 0, py);
             p.Red()   = wxPy_premultiply(red,   alphaOutline);
             p.Green() = wxPy_premultiply(green, alphaOutline);
             p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
             p.Alpha() = alphaOutline;
-            p.MoveTo(pixData, r.width-1, y);
+            p.MoveTo(pixData, r.width-1, py);
             p.Red()   = wxPy_premultiply(red,   alphaOutline);
             p.Green() = wxPy_premultiply(green, alphaOutline);
             p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
