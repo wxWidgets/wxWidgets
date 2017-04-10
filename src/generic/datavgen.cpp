@@ -1604,12 +1604,12 @@ void wxDataViewRenameTimer::Notify()
 // one thread.
 static wxDataViewModel* g_model;
 static int g_column;
-static bool g_asending;
+static bool g_ascending;
 
 int LINKAGEMODE wxGenericTreeModelNodeCmp(wxDataViewTreeNode ** node1,
     wxDataViewTreeNode ** node2)
 {
-    return g_model->Compare((*node1)->GetItem(), (*node2)->GetItem(), g_column, g_asending);
+    return g_model->Compare((*node1)->GetItem(), (*node2)->GetItem(), g_column, g_ascending);
 }
 
 
@@ -1620,7 +1620,7 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
 
     g_column = m_window->GetSortColumn();
     g_model = m_window->GetModel();
-    g_asending = m_window->IsAscendingSort();
+    g_ascending = m_window->IsAscendingSort();
 
     // Flag indicating whether we should retain existing sorted list when 
 	// inserting the child node.
@@ -1641,12 +1641,12 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
         if ( ( m_parent == NULL ) && m_branchData->children.IsEmpty())
         {
             m_branchData->sortColumn = g_column;
-            m_branchData->sortAscending = g_asending;
+            m_branchData->sortAscending = g_ascending;
         }
         else
         {
             wxASSERT(m_branchData->sortColumn == g_column);
-            wxASSERT(m_branchData->sortAscending == g_asending);
+            wxASSERT(m_branchData->sortAscending == g_ascending);
         }
 
         // We retain the sorted child list
@@ -1661,7 +1661,7 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
         m_branchData->sortColumn = SortColumn_None;
         m_branchData->sortAscending = true;
     }
-    else if ( (m_branchData->sortColumn == g_column) && (m_branchData->sortAscending == g_asending) )
+    else if ( (m_branchData->sortColumn == g_column) && (m_branchData->sortAscending == g_ascending) )
     {
         // The children are already sorted by the correct criteria. This 
 		// means the node has at some point in time been open. Even though
@@ -1722,15 +1722,15 @@ void wxDataViewTreeNode::Resort()
     if ( g_column != SortColumn_None )
     {
         g_model = m_window->GetModel();
-        g_asending = m_window->IsAscendingSort();
+        g_ascending = m_window->IsAscendingSort();
         wxDataViewTreeNodes& nodes = m_branchData->children;
 
         // Only sort the children if they aren't already sorted by the wanted criteria
-        if ( (g_column != m_branchData->sortColumn) || (g_asending != m_branchData->sortAscending) )
+        if ( (g_column != m_branchData->sortColumn) || (g_ascending != m_branchData->sortAscending) )
         {
             nodes.Sort(&wxGenericTreeModelNodeCmp);
             m_branchData->sortColumn = g_column;
-            m_branchData->sortAscending = g_asending;
+            m_branchData->sortAscending = g_ascending;
         }
 
 		// There may be open child nodes that also need a resort.
@@ -1758,10 +1758,10 @@ void wxDataViewTreeNode::MoveUpdatedChild(wxDataViewTreeNode * childNode)
 
     g_column = m_window->GetSortColumn();
     g_model = m_window->GetModel();
-    g_asending = m_window->IsAscendingSort();
+    g_ascending = m_window->IsAscendingSort();
 
     wxASSERT(g_column == m_branchData->sortColumn);
-    wxASSERT(g_asending == m_branchData->sortAscending);
+    wxASSERT(g_ascending == m_branchData->sortAscending);
 
     wxDataViewTreeNodes& nodes = m_branchData->children;
 
