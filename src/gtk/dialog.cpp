@@ -129,7 +129,6 @@ realize_hook(GSignalInvocationHint*, unsigned, const GValue* param_values, void*
 
 int wxDialog::ShowModal()
 {
-
     WX_HOOK_MODAL_DIALOG();
 
     wxASSERT_MSG( !IsModal(), "ShowModal() can't be called twice" );
@@ -163,7 +162,7 @@ int wxDialog::ShowModal()
     gtk_window_set_modal(GTK_WINDOW(m_widget), true);
 
     m_modalShowing = true;
-	
+
     Show( true );
 
     wxOpenModalDialogLocker modalLock;
