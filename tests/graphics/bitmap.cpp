@@ -107,17 +107,38 @@ void BitmapTestCase::OverlappingBlit()
 
     dc.Blit( 0, 1, 10, 9, &dc, 0, 0 );
     } // Select the bitmap out of the memory DC before using it directly.
-
     // Now, lines 0 and 1 should be red, lines 2++ should still be white.
 
-    wxAlphaPixelData npd( m_bmp );
-    wxAlphaPixelData::Iterator it( npd );
+    if ( m_bmp.GetDepth() == 32 )
+    {
+        wxAlphaPixelData npd( m_bmp );
+        wxAlphaPixelData::Iterator it( npd );
 
-    ASSERT_EQUAL_RGB( it, 255, 0, 0 );
-    it.OffsetY( npd, 1 );
-    ASSERT_EQUAL_RGB( it, 255, 0, 0 );
-    it.OffsetY( npd, 1 );
-    ASSERT_EQUAL_RGB( it, 255, 255, 255 );
-    it.OffsetY( npd, 1 );
-    ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+        ASSERT_EQUAL_RGB( it, 255, 0, 0 );
+        it.OffsetY( npd, 1 );
+        ASSERT_EQUAL_RGB( it, 255, 0, 0 );
+        it.OffsetY( npd, 1 );
+        ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+        it.OffsetY( npd, 1 );
+        ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+    }
+    else
+    {
+        wxNativePixelData npd( m_bmp );
+        wxNativePixelData::Iterator it( npd );
+        if ( !npd )
+        {
+            CPPUNIT_FAIL( "Raw access to bitmap data unavailable" );
+        }
+        else
+        {
+            ASSERT_EQUAL_RGB( it, 255, 0, 0 );
+            it.OffsetY( npd, 1 );
+            ASSERT_EQUAL_RGB( it, 255, 0, 0 );
+            it.OffsetY( npd, 1 );
+            ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+            it.OffsetY( npd, 1 );
+            ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+        }
+    }
 }
