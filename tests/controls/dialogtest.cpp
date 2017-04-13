@@ -138,30 +138,26 @@ void ModalDialogsTestCase::CustomDialog()
 class MyModalDialog : public wxDialog
 {
 public:
-  MyModalDialog() : wxDialog ( NULL, wxID_ANY, _T("Modal Dialog") )
-  {
-    modal = false;
-  }
+    MyModalDialog() : wxDialog (NULL, wxID_ANY, "Modal Dialog")
+    {
+        m_wasModal = false;
+	Bind( wxEVT_INIT_DIALOG, &MyModalDialog::OnInit, this );
+    }
 
-  void OnInit( wxInitDialogEvent& WXUNUSED(event))
-  {
-    modal = IsModal();
-    CallAfter( &MyModalDialog::EndModal, wxID_OK );
-  }
+    void OnInit( wxInitDialogEvent& WXUNUSED(event))
+    {
+        m_wasModal = IsModal();
+        CallAfter( &MyModalDialog::EndModal, wxID_OK );
+    }
 
-  bool WasModal() {
-    return modal;
-  }
+    const bool WasModal()
+    {
+        return m_wasModal;
+    }
 
 private:
-  bool modal;
-  
-  wxDECLARE_EVENT_TABLE();
+    bool m_wasModal;
 };
-
-BEGIN_EVENT_TABLE( MyModalDialog, wxDialog )
-EVT_INIT_DIALOG ( MyModalDialog::OnInit )
-END_EVENT_TABLE()
 
 void ModalDialogsTestCase::wxInitDialog()
 {
