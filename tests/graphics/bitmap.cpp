@@ -19,6 +19,9 @@
 #include "wx/bitmap.h"
 #include "wx/rawbmp.h"
 #include "wx/dcmemory.h"
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/graphics.h"
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 #define ASSERT_EQUAL_RGB(c, r, g, b) \
     CPPUNIT_ASSERT_EQUAL( r, (int)c.Red() ); \
@@ -95,6 +98,14 @@ void BitmapTestCase::OverlappingBlit()
     // Clear to white.
     {
     wxMemoryDC dc(m_bmp);
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsContext* gc = dc.GetGraphicsContext();
+    if ( gc )
+    {
+        gc->SetAntialiasMode(wxANTIALIAS_NONE);
+    }
+#endif // wxUSE_GRAPHICS_CONTEXT
+
     dc.SetBackground( *wxWHITE );
     dc.Clear();
 
