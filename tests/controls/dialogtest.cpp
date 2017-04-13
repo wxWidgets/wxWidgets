@@ -141,7 +141,7 @@ public:
     MyModalDialog() : wxDialog (NULL, wxID_ANY, "Modal Dialog")
     {
         m_wasModal = false;
-	Bind( wxEVT_INIT_DIALOG, &MyModalDialog::OnInit, this );
+        Bind( wxEVT_INIT_DIALOG, &MyModalDialog::OnInit, this );
     }
 
     void OnInit( wxInitDialogEvent& WXUNUSED(event))
@@ -161,9 +161,9 @@ private:
 
 void ModalDialogsTestCase::wxInitDialog()
 {
-  MyModalDialog dlg;
-  dlg.ShowModal();
-  CPPUNIT_ASSERT_EQUAL( true, dlg.WasModal() );
+    MyModalDialog dlg;
+    dlg.ShowModal();
+    CPPUNIT_ASSERT_EQUAL( true, dlg.WasModal() );
 }
 
 #endif // HAVE_VARIADIC_MACROS
