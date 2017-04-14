@@ -335,8 +335,7 @@ bool wxEntryStart(int& argc, wxChar **argv)
 
     // remember, possibly modified (e.g. due to removal of toolkit-specific
     // parameters), command line arguments in member variables
-    app->argc = argc;
-    app->argv = argv;
+    app->argv.Init(argc, argv);
 
     wxCallAppCleanup callAppCleanup(app.get());
 
