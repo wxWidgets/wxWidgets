@@ -321,6 +321,11 @@
             horse_box_average_100x100.png
             horse_box_average_150x150.png
             horse_box_average_300x300.png
+
+            cross_bicubic_256x256.png
+            cross_bilinear_256x256.png
+            cross_box_average_256x256.png
+            cross_nearest_neighb_256x256.png
         </files>
     </wx-data>
 
