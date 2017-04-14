@@ -679,6 +679,7 @@ wxOSX:
 - Return false from wxSound::Create()/IsOk() if the file doesn't exist.
 - Fix scrolling behaviour of wxSearchCtrl (John Roberts).
 - Add wxTE_{RIGHT,CENTER} support for multiline wxTextCtrl (Andreas Falkenhahn).
+- Fix changing year in wxCalendarCtrl using arrows (Lauri Nurmi).
 
 
 3.0.2: (released 2014-10-06)
