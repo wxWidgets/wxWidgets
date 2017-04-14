@@ -96,6 +96,7 @@ public:
         wxCommandEvent eventCopy(event);
         eventCopy.SetEventObject(m_spin);
         eventCopy.SetId(m_spin->GetId());
+        eventCopy.SetInt(wxAtoi(event.GetString()));
         m_spin->ProcessWindowEvent(eventCopy);
     }
 
