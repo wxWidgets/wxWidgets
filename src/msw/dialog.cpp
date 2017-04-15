@@ -181,17 +181,15 @@ int wxDialog::ShowModal()
 
     wxASSERT_MSG( !IsModal(), wxT("ShowModal() can't be called twice") );
 
-    Show();
+    //enter and run the modal loop
+    wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                       new wxDialogModalData(this));
 
+    Show();
     // EndModal may have been called from InitDialog handler (called from
     // inside Show()) and hidden the dialog back again
-    if ( IsShown() )
-    {
-        // enter and run the modal loop
-        wxDialogModalDataTiedPtr modalData(&m_modalData,
-                                           new wxDialogModalData(this));
-        modalData->RunLoop();
-    }
+
+    modalData->RunLoop();
 
     return GetReturnCode();
 }
