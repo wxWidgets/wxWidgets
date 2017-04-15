@@ -36,13 +36,13 @@ private:
 #endif
         CPPUNIT_TEST( FileDialog );
         CPPUNIT_TEST( CustomDialog );
-        CPPUNIT_TEST( wxInitDialog );
+        CPPUNIT_TEST( InitDialog );
     CPPUNIT_TEST_SUITE_END();
 
     void MessageDialog();
     void FileDialog();
     void CustomDialog();
-    void wxInitDialog();
+    void InitDialog();
 
     wxDECLARE_NO_COPY_CLASS(ModalDialogsTestCase);
 };
@@ -150,7 +150,7 @@ public:
         CallAfter( &MyModalDialog::EndModal, wxID_OK );
     }
 
-    const bool WasModal()
+    bool WasModal() const
     {
         return m_wasModal;
     }
@@ -159,11 +159,11 @@ private:
     bool m_wasModal;
 };
 
-void ModalDialogsTestCase::wxInitDialog()
+void ModalDialogsTestCase::InitDialog()
 {
     MyModalDialog dlg;
     dlg.ShowModal();
-    CPPUNIT_ASSERT_EQUAL( true, dlg.WasModal() );
+    CPPUNIT_ASSERT( dlg.WasModal() );
 }
 
 #endif // HAVE_VARIADIC_MACROS
