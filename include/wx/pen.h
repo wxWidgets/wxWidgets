@@ -69,6 +69,7 @@ public:
     virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) = 0;
 
     virtual void SetWidth(int width) = 0;
+    virtual void SetWidthF(double WXUNUSED(width)) { /* no-op */ };
     virtual void SetStyle(wxPenStyle style) = 0;
     virtual void SetStipple(const wxBitmap& stipple) = 0;
     virtual void SetDashes(int nb_dashes, const wxDash *dash) = 0;
@@ -81,6 +82,7 @@ public:
     virtual wxPenJoin GetJoin() const = 0;
     virtual wxPenCap GetCap() const = 0;
     virtual int GetWidth() const = 0;
+    virtual double GetWidthF() const { return -1.0; };
     virtual int GetDashes(wxDash **ptr) const = 0;
 
     // Convenient helpers for testing whether the pen is a transparent one:

@@ -27,6 +27,7 @@ public:
     wxPenRefData()
     {
         m_width = 1;
+        m_widthF = -1.0;
         m_style = wxPENSTYLE_SOLID;
         m_joinStyle = wxJOIN_ROUND;
         m_capStyle = wxCAP_ROUND;
@@ -39,6 +40,7 @@ public:
     {
         m_style = data.m_style;
         m_width = data.m_width;
+        m_widthF = data.m_widthF;
         m_joinStyle = data.m_joinStyle;
         m_capStyle = data.m_capStyle;
         m_colour = data.m_colour;
@@ -67,12 +69,14 @@ public:
 
         return m_style == data.m_style &&
                m_width == data.m_width &&
+               m_widthF == data.m_widthF &&
                m_joinStyle == data.m_joinStyle &&
                m_capStyle == data.m_capStyle &&
                m_colour == data.m_colour;
     }
 
     int        m_width;
+    double     m_widthF;
     wxPenStyle m_style;
     wxPenJoin  m_joinStyle;
     wxPenCap   m_capStyle;
@@ -91,6 +95,7 @@ wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style )
 {
     m_refData = new wxPenRefData();
     M_PENDATA->m_width = width;
+    M_PENDATA->m_widthF = -1.0;
     M_PENDATA->m_style = style;
     M_PENDATA->m_colour = colour;
 }
@@ -99,6 +104,7 @@ wxPen::wxPen(const wxColour& colour, int width, int style)
 {
     m_refData = new wxPenRefData();
     M_PENDATA->m_width = width;
+    M_PENDATA->m_widthF = -1.0;
     M_PENDATA->m_style = (wxPenStyle)style;
     M_PENDATA->m_colour = colour;
 }
@@ -177,6 +183,13 @@ void wxPen::SetWidth( int width )
     M_PENDATA->m_width = width;
 }
 
+void wxPen::SetWidthF( double widthF )
+{
+    AllocExclusive();
+
+    M_PENDATA->m_widthF = widthF;
+}
+
 int wxPen::GetDashes( wxDash **ptr ) const
 {
     wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
@@ -225,6 +238,13 @@ int wxPen::GetWidth() const
     wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_width;
+}
+
+double wxPen::GetWidthF() const
+{
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
+
+    return M_PENDATA->m_widthF;
 }
 
 wxColour wxPen::GetColour() const

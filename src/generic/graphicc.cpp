@@ -22,7 +22,7 @@
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
-#define cairo_public 
+#define cairo_public
 
 #include <cairo.h>
 #include <float.h>
@@ -440,7 +440,7 @@ public:
     {
         if ( !m_enableOffset )
             return false;
-        
+
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -736,7 +736,9 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
     : wxCairoPenBrushBaseData(renderer, pen.GetColour(), pen.IsTransparent())
 {
     Init();
-    m_width = pen.GetWidth();
+    m_width = pen.GetWidthF();
+    if (m_width < 0.0)
+        m_width = pen.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 
@@ -1539,7 +1541,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     }
 
 #if defined(__WXMSW__) || defined(__WXGTK3__)
-    // if there is a mask, set the alpha bytes in the target buffer to 
+    // if there is a mask, set the alpha bytes in the target buffer to
     // fully transparent or fully opaque
 #if defined(__WXMSW__)
     if (bmp.GetMask() != NULL && !bmp.HasAlpha())
@@ -1772,7 +1774,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 : wxGraphicsContext(renderer)
 {
 #ifdef __WXMSW__
-    // wxMSW contexts always use MM_ANISOTROPIC, which messes up 
+    // wxMSW contexts always use MM_ANISOTROPIC, which messes up
     // text rendering when printing using Cairo. Switch it to MM_TEXT
     // map mode to avoid this problem.
     HDC hdc = (HDC)dc.GetHDC();
@@ -2035,7 +2037,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     if ( adjustTransformFromDC )
         ApplyTransformFromDC(dc);
 #endif // __WXMSW__
-    
+
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);

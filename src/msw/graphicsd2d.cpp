@@ -2497,8 +2497,12 @@ wxD2DPenData::wxD2DPenData(
     wxGraphicsRenderer* renderer,
     ID2D1Factory* direct2dFactory,
     const wxPen& pen)
-    : wxGraphicsObjectRefData(renderer), m_sourcePen(pen), m_width(pen.GetWidth())
+    : wxGraphicsObjectRefData(renderer), m_sourcePen(pen)
 {
+    m_width = pen.GetWidthF();
+    if (m_width < 0.0)
+        m_width = pen.GetWidth();
+
     CreateStrokeStyle(direct2dFactory);
 
     wxBrush strokeBrush;

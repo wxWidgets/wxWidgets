@@ -33,6 +33,7 @@ public:
     void SetJoin( wxPenJoin joinStyle ) wxOVERRIDE;
     void SetStyle( wxPenStyle style ) wxOVERRIDE;
     void SetWidth( int width ) wxOVERRIDE;
+    void SetWidthF( double widthF ) wxOVERRIDE;
     void SetDashes( int number_of_dashes, const wxDash *dash ) wxOVERRIDE;
     void SetStipple(const wxBitmap& stipple) wxOVERRIDE;
 
@@ -41,6 +42,7 @@ public:
     wxPenJoin GetJoin() const wxOVERRIDE;
     wxPenStyle GetStyle() const wxOVERRIDE;
     int GetWidth() const wxOVERRIDE;
+    double GetWidthF() const wxOVERRIDE;
     int GetDashes(wxDash **ptr) const wxOVERRIDE;
     int GetDashCount() const;
     wxDash* GetDash() const;

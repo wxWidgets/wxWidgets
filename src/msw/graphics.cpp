@@ -400,7 +400,7 @@ public:
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
 
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE;
-    
+
     virtual bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE;
 
     virtual void BeginLayer(wxDouble opacity) wxOVERRIDE;
@@ -647,7 +647,9 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
 : wxGraphicsObjectRefData(renderer)
 {
     Init();
-    m_width = pen.GetWidth();
+    m_width = pen.GetWidthF();
+    if (m_width < 0.0)
+        m_width = pen.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 
@@ -2047,7 +2049,7 @@ void wxGDIPlusContext::DoDrawText(const wxString& str,
 
     wxGDIPlusFontData * const
         fontData = (wxGDIPlusFontData *)m_font.GetRefData();
- 
+
     m_context->DrawString
                (
                     str.wc_str(*wxConvUI),  // string to draw, always Unicode
@@ -2160,7 +2162,7 @@ bool wxGDIPlusContext::ShouldOffset() const
 {
     if ( !m_enableOffset )
         return false;
-    
+
     int penwidth = 0 ;
     if ( !m_pen.IsNull() )
     {

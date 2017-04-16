@@ -33,6 +33,7 @@ public:
     void SetColour(unsigned char r, unsigned char g, unsigned char b) ;
 
     void SetWidth(int width)  ;
+    void SetWidthF(double widthF)  ;
     void SetStyle(wxPenStyle style)  ;
     void SetStipple(const wxBitmap& stipple)  ;
     void SetDashes(int nb_dashes, const wxDash *dash)  ;
@@ -41,6 +42,7 @@ public:
 
     wxColour GetColour() const ;
     int GetWidth() const;
+    double GetWidthF() const;
     wxPenStyle GetStyle() const;
     wxPenJoin GetJoin() const;
     wxPenCap GetCap() const;
