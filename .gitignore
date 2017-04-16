@@ -1,4 +1,11 @@
+*.o
+lib*.so
+lib*.so.*
+lib*.a
+
 # /
+/.deps
+/.pch
 /.gdb_history
 /config.cache
 /configarg.cache
