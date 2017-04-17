@@ -243,8 +243,8 @@ protected:
     unsigned short       m_indent;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
-    wxBrush             *m_hilightBrush,
-                        *m_hilightUnfocusedBrush;
+    wxBrush             *m_highlightBrush,
+                        *m_highlightUnfocusedBrush;
     bool                 m_hasFocus;
     bool                 m_dirty;
     bool                 m_ownsImageListButtons;

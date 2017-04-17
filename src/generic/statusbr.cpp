@@ -293,7 +293,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
         // Inside this, left and top sides (dark grey). Bottom and right (white).
         // Reverse it for wxSB_RAISED
 
-        dc.SetPen((style == wxSB_RAISED) ? m_mediumShadowPen : m_hilightPen);
+        dc.SetPen((style == wxSB_RAISED) ? m_mediumShadowPen : m_highlightPen);
 
         // Right and bottom lines
         dc.DrawLine(rect.x + rect.width, rect.y,
@@ -301,7 +301,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
         dc.DrawLine(rect.x + rect.width, rect.y + rect.height,
                     rect.x, rect.y + rect.height);
 
-        dc.SetPen((style == wxSB_RAISED) ? m_hilightPen : m_mediumShadowPen);
+        dc.SetPen((style == wxSB_RAISED) ? m_highlightPen : m_mediumShadowPen);
 
         // Left and top lines
         dc.DrawLine(rect.x, rect.y + rect.height,
@@ -369,7 +369,7 @@ int wxStatusBarGeneric::GetFieldFromPoint(const wxPoint& pt) const
 void wxStatusBarGeneric::InitColours()
 {
     m_mediumShadowPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW));
-    m_hilightPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT));
+    m_highlightPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DHIGHLIGHT));
 }
 
 void wxStatusBarGeneric::SetMinHeight(int height)

@@ -1061,7 +1061,7 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
 
     if(new_hover && new_hover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
     {
-        new_hover = NULL; // A disabled tool can not be hilighted
+        new_hover = NULL; // A disabled tool can not be highlighted
     }
 
     if(new_hover != m_hover_tool)

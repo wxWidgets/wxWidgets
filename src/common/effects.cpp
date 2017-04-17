@@ -35,7 +35,7 @@ wxIMPLEMENT_CLASS(wxEffectsImpl, wxObject);
 // Assume system colours
 wxEffectsImpl::wxEffectsImpl()
 {
-    m_highlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT) ;
+    m_highlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHIGHLIGHT) ;
     m_lightShadow = wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT) ;
     m_faceColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE) ;
     m_mediumShadow = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW) ;

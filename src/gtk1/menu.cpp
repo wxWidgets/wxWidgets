@@ -634,7 +634,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
+static void gtk_menu_highlight_callback( GtkWidget *widget, wxMenu *menu )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -1067,7 +1067,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         wxASSERT_MSG( menuItem, wxT("invalid menuitem") );
 
         gtk_signal_connect( GTK_OBJECT(menuItem), "select",
-                            GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
+                            GTK_SIGNAL_FUNC(gtk_menu_highlight_callback),
                             (gpointer)this );
 
         gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
