@@ -428,7 +428,7 @@ void wxSashWindow::DrawBorders(wxDC& dc)
     wxPen mediumShadowPen(m_mediumShadowColour, 1, wxPENSTYLE_SOLID);
     wxPen darkShadowPen(m_darkShadowColour, 1, wxPENSTYLE_SOLID);
     wxPen lightShadowPen(m_lightShadowColour, 1, wxPENSTYLE_SOLID);
-    wxPen hilightPen(m_hilightColour, 1, wxPENSTYLE_SOLID);
+    wxPen highlightPen(m_highlightColour, 1, wxPENSTYLE_SOLID);
 
     if ( GetWindowStyleFlag() & wxSW_3DBORDER )
     {
@@ -440,7 +440,7 @@ void wxSashWindow::DrawBorders(wxDC& dc)
         dc.DrawLine(1, 1, w-2, 1);
         dc.DrawLine(1, 1, 1, h-2);
 
-        dc.SetPen(hilightPen);
+        dc.SetPen(highlightPen);
         dc.DrawLine(0, h-1, w-1, h-1);
         dc.DrawLine(w-1, 0, w-1, h); // Surely the maximum y pos. should be h - 1.
                                      /// Anyway, h is required for MSW.
@@ -479,7 +479,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
     wxPen mediumShadowPen(m_mediumShadowColour, 1, wxPENSTYLE_SOLID);
     wxPen darkShadowPen(m_darkShadowColour, 1, wxPENSTYLE_SOLID);
     wxPen lightShadowPen(m_lightShadowColour, 1, wxPENSTYLE_SOLID);
-    wxPen hilightPen(m_hilightColour, 1, wxPENSTYLE_SOLID);
+    wxPen highlightPen(m_highlightColour, 1, wxPENSTYLE_SOLID);
     wxColour blackClr(0, 0, 0);
     wxColour whiteClr(255, 255, 255);
     wxPen blackPen(blackClr, 1, wxPENSTYLE_SOLID);
@@ -506,7 +506,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
             {
                 // Draw a highlight line on the right to indicate that the
                 // sash is raised
-                dc.SetPen(hilightPen);
+                dc.SetPen(highlightPen);
                 dc.DrawLine(w - GetEdgeMargin(edge), 0, w - GetEdgeMargin(edge), h);
             }
         }
@@ -525,7 +525,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
             {
                 // Draw a highlight line on the bottom to indicate that the
                 // sash is raised
-                dc.SetPen(hilightPen);
+                dc.SetPen(highlightPen);
                 dc.DrawLine(0, h - GetEdgeMargin(edge), w, h - GetEdgeMargin(edge));
             }
             else
@@ -673,7 +673,7 @@ void wxSashWindow::InitColours()
     m_mediumShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW);
     m_darkShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW);
     m_lightShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
-    m_hilightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT);
+    m_highlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT);
 }
 
 void wxSashWindow::SetSashVisible(wxSashEdgePosition edge, bool sash)
