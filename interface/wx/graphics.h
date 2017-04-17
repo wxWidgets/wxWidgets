@@ -847,6 +847,9 @@ public:
 
     /**
         Creates a native graphics font from a wxFont and a text colour.
+
+        @remarks
+        For Direct2D graphics fonts can be created from TrueType fonts only.
     */
     virtual wxGraphicsFont CreateFont(const wxFont& font,
                                       const wxColour& col = *wxBLACK) const;
@@ -857,8 +860,11 @@ public:
         The use of overload taking wxFont is preferred, see
         wxGraphicsRenderer::CreateFont() for more details.
 
+        @remarks
+        For Direct2D graphics fonts can be created from TrueType fonts only.
+
         @since 2.9.3
-     */
+    */
     virtual wxGraphicsFont CreateFont(double sizeInPixels,
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
@@ -866,6 +872,9 @@ public:
 
     /**
         Sets the font for drawing text.
+
+        @remarks
+        For Direct2D only TrueType fonts can be used.
     */
     void SetFont(const wxFont& font, const wxColour& colour);
 

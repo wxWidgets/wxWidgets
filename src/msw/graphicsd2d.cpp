@@ -2627,6 +2627,12 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     }
 
     hr = gdiInterop->CreateFontFromLOGFONT(&logfont, &m_font);
+    if ( hr == DWRITE_E_NOFONT )
+    {
+        // It was attempted to create DirectWrite font from non-TrueType GDI font.
+        return;
+    }
+
     wxCHECK_RET( SUCCEEDED(hr),
                  wxString::Format("Failed to create font '%s' (HRESULT = %x)", logfont.lfFaceName, hr) );
 
@@ -4093,13 +4099,19 @@ void wxD2DContext::GetTextExtent(
     wxDouble* descent,
     wxDouble* externalLeading) const
 {
+    wxCHECK_RET(!m_font.IsNull(),
+        wxS("wxD2DContext::GetTextExtent - no valid font set"));
+
     wxD2DMeasuringContext::GetTextExtent(
         wxGetD2DFontData(m_font), str, width, height, descent, externalLeading);
 }
 
 void wxD2DContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
-    return wxD2DMeasuringContext::GetPartialTextExtents(
+    wxCHECK_RET(!m_font.IsNull(),
+        wxS("wxD2DContext::GetPartialTextExtents - no valid font set"));
+
+    wxD2DMeasuringContext::GetPartialTextExtents(
         wxGetD2DFontData(m_font), text, widths);
 }
 
@@ -4123,7 +4135,7 @@ bool wxD2DContext::ShouldOffset() const
 void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 {
     wxCHECK_RET(!m_font.IsNull(),
-        wxT("wxGDIPlusContext::DrawText - no valid font set"));
+        wxS("wxD2DContext::DrawText - no valid font set"));
 
     if (m_composition == wxCOMPOSITION_DEST)
         return;
@@ -4637,6 +4649,13 @@ wxImage wxD2DRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 wxGraphicsFont wxD2DRenderer::CreateFont(const wxFont& font, const wxColour& col)
 {
     wxD2DFontData* fontData = new wxD2DFontData(this, GetD2DFactory(), font, col);
+    if ( !fontData->GetFont() )
+    {
+        // Apparently a non-TrueType font is given and hence
+        // corresponding DirectWrite font couldn't be created.
+        delete fontData;
+        return wxNullGraphicsFont;
+    }
 
     wxGraphicsFont graphicsFont;
     graphicsFont.SetRefData(fontData);
