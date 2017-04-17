@@ -558,7 +558,7 @@ void BitmapComboBoxWidgetsPage::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
     if ( sel == wxNOT_FOUND )
         sel = m_combobox->GetCount();
 
-    m_combobox->Insert(s, wxNullBitmap, m_combobox->GetSelection());
+    m_combobox->Insert(s, wxNullBitmap, sel);
 }
 
 void BitmapComboBoxWidgetsPage::OnTextChangeHeight(wxCommandEvent& WXUNUSED(event))
