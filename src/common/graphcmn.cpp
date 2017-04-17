@@ -653,12 +653,21 @@ void wxGraphicsContext::SetFont( const wxGraphicsFont& font )
     m_font = font;
 }
 
-void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )
+void wxGraphicsContext::SetFont(const wxFont& font, const wxColour& colour)
 {
     if ( font.IsOk() )
-        SetFont( CreateFont( font, colour ) );
+    {
+        // Change current font only if new graphics font is successfully created.
+        wxGraphicsFont grFont = CreateFont(font, colour);
+        if ( !grFont.IsSameAs(wxNullGraphicsFont) )
+        {
+            SetFont(grFont);
+        }
+    }
     else
+    {
         SetFont( wxNullGraphicsFont );
+    }
 }
 
 void wxGraphicsContext::DrawPath( const wxGraphicsPath& path, wxPolygonFillMode fillStyle )
