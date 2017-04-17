@@ -5,7 +5,7 @@
  ** Lexer for Erlang.
  ** Enhanced by Etienne 'Lenain' Girondel (lenaing@gmail.com)
  ** Originally wrote by Peter-Henry Mander,
- ** based on Matlab lexer by José Fonseca.
+ ** based on Matlab lexer by Jos\u00E9 Fonseca.
  **/
 
 #include <stdlib.h>
