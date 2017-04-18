@@ -385,6 +385,11 @@ void SliderWidgetsPage::CreateSlider()
 {
     int flags = ms_defaultFlags;
 
+#if defined(__WXX11__)
+    // wxX11 asserts without a sane tick setting, which initially it hasn't
+    flags |= wxSL_BOTTOM;
+#endif
+
     if ( m_chkInverse->GetValue() )
     {
         flags |= wxSL_INVERSE;

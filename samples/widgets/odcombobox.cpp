@@ -305,7 +305,8 @@ IMPLEMENT_WIDGETS_PAGE(ODComboboxWidgetsPage, wxT("OwnerDrawnCombobox"),
 
 ODComboboxWidgetsPage::ODComboboxWidgetsPage(WidgetsBookCtrl *book,
                                              wxImageList *imaglist)
-                  : ItemContainerWidgetsPage(book, imaglist, odcombobox_xpm)
+                  : ItemContainerWidgetsPage(book, imaglist, odcombobox_xpm),
+                    m_textPopupMinWidth(NULL), m_textPopupHeight(NULL)
 {
     // init everything
     m_chkSort =
@@ -649,6 +650,11 @@ void ODComboboxWidgetsPage::OnTextPopupWidth(wxCommandEvent& WXUNUSED(event))
 {
     long l = 0;
 
+    if (!m_textPopupMinWidth)
+    {
+        return;
+    }
+
     m_textPopupMinWidth->GetValue().ToLong(&l);
 
     if (m_combobox && l > 0)
@@ -660,6 +666,11 @@ void ODComboboxWidgetsPage::OnTextPopupWidth(wxCommandEvent& WXUNUSED(event))
 void ODComboboxWidgetsPage::OnTextPopupHeight(wxCommandEvent& WXUNUSED(event))
 {
     long l = 0;
+
+    if (!m_textPopupHeight)
+    {
+        return;
+    }
 
     m_textPopupHeight->GetValue().ToLong(&l);
 

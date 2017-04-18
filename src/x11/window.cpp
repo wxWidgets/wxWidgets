@@ -1580,13 +1580,76 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             KeySym keySym;
             (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
             int id = wxCharCodeXToWX (keySym);
-            // id may be WXK_xxx code - these are outside ASCII range, so we
-            // can't just use toupper() on id.
-            // Only change this if we want the raw key that was pressed,
-            // and don't change it if we want an ASCII value.
-            if (!isAscii && (id >= 'a' && id <= 'z'))
+            if (isAscii)
             {
-                id = id + 'A' - 'a';
+                // fold keypad into normal character codes
+                if (id >= WXK_NUMPAD0 && id <= WXK_NUMPAD9)
+                {
+                    id = id - WXK_NUMPAD0 + '0';
+                }
+                else if (id >= WXK_NUMPAD_SPACE && id <= WXK_NUMPAD_DIVIDE)
+                {
+                    switch (id)
+                    {
+                        case WXK_NUMPAD_SPACE:
+                            id = ' ';
+                            break;
+                        case WXK_NUMPAD_TAB:
+                            id = WXK_TAB;
+                            break;
+                        case WXK_NUMPAD_ENTER:
+                            id = WXK_RETURN;
+                            break;
+                        case WXK_NUMPAD_F1:
+                        case WXK_NUMPAD_F2:
+                        case WXK_NUMPAD_F3:
+                        case WXK_NUMPAD_F4:
+                            id = id - WXK_NUMPAD_F1 + WXK_F1;
+                            break;
+                        case WXK_NUMPAD_END:
+                        case WXK_NUMPAD_HOME:
+                        case WXK_NUMPAD_LEFT:
+                        case WXK_NUMPAD_UP:
+                        case WXK_NUMPAD_RIGHT:
+                        case WXK_NUMPAD_DOWN:
+                            id = id - WXK_NUMPAD_END + WXK_END;
+                            break;
+                        case WXK_NUMPAD_PAGEUP:
+                            id = WXK_PAGEUP;
+                            break;
+                        case WXK_NUMPAD_PAGEDOWN:
+                            id = WXK_PAGEDOWN;
+                            break;
+                        case WXK_NUMPAD_INSERT:
+                        case WXK_NUMPAD_DELETE:
+                        case WXK_NUMPAD_EQUAL:
+                            id = id - WXK_NUMPAD_INSERT + WXK_INSERT;
+                            break;
+                        case WXK_NUMPAD_BEGIN:
+                            id = WXK_HOME;
+                            break;
+                        case WXK_NUMPAD_MULTIPLY:
+                        case WXK_NUMPAD_ADD:
+                        case WXK_NUMPAD_SEPARATOR:
+                        case WXK_NUMPAD_SUBTRACT:
+                        case WXK_NUMPAD_DECIMAL:
+                        case WXK_NUMPAD_DIVIDE:
+                            id = id - WXK_NUMPAD_MULTIPLY + WXK_MULTIPLY;
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                // Fold case for alphabetic characters. We can't just
+                // use toupper() on id, since id may be WXK_xxx code -
+                // these are outside ASCII range.  Only change this if
+                // we want the raw key that was pressed, and don't
+                // change it if we want an ASCII value.
+                if (id >= 'a' && id <= 'z')
+                {
+                    id = id + 'A' - 'a';
+                }
             }
 
             wxevent.m_shiftDown = XKeyEventShiftIsDown(xevent);
