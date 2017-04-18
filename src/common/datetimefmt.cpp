@@ -689,10 +689,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
                         // time in the local time zone to the user.
                         if ( ofs == -wxGetTimeZone() && IsDST() == 1 )
                         {
-                            // FIXME: As elsewhere in wxDateTime, we assume
-                            // that the DST is always 1 hour, but this is not
-                            // true in general.
-                            ofs += 3600;
+                            ofs += DST_OFFSET;
                         }
 
                         if ( ofs < 0 )

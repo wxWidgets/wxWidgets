@@ -2066,8 +2066,7 @@ wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
     // specified.
     if ( !noDST && (IsDST() == 1) )
     {
-        // FIXME we assume that the DST is always shifted by 1 hour
-        secDiff -= 3600;
+        secDiff -= DST_OFFSET;
     }
 
     return Add(wxTimeSpan::Seconds(secDiff));
@@ -2080,8 +2079,7 @@ wxDateTime& wxDateTime::MakeFromTimezone(const TimeZone& tz, bool noDST)
     // See comment in MakeTimezone() above, the logic here is exactly the same.
     if ( !noDST && (IsDST() == 1) )
     {
-        // FIXME we assume that the DST is always shifted by 1 hour
-        secDiff -= 3600;
+        secDiff -= DST_OFFSET;
     }
 
     return Subtract(wxTimeSpan::Seconds(secDiff));

@@ -277,6 +277,15 @@ public:
         Sunday_First     // week starts with a Sunday
     };
 
+    // Currently we assume that DST is always shifted by 1 hour, this seems to
+    // be always true in practice. If this ever needs to change, search for all
+    // places using DST_OFFSET and update them.
+    enum
+    {
+        DST_OFFSET = 3600
+    };
+
+
     // helper classes
     // ------------------------------------------------------------------------
 
