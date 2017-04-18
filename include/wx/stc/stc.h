@@ -5128,11 +5128,11 @@ public:
     wxIntPtr SendMsg(int msg, wxUIntPtr wp=0, wxIntPtr lp=0) const;
 
 
-    // Set the vertical scrollbar to use instead of the ont that's built-in.
+    // Set the vertical scrollbar to use instead of the one that's built-in.
     void SetVScrollBar(wxScrollBar* bar);
 
 
-    // Set the horizontal scrollbar to use instead of the ont that's built-in.
+    // Set the horizontal scrollbar to use instead of the one that's built-in.
     void SetHScrollBar(wxScrollBar* bar);
 
     // Can be used to prevent the EVT_CHAR handler from adding the char

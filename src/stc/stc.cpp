@@ -247,7 +247,7 @@ wxIntPtr wxStyledTextCtrl::SendMsg(int msg, wxUIntPtr wp, wxIntPtr lp) const
 
 //----------------------------------------------------------------------
 
-// Set the vertical scrollbar to use instead of the ont that's built-in.
+// Set the vertical scrollbar to use instead of the one that's built-in.
 void wxStyledTextCtrl::SetVScrollBar(wxScrollBar* bar)  {
     m_vScrollBar = bar;
     if (bar != NULL) {
@@ -257,7 +257,7 @@ void wxStyledTextCtrl::SetVScrollBar(wxScrollBar* bar)  {
 }
 
 
-// Set the horizontal scrollbar to use instead of the ont that's built-in.
+// Set the horizontal scrollbar to use instead of the one that's built-in.
 void wxStyledTextCtrl::SetHScrollBar(wxScrollBar* bar)  {
     m_hScrollBar = bar;
     if (bar != NULL) {
