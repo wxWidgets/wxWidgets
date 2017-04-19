@@ -233,6 +233,7 @@ private:
         CPPUNIT_TEST( TestDSTBug );
         CPPUNIT_TEST( TestDateOnly );
         CPPUNIT_TEST( TestTranslateFromUnicodeFormat );
+        CPPUNIT_TEST( TestConvToFromLocalTZ );
     CPPUNIT_TEST_SUITE_END();
 
     void TestLeapYears();
@@ -254,6 +255,7 @@ private:
     void TestDSTBug();
     void TestDateOnly();
     void TestTranslateFromUnicodeFormat();
+    void TestConvToFromLocalTZ();
 
     wxDECLARE_NO_COPY_CLASS(DateTimeTestCase);
 };
@@ -1489,6 +1491,25 @@ void DateTimeTestCase::TestTranslateFromUnicodeFormat()
     CPPUNIT_ASSERT_EQUAL("'%H o'clock: It's about time'",
         wxTranslateFromUnicodeFormat("''H 'o''clock: It''s about time'''"));
 #endif // ports having wxTranslateFromUnicodeFormat()
+}
+
+void DateTimeTestCase::TestConvToFromLocalTZ()
+{
+    // Choose a date when the DST is on in many time zones: in this case,
+    // converting to/from local TZ does modify the object because it
+    // adds/subtracts DST to/from it, so to get the expected results we need to
+    // explicitly disable DST support in these functions.
+    wxDateTime dt(18, wxDateTime::Apr, 2017, 19);
+
+    CPPUNIT_ASSERT_EQUAL( dt.FromTimezone(wxDateTime::Local, true), dt );
+    CPPUNIT_ASSERT_EQUAL( dt.ToTimezone(wxDateTime::Local, true), dt );
+
+    // And another one when it is off: in this case, there is no need to pass
+    // "true" as "noDST" argument to these functions.
+    dt = wxDateTime(18, wxDateTime::Jan, 2018, 19);
+
+    CPPUNIT_ASSERT_EQUAL( dt.FromTimezone(wxDateTime::Local), dt );
+    CPPUNIT_ASSERT_EQUAL( dt.ToTimezone(wxDateTime::Local), dt );
 }
 
 #endif // wxUSE_DATETIME

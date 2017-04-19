@@ -1237,10 +1237,17 @@ public:
     //@{
 
     /**
-        Transform the date from the given time zone to the local one. If
-        @a noDST is @true, no DST adjustments will be made.
+        Transform the date from the given time zone to the local one.
 
-        @return The date in the local time zone.
+        If @a noDST is @true, no DST adjustments will be made.
+
+        Notice using wxDateTime::Local for @a tz parameter doesn't really make
+        sense and may result in unexpected results as it will return a
+        different object when DST is in use and @a noDST has its default value
+        of @false.
+
+        @return The date adjusted by the different between the given and the
+        local time zones.
     */
     wxDateTime FromTimezone(const TimeZone& tz, bool noDST = false) const;
 
@@ -1258,7 +1265,9 @@ public:
 
     /**
         Modifies the object in place to represent the date in another time
-        zone. If @a noDST is @true, no DST adjustments will be made.
+        zone.
+
+        If @a noDST is @true, no DST adjustments will be made.
     */
     wxDateTime& MakeTimezone(const TimeZone& tz, bool noDST = false);
 
@@ -1268,10 +1277,16 @@ public:
     wxDateTime& MakeUTC(bool noDST = false);
 
     /**
-        Transform the date to the given time zone. If @a noDST is @true, no DST
-        adjustments will be made.
+        Transform the date to the given time zone.
 
-        @return The date in the new time zone.
+        If @a noDST is @true, no DST adjustments will be made.
+
+        Notice that, as with FromTimezone(), using wxDateTime::Local as @a tz
+        doesn't really make sense and may return a different object when DST is
+        in effect and @a noDST is @false.
+
+        @return The date adjusted by the different between the local and the
+        given time zones.
     */
     wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
 
