@@ -32623,7 +32623,7 @@ fi
 if test "$wxUSE_XLOCALE" = "yes" ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking for complete xlocale" >&5
 $as_echo_n "checking for complete xlocale... " >&6; }
-if ${wx_cv_use_xlocale_local+:} false; then :
+if ${wx_cv_func_strtod_l+:} false; then :
   $as_echo_n "(cached) " >&6
 else
 
@@ -32652,9 +32652,9 @@ main ()
 }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_use_xlocale_local=yes
+  wx_cv_func_strtod_l=yes
 else
-  wx_cv_use_xlocale_local=no
+  wx_cv_func_strtod_l=no
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
@@ -32666,10 +32666,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_use_xlocale_local" >&5
-$as_echo "$wx_cv_use_xlocale_local" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_strtod_l" >&5
+$as_echo "$wx_cv_func_strtod_l" >&6; }
 
-    if test "$wx_cv_use_xlocale_local" = "yes" ; then
+    if test "$wx_cv_func_strtod_l" = "yes" ; then
         $as_echo "#define wxUSE_XLOCALE 1" >>confdefs.h
 
     fi

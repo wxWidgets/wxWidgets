@@ -5712,7 +5712,7 @@ if test "$wxUSE_XLOCALE" = "yes" ; then
     dnl even if xlocale.h exists, it may not contain all that
     dnl wx needs. check if strtod_l() really is available.
     AC_CACHE_CHECK([for complete xlocale],
-                   wx_cv_use_xlocale_local,
+                   wx_cv_func_strtod_l,
     [
         AC_LANG_PUSH(C++)
         AC_TRY_COMPILE(
@@ -5725,13 +5725,13 @@ if test "$wxUSE_XLOCALE" = "yes" ; then
         locale_t t;
         strtod_l(NULL, NULL, t);
         ],
-        wx_cv_use_xlocale_local=yes,
-        wx_cv_use_xlocale_local=no
+        wx_cv_func_strtod_l=yes,
+        wx_cv_func_strtod_l=no
         )
         AC_LANG_POP()
     ])
 
-    if test "$wx_cv_use_xlocale_local" = "yes" ; then
+    if test "$wx_cv_func_strtod_l" = "yes" ; then
         AC_DEFINE(wxUSE_XLOCALE)
     fi
 fi
