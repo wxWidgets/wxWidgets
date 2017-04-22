@@ -15,6 +15,35 @@ Setup have all been added to your Path in Windows. You can confirm this by
 running `7z`, `hhc`, `iscc`, `doxygen -v`, and `dot -V` in a command prompt.
 Add the missing installed folder locations of any executables to your Path.
 
+## Checking ABI Compatibility
+
+For the stable (even) releases only, check that binary compatibility hasn't
+been broken since the last stable release.
+
+### Checking under Unix systems using `abi-complicance-checker` tool.
+
+Instructions:
+
+1. Get [the tool](https://lvc.github.io/abi-compliance-checker/).
+1. Build the old (vX.Y.Z-1) library with `-g -Og` options, i.e. configure it
+   with `--enable-debug` and `CXXFLAGS=-Og CFLAFS=-Og`. For convenience, let's
+   assume it's built in "$old" subdirectory.
+1. Build the new (vX.Y.Z) library with the same options in "$new".
+1. Create directories for temporary files containing the ABI dumps for the old
+   and new libraries: `mkdir -p ../compat/{$old,$new}`.
+1. Run abi-dumper on all libraries: `for l in $old/lib/*.so; do abi-dumper $l
+   -lver $old -o ../compat/$old/$(basename $l).dump` and the same thing with
+   the new libraries.
+1. Run abi-compliance-checker on each pair of produced dumps to generate HTML
+   reports: `for l in 3.0.2/*dump; abi-compliance-checker -l $(basename $l
+   .dump) -old $l -new 3.0.3/$(basename $l)`.
+1. Examine these reports, paying attention to the problem summary.
+
+### Checking under MSW systems.
+
+Manually check compatibility by building the widgets samples from the old tree
+and then run it using the new DLLs.
+
 ## Pre-Release Steps
 
 * Update `docs/readme.txt`. Please review its contents in addition to just
