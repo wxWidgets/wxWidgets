@@ -580,7 +580,7 @@ Major new features in this release
 
 
 
-3.0.3: (released 2015-??-??)
+3.0.3: (released 2017-05-02)
 ----------------------------
 
 All:
@@ -618,6 +618,7 @@ All (GUI):
 
 wxGTK:
 
+- Support for GStreamer 1.0 in wxMediaCtrl (Sebastian Dröge).
 - Fix infinite sizing loop with GTK3 when using wxScrolled with a non-default
   target window.
 - Fix wxBitmap ctor from XBM for non-square bitmaps.

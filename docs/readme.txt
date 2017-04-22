@@ -24,14 +24,7 @@ and read its documentation online at
 wxWidgets sources and binaries for the selected platforms are
 available for download from
 
-        https://sourceforge.net/projects/wxwindows/files/3.0.3/
-
-or
-
-        ftp://ftp.wxwidgets.org/pub/3.0.3/
-
-Please see the "Files" section below for the description of various
-files available at these locations.
+	https://github.com/wxWidgets/wxWidgets/releases/tag/v3.0.3/
 
 
 
@@ -41,45 +34,41 @@ Changes in this release
 This is a bug fix release with no significant new features compared to
 the previous 3.0.x releases and compatible with them at both the API
 and the ABI level (i.e. all applications linked against earlier 3.0.x
-DLLs or shared libraries will continue to work when using 3.0.2
+DLLs or shared libraries will continue to work when using 3.0.3
 libraries).
 
-Some of the changes:
+The full list of changes in this release is available at
+
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.3/docs/changes.txt
+
+(starting from the line 583, or search for "3.0.3" in this file), here are
+some selected ones:
+
+* In all ports:
+ - Support requestion modern (3.x+) OpenGL version in wxGLCanvas.
+ - Fix using wxHTTP and wxFTP from worker thread.
 
 * In wxGTK:
- - Fix wxSearchCtrl layout.
- - Fix mouse handling in wxListCtrl and wxTreeCtrl inside wxNotebook.
- - Avoid some GTK+ warnings.
+ - Support for Gstreamer 1.0 in wxMediaCtrl, in addition to obsolete 0.x.
+ - Several fatal bug fixes for GTK+ 3.
 
 * In wxMSW:
- - Cygwin 1.7 and MinGW 4.8 build fixes.
- - Fix parallel build in MSVS 2010+ solutions.
- - Add x64 configurations to MSVS 2005/2008 projects too.
- - Fix using Esc as accelerator in the menus.
- - Fix wxRadioBox, wxSlider, wxToggleButton with non-default colours.
- - RTL support fixes for wxDC and wxGrid.
+ - Build fixes for MinGW 4.9.
+ - Improve wxSearchCtrl appearance.
+ - Fix creating or modifying file associations under recent Windows versions.
 
 * In wxOSX:
- - Avoid compilation warnings when using 10.10 SDK.
- - Enhancements to retina support.
+ - Build fixes for wxWebView and wxMediaCtrl when using 10.10 or later SDK.
+ - Implement wxTE_{RIGHT,CENTER} support in multiline wxTextCtrl.
+ - Generate wxEVT_TEXT_ENTER for wxTE_PASSWORD controls.
+ - Fix handling of WXK_NUMPAD_ENTER.
+ - Fix length of text in wxTextDataObject.
+ - Fix wxDatePickerCtrl appearance.
 
-Despite of the focus on bug fixes, a few new features have
-nevertheless made it into this release as well:
 
- - Add support for "%V", "%G" and "%g" to wxDateTime::Format().
- - Added an XRC handler for wxSimplebook.
- - Allow to specify the "variant" window property in XRC.
- - Add wxGenericListCtrl::EndEditLabel().
-
-Other changes in this release are described in the file
-docs/changes.txt available online at
-
-    https://sourceforge.net/projects/wxwindows/files/3.0.3/changes.txt
-
-This file also contains information about the changes in 3.0 compared
-to earlier versions of wxWidgets, please read it, and especially its
-"INCOMPATIBLE CHANGES" section, if you are upgrading from wxWidgets
-2.8 or earlier. And for even more details, please see
+If you are upgrading from wxWidgets 2.8 or earlier, please read the
+"INCOMPATIBLE CHANGES" section in the beginning of this file and the
+corresponding part of the manual at
 
     http://docs.wxwidgets.org/3.0.3/overview_changes_since28.html
 
@@ -87,7 +76,7 @@ to earlier versions of wxWidgets, please read it, and especially its
 Platforms supported
 -------------------
 
-wxWidgets currently supports the following primary platforms:
+wxWidgets 3.0.x supports the following primary platforms:
 
 - Windows 95/98/ME, NT, 2000, XP, Vista, 7, 8, 10 (32/64 bits).
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
@@ -215,4 +204,4 @@ If you are looking for support, you can get it from
 
 Have fun!
 
-The wxWidgets Team, October 2014
+The wxWidgets Team, April 2017
