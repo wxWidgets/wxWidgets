@@ -2211,26 +2211,26 @@ static void XCopyRemote(Display *src_display, Display *dest_display,
                     pixel = cachedest[k];
                     goto install;
                 }
-                if (all_cache)
-                    for (k = CACHE_SIZE; k-- > cache_pos; )
-                        if (cachesrc[k] == pixel) {
-                            pixel = cachedest[k];
-                            goto install;
-                        }
+            if (all_cache)
+                for (k = CACHE_SIZE; k-- > cache_pos; )
+                    if (cachesrc[k] == pixel) {
+                        pixel = cachedest[k];
+                        goto install;
+                    }
 
-                        cachesrc[cache_pos] = xcol.pixel = pixel;
-                        XQueryColor(src_display, srccm, &xcol);
-                        if (!XAllocColor(dest_display, destcm, &xcol))
-                            xcol.pixel = 0;
-                        cachedest[cache_pos] = pixel = xcol.pixel;
+            cachesrc[cache_pos] = xcol.pixel = pixel;
+            XQueryColor(src_display, srccm, &xcol);
+            if (!XAllocColor(dest_display, destcm, &xcol))
+                xcol.pixel = 0;
+            cachedest[cache_pos] = pixel = xcol.pixel;
 
-                        if (++cache_pos >= CACHE_SIZE) {
-                            cache_pos = 0;
-                            all_cache = true;
-                        }
+            if (++cache_pos >= CACHE_SIZE) {
+                cache_pos = 0;
+                all_cache = true;
+            }
 
 install:
-                        XPutPixel(destimage, i, j, pixel);
+            XPutPixel(destimage, i, j, pixel);
         }
 
         XPutImage(dest_display, dest, destgc, destimage, 0, 0, destx, desty, w, h);
