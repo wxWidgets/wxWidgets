@@ -45,5 +45,8 @@
 # generic branch tag (don't remove this!):
 
 @WX_VERSION_TAG@ {
+        # Explicitly mention this one as otherwise it would be caught by
+        # wxDataViewRenderer*FinishEditing wildcard in 3.0.3 above.
+        *wxDataViewRendererBase*FinishEditing*;
         *;
 };
