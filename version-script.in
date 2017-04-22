@@ -25,10 +25,6 @@
 @WX_VERSION_TAG@.3 {
     *wxDataViewRenderer*FinishEditing*;
     *wxFloatProperty*DoGetAttribute*;
-
-    # This class was actually added in 3.0.2 but not tagged correctly in it, so
-    # do it here following the better late than never principle.
-    *wxSimplebookXmlHandler*;
 };
 
 # public symbols added in 3.0.2 (please keep in alphabetical order):
