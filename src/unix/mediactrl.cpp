@@ -693,7 +693,18 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromElement(GstElement* element)
 
     return true;
 }
-#endif
+#else // GStreamer 1.0
+
+// This method is unused, but still provide just to avoid warnings about ABI
+// incompatible changes compared to the previous versions, in which it always
+// existed.
+bool
+wxGStreamerMediaBackend::QueryVideoSizeFromElement(GstElement* WXUNUSED(element))
+{
+    return false;
+}
+
+#endif // GStreamer 0.x/1.0
 
 //-----------------------------------------------------------------------------
 // wxGStreamerMediaBackend::QueryVideoSizeFromPad
