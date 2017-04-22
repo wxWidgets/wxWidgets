@@ -233,6 +233,13 @@ public:
     resources such as images and stylesheets are currently loaded using the
     data:// scheme.
 
+    @par wxWEBVIEW_WEBKIT2 (GTK3)
+
+    Under GTK3 the WebKit2 version of <a href="http://webkitgtk.org/">WebKitGTK+</a>
+    is used. In Ubuntu the required package name is libwebkit2gtk-4.0-dev
+    and under Fedora it is webkitgtk4-devel. All wxWEBVIEW_WEBKIT features are
+    supported except for clearing and enabling / disabling the history.
+
     @par wxWEBVIEW_WEBKIT (OSX)
 
     The OS X WebKit backend uses Apple's
