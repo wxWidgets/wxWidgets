@@ -139,7 +139,7 @@ dnl SHARED_LIB_SETUP to find the exact place
 case "${host}" in
   *-hp-hpux* )
     USE_HPUX=1
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
     AC_DEFINE(__HPUX__)
 
@@ -171,7 +171,7 @@ case "${host}" in
     USE_SVR4=1
     AC_DEFINE(__SGI__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-qnx*)
     USE_QNX=1
@@ -185,7 +185,7 @@ case "${host}" in
     AC_DEFINE(__SUN__)
     AC_DEFINE(__SOLARIS__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-sunos4* )
@@ -195,7 +195,7 @@ case "${host}" in
     AC_DEFINE(__SUN__)
     AC_DEFINE(__SUNOS__)
     AC_DEFINE(__BSD__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-freebsd*)
     USE_BSD=1
@@ -228,7 +228,7 @@ case "${host}" in
     USE_OSF=1
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__OSF__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-dgux5* )
@@ -236,14 +236,14 @@ case "${host}" in
     USE_SVR4=1
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-sysv5* )
     USE_SYSV=1
     USE_SVR4=1
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-aix* )
     USE_AIX=1
@@ -252,7 +252,7 @@ case "${host}" in
     AC_DEFINE(__AIX__)
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
 
   *-*-*UnixWare*)

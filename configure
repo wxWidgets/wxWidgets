@@ -3751,7 +3751,7 @@ DEFAULT_STD_FLAG=yes
 case "${host}" in
   *-hp-hpux* )
     USE_HPUX=1
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
     $as_echo "#define __HPUX__ 1" >>confdefs.h
 
@@ -3787,7 +3787,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-qnx*)
     USE_QNX=1
@@ -3805,7 +3805,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-sunos4* )
@@ -3818,7 +3818,7 @@ case "${host}" in
 
     $as_echo "#define __BSD__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-freebsd*)
     USE_BSD=1
@@ -3857,7 +3857,7 @@ case "${host}" in
 
     $as_echo "#define __OSF__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-dgux5* )
@@ -3867,7 +3867,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-sysv5* )
     USE_SYSV=1
@@ -3876,7 +3876,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-aix* )
     USE_AIX=1
@@ -3888,7 +3888,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
 
   *-*-*UnixWare*)
