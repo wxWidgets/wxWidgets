@@ -590,6 +590,7 @@ All (GUI):
 wxGTK:
 
 - Allow using more recent WebKit2GTK+ in wxWebView (Scott Talbert).
+- Fix displaying wxRadioBox items labels containing ampersands.
 
 wxMSW:
 
