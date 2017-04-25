@@ -246,22 +246,58 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     gtk_widget_show( table );
     gtk_container_add( GTK_CONTAINER(m_widget), table );
 
-    wxString label;
     GSList *radio_button_group = NULL;
     for (unsigned int i = 0; i < (unsigned int)n; i++)
     {
         if ( i != 0 )
             radio_button_group = gtk_radio_button_get_group( GTK_RADIO_BUTTON(rbtn) );
 
-        label.Empty();
+        // Process mnemonic in the label
+        wxString label;
+        bool hasMnemonic = false;
         for ( wxString::const_iterator pc = choices[i].begin();
               pc != choices[i].end(); ++pc )
         {
-            if ( *pc != wxT('&') )
-                label += *pc;
-        }
+            if ( *pc == wxS('_') )
+            {
+                // If we have a literal underscore character in the label
+                // containing mnemonic, two underscores should be used.
+                if ( hasMnemonic )
+                    label += wxS('_');
+            }
+            else if ( *pc == wxS('&') )
+            {
+                ++pc; // skip it
+                 if ( pc == choices[i].end() )
+                 {
+                     break;
+                 }
+                 else if ( *pc != wxS('&') )
+                 {
+                     if ( !hasMnemonic )
+                     {
+                         hasMnemonic = true;
+                         // So far we assumed that label doesn't contain mnemonic
+                         // and therefore single underscore characters were not
+                         // replaced by two underscores. Now we have to double
+                         // all exisiting underscore characters.
+                         label.Replace(wxS("_"), wxS("__"));
+                         label += wxS('_');
+                     }
+                     else
+                     {
+                         wxFAIL_MSG(wxT("duplicate mnemonic char in radio button label"));
+                     }
+                 }
+            }
 
-        rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
+            label += *pc;
+        }
+        if ( hasMnemonic )
+            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_mnemonic( radio_button_group, wxGTK_CONV( label ) ) );
+        else
+            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
+
         gtk_widget_show( GTK_WIDGET(rbtn) );
 
         g_signal_connect (rbtn, "key_press_event",

@@ -148,6 +148,7 @@ wxGTK:
 - Fix wxDC::GetClippingBox() for transformed wxDC.
 - Add support for affine transformation matrix in wxDC (GTK+ 3).
 - Fix wxMemoryDC::Blit() with itself as source (GTK+ 3).
+- Fix displaying labels of wxRadioBox items.
 
 wxMSW:
 
