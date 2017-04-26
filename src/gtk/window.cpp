@@ -932,9 +932,11 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                 // got one
                 key_code = keysymNormalized ? keysymNormalized : keysym;
             }
-#else
-            key_code = keysym;
-#endif
+            else
+#endif // GDK_WINDOWING_X11
+            {
+                key_code = keysym;
+            }
 
             // as explained above, we want to have lower register key codes
             // normally but for the letter keys we want to have the upper ones
