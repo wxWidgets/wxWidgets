@@ -629,6 +629,7 @@ wxGTK:
 - Make items selected from keyboard visible in wxListCtrl (Jonathan Dagresta).
 - Cosmetic fix for empty wxCheckBoxes display (Chuddah).
 - Fix crashes in wxFileSystemWatcher implementation (David Hart).
+- Fix key events codes when using Wayland (David Hart).
 
 wxMSW:
 
