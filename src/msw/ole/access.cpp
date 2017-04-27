@@ -2037,8 +2037,8 @@ long wxConvertToWindowsState(long wxstate)
     if (wxstate & wxACC_STATE_SYSTEM_INVISIBLE)
         state |= STATE_SYSTEM_INVISIBLE;
 
-    if (wxstate & wxACC_STATE_SYSTEM_INVISIBLE)
-        state |= STATE_SYSTEM_INVISIBLE;
+    if (wxstate & wxACC_STATE_SYSTEM_MARQUEED)
+        state |= STATE_SYSTEM_MARQUEED;
 
     if (wxstate & wxACC_STATE_SYSTEM_MIXED)
         state |= STATE_SYSTEM_MIXED;
