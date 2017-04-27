@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtextsizepage.cpp
 // Purpose:     Implements the rich text formatting dialog size page.
 // Author:      Julian Smart
@@ -116,7 +116,7 @@ wxRichTextSizePage::~wxRichTextSizePage()
     sm_showAlignmentControls = true;
     sm_showFloatingAndAlignmentControls = true;
     sm_showMinMaxSizeControls = true;
-    sm_showMinMaxSizeControls = true;
+    sm_enablePositionAndSizeUnits = true;
     sm_enablePositionAndSizeCheckboxes = true;
     sm_showMoveObjectControls = true;
     
