@@ -5,6 +5,21 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+/// Magic constant which tells (to some functions) to automatically calculate
+/// the appropriate size
+#define wxGRID_AUTOSIZE (-1)
+
+/// Many wxGrid methods work either with columns or rows, this enum is used for
+/// the parameter indicating which one should it be
+enum wxGridDirection
+{
+    wxGRID_COLUMN,
+    wxGRID_ROW
+};
+
+
+
 /**
     @class wxGridCellRenderer
 
