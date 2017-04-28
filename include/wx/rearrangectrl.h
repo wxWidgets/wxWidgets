@@ -100,6 +100,8 @@ public:
     virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
 
     int DoInsertOneItem(const wxString& item, unsigned int pos) wxOVERRIDE;
+    int DoInsertItems(const wxArrayStringsAdapter& items, unsigned int pos,
+                      void **clientData, wxClientDataType type) wxOVERRIDE;
     void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
     void DoClear() wxOVERRIDE;
 

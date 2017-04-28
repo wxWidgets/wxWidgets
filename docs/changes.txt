@@ -134,6 +134,7 @@ All (GUI):
 - Add wxStyledTextCtrl::AutoCompGetCurrentText() (NewPagodi).
 - Extend wxStyledTextCtrl::FindText() to return end position of matched
   text (NewPagodi).
+- Fix adding/removing items to/from wxRearrangeList.
 
 wxGTK:
 

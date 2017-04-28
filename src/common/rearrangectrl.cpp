@@ -190,11 +190,25 @@ void wxRearrangeList::OnCheck(wxCommandEvent& event)
 
 int wxRearrangeList::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
-    wxCheckListBox::DoInsertOneItem(item, pos);
+    int ret = wxCheckListBox::DoInsertOneItem(item, pos);
     // Item is not checked initially.
     const int idx = ~m_order.size();
     m_order.Insert(idx, pos);
-    return pos;
+    return ret;
+}
+
+int wxRearrangeList::DoInsertItems(const wxArrayStringsAdapter& items, unsigned int pos,
+                                   void **clientData, wxClientDataType type)
+{
+    int ret = wxCheckListBox::DoInsertItems(items, pos, clientData, type);
+    const size_t numItems = items.GetCount();
+    for ( size_t i = 0; i < numItems; i++ )
+    {
+        // Item is not checked initially.
+        const int idx = ~m_order.size();
+        m_order.Insert(idx, pos+i);
+    }
+    return ret;
 }
 
 void wxRearrangeList::DoDeleteOneItem(unsigned int n)
