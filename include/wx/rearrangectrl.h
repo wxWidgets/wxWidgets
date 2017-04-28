@@ -99,6 +99,10 @@ public:
     // Override this to keep our m_order array in sync with the real item state.
     virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
 
+    int DoInsertOneItem(const wxString& item, unsigned int pos) wxOVERRIDE;
+    void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
+    void DoClear() wxOVERRIDE;
+
 private:
     // swap two items at the given positions in the listbox
     void Swap(int pos1, int pos2);
