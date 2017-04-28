@@ -280,11 +280,11 @@ wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
 {
     if ( client == wxART_TOOLBAR )
     {
-        return wxSize(24, 24);
+        return wxWindow::FromDIP(wxSize(24, 24), NULL);
     }
     else if ( client == wxART_MENU )
     {
-        return wxSize(16, 16);
+        return wxWindow::FromDIP(wxSize(16, 16), NULL);
     }
     else if ( client == wxART_FRAME_ICON )
     {
@@ -299,11 +299,11 @@ wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
     }
     else if (client == wxART_BUTTON)
     {
-        return wxSize(16, 16);
+        return wxWindow::FromDIP(wxSize(16, 16), NULL);
     }
     else if (client == wxART_LIST)
     {
-        return wxSize(16, 16);
+        return wxWindow::FromDIP(wxSize(16, 16), NULL);
     }
 
     return wxDefaultSize;
