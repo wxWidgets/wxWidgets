@@ -99,6 +99,7 @@ All (GUI):
 - Make wxDataViewCtrl::Expand() expand ancestors in native ports too.
 - Add wxDataViewTextRenderer::EnableMarkup().
 - Add wxDataViewCtrl::SetHeaderAttr().
+- Add wxDataViewCtrl::GetTopItem() and GetCountPerPage() (Andreas Falkenhahn).
 - Add wxListCtrl::SetHeaderAttr().
 - Add support for using markup in wxDataViewCtrl text items.
 - Implement auto complete in generic wxSearchCtrl (Eric Jensen).
@@ -134,6 +135,7 @@ All (GUI):
 - Add wxStyledTextCtrl::AutoCompGetCurrentText() (NewPagodi).
 - Extend wxStyledTextCtrl::FindText() to return end position of matched
   text (NewPagodi).
+- Add wxFontPickerCtrl::SetMinPointSize() (Andreas Falkenhahn).
 
 wxGTK:
 
