@@ -9932,7 +9932,7 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
     wxRichTextAttr attr;
 
     wxRichTextSelection sel;
-    if (buffer->GetRichTextCtrl())
+    if (buffer && buffer->GetRichTextCtrl())
         sel = buffer->GetRichTextCtrl()->GetSelection();
         
     if (table && buffer && buffer->GetRichTextCtrl() && sel.IsValid() &&
