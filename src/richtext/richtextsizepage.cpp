@@ -117,7 +117,7 @@ wxRichTextSizePage::~wxRichTextSizePage()
     sm_showAlignmentControls = true;
     sm_showFloatingAndAlignmentControls = true;
     sm_showMinMaxSizeControls = true;
-    sm_showMinMaxSizeControls = true;
+    sm_enablePositionAndSizeUnits = true;
     sm_enablePositionAndSizeCheckboxes = true;
     
 ////@begin wxRichTextSizePage destruction
