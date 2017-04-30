@@ -179,6 +179,7 @@ wxMSW:
   wxMemoryDC (Cairo >= 1.15.4).
 - Fix updating bounding box in wxDC::DrawSpline().
 - Fix placing 0RGB wxBitmaps on the clipboard.
+- Fix adding wxBitmap to clipboard when wxUSE_OLE == 0.
 
 wxOSX:
 

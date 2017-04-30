@@ -219,9 +219,51 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 if ( bitmap && bitmap->IsOk() )
                 {
                     wxDIB dib(*bitmap);
+
                     if ( dib.IsOk() )
                     {
-                        handle = ::SetClipboardData(CF_DIB, dib.Detach());
+                        DIBSECTION ds;
+                        int n = ::GetObject(dib.GetHandle(), sizeof(DIBSECTION), &ds);
+                        wxASSERT( n == sizeof(DIBSECTION) && ds.dsBm.bmBits );
+                        // Number of colours in the palette.
+                        int numColors;
+                        switch ( ds.dsBmih.biCompression )
+                        {
+                        case BI_BITFIELDS:
+                            numColors = 3;
+                            break;
+                        case BI_RGB:
+                            numColors = ds.dsBmih.biClrUsed;
+                            if ( !numColors )
+                            {
+                                numColors = ds.dsBmih.biBitCount <= 8 ? 1 << ds.dsBmih.biBitCount : 0;
+                            }
+                            break;
+                        default:
+                            numColors = 0;
+                        }
+
+                        unsigned long bmpSize = wxDIB::GetLineSize(ds.dsBmih.biWidth, ds.dsBmih.biBitCount) *
+                                                                   abs(ds.dsBmih.biHeight);
+                        HANDLE hMem;
+                        hMem = ::GlobalAlloc(GHND, ds.dsBmih.biSize + numColors*sizeof(RGBQUAD) + bmpSize);
+                        if ( hMem )
+                        {
+                            char* pDst = (char*)::GlobalLock(hMem);
+                            memcpy(pDst, &ds.dsBmih, ds.dsBmih.biSize);
+                            pDst += ds.dsBmih.biSize;
+                            if ( numColors > 0 )
+                            {
+                                // Get colour table.
+                                MemoryHDC hDC;
+                                SelectInHDC sDC(hDC, dib.GetHandle());
+                                ::GetDIBColorTable(hDC, 0, numColors, (RGBQUAD*)pDst);
+                                pDst += numColors*sizeof(RGBQUAD);
+                            }
+                            memcpy(pDst, dib.GetData(), bmpSize);
+                            ::GlobalUnlock(hMem);
+                            handle = ::SetClipboardData(CF_DIB, hMem);
+                        }
                     }
                 }
                 break;
@@ -684,6 +726,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 #elif wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), false, wxT("clipboard not open") );
 
+    bool bRet = false;
     switch ( format )
     {
         case wxDF_TEXT:
@@ -691,16 +734,18 @@ bool wxClipboard::AddData( wxDataObject *data )
         {
             wxTextDataObject* textDataObject = (wxTextDataObject*) data;
             wxString str(textDataObject->GetText());
-            return wxSetClipboardData(format, str.c_str());
+            bRet = wxSetClipboardData(format, str.c_str());
         }
+        break;
 
         case wxDF_BITMAP:
         case wxDF_DIB:
         {
             wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
             wxBitmap bitmap(bitmapDataObject->GetBitmap());
-            return wxSetClipboardData(format, &bitmap);
+            bRet = wxSetClipboardData(format, &bitmap);
         }
+        break;
 
 #if wxUSE_METAFILE
         case wxDF_METAFILE:
@@ -708,16 +753,16 @@ bool wxClipboard::AddData( wxDataObject *data )
 #if 1
             // TODO
             wxLogError(wxT("Not implemented because wxMetafileDataObject does not contain width and height values."));
-            return false;
 #else
             wxMetafileDataObject* metaFileDataObject =
                 (wxMetafileDataObject*) data;
             wxMetafile metaFile = metaFileDataObject->GetMetafile();
-            return wxSetClipboardData(wxDF_METAFILE, &metaFile,
+            bRet = wxSetClipboardData(wxDF_METAFILE, &metaFile,
                                       metaFileDataObject->GetWidth(),
                                       metaFileDataObject->GetHeight());
 #endif
         }
+        break;
 #endif // wxUSE_METAFILE
 
         default:
@@ -726,9 +771,11 @@ bool wxClipboard::AddData( wxDataObject *data )
 //            return wxSetClipboardData(data);
             // TODO
             wxLogError(wxT("Not implemented."));
-            return false;
         }
     }
+    // Delete owned, no longer necessary data.
+    delete data;
+    return bRet;
 #else // !wxUSE_DATAOBJ
     return false;
 #endif // wxUSE_DATAOBJ/!wxUSE_DATAOBJ
