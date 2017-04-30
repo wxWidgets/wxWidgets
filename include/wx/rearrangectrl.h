@@ -99,7 +99,6 @@ public:
     // Override this to keep our m_order array in sync with the real item state.
     virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
 
-    int DoInsertOneItem(const wxString& item, unsigned int pos) wxOVERRIDE;
     int DoInsertItems(const wxArrayStringsAdapter& items, unsigned int pos,
                       void **clientData, wxClientDataType type) wxOVERRIDE;
     void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
