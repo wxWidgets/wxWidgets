@@ -37,6 +37,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/dataobj.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #if wxUSE_METAFILE
