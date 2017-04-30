@@ -178,6 +178,7 @@ wxMSW:
 - Use cairo_win32_surface_create_with_format() to create ARGB surface from
   wxMemoryDC (Cairo >= 1.15.4).
 - Fix updating bounding box in wxDC::DrawSpline().
+- Fix placing 0RGB wxBitmaps on the clipboard.
 
 wxOSX:
 
