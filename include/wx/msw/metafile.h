@@ -14,7 +14,7 @@
 #include "wx/dc.h"
 #include "wx/gdiobj.h"
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DATAOBJ
     #include "wx/dataobj.h"
 #endif
 
@@ -155,7 +155,7 @@ bool WXDLLIMPEXP_CORE wxMakeMetaFilePlaceable(const wxString& filename, int x1, 
 // wxMetafileDataObject is a specialization of wxDataObject for metafile data
 // ----------------------------------------------------------------------------
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DATAOBJ
 
 class WXDLLIMPEXP_CORE wxMetafileDataObject : public wxDataObjectSimple
 {
@@ -182,7 +182,7 @@ protected:
     wxMetafile m_metafile;
 };
 
-#endif // wxUSE_DRAG_AND_DROP
+#endif // wxUSE_DATAOBJ
 
 #endif
     // _WX_METAFIILE_H_
