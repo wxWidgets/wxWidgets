@@ -355,15 +355,6 @@
 #       endif
 #   endif
 
-#   if wxUSE_DATAOBJ
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_DATAOBJ requires wxUSE_OLE"
-#       else
-#           undef wxUSE_DATAOBJ
-#           define wxUSE_DATAOBJ 0
-#       endif
-#   endif
-
 #   if wxUSE_OLE_AUTOMATION
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxAutomationObject requires wxUSE_OLE"
