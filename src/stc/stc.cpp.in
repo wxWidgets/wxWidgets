@@ -662,6 +662,7 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
     SendMsg(SCI_APPENDTEXT, length, (sptr_t)text);
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 // Deprecated since Scintilla 3.7.2
 void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
 {
@@ -675,6 +676,7 @@ void wxStyledTextCtrl::StartStyling(int start, int unused)
 
         SendMsg(SCI_STARTSTYLING, start, unused);
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
 //----------------------------------------------------------------------
 // Event handlers
