@@ -54,10 +54,6 @@
     #include "wx/msw/dib.h"
 #endif
 
-// wxDataObject is tied to OLE/drag and drop implementation, therefore so are
-// the functions using wxDataObject in wxClipboard
-//#define wxUSE_DATAOBJ wxUSE_DRAG_AND_DROP
-
 #if wxUSE_OLE
     // use OLE clipboard
     #define wxUSE_OLE_CLIPBOARD 1
@@ -168,6 +164,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 }
 
 
+#if !wxUSE_OLE_CLIPBOARD
 bool wxSetClipboardData(wxDataFormat dataFormat,
                         const void *data,
                         int width, int height)
@@ -340,6 +337,22 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 break;
             }
 
+        case wxDF_UNICODETEXT:
+            {
+                LPWSTR s = (LPWSTR)data;
+                DWORD size = sizeof(WCHAR) * (lstrlenW(s) + 1);
+                HANDLE hGlobalMemory = ::GlobalAlloc(GHND, size);
+                if ( hGlobalMemory )
+                {
+                    LPWSTR lpGlobalMemory = (LPWSTR)::GlobalLock(hGlobalMemory);
+                    memcpy(lpGlobalMemory, s, size);
+                    ::GlobalUnlock(hGlobalMemory);
+                }
+
+                handle = ::SetClipboardData(CF_UNICODETEXT, hGlobalMemory);
+            }
+            break;
+
         case wxDF_HTML:
             {
                 char* html = (char *)data;
@@ -506,6 +519,26 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
                 break;
             }
 
+        case wxDF_UNICODETEXT:
+            {
+                HANDLE hGlobalMemory = ::GetClipboardData(CF_UNICODETEXT);
+                if ( hGlobalMemory )
+                {
+                    DWORD size = ::GlobalSize(hGlobalMemory);
+                    if ( len )
+                        *len = size;
+                    WCHAR* s = new WCHAR[(size + 1) / sizeof(WCHAR)];
+                    if ( s )
+                    {
+                        LPWSTR lpGlobalMemory = (LPWSTR)::GlobalLock(hGlobalMemory);
+                        memcpy(s, lpGlobalMemory, size);
+                        ::GlobalUnlock(hGlobalMemory);
+                        retval = s;
+                    }
+                }
+            }
+            break;
+
         default:
             {
                 HANDLE hGlobalMemory = ::GetClipboardData(dataFormat);
@@ -538,6 +571,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 
     return retval;
 }
+#endif // !wxUSE_OLE_CLIPBOARD
 
 wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat)
 {
@@ -736,6 +770,14 @@ bool wxClipboard::AddData( wxDataObject *data )
             wxTextDataObject* textDataObject = (wxTextDataObject*) data;
             wxString str(textDataObject->GetText());
             bRet = wxSetClipboardData(format, str.c_str());
+        }
+        break;
+
+        case wxDF_UNICODETEXT:
+        {
+            wxTextDataObject* textDataObject = (wxTextDataObject*)data;
+            wxString str(textDataObject->GetText());
+            bRet = wxSetClipboardData(format, str.wc_str());
         }
         break;
 
@@ -967,6 +1009,19 @@ bool wxClipboard::GetData( wxDataObject& data )
 
             textDataObject.SetText(wxString::FromAscii(s));
             delete [] s;
+
+            return true;
+        }
+
+        case wxDF_UNICODETEXT:
+        {
+            wxTextDataObject& textDataObject = (wxTextDataObject &)data;
+            WCHAR* s = (WCHAR*)wxGetClipboardData(format);
+            if ( !s )
+                return false;
+
+            textDataObject.SetText(wxString(s));
+            delete[] s;
 
             return true;
         }
