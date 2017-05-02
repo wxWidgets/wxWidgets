@@ -100,6 +100,43 @@ enum wxPenCap
 };
 
 
+/**
+    @class wxPenInfo
+
+    This class is a helper used for wxPen creation using named parameter
+    idiom: it allows to specify various wxPen attributes using the chained
+    calls to its clearly named methods instead of passing them in the fixed
+    order to wxPen constructors.
+
+    @since 3.1.0
+ */
+class wxPenInfo
+{
+public:
+
+    wxPenInfo();
+
+    explicit wxPen(const wxColour& colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
+
+    wxPenInfo& ();
+
+    wxPenInfo& Colour(const wxColour& col);
+
+    wxPenInfo& Width(int width);
+
+    wxPenInfo& Style(wxPenStyle style);
+
+    wxPenInfo& Style(wxPenStyle style);
+
+    wxPenInfo& Stipple(const wxBitmap& stipple);
+
+    wxPenInfo& Dashes(int nb_dashes, const wxDash *dash);
+
+    wxPenInfo& Join(wxPenJoin join);
+
+    wxPenInfo& Cap(wxPenCap cap);
+};
+
 
 /**
     @class wxPen
@@ -156,6 +193,11 @@ public:
         Default constructor. The pen will be uninitialised, and IsOk() will return @false.
     */
     wxPen();
+
+    /**
+        Creates a pen object using the specified pen description.
+    */
+    wxPen(const wxPenInfo& info);
 
     /**
         Constructs a pen from a colour object, pen width and style.

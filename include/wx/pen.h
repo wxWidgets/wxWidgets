@@ -59,6 +59,82 @@ enum wxPenCap
     wxCAP_BUTT
 };
 
+// ----------------------------------------------------------------------------
+// wxPenInfo describes a wxPen
+// ----------------------------------------------------------------------------
+
+class wxPenInfo
+{
+public:
+    wxPenInfo() :
+        m_colour(wxNullColour)
+    {
+        Init();
+
+        m_width = 1;
+        m_style = wxPENSTYLE_SOLID;
+    }
+
+    explicit wxPenInfo(const wxColour& colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID) :
+        m_colour((wxColour&) colour)
+    {
+        Init();
+
+        m_width = width;
+        m_style = style;
+    }
+
+    // Setters for the various attributes. All of them return the object itself
+    // so that the calls to them could be chained.
+
+    wxPenInfo& Colour(const wxColour& colour)
+        { m_colour = colour; return *this; }
+
+    wxPenInfo& Width(int width)
+        { m_width = width; return *this; }
+
+    wxPenInfo& Style(wxPenStyle style)
+        { m_style = style; return *this; }
+    wxPenInfo& Stipple(const wxBitmap& stipple)
+        { m_stipple = stipple; m_style = wxPENSTYLE_STIPPLE; return *this; }
+    wxPenInfo& Dashes(int nb_dashes, const wxDash *dash)
+        { m_nb_dashes = nb_dashes; m_dash = (wxDash *)dash; return *this; }
+    wxPenInfo& Join(wxPenJoin join)
+        { m_join = join; return *this; }
+    wxPenInfo& Cap(wxPenCap cap)
+        { m_cap = cap; return *this; }
+
+    // Accessors are mostly meant to be used by wxPen itself.
+
+    wxColour GetColour() const { return m_colour; }
+    wxBitmap* GetStipple() { return &m_stipple; }
+    wxPenStyle GetStyle() const { return m_style; }
+    wxPenJoin GetJoin() const { return m_join; }
+    wxPenCap GetCap() const { return m_cap; }
+    int GetWidth() const { return m_width; }
+    int GetDashes(wxDash **ptr) const { *ptr = m_dash; return m_nb_dashes; }
+
+private:
+    void Init()
+    {
+        m_stipple = wxNullBitmap;
+        m_nb_dashes = 0;
+        m_dash = NULL;
+        m_join = wxJOIN_ROUND;
+        m_cap = wxCAP_ROUND;
+    }
+
+    wxColour& m_colour;
+    int m_width;
+    wxBitmap m_stipple;
+    wxPenStyle m_style;
+    wxPenJoin m_join;
+    wxPenCap m_cap;
+
+    int m_nb_dashes;
+    wxDash* m_dash;
+};
+
 
 class WXDLLIMPEXP_CORE wxPenBase : public wxGDIObject
 {

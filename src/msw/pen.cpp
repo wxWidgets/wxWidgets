@@ -414,6 +414,20 @@ wxPen::wxPen(const wxBitmap& stipple, int width)
     m_refData = new wxPenRefData(stipple, width);
 }
 
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData();
+
+    M_PENDATA->SetColour(info.GetColour());
+    M_PENDATA->SetWidth(info.GetWidth());
+    M_PENDATA->SetStyle(info.GetStyle());
+    M_PENDATA->SetJoin(info.GetJoin());
+    M_PENDATA->SetCap(info.GetCap());
+    wxDash *dash;
+    int nb_dashes = info.GetDashes(&dash);
+    M_PENDATA->SetDashes(nb_dashes, dash)
+}
+
 bool wxPen::operator==(const wxPen& pen) const
 {
     const wxPenRefData *
