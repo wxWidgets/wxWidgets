@@ -114,6 +114,10 @@ public:
     int GetWidth() const { return m_width; }
     int GetDashes(wxDash **ptr) const { *ptr = m_dash; return m_nb_dashes; }
 
+    // Convenience
+
+    bool IsTransparent() const { return m_style == wxPENSTYLE_TRANSPARENT; }
+
 private:
     void Init()
     {

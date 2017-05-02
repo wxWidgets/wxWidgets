@@ -22,7 +22,7 @@
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
-#define cairo_public 
+#define cairo_public
 
 #include <cairo.h>
 #include <float.h>
@@ -286,9 +286,11 @@ class WXDLLIMPEXP_CORE wxCairoPenData : public wxCairoPenBrushBaseData
 {
 public:
     wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
+    wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
     ~wxCairoPenData();
 
     void Init();
+    void InitFromPenInfo( const wxGraphicsPenInfo& info );
 
     virtual void Apply( wxGraphicsContext* context ) wxOVERRIDE;
     virtual wxDouble GetWidth() { return m_width; }
@@ -440,7 +442,7 @@ public:
     {
         if ( !m_enableOffset )
             return false;
-        
+
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -735,12 +737,35 @@ void wxCairoPenData::Init()
 wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
     : wxCairoPenBrushBaseData(renderer, pen.GetColour(), pen.IsTransparent())
 {
+    wxDash *dashes;
+    int nb_dashes = pen.GetDashes(&dashes);
+    InitFromPenInfo(wxGraphicsPenInfo()
+        .Colour(pen.GetColour())
+        .Width(pen.GetWidth())
+        .Style(pen.GetStyle())
+        .Stipple(*pen.GetStipple())
+        .Dashes(nb_dashes, dashes)
+        .Join(pen.GetJoin())
+        .Cap(pen.GetCap())
+    );
+}
+
+wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info )
+    : wxCairoPenBrushBaseData(renderer, info.GetColour(), info.IsTransparent())
+{
+    InitFromPenInfo(info);
+}
+
+void wxCairoPenData::InitFromPenInfo( const wxGraphicsPenInfo &info )
+{
     Init();
-    m_width = pen.GetWidth();
+    m_width = info.GetWidthF();
+    if (m_width < 0)
+        m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 
-    switch ( pen.GetCap() )
+    switch ( info.GetCap() )
     {
     case wxCAP_ROUND :
         m_cap = CAIRO_LINE_CAP_ROUND;
@@ -759,7 +784,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         break;
     }
 
-    switch ( pen.GetJoin() )
+    switch ( info.GetJoin() )
     {
     case wxJOIN_BEVEL :
         m_join = CAIRO_LINE_JOIN_BEVEL;
@@ -796,7 +821,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         9.0 , 6.0 , 3.0 , 3.0
     };
 
-    switch ( pen.GetStyle() )
+    switch ( info.GetStyle() )
     {
     case wxPENSTYLE_SOLID :
         break;
@@ -826,7 +851,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
     case wxPENSTYLE_USER_DASH :
         {
             wxDash *wxdashes ;
-            m_count = pen.GetDashes( &wxdashes ) ;
+            m_count = info.GetDashes( &wxdashes ) ;
             if ((wxdashes != NULL) && (m_count > 0))
             {
                 m_userLengths = new double[m_count] ;
@@ -847,14 +872,14 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
     case wxPENSTYLE_STIPPLE :
     case wxPENSTYLE_STIPPLE_MASK :
     case wxPENSTYLE_STIPPLE_MASK_OPAQUE :
-        InitStipple(pen.GetStipple());
+        InitStipple(((wxGraphicsPenInfo&) info).GetStipple());
         break;
 
     default :
-        if ( pen.GetStyle() >= wxPENSTYLE_FIRST_HATCH
-            && pen.GetStyle() <= wxPENSTYLE_LAST_HATCH )
+        if ( info.GetStyle() >= wxPENSTYLE_FIRST_HATCH
+            && info.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
-            InitHatch(static_cast<wxHatchStyle>(pen.GetStyle()));
+            InitHatch(static_cast<wxHatchStyle>(info.GetStyle()));
         }
         break;
     }
@@ -1539,7 +1564,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     }
 
 #if defined(__WXMSW__) || defined(__WXGTK3__)
-    // if there is a mask, set the alpha bytes in the target buffer to 
+    // if there is a mask, set the alpha bytes in the target buffer to
     // fully transparent or fully opaque
 #if defined(__WXMSW__)
     if (bmp.GetMask() != NULL && !bmp.HasAlpha())
@@ -1772,7 +1797,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 : wxGraphicsContext(renderer)
 {
 #ifdef __WXMSW__
-    // wxMSW contexts always use MM_ANISOTROPIC, which messes up 
+    // wxMSW contexts always use MM_ANISOTROPIC, which messes up
     // text rendering when printing using Cairo. Switch it to MM_TEXT
     // map mode to avoid this problem.
     HDC hdc = (HDC)dc.GetHDC();
@@ -2035,7 +2060,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     if ( adjustTransformFromDC )
         ApplyTransformFromDC(dc);
 #endif // __WXMSW__
-    
+
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
@@ -2869,6 +2894,7 @@ public :
 
 
     virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE ;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE ;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE ;
 
@@ -3051,6 +3077,17 @@ wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
     if (pen.IsOk() && pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
         p.SetRefData(new wxCairoPenData( this, pen ));
+    }
+    return p;
+}
+
+wxGraphicsPen wxCairoRenderer::CreatePen(const wxGraphicsPenInfo& info)
+{
+    wxGraphicsPen p;
+    ENSURE_LOADED_OR_RETURN(p);
+    if (info.GetStyle() != wxPENSTYLE_TRANSPARENT)
+    {
+        p.SetRefData(new wxCairoPenData( this, info ));
     }
     return p;
 }

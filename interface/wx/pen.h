@@ -116,7 +116,7 @@ public:
 
     wxPenInfo();
 
-    explicit wxPen(const wxColour& colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
+    explicit wxPenInfo(const wxColour& colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
 
     wxPenInfo& ();
 

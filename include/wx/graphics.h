@@ -34,7 +34,7 @@ enum wxInterpolationQuality
     // default interpolation
     wxINTERPOLATION_DEFAULT,
     // no interpolation
-    wxINTERPOLATION_NONE, 
+    wxINTERPOLATION_NONE,
     // fast interpolation, suited for interactivity
     wxINTERPOLATION_FAST,
     // better quality
@@ -132,6 +132,49 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };
 
+// ----------------------------------------------------------------------------
+// wxGraphicsPenInfo describes a wxGraphicsPen
+// ----------------------------------------------------------------------------
+
+class wxGraphicsPenInfo : public wxPenInfo
+{
+public:
+    wxGraphicsPenInfo()
+    : wxPenInfo()
+    {
+        m_widthF = -1.0;
+    }
+
+    explicit wxGraphicsPenInfo(const wxColour& colour, double widthF = 1.0, wxPenStyle style = wxPENSTYLE_SOLID)
+    : wxPenInfo(colour, 0, style)
+    {
+        m_widthF = widthF;
+    }
+
+    // Setters for the various attributes. All of them return the object itself
+    // so that the calls to them could be chained.
+
+    wxGraphicsPenInfo& Colour(const wxColour& colour);
+
+    wxGraphicsPenInfo& Width(int width);
+
+    wxGraphicsPenInfo& Style(wxPenStyle style);
+    wxGraphicsPenInfo& Stipple(const wxBitmap& stipple);
+    wxGraphicsPenInfo& Dashes(int nb_dashes, const wxDash *dash);
+    wxGraphicsPenInfo& Join(wxPenJoin join);
+    wxGraphicsPenInfo& Cap(wxPenCap cap);
+
+    wxGraphicsPenInfo& WidthF(wxDouble widthF)
+        { m_widthF = widthF; return *this; }
+
+    // Accessors are mostly meant to be used by wxGraphicsPen itself.
+
+    wxDouble GetWidthF() const { return m_widthF; }
+
+private:
+    wxDouble m_widthF;
+};
+
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
 {
 public:
@@ -177,7 +220,7 @@ public:
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
 #endif // wxUSE_IMAGE
-    
+
     void* GetNativeBitmap() const;
 
     const wxGraphicsBitmapData* GetBitmapData() const
@@ -566,10 +609,10 @@ public:
 
     // returns the current interpolation quality
     virtual wxInterpolationQuality GetInterpolationQuality() const { return m_interpolation; }
-    
+
     // sets the interpolation quality, returns true if it supported
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
-    
+
     // returns the current compositing operator
     virtual wxCompositionMode GetCompositionMode() const { return m_composition; }
 
@@ -716,14 +759,14 @@ public:
 
     // helper to determine if a 0.5 offset should be applied for the drawing operation
     virtual bool ShouldOffset() const { return false; }
-    
-    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on 
+
+    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on
     // bitmap devices like screen, by default this is turned off
     virtual void EnableOffset(bool enable = true);
-    
+
     void DisableOffset() { EnableOffset(false); }
     bool OffsetEnabled() { return m_enableOffset; }
-    
+
 protected:
     // These fields must be initialized in the derived class ctors.
     wxDouble m_width,
