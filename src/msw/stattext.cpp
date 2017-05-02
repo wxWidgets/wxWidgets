@@ -113,7 +113,7 @@ wxSize wxStaticText::DoGetBestClientSize() const
     // controls vertically, otherwise we simply can't ensure that the text is
     // always on the same line, e.g. even with this hack wxComboBox text is
     // still not aligned to the same position.
-    heightTextTotal += 1;
+    //heightTextTotal += 1;
 
     return wxSize(widthTextMax, heightTextTotal);
 }
