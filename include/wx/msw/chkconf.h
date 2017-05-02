@@ -132,7 +132,7 @@
  * the comments in wx/setup.h.
  */
 #if wxUSE_COMPILER_TLS == 1
-    #if !wxCHECK_VISUALC_VERSION(11) || defined(_USING_V110_SDK71_)
+    #if !wxCHECK_VISUALC_VERSION(11) || defined(_USING_V110_SDK71_) || defined(_ATL_XP_TARGETING)
         #undef wxUSE_COMPILER_TLS
         #define wxUSE_COMPILER_TLS 0
     #endif
