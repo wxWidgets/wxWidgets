@@ -32,8 +32,9 @@ public:
 
 
     // ctor creates a temporary directory where we create the files which will
-    // be included in the report, use IsOk() to check for errors
-    wxDebugReport();
+    // be included in the report, use IsOk() to check for errors, specify a
+    // non-empty string to specify a custom temporary directory
+    wxDebugReport(const wxString &tmpDir = wxEmptyString);
 
     // dtor normally destroys the temporary directory created in the ctor (with
     // all the files it contains), call Reset() to prevent this from happening
@@ -131,7 +132,9 @@ private:
 class WXDLLIMPEXP_QA wxDebugReportCompress : public wxDebugReport
 {
 public:
-    wxDebugReportCompress() { }
+    // pass a non-empty string to specify a custom temporary directory to be
+    // used for report construction
+    wxDebugReportCompress(const wxString &tmpDir = wxEmptyString);
 
     // you can optionally specify the directory and/or name of the file where
     // the debug report should be generated, a default location under the

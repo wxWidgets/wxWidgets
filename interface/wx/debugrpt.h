@@ -63,8 +63,10 @@ class wxDebugReportCompress : public wxDebugReport
 public:
     /**
         Default constructor does nothing special.
+
+        @see wxDebugReport::wxDebugReport(const wxString &tmpDir)
     */
-    wxDebugReportCompress();
+    wxDebugReportCompress(const wxString &tmpDir = wxEmptyString);
 
     /**
         Set the directory where the debug report should be generated.
@@ -164,8 +166,10 @@ public:
     /**
         The constructor creates a temporary directory where the files that will
         be included in the report are created. Use IsOk() to check for errors.
+        Specify a non-empty string to use a custom directory for report
+        construction.
     */
-    wxDebugReport();
+    wxDebugReport(const wxString &tmpDir = wxEmptyString);
 
     /**
         The destructor normally destroys the temporary directory created in the
@@ -221,8 +225,8 @@ public:
         is copied to a file in the debug report directory with the same name.
         Otherwise the file will be searched in the temporary directory returned
         by GetDirectory().
-        
-        The argument @a description only exists to be displayed to the user in 
+
+        The argument @a description only exists to be displayed to the user in
         the report summary shown by wxDebugReportPreview.
 
         @see GetDirectory(), AddText()
@@ -385,4 +389,3 @@ protected:
     */
     virtual bool OnServerReply(const wxArrayString& reply);
 };
-
