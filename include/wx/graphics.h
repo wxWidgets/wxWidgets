@@ -132,6 +132,49 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };
 
+// ----------------------------------------------------------------------------
+// wxGraphicsPenInfo describes a wxGraphicsPen
+// ----------------------------------------------------------------------------
+
+class wxGraphicsPenInfo : public wxPenInfo
+{
+public:
+    wxGraphicsPenInfo()
+    : wxPenInfo()
+    {
+        m_widthF = -1.0;
+    }
+
+    explicit wxGraphicsPenInfo(const wxColour& colour, double widthF = 1.0, wxPenStyle style = wxPENSTYLE_SOLID)
+    : wxPenInfo(colour, 0, style)
+    {
+        m_widthF = widthF;
+    }
+
+    // Setters for the various attributes. All of them return the object itself
+    // so that the calls to them could be chained.
+
+    wxGraphicsPenInfo& Colour(const wxColour& colour);
+
+    wxGraphicsPenInfo& Width(int width);
+
+    wxGraphicsPenInfo& Style(wxPenStyle style);
+    wxGraphicsPenInfo& Stipple(const wxBitmap& stipple);
+    wxGraphicsPenInfo& Dashes(int nb_dashes, const wxDash *dash);
+    wxGraphicsPenInfo& Join(wxPenJoin join);
+    wxGraphicsPenInfo& Cap(wxPenCap cap);
+
+    wxGraphicsPenInfo& WidthF(wxDouble widthF)
+        { m_widthF = widthF; return *this; }
+
+    // Accessors are mostly meant to be used by wxGraphicsPen itself.
+
+    wxDouble GetWidthF() const { return m_widthF; }
+
+private:
+    wxDouble m_widthF;
+};
+
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
 {
 public:

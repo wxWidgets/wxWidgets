@@ -253,7 +253,7 @@ enum wxInterpolationQuality
     /** default interpolation, based on type of context, in general medium quality */
     wxINTERPOLATION_DEFAULT,
     /** no interpolation */
-    wxINTERPOLATION_NONE, 
+    wxINTERPOLATION_NONE,
     /** fast interpolation, suited for interactivity */
     wxINTERPOLATION_FAST,
     /** better quality */
@@ -331,7 +331,7 @@ public:
     wxImage ConvertToImage() const;
 
     /**
-        Return the pointer to the native bitmap data. (CGImageRef for Core Graphics, 
+        Return the pointer to the native bitmap data. (CGImageRef for Core Graphics,
         cairo_surface_t for Cairo, Bitmap* for GDI+.)
 
         @since 2.9.4
@@ -679,6 +679,11 @@ public:
         Creates a native pen from a wxPen.
     */
     virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+
+    /**
+        Creates a native pen from a wxGraphicsPenInfo.
+    */
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) const;
 
     /**
         Sets the pen used for stroking.
@@ -1524,6 +1529,46 @@ class wxGraphicsFont : public wxGraphicsObject
 {
 public:
 
+};
+
+
+/**
+    @class wxGraphicsPenInfo
+
+    This class is a helper used for wxGraphicsPen creation using named parameter
+    idiom: it allows to specify various wxGraphicsPen attributes using the chained
+    calls to its clearly named methods instead of passing them in the fixed
+    order to wxGraphicsPen constructors.
+
+    @since 3.1.0
+ */
+class wxGraphicsPenInfo : public wxPenInfo
+{
+public:
+
+    wxGraphicsPenInfo();
+
+    explicit wxGraphicsPenInfo(const wxColour& colour, double widthF = 1.0, wxPenStyle style = wxPENSTYLE_SOLID);
+
+    wxGraphicsPenInfo& ();
+
+    wxGraphicsPenInfo& Colour(const wxColour& col);
+
+    wxGraphicsPenInfo& Width(int width);
+
+    wxGraphicsPenInfo& WidthF(wxDouble widthF);
+
+    wxGraphicsPenInfo& Style(wxPenStyle style);
+
+    wxGraphicsPenInfo& Style(wxPenStyle style);
+
+    wxGraphicsPenInfo& Stipple(const wxBitmap& stipple);
+
+    wxGraphicsPenInfo& Dashes(int nb_dashes, const wxDash *dash);
+
+    wxGraphicsPenInfo& Join(wxPenJoin join);
+
+    wxGraphicsPenInfo& Cap(wxPenCap cap);
 };
 
 
