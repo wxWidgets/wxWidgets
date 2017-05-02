@@ -17,6 +17,8 @@
 
     @library{wxcore}
     @category{help}
+
+    @see @ref wxTipWindow
 */
 class wxToolTip : public wxObject
 {
