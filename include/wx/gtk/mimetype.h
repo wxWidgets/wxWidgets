@@ -18,7 +18,7 @@
 #include "wx/msw/mimetype.h"
 #endif
 
-#if wxUSE_MIMETYPE
+#if wxUSE_MIMETYPE && defined(__UNIX__)
 
 class WXDLLIMPEXP_CORE wxGTKMimeTypesManagerImpl : public wxMimeTypesManagerImpl
 {
@@ -33,6 +33,6 @@ public:
     wxMimeTypesManagerImpl *CreateMimeTypesManagerImpl() wxOVERRIDE;
 };
 
-#endif // wxUSE_MIMETYPE
+#endif // wxUSE_MIMETYPE && defined(__UNIX__)
 
 #endif // _WX_GTK_MIMETYPE_IMPL_H

@@ -183,7 +183,7 @@
     #define wxUSE_SECRETSTORE 0
 #endif
 
-#if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
+#if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__) && defined(__WXMSW__)
 #   undef wxUSE_CHECKLISTBOX
 #   define wxUSE_CHECKLISTBOX 0
 #endif
@@ -401,6 +401,24 @@
 #       define wxUSE_ACTIVITYINDICATOR 0
 #   endif
 #endif /* wxUSE_ACTIVITYINDICATOR */
+
+#if wxUSE_MIMETYPE && !wxUSE_REGKEY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MIMETYPE requires wxUSE_REGKEY under Windows"
+#   else
+#       undef wxUSE_REGKEY
+#       define wxUSE_REGKEY 1
+#   endif
+#endif /* wxUSE_MIMETYPE && !wxUSE_REGKEY */
+
+#if wxUSE_CONFIG_NATIVE && !wxUSE_REGKEY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CONFIG_NATIVE requires wxUSE_REGKEY under Windows"
+#   else
+#       undef wxUSE_REGKEY
+#       define wxUSE_REGKEY 1
+#   endif
+#endif /* wxUSE_MIMETYPE && !wxUSE_REGKEY */
 
 #if wxUSE_STACKWALKER && !wxUSE_DBGHELP
     /*
