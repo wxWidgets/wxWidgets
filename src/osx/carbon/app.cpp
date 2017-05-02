@@ -231,6 +231,12 @@ bool wxApp::OSXOnShouldTerminate()
     ProcessEvent(event);
     return !event.GetVeto();
 }
+
+wxMenu* wxApp::MacGetDockMenu()
+{
+    return NULL;
+}
+
 #endif
 
 #if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON
