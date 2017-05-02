@@ -78,9 +78,6 @@ run_sed configure.in \
 run_sed build/osx/wxvers.xcconfig \
     "/DYLIB_.* = /s/$ver_for_sed/$ver_string_new/"
 
-run_sed build/tools/bld_chm_exe.bat \
-    "/^SET WXW_VER=/s/$ver_for_sed/$ver_string_new/"
-
 run_sed docs/readme.txt \
     "/wxWidgets /s/$ver_for_sed/$ver_string_new/" \
     "/\//s/$ver_for_sed/$ver_string_new/" \
