@@ -1517,6 +1517,18 @@ bool wxTranslations::AddCatalog(const wxString& domain,
 }
 
 
+bool wxTranslations::AddCatalogFor(wxLanguage lang,
+                                   const wxString& domain,
+                                   wxLanguage msgIdLanguage)
+{
+    return LoadCatalog
+           (
+                domain,
+                wxLocale::GetLanguageCanonicalName(lang),
+                wxLocale::GetLanguageCanonicalName(msgIdLanguage)
+           );
+}
+
 bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang, const wxString& msgIdLang)
 {
     wxCHECK_MSG( m_loader, false, "loader can't be NULL" );

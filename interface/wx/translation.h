@@ -208,6 +208,26 @@ public:
                     const wxString& msgIdCharset);
 
     /**
+        Add a catalog for use with the specified language.
+
+        This is a generalization of AddCatalog() which loads the catalog with
+        the translations for the current locale and allows to load translations
+        for any language, not necessarily the current one. This is especially
+        useful if the system doesn't support some locale, preventing it from
+        being set, as it still allows to at least show the translations in it
+        even if the rest of the program behaviour (e.g. numeric or calendar
+        conventions) is not localized.
+
+        The additional, compared to AddCatalog(), parameter @a lang specifies
+        the language to load the translations for.
+
+        @since 3.1.1
+     */
+    bool AddCatalogFor(wxLanguage lang,
+                       const wxString& domain,
+                       wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
+
+    /**
         Check if the given catalog is loaded, and returns @true if it is.
 
         According to GNU gettext tradition, each catalog normally corresponds to
