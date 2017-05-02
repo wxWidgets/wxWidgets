@@ -151,6 +151,10 @@ wxGTK:
 - Fix wxMemoryDC::Blit() with itself as source (GTK+ 3).
 - Fix displaying labels of wxRadioBox items.
 
+wxGTK:
+
+- Implement setting link colours in wxHyperlinkCtrl for GTK+3 (Hanmac).
+
 wxMSW:
 
 - Add support for building with Microsoft Visual Studio 2017 (Tobias Taschner).
