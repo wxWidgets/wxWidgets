@@ -368,6 +368,9 @@ bool wxGtkFileCtrl::Create( wxWindow *parent,
     if ( style & wxFC_MULTIPLE )
         gtk_file_chooser_set_select_multiple( m_fcWidget, true );
 
+    if ( style & wxFC_NOSHOWHIDDEN )
+        gtk_file_chooser_set_show_hidden(m_fcWidget, true);
+
     SetWildcard( wildCard );
 
     // if defaultDir is specified it should contain the directory and
