@@ -309,7 +309,7 @@ public:
     ~wxMacCoreGraphicsPenData();
 
     void Init();
-    void InitFromPenInfo( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info );
+    void InitFromPenInfo( const wxGraphicsPenInfo& info );
     virtual void Apply( wxGraphicsContext* context );
     virtual wxDouble GetWidth() { return m_width; }
 
@@ -334,34 +334,22 @@ protected :
 wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxPen &pen ) :
     wxGraphicsObjectRefData( renderer )
 {
-    wxDash *dashes;
-    int nb_dashes = pen.GetDashes(&dashes);
-    InitFromPenInfo(renderer, wxGraphicsPenInfo()
-        .Colour(pen.GetColour())
-        .Width(pen.GetWidth())
-        .Style(pen.GetStyle())
-        .Stipple(*pen.GetStipple())
-        .Dashes(nb_dashes, dashes)
-        .Join(pen.GetJoin())
-        .Cap(pen.GetCap())
-    );
+    InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
 }
 
 wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info ) :
     wxGraphicsObjectRefData( renderer )
 {
-    InitFromPenInfo(renderer, info);
+    InitFromPenInfo(info);
 }
 
-void wxMacCoreGraphicsPenData::InitFromPenInfo( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info )
+void wxMacCoreGraphicsPenData::InitFromPenInfo( const wxGraphicsPenInfo& info )
 {
     Init();
 
     m_color.reset( wxMacCreateCGColor( info.GetColour() ) ) ;
 
     // TODO: * m_dc->m_scaleX
-    m_width = info.GetWidthF();
-    if (m_width < 0.0)
         m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = (CGFloat) 0.1;
@@ -459,11 +447,11 @@ void wxMacCoreGraphicsPenData::InitFromPenInfo( wxGraphicsRenderer* renderer, co
 
         case wxPENSTYLE_STIPPLE:
             {
-                wxBitmap* bmp = info.GetStipple();
-                if ( bmp && bmp->IsOk() )
+                wxBitmap bmp = info.GetStipple();
+                if ( bmp.IsOk() )
                 {
                     m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
-                    m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
+                    m_pattern.reset( (CGPatternRef) *( new ImagePattern( &bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                     m_patternColorComponents = new CGFloat[1] ;
                     m_patternColorComponents[0] = (CGFloat) 1.0;
                     m_isPattern = true;
@@ -2746,7 +2734,7 @@ wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
-    if ( info.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( info.IsTransparent() )
         return wxNullGraphicsPen;
     else
     {

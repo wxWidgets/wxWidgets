@@ -2462,7 +2462,7 @@ public:
 
     wxD2DPenData(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, const wxGraphicsPenInfo& info);
 
-    void InitFromPenInfo(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory);
+    void Init(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory);
 
     void CreateStrokeStyle(ID2D1Factory* const direct2dfactory);
 
@@ -2480,7 +2480,7 @@ public:
 private:
     // We store the source info for later when we need to recreate the
     // device-dependent resources.
-    const wxGraphicsPenInfo& m_sourceInfo;
+    const wxGraphicsPenInfo m_sourceInfo;
 
     // A stroke style is a device-independent resource.
     // Describes the caps, miter limit, line join, and dash information.
@@ -2502,45 +2502,32 @@ wxD2DPenData::wxD2DPenData(
     ID2D1Factory* direct2dFactory,
     const wxPen& pen) :
         wxGraphicsObjectRefData(renderer),
-        m_sourceInfo(wxGraphicsPenInfo())
+        m_sourceInfo(wxGraphicsPenInfo::CreateFromPen(pen)),
         m_width(pen.GetWidth())
 {
-    wxDash* dashes;
-    int nb_dashes = pen.GetDashes(&dashes);
-    m_sourceInfo
-        .Colour(pen.GetColour())
-        .Width(pen.GetWidth())
-        .Style(pen.GetStyle())
-        .Stipple(*pen.GetStipple())
-        .Dashes(nb_dashes, dashes)
-        .Join(pen.GetJoin())
-        .Cap(pen.GetCap())
-    InitFromPenInfo(renderer, direct2dFactory);
+    Init(renderer, direct2dFactory);
 }
 
 wxD2DPenData::wxD2DPenData(
     wxGraphicsRenderer* renderer,
     ID2D1Factory* direct2dFactory,
     const wxGraphicsPenInfo& info)
-    : wxGraphicsObjectRefData(renderer), m_sourceInfo(Info), m_width(info.GetWidthF())
+    : wxGraphicsObjectRefData(renderer), m_sourceInfo(info), m_width(info.GetWidth())
 {
-    if (m_width < 0.0)
-        m_width = info.GetWidth();
-
-    InitFromPenInfo(renderer, direct2dFactory);
+    Init(renderer, direct2dFactory);
 }
 
-void wxD2DPenData::InitFromPenInfo(
+void wxD2DPenData::Init(
     wxGraphicsRenderer* renderer,
     ID2D1Factory* direct2dFactory)
 {
-    CreateStrokeStyle(direct2dFactory, info);
+    CreateStrokeStyle(direct2dFactory);
 
     wxBrush strokeBrush;
 
     if (m_sourceInfo.GetStyle() == wxPENSTYLE_STIPPLE)
     {
-        strokeBrush.SetStipple(*(m_sourceInfo.GetStipple()));
+        strokeBrush.SetStipple(m_sourceInfo.GetStipple());
         strokeBrush.SetStyle(wxBRUSHSTYLE_STIPPLE);
     }
     else if(wxIsHatchPenStyle(m_sourceInfo.GetStyle()))

@@ -265,7 +265,7 @@ public:
     ~wxGDIPlusPenData();
 
     void Init();
-    void InitFromPenInfo( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
+    void InitFromPenInfo( const wxGraphicsPenInfo &info );
 
     virtual wxDouble GetWidth() { return m_width; }
     virtual Pen* GetGDIPlusPen() { return m_pen; }
@@ -650,31 +650,19 @@ void wxGDIPlusPenData::Init()
 wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
 : wxGraphicsObjectRefData(renderer)
 {
-    wxDash *dashes;
-    int nb_dashes = pen.GetDashes(&dashes);
-    InitFromPenInfo(renderer, wxGraphicsPenInfo()
-        .Colour(pen.GetColour())
-        .Width(pen.GetWidth())
-        .Style(pen.GetStyle())
-        .Stipple(*pen.GetStipple())
-        .Dashes(nb_dashes, dashes)
-        .Join(pen.GetJoin())
-        .Cap(pen.GetCap())
-    );
+    InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
 }
 
 wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info )
 : wxGraphicsObjectRefData(renderer)
 {
-    InitFromPenInfo(renderer, info);
+    InitFromPenInfo(info);
 }
 
-void wxGDIPlusPenData::InitFromPenInfo( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info )
+void wxGDIPlusPenData::InitFromPenInfo( const wxGraphicsPenInfo &info )
 {
     Init();
-    m_width = info.GetWidthF();
-    if (m_info < 0.0)
-        m_width = info.GetWidth();
+    m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 
@@ -765,12 +753,12 @@ void wxGDIPlusPenData::InitFromPenInfo( wxGraphicsRenderer* renderer, const wxGr
         break;
     case wxPENSTYLE_STIPPLE :
         {
-            wxBitmap* bmp = info.GetStipple();
-            if ( bmp && bmp->IsOk() )
+            wxBitmap bmp = info.GetStipple();
+            if ( bmp.IsOk() )
             {
-                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
+                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
 #if wxUSE_PALETTE
-                    (HPALETTE)bmp->GetPalette()->GetHPALETTE()
+                    (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
                     NULL
 #endif
@@ -2491,7 +2479,7 @@ wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
 wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsPen);
-    if ( !info.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( info.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return wxNullGraphicsPen;
     else
     {

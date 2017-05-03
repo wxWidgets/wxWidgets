@@ -150,9 +150,7 @@ wxPen::wxPen(const wxPenInfo& info)
     M_PENDATA->m_style = info.GetStyle();
     M_PENDATA->m_join = info.GetJoin();
     M_PENDATA->m_cap = info.GetCap();
-    wxDash *dashes;
-    M_PENDATA->m_nbDash = info.GetDashes(&dashes);
-    M_PENDATA->m_dash = dashes;
+    M_PENDATA->m_nbDash = info.GetDashes(&M_PENDATA->m_dash);
 
     RealizeResource();
 }

@@ -1532,6 +1532,7 @@ public:
 };
 
 
+
 /**
     @class wxGraphicsPenInfo
 
@@ -1540,23 +1541,26 @@ public:
     calls to its clearly named methods instead of passing them in the fixed
     order to wxGraphicsPen constructors.
 
-    @since 3.1.0
+    Typically you would use wxGraphicsPenInfo with a wxGraphicsContext:
+    @code
+    wxGraphicsContext ctx = wxGraphicsContext::Create(dc);
+
+    ctx.SetPen(wxGraphicsPenInfo(*wxBLUE, 1.25));
+    @endcode
+
+    @since 3.1.1
  */
-class wxGraphicsPenInfo : public wxPenInfo
+class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
 {
 public:
 
-    wxGraphicsPenInfo();
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(), wxDouble width = 1.0, wxPenStyle style = wxPENSTYLE_SOLID);
 
-    explicit wxGraphicsPenInfo(const wxColour& colour, double widthF = 1.0, wxPenStyle style = wxPENSTYLE_SOLID);
-
-    wxGraphicsPenInfo& ();
+    static wxGraphicsPenInfo CreateFromPen(const wxPen& pen);
 
     wxGraphicsPenInfo& Colour(const wxColour& col);
 
-    wxGraphicsPenInfo& Width(int width);
-
-    wxGraphicsPenInfo& WidthF(wxDouble widthF);
+    wxGraphicsPenInfo& Width(wxDouble width);
 
     wxGraphicsPenInfo& Style(wxPenStyle style);
 

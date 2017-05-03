@@ -738,17 +738,7 @@ void wxCairoPenData::Init()
 wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
     : wxCairoPenBrushBaseData(renderer, pen.GetColour(), pen.IsTransparent())
 {
-    wxDash *dashes;
-    int nb_dashes = pen.GetDashes(&dashes);
-    InitFromPenInfo(wxGraphicsPenInfo()
-        .Colour(pen.GetColour())
-        .Width(pen.GetWidth())
-        .Style(pen.GetStyle())
-        .Stipple(*pen.GetStipple())
-        .Dashes(nb_dashes, dashes)
-        .Join(pen.GetJoin())
-        .Cap(pen.GetCap())
-    );
+    InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
 }
 
 wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info )
@@ -760,8 +750,6 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
 void wxCairoPenData::InitFromPenInfo( const wxGraphicsPenInfo &info )
 {
     Init();
-    m_width = info.GetWidthF();
-    if (m_width < 0)
         m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
@@ -873,7 +861,10 @@ void wxCairoPenData::InitFromPenInfo( const wxGraphicsPenInfo &info )
     case wxPENSTYLE_STIPPLE :
     case wxPENSTYLE_STIPPLE_MASK :
     case wxPENSTYLE_STIPPLE_MASK_OPAQUE :
-        InitStipple(((wxGraphicsPenInfo&) info).GetStipple());
+        {
+            wxBitmap stipple = info.GetStipple();
+            InitStipple(&stipple);
+        }
         break;
 
     default :

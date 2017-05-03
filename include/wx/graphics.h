@@ -22,6 +22,7 @@
 #include "wx/font.h"
 #include "wx/image.h"
 #include "wx/vector.h"
+#include "wx/pen.h"
 
 enum wxAntialiasMode
 {
@@ -136,43 +137,40 @@ protected:
 // wxGraphicsPenInfo describes a wxGraphicsPen
 // ----------------------------------------------------------------------------
 
-class wxGraphicsPenInfo : public wxPenInfo
+class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
 {
 public:
-    wxGraphicsPenInfo()
-    : wxPenInfo()
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(), wxDouble width = 1.0, wxPenStyle style = wxPENSTYLE_SOLID)
+    : wxPenInfoBase(colour, style)
     {
-        m_widthF = -1.0;
+        m_width = width;
     }
 
-    explicit wxGraphicsPenInfo(const wxColour& colour, double widthF = 1.0, wxPenStyle style = wxPENSTYLE_SOLID)
-    : wxPenInfo(colour, 0, style)
+    static wxGraphicsPenInfo CreateFromPen(const wxPen& pen)
     {
-        m_widthF = widthF;
+        wxDash *dashes;
+        int nb_dashes = pen.GetDashes(&dashes);
+        return wxGraphicsPenInfo()
+            .Colour(pen.GetColour())
+            .Width(pen.GetWidth())
+            .Style(pen.GetStyle())
+            .Stipple(*pen.GetStipple())
+            .Dashes(nb_dashes, dashes)
+            .Join(pen.GetJoin())
+            .Cap(pen.GetCap());
     }
 
-    // Setters for the various attributes. All of them return the object itself
-    // so that the calls to them could be chained.
+    // Setters
 
-    wxGraphicsPenInfo& Colour(const wxColour& colour);
+    wxGraphicsPenInfo& Width(wxDouble width)
+        { m_width = width; return *this; }
 
-    wxGraphicsPenInfo& Width(int width);
+    // Accessors
 
-    wxGraphicsPenInfo& Style(wxPenStyle style);
-    wxGraphicsPenInfo& Stipple(const wxBitmap& stipple);
-    wxGraphicsPenInfo& Dashes(int nb_dashes, const wxDash *dash);
-    wxGraphicsPenInfo& Join(wxPenJoin join);
-    wxGraphicsPenInfo& Cap(wxPenCap cap);
-
-    wxGraphicsPenInfo& WidthF(wxDouble widthF)
-        { m_widthF = widthF; return *this; }
-
-    // Accessors are mostly meant to be used by wxGraphicsPen itself.
-
-    wxDouble GetWidthF() const { return m_widthF; }
+    wxDouble GetWidth() const { return m_width; }
 
 private:
-    wxDouble m_widthF;
+    wxDouble m_width;
 };
 
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
@@ -523,6 +521,8 @@ public:
     wxGraphicsPath CreatePath() const;
 
     virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& pen) const;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) const;
 
@@ -905,6 +905,8 @@ public:
     // Paints
 
     virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
+
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) = 0;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) = 0;
 

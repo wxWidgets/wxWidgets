@@ -827,6 +827,11 @@ wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen) const
     return GetRenderer()->CreatePen(pen);
 }
 
+wxGraphicsPen wxGraphicsContext::CreatePen(const wxGraphicsPenInfo& info) const
+{
+    return GetRenderer()->CreatePen(info);
+}
+
 wxGraphicsBrush wxGraphicsContext::CreateBrush(const wxBrush& brush ) const
 {
     return GetRenderer()->CreateBrush(brush);
