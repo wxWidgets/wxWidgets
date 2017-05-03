@@ -1374,7 +1374,7 @@
 
 // Use wxDropTarget and wxDropSource classes for drag and drop (this is
 // different from "built in" drag and drop in wxTreeCtrl which is always
-// available). Requires wxUSE_DATAOBJ.
+// available). Requires wxUSE_DATAOBJ and wxUSE_OLE.
 //
 // Default is 1.
 //

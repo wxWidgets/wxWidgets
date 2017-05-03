@@ -363,6 +363,15 @@
 #           define wxUSE_OLE_AUTOMATION 0
 #       endif
 #   endif
+
+#   if wxUSE_DRAG_AND_DROP
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_DRAG_AND_DROP requires wxUSE_OLE"
+#       else
+#           undef wxUSE_DRAG_AND_DROP
+#           define wxUSE_DRAG_AND_DROP 0
+#       endif
+#   endif
 #endif /* !wxUSE_OLE */
 
 #if !wxUSE_ACTIVEX
