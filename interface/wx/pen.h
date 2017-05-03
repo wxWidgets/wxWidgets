@@ -100,6 +100,7 @@ enum wxPenCap
 };
 
 
+
 /**
     @class wxPenInfo
 
@@ -108,17 +109,18 @@ enum wxPenCap
     calls to its clearly named methods instead of passing them in the fixed
     order to wxPen constructors.
 
-    @since 3.1.0
+    For instance, to create a blue pen with a width of 0:
+    @code
+    wxPen pen(wxPenInfo(*wxBLUE, 0));
+    @endcode
+
+    @since 3.1.1
  */
-class wxPenInfo
+class wxPenInfo : public wxPenInfoBase<wxPenInfo>
 {
 public:
 
-    wxPenInfo();
-
-    explicit wxPenInfo(const wxColour& colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
-
-    wxPenInfo& ();
+    explicit wxPenInfo(const wxColour& colour = wxColour(), int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
 
     wxPenInfo& Colour(const wxColour& col);
 
@@ -136,6 +138,7 @@ public:
 
     wxPenInfo& Cap(wxPenCap cap);
 };
+
 
 
 /**

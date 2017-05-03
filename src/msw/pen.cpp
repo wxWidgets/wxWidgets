@@ -425,7 +425,7 @@ wxPen::wxPen(const wxPenInfo& info)
     M_PENDATA->SetCap(info.GetCap());
     wxDash *dash;
     int nb_dashes = info.GetDashes(&dash);
-    M_PENDATA->SetDashes(nb_dashes, dash)
+    M_PENDATA->SetDashes(nb_dashes, dash);
 }
 
 bool wxPen::operator==(const wxPen& pen) const

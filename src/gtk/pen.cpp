@@ -111,9 +111,7 @@ wxPen::wxPen(const wxPenInfo& info)
     M_PENDATA->m_style = info.GetStyle();
     M_PENDATA->m_joinStyle = info.GetJoin();
     M_PENDATA->m_capStyle = info.GetCap();
-    wxDash *dashes;
-    M_PENDATA->m_countDashes = info.GetDashes(&dashes);
-    M_PENDATA->m_dash = dashes;
+    M_PENDATA->m_countDashes = info.GetDashes(&M_PENDATA->m_dash);
 }
 
 wxPen::~wxPen()
