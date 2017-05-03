@@ -1115,7 +1115,7 @@
 //
 // wxNotificationMessage allows to show non-intrusive messages to the user
 // using balloons, banners, popups or whatever is the appropriate method for
-// the current platform.
+// the current platform. Requires wxUSE_OLE if wxUSE_WINRT is 1.
 //
 // Default is 1.
 //
