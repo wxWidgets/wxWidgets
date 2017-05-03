@@ -1630,7 +1630,7 @@ wxBitmap wxMask::GetBitmap() const
     wxBitmap bmp;
     bmp.SetHBITMAP((WXHBITMAP)hNewBitmap);
     bmp.SetSize(bm.bmWidth, bm.bmHeight);
-    bmp.SetDepth(bm.bmPlanes);
+    bmp.SetDepth(bm.bmBitsPixel);
 
     return bmp;
 }

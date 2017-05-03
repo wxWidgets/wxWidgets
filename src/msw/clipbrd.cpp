@@ -478,7 +478,7 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
                 wxBM->SetHBITMAP((WXHBITMAP) hNewBitmap);
                 wxBM->SetWidth(bm.bmWidth);
                 wxBM->SetHeight(bm.bmHeight);
-                wxBM->SetDepth(bm.bmPlanes);
+                wxBM->SetDepth(bm.bmBitsPixels);
                 retval = wxBM;
                 break;
             }

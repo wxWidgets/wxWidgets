@@ -1122,7 +1122,7 @@ bool wxBitmapDataObject2::SetData(size_t WXUNUSED(len), const void *pBuf)
         wxLogLastError(wxT("GetObject(HBITMAP)"));
     }
 
-    wxBitmap bitmap(bmp.bmWidth, bmp.bmHeight, bmp.bmPlanes);
+    wxBitmap bitmap(bmp.bmWidth, bmp.bmHeight, bmp.bmBitsPixel);
     bitmap.SetHBITMAP((WXHBITMAP)hbmp);
 
     if ( !bitmap.IsOk() ) {
@@ -1231,6 +1231,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 
         m_bitmap.SetWidth(pbmih->biWidth);
         m_bitmap.SetHeight(pbmih->biHeight);
+        m_bitmap.SetDepth(pbmih->biBitCount);
     }
     else // CF_BITMAP
     {
@@ -1245,7 +1246,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 
         m_bitmap.SetWidth(bmp.bmWidth);
         m_bitmap.SetHeight(bmp.bmHeight);
-        m_bitmap.SetDepth(bmp.bmPlanes);
+        m_bitmap.SetDepth(bmp.bmBitsPixel);
     }
 
     m_bitmap.SetHBITMAP((WXHBITMAP)hbmp);
