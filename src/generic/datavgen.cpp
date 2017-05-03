@@ -2373,15 +2373,19 @@ void wxDataViewMainWindow::DrawCellBackground( wxDataViewRenderer* cell, wxDC& d
     // don't overlap the horizontal rules
     if ( m_owner->HasFlag(wxDV_HORIZ_RULES) )
     {
-        rectBg.x++;
-        rectBg.width--;
+        rectBg.y++;
+        rectBg.height--;
     }
 
     // don't overlap the vertical rules
     if ( m_owner->HasFlag(wxDV_VERT_RULES) )
     {
-        rectBg.y++;
-        rectBg.height--;
+        // same note as in OnPaint handler above
+        // NB: Vertical rules are drawn in the last pixel of a column so that
+        //     they align perfectly with native MSW wxHeaderCtrl as well as for
+        //     consistency with MSW native list control. There's no vertical
+        //     rule at the most-left side of the control.
+        rectBg.width--;
     }
 
     cell->RenderBackground(&dc, rectBg);
