@@ -742,11 +742,7 @@ $(OBJS)\test_xmltest.obj: .\xml\xmltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\xml\xmltest.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-<<<<<<< HEAD
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) -i. $(__DLLFLAG_p_3) -i.\..\samples -dNOPCH .\..\samples\sample.rc
-=======
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) -i. $(__DLLFLAG_p_7) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\samples\sample.rc
->>>>>>> cbd92ce... Fix resource compiler include path for Borland.
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) -i. $(__DLLFLAG_p_3) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\samples\sample.rc
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) -H .\dummy.cpp
