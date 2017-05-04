@@ -433,7 +433,7 @@ public:
                          const wxString& path);
 
     /**
-        Retrieve the new absolute path of the file/directory.
+        Retrieve the absolute path of the file/directory the user has just selected.
     */
     wxString GetPath() const;
 
