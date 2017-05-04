@@ -1708,10 +1708,11 @@
 // Default is 1 if the compiler supports it, 0 for old MinGW.
 //
 // Recommended setting: 1, there is not much gain in disabling this
-#if defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__)
-    #define wxUSE_DBGHELP 1
+#define wxHAVE_DEBUGHLP_API 1
+#if wxHAVE_DEBUGHLP_API && (defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__))
+    #define wxUSE_DBGHELP (1==1)
 #else
-    #define wxUSE_DBGHELP 0
+    #define wxUSE_DBGHELP (0==1)
 #endif
 
 // Set this to 1 to be able to use wxCrashReport::Generate() to create mini

@@ -715,10 +715,11 @@
 #define wxUSE_TIMEPICKCTRL_GENERIC 0
 
 
-#if defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__)
-    #define wxUSE_DBGHELP 0
+#define wxHAVE_DEBUGHLP_API 0
+#if wxHAVE_DEBUGHLP_API && (defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__))
+    #define wxUSE_DBGHELP (1==1)
 #else
-    #define wxUSE_DBGHELP 0
+    #define wxUSE_DBGHELP (0==1)
 #endif
 
 #define wxUSE_CRASHREPORT 0
