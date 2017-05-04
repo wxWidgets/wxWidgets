@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/gtk/wx/webview_webkit2_extension.h
+// Name:        include/wx/gtk/private/webview_webkit2_extension.h
 // Purpose:     Common elements for webview webkit2 extension
 // Author:      Scott Talbert
 // Copyright:   (c) 2017 Scott Talbert

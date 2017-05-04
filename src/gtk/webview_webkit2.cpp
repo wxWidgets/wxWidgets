@@ -18,7 +18,7 @@
 #include "wx/filesys.h"
 #include "wx/base64.h"
 #include "wx/log.h"
-#include "wx/gtk/webview_webkit2_extension.h"
+#include "wx/gtk/private/webview_webkit2_extension.h"
 #include <webkit2/webkit2.h>
 
 // ----------------------------------------------------------------------------
