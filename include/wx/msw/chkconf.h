@@ -183,11 +183,6 @@
     #define wxUSE_SECRETSTORE 0
 #endif
 
-#if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
-#   undef wxUSE_CHECKLISTBOX
-#   define wxUSE_CHECKLISTBOX 0
-#endif
-
 #if wxUSE_SPINCTRL
 #   if !wxUSE_SPINBTN
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -196,6 +191,16 @@
 #           undef wxUSE_SPINBTN
 #           define wxUSE_SPINBTN 1
 #       endif
+#   endif
+#endif
+
+/* wxMSW-specific checks: notice that this file is also used with wxUniv
+   and can even be used with wxGTK, when building it under Windows.
+ */
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#   if !wxUSE_OWNER_DRAWN
+#       undef wxUSE_CHECKLISTBOX
+#       define wxUSE_CHECKLISTBOX 0
 #   endif
 #endif
 

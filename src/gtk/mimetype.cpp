@@ -19,6 +19,7 @@
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/object.h"
 
+#if defined(__UNIX__)
 wxString wxGTKMimeTypesManagerImpl::GetIconFromMimeType(const wxString& mime)
 {
     wxString icon;
@@ -58,6 +59,7 @@ wxString wxGTKMimeTypesManagerImpl::GetIconFromMimeType(const wxString& mime)
 #endif // GTK_CHECK_VERSION(2,14,0)
     return icon;
 }
+#endif // defined(__UNIX__)
 
 wxMimeTypesManagerImpl *wxGTKMimeTypesManagerFactory::CreateMimeTypesManagerImpl()
 {
