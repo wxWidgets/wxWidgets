@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/defs.h"
-#include "wx/gtk/webview_webkit2_extension.h"
+#include "wx/gtk/private/webview_webkit2_extension.h"
 #include <webkit2/webkit-web-extension.h>
 #define WEBKIT_DOM_USE_UNSTABLE_API
 #include <webkitdom/WebKitDOMDOMSelection.h>
