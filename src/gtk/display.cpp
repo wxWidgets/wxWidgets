@@ -20,6 +20,8 @@
 #endif
 #include "wx/gtk/private/gtk2-compat.h"
 
+#if !defined(GDK_WINDOWING_WIN32)
+
 GtkWidget* wxGetRootWindow();
 
 //-----------------------------------------------------------------------------
@@ -239,3 +241,5 @@ wxDisplayFactory* wxDisplay::CreateFactory()
     return new wxDisplayFactoryGTK;
 }
 #endif // wxUSE_DISPLAY
+
+#endif // !defined(GDK_WINDOWING_WIN32)
