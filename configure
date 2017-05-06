@@ -24491,7 +24491,9 @@ rm -f core conftest.err conftest.$ac_objext \
                 if test -z "$wx_cv_lib_gtk"; then
                                         wx_cv_lib_gtk=none
                 else
-                                        GTK_LIBS="$GTK_LIBS -lX11"
+                    if test "$USE_WIN32" != 1 ; then
+                                                GTK_LIBS="$GTK_LIBS -lX11"
+                    fi
 
                                                             wx_cv_cflags_gtk=$GTK_CFLAGS
                     wx_cv_libs_gtk=$GTK_LIBS
@@ -31092,7 +31094,7 @@ else
 $as_echo "$as_me: WARNING: wxGetDiskSpace() function won't work without statfs()" >&2;}
 fi
 
-if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
+if test "$wxUSE_SNGLINST_CHECKER" = "yes" -a "$USE_WIN32" != 1 ; then
     for ac_func in fcntl flock
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
@@ -33580,7 +33582,7 @@ fi
 
 
 if test "$wxUSE_FSWATCHER" = "yes"; then
-                if test "$wxUSE_MSW" != "1"; then
+                if test "$USE_WIN32" != 1; then
         if test "$wxUSE_UNIX" = "yes"; then
             for ac_header in sys/inotify.h
 do :
@@ -35827,7 +35829,7 @@ done
 
 
 if test "$wxUSE_SOCKETS" = "yes"; then
-        if test "$TOOLKIT" != "MSW"; then
+        if test "$USE_WIN32" != 1 ; then
                 ac_fn_c_check_func "$LINENO" "socket" "ac_cv_func_socket"
 if test "x$ac_cv_func_socket" = xyes; then :
 
@@ -35890,7 +35892,7 @@ fi
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
-                if test "$TOOLKIT" != "MSW"; then
+        if test "$USE_WIN32" != 1 ; then
                                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking what is the type of the third argument of getsockname" >&5
 $as_echo_n "checking what is the type of the third argument of getsockname... " >&6; }
 if ${wx_cv_type_getsockname3+:} false; then :

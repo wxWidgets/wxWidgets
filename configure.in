@@ -2892,8 +2892,10 @@ if test "$wxUSE_GUI" = "yes"; then
                     dnl looks better in AC_MSG_RESULT
                     wx_cv_lib_gtk=none
                 else
-                    dnl we use symbols from X11 directly so we should link with it
-                    GTK_LIBS="$GTK_LIBS -lX11"
+                    if test "$USE_WIN32" != 1 ; then
+                        dnl we use symbols from X11 directly so we should link with it
+                        GTK_LIBS="$GTK_LIBS -lX11"
+                    fi
 
                     dnl we need to cache GTK_CFLAGS and GTK_LIBS for the
                     dnl subsequent runs
@@ -4551,7 +4553,7 @@ fi
 
 dnl check for fcntl() or at least flock() needed by Unix implementation of
 dnl wxSingleInstanceChecker
-if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
+if test "$wxUSE_SNGLINST_CHECKER" = "yes" -a "$USE_WIN32" != 1 ; then
     AC_CHECK_FUNCS(fcntl flock, break)
 
     if test "$ac_cv_func_fcntl" != "yes" -a "$ac_cv_func_flock" != "yes"; then
@@ -5506,10 +5508,10 @@ dnl File system watcher checks
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_FSWATCHER" = "yes"; then
-    dnl wxFileSystemWatcher is always available under MSW but we need either
+    dnl wxFileSystemWatcher is always available under Windows but we need either
     dnl inotify or kqueue support in the system for it under Unix (this
     dnl includes OS X which does have kqueue but no other platforms)
-    if test "$wxUSE_MSW" != "1"; then
+    if test "$USE_WIN32" != 1; then
         if test "$wxUSE_UNIX" = "yes"; then
             AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
             if test "$ac_cv_header_sys_inotify_h" = "yes"; then
@@ -6167,8 +6169,8 @@ dnl wxSocket
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_SOCKETS" = "yes"; then
-    dnl under MSW we always have sockets
-    if test "$TOOLKIT" != "MSW"; then
+    dnl under Windows we always have sockets
+    if test "$USE_WIN32" != 1 ; then
         dnl under Solaris and OS/2, socket functions live in -lsocket
         AC_CHECK_FUNC(socket,,
             [
@@ -6187,10 +6189,8 @@ if test "$wxUSE_SOCKETS" = "yes"; then
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
-    dnl this test may be appropriate if building under cygwin
-    dnl right now I'm assuming it also uses the winsock stuff
-    dnl like mingw does..  -- RL
-    if test "$TOOLKIT" != "MSW"; then
+    dnl under Windows we do not use getsockname
+    if test "$USE_WIN32" != 1 ; then
         dnl determine the type of third argument for getsockname
         dnl This test needs to be done in C++ mode since gsocket.cpp now
         dnl is C++ code and pointer cast that are possible even without
