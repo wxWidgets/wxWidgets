@@ -242,6 +242,11 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
    in release configuration and/or as a shared library instead of the
    default static one.
 
+   NOTE: For parallel builds, i.e. using -jN make option, please run
+         "mingw32-make -jN ... setup_h" first and then rerun the full
+         make command without "setup_h" at the end to work around a bug
+         in the current makefiles.
+
 2. To verify your build, change the directory to samples\minimal and
    run the same mingw32-make command (with the same parameters there),
    this should create a working minimal wxWidgets sample.
