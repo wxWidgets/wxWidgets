@@ -509,7 +509,7 @@ public:
     void UseAppInfo(int info);
 
     /**
-        Returns the current file layout.
+        Sets the current file layout.
 
         The default layout is @c FileLayout_Classic for compatibility, however
         newer applications are encouraged to set it to @c FileLayout_XDG on
