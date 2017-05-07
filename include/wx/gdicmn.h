@@ -159,7 +159,7 @@ enum wxStockCursor
 // macros
 // ---------------------------------------------------------------------------
 
-#if defined(__WINDOWS__) || defined(__WXPM__)
+#if (defined(__WINDOWS__) && wxUSE_WXDIB) || defined(__WXPM__)
     #define wxHAS_IMAGES_IN_RESOURCES
 #endif
 
@@ -173,10 +173,7 @@ enum wxStockCursor
     wxIcon *icon = new wxIcon(sample_xpm);    // On wxGTK/Linux
  */
 
-#ifdef __WINDOWS__
-    // Load from a resource
-    #define wxICON(X) wxIcon(wxT(#X))
-#elif defined(__WXPM__)
+#ifdef wxHAS_IMAGES_IN_RESOURCES
     // Load from a resource
     #define wxICON(X) wxIcon(wxT(#X))
 #elif defined(__WXDFB__)
@@ -203,7 +200,7 @@ enum wxStockCursor
    under Unix bitmaps live in XPMs and under Windows they're in ressources.
  */
 
-#if defined(__WINDOWS__) || defined(__WXPM__)
+#if (defined(__WINDOWS__) && wxUSE_WXDIB) || defined(__WXPM__)
     #define wxBITMAP(name) wxBitmap(wxT(#name), wxBITMAP_TYPE_BMP_RESOURCE)
 #elif defined(__WXGTK__)   || \
       defined(__WXMOTIF__) || \
@@ -233,7 +230,7 @@ enum wxStockCursor
 // resource type and under OS X the PNG file with the specified name must be
 // available in the resource subdirectory of the bundle. Elsewhere, this is
 // exactly the same thing as wxBITMAP_PNG_FROM_DATA() described above.
-#if defined(__WINDOWS__) || defined(__WXOSX__)
+#if (defined(__WINDOWS__) && wxUSE_WXDIB) || defined(__WXOSX__)
     #define wxBITMAP_PNG(name) wxBitmap(wxS(#name), wxBITMAP_TYPE_PNG_RESOURCE)
 #else
     #define wxBITMAP_PNG(name) wxBITMAP_PNG_FROM_DATA(name)
