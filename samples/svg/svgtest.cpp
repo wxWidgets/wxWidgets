@@ -111,8 +111,6 @@ public:
     void OnQuit(wxCommandEvent& event);
 private:
     wxNotebook *m_notebook;
-    wxPanel *m_panel;
-    wxBoxSizer *m_sizerFrame;
 
     wxDECLARE_EVENT_TABLE();
 };
