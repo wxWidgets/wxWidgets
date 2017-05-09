@@ -25,7 +25,7 @@
 #include "wx/msw/rt/utils.h"
 #include "wx/msw/private/comptr.h"
 #include "wx/msw/wrapshl.h"
-#include "wx/msw/ole/oleutils.h"
+#include "wx/msw/ole/comimpl.h"
 
 #include "wx/filename.h"
 #include "wx/stdpaths.h"

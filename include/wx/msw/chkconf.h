@@ -377,15 +377,6 @@
 #           define wxUSE_DRAG_AND_DROP 0
 #       endif
 #   endif
-
-#   if wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_NOTIFICATION_MESSAGE requires wxUSE_OLE"
-#       else
-#           undef wxUSE_NOTIFICATION_MESSAGE
-#           define wxUSE_NOTIFICATION_MESSAGE 0
-#       endif
-#   endif
 #endif /* !wxUSE_OLE */
 
 #if !wxUSE_ACTIVEX
