@@ -2210,6 +2210,7 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/imaglist.h \
 	wx/msw/ole/automtn.h \
+	wx/msw/ole/comimpl.h \
 	wx/msw/ole/oleutils.h \
 	wx/msw/ole/safearray.h \
 	wx/msw/ole/uuid.h \
@@ -3132,6 +3133,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/msvcrt.h \
 	wx/msw/notebook.h \
 	wx/msw/ole/access.h \
+	wx/msw/ole/comimpl.h \
 	wx/msw/ole/dataform.h \
 	wx/msw/ole/dataobj.h \
 	wx/msw/ole/dataobj2.h \
@@ -4943,6 +4945,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_imaglist.o \
 	monodll_msw_minifram.o \
 	monodll_msw_nonownedwnd.o \
+	monodll_comimpl.o \
 	monodll_ole_dataobj.o \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
@@ -5649,6 +5652,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_imaglist.o \
 	monodll_msw_minifram.o \
 	monodll_msw_nonownedwnd.o \
+	monodll_comimpl.o \
 	monodll_ole_dataobj.o \
 	monodll_dropsrc.o \
 	monodll_droptgt.o \
@@ -6966,6 +6970,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_imaglist.o \
 	monolib_msw_minifram.o \
 	monolib_msw_nonownedwnd.o \
+	monolib_comimpl.o \
 	monolib_ole_dataobj.o \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
@@ -7672,6 +7677,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_imaglist.o \
 	monolib_msw_minifram.o \
 	monolib_msw_nonownedwnd.o \
+	monolib_comimpl.o \
 	monolib_ole_dataobj.o \
 	monolib_dropsrc.o \
 	monolib_droptgt.o \
@@ -9133,6 +9139,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_imaglist.o \
 	coredll_msw_minifram.o \
 	coredll_msw_nonownedwnd.o \
+	coredll_comimpl.o \
 	coredll_ole_dataobj.o \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
@@ -9839,6 +9846,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_imaglist.o \
 	coredll_msw_minifram.o \
 	coredll_msw_nonownedwnd.o \
+	coredll_comimpl.o \
 	coredll_ole_dataobj.o \
 	coredll_dropsrc.o \
 	coredll_droptgt.o \
@@ -10606,6 +10614,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_imaglist.o \
 	corelib_msw_minifram.o \
 	corelib_msw_nonownedwnd.o \
+	corelib_comimpl.o \
 	corelib_ole_dataobj.o \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
@@ -11312,6 +11321,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_imaglist.o \
 	corelib_msw_minifram.o \
 	corelib_msw_nonownedwnd.o \
+	corelib_comimpl.o \
 	corelib_ole_dataobj.o \
 	corelib_dropsrc.o \
 	corelib_droptgt.o \
@@ -13355,6 +13365,7 @@ COND_PLATFORM_WIN32_1___GTK_PLATFORM_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
 	monodll_generic_imaglist.o \
 	monodll_automtn.o \
+	monodll_comimpl.o \
 	monodll_oleutils.o \
 	monodll_safearray.o \
 	monodll_uuid.o \
@@ -13499,6 +13510,7 @@ COND_PLATFORM_WIN32_1___GTK_PLATFORM_SRC_OBJECTS_17 =  \
 	monolib_generic_caret.o \
 	monolib_generic_imaglist.o \
 	monolib_automtn.o \
+	monolib_comimpl.o \
 	monolib_oleutils.o \
 	monolib_safearray.o \
 	monolib_uuid.o \
@@ -13643,6 +13655,7 @@ COND_PLATFORM_WIN32_1___GTK_PLATFORM_SRC_OBJECTS_1_1 =  \
 	coredll_generic_caret.o \
 	coredll_generic_imaglist.o \
 	coredll_automtn.o \
+	coredll_comimpl.o \
 	coredll_oleutils.o \
 	coredll_safearray.o \
 	coredll_uuid.o \
@@ -13772,6 +13785,7 @@ COND_PLATFORM_WIN32_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 	corelib_generic_caret.o \
 	corelib_generic_imaglist.o \
 	corelib_automtn.o \
+	corelib_comimpl.o \
 	corelib_oleutils.o \
 	corelib_safearray.o \
 	corelib_uuid.o \
@@ -17606,6 +17620,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
@@ -22457,6 +22480,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
@@ -27378,6 +27410,15 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
 
@@ -30770,6 +30811,15 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
@@ -35258,7 +35308,6 @@ sound_sdl_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp
 
 webkit2_ext_webview_webkit2_extension.o: $(srcdir)/src/gtk/webview_webkit2_extension.cpp
 	$(CXXC) -c -o $@ $(WEBKIT2_EXT_CXXFLAGS) $(srcdir)/src/gtk/webview_webkit2_extension.cpp
-
 
 @COND_PYTHON@@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
 @COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \

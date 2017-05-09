@@ -1228,6 +1228,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/msw/ole/automtn.cpp
+    src/msw/ole/comimpl.cpp
     src/msw/ole/oleutils.cpp
     src/msw/ole/safearray.cpp
     src/msw/ole/uuid.cpp
@@ -1242,6 +1243,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/caret.h
     wx/generic/imaglist.h
     wx/msw/ole/automtn.h
+    wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h
     wx/msw/ole/safearray.h
     wx/msw/ole/uuid.h
@@ -1885,6 +1887,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/imaglist.cpp
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
+    src/msw/ole/comimpl.cpp
     src/msw/ole/dataobj.cpp
     src/msw/ole/dropsrc.cpp
     src/msw/ole/droptgt.cpp
@@ -2050,6 +2053,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/msvcrt.h
     wx/msw/notebook.h
     wx/msw/ole/access.h
+    wx/msw/ole/comimpl.h
     wx/msw/ole/dataform.h
     wx/msw/ole/dataobj.h
     wx/msw/ole/dataobj2.h

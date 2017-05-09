@@ -1423,6 +1423,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\ole\comimpl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\control.cpp"
 				>
 			</File>
@@ -2203,6 +2207,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\combobox.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\ole\comimpl.h"
 				>
 			</File>
 			<File

@@ -762,6 +762,9 @@
     <ClCompile Include="..\..\src\msw\ole\automtn.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\ole\comimpl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\ole\dataobj.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -1547,6 +1550,9 @@
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\ole\automtn.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\ole\comimpl.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\ole\dataform.h">
