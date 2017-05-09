@@ -15,7 +15,7 @@
 
 #include "wx/msw/wrapwin.h"
 // get IUnknown, REFIID &c
-#include <combaseapi.h>
+#include <objbase.h>
 
 // ============================================================================
 // General purpose functions and macros
