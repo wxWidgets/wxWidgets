@@ -583,6 +583,10 @@ Major new features in this release
 3.0.4: (released 2017-??-??)
 ----------------------------
 
+All (GUI):
+
+- Fix wxListbook::GetPageImage() to not always return -1 (Kinaou Hervé).
+
 wxGTK:
 
 - Allow using more recent WebKit2GTK+ in wxWebView (Scott Talbert).

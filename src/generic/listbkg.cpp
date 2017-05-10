@@ -240,6 +240,7 @@ int wxListbook::GetPageImage(size_t n) const
 {
     wxListItem item;
     item.SetId(n);
+    item.SetMask(wxLIST_MASK_IMAGE);
 
     if (GetListView()->GetItem(item))
     {
