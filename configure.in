@@ -2271,6 +2271,9 @@ AC_LANG_POP()
 
 fi dnl End of pre-C++11 only checks section
 
+dnl Find pkg-config outside of any conditional.  Done before any PKG_* call.
+PKG_PROG_PKG_CONFIG
+
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
 dnl
@@ -2947,8 +2950,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
     fi
 
     if test "$wxUSE_DFB" = 1; then
-       PKG_PROG_PKG_CONFIG()
-
        PKG_CHECK_MODULES(DIRECTFB,
                          [directfb >= 0.9.23],
                          [
@@ -2997,8 +2998,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         fi
 
         if test "$wxUSE_UNICODE" = "yes"; then
-            PKG_PROG_PKG_CONFIG()
-
             PKG_CHECK_MODULES(PANGOXFT, pangoxft,
                 [
                     AC_DEFINE(HAVE_PANGO_XFT)
@@ -3297,8 +3296,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
 
     if test "$wxUSE_QT" = 1; then
-        PKG_PROG_PKG_CONFIG()
-
         PKG_CHECK_MODULES(QT5,
                           [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test],
             [
@@ -5428,8 +5425,6 @@ WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
   if test "$USE_UNIX" = 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
-      PKG_PROG_PKG_CONFIG()
-
       PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
                   [
                     EXTRALIBS_SDL="$SDL_LIBS"
@@ -5461,8 +5456,6 @@ if test "$wxUSE_SOUND" = "yes"; then
 fi
 
 if test "$WXGTK2" = 1; then
-    PKG_PROG_PKG_CONFIG()
-
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
 
         if test "$wxUSE_GTKPRINT" = "yes" ; then
