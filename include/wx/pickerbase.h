@@ -76,27 +76,14 @@ public:     // public API
         { return (GetTextCtrlItem()->GetFlag() & wxGROW) != 0; }
     void SetTextCtrlGrowable(bool grow = true)
     {
-        int f = GetDefaultTextCtrlFlag();
-        if ( grow )
-            f |= wxGROW;
-        else
-            f &= ~wxGROW;
-
-        GetTextCtrlItem()->SetFlag(f);
+        DoSetGrowableFlagFor(GetTextCtrlItem(), grow);
     }
 
     bool IsPickerCtrlGrowable() const
         { return (GetPickerCtrlItem()->GetFlag() & wxGROW) != 0; }
     void SetPickerCtrlGrowable(bool grow = true)
     {
-        int f = GetDefaultPickerCtrlFlag();
-        if ( grow )
-        {
-            f &= ~wxALIGN_MASK;
-            f |= wxGROW;
-        }
-
-        GetPickerCtrlItem()->SetFlag(f);
+        DoSetGrowableFlagFor(GetPickerCtrlItem(), grow);
     }
 
     bool HasTextCtrl() const
@@ -150,15 +137,19 @@ protected:
         return m_sizer->GetItem((size_t)0);
     }
 
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("useless and will be removed in the future")
     int GetDefaultPickerCtrlFlag() const
     {
         return wxALIGN_CENTER_VERTICAL;
     }
 
+    wxDEPRECATED_MSG("useless and will be removed in the future")
     int GetDefaultTextCtrlFlag() const
     {
         return wxALIGN_CENTER_VERTICAL | wxRIGHT;
     }
+#endif // WXWIN_COMPATIBILITY_3_0
 
     void PostCreation();
 
@@ -168,6 +159,9 @@ protected:
     wxBoxSizer *m_sizer;
 
 private:
+    // Common implementation of Set{Text,Picker}CtrlGrowable().
+    void DoSetGrowableFlagFor(wxSizerItem* item, bool grow);
+
     wxDECLARE_ABSTRACT_CLASS(wxPickerBase);
 };
 

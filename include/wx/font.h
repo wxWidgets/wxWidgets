@@ -123,9 +123,9 @@ public:
         { InitPointSize(-1); }
 
     // These ctors specify the font size, either in points or in pixels.
-    wxEXPLICIT wxFontInfo(int pointSize)
+    explicit wxFontInfo(int pointSize)
         { InitPointSize(pointSize); }
-    wxEXPLICIT wxFontInfo(const wxSize& pixelSize) : m_pixelSize(pixelSize)
+    explicit wxFontInfo(const wxSize& pixelSize) : m_pixelSize(pixelSize)
         { Init(); }
 
     // Setters for the various attributes. All of them return the object itself

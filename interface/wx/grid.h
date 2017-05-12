@@ -461,7 +461,7 @@ public:
         Draws the part of the cell not occupied by the control: the base class
         version just fills it with background colour from the attribute.
     */
-    virtual void PaintBackground(wxDC& dc, const wxRect& rectCell, wxGridCellAttr& attr);
+    virtual void PaintBackground(wxDC& dc, const wxRect& rectCell, const wxGridCellAttr& attr);
 
     /**
         Reset the value in the control back to its starting value.
@@ -801,7 +801,10 @@ public:
         Row,
 
         /// Return the attribute set for this cells column.
-        Col
+        Col,
+
+        Default,
+        Merged
     };
 
     /**
@@ -977,6 +980,22 @@ public:
         Sets the text colour.
     */
     void SetTextColour(const wxColour& colText);
+
+    
+    void MergeWith(wxGridCellAttr *mergefrom);
+
+    void SetSize(int num_rows, int num_cols);
+    void SetOverflow(bool allow = true);
+    void SetKind(wxAttrKind kind);
+
+    bool HasReadWriteMode() const;
+    bool HasOverflowMode() const;
+    bool HasSize() const;
+
+    void GetSize(int *num_rows, int *num_cols) const;
+    bool GetOverflow() const;
+    wxAttrKind GetKind();
+
 
 protected:
 
@@ -1879,71 +1898,6 @@ enum wxGridTableRequest
     /// Columns have been deleted from the table.
     wxGRIDTABLE_NOTIFY_COLS_DELETED
 };
-
-
-/**
-   @class wxGridTableMessage
-
-   A simple class used to pass messages from the table to the grid.
-
-    @library{wxadv}
-    @category{grid}
-*/
-class wxGridTableMessage
-{
-public:
-    wxGridTableMessage();
-    wxGridTableMessage( wxGridTableBase *table, int id,
-                        int comInt1 = -1,
-                        int comInt2 = -1 );
-
-    void SetTableObject( wxGridTableBase *table );
-    wxGridTableBase * GetTableObject() const;
-    void SetId( int id );
-    int  GetId();
-    void SetCommandInt( int comInt1 );
-    int  GetCommandInt();
-    void SetCommandInt2( int comInt2 );
-    int  GetCommandInt2();
-};
-
-
-
-/**
-   @class wxGridStringTable
-
-   Simplest type of data table for a grid for small tables of strings
-   that are stored in memory
-*/
-class wxGridStringTable : public wxGridTableBase
-{
-public:
-    wxGridStringTable();
-    wxGridStringTable( int numRows, int numCols );
-
-    // these are pure virtual in wxGridTableBase
-    virtual int GetNumberRows();
-    virtual int GetNumberCols();
-    virtual wxString GetValue( int row, int col );
-    virtual void SetValue( int row, int col, const wxString& value );
-
-    // overridden functions from wxGridTableBase
-    void Clear();
-    bool InsertRows( size_t pos = 0, size_t numRows = 1 );
-    bool AppendRows( size_t numRows = 1 );
-    bool DeleteRows( size_t pos = 0, size_t numRows = 1 );
-    bool InsertCols( size_t pos = 0, size_t numCols = 1 );
-    bool AppendCols( size_t numCols = 1 );
-    bool DeleteCols( size_t pos = 0, size_t numCols = 1 );
-
-    void SetRowLabelValue( int row, const wxString& );
-    void SetColLabelValue( int col, const wxString& );
-    wxString GetRowLabelValue( int row );
-    wxString GetColLabelValue( int col );
-};
-
-
-
 
 
 
@@ -2852,6 +2806,13 @@ public:
         Returns @true if the in-place edit control is currently enabled.
     */
     bool IsCellEditControlEnabled() const;
+
+    /**
+        Returns @true if the in-place edit control is currently shown.
+
+        @see HideCellEditControl()
+    */
+    bool IsCellEditControlShown() const;
 
     /**
         Returns @true if the current cell is read-only.
@@ -3810,6 +3771,21 @@ public:
     void ClearSelection();
 
     /**
+        Deselects a row of cells.
+    */
+    void DeselectRow( int row );
+
+    /**
+        Deselects a column of cells.
+    */
+    void DeselectCol( int col );
+
+    /**
+        Deselects a cell.
+    */
+    void DeselectCell( int row, int col );
+
+    /**
         Returns an array of individually selected cells.
 
         Notice that this array does @em not contain all the selected cells in
@@ -4439,6 +4415,16 @@ public:
                  const wxGridCellCoords& topLeft = wxGridCellCoords( -1, -1 ),
                  const wxGridCellCoords& bottomRight = wxGridCellCoords( -1, -1 ),
                  int style = wxGRID_DRAW_DEFAULT );
+
+    /**
+        Sets the cell attributes for the specified cell.
+
+        The grid takes ownership of the attribute pointer.
+
+        See the wxGridCellAttr class for more information about controlling
+        cell attributes.
+    */
+    void SetAttr(int row, int col, wxGridCellAttr *attr);
 
     /**
         Sets the cell attributes for all cells in the specified column.

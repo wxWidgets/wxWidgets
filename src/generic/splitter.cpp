@@ -656,8 +656,6 @@ void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
 // including the edges next to the sash.
 void wxSplitterWindow::SizeWindows()
 {
-    int oldSashPosition = m_sashPosition;
-
     // check if we have delayed setting the real sash position
     if ( m_requestedSashPosition != INT_MAX )
     {
@@ -723,11 +721,8 @@ void wxSplitterWindow::SizeWindows()
         GetWindow1()->SetSize(border, border, w1, h1);
     }
 
-    if ( oldSashPosition != m_sashPosition )
-    {
-        wxClientDC dc(this);
-        DrawSash(dc);
-    }
+    wxClientDC dc(this);
+    DrawSash(dc);
 }
 
 // Set pane for unsplit window

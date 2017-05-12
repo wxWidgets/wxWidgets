@@ -77,7 +77,7 @@ private:
 class wxModalDialogHookExitGuard
 {
 public:
-    wxEXPLICIT wxModalDialogHookExitGuard(wxDialog* dialog)
+    explicit wxModalDialogHookExitGuard(wxDialog* dialog)
         : m_dialog(dialog)
     {
     }

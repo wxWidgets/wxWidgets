@@ -398,6 +398,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexECL.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexEDIFACT.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexEScript.cxx">
 			</File>
 			<File

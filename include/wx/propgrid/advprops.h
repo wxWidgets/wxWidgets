@@ -47,35 +47,26 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(DatePickerCtrl,WXDLLIMPEXP_PROPGRID)
 #define wxPG_COLOUR_CUSTOM      0xFFFFFF
 #define wxPG_COLOUR_UNSPECIFIED (wxPG_COLOUR_CUSTOM+1)
 
-/** @class wxColourPropertyValue
-
-    Because text, background and other colours tend to differ between
-    platforms, wxSystemColourProperty must be able to select between system
-    colour and, when necessary, to pick a custom one. wxSystemColourProperty
-    value makes this possible.
-*/
+// Because text, background and other colours tend to differ between
+// platforms, wxSystemColourProperty must be able to select between system
+// colour and, when necessary, to pick a custom one. wxSystemColourProperty
+// value makes this possible.
 class WXDLLIMPEXP_PROPGRID wxColourPropertyValue : public wxObject
 {
 public:
-    /** An integer value relating to the colour, and which exact
-        meaning depends on the property with which it is used.
-
-        For wxSystemColourProperty:
-
-        Any of wxSYS_COLOUR_XXX, or any web-colour ( use wxPG_TO_WEB_COLOUR
-        macro - (currently unsupported) ), or wxPG_COLOUR_CUSTOM.
-
-        For custom colour properties without values array specified:
-
-        index or wxPG_COLOUR_CUSTOM
-
-        For custom colour properties <b>with</b> values array specified:
-
-        m_arrValues[index] or wxPG_COLOUR_CUSTOM
-    */
+    // An integer value relating to the colour, and which exact
+    // meaning depends on the property with which it is used.
+    // For wxSystemColourProperty:
+    // Any of wxSYS_COLOUR_XXX, or any web-colour ( use wxPG_TO_WEB_COLOUR
+    // macro - (currently unsupported) ), or wxPG_COLOUR_CUSTOM.
+    //
+    // For custom colour properties without values array specified:
+    // index or wxPG_COLOUR_CUSTOM
+    // For custom colour properties with values array specified:
+    // m_arrValues[index] or wxPG_COLOUR_CUSTOM
     wxUint32    m_type;
 
-    /** Resulting colour. Should be correct regardless of type. */
+    // Resulting colour. Should be correct regardless of type.
     wxColour    m_colour;
 
     wxColourPropertyValue()
@@ -145,10 +136,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 
 // -----------------------------------------------------------------------
 
-/** @class wxFontProperty
-    @ingroup classes
-    Property representing wxFont.
-*/
+// Property representing wxFont.
 class WXDLLIMPEXP_PROPGRID wxFontProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxFontProperty)
@@ -173,15 +161,12 @@ protected:
 // -----------------------------------------------------------------------
 
 
-/** If set, then match from list is searched for a custom colour. */
+// If set, then match from list is searched for a custom colour.
 #define wxPG_PROP_TRANSLATE_CUSTOM      wxPG_PROP_CLASS_SPECIFIC_1
 
 
-/** @class wxSystemColourProperty
-    @ingroup classes
-    Has dropdown list of wxWidgets system colours. Value used is
-    of wxColourPropertyValue type.
-*/
+// Has dropdown list of wxWidgets system colours. Value used is
+// of wxColourPropertyValue type.
 class WXDLLIMPEXP_PROPGRID wxSystemColourProperty : public wxEnumProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxSystemColourProperty)
@@ -198,16 +183,13 @@ public:
                             int number,
                             int argFlags = 0) const wxOVERRIDE;
 
-    /**
-        Override in derived class to customize how colours are printed as
-        strings.
-    */
+    // Override in derived class to customize how colours are printed as
+    // strings.
     virtual wxString ColourToString( const wxColour& col, int index,
                                      int argFlags = 0 ) const;
 
-    /** Returns index of entry that triggers colour picker dialog
-        (default is last).
-    */
+    // Returns index of entry that triggers colour picker dialog
+    // (default is last).
     virtual int GetCustomColourIndex() const;
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const wxOVERRIDE;
@@ -224,9 +206,8 @@ public:
     // Helper function to show the colour dialog
     bool QueryColourFromUser( wxVariant& variant ) const;
 
-    /** Default is to use wxSystemSettings::GetColour(index). Override to use
-        custom colour tables etc.
-    */
+    // Default is to use wxSystemSettings::GetColour(index). Override to use
+    // custom colour tables etc.
     virtual wxColour GetColour( int index ) const;
 
     wxColourPropertyValue GetVal( const wxVariant* pVariant = NULL ) const;
@@ -282,10 +263,7 @@ private:
 
 // -----------------------------------------------------------------------
 
-/** @class wxCursorProperty
-    @ingroup classes
-    Property representing wxCursor.
-*/
+// Property representing wxCursor.
 class WXDLLIMPEXP_PROPGRID wxCursorProperty : public wxEnumProperty
 {
     wxDECLARE_DYNAMIC_CLASS(wxCursorProperty);
@@ -306,10 +284,7 @@ class WXDLLIMPEXP_PROPGRID wxCursorProperty : public wxEnumProperty
 
 WXDLLIMPEXP_PROPGRID const wxString& wxPGGetDefaultImageWildcard();
 
-/** @class wxImageFileProperty
-    @ingroup classes
-    Property representing image file(name).
-*/
+// Property representing image file(name).
 class WXDLLIMPEXP_PROPGRID wxImageFileProperty : public wxFileProperty
 {
     wxDECLARE_DYNAMIC_CLASS(wxImageFileProperty);
@@ -339,18 +314,9 @@ private:
 
 #if wxUSE_CHOICEDLG
 
-/** @class wxMultiChoiceProperty
-    @ingroup classes
-    Property that manages a value resulting from wxMultiChoiceDialog. Value is
-    array of strings. You can get value as array of choice values/indices by
-    calling wxMultiChoiceProperty::GetValueAsArrayInt().
-
-    <b>Supported special attributes:</b>
-    - "UserStringMode": If > 0, allow user to manually enter strings that are
-      not in the list of choices. If this value is 1, user strings are
-      preferably placed in front of valid choices. If value is 2, then those
-      strings will placed behind valid choices.
-*/
+// Property that manages a value resulting from wxMultiChoiceDialog. Value is
+// array of strings. You can get value as array of choice values/indices by
+// calling wxMultiChoiceProperty::GetValueAsArrayInt().
 class WXDLLIMPEXP_PROPGRID wxMultiChoiceProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxMultiChoiceProperty)
@@ -403,16 +369,7 @@ protected:
 
 #if wxUSE_DATETIME
 
-/** @class wxDateProperty
-    @ingroup classes
-    Property representing wxDateTime.
-
-    <b>Supported special attributes:</b>
-    - "DateFormat": Determines displayed date format.
-    - "PickerStyle": Determines window style used with wxDatePickerCtrl.
-       Default is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE
-       enables additional support for unspecified property value.
-*/
+// Property representing wxDateTime.
 class WXDLLIMPEXP_PROPGRID wxDateProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxDateProperty)

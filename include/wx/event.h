@@ -153,8 +153,8 @@ private:
 // These are needed for the functor definitions
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 
-// We had some trouble (specifically with eVC for ARM WinCE build) with using
-// wxEventFunction in the past so we had introduced wxObjectEventFunction which
+// We had some trouble with using wxEventFunction
+// in the past so we had introduced wxObjectEventFunction which
 // used to be a typedef for a member of wxObject and not wxEvtHandler to work
 // around this but as eVC is not really supported any longer we now only keep
 // this for backwards compatibility and, despite its name, this is a typedef
@@ -332,7 +332,7 @@ class wxEventFunctorMethod
               <
                 Class,
                 EventArg,
-                wxConvertibleTo<Class, wxEvtHandler>::value != 0
+                wxIsPubliclyDerived<Class, wxEvtHandler>::value != 0
               >
 {
 private:
@@ -356,7 +356,7 @@ public:
         CheckHandlerArgument(static_cast<EventClass *>(NULL));
     }
 
-    virtual void operator()(wxEvtHandler *handler, wxEvent& event)
+    virtual void operator()(wxEvtHandler *handler, wxEvent& event) wxOVERRIDE
     {
         Class * realHandler = m_handler;
         if ( !realHandler )
@@ -373,7 +373,7 @@ public:
         (realHandler->*m_method)(static_cast<EventArg&>(event));
     }
 
-    virtual bool IsMatching(const wxEventFunctor& functor) const
+    virtual bool IsMatching(const wxEventFunctor& functor) const wxOVERRIDE
     {
         if ( wxTypeId(functor) != wxTypeId(*this) )
             return false;
@@ -388,10 +388,10 @@ public:
                (m_handler == other.m_handler || other.m_handler == NULL);
     }
 
-    virtual wxEvtHandler *GetEvtHandler() const
+    virtual wxEvtHandler *GetEvtHandler() const wxOVERRIDE
         { return this->ConvertToEvtHandler(m_handler); }
 
-    virtual wxEventFunction GetEvtMethod() const
+    virtual wxEventFunction GetEvtMethod() const wxOVERRIDE
         { return this->ConvertToEvtMethod(m_method); }
 
 private:
@@ -3106,8 +3106,7 @@ private:
 
 
 /* TODO
- wxEVT_MOUSE_CAPTURE_CHANGED,
- wxEVT_SETTING_CHANGED, // WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
+ wxEVT_SETTING_CHANGED, // WM_WININICHANGE
 // wxEVT_FONT_CHANGED,  // WM_FONTCHANGE: roll into wxEVT_SETTING_CHANGED, but remember to propagate
                         // wxEVT_FONT_CHANGED to all other windows (maybe).
  wxEVT_DRAW_ITEM, // Leave these three as virtual functions in wxControl?? Platform-specific.
@@ -3385,6 +3384,18 @@ public:
     bool ProcessThreadEvent(const wxEvent& event);
         // NOTE: uses AddPendingEvent(); call only from secondary threads
 #endif
+
+#if wxUSE_EXCEPTIONS
+    // This is a private function which handles any exceptions arising during
+    // the execution of user-defined code called in the event loop context by
+    // forwarding them to wxApp::OnExceptionInMainLoop() and, if it rethrows,
+    // to wxApp::OnUnhandledException(). In any case this function ensures that
+    // no exceptions ever escape from it and so is useful to call at module
+    // boundary.
+    //
+    // It must be only called when handling an active exception.
+    static void WXConsumeException();
+#endif // wxUSE_EXCEPTIONS
 
 #ifdef wxHAS_CALL_AFTER
     // Asynchronous method calls: these methods schedule the given method

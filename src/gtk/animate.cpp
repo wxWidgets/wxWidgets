@@ -23,6 +23,7 @@
 
 #include "wx/wfstream.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/object.h"
 
 #include <gtk/gtk.h>
 
@@ -116,6 +117,8 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     else
         loader = gdk_pixbuf_loader_new();
 
+    wxGtkObject<GdkPixbufLoader> ensureUnrefLoader(loader);
+
     if (!loader ||
         error != NULL)  // even if the loader was allocated, an error could have happened
     {
@@ -156,6 +159,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     if (!data_written)
     {
         wxLogDebug("Could not read data from the stream...");
+        gdk_pixbuf_loader_close(loader, NULL);
         return false;
     }
 

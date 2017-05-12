@@ -15,7 +15,7 @@ class wxQtFontDialog : public wxQtEventSignalHandler< QFontDialog, wxFontDialog 
 {
 public:
     wxQtFontDialog( wxWindow *parent, wxFontDialog *handler)
-        : wxQtEventSignalHandler(parent, handler)
+        : wxQtEventSignalHandler<QFontDialog,wxFontDialog>(parent, handler)
         {
             connect(this, &QFontDialog::currentFontChanged, this, &wxQtFontDialog::updateFont);
         }

@@ -50,9 +50,34 @@ void wxStandardPaths::SetInstallPrefix(const wxString& prefix)
     m_prefix = prefix;
 }
 
+// Helper function returning the value of XDG_CONFIG_HOME environment variable
+// or its default value if it is not defined.
+static wxString GetXDGConfigHome()
+{
+    wxString dir;
+    if ( !wxGetEnv(wxS("XDG_CONFIG_HOME"), &dir) || dir.empty() )
+        dir = wxFileName::GetHomeDir() + wxS("/.config");
+    return dir;
+}
+
 wxString wxStandardPaths::GetUserConfigDir() const
 {
-    return wxFileName::GetHomeDir();
+    wxString dir;
+
+    switch ( GetFileLayout() )
+    {
+        case FileLayout_Classic:
+            dir = wxFileName::GetHomeDir();
+            break;
+
+        case FileLayout_XDG:
+            dir = GetXDGConfigHome();
+            break;
+    }
+
+    wxASSERT_MSG( !dir.empty(), wxS("unsupported file layout") );
+
+    return dir;
 }
 
 
@@ -235,61 +260,70 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxString& lang,
 
 wxString wxStandardPaths::GetUserDir(Dir userDir) const
 {
-    {
-        wxLogNull logNull;
-        wxString homeDir = wxFileName::GetHomeDir();
-        wxString configPath;
-        if (wxGetenv(wxT("XDG_CONFIG_HOME")))
-            configPath = wxGetenv(wxT("XDG_CONFIG_HOME"));
-        else
-            configPath = homeDir + wxT("/.config");
-        wxString dirsFile = configPath + wxT("/user-dirs.dirs");
-        if (wxFileExists(dirsFile))
-        {
-            wxString userDirId;
-            switch (userDir)
-            {
-                case Dir_Desktop:
-                    userDirId = "XDG_DESKTOP_DIR";
-                    break;
-                case Dir_Downloads:
-                    userDirId = "XDG_DOWNLOAD_DIR";
-                    break;
-                case Dir_Music:
-                    userDirId = "XDG_MUSIC_DIR";
-                    break;
-                case Dir_Pictures:
-                    userDirId = "XDG_PICTURES_DIR";
-                    break;
-                case Dir_Videos:
-                    userDirId = "XDG_VIDEOS_DIR";
-                    break;
-                default:
-                    userDirId = "XDG_DOCUMENTS_DIR";
-                    break;
-            }
+    // Note that we do not use the file layout here because there is no reason
+    // not to respect the XDG convention even if SetFileLayout(FileLayout_XDG)
+    // hadn't been called: we're not bound by any backwards compatibility
+    // considerations as there can't be any pre-existing config or data files
+    // in the home directory that wouldn't be found any longer after updating
+    // the version of wxWidgets used by the application.
 
-            wxTextFile textFile;
-            if (textFile.Open(dirsFile))
+    wxLogNull logNull;
+    const wxString homeDir = wxFileName::GetHomeDir();
+    if (userDir == Dir_Cache)
+    {
+        wxString cacheDir;
+        if ( !wxGetEnv(wxS("XDG_CACHE_HOME"), &cacheDir) )
+          cacheDir = homeDir + wxS("/.cache");
+
+        return cacheDir;
+    }
+
+    const wxFileName dirsFile(GetXDGConfigHome(), wxS("user-dirs.dirs"));
+    if ( dirsFile.FileExists() )
+    {
+        wxString userDirId;
+        switch (userDir)
+        {
+            case Dir_Desktop:
+                userDirId = "XDG_DESKTOP_DIR";
+                break;
+            case Dir_Downloads:
+                userDirId = "XDG_DOWNLOAD_DIR";
+                break;
+            case Dir_Music:
+                userDirId = "XDG_MUSIC_DIR";
+                break;
+            case Dir_Pictures:
+                userDirId = "XDG_PICTURES_DIR";
+                break;
+            case Dir_Videos:
+                userDirId = "XDG_VIDEOS_DIR";
+                break;
+            default:
+                userDirId = "XDG_DOCUMENTS_DIR";
+                break;
+        }
+
+        wxTextFile textFile;
+        if ( textFile.Open(dirsFile.GetFullPath()) )
+        {
+            for ( wxString line = textFile.GetFirstLine();
+                  !textFile.Eof();
+                  line = textFile.GetNextLine() )
             {
-                size_t i;
-                for (i = 0; i < textFile.GetLineCount(); i++)
+                int pos = line.Find(userDirId);
+                if (pos != wxNOT_FOUND)
                 {
-                    wxString line(textFile[i]);
-                    int pos = line.Find(userDirId);
-                    if (pos != wxNOT_FOUND)
-                    {
-                        wxString value = line.AfterFirst(wxT('='));
-                        value.Replace(wxT("$HOME"), homeDir);
-                        value.Trim(true);
-                        value.Trim(false);
-                        // Remove quotes
-                        value.Replace("\"", "", true /* replace all */);
-                        if (!value.IsEmpty() && wxDirExists(value))
-                            return value;
-                        else
-                            break;
-                    }
+                    wxString value = line.AfterFirst(wxT('='));
+                    value.Replace(wxT("$HOME"), homeDir);
+                    value.Trim(true);
+                    value.Trim(false);
+                    // Remove quotes
+                    value.Replace("\"", "", true /* replace all */);
+                    if (!value.IsEmpty() && wxDirExists(value))
+                        return value;
+                    else
+                        break;
                 }
             }
         }
@@ -299,5 +333,40 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
 }
 
 #endif // __VMS/!__VMS
+
+wxString
+wxStandardPaths::MakeConfigFileName(const wxString& basename,
+                                    ConfigFileConv conv) const
+{
+    wxFileName fn(wxEmptyString, basename);
+
+    bool addExt = false;
+
+    switch ( GetFileLayout() )
+    {
+        case FileLayout_Classic:
+            switch ( conv )
+            {
+                case ConfigFileConv_Dot:
+                    fn.SetName(wxT('.') + fn.GetName());
+                    break;
+
+                case ConfigFileConv_Ext:
+                    addExt = true;
+                    break;
+            }
+            break;
+
+        case FileLayout_XDG:
+            // Dot files are never used in XDG mode.
+            addExt = true;
+            break;
+    }
+
+    if ( addExt )
+        fn.SetExt(wxS("conf"));
+
+    return fn.GetFullName();
+}
 
 #endif // wxUSE_STDPATHS

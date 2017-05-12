@@ -685,6 +685,7 @@
     </ClCompile>
     <ClCompile Include="..\..\src\msw\cursor.cpp" />
     <ClCompile Include="..\..\src\msw\data.cpp" />
+    <ClCompile Include="..\..\src\msw\ole\comimpl.cpp" />
     <ClCompile Include="..\..\src\msw\ole\dataobj.cpp" />
     <ClCompile Include="..\..\src\msw\dc.cpp" />
     <ClCompile Include="..\..\src\msw\dcclient.cpp" />
@@ -799,7 +800,6 @@
     <ClCompile Include="..\..\src\msw\ole\safearray.cpp" />
     <ClCompile Include="..\..\src\msw\ownerdrw.cpp" />
     <ClCompile Include="..\..\src\msw\palette.cpp" />
-    <ClCompile Include="..\..\src\msw\panel.cpp" />
     <ClCompile Include="..\..\src\msw\pen.cpp" />
     <ClCompile Include="..\..\src\msw\popupwin.cpp" />
     <ClCompile Include="..\..\src\msw\printdlg.cpp" />
@@ -1052,6 +1052,7 @@
     <ClInclude Include="..\..\include\wx\msw\ctrlsub.h" />
     <ClInclude Include="..\..\include\wx\msw\cursor.h" />
     <ClInclude Include="..\..\include\wx\msw\custombgwin.h" />
+    <ClInclude Include="..\..\include\wx\msw\ole\comimpl.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\dataform.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\dataobj.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\dataobj2.h" />

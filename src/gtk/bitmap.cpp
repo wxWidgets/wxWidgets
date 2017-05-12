@@ -431,17 +431,18 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
         const char* src = bits;
         guchar* dst = gdk_pixbuf_get_pixels(pixbuf);
         const int stride_src = (width + 7) / 8;
-        const int rowinc_dst = gdk_pixbuf_get_rowstride(pixbuf) - 3 * width;
-        for (int j = 0; j < width; j++, src += stride_src, dst += rowinc_dst)
+        const int stride_dst = gdk_pixbuf_get_rowstride(pixbuf);
+        for (int j = 0; j < height; j++, src += stride_src, dst += stride_dst)
         {
-            for (int i = 0; i < height; i++)
+            guchar* d = dst;
+            for (int i = 0; i < width; i++)
             {
                 guchar c = 0xff;
                 if (src[i >> 3] & (1 << (i & 7)))
                     c = 0;
-                *dst++ = c;
-                *dst++ = c;
-                *dst++ = c;
+                *d++ = c;
+                *d++ = c;
+                *d++ = c;
             }
         }
 #else

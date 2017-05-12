@@ -100,9 +100,9 @@ protected:
 class WXDLLIMPEXP_CORE wxDisplayFactorySingle : public wxDisplayFactory
 {
 public:
-    virtual wxDisplayImpl *CreateDisplay(unsigned n);
-    virtual unsigned GetCount() { return 1; }
-    virtual int GetFromPoint(const wxPoint& pt);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual unsigned GetCount() wxOVERRIDE { return 1; }
+    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
 };
 
 #endif // _WX_DISPLAY_IMPL_H_BASE_

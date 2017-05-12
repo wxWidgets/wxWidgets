@@ -22,10 +22,16 @@
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
     #include "wx/bitmap.h"
+    #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/dcprint.h"
     #include "wx/math.h"
     #include "wx/region.h"
     #include "wx/log.h"
+#endif
+
+#ifdef __WXMSW__
+    #include "wx/msw/enhmeta.h"
 #endif
 
 #include "wx/private/graphics.h"
@@ -647,12 +653,21 @@ void wxGraphicsContext::SetFont( const wxGraphicsFont& font )
     m_font = font;
 }
 
-void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )
+void wxGraphicsContext::SetFont(const wxFont& font, const wxColour& colour)
 {
     if ( font.IsOk() )
-        SetFont( CreateFont( font, colour ) );
+    {
+        // Change current font only if new graphics font is successfully created.
+        wxGraphicsFont grFont = CreateFont(font, colour);
+        if ( !grFont.IsSameAs(wxNullGraphicsFont) )
+        {
+            SetFont(grFont);
+        }
+    }
     else
+    {
         SetFont( wxNullGraphicsFont );
+    }
 }
 
 void wxGraphicsContext::DrawPath( const wxGraphicsPath& path, wxPolygonFillMode fillStyle )
@@ -920,6 +935,49 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 #endif
 #endif
 
+wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
+{
+#ifndef wxNO_RTTI
+    if ( const wxWindowDC *windc = dynamic_cast<const wxWindowDC*>(&dc) )
+        return Create(*windc);
+
+    if ( const wxMemoryDC *memdc = dynamic_cast<const wxMemoryDC*>(&dc) )
+        return Create(*memdc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if ( const wxPrinterDC *printdc = dynamic_cast<const wxPrinterDC*>(&dc) )
+        return Create(*printdc);
+#endif
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    if ( const wxEnhMetaFileDC *mfdc = dynamic_cast<const wxEnhMetaFileDC*>(&dc) )
+        return Create(*mfdc);
+#endif
+#endif
+#else // wxNO_RTTI
+    if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
+        return Create(*windc);
+
+    if ( const wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
+        return Create(*memdc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if ( const wxPrinterDC *printdc = wxDynamicCast(&dc, wxPrinterDC) )
+        return Create(*printdc);
+#endif
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    if ( const wxEnhMetaFileDC *mfdc = wxDynamicCast(&dc, wxEnhMetaFileDC) )
+        return Create(*mfdc);
+#endif
+#endif
+#endif // !wxNO_RTTI/wxNO_RTTI
+
+    return NULL;
+}
+
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeContext(context);
@@ -929,6 +987,13 @@ wxGraphicsContext* wxGraphicsContext::CreateFromNativeWindow( void * window )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeWindow(window);
 }
+
+#ifdef __WXMSW__
+wxGraphicsContext* wxGraphicsContext::CreateFromNativeHDC(WXHDC dc)
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeHDC(dc);
+}
+#endif
 
 wxGraphicsContext* wxGraphicsContext::Create( wxWindow* window )
 {

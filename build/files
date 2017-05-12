@@ -124,6 +124,7 @@ BASE_WIN32_HDR =
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
     wx/msw/winundef.h
+    wx/msw/winver.h
     wx/msw/wrapcctl.h
     wx/msw/wrapcdlg.h
     wx/msw/wrapwin.h
@@ -1126,6 +1127,7 @@ GTK_WIN32_SRC =
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/msw/ole/automtn.cpp
+    src/msw/ole/comimpl.cpp
     src/msw/ole/oleutils.cpp
     src/msw/ole/safearray.cpp
     src/msw/ole/uuid.cpp
@@ -1139,6 +1141,7 @@ GTK_WIN32_HDR =
     wx/generic/caret.h
     wx/generic/imaglist.h
     wx/msw/ole/automtn.h
+    wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h
     wx/msw/ole/safearray.h
     wx/msw/ole/uuid.h
@@ -1164,6 +1167,7 @@ GTK_LOWLEVEL_SRC =
     src/gtk/filehistory.cpp
     src/gtk/font.cpp
     src/gtk/sockgtk.cpp
+    src/gtk/mimetype.cpp
     src/gtk/minifram.cpp
     src/gtk/nonownedwnd.cpp
     src/gtk/pen.cpp
@@ -1203,6 +1207,7 @@ GTK_LOWLEVEL_HDR =
     wx/gtk/evtloopsrc.h
     wx/gtk/font.h
     wx/gtk/filehistory.h
+    wx/gtk/mimetype.h
     wx/gtk/minifram.h
     wx/gtk/nonownedwnd.h
     wx/gtk/pen.h
@@ -1744,6 +1749,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/imaglist.cpp
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
+    src/msw/ole/comimpl.cpp
     src/msw/ole/dataobj.cpp
     src/msw/ole/dropsrc.cpp
     src/msw/ole/droptgt.cpp
@@ -1825,7 +1831,6 @@ MSW_SRC =
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp
-    src/msw/panel.cpp
     src/msw/progdlg.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
@@ -1904,6 +1909,7 @@ MSW_HDR =
     wx/msw/msvcrt.h
     wx/msw/notebook.h
     wx/msw/ole/access.h
+    wx/msw/ole/comimpl.h
     wx/msw/ole/dataform.h
     wx/msw/ole/dataobj.h
     wx/msw/ole/dataobj2.h

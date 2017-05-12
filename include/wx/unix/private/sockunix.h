@@ -34,9 +34,9 @@ public:
         m_fds[1] = -1;
     }
 
-    virtual wxSocketError GetLastError() const;
+    virtual wxSocketError GetLastError() const wxOVERRIDE;
 
-    virtual void ReenableEvents(wxSocketEventFlags flags)
+    virtual void ReenableEvents(wxSocketEventFlags flags) wxOVERRIDE
     {
         // enable the notifications about input/output being available again in
         // case they were disabled by OnRead/WriteWaiting()
@@ -54,20 +54,20 @@ public:
     }
 
     // wxFDIOHandler methods
-    virtual void OnReadWaiting();
-    virtual void OnWriteWaiting();
-    virtual void OnExceptionWaiting();
-    virtual bool IsOk() const { return m_fd != INVALID_SOCKET; }
+    virtual void OnReadWaiting() wxOVERRIDE;
+    virtual void OnWriteWaiting() wxOVERRIDE;
+    virtual void OnExceptionWaiting() wxOVERRIDE;
+    virtual bool IsOk() const wxOVERRIDE { return m_fd != INVALID_SOCKET; }
 
 private:
-    virtual void DoClose()
+    virtual void DoClose() wxOVERRIDE
     {
         DisableEvents();
 
         close(m_fd);
     }
 
-    virtual void UnblockAndRegisterWithEventLoop()
+    virtual void UnblockAndRegisterWithEventLoop() wxOVERRIDE
     {
         int trueArg = 1;
         ioctl(m_fd, FIONBIO, &trueArg);
@@ -114,16 +114,16 @@ public:
         m_fdioManager = NULL;
     }
 
-    virtual bool OnInit();
-    virtual void OnExit() { }
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE { }
 
-    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) wxOVERRIDE
     {
         return new wxSocketImplUnix(wxsocket);
     }
 
-    virtual void Install_Callback(wxSocketImpl *socket_, wxSocketNotify event);
-    virtual void Uninstall_Callback(wxSocketImpl *socket_, wxSocketNotify event);
+    virtual void Install_Callback(wxSocketImpl *socket_, wxSocketNotify event) wxOVERRIDE;
+    virtual void Uninstall_Callback(wxSocketImpl *socket_, wxSocketNotify event) wxOVERRIDE;
 
 protected:
     // get the FD index corresponding to the given wxSocketNotify

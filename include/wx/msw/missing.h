@@ -198,6 +198,9 @@
 #ifndef HDS_FLAT
     #define HDS_FLAT 0x0200
 #endif
+#ifndef HDS_NOSIZING
+    #define HDS_NOSIZING 0x0800
+#endif
 
 #ifndef HDF_SORTUP
     #define HDF_SORTUP   0x0400

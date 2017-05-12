@@ -90,6 +90,9 @@ public:
     */
     static void AddFile(const wxString& filename, wxImage& image, wxBitmapType type);
     static void AddFile(const wxString& filename, const wxBitmap& bitmap, wxBitmapType type);
+    static void AddFile(const wxString& filename, const wxString& textdata);
+    static void AddFile(const wxString& filename, const void *binarydata, size_t size);
+
     //@}
 
     //@{

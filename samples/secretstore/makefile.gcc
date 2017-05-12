@@ -64,10 +64,10 @@ ifeq ($(SHARED),1)
 LIBTYPE_SUFFIX = dll
 endif
 ifeq ($(MONOLITHIC),0)
-EXTRALIBS_FOR_BASE =
+EXTRALIBS_FOR_BASE = 
 endif
 ifeq ($(MONOLITHIC),1)
-EXTRALIBS_FOR_BASE =
+EXTRALIBS_FOR_BASE =   
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG_2 = -O0
@@ -79,13 +79,13 @@ ifeq ($(USE_RTTI),0)
 __RTTIFLAG_5 = -fno-rtti
 endif
 ifeq ($(USE_RTTI),1)
-__RTTIFLAG_5 =
+__RTTIFLAG_5 = 
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONSFLAG_6 = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG_6 =
+__EXCEPTIONSFLAG_6 = 
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -152,17 +152,17 @@ endif
 endif
 ifeq ($(BUILD),release)
 ifeq ($(DEBUG_INFO),default)
-__DEBUGINFO =
+__DEBUGINFO = 
 endif
 endif
 ifeq ($(DEBUG_INFO),0)
-__DEBUGINFO =
+__DEBUGINFO = 
 endif
 ifeq ($(DEBUG_INFO),1)
 __DEBUGINFO = -g
 endif
 ifeq ($(USE_THREADS),0)
-__THREADSFLAG =
+__THREADSFLAG = 
 endif
 ifeq ($(USE_THREADS),1)
 __THREADSFLAG = -mthreads
@@ -177,13 +177,13 @@ $(OBJS):
 
 all: $(OBJS)\secretstore.exe
 
-clean:
+clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\secretstore.exe del $(OBJS)\secretstore.exe
 
 $(OBJS)\secretstore.exe: $(SECRETSTORE_OBJECTS)
-	$(CXX) -o $@ $(SECRETSTORE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet
+	$(CXX) -o $@ $(SECRETSTORE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc
 
 $(OBJS)\secretstore_secretstore.o: ./secretstore.cpp
 	$(CXX) -c -o $@ $(SECRETSTORE_CXXFLAGS) $(CPPDEPS) $<

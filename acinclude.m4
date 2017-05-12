@@ -209,53 +209,6 @@ AC_DEFUN([WX_CPP_NEW_HEADERS],
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl WX_CPP_EXPLICIT checks whether the C++ compiler support the explicit
-dnl keyword and defines HAVE_EXPLICIT if this is the case
-dnl ---------------------------------------------------------------------------
-
-AC_DEFUN([WX_CPP_EXPLICIT],
-[
-  AC_CACHE_CHECK([if C++ compiler supports the explicit keyword],
-                 wx_cv_explicit,
-  [
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
-
-    dnl do the test in 2 steps: first check that the compiler knows about the
-    dnl explicit keyword at all and then verify that it really honours it
-    AC_TRY_COMPILE(
-      [
-        class Foo { public: explicit Foo(int) {} };
-      ],
-      [
-        return 0;
-      ],
-      [
-        AC_TRY_COMPILE(
-            [
-                class Foo { public: explicit Foo(int) {} };
-                static void TakeFoo(const Foo& foo) { }
-            ],
-            [
-                TakeFoo(17);
-                return 0;
-            ],
-            wx_cv_explicit=no,
-            wx_cv_explicit=yes
-        )
-      ],
-      wx_cv_explicit=no
-    )
-
-    AC_LANG_RESTORE
-  ])
-
-  if test "$wx_cv_explicit" = "yes"; then
-    AC_DEFINE(HAVE_EXPLICIT)
-  fi
-])
-
-dnl ---------------------------------------------------------------------------
 dnl WX_CHECK_FUNCS(FUNCTIONS...,
 dnl                [ACTION-IF-FOUND],
 dnl                [ACTION-IF-NOT-FOUND],

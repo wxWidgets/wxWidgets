@@ -706,6 +706,9 @@
     <ClInclude Include="..\..\include\wx\msw\winundef.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\winver.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\wrapcctl.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>

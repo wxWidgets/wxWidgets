@@ -1700,17 +1700,6 @@ template <typename T> wxDELETEA(T*& array);
 #define wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(func, body)
 
 /**
-    @c wxEXPLICIT is a macro which expands to the C++ @c explicit keyword if
-    the compiler supports it or nothing otherwise. Thus, it can be used even in
-    the code which might have to be compiled with an old compiler without
-    support for this language feature but still take advantage of it when it is
-    available.
-
-    @header{wx/defs.h}
-*/
-#define wxEXPLICIT
-
-/**
     @c wxOVERRIDE expands to the C++11 @c override keyword if it's supported by
     the compiler or nothing otherwise.
 

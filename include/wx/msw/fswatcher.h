@@ -26,7 +26,7 @@ public:
     // implementation for it using the platform native support for watching the
     // entire directory trees.
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                         const wxString& filter = wxEmptyString);
+                         const wxString& filter = wxEmptyString) wxOVERRIDE;
 
 protected:
     bool Init();

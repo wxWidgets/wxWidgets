@@ -160,6 +160,7 @@ public:
     void OnListDeleteAllItems( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
     void OnListColClick( wxListEvent &event );
+    void OnSize( wxSizeEvent &event );
 
     virtual void SortItems(wxFileData::fileListFieldType field, bool forward);
     bool GetSortDirection() const { return m_sort_forward; }

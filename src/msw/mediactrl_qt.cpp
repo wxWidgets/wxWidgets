@@ -355,33 +355,33 @@ public:
                                      const wxSize& size,
                                      long style,
                                      const wxValidator& validator,
-                                     const wxString& name);
+                                     const wxString& name) wxOVERRIDE;
 
-    virtual bool Play();
-    virtual bool Pause();
-    virtual bool Stop();
+    virtual bool Play() wxOVERRIDE;
+    virtual bool Pause() wxOVERRIDE;
+    virtual bool Stop() wxOVERRIDE;
 
     virtual bool Load(const wxURI& location,
-                      const wxURI& proxy)
+                      const wxURI& proxy) wxOVERRIDE
     { return wxMediaBackend::Load(location, proxy); }
 
-    virtual bool Load(const wxString& fileName);
-    virtual bool Load(const wxURI& location);
+    virtual bool Load(const wxString& fileName) wxOVERRIDE;
+    virtual bool Load(const wxURI& location) wxOVERRIDE;
 
-    virtual wxMediaState GetState();
+    virtual wxMediaState GetState() wxOVERRIDE;
 
-    virtual bool SetPosition(wxLongLong where);
-    virtual wxLongLong GetPosition();
-    virtual wxLongLong GetDuration();
+    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
+    virtual wxLongLong GetPosition() wxOVERRIDE;
+    virtual wxLongLong GetDuration() wxOVERRIDE;
 
-    virtual void Move(int x, int y, int w, int h);
-    wxSize GetVideoSize() const;
+    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
+    wxSize GetVideoSize() const wxOVERRIDE;
 
-    virtual double GetPlaybackRate();
-    virtual bool SetPlaybackRate(double dRate);
+    virtual double GetPlaybackRate() wxOVERRIDE;
+    virtual bool SetPlaybackRate(double dRate) wxOVERRIDE;
 
-    virtual double GetVolume();
-    virtual bool SetVolume(double);
+    virtual double GetVolume() wxOVERRIDE;
+    virtual bool SetVolume(double) wxOVERRIDE;
 
     void Cleanup();
     void FinishLoad();
@@ -394,7 +394,7 @@ public:
 
     static LRESULT CALLBACK QTWndProc(HWND, UINT, WPARAM, LPARAM);
 
-    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags);
+    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags) wxOVERRIDE;
 
     wxSize m_bestSize;              // Original movie size
     Movie m_movie;    // QT Movie handle/instance
@@ -469,7 +469,7 @@ public:
     wxQTLoadTimer(Movie movie, wxQTMediaBackend* parent, wxQuickTimeLibrary* pLib) :
       m_movie(movie), m_parent(parent), m_pLib(pLib) {}
 
-    void Notify()
+    void Notify() wxOVERRIDE
     {
         m_pLib->MoviesTask(m_movie, 0);
         // kMovieLoadStatePlayable
@@ -502,7 +502,7 @@ public:
                   wxQuickTimeLibrary* pLib) :
         m_movie(movie), m_parent(parent), m_pLib(pLib) {}
 
-    void Notify()
+    void Notify() wxOVERRIDE
     {
         //
         //  OK, a little explaining - basically originally

@@ -297,3 +297,9 @@ public:
     */
     void SetGalleryItem(wxRibbonGalleryItem* item);
 };
+
+
+wxEventType wxEVT_RIBBONGALLERY_HOVER_CHANGED;
+wxEventType wxEVT_RIBBONGALLERY_SELECTED;
+wxEventType wxEVT_RIBBONGALLERY_CLICKED;
+

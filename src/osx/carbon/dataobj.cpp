@@ -488,7 +488,13 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                                     memcpy( buf, CFDataGetBytePtr( flavorData ), flavorDataSize );
 
                                     if (dataFormat.GetType() == wxDF_TEXT)
-                                        wxMacConvertNewlines10To13( (char*) buf );
+                                    {
+                                        wxMacConvertNewlines13To10((char*) buf);
+                                    }
+                                    else if (dataFormat.GetType() == wxDF_UNICODETEXT)
+                                    {
+                                        wxMacConvertNewlines13To10((wxChar16*) buf);
+                                    }
                                     SetData( flavorFormat, flavorDataSize, buf );
                                     transferred = true;
                                     free( buf );

@@ -221,6 +221,7 @@ int          g_lastButtonNumber = 0;
 
 #ifdef __WXGTK3__
 static GList* gs_sizeRevalidateList;
+static bool gs_inSizeAllocate;
 #endif
 
 //-----------------------------------------------------------------------------
@@ -373,8 +374,10 @@ draw_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 #ifdef __WXGTK3__
         GtkStyleContext* sc = gtk_widget_get_style_context(win->m_wxwindow);
         GdkRGBA* c;
+        gtk_style_context_save(sc);
         gtk_style_context_set_state(sc, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL, "border-color", &c, NULL);
+        gtk_style_context_restore(sc);
         gdk_cairo_set_source_rgba(cr, c);
         gdk_rgba_free(c);
         cairo_set_line_width(cr, 1);
@@ -929,9 +932,11 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                 // got one
                 key_code = keysymNormalized ? keysymNormalized : keysym;
             }
-#else
-            key_code = keysym;
-#endif
+            else
+#endif // GDK_WINDOWING_X11
+            {
+                key_code = keysym;
+            }
 
             // as explained above, we want to have lower register key codes
             // normally but for the letter keys we want to have the upper ones
@@ -1689,7 +1694,7 @@ static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
             break;
 
         w = w->GetParent();
-        if ( !w )
+        if (w == NULL || w->m_widget == NULL || !gtk_widget_get_visible(w->m_widget))
             break;
         posClient = w->ScreenToClient(posScreen);
     }
@@ -2164,21 +2169,6 @@ gtk_window_grab_broken( GtkWidget*,
 #endif
 
 //-----------------------------------------------------------------------------
-// "style_set"/"style_updated"
-//-----------------------------------------------------------------------------
-
-#ifdef __WXGTK3__
-static void style_updated(GtkWidget*, wxWindow* win)
-#else
-static void style_updated(GtkWidget*, GtkStyle*, wxWindow* win)
-#endif
-{
-    wxSysColourChangedEvent event;
-    event.SetEventObject(win);
-    win->GTKProcessEvent(event);
-}
-
-//-----------------------------------------------------------------------------
 // "unrealize"
 //-----------------------------------------------------------------------------
 
@@ -2197,6 +2187,22 @@ static void frame_clock_layout(GdkFrameClock*, wxWindow* win)
     win->GTKSizeRevalidate();
 }
 #endif // GTK_CHECK_VERSION(3,8,0)
+
+#ifdef __WXGTK3__
+//-----------------------------------------------------------------------------
+// "check-resize"
+//-----------------------------------------------------------------------------
+
+static void check_resize(GtkContainer*, wxWindow*)
+{
+    gs_inSizeAllocate = true;
+}
+
+static void check_resize_after(GtkContainer*, wxWindow*)
+{
+    gs_inSizeAllocate = false;
+}
+#endif // __WXGTK3__
 
 } // extern "C"
 
@@ -2246,9 +2252,8 @@ void wxWindowGTK::GTKHandleRealized()
     }
 #endif
 
-    const bool isTopLevel = IsTopLevel();
 #if GTK_CHECK_VERSION(3,8,0)
-    if (isTopLevel && gtk_check_version(3,8,0) == NULL)
+    if (IsTopLevel() && gtk_check_version(3,8,0) == NULL)
     {
         GdkFrameClock* clock = gtk_widget_get_frame_clock(m_widget);
         if (clock &&
@@ -2264,21 +2269,6 @@ void wxWindowGTK::GTKHandleRealized()
     GTKProcessEvent( event );
 
     GTKUpdateCursor(false, true);
-
-    if (m_wxwindow && isTopLevel)
-    {
-        // attaching to style changed signal after realization avoids initial
-        // changes we don't care about
-        const gchar *detailed_signal =
-#ifdef __WXGTK3__
-            "style_updated";
-#else
-            "style_set";
-#endif
-        g_signal_connect(m_wxwindow,
-            detailed_signal,
-            G_CALLBACK(style_updated), this);
-    }
 }
 
 void wxWindowGTK::GTKHandleUnrealize()
@@ -2289,12 +2279,6 @@ void wxWindowGTK::GTKHandleUnrealize()
     {
         if (m_imContext)
             gtk_im_context_set_client_window(m_imContext, NULL);
-
-        if (IsTopLevel())
-        {
-            g_signal_handlers_disconnect_by_func(
-                m_wxwindow, (void*)style_updated, this);
-        }
     }
 }
 
@@ -2420,6 +2404,7 @@ void wxWindowGTK::Init()
 #ifdef __WXGTK3__
     m_paintContext = NULL;
     m_styleProvider = NULL;
+    m_needSizeEvent = false;
 #endif
 
     m_isScrolling = false;
@@ -2604,15 +2589,12 @@ wxWindowGTK::~wxWindowGTK()
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
 
-    // Unlike the above cases, which can happen in normal circumstances, a
-    // window shouldn't be destroyed while it still has capture, so even though
-    // we still reset the global pointer to avoid leaving it dangling and
-    // crashing afterwards, also complain about it.
+    // This is a real error, unlike the above, but it's already checked for in
+    // the base class dtor and asserting here results is useless and, even
+    // worse, results in abnormal termination when running unit tests which
+    // throw exceptions from their assert handler, so don't assert here.
     if ( g_captureWindow == this )
-    {
-        wxFAIL_MSG( wxS("Destroying window with mouse capture") );
         g_captureWindow = NULL;
-    }
 
     if (m_wxwindow)
     {
@@ -2638,7 +2620,7 @@ wxWindowGTK::~wxWindowGTK()
     if (m_styleProvider)
         g_object_unref(m_styleProvider);
 
-    gs_sizeRevalidateList = g_list_remove(gs_sizeRevalidateList, this);
+    gs_sizeRevalidateList = g_list_remove_all(gs_sizeRevalidateList, this);
 #endif
 
     if (m_widget)
@@ -2773,6 +2755,13 @@ void wxWindowGTK::PostCreation()
         g_signal_connect(m_wxwindow ? m_wxwindow : m_widget, "size_allocate",
             G_CALLBACK(size_allocate), this);
     }
+#ifdef __WXGTK3__
+    else
+    {
+        g_signal_connect(m_widget, "check-resize", G_CALLBACK(check_resize), this);
+        g_signal_connect_after(m_widget, "check-resize", G_CALLBACK(check_resize_after), this);
+    }
+#endif
 
 #if GTK_CHECK_VERSION(2, 8, 0)
 #ifndef __WXGTK3__
@@ -2881,46 +2870,48 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_leave_callback), this);
 }
 
-static GSList* gs_queueResizeList;
-
-extern "C" {
-static gboolean queue_resize(void*)
-{
-    gdk_threads_enter();
-    for (GSList* p = gs_queueResizeList; p; p = p->next)
-    {
-        if (p->data)
-        {
-            gtk_widget_queue_resize(GTK_WIDGET(p->data));
-            g_object_remove_weak_pointer(G_OBJECT(p->data), &p->data);
-        }
-    }
-    g_slist_free(gs_queueResizeList);
-    gs_queueResizeList = NULL;
-    gdk_threads_leave();
-    return false;
-}
-}
-
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
-    gtk_widget_set_size_request(m_widget, width, height);
     GtkWidget* parent = gtk_widget_get_parent(m_widget);
+    wxPizza* pizza = NULL;
     if (WX_IS_PIZZA(parent))
-        WX_PIZZA(parent)->move(m_widget, x, y, width, height);
+    {
+        pizza = WX_PIZZA(parent);
+        pizza->move(m_widget, x, y, width, height);
+        if (
+#ifdef __WXGTK3__
+            !gs_inSizeAllocate &&
+#endif
+            gtk_widget_get_visible(m_widget))
+        {
+            // in case only the position is changing
+            gtk_widget_queue_resize(m_widget);
+        }
+    }
 
+    gtk_widget_set_size_request(m_widget, width, height);
+
+#ifdef __WXGTK3__
     // With GTK3, gtk_widget_queue_resize() is ignored while a size-allocate
     // is in progress. This situation is common in wxWidgets, since
     // size-allocate can generate wxSizeEvent and size event handlers often
-    // call SetSize(), directly or indirectly. Work around this by deferring
-    // the queue-resize until after size-allocate processing is finished.
-    if (g_slist_find(gs_queueResizeList, m_widget) == NULL)
+    // call SetSize(), directly or indirectly. It should be fine to call
+    // gtk_widget_size_allocate() immediately in this case.
+    if (gs_inSizeAllocate && gtk_widget_get_visible(m_widget) && width > 0 && height > 0)
     {
-        if (gs_queueResizeList == NULL)
-            g_idle_add_full(GTK_PRIORITY_RESIZE, queue_resize, NULL, NULL);
-        gs_queueResizeList = g_slist_prepend(gs_queueResizeList, m_widget);
-        g_object_add_weak_pointer(G_OBJECT(m_widget), &gs_queueResizeList->data);
+        // obligatory size request before size allocate to avoid GTK3 warnings
+        GtkRequisition req;
+        gtk_widget_get_preferred_size(m_widget, &req, NULL);
+
+        if (pizza)
+            pizza->size_allocate_child(m_widget, x, y, width, height);
+        else
+        {
+            GtkAllocation a = { x, y, width, height };
+            gtk_widget_size_allocate(m_widget, &a);
+        }
     }
+#endif // __WXGTK3__
 }
 
 void wxWindowGTK::ConstrainSize()
@@ -3010,8 +3001,15 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         DoMoveWindow(x, y, width, height);
     }
 
-    if ((sizeChange && !m_nativeSizeEvent) || (sizeFlags & wxSIZE_FORCE_EVENT))
+    if (((sizeChange
+#ifdef __WXGTK3__
+                     || m_needSizeEvent
+#endif
+                                       ) && !m_nativeSizeEvent) || (sizeFlags & wxSIZE_FORCE_EVENT))
     {
+#ifdef __WXGTK3__
+        m_needSizeEvent = false;
+#endif
         // update these variables to keep size_allocate handler
         // from sending another size event for this change
         DoGetClientSize(&m_clientWidth, &m_clientHeight);
@@ -3248,7 +3246,11 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
         return;
     }
 
-    wxCHECK_RET(source, "ClientToScreen failed on unrealized window");
+    if (source == NULL)
+    {
+        wxLogDebug("ClientToScreen cannot work when toplevel window is not shown");
+        return;
+    }
 
     int org_x = 0;
     int org_y = 0;
@@ -3318,7 +3320,11 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
         return;
     }
 
-    wxCHECK_RET(source, "ScreenToClient failed on unrealized window");
+    if (source == NULL)
+    {
+        wxLogDebug("ScreenToClient cannot work when toplevel window is not shown");
+        return;
+    }
 
     int org_x = 0;
     int org_y = 0;
@@ -4156,9 +4162,21 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
 #endif
 {
 #ifdef __WXGTK3__
-    m_paintContext = cr;
+    {
+        cairo_region_t* region = gdk_window_get_clip_region(gtk_widget_get_window(m_wxwindow));
+        cairo_rectangle_int_t rect;
+        cairo_region_get_extents(region, &rect);
+        cairo_region_destroy(region);
+        cairo_rectangle(cr, rect.x, rect.y, rect.width, rect.height);
+        cairo_clip(cr);
+    }
     double x1, y1, x2, y2;
     cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+
+    if (x1 >= x2 || y1 >= y2)
+        return;
+
+    m_paintContext = cr;
     m_updateRegion = wxRegion(int(x1), int(y1), int(x2 - x1), int(y2 - y1));
 #else // !__WXGTK3__
     m_updateRegion = wxRegion(region);
@@ -4275,6 +4293,15 @@ void wxWindowGTK::GTKSendPaintEvents(const GdkRegion* region)
                                     0, 0, w, h);
 #endif // !__WXGTK3__
             }
+#ifdef __WXGTK3__
+            else if (m_backgroundColour.IsOk() && gtk_check_version(3,20,0) == NULL)
+            {
+                cairo_save(cr);
+                gdk_cairo_set_source_rgba(cr, m_backgroundColour);
+                cairo_paint(cr);
+                cairo_restore(cr);
+            }
+#endif
             break;
 
         case wxBG_STYLE_PAINT:
@@ -4537,24 +4564,7 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
 void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     GtkWidget* widget = m_wxwindow ? m_wxwindow : m_widget;
-
-    // block the signal temporarily to avoid sending
-    // wxSysColourChangedEvents when we change the colours ourselves
-    bool unblock = false;
-    if (m_wxwindow && IsTopLevel())
-    {
-        unblock = true;
-        g_signal_handlers_block_by_func(
-            m_wxwindow, (void*)style_updated, this);
-    }
-
     GTKApplyStyle(widget, style);
-
-    if (unblock)
-    {
-        g_signal_handlers_unblock_by_func(
-            m_wxwindow, (void*)style_updated, this);
-    }
 }
 
 void wxWindowGTK::GTKApplyStyle(GtkWidget* widget, GtkRcStyle* WXUNUSED_IN_GTK3(style))
@@ -4576,9 +4586,11 @@ void wxWindowGTK::GTKApplyStyle(GtkWidget* widget, GtkRcStyle* WXUNUSED_IN_GTK3(
     cairo_pattern_t* pattern = NULL;
     if (m_backgroundColour.IsOk())
     {
+        gtk_style_context_save(context);
         gtk_style_context_set_state(context, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get(context,
             GTK_STATE_FLAG_NORMAL, "background-image", &pattern, NULL);
+        gtk_style_context_restore(context);
     }
     if (pattern)
     {
@@ -4814,6 +4826,15 @@ void wxWindowGTK::GTKSizeRevalidate()
         {
             win->InvalidateBestSize();
             gs_sizeRevalidateList = g_list_delete_link(gs_sizeRevalidateList, p);
+            for (;;)
+            {
+                win = win->m_parent;
+                if (win == NULL || win->m_needSizeEvent)
+                    break;
+                win->m_needSizeEvent = true;
+                if (win->IsTopLevel())
+                    break;
+            }
         }
     }
 }
@@ -4848,14 +4869,14 @@ bool wxWindowGTK::SetFont( const wxFont &font )
     // invalidate the best size right before the style cache is updated, so any
     // subsequent best size requests use the correct font.
     if (gtk_check_version(3,8,0) == NULL)
-        gs_sizeRevalidateList = g_list_append(gs_sizeRevalidateList, this);
+        gs_sizeRevalidateList = g_list_prepend(gs_sizeRevalidateList, this);
     else if (gtk_check_version(3,6,0) == NULL)
     {
         wxWindow* tlw = wxGetTopLevelParent(static_cast<wxWindow*>(this));
         if (tlw->m_widget && gtk_widget_get_visible(tlw->m_widget))
             g_idle_add_full(GTK_PRIORITY_RESIZE - 1, before_resize, this, NULL);
         else
-            gs_sizeRevalidateList = g_list_append(gs_sizeRevalidateList, this);
+            gs_sizeRevalidateList = g_list_prepend(gs_sizeRevalidateList, this);
     }
 #endif
 
@@ -5044,9 +5065,7 @@ int wxWindowGTK::GetScrollRange( int orient ) const
 //   difference due to possible inexactness in floating point arithmetic
 static inline bool IsScrollIncrement(double increment, double x)
 {
-    wxASSERT(increment >= 0);
-    if ( increment == 0. )
-        return false;
+    wxASSERT(increment > 0);
     const double tolerance = 1.0 / 1024;
     return fabs(increment - fabs(x)) < tolerance;
 }
@@ -5057,14 +5076,18 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
 
     const int barIndex = range == m_scrollBar[1];
 
-    const double value = gtk_range_get_value(range);
+    GtkAdjustment* adj = gtk_range_get_adjustment(range);
+    const double value = gtk_adjustment_get_value(adj);
 
     // save previous position
     const double oldPos = m_scrollPos[barIndex];
     // update current position
     m_scrollPos[barIndex] = value;
     // If event should be ignored, or integral position has not changed
-    if (g_blockEventsOnDrag || wxRound(value) == wxRound(oldPos))
+    // or scrollbar is disabled (webkitgtk is known to cause a "value-changed"
+    // by setting the GtkAdjustment to all zeros)
+    if (g_blockEventsOnDrag || wxRound(value) == wxRound(oldPos) ||
+        gtk_adjustment_get_upper(adj) <= gtk_adjustment_get_page_size(adj))
     {
         return wxEVT_NULL;
     }
@@ -5076,7 +5099,6 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
         const double diff = value - oldPos;
         const bool isDown = diff > 0;
 
-        GtkAdjustment* adj = gtk_range_get_adjustment(range);
         if (IsScrollIncrement(gtk_adjustment_get_step_increment(adj), diff))
         {
             eventType = isDown ? wxEVT_SCROLL_LINEDOWN : wxEVT_SCROLL_LINEUP;

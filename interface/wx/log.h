@@ -1215,7 +1215,7 @@ void wxSafeShowMessage(const wxString& title, const wxString& text);
     Returns the error code from the last system call. This function uses
     @c errno on Unix platforms and @c GetLastError under Win32.
 
-    @see wxSysErrorMsg(), wxLogSysError()
+    @see wxSysErrorMsgStr(), wxLogSysError()
 
     @header{wx/log.h}
 */
@@ -1225,6 +1225,25 @@ unsigned long wxSysErrorCode();
     Returns the error message corresponding to the given system error code. If
     @a errCode is 0 (default), the last error code (as returned by
     wxSysErrorCode()) is used.
+
+    Use this function instead of wxSysErrorMsg(), as the latter one is not
+    thread-safe.
+
+    @since 3.1.0
+
+    @see wxSysErrorCode(), wxLogSysError()
+
+    @header{wx/log.h}
+*/
+wxString wxSysErrorMsgStr(unsigned long errCode = 0);
+
+/**
+    Returns the error message corresponding to the given system error code. If
+    @a errCode is 0 (default), the last error code (as returned by
+    wxSysErrorCode()) is used.
+
+    Use wxSysErrorMsgStr() instead of this function especially in a
+    multi-threaded application.
 
     @see wxSysErrorCode(), wxLogSysError()
 
@@ -1282,7 +1301,7 @@ void wxVLogInfo(const char* formatString, va_list argPtr);
     activated by calling wxLog::SetVerbose().
 
     Notice that this is done automatically by wxWidgets, unless the standard
-    command line handling is overridden, if @c --verbose option is specified on
+    command line handling is overridden, if @c \--verbose option is specified on
     the program command line, so using these functions provides a simple way of
     having some diagnostic messages not shown by default but which can be
     easily shown by the user if needed.
@@ -1440,7 +1459,7 @@ void wxVLogStatus(const char* formatString, va_list argPtr);
     form of this function takes the error code explicitly as the first
     argument.
 
-    @see wxSysErrorCode(), wxSysErrorMsg()
+    @see wxSysErrorCode(), wxSysErrorMsgStr()
 
     @header{wx/log.h}
 */

@@ -89,45 +89,45 @@ public:
 
     wxAuiDefaultDockArt();
 
-    int GetMetric(int metricId);
-    void SetMetric(int metricId, int newVal);
-    wxColour GetColour(int id);
-    void SetColour(int id, const wxColor& colour);
-    void SetFont(int id, const wxFont& font);
-    wxFont GetFont(int id);
+    int GetMetric(int metricId) wxOVERRIDE;
+    void SetMetric(int metricId, int newVal) wxOVERRIDE;
+    wxColour GetColour(int id) wxOVERRIDE;
+    void SetColour(int id, const wxColor& colour) wxOVERRIDE;
+    void SetFont(int id, const wxFont& font) wxOVERRIDE;
+    wxFont GetFont(int id) wxOVERRIDE;
 
     void DrawSash(wxDC& dc,
                   wxWindow *window,
                   int orientation,
-                  const wxRect& rect);
+                  const wxRect& rect) wxOVERRIDE;
 
     void DrawBackground(wxDC& dc,
                   wxWindow *window,
                   int orientation,
-                  const wxRect& rect);
+                  const wxRect& rect) wxOVERRIDE;
 
     void DrawCaption(wxDC& dc,
                   wxWindow *window,
                   const wxString& text,
                   const wxRect& rect,
-                  wxAuiPaneInfo& pane);
+                  wxAuiPaneInfo& pane) wxOVERRIDE;
 
     void DrawGripper(wxDC& dc,
                   wxWindow *window,
                   const wxRect& rect,
-                  wxAuiPaneInfo& pane);
+                  wxAuiPaneInfo& pane) wxOVERRIDE;
 
     void DrawBorder(wxDC& dc,
                   wxWindow *window,
                   const wxRect& rect,
-                  wxAuiPaneInfo& pane);
+                  wxAuiPaneInfo& pane) wxOVERRIDE;
 
     void DrawPaneButton(wxDC& dc,
                   wxWindow *window,
                   int button,
                   int buttonState,
                   const wxRect& rect,
-                  wxAuiPaneInfo& pane);
+                  wxAuiPaneInfo& pane) wxOVERRIDE;
 
     void DrawIcon(wxDC& dc,
                   const wxRect& rect,

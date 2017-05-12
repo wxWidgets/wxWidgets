@@ -20,7 +20,7 @@ using PostScript which never really matched the screen display.
 
 Since GTK+ 2.10, support for printing has been added to GTK+ itself and
 beginning with wxWidgets 2.9, GTK+ printing is used by default (i.e. unless
-<tt>--without-gtkprint</tt> was explicitly used when configuring the library).
+<tt>\--without-gtkprint</tt> was explicitly used when configuring the library).
 Support for GTK+ print is detected dynamically, i.e. during the run-time: if it
 is found, printing will be done through GTK+, otherwise the application will
 fall back to the old PostScript printing code. This allows the applications

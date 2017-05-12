@@ -20,7 +20,11 @@
 
 #include "wx/utils.h"
 
-#define USE_PUTENV (!defined(HAVE_SETENV) && defined(HAVE_PUTENV))
+#if !defined(HAVE_SETENV) && defined(HAVE_PUTENV)
+    #define USE_PUTENV 1
+#else
+    #define USE_PUTENV 0
+#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -405,7 +409,7 @@ public:
     }
 
 #if wxUSE_UNICODE
-    ArgsArray(wchar_t **wargv)
+    ArgsArray(const wchar_t* const* wargv)
     {
         int argc = 0;
         while ( wargv[argc] )
@@ -430,7 +434,7 @@ public:
         delete [] m_argv;
     }
 
-    operator char**() const { return m_argv; }
+    operator const char* const*() const { return m_argv; }
 
 private:
     void Init(int argc)
@@ -453,7 +457,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-bool wxMacLaunch(char **argv);
+bool wxMacLaunch(const char* const* argv);
 #endif
 
 long wxExecute(const wxString& command, int flags, wxProcess *process,
@@ -467,7 +471,7 @@ long wxExecute(const wxString& command, int flags, wxProcess *process,
 
 #if wxUSE_UNICODE
 
-long wxExecute(wchar_t **wargv, int flags, wxProcess *process,
+long wxExecute(const wchar_t* const* wargv, int flags, wxProcess* process,
         const wxExecuteEnv *env)
 {
     ArgsArray argv(wargv);
@@ -555,7 +559,7 @@ int BlockUntilChildExit(wxExecuteData& execData)
 } // anonymous namespace
 
 // wxExecute: the real worker function
-long wxExecute(char **argv, int flags, wxProcess *process,
+long wxExecute(const char* const* argv, int flags, wxProcess* process,
         const wxExecuteEnv *env)
 {
     // for the sync execution, we return -1 to indicate failure, but for async
@@ -739,10 +743,10 @@ long wxExecute(char **argv, int flags, wxProcess *process,
             }
         }
 
-        execvp(*argv, argv);
+        execvp(*argv, const_cast<char**>(argv));
 
         fprintf(stderr, "execvp(");
-        for ( char **a = argv; *a; a++ )
+        for (const char* const* a = argv; *a; a++)
             fprintf(stderr, "%s%s", a == argv ? "" : ", ", *a);
         fprintf(stderr, ") failed with error %d!\n", errno);
 

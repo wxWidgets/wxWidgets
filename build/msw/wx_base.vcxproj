@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -653,6 +653,7 @@
     <ClInclude Include="..\..\include\wx\msw\stackwalk.h" />
     <ClInclude Include="..\..\include\wx\msw\stdpaths.h" />
     <ClInclude Include="..\..\include\wx\msw\winundef.h" />
+    <ClInclude Include="..\..\include\wx\msw\winver.h" />
     <ClInclude Include="..\..\include\wx\msw\wrapcctl.h" />
     <ClInclude Include="..\..\include\wx\msw\wrapcdlg.h" />
     <ClInclude Include="..\..\include\wx\msw\wrapwin.h" />

@@ -47,14 +47,6 @@
 
 #include "wx/display.h"
 
-#ifndef ICON_BIG
-    #define ICON_BIG 1
-#endif
-
-#ifndef ICON_SMALL
-    #define ICON_SMALL 0
-#endif
-
 // NB: wxDlgProc must be defined here and not in dialog.cpp because the latter
 //     is not included by wxUniv build which does need wxDlgProc
 LONG APIENTRY
@@ -69,8 +61,8 @@ class wxTLWHiddenParentModule : public wxModule
 {
 public:
     // module init/finalize
-    virtual bool OnInit();
-    virtual void OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE;
 
     // get the hidden window (creates on demand)
     static HWND GetHWND();
@@ -407,8 +399,7 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
         exflags |= WS_EX_LAYOUTRTL;
 
-    return MSWCreate(MSWGetRegisteredClassName(),
-                     title.t_str(), pos, sz, flags, exflags);
+    return MSWCreate(GetMSWClassName(GetWindowStyle()), title.t_str(), pos, sz, flags, exflags);
 }
 
 bool wxTopLevelWindowMSW::Create(wxWindow *parent,

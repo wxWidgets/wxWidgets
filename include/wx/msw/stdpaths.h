@@ -21,14 +21,16 @@ class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 {
 public:
     // implement base class pure virtuals
-    virtual wxString GetExecutablePath() const;
-    virtual wxString GetConfigDir() const;
-    virtual wxString GetUserConfigDir() const;
-    virtual wxString GetDataDir() const;
-    virtual wxString GetUserDataDir() const;
-    virtual wxString GetUserLocalDataDir() const;
-    virtual wxString GetPluginsDir() const;
+    virtual wxString GetExecutablePath() const wxOVERRIDE;
+    virtual wxString GetConfigDir() const wxOVERRIDE;
+    virtual wxString GetUserConfigDir() const wxOVERRIDE;
+    virtual wxString GetDataDir() const wxOVERRIDE;
+    virtual wxString GetUserDataDir() const wxOVERRIDE;
+    virtual wxString GetUserLocalDataDir() const wxOVERRIDE;
+    virtual wxString GetPluginsDir() const wxOVERRIDE;
     virtual wxString GetUserDir(Dir userDir) const wxOVERRIDE;
+    virtual wxString MakeConfigFileName(const wxString& basename,
+                                        ConfigFileConv conv) const wxOVERRIDE;
 
 
     // MSW-specific methods
@@ -92,8 +94,8 @@ protected:
 class WXDLLIMPEXP_BASE wxStandardPathsWin16 : public wxStandardPaths
 {
 public:
-    virtual wxString GetConfigDir() const;
-    virtual wxString GetUserConfigDir() const;
+    virtual wxString GetConfigDir() const wxOVERRIDE;
+    virtual wxString GetUserConfigDir() const wxOVERRIDE;
 };
 
 #endif // _WX_MSW_STDPATHS_H_

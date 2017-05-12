@@ -51,12 +51,13 @@ public:
     }
 
     // override/implement base class virtuals
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
+    virtual bool Dispatch() wxOVERRIDE;
+    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
+    virtual void WakeUp() wxOVERRIDE;
 
 protected:
-    virtual void OnNextIteration();
-    virtual void DoYieldFor(long eventsToProcess);
+    virtual void OnNextIteration() wxOVERRIDE;
+    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
 
 private:
     // check if the given window is a child of ms_winCritical (which must be

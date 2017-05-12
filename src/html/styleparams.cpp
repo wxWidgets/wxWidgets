@@ -42,7 +42,7 @@ wxHtmlStyleParams::wxHtmlStyleParams(const wxHtmlTag& tag)
         else
         {
             // Syntax problem change to blank string
-            wd = "";
+            wd.clear();
         }
     }
 

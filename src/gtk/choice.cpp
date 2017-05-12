@@ -99,6 +99,15 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 wxChoice::~wxChoice()
 {
     delete m_strings;
+
+ #ifdef __WXGTK3__
+    // At least with GTK+ 3.22.9, destroying a shown combobox widget results in
+    // a Gtk-CRITICAL debug message when the assertion fails inside a signal
+    // handler called from gtk_widget_unrealize(), which is annoying, so avoid
+    // it by hiding the widget before destroying it -- this doesn't look right,
+    // but shouldn't do any harm neither.
+    Hide();
+ #endif // __WXGTK3__
 }
 
 void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )

@@ -55,14 +55,14 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
     // items may be checked
-    virtual bool IsChecked(unsigned int uiIndex) const;
-    virtual void Check(unsigned int uiIndex, bool bCheck = true);
+    virtual bool IsChecked(unsigned int uiIndex) const wxOVERRIDE;
+    virtual void Check(unsigned int uiIndex, bool bCheck = true) wxOVERRIDE;
     virtual void Toggle(unsigned int uiIndex);
 
     // we create our items ourselves and they have non-standard size,
     // so we need to override these functions
-    virtual wxOwnerDrawn *CreateLboxItem(size_t n);
-    virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
+    virtual wxOwnerDrawn *CreateLboxItem(size_t n) wxOVERRIDE;
+    virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) wxOVERRIDE;
 
 protected:
     // pressing space or clicking the check box toggles the item
@@ -79,7 +79,7 @@ protected:
         ProcessCommand(event);
     }
 
-    wxSize DoGetBestClientSize() const;
+    wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);

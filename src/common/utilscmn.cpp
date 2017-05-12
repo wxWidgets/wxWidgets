@@ -117,38 +117,38 @@
 // ============================================================================
 
 // Array used in DecToHex conversion routine.
-static const wxChar hexArray[] = wxT("0123456789ABCDEF");
+static const char hexArray[] = "0123456789ABCDEF";
 
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& str)
 {
+    wxCHECK_MSG( str.Length() >= 2, -1, wxS("Invalid argument") );
+
     char buf[2];
     buf[0] = str.GetChar(0);
     buf[1] = str.GetChar(1);
-    return wxHexToDec((const char*) buf);
+    return wxHexToDec(buf);
 }
 
-// Convert decimal integer to 2-character hex string
-void wxDecToHex(int dec, wxChar *buf)
+// Convert decimal integer to 2-character hex string (not prefixed by 0x).
+void wxDecToHex(unsigned char dec, wxChar *buf)
 {
-    int firstDigit = (int)(dec/16.0);
-    int secondDigit = (int)(dec - (firstDigit*16.0));
-    buf[0] = hexArray[firstDigit];
-    buf[1] = hexArray[secondDigit];
+    wxASSERT_MSG( buf, wxS("Invalid argument") );
+    buf[0] = hexArray[dec >> 4];
+    buf[1] = hexArray[dec & 0x0F];
     buf[2] = 0;
 }
 
 // Convert decimal integer to 2 characters
-void wxDecToHex(int dec, char* ch1, char* ch2)
+void wxDecToHex(unsigned char dec, char* ch1, char* ch2)
 {
-    int firstDigit = (int)(dec/16.0);
-    int secondDigit = (int)(dec - (firstDigit*16.0));
-    (*ch1) = (char) hexArray[firstDigit];
-    (*ch2) = (char) hexArray[secondDigit];
+    wxASSERT_MSG( ch1 && ch2, wxS("Invalid argument(s)") );
+    *ch1 = hexArray[dec >> 4];
+    *ch2 = hexArray[dec & 0x0F];
 }
 
-// Convert decimal integer to 2-character hex string
-wxString wxDecToHex(int dec)
+// Convert decimal integer to 2-character hex string (not prefixed by 0x).
+wxString wxDecToHex(unsigned char dec)
 {
     wxChar buf[3];
     wxDecToHex(dec, buf);
@@ -1155,6 +1155,29 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
     size_t len = in.length();
     out.reserve(len);
 
+    // In some East Asian languages _("&File") translates as "<translation>(&F)"
+    // Check for this first, otherwise fall through to the standard situation
+    if (flags & wxStrip_Mnemonics)
+    {
+        wxString label(in), accel;
+        int pos = in.Find('\t');
+        if (pos != wxNOT_FOUND)
+        {
+            label = in.Left(pos+1).Trim();
+            if (!(flags & wxStrip_Accel))
+            {
+                accel = in.Mid(pos);
+            }
+        }
+
+        // The initial '?' means we match "Foo(&F)" but not "(&F)"
+        if (label.Matches("?*(&?)"))
+        {
+            label = label.Left( label.Len()-4 ).Trim();
+            return label + accel;
+        }
+    }
+
     for ( wxString::const_iterator it = in.begin(); it != in.end(); ++it )
     {
         wxChar ch = *it;
@@ -1388,7 +1411,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxS("Copyright (c) 1995-2016 wxWidgets team"));
+                         wxS("Copyright (c) 1995-2017 wxWidgets team"));
 }
 
 void wxInfoMessageBox(wxWindow* parent)

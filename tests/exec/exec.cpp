@@ -302,7 +302,7 @@ void ExecTestCase::TestProcess()
 class TestAsyncProcess : public wxProcess
 {
 public:
-    wxEXPLICIT TestAsyncProcess()
+    explicit TestAsyncProcess()
     {
     }
 

@@ -382,7 +382,6 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    }
 
    // second method: try to connect to well known host:
-   // This can be used under Win 9x, too!
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
    int sockfd;

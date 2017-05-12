@@ -96,8 +96,8 @@ uses its knowledge about wxString reference counting schema.
 
 To build wxWidgets with the standard containers you need to set
 wxUSE_STD_CONTAINERS option to 1 in @c wx/msw/setup.h for wxMSW builds or
-specify @c --enable-std_containers option to configure (which is also
-implicitly enabled by @c --enable-stl option) in Unix builds.
+specify @c \--enable-std_containers option to configure (which is also
+implicitly enabled by @c \--enable-stl option) in Unix builds.
 
 The standard container build is mostly, but not quite, compatible with the
 default one. Here are the most important differences:

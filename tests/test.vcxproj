@@ -535,6 +535,7 @@
     <ClCompile Include="strings\unicode.cpp" />
     <ClCompile Include="strings\vararg.cpp" />
     <ClCompile Include="strings\vsnprintf.cpp" />
+    <ClCompile Include="strings\hexconv.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="textfile\textfiletest.cpp" />
     <ClCompile Include="thread\atomic.cpp" />

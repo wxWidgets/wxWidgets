@@ -51,8 +51,12 @@ wxEventType wxEVT_DIRPICKER_CHANGED;
            Can be combined with wxFLP_SAVE only: ask confirmation to the user
            before selecting a file.
     @style{wxFLP_FILE_MUST_EXIST}
-           Can be combined with wxFLP_OPEN only: the selected file must be an
-           existing file.
+           Can be combined with wxFLP_OPEN only: the file selected in the popup
+           wxFileDialog must be an existing file. Notice that it still remains
+           possible for the user to enter a non-existent file name in the text
+           control if @c wxFLP_USE_TEXTCTRL is also used, this flag is a hint
+           for the user rather than a guarantee that the selected file does
+           exist for the program.
     @style{wxFLP_CHANGE_DIR}
            Change current working directory on each user file selection change.
     @style{wxFLP_SMALL}
@@ -166,7 +170,14 @@ public:
 
     /**
         Sets the absolute path of the currently selected file.
-        This must be a valid file if the @c wxFLP_FILE_MUST_EXIST style was given.
+
+        If the control uses @c wxFLP_FILE_MUST_EXIST and does not use
+        @c wxFLP_USE_TEXTCTRL style, the @a filename must be a name of an
+        existing file and will be simply ignored by the native wxGTK
+        implementation if this is not the case (the generic implementation used
+        under the other platforms accepts even invalid file names currently,
+        but this is subject to change in the future, don't rely on being able
+        to use non-existent paths with it).
     */
     void SetPath(const wxString& filename);
 };
@@ -193,9 +204,13 @@ public:
            automatically synchronized with button's value. Use functions
            defined in wxPickerBase to modify the text control.
     @style{wxDIRP_DIR_MUST_EXIST}
-           Creates a picker which allows to select only existing directories.
-           wxGTK control always adds this flag internally as it does not
-           support its absence.
+           Creates a picker which allows to select only existing directories in
+           the popup wxDirDialog. Notice that, as with @c wxFLP_FILE_MUST_EXIST,
+           it is still possible to enter a non-existent directory even when
+           this file is specified if @c wxDIRP_USE_TEXTCTRL style is also used.
+           Also note that if @c wxDIRP_USE_TEXTCTRL is not used, the native
+           wxGTK implementation always uses this style as it doesn't support
+           selecting non-existent directories.
     @style{wxDIRP_CHANGE_DIR}
            Change current working directory on each user directory selection change.
     @style{wxDIRP_SMALL}
@@ -303,9 +318,12 @@ public:
     void SetInitialDirectory(const wxString& dir);
 
     /**
-        Sets the absolute path of the currently selected directory (the default converter uses current locale's
-        charset).
-        This must be a valid directory if @c wxDIRP_DIR_MUST_EXIST style was given.
+        Sets the absolute path of the currently selected directory.
+
+        If the control uses @c wxDIRP_DIR_MUST_EXIST and does not use
+        @c wxDIRP_USE_TEXTCTRL style, the @a dirname must be a name of an
+        existing directory and will be simply ignored by the native wxGTK
+        implementation if this is not the case.
     */
     void SetPath(const wxString& dirname);
 };

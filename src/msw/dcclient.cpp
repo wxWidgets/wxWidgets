@@ -226,10 +226,6 @@ void wxClientDCImpl::InitDC()
 
     // in wxUniv build we must manually do some DC adjustments usually
     // performed by Windows for us
-    //
-    // we also need to take the menu/toolbar manually into account under
-    // Windows CE because they're just another control there, not anything
-    // special as usually under Windows
 #if defined(__WXUNIVERSAL__)
     wxPoint ptOrigin = m_window->GetClientAreaOrigin();
     if ( ptOrigin.x || ptOrigin.y )

@@ -54,7 +54,11 @@
 
 #if wxUSE_GUI
     #include "testableframe.h"
-#endif
+
+#ifdef __WXGTK__
+    #include <glib.h>
+#endif // __WXGTK__
+#endif // wxUSE_GUI
 
 #include "wx/socket.h"
 #include "wx/evtloop.h"
@@ -222,17 +226,34 @@ public:
 class DetailListener : public CppUnit::TestListener
 {
 public:
-    DetailListener(bool doTiming = false):
+    DetailListener() :
         CppUnit::TestListener(),
-        m_timing(doTiming)
+        m_verboseLogging(false),
+        m_timing(false)
     {
     }
 
+    void EnableVerboseLog(bool withTimings)
+    {
+        m_verboseLogging = true;
+        m_timing = withTimings;
+    }
+
+    // May return empty string if not running any tests currently.
+    static const char* GetCurrentTest() { return ms_currentTest.c_str(); }
+
     virtual void startTest(CppUnit::Test *test)
     {
-        printf("  %-60s  ", test->getName().c_str());
-        m_result = RESULT_OK;
-        m_watch.Start();
+        ms_currentTest = test->getName();
+
+        if ( m_verboseLogging )
+        {
+            printf("  %-60s  ", ms_currentTest.c_str());
+            m_result = RESULT_OK;
+
+            if ( m_timing )
+                m_watch.Start();
+        }
     }
 
     virtual void addFailure(const CppUnit::TestFailure& failure)
@@ -242,11 +263,17 @@ public:
 
     virtual void endTest(CppUnit::Test * WXUNUSED(test))
     {
-        m_watch.Pause();
-        printf("%s", GetResultStr(m_result));
-        if (m_timing)
-            printf("  %6ld ms", m_watch.Time());
-        printf("\n");
+        if ( m_verboseLogging )
+        {
+            if ( m_timing )
+                m_watch.Pause();
+            printf("%s", GetResultStr(m_result));
+            if (m_timing)
+                printf("  %6ld ms", m_watch.Time());
+            printf("\n");
+        }
+
+        ms_currentTest.clear();
     }
 
 protected :
@@ -273,10 +300,16 @@ protected :
         return resultTypeNames[type];
     }
 
+    bool m_verboseLogging;
     bool m_timing;
     wxStopWatch m_watch;
     ResultType m_result;
+
+private:
+    static string ms_currentTest;
 };
+
+string DetailListener::ms_currentTest;
 
 #if wxUSE_GUI
     typedef wxApp TestAppBase;
@@ -488,6 +521,10 @@ extern bool IsAutomaticTest()
         username.MakeLower();
         s_isAutomatic = username == "buildbot" ||
                             username.Matches("sandbox*");
+
+        // Also recognize Travis CI environment.
+        if ( !s_isAutomatic )
+            s_isAutomatic = wxGetEnv("TRAVIS", NULL);
     }
 
     return s_isAutomatic == 1;
@@ -513,6 +550,42 @@ static Test *GetTestByName(const wxString& name)
     return test;
 }
 
+#if wxUSE_GUI
+
+void DeleteTestWindow(wxWindow* win)
+{
+    if ( !win )
+        return;
+
+    wxWindow* const capture = wxWindow::GetCapture();
+    if ( capture )
+    {
+        if ( capture == win ||
+                capture->GetMainWindowOfCompositeControl() == win )
+            capture->ReleaseMouse();
+    }
+
+    delete win;
+}
+
+#ifdef __WXGTK__
+
+extern "C"
+void
+wxTestGLogHandler(const gchar* domain,
+                  GLogLevelFlags level,
+                  const gchar* message,
+                  gpointer data)
+{
+    fprintf(stderr, "** GTK log message while running %s(): ",
+            DetailListener::GetCurrentTest());
+
+    g_log_default_handler(domain, level, message, data);
+}
+
+#endif // __WXGTK__
+
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // TestApp
@@ -563,6 +636,11 @@ bool TestApp::OnInit()
     new wxTestableFrame();
 
     Connect(wxEVT_IDLE, wxIdleEventHandler(TestApp::OnIdle));
+
+#ifdef __WXGTK20__
+    g_log_set_default_handler(wxTestGLogHandler, NULL);
+#endif // __WXGTK__
+
 #endif // wxUSE_GUI
 
     return true;
@@ -714,9 +792,10 @@ int TestApp::RunTests()
     cout.setf(ios::unitbuf);
 
     // add detail listener if needed
-    DetailListener detailListener(m_timing);
+    DetailListener detailListener;
     if ( m_detail || m_timing )
-        runner.eventManager().addListener(&detailListener);
+        detailListener.EnableVerboseLog(m_timing);
+    runner.eventManager().addListener(&detailListener);
 
     // finally ensure that we report our own exceptions nicely instead of
     // giving "uncaught exception of unknown type" messages

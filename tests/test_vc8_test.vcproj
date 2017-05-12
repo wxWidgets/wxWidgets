@@ -1211,6 +1211,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\strings\hexconv.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\weakref\weakref.cpp"
 				>
 			</File>

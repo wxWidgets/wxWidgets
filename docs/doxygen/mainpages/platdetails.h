@@ -43,14 +43,14 @@ on systems even with a much earlier version of GTK+. You will have to ensure
 that the application is launched with lazy symbol binding for that.
 
 In order to configure wxWidgets to compile wxGTK you will need use the
-@c --with-gtk argument to the @c configure script. This is the default for many
+@c \--with-gtk argument to the @c configure script. This is the default for many
 systems.
 
 GTK+ 1.2 can still be used, albeit discouraged. For that you can pass
-@c --with-gtk=1 to the @c configure script.
+@c \--with-gtk=1 to the @c configure script.
 
 Support for GTK+ 3 is available starting with wxWidgets 2.9.4, use @c configure
-option @c --with-gtk=3 to enable it.
+option @c \--with-gtk=3 to enable it.
 
 For further information, please see the files in @c docs/gtk in the
 distribution.

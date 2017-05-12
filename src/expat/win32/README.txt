@@ -16,6 +16,14 @@ Expat can be built on Windows in three ways:
 * MS Visual Studio .NET 2002, 2003, 2005, 2008, 2010:
   The VC++ 6 workspace file (expat.dsw) and project files (.dsp)
   can be opened and imported in VS.NET without problems.
+  Note: Tests have their own *.dsw files.
+  
+* MS Visual Studio 2013 and 2015:
+  A solution file for Visual Studio 2013 is provided: expat.sln.
+  The associated project files (*.vcxproj) reside in the appropriate
+  project directories. This solution file can be opened in VS 2015
+  and should be upgraded automatically if VS 2013 is not also installed.
+  Note: Tests have their own solution files.
 
 * All MS C/C++ compilers:
   The output for all projects will be generated in the win32\bin

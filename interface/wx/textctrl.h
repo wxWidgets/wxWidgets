@@ -1476,7 +1476,10 @@ public:
 
     /**
         Changes the default style to use for the new text which is going to be
-        added to the control using WriteText() or AppendText().
+        added to the control.
+
+        This applies both to the text added programmatically using WriteText()
+        or AppendText() and to the text entered by the user interactively.
 
         If either of the font, foreground, or background colour is not set in
         @a style, the values of the previous default style are used for them.
@@ -1610,7 +1613,7 @@ public:
         inheriting wxTextCtrl from @c std::streambuf in which case this class is
         not compiled in.
         You also must have @c wxUSE_STD_IOSTREAM option on (i.e. set to 1) in your
-        @c setup.h to be able to use it. Under Unix, specify @c --enable-std_iostreams
+        @c setup.h to be able to use it. Under Unix, specify @c \--enable-std_iostreams
         switch when running configure for this.
 
     Example of usage:

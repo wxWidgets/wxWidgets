@@ -610,6 +610,17 @@ static void ColouriseHyperTextDoc(Sci_PositionU startPos, Sci_Position length, i
 	}
 	styler.StartAt(startPos);
 
+	/* Nothing handles getting out of these, so we need not start in any of them.
+	 * As we're at line start and they can't span lines, we'll re-detect them anyway */
+	switch (state) {
+		case SCE_H_QUESTION:
+		case SCE_H_XMLSTART:
+		case SCE_H_XMLEND:
+		case SCE_H_ASP:
+			state = SCE_H_DEFAULT;
+			break;
+	}
+
 	Sci_Position lineCurrent = styler.GetLine(startPos);
 	int lineState;
 	if (lineCurrent > 0) {
@@ -898,7 +909,7 @@ static void ColouriseHyperTextDoc(Sci_PositionU startPos, Sci_Position length, i
 		/////////////////////////////////////
 		// handle the start of PHP pre-processor = Non-HTML
 		else if ((state != SCE_H_ASPAT) &&
-		         !isPHPStringState(state) &&
+		         !isStringState(state) &&
 		         (state != SCE_HPHP_COMMENT) &&
 		         (state != SCE_HPHP_COMMENTLINE) &&
 		         (ch == '<') &&

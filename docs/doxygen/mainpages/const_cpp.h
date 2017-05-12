@@ -243,6 +243,59 @@ the project that uses wxWidgets to the same value as the @c CFG variable in
 order for the correct @c wx/setup.h file to automatically be included for that
 configuration.
 
+
+@section page_cppconst_compatibility Compatibility Macros
+
+wxWidgets always tries to preserve source backwards compatibility, however
+sometimes existing symbols may need to be removed. Except in exceedingly rare
+cases, this happens in several steps: first, the symbol is marked as
+deprecated, so that using it results in a warning when using the common
+compilers (e.g. any non-ancient version of MSVC, gcc or clang) in some
+wxWidgets release @c x.y. It can still be used, however the warnings indicate
+all the places in your code which will need to be updated in the future. If
+your code doesn't use any deprecated symbols or you have already fixed all
+their occurrences, you may change @c WXWIN_COMPATIBILITY_x_y to 0 to ensure
+they can't be used -- however its default value is still 1 at this time.
+
+At some point in the future, the next stable wxWidgets release @c x.y+2 changes
+the default @c WXWIN_COMPATIBILITY_x_y value to 0, meaning that now the symbol
+becomes unavailable by default and if you still want to be able to compile the
+code using it, you need to explicitly change @c WXWIN_COMPATIBILITY_x_y to 1
+when building the library.
+
+And, finally, the symbol is completely removed from the library in the next
+stable version after this, i.e. @c x.y+4. @c WXWIN_COMPATIBILITY_x_y itself is
+removed as well at this time, as it is not useful any longer.
+
+According to this general rule, currently, i.e. in wxWidgets 3.2, the following
+two symbols are defined: @c WXWIN_COMPATIBILITY_2_8, as 0, and @c
+WXWIN_COMPATIBILITY_3_0, as 1. Please see @ref overview_backwardcompat for even
+more details.
+
+@beginDefList
+@itemdef{WXWIN_COMPATIBILITY_2_8,
+         defined as 0 by default meaning that symbols existing in wxWidgets 2.8
+         but deprecated in 3.0 release are not available by default. It can be
+         changed to 1 to make them available, but it is strongly recommended to
+         update the code using them instead.}
+@itemdef{WXWIN_COMPATIBILITY_3_0,
+         defined as 1 by default meaning that symbols existing in wxWidgets 3.0
+         but deprecated since then are still available. It can be changed to 1
+         to ensure that no deprecated symbols are used accidentally.}
+@itemdef{wxDIALOG_UNIT_COMPATIBILITY,
+         wxMSW-specific setting which can be set to 1 to make
+         wxWindow::GetCharWidth() and wxWindow::GetCharHeight() more compatible
+         with old wxWidgets versions. Changing it is not recommended.}
+@itemdef{wxUSE_UNSAFE_WXSTRING_CONV,
+         this option determines if unsafe implicit conversions of wxString to
+         @c char* or @c std::string (depending on whether @c wxUSE_STL is 0 or
+         1) are defined. It is set to 1 by default for compatibility reasons,
+         however it is recommended to set it to 0 for the new projects. See
+         also @c wxNO_UNSAFE_WXSTRING_CONV below for an alternative way of
+         disabling these unsafe conversions not requiring rebuilding the
+         library.}
+@endDefList
+
 @section page_cppconst_miscellaneous Miscellaneous
 
 @beginDefList
@@ -281,6 +334,15 @@ configuration.
         don't include compiler flags needed for multithreaded code generation. This
         implies that wxUSE_THREADS is 0 and also that other (non-wx-based) threading
         packages cannot be used neither.}
+@itemdef{wxNO_UNSAFE_WXSTRING_CONV,
+        this symbol is not defined by wxWidgets itself, but can be defined by
+        the applications using the library to disable unsafe implicit
+        conversions in wxString class. This is especially useful when using
+        standard build of the library, e.g. installed by the system package
+        manager under Unix, which is compiled with @c wxUSE_UNSAFE_WXSTRING_CONV
+        set to 1 for compatibility reasons as @c -DwxNO_UNSAFE_WXSTRING_CONV
+        can be used only compiling the application code, without rebuilding the
+        library. Support for this option appeared in wxWidgets 3.1.1.}
 @itemdef{WXMAKINGDLL_XXX,
         used internally and defined when building the
         library @c XXX as a DLL; when a monolithic wxWidgets build is used only a

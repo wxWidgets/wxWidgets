@@ -341,6 +341,9 @@
 				RelativePath=".\window\clientsize.cpp">
 			</File>
 			<File
+				RelativePath=".\graphics\clippingbox.cpp">
+			</File>
+			<File
 				RelativePath=".\events\clone.cpp">
 			</File>
 			<File
@@ -408,6 +411,9 @@
 			</File>
 			<File
 				RelativePath=".\controls\gaugetest.cpp">
+			</File>
+			<File
+				RelativePath=".\graphics\graphmatrix.cpp">
 			</File>
 			<File
 				RelativePath=".\sizers\gridsizer.cpp">

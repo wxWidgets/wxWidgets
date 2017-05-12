@@ -430,7 +430,12 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
 #endif
 
     m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"));
-    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, buttonStyle);
+    // Avoid Cmd+C closing dialog on Mac.
+    wxString cancelLabel(_("&Cancel"));
+#ifdef __WXMAC__
+    cancelLabel.Replace("&",wxEmptyString);
+#endif
+    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, cancelLabel, wxDefaultPosition, wxDefaultSize, buttonStyle);
 #ifndef __WXMAC__
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
         btnHelp=new wxButton(this, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, buttonStyle);

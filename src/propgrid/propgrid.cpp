@@ -4674,8 +4674,8 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
         }
         else
         {
-            int w = m_doubleBuffer->GetWidth();
-            int h = m_doubleBuffer->GetHeight();
+            int w = m_doubleBuffer->GetScaledWidth();
+            int h = m_doubleBuffer->GetScaledHeight();
 
             // Double buffer must be large enough
             if ( w < width || h < (height+dblh) )
@@ -5969,7 +5969,9 @@ bool wxPropertyGrid::IsEditorFocused() const
     wxWindow* focus = wxWindow::FindFocus();
 
     if ( focus == m_wndEditor || focus == m_wndEditor2 ||
-         focus == GetEditorControl() )
+         focus == GetEditorControl() ||
+         // In case a combobox text control is focused
+         (focus && focus->GetParent() && (focus->GetParent() == m_wndEditor)) )
          return true;
 
     return false;

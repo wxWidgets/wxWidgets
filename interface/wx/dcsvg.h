@@ -40,9 +40,11 @@ class wxSVGFileDC : public wxDC
 public:
     /**
         Initializes a wxSVGFileDC with the given @a f filename with the given
-        @a Width and @a Height at @a dpi resolution.
+        @a Width and @a Height at @a dpi resolution, and an optional @a title.
+        The title provides a readable name for the SVG document.
     */
-    wxSVGFileDC(const wxString& filename, int width = 320, int height = 240, double dpi = 72);
+    wxSVGFileDC(const wxString& filename, int width = 320, int height = 240,
+                double dpi = 72, const wxString& title = wxString());
 
     /**
         Destructor.
@@ -60,7 +62,7 @@ public:
     void EndPage();
 
     /**
-        This makes no sense in wxSVGFileDC and does nothing.
+        Draws a rectangle the size of the SVG using the wxDC::SetBackground() brush.
     */
     void Clear();
 

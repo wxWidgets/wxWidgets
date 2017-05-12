@@ -74,6 +74,7 @@ public:
     virtual wxPoint GetPosition(const wxString& param = wxT("pos")) = 0;
     virtual wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
                                  wxWindow *windowToUse = NULL) = 0;
+    virtual wxSize GetPairInts(const wxString& param) = 0;
     virtual wxDirection GetDirection(const wxString& param, wxDirection dir = wxLEFT) = 0;
     virtual wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
                                const wxArtClient& defaultArtClient = wxART_OTHER,
@@ -295,6 +296,10 @@ protected:
                          wxWindow *windowToUse = NULL)
     {
         return GetImpl()->GetDimension(param, defaultv, windowToUse);
+    }
+    wxSize GetPairInts(const wxString& param)
+    {
+        return GetImpl()->GetPairInts(param);
     }
     wxDirection GetDirection(const wxString& param, wxDirection dir = wxLEFT)
     {

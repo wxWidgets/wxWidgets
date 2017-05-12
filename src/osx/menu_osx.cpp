@@ -645,7 +645,7 @@ wxMenuBar::~wxMenuBar()
 
 void wxMenuBar::Refresh(bool WXUNUSED(eraseBackground), const wxRect *WXUNUSED(rect))
 {
-    wxCHECK_RET( IsAttached(), wxT("can't refresh unatteched menubar") );
+    wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 }
 
 void wxMenuBar::MacUninstallMenuBar()

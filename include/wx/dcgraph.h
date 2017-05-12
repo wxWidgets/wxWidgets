@@ -39,8 +39,8 @@ public:
 #ifdef __WXMSW__
     // override wxDC virtual functions to provide access to HDC associated with
     // this Graphics object (implemented in src/msw/graphics.cpp)
-    virtual WXHDC AcquireHDC();
-    virtual void ReleaseHDC(WXHDC hdc);
+    virtual WXHDC AcquireHDC() wxOVERRIDE;
+    virtual void ReleaseHDC(WXHDC hdc) wxOVERRIDE;
 #endif // __WXMSW__
 
 private:
@@ -106,6 +106,13 @@ public:
     virtual void SetGraphicsContext( wxGraphicsContext* ctx ) wxOVERRIDE;
 
     virtual void* GetHandle() const wxOVERRIDE;
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+    virtual bool CanUseTransformMatrix() const wxOVERRIDE;
+    virtual bool SetTransformMatrix(const wxAffineMatrix2D& matrix) wxOVERRIDE;
+    virtual wxAffineMatrix2D GetTransformMatrix() const wxOVERRIDE;
+    virtual void ResetTransformMatrix() wxOVERRIDE;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -185,6 +192,8 @@ public:
     virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE;
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height) wxOVERRIDE;
+    virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
+                                  wxCoord *w, wxCoord *h) const wxOVERRIDE;
 
     virtual void DoGetTextExtent(const wxString& string,
         wxCoord *x, wxCoord *y,
@@ -195,8 +204,11 @@ public:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
 
 #ifdef __WXMSW__
-    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const;
+    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const wxOVERRIDE;
 #endif // __WXMSW__
+
+    // update the internal clip box variables
+    void UpdateClipBox();
 
 protected:
     // unused int parameter distinguishes this version, which does not create a
@@ -207,10 +219,13 @@ protected:
     bool m_logicalFunctionSupported;
     wxGraphicsMatrix m_matrixOriginal;
     wxGraphicsMatrix m_matrixCurrent;
-
-    double m_formerScaleX, m_formerScaleY;
+#if wxUSE_DC_TRANSFORM_MATRIX
+    wxAffineMatrix2D m_matrixExtTransform;
+#endif // wxUSE_DC_TRANSFORM_MATRIX
 
     wxGraphicsContext* m_graphicContext;
+
+    bool m_isClipBoxValid;
 
 private:
     void Init(wxGraphicsContext*);

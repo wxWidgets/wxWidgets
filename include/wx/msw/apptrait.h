@@ -18,18 +18,18 @@
 class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
-    virtual wxEventLoopBase *CreateEventLoop();
-    virtual void *BeforeChildWaitLoop();
-    virtual void AfterChildWaitLoop(void *data);
+    virtual wxEventLoopBase *CreateEventLoop() wxOVERRIDE;
+    virtual void *BeforeChildWaitLoop() wxOVERRIDE;
+    virtual void AfterChildWaitLoop(void *data) wxOVERRIDE;
 #if wxUSE_TIMER
-    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) wxOVERRIDE;
 #endif // wxUSE_TIMER
 #if wxUSE_THREADS
-    virtual bool DoMessageFromThreadWait();
-    virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags);
+    virtual bool DoMessageFromThreadWait() wxOVERRIDE;
+    virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags) wxOVERRIDE;
 #endif // wxUSE_THREADS
-    virtual bool CanUseStderr() { return true; }
-    virtual bool WriteToStderr(const wxString& text);
+    virtual bool CanUseStderr() wxOVERRIDE { return true; }
+    virtual bool WriteToStderr(const wxString& text) wxOVERRIDE;
 };
 
 #if wxUSE_GUI
@@ -39,22 +39,22 @@ public:
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual wxEventLoopBase *CreateEventLoop();
-    virtual void *BeforeChildWaitLoop();
-    virtual void AfterChildWaitLoop(void *data);
+    virtual wxEventLoopBase *CreateEventLoop() wxOVERRIDE;
+    virtual void *BeforeChildWaitLoop() wxOVERRIDE;
+    virtual void AfterChildWaitLoop(void *data) wxOVERRIDE;
 #if wxUSE_TIMER
-    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) wxOVERRIDE;
 #endif // wxUSE_TIMER
 #if wxUSE_THREADS
-    virtual bool DoMessageFromThreadWait();
-    virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags);
+    virtual bool DoMessageFromThreadWait() wxOVERRIDE;
+    virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags) wxOVERRIDE;
 #endif // wxUSE_THREADS
     wxPortId GetToolkitVersion(int *majVer = NULL,
                                int *minVer = NULL,
                                int *microVer = NULL) const wxOVERRIDE;
 
-    virtual bool CanUseStderr();
-    virtual bool WriteToStderr(const wxString& text);
+    virtual bool CanUseStderr() wxOVERRIDE;
+    virtual bool WriteToStderr(const wxString& text) wxOVERRIDE;
 };
 
 #elif defined(__WXGTK__)

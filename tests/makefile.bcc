@@ -95,6 +95,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_vararg.obj \
 	$(OBJS)\test_crt.obj \
 	$(OBJS)\test_vsnprintf.obj \
+	$(OBJS)\test_hexconv.obj \
 	$(OBJS)\test_bstream.obj \
 	$(OBJS)\test_datastreamtest.obj \
 	$(OBJS)\test_ffilestream.obj \
@@ -166,6 +167,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_measuring.obj \
 	$(OBJS)\test_gui_affinematrix.obj \
 	$(OBJS)\test_gui_boundingbox.obj \
+	$(OBJS)\test_gui_clippingbox.obj \
+	$(OBJS)\test_gui_graphmatrix.obj \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_bitmapcomboboxtest.obj \
 	$(OBJS)\test_gui_bitmaptogglebuttontest.obj \
@@ -462,7 +465,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr ja
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -525,11 +528,15 @@ data:
 
 data-images: 
 	if not exist image mkdir image
-	for %f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png) do if not exist image\%f copy .\image\%f image
+	for %f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png cross_bicubic_256x256.png cross_bilinear_256x256.png cross_box_average_256x256.png cross_nearest_neighb_256x256.png) do if not exist image\%f copy .\image\%f image
 
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%f copy .\intl\fr\%f $(OBJS)\intl\fr
+
+ja: 
+	if not exist $(OBJS)\intl\ja mkdir $(OBJS)\intl\ja
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\ja\%f copy .\intl\ja\%f $(OBJS)\intl\ja
 
 $(OBJS)\test_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) -H .\dummy.cpp
@@ -705,6 +712,9 @@ $(OBJS)\test_crt.obj: .\strings\crt.cpp
 $(OBJS)\test_vsnprintf.obj: .\strings\vsnprintf.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\strings\vsnprintf.cpp
 
+$(OBJS)\test_hexconv.obj: .\strings\hexconv.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\strings\hexconv.cpp
+
 $(OBJS)\test_bstream.obj: .\streams\bstream.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\streams\bstream.cpp
 
@@ -851,6 +861,12 @@ $(OBJS)\test_gui_affinematrix.obj: .\graphics\affinematrix.cpp
 
 $(OBJS)\test_gui_boundingbox.obj: .\graphics\boundingbox.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\graphics\boundingbox.cpp
+
+$(OBJS)\test_gui_clippingbox.obj: .\graphics\clippingbox.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\graphics\clippingbox.cpp
+
+$(OBJS)\test_gui_graphmatrix.obj: .\graphics\graphmatrix.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\graphics\graphmatrix.cpp
 
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\config\config.cpp

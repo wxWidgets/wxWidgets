@@ -35,10 +35,6 @@
 #include "wx/msw/missing.h" // for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
 #include "wx/msw/private/metrics.h"
 
-#ifndef SPI_GETFLATMENU
-#define SPI_GETFLATMENU                     0x1022
-#endif
-
 #include "wx/fontutil.h"
 #include "wx/fontenum.h"
 
@@ -51,8 +47,8 @@
 class wxSystemSettingsModule : public wxModule
 {
 public:
-    virtual bool OnInit();
-    virtual void OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
@@ -75,7 +71,7 @@ static wxFont *gs_fontDefault = NULL;
 // from GetSystemMetric, and should it? Perhaps call it GetSystemParameter
 // and pass an optional void* arg to get further info.
 // Should also have SetSystemParameter.
-// Also implement WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
+// Also implement WM_WININICHANGE
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsModule
@@ -223,83 +219,41 @@ static const int gs_metricsMap[] =
 
     SM_CXBORDER,
     SM_CYBORDER,
-#ifdef SM_CXCURSOR
     SM_CXCURSOR,
     SM_CYCURSOR,
-#else
-    -1, -1,
-#endif
     SM_CXDOUBLECLK,
     SM_CYDOUBLECLK,
-#if defined(SM_CXDRAG)
     SM_CXDRAG,
     SM_CYDRAG,
     SM_CXEDGE,
     SM_CYEDGE,
-#else
-    -1, -1, -1, -1,
-#endif
     SM_CXHSCROLL,
     SM_CYHSCROLL,
-#ifdef SM_CXHTHUMB
     SM_CXHTHUMB,
-#else
-    -1,
-#endif
     SM_CXICON,
     SM_CYICON,
     SM_CXICONSPACING,
     SM_CYICONSPACING,
-#ifdef SM_CXHTHUMB
     SM_CXMIN,
     SM_CYMIN,
-#else
-    -1, -1,
-#endif
     SM_CXSCREEN,
     SM_CYSCREEN,
 
-#if defined(SM_CXSIZEFRAME)
     SM_CXSIZEFRAME,
     SM_CYSIZEFRAME,
     SM_CXSMICON,
     SM_CYSMICON,
-#else
-    -1, -1, -1, -1,
-#endif
     SM_CYHSCROLL,
     SM_CXHSCROLL,
     SM_CXVSCROLL,
     SM_CYVSCROLL,
-#ifdef SM_CYVTHUMB
     SM_CYVTHUMB,
-#else
-    -1,
-#endif
     SM_CYCAPTION,
     SM_CYMENU,
-#if defined(SM_NETWORK)
     SM_NETWORK,
-#else
-    -1,
-#endif
-#ifdef SM_PENWINDOWS
     SM_PENWINDOWS,
-#else
-    -1,
-#endif
-#if defined(SM_SHOWSOUNDS)
     SM_SHOWSOUNDS,
-#else
-    -1,
-#endif
-    // SM_SWAPBUTTON is not available under CE and it doesn't make sense to ask
-    // for it there
-#ifdef SM_SWAPBUTTON
     SM_SWAPBUTTON,
-#else
-    -1,
-#endif
     -1   // wxSYS_DCLICK_MSEC - not available as system metric
 };
 

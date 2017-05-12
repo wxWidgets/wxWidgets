@@ -11,10 +11,15 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
+// NOTE: this header is used for both the WebKit1 and WebKit2 implementations
+#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2) && defined(__WXGTK__)
 
 #include "wx/sharedptr.h"
 #include "wx/webview.h"
+#if wxUSE_WEBVIEW_WEBKIT2
+#include <glib.h>
+#include <gio/gio.h>
+#endif
 
 typedef struct _WebKitWebView WebKitWebView;
 
@@ -152,6 +157,11 @@ private:
     // focus event handler: calls GTKUpdateBitmap()
     void GTKOnFocus(wxFocusEvent& event);
 
+#if wxUSE_WEBVIEW_WEBKIT2
+    bool CanExecuteEditingCommand(const gchar* command) const;
+    void SetupWebExtensionServer();
+#endif
+
     WebKitWebView *m_web_view;
     int m_historyLimit;
 
@@ -162,6 +172,12 @@ private:
     wxString m_findText;
     int m_findPosition;
     int m_findCount;
+
+#if wxUSE_WEBVIEW_WEBKIT2
+    //Used for webkit2 extension
+    GDBusServer *m_dbusServer;
+    GDBusProxy *m_extension;
+#endif
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 };

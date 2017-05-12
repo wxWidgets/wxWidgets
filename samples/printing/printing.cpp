@@ -162,6 +162,8 @@ void MyApp::Draw(wxDC&dc)
 
     dc.DrawText( wxT("Test message: this is in 10 point text"), 10, 180);
 
+    dc.DrawRotatedText( wxS("This\nis\na multi-line\ntext"), 170, 100, -m_angle/1.5);
+
 #if wxUSE_UNICODE
     const char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
@@ -217,25 +219,7 @@ void MyApp::Draw(wxDC&dc)
         dc.DrawBitmap( m_bitmap, 10, 10 );
 
 #if wxUSE_GRAPHICS_CONTEXT
-    wxGraphicsContext *gc = NULL;
-
-    wxPrinterDC *printer_dc = wxDynamicCast( &dc, wxPrinterDC );
-    if (printer_dc)
-        gc = wxGraphicsContext::Create( *printer_dc );
-
-    wxWindowDC *window_dc = wxDynamicCast( &dc, wxWindowDC );
-    if (window_dc)
-        gc = wxGraphicsContext::Create( *window_dc );
-
-    wxMemoryDC *memory_dc = wxDynamicCast( &dc, wxMemoryDC );
-    if (memory_dc)
-        gc = wxGraphicsContext::Create( *memory_dc );
-
-#ifdef __WXMSW__
-    wxEnhMetaFileDC *emf_dc = wxDynamicCast( &dc, wxEnhMetaFileDC );
-    if (emf_dc)
-        gc = wxGraphicsContext::Create( *emf_dc );
-#endif
+    wxGraphicsContext *gc = wxGraphicsContext::CreateFromUnknownDC(dc);
 
     if (gc)
     {
@@ -267,6 +251,7 @@ void MyApp::Draw(wxDC&dc)
         delete gc;
     }
 #endif
+
 }
 
 

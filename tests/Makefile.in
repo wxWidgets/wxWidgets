@@ -115,6 +115,7 @@ TEST_OBJECTS =  \
 	test_vararg.o \
 	test_crt.o \
 	test_vsnprintf.o \
+	test_hexconv.o \
 	test_bstream.o \
 	test_datastreamtest.o \
 	test_ffilestream.o \
@@ -182,6 +183,8 @@ TEST_GUI_OBJECTS =  \
 	test_gui_measuring.o \
 	test_gui_affinematrix.o \
 	test_gui_boundingbox.o \
+	test_gui_clippingbox.o \
+	test_gui_graphmatrix.o \
 	test_gui_config.o \
 	test_gui_bitmapcomboboxtest.o \
 	test_gui_bitmaptogglebuttontest.o \
@@ -391,7 +394,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr
+all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr ja
 
 install: 
 
@@ -474,7 +477,7 @@ data:
 
 data-images: 
 	@mkdir -p image
-	@for f in horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png; do \
+	@for f in horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png cross_bicubic_256x256.png cross_bilinear_256x256.png cross_box_average_256x256.png cross_nearest_neighb_256x256.png; do \
 	if test ! -f image/$$f -a ! -d image/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/image/$$f -newer image/$$f -print` ; \
@@ -493,6 +496,18 @@ fr:
 	fi; \
 	case "$$x" in ?*) \
 	cp -pRf $(srcdir)/intl/fr/$$f ./intl/fr ;; \
+	esac; \
+	done
+
+ja: 
+	@mkdir -p ./intl/ja
+	@for f in internat.po internat.mo; do \
+	if test ! -f ./intl/ja/$$f -a ! -d ./intl/ja/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/intl/ja/$$f -newer ./intl/ja/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/intl/ja/$$f ./intl/ja ;; \
 	esac; \
 	done
 
@@ -667,6 +682,9 @@ test_crt.o: $(srcdir)/strings/crt.cpp $(TEST_ODEP)
 test_vsnprintf.o: $(srcdir)/strings/vsnprintf.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/vsnprintf.cpp
 
+test_hexconv.o: $(srcdir)/strings/hexconv.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/hexconv.cpp
+
 test_bstream.o: $(srcdir)/streams/bstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/bstream.cpp
 
@@ -807,6 +825,12 @@ test_gui_affinematrix.o: $(srcdir)/graphics/affinematrix.cpp $(TEST_GUI_ODEP)
 
 test_gui_boundingbox.o: $(srcdir)/graphics/boundingbox.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/boundingbox.cpp
+
+test_gui_clippingbox.o: $(srcdir)/graphics/clippingbox.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/clippingbox.cpp
+
+test_gui_graphmatrix.o: $(srcdir)/graphics/graphmatrix.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/graphmatrix.cpp
 
 test_gui_config.o: $(srcdir)/config/config.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/config/config.cpp
@@ -1075,4 +1099,4 @@ failtest_weakref:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean test_gui_bundle data data-images fr
+.PHONY: all install uninstall clean distclean test_gui_bundle data data-images fr ja

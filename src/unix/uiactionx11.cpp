@@ -36,7 +36,11 @@
 // but it's useless to do it when using GTK+ 3 as it's not going to work with
 // it anyhow because GTK+ 3 needs XInput2 events and not the "classic" ones we
 // synthesize here, so don't even compile in this code for wxGTK3 port.
-#define wxUSE_PLAINX_IMPL (!defined(__WXGTK3__))
+#ifdef __WXGTK3__
+    #define wxUSE_PLAINX_IMPL 0
+#else
+    #define wxUSE_PLAINX_IMPL 1
+#endif
 
 namespace
 {

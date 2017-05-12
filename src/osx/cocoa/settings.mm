@@ -21,6 +21,26 @@
 #include "wx/osx/cocoa/private.h"
 
 #import <AppKit/NSColor.h>
+#import <Foundation/Foundation.h>
+
+
+static int wxOSXGetUserDefault(NSString* key, int defaultValue)
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    if (!defaults)
+    {
+        return defaultValue;
+    }
+
+    id setting = [defaults objectForKey: key];
+    if (!setting)
+    {
+        return defaultValue;
+    }
+
+    return [setting intValue];
+}
+
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
@@ -230,6 +250,32 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow *WXUNUSED(w
             // default on mac is 30 ticks, we shouldn't really use wxSYS_DCLICK_MSEC anyway
             // but rather rely on the 'click-count' by the system delivered in a mouse event
             return 500;
+
+        case wxSYS_CARET_ON_MSEC:
+             value = wxOSXGetUserDefault(@"NSTextInsertionPointBlinkPeriodOn", -1);
+             if (value > 0)
+                 return value;
+
+             value = wxOSXGetUserDefault(@"NSTextInsertionPointBlinkPeriod", -1);
+             if (value > 0)
+                 return value / 2;
+
+             return -1;
+
+        case wxSYS_CARET_OFF_MSEC:
+             value = wxOSXGetUserDefault(@"NSTextInsertionPointBlinkPeriodOff", -1);
+             if (value > 0)
+                 return value;
+
+             value = wxOSXGetUserDefault(@"NSTextInsertionPointBlinkPeriod", -1);
+             if (value > 0)
+                 return value / 2;
+
+             return -1;
+
+        case wxSYS_CARET_TIMEOUT_MSEC:
+             // On MacOS X, carets don't stop blinking after user interactions.
+             return -1;
 
         default:
             return -1;  // unsupported metric

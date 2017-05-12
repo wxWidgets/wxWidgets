@@ -33,10 +33,10 @@ public:
     wxColourData& GetColourData() { return m_colourData; }
 
     // override some base class virtuals
-    virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle() const;
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+    virtual wxString GetTitle() const wxOVERRIDE;
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
     // wxMSW-specific implementation from now on
     // -----------------------------------------
@@ -48,11 +48,11 @@ protected:
     // common part of all ctors
     void Init();
 
-    virtual void DoGetPosition( int *x, int *y ) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-    virtual void DoCentre(int dir);
+    virtual void DoGetPosition( int *x, int *y ) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual void DoCentre(int dir) wxOVERRIDE;
 
     wxColourData        m_colourData;
     wxString            m_title;

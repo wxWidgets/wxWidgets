@@ -244,6 +244,9 @@
     <ClCompile Include="strings\vsnprintf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="strings\hexconv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="weakref\weakref.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

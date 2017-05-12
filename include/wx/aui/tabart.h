@@ -289,8 +289,6 @@ protected:
     wxFont m_normalFont;
     wxFont m_selectedFont;
     wxFont m_measuringFont;
-    wxColour m_normalTextColour;
-    wxColour m_selectedTextColour;
     wxPen m_normalBkPen;
     wxPen m_selectedBkPen;
     wxBrush m_normalBkBrush;

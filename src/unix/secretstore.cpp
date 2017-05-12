@@ -27,6 +27,9 @@
 #include "wx/secretstore.h"
 #include "wx/private/secretstore.h"
 
+// Older versions of libsecret, such as 0.16 from Ubuntu 14.04 LTS, require
+// predefining this symbol in order to have access to the APIs we use below.
+#define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
 
 #include "wx/gtk/private/error.h"

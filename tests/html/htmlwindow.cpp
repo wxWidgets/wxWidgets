@@ -78,7 +78,8 @@ void HtmlWindowTestCase::setUp()
 
 void HtmlWindowTestCase::tearDown()
 {
-    wxDELETE(m_win);
+    DeleteTestWindow(m_win);
+    m_win = NULL;
 }
 
 // ----------------------------------------------------------------------------

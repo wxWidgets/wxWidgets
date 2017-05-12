@@ -69,7 +69,12 @@ enum wxRibbonButtonBarButtonState
         Only applicable to dropdown and hybrid buttons.
     */
     wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE   = 1 << 6,
-    
+
+    /**
+       A mask to extract active flags
+     */
+    wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK       = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE,
+
     /**
         The button is disabled. Hover flags may still be set when a button
         is disabled, but should be ignored during drawing if the button is
@@ -422,7 +427,7 @@ public:
 
         @since 2.9.5
     */
-    virtual int GetItemId(wxRibbonButtonBarButtonBase *) const;
+    virtual int GetItemId(wxRibbonButtonBarButtonBase *item) const;
 
     /**
         Calculate button layouts and positions.
@@ -562,3 +567,7 @@ public:
     */
     bool PopupMenu(wxMenu* menu);
 };
+
+
+wxEventType wxEVT_RIBBONBUTTONBAR_CLICKED;
+wxEventType wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED;

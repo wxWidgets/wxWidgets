@@ -20,6 +20,7 @@ enum wxPG_WINDOW_STYLES
     When inserting a lot of items in this mode, it may make sense to
     use Freeze() before operations and Thaw() afterwards to increase
     performance.
+    @hideinitializer
 */
 wxPG_AUTO_SORT                      = 0x00000010,
 
@@ -28,29 +29,34 @@ wxPG_AUTO_SORT                      = 0x00000010,
     IMPORTANT NOTE: If you do not plan to use categories, then this
     style will waste resources.
     This flag can also be changed using wxPropertyGrid::EnableCategories method.
+    @hideinitializer
 */
 wxPG_HIDE_CATEGORIES                = 0x00000020,
 
 /**
     This style combines non-categoric mode and automatic sorting.
+    @hideinitializer
 */
 wxPG_ALPHABETIC_MODE                = (wxPG_HIDE_CATEGORIES|wxPG_AUTO_SORT),
 
 /**
     Modified values are shown in bold font. Changing this requires Refresh()
     to show changes.
+    @hideinitializer
 */
 wxPG_BOLD_MODIFIED                  = 0x00000040,
 
 /**
     When wxPropertyGrid is resized, splitter moves to the center. This
     behaviour stops once the user manually moves the splitter.
+    @hideinitializer
 */
 wxPG_SPLITTER_AUTO_CENTER           = 0x00000080,
 
 /**
     Display tool tips for cell text that cannot be shown completely. If
     wxUSE_TOOLTIPS is 0, then this doesn't have any effect.
+    @hideinitializer
 */
 wxPG_TOOLTIPS                       = 0x00000100,
 
@@ -58,17 +64,20 @@ wxPG_TOOLTIPS                       = 0x00000100,
     Disables margin and hides all expand/collapse buttons that would appear
     outside the margin (for sub-properties). Toggling this style automatically
     expands all collapsed items.
+    @hideinitializer
 */
 wxPG_HIDE_MARGIN                    = 0x00000200,
 
 /**
     This style prevents user from moving the splitter.
+    @hideinitializer
 */
 wxPG_STATIC_SPLITTER                = 0x00000400,
 
 /**
     Combination of other styles that make it impossible for user to modify
     the layout.
+    @hideinitializer
 */
 wxPG_STATIC_LAYOUT                  = (wxPG_HIDE_MARGIN|wxPG_STATIC_SPLITTER),
 
@@ -76,64 +85,82 @@ wxPG_STATIC_LAYOUT                  = (wxPG_HIDE_MARGIN|wxPG_STATIC_SPLITTER),
     Disables wxTextCtrl based editors for properties which
     can be edited in another way. Equals calling
     wxPropertyGrid::LimitPropertyEditing() for all added properties.
+    @hideinitializer
 */
 wxPG_LIMITED_EDITING                = 0x00000800,
 
 /**
     wxPropertyGridManager only: Show tool bar for mode and page selection.
+    @hideinitializer
 */
 wxPG_TOOLBAR                        = 0x00001000,
 
 /**
     wxPropertyGridManager only: Show adjustable text box showing description
     or help text, if available, for currently selected property.
+    @hideinitializer
 */
 wxPG_DESCRIPTION                    = 0x00002000,
 
 /** wxPropertyGridManager only: don't show an internal border around the
     property grid. Recommended if you use a header.
+    @hideinitializer
 */
-wxPG_NO_INTERNAL_BORDER             = 0x00004000
+wxPG_NO_INTERNAL_BORDER             = 0x00004000,
 
+/** A mask which can be used to filter (out) all styles.
+    @hideinitializer
+*/
+wxPG_WINDOW_STYLE_MASK = wxPG_AUTO_SORT|wxPG_HIDE_CATEGORIES|wxPG_BOLD_MODIFIED|
+                         wxPG_SPLITTER_AUTO_CENTER|wxPG_TOOLTIPS|wxPG_HIDE_MARGIN|
+                         wxPG_STATIC_SPLITTER|wxPG_LIMITED_EDITING|wxPG_TOOLBAR|
+                         wxPG_DESCRIPTION|wxPG_NO_INTERNAL_BORDER
 };
-
-enum wxPG_EX_WINDOW_STYLES
-{
 
 /**
     NOTE: wxPG_EX_xxx are extra window styles and must be set using SetExtraStyle()
     member function.
-
+*/
+enum wxPG_EX_WINDOW_STYLES
+{
+/**
     Speeds up switching to wxPG_HIDE_CATEGORIES mode. Initially, if
     wxPG_HIDE_CATEGORIES is not defined, the non-categorized data storage is not
     activated, and switching the mode first time becomes somewhat slower.
     wxPG_EX_INIT_NOCAT activates the non-categorized data storage right away.
 
-    NOTE: If you do plan not switching to non-categoric mode, or if
+    @remarks
+    If you do plan not switching to non-categoric mode, or if
     you don't plan to use categories at all, then using this style will result
     in waste of resources.
+
+    @hideinitializer
 */
 wxPG_EX_INIT_NOCAT                  = 0x00001000,
 
 /**
     Extended window style that sets wxPropertyGridManager tool bar to not
     use flat style.
+    @hideinitializer
 */
 wxPG_EX_NO_FLAT_TOOLBAR             = 0x00002000,
 
 /**
     Shows alphabetic/categoric mode buttons from tool bar.
+    @hideinitializer
 */
 wxPG_EX_MODE_BUTTONS                = 0x00008000,
 
 /**
     Show property help strings as tool tips instead as text on the status bar.
     You can set the help strings using SetPropertyHelpString member function.
+    @hideinitializer
 */
 wxPG_EX_HELP_AS_TOOLTIPS            = 0x00010000,
 
 /**
     Allows relying on native double-buffering.
+    @hideinitializer
 */
 wxPG_EX_NATIVE_DOUBLE_BUFFERING         = 0x00080000,
 
@@ -141,6 +168,7 @@ wxPG_EX_NATIVE_DOUBLE_BUFFERING         = 0x00080000,
     Set this style to let user have ability to set values of properties to
     unspecified state. Same as setting wxPG_PROP_AUTO_UNSPECIFIED for
     all properties.
+    @hideinitializer
 */
 wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
 
@@ -149,12 +177,16 @@ wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
     wxPG_STRING_PASSWORD) are not stored into property's attribute storage (thus
     they are not readable).
 
-    Note that this option is global, and applies to all wxPG property containers.
+    @remarks
+    This option is global, and applies to all wxPG property containers.
+
+    @hideinitializer
 */
 wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES    = 0x00400000,
 
 /**
     Hides page selection buttons from tool bar.
+    @hideinitializer
 */
 wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000,
 
@@ -168,6 +200,7 @@ wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000,
     property which has editor active (usually the first one
     selected). Other useful member functions are ClearSelection(),
     AddToSelection() and RemoveFromSelection().
+    @hideinitializer
 */
 wxPG_EX_MULTIPLE_SELECTION              = 0x02000000,
 
@@ -181,17 +214,35 @@ wxPG_EX_MULTIPLE_SELECTION              = 0x02000000,
     @remarks If you are not in fact using any system that may change
              wxPropertyGrid's top-level parent window on its own, then you
              are recommended to enable this style.
+
+    @hideinitializer
 */
 wxPG_EX_ENABLE_TLP_TRACKING             = 0x04000000,
 
 /** Don't show divider above toolbar, on Windows.
+    @hideinitializer
 */
 wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x04000000,
 
 /** Show a separator below the toolbar.
+    @hideinitializer
 */
-wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000
+wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000,
 
+/** Allows to take focus on the entire area (on canvas)
+    even if wxPropertyGrid is not a standalone control.
+    @hideinitializer
+*/
+wxPG_EX_ALWAYS_ALLOW_FOCUS              = 0x00100000,
+
+/** A mask which can be used to filter (out) all extra styles.
+    @hideinitializer
+*/
+wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_INIT_NOCAT|wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|
+                            wxPG_EX_HELP_AS_TOOLTIPS|wxPG_EX_NATIVE_DOUBLE_BUFFERING|wxPG_EX_AUTO_UNSPECIFIED_VALUES|
+                            wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES|wxPG_EX_HIDE_PAGE_BUTTONS|wxPG_EX_MULTIPLE_SELECTION|
+                            wxPG_EX_ENABLE_TLP_TRACKING|wxPG_EX_NO_TOOLBAR_DIVIDER|wxPG_EX_TOOLBAR_SEPARATOR|
+                            wxPG_EX_ALWAYS_ALLOW_FOCUS
 };
 
 /** Combines various styles.
@@ -214,20 +265,22 @@ wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000
 
 enum wxPG_VALIDATION_FAILURE_BEHAVIOR_FLAGS
 {
-
 /**
     Prevents user from leaving property unless value is valid. If this
     behaviour flag is not used, then value change is instead cancelled.
+    @hideinitializer
 */
 wxPG_VFB_STAY_IN_PROPERTY           = 0x01,
 
 /**
     Calls wxBell() on validation failure.
+    @hideinitializer
 */
 wxPG_VFB_BEEP                       = 0x02,
 
 /**
     Cell with invalid value will be marked (with red colour).
+    @hideinitializer
 */
 wxPG_VFB_MARK_CELL                  = 0x04,
 
@@ -239,12 +292,14 @@ wxPG_VFB_MARK_CELL                  = 0x04,
     derived class. Default behaviour is to display the text on
     the top-level frame's status bar, if present, and otherwise
     using wxMessageBox.
+    @hideinitializer
 */
 wxPG_VFB_SHOW_MESSAGE               = 0x08,
 
 /**
     Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
     message using wxMessageBox.
+    @hideinitializer
 */
 wxPG_VFB_SHOW_MESSAGEBOX            = 0x10,
 
@@ -253,11 +308,13 @@ wxPG_VFB_SHOW_MESSAGEBOX            = 0x10,
     message on the status bar (when present - you can reimplement
     wxPropertyGrid::GetStatusBar() in a derived class to specify
     this yourself).
+    @hideinitializer
 */
 wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR  = 0x20,
 
 /**
     Defaults.
+    @hideinitializer
 */
 wxPG_VFB_DEFAULT                    = wxPG_VFB_MARK_CELL |
                                       wxPG_VFB_SHOW_MESSAGEBOX,
@@ -266,16 +323,23 @@ wxPG_VFB_DEFAULT                    = wxPG_VFB_MARK_CELL |
 /** @}
 */
 
-typedef wxByte wxPGVFBFlags;
+/**
+    Having this as define instead of wxByte typedef makes things easier for
+    wxPython bindings (ignoring and redefining it in SWIG interface file
+    seemed rather tricky)
+*/
+#define wxPGVFBFlags unsigned char
 
 /**
-    wxPGValidationInfo
+    @class wxPGValidationInfo
 
     Used to convey validation information to and from functions that
     actually perform validation. Mostly used in custom property classes.
 */
 class wxPGValidationInfo
 {
+    friend class wxPropertyGrid;
+
 public:
     /**
         @return Returns failure behaviour which is a combination of
@@ -318,6 +382,9 @@ public:
 
 enum wxPG_KEYBOARD_ACTIONS
 {
+    /**
+        @hideinitializer
+    */
     wxPG_ACTION_INVALID = 0,
 
     /** Select the next property. */
@@ -332,9 +399,8 @@ enum wxPG_KEYBOARD_ACTIONS
     /** Collapse the selected property, if it has child items. */
     wxPG_ACTION_COLLAPSE_PROPERTY,
 
-    /** Cancel and undo any editing done in the currently active property
-        editor.
-    */
+    // Cancel and undo any editing done in the currently active property
+    // editor.
     wxPG_ACTION_CANCEL_EDIT,
 
     /** Move focus to the editor control of the currently selected
@@ -415,7 +481,7 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
         to prevent change from taking place, if necessary.
     @event{EVT_PG_HIGHLIGHTED(id, func)}
         Respond to @c wxEVT_PG_HIGHLIGHTED event, which occurs when mouse
-        moves over a property. Event's property is NULL if hovered area does
+        moves over a property. Event's property is @NULL if hovered area does
         not belong to any property.
     @event{EVT_PG_RIGHT_CLICK(id, func)}
         Respond to @c wxEVT_PG_RIGHT_CLICK event, which occurs when property is
@@ -558,7 +624,7 @@ public:
         Centers the splitter.
 
         @param enableAutoResizing
-            If @true, automatic column resizing is enabled (only applicapple
+            If @true, automatic column resizing is enabled (only applicable
             if window style wxPG_SPLITTER_AUTO_CENTER is used).
     */
     void CenterSplitter( bool enableAutoResizing = false );
@@ -613,7 +679,7 @@ public:
         enable.
 
         @remarks This functions deselects selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     bool EnableCategories( bool enable );
@@ -654,7 +720,7 @@ public:
     wxSize FitColumns();
 
     /**
-        Returns currently active label editor, NULL if none.
+        Returns currently active label editor, @NULL if none.
     */
     wxTextCtrl* GetLabelEditor() const;
 
@@ -732,7 +798,7 @@ public:
 
         @param property
             Return image rectangle for this property.
-            If this argument is NULL, then preferred size is returned.
+            If this argument is @NULL, then preferred size is returned.
 
         @param item
             Which choice of property to use (each choice may have
@@ -757,6 +823,11 @@ public:
         Returns background colour of margin.
     */
     wxColour GetMarginColour() const;
+
+    /**
+        Returns margin width.
+    */
+    int GetMarginWidth() const;
 
     /**
         Returns "root property". It does not have name, etc. and it is not
@@ -849,7 +920,7 @@ public:
     bool IsEditorFocused() const;
 
     /**
-        Returns true if updating is frozen (ie. Freeze() called but not
+        Returns true if updating is frozen (i.e. Freeze() called but not
         yet Thaw() ).
     */
     bool IsFrozen() const;
@@ -898,7 +969,7 @@ public:
     /**
         Registers a new editor class.
 
-        @return Returns pointer  to the editor class instance that should be used.
+        @return Returns pointer to the editor class instance that should be used.
     */
     static wxPGEditor* DoRegisterEditorClass( wxPGEditor* editor,
                                             const wxString& name,
@@ -1084,6 +1155,32 @@ public:
     void SetVerticalSpacing( int vspacing );
 
     /**
+        Set virtual width for this particular page. Width -1 indicates that the
+        virtual width should be disabled.
+    */
+    void SetVirtualWidth( int width );
+
+    /**
+        Must be called in wxPGEditor::CreateControls() if primary editor window
+        is wxTextCtrl, just before textctrl is created.
+        @param text
+            Initial text value of created wxTextCtrl.
+    */
+    void SetupTextCtrlValue( const wxString& text );
+
+    /**
+        Unfocuses or closes editor if one was open, but does not deselect
+        property.
+    */
+    bool UnfocusEditor();
+
+    /**
+        Draws item, children, and consecutive parents as long as category is
+        not met.
+     */
+    void DrawItemAndValueRelated( wxPGProperty* p );
+
+    /**
         @name wxPropertyGrid customization
 
         Reimplement these member functions in derived class for better
@@ -1120,6 +1217,22 @@ public:
         bar, if any.
     */
     virtual wxStatusBar* GetStatusBar();
+
+    /** Override to customize property validation failure behaviour.
+        @param invalidValue
+            Value which failed in validation.
+        @return
+            Return true if user is allowed to change to another property even
+            if current has invalid value.
+    */
+    virtual bool DoOnValidationFailure( wxPGProperty* property,
+                                        wxVariant& invalidValue );
+
+    /** Override to customize resetting of property validation failure status.
+        @remarks
+        Property is guaranteed to have flag wxPG_PROP_INVALID_VALUE set.
+    */
+    virtual void DoOnValidationFailureReset( wxPGProperty* property );
 
     //@}
 
@@ -1166,6 +1279,14 @@ public:
         Shows an brief error message that is related to a property.
     */
     void ShowPropertyError( wxPGPropArg id, const wxString& msg );
+
+    /**
+        Call this from wxPGProperty::OnEvent() to cause property value to be
+        changed after the function returns (with true as return value).
+        ValueChangeInEvent() must be used if you wish the application to be
+        able to use wxEVT_PG_CHANGING to potentially veto the given value.
+    */
+    void ValueChangeInEvent( wxVariant variant );
 
     /**
         You can use this member function, for instance, to detect in
@@ -1230,7 +1351,7 @@ public:
     /**
         Returns property associated with this event.
 
-        @remarks You should assume that this property can always be NULL.
+        @remarks You should assume that this property can always be @NULL.
                  For instance, @c wxEVT_PG_SELECTED is emitted not only when
                  a new property is selected, but also when selection is
                  cleared by user activity.
@@ -1264,6 +1385,8 @@ public:
     wxVariant GetPropertyValue() const
 
     /**
+        Returns value of the associated property.
+
         @see GetPropertyValue()
     */
     wxVariant GetValue() const;
@@ -1301,4 +1424,91 @@ public:
         Returns @true if event was vetoed.
     */
     bool WasVetoed() const;
+};
+
+// -----------------------------------------------------------------------
+
+/** @class wxPropertyGridPopulator
+
+    Allows populating wxPropertyGrid from arbitrary text source.
+*/
+class wxPropertyGridPopulator
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxPropertyGridPopulator();
+
+    /**
+        Destructor.
+    */
+    virtual ~wxPropertyGridPopulator();
+
+    void SetState( wxPropertyGridPageState* state );
+
+    void SetGrid( wxPropertyGrid* pg );
+
+    /**
+        Appends a new property under bottommost parent.
+        @param propClass
+        Property class as string.
+    */
+    wxPGProperty* Add( const wxString& propClass,
+                       const wxString& propLabel,
+                       const wxString& propName,
+                       const wxString* propValue,
+                       wxPGChoices* pChoices = NULL );
+
+    /**
+        Pushes property to the back of parent array (ie it becomes bottommost
+        parent), and starts scanning/adding children for it.
+
+        When finished, parent array is returned to the original state.
+    */
+    void AddChildren( wxPGProperty* property );
+
+    /**
+        Adds attribute to the bottommost property.
+        @param type
+        Allowed values: "string", (same as string), "int", "bool". Empty string
+        mean autodetect.
+    */
+    bool AddAttribute( const wxString& name,
+                       const wxString& type,
+                       const wxString& value );
+
+    /**
+        Called once in AddChildren.
+    */
+    virtual void DoScanForChildren() = 0;
+
+    /**
+        Returns id of parent property for which children can currently be
+        added.
+     */
+    wxPGProperty* GetCurParent() const;
+
+    wxPropertyGridPageState* GetState();
+    const wxPropertyGridPageState* GetState() const;
+
+    /**
+         Like wxString::ToLong, except allows N% in addition of N.
+    */
+    static bool ToLongPCT( const wxString& s, long* pval, long max );
+
+    /**
+        Parses strings of format "choice1"[=value1] ... "choiceN"[=valueN] into
+        wxPGChoices. Registers parsed result using idString (if not empty).
+        Also, if choices with given id already registered, then don't parse but
+        return those choices instead.
+    */
+    wxPGChoices ParseChoices( const wxString& choicesString,
+                              const wxString& idString );
+
+    /**
+        Implement in derived class to do custom process when an error occurs.
+        Default implementation uses wxLogError.
+    */
+    virtual void ProcessError( const wxString& msg );
 };

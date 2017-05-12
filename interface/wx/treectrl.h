@@ -208,7 +208,7 @@ public:
 
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
-        items, respectively. If @a image -1 and @a selImage is -1, the same
+        items, respectively. If @a image > -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
     */
     virtual wxTreeItemId AddRoot(const wxString& text, int image = -1,
@@ -693,7 +693,7 @@ public:
 
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
-        items, respectively. If @a image -1 and @a selImage is -1, the same
+        items, respectively. If @a image > -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
     */
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
@@ -710,7 +710,7 @@ public:
 
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
-        items, respectively. If @a image -1 and @a selImage is -1, the same
+        items, respectively. If @a image > -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
     */
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
@@ -776,7 +776,7 @@ public:
 
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
-        items, respectively. If @a image -1 and @a selImage is -1, the same
+        items, respectively. If @a image > -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
     */
     wxTreeItemId PrependItem(const wxTreeItemId& parent,

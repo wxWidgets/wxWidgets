@@ -201,7 +201,7 @@ __RUNTIME_LIBS_10 = D
 __RUNTIME_LIBS_10 = $(__THREADSFLAG_9)
 !endif
 !if "$(USE_RTTI)" == "0"
-__RTTIFLAG_11 = 
+__RTTIFLAG_11 = /GR-
 !endif
 !if "$(USE_RTTI)" == "1"
 __RTTIFLAG_11 = /GR

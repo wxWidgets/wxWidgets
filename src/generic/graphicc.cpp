@@ -25,6 +25,7 @@
 #define cairo_public 
 
 #include <cairo.h>
+#include <float.h>
 
 bool wxCairoInit();
 
@@ -458,6 +459,9 @@ public:
     // resets the clipping to original extent
     virtual void ResetClip() wxOVERRIDE;
 
+    // returns bounding box of the clipping region
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+
     virtual void * GetNativeContext() wxOVERRIDE;
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
@@ -491,6 +495,7 @@ public:
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
     virtual void PushState() wxOVERRIDE;
     virtual void PopState() wxOVERRIDE;
+    virtual void Flush() wxOVERRIDE;
 
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                 wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
@@ -1262,7 +1267,8 @@ wxGraphicsObjectRefData *wxCairoMatrixData::Clone() const
 // concatenates the matrix
 void wxCairoMatrixData::Concat( const wxGraphicsMatrixData *t )
 {
-    cairo_matrix_multiply( &m_matrix, &m_matrix, (cairo_matrix_t*) t->GetNativeMatrix());
+    // The parameter matrix (t) is the multiplicand.
+    cairo_matrix_multiply(&m_matrix, (cairo_matrix_t*) t->GetNativeMatrix(), &m_matrix);
 }
 
 // sets the matrix to the respective values
@@ -1869,15 +1875,23 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 
     HDC hdc = (HDC)dc.GetHDC();
     m_mswStateSavedDC = ::SaveDC(hdc);
-    bool hasBitmap = false;
+    bool hasBitmap = false;      // To signal that Cairo context is created
+                                 // from raw bitmap and not from DC.
+    bool adjustTransformFromDC = false; // To signal that we have to transfer
+                                        // transformation settings from source
+                                        // wxDC to Cairo context on our own.
 
-    // cairo_win32_surface_create creates a 24-bit bitmap,
-    // so if we 32bpp bitmap, we need to create a 32-bit surface instead.
-    if (bmp.GetDepth() < 32)
-    {
-        m_mswSurface = cairo_win32_surface_create(hdc);
-    }
-    else
+    // Prior to 1.15.4 creating surface from HDC could be done only with
+    // cairo_win32_surface_create() supporting only 24 bpp RGB surface.
+    // So, in case of a 32 bpp ARGB bitmap, it was necessary to create
+    // a 32 bpp surface directly from bitmap data with cairo_image_surface_create_for_data().
+    // New API cairo_win32_surface_create_with_format() introduced in 1.15.4
+    // supports creating also 32 bpp ARGB surface so this function
+    // can be used to create a surface from both RGB and ARGB bitmaps.
+    // For 0RGB bitmaps, surface still has to be created in the old way, from
+    // bitmap data.
+    if ( bmp.GetDepth() == 32 &&
+         (cairo_version() < CAIRO_VERSION_ENCODE(1, 15, 4) || !bmp.HasAlpha()) )
     {
 #if wxUSE_WXDIB
         // We need to convert the currently selected bitmap to a DIB
@@ -1892,7 +1906,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 
         bmp.ConvertToDIB(); // Does nothing if already a DIB.
 
-        if (!bmp.HasAlpha())
+        if ( !bmp.HasAlpha() )
         {
             // Initialize alpha channel, even if we don't have any alpha yet,
             // we should have correct (opaque) alpha values in it for Cairo
@@ -1940,8 +1954,20 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
                                                info.bmWidth,
                                                info.bmHeight,
                                                info.bmWidthBytes);
-
-                hasBitmap = true;
+                if ( cairo_surface_status(m_mswSurface) == CAIRO_STATUS_SUCCESS )
+                {
+                    hasBitmap = true;
+                    // We will have to transfer transformation settings
+                    // from source wxDC to Cairo context on our own
+                    // because in this case they are not inherited
+                    // implicitly from underlying DC.
+                    adjustTransformFromDC = true;
+                }
+                else
+                {
+                    cairo_surface_destroy(m_mswSurface);
+                    m_mswSurface = NULL;
+                }
             }
             else
             {
@@ -1952,29 +1978,62 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         {
             wxLogLastError( wxS("wxCairoContext ctor - GetObject") );
         }
+    }
 
-        // Fallback if we failed to create Cairo surface from 32bpp bitmap.
-        if( !hasBitmap )
+    // Fallback if Cairo surface hasn't been created from bitmap data.
+    if( !hasBitmap )
+    {
+        // When x- or y-coordinate of DC origin > 0 then surface
+        // created from DC is not fully operational (for some Cairo
+        // operations memory access violation errors occur - see Cairo
+        // bug 96482) so in this case we would need to pass non-transformed
+        // DC to Cairo and to apply original DC transformation to the Cairo
+        // context operations on our own.
+        // We believe this bug will be fixed in the next Cairo version.
+#if CAIRO_VERSION <= CAIRO_VERSION_ENCODE(1, 15, 2)
+        if ( cairo_version() <= CAIRO_VERSION_ENCODE(1, 15, 2) )
+        {
+            wxCoord orgX, orgY;
+            dc.GetDeviceOrigin(&orgX, &orgY);
+            if ( orgX > 0 || orgY > 0 )
+            {
+                ::SetViewportOrgEx(hdc, 0, 0, NULL);
+                ::SetViewportExtEx(hdc, 1, 1, NULL);
+                ::SetWindowOrgEx(hdc, 0, 0, NULL);
+                ::SetWindowExtEx(hdc, 1, 1, NULL);
+                adjustTransformFromDC = true;
+            }
+        }
+#endif // Cairo <= 1.15.2
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
+        if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 15, 4) )
+        {
+            m_mswSurface = cairo_win32_surface_create_with_format(hdc,
+                             bmp.HasAlpha() ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24);
+        }
+        else
+#endif // Cairo >= 1.15.4
         {
             m_mswSurface = cairo_win32_surface_create(hdc);
         }
+        wxASSERT_MSG( cairo_surface_status(m_mswSurface) == CAIRO_STATUS_SUCCESS,
+                      wxS("wxCairoContext ctor - Error creating Cairo surface") );
     }
 
     Init( cairo_create(m_mswSurface) );
-    // If we've created a image surface, we need:
-    //   1. To flip the Y axis so that all drawing will appear right side up.
-    //   2. To explicitly transfer transformations settings from source DC
-    //      to Cairo context because they are not inherited implicitly.
-    // We have to remember these operations as an internal transformation
-    // which is not going to be exposed through e.g. GetTransform().
     if (hasBitmap)
     {
-        // Flip the Y axis.
+        // If we've created an image surface we need to flip the Y axis
+        // so that all drawing will appear right side up.
+        // We have to remember these operations as an internal transformation
+        // which is not going to be exposed through e.g. GetTransform().
         cairo_matrix_init(&m_internalTransform, 1.0, 0.0, 0.0, -1.0, 0.0, height);
-
-        // Transfer transformation settings from source DC to Cairo context on our own.
-        ApplyTransformFromDC(dc);
     }
+    // Transfer transformation settings from source wxDC
+    // to Cairo context on our own, if required.
+    if ( adjustTransformFromDC )
+        ApplyTransformFromDC(dc);
 #endif // __WXMSW__
     
 #ifdef __WXGTK3__
@@ -2062,8 +2121,58 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
 : wxGraphicsContext(renderer)
 {
     m_mswStateSavedDC = ::SaveDC(handle);
+
+    bool adjustTransformFromDC = false; // To signal that we have to transfer
+                                        // transformation settings from source
+                                        // wxDC to Cairo context on our own.
+    cairo_matrix_t dcTransform;
+    cairo_matrix_init_identity(&dcTransform);
+    // When x- or y-coordinate of DC origin > 0 then surface
+    // created from DC is not fully operational (for some Cairo
+    // operations memory access violation errors occur - see Cairo
+    // bug 96482) so in this case we would need to pass non-transformed
+    // DC to Cairo and to apply original DC transformation to the Cairo
+    // context operations on our own.
+    // We believe this bug will be fixed in the next Cairo version.
+#if CAIRO_VERSION <= CAIRO_VERSION_ENCODE(1, 15, 2)
+    if ( cairo_version() <= CAIRO_VERSION_ENCODE(1, 15, 2) )
+    {
+        POINT devOrg;
+        ::GetViewportOrgEx(handle, &devOrg);
+        if ( devOrg.x > 0 || devOrg.y > 0 )
+        {
+            SIZE devExt;
+            ::GetViewportExtEx(handle, &devExt);
+            POINT logOrg;
+            ::GetWindowOrgEx(handle, &logOrg);
+            SIZE logExt;
+            ::GetWindowExtEx(handle, &logExt);
+
+            double sx = (double)devExt.cx / logExt.cx;
+            double sy = (double)devExt.cy / logExt.cy;
+
+            cairo_matrix_translate(&dcTransform, devOrg.x, devOrg.y);
+            cairo_matrix_scale(&dcTransform, sx, sy);
+            cairo_matrix_translate(&dcTransform, -logOrg.x, -logOrg.y);
+
+            ::SetViewportOrgEx(handle, 0, 0, NULL);
+            ::SetViewportExtEx(handle, 1, 1, NULL);
+            ::SetWindowOrgEx(handle, 0, 0, NULL);
+            ::SetWindowExtEx(handle, 1, 1, NULL);
+
+            adjustTransformFromDC = true;
+        }
+    }
+#endif // Cairo <= 1.15.2
     m_mswSurface = cairo_win32_surface_create(handle);
     Init( cairo_create(m_mswSurface) );
+    if ( adjustTransformFromDC )
+    {
+        cairo_matrix_multiply(&m_internalTransform,
+                              &dcTransform, &m_internalTransform);
+        cairo_set_matrix(m_context, &m_internalTransform);
+    }
+
     m_width = 0;
     m_height = 0;
     // Try to determine DC size.
@@ -2088,6 +2197,7 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, HWND hWnd)
 
     m_mswStateSavedDC = 0;
     m_mswSurface = cairo_win32_surface_create((HDC)m_mswWindowHDC);
+
     Init(cairo_create(m_mswSurface));
     m_width = 0;
     m_height = 0;
@@ -2219,8 +2329,8 @@ void wxCairoContext::Init(cairo_t *context)
 
 void wxCairoContext::ApplyTransformFromDC(const wxDC& dc, ApplyTransformMode mode)
 {
-    // Transfer transformation settings from source DC to Cairo context
-    // and store it as an internal transformation
+    // Transfer transformation settings from source wxDC
+    // to Cairo context and store them as an internal transformation
     // (which is not going to be exposed).
     double sx, sy;
     dc.GetUserScale(&sx, &sy);
@@ -2242,7 +2352,6 @@ void wxCairoContext::ApplyTransformFromDC(const wxDC& dc, ApplyTransformMode mod
     org = dc.GetLogicalOrigin();
     cairo_matrix_translate(&m_internalTransform, -org.x, -org.y);
 
-    // Apply all above transformations.
     cairo_set_matrix(m_context, &m_internalTransform);
 }
 
@@ -2286,6 +2395,23 @@ void wxCairoContext::ResetClip()
     cairo_reset_clip(m_context);
 }
 
+void wxCairoContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
+{
+    double x1, y1, x2, y2;
+    cairo_clip_extents(m_context, &x1, &y1, &x2, &y2);
+    // Check if we have an empty clipping box.
+    if ( x2 - x1 <= DBL_MIN || y2 - y1 <= DBL_MIN )
+        x1 = x2 = y1 = y2 = 0.0;
+
+    if ( x )
+        *x = x1;
+    if ( y )
+        *y = y1;
+    if ( w )
+        *w = x2 - x1;
+    if ( h )
+        *h = y2 - y1;
+}
 
 void wxCairoContext::StrokePath( const wxGraphicsPath& path )
 {
@@ -2369,6 +2495,22 @@ void wxCairoContext::PushState()
 void wxCairoContext::PopState()
 {
     cairo_restore(m_context);
+}
+
+void wxCairoContext::Flush()
+{
+#ifdef __WXMSW__
+    if ( m_mswSurface )
+    {
+        cairo_surface_flush(m_mswSurface);
+    }
+#endif
+#ifdef __WXQT__
+    if ( m_qtSurface )
+    {
+        cairo_surface_flush(m_qtSurface);
+    }
+#endif
 }
 
 void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -2699,6 +2841,11 @@ public :
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) wxOVERRIDE;
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) wxOVERRIDE;
+
+#ifdef __WXMSW__
+    virtual wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) wxOVERRIDE;
+#endif
+
 #if wxUSE_IMAGE
     virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) wxOVERRIDE;
 #endif // wxUSE_IMAGE
@@ -2836,6 +2983,14 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * windo
     return NULL;
 #endif
 }
+
+#ifdef __WXMSW__
+wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeHDC(WXHDC dc)
+{
+    ENSURE_LOADED_OR_RETURN(NULL);
+    return new wxCairoContext(this, (HDC)dc);
+}
+#endif
 
 #if wxUSE_IMAGE
 wxGraphicsContext * wxCairoRenderer::CreateContextFromImage(wxImage& image)

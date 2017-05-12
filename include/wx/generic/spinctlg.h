@@ -111,7 +111,7 @@ protected:
 
 #ifdef __WXMSW__
     // and, for MSW, enabling this window itself
-    virtual void DoEnable(bool enable);
+    virtual void DoEnable(bool enable) wxOVERRIDE;
 #endif // __WXMSW__
 
     enum SendEvent
@@ -393,7 +393,7 @@ public:
     unsigned GetDigits() const { return m_digits; }
 
     // operations
-    void SetValue(const wxString& value)
+    void SetValue(const wxString& value) wxOVERRIDE
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue(double value)                 { DoSetValue(value, SendEvent_None); }
     void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
@@ -402,14 +402,14 @@ public:
 
     // We don't implement bases support for floating point numbers, this is not
     // very useful in practice.
-    virtual int GetBase() const { return 10; }
-    virtual bool SetBase(int WXUNUSED(base)) { return 0; }
+    virtual int GetBase() const wxOVERRIDE { return 10; }
+    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return 0; }
 
 protected:
-    virtual void DoSendEvent();
+    virtual void DoSendEvent() wxOVERRIDE;
 
-    virtual bool DoTextToValue(const wxString& text, double *val);
-    virtual wxString DoValueToText(double val);
+    virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
+    virtual wxString DoValueToText(double val) wxOVERRIDE;
 
     unsigned m_digits;
 

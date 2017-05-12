@@ -250,12 +250,14 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         stateFlag = GTK_STATE_FLAG_ACTIVE;
     }
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
+    gtk_style_context_save(sc);
     GdkRGBA *fc, *bc;
     wxNativeFontInfo info;
     gtk_style_context_set_state(sc, stateFlag);
     gtk_style_context_get(sc, stateFlag,
         "color", &fc, "background-color", &bc,
         GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
+    gtk_style_context_restore(sc);
     attr.colFg = wxColour(*fc);
     attr.colBg = wxColour(*bc);
     attr.font = wxFont(info);
@@ -319,7 +321,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
 // been recalculated and cached by us. We want GTK+ information.
 wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
 {
-    GtkRequisition req;
+    GtkRequisition req = { 0, 0 };
 #ifdef __WXGTK3__
     int w, h;
     gtk_widget_get_size_request(widget, &w, &h);

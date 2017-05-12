@@ -76,13 +76,13 @@ public:
   wxFileOffset Length() const;
 
   // simple accessors: note that Eof() and Error() may only be called if
-  // IsOpened()!
+  // IsOpened(). Otherwise they assert and return false.
     // is file opened?
   bool IsOpened() const { return m_fp != NULL; }
     // is end of file reached?
-  bool Eof() const { return feof(m_fp) != 0; }
+  bool Eof() const;
     // has an error occurred?
-  bool Error() const { return ferror(m_fp) != 0; }
+  bool Error() const;
     // get the file name
   const wxString& GetName() const { return m_name; }
     // type such as disk or pipe

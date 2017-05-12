@@ -157,7 +157,7 @@ template <wxUIntPtr INVALID_VALUE = (wxUIntPtr)INVALID_HANDLE_VALUE>
 class AutoHANDLE
 {
 public:
-    wxEXPLICIT AutoHANDLE(HANDLE handle = InvalidHandle()) : m_handle(handle) { }
+    explicit AutoHANDLE(HANDLE handle = InvalidHandle()) : m_handle(handle) { }
 
     bool IsOk() const { return m_handle != InvalidHandle(); }
     operator HANDLE() const { return m_handle; }
@@ -332,15 +332,6 @@ extern
 BOOL wxDrawStateBitmap(HDC hDC, HBITMAP hBitmap, int x, int y, UINT uState);
 
 #endif // wxUSE_OWNER_DRAWN
-
-// get (x, y) from DWORD - notice that HI/LOWORD can *not* be used because they
-// will fail on system with multiple monitors where the coords may be negative
-//
-// these macros are standard now (Win98) but some older headers don't have them
-#ifndef GET_X_LPARAM
-    #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
-    #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
-#endif // GET_X_LPARAM
 
 // get the current state of SHIFT/CTRL/ALT keys
 inline bool wxIsModifierDown(int vk)
@@ -900,10 +891,6 @@ inline wxString wxGetFullModuleName()
 // return the run-time version of the OS in a format similar to
 // WINVER/_WIN32_WINNT compile-time macros:
 //
-//      0x0300      Windows NT 3.51
-//      0x0400      Windows 95, NT4
-//      0x0410      Windows 98
-//      0x0500      Windows ME, 2000
 //      0x0501      Windows XP, 2003
 //      0x0502      Windows XP SP2, 2003 SP1
 //      0x0600      Windows Vista, 2008
@@ -1095,7 +1082,6 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 // Get the size of an icon
 extern WXDLLIMPEXP_CORE wxSize wxGetHiconSize(HICON hicon);
 
-// Lines are drawn differently for WinCE and regular WIN32
 WXDLLIMPEXP_CORE void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
 
 // fill the client rect of the given window on the provided dc using this brush

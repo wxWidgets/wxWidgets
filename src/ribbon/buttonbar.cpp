@@ -302,7 +302,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     {
         if(bitmap.IsOk())
         {
-            m_bitmap_size_large = bitmap.GetSize();
+            m_bitmap_size_large = bitmap.GetScaledSize();
             if(!bitmap_small.IsOk())
             {
                 m_bitmap_size_small = m_bitmap_size_large;
@@ -311,7 +311,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         }
         if(bitmap_small.IsOk())
         {
-            m_bitmap_size_small = bitmap_small.GetSize();
+            m_bitmap_size_small = bitmap_small.GetScaledSize();
             if(!bitmap.IsOk())
             {
                 m_bitmap_size_large = m_bitmap_size_small;
@@ -329,7 +329,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         base->bitmap_large = MakeResizedBitmap(base->bitmap_small,
             m_bitmap_size_large);
     }
-    else if(base->bitmap_large.GetSize() != m_bitmap_size_large)
+    else if(base->bitmap_large.GetScaledSize() != m_bitmap_size_large)
     {
         base->bitmap_large = MakeResizedBitmap(base->bitmap_large,
             m_bitmap_size_large);
@@ -340,7 +340,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
         base->bitmap_small = MakeResizedBitmap(base->bitmap_large,
             m_bitmap_size_small);
     }
-    else if(base->bitmap_small.GetSize() != m_bitmap_size_small)
+    else if(base->bitmap_small.GetScaledSize() != m_bitmap_size_small)
     {
         base->bitmap_small = MakeResizedBitmap(base->bitmap_small,
             m_bitmap_size_small);
@@ -467,15 +467,19 @@ void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
 
 wxBitmap wxRibbonButtonBar::MakeResizedBitmap(const wxBitmap& original, wxSize size)
 {
+    double scale = original.GetScaleFactor();
+    if (scale > 1.0)
+        scale = 2.0;
+
     wxImage img(original.ConvertToImage());
-    img.Rescale(size.GetWidth(), size.GetHeight(), wxIMAGE_QUALITY_HIGH);
-    return wxBitmap(img);
+    img.Rescale(scale * size.GetWidth(), scale * size.GetHeight(), wxIMAGE_QUALITY_HIGH);
+    return wxBitmap(img, -1, scale);
 }
 
 wxBitmap wxRibbonButtonBar::MakeDisabledBitmap(const wxBitmap& original)
 {
     wxImage img(original.ConvertToImage());
-    return wxBitmap(img.ConvertToGreyscale());
+    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScaleFactor());
 }
 
 size_t wxRibbonButtonBar::GetButtonCount() const

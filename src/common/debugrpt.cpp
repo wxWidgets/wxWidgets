@@ -234,7 +234,7 @@ wxDebugReport::~wxDebugReport()
 
     if ( !m_dir.empty() )
     {
-        if ( wxRmDir(m_dir.fn_str()) != 0 )
+        if ( wxRmDir(m_dir) != 0 )
         {
             wxLogSysError(_("Failed to clean up debug report directory \"%s\""),
                           m_dir.c_str());

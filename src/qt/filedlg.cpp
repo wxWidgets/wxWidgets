@@ -23,7 +23,7 @@ public:
     wxQtFileDialog( wxWindow *parent, wxDialog *handler,
                     const wxString& message, const wxString& defaultDir,
                     const wxString& defaultFile, const wxString& wildCard, long style )
-        : wxQtEventSignalHandler(parent, handler)
+        : wxQtEventSignalHandler<QFileDialog,wxDialog>(parent, handler)
     {
         setLabelText(QFileDialog::LookIn, wxQtConvertString(message));
         setDirectory(wxQtConvertString(defaultDir));

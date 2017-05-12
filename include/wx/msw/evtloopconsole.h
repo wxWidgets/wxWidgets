@@ -15,20 +15,9 @@ class WXDLLIMPEXP_BASE wxMSWEventLoopBase : public wxEventLoopManual
 {
 public:
     wxMSWEventLoopBase();
-    virtual ~wxMSWEventLoopBase();
 
     // implement base class pure virtuals
-    virtual bool Pending() const;
-    virtual void WakeUp();
-
-#if wxUSE_THREADS
-    // MSW-specific method to wait for the termination of the specified (by its
-    // native handle) thread or any input message arriving (in GUI case).
-    //
-    // Return value is WAIT_OBJECT_0 if the thread terminated, WAIT_OBJECT_0+1
-    // if a message arrived with anything else indicating an error.
-    WXDWORD MSWWaitForThread(WXHANDLE hThread);
-#endif // wxUSE_THREADS
+    virtual bool Pending() const wxOVERRIDE;
 
 protected:
     // get the next message from queue and return true or return false if we
@@ -36,13 +25,8 @@ protected:
     bool GetNextMessage(WXMSG *msg);
 
     // same as above but with a timeout and return value can be -1 meaning that
-    // time out expired in addition to true/false
+    // time out expired in addition to
     int GetNextMessageTimeout(WXMSG *msg, unsigned long timeout);
-
-private:
-    // An auto-reset Win32 event which is signalled when we need to wake up the
-    // main thread waiting in GetNextMessage[Timeout]().
-    WXHANDLE m_heventWake;
 };
 
 #if wxUSE_CONSOLE_EVENTLOOP
@@ -53,14 +37,15 @@ public:
     wxConsoleEventLoop() { }
 
     // override/implement base class virtuals
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
+    virtual bool Dispatch() wxOVERRIDE;
+    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
+    virtual void WakeUp() wxOVERRIDE;
 
     // Windows-specific function to process a single message
     virtual void ProcessMessage(WXMSG *msg);
 
 protected:
-    virtual void DoYieldFor(long eventsToProcess);
+    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
 };
 
 #endif // wxUSE_CONSOLE_EVENTLOOP

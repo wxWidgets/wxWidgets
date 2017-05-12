@@ -32,7 +32,7 @@ public:
     
     // Convert from wxIcon / wxCursor
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
-    wxEXPLICIT wxBitmap(const wxCursor& cursor);
+    explicit wxBitmap(const wxCursor& cursor);
 
     static void InitStandardHandlers();
 

@@ -165,6 +165,14 @@ private:
     wxDECLARE_NO_COPY_CLASS(CLocaleSetter);
 };
 
+#if wxUSE_GUI
+
+// Helper function deleting the window without asserts (and hence exceptions
+// thrown from its dtor!) even if it has mouse capture.
+void DeleteTestWindow(wxWindow* win);
+
+#endif // wxUSE_GUI
+
 // Macro that can be used to register the test with the given name in both the
 // global unnamed registry so that it is ran by default and a registry with the
 // same name as this test to allow running just this test individually.

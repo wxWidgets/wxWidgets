@@ -394,13 +394,8 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
         return (WXHWND) ::ChildWindowFromPoint(GetHwnd(), pt);
     }
 
-    // notice that a slightly safer alternative could be to use FindWindowEx()
-    // but it's not available under WinCE so just take the first child for now
-    // to keep one version of the code for all platforms and fix it later if
-    // problems are discovered
-
     // we assume that the only child of the combobox is the edit window
-    return (WXHWND)::GetWindow(GetHwnd(), GW_CHILD);
+    return (WXHWND)::FindWindowEx(GetHwnd(), NULL, wxT("EDIT"), NULL);
 }
 
 WXHWND wxComboBox::GetEditHWND() const

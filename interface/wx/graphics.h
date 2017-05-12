@@ -377,6 +377,13 @@ public:
     }
     @endcode
 
+    @remarks For some renderers (like Direct2D or Cairo) processing
+    of drawing operations may be deferred (Direct2D render target normally
+    builds up a batch of rendering commands but defers processing of these
+    commands, Cairo operates on a separate surface) so to make drawing
+    results visible you need to update the content of the context
+    by calling wxGraphicsContext::Flush() or by destroying the context.
+
     @library{wxcore}
     @category{gdi,dc}
 
@@ -385,6 +392,12 @@ public:
 class wxGraphicsContext : public wxGraphicsObject
 {
 public:
+    /**
+        @name Creating a context
+
+        @{
+    */
+
     /**
         Creates a wxGraphicsContext from a wxWindow.
 
@@ -426,6 +439,21 @@ public:
     static wxGraphicsContext* Create(const wxEnhMetaFileDC& metaFileDC);
 
     /**
+        Creates a wxGraphicsContext from a DC of unknown specific type.
+
+        Creates a wxGraphicsContext if @a dc is a supported type (i.e. has a
+        corresponding Create() method, e.g. wxWindowDC or wxMemoryDC).
+        Returns @NULL if the DC is unsupported.
+
+        This method is only useful as a helper in generic code that operates
+        with wxDC and doesn't known its exact type. Use Create() instead if
+        you know that the DC is e.g. wxWindowDC.
+
+        @since 3.1.1
+     */
+    static wxGraphicsContext* CreateFromUnknownDC(wxDC& dc);
+
+    /**
         Creates a wxGraphicsContext associated with a wxImage.
 
         The image specifies the size of the context as well as whether alpha is
@@ -437,77 +465,6 @@ public:
         @since 2.9.3
      */
     static wxGraphicsContext* Create(wxImage& image);
-
-    /**
-       Create a lightweight context that can be used only for measuring text.
-    */
-    static wxGraphicsContext* Create();
-
-    /**
-        Clips drawings to the specified region.
-    */
-    virtual void Clip(const wxRegion& region) = 0;
-
-    /**
-        Clips drawings to the specified rectangle.
-    */
-    virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) = 0;
-
-    /**
-        Concatenates the passed in transform with the current transform of this
-        context.
-    */
-    virtual void ConcatTransform(const wxGraphicsMatrix& matrix) = 0;
-
-    /**
-        Creates wxGraphicsBitmap from an existing wxBitmap.
-
-        Returns an invalid wxNullGraphicsBitmap on failure.
-     */
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
-
-    /**
-        Creates wxGraphicsBitmap from an existing wxImage.
-
-        This method is more efficient than converting wxImage to wxBitmap first
-        and then calling CreateBitmap() but otherwise has the same effect.
-
-        Returns an invalid wxNullGraphicsBitmap on failure.
-
-        @since 2.9.3
-     */
-    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
-
-    /**
-        Extracts a sub-bitmap from an existing bitmap.
-     */
-    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
-                                             wxDouble x, wxDouble y,
-                                             wxDouble w, wxDouble h) = 0;
-
-    /**
-        Creates a native brush from a wxBrush.
-    */
-    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) const;
-
-    /**
-        Creates a native graphics font from a wxFont and a text colour.
-    */
-    virtual wxGraphicsFont CreateFont(const wxFont& font,
-                                      const wxColour& col = *wxBLACK) const;
-
-    /**
-        Creates a font object with the specified attributes.
-
-        The use of overload taking wxFont is preferred, see
-        wxGraphicsRenderer::CreateFont() for more details.
-
-        @since 2.9.3
-     */
-    virtual wxGraphicsFont CreateFont(double sizeInPixels,
-                                      const wxString& facename,
-                                      int flags = wxFONTFLAG_DEFAULT,
-                                      const wxColour& col = *wxBLACK) const;
 
     /**
         Creates a wxGraphicsContext from a native context. This native context
@@ -526,25 +483,76 @@ public:
     static wxGraphicsContext* CreateFromNativeWindow(void* window);
 
     /**
-        Creates a native brush with a linear gradient.
+        Creates a wxGraphicsContext from a native DC handle. Windows only.
 
-        The brush starts at (@a x1, @a y1) and ends at (@a x2, @a y2). Either
-        just the start and end gradient colours (@a c1 and @a c2) or full set
-        of gradient @a stops can be specified.
+        @see wxGraphicsRenderer::CreateContextFromNativeHDC()
 
-        The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
+        @since 3.1.1
     */
-    //@{
-    wxGraphicsBrush
-    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                              wxDouble x2, wxDouble y2,
-                              const wxColour& c1, const wxColour& c2) const;
+    static wxGraphicsContext* CreateFromNativeHDC(WXHDC dc);
 
-    wxGraphicsBrush
-    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                              wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) const;
-    //@}
+    /**
+       Create a lightweight context that can be used only for measuring text.
+    */
+    static wxGraphicsContext* Create();
+
+    /** @}
+    */
+
+    /**
+        @name Clipping region functions
+
+        @{
+    */
+
+    /**
+        Resets the clipping to original shape.
+    */
+    virtual void ResetClip() = 0;
+
+    /**
+        Sets the clipping region to the intersection of the given region
+        and the previously set clipping region.
+        The clipping region is an area to which drawing is restricted.
+
+        @remarks
+        - Clipping region should be given in logical coordinates.
+
+        - Calling this function can only make the clipping region smaller,
+        never larger.
+
+        - You need to call ResetClip() first if you want to set the clipping
+        region exactly to the region specified.
+
+        - If resulting clipping region is empty, then all drawing upon the context
+        is clipped out (all changes made by drawing operations are masked out).
+    */
+    virtual void Clip(const wxRegion& region) = 0;
+
+    /**
+        @overload
+    */
+    virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) = 0;
+
+    /**
+        Returns bounding box of the current clipping region.
+
+        @remarks
+        - If clipping region is empty, then empty rectangle is returned
+        (@a x, @a y, @a w, @a h are set to zero).
+
+        @since 3.1.1
+    */
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) = 0;
+
+    /** @}
+    */
+
+    /**
+        @name Transformation matrix
+
+        @{
+    */
 
     /**
         Creates a native affine transformation matrix from the passed in
@@ -564,14 +572,71 @@ public:
     wxGraphicsMatrix CreateMatrix(const wxAffineMatrix2DBase& mat) const;
 
     /**
-        Creates a native graphics path which is initially empty.
+        Concatenates the passed in transform with the current transform of this
+        context.
     */
-    wxGraphicsPath CreatePath() const;
+    virtual void ConcatTransform(const wxGraphicsMatrix& matrix) = 0;
 
     /**
-        Creates a native pen from a wxPen.
+        Gets the current transformation matrix of this context.
     */
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+    virtual wxGraphicsMatrix GetTransform() const = 0;
+
+    /**
+        Rotates the current transformation matrix (in radians).
+    */
+    virtual void Rotate(wxDouble angle) = 0;
+
+    /**
+        Scales the current transformation matrix.
+    */
+    virtual void Scale(wxDouble xScale, wxDouble yScale) = 0;
+
+    /**
+        Sets the current transformation matrix of this context
+    */
+    virtual void SetTransform(const wxGraphicsMatrix& matrix) = 0;
+
+    /**
+        Translates the current transformation matrix.
+    */
+    virtual void Translate(wxDouble dx, wxDouble dy) = 0;
+
+    /** @}
+    */
+
+    /**
+        @name Brush and pen functions
+
+        @{
+    */
+
+    /**
+        Creates a native brush from a wxBrush.
+    */
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) const;
+
+    /**
+        Creates a native brush with a linear gradient.
+
+        The brush starts at (@a x1, @a y1) and ends at (@a x2, @a y2). Either
+        just the start and end gradient colours (@a c1 and @a c2) or full set
+        of gradient @a stops can be specified.
+
+        The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
+    */
+    wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxColour& c1, const wxColour& c2) const;
+
+    /**
+        @overload
+    */
+    wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxGraphicsGradientStops& stops) const;
 
     /**
         Creates a native brush with a radial gradient.
@@ -584,7 +649,6 @@ public:
 
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
     */
-    //@{
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                               wxDouble xc, wxDouble yc,
@@ -592,25 +656,63 @@ public:
                               const wxColour& oColor,
                               const wxColour& cColor) const;
 
+    /**
+        @overload
+    */
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                               wxDouble xc, wxDouble yc,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops) = 0;
-    //@}
+
+    /**
+        Sets the brush for filling paths.
+    */
+    void SetBrush(const wxBrush& brush);
+
+    /**
+        Sets the brush for filling paths.
+    */
+    virtual void SetBrush(const wxGraphicsBrush& brush);
+
+    /**
+        Creates a native pen from a wxPen.
+    */
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+
+    /**
+        Sets the pen used for stroking.
+    */
+    void SetPen(const wxPen& pen);
+
+    /**
+        Sets the pen used for stroking.
+    */
+    virtual void SetPen(const wxGraphicsPen& pen);
+
+    /** @}
+    */
+
+    /**
+        @name Drawing functions
+
+        @{
+    */
 
     /**
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask
         and the current brushed is used for filling.
     */
-    //@{
     virtual void DrawBitmap(const wxGraphicsBitmap& bmp,
                             wxDouble x, wxDouble y,
                             wxDouble w, wxDouble h ) = 0;
+
+    /**
+        @overload
+    */
     virtual void DrawBitmap(const wxBitmap& bmp,
                             wxDouble x, wxDouble y,
                             wxDouble w, wxDouble h) = 0;
-    //@}
 
     /**
         Draws an ellipse.
@@ -650,6 +752,7 @@ public:
         Draws text at the defined position.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y);
+
     /**
         Draws text at the defined position.
 
@@ -664,6 +767,7 @@ public:
             the string.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y, wxDouble angle);
+
     /**
         Draws text at the defined position.
 
@@ -697,16 +801,87 @@ public:
                   wxDouble angle, const wxGraphicsBrush& backgroundBrush);
 
     /**
+        Creates a native graphics path which is initially empty.
+    */
+    wxGraphicsPath CreatePath() const;
+
+    /**
         Fills the path with the current brush.
     */
     virtual void FillPath(const wxGraphicsPath& path,
                           wxPolygonFillMode fillStyle = wxODDEVEN_RULE) = 0;
 
     /**
-        Returns the native context (CGContextRef for Core Graphics, Graphics
-        pointer for GDIPlus and cairo_t pointer for cairo).
+        Strokes a single line.
     */
-    virtual void* GetNativeContext() = 0;
+    virtual void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
+
+    /**
+        Stroke disconnected lines from begin to end points, fastest method
+        available for this purpose.
+    */
+
+    virtual void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
+                             const wxPoint2DDouble* endPoints);
+    /**
+        Stroke lines connecting all the points.
+
+        Unlike the other overload of this function, this method draws a single
+        polyline and not a number of disconnected lines.
+    */
+    virtual void StrokeLines(size_t n, const wxPoint2DDouble* points);
+
+    /**
+        Strokes along a path with the current pen.
+    */
+    virtual void StrokePath(const wxGraphicsPath& path) = 0;
+
+    /** @}
+    */
+
+    /**
+        @name Text functions
+
+        @{
+    */
+
+    /**
+        Creates a native graphics font from a wxFont and a text colour.
+
+        @remarks
+        For Direct2D graphics fonts can be created from TrueType fonts only.
+    */
+    virtual wxGraphicsFont CreateFont(const wxFont& font,
+                                      const wxColour& col = *wxBLACK) const;
+
+    /**
+        Creates a font object with the specified attributes.
+
+        The use of overload taking wxFont is preferred, see
+        wxGraphicsRenderer::CreateFont() for more details.
+
+        @remarks
+        For Direct2D graphics fonts can be created from TrueType fonts only.
+
+        @since 2.9.3
+    */
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK) const;
+
+    /**
+        Sets the font for drawing text.
+
+        @remarks
+        For Direct2D only TrueType fonts can be used.
+    */
+    void SetFont(const wxFont& font, const wxColour& colour);
+
+    /**
+        Sets the font for drawing text.
+    */
+    virtual void SetFont(const wxGraphicsFont& font);
 
     /**
         Fills the @a widths array with the widths from the beginning of
@@ -735,152 +910,14 @@ public:
                                wxDouble* height, wxDouble* descent,
                                wxDouble* externalLeading) const = 0;
 
-    /**
-        Gets the current transformation matrix of this context.
+    /** @}
     */
-    virtual wxGraphicsMatrix GetTransform() const = 0;
 
     /**
-        Resets the clipping to original shape.
+        @name Page and document start/end functions
+
+        @{
     */
-    virtual void ResetClip() = 0;
-
-    /**
-        Rotates the current transformation matrix (in radians).
-    */
-    virtual void Rotate(wxDouble angle) = 0;
-
-    /**
-        Scales the current transformation matrix.
-    */
-    virtual void Scale(wxDouble xScale, wxDouble yScale) = 0;
-
-    /**
-        Sets the brush for filling paths.
-    */
-    void SetBrush(const wxBrush& brush);
-    /**
-        Sets the brush for filling paths.
-    */
-    virtual void SetBrush(const wxGraphicsBrush& brush);
-
-    /**
-        Sets the font for drawing text.
-    */
-    void SetFont(const wxFont& font, const wxColour& colour);
-    /**
-        Sets the font for drawing text.
-    */
-    virtual void SetFont(const wxGraphicsFont& font);
-
-    /**
-        Sets the pen used for stroking.
-    */
-    void SetPen(const wxPen& pen);
-    /**
-        Sets the pen used for stroking.
-    */
-    virtual void SetPen(const wxGraphicsPen& pen);
-
-    /**
-        Sets the current transformation matrix of this context
-    */
-    virtual void SetTransform(const wxGraphicsMatrix& matrix) = 0;
-
-    /**
-        Strokes a single line.
-    */
-    virtual void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
-
-    /**
-        Stroke disconnected lines from begin to end points, fastest method
-        available for this purpose.
-    */
-    virtual void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
-                             const wxPoint2DDouble* endPoints);
-    /**
-        Stroke lines connecting all the points.
-
-        Unlike the other overload of this function, this method draws a single
-        polyline and not a number of disconnected lines.
-    */
-    virtual void StrokeLines(size_t n, const wxPoint2DDouble* points);
-
-    /**
-        Strokes along a path with the current pen.
-    */
-    virtual void StrokePath(const wxGraphicsPath& path) = 0;
-
-    /**
-        Translates the current transformation matrix.
-    */
-    virtual void Translate(wxDouble dx, wxDouble dy) = 0;
-
-    /**
-        Redirects all rendering is done into a fully transparent temporary context
-    */
-    virtual void BeginLayer(wxDouble opacity) = 0;
-
-    /**
-        Composites back the drawings into the context with the opacity given at
-        the BeginLayer call
-    */
-    virtual void EndLayer() = 0;
-
-    /**
-        Sets the antialiasing mode, returns true if it supported
-    */
-    virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
-
-    /**
-        Returns the current shape antialiasing mode
-    */
-    virtual wxAntialiasMode GetAntialiasMode() const ;
-
-    /**
-        Sets the interpolation quality, returns true if it is supported.
-
-        Not implemented in Cairo backend currently.
-     */
-    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
-
-    /**
-        Returns the current interpolation quality.
-     */
-    virtual wxInterpolationQuality GetInterpolationQuality() const;
-
-    /**
-        Sets the compositing operator, returns true if it supported
-    */
-    virtual bool SetCompositionMode(wxCompositionMode op) = 0;
-
-    /**
-        Returns the current compositing operator
-    */
-    virtual wxCompositionMode GetCompositionMode() const;
-
-
-    /**
-       Push the current state of the context's transformation matrix on a
-       stack.
-
-       @see wxGraphicsContext::PopState
-    */
-    virtual void PushState() = 0;
-
-    /**
-       Pops a stored state from the stack and sets the current transformation
-       matrix to that state.
-
-       @see wxGraphicsContext::PopState
-    */
-    virtual void PopState() = 0;
-
-
-    virtual bool ShouldOffset() const;
-    virtual void EnableOffset(bool enable = true);
-    void DisableOffset();
-    bool OffsetEnabled();
 
     /**
        Begin a new document (relevant only for printing / pdf etc.)
@@ -904,21 +941,169 @@ public:
     */
     virtual void EndPage();
 
+    /** @}
+    */
+
+    /**
+        @name Bitmap functions
+
+        @{
+    */
+
+    /**
+        Creates wxGraphicsBitmap from an existing wxBitmap.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+     */
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+
+    /**
+        Creates wxGraphicsBitmap from an existing wxImage.
+
+        This method is more efficient than converting wxImage to wxBitmap first
+        and then calling CreateBitmap() but otherwise has the same effect.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+
+    /**
+        Extracts a sub-bitmap from an existing bitmap.
+     */
+    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
+                                             wxDouble x, wxDouble y,
+                                             wxDouble w, wxDouble h) = 0;
+
+    /** @}
+    */
+
+    /**
+        @name Modifying the state
+
+        @{
+    */
+
+    /**
+        All rendering will be done into a fully transparent temporary context.
+        Layers can be nested by making balanced calls to BeginLayer()/EndLayer().
+    */
+    virtual void BeginLayer(wxDouble opacity) = 0;
+
+    /**
+        Composites back the drawings into the context with the opacity given at
+        the BeginLayer() call.
+    */
+    virtual void EndLayer() = 0;
+
+    /**
+       Push the current state (like transformations, clipping region and quality
+       settings) of the context on a stack.
+       Multiple balanced calls to PushState() and PopState() can be nested.
+
+       @see PopState()
+    */
+    virtual void PushState() = 0;
+
+    /**
+       Sets current state of the context to the state saved by a preceding call
+       to PushState() and removes that state from the stack of saved states.
+
+       @see PushState()
+    */
+    virtual void PopState() = 0;
+
     /**
        Make sure that the current content of this context is immediately visible.
     */
     virtual void Flush();
 
+    /** @}
+    */
+
+    /**
+        @name Getting/setting parameters
+
+        @{
+    */
+
+    /**
+        Returns the native context (CGContextRef for Core Graphics, Graphics
+        pointer for GDIPlus and cairo_t pointer for cairo).
+    */
+    virtual void* GetNativeContext() = 0;
+
+    /**
+        Sets the antialiasing mode, returns true if it supported
+    */
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
+
+    /**
+        Returns the current shape antialiasing mode
+    */
+    virtual wxAntialiasMode GetAntialiasMode() const ;
+
+    /**
+        Sets the interpolation quality, returns true if it is supported.
+
+        @remarks
+        Not implemented in Cairo backend currently.
+     */
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
+
+    /**
+        Returns the current interpolation quality.
+     */
+    virtual wxInterpolationQuality GetInterpolationQuality() const;
+
+    /**
+        Sets the compositing operator, returns true if it supported
+    */
+    virtual bool SetCompositionMode(wxCompositionMode op) = 0;
+
+    /**
+        Returns the current compositing operator
+    */
+    virtual wxCompositionMode GetCompositionMode() const;
+
     /**
        Returns the size of the graphics context in device coordinates.
     */
     void GetSize(wxDouble* width, wxDouble* height) const;
-    
+
     /**
        Returns the resolution of the graphics context in device points per inch.
     */
     virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
 
+    /** @}
+    */
+
+    /**
+        @name Offset management
+
+        @{
+    */
+
+    /**
+        Helper to determine if a 0.5 offset should be applied
+        for the drawing operation.
+    */
+    virtual bool ShouldOffset() const;
+
+    /**
+        Indicates whether the context should try to offset for pixel
+        boundaries. This only makes sense on bitmap devices like screen.
+        By default this is turned off.
+    */
+    virtual void EnableOffset(bool enable = true);
+
+    void DisableOffset();
+    bool OffsetEnabled();
+
+    /** @}
+    */
 };
 
 /**
@@ -1041,7 +1226,7 @@ public:
     used. There may be multiple instances on a system, if there are different
     rendering engines present, but there is always only one instance per
     engine. This instance is pointed back to by all objects created by it
-    (wxGraphicsContext, wxGraphicsPath etc) and can be retrieved through their
+    (wxGraphicsContext, wxGraphicsPath etc.) and can be retrieved through their
     wxGraphicsObject::GetRenderer() method. Therefore you can create an
     additional instance of a path etc. by calling
     wxGraphicsObject::GetRenderer() and then using the appropriate CreateXXX()
@@ -1112,7 +1297,8 @@ public:
     virtual wxGraphicsContext* CreateContext(const wxMemoryDC& memoryDC) = 0 ;
 
     /**
-        Creates a wxGraphicsContext from a wxPrinterDC
+        Creates a wxGraphicsContext from a wxPrinterDC.
+        @remarks Not implemented for Direct2D renderer (on MSW).
     */
     virtual wxGraphicsContext* CreateContext(const wxPrinterDC& printerDC) = 0 ;
 
@@ -1120,7 +1306,7 @@ public:
         Creates a wxGraphicsContext from a wxEnhMetaFileDC.
 
         This function, as wxEnhMetaFileDC class itself, is only available only
-        under MSW.
+        under MSW (but not for Direct2D renderer).
     */
     virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& metaFileDC) = 0;
 
@@ -1142,7 +1328,9 @@ public:
     /**
         Creates a wxGraphicsContext from a native context. This native context
         must be a CGContextRef for Core Graphics, a Graphics pointer for
-        GDIPlus, or a cairo_t pointer for cairo.
+        GDIPlus, an ID2D1RenderTarget pointer for Direct2D, a cairo_t pointer
+        or HDC for Cairo on MSW, or a cairo_t pointer for Cairo on any other
+        platform.
     */
     virtual wxGraphicsContext* CreateContextFromNativeContext(void* context) = 0;
 
@@ -1150,6 +1338,13 @@ public:
         Creates a wxGraphicsContext from a native window.
     */
     virtual wxGraphicsContext* CreateContextFromNativeWindow(void* window) = 0;
+
+    /**
+        Creates a wxGraphicsContext from a native DC handle. Windows only.
+
+        @since 3.1.1
+    */
+    static wxGraphicsContext* CreateContextFromNativeHDC(WXHDC dc);
 
     /**
         Creates a wxGraphicsContext that can be used for measuring texts only.
@@ -1237,9 +1432,6 @@ public:
 
     /**
         Extracts a sub-bitmap from an existing bitmap.
-
-        Currently this function is implemented in the native MSW and OS X
-        versions but not when using Cairo.
      */
     virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
                                              wxDouble x, wxDouble y,
@@ -1248,11 +1440,12 @@ public:
     /**
         Returns the name of the technology used by the renderer.
 
-        Currently this function returns "gdiplus" for Windows GDI+ implementation,
+        Currently this function returns "gdiplus" for Windows GDI+
+        implementation, "direct2d" for Windows Direct2D implementation,
         "cairo" for Cairo implementation and "cg" for OS X CoreGraphics
         implementation.
 
-        Note: the string returned by this method is not user-readable and is
+        @remarks The string returned by this method is not user-readable and is
         expected to be used internally by the program only.
 
         @since 3.1.0
@@ -1276,11 +1469,21 @@ public:
     /**
         Returns the default renderer on this platform. On OS X this is the Core
         Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and
-        on GTK we currently default to the cairo renderer.
+        on GTK we currently default to the Cairo renderer.
     */
     static wxGraphicsRenderer* GetDefaultRenderer();
+    /**
+        Returns Cairo renderer.
+    */
     static wxGraphicsRenderer* GetCairoRenderer();
-
+    /**
+        Returns GDI+ renderer (MSW only).
+    */
+    static wxGraphicsRenderer* GetGDIPlusRenderer();
+    /**
+        Returns Direct2D renderer (MSW only).
+    */
+    static wxGraphicsRenderer* GetDirect2DRenderer();
 };
 
 
@@ -1362,10 +1565,21 @@ class wxGraphicsMatrix : public wxGraphicsObject
 public:
     /**
         Concatenates the matrix passed with the current matrix.
+        The effect of the resulting transformation is to first apply
+        the transformation in @a t to the coordinates and then apply
+        the transformation in the current matrix to the coordinates.
+
+        @code
+        // matrix = t x matrix
+        @endcode
+
+        @param t
+            The parameter matrix is the multiplicand.
     */
     virtual void Concat(const wxGraphicsMatrix* t);
+
     /**
-        Concatenates the matrix passed with the current matrix.
+        @overload
     */
     void Concat(const wxGraphicsMatrix& t);
 

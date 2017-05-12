@@ -21,6 +21,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/wxcrt.h"
+#endif // WX_PRECOMP
+
 #include "wx/msw/debughlp.h"
 
 #if wxUSE_DBGHELP && wxUSE_DYNLIB_CLASS
@@ -212,7 +216,7 @@ const wxString& wxDbgHelpDLL::GetErrorMessage()
 void wxDbgHelpDLL::LogError(const wxChar *func)
 {
     ::OutputDebugString(wxString::Format(wxT("dbghelp: %s() failed: %s\r\n"),
-                        func, wxSysErrorMsg(::GetLastError())).t_str());
+                        func, wxSysErrorMsgStr(::GetLastError())).t_str());
 }
 
 // ----------------------------------------------------------------------------

@@ -30,13 +30,9 @@ typedef unsigned long WXKeySym;
 
 int wxCharCodeXToWX(WXKeySym keySym);
 WXKeySym wxCharCodeWXToX(int id);
+#ifdef __WXX11__
 int wxUnicodeCharXToWX(WXKeySym keySym);
-
-// Xlib keysym-unicode charactor pair
-struct CodePair {
-    unsigned int keySym;
-    int uniChar;
-};
+#endif
 
 class wxIconBundle;
 

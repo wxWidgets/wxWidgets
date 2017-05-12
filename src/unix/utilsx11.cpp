@@ -808,12 +808,16 @@ WXKeySym wxCharCodeWXToX(int id)
     return keySym;
 }
 
+#ifdef __WXX11__
 // all Xlib keysym-unicode charactor pair that could
 // type from keyboard directly under variety layout
 // Credits: This tab just modified around a public domain keysym dataset
 // write by Markus G. Kuhn. See the link below.
 // http://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt
-CodePair keySymTab[] = {
+static const struct {
+    unsigned keySym;
+    int uniChar;
+} keySymTab[] = {
     {0x0020, 0x0020},    // space
     {0x0021, 0x0021},    // exclam
     {0x0022, 0x0022},    // quotedbl
@@ -2507,7 +2511,7 @@ int wxUnicodeCharXToWX(WXKeySym keySym)
         return id;
 
     int min = 0;
-    int max = sizeof(keySymTab) / sizeof(CodePair) - 1;
+    int max = int(WXSIZEOF(keySymTab) - 1);
     int mid;
 
     /* also check for directly encoded 24-bit UCS characters */
@@ -2530,12 +2534,13 @@ int wxUnicodeCharXToWX(WXKeySym keySym)
     // no matching keycode value found
     return WXK_NONE;
 }
+#endif // __WXX11__
 
 // ----------------------------------------------------------------------------
 // check current state of a key
 // ----------------------------------------------------------------------------
 
-bool wxGetKeyState(wxKeyCode key)
+static bool wxGetKeyStateX11(wxKeyCode key)
 {
     wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
         WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
@@ -2577,10 +2582,66 @@ bool wxGetKeyState(wxKeyCode key)
     // with the least-significant bit in the byte representing key 8N.
     char key_vector[32];
     XQueryKeymap(pDisplay, key_vector);
-    return key_vector[keyCode >> 3] & (1 << (keyCode & 7));
+    return (key_vector[keyCode >> 3] & (1 << (keyCode & 7))) != 0;
 }
 
 #endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
+
+// We need to use GDK functions when using wxGTK with a non-X11 backend, the
+// X11 code above can't work in this case.
+#ifdef __WXGTK__
+
+// gdk_keymap_get_modifier_state() is only available since 3.4
+#if GTK_CHECK_VERSION(3,4,0)
+
+#define wxHAS_GETKEYSTATE_GTK
+
+static bool wxGetKeyStateGTK(wxKeyCode key)
+{
+    if (gtk_check_version(3,4,0) != NULL)
+        return false;
+
+    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+    GdkKeymap* keymap = gdk_keymap_get_for_display(display);
+    guint state = gdk_keymap_get_modifier_state(keymap);
+    guint mask = 0;
+    switch (key)
+    {
+        case WXK_ALT:
+            mask = GDK_MOD1_MASK;
+            break;
+
+        case WXK_CONTROL:
+            mask = GDK_CONTROL_MASK;
+            break;
+
+        case WXK_SHIFT:
+            mask = GDK_SHIFT_MASK;
+            break;
+
+        default:
+            wxFAIL_MSG(wxS("Unsupported key, only modifiers can be used"));
+            return false;
+    }
+    return (state & mask) != 0;
+}
+
+#endif // GTK+ 3.4
+#endif // __WXGTK__
+
+bool wxGetKeyState(wxKeyCode key)
+{
+#ifdef wxHAS_GETKEYSTATE_GTK
+    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
+    if (strcmp(name, "GdkX11Display") != 0)
+    {
+        return wxGetKeyStateGTK(key);
+    }
+#endif // GTK+ 3.4+
+
+    return wxGetKeyStateX11(key);
+}
 
 // ----------------------------------------------------------------------------
 // Launch document with default app
@@ -2599,7 +2660,11 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
     if ( wxGetEnv("PATH", &path) &&
          wxFindFileInPath(&xdg_open, path, "xdg-open") )
     {
-        if ( wxExecute(xdg_open + " " + document) )
+        const char* argv[3];
+        argv[0] = xdg_open.fn_str();
+        argv[1] = document.fn_str();
+        argv[2] = NULL;
+        if (wxExecute(argv))
             return true;
     }
 
@@ -2626,6 +2691,10 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 #endif // GTK_CHECK_VERSION(2,14,0)
 #endif // __WXGTK__
 
+    const char* argv[4];
+    argv[1] = params.GetPathOrURL().fn_str();
+    argv[2] = NULL;
+
     // Our best best is to use xdg-open from freedesktop.org cross-desktop
     // compatibility suite xdg-utils
     // (see http://portland.freedesktop.org/wiki/) -- this is installed on
@@ -2636,7 +2705,8 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
     if ( wxGetEnv("PATH", &path) &&
          wxFindFileInPath(&xdg_open, path, "xdg-open") )
     {
-        if ( wxExecute(xdg_open + " " + params.GetPathOrURL()) )
+        argv[0] = xdg_open.fn_str();
+        if (wxExecute(argv))
             return true;
     }
 
@@ -2654,16 +2724,19 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
                               output, errors, wxEXEC_NODISABLE );
         if (res >= 0 && errors.GetCount() == 0)
         {
-            wxString cmd = output[0];
-            cmd << wxT(' ') << params.GetPathOrURL();
-            if (wxExecute(cmd))
+            argv[0] = output[0].fn_str();
+            if (wxExecute(argv))
                 return true;
         }
     }
     else if (desktop == wxT("KDE"))
     {
         // kfmclient directly opens the given URL
-        if (wxExecute(wxT("kfmclient openURL ") + params.GetPathOrURL()))
+        argv[2] = argv[1];
+        argv[0] = "kfmclient";
+        argv[1] = "openURL";
+        argv[3] = NULL;
+        if (wxExecute(argv))
             return true;
     }
 

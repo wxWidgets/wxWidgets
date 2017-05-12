@@ -318,9 +318,10 @@ void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 
 wxString wxFontBase::GetNativeFontInfoDesc() const
 {
-    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
-
     wxString fontDesc;
+
+    wxCHECK_MSG(IsOk(), fontDesc, "invalid font");
+
     const wxNativeFontInfo *fontInfo = GetNativeFontInfo();
     if ( fontInfo )
     {
@@ -337,9 +338,10 @@ wxString wxFontBase::GetNativeFontInfoDesc() const
 
 wxString wxFontBase::GetNativeFontInfoUserDesc() const
 {
-    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
-
     wxString fontDesc;
+
+    wxCHECK_MSG(IsOk(), fontDesc, "invalid font");
+
     const wxNativeFontInfo *fontInfo = GetNativeFontInfo();
     if ( fontInfo )
     {

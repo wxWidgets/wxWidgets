@@ -200,6 +200,9 @@ protected:
 
     @see wxSimpleHtmlListBox::Create
 */
+#define wxHLB_DEFAULT_STYLE     wxBORDER_SUNKEN
+#define wxHLB_MULTIPLE          wxLB_MULTIPLE
+
 class wxSimpleHtmlListBox : public wxHtmlListBox,
                             public wxItemContainer
 {

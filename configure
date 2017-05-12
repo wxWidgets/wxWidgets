@@ -675,6 +675,7 @@ COND_WXUNIV_0
 COND_WITH_PLUGIN_SDL_1
 COND_WINDOWS_IMPLIB_1
 COND_USE_XRC_1
+COND_USE_WEBVIEW_WEBKIT2_1
 COND_USE_THREADS_1
 COND_USE_THREADS_0
 COND_USE_STC_1
@@ -953,9 +954,9 @@ GNOMEVFS_LIBS
 GNOMEVFS_CFLAGS
 GTKPRINT_LIBS
 GTKPRINT_CFLAGS
+SDL_CONFIG
 SDL_LIBS
 SDL_CFLAGS
-SDL_CONFIG
 LIBSECRET_LIBS
 LIBSECRET_CFLAGS
 GXX_VERSION
@@ -990,8 +991,8 @@ DIRECTFB_CFLAGS
 GTK_CONFIG
 GTK_LIBS
 GTK_CFLAGS
-PKG_CONFIG
 subdirs
+PKG_CONFIG
 AR
 HAVE_CXX14
 HAVE_CXX11
@@ -1119,6 +1120,7 @@ enable_std_containers_compat
 enable_std_iostreams
 enable_std_string
 enable_std_string_conv_in_wxstring
+enable_unsafe_conv_in_wxstring
 enable_unicode
 enable_utf8
 enable_utf8only
@@ -1399,6 +1401,8 @@ MesaGL_CFLAGS
 MesaGL_LIBS
 LIBSECRET_CFLAGS
 LIBSECRET_LIBS
+SDL_CFLAGS
+SDL_LIBS
 GTKPRINT_CFLAGS
 GTKPRINT_LIBS
 GNOMEVFS_CFLAGS
@@ -2057,6 +2061,7 @@ Optional Features:
   --enable-std_iostreams  use standard C++ stream classes
   --enable-std_string     use standard C++ string classes
  --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
+ --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString
   --disable-unicode       compile without Unicode support
   --enable-utf8           use UTF-8 representation for strings (Unix only)
   --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)
@@ -2395,6 +2400,8 @@ Some influential environment variables:
               C compiler flags for LIBSECRET, overriding pkg-config
   LIBSECRET_LIBS
               linker flags for LIBSECRET, overriding pkg-config
+  SDL_CFLAGS  C compiler flags for SDL, overriding pkg-config
+  SDL_LIBS    linker flags for SDL, overriding pkg-config
   GTKPRINT_CFLAGS
               C compiler flags for GTKPRINT, overriding pkg-config
   GTKPRINT_LIBS
@@ -3744,7 +3751,7 @@ DEFAULT_STD_FLAG=yes
 case "${host}" in
   *-hp-hpux* )
     USE_HPUX=1
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
     $as_echo "#define __HPUX__ 1" >>confdefs.h
 
@@ -3780,7 +3787,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-qnx*)
     USE_QNX=1
@@ -3798,7 +3805,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-sunos4* )
@@ -3811,7 +3818,7 @@ case "${host}" in
 
     $as_echo "#define __BSD__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-freebsd*)
     USE_BSD=1
@@ -3850,7 +3857,7 @@ case "${host}" in
 
     $as_echo "#define __OSF__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-dgux5* )
@@ -3860,7 +3867,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-sysv5* )
     USE_SYSV=1
@@ -3869,7 +3876,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-aix* )
     USE_AIX=1
@@ -3881,7 +3888,7 @@ case "${host}" in
 
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
 
   *-*-*UnixWare*)
@@ -5467,6 +5474,35 @@ fi
 
 
           eval "$wx_cv_use_std_string_conv_in_wxstring"
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-unsafe_conv_in_wxstring was given.
+if test "${enable_unsafe_conv_in_wxstring+set}" = set; then :
+  enableval=$enable_unsafe_conv_in_wxstring;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_unsafe_conv_in_wxstring='wxUSE_UNSAFE_WXSTRING_CONV=yes'
+                          else
+                            wx_cv_use_unsafe_conv_in_wxstring='wxUSE_UNSAFE_WXSTRING_CONV=no'
+                          fi
+
+else
+
+                          wx_cv_use_unsafe_conv_in_wxstring='wxUSE_UNSAFE_WXSTRING_CONV=${'DEFAULT_wxUSE_UNSAFE_WXSTRING_CONV":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_unsafe_conv_in_wxstring"
 
 
           enablestring=disable
@@ -7882,6 +7918,8 @@ fi
 
           eval "$wx_cv_use_iniconf"
 
+fi
+
 
           enablestring=
           defaultval=$wxUSE_ALL_FEATURES
@@ -7911,7 +7949,6 @@ fi
 
           eval "$wx_cv_use_regkey"
 
-fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -11328,6 +11365,10 @@ fi
           eval "$wx_cv_use_wizarddlg"
 
 
+
+if test "$wxUSE_MSW" = 1 ; then
+    DEFAULT_wxUSE_ACCESSIBILITY=yes
+fi
 
 
           enablestring=
@@ -18988,86 +19029,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if C++ compiler supports the explicit keyword" >&5
-$as_echo_n "checking if C++ compiler supports the explicit keyword... " >&6; }
-if ${wx_cv_explicit+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-
-    ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-        class Foo { public: explicit Foo(int) {} };
-
-int
-main ()
-{
-
-        return 0;
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-                class Foo { public: explicit Foo(int) {} };
-                static void TakeFoo(const Foo& foo) { }
-
-int
-main ()
-{
-
-                TakeFoo(17);
-                return 0;
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_explicit=no
-else
-  wx_cv_explicit=yes
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-else
-  wx_cv_explicit=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_explicit" >&5
-$as_echo "$wx_cv_explicit" >&6; }
-
-  if test "$wx_cv_explicit" = "yes"; then
-    $as_echo "#define HAVE_EXPLICIT 1" >>confdefs.h
-
-  fi
-
-
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -20004,6 +19965,123 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 fi
 
 
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+$as_echo "$PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
+$as_echo "$ac_pt_PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		PKG_CONFIG=""
+	fi
+
+fi
+
+
+
 if test "$wxUSE_REGEX" != "no"; then
     $as_echo "#define wxUSE_REGEX 1" >>confdefs.h
 
@@ -20869,123 +20947,7 @@ if test "$wxUSE_GUI" = "yes"; then
 $as_echo_n "checking for GTK+ version... " >&6; }
 
         gtk_version_cached=1
-
-
-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
-$as_echo "$PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_path_PKG_CONFIG"; then
-  ac_pt_PKG_CONFIG=$PKG_CONFIG
-  # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $ac_pt_PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
-if test -n "$ac_pt_PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
-$as_echo "$ac_pt_PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_pt_PKG_CONFIG" = x; then
-    PKG_CONFIG=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    PKG_CONFIG=$ac_pt_PKG_CONFIG
-  fi
-else
-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
-fi
-
-fi
-if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
-$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
-fi
-if ${wx_cv_lib_gtk+:} false; then :
+        if ${wx_cv_lib_gtk+:} false; then :
   $as_echo_n "(cached) " >&6
 else
 
@@ -22151,7 +22113,9 @@ rm -f core conftest.err conftest.$ac_objext \
                 if test -z "$wx_cv_lib_gtk"; then
                                         wx_cv_lib_gtk=none
                 else
-                                        GTK_LIBS="$GTK_LIBS -lX11"
+                    if test "$USE_WIN32" != 1 ; then
+                                                GTK_LIBS="$GTK_LIBS -lX11"
+                    fi
 
                                                             wx_cv_cflags_gtk=$GTK_CFLAGS
                     wx_cv_libs_gtk=$GTK_LIBS
@@ -22437,123 +22401,6 @@ $as_echo "not found" >&6; }
     fi
 
     if test "$wxUSE_DFB" = 1; then
-
-
-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
-$as_echo "$PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_path_PKG_CONFIG"; then
-  ac_pt_PKG_CONFIG=$PKG_CONFIG
-  # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $ac_pt_PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
-if test -n "$ac_pt_PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
-$as_echo "$ac_pt_PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_pt_PKG_CONFIG" = x; then
-    PKG_CONFIG=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    PKG_CONFIG=$ac_pt_PKG_CONFIG
-  fi
-else
-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
-fi
-
-fi
-if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
-$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
-fi
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for DIRECTFB" >&5
@@ -23350,123 +23197,6 @@ $as_echo "$MICROWIN" >&6; }
 
         if test "$wxUSE_UNICODE" = "yes"; then
 
-
-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
-$as_echo "$PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_path_PKG_CONFIG"; then
-  ac_pt_PKG_CONFIG=$PKG_CONFIG
-  # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $ac_pt_PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
-if test -n "$ac_pt_PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
-$as_echo "$ac_pt_PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_pt_PKG_CONFIG" = x; then
-    PKG_CONFIG=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    PKG_CONFIG=$ac_pt_PKG_CONFIG
-  fi
-else
-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
-fi
-
-fi
-if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
-$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
-fi
-
-
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for PANGOXFT" >&5
 $as_echo_n "checking for PANGOXFT... " >&6; }
@@ -23687,7 +23417,7 @@ $as_echo "found in $ac_find_includes" >&6; }
     fi
   fi
 
-            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
+            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
         else
             save_CFLAGS=$CFLAGS
             CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
@@ -23760,7 +23490,7 @@ $as_echo "found in $ac_find_libraries" >&6; }
     fi
   fi
 
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
         else
                                                 save_CFLAGS=$CFLAGS
             CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
@@ -23814,7 +23544,7 @@ $as_echo_n "checking if we need -lXp and/or -lSM -lICE... " >&6; }
                 for libsm_ice in "" " -lSM -lICE"; do
                     if test "$libs_found" = 0; then
                         save_LIBS="$LIBS"
-                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
+                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt ${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
                         CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
@@ -23841,8 +23571,8 @@ if ac_fn_c_try_link "$LINENO"; then :
 
                                 libp_link="$libp"
                                 libsm_ice_link="$libsm_ice"
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: result: need${libp_link}${libsm_ice_link}" >&5
-$as_echo "need${libp_link}${libsm_ice_link}" >&6; }
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: result: need ${libp_link} ${libsm_ice_link}" >&5
+$as_echo "need ${libp_link} ${libsm_ice_link}" >&6; }
                                 libs_found=1
 
 fi
@@ -23987,7 +23717,7 @@ $as_echo "$wx_cv_lib_lesstif" >&6; }
 
         CFLAGS=$save_CFLAGS
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY ${libsgm_link} -lXm ${libp_link} -lXmu -lXext -lXt ${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
     fi
@@ -24022,7 +23752,7 @@ $as_echo_n "checking for Xpm library... " >&6; }
     fi
   fi
 
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: found in $ac_find_libraries" >&5
 $as_echo "found in $ac_find_libraries" >&6; }
 
@@ -24178,123 +23908,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
     if test "$wxUSE_QT" = 1; then
-
-
-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
-$as_echo "$PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_path_PKG_CONFIG"; then
-  ac_pt_PKG_CONFIG=$PKG_CONFIG
-  # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $ac_pt_PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
-if test -n "$ac_pt_PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
-$as_echo "$ac_pt_PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_pt_PKG_CONFIG" = x; then
-    PKG_CONFIG=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    PKG_CONFIG=$ac_pt_PKG_CONFIG
-  fi
-else
-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
-fi
-
-fi
-if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
-$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
-fi
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for QT5" >&5
@@ -26333,7 +25946,7 @@ fi
 
                         if test "$ac_path_to_link" != " -L/usr/lib" -a \
                                 "$ac_path_to_link" != "$LDFLAGS_GL" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
 
@@ -26699,7 +26312,7 @@ fi
   fi
 
                         if test "$ac_path_to_link" != " -L/usr/lib" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
                       OPENGL_LIBS="-lMesaGL -lMesaGLU"
@@ -28163,6 +27776,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 if test "$TOOLKIT" != "MSW"; then
 
 if test "$wxUSE_LIBICONV" != "no" ; then
+    ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
 
 
 
@@ -28199,7 +27818,7 @@ iconv_t cd = iconv_open("","");
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   am_cv_func_iconv=yes
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -28221,7 +27840,7 @@ iconv_t cd = iconv_open("","");
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   am_cv_lib_iconv=yes
         am_cv_func_iconv=yes
 fi
@@ -28265,7 +27884,7 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
   wx_cv_func_iconv_const="no"
 else
   wx_cv_func_iconv_const="yes"
@@ -28293,6 +27912,12 @@ _ACEOF
     LIBICONV="-liconv"
   fi
 
+
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
     LIBS="$LIBICONV $LIBS"
 fi
@@ -28794,7 +28419,7 @@ else
 $as_echo "$as_me: WARNING: wxGetDiskSpace() function won't work without statfs()" >&2;}
 fi
 
-if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
+if test "$wxUSE_SNGLINST_CHECKER" = "yes" -a "$USE_WIN32" != 1 ; then
     for ac_func in fcntl flock
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
@@ -31088,7 +30713,7 @@ if test "x$ac_cv_lib_dl_dlopen" = xyes; then :
                                 $as_echo "#define HAVE_DLOPEN 1" >>confdefs.h
 
                                 HAVE_DL_FUNCS=1
-                                DL_LINK=" -ldl$DL_LINK"
+                                DL_LINK="-ldl $DL_LINK"
 
 else
 
@@ -31145,7 +30770,7 @@ $as_echo "$ac_cv_lib_shl_load_dld" >&6; }
 if test "x$ac_cv_lib_shl_load_dld" = xyes; then :
 
                                                                 HAVE_SHL_FUNCS=1
-                                                                DL_LINK=" -ldld$DL_LINK"
+                                                                DL_LINK="-ldld $DL_LINK"
 
 fi
 
@@ -31334,7 +30959,7 @@ fi
 
 
 if test "$wxUSE_FSWATCHER" = "yes"; then
-                if test "$wxUSE_MSW" != "1"; then
+                if test "$USE_WIN32" != 1; then
         if test "$wxUSE_UNIX" = "yes"; then
             for ac_header in sys/inotify.h
 do :
@@ -31595,6 +31220,68 @@ if test "$wxUSE_SOUND" = "yes"; then
   if test "$USE_UNIX" = 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
 
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL" >&5
+$as_echo_n "checking for SDL... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$SDL_CFLAGS"; then
+        pkg_cv_SDL_CFLAGS="$SDL_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sdl2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "sdl2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_SDL_CFLAGS=`$PKG_CONFIG --cflags "sdl2 >= 2.0.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$SDL_LIBS"; then
+        pkg_cv_SDL_LIBS="$SDL_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sdl2 >= 2.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "sdl2 >= 2.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_SDL_LIBS=`$PKG_CONFIG --libs "sdl2 >= 2.0.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        SDL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "sdl2 >= 2.0.0"`
+        else
+	        SDL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "sdl2 >= 2.0.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$SDL_PKG_ERRORS" >&5
+
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: SDL 2.0 not available. Falling back to 1.2." >&5
+$as_echo "$as_me: SDL 2.0 not available. Falling back to 1.2." >&6;}
+
 # Check whether --with-sdl-prefix was given.
 if test "${with_sdl_prefix+set}" = set; then :
   withval=$with_sdl_prefix; sdl_prefix="$withval"
@@ -31781,10 +31468,10 @@ fi
      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                    EXTRALIBS_SDL="$SDL_LIBS"
-                    CFLAGS="$SDL_CFLAGS $CFLAGS"
-                    CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
-                    $as_echo "#define wxUSE_LIBSDL 1" >>confdefs.h
+                                  EXTRALIBS_SDL="$SDL_LIBS"
+                                  CFLAGS="$SDL_CFLAGS $CFLAGS"
+                                  CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
+                                  $as_echo "#define wxUSE_LIBSDL 1" >>confdefs.h
 
 
   else
@@ -31853,6 +31540,284 @@ rm -f core conftest.err conftest.$ac_objext \
 
   rm -f conf.sdltest
 
+
+elif test $pkg_failed = untried; then
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: SDL 2.0 not available. Falling back to 1.2." >&5
+$as_echo "$as_me: SDL 2.0 not available. Falling back to 1.2." >&6;}
+
+# Check whether --with-sdl-prefix was given.
+if test "${with_sdl_prefix+set}" = set; then :
+  withval=$with_sdl_prefix; sdl_prefix="$withval"
+else
+  sdl_prefix=""
+fi
+
+
+# Check whether --with-sdl-exec-prefix was given.
+if test "${with_sdl_exec_prefix+set}" = set; then :
+  withval=$with_sdl_exec_prefix; sdl_exec_prefix="$withval"
+else
+  sdl_exec_prefix=""
+fi
+
+# Check whether --enable-sdltest was given.
+if test "${enable_sdltest+set}" = set; then :
+  enableval=$enable_sdltest;
+else
+  enable_sdltest=yes
+fi
+
+
+  if test x$sdl_exec_prefix != x ; then
+    sdl_args="$sdl_args --exec-prefix=$sdl_exec_prefix"
+    if test x${SDL_CONFIG+set} != xset ; then
+      SDL_CONFIG=$sdl_exec_prefix/bin/sdl-config
+    fi
+  fi
+  if test x$sdl_prefix != x ; then
+    sdl_args="$sdl_args --prefix=$sdl_prefix"
+    if test x${SDL_CONFIG+set} != xset ; then
+      SDL_CONFIG=$sdl_prefix/bin/sdl-config
+    fi
+  fi
+
+  if test "x$prefix" != xNONE; then
+    PATH="$prefix/bin:$prefix/usr/bin:$PATH"
+  fi
+  # Extract the first word of "sdl-config", so it can be a program name with args.
+set dummy sdl-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_SDL_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $SDL_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_SDL_CONFIG="$SDL_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_SDL_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_SDL_CONFIG" && ac_cv_path_SDL_CONFIG="no"
+  ;;
+esac
+fi
+SDL_CONFIG=$ac_cv_path_SDL_CONFIG
+if test -n "$SDL_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SDL_CONFIG" >&5
+$as_echo "$SDL_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  min_sdl_version=1.2.0
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL - version >= $min_sdl_version" >&5
+$as_echo_n "checking for SDL - version >= $min_sdl_version... " >&6; }
+  no_sdl=""
+  if test "$SDL_CONFIG" = "no" ; then
+    no_sdl=yes
+  else
+    SDL_CFLAGS=`$SDL_CONFIG $sdlconf_args --cflags`
+    SDL_LIBS=`$SDL_CONFIG $sdlconf_args --libs`
+
+    sdl_major_version=`$SDL_CONFIG $sdl_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+    sdl_minor_version=`$SDL_CONFIG $sdl_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+    sdl_micro_version=`$SDL_CONFIG $sdl_config_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+    if test "x$enable_sdltest" = "xyes" ; then
+      ac_save_CFLAGS="$CFLAGS"
+      ac_save_CXXFLAGS="$CXXFLAGS"
+      ac_save_LIBS="$LIBS"
+      CFLAGS="$CFLAGS $SDL_CFLAGS"
+      CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+      LIBS="$LIBS $SDL_LIBS"
+      rm -f conf.sdltest
+      if test "$cross_compiling" = yes; then :
+  echo $ac_n "cross compiling; assumed OK... $ac_c"
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "SDL.h"
+
+char*
+my_strdup (char *str)
+{
+  char *new_str;
+
+  if (str)
+    {
+      new_str = (char *)malloc ((strlen (str) + 1) * sizeof(char));
+      strcpy (new_str, str);
+    }
+  else
+    new_str = NULL;
+
+  return new_str;
+}
+
+int main (int argc, char *argv[])
+{
+  int major, minor, micro;
+  char *tmp_version;
+
+  /* This hangs on some systems (?)
+  system ("touch conf.sdltest");
+  */
+  { FILE *fp = fopen("conf.sdltest", "a"); if ( fp ) fclose(fp); }
+
+  /* HP/UX 9 (%@#!) writes to sscanf strings */
+  tmp_version = my_strdup("$min_sdl_version");
+  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
+     printf("%s, bad version string\n", "$min_sdl_version");
+     exit(1);
+   }
+
+   if (($sdl_major_version > major) ||
+      (($sdl_major_version == major) && ($sdl_minor_version > minor)) ||
+      (($sdl_major_version == major) && ($sdl_minor_version == minor) && ($sdl_micro_version >= micro)))
+    {
+      return 0;
+    }
+  else
+    {
+      printf("\n*** 'sdl-config --version' returned %d.%d.%d, but the minimum version\n", $sdl_major_version, $sdl_minor_version, $sdl_micro_version);
+      printf("*** of SDL required is %d.%d.%d. If sdl-config is correct, then it is\n", major, minor, micro);
+      printf("*** best to upgrade to the required version.\n");
+      printf("*** If sdl-config was wrong, set the environment variable SDL_CONFIG\n");
+      printf("*** to point to the correct copy of sdl-config, and remove the file\n");
+      printf("*** config.cache before re-running configure\n");
+      return 1;
+    }
+}
+
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+
+else
+  no_sdl=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+       CFLAGS="$ac_save_CFLAGS"
+       CXXFLAGS="$ac_save_CXXFLAGS"
+       LIBS="$ac_save_LIBS"
+     fi
+  fi
+  if test "x$no_sdl" = x ; then
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                                  EXTRALIBS_SDL="$SDL_LIBS"
+                                  CFLAGS="$SDL_CFLAGS $CFLAGS"
+                                  CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
+                                  $as_echo "#define wxUSE_LIBSDL 1" >>confdefs.h
+
+
+  else
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+     if test "$SDL_CONFIG" = "no" ; then
+       echo "*** The sdl-config script installed by SDL could not be found"
+       echo "*** If SDL was installed in PREFIX, make sure PREFIX/bin is in"
+       echo "*** your path, or set the SDL_CONFIG environment variable to the"
+       echo "*** full path to sdl-config."
+     else
+       if test -f conf.sdltest ; then
+        :
+       else
+          echo "*** Could not run SDL test program, checking why..."
+          CFLAGS="$CFLAGS $SDL_CFLAGS"
+          CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+          LIBS="$LIBS $SDL_LIBS"
+          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include "SDL.h"
+
+int main(int argc, char *argv[])
+{ return 0; }
+#undef  main
+#define main K_and_R_C_main
+
+int
+main ()
+{
+ return 0;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+   echo "*** The test program compiled, but did not run. This usually means"
+          echo "*** that the run-time linker is not finding SDL or finding the wrong"
+          echo "*** version of SDL. If it is not finding SDL, you'll need to set your"
+          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+          echo "*** is required on your system"
+	  echo "***"
+          echo "*** If you have an old version installed, it is best to remove it, although"
+          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
+else
+   echo "*** The test program failed to compile or link. See the file config.log for the"
+          echo "*** exact error that occurred. This usually means SDL was incorrectly installed"
+          echo "*** or that you have moved SDL since it was installed. In the latter case, you"
+          echo "*** may want to edit the sdl-config script: $SDL_CONFIG"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+          CFLAGS="$ac_save_CFLAGS"
+          CXXFLAGS="$ac_save_CXXFLAGS"
+          LIBS="$ac_save_LIBS"
+       fi
+     fi
+     SDL_CFLAGS=""
+     SDL_LIBS=""
+     wxUSE_LIBSDL="no"
+  fi
+
+
+  rm -f conf.sdltest
+
+
+else
+	SDL_CFLAGS=$pkg_cv_SDL_CFLAGS
+	SDL_LIBS=$pkg_cv_SDL_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                    EXTRALIBS_SDL="$SDL_LIBS"
+                    CFLAGS="$SDL_CFLAGS $CFLAGS"
+                    CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
+                    $as_echo "#define wxUSE_LIBSDL 1" >>confdefs.h
+
+
+fi
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1
       fi
@@ -31867,123 +31832,6 @@ if test "$wxUSE_SOUND" = "yes"; then
 fi
 
 if test "$WXGTK2" = 1; then
-
-
-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
-$as_echo "$PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_path_PKG_CONFIG"; then
-  ac_pt_PKG_CONFIG=$PKG_CONFIG
-  # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $ac_pt_PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
-if test -n "$ac_pt_PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
-$as_echo "$ac_pt_PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_pt_PKG_CONFIG" = x; then
-    PKG_CONFIG=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    PKG_CONFIG=$ac_pt_PKG_CONFIG
-  fi
-else
-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
-fi
-
-fi
-if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
-$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
-fi
-
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
 
         if test "$wxUSE_GTKPRINT" = "yes" ; then
@@ -32603,6 +32451,11 @@ if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
 
 fi
 
+if test "$wxUSE_UNSAFE_WXSTRING_CONV" = "yes"; then
+  $as_echo "#define wxUSE_UNSAFE_WXSTRING_CONV 1" >>confdefs.h
+
+fi
+
 if test "$wxUSE_STDPATHS" = "yes"; then
   $as_echo "#define wxUSE_STDPATHS 1" >>confdefs.h
 
@@ -32649,20 +32502,58 @@ $as_echo "$as_me: WARNING: I18n code requires wxFile... disabled" >&2;}
 fi
 
 if test "$wxUSE_XLOCALE" = "yes" ; then
-    $as_echo "#define wxUSE_XLOCALE 1" >>confdefs.h
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for complete xlocale" >&5
+$as_echo_n "checking for complete xlocale... " >&6; }
+if ${wx_cv_func_strtod_l+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
 
-    ac_fn_c_check_type "$LINENO" "locale_t" "ac_cv_type_locale_t" "#include <xlocale.h>
-                    #include <locale.h>
-"
-if test "x$ac_cv_type_locale_t" = xyes; then :
+        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-cat >>confdefs.h <<_ACEOF
-#define HAVE_LOCALE_T 1
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <xlocale.h>
+        #include <locale.h>
+        #include <stdlib.h>
+
+int
+main ()
+{
+
+        locale_t t;
+        strtod_l(NULL, NULL, t);
+
+  ;
+  return 0;
+}
 _ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  wx_cv_func_strtod_l=yes
+else
+  wx_cv_func_strtod_l=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+        ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_strtod_l" >&5
+$as_echo "$wx_cv_func_strtod_l" >&6; }
 
+    if test "$wx_cv_func_strtod_l" = "yes" ; then
+        $as_echo "#define wxUSE_XLOCALE 1" >>confdefs.h
+
+    fi
 fi
 
 if test "$wxUSE_LOG" = "yes"; then
@@ -33023,7 +32914,7 @@ done
 
 
 if test "$wxUSE_SOCKETS" = "yes"; then
-        if test "$TOOLKIT" != "MSW"; then
+        if test "$USE_WIN32" != 1 ; then
                 ac_fn_c_check_func "$LINENO" "socket" "ac_cv_func_socket"
 if test "x$ac_cv_func_socket" = xyes; then :
 
@@ -33086,7 +32977,7 @@ fi
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
-                if test "$TOOLKIT" != "MSW"; then
+        if test "$USE_WIN32" != 1 ; then
                                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking what is the type of the third argument of getsockname" >&5
 $as_echo_n "checking what is the type of the third argument of getsockname... " >&6; }
 if ${wx_cv_type_getsockname3+:} false; then :
@@ -33600,7 +33491,7 @@ $as_echo "yes" >&6; }
                             WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fvtable-thunks"
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-            LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
+            LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
                 $as_echo "#define wxUSE_OLE 1" >>confdefs.h
 
@@ -34536,12 +34427,95 @@ fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW_WEBKIT=0
+    USE_WEBVIEW_WEBKIT2=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
-            webkitgtk=webkit-1.0
             if test "$WXGTK3" = 1; then
-                webkitgtk=webkitgtk-3.0
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
+$as_echo_n "checking for WEBKIT... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$WEBKIT_CFLAGS"; then
+        pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$WEBKIT_LIBS"; then
+        pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "webkit2gtk-4.0"`
+        else
+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "webkit2gtk-4.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$WEBKIT_PKG_ERRORS" >&5
+
+
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk not found, falling back to webkitgtk" >&5
+$as_echo "$as_me: WARNING: webkit2gtk not found, falling back to webkitgtk" >&2;}
+
+elif test $pkg_failed = untried; then
+
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk not found, falling back to webkitgtk" >&5
+$as_echo "$as_me: WARNING: webkit2gtk not found, falling back to webkitgtk" >&2;}
+
+else
+	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
+	WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                                    USE_WEBVIEW_WEBKIT2=1
+                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+
+fi
             fi
+            if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+                webkitgtk=webkit-1.0
+                if test "$WXGTK3" = 1; then
+                    webkitgtk=webkitgtk-3.0
+                fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
@@ -34602,12 +34576,12 @@ fi
 	echo "$WEBKIT_PKG_ERRORS" >&5
 
 
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
 $as_echo "$as_me: WARNING: webkitgtk not found." >&2;}
 
 elif test $pkg_failed = untried; then
 
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
 $as_echo "$as_me: WARNING: webkitgtk not found." >&2;}
 
 else
@@ -34616,11 +34590,12 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                USE_WEBVIEW_WEBKIT=1
-                                CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
-                                EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                    USE_WEBVIEW_WEBKIT=1
+                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
 
 fi
+            fi
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
                                     old_CPPFLAGS="$CPPFLAGS"
             CPPFLAGS="-x objective-c++ $CPPFLAGS"
@@ -34651,6 +34626,10 @@ fi
         if test "$USE_WEBVIEW_WEBKIT" = 1; then
             wxUSE_WEBVIEW="yes"
             $as_echo "#define wxUSE_WEBVIEW_WEBKIT 1" >>confdefs.h
+
+        elif test "$USE_WEBVIEW_WEBKIT2" = 1; then
+            wxUSE_WEBVIEW="yes"
+            $as_echo "#define wxUSE_WEBVIEW_WEBKIT2 1" >>confdefs.h
 
         else
             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKit not available, disabling wxWebView" >&5
@@ -34811,11 +34790,6 @@ if test "$wxUSE_MSW" = 1 ; then
 
     fi
 
-    if test "$wxUSE_DIB" = "yes"; then
-        $as_echo "#define wxUSE_WXDIB 1" >>confdefs.h
-
-    fi
-
     if test "$wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW" = "yes"; then
         $as_echo "#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1" >>confdefs.h
 
@@ -34892,6 +34866,11 @@ $as_echo "$wx_cv_lib_debughlp" >&6; }
             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Debug help API and wxStackWalker won't be available" >&5
 $as_echo "$as_me: WARNING: Debug help API and wxStackWalker won't be available" >&2;}
         fi
+    fi
+
+    if test "$wxUSE_DIB" = "yes"; then
+        $as_echo "#define wxUSE_WXDIB 1" >>confdefs.h
+
     fi
 
     if test "$wxUSE_INICONF" = "yes"; then
@@ -35353,10 +35332,39 @@ fi
         fi
 
     elif test "$wxUSE_MAC" = 1; then
-        if test "$wxUSE_OSX_IPHONE" = 1; then
                         GST_LIBS="-framework AVFoundation -framework CoreMedia"
-        else
-                                    GST_LIBS="-framework QTKit"
+        if test "$wxUSE_OSX_IPHONE" != 1; then
+                                    old_CPPFLAGS="$CPPFLAGS"
+            CPPFLAGS="-x objective-c++ $CPPFLAGS"
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if AVKit is available" >&5
+$as_echo_n "checking if AVKit is available... " >&6; }
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include "AvailabilityMacros.h"
+int
+main ()
+{
+
+                    #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+                        // AVKit available
+                    #else
+                        choke me
+                    #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  GST_LIBS="$GST_LIBS -framework AVKit"; { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+            CPPFLAGS="$old_CPPFLAGS"
         fi
     fi
 
@@ -38256,6 +38264,11 @@ EOF
     COND_USE_THREADS_1="#"
     if test "x$USE_THREADS" = "x1" ; then
         COND_USE_THREADS_1=""
+    fi
+
+    COND_USE_WEBVIEW_WEBKIT2_1="#"
+    if test "x$USE_WEBVIEW_WEBKIT2" = "x1" ; then
+        COND_USE_WEBVIEW_WEBKIT2_1=""
     fi
 
     COND_USE_XRC_1="#"

@@ -2306,7 +2306,7 @@ void wxComboCtrlBase::ShowPopup()
     //     by, for instance, adding check to window.cpp:wxWindowMSW::MSWProcessMessage
     //     that if transient popup is open, then tab traversal is to be ignored.
     //     However, I think this code would still be needed for cases where
-    //     transient popup doesn't work yet (wxWinCE?).
+    //     transient popup doesn't work yet.
     wxWindow* mainCtrl = GetMainWindowOfCompositeControl();
     wxWindow* parent = mainCtrl->GetParent();
     int parentFlags = parent->GetWindowStyle();

@@ -8,6 +8,30 @@
 
 #define wxNullProperty  ((wxPGProperty*)NULL)
 
+/** @class wxPGPaintData
+
+    Contains information related to property's OnCustomPaint.
+*/
+struct wxPGPaintData
+{
+    /** wxPropertyGrid */
+    const wxPropertyGrid*   m_parent;
+
+    /**
+        Normally -1, otherwise index to drop-down list item that has to be
+        drawn.
+     */
+    int                     m_choiceItem;
+
+    /** Set to drawn width in OnCustomPaint (optional). */
+    int                     m_drawnWidth;
+
+    /**
+        In a measure item call, set this to the height of item at m_choiceItem
+        index.
+     */
+    int                     m_drawnHeight;
+};
 
 /**
     @section propgrid_property_attributes wxPropertyGrid Property Attribute Identifiers
@@ -45,11 +69,6 @@
 */
 #define wxPG_ATTR_HINT                      wxS("Hint")
 
-/**
-    @deprecated Use "Hint" (wxPG_ATTR_HINT) instead.
-*/
-#define wxPG_ATTR_INLINE_HELP               wxS("InlineHelp")
-
 /** Universal, wxArrayString. Set to enable auto-completion in any
     wxTextCtrl-based property editor.
 */
@@ -81,7 +100,8 @@
 */
 #define wxPG_FLOAT_PRECISION                wxS("Precision")
 
-/** The text will be echoed as asterisks (wxTE_PASSWORD will be passed to textctrl etc).
+/** The text will be echoed as asterisks (wxTE_PASSWORD will be passed
+    to textctrl etc.).
 */
 #define wxPG_STRING_PASSWORD                wxS("Password")
 
@@ -167,7 +187,7 @@
 /** SpinCtrl editor, bool. If @true, value can also by changed by moving
     mouse when left mouse button is being pressed.
 */
-#define wxPG_ATTR_SPINCTRL_MOTIONSPIN       wxS("MotionSpin")
+#define wxPG_ATTR_SPINCTRL_MOTION           wxS("MotionSpin")
 
 /** wxMultiChoiceProperty, int. If 0, no user strings allowed. If 1, user strings
     appear before list strings. If 2, user strings appear after list string.
@@ -197,29 +217,35 @@ enum wxPGPropertyFlags
 {
 
 /** Indicates bold font.
+    @hideinitializer
 */
 wxPG_PROP_MODIFIED                  = 0x0001,
 
 /** Disables ('greyed' text and editor does not activate) property.
+    @hideinitializer
 */
 wxPG_PROP_DISABLED                  = 0x0002,
 
 /** Hider button will hide this property.
+    @hideinitializer
 */
 wxPG_PROP_HIDDEN                    = 0x0004,
 
 /** This property has custom paint image just in front of its value.
     If property only draws custom images into a popup list, then this
     flag should not be set.
+    @hideinitializer
 */
 wxPG_PROP_CUSTOMIMAGE               = 0x0008,
 
 /** Do not create text based editor for this property (but button-triggered
     dialog and choice are ok).
+    @hideinitializer
 */
 wxPG_PROP_NOEDITOR                  = 0x0010,
 
 /** Property is collapsed, ie. it's children are hidden.
+    @hideinitializer
 */
 wxPG_PROP_COLLAPSED                 = 0x0020,
 
@@ -230,24 +256,26 @@ wxPG_PROP_COLLAPSED                 = 0x0020,
     If property is not selected, then indicates that the actual property
     value has failed validation (NB: this behaviour is not currently supported,
     but may be used in the future).
+    @hideinitializer
 */
 wxPG_PROP_INVALID_VALUE             = 0x0040,
 
-// 0x0080,
-
 /** Switched via SetWasModified(). Temporary flag - only used when
     setting/changing property value.
+    @hideinitializer
 */
 wxPG_PROP_WAS_MODIFIED              = 0x0200,
 
 /**
     If set, then child properties (if any) are private, and should be
     "invisible" to the application.
+    @hideinitializer
 */
 wxPG_PROP_AGGREGATE                 = 0x0400,
 
 /** If set, then child properties (if any) are copies and should not
     be deleted in dtor.
+    @hideinitializer
 */
 wxPG_PROP_CHILDREN_ARE_COPIES       = 0x0800,
 
@@ -255,6 +283,7 @@ wxPG_PROP_CHILDREN_ARE_COPIES       = 0x0800,
     Classifies this item as a non-category.
 
     Used for faster item type identification.
+    @hideinitializer
 */
 wxPG_PROP_PROPERTY                  = 0x1000,
 
@@ -262,17 +291,20 @@ wxPG_PROP_PROPERTY                  = 0x1000,
     Classifies this item as a category.
 
     Used for faster item type identification.
+    @hideinitializer
 */
 wxPG_PROP_CATEGORY                  = 0x2000,
 
 /** Classifies this item as a property that has children, but is not aggregate
-    (ie children are not private).
+    (i.e. children are not private).
+    @hideinitializer
 */
 wxPG_PROP_MISC_PARENT               = 0x4000,
 
 /** Property is read-only. Editor is still created for wxTextCtrl-based
     property editors. For others, editor is not usually created because
     they do implement wxTE_READONLY style or equivalent.
+    @hideinitializer
 */
 wxPG_PROP_READONLY                  = 0x8000,
 
@@ -283,12 +315,14 @@ wxPG_PROP_READONLY                  = 0x8000,
 /** Property's value is composed from values of child properties.
     @remarks
     This flag cannot be used with property iterators.
+    @hideinitializer
 */
 wxPG_PROP_COMPOSED_VALUE            = 0x00010000,
 
 /** Common value of property is selectable in editor.
     @remarks
     This flag cannot be used with property iterators.
+    @hideinitializer
 */
 wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
 
@@ -301,20 +335,29 @@ wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
     This flag cannot be used with property iterators.
 
     @see wxPGProperty::SetAutoUnspecified()
+    @hideinitializer
 */
 wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
 
-/** Indicates the bit usable by derived properties.
+/** Indicates the bit useable by derived properties.
+    @hideinitializer
 */
 wxPG_PROP_CLASS_SPECIFIC_1          = 0x00080000,
 
-/** Indicates the bit usable by derived properties.
+/** Indicates the bit useable by derived properties.
+    @hideinitializer
 */
 wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000,
 
 /** Indicates that the property is being deleted and should be ignored.
+    @hideinitializer
 */
 wxPG_PROP_BEING_DELETED             = 0x00200000
+
+/** Indicates the bit useable by derived properties.
+    @hideinitializer
+*/
+wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
 };
 
@@ -331,9 +374,15 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
                          wxPG_PROP_CATEGORY | \
                          wxPG_PROP_MISC_PARENT))
 
+/** Combination of flags that can be stored by GetFlagsAsString().
+*/
+#define wxPG_STRING_STORED_FLAGS \
+    (wxPG_PROP_DISABLED|wxPG_PROP_HIDDEN|wxPG_PROP_NOEDITOR|wxPG_PROP_COLLAPSED)
+
 /** @}
 */
 
+// -----------------------------------------------------------------------
 
 /**
     @class wxPGProperty
@@ -380,11 +429,15 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 
     @subsection wxStringProperty
 
-    Simple string property. wxPG_STRING_PASSWORD attribute may be used
-    to echo value as asterisks and use wxTE_PASSWORD for wxTextCtrl.
-    wxPG_ATTR_AUTOCOMPLETE attribute may be used to enable auto-completion
+    Simple string property.
+
+    Supported special attributes:
+    - @c wxPG_STRING_PASSWORD: Set to @true in order to echo value as asterisks and
+    to use @c wxTE_PASSWORD on the editor (wxTextCtrl).
+    - @c wxPG_ATTR_AUTOCOMPLETE: Set to @true to enable auto-completion
     (use a wxArrayString value), and is also supported by any property that
     happens to use a wxTextCtrl-based editor.
+    @see @ref propgrid_property_attributes
 
     @remarks wxStringProperty has a special trait: if it has value of
             "<composed>", and also has child properties, then its displayed
@@ -394,7 +447,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     @subsection wxIntProperty
 
     Like wxStringProperty, but converts text to a signed long integer.
-    wxIntProperty seamlessly supports 64-bit integers (ie. wxLongLong).
+    wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overlfow.
     To safely convert variant to integer, use code like this:
 
     @code
@@ -405,21 +458,61 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
         wxLongLong ll = propertyGrid->GetPropertyValueAsLong(property);
     @endcode
 
+    Getting 64-bit value:
+    @code
+        wxLongLong_t value = pg->GetPropertyValueAsLongLong();
+
+        // or
+
+        wxLongLong value;
+        wxVariant variant = property->GetValue();
+        if ( variant.IsType(wxPG_VARIANT_TYPE_LONGLONG) )
+            value = variant.GetLongLong();
+        else
+            value = variant.GetLong();
+    @endcode
+
+    Setting 64-bit value:
+    @code
+        pg->SetPropertyValue(longLongVal);
+
+        // or
+
+        property->SetValue(WXVARIANT(longLongVal));
+    @endcode
+
+    Supported special attributes:
+    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX to specify acceptable value range.
+
     @subsection wxUIntProperty
 
     Like wxIntProperty, but displays value as unsigned int. To set
-    the prefix used globally, manipulate wxPG_UINT_PREFIX string attribute.
-    To set the globally used base, manipulate wxPG_UINT_BASE int
+    the prefix used globally, manipulate @c wxPG_UINT_PREFIX string attribute.
+    To set the globally used base, manipulate @c wxPG_UINT_BASE int
     attribute. Regardless of current prefix, understands (hex) values starting
-    with both "0x" and "$".
+    with both "0x" and "$" (apart from edit mode).
     Like wxIntProperty, wxUIntProperty seamlessly supports 64-bit unsigned
-    integers (ie. wxULongLong). Same wxVariant safety rules apply.
+    integers (i.e. wxULongLong). Same wxVariant safety rules apply.
+
+    Supported special attributes:
+    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX: Specifies acceptable value range.
+    - @c wxPG_UINT_BASE: Defines base. Valid constants are @c wxPG_BASE_OCT,
+    @c wxPG_BASE_DEC, @c wxPG_BASE_HEX and @c wxPG_BASE_HEXL (lowercase characters).
+    Arbitrary bases are <b>not</b> supported.
+    - @c wxPG_UINT_PREFIX: Defines displayed prefix. Possible values are
+    @c wxPG_PREFIX_NONE, @c wxPG_PREFIX_0x and @c wxPG_PREFIX_DOLLAR_SIGN.
+    Only @c wxPG_PREFIX_NONE works with decimal and octal numbers.
+    @see @ref propgrid_property_attributes
+
+    @remarks
+    For example how to use seamless 64-bit integer support, see wxIntProperty
+    documentation (just use wxULongLong instead of wxLongLong).
 
     @subsection wxFloatProperty
 
     Like wxStringProperty, but converts text to a double-precision floating point.
     Default float-to-text precision is 6 decimals, but this can be changed
-    by modifying wxPG_FLOAT_PRECISION attribute.
+    by modifying @c wxPG_FLOAT_PRECISION attribute.
 
     Note that when displaying the value, sign is omitted if the resulting
     textual representation is effectively zero (for example, -0.0001 with
@@ -427,11 +520,25 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     what C standard library does, but should result in better end-user
     experience in almost all cases.
 
+    Supported special attributes:
+    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX: Specifies acceptable value range.
+    - @c wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
+    value is rendered as text. The default -1 means shortest floating-point
+    6-digit representation.
+    @see @ref propgrid_property_attributes
+
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
-    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true in order to
+    default. @c wxPG_BOOL_USE_CHECKBOX attribute can be set to @true in order to
     use check box instead.
+
+    Supported special attributes:
+    - @c wxPG_BOOL_USE_CHECKBOX: If set to @true uses check box editor instead
+    of combo box.
+    - @c wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING: If set to @true cycles combo box
+    instead showing the list.
+    @see @ref propgrid_property_attributes
 
     @subsection wxLongStringProperty
 
@@ -473,15 +580,27 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     @subsection wxDirProperty
 
     Like wxLongStringProperty, but the button triggers dir selector instead.
-    Supported properties (all with string value): wxPG_DIR_DIALOG_MESSAGE.
+
+    Supported special attributes:
+    - @c wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
+    @see @ref propgrid_property_attributes
 
     @subsection wxFileProperty
 
     Like wxLongStringProperty, but the button triggers file selector instead.
     Default wildcard is "All files..." but this can be changed by setting
-    wxPG_FILE_WILDCARD attribute (see wxFileDialog for format details).
-    Attribute wxPG_FILE_SHOW_FULL_PATH can be set to @false in order to show
-    only the filename, not the entire path.
+    @c wxPG_FILE_WILDCARD attribute.
+
+    Supported special attributes:
+    - @c wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
+    files..." is default.
+    - @c wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
+    (i.e. drive and directory are hidden).
+    - @c wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
+    given path string.
+    - @c wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
+    - @c wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
+    @see @ref propgrid_property_attributes
 
     @subsection wxEnumProperty
 
@@ -495,7 +614,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     manually edit the flags as a text; a continuous sequence of spaces, commas
     and semicolons are considered as a flag id separator.
 
-    <b>Note:</b> When changing "choices" (ie. flag labels) of wxFlagsProperty,
+    <b>Note:</b> When changing "choices" (i.e. flag labels) of wxFlagsProperty,
     you will need to use wxPGProperty::SetChoices() - otherwise they will not
     get updated properly.
 
@@ -503,22 +622,35 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 
     @subsection wxArrayStringProperty
 
-    Allows editing of a list of strings in wxTextCtrl and in a separate
-    dialog. Supports "Delimiter" attribute, which defaults to comma (',').
+    Property that manages a list of strings. Allows editing of a list
+    of strings in wxTextCtrl and in a separate dialog.
+
+    Supported special attributes:
+    - @c wxPG_ARRAY_DELIMITER: Sets string delimiter character.
+    Default is comma (',').
+    @see @ref propgrid_property_attributes
 
     @subsection wxDateProperty
 
-    wxDateTime property. Default editor is DatePickerCtrl, although TextCtrl
-    should work as well. wxPG_DATE_FORMAT attribute can be used to change
-    string wxDateTime::Format uses (although default is recommended as it is
-    locale-dependent), and wxPG_DATE_PICKER_STYLE allows changing window
-    style given to DatePickerCtrl (default is wxDP_DEFAULT|wxDP_SHOWCENTURY).
-    Using wxDP_ALLOWNONE will enable better unspecified value support.
+    Property representing wxDateTime. Default editor is DatePickerCtrl,
+    although TextCtrl should work as well.
+
+    Supported special attributes:
+    - @c wxPG_DATE_FORMAT: Determines displayed date format (with wxDateTime::Format).
+    Default is recommended as it is locale-dependent.
+    - @c wxPG_DATE_PICKER_STYLE: Determines window style used with wxDatePickerCtrl.
+       Default is @c wxDP_DEFAULT | @c wxDP_SHOWCENTURY. Using @c wxDP_ALLOWNONE
+       enables additional support for unspecified property value.
+    @see @ref propgrid_property_attributes
 
     @subsection wxEditEnumProperty
 
     Represents a string that can be freely edited or selected from list of choices -
     custom combobox control is used to edit the value.
+
+    @remarks
+    Uses int value, similar to wxEnumProperty, unless text entered by user is
+    is not in choices (in which case string value is used).
 
     @subsection wxMultiChoiceProperty
 
@@ -526,10 +658,18 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     property is pretty much built around concept of wxMultiChoiceDialog.
     It uses wxArrayString value.
 
+    Supported special attributes:
+    - @c wxPG_ATTR_MULTICHOICE_USERSTRINGMODE: If > 0, allows user to manually
+    enter strings that are not in the list of choices. If this value is 1,
+    user strings are preferably placed in front of valid choices. If value
+    is 2, then those strings will placed behind valid choices.
+    @see @ref propgrid_property_attributes
+
     @subsection wxImageFileProperty
 
-    Like wxFileProperty, but has thumbnail of the image in front of
-    the filename and autogenerates wildcard from available image handlers.
+    Property representing image file(name). Like wxFileProperty,
+    but has thumbnail of the image in front of the filename
+    and autogenerates wildcard from available image handlers.
 
     @subsection wxColourProperty
 
@@ -539,8 +679,10 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     There are various sub-classing opportunities with this class. See
     below in wxSystemColourProperty section for details.
 
-    Setting "HasAlpha" attribute to @true for this property allows user to
-    edit the alpha colour component.
+    Supported special attributes:
+    - @c wxPG_COLOUR_HAS_ALPHA: If set to @true allows user to edit the alpha
+    colour component.
+    @see @ref propgrid_property_attributes
 
     @subsection wxFontProperty
 
@@ -571,7 +713,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
         };
     @endcode
 
-    in wxSystemColourProperty, and its derived class wxColourProperty, there
+    In wxSystemColourProperty, and its derived class wxColourProperty, there
     are various sub-classing features. To set a basic list of colour
     names, call wxPGProperty::SetChoices().
 
@@ -725,7 +867,7 @@ public:
         This virtual function is called after m_value has been set.
 
         @remarks
-        - If m_value was set to Null variant (ie. unspecified value), OnSetValue()
+        - If m_value was set to Null variant (i.e. unspecified value), OnSetValue()
           will not be called.
         - m_value may be of any variant type. Typically properties internally support only
           one variant type, and as such OnSetValue() provides a good opportunity to convert
@@ -829,11 +971,18 @@ public:
         @param text
             String to get the value from.
         @param flags
-            @todo docme
+            If @c wxPG_FULL_VALUE is set, the function sets complete, storable
+            value instead of displayable one (they may be different).
+            @c wxPG_PROGRAMMATIC_VALUE flag is used to indicate that value is
+            being set programmatically (i.e. operation is not caused by user
+            input).
+            If @c wxPG_REPORT_ERROR is set, a special action should be
+            performed if string couldn't have been successfully converted
+            to the valid value (e.g. a special value can be set in this case).
 
         @return @true if value was changed.
     */
-    bool SetValueFromString( const wxString& text, int flags = 0 );
+    bool SetValueFromString( const wxString& text, int flags = wxPG_PROGRAMMATIC_VALUE );
 
     /**
         Converts integer to a value, and if successful, calls SetValue() on it.
@@ -859,7 +1008,7 @@ public:
         @remarks
         - Default behaviour is to return wxSize(0,0), which means no image.
         - Default image width or height is indicated with dimension -1.
-        - You can also return wxPG_DEFAULT_IMAGE_SIZE which equals wxSize(-1, -1).
+        - You can also return wxPG_DEFAULT_IMAGE_SIZE which equals wxDefaultSize.
     */
     virtual wxSize OnMeasureImage( int item = -1 ) const;
 
@@ -1082,7 +1231,7 @@ public:
         Returns instance of a new wxPGEditorDialogAdapter instance, which is
         used when user presses the (optional) button next to the editor control;
 
-        Default implementation returns @NULL (ie. no action is generated when
+        Default implementation returns @NULL (i.e. no action is generated when
         button is pressed).
     */
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
@@ -1118,7 +1267,7 @@ public:
 
         @see AddPrivateChild()
     */
-    wxDEPRECATED( void AddChild( wxPGProperty* prop ) );
+    void AddChild( wxPGProperty* prop );
 
     /**
         Adds a private child property. If you use this instead of
@@ -1136,7 +1285,7 @@ public:
     void AdaptListToValue( wxVariant& list, wxVariant* value ) const;
 
     /**
-        Use this member function to add independent (ie. regular) children to
+        Use this member function to add independent (i.e. regular) children to
         a property.
 
         @return Appended childProperty.
@@ -1199,9 +1348,23 @@ public:
     void Enable( bool enable = true );
 
     /**
+        Call to enable or disable usage of common value (integer value that can
+        be selected for properties instead of their normal values) for this
+        property.
+
+        Common values are disabled by the default for all properties.
+    */
+    void EnableCommonValue( bool enable = true );
+
+    /**
         Composes text from values of child properties.
     */
     wxString GenerateComposedValue() const;
+
+    /**
+        Returns property's label.
+    */
+    const wxString& GetLabel() const;
 
     /**
         Returns property attribute value, null variant if not found.
@@ -1221,6 +1384,11 @@ public:
     double GetAttributeAsDouble( const wxString& name, double defVal ) const;
 
     /**
+        Returns comma-delimited string of property attributes.
+    */
+    const wxPGAttributeStorage& GetAttributes() const;
+
+    /**
         Returns attributes as list wxVariant.
     */
     wxVariant GetAttributesAsList() const;
@@ -1230,7 +1398,9 @@ public:
     */
     const wxPGEditor* GetColumnEditor( int column ) const;
 
-    /** Returns property's base name (ie. parent's name is not added in any case) */
+    /** Returns property's base name (i.e. parent's name is not added
+        in any case).
+    */
     const wxString& GetBaseName() const;
 
     /**
@@ -1279,7 +1449,7 @@ public:
     */
     void* GetClientData() const;
 
-    /** Sets managed client object of a property.
+    /** Gets managed client object of a property.
     */
     wxClientData *GetClientObject() const;
 
@@ -1289,6 +1459,18 @@ public:
         this function usually returns Null variant.
     */
     wxVariant GetDefaultValue() const;
+
+    /**
+        Returns common value selected for this property. -1 for none.
+    */
+    int GetCommonValue() const;
+
+    unsigned int GetDepth() const;
+
+    /**
+        Return number of displayed common values for this property.
+    */
+    int GetDisplayedCommonValueCount() const;
 
     /** Returns property's displayed text.
     */
@@ -1302,9 +1484,9 @@ public:
     const wxPGEditor* GetEditorClass() const;
 
     /**
-        Returns property flags.
+        Returns property's hint text (shown in empty value cell).
     */
-    FlagType GetFlags() const;
+    inline wxString GetHintText() const;
 
     /** Returns property grid where property lies. */
     wxPropertyGrid* GetGrid() const;
@@ -1322,13 +1504,18 @@ public:
     */
     const wxString& GetHelpString() const;
 
+    /** Gets flags as a'|' delimited string. Note that flag names are not
+        prepended with 'wxPG_PROP_'.
+
+        @param flagsMask
+        String will only be made to include flags combined by this parameter.
+    */
+    wxString GetFlagsAsString( FlagType flagsMask ) const;
+
     /**
         Returns position in parent's array.
     */
     unsigned int GetIndexInParent() const;
-
-    /** Returns property's label. */
-    const wxString& GetLabel() const;
 
     /**
         Returns last visible child property, recursively.
@@ -1397,7 +1584,7 @@ public:
 
         @see GetValueAsString()
     */
-    wxDEPRECATED( wxString GetValueString( int argFlags = 0 ) const );
+    wxString GetValueString( int argFlags = 0 ) const;
 
     /**
         Returns value type used by this property.
@@ -1411,11 +1598,30 @@ public:
     int GetY() const;
 
     /**
-        Returns non-zero if property has given flag set.
+        Converts image width into full image offset, with margins.
+    */
+    int GetImageOffset( int imageWidth ) const;
+
+    /** Returns property at given virtual y coordinate.
+    */
+    wxPGProperty* GetItemAtY( unsigned int y ) const;
+
+    /**
+        Returns @true if property has given flag set.
 
         @see propgrid_propflags
     */
-    FlagType HasFlag( wxPGPropertyFlags flag ) const;
+    bool HasFlag(wxPGPropertyFlags flag) const;
+
+    /**
+        Returns @true if property has given flag set.
+    */
+    bool HasFlag(FlagType flag) const;
+
+    /**
+        Returns @true if property has all given flags set.
+    */
+    bool HasFlagsExact(FlagType flags) const;
 
     /**
         Returns @true if property has even one visible child.
@@ -1440,7 +1646,7 @@ public:
     int Index( const wxPGProperty* p ) const;
 
     /**
-        Use this member function to add independent (ie. regular) children to
+        Use this member function to add independent (i.e. regular) children to
         a property.
 
         @return Inserted childProperty.
@@ -1488,7 +1694,14 @@ public:
     bool IsRoot() const;
 
     /**
+       Returns true if this is a sub-property.
+    */
+    bool IsSubProperty() const;
+
+
+    /**
         Returns @true if candidateParent is some parent of this property.
+        Use, for example, to detect if item is inside collapsed section.
     */
     bool IsSomeParent( wxPGProperty* candidateParent ) const;
 
@@ -1518,6 +1731,17 @@ public:
     wxPGProperty* Item( unsigned int i ) const;
 
     /**
+        Returns last sub-property.
+    */
+    wxPGProperty* Last() const;
+
+    /**
+        If property's editor is created this forces its recreation.
+        Useful in SetAttribute etc. Returns true if actually did anything.
+    */
+    bool RecreateEditor();
+
+    /**
         If property's editor is active, then update it's value.
     */
     void RefreshEditor();
@@ -1535,6 +1759,8 @@ public:
                 from property's set of attributes.
     */
     void SetAttribute( const wxString& name, wxVariant value );
+
+    void SetAttributes( const wxPGAttributeStorage& attributes );
 
     /**
         Set if user can change the property's value to unspecified by
@@ -1558,6 +1784,10 @@ public:
             Default is wxPG_RECURSE which causes colour to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
+
+        @remarks
+        Unlike wxPropertyGridInterface::SetPropertyBackgroundColour(),
+        this does not automatically update the display.
     */
     void SetBackgroundColour( const wxColour& colour,
                               int flags = wxPG_RECURSE );
@@ -1584,6 +1814,11 @@ public:
     void SetCell( int column, const wxPGCell& cell );
 
     /**
+        Sets common value selected for this property. -1 for none.
+    */
+    void SetCommonValue( int commonValue );
+
+    /**
         Sets new set of choices for the property.
 
         @remarks This operation deselects the property and clears its
@@ -1598,7 +1833,7 @@ public:
     */
     void SetClientData( void* clientData );
 
-    /** Returns client object of a property.
+    /** Sets client object of a property.
     */
     void SetClientObject(wxClientData* clientObject);
 
@@ -1618,6 +1853,13 @@ public:
     */
     void SetDefaultValue( wxVariant& value );
 
+    void SetExpanded( bool expanded );
+
+    /** Sets flags from a '|' delimited string. Note that flag names are not
+        prepended with 'wxPG_PROP_'.
+    */
+    void SetFlagsFromString( const wxString& str );
+
     /**
         Sets or clears given property flag, recursively. This function is
         primarily intended for internal use.
@@ -1635,8 +1877,11 @@ public:
     /**
         Sets property's label.
 
-        @remarks Properties under same parent may have same labels. However,
-                property names must still remain unique.
+        @remarks
+        - Properties under same parent may have same labels. However,
+        property names must still remain unique.
+        - Unlike wxPropertyGridInterface::SetPropertyLabel(),
+        this does not automatically update the display.
     */
     void SetLabel( const wxString& label );
 
@@ -1678,9 +1923,27 @@ public:
             Default is wxPG_RECURSE which causes colour to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
+
+        @remarks
+        Unlike wxPropertyGridInterface::SetPropertyTextColour(),
+        this does not automatically update the display.
     */
     void SetTextColour( const wxColour& colour,
                         int flags = wxPG_RECURSE );
+
+    /**
+        Sets property's default text and background colours.
+
+        @param flags
+            Default is wxPG_RECURSE which causes colours to be set recursively.
+            Omit this flag to only set colours for the property in question
+            and not any of its children.
+
+        @remarks
+        Unlike wxPropertyGridInterface::SetPropertyColoursToDefault(),
+        this does not automatically update the display.
+    */
+    void SetDefaultColours(int flags = wxPG_RECURSE);
 
     /** Sets wxValidator for a property */
     void SetValidator( const wxValidator& validator );
@@ -1724,19 +1987,22 @@ public:
     void SetValueInEvent( wxVariant value ) const;
 
     /**
-        Sets property's value to unspecified (ie. Null variant).
+        Sets property's value to unspecified (i.e. Null variant).
     */
     void SetValueToUnspecified();
 
     /**
         Call with @false in OnSetValue() to cancel value changes after all
-        (ie. cancel @true returned by StringToValue() or IntToValue()).
+        (i.e. cancel @true returned by StringToValue() or IntToValue()).
     */
     void SetWasModified( bool set = true );
 
     /**
         Updates composed values of parent non-category properties, recursively.
         Returns topmost property updated.
+
+        @remarks
+        Must not call SetValue() (as can be called in it).
     */
     wxPGProperty* UpdateParentValues();
 
@@ -1745,9 +2011,292 @@ public:
     */
     bool UsesAutoUnspecified() const;
 
+    /** This member is public so scripting language bindings
+        wrapper code can access it freely.
+    */
+    void*                       m_clientData;
+
 protected:
+    /**
+        Sets property cell in fashion that reduces number of exclusive
+        copies of cell data. Used when setting, for instance, same
+        background colour for a number of properties.
+
+        @param firstCol
+            First column to affect.
+
+        @param lastCol
+            Last column to affect.
+
+        @param preparedCell
+            Pre-prepared cell that is used for those which cell data
+            before this matched unmodCellData.
+
+        @param srcData
+            If unmodCellData did not match, valid cell data from this
+            is merged into cell (usually generating new exclusive copy
+            of cell's data).
+
+        @param unmodCellData
+            If cell's cell data matches this, its cell is now set to
+            preparedCell.
+
+        @param ignoreWithFlags
+            Properties with any one of these flags are skipped.
+
+        @param recursively
+            If @true, apply this operation recursively in child properties.
+    */
+    void AdaptiveSetCell( unsigned int firstCol,
+                          unsigned int lastCol,
+                          const wxPGCell& preparedCell,
+                          const wxPGCell& srcData,
+                          wxPGCellData* unmodCellData,
+                          FlagType ignoreWithFlags,
+                          bool recursively );
+
+    /**
+        Clear cells associated with property.
+
+        @param recursively
+            If @true, apply this operation recursively in child properties.
+    */
+    void ClearCells(FlagType ignoreWithFlags, bool recursively);
+
+    /**
+        Makes sure m_cells has size of column+1 (or more).
+    */
+    void EnsureCells( unsigned int column );
+
+    /** Returns (direct) child property with given name (or @NULL if not found),
+        with hint index.
+
+        @param hintIndex
+        Start looking for the child at this index.
+
+        @remarks
+        Does not support scope (i.e. Parent.Child notation).
+    */
+    wxPGProperty* GetPropertyByNameWH( const wxString& name,
+                                       unsigned int hintIndex ) const;
+
+    /** This is used by Insert etc. */
+    void DoAddChild( wxPGProperty* prop,
+                     int index = -1,
+                     bool correct_mode = true );
+
     /** Deletes all child properties. */
     void Empty();
+
+    /**
+        Returns true if child property is selected.
+    */
+    bool IsChildSelected( bool recursive = false ) const;
+};
+
+// -----------------------------------------------------------------------
+
+/** @class wxPGCellRenderer
+
+    Base class for wxPropertyGrid cell renderers.
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGCellRenderer : public wxObjectRefData
+{
+public:
+    wxPGCellRenderer();
+    virtual ~wxPGCellRenderer();
+
+    /**
+        @anchor pgcellrenderer_render_flags
+
+        Flags for Render(), PreDrawCell() and PostDrawCell().
+    */
+    enum
+    {
+        /** We are painting selected item.
+            @hideinitializer
+        */
+        Selected        = 0x00010000,
+
+        /** We are painting item in choice popup.
+            @hideinitializer
+        */
+        ChoicePopup     = 0x00020000,
+
+        /**
+            We are rendering wxOwnerDrawnComboBox control
+            or other owner drawn control, but that is only
+            officially supported one ATM).
+            @hideinitializer
+        */
+        Control         = 0x00040000,
+
+        /** We are painting a disable property.
+            @hideinitializer
+        */
+        Disabled        = 0x00080000,
+
+        /**
+            We are painting selected, disabled, or similar
+            item that dictates fore- and background colours,
+            overriding any cell values.
+            @hideinitializer
+        */
+        DontUseCellFgCol    = 0x00100000,
+        /**
+            @hideinitializer
+        */
+        DontUseCellBgCol    = 0x00200000,
+        /**
+            @hideinitializer
+        */
+        DontUseCellColours  = DontUseCellFgCol |
+                              DontUseCellBgCol
+    };
+
+    /**
+        Returns @true if rendered something in the foreground (text or
+        bitmap).
+
+        @param flags
+            See @ref pgcellrenderer_render_flags "list of render flags".
+    */
+    virtual bool Render( wxDC& dc,
+                         const wxRect& rect,
+                         const wxPropertyGrid* propertyGrid,
+                         wxPGProperty* property,
+                         int column,
+                         int item,
+                         int flags ) const = 0;
+
+    /** Returns size of the image in front of the editable area.
+
+        @remarks
+        If property is @NULL, then this call is for a custom value. In that case
+        the item is index to wxPropertyGrid's custom values.
+    */
+    virtual wxSize GetImageSize( const wxPGProperty* property,
+                                 int column,
+                                 int item ) const;
+
+    /** Paints property category selection rectangle.
+    */
+    virtual void DrawCaptionSelectionRect(wxWindow *win, wxDC& dc,
+                                          int x, int y, int w, int h) const;
+
+    /** Utility to draw vertically centered text.
+    */
+    void DrawText( wxDC& dc,
+                   const wxRect& rect,
+                   int imageWidth,
+                   const wxString& text ) const;
+
+    /**
+        Utility to draw editor's value, or vertically aligned text if editor is
+        @NULL.
+    */
+    void DrawEditorValue( wxDC& dc, const wxRect& rect,
+                          int xOffset, const wxString& text,
+                          wxPGProperty* property,
+                          const wxPGEditor* editor ) const;
+
+    /** Utility to render cell bitmap and set text colour plus bg brush
+        colour.
+
+        @param flags
+            See @ref pgcellrenderer_render_flags "list of render flags".
+
+        @return Returns image width, which, for instance, can be passed to
+                DrawText.
+    */
+    int PreDrawCell( wxDC& dc,
+                     const wxRect& rect,
+                     const wxPGCell& cell,
+                     int flags ) const;
+
+    /**
+        Utility to be called after drawing is done, to revert whatever
+        changes PreDrawCell() did.
+
+        @param flags
+            Same as those passed to PreDrawCell().
+            See @ref pgcellrenderer_render_flags "list of render flags".
+    */
+    void PostDrawCell( wxDC& dc,
+                       const wxPropertyGrid* propGrid,
+                       const wxPGCell& cell,
+                       int flags ) const;
+};
+
+// -----------------------------------------------------------------------
+
+/**
+    @class wxPGDefaultRenderer
+
+    Default cell renderer, that can handles the common
+    scenarios.
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGDefaultRenderer : public wxPGCellRenderer
+{
+public:
+    /**
+        Returns @true if rendered something in the foreground (text or
+        bitmap.
+
+        @param flags
+            See @ref pgcellrenderer_render_flags "list of render flags".
+    */
+    virtual bool Render( wxDC& dc,
+                         const wxRect& rect,
+                         const wxPropertyGrid* propertyGrid,
+                         wxPGProperty* property,
+                         int column,
+                         int item,
+                         int flags ) const;
+
+    virtual wxSize GetImageSize( const wxPGProperty* property,
+                                 int column,
+                                 int item ) const;
+};
+
+// -----------------------------------------------------------------------
+
+/**
+    @class wxPGCellData
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGCellData : public wxObjectRefData
+{
+    friend class wxPGCell;
+public:
+    wxPGCellData();
+
+    void SetText( const wxString& text );
+    void SetBitmap( const wxBitmap& bitmap );
+    void SetFgCol( const wxColour& col );
+    void SetBgCol( const wxColour& col );
+    void SetFont( const wxFont& font );
+
+protected:
+    virtual ~wxPGCellData();
+
+    wxString    m_text;
+    wxBitmap    m_bitmap;
+    wxColour    m_fgCol;
+    wxColour    m_bgCol;
+    wxFont      m_font;
+
+    /** True if m_text is valid and specified.
+    */
+    bool        m_hasValidText;
 };
 
 
@@ -1771,12 +2320,18 @@ public:
 
     virtual ~wxPGCell();
 
+    wxPGCellData* GetData();
     const wxPGCellData* GetData() const;
 
     /**
         Returns @true if this cell has custom text stored within.
     */
     bool HasText() const;
+
+    /**
+        Sets empty but valid data to this cell object.
+    */
+    void SetEmptyData();
 
     /**
         Merges valid data from srcCell into this.
@@ -1817,6 +2372,78 @@ public:
     wxPGCell& operator=( const wxPGCell& other );
 };
 
+// -----------------------------------------------------------------------
+
+/** @class wxPGAttributeStorage
+
+    wxPGAttributeStorage is somewhat optimized storage for
+    key=variant pairs (i.e. a map).
+*/
+class wxPGAttributeStorage
+{
+public:
+    wxPGAttributeStorage();
+    ~wxPGAttributeStorage();
+
+    void Set( const wxString& name, const wxVariant& value );
+    unsigned int GetCount() const;
+    wxVariant FindValue( const wxString& name ) const;
+
+    typedef wxPGHashMapS2P::const_iterator const_iterator;
+    const_iterator StartIteration() const;
+    bool GetNext( const_iterator& it, wxVariant& variant ) const;
+};
+
+// -----------------------------------------------------------------------
+
+
+/**
+    @class wxPGChoiceEntry
+    Data of a single wxPGChoices choice.
+*/
+class wxPGChoiceEntry : public wxPGCell
+{
+public:
+    wxPGChoiceEntry();
+    wxPGChoiceEntry(const wxPGChoiceEntry& other);
+    wxPGChoiceEntry( const wxString& label,
+                     int value = wxPG_INVALID_VALUE );
+
+    virtual ~wxPGChoiceEntry();
+
+    void SetValue( int value );
+    int GetValue() const;
+
+    wxPGChoiceEntry& operator=( const wxPGChoiceEntry& other );
+};
+
+
+class wxPGChoicesData : public wxObjectRefData
+{
+public:
+    // Constructor sets m_refCount to 1.
+    wxPGChoicesData();
+
+    void CopyDataFrom( wxPGChoicesData* data );
+
+    wxPGChoiceEntry& Insert( int index, const wxPGChoiceEntry& item );
+
+    // Delete all entries
+    void Clear();
+
+    unsigned int GetCount() const;
+
+    const wxPGChoiceEntry& Item( unsigned int i ) const;
+    wxPGChoiceEntry& Item( unsigned int i );
+
+protected:
+    virtual ~wxPGChoicesData();
+};
+
+#define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)
+
+
+
 
 /**
     @class wxPGChoices
@@ -1851,38 +2478,80 @@ public:
     */
     wxPGChoices( const wxPGChoices& a );
 
-    /** Constructor. */
+    /**
+        Constructor.
+
+        @param labels
+            Labels for choices.
+
+        @param values
+            Values for choices. If @NULL, indexes are used.
+    */
     wxPGChoices( const wxChar** labels, const long* values = NULL );
 
-    /** Constructor. */
+    /**
+        Constructor.
+
+        @param labels
+            Labels for choices.
+
+        @param values
+            Values for choices. If empty, indexes are used.
+    */
     wxPGChoices( const wxArrayString& labels, const wxArrayInt& values = wxArrayInt() );
 
-    /** Constructor. */
+    /**
+        Simple interface constructor.
+    */
     wxPGChoices( wxPGChoicesData* data );
 
-    /** Destructor. */
+    /**
+        Destructor.
+    */
     ~wxPGChoices();
 
     /**
         Adds to current. If did not have own copies, creates them now. If was empty,
         identical to set except that creates copies.
+
+        @param labels
+            Labels for added choices.
+
+        @param values
+            Values for added choices. If empty, relevant entry indexes are used.
     */
     void Add( const wxChar** labels, const ValArrItem* values = NULL );
 
-    /** Version that works with wxArrayString and wxArrayInt. */
+    /**
+        Adds to current. Version that works with wxArrayString and wxArrayInt.
+    */
     void Add( const wxArrayString& arr, const wxArrayInt& arrint );
 
-    /** Adds single item. */
+    /**
+        Adds a single choice item.
+
+        @param label
+            Label for added choice.
+
+        @param value
+            Value for added choice. If unspecified, index is used.
+    */
     wxPGChoiceEntry& Add( const wxString& label, int value = wxPG_INVALID_VALUE );
 
-    /** Adds a single item, with bitmap. */
+    /**
+        Adds a single item, with bitmap.
+    */
     wxPGChoiceEntry& Add( const wxString& label, const wxBitmap& bitmap,
                           int value = wxPG_INVALID_VALUE );
 
-    /** Adds a single item with full entry information. */
+    /**
+        Adds a single item with full entry information.
+    */
     wxPGChoiceEntry& Add( const wxPGChoiceEntry& entry );
 
-    /** Adds single item, sorted. */
+    /**
+        Adds a single item, sorted.
+    */
     wxPGChoiceEntry& AddAsSorted( const wxString& label, int value = wxPG_INVALID_VALUE );
 
     /**
@@ -1906,6 +2575,13 @@ public:
     */
     wxPGChoices Copy() const;
 
+    void EnsureData();
+
+    /**
+        Gets a unsigned number identifying this list.
+    */
+    wxPGChoicesId GetId() const;
+
     /**
         Returns label of item.
     */
@@ -1917,7 +2593,7 @@ public:
     unsigned int GetCount() const;
 
     /**
-        Returns value of item;
+        Returns value of item.
     */
     int GetValue( unsigned int ind ) const;
 
@@ -1945,7 +2621,7 @@ public:
     int Index( int val ) const;
 
     /**
-        Inserts single item.
+        Inserts a single item.
     */
     wxPGChoiceEntry& Insert( const wxString& label, int index, int value = wxPG_INVALID_VALUE );
 
@@ -1991,6 +2667,21 @@ public:
     void AllocExclusive();
 
     /**
+        Returns data, increases refcount.
+    */
+    wxPGChoicesData* GetData();
+
+    /**
+        Returns plain data ptr - no refcounting stuff is done.
+    */
+    wxPGChoicesData* GetDataPtr() const;
+
+    /**
+        Changes ownership of data to you.
+    */
+    wxPGChoicesData* ExtractData();
+
+    /**
         Returns array of choice labels.
     */
     wxArrayString GetLabels() const;
@@ -1999,6 +2690,74 @@ public:
 
     wxPGChoiceEntry& operator[](unsigned int i);
     const wxPGChoiceEntry& operator[](unsigned int i) const;
+
+protected:
+    wxPGChoicesData*    m_data;
+
+    void Init();
+    void Free();
 };
 
 // -----------------------------------------------------------------------
+
+/** @class wxPGChoiceEntry
+
+    Data of a single wxPGChoices choice.
+*/
+class wxPGChoiceEntry : public wxPGCell
+{
+public:
+    wxPGChoiceEntry();
+    wxPGChoiceEntry(const wxPGChoiceEntry& other);
+    wxPGChoiceEntry( const wxString& label,
+                     int value = wxPG_INVALID_VALUE );
+
+    virtual ~wxPGChoiceEntry();
+
+    void SetValue( int value );
+    int GetValue() const;
+
+    wxPGChoiceEntry& operator=( const wxPGChoiceEntry& other );
+};
+
+// -----------------------------------------------------------------------
+
+/** @class wxPGRootProperty
+
+    Root parent property.
+*/
+class wxPGRootProperty : public wxPGProperty
+{
+public:
+
+    /** Constructor. */
+    wxPGRootProperty( const wxString& name = wxS("<Root>") );
+    virtual ~wxPGRootProperty();
+
+    virtual bool StringToValue( wxVariant&, const wxString&, int ) const;
+};
+
+// -----------------------------------------------------------------------
+
+/** @class wxPropertyCategory
+
+    Category (caption) property.
+*/
+class wxPropertyCategory : public wxPGProperty
+{
+    friend class wxPropertyGrid;
+    friend class wxPropertyGridPageState;
+public:
+
+    /** Default constructor is only used in special cases. */
+    wxPropertyCategory();
+
+    wxPropertyCategory( const wxString& label,
+                        const wxString& name = wxPG_LABEL );
+    ~wxPropertyCategory();
+
+    int GetTextExtent( const wxWindow* wnd, const wxFont& font ) const;
+
+    virtual wxString ValueToString( wxVariant& value, int argFlags ) const;
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+};

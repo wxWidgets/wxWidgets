@@ -652,7 +652,7 @@ private:
             { wxNodeBase::SetData(data); }                                  \
                                                                             \
     protected:                                                              \
-        virtual void DeleteData();                                          \
+        virtual void DeleteData() wxOVERRIDE;                               \
                                                                             \
         wxDECLARE_NO_COPY_CLASS(nodetype);                                  \
     };                                                                      \
@@ -742,6 +742,7 @@ private:
         virtual wxNodeBase *CreateNode(wxNodeBase *prev, wxNodeBase *next,  \
                                void *data,                                  \
                                const wxListKey& key = wxDefaultListKey)     \
+                               wxOVERRIDE                                   \
             {                                                               \
                 return new nodetype(this,                                   \
                                     (nodetype *)prev, (nodetype *)next,     \
@@ -942,7 +943,7 @@ private:
                 { return it.m_node == m_node; }                             \
         };                                                                  \
                                                                             \
-        wxEXPLICIT name(size_type n, const_reference v = value_type())      \
+        explicit name(size_type n, const_reference v = value_type())        \
             { assign(n, v); }                                               \
         name(const const_iterator& first, const const_iterator& last)       \
             { assign(first, last); }                                        \

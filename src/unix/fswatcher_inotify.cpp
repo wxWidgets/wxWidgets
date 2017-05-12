@@ -61,7 +61,7 @@ public:
         delete m_handler;
     }
 
-    bool Init()
+    bool Init() wxOVERRIDE
     {
         wxCHECK_MSG( !IsOk(), false, "Inotify already initialized" );
 
@@ -98,7 +98,7 @@ public:
         }
     }
 
-    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch)
+    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -121,7 +121,7 @@ public:
         return true;
     }
 
-    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch)
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -129,8 +129,20 @@ public:
         int ret = DoRemoveInotify(watch.get());
         if (ret == -1)
         {
-            wxLogSysError( _("Unable to remove inotify watch") );
-            return false;
+            // Failures can happen if a dir is deleted just before we try to
+            // remove the watch. I think there's a race between calling this
+            // code and IN_DELETE_SELF arriving. So just warn.
+            wxFileSystemWatcherEvent
+                event
+                (
+                    wxFSW_EVENT_WARNING, wxFSW_WARNING_GENERAL,
+                    wxString::Format
+                    (
+                     _("Unable to remove inotify watch %i"),
+                     watch->GetWatchDescriptor()
+                    )
+                );
+            SendEvent(event);
         }
 
         if (m_watchMap.erase(watch->GetWatchDescriptor()) != 1)
@@ -145,7 +157,7 @@ public:
         return true;
     }
 
-    virtual bool RemoveAll()
+    virtual bool RemoveAll() wxOVERRIDE
     {
         wxFSWatchEntries::iterator it = m_watches.begin();
         for ( ; it != m_watches.end(); ++it )
@@ -373,6 +385,7 @@ protected:
             // if the wd isn't found: repeated IN_DELETE_SELFs can occur
             wxFileName fn = GetEventPath(watch, inevt);
             wxString path(fn.GetPathWithSep());
+            const wxString filespec(watch.GetFilespec());
 
             if (m_watchMap.erase(inevt.wd) == 1)
             {
@@ -394,7 +407,7 @@ protected:
 
             // Tell the owner, in case it's interested
             // If there's a filespec, assume he's not
-            if (watch.GetFilespec().empty())
+            if (filespec.empty())
             {
                 wxFileSystemWatcherEvent event(flags, fn, fn);
                 SendEvent(event);

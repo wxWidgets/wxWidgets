@@ -275,16 +275,15 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_scrolled_window_new( NULL, NULL );
     g_object_ref(m_widget);
+
+    GtkPolicyType vPolicy = GTK_POLICY_AUTOMATIC;
     if (style & wxLB_ALWAYS_SB)
-    {
-      gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
-        GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS );
-    }
-    else
-    {
-      gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
-        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
-    }
+        vPolicy = GTK_POLICY_ALWAYS;
+    else if (style & wxLB_NO_SB)
+        vPolicy = GTK_POLICY_NEVER;
+
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(m_widget),
+        GTK_POLICY_AUTOMATIC, vPolicy);
 
 
     GTKScrolledWindowSetBorder(m_widget, style);
@@ -763,14 +762,20 @@ int wxListBox::GetTopItem() const
 {
     int idx = wxNOT_FOUND;
 
+#if GTK_CHECK_VERSION(2,8,0)
     wxGtkTreePath start;
-    if ( gtk_tree_view_get_visible_range(m_treeview, start.ByRef(), NULL) )
+    if (
+#ifndef __WXGTK3__
+        gtk_check_version(2,8,0) == NULL &&
+#endif
+        gtk_tree_view_get_visible_range(m_treeview, start.ByRef(), NULL))
     {
         gint *ptr = gtk_tree_path_get_indices(start);
 
         if ( ptr )
             idx = *ptr;
     }
+#endif
 
     return idx;
 }

@@ -161,6 +161,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexECL.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexEDIFACT.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexEScript.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>

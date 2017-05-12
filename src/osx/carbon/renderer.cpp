@@ -251,8 +251,7 @@ int wxRendererMac::GetHeaderButtonHeight(wxWindow* WXUNUSED(win))
 
 int wxRendererMac::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
 {
-    wxFAIL_MSG( "GetHeaderButtonMargin() not implemented" );
-    return -1;
+    return 0; // TODO: How to determine the real margin?
 }
 
 void wxRendererMac::DrawTreeItemButton( wxWindow *win,

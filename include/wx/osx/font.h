@@ -145,15 +145,6 @@ public:
 
     CTFontRef OSXGetCTFont() const;
 
-#if wxOSX_USE_ATSU_TEXT
-    // Returns an ATSUStyle not ATSUStyle*
-    void* MacGetATSUStyle() const ;
-    void* OSXGetATSUStyle() const { return MacGetATSUStyle() ; }
-
-    wxDEPRECATED( wxUint32 MacGetATSUFontID() const );
-    wxDEPRECATED( wxUint32 MacGetATSUAdditionalQDStyles() const );
-#endif
-
 #if wxOSX_USE_COCOA
     WX_NSFont OSXGetNSFont() const;
     static WX_NSFont OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info);

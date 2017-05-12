@@ -59,8 +59,7 @@ class wxMSWListHeaderCustomDraw;
     which item. Each image in an image list can contain a mask, and can be made out
     of either a bitmap, two bitmaps or an icon. See ImagList.h for more details.
 
-    Notifications are passed via the wxWidgets 2.0 event system, or using virtual
-    functions in wxWidgets 1.66.
+    Notifications are passed via the event system.
 
     See the sample wxListCtrl app for API usage.
 
@@ -68,9 +67,6 @@ class wxMSWListHeaderCustomDraw;
      - addition of further convenience functions
        to avoid use of wxListItem in some functions
      - state/overlay images: probably not needed.
-     - in Win95, you can be called back to supply other information
-       besides text, such as state information. This saves no memory
-       and is probably superfluous to requirements.
      - testing of whole API, extending current sample.
 
 
@@ -113,23 +109,23 @@ public:
     ////////////////////////////////////////////////////////////////////////////
 
     // Set the control colours
-    bool SetForegroundColour(const wxColour& col);
-    bool SetBackgroundColour(const wxColour& col);
+    bool SetForegroundColour(const wxColour& col) wxOVERRIDE;
+    bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
 
     // Header attributes
     virtual bool SetHeaderAttr(const wxItemAttr& attr) wxOVERRIDE;
 
     // Gets information about this column
-    bool GetColumn(int col, wxListItem& item) const;
+    bool GetColumn(int col, wxListItem& item) const wxOVERRIDE;
 
     // Sets information about this column
-    bool SetColumn(int col, const wxListItem& item);
+    bool SetColumn(int col, const wxListItem& item) wxOVERRIDE;
 
     // Gets the column width
-    int GetColumnWidth(int col) const;
+    int GetColumnWidth(int col) const wxOVERRIDE;
 
     // Sets the column width
-    bool SetColumnWidth(int col, int width);
+    bool SetColumnWidth(int col, int width) wxOVERRIDE;
 
 
     // Gets the column order from its index or index from its order
@@ -203,7 +199,7 @@ public:
     int GetItemCount() const;
 
     // Gets the number of columns in the list control
-    int GetColumnCount() const { return m_colCount; }
+    int GetColumnCount() const wxOVERRIDE { return m_colCount; }
 
     // get the horizontal and vertical components of the item spacing
     wxSize GetItemSpacing() const;
@@ -243,7 +239,7 @@ public:
     void SetSingleStyle(long style, bool add = true);
 
     // Set the whole window style
-    void SetWindowStyleFlag(long style);
+    void SetWindowStyleFlag(long style) wxOVERRIDE;
 
     // Searches for an item, starting from 'item'.
     // item can be -1 to find the first item that matches the
@@ -252,17 +248,11 @@ public:
     long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const;
 
     // Gets one of the three image lists
-    wxImageList *GetImageList(int which) const;
+    wxImageList *GetImageList(int which) const wxOVERRIDE;
 
     // Sets the image list
-    // N.B. There's a quirk in the Win95 list view implementation.
-    // If in wxLC_LIST mode, it'll *still* display images by the labels if
-    // there's a small-icon image list set for the control - even though you
-    // haven't specified wxLIST_MASK_IMAGE when inserting.
-    // So you have to set a NULL small-icon image list to be sure that
-    // the wxLC_LIST mode works without icons. Of course, you may want icons...
-    void SetImageList(wxImageList *imageList, int which);
-    void AssignImageList(wxImageList *imageList, int which);
+    void SetImageList(wxImageList *imageList, int which) wxOVERRIDE;
+    void AssignImageList(wxImageList *imageList, int which) wxOVERRIDE;
 
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
@@ -281,10 +271,10 @@ public:
     bool DeleteAllItems();
 
     // Deletes a column
-    bool DeleteColumn(int col);
+    bool DeleteColumn(int col) wxOVERRIDE;
 
     // Deletes all columns
-    bool DeleteAllColumns();
+    bool DeleteAllColumns() wxOVERRIDE;
 
     // Clears items, and columns if there are any.
     void ClearAll();
@@ -352,9 +342,9 @@ public:
     bool SortItems(wxListCtrlCompare fn, wxIntPtr data);
 
     // IMPLEMENTATION
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-    virtual bool MSWShouldPreProcessMessage(WXMSG* msg);
+    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+    virtual bool MSWShouldPreProcessMessage(WXMSG* msg) wxOVERRIDE;
 
     // bring the control in sync with current m_windowStyle value
     void UpdateStyle();
@@ -365,9 +355,9 @@ public:
     void OnPaint(wxPaintEvent& event);
 
 
-    virtual bool ShouldInheritColours() const { return false; }
+    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
 
-    virtual wxVisualAttributes GetDefaultAttributes() const
+    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -376,27 +366,27 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // convert our styles to Windows
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
 
     // special Windows message handling
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
-                                    WXLPARAM lParam);
+                                    WXLPARAM lParam) wxOVERRIDE;
 
 protected:
     // common part of all ctors
     void Init();
 
     // Implement constrained best size calculation.
-    virtual int DoGetBestClientHeight(int width) const
+    virtual int DoGetBestClientHeight(int width) const wxOVERRIDE
         { return MSWGetBestViewRect(width, -1).y; }
-    virtual int DoGetBestClientWidth(int height) const
+    virtual int DoGetBestClientWidth(int height) const wxOVERRIDE
         { return MSWGetBestViewRect(-1, height).x; }
 
     wxSize MSWGetBestViewRect(int x, int y) const;
 
     // Implement base class pure virtual methods.
-    long DoInsertColumn(long col, const wxListItem& info);
+    long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
     // free memory taken by all internal data
     void FreeAllInternalData();

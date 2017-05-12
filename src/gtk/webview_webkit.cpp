@@ -1005,7 +1005,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
     m_findText = text;
 
     //If the search string is empty then we clear any selection and highlight
-    if(text == "")
+    if (text.empty())
     {
         webkit_web_view_unmark_text_matches(m_web_view);
         webkit_web_view_set_highlight_text_matches(m_web_view, false);

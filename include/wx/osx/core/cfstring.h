@@ -30,6 +30,7 @@ WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( wxString *data ) ;
 WXDLLIMPEXP_BASE void wxMacConvertNewlines10To13( wxString *data ) ;
 
 WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( char * data ) ;
+WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( wxChar16 * data ) ;
 WXDLLIMPEXP_BASE void wxMacConvertNewlines10To13( char * data ) ;
 
 WXDLLIMPEXP_BASE wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;

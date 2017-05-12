@@ -54,6 +54,8 @@
 #pragma hdrstop
 #endif
 
+#include <float.h> // for FLT_MAX, FLT_MIN
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/dcclient.h"
@@ -62,7 +64,6 @@
     #include "wx/module.h"
     #include "wx/window.h"
     #include "wx/msw/private.h"
-    #include <float.h> // for FLT_MAX
 #endif // !WX_PRECOMP
 
 #include "wx/graphics.h"
@@ -757,40 +758,62 @@ D2D1_RECT_F wxD2DConvertRect(const wxRect& rect)
 
 wxCOMPtr<ID2D1Geometry> wxD2DConvertRegionToGeometry(ID2D1Factory* direct2dFactory, const wxRegion& region)
 {
-    wxRegionIterator regionIterator(region);
-
-    // Count the number of rectangles which compose the region
-    int rectCount = 0;
-    while(regionIterator++)
-        rectCount++;
-
     // Build the array of geometries
-    ID2D1Geometry** geometries = new ID2D1Geometry*[rectCount];
-    regionIterator.Reset(region);
-
-    int i = 0;
-    while(regionIterator)
+    HRESULT hr;
+    int i;
+    ID2D1Geometry** geometries;
+    int rectCount;
+    if ( region.IsEmpty() )
     {
-        geometries[i] = NULL;
+        // Empty region is skipped by iterator
+        // so we have to create it in a special way.
+        rectCount = 1;
+        geometries = new ID2D1Geometry*[rectCount];
 
-        wxRect rect = regionIterator.GetRect();
-        rect.SetWidth(rect.GetWidth() + 1);
-        rect.SetHeight(rect.GetHeight() + 1);
+        geometries[0] = NULL;
+        hr = direct2dFactory->CreateRectangleGeometry(
+                        D2D1::RectF(0.0F, 0.0F, 0.0F, 0.0F),
+                        (ID2D1RectangleGeometry**)(&geometries[0]));
+        wxFAILED_HRESULT_MSG(hr);
+    }
+    else
+    {
+        // Count the number of rectangles which compose the region
+        wxRegionIterator regionIterator(region);
+        rectCount = 0;
+        while(regionIterator++)
+            rectCount++;
 
-        direct2dFactory->CreateRectangleGeometry(
-            wxD2DConvertRect(rect),
-            (ID2D1RectangleGeometry**)(&geometries[i]));
+        geometries = new ID2D1Geometry*[rectCount];
+        regionIterator.Reset(region);
 
-        i++; regionIterator++;
+        i = 0;
+        while(regionIterator)
+        {
+            geometries[i] = NULL;
+
+            wxRect rect = regionIterator.GetRect();
+            rect.SetWidth(rect.GetWidth() + 1);
+            rect.SetHeight(rect.GetHeight() + 1);
+
+            hr = direct2dFactory->CreateRectangleGeometry(
+                wxD2DConvertRect(rect),
+                (ID2D1RectangleGeometry**)(&geometries[i]));
+            wxFAILED_HRESULT_MSG(hr);
+
+            i++;
+            ++regionIterator;
+        }
     }
 
     // Create a geometry group to hold all the rectangles
     wxCOMPtr<ID2D1GeometryGroup> resultGeometry;
-    direct2dFactory->CreateGeometryGroup(
+    hr = direct2dFactory->CreateGeometryGroup(
         D2D1_FILL_MODE_WINDING,
         geometries,
         rectCount,
         &resultGeometry);
+    wxFAILED_HRESULT_MSG(hr);
 
     // Cleanup temporaries
     for (i = 0; i < rectCount; ++i)
@@ -844,6 +867,8 @@ public:
     wxD2DMatrixData(wxGraphicsRenderer* renderer);
     wxD2DMatrixData(wxGraphicsRenderer* renderer, const D2D1::Matrix3x2F& matrix);
 
+    virtual wxGraphicsObjectRefData* Clone() const wxOVERRIDE;
+
     void Concat(const wxGraphicsMatrixData* t) wxOVERRIDE;
 
     void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
@@ -890,9 +915,19 @@ wxD2DMatrixData::wxD2DMatrixData(wxGraphicsRenderer* renderer, const D2D1::Matri
 {
 }
 
+wxGraphicsObjectRefData* wxD2DMatrixData::Clone() const
+{
+    return new wxD2DMatrixData(GetRenderer(), m_matrix);
+}
+
 void wxD2DMatrixData::Concat(const wxGraphicsMatrixData* t)
 {
-    m_matrix.SetProduct(m_matrix, static_cast<const wxD2DMatrixData*>(t)->m_matrix);
+    // Elements of resulting matrix are modified in-place in SetProduct()
+    // so multiplied matrices cannot be the instances of the resulting matrix.
+    // Note that parameter matrix (t) is the multiplicand.
+    const D2D1::Matrix3x2F m1(static_cast<const wxD2DMatrixData*>(t)->m_matrix);
+    const D2D1::Matrix3x2F m2(m_matrix);
+    m_matrix.SetProduct(m1, m2);
 }
 
 void wxD2DMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, wxDouble tx, wxDouble ty)
@@ -957,7 +992,7 @@ void wxD2DMatrixData::TransformDistance(wxDouble* dx, wxDouble* dy) const
     D2D1::Matrix3x2F noTranslationMatrix = m_matrix;
     noTranslationMatrix._31 = 0;
     noTranslationMatrix._32 = 0;
-    D2D1_POINT_2F result = m_matrix.TransformPoint(D2D1::Point2F(*dx, *dy));
+    D2D1_POINT_2F result = noTranslationMatrix.TransformPoint(D2D1::Point2F(*dx, *dy));
     *dx = result.x;
     *dy = result.y;
 }
@@ -2575,31 +2610,47 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     wxCHECK_HRESULT_RET(hr);
 
     LOGFONTW logfont;
-    GetObjectW(font.GetHFONT(), sizeof(logfont), &logfont);
+    int n = GetObjectW(font.GetHFONT(), sizeof(logfont), &logfont);
+    wxCHECK_RET( n > 0, wxS("Failed to obtain font info") );
 
     // Ensure the LOGFONT object contains the correct font face name
-    if (logfont.lfFaceName[0] == '\0')
+    if (lstrlen(logfont.lfFaceName) == 0)
     {
-        for (unsigned int i = 0; i < font.GetFaceName().Length(); ++i)
+        // The length of the font name must not exceed LF_FACESIZE TCHARs,
+        // including the terminating NULL.
+        wxString name = font.GetFaceName().Mid(0, WXSIZEOF(logfont.lfFaceName)-1);
+        for (unsigned int i = 0; i < name.Length(); ++i)
         {
-            logfont.lfFaceName[i] = font.GetFaceName().GetChar(i);
+            logfont.lfFaceName[i] = name.GetChar(i);
         }
+        logfont.lfFaceName[name.Length()] = L'\0';
     }
 
     hr = gdiInterop->CreateFontFromLOGFONT(&logfont, &m_font);
-    wxCHECK_HRESULT_RET(hr);
+    if ( hr == DWRITE_E_NOFONT )
+    {
+        // It was attempted to create DirectWrite font from non-TrueType GDI font.
+        return;
+    }
+
+    wxCHECK_RET( SUCCEEDED(hr),
+                 wxString::Format("Failed to create font '%s' (HRESULT = %x)", logfont.lfFaceName, hr) );
 
     wxCOMPtr<IDWriteFontFamily> fontFamily;
-    m_font->GetFontFamily(&fontFamily);
+    hr = m_font->GetFontFamily(&fontFamily);
+    wxCHECK_HRESULT_RET(hr);
 
     wxCOMPtr<IDWriteLocalizedStrings> familyNames;
-    fontFamily->GetFamilyNames(&familyNames);
+    hr = fontFamily->GetFamilyNames(&familyNames);
+    wxCHECK_HRESULT_RET(hr);
 
     UINT32 length;
-    familyNames->GetStringLength(0, &length);
+    hr = familyNames->GetStringLength(0, &length);
+    wxCHECK_HRESULT_RET(hr);
 
     wchar_t* name = new wchar_t[length+1];
-    familyNames->GetString(0, name, length+1);
+    hr = familyNames->GetString(0, name, length+1);
+    wxCHECK_HRESULT_RET(hr);
 
     FLOAT dpiX, dpiY;
     d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
@@ -3158,7 +3209,7 @@ public:
     }
 
 protected:
-    void DoAcquireResource()
+    void DoAcquireResource() wxOVERRIDE
     {
         wxCOMPtr<ID2D1DCRenderTarget> renderTarget;
         D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties = D2D1::RenderTargetProperties(
@@ -3179,6 +3230,8 @@ protected:
 
         hr = renderTarget->BindDC(m_hdc, &r);
         wxCHECK_HRESULT_RET(hr);
+        renderTarget->SetTransform(
+                       D2D1::Matrix3x2F::Translation(-r.left, -r.top));
 
         m_nativeResource = renderTarget;
     }
@@ -3206,6 +3259,7 @@ public:
     void Clip(const wxRegion&) wxOVERRIDE {}
     void Clip(wxDouble, wxDouble, wxDouble, wxDouble) wxOVERRIDE {}
     void ResetClip() wxOVERRIDE {}
+    void GetClipBox(wxDouble*, wxDouble*, wxDouble*, wxDouble*) wxOVERRIDE {}
     void* GetNativeContext() wxOVERRIDE { return NULL; }
     bool SetAntialiasMode(wxAntialiasMode) wxOVERRIDE { return false; }
     bool SetInterpolationQuality(wxInterpolationQuality) wxOVERRIDE { return false; }
@@ -3303,6 +3357,8 @@ public:
 
     void ResetClip() wxOVERRIDE;
 
+    void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+
     // The native context used by wxD2DContext is a Direct2D render target.
     void* GetNativeContext() wxOVERRIDE;
 
@@ -3385,34 +3441,44 @@ private:
 
     ID2D1RenderTarget* GetRenderTarget() const;
 
+    void SetClipLayer(ID2D1Geometry* clipGeometry);
+
 private:
-    enum ClipMode
+    enum LayerType
     {
-        CLIP_MODE_NONE,
-        CLIP_MODE_AXIS_ALIGNED_RECTANGLE,
-        CLIP_MODE_GEOMETRY
+        CLIP_LAYER,
+        OTHER_LAYER
+    };
+
+    struct LayerData
+    {
+        LayerType type;
+        D2D1_LAYER_PARAMETERS params;
+        wxCOMPtr<ID2D1Layer> layer;
+        wxCOMPtr<ID2D1Geometry> geometry;
+        D2D1_MATRIX_3X2_F transformMatrix;
+    };
+
+    struct StateData
+    {
+        // A ID2D1DrawingStateBlock represents the drawing state of a render target:
+        // the anti aliasing mode, transform, tags, and text-rendering options.
+        // The context owns these pointers and is responsible for releasing them.
+        wxCOMPtr<ID2D1DrawingStateBlock> drawingState;
+        // We need to store also current layers.
+        wxStack<LayerData> layers;
     };
 
 private:
     ID2D1Factory* m_direct2dFactory;
-
     wxSharedPtr<wxD2DRenderTargetResourceHolder> m_renderTargetHolder;
-
-    // A ID2D1DrawingStateBlock represents the drawing state of a render target:
-    // the anti aliasing mode, transform, tags, and text-rendering options.
-    // The context owns these pointers and is responsible for releasing them.
-    wxStack<wxCOMPtr<ID2D1DrawingStateBlock> > m_stateStack;
-
-    ClipMode m_clipMode;
-
-    bool m_clipLayerAcquired;
-
-    // A direct2d layer is a device-dependent resource.
-    wxCOMPtr<ID2D1Layer> m_clipLayer;
-
-    wxStack<wxCOMPtr<ID2D1Layer> > m_layers;
-
+    wxStack<StateData> m_stateStack;
+    wxStack<LayerData> m_layers;
     ID2D1RenderTarget* m_cachedRenderTarget;
+    D2D1::Matrix3x2F m_initTransform;
+    // Clipping box
+    bool m_isClipBoxValid;
+    double m_clipX1, m_clipY1, m_clipX2, m_clipY2;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxD2DContext);
@@ -3469,21 +3535,25 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
 void wxD2DContext::Init()
 {
     m_cachedRenderTarget = NULL;
-    m_clipMode = CLIP_MODE_NONE;
     m_composition = wxCOMPOSITION_OVER;
-    m_clipLayerAcquired = false;
     m_renderTargetHolder->Bind(this);
     m_enableOffset = true;
+    m_isClipBoxValid = false;
+    m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0.0;
     EnsureInitialized();
 }
 
 wxD2DContext::~wxD2DContext()
 {
-    ResetClip();
-
-    while (!m_layers.empty())
+    // Remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
     {
-        EndLayer();
+        LayerData ld = m_layers.top();
+        m_layers.pop();
+
+        GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        ld.geometry.reset();
     }
 
     HRESULT result = GetRenderTarget()->EndDraw();
@@ -3499,47 +3569,195 @@ ID2D1RenderTarget* wxD2DContext::GetRenderTarget() const
 
 void wxD2DContext::Clip(const wxRegion& region)
 {
-    GetRenderTarget()->Flush();
-    ResetClip();
-
     wxCOMPtr<ID2D1Geometry> clipGeometry = wxD2DConvertRegionToGeometry(m_direct2dFactory, region);
 
-    if (!m_clipLayerAcquired)
-    {
-        GetRenderTarget()->CreateLayer(&m_clipLayer);
-        m_clipLayerAcquired = true;
-    }
-
-    GetRenderTarget()->PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry), m_clipLayer);
-
-    m_clipMode = CLIP_MODE_GEOMETRY;
+    SetClipLayer(clipGeometry);
 }
 
 void wxD2DContext::Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
-    GetRenderTarget()->Flush();
-    ResetClip();
+    wxCOMPtr<ID2D1RectangleGeometry> clipGeometry;
+    HRESULT hr = m_direct2dFactory->CreateRectangleGeometry(
+                        D2D1::RectF(x, y, x + w, y + h), &clipGeometry);
+    wxCHECK_HRESULT_RET(hr);
 
-    GetRenderTarget()->PushAxisAlignedClip(
-        D2D1::RectF(x, y, x + w, y + h),
-        D2D1_ANTIALIAS_MODE_ALIASED);
+    SetClipLayer(clipGeometry);
+}
 
-    m_clipMode = CLIP_MODE_AXIS_ALIGNED_RECTANGLE;
+void wxD2DContext::SetClipLayer(ID2D1Geometry* clipGeometry)
+{
+    EnsureInitialized();
+
+    wxCOMPtr<ID2D1Layer> clipLayer;
+    HRESULT hr = GetRenderTarget()->CreateLayer(&clipLayer);
+    wxCHECK_HRESULT_RET(hr);
+
+    LayerData ld;
+    ld.type = CLIP_LAYER;
+    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry,
+                                      wxD2DConvertAntialiasMode(m_antialias));
+    ld.layer = clipLayer;
+    ld.geometry = clipGeometry;
+    // We need to store CTM to be able to re-apply
+    // the layer at the original position later on.
+    GetRenderTarget()->GetTransform(&ld.transformMatrix);
+
+    GetRenderTarget()->PushLayer(ld.params, clipLayer);
+    // Store layer parameters.
+    m_layers.push(ld);
+
+    m_isClipBoxValid = false;
 }
 
 void wxD2DContext::ResetClip()
 {
-    if (m_clipMode == CLIP_MODE_AXIS_ALIGNED_RECTANGLE)
+    wxStack<LayerData> layersToRestore;
+    // Remove all clipping layers from the stack of layers.
+    while ( !m_layers.empty() )
     {
-        GetRenderTarget()->PopAxisAlignedClip();
-    }
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
-    if (m_clipMode == CLIP_MODE_GEOMETRY)
-    {
+        if ( ld.type == CLIP_LAYER )
+        {
+            GetRenderTarget()->PopLayer();
+            ld.layer.reset();
+            ld.geometry.reset();
+            continue;
+        }
+
         GetRenderTarget()->PopLayer();
+        // Save non-clipping layer
+        layersToRestore.push(ld);
     }
 
-    m_clipMode = CLIP_MODE_NONE;
+    HRESULT hr = GetRenderTarget()->Flush();
+    wxCHECK_HRESULT_RET(hr);
+
+    // Re-apply all remaining non-clipping layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
+
+    m_isClipBoxValid = false;
+}
+
+void wxD2DContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
+{
+    if ( !m_isClipBoxValid )
+    {
+        // To obtain actual clipping box we have to start with rectangle
+        // covering the entire render target and interesect with this rectangle
+        // all clipping layers. Bounding box of the final geometry
+        // (being intersection of all clipping layers) is a clipping box.
+
+        HRESULT hr;
+        wxCOMPtr<ID2D1RectangleGeometry> rectGeometry;
+        hr = m_direct2dFactory->CreateRectangleGeometry(
+                    D2D1::RectF(0.0F, 0.0F, (FLOAT)m_width, (FLOAT)m_height),
+                    &rectGeometry);
+        wxCHECK_HRESULT_RET(hr);
+
+        wxCOMPtr<ID2D1Geometry> clipGeometry(rectGeometry);
+
+        wxStack<LayerData> layers(m_layers);
+        while( !layers.empty() )
+        {
+            LayerData ld = layers.top();
+            layers.pop();
+
+            if ( ld.type == CLIP_LAYER )
+            {
+                // If current geometry is empty (null region)
+                // or there is no intersection between geometries
+                // then final result is "null" rectangle geometry.
+                FLOAT area;
+                hr = ld.geometry->ComputeArea(ld.transformMatrix, &area);
+                wxCHECK_HRESULT_RET(hr);
+                D2D1_GEOMETRY_RELATION geomRel;
+                hr = clipGeometry->CompareWithGeometry(ld.geometry, ld.transformMatrix, &geomRel);
+                wxCHECK_HRESULT_RET(hr);
+                if ( area <= FLT_MIN || geomRel == D2D1_GEOMETRY_RELATION_DISJOINT )
+                {
+                    wxCOMPtr<ID2D1RectangleGeometry> nullGeometry;
+                    hr = m_direct2dFactory->CreateRectangleGeometry(
+                                D2D1::RectF(0.0F, 0.0F, 0.0F, 0.0F), &nullGeometry);
+                    wxCHECK_HRESULT_RET(hr);
+
+                    clipGeometry.reset();
+                    clipGeometry = nullGeometry;
+                    break;
+                }
+
+                wxCOMPtr<ID2D1PathGeometry> pathGeometryClip;
+                hr = m_direct2dFactory->CreatePathGeometry(&pathGeometryClip);
+                wxCHECK_HRESULT_RET(hr);
+                wxCOMPtr<ID2D1GeometrySink> pGeometrySink;
+                hr = pathGeometryClip->Open(&pGeometrySink);
+                wxCHECK_HRESULT_RET(hr);
+
+                hr = clipGeometry->CombineWithGeometry(ld.geometry, D2D1_COMBINE_MODE_INTERSECT,
+                                                       ld.transformMatrix, pGeometrySink);
+                wxCHECK_HRESULT_RET(hr);
+                hr = pGeometrySink->Close();
+                wxCHECK_HRESULT_RET(hr);
+                pGeometrySink.reset();
+
+                clipGeometry = pathGeometryClip;
+                pathGeometryClip.reset();
+            }
+        }
+
+        // Final clipping geometry is given in device coordinates
+        // so we need to transform its bounds to logical coordinates.
+        D2D1::Matrix3x2F currTransform;
+        GetRenderTarget()->GetTransform(&currTransform);
+        currTransform.Invert();
+
+        D2D1_RECT_F bounds;
+        // First check if clip region is empty.
+        FLOAT clipArea;
+        hr = clipGeometry->ComputeArea(currTransform, &clipArea);
+        wxCHECK_HRESULT_RET(hr);
+        if ( clipArea <= FLT_MIN )
+        {
+            bounds.left = bounds.top = bounds.right = bounds.bottom = 0.0F;
+        }
+        else
+        {
+            // If it is not empty then get it bounds.
+            hr = clipGeometry->GetBounds(currTransform, &bounds);
+            wxCHECK_HRESULT_RET(hr);
+        }
+
+        m_clipX1 = bounds.left;
+        m_clipY1 = bounds.top;
+        m_clipX2 = bounds.right;
+        m_clipY2 = bounds.bottom;
+        m_isClipBoxValid = true;
+    }
+
+    if ( x )
+        *x = m_clipX1;
+    if ( y )
+        *y = m_clipY1;
+    if ( w )
+        *w = m_clipX2 - m_clipX1;
+    if ( h )
+        *h = m_clipY2 - m_clipY1;
 }
 
 void* wxD2DContext::GetNativeContext()
@@ -3628,31 +3846,83 @@ bool wxD2DContext::SetCompositionMode(wxCompositionMode compositionMode)
 
 void wxD2DContext::BeginLayer(wxDouble opacity)
 {
-    wxCOMPtr<ID2D1Layer> layer;
-    GetRenderTarget()->CreateLayer(&layer);
-    m_layers.push(layer);
+    EnsureInitialized();
 
-    GetRenderTarget()->PushLayer(
-        D2D1::LayerParameters(D2D1::InfiniteRect(),
-            NULL,
-            D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
-            D2D1::IdentityMatrix(), opacity),
-        layer);
+    wxCOMPtr<ID2D1Layer> layer;
+    HRESULT hr = GetRenderTarget()->CreateLayer(&layer);
+    wxCHECK_HRESULT_RET(hr);
+
+    LayerData ld;
+    ld.type = OTHER_LAYER;
+    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(),
+                        NULL,
+                        D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
+                        D2D1::IdentityMatrix(), opacity);
+    ld.layer = layer;
+    // We need to store CTM to be able to re-apply
+    // the layer at the original position later on.
+    GetRenderTarget()->GetTransform(&ld.transformMatrix);
+
+    GetRenderTarget()->PushLayer(ld.params, layer);
+
+    // Store layer parameters.
+    m_layers.push(ld);
 }
 
 void wxD2DContext::EndLayer()
 {
-    if (!m_layers.empty())
+    wxStack<LayerData> layersToRestore;
+    // Temporarily remove all clipping layers
+    // above the first standard layer
+    // and next permanently remove this layer.
+    while ( !m_layers.empty() )
     {
-        wxCOMPtr<ID2D1Layer> topLayer = m_layers.top();
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
+        if ( ld.type == CLIP_LAYER )
+        {
+            GetRenderTarget()->PopLayer();
+            layersToRestore.push(ld);
+            continue;
+        }
+
+        // We found a non-clipping layer to remove.
         GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        break;
+    }
 
+    if ( m_layers.empty() )
+    {
         HRESULT hr = GetRenderTarget()->Flush();
         wxCHECK_HRESULT_RET(hr);
-
-        m_layers.pop();
     }
+
+    // Re-apply all stored clipping layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        if ( ld.type == CLIP_LAYER )
+        {
+            // Restore layer at original position.
+            GetRenderTarget()->SetTransform(&ld.transformMatrix);
+            GetRenderTarget()->PushLayer(ld.params, ld.layer);
+        }
+        else
+        {
+            wxFAIL_MSG( wxS("Invalid layer type") );
+        }
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
 }
 
 void wxD2DContext::Translate(wxDouble dx, wxDouble dy)
@@ -3694,7 +3964,11 @@ void wxD2DContext::SetTransform(const wxGraphicsMatrix& matrix)
 {
     EnsureInitialized();
 
-    GetRenderTarget()->SetTransform(wxGetD2DMatrixData(matrix)->GetMatrix3x2F());
+    D2D1::Matrix3x2F m;
+    m.SetProduct(wxGetD2DMatrixData(matrix)->GetMatrix3x2F(), m_initTransform);
+    GetRenderTarget()->SetTransform(&m);
+
+    m_isClipBoxValid = false;
 }
 
 wxGraphicsMatrix wxD2DContext::GetTransform() const
@@ -3704,6 +3978,16 @@ wxGraphicsMatrix wxD2DContext::GetTransform() const
     if (GetRenderTarget() != NULL)
     {
         GetRenderTarget()->GetTransform(&transformMatrix);
+
+        if ( m_initTransform.IsInvertible() )
+        {
+            D2D1::Matrix3x2F invMatrix = m_initTransform;
+            invMatrix.Invert();
+
+            D2D1::Matrix3x2F m;
+            m.SetProduct(transformMatrix, invMatrix);
+            transformMatrix = m;
+        }
     }
     else
     {
@@ -3747,23 +4031,65 @@ void wxD2DContext::DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y, wxDouble
 
 void wxD2DContext::PushState()
 {
-    ID2D1Factory* wxGetD2DFactory(wxGraphicsRenderer* renderer);
+    EnsureInitialized();
 
-    wxCOMPtr<ID2D1DrawingStateBlock> drawStateBlock;
-    wxGetD2DFactory(GetRenderer())->CreateDrawingStateBlock(&drawStateBlock);
-    GetRenderTarget()->SaveDrawingState(drawStateBlock);
+    StateData state;
+    m_direct2dFactory->CreateDrawingStateBlock(&state.drawingState);
+    GetRenderTarget()->SaveDrawingState(state.drawingState);
+    state.layers = m_layers;
 
-    m_stateStack.push(drawStateBlock);
+    m_stateStack.push(state);
 }
 
 void wxD2DContext::PopState()
 {
-    wxCHECK_RET(!m_stateStack.empty(), wxT("No state to pop"));
+    wxCHECK_RET(!m_stateStack.empty(), wxS("No state to pop"));
 
-    wxCOMPtr<ID2D1DrawingStateBlock> drawStateBlock = m_stateStack.top();
+    // Remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
+    {
+        LayerData ld = m_layers.top();
+        m_layers.pop();
+
+        GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        ld.geometry.reset();
+    }
+
+    // Retrieve state data.
+    StateData state;
+    state = m_stateStack.top();
     m_stateStack.pop();
 
-    GetRenderTarget()->RestoreDrawingState(drawStateBlock);
+    // Restore all saved layers.
+    wxStack<LayerData> layersToRestore;
+    // We have to restore layers on the stack from "bottom" to "top",
+    // so we have to create a "reverted" stack.
+    while ( !state.layers.empty() )
+    {
+        LayerData ld = state.layers.top();
+        state.layers.pop();
+
+        layersToRestore.push(ld);
+    }
+    // And next set layers from the top of "reverted" stack.
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+
+    // Restore drawing state.
+    GetRenderTarget()->RestoreDrawingState(state.drawingState);
+
+    m_isClipBoxValid = false;
 }
 
 void wxD2DContext::GetTextExtent(
@@ -3773,13 +4099,19 @@ void wxD2DContext::GetTextExtent(
     wxDouble* descent,
     wxDouble* externalLeading) const
 {
+    wxCHECK_RET(!m_font.IsNull(),
+        wxS("wxD2DContext::GetTextExtent - no valid font set"));
+
     wxD2DMeasuringContext::GetTextExtent(
         wxGetD2DFontData(m_font), str, width, height, descent, externalLeading);
 }
 
 void wxD2DContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
-    return wxD2DMeasuringContext::GetPartialTextExtents(
+    wxCHECK_RET(!m_font.IsNull(),
+        wxS("wxD2DContext::GetPartialTextExtents - no valid font set"));
+
+    wxD2DMeasuringContext::GetPartialTextExtents(
         wxGetD2DFontData(m_font), text, widths);
 }
 
@@ -3803,7 +4135,7 @@ bool wxD2DContext::ShouldOffset() const
 void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 {
     wxCHECK_RET(!m_font.IsNull(),
-        wxT("wxGDIPlusContext::DrawText - no valid font set"));
+        wxS("wxD2DContext::DrawText - no valid font set"));
 
     if (m_composition == wxCOMPOSITION_DEST)
         return;
@@ -3825,7 +4157,7 @@ void wxD2DContext::EnsureInitialized()
     if (!m_renderTargetHolder->IsResourceAcquired())
     {
         m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
-        GetRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+        GetRenderTarget()->GetTransform(&m_initTransform);
         GetRenderTarget()->BeginDraw();
     }
     else
@@ -3865,9 +4197,6 @@ void wxD2DContext::AdjustRenderTargetSize()
 void wxD2DContext::ReleaseDeviceDependentResources()
 {
     ReleaseResources();
-
-    m_clipLayer.reset();
-    m_clipLayerAcquired = false;
 }
 
 void wxD2DContext::DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
@@ -3960,12 +4289,48 @@ void wxD2DContext::DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 
 void wxD2DContext::Flush()
 {
-    HRESULT result = m_renderTargetHolder->Flush();
+    wxStack<LayerData> layersToRestore;
+    // Temporarily remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
+    {
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
-    if (result == (HRESULT)D2DERR_RECREATE_TARGET)
+        GetRenderTarget()->PopLayer();
+
+        // Save layer data.
+        layersToRestore.push(ld);
+    }
+
+    HRESULT hr = m_renderTargetHolder->Flush();
+
+    if ( hr == (HRESULT)D2DERR_RECREATE_TARGET )
     {
         ReleaseDeviceDependentResources();
     }
+    else
+    {
+        wxCHECK_HRESULT_RET(hr);
+    }
+
+    // Re-apply all layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
 }
 
 void wxD2DContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY)
@@ -4002,6 +4367,8 @@ public :
     wxGraphicsContext* CreateContextFromNativeContext(void* context) wxOVERRIDE;
 
     wxGraphicsContext* CreateContextFromNativeWindow(void* window) wxOVERRIDE;
+
+    wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) wxOVERRIDE;
 
     wxGraphicsContext* CreateContext(wxWindow* window) wxOVERRIDE;
 
@@ -4143,6 +4510,11 @@ wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeWindow(void* window)
     return new wxD2DContext(this, m_direct2dFactory, (HWND)window);
 }
 
+wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeHDC(WXHDC dc)
+{
+    return new wxD2DContext(this, m_direct2dFactory, (HDC)dc, wxSize(0, 0));
+}
+
 wxGraphicsContext* wxD2DRenderer::CreateContext(wxWindow* window)
 {
     return new wxD2DContext(this, m_direct2dFactory, (HWND)window->GetHWND());
@@ -4277,6 +4649,13 @@ wxImage wxD2DRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 wxGraphicsFont wxD2DRenderer::CreateFont(const wxFont& font, const wxColour& col)
 {
     wxD2DFontData* fontData = new wxD2DFontData(this, GetD2DFactory(), font, col);
+    if ( !fontData->GetFont() )
+    {
+        // Apparently a non-TrueType font is given and hence
+        // corresponding DirectWrite font couldn't be created.
+        delete fontData;
+        return wxNullGraphicsFont;
+    }
 
     wxGraphicsFont graphicsFont;
     graphicsFont.SetRefData(fontData);

@@ -882,6 +882,9 @@
 				RelativePath="..\..\include\wx\msw\winundef.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\winver.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\wrapcctl.h">
 			</File>
 			<File

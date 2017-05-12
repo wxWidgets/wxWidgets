@@ -125,7 +125,7 @@ public:
     wxString& GetPrevLine()  /* const */
         { wxASSERT(m_nCurLine > 0); return m_aLines[--m_nCurLine]; }
     wxString& GetLastLine() /* const */
-        { m_nCurLine = m_aLines.size() - 1; return m_aLines.Last(); }
+        { return m_aLines.empty() ? ms_eof : m_aLines[m_nCurLine = m_aLines.size() - 1]; }
 
     // get the type of the line (see also GetEOL)
     wxTextFileType GetLineType(size_t n) const { return m_aTypes[n]; }

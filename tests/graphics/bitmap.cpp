@@ -17,7 +17,16 @@
 #endif
 
 #include "wx/bitmap.h"
+#include "wx/rawbmp.h"
 #include "wx/dcmemory.h"
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/graphics.h"
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+#define ASSERT_EQUAL_RGB(c, r, g, b) \
+    CPPUNIT_ASSERT_EQUAL( r, (int)c.Red() ); \
+    CPPUNIT_ASSERT_EQUAL( g, (int)c.Green() ); \
+    CPPUNIT_ASSERT_EQUAL( b, (int)c.Blue() )
 
 // ----------------------------------------------------------------------------
 // test class
@@ -34,9 +43,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( BitmapTestCase );
         CPPUNIT_TEST( Mask );
+        CPPUNIT_TEST( OverlappingBlit );
     CPPUNIT_TEST_SUITE_END();
 
     void Mask();
+    void OverlappingBlit();
 
     wxBitmap m_bmp;
 
@@ -80,3 +91,65 @@ void BitmapTestCase::Mask()
     m_bmp.SetMask(mask2);
 }
 
+void BitmapTestCase::OverlappingBlit()
+{
+    m_bmp.SetMask( NULL );
+
+    // Clear to white.
+    {
+    wxMemoryDC dc(m_bmp);
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsContext* gc = dc.GetGraphicsContext();
+    if ( gc )
+    {
+        gc->SetAntialiasMode(wxANTIALIAS_NONE);
+    }
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+    dc.SetBackground( *wxWHITE );
+    dc.Clear();
+
+    // Draw red line across the top.
+
+    dc.SetPen(*wxRED_PEN);
+    dc.DrawLine(0, 0, 10, 0);
+
+    // Scroll down one line.
+
+    dc.Blit( 0, 1, 10, 9, &dc, 0, 0 );
+    } // Select the bitmap out of the memory DC before using it directly.
+    // Now, lines 0 and 1 should be red, lines 2++ should still be white.
+
+    if ( m_bmp.GetDepth() == 32 )
+    {
+        wxAlphaPixelData npd( m_bmp );
+        wxAlphaPixelData::Iterator it( npd );
+
+        ASSERT_EQUAL_RGB( it, 255, 0, 0 );
+        it.OffsetY( npd, 1 );
+        ASSERT_EQUAL_RGB( it, 255, 0, 0 );
+        it.OffsetY( npd, 1 );
+        ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+        it.OffsetY( npd, 1 );
+        ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+    }
+    else
+    {
+        wxNativePixelData npd( m_bmp );
+        wxNativePixelData::Iterator it( npd );
+        if ( !npd )
+        {
+            CPPUNIT_FAIL( "Raw access to bitmap data unavailable" );
+        }
+        else
+        {
+            ASSERT_EQUAL_RGB( it, 255, 0, 0 );
+            it.OffsetY( npd, 1 );
+            ASSERT_EQUAL_RGB( it, 255, 0, 0 );
+            it.OffsetY( npd, 1 );
+            ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+            it.OffsetY( npd, 1 );
+            ASSERT_EQUAL_RGB( it, 255, 255, 255 );
+        }
+    }
+}

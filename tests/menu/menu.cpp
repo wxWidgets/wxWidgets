@@ -21,6 +21,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/menu.h"
+#include "wx/translation.h"
 #include "wx/uiaction.h"
 
 #include <stdarg.h>
@@ -86,6 +87,9 @@ private:
         CPPUNIT_TEST( EnableTop );
         CPPUNIT_TEST( Count );
         CPPUNIT_TEST( Labels );
+#if wxUSE_INTL
+        CPPUNIT_TEST( TranslatedMnemonics );
+#endif // wxUSE_INTL
         CPPUNIT_TEST( RadioItems );
         CPPUNIT_TEST( RemoveAdd );
         CPPUNIT_TEST( ChangeBitmap );
@@ -99,6 +103,9 @@ private:
     void EnableTop();
     void Count();
     void Labels();
+#if wxUSE_INTL
+    void TranslatedMnemonics();
+#endif // wxUSE_INTL
     void RadioItems();
     void RemoveAdd();
     void ChangeBitmap();
@@ -333,6 +340,58 @@ void MenuTestCase::Labels()
     CPPUNIT_ASSERT_EQUAL( "Foo", itemFoo->GetItemLabelText() );
     CPPUNIT_ASSERT_EQUAL( "Foo", wxMenuItem::GetLabelText("&Foo\tCtrl-F") );
 }
+
+#if wxUSE_INTL
+
+static wxString
+GetTranslatedString(const wxTranslations& trans, const wxString& s)
+{
+    const wxString* t = trans.GetTranslatedString(s);
+    return t ? *t : s;
+}
+
+void MenuTestCase::TranslatedMnemonics()
+{
+    // Check that appended mnemonics are correctly stripped;
+    // see http://trac.wxwidgets.org/ticket/16736
+    wxTranslations trans;
+    trans.SetLanguage(wxLANGUAGE_JAPANESE);
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+    CPPUNIT_ASSERT( trans.AddCatalog("internat") );
+
+    // Check the translation is being used:
+    CPPUNIT_ASSERT( wxString("&File") != GetTranslatedString(trans, "&File") );
+
+    wxString filemenu = m_frame->GetMenuBar()->GetMenuLabel(0);
+    CPPUNIT_ASSERT_EQUAL
+    (
+         wxStripMenuCodes(GetTranslatedString(trans, "&File")),
+         wxStripMenuCodes(GetTranslatedString(trans, filemenu))
+    );
+
+    // Test strings that have shortcuts. Duplicate non-mnemonic translations
+    // exist for both "Edit" and "View", for ease of comparison
+    CPPUNIT_ASSERT_EQUAL
+    (
+         GetTranslatedString(trans, "Edit"),
+         wxStripMenuCodes(GetTranslatedString(trans, "E&dit\tCtrl+E"))
+    );
+
+    // "Vie&w" also has a space before the (&W)
+    CPPUNIT_ASSERT_EQUAL
+    (
+         GetTranslatedString(trans, "View"),
+         wxStripMenuCodes(GetTranslatedString(trans, "Vie&w\tCtrl+V"))
+    );
+
+    // Test a 'normal' mnemonic too: the translation is "Preten&d"
+    CPPUNIT_ASSERT_EQUAL
+    (
+         "Pretend",
+         wxStripMenuCodes(GetTranslatedString(trans, "B&ogus"))
+    );
+}
+#endif // wxUSE_INTL
 
 void MenuTestCase::RadioItems()
 {

@@ -92,7 +92,7 @@ public:
         m_icon = icon;
     }
 
-    virtual bool AddAction(wxWindowID WXUNUSED(actionid), const wxString &WXUNUSED(label))
+    virtual bool AddAction(wxWindowID WXUNUSED(actionid), const wxString &WXUNUSED(label)) wxOVERRIDE
     {
         // Actions are not supported in balloon notifications
         return false;
@@ -341,15 +341,25 @@ bool wxNotificationMessage::MSWUseToasts(
     const wxString& shortcutPath,
     const wxString& appId)
 {
+#if wxUSE_WINRT
     return wxToastNotificationHelper::UseToasts(shortcutPath, appId);
+#else
+    wxUnusedVar(shortcutPath);
+    wxUnusedVar(appId);
+    return false;
+#endif
 }
 
 void wxNotificationMessage::Init()
 {
+#if wxUSE_WINRT
     if ( wxToastNotificationHelper::IsEnabled() )
         m_impl = wxToastNotificationHelper::CreateInstance(this);
     else
+#endif
+    {
         m_impl = new wxBalloonNotifMsgImpl(this);
+    }
 }
 
 #endif // wxUSE_NOTIFICATION_MESSAGE && wxUSE_TASKBARICON

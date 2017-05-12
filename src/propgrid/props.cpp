@@ -352,8 +352,7 @@ template<typename T>
 bool NumericValidation( const wxPGProperty* property,
                         T& value,
                         wxPGValidationInfo* pValidationInfo,
-                        int mode, T defMin, T defMax,
-                        const wxString& strFmt )
+                        int mode, T defMin, T defMax)
 {
     T min = defMin;
     T max = defMax;
@@ -380,16 +379,20 @@ bool NumericValidation( const wxPGProperty* property,
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
             {
                 wxString msg;
-                wxString smin = wxString::Format(strFmt, min);
-                wxString smax = wxString::Format(strFmt, max);
+                wxVariant vmin = WXVARIANT(min);
+                wxString smin = property->ValueToString(vmin);
                 if ( !maxOk )
                     msg = wxString::Format(
                                 _("Value must be %s or higher."),
                                 smin.c_str());
                 else
+                {
+                    wxVariant vmax = WXVARIANT(max);
+                    wxString smax = property->ValueToString(vmax);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
                                 smin.c_str(), smax.c_str());
+                }
                 pValidationInfo->SetFailureMessage(msg);
             }
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
@@ -407,16 +410,20 @@ bool NumericValidation( const wxPGProperty* property,
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
             {
                 wxString msg;
-                wxString smin = wxString::Format(strFmt, min);
-                wxString smax = wxString::Format(strFmt, max);
+                wxVariant vmax = WXVARIANT(max);
+                wxString smax = property->ValueToString(vmax);
                 if ( !minOk )
                     msg = wxString::Format(
                                 _("Value must be %s or less."),
                                 smax.c_str());
                 else
+                {
+                    wxVariant vmin = WXVARIANT(min);
+                    wxString smin = property->ValueToString(vmin);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
                                 smin.c_str(), smax.c_str());
+                }
                 pValidationInfo->SetFailureMessage(msg);
             }
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
@@ -436,8 +443,7 @@ template<>
 bool NumericValidation( const wxPGProperty* property,
                         double& value,
                         wxPGValidationInfo* pValidationInfo,
-                        int mode, double defMin, double defMax,
-                        const wxString& strFmt )
+                        int mode, double defMin, double defMax)
 {
     double min = defMin;
     double max = defMax;
@@ -487,16 +493,20 @@ bool NumericValidation( const wxPGProperty* property,
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
             {
                 wxString msg;
-                wxString smin = wxString::Format(strFmt, min);
-                wxString smax = wxString::Format(strFmt, max);
+                wxVariant vmin = WXVARIANT(min);
+                wxString smin = property->ValueToString(vmin);
                 if ( !maxOk )
                     msg = wxString::Format(
                                 _("Value must be %s or higher."),
                                 smin.c_str());
                 else
+                {
+                    wxVariant vmax = WXVARIANT(max);
+                    wxString smax = property->ValueToString(vmax);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
                                 smin.c_str(), smax.c_str());
+                }
                 pValidationInfo->SetFailureMessage(msg);
             }
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
@@ -514,16 +524,20 @@ bool NumericValidation( const wxPGProperty* property,
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
             {
                 wxString msg;
-                wxString smin = wxString::Format(strFmt, min);
-                wxString smax = wxString::Format(strFmt, max);
+                wxVariant vmax = WXVARIANT(max);
+                wxString smax = property->ValueToString(vmax);
                 if ( !minOk )
                     msg = wxString::Format(
                                 _("Value must be %s or less."),
                                 smax.c_str());
                 else
+                {
+                    wxVariant vmin = WXVARIANT(min);
+                    wxString smin = property->ValueToString(vmin);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
                                 smin.c_str(), smax.c_str());
+                }
                 pValidationInfo->SetFailureMessage(msg);
             }
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
@@ -536,19 +550,29 @@ bool NumericValidation( const wxPGProperty* property,
     return true;
 }
 
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
+#if wxUSE_LONGLONG
+bool wxIntProperty::DoValidation( const wxPGProperty* property,
+                                  wxLongLong& value,
+                                  wxPGValidationInfo* pValidationInfo,
+                                  int mode )
+{
+    return NumericValidation<wxLongLong>(property,
+                                           value,
+                                           pValidationInfo,
+                                           mode, wxLongLong(LLONG_MIN), wxLongLong(LLONG_MAX));
+}
+
+#if defined(wxLongLong_t)
 bool wxIntProperty::DoValidation( const wxPGProperty* property,
                                   wxLongLong_t& value,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode )
 {
-    return NumericValidation<wxLongLong_t>(property,
-                                           value,
-                                           pValidationInfo,
-                                           mode, LLONG_MIN, LLONG_MAX,
-                                           wxS("%") wxS(wxLongLongFmtSpec) wxS("d"));
+    wxLongLong llval(value);
+    return DoValidation(property, llval, pValidationInfo, mode);
 }
-#endif
+#endif // wxLongLong_t
+#endif // wxUSE_LONGLONG
 
 bool wxIntProperty::DoValidation(const wxPGProperty* property,
                                  long& value,
@@ -556,14 +580,14 @@ bool wxIntProperty::DoValidation(const wxPGProperty* property,
                                  int mode)
 {
     return NumericValidation<long>(property, value, pValidationInfo,
-                                   mode, LONG_MIN, LONG_MAX, wxS("%ld"));
+                                   mode, LONG_MIN, LONG_MAX);
 }
 
 bool wxIntProperty::ValidateValue( wxVariant& value,
                                    wxPGValidationInfo& validationInfo ) const
 {
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
-    wxLongLong_t ll = value.GetLongLong().GetValue();
+#if wxUSE_LONGLONG
+    wxLongLong ll = value.GetLongLong();
 #else
     long ll = value.GetLong();
 #endif
@@ -607,25 +631,6 @@ enum
     wxPG_UINT_TEMPLATE_MAX
 };
 
-static const wxStringCharType* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
-    wxS("%lx"),wxS("0x%lx"),wxS("$%lx"),
-    wxS("%lX"),wxS("0x%lX"),wxS("$%lX"),
-    wxS("%lu"),wxS("%lo")
-};
-
-#if wxUSE_LONGLONG
-static const wxStringCharType* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
-    wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
-    wxS("0x%") wxS(wxLongLongFmtSpec) wxS("x"),
-    wxS("$%") wxS(wxLongLongFmtSpec) wxS("x"),
-    wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
-    wxS("0x%") wxS(wxLongLongFmtSpec) wxS("X"),
-    wxS("$%") wxS(wxLongLongFmtSpec) wxS("X"),
-    wxS("%") wxS(wxLongLongFmtSpec) wxS("u"),
-    wxS("%") wxS(wxLongLongFmtSpec) wxS("o")
-};
-#endif // wxUSE_LONGLONG
-
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxPGProperty,TextCtrl)
 
 void wxUIntProperty::Init()
@@ -653,9 +658,52 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
 
 wxUIntProperty::~wxUIntProperty() { }
 
-wxString wxUIntProperty::ValueToString( wxVariant& value,
-                                        int WXUNUSED(argFlags) ) const
+wxString wxUIntProperty::ValueToString(wxVariant& value, int argFlags) const
 {
+    static const wxStringCharType* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] =
+    {
+        wxS("%lx"), wxS("0x%lx"), wxS("$%lx"),
+        wxS("%lX"), wxS("0x%lX"), wxS("$%lX"),
+        wxS("%lu"), wxS("%lo")
+    };
+
+    // In the edit mode we want to display just the numeric value,
+    // without prefixes.
+    static const wxStringCharType* const gs_uintEditTemplates32[wxPG_UINT_TEMPLATE_MAX] =
+    {
+        wxS("%lx"), wxS("%lx"), wxS("%lx"),
+        wxS("%lX"), wxS("%lX"), wxS("%lX"),
+        wxS("%lu"), wxS("%lo")
+    };
+
+#if wxUSE_LONGLONG
+    static const wxStringCharType* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] =
+    {
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("0x%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("$%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("0x%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("$%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("u"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("o")
+    };
+
+    // In the edit mode we want to display just the numeric value,
+    // without prefixes.
+    static const wxStringCharType* const gs_uintEditTemplates64[wxPG_UINT_TEMPLATE_MAX] =
+    {
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("u"),
+        wxS("%") wxS(wxLongLongFmtSpec) wxS("o")
+    };
+#endif // wxUSE_LONGLONG
+
     size_t index = m_base + m_prefix;
     if ( index >= wxPG_UINT_TEMPLATE_MAX )
         index = wxPG_UINT_DEC;
@@ -663,14 +711,19 @@ wxString wxUIntProperty::ValueToString( wxVariant& value,
     const wxString valType(value.GetType());
     if ( valType == wxPG_VARIANT_TYPE_LONG )
     {
-        return wxString::Format(gs_uintTemplates32[index],
-                                (unsigned long)value.GetLong());
+        const wxStringCharType* fmt = argFlags & wxPG_EDITABLE_VALUE ?
+                                        gs_uintEditTemplates32[index] :
+                                        gs_uintTemplates32[index];
+        return wxString::Format(fmt, (unsigned long)value.GetLong());
     }
 #if wxUSE_LONGLONG
     else if ( valType == wxPG_VARIANT_TYPE_ULONGLONG )
     {
+        const wxStringCharType* fmt = argFlags & wxPG_EDITABLE_VALUE ?
+                                        gs_uintEditTemplates64[index] :
+                                        gs_uintTemplates64[index];
         wxULongLong ull = value.GetULongLong();
-        return wxString::Format(gs_uintTemplates64[index], ull.GetValue());
+        return wxString::Format(fmt, ull.GetValue());
     }
 #endif
     return wxEmptyString;
@@ -743,17 +796,27 @@ bool wxUIntProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(ar
     return false;
 }
 
-#if defined(wxULongLong_t) && wxUSE_LONGLONG
+#if wxUSE_LONGLONG
+bool wxUIntProperty::DoValidation(const wxPGProperty* property,
+                                  wxULongLong& value,
+                                  wxPGValidationInfo* pValidationInfo,
+                                  int mode )
+{
+    return NumericValidation<wxULongLong>(property, value, pValidationInfo,
+                                            mode, wxULongLong(0), wxULongLong(ULLONG_MAX));
+}
+
+#if defined(wxULongLong_t)
 bool wxUIntProperty::DoValidation(const wxPGProperty* property,
                                   wxULongLong_t& value,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode )
 {
-    return NumericValidation<wxULongLong_t>(property, value, pValidationInfo,
-                                            mode, 0, ULLONG_MAX,
-                                            wxS("%") wxS(wxLongLongFmtSpec) wxS("u"));
+    wxULongLong ullval(value);
+    return DoValidation(property, ullval, pValidationInfo, mode);
 }
-#endif
+#endif // wxULongLong_t
+#endif // wxUSE_LONGLONG
 
 bool wxUIntProperty::DoValidation(const wxPGProperty* property,
                                   long& value,
@@ -761,13 +824,13 @@ bool wxUIntProperty::DoValidation(const wxPGProperty* property,
                                   int mode)
 {
     return NumericValidation<long>(property, value, pValidationInfo,
-                                   mode, 0, ULONG_MAX, wxS("%ld"));
+                                   mode, 0, ULONG_MAX);
 }
 
 bool wxUIntProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& validationInfo ) const
 {
-#if defined(wxULongLong_t) && wxUSE_LONGLONG
-    wxULongLong_t uul = value.GetULongLong().GetValue();
+#if wxUSE_LONGLONG
+    wxULongLong uul = value.GetULongLong();
 #else
     long uul = value.GetLong();
 #endif
@@ -957,8 +1020,7 @@ bool wxFloatProperty::DoValidation( const wxPGProperty* property,
     return NumericValidation<double>(property,
                                      value,
                                      pValidationInfo,
-                                     mode, DBL_MIN, DBL_MAX,
-                                     wxS("%g"));
+                                     mode, DBL_MIN, DBL_MAX);
 }
 
 bool

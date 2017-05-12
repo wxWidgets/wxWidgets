@@ -51,32 +51,8 @@ typedef HRESULT (WINAPI *SHGetKnownFolderPath_t)(const GUID&, DWORD, HANDLE, PWS
 // used in our wxLogTrace messages
 #define TRACE_MASK wxT("stdpaths")
 
-#ifndef CSIDL_APPDATA
-    #define CSIDL_APPDATA         0x001a
-#endif
-
-#ifndef CSIDL_LOCAL_APPDATA
-    #define CSIDL_LOCAL_APPDATA   0x001c
-#endif
-
-#ifndef CSIDL_COMMON_APPDATA
-    #define CSIDL_COMMON_APPDATA  0x0023
-#endif
-
-#ifndef CSIDL_PROGRAM_FILES
-    #define CSIDL_PROGRAM_FILES   0x0026
-#endif
-
 #ifndef CSIDL_PERSONAL
     #define CSIDL_PERSONAL        0x0005
-#endif
-
-#ifndef SHGFP_TYPE_CURRENT
-    #define SHGFP_TYPE_CURRENT 0
-#endif
-
-#ifndef SHGFP_TYPE_DEFAULT
-    #define SHGFP_TYPE_DEFAULT 1
 #endif
 
 // ----------------------------------------------------------------------------
@@ -223,6 +199,9 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
     int csidl;
     switch (userDir)
     {
+        case Dir_Cache:
+            csidl = CSIDL_LOCAL_APPDATA;
+            break;
         case Dir_Desktop:
             csidl = CSIDL_DESKTOPDIRECTORY;
             break;
@@ -364,6 +343,16 @@ wxString wxStandardPaths::GetPluginsDir() const
     // there is no standard location for plugins, suppose they're in the same
     // directory as the .exe
     return GetAppDir();
+}
+
+
+wxString
+wxStandardPaths::MakeConfigFileName(const wxString& basename,
+                                    ConfigFileConv WXUNUSED(conv)) const
+{
+    wxFileName fn(wxEmptyString, basename);
+    fn.SetExt(wxT("ini"));
+    return fn.GetFullName();
 }
 
 // ============================================================================

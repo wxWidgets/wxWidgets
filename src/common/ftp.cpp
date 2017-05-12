@@ -459,20 +459,21 @@ wxString wxFTP::Pwd()
     {
         // the result is at least that long if CheckCommand() succeeded
         wxString::const_iterator p = m_lastResult.begin() + LEN_CODE + 1;
-        if ( *p != wxT('"') )
+        const wxString::const_iterator end = m_lastResult.end();
+        if ( p == end || *p != wxT('"') )
         {
             wxLogDebug(wxT("Missing starting quote in reply for PWD: %s"),
-                       wxString(p, m_lastResult.end()));
+                       wxString(p, end));
         }
         else
         {
-            for ( ++p; *p; ++p )
+            for ( ++p; p != end; ++p )
             {
                 if ( *p == wxT('"') )
                 {
                     // check if the quote is doubled
                     ++p;
-                    if ( !*p || *p != wxT('"') )
+                    if ( p == end || *p != wxT('"') )
                     {
                         // no, this is the end
                         break;
@@ -484,7 +485,7 @@ wxString wxFTP::Pwd()
                 path += *p;
             }
 
-            if ( !*p )
+            if ( p != end )
             {
                 wxLogDebug(wxT("Missing ending quote in reply for PWD: %s"),
                            m_lastResult.c_str() + LEN_CODE + 1);

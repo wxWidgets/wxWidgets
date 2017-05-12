@@ -790,39 +790,6 @@ public:
 #define wxIMPLEMENT_CLASS2( className, baseClassName1, baseClassName2 )
 
 /**
-    Same as @c const_cast<T>(x) if the compiler supports const cast or @c (T)x for
-    old compilers. Unlike wxConstCast(), the cast it to the type @c T and not to
-    <tt>T *</tt> and also the order of arguments is the same as for the standard cast.
-
-    @header{wx/defs.h}
-
-    @see wx_reinterpret_cast(), wx_static_cast()
-*/
-#define wx_const_cast(T, x)
-
-/**
-    Same as @c reinterpret_cast<T>(x) if the compiler supports reinterpret cast or
-    @c (T)x for old compilers.
-
-    @header{wx/defs.h}
-
-    @see wx_const_cast(), wx_static_cast()
-*/
-#define wx_reinterpret_cast(T, x)
-
-/**
-    Same as @c static_cast<T>(x) if the compiler supports static cast or @c (T)x for
-    old compilers. Unlike wxStaticCast(), there are no checks being done and
-    the meaning of the macro arguments is exactly the same as for the standard
-    static cast, i.e. @a T is the full type name and star is not appended to it.
-
-    @header{wx/defs.h}
-
-    @see wx_const_cast(), wx_reinterpret_cast(), wx_truncate_cast()
-*/
-#define wx_static_cast(T, x)
-
-/**
     This case doesn’t correspond to any standard cast but exists solely to make
     casts which possibly result in a truncation of an integer value more
     readable.
@@ -837,7 +804,7 @@ public:
 
     @header{wx/defs.h}
 
-    @see wx_const_cast(), wxDynamicCast(), wxStaticCast()
+    @see wxDynamicCast(), wxStaticCast()
 */
 #define wxConstCast( ptr, classname )
 
@@ -889,7 +856,7 @@ public:
 
     @header{wx/object.h}
 
-    @see wx_static_cast(), wxDynamicCast(), wxConstCast()
+    @see wxDynamicCast(), wxConstCast()
 */
 #define wxStaticCast( ptr, classname )
 

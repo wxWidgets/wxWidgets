@@ -216,9 +216,12 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
         {
             case NSRunContinuesResponse:
             {
+                [[NSRunLoop currentRunLoop]
+                        runMode:NSDefaultRunLoopMode
+                        beforeDate:[NSDate dateWithTimeIntervalSinceNow: timeout/1000.0]];
                 if ( [[NSApplication sharedApplication]
                         nextEventMatchingMask: NSAnyEventMask
-                        untilDate: [NSDate dateWithTimeIntervalSinceNow: timeout/1000.0]
+                        untilDate: nil
                         inMode: NSDefaultRunLoopMode
                         dequeue: NO] != nil )
                     return 1;

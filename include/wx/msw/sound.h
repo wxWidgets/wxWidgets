@@ -36,7 +36,7 @@ protected:
     bool CheckCreatedOk();
     void Free();
 
-    virtual bool DoPlay(unsigned flags) const;
+    virtual bool DoPlay(unsigned flags) const wxOVERRIDE;
 
 private:
     // data of this object

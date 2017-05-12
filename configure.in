@@ -139,7 +139,7 @@ dnl SHARED_LIB_SETUP to find the exact place
 case "${host}" in
   *-hp-hpux* )
     USE_HPUX=1
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
     AC_DEFINE(__HPUX__)
 
@@ -171,7 +171,7 @@ case "${host}" in
     USE_SVR4=1
     AC_DEFINE(__SGI__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-qnx*)
     USE_QNX=1
@@ -185,7 +185,7 @@ case "${host}" in
     AC_DEFINE(__SUN__)
     AC_DEFINE(__SOLARIS__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-sunos4* )
@@ -195,7 +195,7 @@ case "${host}" in
     AC_DEFINE(__SUN__)
     AC_DEFINE(__SUNOS__)
     AC_DEFINE(__BSD__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-freebsd*)
     USE_BSD=1
@@ -228,7 +228,7 @@ case "${host}" in
     USE_OSF=1
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__OSF__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-dgux5* )
@@ -236,14 +236,14 @@ case "${host}" in
     USE_SVR4=1
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-sysv5* )
     USE_SYSV=1
     USE_SVR4=1
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-aix* )
     USE_AIX=1
@@ -252,7 +252,7 @@ case "${host}" in
     AC_DEFINE(__AIX__)
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
-    DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
 
   *-*-*UnixWare*)
@@ -642,6 +642,7 @@ WX_ARG_ENABLE(std_containers_compat, [  --enable-std_containers_compat     use s
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
 WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
+WX_ARG_DISABLE(unsafe_conv_in_wxstring,     [ --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString], wxUSE_UNSAFE_WXSTRING_CONV)
 WX_ARG_DISABLE(unicode,      [  --disable-unicode       compile without Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
 WX_ARG_ENABLE(utf8only,      [  --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
@@ -748,8 +749,9 @@ WX_ARG_FEATURE(threads,     [  --enable-threads        use threads], wxUSE_THREA
 if test "$wxUSE_MSW" = 1 ; then
 WX_ARG_DISABLE(dbghelp,     [  --enable-dbghelp        use dbghelp.dll API (Win32 only)], wxUSE_DBGHELP)
 WX_ARG_ENABLE(iniconf,      [  --enable-iniconf        use wxIniConfig (Win32 only)], wxUSE_INICONF)
-WX_ARG_FEATURE(regkey,      [  --enable-regkey         use wxRegKey class (Win32 only)], wxUSE_REGKEY)
 fi
+
+WX_ARG_FEATURE(regkey,      [  --enable-regkey         use wxRegKey class (Win32 only)], wxUSE_REGKEY)
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -969,6 +971,10 @@ WX_ARG_FEATURE(wizarddlg,   [  --enable-wizarddlg      use wxWizard], wxUSE_WIZA
 dnl ---------------------------------------------------------------------------
 dnl misc GUI options
 dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_MSW" = 1 ; then
+    DEFAULT_wxUSE_ACCESSIBILITY=yes
+fi
 
 WX_ARG_FEATURE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes], wxUSE_MENUS)
 WX_ARG_FEATURE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
@@ -1802,9 +1808,6 @@ if test "$HAVE_CXX11" != "1" ; then
 dnl check for iostream (as opposed to iostream.h) standard header
 WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 
-dnl check whether C++ compiler supports explicit keyword
-WX_CPP_EXPLICIT
-
 dnl the next few tests are all for C++ features and so need to be done using
 dnl C++ compiler
 AC_LANG_PUSH(C++)
@@ -2267,6 +2270,9 @@ fi
 AC_LANG_POP()
 
 fi dnl End of pre-C++11 only checks section
+
+dnl Find pkg-config outside of any conditional.  Done before any PKG_* call.
+PKG_PROG_PKG_CONFIG
 
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
@@ -2780,8 +2786,10 @@ if test "$wxUSE_GUI" = "yes"; then
                     dnl looks better in AC_MSG_RESULT
                     wx_cv_lib_gtk=none
                 else
-                    dnl we use symbols from X11 directly so we should link with it
-                    GTK_LIBS="$GTK_LIBS -lX11"
+                    if test "$USE_WIN32" != 1 ; then
+                        dnl we use symbols from X11 directly so we should link with it
+                        GTK_LIBS="$GTK_LIBS -lX11"
+                    fi
 
                     dnl we need to cache GTK_CFLAGS and GTK_LIBS for the
                     dnl subsequent runs
@@ -2942,8 +2950,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
     fi
 
     if test "$wxUSE_DFB" = 1; then
-       PKG_PROG_PKG_CONFIG()
-
        PKG_CHECK_MODULES(DIRECTFB,
                          [directfb >= 0.9.23],
                          [
@@ -2992,8 +2998,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         fi
 
         if test "$wxUSE_UNICODE" = "yes"; then
-            PKG_PROG_PKG_CONFIG()
-
             PKG_CHECK_MODULES(PANGOXFT, pangoxft,
                 [
                     AC_DEFINE(HAVE_PANGO_XFT)
@@ -3040,7 +3044,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found in $ac_find_includes)
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
+            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
         else
             save_CFLAGS=$CFLAGS
             CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
@@ -3074,7 +3078,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             AC_MSG_RESULT(found in $ac_find_libraries)
 
             WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
         else
             dnl it might happen that we found headers in one of the standard
             dnl paths but the libs are elsewhere but still in default (linker)
@@ -3115,7 +3119,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 for libsm_ice in "" " -lSM -lICE"; do
                     if test "$libs_found" = 0; then
                         save_LIBS="$LIBS"
-                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
+                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt ${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
                         CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
@@ -3134,7 +3138,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                                 libp_link="$libp"
                                 libsm_ice_link="$libsm_ice"
                                 AC_MSG_RESULT(
-                                    [need${libp_link}${libsm_ice_link}])
+                                    [need ${libp_link} ${libsm_ice_link}])
                                 libs_found=1
                             ], []
                         )
@@ -3197,7 +3201,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         CFLAGS=$save_CFLAGS
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY${libsgm_link} -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY ${libsgm_link} -lXm ${libp_link} -lXmu -lXext -lXt ${libsm_ice_link} -lX11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
     fi
@@ -3210,7 +3214,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             WX_PATH_FIND_LIBRARIES(Xpm)
             if test "$ac_find_libraries" != "" ; then
                 WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
                 AC_MSG_RESULT(found in $ac_find_libraries)
 
                 AC_CACHE_CHECK([for X11/xpm.h],
@@ -3292,8 +3296,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
 
     if test "$wxUSE_QT" = 1; then
-        PKG_PROG_PKG_CONFIG()
-
         PKG_CHECK_MODULES(QT5,
                           [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test],
             [
@@ -3483,7 +3485,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                         if test "$ac_path_to_link" != " -L/usr/lib" -a \
                                 "$ac_path_to_link" != "$LDFLAGS_GL" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
 
@@ -3498,7 +3500,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                       if test "$ac_find_libraries" != "std" ; then
                         WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
                         if test "$ac_path_to_link" != " -L/usr/lib" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL$ac_path_to_link"
+                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
                       OPENGL_LIBS="-lMesaGL -lMesaGLU"
@@ -4115,7 +4117,9 @@ if test "$TOOLKIT" != "MSW"; then
 
 dnl check for available version of iconv()
 if test "$wxUSE_LIBICONV" != "no" ; then
+    AC_LANG_PUSH(C++)
     AM_ICONV
+    AC_LANG_POP()
     LIBS="$LIBICONV $LIBS"
 fi
 
@@ -4341,7 +4345,7 @@ fi
 
 dnl check for fcntl() or at least flock() needed by Unix implementation of
 dnl wxSingleInstanceChecker
-if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
+if test "$wxUSE_SNGLINST_CHECKER" = "yes" -a "$USE_WIN32" != 1 ; then
     AC_CHECK_FUNCS(fcntl flock, break)
 
     if test "$ac_cv_func_fcntl" != "yes" -a "$ac_cv_func_flock" != "yes"; then
@@ -5199,7 +5203,7 @@ if test "$TOOLKIT" != "MSW"; then
                             [
                                 AC_DEFINE(HAVE_DLOPEN)
                                 HAVE_DL_FUNCS=1
-                                DL_LINK=" -ldl$DL_LINK"
+                                DL_LINK="-ldl $DL_LINK"
                             ],
                             [
                                 AC_CHECK_FUNCS(shl_load,
@@ -5211,7 +5215,7 @@ if test "$TOOLKIT" != "MSW"; then
                                                 AC_CHECK_LIB(shl_load, dld,
                                                              [
                                                                 HAVE_SHL_FUNCS=1
-                                                                DL_LINK=" -ldld$DL_LINK"
+                                                                DL_LINK="-ldld $DL_LINK"
                                                              ])
                                               ])
                             ])
@@ -5289,10 +5293,10 @@ dnl File system watcher checks
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_FSWATCHER" = "yes"; then
-    dnl wxFileSystemWatcher is always available under MSW but we need either
+    dnl wxFileSystemWatcher is always available under Windows but we need either
     dnl inotify or kqueue support in the system for it under Unix (this
     dnl includes OS X which does have kqueue but no other platforms)
-    if test "$wxUSE_MSW" != "1"; then
+    if test "$USE_WIN32" != 1; then
         if test "$wxUSE_UNIX" = "yes"; then
             AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
             if test "$ac_cv_header_sys_inotify_h" = "yes"; then
@@ -5421,14 +5425,24 @@ WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
   if test "$USE_UNIX" = 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
-      AM_PATH_SDL([1.2.0],
+      PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
                   [
                     EXTRALIBS_SDL="$SDL_LIBS"
                     CFLAGS="$SDL_CFLAGS $CFLAGS"
                     CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
                     AC_DEFINE(wxUSE_LIBSDL)
                   ],
-                  [wxUSE_LIBSDL="no"])
+                  [
+                    AC_MSG_NOTICE([SDL 2.0 not available. Falling back to 1.2.])
+                    AM_PATH_SDL([1.2.0],
+                                [
+                                  EXTRALIBS_SDL="$SDL_LIBS"
+                                  CFLAGS="$SDL_CFLAGS $CFLAGS"
+                                  CXXFLAGS="$SDL_CFLAGS $CXXFLAGS"
+                                  AC_DEFINE(wxUSE_LIBSDL)
+                                ],
+                                [wxUSE_LIBSDL="no"])
+		  ])
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1
       fi
@@ -5442,8 +5456,6 @@ if test "$wxUSE_SOUND" = "yes"; then
 fi
 
 if test "$WXGTK2" = 1; then
-    PKG_PROG_PKG_CONFIG()
-
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
 
         if test "$wxUSE_GTKPRINT" = "yes" ; then
@@ -5664,6 +5676,10 @@ if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
   AC_DEFINE(wxUSE_STD_STRING_CONV_IN_WXSTRING)
 fi
 
+if test "$wxUSE_UNSAFE_WXSTRING_CONV" = "yes"; then
+  AC_DEFINE(wxUSE_UNSAFE_WXSTRING_CONV)
+fi
+
 if test "$wxUSE_STDPATHS" = "yes"; then
   AC_DEFINE(wxUSE_STDPATHS)
 fi
@@ -5701,10 +5717,31 @@ if test "$wxUSE_INTL" = "yes" ; then
 fi
 
 if test "$wxUSE_XLOCALE" = "yes" ; then
-    AC_DEFINE(wxUSE_XLOCALE)
-    AC_CHECK_TYPES(locale_t,,,
-                   [#include <xlocale.h>
-                    #include <locale.h>])
+    dnl even if xlocale.h exists, it may not contain all that
+    dnl wx needs. check if strtod_l() really is available.
+    AC_CACHE_CHECK([for complete xlocale],
+                   wx_cv_func_strtod_l,
+    [
+        AC_LANG_PUSH(C++)
+        AC_TRY_COMPILE(
+        [
+        #include <xlocale.h>
+        #include <locale.h>
+        #include <stdlib.h>
+        ],
+        [
+        locale_t t;
+        strtod_l(NULL, NULL, t);
+        ],
+        wx_cv_func_strtod_l=yes,
+        wx_cv_func_strtod_l=no
+        )
+        AC_LANG_POP()
+    ])
+
+    if test "$wx_cv_func_strtod_l" = "yes" ; then
+        AC_DEFINE(wxUSE_XLOCALE)
+    fi
 fi
 
 if test "$wxUSE_LOG" = "yes"; then
@@ -5921,8 +5958,8 @@ dnl wxSocket
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_SOCKETS" = "yes"; then
-    dnl under MSW we always have sockets
-    if test "$TOOLKIT" != "MSW"; then
+    dnl under Windows we always have sockets
+    if test "$USE_WIN32" != 1 ; then
         dnl under Solaris and OS/2, socket functions live in -lsocket
         AC_CHECK_FUNC(socket,,
             [
@@ -5941,10 +5978,8 @@ if test "$wxUSE_SOCKETS" = "yes"; then
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
-    dnl this test may be appropriate if building under cygwin
-    dnl right now I'm assuming it also uses the winsock stuff
-    dnl like mingw does..  -- RL
-    if test "$TOOLKIT" != "MSW"; then
+    dnl under Windows we do not use getsockname
+    if test "$USE_WIN32" != 1 ; then
         dnl determine the type of third argument for getsockname
         dnl This test needs to be done in C++ mode since gsocket.cpp now
         dnl is C++ code and pointer cast that are possible even without
@@ -6302,7 +6337,7 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                            [AC_MSG_RESULT(no)],
                            [AC_MSG_RESULT(yes)
                             WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fvtable-thunks"])
-            LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
+            LIBS="-lrpcrt4 -loleaut32 -lole32 -luuid $LIBS"
             if test "$wxUSE_OLE" = "yes" ; then
                 AC_DEFINE(wxUSE_OLE)
                 AC_DEFINE(wxUSE_OLE_AUTOMATION)
@@ -7017,22 +7052,37 @@ fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW_WEBKIT=0
+    USE_WEBVIEW_WEBKIT2=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
-            webkitgtk=webkit-1.0
             if test "$WXGTK3" = 1; then
-                webkitgtk=webkitgtk-3.0
+                PKG_CHECK_MODULES([WEBKIT],
+                                  [webkit2gtk-4.0],
+                                  [
+                                    USE_WEBVIEW_WEBKIT2=1
+                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                  ],
+                                  [
+                                    AC_MSG_WARN([webkit2gtk not found, falling back to webkitgtk])
+                                  ])
             fi
-            PKG_CHECK_MODULES([WEBKIT],
-                              [$webkitgtk >= 1.3.1],
-                              [
-                                USE_WEBVIEW_WEBKIT=1
-                                CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
-                                EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
-                              ],
-                              [
-                                AC_MSG_WARN([webkitgtk not found.])
-                              ])
+            if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+                webkitgtk=webkit-1.0
+                if test "$WXGTK3" = 1; then
+                    webkitgtk=webkitgtk-3.0
+                fi
+                PKG_CHECK_MODULES([WEBKIT],
+                                  [$webkitgtk >= 1.3.1],
+                                  [
+                                    USE_WEBVIEW_WEBKIT=1
+                                    CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                  ],
+                                  [
+                                    AC_MSG_WARN([webkitgtk not found.])
+                                  ])
+            fi
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
             dnl Under Mac we always have the libraries but check for the
             dnl headers
@@ -7059,6 +7109,9 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         if test "$USE_WEBVIEW_WEBKIT" = 1; then
             wxUSE_WEBVIEW="yes"
             AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
+        elif test "$USE_WEBVIEW_WEBKIT2" = 1; then
+            wxUSE_WEBVIEW="yes"
+            AC_DEFINE(wxUSE_WEBVIEW_WEBKIT2)
         else
             AC_MSG_WARN([WebKit not available, disabling wxWebView])
         fi
@@ -7205,10 +7258,6 @@ if test "$wxUSE_MSW" = 1 ; then
         AC_DEFINE(wxUSE_DC_CACHEING)
     fi
 
-    if test "$wxUSE_DIB" = "yes"; then
-        AC_DEFINE(wxUSE_WXDIB)
-    fi
-
     if test "$wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW" = "yes"; then
         AC_DEFINE(wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
     fi
@@ -7255,6 +7304,10 @@ if test "$USE_WIN32" = 1 ; then
         else
             AC_MSG_WARN([Debug help API and wxStackWalker won't be available])
         fi
+    fi
+
+    if test "$wxUSE_DIB" = "yes"; then
+        AC_DEFINE(wxUSE_WXDIB)
     fi
 
     if test "$wxUSE_INICONF" = "yes"; then
@@ -7408,13 +7461,28 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         fi
 
     elif test "$wxUSE_MAC" = 1; then
-        if test "$wxUSE_OSX_IPHONE" = 1; then
-            dnl this will also be used for cocoa in the future
-            GST_LIBS="-framework AVFoundation -framework CoreMedia"
-        else
-            dnl We always have the necessary libraries under Mac
-            dnl but we need to link with it explicitly.
-            GST_LIBS="-framework QTKit"
+        dnl We always have the necessary libraries under Mac
+        dnl but we need to link with it explicitly.
+        GST_LIBS="-framework AVFoundation -framework CoreMedia"
+        if test "$wxUSE_OSX_IPHONE" != 1; then
+            dnl In addition to AVFoundation AVKit may be used when available
+            dnl AVKit is only available since OS X 10.9
+            old_CPPFLAGS="$CPPFLAGS"
+            CPPFLAGS="-x objective-c++ $CPPFLAGS"
+            AC_MSG_CHECKING([if AVKit is available])
+            AC_TRY_COMPILE(
+                [#include "AvailabilityMacros.h"],
+                [
+                    #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+                        // AVKit available
+                    #else
+                        choke me
+                    #endif
+                ],
+                [GST_LIBS="$GST_LIBS -framework AVKit"; AC_MSG_RESULT(yes)],
+                AC_MSG_RESULT(no)
+            )
+            CPPFLAGS="$old_CPPFLAGS"
         fi
     fi
 

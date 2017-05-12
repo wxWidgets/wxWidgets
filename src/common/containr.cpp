@@ -162,6 +162,24 @@ bool wxControlContainerBase::SetFocusToChild()
     return wxSetFocusToChild(m_winParent, &m_winLastFocused);
 }
 
+#ifdef __WXMSW__
+
+bool wxControlContainerBase::HasTransparentBackground() const
+{
+    for ( wxWindow *win = m_winParent->GetParent(); win; win = win->GetParent() )
+    {
+        if ( win->MSWHasInheritableBackground() )
+            return true;
+
+        if ( win->IsTopLevel() )
+            break;
+    }
+
+    return false;
+}
+
+#endif // __WXMSW__
+
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL
 
 // ----------------------------------------------------------------------------
