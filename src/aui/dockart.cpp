@@ -587,7 +587,7 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     {
         DrawIcon(dc, rect, pane);
 
-        caption_offset += pane.icon.GetWidth() + 3;
+        caption_offset += pane.icon.GetScaledWidth() + 3;
     }
 
     if (pane.state & wxAuiPaneInfo::optionActive)
@@ -621,7 +621,7 @@ wxAuiDefaultDockArt::DrawIcon(wxDC& dc, const wxRect& rect, wxAuiPaneInfo& pane)
 {
    // Draw the icon centered vertically
    dc.DrawBitmap(pane.icon,
-                 rect.x+2, rect.y+(rect.height-pane.icon.GetHeight())/2,
+                 rect.x+2, rect.y+(rect.height-pane.icon.GetScaledHeight())/2,
                  true);
 }
 
@@ -720,7 +720,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
     wxRect rect = _rect;
 
     int old_y = rect.y;
-    rect.y = rect.y + (rect.height/2) - (bmp.GetHeight()/2);
+    rect.y = rect.y + (rect.height/2) - (bmp.GetScaledHeight()/2);
     rect.height = old_y + rect.height - rect.y - 1;
 
 
