@@ -2956,7 +2956,7 @@ bool wxDataViewTextRenderer::MacRender()
 #if wxUSE_MARKUP
     if ( m_useMarkup )
     {
-        wxMarkupToAttrString toAttr(wxFont([cell font]), GetValue().GetString());
+        wxItemMarkupToAttrString toAttr(wxFont([cell font]), GetValue().GetString());
         NSMutableAttributedString *str = toAttr.GetNSAttributedString();
 
         if ( [cell lineBreakMode] != NSLineBreakByClipping )
