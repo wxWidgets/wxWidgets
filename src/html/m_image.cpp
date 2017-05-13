@@ -287,7 +287,7 @@ class wxHtmlImageCell : public wxHtmlCell
 {
 public:
     wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
-                    wxFSFile *input,
+                    wxFSFile *input, double scaleHDPI = 1.0,
                     int w = wxDefaultCoord, bool wpercent = false,
                     int h = wxDefaultCoord, bool hpresent = false,
                     double scale = 1.0, int align = wxHTML_ALIGN_BOTTOM,
@@ -297,7 +297,7 @@ public:
               wxHtmlRenderingInfo& info) wxOVERRIDE;
     virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const wxOVERRIDE;
 
-    void SetImage(const wxImage& img);
+    void SetImage(const wxImage& img, double scaleHDPI = 1.0);
 
     // If "alt" text is set, it will be used when converting this cell to text.
     void SetAlt(const wxString& alt);
@@ -355,7 +355,7 @@ class wxGIFTimer : public wxTimer
 
 
 wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
-                                 wxFSFile *input,
+                                 wxFSFile *input, double scaleHDPI,
                                  int w, bool wpercent, int h, bool hpresent, double scale, int align,
                                  const wxString& mapname) : wxHtmlCell()
 {
@@ -425,7 +425,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
                 {
                     wxImage image(*s, wxBITMAP_TYPE_ANY);
                     if ( image.IsOk() )
-                        SetImage(image);
+                        SetImage(image, scaleHDPI);
                 }
             }
         }
@@ -450,7 +450,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
 
  }
 
-void wxHtmlImageCell::SetImage(const wxImage& img)
+void wxHtmlImageCell::SetImage(const wxImage& img, double scaleHDPI)
 {
 #if !defined(__WXMSW__) || wxUSE_WXDIB
     if ( img.IsOk() )
@@ -462,11 +462,13 @@ void wxHtmlImageCell::SetImage(const wxImage& img)
         hh = img.GetHeight();
 
         if ( m_bmpW == wxDefaultCoord)
-            m_bmpW = ww;
+            m_bmpW = ww / scaleHDPI;
         if ( m_bmpH == wxDefaultCoord)
-            m_bmpH = hh;
+            m_bmpH = hh / scaleHDPI;
 
-        m_bitmap = new wxBitmap(img);
+        // On a Mac retina screen, we might have found a @2 version of the image,
+        // so specify this scale factor.
+        m_bitmap = new wxBitmap(img, -1, scaleHDPI);
     }
 #endif
 }
@@ -540,7 +542,7 @@ void wxHtmlImageCell::Layout(int w)
         m_Width = w*m_bmpW/100;
 
         if (!m_bmpHpresent && m_bitmap != NULL)
-            m_Height = m_bitmap->GetHeight()*m_Width/m_bitmap->GetWidth();
+            m_Height = m_bitmap->GetScaledHeight()*m_Width/m_bitmap->GetScaledWidth();
         else
             m_Height = static_cast<int>(m_scale*m_bmpH);
     } else
@@ -617,10 +619,10 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
         }
 #endif 
 
-        if (m_Width != m_bitmap->GetWidth())
-            imageScaleX = (double) m_Width / (double) m_bitmap->GetWidth();
-        if (m_Height != m_bitmap->GetHeight())
-            imageScaleY = (double) m_Height / (double) m_bitmap->GetHeight();
+        if (m_Width != m_bitmap->GetScaledWidth())
+            imageScaleX = (double) m_Width / (double) m_bitmap->GetScaledWidth();
+        if (m_Height != m_bitmap->GetScaledHeight())
+            imageScaleY = (double) m_Height / (double) m_bitmap->GetScaledHeight();
 
         double us_x, us_y;
         dc.GetUserScale(&us_x, &us_y);
@@ -682,10 +684,32 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 bool wpercent = false;
                 bool hpresent = false;
                 int al;
-                wxFSFile *str;
+                wxFSFile *str = NULL;
                 wxString mn;
+                double scaleHDPI = 1.0;
 
-                str = m_WParser->OpenURL(wxHTML_URL_IMAGE, tmp);
+#if defined(__WXOSX_COCOA__)
+                // Try to find a 2x resolution image with @2 appended before the file extension.
+                wxWindow* win = m_WParser->GetWindowInterface() ? m_WParser->GetWindowInterface()->GetHTMLWindow() : NULL;
+                if (!win && wxTheApp)
+                    win = wxTheApp->GetTopWindow();
+                if (win && win->GetContentScaleFactor() > 1.0)
+                {
+                    if (tmp.Find('.') != wxNOT_FOUND)
+                    {
+                        wxString ext = tmp.AfterLast('.');
+                        wxString rest = tmp.BeforeLast('.');
+                        wxString hiDPIFilename = rest + "@2." + ext;
+                        str = m_WParser->OpenURL(wxHTML_URL_IMAGE, hiDPIFilename);
+                        if (str)
+                        {
+                            scaleHDPI = 2.0;
+                        }
+                    }
+                }                    
+#endif
+                if (!str)
+                    str = m_WParser->OpenURL(wxHTML_URL_IMAGE, tmp);
 
                 if (tag.GetParamAsIntOrPercent(wxT("WIDTH"), &w, wpercent))
                 {
@@ -722,7 +746,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 }
                 wxHtmlImageCell *cel = new wxHtmlImageCell(
                                           m_WParser->GetWindowInterface(),
-                                          str, w, wpercent, h, hpresent,
+                                          str, scaleHDPI, w, wpercent, h, hpresent,
                                           m_WParser->GetPixelScale(),
                                           al, mn);
                 m_WParser->ApplyStateToCell(cel);
