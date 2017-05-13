@@ -109,7 +109,12 @@ public:
     virtual wxWindow* GetContentWindow() const;
 
     // Set and get the inner sizer
+
+    // Keep old version with a typo in it for ABI compatibility.
+    void SetInnerSize(wxSizer* sizer) { m_innerSizer = sizer; }
+#if wxABI_VERSION >= 30003
     void SetInnerSizer(wxSizer* sizer) { m_innerSizer = sizer; }
+#endif
     wxSizer* GetInnerSizer() const { return m_innerSizer ; }
 
     // Set and get the book style
