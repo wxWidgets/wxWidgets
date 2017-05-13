@@ -466,7 +466,7 @@ void wxHtmlImageCell::SetImage(const wxImage& img, double scaleHDPI)
         if ( m_bmpH == wxDefaultCoord)
             m_bmpH = hh / scaleHDPI;
 
-        // On a Mac retina screen, we might have found a @2 version of the image,
+        // On a Mac retina screen, we might have found a @2x version of the image,
         // so specify this scale factor.
         m_bitmap = new wxBitmap(img, -1, scaleHDPI);
     }
@@ -689,7 +689,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 double scaleHDPI = 1.0;
 
 #if defined(__WXOSX_COCOA__)
-                // Try to find a 2x resolution image with @2 appended before the file extension.
+                // Try to find a 2x resolution image with @2x appended before the file extension.
                 wxWindow* win = m_WParser->GetWindowInterface() ? m_WParser->GetWindowInterface()->GetHTMLWindow() : NULL;
                 if (!win && wxTheApp)
                     win = wxTheApp->GetTopWindow();
@@ -699,7 +699,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                     {
                         wxString ext = tmp.AfterLast('.');
                         wxString rest = tmp.BeforeLast('.');
-                        wxString hiDPIFilename = rest + "@2." + ext;
+                        wxString hiDPIFilename = rest + "@2x." + ext;
                         str = m_WParser->OpenURL(wxHTML_URL_IMAGE, hiDPIFilename);
                         if (str)
                         {
