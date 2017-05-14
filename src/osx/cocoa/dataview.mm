@@ -1930,6 +1930,18 @@ outlineView:(NSOutlineView*)outlineView
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
+-(BOOL) textShouldBeginEditing:(NSText*)text
+{
+    wxUnusedVar(text);
+
+    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_START_EDITING, dvc, dvc->GetCurrentItem());
+    dvc->GetEventHandler()->ProcessEvent(event);
+    // continue editing if not vetoed:
+    return event.IsAllowed();
+}
+
 -(void) textDidBeginEditing:(NSNotification*)notification
 {
     // this notification is only sent if the user started modifying the cell
