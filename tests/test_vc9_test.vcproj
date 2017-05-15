@@ -1003,6 +1003,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\strings\hexconv.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\interactive\input.cpp"
 				>
 			</File>
@@ -1180,10 +1184,6 @@
 			</File>
 			<File
 				RelativePath=".\strings\vsnprintf.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\strings\hexconv.cpp"
 				>
 			</File>
 			<File
