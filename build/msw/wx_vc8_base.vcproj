@@ -1775,7 +1775,7 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\winver.h"
-			>
+				>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\wrapcctl.h"
