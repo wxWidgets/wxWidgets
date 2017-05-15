@@ -580,6 +580,13 @@ Major new features in this release
 
 
 
+3.0.3.1: (released 2017-05-15)
+------------------------------
+
+Bug fix release adding back wxPropertySheetDialog::SetInnerSize() mistakenly
+removed in 3.0.3. There are no other changes in this micro-release.
+
+
 3.0.3: (released 2017-05-02)
 ----------------------------
 
