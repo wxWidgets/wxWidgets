@@ -175,8 +175,8 @@ I.e. you would just write
 
 @code
 wxDateTime dt(...whatever...);
-printf("The time is %s in local time zone", dt.FormatTime().c_str());
-printf("The time is %s in GMT", dt.FormatTime(wxDateTime::GMT).c_str());
+wxPrintf("The time is %s in local time zone", dt.FormatTime());
+wxPrintf("The time is %s in GMT", dt.FormatTime(wxDateTime::GMT));
 @endcode
 
 

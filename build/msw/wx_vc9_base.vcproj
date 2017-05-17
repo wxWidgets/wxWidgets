@@ -1094,6 +1094,74 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\secretstore.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud\base\common_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu\base\common_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll\base\common_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll\base\common_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud_x64\base\common_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu_x64\base\common_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll_x64\base\common_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll_x64\base\common_secretstore.obj"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\src\common\sstream.cpp"
 				>
 			</File>
@@ -1285,6 +1353,74 @@
 			<File
 				RelativePath="..\..\src\msw\registry.cpp"
 				>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\secretstore.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud\base\msw_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu\base\msw_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll\base\msw_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll\base\msw_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswud_x64\base\msw_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswu_x64\base\msw_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswuddll_x64\base\msw_secretstore.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="vc_mswudll_x64\base\msw_secretstore.obj"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\snglinst.cpp"
@@ -1631,6 +1767,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\winundef.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\winver.h"
 				>
 			</File>
 			<File
@@ -2069,6 +2209,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\scopeguard.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\secretstore.h"
 				>
 			</File>
 			<File

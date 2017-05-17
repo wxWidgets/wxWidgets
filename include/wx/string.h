@@ -702,7 +702,7 @@ public:
   typedef const wxChar* const_pointer;
 
   typedef size_t size_type;
-  typedef wxUniChar const_reference;
+  typedef const wxUniChar const_reference;
 
 #if wxUSE_STD_STRING
   #if wxUSE_UNICODE_UTF8
@@ -951,7 +951,7 @@ public:
       const_iterator(const const_iterator& i) : m_cur(i.m_cur) {}
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
 
-      reference operator*() const
+      const_reference operator*() const
         { return wxStringOperations::DecodeChar(m_cur); }
 
       const_iterator operator+(ptrdiff_t n) const
@@ -1263,7 +1263,9 @@ public:
     // they conflict with the implicit conversions to "const char/wchar_t *"
     // which we use for backwards compatibility but do provide them if
     // explicitly requested.
+#if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
   operator wxStringToStdStringRetType() const { return ToStdString(); }
+#endif // wxUSE_UNSAFE_WXSTRING_CONV
   operator wxStringToStdWstringRetType() const { return ToStdWstring(); }
 #endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
 
@@ -1282,20 +1284,26 @@ public:
   // first valid index position
   const_iterator begin() const { return const_iterator(this, m_impl.begin()); }
   iterator begin() { return iterator(this, m_impl.begin()); }
+  const_iterator cbegin() const { return const_iterator(this, m_impl.begin()); }
   // position one after the last valid one
   const_iterator end() const { return const_iterator(this, m_impl.end()); }
   iterator end() { return iterator(this, m_impl.end()); }
+  const_iterator cend() const { return const_iterator(this, m_impl.end()); }
 
   // first element of the reversed string
   const_reverse_iterator rbegin() const
     { return const_reverse_iterator(end()); }
   reverse_iterator rbegin()
     { return reverse_iterator(end()); }
+  const_reverse_iterator crbegin() const
+    { return const_reverse_iterator(end()); }
   // one beyond the end of the reversed string
   const_reverse_iterator rend() const
     { return const_reverse_iterator(begin()); }
   reverse_iterator rend()
     { return reverse_iterator(begin()); }
+  const_reverse_iterator crend() const
+    { return const_reverse_iterator(begin()); }
 
   // std::string methods:
 #if wxUSE_UNICODE_UTF8
@@ -1511,13 +1519,16 @@ public:
     // messages for the code which relies on implicit conversion to char* in
     // STL build
 #if !wxUSE_STD_STRING_CONV_IN_WXSTRING
-    operator const char*() const { return c_str(); }
     operator const wchar_t*() const { return c_str(); }
 
+#if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
+    operator const char*() const { return c_str(); }
     // implicit conversion to untyped pointer for compatibility with previous
     // wxWidgets versions: this is the same as conversion to const char * so it
     // may fail!
     operator const void*() const { return c_str(); }
+#endif // wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
+
 #endif // !wxUSE_STD_STRING_CONV_IN_WXSTRING
 
     // identical to c_str(), for MFC compatibility
@@ -3983,6 +3994,32 @@ namespace std
 } // namespace std
 
 #endif // wxUSE_STD_STRING
+
+#endif // C++11
+
+// Specialize std::iter_swap in C++11 to make std::reverse() work with wxString
+// iterators: unlike in C++98, where iter_swap() is required to deal with the
+// iterator::reference being different from "iterator::value_type&", in C++11
+// iter_swap() just calls swap() by default and this doesn't work for us as
+// wxUniCharRef is not the same as "wxUniChar&".
+//
+// Unfortunately currently iter_swap() can't be specialized when using libc++,
+// see https://llvm.org/bugs/show_bug.cgi?id=28559
+#if (__cplusplus >= 201103L) && !defined(_LIBCPP_VERSION)
+
+namespace std
+{
+    template <>
+    inline void
+    iter_swap<wxString::iterator>(wxString::iterator i1, wxString::iterator i2)
+    {
+        // We don't check for i1 == i2, this won't happen in normal use, so
+        // don't pessimize the common code to account for it.
+        wxUniChar tmp = *i1;
+        *i1 = *i2;
+        *i2 = tmp;
+    }
+} // namespace std
 
 #endif // C++11
 

@@ -57,7 +57,7 @@
     // up to VC 12 this warning ("calling _set_se_translator() requires /EHa")
     // is harmless and it's easier to suppress it than deal with it as make/
     // project file level as it seems to be harmless
-    #if __VISUALC__ < 1900
+    #if __VISUALC__ < 2000
         #pragma warning(disable: 4535)
     #endif
 

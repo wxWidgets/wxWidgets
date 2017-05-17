@@ -669,16 +669,10 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
         }
     }
 
-    // the column images were not supported in older versions but how to check
-    // for this? we can't use _WIN32_IE because we always define it to a very
-    // high value, so see if another symbol which is only defined starting from
-    // comctl32.dll 4.70 is available
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         item.m_image = lvCol.iImage;
     }
-#endif // LVCOLUMN::iImage exists
 
     return success;
 }
@@ -1780,35 +1774,53 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 
     flags = 0;
 
-    if ( hitTestInfo.flags & LVHT_ABOVE )
-        flags |= wxLIST_HITTEST_ABOVE;
-    if ( hitTestInfo.flags & LVHT_BELOW )
-        flags |= wxLIST_HITTEST_BELOW;
-    if ( hitTestInfo.flags & LVHT_TOLEFT )
-        flags |= wxLIST_HITTEST_TOLEFT;
-    if ( hitTestInfo.flags & LVHT_TORIGHT )
-        flags |= wxLIST_HITTEST_TORIGHT;
-
-    if ( hitTestInfo.flags & LVHT_NOWHERE )
-        flags |= wxLIST_HITTEST_NOWHERE;
-
-    // note a bug or at least a very strange feature of comtl32.dll (tested
-    // with version 4.0 under Win95 and 6.0 under Win 2003): if you click to
-    // the right of the item label, ListView_HitTest() returns a combination of
-    // LVHT_ONITEMICON, LVHT_ONITEMLABEL and LVHT_ONITEMSTATEICON -- filter out
-    // the bits which don't make sense
-    if ( hitTestInfo.flags & LVHT_ONITEMLABEL )
+    // test whether an actual item was hit or not
+    if ( hitTestInfo.flags == LVHT_ONITEMICON )
     {
-        flags |= wxLIST_HITTEST_ONITEMLABEL;
-
-        // do not translate LVHT_ONITEMICON here, as per above
+        flags = wxLIST_HITTEST_ONITEMICON;
     }
-    else
+    // note a bug in comctl32.dll:
+    // 1) in report mode, when there are 2 or more columns, if you click to the
+    //    right of the first column, ListView_HitTest() returns LVHT_ONITEM
+    //    (LVHT_ONITEMICON|LVHT_ONITEMLABEL|LVHT_ONITEMSTATEICON).
+    else if ( hitTestInfo.flags & LVHT_ONITEMLABEL )
     {
-        if ( hitTestInfo.flags & LVHT_ONITEMICON )
-            flags |= wxLIST_HITTEST_ONITEMICON;
-        if ( hitTestInfo.flags & LVHT_ONITEMSTATEICON )
-            flags |= wxLIST_HITTEST_ONITEMSTATEICON;
+        flags = wxLIST_HITTEST_ONITEMLABEL;
+    }
+    // note another bug in comctl32.dll:
+    // 2) LVHT_ONITEMSTATEICON and LVHT_ABOVE have the same value. However, the
+    //    former (used for the checkbox when LVS_EX_CHECKBOXES is used) can
+    //    only occur when y >= 0, while the latter ("above the control's client
+    //    area") can only occur when y < 0.
+    else if ( (hitTestInfo.flags == LVHT_ONITEMSTATEICON) && point.y >= 0 )
+    {
+        flags = wxLIST_HITTEST_ONITEMSTATEICON;
+    }
+    else if ( hitTestInfo.flags == LVHT_NOWHERE )
+    {
+        flags = wxLIST_HITTEST_NOWHERE;
+    }
+
+    if ( flags ) // any flags found so far couldn't be combined with others
+        return item;
+
+    // outside an item, values could be combined
+    if ( (hitTestInfo.flags & LVHT_ABOVE) && point.y < 0 ) // see second MS bug
+    {
+        flags = wxLIST_HITTEST_ABOVE;
+    }
+    else if ( hitTestInfo.flags & LVHT_BELOW )
+    {
+        flags = wxLIST_HITTEST_BELOW;
+    }
+
+    if ( hitTestInfo.flags & LVHT_TOLEFT )
+    {
+        flags |= wxLIST_HITTEST_TOLEFT;
+    }
+    else if ( hitTestInfo.flags & LVHT_TORIGHT )
+    {
+        flags |= wxLIST_HITTEST_TORIGHT;
     }
 
     return item;
@@ -2483,12 +2495,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-#ifdef NM_CUSTOMDRAW
             case NM_CUSTOMDRAW:
                 *result = OnCustomDraw(lParam);
 
                 return *result != CDRF_DODEFAULT;
-#endif // _WIN32_IE >= 0x300
 
             case LVN_ODCACHEHINT:
                 {
@@ -2638,13 +2648,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         wxStrlcpy(lvi.pszText, text.c_str(), lvi.cchTextMax);
                     }
 
-                    // see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW
                     if ( lvi.mask & LVIF_IMAGE )
                     {
                         lvi.iImage = OnGetItemColumnImage(item, lvi.iSubItem);
                     }
-#endif // NM_CUSTOMDRAW
 
                     // even though we never use LVM_SETCALLBACKMASK, we still
                     // can get messages with LVIF_STATE in lvi.mask under Vista
@@ -2751,9 +2758,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // ----------------------------------------------------------------------------
 // custom draw stuff
 // ----------------------------------------------------------------------------
-
-// see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
 
 static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 {
@@ -3039,8 +3043,6 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
     return CDRF_DODEFAULT;
 }
 
-#endif // NM_CUSTOMDRAW supported
-
 // Necessary for drawing hrules and vrules, if specified
 void wxListCtrl::OnPaint(wxPaintEvent& event)
 {
@@ -3157,12 +3159,10 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     switch ( nMsg )
     {
-#ifdef WM_PRINT
         case WM_PRINT:
             // we should bypass our own WM_PRINT handling as we don't handle
             // PRF_CHILDREN flag, so leave it to the native control itself
             return MSWDefWindowProc(nMsg, wParam, lParam);
-#endif // WM_PRINT
 
         case WM_CONTEXTMENU:
             // because this message is propagated upwards the child-parent
@@ -3444,8 +3444,6 @@ static void wxConvertToMSWListCol(HWND hwndList,
             lvCol.cx = item.m_width;
     }
 
-    // see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         lvCol.mask |= LVCF_IMAGE;
@@ -3479,7 +3477,6 @@ static void wxConvertToMSWListCol(HWND hwndList,
 
         lvCol.iImage = item.m_image;
     }
-#endif // _WIN32_IE >= 0x0300
 }
 
 #endif // wxUSE_LISTCTRL

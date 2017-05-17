@@ -139,8 +139,10 @@ void VarArgTestCase::CharPrintf()
     #ifdef _MSC_VER
         #pragma warning(default:4309)
     #endif
+    #ifndef __CHAR_UNSIGNED__
     s.Printf("value is %i (int)", c);
     CPPUNIT_ASSERT_EQUAL( wxString("value is -16 (int)"), s );
+    #endif
 
     unsigned char u = 240;
     s.Printf("value is %i (int)", u);

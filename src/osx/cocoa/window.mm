@@ -71,7 +71,24 @@ NSView* GetFocusedViewInWindow( NSWindow* keyWindow )
 
 WXWidget wxWidgetImpl::FindFocus()
 {
-    return GetFocusedViewInWindow( [NSApp keyWindow] );;
+    NSWindow *key = [NSApp keyWindow];
+    if ( key == nil )
+    {
+        // Application's keyWindow property may still not be updated and be
+        // nil when windowDidBecomeKey: is called and even if the
+        // just-activated's window isKeyWindow already returns YES. To get
+        // accurate information about where the focus is at all times, we have
+        // to explicitly check all application windos as well:
+        for ( NSWindow *w in [NSApp windows] )
+        {
+            if ( [w isKeyWindow] )
+            {
+                key = w;
+                break;
+            }
+        }
+    }
+    return key ? GetFocusedViewInWindow(key) : nil;
 }
 
 wxWidgetImpl* wxWidgetImpl::FindBestFromWXWidget(WXWidget control)
@@ -985,7 +1002,9 @@ void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event)
     if (impl == NULL)
         return;
 
-    impl->mouseEvent(event, self, _cmd);
+    // We shouldn't let disabled windows get mouse events.
+    if (impl->GetWXPeer()->IsEnabled())
+        impl->mouseEvent(event, self, _cmd);
 }
 
 void wxOSX_cursorUpdate(NSView* self, SEL _cmd, NSEvent *event)
@@ -2044,7 +2063,7 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
     {
         // what is a good default duration? Windows uses 200ms, Web frameworks
         // use anything from 250ms to 1s... choose something in the middle
-        timeout = 500;
+        timeout = 200;
     }
 
     [anim setDuration:timeout/1000.];   // duration is in seconds here
@@ -2328,18 +2347,28 @@ bool wxWidgetCocoaImpl::GetNeedsDisplay() const
 
 bool wxWidgetCocoaImpl::CanFocus() const
 {
-    return [m_osxView canBecomeKeyView] == YES;
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
+    return [targetView canBecomeKeyView] == YES;
 }
 
 bool wxWidgetCocoaImpl::HasFocus() const
 {
-    return ( FindFocus() == m_osxView );
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
+    return ( FindFocus() == targetView );
 }
 
 bool wxWidgetCocoaImpl::SetFocus()
 {
     if ( !CanFocus() )
         return false;
+
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
 
     // TODO remove if no issues arise: should not raise the window, only assign focus
     //[[m_osxView window] makeKeyAndOrderFront:nil] ;

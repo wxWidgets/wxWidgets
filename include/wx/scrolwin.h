@@ -64,7 +64,7 @@ enum wxScrollbarVisibility
 class WXDLLIMPEXP_CORE wxAnyScrollHelperBase
 {
 public:
-    wxEXPLICIT wxAnyScrollHelperBase(wxWindow* win);
+    explicit wxAnyScrollHelperBase(wxWindow* win);
     virtual ~wxAnyScrollHelperBase() {}
 
     // Disable use of keyboard keys for scrolling. By default cursor movement
@@ -431,13 +431,13 @@ public:
 #ifdef __WXMSW__
     // we need to return a special WM_GETDLGCODE value to process just the
     // arrows but let the other navigation characters through
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE
     {
         return FilterMSWWindowProc(nMsg, T::MSWWindowProc(nMsg, wParam, lParam));
     }
 
     // Take into account the scroll origin.
-    virtual void MSWAdjustBrushOrg(int* xOrg, int* yOrg) const
+    virtual void MSWAdjustBrushOrg(int* xOrg, int* yOrg) const wxOVERRIDE
     {
         CalcUnscrolledPosition(*xOrg, *yOrg, xOrg, yOrg);
     }

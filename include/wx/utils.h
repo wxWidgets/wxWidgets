@@ -197,7 +197,7 @@ WXDLLIMPEXP_CORE wxMouseState wxGetMouseState();
  * A custom platform symbol:
  *
  *  #define stPDA 100
- *  #ifdef __WXWINCE__
+ *  #ifdef __WXMSW__
  *      wxPlatform::AddPlatform(stPDA);
  *  #endif
  *
@@ -296,22 +296,30 @@ inline int wxHexToDec(const char* buf)
 
     if (buf[0] >= 'A')
         firstDigit = buf[0] - 'A' + 10;
-    else
+    else if (buf[0] >= '0')
         firstDigit = buf[0] - '0';
+    else
+        firstDigit = -1;
+
+    wxCHECK_MSG( firstDigit >= 0 && firstDigit <= 15, -1, wxS("Invalid argument") );
 
     if (buf[1] >= 'A')
         secondDigit = buf[1] - 'A' + 10;
-    else
+    else if (buf[1] >= '0')
         secondDigit = buf[1] - '0';
+    else
+        secondDigit = -1;
 
-    return (firstDigit & 0xF) * 16 + (secondDigit & 0xF );
+    wxCHECK_MSG( secondDigit >= 0 && secondDigit <= 15, -1, wxS("Invalid argument") );
+
+    return firstDigit * 16 + secondDigit;
 }
 
 
 // Convert decimal integer to 2-character hex string
-WXDLLIMPEXP_BASE void wxDecToHex(int dec, wxChar *buf);
-WXDLLIMPEXP_BASE void wxDecToHex(int dec, char* ch1, char* ch2);
-WXDLLIMPEXP_BASE wxString wxDecToHex(int dec);
+WXDLLIMPEXP_BASE void wxDecToHex(unsigned char dec, wxChar *buf);
+WXDLLIMPEXP_BASE void wxDecToHex(unsigned char dec, char* ch1, char* ch2);
+WXDLLIMPEXP_BASE wxString wxDecToHex(unsigned char dec);
 
 // ----------------------------------------------------------------------------
 // Process management
@@ -381,12 +389,12 @@ WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL,
                                 const wxExecuteEnv *env = NULL);
-WXDLLIMPEXP_BASE long wxExecute(char **argv,
+WXDLLIMPEXP_BASE long wxExecute(const char* const* argv,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL,
                                 const wxExecuteEnv *env = NULL);
 #if wxUSE_UNICODE
-WXDLLIMPEXP_BASE long wxExecute(wchar_t **argv,
+WXDLLIMPEXP_BASE long wxExecute(const wchar_t* const* argv,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL,
                                 const wxExecuteEnv *env = NULL);

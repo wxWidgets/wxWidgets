@@ -79,14 +79,13 @@ public:
     {
         wxTopLevelWindow * const tlw = Get();
 
-        long x wxDUMMY_INITIALIZE(-1),
-             y wxDUMMY_INITIALIZE(-1),
-             w wxDUMMY_INITIALIZE(-1),
-             h wxDUMMY_INITIALIZE(-1);
-        const bool hasPos = RestoreValue(wxPERSIST_TLW_X, &x) &&
-                            RestoreValue(wxPERSIST_TLW_Y, &y);
-        const bool hasSize = RestoreValue(wxPERSIST_TLW_W, &w) &&
-                             RestoreValue(wxPERSIST_TLW_H, &h);
+        wxPoint pos;
+        wxSize size;
+
+        const bool hasPos = RestoreValue(wxPERSIST_TLW_X, &pos.x) &&
+                            RestoreValue(wxPERSIST_TLW_Y, &pos.y);
+        const bool hasSize = RestoreValue(wxPERSIST_TLW_W, &size.x) &&
+                             RestoreValue(wxPERSIST_TLW_H, &size.y);
 #ifdef __WXGTK20__
         wxTopLevelWindowGTK::DecorSize decorSize;
         if (tlw->m_decorSize.top == 0 &&
@@ -108,17 +107,16 @@ public:
             // NB: we should allow window position to be (slightly) off screen,
             //     it's not uncommon to position the window so that its upper
             //     left corner has slightly negative coordinate
-            if ( wxDisplay::GetFromPoint(wxPoint(x, y)) != wxNOT_FOUND ||
-                 (hasSize && wxDisplay::GetFromPoint(
-                                    wxPoint(x + w, y + h)) != wxNOT_FOUND) )
+            if ( wxDisplay::GetFromPoint(pos) != wxNOT_FOUND ||
+                 (hasSize && wxDisplay::GetFromPoint(pos + size) != wxNOT_FOUND) )
             {
-                tlw->Move(x, y, wxSIZE_ALLOW_MINUS_ONE);
+                tlw->Move(pos, wxSIZE_ALLOW_MINUS_ONE);
             }
             //else: should we try to adjust position/size somehow?
         }
 
         if ( hasSize )
-            tlw->SetSize(w, h);
+            tlw->SetSize(size);
 
         // note that the window can be both maximized and iconized
         bool maximized;

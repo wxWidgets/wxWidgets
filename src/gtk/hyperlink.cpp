@@ -32,10 +32,6 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
-#ifdef __WXGTK3__
-    #include "wx/gtk/private/object.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
@@ -88,23 +84,6 @@ static void clicked_hook(GtkLinkButton* button, const char*, void*)
 }
 }
 #endif
-
-#ifdef __WXGTK3__
-
-// Used to store GtkCssProviders we need to change the link colours with GTK+3.
-class wxHyperlinkCtrlColData
-{
-public:
-    wxHyperlinkCtrlColData() :
-        m_normalLinkCssProvider(gtk_css_provider_new()),
-        m_visitedLinkCssProvider(gtk_css_provider_new())
-    {}
-
-    wxGtkObject<GtkCssProvider> m_normalLinkCssProvider;
-    wxGtkObject<GtkCssProvider> m_visitedLinkCssProvider;
-};
-
-#endif // __WXGTK3__
 
 // ----------------------------------------------------------------------------
 // wxHyperlinkCtrl
@@ -234,45 +213,12 @@ wxString wxHyperlinkCtrl::GetURL() const
     return wxGenericHyperlinkCtrl::GetURL();
 }
 
-void wxHyperlinkCtrl::DoSetLinkColour(LinkKind linkKind, const wxColour& colour)
-{
-#ifdef __WXGTK3__
-    if ( !m_colData )
-        m_colData.reset(new wxHyperlinkCtrlColData());
-
-    const char* cssProp = NULL;
-    GtkCssProvider* cssProvider = NULL;
-    switch ( linkKind )
-    {
-        case Link_Normal:
-            cssProp = "link-color";
-            cssProvider = m_colData->m_normalLinkCssProvider;
-            break;
-
-        case Link_Visited:
-            cssProp = "visited-link-color";
-            cssProvider = m_colData->m_visitedLinkCssProvider;
-            break;
-    }
-
-    wxCHECK_RET( cssProvider, wxS("unknown link kind") );
-
-    const GdkRGBA *col = colour;
-
-    wxGtkString
-        css(g_strdup_printf("* { %s: %s; }", cssProp, gdk_rgba_to_string(col)));
-    ApplyCssStyle(cssProvider, css);
-#else // !__WXGTK3__
-    // simply do nothing: GTK+ does not allow us to change it :(
-    wxUnusedVar(linkKind);
-    wxUnusedVar(colour);
-#endif
-}
-
 void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 {
     if ( UseNative() )
-        DoSetLinkColour(Link_Normal, colour);
+    {
+        // simply do nothing: GTK+ does not allow us to change it :(
+    }
     else
         wxGenericHyperlinkCtrl::SetNormalColour(colour);
 }
@@ -282,16 +228,6 @@ wxColour wxHyperlinkCtrl::GetNormalColour() const
     wxColour ret;
     if ( UseNative() )
     {
-#ifdef __WXGTK3__
-        GdkRGBA *link_color = NULL;
-        gtk_widget_style_get(m_widget, "link-color", &link_color, NULL);
-
-        if ( link_color )
-        {
-            ret = wxColour(*link_color);
-            gdk_rgba_free (link_color);
-        }
-#else // !__WXGTK3__
         GdkColor* link_color;
         GdkColor color = { 0, 0, 0, 0xeeee };
 
@@ -306,7 +242,6 @@ wxColour wxHyperlinkCtrl::GetNormalColour() const
         }
         wxGCC_WARNING_RESTORE()
         ret = wxColour(color);
-#endif // __WXGTK3__/!__WXGTK3__
     }
     else
         ret = wxGenericHyperlinkCtrl::GetNormalColour();
@@ -318,7 +253,7 @@ void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
 {
     if ( UseNative() )
     {
-        DoSetLinkColour(Link_Visited, colour);
+        // simply do nothing: GTK+ does not allow us to change it :(
     }
     else
         wxGenericHyperlinkCtrl::SetVisitedColour(colour);
@@ -329,16 +264,6 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
     wxColour ret;
     if ( UseNative() )
     {
-#ifdef __WXGTK3__
-        GdkRGBA *link_color = NULL;
-        gtk_widget_style_get(m_widget, "visited-link-color", &link_color, NULL);
-
-        if ( link_color )
-        {
-            ret = wxColour(*link_color);
-            gdk_rgba_free (link_color);
-        }
-#else // !__WXGTK3__
         GdkColor* link_color;
         GdkColor color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 
@@ -353,7 +278,6 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
         }
         wxGCC_WARNING_RESTORE()
         ret = wxColour(color);
-#endif // __WXGTK3__/!__WXGTK3__
     }
     else
         ret = base_type::GetVisitedColour();

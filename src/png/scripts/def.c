@@ -21,7 +21,7 @@ PNG_DFN "OS2 DESCRIPTION "PNG image compression library""
 PNG_DFN "OS2 CODE PRELOAD MOVEABLE DISCARDABLE"
 PNG_DFN ""
 PNG_DFN "EXPORTS"
-PNG_DFN ";Version 1.6.21"
+PNG_DFN ";Version 1.6.28"
 
 #define PNG_EXPORTA(ordinal, type, name, args, attributes)\
         PNG_DFN "@" SYMBOL_PREFIX "@@" name "@"

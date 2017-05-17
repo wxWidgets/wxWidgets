@@ -1207,8 +1207,8 @@ bool wxThread::TestDestroy()
 class wxThreadModule : public wxModule
 {
 public:
-    virtual bool OnInit();
-    virtual void OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxThreadModule);
@@ -1371,7 +1371,7 @@ void WXDLLIMPEXP_BASE wxWakeUpMainThread()
             wxS("Failed to wake up main thread: PostThreadMessage(WM_NULL) ")
             wxS("failed with error 0x%08lx (%s)."),
             ec,
-            wxSysErrorMsg(ec)
+            wxSysErrorMsgStr(ec)
         );
     }
 }

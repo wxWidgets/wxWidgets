@@ -50,7 +50,7 @@ NB: If you checked your sources from version control repository and
     problem by creating a symbolic link to setup0.h instead of making
     a copy of it using mklink, from an admin command prompt:
 
-        cd include/wx/msw/
+        cd %WXWIN%\include\wx\msw\
         mklink setup.h setup0.h
 
 
@@ -93,7 +93,7 @@ Microsoft Visual C++ Compilation
    See "Configuring the Build" for more information about the
    additional parameters that can be specified on the command line.
 
-2. To verify your build, change the directory to samples\minimal and
+2. To verify your build, change the directory to %WXWIN%\samples\minimal and
    run the same nmake command (with the same parameters there), this
    should create a working minimal wxWidgets sample.
 
@@ -103,20 +103,15 @@ Microsoft Visual C++ Compilation
 * From the IDE using the provided project files:
 
 Ready to use project files are provided for VC++ versions 7, 8, 9,
-10, 11, 12 and 14 (also known as MSVS 2003, 2005, 2008, 2010, 2012, 2013
-and 2015 respectively).
+10, 11, 12, 14 and 15 (also known as MSVS 2003, 2005, 2008, 2010, 2012, 2013,
+2015 and 2017 respectively).
 
-Simply open wx_vcN.sln (for N=7, 8, 9, 10, 11 or 12) file,
+Simply open wx_vcN.sln (for N=7, 8, 9, 10, 11, 12, 14, or 15) file,
 select the appropriate configuration (Debug or Release, static or DLL)
 and build the solution. Notice that when building a DLL configuration,
 you may need to perform the build several times because the projects
 are not always built in the correct order, and this may result in link
 errors. Simply do the build again, up to 3 times, to fix this.
-
-Notice that x64 configurations are only included in VC10 and later project
-currently. If you want to build Win64 libraries with the previous
-compiler versions, the simplest solution is to use the makefiles as
-described above.
 
 
 Special notes for Visual Studio 2010+:
@@ -151,7 +146,7 @@ Improve debugging for Visual Studio 2012+:
 Debug visualizers for Visual Studio 2012+ are provided which makes inspecting
 various wxWidgets classes easier to view while debugging. To use them:
 
-1. Open the folder misc/msvc
+1. Open the folder %WXWIN%\misc\msvc
 2. Open the folder %USERPROFILE%\My Documents\Visual Studio 2012\Visualizers\
    (or the corresponding location for newer versions, e.g. ...2013\Visualizers)
 3. Copy wxWidgets.natvis and autoexp.inc
@@ -247,6 +242,11 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
    in release configuration and/or as a shared library instead of the
    default static one.
 
+   NOTE: For parallel builds, i.e. using -jN make option, please run
+         "mingw32-make -jN ... setup_h" first and then rerun the full
+         make command without "setup_h" at the end to work around a bug
+         in the current makefiles.
+
 2. To verify your build, change the directory to samples\minimal and
    run the same mingw32-make command (with the same parameters there),
    this should create a working minimal wxWidgets sample.
@@ -295,7 +295,7 @@ debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
 Using the Debugger and IDE in BDS or Turbo Explorer
 ---------------------------------------------------
 
-Doubleclick / open samples\minimal\borland.bdsproj. The current version
+Doubleclick / open %WXWIN%\samples\minimal\borland.bdsproj. The current version
 is to be used with a dynamic build of wxWidgets-made by running
 make -f Makefile.bcc -DBUILD=debug -DSHARED=1
 in wxWidgets\build\msw. You also need the wxWidgets\lib\bcc_dll
@@ -337,8 +337,8 @@ Library configuration
 ----------------------------------------------------------------
 
 While it is never necessary to do it, you may want to change some of
-the options in the include/wx/msw/setup.h file before building wxWidgets.
-This file is heavily commented, please read it and enable or disable
+the options in the %WXWIN%\include\wx\msw\setup.h file before building
+wxWidgets. This file is heavily commented, please read it and enable or disable
 the features you would like to compile wxWidgets with[out].
 
 Notice that this file is later copied into a directory under lib for
@@ -466,7 +466,7 @@ CFG=<configuration name>
   different setup.h settings coexisting in same tree. The value of
   this option is appended to the build directories names. This is
   useful for building the library in some non-default configuration,
-  e.g. you could change wxUSE_STL to 1 in include/wx/msw/setup.h and
+  e.g. you could change wxUSE_STL to 1 in %WXWIN%\include\wx\msw\setup.h and
   then build with "CFG=-stl". Alternatively, you could build with e.g.
   "RUNTIME_LIBS=static CFG=-mt" when using MSVC.
 
@@ -493,15 +493,15 @@ Building Applications Using wxWidgets
 NB: The makefiles and project files provided with wxWidgets samples show which
     flags should be used when building applications using wxWidgets so in case
     of a problem, e.g. if the instructions here are out of date, you can always
-    simply copy a makefile or project file from samples\minimal or some other
-    sample and adapt it to your application.
+    simply copy a makefile or project file from %WXWIN%\samples\minimal or some
+    other sample and adapt it to your application.
 
 Independently of the compiler and make/IDE you are using you must do the
 following to use wxWidgets sources under the directory $WXWIN (notice that
 different tool chains refer to environment variables such as WXWIN in
 different ways, e.g. MSVC users should use $(WXWIN) instead of just $WXWIN):
 
-* Add $WXWIN/include to the
+* Add $WXWIN\include to the
   - compiler
   - resource compiler
   include paths.
@@ -512,7 +512,7 @@ different ways, e.g. MSVC users should use $(WXWIN) instead of just $WXWIN):
   - WXUSINGDLL if you are using DLL build of wxWidgets.
 * If using MSVC 7 only (i.e. not for later versions), also define
   wxUSE_RC_MANIFEST=1 and WX_CPU_X86.
-* Add $WXWIN/lib/prefix_lib-or-dll to the libraries path. The prefix depends
+* Add $WXWIN\lib\prefix_lib-or-dll to the libraries path. The prefix depends
   on the compiler, by default it is "vc" for MSVC, "gcc" for g++ and so on.
 * Add the list of libraries to link with to the linker input. The exact list
   depends on which libraries you use and whether you built wxWidgets in
@@ -524,7 +524,7 @@ different ways, e.g. MSVC users should use $(WXWIN) instead of just $WXWIN):
 
 
 Microsoft Visual C++ users can simplify the linker setup by prepending
-"$(WXWIN)/include/msvc" to the include path (it must come before the
-"$(WXWIN)/include" part!) and omitting the last step: the required libraries
+"$(WXWIN)\include\msvc" to the include path (it must come before the
+"$(WXWIN)\include" part!) and omitting the last step: the required libraries
 will be linked in automatically using the "#pragma comment(lib)" feature of
 this compiler.

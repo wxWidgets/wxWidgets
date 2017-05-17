@@ -15,7 +15,7 @@
     <subproject id="access" template="sub"/>
     <subproject id="animate" template="sub"/>
     <subproject id="artprov" template="sub"/>
-    <subproject id="aui" template="sub"/>
+    <subproject id="aui" template="sub" cond="USE_HTML=='1'"/>
     <subproject id="calendar" template="sub"/>
     <subproject id="caret" template="sub"/>
     <subproject id="clipboard" template="sub"/>
@@ -34,13 +34,13 @@
     <subproject id="drawing" template="sub"/>
     <subproject id="erase" template="sub"/>
     <subproject id="event" template="sub"/>
-    <subproject id="except" template="sub"/>
+    <subproject id="except" template="sub" cond="USE_EXCEPTIONS=='1'"/>
     <subproject id="exec" template="sub"/>
     <subproject id="font" template="sub"/>
     <subproject id="grid" template="sub"/>
-    <subproject id="help" template="sub"/>
-    <subproject id="htlbox" template="sub"/>
-    <subproject id="html" template="sub"/>
+    <subproject id="help" template="sub" cond="USE_HTML=='1'"/>
+    <subproject id="htlbox" template="sub" cond="USE_HTML=='1'"/>
+    <subproject id="html" template="sub" cond="USE_HTML=='1'"/>
     <subproject id="image" template="sub"/>
     <subproject id="internat" template="sub"/>
     <subproject id="ipc" template="sub"/>
@@ -49,7 +49,7 @@
     <subproject id="layout" template="sub"/>
     <subproject id="listctrl" template="sub"/>
     <subproject id="mdi" template="sub"/>
-    <subproject id="mediaplayer" template="sub"/>
+    <subproject id="mediaplayer" template="sub" cond="USE_MEDIA=='1'"/>
     <subproject id="menu" template="sub"/>
     <subproject id="minimal" template="sub"/>
     <subproject id="nativdlg" template="sub"/>
@@ -61,20 +61,21 @@
     <subproject id="power" template="sub"/>
     <subproject id="preferences" template="sub"/>
     <subproject id="printing" template="sub"/>
-    <subproject id="propgrid" template="sub"/>
+    <subproject id="propgrid" template="sub" cond="USE_PROPGRID=='1'"/>
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
-    <subproject id="ribbon" template="sub"/>
-    <subproject id="richtext" template="sub"/>
+    <subproject id="ribbon" template="sub" cond="USE_RIBBON=='1'"/>
+    <subproject id="richtext" template="sub" cond="USE_HTML=='1' and USE_RICHTEXT=='1'"/>
     <subproject id="sashtest" template="sub"/>
     <subproject id="scroll" template="sub"/>
+    <subproject id="secretstore" template="sub"/>
     <subproject id="shaped" template="sub"/>
     <subproject id="sockets" template="sub"/>
     <subproject id="sound" template="sub"/>
-    <subproject id="splash" template="sub"/>
+    <subproject id="splash" template="sub" cond="USE_MEDIA=='1'"/>
     <subproject id="splitter" template="sub"/>
     <subproject id="statbar" template="sub"/>
-    <subproject id="stc" template="sub"/>
+    <subproject id="stc" template="sub" cond="USE_STC=='1'"/>
     <subproject id="svg" template="sub"/>
     <subproject id="taborder" template="sub"/>
     <subproject id="taskbar" template="sub"/>
@@ -86,11 +87,11 @@
     <subproject id="uiaction" template="sub"/>
     <subproject id="validate" template="sub"/>
     <subproject id="vscroll" template="sub"/>
-    <subproject id="webview" template="sub"/>
+    <subproject id="webview" template="sub" cond="USE_STC=='1'"/>
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>
-    <subproject id="xrc" template="sub"/>
+    <subproject id="xrc" template="sub" cond="USE_HTML=='1' and USE_RIBBON=='1'"/>
 
     <!--
         These samples don't always build (they need non-default wxWidgets

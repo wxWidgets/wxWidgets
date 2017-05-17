@@ -292,9 +292,20 @@ public:
 
     /**
        Splits text up at newlines and places the lines into wxStaticText
-       objects in a vertical wxBoxSizer.
+       objects with the specified maximum width in a vertical wxBoxSizer.
+
+       If @a widthMax has its default value of -1, only explicit new line
+       characters in @a message are taken into account. Otherwise, lines are
+       broken either after a new line or wrapped, at word boundary, if their
+       width would become bigger than the specified maximal width.
+
+       @param widthMax Specifies the text's maximum width (this argument is
+        available since version 3.1.1, previous versions always behaved as if
+        the maximal width of -1 was specified).
+
+       @see wxStaticText::Wrap(int width)
     */
-    wxSizer *CreateTextSizer( const wxString& message );
+    wxSizer *CreateTextSizer(const wxString& message, int widthMax = -1);
 
     /**
         Performs layout adaptation, usually if the dialog is too large to fit

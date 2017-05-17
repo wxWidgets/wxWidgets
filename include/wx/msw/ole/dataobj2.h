@@ -33,17 +33,17 @@ public:
         }
 
     // implement base class pure virtuals
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
+    virtual size_t GetDataSize() const wxOVERRIDE;
+    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
 
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const
+                             void *buf) const wxOVERRIDE
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf)
+                         size_t len, const void *buf) wxOVERRIDE
         { return SetData(len, buf); }
 
 private:
@@ -69,17 +69,17 @@ public:
         }
 
     // implement base class pure virtuals
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
+    virtual size_t GetDataSize() const wxOVERRIDE;
+    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
 
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const
+                             void *buf) const wxOVERRIDE
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf)
+                         size_t len, const void *buf) wxOVERRIDE
         { return SetData(len, buf); }
 
 private:
@@ -96,18 +96,18 @@ public:
     wxFileDataObject() { }
 
     // implement base class pure virtuals
-    virtual bool SetData(size_t len, const void *buf);
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *pData) const;
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
+    virtual size_t GetDataSize() const wxOVERRIDE;
+    virtual bool GetDataHere(void *pData) const wxOVERRIDE;
     virtual void AddFile(const wxString& file);
 
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const
+                             void *buf) const wxOVERRIDE
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf)
+                         size_t len, const void *buf) wxOVERRIDE
         { return SetData(len, buf); }
 
 private:
@@ -133,7 +133,7 @@ public:
     // override to set m_textFormat
     virtual bool SetData(const wxDataFormat& format,
                          size_t len,
-                         const void *buf);
+                         const void *buf) wxOVERRIDE;
 
 private:
     // last data object we got data in

@@ -31,12 +31,6 @@ public:
         Create(parent, winid, pos, size, style, name);
     }
 
-    // This is overridden for MSW to return true for all panels that are child
-    // of a window with themed background (such as wxNotebook) which should
-    // show through the child panels.
-    virtual bool HasTransparentBackground();
-
-
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_CONSTRUCTOR(
     wxPanel(wxWindow *parent,

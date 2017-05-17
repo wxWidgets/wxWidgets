@@ -5,6 +5,26 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+   @class wxPGWindowList
+
+   Contains a list of editor windows returned by CreateControls.
+*/
+
+class wxPGWindowList
+{
+public:
+    wxPGWindowList();
+    void SetSecondary( wxWindow* secondary );
+
+    wxWindow*   m_primary;
+    wxWindow*   m_secondary;
+
+    wxPGWindowList( wxWindow* a );
+    wxPGWindowList( wxWindow* a, wxWindow* b );
+};
+
+
 
 /**
     @class wxPGEditor
@@ -18,7 +38,7 @@
       calling wxPropertyGrid::RegisterAdditionalEditors() prior use.
 
     - Pointer to built-in editor is available as wxPGEditor_EditorName
-      (eg. wxPGEditor_TextCtrl).
+      (e.g. wxPGEditor_TextCtrl).
 
     - Before you start using new editor you just created, you need to register
       it using static function
@@ -45,7 +65,7 @@ public:
 
     /**
         Returns pointer to the name of the editor. For example,
-        wxPGEditor_TextCtrl has name "TextCtrl". If you dont' need to access
+        wxPGEditor_TextCtrl has name "TextCtrl". If you don't need to access
         your custom editor by string name, then you do not need to implement
         this function.
     */
@@ -67,8 +87,6 @@ public:
             Initial size for control(s).
 
         @remarks
-        - Primary control shall use id wxPG_SUBID1, and secondary (button) control
-          shall use wxPG_SUBID2.
         - Unlike in previous version of wxPropertyGrid, it is no longer
           necessary to call wxEvtHandler::Connect() for interesting editor
           events. Instead, all events from control are now automatically
@@ -95,14 +113,14 @@ public:
         @remarks wxPropertyGrid will automatically unfocus the editor when
                  @c wxEVT_TEXT_ENTER is received and when it results in
                  property value being modified. This happens regardless of
-                 editor type (ie. behaviour is same for any wxTextCtrl and
+                 editor type (i.e. behaviour is same for any wxTextCtrl and
                  wxComboBox based editor).
     */
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd_primary, wxEvent& event ) const = 0;
 
     /**
-        Returns value from control, via parameter 'variant'.
+        Returns value from control, via parameter @a variant.
         Usually ends up calling property's StringToValue() or IntToValue().
         Returns @true if value was different.
     */
@@ -111,21 +129,24 @@ public:
 
     /** Sets value in control to unspecified. */
     virtual void SetValueToUnspecified( wxPGProperty* property,
-                                        wxWindow* ctrl ) const = 0;
+                                        wxWindow* ctrl ) const;
 
     /**
         Called by property grid to set new appearance for the control.
         Default implementation  sets foreground colour, background colour,
         font, plus text for wxTextCtrl and wxComboCtrl.
 
-        The parameter @a appearance represents the new appearance to be applied.
+        @param appearance
+            New appearance to be applied.
 
-        The parameter @a oldAppearance is the previously applied appearance. 
-        Used to detect which control attributes need to be changed (e.g. so we only
-        change background colour if really needed).
+        @param oldAppearance
+            Previously applied appearance.  Used to detect which control
+            attributes need to be changed (e.g. so we onlychange background
+            colour if really needed).
 
-        Finally, the parameter @a unspecified if @true tells this function that
-        the new appearance represents an unspecified property value.
+        @param unspecified
+            If @true tells this function that the new appearance represents
+            an unspecified property value.
     */
     virtual void SetControlAppearance( wxPropertyGrid* pg,
                                        wxPGProperty* property,
@@ -165,6 +186,228 @@ public:
         Default implementation returns @false.
     */
     virtual bool CanContainCustomImage() const;
+
+    //
+    // This member is public so scripting language bindings
+    // wrapper code can access it freely.
+    void*       m_clientData;
+
+};
+
+
+
+
+class wxPGTextCtrlEditor : public wxPGEditor
+{
+public:
+    wxPGTextCtrlEditor();
+    virtual ~wxPGTextCtrlEditor();
+
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+    virtual void UpdateControl( wxPGProperty* property,
+                                wxWindow* ctrl ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxPGProperty* property,
+                          wxWindow* primaryCtrl,
+                          wxEvent& event ) const;
+    virtual bool GetValueFromControl( wxVariant& variant,
+                                      wxPGProperty* property,
+                                      wxWindow* ctrl ) const;
+
+    virtual wxString GetName() const;
+
+    virtual void SetControlStringValue( wxPGProperty* property,
+                                        wxWindow* ctrl,
+                                        const wxString& txt ) const;
+    virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
+
+    static bool OnTextCtrlEvent( wxPropertyGrid* propgrid,
+                                 wxPGProperty* property,
+                                 wxWindow* ctrl,
+                                 wxEvent& event );
+
+    static bool GetTextCtrlValueFromControl( wxVariant& variant,
+                                             wxPGProperty* property,
+                                             wxWindow* ctrl );
+};
+
+
+class wxPGChoiceEditor : public wxPGEditor
+{
+public:
+    wxPGChoiceEditor()
+    virtual ~wxPGChoiceEditor();
+
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+    virtual void UpdateControl( wxPGProperty* property,
+                                wxWindow* ctrl ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxPGProperty* property,
+                          wxWindow* primaryCtrl,
+                          wxEvent& event ) const;
+    virtual bool GetValueFromControl( wxVariant& variant,
+                                      wxPGProperty* property,
+                                      wxWindow* ctrl ) const;
+    virtual void SetValueToUnspecified( wxPGProperty* property,
+                                        wxWindow* ctrl ) const;
+    virtual wxString GetName() const;
+
+    virtual void SetControlIntValue( wxPGProperty* property,
+                                     wxWindow* ctrl,
+                                     int value ) const;
+    virtual void SetControlStringValue( wxPGProperty* property,
+                                        wxWindow* ctrl,
+                                        const wxString& txt ) const;
+
+    virtual int InsertItem( wxWindow* ctrl,
+                            const wxString& label,
+                            int index ) const;
+    virtual void DeleteItem( wxWindow* ctrl, int index ) const;
+    virtual bool CanContainCustomImage() const;
+
+    wxWindow* CreateControlsBase( wxPropertyGrid* propgrid,
+                                  wxPGProperty* property,
+                                  const wxPoint& pos,
+                                  const wxSize& sz,
+                                  long extraStyle ) const;
+
+};
+
+
+class wxPGComboBoxEditor : public wxPGChoiceEditor
+{
+public:
+    wxPGComboBoxEditor();
+    virtual ~wxPGComboBoxEditor();
+
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+
+    virtual wxString GetName() const;
+
+    virtual void UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const;
+
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
+        wxWindow* ctrl, wxEvent& event ) const;
+
+    virtual bool GetValueFromControl( wxVariant& variant,
+                                      wxPGProperty* property,
+                                      wxWindow* ctrl ) const;
+
+    virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
+
+};
+
+
+class wxPGChoiceAndButtonEditor : public wxPGChoiceEditor
+{
+public:
+    wxPGChoiceAndButtonEditor();
+    virtual ~wxPGChoiceAndButtonEditor();
+    virtual wxString GetName() const;
+
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+};
+
+class wxPGTextCtrlAndButtonEditor : public wxPGTextCtrlEditor
+{
+public:
+    wxPGTextCtrlAndButtonEditor();
+    virtual ~wxPGTextCtrlAndButtonEditor();
+    virtual wxString GetName() const;
+
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+};
+
+
+
+
+
+class wxPGCheckBoxEditor : public wxPGEditor
+{
+public:
+    wxPGCheckBoxEditor();
+    virtual ~wxPGCheckBoxEditor();
+
+    virtual wxString GetName() const;
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+    virtual void UpdateControl( wxPGProperty* property,
+                                wxWindow* ctrl ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxPGProperty* property,
+                          wxWindow* primaryCtrl,
+                          wxEvent& event ) const;
+    virtual bool GetValueFromControl( wxVariant& variant,
+                                      wxPGProperty* property,
+                                      wxWindow* ctrl ) const;
+    virtual void SetValueToUnspecified( wxPGProperty* property,
+                                        wxWindow* ctrl ) const;
+
+    virtual void DrawValue( wxDC& dc,
+                            const wxRect& rect,
+                            wxPGProperty* property,
+                            const wxString& text ) const;
+
+    virtual void SetControlIntValue( wxPGProperty* property,
+                                     wxWindow* ctrl,
+                                     int value ) const;
+};
+
+
+
+/**
+    @class wxPGEditorDialogAdapter
+
+    Derive a class from this to adapt an existing editor dialog or function to
+    be used when editor button of a property is pushed.
+
+    You only need to derive class and implement DoShowDialog() to create and
+    show the dialog, and finally submit the value returned by the dialog
+    via SetValue().
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGEditorDialogAdapter : public wxObject
+{
+public:
+    wxPGEditorDialogAdapter();
+    virtual ~wxPGEditorDialogAdapter();
+
+    bool ShowDialog( wxPropertyGrid* propGrid, wxPGProperty* property );
+
+    virtual bool DoShowDialog( wxPropertyGrid* propGrid,
+                               wxPGProperty* property ) = 0;
+
+    void SetValue( wxVariant value );
+
+    /**
+        This method is typically only used if deriving class from existing
+        adapter with value conversion purposes.
+    */
+    wxVariant& GetValue() { return m_value; }
+
+    //
+    // This member is public so scripting language bindings
+    // wrapper code can access it freely.
+    void*               m_clientData;
 };
 
 
@@ -335,3 +578,35 @@ public:
     wxSize GetPrimarySize() const;
 };
 
+/** @class wxPGEditorDialogAdapter
+
+    Derive a class from this to adapt an existing editor dialog or function to
+    be used when editor button of a property is pushed.
+
+    You only need to derive class and implement DoShowDialog() to create and
+    show the dialog, and finally submit the value returned by the dialog
+    via SetValue().
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGEditorDialogAdapter : public wxObject
+{
+public:
+    wxPGEditorDialogAdapter();
+
+    virtual ~wxPGEditorDialogAdapter();
+
+    bool ShowDialog( wxPropertyGrid* propGrid, wxPGProperty* property );
+
+    virtual bool DoShowDialog( wxPropertyGrid* propGrid,
+                               wxPGProperty* property ) = 0;
+
+    void SetValue( wxVariant value );
+
+    /**
+        This method is typically only used if deriving class from existing
+        adapter with value conversion purposes.
+    */
+    wxVariant& GetValue();
+};

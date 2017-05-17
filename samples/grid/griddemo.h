@@ -64,6 +64,7 @@ class GridFrame : public wxFrame
     void DeleteSelectedRows( wxCommandEvent& );
     void DeleteSelectedCols( wxCommandEvent& );
     void ClearGrid( wxCommandEvent& );
+    void ShowSelection( wxCommandEvent& );
     void SelectCells( wxCommandEvent& );
     void SelectRows( wxCommandEvent& );
     void SelectCols( wxCommandEvent& );
@@ -164,6 +165,7 @@ public:
         ID_DELETEROW,
         ID_DELETECOL,
         ID_CLEARGRID,
+        ID_SHOWSEL,
         ID_CHANGESEL,
         ID_SELCELLS,
         ID_SELROWS,

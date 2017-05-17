@@ -65,6 +65,7 @@ EditModel::EditModel() {
 	primarySelection = true;
 	imeInteraction = imeWindowed;
 	foldFlags = 0;
+	foldDisplayTextStyle = SC_FOLDDISPLAYTEXT_HIDDEN;
 	hotspot = Range(invalidPosition);
 	hoverIndicatorPos = invalidPosition;
 	wrapWidth = LineLayout::wrapWidthInfinite;

@@ -113,7 +113,7 @@ private:
     static std::string
     Message(size_t n, const wxString& msg)
     {
-        return std::string(wxString::Format("#%lu: %s", (unsigned long)n, msg));
+        return wxString::Format("#%lu: %s", (unsigned long)n, msg).ToStdString();
     }
 
     template <typename T>

@@ -19,7 +19,7 @@ class wxGtkObject
 {
 public:
     explicit wxGtkObject(T *p) : m_ptr(p) { }
-    ~wxGtkObject() { g_object_unref(m_ptr); }
+    ~wxGtkObject() { if ( m_ptr ) g_object_unref(m_ptr); }
 
     operator T *() const { return m_ptr; }
 

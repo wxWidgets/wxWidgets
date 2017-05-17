@@ -21,7 +21,7 @@
     #include "wx/wx.h"
 #endif
 
-#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_IE
+#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE
 #error "A wxWebView backend is required by this sample"
 #endif
 
@@ -736,7 +736,7 @@ void WebFrame::OnFindText(wxCommandEvent& evt)
     {
         count++;
     }
-    wxLogMessage("Searching for:%s  current match:%i/%i", m_findText.c_str(), count, m_findCount);
+    wxLogMessage("Searching for:%s  current match:%li/%i", m_findText.c_str(), count, m_findCount);
 }
 
 /**

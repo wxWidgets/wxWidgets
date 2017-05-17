@@ -63,13 +63,6 @@ bool wxColourDisplay()
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1070) && (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
-// bring back declaration so that we can support deployment targets < 10_6
-CG_EXTERN size_t CGDisplayBitsPerPixel(CGDirectDisplayID display)
-CG_AVAILABLE_BUT_DEPRECATED(__MAC_10_0, __MAC_10_6,
-                            __IPHONE_NA, __IPHONE_NA);
-#endif
-
 // Returns depth of screen
 int wxDisplayDepth()
 {
@@ -157,15 +150,11 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-    wxDisplaySize(width, height);
-    // on mac 72 is fixed (at least now;-)
-    double cvPt2Mm = 25.4 / 72;
-
-    if (width != NULL)
-        *width = int( *width * cvPt2Mm );
-
-    if (height != NULL)
-        *height = int( *height * cvPt2Mm );
+    CGSize size = CGDisplayScreenSize(CGMainDisplayID());
+    if ( width )
+        *width = (int)size.width ;
+    if ( height )
+        *height = (int)size.height;
 }
 
 

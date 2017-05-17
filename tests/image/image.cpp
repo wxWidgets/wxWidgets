@@ -1422,6 +1422,36 @@ void ImageTestCase::ScaleCompare()
                                "image/horse_bilinear_150x150.png");
     ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(300, 300, wxIMAGE_QUALITY_BILINEAR),
                                "image/horse_bilinear_300x300.png");
+
+    // Test scaling symmetric image
+    const static char* cross_xpm[] =
+    {
+        "9 9 5 1",
+        "   c None",
+        "r  c #FF0000",
+        "g  c #00FF00",
+        "b  c #0000FF",
+        "w  c #FFFFFF",
+        "    r    ",
+        "    g    ",
+        "    b    ",
+        "    w    ",
+        "rgbw wbgr",
+        "    w    ",
+        "    b    ",
+        "    g    ",
+        "    r    "
+    };
+
+    wxImage imgCross(cross_xpm);
+    ASSERT_IMAGE_EQUAL_TO_FILE(imgCross.Scale(256, 256, wxIMAGE_QUALITY_BILINEAR),
+                               "image/cross_bilinear_256x256.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(imgCross.Scale(256, 256, wxIMAGE_QUALITY_BICUBIC),
+                               "image/cross_bicubic_256x256.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(imgCross.Scale(256, 256, wxIMAGE_QUALITY_BOX_AVERAGE),
+                               "image/cross_box_average_256x256.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(imgCross.Scale(256, 256, wxIMAGE_QUALITY_NEAREST),
+                               "image/cross_nearest_neighb_256x256.png");
 }
 
 #endif //wxUSE_IMAGE

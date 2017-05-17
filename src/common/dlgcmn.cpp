@@ -196,19 +196,19 @@ wxDialogBase::GetParentForModalDialog(wxWindow *parent, long style) const
 
 #if wxUSE_STATTEXT
 
-wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
+wxSizer *wxDialogBase::CreateTextSizer(const wxString& message, int widthMax)
 {
     wxTextSizerWrapper wrapper(this);
 
-    return CreateTextSizer(message, wrapper);
+    return CreateTextSizer(message, wrapper, widthMax);
 }
 
 wxSizer *wxDialogBase::CreateTextSizer(const wxString& message,
-                                       wxTextSizerWrapper& wrapper)
+                                       wxTextSizerWrapper& wrapper,
+                                       int widthMax)
 {
     // I admit that this is complete bogus, but it makes
     // message boxes work for pda screens temporarily..
-    int widthMax = -1;
     const bool is_pda = wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA;
     if (is_pda)
     {
@@ -275,7 +275,12 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 
     if (flags & wxCANCEL)
     {
-        wxButton *cancel = new wxButton(this, wxID_CANCEL);
+        // Avoid Cmd+C closing dialog on Mac.
+        wxString cancelLabel(_("&Cancel"));
+#ifdef __WXMAC__
+        cancelLabel.Replace("&",wxEmptyString);
+#endif
+        wxButton *cancel = new wxButton(this, wxID_CANCEL, cancelLabel);
         sizer->AddButton(cancel);
     }
 

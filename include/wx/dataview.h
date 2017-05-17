@@ -54,6 +54,9 @@ class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
 class WXDLLIMPEXP_FWD_ADV wxDataViewRenderer;
 class WXDLLIMPEXP_FWD_ADV wxDataViewModelNotifier;
+#if wxUSE_ACCESSIBILITY
+class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlAccessible;
+#endif // wxUSE_ACCESSIBILITY
 
 extern WXDLLIMPEXP_DATA_ADV(const char) wxDataViewCtrlNameStr[];
 
@@ -87,7 +90,7 @@ class wxDataViewItem : public wxItemId<void*>
 {
 public:
     wxDataViewItem() : wxItemId<void*>() { }
-    wxEXPLICIT wxDataViewItem(void* pItem) : wxItemId<void*>(pItem) { }
+    explicit wxDataViewItem(void* pItem) : wxItemId<void*>(pItem) { }
 };
 
 WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
@@ -382,7 +385,7 @@ public:
     // implement base methods
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const wxOVERRIDE;
 
-    unsigned int GetCount() const wxOVERRIDE { return m_hash.GetCount(); }
+    unsigned int GetCount() const wxOVERRIDE { return (unsigned int)m_hash.GetCount(); }
 
 private:
     wxDataViewItemArray m_hash;

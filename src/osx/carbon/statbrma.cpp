@@ -13,10 +13,12 @@
 #if wxUSE_STATUSBAR
 
 #include "wx/statusbr.h"
+#include "wx/platinfo.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/dcclient.h"
+    #include "wx/dialog.h"
     #include "wx/toplevel.h"
 #endif
 
@@ -57,33 +59,51 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
                             long style ,
                             const wxString& name)
 {
+    SetBackgroundStyle( wxBG_STYLE_TRANSPARENT );
+
     if ( !wxStatusBarGeneric::Create( parent, id, style, name ) )
         return false;
-
-    if ( parent->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
-        SetBackgroundStyle( wxBG_STYLE_TRANSPARENT );
 
     // normal system font is too tall for fitting into the standard height
     SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+    if ( !wxPlatformInfo::Get().CheckOSVersion(10, 10) )
+    {
+        // 10.9 Mavericks and older:
+        m_textActive = wxColour(0x2F, 0x2F, 0x2F);
+        m_textInactive = wxColour(0x4D, 0x4D, 0x4D);
+        m_bgActiveFrom = wxColour(0xDA, 0xDA, 0xDA);
+        m_bgActiveTo = wxColour(0xA0, 0xA0, 0xA0);
+        m_borderActive = wxColour(0x6E, 0x6E, 0x6E);
+        m_borderInactive = wxColour(0xA3, 0xA3, 0xA3);
+        SetBackgroundColour(wxColour(0xE1, 0xE1, 0xE1)); // inactive bg
+    }
+    else
+#endif // MAC_OS_X_VERSION_MIN_REQUIRED < 101000
+    {
+        // 10.10 Yosemite and newer:
+        m_textActive = wxColour(0x40, 0x40, 0x40);
+        m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
+        m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
+        m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
+        m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
+        m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
+        SetBackgroundColour(wxColour(0xF4, 0xF4, 0xF4)); // inactive bg
+    }
+
     return true;
 }
 
-void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int WXUNUSED(textHeight))
+void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
 {
     int w, h;
     GetSize( &w , &h );
 
-    if ( !MacIsReallyHilited() )
-        dc.SetTextForeground( wxColour( 0x80, 0x80, 0x80 ) );
-
     wxString text(GetStatusText( i ));
 
-    /*wxCoord x, y;
-    dc.GetTextExtent(text, &x, &y);    -- seems unused (FM)*/
-
     int xpos = rect.x + wxFIELD_TEXT_MARGIN + 1;
-    int ypos = 1;
+    int ypos = 2 + (rect.height - textHeight) / 2;
 
     if ( MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
         ypos++;
@@ -128,26 +148,39 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
     int w, h;
     GetSize( &w, &h );
 
-    if ( MacIsReallyHilited() )
+    // Notice that wxOSXGetKeyWindow (aka [NSApp keyWindow] used below is
+    // subtly different from IsActive() (aka [NSWindow iskeyWindow]): the
+    // former remains non-NULL if another application shows a temporary
+    // floating window or a status icon's menu is used. That's what we want: in
+    // that case, statusbar appearance shouldn't change. It also shouldn't
+    // change if a window-modal sheet attached to this window is key.
+    wxTopLevelWindow *tlw = wxDynamicCast(MacGetTopLevelWindow(), wxTopLevelWindow);
+    wxWindow *keyWindow = wxNonOwnedWindow::GetFromWXWindow(wxOSXGetKeyWindow())->MacGetTopLevelWindow();
+    while ( keyWindow && keyWindow != tlw )
     {
-        wxPen white( *wxWHITE , 1 , wxPENSTYLE_SOLID );
-        // Finder statusbar border color: (Project Builder similar is 9B9B9B)
-        if ( MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
-            dc.SetPen(wxPen(wxColour(0x40, 0x40, 0x40), 1, wxPENSTYLE_SOLID));
+        wxDialog *dlg = wxDynamicCast(keyWindow, wxDialog);
+        if ( dlg && dlg->GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL )
+            keyWindow = dlg->GetParent();
         else
-            dc.SetPen(wxPen(wxColour(0xB1, 0xB1, 0xB1), 1, wxPENSTYLE_SOLID));
+            break;
+    }
 
-        dc.DrawLine(0, 0, w, 0);
-        dc.SetPen(white);
-        dc.DrawLine(0, 1, w, 1);
+    if ( tlw == keyWindow )
+    {
+        dc.GradientFillLinear(dc.GetSize(), m_bgActiveFrom, m_bgActiveTo, wxBOTTOM);
+
+        // Finder statusbar border color
+        dc.SetPen(wxPen(m_borderActive, 2, wxPENSTYLE_SOLID));
+        dc.SetTextForeground(m_textActive);
     }
     else
     {
-        // Finder statusbar border color: (Project Builder similar is 9B9B9B)
-        dc.SetPen(wxPen(wxColour(0xB1, 0xB1, 0xB1), 1, wxPENSTYLE_SOLID));
-
-        dc.DrawLine(0, 0, w, 0);
+        // Finder statusbar border color
+        dc.SetPen(wxPen(m_borderInactive, 2, wxPENSTYLE_SOLID));
+        dc.SetTextForeground(m_textInactive);
     }
+
+    dc.DrawLine(0, 0, w, 0);
 
     if ( GetFont().IsOk() )
         dc.SetFont(GetFont());

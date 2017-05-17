@@ -49,6 +49,10 @@
 #ifdef __WIN32__
     #include "wx/dynlib.h"
     #include "wx/msw/private.h"
+
+    #ifndef LOCALE_SNAME
+    #define LOCALE_SNAME 0x5c
+    #endif
 #endif
 
 #include "wx/file.h"
@@ -147,6 +151,19 @@ wxString wxLanguageInfo::GetLocaleName() const
 
     wxChar buffer[256];
     buffer[0] = wxT('\0');
+    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    {
+        if ( ::GetLocaleInfo(lcid, LOCALE_SNAME, buffer, WXSIZEOF(buffer)) )
+        {
+            locale << buffer;
+        }
+        else
+        {
+            wxLogLastError(wxT("GetLocaleInfo(LOCALE_SNAME)"));
+        }
+        return locale;
+    }
+
     if ( !::GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, WXSIZEOF(buffer)) )
     {
         wxLogLastError(wxT("GetLocaleInfo(LOCALE_SENGLANGUAGE)"));
@@ -518,7 +535,7 @@ bool wxLocale::Init(int language, int flags)
         ret = false;
 #elif defined(__WXMAC__)
     if (lang == wxLANGUAGE_DEFAULT)
-        locale = wxEmptyString;
+        locale.clear();
     else
         locale = info->CanonicalName;
 
@@ -807,15 +824,11 @@ wxString wxLocale::GetSystemEncodingName()
     // to Unix98)
     char *oldLocale = strdup(setlocale(LC_CTYPE, NULL));
     setlocale(LC_CTYPE, "");
-    const char *alang = nl_langinfo(CODESET);
+    encname = wxString::FromAscii(nl_langinfo(CODESET));
     setlocale(LC_CTYPE, oldLocale);
     free(oldLocale);
 
-    if ( alang )
-    {
-        encname = wxString::FromAscii( alang );
-    }
-    else // nl_langinfo() failed
+    if (encname.empty())
 #endif // HAVE_LANGINFO_H
     {
         // if we can't get at the character set directly, try to see if it's in
@@ -959,27 +972,31 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
 /* static */
 wxString wxLocale::GetLanguageName(int lang)
 {
+    wxString string;
+
     if ( lang == wxLANGUAGE_DEFAULT || lang == wxLANGUAGE_UNKNOWN )
-        return wxEmptyString;
+        return string;
 
     const wxLanguageInfo *info = GetLanguageInfo(lang);
-    if ( !info )
-        return wxEmptyString;
-    else
-        return info->Description;
+    if (info)
+        string = info->Description;
+
+    return string;
 }
 
 /* static */
 wxString wxLocale::GetLanguageCanonicalName(int lang)
 {
+    wxString string;
+
     if ( lang == wxLANGUAGE_DEFAULT || lang == wxLANGUAGE_UNKNOWN )
-        return wxEmptyString;
+        return string;
 
     const wxLanguageInfo *info = GetLanguageInfo(lang);
-    if ( !info )
-        return wxEmptyString;
-    else
-        return info->CanonicalName;
+    if (info)
+        string = info->CanonicalName;
+
+    return string;
 }
 
 /* static */

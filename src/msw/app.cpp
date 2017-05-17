@@ -51,6 +51,7 @@
 #include "wx/thread.h"
 #include "wx/scopeguard.h"
 #include "wx/vector.h"
+#include "wx/weakref.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
@@ -91,10 +92,6 @@
     typedef HRESULT (CALLBACK* DLLGETVERSIONPROC)(DLLVERSIONINFO *);
 #endif // defined(DLLVERSIONINFO)
 
-#ifndef ATTACH_PARENT_PROCESS
-    #define ATTACH_PARENT_PROCESS ((DWORD)-1)
-#endif
-
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -105,10 +102,29 @@ extern void wxSetKeyboardHook(bool doIt);
 // see http://article.gmane.org/gmane.comp.lib.wxwidgets.devel/110282
 struct ClassRegInfo
 {
-    ClassRegInfo(const wxChar *name)
-        : regname(name),
-          regnameNR(regname + wxApp::GetNoRedrawClassSuffix())
+    ClassRegInfo(const wxChar *name, int flags)
     {
+        if ( (flags & wxApp::RegClass_OnlyNR) == wxApp::RegClass_OnlyNR )
+        {
+            // We don't register the "normal" variant, so leave its name empty
+            // to indicate that it's not used and use the given name for the
+            // class that we do register: we don't need the "NR" suffix to
+            // distinguish it in this case as there is only a single variant.
+            regnameNR = name;
+        }
+        else // Register both normal and NR variants.
+        {
+            // Here we use a special suffix to make the class names unique.
+            regname = name;
+            regnameNR = regname + wxApp::GetNoRedrawClassSuffix();
+        }
+    }
+
+    // Return the appropriate string depending on the presence of
+    // RegClass_ReturnNR bit in the flags.
+    const wxChar* GetRequestedName(int flags) const
+    {
+        return (flags & wxApp::RegClass_ReturnNR ? regnameNR : regname).t_str();
     }
 
     // the name of the registered class with and without CS_[HV]REDRAW styles
@@ -137,13 +153,15 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 // AfterChildWaitLoop()
 struct ChildWaitLoopData
 {
-    ChildWaitLoopData(wxWindowDisabler *wd_, wxWindow *winActive_)
+    ChildWaitLoopData(wxWindowDisabler *wd_, wxWindow *focused_, wxWindow *winActive_)
     {
         wd = wd_;
+        focused = focused_;
         winActive = winActive_;
     }
 
     wxWindowDisabler *wd;
+    wxWeakRef<wxWindow> focused;
     wxWindow *winActive;
 };
 
@@ -167,6 +185,8 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
      */
     wxBeginBusyCursor();
 
+    wxWindow* const focus = wxWindow::FindFocus();
+
     // first disable all existing windows
     wxWindowDisabler *wd = new wxWindowDisabler;
 
@@ -183,7 +203,7 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
                     );
     winActive->Show();
 
-    return new ChildWaitLoopData(wd, winActive);
+    return new ChildWaitLoopData(wd, focus, winActive);
 }
 
 void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
@@ -193,6 +213,9 @@ void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
     ChildWaitLoopData * const data = (ChildWaitLoopData *)dataOrig;
 
     delete data->wd;
+
+    if ( data->focused )
+        data->focused->SetFocus();
 
     // finally delete the dummy dialog and, as wd has been already destroyed
     // and the other windows reenabled, the activation is going to return to
@@ -225,16 +248,23 @@ WXDWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
     // have a running event loop as we would never remove them from the message
     // queue then and so we would enter an infinite loop as
     // MsgWaitForMultipleObjects() keeps returning WAIT_OBJECT_0 + 1.
-    if ( flags == wxTHREAD_WAIT_YIELD && wxIsMainThread() )
+    if ( flags == wxTHREAD_WAIT_BLOCK ||
+            !wxIsMainThread() ||
+                !wxEventLoop::GetActive() )
     {
-        wxMSWEventLoopBase* const
-            evtLoop = static_cast<wxMSWEventLoopBase *>(wxEventLoop::GetActive());
-        if ( evtLoop )
-            return evtLoop->MSWWaitForThread(hThread);
+        // Simple blocking wait.
+        return DoSimpleWaitForThread(hThread);
     }
 
-    // Simple blocking wait.
-    return DoSimpleWaitForThread(hThread);
+    return ::MsgWaitForMultipleObjects
+             (
+               1,                   // number of objects to wait for
+               (HANDLE *)&hThread,  // the objects
+               false,               // wait for any objects, not all
+               INFINITE,            // no timeout
+               QS_ALLINPUT |        // return as soon as there are any events
+               QS_ALLPOSTMESSAGE
+             );
 }
 #endif // wxUSE_THREADS
 
@@ -615,13 +645,15 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 /* static */
 const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
                                             int bgBrushCol,
-                                            int extraStyles)
+                                            int extraStyles,
+                                            int flags)
 {
     const size_t count = gs_regClassesInfo.size();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( gs_regClassesInfo[n].regname == name )
-            return gs_regClassesInfo[n].regname.c_str();
+        if ( gs_regClassesInfo[n].regname == name ||
+                gs_regClassesInfo[n].regnameNR == name )
+            return gs_regClassesInfo[n].GetRequestedName(flags);
     }
 
     // we need to register this class
@@ -635,13 +667,16 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | extraStyles;
 
 
-    ClassRegInfo regClass(name);
-    wndclass.lpszClassName = regClass.regname.t_str();
-    if ( !::RegisterClass(&wndclass) )
+    ClassRegInfo regClass(name, flags);
+    if ( !regClass.regname.empty() )
     {
-        wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
-                       regClass.regname));
-        return NULL;
+        wndclass.lpszClassName = regClass.regname.t_str();
+        if ( !::RegisterClass(&wndclass) )
+        {
+            wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
+                           regClass.regname));
+            return NULL;
+        }
     }
 
     wndclass.style &= ~(CS_HREDRAW | CS_VREDRAW);
@@ -660,7 +695,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     // function returns (it could be invalidated later if new elements are
     // added to the vector and it's reallocated but this shouldn't matter as
     // this pointer should be used right now, not stored)
-    return gs_regClassesInfo.back().regname.t_str();
+    return gs_regClassesInfo.back().GetRequestedName(flags);
 }
 
 bool wxApp::IsRegisteredClassName(const wxString& name)
@@ -682,10 +717,13 @@ void wxApp::UnregisterWindowClasses()
     for ( size_t n = 0; n < count; n++ )
     {
         const ClassRegInfo& regClass = gs_regClassesInfo[n];
-        if ( !::UnregisterClass(regClass.regname.c_str(), wxGetInstance()) )
+        if ( !regClass.regname.empty() )
         {
-            wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
-                           regClass.regname));
+            if ( !::UnregisterClass(regClass.regname.c_str(), wxGetInstance()) )
+            {
+                wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
+                               regClass.regname));
+            }
         }
 
         if ( !::UnregisterClass(regClass.regnameNR.c_str(), wxGetInstance()) )
@@ -747,16 +785,42 @@ void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
 
 void wxApp::WakeUpIdle()
 {
-    wxEventLoopBase * const evtLoop = wxEventLoop::GetActive();
-    if ( !evtLoop )
+    // Send the top window a dummy message so idle handler processing will
+    // start up again.  Doing it this way ensures that the idle handler
+    // wakes up in the right thread (see also wxWakeUpMainThread() which does
+    // the same for the main app thread only)
+    wxWindow * const topWindow = wxTheApp->GetTopWindow();
+    if ( topWindow )
     {
-        // We can't wake up the event loop if there is none and there is just
-        // no need to do anything in this case, any pending events will be
-        // handled when the event loop starts.
-        return;
-    }
+        HWND hwndTop = GetHwndOf(topWindow);
 
-    evtLoop->WakeUp();
+        // Do not post WM_NULL if there's already a pending WM_NULL to avoid
+        // overflowing the message queue.
+        //
+        // Notice that due to a limitation of PeekMessage() API (which handles
+        // 0,0 range specially), we have to check the range from 0-1 instead.
+        // This still makes it possible to overflow the queue with WM_NULLs by
+        // interspersing the calles to WakeUpIdle() with windows creation but
+        // it should be rather hard to do it accidentally.
+        MSG msg;
+        if ( !::PeekMessage(&msg, hwndTop, 0, 1, PM_NOREMOVE) ||
+              ::PeekMessage(&msg, hwndTop, 1, 1, PM_NOREMOVE) )
+        {
+            // If this fails too, there is really not much we can do, but then
+            // neither do we need to, as it normally indicates that the window
+            // queue is full to the brim with the messages and so the main loop
+            // is running and doesn't need to be woken up.
+            //
+            // Notice that we especially should not try use wxLogLastError()
+            // here as this would lead to another call to wxWakeUpIdle() from
+            // inside wxLog and stack overflow due to the resulting recursion.
+            ::PostMessage(hwndTop, WM_NULL, 0, 0);
+        }
+    }
+#if wxUSE_THREADS
+    else
+        wxWakeUpMainThread();
+#endif // wxUSE_THREADS
 }
 
 // ----------------------------------------------------------------------------

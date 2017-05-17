@@ -1247,7 +1247,7 @@ void MBConvTestCase::TestStreamDecoder(
     {
         wxChar wc = textInputStream.GetChar();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            std::string(wxString::Format("At position %lu", (unsigned long)i)),
+            wxString::Format("At position %lu", (unsigned long)i).ToStdString(),
             wideBuffer[i],
             wc
         );

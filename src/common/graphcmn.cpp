@@ -22,10 +22,16 @@
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
     #include "wx/bitmap.h"
+    #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/dcprint.h"
     #include "wx/math.h"
     #include "wx/region.h"
     #include "wx/log.h"
+#endif
+
+#ifdef __WXMSW__
+    #include "wx/msw/enhmeta.h"
 #endif
 
 #include "wx/private/graphics.h"
@@ -434,11 +440,11 @@ void wxGraphicsPathData::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w
         AddRectangle(x,y,w,h);
     else
     {
-        MoveToPoint( x + w, y + h / 2);
-        AddArcToPoint(x + w, y + h, x + w / 2, y + h, radius);
-        AddArcToPoint(x, y + h, x, y + h / 2, radius);
-        AddArcToPoint(x, y , x + w / 2, y, radius);
-        AddArcToPoint(x + w, y, x + w, y + h / 2, radius);
+        MoveToPoint(x+w, y+h/2);
+        AddArc(x+w-radius, y+h-radius, radius, 0.0, M_PI/2.0, true);
+        AddArc(x+radius, y+h-radius, radius, M_PI/2.0, M_PI, true);
+        AddArc(x+radius, y+radius, radius, M_PI, 3.0*M_PI/2.0, true);
+        AddArc(x+w-radius, y+radius, radius, 3.0*M_PI/2.0, 2.0*M_PI, true);
         CloseSubpath();
     }
 }
@@ -447,37 +453,66 @@ void wxGraphicsPathData::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w
 void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
 {
     wxPoint2DDouble current;
-    GetCurrentPoint(&current.m_x,&current.m_y);
-    wxPoint2DDouble p1(x1,y1);
-    wxPoint2DDouble p2(x2,y2);
+    GetCurrentPoint(&current.m_x, &current.m_y);
+    wxPoint2DDouble p1(x1, y1);
+    wxPoint2DDouble p2(x2, y2);
 
     wxPoint2DDouble v1 = current - p1;
-    v1.Normalize();
+    wxDouble v1Length = v1.GetVectorLength();
     wxPoint2DDouble v2 = p2 - p1;
-    v2.Normalize();
+    wxDouble v2Length = v2.GetVectorLength();
 
     wxDouble alpha = v1.GetVectorAngle() - v2.GetVectorAngle();
-
+    // Reduce angle value to the range [0..180] degrees.
     if ( alpha < 0 )
         alpha = 360 + alpha;
-    // TODO obtuse angles
+    if ( alpha > 180 )
+        alpha = 360 - alpha;
 
-    alpha = wxDegToRad(alpha);
+    // Degenerated cases: there is no need
+    // to draw an arc connecting points when:
+    // - There are no 3 different points provided,
+    // - Points (and lines) are colinear,
+    // - Radius equals zero.
+    if ( v1Length == 0 || v2Length == 0 ||
+         alpha == 0 || alpha == 180 || r == 0 )
+    {
+        AddLineToPoint(p1.m_x, p1.m_y);
+        AddLineToPoint(p2.m_x, p2.m_y);
+        return;
+    }
 
-    wxDouble dist = r / sin(alpha/2) * cos(alpha/2);
-    // calculate tangential points
-    wxPoint2DDouble t1 = dist*v1 + p1;
+    // Determine spatial relation between the vectors.
+    bool drawClockwiseArc = v1.GetCrossProduct(v2) < 0;
 
-    wxPoint2DDouble nv1 = v1;
-    nv1.SetVectorAngle(v1.GetVectorAngle()-90);
-    wxPoint2DDouble c = t1 + r*nv1;
+    alpha = wxDegToRad(alpha) / 2.0;
+    wxDouble distT = r / sin(alpha) * cos(alpha);
+    wxDouble distC = r / sin(alpha);
+    wxASSERT_MSG( distT <= v1Length && distT <= v2Length,
+                  wxS("Radius is too big to fit the arc to given points") );
+    // Calculate tangential points
+    v1.Normalize();
+    v2.Normalize();
+    wxPoint2DDouble t1 = distT*v1 + p1;
+    wxPoint2DDouble t2 = distT*v2 + p1;
+    // Calculate the angle bisector vector
+    // (because central point is located on the bisector).
+    wxPoint2DDouble v = v1 + v2;
+    if ( v.GetVectorLength() > 0 )
+        v.Normalize();
+    // Calculate center of the arc
+    wxPoint2DDouble c = distC*v + p1;
+    // Calculate normal vectors at tangential points
+    // (with inverted directions to make angle calculations easier).
+    wxPoint2DDouble nv1 = t1 - c;
+    wxPoint2DDouble nv2 = t2 - c;
+    // Calculate start and end angle of the arc.
+    wxDouble a1 = nv1.GetVectorAngle();
+    wxDouble a2 = nv2.GetVectorAngle();
 
-    wxDouble a1 = v1.GetVectorAngle()+90;
-    wxDouble a2 = v2.GetVectorAngle()-90;
-
-    AddLineToPoint(t1.m_x,t1.m_y);
-    AddArc(c.m_x,c.m_y,r,wxDegToRad(a1),wxDegToRad(a2),true);
-    AddLineToPoint(p2.m_x,p2.m_y);
+    AddLineToPoint(t1.m_x, t1.m_y);
+    AddArc(c.m_x, c.m_y, r, wxDegToRad(a1), wxDegToRad(a2), drawClockwiseArc);
+    AddLineToPoint(p2.m_x, p2.m_y);
 }
 
 //-----------------------------------------------------------------------------
@@ -618,12 +653,21 @@ void wxGraphicsContext::SetFont( const wxGraphicsFont& font )
     m_font = font;
 }
 
-void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )
+void wxGraphicsContext::SetFont(const wxFont& font, const wxColour& colour)
 {
     if ( font.IsOk() )
-        SetFont( CreateFont( font, colour ) );
+    {
+        // Change current font only if new graphics font is successfully created.
+        wxGraphicsFont grFont = CreateFont(font, colour);
+        if ( !grFont.IsSameAs(wxNullGraphicsFont) )
+        {
+            SetFont(grFont);
+        }
+    }
     else
+    {
         SetFont( wxNullGraphicsFont );
+    }
 }
 
 void wxGraphicsContext::DrawPath( const wxGraphicsPath& path, wxPolygonFillMode fillStyle )
@@ -891,6 +935,49 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 #endif
 #endif
 
+wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
+{
+#ifndef wxNO_RTTI
+    if ( const wxWindowDC *windc = dynamic_cast<const wxWindowDC*>(&dc) )
+        return Create(*windc);
+
+    if ( const wxMemoryDC *memdc = dynamic_cast<const wxMemoryDC*>(&dc) )
+        return Create(*memdc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if ( const wxPrinterDC *printdc = dynamic_cast<const wxPrinterDC*>(&dc) )
+        return Create(*printdc);
+#endif
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    if ( const wxEnhMetaFileDC *mfdc = dynamic_cast<const wxEnhMetaFileDC*>(&dc) )
+        return Create(*mfdc);
+#endif
+#endif
+#else // wxNO_RTTI
+    if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
+        return Create(*windc);
+
+    if ( const wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
+        return Create(*memdc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if ( const wxPrinterDC *printdc = wxDynamicCast(&dc, wxPrinterDC) )
+        return Create(*printdc);
+#endif
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    if ( const wxEnhMetaFileDC *mfdc = wxDynamicCast(&dc, wxEnhMetaFileDC) )
+        return Create(*mfdc);
+#endif
+#endif
+#endif // !wxNO_RTTI/wxNO_RTTI
+
+    return NULL;
+}
+
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeContext(context);
@@ -900,6 +987,13 @@ wxGraphicsContext* wxGraphicsContext::CreateFromNativeWindow( void * window )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeWindow(window);
 }
+
+#ifdef __WXMSW__
+wxGraphicsContext* wxGraphicsContext::CreateFromNativeHDC(WXHDC dc)
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeHDC(dc);
+}
+#endif
 
 wxGraphicsContext* wxGraphicsContext::Create( wxWindow* window )
 {

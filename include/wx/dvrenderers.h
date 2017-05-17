@@ -96,6 +96,16 @@ enum wxDataViewCellRenderState
     wxDATAVIEW_CELL_FOCUSED     = 8
 };
 
+// helper for fine-tuning rendering of values depending on row's state
+class WXDLLIMPEXP_ADV wxDataViewValueAdjuster
+{
+public:
+    virtual ~wxDataViewValueAdjuster() {}
+
+    // changes the value to have appearance suitable for highlighted rows
+    virtual wxVariant MakeHighlighted(const wxVariant& value) const { return value; }
+};
+
 class WXDLLIMPEXP_ADV wxDataViewRendererBase: public wxObject
 {
 public:
@@ -114,6 +124,9 @@ public:
     // before a cell is rendered using this renderer
     virtual bool SetValue(const wxVariant& value) = 0;
     virtual bool GetValue(wxVariant& value) const = 0;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const = 0;
+#endif // wxUSE_ACCESSIBILITY
 
     wxString GetVariantType() const             { return m_variantType; }
 
@@ -180,8 +193,16 @@ public:
     // wxDVR_DEFAULT_ALIGNMENT.
     int GetEffectiveAlignment() const;
 
+    // Like GetEffectiveAlignment(), but returns wxDVR_DEFAULT_ALIGNMENT if
+    // the owner isn't set and GetAlignment() is default.
+    int GetEffectiveAlignmentIfKnown() const;
+
     // Send wxEVT_DATAVIEW_ITEM_EDITING_STARTED event.
     void NotifyEditingStarted(const wxDataViewItem& item);
+
+    // Sets the transformer for fine-tuning rendering of values depending on row's state
+    void SetValueAdjuster(wxDataViewValueAdjuster *transformer)
+        { delete m_valueAdjuster; m_valueAdjuster = transformer; }
 
 protected:
     // These methods are called from PrepareForItem() and should do whatever is
@@ -189,6 +210,10 @@ protected:
     // using the given attributes and enabled/disabled state.
     virtual void SetAttr(const wxDataViewItemAttr& attr) = 0;
     virtual void SetEnabled(bool enabled) = 0;
+
+    // Return whether the currently rendered item is on a highlighted row
+    // (typically selection with dark background). For internal use only.
+    virtual bool IsHighlighted() const = 0;
 
     // Called from {Cancel,Finish}Editing() to cleanup m_editorCtrl
     void DestroyEditControl();
@@ -203,6 +228,8 @@ protected:
     wxDataViewColumn       *m_owner;
     wxWeakRef<wxWindow>     m_editorCtrl;
     wxDataViewItem          m_item; // Item being currently edited, if valid.
+
+    wxDataViewValueAdjuster *m_valueAdjuster;
 
     // internal utility, may be used anywhere the window associated with the
     // renderer is required
@@ -380,6 +407,9 @@ public:
     virtual wxSize GetSize() const wxOVERRIDE;
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
 private:
     long    m_data;
@@ -400,13 +430,16 @@ public:
     wxDataViewChoiceRenderer( const wxArrayString &choices,
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                             int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    virtual bool HasEditorCtrl() const { return true; }
-    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value );
-    virtual bool Render( wxRect rect, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
-    virtual bool SetValue( const wxVariant &value );
-    virtual bool GetValue( wxVariant &value ) const;
+    virtual bool HasEditorCtrl() const wxOVERRIDE { return true; }
+    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value ) wxOVERRIDE;
+    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value ) wxOVERRIDE;
+    virtual bool Render( wxRect rect, wxDC *dc, int state ) wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
+    virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 
     wxString GetChoice(size_t index) const { return m_choices[index]; }
     const wxArrayString& GetChoices() const { return m_choices; }
@@ -427,11 +460,14 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                               int alignment = wxDVR_DEFAULT_ALIGNMENT );
 
-    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value );
+    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value ) wxOVERRIDE;
+    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value ) wxOVERRIDE;
 
-    virtual bool SetValue( const wxVariant &value );
-    virtual bool GetValue( wxVariant &value ) const;
+    virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
 };
 
 
@@ -458,6 +494,9 @@ public:
     virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant &value) wxOVERRIDE;
     virtual bool SetValue(const wxVariant &value) wxOVERRIDE;
     virtual bool GetValue(wxVariant& value) const wxOVERRIDE;
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE;
+#endif // wxUSE_ACCESSIBILITY
     virtual bool Render( wxRect cell, wxDC *dc, int state ) wxOVERRIDE;
     virtual wxSize GetSize() const wxOVERRIDE;
 

@@ -1,13 +1,21 @@
-# Makefile.am:
-#   Source file for Makefile.in (and hence Makefile)
+# Makefile.am, the source file for Makefile.in (and hence Makefile), is
 #
+# Copyright (c) 2004-2016 Glenn Randers-Pehrson
+# Last changed in libpng 1.6.25 [September 1, 2016]
+#
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
 
 PNGLIB_BASENAME= libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@
 
 ACLOCAL_AMFLAGS = -I scripts
 
 # test programs - run on make check, make distcheck
-check_PROGRAMS= pngtest pngunknown pngstest pngvalid pngimage
+check_PROGRAMS= pngtest pngunknown pngstest pngvalid pngimage pngcp
+if HAVE_CLOCK_GETTIME
+check_PROGRAMS += timepng
+endif
 
 # Utilities - installed
 bin_PROGRAMS= pngfix png-fix-itxt
@@ -37,10 +45,16 @@ pngunknown_LDADD = libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@.la
 pngimage_SOURCES = contrib/libtests/pngimage.c
 pngimage_LDADD = libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@.la
 
+timepng_SOURCES = contrib/libtests/timepng.c
+timepng_LDADD = libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@.la
+
 pngfix_SOURCES = contrib/tools/pngfix.c
 pngfix_LDADD = libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@.la
 
 png_fix_itxt_SOURCES = contrib/tools/png-fix-itxt.c
+
+pngcp_SOURCES = contrib/tools/pngcp.c
+pngcp_LDADD = libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@.la
 
 # Generally these are single line shell scripts to run a test with a particular
 # set of parameters:
@@ -81,6 +95,11 @@ libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@_la_SOURCES = png.c pngerror.c\
 if PNG_ARM_NEON
 libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@_la_SOURCES += arm/arm_init.c\
 	arm/filter_neon.S arm/filter_neon_intrinsics.c
+endif
+
+if PNG_MIPS_MSA
+libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@_la_SOURCES += mips/mips_init.c\
+	mips/filter_msa_intrinsics.c
 endif
 
 nodist_libpng@PNGLIB_MAJOR@@PNGLIB_MINOR@_la_SOURCES = pnglibconf.h
@@ -219,6 +238,7 @@ contrib/libtests/timepng.o: pnglibconf.h
 
 contrib/tools/makesRGB.o: pnglibconf.h
 contrib/tools/pngfix.o: pnglibconf.h
+contrib/tools/pngcp.o: pnglibconf.h
 
 # We must use -DPNG_NO_USE_READ_MACROS here even when the library may actually
 # be built with PNG_USE_READ_MACROS; this prevents the read macros from

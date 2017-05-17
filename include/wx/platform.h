@@ -38,6 +38,18 @@
 #    ifndef MAC_OS_X_VERSION_10_10
 #       define MAC_OS_X_VERSION_10_10 101000
 #    endif
+#    ifndef MAC_OS_X_VERSION_10_11
+#       define MAC_OS_X_VERSION_10_11 101100
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_12
+#       define MAC_OS_X_VERSION_10_12 101200
+#    endif
+#    ifndef NSAppKitVersionNumber10_10
+#       define NSAppKitVersionNumber10_10 1343
+#    endif
+#    ifndef NSAppKitVersionNumber10_11
+#       define NSAppKitVersionNumber10_11 1404
+#    endif
 #    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
@@ -358,6 +370,7 @@
 #    define wxCHECK_W32API_VERSION(maj, min) (0)
 #    undef wxCHECK_MINGW32_VERSION
 #    define wxCHECK_MINGW32_VERSION( major, minor ) (0)
+#    define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params)
 #    define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
 #endif
 
@@ -464,6 +477,18 @@
 #        endif
 #        ifndef MAC_OS_X_VERSION_10_10
 #           define MAC_OS_X_VERSION_10_10 101000
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_11
+#           define MAC_OS_X_VERSION_10_11 101100
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_12
+#           define MAC_OS_X_VERSION_10_12 101200
+#        endif
+#        ifndef NSAppKitVersionNumber10_10
+#           define NSAppKitVersionNumber10_10 1343
+#        endif
+#        ifndef NSAppKitVersionNumber10_11
+#           define NSAppKitVersionNumber10_11 1404
 #        endif
 #    else
 #        error "only mach-o configurations are supported"

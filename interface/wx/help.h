@@ -140,10 +140,10 @@ public:
     */
     virtual wxWindow* GetParentWindow() const;
 
-    //@{
     /**
-        Initializes the help instance with a help filename, and optionally a server
-        socket number if using wxHelp (now obsolete). Does not invoke the help viewer.
+        Initializes the help instance with a help filename.
+
+        Does not invoke the help viewer.
         This must be called directly after the help instance object is created and
         before any attempts to communicate with the viewer.
 
@@ -152,8 +152,6 @@ public:
         while searching for a suitable file. For WinHelp, the hlp extension is appended.
     */
     virtual bool Initialize(const wxString& file);
-    virtual bool Initialize(const wxString& file, int server);
-    //@}
 
     /**
         If the help viewer is not running, runs it, and searches for sections matching

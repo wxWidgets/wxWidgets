@@ -421,7 +421,7 @@ const int H_SCROLL_STEP = 20;
 bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
     bool modified = false;
 
-    int vertEnd = nMax;
+    int vertEnd = nMax+1;
     if (!verticalScrollBarVisible)
         vertEnd = 0;
 
@@ -431,7 +431,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         int  sbThumb  = stc->GetScrollThumb(wxVERTICAL);
         int  sbPos    = stc->GetScrollPos(wxVERTICAL);
         if (sbMax != vertEnd || sbThumb != nPage) {
-            stc->SetScrollbar(wxVERTICAL, sbPos, nPage, vertEnd+1);
+            stc->SetScrollbar(wxVERTICAL, sbPos, nPage, vertEnd);
             modified = true;
         }
     }
@@ -440,7 +440,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         int  sbPage   = stc->m_vScrollBar->GetPageSize();
         int  sbPos    = stc->m_vScrollBar->GetThumbPosition();
         if (sbMax != vertEnd || sbPage != nPage) {
-            stc->m_vScrollBar->SetScrollbar(sbPos, nPage, vertEnd+1, nPage);
+            stc->m_vScrollBar->SetScrollbar(sbPos, nPage, vertEnd, nPage);
             modified = true;
         }
     }
@@ -991,6 +991,15 @@ void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, b
     ButtonDown(pt, curTime, shift, ctrl, alt);
 }
 
+void ScintillaWX::DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt) {
+    if (!PointInSelection(pt)) {
+        CancelModes();
+        SetEmptySelection(PositionFromLocation(pt));
+    }
+
+    RightButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt));
+}
+
 void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
     ButtonUp(pt, curTime, ctrl);
 }
@@ -1134,9 +1143,13 @@ void ScintillaWX::DoCommand(int ID) {
 }
 
 
-void ScintillaWX::DoContextMenu(Point pt) {
-    if (displayPopupMenu)
+bool ScintillaWX::DoContextMenu(Point pt) {
+    if (ShouldDisplayPopup(pt))
+    {
         ContextMenu(pt);
+        return true;
+    }
+    return false;
 }
 
 void ScintillaWX::DoOnListBox() {

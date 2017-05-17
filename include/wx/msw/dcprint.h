@@ -29,22 +29,22 @@ public:
     wxPrinterDCImpl( wxPrinterDC *owner, WXHDC theDC );
 
     // override some base class virtuals
-    virtual bool StartDoc(const wxString& message);
-    virtual void EndDoc();
-    virtual void StartPage();
-    virtual void EndPage();
+    virtual bool StartDoc(const wxString& message) wxOVERRIDE;
+    virtual void EndDoc() wxOVERRIDE;
+    virtual void StartPage() wxOVERRIDE;
+    virtual void EndPage() wxOVERRIDE;
 
-    virtual wxRect GetPaperRect() const;
+    virtual wxRect GetPaperRect() const wxOVERRIDE;
 
 protected:
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = false);
+                              bool useMask = false) wxOVERRIDE;
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
                         wxRasterOperationMode rop = wxCOPY, bool useMask = false,
-                        wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
-    virtual void DoGetSize(int *w, int *h) const
+                        wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) wxOVERRIDE;
+    virtual void DoGetSize(int *w, int *h) const wxOVERRIDE
     {
         GetDeviceSize(w, h);
     }

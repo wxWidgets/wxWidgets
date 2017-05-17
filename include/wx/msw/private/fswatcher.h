@@ -309,7 +309,7 @@ protected:
         const wxFSWatchEntryMSW* watch;
     };
 
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() wxOVERRIDE;
 
     // wait for events to occur, read them and send to interested parties
     // returns false it empty status was read, which means we would exit

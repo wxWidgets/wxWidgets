@@ -98,7 +98,7 @@ public:
     }
 
     // Convert from wxCursor
-    wxEXPLICIT wxBitmap(const wxCursor& cursor)
+    explicit wxBitmap(const wxCursor& cursor)
     {
         (void)CopyFromCursor(cursor, wxBitmapTransparency_Auto);
     }
@@ -206,8 +206,8 @@ public:
     wxDC *GetSelectedInto() const;
 
 protected:
-    virtual wxGDIImageRefData *CreateData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIImageRefData *CreateData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
     // creates an uninitialized bitmap, called from Create()s above
     bool DoCreate(int w, int h, int depth, WXHDC hdc);
@@ -295,14 +295,14 @@ public:
     virtual bool Create(wxGDIImage *image,
                         const void* data,
                         wxBitmapType type,
-                        int width, int height, int depth = 1);
+                        int width, int height, int depth = 1) wxOVERRIDE;
     virtual bool Load(wxGDIImage *image,
                       const wxString& name,
                       wxBitmapType type,
-                      int desiredWidth, int desiredHeight);
+                      int desiredWidth, int desiredHeight) wxOVERRIDE;
     virtual bool Save(const wxGDIImage *image,
                       const wxString& name,
-                      wxBitmapType type) const;
+                      wxBitmapType type) const wxOVERRIDE;
 
 
     // make wxBitmapHandler compatible with the wxBitmapHandler interface

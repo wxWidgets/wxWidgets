@@ -84,6 +84,7 @@
             strings/vararg.cpp
             strings/crt.cpp
             strings/vsnprintf.cpp
+            strings/hexconv.cpp
             streams/bstream.cpp
             streams/datastreamtest.cpp
             streams/ffilestream.cpp
@@ -180,6 +181,8 @@
             graphics/measuring.cpp
             graphics/affinematrix.cpp
             graphics/boundingbox.cpp
+            graphics/clippingbox.cpp
+            graphics/graphmatrix.cpp
             config/config.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
@@ -318,6 +321,11 @@
             horse_box_average_100x100.png
             horse_box_average_150x150.png
             horse_box_average_300x300.png
+
+            cross_bicubic_256x256.png
+            cross_bilinear_256x256.png
+            cross_box_average_256x256.png
+            cross_nearest_neighb_256x256.png
         </files>
     </wx-data>
 
@@ -328,6 +336,7 @@
     </template>
 
     <wx-data id="fr" template="catalog"/>
+    <wx-data id="ja" template="catalog"/>
 
 
     <fragment format="autoconf">

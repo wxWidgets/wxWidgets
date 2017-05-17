@@ -311,6 +311,11 @@ protected:
     // Lay out controls
     virtual void DoSize();
 
+    // It is better to make this control transparent so that by default the controls on
+    // its pages are on the same colour background as the rest of the window. If the user
+    // prefers a coloured background they can set the background colour on the page panel
+    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+
     // This method also invalidates the size of the controller and should be
     // called instead of just InvalidateBestSize() whenever pages are added or
     // removed as this also affects the controller

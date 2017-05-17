@@ -706,8 +706,8 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
                                       wxDefaultPosition, wxSize(300, 100),
                                       wxTE_MULTILINE);
     text->SetHelpText(_("Type text here if you have got nothing more interesting to do"));
-    sizerTop->Add(text, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-    sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    sizerTop->Add(text, 0, wxEXPAND|wxALL, 5 );
+    sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALL, 5 );
 
     SetSizerAndFit(sizerTop);
 

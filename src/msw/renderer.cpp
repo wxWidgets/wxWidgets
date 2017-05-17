@@ -126,10 +126,6 @@
     #define TDLGEBS_EXPANDEDPRESSED 6
 #endif
 
-#ifndef DFCS_HOT
-    #define DFCS_HOT 0x1000
-#endif
-
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
 // ----------------------------------------------------------------------------
@@ -144,27 +140,27 @@ public:
     void DrawFocusRect(wxWindow * win,
                         wxDC& dc,
                         const wxRect& rect,
-                        int flags = 0);
+                        int flags = 0) wxOVERRIDE;
 
     void DrawItemSelectionRect(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0);
+                                int flags = 0) wxOVERRIDE;
 
     void DrawChoice(wxWindow* win,
                      wxDC& dc,
                      const wxRect& rect,
-                     int flags = 0);
+                     int flags = 0) wxOVERRIDE;
 
     void DrawComboBox(wxWindow* win,
                        wxDC& dc,
                        const wxRect& rect,
-                       int flags = 0);
+                       int flags = 0) wxOVERRIDE;
 
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                          wxDC& dc,
                                          const wxRect& rect,
-                                         int flags = 0) = 0;
+                                         int flags = 0) wxOVERRIDE = 0;
 };
 
 // ----------------------------------------------------------------------------
@@ -181,12 +177,12 @@ public:
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
-                                        int flags = 0);
+                                        int flags = 0) wxOVERRIDE;
 
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0)
+                              int flags = 0) wxOVERRIDE
     {
         DoDrawButton(DFCS_BUTTONCHECK, win, dc, rect, flags);
     }
@@ -194,12 +190,12 @@ public:
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0);
+                                int flags = 0) wxOVERRIDE;
 
     virtual void DrawRadioBitmap(wxWindow* win,
                                  wxDC& dc,
                                  const wxRect& rect,
-                                 int flags = 0)
+                                 int flags = 0) wxOVERRIDE
     {
         DoDrawButton(DFCS_BUTTONRADIO, win, dc, rect, flags);
     }
@@ -208,13 +204,13 @@ public:
                                     wxDC& dc,
                                     const wxRect& rect,
                                     wxTitleBarButton button,
-                                    int flags = 0);
+                                    int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win);
+    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
 
-    virtual int GetHeaderButtonHeight(wxWindow *win);
+    virtual int GetHeaderButtonHeight(wxWindow *win) wxOVERRIDE;
 
-    virtual int GetHeaderButtonMargin(wxWindow *win);
+    virtual int GetHeaderButtonMargin(wxWindow *win) wxOVERRIDE;
 
 private:
     // wrapper of DrawFrameControl()
@@ -257,30 +253,30 @@ public:
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params = NULL);
+                                  wxHeaderButtonParams* params = NULL) wxOVERRIDE;
 
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
-                                    int flags = 0);
+                                    int flags = 0) wxOVERRIDE;
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
-                                    int flags = 0);
+                                    int flags = 0) wxOVERRIDE;
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
                                   wxOrientation orient,
-                                  int flags = 0);
+                                  int flags = 0) wxOVERRIDE;
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
-                                        int flags = 0);
+                                        int flags = 0) wxOVERRIDE;
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0)
+                              int flags = 0) wxOVERRIDE
     {
         if ( !DoDrawXPButton(BP_CHECKBOX, win, dc, rect, flags) )
             m_rendererNative.DrawCheckBox(win, dc, rect, flags);
@@ -289,7 +285,7 @@ public:
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0)
+                                int flags = 0) wxOVERRIDE
     {
         if ( !DoDrawXPButton(BP_PUSHBUTTON, win, dc, rect, flags) )
             m_rendererNative.DrawPushButton(win, dc, rect, flags);
@@ -298,24 +294,24 @@ public:
     virtual void DrawCollapseButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
-                                    int flags = 0);
+                                    int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc);
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) wxOVERRIDE;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
-                                       int flags = 0);
+                                       int flags = 0) wxOVERRIDE;
 
     virtual void DrawTextCtrl(wxWindow* win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0);
+                              int flags = 0) wxOVERRIDE;
 
     virtual void DrawRadioBitmap(wxWindow *win,
                                  wxDC& dc,
                                  const wxRect& rect,
-                                 int flags = 0)
+                                 int flags = 0) wxOVERRIDE
     {
         if ( !DoDrawXPButton(BP_RADIOBUTTON, win, dc, rect, flags) )
             m_rendererNative.DrawRadioBitmap(win, dc, rect, flags);
@@ -325,16 +321,16 @@ public:
                                     wxDC& dc,
                                     const wxRect& rect,
                                     wxTitleBarButton button,
-                                    int flags = 0);
+                                    int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win);
+    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
 
     virtual void DrawGauge(wxWindow* win,
                            wxDC& dc,
                            const wxRect& rect,
                            int value,
                            int max,
-                           int flags = 0);
+                           int flags = 0) wxOVERRIDE;
 
     virtual void DrawItemText(wxWindow* win,
                               wxDC& dc,
@@ -342,9 +338,9 @@ public:
                               const wxRect& rect,
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
                               int flags = 0,
-                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END);
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) wxOVERRIDE;
 
-    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
 private:
     // wrapper around DrawThemeBackground() translating flags to NORMAL/HOT/

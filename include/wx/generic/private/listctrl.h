@@ -370,6 +370,8 @@ public:
     int m_colToSend;
     int m_widthToSend;
 
+    virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
+
     virtual void OnInternalIdle() wxOVERRIDE;
 
 private:

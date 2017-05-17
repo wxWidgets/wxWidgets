@@ -67,13 +67,13 @@ bool wxURI::Create(const wxString& uri)
 
 void wxURI::Clear()
 {
-    m_scheme =
-    m_userinfo =
-    m_server =
-    m_port =
-    m_path =
-    m_query =
-    m_fragment = wxEmptyString;
+    m_scheme.clear();
+    m_userinfo.clear();
+    m_server.clear();
+    m_port.clear();
+    m_path.clear();
+    m_query.clear();
+    m_fragment.clear();
 
     m_hostType = wxURI_REGNAME;
 

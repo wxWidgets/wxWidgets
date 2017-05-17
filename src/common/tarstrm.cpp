@@ -596,7 +596,7 @@ wxString wxTarEntry::GetInternalName(const wxString& name,
     while (!internal.empty() && internal.compare(0, 2, wxT("./")) == 0)
         internal.erase(0, 2);
     if (internal == wxT(".") || internal == wxT(".."))
-        internal = wxEmptyString;
+        internal.clear();
 
     return internal;
 }
@@ -865,9 +865,9 @@ wxString wxTarInputStream::GetExtendedHeader(const wxString& key) const
 
 wxString wxTarInputStream::GetHeaderPath() const
 {
-    wxString path;
+    wxString path(GetExtendedHeader(wxS("path")));
 
-    if ((path = GetExtendedHeader(wxT("path"))) != wxEmptyString)
+    if (!path.empty())
         return path;
 
     path = wxString(m_hdr->Get(TAR_NAME), GetConv());
@@ -880,10 +880,10 @@ wxString wxTarInputStream::GetHeaderPath() const
 
 wxDateTime wxTarInputStream::GetHeaderDate(const wxString& key) const
 {
-    wxString value;
+    wxString value(GetExtendedHeader(key));
 
     // try extended header, stored as decimal seconds since the epoch
-    if ((value = GetExtendedHeader(key)) != wxEmptyString) {
+    if (!value.empty()) {
         wxLongLong ll;
         ll.Assign(wxAtof(value) * 1000.0);
         return ll;
@@ -897,9 +897,9 @@ wxDateTime wxTarInputStream::GetHeaderDate(const wxString& key) const
 
 wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
 {
-    wxString value;
+    wxString value(GetExtendedHeader(m_hdr->Name(id)));
 
-    if ((value = GetExtendedHeader(m_hdr->Name(id))) != wxEmptyString) {
+    if (!value.empty()) {
         wxTarNumber n = 0;
         wxString::const_iterator p = value.begin();
         while (p != value.end() && *p == ' ')
@@ -914,12 +914,12 @@ wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
 
 wxString wxTarInputStream::GetHeaderString(int id) const
 {
-    wxString value;
+    wxString value(GetExtendedHeader(m_hdr->Name(id)));
 
-    if ((value = GetExtendedHeader(m_hdr->Name(id))) != wxEmptyString)
-        return value;
+    if (value.empty())
+        value = wxString(m_hdr->Get(id), GetConv());
 
-    return wxString(m_hdr->Get(id), GetConv());
+    return value;
 }
 
 // An extended header consists of one or more records, each constructed:

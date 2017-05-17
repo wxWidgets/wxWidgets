@@ -37,11 +37,6 @@
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
 
-// for MSVC5 and old w32api
-#ifndef HANGUL_CHARSET
-#    define HANGUL_CHARSET  129
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================

@@ -14,6 +14,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/toplevel.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -31,28 +32,24 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
 
 static wxFont gs_fontSystem;
 
+#ifndef __WXGTK3__
+static GtkWidget* gs_tlw_parent;
+
 static GtkContainer* ContainerWidget()
 {
     static GtkContainer* s_widget;
     if (s_widget == NULL)
     {
         s_widget = GTK_CONTAINER(gtk_fixed_new());
-        GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-#ifdef __WXGTK3__
-        // need this to initialize style for window
-        gtk_widget_get_style_context(GTK_WIDGET(window));
-#endif
-        gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(s_widget));
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
+        gs_tlw_parent = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        gtk_container_add(GTK_CONTAINER(gs_tlw_parent), GTK_WIDGET(s_widget));
     }
     return s_widget;
 }
 
 extern "C" {
-#ifdef __WXGTK3__
-static void style_updated(GtkWidget*, void*)
-#else
 static void style_set(GtkWidget*, GtkStyle*, void*)
-#endif
 {
     gs_fontSystem = wxNullFont;
 }
@@ -64,13 +61,10 @@ static GtkWidget* ButtonWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_button_new();
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
-#ifdef __WXGTK3__
-        g_signal_connect(s_widget, "style_updated", G_CALLBACK(style_updated), NULL);
-#else
         gtk_widget_ensure_style(s_widget);
         g_signal_connect(s_widget, "style_set", G_CALLBACK(style_set), NULL);
-#endif
     }
     return s_widget;
 }
@@ -82,10 +76,9 @@ static GtkWidget* ListWidget()
     {
         s_widget = gtk_tree_view_new_with_model(
             GTK_TREE_MODEL(gtk_list_store_new(1, G_TYPE_INT)));
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
-#ifndef __WXGTK3__
         gtk_widget_ensure_style(s_widget);
-#endif
     }
     return s_widget;
 }
@@ -96,10 +89,9 @@ static GtkWidget* TextCtrlWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_text_view_new();
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
-#ifndef __WXGTK3__
         gtk_widget_ensure_style(s_widget);
-#endif
     }
     return s_widget;
 }
@@ -110,10 +102,9 @@ static GtkWidget* MenuItemWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_menu_item_new();
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
-#ifndef __WXGTK3__
         gtk_widget_ensure_style(s_widget);
-#endif
     }
     return s_widget;
 }
@@ -124,10 +115,9 @@ static GtkWidget* MenuBarWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_menu_bar_new();
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
-#ifndef __WXGTK3__
         gtk_widget_ensure_style(s_widget);
-#endif
     }
     return s_widget;
 }
@@ -138,152 +128,467 @@ static GtkWidget* ToolTipWidget()
     if (s_widget == NULL)
     {
         s_widget = gtk_window_new(GTK_WINDOW_POPUP);
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
+        g_signal_connect_swapped(ContainerWidget(), "destroy",
+            G_CALLBACK(gtk_widget_destroy), s_widget);
         const char* name = "gtk-tooltip";
-#ifndef __WXGTK3__
         if (gtk_check_version(2, 11, 0))
             name = "gtk-tooltips";
-#endif
         gtk_widget_set_name(s_widget, name);
-#ifndef __WXGTK3__
         gtk_widget_ensure_style(s_widget);
-#endif
     }
     return s_widget;
 }
+#endif // !__WXGTK3__
 
 #ifdef __WXGTK3__
-static void get_color(const char* name, GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
+
+#if !GTK_CHECK_VERSION(3,12,0)
+    #define GTK_STATE_FLAG_LINK (1 << 9)
+#endif
+
+static wxColour gs_systemColorCache[wxSYS_COLOUR_MAX + 1];
+
+extern "C" {
+static void notify_gtk_theme_name(GObject*, GParamSpec*, void*)
 {
-    GtkStyleContext* sc = gtk_widget_get_style_context(widget);
-    GdkRGBA* rgba;
-    gtk_style_context_set_state(sc, state);
-    gtk_style_context_get(sc, state, name, &rgba, NULL);
-    gdkRGBA = *rgba;
-    gdk_rgba_free(rgba);
-    if (gdkRGBA.alpha <= 0)
+    gs_fontSystem.UnRef();
+    for (int i = wxSYS_COLOUR_MAX; i--;)
+        gs_systemColorCache[i].UnRef();
+}
+
+static void notify_gtk_font_name(GObject*, GParamSpec*, void*)
+{
+    gs_fontSystem.UnRef();
+}
+}
+
+// Some notes on using GtkStyleContext. Style information from a context
+// attached to a non-visible GtkWidget is not accurate. The context has an
+// internal visibility state, controlled by the widget, which it presumably
+// uses to avoid doing unnecessary work. Creating a new style context from the
+// GtkWidgetPath in a context attached to a widget also does not work. The path
+// does not accurately reproduce the context state with older versions of GTK+,
+// and there is no context hierarchy (parent contexts). The hierarchy of parent
+// contexts is necessary, even though it would seem that the widget path has
+// the same hierarchy in it. So the best way to get style information seems
+// to be creating the widget paths and context hierarchy directly.
+
+static GtkStyleContext* StyleContext(
+    GtkStyleContext* parent,
+    GtkWidgetPath* path,
+    GType type,
+    const char* objectName,
+    const char* className1 = NULL,
+    const char* className2 = NULL)
+{
+    gtk_widget_path_append_type(path, type);
+#if GTK_CHECK_VERSION(3,20,0)
+    if (gtk_check_version(3,20,0) == NULL)
+        gtk_widget_path_iter_set_object_name(path, -1, objectName);
+#else
+    wxUnusedVar(objectName);
+#endif
+    if (className1)
+        gtk_widget_path_iter_add_class(path, -1, className1);
+    if (className2)
+        gtk_widget_path_iter_add_class(path, -1, className2);
+    GtkStyleContext* sc = gtk_style_context_new();
+    gtk_style_context_set_path(sc, path);
+    if (parent)
     {
-        widget = gtk_widget_get_parent(GTK_WIDGET(ContainerWidget()));
-        sc = gtk_widget_get_style_context(widget);
-        gtk_style_context_set_state(sc, state);
-        gtk_style_context_get(sc, state, name, &rgba, NULL);
-        gdkRGBA = *rgba;
-        gdk_rgba_free(rgba);
+#if GTK_CHECK_VERSION(3,4,0)
+        if (gtk_check_version(3,4,0) == NULL)
+            gtk_style_context_set_parent(sc, parent);
+#endif
+        g_object_unref(parent);
     }
+    return sc;
 }
-static void bg(GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
+
+static GtkStyleContext* StyleContext(
+    GtkWidgetPath* path,
+    GType type,
+    const char* objectName,
+    const char* className1 = NULL,
+    const char* className2 = NULL)
 {
-    get_color("background-color", widget, state, gdkRGBA);
+    GtkStyleContext* sc;
+    sc = StyleContext(NULL, path, GTK_TYPE_WINDOW, "window", "background");
+    sc = StyleContext(sc, path, type, objectName, className1, className2);
+    return sc;
 }
-static void fg(GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
+
+static void StyleContextFree(GtkStyleContext* sc)
 {
-    get_color("color", widget, state, gdkRGBA);
+    if (gtk_check_version(3,16,0) == NULL || gtk_check_version(3,4,0))
+    {
+        g_object_unref(sc);
+        return;
+    }
+#if GTK_CHECK_VERSION(3,4,0)
+    // GTK+ < 3.16 does not properly handle freeing child context before parent
+    do {
+        GtkStyleContext* parent = gtk_style_context_get_parent(sc);
+        if (parent)
+        {
+            g_object_ref(parent);
+            gtk_style_context_set_parent(sc, NULL);
+        }
+        g_object_unref(sc);
+        sc = parent;
+    } while (sc);
+#endif
 }
-static void border(GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
+
+static GtkStyleContext* ButtonContext(GtkWidgetPath* path)
 {
-    get_color("border-color", widget, state, gdkRGBA);
+    GtkStyleContext* sc;
+    sc = StyleContext(path, GTK_TYPE_BUTTON, "button", "button");
+    return sc;
+}
+
+static GtkStyleContext* ButtonLabelContext(GtkWidgetPath* path)
+{
+    GtkStyleContext* sc;
+    sc = ButtonContext(path);
+    sc = StyleContext(sc, path, GTK_TYPE_LABEL, "label");
+    return sc;
+}
+
+static GtkStyleContext* HeaderbarContext(GtkWidgetPath* path)
+{
+    GtkStyleContext* sc;
+    sc = StyleContext(path, GTK_TYPE_HEADER_BAR, "headerbar", "titlebar", "header-bar");
+    return sc;
+}
+
+static GtkStyleContext* HeaderbarLabelContext(GtkWidgetPath* path)
+{
+    GtkStyleContext* sc;
+    sc = HeaderbarContext(path);
+    sc = StyleContext(sc, path, GTK_TYPE_LABEL, "label");
+    return sc;
+}
+
+static GtkStyleContext* MenuContext(GtkWidgetPath* path)
+{
+    GtkStyleContext* sc;
+    sc = StyleContext(NULL, path, GTK_TYPE_WINDOW, "window", "background", "popup");
+    sc = StyleContext(sc, path, GTK_TYPE_MENU, "menu", "menu");
+    return sc;
+}
+
+static GtkStyleContext* MenuItemContext(GtkWidgetPath* path)
+{
+    GtkStyleContext* sc;
+    sc = MenuContext(path);
+    sc = StyleContext(sc, path, GTK_TYPE_MENU_ITEM, "menuitem", "menuitem");
+    return sc;
+}
+
+static GtkStyleContext* TextviewContext(GtkWidgetPath* path, const char* child1 = NULL, const char* child2 = NULL)
+{
+    GtkStyleContext* sc;
+    sc = StyleContext(path, GTK_TYPE_TEXT_VIEW, "textview", "view");
+    if (child1 && gtk_check_version(3,20,0) == NULL)
+    {
+        sc = StyleContext(sc, path, G_TYPE_NONE, child1);
+        if (child2)
+            sc = StyleContext(sc, path, G_TYPE_NONE, child2);
+    }
+    return sc;
+}
+
+static GtkStyleContext* TreeviewContext(GtkWidgetPath* path)
+{
+    GtkStyleContext* sc;
+    sc = StyleContext(path, GTK_TYPE_TREE_VIEW, "treeview", "view");
+    return sc;
+}
+
+static GtkStyleContext* TooltipContext(GtkWidgetPath* path)
+{
+    gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+#if GTK_CHECK_VERSION(3,20,0)
+    if (gtk_check_version(3,20,0) == NULL)
+        gtk_widget_path_iter_set_object_name(path, -1, "tooltip");
+#endif
+    gtk_widget_path_iter_add_class(path, -1, "background");
+    gtk_widget_path_iter_add_class(path, -1, "tooltip");
+    gtk_widget_path_iter_set_name(path, -1, "gtk-tooltip");
+    GtkStyleContext* sc = gtk_style_context_new();
+    gtk_style_context_set_path(sc, path);
+    return sc;
+}
+
+static void bg(GtkStyleContext* sc, wxColour& color, int state = GTK_STATE_FLAG_NORMAL)
+{
+    GdkRGBA* rgba;
+    cairo_pattern_t* pattern = NULL;
+    gtk_style_context_set_state(sc, GtkStateFlags(state));
+    gtk_style_context_get(sc, GtkStateFlags(state),
+        "background-color", &rgba, "background-image", &pattern, NULL);
+    color = wxColour(*rgba);
+    gdk_rgba_free(rgba);
+
+    // "background-image" takes precedence over "background-color".
+    // If there is an image, try to get a color out of it.
+    if (pattern)
+    {
+        if (cairo_pattern_get_type(pattern) == CAIRO_PATTERN_TYPE_SURFACE)
+        {
+            cairo_surface_t* surf;
+            cairo_pattern_get_surface(pattern, &surf);
+            if (cairo_surface_get_type(surf) == CAIRO_SURFACE_TYPE_IMAGE)
+            {
+                const guchar* data = cairo_image_surface_get_data(surf);
+                const int stride = cairo_image_surface_get_stride(surf);
+                // choose a pixel in the middle vertically,
+                // images often have a vertical gradient
+                const int i = stride * (cairo_image_surface_get_height(surf) / 2);
+                const unsigned* p = reinterpret_cast<const unsigned*>(data + i);
+                const unsigned pixel = *p;
+                guchar r, g, b, a = 0xff;
+                switch (cairo_image_surface_get_format(surf))
+                {
+                case CAIRO_FORMAT_ARGB32:
+                    a = guchar(pixel >> 24);
+                    // fallthrough
+                case CAIRO_FORMAT_RGB24:
+                    r = guchar(pixel >> 16);
+                    g = guchar(pixel >> 8);
+                    b = guchar(pixel);
+                    break;
+                default:
+                    a = 0;
+                    break;
+                }
+                if (a != 0)
+                {
+                    if (a != 0xff)
+                    {
+                        // un-premultiply
+                        r = guchar((r * 0xff) / a);
+                        g = guchar((g * 0xff) / a);
+                        b = guchar((b * 0xff) / a);
+                    }
+                    color.Set(r, g, b, a);
+                }
+            }
+        }
+        cairo_pattern_destroy(pattern);
+    }
+
+    if (color.Alpha() == 0)
+    {
+        // Try TLW as last resort, but not if we're already doing it
+        const GtkWidgetPath* path0 = gtk_style_context_get_path(sc);
+        if (gtk_widget_path_length(path0) > 1 ||
+            gtk_widget_path_iter_get_object_type(path0, 0) != GTK_TYPE_WINDOW)
+        {
+            GtkWidgetPath* path = gtk_widget_path_new();
+            GtkStyleContext* sc2;
+            sc2 = StyleContext(NULL, path, GTK_TYPE_WINDOW, "window", "background");
+            gtk_widget_path_unref(path);
+            bg(sc2, color, state);
+        }
+    }
+
+    StyleContextFree(sc);
+}
+
+static void fg(GtkStyleContext* sc, wxColour& color, int state = GTK_STATE_FLAG_NORMAL)
+{
+    GdkRGBA rgba;
+    gtk_style_context_set_state(sc, GtkStateFlags(state));
+    gtk_style_context_get_color(sc, GtkStateFlags(state), &rgba);
+    color = wxColour(rgba);
+    StyleContextFree(sc);
+}
+
+static void border(GtkStyleContext* sc, wxColour& color)
+{
+    GdkRGBA* rgba;
+    gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL, "border-color", &rgba, NULL);
+    color = wxColour(*rgba);
+    gdk_rgba_free(rgba);
+    StyleContextFree(sc);
 }
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    GdkRGBA gdkRGBA = { 0, 0, 0, 1 };
+    if (unsigned(index) > wxSYS_COLOUR_MAX)
+        index = wxSYS_COLOUR_MAX;
+
+    wxColour& color = gs_systemColorCache[index];
+    if (color.IsOk())
+        return color;
+
+    static bool once;
+    if (!once)
+    {
+        once = true;
+        g_signal_connect(gtk_settings_get_default(), "notify::gtk-theme-name",
+            G_CALLBACK(notify_gtk_theme_name), NULL);
+    }
+
+    GtkWidgetPath* path = gtk_widget_path_new();
+    GtkStyleContext* sc;
+
     switch (index)
     {
+    case wxSYS_COLOUR_ACTIVECAPTION:
+    case wxSYS_COLOUR_INACTIVECAPTION:
+#if GTK_CHECK_VERSION(3,10,0)
+        if (gtk_check_version(3,10,0) == NULL)
+        {
+            sc = HeaderbarContext(path);
+            int state = GTK_STATE_FLAG_NORMAL;
+            if (index == wxSYS_COLOUR_INACTIVECAPTION)
+                state = GTK_STATE_FLAG_BACKDROP;
+            bg(sc, color, state);
+            break;
+        }
+#endif
+        // fall through
     case wxSYS_COLOUR_3DLIGHT:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:
     case wxSYS_COLOUR_DESKTOP:
     case wxSYS_COLOUR_INACTIVEBORDER:
-    case wxSYS_COLOUR_INACTIVECAPTION:
     case wxSYS_COLOUR_SCROLLBAR:
     case wxSYS_COLOUR_WINDOWFRAME:
-        bg(ButtonWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
+        sc = ButtonContext(path);
+        bg(sc, color);
         break;
-    case wxSYS_COLOUR_BTNHIGHLIGHT:
     case wxSYS_COLOUR_HIGHLIGHT:
-        bg(ButtonWidget(), GTK_STATE_FLAG_SELECTED, gdkRGBA);
-        break;
-    case wxSYS_COLOUR_BTNSHADOW:
-        border(ButtonWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
-        break;
-    case wxSYS_COLOUR_BTNTEXT:
-    case wxSYS_COLOUR_WINDOWTEXT:
-        fg(ButtonWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
-        break;
-    case wxSYS_COLOUR_GRAYTEXT:
-    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
-        fg(ButtonWidget(), GTK_STATE_FLAG_INSENSITIVE, gdkRGBA);
+        sc = TextviewContext(path, "text", "selection");
+        bg(sc, color, GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
         break;
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
-        fg(ButtonWidget(), GTK_STATE_FLAG_SELECTED, gdkRGBA);
+        sc = TextviewContext(path, "text", "selection");
+        fg(sc, color, GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
+        break;
+    case wxSYS_COLOUR_WINDOWTEXT:
+        sc = TextviewContext(path, "text");
+        fg(sc, color);
+        break;
+    case wxSYS_COLOUR_BTNHIGHLIGHT:
+        sc = ButtonContext(path);
+        bg(sc, color, GTK_STATE_FLAG_PRELIGHT);
+        break;
+    case wxSYS_COLOUR_BTNSHADOW:
+        sc = ButtonContext(path);
+        border(sc, color);
+        break;
+    case wxSYS_COLOUR_CAPTIONTEXT:
+#if GTK_CHECK_VERSION(3,10,0)
+        if (gtk_check_version(3,10,0) == NULL)
+        {
+            sc = HeaderbarLabelContext(path);
+            fg(sc, color);
+            break;
+        }
+#endif
+        // fall through
+    case wxSYS_COLOUR_BTNTEXT:
+        sc = ButtonLabelContext(path);
+        fg(sc, color);
+        break;
+    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+#if GTK_CHECK_VERSION(3,10,0)
+        if (gtk_check_version(3,10,0) == NULL)
+        {
+            sc = HeaderbarLabelContext(path);
+            fg(sc, color, GTK_STATE_FLAG_BACKDROP);
+            break;
+        }
+#endif
+        // fall through
+    case wxSYS_COLOUR_GRAYTEXT:
+        sc = StyleContext(path, GTK_TYPE_LABEL, "label");
+        fg(sc, color, GTK_STATE_FLAG_INSENSITIVE);
         break;
     case wxSYS_COLOUR_HOTLIGHT:
+        sc = StyleContext(path, GTK_TYPE_LINK_BUTTON, "button", "link");
+        if (gtk_check_version(3,12,0) == NULL)
+            fg(sc, color, GTK_STATE_FLAG_LINK);
+        else
         {
-            static GtkWidget* s_widget;
-            if (s_widget == NULL)
-            {
-                s_widget = gtk_link_button_new("");
-                gtk_container_add(ContainerWidget(), s_widget);
-            }
-            fg(s_widget, GTK_STATE_FLAG_NORMAL, gdkRGBA);
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+            GValue value = G_VALUE_INIT;
+            g_value_init(&value, GDK_TYPE_COLOR);
+            gtk_style_context_get_style_property(sc, "link-color", &value);
+            GdkColor* link_color = static_cast<GdkColor*>(g_value_get_boxed(&value));
+            GdkColor gdkColor = { 0, 0, 0, 0xeeee };
+            if (link_color)
+                gdkColor = *link_color;
+            color = wxColour(gdkColor);
+            g_value_unset(&value);
+            StyleContextFree(sc);
+            wxGCC_WARNING_RESTORE()
         }
         break;
     case wxSYS_COLOUR_INFOBK:
-        bg(ToolTipWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
+        sc = TooltipContext(path);
+        bg(sc, color);
         break;
     case wxSYS_COLOUR_INFOTEXT:
-        fg(ToolTipWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
+        sc = TooltipContext(path);
+        sc = StyleContext(sc, path, GTK_TYPE_LABEL, "label");
+        fg(sc, color);
         break;
     case wxSYS_COLOUR_LISTBOX:
-        bg(ListWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
+        sc = TreeviewContext(path);
+        bg(sc, color);
         break;
     case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
-        fg(ListWidget(), GTK_STATE_FLAG_SELECTED, gdkRGBA);
+        sc = TreeviewContext(path);
+        fg(sc, color, GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
         break;
     case wxSYS_COLOUR_LISTBOXTEXT:
-        fg(ListWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
+        sc = TreeviewContext(path);
+        fg(sc, color);
         break;
     case wxSYS_COLOUR_MENU:
-        bg(MenuItemWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
+        sc = MenuContext(path);
+        bg(sc, color);
         break;
     case wxSYS_COLOUR_MENUBAR:
-        bg(MenuBarWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
+        sc = StyleContext(path, GTK_TYPE_MENU_BAR, "menubar", "menubar");
+        bg(sc, color);
         break;
-    case wxSYS_COLOUR_ACTIVECAPTION:
     case wxSYS_COLOUR_MENUHILIGHT:
-        bg(MenuItemWidget(), GTK_STATE_FLAG_PRELIGHT, gdkRGBA);
+        sc = MenuItemContext(path);
+        bg(sc, color, GTK_STATE_FLAG_PRELIGHT);
         break;
     case wxSYS_COLOUR_MENUTEXT:
-        fg(MenuItemWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
+        sc = MenuItemContext(path);
+        sc = StyleContext(sc, path, GTK_TYPE_LABEL, "label");
+        fg(sc, color);
         break;
     case wxSYS_COLOUR_APPWORKSPACE:
     case wxSYS_COLOUR_WINDOW:
-        {
-            GtkWidget* widget = TextCtrlWidget();
-            GtkStyleContext* sc = gtk_widget_get_style_context(widget);
-            gtk_style_context_save(sc);
-            gtk_style_context_add_class(sc, GTK_STYLE_CLASS_VIEW);
-            bg(widget, GTK_STATE_FLAG_NORMAL, gdkRGBA);
-            gtk_style_context_restore(sc);
-        }
+        sc = TextviewContext(path);
+        bg(sc, color);
         break;
-    case wxSYS_COLOUR_CAPTIONTEXT:
-        {
-            GdkRGBA c = { 1, 1, 1, 1 };
-            gdkRGBA = c;
-        }
-        break;
-    default:
-        wxFAIL_MSG("unknown system colour index");
-        // fallthrough
     case wxSYS_COLOUR_3DDKSHADOW:
     case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
     case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
-        // black
+        color.Set(0, 0, 0);
+        break;
+    default:
+        wxFAIL_MSG("invalid system colour index");
+        color.Set(0, 0, 0, 0);
         break;
     }
-    return wxColour(gdkRGBA);
+
+    gtk_widget_path_unref(path);
+
+    return color;
 }
-#else
+#else // !__WXGTK3__
 static const GtkStyle* ButtonStyle()
 {
     return gtk_widget_get_style(ButtonWidget());
@@ -428,7 +733,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
     wxASSERT(color.IsOk());
     return color;
 }
-#endif
+#endif // !__WXGTK3__
 
 wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 {
@@ -449,10 +754,20 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
             {
                 wxNativeFontInfo info;
 #ifdef __WXGTK3__
-                GtkStyleContext* sc = gtk_widget_get_style_context(ButtonWidget());
-                gtk_style_context_set_state(sc, GTK_STATE_FLAG_NORMAL);
+                static bool once;
+                if (!once)
+                {
+                    once = true;
+                    g_signal_connect(gtk_settings_get_default(), "notify::gtk-font-name",
+                        G_CALLBACK(notify_gtk_font_name), NULL);
+                }
+                GtkWidgetPath* path = gtk_widget_path_new();
+                GtkStyleContext* sc;
+                sc = ButtonLabelContext(path);
                 gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
                     GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
+                gtk_widget_path_unref(path);
+                StyleContextFree(sc);
 #else
                 info.description = ButtonStyle()->font_desc;
 #endif
@@ -574,6 +889,56 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                             "gtk-double-click-time", &dclick, NULL);
             return dclick;
 
+        case wxSYS_CARET_ON_MSEC:
+            {
+                gint blink_time = -1;
+                g_object_get(GetSettingsForWindowScreen(window),
+                                "gtk-cursor-blink-time", &blink_time, NULL);
+                if (blink_time > 0)
+                    return blink_time / 2;
+
+                return -1;
+            }
+
+        case wxSYS_CARET_OFF_MSEC:
+            {
+                gboolean should_blink = true;
+                gint blink_time = -1;
+                g_object_get(GetSettingsForWindowScreen(window),
+                                "gtk-cursor-blink", &should_blink,
+                                "gtk-cursor-blink-time", &blink_time,
+                                NULL);
+                if (!should_blink)
+                    return 0;
+
+                if (blink_time > 0)
+                    return blink_time / 2;
+
+                return -1;
+            }
+
+        case wxSYS_CARET_TIMEOUT_MSEC:
+            {
+                gboolean should_blink = true;
+                gint timeout = 0;
+                g_object_get(GetSettingsForWindowScreen(window),
+                                "gtk-cursor-blink", &should_blink,
+                                "gtk-cursor-blink-timeout", &timeout,
+                                NULL);
+                if (!should_blink)
+                    return 0;
+
+                // GTK+ returns this value in seconds, not milliseconds,
+                // Special value of 2147483647 means that the cursor never
+                // blinks and we handle any value that would overflow int after
+                // multiplication in the same manner as it looks quite
+                // unnecessary to support cursor blinking once a month.
+                if (timeout > 0 && timeout < 2147483647 / 1000)
+                    return timeout * 1000;
+
+                return -1;  // no timeout, blink forever
+            }
+
         case wxSYS_DRAG_X:
         case wxSYS_DRAG_Y:
             gint drag_threshold;
@@ -656,4 +1021,30 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
         default:
             return false;
     }
+}
+
+class wxSystemSettingsModule: public wxModule
+{
+public:
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE;
+    wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
+};
+wxIMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule);
+
+void wxSystemSettingsModule::OnExit()
+{
+#ifdef __WXGTK3__
+    GtkSettings* settings = gtk_settings_get_default();
+    g_signal_handlers_disconnect_by_func(settings,
+        (void*)notify_gtk_theme_name, NULL);
+    g_signal_handlers_disconnect_by_func(settings,
+        (void*)notify_gtk_font_name, NULL);
+#else
+    if (gs_tlw_parent)
+    {
+        gtk_widget_destroy(gs_tlw_parent);
+        gs_tlw_parent = NULL;
+    }
+#endif
 }

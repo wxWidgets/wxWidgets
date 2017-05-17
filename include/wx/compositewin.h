@@ -54,7 +54,7 @@ public:
     //     it non-virtually and we need to do this to avoid infinite recursion,
     //     so we work around this by calling the method of this object itself
     //     manually in each function.
-    virtual bool SetForegroundColour(const wxColour& colour)
+    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE
     {
         if ( !BaseWindowClass::SetForegroundColour(colour) )
             return false;
@@ -64,7 +64,7 @@ public:
         return true;
     }
 
-    virtual bool SetBackgroundColour(const wxColour& colour)
+    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE
     {
         if ( !BaseWindowClass::SetBackgroundColour(colour) )
             return false;
@@ -74,7 +74,7 @@ public:
         return true;
     }
 
-    virtual bool SetFont(const wxFont& font)
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE
     {
         if ( !BaseWindowClass::SetFont(font) )
             return false;
@@ -84,7 +84,7 @@ public:
         return true;
     }
 
-    virtual bool SetCursor(const wxCursor& cursor)
+    virtual bool SetCursor(const wxCursor& cursor) wxOVERRIDE
     {
         if ( !BaseWindowClass::SetCursor(cursor) )
             return false;
@@ -94,7 +94,7 @@ public:
         return true;
     }
 
-    virtual void SetLayoutDirection(wxLayoutDirection dir)
+    virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE
     {
         BaseWindowClass::SetLayoutDirection(dir);
 
@@ -113,7 +113,7 @@ public:
     }
 
 #if wxUSE_TOOLTIPS
-    virtual void DoSetToolTipText(const wxString &tip)
+    virtual void DoSetToolTipText(const wxString &tip) wxOVERRIDE
     {
         BaseWindowClass::DoSetToolTipText(tip);
 
@@ -123,7 +123,7 @@ public:
         SetForAllParts(func, tip);
     }
 
-    virtual void DoSetToolTip(wxToolTip *tip)
+    virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE
     {
         BaseWindowClass::DoSetToolTip(tip);
 
@@ -131,7 +131,7 @@ public:
     }
 #endif // wxUSE_TOOLTIPS
 
-    virtual void SetFocus()
+    virtual void SetFocus() wxOVERRIDE
     {
         wxSetFocusToChild(this, NULL);
     }

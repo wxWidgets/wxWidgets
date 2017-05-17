@@ -295,7 +295,7 @@ __THREADSFLAG = L
 __THREADSFLAG = T
 !endif
 !if "$(USE_RTTI)" == "0"
-__RTTIFLAG = 
+__RTTIFLAG = /GR-
 !endif
 !if "$(USE_RTTI)" == "1"
 __RTTIFLAG = /GR

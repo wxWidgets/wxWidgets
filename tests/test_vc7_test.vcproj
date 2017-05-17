@@ -422,6 +422,9 @@
 				RelativePath=".\hashes\hashes.cpp">
 			</File>
 			<File
+				RelativePath=".\strings\hexconv.cpp">
+			</File>
+			<File
 				RelativePath=".\interactive\input.cpp">
 			</File>
 			<File

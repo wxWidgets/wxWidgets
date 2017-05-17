@@ -34,11 +34,54 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Conditionally set variables: ###
 
+ifeq ($(USE_HTML),1)
+__aui___depname = aui
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__except___depname = except
+endif
+ifeq ($(USE_HTML),1)
+__help___depname = help
+endif
+ifeq ($(USE_HTML),1)
+__htlbox___depname = htlbox
+endif
+ifeq ($(USE_HTML),1)
+__html___depname = html
+endif
+ifeq ($(USE_MEDIA),1)
+__mediaplayer___depname = mediaplayer
+endif
+ifeq ($(USE_PROPGRID),1)
+__propgrid___depname = propgrid
+endif
+ifeq ($(USE_RIBBON),1)
+__ribbon___depname = ribbon
+endif
+ifeq ($(USE_HTML),1)
+ifeq ($(USE_RICHTEXT),1)
+__richtext___depname = richtext
+endif
+endif
+ifeq ($(USE_MEDIA),1)
+__splash___depname = splash
+endif
+ifeq ($(USE_STC),1)
+__stc___depname = stc
+endif
+ifeq ($(USE_STC),1)
+__webview___depname = webview
+endif
+ifeq ($(USE_HTML),1)
+ifeq ($(USE_RIBBON),1)
+__xrc___depname = xrc
+endif
+endif
 
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
+all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -99,6 +142,7 @@ clean:
 	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C sashtest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C scroll -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C secretstore -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C shaped -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C sockets -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C sound -f makefile.gcc $(MAKEARGS) clean
@@ -133,8 +177,10 @@ animate:
 artprov: 
 	$(MAKE) -C artprov -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_HTML),1)
 aui: 
 	$(MAKE) -C aui -f makefile.gcc $(MAKEARGS) all
+endif
 
 calendar: 
 	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) all
@@ -190,8 +236,10 @@ erase:
 event: 
 	$(MAKE) -C event -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_EXCEPTIONS),1)
 except: 
 	$(MAKE) -C except -f makefile.gcc $(MAKEARGS) all
+endif
 
 exec: 
 	$(MAKE) -C exec -f makefile.gcc $(MAKEARGS) all
@@ -202,14 +250,20 @@ font:
 grid: 
 	$(MAKE) -C grid -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_HTML),1)
 help: 
 	$(MAKE) -C help -f makefile.gcc $(MAKEARGS) all
+endif
 
+ifeq ($(USE_HTML),1)
 htlbox: 
 	$(MAKE) -C htlbox -f makefile.gcc $(MAKEARGS) all
+endif
 
+ifeq ($(USE_HTML),1)
 html: 
 	$(MAKE) -C html -f makefile.gcc $(MAKEARGS) all
+endif
 
 image: 
 	$(MAKE) -C image -f makefile.gcc $(MAKEARGS) all
@@ -235,8 +289,10 @@ listctrl:
 mdi: 
 	$(MAKE) -C mdi -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_MEDIA),1)
 mediaplayer: 
 	$(MAKE) -C mediaplayer -f makefile.gcc $(MAKEARGS) all
+endif
 
 menu: 
 	$(MAKE) -C menu -f makefile.gcc $(MAKEARGS) all
@@ -271,8 +327,10 @@ preferences:
 printing: 
 	$(MAKE) -C printing -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_PROPGRID),1)
 propgrid: 
 	$(MAKE) -C propgrid -f makefile.gcc $(MAKEARGS) all
+endif
 
 regtest: 
 	$(MAKE) -C regtest -f makefile.gcc $(MAKEARGS) all
@@ -280,17 +338,26 @@ regtest:
 render: 
 	$(MAKE) -C render -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_RIBBON),1)
 ribbon: 
 	$(MAKE) -C ribbon -f makefile.gcc $(MAKEARGS) all
+endif
 
+ifeq ($(USE_HTML),1)
+ifeq ($(USE_RICHTEXT),1)
 richtext: 
 	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) all
+endif
+endif
 
 sashtest: 
 	$(MAKE) -C sashtest -f makefile.gcc $(MAKEARGS) all
 
 scroll: 
 	$(MAKE) -C scroll -f makefile.gcc $(MAKEARGS) all
+
+secretstore: 
+	$(MAKE) -C secretstore -f makefile.gcc $(MAKEARGS) all
 
 shaped: 
 	$(MAKE) -C shaped -f makefile.gcc $(MAKEARGS) all
@@ -301,8 +368,10 @@ sockets:
 sound: 
 	$(MAKE) -C sound -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_MEDIA),1)
 splash: 
 	$(MAKE) -C splash -f makefile.gcc $(MAKEARGS) all
+endif
 
 splitter: 
 	$(MAKE) -C splitter -f makefile.gcc $(MAKEARGS) all
@@ -310,8 +379,10 @@ splitter:
 statbar: 
 	$(MAKE) -C statbar -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_STC),1)
 stc: 
 	$(MAKE) -C stc -f makefile.gcc $(MAKEARGS) all
+endif
 
 svg: 
 	$(MAKE) -C svg -f makefile.gcc $(MAKEARGS) all
@@ -346,8 +417,10 @@ validate:
 vscroll: 
 	$(MAKE) -C vscroll -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_STC),1)
 webview: 
 	$(MAKE) -C webview -f makefile.gcc $(MAKEARGS) all
+endif
 
 widgets: 
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) all
@@ -358,8 +431,12 @@ wizard:
 wrapsizer: 
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) all
 
+ifeq ($(USE_HTML),1)
+ifeq ($(USE_RIBBON),1)
 xrc: 
 	$(MAKE) -C xrc -f makefile.gcc $(MAKEARGS) all
+endif
+endif
 
 memcheck: 
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
@@ -369,9 +446,9 @@ memcheck:
 	erase event except exec font grid help htlbox html image internat ipc joytest \
 	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
 	opengl ownerdrw popup power preferences printing propgrid regtest render ribbon \
-	richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg \
-	taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll \
-	webview widgets wizard wrapsizer xrc memcheck
+	richtext sashtest scroll secretstore shaped sockets sound splash splitter statbar \
+	stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate \
+	vscroll webview widgets wizard wrapsizer xrc memcheck
 
 
 SHELL := $(COMSPEC)

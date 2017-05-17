@@ -30,6 +30,11 @@
     /R-). You will need to use wxCmdLineParser::FoundSwitch() to distinguish
     between the normal and negated forms of the switch. This flag is new since
     wxWidgets 2.9.2.
+
+    @c wxCMD_LINE_HIDDEN can be specified for arguments that should exist but
+    are not to be included in the output of Usage(). These could be, for
+    example, diagnostics switches that are not useful to the end user.
+    This flags is new since wxWidgets 3.1.1.
 */
 enum wxCmdLineEntryFlags
 {
@@ -38,7 +43,8 @@ enum wxCmdLineEntryFlags
     wxCMD_LINE_PARAM_MULTIPLE   = 0x04, ///< The parameter may be repeated.
     wxCMD_LINE_OPTION_HELP      = 0x08, ///< This option is a help request.
     wxCMD_LINE_NEEDS_SEPARATOR  = 0x10, ///< Must have a separator before the value.
-    wxCMD_LINE_SWITCH_NEGATABLE = 0x20  ///< This switch can be negated (e.g. /S-)
+    wxCMD_LINE_SWITCH_NEGATABLE = 0x20, ///< This switch can be negated (e.g. /S-)
+    wxCMD_LINE_HIDDEN           = 0x40  ///< This switch is not listed by Usage()
 };
 
 /**

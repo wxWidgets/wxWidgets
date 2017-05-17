@@ -223,7 +223,7 @@ msgstr "Ко&лір тла:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:299
 msgid "&Blur distance:"
-msgstr ""
+msgstr "Відстань &розмиття"
 
 #: ../src/common/stockitem.cpp:143
 msgid "&Bold"
@@ -1292,7 +1292,7 @@ msgstr "Всі файли (*)|*"
 
 #: ../include/wx/defs.h:2913
 msgid "All files (*.*)|*.*"
-msgstr " Всі файли (*)|*"
+msgstr "Всі файли (*.*)|*.*"
 
 #: ../src/richtext/richtextstyles.cpp:1061
 msgid "All styles"
@@ -1331,7 +1331,7 @@ msgstr "Анімаційний файл не належить до типу %ld.
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:858
 msgid "AppWorkspace"
-msgstr ""
+msgstr "РобочаОбластьДодатків"
 
 #: ../src/generic/logg.cpp:1034
 #, c-format
@@ -1348,7 +1348,7 @@ msgstr "Застосувати"
 
 #: ../src/propgrid/advprops.cpp:1570
 msgid "Aqua"
-msgstr ""
+msgstr "Аква"
 
 #: ../src/richtext/richtextbulletspage.cpp:274
 #: ../src/richtext/richtextliststylepage.cpp:482
@@ -1368,7 +1368,7 @@ msgstr "Не знайдено аргументу %u."
 #: ../src/propgrid/advprops.cpp:1714
 #, fuzzy
 msgid "Arrow"
-msgstr "завтра"
+msgstr "Стрілка"
 
 #: ../src/generic/aboutdlgg.cpp:184
 msgid "Artists"
@@ -1513,16 +1513,16 @@ msgstr ""
 
 #: ../src/propgrid/advprops.cpp:1555
 msgid "Black"
-msgstr ""
+msgstr "Чорний"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1716
 msgid "Blank"
-msgstr ""
+msgstr "Порожній"
 
 #: ../src/propgrid/advprops.cpp:1564
 msgid "Blue"
-msgstr ""
+msgstr "Синій"
 
 #: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
 #: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:353
@@ -1585,22 +1585,22 @@ msgstr "Стиль позначки"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:861
 msgid "ButtonFace"
-msgstr ""
+msgstr "ВерхКнопки"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:862
 msgid "ButtonHighlight"
-msgstr ""
+msgstr "ПідсвічуванняКнопки"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:863
 msgid "ButtonShadow"
-msgstr ""
+msgstr "ЗатінитиКнопку"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:864
 msgid "ButtonText"
-msgstr ""
+msgstr "ТекстКнопки"
 
 #: ../src/common/paper.cpp:99
 msgid "C sheet, 17 x 22 in"
@@ -1653,7 +1653,7 @@ msgstr "Не можу В&ідновити "
 #: ../src/common/image.cpp:2690
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
-"Неможлива визначити формат зображення у автоматичному режимі для вхідних "
+"Неможливо визначити формат зображення у автоматичному режимі для вхідних "
 "даних без можливості позиціювання."
 
 #: ../src/msw/registry.cpp:498
@@ -1941,7 +1941,7 @@ msgstr "Пр&описні"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:865
 msgid "CaptionText"
-msgstr ""
+msgstr "ТекстЗаголовка"
 
 #: ../src/html/helpwnd.cpp:533
 msgid "Case sensitive"
@@ -2409,7 +2409,7 @@ msgstr "Копіювати позначене"
 
 #: ../src/msw/glcanvas.cpp:183 ../src/unix/glx11.cpp:136
 msgid "Core OpenGL profile is not supported by the OpenGL driver."
-msgstr ""
+msgstr "Core-profile OpenGL не підтримується драйвером OpenGL."
 
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
@@ -2825,7 +2825,7 @@ msgid ""
 "not installed on this machine. Please install it."
 msgstr ""
 "Службу віддаленого з'єднання (RAS) на цьому комп’ютері не встановлено. Будь "
-"ласка, встановіть його."
+"ласка, встановіть її."
 
 #: ../src/generic/tipdlg.cpp:225
 msgid "Did you know..."
@@ -3947,7 +3947,7 @@ msgstr "Від:"
 
 #: ../src/propgrid/advprops.cpp:1565
 msgid "Fuchsia"
-msgstr ""
+msgstr "Фуксія"
 
 #: ../src/common/imaggif.cpp:160
 msgid "GIF: Invalid gif index."
@@ -4036,12 +4036,12 @@ msgstr "Графічні елементи від "
 
 #: ../src/propgrid/advprops.cpp:1560
 msgid "Gray"
-msgstr ""
+msgstr "Сірий"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:869
 msgid "GrayText"
-msgstr ""
+msgstr "СірийТекст"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
@@ -4076,7 +4076,7 @@ msgstr "Файли HTML (*.html;*.htm)|*.html;*.htm|"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1720
 msgid "Hand"
-msgstr ""
+msgstr "Рука"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Harddisk"
@@ -4794,7 +4794,7 @@ msgstr "Світлий"
 
 #: ../src/propgrid/advprops.cpp:1569
 msgid "Lime"
-msgstr ""
+msgstr "Лайм"
 
 #: ../src/generic/helpext.cpp:294
 #, c-format
@@ -5053,7 +5053,7 @@ msgstr "Поля"
 
 #: ../src/propgrid/advprops.cpp:1556
 msgid "Maroon"
-msgstr ""
+msgstr "Брунато-малиновий"
 
 #: ../src/generic/fdrepdlg.cpp:147
 msgid "Match case"
@@ -5103,7 +5103,7 @@ msgstr "З&меншити"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1724
 msgid "Middle Button"
-msgstr ""
+msgstr "Середня Кнопка"
 
 #: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
@@ -5538,7 +5538,7 @@ msgstr "Об'єкти повинні мати атрибут id"
 
 #: ../src/propgrid/advprops.cpp:1562
 msgid "Olive"
-msgstr ""
+msgstr "Оливковий"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:326
 msgid "Opaci&ty:"
@@ -5592,7 +5592,7 @@ msgstr "Параметри"
 
 #: ../src/propgrid/advprops.cpp:1567
 msgid "Orange"
-msgstr ""
+msgstr "Помаранчевий"
 
 #: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
@@ -6131,7 +6131,7 @@ msgstr "Редактор властивостей"
 
 #: ../src/propgrid/advprops.cpp:1558
 msgid "Purple"
-msgstr ""
+msgstr "Пурпуровий"
 
 #: ../src/common/paper.cpp:113
 msgid "Quarto, 215 x 275 mm"
@@ -6605,7 +6605,7 @@ msgstr "Попередній перегляд шрифту."
 
 #: ../src/propgrid/advprops.cpp:1568
 msgid "Silver"
-msgstr ""
+msgstr "Срібний"
 
 #: ../src/univ/themes/mono.cpp:516
 msgid "Simple monochrome theme"
@@ -6856,7 +6856,7 @@ msgstr "Табуляції"
 
 #: ../src/propgrid/advprops.cpp:1559
 msgid "Teal"
-msgstr ""
+msgstr "Зеленувато-блакитний"
 
 #: ../src/generic/fontdlgg.cpp:327
 msgid "Teletype"
@@ -8049,7 +8049,7 @@ msgstr "Чи буде шрифт з підкресленням."
 
 #: ../src/propgrid/advprops.cpp:1572
 msgid "White"
-msgstr ""
+msgstr "Білий"
 
 #: ../src/generic/fdrepdlg.cpp:144
 msgid "Whole word"
@@ -8299,7 +8299,7 @@ msgstr "XPM: обрізані дані картинки у рядку %d!"
 
 #: ../src/propgrid/advprops.cpp:1571
 msgid "Yellow"
-msgstr ""
+msgstr "Жовтий"
 
 #: ../include/wx/msgdlg.h:276 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196

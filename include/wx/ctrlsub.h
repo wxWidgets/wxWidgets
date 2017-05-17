@@ -221,8 +221,7 @@ public:
         { return AppendItems(wxArrayStringsAdapter(n, items), clientData); }
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
-    template <class T>
-    int Append(const std::vector<T>& items)
+    int Append(const std::vector<wxString>& items)
         { return AppendItems(items); }
 #endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 
@@ -266,8 +265,7 @@ public:
         { return InsertItems(wxArrayStringsAdapter(n, items), pos, clientData); }
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
-    template <class T>
-    int Insert(const std::vector<T>& items, unsigned int pos)
+    int Insert(const std::vector<wxString>& items, unsigned int pos)
         { return InsertItems(items, pos); }
 #endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 
@@ -288,8 +286,7 @@ public:
         { Clear(); Append(n, items, clientData); }
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
-    template <class T>
-    void Set(const std::vector<T>& items)
+    void Set(const std::vector<wxString>& items)
         { Clear(); Append(items); }
 #endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 

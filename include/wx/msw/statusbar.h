@@ -40,33 +40,33 @@ public:
     virtual ~wxStatusBar();
 
     // implement base class methods
-    virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
-    virtual void SetStatusWidths(int n, const int widths_field[]);
-    virtual void SetStatusStyles(int n, const int styles[]);
-    virtual void SetMinHeight(int height);
-    virtual bool GetFieldRect(int i, wxRect& rect) const;
+    virtual void SetFieldsCount(int number = 1, const int *widths = NULL) wxOVERRIDE;
+    virtual void SetStatusWidths(int n, const int widths_field[]) wxOVERRIDE;
+    virtual void SetStatusStyles(int n, const int styles[]) wxOVERRIDE;
+    virtual void SetMinHeight(int height) wxOVERRIDE;
+    virtual bool GetFieldRect(int i, wxRect& rect) const wxOVERRIDE;
 
-    virtual int GetBorderX() const;
-    virtual int GetBorderY() const;
+    virtual int GetBorderX() const wxOVERRIDE;
+    virtual int GetBorderY() const wxOVERRIDE;
 
     // override some wxWindow virtual methods too
-    virtual bool SetFont(const wxFont& font);
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
 
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
-                                    WXLPARAM lParam);
+                                    WXLPARAM lParam) wxOVERRIDE;
 
 protected:
     // implement base class pure virtual method
-    virtual void DoUpdateStatusText(int number);
+    virtual void DoUpdateStatusText(int number) wxOVERRIDE;
 
     // override some base class virtuals
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 #if wxUSE_TOOLTIPS
-    virtual bool MSWProcessMessage(WXMSG* pMsg);
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result);
+    virtual bool MSWProcessMessage(WXMSG* pMsg) wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result) wxOVERRIDE;
 #endif
 
     // implementation of the public SetStatusWidths()

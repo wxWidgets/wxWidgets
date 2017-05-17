@@ -141,8 +141,8 @@ public:
 
     // add catalog with given domain name and language, looking it up via
     // wxTranslationsLoader
-    bool AddCatalog(const wxString& domain);
-    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+    bool AddCatalog(const wxString& domain,
+                    wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 #if !wxUSE_UNICODE
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage,
@@ -227,9 +227,9 @@ class WXDLLIMPEXP_BASE wxResourceTranslationsLoader
 {
 public:
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
-                                      const wxString& lang);
+                                      const wxString& lang) wxOVERRIDE;
 
-    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const;
+    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const wxOVERRIDE;
 
 protected:
     // returns resource type to use for translations

@@ -901,7 +901,7 @@ wxString wxZipEntry::GetInternalName(const wxString& name,
             (internal[0] == wxS('.') && IsDOSPathSep(internal[1])))
         internal.erase(0, 2);
     if (internal == wxT(".") || internal == wxT(".."))
-        internal = wxEmptyString;
+        internal.clear();
 
     return internal;
 }

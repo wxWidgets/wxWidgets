@@ -41,11 +41,50 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Conditionally set variables: ###
 
+!if "$(USE_HTML)" == "1"
+__aui___depname = aui
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__except___depname = except
+!endif
+!if "$(USE_HTML)" == "1"
+__help___depname = help
+!endif
+!if "$(USE_HTML)" == "1"
+__htlbox___depname = htlbox
+!endif
+!if "$(USE_HTML)" == "1"
+__html___depname = html
+!endif
+!if "$(USE_MEDIA)" == "1"
+__mediaplayer___depname = mediaplayer
+!endif
+!if "$(USE_PROPGRID)" == "1"
+__propgrid___depname = propgrid
+!endif
+!if "$(USE_RIBBON)" == "1"
+__ribbon___depname = ribbon
+!endif
+!if "$(USE_HTML)" == "1" && "$(USE_RICHTEXT)" == "1"
+__richtext___depname = richtext
+!endif
+!if "$(USE_MEDIA)" == "1"
+__splash___depname = splash
+!endif
+!if "$(USE_STC)" == "1"
+__stc___depname = stc
+!endif
+!if "$(USE_STC)" == "1"
+__webview___depname = webview
+!endif
+!if "$(USE_HTML)" == "1" && "$(USE_RIBBON)" == "1"
+__xrc___depname = xrc
+!endif
 
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
+all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -275,6 +314,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>scroll.bat
 	call scroll.bat
 	@del scroll.bat
+	@echo cd secretstore >secretstore.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>secretstore.bat
+	call secretstore.bat
+	@del secretstore.bat
 	@echo cd shaped >shaped.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>shaped.bat
 	call shaped.bat
@@ -390,11 +433,13 @@ artprov:
 	call artprov.bat
 	@del artprov.bat
 
+!if "$(USE_HTML)" == "1"
 aui: 
 	@echo cd aui >aui.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>aui.bat
 	call aui.bat
 	@del aui.bat
+!endif
 
 calendar: 
 	@echo cd calendar >calendar.bat
@@ -504,11 +549,13 @@ event:
 	call event.bat
 	@del event.bat
 
+!if "$(USE_EXCEPTIONS)" == "1"
 except: 
 	@echo cd except >except.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>except.bat
 	call except.bat
 	@del except.bat
+!endif
 
 exec: 
 	@echo cd exec >exec.bat
@@ -528,23 +575,29 @@ grid:
 	call grid.bat
 	@del grid.bat
 
+!if "$(USE_HTML)" == "1"
 help: 
 	@echo cd help >help.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>help.bat
 	call help.bat
 	@del help.bat
+!endif
 
+!if "$(USE_HTML)" == "1"
 htlbox: 
 	@echo cd htlbox >htlbox.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>htlbox.bat
 	call htlbox.bat
 	@del htlbox.bat
+!endif
 
+!if "$(USE_HTML)" == "1"
 html: 
 	@echo cd html >html.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>html.bat
 	call html.bat
 	@del html.bat
+!endif
 
 image: 
 	@echo cd image >image.bat
@@ -594,11 +647,13 @@ mdi:
 	call mdi.bat
 	@del mdi.bat
 
+!if "$(USE_MEDIA)" == "1"
 mediaplayer: 
 	@echo cd mediaplayer >mediaplayer.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>mediaplayer.bat
 	call mediaplayer.bat
 	@del mediaplayer.bat
+!endif
 
 menu: 
 	@echo cd menu >menu.bat
@@ -666,11 +721,13 @@ printing:
 	call printing.bat
 	@del printing.bat
 
+!if "$(USE_PROPGRID)" == "1"
 propgrid: 
 	@echo cd propgrid >propgrid.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>propgrid.bat
 	call propgrid.bat
 	@del propgrid.bat
+!endif
 
 regtest: 
 	@echo cd regtest >regtest.bat
@@ -684,17 +741,21 @@ render:
 	call render.bat
 	@del render.bat
 
+!if "$(USE_RIBBON)" == "1"
 ribbon: 
 	@echo cd ribbon >ribbon.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>ribbon.bat
 	call ribbon.bat
 	@del ribbon.bat
+!endif
 
+!if "$(USE_HTML)" == "1" && "$(USE_RICHTEXT)" == "1"
 richtext: 
 	@echo cd richtext >richtext.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>richtext.bat
 	call richtext.bat
 	@del richtext.bat
+!endif
 
 sashtest: 
 	@echo cd sashtest >sashtest.bat
@@ -707,6 +768,12 @@ scroll:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>scroll.bat
 	call scroll.bat
 	@del scroll.bat
+
+secretstore: 
+	@echo cd secretstore >secretstore.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>secretstore.bat
+	call secretstore.bat
+	@del secretstore.bat
 
 shaped: 
 	@echo cd shaped >shaped.bat
@@ -726,11 +793,13 @@ sound:
 	call sound.bat
 	@del sound.bat
 
+!if "$(USE_MEDIA)" == "1"
 splash: 
 	@echo cd splash >splash.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>splash.bat
 	call splash.bat
 	@del splash.bat
+!endif
 
 splitter: 
 	@echo cd splitter >splitter.bat
@@ -744,11 +813,13 @@ statbar:
 	call statbar.bat
 	@del statbar.bat
 
+!if "$(USE_STC)" == "1"
 stc: 
 	@echo cd stc >stc.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>stc.bat
 	call stc.bat
 	@del stc.bat
+!endif
 
 svg: 
 	@echo cd svg >svg.bat
@@ -816,11 +887,13 @@ vscroll:
 	call vscroll.bat
 	@del vscroll.bat
 
+!if "$(USE_STC)" == "1"
 webview: 
 	@echo cd webview >webview.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>webview.bat
 	call webview.bat
 	@del webview.bat
+!endif
 
 widgets: 
 	@echo cd widgets >widgets.bat
@@ -840,11 +913,13 @@ wrapsizer:
 	call wrapsizer.bat
 	@del wrapsizer.bat
 
+!if "$(USE_HTML)" == "1" && "$(USE_RIBBON)" == "1"
 xrc: 
 	@echo cd xrc >xrc.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>xrc.bat
 	call xrc.bat
 	@del xrc.bat
+!endif
 
 memcheck: 
 	@echo cd memcheck >memcheck.bat

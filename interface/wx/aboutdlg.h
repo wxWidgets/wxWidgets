@@ -37,7 +37,7 @@
         aboutInfo.SetName("MyApp");
         aboutInfo.SetVersion(MY_APP_VERSION_STRING);
         aboutInfo.SetDescription(_("My wxWidgets-based application!"));
-        aboutInfo.SetCopyright("(C) 1992-2016");
+        aboutInfo.SetCopyright("(C) 1992-2017");
         aboutInfo.SetWebSite("http://myapp.org");
         aboutInfo.AddDeveloper("My Self");
 
@@ -162,6 +162,16 @@ public:
     void SetDocWriters(const wxArrayString& docwriters);
 
     /**
+       Returns @true if an icon has been set for the about dialog.
+    */
+    bool HasIcon() const;
+
+    /**
+       Returns the icon set by SetIcon().
+    */
+    wxIcon GetIcon() const;
+    
+    /**
         Set the icon to be shown in the dialog. By default the icon of the main frame
         will be shown if the native about dialog supports custom icons. If it doesn't
         but a valid icon is specified using this method, the generic about dialog is
@@ -169,6 +179,18 @@ public:
         look and feel.
     */
     void SetIcon(const wxIcon& icon);
+
+    /**
+       Returns @true if the licence string has been set.
+    */
+    bool HasLicence() const;
+
+    /**
+       Returns the licence string.
+
+       @see SetLicence()
+    */
+    const wxString& GetLicence() const;
 
     /**
         Set the long, multiline string containing the text of the program licence.
@@ -214,6 +236,35 @@ public:
     void SetVersion(const wxString& version, const wxString& longVersion = wxString());
 
     /**
+       Return the short version string.
+
+       @see SetVersion()
+    */
+    const wxString& GetVersion() const;
+    
+    /**
+       Return the long version string if set.
+
+       @see SetVersion()
+    */
+    const wxString& GetLongVersion() const;
+
+    /**
+       Returns @true if the website info has been set.
+    */
+    bool HasWebSite() const;
+
+    /**
+       Returns the website URL set for the dialog.
+     */
+    const wxString& GetWebSiteURL() const;
+
+    /**
+       Returns the description of the website URL set for the dialog.
+     */
+    const wxString& GetWebSiteDescription() const;
+    
+    /**
         Set the web site for the program and its description (which defaults to @a url
         itself if empty).
 
@@ -223,6 +274,49 @@ public:
     */
     void SetWebSite(const wxString& url,
                     const wxString& desc = wxEmptyString);
+
+    
+    /**
+       Returns @true if developers have been set in the dialog info.
+    */
+    bool HasDevelopers() const;
+
+    /**
+       Returns an array of the developer strings set in the dialog info.
+    */
+    const wxArrayString& GetDevelopers() const;
+
+    /**
+       Returns @true if writers have been set in the dialog info.
+    */
+    bool HasDocWriters() const;
+
+    /**
+       Returns an array of the writer strings set in the dialog info.
+    */
+    const wxArrayString& GetDocWriters() const;
+
+    /**
+       Returns @true if artists have been set in the dialog info.
+    */
+    bool HasArtists() const;
+
+    /**
+       Returns an array of the artist strings set in the dialog info.
+    */
+    const wxArrayString& GetArtists() const;
+
+    /**
+       Returns @true if translators have been set in the dialog info.
+    */
+    bool HasTranslators() const;
+
+    /**
+       Returns an array of the translator strings set in the dialog info.
+    */
+    const wxArrayString& GetTranslators() const;
+
+    
 };
 
 

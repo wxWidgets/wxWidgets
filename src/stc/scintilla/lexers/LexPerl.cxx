@@ -755,7 +755,7 @@ void SCI_METHOD LexerPerl::Lex(Sci_PositionU startPos, Sci_Position length, int 
 		backPos++;
 	}
 
-	StyleContext sc(startPos, endPos - startPos, initStyle, styler, static_cast<char>(STYLE_MAX));
+	StyleContext sc(startPos, endPos - startPos, initStyle, styler);
 
 	for (; sc.More(); sc.Forward()) {
 

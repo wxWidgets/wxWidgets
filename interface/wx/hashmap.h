@@ -146,7 +146,7 @@
     ++it ( and it++ ) to move to the next element, *it to access the element pointed to,
     it->first ( it->second ) to access the key ( value ) of the element pointed to.
 
-    Hash maps provide forward only iterators, this means that you can't use --it,
+    Hash maps provide forward only iterators, this means that you can't use \--it,
     it + 3, it1 - it2.
 
 

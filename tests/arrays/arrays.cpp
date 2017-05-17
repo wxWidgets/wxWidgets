@@ -350,6 +350,13 @@ void ArraysTestCase::wxStringArrayTest()
     wxArrayString a6;
     a6.Add("Foo");
     a6.Insert(a6[0], 1, 100);
+
+    wxArrayString a7;
+    a7 = a7;
+    CPPUNIT_ASSERT_EQUAL( 0, a7.size() );
+    a7.Add("Bar");
+    a7 = a7;
+    CPPUNIT_ASSERT_EQUAL( 1, a7.size() );
 }
 
 void ArraysTestCase::SortedArray()

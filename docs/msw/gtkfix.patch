@@ -1,0 +1,24 @@
+--- build/bakefiles/common.bkl
++++ build/bakefiles/common.bkl
+@@ -423,6 +423,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
+         <if cond="IS_MSVC_PRJ">
+             <msvc-headers-setup-h>
+                 msw/setup.h
++                gtk/setup.h
+                 univ/setup.h
+             </msvc-headers-setup-h>
+             <set var="_custom_build_include_wx_msw_setup_h">
+--- build/bakefiles/config.bkl
++++ build/bakefiles/config.bkl
+@@ -64,11 +64,6 @@
+                 </description>
+             </option>
+         </if>
+-
+-        <!-- We must make TOOLKIT a constant under Windows -->
+-        <if cond="FORMAT in ['borland','mingw','msvc','watcom', 'msvc6prj', 'msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
+-            <set var="TOOLKIT">MSW</set>
+-        </if>
+     </if>
+
+     <!--

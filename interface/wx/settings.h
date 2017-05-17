@@ -191,7 +191,41 @@ enum wxSystemMetric
                               //!< visually in situations where it would otherwise present the information
                               //!< only in audible form; zero otherwise.
     wxSYS_SWAP_BUTTONS,       //!< Non-zero if the meanings of the left and right mouse buttons are swapped; zero otherwise.
-    wxSYS_DCLICK_MSEC         //!< Maximal time, in milliseconds, which may pass between subsequent clicks for a double click to be generated.
+    wxSYS_DCLICK_MSEC,        //!< Maximal time, in milliseconds, which may pass between subsequent clicks for a double click to be generated.
+
+    /**
+        Time, in milliseconds, for how long a blinking caret should
+        stay visible during a single blink cycle before it disappears.
+        If this value is negative, the platform does not support the
+        user setting.  Implemented only on GTK+ and MacOS X.
+
+        @since 3.1.1
+    */
+    wxSYS_CARET_ON_MSEC,
+
+    /**
+        Time, in milliseconds, for how long a blinking caret should
+        stay invisible during a single blink cycle before it reappears.
+        If this value is zero, carets should be visible all the time
+        instead of blinking.  If the value is negative, the platform
+        does not support the user setting.  Implemented only on GTK+
+        and MacOS X.
+
+        @since 3.1.1
+    */
+    wxSYS_CARET_OFF_MSEC,
+
+    /**
+        Time, in milliseconds, for how long a caret should blink after
+        a user interaction.  After this timeout has expired, the caret
+        should stay continuously visible until the user interacts with
+        the caret again (for example by entering, deleting or cutting
+        text).  If this value is negative, carets should blink forever;
+        if it is zero, carets should not blink at all.
+
+        @since 3.1.1
+    */
+    wxSYS_CARET_TIMEOUT_MSEC
 };
 
 /**
@@ -231,7 +265,7 @@ enum wxSystemScreenType
 
     @see wxFont, wxColour, wxSystemOptions
 */
-class wxSystemSettings : public wxObject
+class wxSystemSettings
 {
 public:
     /**

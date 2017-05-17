@@ -2457,7 +2457,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             evtCtx.SetEventObject(GetParent());
             GetParent()->GetEventHandler()->ProcessEvent(evtCtx);
         }
-        else
+        else if (event.LeftDown())
         {
             // reset the selection and bail out
             HighlightAll(false);
@@ -3015,6 +3015,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                     SetItemState(item,
                                  wxLIST_STATE_FOCUSED | wxLIST_STATE_SELECTED,
                                  wxLIST_STATE_FOCUSED | wxLIST_STATE_SELECTED);
+                    EnsureVisible(item);
 
                     // Reset the bell flag if it had been temporarily disabled
                     // before.

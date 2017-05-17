@@ -215,6 +215,14 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
 
         sizeX = sysX;
         sizeY = sysY;
+
+        // Not all ports provide this metric, so if they don't, fall back to
+        // something reasonable _and_ allow searching for a closer match.
+        if ( sizeX == -1 && sizeY == -1 )
+        {
+            sizeX = sizeY = 32;
+            flags |= FALLBACK_NEAREST_LARGER;
+        }
     }
 
     // Iterate over all icons searching for the exact match or the closest icon

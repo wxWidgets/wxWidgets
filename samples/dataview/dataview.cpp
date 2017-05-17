@@ -234,6 +234,13 @@ public:
 
     virtual bool GetValue( wxVariant &WXUNUSED(value) ) const wxOVERRIDE { return true; }
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxString GetAccessibleDescription() const wxOVERRIDE
+    {
+        return m_value;
+    }
+#endif // wxUSE_ACCESSIBILITY
+
     virtual bool HasEditorCtrl() const wxOVERRIDE { return true; }
 
     virtual wxWindow*
@@ -702,9 +709,14 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 
             m_ctrl[1]->AppendDateColumn("date",
                                         MyListModel::Col_Date);
+
+            wxDataViewTextRenderer* const markupRenderer = new wxDataViewTextRenderer();
+#if wxUSE_MARKUP
+            markupRenderer->EnableMarkup();
+#endif // wxUSE_MARKUP
             m_attributes =
                 new wxDataViewColumn("attributes",
-                                     new wxDataViewTextRenderer,
+                                     markupRenderer,
                                      MyListModel::Col_TextWithAttr,
                                      wxCOL_WIDTH_AUTOSIZE,
                                      wxALIGN_RIGHT,
@@ -943,7 +955,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
     info.AddDeveloper("Robert Roebling");
     info.AddDeveloper("Francesco Montorsi");
 
-    wxAboutBox(info);
+    wxAboutBox(info, this);
 }
 
 

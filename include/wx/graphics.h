@@ -70,6 +70,7 @@ enum wxCompositionMode
     wxCOMPOSITION_ADD /* R = S + D */
 };
 
+class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -437,9 +438,16 @@ public:
 #endif
 #endif
 
+    // Create a context from a DC of unknown type, if supported, returns NULL otherwise
+    static wxGraphicsContext* CreateFromUnknownDC(const wxDC& dc);
+
     static wxGraphicsContext* CreateFromNative( void * context );
 
     static wxGraphicsContext* CreateFromNativeWindow( void * window );
+
+#ifdef __WXMSW__
+    static wxGraphicsContext* CreateFromNativeHDC(WXHDC dc);
+#endif
 
     static wxGraphicsContext* Create( wxWindow* window );
 
@@ -543,6 +551,9 @@ public:
 
     // resets the clipping to original extent
     virtual void ResetClip() = 0;
+
+    // returns bounding box of the clipping region
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) = 0;
 
     // returns the native context
     virtual void * GetNativeContext() = 0;
@@ -822,6 +833,10 @@ public:
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) = 0;
+
+#ifdef __WXMSW__
+    virtual wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) = 0;
+#endif
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window ) = 0;
 

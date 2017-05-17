@@ -120,7 +120,7 @@ protected:
     // to do this easily and as there is much in that code I don't understand
     // (notably what is the logic for buttons sizing?) I prefer to not touch it
     // at all.
-    virtual wxSize DoGetBestSize() const
+    virtual wxSize DoGetBestSize() const wxOVERRIDE
     {
         const long flags = GetWindowStyleFlag();
         wxSearchTextCtrl* const self = const_cast<wxSearchTextCtrl*>(this);
@@ -488,6 +488,7 @@ void wxSearchCtrl::LayoutControls()
     int horizontalBorder = 1 + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
     int x = horizontalBorder;
     width -= horizontalBorder*2;
+    if (width < 0) width = 0;
 
     wxSize sizeSearch(0,0);
     wxSize sizeCancel(0,0);

@@ -204,6 +204,13 @@ void wxCheckBox::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widgetLabel != NULL, wxT("invalid checkbox") );
 
+    // If we don't hide the empty label, in some themes a focus rectangle is
+    // still drawn around it and this looks out of place.
+    if ( label.empty() )
+        gtk_widget_hide(m_widgetLabel);
+    else
+        gtk_widget_show(m_widgetLabel);
+
     // save the label inside m_label in case user calls GetLabel() later
     wxControl::SetLabel(label);
 

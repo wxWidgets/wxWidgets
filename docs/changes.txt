@@ -38,6 +38,10 @@ Changes in behaviour not resulting in compilation errors
   for getting the micro version. If you override GetToolkitVersion() you need
   to add this new third parameter.
 
+- wxWindow::CreateAccessible() doesn't return accessible object by default
+  anymore and GetOrCreateAccessible() may return NULL, indicating that native
+  system-provided accessibility should be used.
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
@@ -64,6 +68,8 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
 
 All:
 
+- Add wxSecretStore for storing passwords using the OS-provided facilities.
+- Add support for compiling application code with wxNO_UNSAFE_WXSTRING_CONV.
 - Add support for the micro version (third component) to OS and toolkit version
   functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
 - wxLogInfo() now logs messages if the log level is high enough, even without
@@ -71,44 +77,132 @@ All:
 - Add wxFileType::GetExpandedCommand() (troelsk).
 - Make it easier to convert to/from UTF-8-encoded std::string (ARATA Mizuki).
 - Add support for loading dynamic lexer in wxStyledTextCtrl (New Pagodi).
+- Handle strings with embedded NULs in wxDataStream (Nitch).
+- Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
+- Add wxString::cbegin() and cend() method (Lauri Nurmi).
+- Allow using Bind() with event handlers non-publicly deriving from
+  wxEvtHandler and/or wxTrackable in C++11 code (Raul Tambre, mmarsan).
+- Update bundled expat to 2.2.0 (Catalin Raceanu).
+- Add wxCMD_LINE_HIDDEN wxCmdLineParser flag (Lauri Nurmi).
+- Fix wxRmdir() with non-ASCII paths (trivia21).
+- Don't crash in wxFFile::Eof() or Error() on closed file (jprotopopov).
 
 All (GUI):
 
+- Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
-- Update Scintilla to v3.6.3 (Paul Kulchenko).
+- Update Scintilla to v3.7.2 (NewPagodi, Paul Kulchenko).
+- Update bundled libpng to 1.6.28 (Catalin Raceanu).
+- Fix vertical scrollbar visibility in wxStyledTextCtrl (yenwu, NewPagodi).
 - Fix bug with not being able to select AUI tab after dragging.
 - Make wxDataViewCtrl::Expand() expand ancestors in native ports too.
+- Add wxDataViewTextRenderer::EnableMarkup().
 - Add wxDataViewCtrl::SetHeaderAttr().
 - Add wxListCtrl::SetHeaderAttr().
+- Add support for using markup in wxDataViewCtrl text items.
 - Implement auto complete in generic wxSearchCtrl (Eric Jensen).
+- Fix preserving selection when changing selection mode in wxGrid (jonkraber).
+- Fix wxTextEntry::SetHint() with wxTE_PASSWORD in generic implementation.
+- Many fixes and improvements in Direct2D, Cairo, and GDI+ graphics renderers.
+- Fix and unify clipping region support for MSW and GTK+.
+- Fix rescaling of wxImage.
+- Fix displaying edited value of wxUIntProperty (wxPropertyGrid).
+- Fix displaying validation errors for numeric wxPropertyGrid properties.
+- Add wxSYS_CARET_{ON,OFF,TIMEOUT}_MSEC system settings (brawer).
+- Add wxGraphicsContext::GetClipBox().
+- Fix wxGCDC::Clear() for rotated graphics context.
+- Fix wxGCDC::GetClippingBox() for transformed wxDC (MSW, GTK+).
+- Add support for affine transformation matrix in wxGCDC.
+- Add wxGraphicsContext::Flush() for Cairo renderer.
+- Add wxStyledTextEvent::GetListCompletionMethod() (NewPagodi).
+- Add wxEVT_STC_AUTOCOMP_COMPLETED event (NewPagodi).
+- Fix retrieving bounding box for wxDC with transformed coordinates.
+- Fix wxGraphicsMatrixData::Concat() for Direct2D and Cairo renderers.
+- Fix calculating point position in wxDataViewCtrl::HitTest().
+- Fix position of the rectangle returned by wxDataViewCtrl::GetItemRect().
+- Add wxDataViewRenderer::GetAccessibleDescription().
+- Improve wxImage::Scale() handling of pixels with alpha channel (Tim Kosse).
+- Fix parsing of RGBA strings in wxColour (Laurent Poujoulat).
+- Refactor code in wxQuantize() for MSVC to avoid crash.
+- Fix drawing rotated and/or underlined text on wxPostScriptDC.
+- Support multiline strings in wxPostScriptDC::DrawText(), DrawRotatedText().
+- Deprecate wxEVT_STC_KEY and wxEVT_STC_URIDROPPED events (NewPagodi).
+- Optimize font registration in PostScript code emitted by wxPostScriptDC.
+- Fix drawing filled arc with wxPostScriptDC::DrawArc().
+- Optimize PostScript code emitted by wxPostScriptDC to draw elliptic arcs.
+- Add wxStyledTextCtrl::AutoCompGetCurrentText() (NewPagodi).
+- Extend wxStyledTextCtrl::FindText() to return end position of matched
+  text (NewPagodi).
+- Fix adding/removing items to/from wxRearrangeList.
 
 wxGTK:
 
-- Implement setting link colours in wxHyperlinkCtrl for GTK+3 (Hanmac).
+- Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
+- Apply wxTextCtrl::SetDefaultStyle() to user-entered text (Andreas Falkenhahn).
 - Support background colour in wxDataViewCtrl attributes.
 - Improve wxSpinCtrl best size calculation.
+- Implement support for icon locations in wxMimeTypesManager (Hanmac).
+- Cosmetic fix for empty wxCheckBoxes display (Chuddah).
+- Fix crashes in wxFileSystemWatcher implementation (David Hart).
+- Fix wxBitmap ctor from XBM for non-square bitmaps.
+- Fix wxDC::GetClippingBox() for transformed wxDC.
+- Add support for affine transformation matrix in wxDC (GTK+ 3).
+- Fix wxMemoryDC::Blit() with itself as source (GTK+ 3).
+- Fix displaying labels of wxRadioBox items.
 
 wxMSW:
 
+- Add support for building with Microsoft Visual Studio 2017 (Tobias Taschner).
 - Enable wxStackWalker in MinGW64 builds.
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
+- Fix wxSpinCtrl appearance: show arrows inside the control (Catalin Raceanu).
 - Fix MDI menu display after failure to create a child frame (troelsk).
 - Fix wxScreenDC::GetSize() with multiple monitors (iwbnwif).
 - Fix background colour returned by wxTextCtrl::GetStyle() (Andreas Falkenhahn).
+- Revert to using equally-sized buttons in wxToolBar by default.
+- Restore dispatching wxThreadEvent while resizing the window broken in 3.1.0.
+- Fix wxGraphicsMatrix::TransformDistance for Direct2D renderer.
+- Fix wxDC::Clear() for rotated DC.
+- Fix wxDC::GetClippingBox() for transformed wxDC.
+- Fix wxMemoryDC::Blit() with itself as source (Tim Roberts).
+- Return proper value from wxIAccessible::get_accSelection() if no children
+  are selected.
+- Add wxAccStatus::wxACC_INVALID_ARG error code to indicate argument-related
+  errors in wxAccessible methods.
+- Return DISP_E_MEMBERNOTFOUND error code from wxIAccessible if wxAccessible
+  methods return wxAccStatus::wxACC_NOT_SUPPORTED.
+- Return null BSTR from wxIAccessible if string returned from wxAccesible
+  method is empty.
+- Handle Ctrl-A in non-rich multiline text controls (Jens Göpfert).
+- Use cairo_win32_surface_create_with_format() to create ARGB surface from
+  wxMemoryDC (Cairo >= 1.15.4).
+- Fix updating bounding box in wxDC::DrawSpline().
+- Fix placing 0RGB wxBitmaps on the clipboard.
+- Fix handling wxClipboard data when wxUSE_OLE == 0.
 
 wxOSX:
 
 - Fix handling of non-BMP characters in GetPartialTextExtents() (ARATA Mizuki).
+- Fix dialogs using wxFRAME_FLOAT_ON_PARENT frame as parent (Lauri Nurmi).
+- Implement wxGetDisplaySizeMM() and fix printing DPI (David Vanderson).
 - Remove extra borders around wxFilePickerCtrl (John Roberts).
 - Set up extensions filter correctly in wxFileDialog (nick863).
-- Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
 - Implement wxDataViewChoiceByIndexRenderer (wanup).
 - Fix unnecessary indentation in list-like wxDataViewCtrl (Andreas Falkenhahn).
+- Recognize macOS 10.12 Sierra in wxGetOsDescription() (Tobias Taschner).
+- Don't try to open command line arguments as files (Jeff Hostetler).
+- Implement wxDataViewCtrl::SetRowHeight().
+- Add OSXEnableAutomaticQuoteSubstitution(), OSXEnableAutomaticDashSubstitution()
+  and OSXDisableAllSmartSubstitutions() to control wxTextCtrl smart behavior.
+- Don't allow interacting with disabled wxSlider (Andreas Falkenhahn).
+- Fix setting alignment in wxTextCtrl with wxTE_DONTWRAP (Andreas Falkenhahn).
+- Allow pasting using Cmd+V in wxTextCtrl with wxTE_PASSWORD style.
 
 Unix:
 
 - Support new gstreamer API in 1.7.2+ in wxMediaCtrl (Sebastian Dröge).
+- Add wxStandardPaths::SetFileLayout(FileLayout_XDG) (Martin Koegler).
 
 
 3.1.0: (released 2016-02-29)
@@ -218,7 +312,6 @@ All (GUI):
 - Fix a crash when using animated GIFs in wxHtmlListBox.
 - Use platform-specific stock icons for wxEditableListBox buttons.
 - Add support for the events from multimedia keys (Jens Göpfert).
-- Improve wxAUI appearance in high contrast themes (Zane U. Ji).
 - Allow suppressing warnings from wxImage::LoadFile().
 - Allow customizing wxRibbon highlight colours (wxBen).
 

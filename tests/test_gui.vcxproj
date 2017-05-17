@@ -528,6 +528,8 @@
     <ClCompile Include="graphics\affinematrix.cpp" />
     <ClCompile Include="graphics\bitmap.cpp" />
     <ClCompile Include="graphics\boundingbox.cpp" />
+    <ClCompile Include="graphics\clippingbox.cpp" />
+    <ClCompile Include="graphics\graphmatrix.cpp" />
     <ClCompile Include="graphics\colour.cpp" />
     <ClCompile Include="graphics\ellipsization.cpp" />
     <ClCompile Include="graphics\measuring.cpp" />

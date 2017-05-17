@@ -251,7 +251,7 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
     tool->bitmap = bitmap;
     if(bitmap_disabled.IsOk())
     {
-        wxASSERT(bitmap.GetSize() == bitmap_disabled.GetSize());
+        wxASSERT(bitmap.GetScaledSize() == bitmap_disabled.GetScaledSize());
         tool->bitmap_disabled = bitmap_disabled;
     }
     else
@@ -519,7 +519,7 @@ bool wxRibbonToolBar::GetToolState(int tool_id)const
 wxBitmap wxRibbonToolBar::MakeDisabledBitmap(const wxBitmap& original)
 {
     wxImage img(original.ConvertToImage());
-    return wxBitmap(img.ConvertToGreyscale());
+    return wxBitmap(img.ConvertToGreyscale(), -1, original.GetScaleFactor());
 }
 
 void wxRibbonToolBar::AppendGroup()
@@ -748,7 +748,7 @@ bool wxRibbonToolBar::Realize()
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             tool->size = m_art->GetToolSize(temp_dc, this,
-                tool->bitmap.GetSize(), tool->kind, t == 0,
+                tool->bitmap.GetScaledSize(), tool->kind, t == 0,
                 t == (tool_count - 1), &tool->dropdown);
             if(t == 0)
                 tool->state |= wxRIBBON_TOOLBAR_TOOL_FIRST;

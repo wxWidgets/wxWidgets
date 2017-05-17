@@ -83,7 +83,7 @@ gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 class wxSpinCtrlEventDisabler
 {
 public:
-    wxEXPLICIT wxSpinCtrlEventDisabler(wxSpinCtrlGTKBase* spin)
+    explicit wxSpinCtrlEventDisabler(wxSpinCtrlGTKBase* spin)
         : m_spin(spin)
     {
         m_spin->GtkDisableEvents();

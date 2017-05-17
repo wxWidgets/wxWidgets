@@ -21,6 +21,13 @@
           version doesn't currently collapse pairs of create/delete events in a
           rename event, unlike the other ones.
 
+    @note The application's event loop needs to be running before a
+          wxFileSystemWatcher can be properly created, and that is why one
+          should not be created too early during application startup.
+          If you intend to create a wxFileSystemWatcher at startup, you can
+          override wxAppConsole::OnEventLoopEnter() to ensure it is not done
+          too early.
+
     For the full list of change types that are reported see wxFSWFlags.
 
     This class notifies the application about the file system changes by

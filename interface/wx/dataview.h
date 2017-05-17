@@ -1395,11 +1395,8 @@ public:
     int GetIndent() const;
 
     /**
-        Returns item rectangle.
-
-        This method is currently not implemented at all in wxGTK and only
-        implemented for non-@NULL @a col argument in wxOSX. It is fully
-        implemented in the generic version of the control.
+        Returns item rectangle. Coordinates of the rectangle are specified in
+        wxDataViewCtrl client area coordinates.
 
         @param item
             A valid item.
@@ -1407,6 +1404,10 @@ public:
             If non-@NULL, the rectangle returned corresponds to the
             intersection of the item with the specified column. If @NULL, the
             rectangle spans all the columns.
+
+        @note This method is currently not implemented at all in wxGTK and only
+              implemented for non-@NULL @a col argument in wxOSX. It is fully
+              implemented in the generic version of the control.
     */
     virtual wxRect GetItemRect(const wxDataViewItem& item,
                                const wxDataViewColumn* col = NULL) const;
@@ -1485,7 +1486,9 @@ public:
     bool HasSelection() const;
 
     /**
-        Hittest.
+        Retrieves item and column at the given point.
+        The point coordinates are specified in wxDataViewCtrl client area
+        coordinates.
     */
     virtual void HitTest(const wxPoint& point, wxDataViewItem& item,
                          wxDataViewColumn*& col) const;
@@ -1593,8 +1596,8 @@ public:
         This function can only be used when all rows have the same height, i.e.
         when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
 
-        Currently this is implemented in the generic and native GTK versions
-        only and nothing is done (and @false returned) when using OS X port.
+        Currently this is implemented in the generic and native GTK and OS X
+        (since 3.1.1) versions.
 
         Also notice that this method can only be used to increase the row
         height compared with the default one (as determined by the return value
@@ -1851,6 +1854,18 @@ public:
     void DisableEllipsize();
 
     /**
+        This method returns a string describing the content of the renderer
+        to the class implementing accessibility features in wxDataViewCtrl.
+
+        @note
+        The method is implemented if @c wxUSE_ACCESSIBILITY setup symbol is set
+        to 1.
+
+        @since 3.1.1
+    */
+    virtual wxString GetAccessibleDescription() const = 0;
+
+    /**
         Returns the alignment. See SetAlignment()
     */
     virtual int GetAlignment() const;
@@ -1911,6 +1926,28 @@ public:
     virtual bool SetValue(const wxVariant& value) = 0;
 
     /**
+        Set the transformer object to be used to customize values before they
+        are rendered.
+
+        Can be used to change the value if it is shown on a highlighted row
+        (i.e. in selection) which typically has dark background. It is useful
+        in combination with wxDataViewTextRenderer with markup and can be used
+        e.g. to remove background color attributes inside selection, as a
+        lightweight alternative to implementing an entire
+        wxDataViewCustomRenderer specialization.
+
+        @a transformer can be @NULL to reset any transformer currently being
+        used.
+
+        Takes ownership of @a transformer.
+
+        @see wxDataViewValueAdjuster
+
+        @since 3.1.1
+    */
+    void SetValueAdjuster(wxDataViewValueAdjuster *transformer);
+
+    /**
         Before data is committed to the data model, it is passed to this
         method where it can be checked for validity. This can also be
         used for checking a valid range or limiting the user input in
@@ -1966,6 +2003,49 @@ public:
     wxDataViewTextRenderer(const wxString& varianttype = GetDefaultType(),
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                            int align = wxDVR_DEFAULT_ALIGNMENT );
+
+    /**
+        Enable interpretation of markup in the item data.
+
+        If this method is called with @true argument, markup (@ref
+        wxControl::SetLabelMarkup()) in the data of the items in this column
+        will be interpreted, which can be used for a more fine-grained
+        appearance control than just setting an attribute, which affects all of
+        the item text.
+
+        For example, as shown in the @ref page_samples_dataview, after creating
+        a column using a markup-enabled renderer:
+        @code
+            wxDataViewTextRenderer* renderer = new wxDataViewTextRenderer();
+            renderer->EnableMarkup();
+            dataViewCtrl->AppendColumn(new wxDataViewColumn("title", renderer, 0));
+        @endcode
+
+        The overridden model wxDataViewModel::GetValue() method may return
+        values containing markup for this column:
+        @code
+        void MyModel::GetValue(wxVariant& variant,
+                               const wxDataViewItem& item,
+                               unsigned int col) const
+        {
+            if ( col == 0 && item == ... )
+            {
+                variant = "<span color=\"#87ceeb\">light</span> and "
+                          "<span color=\"#000080\">dark</span> blue";
+            }
+
+            ...
+        }
+        @endcode
+
+        @note Currently wxDataViewIconTextRenderer only provides EnableMarkup()
+            EnableMarkup() in wxGTK, but not under the other platforms, so you
+            should only use it for plain wxDataViewTextRenderer columns,
+            without icons, in portable code.
+
+        @since 3.1.1
+     */
+    void EnableMarkup(bool enable = true);
 };
 
 
@@ -2182,6 +2262,9 @@ public:
     wxDataViewCustomRenderer::HasEditorCtrl, wxDataViewCustomRenderer::CreateEditorCtrl
     and wxDataViewCustomRenderer::GetValueFromEditorCtrl.
 
+    If @c wxUSE_ACCESSIBILITY setup symbol is set to 1, you might need to override also
+    wxDataViewRenderer::GetAccessibleDescription.
+
     Note that a special event handler will be pushed onto that editor control
     which handles @e \<ENTER\> and focus out events in order to end the editing.
 
@@ -2355,8 +2438,7 @@ public:
                           const wxDataViewItem & item,
                           unsigned int col);
 
-
-    /**
+/**
         Override this to render the cell.
         Before this is called, wxDataViewRenderer::SetValue was called
         so that this instance knows what to render.
@@ -3602,3 +3684,66 @@ public:
 
 };
 
+
+/**
+    @class wxDataViewValueAdjuster
+
+    This class can be used with wxDataViewRenderer::SetValueAdjuster() to
+    customize rendering of model values with standard renderers.
+
+    Can be used to change the value if it is shown on a highlighted row (i.e.
+    in selection) which typically has dark background. It is useful in
+    combination with wxDataViewTextRenderer with markup and can be used e.g. to
+    remove background color attributes inside selection, as a lightweight
+    alternative to implementing an entire wxDataViewCustomRenderer
+    specialization.
+
+    @example
+    // Markup renderer that removes bgcolor attributes when in selection
+    class DataViewMarkupRenderer : public wxDataViewTextRenderer
+    {
+    public:
+        DataViewMarkupRenderer()
+        {
+            EnableMarkup();
+            SetValueAdjuster(new Adjuster());
+        }
+
+    private:
+        class Adjuster : public wxDataViewValueAdjuster
+        {
+        public:
+            wxVariant MakeHighlighted(const wxVariant& value) const override
+            {
+                wxString s = value.GetString();
+                size_t pos = s.find(" bgcolor=\"");
+                if (pos != wxString::npos)
+                {
+                    size_t pos2 = s.find('"', pos + 10);
+                    s.erase(pos, pos2 - pos + 1);
+                    return s;
+                }
+                return value;
+            }
+        };
+    };
+    @endexample
+
+    @since 3.1.1
+
+    @library{wxadv}
+    @category{dvc}
+*/
+class wxDataViewValueAdjuster
+{
+public:
+    /**
+        Change value for rendering when highlighted.
+
+        Override to customize the value when it is shown in a highlighted
+        (selected) row, typically on a dark background.
+
+        Default implementation returns @a value unmodified.
+    */
+    virtual wxVariant MakeHighlighted(const wxVariant& value) const;
+};

@@ -96,6 +96,7 @@ public:
         wxCommandEvent eventCopy(event);
         eventCopy.SetEventObject(m_spin);
         eventCopy.SetId(m_spin->GetId());
+        eventCopy.SetInt(wxAtoi(event.GetString()));
         m_spin->ProcessWindowEvent(eventCopy);
     }
 
@@ -409,8 +410,8 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 
 void wxSpinCtrlGenericBase::OnTextLostFocus(wxFocusEvent& event)
 {
-    SyncSpinToText(SendEvent_Text);
-    DoSendEvent();
+    if ( SyncSpinToText(SendEvent_Text) )
+        DoSendEvent();
 
     event.Skip();
 }

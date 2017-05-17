@@ -178,6 +178,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
     EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
+    EVT_MENU( ID_SHOWSEL,   GridFrame::ShowSelection )
     EVT_MENU( ID_SELCELLS,  GridFrame::SelectCells )
     EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
     EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
@@ -366,7 +367,9 @@ GridFrame::GridFrame()
     selectMenu->Append( ID_DESELECT_ROW, wxT("Deselect row 2"));
     selectMenu->Append( ID_DESELECT_COL, wxT("Deselect col 2"));
     selectMenu->Append( ID_DESELECT_CELL, wxT("Deselect cell (3, 1)"));
+    selectMenu->AppendSeparator();
     wxMenu *selectionMenu = new wxMenu;
+    selectMenu->Append( ID_SHOWSEL, "&Show current selection\tCtrl-S" );
     selectMenu->Append( ID_CHANGESEL, wxT("Change &selection mode"),
                       selectionMenu,
                       wxT("Change selection mode") );
@@ -1040,6 +1043,36 @@ void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
     grid->ClearGrid();
 }
 
+void GridFrame::ShowSelection( wxCommandEvent& WXUNUSED(ev) )
+{
+    switch ( grid->GetSelectionMode() )
+    {
+        case wxGrid::wxGridSelectCells:
+            wxLogMessage("%zu individual cells and "
+                         "%zu blocks of contiguous cells selected",
+                         grid->GetSelectedCells().size(),
+                         grid->GetSelectionBlockTopLeft().size());
+            return;
+
+        case wxGrid::wxGridSelectRows:
+        case wxGrid::wxGridSelectColumns:
+        case wxGrid::wxGridSelectRowsOrColumns:
+            const wxArrayInt& rows = grid->GetSelectedRows();
+            if ( !rows.empty() )
+                wxLogMessage("%zu rows selected", rows.size());
+
+            const wxArrayInt& cols = grid->GetSelectedCols();
+            if ( !cols.empty() )
+                wxLogMessage("%zu columns selected", rows.size());
+
+            if ( rows.empty() && cols.empty() )
+                wxLogMessage("No selection");
+            return;
+    }
+
+    wxLogError("Unknown grid selection mode.");
+}
+
 void GridFrame::SelectCells( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->SetSelectionMode( wxGrid::wxGridSelectCells );
@@ -1342,7 +1375,7 @@ void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
     // work with it for some reason) is moved over it.
     aboutInfo.SetWebSite(wxT("http://www.wxwidgets.org"));
 
-    wxAboutBox(aboutInfo);
+    wxAboutBox(aboutInfo, this);
 }
 
 

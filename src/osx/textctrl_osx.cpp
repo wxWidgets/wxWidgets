@@ -139,6 +139,22 @@ void wxTextCtrl::MacCheckSpelling(bool check)
     GetTextPeer()->CheckSpelling(check);
 }
 
+void wxTextCtrl::OSXEnableAutomaticQuoteSubstitution(bool enable)
+{
+    GetTextPeer()->EnableAutomaticQuoteSubstitution(enable);
+}
+
+void wxTextCtrl::OSXEnableAutomaticDashSubstitution(bool enable)
+{
+    GetTextPeer()->EnableAutomaticDashSubstitution(enable);
+}
+
+void wxTextCtrl::OSXDisableAllSmartSubstitutions()
+{
+    OSXEnableAutomaticDashSubstitution(false);
+    OSXEnableAutomaticQuoteSubstitution(false);
+}
+
 bool wxTextCtrl::SetFont( const wxFont& font )
 {
     if ( !wxTextCtrlBase::SetFont( font ) )

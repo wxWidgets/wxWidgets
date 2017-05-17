@@ -97,7 +97,7 @@ public:
         m_title = title;
     }
 
-    virtual void AddPage(wxPreferencesPage* page)
+    virtual void AddPage(wxPreferencesPage* page) wxOVERRIDE
     {
         m_pages.push_back(wxSharedPtr<wxPreferencesPage>(page));
     }
@@ -156,7 +156,7 @@ public:
             m_win->Destroy();
     }
 
-    virtual void Show(wxWindow* parent)
+    virtual void Show(wxWindow* parent) wxOVERRIDE
     {
         if ( !m_win )
         {
@@ -174,7 +174,7 @@ public:
         }
     }
 
-    virtual void Dismiss()
+    virtual void Dismiss() wxOVERRIDE
     {
         if ( m_win )
         {
@@ -204,7 +204,7 @@ public:
         m_currentPage = -1;
     }
 
-    virtual void Show(wxWindow* parent)
+    virtual void Show(wxWindow* parent) wxOVERRIDE
     {
         wxScopedPtr<wxGenericPrefsDialog> dlg(CreateDialog(parent));
 
@@ -222,7 +222,7 @@ public:
             m_currentPage = dlg->GetSelectedPage();
     }
 
-    virtual void Dismiss()
+    virtual void Dismiss() wxOVERRIDE
     {
         if ( m_dlg )
         {

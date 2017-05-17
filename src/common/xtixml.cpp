@@ -363,7 +363,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectReaderCallback *ca
             {
                 if ( propertyNames[j] == paramName )
                 {
-                    propertyNames[j] = wxEmptyString;
+                    propertyNames[j].clear();
                     break;
                 }
             }

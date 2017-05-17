@@ -27,6 +27,7 @@
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dataobj.h"
+    #include "wx/textctrl.h"            // Only needed for wxTE_PASSWORD.
 #endif //WX_PRECOMP
 
 #include "wx/textentry.h"
@@ -376,6 +377,11 @@ void wxTextEntryBase::ForceUpper()
 
 bool wxTextEntryBase::SetHint(const wxString& hint)
 {
+    // Hint contents would be shown hidden in a password text entry anyhow, so
+    // we just can't support hints in this case.
+    if ( GetEditableWindow()->HasFlag(wxTE_PASSWORD) )
+        return false;
+
     if ( !hint.empty() )
     {
         if ( !m_hintData )

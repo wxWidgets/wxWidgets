@@ -1337,6 +1337,9 @@ wxString wxCmdLineParser::GetUsageString() const
         wxCmdLineOption& opt = m_data->m_options[n];
         wxString option, negator;
 
+        if ( opt.flags & wxCMD_LINE_HIDDEN )
+            continue;
+
         if ( opt.kind != wxCMD_LINE_USAGE_TEXT )
         {
             usage << wxT(' ');
@@ -1402,6 +1405,9 @@ wxString wxCmdLineParser::GetUsageString() const
     for ( n = 0; n < count; n++ )
     {
         wxCmdLineParam& param = m_data->m_paramDesc[n];
+
+        if ( param.flags & wxCMD_LINE_HIDDEN )
+            continue;
 
         usage << wxT(' ');
         if ( param.flags & wxCMD_LINE_PARAM_OPTIONAL )

@@ -66,6 +66,10 @@ wxSize wxBitmapButton::DoGetBestSize() const
 
     if ( GetBitmapLabel().IsOk() )
     {
+        // Hack to stop 16x16 bitmap being clipped
+        if (GetBitmapLabel().GetScaledSize().x == 16)
+            best += wxSize(4,0);
+            
         best += GetBitmapLabel().GetScaledSize();
     }
 

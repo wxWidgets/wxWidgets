@@ -23,6 +23,8 @@
 // are not violating the ODR rule.
 #define D2D1CreateFactory wxD2D1CreateFactory
 #define D2D1MakeRotateMatrix wxD2D1MakeRotateMatrix
+#define D2D1MakeSkewMatrix wxD2D1MakeSkewMatrix
+#define D2D1IsMatrixInvertible wxD2D1IsMatrixInvertible
 #define D2D1InvertMatrix wxD2D1InvertMatrix
 
 // There are clashes between the names of the member fields and parameters
@@ -52,6 +54,8 @@
 #pragma hdrstop
 #endif
 
+#include <float.h> // for FLT_MAX, FLT_MIN
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/dcclient.h"
@@ -60,7 +64,6 @@
     #include "wx/module.h"
     #include "wx/window.h"
     #include "wx/msw/private.h"
-    #include <float.h> // for FLT_MAX
 #endif // !WX_PRECOMP
 
 #include "wx/graphics.h"
@@ -158,6 +161,8 @@ private:
 
         wxLOAD_FUNC(m_dllDirect2d, D2D1CreateFactory);
         wxLOAD_FUNC(m_dllDirect2d, D2D1MakeRotateMatrix);
+        wxLOAD_FUNC(m_dllDirect2d, D2D1MakeSkewMatrix);
+        wxLOAD_FUNC(m_dllDirect2d, D2D1IsMatrixInvertible);
         wxLOAD_FUNC(m_dllDirect2d, D2D1InvertMatrix);
         wxLOAD_FUNC(m_dllDirectWrite, DWriteCreateFactory);
 
@@ -172,6 +177,12 @@ public:
 
     typedef void (WINAPI *D2D1MakeRotateMatrix_t)(FLOAT, D2D1_POINT_2F, D2D1_MATRIX_3X2_F*);
     static D2D1MakeRotateMatrix_t D2D1MakeRotateMatrix;
+
+    typedef void (WINAPI *D2D1MakeSkewMatrix_t)(FLOAT, FLOAT, D2D1_POINT_2F, D2D1_MATRIX_3X2_F*);
+    static D2D1MakeSkewMatrix_t D2D1MakeSkewMatrix;
+
+    typedef BOOL (WINAPI *D2D1IsMatrixInvertible_t)(const D2D1_MATRIX_3X2_F*);
+    static D2D1IsMatrixInvertible_t D2D1IsMatrixInvertible;
 
     typedef BOOL (WINAPI *D2D1InvertMatrix_t)(D2D1_MATRIX_3X2_F*);
     static D2D1InvertMatrix_t D2D1InvertMatrix;
@@ -199,6 +210,8 @@ wxDynamicLibrary wxDirect2D::m_dllDirectWrite;
 // define the (not yet imported) functions
 wxDirect2D::D2D1CreateFactory_t wxDirect2D::D2D1CreateFactory = NULL;
 wxDirect2D::D2D1MakeRotateMatrix_t wxDirect2D::D2D1MakeRotateMatrix = NULL;
+wxDirect2D::D2D1MakeSkewMatrix_t wxDirect2D::D2D1MakeSkewMatrix = NULL;
+wxDirect2D::D2D1IsMatrixInvertible_t wxDirect2D::D2D1IsMatrixInvertible = NULL;
 wxDirect2D::D2D1InvertMatrix_t wxDirect2D::D2D1InvertMatrix = NULL;
 wxDirect2D::DWriteCreateFactory_t wxDirect2D::DWriteCreateFactory = NULL;
 
@@ -238,6 +251,27 @@ void WINAPI wxD2D1MakeRotateMatrix(
         return;
 
     wxDirect2D::D2D1MakeRotateMatrix(angle, center, matrix);
+}
+
+void WINAPI wxD2D1MakeSkewMatrix(
+    FLOAT angleX,
+    FLOAT angleY,
+    D2D1_POINT_2F center,
+    D2D1_MATRIX_3X2_F *matrix)
+{
+    if (!wxDirect2D::Initialize())
+        return;
+
+    wxDirect2D::D2D1MakeSkewMatrix(angleX, angleY, center, matrix);
+}
+
+BOOL WINAPI wxD2D1IsMatrixInvertible(
+    const D2D1_MATRIX_3X2_F *matrix)
+{
+    if (!wxDirect2D::Initialize())
+        return FALSE;
+
+    return wxDirect2D::D2D1IsMatrixInvertible(matrix);
 }
 
 BOOL WINAPI wxD2D1InvertMatrix(
@@ -724,40 +758,62 @@ D2D1_RECT_F wxD2DConvertRect(const wxRect& rect)
 
 wxCOMPtr<ID2D1Geometry> wxD2DConvertRegionToGeometry(ID2D1Factory* direct2dFactory, const wxRegion& region)
 {
-    wxRegionIterator regionIterator(region);
-
-    // Count the number of rectangles which compose the region
-    int rectCount = 0;
-    while(regionIterator++)
-        rectCount++;
-
     // Build the array of geometries
-    ID2D1Geometry** geometries = new ID2D1Geometry*[rectCount];
-    regionIterator.Reset(region);
-
-    int i = 0;
-    while(regionIterator)
+    HRESULT hr;
+    int i;
+    ID2D1Geometry** geometries;
+    int rectCount;
+    if ( region.IsEmpty() )
     {
-        geometries[i] = NULL;
+        // Empty region is skipped by iterator
+        // so we have to create it in a special way.
+        rectCount = 1;
+        geometries = new ID2D1Geometry*[rectCount];
 
-        wxRect rect = regionIterator.GetRect();
-        rect.SetWidth(rect.GetWidth() + 1);
-        rect.SetHeight(rect.GetHeight() + 1);
+        geometries[0] = NULL;
+        hr = direct2dFactory->CreateRectangleGeometry(
+                        D2D1::RectF(0.0F, 0.0F, 0.0F, 0.0F),
+                        (ID2D1RectangleGeometry**)(&geometries[0]));
+        wxFAILED_HRESULT_MSG(hr);
+    }
+    else
+    {
+        // Count the number of rectangles which compose the region
+        wxRegionIterator regionIterator(region);
+        rectCount = 0;
+        while(regionIterator++)
+            rectCount++;
 
-        direct2dFactory->CreateRectangleGeometry(
-            wxD2DConvertRect(rect),
-            (ID2D1RectangleGeometry**)(&geometries[i]));
+        geometries = new ID2D1Geometry*[rectCount];
+        regionIterator.Reset(region);
 
-        i++; regionIterator++;
+        i = 0;
+        while(regionIterator)
+        {
+            geometries[i] = NULL;
+
+            wxRect rect = regionIterator.GetRect();
+            rect.SetWidth(rect.GetWidth() + 1);
+            rect.SetHeight(rect.GetHeight() + 1);
+
+            hr = direct2dFactory->CreateRectangleGeometry(
+                wxD2DConvertRect(rect),
+                (ID2D1RectangleGeometry**)(&geometries[i]));
+            wxFAILED_HRESULT_MSG(hr);
+
+            i++;
+            ++regionIterator;
+        }
     }
 
     // Create a geometry group to hold all the rectangles
     wxCOMPtr<ID2D1GeometryGroup> resultGeometry;
-    direct2dFactory->CreateGeometryGroup(
+    hr = direct2dFactory->CreateGeometryGroup(
         D2D1_FILL_MODE_WINDING,
         geometries,
         rectCount,
         &resultGeometry);
+    wxFAILED_HRESULT_MSG(hr);
 
     // Cleanup temporaries
     for (i = 0; i < rectCount; ++i)
@@ -811,6 +867,8 @@ public:
     wxD2DMatrixData(wxGraphicsRenderer* renderer);
     wxD2DMatrixData(wxGraphicsRenderer* renderer, const D2D1::Matrix3x2F& matrix);
 
+    virtual wxGraphicsObjectRefData* Clone() const wxOVERRIDE;
+
     void Concat(const wxGraphicsMatrixData* t) wxOVERRIDE;
 
     void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
@@ -857,9 +915,19 @@ wxD2DMatrixData::wxD2DMatrixData(wxGraphicsRenderer* renderer, const D2D1::Matri
 {
 }
 
+wxGraphicsObjectRefData* wxD2DMatrixData::Clone() const
+{
+    return new wxD2DMatrixData(GetRenderer(), m_matrix);
+}
+
 void wxD2DMatrixData::Concat(const wxGraphicsMatrixData* t)
 {
-    m_matrix.SetProduct(m_matrix, static_cast<const wxD2DMatrixData*>(t)->m_matrix);
+    // Elements of resulting matrix are modified in-place in SetProduct()
+    // so multiplied matrices cannot be the instances of the resulting matrix.
+    // Note that parameter matrix (t) is the multiplicand.
+    const D2D1::Matrix3x2F m1(static_cast<const wxD2DMatrixData*>(t)->m_matrix);
+    const D2D1::Matrix3x2F m2(m_matrix);
+    m_matrix.SetProduct(m1, m2);
 }
 
 void wxD2DMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, wxDouble tx, wxDouble ty)
@@ -924,7 +992,7 @@ void wxD2DMatrixData::TransformDistance(wxDouble* dx, wxDouble* dy) const
     D2D1::Matrix3x2F noTranslationMatrix = m_matrix;
     noTranslationMatrix._31 = 0;
     noTranslationMatrix._32 = 0;
-    D2D1_POINT_2F result = m_matrix.TransformPoint(D2D1::Point2F(*dx, *dy));
+    D2D1_POINT_2F result = noTranslationMatrix.TransformPoint(D2D1::Point2F(*dx, *dy));
     *dx = result.x;
     *dy = result.y;
 }
@@ -947,6 +1015,11 @@ const wxD2DMatrixData* wxGetD2DMatrixData(const wxGraphicsMatrix& matrix)
 //-----------------------------------------------------------------------------
 // wxD2DPathData declaration
 //-----------------------------------------------------------------------------
+
+bool operator==(const D2D1_POINT_2F& lhs, const D2D1_POINT_2F& rhs)
+{
+    return lhs.x == rhs.x && lhs.y == rhs.y;
+}
 
 class wxD2DPathData : public wxGraphicsPathData
 {
@@ -1015,9 +1088,26 @@ private:
 
     void EnsureSinkOpen();
 
-    void EnsureFigureOpen(wxDouble x = 0, wxDouble y = 0);
+    void EnsureFigureOpen(const D2D1_POINT_2F& pos);
 
     void EndFigure(D2D1_FIGURE_END figureEnd);
+
+    ID2D1Geometry* GetFullGeometry() const;
+
+    bool IsEmpty() const;
+    bool IsStateSafeForFlush() const;
+
+    struct GeometryStateData
+    {
+        bool m_isCurrentPointSet;
+        D2D1_POINT_2F m_currentPoint;
+        bool m_isFigureOpen;
+        D2D1_POINT_2F m_figureStart;
+        bool m_isFigureLogStartSet;
+        D2D1_POINT_2F m_figureLogStart;
+    };
+    void SaveGeometryState(GeometryStateData& data) const;
+    void RestoreGeometryState(const GeometryStateData& data);
 
 private :
     wxCOMPtr<ID2D1PathGeometry> m_pathGeometry;
@@ -1026,15 +1116,16 @@ private :
 
     wxCOMPtr<ID2D1Factory> m_direct2dfactory;
 
-    mutable wxCOMPtr<ID2D1TransformedGeometry> m_transformedGeometry;
+    mutable wxCOMPtr<ID2D1GeometryGroup> m_combinedGeometry;
+    wxVector<ID2D1Geometry*> m_pTransformedGeometries;
 
     bool m_currentPointSet;
     D2D1_POINT_2F m_currentPoint;
 
-    D2D1_MATRIX_3X2_F m_transformMatrix;
-
     bool m_figureOpened;
     D2D1_POINT_2F m_figureStart;
+    bool m_figureLogStartSet;
+    D2D1_POINT_2F m_figureLogStart;
 
     bool m_geometryWritable;
 };
@@ -1044,12 +1135,14 @@ private :
 //-----------------------------------------------------------------------------
 
 wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFactory) :
-    wxGraphicsPathData(renderer), m_direct2dfactory(d2dFactory),
+    wxGraphicsPathData(renderer),
+    m_direct2dfactory(d2dFactory),
     m_currentPointSet(false),
     m_currentPoint(D2D1::Point2F(0.0f, 0.0f)),
-    m_transformMatrix(D2D1::Matrix3x2F::Identity()),
     m_figureOpened(false),
     m_figureStart(D2D1::Point2F(0.0f, 0.0f)),
+    m_figureLogStartSet(false),
+    m_figureLogStart(D2D1::Point2F(0.0f, 0.0f)),
     m_geometryWritable(true)
 {
     m_direct2dfactory->CreatePathGeometry(&m_pathGeometry);
@@ -1061,6 +1154,10 @@ wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
 wxD2DPathData::~wxD2DPathData()
 {
     Flush();
+    for( size_t i = 0; i < m_pTransformedGeometries.size(); i++ )
+    {
+        m_pTransformedGeometries[i]->Release();
+    }
 }
 
 ID2D1PathGeometry* wxD2DPathData::GetPathGeometry()
@@ -1074,8 +1171,8 @@ wxD2DPathData::wxGraphicsObjectRefData* wxD2DPathData::Clone() const
 
     newPathData->EnsureGeometryOpen();
 
-    // Only geometry with closed sink (immutable)
-    // can be transferred to another geometry object with
+    // Only geometry with closed sink can be
+    // transferred to another geometry object with
     // ID2D1PathGeometry::Stream() so we have to check
     // if actual transfer succeeded.
 
@@ -1087,11 +1184,23 @@ wxD2DPathData::wxGraphicsObjectRefData* wxD2DPathData::Clone() const
         delete newPathData;
         return NULL;
     }
-    // Copy auxiliary data.
-    newPathData->m_currentPoint = m_currentPoint;
-    newPathData->m_transformMatrix = m_transformMatrix;
-    newPathData->m_figureOpened = m_figureOpened;
-    newPathData->m_figureStart = m_figureStart;
+
+    // Copy the collection of transformed geometries.
+    ID2D1TransformedGeometry* pTransformedGeometry;
+    for ( size_t i = 0; i < m_pTransformedGeometries.size(); i++ )
+    {
+        pTransformedGeometry = NULL;
+        hr = m_direct2dfactory->CreateTransformedGeometry(
+                    m_pTransformedGeometries[i],
+                    D2D1::Matrix3x2F::Identity(), &pTransformedGeometry);
+        wxASSERT_MSG( SUCCEEDED(hr), wxFAILED_HRESULT_MSG(hr) );
+        newPathData->m_pTransformedGeometries.push_back(pTransformedGeometry);
+    }
+
+    // Copy positional data.
+    GeometryStateData curState;
+    SaveGeometryState(curState);
+    newPathData->RestoreGeometryState(curState);
 
     return newPathData;
 }
@@ -1100,30 +1209,38 @@ void wxD2DPathData::Flush()
 {
     if (m_geometrySink != NULL)
     {
-        if (m_figureOpened)
+        if ( m_figureOpened )
         {
             m_geometrySink->EndFigure(D2D1_FIGURE_END_OPEN);
+            m_figureOpened = false;
         }
 
-        m_figureOpened = false;
-        m_geometrySink->Close();
-
-        m_geometryWritable = false;
+        if( m_geometryWritable )
+        {
+            HRESULT hr = m_geometrySink->Close();
+            wxCHECK_HRESULT_RET(hr);
+            m_geometryWritable = false;
+        }
     }
 }
 
 void wxD2DPathData::EnsureGeometryOpen()
 {
-    if (!m_geometryWritable) {
+    if (!m_geometryWritable)
+    {
         wxCOMPtr<ID2D1PathGeometry> newPathGeometry;
-        m_direct2dfactory->CreatePathGeometry(&newPathGeometry);
+        HRESULT hr;
+        hr = m_direct2dfactory->CreatePathGeometry(&newPathGeometry);
+        wxCHECK_HRESULT_RET(hr);
 
         m_geometrySink.reset();
-        newPathGeometry->Open(&m_geometrySink);
+        hr = newPathGeometry->Open(&m_geometrySink);
+        wxCHECK_HRESULT_RET(hr);
 
         if (m_pathGeometry != NULL)
         {
-            m_pathGeometry->Stream(m_geometrySink);
+            hr = m_pathGeometry->Stream(m_geometrySink);
+            wxCHECK_HRESULT_RET(hr);
         }
 
         m_pathGeometry = newPathGeometry;
@@ -1137,18 +1254,18 @@ void wxD2DPathData::EnsureSinkOpen()
 
     if (m_geometrySink == NULL)
     {
-        m_geometrySink = NULL;
-        m_pathGeometry->Open(&m_geometrySink);
+        HRESULT hr = m_pathGeometry->Open(&m_geometrySink);
+        wxCHECK_HRESULT_RET(hr);
     }
 }
 
-void wxD2DPathData::EnsureFigureOpen(wxDouble x, wxDouble y)
+void wxD2DPathData::EnsureFigureOpen(const D2D1_POINT_2F& pos)
 {
     EnsureSinkOpen();
 
     if (!m_figureOpened)
     {
-        m_figureStart = D2D1::Point2F(x, y);
+        m_figureStart = pos;
         m_geometrySink->BeginFigure(m_figureStart, D2D1_FIGURE_BEGIN_FILLED);
         m_figureOpened = true;
         m_currentPoint = m_figureStart;
@@ -1163,8 +1280,27 @@ void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
         if( figureEnd == D2D1_FIGURE_END_CLOSED )
             m_geometrySink->AddLine(m_currentPoint);
 
-        m_geometrySink->EndFigure(figureEnd);
+        if( figureEnd == D2D1_FIGURE_END_OPEN ||
+            !m_figureLogStartSet ||
+            m_figureLogStart == m_figureStart )
+        {
+            // If figure will remain open or if its logical startpoint
+            // is not used or if it is the same as the actual
+            // startpoint then we can end the figure in a standard way.
+            m_geometrySink->EndFigure(figureEnd);
+        }
+        else
+        {
+            // If we want to end and close the figure for which
+            // logical startpoint is not the same as actual startpoint
+            // we have to fill the gap between the actual and logical
+            // endpoints on our own.
+            m_geometrySink->AddLine(m_figureLogStart);
+            m_geometrySink->EndFigure(D2D1_FIGURE_END_OPEN);
+            m_figureStart = m_figureLogStart;
+        }
         m_figureOpened = false;
+        m_figureLogStartSet = false;
 
         // If the figure is closed then current point
         // should be moved to the beginning of the figure.
@@ -1173,14 +1309,104 @@ void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
     }
 }
 
+ID2D1Geometry* wxD2DPathData::GetFullGeometry() const
+{
+    // Our final path geometry is represented by geometry group
+    // which contains all transformed geometries plus current geometry.
+
+    // We have to store pointers to all transformed geometries
+    // as well as pointer to the current geometry in the auxiliary array.
+    const size_t numGeometries = m_pTransformedGeometries.size();
+    ID2D1Geometry** pGeometries = new ID2D1Geometry*[numGeometries+1];
+    for( size_t i = 0; i < numGeometries; i++ )
+        pGeometries[i] = m_pTransformedGeometries[i];
+
+    pGeometries[numGeometries] = m_pathGeometry;
+
+    // And use this array as a source to create geometry group.
+    m_combinedGeometry.reset();
+    HRESULT hr = m_direct2dfactory->CreateGeometryGroup(D2D1_FILL_MODE_ALTERNATE,
+                                  pGeometries, numGeometries+1, &m_combinedGeometry);
+    wxFAILED_HRESULT_MSG(hr);
+    delete []pGeometries;
+
+    return m_combinedGeometry;
+}
+
+bool wxD2DPathData::IsEmpty() const
+{
+    return !m_currentPointSet && !m_figureOpened &&
+            m_pTransformedGeometries.size() == 0;
+}
+
+bool wxD2DPathData::IsStateSafeForFlush() const
+{
+    // Only geometry with not yet started figure
+    // or with started but empty figure can be fully
+    // restored to its initial state after invoking Flush().
+    if( !m_figureOpened )
+        return true;
+
+    D2D1_POINT_2F actFigureStart = m_figureLogStartSet ?
+                        m_figureLogStart : m_figureStart;
+    return m_currentPoint == actFigureStart;
+}
+
+void wxD2DPathData::SaveGeometryState(GeometryStateData& data) const
+{
+    data.m_isFigureOpen = m_figureOpened;
+    data.m_isFigureLogStartSet = m_figureLogStartSet;
+    data.m_isCurrentPointSet = m_currentPointSet;
+    data.m_currentPoint = m_currentPoint;
+    data.m_figureStart = m_figureStart;
+    data.m_figureLogStart = m_figureLogStart;
+}
+
+void wxD2DPathData::RestoreGeometryState(const GeometryStateData& data)
+{
+    if( data.m_isFigureOpen )
+    {
+        // If the figure has to be re-started at the startpoint
+        // which is not the current point then we have to start it
+        // physically at the current point but with storing also its
+        // logical startpoint to use it later on to close the figure,
+        // if necessary.
+        // Ending and closing the figure using this proxy startpoint
+        // is only a simulation of regular closure and figure can behave
+        // in a slightly different way than figure closed with physical
+        // startpoint so this action should be avoided if only possible.
+        D2D1_POINT_2F actFigureStart = data.m_isFigureLogStartSet ?
+                         data.m_figureLogStart : data.m_figureStart;
+        if ( !(data.m_currentPoint == actFigureStart) )
+        {
+            m_figureLogStart = actFigureStart;
+            m_figureLogStartSet = true;
+            EnsureFigureOpen(data.m_currentPoint);
+        }
+        else
+        {
+            EnsureFigureOpen(actFigureStart);
+        }
+    }
+    else
+    {
+        m_figureOpened = false;
+    }
+
+    m_currentPointSet = data.m_isCurrentPointSet;
+    m_currentPoint = data.m_isCurrentPointSet ?
+                data.m_currentPoint : D2D1::Point2F(0.0F, 0.0F);
+}
+
 void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
 {
     // Close current sub-path (leaving the figure as is).
     EndFigure(D2D1_FIGURE_END_OPEN);
     // And open a new sub-path.
-    EnsureFigureOpen(x, y);
+    D2D1_POINT_2F p = D2D1::Point2F(x, y);
+    EnsureFigureOpen(p);
 
-    m_currentPoint = D2D1::Point2F(x, y);
+    m_currentPoint = p;
     m_currentPointSet = true;
 }
 
@@ -1195,7 +1421,7 @@ void wxD2DPathData::AddLineToPoint(wxDouble x, wxDouble y)
         return;
     }
 
-    EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
+    EnsureFigureOpen(m_currentPoint);
     m_geometrySink->AddLine(D2D1::Point2F(x, y));
 
     m_currentPoint = D2D1::Point2F(x, y);
@@ -1207,7 +1433,7 @@ void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wx
     // If no current point is set then this function should behave
     // as if preceded by a call to MoveToPoint(cx1, cy1).
     if( m_currentPointSet )
-        EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
+        EnsureFigureOpen(m_currentPoint);
     else
         MoveToPoint(cx1, cy1);
 
@@ -1223,10 +1449,45 @@ void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wx
 // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise)
 {
-    wxPoint2DDouble center = wxPoint2DDouble(x, y);
+    double angle;
+
+    // For the sake of compatibility normalize angles the same way
+    // as it is done in Cairo.
+    if ( clockwise )
+    {
+        // If endAngle < startAngle it needs to be progressively
+        // increased by 2*M_PI until endAngle > startAngle.
+        if ( endAngle < startAngle )
+        {
+            while ( endAngle <= startAngle )
+            {
+                endAngle += 2.0*M_PI;
+            }
+        }
+
+        angle = endAngle - startAngle;
+    }
+    else
+    {
+        // If endAngle > startAngle it needs to be progressively
+        // decreased by 2*M_PI until endAngle < startAngle.
+        if ( endAngle > startAngle )
+        {
+            while ( endAngle >= startAngle )
+            {
+                endAngle -= 2.0*M_PI;
+            }
+        }
+
+        angle = startAngle - endAngle;
+    }
+
     wxPoint2DDouble start = wxPoint2DDouble(cos(startAngle) * r, sin(startAngle) * r);
     wxPoint2DDouble end = wxPoint2DDouble(cos(endAngle) * r, sin(endAngle) * r);
 
+    // To ensure compatibility with Cairo an initial
+    // line segment to the beginning of the arc needs
+    // to be added to the path.
     if (m_figureOpened)
     {
         AddLineToPoint(start.m_x + x, start.m_y + y);
@@ -1236,39 +1497,68 @@ void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAng
         MoveToPoint(start.m_x + x, start.m_y + y);
     }
 
-    double angle = (end.GetVectorAngle() - start.GetVectorAngle());
+    D2D1_SWEEP_DIRECTION sweepDirection = clockwise ?
+       D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
+    D2D1_SIZE_F size = D2D1::SizeF((FLOAT)r, (FLOAT)r);
 
-    if (!clockwise)
+    if ( angle >= 2.0*M_PI )
     {
-        angle = 360 - angle;
+        // In addition to arc we need to draw full circle(s).
+        // Remarks:
+        // 1. Parity of the number of the circles has to be
+        // preserved because this matters when path would be
+        // filled with wxODDEVEN_RULE flag set (using
+        // D2D1_FILL_MODE_ALTERNATE mode) when number of the
+        // edges is counted.
+        // 2. ID2D1GeometrySink::AddArc() doesn't work
+        // with 360-degree arcs so we need to construct
+        // the circle from two halves.
+        D2D1_ARC_SEGMENT circleSegment1 =
+        {
+            D2D1::Point2((FLOAT)(x - start.m_x), (FLOAT)(y - start.m_y)),  // end point
+            size,                     // size
+            0.0f,                     // rotation
+            sweepDirection,           // sweep direction
+            D2D1_ARC_SIZE_SMALL       // arc size
+        };
+        D2D1_ARC_SEGMENT circleSegment2 =
+        {
+            D2D1::Point2((FLOAT)(x + start.m_x), (FLOAT)(y + start.m_y)),  // end point
+            size,                     // size
+            0.0f,                     // rotation
+            sweepDirection,           // sweep direction
+            D2D1_ARC_SIZE_SMALL       // arc size
+        };
+
+        int numCircles = (int)(angle / (2.0*M_PI));
+        numCircles = (numCircles - 1) % 2 + 1;
+        for( int i = 0; i < numCircles; i++ )
+        {
+            m_geometrySink->AddArc(circleSegment1);
+            m_geometrySink->AddArc(circleSegment2);
+        }
+
+        // Reduce the angle to [0..2*M_PI) range.
+        angle = fmod(angle, 2.0*M_PI);
     }
 
-    while (abs(angle) > 360)
+    D2D1_ARC_SIZE arcSize = angle > M_PI ?
+       D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL;
+    D2D1_POINT_2F endPoint =
+       D2D1::Point2((FLOAT)(end.m_x + x), (FLOAT)(end.m_y + y));
+
+    D2D1_ARC_SEGMENT arcSegment =
     {
-        angle -= (angle / abs(angle)) * 360;
-    }
-
-    if (angle == 360)
-    {
-        AddCircle(center.m_x, center.m_y, start.GetVectorLength());
-        return;
-    }
-
-    D2D1_SWEEP_DIRECTION sweepDirection = clockwise ? D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
-
-    D2D1_ARC_SIZE arcSize = angle > 180 ? D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL;
-
-    D2D1_ARC_SEGMENT arcSegment = {
-        { (FLOAT)(end.m_x + x), (FLOAT)(end.m_y + y) },     // end point
-        { (FLOAT)r, (FLOAT) r },                         // size
-        0,                              // rotation
-        sweepDirection,                 // sweep direction
-        arcSize                         // arc size
+        endPoint,                     // end point
+        size,                         // size
+        0.0f,                         // rotation
+        sweepDirection,               // sweep direction
+        arcSize                       // arc size
     };
 
     m_geometrySink->AddArc(arcSegment);
 
-    m_currentPoint = D2D1::Point2F(end.m_x + x, end.m_y + y);
+    m_currentPoint = endPoint;
 }
 
 // appends an ellipsis as a new closed subpath fitting the passed rectangle
@@ -1315,70 +1605,94 @@ void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 // gets the last point of the current path, (0,0) if not yet set
 void wxD2DPathData::GetCurrentPoint(wxDouble* x, wxDouble* y) const
 {
-    D2D1_POINT_2F transformedPoint = D2D1::Matrix3x2F::ReinterpretBaseType(&m_transformMatrix)->TransformPoint(m_currentPoint);
-
-    if (x != NULL) *x = transformedPoint.x;
-    if (y != NULL) *y = transformedPoint.y;
+    if (x != NULL) *x = m_currentPoint.x;
+    if (y != NULL) *y = m_currentPoint.y;
 }
 
 // adds another path
 void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
 {
-    wxD2DPathData* d2dPath =
+    wxD2DPathData* pathSrc =
          const_cast<wxD2DPathData*>(static_cast<const wxD2DPathData*>(path));
 
     // Nothing to do if geometry of appended path is not initialized.
-    if ( d2dPath->m_pathGeometry == NULL || d2dPath->m_geometrySink == NULL )
+    if ( pathSrc->m_pathGeometry == NULL || pathSrc->m_geometrySink == NULL )
         return;
 
-    // Close current sub-path (leaving the figure as is).
-    EndFigure(D2D1_FIGURE_END_OPEN);
-
-    // Because only geometry with closed sink (immutable)
+    // Because only closed geometry (with closed sink)
     // can be transferred to another geometry object with
-    // ID2D1PathGeometry::Stream() so we have to make
-    // a writable copy of the appended geometry
-    // and re-assign it to the source path after actual appending.
+    // ID2D1PathGeometry::Stream() so we have to close it
+    // before any operation and to re-open afterwards.
+    // Unfortunately, to close the sink it is also necessary
+    // to end the figure it contains, if it was open.
+    // After re-opening the geometry we should also re-start
+    // the figure (if it was open) and restore its state but
+    // it seems there is no straightforward way to do so
+    // if the figure is not empty.
+    //
+    // So, only if appended path has a sub-path closed or
+    // has an empty sub-path open there is possible to restore
+    // its state after appending it to the current path and only
+    // in this case the operation doesn't introduce side effects.
 
-    // Close appended geometry sink.
-    d2dPath->EndFigure(D2D1_FIGURE_END_OPEN);
+    // Nothing to do if appended path is empty.
+    if ( pathSrc->IsEmpty() )
+        return;
+
+    // Save positional and auxiliary data
+    // of the appended path and its geometry.
+    GeometryStateData curStateSrc;
+    pathSrc->SaveGeometryState(curStateSrc);
+
+    // Raise warning if appended path has an open non-empty sub-path.
+    wxASSERT_MSG( pathSrc->IsStateSafeForFlush(),
+        wxS("Sub-path in appended path should be closed prior to this operation") );
+    // Close appended geometry.
+    pathSrc->Flush();
+
+    // Close current geometry (leaving the figure as is).
+    Flush();
+
     HRESULT hr;
-    hr = d2dPath->m_geometrySink->Close();
-    wxFAILED_HRESULT_MSG(hr);
+    ID2D1TransformedGeometry* pTransformedGeometry = NULL;
+    // Add current geometry to the collection transformed geometries.
+    hr = m_direct2dfactory->CreateTransformedGeometry(m_pathGeometry,
+                        D2D1::Matrix3x2F::Identity(), &pTransformedGeometry);
+    wxCHECK_HRESULT_RET(hr);
+    m_pTransformedGeometries.push_back(pTransformedGeometry);
 
-    // Transfer appended geometry to the current geometry sink.
-    hr = d2dPath->m_pathGeometry->Stream(m_geometrySink);
-    wxFAILED_HRESULT_MSG(hr);
-    // Copy auxiliary data if appended path is non-empty.
-    UINT32 segCount = 0;
-    UINT32 figCount = 0;
-    hr = d2dPath->m_pathGeometry->GetSegmentCount(&segCount);
-    wxFAILED_HRESULT_MSG(hr);
-    hr = d2dPath->m_pathGeometry->GetFigureCount(&figCount);
-    wxFAILED_HRESULT_MSG(hr);
-    if( segCount > 0 || figCount > 0 || d2dPath->m_currentPointSet || d2dPath->m_figureOpened )
+    // Add to the collection transformed geometries from the appended path.
+    for ( size_t i = 0; i < pathSrc->m_pTransformedGeometries.size(); i++ )
     {
-        m_currentPointSet = d2dPath->m_currentPointSet;
-        m_currentPoint = d2dPath->m_currentPoint;
-        m_figureOpened = d2dPath->m_figureOpened;
-        m_figureStart = d2dPath->m_figureStart;
+        pTransformedGeometry = NULL;
+        hr = m_direct2dfactory->CreateTransformedGeometry(
+                    pathSrc->m_pTransformedGeometries[i],
+                    D2D1::Matrix3x2F::Identity(), &pTransformedGeometry);
+        wxCHECK_HRESULT_RET(hr);
+        m_pTransformedGeometries.push_back(pTransformedGeometry);
     }
 
-    // Make a writable copy of the appended geometry.
-    wxCOMPtr<ID2D1PathGeometry> srcPathGeometry;
-    wxCOMPtr<ID2D1GeometrySink> srcGeometrySink;
-    hr = m_direct2dfactory->CreatePathGeometry(&srcPathGeometry);
-    wxFAILED_HRESULT_MSG(hr);
-    hr = srcPathGeometry->Open(&srcGeometrySink);
-    wxFAILED_HRESULT_MSG(hr);
-    // Transfer appended geometry.
-    hr = d2dPath->m_pathGeometry->Stream(srcGeometrySink);
-    wxFAILED_HRESULT_MSG(hr);
+    // Clear and reopen current geometry.
+    m_pathGeometry.reset();
+    EnsureGeometryOpen();
 
-    // Assign a writable copy of the appendeed
-    // geometry back to the source path.
-    d2dPath->m_pathGeometry = srcPathGeometry;
-    d2dPath->m_geometrySink = srcGeometrySink;
+    // Transfer appended geometry to the current geometry sink.
+    hr = pathSrc->m_pathGeometry->Stream(m_geometrySink);
+    wxCHECK_HRESULT_RET(hr);
+
+    // Apply to the current path positional data from the appended path.
+    // This operation fully sets geometry to the required state
+    // only if it represents geometry without started figure
+    // or with started but empty figure.
+    RestoreGeometryState(curStateSrc);
+
+    // Reopen appended geometry.
+    pathSrc->EnsureGeometryOpen();
+    // Restore its positional data.
+    // This operation fully restores geometry to the required state
+    // only if it represents geometry without started figure
+    // or with started but empty figure.
+    pathSrc->RestoreGeometryState(curStateSrc);
 }
 
 // closes the current sub-path
@@ -1394,20 +1708,98 @@ void wxD2DPathData::CloseSubpath()
 
 void* wxD2DPathData::GetNativePath() const
 {
-    m_transformedGeometry.reset();
-    m_direct2dfactory->CreateTransformedGeometry(m_pathGeometry, m_transformMatrix, &m_transformedGeometry);
-    return m_transformedGeometry;
+    return GetFullGeometry();
 }
 
 void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
 {
-    m_transformMatrix = *((D2D1_MATRIX_3X2_F*)(matrix->GetNativeMatrix()));
+    // Unfortunately, it looks there is no straightforward way to apply
+    // transformation to the current underlying path geometry
+    // (ID2D1PathGeometry object) "in-place" (ie. transform it and use
+    // for further graphics operations, including next transformations too).
+    // Some simple methods offered by D2D are not useful for these purposes:
+    // 1. ID2D1Factory::CreateTransformedGeometry() converts ID2D1PathGeometry
+    // object to ID2D1TransformedGeometry object but ID2D1TransformedGeometry
+    // inherits from ID2D1Geometry (not from ID2D1PathGeometry)
+    // and hence cannot be used for further path operations.
+    // 2. ID2D1Geometry::CombineWithGeometry() which could be used to get final
+    // path geometry by combining empty geometry with transformed geometry
+    // doesn't offer any combine mode which would produce a "sum" of geometries
+    // (D2D1_COMBINE_MODE_UNION produces kind of outline). Moreover the result
+    // is stored in ID2D1SimplifiedGeometrySink not in ID2DGeometrySink.
+
+    // So, it seems that ability to transform the wxGraphicsPath
+    // (several times) and still use it after this operation(s)
+    // can be achieved (only?) by using a geometry group object
+    // (ID2D1GeometryGroup) this way:
+    // 1. After applying transformation to the current path geometry with
+    // ID2D1Factory::CreateTransformedGeometry() the result is stored
+    // in the collection of transformed geometries (an auxiliary array)
+    // and after that a new (empty) geometry is open (in the same state
+    // as just closed one) and this geometry is used as a current one
+    // for further graphics operations.
+    // 2. Since above steps are done at every transformation so our effective
+    // geometry will be a superposition of all previously transformed
+    // geometries stored in the collection (array) and the current
+    // operational geometry.
+    // 3. If there is necessary to use this combined effective geometry
+    // in any operation then ID2D1GeometryGroup created with
+    // ID2D1Factory::CreateGeometryGroup() from the collection
+    // of stored geometries will act as a proxy geometry.
+
+    const D2D1::Matrix3x2F* m = static_cast<D2D1::Matrix3x2F*>(matrix->GetNativeMatrix());
+
+    // Save current positional data.
+    GeometryStateData curState;
+    SaveGeometryState(curState);
+    // We need to close the geometry what requires also to end a figure
+    // (if started). This ended figure should be re-started in its initial
+    // state when all path processing is done but due to the Direct2D
+    // constraints this can be fully done only if open figure was empty.
+    // So, Transform() can be safely called if path doesn't contain the open
+    // sub-path or if open sub-path is empty.
+    wxASSERT_MSG( IsStateSafeForFlush(),
+            wxS("Consider closing sub-path before calling Transform()") );
+    // Close current geometry.
+    Flush();
+
+    HRESULT hr;
+    ID2D1TransformedGeometry* pTransformedGeometry;
+    // Apply given transformation to all previously stored geometries too.
+    for( size_t i = 0; i < m_pTransformedGeometries.size(); i++ )
+    {
+        pTransformedGeometry = NULL;
+        hr = m_direct2dfactory->CreateTransformedGeometry(m_pTransformedGeometries[i], m, &pTransformedGeometry);
+        wxCHECK_HRESULT_RET(hr);
+
+        m_pTransformedGeometries[i]->Release();
+        m_pTransformedGeometries[i] = pTransformedGeometry;
+    }
+
+    // Transform current geometry and add the result
+    // to the collection of transformed geometries.
+    pTransformedGeometry = NULL;
+    hr = m_direct2dfactory->CreateTransformedGeometry(m_pathGeometry, m, &pTransformedGeometry);
+    wxCHECK_HRESULT_RET(hr);
+    m_pTransformedGeometries.push_back(pTransformedGeometry);
+
+    // Clear and reopen current geometry.
+    m_pathGeometry.reset();
+    EnsureGeometryOpen();
+    // Restore the figure with transformed positional data.
+    // This operation fully restores geometry to the required state
+    // only if IsStateSafeForFlush() returns true.
+    curState.m_currentPoint = m->TransformPoint(curState.m_currentPoint);
+    curState.m_figureLogStart = m->TransformPoint(curState.m_figureLogStart);
+    curState.m_figureStart = m->TransformPoint(curState.m_figureStart);
+    RestoreGeometryState(curState);
 }
 
 void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) const
 {
     D2D1_RECT_F bounds;
-    m_pathGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
+    ID2D1Geometry *curGeometry = GetFullGeometry();
+    curGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
     if (x != NULL) *x = bounds.left;
     if (y != NULL) *y = bounds.top;
     if (w != NULL) *w = bounds.right - bounds.left;
@@ -1417,8 +1809,9 @@ void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) c
 bool wxD2DPathData::Contains(wxDouble x, wxDouble y, wxPolygonFillMode WXUNUSED(fillStyle)) const
 {
     BOOL result;
-    m_pathGeometry->FillContainsPoint(D2D1::Point2F(x, y), D2D1::Matrix3x2F::Identity(), &result);
-    return result != 0;
+    ID2D1Geometry *curGeometry = GetFullGeometry();
+    curGeometry->FillContainsPoint(D2D1::Point2F(x, y), D2D1::Matrix3x2F::Identity(), &result);
+    return result != FALSE;
 }
 
 wxD2DPathData* wxGetD2DPathData(const wxGraphicsPath& path)
@@ -2217,31 +2610,47 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     wxCHECK_HRESULT_RET(hr);
 
     LOGFONTW logfont;
-    GetObjectW(font.GetHFONT(), sizeof(logfont), &logfont);
+    int n = GetObjectW(font.GetHFONT(), sizeof(logfont), &logfont);
+    wxCHECK_RET( n > 0, wxS("Failed to obtain font info") );
 
     // Ensure the LOGFONT object contains the correct font face name
-    if (logfont.lfFaceName[0] == '\0')
+    if (lstrlen(logfont.lfFaceName) == 0)
     {
-        for (unsigned int i = 0; i < font.GetFaceName().Length(); ++i)
+        // The length of the font name must not exceed LF_FACESIZE TCHARs,
+        // including the terminating NULL.
+        wxString name = font.GetFaceName().Mid(0, WXSIZEOF(logfont.lfFaceName)-1);
+        for (unsigned int i = 0; i < name.Length(); ++i)
         {
-            logfont.lfFaceName[i] = font.GetFaceName().GetChar(i);
+            logfont.lfFaceName[i] = name.GetChar(i);
         }
+        logfont.lfFaceName[name.Length()] = L'\0';
     }
 
     hr = gdiInterop->CreateFontFromLOGFONT(&logfont, &m_font);
-    wxCHECK_HRESULT_RET(hr);
+    if ( hr == DWRITE_E_NOFONT )
+    {
+        // It was attempted to create DirectWrite font from non-TrueType GDI font.
+        return;
+    }
+
+    wxCHECK_RET( SUCCEEDED(hr),
+                 wxString::Format("Failed to create font '%s' (HRESULT = %x)", logfont.lfFaceName, hr) );
 
     wxCOMPtr<IDWriteFontFamily> fontFamily;
-    m_font->GetFontFamily(&fontFamily);
+    hr = m_font->GetFontFamily(&fontFamily);
+    wxCHECK_HRESULT_RET(hr);
 
     wxCOMPtr<IDWriteLocalizedStrings> familyNames;
-    fontFamily->GetFamilyNames(&familyNames);
+    hr = fontFamily->GetFamilyNames(&familyNames);
+    wxCHECK_HRESULT_RET(hr);
 
     UINT32 length;
-    familyNames->GetStringLength(0, &length);
+    hr = familyNames->GetStringLength(0, &length);
+    wxCHECK_HRESULT_RET(hr);
 
     wchar_t* name = new wchar_t[length+1];
-    familyNames->GetString(0, name, length+1);
+    hr = familyNames->GetString(0, name, length+1);
+    wxCHECK_HRESULT_RET(hr);
 
     FLOAT dpiX, dpiY;
     d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
@@ -2800,7 +3209,7 @@ public:
     }
 
 protected:
-    void DoAcquireResource()
+    void DoAcquireResource() wxOVERRIDE
     {
         wxCOMPtr<ID2D1DCRenderTarget> renderTarget;
         D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties = D2D1::RenderTargetProperties(
@@ -2821,6 +3230,8 @@ protected:
 
         hr = renderTarget->BindDC(m_hdc, &r);
         wxCHECK_HRESULT_RET(hr);
+        renderTarget->SetTransform(
+                       D2D1::Matrix3x2F::Translation(-r.left, -r.top));
 
         m_nativeResource = renderTarget;
     }
@@ -2848,6 +3259,7 @@ public:
     void Clip(const wxRegion&) wxOVERRIDE {}
     void Clip(wxDouble, wxDouble, wxDouble, wxDouble) wxOVERRIDE {}
     void ResetClip() wxOVERRIDE {}
+    void GetClipBox(wxDouble*, wxDouble*, wxDouble*, wxDouble*) wxOVERRIDE {}
     void* GetNativeContext() wxOVERRIDE { return NULL; }
     bool SetAntialiasMode(wxAntialiasMode) wxOVERRIDE { return false; }
     bool SetInterpolationQuality(wxInterpolationQuality) wxOVERRIDE { return false; }
@@ -2945,6 +3357,8 @@ public:
 
     void ResetClip() wxOVERRIDE;
 
+    void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+
     // The native context used by wxD2DContext is a Direct2D render target.
     void* GetNativeContext() wxOVERRIDE;
 
@@ -3027,34 +3441,44 @@ private:
 
     ID2D1RenderTarget* GetRenderTarget() const;
 
+    void SetClipLayer(ID2D1Geometry* clipGeometry);
+
 private:
-    enum ClipMode
+    enum LayerType
     {
-        CLIP_MODE_NONE,
-        CLIP_MODE_AXIS_ALIGNED_RECTANGLE,
-        CLIP_MODE_GEOMETRY
+        CLIP_LAYER,
+        OTHER_LAYER
+    };
+
+    struct LayerData
+    {
+        LayerType type;
+        D2D1_LAYER_PARAMETERS params;
+        wxCOMPtr<ID2D1Layer> layer;
+        wxCOMPtr<ID2D1Geometry> geometry;
+        D2D1_MATRIX_3X2_F transformMatrix;
+    };
+
+    struct StateData
+    {
+        // A ID2D1DrawingStateBlock represents the drawing state of a render target:
+        // the anti aliasing mode, transform, tags, and text-rendering options.
+        // The context owns these pointers and is responsible for releasing them.
+        wxCOMPtr<ID2D1DrawingStateBlock> drawingState;
+        // We need to store also current layers.
+        wxStack<LayerData> layers;
     };
 
 private:
     ID2D1Factory* m_direct2dFactory;
-
     wxSharedPtr<wxD2DRenderTargetResourceHolder> m_renderTargetHolder;
-
-    // A ID2D1DrawingStateBlock represents the drawing state of a render target:
-    // the anti aliasing mode, transform, tags, and text-rendering options.
-    // The context owns these pointers and is responsible for releasing them.
-    wxStack<wxCOMPtr<ID2D1DrawingStateBlock> > m_stateStack;
-
-    ClipMode m_clipMode;
-
-    bool m_clipLayerAcquired;
-
-    // A direct2d layer is a device-dependent resource.
-    wxCOMPtr<ID2D1Layer> m_clipLayer;
-
-    wxStack<wxCOMPtr<ID2D1Layer> > m_layers;
-
+    wxStack<StateData> m_stateStack;
+    wxStack<LayerData> m_layers;
     ID2D1RenderTarget* m_cachedRenderTarget;
+    D2D1::Matrix3x2F m_initTransform;
+    // Clipping box
+    bool m_isClipBoxValid;
+    double m_clipX1, m_clipY1, m_clipX2, m_clipY2;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxD2DContext);
@@ -3111,21 +3535,25 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
 void wxD2DContext::Init()
 {
     m_cachedRenderTarget = NULL;
-    m_clipMode = CLIP_MODE_NONE;
     m_composition = wxCOMPOSITION_OVER;
-    m_clipLayerAcquired = false;
     m_renderTargetHolder->Bind(this);
     m_enableOffset = true;
+    m_isClipBoxValid = false;
+    m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0.0;
     EnsureInitialized();
 }
 
 wxD2DContext::~wxD2DContext()
 {
-    ResetClip();
-
-    while (!m_layers.empty())
+    // Remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
     {
-        EndLayer();
+        LayerData ld = m_layers.top();
+        m_layers.pop();
+
+        GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        ld.geometry.reset();
     }
 
     HRESULT result = GetRenderTarget()->EndDraw();
@@ -3141,47 +3569,195 @@ ID2D1RenderTarget* wxD2DContext::GetRenderTarget() const
 
 void wxD2DContext::Clip(const wxRegion& region)
 {
-    GetRenderTarget()->Flush();
-    ResetClip();
-
     wxCOMPtr<ID2D1Geometry> clipGeometry = wxD2DConvertRegionToGeometry(m_direct2dFactory, region);
 
-    if (!m_clipLayerAcquired)
-    {
-        GetRenderTarget()->CreateLayer(&m_clipLayer);
-        m_clipLayerAcquired = true;
-    }
-
-    GetRenderTarget()->PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry), m_clipLayer);
-
-    m_clipMode = CLIP_MODE_GEOMETRY;
+    SetClipLayer(clipGeometry);
 }
 
 void wxD2DContext::Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
-    GetRenderTarget()->Flush();
-    ResetClip();
+    wxCOMPtr<ID2D1RectangleGeometry> clipGeometry;
+    HRESULT hr = m_direct2dFactory->CreateRectangleGeometry(
+                        D2D1::RectF(x, y, x + w, y + h), &clipGeometry);
+    wxCHECK_HRESULT_RET(hr);
 
-    GetRenderTarget()->PushAxisAlignedClip(
-        D2D1::RectF(x, y, x + w, y + h),
-        D2D1_ANTIALIAS_MODE_ALIASED);
+    SetClipLayer(clipGeometry);
+}
 
-    m_clipMode = CLIP_MODE_AXIS_ALIGNED_RECTANGLE;
+void wxD2DContext::SetClipLayer(ID2D1Geometry* clipGeometry)
+{
+    EnsureInitialized();
+
+    wxCOMPtr<ID2D1Layer> clipLayer;
+    HRESULT hr = GetRenderTarget()->CreateLayer(&clipLayer);
+    wxCHECK_HRESULT_RET(hr);
+
+    LayerData ld;
+    ld.type = CLIP_LAYER;
+    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(), clipGeometry,
+                                      wxD2DConvertAntialiasMode(m_antialias));
+    ld.layer = clipLayer;
+    ld.geometry = clipGeometry;
+    // We need to store CTM to be able to re-apply
+    // the layer at the original position later on.
+    GetRenderTarget()->GetTransform(&ld.transformMatrix);
+
+    GetRenderTarget()->PushLayer(ld.params, clipLayer);
+    // Store layer parameters.
+    m_layers.push(ld);
+
+    m_isClipBoxValid = false;
 }
 
 void wxD2DContext::ResetClip()
 {
-    if (m_clipMode == CLIP_MODE_AXIS_ALIGNED_RECTANGLE)
+    wxStack<LayerData> layersToRestore;
+    // Remove all clipping layers from the stack of layers.
+    while ( !m_layers.empty() )
     {
-        GetRenderTarget()->PopAxisAlignedClip();
-    }
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
-    if (m_clipMode == CLIP_MODE_GEOMETRY)
-    {
+        if ( ld.type == CLIP_LAYER )
+        {
+            GetRenderTarget()->PopLayer();
+            ld.layer.reset();
+            ld.geometry.reset();
+            continue;
+        }
+
         GetRenderTarget()->PopLayer();
+        // Save non-clipping layer
+        layersToRestore.push(ld);
     }
 
-    m_clipMode = CLIP_MODE_NONE;
+    HRESULT hr = GetRenderTarget()->Flush();
+    wxCHECK_HRESULT_RET(hr);
+
+    // Re-apply all remaining non-clipping layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
+
+    m_isClipBoxValid = false;
+}
+
+void wxD2DContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
+{
+    if ( !m_isClipBoxValid )
+    {
+        // To obtain actual clipping box we have to start with rectangle
+        // covering the entire render target and interesect with this rectangle
+        // all clipping layers. Bounding box of the final geometry
+        // (being intersection of all clipping layers) is a clipping box.
+
+        HRESULT hr;
+        wxCOMPtr<ID2D1RectangleGeometry> rectGeometry;
+        hr = m_direct2dFactory->CreateRectangleGeometry(
+                    D2D1::RectF(0.0F, 0.0F, (FLOAT)m_width, (FLOAT)m_height),
+                    &rectGeometry);
+        wxCHECK_HRESULT_RET(hr);
+
+        wxCOMPtr<ID2D1Geometry> clipGeometry(rectGeometry);
+
+        wxStack<LayerData> layers(m_layers);
+        while( !layers.empty() )
+        {
+            LayerData ld = layers.top();
+            layers.pop();
+
+            if ( ld.type == CLIP_LAYER )
+            {
+                // If current geometry is empty (null region)
+                // or there is no intersection between geometries
+                // then final result is "null" rectangle geometry.
+                FLOAT area;
+                hr = ld.geometry->ComputeArea(ld.transformMatrix, &area);
+                wxCHECK_HRESULT_RET(hr);
+                D2D1_GEOMETRY_RELATION geomRel;
+                hr = clipGeometry->CompareWithGeometry(ld.geometry, ld.transformMatrix, &geomRel);
+                wxCHECK_HRESULT_RET(hr);
+                if ( area <= FLT_MIN || geomRel == D2D1_GEOMETRY_RELATION_DISJOINT )
+                {
+                    wxCOMPtr<ID2D1RectangleGeometry> nullGeometry;
+                    hr = m_direct2dFactory->CreateRectangleGeometry(
+                                D2D1::RectF(0.0F, 0.0F, 0.0F, 0.0F), &nullGeometry);
+                    wxCHECK_HRESULT_RET(hr);
+
+                    clipGeometry.reset();
+                    clipGeometry = nullGeometry;
+                    break;
+                }
+
+                wxCOMPtr<ID2D1PathGeometry> pathGeometryClip;
+                hr = m_direct2dFactory->CreatePathGeometry(&pathGeometryClip);
+                wxCHECK_HRESULT_RET(hr);
+                wxCOMPtr<ID2D1GeometrySink> pGeometrySink;
+                hr = pathGeometryClip->Open(&pGeometrySink);
+                wxCHECK_HRESULT_RET(hr);
+
+                hr = clipGeometry->CombineWithGeometry(ld.geometry, D2D1_COMBINE_MODE_INTERSECT,
+                                                       ld.transformMatrix, pGeometrySink);
+                wxCHECK_HRESULT_RET(hr);
+                hr = pGeometrySink->Close();
+                wxCHECK_HRESULT_RET(hr);
+                pGeometrySink.reset();
+
+                clipGeometry = pathGeometryClip;
+                pathGeometryClip.reset();
+            }
+        }
+
+        // Final clipping geometry is given in device coordinates
+        // so we need to transform its bounds to logical coordinates.
+        D2D1::Matrix3x2F currTransform;
+        GetRenderTarget()->GetTransform(&currTransform);
+        currTransform.Invert();
+
+        D2D1_RECT_F bounds;
+        // First check if clip region is empty.
+        FLOAT clipArea;
+        hr = clipGeometry->ComputeArea(currTransform, &clipArea);
+        wxCHECK_HRESULT_RET(hr);
+        if ( clipArea <= FLT_MIN )
+        {
+            bounds.left = bounds.top = bounds.right = bounds.bottom = 0.0F;
+        }
+        else
+        {
+            // If it is not empty then get it bounds.
+            hr = clipGeometry->GetBounds(currTransform, &bounds);
+            wxCHECK_HRESULT_RET(hr);
+        }
+
+        m_clipX1 = bounds.left;
+        m_clipY1 = bounds.top;
+        m_clipX2 = bounds.right;
+        m_clipY2 = bounds.bottom;
+        m_isClipBoxValid = true;
+    }
+
+    if ( x )
+        *x = m_clipX1;
+    if ( y )
+        *y = m_clipY1;
+    if ( w )
+        *w = m_clipX2 - m_clipX1;
+    if ( h )
+        *h = m_clipY2 - m_clipY1;
 }
 
 void* wxD2DContext::GetNativeContext()
@@ -3270,31 +3846,83 @@ bool wxD2DContext::SetCompositionMode(wxCompositionMode compositionMode)
 
 void wxD2DContext::BeginLayer(wxDouble opacity)
 {
-    wxCOMPtr<ID2D1Layer> layer;
-    GetRenderTarget()->CreateLayer(&layer);
-    m_layers.push(layer);
+    EnsureInitialized();
 
-    GetRenderTarget()->PushLayer(
-        D2D1::LayerParameters(D2D1::InfiniteRect(),
-            NULL,
-            D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
-            D2D1::IdentityMatrix(), opacity),
-        layer);
+    wxCOMPtr<ID2D1Layer> layer;
+    HRESULT hr = GetRenderTarget()->CreateLayer(&layer);
+    wxCHECK_HRESULT_RET(hr);
+
+    LayerData ld;
+    ld.type = OTHER_LAYER;
+    ld.params = D2D1::LayerParameters(D2D1::InfiniteRect(),
+                        NULL,
+                        D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
+                        D2D1::IdentityMatrix(), opacity);
+    ld.layer = layer;
+    // We need to store CTM to be able to re-apply
+    // the layer at the original position later on.
+    GetRenderTarget()->GetTransform(&ld.transformMatrix);
+
+    GetRenderTarget()->PushLayer(ld.params, layer);
+
+    // Store layer parameters.
+    m_layers.push(ld);
 }
 
 void wxD2DContext::EndLayer()
 {
-    if (!m_layers.empty())
+    wxStack<LayerData> layersToRestore;
+    // Temporarily remove all clipping layers
+    // above the first standard layer
+    // and next permanently remove this layer.
+    while ( !m_layers.empty() )
     {
-        wxCOMPtr<ID2D1Layer> topLayer = m_layers.top();
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
+        if ( ld.type == CLIP_LAYER )
+        {
+            GetRenderTarget()->PopLayer();
+            layersToRestore.push(ld);
+            continue;
+        }
+
+        // We found a non-clipping layer to remove.
         GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        break;
+    }
 
+    if ( m_layers.empty() )
+    {
         HRESULT hr = GetRenderTarget()->Flush();
         wxCHECK_HRESULT_RET(hr);
-
-        m_layers.pop();
     }
+
+    // Re-apply all stored clipping layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        if ( ld.type == CLIP_LAYER )
+        {
+            // Restore layer at original position.
+            GetRenderTarget()->SetTransform(&ld.transformMatrix);
+            GetRenderTarget()->PushLayer(ld.params, ld.layer);
+        }
+        else
+        {
+            wxFAIL_MSG( wxS("Invalid layer type") );
+        }
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
 }
 
 void wxD2DContext::Translate(wxDouble dx, wxDouble dy)
@@ -3336,7 +3964,11 @@ void wxD2DContext::SetTransform(const wxGraphicsMatrix& matrix)
 {
     EnsureInitialized();
 
-    GetRenderTarget()->SetTransform(wxGetD2DMatrixData(matrix)->GetMatrix3x2F());
+    D2D1::Matrix3x2F m;
+    m.SetProduct(wxGetD2DMatrixData(matrix)->GetMatrix3x2F(), m_initTransform);
+    GetRenderTarget()->SetTransform(&m);
+
+    m_isClipBoxValid = false;
 }
 
 wxGraphicsMatrix wxD2DContext::GetTransform() const
@@ -3346,6 +3978,16 @@ wxGraphicsMatrix wxD2DContext::GetTransform() const
     if (GetRenderTarget() != NULL)
     {
         GetRenderTarget()->GetTransform(&transformMatrix);
+
+        if ( m_initTransform.IsInvertible() )
+        {
+            D2D1::Matrix3x2F invMatrix = m_initTransform;
+            invMatrix.Invert();
+
+            D2D1::Matrix3x2F m;
+            m.SetProduct(transformMatrix, invMatrix);
+            transformMatrix = m;
+        }
     }
     else
     {
@@ -3389,23 +4031,65 @@ void wxD2DContext::DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y, wxDouble
 
 void wxD2DContext::PushState()
 {
-    ID2D1Factory* wxGetD2DFactory(wxGraphicsRenderer* renderer);
+    EnsureInitialized();
 
-    wxCOMPtr<ID2D1DrawingStateBlock> drawStateBlock;
-    wxGetD2DFactory(GetRenderer())->CreateDrawingStateBlock(&drawStateBlock);
-    GetRenderTarget()->SaveDrawingState(drawStateBlock);
+    StateData state;
+    m_direct2dFactory->CreateDrawingStateBlock(&state.drawingState);
+    GetRenderTarget()->SaveDrawingState(state.drawingState);
+    state.layers = m_layers;
 
-    m_stateStack.push(drawStateBlock);
+    m_stateStack.push(state);
 }
 
 void wxD2DContext::PopState()
 {
-    wxCHECK_RET(!m_stateStack.empty(), wxT("No state to pop"));
+    wxCHECK_RET(!m_stateStack.empty(), wxS("No state to pop"));
 
-    wxCOMPtr<ID2D1DrawingStateBlock> drawStateBlock = m_stateStack.top();
+    // Remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
+    {
+        LayerData ld = m_layers.top();
+        m_layers.pop();
+
+        GetRenderTarget()->PopLayer();
+        ld.layer.reset();
+        ld.geometry.reset();
+    }
+
+    // Retrieve state data.
+    StateData state;
+    state = m_stateStack.top();
     m_stateStack.pop();
 
-    GetRenderTarget()->RestoreDrawingState(drawStateBlock);
+    // Restore all saved layers.
+    wxStack<LayerData> layersToRestore;
+    // We have to restore layers on the stack from "bottom" to "top",
+    // so we have to create a "reverted" stack.
+    while ( !state.layers.empty() )
+    {
+        LayerData ld = state.layers.top();
+        state.layers.pop();
+
+        layersToRestore.push(ld);
+    }
+    // And next set layers from the top of "reverted" stack.
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+
+    // Restore drawing state.
+    GetRenderTarget()->RestoreDrawingState(state.drawingState);
+
+    m_isClipBoxValid = false;
 }
 
 void wxD2DContext::GetTextExtent(
@@ -3415,13 +4099,19 @@ void wxD2DContext::GetTextExtent(
     wxDouble* descent,
     wxDouble* externalLeading) const
 {
+    wxCHECK_RET(!m_font.IsNull(),
+        wxS("wxD2DContext::GetTextExtent - no valid font set"));
+
     wxD2DMeasuringContext::GetTextExtent(
         wxGetD2DFontData(m_font), str, width, height, descent, externalLeading);
 }
 
 void wxD2DContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
-    return wxD2DMeasuringContext::GetPartialTextExtents(
+    wxCHECK_RET(!m_font.IsNull(),
+        wxS("wxD2DContext::GetPartialTextExtents - no valid font set"));
+
+    wxD2DMeasuringContext::GetPartialTextExtents(
         wxGetD2DFontData(m_font), text, widths);
 }
 
@@ -3445,7 +4135,7 @@ bool wxD2DContext::ShouldOffset() const
 void wxD2DContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 {
     wxCHECK_RET(!m_font.IsNull(),
-        wxT("wxGDIPlusContext::DrawText - no valid font set"));
+        wxS("wxD2DContext::DrawText - no valid font set"));
 
     if (m_composition == wxCOMPOSITION_DEST)
         return;
@@ -3467,7 +4157,7 @@ void wxD2DContext::EnsureInitialized()
     if (!m_renderTargetHolder->IsResourceAcquired())
     {
         m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
-        GetRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
+        GetRenderTarget()->GetTransform(&m_initTransform);
         GetRenderTarget()->BeginDraw();
     }
     else
@@ -3507,9 +4197,6 @@ void wxD2DContext::AdjustRenderTargetSize()
 void wxD2DContext::ReleaseDeviceDependentResources()
 {
     ReleaseResources();
-
-    m_clipLayer.reset();
-    m_clipLayerAcquired = false;
 }
 
 void wxD2DContext::DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
@@ -3602,12 +4289,48 @@ void wxD2DContext::DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 
 void wxD2DContext::Flush()
 {
-    HRESULT result = m_renderTargetHolder->Flush();
+    wxStack<LayerData> layersToRestore;
+    // Temporarily remove all layers from the stack of layers.
+    while ( !m_layers.empty() )
+    {
+        LayerData ld = m_layers.top();
+        m_layers.pop();
 
-    if (result == (HRESULT)D2DERR_RECREATE_TARGET)
+        GetRenderTarget()->PopLayer();
+
+        // Save layer data.
+        layersToRestore.push(ld);
+    }
+
+    HRESULT hr = m_renderTargetHolder->Flush();
+
+    if ( hr == (HRESULT)D2DERR_RECREATE_TARGET )
     {
         ReleaseDeviceDependentResources();
     }
+    else
+    {
+        wxCHECK_HRESULT_RET(hr);
+    }
+
+    // Re-apply all layers.
+    // First, save current transformation matrix.
+    D2D1_MATRIX_3X2_F currTransform;
+    GetRenderTarget()->GetTransform(&currTransform);
+    while ( !layersToRestore.empty() )
+    {
+        LayerData ld = layersToRestore.top();
+        layersToRestore.pop();
+
+        // Restore layer at original position.
+        GetRenderTarget()->SetTransform(&ld.transformMatrix);
+        GetRenderTarget()->PushLayer(ld.params, ld.layer);
+
+        // Store layer parameters.
+        m_layers.push(ld);
+    }
+    // Restore current transformation matrix.
+    GetRenderTarget()->SetTransform(&currTransform);
 }
 
 void wxD2DContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY)
@@ -3644,6 +4367,8 @@ public :
     wxGraphicsContext* CreateContextFromNativeContext(void* context) wxOVERRIDE;
 
     wxGraphicsContext* CreateContextFromNativeWindow(void* window) wxOVERRIDE;
+
+    wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) wxOVERRIDE;
 
     wxGraphicsContext* CreateContext(wxWindow* window) wxOVERRIDE;
 
@@ -3785,6 +4510,11 @@ wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeWindow(void* window)
     return new wxD2DContext(this, m_direct2dFactory, (HWND)window);
 }
 
+wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeHDC(WXHDC dc)
+{
+    return new wxD2DContext(this, m_direct2dFactory, (HDC)dc, wxSize(0, 0));
+}
+
 wxGraphicsContext* wxD2DRenderer::CreateContext(wxWindow* window)
 {
     return new wxD2DContext(this, m_direct2dFactory, (HWND)window->GetHWND());
@@ -3919,6 +4649,13 @@ wxImage wxD2DRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 wxGraphicsFont wxD2DRenderer::CreateFont(const wxFont& font, const wxColour& col)
 {
     wxD2DFontData* fontData = new wxD2DFontData(this, GetD2DFactory(), font, col);
+    if ( !fontData->GetFont() )
+    {
+        // Apparently a non-TrueType font is given and hence
+        // corresponding DirectWrite font couldn't be created.
+        delete fontData;
+        return wxNullGraphicsFont;
+    }
 
     wxGraphicsFont graphicsFont;
     graphicsFont.SetRefData(fontData);

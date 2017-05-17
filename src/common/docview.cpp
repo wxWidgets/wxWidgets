@@ -1792,7 +1792,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                          msgTitle,
                          wxOK | wxICON_EXCLAMATION | wxCENTRE);
 
-            path = wxEmptyString;
+            path.clear();
             return NULL;
         }
 

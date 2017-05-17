@@ -33,7 +33,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxFontPickerCtrlNameStr[];
 class WXDLLIMPEXP_CORE wxFontPickerWidgetBase
 {
 public:
-    wxFontPickerWidgetBase() { m_selectedFont = *wxNORMAL_FONT; }
+    wxFontPickerWidgetBase() : m_selectedFont(*wxNORMAL_FONT) { }
     virtual ~wxFontPickerWidgetBase() {}
 
     wxFont GetSelectedFont() const

@@ -143,10 +143,6 @@ inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 #include "wx/fontutil.h"
 #include "wx/msw/private/metrics.h"
 
-#ifndef SPI_GETKEYBOARDCUES
-#define SPI_GETKEYBOARDCUES 0x100A
-#endif
-
 #if wxUSE_UXTHEME
 
 enum MENUPARTS
@@ -945,7 +941,8 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         data->SeparatorMargin.ApplyTo(rcSeparator);
 
         RECT rcGutter = rcSelection;
-        rcGutter.right = data->ItemMargin.cxLeftWidth
+        rcGutter.right = rcGutter.left
+                       + data->ItemMargin.cxLeftWidth
                        + data->CheckBgMargin.cxLeftWidth
                        + data->CheckMargin.cxLeftWidth
                        + imgWidth
@@ -1322,14 +1319,10 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
 
 bool wxMenuItem::MSWMustUseOwnerDrawn()
 {
-    // MIIM_BITMAP only works under WinME/2000+ so we always use owner
-    // drawn item under the previous versions and we also have to use
-    // them in any case if the item has custom colours or font
-    static const wxWinVersion winver = wxGetWinVersion();
-    bool mustUseOwnerDrawn = winver < wxWinVersion_98 ||
-                                GetTextColour().IsOk() ||
-                                GetBackgroundColour().IsOk() ||
-                                GetFont().IsOk();
+    // we have to use owner drawn item if it has custom colours or font
+    bool mustUseOwnerDrawn = GetTextColour().IsOk() ||
+                             GetBackgroundColour().IsOk() ||
+                             GetFont().IsOk();
 
     // Windows XP or earlier don't display menu bitmaps bigger than
     // standard size correctly (they're truncated) nor can
@@ -1338,6 +1331,7 @@ bool wxMenuItem::MSWMustUseOwnerDrawn()
     // doesn't seem to have any problems with even very large bitmaps
     // so don't use owner-drawn items unnecessarily there (Vista wasn't
     // actually tested but I assume it works as 7 rather than as XP).
+    static const wxWinVersion winver = wxGetWinVersion();
     if ( !mustUseOwnerDrawn && winver < wxWinVersion_Vista )
     {
         const wxBitmap& bmpUnchecked = GetBitmap(false),

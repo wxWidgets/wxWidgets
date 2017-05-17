@@ -1031,6 +1031,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\strings\hexconv.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\interactive\input.cpp"
 				>
 			</File>

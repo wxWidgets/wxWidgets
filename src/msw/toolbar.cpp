@@ -46,10 +46,15 @@
 #include "wx/artprov.h"
 #include "wx/sysopt.h"
 #include "wx/dcclient.h"
+#include "wx/rawbmp.h"
 #include "wx/scopedarray.h"
 
+#include <windowsx.h> // needed by GET_X_LPARAM and GET_Y_LPARAM macros
+
 #include "wx/msw/private.h"
+#include "wx/msw/winundef.h"
 #include "wx/msw/dc.h"
+#include "wx/msw/dib.h"
 
 #if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"
@@ -148,14 +153,16 @@ public:
     {
         if ( IsControl() && !m_label.empty() )
         {
-            // create a control to render the control's label
+            // Create a control to render the control's label.
+            // It has the same witdh as the control.
+            wxSize size(control->GetSize().GetWidth(), wxDefaultCoord);
             m_staticText = new wxStaticText
                                (
                                  m_tbar,
                                  wxID_ANY,
                                  m_label,
                                  wxDefaultPosition,
-                                 wxDefaultSize,
+                                 size,
                                  wxALIGN_CENTRE | wxST_NO_AUTORESIZE
                                );
         }
@@ -172,20 +179,53 @@ public:
         delete m_staticText;
     }
 
-    virtual void SetLabel(const wxString& label)
+    virtual void SetLabel(const wxString& label) wxOVERRIDE
     {
+        wxASSERT_MSG( IsControl() || IsButton(),
+           wxS("Label can be set for control or button tool only") );
+
         if ( label == m_label )
             return;
 
         wxToolBarToolBase::SetLabel(label);
 
-        if ( m_staticText )
-            m_staticText->SetLabel(label);
-
-        // we need to update the label shown in the toolbar because it has a
-        // pointer to the internal buffer of the old label
-        //
-        // TODO: use TB_SETBUTTONINFO
+        if ( IsControl() )
+        {
+            if ( m_staticText )
+            {
+                 if ( !label.empty() )
+                 {
+                    m_staticText->SetLabel(label);
+                 }
+                 else
+                 {
+                    delete m_staticText;
+                    m_staticText = NULL;
+                 }
+            }
+            else
+            {
+                 if ( !label.empty() )
+                 {
+                    // Create a control to render the control's label.
+                    // It has the same witdh as the control.
+                    wxSize size(m_control->GetSize().GetWidth(), wxDefaultCoord);
+                    m_staticText = new wxStaticText(m_tbar, wxID_ANY, label,
+                                        wxDefaultPosition, size,
+                                        wxALIGN_CENTRE | wxST_NO_AUTORESIZE);
+                 }
+            }
+        }
+        else if ( IsButton() )
+        {
+            // Because new label can have different length than the old one
+            // so updating button's label with TB_SETBUTTONINFO would require
+            // also manual re-positionining items in the control tools located
+            // to the right in the toolbar and recalculation of stretchable
+            // spacers so it is easier just to recreate the toolbar with
+            // Realize(). Performance penalty should be negligible.
+            m_tbar->Realize();
+        }
     }
 
     wxStaticText* GetStaticText()
@@ -279,7 +319,7 @@ static RECT wxGetTBItemRect(HWND hwnd, int index, int id = wxID_NONE)
     return r;
 }
 
-inline bool MSWShouldBeChecked(const wxToolBarToolBase *tool)
+static bool MSWShouldBeChecked(const wxToolBarToolBase *tool)
 {
     // Apparently, "checked" state image overrides the "disabled" image
     // so we need to enforce our custom "disabled" image (if there is any)
@@ -699,10 +739,10 @@ bool wxToolBar::Realize()
     // remap the buttons on 8bpp displays as otherwise the bitmaps usually look
     // much worse after remapping
     static const wxChar *remapOption = wxT("msw.remap");
-    const int remapValue = wxSystemOptions::HasOption(remapOption)
-                                ? wxSystemOptions::GetOptionInt(remapOption)
-                                : wxDisplayDepth() <= 8 ? Remap_Buttons
-                                                        : Remap_None;
+    int remapValue = wxSystemOptions::HasOption(remapOption)
+                          ? wxSystemOptions::GetOptionInt(remapOption)
+                          : wxDisplayDepth() <= 8 ? Remap_Buttons
+                                                  : Remap_None;
 
 
     // delete all old buttons, if any
@@ -733,9 +773,43 @@ bool wxToolBar::Realize()
         // Create a bitmap and copy all the tool bitmaps into it
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
+
+        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+        {
+            wxToolBarToolBase *tool = node->GetData();
+            if ( tool->IsButton() &&
+                 tool->GetNormalBitmap().IsOk() && tool->GetNormalBitmap().HasAlpha() )
+            {
+                // By default bitmaps don't have alpha in wxMSW, but if we
+                // use a bitmap tool with alpha, we should use alpha for
+                // the combined bitmap as well.
+                bitmap.UseAlpha();
+#ifdef wxHAS_RAW_BITMAP
+                // Clear the combined bitmap to have (0,0,0,0) pixels so that
+                // alpha blending bitmaps onto it doesn't change their appearance.
+                wxAlphaPixelData data(bitmap);
+                if ( data )
+                {
+                    wxAlphaPixelData::Iterator p(data);
+                    for (int y = 0; y < totalBitmapHeight; y++)
+                    {
+                        wxAlphaPixelData::Iterator rowStart = p;
+                        for (int x = 0; x < totalBitmapWidth; ++x, ++p)
+                        {
+                            p.Red() = p.Green() = p.Blue() = p.Alpha() = 0;
+                        }
+                        p = rowStart;
+                        p.OffsetY(data, 1);
+                    }
+#endif
+                }
+                break;
+            }
+        }
+
         dcAllButtons.SelectObject(bitmap);
 
-        if ( remapValue != Remap_TransparentBg )
+        if ( remapValue != Remap_TransparentBg && !bitmap.HasAlpha() )
         {
             dcAllButtons.SetBackground(GetBackgroundColour());
             dcAllButtons.Clear();
@@ -767,21 +841,26 @@ bool wxToolBar::Realize()
             wxToolBarToolBase *tool = node->GetData();
             if ( tool->IsButton() )
             {
-                const wxBitmap& bmp = tool->GetNormalBitmap();
+                wxBitmap bmp = tool->GetNormalBitmap();
 
                 const int w = bmp.GetWidth();
                 const int h = bmp.GetHeight();
 
                 if ( bmp.IsOk() )
                 {
-                    // By default bitmaps don't have alpha in wxMSW, but if we
-                    // use a bitmap tool with alpha, we should use alpha for
-                    // the combined bitmap as well.
-                    if ( bmp.HasAlpha() )
-                        bitmap.UseAlpha();
-
                     int xOffset = wxMax(0, (m_defaultWidth - w)/2);
                     int yOffset = wxMax(0, (m_defaultHeight - h)/2);
+
+#if wxUSE_IMAGE
+                    // If a mix of icons with alpha and without is used,
+                    // convert them all to use alpha.
+                    if (bitmap.HasAlpha() && !bmp.HasAlpha())
+                    {
+                        wxImage img = bmp.ConvertToImage();
+                        img.InitAlpha();
+                        bmp = wxBitmap(img);
+                    }
+#endif
 
                     // notice the last parameter: do use mask
                     dcAllButtons.DrawBitmap(bmp, x + xOffset, yOffset, true);
@@ -847,8 +926,23 @@ bool wxToolBar::Realize()
 
         dcAllButtons.SelectObject(wxNullBitmap);
 
-        // don't delete this HBITMAP!
-        bitmap.SetHBITMAP(0);
+#if wxUSE_WXDIB
+        if ( bitmap.HasAlpha() )
+        {
+            // Strangely, toolbar expects bitmaps with transparency to not
+            // be premultiplied, unlike most of the rest of win32. Without this
+            // conversion, e.g. antialiased lines would be subtly, but
+            // noticeably misrendered. 
+            hBitmap = wxDIB(bitmap.ConvertToImage(),
+                            wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        }
+        else
+#endif
+        {
+            hBitmap = GetHbitmapOf(bitmap);
+            // don't delete this HBITMAP!
+            bitmap.SetHBITMAP(0);
+        }
 
         if ( remapValue == Remap_Buttons )
         {
@@ -1060,7 +1154,7 @@ bool wxToolBar::Realize()
                 // automatically according to the size of their bitmap and text
                 // label, if present. They look hideously ugly without autosizing
                 // when the labels have even slightly different lengths.
-                if ( !IsVertical() )
+                if ( HasFlag(wxTB_HORZ_LAYOUT) )
                 {
                     button.fsStyle |= TBSTYLE_AUTOSIZE;
                 }
@@ -1539,7 +1633,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
         // it's a separator or there is no tool at all there
         return NULL;
 
-        return m_tools.Item((size_t)index)->GetData();
+    return m_tools.Item((size_t)index)->GetData();
 }
 
 void wxToolBar::UpdateSize()

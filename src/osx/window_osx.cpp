@@ -2739,6 +2739,13 @@ void wxWidgetImpl::RemoveAssociations(wxWidgetImpl* impl)
     }
 }
 
+void wxWidgetImpl::RemoveAssociation(WXWidget control)
+{
+	wxCHECK_RET( control != NULL, wxT("attempt to remove a NULL WXWidget from control map") );
+
+	wxWinMacControlList.erase(control);
+}
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxWidgetImpl, wxObject);
 
 wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserPane )

@@ -105,7 +105,7 @@ public:
         for ( size_t n = 0; n < src.size(); n++ )
             Add(src[n]);
     }
-    wxEXPLICIT wxSortedArrayString(wxArrayString::CompareFunction compareFunction)
+    explicit wxSortedArrayString(wxArrayString::CompareFunction compareFunction)
         : wxSortedArrayStringBase(compareFunction)
         { }
 
@@ -151,7 +151,7 @@ public:
     //     wouldn't be needed if the 'explicit' keyword was supported by all
     //     compilers, or if this was protected ctor for wxSortedArrayString,
     //     but we're stuck with it now.
-  wxEXPLICIT wxArrayString(int autoSort) { Init(autoSort != 0); }
+  explicit wxArrayString(int autoSort) { Init(autoSort != 0); }
     // C string array ctor
   wxArrayString(size_t sz, const char** a);
   wxArrayString(size_t sz, const wchar_t** a);
@@ -263,7 +263,7 @@ public:
   public:
     pointer m_ptr;
     reverse_iterator() : m_ptr(NULL) { }
-    wxEXPLICIT reverse_iterator(pointer ptr) : m_ptr(ptr) { }
+    explicit reverse_iterator(pointer ptr) : m_ptr(ptr) { }
     reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }
     reference operator*() const { return *m_ptr; }
     pointer operator->() const { return m_ptr; }
@@ -289,7 +289,7 @@ public:
   public:
     pointer m_ptr;
     const_reverse_iterator() : m_ptr(NULL) { }
-    wxEXPLICIT const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }
+    explicit const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }
     const_reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }
     const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
     reference operator*() const { return *m_ptr; }
@@ -389,7 +389,7 @@ public:
   wxSortedArrayString(const wxArrayString& array) : wxArrayString(true)
     { Copy(array); }
 
-  wxEXPLICIT wxSortedArrayString(CompareFunction compareFunction)
+  explicit wxSortedArrayString(CompareFunction compareFunction)
       : wxArrayString(true)
     { m_compareFunction = compareFunction; }
 };
@@ -479,9 +479,8 @@ public:
     }
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
-    // construct an adapter from a vector of strings (of any type)
-    template <class T>
-    wxArrayStringsAdapter(const std::vector<T>& strings)
+    // construct an adapter from a vector of strings
+    wxArrayStringsAdapter(const std::vector<wxString>& strings)
         : m_type(wxSTRING_POINTER), m_size(strings.size())
     {
         m_data.ptr = &strings[0];

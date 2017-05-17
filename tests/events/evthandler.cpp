@@ -509,3 +509,21 @@ void EvtHandlerTestCase::UnbindFromHandler()
 
     handler.ProcessEvent(e);
 }
+
+// This is a compilation-time-only test: just check that a class inheriting
+// from wxEvtHandler non-publicly can use Bind() with its method, this used to
+// result in compilation errors.
+// Note that this test will work only on C++11 compilers, so we test this only
+// for such compilers.
+#if __cplusplus >= 201103
+class HandlerNonPublic : protected wxEvtHandler
+{
+public:
+    HandlerNonPublic()
+    {
+        Bind(wxEVT_IDLE, &HandlerNonPublic::OnIdle, this);
+    }
+
+    void OnIdle(wxIdleEvent&) { }
+};
+#endif // C++11

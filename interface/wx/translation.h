@@ -157,20 +157,10 @@ public:
         All loaded catalogs will be used for message lookup by GetString() for
         the current locale.
 
-        In this overload, @c msgid strings are assumed
+        Bu default, i.e. if @a msgIdLanguage is not given, @c msgid strings are assumed
         to be in English and written only using 7-bit ASCII characters.
         If you have to deal with non-English strings or 8-bit characters in the
         source code, see the instructions in @ref overview_nonenglish.
-
-        @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
-     */
-    bool AddCatalog(const wxString& domain);
-
-    /**
-        Same as AddCatalog(const wxString&), but takes an additional argument,
-        @a msgIdLanguage.
 
         @param domain
             The catalog domain to add.
@@ -186,7 +176,8 @@ public:
             @true if catalog was successfully loaded, @false otherwise (which might
             mean that the catalog is not found or that it isn't in the correct format).
      */
-    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+    bool AddCatalog(const wxString& domain,
+                    wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 
     /**
         Same as AddCatalog(const wxString&, wxLanguage), but takes two
@@ -475,30 +466,32 @@ public:
     initialization.
 
     Here is an example which should make it more clear: suppose that you have a
-    static array of strings containing the weekday names and which have to be
-    translated (note that it is a bad example, really, as wxDateTime already
-    can be used to get the localized week day names already). If you write:
+    static array of strings containing the names of chemical elements, which
+    have to be translated. If you write:
 
     @code
-    static const char * const weekdays[] = { _("Mon"), ..., _("Sun") };
+    static const char * const elements[] = { _("Hydrogen"), _("Helium"), ... };
     ...
-    // use weekdays[n] as usual
+    // use elements[n] as usual
     @endcode
 
-    The code wouldn't compile because the function calls are forbidden in the
-    array initializer. So instead you should do this:
+    The code would compile and run, but there would be no translations for the
+    strings because static variables are initialized at a very early stage of
+    program execution; that is, before the locale and paths to message catalog
+    files have been set up.
+    So instead you should do this:
 
     @code
-    static const char * const weekdays[] = { wxTRANSLATE("Mon"), ...,
-    wxTRANSLATE("Sun") };
+    static const char * const elements[] = { wxTRANSLATE("Hydrogen"),
+    wxTRANSLATE("Helium"), ... };
     ...
-    // use wxGetTranslation(weekdays[n])
+    // use wxGetTranslation(elements[n])
     @endcode
 
-    Note that although the code @b would compile if you simply omit
-    wxTRANSLATE() in the above, it wouldn't work as expected because there
-    would be no translations for the weekday names in the program message
-    catalog and wxGetTranslation() wouldn't find them.
+    Note that if you simply omit wxTRANSLATE() above, those strings would not
+    be marked for translation, and would therefore not be included in the
+    message catalog. Consequently, wxGetTranslation() would not find
+    translations for them.
 
     @return A const wxChar*.
 

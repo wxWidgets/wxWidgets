@@ -970,6 +970,7 @@ XmlResApp::FindStrings(const wxString& filename, wxXmlNode *node)
                 (node/*not n!*/->GetName() == wxT("value") &&
                                !n->GetContent().IsNumber()) ||
                 node/*not n!*/->GetName() == wxT("help") ||
+                node/*not n!*/->GetName() == wxT("hint") ||
                 node/*not n!*/->GetName() == wxT("longhelp") ||
                 node/*not n!*/->GetName() == wxT("tooltip") ||
                 node/*not n!*/->GetName() == wxT("htmlcode") ||

@@ -23,10 +23,10 @@ public:
     virtual ~wxNonOwnedWindow();
 
 protected:
-    virtual bool DoClearShape();
-    virtual bool DoSetRegionShape(const wxRegion& region);
+    virtual bool DoClearShape() wxOVERRIDE;
+    virtual bool DoSetRegionShape(const wxRegion& region) wxOVERRIDE;
 #if wxUSE_GRAPHICS_CONTEXT
-    virtual bool DoSetPathShape(const wxGraphicsPath& path);
+    virtual bool DoSetPathShape(const wxGraphicsPath& path) wxOVERRIDE;
 
 private:
     wxNonOwnedWindowShapeImpl* m_shapeImpl;

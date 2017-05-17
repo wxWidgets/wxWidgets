@@ -89,7 +89,14 @@ wxArrayString::wxArrayString(const wxArrayString& src)
 wxArrayString& wxArrayString::operator=(const wxArrayString& src)
 {
   if ( m_nSize > 0 )
+  {
+    // Do this test here to avoid unnecessary overhead when assigning to an
+    // empty array, in that case there is no harm in self-assignment.
+    if ( &src == this )
+        return *this;
+
     Clear();
+  }
 
   Copy(src);
 
@@ -483,11 +490,11 @@ bool wxArrayString::operator==(const wxArrayString& a) const
 
 wxString wxJoin(const wxArrayString& arr, const wxChar sep, const wxChar escape)
 {
+    wxString str;
+
     size_t count = arr.size();
     if ( count == 0 )
-        return wxEmptyString;
-
-    wxString str;
+        return str;
 
     // pre-allocate memory using the estimation of the average length of the
     // strings in the given array: this is very imprecise, of course, but

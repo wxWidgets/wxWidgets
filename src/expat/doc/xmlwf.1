@@ -177,12 +177,14 @@ data from outside the XML file currently being parsed.
 This is an example of an internal entity:
 
 .nf
+
 <!ENTITY vers '1.0.2'>
 .fi
 
 And here are some examples of external entities:
 
 .nf
+
 <!ENTITY header SYSTEM "header\-&vers;.xml">  (parsed)
 <!ENTITY logo SYSTEM "logo.png" PNG>         (unparsed)
 .fi
@@ -193,6 +195,7 @@ Terminates the list of options. This is only needed if a filename
 starts with a hyphen. For example:
 
 .nf
+
 xmlwf \-\- \-myfile.xml
 .fi
 
@@ -228,6 +231,7 @@ me, I'd like to add this information to this manpage.
 Here are some XML validators on the web:
 
 .nf
+
 http://www.hcrc.ed.ac.uk/~richard/xml\-check.html
 http://www.stg.brown.edu/service/xmlvalid/
 http://www.scripting.com/frontier5/xml/code/xmlValidator.html
@@ -235,6 +239,7 @@ http://www.xml.com/pub/a/tools/ruwf/check.html
 .fi
 .SH "SEE ALSO"
 .nf
+
 The Expat home page:        http://www.libexpat.org/
 The W3 XML specification:   http://www.w3.org/TR/REC\-xml
 .fi

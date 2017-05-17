@@ -30,11 +30,18 @@
 #include "wx/stopwatch.h"
 #include "wx/dcgraph.h"
 
+#if wxUSE_MARKUP
+    #include "wx/osx/cocoa/private/markuptoattr.h"
+#endif // wxUSE_MARKUP
+
 // ============================================================================
 // Constants used locally
 // ============================================================================
 
 #define DataViewPboardType @"OutlineViewItem"
+
+static const int MINIMUM_NATIVE_ROW_HEIGHT = 17;
+
 
 // ============================================================================
 // Classes used locally in dataview.mm
@@ -388,6 +395,10 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     [[nativeColumn dataCell] setWraps:NO];
     // setting the default data cell:
     [nativeColumn setDataCell:renderData->GetColumnCell()];
+
+    if (!renderData->HasCustomFont())
+        [renderData->GetColumnCell() setFont:column->GetOwner()->GetFont().OSXGetNSFont()];
+
     // setting the editablility:
     const bool isEditable = renderer->GetMode() == wxDATAVIEW_CELL_EDITABLE;
 
@@ -1202,7 +1213,7 @@ outlineView:(NSOutlineView*)outlineView
     dc.SetGraphicsContext(gc);
 
     int state = 0;
-    if ( [self isHighlighted] )
+    if ( [self backgroundStyle] == NSBackgroundStyleDark )
         state |= wxDATAVIEW_CELL_SELECTED;
 
     renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), &dc, state);
@@ -1221,6 +1232,108 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 @end
+
+// ============================================================================
+// wxImageCell
+// ============================================================================
+@implementation wxImageCell
+
+-(NSSize) cellSize
+{
+    if ([self image] != nil)
+        return [[self image] size];
+    else
+        return NSZeroSize;
+}
+
+@end
+
+// ============================================================================
+// wxTextFieldCell
+// ============================================================================
+
+#ifndef _LP64
+    // The code below doesn't compile in 32 bits failing with
+    //
+    //      error: instance variables may not be placed in class extension
+    //
+    // Until this can be fixed, disable it to at least fix compilation.
+    #define wxTextFieldCell NSTextFieldCell
+#else
+@interface wxTextFieldCell ()
+{
+    int _wxAlignment;
+    BOOL _adjustRect;
+}
+@end
+
+@implementation wxTextFieldCell
+
+- (void)setWXAlignment:(int)alignment
+{
+    _wxAlignment = alignment;
+    _adjustRect = (alignment & (wxALIGN_CENTRE_VERTICAL | wxALIGN_BOTTOM)) != 0;
+}
+
+// These three overrides implement vertical alignment of text cells.
+// The solution is described by Daniel Jalkut at
+// https://red-sweater.com/blog/148/what-a-difference-a-cell-makes
+
+- (NSRect)drawingRectForBounds:(NSRect)theRect
+{
+    // Get the parent's idea of where we should draw
+    NSRect r = [super drawingRectForBounds:theRect];
+
+    if (!_adjustRect)
+        return r;
+    if (theRect.size.height <= MINIMUM_NATIVE_ROW_HEIGHT)
+        return r;  // don't mess with default-sized rows as they are centered
+
+    NSSize bestSize = [self cellSizeForBounds:theRect];
+    if (bestSize.height < r.size.height)
+    {
+        if (_wxAlignment & wxALIGN_CENTER_VERTICAL)
+        {
+            r.origin.y += int(r.size.height - bestSize.height) / 2;
+            r.size.height = bestSize.height;
+        }
+        else if (_wxAlignment & wxALIGN_BOTTOM)
+        {
+            r.origin.y += r.size.height - bestSize.height;
+            r.size.height = bestSize.height;
+        }
+    }
+
+    return r;
+}
+
+- (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
+{
+    BOOL oldAdjustRect = _adjustRect;
+    if (oldAdjustRect)
+    {
+        aRect = [self drawingRectForBounds:aRect];
+        _adjustRect = NO;
+    }
+    [super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
+    _adjustRect = oldAdjustRect;
+}
+
+- (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
+{
+    BOOL oldAdjustRect = _adjustRect;
+    if (oldAdjustRect)
+    {
+        aRect = [self drawingRectForBounds:aRect];
+        _adjustRect = NO;
+    }
+    [super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
+    _adjustRect = oldAdjustRect;
+}
+
+@end
+#endif // 32/64 bits
+
 
 // ============================================================================
 // wxImageTextCell
@@ -1693,6 +1806,15 @@ outlineView:(NSOutlineView*)outlineView
     }
 }
 
+-(void) outlineView:(NSOutlineView *)outlineView mouseDownInHeaderOfTableColumn:(NSTableColumn *)tableColumn
+{
+    // Implements per-column reordering in NSTableView per Apple's Q&A:
+    // https://developer.apple.com/library/content/qa/qa1503/_index.html
+    wxDataViewColumn* const
+        col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+    [outlineView setAllowsColumnReordering:col->IsReorderable()];
+}
+
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {
     wxUnusedVar(outlineView);
@@ -1883,6 +2005,14 @@ outlineView:(NSOutlineView*)outlineView
     }
 }
 
+-(BOOL) becomeFirstResponder
+{
+    BOOL r = [super becomeFirstResponder];
+    if ( r )
+        implementation->DoNotifyFocusSet();
+    return r;
+}
+
 @end
 
 // ============================================================================
@@ -1899,28 +2029,30 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
         [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]
       ),
       m_DataSource(NULL),
-      m_OutlineView([[wxCocoaOutlineView alloc] init])
+      m_OutlineView([[wxCocoaOutlineView alloc] init]),
+      m_removeIndentIfNecessary(false)
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
 
-    [scrollview setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     [scrollview setBorderType:NSNoBorder];
     [scrollview setHasVerticalScroller:YES];
     [scrollview setHasHorizontalScroller:YES];
     [scrollview setAutohidesScrollers:YES];
     [scrollview setDocumentView:m_OutlineView];
 
-    // we cannot call InstallHandler(m_OutlineView) here, because we are handling
-    // our action:s ourselves, only associate the view with this impl
-    Associate(m_OutlineView,this);
     // initialize the native control itself too
     InitOutlineView(style);
 }
 
 void wxCocoaDataViewControl::InitOutlineView(long style)
 {
+    // we cannot call InstallHandler(m_OutlineView) here, because we are handling
+    // our action:s ourselves, only associate the view with this impl
+    Associate(m_OutlineView,this);
+
     [m_OutlineView setImplementation:this];
+    [m_OutlineView setFocusRingType:NSFocusRingTypeNone];
     [m_OutlineView setColumnAutoresizingStyle:NSTableViewLastColumnOnlyAutoresizingStyle];
     [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
     NSUInteger maskGridStyle(NSTableViewGridNone);
@@ -1947,15 +2079,20 @@ wxCocoaDataViewControl::~wxCocoaDataViewControl()
 //
 bool wxCocoaDataViewControl::ClearColumns()
 {
+    CGFloat rowHeight = [m_OutlineView rowHeight];
+
     // as there is a bug in NSOutlineView version (OSX 10.5.6 #6555162) the
     // columns cannot be deleted if there is an outline column in the view;
     // therefore, the whole view is deleted and newly constructed:
+    RemoveAssociation(m_OutlineView); // undo InitOutlineView's association
     [m_OutlineView release];
     m_OutlineView = [[wxCocoaOutlineView alloc] init];
     [((NSScrollView*) GetWXWidget()) setDocumentView:m_OutlineView];
     [m_OutlineView setDataSource:m_DataSource];
 
     InitOutlineView(GetDataViewCtrl()->GetWindowStyle());
+
+    [m_OutlineView setRowHeight:rowHeight];
 
     return true;
 }
@@ -2244,13 +2381,11 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
         m_DataSource = NULL;
     [m_OutlineView setDataSource:m_DataSource]; // if there is a data source the data is immediately going to be requested
 
-    // By default, the first column is indented to leave enough place for the
-    // expanders, but this looks bad if there are no expanders, so don't use
-    // indent in this case.
-    if ( model && model->IsListModel() )
-    {
-        DoSetIndent(0);
-    }
+    // Set this to true to check if we need to remove the indent in the next
+    // OnSize() call: we can't do it directly here because the model might not
+    // be fully initialized yet and so might not know whether it has any items
+    // with children or not.
+    m_removeIndentIfNecessary = true;
 
     return true;
 }
@@ -2331,6 +2466,7 @@ void wxCocoaDataViewControl::Unselect(const wxDataViewItem& item)
 void wxCocoaDataViewControl::UnselectAll()
 {
     [m_OutlineView deselectAll:m_OutlineView];
+    [m_OutlineView setNeedsDisplay:YES];
 }
 
 //
@@ -2390,6 +2526,23 @@ void wxCocoaDataViewControl::HitTest(const wxPoint& point, wxDataViewItem& item,
     }
 }
 
+void wxCocoaDataViewControl::SetRowHeight(int height)
+{
+    [m_OutlineView setRowHeight:wxMax(height, GetDefaultRowHeight())];
+}
+
+int wxCocoaDataViewControl::GetDefaultRowHeight() const
+{
+    // Custom setup of NSLayoutManager is necessary to match NSTableView sizing.
+    // See http://stackoverflow.com/questions/17095927/dynamically-changing-row-height-after-font-size-of-entire-nstableview-nsoutlin
+    NSLayoutManager *lm = [[NSLayoutManager alloc] init];
+    [lm setTypesetterBehavior:NSTypesetterBehavior_10_2_WithCompatibility];
+    [lm setUsesScreenFonts:NO];
+    CGFloat height = [lm defaultLineHeightForFont:GetWXPeer()->GetFont().OSXGetNSFont()];
+    [lm release];
+    return wxMax(MINIMUM_NATIVE_ROW_HEIGHT, int(height));
+}
+
 void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), unsigned int WXUNUSED(height))
     // Not supported by the native control
 {
@@ -2397,6 +2550,21 @@ void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), 
 
 void wxCocoaDataViewControl::OnSize()
 {
+    if ( m_removeIndentIfNecessary )
+    {
+        m_removeIndentIfNecessary = false;
+
+        const wxDataViewModel* const model = GetDataViewCtrl()->GetModel();
+
+        // By default, the first column is indented to leave enough place for the
+        // expanders, but this looks bad if there are no expanders, so don't use
+        // indent in this case.
+        if ( model && model->IsListModel() )
+        {
+            DoSetIndent(0);
+        }
+    }
+
     if ([m_OutlineView numberOfColumns] == 1)
         [m_OutlineView sizeLastColumnToFit];
 }
@@ -2497,6 +2665,13 @@ id wxCocoaDataViewControl::GetItemAtRow(int row) const
     return [m_OutlineView itemAtRow:row];
 }
 
+void wxCocoaDataViewControl::SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack)
+{
+    wxWidgetCocoaImpl::SetFont(font, foreground, windowStyle, ignoreBlack);
+    SetRowHeight(0/*will use default/minimum height*/);
+}
+
+
 // ----------------------------------------------------------------------------
 // wxDataViewRendererNativeData
 // ----------------------------------------------------------------------------
@@ -2506,6 +2681,7 @@ void wxDataViewRendererNativeData::Init()
     m_origFont = NULL;
     m_origTextColour = NULL;
     m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
+    m_hasCustomFont = false;
 
     if ( m_ColumnCell )
         ApplyLineBreakMode(m_ColumnCell);
@@ -2560,7 +2736,18 @@ wxDataViewRenderer::~wxDataViewRenderer()
 void wxDataViewRenderer::SetAlignment(int align)
 {
     m_alignment = align;
-    [GetNativeData()->GetColumnCell() setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
+    OSXUpdateAlignment();
+}
+
+void wxDataViewRenderer::OSXUpdateAlignment()
+{
+    int align = GetEffectiveAlignment();
+    NSCell *cell = GetNativeData()->GetColumnCell();
+    [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
+#ifdef _LP64
+    if ([cell respondsToSelector:@selector(setWXAlignment:)])
+        [(wxTextFieldCell*)cell setWXAlignment:align];
+#endif // _LP64
 }
 
 void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
@@ -2590,6 +2777,11 @@ void wxDataViewRenderer::EnableEllipsize(wxEllipsizeMode mode)
 wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
 {
     return GetNativeData()->GetEllipsizeMode();
+}
+
+bool wxDataViewRenderer::IsHighlighted() const
+{
+    return [GetNativeData()->GetColumnCell() backgroundStyle] == NSBackgroundStyleDark;
 }
 
 void
@@ -2662,7 +2854,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
         //else: can't change font if the cell doesn't have any
     }
 
-    if ( attr.HasColour() )
+    if ( attr.HasColour() && [cell backgroundStyle] == NSBackgroundStyleLight )
     {
         // we can set font for any cell but only NSTextFieldCell provides
         // a method for setting text colour so check that this method is
@@ -2694,6 +2886,12 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 
 void wxDataViewRenderer::SetEnabled(bool enabled)
 {
+    // setting the appearance to disabled grey should only be done for
+    // the active cells which are disabled, not for the cells which can
+    // never be edited at all
+    if ( GetMode() == wxDATAVIEW_CELL_INERT )
+        enabled = true;
+
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
@@ -2730,18 +2928,74 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(const wxString& varianttype,
                                                int align)
     : wxDataViewRenderer(varianttype,mode,align)
 {
+#if wxUSE_MARKUP
+    m_useMarkup = false;
+#endif // wxUSE_MARKUP
+
     NSTextFieldCell* cell;
 
 
-    cell = [[NSTextFieldCell alloc] init];
+    cell = [[wxTextFieldCell alloc] init];
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
 }
 
+#if wxUSE_MARKUP
+
+void wxDataViewTextRenderer::EnableMarkup(bool enable)
+{
+    m_useMarkup = enable;
+}
+
+#endif // wxUSE_MARKUP
+
 bool wxDataViewTextRenderer::MacRender()
 {
-    [GetNativeData()->GetItemCell() setObjectValue:wxCFStringRef(GetValue().GetString()).AsNSString()];
+    NSCell *cell = GetNativeData()->GetItemCell();
+#if wxUSE_MARKUP
+    if ( m_useMarkup )
+    {
+        wxItemMarkupToAttrString toAttr(wxFont([cell font]), GetValue().GetString());
+        NSMutableAttributedString *str = toAttr.GetNSAttributedString();
+
+        if ( [cell lineBreakMode] != NSLineBreakByClipping )
+        {
+            NSMutableParagraphStyle *par = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+            [par setLineBreakMode:[cell lineBreakMode]];
+            // Tightening looks very ugly when combined with non-tightened rows,
+            // so disabled it on OS X version where it's used:
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
+            if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_11)
+            {
+                [par setAllowsDefaultTighteningForTruncation:NO];
+            }
+            else
+#endif
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+            if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_10)
+            {
+                [par setTighteningFactorForTruncation:0.0];
+            }
+#endif
+
+            [str addAttribute:NSParagraphStyleAttributeName
+                        value:par
+                        range:NSMakeRange(0, [str length])];
+            [par release];
+        }
+
+        if ( [cell backgroundStyle] == NSBackgroundStyleDark )
+        {
+            [str removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [str length])];
+        }
+
+        [cell setAttributedStringValue:str];
+        return true;
+    }
+#endif // wxUSE_MARKUP
+
+    [cell setObjectValue:wxCFStringRef(GetValue().GetString()).AsNSString()];
     return true;
 }
 
@@ -2768,10 +3022,7 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(const wxString& varianttype,
                                                    int align)
     : wxDataViewRenderer(varianttype,mode,align)
 {
-    NSImageCell* cell;
-
-
-    cell = [[NSImageCell alloc] init];
+    NSCell* cell = [[wxImageCell alloc] init];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
 }
@@ -2784,11 +3035,20 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(const wxString& varianttype,
 // In all other cases the method returns 'false'.
 bool wxDataViewBitmapRenderer::MacRender()
 {
-    wxBitmap bitmap;
-
-    bitmap << GetValue();
-    if (bitmap.IsOk())
-        [GetNativeData()->GetItemCell() setObjectValue:[[bitmap.GetNSImage() retain] autorelease]];
+    if (GetValue().GetType() == wxS("wxBitmap"))
+    {
+        wxBitmap bitmap;
+        bitmap << GetValue();
+        if (bitmap.IsOk())
+            [GetNativeData()->GetItemCell() setObjectValue:[[bitmap.GetNSImage() retain] autorelease]];
+    }
+    else if (GetValue().GetType() == wxS("wxIcon"))
+    {
+        wxIcon icon;
+        icon << GetValue();
+        if (icon.IsOk())
+            [GetNativeData()->GetItemCell() setObjectValue:[[icon.GetNSImage() retain] autorelease]];
+    }
     return true;
 }
 
@@ -2811,7 +3071,9 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
     [cell setFont:[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]]];
     for (size_t i=0; i<choices.GetCount(); ++i)
         [cell addItemWithTitle:wxCFStringRef(choices[i]).AsNSString()];
-    SetNativeData(new wxDataViewRendererNativeData(cell));
+    wxDataViewRendererNativeData *data = new wxDataViewRendererNativeData(cell);
+    data->SetHasCustomFont(true);
+    SetNativeData(data);
     [cell release];
 }
 
@@ -2909,7 +3171,7 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(const wxString& varianttype,
     dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
-    cell = [[NSTextFieldCell alloc] init];
+    cell = [[wxTextFieldCell alloc] init];
     [cell setFormatter:dateFormatter];
     SetNativeData(new wxDataViewRendererNativeData(cell,[NSDate dateWithString:@"2000-12-30 20:00:00 +0000"]));
     [cell          release];
@@ -3127,7 +3389,7 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title,
     InitCommon(width, align, flags);
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-        renderer->SetAlignment(align);
+        renderer->OSXUpdateAlignment();
     SetResizeable((flags & wxDATAVIEW_COL_RESIZABLE) != 0);
 }
 
@@ -3143,7 +3405,7 @@ wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap,
     InitCommon(width, align, flags);
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-        renderer->SetAlignment(align);
+        renderer->OSXUpdateAlignment();
 }
 
 wxDataViewColumn::~wxDataViewColumn()
@@ -3168,7 +3430,7 @@ void wxDataViewColumn::SetAlignment(wxAlignment align)
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
     if (m_renderer && !m_renderer->IsCustomRenderer() &&
         (m_renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-        m_renderer->SetAlignment(align);
+        m_renderer->OSXUpdateAlignment();
 }
 
 void wxDataViewColumn::SetBitmap(const wxBitmap& bitmap)

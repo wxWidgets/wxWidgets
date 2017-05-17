@@ -258,6 +258,25 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                      }
                 }
             }
+            else if ( commandSelector == @selector(noop:) )
+            {
+                // We are called with this strange "noop:" selector when an
+                // attempt to paste the text into a password text control using
+                // Cmd+V is made. Check if we're really in this case and, if
+                // we're, do paste as otherwise nothing happens by default
+                // which is annoying, it is pretty common and useful to paste
+                // passwords, e.g. from a password manager.
+                NSEvent* cevent = [[NSApplication sharedApplication] currentEvent];
+                if ( [cevent type] == NSKeyDown &&
+                        [cevent keyCode] == 9 /* V */ &&
+                            ([cevent modifierFlags] & NSCommandKeyMask) == NSCommandKeyMask )
+                {
+                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+                    wxTextEntry * const entry = impl->GetTextEntry();
+                    entry->Paste();
+                    handled = YES;
+                }
+            }
         }
     }
     
@@ -429,6 +448,37 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     return NO;
 }
 
+- (BOOL)_handleClipboardEvent:(wxEventType)type
+{
+    wxWidgetImpl *impl = wxWidgetImpl::FindFromWXWidget(self);
+    wxWindow* wxpeer = impl ? impl->GetWXPeer() : NULL;
+    if ( wxpeer )
+    {
+        wxClipboardTextEvent evt(type, wxpeer->GetId());
+        evt.SetEventObject(wxpeer);
+        return wxpeer->HandleWindowEvent(evt);
+    }
+    return false;
+}
+
+- (void)copy:(id)sender
+{
+    if ( ![self _handleClipboardEvent:wxEVT_TEXT_COPY] )
+        [super copy:sender];
+}
+
+- (void)cut:(id)sender
+{
+    if ( ![self _handleClipboardEvent:wxEVT_TEXT_CUT] )
+        [super cut:sender];
+}
+
+- (void)paste:(id)sender
+{
+    if ( ![self _handleClipboardEvent:wxEVT_TEXT_PASTE] )
+        [super paste:sender];
+}
+
 @end
 
 @implementation wxNSTextField
@@ -598,6 +648,13 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 // wxNSTextViewControl
 
+// Official Apple docs suggest to use FLT_MAX when embedding an NSTextView
+// object inside an NSScrollView, see here:
+// https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html
+// However, when using FLT_MAX, "setAlignment" doesn't work any more; using
+// 1000000 instead of FLT_MAX fixes this
+#define MAX_WIDTH 1000000
+
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxWidgetCocoaImpl(wxPeer, w),
       wxTextWidgetImpl(wxPeer)
@@ -612,7 +669,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     NSSize contentSize = [m_scrollView contentSize];
     NSRect viewFrame = NSMakeRect(
             0, 0,
-            hasHScroll ? FLT_MAX : contentSize.width, contentSize.height
+            hasHScroll ? MAX_WIDTH : contentSize.width, contentSize.height
         );
 
     wxNSTextView* const tv = [[wxNSTextView alloc] initWithFrame: viewFrame];
@@ -620,12 +677,10 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     [tv setVerticallyResizable:YES];
     [tv setHorizontallyResizable:hasHScroll];
     [tv setAutoresizingMask:NSViewWidthSizable];
-    [tv setAutomaticDashSubstitutionEnabled:false];
-    [tv setAutomaticQuoteSubstitutionEnabled:false];
     
     if ( hasHScroll )
     {
-        [[tv textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+        [[tv textContainer] setContainerSize:NSMakeSize(MAX_WIDTH, MAX_WIDTH)];
         [[tv textContainer] setWidthTracksTextView:NO];
     }
 
@@ -669,12 +724,13 @@ bool wxNSTextViewControl::CanFocus() const
     return true;
 }
 
-void wxNSTextViewControl::insertText(NSString* text, WXWidget slf, void *_cmd)
+void wxNSTextViewControl::insertText(NSString* str, WXWidget slf, void *_cmd)
 {
+    NSString *text = [str isKindOfClass:[NSAttributedString class]] ? [(id)str string] : str;
     if ( m_lastKeyDownEvent ==NULL || !DoHandleCharEvent(m_lastKeyDownEvent, text) )
     {
         wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-        superimpl(slf, (SEL)_cmd, text);
+        superimpl(slf, (SEL)_cmd, str);
     }
 }
 
@@ -857,12 +913,40 @@ void wxNSTextViewControl::SetStyle(long start,
         if ( style.HasTextColour() )
             [storage addAttribute:NSForegroundColorAttributeName value:style.GetTextColour().OSXGetNSColor() range:range];
     }
+        
+    if ( style.HasAlignment() )
+    {
+        switch ( style.GetAlignment() )
+        {
+            case wxTEXT_ALIGNMENT_RIGHT:
+                [m_textView setAlignment:NSRightTextAlignment];
+                break;
+            case wxTEXT_ALIGNMENT_CENTER:
+                [m_textView setAlignment:NSCenterTextAlignment];
+                break;
+            default:
+                [m_textView setAlignment:NSLeftTextAlignment];
+                break;
+        }
+    }
 }
 
 void wxNSTextViewControl::CheckSpelling(bool check)
 {
     if (m_textView)
         [m_textView setContinuousSpellCheckingEnabled: check];
+}
+
+void wxNSTextViewControl::EnableAutomaticQuoteSubstitution(bool enable)
+{
+    if (m_textView)
+        [m_textView setAutomaticQuoteSubstitutionEnabled:enable];
+}
+
+void wxNSTextViewControl::EnableAutomaticDashSubstitution(bool enable)
+{
+    if (m_textView)
+        [m_textView setAutomaticDashSubstitutionEnabled:enable];
 }
 
 wxSize wxNSTextViewControl::GetBestSize() const

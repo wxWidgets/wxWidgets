@@ -32,11 +32,50 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Conditionally set variables: ###
 
+!if "$(USE_HTML)" == "1"
+__aui___depname = sub_aui
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__except___depname = sub_except
+!endif
+!if "$(USE_HTML)" == "1"
+__help___depname = sub_help
+!endif
+!if "$(USE_HTML)" == "1"
+__htlbox___depname = sub_htlbox
+!endif
+!if "$(USE_HTML)" == "1"
+__html___depname = sub_html
+!endif
+!if "$(USE_MEDIA)" == "1"
+__mediaplayer___depname = sub_mediaplayer
+!endif
+!if "$(USE_PROPGRID)" == "1"
+__propgrid___depname = sub_propgrid
+!endif
+!if "$(USE_RIBBON)" == "1"
+__ribbon___depname = sub_ribbon
+!endif
+!if "$(USE_HTML)" == "1" && "$(USE_RICHTEXT)" == "1"
+__richtext___depname = sub_richtext
+!endif
+!if "$(USE_MEDIA)" == "1"
+__splash___depname = sub_splash
+!endif
+!if "$(USE_STC)" == "1"
+__stc___depname = sub_stc
+!endif
+!if "$(USE_STC)" == "1"
+__webview___depname = sub_webview
+!endif
+!if "$(USE_HTML)" == "1" && "$(USE_RIBBON)" == "1"
+__xrc___depname = sub_xrc
+!endif
 
 
 ### Targets: ###
 
-all: sub_access sub_animate sub_artprov sub_aui sub_calendar sub_caret sub_clipboard sub_collpane sub_combo sub_config sub_console sub_dataview sub_dialogs sub_dialup sub_display sub_dll sub_dnd sub_docview sub_dragimag sub_drawing sub_erase sub_event sub_except sub_exec sub_font sub_grid sub_help sub_htlbox sub_html sub_image sub_internat sub_ipc sub_joytest sub_keyboard sub_layout sub_listctrl sub_mdi sub_mediaplayer sub_menu sub_minimal sub_nativdlg sub_notebook sub_oleauto sub_opengl sub_ownerdrw sub_popup sub_power sub_preferences sub_printing sub_propgrid sub_regtest sub_render sub_ribbon sub_richtext sub_sashtest sub_scroll sub_shaped sub_sockets sub_sound sub_splash sub_splitter sub_statbar sub_stc sub_svg sub_taborder sub_taskbar sub_text sub_thread sub_toolbar sub_treectrl sub_typetest sub_uiaction sub_validate sub_vscroll sub_webview sub_widgets sub_wizard sub_wrapsizer sub_xrc
+all: sub_access sub_animate sub_artprov $(__aui___depname) sub_calendar sub_caret sub_clipboard sub_collpane sub_combo sub_config sub_console sub_dataview sub_dialogs sub_dialup sub_display sub_dll sub_dnd sub_docview sub_dragimag sub_drawing sub_erase sub_event $(__except___depname) sub_exec sub_font sub_grid $(__help___depname) $(__htlbox___depname) $(__html___depname) sub_image sub_internat sub_ipc sub_joytest sub_keyboard sub_layout sub_listctrl sub_mdi $(__mediaplayer___depname) sub_menu sub_minimal sub_nativdlg sub_notebook sub_oleauto sub_opengl sub_ownerdrw sub_popup sub_power sub_preferences sub_printing $(__propgrid___depname) sub_regtest sub_render $(__ribbon___depname) $(__richtext___depname) sub_sashtest sub_scroll sub_secretstore sub_shaped sub_sockets sub_sound $(__splash___depname) sub_splitter sub_statbar $(__stc___depname) sub_svg sub_taborder sub_taskbar sub_text sub_thread sub_toolbar sub_treectrl sub_typetest sub_uiaction sub_validate sub_vscroll $(__webview___depname) sub_widgets sub_wizard sub_wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -210,6 +249,9 @@ clean:
 	cd scroll
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
+	cd secretstore
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd "$(MAKEDIR)"
 	cd shaped
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
@@ -304,10 +346,12 @@ sub_artprov:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_HTML)" == "1"
 sub_aui: 
 	cd aui
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_calendar: 
 	cd calendar
@@ -399,10 +443,12 @@ sub_event:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_EXCEPTIONS)" == "1"
 sub_except: 
 	cd except
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_exec: 
 	cd exec
@@ -419,20 +465,26 @@ sub_grid:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_HTML)" == "1"
 sub_help: 
 	cd help
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
+!if "$(USE_HTML)" == "1"
 sub_htlbox: 
 	cd htlbox
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
+!if "$(USE_HTML)" == "1"
 sub_html: 
 	cd html
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_image: 
 	cd image
@@ -474,10 +526,12 @@ sub_mdi:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_MEDIA)" == "1"
 sub_mediaplayer: 
 	cd mediaplayer
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_menu: 
 	cd menu
@@ -534,10 +588,12 @@ sub_printing:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_PROPGRID)" == "1"
 sub_propgrid: 
 	cd propgrid
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_regtest: 
 	cd regtest
@@ -549,15 +605,19 @@ sub_render:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_RIBBON)" == "1"
 sub_ribbon: 
 	cd ribbon
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
+!if "$(USE_HTML)" == "1" && "$(USE_RICHTEXT)" == "1"
 sub_richtext: 
 	cd richtext
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_sashtest: 
 	cd sashtest
@@ -566,6 +626,11 @@ sub_sashtest:
 
 sub_scroll: 
 	cd scroll
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd "$(MAKEDIR)"
+
+sub_secretstore: 
+	cd secretstore
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
@@ -584,10 +649,12 @@ sub_sound:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_MEDIA)" == "1"
 sub_splash: 
 	cd splash
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_splitter: 
 	cd splitter
@@ -599,10 +666,12 @@ sub_statbar:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_STC)" == "1"
 sub_stc: 
 	cd stc
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_svg: 
 	cd svg
@@ -659,10 +728,12 @@ sub_vscroll:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_STC)" == "1"
 sub_webview: 
 	cd webview
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_widgets: 
 	cd widgets
@@ -679,10 +750,12 @@ sub_wrapsizer:
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
+!if "$(USE_HTML)" == "1" && "$(USE_RIBBON)" == "1"
 sub_xrc: 
 	cd xrc
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
+!endif
 
 sub_flash: 
 	cd flash

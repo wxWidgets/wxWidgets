@@ -16,18 +16,32 @@ enum wxAccStatus
     wxACC_FALSE,           //!< The function returned false.
     wxACC_OK,              //!< The function completed successfully.
     wxACC_NOT_IMPLEMENTED, //!< The function is not implemented.
-    wxACC_NOT_SUPPORTED    //!< The function is not supported.
+    wxACC_NOT_SUPPORTED,   //!< The function is not supported.
+    /**
+        An argument is not valid (e.g. it does not make sense for the specified
+        object).
+    */
+    wxACC_INVALID_ARG
 };
 
 
 /**
-    Directions of navigation are represented by this enum.
+    This enum represents directions of navigation used in
+    wxAccessible::Navigate().
 */
 enum wxNavDir
 {
-    wxNAVDIR_DOWN,
+    /**
+        Navigate to the first child of the object. When this flag is used, the
+        @c fromId parameter must be @c wxACC_SELF.
+    */
     wxNAVDIR_FIRSTCHILD,
+    /**
+        Navigate to the last child of the object. When this flag is used, the
+        @c fromId parameter must be @c wxACC_SELF.
+    */
     wxNAVDIR_LASTCHILD,
+    wxNAVDIR_DOWN,
     wxNAVDIR_LEFT,
     wxNAVDIR_NEXT,
     wxNAVDIR_PREVIOUS,
@@ -108,17 +122,53 @@ enum wxAccRole {
     Objects are represented by a wxAccObject enum value.
 */
 enum wxAccObject {
+    /**
+        @hideinitializer
+    */
     wxOBJID_WINDOW =    0x00000000,
+    /**
+        @hideinitializer
+    */
     wxOBJID_SYSMENU =   0xFFFFFFFF,
+    /**
+        @hideinitializer
+    */
     wxOBJID_TITLEBAR =  0xFFFFFFFE,
+    /**
+        @hideinitializer
+    */
     wxOBJID_MENU =      0xFFFFFFFD,
+    /**
+        @hideinitializer
+    */
     wxOBJID_CLIENT =    0xFFFFFFFC,
+    /**
+        @hideinitializer
+    */
     wxOBJID_VSCROLL =   0xFFFFFFFB,
+    /**
+        @hideinitializer
+    */
     wxOBJID_HSCROLL =   0xFFFFFFFA,
+    /**
+        @hideinitializer
+    */
     wxOBJID_SIZEGRIP =  0xFFFFFFF9,
+    /**
+        @hideinitializer
+    */
     wxOBJID_CARET =     0xFFFFFFF8,
+    /**
+        @hideinitializer
+    */
     wxOBJID_CURSOR =    0xFFFFFFF7,
+    /**
+        @hideinitializer
+    */
     wxOBJID_ALERT =     0xFFFFFFF6,
+    /**
+        @hideinitializer
+    */
     wxOBJID_SOUND =     0xFFFFFFF5
 };
 
@@ -128,11 +178,52 @@ enum wxAccObject {
 */
 enum wxAccSelectionFlags
 {
+    /**
+        No action is performed. Neither the selection nor focus is changed.
+
+        @hideinitializer
+    */
     wxACC_SEL_NONE            = 0,
+    /**
+        The object is focused and becomes the selection anchor.
+
+        @hideinitializer
+    */
     wxACC_SEL_TAKEFOCUS       = 1,
+    /**
+        The object is selected and all other objects are removed from the
+        current selection.
+
+        @hideinitializer
+    */
     wxACC_SEL_TAKESELECTION   = 2,
+    /**
+        All objects between the selection anchor and this object are added to
+        the current selection if the anchor object's is selected or they are
+        removed from the current selection otherwise.
+        If this flag is combined with @c wxACC_SEL_ADDSELECTION, the objects
+        are added to the current selection regardless of the anchor object's
+        state.
+        If this flag is combined with @c wxACC_SEL_REMOVESELECTION, the objects
+        are removed from the current selection regardless of the anchor
+        object's state.
+
+        @hideinitializer
+    */
     wxACC_SEL_EXTENDSELECTION = 4,
+    /**
+        The object is added to the current selection. A noncontiguous selection
+        can be a result of this operation.
+
+        @hideinitializer
+    */
     wxACC_SEL_ADDSELECTION    = 8,
+    /**
+        The object is removed from the current selection. A noncontiguous
+        selection can be a result of this operation.
+
+        @hideinitializer
+    */
     wxACC_SEL_REMOVESELECTION = 16
 };
 
@@ -245,7 +336,7 @@ enum wxAccSelectionFlags
     For details on the semantics of functions and types, please refer to the
     Microsoft Active Accessibility 1.2 documentation.
 
-    This class is compiled into wxWidgets only if the wxUSE_ACCESSIBILITY setup
+    This class is compiled into wxWidgets only if the @c wxUSE_ACCESSIBILITY setup
     symbol is set to 1.
 
     @onlyfor{wxmsw}
@@ -355,11 +446,13 @@ public:
         Gets a variant representing the selected children of this object.
 
         Acceptable values are:
-        @li a null variant (IsNull() returns @true)
-        @li a list variant (GetType() == "list")
+        @li a null variant (@c IsNull() returns @true) if no children
+            are selected
+        @li a @c void* pointer to a wxAccessible of selected child object
         @li an integer representing the selected child element,
-            or 0 if this object is selected (GetType() == "long")
-        @li a "void*" pointer to a wxAccessible child object
+            or 0 if this object is selected (@c GetType() @c == @c "long")
+        @li a list variant (@c GetType() @c == @c "list") if multiple child
+            objects are selected
     */
     virtual wxAccStatus GetSelections(wxVariant* selections);
 

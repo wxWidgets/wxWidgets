@@ -764,6 +764,9 @@
 				RelativePath="..\..\src\msw\combobox.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\ole\comimpl.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\control.cpp">
 			</File>
 			<File
@@ -927,9 +930,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\palette.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\msw\panel.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\pen.cpp">
@@ -1309,6 +1309,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\combobox.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\ole\comimpl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\commandlinkbutton.h">

@@ -1,5 +1,12 @@
 # configure.ac
 
+# Copyright (c) 2004-2016 Glenn Randers-Pehrson
+# Last changed in libpng 1.6.25 [September 1, 2016]
+
+# This code is released under the libpng license.
+# For conditions of distribution and use, see the disclaimer
+# and license in png.h
+
 dnl Process this file with autoconf to produce a configure script.
 dnl
 dnl Minor upgrades (compatible ABI): increment the package version
@@ -18,7 +25,7 @@ AC_PREREQ([2.68])
 
 dnl Version number stuff here:
 
-AC_INIT([libpng],[1.6.21],[png-mng-implement@lists.sourceforge.net])
+AC_INIT([libpng],[1.6.28],[png-mng-implement@lists.sourceforge.net])
 AC_CONFIG_MACRO_DIR([scripts])
 
 # libpng does not follow GNU file name conventions (hence 'foreign')
@@ -29,7 +36,7 @@ AC_CONFIG_MACRO_DIR([scripts])
 # 1.13 is required for parallel tests
 AM_INIT_AUTOMAKE([1.13 foreign dist-xz color-tests silent-rules subdir-objects])
 # The following line causes --disable-maintainer-mode to be the default to
-# configure, this is necessary because libpng distributions cannot rely on the
+# configure. This is necessary because libpng distributions cannot rely on the
 # time stamps of the autotools generated files being correct
 AM_MAINTAINER_MODE
 
@@ -39,10 +46,10 @@ dnl automake, so the following is not necessary (and is not defined anyway):
 dnl AM_PREREQ([1.11.2])
 dnl stop configure from automagically running automake
 
-PNGLIB_VERSION=1.6.21
+PNGLIB_VERSION=1.6.28
 PNGLIB_MAJOR=1
 PNGLIB_MINOR=6
-PNGLIB_RELEASE=21
+PNGLIB_RELEASE=28
 
 dnl End of version number stuff
 
@@ -60,7 +67,7 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
-dnl libtool/libtoolize; version 2.4.2 is the tested version, this or any
+dnl libtool/libtoolize; version 2.4.2 is the tested version. This or any
 dnl compatible later version may be used
 LT_INIT([win32-dll])
 LT_PREREQ([2.4.2])
@@ -107,6 +114,25 @@ AC_ARG_ENABLE(werror,
       CFLAGS="$sav_CFLAGS"
     fi],)
 
+# For GCC 5 the default mode for C is -std=gnu11 instead of -std=gnu89
+# In pngpriv.h we request just the POSIX 1003.1 and C89 APIs by defining _POSIX_SOURCE to 1
+# This is incompatible with the new default mode, so we test for that and force the 
+# "-std=c89" compiler option:
+AC_MSG_CHECKING([if we need to force back C standard to C89])
+AC_COMPILE_IFELSE(
+   [AC_LANG_PROGRAM([
+      [#define _POSIX_SOURCE 1]
+      [#include <stdio.h>]
+   ])],
+   AC_MSG_RESULT(no),[
+      if test "x$GCC" != "xyes"; then
+         AC_MSG_ERROR(
+            [Forcing back to C89 is required but the flags are only known for GCC])
+      fi
+   AC_MSG_RESULT(yes)
+   CFLAGS="$CFLAGS -std=c89"
+])
+
 # Checks for header files.
 AC_HEADER_STDC
 
@@ -120,6 +146,12 @@ AC_C_RESTRICT
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([memset], , AC_MSG_ERROR(memset not found in libc))
 AC_CHECK_FUNCS([pow], , AC_CHECK_LIB(m, pow, , AC_MSG_ERROR(cannot find pow)) )
+
+# Some later POSIX 1003.1 functions are required for test programs, failure here
+# is soft (the corresponding test program is not built).
+AC_CHECK_FUNC([clock_gettime],,[AC_MSG_WARN([not building timepng])])
+AM_CONDITIONAL([HAVE_CLOCK_GETTIME], [test "$ac_cv_func_clock_gettime" = "yes"])
+
 AC_ARG_WITH(zlib-prefix,
    AS_HELP_STRING([[[--with-zlib-prefix]]],
       [prefix that may have been used in installed zlib]),
@@ -312,6 +344,51 @@ AM_CONDITIONAL([PNG_ARM_NEON],
     case "$host_cpu" in
       arm*|aarch64*) :;;
       *)    test "$enable_arm_neon" != '';;
+    esac])
+
+# MIPS
+# ===
+#
+# MIPS MSA (SIMD) support.
+
+AC_ARG_ENABLE([mips-msa],
+   AS_HELP_STRING([[[--enable-mips-msa]]],
+      [Enable MIPS MSA optimizations: =no/off, check, api, yes/on:]
+      [no/off: disable the optimizations; check: use internal checking code]
+      [(deprecated and poorly supported); api: disable by default, enable by]
+      [a call to png_set_option; yes/on: turn on unconditionally.]
+      [If not specified: determined by the compiler.]),
+   [case "$enableval" in
+      no|off)
+         # disable the default enabling on __mips_msa systems:
+         AC_DEFINE([PNG_MIPS_MSA_OPT], [0],
+                   [Disable MIPS MSA optimizations])
+         # Prevent inclusion of the assembler files below:
+         enable_mips_msa=no;;
+      check)
+         AC_DEFINE([PNG_MIPS_MSA_CHECK_SUPPORTED], [],
+                   [Check for MIPS MSA support at run-time]);;
+      api)
+         AC_DEFINE([PNG_MIPS_MSA_API_SUPPORTED], [],
+                   [Turn on MIPS MSA optimizations at run-time]);;
+      yes|on)
+         AC_DEFINE([PNG_MIPS_MSA_OPT], [2],
+                   [Enable MIPS MSA optimizations])
+         AC_MSG_WARN([--enable-mips-msa: please specify 'check' or 'api', if]
+            [you want the optimizations unconditionally pass '-mmsa -mfp64']
+            [to the compiler.]);;
+      *)
+         AC_MSG_ERROR([--enable-mips-msa=${enable_mips_msa}: invalid value])
+   esac])
+
+# Add MIPS specific files to all builds where the host_cpu is mips ('mips*') or
+# where MIPS optimizations were explicitly requested (this allows a fallback if a
+# future host CPU does not match 'mips*')
+
+AM_CONDITIONAL([PNG_MIPS_MSA],
+   [test "$enable_mips_msa" != 'no' &&
+    case "$host_cpu" in
+      mipsel*|mips64el*) :;;
     esac])
 
 AC_MSG_NOTICE([[Extra options for compiler: $PNG_COPTS]])

@@ -1032,7 +1032,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
 
     // Bitmap files come in old v1 format using BITMAPCOREHEADER or a newer
-    // format (typically BITMAPV5HEADER, in use since Windows 98, but we don't
+    // format (typically BITMAPV5HEADER, but we don't
     // really support any features specific to later formats such as gamma
     // correction or ICC profiles, so it doesn't matter much to us).
     const bool usesV1 = hdrSize == 12;

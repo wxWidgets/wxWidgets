@@ -389,7 +389,7 @@ public:
     @code
     wxAutomationObject excelObject;
       if (excelObject.GetInstance("Excel.Application"))
-          excelObject.PutProperty("ActiveCell.Font.Bold", @true);
+          excelObject.PutProperty("ActiveCell.Font.Bold", true);
     @endcode
 
     Note that this class obviously works under Windows only.

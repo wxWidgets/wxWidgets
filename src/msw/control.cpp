@@ -206,13 +206,9 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
         if ( testFont )
         {
-            // not sure if we need to explicitly set the font here for Win95/NT4
-            // but we definitely can't do it for any newer version
+            // we can't explicitly set the font here
             // see wxGetCCDefaultFont() in src/msw/settings.cpp for explanation
             // of why this test works
-
-            // TODO: test Win95/NT4 to see if this is needed or breaks the
-            // font resizing as it does on newer versions
             if ( font != wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) )
             {
                 setFont = false;

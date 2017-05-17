@@ -175,7 +175,7 @@ void MarkupTestCase::RoundTrip()
     );
 
     CHECK_PARSES_OK( "foo&bar" );
-    CHECK_PARSES_AS( "foo&amp;bar", "foo&&bar" );
+    CHECK_PARSES_AS( "foo&amp;bar", "foo&bar" );
     CHECK_PARSES_AS( "&lt;O&apos;Reilly&gt;", "<O'Reilly>" );
 
     CHECK_DOESNT_PARSE( "<" );

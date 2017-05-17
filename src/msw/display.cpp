@@ -43,31 +43,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/hiddenwin.h"
 
-    // Older versions of windef.h don't define HMONITOR.  Unfortunately, we
-    // can't directly test whether HMONITOR is defined or not in windef.h as
-    // it's not a macro but a typedef, so we test for an unrelated symbol which
-    // is only defined in winuser.h if WINVER >= 0x0500
-    #if !defined(HMONITOR_DECLARED) && !defined(MNS_NOCHECK)
-        DECLARE_HANDLE(HMONITOR);
-        typedef BOOL(CALLBACK * MONITORENUMPROC )(HMONITOR, HDC, LPRECT, LPARAM);
-        typedef struct tagMONITORINFO
-        {
-            DWORD   cbSize;
-            RECT    rcMonitor;
-            RECT    rcWork;
-            DWORD   dwFlags;
-        } MONITORINFO, *LPMONITORINFO;
-        typedef struct tagMONITORINFOEX : public tagMONITORINFO
-        {
-            TCHAR       szDevice[CCHDEVICENAME];
-        } MONITORINFOEX, *LPMONITORINFOEX;
-        #define MONITOR_DEFAULTTONULL       0x00000000
-        #define MONITOR_DEFAULTTOPRIMARY    0x00000001
-        #define MONITOR_DEFAULTTONEAREST    0x00000002
-        #define MONITORINFOF_PRIMARY        0x00000001
-        #define HMONITOR_DECLARED
-    #endif
-
 static const wxChar displayDllName[] = wxT("user32.dll");
 
 // ----------------------------------------------------------------------------
@@ -83,14 +58,14 @@ public:
     {
     }
 
-    virtual wxRect GetGeometry() const;
-    virtual wxRect GetClientArea() const;
-    virtual wxString GetName() const;
-    virtual bool IsPrimary() const;
+    virtual wxRect GetGeometry() const wxOVERRIDE;
+    virtual wxRect GetClientArea() const wxOVERRIDE;
+    virtual wxString GetName() const wxOVERRIDE;
+    virtual bool IsPrimary() const wxOVERRIDE;
 
-    virtual wxVideoMode GetCurrentMode() const;
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
-    virtual bool ChangeMode(const wxVideoMode& mode);
+    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
+    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
 
 protected:
     // convert a DEVMODE to our wxVideoMode
@@ -135,10 +110,10 @@ public:
 
     bool IsOk() const { return !m_displays.empty(); }
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n);
-    virtual unsigned GetCount() { return unsigned(m_displays.size()); }
-    virtual int GetFromPoint(const wxPoint& pt);
-    virtual int GetFromWindow(const wxWindow *window);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual unsigned GetCount() wxOVERRIDE { return unsigned(m_displays.size()); }
+    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
 
     // Called when we receive WM_SETTINGCHANGE to refresh the list of monitor
     // handles.
@@ -260,9 +235,9 @@ wxVideoMode wxDisplayMSW::GetCurrentMode() const
 {
     wxVideoMode mode;
 
-    // The first parameter of EnumDisplaySettings() must be NULL under Win95
-    // according to MSDN.  The version of GetName() we implement for Win95
-    // returns an empty string.
+    // The first parameter of EnumDisplaySettings() must be NULL according
+    // to MSDN, in order to specify the current display on the computer
+    // on which the calling thread is running.
     const wxString name = GetName();
     const wxChar * const deviceName = name.empty()
                                           ? (const wxChar*)NULL
@@ -288,9 +263,9 @@ wxArrayVideoModes wxDisplayMSW::GetModes(const wxVideoMode& modeMatch) const
 {
     wxArrayVideoModes modes;
 
-    // The first parameter of EnumDisplaySettings() must be NULL under Win95
-    // according to MSDN.  The version of GetName() we implement for Win95
-    // returns an empty string.
+    // The first parameter of EnumDisplaySettings() must be NULL according
+    // to MSDN, in order to specify the current display on the computer
+    // on which the calling thread is running.
     const wxString name = GetName();
     const wxChar * const deviceName = name.empty()
                                             ? (const wxChar*)NULL

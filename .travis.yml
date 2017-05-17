@@ -19,8 +19,9 @@ matrix:
           compiler: clang
           env: wxCONFIGURE_FLAGS="--disable-shared"
         - os: osx
+          osx_image: xcode6.4
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS='-std=c++11 -stdlib=libc++'"
+          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxSKIP_SAMPLES=1
 
 branches:
     only:
@@ -36,25 +37,23 @@ notifications:
 
 before_install: ./build/tools/before_install.sh
 
-script: |
-    echo 'Configuring...' && echo -en 'travis_fold:start:script.1\\r' &&
-    ./configure --disable-optimise $wxCONFIGURE_FLAGS &&
-    echo -en 'travis_fold:end:script.1\\r' &&
-    echo 'Building...' && echo -en 'travis_fold:start:script.2\\r' &&
-    make &&
-    echo -en 'travis_fold:end:script.2\\r' &&
-    echo 'Testing...' && echo -en 'travis_fold:start:script.3\\r' &&
-    make -C tests &&
-    pushd tests &&
-    ./test -t &&
-    popd &&
-    echo -en 'travis_fold:end:script.3\\r' &&
-    echo 'Building the samples...' && echo -en 'travis_fold:start:script.4\\r' &&
-    make samples &&
-    echo -en 'travis_fold:end:script.4\\r' &&
-    echo 'Installing...' && echo -en 'travis_fold:start:script.5\\r' &&
-    sudo make install &&
-    echo -en 'travis_fold:end:script.5\\r' &&
-    echo 'Testing building with the installed version...' && echo -en 'travis_fold:start:script.6\\r' &&
-    make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS &&
-    echo -en 'travis_fold:end:script.6\\r'
+script:
+    - set -e && echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
+    - ./configure --disable-optimise $wxCONFIGURE_FLAGS
+    - echo -en 'travis_fold:end:script.configure\\r'
+    - echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
+    - make
+    - echo -en 'travis_fold:end:script.build\\r'
+    - echo 'Testing...' && echo -en 'travis_fold:start:script.test\\r'
+    - make -C tests && pushd tests && ./test -t && popd
+    - echo -en 'travis_fold:end:script.test\\r'
+    - echo 'Building samples...' && echo -en 'travis_fold:start:script.samples\\r'
+    - (test "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make samples
+    - echo -en 'travis_fold:end:script.samples\\r'
+    - echo 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
+    - sudo make install
+    - echo -en 'travis_fold:end:script.install\\r'
+    - echo 'Testing installation...' && echo -en 'travis_fold:start:script.testinstall\\r'
+    - make -C samples/minimal -f makefile.unx clean
+    - make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS
+    - echo -en 'travis_fold:end:script.testinstall\\r'

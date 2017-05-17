@@ -90,6 +90,16 @@ public:
     // Returns true if we have any focusable children, false otherwise.
     bool UpdateCanFocusChildren();
 
+#ifdef __WXMSW__
+    // This is not strictly related to navigation, but all windows containing
+    // more than one children controls need to return from this method if any
+    // of their parents has an inheritable background, so do this automatically
+    // for all of them (another alternative could be to do it in wxWindow
+    // itself but this would be potentially more backwards incompatible and
+    // could conceivably break some custom windows).
+    bool HasTransparentBackground() const;
+#endif // __WXMSW__
+
 protected:
     // set the focus to the child which had it the last time
     virtual bool SetFocusToChild();
@@ -200,22 +210,22 @@ public:
 #endif // !wxHAS_NATIVE_TAB_TRAVERSAL
     }
 
-    WXDLLIMPEXP_INLINE_CORE virtual bool AcceptsFocus() const
+    WXDLLIMPEXP_INLINE_CORE virtual bool AcceptsFocus() const wxOVERRIDE
     {
         return m_container.AcceptsFocus();
     }
 
-    WXDLLIMPEXP_INLINE_CORE virtual bool AcceptsFocusRecursively() const
+    WXDLLIMPEXP_INLINE_CORE virtual bool AcceptsFocusRecursively() const wxOVERRIDE
     {
         return m_container.AcceptsFocusRecursively();
     }
 
-    WXDLLIMPEXP_INLINE_CORE virtual bool AcceptsFocusFromKeyboard() const
+    WXDLLIMPEXP_INLINE_CORE virtual bool AcceptsFocusFromKeyboard() const wxOVERRIDE
     {
         return m_container.AcceptsFocusFromKeyboard();
     }
 
-    WXDLLIMPEXP_INLINE_CORE virtual void AddChild(wxWindowBase *child)
+    WXDLLIMPEXP_INLINE_CORE virtual void AddChild(wxWindowBase *child) wxOVERRIDE
     {
         BaseWindowClass::AddChild(child);
 
@@ -228,7 +238,7 @@ public:
         }
     }
 
-    WXDLLIMPEXP_INLINE_CORE virtual void RemoveChild(wxWindowBase *child)
+    WXDLLIMPEXP_INLINE_CORE virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE
     {
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL
         m_container.HandleOnWindowDestroy(child);
@@ -241,7 +251,7 @@ public:
         m_container.UpdateCanFocusChildren();
     }
 
-    WXDLLIMPEXP_INLINE_CORE virtual void SetFocus()
+    WXDLLIMPEXP_INLINE_CORE virtual void SetFocus() wxOVERRIDE
     {
         if ( !m_container.DoSetFocus() )
             BaseWindowClass::SetFocus();
@@ -251,6 +261,13 @@ public:
     {
         BaseWindowClass::SetFocus();
     }
+
+#ifdef __WXMSW__
+    WXDLLIMPEXP_INLINE_CORE virtual bool HasTransparentBackground() wxOVERRIDE
+    {
+        return m_container.HasTransparentBackground();
+    }
+#endif // __WXMSW__
 
 protected:
 #ifndef wxHAS_NATIVE_TAB_TRAVERSAL

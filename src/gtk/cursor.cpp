@@ -415,6 +415,9 @@ bool wxIsBusy()
 
 void wxSetCursor( const wxCursor& cursor )
 {
-    g_globalCursor = cursor;
-    SetGlobalCursor(cursor);
+    if (cursor.IsOk() || g_globalCursor.IsOk())
+    {
+        g_globalCursor = cursor;
+        SetGlobalCursor(cursor);
+    }
 }

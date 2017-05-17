@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 24 August 2012                                                      *
+# Date : 21 February 2017                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -91,4 +91,7 @@ $(OBJECTS) : [--.include.wx]setup.h
 
 PlatWX.obj : PlatWX.cpp
 ScintillaWX.obj : ScintillaWX.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(CONPTRLOSBIT)\
+	ScintillaWX.cpp
 stc.obj : stc.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(CONPTRLOSBIT) stc.cpp

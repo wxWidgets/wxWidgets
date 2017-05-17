@@ -232,7 +232,7 @@ Pixmap
 XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
 
 {
-    static char stipple_data[] =
+    static unsigned char stipple_data[] =
         {
             0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
             0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
@@ -259,7 +259,9 @@ XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
 
     /* Get the stipple pixmap to be used to 'gray-out' the argument pixmap.
      */
-    stipple = XCreateBitmapFromData( display, pixmap, stipple_data, 16, 16 );
+    stipple = XCreateBitmapFromData( display, pixmap,
+                                    reinterpret_cast<const char*>(stipple_data),
+                                    16, 16 );
     if ( 0 != stipple )
     {
         gc = XCreateGC( display, pixmap, (XtGCMask)0, NULL );

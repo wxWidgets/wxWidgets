@@ -47,6 +47,7 @@
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
+#include "wx/msw/private/dcdynwrap.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -80,7 +81,7 @@ public:
     wxCheckListBoxItem(wxCheckListBox *parent);
 
     // drawing functions
-    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
+    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) wxOVERRIDE;
 
     // simple accessors and operations
     wxCheckListBox *GetParent() const
@@ -89,7 +90,7 @@ public:
     int GetIndex() const
         { return m_parent->GetItemIndex(const_cast<wxCheckListBoxItem*>(this)); }
 
-    wxString GetName() const
+    wxString GetName() const wxOVERRIDE
         { return m_parent->GetString(GetIndex()); }
 
 
@@ -159,7 +160,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     UINT uState = stat & wxOwnerDrawn::wxODSelected ? wxDSB_SELECTED : wxDSB_NORMAL;
 
     // checkmarks should not be mirrored in RTL layout
-    DWORD oldLayout = ::GetLayout(hdc);
+    DWORD oldLayout = wxDynLoadWrappers::GetLayout(hdc);
     if ( oldLayout & LAYOUT_RTL )
         ::SetLayout(hdc, oldLayout | LAYOUT_BITMAPORIENTATIONPRESERVED);
     wxDrawStateBitmap(hdc, hBmpCheck, x, y, uState);

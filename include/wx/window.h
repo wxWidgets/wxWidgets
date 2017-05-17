@@ -402,15 +402,19 @@ public:
         // returns the results.
     virtual wxSize GetEffectiveMinSize() const;
 
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
     wxSize GetBestFittingSize() const;
+#endif // WXWIN_COMPATIBILITY_2_8
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
     void SetInitialSize(const wxSize& size=wxDefaultSize);
 
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_MSG("use SetInitialSize() instead")
     void SetBestFittingSize(const wxSize& size=wxDefaultSize);
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
         // the generic centre function - centers the window on parent by`
@@ -581,7 +585,7 @@ public:
     public:
         // Notice that window can be NULL here, for convenience. In this case
         // this class simply doesn't do anything.
-        wxEXPLICIT ChildrenRepositioningGuard(wxWindowBase* win)
+        explicit ChildrenRepositioningGuard(wxWindowBase* win)
             : m_win(win),
               m_callEnd(win && win->BeginRepositioningChildren())
         {
@@ -1449,7 +1453,7 @@ public:
     // ----------------------
 #if wxUSE_ACCESSIBILITY
     // Override to create a specific accessible object.
-    virtual wxAccessible* CreateAccessible();
+    virtual wxAccessible* CreateAccessible() { return NULL; }
 
     // Sets the accessible object.
     void SetAccessible(wxAccessible* accessible) ;
@@ -1457,7 +1461,8 @@ public:
     // Returns the accessible object.
     wxAccessible* GetAccessible() { return m_accessible; }
 
-    // Returns the accessible object, creating if necessary.
+    // Returns the accessible object, calling CreateAccessible if necessary.
+    // May return NULL, in which case system-provide accessible is used.
     wxAccessible* GetOrCreateAccessible() ;
 #endif
 
@@ -1737,10 +1742,12 @@ protected:
     // recalculated each time the value is needed.
     wxSize m_bestSizeCache;
 
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_MSG("use SetInitialSize() instead.")
     void SetBestSize(const wxSize& size);
     wxDEPRECATED_MSG("use SetInitialSize() instead.")
     virtual void SetInitialBestSize(const wxSize& size);
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
 
@@ -1897,7 +1904,7 @@ private:
 };
 
 
-
+#if WXWIN_COMPATIBILITY_2_8
 // Inlines for some deprecated methods
 inline wxSize wxWindowBase::GetBestFittingSize() const
 {
@@ -1918,6 +1925,7 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
 {
     SetInitialSize(size);
 }
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
 // ----------------------------------------------------------------------------

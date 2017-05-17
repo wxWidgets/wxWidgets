@@ -210,8 +210,8 @@ AC_DEFUN([WX_CONFIG_CHECK],
       AC_MSG_CHECKING([for wxWidgets version >= $min_wx_version ($5)])
     fi
 
-    dnl don't add the libraries ($4) to this variable as this would result in
-    dnl an error when it's used with --version below
+    dnl don't add the libraries (4th argument) to this variable as this would
+    dnl result in an error when it's used with --version below
     WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args $5"
 
     WX_VERSION=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`
@@ -605,9 +605,9 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
                     if test "$TOOLKIT" != "gtk1" -a "$TOOLKIT" != "gtk2" -a "$TOOLKIT" != "gtk3" -a \
                             "$TOOLKIT" != "msw" -a "$TOOLKIT" != "motif" -a \
                             "$TOOLKIT" != "osx_carbon" -a "$TOOLKIT" != "osx_cocoa" -a \
-                            "$TOOLKIT" != "dfb" -a "$TOOLKIT" != "x11"; then
+                            "$TOOLKIT" != "dfb" -a "$TOOLKIT" != "x11" -a "$TOOLKIT" != "base"; then
                         AC_MSG_ERROR([
-    Unrecognized option value (allowed values: auto, gtk1, gtk2, gtk3, msw, motif, osx_carbon, osx_cocoa, dfb, x11)
+    Unrecognized option value (allowed values: auto, gtk1, gtk2, gtk3, msw, motif, osx_carbon, osx_cocoa, dfb, x11, base)
                         ])
                     fi
 
@@ -868,6 +868,7 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
             WX_OSXCARBONPORT=$(expr "$WX_SELECTEDCONFIG" : ".*osx_carbon.*")
             WX_X11PORT=$(expr "$WX_SELECTEDCONFIG" : ".*x11.*")
             WX_DFBPORT=$(expr "$WX_SELECTEDCONFIG" : ".*dfb.*")
+            WX_BASEPORT=$(expr "$WX_SELECTEDCONFIG" : ".*base.*")
 
             WX_PORT="unknown"
             if test "$WX_GTKPORT1" != "0"; then WX_PORT="gtk1"; fi
@@ -879,6 +880,7 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
             if test "$WX_OSXCARBONPORT" != "0"; then WX_PORT="osx_carbon"; fi
             if test "$WX_X11PORT" != "0"; then WX_PORT="x11"; fi
             if test "$WX_DFBPORT" != "0"; then WX_PORT="dfb"; fi
+            if test "$WX_BASEPORT" != "0"; then WX_PORT="base"; fi
 
             dnl NOTE: backward-compatible check for wx2.8; in wx2.9 the mac
             dnl       ports are called 'osx_cocoa' and 'osx_carbon' (see above)

@@ -386,13 +386,13 @@ public:
     wxString(const char *psz, const wxMBConv& conv);
 
     /**
-       Constructs a string from the first @a nLength character of the string literal @a psz using
+       Constructs a string from the first @a nLength bytes of the string literal @a psz using
        the current locale encoding to convert it to Unicode (wxConvLibc).
     */
     wxString(const char *psz, size_t nLength);
 
     /**
-       Constructs a string from the first @a nLength character of the string literal @a psz using
+       Constructs a string from the first @a nLength bytes of the string literal @a psz using
        @a conv to convert it Unicode.
     */
     wxString(const char *psz, const wxMBConv& conv, size_t nLength);
@@ -1574,13 +1574,17 @@ public:
 
     const_iterator begin() const;
     iterator begin();
+    const_iterator cbegin() const;
     const_iterator end() const;
     iterator end();
+    const_iterator cend() const;
 
     const_reverse_iterator rbegin() const;
     reverse_iterator rbegin();
+    const_reverse_iterator crbegin() const;
     const_reverse_iterator rend() const;
     reverse_iterator rend();
+    const_reverse_iterator crend() const;
 
     //@}
 

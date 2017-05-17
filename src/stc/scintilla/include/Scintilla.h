@@ -11,8 +11,6 @@
 #ifndef SCINTILLA_H
 #define SCINTILLA_H
 
-#include "Sci_Position.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,19 +26,22 @@ int Scintilla_LinkLexers(void);
 }
 #endif
 
-/* Here should be placed typedefs for uptr_t, an unsigned integer type large enough to
- * hold a pointer and sptr_t, a signed integer large enough to hold a pointer.
- * May need to be changed for 64 bit platforms. */
-#if defined(_WIN32)
-#include <basetsd.h>
-#endif
-#ifdef MAXULONG_PTR
-typedef ULONG_PTR uptr_t;
-typedef LONG_PTR sptr_t;
+// Include header that defines basic numeric types.
+#if defined(_MSC_VER)
+// Older releases of MSVC did not have stdint.h.
+#include <stddef.h>
+#elif defined( __VMS )
+#include <inttypes.h>
 #else
-typedef unsigned long uptr_t;
-typedef long sptr_t;
+#include <stdint.h>
 #endif
+
+// Define uptr_t, an unsigned integer type large enough to hold a pointer.
+typedef uintptr_t uptr_t;
+// Define sptr_t, a signed integer large enough to hold a pointer.
+typedef intptr_t sptr_t;
+
+#include "Sci_Position.h"
 
 typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 
@@ -76,6 +77,10 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCWS_VISIBLEONLYININDENT 3
 #define SCI_GETVIEWWS 2020
 #define SCI_SETVIEWWS 2021
+#define SCTD_LONGARROW 0
+#define SCTD_STRIKEOUT 1
+#define SCI_GETTABDRAWMODE 2698
+#define SCI_SETTABDRAWMODE 2699
 #define SCI_POSITIONFROMPOINT 2022
 #define SCI_POSITIONFROMPOINTCLOSE 2023
 #define SCI_GOTOLINE 2024
@@ -167,6 +172,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SC_MARGIN_FORE 3
 #define SC_MARGIN_TEXT 4
 #define SC_MARGIN_RTEXT 5
+#define SC_MARGIN_COLOUR 6
 #define SCI_SETMARGINTYPEN 2240
 #define SCI_GETMARGINTYPEN 2241
 #define SCI_SETMARGINWIDTHN 2242
@@ -177,6 +183,10 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETMARGINSENSITIVEN 2247
 #define SCI_SETMARGINCURSORN 2248
 #define SCI_GETMARGINCURSORN 2249
+#define SCI_SETMARGINBACKN 2250
+#define SCI_GETMARGINBACKN 2251
+#define SCI_SETMARGINS 2252
+#define SCI_GETMARGINS 2253
 #define STYLE_DEFAULT 32
 #define STYLE_LINENUMBER 33
 #define STYLE_BRACELIGHT 34
@@ -184,6 +194,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define STYLE_CONTROLCHAR 36
 #define STYLE_INDENTGUIDE 37
 #define STYLE_CALLTIP 38
+#define STYLE_FOLDDISPLAYTEXT 39
 #define STYLE_LASTPREDEFINED 39
 #define STYLE_MAX 255
 #define SC_CHARSET_ANSI 0
@@ -282,6 +293,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define INDIC_COMPOSITIONTHIN 15
 #define INDIC_FULLBOX 16
 #define INDIC_TEXTFORE 17
+#define INDIC_POINT 18
+#define INDIC_POINTCHARACTER 19
 #define INDIC_IME 32
 #define INDIC_IME_MAX 35
 #define INDIC_MAX 35
@@ -475,6 +488,11 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_SETFOLDEXPANDED 2229
 #define SCI_GETFOLDEXPANDED 2230
 #define SCI_TOGGLEFOLD 2231
+#define SCI_TOGGLEFOLDSHOWTEXT 2700
+#define SC_FOLDDISPLAYTEXT_HIDDEN 0
+#define SC_FOLDDISPLAYTEXT_STANDARD 1
+#define SC_FOLDDISPLAYTEXT_BOXED 2
+#define SCI_FOLDDISPLAYTEXTSETSTYLE 2701
 #define SC_FOLDACTION_CONTRACT 0
 #define SC_FOLDACTION_EXPAND 1
 #define SC_FOLDACTION_TOGGLE 2
@@ -650,16 +668,22 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define EDGE_NONE 0
 #define EDGE_LINE 1
 #define EDGE_BACKGROUND 2
+#define EDGE_MULTILINE 3
 #define SCI_GETEDGECOLUMN 2360
 #define SCI_SETEDGECOLUMN 2361
 #define SCI_GETEDGEMODE 2362
 #define SCI_SETEDGEMODE 2363
 #define SCI_GETEDGECOLOUR 2364
 #define SCI_SETEDGECOLOUR 2365
+#define SCI_MULTIEDGEADDLINE 2694
+#define SCI_MULTIEDGECLEARALL 2695
 #define SCI_SEARCHANCHOR 2366
 #define SCI_SEARCHNEXT 2367
 #define SCI_SEARCHPREV 2368
 #define SCI_LINESONSCREEN 2370
+#define SC_POPUP_NEVER 0
+#define SC_POPUP_ALL 1
+#define SC_POPUP_TEXT 2
 #define SCI_USEPOPUP 2371
 #define SCI_SELECTIONISRECTANGLE 2372
 #define SCI_SETZOOM 2373
@@ -679,6 +703,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETSTATUS 2383
 #define SCI_SETMOUSEDOWNCAPTURES 2384
 #define SCI_GETMOUSEDOWNCAPTURES 2385
+#define SCI_SETMOUSEWHEELCAPTURES 2696
+#define SCI_GETMOUSEWHEELCAPTURES 2697
 #define SC_CURSORNORMAL -1
 #define SC_CURSORARROW 2
 #define SC_CURSORWAIT 4
@@ -895,6 +921,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCVS_NONE 0
 #define SCVS_RECTANGULARSELECTION 1
 #define SCVS_USERACCESSIBLE 2
+#define SCVS_NOWRAPLINESTART 4
 #define SCI_SETVIRTUALSPACEOPTIONS 2596
 #define SCI_GETVIRTUALSPACEOPTIONS 2597
 #define SCI_SETRECTANGULARSELECTIONMODIFIER 2598
@@ -1069,15 +1096,12 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCN_FOCUSIN 2028
 #define SCN_FOCUSOUT 2029
 #define SCN_AUTOCCOMPLETED 2030
+#define SCN_MARGINRIGHTCLICK 2031
 /* --Autogenerated -- end of section automatically generated from Scintilla.iface */
 
 /* These structures are defined to be exactly the same shape as the Win32
  * CHARRANGE, TEXTRANGE, FINDTEXTEX, FORMATRANGE, and NMHDR structs.
  * So older code that treats Scintilla as a RichEdit will work. */
-
-#if defined(__cplusplus) && defined(SCI_NAMESPACE)
-namespace Scintilla {
-#endif
 
 struct Sci_CharacterRange {
 	Sci_PositionCR cpMin;
@@ -1094,10 +1118,6 @@ struct Sci_TextToFind {
 	const char *lpstrText;
 	struct Sci_CharacterRange chrgText;
 };
-
-#define CharacterRange Sci_CharacterRange
-#define TextRange Sci_TextRange
-#define TextToFind Sci_TextToFind
 
 typedef void *Sci_SurfaceID;
 
@@ -1119,7 +1139,12 @@ struct Sci_RangeToFormat {
 	struct Sci_CharacterRange chrg;
 };
 
-#define RangeToFormat Sci_RangeToFormat
+#ifndef __cplusplus
+/* For the GTK+ platform, g-ir-scanner needs to have these typedefs. This
+ * is not required in C++ code and actually seems to break ScintillaEditPy */
+typedef struct Sci_NotifyHeader Sci_NotifyHeader;
+typedef struct SCNotification SCNotification;
+#endif
 
 struct Sci_NotifyHeader {
 	/* Compatible with Windows NMHDR.
@@ -1130,10 +1155,8 @@ struct Sci_NotifyHeader {
 	unsigned int code;
 };
 
-#define NotifyHeader Sci_NotifyHeader
-
 struct SCNotification {
-	struct Sci_NotifyHeader nmhdr;
+	Sci_NotifyHeader nmhdr;
 	Sci_Position position;
 	/* SCN_STYLENEEDED, SCN_DOUBLECLICK, SCN_MODIFIED, SCN_MARGINCLICK, */
 	/* SCN_NEEDSHOWN, SCN_DWELLSTART, SCN_DWELLEND, SCN_CALLTIPCLICK, */
@@ -1171,17 +1194,16 @@ struct SCNotification {
 	/* SCN_AUTOCSELECTION, SCN_AUTOCCOMPLETED, SCN_USERLISTSELECTION, */
 };
 
-#if defined(__cplusplus) && defined(SCI_NAMESPACE)
-}
-#endif
-
 #ifdef INCLUDE_DEPRECATED_FEATURES
 
-#define SC_CP_DBCS 1
-#define SCI_SETUSEPALETTE 2039
-#define SCI_GETUSEPALETTE 2139
 #define SCI_SETKEYSUNICODE 2521
 #define SCI_GETKEYSUNICODE 2522
+
+#define CharacterRange Sci_CharacterRange
+#define TextRange Sci_TextRange
+#define TextToFind Sci_TextToFind
+#define RangeToFormat Sci_RangeToFormat
+#define NotifyHeader Sci_NotifyHeader
 
 #endif
 

@@ -26,18 +26,18 @@ public:
     wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
         { LoadFile(name, type); }
 
-    virtual bool IsOk() const
+    virtual bool IsOk() const wxOVERRIDE
         { return m_refData != NULL; }
 
-    virtual unsigned int GetFrameCount() const;
-    virtual int GetDelay(unsigned int i) const;
-    virtual wxImage GetFrame(unsigned int i) const;
-    virtual wxSize GetSize() const;
+    virtual unsigned int GetFrameCount() const wxOVERRIDE;
+    virtual int GetDelay(unsigned int i) const wxOVERRIDE;
+    virtual wxImage GetFrame(unsigned int i) const wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
 
     virtual bool LoadFile(const wxString& filename,
-                          wxAnimationType type = wxANIMATION_TYPE_ANY);
+                          wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
     virtual bool Load(wxInputStream& stream,
-                      wxAnimationType type = wxANIMATION_TYPE_ANY);
+                      wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
 
     // extended interface used by the generic implementation of wxAnimationCtrl
     wxPoint GetFramePosition(unsigned int frame) const;

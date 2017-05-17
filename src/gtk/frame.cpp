@@ -259,11 +259,7 @@ void wxFrame::DetachMenuBar()
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
     if ( m_frameMenuBar )
-    {
-        g_object_ref( m_frameMenuBar->m_widget );
-
         gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
-    }
 
     wxFrameBase::DetachMenuBar();
 

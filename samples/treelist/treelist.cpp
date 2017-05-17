@@ -569,7 +569,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     info.SetDescription("wxTreeListCtrl wxWidgets sample.");
     info.SetCopyright("(C) 2011 Vadim Zeitlin <vadim@wxwidgets.org>");
 
-    wxAboutBox(info);
+    wxAboutBox(info, this);
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))

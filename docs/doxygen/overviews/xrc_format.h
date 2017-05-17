@@ -257,6 +257,10 @@ where x and y are integers. Either of the components (or both) may be "-1" to
 signify default value. As a shortcut, empty string is equivalent to "-1,-1"
 (= wxDefaultSize or wxDefaultPosition).
 
+Notice that the dialog unit suffix "d" applies to both @c x and @c y if it's
+specified and cannot be specified after the first component, but only at the
+end.
+
 Examples:
 @code
 42,-1
@@ -275,6 +279,17 @@ Similarly to @ref overview_xrcformat_type_size "sizes", dimensions are expressed
 as integers with optional "d" suffix. When "d" suffix is used, the integer
 preceding it is interpreted as dialog units in the parent window, otherwise
 it's a DPI-independent pixel value.
+
+
+@subsection overview_xrcformat_type_pair_ints Pair of integers
+
+This is similar to @ref overview_xrcformat_type_size size, but for values that
+are not expressed in pixels and so doesn't allow "d" suffix nor does any
+DPI-dependent scaling, i.e. the format is just
+
+  size := x "," y
+
+and @c x and @c y are just integers which are not interpreted in any way.
 
 
 @subsection overview_xrcformat_type_text Text
@@ -1577,7 +1592,7 @@ can also have some optional XML @em attributes (not properties!):
 @beginTable
 @hdr3col{attribute, type, description}
 @row3col{tooltip, @ref overview_xrcformat_type_string,
-     Tooltip to show over this ratio button (default: none).}
+     Tooltip to show over this radio button (default: none).}
 @row3col{helptext, @ref overview_xrcformat_type_string,
      Contextual help for this radio button (default: none).}
 @row3col{enabled, @ref overview_xrcformat_type_bool,
@@ -2312,11 +2327,11 @@ properties:
     (default: 0).}
 @row3col{minsize, @ref overview_xrcformat_type_size,
     Minimal size of this item (default: no min size).}
-@row3col{ratio, @ref overview_xrcformat_type_size,
+@row3col{ratio, @ref overview_xrcformat_type_pair_ints,
     Item ratio, see wxSizer::SetRatio() (default: no ratio).}
-@row3col{cellpos, @ref overview_xrcformat_type_pos,
+@row3col{cellpos, @ref overview_xrcformat_type_pair_ints,
     (wxGridBagSizer only) Position, see wxGBSizerItem::SetPos() (required). }
-@row3col{cellspan, @ref overview_xrcformat_type_size,
+@row3col{cellspan, @ref overview_xrcformat_type_pair_ints,
     (wxGridBagSizer only) Span, see wxGBSizerItem::SetSpan() (required). }
 @endTable
 

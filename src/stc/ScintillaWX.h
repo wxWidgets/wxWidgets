@@ -159,6 +159,7 @@ public:
     void DoGainFocus();
     void DoSysColourChange();
     void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
+    void DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
     void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
     void DoLeftButtonMove(Point pt);
     void DoMiddleButtonUp(Point pt);
@@ -178,7 +179,7 @@ public:
 #endif
 
     void DoCommand(int ID);
-    void DoContextMenu(Point pt);
+    bool DoContextMenu(Point pt);
     void DoOnListBox();
 
 

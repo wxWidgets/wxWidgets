@@ -22,23 +22,6 @@
     #pragma hdrstop
 #endif
 
-// This is a horrible hack which only works because we don't currently include
-// <time.h> from wx/wxprec.h. It is needed because we need timezone-related
-// stuff from MinGW time.h, but it is not compiled in strict ANSI mode and it
-// is too complicated to be dealt with using wxDECL_FOR_STRICT_MINGW32(). So we
-// just include the header after undefining __STRICT_ANSI__ to get all the
-// declarations we need -- and then define it back to avoid inconsistencies in
-// all our other headers.
-//
-// Note that the same hack is used for "environ" in utilscmn.cpp, so if the
-// code here is modified because this hack becomes unnecessary or a better
-// solution is found, the code there should be updated as well.
-#ifdef wxNEEDS_STRICT_ANSI_WORKAROUNDS
-    #undef __STRICT_ANSI__
-    #include <time.h>
-    #define __STRICT_ANSI__
-#endif
-
 #include "wx/time.h"
 
 #ifndef WX_PRECOMP
@@ -59,6 +42,7 @@
 
 #include <time.h>
 
+wxDECL_FOR_STRICT_MINGW32(void, tzset, (void));
 
 #if !defined(__WXMAC__)
     #include <sys/types.h>      // for time_t
@@ -198,6 +182,10 @@ int wxGetTimeZone()
     #if defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
         return WX_TIMEZONE;
     #elif defined(__BORLANDC__) || defined(__MINGW32__)
+        #if defined(__MINGW32_TOOLCHAIN__) && defined(__STRICT_ANSI__)
+            extern long _timezone;
+        #endif
+
         return _timezone;
     #else // unknown platform -- assume it has timezone
         return timezone;

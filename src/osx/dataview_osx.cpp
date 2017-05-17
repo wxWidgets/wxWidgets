@@ -568,6 +568,12 @@ void wxDataViewCtrl::HitTest(wxPoint const& point, wxDataViewItem& item, wxDataV
   return GetDataViewPeer()->HitTest(point,item,columnPtr);
 }
 
+bool wxDataViewCtrl::SetRowHeight(int rowHeight)
+{
+  GetDataViewPeer()->SetRowHeight(rowHeight);
+  return true;
+}
+
 bool wxDataViewCtrl::IsSelected(wxDataViewItem const& item) const
 {
   return GetDataViewPeer()->IsSelected(item);
@@ -589,6 +595,10 @@ void wxDataViewCtrl::SelectAll()
 
 void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
 {
+    wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer());
+
+    dataViewWidgetPtr->UnselectAll();
+
     size_t const noOfSelections = sel.GetCount();
 
     size_t i;
@@ -608,8 +618,6 @@ void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
     }
 
    // finally select the items:
-    wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer()); // variable definition for abbreviational purposes
-
     for (i=0; i<noOfSelections; ++i)
       dataViewWidgetPtr->Select(sel[i]);
 }

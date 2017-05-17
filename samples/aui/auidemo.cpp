@@ -1655,7 +1655,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1)),
                 1, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( new wxStaticText( panel, -1, wxT("wxSpinCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxSize(100,-1),
+   flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxDefaultSize,
                 wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
    panel->SetSizer( flex );
