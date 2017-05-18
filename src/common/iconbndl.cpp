@@ -249,11 +249,8 @@ void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
     size_t outLen = 0;
 
     // load the icon directory resource
-    if ( !wxLoadUserResource(&data, &outLen, resourceName, RT_GROUP_ICON, module) )
-    {
-        wxLogDebug(wxS("Could not load RT_GROUP_ICON resource with name \"%s\": %s."), resourceName, wxSysErrorMsgStr());
+    if ( !wxLoadUserResource(&data, &outLen, resourceName, RT_GROUP_ICON, module) )        
         return;
-    }
 
     // load the individual icons referred from the icon directory
     const GRPICONDIR* grpIconDir = static_cast<const GRPICONDIR*>(data);
@@ -272,10 +269,6 @@ void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
                 AddIcon(icon);            
             else            
                 wxLogDebug(wxS("Could not create icon from resource with id %u."), iconID);                        
-        }
-        else
-        {
-            wxLogDebug(wxS("Could not load RT_ICON resource with id %u: %s."), iconID, wxSysErrorMsgStr());            
         }        
     }
 }
