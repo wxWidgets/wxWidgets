@@ -17,12 +17,16 @@
 #include "wx/iconbndl.h"
 
 #ifndef WX_PRECOMP
+    #ifdef __WINDOWS__
+        #include "wx/msw/wrapwin.h"
+    #endif 
     #include "wx/settings.h"
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
     #include "wx/stream.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/wfstream.h"
@@ -88,6 +92,16 @@ wxIconBundle::wxIconBundle(const wxIcon& icon)
 {
     AddIcon(icon);
 }
+
+#ifdef __WINDOWS__
+
+wxIconBundle::wxIconBundle(const wxString& resourceName, WXHINSTANCE module)
+            : wxGDIObject()
+{
+    AddIcon(resourceName, module);
+}
+
+#endif
 
 wxGDIRefData *wxIconBundle::CreateGDIRefData() const
 {
@@ -191,6 +205,75 @@ void wxIconBundle::AddIcon(wxInputStream& stream, wxBitmapType type)
 }
 
 #endif // wxUSE_STREAMS && wxUSE_IMAGE
+
+
+#ifdef __WINDOWS__
+
+namespace {
+
+// struct declarations taken from https://msdn.microsoft.com/en-us/library/ms997538.aspx
+#pragma pack(push)
+#pragma pack(2)
+
+// individual icon entry in the icon directory resource
+typedef struct
+{
+    BYTE   bWidth;               // Width, in pixels, of the image
+    BYTE   bHeight;              // Height, in pixels, of the image
+    BYTE   bColorCount;          // Number of colors in image (0 if >=8bpp)
+    BYTE   bReserved;            // Reserved
+    WORD   wPlanes;              // Color Planes
+    WORD   wBitCount;            // Bits per pixel
+    DWORD  dwBytesInRes;         // how many bytes in this resource?
+    WORD   nID;                  // the ID
+} GRPICONDIRENTRY, *LPGRPICONDIRENTRY;
+
+// icon directory resource
+typedef struct 
+{
+    WORD            idReserved;   // Reserved (must be 0)
+    WORD            idType;       // Resource type (1 for icons)
+    WORD            idCount;      // How many images?
+    GRPICONDIRENTRY idEntries[1]; // The entries for each image
+} GRPICONDIR, *LPGRPICONDIR;
+
+#pragma pack(pop)
+
+} // anonymous namespace
+
+// Loads all the icons for an icon group (i.e., different sizes of one icon)
+// stored as an MS Windows resource.
+void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
+{
+    const void* data = NULL;
+    size_t outLen = 0;
+
+    // load the icon directory resource
+    if ( !wxLoadUserResource(&data, &outLen, resourceName, RT_GROUP_ICON, module) )
+        return;
+
+    // load the individual icons referred from the icon directory
+    const GRPICONDIR* grpIconDir = static_cast<const GRPICONDIR*>(data);
+    
+    for ( WORD i = 0; i < grpIconDir->idCount; i++ )
+    {
+        const WORD iconID = grpIconDir->idEntries[i].nID;
+
+        if ( wxLoadUserResource(&data, &outLen, wxString::Format(wxS("#%u"), iconID), RT_ICON, module) )
+        {
+            HICON hIcon = ::CreateIconFromResourceEx(static_cast<PBYTE>(const_cast<void*>(data)),
+                                static_cast<DWORD>(outLen), TRUE, 0x00030000, 0, 0, LR_DEFAULTCOLOR);
+            wxIcon icon;
+
+            if ( hIcon && icon.CreateFromHICON(hIcon) )
+                AddIcon(icon);
+            else
+                wxLogDebug(wxS("Could not create icon from resource with id %u."), iconID);
+        }
+    }
+}
+
+#endif
 
 wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
 {
