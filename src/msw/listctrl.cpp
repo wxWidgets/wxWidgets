@@ -502,9 +502,16 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 {
     if ( flag != m_windowStyle )
     {
+        const bool wasInReportView = InReportView();
+
         wxListCtrlBase::SetWindowStyleFlag(flag);
 
         UpdateStyle();
+
+        // if we switched to the report view, set the extended styles for
+        // it too
+        if ( !wasInReportView && InReportView() )
+            MSWSetExListStyles();
 
         Refresh();
     }
