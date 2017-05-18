@@ -403,6 +403,8 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return wstyle;
 }
 
+#if WXWIN_COMPATIBILITY_3_0
+// Deprecated
 void wxListCtrl::UpdateStyle()
 {
     if ( GetHwnd() )
@@ -428,11 +430,12 @@ void wxListCtrl::UpdateStyle()
 
             // if we switched to the report view, set the extended styles for
             // it too
-            if ( !(dwStyleOld & LVS_REPORT) && (dwStyleNew & LVS_REPORT) )
+            if ( (dwStyleOld & LVS_TYPEMASK) != LVS_REPORT && (dwStyleNew & LVS_TYPEMASK) == LVS_REPORT )
                 MSWSetExListStyles();
         }
     }
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
 void wxListCtrl::FreeAllInternalData()
 {
@@ -504,9 +507,17 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
     {
         const bool wasInReportView = InReportView();
 
+        // we don't have wxVSCROLL style, but the list control may have it,
+        // don't change it then in the call to parent's SetWindowStyleFlags()
+        DWORD dwStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+        flag &= ~(wxHSCROLL | wxVSCROLL);
+        if ( dwStyle & WS_HSCROLL )
+            flag |= wxHSCROLL;
+        if ( dwStyle & WS_VSCROLL )
+            flag |= wxVSCROLL;
         wxListCtrlBase::SetWindowStyleFlag(flag);
-
-        UpdateStyle();
+        // As it was said, we don't have wxSCROLL style
+        m_windowStyle &= ~(wxHSCROLL | wxVSCROLL);
 
         // if we switched to the report view, set the extended styles for
         // it too
