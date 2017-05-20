@@ -36,6 +36,7 @@
 #include "wx/scopedarray.h"
 #include "wx/scopedptr.h"
 #include "wx/anidecod.h"
+#include "wx/private/icondir.h"
 
 // For memcpy
 #include <string.h>
@@ -1240,30 +1241,6 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
 wxIMPLEMENT_DYNAMIC_CLASS(wxICOHandler, wxBMPHandler);
 
 #if wxUSE_STREAMS
-
-struct ICONDIRENTRY
-{
-    wxUint8         bWidth;               // Width of the image
-    wxUint8         bHeight;              // Height of the image (times 2)
-    wxUint8         bColorCount;          // Number of colors in image (0 if >=8bpp)
-    wxUint8         bReserved;            // Reserved
-
-    // these two are different in icons and cursors:
-                                          // icon           or  cursor
-    wxUint16        wPlanes;              // Color Planes   or  XHotSpot
-    wxUint16        wBitCount;            // Bits per pixel or  YHotSpot
-
-    wxUint32        dwBytesInRes;         // how many bytes in this resource?
-    wxUint32        dwImageOffset;        // where in the file is this image
-};
-
-struct ICONDIR
-{
-    wxUint16     idReserved;   // Reserved
-    wxUint16     idType;       // resource type (1 for icons, 2 for cursors)
-    wxUint16     idCount;      // how many images?
-};
-
 
 bool wxICOHandler::SaveFile(wxImage *image,
                             wxOutputStream& stream,

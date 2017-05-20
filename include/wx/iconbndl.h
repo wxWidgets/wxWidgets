@@ -21,9 +21,7 @@ class WXDLLIMPEXP_FWD_BASE wxInputStream;
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
 
-// this class can't load bitmaps of type wxBITMAP_TYPE_ICO_RESOURCE,
-// if you need them, you have to load them manually and call
-// wxIconCollection::AddIcon
+// Load icons of multiple sizes from files or resources (MSW-only).
 class WXDLLIMPEXP_CORE wxIconBundle : public wxGDIObject
 {
 public:
@@ -58,6 +56,11 @@ public:
     // initializes the bundle with a single icon
     wxIconBundle(const wxIcon& icon);
 
+#if defined(__WINDOWS__) && wxUSE_ICO_CUR
+    // initializes the bundle with the icons from a group icon stored as an MS Windows resource
+    wxIconBundle(const wxString& resourceName, WXHINSTANCE module);
+#endif
+
     // default copy ctor and assignment operator are OK
 
     // adds all the icons contained in the file to the collection,
@@ -69,6 +72,11 @@ public:
 #endif // wxUSE_FFILE || wxUSE_FILE
     void AddIcon(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY);
 #endif // wxUSE_STREAMS && wxUSE_IMAGE
+
+#if defined(__WINDOWS__) && wxUSE_ICO_CUR
+    // loads all the icons from a group icon stored in an MS Windows resource
+    void AddIcon(const wxString& resourceName, WXHINSTANCE module);
+#endif
 
     // adds the icon to the collection, if the collection already
     // contains an icon with the same width and height, it is

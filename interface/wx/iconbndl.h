@@ -69,6 +69,19 @@ public:
     wxIconBundle(const wxIcon& icon);
 
     /**
+        Initializes the bundle with all sizes of a group icon with @a
+        resourceName stored as an MS Windows resource in @a module.
+
+        When @a module is 0, the current instance is used.
+
+        @see AddIcon(const wxString&, WXHINSTANCE)
+
+        @onlyfor{wxmsw}
+        @since 3.1.1
+    */
+    wxIconBundle(const wxString& resourceName, WXHINSTANCE module);
+
+    /**
         Copy constructor.
     */
     wxIconBundle(const wxIconBundle& ic);
@@ -97,6 +110,17 @@ public:
         @since 2.9.0
     */
     void AddIcon(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY);
+
+    /**
+        Loads all sizes of a group icon with @a resourceName stored as an MS
+        Windows resource in @a module.
+
+        When @a module is 0, the current instance is used.
+
+        @onlyfor{wxmsw}
+        @since 3.1.1
+    */
+    void AddIcon(const wxString& resourceName, WXHINSTANCE module);
 
     /**
         Adds the icon to the collection; if the collection already
