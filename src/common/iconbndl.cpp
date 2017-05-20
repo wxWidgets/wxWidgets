@@ -105,7 +105,7 @@ wxIconBundle::wxIconBundle(const wxString& resourceName, WXHINSTANCE module)
     AddIcon(resourceName, module);
 }
 
-#endif #if defined( __WINDOWS__) && wxUSE_ICO_CUR
+#endif // #if defined( __WINDOWS__) && wxUSE_ICO_CUR
 
 wxGDIRefData *wxIconBundle::CreateGDIRefData() const
 {
