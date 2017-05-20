@@ -19,7 +19,7 @@
 #ifndef WX_PRECOMP
     #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h"
-    #endif 
+    #endif
     #include "wx/settings.h"
     #include "wx/log.h"
     #include "wx/intl.h"
@@ -33,7 +33,7 @@
 
 #ifdef __WINDOWS__
     #include "wx/private/icondir.h"
-#endif 
+#endif
 
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxIconArray)
@@ -97,7 +97,7 @@ wxIconBundle::wxIconBundle(const wxIcon& icon)
     AddIcon(icon);
 }
 
-#if defined( __WINDOWS__) && wxUSE_ICO_CUR
+#if defined(__WINDOWS__) && wxUSE_ICO_CUR
 
 wxIconBundle::wxIconBundle(const wxString& resourceName, WXHINSTANCE module)
             : wxGDIObject()
@@ -105,7 +105,7 @@ wxIconBundle::wxIconBundle(const wxString& resourceName, WXHINSTANCE module)
     AddIcon(resourceName, module);
 }
 
-#endif // #if defined( __WINDOWS__) && wxUSE_ICO_CUR
+#endif // defined(__WINDOWS__) && wxUSE_ICO_CUR
 
 wxGDIRefData *wxIconBundle::CreateGDIRefData() const
 {
@@ -210,7 +210,7 @@ void wxIconBundle::AddIcon(wxInputStream& stream, wxBitmapType type)
 
 #endif // wxUSE_STREAMS && wxUSE_IMAGE
 
-#if defined( __WINDOWS__) && wxUSE_ICO_CUR
+#if defined(__WINDOWS__) && wxUSE_ICO_CUR
 
 // Loads all the icons for an icon group (i.e., different sizes of one icon)
 // stored as an MS Windows resource.
@@ -228,7 +228,7 @@ void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
 
     // load the individual icons referred from the icon directory
     const GRPICONDIR* grpIconDir = static_cast<const GRPICONDIR*>(data);
-    
+
     for ( WORD i = 0; i < grpIconDir->idCount; i++ )
     {
         const WORD iconID = grpIconDir->idEntries[i].nID;
@@ -251,7 +251,7 @@ void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
     }
 }
 
-#endif // #if defined( __WINDOWS__) && wxUSE_ICO_CUR
+#endif // defined(__WINDOWS__) && wxUSE_ICO_CUR
 
 wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
 {

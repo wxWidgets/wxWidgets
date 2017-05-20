@@ -13,14 +13,12 @@
 #include "wx/defs.h"          // wxUint* declarations
 
 
-// Structs declared here are used for loading group icons from 
+// Structs declared here are used for loading group icons from
 // .ICO files or MS Windows resources.
 // Icon entry and directory structs for .ICO files and
 // MS Windows resources are very similar but not identical.
 
-
 #if wxUSE_ICO_CUR
-
 
 #if wxUSE_STREAMS
 
@@ -49,7 +47,7 @@ struct ICONDIR
     wxUint16     idCount;      // how many images?
 };
 
-#endif // #if wxUSE_STREAMS
+#endif // wxUSE_STREAMS
 
 
 #ifdef __WINDOWS__
@@ -71,7 +69,7 @@ struct GRPICONDIRENTRY
     wxUint16        wBitCount;            // Bits per pixel or  YHotSpot
 
     wxUint32        dwBytesInRes;         // how many bytes in this resource?
-    
+
     wxUint16        nID;                  // actual icon resource ID
 };
 
@@ -86,9 +84,8 @@ struct GRPICONDIR
 
 #pragma pack(pop)
 
-#endif // #ifdef __WINDOWS__
+#endif // __WINDOWS__
 
+#endif // wxUSE_ICO_CUR
 
-#endif // #if wxUSE_ICO_CUR
-
-#endif // #ifndef _WX_PRIVATE_ICONDIR_H_
+#endif // _WX_PRIVATE_ICONDIR_H_
