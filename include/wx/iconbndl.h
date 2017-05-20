@@ -21,9 +21,7 @@ class WXDLLIMPEXP_FWD_BASE wxInputStream;
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
 
-// this class can't load bitmaps of type wxBITMAP_TYPE_ICO_RESOURCE,
-// if you need them, you have to load them manually and call
-// wxIconCollection::AddIcon
+// Load icons of multiple sizes from files or resources (MSW-only).
 class WXDLLIMPEXP_CORE wxIconBundle : public wxGDIObject
 {
 public:
