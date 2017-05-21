@@ -1104,7 +1104,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     gc->PushState(); // save current translation/scale/other state
     gc->Translate(60, 75); // reposition the context origin
 
-    gc->SetPen(wxPen("navy"));
+    gc->SetPen(wxGraphicsPenInfo(wxColour("navy")));
     gc->SetBrush(wxBrush("pink"));
 
     for( int i = 0 ; i < 3 ; ++i )
@@ -1172,7 +1172,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
         //  pop back to it at the end of the loop
         wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(float(angle)/360, 1, 1));
         gc->SetBrush(wxBrush(wxColour(val.red, val.green, val.blue, 64)));
-        gc->SetPen(wxPen(wxColour(val.red, val.green, val.blue, 128)));
+        gc->SetPen(wxGraphicsPenInfo(wxColour(val.red, val.green, val.blue, 128)));
 
         // use translate to artfully reposition each drawn path
         gc->Translate(1.5 * BASE2 * cos(wxDegToRad(angle)),
