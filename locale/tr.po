@@ -6,7 +6,7 @@
 # Kaya Zeren <kayazeren@gmail.com>, 2013-2014
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n
+"Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-21 14:25+0200\n"
 "PO-Revision-Date: 2014-11-26 21:27+0200\n"

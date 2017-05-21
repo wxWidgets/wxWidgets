@@ -2,7 +2,7 @@
 # Updated by Nicolas Velin <nsv@fr.st>, TMTisFree (tmtisfree@free.fr)
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n
+"Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-21 14:25+0200\n"
 "PO-Revision-Date: 2015-10-21 12:25+0200\n"
