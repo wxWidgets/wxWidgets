@@ -5,7 +5,7 @@
 # Revisión: Juan Pablo Martínez <jpmart[arroba]unizar.es>, 2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.0\n"
+"Project-Id-Version: wxWidgets 3.1\n
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-21 14:25+0200\n"
 "PO-Revision-Date: 2014-04-13 17:41+0100\n"
