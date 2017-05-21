@@ -319,17 +319,24 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             break;
 
         case WM_SIZE:
-            if ( m_hGripper )
+            switch ( wParam )
             {
-                switch ( wParam )
-                {
-                    case SIZE_MAXIMIZED:
-                        ShowGripper(false);
-                        break;
+                case SIZE_MINIMIZED:
+                    m_iconized = true;
+                    break;
 
-                    case SIZE_RESTORED:
-                        ShowGripper(true);
-                }
+                case SIZE_MAXIMIZED:
+                    wxFALLTHROUGH;
+
+                case SIZE_RESTORED:
+                    if ( m_hGripper )
+                        ShowGripper( wParam == SIZE_RESTORED );
+
+                    if ( m_iconized )
+                        (void)SendIconizeEvent(false);
+                    m_iconized = false;
+
+                    break;
             }
 
             // the Windows dialogs unfortunately are not meant to be resizable
