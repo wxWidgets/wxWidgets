@@ -274,13 +274,27 @@ bool wxTextFile::OnWrite(wxTextFileType typeNew, const wxMBConv& conv)
         return false;
     }
 
+    // Writing to wxTempFile in reasonably-sized chunks is much faster than
+    // doing it line by line.
+    const size_t chunk_size = 16384;
+    wxString chunk;
+    chunk.reserve(chunk_size);
+
     size_t nCount = GetLineCount();
-    for ( size_t n = 0; n < nCount; n++ ) {
-        fileTmp.Write(GetLine(n) +
-                      GetEOL(typeNew == wxTextFileType_None ? GetLineType(n)
-                                                            : typeNew),
-                      conv);
+    for ( size_t n = 0; n < nCount; n++ )
+    {
+        chunk += GetLine(n) +
+                  GetEOL(typeNew == wxTextFileType_None ? GetLineType(n)
+                                                        : typeNew);
+        if ( chunk.size() >= chunk_size )
+        {
+            fileTmp.Write(chunk, conv);
+            chunk.clear();
+        }
     }
+
+    if ( !chunk.empty() )
+        fileTmp.Write(chunk, conv);
 
     // replace the old file with this one
     return fileTmp.Commit();
