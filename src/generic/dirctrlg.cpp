@@ -1536,6 +1536,8 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
     return m_smallImageList;
 }
 
+// This function is currently not unused anymore
+#if 0
 #if wxUSE_MIMETYPE && wxUSE_IMAGE && (!defined(__WINDOWS__) || wxUSE_WXDIB)
 // VS: we don't need this function w/o wxMimeTypesManager because we'll only have
 //     one icon and we won't resize it
@@ -1593,7 +1595,9 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img, const wxSize& sz)
 
     return wxBitmap(smallimg);
 }
-
+#endif
+    // #if 0
+    
 // This function is currently not unused anymore
 #if 0
 // finds empty borders and return non-empty area of image:
@@ -1701,11 +1705,36 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     {
         wxImage img = bmp.ConvertToImage();
 
-        if ((img.GetWidth() != size*2) || (img.GetHeight() != size*2))
-//            m_smallImageList->Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(size*2, size*2)));
-            m_smallImageList->Add(CreateAntialiasedBitmap(img.Rescale(size*2, size*2), m_size));
+        if (img.HasMask())
+            img.InitAlpha();
+
+        wxBitmap bmp2;
+        if ((img.GetWidth() != size) || (img.GetHeight() != size))
+        {
+#if defined(__WXOSX_COCOA__)
+            if (wxOSXGetMainScreenContentScaleFactor() > 1.0)
+            {
+                img.Rescale(2*size, 2*size, wxIMAGE_QUALITY_HIGH);
+                bmp2 = wxBitmap(img, -1, 2.0);
+            }
+            else
+#endif
+            {
+                // Double, using normal quality scaling.
+                img.Rescale(2*img.GetWidth(), 2*img.GetHeight());
+                
+                // Then scale to the desired size. This gives the best quality,
+                // and better than CreateAntialiasedBitmap.
+                if ((img.GetWidth() != size) || (img.GetHeight() != size))
+                    img.Rescale(size, size, wxIMAGE_QUALITY_HIGH);
+
+                bmp2 = wxBitmap(img);
+            }
+        }
         else
-            m_smallImageList->Add(CreateAntialiasedBitmap(img, m_size));
+            bmp2 = wxBitmap(img);
+
+        m_smallImageList->Add(bmp2);
     }
 #endif // wxUSE_IMAGE
 
