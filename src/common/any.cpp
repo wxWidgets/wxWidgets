@@ -28,6 +28,7 @@
 #include "wx/module.h"
 #include "wx/hashmap.h"
 #include "wx/hashset.h"
+#include "wx/scopedptr.h"
 
 using namespace wxPrivate;
 
@@ -120,7 +121,7 @@ private:
     wxVector<wxAnyToVariantRegistration*>   m_anyToVariantRegs;
 };
 
-static wxAnyValueTypeGlobals* g_wxAnyValueTypeGlobals = NULL;
+static wxScopedPtr<wxAnyValueTypeGlobals> g_wxAnyValueTypeGlobals;
 
 
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplVariantData)
@@ -128,7 +129,7 @@ WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplVariantData)
 void wxPreRegisterAnyToVariant(wxAnyToVariantRegistration* reg)
 {
     if ( !g_wxAnyValueTypeGlobals )
-        g_wxAnyValueTypeGlobals = new wxAnyValueTypeGlobals();
+        g_wxAnyValueTypeGlobals.reset(new wxAnyValueTypeGlobals());
     g_wxAnyValueTypeGlobals->PreRegisterAnyToVariant(reg);
 }
 
@@ -222,7 +223,7 @@ public:
     }
     virtual void OnExit() wxOVERRIDE
     {
-        wxDELETE(g_wxAnyValueTypeGlobals);
+        g_wxAnyValueTypeGlobals.reset();
     }
 private:
 };
