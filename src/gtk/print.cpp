@@ -1447,11 +1447,17 @@ void wxGtkPrinterDCImpl::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,w
         cairo_close_path (m_cairo);
 
         SetBrush( m_brush );
-        cairo_fill_preserve( m_cairo );
+        if ( m_pen.IsTransparent() )
+            cairo_fill(m_cairo);
+        else
+           cairo_fill_preserve(m_cairo);
     }
 
-    SetPen (m_pen);
-    cairo_stroke( m_cairo );
+    SetPen(m_pen);
+    if ( m_pen.IsNonTransparent() )
+    {
+        cairo_stroke(m_cairo);
+    }
 
     CalcBoundingBox (x1, y1);
     CalcBoundingBox (xc, yc);
@@ -1546,10 +1552,16 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     cairo_close_path(m_cairo);
 
     SetBrush( m_brush );
-    cairo_fill_preserve( m_cairo );
+    if ( m_pen.IsTransparent() )
+        cairo_fill(m_cairo);
+    else
+        cairo_fill_preserve(m_cairo);
 
-    SetPen (m_pen);
-    cairo_stroke( m_cairo );
+    SetPen(m_pen);
+    if ( m_pen.IsNonTransparent() )
+    {
+        cairo_stroke(m_cairo);
+    }
 
     CalcBoundingBox( x, y );
 
@@ -1565,17 +1577,27 @@ void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoi
 
 void wxGtkPrinterDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    width--;
-    height--;
+    if ( m_pen.IsNonTransparent() )
+    {
+        // outline is one pixel larger than what raster-based wxDC implementations draw
+        width -= 1;
+        height -= 1;
+    }
 
     cairo_new_path(m_cairo);
     cairo_rectangle ( m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
 
     SetBrush( m_brush );
-    cairo_fill_preserve( m_cairo );
+    if ( m_pen.IsTransparent() )
+        cairo_fill(m_cairo);
+    else
+        cairo_fill_preserve(m_cairo);
 
-    SetPen (m_pen);
-    cairo_stroke( m_cairo );
+    SetPen(m_pen);
+    if ( m_pen.IsNonTransparent() )
+    {
+        cairo_stroke(m_cairo);
+    }
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + width, y + height );
@@ -1620,10 +1642,16 @@ void wxGtkPrinterDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord wi
     cairo_close_path(m_cairo);
 
     SetBrush(m_brush);
-    cairo_fill_preserve(m_cairo);
+    if ( m_pen.IsTransparent() )
+        cairo_fill(m_cairo);
+    else
+        cairo_fill_preserve(m_cairo);
 
     SetPen(m_pen);
-    cairo_stroke(m_cairo);
+    if ( m_pen.IsNonTransparent() )
+    {
+        cairo_stroke(m_cairo);
+    }
 
     CalcBoundingBox(x,y);
     CalcBoundingBox(x+width,y+height);
@@ -1643,10 +1671,16 @@ void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCo
     cairo_arc ( m_cairo, 0, 0, XLOG2DEVREL(width/2), 0, 2 * M_PI);
 
     SetBrush( m_brush );
-    cairo_fill_preserve( m_cairo );
+    if ( m_pen.IsTransparent() )
+        cairo_fill(m_cairo);
+    else
+        cairo_fill_preserve(m_cairo);
 
-    SetPen (m_pen);
-    cairo_stroke( m_cairo );
+    SetPen(m_pen);
+    if ( m_pen.IsNonTransparent() )
+    {
+        cairo_stroke(m_cairo);
+    }
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + width, y + height );
