@@ -291,6 +291,7 @@ protected:
                      wxCoord *descent = NULL,
                      wxCoord *externalLeading = NULL,
                      const wxFont *theFont = NULL ) const wxOVERRIDE;
+    bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
     void DoGetSize(int* width, int* height) const wxOVERRIDE;
     void DoGetSizeMM(int *width, int *height) const wxOVERRIDE;
 

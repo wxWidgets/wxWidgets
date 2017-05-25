@@ -2250,6 +2250,38 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
     cairo_restore( m_cairo );
 }
 
+bool wxGtkPrinterDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
+{
+    widths.Empty();
+
+    const wxCharBuffer data = text.utf8_str();
+    int w = 0;
+    if ( data.length() > 0 )
+    {
+        cairo_save(m_cairo);
+        cairo_scale(m_cairo, m_scaleX, m_scaleY);
+
+        pango_layout_set_text(m_layout, data, data.length());
+        PangoLayoutIter* iter = pango_layout_get_iter(m_layout);
+        do
+        {
+            PangoRectangle rect;
+            pango_layout_iter_get_cluster_extents(iter, NULL, &rect);
+            w += rect.width;
+            widths.Add(PANGO_PIXELS(w));
+        } while (pango_layout_iter_next_cluster(iter));
+        pango_layout_iter_free(iter);
+
+       cairo_restore(m_cairo);
+    }
+    size_t i = widths.GetCount();
+    const size_t len = text.length();
+    while (i++ < len)
+        widths.Add(PANGO_PIXELS(w));
+
+    return true;
+}
+
 void wxGtkPrinterDCImpl::DoGetSize(int* width, int* height) const
 {
     GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
