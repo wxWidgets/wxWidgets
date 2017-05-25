@@ -32,6 +32,9 @@
 #include "wx/settings.h" // system settings
 #include "wx/string.h"   // strings support
 #include "wx/image.h"    // images support
+#if wxUSE_PRINTING_ARCHITECTURE
+#include "wx/paper.h"
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 //! application headers
 #include "defsext.h"     // Additional definitions
@@ -217,7 +220,14 @@ bool App::OnInit () {
 #if wxUSE_PRINTING_ARCHITECTURE
     // initialize print data and setup
     g_printData = new wxPrintData;
+    wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
+    g_printData->SetPaperId(paper->GetId());
+    g_printData->SetPaperSize(paper->GetSize());
+    g_printData->SetOrientation(wxPORTRAIT);
+
     g_pageSetupData = new wxPageSetupDialogData;
+    // copy over initial paper size from print record
+    (*g_pageSetupData) = *g_printData;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
     // create application frame
