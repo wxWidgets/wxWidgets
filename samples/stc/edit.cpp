@@ -837,10 +837,9 @@ EditProperties::EditProperties (Edit *edit,
 //----------------------------------------------------------------------------
 
 EditPrint::EditPrint (Edit *edit, const wxChar *title)
-              : wxPrintout(title) {
-    m_edit = edit;
-    m_printed = 0;
-
+              : wxPrintout(title)
+              , m_edit(edit)
+{
 }
 
 bool EditPrint::OnPrintPage (int page) {
@@ -852,10 +851,8 @@ bool EditPrint::OnPrintPage (int page) {
     PrintScaling (dc);
 
     // print page
-    if (page == 1) m_printed = 0;
-    m_printed = m_edit->FormatRange (1, m_printed, m_edit->GetLength(),
+    m_edit->FormatRange(true, page == 1 ? 0 : m_pageEnds[page-2], m_pageEnds[page-1],
                                      dc, dc, m_printRect, m_pageRect);
-
     return true;
 }
 
@@ -887,6 +884,12 @@ void EditPrint::GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *
     wxSize page = g_pageSetupData->GetPaperSize();
     page.x = static_cast<int> (page.x * ppiScr.x / 25.4);
     page.y = static_cast<int> (page.y * ppiScr.y / 25.4);
+    // In landscape mode we need to swap the width and height
+    if ( g_pageSetupData->GetPrintData().GetOrientation() == wxLANDSCAPE )
+    {
+        wxSwap(page.x, page.y);
+    }
+
     m_pageRect = wxRect (0,
                          0,
                          page.x,
@@ -911,9 +914,12 @@ void EditPrint::GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *
                           page.y - (top + bottom));
 
     // count pages
-    while (HasPage (*maxPage)) {
-        m_printed = m_edit->FormatRange (0, m_printed, m_edit->GetLength(),
-                                       dc, dc, m_printRect, m_pageRect);
+    m_pageEnds.Clear();
+    int printed = 0;
+    while ( printed < m_edit->GetLength() ) {
+        printed = m_edit->FormatRange(false, printed, m_edit->GetLength(),
+                                      dc, dc, m_printRect, m_pageRect);
+        m_pageEnds.Add(printed);
         *maxPage += 1;
     }
     if (*maxPage > 0) *minPage = 1;
@@ -921,9 +927,9 @@ void EditPrint::GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *
     *selPageTo = *maxPage;
 }
 
-bool EditPrint::HasPage (int WXUNUSED(page)) {
-
-    return (m_printed < m_edit->GetLength());
+bool EditPrint::HasPage (int page)
+{
+    return page <= (int)m_pageEnds.Count();
 }
 
 bool EditPrint::PrintScaling (wxDC *dc){
