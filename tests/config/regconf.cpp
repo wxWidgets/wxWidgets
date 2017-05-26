@@ -39,6 +39,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void ReadWrite();
+    void DeleteRegistryKeyFromRedirectedView();
 
     wxDECLARE_NO_COPY_CLASS(RegConfigTestCase);
 };
