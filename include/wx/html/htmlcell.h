@@ -232,7 +232,7 @@ public:
     virtual wxHtmlCell* GetFirstChild() const { return NULL; }
 
     // members writing methods
-    virtual void SetPos(int x, int y) {m_PosX = x, m_PosY = y;}
+    virtual void SetPos(int x, int y) {m_PosX = x; m_PosY = y;}
     void SetLink(const wxHtmlLinkInfo& link);
     void SetNext(wxHtmlCell *cell) {m_Next = cell;}
 
