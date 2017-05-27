@@ -8300,6 +8300,19 @@ fi dnl wxWITH_SUBDIRS
 
 AC_OUTPUT
 
+dnl Enable strict option checking by default because typos in --enable-xxx is
+dnl a much more common case than wanting to explicitly pass an option unknown
+dnl to the main configure script (this one) to a configure scripts in a
+dnl subdirectory (e.g. src/tiff or src/expat). If someone really needs to do
+dnl the latter, --disable-option-checking would need to be explicitly used.
+dnl
+dnl Notice that we need to do this at the very end of configure script as
+dnl otherwise this would be overridden by AC_CONFIG_SUBDIRS() which disables
+dnl option checking. And we need to use m4_divert_text() because we want this
+dnl to appear in the beginning of the generated file, before the code parsing
+dnl the options.
+m4_divert_text([DEFAULTS],[enable_option_checking=fatal])
+
 dnl report how we have been configured
 echo
 echo "Configured wxWidgets ${WX_VERSION} for \`${host}'"
