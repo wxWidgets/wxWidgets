@@ -4247,76 +4247,160 @@ if test "${with_gtk+set}" = set; then :
 fi
 
 
+
 # Check whether --with-motif was given.
 if test "${with_motif+set}" = set; then :
-  withval=$with_motif; wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1
+  withval=$with_motif;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-motif doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-osx_cocoa was given.
 if test "${with_osx_cocoa+set}" = set; then :
-  withval=$with_osx_cocoa; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+  withval=$with_osx_cocoa;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-osx_cocoa doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-osx_iphone was given.
 if test "${with_osx_iphone+set}" = set; then :
-  withval=$with_osx_iphone; wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1
+  withval=$with_osx_iphone;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-osx_iphone doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-osx was given.
 if test "${with_osx+set}" = set; then :
-  withval=$with_osx; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+  withval=$with_osx;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-osx doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-cocoa was given.
 if test "${with_cocoa+set}" = set; then :
-  withval=$with_cocoa; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+  withval=$with_cocoa;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-cocoa doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-iphone was given.
 if test "${with_iphone+set}" = set; then :
-  withval=$with_iphone; wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1
+  withval=$with_iphone;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-iphone doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-mac was given.
 if test "${with_mac+set}" = set; then :
-  withval=$with_mac; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+  withval=$with_mac;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-mac doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-wine was given.
 if test "${with_wine+set}" = set; then :
-  withval=$with_wine; wxUSE_WINE="$withval" CACHE_WINE=1
+  withval=$with_wine;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-wine doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_WINE="$withval" CACHE_WINE=1
+
 fi
+
+
 
 
 # Check whether --with-msw was given.
 if test "${with_msw+set}" = set; then :
-  withval=$with_msw; wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1
+  withval=$with_msw;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-msw doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-directfb was given.
 if test "${with_directfb+set}" = set; then :
-  withval=$with_directfb; wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1
+  withval=$with_directfb;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-directfb doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-x11 was given.
 if test "${with_x11+set}" = set; then :
-  withval=$with_x11; wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1
+  withval=$with_x11;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-x11 doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1
+
 fi
+
+
 
 
 # Check whether --with-qt was given.
 if test "${with_qt+set}" = set; then :
-  withval=$with_qt; wxUSE_QT="$withval" CACHE_QT=1 TOOLKIT_GIVEN=1
+  withval=$with_qt;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-qt doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_QT="$withval" CACHE_QT=1 TOOLKIT_GIVEN=1
+
 fi
+
 
 
           enablestring=
