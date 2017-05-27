@@ -1140,6 +1140,7 @@ enable_rpath
 enable_objc_uniquifying
 enable_visibility
 enable_tls
+enable_repro_build
 enable_intl
 enable_xlocale
 enable_config
@@ -2080,6 +2081,7 @@ Optional Features:
   --enable-objc_uniquifying enable Objective-C class name uniquifying
   --disable-visibility    disable use of ELF symbols visibility even if supported
   --disable-tls           disable use of compiler TLS support
+  --enable-repro-build    enable reproducible build mode
   --enable-intl           use internationalization system
   --enable-xlocale        use x-locale support (requires wxLocale)
   --enable-config         use wxConfig (and derived) classes
@@ -6076,6 +6078,36 @@ fi
 
 
           eval "$wx_cv_use_tls"
+
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-repro_build was given.
+if test "${enable_repro_build+set}" = set; then :
+  enableval=$enable_repro_build;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_repro_build='wxUSE_REPRODUCIBLE_BUILD=yes'
+                          else
+                            wx_cv_use_repro_build='wxUSE_REPRODUCIBLE_BUILD=no'
+                          fi
+
+else
+
+                          wx_cv_use_repro_build='wxUSE_REPRODUCIBLE_BUILD=${'DEFAULT_wxUSE_REPRODUCIBLE_BUILD":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_repro_build"
 
 
 
@@ -30675,6 +30707,11 @@ else
             OPTIMISE_CFLAGS="-O"
         fi
     fi
+fi
+
+if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
+    $as_echo "#define wxUSE_REPRODUCIBLE_BUILD 1" >>confdefs.h
+
 fi
 
 

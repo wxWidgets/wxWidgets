@@ -68,6 +68,16 @@
 // Recommended setting: 0
 #define wxUSE_UNSAFE_WXSTRING_CONV 1
 
+// If set to 1, enables "reproducible builds", i.e. build output should be
+// exactly the same if the same build is redone again. As using __DATE__ and
+// __TIME__ macros clearly makes the build irreproducible, setting this option
+// to 1 disables their use in the library code.
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_REPRODUCIBLE_BUILD 0
+
 // ----------------------------------------------------------------------------
 // debugging settings
 // ----------------------------------------------------------------------------
@@ -1284,15 +1294,14 @@
 // Metafiles support
 // ----------------------------------------------------------------------------
 
-// Windows supports the graphics format known as metafile which is, though not
-// portable, is widely used under Windows and so is supported by wxWin (under
-// Windows only, of course). Win16 (Win3.1) used the so-called "Window
-// MetaFiles" or WMFs which were replaced with "Enhanced MetaFiles" or EMFs in
-// Win32 (Win9x, NT, 2000). Both of these are supported in wxWin and, by
-// default, WMFs will be used under Win16 and EMFs under Win32. This may be
-// changed by setting wxUSE_WIN_METAFILES_ALWAYS to 1 and/or setting
-// wxUSE_ENH_METAFILE to 0. You may also set wxUSE_METAFILE to 0 to not compile
-// in any metafile related classes at all.
+// Windows supports the graphics format known as metafile which, though not
+// portable, is widely used under Windows and so is supported by wxWidgets
+// (under Windows only, of course). Both the so-called "Window MetaFiles" or
+// WMFs, and "Enhanced MetaFiles" or EMFs are supported in wxWin and, by
+// default, EMFs will be used. This may be changed by setting
+// wxUSE_WIN_METAFILES_ALWAYS to 1 and/or setting wxUSE_ENH_METAFILE to 0.
+// You may also set wxUSE_METAFILE to 0 to not compile in any metafile
+// related classes at all.
 //
 // Default is 1 for wxUSE_ENH_METAFILE and 0 for wxUSE_WIN_METAFILES_ALWAYS.
 //
@@ -1438,10 +1447,6 @@
 
 // Compile wxUIActionSimulator class?
 #define wxUSE_UIACTIONSIMULATOR 1
-
-// This is only used under Unix, but needs to be defined here as it's checked
-// by wx/unix/chkconf.h.
-#define wxUSE_XTEST 0
 
 // ----------------------------------------------------------------------------
 // wxDC classes for various output formats

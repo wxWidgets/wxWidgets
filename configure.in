@@ -669,6 +669,8 @@ WX_ARG_ENABLE(objc_uniquifying,[  --enable-objc_uniquifying enable Objective-C c
 WX_ARG_DISABLE(visibility,   [  --disable-visibility    disable use of ELF symbols visibility even if supported], wxUSE_VISIBILITY)
 WX_ARG_DISABLE(tls,          [  --disable-tls           disable use of compiler TLS support], wxUSE_COMPILER_TLS)
 
+WX_ARG_ENABLE(repro_build,  [  --enable-repro-build    enable reproducible build mode], wxUSE_REPRODUCIBLE_BUILD)
+
 dnl ---------------------------------------------------------------------------
 dnl optional non GUI features
 dnl ---------------------------------------------------------------------------
@@ -5132,6 +5134,10 @@ else
             OPTIMISE_CFLAGS="-O"
         fi
     fi
+fi
+
+if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
+    AC_DEFINE(wxUSE_REPRODUCIBLE_BUILD)
 fi
 
 dnl ---------------------------------------------------------------------------
