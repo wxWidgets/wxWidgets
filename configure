@@ -1130,7 +1130,6 @@ enable_profile
 enable_no_rtti
 enable_no_exceptions
 enable_permissive
-enable_no_deps
 enable_vararg_macros
 enable_universal_binary
 enable_macosx_arch
@@ -2071,7 +2070,6 @@ Optional Features:
   --enable-no_rtti        create code without RTTI information
   --enable-no_exceptions  create code without C++ exceptions handling
   --enable-permissive     compile code disregarding strict ANSI
-  --enable-no_deps        create code without dependency information
   --disable-vararg_macros don't use vararg macros, even if they are supported
   --enable-universal_binary=archs create universal binary for the specified (or all supported) architectures
   --enable-macosx_arch=ARCH  build for just the specified architecture
@@ -5753,35 +5751,6 @@ fi
 
 
           eval "$wx_cv_use_permissive"
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-no_deps was given.
-if test "${enable_no_deps+set}" = set; then :
-  enableval=$enable_no_deps;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_no_deps='wxUSE_NO_DEPS=yes'
-                          else
-                            wx_cv_use_no_deps='wxUSE_NO_DEPS=no'
-                          fi
-
-else
-
-                          wx_cv_use_no_deps='wxUSE_NO_DEPS=${'DEFAULT_wxUSE_NO_DEPS":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_no_deps"
 
 
           enablestring=disable

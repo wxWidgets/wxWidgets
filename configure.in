@@ -654,7 +654,6 @@ WX_ARG_ENABLE(profile,       [  --enable-profile        create code with profili
 WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
-WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 WX_ARG_DISABLE(vararg_macros,[  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
 
 WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary=archs create universal binary for the specified (or all supported) architectures]], wxUSE_UNIVERSAL_BINARY)
