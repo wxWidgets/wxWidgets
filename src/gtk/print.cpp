@@ -965,6 +965,7 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     dataToSend.printer = this;
     dataToSend.printout = printout;
 
+    wxDELETE(m_dc);
     // These Gtk signals are caught here.
     g_signal_connect (printOp, "begin-print", G_CALLBACK (gtk_begin_print_callback), &dataToSend);
     g_signal_connect (printOp, "draw-page", G_CALLBACK (gtk_draw_page_print_callback), &dataToSend);
@@ -984,6 +985,9 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     {
         sm_lastError = wxPRINTER_ERROR;
     }
+
+    printout->SetDC(NULL);
+    wxDELETE(m_dc);
 
     return (sm_lastError == wxPRINTER_NO_ERROR);
 }
