@@ -135,6 +135,7 @@ All (GUI):
 - Extend wxStyledTextCtrl::FindText() to return end position of matched
   text (NewPagodi).
 - Fix adding/removing items to/from wxRearrangeList.
+- Handle wxST_ELLIPSIZE_XXX styles in wxStaticText XRC handler (tm).
 
 wxGTK:
 
