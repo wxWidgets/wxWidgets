@@ -1439,10 +1439,6 @@
 // Compile wxUIActionSimulator class?
 #define wxUSE_UIACTIONSIMULATOR 1
 
-// This is only used under Unix, but needs to be defined here as it's checked
-// by wx/unix/chkconf.h.
-#define wxUSE_XTEST 0
-
 // ----------------------------------------------------------------------------
 // wxDC classes for various output formats
 // ----------------------------------------------------------------------------
@@ -1552,6 +1548,10 @@
  Recommended setting: 1 (wxMediaCtrl won't work by default without it).
  */
 #define wxUSE_GSTREAMER 0
+
+// This is only used under Unix, but needs to be defined here as it's checked
+// by wx/unix/chkconf.h.
+#define wxUSE_XTEST 0
 
 // ----------------------------------------------------------------------------
 // Mac-specific settings
