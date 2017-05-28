@@ -584,7 +584,13 @@ bool wxGtkPrintNativeData::TransferFrom( const wxPrintData &data )
 void wxGtkPrintNativeData::SetPrintConfig( GtkPrintSettings * config )
 {
     if (config)
+    {
+        if ( m_config )
+        {
+            g_object_unref(m_config);
+        }
         m_config = gtk_print_settings_copy(config);
+    }
 }
 
 // Extract page setup from settings.
