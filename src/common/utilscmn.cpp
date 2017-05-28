@@ -1374,7 +1374,9 @@ wxVersionInfo wxGetLibraryVersionInfo()
     wxString msg;
     msg.Printf(wxS("wxWidgets Library (%s port)\n")
                wxS("Version %d.%d.%d (Unicode: %s, debug level: %d),\n")
+#if !wxUSE_REPRODUCIBLE_BUILD
                wxS("compiled at %s %s\n\n")
+#endif
                wxS("Runtime version of toolkit used is %d.%d.\n"),
                wxPlatformInfo::Get().GetPortIdName(),
                wxMAJOR_VERSION,
@@ -1388,8 +1390,10 @@ wxVersionInfo wxGetLibraryVersionInfo()
                "none",
 #endif
                wxDEBUG_LEVEL,
+#if !wxUSE_REPRODUCIBLE_BUILD
                __TDATE__,
                __TTIME__,
+#endif
                wxPlatformInfo::Get().GetToolkitMajorVersion(),
                wxPlatformInfo::Get().GetToolkitMinorVersion()
               );

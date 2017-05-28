@@ -394,6 +394,16 @@ AC_DEFUN([WX_ARG_WITH],
 dnl same as WX_ARG_WITH but makes it clear that the option is enabled by default
 AC_DEFUN([WX_ARG_WITHOUT], [WX_ARG_WITH($1, [$2], $3, without)])
 
+dnl variant of AC_ARG_WITH which doesn't accept --without-xxx varient
+AC_DEFUN([WX_ARG_ONLY_WITH], [
+        AC_ARG_WITH($1, [$2], [
+            if test "$withval" != yes; then
+                AC_MSG_ERROR([Option --with-$1 doesn't accept any arguments])
+            fi
+            $3
+        ])
+    ])
+
 dnl like WX_ARG_WITH but uses AC_ARG_ENABLE instead of AC_ARG_WITH
 dnl usage: WX_ARG_ENABLE(option, helpmessage, var, [enablestring], [default])
 dnl
