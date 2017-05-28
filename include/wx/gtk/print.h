@@ -80,8 +80,7 @@ public:
     wxPrintDialogData& GetPrintDialogData() wxOVERRIDE
         { return m_printDialogData; }
 
-    wxDC *GetPrintDC() wxOVERRIDE { return m_dc; }
-    void SetPrintDC(wxDC * printDC) { m_dc = printDC; }
+    wxDC *GetPrintDC() wxOVERRIDE;
 
     virtual int ShowModal() wxOVERRIDE;
 
@@ -105,7 +104,6 @@ private:
     wxPrintDialogData    m_printDialogData;
     wxWindow            *m_parent;
     bool                 m_showDialog;
-    wxDC                *m_dc;
 
     wxDECLARE_DYNAMIC_CLASS(wxGtkPrintDialog);
 };

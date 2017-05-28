@@ -771,6 +771,11 @@ int wxGtkPrintDialog::ShowModal()
     return wxID_OK;
 }
 
+wxDC* wxGtkPrintDialog::GetPrintDC()
+{
+    return new wxPrinterDC(m_printDialogData.GetPrintData());
+}
+
 //----------------------------------------------------------------------------
 // wxGtkPageSetupDialog
 //----------------------------------------------------------------------------
@@ -967,7 +972,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     // This is used to setup the DC and
     // show the dialog if desired
-    dialog.SetPrintDC(m_dc);
     dialog.SetShowDialog(prompt);
 
     // doesn't necessarily show
@@ -1153,7 +1157,6 @@ wxDC* wxGtkPrinter::PrintDialog( wxWindow *parent )
 {
     wxGtkPrintDialog dialog( parent, &m_printDialogData );
 
-    dialog.SetPrintDC(m_dc);
     dialog.SetShowDialog(true);
 
     int ret = dialog.ShowModal();
@@ -1169,9 +1172,13 @@ wxDC* wxGtkPrinter::PrintDialog( wxWindow *parent )
         return NULL;
     }
 
-    m_printDialogData = dialog.GetPrintDialogData();
+    wxDC* dc = dialog.GetPrintDC();
+    if ( dc )
+    {
+        m_printDialogData = dialog.GetPrintDialogData();
+    }
 
-    return new wxPrinterDC( m_printDialogData.GetPrintData() );
+    return dc;
 }
 
 bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
