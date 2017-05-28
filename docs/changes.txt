@@ -136,6 +136,7 @@ All (GUI):
   text (NewPagodi).
 - Fix adding/removing items to/from wxRearrangeList.
 - Handle wxST_ELLIPSIZE_XXX styles in wxStaticText XRC handler (tm).
+- Add support for bitmaps to wxToggleButton XRC handler (tm).
 
 wxGTK:
 

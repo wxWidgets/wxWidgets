@@ -78,6 +78,12 @@ void wxToggleButtonXmlHandler::DoCreateToggleButton(wxObject *control)
                    wxDefaultValidator,
                    GetName());
 
+    if ( GetParamNode("bitmap") )
+    {
+        button->SetBitmap(GetBitmap("bitmap", wxART_BUTTON),
+                          GetDirection("bitmapposition"));
+    }
+
     button->SetValue(GetBool( wxT("checked")));
 }
 
