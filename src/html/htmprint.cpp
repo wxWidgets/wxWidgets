@@ -320,22 +320,22 @@ void wxHtmlPrintout::OnPreparePrinting()
                          (double)ppiPrinterY / (double)ppiScreenY);
     m_RendererHdr->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)),
                           (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom)));
-    if (m_Headers[0] != wxEmptyString)
+    if (!m_Headers[0].empty())
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[0], 1));
         m_HeaderHeight = m_RendererHdr->GetTotalHeight();
     }
-    else if (m_Headers[1] != wxEmptyString)
+    else if (!m_Headers[1].empty())
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[1], 1));
         m_HeaderHeight = m_RendererHdr->GetTotalHeight();
     }
-    if (m_Footers[0] != wxEmptyString)
+    if (!m_Footers[0].empty())
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[0], 1));
         m_FooterHeight = m_RendererHdr->GetTotalHeight();
     }
-    else if (m_Footers[1] != wxEmptyString)
+    else if (!m_Footers[1].empty())
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[1], 1));
         m_FooterHeight = m_RendererHdr->GetTotalHeight();
@@ -543,12 +543,12 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     m_RendererHdr->SetDC(dc,
                          (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
                          (double)ppiPrinterY / (double)ppiScreenY);
-    if (m_Headers[page % 2] != wxEmptyString)
+    if (!m_Headers[page % 2].empty())
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[page % 2], page));
         m_RendererHdr->Render((int) (ppmm_h * m_MarginLeft), (int) (ppmm_v * m_MarginTop), m_PageBreaks);
     }
-    if (m_Footers[page % 2] != wxEmptyString)
+    if (!m_Footers[page % 2].empty())
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[page % 2], page));
         m_RendererHdr->Render((int) (ppmm_h * m_MarginLeft), (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight), m_PageBreaks);

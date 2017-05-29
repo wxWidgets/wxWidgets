@@ -6359,7 +6359,7 @@ void wxGrid::ShowCellEditControl()
             // resize editor to overflow into righthand cells if allowed
             int maxWidth = rect.width;
             wxString value = GetCellValue(row, col);
-            if ( (value != wxEmptyString) && (attr->GetOverflow()) )
+            if ( !value.empty() && attr->GetOverflow() )
             {
                 int y;
                 GetTextExtent(value, &maxWidth, &y, NULL, NULL, &attr->GetFont());

@@ -631,7 +631,7 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
 void wxHtmlWinParser::SetLink(const wxHtmlLinkInfo& link)
 {
     m_Link = link;
-    m_UseLink = (link.GetHref() != wxEmptyString);
+    m_UseLink = !link.GetHref().empty();
 }
 
 void wxHtmlWinParser::SetFontFace(const wxString& face)
