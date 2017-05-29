@@ -74,7 +74,7 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     // info.rect not set (intentional)
 
     wxClientDC dcTemp(this);
-    wxString label = wxEmptyString;
+    wxString label;
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
         label = page->GetLabel();
     wxBitmap icon = wxNullBitmap;
@@ -174,7 +174,7 @@ bool wxRibbonBar::Realize()
         {
             status = false;
         }
-        wxString label = wxEmptyString;
+        wxString label;
         if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
             label = info.page->GetLabel();
         wxBitmap icon = wxNullBitmap;

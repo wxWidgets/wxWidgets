@@ -1248,7 +1248,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
         {
             wxString url = evt[1].GetString();
             // TODO: set target parameter if possible
-            wxString target = wxEmptyString;
+            wxString target;
             wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATED,
                                  GetId(), url, target);
             event.SetEventObject(this);
@@ -1299,7 +1299,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             //Reset the find values.
             FindClear();
             // TODO: set target parameter if possible
-            wxString target = wxEmptyString;
+            wxString target;
             wxWebViewEvent event(wxEVT_WEBVIEW_LOADED, GetId(),
                                  url, target);
             event.SetEventObject(this);

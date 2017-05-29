@@ -516,7 +516,7 @@ size_t wxChmInputStream::OnSysRead(void *buffer, size_t bufsize)
 
 wxFileOffset wxChmInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 {
-    wxString mode_str = wxEmptyString;
+    wxString mode_str;
 
     if ( !m_contentStream || m_contentStream->Eof() )
     {

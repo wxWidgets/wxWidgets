@@ -829,7 +829,7 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
 
     int foundcnt = 0;
     wxString foundstr;
-    wxString book = wxEmptyString;
+    wxString book;
 
     if (!m_Splitter->IsSplit())
     {

@@ -589,7 +589,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         else
         {
             wxList::compatibility_iterator node;
-            wxString src = wxEmptyString;
+            wxString src;
 
 #if wxUSE_STATUSBAR
             if (m_RelatedStatusBarIndex != -1)
