@@ -684,8 +684,12 @@ void wxAppConsoleBase::OnUnhandledException()
 #if wxUSE_STL
     catch ( std::exception& e )
     {
+#ifdef wxNO_RTTI
+        what.Printf("std::exception, what() = \"%s\"", e.what());
+#else
         what.Printf("std::exception of type \"%s\", what() = \"%s\"",
                     typeid(e).name(), e.what());
+#endif
     }
 #endif // wxUSE_STL
     catch ( ... )
