@@ -702,7 +702,9 @@ int wxGtkPrintDialog::ShowModal()
     // If the settings are OK, we restore it.
     if (settings != NULL)
         gtk_print_operation_set_print_settings (printOp, settings);
-    gtk_print_operation_set_default_page_setup (printOp, native->GetPageSetupFromSettings(settings));
+    GtkPageSetup* pgSetup = native->GetPageSetupFromSettings(settings);
+    gtk_print_operation_set_default_page_setup (printOp, pgSetup);
+    g_object_unref(pgSetup);
 
     // Show the dialog if needed.
     GError* gError = NULL;
@@ -845,6 +847,8 @@ int wxGtkPageSetupDialog::ShowModal()
         GTK_PAGE_SETUP_UNIX_DIALOG(dlg), nativeData);
     gtk_page_setup_unix_dialog_set_page_setup(
         GTK_PAGE_SETUP_UNIX_DIALOG(dlg), oldPageSetup);
+
+    g_object_unref(oldPageSetup);
 
     int result = gtk_dialog_run(GTK_DIALOG(dlg));
     gtk_widget_hide(dlg);
