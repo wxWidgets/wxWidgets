@@ -151,7 +151,9 @@ wxString wxLanguageInfo::GetLocaleName() const
 
     wxChar buffer[256];
     buffer[0] = wxT('\0');
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    // wxLANGUAGE_NORWEGIAN_BOKMAL crashes mbstowcs, but using LOCALE_SNAME can fail
+    // for e.g. wxLANGUAGE_ENGLISH, so at least limit the damage.
+    if ( Language == wxLANGUAGE_NORWEGIAN_BOKMAL && wxGetWinVersion() >= wxWinVersion_Vista )
     {
         if ( ::GetLocaleInfo(lcid, LOCALE_SNAME, buffer, WXSIZEOF(buffer)) )
         {
