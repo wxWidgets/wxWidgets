@@ -1265,6 +1265,9 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
 
 wxGtkPrinterDCImpl::~wxGtkPrinterDCImpl()
 {
+    if ( m_fontdesc )
+         pango_font_description_free(m_fontdesc);
+
     g_object_unref(m_context);
     g_object_unref(m_layout);
 }
