@@ -3421,7 +3421,17 @@ int wxWindowGTK::GetCharHeight() const
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
     pango_layout_set_text(layout, "H", 1);
-    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    PangoLayoutLine* line;
+#if PANGO_VERSION_CHECK(1,16,0)
+    if ( wx_pango_version_check(1,16,0) == NULL )
+    {
+        line = pango_layout_get_line_readonly(layout, 0);
+    }
+    else
+#endif // Pango 1.16+
+    {
+        line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    }
 
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
@@ -3447,7 +3457,17 @@ int wxWindowGTK::GetCharWidth() const
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
     pango_layout_set_text(layout, "g", 1);
-    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    PangoLayoutLine* line;
+#if PANGO_VERSION_CHECK(1,16,0)
+    if ( wx_pango_version_check(1,16,0) == NULL )
+    {
+        line = pango_layout_get_line_readonly(layout, 0);
+    }
+    else
+#endif // Pango 1.16+
+    {
+        line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    }
 
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
