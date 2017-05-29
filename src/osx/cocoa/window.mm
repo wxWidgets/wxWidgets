@@ -2444,7 +2444,8 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
     if ( [m_osxView respondsToSelector:@selector(setAttributedTitle:) ] )
     {
         wxFont f = GetWXPeer()->GetFont();
-        if ( f.GetStrikethrough() || f.GetUnderlined() )
+        wxColour col = GetWXPeer()->GetForegroundColour();
+        if ( f.GetStrikethrough() || f.GetUnderlined() || col.IsOk() )
         {
             wxCFStringRef cf(title, encoding );
 
@@ -2471,6 +2472,13 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
                                    value:@(NSUnderlineStyleSingle)
                                    range:NSMakeRange(0, [attrString length])];
 
+            }
+
+            if ( col.IsOk() )
+            {
+                [attrString addAttribute:NSForegroundColorAttributeName
+                                   value:col.OSXGetNSColor()
+                                   range:NSMakeRange(0, [attrString length])];
             }
 
             [attrString endEditing];
@@ -2722,11 +2730,15 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bo
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
+    else if ( [m_osxView isKindOfClass:[NSBox class] ] )
+        targetView = [(NSBox*) m_osxView titleCell];
 
     if ([targetView respondsToSelector:@selector(setFont:)])
         [targetView setFont: font.OSXGetNSFont()];
     if ([targetView respondsToSelector:@selector(setTextColor:)])
         [targetView setTextColor: col.OSXGetNSColor()];
+    if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
+        SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics), GetWXPeer()->GetFont().GetEncoding());
 }
 
 void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
