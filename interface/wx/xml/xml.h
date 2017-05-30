@@ -787,6 +787,22 @@ public:
     const wxXmlDoctype& GetDoctype() const;
 
     /**
+        Returns the output line ending format used for documents.
+
+        @since 3.1.1
+    */
+    wxTextFileType GetFileType() const;
+
+    /**
+        Returns the output line ending string used for documents.
+
+        This string is determined by the last call to SetFileType().
+
+        @since 3.1.1
+    */
+    wxString GetEOL() const;
+
+    /**
         Returns the document node of the document.
 
         @since 2.9.2
@@ -881,6 +897,16 @@ public:
         @since 3.1.0
     */
     void SetDoctype(const wxXmlDoctype& doctype);
+
+    /**
+        Sets the output line ending formats when the document is saved.
+
+        By default Unix file type is used, i.e. a single ASCII LF (10)
+        character is used at the end of lines.
+
+        @since 3.1.1
+    */
+    void SetFileType(wxTextFileType fileType);
 
     /**
         Sets the root element node of this document.

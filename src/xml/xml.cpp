@@ -462,11 +462,15 @@ wxXmlDocument::wxXmlDocument()
 #if !wxUSE_UNICODE
     m_encoding = wxS("UTF-8");
 #endif
+
+    SetFileType(wxTextFileType_Unix);
 }
 
 wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
               :wxObject(), m_docNode(NULL)
 {
+    SetFileType(wxTextFileType_Unix);
+
     if ( !Load(filename, encoding) )
     {
         wxDELETE(m_docNode);
@@ -476,6 +480,8 @@ wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
 wxXmlDocument::wxXmlDocument(wxInputStream& stream, const wxString& encoding)
               :wxObject(), m_docNode(NULL)
 {
+    SetFileType(wxTextFileType_Unix);
+
     if ( !Load(stream, encoding) )
     {
         wxDELETE(m_docNode);
@@ -503,6 +509,8 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
 #endif
     m_fileEncoding = doc.m_fileEncoding;
     m_doctype = doc.m_doctype;
+    m_fileType = doc.m_fileType;
+    m_eol = doc.m_eol;
 
     if (doc.m_docNode)
         m_docNode = new wxXmlNode(*doc.m_docNode);
@@ -600,6 +608,12 @@ void wxXmlDocument::SetRoot(wxXmlNode *root)
     }
     if (root)
         root->SetParent(m_docNode);
+}
+
+void wxXmlDocument::SetFileType(wxTextFileType fileType)
+{
+    m_fileType = fileType;
+    m_eol = wxTextBuffer::GetEOL(m_fileType);
 }
 
 void wxXmlDocument::AppendToProlog(wxXmlNode *node)
@@ -1058,9 +1072,10 @@ bool OutputEscapedString(wxOutputStream& stream,
 bool OutputIndentation(wxOutputStream& stream,
                        int indent,
                        wxMBConv *convMem,
-                       wxMBConv *convFile)
+                       wxMBConv *convFile,
+                       const wxString& eol)
 {
-    wxString str(wxS("\n"));
+    wxString str(eol);
     str += wxString(indent, wxS(' '));
     return OutputString(stream, str, convMem, convFile);
 }
@@ -1070,7 +1085,8 @@ bool OutputNode(wxOutputStream& stream,
                 int indent,
                 wxMBConv *convMem,
                 wxMBConv *convFile,
-                int indentstep)
+                int indentstep,
+                const wxString& eol)
 {
     bool rc;
     switch (node->GetType())
@@ -1125,12 +1141,12 @@ bool OutputNode(wxOutputStream& stream,
                     if ( indentstep >= 0 && n->GetType() != wxXML_TEXT_NODE )
                     {
                         rc = OutputIndentation(stream, indent + indentstep,
-                                               convMem, convFile);
+                                               convMem, convFile, eol);
                     }
 
                     if ( rc )
                         rc = OutputNode(stream, n, indent + indentstep,
-                                        convMem, convFile, indentstep);
+                                        convMem, convFile, indentstep, eol);
 
                     prev = n;
                 }
@@ -1138,7 +1154,8 @@ bool OutputNode(wxOutputStream& stream,
                 if ( rc && indentstep >= 0 &&
                         prev && prev->GetType() != wxXML_TEXT_NODE )
                 {
-                    rc = OutputIndentation(stream, indent, convMem, convFile);
+                    rc = OutputIndentation(stream, indent, convMem, convFile,
+                                           eol);
                 }
 
                 if ( rc )
@@ -1198,7 +1215,7 @@ bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
 #endif
 
     wxString dec = wxString::Format(
-                                    wxS("<?xml version=\"%s\" encoding=\"%s\"?>\n"),
+                                    wxS("<?xml version=\"%s\" encoding=\"%s\"?>") + m_eol,
                                     GetVersion(), GetFileEncoding()
                                    );
     bool rc = OutputString(stream, dec, convMem.get(), convFile.get());
@@ -1209,7 +1226,7 @@ bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
         if ( !doctype.empty() )
         {
             rc = OutputString(stream,
-                              wxS("<!DOCTYPE ") + doctype + wxS(">\n"),
+                              wxS("<!DOCTYPE ") + doctype + wxS(">") + m_eol,
                               convMem.get(), convFile.get());
         }
     }
@@ -1221,8 +1238,8 @@ bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
     while( rc && node )
     {
         rc = OutputNode(stream, node, 0, convMem.get(),
-                        convFile.get(), indentstep) &&
-             OutputString(stream, wxS("\n"), convMem.get(), convFile.get());
+                        convFile.get(), indentstep, m_eol) &&
+             OutputString(stream, m_eol, convMem.get(), convFile.get());
         node = node->GetNext();
     }
     return rc;
