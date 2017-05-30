@@ -92,8 +92,7 @@ void wxLibNotifyMsgImplActionCallback(NotifyNotification *notification,
                                                          gpointer user_data);
 
 extern "C" {
-static gboolean closed_notification(NotifyNotification *notification,
-    const char* WXUNUSED(data), void* user_data);
+static void closed_notification(NotifyNotification* notification, void* user_data);
 }
 
 class wxLibNotifyMsgImpl : public wxNotificationMessageImpl
@@ -352,13 +351,11 @@ void wxLibNotifyMsgImplActionCallback(NotifyNotification *WXUNUSED(notification)
 }
 
 extern "C" {
-static gboolean closed_notification(NotifyNotification *notification,
-    const char* WXUNUSED(data), void* user_data)
+static void closed_notification(NotifyNotification* notification, void* user_data)
 {
     wxLibNotifyMsgImpl* impl = (wxLibNotifyMsgImpl*) user_data;
     gint closeReason = notify_notification_get_closed_reason(notification);
     impl->NotifyClose(closeReason);
-    return true;
 }
 }
 
