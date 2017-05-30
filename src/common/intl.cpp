@@ -151,9 +151,11 @@ wxString wxLanguageInfo::GetLocaleName() const
 
     wxChar buffer[256];
     buffer[0] = wxT('\0');
+
     // wxLANGUAGE_NORWEGIAN_BOKMAL crashes mbstowcs, but using LOCALE_SNAME can fail
-    // for e.g. wxLANGUAGE_ENGLISH, so at least limit the damage.
-    if ( Language == wxLANGUAGE_NORWEGIAN_BOKMAL && wxGetWinVersion() >= wxWinVersion_Vista )
+    // for e.g. wxLANGUAGE_ENGLISH in VS 2010 (other versions?)
+#if !defined(__VISUALC__) || (__VISUALC__ != 1600)
+    if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
         if ( ::GetLocaleInfo(lcid, LOCALE_SNAME, buffer, WXSIZEOF(buffer)) )
         {
@@ -165,6 +167,7 @@ wxString wxLanguageInfo::GetLocaleName() const
         }
         return locale;
     }
+#endif
 
     if ( !::GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, WXSIZEOF(buffer)) )
     {
