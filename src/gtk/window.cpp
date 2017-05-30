@@ -61,6 +61,10 @@ typedef guint KeySym;
 #define wxGTK_VERSION_REQUIRED_FOR_COMPOSITING 2,12,0
 #define wxGTK_HAS_COMPOSITING_SUPPORT (GTK_CHECK_VERSION(2,12,0) && wxUSE_CAIRO)
 
+#ifndef PANGO_VERSION_CHECK
+    #define PANGO_VERSION_CHECK(a,b,c) 0
+#endif
+
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
@@ -291,7 +295,6 @@ PangoContext* wxGetPangoContext()
         {
             context = gdk_pango_context_get_for_screen(screen);
         }
-#ifdef PANGO_VERSION_CHECK
 #if PANGO_VERSION_CHECK(1,22,0)
         else // No default screen.
         {
@@ -306,7 +309,6 @@ PangoContext* wxGetPangoContext()
             //else: pango_font_map_create_context() not available
         }
 #endif // Pango 1.22+
-#endif // PANGO_VERSION_CHECK
     }
 
     return context;
