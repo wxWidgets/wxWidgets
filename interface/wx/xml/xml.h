@@ -788,11 +788,17 @@ public:
 
     /**
         Returns the output line ending format used for documents.
+
+        @since 3.1.1
     */
     wxTextFileType GetFileType() const;
 
     /**
         Returns the output line ending string used for documents.
+
+        This string is determined by the last call to SetFileType().
+
+        @since 3.1.1
     */
     wxString GetEOL() const;
 
@@ -894,6 +900,11 @@ public:
 
     /**
         Sets the output line ending formats when the document is saved.
+
+        By default Unix file type is used, i.e. a single ASCII LF (10)
+        character is used at the end of lines.
+
+        @since 3.1.1
     */
     void SetFileType(wxTextFileType fileType);
 
