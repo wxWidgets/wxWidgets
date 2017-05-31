@@ -266,9 +266,6 @@ wxWindowMac::~wxWindowMac()
             tlw->SetDefaultItem(NULL);
     }
 
-    if ( g_MacLastWindow == this )
-        g_MacLastWindow = NULL ;
-
 #ifndef __WXUNIVERSAL__
     wxFrame* frame = wxDynamicCast( wxGetTopLevelParent( (wxWindow*)this ) , wxFrame ) ;
     if ( frame )
