@@ -403,7 +403,6 @@ wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(
     return wxBitmap( [NSImage imageNamed:cfname.AsNSString()] );
 }
 
-//  From "Cocoa Drawing Guide:Working with Images"
 WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor, bool isTemplate )
 {
     NSRect      imageRect    = NSMakeRect(0.0, 0.0, 0.0, 0.0);
@@ -412,25 +411,10 @@ WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor, bo
     imageRect.size.height = CGImageGetHeight(image)/scaleFactor;
     imageRect.size.width = CGImageGetWidth(image)/scaleFactor;
 
-    // Create a new image to receive the Quartz image data.
-    NSImage  *newImage = [[NSImage alloc] initWithSize:imageRect.size];
-    [newImage lockFocus];
-
-    // Get the Quartz context and draw.
-    CGContextRef  imageContext = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
-    CGContextDrawImage( imageContext, *(CGRect*)&imageRect, image );
-    [newImage unlockFocus];
-
+    NSImage* newImage = [[NSImage alloc] initWithCGImage:image size:imageRect.size];
+    
     [newImage setTemplate:isTemplate];
 
-    /*
-        // Create a bitmap rep from the image...
-        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
-        // Create an NSImage and add the bitmap rep to it...
-        NSImage *image = [[NSImage alloc] init];
-        [image addRepresentation:bitmapRep];
-        [bitmapRep release];
-    */
     [newImage autorelease];
     return( newImage );
 }

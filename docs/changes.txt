@@ -55,6 +55,9 @@ Changes in behaviour which may result in build errors
 
 - WXWIN_OS_DESCRIPTION doesn't exist any longer, use wxGetOsDescription().
 
+- Never documented and not always available private wxGetClipboardData()
+  function now doesn't exist at all any more in wxMSW, use wxClipboard instead.
+
 
 3.1.1: (not released yet)
 ----------------------------
