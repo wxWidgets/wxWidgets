@@ -2497,6 +2497,7 @@ void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
     else
         event.Skip();
 }
+#endif
 
 wxMenu *wxTextCtrl::MSWCreateContextMenu()
 {
@@ -2513,6 +2514,7 @@ wxMenu *wxTextCtrl::MSWCreateContextMenu()
     return m;
 }
 
+#if wxUSE_RICHEDIT
 // ----------------------------------------------------------------------------
 // EN_LINK processing
 // ----------------------------------------------------------------------------
