@@ -1930,16 +1930,29 @@ outlineView:(NSOutlineView*)outlineView
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
--(BOOL) textShouldBeginEditing:(NSText*)text
-{
-    wxUnusedVar(text);
 
-    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+-(BOOL) textShouldBeginEditing:(NSText*)textEditor
+{	 
+    currentlyEditedColumn = [self editedColumn];
+    currentlyEditedRow = [self editedRow];
+    
+    wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]);
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_START_EDITING, dvc, dvc->GetCurrentItem());
-    dvc->GetEventHandler()->ProcessEvent(event);
-    // continue editing if not vetoed:
-    return event.IsAllowed();
+    NSTableColumn* tableColumn = [[self tableColumns] objectAtIndex:currentlyEditedColumn];
+    wxDataViewColumn* const col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+
+    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl(); 
+
+    wxDataViewRenderer* const renderer = col->GetRenderer();
+
+	wxRect rect = implementation->GetRectangle(item, col);
+	
+    if (renderer)
+    {
+         if(renderer->StartEditing(item, rect))
+			return YES;
+    }
+    return NO;
 }
 
 -(void) textDidBeginEditing:(NSNotification*)notification
