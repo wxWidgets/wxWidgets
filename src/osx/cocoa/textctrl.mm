@@ -277,6 +277,45 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                     handled = YES;
                 }
             }
+            else if (wxpeer->GetWindowStyle() & wxTE_PASSWORD)
+            {
+                // Make TAB and ESCAPE work on password fields. The general fix done in wxWidgetCocoaImpl::DoHandleKeyEvent()
+                // does not help for password fields because wxWidgetCocoaImpl::keyEvent() is not executed
+                // when TAB is pressed, only when it is released.
+                wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+                if (commandSelector == @selector(insertTab:))
+                {
+                    wxevent.m_keyCode = WXK_TAB;
+                }
+                else if (commandSelector == @selector(insertBacktab:))
+                {
+                    wxevent.m_keyCode = WXK_TAB;
+                    wxevent.SetShiftDown(true);
+                }
+                else if (commandSelector == @selector(selectNextKeyView:))
+                {
+                    wxevent.m_keyCode = WXK_TAB;
+                    wxevent.SetRawControlDown(true);
+                }
+                else if (commandSelector == @selector(selectPreviousKeyView:))
+                {
+                    wxevent.m_keyCode = WXK_TAB;
+                    wxevent.SetShiftDown(true);
+                    wxevent.SetRawControlDown(true);
+                }
+                else if (commandSelector == @selector(cancelOperation:))
+                {
+                    wxevent.m_keyCode = WXK_ESCAPE;
+                }
+                if (wxevent.GetKeyCode() != WXK_NONE)
+                {
+                    wxKeyEvent eventHook(wxEVT_CHAR_HOOK, wxevent);
+                    if (wxpeer->OSXHandleKeyEvent(eventHook) && !eventHook.IsNextEventAllowed())
+                        handled = YES;
+                    else if (impl->DoHandleKeyNavigation(wxevent))
+                        handled = YES;
+                }
+            }
         }
     }
     
