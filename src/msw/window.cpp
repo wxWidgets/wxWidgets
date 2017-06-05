@@ -4716,30 +4716,14 @@ bool wxWindowMSW::MSWIsDPIUpdating() const
 void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
 {
     wxSize dpi = wxDefaultSize;
-    PROCESS_DPI_AWARENESS dpiAware = PROCESS_DPI_UNAWARE;
+    bool perMonitorAwareV2 = false;
 
 #if wxUSE_DYNLIB_CLASS
 
-    // determine if process is per-monitor DPI aware
-    wxDynamicLibrary dllShCore;
-    if (dllShCore.Load(wxS("Shcore.dll"), wxDL_VERBATIM | wxDL_QUIET))
-    {
-        typedef HRESULT(WINAPI *GetProcessDpiAwareness_t)(HANDLE hprocess, PROCESS_DPI_AWARENESS *value);
-        GetProcessDpiAwareness_t wxDL_INIT_FUNC(pfn, GetProcessDpiAwareness, dllShCore);
-
-        if (pfnGetProcessDpiAwareness)
-        {
-            if (pfnGetProcessDpiAwareness(NULL, &dpiAware) != 0 /*S_OK*/)
-            {
-                dpiAware = PROCESS_DPI_UNAWARE;
-            }
-        }
-    }
-
-    // determine active DPI of the window
     wxDynamicLibrary dllUser32;
     if (dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
     {
+        // determine active DPI of the window
         typedef UINT(WINAPI *GetDpiForWindow_t)(HWND hwnd);
         GetDpiForWindow_t wxDL_INIT_FUNC(pfn, GetDpiForWindow, dllUser32);
 
@@ -4749,6 +4733,23 @@ void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware
             if (dpiWindow != 0)
             {
                 dpi = wxSize((int)dpiWindow, (int)dpiWindow);
+            }
+        }
+
+        // determine if 'Per Monitor v2' awareness is used
+        typedef DPI_AWARENESS_CONTEXT(WINAPI *GetWindowDpiAwarenessContext_t)(HWND hwnd);
+        GetWindowDpiAwarenessContext_t wxDL_INIT_FUNC(pfn, GetWindowDpiAwarenessContext, dllUser32);
+
+        typedef BOOL(WINAPI *AreDpiAwarenessContextsEqual_t)(DPI_AWARENESS_CONTEXT dpiContextA, DPI_AWARENESS_CONTEXT dpiContextB);
+        AreDpiAwarenessContextsEqual_t wxDL_INIT_FUNC(pfn, AreDpiAwarenessContextsEqual, dllUser32);
+
+        if (pfnGetWindowDpiAwarenessContext && pfnAreDpiAwarenessContextsEqual)
+        {
+            DPI_AWARENESS_CONTEXT dpiAwarenessContext = pfnGetWindowDpiAwarenessContext(GetHwnd());
+
+            if (pfnAreDpiAwarenessContextsEqual(dpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+            {
+                perMonitorAwareV2 = true;
             }
         }
     }
@@ -4764,7 +4765,7 @@ void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware
     }
 
     activeDPI = dpi;
-    perMonitorDPIaware = (dpiAware == PROCESS_PER_MONITOR_DPI_AWARE);
+    perMonitorDPIaware = perMonitorAwareV2;
 }
 
 bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
