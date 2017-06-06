@@ -136,6 +136,9 @@ wxString wxGetOsDescription()
             case 12:
                 osName = "Sierra";
                 break;
+            case 13:
+                osName = "High Sierra";
+                break;
         };
     }
 #else
