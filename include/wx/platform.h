@@ -44,11 +44,16 @@
 #    ifndef MAC_OS_X_VERSION_10_12
 #       define MAC_OS_X_VERSION_10_12 101200
 #    endif
-#    ifndef NSAppKitVersionNumber10_10
-#       define NSAppKitVersionNumber10_10 1343
+#    ifndef MAC_OS_X_VERSION_10_13
+#       define MAC_OS_X_VERSION_10_13 101300
 #    endif
-#    ifndef NSAppKitVersionNumber10_11
-#       define NSAppKitVersionNumber10_11 1404
+#    if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#        ifndef NSAppKitVersionNumber10_10
+#            define NSAppKitVersionNumber10_10 1343
+#        endif
+#        ifndef NSAppKitVersionNumber10_11
+#            define NSAppKitVersionNumber10_11 1404
+#        endif
 #    endif
 #    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
@@ -484,11 +489,16 @@
 #        ifndef MAC_OS_X_VERSION_10_12
 #           define MAC_OS_X_VERSION_10_12 101200
 #        endif
-#        ifndef NSAppKitVersionNumber10_10
-#           define NSAppKitVersionNumber10_10 1343
+#        ifndef MAC_OS_X_VERSION_10_13
+#           define MAC_OS_X_VERSION_10_13 101300
 #        endif
-#        ifndef NSAppKitVersionNumber10_11
-#           define NSAppKitVersionNumber10_11 1404
+#        if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#            ifndef NSAppKitVersionNumber10_10
+#                define NSAppKitVersionNumber10_10 1343
+#            endif
+#            ifndef NSAppKitVersionNumber10_11
+#                define NSAppKitVersionNumber10_11 1404
+#            endif
 #        endif
 #    else
 #        error "only mach-o configurations are supported"
