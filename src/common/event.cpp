@@ -268,7 +268,6 @@ wxDEFINE_EVENT( wxEVT_MOVE_END, wxMoveEvent );
 wxDEFINE_EVENT( wxEVT_CLOSE_WINDOW, wxCloseEvent );
 wxDEFINE_EVENT( wxEVT_END_SESSION, wxCloseEvent );
 wxDEFINE_EVENT( wxEVT_QUERY_END_SESSION, wxCloseEvent );
-wxDEFINE_EVENT( wxEVT_HIBERNATE, wxActivateEvent );
 wxDEFINE_EVENT( wxEVT_ACTIVATE_APP, wxActivateEvent );
 wxDEFINE_EVENT( wxEVT_ACTIVATE, wxActivateEvent );
 wxDEFINE_EVENT( wxEVT_CREATE, wxWindowCreateEvent );

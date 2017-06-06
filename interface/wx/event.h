@@ -2961,12 +2961,6 @@ public:
     @event{EVT_ACTIVATE_APP(func)}
         Process a @c wxEVT_ACTIVATE_APP event.
         This event is received by the wxApp-derived instance only.
-    @event{EVT_HIBERNATE(func)}
-        Process a hibernate event, supplying the member function. This event applies
-        to wxApp only, and only on Windows SmartPhone and PocketPC.
-        It is generated when the system is low on memory; the application should free
-        up as much memory as possible, and restore full working state when it receives
-        a @c wxEVT_ACTIVATE or @c wxEVT_ACTIVATE_APP event.
     @endEventTable
 
     @note Until wxWidgets 3.1.0 activation events could be sent by wxMSW when
@@ -4757,7 +4751,6 @@ wxEventType wxEVT_SIZING;
 wxEventType wxEVT_MOVING;
 wxEventType wxEVT_MOVE_START;
 wxEventType wxEVT_MOVE_END;
-wxEventType wxEVT_HIBERNATE;
 wxEventType wxEVT_TEXT_COPY;
 wxEventType wxEVT_TEXT_CUT;
 wxEventType wxEVT_TEXT_PASTE;

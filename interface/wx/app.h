@@ -798,8 +798,6 @@ public:
         See wxCloseEvent.
     @event{EVT_ACTIVATE_APP(func)}
         Process a @c wxEVT_ACTIVATE_APP event. See wxActivateEvent.
-    @event{EVT_HIBERNATE(func)}
-        Process a hibernate event. See wxActivateEvent.
     @event{EVT_DIALUP_CONNECTED(func)}
         A connection with the network was established. See wxDialUpEvent.
     @event{EVT_DIALUP_DISCONNECTED(func)}
