@@ -9,4 +9,4 @@ GCC_VERSION =
 
 ARCHS = i386 x86_64
 
-OTHER_LDFLAGS = -framework WebKit -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework OpenGL -framework AVFoundation -framework CoreMedia -framework QTKit 
+OTHER_LDFLAGS = -framework WebKit -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework OpenGL -framework AVFoundation -framework CoreMedia -framework QTKit -framework Security
