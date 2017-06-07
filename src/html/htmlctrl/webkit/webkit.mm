@@ -206,38 +206,39 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 
 
     // Register event listener interfaces
+    
     MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: this];
     [m_webView setFrameLoadDelegate:myFrameLoadMonitor];
-
+    m_frameLoadMonitor = myFrameLoadMonitor;
+    
     // this is used to veto page loads, etc.
     MyPolicyDelegate* myPolicyDelegate = [[MyPolicyDelegate alloc] initWithWxWindow: this];
     [m_webView setPolicyDelegate:myPolicyDelegate];
+    m_policyDelegate = myPolicyDelegate;
 
     // this is used to provide printing support for JavaScript
     MyUIDelegate* myUIDelegate = [[MyUIDelegate alloc] initWithWxWindow: this];
     [m_webView setUIDelegate:myUIDelegate];
-
+    m_UIDelegate = myUIDelegate;
+    
     LoadURL(m_currentURL);
     return true;
 }
 
 wxWebKitCtrl::~wxWebKitCtrl()
 {
-    MyFrameLoadMonitor* myFrameLoadMonitor = [m_webView frameLoadDelegate];
-    MyPolicyDelegate* myPolicyDelegate = [m_webView policyDelegate];
-    MyUIDelegate* myUIDelegate = [m_webView UIDelegate];
     [m_webView setFrameLoadDelegate: nil];
     [m_webView setPolicyDelegate: nil];
     [m_webView setUIDelegate: nil];
     
-    if (myFrameLoadMonitor)
-        [myFrameLoadMonitor release];
+    if (m_frameLoadMonitor)
+        [m_frameLoadMonitor release];
         
-    if (myPolicyDelegate)
-        [myPolicyDelegate release];
+    if (m_policyDelegate)
+        [m_policyDelegate release];
 
-    if (myUIDelegate)
-        [myUIDelegate release];
+    if (m_UIDelegate)
+        [m_UIDelegate release];
 }
 
 // ----------------------------------------------------------------------------
