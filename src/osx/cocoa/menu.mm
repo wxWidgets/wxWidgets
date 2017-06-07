@@ -37,8 +37,10 @@
 
 - (id) initWithTitle:(NSString*) title
 {
-    self = [super initWithTitle:title];
-    impl = NULL;
+    if ( self = [super initWithTitle:title] )
+    {
+        impl = NULL;
+    }
     return self;
 }
 

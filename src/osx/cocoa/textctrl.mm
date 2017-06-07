@@ -130,9 +130,11 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (id)init 
 {
-    self = [super init];
-    maxLength = 0;
-    forceUpper = false;
+    if ( self = [super init] )
+    {
+        maxLength = 0;
+        forceUpper = false;
+    }
     return self;
 }
 
@@ -495,8 +497,10 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (id) initWithFrame:(NSRect) frame
 {
-    self = [super initWithFrame:frame];
-    fieldEditor = nil;
+    if ( self = [super initWithFrame:frame] )
+    {
+        fieldEditor = nil;
+    }
     return self;
 }
 

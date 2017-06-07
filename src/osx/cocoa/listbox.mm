@@ -160,8 +160,10 @@ protected :
 
 - (id) init
 {
-    self = [super init];
-    column = nil;
+    if ( self = [super init] )
+    {
+        column = nil;
+    }
     return self;
 }
 
@@ -223,8 +225,10 @@ protected:
 
 - (id) init
 {
-    self = [super init];
-    impl = nil;
+    if ( self = [super init] )
+    {
+        impl = nil;
+    }
     return self;
 }
 

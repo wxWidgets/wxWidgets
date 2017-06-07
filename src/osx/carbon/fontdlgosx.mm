@@ -61,9 +61,11 @@
 
 - (id)init
 {
-    [super init];
-    m_isUnderline = false;
-    m_isStrikethrough = false;
+    if (self = [super init])
+    {
+        m_isUnderline = false;
+        m_isStrikethrough = false;
+    }
     return self;
 }
 
@@ -118,37 +120,38 @@
 @implementation wxMacFontPanelAccView : NSView
 - (id)initWithFrame:(NSRect)rectBox
 {
-    [super initWithFrame:rectBox];
+    if ( self = [super initWithFrame:rectBox] )
+    {
+        wxCFStringRef cfOkString( wxT("OK"), wxLocale::GetSystemEncoding() );
+        wxCFStringRef cfCancelString( wxT("Cancel"), wxLocale::GetSystemEncoding() );
 
-    wxCFStringRef cfOkString( wxT("OK"), wxLocale::GetSystemEncoding() );
-    wxCFStringRef cfCancelString( wxT("Cancel"), wxLocale::GetSystemEncoding() );
+        NSRect rectCancel = NSMakeRect( (CGFloat) 10.0 , (CGFloat)10.0 , (CGFloat)82  , (CGFloat)24 );
+        NSRect rectOK = NSMakeRect( (CGFloat)100.0 , (CGFloat)10.0 , (CGFloat)82  , (CGFloat)24 );
 
-    NSRect rectCancel = NSMakeRect( (CGFloat) 10.0 , (CGFloat)10.0 , (CGFloat)82  , (CGFloat)24 );
-    NSRect rectOK = NSMakeRect( (CGFloat)100.0 , (CGFloat)10.0 , (CGFloat)82  , (CGFloat)24 );
+        NSButton* cancelButton = [[NSButton alloc] initWithFrame:rectCancel];
+        [cancelButton setTitle:(NSString*)wxCFRetain((CFStringRef)cfCancelString)];
+        [cancelButton setBezelStyle:NSRoundedBezelStyle];
+        [cancelButton setButtonType:NSMomentaryPushInButton];
+        [cancelButton setAction:@selector(cancelPressed:)];
+        [cancelButton setTarget:self];
+        m_cancelButton = cancelButton ;
 
-    NSButton* cancelButton = [[NSButton alloc] initWithFrame:rectCancel];
-    [cancelButton setTitle:(NSString*)wxCFRetain((CFStringRef)cfCancelString)];
-    [cancelButton setBezelStyle:NSRoundedBezelStyle];
-    [cancelButton setButtonType:NSMomentaryPushInButton];
-    [cancelButton setAction:@selector(cancelPressed:)];
-    [cancelButton setTarget:self];
-    m_cancelButton = cancelButton ;
-
-    NSButton* okButton = [[NSButton alloc] initWithFrame:rectOK];
-    [okButton setTitle:(NSString*)wxCFRetain((CFStringRef)cfOkString)];
-    [okButton setBezelStyle:NSRoundedBezelStyle];
-    [okButton setButtonType:NSMomentaryPushInButton];
-    [okButton setAction:@selector(okPressed:)];
-    [okButton setTarget:self];
-    // doesn't help either, the button is not highlighted after a color dialog has been used
-    // [okButton setKeyEquivalent:@"\r"];
-    m_okButton = okButton ;
+        NSButton* okButton = [[NSButton alloc] initWithFrame:rectOK];
+        [okButton setTitle:(NSString*)wxCFRetain((CFStringRef)cfOkString)];
+        [okButton setBezelStyle:NSRoundedBezelStyle];
+        [okButton setButtonType:NSMomentaryPushInButton];
+        [okButton setAction:@selector(okPressed:)];
+        [okButton setTarget:self];
+        // doesn't help either, the button is not highlighted after a color dialog has been used
+        // [okButton setKeyEquivalent:@"\r"];
+        m_okButton = okButton ;
 
 
-    [self addSubview:cancelButton];
-    [self addSubview:okButton];
+        [self addSubview:cancelButton];
+        [self addSubview:okButton];
 
-    [self resetFlags];
+        [self resetFlags];
+    }
     return self;
 }
 
@@ -318,9 +321,11 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 
 - (id)init
 {
-    [super init];
-    m_bIsClosed = false;
-
+    if ( self = [super init] )
+    {
+        m_bIsClosed = false;
+    }
+    
     return self;
 }
 
@@ -362,10 +367,11 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 
 - (id)init
 {
-    [super init];
-    m_bIsClosed = false;
-    m_bIsOpen = false;
-
+    if ( self = [super init] )
+    {
+        m_bIsClosed = false;
+        m_bIsOpen = false;
+    }
     return self;
 }
 

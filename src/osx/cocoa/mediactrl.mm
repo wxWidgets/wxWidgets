@@ -134,13 +134,13 @@ private:
 
 - (id) init
 {
-    self = [super init];
-    
-    [self addObserver:self forKeyPath:@"currentItem.status"
+    if ( self = [super init] )
+    {
+        [self addObserver:self forKeyPath:@"currentItem.status"
                   options:NSKeyValueObservingOptionNew context:AVSPPlayerItemStatusContext];
-    [self addObserver:self forKeyPath:@"rate"
+        [self addObserver:self forKeyPath:@"rate"
               options:NSKeyValueObservingOptionNew context:AVSPPlayerRateContext];
-
+    }
     return self;
 }
 
@@ -257,13 +257,12 @@ private:
 
 - (id) initWithFrame:(CGRect)rect player:(wxAVPlayer*) player
 {
-    if ( !(self=[super initWithFrame:rect]) )
-        return nil;
-
-    AVPlayerLayer* playerLayer = (AVPlayerLayer*) [self layer];
-    [playerLayer setPlayer: player];
-    [player setPlayerLayer:playerLayer];
-
+    if ( self = [super initWithFrame:rect] )
+    {
+        AVPlayerLayer* playerLayer = (AVPlayerLayer*) [self layer];
+        [playerLayer setPlayer: player];
+        [player setPlayerLayer:playerLayer];
+    }
     return self;
 }
 
@@ -297,11 +296,10 @@ private:
 
 - (id) initWithFrame:(NSRect)rect player:(wxAVPlayer*) player
 {
-    if ( !(self=[super initWithFrame:rect]) )
-        return nil;
-    
-    self.player = player;
-    
+    if ( self = [super initWithFrame:rect] )
+    {
+        self.player = player;
+    }
     return self;
 }
 
@@ -334,17 +332,17 @@ private:
 
 - (id) initWithFrame:(NSRect)rect player:(wxAVPlayer*) player
 {
-    if ( !(self=[super initWithFrame:rect]) )
-        return nil;
+    if ( self = [super initWithFrame:rect] )
+    {
+        [self setWantsLayer:YES];
+        AVPlayerLayer* playerlayer = [[AVPlayerLayer playerLayerWithPlayer: player] retain];
+        [player setPlayerLayer:playerlayer];
+
+        [playerlayer setFrame:[[self layer] bounds]];
+        [playerlayer setAutoresizingMask:kCALayerWidthSizable | kCALayerHeightSizable];
+        [[self layer] addSublayer:playerlayer];
+    }
     
-    [self setWantsLayer:YES];
-    AVPlayerLayer* playerlayer = [[AVPlayerLayer playerLayerWithPlayer: player] retain];
-    [player setPlayerLayer:playerlayer];
-
-    [playerlayer setFrame:[[self layer] bounds]];
-    [playerlayer setAutoresizingMask:kCALayerWidthSizable | kCALayerHeightSizable];
-    [[self layer] addSublayer:playerlayer];
-
     return self;
 }
 

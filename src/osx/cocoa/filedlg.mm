@@ -68,8 +68,10 @@
 
 - (id) init
 {
-    self = [super init];
-    _dialog = NULL;
+    if ( self = [super init] )
+    {
+        _dialog = NULL;
+    }
     return self;
 }
 
