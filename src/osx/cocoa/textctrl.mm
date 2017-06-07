@@ -856,16 +856,16 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
         if (position < (long) [[m_textView string] length]) 
         {
             NSTextStorage* storage = [m_textView textStorage];
-            font = [[storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL] autorelease];
-            bgcolor = [[storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:NULL] autorelease];
-            fgcolor = [[storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL] autorelease];
+            font = [storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL];
+            bgcolor = [storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:NULL];
+            fgcolor = [storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL];
         }
         else
         {
             NSDictionary* attrs = [m_textView typingAttributes];
-            font = [[attrs objectForKey:NSFontAttributeName] autorelease];
-            bgcolor = [[attrs objectForKey:NSBackgroundColorAttributeName] autorelease];
-            fgcolor = [[attrs objectForKey:NSForegroundColorAttributeName] autorelease];
+            font = [attrs objectForKey:NSFontAttributeName];
+            bgcolor = [attrs objectForKey:NSBackgroundColorAttributeName];
+            fgcolor = [attrs objectForKey:NSForegroundColorAttributeName];
         }
         
         if (font)

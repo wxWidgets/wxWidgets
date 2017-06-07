@@ -173,8 +173,6 @@ int wxMessageDialog::ShowModal()
 
 void wxMessageDialog::ShowWindowModal()
 {
-    NSAlert* alert = (NSAlert*)ConstructNSAlert();
-
     wxNonOwnedWindow* parentWindow = NULL;
 
     m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
@@ -186,6 +184,8 @@ void wxMessageDialog::ShowWindowModal()
 
     if (parentWindow)
     {
+        NSAlert* alert = (NSAlert*)ConstructNSAlert();
+        
         NSWindow* nativeParent = parentWindow->GetWXWindow();
         [alert beginSheetModalForWindow: nativeParent modalDelegate: m_sheetDelegate
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)

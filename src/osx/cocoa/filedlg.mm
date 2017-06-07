@@ -314,7 +314,7 @@ void wxFileDialog::ShowWindowModal()
     if (GetParent())
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
 
-    wxASSERT_MSG(parentWindow, "Window modal display requires parent.");
+    wxCHECK_RET(parentWindow, "Window modal display requires parent.");
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
