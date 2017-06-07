@@ -2476,6 +2476,8 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
             [attrString endEditing];
 
             [(id)m_osxView setAttributedTitle:attrString];
+            
+            [attrString release];
 
             return;
         }
