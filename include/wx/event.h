@@ -742,7 +742,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBRELEASE, wxScrol
     // Gesture events
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_PAN, wxPanGestureEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_ZOOM, wxZoomGestureEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_ROTATE, wxRoGestureEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_ROTATE, wxRotateGestureEvent);
 
     // System events
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SIZE, wxSizeEvent);
@@ -1868,7 +1868,7 @@ class WXDLLIMPEXP_CORE wxPanGestureEvent : public wxEvent
 
 {
 public:
-	 wxPanGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
+     wxPanGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
                    : wxEvent(winid, type)
                    { }
       
@@ -1883,14 +1883,14 @@ public:
      wxDirection GetPanDirection() const { return m_panDirection; }
      void SetPanDirection(const wxDirection& panDirection) { m_panDirection = panDirection; }
  
-     virtual wxEvent *Clone() const wxOVERRIDE { return new wxPanGestureEvent(*this); }
+     virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
  
 public:
     wxPoint m_pos;
     wxDirection m_panDirection;
 
 private:
-	wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
 
 };
 
@@ -1904,7 +1904,7 @@ class WXDLLIMPEXP_CORE wxZoomGestureEvent : public wxEvent
 
 {
 public:
-	 wxZoomGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
+     wxZoomGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
                    : wxEvent(winid, type)
                    { }
       
@@ -1919,14 +1919,14 @@ public:
      double GetZoomFactor() const { return m_zoomFactor; }
      void SetZoomFactor(const double& zoomFactor) { m_zoomFactor = zoomFactor; }
  
-     virtual wxEvent *Clone() const wxOVERRIDE { return new wxZoomGestureEvent(*this); }
+     virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
  
 public:
     wxPoint m_pos;
-    wxDirection m_zoomFactor;
+    double m_zoomFactor;
 
 private:
-	wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
 
 };
 
@@ -1940,7 +1940,7 @@ class WXDLLIMPEXP_CORE wxRotateGestureEvent : public wxEvent
 
 {
 public:
-	 wxRotateGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
+     wxRotateGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
                    : wxEvent(winid, type)
                    { }
       
@@ -1952,17 +1952,17 @@ public:
  
      double GetAngleDelta() const { return m_angleDelta; }
      void SetAngleDelta(const double& angleDelta) { m_angleDelta = angleDelta; }
-     double GetRotateDirection() const { return m_rotateDirection; }
+     wxRotateDirection GetRotateDirection() const { return m_rotateDirection; }
      void SetRotateDirection(const wxRotateDirection& rotateDirection) { m_rotateDirection = rotateDirection; }
  
-     virtual wxEvent *Clone() const wxOVERRIDE { return new wxRotateGestureEvent(*this); }
+     virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
  
 public:
-    wxPoint m_angleDelta;
-    wxDirection m_rotateDirection;
+    double m_angleDelta;
+    wxRotateDirection m_rotateDirection;
 
 private:
-	wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
 
 };
 
