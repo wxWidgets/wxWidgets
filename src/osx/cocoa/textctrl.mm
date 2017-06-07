@@ -548,7 +548,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger*)index
 {
-    NSMutableArray* matches = NULL;
+    NSMutableArray* matches = [NSMutableArray array];
 
     wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
     wxTextEntry * const entry = impl->GetTextEntry();
@@ -563,7 +563,6 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                               [[textView string] substringWithRange:charRange]
                             );
 
-            matches = [NSMutableArray array];
             for ( ;; )
             {
                 const wxString s = completer->GetNext();
