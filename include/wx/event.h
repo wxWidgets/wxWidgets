@@ -631,6 +631,9 @@ class WXDLLIMPEXP_FWD_CORE wxInitDialogEvent;
 class WXDLLIMPEXP_FWD_CORE wxUpdateUIEvent;
 class WXDLLIMPEXP_FWD_CORE wxClipboardTextEvent;
 class WXDLLIMPEXP_FWD_CORE wxHelpEvent;
+class WXDLLIMPEXP_FWD_CORE wxPanGestureEvent;
+class WXDLLIMPEXP_FWD_CORE wxZoomGestureEvent;
+class WXDLLIMPEXP_FWD_CORE wxRotateGestureEvent;
 
 
     // Command events
@@ -735,6 +738,11 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEv
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent);
+
+    // Gesture events
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_PAN, wxPanGestureEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_ZOOM, wxZoomGestureEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_ROTATE, wxRoGestureEvent);
 
     // System events
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SIZE, wxSizeEvent);
@@ -1848,6 +1856,114 @@ private:
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSetCursorEvent);
+};
+
+ // Pan Gesture Event
+
+ /*
+  wxEVT_GESTURE_PAN
+  */
+
+class WXDLLIMPEXP_CORE wxPanGestureEvent : public wxEvent
+
+{
+public:
+	 wxPanGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
+                   : wxEvent(winid, type)
+                   { }
+      
+     wxPanGestureEvent(const wxPanGestureEvent& event) : wxEvent(event)
+     {
+        m_pos = event.m_pos;
+        m_panDirection = event.m_panDirection;
+     }
+ 
+     wxPoint GetPosition() const { return m_pos; }
+     void SetPosition(const wxPoint& pos) { m_pos = pos; }
+     wxDirection GetPanDirection() const { return m_panDirection; }
+     void SetPanDirection(const wxDirection& panDirection) { m_panDirection = panDirection; }
+ 
+     virtual wxEvent *Clone() const wxOVERRIDE { return new wxPanGestureEvent(*this); }
+ 
+public:
+    wxPoint m_pos;
+    wxDirection m_panDirection;
+
+private:
+	wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
+
+};
+
+ //Zoom Gesture Event
+
+ /*
+  wxEVT_GESTURE_ZOOM
+  */
+
+class WXDLLIMPEXP_CORE wxZoomGestureEvent : public wxEvent
+
+{
+public:
+	 wxZoomGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
+                   : wxEvent(winid, type)
+                   { }
+      
+     wxZoomGestureEvent(const wxZoomGestureEvent& event) : wxEvent(event)
+     {
+        m_pos = event.m_pos;
+        m_zoomFactor = event.m_zoomFactor;
+     }
+ 
+     wxPoint GetPosition() const { return m_pos; }
+     void SetPosition(const wxPoint& pos) { m_pos = pos; }
+     double GetZoomFactor() const { return m_zoomFactor; }
+     void SetZoomFactor(const double& zoomFactor) { m_zoomFactor = zoomFactor; }
+ 
+     virtual wxEvent *Clone() const wxOVERRIDE { return new wxZoomGestureEvent(*this); }
+ 
+public:
+    wxPoint m_pos;
+    wxDirection m_zoomFactor;
+
+private:
+	wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
+
+};
+
+ //Rotate Gesture Event
+
+ /*
+  wxEVT_GESTURE_ROTATE
+  */
+
+class WXDLLIMPEXP_CORE wxRotateGestureEvent : public wxEvent
+
+{
+public:
+	 wxRotateGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
+                   : wxEvent(winid, type)
+                   { }
+      
+     wxRotateGestureEvent(const wxRotateGestureEvent& event) : wxEvent(event)
+     {
+        m_angleDelta = event.m_angleDelta;
+        m_rotateDirection = event.m_rotateDirection;
+     }
+ 
+     double GetAngleDelta() const { return m_angleDelta; }
+     void SetAngleDelta(const double& angleDelta) { m_angleDelta = angleDelta; }
+     double GetRotateDirection() const { return m_rotateDirection; }
+     void SetRotateDirection(const wxRotateDirection& rotateDirection) { m_rotateDirection = rotateDirection; }
+ 
+     virtual wxEvent *Clone() const wxOVERRIDE { return new wxRotateGestureEvent(*this); }
+ 
+public:
+    wxPoint m_angleDelta;
+    wxDirection m_rotateDirection;
+
+private:
+	wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
+
 };
 
 // Keyboard input event class
