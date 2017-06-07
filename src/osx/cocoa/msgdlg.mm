@@ -71,8 +71,6 @@ int wxMessageDialog::ShowModal()
 
     wxCFEventLoopPauseIdleEvents pause;
     
-    int resultbutton = wxID_CANCEL;
-
     const long style = GetMessageDialogStyle();
 
     wxASSERT_MSG( (style & 0x3F) != wxYES, wxT("this style is not supported on Mac") );
@@ -156,7 +154,9 @@ int wxMessageDialog::ShowModal()
             0, alertType, NULL, NULL, NULL, cfTitle, cfText,
             defaultButtonTitle, alternateButtonTitle, otherButtonTitle, &exitButton );
         if (err == noErr)
-            resultbutton = m_buttonId[exitButton];
+            SetReturnCode( m_buttonId[exitButton] );
+        else
+            SetReturnCode( wxID_CANCEL );
     }
     else
     {
@@ -164,8 +164,8 @@ int wxMessageDialog::ShowModal()
 
         int button = -1;
         button = [alert runModal];
-        [alert release];
         ModalFinishedCallback(alert, button);
+        [alert release];
     }
 
     return GetReturnCode();
