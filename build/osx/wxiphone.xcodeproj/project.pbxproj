@@ -350,6 +350,7 @@
 		66FD099CE5A338C18329FC36 /* LexAbaqus.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CD72950967F33809931D4968 /* LexAbaqus.cxx */; };
 		675B4E6CBA8632E89B4AC26D /* textctrl.mm in Sources */ = {isa = PBXBuildFile; fileRef = E4E16323A43E36DC8024EDF1 /* textctrl.mm */; };
 		67A0583ADD8C35B8B9BA3D12 /* checkbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81708CFA21A03013ACB8DDD7 /* checkbox.mm */; };
+		67CE7065EE593DAAA2CE4489 /* LexEDIFACT.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 42185ECBB8873E4C9E50D759 /* LexEDIFACT.cxx */; };
 		67EBCE5FA5FF36349ADF0916 /* jdapistd.c in Sources */ = {isa = PBXBuildFile; fileRef = 1EF327CE8D7E3C11BFC6BD74 /* jdapistd.c */; };
 		682403FBBD4E3D5E88159501 /* CellBuffer.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E860DD54EEBF3119961B7BB1 /* CellBuffer.cxx */; };
 		6832385DDBB33D1B90C73CBA /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 425BFA3FDB7D3EA7ADCE1087 /* renderer.cpp */; };
@@ -583,7 +584,10 @@
 		AF1E3338E892336E924AF631 /* pickerbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FBC22BAD63D3A1AB78F5F82 /* pickerbase.cpp */; };
 		B01C4EF49CF9390DA93A3502 /* jidctflt.c in Sources */ = {isa = PBXBuildFile; fileRef = 3C131F7BF8A83960ACB26242 /* jidctflt.c */; };
 		B026621DE50A3921B6598EF6 /* regerror.c in Sources */ = {isa = PBXBuildFile; fileRef = A70C82ADB45A3FB99C420D03 /* regerror.c */; };
+		B0C44C3054CB3E0590DDCBDA /* LexJSON.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F48BFBB2D4E43930BE005A42 /* LexJSON.cxx */; };
 		B0E94A59C83637C09FAAE71C /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 757B31FCCA1F381C95B30DF8 /* app.cpp */; };
+		B0FD1B96EAE635AFBFCF2C91 /* secretstore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BE1FB352696346BB642C044 /* secretstore.cpp */; };
+		B0FD1B96EAE635AFBFCF2C92 /* secretstore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BE1FB352696346BB642C045 /* secretstore.cpp */; };
 		B1775EF7C72233408044034B /* radiobox_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 773D91F8280434519BD167EA /* radiobox_osx.cpp */; };
 		B181806CC34839E791E54BF0 /* xh_tglbtn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDA232B9FFD33B7482E69B58 /* xh_tglbtn.cpp */; };
 		B189DB62AE9F30A1B613756B /* bmpcboxg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13FD4A890E9B3BAEBD568C3B /* bmpcboxg.cpp */; };
@@ -1067,6 +1071,7 @@
 		4188821BBA833CCAA678B234 /* utilscmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utilscmn.cpp; path = ../../src/common/utilscmn.cpp; sourceTree = "<group>"; };
 		418AD9241B673308BE31DC06 /* xlocale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xlocale.cpp; path = ../../src/common/xlocale.cpp; sourceTree = "<group>"; };
 		41D75DF4695B361DB700D51D /* PropSetSimple.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PropSetSimple.cxx; path = ../../src/stc/scintilla/lexlib/PropSetSimple.cxx; sourceTree = "<group>"; };
+		42185ECBB8873E4C9E50D759 /* LexEDIFACT.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexEDIFACT.cxx; path = ../../src/stc/scintilla/lexers/LexEDIFACT.cxx; sourceTree = "<group>"; };
 		425BFA3FDB7D3EA7ADCE1087 /* renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = renderer.cpp; path = ../../src/osx/carbon/renderer.cpp; sourceTree = "<group>"; };
 		42E433D1700631A8907B8227 /* helpctrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helpctrl.cpp; path = ../../src/html/helpctrl.cpp; sourceTree = "<group>"; };
 		430739CB8B95336ABB372EC7 /* EditView.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EditView.cxx; path = ../../src/stc/scintilla/src/EditView.cxx; sourceTree = "<group>"; };
@@ -1152,6 +1157,8 @@
 		5B83407D156C3CC3A66F05A4 /* fswatcher_fsevents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fswatcher_fsevents.cpp; path = ../../src/osx/fswatcher_fsevents.cpp; sourceTree = "<group>"; };
 		5B9586328A1F3C4BA0390AA5 /* time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = ../../src/common/time.cpp; sourceTree = "<group>"; };
 		5BD6231188AB329CAA5E1171 /* evtloop_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = evtloop_cf.cpp; path = ../../src/osx/core/evtloop_cf.cpp; sourceTree = "<group>"; };
+		5BE1FB352696346BB642C044 /* secretstore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = secretstore.cpp; path = ../../src/common/secretstore.cpp; sourceTree = "<group>"; };
+		5BE1FB352696346BB642C045 /* secretstore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = secretstore.cpp; path = ../../src/osx/core/secretstore.cpp; sourceTree = "<group>"; };
 		5BEC6B3CAFB532CBB9F95D74 /* jutils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jutils.c; path = ../../src/jpeg/jutils.c; sourceTree = "<group>"; };
 		5C85865D28DC31649440A921 /* imagxpm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagxpm.cpp; path = ../../src/common/imagxpm.cpp; sourceTree = "<group>"; };
 		5C8CEE782CD236A5A9999724 /* xh_filepicker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_filepicker.cpp; path = ../../src/xrc/xh_filepicker.cpp; sourceTree = "<group>"; };
@@ -1677,6 +1684,7 @@
 		F4020D790AE7363CB29F1C2F /* anybutton.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = anybutton.mm; path = ../../src/osx/iphone/anybutton.mm; sourceTree = "<group>"; };
 		F43AF44465B335479752116D /* xh_radbx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_radbx.cpp; path = ../../src/xrc/xh_radbx.cpp; sourceTree = "<group>"; };
 		F46EC1508C063C8395CE7A95 /* sstream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sstream.cpp; path = ../../src/common/sstream.cpp; sourceTree = "<group>"; };
+		F48BFBB2D4E43930BE005A42 /* LexJSON.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexJSON.cxx; path = ../../src/stc/scintilla/lexers/LexJSON.cxx; sourceTree = "<group>"; };
 		F4B85051B7C835A8BF4E3EE1 /* xh_panel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_panel.cpp; path = ../../src/xrc/xh_panel.cpp; sourceTree = "<group>"; };
 		F4C72C5C61A6335C8B418BA1 /* LexMetapost.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexMetapost.cxx; path = ../../src/stc/scintilla/lexers/LexMetapost.cxx; sourceTree = "<group>"; };
 		F52DCBC0442233738B39138E /* CaseFolder.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CaseFolder.cxx; path = ../../src/stc/scintilla/src/CaseFolder.cxx; sourceTree = "<group>"; };
@@ -1813,6 +1821,7 @@
 				AC62806DE67F33E18C386D4F /* LexDMAP.cxx */,
 				910D00F1C9143C6D85C24E7C /* LexDMIS.cxx */,
 				1AD9605C9385374C87FAC9BC /* LexECL.cxx */,
+				42185ECBB8873E4C9E50D759 /* LexEDIFACT.cxx */,
 				55EBB18CB4773C788510B14B /* LexEiffel.cxx */,
 				A1276C0E5D48337489DEE8DF /* LexErlang.cxx */,
 				2851EAAEE9B73FE8981912C9 /* LexErrorList.cxx */,
@@ -1826,6 +1835,7 @@
 				1C86EC3AA4193E639EB08AA7 /* LexHex.cxx */,
 				D87406BCF3E833369E12D89A /* LexHTML.cxx */,
 				15CBD0AAFEB435429EA96D41 /* LexInno.cxx */,
+				F48BFBB2D4E43930BE005A42 /* LexJSON.cxx */,
 				B303230368143F37B2409DE6 /* LexKix.cxx */,
 				FCE8B55EBD6B348B8351AB08 /* LexKVIrc.cxx */,
 				E72F0A2EE3DB34E193D8CCA7 /* LexLaTeX.cxx */,
@@ -2641,12 +2651,14 @@
 				B9B5BC858CCF3477895D2786 /* zstream.cpp */,
 				7D2BE094D90D3AFDAE49F589 /* fswatchercmn.cpp */,
 				47783A330B2A3B4EBB1CD95D /* fswatcherg.cpp */,
+				5BE1FB352696346BB642C044 /* secretstore.cpp */,
 				7C97C1F26B5A38C49543060C /* mimetype.cpp */,
 				5168ADF7BE39351F8F24E1E6 /* cfstring.cpp */,
 				5BD6231188AB329CAA5E1171 /* evtloop_cf.cpp */,
 				D5F9383D1CE931499F339D85 /* strconv_cf.cpp */,
 				81390F96937631078EFCD891 /* utilsexc_base.cpp */,
 				2ED0C0702D2734D9B08FC31D /* utils_base.mm */,
+				5BE1FB352696346BB642C045 /* secretstore.cpp */,
 				47F784C2BB5A3B5DAD276583 /* fdiodispatcher.cpp */,
 				A5D569A4DE643DC8B0C28087 /* selectdispatcher.cpp */,
 				B40E0F6AA0273ACD9BDEAD72 /* appunix.cpp */,
@@ -2953,12 +2965,14 @@
 				014AF0BAB1783A5D9D75A7ED /* zstream.cpp in Sources */,
 				A93D0E6F0871368EA8FC9FF9 /* fswatchercmn.cpp in Sources */,
 				E49F0D43B5A63EF1A57A7112 /* fswatcherg.cpp in Sources */,
+				B0FD1B96EAE635AFBFCF2C91 /* secretstore.cpp in Sources */,
 				4657E7382E9E3EDC8DE2401E /* mimetype.cpp in Sources */,
 				1DBDF75500D73A3098015E7F /* cfstring.cpp in Sources */,
 				9FBC642677C63D01AA2511BC /* evtloop_cf.cpp in Sources */,
 				AAAB5DF8E60736D88273DCFE /* strconv_cf.cpp in Sources */,
 				4E140367282F38C8A904A004 /* utilsexc_base.cpp in Sources */,
 				68C300D096BF39239876D043 /* utils_base.mm in Sources */,
+				B0FD1B96EAE635AFBFCF2C92 /* secretstore.cpp in Sources */,
 				D36E76A4CAF5352D9397E1FF /* fdiodispatcher.cpp in Sources */,
 				D3FB75C8E3A73AE38EE8A6F6 /* selectdispatcher.cpp in Sources */,
 				BAAB6B1D80A33843A8436B10 /* appunix.cpp in Sources */,
@@ -3603,6 +3617,7 @@
 				0B792C3F31713850818EEFEA /* LexDMAP.cxx in Sources */,
 				DC5F82733F733D98B39DE74D /* LexDMIS.cxx in Sources */,
 				AAC2AC9C49F1366D8BD20F5E /* LexECL.cxx in Sources */,
+				67CE7065EE593DAAA2CE4489 /* LexEDIFACT.cxx in Sources */,
 				E8BBC08597EF383597DA0308 /* LexEiffel.cxx in Sources */,
 				BFD3BFBDC8DA3B1EAD141F96 /* LexErlang.cxx in Sources */,
 				8D6B0D48EA843E48AB0FE43D /* LexErrorList.cxx in Sources */,
@@ -3616,6 +3631,7 @@
 				D98FABF75BCE3AF18C91B42D /* LexHex.cxx in Sources */,
 				AEEE6BC41B6531898A61CB16 /* LexHTML.cxx in Sources */,
 				B37802B0A90133C68EF93DDA /* LexInno.cxx in Sources */,
+				B0C44C3054CB3E0590DDCBDA /* LexJSON.cxx in Sources */,
 				14C024EB327435A2A571DA2C /* LexKix.cxx in Sources */,
 				E3AD8574E13B39BDB8D4E92E /* LexKVIrc.cxx in Sources */,
 				62331487C17B32E081B8FEA7 /* LexLaTeX.cxx in Sources */,
