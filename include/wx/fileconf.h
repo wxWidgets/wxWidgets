@@ -174,6 +174,11 @@ public:
   virtual bool DeleteGroup(const wxString& szKey) wxOVERRIDE;
   virtual bool DeleteAll() wxOVERRIDE;
 
+  // set/test the dirty flag
+  void SetDirty() { m_isDirty = true; }
+  void ResetDirty() { m_isDirty = false; }
+  bool IsDirty() const { return m_isDirty; }
+
   // additional, wxFileConfig-specific, functionality
 #if wxUSE_STREAMS
   // save the entire config file text to the given stream, note that the text
@@ -224,12 +229,6 @@ private:
   // real SetPath() implementation, returns true if path could be set or false
   // if path doesn't exist and createMissingComponents == false
   bool DoSetPath(const wxString& strPath, bool createMissingComponents);
-
-  // set/test the dirty flag
-  void SetDirty() { m_isDirty = true; }
-  void ResetDirty() { m_isDirty = false; }
-  bool IsDirty() const { return m_isDirty; }
-
 
   // member variables
   // ----------------

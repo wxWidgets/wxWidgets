@@ -129,5 +129,10 @@ public:
   virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true);
   virtual bool DeleteGroup(const wxString& szKey);
   virtual bool DeleteAll();
+
+  // set/test the dirty flag
+  void SetDirty();
+  void ResetDirty();
+  bool IsDirty();
 };
 
