@@ -335,7 +335,7 @@ private:
     if ( self = [super initWithFrame:rect] )
     {
         [self setWantsLayer:YES];
-        AVPlayerLayer* playerlayer = [[AVPlayerLayer playerLayerWithPlayer: player] retain];
+        AVPlayerLayer* playerlayer = [AVPlayerLayer playerLayerWithPlayer: player];
         [player setPlayerLayer:playerlayer];
 
         [playerlayer setFrame:[[self layer] bounds]];
