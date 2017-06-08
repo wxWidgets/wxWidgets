@@ -1865,7 +1865,6 @@ private:
   */
 
 class WXDLLIMPEXP_CORE wxPanGestureEvent : public wxEvent
-
 {
 public:
      wxPanGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
@@ -1899,7 +1898,6 @@ private:
   */
 
 class WXDLLIMPEXP_CORE wxZoomGestureEvent : public wxEvent
-
 {
 public:
      wxZoomGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
@@ -1933,7 +1931,6 @@ private:
   */
 
 class WXDLLIMPEXP_CORE wxRotateGestureEvent : public wxEvent
-
 {
 public:
      wxRotateGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
