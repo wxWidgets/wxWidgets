@@ -565,6 +565,16 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
                 <!-- this one is only used if wxUSE_URL_NATIVE==1 but we don't
                      know if it is here so just add it unconditionally -->
                 <sys-lib>wininet</sys-lib>
+                <if cond="FORMAT in ['mingw']">
+                    <!-- for Direct 2D -->
+                    <sys-lib>d2d1</sys-lib>
+                    <sys-lib>dwrite</sys-lib>
+                    <sys-lib>windowscodecs</sys-lib>
+                    <!-- TODO : Test for Windows 7 SP xx and Windows 8, with Direct 3D v.11 -->
+                    <!-- <sys-lib>D3D11</sys-lib> -->
+                    <!-- <sys-lib>D2d1_1</sys-lib> -->
+                    <!-- <sys-lib>DXGI1_2</sys-lib> -->
+                </if>
             </if>
             <!-- For MSVC this library is conditionally included from
                  wx/msw/libraries.h when wxUSE_ACCESSIBILITY==1 -->
