@@ -1878,7 +1878,7 @@ public:
         m_panDirection = event.m_panDirection;
      }
  
-     wxPoint GetPosition() const { return m_pos; }
+     const wxPoint& GetPosition() const { return m_pos; }
      void SetPosition(const wxPoint& pos) { m_pos = pos; }
      wxDirection GetPanDirection() const { return m_panDirection; }
      void SetPanDirection(const wxDirection& panDirection) { m_panDirection = panDirection; }
@@ -1912,7 +1912,7 @@ public:
         m_zoomFactor = event.m_zoomFactor;
      }
  
-     wxPoint GetPosition() const { return m_pos; }
+     const wxPoint& GetPosition() const { return m_pos; }
      void SetPosition(const wxPoint& pos) { m_pos = pos; }
      double GetZoomFactor() const { return m_zoomFactor; }
      void SetZoomFactor(const double& zoomFactor) { m_zoomFactor = zoomFactor; }
@@ -1956,7 +1956,7 @@ public:
 private:
     double m_angleDelta;
     wxRotateDirection m_rotateDirection;
-    
+
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
 };
 
