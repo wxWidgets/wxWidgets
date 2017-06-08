@@ -7484,7 +7484,7 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
                         choke me
                     #endif
                 ],
-                [GST_LIBS="$GST_LIBS -framework AVKit"; AC_MSG_RESULT(yes)],
+                [GST_LIBS="$GST_LIBS -weak_framework AVKit"; AC_MSG_RESULT(yes)],
                 AC_MSG_RESULT(no)
             )
             CPPFLAGS="$old_CPPFLAGS"
