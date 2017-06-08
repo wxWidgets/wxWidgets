@@ -969,17 +969,10 @@ wxString wxWebViewWebKit::GetPageText() const
                     wxConvUTF8);
 }
 
-wxString wxWebViewWebKit::RunScript(const wxString& javascript)
+void wxWebViewWebKit::RunScript(const wxString& javascript)
 {
-
-    webkit_web_view_run_javascript(m_web_view,
-                                   javascript.mb_str(wxConvUTF8), NULL, NULL, NULL);
-    return _("Test");
-}
-
-wxString wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data = null)
-{
-  return wxT("");
+    webkit_web_view_execute_script(m_web_view,
+                                   javascript.mb_str(wxConvUTF8));
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
