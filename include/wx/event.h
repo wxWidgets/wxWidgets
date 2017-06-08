@@ -1885,11 +1885,10 @@ public:
  
      virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
  
-public:
+private:
     wxPoint m_pos;
     wxDirection m_panDirection;
 
-private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
 };
 
@@ -1920,11 +1919,10 @@ public:
  
      virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
  
-public:
+private:
     wxPoint m_pos;
     double m_zoomFactor;
 
-private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
 };
 
@@ -1955,11 +1953,10 @@ public:
  
      virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
  
-public:
+private:
     double m_angleDelta;
     wxRotateDirection m_rotateDirection;
-
-private:
+    
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
 };
 
