@@ -194,8 +194,10 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
     #endif
 
     #ifdef HAVE_STRTOULL
-        wxDECL_FOR_STRICT_MINGW32(long long, strtoll, (const char*, char**, int))
-        wxDECL_FOR_STRICT_MINGW32(unsigned long long, strtoull, (const char*, char**, int))
+        #if !defined (_STDLIB_H_) || defined (RC_INVOKED) || defined (__NO_ISOCEXT)
+            wxDECL_FOR_STRICT_MINGW32(long long, strtoll, (const char*, char**, int))
+            wxDECL_FOR_STRICT_MINGW32(unsigned long long, strtoull, (const char*, char**, int))
+        #endif
 
         #define wxCRT_StrtollA   strtoll
         #define wxCRT_StrtoullA  strtoull

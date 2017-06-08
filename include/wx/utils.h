@@ -601,8 +601,9 @@ WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
                                      wxDiskspaceSize_t *pTotal = NULL,
                                      wxDiskspaceSize_t *pFree = NULL);
 
-
-
+// wxQsort can be initially declared in wx/vector.h
+#ifndef _WX_WXQSORT_DECLARED_
+#define _WX_WXQSORT_DECLARED_
 typedef int (*wxSortCallback)(const void* pItem1,
                               const void* pItem2,
                               const void* user_data);
@@ -611,7 +612,7 @@ typedef int (*wxSortCallback)(const void* pItem1,
 WXDLLIMPEXP_BASE void wxQsort(void* pbase, size_t total_elems,
                               size_t size, wxSortCallback cmp,
                               const void* user_data);
-
+#endif // _WX_WXQSORT_DECLARED_
 
 #if wxUSE_GUI // GUI only things from now on
 
