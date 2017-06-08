@@ -1880,7 +1880,7 @@ public:
      const wxPoint& GetPosition() const { return m_pos; }
      void SetPosition(const wxPoint& pos) { m_pos = pos; }
      wxDirection GetPanDirection() const { return m_panDirection; }
-     void SetPanDirection(const wxDirection panDirection) { m_panDirection = panDirection; }
+     void SetPanDirection(wxDirection panDirection) { m_panDirection = panDirection; }
  
      virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
  
@@ -1913,7 +1913,7 @@ public:
      const wxPoint& GetPosition() const { return m_pos; }
      void SetPosition(const wxPoint& pos) { m_pos = pos; }
      double GetZoomFactor() const { return m_zoomFactor; }
-     void SetZoomFactor(const double zoomFactor) { m_zoomFactor = zoomFactor; }
+     void SetZoomFactor(double zoomFactor) { m_zoomFactor = zoomFactor; }
  
      virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
  
@@ -1944,9 +1944,9 @@ public:
      }
  
      double GetAngleDelta() const { return m_angleDelta; }
-     void SetAngleDelta(const double angleDelta) { m_angleDelta = angleDelta; }
+     void SetAngleDelta(double angleDelta) { m_angleDelta = angleDelta; }
      wxRotateDirection GetRotateDirection() const { return m_rotateDirection; }
-     void SetRotateDirection(const wxRotateDirection& rotateDirection) { m_rotateDirection = rotateDirection; }
+     void SetRotateDirection(wxRotateDirection rotateDirection) { m_rotateDirection = rotateDirection; }
  
      virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
  
