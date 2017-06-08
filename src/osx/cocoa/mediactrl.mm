@@ -32,7 +32,7 @@
 
 #include "wx/osx/private.h"
 
-#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
     #define wxOSX_USE_AVKIT 1
 #else
     #define wxOSX_USE_AVKIT 0
