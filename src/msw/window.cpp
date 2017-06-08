@@ -3159,6 +3159,29 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
+        case WM_GESTURENOTIFY:
+            {
+                // Single finger panning is disabled by default windows 8 and may be in later versions also
+                DWORD dwPanWant = GC_PAN_WITH_SINGLE_FINGER_VERTICALLY | GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY;
+                DWORD dwPanBlock = GC_PAN_WITH_GUTTER /*| GC_PAN_WITH_INERTIA*/;
+
+                // Set the settings in the gesture configuration
+                GESTURECONFIG gc[] = { {GID_ZOOM, GC_ZOOM, 0},
+                {GID_ROTATE, GC_ROTATE, 0},
+                {GID_PAN, GC_PAN dwPanWant , dwPanBlock}
+                };
+
+                UINT uiGcs = 3;
+                
+                if(!::SetGestureConfig(GetHwnd(), 0, uiGcs, gc, sizeof(GESTURECONFIG)))
+                {
+                    wxLogLastError(wxT("SetGestureConfig"));
+                }
+                // WM_GESTURENOTIFY must always be passed to DefWindowProc  
+                processed = false;
+            }
+            break;
+
         // CTLCOLOR messages are sent by children to query the parent for their
         // colors
         case WM_CTLCOLORMSGBOX:
