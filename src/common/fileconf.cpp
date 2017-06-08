@@ -57,6 +57,7 @@
 // ----------------------------------------------------------------------------
 
 #define FILECONF_TRACE_MASK wxT("fileconf")
+#define CHAR_BOM 0xFEFF
 
 // ----------------------------------------------------------------------------
 // global functions declarations
@@ -516,8 +517,8 @@ void wxFileConfig::Parse(const wxTextBuffer& buffer, bool bLocal)
       LineListAppend(strLine);
 
 
-    // skip leading spaces
-    for ( pStart = buf; wxIsspace(*pStart); pStart++ )
+    // skip leading spaces or Unicode byte-order mark
+    for ( pStart = buf; wxIsspace(*pStart) || *pStart == CHAR_BOM; pStart++ )
       ;
 
     // skip blank/comment lines
