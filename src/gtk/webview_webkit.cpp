@@ -19,6 +19,7 @@
 #include "wx/base64.h"
 #include "wx/log.h"
 #include <webkit/webkit.h>
+//#include <webkit2/webkit2.h>
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -971,8 +972,10 @@ wxString wxWebViewWebKit::GetPageText() const
 
 void wxWebViewWebKit::RunScript(const wxString& javascript)
 {
-    webkit_web_view_execute_script(m_web_view,
-                                   javascript.mb_str(wxConvUTF8));
+
+  webkit_web_view_run_javascript(m_web_view,javascript.mb_str(wxConvUTF8), NULL, NULL, NULL);
+  //webkit_web_view_execute_script(m_web_view,
+  //                               javascript.mb_str(wxConvUTF8));
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
