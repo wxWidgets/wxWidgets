@@ -1623,7 +1623,6 @@ enum wxRotateDirection
 {
     wxCLOCKWISE               = 0x0010,
     wxCOUNTERCLOCKWISE        = 0x0020
-
 };
 
 enum wxAlignment

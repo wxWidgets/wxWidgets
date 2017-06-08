@@ -1891,7 +1891,6 @@ public:
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
-
 };
 
  //Zoom Gesture Event
@@ -1927,7 +1926,6 @@ public:
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
-
 };
 
  //Rotate Gesture Event
@@ -1963,7 +1961,6 @@ public:
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
-
 };
 
 // Keyboard input event class
