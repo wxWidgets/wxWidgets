@@ -1942,15 +1942,18 @@ public:
         m_angleDelta = event.m_angleDelta;
         m_rotateDirection = event.m_rotateDirection;
      }
- 
+   
      double GetAngleDelta() const { return m_angleDelta; }
      void SetAngleDelta(double angleDelta) { m_angleDelta = angleDelta; }
      wxRotateDirection GetRotateDirection() const { return m_rotateDirection; }
      void SetRotateDirection(wxRotateDirection rotateDirection) { m_rotateDirection = rotateDirection; }
+     const wxPoint& GetPosition() const { return m_pos; }
+     void SetPosition(const wxPoint& pos) { m_pos = pos; }
  
      virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
  
 private:
+    wxPoint m_pos;
     double m_angleDelta;
     wxRotateDirection m_rotateDirection;
 
