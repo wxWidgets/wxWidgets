@@ -203,6 +203,9 @@ int gs_modalEntryWindowCount = 0;
 // Indicates whether we are currently processing WM_CAPTURECHANGED message.
 bool gs_insideCaptureChanged = false;
 
+// This is used to track the last gesture event point in client coordinates
+wxPoint ptLastGestureEvent;
+
 } // anonymous namespace
 
 // ---------------------------------------------------------------------------
@@ -3159,26 +3162,40 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-        case WM_GESTURENOTIFY:
+        case WM_GESTURE:
             {
-                // Single finger panning is disabled by default windows 8 and may be in later versions also
-                DWORD dwPanWant = GC_PAN_WITH_SINGLE_FINGER_VERTICALLY | GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY;
-                DWORD dwPanBlock = GC_PAN_WITH_GUTTER /*| GC_PAN_WITH_INERTIA*/;
-
-                // Set the settings in the gesture configuration
-                GESTURECONFIG gc[] = { {GID_ZOOM, GC_ZOOM, 0},
-                {GID_ROTATE, GC_ROTATE, 0},
-                {GID_PAN, GC_PAN dwPanWant , dwPanBlock}
-                };
-
-                UINT uiGcs = 3;
+                // gestureInfo will contain the information about the gesture
+                GESTUREINFO gestureInfo;
+                ZeroMemory(&gestureInfo, sizeof(GESTUREINFO));
+                gestureInfo.cbSize = sizeof(GESTUREINFO);
                 
-                if(!::SetGestureConfig(GetHwnd(), 0, uiGcs, gc, sizeof(GESTURECONFIG)))
+                // This should fill gestureInfo with the gesture details
+                if(!::GetGestureInfo((HGESTUREINFO)lParam, &gestureInfo))
                 {
-                    wxLogLastError(wxT("SetGestureConfig"));
+                    wxLogLastError(wxT("GetGestureInfo"));
+                    processed = false;
                 }
-                // WM_GESTURENOTIFY must always be passed to DefWindowProc  
-                processed = false;
+
+                else
+                {   
+                    // dwID field is used to determine the type of gesture
+                    switch(gestureInfo.dwID)
+                    {
+                        // Pan gesture
+                        case GID_PAN:
+                        {
+                            // ptsLocation(POINTS struct) is the current position of the pan
+                            int x = gestureInfo.ptsLocation.x;
+                            int y = gestureInfo.ptsLocation.y;
+                            // Convert them into client coordinates
+                            ScreenToClient(&x, &y);
+                            processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
+                        }
+
+                    }
+
+                }
+
             }
             break;
 
@@ -5526,6 +5543,76 @@ void wxWindowMSW::GenerateMouseLeave()
     InitMouseEvent(event, pt.x, pt.y, state);
 
     (void)HandleWindowEvent(event);
+}
+
+// ---------------------------------------------------------------------------
+// Gesture events
+// ---------------------------------------------------------------------------
+
+bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
+{
+    // This flag indicates that the gesture has just started
+    // Store the current point to determine the pan direction later on
+    if(flags & GF_BEGIN)
+    {
+        ptLastGestureEvent.x = x;
+        ptLastGestureEvent.y = y;
+        return true;
+    }
+    
+    // This flag indicates that the gesture has just ended 
+    if(flags & GF_END)
+    {
+        return true;
+    }
+    
+    wxPoint pt;
+    pt.x = x;
+    pt.y = y;
+    
+    // Determine the horizontal and vertical changes
+    int panDeltaX =  x - ptLastGestureEvent.x, panDeltaY = y - ptLastGestureEvent.y;
+    
+    // wxEVT_GESTURE_PAN
+    wxPanGestureEvent event(wxEVT_GESTURE_PAN, GetId());
+    event.SetEventObject(this);
+    event.SetTimestamp(::GetMessageTime());
+    event.SetPosition(pt);
+    
+    // It might be the case that the direction of finger(s) is diagnol rather than along
+    // one of the axis. The axis in which the change is greater should be preferred
+    // Currently, vertical axis is preferred if the change is equal for both
+    if( abs(panDeltaY) >= abs(panDeltaX) )
+    {
+        if(panDeltaY > 0)
+        {
+            event.SetPanDirection(wxDOWN);
+        }
+
+        else
+        {
+            event.SetPanDirection(wxUP);
+        }
+
+    }
+
+    else
+    {
+        if(panDeltaX > 0)
+        {
+            event.SetPanDirection(wxRIGHT);
+        }
+
+        else
+        {
+            event.SetPanDirection(wxLEFT);
+        }
+    }
+    
+    // Update the last gesture event point 
+    ptLastGestureEvent.x = x;
+    ptLastGestureEvent.y = y;
+    return HandleWindowEvent(event);
 }
 
 // ---------------------------------------------------------------------------
