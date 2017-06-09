@@ -3191,11 +3191,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             ScreenToClient(&x, &y);
                             processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
                         }
-
                     }
-
                 }
-
             }
             break;
 
@@ -5593,7 +5590,6 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
         {
             event.SetPanDirection(wxUP);
         }
-
     }
 
     else
