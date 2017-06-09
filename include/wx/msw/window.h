@@ -360,6 +360,8 @@ public:
     bool HandleMouseWheel(wxMouseWheelAxis axis,
                           WXWPARAM wParam, WXLPARAM lParam);
 
+    bool HandlePanGesture(int x, int y, WXDWORD flags);
+
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
