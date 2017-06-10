@@ -3166,7 +3166,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             {
                 // gestureInfo will contain the information about the gesture
                 GESTUREINFO gestureInfo;
-                ZeroMemory(&gestureInfo, sizeof(GESTUREINFO));
                 gestureInfo.cbSize = sizeof(GESTUREINFO);
                 
                 // This should fill gestureInfo with the gesture details
