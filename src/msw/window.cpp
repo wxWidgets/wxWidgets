@@ -5563,8 +5563,6 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     }
     
     wxPoint pt;
-    pt.x = x;
-    pt.y = y;
     
     // Determine the horizontal and vertical changes
     int panDeltaX =  x - gs_ptLastGestureEvent.x, panDeltaY = y - gs_ptLastGestureEvent.y;
