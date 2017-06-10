@@ -103,6 +103,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureLostEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxPanGestureEvent, wxEvent);
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -257,6 +258,9 @@ wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent );
+
+// Gesture events
+wxDEFINE_EVENT( wxEVT_GESTURE_PAN, wxPanGestureEvent );
 
 // System events
 wxDEFINE_EVENT( wxEVT_SIZE, wxSizeEvent );
