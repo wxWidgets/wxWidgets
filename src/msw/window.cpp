@@ -204,7 +204,7 @@ int gs_modalEntryWindowCount = 0;
 bool gs_insideCaptureChanged = false;
 
 // This is used to track the last gesture event point in client coordinates
-wxPoint ptLastGestureEvent;
+wxPoint gs_ptLastGestureEvent;
 
 } // anonymous namespace
 
@@ -5551,8 +5551,8 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     // Store the current point to determine the pan direction later on
     if(flags & GF_BEGIN)
     {
-        ptLastGestureEvent.x = x;
-        ptLastGestureEvent.y = y;
+        gs_ptLastGestureEvent.x = x;
+        gs_ptLastGestureEvent.y = y;
         return true;
     }
     
@@ -5567,7 +5567,7 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     pt.y = y;
     
     // Determine the horizontal and vertical changes
-    int panDeltaX =  x - ptLastGestureEvent.x, panDeltaY = y - ptLastGestureEvent.y;
+    int panDeltaX =  x - gs_ptLastGestureEvent.x, panDeltaY = y - gs_ptLastGestureEvent.y;
     
     // wxEVT_GESTURE_PAN
     wxPanGestureEvent event(wxEVT_GESTURE_PAN, GetId());
@@ -5605,8 +5605,8 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     }
     
     // Update the last gesture event point 
-    ptLastGestureEvent.x = x;
-    ptLastGestureEvent.y = y;
+    gs_ptLastGestureEvent.x = x;
+    gs_ptLastGestureEvent.y = y;
     return HandleWindowEvent(event);
 }
 
