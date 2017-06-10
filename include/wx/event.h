@@ -1942,7 +1942,7 @@ public:
         m_angleDelta = event.m_angleDelta;
         m_rotateDirection = event.m_rotateDirection;
      }
-   
+     
      double GetAngleDelta() const { return m_angleDelta; }
      void SetAngleDelta(double angleDelta) { m_angleDelta = angleDelta; }
      wxRotateDirection GetRotateDirection() const { return m_rotateDirection; }
@@ -4018,6 +4018,7 @@ typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureChangedEvent&);
 typedef void (wxEvtHandler::*wxMouseCaptureLostEventFunction)(wxMouseCaptureLostEvent&);
 typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&);
+typedef void (wxEvtHandler::*wxPanGestureEventFunction)(wxPanGestureEvent&);
 
 
 #define wxCommandEventHandler(func) \
@@ -4093,6 +4094,9 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     wxEVENT_HANDLER_CAST(wxMouseCaptureLostEventFunction, func)
 #define wxClipboardTextEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxClipboardTextEventFunction, func)
+#define wxPanGestureEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxPanGestureEventFunction, func)
+
 
 #endif // wxUSE_GUI
 
@@ -4426,6 +4430,9 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     EVT_COMMAND_SCROLL_THUMBTRACK(winid, func) \
     EVT_COMMAND_SCROLL_THUMBRELEASE(winid, func) \
     EVT_COMMAND_SCROLL_CHANGED(winid, func)
+
+// Gesture events
+#define EVT_GESTURE_PAN(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_PAN, winid, wxPanGestureEventHandler(func))    
 
 // Convenience macros for commonly-used commands
 #define EVT_CHECKBOX(winid, func) wx__DECLARE_EVT1(wxEVT_CHECKBOX, winid, wxCommandEventHandler(func))
