@@ -206,6 +206,9 @@ bool gs_insideCaptureChanged = false;
 // This is used to track the last gesture event point in client coordinates
 wxPoint gs_ptLastGestureEvent;
 
+// This is used to calculate the zoom factor for zoom gesture
+WXWORD gs_lastZoomDistance;
+
 } // anonymous namespace
 
 // ---------------------------------------------------------------------------
@@ -3190,6 +3193,22 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             ScreenToClient(&x, &y);
                             processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
                         }
+
+                        // Zoom gesture
+                        case GID_ZOOM:
+                        {
+                            // ptsLocation is the mid-point of the 2 fingers
+                            int x = gestureInfo.ptsLocation.x;
+                            int y = gestureInfo.ptsLocation.y;
+                            // Convert them into client coordinates
+                            ScreenToClient(&x, &y);
+                            
+                            // ullArgument field is a 64-bit unsigned integer, but the relevant information
+                            // is in it's lower 4 bytes and represents distance between the fingers
+                            // this is used to extract those lower 4 bytes
+                            DWORD zoomDistance = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
+                            processed = HandleZoomGesture(x, y, zoomDistance, gestureInfo.dwFlags);
+                        }
                     }
                 }
             }
@@ -5605,6 +5624,50 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     // Update the last gesture event point 
     gs_ptLastGestureEvent.x = x;
     gs_ptLastGestureEvent.y = y;
+    return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD flags)
+{
+    // This flag indicates that the gesture has just started
+    // Store the current point and zoom distance for future calculations
+    if(flags & GF_BEGIN)
+    {
+      gs_ptLastGestureEvent.x = x;
+      gs_ptLastGestureEvent.y = y;
+      gs_lastZoomDistance = zoomDistance;
+      return true;
+    }
+
+    // This flag indicates that the gesture has just ended
+    if(flags & GF_END)
+    {
+      return true;
+    }
+    
+    // Calculate center point of the zoom
+    // Human beings are not very good at moving two fingers at exactly the same rate outwards/inwards
+    // There is usually some error, which can cause the center to shift slightly
+    // So, it is recommended to take the average of current gesture point and the last gesture point
+    wxPoint pt(x,y);
+    pt.x = (gs_ptLastGestureEvent.x + x) / 2;
+    pt.y = (gs_ptLastGestureEvent.y + y) / 2;
+
+    // Calculate the zoom factor which is the ratio of zoomDistance and gs_lastZoomDistance
+    double zoomFactor = (double) zoomDistance / (double) gs_lastZoomDistance;
+
+    // wxEVT_GESTURE_ZOOM
+    wxZoomGestureEvent event(wxEVT_GESTURE_ZOOM, GetId());
+    event.SetEventObject(this);
+    event.SetTimestamp(::GetMessageTime());
+    event.SetPosition(pt);
+    event.SetZoomFactor(zoomFactor);
+
+    // Update gs_lastZoomDistance and gs_ptLastGestureEvent
+    gs_ptLastGestureEvent.x = x;
+    gs_ptLastGestureEvent.y = y;
+    gs_lastZoomDistance = zoomDistance;
+
     return HandleWindowEvent(event);
 }
 
