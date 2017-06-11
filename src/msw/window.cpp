@@ -5648,7 +5648,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     // Calculate center point of the zoom
     // Human beings are not very good at moving two fingers at exactly the same rate outwards/inwards
     // There is usually some error, which can cause the center to shift slightly
-    // So, it is recommended to take the average of current gesture point and the last gesture point
+    // So, it is recommended to take the average of center of fingers in the current and last positions
     wxPoint pt(x,y);
     pt.x = (gs_ptLastGestureEvent.x + x) / 2;
     pt.y = (gs_ptLastGestureEvent.y + y) / 2;
@@ -5660,6 +5660,8 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     wxZoomGestureEvent event(wxEVT_GESTURE_ZOOM, GetId());
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
+
+    // This is not a gesture point but the center of a zoom
     event.SetPosition(pt);
     event.SetZoomFactor(zoomFactor);
 
