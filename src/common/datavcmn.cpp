@@ -1979,11 +1979,14 @@ wxString wxDataViewListStore::GetColumnType( unsigned int pos ) const
 
 void wxDataViewListStore::AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data )
 {
-    wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
-    line->m_values = values;
-    m_data.push_back( line );
+    if(!values.empty())
+    {
+        wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
+        line->m_values = values;
+        m_data.push_back( line );
 
-    RowAppended();
+        RowAppended();
+    }
 }
 
 void wxDataViewListStore::PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data )
