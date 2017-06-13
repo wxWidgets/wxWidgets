@@ -5649,7 +5649,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     // Human beings are not very good at moving two fingers at exactly the same rate outwards/inwards
     // There is usually some error, which can cause the center to shift slightly
     // So, it is recommended to take the average of center of fingers in the current and last positions
-    wxPoint pt(x,y);
+    wxPoint pt;
     pt.x = (gs_ptLastGestureEvent.x + x) / 2;
     pt.y = (gs_ptLastGestureEvent.y + y) / 2;
 
