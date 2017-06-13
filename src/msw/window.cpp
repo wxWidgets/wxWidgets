@@ -207,7 +207,7 @@ bool gs_insideCaptureChanged = false;
 wxPoint gs_ptLastGestureEvent;
 
 // This is used to calculate the zoom factor for zoom gesture
-WXWORD gs_lastZoomDistance;
+WXDWORD gs_lastZoomDistance;
 
 } // anonymous namespace
 
