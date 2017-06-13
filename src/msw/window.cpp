@@ -5575,12 +5575,6 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
         return true;
     }
     
-    // This flag indicates that the gesture has just ended 
-    if(flags & GF_END)
-    {
-        return true;
-    }
-    
     wxPoint pt(x, y);
     
     // Determine the horizontal and vertical changes
@@ -5636,12 +5630,6 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
       gs_ptLastGestureEvent.x = x;
       gs_ptLastGestureEvent.y = y;
       gs_lastZoomDistance = zoomDistance;
-      return true;
-    }
-
-    // This flag indicates that the gesture has just ended
-    if(flags & GF_END)
-    {
       return true;
     }
     
