@@ -209,6 +209,9 @@ wxPoint gs_ptLastGestureEvent;
 // This is used to calculate the zoom factor for zoom gesture
 WXDWORD gs_lastZoomDistance;
 
+// This is used to obtain the angle delta for rotate gesture
+WXDWORD gs_lastAngleArgument;
+
 } // anonymous namespace
 
 // ---------------------------------------------------------------------------
@@ -3209,6 +3212,21 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             DWORD zoomDistance = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
                             processed = HandleZoomGesture(x, y, zoomDistance, gestureInfo.dwFlags);
                         }
+
+                        // Rotate gesture
+                        case GID_ROTATE:
+                        {
+                            // ptsLocation is the center point of rotation
+                            int x = gestureInfo.ptsLocation.x;
+                            int y = gestureInfo.ptsLocation.y;
+                            // Convert them into client coordinates
+                            ScreenToClient(&x, &y);
+
+                            // Again, we need the lower 4 bytes and this will used as an argument
+                            // to obtain the angle to rotate
+                            DWORD angleArgument = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
+                            processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
+                        }
                     }
                 }
             }
@@ -5632,7 +5650,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
       gs_lastZoomDistance = zoomDistance;
       return true;
     }
-    
+
     // Calculate center point of the zoom
     // Human beings are not very good at moving two fingers at exactly the same rate outwards/inwards
     // There is usually some error, which can cause the center to shift slightly
@@ -5657,6 +5675,47 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     gs_ptLastGestureEvent.x = x;
     gs_ptLastGestureEvent.y = y;
     gs_lastZoomDistance = zoomDistance;
+
+    return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags)
+{
+    // This flag indicates that the gesture has just started
+    if(flags & GF_BEGIN)
+    {
+        return true;
+    }
+
+    wxPoint pt(x, y);
+
+    // Windows returns the cumulative rotation angle since the gesture was first started,
+    // angleArgument is used to obtain that cumulative angle. Take the difference of the 
+    // angles returned by using angleArgument and gs_lastAngleArgument to obtain the 
+    // change in angle for the consecutive rotate gesture events. This change in angle
+    // is in radians.
+    double angleDelta = GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument)
+    - GID_ROTATE_ANGLE_FROM_ARGUMENT(gs_lastAngleArgument);
+
+    // wxEVT_GESTURE_ROTATE
+    wxRotateGestureEvent event(wxEVT_GESTURE_ROTATE, GetId());
+    event.SetEventObject(this);
+    event.SetTimestamp(::GetMessageTime());
+    event.SetPosition(pt);
+    event.SetAngleDelta(angleDelta);
+
+    if(angleDelta > 0)
+    {
+        event.SetRotateDirection(wxCLOCKWISE);
+    }
+
+    else
+    {
+        event.SetRotateDirection(wxCOUNTERCLOCKWISE);
+    }
+
+    // Update gs_lastAngleArgument
+    gs_lastAngleArgument = angleArgument;
 
     return HandleWindowEvent(event);
 }
