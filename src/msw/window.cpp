@@ -5732,7 +5732,6 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
     event.SetPosition(pt);
-    event.SetAngleDelta(angleDelta);
 
     if(angleDelta > 0)
     {
