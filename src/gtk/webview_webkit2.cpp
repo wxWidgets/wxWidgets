@@ -1540,6 +1540,7 @@ web_view_javascript_finished (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
+<<<<<<< HEAD
     wxString return_value;
     wxWebViewEvent *event = (wxWebViewEvent*)user_data;
     wxWebViewWebKit *wxwebviewwebkit = (wxWebViewWebKit*)(event -> GetEventObject());
@@ -1862,6 +1863,9 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 >>>>>>> Async working, need to use user_data to know which runscript trigged the event
     
 >>>>>>> Modified sample
+=======
+    printf("Using Runscript winth Webkit2\n");
+>>>>>>> Putting printf on webkits in order to know when is using one or the other, easily
 =======
     printf("Using Runscript winth Webkit2\n");
 >>>>>>> Putting printf on webkits in order to know when is using one or the other, easily
