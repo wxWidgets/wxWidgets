@@ -5735,11 +5735,13 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
 
     if(angleDelta > 0)
     {
+        event.SetAngleDelta(angleDelta);
         event.SetRotateDirection(wxCLOCKWISE);
     }
 
     else
     {
+        event.SetAngleDelta(-angleDelta);
         event.SetRotateDirection(wxCOUNTERCLOCKWISE);
     }
 
