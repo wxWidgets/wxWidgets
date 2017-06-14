@@ -3196,6 +3196,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             ScreenToClient(&x, &y);
                             processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
                         }
+                        break;
 
                         // Zoom gesture
                         case GID_ZOOM:
@@ -3212,6 +3213,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             DWORD zoomDistance = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
                             processed = HandleZoomGesture(x, y, zoomDistance, gestureInfo.dwFlags);
                         }
+                        break;
 
                         // Rotate gesture
                         case GID_ROTATE:
@@ -3227,6 +3229,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             DWORD angleArgument = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
                             processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
                         }
+                        break;
                     }
                 }
             }
