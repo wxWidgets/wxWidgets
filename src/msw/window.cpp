@@ -3195,6 +3195,15 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             // Convert them into client coordinates
                             ScreenToClient(&x, &y);
                             processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
+
+                            if(!processed)
+                            {
+                                // If not processed, we must call this to avoid memory leaks
+                                if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
+                                {
+                                    wxLogLastError(wxT("CloseGestureInfoHandle"));
+                                }
+                            }
                         }
                         break;
 
@@ -3212,6 +3221,15 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             // this is used to extract those lower 4 bytes
                             DWORD zoomDistance = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
                             processed = HandleZoomGesture(x, y, zoomDistance, gestureInfo.dwFlags);
+
+                            if(!processed)
+                            {
+                                // If not processed, we must call this to avoid memory leaks
+                                if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
+                                {
+                                    wxLogLastError(wxT("CloseGestureInfoHandle"));
+                                }
+                            }
                         }
                         break;
 
@@ -3228,6 +3246,15 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             // to obtain the angle to rotate
                             DWORD angleArgument = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
                             processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
+
+                            if(!processed)
+                            {
+                                // If not processed, we must call this to avoid memory leaks
+                                if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
+                                {
+                                    wxLogLastError(wxT("CloseGestureInfoHandle"));
+                                }
+                            }
                         }
                         break;
                     }
