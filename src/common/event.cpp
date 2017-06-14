@@ -105,6 +105,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxPanGestureEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxZoomGestureEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxRotateGestureEvent, wxEvent);
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -263,6 +264,7 @@ wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent );
 // Gesture events
 wxDEFINE_EVENT( wxEVT_GESTURE_PAN, wxPanGestureEvent );
 wxDEFINE_EVENT( wxEVT_GESTURE_ZOOM, wxZoomGestureEvent );
+wxDEFINE_EVENT( wxEVT_GESTURE_ROTATE, wxRotateGestureEvent );
 
 // System events
 wxDEFINE_EVENT( wxEVT_SIZE, wxSizeEvent );
