@@ -4020,6 +4020,7 @@ typedef void (wxEvtHandler::*wxMouseCaptureLostEventFunction)(wxMouseCaptureLost
 typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&);
 typedef void (wxEvtHandler::*wxPanGestureEventFunction)(wxPanGestureEvent&);
 typedef void (wxEvtHandler::*wxZoomGestureEventFunction)(wxZoomGestureEvent&);
+typedef void (wxEvtHandler::*wxRotateGestureEventFunction)(wxRotateGestureEvent&);
 
 
 #define wxCommandEventHandler(func) \
@@ -4099,6 +4100,8 @@ typedef void (wxEvtHandler::*wxZoomGestureEventFunction)(wxZoomGestureEvent&);
     wxEVENT_HANDLER_CAST(wxPanGestureEventFunction, func)
 #define wxZoomGestureEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxZoomGestureEventFunction, func)
+#define wxRotateGestureEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxRotateGestureEventFunction, func)
 
 
 #endif // wxUSE_GUI
@@ -4436,7 +4439,8 @@ typedef void (wxEvtHandler::*wxZoomGestureEventFunction)(wxZoomGestureEvent&);
 
 // Gesture events
 #define EVT_GESTURE_PAN(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_PAN, winid, wxPanGestureEventHandler(func))
-#define EVT_GESTURE_ZOOM(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_ZOOM, winid, wxZoomGestureEventHandler(func))    
+#define EVT_GESTURE_ZOOM(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_ZOOM, winid, wxZoomGestureEventHandler(func))
+#define EVT_GESTURE_ROTATE(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_ROTATE, winid, wxRotateGestureEventHandler(func))    
 
 // Convenience macros for commonly-used commands
 #define EVT_CHECKBOX(winid, func) wx__DECLARE_EVT1(wxEVT_CHECKBOX, winid, wxCommandEventHandler(func))
