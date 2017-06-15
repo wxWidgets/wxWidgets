@@ -855,26 +855,19 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     {
         return wxWEBVIEW_ZOOM_TINY;
     }
-    else if (zoom > 0.65 && zoom <= 0.90)
+    if (zoom <= 0.90)
     {
         return wxWEBVIEW_ZOOM_SMALL;
     }
-    else if (zoom > 0.90 && zoom <= 1.15)
+    if (zoom <= 1.15)
     {
         return wxWEBVIEW_ZOOM_MEDIUM;
     }
-    else if (zoom > 1.15 && zoom <= 1.45)
+    if (zoom <= 1.45)
     {
         return wxWEBVIEW_ZOOM_LARGE;
     }
-    else if (zoom > 1.45)
-    {
-        return wxWEBVIEW_ZOOM_LARGEST;
-    }
-
-    // to shut up compilers, this can never be reached logically
-    wxFAIL;
-    return wxWEBVIEW_ZOOM_MEDIUM;
+    return wxWEBVIEW_ZOOM_LARGEST;
 }
 
 
