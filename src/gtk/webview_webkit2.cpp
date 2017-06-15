@@ -427,6 +427,7 @@ wxgtk_new_connection_cb(GDBusServer *,
     return TRUE;
 }
 
+static
 gboolean
 wxgtk_dbus_peer_is_authorized(GCredentials *peer_credentials)
 {
