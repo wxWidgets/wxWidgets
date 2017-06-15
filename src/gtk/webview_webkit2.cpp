@@ -44,8 +44,7 @@ wxgtk_webview_webkit_load_changed(GtkWidget *,
                              webKitCtrl->GetId(),
                              url, target);
 
-        if (webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
+        webKitCtrl->HandleWindowEvent(event);
     }
     else if (load_event == WEBKIT_LOAD_COMMITTED)
     {
@@ -54,8 +53,7 @@ wxgtk_webview_webkit_load_changed(GtkWidget *,
                              webKitCtrl->GetId(),
                              url, target);
 
-        if (webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
+        webKitCtrl->HandleWindowEvent(event);
     }
 }
 
@@ -80,9 +78,8 @@ wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
                              wxString(uri, wxConvUTF8),
                              target);
 
-        if(webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
-        
+        webKitCtrl->HandleWindowEvent(event);
+
         webkit_policy_decision_ignore(decision);
         return TRUE;
     }
@@ -104,8 +101,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
                          wxString( uri, wxConvUTF8 ),
                          target);
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
+    webKitCtrl->HandleWindowEvent(event);
 
     if (!event.IsAllowed())
     {
@@ -256,10 +252,7 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
     event.SetString(description);
     event.SetInt(type);
 
-    if (webKitWindow && webKitWindow->GetEventHandler())
-    {
-        webKitWindow->GetEventHandler()->ProcessEvent(event);
-    }
+    webKitWindow->HandleWindowEvent(event);
 
     return FALSE;
 }
@@ -279,8 +272,7 @@ wxgtk_webview_webkit_new_window(WebKitPolicyDecision *decision,
                                        wxString( uri, wxConvUTF8 ),
                                        target);
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
+    webKitCtrl->HandleWindowEvent(event);
 
     //We always want the user to handle this themselves
     webkit_policy_decision_ignore(decision);
@@ -318,8 +310,7 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
                          "");
     event.SetString(wxString(title, wxConvUTF8));
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
+    webKitCtrl->HandleWindowEvent(event);
 
     g_free(title);
 }
