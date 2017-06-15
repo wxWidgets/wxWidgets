@@ -665,8 +665,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
     WebKitBackForwardList* history =
         webkit_web_view_get_back_forward_list(m_web_view);
-    GList* list = webkit_back_forward_list_get_back_list_with_limit(history,
-                                                                    m_historyLimit);
+    GList* list = webkit_back_forward_list_get_back_list(history);
     //We need to iterate in reverse to get the order we desire
     for(int i = g_list_length(list) - 1; i >= 0 ; i--)
     {
@@ -686,8 +685,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory(
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist;
     WebKitBackForwardList* history =
         webkit_web_view_get_back_forward_list(m_web_view);
-    GList* list = webkit_back_forward_list_get_forward_list_with_limit(history,
-                                                                       m_historyLimit);
+    GList* list = webkit_back_forward_list_get_forward_list(history);
     for(guint i = 0; i < g_list_length(list); i++)
     {
         WebKitBackForwardListItem* gtkitem = (WebKitBackForwardListItem*)g_list_nth_data(list, i);
