@@ -369,10 +369,7 @@ wxgtk_webview_webkit_context_menu(WebKitWebView *,
                                   WebKitHitTestResult *,
                                   wxWebViewWebKit *webKitCtrl)
 {
-    if(webKitCtrl->IsContextMenuEnabled())
-        return FALSE;
-    else
-        return TRUE;
+    return !webKitCtrl->IsContextMenuEnabled();
 }
 
 static WebKitWebView*
@@ -905,8 +902,7 @@ void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
 {
     WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
     webkit_settings_set_zoom_text_only(settings,
-                                       (type == wxWEBVIEW_ZOOM_TYPE_TEXT ?
-                                       TRUE : FALSE));
+                                       type == wxWEBVIEW_ZOOM_TYPE_TEXT);
 }
 
 wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
