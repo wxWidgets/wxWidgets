@@ -581,13 +581,13 @@ void wxWebViewWebKit::GoForward()
 
 bool wxWebViewWebKit::CanGoBack() const
 {
-    return webkit_web_view_can_go_back(m_web_view);
+    return webkit_web_view_can_go_back(m_web_view) != 0;
 }
 
 
 bool wxWebViewWebKit::CanGoForward() const
 {
-    return webkit_web_view_can_go_forward(m_web_view);
+    return webkit_web_view_can_go_forward(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::ClearHistory()
@@ -664,17 +664,17 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
 
 bool wxWebViewWebKit::CanCut() const
 {
-    return webkit_web_view_can_cut_clipboard(m_web_view);
+    return webkit_web_view_can_cut_clipboard(m_web_view) != 0;
 }
 
 bool wxWebViewWebKit::CanCopy() const
 {
-    return webkit_web_view_can_copy_clipboard(m_web_view);
+    return webkit_web_view_can_copy_clipboard(m_web_view) != 0;
 }
 
 bool wxWebViewWebKit::CanPaste() const
 {
-    return webkit_web_view_can_paste_clipboard(m_web_view);
+    return webkit_web_view_can_paste_clipboard(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::Cut()
@@ -694,12 +694,12 @@ void wxWebViewWebKit::Paste()
 
 bool wxWebViewWebKit::CanUndo() const
 {
-    return webkit_web_view_can_undo(m_web_view);
+    return webkit_web_view_can_undo(m_web_view) != 0;
 }
 
 bool wxWebViewWebKit::CanRedo() const
 {
-    return webkit_web_view_can_redo(m_web_view);
+    return webkit_web_view_can_redo(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::Undo()
@@ -877,7 +877,7 @@ void wxWebViewWebKit::SetEditable(bool enable)
 
 bool wxWebViewWebKit::IsEditable() const
 {
-    return webkit_web_view_get_editable(m_web_view);
+    return webkit_web_view_get_editable(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::DeleteSelection()
@@ -887,7 +887,7 @@ void wxWebViewWebKit::DeleteSelection()
 
 bool wxWebViewWebKit::HasSelection() const
 {
-    return webkit_web_view_has_selection(m_web_view);
+    return webkit_web_view_has_selection(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::SelectAll()
