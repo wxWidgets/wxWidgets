@@ -700,11 +700,15 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     }
 }
 
-static void wxgtk_can_execute_editing_command_cb(WebKitWebView *,
+extern "C" {
+static void wxgtk_can_execute_editing_command_cb(GObject*,
                                                  GAsyncResult *res,
-                                                 GAsyncResult **res_out)
+                                                 void* user_data)
 {
-    *res_out = (GAsyncResult*)g_object_ref(res);
+    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
+    g_object_ref(res);
+    *res_out = res;
+}
 }
 
 bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
@@ -713,7 +717,7 @@ bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
     webkit_web_view_can_execute_editing_command(m_web_view,
                                                 command,
                                                 NULL,
-                                                (GAsyncReadyCallback)wxgtk_can_execute_editing_command_cb,
+                                                wxgtk_can_execute_editing_command_cb,
                                                 &result);
 
     GMainContext *main_context = g_main_context_get_thread_default();
