@@ -86,7 +86,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
 {
     const gchar* uri = webkit_network_request_get_uri(request);
     wxString target = webkit_web_frame_get_name (frame);
-    
+
     //If m_creating is true then we are the result of a new window
     //and so we need to send the event and veto the load
     if(webKitCtrl->m_creating)
@@ -467,12 +467,12 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     g_signal_connect_after(m_web_view, "resource-request-starting",
                            G_CALLBACK(wxgtk_webview_webkit_resource_req), this);
-      
+
 #if WEBKIT_CHECK_VERSION(1, 10, 0)    
      g_signal_connect_after(m_web_view, "context-menu",
                            G_CALLBACK(wxgtk_webview_webkit_context_menu), this);
 #endif
-     
+
      g_signal_connect_after(m_web_view, "create-web-view",
                            G_CALLBACK(wxgtk_webview_webkit_create_webview), this);
 

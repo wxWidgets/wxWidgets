@@ -67,7 +67,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
     WebKitURIRequest* request = webkit_navigation_action_get_request(action);
     const gchar* uri = webkit_uri_request_get_uri(request);
     wxString target = webkit_navigation_policy_decision_get_frame_name(navigation_decision);
-    
+
     //If m_creating is true then we are the result of a new window
     //and so we need to send the event and veto the load
     if(webKitCtrl->m_creating)
@@ -983,7 +983,7 @@ bool wxWebViewWebKit::HasSelection() const
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   NULL, NULL);
         if (retval)
-	{
+        {
             gboolean has_selection = FALSE;
             g_variant_get(retval, "(b)", &has_selection);
             g_variant_unref(retval);
@@ -1010,7 +1010,7 @@ wxString wxWebViewWebKit::GetSelectedText() const
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   NULL, NULL);
         if (retval)
-	{
+        {
             char *text;
             g_variant_get(retval, "(s)", &text);
             g_variant_unref(retval);
@@ -1031,7 +1031,7 @@ wxString wxWebViewWebKit::GetSelectedSource() const
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   NULL, NULL);
         if (retval)
-	{
+        {
             char *source;
             g_variant_get(retval, "(s)", &source);
             g_variant_unref(retval);
@@ -1069,7 +1069,7 @@ wxString wxWebViewWebKit::GetPageText() const
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   NULL, NULL);
         if (retval)
-	{
+        {
             char *text;
             g_variant_get(retval, "(s)", &text);
             g_variant_unref(retval);
