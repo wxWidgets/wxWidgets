@@ -557,6 +557,9 @@ public:
         Returns @true if a context menu will be shown on right click.
 
         @since 2.9.5
+        
+        Setting enable to @false will not only disable the showing of the default context menu but 
+        also will fire wxContextMenuEvent. @since 3.1.1
     */
     virtual bool IsContextMenuEnabled() const;
 
