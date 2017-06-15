@@ -632,13 +632,13 @@ void wxWebViewWebKit::GoForward()
 
 bool wxWebViewWebKit::CanGoBack() const
 {
-    return webkit_web_view_can_go_back(m_web_view);
+    return webkit_web_view_can_go_back(m_web_view) != 0;
 }
 
 
 bool wxWebViewWebKit::CanGoForward() const
 {
-    return webkit_web_view_can_go_forward(m_web_view);
+    return webkit_web_view_can_go_forward(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::ClearHistory()
@@ -731,7 +731,7 @@ bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
                                                                               NULL);
     g_object_unref(result);
 
-    return can_execute;
+    return can_execute != 0;
 }
 
 bool wxWebViewWebKit::CanCut() const
@@ -962,7 +962,7 @@ bool wxWebViewWebKit::IsEditable() const
 {
     gboolean editable;
     g_object_get(m_web_view, "editable", &editable, NULL);
-    return editable;
+    return editable != 0;
 }
 
 void wxWebViewWebKit::DeleteSelection()
@@ -997,7 +997,7 @@ bool wxWebViewWebKit::HasSelection() const
             gboolean has_selection = FALSE;
             g_variant_get(retval, "(b)", &has_selection);
             g_variant_unref(retval);
-            return has_selection;
+            return has_selection != 0;
         }
     }
     return false;
