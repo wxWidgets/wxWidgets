@@ -409,7 +409,7 @@ wxgtk_new_connection_cb(GDBusServer *,
                         GDBusProxy **proxy)
 {
     GError *error = NULL;
-    GDBusProxyFlags flags = static_cast<GDBusProxyFlags>(static_cast<int>(G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES) | static_cast<int>(G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS));
+    GDBusProxyFlags flags = GDBusProxyFlags(G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS);
     *proxy = g_dbus_proxy_new_sync(connection,
                                    flags,
                                    NULL,
