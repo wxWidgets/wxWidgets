@@ -444,6 +444,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
+    m_web_view = NULL;
     m_busy = false;
     m_guard = false;
     m_creating = false;
