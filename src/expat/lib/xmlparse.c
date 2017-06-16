@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <limits.h>                     /* UINT_MAX */
 
-#ifdef WIN32
+#ifdef _WIN32
 #define getpid GetCurrentProcessId
 #else
 #include <sys/time.h>                   /* gettimeofday() */
@@ -17,7 +17,7 @@
 
 #define XML_BUILDING_EXPAT 1
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "winconfig.h"
 #elif defined(MACOS_CLASSIC)
 #include "macconfig.h"
@@ -27,7 +27,7 @@
 #include "watcomconfig.h"
 #elif defined(HAVE_EXPAT_CONFIG_H)
 #include <expat_config.h>
-#endif /* ndef WIN32 */
+#endif /* ndef _WIN32 */
 
 #include "ascii.h"
 #include "expat.h"
@@ -700,7 +700,7 @@ static const XML_Char implicitContext[] = {
 static unsigned long
 gather_time_entropy(void)
 {
-#ifdef WIN32
+#ifdef _WIN32
   FILETIME ft;
   GetSystemTimeAsFileTime(&ft); /* never fails */
   return ft.dwHighDateTime ^ ft.dwLowDateTime;

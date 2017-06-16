@@ -16,7 +16,7 @@
 #include <unistd.h>
 #endif
 #else
-# if !defined(WIN32) && !defined(_WIN32) && !defined(_WIN64)
+# if !defined(_WIN32) && !defined(_WIN64)
 #  include <unistd.h>
 # endif
 #endif
