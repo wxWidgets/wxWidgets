@@ -158,6 +158,7 @@ protected:
 public:
     bool            m_fontValid;
     wxCFRef<CTFontRef> m_ctFont;
+    wxCFRef<CFDictionaryRef> m_ctFontAttributes;
     wxCFRef<CGFontRef> m_cgFont;
 #if wxOSX_USE_COCOA
     WX_NSFont       m_nsFont;
@@ -176,6 +177,7 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data) : wxGDIRefData()
     m_info = data.m_info;
     m_fontValid = data.m_fontValid;
     m_ctFont = data.m_ctFont;
+    m_ctFontAttributes = data.m_ctFontAttributes;
     m_cgFont = data.m_cgFont;
 #if wxOSX_USE_COCOA
     m_nsFont = (NSFont*) wxMacCocoaRetain(data.m_nsFont);
@@ -271,6 +273,11 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
                 break;
         }
         m_ctFont.reset(CTFontCreateUIFontForLanguage( uifont, (CGFloat) size, NULL ));
+        CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        m_ctFontAttributes.reset(dict);
+        CFDictionarySetValue(dict, kCTFontAttributeName, m_ctFont.get() );
+        CFDictionarySetValue(dict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
+
         wxCFRef<CTFontDescriptorRef> descr;
         descr.reset( CTFontCopyFontDescriptor( m_ctFont ) );
         m_info.Init(descr);
@@ -307,9 +314,18 @@ void wxFontRefData::MacFindFont()
         wxString lookupnameWithSize = wxString::Format( "%s_%u_%d", m_info.m_faceName, traits, m_info.m_pointSize );
 
         static std::map< std::wstring , wxCFRef< CTFontRef > > fontcache ;
+        static std::map< std::wstring , wxCFRef< CFDictionaryRef > > fontattributescache ;
+        
         m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];
-        if ( !m_ctFont )
+        m_ctFontAttributes = fontattributescache[ std::wstring(lookupnameWithSize.wc_str()) ];
+        if ( m_ctFont )
         {
+            // use cached version
+        }
+        else
+        {
+            CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+            m_ctFontAttributes.reset(dict);
             
             wxStringToStringHashMap::const_iterator it = gs_FontFamilyToPSName.find(m_info.m_faceName);
             
@@ -350,10 +366,21 @@ void wxFontRefData::MacFindFont()
                                 fontWithTraits = CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, remainingTransform, remainingTraits, remainingTraits );
                                 if ( fontWithTraits == NULL )
                                 {
-                                    // give in on the bold, try native oblique
+                                    // try native oblique, emulate bold later
                                     fontWithTraits = CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, NULL, kCTFontItalicTrait, kCTFontItalicTrait );
                                 }
+                                else
+                                {
+                                    remainingTraits &= ~kCTFontBoldTrait;
+                                }
                             }
+                        }
+                        
+                        // we have to emulate bold
+                        if ( remainingTraits & kCTFontBoldTrait )
+                        {
+                            const float strokewidth = -3.0;
+                            CFDictionarySetValue(dict, kCTStrokeWidthAttributeName, CFNumberCreate( NULL, kCFNumberFloatType, &strokewidth));
                         }
 
                         if ( fontWithTraits == NULL )
@@ -366,6 +393,11 @@ void wxFontRefData::MacFindFont()
                         m_ctFont.reset(fontWithTraits);
                 }
             }
+            CFDictionarySetValue(dict, kCTFontAttributeName, m_ctFont.get() );
+            CFDictionarySetValue(dict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
+            
+            fontcache[ std::wstring(lookupnameWithSize.wc_str()) ] = m_ctFont;
+            fontattributescache[ std::wstring(lookupnameWithSize.wc_str()) ] = m_ctFontAttributes;
         }
 
         m_cgFont.reset(CTFontCopyGraphicsFont(m_ctFont, NULL));
@@ -657,6 +689,16 @@ CTFontRef wxFont::OSXGetCTFont() const
     const_cast<wxFont *>(this)->RealizeResource();
 
     return (CTFontRef)(M_FONTDATA->m_ctFont);
+}
+
+CFDictionaryRef wxFont::OSXGetCTFontAttributes() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
+    
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
+    
+    return (CFDictionaryRef)(M_FONTDATA->m_ctFontAttributes);
 }
 
 #if wxOSX_USE_COCOA_OR_CARBON
