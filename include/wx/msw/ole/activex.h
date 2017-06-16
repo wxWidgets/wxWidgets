@@ -21,7 +21,7 @@
 // wx includes
 //---------------------------------------------------------------------------
 
-#include "wx/msw/ole/oleutils.h" // wxBasicString &c
+#include "wx/msw/ole/oleutils.h"
 #include "wx/msw/ole/uuid.h"
 #include "wx/window.h"
 #include "wx/variant.h"

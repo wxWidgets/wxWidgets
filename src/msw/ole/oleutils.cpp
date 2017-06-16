@@ -38,7 +38,7 @@
 
 WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str)
 {
-    return wxBasicString(str).Get();
+    return wxBSTR(str).Detach();
 }
 
 WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
@@ -68,28 +68,48 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 }
 
 // ----------------------------------------------------------------------------
-// wxBasicString
+// wxBSTR
 // ----------------------------------------------------------------------------
 
-wxBasicString::wxBasicString(const wxString& str)
+wxBSTR::wxBSTR(BSTR bstr, bool copy)
 {
-    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
+    if ( copy )
+        m_bstr = ::SysAllocString(bstr);
+    else
+        m_bstr = bstr;
 }
 
-wxBasicString::wxBasicString(const wxBasicString& src)
+wxBSTR& wxBSTR::operator=(const wxBSTR& wxbstr)
 {
-    m_bstrBuf = src.Get();
-}
+    if ( wxbstr != *this )
+    {
+        Free();
+        m_bstr = wxbstr.GetCopy();
+    }
 
-wxBasicString& wxBasicString::operator=(const wxBasicString& src)
-{
-    SysReAllocString(&m_bstrBuf, src);
     return *this;
 }
 
-wxBasicString::~wxBasicString()
+void wxBSTR::Attach(BSTR bstr)
 {
-    SysFreeString(m_bstrBuf);
+    wxCHECK_RET(m_bstr != bstr, wxS("Attaching already attached BSTR!"));
+
+    Free();
+    m_bstr = bstr;
+}
+
+BSTR wxBSTR::Detach()
+{
+    BSTR bstr = m_bstr;
+
+    m_bstr = NULL;    
+    return bstr;
+}
+
+void wxBSTR::Free()
+{
+    ::SysFreeString(m_bstr);
+    m_bstr = NULL;
 }
 
 

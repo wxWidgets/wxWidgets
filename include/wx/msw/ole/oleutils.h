@@ -61,29 +61,6 @@ inline void wxOleUninitialize()
     ::OleUninitialize();
 }
 
-// wrapper around BSTR type (by Vadim Zeitlin)
-
-class WXDLLIMPEXP_CORE wxBasicString
-{
-public:
-    // ctors & dtor
-    wxBasicString(const wxString& str);
-    wxBasicString(const wxBasicString& bstr);
-    ~wxBasicString();
-
-    wxBasicString& operator=(const wxBasicString& bstr);
-
-    // accessors
-        // just get the string
-    operator BSTR() const { return m_bstrBuf; }
-        // retrieve a copy of our string - caller must SysFreeString() it later!
-    BSTR Get() const { return SysAllocString(m_bstrBuf); }
-
-private:
-    // actual string
-    BSTR m_bstrBuf;
-};
-
 #if wxUSE_VARIANT
 // Convert variants
 class WXDLLIMPEXP_FWD_BASE wxVariant;
@@ -194,6 +171,55 @@ WXDLLIMPEXP_CORE BSTR wxConvertStringToOle(const wxString& str);
 
 // Convert string from BSTR to wxString
 WXDLLIMPEXP_CORE wxString wxConvertStringFromOle(BSTR bStr);
+
+// A thin RAII wrapper for BSTR, which can create BSTR
+// from wxString as well as return the owned BSTR as wxString.
+// Unlike _b_str_t, wxBSTR is NOT reference counted.
+class WXDLLIMPEXP_CORE wxBSTR
+{
+public:
+    wxBSTR() : m_bstr(NULL) {}
+
+    // If copy is true then a copy of bstr is created,
+    // if not then ownership of bstr is taken.
+    wxBSTR(BSTR bstr, bool copy);
+
+    // Creates BSTR from wxString
+    wxBSTR(const wxString& str) : m_bstr(::SysAllocString(str.wc_str(*wxConvCurrent))) {}
+
+    // Creates a copy of BSTR owned by wxbstr
+    wxBSTR(const wxBSTR& wxbstr) : m_bstr(wxbstr.GetCopy()) {}
+
+    // Frees the owned BSTR
+    ~wxBSTR() { Free(); }
+
+    // Creates a copy of wxbstr
+    wxBSTR& operator=(const wxBSTR& wxbstr);
+
+    // Takes ownership of bstr
+    void Attach(BSTR bstr);
+
+    // Returns the owned BSTR and gives up its ownership
+    BSTR Detach();
+
+    // Frees the owned BSTR
+    void Free();
+
+    // Returnes the owned BSTR while keeping its ownership
+    BSTR GetBSTR() const { return m_bstr; }
+    operator BSTR() const { return GetBSTR(); }
+
+    // Returns the address of owned BSTR
+    BSTR* GetAddress() { return &m_bstr; }
+
+    // Return a copy of owned BSTR
+    BSTR GetCopy() const {  return ::SysAllocString(m_bstr); }
+
+    // Returns the owned BSTR convert to wxString
+    wxString GetwxString() const { return wxConvertStringFromOle(m_bstr); }
+private:
+    BSTR m_bstr;
+};
 
 #else // !wxUSE_OLE
 
