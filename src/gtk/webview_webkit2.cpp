@@ -1852,7 +1852,11 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 =======
                                    options);
     //mutex -> Wait();
-    wxMilliSleep(2000);
+    //wxMilliSleep(2000);
+    int i;
+    for (i=0;i<100;i++) {
+      gtk_main_iteration();
+    }
     printf("String is: %s\n", result);
 >>>>>>> Sleep runscript when callback is called
 }
