@@ -166,6 +166,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     virtual wxString RunScript(const wxString& javascript) = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -207,6 +208,9 @@ public:
 =======
     virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
 >>>>>>> Adding a identifier to async RunScript
+=======
+    virtual void RunScript(const wxString& javascript, wxObject* user_data=NULL) = 0;
+>>>>>>> Integrate Proof of Concept inside webview_webkit2
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {
