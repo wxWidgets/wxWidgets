@@ -261,7 +261,11 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_LOADED, wxWebViewEv
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
+<<<<<<< HEAD
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
+=======
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
+>>>>>>> Sleep runscript when callback is called
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -293,12 +297,18 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_TITLE_CHANGED, id, \
                      wxWebViewEventHandler(fn))
 
+<<<<<<< HEAD
 #define EVT_WEBVIEW_RUNSCRIPT_RESULT(id, fn) \
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_RUNSCRIPT_RESULT, id, \
+=======
+#define EVT_RUNSCRIPT_RESULT(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_LOADED, id, \
+>>>>>>> Sleep runscript when callback is called
                      wxWebViewEventHandler(fn))
 
 
 // old wxEVT_COMMAND_* constants
+<<<<<<< HEAD
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATING        wxEVT_WEBVIEW_NAVIGATING
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATED         wxEVT_WEBVIEW_NAVIGATED
 #define wxEVT_COMMAND_WEBVIEW_LOADED            wxEVT_WEBVIEW_LOADED
@@ -306,6 +316,15 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 #define wxEVT_COMMAND_WEBVIEW_NEWWINDOW         wxEVT_WEBVIEW_NEWWINDOW
 #define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED     wxEVT_WEBVIEW_TITLE_CHANGED
 #define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
+=======
+#define wxEVT_COMMAND_WEBVIEW_NAVIGATING      wxEVT_WEBVIEW_NAVIGATING
+#define wxEVT_COMMAND_WEBVIEW_NAVIGATED       wxEVT_WEBVIEW_NAVIGATED
+#define wxEVT_COMMAND_WEBVIEW_LOADED          wxEVT_WEBVIEW_LOADED
+#define wxEVT_COMMAND_WEBVIEW_ERROR           wxEVT_WEBVIEW_ERROR
+#define wxEVT_COMMAND_WEBVIEW_NEWWINDOW       wxEVT_WEBVIEW_NEWWINDOW
+#define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED   wxEVT_WEBVIEW_TITLE_CHANGED
+#define wxEVT_COMMAND_RUNSCRIPT_RESULT        wxEVT_RUNSCRIPT_RESULT
+>>>>>>> Sleep runscript when callback is called
 
 #endif // wxUSE_WEBVIEW
 

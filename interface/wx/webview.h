@@ -835,4 +835,8 @@ wxEventType wxEVT_WEBVIEW_LOADED;
 wxEventType wxEVT_WEBVIEW_ERROR;
 wxEventType wxEVT_WEBVIEW_NEWWINDOW;
 wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
+<<<<<<< HEAD
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
+=======
+wxEventType wxEVT_RUNSCRIPT_RESULT;
+>>>>>>> Sleep runscript when callback is called

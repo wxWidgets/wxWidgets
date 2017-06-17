@@ -49,7 +49,11 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
+<<<<<<< HEAD
 wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
+=======
+wxDEFINE_EVENT( wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
+>>>>>>> Sleep runscript when callback is called
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
 
