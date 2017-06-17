@@ -116,6 +116,7 @@ public:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -136,6 +137,9 @@ public:
 =======
     virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
 >>>>>>> Adding a identifier to async RunScript
+=======
+    virtual void RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
+>>>>>>> Integrate Proof of Concept inside webview_webkit2
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
