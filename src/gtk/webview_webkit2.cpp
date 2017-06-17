@@ -1141,9 +1141,9 @@ web_view_javascript_finished (GObject      *object,
         js_str_value = JSValueToStringCopy (context, value, NULL);
         str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
         str_value = (gchar *)g_malloc (str_length);
-	snprintf(data,8192,str_value);
         JSStringGetUTF8CString (js_str_value, str_value, str_length);
         JSStringRelease (js_str_value);
+	snprintf(data,8192,str_value);
         g_print ("Script result: %s\n", str_value);
         g_free (str_value);
     }
