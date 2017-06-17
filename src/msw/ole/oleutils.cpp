@@ -81,7 +81,7 @@ wxBSTR::wxBSTR(BSTR bstr, bool copy)
 
 wxBSTR& wxBSTR::operator=(const wxBSTR& wxbstr)
 {
-    if ( wxbstr != *this )
+    if ( this != &wxbstr )
     {
         Free();
         m_bstr = wxbstr.GetCopy();

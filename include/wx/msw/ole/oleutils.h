@@ -172,19 +172,20 @@ WXDLLIMPEXP_CORE BSTR wxConvertStringToOle(const wxString& str);
 // Convert string from BSTR to wxString
 WXDLLIMPEXP_CORE wxString wxConvertStringFromOle(BSTR bStr);
 
-// A thin RAII wrapper for BSTR, which can create BSTR
+// A thin RAII wrapper for BSTR, which can also create BSTR
 // from wxString as well as return the owned BSTR as wxString.
 // Unlike _b_str_t, wxBSTR is NOT reference counted.
 class WXDLLIMPEXP_CORE wxBSTR
 {
 public:
+    // Creates with the owned BSTR set to NULL
     wxBSTR() : m_bstr(NULL) {}
 
     // If copy is true then a copy of bstr is created,
     // if not then ownership of bstr is taken.
     wxBSTR(BSTR bstr, bool copy);
 
-    // Creates BSTR from wxString
+    // Creates the owned BSTR from wxString str
     wxBSTR(const wxString& str) : m_bstr(::SysAllocString(str.wc_str(*wxConvCurrent))) {}
 
     // Creates a copy of BSTR owned by wxbstr
@@ -193,7 +194,7 @@ public:
     // Frees the owned BSTR
     ~wxBSTR() { Free(); }
 
-    // Creates a copy of wxbstr
+    // Creates a copy of the BSTR owned by wxbstr
     wxBSTR& operator=(const wxBSTR& wxbstr);
 
     // Takes ownership of bstr
@@ -205,17 +206,17 @@ public:
     // Frees the owned BSTR
     void Free();
 
-    // Returnes the owned BSTR while keeping its ownership
+    // Returns the owned BSTR while keeping its ownership
     BSTR GetBSTR() const { return m_bstr; }
     operator BSTR() const { return GetBSTR(); }
 
     // Returns the address of owned BSTR
     BSTR* GetAddress() { return &m_bstr; }
 
-    // Return a copy of owned BSTR
+    // Returns a copy of owned BSTR
     BSTR GetCopy() const {  return ::SysAllocString(m_bstr); }
 
-    // Returns the owned BSTR convert to wxString
+    // Returns the owned BSTR converted to wxString
     wxString GetwxString() const { return wxConvertStringFromOle(m_bstr); }
 private:
     BSTR m_bstr;
