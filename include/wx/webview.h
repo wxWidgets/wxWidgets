@@ -260,6 +260,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_LOADED, wxWebViewEv
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -291,6 +292,11 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_TITLE_CHANGED, id, \
                      wxWebViewEventHandler(fn))
 
+#define EVT_RUNSCRIPT_RESULT(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_LOADED, id, \
+                     wxWebViewEventHandler(fn))
+
+
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATING      wxEVT_WEBVIEW_NAVIGATING
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATED       wxEVT_WEBVIEW_NAVIGATED
@@ -298,6 +304,7 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 #define wxEVT_COMMAND_WEBVIEW_ERROR           wxEVT_WEBVIEW_ERROR
 #define wxEVT_COMMAND_WEBVIEW_NEWWINDOW       wxEVT_WEBVIEW_NEWWINDOW
 #define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED   wxEVT_WEBVIEW_TITLE_CHANGED
+#define wxEVT_COMMAND_RUNSCRIPT_RESULT        wxEVT_RUNSCRIPT_RESULT
 
 #endif // wxUSE_WEBVIEW
 
