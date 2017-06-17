@@ -1221,6 +1221,7 @@ web_view_javascript_finished (GObject      *object,
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
     if (JSValueIsString (context, value)) {
+        printf("Result is a String\n");
         JSStringRef js_str_value;
         gchar      *str_value;
         gsize       str_length;
@@ -1232,7 +1233,24 @@ web_view_javascript_finished (GObject      *object,
         JSStringRelease (js_str_value);
         g_print ("Script result: %s\n", str_value);
         g_free (str_value);
-    } else {
+    }
+    else if (JSValueIsBoolean(context,value)) {
+      printf("Result is a String\n");
+    }
+    else if (JSValueIsNumber(context,value)) {
+      printf("Result is a Number\n");	        
+    }
+    else if (JSValueIsObject(context,value)) {
+      printf("Result is an Object\n");      
+    }
+    else if (JSValueIsNull(context,value)) {
+      printf("Result is Null\n");
+      
+    }
+    else if (JSValueIsUndefined(context,value)) {
+      printf("Result is Undefined\n");
+    }
+    else {
         g_warning("js_result == true");
         g_warning ("Error running javascript: unexpected return value");
     }
