@@ -289,6 +289,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWe
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
 =======
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
@@ -301,6 +302,9 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, w
 =======
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
 >>>>>>> Set up the new async enviroment
+=======
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
+>>>>>>> Sleep runscript when callback is called
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -335,6 +339,7 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define EVT_WEBVIEW_RUNSCRIPT_RESULT(id, fn) \
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_RUNSCRIPT_RESULT, id, \
 =======
@@ -351,6 +356,12 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
                      wxWebViewEventHandler(fn))
 
 >>>>>>> Set up the new async enviroment
+=======
+#define EVT_RUNSCRIPT_RESULT(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_LOADED, id, \
+                     wxWebViewEventHandler(fn))
+
+>>>>>>> Sleep runscript when callback is called
 
 // old wxEVT_COMMAND_* constants
 <<<<<<< HEAD
@@ -375,6 +386,7 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 #define wxEVT_COMMAND_WEBVIEW_NEWWINDOW       wxEVT_WEBVIEW_NEWWINDOW
 #define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED   wxEVT_WEBVIEW_TITLE_CHANGED
 #define wxEVT_COMMAND_RUNSCRIPT_RESULT        wxEVT_RUNSCRIPT_RESULT
+<<<<<<< HEAD
 >>>>>>> Sleep runscript when callback is called
 =======
 >>>>>>> Async working, need to use user_data to know which runscript trigged the event
@@ -383,6 +395,8 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 =======
 #define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
 >>>>>>> Set up the new async enviroment
+=======
+>>>>>>> Sleep runscript when callback is called
 
 #endif // wxUSE_WEBVIEW
 

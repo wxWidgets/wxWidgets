@@ -1483,10 +1483,17 @@ web_view_javascript_finished (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
+
+  printf("Starting web_view_javascript_finished\n");
     WebKitJavascriptResult *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
     GError                 *error = NULL;
+
+    wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)((void**)user_data)[0];
+    wxSemaphore* mutex = (wxSemaphore*)((void**)user_data)[1];
+    char* data = (char*)(((void**)user_data)[2]);
+    wxObject* custom = (wxObject*)((void**)user_data)[3];
 
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
 
@@ -1501,7 +1508,23 @@ web_view_javascript_finished (GObject      *object,
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
     if (JSValueIsString (context, value)) {
+
         printf("Result is a String\n");
+
+	wxString url;
+	
+	wxString target; // TODO: get target (if possible)
+	
+
+	wxWebViewEvent event(wxEVT_RUNSCRIPT_RESULT,
+			     wxwebviewwebkit->GetId(),
+			     url, target);
+	
+	if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
+	  printf("Trigged event wxEVT_RUNSCRIPT_RESULT");
+	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
+	}
+
         JSStringRef js_str_value;
         gchar      *str_value;
         gsize       str_length;
@@ -1509,6 +1532,7 @@ web_view_javascript_finished (GObject      *object,
         js_str_value = JSValueToStringCopy (context, value, NULL);
         str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
         str_value = (gchar *)g_malloc (str_length);
+	snprintf(data,8192,str_value);
         JSStringGetUTF8CString (js_str_value, str_value, str_length);
         JSStringRelease (js_str_value);
         g_print ("Script result: %s\n", str_value);
@@ -1535,6 +1559,7 @@ web_view_javascript_finished (GObject      *object,
         g_warning ("Error running javascript: unexpected return value");
     }
     webkit_javascript_result_unref (js_result);
+    //mutex -> Post();
 }
 
 void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
@@ -1576,6 +1601,7 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
   
 =======
     printf("Using Runscript winth Webkit2\n");
+<<<<<<< HEAD
 
 =======
 >>>>>>> Now printf are more clear. Minor changes.
@@ -1805,14 +1831,30 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
     event -> SetEventObject(this);
     event -> SetId(id);
   
+=======
+    char result[8192];
+    wxSemaphore* mutex = new wxSemaphore(0,1);
+    void* options[4];
+    options[0] = (void*)this;
+    options[1] = (void*)mutex;
+    options[2] = (void*)result;
+    options[3] = user_data;
+>>>>>>> Sleep runscript when callback is called
     webkit_web_view_run_javascript(m_web_view,
                                    javascript.mb_str(wxConvUTF8),
                                    NULL,
                                    web_view_javascript_finished,
+<<<<<<< HEAD
                                    event);
 =======
                                    user_data);
 >>>>>>> Integrate Proof of Concept inside webview_webkit2
+=======
+                                   options);
+    //mutex -> Wait();
+    wxMilliSleep(2000);
+    printf("String is: %s\n", result);
+>>>>>>> Sleep runscript when callback is called
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

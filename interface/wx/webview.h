@@ -859,6 +859,7 @@ wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 =======
 wxEventType wxEVT_RUNSCRIPT_RESULT;
@@ -871,3 +872,6 @@ wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 =======
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 >>>>>>> Set up the new async enviroment
+=======
+wxEventType wxEVT_RUNSCRIPT_RESULT;
+>>>>>>> Sleep runscript when callback is called
