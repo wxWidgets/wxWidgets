@@ -1165,12 +1165,20 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
         JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
 =======
         str_value = (gchar *)g_malloc (str_length);
-	snprintf(data,8192,str_value);
         JSStringGetUTF8CString (js_str_value, str_value, str_length);
 >>>>>>> Sleep runscript when callback is called
         JSStringRelease (js_str_value);
+<<<<<<< HEAD
 
         return_value = wxString::FromUTF8(str_value);
+=======
+	snprintf(data,8192,str_value);
+        g_print ("Script result: %s\n", str_value);
+        g_free (str_value);
+    }
+    else if (JSValueIsBoolean(context,value)) {
+      printf("Result is a String\n");
+>>>>>>> Fixed pointer not getting the result
     }
     else if (JSValueIsNumber (context,value))
     {
