@@ -1113,9 +1113,8 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
     GError                 *error = NULL;
 
     wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)((void**)user_data)[0];
-    wxSemaphore* mutex = (wxSemaphore*)((void**)user_data)[1];
-    char* data = (char*)(((void**)user_data)[2]);
-    wxObject* custom = (wxObject*)((void**)user_data)[3];
+    wxWebViewEvent* event = (wxWebViewEvent*)(((void**)user_data)[1]);
+    wxObject* custom = (wxObject*)((void**)user_data)[2];
 
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
 >>>>>>> Sleep runscript when callback is called
@@ -1139,22 +1138,16 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
     if (JSValueIsString (context, value)) {
 
         printf("Result is a String\n");
-
-	wxString url;
 	
-	wxString target; // TODO: get target (if possible)
-	
-
-	wxWebViewEvent event(wxEVT_RUNSCRIPT_RESULT,
-			     wxwebviewwebkit->GetId(),
-			     url, target);
-	
+<<<<<<< HEAD
 	if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
 	  printf("Trigged event wxEVT_RUNSCRIPT_RESULT");
 	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
 	}
 
 >>>>>>> Sleep runscript when callback is called
+=======
+>>>>>>> Modified sample
         JSStringRef js_str_value;
         gsize       str_length;
 
@@ -1169,16 +1162,33 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
 >>>>>>> Sleep runscript when callback is called
         JSStringRelease (js_str_value);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         return_value = wxString::FromUTF8(str_value);
 =======
 	snprintf(data,8192,str_value);
+=======
+	
+	char result[8192];
+	snprintf(result,8192,str_value);
+	
+	if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
+	  printf("Trigged event wxEVT_RUNSCRIPT_RESULT");
+	  event -> SetEventObject(wxString::FromUTF8(result));
+	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
+	}
+	
+>>>>>>> Modified sample
         g_print ("Script result: %s\n", str_value);
         g_free (str_value);
     }
     else if (JSValueIsBoolean(context,value)) {
+<<<<<<< HEAD
       printf("Result is a String\n");
 >>>>>>> Fixed pointer not getting the result
+=======
+      printf("Result is a Boolean\n");
+>>>>>>> Modified sample
     }
     else if (JSValueIsNumber (context,value))
     {
@@ -1219,6 +1229,7 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
         wxLogError("Error running javascript: unexpected return value");
     
     webkit_javascript_result_unref (js_result);
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     return return_value;
@@ -1263,6 +1274,8 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 =======
     //mutex -> Post();
 >>>>>>> Sleep runscript when callback is called
+=======
+>>>>>>> Modified sample
 }
 
 void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
@@ -1277,14 +1290,22 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
   
 =======
     printf("Using Runscript winth Webkit2\n");
-    char result[8192];
-    wxSemaphore* mutex = new wxSemaphore(0,1);
-    void* options[4];
+
+    wxWebViewEvent event(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+			 wxwebviewwebkit->GetId(),
+			 GetCurrentURL(), NULL);
+    void* options[3];
     options[0] = (void*)this;
+<<<<<<< HEAD
     options[1] = (void*)mutex;
     options[2] = (void*)result;
     options[3] = user_data;
 >>>>>>> Sleep runscript when callback is called
+=======
+    options[1] = (void*)event;
+    options[2] = user_data;
+    
+>>>>>>> Modified sample
     webkit_web_view_run_javascript(m_web_view,
                                    javascript.mb_str(wxConvUTF8),
                                    NULL,
@@ -1293,12 +1314,13 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
                                    event);
 =======
                                    options);
-    //mutex -> Wait();
-    //wxMilliSleep(2000);
-    int i;
-    for (i=0;i<100;i++) {
-      gtk_main_iteration();
+    //for (int i=0;i<100;i++) 
+    //gtk_main_iteration();
+
+    while () {
+      
     }
+    
     printf("String is: %s\n", result);
 >>>>>>> Sleep runscript when callback is called
 }

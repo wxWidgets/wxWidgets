@@ -133,9 +133,14 @@ public:
     void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
     void OnScrollPageUp(wxCommandEvent&) { m_browser->PageUp(); }
     void OnScrollPageDown(wxCommandEvent&) { m_browser->PageDown(); }
+<<<<<<< HEAD
     void OnRunScript(wxCommandEvent& evt);
     void OnRunScriptAsync(wxCommandEvent& evt);
     void OnRunScriptAsyncResult(wxCommandEvent& evt);
+=======
+    void OnRunScriptSync(wxCommandEvent& evt);
+    void OnRunScriptAsync(wxCommandEvent& evt);
+>>>>>>> Modified sample
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -396,7 +401,12 @@ WebFrame::WebFrame(const wxString& url) :
     m_scroll_page_down = scroll_menu->Append(wxID_ANY, "Page d&own");
     m_tools_menu->AppendSubMenu(scroll_menu, "Scroll");
 
+<<<<<<< HEAD
     wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
+=======
+    wxMenuItem* script_sync =  m_tools_menu->Append(wxID_ANY, _("Run Script Sync"));
+
+>>>>>>> Modified sample
     wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
 
     //Selection menu
@@ -506,12 +516,19 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnScrollPageUp),  NULL, this );
     Connect(m_scroll_page_down->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnScrollPageDown),  NULL, this );
+<<<<<<< HEAD
     Connect(script->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
     Connect(script_async->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
     Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
 	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
+=======
+    Connect(script_sync->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptSync),  NULL, this );
+    Connect(script_async->GetId(), wxEVT_MENU,
+	    wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
+>>>>>>> Modified sample
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
     Connect(m_selection_delete->GetId(), wxEVT_MENU,
@@ -977,7 +994,7 @@ void WebFrame::OnHistory(wxCommandEvent& evt)
     m_browser->LoadHistoryItem(m_histMenuItems[evt.GetId()]);
 }
 
-void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
+void WebFrame::OnRunScriptSync(wxCommandEvent& WXUNUSED(evt))
 {
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
@@ -988,6 +1005,7 @@ void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
 {
+<<<<<<< HEAD
     wxTextEntryDialog dialog(this, "Enter JavaScript to run (async).", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
     {
@@ -1003,6 +1021,16 @@ void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
     wxLogMessage("RunScriptAsyc(id=%d) result: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
 }
 
+=======
+    wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
+    if(dialog.ShowModal() == wxID_OK)
+    {
+      wxString* test = new wxString(_("Test"));
+      m_browser->RunScript(dialog.GetValue(), (wxObject*)test);
+    }
+}
+
+>>>>>>> Modified sample
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->ClearSelection();
