@@ -5605,6 +5605,7 @@ void wxWindowMSW::GenerateMouseLeave()
 
 bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
 {
+    // These are used to calculate the pan direction
     static int s_previousLocationX, s_previousLocationY;
 
     // This flag indicates that the gesture has just started
@@ -5664,6 +5665,7 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
 
 bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags)
 {
+    // These are used to calculate the center of the zoom and zoom factor
     static int s_previousLocationX, s_previousLocationY, s_lastFingerDistance;
 
     // This flag indicates that the gesture has just started
@@ -5706,6 +5708,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
 
 bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags)
 {
+    // This is used to calculate the change in angle
     static WXDWORD s_angle;
 
     // This flag indicates that the gesture has just started
