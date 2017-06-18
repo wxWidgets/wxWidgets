@@ -117,6 +117,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -140,6 +141,9 @@ public:
 =======
     virtual void RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
 >>>>>>> Integrate Proof of Concept inside webview_webkit2
+=======
+    virtual wxString RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
