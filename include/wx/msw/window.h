@@ -361,7 +361,7 @@ public:
                           WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandlePanGesture(int x, int y, WXDWORD flags);
-    bool HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD flags);
+    bool HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags);
     bool HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags);
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
