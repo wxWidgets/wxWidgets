@@ -42,6 +42,10 @@ filemap(const char *name,
     fprintf(stderr, "%s: not a regular file\n", name);
     return 0;
   }
+  if (sb.st_size > XML_MAX_CHUNK_LEN) {
+    close(fd);
+    return 2;  /* Cannot be passed to XML_Parse in one go */
+  }
 
   nbytes = sb.st_size;
   /* mmap fails for zero length files */

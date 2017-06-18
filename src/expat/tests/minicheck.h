@@ -27,7 +27,8 @@ extern "C" {
 #endif
 
 /* ISO C90 does not support '__func__' predefined identifier */
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ < 199901)
+#if (defined(__STDC_VERSION__) && (__STDC_VERSION__ < 199901)) || \
+    (defined(__GNUC__) && !defined(__STDC_VERSION__))
 # define __func__ "(unknown)"
 #endif
 

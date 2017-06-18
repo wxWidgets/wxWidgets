@@ -5,13 +5,6 @@
 #ifndef Expat_External_INCLUDED
 #define Expat_External_INCLUDED 1
 
-/* wxWidgets modification: always predefine XML_STATIC as we always use
-   Expat as a static library.
-*/
-#ifndef XML_STATIC
-#define XML_STATIC
-#endif
-
 /* External API definitions */
 
 #if defined(_MSC_EXTENSIONS) && !defined(__BEOS__) && !defined(__CYGWIN__)
@@ -100,7 +93,10 @@ extern "C" {
 #endif
 
 #ifdef XML_UNICODE_WCHAR_T
-#define XML_UNICODE
+# define XML_UNICODE
+# if defined(__SIZEOF_WCHAR_T__) && (__SIZEOF_WCHAR_T__ != 2)
+#  error "sizeof(wchar_t) != 2; Need -fshort-wchar for both Expat and libc"
+# endif
 #endif
 
 #ifdef XML_UNICODE     /* Information is UTF-16 encoded. */
