@@ -514,7 +514,7 @@ WebFrame::WebFrame(const wxString& url) :
     Connect(script_async->GetId(), wxEVT_MENU,
 	    wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
     Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-	    wxCommandEventHandler(WebFrame::OnRunScriptResult), NULL, this);
+    	    wxCommandEventHandler(WebFrame::OnRunScriptResult), NULL, this);
 
     
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
