@@ -5667,7 +5667,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     static int s_previousLocationX, s_previousLocationY, s_lastFingerDistance;
 
     // This flag indicates that the gesture has just started
-    // Store the current point and zoom distance for future calculations
+    // Store the current point and distance between the fingers for future calculations
     if(flags & GF_BEGIN)
     {
       s_previousLocationX = x;
@@ -5684,7 +5684,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     pt.x = (s_previousLocationX + x) / 2;
     pt.y = (s_previousLocationY + y) / 2;
 
-    // Calculate the zoom factor which is the ratio of zoomDistance and gs_lastZoomDistance
+    // Calculate the zoom factor which is the ratio of fingerDistance and s_lastFingerDistance
     double zoomFactor = (double) fingerDistance / (double) s_lastFingerDistance;
 
     // wxEVT_GESTURE_ZOOM
@@ -5696,7 +5696,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     event.SetPosition(pt);
     event.SetZoomFactor(zoomFactor);
 
-    // Update gs_lastZoomDistance and gs_ptLastGestureEvent
+    // Update gesture event point and distance between the fingers
     s_previousLocationX = x;
     s_previousLocationY = y;
     s_lastFingerDistance = fingerDistance;
@@ -5718,7 +5718,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags
 
     // Windows returns the cumulative rotation angle since the gesture was first started,
     // angleArgument is used to obtain that cumulative angle. Take the difference of the 
-    // angles returned by using angleArgument and gs_lastAngleArgument to obtain the 
+    // angles returned by using angle and s_angle to obtain the 
     // change in angle for the consecutive rotate gesture events. This change in angle
     // is in radians.
     double angleDelta = GID_ROTATE_ANGLE_FROM_ARGUMENT(angle)
@@ -5742,7 +5742,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags
         event.SetRotateDirection(wxCOUNTERCLOCKWISE);
     }
 
-    // Update gs_lastAngleArgument
+    // Update gs_angle
     s_angle = angle;
 
     return HandleWindowEvent(event);
