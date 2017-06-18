@@ -679,7 +679,7 @@ WebFrame::WebFrame(const wxString& url) :
 >>>>>>> Modified sample
 =======
     Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-	    wxCommandEventHandler(WebFrame::OnRunScriptResult), NULL, this);
+    	    wxCommandEventHandler(WebFrame::OnRunScriptResult), NULL, this);
 
     
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not

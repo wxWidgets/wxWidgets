@@ -1255,8 +1255,9 @@ web_view_javascript_finished (GObject      *object,
 	if (user_data != NULL) {
 	  printf("Trying to trigger event!\n");
 	  wxString target;
+	  wxString url;
 	  wxWebViewEvent event(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-			       wxwebviewwebkit->GetId(), wxwebviewwebkit->GetCurrentURL(), target);
+			       wxwebviewwebkit->GetId(), url, target);
 	  printf("Event created!\n");
 	  if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
 	    printf("Trigged event wxEVT_RUNSCRIPT_RESULT\n");
@@ -2277,7 +2278,7 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 >>>>>>> Sleep runscript when callback is called
 =======
 
-    char result[8192];
+    char result[8192] = "\0";
 
     void* options[3];
     options[0] = (void*)this;
@@ -2298,8 +2299,27 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
                                    options);
 
     if (user_data == NULL) {
-      for (int i=0;i<100;i++) 
-	gtk_main_iteration();
+      // wait for the javascript result:
+      printf("entering loop...\n");
+      //this limit is probably too short for complex scripts...
+      int i;
+      for (i=0;i<100;i++) {
+	// process events, do not block (just in case)
+	gtk_main_iteration_do(false);
+	// check if result was modified:
+	if (result[0] != 0) {
+	  break;
+	}
+      }
+      printf("Loop done!\n");
+      // safety check: result should not be empty...
+      if (result[0] == 0) {
+	// a js exception could have been raised, or the result was undefined...
+	printf("Result is empty!\n");
+      } else {
+	printf("String is: %s (loops=%d)\n", result, i);
+      }
+
       return wxString::FromUTF8(result);
     }
 <<<<<<< HEAD
