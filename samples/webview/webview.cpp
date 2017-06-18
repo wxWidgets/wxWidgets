@@ -139,6 +139,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     void OnRunScript(wxCommandEvent& evt);
     void OnRunScriptAsync(wxCommandEvent& evt);
     void OnRunScriptAsyncResult(wxCommandEvent& evt);
@@ -174,6 +175,10 @@ public:
 >>>>>>> Trying to allocate memory for result string
 =======
 >>>>>>> Set up the new async enviroment
+=======
+    void OnRunScriptSync(wxCommandEvent& evt);
+    void OnRunScriptAsync(wxCommandEvent& evt);
+>>>>>>> Modified sample
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -438,6 +443,7 @@ WebFrame::WebFrame(const wxString& url) :
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
 <<<<<<< HEAD
 =======
@@ -463,6 +469,11 @@ WebFrame::WebFrame(const wxString& url) :
 =======
     wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
 >>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
+=======
+    wxMenuItem* script_sync =  m_tools_menu->Append(wxID_ANY, _("Run Script Sync"));
+
+    wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
+>>>>>>> Modified sample
 
     //Selection menu
     wxMenu* selection = new wxMenu();
@@ -577,6 +588,7 @@ WebFrame::WebFrame(const wxString& url) :
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Connect(script->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
 <<<<<<< HEAD
@@ -595,10 +607,13 @@ WebFrame::WebFrame(const wxString& url) :
 =======
     
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
+=======
+>>>>>>> Modified sample
     Connect(script_sync->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScriptSync),  NULL, this );
     Connect(script_async->GetId(), wxEVT_MENU,
 	    wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -647,6 +662,8 @@ WebFrame::WebFrame(const wxString& url) :
     Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
 	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
 >>>>>>> Set up the new async enviroment
+=======
+>>>>>>> Modified sample
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
     Connect(m_selection_delete->GetId(), wxEVT_MENU,
@@ -1112,7 +1129,7 @@ void WebFrame::OnHistory(wxCommandEvent& evt)
     m_browser->LoadHistoryItem(m_histMenuItems[evt.GetId()]);
 }
 
-void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
+void WebFrame::OnRunScriptSync(wxCommandEvent& WXUNUSED(evt))
 {
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
@@ -1187,6 +1204,7 @@ void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Trying to allocate memory for result string
 =======
 void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
@@ -1209,6 +1227,8 @@ void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
 
 >>>>>>> Set up the new async enviroment
 =======
+=======
+>>>>>>> Modified sample
 void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
 {
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
@@ -1219,6 +1239,7 @@ void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
     }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> Modified sample
 =======
@@ -1262,6 +1283,8 @@ void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
 }
 
 >>>>>>> Set up the new async enviroment
+=======
+>>>>>>> Modified sample
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->ClearSelection();
