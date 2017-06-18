@@ -140,6 +140,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     void OnRunScript(wxCommandEvent& evt);
     void OnRunScriptAsync(wxCommandEvent& evt);
     void OnRunScriptAsyncResult(wxCommandEvent& evt);
@@ -179,6 +180,13 @@ public:
     void OnRunScriptSync(wxCommandEvent& evt);
     void OnRunScriptAsync(wxCommandEvent& evt);
 >>>>>>> Modified sample
+=======
+  
+    void OnRunScriptSync(wxCommandEvent& evt);
+    void OnRunScriptAsync(wxCommandEvent& evt);
+    void OnRunScriptResult(wxCommandEvent& evt);
+  
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -589,6 +597,7 @@ WebFrame::WebFrame(const wxString& url) :
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Connect(script->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
 <<<<<<< HEAD
@@ -609,10 +618,14 @@ WebFrame::WebFrame(const wxString& url) :
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 =======
 >>>>>>> Modified sample
+=======
+    
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
     Connect(script_sync->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScriptSync),  NULL, this );
     Connect(script_async->GetId(), wxEVT_MENU,
 	    wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -664,6 +677,12 @@ WebFrame::WebFrame(const wxString& url) :
 >>>>>>> Set up the new async enviroment
 =======
 >>>>>>> Modified sample
+=======
+    Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+	    wxCommandEventHandler(WebFrame::OnRunScriptResult), NULL, this);
+
+    
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
     Connect(m_selection_delete->GetId(), wxEVT_MENU,
@@ -1140,6 +1159,7 @@ void WebFrame::OnRunScriptSync(wxCommandEvent& WXUNUSED(evt))
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       wxLogMessage("RunScript result: %s\n", m_browser->RunScript(dialog.GetValue()));	
 =======
         wxString result = m_browser->RunScript(dialog.GetValue());
@@ -1178,6 +1198,11 @@ void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
     {
       wxString* test = new wxString(_("Test"));
       m_browser->RunScript(dialog.GetValue(), (wxObject*)test);
+=======
+        wxString result = m_browser->RunScript(dialog.GetValue());
+	printf("The result of RunScript Sync is %s\n", (const char*)result.mb_str(wxConvUTF8));
+	
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
     }
 }
 
@@ -1241,6 +1266,7 @@ void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Modified sample
 =======
 void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
@@ -1285,6 +1311,15 @@ void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
 >>>>>>> Set up the new async enviroment
 =======
 >>>>>>> Modified sample
+=======
+void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
+{
+  printf("Event gets the method handler\n");
+  printf("The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
+  
+}
+
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->ClearSelection();

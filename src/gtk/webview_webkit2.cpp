@@ -1201,7 +1201,7 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
 static void
 web_view_javascript_finished (GObject      *object,
                               GAsyncResult *result,
-                              gpointer      user_data)
+                              gpointer      options)
 {
 
   printf("Starting web_view_javascript_finished\n");
@@ -1210,9 +1210,9 @@ web_view_javascript_finished (GObject      *object,
     JSGlobalContextRef      context;
     GError                 *error = NULL;
 
-    wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)((void**)user_data)[0];
-    wxWebViewEvent* event = (wxWebViewEvent*)(((void**)user_data)[1]);
-    wxObject* custom = (wxObject*)((void**)user_data)[2];
+    wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)((void**)options)[0];
+    wxObject* user_data = (wxObject*)((void**)options)[1];
+    char* data = (char *)((void**)options)[2];
 
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
 
@@ -1239,18 +1239,35 @@ web_view_javascript_finished (GObject      *object,
         str_value = (gchar *)g_malloc (str_length);
         JSStringGetUTF8CString (js_str_value, str_value, str_length);
         JSStringRelease (js_str_value);
+
+	char str[8192];
 	
-	char result[8192];
-	snprintf(result,8192,str_value);
-	
-	if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
-	  printf("Trigged event wxEVT_RUNSCRIPT_RESULT");
-	  event -> SetEventObject(wxString::FromUTF8(result));
-	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
+	if (user_data == NULL) {
+	  printf("user_data is NULL\n");
+	  snprintf(data,8192,str_value);
+	}
+	else {
+	  printf("user_data is NOT NULL\n");
+	  snprintf(str,8192,str_value);
+	  printf("str copy\n");
 	}
 	
-        g_print ("Script result: %s\n", str_value);
+	if (user_data != NULL) {
+	  printf("Trying to trigger event!\n");
+	  wxString target;
+	  wxWebViewEvent event(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+			       wxwebviewwebkit->GetId(), wxwebviewwebkit->GetCurrentURL(), target);
+	  printf("Event created!\n");
+	  if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
+	    printf("Trigged event wxEVT_RUNSCRIPT_RESULT\n");
+	    event.SetString(wxString::FromUTF8(str));
+	    wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
+	  }
+	}
+
+	g_print ("Script result: %s\n", str_value);
         g_free (str_value);
+
     }
     else if (JSValueIsBoolean(context,value)) {
       printf("Result is a Boolean\n");
@@ -1275,6 +1292,7 @@ web_view_javascript_finished (GObject      *object,
     webkit_javascript_result_unref (js_result);
 }
 
+<<<<<<< HEAD
 void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 >>>>>>> Integrate Proof of Concept inside webview_webkit2
 {
@@ -1620,6 +1638,9 @@ static void
 web_view_javascript_finished (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
+=======
+wxString wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 {
 <<<<<<< HEAD
     wxString return_value;
@@ -2256,13 +2277,12 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 >>>>>>> Sleep runscript when callback is called
 =======
 
-    wxWebViewEvent event(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-			 wxwebviewwebkit->GetId(),
-			 GetCurrentURL(), NULL);
+    char result[8192];
+
     void* options[3];
     options[0] = (void*)this;
-    options[1] = (void*)event;
-    options[2] = user_data;
+    options[1] = user_data;
+    options[2] = (void*)result;
     
 >>>>>>> Modified sample
     webkit_web_view_run_javascript(m_web_view,
@@ -2276,15 +2296,20 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 >>>>>>> Integrate Proof of Concept inside webview_webkit2
 =======
                                    options);
-    //for (int i=0;i<100;i++) 
-    //gtk_main_iteration();
 
-    while () {
-      
+    if (user_data == NULL) {
+      for (int i=0;i<100;i++) 
+	gtk_main_iteration();
+      return wxString::FromUTF8(result);
     }
+<<<<<<< HEAD
     
     printf("String is: %s\n", result);
 >>>>>>> Sleep runscript when callback is called
+=======
+    else 
+      return _("");
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
