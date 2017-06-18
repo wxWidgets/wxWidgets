@@ -3210,7 +3210,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             // ullArgument field is a 64-bit unsigned integer, but the relevant information
                             // is in it's lower 4 bytes and represents distance between the fingers
                             // this is used to extract those lower 4 bytes
-                            DWORD fingerDistance = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
+                            DWORD fingerDistance = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
                             processed = HandleZoomGesture(x, y, fingerDistance, gestureInfo.dwFlags);
 
                             if(!processed)
@@ -3235,7 +3235,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                             // Again, we need the lower 4 bytes and this will used as an argument
                             // to obtain the angle to rotate
-                            DWORD angle = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
+                            DWORD angle = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
                             processed = HandleRotateGesture(x, y, angle, gestureInfo.dwFlags);
 
                             if(!processed)
