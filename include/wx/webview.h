@@ -161,8 +161,12 @@ public:
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
+<<<<<<< HEAD
     virtual wxString RunScript(const wxString& javascript) = 0;
     virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
+=======
+    virtual wxString RunScript(const wxString& javascript, wxObject* user_data=NULL) = 0;
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {

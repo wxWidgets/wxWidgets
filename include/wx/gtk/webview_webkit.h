@@ -114,8 +114,12 @@ public:
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
 
+<<<<<<< HEAD
     virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
     virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
+=======
+    virtual wxString RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
+>>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
