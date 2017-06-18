@@ -1100,9 +1100,8 @@ web_view_javascript_finished (GObject      *object,
     GError                 *error = NULL;
 
     wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)((void**)user_data)[0];
-    wxSemaphore* mutex = (wxSemaphore*)((void**)user_data)[1];
-    char* data = (char*)(((void**)user_data)[2]);
-    wxObject* custom = (wxObject*)((void**)user_data)[3];
+    wxWebViewEvent* event = (wxWebViewEvent*)(((void**)user_data)[1]);
+    wxObject* custom = (wxObject*)((void**)user_data)[2];
 
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
 
@@ -1119,21 +1118,7 @@ web_view_javascript_finished (GObject      *object,
     if (JSValueIsString (context, value)) {
 
         printf("Result is a String\n");
-
-	wxString url;
 	
-	wxString target; // TODO: get target (if possible)
-	
-
-	wxWebViewEvent event(wxEVT_RUNSCRIPT_RESULT,
-			     wxwebviewwebkit->GetId(),
-			     url, target);
-	
-	if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
-	  printf("Trigged event wxEVT_RUNSCRIPT_RESULT");
-	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
-	}
-
         JSStringRef js_str_value;
         gchar      *str_value;
         gsize       str_length;
@@ -1143,12 +1128,21 @@ web_view_javascript_finished (GObject      *object,
         str_value = (gchar *)g_malloc (str_length);
         JSStringGetUTF8CString (js_str_value, str_value, str_length);
         JSStringRelease (js_str_value);
-	snprintf(data,8192,str_value);
+	
+	char result[8192];
+	snprintf(result,8192,str_value);
+	
+	if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
+	  printf("Trigged event wxEVT_RUNSCRIPT_RESULT");
+	  event -> SetEventObject(wxString::FromUTF8(result));
+	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
+	}
+	
         g_print ("Script result: %s\n", str_value);
         g_free (str_value);
     }
     else if (JSValueIsBoolean(context,value)) {
-      printf("Result is a String\n");
+      printf("Result is a Boolean\n");
     }
     else if (JSValueIsNumber(context,value)) {
       printf("Result is a Number\n");	        
@@ -1168,30 +1162,32 @@ web_view_javascript_finished (GObject      *object,
         g_warning ("Error running javascript: unexpected return value");
     }
     webkit_javascript_result_unref (js_result);
-    //mutex -> Post();
 }
 
 void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 {
     printf("Using Runscript winth Webkit2\n");
-    char result[8192];
-    wxSemaphore* mutex = new wxSemaphore(0,1);
-    void* options[4];
+
+    wxWebViewEvent event(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+			 wxwebviewwebkit->GetId(),
+			 GetCurrentURL(), NULL);
+    void* options[3];
     options[0] = (void*)this;
-    options[1] = (void*)mutex;
-    options[2] = (void*)result;
-    options[3] = user_data;
+    options[1] = (void*)event;
+    options[2] = user_data;
+    
     webkit_web_view_run_javascript(m_web_view,
                                    javascript.mb_str(wxConvUTF8),
                                    NULL,
                                    web_view_javascript_finished,
                                    options);
-    //mutex -> Wait();
-    //wxMilliSleep(2000);
-    int i;
-    for (i=0;i<100;i++) {
-      gtk_main_iteration();
+    //for (int i=0;i<100;i++) 
+    //gtk_main_iteration();
+
+    while () {
+      
     }
+    
     printf("String is: %s\n", result);
 }
 
