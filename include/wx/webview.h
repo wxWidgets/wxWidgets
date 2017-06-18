@@ -374,6 +374,9 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 // old wxEVT_COMMAND_* constants
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Async working, need to use user_data to know which runscript trigged the event
 =======
 >>>>>>> Async working, need to use user_data to know which runscript trigged the event
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATING        wxEVT_WEBVIEW_NAVIGATING
@@ -382,6 +385,7 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 #define wxEVT_COMMAND_WEBVIEW_ERROR             wxEVT_WEBVIEW_ERROR
 #define wxEVT_COMMAND_WEBVIEW_NEWWINDOW         wxEVT_WEBVIEW_NEWWINDOW
 #define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED     wxEVT_WEBVIEW_TITLE_CHANGED
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 #define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
@@ -405,6 +409,9 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 >>>>>>> Set up the new async enviroment
 =======
 >>>>>>> Sleep runscript when callback is called
+=======
+#define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
+>>>>>>> Async working, need to use user_data to know which runscript trigged the event
 
 #endif // wxUSE_WEBVIEW
 
