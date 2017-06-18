@@ -203,15 +203,6 @@ int gs_modalEntryWindowCount = 0;
 // Indicates whether we are currently processing WM_CAPTURECHANGED message.
 bool gs_insideCaptureChanged = false;
 
-// This is used to track the last gesture event point in client coordinates
-wxPoint gs_ptLastGestureEvent;
-
-// This is used to calculate the zoom factor for zoom gesture
-WXDWORD gs_lastZoomDistance;
-
-// This is used to obtain the angle delta for rotate gesture
-WXDWORD gs_lastAngleArgument;
-
 } // anonymous namespace
 
 // ---------------------------------------------------------------------------
@@ -5618,15 +5609,15 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     // Store the current point to determine the pan direction later on
     if(flags & GF_BEGIN)
     {
-        gs_ptLastGestureEvent.x = x;
-        gs_ptLastGestureEvent.y = y;
+         = x;
+         = y;
         return true;
     }
     
     wxPoint pt(x, y);
     
     // Determine the horizontal and vertical changes
-    int panDeltaX =  x - gs_ptLastGestureEvent.x, panDeltaY = y - gs_ptLastGestureEvent.y;
+    int panDeltaX =  x - , panDeltaY = y - ;
     
     // wxEVT_GESTURE_PAN
     wxPanGestureEvent event(wxEVT_GESTURE_PAN, GetId());
@@ -5664,8 +5655,8 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     }
     
     // Update the last gesture event point 
-    gs_ptLastGestureEvent.x = x;
-    gs_ptLastGestureEvent.y = y;
+     = x;
+     = y;
     return HandleWindowEvent(event);
 }
 
@@ -5675,9 +5666,9 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     // Store the current point and zoom distance for future calculations
     if(flags & GF_BEGIN)
     {
-      gs_ptLastGestureEvent.x = x;
-      gs_ptLastGestureEvent.y = y;
-      gs_lastZoomDistance = zoomDistance;
+       = x;
+       = y;
+       = zoomDistance;
       return true;
     }
 
@@ -5686,11 +5677,11 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     // There is usually some error, which can cause the center to shift slightly
     // So, it is recommended to take the average of center of fingers in the current and last positions
     wxPoint pt;
-    pt.x = (gs_ptLastGestureEvent.x + x) / 2;
-    pt.y = (gs_ptLastGestureEvent.y + y) / 2;
+    pt.x = ( + x) / 2;
+    pt.y = ( + y) / 2;
 
     // Calculate the zoom factor which is the ratio of zoomDistance and gs_lastZoomDistance
-    double zoomFactor = (double) zoomDistance / (double) gs_lastZoomDistance;
+    double zoomFactor = (double) zoomDistance / (double) ;
 
     // wxEVT_GESTURE_ZOOM
     wxZoomGestureEvent event(wxEVT_GESTURE_ZOOM, GetId());
@@ -5702,9 +5693,9 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     event.SetZoomFactor(zoomFactor);
 
     // Update gs_lastZoomDistance and gs_ptLastGestureEvent
-    gs_ptLastGestureEvent.x = x;
-    gs_ptLastGestureEvent.y = y;
-    gs_lastZoomDistance = zoomDistance;
+     = x;
+     = y;
+     = zoomDistance;
 
     return HandleWindowEvent(event);
 }
@@ -5725,7 +5716,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
     // change in angle for the consecutive rotate gesture events. This change in angle
     // is in radians.
     double angleDelta = GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument)
-    - GID_ROTATE_ANGLE_FROM_ARGUMENT(gs_lastAngleArgument);
+    - GID_ROTATE_ANGLE_FROM_ARGUMENT();
 
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(wxEVT_GESTURE_ROTATE, GetId());
@@ -5746,7 +5737,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
     }
 
     // Update gs_lastAngleArgument
-    gs_lastAngleArgument = angleArgument;
+     = angleArgument;
 
     return HandleWindowEvent(event);
 }
