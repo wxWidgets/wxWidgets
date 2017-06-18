@@ -3210,8 +3210,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             // ullArgument field is a 64-bit unsigned integer, but the relevant information
                             // is in it's lower 4 bytes and represents distance between the fingers
                             // this is used to extract those lower 4 bytes
-                            DWORD zoomDistance = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
-                            processed = HandleZoomGesture(x, y, zoomDistance, gestureInfo.dwFlags);
+                            DWORD fingerDistance = ((DWORD)((ULONGLONG)(gestureInfo.ullArguments) & 0x00000000ffffffff));
+                            processed = HandleZoomGesture(x, y, fingerDistance, gestureInfo.dwFlags);
 
                             if(!processed)
                             {
@@ -5662,7 +5662,7 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD flags)
+bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags)
 {
     static int s_previousLocationX, s_previousLocationY, s_lastFingerDistance;
 
@@ -5672,7 +5672,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     {
       s_previousLocationX = x;
       s_previousLocationY = y;
-      s_lastFingerDistance = zoomDistance;
+      s_lastFingerDistance = fingerDistance;
       return true;
     }
 
@@ -5685,7 +5685,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     pt.y = (s_previousLocationY + y) / 2;
 
     // Calculate the zoom factor which is the ratio of zoomDistance and gs_lastZoomDistance
-    double zoomFactor = (double) zoomDistance / (double) s_lastFingerDistance;
+    double zoomFactor = (double) fingerDistance / (double) s_lastFingerDistance;
 
     // wxEVT_GESTURE_ZOOM
     wxZoomGestureEvent event(wxEVT_GESTURE_ZOOM, GetId());
@@ -5699,7 +5699,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD zoomDistance, WXDWORD 
     // Update gs_lastZoomDistance and gs_ptLastGestureEvent
     s_previousLocationX = x;
     s_previousLocationY = y;
-    s_lastFingerDistance = zoomDistance;
+    s_lastFingerDistance = fingerDistance;
 
     return HandleWindowEvent(event);
 }
