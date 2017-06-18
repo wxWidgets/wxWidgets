@@ -827,8 +827,9 @@ wxString wxWebViewWebKit::GetPageSource() const
         g_main_context_iteration(main_context, TRUE);
     }
 
+    size_t length;
     guchar *source = webkit_web_resource_get_data_finish(resource, result,
-                                                         NULL, NULL);
+                                                         &length, NULL);
     if (result)
     {
         g_object_unref(result);
@@ -836,7 +837,7 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     if (source)
     {
-        wxString wxs = wxString(source, wxConvUTF8);
+        wxString wxs(source, wxConvUTF8, length);
         free(source);
         return wxs;
     }
