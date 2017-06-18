@@ -1197,11 +1197,19 @@ web_view_javascript_finished (GObject      *object,
 =======
 	if (user_data != NULL) {
 	  printf("Trying to trigger event!\n");
+	  fflush(stdout);
+
+
 	  wxString target;
-	  wxString url;
+	  wxString url = wxwebviewwebkit->GetCurrentURL();
+    
 	  wxWebViewEvent event(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-			       wxwebviewwebkit->GetId(), url, target);
+				   wxwebviewwebkit -> GetId(),
+				   url, target);
+
+	  
 	  printf("Event created!\n");
+	  fflush(stdout);
 	  if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
 	    printf("Trigged event wxEVT_RUNSCRIPT_RESULT\n");
 	    event.SetString(wxString::FromUTF8(str));
@@ -1329,7 +1337,9 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 
     char result[8192] = "\0";
 
-    void* options[3];
+
+
+    void** options = (void**)malloc(sizeof(void*)*3);
     options[0] = (void*)this;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1343,7 +1353,11 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 =======
     options[1] = user_data;
     options[2] = (void*)result;
+<<<<<<< HEAD
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
+=======
+    //options[3] = (void*)event;
+>>>>>>> Async working, need to use user_data to know which runscript trigged the event
     
 >>>>>>> Modified sample
     webkit_web_view_run_javascript(m_web_view,
