@@ -153,7 +153,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     // surface and use this copy in the drawing operations.
     if ( cr == cr_src )
     {
-	// Check if destination and source regions overlap.
+        // Check if destination and source regions overlap.
         // If necessary, copy source surface to the temporary one.
         if (wxRect(xdest, ydest, dstWidth, dstHeight)
             .Intersects(wxRect(xsrc, ysrc, srcWidth, srcHeight)))
@@ -221,7 +221,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     cairo_restore(cr);
     if ( surfaceTmp )
     {
-	cairo_surface_destroy(surfaceTmp);
+        cairo_surface_destroy(surfaceTmp);
     }
     m_logicalFunction = rop_save;
     return true;

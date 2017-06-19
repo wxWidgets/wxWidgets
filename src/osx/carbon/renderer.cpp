@@ -44,7 +44,7 @@
 inline bool wxHasCGContext(wxWindow* WXUNUSED(win), wxDC& dc)
 {
     wxGCDCImpl* gcdc = wxDynamicCast( dc.GetImpl() , wxGCDCImpl);
-    
+
     if ( gcdc )
     {
         if ( gcdc->GetGraphicsContext()->GetNativeContext() )
@@ -218,7 +218,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
             {
                 drawInfo.value = kThemeButtonOn;
             }
-            
+
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
         }
     }
@@ -730,22 +730,22 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
         drawCircle = false;
         glyphColor = wxColour(145, 147, 149);
     }
-    
+
     if ( drawCircle )
     {
         wxRect circleRect(rect);
         circleRect.Deflate(2);
-    
+
         dc.DrawEllipse(circleRect);
     }
-    
+
     dc.SetPen(wxPen(glyphColor, 1));
-    
+
     wxRect centerRect(rect);
     centerRect.Deflate(5);
     centerRect.height++;
     centerRect.width++;
-	
+
     dc.DrawLine(centerRect.GetTopLeft(), centerRect.GetBottomRight());
     dc.DrawLine(centerRect.GetTopRight(), centerRect.GetBottomLeft());
 }
