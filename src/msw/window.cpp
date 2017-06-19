@@ -5666,6 +5666,7 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     // Update the last gesture event point 
     s_previousLocationX = x;
     s_previousLocationY = y;
+    
     return HandleWindowEvent(event);
 }
 
