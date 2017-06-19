@@ -1228,7 +1228,7 @@ web_view_javascript_finished (GObject      *object,
     value = webkit_javascript_result_get_value (js_result);
     if (JSValueIsString (context, value)) {
 
-        printf("Result is a String\n");
+        printf("(WebKit callback) Result is a String\n");
 	
         JSStringRef js_str_value;
         gchar      *str_value;
@@ -1243,17 +1243,13 @@ web_view_javascript_finished (GObject      *object,
 	char str[8192];
 	
 	if (user_data == NULL) {
-	  printf("user_data is NULL\n");
 	  snprintf(data,8192,str_value);
 	}
 	else {
-	  printf("user_data is NOT NULL\n");
 	  snprintf(str,8192,str_value);
-	  printf("str copy\n");
 	}
 	
 	if (user_data != NULL) {
-	  printf("Trying to trigger event!\n");
 	  fflush(stdout);
 
 
@@ -1265,16 +1261,16 @@ web_view_javascript_finished (GObject      *object,
 				   url, target);
 
 	  
-	  printf("Event created!\n");
 	  fflush(stdout);
 	  if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
-	    printf("Trigged event wxEVT_RUNSCRIPT_RESULT\n");
+	    printf("(WebKit callback) Trigged event wxEVT_RUNSCRIPT_RESULT\n");
 	    event.SetString(wxString::FromUTF8(str));
+	    event.SetEventObject(user_data);
 	    wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
 	  }
 	}
 
-	g_print ("Script result: %s\n", str_value);
+	g_print ("(WebKit callback) Script result: %s\n", str_value);
         g_free (str_value);
 
     }
@@ -1863,6 +1859,7 @@ static void wxgtk_run_javascript_cb(WebKitWebView *,
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     wxString return_value;
     GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
@@ -2286,8 +2283,9 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 >>>>>>> Sleep runscript when callback is called
 =======
 
+=======
+>>>>>>> Now printf are more clear. Minor changes.
     char result[8192] = "\0";
-
 
 
     void** options = (void**)malloc(sizeof(void*)*3);
@@ -2311,7 +2309,7 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 
     if (user_data == NULL) {
       // wait for the javascript result:
-      printf("entering loop...\n");
+      printf("(RunScript Sync) entering loop...\n");
       //this limit is probably too short for complex scripts...
       int i;
       for (i=0;i<100;i++) {
@@ -2322,13 +2320,13 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 	  break;
 	}
       }
-      printf("Loop done!\n");
+      printf("(RunScript Sync) Loop done!\n");
       // safety check: result should not be empty...
       if (result[0] == 0) {
 	// a js exception could have been raised, or the result was undefined...
-	printf("Result is empty!\n");
+	printf("(RunScript Sync) Result is empty!\n");
       } else {
-	printf("String is: %s (loops=%d)\n", result, i);
+	printf("(RunScript Sync) String is: %s (loops=%d)\n", result, i);
       }
 
       return wxString::FromUTF8(result);
