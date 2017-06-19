@@ -5614,7 +5614,6 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     {
         s_previousLocationX = x;
         s_previousLocationY = y;
-        return true;
     }
     
     wxPoint pt(x, y);
@@ -5675,7 +5674,6 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
       s_previousLocationX = x;
       s_previousLocationY = y;
       s_lastFingerDistance = fingerDistance;
-      return true;
     }
 
     // Calculate center point of the zoom
@@ -5714,7 +5712,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags
     // This flag indicates that the gesture has just started
     if(flags & GF_BEGIN)
     {
-        return true;
+        
     }
 
     wxPoint pt(x, y);
