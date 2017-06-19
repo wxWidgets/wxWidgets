@@ -1875,7 +1875,7 @@ public:
      {
         m_pos = event.m_pos;
         m_panDirection = event.m_panDirection;
-        m_start = event.start;
+        m_start = event.m_start;
      }
  
      const wxPoint& GetPosition() const { return m_pos; }
@@ -1912,7 +1912,7 @@ public:
      {
         m_pos = event.m_pos;
         m_zoomFactor = event.m_zoomFactor;
-        m_start = event.start;
+        m_start = event.m_start;
      }
  
      const wxPoint& GetPosition() const { return m_pos; }
@@ -1949,7 +1949,7 @@ public:
      {
         m_angle = event.m_angle;
         m_pos = event.m_pos;
-        m_start = event.start;
+        m_start = event.m_start;
      }
      
      double GetAngle() const { return m_angle; }
