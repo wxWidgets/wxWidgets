@@ -339,9 +339,14 @@ inline static void CacheWriteString(wxOutputStream *f, const wxString& str)
 inline static wxString CacheReadString(wxInputStream *f)
 {
     size_t len = (size_t)CacheReadInt32(f);
-    wxCharBuffer str(len-1);
-    f->Read(str.data(), len);
-    return wxString(str, wxConvUTF8);
+    if (0<len)
+    {
+        wxCharBuffer str(len-1);
+        f->Read(str.data(), len);
+        return wxString(str, wxConvUTF8);
+    }
+    else
+        return wxString();
 }
 
 #define CURRENT_CACHED_BOOK_VERSION     5
