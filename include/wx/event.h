@@ -1875,18 +1875,22 @@ public:
      {
         m_pos = event.m_pos;
         m_panDirection = event.m_panDirection;
+        m_start = event.start;
      }
  
      const wxPoint& GetPosition() const { return m_pos; }
      void SetPosition(const wxPoint& pos) { m_pos = pos; }
      wxDirection GetPanDirection() const { return m_panDirection; }
      void SetPanDirection(wxDirection panDirection) { m_panDirection = panDirection; }
- 
+     bool IsGestureStart() const { return m_start == true; }
+     void SetGestureStart(bool start) { m_start = start; }
+
      virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
  
 private:
     wxPoint m_pos;
     wxDirection m_panDirection;
+    bool m_start;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
 };
@@ -1908,18 +1912,22 @@ public:
      {
         m_pos = event.m_pos;
         m_zoomFactor = event.m_zoomFactor;
+        m_start = event.start;
      }
  
      const wxPoint& GetPosition() const { return m_pos; }
      void SetPosition(const wxPoint& pos) { m_pos = pos; }
      double GetZoomFactor() const { return m_zoomFactor; }
      void SetZoomFactor(double zoomFactor) { m_zoomFactor = zoomFactor; }
+     bool IsGestureStart() const { return m_start == true; }
+     void SetGestureStart(bool start) { m_start = start; }
  
      virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
  
 private:
     wxPoint m_pos;
     double m_zoomFactor;
+    bool m_start;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
 };
@@ -1941,18 +1949,22 @@ public:
      {
         m_angle = event.m_angle;
         m_pos = event.m_pos;
+        m_start = event.start;
      }
      
      double GetAngle() const { return m_angle; }
      void SetAngle(double angle) { m_angle = angle; }
      const wxPoint& GetPosition() const { return m_pos; }
      void SetPosition(const wxPoint& pos) { m_pos = pos; }
+     bool IsGestureStart() const { return m_start == true; }
+     void SetGestureStart(bool start) { m_start = start; }
  
      virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
  
 private:
     wxPoint m_pos;
     double m_angle;
+    bool m_start;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
 };
