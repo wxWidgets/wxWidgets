@@ -2322,9 +2322,9 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     {
         if ( width )
             *width = w;
+        if ( height )
+            *height = a+d+l;
     }
-    if ( height )
-        *height = a+d+l;
     if ( descent )
         *descent = d;
     if ( externalLeading )
