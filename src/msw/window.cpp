@@ -5742,11 +5742,8 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
 
     wxPoint pt(x, y);
 
-    // Windows returns the cumulative rotation angle since the gesture was first started,
-    // angleArgument is used to obtain that cumulative angle. Take the difference of the 
-    // angles returned by using angle and s_angle to obtain the 
-    // change in angle for the consecutive rotate gesture events. This change in angle
-    // is in radians.
+    // use angleArgument to obtain the cumulative angle since the gesture was first
+    // started. This angle is in radians.
     double angle = GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
 
     event.SetEventObject(this);
