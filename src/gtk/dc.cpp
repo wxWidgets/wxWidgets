@@ -154,35 +154,9 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     if ( cr == cr_src )
     {
 	// Check if destination and source regions overlap.
-	bool regOverlap;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-        if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0) )
-        {
-            cairo_rectangle_int_t rdst;
-	    rdst.x = xdest;
-	    rdst.y = ydest;
-            rdst.width = dstWidth;
-	    rdst.height = dstHeight;
-	    cairo_region_t* regdst = cairo_region_create_rectangle(&rdst);
-
-	    cairo_rectangle_int_t rsrc;
-	    rsrc.x = xsrc;
-	    rsrc.y = ysrc;
-	    rsrc.width = srcWidth;
-	    rsrc.height = srcHeight;
-	    cairo_region_overlap_t ov = cairo_region_contains_rectangle(regdst, &rsrc);
-	    cairo_region_destroy(regdst);
-	    regOverlap = (ov !=  CAIRO_REGION_OVERLAP_OUT);
-        }
-        else
-#endif // Cairo 1.10
-        {
-	    wxRect rdst(xdest, ydest, dstWidth, dstHeight);
-	    wxRect rsrc(xsrc, ysrc, srcWidth, srcHeight);
-	    regOverlap = rdst.Intersects(rsrc);
-        }
         // If necessary, copy source surface to the temporary one.
-        if ( regOverlap )
+        if (wxRect(xdest, ydest, dstWidth, dstHeight)
+            .Intersects(wxRect(xsrc, ysrc, srcWidth, srcHeight)))
         {
             const int w = cairo_image_surface_get_width(surfaceSrc);
             const int h = cairo_image_surface_get_height(surfaceSrc);
