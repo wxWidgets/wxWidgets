@@ -3235,8 +3235,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                             // Again, we need the lower 4 bytes and this will used as an argument
                             // to obtain the angle to rotate
-                            DWORD angle = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
-                            processed = HandleRotateGesture(x, y, angle, gestureInfo.dwFlags);
+                            DWORD angleArgument = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
+                            processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
 
                             if(!processed)
                             {
@@ -5704,7 +5704,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags)
+bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags)
 {
     // This flag indicates that the gesture has just started
     if(flags & GF_BEGIN)
@@ -5719,7 +5719,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags
     // angles returned by using angle and s_angle to obtain the 
     // change in angle for the consecutive rotate gesture events. This change in angle
     // is in radians.
-    double angle = GID_ROTATE_ANGLE_FROM_ARGUMENT(angle);
+    double angle = GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
 
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(wxEVT_GESTURE_ROTATE, GetId());
