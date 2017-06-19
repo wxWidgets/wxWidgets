@@ -1005,8 +1005,11 @@ void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
 {
-  printf("Event gets the method handler\n");
-  printf("The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
+  wxString* str = (wxString*)evt.GetEventObject(); 
+  if (str->IsSameAs(_("Test"))) {
+    printf("(WebFrame::OnRunScriptResult (aka sample)) Event gets the method handler\n");
+    printf("(WebFrame::OnRunScriptResult (aka sample)) The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
+   }
   
 }
 
