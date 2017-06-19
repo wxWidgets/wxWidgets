@@ -3174,6 +3174,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                 else
                 {   
+                    if(gestureInfo.hwndTarget != GetHWND())
+                    {
+                        wxLogDebug("This is Not the window targeted by this gesture!");
+                    }
+                    
                     // dwID field is used to determine the type of gesture
                     switch(gestureInfo.dwID)
                     {
