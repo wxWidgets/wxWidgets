@@ -1940,6 +1940,7 @@ public:
      wxRotateGestureEvent(const wxRotateGestureEvent& event) : wxEvent(event)
      {
         m_angle = event.m_angle;
+        m_pos = event.m_pos;
      }
      
      double GetAngle() const { return m_angle; }
