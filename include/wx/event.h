@@ -1939,11 +1939,11 @@ public:
       
      wxRotateGestureEvent(const wxRotateGestureEvent& event) : wxEvent(event)
      {
-        m_angleDelta = event.m_angleDelta;
+        m_angle = event.m_angle;
      }
      
-     double GetAngleDelta() const { return m_angleDelta; }
-     void SetAngleDelta(double angleDelta) { m_angleDelta = angleDelta; }
+     double GetAngle() const { return m_angle; }
+     void SetAngle(double angle) { m_angle = angle; }
      const wxPoint& GetPosition() const { return m_pos; }
      void SetPosition(const wxPoint& pos) { m_pos = pos; }
  
@@ -1951,7 +1951,7 @@ public:
  
 private:
     wxPoint m_pos;
-    double m_angleDelta;
+    double m_angle;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
 };

@@ -5706,9 +5706,6 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
 
 bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags)
 {
-    // This is used to calculate the change in angle
-    static WXDWORD s_angle;
-
     // This flag indicates that the gesture has just started
     if(flags & GF_BEGIN)
     {
@@ -5722,27 +5719,14 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags
     // angles returned by using angle and s_angle to obtain the 
     // change in angle for the consecutive rotate gesture events. This change in angle
     // is in radians.
-    double angleDelta = GID_ROTATE_ANGLE_FROM_ARGUMENT(angle)
-    - GID_ROTATE_ANGLE_FROM_ARGUMENT(s_angle);
+    double angle = GID_ROTATE_ANGLE_FROM_ARGUMENT(angle);
 
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(wxEVT_GESTURE_ROTATE, GetId());
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
     event.SetPosition(pt);
-
-    if(angleDelta > 0)
-    {
-        event.SetAngleDelta(angleDelta);
-    }
-
-    else
-    {
-        event.SetAngleDelta(angleDelta);
-    }
-
-    // Update gs_angle
-    s_angle = angle;
+    event.SetAngle(angle);
 
     return HandleWindowEvent(event);
 }
