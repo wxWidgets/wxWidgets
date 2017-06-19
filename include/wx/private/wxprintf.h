@@ -902,7 +902,7 @@ struct wxPrintfConvSpecParser
 
         // warn if we lost any arguments (the program probably will crash
         // anyhow because of stack corruption...)
-        if ( nargs == wxMAX_SVNPRINTF_ARGUMENTS )
+        if ( nargs >= wxMAX_SVNPRINTF_ARGUMENTS )
         {
             wxFAIL_MSG
             (
