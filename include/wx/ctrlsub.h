@@ -199,7 +199,11 @@ public:
     int Append(const wxString& item)
         { return AppendItems(item); }
     int Append(const wxString& item, void *clientData)
-        { return AppendItems(item, &clientData); }
+    {
+        void* clientDataArray[1];
+        clientDataArray[0] = clientData;
+        return AppendItems(item, clientDataArray);
+    }
     int Append(const wxString& item, wxClientData *clientData)
         { return AppendItems(item, &clientData); }
 
@@ -237,7 +241,11 @@ public:
     int Insert(const wxString& item, unsigned int pos)
         { return InsertItems(item, pos); }
     int Insert(const wxString& item, unsigned int pos, void *clientData)
-        { return InsertItems(item, pos, &clientData); }
+    {
+        void* clientDataArray[1];
+        clientDataArray[0] = clientData;
+        return InsertItems(item, pos, clientDataArray);
+    }
     int Insert(const wxString& item, unsigned int pos, wxClientData *clientData)
         { return InsertItems(item, pos, &clientData); }
 

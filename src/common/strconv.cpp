@@ -424,7 +424,7 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
     if ( pwz )
     {
         const size_t nLen = FromWChar(NULL, 0, pwz);
-        if ( nLen != wxCONV_FAILED )
+        if ( nLen != wxCONV_FAILED && nLen > 0 )
         {
             wxCharBuffer buf(nLen - 1);
             if ( FromWChar(buf.data(), nLen, pwz) != wxCONV_FAILED )

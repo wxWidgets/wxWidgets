@@ -687,7 +687,12 @@ void PositionCache::MeasureWidths(Surface *surface, const ViewStyle &vstyle, uns
 			for (unsigned int inSeg = 0; inSeg < lenSegment; inSeg++) {
 				positions[startSegment + inSeg] += xStartSegment;
 			}
-			xStartSegment = positions[startSegment + lenSegment - 1];
+			// If lenSegment is 0 here, we have an infinite loop, which is bad anyway.
+			// If startSegment is 0 here as well, we access positions at a bad position.
+			// So don't do that if both are 0.
+			if (startSegment + lenSegment > 0) {
+				xStartSegment = positions[startSegment + lenSegment - 1];
+			}
 			startSegment += lenSegment;
 		}
 	} else {

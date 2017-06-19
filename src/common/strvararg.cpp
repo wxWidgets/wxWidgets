@@ -703,52 +703,55 @@ wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
         return wxFormatString::Arg_Unused;
     }
 
-    wxCHECK_MSG( parser.pspec[n-1] != NULL, wxFormatString::Arg_Unknown,
-                 "requested argument not found - invalid format string?" );
-
-    switch ( parser.pspec[n-1]->m_type )
+    if (0<n)
     {
-        case wxPAT_CHAR:
-        case wxPAT_WCHAR:
-            return wxFormatString::Arg_Char;
+        wxCHECK_MSG( parser.pspec[n-1] != NULL, wxFormatString::Arg_Unknown,
+                     "requested argument not found - invalid format string?" );
 
-        case wxPAT_PCHAR:
-        case wxPAT_PWCHAR:
-            return wxFormatString::Arg_String;
+        switch ( parser.pspec[n-1]->m_type )
+        {
+            case wxPAT_CHAR:
+            case wxPAT_WCHAR:
+                return wxFormatString::Arg_Char;
 
-        case wxPAT_INT:
-            return wxFormatString::Arg_Int;
-        case wxPAT_LONGINT:
-            return wxFormatString::Arg_LongInt;
+            case wxPAT_PCHAR:
+            case wxPAT_PWCHAR:
+                return wxFormatString::Arg_String;
+
+            case wxPAT_INT:
+                return wxFormatString::Arg_Int;
+            case wxPAT_LONGINT:
+                return wxFormatString::Arg_LongInt;
 #ifdef wxLongLong_t
-        case wxPAT_LONGLONGINT:
-            return wxFormatString::Arg_LongLongInt;
+            case wxPAT_LONGLONGINT:
+                return wxFormatString::Arg_LongLongInt;
 #endif
-        case wxPAT_SIZET:
-            return wxFormatString::Arg_Size_t;
+            case wxPAT_SIZET:
+                return wxFormatString::Arg_Size_t;
 
-        case wxPAT_DOUBLE:
-            return wxFormatString::Arg_Double;
-        case wxPAT_LONGDOUBLE:
-            return wxFormatString::Arg_LongDouble;
+            case wxPAT_DOUBLE:
+                return wxFormatString::Arg_Double;
+            case wxPAT_LONGDOUBLE:
+                return wxFormatString::Arg_LongDouble;
 
-        case wxPAT_POINTER:
-            return wxFormatString::Arg_Pointer;
+            case wxPAT_POINTER:
+                return wxFormatString::Arg_Pointer;
 
-        case wxPAT_NINT:
-            return wxFormatString::Arg_IntPtr;
-        case wxPAT_NSHORTINT:
-            return wxFormatString::Arg_ShortIntPtr;
-        case wxPAT_NLONGINT:
-            return wxFormatString::Arg_LongIntPtr;
+            case wxPAT_NINT:
+                return wxFormatString::Arg_IntPtr;
+            case wxPAT_NSHORTINT:
+                return wxFormatString::Arg_ShortIntPtr;
+            case wxPAT_NLONGINT:
+                return wxFormatString::Arg_LongIntPtr;
 
-        case wxPAT_STAR:
-            // "*" requires argument of type int
-            return wxFormatString::Arg_Int;
+            case wxPAT_STAR:
+                // "*" requires argument of type int
+                return wxFormatString::Arg_Int;
 
-        case wxPAT_INVALID:
-            // (handled after the switch statement)
-            break;
+            case wxPAT_INVALID:
+                // (handled after the switch statement)
+                break;
+        }
     }
 
     // silence warning

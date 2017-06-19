@@ -360,6 +360,9 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     m_restbyte = 0;
     m_lastbyte = 0;
 
+    memset(ab_prefix, 0, sizeof(int)*allocSize);
+    memset(ab_tail, 0, sizeof(int)*allocSize);
+
     do
     {
         // get next code
