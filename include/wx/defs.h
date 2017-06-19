@@ -1619,12 +1619,6 @@ enum wxDirection
     wxDIRECTION_MASK           = wxALL
 };
 
-enum wxRotateDirection
-{
-    wxCLOCKWISE,
-    wxCOUNTERCLOCKWISE        
-};
-
 enum wxAlignment
 {
     /*

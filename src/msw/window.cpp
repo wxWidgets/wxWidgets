@@ -5712,7 +5712,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags
     // This flag indicates that the gesture has just started
     if(flags & GF_BEGIN)
     {
-        
+
     }
 
     wxPoint pt(x, y);
@@ -5734,13 +5734,11 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angle, WXDWORD flags
     if(angleDelta > 0)
     {
         event.SetAngleDelta(angleDelta);
-        event.SetRotateDirection(wxCLOCKWISE);
     }
 
     else
     {
-        event.SetAngleDelta(-angleDelta);
-        event.SetRotateDirection(wxCOUNTERCLOCKWISE);
+        event.SetAngleDelta(angleDelta);
     }
 
     // Update gs_angle
