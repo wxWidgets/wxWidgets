@@ -295,6 +295,11 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
 
 static const CGAffineTransform kSlantTransform = CGAffineTransformMake( 1, 0, tan(wxDegToRad(11)), 1, 0, 0 );
 
+typedef struct {
+    wxCFRef< CTFontRef > font;
+    wxCFRef< CFDictionaryRef > fontAttributes;
+} OSXFontEntry;
+
 void wxFontRefData::MacFindFont()
 {
     if ( m_fontValid )
@@ -313,11 +318,11 @@ void wxFontRefData::MacFindFont()
         // use font caching
         wxString lookupnameWithSize = wxString::Format( "%s_%u_%d", m_info.m_faceName, traits, m_info.m_pointSize );
 
-        static std::map< std::wstring , wxCFRef< CTFontRef > > fontcache ;
-        static std::map< std::wstring , wxCFRef< CFDictionaryRef > > fontattributescache ;
+        static std::map< std::wstring , OSXFontEntry > fontcache ;
         
-        m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];
-        m_ctFontAttributes = fontattributescache[ std::wstring(lookupnameWithSize.wc_str()) ];
+        OSXFontEntry& entry = fontcache[ lookupnameWithSize.ToStdWstring() ];
+        m_ctFont = entry.font;
+        m_ctFontAttributes = entry.fontAttributes;
         if ( m_ctFont )
         {
             // use cached version
@@ -379,6 +384,7 @@ void wxFontRefData::MacFindFont()
                         // we have to emulate bold
                         if ( remainingTraits & kCTFontBoldTrait )
                         {
+                            // 3 times as thick, negative value because we want effect on stroke and fill (not only stroke)
                             const float strokewidth = -3.0;
                             CFDictionarySetValue(dict, kCTStrokeWidthAttributeName, CFNumberCreate( NULL, kCFNumberFloatType, &strokewidth));
                         }
@@ -396,8 +402,8 @@ void wxFontRefData::MacFindFont()
             CFDictionarySetValue(dict, kCTFontAttributeName, m_ctFont.get() );
             CFDictionarySetValue(dict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
             
-            fontcache[ std::wstring(lookupnameWithSize.wc_str()) ] = m_ctFont;
-            fontattributescache[ std::wstring(lookupnameWithSize.wc_str()) ] = m_ctFontAttributes;
+            entry.font = m_ctFont;
+            entry.fontAttributes = m_ctFontAttributes;
         }
 
         m_cgFont.reset(CTFontCopyGraphicsFont(m_ctFont, NULL));
@@ -693,7 +699,7 @@ CTFontRef wxFont::OSXGetCTFont() const
 
 CFDictionaryRef wxFont::OSXGetCTFontAttributes() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
     
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
