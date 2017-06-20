@@ -118,6 +118,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -144,6 +145,9 @@ public:
 =======
     virtual wxString RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
+=======
+    virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
+>>>>>>> Trying to allocate memory for result string
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;

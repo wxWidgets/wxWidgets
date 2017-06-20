@@ -1479,104 +1479,64 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_d
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 =======
 static void
-web_view_javascript_finished (GObject      *object,
+web_view_javascript_finished(GObject      *object,
                               GAsyncResult *result,
-                              gpointer      options)
+                              gpointer     user_data)
 {
-
-  printf("Starting web_view_javascript_finished\n");
     WebKitJavascriptResult *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
-    GError                 *error = NULL;
-
-    wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)((void**)options)[0];
-    wxObject* user_data = (wxObject*)((void**)options)[1];
-    char* data = (char *)((void**)options)[2];
+    GError                 *error;
 
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
 
 
-    if (!js_result) {
-        g_warning("!js_result");
+    if (!js_result)
+    {
+        //Can't get wxLogMessage working in this context
         g_warning ("Error running javascript: %s", error->message);
-        g_error_free (error);
         return;
     }
 
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
-    if (JSValueIsString (context, value)) {
+    if (JSValueIsString (context, value))
+    {
+      	printf("excute3\n");
+	fflush(stdout);
 
-        printf("(WebKit callback) Result is a String\n");
-	
         JSStringRef js_str_value;
-        gchar      *str_value;
         gsize       str_length;
+	gchar      *str_value = (gchar*)user_data;
+	printf("result pointer %p\n",str_value);
+	printf("result pointer %p\n",user_data);
 
         js_str_value = JSValueToStringCopy (context, value, NULL);
         str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
-        str_value = (gchar *)g_malloc (str_length);
-        JSStringGetUTF8CString (js_str_value, str_value, str_length);
+	printf("excute1\n");
+	fflush(stdout);
+        //str_value = (gchar *)g_realloc (str_value,str_length);
+	user_data = str_value;
+	printf("result pointer %p\n",str_value);
+	printf("result pointer %p\n",user_data);
+	printf("excute2\n");
+	fflush(stdout);
+	str_value = (gchar*)g_realloc(str_value,str_length);
+	user_data = str_value;
+        JSStringGetUTF8CString (js_str_value, str_value+sizeof(char), str_length);
+	str_value[0] = 1;
         JSStringRelease (js_str_value);
-
-	char str[8192];
-	
-	if (user_data == NULL) {
-	  snprintf(data,8192,str_value);
-	}
-	else {
-	  snprintf(str,8192,str_value);
-	}
-	
-	if (user_data != NULL) {
-	  fflush(stdout);
-
-
-	  wxString target;
-	  wxString url = wxwebviewwebkit->GetCurrentURL();
+	printf("str_length = %d\n",str_length);
+	if (user_data != NULL)
+	  printf("user_data != NULL");
+    }
+    else 
+        g_warning("Error running javascript: unexpected return value");
     
-	  wxWebViewEvent event(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-				   wxwebviewwebkit -> GetId(),
-				   url, target);
-
-	  
-	  fflush(stdout);
-	  if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler()) {
-	    printf("(WebKit callback) Trigged event wxEVT_RUNSCRIPT_RESULT\n");
-	    event.SetString(wxString::FromUTF8(str));
-	    event.SetEventObject(user_data);
-	    wxwebviewwebkit->GetEventHandler()->ProcessEvent(event);
-	  }
-	}
-
-	g_print ("(WebKit callback) Script result: %s\n", str_value);
-        g_free (str_value);
-
-    }
-    else if (JSValueIsBoolean(context,value)) {
-      printf("Result is a Boolean\n");
-    }
-    else if (JSValueIsNumber(context,value)) {
-      printf("Result is a Number\n");	        
-    }
-    else if (JSValueIsObject(context,value)) {
-      printf("Result is an Object\n");      
-    }
-    else if (JSValueIsNull(context,value)) {
-      printf("Result is Null\n");
-      
-    }
-    else if (JSValueIsUndefined(context,value)) {
-      printf("Result is Undefined\n");
-    }
-    else {
-        g_warning("js_result == true");
-        g_warning ("Error running javascript: unexpected return value");
-    }
     webkit_javascript_result_unref (js_result);
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 >>>>>>> Integrate Proof of Concept inside webview_webkit2
@@ -1919,6 +1879,30 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
     else 
       return _("");
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
+=======
+wxString wxWebViewWebKit::RunScript(const wxString& javascript)
+{
+    gchar *result = (gchar*)g_malloc(10);
+    result[0]=0;
+    printf("result pointer %p",result);
+  
+    webkit_web_view_run_javascript(m_web_view,
+				   javascript.mb_str(wxConvUTF8),
+				   NULL,
+				   web_view_javascript_finished,
+				   result);
+
+    printf("excute\n");
+    fflush(stdout);
+
+    while (result[0] == 0)
+	gtk_main_iteration_do(false);
+
+    wxString wsx = wxString::FromUTF8(result+sizeof(char));
+    g_free (result);
+
+    return wsx;
+>>>>>>> Trying to allocate memory for result string
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
