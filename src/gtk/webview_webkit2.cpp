@@ -1490,7 +1490,6 @@ web_view_javascript_finished(GObject      *object,
 
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
 
-
     if (!js_result)
     {
         //Can't get wxLogMessage working in this context
@@ -1521,12 +1520,14 @@ web_view_javascript_finished(GObject      *object,
 	printf("result pointer %p\n",user_data);
 	printf("excute2\n");
 	fflush(stdout);
-	str_value = (gchar*)g_realloc(str_value,str_length);
-	user_data = str_value;
+	
+	str_value = (gchar*)g_alloc(str_value,str_length+sizeof(char));
         JSStringGetUTF8CString (js_str_value, str_value+sizeof(char), str_length);
-	str_value[0] = 1;
         JSStringRelease (js_str_value);
+	user_data = str_value;
+	str_value[0] = 1;
 	printf("str_length = %d\n",str_length);
+	printf("str_value = %s\n",str_value+sizeof(char));
 	if (user_data != NULL)
 	  printf("user_data != NULL");
     }
@@ -1882,7 +1883,8 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 =======
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
-    gchar *result = (gchar*)g_malloc(10);
+    
+    gchar *result = (gchar*)g_malloc(8192);
     result[0]=0;
     printf("result pointer %p",result);
   
@@ -1899,7 +1901,9 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 	gtk_main_iteration_do(false);
 
     wxString wsx = wxString::FromUTF8(result+sizeof(char));
-    g_free (result);
+    printf("RunScript result inside = %s\n",result+sizeof(char));
+    printf("RunScript result inside = %s\n",(const char*)wsx.mb_str(wxConvUTF8));
+    //g_free (result);
 
     return wsx;
 >>>>>>> Trying to allocate memory for result string
