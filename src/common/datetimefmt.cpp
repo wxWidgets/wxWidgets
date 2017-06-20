@@ -1549,7 +1549,14 @@ wxDateTime::ParseFormat(const wxString& date,
                         }
                     }
 
-                    if ( hours > 12 || minutes > 59 )
+                    /*
+                    Contemporary offset limits are -12:00 and +14:00.
+                    However historically offsets of over +/- 15 hours
+                    existed so be a bit more flexible. Info retrieved
+                    from Time Zone Database at
+                    https://www.iana.org/time-zones.
+                    */
+                    if ( hours > 15 || minutes > 59 )
                         return false;   // bad format
 
                     timeZone = 3600*hours + 60*minutes;

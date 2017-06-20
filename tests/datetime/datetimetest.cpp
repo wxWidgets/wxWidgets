@@ -925,8 +925,8 @@ void DateTimeTestCase::TestTimeZoneParse()
 
         // Some invalid ones too.
 
-        { "00:00-1300" }, // Offset out of range.
-        { "00:00+1300" }, // Offset out of range.
+        { "00:00-1600" }, // Offset out of range.
+        { "00:00+1600" }, // Offset out of range.
 
         { "00:00+00:" }, // Minutes missing after colon separator.
 
