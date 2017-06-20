@@ -90,11 +90,13 @@ namespace
 // all the functions below taking non-const wxString::const_iterator p advance
 // it until the end of the match
 
-// scans all digits (but no more than len) and returns the resulting number
+// Scans all digits (but no more than len) and returns the resulting number.
+// Optionally writes number of digits scanned to numScannedDigits.
 bool GetNumericToken(size_t len,
                      wxString::const_iterator& p,
                      const wxString::const_iterator& end,
-                     unsigned long *number)
+                     unsigned long *number,
+                     size_t *numScannedDigits = NULL)
 {
     size_t n = 1;
     wxString s;
@@ -104,6 +106,11 @@ bool GetNumericToken(size_t len,
 
         if ( len && ++n > len )
             break;
+    }
+
+    if (numScannedDigits)
+    {
+        *numScannedDigits = n - 1;
     }
 
     return !s.empty() && s.ToULong(number);
@@ -1499,14 +1506,34 @@ wxDateTime::ParseFormat(const wxString& date,
                     else
                         return false;   // no match
 
-                    // here should follow 4 digits HHMM
                     ++input;
-                    unsigned long tzHourMin;
-                    if ( !GetNumericToken(4, input, end, &tzHourMin) )
-                        return false;   // no match
 
-                    const unsigned hours = tzHourMin / 100;
-                    const unsigned minutes = tzHourMin % 100;
+                    // Here should follow exactly 2 digits for hours (HH).
+                    const size_t numRequiredDigits = 2;
+                    size_t numScannedDigits;
+
+                    unsigned long hours;
+                    if ( !GetNumericToken(numRequiredDigits, input, end,
+                                          &hours, &numScannedDigits)
+                         || numScannedDigits != numRequiredDigits)
+                    {
+                        return false; // No match.
+                    }
+
+                    // Optionally followed by a colon separator.
+                    if ( input != end && *input == wxS(':') )
+                    {
+                        ++input;
+                    }
+
+                    // Followed by exactly 2 digits for minutes (MM).
+                    unsigned long minutes;
+                    if ( !GetNumericToken(numRequiredDigits, input, end,
+                                          &minutes, &numScannedDigits)
+                         || numScannedDigits != numRequiredDigits)
+                    {
+                        return false; // No match.
+                    }
 
                     if ( hours > 12 || minutes > 59 )
                         return false;   // bad format
