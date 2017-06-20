@@ -35,6 +35,7 @@
 
 #include <wx/statline.h>
 #include <wx/log.h>
+#include "gestures.h"
 
 // ----------------------------------------------------------------------------
 // event constants
@@ -144,6 +145,9 @@ public:
     void OnClickDynamicHandlerButton(wxCommandEvent& event);
     void OnClickStaticHandlerFrame(wxCommandEvent& event);
 
+    // Gesture
+    void OnGesture(wxCommandEvent& event);
+
 private:
     // symbolic names for the status bar fields
     enum
@@ -220,7 +224,8 @@ enum
     Event_Push,
     Event_Pop,
     Event_Custom,
-    Event_Test
+    Event_Test,
+    Event_Gesture
 };
 
 // ----------------------------------------------------------------------------
@@ -252,6 +257,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Test, MyFrame::OnTest)
     EVT_MENU(Event_Push, MyFrame::OnPushEventHandler)
     EVT_MENU(Event_Pop, MyFrame::OnPopEventHandler)
+    EVT_MENU(Event_Gesture, MyFrame::OnGesture)
 
     EVT_UPDATE_UI(Event_Pop, MyFrame::OnUpdateUIPop)
 
@@ -381,6 +387,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuEvent->AppendSeparator();
     menuEvent->Append(Event_Custom, wxT("Fire c&ustom event\tCtrl-U"),
                       wxT("Generate a custom event"));
+    menuEvent->Append(Event_Gesture, wxT("&Gesture events\tCtrl-G"),
+                    wxT("Gesture event"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -577,6 +585,12 @@ void MyFrame::OnPopEventHandler(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_STATUSBAR
 }
 
+void MyFrame::OnGesture(wxCommandEvent& WXUNUSED(event))
+{
+    MyGestureFrame *frame = new MyGestureFrame();
+    frame->Show(true);
+}
+
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(wxT("This is the test event handler in the main frame"));
@@ -602,4 +616,3 @@ void MyFrame::OnProcessCustom(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(wxT("Got a custom event!"));
 }
-
