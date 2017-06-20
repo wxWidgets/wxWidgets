@@ -903,6 +903,9 @@ void DateTimeTestCase::TestTimeZoneParse()
         { "13:37+0000", true },
         { "17:37+0400", true },
 
+        // Z as UTC designator.
+        { "13:37Z", true },
+
         // Some invalid ones too.
         { "00:00-1300" }, // Offset out of range.
         { "00:00+1300" }, // Offset out of range.

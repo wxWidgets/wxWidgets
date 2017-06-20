@@ -1482,6 +1482,14 @@ wxDateTime::ParseFormat(const wxString& date,
                     if ( input == end )
                         return false;
 
+                    if ( *input == wxS('Z') )
+                    {
+                        // Time is in UTC.
+                        ++input;
+                        haveTimeZone = true;
+                        break;
+                    }
+
                     // and then check that it's either plus or minus sign
                     bool minusFound;
                     if ( *input == wxT('-') )
