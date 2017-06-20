@@ -1497,12 +1497,19 @@ wxDateTime::ParseFormat(const wxString& date,
                         break;
                     }
 
-                    // and then check that it's either plus or minus sign
+                    // Check if there's either a plus, hyphen-minus, or
+                    // minus sign.
                     bool minusFound;
-                    if ( *input == wxT('-') )
-                        minusFound = true;
-                    else if ( *input == wxT('+') )
+                    if ( *input == wxS('+') )
                         minusFound = false;
+                    else if
+                    (
+                        *input == wxS('-')
+#if wxUSE_UNICODE
+                        || *input == wxString::FromUTF8("\xe2\x88\x92")
+#endif
+                    )
+                        minusFound = true;
                     else
                         return false;   // no match
 
