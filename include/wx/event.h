@@ -1876,7 +1876,7 @@ public:
 
     const wxPoint& GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
-    bool IsGestureStart() const { return m_isStart == true; }
+    bool IsGestureStart() const { return m_isStart; }
     void SetGestureStart(bool isStart = true) { m_isStart = isStart; }
 
     virtual wxEvent *Clone() const { return new wxGestureEvent(*this); }
