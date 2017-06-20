@@ -144,6 +144,7 @@ public:
 #endif
 
     CTFontRef OSXGetCTFont() const;
+    CFDictionaryRef OSXGetCTFontAttributes() const;
 
 #if wxOSX_USE_COCOA
     WX_NSFont OSXGetNSFont() const;

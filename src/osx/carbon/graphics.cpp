@@ -824,6 +824,7 @@ public:
     ~wxMacCoreGraphicsFontData();
 
     CTFontRef OSXGetCTFont() const { return m_ctFont ; }
+    CFDictionaryRef OSXGetCTFontAttributes() const { return m_ctFontAttributes; }
     wxColour GetColour() const { return m_colour ; }
 
     bool GetUnderlined() const { return m_underlined ; }
@@ -837,6 +838,7 @@ private :
     bool m_underlined,
          m_strikethrough;
     wxCFRef< CTFontRef > m_ctFont;
+    wxCFRef< CFDictionaryRef > m_ctFontAttributes;
 #if wxOSX_USE_IPHONE
     UIFont*  m_uiFont;
 #endif
@@ -849,6 +851,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_strikethrough = font.GetStrikethrough();
 
     m_ctFont.reset( wxMacCreateCTFont( font ) );
+    m_ctFontAttributes.reset( wxCFRetain( font.OSXGetCTFontAttributes() ) );
 #if wxOSX_USE_IPHONE
     m_uiFont = CreateUIFont(font);
     wxMacCocoaRetain( m_uiFont );
@@ -2220,21 +2223,10 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
 
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
     wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
-    CTFontRef font = fref->OSXGetCTFont();
     CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
-#if 0
-    // right now there's no way to get continuous underlines, only words, so we emulate it
-    CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
-    wxCFRef<CFNumberRef> underlined( CFNumberCreate(NULL, kCFNumberSInt32Type, &ustyle) );
-     CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName, kCTUnderlineStyleAttributeName };
-    CFTypeRef values[] = { font, col, underlined };
-#else
-    CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName };
-    CFTypeRef values[] = { font, col };
-#endif
-    wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
-                                                    WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
-    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
+    CTFontRef font = fref->OSXGetCTFont();
+
+    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, fref->OSXGetCTFontAttributes()) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
     y += CTFontGetAscent(font);
@@ -2246,6 +2238,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     CGContextScaleCTM(m_cgContext, 1, -1);
     CGContextSetTextMatrix(m_cgContext, CGAffineTransformIdentity);
 
+    CGContextSetFillColorWithColor( m_cgContext, col );
     CTLineDraw( line, m_cgContext );
 
     if ( fref->GetUnderlined() ) {
@@ -2316,14 +2309,10 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         strToMeasure = wxS(" ");
 
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-    CTFontRef font = fref->OSXGetCTFont();
 
     wxCFStringRef text(strToMeasure, wxLocale::GetSystemEncoding() );
-    CFStringRef keys[] = { kCTFontAttributeName  };
-    CFTypeRef values[] = { font };
-    wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
-                                                            WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
-    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
+    
+    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, fref->OSXGetCTFontAttributes() ) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
     CGFloat a, d, l, w;
@@ -2336,7 +2325,6 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         if ( height )
             *height = a+d+l;
     }
-
     if ( descent )
         *descent = d;
     if ( externalLeading )
@@ -2355,14 +2343,9 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         return;
 
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-    CTFontRef font = fref->OSXGetCTFont();
 
     wxCFStringRef t(text, wxLocale::GetSystemEncoding() );
-    CFStringRef keys[] = { kCTFontAttributeName  };
-    CFTypeRef values[] = { font };
-    wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
-                                                            WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
-    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, t, attributes) );
+    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, t, fref->OSXGetCTFontAttributes()) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
     widths.reserve(text.length());
