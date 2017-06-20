@@ -2943,6 +2943,7 @@ typedef const void * CFTypeRef;
 
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFString )
 typedef struct __CFString * CFMutableStringRef;
+DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFDictionary )
 
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopSource )
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CTFont )

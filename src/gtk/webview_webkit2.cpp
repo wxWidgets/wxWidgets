@@ -801,11 +801,15 @@ wxString wxWebViewWebKit::GetCurrentTitle() const
 }
 
 
-static void wxgtk_web_resource_get_data_cb(WebKitWebResource *,
+extern "C" {
+static void wxgtk_web_resource_get_data_cb(GObject*,
                                            GAsyncResult *res,
-                                           GAsyncResult **res_out)
+                                           void* user_data)
 {
-    *res_out = (GAsyncResult*)g_object_ref(res);
+    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
+    g_object_ref(res);
+    *res_out = res;
+}
 }
 
 wxString wxWebViewWebKit::GetPageSource() const
@@ -818,7 +822,7 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     GAsyncResult *result = NULL;
     webkit_web_resource_get_data(resource, NULL,
-                                 (GAsyncReadyCallback)wxgtk_web_resource_get_data_cb,
+                                 wxgtk_web_resource_get_data_cb,
                                  &result);
 
     GMainContext *main_context = g_main_context_get_thread_default();
@@ -827,8 +831,9 @@ wxString wxWebViewWebKit::GetPageSource() const
         g_main_context_iteration(main_context, TRUE);
     }
 
+    size_t length;
     guchar *source = webkit_web_resource_get_data_finish(resource, result,
-                                                         NULL, NULL);
+                                                         &length, NULL);
     if (result)
     {
         g_object_unref(result);
@@ -836,7 +841,7 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     if (source)
     {
-        wxString wxs = wxString(source, wxConvUTF8);
+        wxString wxs(source, wxConvUTF8, length);
         free(source);
         return wxs;
     }
