@@ -918,6 +918,11 @@ void DateTimeTestCase::TestTimeZoneParse()
         { "09:07-04:30", true },
         { "19:22+05:45", true },
 
+#if wxUSE_UNICODE
+        // Containing minus sign (U+2212) as separator between time and tz.
+        { "09:37" "\xe2\x88\x92" "0400", true },
+#endif
+
         // Some invalid ones too.
 
         { "00:00-1300" }, // Offset out of range.
@@ -937,7 +942,7 @@ void DateTimeTestCase::TestTimeZoneParse()
     for ( size_t n = 0; n < WXSIZEOF(parseTestTimeZones); ++n )
     {
         wxDateTime dt;
-        wxString sTimeZone = parseTestTimeZones[n].str;
+        wxString sTimeZone = wxString::FromUTF8(parseTestTimeZones[n].str);
         wxString::const_iterator end;
         if ( dt.ParseFormat(sTimeZone, wxS("%H:%M%z"), &end)
              && end == sTimeZone.end() )
