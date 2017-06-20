@@ -1521,18 +1521,25 @@ wxDateTime::ParseFormat(const wxString& date,
                     }
 
                     // Optionally followed by a colon separator.
+                    bool mustHaveMinutes = false;
                     if ( input != end && *input == wxS(':') )
                     {
+                        mustHaveMinutes = true;
                         ++input;
                     }
 
-                    // Followed by exactly 2 digits for minutes (MM).
-                    unsigned long minutes;
+                    // Optionally followed by exactly 2 digits for minutes (MM).
+                    unsigned long minutes = 0;
                     if ( !GetNumericToken(numRequiredDigits, input, end,
                                           &minutes, &numScannedDigits)
                          || numScannedDigits != numRequiredDigits)
                     {
-                        return false; // No match.
+                        if (mustHaveMinutes || numScannedDigits)
+                        {
+                            // No match if we must have minutes, or digits
+                            // for minutes were specified but not exactly 2.
+                            return false;
+                        }
                     }
 
                     if ( hours > 12 || minutes > 59 )
