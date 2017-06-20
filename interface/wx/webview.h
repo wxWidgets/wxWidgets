@@ -470,6 +470,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         @param A wxString containing the Javascript.
 =======
 >>>>>>> Trying to allocate memory for result string
@@ -522,6 +523,12 @@ public:
 	@param An integer represent the identifier of the event.
     */
     virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
+=======
+        @return A wxString with Javascript return value.
+
+    */
+    virtual wxString RunScript(const wxString& javascript) = 0;
+>>>>>>> Trying to allocate memory for result string
 
     /**
         Set the editable property of the web control. Enabling allows the user
@@ -886,6 +893,7 @@ wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 =======
 wxEventType wxEVT_RUNSCRIPT_RESULT;
@@ -915,3 +923,5 @@ wxEventType wxEVT_RUNSCRIPT_RESULT;
 =======
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 >>>>>>> Modified sample
+=======
+>>>>>>> Trying to allocate memory for result string
