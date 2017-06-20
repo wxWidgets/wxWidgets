@@ -222,6 +222,7 @@ private:
         CPPUNIT_TEST( TestTimeDST );
         CPPUNIT_TEST( TestTimeFormat );
         CPPUNIT_TEST( TestTimeParse );
+        CPPUNIT_TEST( TestTimeZoneParse );
         CPPUNIT_TEST( TestTimeSpanFormat );
         CPPUNIT_TEST( TestTimeTicks );
         CPPUNIT_TEST( TestParseRFC822 );
@@ -244,6 +245,7 @@ private:
     void TestTimeDST();
     void TestTimeFormat();
     void TestTimeParse();
+    void TestTimeZoneParse();
     void TestTimeSpanFormat();
     void TestTimeTicks();
     void TestParseRFC822();
@@ -886,6 +888,44 @@ void DateTimeTestCase::TestTimeParse()
 
     // Parsing gibberish shouldn't work.
     CPPUNIT_ASSERT( !dt.ParseTime("bloordyblop") );
+}
+
+void DateTimeTestCase::TestTimeZoneParse()
+{
+    static const struct
+    {
+        const char *str;
+        bool good;
+    } parseTestTimeZones[] =
+    {
+        // All of the good entries should result in 13:37 UTC+0.
+        { "09:37-0400", true },
+        { "13:37+0000", true },
+        { "17:37+0400", true },
+
+        // Some invalid ones too.
+        { "00:00-1300" }, // Offset out of range.
+        { "00:00+1300" }, // Offset out of range.
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(parseTestTimeZones); ++n )
+    {
+        wxDateTime dt;
+        wxString sTimeZone = parseTestTimeZones[n].str;
+        wxString::const_iterator end;
+        if ( dt.ParseFormat(sTimeZone, wxS("%H:%M%z"), &end)
+             && end == sTimeZone.end() )
+        {
+            CPPUNIT_ASSERT( parseTestTimeZones[n].good );
+            CPPUNIT_ASSERT_EQUAL( 13, dt.GetHour(wxDateTime::UTC));
+            CPPUNIT_ASSERT_EQUAL( 37, dt.GetMinute(wxDateTime::UTC));
+        }
+        else
+        {
+            // Failed to parse time zone.
+            CPPUNIT_ASSERT( !parseTestTimeZones[n].good );
+        }
+    }
 }
 
 void DateTimeTestCase::TestTimeSpanFormat()
