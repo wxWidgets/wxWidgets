@@ -58,7 +58,7 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 }
 
 
-@interface wxUIView(PossibleMethods)
+@interface UIView(PossibleMethods)
 - (void)setTitle:(NSString *)title forState:(UIControlState)state;
 
 - (void)drawRect: (CGRect) rect;
@@ -70,6 +70,9 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
+
+- (BOOL)isEnabled;
+- (void)setEnabled:(BOOL)flag;
 @end
 
 //
