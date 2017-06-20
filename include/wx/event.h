@@ -631,6 +631,7 @@ class WXDLLIMPEXP_FWD_CORE wxInitDialogEvent;
 class WXDLLIMPEXP_FWD_CORE wxUpdateUIEvent;
 class WXDLLIMPEXP_FWD_CORE wxClipboardTextEvent;
 class WXDLLIMPEXP_FWD_CORE wxHelpEvent;
+class WXDLLIMPEXP_FWD_CORE wxGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxPanGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxZoomGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxRotateGestureEvent;
@@ -1858,39 +1859,61 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSetCursorEvent);
 };
 
+ // Gesture Event
+
+class WXDLLIMPEXP_CORE wxGestureEvent : public wxEvent
+{
+public:
+    wxGestureEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
+                   : wxEvent(winid, type) 
+                   { m_isStart = false; }
+
+    wxGestureEvent(const wxGestureEvent& event) : wxEvent(event)
+    {
+        m_pos = event.m_pos;
+        m_isStart = event.m_isStart;
+    }
+
+    const wxPoint& GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint& pos) { m_pos = pos; }
+    bool IsGestureStart() const { return m_isStart == true; }
+    void SetGestureStart(bool isStart = true) { m_isStart = isStart; }
+
+    virtual wxEvent *Clone() const { return new wxGestureEvent(*this); }
+
+protected:
+    wxPoint m_pos;
+    bool m_isStart;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGestureEvent);
+
+};
+
  // Pan Gesture Event
 
  /*
   wxEVT_GESTURE_PAN
   */
 
-class WXDLLIMPEXP_CORE wxPanGestureEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxPanGestureEvent : public wxGestureEvent
 {
 public:
-     wxPanGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
-                   : wxEvent(winid, type)
+     wxPanGestureEvent(wxWindowID winid = 0)
+                   : wxGestureEvent(winid, wxEVT_GESTURE_PAN)
                    { }
       
-     wxPanGestureEvent(const wxPanGestureEvent& event) : wxEvent(event)
+     wxPanGestureEvent(const wxPanGestureEvent& event) : wxGestureEvent(event)
      {
-        m_pos = event.m_pos;
         m_panDirection = event.m_panDirection;
-        m_start = event.m_start;
      }
  
-     const wxPoint& GetPosition() const { return m_pos; }
-     void SetPosition(const wxPoint& pos) { m_pos = pos; }
      wxDirection GetPanDirection() const { return m_panDirection; }
      void SetPanDirection(wxDirection panDirection) { m_panDirection = panDirection; }
-     bool IsGestureStart() const { return m_start == true; }
-     void SetGestureStart(bool start) { m_start = start; }
 
      virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
  
 private:
-    wxPoint m_pos;
     wxDirection m_panDirection;
-    bool m_start;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
 };
@@ -1901,33 +1924,25 @@ private:
   wxEVT_GESTURE_ZOOM
   */
 
-class WXDLLIMPEXP_CORE wxZoomGestureEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxZoomGestureEvent : public wxGestureEvent
 {
 public:
-     wxZoomGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
-                   : wxEvent(winid, type)
-                   { }
+     wxZoomGestureEvent(wxWindowID winid = 0)
+                   : wxGestureEvent(winid, wxEVT_GESTURE_ZOOM)
+                   { m_zoomFactor = 1.0; }
       
-     wxZoomGestureEvent(const wxZoomGestureEvent& event) : wxEvent(event)
+     wxZoomGestureEvent(const wxZoomGestureEvent& event) : wxGestureEvent(event)
      {
-        m_pos = event.m_pos;
         m_zoomFactor = event.m_zoomFactor;
-        m_start = event.m_start;
      }
- 
-     const wxPoint& GetPosition() const { return m_pos; }
-     void SetPosition(const wxPoint& pos) { m_pos = pos; }
+
      double GetZoomFactor() const { return m_zoomFactor; }
      void SetZoomFactor(double zoomFactor) { m_zoomFactor = zoomFactor; }
-     bool IsGestureStart() const { return m_start == true; }
-     void SetGestureStart(bool start) { m_start = start; }
  
      virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
  
 private:
-    wxPoint m_pos;
     double m_zoomFactor;
-    bool m_start;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
 };
@@ -1938,33 +1953,25 @@ private:
   wxEVT_GESTURE_ROTATE
   */
 
-class WXDLLIMPEXP_CORE wxRotateGestureEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxRotateGestureEvent : public wxGestureEvent
 {
 public:
-     wxRotateGestureEvent(wxEventType type = wxEVT_NULL, wxWindowID winid = 0)
-                   : wxEvent(winid, type)
-                   { }
+     wxRotateGestureEvent(wxWindowID winid = 0)
+                   : wxGestureEvent(winid, wxEVT_GESTURE_ROTATE)
+                   { m_angle = 0.0; }
       
-     wxRotateGestureEvent(const wxRotateGestureEvent& event) : wxEvent(event)
+     wxRotateGestureEvent(const wxRotateGestureEvent& event) : wxGestureEvent(event)
      {
         m_angle = event.m_angle;
-        m_pos = event.m_pos;
-        m_start = event.m_start;
      }
      
      double GetAngle() const { return m_angle; }
      void SetAngle(double angle) { m_angle = angle; }
-     const wxPoint& GetPosition() const { return m_pos; }
-     void SetPosition(const wxPoint& pos) { m_pos = pos; }
-     bool IsGestureStart() const { return m_start == true; }
-     void SetGestureStart(bool start) { m_start = start; }
  
      virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
  
 private:
-    wxPoint m_pos;
     double m_angle;
-    bool m_start;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
 };

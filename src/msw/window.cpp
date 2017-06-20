@@ -5611,7 +5611,7 @@ void wxWindowMSW::GenerateMouseLeave()
 bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
 {
     // wxEVT_GESTURE_PAN
-    wxPanGestureEvent event(wxEVT_GESTURE_PAN, GetId());
+    wxPanGestureEvent event(GetId());
 
     // These are used to calculate the pan direction
     static int s_previousLocationX, s_previousLocationY;
@@ -5622,14 +5622,9 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     {
         s_previousLocationX = x;
         s_previousLocationY = y;
-        event.SetGestureStart(true);
+        event.SetGestureStart();
     }
 
-    else
-    {
-        event.SetGestureStart(false);
-    }
-    
     wxPoint pt(x, y);
     
     // Determine the horizontal and vertical changes
@@ -5678,7 +5673,7 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
 bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags)
 {
     // wxEVT_GESTURE_ZOOM
-    wxZoomGestureEvent event(wxEVT_GESTURE_ZOOM, GetId());
+    wxZoomGestureEvent event(GetId());
 
     // These are used to calculate the center of the zoom and zoom factor
     static int s_previousLocationX, s_previousLocationY, s_lastFingerDistance;
@@ -5690,12 +5685,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
       s_previousLocationX = x;
       s_previousLocationY = y;
       s_lastFingerDistance = fingerDistance;
-      event.SetGestureStart(true);
-    }
-
-    else
-    {
-        event.SetGestureStart(false);
+      event.SetGestureStart();
     }
 
     // Calculate center point of the zoom
@@ -5727,17 +5717,12 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
 bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags)
 {
     // wxEVT_GESTURE_ROTATE
-    wxRotateGestureEvent event(wxEVT_GESTURE_ROTATE, GetId());
+    wxRotateGestureEvent event(GetId());
 
     // This flag indicates that the gesture has just started
     if(flags & GF_BEGIN)
     {
-        event.SetGestureStart(true);
-    }
-
-    else
-    {
-        event.SetGestureStart(false);
+        event.SetGestureStart();
     }
 
     wxPoint pt(x, y);
