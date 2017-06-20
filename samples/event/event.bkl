@@ -5,6 +5,8 @@
 
     <exe id="event" template="wx_sample" template_append="wx_append">
         <sources>event.cpp</sources>
+		<sources>gestures.cpp</sources>
+		<sources>gestures.h</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
