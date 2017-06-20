@@ -782,6 +782,14 @@
 				RelativePath=".\event.cpp"
 				>
 			</File>
+			<File
+			     RelativePath=".\gestures.cpp"
+				 >
+			</File>
+			<File
+			     RelativePath=".\gestures.h"
+				 >
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
