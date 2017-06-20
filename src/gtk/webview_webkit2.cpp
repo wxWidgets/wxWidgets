@@ -1101,8 +1101,9 @@ static void wxgtk_run_javascript_cb(WebKitWebView *,
 wxString JSResultToString(GObject *object, GAsyncResult *result)
 =======
 static void
-web_view_javascript_finished (GObject      *object,
+web_view_javascript_finished(GObject      *object,
                               GAsyncResult *result,
+<<<<<<< HEAD
                               gpointer      options)
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 {
@@ -1114,14 +1115,14 @@ web_view_javascript_finished (GObject      *object,
 =======
 
   printf("Starting web_view_javascript_finished\n");
+=======
+                              gpointer     user_data)
+{
+>>>>>>> Trying to allocate memory for result string
     WebKitJavascriptResult *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
-    GError                 *error = NULL;
-
-    wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)((void**)options)[0];
-    wxObject* user_data = (wxObject*)((void**)options)[1];
-    char* data = (char *)((void**)options)[2];
+    GError                 *error;
 
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, &error);
 >>>>>>> Sleep runscript when callback is called
@@ -1130,13 +1131,20 @@ web_view_javascript_finished (GObject      *object,
 
     if (!js_result)
     {
+<<<<<<< HEAD
         wxLogError("Error running javascript: %s", error.GetMessage());
 	return_value = wxString();
 	return return_value;
+=======
+        //Can't get wxLogMessage working in this context
+        g_warning ("Error running javascript: %s", error->message);
+        return;
+>>>>>>> Trying to allocate memory for result string
     }
 
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
+<<<<<<< HEAD
 <<<<<<< HEAD
     
     if (JSValueIsString (context, value))
@@ -1155,11 +1163,22 @@ web_view_javascript_finished (GObject      *object,
 >>>>>>> Sleep runscript when callback is called
 =======
 >>>>>>> Modified sample
+=======
+    if (JSValueIsString (context, value))
+    {
+      	printf("excute3\n");
+	fflush(stdout);
+
+>>>>>>> Trying to allocate memory for result string
         JSStringRef js_str_value;
         gsize       str_length;
+	gchar      *str_value = (gchar*)user_data;
+	printf("result pointer %p\n",str_value);
+	printf("result pointer %p\n",user_data);
 
         js_str_value = JSValueToStringCopy (context, value, NULL);
         str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
+<<<<<<< HEAD
 <<<<<<< HEAD
         wxGtkString str_value((gchar *)g_malloc (str_length));
         JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
@@ -1267,6 +1286,27 @@ web_view_javascript_finished (GObject      *object,
     }
     else 
         wxLogError("Error running javascript: unexpected return value");
+=======
+	printf("excute1\n");
+	fflush(stdout);
+        //str_value = (gchar *)g_realloc (str_value,str_length);
+	user_data = str_value;
+	printf("result pointer %p\n",str_value);
+	printf("result pointer %p\n",user_data);
+	printf("excute2\n");
+	fflush(stdout);
+	str_value = (gchar*)g_realloc(str_value,str_length);
+	user_data = str_value;
+        JSStringGetUTF8CString (js_str_value, str_value+sizeof(char), str_length);
+	str_value[0] = 1;
+        JSStringRelease (js_str_value);
+	printf("str_length = %d\n",str_length);
+	if (user_data != NULL)
+	  printf("user_data != NULL");
+    }
+    else 
+        g_warning("Error running javascript: unexpected return value");
+>>>>>>> Trying to allocate memory for result string
     
     webkit_javascript_result_unref (js_result);
 <<<<<<< HEAD
@@ -1275,6 +1315,7 @@ web_view_javascript_finished (GObject      *object,
     return return_value;
 }
 
+<<<<<<< HEAD
 static void
 web_view_javascript_finished (GObject      *object,
                               GAsyncResult *result,
@@ -1339,8 +1380,24 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 =======
 >>>>>>> Now printf are more clear. Minor changes.
     char result[8192] = "\0";
+=======
+wxString wxWebViewWebKit::RunScript(const wxString& javascript)
+{
+    gchar *result = (gchar*)g_malloc(10);
+    result[0]=0;
+    printf("result pointer %p",result);
+  
+    webkit_web_view_run_javascript(m_web_view,
+				   javascript.mb_str(wxConvUTF8),
+				   NULL,
+				   web_view_javascript_finished,
+				   result);
+>>>>>>> Trying to allocate memory for result string
 
+    printf("excute\n");
+    fflush(stdout);
 
+<<<<<<< HEAD
     void** options = (void**)malloc(sizeof(void*)*3);
     options[0] = (void*)this;
 <<<<<<< HEAD
@@ -1403,6 +1460,15 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
     else 
       return _("");
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
+=======
+    while (result[0] == 0)
+	gtk_main_iteration_do(false);
+
+    wxString wsx = wxString::FromUTF8(result+sizeof(char));
+    g_free (result);
+
+    return wsx;
+>>>>>>> Trying to allocate memory for result string
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

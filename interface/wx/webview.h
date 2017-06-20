@@ -466,11 +466,15 @@ public:
         Runs the given javascript code, returning a result if they is any.
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
+<<<<<<< HEAD
         @param A wxString containing the Javascript.
+=======
+>>>>>>> Trying to allocate memory for result string
         @return A wxString with Javascript return value.
 
     */
     virtual wxString RunScript(const wxString& javascript) = 0;
+<<<<<<< HEAD
 
     /**
         Runs the given javascript code, returning a result if they is any, asynchronously.
@@ -481,6 +485,8 @@ public:
 	@param An integer represent the identifier of the event.
     */
     virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
+=======
+>>>>>>> Trying to allocate memory for result string
 
     /**
         Set the editable property of the web control. Enabling allows the user
@@ -837,6 +843,7 @@ wxEventType wxEVT_WEBVIEW_NEWWINDOW;
 wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 =======
 wxEventType wxEVT_RUNSCRIPT_RESULT;
@@ -844,3 +851,5 @@ wxEventType wxEVT_RUNSCRIPT_RESULT;
 =======
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 >>>>>>> Modified sample
+=======
+>>>>>>> Trying to allocate memory for result string
