@@ -906,6 +906,11 @@ void DateTimeTestCase::TestTimeZoneParse()
         // Z as UTC designator.
         { "13:37Z", true },
 
+        // Only containing HH offset.
+        { "09:37-04", true },
+        { "13:37+00", true },
+        { "17:37+04", true },
+
         // Colon as HH and MM separator.
         { "17:37+04:00", true },
 
@@ -917,6 +922,8 @@ void DateTimeTestCase::TestTimeZoneParse()
 
         { "00:00-1300" }, // Offset out of range.
         { "00:00+1300" }, // Offset out of range.
+
+        { "00:00+00:" }, // Minutes missing after colon separator.
 
         // Not exactly 2 digits for hours and minutes.
         { "17:37+4" },
