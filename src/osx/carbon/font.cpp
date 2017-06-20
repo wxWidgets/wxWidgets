@@ -295,10 +295,15 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
 
 static const CGAffineTransform kSlantTransform = CGAffineTransformMake( 1, 0, tan(wxDegToRad(11)), 1, 0, 0 );
 
-typedef struct {
+namespace
+{
+    
+struct CachedFontEntry {
     wxCFRef< CTFontRef > font;
     wxCFRef< CFDictionaryRef > fontAttributes;
-} OSXFontEntry;
+} ;
+    
+} // anonymous namespace
 
 void wxFontRefData::MacFindFont()
 {
@@ -318,9 +323,9 @@ void wxFontRefData::MacFindFont()
         // use font caching
         wxString lookupnameWithSize = wxString::Format( "%s_%u_%d", m_info.m_faceName, traits, m_info.m_pointSize );
 
-        static std::map< std::wstring , OSXFontEntry > fontcache ;
+        static std::map< wxString, CachedFontEntry > fontcache ;
         
-        OSXFontEntry& entry = fontcache[ lookupnameWithSize.ToStdWstring() ];
+        CachedFontEntry& entry = fontcache[ lookupnameWithSize ];
         m_ctFont = entry.font;
         m_ctFontAttributes = entry.fontAttributes;
         if ( m_ctFont )
@@ -416,7 +421,7 @@ void wxFontRefData::MacFindFont()
 #endif
     m_fontValid = true;
 }
-
+    
 bool wxFontRefData::IsFixedWidth() const
 {
     CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(m_ctFont);
