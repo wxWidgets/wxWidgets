@@ -463,8 +463,10 @@ public:
         Runs the given javascript code.
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
+        @return A wxString with Javascript return value.
+
     */
-    virtual void RunScript(const wxString& javascript) = 0;
+    virtual wxString RunScript(const wxString& javascript) = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user
@@ -816,4 +818,3 @@ wxEventType wxEVT_WEBVIEW_LOADED;
 wxEventType wxEVT_WEBVIEW_ERROR;
 wxEventType wxEVT_WEBVIEW_NEWWINDOW;
 wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
-wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
