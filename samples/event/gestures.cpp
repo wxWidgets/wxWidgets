@@ -67,7 +67,7 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
         wxLogMessage("Pan gesture performed in Left direction");
     }
 
-    wxLogMessage(wxT("with deltaX = %d and deltaY = %d\n"),panDeltaX, panDeltaY);
+    wxLogMessage(wxT(" with deltaX = %d and deltaY = %d\n"),panDeltaX, panDeltaY);
  
     previousLocationX = event.GetPosition().x;
     previousLocationY = event.GetPosition().y;
