@@ -906,9 +906,25 @@ void DateTimeTestCase::TestTimeZoneParse()
         // Z as UTC designator.
         { "13:37Z", true },
 
+        // Colon as HH and MM separator.
+        { "17:37+04:00", true },
+
+        // // Colon separator and non-zero MM.
+        { "09:07-04:30", true },
+        { "19:22+05:45", true },
+
         // Some invalid ones too.
+
         { "00:00-1300" }, // Offset out of range.
         { "00:00+1300" }, // Offset out of range.
+
+        // Not exactly 2 digits for hours and minutes.
+        { "17:37+4" },
+        { "17:37+400" },
+        { "17:37+040" },
+        { "17:37+4:0" },
+        { "17:37+4:00" },
+        { "17:37+04:0" },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestTimeZones); ++n )
