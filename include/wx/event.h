@@ -1864,7 +1864,7 @@ private:
 class WXDLLIMPEXP_CORE wxGestureEvent : public wxEvent
 {
 public:
-    wxGestureEvent(wxWindowID winid = 0, wxEventType eventType = wxEVT_NULL)
+    wxGestureEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
         : wxEvent(winid, type)
     {
         m_isStart = false;
