@@ -4,6 +4,8 @@ class MyGestureFrame : public wxFrame
 {
 public:
     MyGestureFrame();
+
+    void OnQuit(wxCloseEvent& event);
 };
  
 class MyGesturePanel : public wxPanel

@@ -182,6 +182,8 @@ private:
     // the button used to highlight the event handlers execution order
     MyEvtTestButton *m_testBtn;
 
+    MyGestureFrame *m_gestureFrame;
+
 
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
@@ -587,8 +589,8 @@ void MyFrame::OnPopEventHandler(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnGesture(wxCommandEvent& WXUNUSED(event))
 {
-    MyGestureFrame *frame = new MyGestureFrame();
-    frame->Show(true);
+    m_gestureFrame = new MyGestureFrame();
+    m_gestureFrame->Show(true);
 }
 
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
