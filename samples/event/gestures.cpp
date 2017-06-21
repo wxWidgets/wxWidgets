@@ -76,9 +76,8 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
     {
         wxLogMessage("Pan gesture Ended\n");
     }   
-    
- 
 }
+
 void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
 {
     if(event.IsGestureStart())
