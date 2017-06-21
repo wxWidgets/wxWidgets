@@ -5631,13 +5631,13 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     wxPoint pt(x, y);
     
     // Determine the horizontal and vertical changes
-    int panDeltaX =  x - s_previousLocationX, panDeltaY = y - s_previousLocationY;
+    int DeltaX =  x - s_previousLocationX, DeltaY = y - s_previousLocationY;
     
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
     event.SetPosition(pt);
-    event.SetPanDeltaX(panDeltaX);
-    event.SetPanDeltaY(panDeltaY);
+    event.SetDeltaX(DeltaX);
+    event.SetDeltaY(DeltaY);
 
     // Update the last gesture event point 
     s_previousLocationX = x;
