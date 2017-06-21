@@ -80,26 +80,26 @@ static bool NotAllNULs(const char *p, size_t n)
 
 static size_t encode_utf16(wxUint32 input, wxUint16 *output)
 {
-    if (input <= 0xffff)
+    if (wxUniChar::IsBMP(input))
     {
         if (output)
             *output = (wxUint16) input;
 
         return 1;
     }
-    else if (input >= 0x110000)
-    {
-        return wxCONV_FAILED;
-    }
-    else
+    else if (wxUniChar::IsSupplementary(input))
     {
         if (output)
         {
-            *output++ = (wxUint16) ((input >> 10) + 0xd7c0);
-            *output = (wxUint16) ((input & 0x3ff) + 0xdc00);
+            *output++ = wxUniChar::HighSurrogate(input);
+            *output = wxUniChar::LowSurrogate(input);
         }
 
         return 2;
+    }
+    else
+    {
+        return wxCONV_FAILED;
     }
 }
 

@@ -672,47 +672,6 @@ typedef short int WXTYPE;
 /*  breaks C++ code) */
 #include <stddef.h>
 
-#ifdef __cplusplus
-
-// everybody gets the assert and other debug macros
-#include "wx/debug.h"
-
-    // delete pointer if it is not NULL and NULL it afterwards
-    template <typename T>
-    inline void wxDELETE(T*& ptr)
-    {
-        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
-
-        if ( ptr != NULL )
-        {
-            delete ptr;
-            ptr = NULL;
-        }
-    }
-
-    // delete an array and NULL it (see comments above)
-    template <typename T>
-    inline void wxDELETEA(T*& ptr)
-    {
-        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
-
-        if ( ptr != NULL )
-        {
-            delete [] ptr;
-            ptr = NULL;
-        }
-    }
-
-    // trivial implementation of std::swap() for primitive types
-    template <typename T>
-    inline void wxSwap(T& first, T& second)
-    {
-        T tmp(first);
-        first = second;
-        second = tmp;
-    }
-#endif /*__cplusplus*/
-
 /*  size of statically declared array */
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
 
@@ -1227,6 +1186,45 @@ typedef wxUint32 wxDword;
 #endif
 
 #ifdef __cplusplus
+
+// everybody gets the assert and other debug macros
+#include "wx/debug.h"
+
+    // delete pointer if it is not NULL and NULL it afterwards
+    template <typename T>
+    inline void wxDELETE(T*& ptr)
+    {
+        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
+
+        if ( ptr != NULL )
+        {
+            delete ptr;
+            ptr = NULL;
+        }
+    }
+
+    // delete an array and NULL it (see comments above)
+    template <typename T>
+    inline void wxDELETEA(T*& ptr)
+    {
+        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
+
+        if ( ptr != NULL )
+        {
+            delete [] ptr;
+            ptr = NULL;
+        }
+    }
+
+    // trivial implementation of std::swap() for primitive types
+    template <typename T>
+    inline void wxSwap(T& first, T& second)
+    {
+        T tmp(first);
+        first = second;
+        second = tmp;
+    }
+
 /* And also define a couple of simple functions to cast pointer to/from it. */
 inline wxUIntPtr wxPtrToUInt(const void *p)
 {
