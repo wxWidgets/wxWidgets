@@ -44,8 +44,7 @@ wxgtk_webview_webkit_load_changed(GtkWidget *,
                              webKitCtrl->GetId(),
                              url, target);
 
-        if (webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
+        webKitCtrl->HandleWindowEvent(event);
     }
     else if (load_event == WEBKIT_LOAD_COMMITTED)
     {
@@ -54,8 +53,7 @@ wxgtk_webview_webkit_load_changed(GtkWidget *,
                              webKitCtrl->GetId(),
                              url, target);
 
-        if (webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
+        webKitCtrl->HandleWindowEvent(event);
     }
 }
 
@@ -69,7 +67,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
     WebKitURIRequest* request = webkit_navigation_action_get_request(action);
     const gchar* uri = webkit_uri_request_get_uri(request);
     wxString target = webkit_navigation_policy_decision_get_frame_name(navigation_decision);
-    
+
     //If m_creating is true then we are the result of a new window
     //and so we need to send the event and veto the load
     if(webKitCtrl->m_creating)
@@ -80,9 +78,8 @@ wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
                              wxString(uri, wxConvUTF8),
                              target);
 
-        if(webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
-        
+        webKitCtrl->HandleWindowEvent(event);
+
         webkit_policy_decision_ignore(decision);
         return TRUE;
     }
@@ -104,8 +101,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
                          wxString( uri, wxConvUTF8 ),
                          target);
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
+    webKitCtrl->HandleWindowEvent(event);
 
     if (!event.IsAllowed())
     {
@@ -256,10 +252,7 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
     event.SetString(description);
     event.SetInt(type);
 
-    if (webKitWindow && webKitWindow->GetEventHandler())
-    {
-        webKitWindow->GetEventHandler()->ProcessEvent(event);
-    }
+    webKitWindow->HandleWindowEvent(event);
 
     return FALSE;
 }
@@ -279,8 +272,7 @@ wxgtk_webview_webkit_new_window(WebKitPolicyDecision *decision,
                                        wxString( uri, wxConvUTF8 ),
                                        target);
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
+    webKitCtrl->HandleWindowEvent(event);
 
     //We always want the user to handle this themselves
     webkit_policy_decision_ignore(decision);
@@ -318,8 +310,7 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
                          "");
     event.SetString(wxString(title, wxConvUTF8));
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
+    webKitCtrl->HandleWindowEvent(event);
 
     g_free(title);
 }
@@ -378,10 +369,7 @@ wxgtk_webview_webkit_context_menu(WebKitWebView *,
                                   WebKitHitTestResult *,
                                   wxWebViewWebKit *webKitCtrl)
 {
-    if(webKitCtrl->IsContextMenuEnabled())
-        return FALSE;
-    else
-        return TRUE;
+    return !webKitCtrl->IsContextMenuEnabled();
 }
 
 static WebKitWebView*
@@ -421,7 +409,7 @@ wxgtk_new_connection_cb(GDBusServer *,
                         GDBusProxy **proxy)
 {
     GError *error = NULL;
-    GDBusProxyFlags flags = static_cast<GDBusProxyFlags>(static_cast<int>(G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES) | static_cast<int>(G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS));
+    GDBusProxyFlags flags = GDBusProxyFlags(G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS);
     *proxy = g_dbus_proxy_new_sync(connection,
                                    flags,
                                    NULL,
@@ -439,6 +427,7 @@ wxgtk_new_connection_cb(GDBusServer *,
     return TRUE;
 }
 
+static
 gboolean
 wxgtk_dbus_peer_is_authorized(GCredentials *peer_credentials)
 {
@@ -490,6 +479,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
+    m_web_view = NULL;
+    m_dbusServer = NULL;
+    m_extension = NULL;
     m_busy = false;
     m_guard = false;
     m_creating = false;
@@ -638,13 +630,13 @@ void wxWebViewWebKit::GoForward()
 
 bool wxWebViewWebKit::CanGoBack() const
 {
-    return webkit_web_view_can_go_back(m_web_view);
+    return webkit_web_view_can_go_back(m_web_view) != 0;
 }
 
 
 bool wxWebViewWebKit::CanGoForward() const
 {
-    return webkit_web_view_can_go_forward(m_web_view);
+    return webkit_web_view_can_go_forward(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::ClearHistory()
@@ -662,8 +654,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
     WebKitBackForwardList* history =
         webkit_web_view_get_back_forward_list(m_web_view);
-    GList* list = webkit_back_forward_list_get_back_list_with_limit(history,
-                                                                    m_historyLimit);
+    GList* list = webkit_back_forward_list_get_back_list(history);
     //We need to iterate in reverse to get the order we desire
     for(int i = g_list_length(list) - 1; i >= 0 ; i--)
     {
@@ -683,8 +674,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory(
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist;
     WebKitBackForwardList* history =
         webkit_web_view_get_back_forward_list(m_web_view);
-    GList* list = webkit_back_forward_list_get_forward_list_with_limit(history,
-                                                                       m_historyLimit);
+    GList* list = webkit_back_forward_list_get_forward_list(history);
     for(guint i = 0; i < g_list_length(list); i++)
     {
         WebKitBackForwardListItem* gtkitem = (WebKitBackForwardListItem*)g_list_nth_data(list, i);
@@ -708,11 +698,15 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
     }
 }
 
-static void wxgtk_can_execute_editing_command_cb(WebKitWebView *,
+extern "C" {
+static void wxgtk_can_execute_editing_command_cb(GObject*,
                                                  GAsyncResult *res,
-                                                 GAsyncResult **res_out)
+                                                 void* user_data)
 {
-    *res_out = (GAsyncResult*)g_object_ref(res);
+    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
+    g_object_ref(res);
+    *res_out = res;
+}
 }
 
 bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
@@ -721,7 +715,7 @@ bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
     webkit_web_view_can_execute_editing_command(m_web_view,
                                                 command,
                                                 NULL,
-                                                (GAsyncReadyCallback)wxgtk_can_execute_editing_command_cb,
+                                                wxgtk_can_execute_editing_command_cb,
                                                 &result);
 
     GMainContext *main_context = g_main_context_get_thread_default();
@@ -735,7 +729,7 @@ bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
                                                                               NULL);
     g_object_unref(result);
 
-    return can_execute;
+    return can_execute != 0;
 }
 
 bool wxWebViewWebKit::CanCut() const
@@ -807,11 +801,15 @@ wxString wxWebViewWebKit::GetCurrentTitle() const
 }
 
 
-static void wxgtk_web_resource_get_data_cb(WebKitWebResource *,
+extern "C" {
+static void wxgtk_web_resource_get_data_cb(GObject*,
                                            GAsyncResult *res,
-                                           GAsyncResult **res_out)
+                                           void* user_data)
 {
-    *res_out = (GAsyncResult*)g_object_ref(res);
+    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
+    g_object_ref(res);
+    *res_out = res;
+}
 }
 
 wxString wxWebViewWebKit::GetPageSource() const
@@ -824,7 +822,7 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     GAsyncResult *result = NULL;
     webkit_web_resource_get_data(resource, NULL,
-                                 (GAsyncReadyCallback)wxgtk_web_resource_get_data_cb,
+                                 wxgtk_web_resource_get_data_cb,
                                  &result);
 
     GMainContext *main_context = g_main_context_get_thread_default();
@@ -833,8 +831,9 @@ wxString wxWebViewWebKit::GetPageSource() const
         g_main_context_iteration(main_context, TRUE);
     }
 
+    size_t length;
     guchar *source = webkit_web_resource_get_data_finish(resource, result,
-                                                         NULL, NULL);
+                                                         &length, NULL);
     if (result)
     {
         g_object_unref(result);
@@ -842,7 +841,7 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     if (source)
     {
-        wxString wxs = wxString(source, wxConvUTF8);
+        wxString wxs(source, wxConvUTF8, length);
         free(source);
         return wxs;
     }
@@ -859,26 +858,19 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     {
         return wxWEBVIEW_ZOOM_TINY;
     }
-    else if (zoom > 0.65 && zoom <= 0.90)
+    if (zoom <= 0.90)
     {
         return wxWEBVIEW_ZOOM_SMALL;
     }
-    else if (zoom > 0.90 && zoom <= 1.15)
+    if (zoom <= 1.15)
     {
         return wxWEBVIEW_ZOOM_MEDIUM;
     }
-    else if (zoom > 1.15 && zoom <= 1.45)
+    if (zoom <= 1.45)
     {
         return wxWEBVIEW_ZOOM_LARGE;
     }
-    else if (zoom > 1.45)
-    {
-        return wxWEBVIEW_ZOOM_LARGEST;
-    }
-
-    // to shut up compilers, this can never be reached logically
-    wxFAIL;
-    return wxWEBVIEW_ZOOM_MEDIUM;
+    return wxWEBVIEW_ZOOM_LARGEST;
 }
 
 
@@ -916,8 +908,7 @@ void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
 {
     WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
     webkit_settings_set_zoom_text_only(settings,
-                                       (type == wxWEBVIEW_ZOOM_TYPE_TEXT ?
-                                       TRUE : FALSE));
+                                       type == wxWEBVIEW_ZOOM_TYPE_TEXT);
 }
 
 wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
@@ -966,7 +957,7 @@ bool wxWebViewWebKit::IsEditable() const
 {
     gboolean editable;
     g_object_get(m_web_view, "editable", &editable, NULL);
-    return editable;
+    return editable != 0;
 }
 
 void wxWebViewWebKit::DeleteSelection()
@@ -997,11 +988,11 @@ bool wxWebViewWebKit::HasSelection() const
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   NULL, NULL);
         if (retval)
-	{
+        {
             gboolean has_selection = FALSE;
             g_variant_get(retval, "(b)", &has_selection);
             g_variant_unref(retval);
-            return has_selection;
+            return has_selection != 0;
         }
     }
     return false;
@@ -1024,7 +1015,7 @@ wxString wxWebViewWebKit::GetSelectedText() const
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   NULL, NULL);
         if (retval)
-	{
+        {
             char *text;
             g_variant_get(retval, "(s)", &text);
             g_variant_unref(retval);
@@ -1045,7 +1036,7 @@ wxString wxWebViewWebKit::GetSelectedSource() const
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   NULL, NULL);
         if (retval)
-	{
+        {
             char *source;
             g_variant_get(retval, "(s)", &source);
             g_variant_unref(retval);
@@ -1083,7 +1074,7 @@ wxString wxWebViewWebKit::GetPageText() const
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   NULL, NULL);
         if (retval)
-	{
+        {
             char *text;
             g_variant_get(retval, "(s)", &text);
             g_variant_unref(retval);

@@ -232,10 +232,12 @@ void wxBell()
 @implementation ModalDialogDelegate
 - (id)init
 {
-    self = [super init];
-    sheetFinished = NO;
-    resultCode = -1;
-    impl = 0;
+    if ( self = [super init] )
+    {
+        sheetFinished = NO;
+        resultCode = -1;
+        impl = 0;
+    }
     return self;
 }
 
@@ -336,8 +338,10 @@ void wxBell()
 
 - (id)init
 {
-    self = [super init];
-    firstPass = YES;
+    if ( self = [super init] )
+    {
+        firstPass = YES;
+    }
     return self;
 }
 

@@ -530,19 +530,20 @@ bool g_lastButtonWasFakeRight = false ;
 
 void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEvent)
 {
-    NSPoint locationInWindow = [nsEvent locationInWindow];
+    NSRect locationInWindow = NSZeroRect;
+    locationInWindow.origin = [nsEvent locationInWindow];
     
     // adjust coordinates for the window of the target view
     if ( [nsEvent window] != [m_osxView window] )
     {
         if ( [nsEvent window] != nil )
-            locationInWindow = [[nsEvent window] convertBaseToScreen:locationInWindow];
+            locationInWindow = [[nsEvent window] convertRectToScreen:locationInWindow];
         
         if ( [m_osxView window] != nil )
-            locationInWindow = [[m_osxView window] convertScreenToBase:locationInWindow];
+            locationInWindow = [[m_osxView window] convertRectFromScreen:locationInWindow];
     }
     
-    NSPoint locationInView = [m_osxView convertPoint:locationInWindow fromView:nil];
+    NSPoint locationInView = [m_osxView convertPoint:locationInWindow.origin fromView:nil];
     wxPoint locationInViewWX = wxFromNSPoint( m_osxView, locationInView );
         
     x = locationInViewWX.x;
@@ -1916,11 +1917,11 @@ double wxWidgetCocoaImpl::GetContentScaleFactor() const
 
 - (id)init:(wxWindow *)win
 {
-    self = [super init];
-
-    m_win = win;
-    m_isDone = false;
-
+    if ( self = [super init] )
+    {
+        m_win = win;
+        m_isDone = false;
+    }
     return self;
 }
 
@@ -2372,7 +2373,7 @@ bool wxWidgetCocoaImpl::SetFocus()
 
     // TODO remove if no issues arise: should not raise the window, only assign focus
     //[[m_osxView window] makeKeyAndOrderFront:nil] ;
-    [[m_osxView window] makeFirstResponder: m_osxView] ;
+    [[m_osxView window] makeFirstResponder: targetView] ;
     return true;
 }
 
@@ -2476,6 +2477,8 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
             [attrString endEditing];
 
             [(id)m_osxView setAttributedTitle:attrString];
+            
+            [attrString release];
 
             return;
         }
@@ -2932,10 +2935,11 @@ void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
 {
     if ( !wxIsBusy() )
     {
-        NSPoint location = [NSEvent mouseLocation];
-        location = [[m_osxView window] convertScreenToBase:location];
-        NSPoint locationInView = [m_osxView convertPoint:location fromView:nil];
-
+        NSRect location = NSZeroRect;
+        location.origin = [NSEvent mouseLocation];
+        location = [[m_osxView window] convertRectFromScreen:location];
+        NSPoint locationInView = [m_osxView convertPoint:location.origin fromView:nil];        
+        
         if( NSMouseInRect(locationInView, [m_osxView bounds], YES) )
         {
             [(NSCursor*)cursor.GetHCURSOR() set];

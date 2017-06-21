@@ -15,6 +15,7 @@
 #if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/dynarray.h"
     #include "wx/dc.h"
     #include "wx/dcprint.h"

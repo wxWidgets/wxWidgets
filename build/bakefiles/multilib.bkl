@@ -176,10 +176,6 @@
     <!--                               wxWEBVIEW                          -->
     <!-- ================================================================ -->
 
-    <set var="webviewdll_ext_dir_define">
-        <if cond="FORMAT=='autoconf' and USE_WEBVIEW_WEBKIT2=='1'">WX_WEB_EXTENSIONS_DIRECTORY="$(PLUGINS_INST_DIR)/web-extensions"</if>
-    </set>
-
     <dll id="webviewdll" template="wx_dll"
          cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>

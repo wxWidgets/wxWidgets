@@ -368,10 +368,12 @@ private:
 
 - (id)initWithItemIdentifier: (NSString*) identifier
 {
-    self = [super initWithItemIdentifier:identifier];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
+    if ( self = [super initWithItemIdentifier:identifier] )
+    {
+        impl = NULL;
+        [self setTarget: self];
+        [self setAction: @selector(clickedAction:)];
+    }
     return self;
 }
 
@@ -406,8 +408,11 @@ private:
 
 - (id)init
 {
-    m_isSelectable = false;
-    return [super init];
+    if ( self = [super init] )
+    {
+        m_isSelectable = false;
+    }
+    return self;
 }
 
 - (void)setSelectable:(bool) value
@@ -469,8 +474,7 @@ private:
 
 - (id)initWithIdentifier:(NSString *)identifier
 {
-    self = [super initWithIdentifier:identifier];
-    if (self)
+    if (self = [super initWithIdentifier:identifier])
     {
         toolbarDelegate = [[wxNSToolbarDelegate alloc] init];
         [self setDelegate:toolbarDelegate];
@@ -492,10 +496,12 @@ private:
 
 - (id)initWithFrame:(NSRect)frame
 {
-    self = [super initWithFrame:frame];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
+    if ( self = [super initWithFrame:frame] )
+    {
+        impl = NULL;
+        [self setTarget: self];
+        [self setAction: @selector(clickedAction:)];
+    }
     return self;
 }
 

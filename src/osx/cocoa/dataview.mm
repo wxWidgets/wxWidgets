@@ -196,7 +196,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 
 -(id) initWithColumnPointer:(const wxDataViewColumn*)column
 {
-    [self initWithIdentifier: [wxDVCNSTableColumn identifierForColumnPointer:column]];
+    self = [self initWithIdentifier: [wxDVCNSTableColumn identifierForColumnPointer:column]];
     return self;
 }
 

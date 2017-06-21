@@ -99,7 +99,6 @@ void* wxMacCocoaRetain( void* obj )
 #if wxOSX_USE_COCOA
 wxFont::wxFont(WX_NSFont nsfont)
 {
-    [nsfont retain];
     wxNativeFontInfo info;
     SetNativeInfoFromNSFont(nsfont, &info);
     Create(info);

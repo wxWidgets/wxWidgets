@@ -570,7 +570,9 @@ bool wxDocument::AddView(wxView *view)
 
 bool wxDocument::RemoveView(wxView *view)
 {
-    (void)m_documentViews.DeleteObject(view);
+    if ( !m_documentViews.DeleteObject(view) )
+        return false;
+
     OnChangedViewList();
     return true;
 }

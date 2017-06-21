@@ -238,8 +238,7 @@ protected :
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     wxUnusedVar(textField);
-    
-    
+
     return NO;
 }
 
@@ -317,7 +316,7 @@ wxUITextViewControl::wxUITextViewControl( wxTextCtrl *wxPeer, UITextView* v) :
 {
     m_textView = v;
     m_delegate= [[wxUITextViewDelegate alloc] init];
-    
+
     [m_textView setDelegate:m_delegate];
 }
 
@@ -423,7 +422,7 @@ void wxUITextViewControl::WriteText(const wxString& str)
     wxString st = str;
     wxMacConvertNewlines10To13( &st );
     wxMacEditHelper helper(m_textView);
-    
+
     wxCFStringRef insert( st , m_wxPeer->GetFont().GetEncoding() );
     NSMutableString* subst = [NSMutableString stringWithString:[m_textView text]];
     [subst replaceCharactersInRange:[m_textView selectedRange] withString:insert.AsNSString()];
@@ -466,10 +465,10 @@ bool wxUITextViewControl::GetStyle(long position, wxTextAttr& style)
         /*
         if (font)
             style.SetFont(wxFont(font));
-        
+
         if (bgcolor)
             style.SetBackgroundColour(wxColour(bgcolor));
-            
+
         if (fgcolor)
             style.SetTextColour(wxColour(fgcolor));
         */
@@ -489,15 +488,15 @@ void wxUITextViewControl::SetStyle(long start,
             range = [m_textView selectedRange];
 /*
         UITextStorage* storage = [m_textView textStorage];
-        
+
         wxFont font = style.GetFont();
         if (style.HasFont() && font.IsOk())
             [storage addAttribute:NSFontAttributeName value:font.OSXGetNSFont() range:range];
-        
+
         wxColour bgcolor = style.GetBackgroundColour();
         if (style.HasBackgroundColour() && bgcolor.IsOk())
             [storage addAttribute:NSBackgroundColorAttributeName value:bgcolor.OSXGetNSColor() range:range];
-        
+
         wxColour fgcolor = style.GetTextColour();
         if (style.HasTextColour() && fgcolor.IsOk())
             [storage addAttribute:NSForegroundColorAttributeName value:fgcolor.OSXGetNSColor() range:range];
@@ -512,9 +511,9 @@ void wxUITextViewControl::CheckSpelling(bool check)
 wxSize wxUITextViewControl::GetBestSize() const
 {
     wxRect r;
-    
+
     GetBestRect(&r);
-    
+
     /*
     if (m_textView && [m_textView layoutManager])
     {
@@ -526,7 +525,7 @@ wxSize wxUITextViewControl::GetBestSize() const
     }
     return wxSize(0,0);
     */
-    
+
     wxSize sz = r.GetSize();
     if ( sz.y < 31 )
         sz.y = 31;
@@ -571,7 +570,7 @@ void wxUITextFieldControl::SetStringValue( const wxString &str)
 wxSize wxUITextFieldControl::GetBestSize() const
 {
     wxRect r;
-    
+
     GetBestRect(&r);
     wxSize sz = r.GetSize();
     if ( sz.y < 31 )
@@ -605,7 +604,7 @@ void wxUITextFieldControl::SetEditable(bool editable)
         if ( !editable ) {
             [m_textField resignFirstResponder];
         }
-        
+
         [m_textField setEnabled: editable];
     }
 }
@@ -710,7 +709,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         UITextView * v = nil;
         v = [[UITextView alloc] initWithFrame:r];
         tv = v;
-        
+
         wxUITextViewControl* tc = new wxUITextViewControl( wxpeer, v );
         c = tc;
         t = tc;
@@ -721,39 +720,39 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         wxUITextField* v = [[wxUITextField alloc] initWithFrame:r];
         tv = v;
 
-		v.textColor = [UIColor blackColor];
-		v.font = [UIFont systemFontOfSize:17.0];
-		v.backgroundColor = [UIColor whiteColor];
-		
-		v.clearButtonMode = UITextFieldViewModeNever;
-		
+        v.textColor = [UIColor blackColor];
+        v.font = [UIFont systemFontOfSize:17.0];
+        v.backgroundColor = [UIColor whiteColor];
+
+        v.clearButtonMode = UITextFieldViewModeNever;
+
         [v setBorderStyle:UITextBorderStyleBezel];
         if ( style & wxNO_BORDER )
             v.borderStyle = UITextBorderStyleNone;
-         
+
         wxUITextFieldControl* tc = new wxUITextFieldControl( wxpeer, v );
         c = tc;
         t = tc;
     }
 #endif
-    
+
     if ( style & wxTE_PASSWORD )
         [tv setSecureTextEntry:YES];
-    
+
     if ( style & wxTE_CAPITALIZE )
         [tv setAutocapitalizationType:UITextAutocapitalizationTypeWords];
     else
         [tv setAutocapitalizationType:UITextAutocapitalizationTypeSentences];
-    
+
     if ( !(style & wxTE_MULTILINE) )
     {
         [tv setAutocorrectionType:UITextAutocorrectionTypeNo];
-		[tv setReturnKeyType:UIReturnKeyDone];
+        [tv setReturnKeyType:UIReturnKeyDone];
     }
     [tv setKeyboardType:UIKeyboardTypeDefault];
-    
+
     t->SetStringValue(str);
-    
+
     return c;
 }
 
