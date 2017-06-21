@@ -301,6 +301,9 @@ public:
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
+    @event{EVT_WEBVIEW_RUNSCRIPT_RESULT(id, func)}
+       Process a @c wxEVT_WEBVIEW_RUNSCRIPT_RESULT event, generated when
+       RunScriptAsync method has the result of a Javascript.
     @endEventTable
 
     @since 2.9.3
@@ -460,13 +463,22 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
-        Runs the given javascript code.
+        Runs the given javascript code, returning a result if they is any.
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
         @return A wxString with Javascript return value.
 
     */
     virtual wxString RunScript(const wxString& javascript) = 0;
+
+    /**
+        Runs the given javascript code, returning a result if they is any, asynchronously.
+	To do that, it uses wxEVT_WEBVIEW_RUNSCRIPT_RESULT.
+        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
+              page to finish loading before calling RunScript().
+
+    */
+    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user
@@ -783,6 +795,9 @@ public:
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
+    @event{EVT_WEBVIEW_RUNSCRIPT_RESULT(id, func)}
+       Process a @c wxEVT_WEBVIEW_RUNSCRIPT_RESULT event, generated when
+       RunScriptAsync method has the result of a Javascript.
     @endEventTable
 
     @since 2.9.3
@@ -818,3 +833,4 @@ wxEventType wxEVT_WEBVIEW_LOADED;
 wxEventType wxEVT_WEBVIEW_ERROR;
 wxEventType wxEVT_WEBVIEW_NEWWINDOW;
 wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
+wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;

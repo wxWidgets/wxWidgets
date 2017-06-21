@@ -1132,7 +1132,7 @@ web_view_javascript_finished(GObject      *object,
 	printf("excute2\n");
 	fflush(stdout);
 	
-	str_value = (gchar*)g_alloc(str_value,str_length+sizeof(char));
+	//str_value = (gchar*)g_alloc(str_value,str_length+sizeof(char));
         JSStringGetUTF8CString (js_str_value, str_value+sizeof(char), str_length);
         JSStringRelease (js_str_value);
 	user_data = str_value;
@@ -1173,6 +1173,11 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     //g_free (result);
 
     return wsx;
+}
+
+void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, wxObject* user_data)
+{
+
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

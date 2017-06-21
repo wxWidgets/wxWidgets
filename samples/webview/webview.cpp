@@ -134,6 +134,8 @@ public:
     void OnScrollPageUp(wxCommandEvent&) { m_browser->PageUp(); }
     void OnScrollPageDown(wxCommandEvent&) { m_browser->PageDown(); }
     void OnRunScript(wxCommandEvent& evt);
+    void OnRunScriptAsync(wxCommandEvent& evt);
+    void OnRunScriptAsyncResult(wxCommandEvent& evt);
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -504,6 +506,10 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnScrollPageDown),  NULL, this );
     Connect(script->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
+    Connect(script->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
+    Connect(script->GetId(), wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
     Connect(m_selection_delete->GetId(), wxEVT_MENU,
@@ -976,6 +982,25 @@ void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
     {
       printf("RunScript result: %s\n", (const char*)m_browser->RunScript(dialog.GetValue()).mb_str(wxConvUTF8));	
     }
+}
+
+void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
+{
+    wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
+    if(dialog.ShowModal() == wxID_OK)
+    {
+      wxString* test = new wxString(_("Test"));
+      m_browser->RunScriptAsync(dialog.GetValue(), (wxObject*)test);
+    }
+}
+
+void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
+{
+  wxString* str = (wxString*)evt.GetEventObject();
+  if (str->IsSameAs(_("Test"))) {
+    printf("(WebFrame::OnRunScriptResult (aka sample)) Event gets the method handler\n");
+    printf("(WebFrame::OnRunScriptResult (aka sample)) The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
+  }
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
