@@ -3170,90 +3170,88 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 {
                     wxLogLastError(wxT("GetGestureInfo"));
                     processed = false;
+                    break;
                 }
 
-                else
-                {   
-                    if(gestureInfo.hwndTarget != GetHWND())
-                    {
-                        wxLogDebug("This is Not the window targeted by this gesture!");
-                    }
+                if(gestureInfo.hwndTarget != GetHWND())
+                {
+                    wxLogDebug("This is Not the window targeted by this gesture!");
+                }
                     
-                    // dwID field is used to determine the type of gesture
-                    switch(gestureInfo.dwID)
+                // dwID field is used to determine the type of gesture
+                switch(gestureInfo.dwID)
+                {
+                    // Pan gesture
+                    case GID_PAN:
                     {
-                        // Pan gesture
-                        case GID_PAN:
-                        {
-                            // ptsLocation(POINTS struct) is the current position of the pan
-                            int x = gestureInfo.ptsLocation.x;
-                            int y = gestureInfo.ptsLocation.y;
-                            // Convert them into client coordinates
-                            ScreenToClient(&x, &y);
-                            processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
+                        // ptsLocation(POINTS struct) is the current position of the pan
+                        int x = gestureInfo.ptsLocation.x;
+                        int y = gestureInfo.ptsLocation.y;
+                        // Convert them into client coordinates
+                        ScreenToClient(&x, &y);
+                        processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
 
-                            if(!processed)
+                        if(!processed)
+                        {
+                            // If not processed, we must call this to avoid memory leaks
+                            if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
                             {
-                                // If not processed, we must call this to avoid memory leaks
-                                if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
-                                {
-                                    wxLogLastError(wxT("CloseGestureInfoHandle"));
-                                }
+                                wxLogLastError(wxT("CloseGestureInfoHandle"));
                             }
                         }
-                        break;
-
-                        // Zoom gesture
-                        case GID_ZOOM:
-                        {
-                            // ptsLocation is the mid-point of the 2 fingers
-                            int x = gestureInfo.ptsLocation.x;
-                            int y = gestureInfo.ptsLocation.y;
-                            // Convert them into client coordinates
-                            ScreenToClient(&x, &y);
-                            
-                            // ullArgument field is a 64-bit unsigned integer, but the relevant information
-                            // is in it's lower 4 bytes and represents distance between the fingers
-                            // this is used to extract those lower 4 bytes
-                            DWORD fingerDistance = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
-                            processed = HandleZoomGesture(x, y, fingerDistance, gestureInfo.dwFlags);
-
-                            if(!processed)
-                            {
-                                // If not processed, we must call this to avoid memory leaks
-                                if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
-                                {
-                                    wxLogLastError(wxT("CloseGestureInfoHandle"));
-                                }
-                            }
-                        }
-                        break;
-
-                        // Rotate gesture
-                        case GID_ROTATE:
-                        {
-                            // ptsLocation is the center point of rotation
-                            int x = gestureInfo.ptsLocation.x;
-                            int y = gestureInfo.ptsLocation.y;
-                            // Convert them into client coordinates
-                            ScreenToClient(&x, &y);
-
-                            // Again, we need the lower 4 bytes and this will used as an argument
-                            // to obtain the angle to rotate
-                            DWORD angleArgument = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
-                            processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
-
-                            if(!processed)
-                            {
-                                // If not processed, we must call this to avoid memory leaks
-                                if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
-                                {
-                                    wxLogLastError(wxT("CloseGestureInfoHandle"));
-                                }
-                            }
-                        }
-                        break;
                     }
+                    break;
+
+                    // Zoom gesture
+                    case GID_ZOOM:
+                    {
+                        // ptsLocation is the mid-point of the 2 fingers
+                        int x = gestureInfo.ptsLocation.x;
+                        int y = gestureInfo.ptsLocation.y;
+                        // Convert them into client coordinates
+                        ScreenToClient(&x, &y);
+                            
+                        // ullArgument field is a 64-bit unsigned integer, but the relevant information
+                        // is in it's lower 4 bytes and represents distance between the fingers
+                        // this is used to extract those lower 4 bytes
+                        DWORD fingerDistance = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
+                        processed = HandleZoomGesture(x, y, fingerDistance, gestureInfo.dwFlags);
+
+                        if(!processed)
+                        {
+                            // If not processed, we must call this to avoid memory leaks
+                            if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
+                            {
+                                wxLogLastError(wxT("CloseGestureInfoHandle"));
+                            }
+                        }
+                    }    
+                    break;
+
+                    // Rotate gesture
+                    case GID_ROTATE:
+                    {
+                        // ptsLocation is the center point of rotation
+                        int x = gestureInfo.ptsLocation.x;
+                        int y = gestureInfo.ptsLocation.y;
+                        // Convert them into client coordinates
+                        ScreenToClient(&x, &y);
+
+                        // Again, we need the lower 4 bytes and this will used as an argument
+                        // to obtain the angle to rotate
+                        DWORD angleArgument = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
+                        processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
+
+                        if(!processed)
+                        {
+                            // If not processed, we must call this to avoid memory leaks
+                            if(!::CloseGestureInfoHandle((HGESTUREINFO)lParam))
+                            {
+                                wxLogLastError(wxT("CloseGestureInfoHandle"));
+                            }
+                        }
+                    }
+                    break;
                 }
             }
             break;
@@ -5613,11 +5611,11 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     // wxEVT_GESTURE_PAN
     wxPanGestureEvent event(GetId());
 
-    // These are used to calculate the pan direction
+    // These are used to calculate the pan delta
     static int s_previousLocationX, s_previousLocationY;
 
     // This flag indicates that the gesture has just started
-    // Store the current point to determine the pan direction later on
+    // Store the current point to determine the pan delta later on
     if(flags & GF_BEGIN)
     {
         s_previousLocationX = x;
@@ -5628,7 +5626,6 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     if(flags & GF_END)
     {
         event.SetGestureEnd();
-        event.SetGestureStart(false);
     }
 
     wxPoint pt(x, y);
@@ -5639,36 +5636,9 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
     event.SetPosition(pt);
-    
-    // It might be the case that the direction of finger(s) is diagnol rather than along
-    // one of the axis. The axis in which the change is greater should be preferred
-    // Currently, vertical axis is preferred if the change is equal for both
-    if( abs(panDeltaY) >= abs(panDeltaX) )
-    {
-        if(panDeltaY > 0)
-        {
-            event.SetPanDirection(wxDOWN);
-        }
+    event.SetPanDeltaX(panDeltaX);
+    event.SetPanDeltaY(panDeltaY);
 
-        else
-        {
-            event.SetPanDirection(wxUP);
-        }
-    }
-
-    else
-    {
-        if(panDeltaX > 0)
-        {
-            event.SetPanDirection(wxRIGHT);
-        }
-
-        else
-        {
-            event.SetPanDirection(wxLEFT);
-        }
-    }
-    
     // Update the last gesture event point 
     s_previousLocationX = x;
     s_previousLocationY = y;
@@ -5697,7 +5667,6 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     if(flags & GF_END)
     {
         event.SetGestureEnd();
-        event.SetGestureStart(false);
     }
 
     // Calculate center point of the zoom
@@ -5740,7 +5709,6 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
     if(flags & GF_END)
     {
         event.SetGestureEnd();
-        event.SetGestureStart(false);
     }
 
     wxPoint pt(x, y);
