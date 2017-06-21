@@ -18,7 +18,6 @@ MyGestureFrame::MyGestureFrame() : wxFrame(NULL, wxID_ANY, wxT("Multi-touch Gest
  
 MyGesturePanel::MyGesturePanel(MyGestureFrame *parent) : wxPanel(parent, wxID_ANY)
 {
-    wxImage::AddHandler(new wxJPEGHandler);
     if(!m_bitmap.LoadFile("../image/horse.jpg", wxBITMAP_TYPE_ANY))
     {
         wxLogError("Can't load the image");
