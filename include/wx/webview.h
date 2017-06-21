@@ -176,6 +176,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
 =======
     virtual wxString RunScript(const wxString& javascript, wxObject* user_data=NULL) = 0;
@@ -219,6 +220,9 @@ public:
 =======
     virtual wxString RunScript(const wxString& javascript) = 0;
 >>>>>>> Trying to allocate memory for result string
+=======
+    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) = 0;
+>>>>>>> Set up the new async enviroment
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {
@@ -328,6 +332,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWe
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
 =======
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
@@ -359,6 +364,9 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, w
 >>>>>>> Modified sample
 =======
 >>>>>>> Trying to allocate memory for result string
+=======
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
+>>>>>>> Set up the new async enviroment
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -398,6 +406,7 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define EVT_WEBVIEW_RUNSCRIPT_RESULT(id, fn) \
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_RUNSCRIPT_RESULT, id, \
 =======
@@ -436,6 +445,12 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 >>>>>>> Sleep runscript when callback is called
 =======
 >>>>>>> Trying to allocate memory for result string
+=======
+#define EVT_WEBVIEW_RUNSCRIPT_RESULT(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_RUNSCRIPT_RESULT, id, \
+                     wxWebViewEventHandler(fn))
+
+>>>>>>> Set up the new async enviroment
 
 // old wxEVT_COMMAND_* constants
 <<<<<<< HEAD
@@ -454,6 +469,7 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 #define wxEVT_COMMAND_WEBVIEW_ERROR             wxEVT_WEBVIEW_ERROR
 #define wxEVT_COMMAND_WEBVIEW_NEWWINDOW         wxEVT_WEBVIEW_NEWWINDOW
 #define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED     wxEVT_WEBVIEW_TITLE_CHANGED
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -498,6 +514,9 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 >>>>>>> Async working, need to use user_data to know which runscript trigged the event
 =======
 >>>>>>> Trying to allocate memory for result string
+=======
+#define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
+>>>>>>> Set up the new async enviroment
 
 #endif // wxUSE_WEBVIEW
 

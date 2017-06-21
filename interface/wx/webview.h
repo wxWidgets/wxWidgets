@@ -531,6 +531,15 @@ public:
 >>>>>>> Trying to allocate memory for result string
 
     /**
+        Runs the given javascript code, returning a result if they is any, asynchronously.
+	To do that, it uses wxEVT_WEBVIEW_RUNSCRIPT_RESULT.
+        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
+              page to finish loading before calling RunScript().
+
+    */
+    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) = 0;
+
+    /**
         Set the editable property of the web control. Enabling allows the user
         to edit the page even if the @c contenteditable attribute is not set.
         The exact capabilities vary with the backend being used.
@@ -894,6 +903,7 @@ wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 =======
 wxEventType wxEVT_RUNSCRIPT_RESULT;
@@ -925,3 +935,6 @@ wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
 >>>>>>> Modified sample
 =======
 >>>>>>> Trying to allocate memory for result string
+=======
+wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
+>>>>>>> Set up the new async enviroment
