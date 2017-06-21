@@ -1865,11 +1865,11 @@ class WXDLLIMPEXP_CORE wxGestureEvent : public wxEvent
 {
 public:
     wxGestureEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
-                   : wxEvent(winid, type) 
-                   {
-                    m_isStart = false;
-                    m_isEnd = false; 
-                   }
+                   : wxEvent(winid, type)
+                    {
+                        m_isStart = false;
+                        m_isEnd = false;
+                    }
 
     wxGestureEvent(const wxGestureEvent& event) : wxEvent(event)
     {
@@ -1910,16 +1910,20 @@ public:
       
      wxPanGestureEvent(const wxPanGestureEvent& event) : wxGestureEvent(event)
      {
-        m_panDirection = event.m_panDirection;
+        m_panDeltaX = event.m_panDeltaX;
+        m_panDeltaY = event.m_panDeltaY;
      }
  
-     wxDirection GetPanDirection() const { return m_panDirection; }
-     void SetPanDirection(wxDirection panDirection) { m_panDirection = panDirection; }
+     int GetPanDeltaX() const { return m_panDeltaX; }
+     void SetPanDeltaX(int panDeltaX) { m_panDeltaX = panDeltaX; }
+     int GetPanDeltaY() const { return m_panDeltaY; }
+     void SetPanDeltaY(int panDeltaX) { m_panDeltaY = panDeltaY; }
+
 
      virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
  
 private:
-    wxDirection m_panDirection;
+    int m_panDeltaX, m_panDeltaY;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
 };
