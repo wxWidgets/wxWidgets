@@ -298,6 +298,8 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    wxImage::AddHandler(new wxJPEGHandler);
+
     // create the main application window
     MyFrame *frame = new MyFrame(wxT("Event wxWidgets Sample"),
                                  wxPoint(50, 50), wxSize(600, 340));
@@ -309,8 +311,6 @@ bool MyApp::OnInit()
     // Add a dynamic handler at the application level for the test button
     Connect(MyEvtTestButton::BUTTON_ID, wxEVT_BUTTON,
             wxCommandEventHandler(MyApp::OnClickDynamicHandlerApp));
-
-    wxImage::AddHandler(new wxJPEGHandler);
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned false here, the
