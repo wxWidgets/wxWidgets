@@ -52,6 +52,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
 =======
 wxDEFINE_EVENT( wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
@@ -61,6 +62,9 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
 >>>>>>> Modified sample
 =======
 >>>>>>> Trying to allocate memory for result string
+=======
+wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
+>>>>>>> Set up the new async enviroment
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
 
