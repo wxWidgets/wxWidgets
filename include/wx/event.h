@@ -1866,24 +1866,30 @@ class WXDLLIMPEXP_CORE wxGestureEvent : public wxEvent
 public:
     wxGestureEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
                    : wxEvent(winid, type) 
-                   { m_isStart = false; }
+                   {
+                    m_isStart = false;
+                    m_isEnd = false; 
+                   }
 
     wxGestureEvent(const wxGestureEvent& event) : wxEvent(event)
     {
         m_pos = event.m_pos;
         m_isStart = event.m_isStart;
+        m_isEnd = event.m_isEnd;
     }
 
     const wxPoint& GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
     bool IsGestureStart() const { return m_isStart; }
     void SetGestureStart(bool isStart = true) { m_isStart = isStart; }
+    bool IsGestureEnd() const { return m_isEnd; }
+    void SetGestureEnd(bool isEnd = true) { m_isEnd = isEnd; }
 
     virtual wxEvent *Clone() const { return new wxGestureEvent(*this); }
 
 protected:
     wxPoint m_pos;
-    bool m_isStart;
+    bool m_isStart, m_isEnd;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGestureEvent);
 

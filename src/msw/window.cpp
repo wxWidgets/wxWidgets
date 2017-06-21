@@ -5625,6 +5625,12 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
         event.SetGestureStart();
     }
 
+    if(flags & GF_END)
+    {
+        event.SetGestureEnd();
+        event.SetGestureStart(false);
+    }
+
     wxPoint pt(x, y);
     
     // Determine the horizontal and vertical changes
@@ -5682,10 +5688,16 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     // Store the current point and distance between the fingers for future calculations
     if(flags & GF_BEGIN)
     {
-      s_previousLocationX = x;
-      s_previousLocationY = y;
-      s_lastFingerDistance = fingerDistance;
-      event.SetGestureStart();
+        s_previousLocationX = x;
+        s_previousLocationY = y;
+        s_lastFingerDistance = fingerDistance;
+        event.SetGestureStart();
+    }
+
+    if(flags & GF_END)
+    {
+        event.SetGestureEnd();
+        event.SetGestureStart(false);
     }
 
     // Calculate center point of the zoom
@@ -5723,6 +5735,12 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
     if(flags & GF_BEGIN)
     {
         event.SetGestureStart();
+    }
+
+    if(flags & GF_END)
+    {
+        event.SetGestureEnd();
+        event.SetGestureStart(false);
     }
 
     wxPoint pt(x, y);
