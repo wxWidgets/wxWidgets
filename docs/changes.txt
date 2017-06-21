@@ -68,6 +68,9 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
   3.1.0, have been renamed to HasCheckBoxes and EnableCheckBoxes respectively
   for consistency with wxCheckBox naming.
 
+- The enum value wxTASKBAR_JUMP_LIST_DESTIONATION, which was added in 3.1.0,
+  contains a typo and has been renamed to wxTASKBAR_JUMP_LIST_DESTINATION.
+
 
 All:
 
