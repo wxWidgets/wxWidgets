@@ -1917,7 +1917,7 @@ public:
      int GetPanDeltaX() const { return m_panDeltaX; }
      void SetPanDeltaX(int panDeltaX) { m_panDeltaX = panDeltaX; }
      int GetPanDeltaY() const { return m_panDeltaY; }
-     void SetPanDeltaY(int panDeltaX) { m_panDeltaY = panDeltaY; }
+     void SetPanDeltaY(int panDeltaY) { m_panDeltaY = panDeltaY; }
 
 
      virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
