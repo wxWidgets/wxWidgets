@@ -123,6 +123,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
 =======
     virtual wxString RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
@@ -148,6 +149,9 @@ public:
 =======
     virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
 >>>>>>> Trying to allocate memory for result string
+=======
+    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) wxOVERRIDE;
+>>>>>>> Set up the new async enviroment
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;

@@ -143,6 +143,7 @@ public:
     void OnRunScriptAsync(wxCommandEvent& evt);
     void OnRunScriptAsyncResult(wxCommandEvent& evt);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     void OnRunScriptSync(wxCommandEvent& evt);
     void OnRunScriptAsync(wxCommandEvent& evt);
@@ -171,6 +172,8 @@ public:
 =======
     void OnRunScript(wxCommandEvent& evt);
 >>>>>>> Trying to allocate memory for result string
+=======
+>>>>>>> Set up the new async enviroment
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -605,6 +608,7 @@ WebFrame::WebFrame(const wxString& url) :
     Connect(script->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Trying to allocate memory for result string
 =======
     Connect(script->GetId(), wxEVT_MENU,
@@ -629,6 +633,12 @@ WebFrame::WebFrame(const wxString& url) :
     Connect(script->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
 >>>>>>> Trying to allocate memory for result string
+=======
+    Connect(script->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
+    Connect(script->GetId(), wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
+>>>>>>> Set up the new async enviroment
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
     Connect(m_selection_delete->GetId(), wxEVT_MENU,
@@ -1219,7 +1229,29 @@ void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
     }
 }
 
+<<<<<<< HEAD
 >>>>>>> Trying to allocate memory for result string
+=======
+void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
+{
+    wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
+    if(dialog.ShowModal() == wxID_OK)
+    {
+      wxString* test = new wxString(_("Test"));
+      m_browser->RunScriptAsync(dialog.GetValue(), (wxObject*)test);
+    }
+}
+
+void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
+{
+  wxString* str = (wxString*)evt.GetEventObject();
+  if (str->IsSameAs(_("Test"))) {
+    printf("(WebFrame::OnRunScriptResult (aka sample)) Event gets the method handler\n");
+    printf("(WebFrame::OnRunScriptResult (aka sample)) The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
+  }
+}
+
+>>>>>>> Set up the new async enviroment
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->ClearSelection();
