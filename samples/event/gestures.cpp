@@ -71,6 +71,12 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
  
     previousLocationX = event.GetPosition().x;
     previousLocationY = event.GetPosition().y;
+
+    if(event.IsGestureEnd())
+    {
+        wxLogMessage("Pan gesture Ended\n");
+    }   
+    
  
 }
 void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
@@ -83,6 +89,11 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
 
     wxLogMessage(wxT("Zoom gesture performed with zoom center at (%d, %d) and zoom factor = %f\n"),
         event.GetPosition().x, event.GetPosition().y, event.GetZoomFactor());
+
+    if(event.IsGestureEnd())
+    {
+        wxLogMessage("Zoom gesture Ended\n");
+    }
 }
  
 void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
@@ -95,4 +106,9 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
 
     wxLogMessage(wxT("Rotate gesture performed with rotation center at (%d, %d) and rotation angle = %f\n"),
         event.GetPosition().x, event.GetPosition().y, event.GetAngle());
+
+    if(event.IsGestureEnd())
+    {
+        wxLogMessage("Rotate gesture Ended\n");
+    }
 }
