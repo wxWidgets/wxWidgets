@@ -1020,10 +1020,10 @@ void CreateShortcut(const wxString& pathFile, const wxString& pathLink)
    hr = sl->QueryInterface(IID_IPersistFile, (void **)&pf);
    CPPUNIT_ASSERT( SUCCEEDED(hr) );
 
-   hr = sl->SetPath(pathFile.wx_str());
+   hr = sl->SetPath(pathFile.t_str());
    CPPUNIT_ASSERT( SUCCEEDED(hr) );
 
-   hr = pf->Save(pathLink.wx_str(), TRUE);
+   hr = pf->Save(pathLink.wc_str(), TRUE);
    CPPUNIT_ASSERT( SUCCEEDED(hr) );
 }
 
