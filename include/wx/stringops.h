@@ -45,7 +45,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
         { return i1 - i2; }
 
 #if wxUSE_UNICODE_UTF16
-    // encodes th characters as UTF-16:
+    // encodes the characters as UTF-16:
     struct Utf16CharBuffer
     {
         Utf16CharBuffer() : data() {}
