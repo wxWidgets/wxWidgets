@@ -48,14 +48,8 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
     // encodes the characters as UTF-16:
     struct Utf16CharBuffer
     {
-        Utf16CharBuffer()
-        {
-            // Can't rely on default initialization of the member array, it
-            // doesn't work at all in very old compilers and works, but warns
-            // about working correctly (!) in even recent versions of MSVC
-            // (warning C4351), so do it manually.
-            data[0] = 0;
-        }
+        // Notice that data is left uninitialized, it is filled by EncodeChar()
+        // which is the only function creating objects of this class.
 
         wchar_t data[3];
         operator const wchar_t*() const { return data; }
@@ -69,12 +63,6 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
     // representation
     struct SingleCharBuffer
     {
-        SingleCharBuffer()
-        {
-            // See comment above.
-            data[0] = 0;
-        }
-
         wxChar data[2];
         operator const wxChar*() const { return data; }
     };
@@ -82,6 +70,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
     {
         SingleCharBuffer buf;
         buf.data[0] = (wxChar)ch;
+        buf.data[1] = 0;
         return buf;
     }
     static wxWxCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);

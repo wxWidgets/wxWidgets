@@ -38,11 +38,13 @@ wxStringOperationsWchar::Utf16CharBuffer wxStringOperationsWchar::EncodeChar(con
     {
         buf.data[0] = (wchar_t)ch.HighSurrogate();
         buf.data[1] = (wchar_t)ch.LowSurrogate();
+        buf.data[2] = L'\0';
     }
     else
     {
         // Assume ch is a BMP character
         buf.data[0] = (wchar_t)ch;
+        buf.data[1] = L'\0';
     }
     return buf;
 }
