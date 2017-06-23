@@ -66,18 +66,45 @@ inline void wxOleUninitialize()
 class WXDLLIMPEXP_CORE wxBasicString
 {
 public:
-    // ctors & dtor
-    wxBasicString(const wxString& str);
-    wxBasicString(const wxBasicString& bstr);
-    ~wxBasicString();
 
-    wxBasicString& operator=(const wxBasicString& bstr);
+	// Takes over the ownership of bstr
+    wxBasicString(BSTR bstr = NULL);
+	
+	// Constructs the BSTR from wxString
+	wxBasicString(const wxString& str);
+    
+	// Creates a copy of the BSTR owned by bstr
+	wxBasicString(const wxBasicString& bstr);
+    
+	// Frees the owned BSTR
+	~wxBasicString();
+	
 
-    // accessors
-        // just get the string
+	// Sets its BSTR to a copy of the BSTR owned by bstr
+	wxBasicString& operator=(const wxBasicString& bstr);
+
+	// Creates its BSTR from wxString
+	wxBasicString& operator=(const wxString& str);
+
+	// Takes over the ownership of bstr
+	wxBasicString& operator=(BSTR bstr);
+
+	// Returns the owned BSTR and gives up its ownership
+	BSTR Detach();
+
+    /// Returns the owned BSTR while keeping its ownership    
     operator BSTR() const { return m_bstrBuf; }
-        // retrieve a copy of our string - caller must SysFreeString() it later!
-    BSTR Get() const { return SysAllocString(m_bstrBuf); }
+     
+	// Returns the address of the owned BSTR
+	operator BSTR*() { return &m_bstrBuf; }
+
+	// Returns a copy of the owned BSTR
+	BSTR Copy() const { return SysAllocString(m_bstrBuf); }
+	
+	
+	// retrieve a copy of our string - caller must SysFreeString() it later!
+	wxDEPRECATED_MSG("use Copy() instead") 
+	BSTR Get() const { return Copy(); }
 
 private:
     // actual string
