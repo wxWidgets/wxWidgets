@@ -905,21 +905,21 @@ bool wxWMP10MediaBackend::Load(const wxURI& location,
     {
         long lOldSetting;
         if( pWMPNetwork->getProxySettings(
-                    wxBSTR(location.GetScheme()).Detach(), &lOldSetting
+                    wxBasicString(location.GetScheme()).Get(), &lOldSetting
                                         ) == 0 &&
 
             pWMPNetwork->setProxySettings(
-                    wxBSTR(location.GetScheme()).Detach(), // protocol
+                    wxBasicString(location.GetScheme()).Get(), // protocol
                                 2) == 0) // 2 == manually specify
         {
             BSTR bsOldName = NULL;
             long lOldPort = 0;
 
             pWMPNetwork->getProxyName(
-                        wxBSTR(location.GetScheme()).Detach(),
+                        wxBasicString(location.GetScheme()).Get(),
                         &bsOldName);
             pWMPNetwork->getProxyPort(
-                        wxBSTR(location.GetScheme()).Detach(),
+                        wxBasicString(location.GetScheme()).Get(),
                         &lOldPort);
 
             long lPort;
@@ -936,11 +936,11 @@ bool wxWMP10MediaBackend::Load(const wxURI& location,
             }
 
             if( pWMPNetwork->setProxyName(
-                        wxBSTR(location.GetScheme()).Detach(), // proto
-                        wxBSTR(server).Detach() ) == 0  &&
+                        wxBasicString(location.GetScheme()).Get(), // proto
+                        wxBasicString(server).Get() ) == 0  &&
 
                 pWMPNetwork->setProxyPort(
-                        wxBSTR(location.GetScheme()).Detach(), // proto
+                        wxBasicString(location.GetScheme()).Get(), // proto
                         lPort
                                          ) == 0
               )
@@ -948,16 +948,16 @@ bool wxWMP10MediaBackend::Load(const wxURI& location,
                 bOK = DoLoad(location.BuildURI());
 
                 pWMPNetwork->setProxySettings(
-                    wxBSTR(location.GetScheme()).Detach(), // protocol
+                    wxBasicString(location.GetScheme()).Get(), // protocol
                                 lOldSetting);
                 if(bsOldName)
                     pWMPNetwork->setProxyName(
-                        wxBSTR(location.GetScheme()).Detach(), // protocol
+                        wxBasicString(location.GetScheme()).Get(), // protocol
                                     bsOldName);
 
                 if(lOldPort)
                     pWMPNetwork->setProxyPort(
-                        wxBSTR(location.GetScheme()).Detach(), // protocol
+                        wxBasicString(location.GetScheme()).Get(), // protocol
                                 lOldPort);
 
                 pWMPNetwork->Release();
@@ -997,7 +997,7 @@ bool wxWMP10MediaBackend::DoLoad(const wxString& location)
     {
         IWMPMedia* pWMPMedia;
 
-        if( (hr = pWMPCore3->newMedia(wxBSTR(location).Detach(),
+        if( (hr = pWMPCore3->newMedia(wxBasicString(location).Get(),
                                &pWMPMedia)) == 0)
         {
             // this (get_duration) will actually FAIL, but it will work.
@@ -1012,7 +1012,7 @@ bool wxWMP10MediaBackend::DoLoad(const wxString& location)
 #endif
     {
         // just load it the "normal" way
-        hr = m_pWMPPlayer->put_URL( wxBSTR(location).Detach() );
+        hr = m_pWMPPlayer->put_URL( wxBasicString(location).Get() );
     }
 
     if(FAILED(hr))
@@ -1061,12 +1061,12 @@ bool wxWMP10MediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
     if(!flags)
     {
         m_pWMPPlayer->put_enabled(VARIANT_FALSE);
-        m_pWMPPlayer->put_uiMode(wxBSTR(wxT("none")).Detach());
+        m_pWMPPlayer->put_uiMode(wxBasicString(wxT("none")).Get());
     }
     else
     {
         // TODO: use "custom"? (note that CE only supports none/full)
-        m_pWMPPlayer->put_uiMode(wxBSTR(wxT("full")).Detach());
+        m_pWMPPlayer->put_uiMode(wxBasicString(wxT("full")).Get());
         m_pWMPPlayer->put_enabled(VARIANT_TRUE);
     }
 
@@ -1358,7 +1358,7 @@ wxLongLong wxWMP10MediaBackend::GetDownloadTotal()
     if(m_pWMPPlayer->get_currentMedia(&pWMPMedia) == 0)
     {
         BSTR bsOut;
-        pWMPMedia->getItemInfo(wxBSTR(wxT("FileSize")).Detach(),
+        pWMPMedia->getItemInfo(wxBasicString(wxT("FileSize")).Get(),
                                &bsOut);
 
         wxString sFileSize = wxConvertStringFromOle(bsOut);

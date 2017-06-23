@@ -130,7 +130,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     }
 
     int namedArgStringCount = namedArgCount + 1;
-    wxVector<wxBSTR> argNames(namedArgStringCount, wxString());
+    wxVector<wxBasicString> argNames(namedArgStringCount, wxString());
     argNames[0] = member;
 
     // Note that arguments are specified in reverse order
@@ -156,7 +156,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     // Get the IDs for the member and its arguments.  GetIDsOfNames expects the
     // member name as the first name, followed by argument names (if any).
     hr = ((IDispatch*)m_dispatchPtr)->GetIDsOfNames(IID_NULL,
-                                // We rely on the fact that wxBSTR is
+                                // We rely on the fact that wxBasicString is
                                 // just BSTR with some methods here.
                                 reinterpret_cast<BSTR *>(&argNames[0]),
                                 1 + namedArgCount, m_lcid, &dispIds[0]);
@@ -499,7 +499,7 @@ namespace
 
 HRESULT wxCLSIDFromProgID(const wxString& progId, CLSID& clsId)
 {
-    HRESULT hr = CLSIDFromProgID(wxBSTR(progId), &clsId);
+    HRESULT hr = CLSIDFromProgID(wxBasicString(progId), &clsId);
     if ( FAILED(hr) )
     {
         wxLogSysError(hr, _("Failed to find CLSID of \"%s\""), progId);

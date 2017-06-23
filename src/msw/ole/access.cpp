@@ -937,8 +937,9 @@ STDMETHODIMP wxIAccessible::get_accDefaultAction ( VARIANT varID, BSTR* pszDefau
             return S_FALSE;
         }
         else
-        {            
-            * pszDefaultAction = wxBSTR(defaultAction).Detach();
+        {
+            wxBasicString basicString(defaultAction);
+            * pszDefaultAction = basicString.Get();
             return S_OK;
         }
     }
@@ -997,8 +998,9 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
             return S_FALSE;
         }
         else
-        {            
-            * pszDescription = wxBSTR(description).Detach();
+        {
+            wxBasicString basicString(description);
+            * pszDescription = basicString.Get();
             return S_OK;
         }
     }
@@ -1057,8 +1059,9 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
             return S_FALSE;
         }
         else
-        {            
-            * pszHelp = wxBSTR(helpString).Detach();
+        {
+            wxBasicString basicString(helpString);
+            * pszHelp = basicString.Get();
             return S_OK;
         }
     }
@@ -1168,7 +1171,8 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
         }
         else
         {
-            * pszKeyboardShortcut = wxBSTR(keyboardShortcut).Detach();
+            wxBasicString basicString(keyboardShortcut);
+            * pszKeyboardShortcut = basicString.Get();
             return S_OK;
         }
     }
@@ -1230,8 +1234,9 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
             return S_FALSE;
         }
         else
-        {            
-            *pszName = wxBSTR(name).Detach();
+        {
+            wxBasicString basicString(name);
+            *pszName = basicString.Get();
         }
         return S_OK;
     }
@@ -1411,7 +1416,8 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
         }
         else
         {
-            * pszValue = wxBSTR(strValue).Detach();
+            wxBasicString basicString(strValue);
+            * pszValue = basicString.Get();
             return S_OK;
         }
     }
