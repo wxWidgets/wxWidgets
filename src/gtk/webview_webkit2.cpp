@@ -1090,6 +1090,7 @@ wxString wxWebViewWebKit::GetPageText() const
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 static void wxgtk_run_javascript_cb(WebKitWebView *,
@@ -1478,11 +1479,11 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 wxString wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 =======
+=======
+/*
+>>>>>>> Trying to include the callback inside the RunScript function to not use pointer and simplify the code
 static void
-web_view_javascript_finished(GObject      *object,
-                              GAsyncResult *result,
-                              gpointer     user_data)
-{
+web_view_javascript_finished
     WebKitJavascriptResult *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
@@ -1539,6 +1540,7 @@ web_view_javascript_finished(GObject      *object,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 >>>>>>> Integrate Proof of Concept inside webview_webkit2
 =======
@@ -1589,10 +1591,13 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
     char result[8192] = "\0";
 =======
 =======
+=======
+>>>>>>> Trying to include the callback inside the RunScript function to not use pointer and simplify the code
 */
 static void wxgtk_run_javascript_cb(WebKitWebView *webview,
                                                  WebKitJavascriptResult *res,
                                                  gpointer *user_data)
+<<<<<<< HEAD
 =======
 
 static void wxgtk_run_javascript_cb(WebKitWebView *,
@@ -1881,9 +1886,70 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
       return _("");
 >>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
 =======
+=======
+{
+    res = webkit_javascript_result_ref(res);
+}
+
+>>>>>>> Trying to include the callback inside the RunScript function to not use pointer and simplify the code
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
+    GAsyncResult *result = NULL;
+    webkit_web_view_run_javascript(m_web_view,
+                                   javascript,
+                                   NULL,
+                                   (GAsyncReadyCallback)wxgtk_run_javascript_cb,
+                                   &result);
+
+    GMainContext *main_context = g_main_context_get_thread_default();
+    while (!result)
+    {
+      gtk_main_iteration_do(false);
+
+      //  g_main_context_iteration(main_context, TRUE);
+    }
+
+
+    WebKitJavascriptResult *js_result;
+    JSValueRef              value;
+    JSGlobalContextRef      context;
+    GError                 *error;
+
+    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (m_web_view), result, &error);
+
+
+    if (!js_result)
+    {
+        //Can't get wxLogMessage working in this context
+        g_warning ("Error running javascript: %s", error->message);
+        return _("");
+    }
+
+    context = webkit_javascript_result_get_global_context (js_result);
+    value = webkit_javascript_result_get_value (js_result);
+    if (JSValueIsString (context, value))
+    {
+      JSStringRef js_str_value;
+      gchar      *str_value;
+      gsize       str_length;
+
+      js_str_value = JSValueToStringCopy (context, value, NULL);
+      str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
+      str_value = (gchar *)g_malloc (str_length);
+      JSStringGetUTF8CString (js_str_value, str_value, str_length);
+      JSStringRelease (js_str_value);
+      g_print ("Script result: %s\n", str_value);
+      g_free (str_value);
+    }
+    else 
+        g_warning("Error running javascript: unexpected return value");
     
+    webkit_javascript_result_unref (js_result);
+
+
+    return _("");
+
+    /*
     gchar *result = (gchar*)g_malloc(8192);
     result[0]=0;
     printf("result pointer %p",result);
@@ -1906,7 +1972,12 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     //g_free (result);
 
     return wsx;
+<<<<<<< HEAD
 >>>>>>> Trying to allocate memory for result string
+=======
+    */
+
+>>>>>>> Trying to include the callback inside the RunScript function to not use pointer and simplify the code
 }
 
 void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, wxObject* user_data)
