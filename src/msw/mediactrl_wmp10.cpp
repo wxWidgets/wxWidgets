@@ -909,17 +909,17 @@ bool wxWMP10MediaBackend::Load(const wxURI& location,
                                         ) == 0 &&
 
             pWMPNetwork->setProxySettings(
-                    wxBasicString(location.GetScheme()).Get(), // protocol
+                    wxBasicString(location.GetScheme()).Detach(), // protocol
                                 2) == 0) // 2 == manually specify
         {
             BSTR bsOldName = NULL;
             long lOldPort = 0;
 
             pWMPNetwork->getProxyName(
-                        wxBasicString(location.GetScheme()).Get(),
+                        wxBasicString(location.GetScheme()).Detach(),
                         &bsOldName);
             pWMPNetwork->getProxyPort(
-                        wxBasicString(location.GetScheme()).Get(),
+                        wxBasicString(location.GetScheme()).Detach(),
                         &lOldPort);
 
             long lPort;
@@ -936,11 +936,11 @@ bool wxWMP10MediaBackend::Load(const wxURI& location,
             }
 
             if( pWMPNetwork->setProxyName(
-                        wxBasicString(location.GetScheme()).Get(), // proto
+                        wxBasicString(location.GetScheme()).Detach(), // proto
                         wxBasicString(server).Get() ) == 0  &&
 
                 pWMPNetwork->setProxyPort(
-                        wxBasicString(location.GetScheme()).Get(), // proto
+                        wxBasicString(location.GetScheme()).Detach(), // proto
                         lPort
                                          ) == 0
               )
@@ -948,16 +948,16 @@ bool wxWMP10MediaBackend::Load(const wxURI& location,
                 bOK = DoLoad(location.BuildURI());
 
                 pWMPNetwork->setProxySettings(
-                    wxBasicString(location.GetScheme()).Get(), // protocol
+                    wxBasicString(location.GetScheme()).Detach(), // protocol
                                 lOldSetting);
                 if(bsOldName)
                     pWMPNetwork->setProxyName(
-                        wxBasicString(location.GetScheme()).Get(), // protocol
+                        wxBasicString(location.GetScheme()).Detach(), // protocol
                                     bsOldName);
 
                 if(lOldPort)
                     pWMPNetwork->setProxyPort(
-                        wxBasicString(location.GetScheme()).Get(), // protocol
+                        wxBasicString(location.GetScheme()).Detach(), // protocol
                                 lOldPort);
 
                 pWMPNetwork->Release();
@@ -1012,7 +1012,7 @@ bool wxWMP10MediaBackend::DoLoad(const wxString& location)
 #endif
     {
         // just load it the "normal" way
-        hr = m_pWMPPlayer->put_URL( wxBasicString(location).Get() );
+        hr = m_pWMPPlayer->put_URL( wxBasicString(location).Detach() );
     }
 
     if(FAILED(hr))
@@ -1061,12 +1061,12 @@ bool wxWMP10MediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
     if(!flags)
     {
         m_pWMPPlayer->put_enabled(VARIANT_FALSE);
-        m_pWMPPlayer->put_uiMode(wxBasicString(wxT("none")).Get());
+        m_pWMPPlayer->put_uiMode(wxBasicString(wxT("none")).Detach());
     }
     else
     {
         // TODO: use "custom"? (note that CE only supports none/full)
-        m_pWMPPlayer->put_uiMode(wxBasicString(wxT("full")).Get());
+        m_pWMPPlayer->put_uiMode(wxBasicString(wxT("full")).Detach());
         m_pWMPPlayer->put_enabled(VARIANT_TRUE);
     }
 
@@ -1358,7 +1358,7 @@ wxLongLong wxWMP10MediaBackend::GetDownloadTotal()
     if(m_pWMPPlayer->get_currentMedia(&pWMPMedia) == 0)
     {
         BSTR bsOut;
-        pWMPMedia->getItemInfo(wxBasicString(wxT("FileSize")).Get(),
+        pWMPMedia->getItemInfo(wxBasicString(wxT("FileSize")).Detach(),
                                &bsOut);
 
         wxString sFileSize = wxConvertStringFromOle(bsOut);

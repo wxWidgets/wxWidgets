@@ -938,8 +938,7 @@ STDMETHODIMP wxIAccessible::get_accDefaultAction ( VARIANT varID, BSTR* pszDefau
         }
         else
         {
-            wxBasicString basicString(defaultAction);
-            * pszDefaultAction = basicString.Get();
+            * pszDefaultAction = wxBasicString(defaultAction).Detach();
             return S_OK;
         }
     }
@@ -999,8 +998,7 @@ STDMETHODIMP wxIAccessible::get_accDescription ( VARIANT varID, BSTR* pszDescrip
         }
         else
         {
-            wxBasicString basicString(description);
-            * pszDescription = basicString.Get();
+            * pszDescription = wxBasicString(description).Detach();
             return S_OK;
         }
     }
@@ -1060,8 +1058,7 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
         }
         else
         {
-            wxBasicString basicString(helpString);
-            * pszHelp = basicString.Get();
+            * pszHelp = wxBasicString(helpString).Detach();
             return S_OK;
         }
     }
@@ -1171,8 +1168,7 @@ STDMETHODIMP wxIAccessible::get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKe
         }
         else
         {
-            wxBasicString basicString(keyboardShortcut);
-            * pszKeyboardShortcut = basicString.Get();
+            * pszKeyboardShortcut = wxBasicString(keyboardShortcut).Detach();
             return S_OK;
         }
     }
@@ -1235,8 +1231,7 @@ STDMETHODIMP wxIAccessible::get_accName ( VARIANT varID, BSTR* pszName)
         }
         else
         {
-            wxBasicString basicString(name);
-            *pszName = basicString.Get();
+            *pszName = wxBasicString(name).Detach();
         }
         return S_OK;
     }
@@ -1416,8 +1411,7 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
         }
         else
         {
-            wxBasicString basicString(strValue);
-            * pszValue = basicString.Get();
+            * pszValue = wxBasicString(strValue).Detach();
             return S_OK;
         }
     }

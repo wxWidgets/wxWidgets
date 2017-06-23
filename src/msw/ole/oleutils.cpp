@@ -38,7 +38,7 @@
 
 WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str)
 {
-    return wxBasicString(str).Get();
+    return wxBasicString(str).Detach();
 }
 
 WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
