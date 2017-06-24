@@ -162,18 +162,21 @@ wxAffineMatrix2D::DoTransformPoint(const wxPoint2DDouble& src) const
                            src.m_x * m_12 + src.m_y * m_22 + m_ty);
 }
 
-// applies the matrix except for translations
-//                           | m_11  m_12   0 |
-// | src.m_x  src._my  0 | x | m_21  m_22   0 |
-//                           | m_tx  m_ty   1 |
+// transform the distance from device coordinates (as observed on the screen)
+// into logical ones corresponding to the matrix.
+// Multiply distance components with the transpose of the matrix,
+// ignoring translation.
+//                        | m_11   m_21 |
+// | src.m_x  src.m_y | x |             |
+//                        | m_12   m_22 |
 wxPoint2DDouble
 wxAffineMatrix2D::DoTransformDistance(const wxPoint2DDouble& src) const
 {
     if ( IsIdentity() )
         return src;
 
-    return wxPoint2DDouble(src.m_x * m_11 + src.m_y * m_21,
-                           src.m_x * m_12 + src.m_y * m_22);
+    return wxPoint2DDouble(src.m_x * m_11 + src.m_y * m_12,
+                           src.m_x * m_21 + src.m_y * m_22);
 }
 
 bool wxAffineMatrix2D::IsIdentity() const
