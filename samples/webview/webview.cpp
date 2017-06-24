@@ -644,7 +644,7 @@ WebFrame::WebFrame(const wxString& url) :
     Connect(script_async->GetId(), wxEVT_MENU,
 >>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
             wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
-    Connect(script_async->GetId(), wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+    Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
 	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
 >>>>>>> Set up the new async enviroment
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
@@ -1249,17 +1249,16 @@ void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
     {
-      m_browser->RunScriptAsync(dialog.GetValue(), wxNewId());
+      m_async_id = wxNewId();
+      m_browser->RunScriptAsync(dialog.GetValue(), m_async_id);
     }
 }
 
 void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
 {
-  //wxString* str = (wxString*)evt.GetEventObject();
-  //if (str->IsSameAs(_("Test"))) {
-    wxLogMessage("(WebFrame::OnRunScriptResult (aka sample)) Event gets the method handler\n");
-    wxLogMessage("(WebFrame::OnRunScriptResult (aka sample)) The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
-    //}
+  int event_id = evt.GetId();
+  if (event_id == m_async_id) 
+    wxLogMessage("RunScriptAsyc(id=%d) result is: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
 }
 
 >>>>>>> Set up the new async enviroment
