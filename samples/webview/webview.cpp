@@ -1369,7 +1369,7 @@ void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
 =======
 void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
 {
-    wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
+    wxTextEntryDialog dialog(this, "Enter JavaScript to run (async).", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
     {
       m_async_id = wxNewId();
@@ -1381,7 +1381,7 @@ void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
 {
   int event_id = evt.GetId();
   if (event_id == m_async_id) 
-    wxLogMessage("RunScriptAsyc(id=%d) result is: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
+    wxLogMessage("RunScriptAsyc(id=%d) result: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
 }
 
 >>>>>>> Set up the new async enviroment
