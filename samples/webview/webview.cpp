@@ -150,6 +150,7 @@ public:
 private:
     wxTextCtrl* m_url;
     wxWebView* m_browser;
+    int m_async_id;
 
     wxToolBar* m_toolbar;
     wxToolBarToolBase* m_toolbar_back;
@@ -509,7 +510,7 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
     Connect(script_async->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
-    Connect(script_async->GetId(), wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+    Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
 	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
@@ -990,17 +991,16 @@ void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
     {
-      m_browser->RunScriptAsync(dialog.GetValue(), wxNewId());
+      m_async_id = wxNewId();
+      m_browser->RunScriptAsync(dialog.GetValue(), m_async_id);
     }
 }
 
 void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
 {
-  //wxString* str = (wxString*)evt.GetEventObject();
-  //if (str->IsSameAs(_("Test"))) {
-    wxLogMessage("(WebFrame::OnRunScriptResult (aka sample)) Event gets the method handler\n");
-    wxLogMessage("(WebFrame::OnRunScriptResult (aka sample)) The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
-    //}
+  int event_id = evt.GetId();
+  if (event_id == m_async_id) 
+    wxLogMessage("RunScriptAsyc(id=%d) result is: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
