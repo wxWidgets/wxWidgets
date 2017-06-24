@@ -13,7 +13,9 @@
 #define wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY     wxT("PngZS")
 #define wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE  wxT("PngZB")
 
-
+/* These are already in interface/wx/image.h
+    They were likely put there as a stopgap, but they've been there long enough
+    that that location trumps moving them here.
 enum
 {
     wxPNG_TYPE_COLOUR = 0,
@@ -21,6 +23,7 @@ enum
     wxPNG_TYPE_GREY_RED = 3,
     wxPNG_TYPE_PALETTE = 4
 };
+*/
 
 /**
     @class wxPNGHandler
