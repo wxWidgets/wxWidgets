@@ -466,6 +466,7 @@ public:
         Runs the given javascript code, returning a result if they is any.
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
+        @param A wxString containing the Javascript.
         @return A wxString with Javascript return value.
 
     */
@@ -476,9 +477,10 @@ public:
 	To do that, it uses wxEVT_WEBVIEW_RUNSCRIPT_RESULT.
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
+        @param A wxString containing the Javascript.
 
     */
-    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) = 0;
+    virtual void RunScriptAsync(const wxString& javascript) = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user
