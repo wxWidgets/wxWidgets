@@ -45,6 +45,6 @@ public:
 protected:
     virtual bool SaveFile(wxImage *image, wxOutputStream& stream, bool verbose=true);
     virtual int DoGetImageCount(wxInputStream& stream);
-    virutal bool DoCanRead(wxInputStream& stream);
+    virtual bool DoCanRead(wxInputStream& stream);
 };
 
