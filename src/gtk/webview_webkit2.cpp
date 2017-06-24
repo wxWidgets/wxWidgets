@@ -1130,6 +1130,7 @@ web_view_javascript_finished (GObject      *object,
 	  event -> SetString(wstr);
 	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
       }
+
       
     }
     else
@@ -1141,15 +1142,15 @@ web_view_javascript_finished (GObject      *object,
 
 
 static void wxgtk_run_javascript_cb(WebKitWebView *,
-				    WebKitJavascriptResult *res,
-				    WebKitJavascriptResult *res_out)
+				    GAsyncResult *res,
+				    GAsyncResult **res_out)
 {
-  
-  res_out = webkit_javascript_result_ref(res);
+  *res_out = (GAsyncResult*)g_object_ref(res);
 }
 
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
+    wxString return_value;
     WebKitJavascriptResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
                                    javascript,
@@ -1158,35 +1159,19 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
                                    &result);
 
     GMainContext *main_context = g_main_context_get_thread_default();
-    printf("1\n");
-    fflush(stdout);
     
     while (!result)
     {
-      printf("k\n");
-      fflush(stdout);
-
-      //gtk_main_iteration_do(false);
-
-      g_main_context_iteration(main_context, TRUE);
+       g_main_context_iteration(main_context, TRUE);
     }
-    printf("2\n");
-    fflush(stdout);
-
 
     WebKitJavascriptResult *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
     wxGtkError                 error;
 
-    printf("3\n");
-    fflush(stdout);
-
     js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (m_web_view), (GAsyncResult *)result, error.Out());
 
-    printf("4\n");
-    fflush(stdout);
-    
     if (!js_result)
     {
         wxLogError("Error running javascript: %s", error.GetMessage());
@@ -1205,6 +1190,8 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
       wxGtkString str_value((gchar *)g_malloc (str_length));
       JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
       JSStringRelease (js_str_value);
+
+      return_value = wxString::FromUTF8(str_value);
     }
     else 
       wxLogError("Error running javascript: unexpected return value");
@@ -1212,7 +1199,7 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     webkit_javascript_result_unref (js_result);
 
 
-    return _("");
+    return return_value;
 }
 
 void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
