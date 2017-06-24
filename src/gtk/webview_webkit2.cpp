@@ -1093,6 +1093,7 @@ wxString wxWebViewWebKit::GetPageText() const
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 static void wxgtk_run_javascript_cb(WebKitWebView *,
@@ -1287,6 +1288,28 @@ void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 	return_value = wxString();
 	return return_value;
 >>>>>>> Refactor duplicated code
+=======
+
+
+
+static void
+web_view_javascript_finished (GObject      *object,
+			      GAsyncResult *result,
+			      gpointer      user_data)
+{
+    WebKitJavascriptResult *js_result;
+    JSValueRef              value;
+    JSGlobalContextRef      context;
+    wxGtkError              error;
+    wxWebViewEvent* event = (wxWebViewEvent*)user_data;
+    wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)(event -> GetEventObject());
+
+    js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, error.Out());
+    if (!js_result)
+    {
+      wxLogError("Error running javascript: %s", error.GetMessage());
+      return;
+>>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
     }
 
     context = webkit_javascript_result_get_global_context (js_result);
@@ -1323,6 +1346,7 @@ void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 >>>>>>> Refactor duplicated code
     if (JSValueIsString (context, value))
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       	printf("excute3\n");
@@ -1523,6 +1547,30 @@ void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
+=======
+      JSStringRef js_str_value;
+      gsize       str_length;
+
+      js_str_value = JSValueToStringCopy (context, value, NULL);
+      str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
+      wxGtkString str_value((gchar *)g_malloc (str_length));
+      JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
+      JSStringRelease (js_str_value);
+
+      wxString wstr = wxString::FromUTF8(str_value);
+      
+      if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler())
+      {
+	  event -> SetString(wstr);
+	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
+      }
+      
+    }
+    else
+    {
+      wxLogMessage("Error running javascript: unexpected return value");
+    }
+>>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
     webkit_javascript_result_unref (js_result);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1602,6 +1650,7 @@ void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
     return return_value;
 }
 
+<<<<<<< HEAD
 static void
 web_view_javascript_finished (GObject      *object,
                               GAsyncResult *result,
@@ -2206,13 +2255,20 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 >>>>>>> Trying to allocate memory for result string
 =======
 =======
+=======
+
+static void wxgtk_run_javascript_cb(WebKitWebView *,
+				    WebKitJavascriptResult *res,
+				    WebKitJavascriptResult *res_out)
+>>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
 {
-    res = webkit_javascript_result_ref(res);
+  
+  res_out = webkit_javascript_result_ref(res);
 }
 
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
-    GAsyncResult *result = NULL;
+    WebKitJavascriptResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
                                    javascript,
                                    NULL,
@@ -2220,26 +2276,38 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
                                    &result);
 
     GMainContext *main_context = g_main_context_get_thread_default();
+    printf("1\n");
+    fflush(stdout);
+    
     while (!result)
     {
-      gtk_main_iteration_do(false);
+      printf("k\n");
+      fflush(stdout);
 
-      //  g_main_context_iteration(main_context, TRUE);
+      //gtk_main_iteration_do(false);
+
+      g_main_context_iteration(main_context, TRUE);
     }
+    printf("2\n");
+    fflush(stdout);
 
 
     WebKitJavascriptResult *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
-    GError                 *error;
+    wxGtkError                 error;
 
-    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (m_web_view), result, &error);
+    printf("3\n");
+    fflush(stdout);
 
+    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (m_web_view), (GAsyncResult *)result, error.Out());
 
+    printf("4\n");
+    fflush(stdout);
+    
     if (!js_result)
     {
-        //Can't get wxLogMessage working in this context
-        g_warning ("Error running javascript: %s", error->message);
+        wxLogError("Error running javascript: %s", error.GetMessage());
         return _("");
     }
 
@@ -2248,25 +2316,27 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     if (JSValueIsString (context, value))
     {
       JSStringRef js_str_value;
-      gchar      *str_value;
       gsize       str_length;
 
       js_str_value = JSValueToStringCopy (context, value, NULL);
       str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
-      str_value = (gchar *)g_malloc (str_length);
-      JSStringGetUTF8CString (js_str_value, str_value, str_length);
+      wxGtkString str_value((gchar *)g_malloc (str_length));
+      JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
       JSStringRelease (js_str_value);
-      g_print ("Script result: %s\n", str_value);
-      g_free (str_value);
     }
     else 
+<<<<<<< HEAD
         g_warning("Error running javascript: unexpected return value");
 >>>>>>> Trying to include the callback inside the RunScript function to not use pointer and simplify the code
+=======
+      wxLogError("Error running javascript: unexpected return value");
+>>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
     
     webkit_javascript_result_unref (js_result);
 
 
     return _("");
+<<<<<<< HEAD
 
     /*
     gchar *result = (gchar*)g_malloc(8192);
@@ -2401,10 +2471,23 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
     */
 
 >>>>>>> Trying to include the callback inside the RunScript function to not use pointer and simplify the code
+=======
+>>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
 }
 
-void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, wxObject* user_data)
+void wxWebViewWebKit::RunScriptAsync(const wxString& javascript)
 {
+  wxWebViewEvent* event = new wxWebViewEvent(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+                         GetId(),
+                         GetCurrentURL(),
+                         "");
+  event -> SetEventObject(this);
+  
+  webkit_web_view_run_javascript(m_web_view,
+				 javascript.mb_str(wxConvUTF8),
+				 NULL,
+				 web_view_javascript_finished,
+				 event);
 
 }
 
