@@ -478,9 +478,9 @@ public:
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
         @param A wxString containing the Javascript.
-
+	@param An integer represent the identifier of the event.
     */
-    virtual void RunScriptAsync(const wxString& javascript) = 0;
+    virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user

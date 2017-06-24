@@ -162,7 +162,7 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
     virtual wxString RunScript(const wxString& javascript) = 0;
-    virtual void RunScriptAsync(const wxString& javascript) = 0;
+    virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {

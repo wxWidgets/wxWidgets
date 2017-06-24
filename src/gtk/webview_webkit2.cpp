@@ -1215,13 +1215,14 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     return _("");
 }
 
-void wxWebViewWebKit::RunScriptAsync(const wxString& javascript)
+void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 {
   wxWebViewEvent* event = new wxWebViewEvent(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
                          GetId(),
                          GetCurrentURL(),
                          "");
   event -> SetEventObject(this);
+  event -> SetId(id);
   
   webkit_web_view_run_javascript(m_web_view,
 				 javascript.mb_str(wxConvUTF8),
