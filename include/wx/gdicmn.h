@@ -1100,6 +1100,7 @@ extern wxRect WXDLLIMPEXP_CORE wxGetClientDisplayRect();
 
 // set global cursor
 extern void WXDLLIMPEXP_CORE wxSetCursor(const wxCursor& cursor);
-
+// get global cursor
+extern wxCursor WXDLLIMPEXP_CORE wxGetCursor();
 #endif
     // _WX_GDICMNH__

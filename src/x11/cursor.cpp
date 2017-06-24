@@ -220,3 +220,9 @@ void wxSetCursor( const wxCursor& cursor )
 {
     g_globalCursor = cursor;
 }
+wxCursor wxGetCursor()
+{
+	//Display *display = XOpenDisplay(NULL);
+
+	return wxNullCursor;
+}

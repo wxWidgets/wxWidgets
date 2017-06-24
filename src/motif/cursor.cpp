@@ -438,7 +438,10 @@ void wxSetCursor(const wxCursor& WXUNUSED(cursor))
 {
   // Nothing to do for Motif (no global cursor)
 }
-
+wxCursor wxGetCursor()
+{
+	return wxNullCursor;
+}
 
 // ----------------------------------------------------------------------------
 // busy cursor stuff

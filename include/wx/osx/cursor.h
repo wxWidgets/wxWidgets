@@ -47,6 +47,4 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxCursor);
 };
 
-extern WXDLLIMPEXP_CORE void wxSetCursor(const wxCursor& cursor);
-
 #endif // _WX_CURSOR_H_
