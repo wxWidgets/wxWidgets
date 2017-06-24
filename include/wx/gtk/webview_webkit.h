@@ -124,6 +124,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
 =======
     virtual wxString RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
@@ -152,6 +153,9 @@ public:
 =======
     virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) wxOVERRIDE;
 >>>>>>> Set up the new async enviroment
+=======
+    virtual void RunScriptAsync(const wxString& javascript) wxOVERRIDE;
+>>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
