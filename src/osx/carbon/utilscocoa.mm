@@ -167,9 +167,7 @@ WXWindow wxOSXGetKeyWindow()
 
 WX_UIImage  wxOSXGetUIImageFromCGImage( CGImageRef image )
 {
-    UIImage  *newImage = [UIImage imageWithCGImage:image];
-    [newImage autorelease];
-    return( newImage );
+    return  [UIImage imageWithCGImage:image];
 }
 
 wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
