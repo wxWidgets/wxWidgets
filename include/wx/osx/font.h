@@ -148,15 +148,11 @@ public:
 
 #if wxOSX_USE_COCOA
     WX_NSFont OSXGetNSFont() const;
-    static WX_NSFont OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info);
-    static WX_NSFont OSXCreateNSFont(const wxNativeFontInfo* info);
     static void SetNativeInfoFromNSFont(WX_NSFont nsfont, wxNativeFontInfo* info);
 #endif
 
 #if wxOSX_USE_IPHONE
     WX_UIFont OSXGetUIFont() const;
-    static WX_UIFont OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info);
-    static WX_UIFont OSXCreateUIFont(const wxNativeFontInfo* info);
 #endif
 
 protected:
