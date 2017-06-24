@@ -467,9 +467,13 @@ public:
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
 <<<<<<< HEAD
+<<<<<<< HEAD
         @param A wxString containing the Javascript.
 =======
 >>>>>>> Trying to allocate memory for result string
+=======
+        @param A wxString containing the Javascript.
+>>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
         @return A wxString with Javascript return value.
 
     */
@@ -493,9 +497,10 @@ public:
 	To do that, it uses wxEVT_WEBVIEW_RUNSCRIPT_RESULT.
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
+        @param A wxString containing the Javascript.
 
     */
-    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) = 0;
+    virtual void RunScriptAsync(const wxString& javascript) = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user
