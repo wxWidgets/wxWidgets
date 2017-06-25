@@ -1867,9 +1867,9 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(dataBase))
     EndRawAccess() ;
 }
 
-void wxBitmap::UseAlpha()
+void wxBitmap::UseAlpha(bool use )
 {
     // remember that we are using alpha channel:
     // we'll need to create a proper mask in UngetRawData()
-    M_BITMAPDATA->UseAlpha( true );
+    M_BITMAPDATA->UseAlpha( use );
 }
