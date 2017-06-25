@@ -11,8 +11,6 @@
 #define wxIMAGE_OPTION_TIFF_PHOTOMETRIC             wxString("Photometric")
 #define wxIMAGE_OPTION_TIFF_IMAGEDESCRIPTOR         wxString("ImageDescriptor")
 
-
-// todo: confirm library and category, and generate some real body documentation
 /**
     @class wxTIFFHandler
     
