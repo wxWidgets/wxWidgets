@@ -42,7 +42,8 @@ public:
             How long, in milliseconds, to wait between each frame.
 
 
-        @return @true if the operation was successful, @false otherwise
+        @return @true if the operation succeeded, @false otherwise.
+
     */
     bool SaveAnimation(const wxImageArray& images, wxOutputStream *stream,
                         bool verbose = true, int delayMilliSecs = 1000);
