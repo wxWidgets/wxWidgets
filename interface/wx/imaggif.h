@@ -38,6 +38,9 @@ public:
             Opened output stream for writing the data.
         @param verbose
             If set to @true, errors reported by the image handler will produce wxLogMessages
+        @param delayMilliSecs
+            How long, in milliseconds, to wait between each frame.
+
 
         @return @true if the operation was successful, @false otherwise
     */
@@ -48,17 +51,4 @@ protected:
     // allow parent class documentation to overwrite.
     virtual int DoGetImageCount(wxInputStream& stream);
     virtual bool DoCanRead(wxInputStream& stream);
-
-    // TODO: document these as necessary
-    bool DoSaveFile(const wxImage&, wxOutputStream *, bool verbose,
-        bool first, int delayMilliSecs, bool loop,
-        const wxRGB *pal, int palCount,
-        int mask_index);
-    bool InitHashTable();
-    void ClearHashTable();
-    void InsertHashTable(unsigned long key, int code);
-    int  ExistsHashTable(unsigned long key);
-    bool CompressOutput(wxOutputStream *, int code);
-    bool SetupCompress(wxOutputStream *, int bpp);
-    bool CompressLine(wxOutputStream *, const wxUint8 *line, int lineLen);
 };
