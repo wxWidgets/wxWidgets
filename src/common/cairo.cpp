@@ -314,6 +314,8 @@ wxCairo::wxCairo()
 
 #ifdef __WXMSW__
     wxString cairoDllStr("libcairo-2.dll");
+#elif defined(__WXOSX__)
+    wxString cairoDllStr("libcairo.2.dylib");
 #else
     wxString cairoDllStr("libcairo.so.2");
 #endif
