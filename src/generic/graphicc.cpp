@@ -98,7 +98,6 @@ using namespace std;
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #include <cairo-quartz.h>
-#include <cairo-atsui.h>
 #endif
 
 // Helper functions for dealing with alpha pre-multiplication.
@@ -476,7 +475,8 @@ public:
 
     virtual void StrokePath( const wxGraphicsPath& p ) wxOVERRIDE;
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) wxOVERRIDE;
-
+    virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    
     virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
     virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
     virtual void Rotate( wxDouble angle ) wxOVERRIDE;
@@ -2438,6 +2438,15 @@ void wxCairoContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fi
         cairo_fill(m_context);
         path.UnGetNativePath(cp);
     }
+}
+
+void wxCairoContext::ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    cairo_save(m_context);
+    cairo_set_operator(m_context, CAIRO_OPERATOR_CLEAR);
+    cairo_rectangle (m_context, x, y, w, h);
+    cairo_fill (m_context);
+    cairo_restore(m_context);
 }
 
 void wxCairoContext::Rotate( wxDouble angle )

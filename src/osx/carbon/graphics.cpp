@@ -1337,7 +1337,10 @@ public:
 
     // draws a path by first filling and then stroking
     virtual void DrawPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) wxOVERRIDE;
-
+    
+    // paints a transparent rectangle (only useful for bitmaps or windows)
+    virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    
     virtual bool ShouldOffset() const wxOVERRIDE
     {
         if ( !m_enableOffset )
@@ -2348,6 +2351,14 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
     return m_cgContext;
 }
 
+void wxMacCoreGraphicsContext::ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if (!EnsureIsValid())
+        return;
+    
+    CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+    CGContextClearRect(m_cgContext, rect);
+}
 
 void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
