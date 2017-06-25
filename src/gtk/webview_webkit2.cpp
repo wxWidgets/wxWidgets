@@ -1303,6 +1303,7 @@ web_view_javascript_finished (GObject      *object,
     wxGtkError              error;
     wxWebViewEvent* event = (wxWebViewEvent*)user_data;
     wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)(event -> GetEventObject());
+    wxString return_value;
 
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, error.Out());
     if (!js_result)
@@ -1557,20 +1558,43 @@ web_view_javascript_finished (GObject      *object,
       JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
       JSStringRelease (js_str_value);
 
-      wxString wstr = wxString::FromUTF8(str_value);
+      return_value = wxString::FromUTF8(str_value);      
+    }
+    else if (JSValueIsNumber (context,value)) {
+      double js_number_value;
       
-      if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler())
-      {
-	  event -> SetString(wstr);
-	  wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
-      }
+      js_number_value = JSValueToNumber(context,value,NULL);
+      return_value = wxString::Format(wxT("%lf"),js_number_value);
+    }
+    else if (JSValueIsBoolean (context,value)) {
+      bool js_bool_value;
+      
+      js_bool_value = JSValueToBoolean(context, value);
+      return_value = _((js_bool_value) ? "true" : "false");
+    }
+    else if (JSValueIsObject (context,value)) {
+      JSStringRef js_object_value;
+      gsize str_length;
+      
+      js_object_value = JSValueCreateJSONString(context, value, 0, NULL);
+      str_length = JSStringGetMaximumUTF8CStringSize (js_object_value);
+      wxGtkString str_value((gchar *)g_malloc (str_length));
+      JSStringGetUTF8CString (js_object_value, (char*) str_value.c_str(), str_length);
+      JSStringRelease (js_object_value);
 
-      
+      return_value = wxString::FromUTF8(str_value);
+    }
+    else if (JSValueIsUndefined (context,value)) {
+      return_value = wxString::FromUTF8("undefined");
+    }
+    else if (JSValueIsNull (context,value)) {
+      return_value = _("");
     }
     else
     {
       wxLogMessage("Error running javascript: unexpected return value");
     }
+<<<<<<< HEAD
 >>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
     webkit_javascript_result_unref (js_result);
 <<<<<<< HEAD
@@ -1671,6 +1695,16 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_d
     {
         event -> SetString(return_value);
         wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
+    }
+>>>>>>> Adding other returning values
+=======
+    
+    webkit_javascript_result_unref (js_result);
+
+    if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler())
+    {
+      event -> SetString(return_value);
+      wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
     }
 >>>>>>> Adding other returning values
 }
@@ -2315,6 +2349,36 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
       JSStringRelease (js_str_value);
 
       return_value = wxString::FromUTF8(str_value);
+    }
+    else if (JSValueIsNumber (context,value)) {
+      double js_number_value;
+      
+      js_number_value = JSValueToNumber(context,value,NULL);
+      return_value = wxString::Format(wxT("%lf"),js_number_value);
+    }
+    else if (JSValueIsBoolean (context,value)) {
+      bool js_bool_value;
+      
+      js_bool_value = JSValueToBoolean(context, value);
+      return_value = _((js_bool_value) ? "true" : "false");
+    }
+    else if (JSValueIsObject (context,value)) {
+      JSStringRef js_object_value;
+      gsize str_length;
+      
+      js_object_value = JSValueCreateJSONString(context, value, 0, NULL);
+      str_length = JSStringGetMaximumUTF8CStringSize (js_object_value);
+      wxGtkString str_value((gchar *)g_malloc (str_length));
+      JSStringGetUTF8CString (js_object_value, (char*) str_value.c_str(), str_length);
+      JSStringRelease (js_object_value);
+
+      return_value = wxString::FromUTF8(str_value);
+    }
+    else if (JSValueIsUndefined (context,value)) {
+      return_value = wxString::FromUTF8("undefined");
+    }
+    else if (JSValueIsNull (context,value)) {
+      return_value =  _("");
     }
     else 
 <<<<<<< HEAD
