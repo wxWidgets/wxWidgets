@@ -1445,7 +1445,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         isSrcBpp32
 #elif defined(__WXGTK3__)
         isSrcBpp32 || bmp.GetMask() != NULL
-#elif defined(__WXMSW__)
+#elif defined(__WXMSW__) || defined(__WXOSX__)
         (isSrcBpp32 && bmp.HasAlpha()) || bmp.GetMask() != NULL
 #else
         isSrcBpp32
@@ -1538,7 +1538,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
     }
 
-#if defined(__WXMSW__) || defined(__WXGTK3__)
+#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
     // if there is a mask, set the alpha bytes in the target buffer to 
     // fully transparent or fully opaque
 #if defined(__WXMSW__)
@@ -1559,7 +1559,12 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxUint32* const rowStartDst = data;
             for (int x=0; x < pixData.GetWidth(); x++)
             {
+                // contrary to the others OSX has natively its masked out pixels as white
+#ifdef __WXOSX__
+                if (p.Red() == 0xFF && p.Green() == 0xFF && p.Blue() == 0xFF )
+#else
                 if (p.Red()+p.Green()+p.Blue() == 0)
+#endif
                     *data = 0;
                 else
                     *data = (wxALPHA_OPAQUE << 24) | (*data & 0x00FFFFFF);
