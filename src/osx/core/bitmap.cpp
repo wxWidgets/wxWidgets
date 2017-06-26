@@ -1212,7 +1212,9 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     // width and height of the device-dependent bitmap
     int width = image.GetWidth();
     int height = image.GetHeight();
-
+    // we always use 32 bit internally here
+    depth = 32;
+    
     wxBitmapRefData* bitmapRefData;
 
     m_refData = bitmapRefData = new wxBitmapRefData( width/scale, height/scale, depth, scale) ;
