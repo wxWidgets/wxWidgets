@@ -273,6 +273,15 @@ public:
     virtual int GetWidth() const;
 
     /**
+        Returns the pen floating-point width, or -1.0 if unset.
+
+        @see SetWidthF()
+
+        @since 3.1.0.
+    */
+    virtual double GetWidthF() const;
+
+    /**
         Returns @true if the pen is initialised.
 
         Notice that an uninitialized pen object can't be queried for any pen
@@ -371,6 +380,20 @@ public:
         @see GetWidth()
     */
     virtual void SetWidth(int width);
+
+    /**
+        Sets the pen width as floating-point value.
+
+        Note: only GDI+/Direct2D (wxMSW), CoreGraphics (wxOSX) and Cairo (wxGTK etc.)
+        support floating-point pen width.
+
+        @onlyfor{wxmsw,wxosx,wxgtk}
+
+        @see GetWidthF()
+
+        @since 3.1.0.
+    */
+    virtual void SetWidthF(double width);
 
     /**
         Inequality operator.

@@ -32,6 +32,7 @@ public:
         // we intentionally don't compare m_hPen fields here
         return m_style == data.m_style &&
             m_width == data.m_width &&
+            m_widthF == data.m_widthF &&
             m_join == data.m_join &&
             m_cap == data.m_cap &&
             m_colour == data.m_colour &&
@@ -43,6 +44,7 @@ public:
 
 protected:
     int           m_width;
+    double        m_widthF;
     wxPenStyle    m_style;
     wxPenJoin     m_join ;
     wxPenCap      m_cap ;
@@ -61,6 +63,7 @@ wxPenRefData::wxPenRefData()
 {
     m_style = wxPENSTYLE_SOLID;
     m_width = 1;
+    m_widthF = -1.0; // no decimal pen width set
     m_join = wxJOIN_ROUND ;
     m_cap = wxCAP_ROUND ;
     m_nbDash = 0 ;
@@ -72,6 +75,7 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
 {
     m_style = data.m_style;
     m_width = data.m_width;
+    m_widthF = data.m_widthF;
     m_join = data.m_join;
     m_cap = data.m_cap;
     m_nbDash = data.m_nbDash;
@@ -102,6 +106,7 @@ wxPen::wxPen(const wxColour& col, int Width, wxPenStyle Style)
 
     M_PENDATA->m_colour = col;
     M_PENDATA->m_width = Width;
+    M_PENDATA->m_widthF = -1.0;
     M_PENDATA->m_style = Style;
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
@@ -117,6 +122,7 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
 
     M_PENDATA->m_colour = col;
     M_PENDATA->m_width = Width;
+    M_PENDATA->m_widthF = -1.0;
     M_PENDATA->m_style = (wxPenStyle)Style;
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
@@ -132,6 +138,7 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
 
     M_PENDATA->m_stipple = stipple;
     M_PENDATA->m_width = Width;
+    M_PENDATA->m_widthF = -1.0;
     M_PENDATA->m_style = wxPENSTYLE_STIPPLE;
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
@@ -171,6 +178,13 @@ int wxPen::GetWidth() const
     wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_width;
+}
+
+double wxPen::GetWidthF() const
+{
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
+
+    return M_PENDATA->m_widthF;
 }
 
 wxPenStyle wxPen::GetStyle() const
@@ -252,6 +266,15 @@ void wxPen::SetWidth(int Width)
     Unshare();
 
     M_PENDATA->m_width = Width;
+
+    RealizeResource();
+}
+
+void wxPen::SetWidthF(double WidthF)
+{
+    Unshare();
+
+    M_PENDATA->m_widthF = WidthF;
 
     RealizeResource();
 }

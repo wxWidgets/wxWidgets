@@ -35,6 +35,7 @@ public:
     void SetColour(unsigned char r, unsigned char g, unsigned char b) wxOVERRIDE;
 
     void SetWidth(int width) wxOVERRIDE;
+    void SetWidthF(double widthF) wxOVERRIDE;
     void SetStyle(wxPenStyle style) wxOVERRIDE;
     void SetStipple(const wxBitmap& stipple) wxOVERRIDE;
     void SetDashes(int nb_dashes, const wxDash *dash) wxOVERRIDE;
@@ -43,6 +44,7 @@ public:
 
     wxColour GetColour() const wxOVERRIDE;
     int GetWidth() const wxOVERRIDE;
+    double GetWidthF() const wxOVERRIDE;
     wxPenStyle GetStyle() const wxOVERRIDE;
     wxPenJoin GetJoin() const wxOVERRIDE;
     wxPenCap GetCap() const wxOVERRIDE;

@@ -55,6 +55,7 @@ public:
         // we intentionally don't compare m_hPen fields here
         return m_style == data.m_style &&
                m_width == data.m_width &&
+               m_widthF == data.m_widthF &&
                m_join == data.m_join &&
                m_cap == data.m_cap &&
                m_colour == data.m_colour &&
@@ -70,6 +71,7 @@ public:
 
     wxColour& GetColour() const { return const_cast<wxColour&>(m_colour); }
     int GetWidth() const { return m_width; }
+    double GetWidthF() const { return m_widthF; }
     wxPenStyle GetStyle() const { return m_style; }
     wxPenJoin GetJoin() const { return m_join; }
     wxPenCap GetCap() const { return m_cap; }
@@ -79,6 +81,7 @@ public:
 
     void SetColour(const wxColour& col) { Free(); m_colour = col; }
     void SetWidth(int width) { Free(); m_width = width; }
+    void SetWidthF(double widthF) { Free(); m_widthF = widthF; }
     void SetStyle(wxPenStyle style) { Free(); m_style = style; }
     void SetStipple(const wxBitmap& stipple)
     {
@@ -126,9 +129,11 @@ private:
         m_nbDash = 0;
         m_dash = NULL;
         m_hPen = 0;
+        m_widthF = -1.0;
     }
 
     int           m_width;
+    double        m_widthF;
     wxPenStyle    m_style;
     wxPenJoin     m_join;
     wxPenCap      m_cap;
@@ -162,6 +167,7 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
 {
     m_style = data.m_style;
     m_width = data.m_width;
+    m_widthF = data.m_widthF;
     m_join = data.m_join;
     m_cap = data.m_cap;
     m_nbDash = data.m_nbDash;
@@ -294,7 +300,8 @@ bool wxPenRefData::Alloc()
             m_cap == wxCAP_ROUND &&
                 m_style != wxPENSTYLE_USER_DASH &&
                     m_style != wxPENSTYLE_STIPPLE &&
-                        (m_width <= 1 || m_style == wxPENSTYLE_SOLID) )
+                        (m_width <= 1 || m_style == wxPENSTYLE_SOLID) &&
+                            m_widthF < 0 )
    {
        m_hPen = ::CreatePen(ConvertPenStyle(m_style), m_width, col);
    }
@@ -366,7 +373,7 @@ bool wxPenRefData::Alloc()
            dash = NULL;
        }
 
-       m_hPen = ::ExtCreatePen(styleMSW, m_width, &lb, m_nbDash, (LPDWORD)dash);
+       m_hPen = ::ExtCreatePen(styleMSW, m_widthF >= 0 ? m_widthF : m_width, &lb, m_nbDash, (LPDWORD)dash);
 
        delete [] dash;
    }
@@ -472,6 +479,13 @@ void wxPen::SetWidth(int width)
     M_PENDATA->SetWidth(width);
 }
 
+void wxPen::SetWidthF(double widthF)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetWidthF(widthF);
+}
+
 void wxPen::SetStyle(wxPenStyle style)
 {
     AllocExclusive();
@@ -519,6 +533,13 @@ int wxPen::GetWidth() const
     wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
 
     return M_PENDATA->GetWidth();
+}
+
+double wxPen::GetWidthF() const
+{
+    wxCHECK_MSG( IsOk(), -1, wxT("invalid pen") );
+
+    return M_PENDATA->GetWidthF();
 }
 
 wxPenStyle wxPen::GetStyle() const
