@@ -1152,22 +1152,23 @@ web_view_javascript_finished
 >>>>>>> Trying to allocate memory for result string
 =======
 
-
-
-static void
-web_view_javascript_finished (GObject      *object,
-                              GAsyncResult *result,
-                              gpointer      user_data)
+static void wxgtk_run_javascript_cb(WebKitWebView *,
+                                    GAsyncResult *res,
+                                    GAsyncResult **res_out)
 {
-    WebKitJavascriptResult *js_result;
+    *res_out = (GAsyncResult*)g_object_ref(res);
+}
+
+wxString JSResultToString(GObject *object, GAsyncResult *result)
+{
+    wxString                return_value;
+    WebKitJavascriptResult  *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
     wxGtkError              error;
-    wxWebViewEvent* event = (wxWebViewEvent*)user_data;
-    wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)(event -> GetEventObject());
-    wxString return_value;
 
-    js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, error.Out());
+    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object), (GAsyncResult *)result, error.Out());
+
     if (!js_result)
     {
 <<<<<<< HEAD
@@ -1176,12 +1177,18 @@ web_view_javascript_finished (GObject      *object,
 >>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
 =======
         wxLogError("Error running javascript: %s", error.GetMessage());
+<<<<<<< HEAD
         return;
 >>>>>>> Fixing some style
+=======
+	return_value = wxString();
+	return return_value;
+>>>>>>> Refactor duplicated code
     }
 
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     
@@ -1203,6 +1210,9 @@ web_view_javascript_finished (GObject      *object,
 =======
 >>>>>>> Modified sample
 =======
+=======
+    
+>>>>>>> Refactor duplicated code
     if (JSValueIsString (context, value))
     {
 <<<<<<< HEAD
@@ -1364,7 +1374,7 @@ web_view_javascript_finished (GObject      *object,
         JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
         JSStringRelease (js_str_value);
 
-        return_value = wxString::FromUTF8(str_value);      
+        return_value = wxString::FromUTF8(str_value);
     }
     else if (JSValueIsNumber (context,value))
     {
@@ -1399,12 +1409,9 @@ web_view_javascript_finished (GObject      *object,
     }
     else if (JSValueIsNull (context,value))
     {
-        return_value = _("");
+        return_value =  wxString();
     }
-    else
-    {
-        wxLogMessage("Error running javascript: unexpected return value");
-    }
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
     webkit_javascript_result_unref (js_result);
@@ -1413,9 +1420,27 @@ web_view_javascript_finished (GObject      *object,
 
     return return_value;
 =======
+=======
+    else 
+        wxLogError("Error running javascript: unexpected return value");
+>>>>>>> Refactor duplicated code
     
     webkit_javascript_result_unref (js_result);
 
+    return return_value;
+}
+
+static void
+web_view_javascript_finished (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+    wxString return_value;
+    wxWebViewEvent *event = (wxWebViewEvent*)user_data;
+    wxWebViewWebKit *wxwebviewwebkit = (wxWebViewWebKit*)(event -> GetEventObject());
+
+    return_value = JSResultToString(object, result);
+    
     if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler())
     {
         event -> SetString(return_value);
@@ -1424,6 +1449,7 @@ web_view_javascript_finished (GObject      *object,
 >>>>>>> Adding other returning values
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 static void
@@ -1518,10 +1544,12 @@ static void wxgtk_run_javascript_cb(WebKitWebView *,
 }
 
 >>>>>>> Trying to include the callback inside the RunScript function to not use pointer and simplify the code
+=======
+>>>>>>> Refactor duplicated code
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
     wxString return_value;
-    WebKitJavascriptResult *result = NULL;
+    GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
                                    javascript,
                                    NULL,
@@ -1533,22 +1561,9 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     while (!result)
         g_main_context_iteration(main_context, TRUE);
 
-    WebKitJavascriptResult *js_result;
-    JSValueRef              value;
-    JSGlobalContextRef      context;
-    wxGtkError                 error;
-
-    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (m_web_view), (GAsyncResult *)result, error.Out());
-
-    if (!js_result)
-    {
-        wxLogError("Error running javascript: %s", error.GetMessage());
-        return _("");
-    }
-
-    context = webkit_javascript_result_get_global_context (js_result);
-    value = webkit_javascript_result_get_value (js_result);
+    return_value = JSResultToString((GObject*)m_web_view, result);    
     
+<<<<<<< HEAD
     if (JSValueIsString (context, value))
     {
         JSStringRef js_str_value;
@@ -1707,6 +1722,8 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 =======
 =======
 >>>>>>> Fixing some style
+=======
+>>>>>>> Refactor duplicated code
     return return_value;
 >>>>>>> Fixed sync. Improving a little bit the example
 }
