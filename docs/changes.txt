@@ -158,6 +158,7 @@ wxGTK:
 - Add support for affine transformation matrix in wxDC (GTK+ 3).
 - Fix wxMemoryDC::Blit() with itself as source (GTK+ 3).
 - Fix displaying labels of wxRadioBox items.
+- Add a native implementation for clearing bitmap/window wxGraphicsContexts
 
 wxMSW:
 
@@ -207,6 +208,8 @@ wxOSX:
 - Don't allow interacting with disabled wxSlider (Andreas Falkenhahn).
 - Fix setting alignment in wxTextCtrl with wxTE_DONTWRAP (Andreas Falkenhahn).
 - Allow pasting using Cmd+V in wxTextCtrl with wxTE_PASSWORD style.
+- Update font code to use toll-free bridges from CTFontRef to NSFont or UIFont
+- Add a native implementation for clearing bitmap/window wxGraphicsContexts
 
 Unix:
 
