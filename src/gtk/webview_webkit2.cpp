@@ -1093,8 +1093,8 @@ wxString wxWebViewWebKit::GetPageText() const
 
 static void
 web_view_javascript_finished (GObject      *object,
-			      GAsyncResult *result,
-			      gpointer      user_data)
+                              GAsyncResult *result,
+                              gpointer      user_data)
 {
     WebKitJavascriptResult *js_result;
     JSValueRef              value;
@@ -1107,75 +1107,80 @@ web_view_javascript_finished (GObject      *object,
     js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, error.Out());
     if (!js_result)
     {
-      wxLogError("Error running javascript: %s", error.GetMessage());
-      return;
+        wxLogError("Error running javascript: %s", error.GetMessage());
+        return;
     }
 
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
     if (JSValueIsString (context, value))
     {
-      JSStringRef js_str_value;
-      gsize       str_length;
+        JSStringRef js_str_value;
+        gsize       str_length;
 
-      js_str_value = JSValueToStringCopy (context, value, NULL);
-      str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
-      wxGtkString str_value((gchar *)g_malloc (str_length));
-      JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
-      JSStringRelease (js_str_value);
+        js_str_value = JSValueToStringCopy (context, value, NULL);
+        str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
+        wxGtkString str_value((gchar *)g_malloc (str_length));
+        JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
+        JSStringRelease (js_str_value);
 
-      return_value = wxString::FromUTF8(str_value);      
+        return_value = wxString::FromUTF8(str_value);      
     }
-    else if (JSValueIsNumber (context,value)) {
-      double js_number_value;
+    else if (JSValueIsNumber (context,value))
+    {
+        double js_number_value;
       
-      js_number_value = JSValueToNumber(context,value,NULL);
-      return_value = wxString::Format(wxT("%lf"),js_number_value);
+        js_number_value = JSValueToNumber(context,value,NULL);
+        return_value = wxString::Format(wxT("%lf"),js_number_value);
     }
-    else if (JSValueIsBoolean (context,value)) {
-      bool js_bool_value;
+    else if (JSValueIsBoolean (context,value))
+    {
+        bool js_bool_value;
       
-      js_bool_value = JSValueToBoolean(context, value);
-      return_value = _((js_bool_value) ? "true" : "false");
+        js_bool_value = JSValueToBoolean(context, value);
+        return_value = _((js_bool_value) ? "true" : "false");
     }
-    else if (JSValueIsObject (context,value)) {
-      JSStringRef js_object_value;
-      gsize str_length;
+    else if (JSValueIsObject (context,value))
+    {
+        JSStringRef js_object_value;
+        gsize str_length;
       
-      js_object_value = JSValueCreateJSONString(context, value, 0, NULL);
-      str_length = JSStringGetMaximumUTF8CStringSize (js_object_value);
-      wxGtkString str_value((gchar *)g_malloc (str_length));
-      JSStringGetUTF8CString (js_object_value, (char*) str_value.c_str(), str_length);
-      JSStringRelease (js_object_value);
+        js_object_value = JSValueCreateJSONString(context, value, 0, NULL);
+        str_length = JSStringGetMaximumUTF8CStringSize (js_object_value);
+        wxGtkString str_value((gchar *)g_malloc (str_length));
+        JSStringGetUTF8CString (js_object_value, (char*) str_value.c_str(), str_length);
+        JSStringRelease (js_object_value);
 
-      return_value = wxString::FromUTF8(str_value);
+        return_value = wxString::FromUTF8(str_value);
     }
-    else if (JSValueIsUndefined (context,value)) {
-      return_value = wxString::FromUTF8("undefined");
+    else if (JSValueIsUndefined (context,value))
+    {
+        return_value = wxString::FromUTF8("undefined");
     }
-    else if (JSValueIsNull (context,value)) {
-      return_value = _("");
+    else if (JSValueIsNull (context,value))
+    {
+        return_value = _("");
     }
     else
     {
-      wxLogMessage("Error running javascript: unexpected return value");
+        wxLogMessage("Error running javascript: unexpected return value");
     }
     
     webkit_javascript_result_unref (js_result);
 
     if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler())
     {
-      event -> SetString(return_value);
-      wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
+        event -> SetString(return_value);
+        wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
     }
 }
 
 
 static void wxgtk_run_javascript_cb(WebKitWebView *,
-				    GAsyncResult *res,
-				    GAsyncResult **res_out)
+                                    GAsyncResult *res,
+                                    GAsyncResult **res_out)
 {
-  *res_out = (GAsyncResult*)g_object_ref(res);
+    *res_out = (GAsyncResult*)g_object_ref(res);
 }
 
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
@@ -1191,9 +1196,7 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     GMainContext *main_context = g_main_context_get_thread_default();
     
     while (!result)
-    {
-       g_main_context_iteration(main_context, TRUE);
-    }
+        g_main_context_iteration(main_context, TRUE);
 
     WebKitJavascriptResult *js_result;
     JSValueRef              value;
@@ -1210,73 +1213,77 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
+    
     if (JSValueIsString (context, value))
     {
-      JSStringRef js_str_value;
-      gsize       str_length;
+        JSStringRef js_str_value;
+        gsize       str_length;
 
-      js_str_value = JSValueToStringCopy (context, value, NULL);
-      str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
-      wxGtkString str_value((gchar *)g_malloc (str_length));
-      JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
-      JSStringRelease (js_str_value);
+        js_str_value = JSValueToStringCopy (context, value, NULL);
+        str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
+        wxGtkString str_value((gchar *)g_malloc (str_length));
+        JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
+        JSStringRelease (js_str_value);
 
-      return_value = wxString::FromUTF8(str_value);
+        return_value = wxString::FromUTF8(str_value);
     }
-    else if (JSValueIsNumber (context,value)) {
-      double js_number_value;
+    else if (JSValueIsNumber (context,value))
+    {
+        double js_number_value;
       
-      js_number_value = JSValueToNumber(context,value,NULL);
-      return_value = wxString::Format(wxT("%lf"),js_number_value);
+        js_number_value = JSValueToNumber(context,value,NULL);
+        return_value = wxString::Format(wxT("%lf"),js_number_value);
     }
-    else if (JSValueIsBoolean (context,value)) {
-      bool js_bool_value;
+    else if (JSValueIsBoolean (context,value))
+    {
+        bool js_bool_value;
       
-      js_bool_value = JSValueToBoolean(context, value);
-      return_value = _((js_bool_value) ? "true" : "false");
+        js_bool_value = JSValueToBoolean(context, value);
+        return_value = _((js_bool_value) ? "true" : "false");
     }
-    else if (JSValueIsObject (context,value)) {
-      JSStringRef js_object_value;
-      gsize str_length;
+    else if (JSValueIsObject (context,value))
+    {
+        JSStringRef js_object_value;
+        gsize str_length;
       
-      js_object_value = JSValueCreateJSONString(context, value, 0, NULL);
-      str_length = JSStringGetMaximumUTF8CStringSize (js_object_value);
-      wxGtkString str_value((gchar *)g_malloc (str_length));
-      JSStringGetUTF8CString (js_object_value, (char*) str_value.c_str(), str_length);
-      JSStringRelease (js_object_value);
+        js_object_value = JSValueCreateJSONString(context, value, 0, NULL);
+        str_length = JSStringGetMaximumUTF8CStringSize (js_object_value);
+        wxGtkString str_value((gchar *)g_malloc (str_length));
+        JSStringGetUTF8CString (js_object_value, (char*) str_value.c_str(), str_length);
+        JSStringRelease (js_object_value);
 
-      return_value = wxString::FromUTF8(str_value);
+        return_value = wxString::FromUTF8(str_value);
     }
-    else if (JSValueIsUndefined (context,value)) {
-      return_value = wxString::FromUTF8("undefined");
+    else if (JSValueIsUndefined (context,value))
+    {
+        return_value = wxString::FromUTF8("undefined");
     }
-    else if (JSValueIsNull (context,value)) {
-      return_value =  _("");
+    else if (JSValueIsNull (context,value))
+    {
+        return_value =  _("");
     }
     else 
-      wxLogError("Error running javascript: unexpected return value");
+        wxLogError("Error running javascript: unexpected return value");
     
     webkit_javascript_result_unref (js_result);
-
 
     return return_value;
 }
 
 void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
 {
-  wxWebViewEvent* event = new wxWebViewEvent(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-                         GetId(),
-                         GetCurrentURL(),
-                         "");
-  event -> SetEventObject(this);
-  event -> SetId(id);
+    wxWebViewEvent* event = new wxWebViewEvent(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
+                                               GetId(),
+                                               GetCurrentURL(),
+                                               "");
+    event -> SetEventObject(this);
+    event -> SetId(id);
   
-  webkit_web_view_run_javascript(m_web_view,
-				 javascript.mb_str(wxConvUTF8),
-				 NULL,
-				 web_view_javascript_finished,
-				 event);
-
+    webkit_web_view_run_javascript(m_web_view,
+                                   javascript.mb_str(wxConvUTF8),
+                                   NULL,
+                                   web_view_javascript_finished,
+                                   event);
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
