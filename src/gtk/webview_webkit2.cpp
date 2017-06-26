@@ -1290,22 +1290,23 @@ void wxWebViewWebKit::RunScript(const wxString& javascript, wxObject* user_data)
 >>>>>>> Refactor duplicated code
 =======
 
-
-
-static void
-web_view_javascript_finished (GObject      *object,
-                              GAsyncResult *result,
-                              gpointer      user_data)
+static void wxgtk_run_javascript_cb(WebKitWebView *,
+                                    GAsyncResult *res,
+                                    GAsyncResult **res_out)
 {
-    WebKitJavascriptResult *js_result;
+    *res_out = (GAsyncResult*)g_object_ref(res);
+}
+
+wxString JSResultToString(GObject *object, GAsyncResult *result)
+{
+    wxString                return_value;
+    WebKitJavascriptResult  *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
     wxGtkError              error;
-    wxWebViewEvent* event = (wxWebViewEvent*)user_data;
-    wxWebViewWebKit* wxwebviewwebkit = (wxWebViewWebKit*)(event -> GetEventObject());
-    wxString return_value;
 
-    js_result = webkit_web_view_run_javascript_finish (WEBKIT_WEB_VIEW (object), result, error.Out());
+    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object), (GAsyncResult *)result, error.Out());
+
     if (!js_result)
     {
 <<<<<<< HEAD
@@ -1314,12 +1315,18 @@ web_view_javascript_finished (GObject      *object,
 >>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
 =======
         wxLogError("Error running javascript: %s", error.GetMessage());
+<<<<<<< HEAD
         return;
 >>>>>>> Fixing some style
+=======
+	return_value = wxString();
+	return return_value;
+>>>>>>> Refactor duplicated code
     }
 
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1344,6 +1351,9 @@ web_view_javascript_finished (GObject      *object,
 =======
 >>>>>>> Modified sample
 =======
+=======
+    
+>>>>>>> Refactor duplicated code
 =======
     
 >>>>>>> Refactor duplicated code
@@ -1382,6 +1392,7 @@ web_view_javascript_finished (GObject      *object,
 <<<<<<< HEAD
 
         return_value = wxString::FromUTF8(str_value);
+<<<<<<< HEAD
 =======
 	snprintf(data,8192,str_value);
 =======
@@ -1438,6 +1449,8 @@ web_view_javascript_finished (GObject      *object,
 =======
       printf("Result is a Boolean\n");
 >>>>>>> Modified sample
+=======
+>>>>>>> Refactor duplicated code
     }
     else if (JSValueIsNumber (context,value))
     {
@@ -1473,6 +1486,7 @@ web_view_javascript_finished (GObject      *object,
     else if (JSValueIsNull (context,value))
     {
         return_value =  wxString();
+<<<<<<< HEAD
     }
     else 
         wxLogError("Error running javascript: unexpected return value");
@@ -1499,6 +1513,11 @@ web_view_javascript_finished (GObject      *object,
     else 
         g_warning("Error running javascript: unexpected return value");
 >>>>>>> Trying to allocate memory for result string
+=======
+    }
+    else 
+        wxLogError("Error running javascript: unexpected return value");
+>>>>>>> Refactor duplicated code
     
 =======
       JSStringRef js_str_value;
@@ -1508,6 +1527,7 @@ web_view_javascript_finished (GObject      *object,
         gsize       str_length;
 >>>>>>> Fixing some style
 
+<<<<<<< HEAD
         js_str_value = JSValueToStringCopy (context, value, NULL);
         str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
         wxGtkString str_value((gchar *)g_malloc (str_length));
@@ -1517,12 +1537,30 @@ web_view_javascript_finished (GObject      *object,
         return_value = wxString::FromUTF8(str_value);
     }
     else if (JSValueIsNumber (context,value))
+=======
+    return return_value;
+}
+
+static void
+web_view_javascript_finished (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+    wxString return_value;
+    wxWebViewEvent *event = (wxWebViewEvent*)user_data;
+    wxWebViewWebKit *wxwebviewwebkit = (wxWebViewWebKit*)(event -> GetEventObject());
+
+    return_value = JSResultToString(object, result);
+    
+    if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler())
+>>>>>>> Refactor duplicated code
     {
         double js_number_value;
       
         js_number_value = JSValueToNumber(context,value,NULL);
         return_value = wxString::Format(wxT("%lf"),js_number_value);
     }
+<<<<<<< HEAD
     else if (JSValueIsBoolean (context,value))
     {
         bool js_bool_value;
@@ -1540,6 +1578,19 @@ web_view_javascript_finished (GObject      *object,
         wxGtkString str_value((gchar *)g_malloc (str_length));
         JSStringGetUTF8CString (js_object_value, (char*) str_value.c_str(), str_length);
         JSStringRelease (js_object_value);
+=======
+}
+
+wxString wxWebViewWebKit::RunScript(const wxString& javascript)
+{
+    wxString return_value;
+    GAsyncResult *result = NULL;
+    webkit_web_view_run_javascript(m_web_view,
+                                   javascript,
+                                   NULL,
+                                   (GAsyncReadyCallback)wxgtk_run_javascript_cb,
+                                   &result);
+>>>>>>> Refactor duplicated code
 
         return_value = wxString::FromUTF8(str_value);
     }
@@ -1562,6 +1613,7 @@ web_view_javascript_finished (GObject      *object,
         gsize       str_length;
 >>>>>>> Fixing some style
 
+<<<<<<< HEAD
         js_str_value = JSValueToStringCopy (context, value, NULL);
         str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
         wxGtkString str_value((gchar *)g_malloc (str_length));
@@ -2562,6 +2614,10 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
     webkit_javascript_result_unref (js_result);
 
 >>>>>>> Fixing some style
+=======
+    return_value = JSResultToString((GObject*)m_web_view, result);    
+    
+>>>>>>> Refactor duplicated code
     return return_value;
 >>>>>>> Fixed sync. Improving a little bit the example
 }
