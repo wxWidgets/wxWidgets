@@ -103,6 +103,17 @@ wxPen::wxPen(const wxColour& colour, int width, int style)
     M_PENDATA->m_colour = colour;
 }
 
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData();
+    M_PENDATA->m_colour = info.GetColour();
+    M_PENDATA->m_width = info.GetWidth();
+    M_PENDATA->m_style = info.GetStyle();
+    M_PENDATA->m_joinStyle = info.GetJoin();
+    M_PENDATA->m_capStyle = info.GetCap();
+    M_PENDATA->m_countDashes = info.GetDashes(&M_PENDATA->m_dash);
+}
+
 wxPen::~wxPen()
 {
     // m_refData unrefed in ~wxObject

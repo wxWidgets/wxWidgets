@@ -22,6 +22,7 @@
 #include "wx/font.h"
 #include "wx/image.h"
 #include "wx/vector.h"
+#include "wx/pen.h"
 
 enum wxAntialiasMode
 {
@@ -34,7 +35,7 @@ enum wxInterpolationQuality
     // default interpolation
     wxINTERPOLATION_DEFAULT,
     // no interpolation
-    wxINTERPOLATION_NONE, 
+    wxINTERPOLATION_NONE,
     // fast interpolation, suited for interactivity
     wxINTERPOLATION_FAST,
     // better quality
@@ -132,6 +133,46 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };
 
+// ----------------------------------------------------------------------------
+// wxGraphicsPenInfo describes a wxGraphicsPen
+// ----------------------------------------------------------------------------
+
+class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
+{
+public:
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(), wxDouble width = 1.0, wxPenStyle style = wxPENSTYLE_SOLID)
+    : wxPenInfoBase(colour, style)
+    {
+        m_width = width;
+    }
+
+    static wxGraphicsPenInfo CreateFromPen(const wxPen& pen)
+    {
+        wxDash *dashes;
+        int nb_dashes = pen.GetDashes(&dashes);
+        return wxGraphicsPenInfo()
+            .Colour(pen.GetColour())
+            .Width(pen.GetWidth())
+            .Style(pen.GetStyle())
+            .Stipple(*pen.GetStipple())
+            .Dashes(nb_dashes, dashes)
+            .Join(pen.GetJoin())
+            .Cap(pen.GetCap());
+    }
+
+    // Setters
+
+    wxGraphicsPenInfo& Width(wxDouble width)
+        { m_width = width; return *this; }
+
+    // Accessors
+
+    wxDouble GetWidth() const { return m_width; }
+
+private:
+    wxDouble m_width;
+};
+
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
 {
 public:
@@ -177,7 +218,7 @@ public:
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
 #endif // wxUSE_IMAGE
-    
+
     void* GetNativeBitmap() const;
 
     const wxGraphicsBitmapData* GetBitmapData() const
@@ -481,6 +522,8 @@ public:
 
     virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
 
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& pen) const;
+
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) const;
 
     // sets the brush to a linear gradient, starting at (x1,y1) and ending at
@@ -566,10 +609,10 @@ public:
 
     // returns the current interpolation quality
     virtual wxInterpolationQuality GetInterpolationQuality() const { return m_interpolation; }
-    
+
     // sets the interpolation quality, returns true if it supported
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
-    
+
     // returns the current compositing operator
     virtual wxCompositionMode GetCompositionMode() const { return m_composition; }
 
@@ -719,14 +762,14 @@ public:
 
     // helper to determine if a 0.5 offset should be applied for the drawing operation
     virtual bool ShouldOffset() const { return false; }
-    
-    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on 
+
+    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on
     // bitmap devices like screen, by default this is turned off
     virtual void EnableOffset(bool enable = true);
-    
+
     void DisableOffset() { EnableOffset(false); }
     bool OffsetEnabled() { return m_enableOffset; }
-    
+
 protected:
     // These fields must be initialized in the derived class ctors.
     wxDouble m_width,
@@ -862,6 +905,8 @@ public:
     // Paints
 
     virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
+
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) = 0;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) = 0;
 

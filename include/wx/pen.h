@@ -11,6 +11,7 @@
 #ifndef _WX_PEN_H_BASE_
 #define _WX_PEN_H_BASE_
 
+#include "wx/bitmap.h"
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
@@ -57,6 +58,91 @@ enum wxPenCap
     wxCAP_ROUND = 130,
     wxCAP_PROJECTING,
     wxCAP_BUTT
+};
+
+// ----------------------------------------------------------------------------
+// wxPenInfo describes a wxPen
+// ----------------------------------------------------------------------------
+
+template <class T>
+class wxPenInfoBase
+{
+public:
+    wxPenInfoBase(const wxColour& colour, wxPenStyle style)
+    {
+        m_nb_dashes = 0;
+        m_dash = NULL;
+        m_join = wxJOIN_ROUND;
+        m_cap = wxCAP_ROUND;
+
+        m_colour = colour;
+        m_style = style;
+    }
+
+    // Setters for the various attributes. All of them return the object itself
+    // so that the calls to them could be chained.
+
+    T &Colour(const wxColour& colour)
+        { m_colour = colour; return static_cast<T&>(*this); }
+
+    T &Style(wxPenStyle style)
+        { m_style = style; return static_cast<T&>(*this); }
+    T &Stipple(const wxBitmap& stipple)
+        { m_stipple = stipple; m_style = wxPENSTYLE_STIPPLE; return static_cast<T&>(*this); }
+    T &Dashes(int nb_dashes, const wxDash *dash)
+        { m_nb_dashes = nb_dashes; m_dash = (wxDash *)dash; return static_cast<T&>(*this); }
+    T &Join(wxPenJoin join)
+        { m_join = join; return static_cast<T&>(*this); }
+    T &Cap(wxPenCap cap)
+        { m_cap = cap; return static_cast<T&>(*this); }
+
+    // Accessors are mostly meant to be used by wxPen itself.
+
+    wxColour GetColour() const { return m_colour; }
+    wxBitmap GetStipple() const { return m_stipple; }
+    wxPenStyle GetStyle() const { return m_style; }
+    wxPenJoin GetJoin() const { return m_join; }
+    wxPenCap GetCap() const { return m_cap; }
+    int GetDashes(wxDash **ptr) const { *ptr = m_dash; return m_nb_dashes; }
+
+    int GetDashCount() const { return m_nb_dashes; }
+    wxDash* GetDash() const { return m_dash; }
+
+    // Convenience
+
+    bool IsTransparent() const { return m_style == wxPENSTYLE_TRANSPARENT; }
+
+private:
+    wxColour m_colour;
+    wxBitmap m_stipple;
+    wxPenStyle m_style;
+    wxPenJoin m_join;
+    wxPenCap m_cap;
+
+    int m_nb_dashes;
+    wxDash* m_dash;
+};
+
+class wxPenInfo : public wxPenInfoBase<wxPenInfo>
+{
+public:
+    explicit wxPenInfo(const wxColour& colour = wxColour(), int width = 1, wxPenStyle style = wxPENSTYLE_SOLID)
+    : wxPenInfoBase(colour, style)
+    {
+        m_width = width;
+    }
+
+    // Setters
+
+    wxPenInfo& Width(int width)
+        { m_width = width; return *this; }
+
+    // Accessors
+
+    int GetWidth() const { return m_width; }
+
+private:
+    int m_width;
 };
 
 

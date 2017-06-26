@@ -597,9 +597,9 @@ void wxGraphicsContext::Flush()
 {
 }
 
-void wxGraphicsContext::EnableOffset(bool enable) 
-{ 
-    m_enableOffset = enable; 
+void wxGraphicsContext::EnableOffset(bool enable)
+{
+    m_enableOffset = enable;
 }
 
 #if 0
@@ -825,6 +825,11 @@ wxGraphicsPath wxGraphicsContext::CreatePath() const
 wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen) const
 {
     return GetRenderer()->CreatePen(pen);
+}
+
+wxGraphicsPen wxGraphicsContext::CreatePen(const wxGraphicsPenInfo& info) const
+{
+    return GetRenderer()->CreatePen(info);
 }
 
 wxGraphicsBrush wxGraphicsContext::CreateBrush(const wxBrush& brush ) const

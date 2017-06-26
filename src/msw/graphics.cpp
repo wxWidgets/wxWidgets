@@ -261,9 +261,11 @@ class wxGDIPlusPenData : public wxGraphicsObjectRefData
 {
 public:
     wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
+    wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
     ~wxGDIPlusPenData();
 
     void Init();
+    void InitFromPenInfo( const wxGraphicsPenInfo &info );
 
     virtual wxDouble GetWidth() { return m_width; }
     virtual Pen* GetGDIPlusPen() { return m_pen; }
@@ -400,7 +402,7 @@ public:
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
 
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE;
-    
+
     virtual bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE;
 
     virtual void BeginLayer(wxDouble opacity) wxOVERRIDE;
@@ -575,6 +577,8 @@ public :
 
     virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE;
 
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& pen) wxOVERRIDE;
+
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE;
 
     virtual wxGraphicsBrush
@@ -646,15 +650,26 @@ void wxGDIPlusPenData::Init()
 wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
 : wxGraphicsObjectRefData(renderer)
 {
+    InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
+}
+
+wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info )
+: wxGraphicsObjectRefData(renderer)
+{
+    InitFromPenInfo(info);
+}
+
+void wxGDIPlusPenData::InitFromPenInfo( const wxGraphicsPenInfo &info )
+{
     Init();
-    m_width = pen.GetWidth();
+    m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 
-    m_pen = new Pen(wxColourToColor(pen.GetColour()), m_width );
+    m_pen = new Pen(wxColourToColor(info.GetColour()), m_width );
 
     LineCap cap;
-    switch ( pen.GetCap() )
+    switch ( info.GetCap() )
     {
     case wxCAP_ROUND :
         cap = LineCapRound;
@@ -675,7 +690,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
     m_pen->SetLineCap(cap,cap, DashCapFlat);
 
     LineJoin join;
-    switch ( pen.GetJoin() )
+    switch ( info.GetJoin() )
     {
     case wxJOIN_BEVEL :
         join = LineJoinBevel;
@@ -699,7 +714,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
     m_pen->SetDashStyle(DashStyleSolid);
 
     DashStyle dashStyle = DashStyleSolid;
-    switch ( pen.GetStyle() )
+    switch ( info.GetStyle() )
     {
     case wxPENSTYLE_SOLID :
         break;
@@ -723,7 +738,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
         {
             dashStyle = DashStyleCustom;
             wxDash *dashes;
-            int count = pen.GetDashes( &dashes );
+            int count = info.GetDashes( &dashes );
             if ((dashes != NULL) && (count > 0))
             {
                 REAL *userLengths = new REAL[count];
@@ -738,12 +753,12 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
         break;
     case wxPENSTYLE_STIPPLE :
         {
-            wxBitmap* bmp = pen.GetStipple();
-            if ( bmp && bmp->IsOk() )
+            wxBitmap bmp = info.GetStipple();
+            if ( bmp.IsOk() )
             {
-                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
+                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
 #if wxUSE_PALETTE
-                    (HPALETTE)bmp->GetPalette()->GetHPALETTE()
+                    (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
                     NULL
 #endif
@@ -755,11 +770,11 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
         }
         break;
     default :
-        if ( pen.GetStyle() >= wxPENSTYLE_FIRST_HATCH &&
-             pen.GetStyle() <= wxPENSTYLE_LAST_HATCH )
+        if ( info.GetStyle() >= wxPENSTYLE_FIRST_HATCH &&
+             info.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
             HatchStyle style;
-            switch( pen.GetStyle() )
+            switch( info.GetStyle() )
             {
             case wxPENSTYLE_BDIAGONAL_HATCH :
                 style = HatchStyleBackwardDiagonal;
@@ -785,7 +800,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
             m_penBrush = new HatchBrush
                              (
                                 style,
-                                wxColourToColor(pen.GetColour()),
+                                wxColourToColor(info.GetColour()),
                                 Color::Transparent
                              );
             m_pen->SetBrush( m_penBrush );
@@ -2047,7 +2062,7 @@ void wxGDIPlusContext::DoDrawText(const wxString& str,
 
     wxGDIPlusFontData * const
         fontData = (wxGDIPlusFontData *)m_font.GetRefData();
- 
+
     m_context->DrawString
                (
                     str.wc_str(*wxConvUI),  // string to draw, always Unicode
@@ -2160,7 +2175,7 @@ bool wxGDIPlusContext::ShouldOffset() const
 {
     if ( !m_enableOffset )
         return false;
-    
+
     int penwidth = 0 ;
     if ( !m_pen.IsNull() )
     {
@@ -2457,6 +2472,19 @@ wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
     {
         wxGraphicsPen p;
         p.SetRefData(new wxGDIPlusPenData( this, pen ));
+        return p;
+    }
+}
+
+wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxGraphicsPenInfo& info)
+{
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsPen);
+    if ( info.GetStyle() == wxPENSTYLE_TRANSPARENT )
+        return wxNullGraphicsPen;
+    else
+    {
+        wxGraphicsPen p;
+        p.SetRefData(new wxGDIPlusPenData( this, info ));
         return p;
     }
 }

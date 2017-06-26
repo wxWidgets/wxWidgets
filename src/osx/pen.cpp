@@ -141,6 +141,20 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     RealizeResource();
 }
 
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData;
+
+    M_PENDATA->m_colour = info.GetColour();
+    M_PENDATA->m_width = info.GetWidth();
+    M_PENDATA->m_style = info.GetStyle();
+    M_PENDATA->m_join = info.GetJoin();
+    M_PENDATA->m_cap = info.GetCap();
+    M_PENDATA->m_nbDash = info.GetDashes(&M_PENDATA->m_dash);
+
+    RealizeResource();
+}
+
 wxGDIRefData *wxPen::CreateGDIRefData() const
 {
     return new wxPenRefData;
