@@ -476,6 +476,7 @@ public:
     virtual void StrokePath( const wxGraphicsPath& p ) wxOVERRIDE;
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) wxOVERRIDE;
     virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
     
     virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
     virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
@@ -2452,6 +2453,24 @@ void wxCairoContext::ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoubl
     cairo_rectangle (m_context, x, y, w, h);
     cairo_fill (m_context);
     cairo_restore(m_context);
+}
+
+void wxCairoContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if ( !m_brush.IsNull() )
+    {
+        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
+        ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
+        cairo_rectangle(m_context, x, y, w, h);
+        cairo_fill(m_context);
+    }
+    if ( !m_pen.IsNull() )
+    {
+        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
+        ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
+        cairo_rectangle(m_context, x, y, w, h);
+        cairo_stroke(m_context);
+    }
 }
 
 void wxCairoContext::Rotate( wxDouble angle )
