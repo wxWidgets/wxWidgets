@@ -75,8 +75,16 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
     wxLogMessage(wxT("Pan gesture performed with deltaX = %d and deltaY = %d, with current position (%d,%d)\n"),
         event.GetDeltaX(), event.GetDeltaY(), event.GetPosition().x, event.GetPosition().y);
 
-    wxPoint dist(event.GetDeltaX(), event.GetDeltaY());
-    m_translateDistance += m_affineMatrix.TransformDistance(dist);
+    // Transform the distance using the tranpose of the matrix,
+    // in order to translate the image to match the screen coordinates
+    wxMatrix2D m;
+    m_affineMatrix.Get(&m, NULL);
+
+    wxPoint2DDouble delta(m.m_11 * event.GetDeltaX() + m.m_12 * event.GetDeltaY(),
+        m.m_21 * event.GetDeltaX() + m.m_22 * event.GetDeltaY());
+
+    // Add it to the total translation
+    m_translateDistance += delta;
 
     if ( event.IsGestureEnd() )
     {
