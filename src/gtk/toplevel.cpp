@@ -1359,6 +1359,9 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
 #ifdef __WXGTK3__
         GTKSizeRevalidate();
 #endif
+        if (!m_isShown)
+            return;
+
         gtk_widget_show(m_widget);
 
 #ifdef __WXGTK3__
