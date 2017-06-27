@@ -247,6 +247,10 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
 // Shutdown or reboot the PC
 bool wxShutdown(int flags)
 {
+#if defined(__WXOSX__) && wxOSX_USE_IPHONE
+    wxUnusedVar(flags);
+    return false;
+#else
     flags &= ~wxSHUTDOWN_FORCE;
 
     wxChar level;
@@ -270,6 +274,7 @@ bool wxShutdown(int flags)
     }
 
     return system(wxString::Format("init %c", level).mb_str()) == 0;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1209,7 +1214,12 @@ wxMemorySize wxGetFreeMemory()
                     {
                         unsigned long cached;
                         if ( sscanf(buf, "Cached: %lu", &cached) == 1 )
-                            memFree += cached;
+                        {
+                            if ( cached > ULONG_MAX-memFree )
+                                memFree = ULONG_MAX;
+                            else
+                                memFree += cached;
+                        }
                     }
 
                     // values here are always expressed in kB and we want bytes

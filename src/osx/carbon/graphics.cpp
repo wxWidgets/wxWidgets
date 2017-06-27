@@ -116,15 +116,6 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
     return retval;
 }
 
-CTFontRef wxMacCreateCTFont( const wxFont& font )
-{
-#ifdef __WXMAC__
-    return wxCFRetain((CTFontRef) font.OSXGetCTFont());
-#else
-    return CTFontCreateWithName( wxCFStringRef( font.GetFaceName(), wxLocale::GetSystemEncoding() ) , font.GetPointSize() , NULL );
-#endif
-}
-
 // CGPattern wrapper class: always allocate on heap, never call destructor
 
 class wxMacCoreGraphicsPattern
@@ -809,14 +800,6 @@ wxMacCoreGraphicsBrushData::CreateGradientFunction(const wxGraphicsGradientStops
 // Font
 //
 
-#if wxOSX_USE_IPHONE
-
-extern UIFont* CreateUIFont( const wxFont& font );
-extern void DrawTextInContext( CGContextRef context, CGPoint where, UIFont *font, NSString* text );
-extern CGSize MeasureTextInContext( UIFont *font, NSString* text );
-
-#endif
-
 class wxMacCoreGraphicsFontData : public wxGraphicsObjectRefData
 {
 public:
@@ -840,7 +823,7 @@ private :
     wxCFRef< CTFontRef > m_ctFont;
     wxCFRef< CFDictionaryRef > m_ctFontAttributes;
 #if wxOSX_USE_IPHONE
-    UIFont*  m_uiFont;
+    wxCFRef< WX_UIFont > m_uiFont;
 #endif
 };
 
@@ -850,19 +833,15 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_underlined = font.GetUnderlined();
     m_strikethrough = font.GetStrikethrough();
 
-    m_ctFont.reset( wxMacCreateCTFont( font ) );
+    m_ctFont.reset( wxCFRetain( font.OSXGetCTFont() ) );
     m_ctFontAttributes.reset( wxCFRetain( font.OSXGetCTFontAttributes() ) );
 #if wxOSX_USE_IPHONE
-    m_uiFont = CreateUIFont(font);
-    wxMacCocoaRetain( m_uiFont );
+    m_uiFont.reset( wxCFRetain( font.OSXGetUIFont() ) );
 #endif
 }
 
 wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 {
-#if wxOSX_USE_IPHONE
-    wxMacCocoaRelease( m_uiFont );
-#endif
 }
 
 class wxMacCoreGraphicsBitmapData : public wxGraphicsBitmapData
@@ -1358,7 +1337,10 @@ public:
 
     // draws a path by first filling and then stroking
     virtual void DrawPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) wxOVERRIDE;
-
+    
+    // paints a transparent rectangle (only useful for bitmaps or windows)
+    virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    
     virtual bool ShouldOffset() const wxOVERRIDE
     {
         if ( !m_enableOffset )
@@ -2369,6 +2351,14 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
     return m_cgContext;
 }
 
+void wxMacCoreGraphicsContext::ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if (!EnsureIsValid())
+        return;
+    
+    CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+    CGContextClearRect(m_cgContext, rect);
+}
 
 void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {

@@ -90,11 +90,13 @@ namespace
 // all the functions below taking non-const wxString::const_iterator p advance
 // it until the end of the match
 
-// scans all digits (but no more than len) and returns the resulting number
+// Scans all digits (but no more than len) and returns the resulting number.
+// Optionally writes number of digits scanned to numScannedDigits.
 bool GetNumericToken(size_t len,
                      wxString::const_iterator& p,
                      const wxString::const_iterator& end,
-                     unsigned long *number)
+                     unsigned long *number,
+                     size_t *numScannedDigits = NULL)
 {
     size_t n = 1;
     wxString s;
@@ -104,6 +106,11 @@ bool GetNumericToken(size_t len,
 
         if ( len && ++n > len )
             break;
+    }
+
+    if (numScannedDigits)
+    {
+        *numScannedDigits = n - 1;
     }
 
     return !s.empty() && s.ToULong(number);
@@ -1482,25 +1489,74 @@ wxDateTime::ParseFormat(const wxString& date,
                     if ( input == end )
                         return false;
 
-                    // and then check that it's either plus or minus sign
+                    if ( *input == wxS('Z') )
+                    {
+                        // Time is in UTC.
+                        ++input;
+                        haveTimeZone = true;
+                        break;
+                    }
+
+                    // Check if there's either a plus, hyphen-minus, or
+                    // minus sign.
                     bool minusFound;
-                    if ( *input == wxT('-') )
-                        minusFound = true;
-                    else if ( *input == wxT('+') )
+                    if ( *input == wxS('+') )
                         minusFound = false;
+                    else if
+                    (
+                        *input == wxS('-')
+#if wxUSE_UNICODE
+                        || *input == wxString::FromUTF8("\xe2\x88\x92")
+#endif
+                    )
+                        minusFound = true;
                     else
                         return false;   // no match
 
-                    // here should follow 4 digits HHMM
                     ++input;
-                    unsigned long tzHourMin;
-                    if ( !GetNumericToken(4, input, end, &tzHourMin) )
-                        return false;   // no match
 
-                    const unsigned hours = tzHourMin / 100;
-                    const unsigned minutes = tzHourMin % 100;
+                    // Here should follow exactly 2 digits for hours (HH).
+                    const size_t numRequiredDigits = 2;
+                    size_t numScannedDigits;
 
-                    if ( hours > 12 || minutes > 59 )
+                    unsigned long hours;
+                    if ( !GetNumericToken(numRequiredDigits, input, end,
+                                          &hours, &numScannedDigits)
+                         || numScannedDigits != numRequiredDigits)
+                    {
+                        return false; // No match.
+                    }
+
+                    // Optionally followed by a colon separator.
+                    bool mustHaveMinutes = false;
+                    if ( input != end && *input == wxS(':') )
+                    {
+                        mustHaveMinutes = true;
+                        ++input;
+                    }
+
+                    // Optionally followed by exactly 2 digits for minutes (MM).
+                    unsigned long minutes = 0;
+                    if ( !GetNumericToken(numRequiredDigits, input, end,
+                                          &minutes, &numScannedDigits)
+                         || numScannedDigits != numRequiredDigits)
+                    {
+                        if (mustHaveMinutes || numScannedDigits)
+                        {
+                            // No match if we must have minutes, or digits
+                            // for minutes were specified but not exactly 2.
+                            return false;
+                        }
+                    }
+
+                    /*
+                    Contemporary offset limits are -12:00 and +14:00.
+                    However historically offsets of over +/- 15 hours
+                    existed so be a bit more flexible. Info retrieved
+                    from Time Zone Database at
+                    https://www.iana.org/time-zones.
+                    */
+                    if ( hours > 15 || minutes > 59 )
                         return false;   // bad format
 
                     timeZone = 3600*hours + 60*minutes;

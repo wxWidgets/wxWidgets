@@ -222,6 +222,7 @@ private:
         CPPUNIT_TEST( TestTimeDST );
         CPPUNIT_TEST( TestTimeFormat );
         CPPUNIT_TEST( TestTimeParse );
+        CPPUNIT_TEST( TestTimeZoneParse );
         CPPUNIT_TEST( TestTimeSpanFormat );
         CPPUNIT_TEST( TestTimeTicks );
         CPPUNIT_TEST( TestParseRFC822 );
@@ -244,6 +245,7 @@ private:
     void TestTimeDST();
     void TestTimeFormat();
     void TestTimeParse();
+    void TestTimeZoneParse();
     void TestTimeSpanFormat();
     void TestTimeTicks();
     void TestParseRFC822();
@@ -886,6 +888,75 @@ void DateTimeTestCase::TestTimeParse()
 
     // Parsing gibberish shouldn't work.
     CPPUNIT_ASSERT( !dt.ParseTime("bloordyblop") );
+}
+
+void DateTimeTestCase::TestTimeZoneParse()
+{
+    static const struct
+    {
+        const char *str;
+        bool good;
+    } parseTestTimeZones[] =
+    {
+        // All of the good entries should result in 13:37 UTC+0.
+        { "09:37-0400", true },
+        { "13:37+0000", true },
+        { "17:37+0400", true },
+
+        // Z as UTC designator.
+        { "13:37Z", true },
+
+        // Only containing HH offset.
+        { "09:37-04", true },
+        { "13:37+00", true },
+        { "17:37+04", true },
+
+        // Colon as HH and MM separator.
+        { "17:37+04:00", true },
+
+        // // Colon separator and non-zero MM.
+        { "09:07-04:30", true },
+        { "19:22+05:45", true },
+
+#if wxUSE_UNICODE
+        // Containing minus sign (U+2212) as separator between time and tz.
+        { "09:37" "\xe2\x88\x92" "0400", true },
+#endif
+
+        // Some invalid ones too.
+
+        { "00:00-1600" }, // Offset out of range.
+        { "00:00+1600" }, // Offset out of range.
+
+        { "00:00+00:" }, // Minutes missing after colon separator.
+
+        // Not exactly 2 digits for hours and minutes.
+        { "17:37+4" },
+        { "17:37+400" },
+        { "17:37+040" },
+        { "17:37+4:0" },
+        { "17:37+4:00" },
+        { "17:37+04:0" },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(parseTestTimeZones); ++n )
+    {
+        wxDateTime dt;
+        wxString sTimeZone = wxString::FromUTF8(parseTestTimeZones[n].str);
+        wxString::const_iterator end;
+        if ( dt.ParseFormat(sTimeZone, wxS("%H:%M%z"), &end)
+             && end == sTimeZone.end() )
+        {
+            CPPUNIT_ASSERT( parseTestTimeZones[n].good );
+            CPPUNIT_ASSERT_EQUAL( 13, dt.GetHour(wxDateTime::UTC));
+            CPPUNIT_ASSERT_EQUAL( 37, dt.GetMinute(wxDateTime::UTC));
+        }
+        else
+        {
+            // Failed to parse time zone.
+            CPPUNIT_ASSERT( !parseTestTimeZones[n].good );
+        }
+    }
 }
 
 void DateTimeTestCase::TestTimeSpanFormat()

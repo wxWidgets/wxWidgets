@@ -1212,7 +1212,9 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     // width and height of the device-dependent bitmap
     int width = image.GetWidth();
     int height = image.GetHeight();
-
+    // we always use 32 bit internally here
+    depth = 32;
+    
     wxBitmapRefData* bitmapRefData;
 
     m_refData = bitmapRefData = new wxBitmapRefData( width/scale, height/scale, depth, scale) ;
@@ -1867,9 +1869,9 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(dataBase))
     EndRawAccess() ;
 }
 
-void wxBitmap::UseAlpha()
+void wxBitmap::UseAlpha(bool use )
 {
     // remember that we are using alpha channel:
     // we'll need to create a proper mask in UngetRawData()
-    M_BITMAPDATA->UseAlpha( true );
+    M_BITMAPDATA->UseAlpha( use );
 }

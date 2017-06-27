@@ -27,6 +27,70 @@
 // implementation
 // ===========================================================================
 
+#if wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+
+#if wxUSE_UNICODE_UTF16
+
+wxStringOperationsWchar::Utf16CharBuffer wxStringOperationsWchar::EncodeChar(const wxUniChar& ch)
+{
+    Utf16CharBuffer buf;
+    if ( ch.IsSupplementary() )
+    {
+        buf.data[0] = (wchar_t)ch.HighSurrogate();
+        buf.data[1] = (wchar_t)ch.LowSurrogate();
+        buf.data[2] = L'\0';
+    }
+    else
+    {
+        // Assume ch is a BMP character
+        buf.data[0] = (wchar_t)ch;
+        buf.data[1] = L'\0';
+    }
+    return buf;
+}
+
+wxWCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& ch)
+{
+    if ( ch.IsSupplementary() )
+    {
+        wxWCharBuffer buf(n * 2);
+        wchar_t s[2] = {
+            (wchar_t)ch.HighSurrogate(),
+            (wchar_t)ch.LowSurrogate(),
+        };
+        wchar_t *ptr = buf.data();
+        for (size_t i = 0; i < n; i++, ptr += 2)
+        {
+            wmemcpy(ptr, s, 2);
+        }
+        return buf;
+    }
+    else
+    {
+        // Assume ch is a BMP character
+        wxWCharBuffer buf(n);
+        wmemset(buf.data(), (wchar_t)ch, n);
+        return buf;
+    }
+}
+
+#else
+
+wxWxCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& ch)
+{
+    wxWxCharBuffer buf(n);
+#if wxUSE_UNICODE_WCHAR
+    wmemset(buf.data(), (wchar_t)ch, n);
+#else // ANSI
+    memset(buf.data(), (unsigned char)ch, n);
+#endif
+    return buf;
+}
+
+#endif // wxUSE_UNICODE_UTF16
+
+#endif // wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+
 #if wxUSE_UNICODE_UTF8
 
 // ---------------------------------------------------------------------------

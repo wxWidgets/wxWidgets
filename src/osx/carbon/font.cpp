@@ -160,12 +160,6 @@ public:
     wxCFRef<CTFontRef> m_ctFont;
     wxCFRef<CFDictionaryRef> m_ctFontAttributes;
     wxCFRef<CGFontRef> m_cgFont;
-#if wxOSX_USE_COCOA
-    WX_NSFont       m_nsFont;
-#endif
-#if wxOSX_USE_IPHONE
-    WX_UIFont       m_uiFont;
-#endif
     wxNativeFontInfo  m_info;
 };
 
@@ -179,13 +173,6 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data) : wxGDIRefData()
     m_ctFont = data.m_ctFont;
     m_ctFontAttributes = data.m_ctFontAttributes;
     m_cgFont = data.m_cgFont;
-#if wxOSX_USE_COCOA
-    m_nsFont = (NSFont*) wxMacCocoaRetain(data.m_nsFont);
-#endif
-#if wxOSX_USE_IPHONE
-    m_uiFont = (UIFont*) wxMacCocoaRetain(data.m_uiFont);
-#endif
-
 }
 
 // ============================================================================
@@ -201,12 +188,6 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
 
 void wxFontRefData::Init()
 {
-#if wxOSX_USE_COCOA
-    m_nsFont = NULL;
-#endif
-#if wxOSX_USE_IPHONE
-    m_uiFont = NULL;
-#endif
     m_fontValid = false;
 }
 
@@ -219,20 +200,6 @@ void wxFontRefData::Free()
 {
     m_ctFont.reset();
     m_cgFont.reset();
-#if wxOSX_USE_COCOA
-    if (m_nsFont != NULL)
-    {
-        wxMacCocoaRelease(m_nsFont);
-        m_nsFont = NULL;
-    }
-#endif
-#if wxOSX_USE_IPHONE
-    if (m_uiFont != NULL)
-    {
-        wxMacCocoaRelease(m_uiFont);
-        m_uiFont = NULL;
-    }
-#endif
     m_fontValid = false;
 }
 
@@ -282,13 +249,6 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
         descr.reset( CTFontCopyFontDescriptor( m_ctFont ) );
         m_info.Init(descr);
     }
-
-#if wxOSX_USE_COCOA
-    m_nsFont = wxFont::OSXCreateNSFont( font, &m_info );
-#endif
-#if wxOSX_USE_IPHONE
-    m_uiFont = wxFont::OSXCreateUIFont( font, &m_info );
-#endif
 
     m_fontValid = true;
 }
@@ -413,12 +373,6 @@ void wxFontRefData::MacFindFont()
 
         m_cgFont.reset(CTFontCopyGraphicsFont(m_ctFont, NULL));
     }
-#if wxOSX_USE_COCOA
-    m_nsFont = wxFont::OSXCreateNSFont( &m_info );
-#endif
-#if wxOSX_USE_IPHONE
-    m_uiFont = wxFont::OSXCreateUIFont( &m_info );
-#endif
     m_fontValid = true;
 }
     
@@ -736,7 +690,7 @@ NSFont* wxFont::OSXGetNSFont() const
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
 
-    return (M_FONTDATA->m_nsFont);
+    return const_cast<NSFont*>(reinterpret_cast<const NSFont*>(OSXGetCTFont()));
 }
 
 #endif
@@ -750,7 +704,7 @@ UIFont* wxFont::OSXGetUIFont() const
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
 
-    return (M_FONTDATA->m_uiFont);
+    return const_cast<UIFont*>(reinterpret_cast<const UIFont*>(OSXGetCTFont()));
 }
 
 #endif

@@ -55,7 +55,6 @@
 #            define NSAppKitVersionNumber10_11 1404
 #        endif
 #    endif
-#    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
 #    endif

@@ -98,7 +98,6 @@ using namespace std;
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #include <cairo-quartz.h>
-#include <cairo-atsui.h>
 #endif
 
 // Helper functions for dealing with alpha pre-multiplication.
@@ -476,7 +475,9 @@ public:
 
     virtual void StrokePath( const wxGraphicsPath& p ) wxOVERRIDE;
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) wxOVERRIDE;
-
+    virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    
     virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
     virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
     virtual void Rotate( wxDouble angle ) wxOVERRIDE;
@@ -1445,7 +1446,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         isSrcBpp32
 #elif defined(__WXGTK3__)
         isSrcBpp32 || bmp.GetMask() != NULL
-#elif defined(__WXMSW__)
+#elif defined(__WXMSW__) || defined(__WXOSX__)
         (isSrcBpp32 && bmp.HasAlpha()) || bmp.GetMask() != NULL
 #else
         isSrcBpp32
@@ -1538,7 +1539,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
     }
 
-#if defined(__WXMSW__) || defined(__WXGTK3__)
+#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
     // if there is a mask, set the alpha bytes in the target buffer to 
     // fully transparent or fully opaque
 #if defined(__WXMSW__)
@@ -1559,7 +1560,12 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxUint32* const rowStartDst = data;
             for (int x=0; x < pixData.GetWidth(); x++)
             {
+                // contrary to the others OSX has natively its masked out pixels as white
+#ifdef __WXOSX__
+                if (p.Red() == 0xFF && p.Green() == 0xFF && p.Blue() == 0xFF )
+#else
                 if (p.Red()+p.Green()+p.Blue() == 0)
+#endif
                     *data = 0;
                 else
                     *data = (wxALPHA_OPAQUE << 24) | (*data & 0x00FFFFFF);
@@ -2437,6 +2443,33 @@ void wxCairoContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fi
         cairo_set_fill_rule(m_context,fillStyle==wxODDEVEN_RULE ? CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING);
         cairo_fill(m_context);
         path.UnGetNativePath(cp);
+    }
+}
+
+void wxCairoContext::ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    cairo_save(m_context);
+    cairo_set_operator(m_context, CAIRO_OPERATOR_CLEAR);
+    cairo_rectangle (m_context, x, y, w, h);
+    cairo_fill (m_context);
+    cairo_restore(m_context);
+}
+
+void wxCairoContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if ( !m_brush.IsNull() )
+    {
+        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
+        ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
+        cairo_rectangle(m_context, x, y, w, h);
+        cairo_fill(m_context);
+    }
+    if ( !m_pen.IsNull() )
+    {
+        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
+        ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
+        cairo_rectangle(m_context, x, y, w, h);
+        cairo_stroke(m_context);
     }
 }
 

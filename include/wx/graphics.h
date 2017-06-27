@@ -653,6 +653,9 @@ public:
     // draws a path by first filling and then stroking
     virtual void DrawPath( const wxGraphicsPath& path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
+    // paints a transparent rectangle (only useful for bitmaps or windows)
+    virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+
     //
     // text
     //

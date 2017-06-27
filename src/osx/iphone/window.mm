@@ -476,7 +476,7 @@ void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to
 
 void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
 {
-    m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
+    m_osxView.backgroundColor = [UIColor colorWithCGColor:col.GetCGColor()];
 }
 
 bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style) 

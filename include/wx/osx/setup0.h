@@ -11,6 +11,11 @@
 #ifndef _WX_SETUP_H_
 #define _WX_SETUP_H_
 
+#ifdef __WXMAC_XCODE__
+// while configure based builds have the flags prepended, we must do this here
+// for xcode based builds
+#include "wx/osx/config_xcode.h"
+#endif
 
 /* --- start common options --- */
 // ----------------------------------------------------------------------------

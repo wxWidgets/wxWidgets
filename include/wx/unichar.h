@@ -83,6 +83,38 @@ public:
         return true;
     }
 
+    // Returns true if the character is a BMP character:
+    static bool IsBMP(wxUint32 value) { return value < 0x10000; }
+
+    // Returns true if the character is a supplementary character:
+    static bool IsSupplementary(wxUint32 value) { return 0x10000 <= value && value < 0x110000; }
+
+    // Returns the high surrogate code unit for the supplementary character
+    static wxUint16 HighSurrogate(wxUint32 value)
+    {
+        wxASSERT_MSG(IsSupplementary(value), "wxUniChar::HighSurrogate() must be called on a supplementary character");
+        return 0xD800 | ((value - 0x10000) >> 10);
+    }
+
+    // Returns the low surrogate code unit for the supplementary character
+    static wxUint16 LowSurrogate(wxUint32 value)
+    {
+        wxASSERT_MSG(IsSupplementary(value), "wxUniChar::LowSurrogate() must be called on a supplementary character");
+        return 0xDC00 | ((value - 0x10000) & 0x03FF);
+    }
+
+    // Returns true if the character is a BMP character:
+    bool IsBMP() const { return IsBMP(m_value); }
+
+    // Returns true if the character is a supplementary character:
+    bool IsSupplementary() const { return IsSupplementary(m_value); }
+
+    // Returns the high surrogate code unit for the supplementary character
+    wxUint16 HighSurrogate() const { return HighSurrogate(m_value); }
+
+    // Returns the low surrogate code unit for the supplementary character
+    wxUint16 LowSurrogate() const { return LowSurrogate(m_value); }
+
     // Conversions to char and wchar_t types: all of those are needed to be
     // able to pass wxUniChars to verious standard narrow and wide character
     // functions
@@ -215,6 +247,11 @@ public:
 
     bool IsAscii() const { return UniChar().IsAscii(); }
     bool GetAsChar(char *c) const { return UniChar().GetAsChar(c); }
+
+    bool IsBMP() const { return UniChar().IsBMP(); }
+    bool IsSupplementary() const { return UniChar().IsSupplementary(); }
+    wxUint16 HighSurrogate() const { return UniChar().HighSurrogate(); }
+    wxUint16 LowSurrogate() const { return UniChar().LowSurrogate(); }
 
     // Assignment operators:
 #if wxUSE_UNICODE_UTF8
