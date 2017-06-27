@@ -173,7 +173,10 @@ public:
     void TransformPoint(wxDouble* x, wxDouble* y) const;
 
     /**
-        Applies the linear part of this matrix, i.e.\ without translation.
+        Transforms the distance from device coordinates (as observed on
+        the screen) into logical ones corresponding to the matrix.
+        It multiplies distance components with the transpose of the matrix
+        except translation values.
 
         @param p
             The source receiving the transformations.
@@ -181,9 +184,9 @@ public:
         @return The source with the transformations applied.
 
         @code
-        //                                   | m_11  m_12   0 |
-        // dist' = | src.m_x  src._my  0 | x | m_21  m_22   0 |
-        //                                   | m_tx  m_ty   1 |
+        //                               | m_11   m_21 |
+        // dist' = | p.m_x  p.m_y  0 | x |             |
+        //                               | m_12   m_22 |
         @endcode
     */
     wxPoint2DDouble TransformDistance(const wxPoint2DDouble& p) const;
