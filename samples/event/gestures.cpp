@@ -3,16 +3,19 @@
 MyGestureFrame::MyGestureFrame()
     : wxFrame(NULL, wxID_ANY, wxT("Multi-touch Gestures"), wxDefaultPosition, wxSize(800, 600))
 {
-    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    // Create controls
     MyGesturePanel *myPanel = new MyGesturePanel(this);
-    sizer->Add(myPanel, wxSizerFlags(1).Expand());
- 
     m_logText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                         wxSize(wxDefaultCoord, 100), wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH);
-    wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
- 
+
+    // Add controls to sizer
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+	sizer->Add(myPanel, wxSizerFlags(1).Expand());
     sizer->Add(m_logText, wxSizerFlags().Expand());
-    SetSizer(sizer);
+	SetSizer(sizer);
+
+    // Log to the text control
+    delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
 
     Bind(wxEVT_CLOSE_WINDOW, &MyGestureFrame::OnQuit, this);
 }
