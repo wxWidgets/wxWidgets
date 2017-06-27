@@ -1919,7 +1919,6 @@ public:
     int GetDeltaY() const { return m_deltaY; }
     void SetDeltaY(int DeltaY) { m_deltaY = DeltaY; }
 
-
     virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
  
 private:
