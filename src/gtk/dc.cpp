@@ -180,6 +180,8 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
             cairo_set_operator(crTmp, CAIRO_OPERATOR_SOURCE);
             cairo_fill(crTmp);
             cairo_destroy(crTmp);
+            cairo_surface_flush(surfaceTmp);
+            surfaceSrc = surfaceTmp;
         }
     }
     cairo_save(cr);
@@ -188,7 +190,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     double sx, sy;
     source->GetUserScale(&sx, &sy);
     cairo_scale(cr, dstWidth / (sx * srcWidth), dstHeight / (sy * srcHeight));
-    cairo_set_source_surface(cr, surfaceTmp ? surfaceTmp : surfaceSrc, -xsrc_dev, -ysrc_dev);
+    cairo_set_source_surface(cr, surfaceSrc, -xsrc_dev, -ysrc_dev);
     const wxRasterOperationMode rop_save = m_logicalFunction;
     SetLogicalFunction(rop);
     cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);
