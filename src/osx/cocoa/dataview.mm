@@ -1258,7 +1258,6 @@ outlineView:(NSOutlineView*)outlineView
     //      error: instance variables may not be placed in class extension
     //
     // Until this can be fixed, disable it to at least fix compilation.
-    #define wxTextFieldCell NSTextFieldCell
 #else
 @interface wxTextFieldCell ()
 {
