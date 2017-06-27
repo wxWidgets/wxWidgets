@@ -5,8 +5,10 @@ class MyGestureFrame : public wxFrame
 public:
     MyGestureFrame();
 
+    void OnGesture(wxGestureEvent& event);
     void OnQuit(wxCloseEvent& event);
 
+private:
     wxTextCtrl *m_logText;
 };
  

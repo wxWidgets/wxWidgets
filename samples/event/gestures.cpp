@@ -17,6 +17,12 @@ MyGestureFrame::MyGestureFrame()
     // Log to the text control
     delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
 
+    // Bind all gestures to the same event handler, which must run before
+    // the other handlers, to clear the log window
+    myPanel->Bind(wxEVT_GESTURE_PAN, &MyGestureFrame::OnGesture, this);
+    myPanel->Bind(wxEVT_GESTURE_ZOOM, &MyGestureFrame::OnGesture, this);
+    myPanel->Bind(wxEVT_GESTURE_ROTATE, &MyGestureFrame::OnGesture, this);
+
     Bind(wxEVT_CLOSE_WINDOW, &MyGestureFrame::OnQuit, this);
 }
  
@@ -44,6 +50,14 @@ void MyGestureFrame::OnQuit(wxCloseEvent& WXUNUSED(event))
     Destroy();
 }
 
+void MyGestureFrame::OnGesture(wxGestureEvent& event)
+{
+    if ( event.IsGestureStart() )
+        m_logText->Clear();
+
+    event.Skip();
+}
+
 void MyGesturePanel::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
@@ -55,7 +69,6 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        ((MyGestureFrame*) GetParent())->m_logText->Clear();
         wxLogMessage("Pan gesture started\n");
     }
 
@@ -77,7 +90,6 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        ((MyGestureFrame*) GetParent())->m_logText->Clear();
         wxLogMessage("Zoom gesture started\n");
     }
 
@@ -105,7 +117,6 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        ((MyGestureFrame*) GetParent())->m_logText->Clear();
         wxLogMessage("Rotate gesture started\n");
     }
 
