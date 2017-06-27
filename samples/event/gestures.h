@@ -6,6 +6,8 @@ public:
     MyGestureFrame();
 
     void OnQuit(wxCloseEvent& event);
+
+    wxTextCtrl *m_logText;
 };
  
 class MyGesturePanel : public wxPanel
@@ -17,7 +19,9 @@ public:
     void OnPan(wxPanGestureEvent& event);
     void OnZoom(wxZoomGestureEvent& event);
     void OnRotate(wxRotateGestureEvent& event);
- 
+
 private:
     wxBitmap m_bitmap;
+    wxPoint2DDouble m_translateDistance;
+    wxAffineMatrix2D m_affineMatrix;
 };
