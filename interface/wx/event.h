@@ -3644,6 +3644,173 @@ public:
     void SetPosition(int pos);    
 };
 
+
+
+/** @class wxGestureEvent
+    This is the base class for all supported gesture events.
+
+    @library{wxcore}
+    @category{events}
+
+    @see wxPanGestureEvent, wxZoomGestureEvent, wxRotateGestureEvent
+
+    @since 3.1.1
+*/
+class wxGestureEvent : public wxEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxGestureEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL);
+
+    /**
+        Returns the position where the event took effect, in client coordinates: position of Pan event,
+        center of zoom for Zoom event, center of rotation for Rotate event.
+    */
+    const wxPoint& GetPosition() const;
+
+    /**
+        Returns true if the event was the first in a gesture sequence.
+    */
+    bool IsGestureStart() const;
+
+    /**
+        Returns true if the event was the last in a gesture sequence.
+    */
+    bool IsGestureEnd() const;
+
+    /**
+        Sets the position where the event took effect, in client coordinates: position of Pan event,
+        center of zoom for Zoom event, center of rotation for Rotate event.
+    */
+    void SetPosition(const wxPoint& pos);
+
+    /**
+        Sets the event to be the first in a gesture sequence.
+    */
+    void SetGestureStart(bool isStart = true);
+
+    /**
+        Sets the event to be the last in a gesture sequence.
+    */
+    void SetGestureEnd(bool isEnd = true);
+};
+
+
+/** @class wxPanGestureEvent
+    This class contains information about the pan gesture event.
+
+    @beginEventTable{wxPanGestureEvent}
+    @event{EVT_GESTURE_PAN(id, func)}
+        Process a @c wxEVT_GESTURE_PAN.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.1.1
+*/
+class wxPanGestureEvent : class wxGestureEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxPanGestureEvent(wxWindowID winid = 0);
+
+    /**
+        Returns the horizontal component of the distance covered since the previous Pan event.
+    */
+    int GetDeltaX() const;
+
+    /**
+        Returns the vertical component of the distance covered since the previous Pan event.
+    */
+    int GetDeltaY() const;
+
+    /**
+        Sets the horizontal component of the distance covered since the previous Pan event.
+    */
+    int SetDeltaX(int DeltaX);
+
+    /**
+        Sets the vertical component of the distance covered since the previous Pan event.
+    */
+    int SetDeltaY(int DeltaY);
+};
+
+
+/** @class wxZoomGestureEvent
+
+    This class contains information about the zoom gesture event.
+
+    @beginEventTable{wxZoomGestureEvent}
+    @event{EVT_GESTURE_ZOOM(id, func)}
+        Process a @c wxEVT_GESTURE_ZOOM.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.1.1
+*/
+class wxZoomGestureEvent : public wxGestureEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxZoomGestureEvent(wxWindowID windid = 0);
+
+    /**
+        Returns the zoom factor. A value greater than 1.0 means we should enlarge
+        (or zoom in), a value less than 1.0 means we should shrink (or zoom out).
+    */
+    double GetZoomFactor() const;
+
+    /**
+        Sets the zoom factor.
+    */
+    void SetZoomFactor(double zoomFactor);
+};
+
+
+/** @class wxRotateGestureEvent
+
+    This class contains information about the rotate gesture event.
+
+    @beginEventTable{wxRotateGestureEvent}
+    @event{EVT_GESTURE_ROTATE(id, func)}
+        Process a @c wxEVT_GESTURE_ROTATE.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.1.1
+*/
+class wxRotateGestureEvent : public wxGestureEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxRotateGestureEvent(wxWindowID windid = 0);
+
+    /**
+        Returns the angle of rotation in radians in clockwise direction since the
+        gesture was first started i.e. when IsGestureStart() returned true.
+    */
+    double GetAngle() const;
+
+     /**
+        Sets the angle of rotation in radians in clockwise direction since the
+        gesture was first started i.e. when IsGestureStart() returned true.
+    */
+    void SetAngle(double angle);
+};
+
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
