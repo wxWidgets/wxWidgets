@@ -359,10 +359,11 @@ public:
     bool HandleMouseMove(int x, int y, WXUINT flags);
     bool HandleMouseWheel(wxMouseWheelAxis axis,
                           WXWPARAM wParam, WXLPARAM lParam);
-
+#ifdef WM_GESTURE
     bool HandlePanGesture(int x, int y, WXDWORD flags);
     bool HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags);
     bool HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags);
+#endif // WM_GESTURE
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
