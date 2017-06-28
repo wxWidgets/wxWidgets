@@ -2459,7 +2459,6 @@ void wxCairoContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble
 {
     if ( !m_brush.IsNull() )
     {
-        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
         ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
         cairo_rectangle(m_context, x, y, w, h);
         cairo_fill(m_context);
