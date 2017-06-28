@@ -3273,18 +3273,28 @@ bool wxDataViewIconTextRenderer::MacRender()
     return true;
 }
 
-void
-wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
+void wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
                                              const wxDataViewItem& item,
                                              unsigned col)
 {
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    
+    // The icon can't be edited so get its old value and reuse it.
+    wxVariant valueOld;
+    model->GetValue(valueOld, item, col);
+    
+    wxDataViewIconText iconText;
+    iconText << valueOld;
+    
+    // But replace the text with the value entered by user.
+    iconText.SetText(ObjectToString(value));
+    
     wxVariant valueIconText;
-    valueIconText << wxDataViewIconText(ObjectToString(value));
-
+    valueIconText << iconText;
+    
     if ( !Validate(valueIconText) )
         return;
-
-    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    
     model->ChangeValue(valueIconText, item, col);
 }
 
