@@ -42,7 +42,21 @@ private:
         CPPUNIT_TEST( Editable );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( Zoom );
-        CPPUNIT_TEST( RunScript );
+        CPPUNIT_TEST( RunScriptWriteDOM );
+        CPPUNIT_TEST( RunScriptReturnString );
+        CPPUNIT_TEST( RunScriptReturnInteger );
+        CPPUNIT_TEST( RunScriptReturnDouble );
+        CPPUNIT_TEST( RunScriptReturnBoolean );
+        CPPUNIT_TEST( RunScriptReturnObject );
+        CPPUNIT_TEST( RunScriptReturnUndefined );
+        CPPUNIT_TEST( RunScriptReturnNull );
+        CPPUNIT_TEST( RunScriptAsyncReturnString );
+        CPPUNIT_TEST( RunScriptAsyncReturnInteger );
+        CPPUNIT_TEST( RunScriptAsyncReturnDouble );
+        CPPUNIT_TEST( RunScriptAsyncReturnBoolean );
+        CPPUNIT_TEST( RunScriptAsyncReturnObject );
+        CPPUNIT_TEST( RunScriptAsyncReturnUndefined );
+        CPPUNIT_TEST( RunScriptAsyncReturnNull );   
         CPPUNIT_TEST( SetPage );
     CPPUNIT_TEST_SUITE_END();
 
@@ -55,7 +69,21 @@ private:
     void Editable();
     void Selection();
     void Zoom();
-    void RunScript();
+    void RunScriptWriteDOM();
+    void RunScriptReturnString();
+    void RunScriptReturnInteger();
+    void RunScriptReturnDouble();
+    void RunScriptReturnBoolean();
+    void RunScriptReturnObject();
+    void RunScriptReturnUndefined();
+    void RunScriptReturnNull();
+    void RunScriptAsyncReturnString();
+    void RunScriptAsyncReturnInteger();
+    void RunScriptAsyncReturnDouble();
+    void RunScriptAsyncReturnBoolean();
+    void RunScriptAsyncReturnObject();
+    void RunScriptAsyncReturnUndefined();
+    void RunScriptAsyncReturnNull();   
     void SetPage();
     void LoadUrl(int times = 1);
 
@@ -260,10 +288,82 @@ void WebTestCase::Zoom()
     }
 }
 
-void WebTestCase::RunScript()
+void WebTestCase::RunScriptWriteDOM()
 {
     m_browser->RunScript("document.write(\"Hello World!\");");
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
+}
+
+void WebTestCase::RunScriptReturnString()
+{
+    wxString result = m_browser->RunScript("function f(a){return a;}f('Hello world');");
+    CPPUNIT_ASSERT_EQUAL("Hello World", result);  
+}
+
+void WebTestCase::RunScriptReturnInteger()
+{
+    wxString result = m_browser->RunScript("function f(a){return a;}f(123);");
+    CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));  
+}
+
+void WebTestCase::RunScriptReturnDouble()
+{
+    wxString result = m_browser->RunScript("function f(a){return a;}f(2.34);");
+    double value;
+    result.ToDouble(&value);
+    CPPUNIT_ASSERT_EQUAL(2.34, value);  
+}
+
+void WebTestCase::RunScriptReturnBoolean()
+{
+    wxString result = m_browser->RunScript("function f(a){return a;}f(false);");
+    CPPUNIT_ASSERT_EQUAL(false, (result == "false") ? false : true);    
+}
+
+void WebTestCase::RunScriptReturnObject()
+{
+    wxString result = m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();");
+    CPPUNIT_ASSERT_EQUAL("{'name':'Foo','lastName':'Bar'}", result);      
+}
+
+void WebTestCase::RunScriptReturnUndefined()
+{
+    wxString result = m_browser->RunScript("function f(){var person = new Object();}f();");
+    CPPUNIT_ASSERT_EQUAL("", result);      
+}
+
+void WebTestCase::RunScriptReturnNull()
+{
+    wxString result = m_browser->RunScript("function f(){return null;}f();");
+    CPPUNIT_ASSERT_EQUAL("", result);        
+}
+
+void WebTestCase::RunScriptAsyncReturnString()
+{
+}
+
+void WebTestCase::RunScriptAsyncReturnInteger()
+{
+}
+
+void WebTestCase::RunScriptAsyncReturnDouble()
+{
+}
+
+void WebTestCase::RunScriptAsyncReturnBoolean()
+{
+}
+
+void WebTestCase::RunScriptAsyncReturnUndefined()
+{
+}
+
+void WebTestCase::RunScriptAsyncReturnObject()
+{
+}
+
+void WebTestCase::RunScriptAsyncReturnNull()
+{
 }
 
 void WebTestCase::SetPage()
