@@ -952,7 +952,6 @@ wxString wxWebViewWebKit::GetPageText() const
 
 void wxWebViewWebKit::RunScript(const wxString& javascript)
 {
-  printf("Using Runscript with webkit1\n");
   webkit_web_view_execute_script(m_web_view,
                                  javascript.mb_str(wxConvUTF8));
 }
