@@ -210,6 +210,7 @@ wxOSX:
 - Allow pasting using Cmd+V in wxTextCtrl with wxTE_PASSWORD style.
 - Update font code to use toll-free bridges from CTFontRef to NSFont or UIFont
 - Add a native implementation for clearing bitmap/window wxGraphicsContexts
+- wxiOS now needs a minimum of iOS 9 for deployment
 
 Unix:
 
