@@ -2614,7 +2614,7 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     wxCHECK_RET( n > 0, wxS("Failed to obtain font info") );
 
     // Ensure the LOGFONT object contains the correct font face name
-    if (lstrlen(logfont.lfFaceName) == 0)
+    if (logfont.lfFaceName[0] == L'\0')
     {
         // The length of the font name must not exceed LF_FACESIZE TCHARs,
         // including the terminating NULL.

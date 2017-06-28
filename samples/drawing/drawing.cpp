@@ -1788,7 +1788,7 @@ void MyCanvas::Draw(wxDC& pdc)
             return;
         }
 
-        gdc.SetBackground(GetBackgroundColour());
+        gdc.SetBackground(wxBrush(GetBackgroundColour(),wxBRUSHSTYLE_SOLID));
         gdc.SetGraphicsContext(context);
     }
 
