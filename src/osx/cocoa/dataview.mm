@@ -388,7 +388,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     [[nativeColumn headerCell] setAlignment:
         ConvertToNativeHorizontalTextAlignment(column->GetAlignment())];
     [[nativeColumn headerCell] setStringValue:
-        [[wxCFStringRef(column->GetTitle()).AsNSString() retain] autorelease]];
+        wxCFStringRef(column->GetTitle()).AsNSString()];
     renderData->ApplyLineBreakMode([nativeColumn headerCell]);
 
     // setting data cell's properties:
@@ -3039,14 +3039,14 @@ bool wxDataViewBitmapRenderer::MacRender()
         wxBitmap bitmap;
         bitmap << GetValue();
         if (bitmap.IsOk())
-            [GetNativeData()->GetItemCell() setObjectValue:[[bitmap.GetNSImage() retain] autorelease]];
+            [GetNativeData()->GetItemCell() setObjectValue:bitmap.GetNSImage()];
     }
     else if (GetValue().GetType() == wxS("wxIcon"))
     {
         wxIcon icon;
         icon << GetValue();
         if (icon.IsOk())
-            [GetNativeData()->GetItemCell() setObjectValue:[[icon.GetNSImage() retain] autorelease]];
+            [GetNativeData()->GetItemCell() setObjectValue:icon.GetNSImage()];
     }
     return true;
 }
@@ -3104,7 +3104,7 @@ wxDataViewChoiceRenderer::OSXOnCellChanged(NSObject *value,
 
 bool wxDataViewChoiceRenderer::MacRender()
 {
-    [((NSPopUpButtonCell*) GetNativeData()->GetItemCell()) selectItemWithTitle:[[wxCFStringRef(GetValue().GetString()).AsNSString() retain] autorelease]];
+    [((NSPopUpButtonCell*) GetNativeData()->GetItemCell()) selectItemWithTitle:wxCFStringRef(GetValue().GetString()).AsNSString()];
     return true;
 }
 
@@ -3266,10 +3266,10 @@ bool wxDataViewIconTextRenderer::MacRender()
     cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
     iconText << GetValue();
     if (iconText.GetIcon().IsOk())
-        [cell setImage:[[wxBitmap(iconText.GetIcon()).GetNSImage() retain] autorelease]];
+        [cell setImage:wxBitmap(iconText.GetIcon()).GetNSImage()];
     else
         [cell setImage:nil];
-    [cell setStringValue:[[wxCFStringRef(iconText.GetText()).AsNSString() retain] autorelease]];
+    [cell setStringValue:wxCFStringRef(iconText.GetText()).AsNSString()];
     return true;
 }
 
@@ -3438,7 +3438,7 @@ void wxDataViewColumn::SetBitmap(const wxBitmap& bitmap)
     // the title is removed:
     m_title = wxEmptyString;
     wxDataViewColumnBase::SetBitmap(bitmap);
-    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:[[bitmap.GetNSImage() retain] autorelease]];
+    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:bitmap.GetNSImage()];
 }
 
 void wxDataViewColumn::SetMaxWidth(int maxWidth)
@@ -3517,7 +3517,7 @@ void wxDataViewColumn::SetTitle(const wxString& title)
     // the bitmap is removed:
     wxDataViewColumnBase::SetBitmap(wxBitmap());
     m_title = title;
-    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setStringValue:[[wxCFStringRef(title).AsNSString() retain] autorelease]];
+    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setStringValue:wxCFStringRef(title).AsNSString()];
 }
 
 void wxDataViewColumn::SetWidth(int width)
