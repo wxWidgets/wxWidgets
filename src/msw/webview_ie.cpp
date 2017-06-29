@@ -853,7 +853,7 @@ wxString wxWebViewIE::GetPageText() const
     }
 }
 
-void wxWebViewIE::RunScript(const wxString& javascript)
+wxString wxWebViewIE::RunScript(const wxString& javascript)
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
 
@@ -872,6 +872,8 @@ void wxWebViewIE::RunScript(const wxString& javascript)
                                &level);
         }
     }
+
+    return "";
 }
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

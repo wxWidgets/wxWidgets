@@ -1117,11 +1117,12 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
 
     if (JSValueIsString (context,value)) {
         JSStringRef js_str_value;
-        gsize str_length;        
-      
+        gsize str_length;
+	
         js_str_value = JSValueToStringCopy (context, value, NULL);
         str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
         wxGtkString str_value((gchar *)g_malloc (str_length));
+	
         JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
         JSStringRelease (js_str_value);
 
@@ -1153,6 +1154,8 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
         JSStringRelease (js_object_value);
 
         return_value = wxString::FromUTF8(str_value);
+
+	delete str_value;
     }
     else if (JSValueIsUndefined (context,value))
     {
@@ -1160,7 +1163,7 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
     }
     else if (JSValueIsNull (context,value))
     {
-        return_value =  wxString();
+        return_value = wxString();
     }
     else 
         wxLogError("Error running javascript: unexpected return value");
@@ -1185,6 +1188,7 @@ web_view_javascript_finished (GObject      *object,
     {
         event -> SetString(return_value);
         wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
+	delete event;
     }
 }
 
