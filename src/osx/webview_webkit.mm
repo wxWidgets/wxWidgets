@@ -411,7 +411,7 @@ wxString wxWebViewWebKit::GetSelectedText() const
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
     if ( !m_webView )
-        return;
+        return wxString();
 
     [[m_webView windowScriptObject] evaluateWebScript:
                     wxCFStringRef( javascript ).AsNSString()];
