@@ -112,7 +112,7 @@ public:
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
 
-    void RunScript(const wxString& javascript) wxOVERRIDE;
+    wxString RunScript(const wxString& javascript) wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
