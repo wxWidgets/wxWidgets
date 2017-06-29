@@ -1011,7 +1011,7 @@ void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
     wxLogMessage("RunScriptAsyc(id=%d) result: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
 }
 
-#end
+#endif
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
 {
