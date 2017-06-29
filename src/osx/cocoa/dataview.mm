@@ -1929,6 +1929,26 @@ outlineView:(NSOutlineView*)outlineView
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
+-(BOOL) textShouldBeginEditing:(NSText*)textEditor
+{
+    currentlyEditedColumn = [self editedColumn];
+    currentlyEditedRow = [self editedRow];
+    
+    wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]);
+    
+    NSTableColumn* tableColumn = [[self tableColumns] objectAtIndex:currentlyEditedColumn];
+    wxDataViewColumn* const col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+    
+    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+    // Before doing anything we send an event asking if editing of this item is really wanted.
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_START_EDITING, dvc, col, item);
+    dvc->GetEventHandler()->ProcessEvent( event );
+    if( !event.IsAllowed() )
+        return NO;
+    
+    return YES;
+}
+
 -(void) textDidBeginEditing:(NSNotification*)notification
 {
     // this notification is only sent if the user started modifying the cell
