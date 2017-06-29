@@ -49,73 +49,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
-=======
-wxDEFINE_EVENT( wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Sleep runscript when callback is called
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
-=======
-wxDEFINE_EVENT( wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Sleep runscript when callback is called
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
-=======
-wxDEFINE_EVENT( wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Sleep runscript when callback is called
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDEFINE_EVENT( wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
 

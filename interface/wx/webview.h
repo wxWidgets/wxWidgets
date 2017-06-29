@@ -466,73 +466,11 @@ public:
         Runs the given javascript code, returning a result if they is any.
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         @param A wxString containing the Javascript.
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-        @param A wxString containing the Javascript.
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-        @param A wxString containing the Javascript.
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-        @param A wxString containing the Javascript.
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
         @return A wxString with Javascript return value.
 
     */
     virtual wxString RunScript(const wxString& javascript) = 0;
-<<<<<<< HEAD
-
-    /**
-        Runs the given javascript code, returning a result if they is any, asynchronously.
-	To do that, it uses wxEVT_WEBVIEW_RUNSCRIPT_RESULT.
-        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
-              page to finish loading before calling RunScript().
-        @param A wxString containing the Javascript.
-	@param An integer represent the identifier of the event.
-    */
-    virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
-=======
->>>>>>> Trying to allocate memory for result string
-
-    /**
-        Runs the given javascript code, returning a result if they is any, asynchronously.
-	To do that, it uses wxEVT_WEBVIEW_RUNSCRIPT_RESULT.
-        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
-              page to finish loading before calling RunScript().
-        @param A wxString containing the Javascript.
-	@param An integer represent the identifier of the event.
-    */
-    virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
-=======
-        @return A wxString with Javascript return value.
-
-    */
-    virtual wxString RunScript(const wxString& javascript) = 0;
->>>>>>> Trying to allocate memory for result string
-
-    /**
-        Runs the given javascript code, returning a result if they is any, asynchronously.
-	To do that, it uses wxEVT_WEBVIEW_RUNSCRIPT_RESULT.
-        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
-              page to finish loading before calling RunScript().
-        @param A wxString containing the Javascript.
-	@param An integer represent the identifier of the event.
-    */
-    virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
-=======
-        @return A wxString with Javascript return value.
-
-    */
-    virtual wxString RunScript(const wxString& javascript) = 0;
->>>>>>> Trying to allocate memory for result string
 
     /**
         Runs the given javascript code, returning a result if they is any, asynchronously.
@@ -897,49 +835,4 @@ wxEventType wxEVT_WEBVIEW_LOADED;
 wxEventType wxEVT_WEBVIEW_ERROR;
 wxEventType wxEVT_WEBVIEW_NEWWINDOW;
 wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
-=======
-wxEventType wxEVT_RUNSCRIPT_RESULT;
->>>>>>> Sleep runscript when callback is called
-=======
-wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
->>>>>>> Set up the new async enviroment
-=======
-wxEventType wxEVT_RUNSCRIPT_RESULT;
->>>>>>> Sleep runscript when callback is called
-=======
-wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
->>>>>>> Set up the new async enviroment
-=======
-wxEventType wxEVT_RUNSCRIPT_RESULT;
->>>>>>> Sleep runscript when callback is called
-=======
-wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxEventType wxEVT_WEBVIEW_RUNSCRIPT_RESULT;
->>>>>>> Set up the new async enviroment

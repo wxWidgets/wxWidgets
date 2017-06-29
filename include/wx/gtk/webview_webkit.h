@@ -113,77 +113,8 @@ public:
     virtual wxString GetSelectedText() const wxOVERRIDE;
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
-=======
-    virtual wxString RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
->>>>>>> Trying to allocate memory for result string
-=======
-    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) wxOVERRIDE;
->>>>>>> Set up the new async enviroment
-=======
-    virtual void RunScriptAsync(const wxString& javascript) wxOVERRIDE;
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-    virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
->>>>>>> Adding a identifier to async RunScript
-=======
-    virtual void RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
->>>>>>> Integrate Proof of Concept inside webview_webkit2
-=======
-    virtual wxString RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
->>>>>>> Trying to allocate memory for result string
-=======
-    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) wxOVERRIDE;
->>>>>>> Set up the new async enviroment
-=======
-    virtual void RunScriptAsync(const wxString& javascript) wxOVERRIDE;
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-    virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
->>>>>>> Adding a identifier to async RunScript
-=======
-    virtual void RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
->>>>>>> Integrate Proof of Concept inside webview_webkit2
-=======
-    virtual wxString RunScript(const wxString& javascript,  wxObject* user_data = NULL) wxOVERRIDE;
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
->>>>>>> Trying to allocate memory for result string
-=======
-    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) wxOVERRIDE;
->>>>>>> Set up the new async enviroment
-=======
-    virtual void RunScriptAsync(const wxString& javascript) wxOVERRIDE;
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-    virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
->>>>>>> Adding a identifier to async RunScript
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;

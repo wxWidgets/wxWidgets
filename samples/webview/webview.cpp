@@ -133,67 +133,9 @@ public:
     void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
     void OnScrollPageUp(wxCommandEvent&) { m_browser->PageUp(); }
     void OnScrollPageDown(wxCommandEvent&) { m_browser->PageDown(); }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     void OnRunScript(wxCommandEvent& evt);
     void OnRunScriptAsync(wxCommandEvent& evt);
     void OnRunScriptAsyncResult(wxCommandEvent& evt);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    void OnRunScriptSync(wxCommandEvent& evt);
-    void OnRunScriptAsync(wxCommandEvent& evt);
->>>>>>> Modified sample
-=======
-=======
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-  
-    void OnRunScriptSync(wxCommandEvent& evt);
-    void OnRunScriptAsync(wxCommandEvent& evt);
-    void OnRunScriptResult(wxCommandEvent& evt);
-  
-<<<<<<< HEAD
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    void OnRunScript(wxCommandEvent& evt);
->>>>>>> Trying to allocate memory for result string
-=======
->>>>>>> Set up the new async enviroment
-=======
-    void OnRunScriptSync(wxCommandEvent& evt);
-    void OnRunScriptAsync(wxCommandEvent& evt);
->>>>>>> Modified sample
-=======
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    void OnRunScript(wxCommandEvent& evt);
->>>>>>> Trying to allocate memory for result string
-=======
->>>>>>> Set up the new async enviroment
-=======
-    void OnRunScriptSync(wxCommandEvent& evt);
-    void OnRunScriptAsync(wxCommandEvent& evt);
->>>>>>> Modified sample
-=======
-  
-    void OnRunScriptSync(wxCommandEvent& evt);
-    void OnRunScriptAsync(wxCommandEvent& evt);
-    void OnRunScriptResult(wxCommandEvent& evt);
-  
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    void OnRunScript(wxCommandEvent& evt);
->>>>>>> Trying to allocate memory for result string
-=======
->>>>>>> Set up the new async enviroment
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -454,49 +396,8 @@ WebFrame::WebFrame(const wxString& url) :
     m_scroll_page_down = scroll_menu->Append(wxID_ANY, "Page d&own");
     m_tools_menu->AppendSubMenu(scroll_menu, "Scroll");
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
-<<<<<<< HEAD
-=======
-    wxMenuItem* script_sync =  m_tools_menu->Append(wxID_ANY, _("Run Script Sync"));
-
->>>>>>> Modified sample
     wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
-=======
-    wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Trying to allocate memory for result string
-=======
-    wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-    wxMenuItem* script_sync =  m_tools_menu->Append(wxID_ANY, _("Run Script Sync"));
-
-    wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
->>>>>>> Modified sample
-=======
-    wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
->>>>>>> Trying to allocate memory for result string
-=======
-    wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-    wxMenuItem* script_sync =  m_tools_menu->Append(wxID_ANY, _("Run Script Sync"));
-
-    wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
->>>>>>> Modified sample
-=======
-    wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
->>>>>>> Trying to allocate memory for result string
-=======
-    wxMenuItem* script_async =  m_tools_menu->Append(wxID_ANY, _("Run Script Async"));
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
 
     //Selection menu
     wxMenu* selection = new wxMenu();
@@ -605,115 +506,12 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnScrollPageUp),  NULL, this );
     Connect(m_scroll_page_down->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnScrollPageDown),  NULL, this );
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     Connect(script->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     Connect(script_async->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
     Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-<<<<<<< HEAD
 	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
-=======
-=======
-    
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
->>>>>>> Modified sample
-=======
-    
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
->>>>>>> Modified sample
-=======
-    
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-    Connect(script_sync->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptSync),  NULL, this );
-    Connect(script_async->GetId(), wxEVT_MENU,
-	    wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Modified sample
-=======
-    Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-    	    wxCommandEventHandler(WebFrame::OnRunScriptResult), NULL, this);
-
-    
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    Connect(script->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Trying to allocate memory for result string
-=======
-    Connect(script->GetId(), wxEVT_MENU,
-=======
-    Connect(script_async->GetId(), wxEVT_MENU,
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-            wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
-    Connect(script_async->GetId(), wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-=======
->>>>>>> Improved example webview async
-	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
->>>>>>> Set up the new async enviroment
-=======
->>>>>>> Modified sample
-=======
-    Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-    	    wxCommandEventHandler(WebFrame::OnRunScriptResult), NULL, this);
-
-    
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    Connect(script->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
->>>>>>> Trying to allocate memory for result string
-=======
-    Connect(script->GetId(), wxEVT_MENU,
-=======
-    Connect(script_async->GetId(), wxEVT_MENU,
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-            wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
-    Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
->>>>>>> Set up the new async enviroment
-=======
->>>>>>> Modified sample
-=======
-    Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-    	    wxCommandEventHandler(WebFrame::OnRunScriptResult), NULL, this);
-
-    
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    Connect(script->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
-<<<<<<< HEAD
->>>>>>> Trying to allocate memory for result string
-=======
-    Connect(script->GetId(), wxEVT_MENU,
-=======
-    Connect(script_async->GetId(), wxEVT_MENU,
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-            wxCommandEventHandler(WebFrame::OnRunScriptAsync),  NULL, this );
-    Connect(wxID_ANY, wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-	    wxCommandEventHandler(WebFrame::OnRunScriptAsyncResult),  NULL, this );
->>>>>>> Set up the new async enviroment
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
     Connect(m_selection_delete->GetId(), wxEVT_MENU,
@@ -1184,146 +982,10 @@ void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-      wxLogMessage("RunScript result: %s\n", m_browser->RunScript(dialog.GetValue()));	
-=======
-        wxString result = m_browser->RunScript(dialog.GetValue());
-	printf("The result of RunScript Sync is %s\n", (const char*)result.mb_str(wxConvUTF8));
-	
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-        wxString result = m_browser->RunScript(dialog.GetValue());
-	printf("The result of RunScript Sync is %s\n", (const char*)result.mb_str(wxConvUTF8));
-	
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
+        wxLogMessage("RunScript result: %s\n", m_browser->RunScript(dialog.GetValue()));	
     }
 }
 
-void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
-{
-<<<<<<< HEAD
-    wxTextEntryDialog dialog(this, "Enter JavaScript to run (async).", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
-    if(dialog.ShowModal() == wxID_OK)
-    {
-      m_async_id = wxNewId();
-      m_browser->RunScriptAsync(dialog.GetValue(), m_async_id);
-    }
-}
-
-void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
-{
-  int event_id = evt.GetId();
-  if (event_id == m_async_id) 
-    wxLogMessage("RunScriptAsyc(id=%d) result: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
-}
-
-=======
-    wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
-    if(dialog.ShowModal() == wxID_OK)
-    {
-      wxString* test = new wxString(_("Test"));
-      m_browser->RunScript(dialog.GetValue(), (wxObject*)test);
-=======
-        wxString result = m_browser->RunScript(dialog.GetValue());
-	printf("The result of RunScript Sync is %s\n", (const char*)result.mb_str(wxConvUTF8));
-	
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-    }
-}
-
-<<<<<<< HEAD
->>>>>>> Modified sample
-=======
-void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
-{
-  wxString* str = (wxString*)evt.GetEventObject(); 
-  if (str->IsSameAs(_("Test"))) {
-    printf("(WebFrame::OnRunScriptResult (aka sample)) Event gets the method handler\n");
-    printf("(WebFrame::OnRunScriptResult (aka sample)) The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
-   }
-  
-}
-
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-      printf("RunScript result: %s\n", (const char*)m_browser->RunScript(dialog.GetValue()).mb_str(wxConvUTF8));	
-=======
-      wxLogMessage("RunScript result: %s\n", m_browser->RunScript(dialog.GetValue()));	
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-    }
-}
-
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Trying to allocate memory for result string
-=======
-void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
-{
-    wxTextEntryDialog dialog(this, "Enter JavaScript to run (async).", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
-    if(dialog.ShowModal() == wxID_OK)
-    {
-      m_async_id = wxNewId();
-      m_browser->RunScriptAsync(dialog.GetValue(), m_async_id);
-    }
-}
-
-<<<<<<< HEAD
-void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
-{
-  int event_id = evt.GetId();
-  if (event_id == m_async_id) 
-    wxLogMessage("RunScriptAsyc(id=%d) result: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
-}
-
->>>>>>> Set up the new async enviroment
-=======
-=======
->>>>>>> Modified sample
-void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
-{
-    wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
-    if(dialog.ShowModal() == wxID_OK)
-    {
-      wxString* test = new wxString(_("Test"));
-      m_browser->RunScript(dialog.GetValue(), (wxObject*)test);
-    }
-}
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Modified sample
-=======
-void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
-{
-  wxString* str = (wxString*)evt.GetEventObject(); 
-  if (str->IsSameAs(_("Test"))) {
-    printf("(WebFrame::OnRunScriptResult (aka sample)) Event gets the method handler\n");
-    printf("(WebFrame::OnRunScriptResult (aka sample)) The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
-   }
-  
-}
-
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-      printf("RunScript result: %s\n", (const char*)m_browser->RunScript(dialog.GetValue()).mb_str(wxConvUTF8));	
-=======
-      wxLogMessage("RunScript result: %s\n", m_browser->RunScript(dialog.GetValue()));	
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-    }
-}
-
-<<<<<<< HEAD
->>>>>>> Trying to allocate memory for result string
-=======
 void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
 {
     wxTextEntryDialog dialog(this, "Enter JavaScript to run (async).", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
@@ -1341,50 +1003,6 @@ void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
     wxLogMessage("RunScriptAsyc(id=%d) result: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
 }
 
->>>>>>> Set up the new async enviroment
-=======
->>>>>>> Modified sample
-=======
-void WebFrame::OnRunScriptResult(wxCommandEvent& evt)
-{
-  wxString* str = (wxString*)evt.GetEventObject(); 
-  if (str->IsSameAs(_("Test"))) {
-    printf("(WebFrame::OnRunScriptResult (aka sample)) Event gets the method handler\n");
-    printf("(WebFrame::OnRunScriptResult (aka sample)) The result is %s\n", (const char*)(evt.GetString()).mb_str(wxConvUTF8));
-   }
-  
-}
-
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-      printf("RunScript result: %s\n", (const char*)m_browser->RunScript(dialog.GetValue()).mb_str(wxConvUTF8));	
-=======
-      wxLogMessage("RunScript result: %s\n", m_browser->RunScript(dialog.GetValue()));	
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-    }
-}
-
-<<<<<<< HEAD
->>>>>>> Trying to allocate memory for result string
-=======
-void WebFrame::OnRunScriptAsync(wxCommandEvent& WXUNUSED(evt))
-{
-    wxTextEntryDialog dialog(this, "Enter JavaScript to run (async).", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
-    if(dialog.ShowModal() == wxID_OK)
-    {
-      m_async_id = wxNewId();
-      m_browser->RunScriptAsync(dialog.GetValue(), m_async_id);
-    }
-}
-
-void WebFrame::OnRunScriptAsyncResult(wxCommandEvent& evt)
-{
-  int event_id = evt.GetId();
-  if (event_id == m_async_id) 
-    wxLogMessage("RunScriptAsyc(id=%d) result: %s\n", event_id, (const char*)(evt.GetString()).mb_str(wxConvUTF8));
-}
-
->>>>>>> Set up the new async enviroment
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->ClearSelection();

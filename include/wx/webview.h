@@ -161,76 +161,8 @@ public:
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     virtual wxString RunScript(const wxString& javascript) = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
-=======
-    virtual wxString RunScript(const wxString& javascript, wxObject* user_data=NULL) = 0;
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    virtual wxString RunScript(const wxString& javascript) = 0;
->>>>>>> Trying to allocate memory for result string
-=======
-    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) = 0;
->>>>>>> Set up the new async enviroment
-=======
-    virtual void RunScriptAsync(const wxString& javascript) = 0;
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-    virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
->>>>>>> Adding a identifier to async RunScript
-=======
-    virtual void RunScript(const wxString& javascript, wxObject* user_data=NULL) = 0;
->>>>>>> Integrate Proof of Concept inside webview_webkit2
-=======
-    virtual wxString RunScript(const wxString& javascript, wxObject* user_data=NULL) = 0;
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    virtual wxString RunScript(const wxString& javascript) = 0;
->>>>>>> Trying to allocate memory for result string
-=======
-    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) = 0;
->>>>>>> Set up the new async enviroment
-=======
-    virtual void RunScriptAsync(const wxString& javascript) = 0;
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-    virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
->>>>>>> Adding a identifier to async RunScript
-=======
-    virtual void RunScript(const wxString& javascript, wxObject* user_data=NULL) = 0;
->>>>>>> Integrate Proof of Concept inside webview_webkit2
-=======
-    virtual wxString RunScript(const wxString& javascript, wxObject* user_data=NULL) = 0;
->>>>>>> New RunScript menuitems on webview sample. Sync is working, async not
-=======
-    virtual wxString RunScript(const wxString& javascript) = 0;
->>>>>>> Trying to allocate memory for result string
-=======
-    virtual void RunScriptAsync(const wxString& javascript, wxObject* user_data) = 0;
->>>>>>> Set up the new async enviroment
-=======
-    virtual void RunScriptAsync(const wxString& javascript) = 0;
->>>>>>> Implementing async and sync. Sync does a segfault and async don't go to event handler
-=======
-    virtual void RunScriptAsync(const wxString& javascript, int id) = 0;
->>>>>>> Adding a identifier to async RunScript
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {
@@ -329,52 +261,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_LOADED, wxWebViewEv
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Sleep runscript when callback is called
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Sleep runscript when callback is called
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Sleep runscript when callback is called
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Modified sample
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_RUNSCRIPT_RESULT, wxWebViewEvent );
->>>>>>> Set up the new async enviroment
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
@@ -406,125 +293,17 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_TITLE_CHANGED, id, \
                      wxWebViewEventHandler(fn))
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 #define EVT_WEBVIEW_RUNSCRIPT_RESULT(id, fn) \
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_RUNSCRIPT_RESULT, id, \
-=======
-#define EVT_RUNSCRIPT_RESULT(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_WEBVIEW_LOADED, id, \
->>>>>>> Sleep runscript when callback is called
-                     wxWebViewEventHandler(fn))
-
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-#define EVT_WEBVIEW_RUNSCRIPT_RESULT(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_WEBVIEW_RUNSCRIPT_RESULT, id, \
-                     wxWebViewEventHandler(fn))
-
->>>>>>> Set up the new async enviroment
-=======
-#define EVT_RUNSCRIPT_RESULT(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_WEBVIEW_LOADED, id, \
-                     wxWebViewEventHandler(fn))
-
->>>>>>> Sleep runscript when callback is called
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-#define EVT_WEBVIEW_RUNSCRIPT_RESULT(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_WEBVIEW_RUNSCRIPT_RESULT, id, \
-                     wxWebViewEventHandler(fn))
-
->>>>>>> Set up the new async enviroment
-=======
-#define EVT_RUNSCRIPT_RESULT(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_WEBVIEW_LOADED, id, \
-                     wxWebViewEventHandler(fn))
-
->>>>>>> Sleep runscript when callback is called
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-#define EVT_WEBVIEW_RUNSCRIPT_RESULT(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_WEBVIEW_RUNSCRIPT_RESULT, id, \
-                     wxWebViewEventHandler(fn))
-
->>>>>>> Set up the new async enviroment
 
 // old wxEVT_COMMAND_* constants
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Async working, need to use user_data to know which runscript trigged the event
-=======
->>>>>>> Async working, need to use user_data to know which runscript trigged the event
-=======
->>>>>>> Async working, need to use user_data to know which runscript trigged the event
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATING        wxEVT_WEBVIEW_NAVIGATING
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATED         wxEVT_WEBVIEW_NAVIGATED
 #define wxEVT_COMMAND_WEBVIEW_LOADED            wxEVT_WEBVIEW_LOADED
 #define wxEVT_COMMAND_WEBVIEW_ERROR             wxEVT_WEBVIEW_ERROR
 #define wxEVT_COMMAND_WEBVIEW_NEWWINDOW         wxEVT_WEBVIEW_NEWWINDOW
 #define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED     wxEVT_WEBVIEW_TITLE_CHANGED
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 #define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
-<<<<<<< HEAD
-=======
-#define wxEVT_COMMAND_WEBVIEW_NAVIGATING      wxEVT_WEBVIEW_NAVIGATING
-#define wxEVT_COMMAND_WEBVIEW_NAVIGATED       wxEVT_WEBVIEW_NAVIGATED
-#define wxEVT_COMMAND_WEBVIEW_LOADED          wxEVT_WEBVIEW_LOADED
-#define wxEVT_COMMAND_WEBVIEW_ERROR           wxEVT_WEBVIEW_ERROR
-#define wxEVT_COMMAND_WEBVIEW_NEWWINDOW       wxEVT_WEBVIEW_NEWWINDOW
-#define wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED   wxEVT_WEBVIEW_TITLE_CHANGED
-#define wxEVT_COMMAND_RUNSCRIPT_RESULT        wxEVT_RUNSCRIPT_RESULT
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Sleep runscript when callback is called
-=======
->>>>>>> Async working, need to use user_data to know which runscript trigged the event
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-#define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
->>>>>>> Set up the new async enviroment
-=======
->>>>>>> Sleep runscript when callback is called
-=======
-#define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
->>>>>>> Async working, need to use user_data to know which runscript trigged the event
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-#define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
->>>>>>> Set up the new async enviroment
-=======
->>>>>>> Sleep runscript when callback is called
-=======
-#define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
->>>>>>> Async working, need to use user_data to know which runscript trigged the event
-=======
->>>>>>> Trying to allocate memory for result string
-=======
-#define wxEVT_COMMAND_WEBVIEW_RUNSCRIPT_RESULT  wxEVT_WEBVIEW_RUNSCRIPT_RESULT
->>>>>>> Set up the new async enviroment
 
 #endif // wxUSE_WEBVIEW
 
