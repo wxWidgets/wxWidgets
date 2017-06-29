@@ -408,13 +408,15 @@ wxString wxWebViewWebKit::GetSelectedText() const
     return wxCFStringRef::AsString([dr toString]);
 }
 
-void wxWebViewWebKit::RunScript(const wxString& javascript)
+wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
     if ( !m_webView )
         return;
 
     [[m_webView windowScriptObject] evaluateWebScript:
                     wxCFStringRef( javascript ).AsNSString()];
+
+    return wxString();
 }
 
 void wxWebViewWebKit::OnSize(wxSizeEvent &event)
