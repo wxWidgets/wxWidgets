@@ -950,10 +950,11 @@ wxString wxWebViewWebKit::GetPageText() const
                     wxConvUTF8);
 }
 
-void wxWebViewWebKit::RunScript(const wxString& javascript)
+wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
   webkit_web_view_execute_script(m_web_view,
                                  javascript.mb_str(wxConvUTF8));
+  return "";
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
