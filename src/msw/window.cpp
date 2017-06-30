@@ -3863,7 +3863,6 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
         {
             wxLogLastError(wxT("SetGestureConfig"));
         }
-
     }
 #endif // WM_GESTURE
 
@@ -5772,7 +5771,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
 
 bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags)
 {
-    static WXDWORD s_lastAngleArgument;
+    static double s_lastAngle;
 
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(GetId());
@@ -5780,7 +5779,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
     // This flag indicates that the gesture has just started
     if ( flags & GF_BEGIN )
     {
-        s_lastAngleArgument = 0;
+        s_lastAngle = 0;
         event.SetGestureStart();
     }
 
@@ -5791,28 +5790,28 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
 
     wxPoint pt(x, y);
 
-    // Use angleArgument and s_lastAngleArgument to obtain the change in angle between this and
-    // the last rotate event. This change in angle is in radians
-    double angleDelta = GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument)
-                      - GID_ROTATE_ANGLE_FROM_ARGUMENT(s_lastAngleArgument);
+    // Use angleArgument to obtain the cumulative angle since the gesture was first
+    // started. This angle is in radians
+    // MSW returns negative angle for clockwise rotation and positive otherwise
+    // So, multiply angleDelta by -1 for positive change in angle for clockwise
+    // and negative in case of counter
+    double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
 
+    // Set the angle to be 0 if the gesture has just started
+    if ( flags & GF_BEGIN )
+    {
+        angle = 0;
+    }
+
+    // Calculate the change in angle
+    double angleDelta = angle - s_lastAngle;
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
     event.SetPosition(pt);
+    event.SetAngleDelta(angleDelta);
 
-    // MSW returns negative angle for clockwise rotation and positive otherwise
-    // So, multiply angleDelta by -1 for positive change in angle for clockwise
-    // and negative in case of counterclockwise rotation
-    event.SetAngleDelta(-angleDelta);
-
-    // Set the change in angle to be 0 if GF_BEGIN is set
-    if ( flags & GF_BEGIN )
-    {
-        event.SetAngleDelta(0.0);
-    }
-
-    // Update s_lastAngleArgument
-    s_lastAngleArgument = angleArgument;
+    // Update s_lastAngle
+    s_lastAngle = angle;
 
     return HandleWindowEvent(event);
 }
