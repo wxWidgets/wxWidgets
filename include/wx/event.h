@@ -1938,20 +1938,20 @@ class WXDLLIMPEXP_CORE wxZoomGestureEvent : public wxGestureEvent
 public:
     wxZoomGestureEvent(wxWindowID winid = 0)
                 : wxGestureEvent(winid, wxEVT_GESTURE_ZOOM)
-                { m_zoomFactor = 1.0; }
+                { m_zoomDelta = 1.0; }
       
     wxZoomGestureEvent(const wxZoomGestureEvent& event) : wxGestureEvent(event)
     {
-        m_zoomFactor = event.m_zoomFactor;
+        m_zoomDelta = event.m_zoomDelta;
     }
 
-    double GetZoomFactor() const { return m_zoomFactor; }
-    void SetZoomFactor(double zoomFactor) { m_zoomFactor = zoomFactor; }
+    double GetZoomDelta() const { return m_zoomDelta; }
+    void SetZoomDelta(double zoomDelta) { m_zoomDelta = zoomDelta; }
  
     virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
  
 private:
-    double m_zoomFactor;
+    double m_zoomDelta;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
 };
@@ -1967,20 +1967,20 @@ class WXDLLIMPEXP_CORE wxRotateGestureEvent : public wxGestureEvent
 public:
     wxRotateGestureEvent(wxWindowID winid = 0)
                 : wxGestureEvent(winid, wxEVT_GESTURE_ROTATE)
-                { m_angle = 0.0; }
+                { m_angleDelta = 0.0; }
       
     wxRotateGestureEvent(const wxRotateGestureEvent& event) : wxGestureEvent(event)
     {
-        m_angle = event.m_angle;
+        m_angleDelta = event.m_angleDelta;
     }
      
-    double GetAngle() const { return m_angle; }
-    void SetAngle(double angle) { m_angle = angle; }
+    double GetAngleDelta() const { return m_angleDelta; }
+    void SetAngleDelta(double angleDelta) { m_angleDelta = angleDelta; }
  
     virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
  
 private:
-    double m_angle;
+    double m_angleDelta;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
 };

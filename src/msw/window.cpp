@@ -3239,29 +3239,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
 #ifdef WM_GESTURE
-        case WM_GESTURENOTIFY:
-        {
-            if ( !GestureFuncs::IsOk() )
-            {
-                processed = false;
-                break;
-            }
-
-            // Configure to receive all gestures
-            GESTURECONFIG gestureConfig[] = {0, GC_ALLGESTURES, 0};
-
-            // This functions sets the configuration to the window. Second argument is reserved to be 0.
-            // Third argument is the number of elements in gestureConfig array, currently equal to 1
-            if ( !GestureFuncs::SetGestureConfig()(GetHWND(), 0, 1, gestureConfig, sizeof(GESTURECONFIG)) )
-            {
-                wxLogLastError(wxT("SetGestureConfig"));
-            }
-
-            // WM_GESTURENOTIFY should always be passed to DefWindowProc
-            processed = false;
-        }
-        break;
-
         case WM_GESTURE:
         {
             if( !GestureFuncs::IsOk() )
@@ -3874,6 +3851,21 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 
         return false;
     }
+#ifdef WM_GESTURE
+    if ( GestureFuncs::IsOk() )
+    {
+        // Configure to receive all gestures
+        GESTURECONFIG gestureConfig = {0, GC_ALLGESTURES, 0};
+
+        // This functions sets the configuration to the window. Second argument is reserved to be 0.
+        // Third argument is the number of elements in gestureConfig array, currently equal to 1
+        if ( !GestureFuncs::SetGestureConfig()(m_hWnd, 0, 1, &gestureConfig, sizeof(GESTURECONFIG)) )
+        {
+            wxLogLastError(wxT("SetGestureConfig"));
+        }
+
+    }
+#endif // WM_GESTURE
 
     SubclassWin(m_hWnd);
 
@@ -5760,15 +5752,15 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     pt.x = (s_previousLocationX + x) / 2;
     pt.y = (s_previousLocationY + y) / 2;
 
-    // Calculate the zoom factor which is the ratio of fingerDistance and s_lastFingerDistance
-    double zoomFactor = (double) fingerDistance / (double) s_lastFingerDistance;
+    // Calculate the zoomDelta(zoom factor) which is the ratio of fingerDistance and s_lastFingerDistance
+    double zoomDelta = (double) fingerDistance / (double) s_lastFingerDistance;
 
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
 
     // This is not a gesture point but the center of a zoom
     event.SetPosition(pt);
-    event.SetZoomFactor(zoomFactor);
+    event.SetZoomDelta(zoomDelta);
 
     // Update gesture event point and distance between the fingers
     s_previousLocationX = x;
@@ -5780,12 +5772,15 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
 
 bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags)
 {
+    static WXDWORD s_lastAngleArgument;
+
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(GetId());
 
     // This flag indicates that the gesture has just started
     if ( flags & GF_BEGIN )
     {
+        s_lastAngleArgument = 0;
         event.SetGestureStart();
     }
 
@@ -5796,14 +5791,28 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
 
     wxPoint pt(x, y);
 
-    // use angleArgument to obtain the cumulative angle since the gesture was first
-    // started. This angle is in radians.
-    double angle = GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
+    // Use angleArgument and s_lastAngleArgument to obtain the change in angle between this and
+    // the last rotate event. This change in angle is in radians
+    double angleDelta = GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument)
+                      - GID_ROTATE_ANGLE_FROM_ARGUMENT(s_lastAngleArgument);
 
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
     event.SetPosition(pt);
-    event.SetAngle(angle);
+
+    // MSW returns negative angle for clockwise rotation and positive otherwise
+    // So, multiply angleDelta by -1 for positive change in angle for clockwise
+    // and negative in case of counterclockwise rotation
+    event.SetAngleDelta(-angleDelta);
+
+    // Set the change in angle to be 0 if GF_BEGIN is set
+    if ( flags & GF_BEGIN )
+    {
+        event.SetAngleDelta(0.0);
+    }
+
+    // Update s_lastAngleArgument
+    s_lastAngleArgument = angleArgument;
 
     return HandleWindowEvent(event);
 }
