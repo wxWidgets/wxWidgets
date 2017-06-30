@@ -218,7 +218,7 @@ public:
         if ( !ms_gestureSymbolsLoaded )
             LoadGestureSymbols();
 
-    return ms_pfnGetGestureInfo && ms_pfnCloseGestureInfoHandle;
+    return ms_pfnGetGestureInfo && ms_pfnCloseGestureInfoHandle && ms_pfnSetGestureConfig;
     }
 
     typedef BOOL (WINAPI *GetGestureInfo_t)(HGESTUREINFO, PGESTUREINFO);
@@ -241,6 +241,16 @@ public:
         return ms_pfnCloseGestureInfoHandle;
     }
 
+    typedef BOOL (WINAPI *SetGestureConfig_t)(HWND, DWORD, UINT, PGESTURECONFIG, UINT);
+
+    static SetGestureConfig_t SetGestureConfig()
+    {
+        if( !ms_gestureSymbolsLoaded )
+            LoadGestureSymbols();
+
+        return ms_pfnSetGestureConfig;
+    }
+
 private:
     static void LoadGestureSymbols()
     {
@@ -248,12 +258,14 @@ private:
 
         wxDL_INIT_FUNC(ms_pfn, GetGestureInfo, dll);
         wxDL_INIT_FUNC(ms_pfn, CloseGestureInfoHandle, dll);
+        wxDL_INIT_FUNC(ms_pfn, SetGestureConfig, dll);
 
         ms_gestureSymbolsLoaded = true;
     }
 
     static GetGestureInfo_t ms_pfnGetGestureInfo;
     static CloseGestureInfoHandle_t ms_pfnCloseGestureInfoHandle;
+    static SetGestureConfig_t ms_pfnSetGestureConfig;
 
     static bool ms_gestureSymbolsLoaded;
 
@@ -263,6 +275,8 @@ GestureFuncs::GetGestureInfo_t
     GestureFuncs::ms_pfnGetGestureInfo = NULL;
 GestureFuncs::CloseGestureInfoHandle_t
     GestureFuncs::ms_pfnCloseGestureInfoHandle = NULL;
+GestureFuncs::SetGestureConfig_t
+    GestureFuncs::ms_pfnSetGestureConfig = NULL;
 
 bool GestureFuncs::ms_gestureSymbolsLoaded = false;
 
@@ -3225,6 +3239,29 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
 #ifdef WM_GESTURE
+        case WM_GESTURENOTIFY:
+        {
+            if ( !GestureFuncs::IsOk() )
+            {
+                processed = false;
+                break;
+            }
+
+            // Configure to recieve all gestures
+            GESTURECONFIG gestureConfig[] = {0, GC_ALLGESTURES, 0};
+
+            // This functions sets the configuration to the window. Second argument is reserved to be 0.
+            // Third argument is the number of elements in gestureConfig array, currently equal to 1
+            if ( !GestureFuncs::SetGestureConfig()(GetHWND(), 0, 1, gestureConfig, sizeof(GESTURECONFIG)) )
+            {
+                wxLogLastError(wxT("SetGestureConfig"));
+            }
+
+            // WM_GESTURENOTIFY should always be passed to DefWindowProc
+            processed = false;
+        }
+        break;
+
         case WM_GESTURE:
         {
             if( !GestureFuncs::IsOk() )
