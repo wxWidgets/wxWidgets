@@ -101,15 +101,15 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
         wxLogMessage("Zoom gesture started\n");
     }
 
-    wxLogMessage(wxT("Zoom gesture performed with zoom center at (%d, %d) and zoom factor = %f\n"),
-        event.GetPosition().x, event.GetPosition().y, event.GetZoomFactor());
+    wxLogMessage(wxT("Zoom gesture performed with zoom center at (%d, %d) and zoom Delta = %f\n"),
+        event.GetPosition().x, event.GetPosition().y, event.GetZoomDelta());
 
     const wxPoint& zoomCenter = event.GetPosition();
 
     // Translate to zoom center
     m_affineMatrix.Translate(zoomCenter.x, zoomCenter.y);
     // Scale
-    m_affineMatrix.Scale(event.GetZoomFactor(), event.GetZoomFactor());
+    m_affineMatrix.Scale(event.GetZoomDelta(), event.GetZoomDelta());
     // Translate back
     m_affineMatrix.Translate(-zoomCenter.x, -zoomCenter.y);
 
@@ -129,14 +129,14 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
     }
 
     wxLogMessage(wxT("Rotate gesture performed with rotation center at (%d, %d) and rotation angle = %f\n"),
-        event.GetPosition().x, event.GetPosition().y, event.GetAngle());
+        event.GetPosition().x, event.GetPosition().y, event.GetAngleDelta());
 
     const wxPoint& rotationCenter = event.GetPosition();
 
     // Translate to rotation center
     m_affineMatrix.Translate(rotationCenter.x, rotationCenter.y);
     // Rotate
-    m_affineMatrix.Rotate(event.GetAngle());
+    m_affineMatrix.Rotate(event.GetAngleDelta());
     // Translate back
     m_affineMatrix.Translate(-rotationCenter.x, -rotationCenter.y);
 
