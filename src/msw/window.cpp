@@ -3247,7 +3247,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 break;
             }
 
-            // Configure to recieve all gestures
+            // Configure to receive all gestures
             GESTURECONFIG gestureConfig[] = {0, GC_ALLGESTURES, 0};
 
             // This functions sets the configuration to the window. Second argument is reserved to be 0.
