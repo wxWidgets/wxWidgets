@@ -5793,8 +5793,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
     // Use angleArgument to obtain the cumulative angle since the gesture was first
     // started. This angle is in radians
     // MSW returns negative angle for clockwise rotation and positive otherwise
-    // So, multiply angleDelta by -1 for positive change in angle for clockwise
-    // and negative in case of counter
+    // So, multiply angle by -1 for positive angle for clockwise and negative in case of counterclockwise
     double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
 
     // Set the angle to be 0 if the gesture has just started
