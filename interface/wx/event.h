@@ -3764,15 +3764,15 @@ public:
     wxZoomGestureEvent(wxWindowID windid = 0);
 
     /**
-        Returns the zoom factor. A value greater than 1.0 means we should enlarge
+        Returns the zoom Delta(zoom factor). A value greater than 1.0 means we should enlarge
         (or zoom in), a value less than 1.0 means we should shrink (or zoom out).
     */
-    double GetZoomFactor() const;
+    double GetZoomDelta() const;
 
     /**
-        Sets the zoom factor.
+        Sets the zoom Delta(zoom factor).
     */
-    void SetZoomFactor(double zoomFactor);
+    void SetZoomDelta(double zoomFactor);
 };
 
 
@@ -3799,16 +3799,16 @@ public:
     wxRotateGestureEvent(wxWindowID windid = 0);
 
     /**
-        Returns the angle of rotation in radians in clockwise direction since the
+        Returns the change in angle of rotation in radians in clockwise direction since the
         gesture was first started i.e. when IsGestureStart() returned true.
     */
-    double GetAngle() const;
+    double GetAngleDelta() const;
 
      /**
-        Sets the angle of rotation in radians in clockwise direction since the
+        Sets the change in angle of rotation in radians in clockwise direction since the
         gesture was first started i.e. when IsGestureStart() returned true.
     */
-    void SetAngle(double angle);
+    void SetAngleDelta(double angleDelta);
 };
 
 #endif // wxUSE_GUI
