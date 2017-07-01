@@ -232,7 +232,7 @@ wxString wxWebViewIE::GetPageSource() const
             if(SUCCEEDED(hr))
             {
                 wxBasicString bstr;
-                if ( htmlTag->get_outerHTML(bstr) == S_OK )
+                if ( htmlTag->get_outerHTML(bstr.ByRef()) == S_OK )
                     source = bstr;
             }
         }
@@ -577,7 +577,7 @@ wxString wxWebViewIE::GetCurrentTitle() const
     if(document)
     {
         wxBasicString title;
-        if ( document->get_nameProp(title) == S_OK )
+        if ( document->get_nameProp(title.ByRef()) == S_OK )
             s = title;
     }
 
@@ -706,7 +706,7 @@ bool wxWebViewIE::IsEditable() const
     if(document)
     {
         wxBasicString mode;
-        if ( document->get_designMode(mode) == S_OK )
+        if ( document->get_designMode(mode.ByRef()) == S_OK )
         {
             if ( wxString(mode) == "On" )
                 return true;
@@ -732,7 +732,7 @@ bool wxWebViewIE::HasSelection() const
         if(SUCCEEDED(hr))
         {
             wxBasicString type;
-            if ( selection->get_type(type) == S_OK )
+            if ( selection->get_type(type.ByRef()) == S_OK )
                 sel = type;
         }
         return sel != "None";
@@ -768,7 +768,7 @@ wxString wxWebViewIE::GetSelectedText() const
                 if(SUCCEEDED(hr))
                 {
                     wxBasicString text;
-                    if ( range->get_text(text) == S_OK )
+                    if ( range->get_text(text.ByRef()) == S_OK )
                         selected = text;
                 }
             }
@@ -801,7 +801,7 @@ wxString wxWebViewIE::GetSelectedSource() const
                 if(SUCCEEDED(hr))
                 {
                     wxBasicString text;
-                    if ( range->get_htmlText(text) == S_OK )
+                    if ( range->get_htmlText(text.ByRef()) == S_OK )
                         selected = text;
                 }
             }
@@ -842,7 +842,7 @@ wxString wxWebViewIE::GetPageText() const
         if(SUCCEEDED(hr))
         {
             wxBasicString out;
-            if ( body->get_innerText(out) == S_OK )
+            if ( body->get_innerText(out.ByRef()) == S_OK )
                 text = out;
         }
         return text;
@@ -949,9 +949,7 @@ wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
 
 bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
 {
-    wxCOMPtr<IHTMLElement> elm1 = elm;
-    wxBasicString display_bstr;
-    wxBasicString visibility_bstr;
+    wxCOMPtr<IHTMLElement> elm1 = elm;   
     bool is_visible = true;
     //This method is not perfect but it does discover most of the hidden elements.
     //so if a better solution is found, then please do improve.
@@ -963,15 +961,18 @@ bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
             wxCOMPtr<wxIHTMLCurrentStyle> style;
             if(SUCCEEDED(elm2->get_currentStyle(&style)))
             {
+                wxBasicString display_bstr;
+                wxBasicString visibility_bstr;
+
                 //Check if the object has the style display:none.
-                if((style->get_display(display_bstr) != S_OK) || 
-                   ((BSTR)display_bstr != NULL && (wxCRT_StricmpW(display_bstr, L"none") == 0)))
+                if((style->get_display(display_bstr.ByRef()) != S_OK) || 
+                    wxString(display_bstr).IsSameAs(wxS("none"), false))
                 {
                     is_visible = false;
                 }
                 //Check if the object has the style visibility:hidden.
-                if((is_visible && (style->get_visibility(visibility_bstr) != S_OK)) ||
-                  ((BSTR)visibility_bstr != NULL && wxCRT_StricmpW(visibility_bstr, L"hidden") == 0))
+                if((is_visible && (style->get_visibility(visibility_bstr.ByRef()) != S_OK)) ||
+                    wxString(visibility_bstr).IsSameAs(wxS("hidden"), false))
                 {
                     is_visible = false;
                 }

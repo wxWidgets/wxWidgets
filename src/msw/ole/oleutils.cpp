@@ -73,7 +73,7 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 
 wxBasicString::wxBasicString(BSTR bstr)
 {
-	m_bstrBuf = bstr;
+    m_bstrBuf = bstr;
 }
 
 wxBasicString::wxBasicString(const wxString& str)
@@ -91,42 +91,58 @@ wxBasicString::~wxBasicString()
     SysFreeString(m_bstrBuf);
 }
 
+BSTR wxBasicString::Detach()
+{
+    BSTR bstr = m_bstrBuf;
+
+    m_bstrBuf = NULL;
+
+    return bstr;
+}
+
+void wxBasicString::Free()
+{
+    SysFreeString(m_bstrBuf);
+    m_bstrBuf = NULL;
+}
+
+BSTR* wxBasicString::ByRef()
+{
+    wxASSERT_MSG(!m_bstrBuf,
+        wxS("Can't get direct access to initialized BSTR"));
+    return &m_bstrBuf;
+}
+
 wxBasicString& wxBasicString::operator=(const wxBasicString& src)
 {
-	if ( this != &src )
-	{
-		SysFreeString(m_bstrBuf);
-		m_bstrBuf = src.Copy();
-	}
+    if ( this != &src )
+    {
+        wxCHECK_MSG(m_bstrBuf == NULL || m_bstrBuf != src.m_bstrBuf, 
+            *this, wxS("Attempting to assign already owned BSTR"));
+        SysFreeString(m_bstrBuf);
+        m_bstrBuf = src.Copy();
+    }
 
-	return *this;
+    return *this;
 }
 
 wxBasicString& wxBasicString::operator=(const wxString& str)
 {
-	SysFreeString(m_bstrBuf);
-	m_bstrBuf = ::SysAllocString(str.wc_str(*wxConvCurrent));
+    SysFreeString(m_bstrBuf);
+    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
 
-	return *this;
+    return *this;
 }
 
 wxBasicString& wxBasicString::operator=(BSTR bstr)
 {
-	wxCHECK_MSG(m_bstrBuf != bstr, *this, wxS("Attempting to attach already attached BSTR!"));
+    wxCHECK_MSG(m_bstrBuf == NULL || m_bstrBuf != bstr, 
+        *this, wxS("Attempting to assign already owned BSTR"));
 
-	SysFreeString(m_bstrBuf);
-	m_bstrBuf = bstr;
+    SysFreeString(m_bstrBuf);
+    m_bstrBuf = bstr;
 
-	return *this;
-}
-
-BSTR wxBasicString::Detach()
-{
-	BSTR bstr = m_bstrBuf;
-
-	m_bstrBuf = NULL;
-	
-	return bstr;
+    return *this;
 }
 
 // ----------------------------------------------------------------------------
