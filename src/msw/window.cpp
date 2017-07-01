@@ -245,7 +245,7 @@ public:
 
     static SetGestureConfig_t SetGestureConfig()
     {
-        if( !ms_gestureSymbolsLoaded )
+        if ( !ms_gestureSymbolsLoaded )
             LoadGestureSymbols();
 
         return ms_pfnSetGestureConfig;
@@ -3241,7 +3241,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 #ifdef WM_GESTURE
         case WM_GESTURE:
         {
-            if( !GestureFuncs::IsOk() )
+            if ( !GestureFuncs::IsOk() )
             {
                 processed = false;
                 break;
@@ -5771,7 +5771,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
 
 bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags)
 {
-    static double s_lastAngle;
+    static double s_lastAngle = 0.0;
 
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(GetId());
@@ -5783,6 +5783,21 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
         event.SetGestureStart();
     }
 
+    else
+    {
+        // Use angleArgument to obtain the cumulative angle since the gesture was first
+        // started. This angle is in radians
+        // MSW returns negative angle for clockwise rotation and positive otherwise
+        // So, multiply angle by -1 for positive angle for clockwise and negative in case of counterclockwise
+        double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
+
+        // Set the change in angle
+        event.SetAngleDelta(angle - s_lastAngle);
+
+        // Update s_lastAngle
+        s_lastAngle = angle;
+    }
+
     if ( flags & GF_END )
     {
         event.SetGestureEnd();
@@ -5790,27 +5805,9 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
 
     wxPoint pt(x, y);
 
-    // Use angleArgument to obtain the cumulative angle since the gesture was first
-    // started. This angle is in radians
-    // MSW returns negative angle for clockwise rotation and positive otherwise
-    // So, multiply angle by -1 for positive angle for clockwise and negative in case of counterclockwise
-    double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
-
-    // Set the angle to be 0 if the gesture has just started
-    if ( flags & GF_BEGIN )
-    {
-        angle = 0;
-    }
-
-    // Calculate the change in angle
-    double angleDelta = angle - s_lastAngle;
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
     event.SetPosition(pt);
-    event.SetAngleDelta(angleDelta);
-
-    // Update s_lastAngle
-    s_lastAngle = angle;
 
     return HandleWindowEvent(event);
 }
