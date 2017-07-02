@@ -292,14 +292,6 @@ void wxGCDCImpl::UpdateClipBox()
 void wxGCDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
 {
     wxCHECK_RET( IsOk(), wxS("wxGCDC::DoGetClippingRegion - invalid GC") );
-#ifdef __WXOSX__
-    // This is a legacy implementation which doesn't
-    // return proper values if graphics context coordinates
-    // were transformed after the call to SetClippingRegion().
-    // TODO: Check wxMacCoreGraphics::GetClipBox()
-    // and switch to the code used by other ports (below).
-    wxDCImpl::DoGetClippingBox(x, y, w, h);
-#else
     // Check if we should retrieve the clipping region possibly not set
     // by SetClippingRegion() but modified by application: this can
     // happen when we're associated with an existing graphics context using
@@ -319,7 +311,6 @@ void wxGCDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h
         *w = m_clipX2 - m_clipX1;
     if ( h )
         *h = m_clipY2 - m_clipY1;
-#endif // __WXOSX__ / !__WXOSX__
 }
 
 void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
@@ -342,16 +333,8 @@ void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h
     }
     m_graphicContext->Clip( x, y, w, h );
 
-#ifdef __WXOSX__
-    // This is a legacy implementation which has to be used
-    // because wxMacCoreGraphics::GetClipBox() is not yet tested.
-    // TODO: Check wxMacCoreGraphics::GetClipBox()
-    // and switch to the code used by other ports (below).
-    wxDCImpl::DoSetClippingRegion(x, y, w, h);
-#else
     m_clipping = true;
     UpdateClipBox();
-#endif // __WXOSX__ / !__WXOSX__
 }
 
 void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )

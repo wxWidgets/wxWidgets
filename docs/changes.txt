@@ -118,7 +118,7 @@ All (GUI):
 - Add wxSYS_CARET_{ON,OFF,TIMEOUT}_MSEC system settings (brawer).
 - Add wxGraphicsContext::GetClipBox().
 - Fix wxGCDC::Clear() for rotated graphics context.
-- Fix wxGCDC::GetClippingBox() for transformed wxDC (MSW, GTK+).
+- Fix wxGCDC::GetClippingBox() for transformed wxDC.
 - Add support for affine transformation matrix in wxGCDC.
 - Add wxGraphicsContext::Flush() for Cairo renderer.
 - Add wxStyledTextEvent::GetListCompletionMethod() (NewPagodi).
