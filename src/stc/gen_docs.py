@@ -1282,8 +1282,8 @@ extendedDocs = {
         '@link wxStyledTextCtrl::wxSTC_POPUP_NEVER wxSTC_POPUP_* @endlink constants.',
         '@remarks',
         'When wxContextMenuEvent is used to create a custom popup menu,',
-        'this function should be called with wxSTC_POPUP_NEVER.  Otherwise both',
-        'the custom and the default popup menus may be shown.',),
+        'this function should be called with wxSTC_POPUP_NEVER.  Otherwise',
+        'the default menu will be shown instead of the custom one.',),
 
     'PropertyType':
         ('The return value will be one of the',

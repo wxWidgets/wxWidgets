@@ -151,11 +151,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_LEFT_DCLICK             (wxStyledTextCtrl::OnMouseLeftDown)
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
-#if defined(__WXMAC__)
-    EVT_RIGHT_UP                (wxStyledTextCtrl::OnMouseRightUp)
-#else
     EVT_CONTEXT_MENU            (wxStyledTextCtrl::OnContextMenu)
-#endif
     EVT_MOUSEWHEEL              (wxStyledTextCtrl::OnMouseWheel)
     EVT_MIDDLE_UP               (wxStyledTextCtrl::OnMouseMiddleUp)
     EVT_CHAR                    (wxStyledTextCtrl::OnChar)
@@ -5211,8 +5207,7 @@ void wxStyledTextCtrl::OnMouseRightDown(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
     m_swx->DoRightButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
-    // we need to call evt.Skip() to ensure the context menu event
-    // is generated with wxOSX
+    // We need to call evt.Skip() to allow generating EVT_CONTEXT_MENU
     evt.Skip();
 }
 
@@ -5226,13 +5221,6 @@ void wxStyledTextCtrl::OnMouseLeftUp(wxMouseEvent& evt) {
     m_swx->DoLeftButtonUp(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ControlDown());
 }
-
-
-void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
-    wxPoint pt = evt.GetPosition();
-    m_swx->DoContextMenu(Point(pt.x, pt.y));
-}
-
 
 void wxStyledTextCtrl::OnMouseMiddleUp(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
