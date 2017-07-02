@@ -211,6 +211,7 @@ wxOSX:
 - Update font code to use toll-free bridges from CTFontRef to NSFont or UIFont
 - Add a native implementation for clearing bitmap/window wxGraphicsContexts
 - wxiOS now needs a minimum of iOS 9 for deployment
+- Fix handling CTM in wxGraphicsContext::SeTransform and GetTransform().
 
 Unix:
 

@@ -1393,6 +1393,7 @@ private:
     CGContextRef m_cgContext;
     WXWidget m_view;
     bool m_contextSynthesized;
+    CGAffineTransform m_initTransform;
     CGAffineTransform m_windowTransform;
     bool m_invisible;
 
@@ -1466,6 +1467,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     SetNativeContext(cgcontext);
     m_width = width;
     m_height = height;
+    m_initTransform = CGContextGetCTM(m_cgContext);
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window ): wxGraphicsContext(renderer)
@@ -1502,6 +1504,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     m_windowTransform = CGAffineTransformScale( m_windowTransform , 1 , -1 );
     m_windowTransform = CGAffineTransformTranslate( m_windowTransform, originX, originY ) ;
 #endif
+    m_initTransform = m_windowTransform;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer) : wxGraphicsContext(renderer)
@@ -2401,16 +2404,18 @@ void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
     CheckInvariants();
+    CGAffineTransform t = *((CGAffineTransform*)matrix.GetNativeMatrix());
     if ( m_cgContext )
     {
         CGAffineTransform transform = CGContextGetCTM( m_cgContext );
         transform = CGAffineTransformInvert( transform ) ;
         CGContextConcatCTM( m_cgContext, transform);
-        CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) matrix.GetNativeMatrix());
+        CGContextConcatCTM(m_cgContext, m_initTransform);
+        CGContextConcatCTM(m_cgContext, t);
     }
     else
     {
-        m_windowTransform = *(CGAffineTransform*) matrix.GetNativeMatrix();
+        m_windowTransform = CGAffineTransformConcat(t, m_initTransform);
     }
     CheckInvariants();
 }
@@ -2419,8 +2424,21 @@ void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
 wxGraphicsMatrix wxMacCoreGraphicsContext::GetTransform() const
 {
     wxGraphicsMatrix m = CreateMatrix();
-    *((CGAffineTransform*) m.GetNativeMatrix()) = ( m_cgContext == NULL ? m_windowTransform :
-        CGContextGetCTM( m_cgContext ));
+    CGAffineTransform* transformMatrix = (CGAffineTransform*)m.GetNativeMatrix();
+
+    if ( m_cgContext )
+    {
+        *transformMatrix = CGContextGetCTM(m_cgContext);
+    }
+    else
+    {
+        *transformMatrix = m_windowTransform;
+    }
+    // Don't expose internal transformations.
+    CGAffineTransform initTransformInv = m_initTransform;
+    initTransformInv = CGAffineTransformInvert(initTransformInv);
+    *transformMatrix = CGAffineTransformConcat(*transformMatrix, initTransformInv);
+
     return m;
 }
 
