@@ -1906,8 +1906,6 @@ void wxMacCoreGraphicsContext::ResetClip()
 
 void wxMacCoreGraphicsContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
 {
-    // This function is not yet tested.
-    // TODO: Do the tests.
     CGRect r;
 
     if ( m_cgContext )
