@@ -413,10 +413,10 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     if ( !m_webView )
         return wxString();
 
-    [[m_webView windowScriptObject] evaluateWebScript:
-                    wxCFStringRef( javascript ).AsNSString()];
+    NSString* result = [m_webView stringByEvaluatingJavaScriptFromString: 
+                   wxCFStringRef( javascript ).AsNSString()];
 
-    return wxString();
+    return wxCFStringRef::AsString(result);
 }
 
 void wxWebViewWebKit::OnSize(wxSizeEvent &event)
@@ -574,10 +574,12 @@ void wxWebViewWebKit::ClearSelection()
     //We use javascript as selection isn't exposed at the moment in webkit
     RunScript("window.getSelection().removeAllRanges();");
 }
-
+   
 void wxWebViewWebKit::SelectAll()
 {
     RunScript("window.getSelection().selectAllChildren(document.body);");
+   
+   
 }
 
 wxString wxWebViewWebKit::GetSelectedSource() const
