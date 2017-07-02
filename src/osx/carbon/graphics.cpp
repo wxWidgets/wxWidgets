@@ -1925,6 +1925,11 @@ void wxMacCoreGraphicsContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w,
     // wxFAIL_MSG( "Needs a valid context for clipping" );
 #endif
     }
+
+    if ( CGRectIsEmpty(r) )
+    {
+        r = CGRectZero;
+    }
     CheckInvariants();
 
     if ( x )
