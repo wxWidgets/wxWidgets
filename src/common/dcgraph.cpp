@@ -342,22 +342,6 @@ void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
     // region is in device coordinates
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoSetDeviceClippingRegion - invalid DC") );
 
-#ifdef __WXOSX__
-    // This is a legacy implementation without
-    // full conversion from device to logical coordinates
-    // (only offset of the origin is taken into account,
-    // but e.g. scale is not).
-    // Solution with full conversion doesn't seem to work under WXOSX.
-    // TODO: Check wxMacCoreGraphics::Clip() and GetClipBox()
-    // and switch to the code used by other renderers (below).
-    wxRegion logRegion(region);
-
-    logRegion.Offset(DeviceToLogicalX(0), DeviceToLogicalY(0));
-    m_graphicContext->Clip(logRegion);
-    wxRect newRegion = logRegion.GetBox();
-    wxDCImpl::DoSetClippingRegion(newRegion.GetLeft(), newRegion.GetTop(),
-                                  newRegion.GetWidth(), newRegion.GetHeight());
-#else
     // Because graphics context works with logical coordinates
     // and clipping region is given in device coordinates
     // we need temporarily reset graphics context's coordinate system
@@ -378,7 +362,6 @@ void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
 
     m_clipping = true;
     UpdateClipBox();
-#endif // __WXOSX__ / !__WXOSX__
 }
 
 void wxGCDCImpl::DestroyClippingRegion()
