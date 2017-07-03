@@ -213,6 +213,7 @@ wxOSX:
 - Add a native implementation for clearing bitmap/window wxGraphicsContexts
 - wxiOS now needs a minimum of iOS 9 for deployment
 - Fix handling CTM in wxGraphicsContext::SeTransform and GetTransform().
+- Allow turning on/off opacity selector in wxColourDialog.
 
 Unix:
 
