@@ -1127,7 +1127,7 @@ bool wxAMMediaBackend::Load(const wxURI& location, const wxURI& proxy)
     if(pPlay)
     {
         pPlay->put_UseHTTPProxy(VARIANT_TRUE);
-        pPlay->put_HTTPProxyHost(wxBasicString(proxy.GetServer()).Get());
+        pPlay->put_HTTPProxyHost(wxBasicString(proxy.GetServer()));
         pPlay->put_HTTPProxyPort(wxAtoi(proxy.GetPort()));
         pPlay->Release();
     }
@@ -1150,9 +1150,9 @@ bool wxAMMediaBackend::DoLoad(const wxString& location)
     // the docs say its async and put_FileName is not -
     // but in practice they both seem to be async anyway
     if(GetMP())
-        hr = GetMP()->Open( wxBasicString(location).Get() );
+        hr = GetMP()->Open( wxBasicString(location) );
     else
-        hr = GetAM()->put_FileName( wxBasicString(location).Get() );
+        hr = GetAM()->put_FileName( wxBasicString(location) );
 
     if(FAILED(hr))
     {
