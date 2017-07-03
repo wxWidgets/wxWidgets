@@ -330,6 +330,7 @@ All (GUI):
 - Add support for the events from multimedia keys (Jens Göpfert).
 - Allow suppressing warnings from wxImage::LoadFile().
 - Allow customizing wxRibbon highlight colours (wxBen).
+- Enable selecting opacity in generic wxColourPicker.
 
 wxGTK:
 
