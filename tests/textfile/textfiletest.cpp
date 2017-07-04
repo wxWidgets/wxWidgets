@@ -255,7 +255,7 @@ void TextFileTestCase::ReadMixedWithFuzzing()
 void TextFileTestCase::ReadCRCRLF()
 {
     // Notepad may create files with CRCRLF line endings (see
-    // http://stackoverflow.com/questions/6998506/text-file-with-0d-0d-0a-line-breaks).
+    // https://stackoverflow.com/questions/6998506/text-file-with-0d-0d-0a-line-breaks).
     // Older versions of wx would loose all data when reading such files.
     // Test that the data are read, but don't worry about empty lines in between or
     // line endings. Also include a longer streak of CRs, because they can

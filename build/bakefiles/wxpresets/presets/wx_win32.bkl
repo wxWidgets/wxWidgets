@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<!-- Original source: http://wiki.wxwidgets.org/wiki.pl?Bakefile    -->
+<!-- Original source: https://wiki.wxwidgets.org/Bakefile    -->
 <!-- Modified by: Francesco Montorsi <frm@users.sourceforge.net>    -->
 <!--              Vaclav Slavik <vslavik@fastmail.fm> to better fit
                   into Bakefile's presets                           -->

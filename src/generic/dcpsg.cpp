@@ -2273,7 +2273,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
     {
         // String couldn't be converted which used to SEGV as reported here:
         // http://bugs.debian.org/702378
-        // http://trac.wxwidgets.org/ticket/15300
+        // https://trac.wxwidgets.org/ticket/15300
         // Upstream suggests "just return if the conversion failed".
         if (x) (*x) = 0;
         if (y) (*y) = 0;

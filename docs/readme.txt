@@ -145,7 +145,7 @@ Reporting Bugs
 
 The wxWidgets bug tracker can be found here:
 
-* http://trac.wxwidgets.org/newticket
+* https://trac.wxwidgets.org/newticket
 
 Please use the search function of our Trac installation to find any possibly
 relevant bugs before reporting new ones. Also please notice that often trying to

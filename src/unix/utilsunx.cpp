@@ -701,7 +701,7 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
         //       have more opened descriptions than this number). Unfortunately
         //       there is no good portable solution for closing all descriptors
         //       above a certain threshold but non-portable solutions exist for
-        //       most platforms, see [http://stackoverflow.com/questions/899038/
+        //       most platforms, see [https://stackoverflow.com/questions/899038/
         //          getting-the-highest-allocated-file-descriptor]
         for ( int fd = 0; fd < (int)FD_SETSIZE; ++fd )
         {
