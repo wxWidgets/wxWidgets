@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // Name:        include/wx/msw/webview_ie.h
 // Purpose:     wxMSW IE wxWebView backend
 // Author:      Marianne Gagnon
@@ -127,6 +127,7 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
 
     virtual void* GetNativeBackend() const wxOVERRIDE { return m_webBrowser; }
+    bool CreateAnonymousFunction(VARIANT * result);
 
     // ---- IE-specific methods
 

@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/webview_ie.cpp
 // Purpose:     wxMSW wxWebViewIE class implementation for web view component
 // Author:      Marianne Gagnon
@@ -855,6 +855,151 @@ wxString wxWebViewIE::GetPageText() const
 
 wxString wxWebViewIE::RunScript(const wxString& javascript)
 {
+    VARIANT result;
+    VariantInit(&result);
+    V_VT(&result) = VT_EMPTY;
+
+    BSTR error_description;
+
+    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    if (!document)
+    {
+        wxLogMessage("!document");
+        return "-1";
+    }
+    
+    VARIANT temp_function;
+    VariantInit(&temp_function);
+    V_VT(&temp_function) = VT_EMPTY;
+    if (!this->CreateAnonymousFunction(&temp_function)) {
+        wxLogMessage("Cannot create anonymous function");
+        return "-1";
+    }
+
+    if (temp_function.vt != VT_DISPATCH) {
+        wxLogMessage("No return value that we care about");
+        return "0";
+    }
+
+    // Grab the "call" method out of the returned function
+    DISPID call_member_id;
+    OLECHAR FAR* call_member_name = L"call";
+    HRESULT hr = temp_function.pdispVal->GetIDsOfNames(IID_NULL,
+        &call_member_name,
+        1,
+        LOCALE_USER_DEFAULT,
+        &call_member_id);
+    if (FAILED(hr)) {
+        wxLogMessage("Cannot locate call method on anonymous function");
+        return "-1";
+    }
+    
+    wxCOMPtr<IHTMLWindow2> window;
+    hr = document->get_parentWindow(&window);
+    if (FAILED(hr)) {
+        wxLogMessage("Cannot get parent window, IHTMLDocument2::get_parentWindow failed");
+        return "-1";
+    }
+
+    // IDispatch::Invoke() expects the arguments to be passed into it
+    // in reverse order. To accomplish this, we create a new variant
+    // array of size n + 1 where n is the number of arguments we have.
+    // we copy each element of arguments_array_ into the new array in
+    // reverse order, and add an extra argument, the window object,
+    // to the end of the array to use as the "this" parameter for the
+    // function invocation.
+    /*
+    size_t arg_count = this->argument_array_.size();
+    std::vector<VARIANT> argument_array_copy(arg_count + 1);
+
+    VARIANT window_variant;
+    VariantInit(&window_variant);
+    V_VT(&window_variant) = VT_EMPTY;
+    window_variant = win;
+    argument_array_copy[arg_count].Copy(&window_variant);
+
+    for (size_t index = 0; index < arg_count; ++index) {
+        argument_array_copy[arg_count - 1 - index].Copy(&this->argument_array_[index]);
+    }
+
+    DISPPARAMS call_parameters = { 0 };
+    memset(&call_parameters, 0, sizeof call_parameters);
+    call_parameters.cArgs = static_cast<unsigned int>(argument_array_copy.size());
+    call_parameters.rgvarg = &argument_array_copy[0];
+    */
+    int return_code = 0;
+    EXCEPINFO exception;
+    memset(&exception, 0, sizeof exception);
+    hr = temp_function.pdispVal->Invoke(call_member_id,
+        IID_NULL,
+        LOCALE_USER_DEFAULT,
+        DISPATCH_METHOD,
+        NULL,
+        &result,
+        &exception,
+        0);
+
+    if (FAILED(hr)) {
+        if (DISP_E_EXCEPTION == hr) {
+            //error_description = exception.bstrDescription ? exception.bstrDescription : L"EUNEXPECTEDJSERROR";
+            //CComBSTR error_source(exception.bstrSource ? exception.bstrSource : L"EUNEXPECTEDJSERROR");
+            //LOG(INFO) << "Exception message was: '" << error_description << "'";
+            //LOG(INFO) << "Exception source was: '" << error_source << "'";
+            wxLogMessage("Exception message was Exception source was");
+        }
+        else {
+            wxLogMessage("Failed to execute anonymous function, no exception information retrieved");
+        }
+
+        
+        result.vt = VT_BSTR;
+        result.bstrVal = error_description;
+        return_code = -1;
+    }
+
+    wxLogMessage(wxString::Format("%i", result.vt));
+
+    return "";
+}
+
+bool wxWebViewIE::CreateAnonymousFunction(VARIANT* result) {
+    wxLogMessage("Entering Script::CreateAnonymousFunction");
+
+    wxString code = "function a() { return 'Hello'; } a();";
+    wxString language = "JScript";
+    
+    VARIANT exec_script_result;
+    VariantInit(&exec_script_result);
+    //V_VT(&exec_script_result) = VT_EMPTY;
+
+    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    if (!document)
+    {
+        wxLogMessage("!document");
+        return "-1";
+    }
+    wxCOMPtr<IHTMLWindow2> window;
+    HRESULT hr = document->get_parentWindow(&window);
+    if (FAILED(hr)) {
+        wxLogMessage("Cannot get parent window, IHTMLDocument2::get_parentWindow failed");
+        return "-1";
+    }
+
+    hr = window->execScript(SysAllocString(code.wc_str()), SysAllocString(language.wc_str()), &exec_script_result);
+    if (FAILED(hr)) {
+        wxLogMessage("Unable to execute code, call to IHTMLWindow2::execScript failed");
+        return false;
+    }
+
+    wxLogMessage(wxString::Format("%i", exec_script_result.vt));
+    
+    
+    return true;
+}
+
+/*
+wxString wxWebViewIE::RunScript(const wxString& javascript)
+{
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
 
     if(document)
@@ -867,14 +1012,21 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
             VARIANT level;
             VariantInit(&level);
             V_VT(&level) = VT_EMPTY;
+            eval
             window->execScript(SysAllocString(javascript.wc_str()),
                                SysAllocString(language.wc_str()),
                                &level);
+            wxString result = level.pcVal;
+            wxString type = wxString::Format("%i",level.vt);
+            wxLogMessage(type);
+        
         }
     }
 
     return "";
 }
+
+*/
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
