@@ -591,6 +591,10 @@ wxGTK:
 
 - Allow using more recent WebKit2GTK+ in wxWebView (Scott Talbert).
 
+wxMSW:
+
+- Fix BSTR memory leaks in wxMediaCtrl and wxWebView (PB).
+
 
 3.0.3: (released 2017-05-02)
 ----------------------------
