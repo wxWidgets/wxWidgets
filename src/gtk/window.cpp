@@ -2897,14 +2897,15 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
     }
 
     win->GTKProcessEvent(event);
-
 }
 
 static void
 gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
     if ( gtk_gesture_get_sequence_state(gesture,sequence) != GTK_EVENT_SEQUENCE_CLAIMED )
+    {
         return ;
+    }
 
     gdouble x, y;
 
@@ -2967,20 +2968,30 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_leave_callback), this);
 
     GtkGesture* gesture_pan_vertical = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
+
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture_pan_vertical), GTK_PHASE_BUBBLE);
 
-    g_signal_connect(gesture_pan_vertical,"begin",G_CALLBACK(gesture_begin_callback), this);
-    g_signal_connect(gesture_pan_vertical,"pan",G_CALLBACK(pan_gesture_callback),this);
-    g_signal_connect(gesture_pan_vertical,"end",G_CALLBACK(gesture_end_callback),this);
-    g_signal_connect(gesture_pan_vertical,"cancel",G_CALLBACK(gesture_end_callback),this);
+    g_signal_connect(gesture_pan_vertical, "begin",
+                     G_CALLBACK(gesture_begin_callback), this);
+    g_signal_connect(gesture_pan_vertical, "pan",
+                     G_CALLBACK(pan_gesture_callback), this);
+    g_signal_connect(gesture_pan_vertical, "end",
+                     G_CALLBACK(gesture_end_callback), this);
+    g_signal_connect(gesture_pan_vertical, "cancel",
+                     G_CALLBACK(gesture_end_callback), this);
 
     GtkGesture* gesture_pan_horizontal = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
+
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture_pan_horizontal), GTK_PHASE_BUBBLE);
 
-    g_signal_connect(gesture_pan_horizontal,"begin",G_CALLBACK(gesture_begin_callback), this);
-    g_signal_connect(gesture_pan_horizontal,"pan",G_CALLBACK(pan_gesture_callback),this);
-    g_signal_connect(gesture_pan_horizontal,"end",G_CALLBACK(gesture_end_callback),this);
-    g_signal_connect(gesture_pan_horizontal,"cancel",G_CALLBACK(gesture_end_callback),this);
+    g_signal_connect(gesture_pan_horizontal, "begin",
+                     G_CALLBACK(gesture_begin_callback), this);
+    g_signal_connect(gesture_pan_horizontal, "pan",
+                     G_CALLBACK(pan_gesture_callback), this);
+    g_signal_connect(gesture_pan_horizontal, "end",
+                     G_CALLBACK(gesture_end_callback), this);
+    g_signal_connect(gesture_pan_horizontal, "cancel",
+                     G_CALLBACK(gesture_end_callback), this);
 }
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
