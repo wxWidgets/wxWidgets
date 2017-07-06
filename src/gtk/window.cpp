@@ -228,6 +228,9 @@ static GList* gs_sizeRevalidateList;
 static bool gs_inSizeAllocate;
 #endif
 
+static bool gs_gestureStart = false;
+static int gs_lastOffset = 0;
+
 //-----------------------------------------------------------------------------
 // debug
 //-----------------------------------------------------------------------------
@@ -2828,6 +2831,98 @@ static gboolean source_dispatch(GSource*, GSourceFunc, void*)
 }
 }
 
+static void
+gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+{
+    gs_gestureStart = true;
+    gs_lastOffset = 0;
+}
+
+static void
+pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble offset, wxWindowGTK* win)
+{
+
+    if ( !gtk_gesture_is_active(gesture) )
+    {
+        return ;
+    }
+
+    GdkEventSequence* sequence = gtk_gesture_single_get_current_sequence((GtkGestureSingle*) gesture);
+
+    gdouble x, y;
+
+    if ( !gtk_gesture_get_point(gesture, sequence, &x, &y) )
+    {
+        return ;
+    }
+
+    gtk_gesture_set_sequence_state(gesture, sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+
+    wxPanGestureEvent event(win->GetId());
+
+    int delta = wxRound(offset) - gs_lastOffset;
+
+    switch ( direction )
+    {
+        case GTK_PAN_DIRECTION_UP:
+            event.SetDeltaY(-delta);
+            event.SetDeltaX(0);
+            break;
+
+        case GTK_PAN_DIRECTION_DOWN:
+            event.SetDeltaY(delta);
+            event.SetDeltaX(0);
+            break;
+
+        case GTK_PAN_DIRECTION_RIGHT:
+            event.SetDeltaX(delta);
+            event.SetDeltaY(0);
+            break;
+
+        case GTK_PAN_DIRECTION_LEFT:
+            event.SetDeltaX(-delta);
+            event.SetDeltaY(0);
+            break;
+    }
+
+    gs_lastOffset = wxRound(offset);
+
+    event.SetEventObject(win);
+    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+
+    if ( gs_gestureStart )
+    {
+        event.SetGestureStart();
+        gs_gestureStart = false;
+    }
+
+    win->GTKProcessEvent(event);
+
+}
+
+static void
+gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+{
+    if ( gtk_gesture_get_sequence_state(gesture,sequence) != GTK_EVENT_SEQUENCE_CLAIMED )
+        return ;
+
+    gdouble x, y;
+
+    if ( !gtk_gesture_get_point(gesture, sequence, &x, &y) )
+    {
+        return ;
+    }
+
+    wxPanGestureEvent event(win->GetId());
+    event.SetEventObject(win);
+    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetDeltaX(0);
+    event.SetDeltaY(0);
+    event.SetGestureEnd();
+
+    win->GTKProcessEvent(event);
+}
+
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 {
     static bool isSourceAttached;
@@ -2870,6 +2965,22 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_enter_callback), this);
     g_signal_connect (widget, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
+
+    GtkGesture* gesture_pan_vertical = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture_pan_vertical), GTK_PHASE_BUBBLE);
+
+    g_signal_connect(gesture_pan_vertical,"begin",G_CALLBACK(gesture_begin_callback), this);
+    g_signal_connect(gesture_pan_vertical,"pan",G_CALLBACK(pan_gesture_callback),this);
+    g_signal_connect(gesture_pan_vertical,"end",G_CALLBACK(gesture_end_callback),this);
+    g_signal_connect(gesture_pan_vertical,"cancel",G_CALLBACK(gesture_end_callback),this);
+
+    GtkGesture* gesture_pan_horizontal = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture_pan_horizontal), GTK_PHASE_BUBBLE);
+
+    g_signal_connect(gesture_pan_horizontal,"begin",G_CALLBACK(gesture_begin_callback), this);
+    g_signal_connect(gesture_pan_horizontal,"pan",G_CALLBACK(pan_gesture_callback),this);
+    g_signal_connect(gesture_pan_horizontal,"end",G_CALLBACK(gesture_end_callback),this);
+    g_signal_connect(gesture_pan_horizontal,"cancel",G_CALLBACK(gesture_end_callback),this);
 }
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
