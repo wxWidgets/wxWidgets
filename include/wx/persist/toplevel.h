@@ -116,7 +116,14 @@ public:
         }
 
         if ( hasSize )
+        {
+            // a previous version of the program could have saved the window
+            // size which used to be big enough, but which is not big enough
+            // any more for the new version, so check that the size we restore
+            // doesn't cut off parts of the window
+            size.IncTo(tlw->GetBestSize());
             tlw->SetSize(size);
+        }
 
         // note that the window can be both maximized and iconized
         bool maximized;

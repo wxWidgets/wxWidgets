@@ -144,6 +144,7 @@ All (GUI):
 - Handle wxST_ELLIPSIZE_XXX styles in wxStaticText XRC handler (tm).
 - Add support for bitmaps to wxToggleButton XRC handler (tm).
 - Fix wxGCDC::SetDeviceClippingRegion().
+- Never restore size smaller than the best one in wxPersistentTLW.
 
 wxGTK:
 
