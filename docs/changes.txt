@@ -145,6 +145,7 @@ All (GUI):
 - Add support for bitmaps to wxToggleButton XRC handler (tm).
 - Fix wxGCDC::SetDeviceClippingRegion().
 - Never restore size smaller than the best one in wxPersistentTLW.
+- Fix escaping/unescaping characters in wxLongStringProperty in wxPG (mikek).
 
 wxGTK:
 
