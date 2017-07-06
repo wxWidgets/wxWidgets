@@ -192,6 +192,7 @@ wxMSW:
 - Fix updating bounding box in wxDC::DrawSpline().
 - Fix placing 0RGB wxBitmaps on the clipboard.
 - Fix handling wxClipboard data when wxUSE_OLE == 0.
+- Fix caching of wxFONTSTYLE_SLANT fonts in wxTheFontList.
 
 wxOSX:
 
