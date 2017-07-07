@@ -1061,12 +1061,12 @@ bool wxWMP10MediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
     if(!flags)
     {
         m_pWMPPlayer->put_enabled(VARIANT_FALSE);
-        m_pWMPPlayer->put_uiMode(wxBasicString(wxT("none")));
+        m_pWMPPlayer->put_uiMode(wxBasicString(wxString(wxS("none"))));
     }
     else
     {
         // TODO: use "custom"? (note that CE only supports none/full)
-        m_pWMPPlayer->put_uiMode(wxBasicString(wxT("full")));
+        m_pWMPPlayer->put_uiMode(wxBasicString(wxString(wxS("full"))));
         m_pWMPPlayer->put_enabled(VARIANT_TRUE);
     }
 
@@ -1358,7 +1358,7 @@ wxLongLong wxWMP10MediaBackend::GetDownloadTotal()
     if(m_pWMPPlayer->get_currentMedia(&pWMPMedia) == 0)
     {
         BSTR bsOut;
-        pWMPMedia->getItemInfo(wxBasicString(wxT("FileSize")),
+        pWMPMedia->getItemInfo(wxBasicString(wxString(wxS("FileSize"))),
                                &bsOut);
 
         wxString sFileSize = wxConvertStringFromOle(bsOut);
