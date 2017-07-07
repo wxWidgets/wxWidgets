@@ -66,7 +66,12 @@ inline void wxOleUninitialize()
 class WXDLLIMPEXP_CORE wxBasicString
 {
 public:    
-    // Takes over the ownership of bstr
+    // Takes over the ownership of bstr.
+    // Must NOT be called with bstr pointing to a wide string literal
+    // (e.g., wxBasicString(wxS("abc")), bstr must always be either NULL 
+    // or a BSTR allocated by Sys(Re)AllocString(), otherwise a wxBasicString's
+    // dtor or Free() method end up calling SysFreeString() on a string literal,
+    // which will result in a crash.
     explicit wxBasicString(BSTR bstr = NULL);
 
     // Constructs the BSTR from wxString
@@ -98,7 +103,9 @@ public:
     // Creates its BSTR from wxString
     wxBasicString& operator=(const wxString& str);
 
-    // Takes over the ownership of bstr
+    // Takes over the ownership of bstr.
+    // bstr must be either NULL or a BSTR allocated by Sys(Re)AllocString(),
+    // see the comment for wxBasicString(BSTR) ctor.
     wxBasicString& operator=(BSTR bstr);
 
     /// Returns the owned BSTR while keeping its ownership    
