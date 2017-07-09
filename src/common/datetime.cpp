@@ -541,6 +541,55 @@ bool wxDateTime::IsLeapYear(int year, wxDateTime::Calendar cal)
     }
 }
 
+#ifdef __WINDOWS__
+#include "wx/msw/registry.h"
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    wxRegKey key(wxRegKey::HKCU, "Control Panel\\International");
+    wxString val;
+
+    if ( key.Exists() && key.HasValue("iFirstDayOfWeek") )
+    {
+        key.QueryValue("iFirstDayOfWeek", val);
+        *firstDay = wxDateTime::WeekDay((wxAtoi(val) + 1) % 7);
+        return true;
+    }
+    else
+    {
+        *firstDay = wxDateTime::Sun;
+        return false;
+    }
+}
+
+#elif defined(__APPLE__)
+// implementation in utils_base.mm
+#elif defined(HAVE_NL_TIME_FIRST_WEEKDAY)
+
+#include <langinfo.h>
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    *firstDay = wxDateTime::WeekDay((*nl_langinfo(_NL_TIME_FIRST_WEEKDAY) - 1) % 7);
+    return true;
+}
+
+#else
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    *firstDay = wxDateTime::Sun;
+    return false;
+}
+
+#endif
+
 /* static */
 int wxDateTime::GetCentury(int year)
 {
