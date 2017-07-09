@@ -1510,6 +1510,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer) : wxGraphicsContext(renderer)
 {
     Init();
+    m_initTransform = CGAffineTransformIdentity;
 }
 
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
