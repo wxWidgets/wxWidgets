@@ -152,11 +152,11 @@ WXDWORD wxCalendarCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 void wxCalendarCtrl::SetWindowStyleFlag(long style)
 {
-    const bool hadMondayFirst = HasFlag(wxCAL_MONDAY_FIRST);
+    const bool hadMondayFirst = WeekStartsOnMonday();
 
     wxCalendarCtrlBase::SetWindowStyleFlag(style);
 
-    if ( HasFlag(wxCAL_MONDAY_FIRST) != hadMondayFirst )
+    if ( WeekStartsOnMonday() != hadMondayFirst )
         UpdateFirstDayOfWeek();
 }
 
@@ -427,7 +427,7 @@ void wxCalendarCtrl::UpdateMarks()
 void wxCalendarCtrl::UpdateFirstDayOfWeek()
 {
     MonthCal_SetFirstDayOfWeek(GetHwnd(),
-                               HasFlag(wxCAL_MONDAY_FIRST) ? MonthCal_Monday
+                               WeekStartsOnMonday() ? MonthCal_Monday
                                                            : MonthCal_Sunday);
 }
 
