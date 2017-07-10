@@ -1906,7 +1906,10 @@ class WXDLLIMPEXP_CORE wxPanGestureEvent : public wxGestureEvent
 public:
     wxPanGestureEvent(wxWindowID winid = 0)
                 : wxGestureEvent(winid, wxEVT_GESTURE_PAN)
-                { }
+                {
+                    m_deltaX = 0;
+                    m_deltaY = 0;
+                }
       
     wxPanGestureEvent(const wxPanGestureEvent& event) : wxGestureEvent(event)
     {
