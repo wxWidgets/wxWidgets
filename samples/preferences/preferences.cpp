@@ -54,15 +54,14 @@ public:
 
     void ShowPreferencesEditor(wxWindow* parent);
     void DismissPreferencesEditor();
-    void UpdateSettings();
 
-    // Make them public for simplicity, we could also provide accessors, of
-    // course.
-    MySettings m_settings;
+    const MySettings& GetSettings() const { return m_settings; }
+    void UpdateSettings(const MySettings& settings);
 
 private:
     class MyFrame* m_frame;
     wxScopedPtr<wxPreferencesEditor> m_prefEditor;
+    MySettings m_settings;
 };
 
 wxIMPLEMENT_APP(MyApp);
@@ -108,7 +107,7 @@ public:
     {
         // Here we should update the settings we use. As we don't actually do
         // anything in this sample, just update their values shown on screen.
-        const MySettings& settings = wxGetApp().m_settings;
+        const MySettings& settings = wxGetApp().GetSettings();
         m_textMarkdownSyntax->SetLabel(settings.m_useMarkdown ? "yes" : "no");
         m_textSpellcheck->SetLabel(settings.m_spellcheck ? "on" : "off");
     }
@@ -149,24 +148,19 @@ public:
 
         SetSizerAndFit(sizer);
 
-        // On some platforms (OS X, GNOME), changes to preferences are applied
-        // immediately rather than after the OK or Apply button is pressed.
-        if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
-        {
-            m_useMarkdown->Bind(wxEVT_CHECKBOX,
-                                &PrefsPageGeneralPanel::ChangedUseMarkdown,
-                                this);
-            m_spellcheck->Bind(wxEVT_CHECKBOX,
-                               &PrefsPageGeneralPanel::ChangedSpellcheck,
-                               this);
-        }
+        m_useMarkdown->Bind(wxEVT_CHECKBOX,
+                            &PrefsPageGeneralPanel::ChangedUseMarkdown,
+                            this);
+        m_spellcheck->Bind(wxEVT_CHECKBOX,
+                           &PrefsPageGeneralPanel::ChangedSpellcheck,
+                           this);
     }
 
     virtual bool TransferDataToWindow()
     {
-        const MySettings& settings = wxGetApp().m_settings;
-        m_useMarkdown->SetValue(settings.m_useMarkdown);
-        m_spellcheck->SetValue(settings.m_spellcheck);
+        m_settingsCurrent = wxGetApp().GetSettings();
+        m_useMarkdown->SetValue(m_settingsCurrent.m_useMarkdown);
+        m_spellcheck->SetValue(m_settingsCurrent.m_spellcheck);
         return true;
     }
 
@@ -174,28 +168,43 @@ public:
     {
         // Called on platforms with modal preferences dialog to save and apply
         // the changes.
-        MySettings& settings = wxGetApp().m_settings;
-        settings.m_useMarkdown = m_useMarkdown->GetValue();
-        settings.m_spellcheck = m_spellcheck->GetValue();
-        wxGetApp().UpdateSettings();
+        wxGetApp().UpdateSettings(m_settingsCurrent);
         return true;
     }
 
 private:
+    void UpdateSettingsIfNecessary()
+    {
+        // On some platforms (OS X, GNOME), changes to preferences are applied
+        // immediately rather than after the OK or Apply button is pressed, so
+        // we need to take them into account as soon as they happen. On others
+        // (MSW), we need to wait until the changes are accepted by the user by
+        // pressing the "OK" button. To reuse the same code for both cases, we
+        // always update m_settingsCurrent object under all platforms, but only
+        // update the real application settings if necessary here.
+        if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
+        {
+            wxGetApp().UpdateSettings(m_settingsCurrent);
+        }
+    }
+
     void ChangedUseMarkdown(wxCommandEvent& e)
     {
-        wxGetApp().m_settings.m_useMarkdown = e.IsChecked();
-        wxGetApp().UpdateSettings();
+        m_settingsCurrent.m_useMarkdown = e.IsChecked();
+        UpdateSettingsIfNecessary();
     }
 
     void ChangedSpellcheck(wxCommandEvent& e)
     {
-        wxGetApp().m_settings.m_spellcheck = e.IsChecked();
-        wxGetApp().UpdateSettings();
+        m_settingsCurrent.m_spellcheck = e.IsChecked();
+        UpdateSettingsIfNecessary();
     }
 
     wxCheckBox *m_useMarkdown;
     wxCheckBox *m_spellcheck;
+
+    // Settings corresponding to the current values in this dialog.
+    MySettings m_settingsCurrent;
 };
 
 class PrefsPageGeneral : public wxStockPreferencesPage
@@ -304,7 +313,8 @@ void MyApp::DismissPreferencesEditor()
         m_prefEditor->Dismiss();
 }
 
-void MyApp::UpdateSettings()
+void MyApp::UpdateSettings(const MySettings& settings)
 {
+    m_settings = settings;
     m_frame->UpdateSettings();
 }
