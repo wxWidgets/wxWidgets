@@ -378,8 +378,8 @@ private:
 @interface wxTextFieldCell : NSTextFieldCell
 {
 @private
-    int wxAlignment;
-    BOOL adjustRect;
+    int alignment_;
+    BOOL adjustRect_;
 }
 
     -(void) setWXAlignment:(int)alignment;

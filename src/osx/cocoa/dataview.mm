@@ -1256,8 +1256,8 @@ outlineView:(NSOutlineView*)outlineView
 
 - (void)setWXAlignment:(int)alignment
 {
-    wxAlignment = alignment;
-    adjustRect = (alignment & (wxALIGN_CENTRE_VERTICAL | wxALIGN_BOTTOM)) != 0;
+    alignment_ = alignment;
+    adjustRect_ = (alignment & (wxALIGN_CENTRE_VERTICAL | wxALIGN_BOTTOM)) != 0;
 }
 
 // These three overrides implement vertical alignment of text cells.
@@ -1269,7 +1269,7 @@ outlineView:(NSOutlineView*)outlineView
     // Get the parent's idea of where we should draw
     NSRect r = [super drawingRectForBounds:theRect];
 
-    if (!adjustRect)
+    if (!adjustRect_)
         return r;
     if (theRect.size.height <= MINIMUM_NATIVE_ROW_HEIGHT)
         return r;  // don't mess with default-sized rows as they are centered
@@ -1277,12 +1277,12 @@ outlineView:(NSOutlineView*)outlineView
     NSSize bestSize = [self cellSizeForBounds:theRect];
     if (bestSize.height < r.size.height)
     {
-        if (wxAlignment & wxALIGN_CENTER_VERTICAL)
+        if (alignment_ & wxALIGN_CENTER_VERTICAL)
         {
             r.origin.y += int(r.size.height - bestSize.height) / 2;
             r.size.height = bestSize.height;
         }
-        else if (wxAlignment & wxALIGN_BOTTOM)
+        else if (alignment_ & wxALIGN_BOTTOM)
         {
             r.origin.y += r.size.height - bestSize.height;
             r.size.height = bestSize.height;
@@ -1294,26 +1294,26 @@ outlineView:(NSOutlineView*)outlineView
 
 - (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
 {
-    BOOL oldAdjustRect = adjustRect;
+    BOOL oldAdjustRect = adjustRect_;
     if (oldAdjustRect)
     {
         aRect = [self drawingRectForBounds:aRect];
-        adjustRect = NO;
+        adjustRect_ = NO;
     }
     [super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
-    adjustRect = oldAdjustRect;
+    adjustRect_ = oldAdjustRect;
 }
 
 - (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
 {
-    BOOL oldAdjustRect = adjustRect;
+    BOOL oldAdjustRect = adjustRect_;
     if (oldAdjustRect)
     {
         aRect = [self drawingRectForBounds:aRect];
-        adjustRect = NO;
+        adjustRect_ = NO;
     }
     [super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
-    adjustRect = oldAdjustRect;
+    adjustRect_ = oldAdjustRect;
 }
 
 @end
