@@ -3072,7 +3072,7 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble angle_delta, gdouble angle,
     event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
 
     // Angle provided by GTK is the cumulative angle since the "begin" signal was emitted.
-    // We need the angle in aangle since the last event.
+    // We need the change in angle since the last event.
     event.SetAngleDelta(angle - gs_lastAngle);
 
     // Update gs_lastAngle
@@ -3145,7 +3145,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (vertical_pan_gesture), GTK_PHASE_TARGET);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(vertical_pan_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (vertical_pan_gesture, "begin",
                       G_CALLBACK(pan_gesture_begin_callback), this);
@@ -3158,7 +3158,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (horizontal_pan_gesture), GTK_PHASE_TARGET);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(horizontal_pan_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (horizontal_pan_gesture, "begin",
                       G_CALLBACK(pan_gesture_begin_callback), this);
@@ -3171,7 +3171,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* zoom_gesture = gtk_gesture_zoom_new(widget);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoom_gesture), GTK_PHASE_TARGET);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(zoom_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (zoom_gesture, "begin",
                       G_CALLBACK(zoom_gesture_begin_callback), this);
@@ -3184,7 +3184,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* rotate_gesture = gtk_gesture_rotate_new(widget);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (rotate_gesture), GTK_PHASE_TARGET);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(rotate_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (rotate_gesture, "begin",
                       G_CALLBACK(rotate_gesture_begin_callback), this);
