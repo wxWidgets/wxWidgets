@@ -237,10 +237,13 @@ static double gs_lastOffset = 0;
 // Last scale provided by GTK
 static gdouble gs_lastScale = 1.0;
 
-// True if "pan" signal was emitted for horizontal pan gesture
+// This is used to calculate angle delta.
+static gdouble gs_lastAngle = 0;
+
+// True if "pam" signal was emitted for horizontal pan gesture
 static bool gs_horizontalPanActive = false;
 
-// True if "pan" signal was emitted for vertical pan gesture
+// True if "pam" signal was emitted for vertical pan gesture
 static bool gs_verticalPanActive = false;
 
 //-----------------------------------------------------------------------------
@@ -3032,6 +3035,71 @@ zoom_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWin
     win->GTKProcessEvent(event);
 }
 
+static void
+rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+{
+    gdouble x, y;
+
+    if ( !gtk_gesture_get_bounding_box_center(gesture, &x, &y) )
+    {
+        return;
+    }
+
+    gs_lastAngle = 0;
+
+    wxRotateGestureEvent event(win->GetId());
+
+    event.SetEventObject(win);
+    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetGestureStart();
+
+    win->GTKProcessEvent(event);
+}
+
+static void
+rotate_gesture_callback(GtkGesture* gesture, gdouble angle_delta, gdouble angle, wxWindowGTK* win)
+{
+    gdouble x, y;
+
+    if ( !gtk_gesture_get_bounding_box_center(gesture, &x, &y) )
+    {
+        return;
+    }
+
+    wxRotateGestureEvent event(win->GetId());
+
+    event.SetEventObject(win);
+    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+
+    // Angle provided by GTK is the cumulative angle since the "begin" signal was emitted.
+    // We need the angle in aangle since the last event.
+    event.SetAngleDelta(angle - gs_lastAngle);
+
+    // Update gs_lastAngle
+    gs_lastAngle = angle;
+
+    win->GTKProcessEvent(event);
+}
+
+static void
+rotate_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+{
+    gdouble x, y;
+
+    if ( !gtk_gesture_get_bounding_box_center(gesture, &x, &y) )
+    {
+        return;
+    }
+
+    wxRotateGestureEvent event(win->GetId());
+
+    event.SetEventObject(win);
+    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetGestureEnd();
+
+    win->GTKProcessEvent(event);
+}
+
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 {
     static bool isSourceAttached;
@@ -3077,7 +3145,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(vertical_pan_gesture), GTK_PHASE_TARGET);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (vertical_pan_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (vertical_pan_gesture, "begin",
                       G_CALLBACK(pan_gesture_begin_callback), this);
@@ -3090,7 +3158,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(horizontal_pan_gesture), GTK_PHASE_TARGET);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (horizontal_pan_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (horizontal_pan_gesture, "begin",
                       G_CALLBACK(pan_gesture_begin_callback), this);
@@ -3103,7 +3171,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* zoom_gesture = gtk_gesture_zoom_new(widget);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(zoom_gesture), GTK_PHASE_TARGET);
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (zoom_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (zoom_gesture, "begin",
                       G_CALLBACK(zoom_gesture_begin_callback), this);
@@ -3113,6 +3181,19 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK(zoom_gesture_end_callback), this);
     g_signal_connect (zoom_gesture, "cancel",
                       G_CALLBACK(zoom_gesture_end_callback), this);
+
+    GtkGesture* rotate_gesture = gtk_gesture_rotate_new(widget);
+
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (rotate_gesture), GTK_PHASE_TARGET);
+
+    g_signal_connect (rotate_gesture, "begin",
+                      G_CALLBACK(rotate_gesture_begin_callback), this);
+    g_signal_connect (rotate_gesture, "angle-changed",
+                      G_CALLBACK(rotate_gesture_callback), this);
+    g_signal_connect (rotate_gesture, "end",
+                      G_CALLBACK(rotate_gesture_end_callback), this);
+    g_signal_connect (rotate_gesture, "cancel",
+                      G_CALLBACK(rotate_gesture_end_callback), this);
 }
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
