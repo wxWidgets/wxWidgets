@@ -28,6 +28,25 @@
 #include "wx/artprov.h"
 #include "wx/frame.h"
 
+// This struct combines the settings edited in the preferences dialog.
+struct MySettings
+{
+    MySettings()
+    {
+        // Normally we would initialize values by loading them from some
+        // persistent storage, e.g. using wxConfig.
+        // For demonstration purposes, we just set hardcoded values here.
+        m_useMarkdown = true;
+        m_spellcheck = false;
+    }
+
+    bool m_useMarkdown;
+    bool m_spellcheck;
+
+    // We don't do the same thing for the second preferences page fields, but
+    // we would have included them in a real application.
+};
+
 class MyApp : public wxApp
 {
 public:
@@ -36,8 +55,13 @@ public:
     void ShowPreferencesEditor(wxWindow* parent);
     void DismissPreferencesEditor();
 
+    const MySettings& GetSettings() const { return m_settings; }
+    void UpdateSettings(const MySettings& settings);
+
 private:
+    class MyFrame* m_frame;
     wxScopedPtr<wxPreferencesEditor> m_prefEditor;
+    MySettings m_settings;
 };
 
 wxIMPLEMENT_APP(MyApp);
@@ -56,14 +80,36 @@ public:
         menuBar->Append(fileMenu, "&File");
         SetMenuBar(menuBar);
 
-        Connect(wxID_PREFERENCES,
-                wxEVT_MENU,
-                wxCommandEventHandler(MyFrame::OnPref), NULL, this);
-        Connect(wxID_EXIT,
-                wxEVT_MENU,
-                wxCommandEventHandler(MyFrame::OnExit), NULL, this);
-        Connect(wxEVT_CLOSE_WINDOW,
-                wxCloseEventHandler(MyFrame::OnClose), NULL, this);
+        Bind(wxEVT_MENU, &MyFrame::OnPref, this, wxID_PREFERENCES);
+        Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
+        Bind(wxEVT_CLOSE_WINDOW, &MyFrame::OnClose, this);
+
+        wxPanel* const panel = new wxPanel(this);
+        m_textMarkdownSyntax = new wxStaticText(panel, wxID_ANY, "");
+        m_textSpellcheck = new wxStaticText(panel, wxID_ANY, "");
+
+        wxSizer* const sizer = new wxFlexGridSizer(2, wxSize(5, 5));
+        sizer->Add(new wxStaticText(panel, wxID_ANY, "Markdown syntax:"),
+                   wxSizerFlags().Center().Right());
+        sizer->Add(m_textMarkdownSyntax,
+                   wxSizerFlags().Center());
+        sizer->Add(new wxStaticText(panel, wxID_ANY, "Spell checking:"),
+                   wxSizerFlags().Center().Right());
+        sizer->Add(m_textSpellcheck,
+                   wxSizerFlags().Center());
+        panel->SetSizer(sizer);
+
+        // Show the initial values.
+        UpdateSettings();
+    }
+
+    void UpdateSettings()
+    {
+        // Here we should update the settings we use. As we don't actually do
+        // anything in this sample, just update their values shown on screen.
+        const MySettings& settings = wxGetApp().GetSettings();
+        m_textMarkdownSyntax->SetLabel(settings.m_useMarkdown ? "yes" : "no");
+        m_textSpellcheck->SetLabel(settings.m_spellcheck ? "on" : "off");
     }
 
 private:
@@ -82,6 +128,9 @@ private:
         wxGetApp().DismissPreferencesEditor();
         e.Skip();
     }
+
+    wxStaticText* m_textMarkdownSyntax;
+    wxStaticText* m_textSpellcheck;
 };
 
 
@@ -90,7 +139,7 @@ class PrefsPageGeneralPanel : public wxPanel
 public:
     PrefsPageGeneralPanel(wxWindow *parent) : wxPanel(parent)
     {
-        m_useMarkdown = new wxCheckBox(this, wxID_ANY, "User Markdown syntax");
+        m_useMarkdown = new wxCheckBox(this, wxID_ANY, "Use Markdown syntax");
         m_spellcheck = new wxCheckBox(this, wxID_ANY, "Check spelling");
 
         wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
@@ -99,25 +148,19 @@ public:
 
         SetSizerAndFit(sizer);
 
-        // On some platforms (OS X, GNOME), changes to preferences are applied
-        // immediately rather than after the OK or Apply button is pressed.
-        if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
-        {
-            m_useMarkdown->Connect(wxEVT_CHECKBOX,
-                                   wxCommandEventHandler(PrefsPageGeneralPanel::ChangedUseMarkdown),
-                                   NULL, this);
-            m_spellcheck->Connect(wxEVT_CHECKBOX,
-                                  wxCommandEventHandler(PrefsPageGeneralPanel::ChangedSpellcheck),
-                                  NULL, this);
-        }
+        m_useMarkdown->Bind(wxEVT_CHECKBOX,
+                            &PrefsPageGeneralPanel::ChangedUseMarkdown,
+                            this);
+        m_spellcheck->Bind(wxEVT_CHECKBOX,
+                           &PrefsPageGeneralPanel::ChangedSpellcheck,
+                           this);
     }
 
     virtual bool TransferDataToWindow()
     {
-        // This is the place where you can initialize values, e.g. from wxConfig.
-        // For demonstration purposes, we just set hardcoded values.
-        m_useMarkdown->SetValue(true);
-        m_spellcheck->SetValue(false);
+        m_settingsCurrent = wxGetApp().GetSettings();
+        m_useMarkdown->SetValue(m_settingsCurrent.m_useMarkdown);
+        m_spellcheck->SetValue(m_settingsCurrent.m_spellcheck);
         return true;
     }
 
@@ -125,25 +168,43 @@ public:
     {
         // Called on platforms with modal preferences dialog to save and apply
         // the changes.
-        wxCommandEvent dummy;
-        ChangedUseMarkdown(dummy);
-        ChangedSpellcheck(dummy);
+        wxGetApp().UpdateSettings(m_settingsCurrent);
         return true;
     }
 
 private:
-    void ChangedUseMarkdown(wxCommandEvent& WXUNUSED(e))
+    void UpdateSettingsIfNecessary()
     {
-        // save new m_useMarkdown value and apply the change to the app
+        // On some platforms (OS X, GNOME), changes to preferences are applied
+        // immediately rather than after the OK or Apply button is pressed, so
+        // we need to take them into account as soon as they happen. On others
+        // (MSW), we need to wait until the changes are accepted by the user by
+        // pressing the "OK" button. To reuse the same code for both cases, we
+        // always update m_settingsCurrent object under all platforms, but only
+        // update the real application settings if necessary here.
+        if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
+        {
+            wxGetApp().UpdateSettings(m_settingsCurrent);
+        }
     }
 
-    void ChangedSpellcheck(wxCommandEvent& WXUNUSED(e))
+    void ChangedUseMarkdown(wxCommandEvent& e)
     {
-        // save new m_spellcheck value and apply the change to the app
+        m_settingsCurrent.m_useMarkdown = e.IsChecked();
+        UpdateSettingsIfNecessary();
+    }
+
+    void ChangedSpellcheck(wxCommandEvent& e)
+    {
+        m_settingsCurrent.m_spellcheck = e.IsChecked();
+        UpdateSettingsIfNecessary();
     }
 
     wxCheckBox *m_useMarkdown;
     wxCheckBox *m_spellcheck;
+
+    // Settings corresponding to the current values in this dialog.
+    MySettings m_settingsCurrent;
 };
 
 class PrefsPageGeneral : public wxStockPreferencesPage
@@ -172,9 +233,9 @@ public:
 
         if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
         {
-            m_fulltext->Connect(wxEVT_CHECKBOX,
-                                wxCommandEventHandler(PrefsPageTopicsPanel::ChangedFulltext),
-                                NULL, this);
+            m_fulltext->Bind(wxEVT_CHECKBOX,
+                             &PrefsPageTopicsPanel::ChangedFulltext,
+                             this);
         }
     }
 
@@ -228,8 +289,8 @@ bool MyApp::OnInit()
     // result in rather strange "Preferences Preferences" title.
     SetAppDisplayName("wxWidgets Sample");
 
-    MyFrame *frame = new MyFrame();
-    frame->Show(true);
+    m_frame = new MyFrame();
+    m_frame->Show(true);
 
     return true;
 }
@@ -250,4 +311,10 @@ void MyApp::DismissPreferencesEditor()
 {
     if ( m_prefEditor )
         m_prefEditor->Dismiss();
+}
+
+void MyApp::UpdateSettings(const MySettings& settings)
+{
+    m_settings = settings;
+    m_frame->UpdateSettings();
 }
