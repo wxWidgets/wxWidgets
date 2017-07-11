@@ -228,6 +228,7 @@ static GList* gs_sizeRevalidateList;
 static bool gs_inSizeAllocate;
 #endif
 
+#if GTK_CHECK_VERSION(3,14,0)
 // This is true when the gesture has just started (currently used for pan gesture only)
 static bool gs_gestureStart = false;
 
@@ -245,6 +246,7 @@ static bool gs_horizontalPanActive = false;
 
 // True if "pam" signal was emitted for vertical pan gesture
 static bool gs_verticalPanActive = false;
+#endif // GTK_CHECK_VERSION(3,14,0)
 
 //-----------------------------------------------------------------------------
 // debug
@@ -2846,6 +2848,7 @@ static gboolean source_dispatch(GSource*, GSourceFunc, void*)
 }
 }
 
+#if GTK_CHECK_VERSION(3,14,0)
 static void
 pan_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
@@ -3099,6 +3102,7 @@ rotate_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxW
 
     win->GTKProcessEvent(event);
 }
+#endif // GTK_CHECK_VERSION(3,14,0)
 
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 {
@@ -3143,7 +3147,10 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
     g_signal_connect (widget, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
 
+#if GTK_CHECK_VERSION(3,14,0)
     GtkGesture* vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
+
+    gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(vertical_pan_gesture), TRUE);
 
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(vertical_pan_gesture), GTK_PHASE_TARGET);
 
@@ -3157,6 +3164,8 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK(vertical_pan_gesture_end_callback), this);
 
     GtkGesture* horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
+
+    gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(horizontal_pan_gesture), TRUE);
 
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(horizontal_pan_gesture), GTK_PHASE_TARGET);
 
@@ -3194,6 +3203,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK(rotate_gesture_end_callback), this);
     g_signal_connect (rotate_gesture, "cancel",
                       G_CALLBACK(rotate_gesture_end_callback), this);
+#endif // GTK_CHECK_VERSION(3,14,0)
 }
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
