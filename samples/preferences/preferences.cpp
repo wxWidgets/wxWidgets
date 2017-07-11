@@ -90,7 +90,7 @@ class PrefsPageGeneralPanel : public wxPanel
 public:
     PrefsPageGeneralPanel(wxWindow *parent) : wxPanel(parent)
     {
-        m_useMarkdown = new wxCheckBox(this, wxID_ANY, "User Markdown syntax");
+        m_useMarkdown = new wxCheckBox(this, wxID_ANY, "Use Markdown syntax");
         m_spellcheck = new wxCheckBox(this, wxID_ANY, "Check spelling");
 
         wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
