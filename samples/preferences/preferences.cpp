@@ -56,14 +56,9 @@ public:
         menuBar->Append(fileMenu, "&File");
         SetMenuBar(menuBar);
 
-        Connect(wxID_PREFERENCES,
-                wxEVT_MENU,
-                wxCommandEventHandler(MyFrame::OnPref), NULL, this);
-        Connect(wxID_EXIT,
-                wxEVT_MENU,
-                wxCommandEventHandler(MyFrame::OnExit), NULL, this);
-        Connect(wxEVT_CLOSE_WINDOW,
-                wxCloseEventHandler(MyFrame::OnClose), NULL, this);
+        Bind(wxEVT_MENU, &MyFrame::OnPref, this, wxID_PREFERENCES);
+        Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
+        Bind(wxEVT_CLOSE_WINDOW, &MyFrame::OnClose, this);
     }
 
 private:
@@ -103,12 +98,12 @@ public:
         // immediately rather than after the OK or Apply button is pressed.
         if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
         {
-            m_useMarkdown->Connect(wxEVT_CHECKBOX,
-                                   wxCommandEventHandler(PrefsPageGeneralPanel::ChangedUseMarkdown),
-                                   NULL, this);
-            m_spellcheck->Connect(wxEVT_CHECKBOX,
-                                  wxCommandEventHandler(PrefsPageGeneralPanel::ChangedSpellcheck),
-                                  NULL, this);
+            m_useMarkdown->Bind(wxEVT_CHECKBOX,
+                                &PrefsPageGeneralPanel::ChangedUseMarkdown,
+                                this);
+            m_spellcheck->Bind(wxEVT_CHECKBOX,
+                               &PrefsPageGeneralPanel::ChangedSpellcheck,
+                               this);
         }
     }
 
@@ -172,9 +167,9 @@ public:
 
         if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
         {
-            m_fulltext->Connect(wxEVT_CHECKBOX,
-                                wxCommandEventHandler(PrefsPageTopicsPanel::ChangedFulltext),
-                                NULL, this);
+            m_fulltext->Bind(wxEVT_CHECKBOX,
+                             &PrefsPageTopicsPanel::ChangedFulltext,
+                             this);
         }
     }
 
