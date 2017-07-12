@@ -3150,8 +3150,6 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 #if GTK_CHECK_VERSION(3,14,0)
     GtkGesture* vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
 
-    gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(vertical_pan_gesture), TRUE);
-
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(vertical_pan_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (vertical_pan_gesture, "begin",
@@ -3164,8 +3162,6 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK(vertical_pan_gesture_end_callback), this);
 
     GtkGesture* horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
-
-    gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(horizontal_pan_gesture), TRUE);
 
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(horizontal_pan_gesture), GTK_PHASE_TARGET);
 
