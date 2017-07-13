@@ -880,7 +880,6 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 
     return [super hitTest:aPoint];
 }
-
 @end // wxNSView
 
 // We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
@@ -1040,6 +1039,24 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
         return;
 
     impl->insertText(text, self, _cmd);
+}
+
+void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    impl->PanGestureEvent(panGestureRecognizer);
+}
+
+void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    impl->ZoomGestureEvent(magnificationGestureRecognizer);
+}
+
+void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognizer* rotationGestureRecognizer)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    impl->RotateGestureEvent(rotationGestureRecognizer);
 }
 
 BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event)
@@ -1428,6 +1445,133 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     m_lastKeyDownEvent = NULL;
 }
 
+void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecognizer)
+{
+    NSGestureRecognizerState gestureState = nil;
+
+    switch ( [panGestureRecognizer state] )
+    {
+        case NSGestureRecognizerStateBegan:
+             gestureState = NSGestureRecognizerStateBegan;
+             break;
+        case NSGestureRecognizerStateChanged:
+             break;
+        case NSGestureRecognizerStateEnded:
+        case NSGestureRecognizerStateCancelled:
+             gestureState = NSGestureRecognizerStateEnded;
+             break;
+        default:
+             return;
+    }
+
+    wxPanGestureEvent wxevent(GetWXPeer()->GetId());
+    wxevent.SetEventObject(GetWXPeer());
+
+    wxevent.SetGestureStart(gestureState == NSGestureRecognizerStateBegan);
+    wxevent.SetGestureEnd(gestureState == NSGestureRecognizerStateEnded);
+
+    NSPoint nspoint = [panGestureRecognizer locationInView:m_osxView];
+    wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetPosition(pt);
+
+    nspoint = [panGestureRecognizer translationInView:m_osxView];
+    pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetDeltaX(pt.x);
+    wxevent.SetDeltaY(pt.y);
+
+    [panGestureRecognizer setTranslation:NSZeroPoint inView:m_osxView];
+
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
+void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
+{
+    NSGestureRecognizerState gestureState = nil;
+
+    switch ( [magnificationGestureRecognizer state] )
+    {
+        case NSGestureRecognizerStateBegan:
+             gestureState = NSGestureRecognizerStateBegan;
+             break;
+        case NSGestureRecognizerStateChanged:
+             break;
+        case NSGestureRecognizerStateEnded:
+        case NSGestureRecognizerStateCancelled:
+             gestureState = NSGestureRecognizerStateEnded;
+             break;
+        default:
+             return;
+    }
+
+    wxZoomGestureEvent wxevent(GetWXPeer()->GetId());
+    wxevent.SetEventObject(GetWXPeer());
+
+    wxevent.SetGestureStart(gestureState == NSGestureRecognizerStateBegan);
+    wxevent.SetGestureEnd(gestureState == NSGestureRecognizerStateEnded);
+
+    NSPoint nspoint = [magnificationGestureRecognizer locationInView:m_osxView];
+    wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetPosition(pt);
+
+    static double lastMagnification = 0.0;
+
+    double magnification = [magnificationGestureRecognizer magnification];
+
+    double zoomDelta = magnification - lastMagnification + 1.0;
+
+    lastMagnification = magnification;
+
+    wxevent.SetZoomDelta(zoomDelta);
+
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
+void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotationGestureRecognizer)
+{
+    NSGestureRecognizerState gestureState = nil;
+
+    switch ( [rotationGestureRecognizer state] )
+    {
+        case NSGestureRecognizerStateBegan:
+             gestureState = NSGestureRecognizerStateBegan;
+             break;
+        case NSGestureRecognizerStateChanged:
+             break;
+        case NSGestureRecognizerStateEnded:
+        case NSGestureRecognizerStateCancelled:
+             gestureState = NSGestureRecognizerStateEnded;
+             break;
+        default:
+             return;
+    }
+
+    wxRotateGestureEvent wxevent(GetWXPeer()->GetId());
+    wxevent.SetEventObject(GetWXPeer());
+
+    wxevent.SetGestureStart(gestureState == NSGestureRecognizerStateBegan);
+    wxevent.SetGestureEnd(gestureState == NSGestureRecognizerStateEnded);
+
+    NSPoint nspoint = [rotationGestureRecognizer locationInView:m_osxView];
+    wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetPosition(pt);
+
+    static double lastAngle = 0.0;
+
+    double angle = -[rotationGestureRecognizer rotation];
+
+    double angleDelta = angle - lastAngle;
+
+    lastAngle  = angle;
+
+    wxevent.SetAngleDelta(angleDelta);
+
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
     bool result = false;
@@ -1774,7 +1918,11 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(scrollWheel:), (IMP) wxOSX_mouseEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseEntered:), (IMP) wxOSX_mouseEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseExited:), (IMP) wxOSX_mouseEvent, "v@:@" )
-        
+
+    wxOSX_CLASS_ADD_METHOD(c, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" )
+
     wxOSX_CLASS_ADD_METHOD(c, @selector(magnifyWithEvent:), (IMP)wxOSX_mouseEvent, "v@:@")
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(cursorUpdate:), (IMP) wxOSX_cursorUpdate, "v@:@" )
@@ -1833,6 +1981,19 @@ wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRoo
     Init();
     m_osxView = w;
 
+    panGestureRecognizer =
+    [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
+
+    magnificationGestureRecognizer =
+    [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
+
+    rotationGestureRecognizer =
+    [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
+
+    [m_osxView addGestureRecognizer:panGestureRecognizer];
+    [m_osxView addGestureRecognizer:magnificationGestureRecognizer];
+    [m_osxView addGestureRecognizer:rotationGestureRecognizer];
+
     // check if the user wants to create the control initially hidden
     if ( !peer->IsShown() )
         SetVisibility(false);
@@ -1874,6 +2035,10 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
     // gc aware handling
     if ( m_osxView )
         CFRelease(m_osxView);
+
+    [panGestureRecognizer release];
+    [magnificationGestureRecognizer release];
+    [rotationGestureRecognizer release];
 }
 
 bool wxWidgetCocoaImpl::IsVisible() const

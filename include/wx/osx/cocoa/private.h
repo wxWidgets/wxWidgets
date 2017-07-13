@@ -143,6 +143,9 @@ public :
     void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
     virtual bool        SetupCursor(NSEvent* event);
 
+    virtual void        PanGestureEvent(NSPanGestureRecognizer *panGestureRecognizer);
+    virtual void        ZoomGestureEvent(NSMagnificationGestureRecognizer *magnificationGestureRecognizer);
+    virtual void        RotateGestureEvent(NSRotationGestureRecognizer *rotationGestureRecognizer);
 
 #if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);
@@ -189,6 +192,10 @@ protected:
     // if it the control has an editor, that editor will already send some
     // events, don't resend them
     bool m_hasEditor;
+
+    NSPanGestureRecognizer *panGestureRecognizer;
+    NSMagnificationGestureRecognizer *magnificationGestureRecognizer;
+    NSRotationGestureRecognizer *rotationGestureRecognizer;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
