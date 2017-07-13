@@ -880,6 +880,7 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 
     return [super hitTest:aPoint];
 }
+
 @end // wxNSView
 
 // We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
