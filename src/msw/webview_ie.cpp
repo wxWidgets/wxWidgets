@@ -852,9 +852,47 @@ wxString wxWebViewIE::GetPageText() const
         return "";
     }
 }
-
+/*
 wxString wxWebViewIE::RunScript(const wxString& javascript)
 {
+
+    wxCOMPtr<IDispatch> dispatch;
+    wxCOMPtr<IHTMLDocument2> document;
+    HRESULT result = m_webBrowser->get_Document(&dispatch);
+    if (dispatch && SUCCEEDED(result))
+    {
+        //document is set to null automatically if the interface isn't supported
+        dispatch->QueryInterface(IID_IHTMLDocument2, (void**)&document);
+    }
+    
+
+    if (document)
+    {
+        wxCOMPtr<IHTMLWindow2> window;
+        wxString language = "javascript";
+        HRESULT hr = document->get_parentWindow(&window);
+        if (SUCCEEDED(hr))
+        {
+            // Get IHTMLWindow dispatch
+
+
+
+    
+    // Define JAVAScript
+    wxString fullScript = "function testFunction(){alert('JS function called!')return  true;}testFunction();";
+    
+    VARIANT result;
+
+    // Execute JavaSctript
+    dispatch->Invoke1(L"eval", SysAllocString(javascript.wc_str()), &result);
+
+    
+
+    // Print Result
+    wxLogMessage("%s", result.bstrVal);
+    
+
+    
     VARIANT result;
     VariantInit(&result);
     V_VT(&result) = VT_EMPTY;
@@ -876,19 +914,21 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
         return "-1";
     }
 
-    if (temp_function.vt != VT_DISPATCH) {
-        wxLogMessage("No return value that we care about");
-        return "0";
-    }
+   // if (temp_function.vt != VT_DISPATCH) {
+     //   wxLogMessage("No return value that we care about");
+      //  return "0";
+   // }
 
     // Grab the "call" method out of the returned function
     DISPID call_member_id;
-    OLECHAR FAR* call_member_name = L"call";
+    OLECHAR FAR* call_member_name = L"a";
+    wxLogMessage("Before temp_function.pdispVal->GetIDsOfNames(IID_NULL,");
     HRESULT hr = temp_function.pdispVal->GetIDsOfNames(IID_NULL,
         &call_member_name,
         1,
         LOCALE_USER_DEFAULT,
         &call_member_id);
+    wxLogMessage("After temp_function.pdispVal->GetIDsOfNames(IID_NULL,");
     if (FAILED(hr)) {
         wxLogMessage("Cannot locate call method on anonymous function");
         return "-1";
@@ -908,25 +948,27 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     // reverse order, and add an extra argument, the window object,
     // to the end of the array to use as the "this" parameter for the
     // function invocation.
-    /*
-    size_t arg_count = this->argument_array_.size();
-    std::vector<VARIANT> argument_array_copy(arg_count + 1);
+    
+    
+    //size_t arg_count = this->argument_array_.size();
+    //std::vector<VARIANT> argument_array_copy(arg_count + 1);
 
     VARIANT window_variant;
     VariantInit(&window_variant);
     V_VT(&window_variant) = VT_EMPTY;
-    window_variant = win;
-    argument_array_copy[arg_count].Copy(&window_variant);
+   // window_variant = win;
+    //argument_array_copy[arg_count].Copy(&window_variant);
 
-    for (size_t index = 0; index < arg_count; ++index) {
-        argument_array_copy[arg_count - 1 - index].Copy(&this->argument_array_[index]);
-    }
+    //for (size_t index = 0; index < arg_count; ++index) {
+      //  argument_array_copy[arg_count - 1 - index].Copy(&this->argument_array_[index]);
+    //}
 
     DISPPARAMS call_parameters = { 0 };
     memset(&call_parameters, 0, sizeof call_parameters);
-    call_parameters.cArgs = static_cast<unsigned int>(argument_array_copy.size());
-    call_parameters.rgvarg = &argument_array_copy[0];
-    */
+  //  call_parameters.cArgs = static_cast<unsigned int>(argument_array_copy.size());
+  //  call_parameters.rgvarg = &argument_array_copy[0];
+    
+    
     int return_code = 0;
     EXCEPINFO exception;
     memset(&exception, 0, sizeof exception);
@@ -958,19 +1000,73 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     }
 
     wxLogMessage(wxString::Format("%i", result.vt));
-
+    
     return "";
+    
+}
+
+bool wxWebViewIE::CallClientScript()
+{
+    //Call client function in HTML
+    //'pStrFuncName' = client script function name
+    //'pArrFuncArgs' = if not NULL, list of arguments
+    //'pOutVarRes' = if not NULL, will receive the return value
+    //RETURN:
+    //      = TRUE if done
+    BOOL bRes = FALSE;
+
+    VARIANT vaResult;
+    VariantInit(&vaResult);
+    V_VT(&vaResult) = VT_EMPTY;
+
+
+
+    wxCOMPtr<IHTMLDocument2> pIDoc2(GetDocument());
+
+    if (pIDoc2)
+    {
+        wxCOMPtr<IDispatch> spScript;
+        if (SUCCEEDED(pIDoc2->get_Script(&spScript)))
+        {
+            //Find dispid for given function in the object
+            wxBasicString bstrMember(pStrFuncName);
+            DISPID dispid = NULL;
+            if (SUCCEEDED(spScript->GetIDsOfNames(IID_NULL, &bstrMember, 1, LOCALE_USER_DEFAULT, &dispid)))
+            {
+
+
+                EXCEPINFO excepInfo;
+                memset(&excepInfo, 0, sizeof excepInfo);
+                UINT nArgErr = (UINT)-1;  // initialize to invalid arg
+
+                                          //Call JavaScript function         
+                if (SUCCEEDED(spScript->Invoke(dispid, IID_NULL, 0, DISPATCH_METHOD, &dispparams, &vaResult, &excepInfo, &nArgErr)))
+                    spScript->Invoke1();
+                {
+                    //Done!
+                    bRes = TRUE;
+                }
+
+            }
+        }
+    }
+
+    if (pOutVarRes)
+        *pOutVarRes = vaResult;
+
+    return bRes;
 }
 
 bool wxWebViewIE::CreateAnonymousFunction(VARIANT* result) {
     wxLogMessage("Entering Script::CreateAnonymousFunction");
 
-    wxString code = "function a() { return 'Hello'; } a();";
+    wxString code = "function a() { return 'Hello'; } ";
+    //wxString code = "alert('hello world');";
     wxString language = "JScript";
     
     VARIANT exec_script_result;
     VariantInit(&exec_script_result);
-    //V_VT(&exec_script_result) = VT_EMPTY;
+    V_VT(&exec_script_result) = VT_EMPTY;
 
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
     if (!document)
@@ -997,36 +1093,62 @@ bool wxWebViewIE::CreateAnonymousFunction(VARIANT* result) {
     return true;
 }
 
-/*
+*/
+
 wxString wxWebViewIE::RunScript(const wxString& javascript)
-{
+{/*
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
 
     if(document)
     {
         wxCOMPtr<IHTMLWindow2> window;
-        wxString language = "javascript";
         HRESULT hr = document->get_parentWindow(&window);
         if(SUCCEEDED(hr))
         {
-            VARIANT level;
-            VariantInit(&level);
-            V_VT(&level) = VT_EMPTY;
-            eval
-            window->execScript(SysAllocString(javascript.wc_str()),
-                               SysAllocString(language.wc_str()),
-                               &level);
-            wxString result = level.pcVal;
-            wxString type = wxString::Format("%i",level.vt);
-            wxLogMessage(type);
+            VARIANT  ret;
+            ret.vt = VT_EMPTY;
+            //VariantInit(&level);
+            //V_VT(&level) = VT_BSTR;
+            
+            HRESULT hr = window->execScript(SysAllocString(javascript.wc_str()),
+                               L"javascript",
+                               &ret);
+            if (SUCCEEDED(hr)) wxLogMessage("sucess");
+            else wxLogMessage("fail");
+            wxString type = wxString::Format("%i",ret.vt);
+            wxLogMessage("type = %s", type);
+            wxLogMessage("bstrVal = %s", ret.bstrVal);
+            wxLogMessage("pbstrVal = %s", &ret.pbstrVal);
         
         }
-    }
+        }
 
     return "";
+        */
+        wxCOMPtr<IHTMLDocument2> pHTMLDoc(GetDocument());
+        VARIANT result = {0};
+        DISPID idMethod = 0;
+        DISPID idSave = 0;
+        OLECHAR FAR* sMethod = L"wx_eval";
+        IDispatch* pScript = 0;
+        pHTMLDoc->get_Script(&pScript);
+        HRESULT hr = pScript->GetIDsOfNames(IID_NULL, &sMethod, 1, LOCALE_SYSTEM_DEFAULT,
+            &idSave);
+        if (SUCCEEDED(hr)) {
+            // invoke assuming no method parameters
+            DISPPARAMS dpNoArgs = { NULL, NULL, 0, 0 };
+            hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
+                &dpNoArgs, &result, NULL, NULL);
+            wxString type = wxString::Format("%i", result.vt);
+            wxLogMessage("type = %s", type);
+            wxLogMessage("result = %s", result.bstrVal);
+        }
+        pScript->Release();
+        pHTMLDoc->Release();
+        return "";
 }
 
-*/
+
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {

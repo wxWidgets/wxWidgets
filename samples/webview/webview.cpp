@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // Name:        webview.cpp
 // Purpose:     wxWebView sample
 // Author:      Marianne Gagnon
@@ -63,7 +63,7 @@ class WebApp : public wxApp
 {
 public:
     WebApp() :
-        m_url("http://www.wxwidgets.org")
+        m_url("http://localhost/test_wx")
     {
     }
 

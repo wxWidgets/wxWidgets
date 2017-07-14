@@ -129,6 +129,8 @@ public:
     virtual void* GetNativeBackend() const wxOVERRIDE { return m_webBrowser; }
     bool CreateAnonymousFunction(VARIANT * result);
 
+    bool CallClientScript();
+
     // ---- IE-specific methods
 
     // FIXME: I seem to be able to access remote webpages even in offline mode...
