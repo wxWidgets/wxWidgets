@@ -420,11 +420,10 @@ bool wxLocale::Init(int language, int flags)
 
     wxString name = info->Description;
     wxString canonical = info->CanonicalName;
-    wxString locale;
 
     // Set the locale:
 #if defined(__UNIX__) && !defined(__WXMAC__)
-    locale = info->CanonicalName;
+    const wxString& locale = info->CanonicalName;
 
     const char *retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
 
@@ -522,7 +521,7 @@ bool wxLocale::Init(int language, int flags)
         }
 
         // and also call setlocale() to change locale used by the CRT
-        locale = info->GetLocaleName();
+        const wxString locale = info->GetLocaleName();
         if ( locale.empty() )
         {
             ret = false;
@@ -551,7 +550,7 @@ bool wxLocale::Init(int language, int flags)
     if ( !retloc )
         ret = false;
 #elif defined(__WXMAC__)
-    locale = info->CanonicalName;
+    const wxString& locale = info->CanonicalName;
 
     const char *retloc = wxSetlocale(LC_ALL, locale);
 
