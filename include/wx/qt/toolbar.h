@@ -48,11 +48,11 @@ public:
     virtual wxToolBarToolBase *CreateTool(int toolid,
                                           const wxString& label,
                                           const wxBitmap& bmpNormal,
-                                          const wxBitmap& bmpDisabled,
-                                          wxItemKind kind,
-                                          wxObject *clientData,
-                                          const wxString& shortHelp,
-                                          const wxString& longHelp) wxOVERRIDE;
+                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          wxItemKind kind = wxITEM_NORMAL,
+                                          wxObject *clientData = NULL,
+                                          const wxString& shortHelp = wxEmptyString,
+                                          const wxString& longHelp = wxEmptyString) wxOVERRIDE;
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) wxOVERRIDE;
