@@ -396,8 +396,6 @@ bool wxLocale::Init(int language, int flags)
                   wxS("wxLOCALE_CONV_ENCODING is no longer supported, add charset to your catalogs") );
 #endif
 
-    bool ret = true;
-
     int lang = language;
     if (lang == wxLANGUAGE_DEFAULT)
     {
@@ -479,9 +477,6 @@ bool wxLocale::Init(int language, int flags)
         }
     }
 
-    if ( !retloc )
-        ret = false;
-
 #ifdef __AIX__
     // at least in AIX 5.2 libc is buggy and the string returned from
     // setlocale(LC_ALL) can't be passed back to it because it returns 6
@@ -539,9 +534,6 @@ bool wxLocale::Init(int language, int flags)
         }
     }
 #endif // CRT not handling Unicode-only languages
-
-    if ( !retloc )
-        ret = false;
 #elif defined(__WXMAC__)
     const wxString& locale = info->CanonicalName;
 
@@ -559,7 +551,7 @@ bool wxLocale::Init(int language, int flags)
 #endif
 
 #ifndef WX_NO_LOCALE_SUPPORT
-    if ( !ret )
+    if ( !retloc )
     {
         wxLogWarning(_("Cannot set locale to language \"%s\"."), name);
 
@@ -572,10 +564,7 @@ bool wxLocale::Init(int language, int flags)
         // this language
     }
 
-    if ( !DoInit(name, info->CanonicalName, retloc) )
-    {
-        ret = false;
-    }
+    const bool ret = DoInit(name, info->CanonicalName, retloc);
 
     if (IsOk()) // setlocale() succeeded
         m_language = lang;
