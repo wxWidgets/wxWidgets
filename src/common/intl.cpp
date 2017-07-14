@@ -111,6 +111,18 @@ inline wxString ExtractNotLang(const wxString& langFull)
 
 #endif // __UNIX__
 
+// Test if setting the given locale works without actually changing it.
+bool CanSetLocale(const wxString& locale)
+{
+    const char* const orig = wxSetlocale(LC_ALL, NULL);
+    if ( !wxSetlocale(LC_ALL, locale) )
+        return false;
+
+    wxSetlocale(LC_ALL, orig);
+
+    return true;
+}
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -152,22 +164,24 @@ wxString wxLanguageInfo::GetLocaleName() const
     wxChar buffer[256];
     buffer[0] = wxT('\0');
 
-    // wxLANGUAGE_NORWEGIAN_BOKMAL crashes mbstowcs, but using LOCALE_SNAME can fail
-    // for e.g. wxLANGUAGE_ENGLISH in VS 2010 (other versions?)
-#if !defined(__VISUALC__) || (__VISUALC__ != 1600)
+    // Prefer to use the new (Vista and later) locale names instead of locale
+    // identifiers if supported, both at the OS level (LOCALE_SNAME) and by the
+    // CRT (check by calling setlocale()).
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
         if ( ::GetLocaleInfo(lcid, LOCALE_SNAME, buffer, WXSIZEOF(buffer)) )
         {
-            locale << buffer;
+            locale = buffer;
         }
         else
         {
             wxLogLastError(wxT("GetLocaleInfo(LOCALE_SNAME)"));
         }
-        return locale;
+
+        if ( CanSetLocale(locale) )
+            return locale;
+        //else: fall back to LOCALE_SENGLANGUAGE
     }
-#endif
 
     if ( !::GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, WXSIZEOF(buffer)) )
     {
@@ -175,7 +189,7 @@ wxString wxLanguageInfo::GetLocaleName() const
         return locale;
     }
 
-    locale << buffer;
+    locale = buffer;
     if ( ::GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY,
                         buffer, WXSIZEOF(buffer)) > 0 )
     {
@@ -188,7 +202,7 @@ wxString wxLanguageInfo::GetLocaleName() const
         locale << wxT('.') << cp;
     }
 
-    return locale;
+    return CanSetLocale(locale) ? locale : wxString();
 }
 
 #endif // __WINDOWS__
