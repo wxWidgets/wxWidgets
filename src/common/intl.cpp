@@ -419,7 +419,6 @@ bool wxLocale::Init(int language, int flags)
     }
 
     wxString name = info->Description;
-    wxString canonical = info->CanonicalName;
 
     // Set the locale:
 #if defined(__UNIX__) && !defined(__WXMAC__)
@@ -579,7 +578,7 @@ bool wxLocale::Init(int language, int flags)
         // this language
     }
 
-    if ( !DoInit(name, canonical, retloc) )
+    if ( !DoInit(name, info->CanonicalName, retloc) )
     {
         ret = false;
     }
