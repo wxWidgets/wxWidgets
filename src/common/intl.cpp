@@ -205,7 +205,14 @@ wxString wxLanguageInfo::GetLocaleName() const
     return CanSetLocale(locale) ? locale : wxString();
 }
 
-#endif // __WINDOWS__
+#else // !__WINDOWS__
+
+wxString wxLanguageInfo::GetLocaleName() const
+{
+    return CanSetLocale(CanonicalName) ? CanonicalName : wxString();
+}
+
+#endif // __WINDOWS__/!__WINDOWS__
 
 // ----------------------------------------------------------------------------
 // wxLocale

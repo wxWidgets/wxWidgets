@@ -72,16 +72,10 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
 #endif // __WINDOWS__
 
     // return the locale name corresponding to this language usable with
-    // setlocale() on the current system
+    // setlocale() on the current system or empty string if this locale is not
+    // supported
     wxString GetLocaleName() const;
 };
-
-// for Unix systems GetLocaleName() is trivial so implement it inline here, for
-// MSW it's implemented in intl.cpp
-#ifndef __WINDOWS__
-inline wxString wxLanguageInfo::GetLocaleName() const { return CanonicalName; }
-#endif // !__WINDOWS__
-
 
 // ----------------------------------------------------------------------------
 // wxLocaleCategory: the category of locale settings
