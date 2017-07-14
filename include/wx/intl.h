@@ -333,9 +333,11 @@ public:
     static void DestroyLanguagesDB();
 
 private:
-    bool DoInit(const wxString& name,
+    // This method is trivial and just updates the corresponding member
+    // variables without doing anything else.
+    void DoInit(const wxString& name,
                 const wxString& shortName,
-                const wxString& locale);
+                int language);
 
     // copy default table of languages from global static array to
     // m_langugagesInfo, called by InitLanguagesDB
@@ -343,6 +345,17 @@ private:
 
     // initialize the member fields to default values
     void DoCommonInit();
+
+    // After trying to set locale, call this method to give the appropriate
+    // error if it couldn't be set (success == false) and to load the
+    // translations for the given language, if necessary.
+    //
+    // The return value is the same as "success" parameter.
+    bool DoCommonPostInit(bool success,
+                          const wxString& name,
+                          const wxString& shortName,
+                          bool bLoadDefault);
+
 
     wxString       m_strLocale,       // this locale name
                    m_strShort;        // short name for the locale

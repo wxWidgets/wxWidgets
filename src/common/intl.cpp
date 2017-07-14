@@ -288,33 +288,6 @@ bool wxLocale::Init(const wxString& name,
                   wxS("wxLocale::Init with bConvertEncoding=false is no longer supported, add charset to your catalogs") );
 #endif
 
-    bool ret = DoInit(name, shortName, locale);
-
-    // NB: don't use 'lang' here, 'language' may be wxLANGUAGE_DEFAULT
-    wxTranslations *t = wxTranslations::Get();
-    if ( t )
-    {
-        t->SetLanguage(shortName);
-
-        if ( bLoadDefault )
-            t->AddStdCatalog();
-    }
-
-    return ret;
-}
-
-bool wxLocale::DoInit(const wxString& name,
-                      const wxString& shortName,
-                      const wxString& locale)
-{
-    wxASSERT_MSG( !m_initialized,
-                    wxS("you can't call wxLocale::Init more than once") );
-
-    m_initialized = true;
-    m_strLocale = name;
-    m_strShort = shortName;
-    m_language = wxLANGUAGE_UNKNOWN;
-
     // change current locale (default: same as long name)
     wxString szLocale(locale);
     if ( szLocale.empty() )
@@ -326,27 +299,69 @@ bool wxLocale::DoInit(const wxString& name,
                     wxS("no locale to set in wxLocale::Init()") );
     }
 
-    if ( !wxSetlocale(LC_ALL, szLocale) )
-    {
-        wxLogError(_("locale '%s' cannot be set."), szLocale);
-    }
-
     // the short name will be used to look for catalog files as well,
     // so we need something here
-    if ( m_strShort.empty() ) {
+    wxString strShort(shortName);
+    if ( strShort.empty() ) {
         // FIXME I don't know how these 2 letter abbreviations are formed,
         //       this wild guess is surely wrong
         if ( !szLocale.empty() )
         {
-            m_strShort += (wxChar)wxTolower(szLocale[0]);
+            strShort += (wxChar)wxTolower(szLocale[0]);
             if ( szLocale.length() > 1 )
-                m_strShort += (wxChar)wxTolower(szLocale[1]);
+                strShort += (wxChar)wxTolower(szLocale[1]);
         }
     }
 
-    return true;
+    DoInit(name, strShort, wxLANGUAGE_UNKNOWN);
+
+    const bool ret = wxSetlocale(LC_ALL, szLocale) != NULL;
+
+    return DoCommonPostInit(ret, szLocale, shortName, bLoadDefault);
 }
 
+void wxLocale::DoInit(const wxString& name,
+                      const wxString& shortName,
+                      int language)
+{
+    wxASSERT_MSG( !m_initialized,
+                    wxS("you can't call wxLocale::Init more than once") );
+
+    m_initialized = true;
+    m_strLocale = name;
+    m_strShort = shortName;
+    m_language = language;
+}
+
+bool wxLocale::DoCommonPostInit(bool success,
+                                const wxString& name,
+                                const wxString& shortName,
+                                bool bLoadDefault)
+{
+    if ( !success )
+    {
+        wxLogWarning(_("Cannot set locale to language \"%s\"."), name);
+
+        // As we failed to change locale, there is no need to restore the
+        // previous one: it's still valid.
+        free(const_cast<char *>(m_pszOldLocale));
+        m_pszOldLocale = NULL;
+
+        // continue nevertheless and try to load at least the translations for
+        // this language
+    }
+
+    wxTranslations *t = wxTranslations::Get();
+    if ( t )
+    {
+        t->SetLanguage(shortName);
+
+        if ( bLoadDefault )
+            t->AddStdCatalog();
+    }
+
+    return success;
+}
 
 #if defined(__UNIX__) && wxUSE_UNICODE && !defined(__WXMAC__)
 static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
@@ -419,6 +434,7 @@ bool wxLocale::Init(int language, int flags)
     }
 
     const wxString& name = info->Description;
+    DoInit(name, info->CanonicalName, lang);
 
     // Set the locale:
 #if defined(__UNIX__) && !defined(__WXMAC__)
@@ -551,35 +567,16 @@ bool wxLocale::Init(int language, int flags)
 #endif
 
 #ifndef WX_NO_LOCALE_SUPPORT
-    if ( !retloc )
-    {
-        wxLogWarning(_("Cannot set locale to language \"%s\"."), name);
-
-        // As we failed to change locale, there is no need to restore the
-        // previous one: it's still valid.
-        free(const_cast<char *>(m_pszOldLocale));
-        m_pszOldLocale = NULL;
-
-        // continue nevertheless and try to load at least the translations for
-        // this language
-    }
-
-    const bool ret = DoInit(name, info->CanonicalName, retloc);
-
-    if (IsOk()) // setlocale() succeeded
-        m_language = lang;
-
     // NB: don't use 'lang' here, 'language'
-    wxTranslations *t = wxTranslations::Get();
-    if ( t )
-    {
-        t->SetLanguage(static_cast<wxLanguage>(language));
-
-        if ( flags & wxLOCALE_LOAD_DEFAULT )
-            t->AddStdCatalog();
-    }
-
-    return ret;
+    return DoCommonPostInit
+           (
+                retloc != NULL,
+                name,
+                language == wxLANGUAGE_DEFAULT
+                    ? wxString()
+                    : info->CanonicalName,
+                flags & wxLOCALE_LOAD_DEFAULT
+           );
 #endif // !WX_NO_LOCALE_SUPPORT
 }
 
