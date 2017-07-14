@@ -299,6 +299,23 @@ bool wxLocale::Init(const wxString& name,
                     wxS("no locale to set in wxLocale::Init()") );
     }
 
+    if ( const wxLanguageInfo* langInfo = FindLanguageInfo(szLocale) )
+    {
+        // Prefer to use Init(wxLanguage) overload if possible as it will
+        // correctly set our m_language and also set the locale correctly under
+        // MSW, where just calling wxSetLocale() as we do below is not enough.
+        //
+        // However don't do it if the parameters are incompatible with this
+        // language, e.g. if we are called with something like ("French", "de")
+        // to use French locale but German translations: this seems unlikely to
+        // happen but, in principle, it could.
+        if ( langInfo->CanonicalName.StartsWith(shortName) )
+        {
+            return Init(langInfo->Language,
+                        bLoadDefault ? wxLOCALE_LOAD_DEFAULT : 0);
+        }
+    }
+
     // the short name will be used to look for catalog files as well,
     // so we need something here
     wxString strShort(shortName);
