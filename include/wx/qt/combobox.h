@@ -63,11 +63,7 @@ public:
         return wxItemContainer::GetStringSelection();
     }
 
-    virtual void Clear() wxOVERRIDE
-    {
-        wxTextEntry::Clear();
-        wxItemContainer::Clear();
-    }
+    virtual void Clear() wxOVERRIDE;
 
     // See wxComboBoxBase discussion of IsEmpty().
     bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
