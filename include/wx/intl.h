@@ -75,6 +75,13 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
     // setlocale() on the current system or empty string if this locale is not
     // supported
     wxString GetLocaleName() const;
+
+    // Call setlocale() and return non-null value if it works for this language.
+    //
+    // This function is mostly for internal use, as changing locale involves
+    // more than just calling setlocale() on some platforms, use wxLocale to
+    // do everything that needs to be done instead of calling this method.
+    const char* TrySetLocale() const;
 };
 
 // ----------------------------------------------------------------------------

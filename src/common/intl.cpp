@@ -111,18 +111,6 @@ inline wxString ExtractNotLang(const wxString& langFull)
 
 #endif // __UNIX__
 
-// Test if setting the given locale works without actually changing it.
-bool CanSetLocale(const wxString& locale)
-{
-    const char* const orig = wxSetlocale(LC_ALL, NULL);
-    if ( !wxSetlocale(LC_ALL, locale) )
-        return false;
-
-    wxSetlocale(LC_ALL, orig);
-
-    return true;
-}
-
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -155,7 +143,7 @@ wxUint32 wxLanguageInfo::GetLCID() const
     return MAKELCID(MAKELANGID(WinLang, WinSublang), SORT_DEFAULT);
 }
 
-wxString wxLanguageInfo::GetLocaleName() const
+const char* wxLanguageInfo::TrySetLocale() const
 {
     wxString locale;
 
@@ -178,15 +166,16 @@ wxString wxLanguageInfo::GetLocaleName() const
             wxLogLastError(wxT("GetLocaleInfo(LOCALE_SNAME)"));
         }
 
-        if ( CanSetLocale(locale) )
-            return locale;
+        const char* const retloc = wxSetlocale(LC_ALL, locale);
+        if ( retloc )
+            return retloc;
         //else: fall back to LOCALE_SENGLANGUAGE
     }
 
     if ( !::GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, WXSIZEOF(buffer)) )
     {
         wxLogLastError(wxT("GetLocaleInfo(LOCALE_SENGLANGUAGE)"));
-        return locale;
+        return NULL;
     }
 
     locale = buffer;
@@ -202,17 +191,30 @@ wxString wxLanguageInfo::GetLocaleName() const
         locale << wxT('.') << cp;
     }
 
-    return CanSetLocale(locale) ? locale : wxString();
+    return wxSetlocale(LC_ALL, locale);
 }
 
 #else // !__WINDOWS__
 
-wxString wxLanguageInfo::GetLocaleName() const
+const char* wxLanguageInfo::TrySetLocale() const
 {
-    return CanSetLocale(CanonicalName) ? CanonicalName : wxString();
+    return wxSetlocale(LC_ALL, CanonicalName);
 }
 
 #endif // __WINDOWS__/!__WINDOWS__
+
+wxString wxLanguageInfo::GetLocaleName() const
+{
+    const char* const orig = wxSetlocale(LC_ALL, NULL);
+
+    const char* const ret = TrySetLocale();
+    if ( !ret )
+        return wxString();
+
+    wxSetlocale(LC_ALL, orig);
+
+    return ret;
+}
 
 // ----------------------------------------------------------------------------
 // wxLocale
@@ -520,15 +522,7 @@ bool wxLocale::Init(int language, int flags)
         }
 
         // and also call setlocale() to change locale used by the CRT
-        const wxString locale = info->GetLocaleName();
-        if ( locale.empty() )
-        {
-            ret = false;
-        }
-        else // have a valid locale
-        {
-            retloc = wxSetlocale(LC_ALL, locale);
-        }
+        retloc = info->TrySetLocale();
     }
 #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
     // VC++ setlocale() (also used by Mingw) can't set locale to languages that
