@@ -424,8 +424,7 @@ bool wxLocale::Init(int language, int flags)
 
     // Set the locale:
 #if defined(__UNIX__) && !defined(__WXMAC__)
-    if (language != wxLANGUAGE_DEFAULT)
-        locale = info->CanonicalName;
+    locale = info->CanonicalName;
 
     const char *retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
 
@@ -498,49 +497,41 @@ bool wxLocale::Init(int language, int flags)
 
 #elif defined(__WIN32__)
     const char *retloc = "C";
-    if ( language != wxLANGUAGE_DEFAULT )
+    if ( info->WinLang == 0 )
     {
-        if ( info->WinLang == 0 )
+        wxLogWarning(wxS("Locale '%s' not supported by OS."), name.c_str());
+        // retloc already set to "C"
+    }
+    else // language supported by Windows
+    {
+        const wxUint32 lcid = info->GetLCID();
+
+        // change locale used by Windows functions
+        ::SetThreadLocale(lcid);
+
+        // SetThreadUILanguage() is available on XP, but with unclear
+        // behavior, so avoid calling it there.
+        if ( wxGetWinVersion() >= wxWinVersion_Vista )
         {
-            wxLogWarning(wxS("Locale '%s' not supported by OS."), name.c_str());
-            // retloc already set to "C"
+            wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
+            typedef LANGID(WINAPI *SetThreadUILanguage_t)(LANGID);
+            SetThreadUILanguage_t pfnSetThreadUILanguage = NULL;
+            wxDL_INIT_FUNC(pfn, SetThreadUILanguage, dllKernel32);
+            if (pfnSetThreadUILanguage)
+                pfnSetThreadUILanguage(LANGIDFROMLCID(lcid));
         }
-        else // language supported by Windows
+
+        // and also call setlocale() to change locale used by the CRT
+        locale = info->GetLocaleName();
+        if ( locale.empty() )
         {
-            const wxUint32 lcid = info->GetLCID();
-
-            // change locale used by Windows functions
-            ::SetThreadLocale(lcid);
-
-            // SetThreadUILanguage() is available on XP, but with unclear
-            // behavior, so avoid calling it there.
-            if ( wxGetWinVersion() >= wxWinVersion_Vista )
-            {
-                wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
-                typedef LANGID(WINAPI *SetThreadUILanguage_t)(LANGID);
-                SetThreadUILanguage_t pfnSetThreadUILanguage = NULL;
-                wxDL_INIT_FUNC(pfn, SetThreadUILanguage, dllKernel32);
-                if (pfnSetThreadUILanguage)
-                    pfnSetThreadUILanguage(LANGIDFROMLCID(lcid));
-            }
-
-            // and also call setlocale() to change locale used by the CRT
-            locale = info->GetLocaleName();
-            if ( locale.empty() )
-            {
-                ret = false;
-            }
-            else // have a valid locale
-            {
-                retloc = wxSetlocale(LC_ALL, locale);
-            }
+            ret = false;
+        }
+        else // have a valid locale
+        {
+            retloc = wxSetlocale(LC_ALL, locale);
         }
     }
-    else // language == wxLANGUAGE_DEFAULT
-    {
-        retloc = wxSetlocale(LC_ALL, wxEmptyString);
-    }
-
 #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
     // VC++ setlocale() (also used by Mingw) can't set locale to languages that
     // can only be written using Unicode, therefore wxSetlocale() call fails
@@ -560,10 +551,7 @@ bool wxLocale::Init(int language, int flags)
     if ( !retloc )
         ret = false;
 #elif defined(__WXMAC__)
-    if (lang == wxLANGUAGE_DEFAULT)
-        locale.clear();
-    else
-        locale = info->CanonicalName;
+    locale = info->CanonicalName;
 
     const char *retloc = wxSetlocale(LC_ALL, locale);
 
