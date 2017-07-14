@@ -43,6 +43,11 @@ public:
     virtual QToolBar *GetQToolBar() const { return m_qtToolBar; }
 
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
+
+    virtual void SetToolShortHelp(int id, const wxString& helpString) wxOVERRIDE;
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
+
     virtual bool Realize() wxOVERRIDE;
 
     virtual wxToolBarToolBase *CreateTool(int toolid,
@@ -59,7 +64,6 @@ public:
     QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
-
     QActionGroup* GetActionGroup(size_t pos);
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
