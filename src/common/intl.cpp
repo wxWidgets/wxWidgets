@@ -418,7 +418,7 @@ bool wxLocale::Init(int language, int flags)
         return false;
     }
 
-    wxString name = info->Description;
+    const wxString& name = info->Description;
 
     // Set the locale:
 #if defined(__UNIX__) && !defined(__WXMAC__)
