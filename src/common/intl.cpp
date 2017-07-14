@@ -497,7 +497,7 @@ bool wxLocale::Init(int language, int flags)
     const char *retloc = "C";
     if ( info->WinLang == 0 )
     {
-        wxLogWarning(wxS("Locale '%s' not supported by OS."), name.c_str());
+        wxLogWarning(wxS("Locale '%s' not supported by OS."), name);
         // retloc already set to "C"
     }
     else // language supported by Windows
@@ -567,7 +567,7 @@ bool wxLocale::Init(int language, int flags)
 #ifndef WX_NO_LOCALE_SUPPORT
     if ( !ret )
     {
-        wxLogWarning(_("Cannot set locale to language \"%s\"."), name.c_str());
+        wxLogWarning(_("Cannot set locale to language \"%s\"."), name);
 
         // As we failed to change locale, there is no need to restore the
         // previous one: it's still valid.
