@@ -69,6 +69,8 @@ public:
     bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
     bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
 
+    virtual void SetValue(const wxString& value) wxOVERRIDE;
+
     virtual void Popup();
     virtual void Dismiss();
 
