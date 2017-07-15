@@ -1212,7 +1212,7 @@ wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 #ifdef __WINDOWS__
         "t"
 #else
-        "EawD"
+        "EcLawD"
 #endif
         ;
     for ( wxString::const_iterator p = fmt.begin(); /* end handled inside */; ++p )
@@ -1308,6 +1308,53 @@ wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
                         default:
                             wxFAIL_MSG( "wrong number of 'E's" );
                     }
+                    break;
+                case 'c':
+                    switch ( lastCount )
+                {
+                    case 1: // c
+                        // TODO: unsupported: first day of week as numeric value
+                        fmtWX += "1";
+                        break;
+                    case 3: // ccc
+                        fmtWX += "%a";
+                        break;
+                    case 4: // cccc
+                        fmtWX += "%A";
+                        break;
+                    case 5: // ccccc
+                        // no "narrow form" in strftime(), use abbrev.
+                        fmtWX += "%a";
+                        break;
+
+                    default:
+                        wxFAIL_MSG( "wrong number of 'c's" );
+                }
+                    break;
+                case 'L':
+                    switch ( lastCount )
+                {
+                    case 1: // L
+                    case 2: // LL
+                        fmtWX += "%m";
+                        break;
+
+                    case 3: // LLL
+                        fmtWX += "%b";
+                        break;
+
+                    case 4: // LLLL
+                        fmtWX += "%B";
+                        break;
+
+                    case 5: // LLLLL
+                        // no "narrow form" in strftime(), use abbrev.
+                        fmtWX += "%b";
+                        break;
+
+                    default:
+                        wxFAIL_MSG( "too many 'L's" );
+                }
                     break;
 #endif
                 case 'M':
