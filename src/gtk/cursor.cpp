@@ -110,9 +110,9 @@ wxCursor::wxCursor(const char bits[], int width, int height,
 #ifdef __WXGTK3__
     wxBitmap bitmap(bits, width, height);
     if (maskBits)
-        bitmap.SetMask(new wxMask(wxBitmap(maskBits, width, height)));
+        bitmap.SetMask(new wxMask(wxBitmap(maskBits, width, height), *wxWHITE));
     GdkPixbuf* pixbuf = bitmap.GetPixbuf();
-    if (fg || bg)
+    if ((fg && *fg != *wxBLACK) || (bg && *bg != *wxWHITE))
     {
         const int stride = gdk_pixbuf_get_rowstride(pixbuf);
         const int n_channels = gdk_pixbuf_get_n_channels(pixbuf);
@@ -122,7 +122,7 @@ wxCursor::wxCursor(const char bits[], int width, int height,
             guchar* p = data;
             for (int i = 0; i < width; i++, p += n_channels)
             {
-                if (p[0])
+                if (p[0] == 0)
                 {
                     if (fg)
                     {
