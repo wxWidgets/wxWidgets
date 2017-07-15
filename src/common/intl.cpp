@@ -1161,6 +1161,20 @@ wxString wxLocale::GetHeaderValue(const wxString& header,
 namespace
 {
 
+bool IsAtTwoSingleQuotes(const wxString& fmt, wxString::const_iterator p)
+{
+    if ( p != fmt.end() && *p == '\'')
+    {
+        ++p;
+        if ( p != fmt.end() && *p == '\'')
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // This function translates from Unicode date formats described at
 //
 //      http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
@@ -1181,7 +1195,7 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
 #ifdef __WINDOWS__
         "t"
 #else
-        "EawD"
+        "EcLawD"
 #endif
         ;
     for ( wxString::const_iterator p = fmt.begin(); /* end handled inside */; ++p )
@@ -1277,6 +1291,53 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                         default:
                             wxFAIL_MSG( "wrong number of 'E's" );
                     }
+                    break;
+                case 'c':
+                    switch ( lastCount )
+                {
+                    case 1: // c
+                        // TODO: unsupported: first day of week as numeric value
+                        fmtWX += "1";
+                        break;
+                    case 3: // ccc
+                        fmtWX += "%a";
+                        break;
+                    case 4: // cccc
+                        fmtWX += "%A";
+                        break;
+                    case 5: // ccccc
+                        // no "narrow form" in strftime(), use abbrev.
+                        fmtWX += "%a";
+                        break;
+
+                    default:
+                        wxFAIL_MSG( "wrong number of 'c's" );
+                }
+                    break;
+                case 'L':
+                    switch ( lastCount )
+                {
+                    case 1: // L
+                    case 2: // LL
+                        fmtWX += "%m";
+                        break;
+
+                    case 3: // LLL
+                        fmtWX += "%b";
+                        break;
+
+                    case 4: // LLLL
+                        fmtWX += "%B";
+                        break;
+
+                    case 5: // LLLLL
+                        // no "narrow form" in strftime(), use abbrev.
+                        fmtWX += "%b";
+                        break;
+
+                    default:
+                        wxFAIL_MSG( "too many 'L's" );
+                }
                     break;
 #endif
                 case 'M':
@@ -1411,14 +1472,58 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
         if ( p == fmt.end() )
             break;
 
-        // not a special character so must be just a separator, treat as is
-        if ( *p == wxT('%') )
+        /*
+        Handle single quotes:
+        "Two single quotes represents [sic] a literal single quote, either
+        inside or outside single quotes. Text within single quotes is not
+        interpreted in any way (except for two adjacent single quotes)."
+        */
+
+        if ( IsAtTwoSingleQuotes(fmt, p) )
         {
-            // this one needs to be escaped
-            fmtWX += wxT('%');
+            fmtWX += '\'';
+            ++p; // the 2nd single quote is skipped by the for loop's increment
+            continue;
         }
 
-        fmtWX += *p;
+        bool isEndQuote = false;
+        if ( *p == '\'' )
+        {
+            ++p;
+            while ( p != fmt.end() )
+            {
+                if ( IsAtTwoSingleQuotes(fmt, p) )
+                {
+                    fmtWX += '\'';
+                    p += 2;
+                    continue;
+                }
+
+                if ( *p == '\'' )
+                {
+                    isEndQuote = true;
+                    break;
+                }
+
+                fmtWX += *p;
+                ++p;
+            }
+        }
+
+        if ( p == fmt.end() )
+            break;
+
+        if ( !isEndQuote )
+        {
+            // not a special character so must be just a separator, treat as is
+            if ( *p == wxT('%') )
+            {
+                // this one needs to be escaped
+                fmtWX += wxT('%');
+            }
+
+            fmtWX += *p;
+        }
     }
 
     return fmtWX;
