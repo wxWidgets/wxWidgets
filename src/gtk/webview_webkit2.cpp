@@ -950,14 +950,23 @@ bool wxWebViewWebKit::IsBusy() const
 
 void wxWebViewWebKit::SetEditable(bool enable)
 {
+#if WEBKIT_CHECK_VERSION(2, 8, 0)
     webkit_web_view_set_editable(m_web_view, enable);
+#else
+    // Not supported in older versions.
+    wxUnusedVar(enable);
+#endif
 }
 
 bool wxWebViewWebKit::IsEditable() const
 {
+#if WEBKIT_CHECK_VERSION(2, 8, 0)
     gboolean editable;
     g_object_get(m_web_view, "editable", &editable, NULL);
     return editable != 0;
+#else
+    return false;
+#endif
 }
 
 void wxWebViewWebKit::DeleteSelection()
