@@ -198,6 +198,7 @@ wxMSW:
 
 wxOSX:
 
+- Many fixes for tab navigation (ikamakj).
 - Fix handling of non-BMP characters in GetPartialTextExtents() (ARATA Mizuki).
 - Fix setting foreground colour for several controls (Steve Browne).
 - Fix dialogs using wxFRAME_FLOAT_ON_PARENT frame as parent (Lauri Nurmi).

@@ -11,6 +11,8 @@
 #ifndef _WX_RADIOBOX_H_
 #define _WX_RADIOBOX_H_
 
+#include "wx/containr.h"
+
 // List box item
 class WXDLLIMPEXP_FWD_CORE wxBitmap ;
 
