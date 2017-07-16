@@ -54,6 +54,7 @@
 /build/msw/*c*_mswhdll_x64
 /build/msw/*c*_mswuhdll
 /build/msw/*c*_mswuhdll_x64
+/build/msw/wx_local.props
 
 /build/msw/*.vcproj.*.user
 /build/msw/*.vcxproj.user
