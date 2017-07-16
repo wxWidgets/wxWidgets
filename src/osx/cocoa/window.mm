@@ -2833,6 +2833,41 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
     return result;
 }
 
+bool wxWidgetCocoaImpl::ShouldHandleKeyNavigation(const wxKeyEvent &WXUNUSED(event)) const
+{
+    // Only controls that intercept tabs for different behavior should return false (ie wxTE_PROCESS_TAB)
+    return true;
+}
+
+bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
+{
+    bool handled = false;
+    wxWindow *focus = GetWXPeer();
+    if (focus && event.GetKeyCode() == WXK_TAB)
+    {
+        if (ShouldHandleKeyNavigation(event))
+        {
+            wxWindow* iter = focus->GetParent() ;
+            while (iter && !handled)
+            {
+                if (iter->HasFlag(wxTAB_TRAVERSAL))
+                {
+                    wxNavigationKeyEvent new_event;
+                    new_event.SetEventObject( focus );
+                    new_event.SetDirection( !event.ShiftDown() );
+                    /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+                    new_event.SetWindowChange( event.ControlDown() );
+                    new_event.SetCurrentFocus( focus );
+                    handled = iter->HandleWindowEvent( new_event ) && !new_event.GetSkipped();
+                }
+
+                iter = iter->GetParent() ;
+            }
+        }
+    }
+    return handled;
+}
+
 bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
@@ -2846,6 +2881,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
         wxKeyEvent eventHook(wxEVT_CHAR_HOOK, wxevent);
         if ( GetWXPeer()->OSXHandleKeyEvent(eventHook)
                 && !eventHook.IsNextEventAllowed() )
+            return true;
+
+        if (DoHandleKeyNavigation(wxevent))
             return true;
     }
 

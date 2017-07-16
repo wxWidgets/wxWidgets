@@ -129,6 +129,8 @@ public :
 
     void                InstallEventHandler( WXWidget control = NULL );
 
+    virtual bool        ShouldHandleKeyNavigation(const wxKeyEvent &event) const;
+    bool                DoHandleKeyNavigation(const wxKeyEvent &event);
     virtual bool        DoHandleMouseEvent(NSEvent *event);
     virtual bool        DoHandleKeyEvent(NSEvent *event);
     virtual bool        DoHandleCharEvent(NSEvent *event, NSString *text);

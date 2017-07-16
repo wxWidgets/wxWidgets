@@ -16,9 +16,27 @@
 
 @class wxTextEntryFormatter;
 
+class wxNSTextBase : public wxWidgetCocoaImpl, public wxTextWidgetImpl
+{
+public :
+    wxNSTextBase( wxTextCtrl *text, WXWidget w )
+        : wxWidgetCocoaImpl(text, w),
+          wxTextWidgetImpl(text)
+    {
+    }
+    wxNSTextBase( wxWindow *wxPeer, wxTextEntry *entry, WXWidget w )
+        : wxWidgetCocoaImpl(wxPeer, w),
+          wxTextWidgetImpl(entry)
+    {
+    }
+    virtual ~wxNSTextBase() { }
+
+    virtual bool ShouldHandleKeyNavigation(const wxKeyEvent &event) const wxOVERRIDE;
+};
+
 // implementation exposed, so that search control can pull it
 
-class wxNSTextFieldControl : public wxWidgetCocoaImpl, public wxTextWidgetImpl
+class wxNSTextFieldControl : public wxNSTextBase
 {
 public :
     // wxNSTextFieldControl must always be associated with a wxTextEntry. If
@@ -67,7 +85,7 @@ private:
     wxTextEntryFormatter* GetFormatter();
 };
 
-class wxNSTextViewControl : public wxWidgetCocoaImpl, public wxTextWidgetImpl
+class wxNSTextViewControl : public wxNSTextBase
 {
 public:
     wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style );
