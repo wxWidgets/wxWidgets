@@ -1856,6 +1856,20 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
 
 // Fixes position of wxTextCtrl-like control (wxSpinCtrl usually
 // fits into that category as well).
+#ifndef wxPG_TEXTCTRLXADJUST
+#if defined(__WXMSW__)
+#define wxPG_TEXTCTRLXADJUST2 0
+#elif defined(__WXGTK__)
+  #if defined(__WXGTK3__)
+  #define wxPG_TEXTCTRLXADJUST2 (-2)
+  #else
+  #define wxPG_TEXTCTRLXADJUST2 0
+  #endif // wxGTK3/!wxGTK3
+#else
+#error "wxPG_TEXTCTRLXADJUST should be defined for this platform"
+#endif
+#endif // !wxPG_TEXTCTRLXADJUST
+
 void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
                                         unsigned int WXUNUSED(forColumn),
                                         const wxPoint& offset )
@@ -1872,7 +1886,7 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
     finalPos.height -= (y_adj+sz_dec);
 
 #ifndef wxPG_TEXTCTRLXADJUST
-    int textCtrlXAdjust = wxPG_XBEFORETEXT - 1;
+    int textCtrlXAdjust = wxPG_XBEFORETEXT - 1 + wxPG_TEXTCTRLXADJUST2;
 
     wxTextCtrl* tc = static_cast<wxTextCtrl*>(ctrl);
     tc->SetMargins(0);
