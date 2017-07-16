@@ -1533,7 +1533,8 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
 
     double magnification = [magnificationGestureRecognizer magnification];
 
-    // Calculate zoomDelta, which is the zoom factor relative to the last zoom gesture event in the current sequence.
+    // Calculate zoomDelta, which is the zoom factor relative to the
+    // last zoom gesture event in the current sequence.
     double zoomDelta = magnification - lastMagnification + 1.0;
 
     lastMagnification = magnification;
@@ -1579,7 +1580,8 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
     // Multiply the returned rotation angle with -1 to obtain the angle in a clockwise sense.
     double angle = -[rotationGestureRecognizer rotation];
 
-    // Calculate angleDelta, which is the amount of rotation performed since the last rotate gesture event in the current sequence.
+    // Calculate angleDelta, which is the amount of rotation performed
+    // since the last rotate gesture event in the current sequence.
     double angleDelta = angle - lastAngle;
 
     lastAngle  = angle;
