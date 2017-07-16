@@ -127,13 +127,13 @@ reportError(XML_Parser parser)
   int code = XML_GetErrorCode(parser);
   const XML_Char *message = XML_ErrorString(code);
   if (message)
-    _ftprintf(stderr, wxT("%s:%d:%ld: %s\n"),
+    _ftprintf(stderr, _T("%s:%d:%ld: %s\n"),
 	     XML_GetBase(parser),
 	     XML_GetErrorLineNumber(parser),
 	     XML_GetErrorColumnNumber(parser),
 	     message);
   else
-    _ftprintf(stderr, wxT("%s: (unknown message %d)\n"),
+    _ftprintf(stderr, _T("%s: (unknown message %d)\n"),
               XML_GetBase(parser), code);
 }
 
@@ -183,7 +183,7 @@ Callback::OnDataAvailable(DWORD grfBSCF,
 	nToRead = READ_MAX;
       void *buf = XML_GetBuffer(parser_, nToRead);
       if (!buf) {
-	_ftprintf(stderr, wxT("out of memory\n"));
+	_ftprintf(stderr, _T("out of memory\n"));
 	return E_ABORT;
       }
       DWORD nRead;
@@ -329,12 +329,12 @@ winPerror(const XML_Char *url, HRESULT hr)
 		      0,
 		      NULL)) {
     /* The system error messages seem to end with a newline. */
-    _ftprintf(stderr, wxT("%s: %s"), url, buf);
+    _ftprintf(stderr, _T("%s: %s"), url, buf);
     fflush(stderr);
     LocalFree(buf);
   }
   else
-    _ftprintf(stderr, wxT("%s: error %x\n"), url, hr);
+    _ftprintf(stderr, _T("%s: error %x\n"), url, hr);
 }
 
 static void

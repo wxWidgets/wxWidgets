@@ -63,14 +63,37 @@ tcase_add_test(TCase *tc, tcase_test_function test)
         size_t new_size = sizeof(tcase_test_function) * nalloc;
         tcase_test_function *new_tests = realloc(tc->tests, new_size);
         assert(new_tests != NULL);
-        if (new_tests != tc->tests) {
-            free(tc->tests);
-            tc->tests = new_tests;
-        }
+        tc->tests = new_tests;
         tc->allocated = nalloc;
     }
     tc->tests[tc->ntests] = test;
     tc->ntests++;
+}
+
+static void
+tcase_free(TCase *tc)
+{
+    if (! tc) {
+        return;
+    }
+
+    free(tc->tests);
+    free(tc);
+}
+
+static void
+suite_free(Suite *suite)
+{
+    if (! suite) {
+        return;
+    }
+
+    while (suite->tests != NULL) {
+        TCase *next = suite->tests->next_tcase;
+        tcase_free(suite->tests);
+        suite->tests = next;
+    }
+    free(suite);
 }
 
 SRunner *
@@ -178,6 +201,10 @@ srunner_ntests_failed(SRunner *runner)
 void
 srunner_free(SRunner *runner)
 {
-    free(runner->suite);
+    if (! runner) {
+        return;
+    }
+
+    suite_free(runner->suite);
     free(runner);
 }

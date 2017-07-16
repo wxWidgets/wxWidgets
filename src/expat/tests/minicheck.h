@@ -26,11 +26,6 @@ extern "C" {
 #define __func__ __FUNCTION__
 #endif
 
-/* ISO C90 does not support '__func__' predefined identifier */
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ < 199901)
-# define __func__ "(unknown)"
-#endif
-
 #define START_TEST(testname) static void testname(void) { \
     _check_set_test_info(__func__, __FILE__, __LINE__);   \
     {
