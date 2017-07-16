@@ -1835,12 +1835,7 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
         if ( m_labelEditor )
         {
             wxRect r = GetEditorWidgetRect(selected, m_selColumn);
-            wxPoint pos = m_labelEditor->GetPosition();
-
-            // Calculate y offset
-            int offset = pos.y % m_lineHeight;
-
-            m_labelEditor->Move(pos.x, r.y + offset);
+            m_labelEditor->Move(r.GetPosition() + m_labelEditorPosRel);
         }
 
         if ( m_wndEditor || m_wndEditor2 )
@@ -1849,19 +1844,12 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
 
             if ( m_wndEditor )
             {
-                wxPoint pos = m_wndEditor->GetPosition();
-
-                // Calculate y offset
-                int offset = pos.y % m_lineHeight;
-
-                m_wndEditor->Move(pos.x, r.y + offset);
+                m_wndEditor->Move(r.GetPosition() + m_wndEditorPosRel);
             }
 
             if ( m_wndEditor2 )
             {
-                wxPoint pos = m_wndEditor2->GetPosition();
-
-                m_wndEditor2->Move(pos.x, r.y);
+                m_wndEditor2->Move(r.GetPosition() + m_wndEditor2PosRel);
             }
         }
     }

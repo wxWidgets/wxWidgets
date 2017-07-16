@@ -1039,6 +1039,8 @@ void wxPropertyGrid::DoBeginLabelEdit( unsigned int colIndex,
     tc->SetFocus();
 
     m_labelEditor = wxStaticCast(tc, wxTextCtrl);
+    // Get actual position within required rectangle
+    m_labelEditorPosRel = m_labelEditor->GetPosition() - r.GetPosition();
     m_labelEditorProperty = selected;
 }
 
@@ -4198,6 +4200,17 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 m_wndEditor = wndList.m_primary;
                 m_wndEditor2 = wndList.m_secondary;
+                // Remember actual positions within required cell.
+                // These values can be used when there will be required
+                // to reposition the cell.
+                if ( m_wndEditor )
+                {
+                    m_wndEditorPosRel = m_wndEditor->GetPosition() - goodPos;
+                }
+                if ( m_wndEditor2 )
+                {
+                    m_wndEditor2PosRel = m_wndEditor2->GetPosition() - goodPos;
+                }
                 primaryCtrl = GetEditorControl();
 
                 //
