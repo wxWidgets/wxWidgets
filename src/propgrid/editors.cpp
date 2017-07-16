@@ -710,7 +710,7 @@ public:
   #define wxPG_TEXTCTRLXADJUST3 0
   #endif // wxGTK3/!wxGTK3
 #elif defined(__WXOSX__)
-#define wxPG_TEXTCTRLXADJUST3 0
+#define wxPG_TEXTCTRLXADJUST3 6
 #else
 #define wxPG_TEXTCTRLXADJUST3 0
 #endif
@@ -724,8 +724,7 @@ public:
     #endif
         wxOwnerDrawnComboBox::PositionTextCtrl(
             textCtrlXAdjust + wxPG_TEXTCTRLXADJUST3,
-            0 // Under MSW, GTK vertical position is already properly adjusted.
-              // Note: This parameter is not used by other ports.
+            0
         );
     }
 
@@ -1019,8 +1018,6 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 
     wxArrayString labels = choices.GetLabels();
 
-    wxPGComboBox* cb;
-
     wxPoint po(pos);
     wxSize si(sz);
     po.y += wxPG_CHOICEYADJUST;
@@ -1054,7 +1051,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
             labels.Add(propGrid->GetCommonValueLabel(i));
     }
 
-    cb = new wxPGComboBox();
+    wxPGComboBox* cb = new wxPGComboBox();
 #ifdef __WXMSW__
     cb->Hide();
 #endif
@@ -1066,7 +1063,11 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
                labels,
                odcbFlags);
 
+    // Under OSX default button seems to look fine
+    // so there is no need to change it.
+#ifndef __WXOSX__
     cb->SetButtonPosition(si.y,0,wxRIGHT);
+#endif // !__WXOSX__
     cb->SetMargins(wxPG_XBEFORETEXT-1);
 
     // Set hint text
