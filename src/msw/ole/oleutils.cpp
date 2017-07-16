@@ -70,25 +70,10 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 // ----------------------------------------------------------------------------
 // wxBasicString
 // ----------------------------------------------------------------------------
-
-wxBasicString::wxBasicString(BSTR bstr)
-{
-    m_bstrBuf = bstr;
-}
-
-wxBasicString::wxBasicString(const wxString& str)
-{
-    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
-}
-
-wxBasicString::wxBasicString(const wxBasicString& bstr)
-{
-    m_bstrBuf = bstr.Copy();
-}
-
-wxBasicString::~wxBasicString()
+void wxBasicString::AssignFromString(const wxString& str)
 {
     SysFreeString(m_bstrBuf);
+    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
 }
 
 BSTR wxBasicString::Detach()
@@ -98,12 +83,6 @@ BSTR wxBasicString::Detach()
     m_bstrBuf = NULL;
 
     return bstr;
-}
-
-void wxBasicString::Free()
-{
-    SysFreeString(m_bstrBuf);
-    m_bstrBuf = NULL;
 }
 
 BSTR* wxBasicString::ByRef()
@@ -122,25 +101,6 @@ wxBasicString& wxBasicString::operator=(const wxBasicString& src)
         SysFreeString(m_bstrBuf);
         m_bstrBuf = src.Copy();
     }
-
-    return *this;
-}
-
-wxBasicString& wxBasicString::operator=(const wxString& str)
-{
-    SysFreeString(m_bstrBuf);
-    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
-
-    return *this;
-}
-
-wxBasicString& wxBasicString::operator=(BSTR bstr)
-{
-    wxCHECK_MSG(m_bstrBuf == NULL || m_bstrBuf != bstr, 
-        *this, wxS("Attempting to assign already owned BSTR"));
-
-    SysFreeString(m_bstrBuf);
-    m_bstrBuf = bstr;
 
     return *this;
 }

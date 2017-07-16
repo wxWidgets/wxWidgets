@@ -65,24 +65,26 @@ inline void wxOleUninitialize()
 
 class WXDLLIMPEXP_CORE wxBasicString
 {
-public:    
-    // Takes over the ownership of bstr
-    explicit wxBasicString(BSTR bstr = NULL);
+public:
+    // Constructs with the owned BSTR set to NULL
+    wxBasicString() : m_bstrBuf(NULL) {}
 
-    // Constructs the BSTR from wxString
-    wxBasicString(const wxString& str);
+    // Constructs with the owned BSTR created from a wxString
+    wxBasicString(const wxString& str)
+        : m_bstrBuf(SysAllocString(str.wc_str(*wxConvCurrent))) {}
 
-    // Creates a copy of the BSTR owned by bstr
-    wxBasicString(const wxBasicString& bstr);
+    // Constructs with the owned BSTR as a copy of the BSTR owned by bstr
+    wxBasicString(const wxBasicString& bstr) : m_bstrBuf(bstr.Copy()) {}
 
     // Frees the owned BSTR
-    ~wxBasicString();
+    ~wxBasicString() { SysFreeString(m_bstrBuf); }
 
-    // Returns the owned BSTR and gives up its ownership
+    // Creates the owned BSTR from a wxString
+    void AssignFromString(const wxString& str);
+
+    // Returns the owned BSTR and gives up its ownership,
+    // the caller is responsible for freeing it
     BSTR Detach();
-
-    // Frees the owned BSTR
-    void Free();
 
     // Returns a copy of the owned BSTR,
     // the caller is responsible for freeing it
@@ -95,17 +97,11 @@ public:
     // Sets its BSTR to a copy of the BSTR owned by bstr
     wxBasicString& operator=(const wxBasicString& bstr);
 
-    // Creates its BSTR from wxString
-    wxBasicString& operator=(const wxString& str);
-
-    // Takes over the ownership of bstr
-    wxBasicString& operator=(BSTR bstr);
-
-    /// Returns the owned BSTR while keeping its ownership    
+    /// Returns the owned BSTR while keeping its ownership
     operator BSTR() const { return m_bstrBuf; }
 
     // retrieve a copy of our string - caller must SysFreeString() it later!
-    wxDEPRECATED_MSG("use Copy() instead") 
+    wxDEPRECATED_MSG("use Copy() instead")
     BSTR Get() const { return Copy(); }
 private:
     // actual string

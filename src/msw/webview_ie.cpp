@@ -1009,8 +1009,8 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
         if(SUCCEEDED(document->QueryInterface(wxIID_IMarkupContainer, (void **)&pIMC)))
         {
             wxCOMPtr<wxIMarkupPointer> ptrBegin, ptrEnd;
-            wxBasicString attr_bstr(wxString("style=\"background-color:#ffff00\""));
-            wxBasicString text_bstr(text.wc_str());
+            wxBasicString attr_bstr(wxS("style=\"background-color:#ffff00\""));
+            wxBasicString text_bstr(text);
             
             pIMS->CreateMarkupPointer(&ptrBegin);
             pIMS->CreateMarkupPointer(&ptrEnd);

@@ -130,8 +130,8 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     }
 
     int namedArgStringCount = namedArgCount + 1;
-    wxVector<wxBasicString> argNames(namedArgStringCount, wxString());
-    argNames[0] = member;
+    wxVector<wxBasicString> argNames(namedArgStringCount);
+    argNames[0].AssignFromString(member);
 
     // Note that arguments are specified in reverse order
     // (all totally logical; hey, we're dealing with OLE here.)
@@ -141,7 +141,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     {
         if ( !INVOKEARG(i).GetName().empty() )
         {
-            argNames[(namedArgCount-j)] = INVOKEARG(i).GetName();
+            argNames[(namedArgCount-j)].AssignFromString(INVOKEARG(i).GetName());
             j ++;
         }
     }
