@@ -1478,9 +1478,6 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
     wxPanGestureEvent wxevent(GetWXPeer()->GetId());
     wxevent.SetEventObject(GetWXPeer());
 
-    wxevent.SetGestureStart(gestureState == NSGestureRecognizerStateBegan);
-    wxevent.SetGestureEnd(gestureState == NSGestureRecognizerStateEnded);
-
     NSPoint nspoint = [panGestureRecognizer locationInView:m_osxView];
     wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
 
@@ -1489,11 +1486,26 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
     nspoint = [panGestureRecognizer translationInView:m_osxView];
     pt = wxFromNSPoint(m_osxView, nspoint);
 
-    wxevent.SetDeltaX(pt.x);
-    wxevent.SetDeltaY(pt.y);
+    static int s_lastLocationX = 0, s_lastLocationY = 0;
 
-    // Reset translation to zero to get offsets for the next pan gesture event
-    [panGestureRecognizer setTranslation:NSZeroPoint inView:m_osxView];
+    if ( gestureState == NSGestureRecognizerStateBegan )
+    {
+        wxevent.SetGestureStart();
+        s_lastLocationX = 0;
+        s_lastLocationY = 0;
+    }
+
+    if ( gestureState == NSGestureRecognizerStateEnded )
+    {
+        wxevent.SetGestureEnd();
+    }
+
+    // Set the offsets
+    wxevent.SetDeltaX(pt.x - s_lastLocationX);
+    wxevent.SetDeltaY(pt.y - s_lastLocationY);
+
+    s_lastLocationX = pt.x;
+    s_lastLocationY = pt.y;
 
     GetWXPeer()->HandleWindowEvent(wxevent);
 }
@@ -1521,23 +1533,31 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
     wxZoomGestureEvent wxevent(GetWXPeer()->GetId());
     wxevent.SetEventObject(GetWXPeer());
 
-    wxevent.SetGestureStart(gestureState == NSGestureRecognizerStateBegan);
-    wxevent.SetGestureEnd(gestureState == NSGestureRecognizerStateEnded);
-
     NSPoint nspoint = [magnificationGestureRecognizer locationInView:m_osxView];
     wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
 
     wxevent.SetPosition(pt);
 
-    static double lastMagnification = 0.0;
+    static double s_lastMagnification = 0.0;
+
+    if ( gestureState == NSGestureRecognizerStateBegan )
+    {
+        wxevent.SetGestureStart();
+        s_lastMagnification = 0.0;
+    }
+
+    if ( gestureState == NSGestureRecognizerStateEnded )
+    {
+        wxevent.SetGestureEnd();
+    }
 
     double magnification = [magnificationGestureRecognizer magnification];
 
     // Calculate zoomDelta, which is the zoom factor relative to the
     // last zoom gesture event in the current sequence.
-    double zoomDelta = magnification - lastMagnification + 1.0;
+    double zoomDelta = magnification - s_lastMagnification + 1.0;
 
-    lastMagnification = magnification;
+    s_lastMagnification = magnification;
 
     wxevent.SetZoomDelta(zoomDelta);
 
@@ -1567,24 +1587,31 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
     wxRotateGestureEvent wxevent(GetWXPeer()->GetId());
     wxevent.SetEventObject(GetWXPeer());
 
-    wxevent.SetGestureStart(gestureState == NSGestureRecognizerStateBegan);
-    wxevent.SetGestureEnd(gestureState == NSGestureRecognizerStateEnded);
-
     NSPoint nspoint = [rotationGestureRecognizer locationInView:m_osxView];
     wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
 
     wxevent.SetPosition(pt);
 
-    static double lastAngle = 0.0;
+    static double s_lastAngle = 0.0;
 
+    if ( gestureState == NSGestureRecognizerStateBegan )
+    {
+        wxevent.SetGestureStart();
+        s_lastAngle = 0.0;
+    }
+
+    if ( gestureState == NSGestureRecognizerStateEnded )
+    {
+        wxevent.SetGestureEnd();
+    }
     // Multiply the returned rotation angle with -1 to obtain the angle in a clockwise sense.
     double angle = -[rotationGestureRecognizer rotation];
 
     // Calculate angleDelta, which is the amount of rotation performed
     // since the last rotate gesture event in the current sequence.
-    double angleDelta = angle - lastAngle;
+    double angleDelta = angle - s_lastAngle;
 
-    lastAngle  = angle;
+    s_lastAngle  = angle;
 
     wxevent.SetAngleDelta(angleDelta);
 
