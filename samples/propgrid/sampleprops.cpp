@@ -27,8 +27,8 @@
 // -----------------------------------------------------------------------
 
 
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/advprops.h>
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/advprops.h"
 
 #ifndef WX_PROPGRID_SAMPLEPROPS_H
     #include "sampleprops.h"

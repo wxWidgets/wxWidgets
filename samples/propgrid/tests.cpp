@@ -18,9 +18,9 @@
     #include "wx/wx.h"
 #endif
 
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/advprops.h>
-#include <wx/propgrid/manager.h>
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/advprops.h"
+#include "wx/propgrid/manager.h"
 
 #include "propgrid.h"
 #include "sampleprops.h"

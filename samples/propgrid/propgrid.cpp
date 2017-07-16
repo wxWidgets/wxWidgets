@@ -44,34 +44,34 @@
     #error "Please set wxUSE_PROPGRID to 1 and rebuild the library."
 #endif
 
-#include <wx/numdlg.h>
+#include "wx/numdlg.h"
 
 // -----------------------------------------------------------------------
 
 
 // Main propertygrid header.
-#include <wx/propgrid/propgrid.h>
+#include "wx/propgrid/propgrid.h"
 
 // Extra property classes.
-#include <wx/propgrid/advprops.h>
+#include "wx/propgrid/advprops.h"
 
 // This defines wxPropertyGridManager.
-#include <wx/propgrid/manager.h>
+#include "wx/propgrid/manager.h"
 
 #include "propgrid.h"
 #include "sampleprops.h"
 
 #if wxUSE_DATEPICKCTRL
-    #include <wx/datectrl.h>
+    #include "wx/datectrl.h"
 #endif
 
-#include <wx/artprov.h>
+#include "wx/artprov.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
-#include <wx/popupwin.h>
+#include "wx/popupwin.h"
 
 // -----------------------------------------------------------------------
 // wxSampleMultiButtonEditor
@@ -3002,7 +3002,7 @@ void FormMain::OnDeleteChoice( wxCommandEvent& WXUNUSED(event) )
 
 // -----------------------------------------------------------------------
 
-#include <wx/colordlg.h>
+#include "wx/colordlg.h"
 
 void FormMain::OnMisc ( wxCommandEvent& event )
 {
