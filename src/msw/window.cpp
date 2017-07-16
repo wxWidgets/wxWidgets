@@ -1877,34 +1877,10 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     GetPosition(&currentX, &currentY);
     GetSize(&currentW, &currentH);
 
-    // ... and don't do anything (avoiding flicker) if it's already ok unless
-    // we're forced to resize the window
-    if ( !(sizeFlags & wxSIZE_FORCE) )
-    {
-        if ( width == currentW && height == currentH )
-        {
-            // We need to send wxSizeEvent ourselves because Windows won't do
-            // it if the size doesn't change.
-            if ( sizeFlags & wxSIZE_FORCE_EVENT )
-            {
-                wxSizeEvent event( wxSize(width,height), GetId() );
-                event.SetEventObject( this );
-                HandleWindowEvent( event );
-            }
-
-            // Still call DoMoveWindow() below if we need to change the
-            // position, otherwise we're done.
-            if ( x == currentX && y == currentY )
-                return;
-        }
-    }
-
     if ( x == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         x = currentX;
     if ( y == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         y = currentY;
-
-    AdjustForParentClientOrigin(x, y, sizeFlags);
 
     wxSize size = wxDefaultSize;
     if ( width == wxDefaultCoord )
@@ -1939,6 +1915,30 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             height = currentH;
         }
     }
+
+    // ... and don't do anything (avoiding flicker) if it's already ok unless
+    // we're forced to resize the window
+    if ( !(sizeFlags & wxSIZE_FORCE) )
+    {
+        if ( width == currentW && height == currentH )
+        {
+            // We need to send wxSizeEvent ourselves because Windows won't do
+            // it if the size doesn't change.
+            if ( sizeFlags & wxSIZE_FORCE_EVENT )
+            {
+                wxSizeEvent event( wxSize(width,height), GetId() );
+                event.SetEventObject( this );
+                HandleWindowEvent( event );
+            }
+
+            // Still call DoMoveWindow() below if we need to change the
+            // position, otherwise we're done.
+            if ( x == currentX && y == currentY )
+                return;
+        }
+    }
+
+    AdjustForParentClientOrigin(x, y, sizeFlags);
 
     DoMoveWindow(x, y, width, height);
 }
