@@ -16,6 +16,13 @@
 
 #include "wx/string.h"
 
+// Initial version of wxSecretStore required passing user name to Load(), which
+// didn't make much sense without support for multiple usernames per service,
+// so the API was changed to load the username too. Test for this symbol to
+// distinguish between the old and the new API, it wasn't defined before the
+// API change.
+#define wxHAS_SECRETSTORE_LOAD_USERNAME
+
 class wxSecretStoreImpl;
 class wxSecretValueImpl;
 
@@ -123,36 +130,35 @@ public:
     bool IsOk() const { return m_impl != NULL; }
 
 
-    // Store a secret.
+    // Store a username/password combination.
     //
     // The service name should be user readable and unique.
     //
-    // If a secret with the same service name and user already exists, it will
-    // be overwritten with the new value.
+    // If a secret with the same service name already exists, it will be
+    // overwritten with the new value.
     //
     // Returns false after logging an error message if an error occurs,
     // otherwise returns true indicating that the secret has been stored.
     bool Save(const wxString& service,
-              const wxString& user,
-              const wxSecretValue& secret);
+              const wxString& username,
+              const wxSecretValue& password);
 
-    // Look up a secret.
+    // Look up the username/password for the given service.
     //
-    // If no such secret is found, an empty value is returned, but no error is
-    // logged (however an error may still be logged if some other error occurs).
-    // If more than one secret matching the parameters exist, only one
-    // arbitrarily chosen of them is returned (notice that it's impossible to
-    // get into such situation using this API only).
-    wxSecretValue Load(const wxString& service, const wxString& user) const;
+    // If no username/password is found for the given service, false is
+    // returned.
+    //
+    // Otherwise the function returns true and updates the provided user name
+    // and password arguments.
+    bool Load(const wxString& service,
+              wxString& username,
+              wxSecretValue& password) const;
 
-    // Delete a previously stored secret.
+    // Delete a previously stored username/password combination.
     //
-    // If there is more than one matching secret, all of them are deleted.
-    //
-    // If any secrets were deleted, returns true. Otherwise returns false and
-    // logs an error if any error other than not finding any matching secrets
-    // occurred.
-    bool Delete(const wxString& service, const wxString& user);
+    // If anything was deleted, returns true. Otherwise returns false and
+    // logs an error if any error other than not finding any matches occurred.
+    bool Delete(const wxString& service);
 
 private:
     // Ctor takes ownership of the passed pointer.
