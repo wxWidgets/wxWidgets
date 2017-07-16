@@ -63,10 +63,7 @@ tcase_add_test(TCase *tc, tcase_test_function test)
         size_t new_size = sizeof(tcase_test_function) * nalloc;
         tcase_test_function *new_tests = realloc(tc->tests, new_size);
         assert(new_tests != NULL);
-        if (new_tests != tc->tests) {
-            free(tc->tests);
-            tc->tests = new_tests;
-        }
+        tc->tests = new_tests;
         tc->allocated = nalloc;
     }
     tc->tests[tc->ntests] = test;

@@ -46,7 +46,7 @@ dnl If the API changes incompatibly set LIBAGE back to 0
 dnl
 
 LIBCURRENT=7   # sync
-LIBREVISION=2  # with
+LIBREVISION=3  # with
 LIBAGE=6       # CMakeLists.txt!
 
 AC_CONFIG_HEADER(expat_config.h)
@@ -80,6 +80,10 @@ if test "$GCC" = yes ; then
     if test "x$CXXFLAGS" = x ; then
     CXXFLAGS=`echo "$CFLAGS" | sed 's/ -Wmissing-prototypes -Wstrict-prototypes//'`
     fi
+
+    CFLAGS="${CFLAGS} -fno-strict-aliasing"
+    CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing"
+    LDFLAGS="${LDFLAGS} -fno-strict-aliasing"
 fi
 
 dnl Checks for header files.
@@ -94,6 +98,69 @@ AC_C_BIGENDIAN_CROSS
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_CHECK_FUNCS(memmove bcopy)
+
+
+AC_ARG_WITH([libbsd], [
+AS_HELP_STRING([--with-libbsd], [utilize libbsd (for arc4random_buf)])
+], [], [with_libbsd=no])
+AS_IF([test "x${with_libbsd}" != xno], [
+  AC_CHECK_LIB([bsd], [arc4random_buf], [], [
+    AS_IF([test "x${with_libbsd}" = xyes], [
+      AC_MSG_ERROR([Enforced use of libbsd cannot be satisfied.])
+    ])
+  ])
+])
+AC_MSG_CHECKING([for arc4random_buf (BSD or libbsd)])
+AC_LINK_IFELSE([AC_LANG_SOURCE([
+  #include <stdlib.h>  /* for arc4random_buf on BSD, for NULL */
+  #if defined(HAVE_LIBBSD)
+  # include <bsd/stdlib.h>
+  #endif
+  int main() {
+    arc4random_buf(NULL, 0U);
+    return 0;
+  }
+])], [
+    AC_DEFINE([HAVE_ARC4RANDOM_BUF], [1],
+        [Define to 1 if you have the `arc4random_buf' function.])
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
+
+
+AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+  #include <stdlib.h>  /* for NULL */
+  #include <sys/random.h>
+  int main() {
+    return getrandom(NULL, 0U, 0U);
+  }
+])], [
+    AC_DEFINE([HAVE_GETRANDOM], [1],
+        [Define to 1 if you have the `getrandom' function.])
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+
+    AC_MSG_CHECKING([for syscall SYS_getrandom (Linux 3.17+)])
+    AC_LINK_IFELSE([AC_LANG_SOURCE([
+      #include <stdlib.h>  /* for NULL */
+      #include <unistd.h>  /* for syscall */
+      #include <sys/syscall.h>  /* for SYS_getrandom */
+      int main() {
+        syscall(SYS_getrandom, NULL, 0, 0);
+        return 0;
+      }
+    ])], [
+        AC_DEFINE([HAVE_SYSCALL_GETRANDOM], [1],
+            [Define to 1 if you have `syscall' and `SYS_getrandom'.])
+        AC_MSG_RESULT([yes])
+    ], [
+        AC_MSG_RESULT([no])
+    ])
+])
+
 
 dnl Only needed for xmlwf:
 AC_CHECK_HEADERS(fcntl.h unistd.h)
@@ -119,10 +186,10 @@ AC_DEFUN([AC_CPP_FUNC],
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for an ANSI C99-conforming __func__], ac_cv_cpp_func,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
-[[char *foo = __func__;]])],
+[[const char *foo = __func__;]])],
   [ac_cv_cpp_func=yes], 
   [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
-[[char *foo = __FUNCTION__;]])],
+[[const char *foo = __FUNCTION__;]])],
   [ac_cv_cpp_func=__FUNCTION__], 
   [ac_cv_cpp_func=no])])])
 if test $ac_cv_cpp_func = __FUNCTION__; then
@@ -144,10 +211,25 @@ AC_DEFINE([XML_NS], 1,
           [Define to make XML Namespaces functionality available.])
 AC_DEFINE([XML_DTD], 1,
           [Define to make parameter entity parsing functionality available.])
-AC_DEFINE([XML_CONTEXT_BYTES], 1024,
-          [Define to specify how much context to retain around the current parse point.])
+
+AC_ARG_ENABLE([xml-context],
+  AS_HELP_STRING([--enable-xml-context @<:@COUNT@:>@],
+    [Retain context around the current parse point;
+        default is enabled and a size of 1024 bytes])
+AS_HELP_STRING([--disable-xml-context],
+    [Do not retain context around the current parse point]),
+  [enable_xml_context=${enableval}])
+AS_IF([test "x${enable_xml_context}" != "xno"], [
+  AS_IF([test "x${enable_xml_context}" == "xyes" \
+      -o "x${enable_xml_context}" == "x"], [
+    enable_xml_context=1024
+  ])
+  AC_DEFINE_UNQUOTED([XML_CONTEXT_BYTES], [${enable_xml_context}],
+    [Define to specify how much context to retain around the current parse point.])
+])
 
 AC_CONFIG_FILES([Makefile expat.pc])
+AC_CONFIG_FILES([run.sh], [chmod +x run.sh])
 AC_OUTPUT
 
 abs_srcdir="`cd $srcdir && pwd`"
