@@ -388,6 +388,7 @@
 
 # /tests/benchmarks/
 /tests/benchmarks/*.sln
+/tests/benchmarks/*c*_msw*/
 
 # /utils/
 /utils/**/*c*_mswu
