@@ -112,7 +112,7 @@
 
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
-    #define wxPG_TEXTCTRLYADJUST            1
+    #define wxPG_TEXTCTRLYADJUST            2
 
 #else
     // defaults
