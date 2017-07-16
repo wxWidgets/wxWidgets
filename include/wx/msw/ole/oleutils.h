@@ -73,7 +73,7 @@ public:
     wxBasicString(const wxString& str)
         : m_bstrBuf(SysAllocString(str.wc_str(*wxConvCurrent))) {}
 
-    // Constructs the owned BSTR as a copy of the BSTR owned by bstr
+    // Constructs with the owned BSTR as a copy of the BSTR owned by bstr
     wxBasicString(const wxBasicString& bstr) : m_bstrBuf(bstr.Copy()) {}
 
     // Frees the owned BSTR
