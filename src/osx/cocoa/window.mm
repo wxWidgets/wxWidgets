@@ -1045,18 +1045,27 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
 void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+         return;
+
     impl->PanGestureEvent(panGestureRecognizer);
 }
 
 void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+         return;
+
     impl->ZoomGestureEvent(magnificationGestureRecognizer);
 }
 
 void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognizer* rotationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+         return;
+
     impl->RotateGestureEvent(rotationGestureRecognizer);
 }
 
@@ -1461,6 +1470,7 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
         case NSGestureRecognizerStateCancelled:
              gestureState = NSGestureRecognizerStateEnded;
              break;
+        // Do not process any other states
         default:
              return;
     }
@@ -1482,6 +1492,7 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
     wxevent.SetDeltaX(pt.x);
     wxevent.SetDeltaY(pt.y);
 
+    // Reset translation to zero to get offsets for the next pan gesture event
     [panGestureRecognizer setTranslation:NSZeroPoint inView:m_osxView];
 
     GetWXPeer()->HandleWindowEvent(wxevent);
@@ -1502,6 +1513,7 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
         case NSGestureRecognizerStateCancelled:
              gestureState = NSGestureRecognizerStateEnded;
              break;
+        // Do not process any other states
         default:
              return;
     }
@@ -1521,6 +1533,7 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
 
     double magnification = [magnificationGestureRecognizer magnification];
 
+    // Calculate zoomDelta, which is the zoom factor relative to the last zoom gesture event in the current sequence.
     double zoomDelta = magnification - lastMagnification + 1.0;
 
     lastMagnification = magnification;
@@ -1545,6 +1558,7 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
         case NSGestureRecognizerStateCancelled:
              gestureState = NSGestureRecognizerStateEnded;
              break;
+        // Do not process any other states
         default:
              return;
     }
@@ -1562,8 +1576,10 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
 
     static double lastAngle = 0.0;
 
+    // Multiply the returned rotation angle with -1 to obtain the angle in a clockwise sense.
     double angle = -[rotationGestureRecognizer rotation];
 
+    // Calculate angleDelta, which is the amount of rotation performed since the last rotate gesture event in the current sequence.
     double angleDelta = angle - lastAngle;
 
     lastAngle  = angle;
@@ -2037,9 +2053,12 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
     if ( m_osxView )
         CFRelease(m_osxView);
 
-    [panGestureRecognizer release];
-    [magnificationGestureRecognizer release];
-    [rotationGestureRecognizer release];
+    if ( IsUserPane() )
+    {
+        [panGestureRecognizer release];
+        [magnificationGestureRecognizer release];
+        [rotationGestureRecognizer release];
+    }
 }
 
 bool wxWidgetCocoaImpl::IsVisible() const
