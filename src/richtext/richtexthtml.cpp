@@ -132,7 +132,12 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                 {
                     wxRichTextObject* obj = node2->GetData();
                     wxRichTextPlainText* textObj = wxDynamicCast(obj, wxRichTextPlainText);
-                    if (textObj && !textObj->IsEmpty())
+                    wxRichTextTable* table = wxDynamicCast(obj, wxRichTextTable);
+					 if (table)
+					 {
+						 OutputTable(buffer, * table, str);
+					 }
+					 else if (textObj && !textObj->IsEmpty())
                     {
                         wxRichTextAttr charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
                         BeginCharacterFormatting(currentCharStyle, charStyle, paraStyle, str);
@@ -702,6 +707,30 @@ bool wxRichTextHTMLHandler::DeleteTemporaryImages(int flags, const wxArrayString
     return true;
 }
 
+
+// Outputs a table
+bool wxRichTextHTMLHandler::OutputTable(wxRichTextBuffer* buffer, wxRichTextTable& table1,
+                                               wxTextOutputStream& outstr)
+{
+	wxString str = wxEmptyString;
+	str = _("<table border='1'>");
+	int k = 0;
+	int num_rows = table1.GetRowCount();
+	int m_num_columns = table1.GetColumnCount();
+	for(int row = 0; row < num_rows; ++row){
+		str += wxT("<tr>");
+		for(int col = 0; col < m_num_columns; ++col){
+			str += wxT("<td>");
+			wxRichTextCell* cell = table1.GetCell(row, col);
+			str += cell->GetText();
+			str += wxT("</td>");
+		}
+		str += wxT("</tr>\n");
+	}
+	str += wxT("</table></font>\n");
+    outstr << str;
+    return true;
+}
 
 #endif
 // wxUSE_RICHTEXT
