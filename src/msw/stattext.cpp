@@ -150,6 +150,10 @@ void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    // If the label doesn't really change, avoid flicker by not doing anything.
+    if ( label == m_labelOrig )
+        return;
+
 #ifdef SS_ENDELLIPSIS
     long styleReal = ::GetWindowLong(GetHwnd(), GWL_STYLE);
     if ( HasFlag(wxST_ELLIPSIZE_END) )
