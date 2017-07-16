@@ -381,7 +381,8 @@
 /tests/*c*_mswunivuddll
 /tests/*c*_mswunivuddll_x64
 /tests/test.opt
-/tests/test.sln
+/tests/test*.dsw
+/tests/test*.sln
 /tests/test.suo
 /tests/test_test.vcproj
 
