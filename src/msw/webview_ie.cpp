@@ -872,25 +872,12 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
         return "";
     }
 
-    VARIANT  level;
-    VariantInit(&level);
-    V_VT(&level) = VT_EMPTY;           
-    wxString new_js = "function wx_eval() { return eval(\"" + javascript + "\"); }";
-
-    hr = window->execScript(SysAllocString(new_js.wc_str()),
-                                                      L"javascript",
-                                                      &level);
-    
-    if (!SUCCEEDED(hr))
-    {
-        wxLogMessage("!SUCCEDED window->execScript");
-        return "";
-    }
-    
     VARIANT result = {0};
+
+    // get the ID for eval method
     DISPID idMethod = 0;
     DISPID idSave = 0;
-    OLECHAR FAR* sMethod = L"wx_eval";
+    OLECHAR FAR* sMethod = L"eval";
     IDispatch* pScript = 0;
     document->get_Script(&pScript);
     hr = pScript->GetIDsOfNames(IID_NULL, &sMethod, 1, LOCALE_SYSTEM_DEFAULT, &idSave);
@@ -900,10 +887,20 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
         return "";
     }
 
-    // invoke assuming no method parameters
-    DISPPARAMS dpNoArgs = { NULL, NULL, 0, 0 };
+    // invoke assuming one method parameter (the javascript)
+    DISPPARAMS dpArgs;
+    VARIANTARG VarData[1];
+
+    dpArgs.rgvarg = &VarData[0];
+    dpArgs.cArgs = 1;
+    dpArgs.cNamedArgs = 0;
+    dpArgs.rgdispidNamedArgs = NULL;
+
+    BSTR js = SysAllocString(javascript.wc_str());
+    VarData[0].vt = VT_BSTR | VT_BYREF;
+    VarData[0].pbstrVal = &js;
     hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
-                         &dpNoArgs, &result, NULL, NULL);
+                         &dpArgs, &result, NULL, NULL);
     if (!SUCCEEDED(hr))
     {
         wxLogMessage("!SUCCEDED pScript->Invoke(idSave, IID_NU");
