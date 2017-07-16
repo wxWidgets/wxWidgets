@@ -103,7 +103,7 @@
     #define wxPG_TEXTCTRLYADJUST            0
 
 #elif defined(__WXMAC__)
-    // *not* tested
+    // partially tested
     #define wxPG_CHECKMARK_XADJ                 4
     #define wxPG_CHECKMARK_YADJ                 4
     #define wxPG_CHECKMARK_WADJ                 -6
@@ -112,7 +112,7 @@
 
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
-    #define wxPG_TEXTCTRLYADJUST            0
+    #define wxPG_TEXTCTRLYADJUST            1
 
 #else
     // defaults

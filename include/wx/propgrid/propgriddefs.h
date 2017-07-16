@@ -105,7 +105,7 @@
 
     // x position adjustment for wxTextCtrl (and like)
     // left margin cannot be set with wxTextEntry::SetMargins()
-    #define wxPG_TEXTCTRLXADJUST        0
+    #define wxPG_TEXTCTRLXADJUST        1
 
     // comment to use bitmap buttons
     #define wxPG_ICON_WIDTH             11
