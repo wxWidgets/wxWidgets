@@ -120,8 +120,16 @@ wxSize wxStaticText::DoGetBestClientSize() const
 
 void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 {
+    // Keep track of the size before so we can see if it changed
+    const wxSize sizeBefore = GetSize();
+
     // note: we first need to set the size and _then_ call UpdateLabel
     wxStaticTextBase::DoSetSize(x, y, w, h, sizeFlags);
+
+    // Avoid flicker by not refreshing or updating the label if the size didn't
+    // change.
+    if ( sizeBefore == GetSize() )
+        return;
 
 #ifdef SS_ENDELLIPSIS
     // do we need to ellipsize the contents?
