@@ -692,9 +692,9 @@ void wxWebViewIE::SetEditable(bool enable)
     if(document)
     {
         if( enable )
-            document->put_designMode(SysAllocString(L"On"));
+            document->put_designMode(wxBasicString("On"));
         else
-            document->put_designMode(SysAllocString(L"Off"));
+            document->put_designMode(wxBasicString("Off"));
 
     }
 }
@@ -867,8 +867,8 @@ void wxWebViewIE::RunScript(const wxString& javascript)
             VARIANT level;
             VariantInit(&level);
             V_VT(&level) = VT_EMPTY;
-            window->execScript(SysAllocString(javascript.wc_str()),
-                               SysAllocString(language.wc_str()),
+            window->execScript(wxBasicString(javascript),
+                               wxBasicString(language),
                                &level);
         }
     }
@@ -913,7 +913,7 @@ bool wxWebViewIE::CanExecCommand(wxString command) const
     {
         VARIANT_BOOL enabled;
 
-        document->queryCommandEnabled(SysAllocString(command.wc_str()), &enabled);
+        document->queryCommandEnabled(wxBasicString(command), &enabled);
 
         return (enabled == VARIANT_TRUE);
     }
@@ -930,7 +930,7 @@ void wxWebViewIE::ExecCommand(wxString command)
 
     if(document)
     {
-        document->execCommand(SysAllocString(command.wc_str()), VARIANT_FALSE, VARIANT(), NULL);
+        document->execCommand(wxBasicString(command), VARIANT_FALSE, VARIANT(), NULL);
     }
 }
 
