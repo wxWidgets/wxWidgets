@@ -67,6 +67,9 @@
 /build/msw/*.VC.VC.opendb
 /build/msw/*.suo
 /build/msw/.vs/
+/build/msw/wx_vc14.opensdf
+/build/msw/wx_vc14.VC.opendb
+/build/msw/wx_vc14.sdf
 
 # /build/osx
 /build/osx/wxcocoa.xcodeproj/xcuserdata
