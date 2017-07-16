@@ -96,7 +96,7 @@ wxBasicString& wxBasicString::operator=(const wxBasicString& src)
 {
     if ( this != &src )
     {
-        wxCHECK_MSG(m_bstrBuf == NULL || m_bstrBuf != src.m_bstrBuf, 
+        wxCHECK_MSG(m_bstrBuf == NULL || m_bstrBuf != src.m_bstrBuf,
             *this, wxS("Attempting to assign already owned BSTR"));
         SysFreeString(m_bstrBuf);
         m_bstrBuf = src.Copy();
