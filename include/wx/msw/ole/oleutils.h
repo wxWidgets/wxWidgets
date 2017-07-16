@@ -80,7 +80,7 @@ public:
     ~wxBasicString() { SysFreeString(m_bstrBuf); }
 
     // Creates the owned BSTR from a wxString
-    void AssignFromwxString(const wxString& str);
+    void AssignFromString(const wxString& str);
 
     // Returns the owned BSTR and gives up its ownership,
     // the caller is responsible for freeing it

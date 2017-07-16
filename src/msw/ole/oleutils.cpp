@@ -70,7 +70,7 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 // ----------------------------------------------------------------------------
 // wxBasicString
 // ----------------------------------------------------------------------------
-void wxBasicString::AssignFromwxString(const wxString& str)
+void wxBasicString::AssignFromString(const wxString& str)
 {
     SysFreeString(m_bstrBuf);
     m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
