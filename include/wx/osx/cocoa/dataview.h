@@ -372,9 +372,6 @@ private:
 // NSTextFieldCell customized to allow vertical alignment
 // ============================================================================
 
-#ifndef __LP64__
-    #define wxTextFieldCell NSTextFieldCell
-#else
 @interface wxTextFieldCell : NSTextFieldCell
 {
 @private
@@ -384,7 +381,6 @@ private:
 
     -(void) setWXAlignment:(int)alignment;
 @end
-#endif
 
 // ============================================================================
 // wxImageTextCell
