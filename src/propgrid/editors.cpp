@@ -701,6 +701,20 @@ public:
         return rect.width;
     }
 
+#if defined(__WXMSW__)
+#define wxPG_TEXTCTRLXADJUST3 0
+#elif defined(__WXGTK__)
+  #if defined(__WXGTK3__)
+  #define wxPG_TEXTCTRLXADJUST3 2
+  #else
+  #define wxPG_TEXTCTRLXADJUST3 0
+  #endif // wxGTK3/!wxGTK3
+#elif defined(__WXOSX__)
+#define wxPG_TEXTCTRLXADJUST3 0
+#else
+#define wxPG_TEXTCTRLXADJUST3 0
+#endif
+
     virtual void PositionTextCtrl( int textCtrlXAdjust,
                                    int WXUNUSED(textCtrlYAdjust) ) wxOVERRIDE
     {
@@ -709,8 +723,8 @@ public:
                           (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
     #endif
         wxOwnerDrawnComboBox::PositionTextCtrl(
-            textCtrlXAdjust,
-            0 // Under MSW vertical position is already properly adjusted.
+            textCtrlXAdjust + wxPG_TEXTCTRLXADJUST3,
+            0 // Under MSW, GTK vertical position is already properly adjusted.
               // Note: This parameter is not used by other ports.
         );
     }
