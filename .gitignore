@@ -229,6 +229,7 @@
 /lib/wxmsw*.ilk
 /lib/wxmsw*.lib
 /lib/zlib*.lib
+/lib/gcc*_dll
 
 # /locale/
 /locale/*.mo
@@ -294,6 +295,7 @@
 /samples/**/vc_mswuniv[du]dll_x64
 /samples/**/vc_mswunivuddll
 /samples/**/vc_mswunivuddll_x64
+/samples/**/gcc_mswuddll
 
 # /samples/image/
 /samples/image/saved.xpm
@@ -396,6 +398,11 @@
 /utils/**/vc_mswudll_x64
 /utils/**/vc_mswuddll
 /utils/**/vc_mswuddll_x64
+/utils/**/*.vcproj*
+/utils/**/*.vcxproj*
+/utils/**/*.suo
+/utils/**/*.sdf
+/utils/**/gcc_mswuddll
 
 # /utils/emulator/src/
 /utils/emulator/src/*.sln
