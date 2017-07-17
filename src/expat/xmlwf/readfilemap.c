@@ -9,16 +9,8 @@
 #include <stdio.h>
 
 /* Functions close(2) and read(2) */
-#ifdef __WATCOMC__
-#ifndef __LINUX__
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-#else
-# if !defined(WIN32) && !defined(_WIN32) && !defined(_WIN64)
-#  include <unistd.h>
-# endif
+#if !defined(_WIN32) && !defined(_WIN64)
+# include <unistd.h>
 #endif
 
 #ifndef S_ISREG
@@ -48,7 +40,7 @@ filemap(const char *name,
 {
   size_t nbytes;
   int fd;
-  int n;
+  ssize_t n;
   struct stat sb;
   void *p;
 
@@ -67,6 +59,11 @@ filemap(const char *name,
     close(fd);
     return 0;
   }
+  if (sb.st_size > XML_MAX_CHUNK_LEN) {
+    close(fd);
+    return 2;  /* Cannot be passed to XML_Parse in one go */
+  }
+
   nbytes = sb.st_size;
   /* malloc will return NULL with nbytes == 0, handle files with size 0 */
   if (nbytes == 0) {
@@ -88,7 +85,7 @@ filemap(const char *name,
     close(fd);
     return 0;
   }
-  if (n != nbytes) {
+  if (n != (ssize_t)nbytes) {
     fprintf(stderr, "%s: read unexpected number of bytes\n", name);
     free(p);
     close(fd);

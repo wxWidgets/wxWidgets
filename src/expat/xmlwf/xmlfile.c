@@ -8,17 +8,11 @@
 #include <string.h>
 #include <fcntl.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "winconfig.h"
-#elif defined(MACOS_CLASSIC)
-#include "macconfig.h"
-#elif defined(__amigaos__)
-#include "amigaconfig.h"
-#elif defined(__WATCOMC__)
-#include "watcomconfig.h"
 #elif defined(HAVE_EXPAT_CONFIG_H)
 #include <expat_config.h>
-#endif /* ndef WIN32 */
+#endif /* ndef _WIN32 */
 
 #include "expat.h"
 #include "internal.h"  /* for UNUSED_P only */
@@ -26,12 +20,8 @@
 #include "xmltchar.h"
 #include "filemap.h"
 
-#if (defined(_MSC_VER) || (defined(__WATCOMC__) && !defined(__LINUX__)))
+#if defined(_MSC_VER)
 #include <io.h>
-#endif
-
-#if defined(__amigaos__) && defined(__USE_INLINE__)
-#include <proto/expat.h>
 #endif
 
 #ifdef HAVE_UNISTD_H
@@ -57,6 +47,9 @@ typedef struct {
   XML_Parser parser;
   int *retPtr;
 } PROCESS_ARGS;
+
+static int
+processStream(const XML_Char *filename, XML_Parser parser);
 
 static void
 reportError(XML_Parser parser, const XML_Char *filename)
@@ -88,7 +81,7 @@ processFile(const void *data, size_t size,
     *retPtr = 1;
 }
 
-#if (defined(WIN32) || defined(__WATCOMC__))
+#if defined(_WIN32)
 
 static int
 isAsciiLetter(XML_Char c)
@@ -96,7 +89,7 @@ isAsciiLetter(XML_Char c)
   return (T('a') <= c && c <= T('z')) || (T('A') <= c && c <= T('Z'));
 }
 
-#endif /* WIN32 */
+#endif /* _WIN32 */
 
 static const XML_Char *
 resolveSystemId(const XML_Char *base, const XML_Char *systemId,
@@ -106,7 +99,7 @@ resolveSystemId(const XML_Char *base, const XML_Char *systemId,
   *toFree = 0;
   if (!base
       || *systemId == T('/')
-#if (defined(WIN32) || defined(__WATCOMC__))
+#if defined(_WIN32)
       || *systemId == T('\\')
       || (isAsciiLetter(systemId[0]) && systemId[1] == T(':'))
 #endif
@@ -120,7 +113,7 @@ resolveSystemId(const XML_Char *base, const XML_Char *systemId,
   s = *toFree;
   if (tcsrchr(s, T('/')))
     s = tcsrchr(s, T('/')) + 1;
-#if (defined(WIN32) || defined(__WATCOMC__))
+#if defined(_WIN32)
   if (tcsrchr(s, T('\\')))
     s = tcsrchr(s, T('\\')) + 1;
 #endif
@@ -139,13 +132,23 @@ externalEntityRefFilemap(XML_Parser parser,
   XML_Char *s;
   const XML_Char *filename;
   XML_Parser entParser = XML_ExternalEntityParserCreate(parser, context, 0);
+  int filemapRes;
   PROCESS_ARGS args;
   args.retPtr = &result;
   args.parser = entParser;
   filename = resolveSystemId(base, systemId, &s);
   XML_SetBase(entParser, filename);
-  if (!filemap(filename, processFile, &args))
+  filemapRes = filemap(filename, processFile, &args);
+  switch (filemapRes) {
+  case 0:
     result = 0;
+    break;
+  case 2:
+    ftprintf(stderr, T("%s: file too large for memory-mapping")
+        T(", switching to streaming\n"), filename);
+    result = processStream(filename, entParser);
+    break;
+  }
   free(s);
   XML_ParserFree(entParser);
   return result;
@@ -233,11 +236,21 @@ XML_ProcessFile(XML_Parser parser,
                                       ? externalEntityRefFilemap
                                       : externalEntityRefStream);
   if (flags & XML_MAP_FILE) {
+    int filemapRes;
     PROCESS_ARGS args;
     args.retPtr = &result;
     args.parser = parser;
-    if (!filemap(filename, processFile, &args))
+    filemapRes = filemap(filename, processFile, &args);
+    switch (filemapRes) {
+    case 0:
       result = 0;
+      break;
+    case 2:
+      ftprintf(stderr, T("%s: file too large for memory-mapping")
+          T(", switching to streaming\n"), filename);
+      result = processStream(filename, parser);
+      break;
+    }
   }
   else
     result = processStream(filename, parser);
