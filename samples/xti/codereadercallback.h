@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xtistrm.h
 // Purpose:     streaming runtime metadata information (extended class info)
 // Author:      Stefan Csomor
@@ -10,6 +10,8 @@
 
 #ifndef _CODEDEPERSISTER_
 #define _CODEDEPERSISTER_
+
+#if wxUSE_EXTENDED_RTTI
 
 #include "wx/defs.h"
 #include "wx/sstream.h"
@@ -103,5 +105,7 @@ public:
     // utility function exposed for callbacks
     wxString ValueAsCode( const wxAny &param );
 };
+
+#endif // wxUSE_EXTENDED_RTTI
 
 #endif
