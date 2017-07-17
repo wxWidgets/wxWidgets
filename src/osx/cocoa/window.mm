@@ -2027,19 +2027,6 @@ wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRoo
     Init();
     m_osxView = w;
 
-    panGestureRecognizer =
-    [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
-
-    magnificationGestureRecognizer =
-    [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
-
-    rotationGestureRecognizer =
-    [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
-
-    [m_osxView addGestureRecognizer:panGestureRecognizer];
-    [m_osxView addGestureRecognizer:magnificationGestureRecognizer];
-    [m_osxView addGestureRecognizer:rotationGestureRecognizer];
-
     // check if the user wants to create the control initially hidden
     if ( !peer->IsShown() )
         SetVisibility(false);
@@ -3004,7 +2991,23 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
     NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: NSZeroRect options: options owner: m_osxView userInfo: nil];
     [m_osxView addTrackingArea: area];
     [area release];
- }
+
+    if ( IsUserPane() )
+    {
+        panGestureRecognizer =
+        [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
+
+        magnificationGestureRecognizer =
+        [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
+
+        rotationGestureRecognizer =
+        [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
+
+        [m_osxView addGestureRecognizer:panGestureRecognizer];
+        [m_osxView addGestureRecognizer:magnificationGestureRecognizer];
+        [m_osxView addGestureRecognizer:rotationGestureRecognizer];
+    }
+}
 
 bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
