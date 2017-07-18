@@ -64,7 +64,7 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
     m_colour = col;
     UpdateColour();
     InitColourData();
-    ms_data.SetChooseAlpha(style & wxCLRP_SHOW_ALPHA);
+    ms_data.SetChooseAlpha((style & wxCLRP_SHOW_ALPHA) != 0);
 
     return true;
 }
