@@ -128,6 +128,19 @@ images.</p>
 <td width="10%"></td>
 <td width="3%">
 
+<p><b>&minus;8</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Disable use of ASCII85 encoding with PostScript Level 2/3.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
 <p><b>&minus;a</b></p>
 </td>
 <td width="5%"></td>
@@ -171,6 +184,19 @@ an effect if both the <b>&minus;w</b> and the
 <td width="10%"></td>
 <td width="3%">
 
+<p><b>&minus;C</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Specify the document creator name.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
 <p><b>&minus;d</b></p>
 </td>
 <td width="5%"></td>
@@ -180,6 +206,19 @@ an effect if both the <b>&minus;w</b> and the
 specified directory number. (NB: Directories are numbered
 starting at zero.) This option is useful for selecting
 individual pages in a multi-page (e.g. facsimile) file.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
+<p><b>&minus;D</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Enable duplex printing (two pages per sheet of paper).</p>
 </td>
 <td width="0%">
 </td>
@@ -252,8 +291,8 @@ and non-zero to enable. The default is enabled.</p>
 <td width="80%">
 
 <p>Specify the size of overlapping for split images (in
-inches). Used in conjunction with <b>&minus;H</b>
-option.</p>
+inches). Used in conjunction with <b>&minus;H</b> and <b>&minus;W</b>
+options.</p>
 </td>
 <td width="0%">
 </td>
@@ -309,6 +348,19 @@ are hidden using the <i>SubIFD</i> tag.</p>
 <td width="10%"></td>
 <td width="3%">
 
+<p><b>&minus;O</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Write PostScript to specified file instead of standard output.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
 <p><b>&minus;p</b></p>
 </td>
 <td width="5%"></td>
@@ -316,6 +368,19 @@ are hidden using the <i>SubIFD</i> tag.</p>
 
 <p>Force the generation of (non-Encapsulated)
 PostScript.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
+<p><b>&minus;P</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Set optional PageOrientation DSC comment to Landscape or Portrait.</p>
 </td>
 <td width="0%">
 </td>
@@ -350,6 +415,32 @@ file.</p>
 <td width="10%"></td>
 <td width="3%">
 
+<p><b>&minus;t</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Specify the document title string.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
+<p><b>&minus;T</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Print pages for top edge binding.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
 <p><b>&minus;w</b></p>
 </td>
 <td width="5%"></td>
@@ -357,6 +448,22 @@ file.</p>
 
 <p>Specify the horizontal size of the printed area (in
 inches).</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
+<p><b>&minus;W</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Specify the maximum width of image (in inches). Images
+with larger sizes will be split in several pages. Option
+<b>&minus;L</b> may be used for specifying size of split
+images overlapping.</p>
 </td>
 <td width="0%">
 </td>
@@ -524,7 +631,7 @@ Level I output.</p>
 <b>tiffsv</b>(1), <b>libtiff</b>(3)</p>
 <!-- INDENTATION -->
 <p>Libtiff library home page:
-<b>http://www.remotesensing.org/libtiff/</b></p>
+<b>http://www.simplesystems.org/libtiff/</b></p>
 </td>
 </table>
 <hr>

@@ -1,3 +1,4 @@
+.\" $Id: tiffset.1,v 1.7 2016-09-25 20:05:52 bfriesen Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -22,9 +23,9 @@
 .\" OF THIS SOFTWARE.
 .\"
 .if n .po 0
-.TH TIFFSET 1 "November 21, 2004" "libtiff"
+.TH TIFFSET 1 "December 3, 2012" "libtiff"
 .SH NAME
-tiffset \- set a field in a
+tiffset \- set or unset a field in a
 .SM TIFF
 header
 .SH SYNOPSIS
@@ -37,7 +38,7 @@ header
 .I Tiffset
 sets the value of a
 .SM TIFF
-header to a specified value.
+header to a specified value or removes an existing setting.
 .SH OPTIONS
 .TP
 .BI \-d " dirnumber"
@@ -52,6 +53,9 @@ change the current directory by offset.
 .BI \-sf " tagnumber filename"
 Set the value of the tag to the contents of filename.  This option is
 supported for ASCII tags only.
+.TP
+.BI \-u " tagnumber"
+Unset the tag.
 .SH EXAMPLES
 The following example sets the image description tag (270) of a.tif to
 the contents of the file descrip:
@@ -92,4 +96,4 @@ tiffset -d 2 -s 262 1 a.tif
 .BR libtiff (3TIFF)
 .PP
 Libtiff library home page:
-.BR http://www.remotesensing.org/libtiff/
+.BR http://www.simplesystems.org/libtiff/

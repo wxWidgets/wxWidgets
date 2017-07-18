@@ -1,3 +1,4 @@
+/* $Id: test_arrays.h,v 1.3 2006/03/23 14:54:02 dron Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>

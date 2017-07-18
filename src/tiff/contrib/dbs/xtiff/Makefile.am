@@ -26,7 +26,12 @@
 
 #LIBTIFF = $(top_builddir)/libtiff/libtiff.la
 
-EXTRA_DIST = README patchlevel.h xtiff.c xtifficon.h
+EXTRA_DIST = \
+	CMakeLists.txt \
+	README \
+	patchlevel.h \
+	xtiff.c \
+	xtifficon.h
 
 #noinst_PROGRAMS =
 

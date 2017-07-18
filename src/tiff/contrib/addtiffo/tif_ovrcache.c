@@ -1,4 +1,5 @@
 /******************************************************************************
+ * $Id: tif_ovrcache.c,v 1.11 2015-05-29 03:08:19 bfriesen Exp $
  *
  * Project:  TIFF Overview Builder
  * Purpose:  Library functions to maintain two rows of tiles or two strips
@@ -103,12 +104,15 @@ TIFFOvrCache *TIFFCreateOvrCache( TIFF *hTIFF, toff_t nDirOffset )
     psCache->pabyRow2Blocks =
         (unsigned char *) _TIFFmalloc(psCache->nBytesPerRow);
 
-    if( psCache->pabyRow1Blocks == NULL
-        || psCache->pabyRow2Blocks == NULL )
+    if ( psCache->pabyRow1Blocks == NULL
+         || psCache->pabyRow2Blocks == NULL )
     {
 		TIFFErrorExt( hTIFF->tif_clientdata, hTIFF->tif_name,
 					  "Can't allocate memory for overview cache." );
-        /* TODO: use of TIFFError is inconsistent with use of fprintf in addtiffo.c, sort out */
+                /* TODO: use of TIFFError is inconsistent with use of fprintf in addtiffo.c, sort out */
+                if (psCache->pabyRow1Blocks) _TIFFfree(psCache->pabyRow1Blocks);
+                if (psCache->pabyRow2Blocks) _TIFFfree(psCache->pabyRow2Blocks);
+                _TIFFfree( psCache );
         return NULL;
     }
 
@@ -266,9 +270,9 @@ unsigned char *TIFFGetOvrBlock( TIFFOvrCache *psCache, int iTileX, int iTileY,
                                 int iSample )
 
 {
-    int		nRowOffset;
+    long	       nRowOffset;
 
-    if( iTileY > psCache->nBlockOffset + 1 )
+    if ( iTileY > psCache->nBlockOffset + 1 )
         TIFFWriteOvrRow( psCache );
 
     assert( iTileX >= 0 && iTileX < psCache->nBlocksPerRow );
@@ -278,13 +282,13 @@ unsigned char *TIFFGetOvrBlock( TIFFOvrCache *psCache, int iTileX, int iTileY,
     assert( iSample >= 0 && iSample < psCache->nSamples );
 
     if (psCache->nPlanarConfig == PLANARCONFIG_SEPARATE)
-        nRowOffset = ((iTileX * psCache->nSamples) + iSample)
-            * psCache->nBytesPerBlock;
+        nRowOffset = ((((toff_t) iTileX * psCache->nSamples) + iSample)
+                      * psCache->nBytesPerBlock);
     else
         nRowOffset = iTileX * psCache->nBytesPerBlock +
             (psCache->nBitsPerPixel + 7) / 8 * iSample;
 
-    if( iTileY == psCache->nBlockOffset )
+    if ( iTileY == psCache->nBlockOffset )
         return psCache->pabyRow1Blocks + nRowOffset;
     else
         return psCache->pabyRow2Blocks + nRowOffset;
@@ -334,7 +338,7 @@ void TIFFDestroyOvrCache( TIFFOvrCache * psCache )
 /*
  * Local Variables:
  * mode: c
- * c-basic-offset: 8
+ * c-basic-offset: 4
  * fill-column: 78
  * End:
  */

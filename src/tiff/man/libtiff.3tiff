@@ -1,3 +1,4 @@
+.\" $Id: libtiff.3tiff,v 1.5 2016-09-25 20:05:51 bfriesen Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -535,7 +536,7 @@ an Aldus Technical Memorandum.
 an appendix to the TIFF 5.0 specification prepared by Cygnet Technologies.
 .PP
 Libtiff library home page:
-.BR http://www.remotesensing.org/libtiff/
+.BR http://www.simplesystems.org/libtiff/
 .SH BUGS
 The library does not support multi-sample images
 where some samples have different bits/sample.

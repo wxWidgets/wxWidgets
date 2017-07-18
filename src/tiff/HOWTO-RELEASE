@@ -10,10 +10,13 @@ Notes on releasing.
    1.4.16 is needed in order to avoid bugs in m4. These packages may
    be downloaded from the following ftp locations:
 
+     m4       - ftp://ftp.gnu.org/pub/gnu/m4
      autoconf - ftp://ftp.gnu.org/pub/gnu/autoconf
      automake - ftp://ftp.gnu.org/pub/gnu/automake
      libtool  - ftp://ftp.gnu.org/pub/gnu/libtool
-     m4       - ftp://ftp.gnu.org/pub/gnu/m4
+
+   It is recommended to install m4 before autoconf, since the later
+   requires the former.
 
    Release builds should only be done on a system with a functioning
    and correctly set system clock and on a filesystem which accurately
@@ -21,13 +24,15 @@ Notes on releasing.
 
 1. Commit any unsaved changes. 
 
-2. Create html/vX.X.html.  Take ChangeLog entries and html-ify in there. 
+2. Create html/vX.X.html and add it to cvs with 'cvs add html/vX.X.html'.
+   Take ChangeLog entries and html-ify in there. 
    Easist thing to do is take html/vX.(X-1).html and use it as a template.
-   Add that file to the list of EXTRA_DIST files in the html/Makefile.am.
 
-3. Update html/index.html to refer to this new page as the current release.
+3. Add vX.X.html file to the list of EXTRA_DIST files in the html/Makefile.am.
 
-4. Increment the release version in configure.ac.  Put 'alpha' or
+4. Update html/index.html to refer to this new page as the current release.
+
+5. Increment the release version in configure.ac.  Put 'alpha' or
    'beta' after the version, if applicable.  For example:
 
      4.0.0
@@ -37,7 +42,7 @@ Notes on releasing.
    Version should be updated in two places: in the second argument of the
    AC_INIT macro and in LIBTIFF_xxx_VERSION variables.
 
-5. Update library ELF versioning in configure.ac (LIBTIFF_CURRENT,
+6. Update library ELF versioning in configure.ac (LIBTIFF_CURRENT,
    LIBTIFF_REVISION, and LIBTIFF_AGE).  These numbers have nothing to
    do with the libtiff release version numbers.
 
@@ -48,11 +53,11 @@ Notes on releasing.
    have been added, removed, or interface structures have changed,
    then more care is required.
 
-6. Add an entry to Changelog similar to:
+7. Add an entry to Changelog similar to:
 
      * libtiff 4.0.0 released.
 
-7. In the source tree do
+8. In the source tree do
 
      ./autogen.sh
 
@@ -60,7 +65,7 @@ Notes on releasing.
    maintainer build with current autoconf, automake, and libtool
    packages.  It is only needed when updating tool versions.
 
-8. It is recommended (but not required) to build outside of the source
+9. It is recommended (but not required) to build outside of the source
    tree so that the source tree is kept in a pristine state.  This
    also allows sharing the source directory on several networked
    systems.  For example:
@@ -73,17 +78,17 @@ Notes on releasing.
 
      ./configure --enable-maintainer-mode
 
-9. In the build tree do
+10. In the build tree do
 
      make release
 
    This will update "RELEASE-DATE", "VERSION", and libtiff/tiffvers.h
    in the source tree.
 
-10. In the source tree, verify that the version info in RELEASE-DATE,
+11. In the source tree, verify that the version info in RELEASE-DATE,
    VERSION and libtiff/tiffvers.h is right.
 
-11. In the build tree do
+12. In the build tree do
 
       make
       make distcheck
@@ -94,24 +99,21 @@ Notes on releasing.
     Two files with names tiff-version.tar.gz and tiff-version.zip will
     be created in the top level build directory.
 
-12. In the source tree do
+13. In the source tree do
 
       'cvs commit'.
 
-13. In the source tree do
+14. In the source tree do
 
       cvs tag Release-v4-0-0
 
     (or the appropriate name for the release)
 
-14. Copy release packages from the build tree to the
+15. Copy release packages from the build tree to the
     ftp.remotesensing.org ftp site.
 
       scp tiff-*.tar.gz tiff-*.zip \
     	 warmerdam@upload.osgeo.org:/osgeo/download/libtiff
 
-15. Announce to list, tiff@lists.maptools.org
-
-16. Update libtiff page on freshmeat with new version announcement.
-
+16. Announce to list, tiff@lists.maptools.org
 

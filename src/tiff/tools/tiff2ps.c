@@ -1,3 +1,4 @@
+/* $Id: tiff2ps.c,v 1.56 2017-04-27 15:46:22 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -43,6 +44,11 @@
 
 /*
  * Revision history
+ * 2013-Jan-21
+ *    Richard Nolde: Fix bug in auto rotate option code. Once a
+ *    rotation angle was set by the auto rotate check, it was
+ *    retained for all pages that followed instead of being
+ *    retested for each page.
  *
  * 2010-Sep-17
  *    Richard Nolde: Reinstate code from Feb 2009 that never got
@@ -240,8 +246,10 @@ main(int argc, char* argv[])
 	double pageWidth = 0;
 	double pageHeight = 0;
 	uint32 diroff = 0;
+#if !HAVE_DECL_OPTARG
 	extern char *optarg;
 	extern int optind;
+#endif
 	FILE* output = stdout;
 
         pageOrientation[0] = '\0';
@@ -254,9 +262,9 @@ main(int argc, char* argv[])
 		case 'c':
 			centered = 1;
 			break;
-                case 'C':
-                        creator = optarg;
-                        break;
+		case 'C':
+			creator = optarg;
+			break;
 		case 'd': /* without -a, this only processes one image at this IFD */
 			dirnum = atoi(optarg);
 			break;
@@ -413,18 +421,13 @@ main(int argc, char* argv[])
 	  exit (1);
           }
 
-	if (pageHeight && (maxPageHeight > pageHeight))
-	  {
-	  TIFFError ("-H", "Max viewport height cannot exceed page height");
-	  exit (1);
-          }
-
         /* auto rotate requires a specified page width and height */
         if (auto_rotate == TRUE)
           {
+	    /*
 	  if ((pageWidth == 0) || (pageHeight == 0))
 	    TIFFWarning ("-r auto", " requires page height and width specified with -h and -w");
-
+	    */
           if ((maxPageWidth > 0) || (maxPageHeight > 0))
             {
 	    TIFFError ("-r auto", " is incompatible with maximum page width/height specified by -H or -W");
@@ -463,10 +466,16 @@ main(int argc, char* argv[])
 		if (tif != NULL) {
 			if (dirnum != -1
                             && !TIFFSetDirectory(tif, (tdir_t)dirnum))
+                        {
+                                TIFFClose(tif);
 				return (-1);
+                        }
 			else if (diroff != 0 &&
 			    !TIFFSetSubDirectory(tif, diroff))
+                        {
+                                TIFFClose(tif);
 				return (-1);
+                        }
 			np = TIFF2PS(output, tif, pageWidth, pageHeight,
 				     leftmargin, bottommargin, centered);
                         if (np < 0)
@@ -857,6 +866,9 @@ int exportMaskedImage(FILE *fp, double pagewidth, double pageheight,
                 {
                if (splitheight < imageheight) /* More than one vertical image segments */
                  {
+                 /* Intra2net: Keep correct apspect ratio */
+                 xscale = (imagewidth + overlap) * (pageheight / splitheight) * scale;
+
                  xtran = -1.0 * column * (pagewidth - overlap);
                   subimage_height = imageheight - ((splitheight - overlap) * row);
                  ytran  = pageheight - subimage_height * (pageheight / splitheight);
@@ -888,6 +900,14 @@ int exportMaskedImage(FILE *fp, double pagewidth, double pageheight,
                  xtran = 0;
                   }
                 }
+
+            if (imagewidth <= pagewidth) {
+                /* Intra2net: Crop page at the bottom instead of the top (-> output starts at the top).
+                     Only do this in non-page-split mode */
+                if (imageheight <= splitheight) {
+                    ytran = pageheight - imageheight; /* Note: Will be negative for images longer than page size */
+                }
+            }
               bott_offset += ytran / (center ? 2 : 1);
               left_offset += xtran / (center ? 2 : 1);
               break;
@@ -1392,7 +1412,10 @@ int get_viewport (double pgwidth, double pgheight, double pswidth, double psheig
   /* Only one of maxPageHeight or maxPageWidth can be specified */
   if (maxPageHeight != 0)   /* Clip the viewport to maxPageHeight on each page */
     {
-    *view_height = maxPageHeight * PS_UNIT_SIZE;
+    if (pgheight != 0 && pgheight < maxPageHeight)
+      *view_height = pgheight * PS_UNIT_SIZE;
+    else
+      *view_height = maxPageHeight * PS_UNIT_SIZE;
     /*
      * if (res_unit == RESUNIT_CENTIMETER)
      * *view_height /= 2.54F;
@@ -1422,7 +1445,10 @@ int get_viewport (double pgwidth, double pgheight, double pswidth, double psheig
 
   if (maxPageWidth != 0)   /* Clip the viewport to maxPageWidth on each page */
     {
-    *view_width = maxPageWidth * PS_UNIT_SIZE;
+    if (pgwidth != 0 && pgwidth < maxPageWidth)
+      *view_width = pgwidth * PS_UNIT_SIZE;
+    else
+      *view_width = maxPageWidth * PS_UNIT_SIZE;
     /* if (res_unit == RESUNIT_CENTIMETER)
      *  *view_width /= 2.54F;
      */
@@ -1591,6 +1617,8 @@ int TIFF2PS(FILE* fd, TIFF* tif, double pgwidth, double pgheight, double lm, dou
        }
   if (generateEPSF)
     break;
+  if (auto_rotate)
+    rotation = 0.0;
   TIFFGetFieldDefaulted(tif, TIFFTAG_SUBFILETYPE, &subfiletype);
   } while (((subfiletype & FILETYPE_PAGE) || printAll) && TIFFReadDirectory(tif));
 
@@ -1780,8 +1808,8 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		imageOp = "imagemask";
 
 	(void)strcpy(im_x, "0");
-	(void)sprintf(im_y, "%lu", (long) h);
-	(void)sprintf(im_h, "%lu", (long) h);
+	(void)snprintf(im_y, sizeof(im_y), "%lu", (long) h);
+	(void)snprintf(im_h, sizeof(im_h), "%lu", (long) h);
 	tile_width = w;
 	tile_height = h;
 	if (TIFFIsTiled(tif)) {
@@ -1802,7 +1830,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 		}
 		if (tile_height < h) {
 			fputs("/im_y 0 def\n", fd);
-			(void)sprintf(im_y, "%lu im_y sub", (unsigned long) h);
+			(void)snprintf(im_y, sizeof(im_y), "%lu im_y sub", (unsigned long) h);
 		}
 	} else {
 		repeat_count = tf_numberstrips;
@@ -1814,7 +1842,7 @@ PS_Lvl2ImageDict(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 			fprintf(fd, "/im_h %lu def\n",
 			    (unsigned long) tile_height);
 			(void)strcpy(im_h, "im_h");
-			(void)sprintf(im_y, "%lu im_y sub", (unsigned long) h);
+			(void)snprintf(im_y, sizeof(im_y), "%lu im_y sub", (unsigned long) h);
 		}
 	}
 
@@ -2418,6 +2446,11 @@ PSDataColorContig(FILE* fd, TIFF* tif, uint32 w, uint32 h, int nc)
 	unsigned char *cp, c;
 
 	(void) w;
+        if( es <= 0 )
+        {
+            TIFFError(filename, "Inconsistent value of es: %d", es);
+            return;
+        }
 	tf_buf = (unsigned char *) _TIFFmalloc(tf_bytesperrow);
 	if (tf_buf == NULL) {
 		TIFFError(filename, "No space for scanline buffer");
@@ -2670,7 +2703,7 @@ PSDataBW(FILE* fd, TIFF* tif, uint32 w, uint32 h)
 
 			if (alpha) {
 				int adjust;
-				while (cc-- > 0) {
+				while (cc-- > 1) {
 					DOBREAK(breaklen, 1, fd);
 					/*
 					 * For images with alpha, matte against
@@ -3032,13 +3065,13 @@ char* stuff[] = {
 " -a            convert all directories in file (default is first), Not EPS",
 " -b #          set the bottom margin to # inches",
 " -c            center image (-b and -l still add to this)",
+" -C name       set postscript document creator name",
 " -d #          set initial directory to # counting from zero",
 " -D            enable duplex printing (two pages per sheet of paper)",
 " -e            generate Encapsulated PostScript (EPS) (implies -z)",
 " -h #          set printed page height to # inches (no default)",
 " -w #          set printed page width to # inches (no default)",
 " -H #          split image if height is more than # inches",
-" -P L or P     set optional PageOrientation DSC comment to Landscape or Portrait",
 " -W #          split image if width is more than # inches",
 " -L #          overLap split images by # inches",
 " -i #          enable/disable (Nz/0) pixel interpolation (default: enable)",
@@ -3046,7 +3079,8 @@ char* stuff[] = {
 " -m            use \"imagemask\" operator instead of \"image\"",
 " -o #          convert directory at file offset # bytes",
 " -O file       write PostScript to file instead of standard output",
-" -p            generate regular PostScript",
+" -p            generate regular (non-encapsulated) PostScript",
+" -P L or P     set optional PageOrientation DSC comment to Landscape or Portrait",
 " -r # or auto  rotate by 90, 180, 270 degrees or auto",
 " -s            generate PostScript for a single image",
 " -t name       set postscript document title. Otherwise the filename is used",

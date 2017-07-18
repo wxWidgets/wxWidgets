@@ -1,3 +1,4 @@
+/* $Id: strcasecmp.c,v 1.4 2015-06-21 01:09:09 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1987, 1993
@@ -43,8 +44,8 @@ strcasecmp(const char *s1, const char *s2)
 	const unsigned char *us1 = (const unsigned char *)s1,
 			*us2 = (const unsigned char *)s2;
 
-	while (tolower(*us1) == tolower(*us2++))
+	while (tolower((int) *us1) == tolower((int) *us2++))
 		if (*us1++ == '\0')
 			return (0);
-	return (tolower(*us1) - tolower(*--us2));
+	return (tolower((int) *us1) - tolower((int) *--us2));
 }

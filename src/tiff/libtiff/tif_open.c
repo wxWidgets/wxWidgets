@@ -1,3 +1,4 @@
+/* $Id: tif_open.c,v 1.48 2016-11-20 22:29:47 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -89,7 +90,6 @@ TIFFClientOpen(
 	/* The following are configuration checks. They should be redundant, but should not
 	 * compile to any actual code in an optimised release build anyway. If any of them
 	 * fail, (makefile-based or other) configuration is not correct */
-#ifndef NDEBUG
 	assert(sizeof(uint8)==1);
 	assert(sizeof(int8)==1);
 	assert(sizeof(uint16)==2);
@@ -112,7 +112,6 @@ TIFFClientOpen(
 		assert(n.a16==1);
 		#endif
 	}
-#endif /* !NDEBUG */
 
 	m = _TIFFgetMode(mode, module);
 	if (m == -1)
@@ -169,7 +168,7 @@ TIFFClientOpen(
 	 * The following flags may be used to control intrinsic library
 	 * behaviour that may or may not be desirable (usually for
 	 * compatibility with some application that claims to support
-	 * TIFF but only supports some braindead idea of what the
+	 * TIFF but only supports some brain dead idea of what the
 	 * vendor thinks TIFF is):
 	 *
 	 * 'l' use little-endian byte order for creating a file
@@ -199,8 +198,8 @@ TIFFClientOpen(
 	 * The 'L', 'B', and 'H' flags are intended for applications
 	 * that can optimize operations on data by using a particular
 	 * bit order.  By default the library returns data in MSB2LSB
-	 * bit order for compatibiltiy with older versions of this
-	 * library.  Returning data in the bit order of the native cpu
+	 * bit order for compatibility with older versions of this
+	 * library.  Returning data in the bit order of the native CPU
 	 * makes the most sense but also requires applications to check
 	 * the value of the FillOrder tag; something they probably do
 	 * not do right now.
@@ -280,10 +279,10 @@ TIFFClientOpen(
 		 * Setup header and write.
 		 */
 		#ifdef WORDS_BIGENDIAN
-		tif->tif_header.common.tiff_magic = tif->tif_flags & TIFF_SWAB
+		tif->tif_header.common.tiff_magic = (tif->tif_flags & TIFF_SWAB)
 		    ? TIFF_LITTLEENDIAN : TIFF_BIGENDIAN;
 		#else
-		tif->tif_header.common.tiff_magic = tif->tif_flags & TIFF_SWAB
+		tif->tif_header.common.tiff_magic = (tif->tif_flags & TIFF_SWAB)
 		    ? TIFF_BIGENDIAN : TIFF_LITTLEENDIAN;
 		#endif
 		if (!(tif->tif_flags&TIFF_BIGTIFF))

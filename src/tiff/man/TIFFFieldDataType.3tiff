@@ -1,3 +1,4 @@
+.\" $Id: TIFFFieldDataType.3tiff,v 1.2 2016-09-25 20:05:49 bfriesen Exp $
 .\"
 .\" Copyright (c) 2012, Tom Lane <tgl@sss.pgh.pa.us>
 .\"
@@ -49,4 +50,4 @@ returns a member of the enum type
 .BR libtiff (3TIFF),
 .PP
 Libtiff library home page:
-.BR http://www.remotesensing.org/libtiff/
+.BR http://www.simplesystems.org/libtiff/

@@ -1,3 +1,4 @@
+# $Id: Makefile.vc,v 1.5 2015-08-19 02:31:04 bfriesen Exp $
 #
 # Copyright (C) 2004, Andrey Kiselev <dron@ak4719.spb.edu>
 #
@@ -28,6 +29,7 @@
 !INCLUDE ..\nmake.opt
 
 OBJ	= \
+        snprintf.obj \
 	strcasecmp.obj \
 	getopt.obj
 

@@ -55,22 +55,23 @@
 /* Unsigned 64-bit type */
 #define TIFF_UINT64_T unsigned __int64
 
+#if _WIN64
+/*
+  Windows 64-bit build
+*/
+
 /* Signed size type */
-#if defined(_WIN64)
-#define TIFF_SSIZE_T signed __int64
-#else
-#define TIFF_SSIZE_T signed int
-#endif
+#  define TIFF_SSIZE_T TIFF_INT64_T
 
-/* Signed size type formatter */
-#if defined(_WIN64)
-#define TIFF_SSIZE_FORMAT "%I64d"
 #else
-#define TIFF_SSIZE_FORMAT "%ld"
-#endif
+/*
+  Windows 32-bit build
+*/
 
-/* Pointer difference type */
-#define TIFF_PTRDIFF_T long
+/* Signed size type */
+#  define TIFF_SSIZE_T signed int
+
+#endif
 
 /* Compatibility stuff. */
 
@@ -89,7 +90,10 @@
 #define CCITT_SUPPORT 1
 
 /* Support JPEG compression (requires IJG JPEG library) */
-#define JPEG_SUPPORT 1
+/* #undef JPEG_SUPPORT */
+
+/* Support JBIG compression (requires JBIG-KIT library) */
+/* #undef JBIG_SUPPORT */
 
 /* Support LogLuv high dynamic range encoding */
 #define LOGLUV_SUPPORT 1
@@ -108,13 +112,13 @@
 #define PACKBITS_SUPPORT 1
 
 /* Support Pixar log-format algorithm (requires Zlib) */
-#define PIXARLOG_SUPPORT 1
+/* #undef PIXARLOG_SUPPORT */
 
 /* Support ThunderScan 4-bit RLE algorithm */
 #define THUNDER_SUPPORT 1
 
 /* Support Deflate compression */
-#define ZIP_SUPPORT 1
+/* #undef ZIP_SUPPORT */
 
 /* Support strip chopping (whether or not to convert single-strip uncompressed
    images to mutiple strips of ~8Kb to reduce memory usage) */
@@ -133,7 +137,7 @@
 #define CHECK_JPEG_YCBCR_SUBSAMPLING 1
 
 /* Support MS MDI magic number files as TIFF */
-#define MDI_SUPPORT 1
+/* #undef MDI_SUPPORT */
 
 /*
  * Feature support definitions.

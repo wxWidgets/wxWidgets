@@ -25,7 +25,11 @@
 
 LIBTIFF = $(top_builddir)/libtiff/libtiff.la
 
-EXTRA_DIST = README test.iptc test.txt
+EXTRA_DIST = \
+	CMakeLists.txt \
+	README \
+	test.iptc \
+	test.txt
 
 noinst_PROGRAMS = iptcutil
 

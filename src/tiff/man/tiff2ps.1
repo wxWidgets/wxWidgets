@@ -1,3 +1,4 @@
+.\" $Id: tiff2ps.1,v 1.12 2016-09-25 20:05:51 bfriesen Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -99,6 +100,9 @@ Generate \*(Ps Level 2.
 Generate \*(Ps Level 3. It basically allows one to use the /flateDecode
 filter for ZIP compressed TIFF images.
 .TP
+.B \-8
+Disable use of ASCII85 encoding with \*(Ps Level 2/3.
+.TP
 .B \-a
 Generate output for all IFDs (pages) in the input file.
 .TP
@@ -114,6 +118,9 @@ and the
 .B \-h
 option are given.
 .TP
+.B \-C
+Specify the document creator name.
+.TP
 .B \-d
 Set the initial
 .SM TIFF
@@ -121,6 +128,9 @@ directory to the specified directory number.
 (NB: Directories are numbered starting at zero.)
 This option is useful for selecting individual pages in a
 multi-page (e.g. facsimile) file.
+.TP
+.B \-D
+Enable duplex printing (two pages per sheet of paper).
 .TP
 .B \-e
 Force the generation of Encapsulated \*(Ps (implies
@@ -134,14 +144,6 @@ Specify the maximum height of image (in inches). Images with larger sizes will
 be split in several pages. Option
 .B \-L
 may be used for specifying size of split images overlapping.
-.TP
-.B \-W
-Specify the maximum width of image (in inches). Images with larger sizes will
-be split in several pages. Options
-.B \-L
-and 
-.B \-W
-are mutually exclusive.
 .B \-i
 Enable/disable pixel interpolation.  This option requires a
 single numeric value: zero to disable pixel interpolation and
@@ -151,9 +153,9 @@ non-zero to enable.  The default is enabled.
 Specify the size of overlapping for split images (in inches). Used in
 conjunction with
 .B \-H
-option and
+and
 .B \-W
-option.
+options.
 .TP
 .B \-l
 Specify the left margin for the output (in inches). This does not affect
@@ -184,8 +186,14 @@ like which are hidden using the
 .I SubIFD
 tag.
 .TP
+.B \-O
+Write \*(Ps to specified file instead of standard output.
+.TP
 .B \-p
 Force the generation of (non-Encapsulated) \*(Ps.
+.TP
+.B \-P L|P
+Set optional PageOrientation DSC comment to Landscape or Portrait.
 .TP
 .B \-r 90|180|270|auto
 Rotate image by 90, 180, 270 degrees or auto.  Auto picks the best
@@ -196,8 +204,22 @@ counterclockwise. Auto rotates 90 degrees ccw to produce landscape.
 .B \-s
 Generate output for a single IFD (page) in the input file.
 .TP
+.B \-t
+Specify the document title string.
+.TP
+.B \-T
+Print pages for top edge binding.
+.TP
 .B \-w
 Specify the horizontal size of the printed area (in inches).
+.TP
+.B \-W
+Specify the maximum width of image (in inches). Images with larger sizes will
+be split in several pages. Options
+.B \-L
+and 
+.B \-W
+are mutually exclusive.
 .TP
 .B \-x
 Override resolution units specified in the TIFF as centimeters.
@@ -269,4 +291,4 @@ Does not handle tiled images when generating \*(Ps Level I output.
 .BR libtiff (3)
 .PP
 Libtiff library home page:
-.BR http://www.remotesensing.org/libtiff/
+.BR http://www.simplesystems.org/libtiff/

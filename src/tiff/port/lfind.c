@@ -1,3 +1,4 @@
+/* $Id: lfind.c,v 1.4 2007/01/15 18:40:39 mloskot Exp $ */
 
 /*
  * Copyright (c) 1989, 1993

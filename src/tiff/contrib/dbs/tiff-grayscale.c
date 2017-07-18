@@ -1,3 +1,4 @@
+/* $Id: tiff-grayscale.c,v 1.6 2010-06-08 18:55:15 bfriesen Exp $ */
 
 /*
  * tiff-grayscale.c -- create a Class G (grayscale) TIFF file

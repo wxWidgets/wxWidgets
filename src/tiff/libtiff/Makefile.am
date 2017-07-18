@@ -27,16 +27,20 @@ LIBPORT = $(top_builddir)/port/libport.la
 LIBTIFF = $(top_builddir)/libtiff/libtiff.la
 libtiffincludedir = $(includedir)
 
-EXTRA_DIST = Makefile.vc \
-	     SConstruct \
-	     tif_config.h-vms \
-	     tif_config.vc.h \
-	     tif_config.wince.h \
-	     tiffconf.vc.h \
-	     tiffconf.wince.h \
-	     libtiff.def \
-	     libtiff.map \
-	     libtiffxx.map
+EXTRA_DIST = \
+	CMakeLists.txt \
+	Makefile.vc \
+	SConstruct \
+	libtiff.def \
+	libtiff.map \
+	libtiffxx.map \
+	tif_config.h-vms \
+	tif_config.h.cmake.in \
+	tif_config.vc.h \
+	tif_config.wince.h \
+	tiffconf.h.cmake.in \
+	tiffconf.vc.h \
+	tiffconf.wince.h
 
 libtiffinclude_HEADERS = \
 	tiff.h \

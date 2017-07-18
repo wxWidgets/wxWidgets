@@ -1,3 +1,4 @@
+/* $Id: thumbnail.c,v 1.21 2015-06-21 01:09:10 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1994-1997 Sam Leffler
@@ -70,8 +71,10 @@ static	int generateThumbnail(TIFF*, TIFF*);
 static	void initScale();
 static	void usage(void);
 
+#if !HAVE_DECL_OPTARG
 extern	char* optarg;
 extern	int optind;
+#endif
 
 int
 main(int argc, char* argv[])
@@ -256,7 +259,7 @@ static struct cpTag {
     { TIFFTAG_CLEANFAXDATA,		1, TIFF_SHORT },
     { TIFFTAG_CONSECUTIVEBADFAXLINES,	1, TIFF_LONG },
     { TIFFTAG_INKSET,			1, TIFF_SHORT },
-    { TIFFTAG_INKNAMES,			1, TIFF_ASCII },
+    /*{ TIFFTAG_INKNAMES,			1, TIFF_ASCII },*/ /* Needs much more complicated logic. See tiffcp */
     { TIFFTAG_DOTRANGE,			2, TIFF_SHORT },
     { TIFFTAG_TARGETPRINTER,		1, TIFF_ASCII },
     { TIFFTAG_SAMPLEFORMAT,		1, TIFF_SHORT },
@@ -273,7 +276,26 @@ cpTags(TIFF* in, TIFF* out)
 {
     struct cpTag *p;
     for (p = tags; p < &tags[NTAGS]; p++)
-	cpTag(in, out, p->tag, p->count, p->type);
+	{
+		/* Horrible: but TIFFGetField() expects 2 arguments to be passed */
+		/* if we request a tag that is defined in a codec, but that codec */
+		/* isn't used */
+		if( p->tag == TIFFTAG_GROUP3OPTIONS )
+		{
+			uint16 compression;
+			if( !TIFFGetField(in, TIFFTAG_COMPRESSION, &compression) ||
+				compression != COMPRESSION_CCITTFAX3 )
+				continue;
+		}
+		if( p->tag == TIFFTAG_GROUP4OPTIONS )
+		{
+			uint16 compression;
+			if( !TIFFGetField(in, TIFFTAG_COMPRESSION, &compression) ||
+				compression != COMPRESSION_CCITTFAX4 )
+				continue;
+		}
+		cpTag(in, out, p->tag, p->count, p->type);
+	}
 }
 #undef NTAGS
 
@@ -548,7 +570,13 @@ setImage1(const uint8* br, uint32 rw, uint32 rh)
 	    err -= limit;
 	    sy++;
 	    if (err >= limit)
-		rows[nrows++] = br + bpr*sy;
+		{
+			/* We should perhaps error loudly, but I can't make sense of that */
+			/* code... */
+			if( nrows == 256 )
+				break;
+			rows[nrows++] = br + bpr*sy;
+		}
 	}
 	setrow(row, nrows, rows);
 	row += tnw;
@@ -584,12 +612,17 @@ generateThumbnail(TIFF* in, TIFF* out)
     rowsize = TIFFScanlineSize(in);
     rastersize = sh * rowsize;
     fprintf(stderr, "rastersize=%u\n", (unsigned int)rastersize);
-    raster = (unsigned char*)_TIFFmalloc(rastersize);
+	/* +3 : add a few guard bytes since setrow() can read a bit */
+	/* outside buffer */
+    raster = (unsigned char*)_TIFFmalloc(rastersize+3);
     if (!raster) {
 	    TIFFError(TIFFFileName(in),
 		      "Can't allocate space for raster buffer.");
 	    return 0;
     }
+    raster[rastersize] = 0;
+    raster[rastersize+1] = 0;
+    raster[rastersize+2] = 0;
     rp = raster;
     for (s = 0; s < ns; s++) {
 	(void) TIFFReadEncodedStrip(in, s, rp, -1);

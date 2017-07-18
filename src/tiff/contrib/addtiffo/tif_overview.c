@@ -272,10 +272,27 @@ void TIFF_DownSample( unsigned char *pabySrcTile,
     int		nPixelGroupBytes = (nBitsPerPixel+nPixelSkewBits)/8;
     unsigned char *pabySrc, *pabyDst;
     double      *padfSamples;
+    size_t      tpadfSamples_size, padfSamples_size;
 
     assert( nBitsPerPixel >= 8 );
 
-    padfSamples = (double *) malloc(sizeof(double) * nOMult * nOMult);
+    /* sizeof(double) * nOMult * nOMult */
+    tpadfSamples_size=nOMult*nOMult;
+    if ((nOMult != 0) && (tpadfSamples_size/nOMult == (size_t) nOMult)) {
+        padfSamples_size=tpadfSamples_size;
+        tpadfSamples_size=padfSamples_size*sizeof(double);
+        if ((tpadfSamples_size / padfSamples_size) == sizeof(double))
+            padfSamples_size=tpadfSamples_size;
+        else
+            padfSamples_size=0;
+    } else {
+        padfSamples_size=0;
+    }
+    if (padfSamples_size == 0) {
+        /* TODO: This is an error condition */
+        return;
+    }
+    padfSamples = (double *) malloc(padfSamples_size);
 
 /* ==================================================================== */
 /*      Loop over scanline chunks to process, establishing where the    */
@@ -893,7 +910,7 @@ void TIFFBuildOverviews( TIFF *hTIFF, int nOverviews, int * panOvList,
 /*
  * Local Variables:
  * mode: c
- * c-basic-offset: 8
+ * c-basic-offset: 4
  * fill-column: 78
  * End:
  */

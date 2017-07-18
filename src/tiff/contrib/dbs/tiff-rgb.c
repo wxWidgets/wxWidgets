@@ -1,3 +1,4 @@
+/* $Id: tiff-rgb.c,v 1.4 2010-06-08 18:55:15 bfriesen Exp $ */
 
 /*
  * tiff-rgb.c -- create a 24-bit Class R (rgb) TIFF file

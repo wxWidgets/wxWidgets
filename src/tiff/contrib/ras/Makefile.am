@@ -23,5 +23,8 @@
 
 # Process this file with automake to produce Makefile.in.
 
-EXTRA_DIST = README ras2tif.c tif2ras.c
-
+EXTRA_DIST = \
+	CMakeLists.txt \
+	README \
+	ras2tif.c \
+	tif2ras.c

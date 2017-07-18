@@ -9,13 +9,10 @@ TOOLS=`cd ../tools && pwd`
 IMAGES="${SRCDIR}/images"
 
 # Aliases for built tools
-BMP2TIFF=${TOOLS}/bmp2tiff
 FAX2PS=${TOOLS}/fax2ps
 FAX2TIFF=${TOOLS}/fax2tiff
-GIF2TIFF=${TOOLS}/gif2tiff
 PAL2RGB=${TOOLS}/pal2rgb
 PPM2TIFF=${TOOLS}/ppm2tiff
-RAS2TIFF=${TOOLS}/ras2tiff
 RAW2TIFF=${TOOLS}/raw2tiff
 RGB2YCBCR=${TOOLS}/rgb2ycbcr
 THUMBNAIL=${TOOLS}/thumbnail
@@ -43,11 +40,6 @@ IMG_PALETTE_1C_8B=${IMAGES}/palette-1c-8b.tiff
 IMG_RGB_3C_16B=${IMAGES}/rgb-3c-16b.tiff
 IMG_RGB_3C_8B=${IMAGES}/rgb-3c-8b.tiff
 IMG_MINISBLACK_2C_8B_ALPHA=${IMAGES}/minisblack-2c-8b-alpha.tiff
-
-IMG_PALETTE_1C_8B_BMP=${IMAGES}/palette-1c-8b.bmp
-IMG_RGB_3C_8B_BMP=${IMAGES}/rgb-3c-8b.bmp
-
-IMG_PALETTE_1C_8B_GIF=${IMAGES}/palette-1c-8b.gif
 
 IMG_MINISWHITE_1C_1B_PBM=${IMAGES}/miniswhite-1c-1b.pbm
 IMG_MINISBLACK_1C_8B_PGM=${IMAGES}/minisblack-1c-8b.pgm

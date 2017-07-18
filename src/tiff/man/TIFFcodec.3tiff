@@ -1,3 +1,4 @@
+.\" $Id: TIFFcodec.3tiff,v 1.4 2016-09-25 20:05:50 bfriesen Exp $
 .\"
 .\" Copyright (c) 1995 Sam Leffler
 .\" Copyright (c) 1995 Silicon Graphics, Inc.
@@ -78,4 +79,4 @@ compression schemes.
 .BR libtiff (3TIFF)
 .PP
 Libtiff library home page:
-.BR http://www.remotesensing.org/libtiff/
+.BR http://www.simplesystems.org/libtiff/

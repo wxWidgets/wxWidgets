@@ -1,3 +1,4 @@
+/* $Id: strip_rw.c,v 1.6 2008/03/28 01:42:07 bfriesen Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>

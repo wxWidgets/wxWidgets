@@ -27,7 +27,9 @@ SUBDIRS = xtiff
 
 LIBTIFF = $(top_builddir)/libtiff/libtiff.la
 
-EXTRA_DIST = README
+EXTRA_DIST = \
+	CMakeLists.txt \
+	README
 
 noinst_PROGRAMS = tiff-bi tiff-grayscale tiff-palette tiff-rgb
 

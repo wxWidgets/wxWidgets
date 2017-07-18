@@ -1,3 +1,4 @@
+.\" $Id: tiffcp.1,v 1.14 2016-09-25 20:05:52 bfriesen Exp $
 .\"
 .\" Copyright (c) 1988-1997 Sam Leffler
 .\" Copyright (c) 1991-1997 Silicon Graphics, Inc.
@@ -59,6 +60,9 @@ in a file, but it is explicitly intended to not alter or convert
 the image data content in any way.
 .SH OPTIONS
 .TP
+.B \-a
+Append to an existing output file instead of overwriting it.
+.TP
 .BI \-b " image"
 subtract the following monochrome image from all others
 processed.  This can be used to remove a noise bias
@@ -90,9 +94,11 @@ for LZMA2 compression,
 for baseline JPEG compression,
 .B g3
 for CCITT Group 3 (T.4) compression,
-and
 .B g4
-for CCITT Group 4 (T.6) compression.
+for CCITT Group 4 (T.6) compression,
+or
+.B sgilog
+for SGILOG compression.
 By default
 .I tiffcp
 will compress data according to the value of the
@@ -178,6 +184,9 @@ overwritten and not when it is appended to.
 .B \-M
 Suppress the use of memory-mapped files when reading images.
 .TP
+.BI \-o " offset"
+Set initial directory offset.
+.TP
 .B \-p
 Specify the planar configuration to use in writing image data
 that has one 8-bit sample per pixel.
@@ -226,6 +235,9 @@ appear in a tile.
 .TP
 .B \-x
 Force the output file to be written with PAGENUMBER value in sequence.
+.TP
+.B \-8
+Write BigTIFF instead of classic TIFF format.
 .TP
 .BI \-,= character
 substitute
@@ -302,4 +314,4 @@ tiffcp \-c none \-,=% \-b CCD,X.tif CCD,X%1%.tif result.tif
 .BR libtiff (3TIFF)
 .PP
 Libtiff library home page:
-.BR http://www.remotesensing.org/libtiff/
+.BR http://www.simplesystems.org/libtiff/

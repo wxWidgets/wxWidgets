@@ -1,3 +1,4 @@
+/* $Id: tifftest.h,v 1.1 2008/04/15 14:18:36 dron Exp $ */
 
 /*
  * Copyright (c) 2008, Andrey Kiselev  <dron@ak4719.spb.edu>
