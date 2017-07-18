@@ -950,7 +950,11 @@ bool wxWebViewWebKit::IsBusy() const
 
 void wxWebViewWebKit::SetEditable(bool enable)
 {
+#if WEBKIT_CHECK_VERSION(2, 8, 0)
     webkit_web_view_set_editable(m_web_view, enable);
+#else
+    g_object_set(m_web_view, "editable", enable ? TRUE : FALSE, NULL);
+#endif
 }
 
 bool wxWebViewWebKit::IsEditable() const

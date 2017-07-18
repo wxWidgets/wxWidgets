@@ -144,7 +144,11 @@ void wxWebViewWebKitExtension::GetSelectedSource(GVariant *parameters,
     webkit_dom_node_append_child(&div->parent_instance,
                                  &clone->parent_instance, NULL);
     WebKitDOMElement *html = (WebKitDOMElement*)div;
+#if WEBKIT_CHECK_VERSION(2, 8, 0)
     gchar *text = webkit_dom_element_get_inner_html(html);
+#else
+    gchar *text = webkit_dom_html_element_get_inner_html(WEBKIT_DOM_HTML_ELEMENT(html));
+#endif
     g_object_unref(range);
 
     ReturnDBusStringValue(invocation, text);
@@ -161,7 +165,12 @@ void wxWebViewWebKitExtension::GetPageSource(GVariant *parameters,
 
     WebKitDOMDocument *doc = webkit_web_page_get_dom_document(web_page);
     WebKitDOMElement *body = webkit_dom_document_get_document_element(doc);
+#if WEBKIT_CHECK_VERSION(2, 8, 0)
     gchar *source = webkit_dom_element_get_outer_html(body);
+#else
+    gchar *source =
+        webkit_dom_html_element_get_outer_html(WEBKIT_DOM_HTML_ELEMENT(body));
+#endif
     g_dbus_method_invocation_return_value(invocation,
                                           g_variant_new("(s)", source ? source : ""));
 }
