@@ -7,6 +7,10 @@
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
 
+#ifdef __MINGW32__
+#include <basetyps.h>
+#endif
+
 #include <tif_config.h>
 
 #endif /* _TIFFCONF_ */

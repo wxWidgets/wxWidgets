@@ -29,7 +29,7 @@
  * in Frank Cringle's viewfax program;
  *      Copyright (C) 1990, 1995  Frank D. Cringle.
  */
-#include "tif_config.h"
+#include <tif_config.h>
 
 #include <stdio.h>
 #include <stdlib.h>

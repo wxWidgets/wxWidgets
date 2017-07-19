@@ -400,7 +400,7 @@ _TIFFmemcmp(const void* p1, const void* p2, tmsize_t c)
 
 #ifndef _WIN32_WCE
 
-#if (_MSC_VER < 1500)
+#if defined(_MSC_VER) && (_MSC_VER < 1500)
 #  define vsnprintf _vsnprintf
 #endif
 
@@ -408,15 +408,15 @@ static void
 Win32WarningHandler(const char* module, const char* fmt, va_list ap)
 {
 #ifndef TIF_PLATFORM_CONSOLE
-	LPTSTR szTitle;
-	LPTSTR szTmp;
-	LPCTSTR szTitleText = "%s Warning";
-	LPCTSTR szDefaultModule = "LIBTIFF";
-	LPCTSTR szTmpModule = (module == NULL) ? szDefaultModule : module;
+	char *szTitle;
+	char *szTmp;
+	const char *szTitleText = "%s Warning";
+	const char *szDefaultModule = "LIBTIFF";
+	const char *szTmpModule = (module == NULL) ? szDefaultModule : module;
         SIZE_T nBufSize = (strlen(szTmpModule) +
                         strlen(szTitleText) + strlen(fmt) + 256)*sizeof(char);
 
-	if ((szTitle = (LPTSTR)LocalAlloc(LMEM_FIXED, nBufSize)) == NULL)
+	if ((szTitle = (char *)LocalAlloc(LMEM_FIXED, nBufSize)) == NULL)
 		return;
 	sprintf(szTitle, szTitleText, szTmpModule);
 	szTmp = szTitle + (strlen(szTitle)+2)*sizeof(char);
@@ -439,15 +439,15 @@ static void
 Win32ErrorHandler(const char* module, const char* fmt, va_list ap)
 {
 #ifndef TIF_PLATFORM_CONSOLE
-	LPTSTR szTitle;
-	LPTSTR szTmp;
-	LPCTSTR szTitleText = "%s Error";
-	LPCTSTR szDefaultModule = "LIBTIFF";
-	LPCTSTR szTmpModule = (module == NULL) ? szDefaultModule : module;
+	char *szTitle;
+	char *szTmp;
+	const char *szTitleText = "%s Error";
+	const char *szDefaultModule = "LIBTIFF";
+	const char *szTmpModule = (module == NULL) ? szDefaultModule : module;
         SIZE_T nBufSize = (strlen(szTmpModule) +
                         strlen(szTitleText) + strlen(fmt) + 256)*sizeof(char);
 
-	if ((szTitle = (LPTSTR)LocalAlloc(LMEM_FIXED, nBufSize)) == NULL)
+	if ((szTitle = (char *)LocalAlloc(LMEM_FIXED, nBufSize)) == NULL)
 		return;
 	sprintf(szTitle, szTitleText, szTmpModule);
 	szTmp = szTitle + (strlen(szTitle)+2)*sizeof(char);

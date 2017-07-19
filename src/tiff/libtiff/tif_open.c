@@ -90,6 +90,7 @@ TIFFClientOpen(
 	/* The following are configuration checks. They should be redundant, but should not
 	 * compile to any actual code in an optimised release build anyway. If any of them
 	 * fail, (makefile-based or other) configuration is not correct */
+#ifndef NDEBUG
 	assert(sizeof(uint8)==1);
 	assert(sizeof(int8)==1);
 	assert(sizeof(uint16)==2);
@@ -112,6 +113,7 @@ TIFFClientOpen(
 		assert(n.a16==1);
 		#endif
 	}
+#endif /* !NDEBUG */
 
 	m = _TIFFgetMode(mode, module);
 	if (m == -1)
