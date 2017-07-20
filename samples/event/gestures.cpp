@@ -1,4 +1,5 @@
 #include "gestures.h"
+#include "wx/dcgraph.h"
 
 MyGestureFrame::MyGestureFrame()
     : wxFrame(NULL, wxID_ANY, wxT("Multi-touch Gestures"), wxDefaultPosition, wxSize(800, 600))
@@ -60,7 +61,12 @@ void MyGestureFrame::OnGesture(wxGestureEvent& event)
 
 void MyGesturePanel::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxPaintDC dc(this);
+    wxPaintDC paintDC(this);
+
+    wxGCDC dc( paintDC );
+
+    dc.Clear();
+
     dc.SetTransformMatrix(m_affineMatrix);
     dc.DrawBitmap(m_bitmap, wxRound(m_translateDistance.m_x), wxRound(m_translateDistance.m_y));
 }
