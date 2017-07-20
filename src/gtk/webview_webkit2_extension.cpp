@@ -47,6 +47,7 @@ static const char introspection_xml[] =
 
 class wxWebViewWebKitExtension;
 
+extern "C" {
 static gboolean
 wxgtk_webview_authorize_authenticated_peer_cb(GDBusAuthObserver *observer,
                                               GIOStream *stream,
@@ -55,7 +56,8 @@ wxgtk_webview_authorize_authenticated_peer_cb(GDBusAuthObserver *observer,
 static void
 wxgtk_webview_dbus_connection_created_cb(GObject *source_object,
                                          GAsyncResult *result,
-                                         wxWebViewWebKitExtension *extension);
+                                         void* user_data);
+} // extern "C"
 
 static wxWebViewWebKitExtension *gs_extension = NULL;
 
@@ -93,7 +95,7 @@ wxWebViewWebKitExtension::wxWebViewWebKitExtension(WebKitWebExtension *extension
                                       G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
                                       observer,
                                       NULL,
-                                      (GAsyncReadyCallback)wxgtk_webview_dbus_connection_created_cb,
+                                      wxgtk_webview_dbus_connection_created_cb,
                                       this);
     g_object_unref(observer);
 }
@@ -299,6 +301,7 @@ void wxWebViewWebKitExtension::SetDBusConnection(GDBusConnection *dbusConnection
     m_dbusConnection = dbusConnection;
 }
 
+extern "C" {
 static void
 wxgtk_webview_handle_method_call(GDBusConnection *connection,
                                  const char *sender,
@@ -345,6 +348,7 @@ wxgtk_webview_handle_method_call(GDBusConnection *connection,
         extension->HasSelection(parameters, invocation);
     }
 }
+} // extern "C"
 
 static const GDBusInterfaceVTable interface_vtable = {
     wxgtk_webview_handle_method_call,
@@ -352,6 +356,7 @@ static const GDBusInterfaceVTable interface_vtable = {
     NULL
 };
 
+static
 gboolean
 wxgtk_webview_dbus_peer_is_authorized(GCredentials *peer_credentials)
 {
@@ -371,6 +376,7 @@ wxgtk_webview_dbus_peer_is_authorized(GCredentials *peer_credentials)
     return FALSE;
 }
 
+extern "C" {
 static gboolean
 wxgtk_webview_authorize_authenticated_peer_cb(GDBusAuthObserver *observer,
                                               GIOStream *stream,
@@ -383,7 +389,7 @@ wxgtk_webview_authorize_authenticated_peer_cb(GDBusAuthObserver *observer,
 static void
 wxgtk_webview_dbus_connection_created_cb(GObject *source_object,
                                          GAsyncResult *result,
-                                         wxWebViewWebKitExtension *extension)
+                                         void* user_data)
 {
     static GDBusNodeInfo *introspection_data =
         g_dbus_node_info_new_for_xml(introspection_xml, NULL);
@@ -397,6 +403,8 @@ wxgtk_webview_dbus_connection_created_cb(GObject *source_object,
         g_error_free(error);
         return;
     }
+
+    wxWebViewWebKitExtension* extension = static_cast<wxWebViewWebKitExtension*>(user_data);
 
     guint registration_id =
         g_dbus_connection_register_object(connection,
@@ -417,7 +425,7 @@ wxgtk_webview_dbus_connection_created_cb(GObject *source_object,
     extension->SetDBusConnection(connection);
 }
 
-extern "C" WXEXPORT void
+WXEXPORT void
 webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_extension,
                                                 GVariant           *user_data)
 {
@@ -428,3 +436,4 @@ webkit_web_extension_initialize_with_user_data (WebKitWebExtension *webkit_exten
     gs_extension = new wxWebViewWebKitExtension(webkit_extension,
                                                 server_address);
 }
+} // extern "C"
