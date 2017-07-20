@@ -303,9 +303,9 @@ void wxWebViewWebKitExtension::SetDBusConnection(GDBusConnection *dbusConnection
 
 extern "C" {
 static void
-wxgtk_webview_handle_method_call(GDBusConnection *connection,
-                                 const char *sender,
-                                 const char *object_path,
+wxgtk_webview_handle_method_call(GDBusConnection*,
+                                 const char* /* sender */,
+                                 const char* /* object_path */,
                                  const char *interface_name,
                                  const char *method_name,
                                  GVariant *parameters,
@@ -378,16 +378,16 @@ wxgtk_webview_dbus_peer_is_authorized(GCredentials *peer_credentials)
 
 extern "C" {
 static gboolean
-wxgtk_webview_authorize_authenticated_peer_cb(GDBusAuthObserver *observer,
-                                              GIOStream *stream,
+wxgtk_webview_authorize_authenticated_peer_cb(GDBusAuthObserver*,
+                                              GIOStream*,
                                               GCredentials *credentials,
-                                              wxWebViewWebKitExtension *extension)
+                                              wxWebViewWebKitExtension*)
 {
     return wxgtk_webview_dbus_peer_is_authorized(credentials);
 }
 
 static void
-wxgtk_webview_dbus_connection_created_cb(GObject *source_object,
+wxgtk_webview_dbus_connection_created_cb(GObject*,
                                          GAsyncResult *result,
                                          void* user_data)
 {
