@@ -6,10 +6,10 @@
 
 #ifdef _WIN32
 #include "winconfig.h"
-#else
-#ifdef HAVE_EXPAT_CONFIG_H
+#elif defined( __APPLE__ ) && !defined(HAVE_EXPAT_CONFIG_H)
+#include "macconfig.h"
+#elif defined(HAVE_EXPAT_CONFIG_H)
 #include <expat_config.h>
-#endif
 #endif /* ndef _WIN32 */
 
 #include "expat_external.h"

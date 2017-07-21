@@ -27,6 +27,8 @@
 
 #ifdef _WIN32
 #include "winconfig.h"
+#elif defined( __APPLE__ ) && !defined(HAVE_EXPAT_CONFIG_H)
+#include "macconfig.h"
 #elif defined(HAVE_EXPAT_CONFIG_H)
 #include <expat_config.h>
 #endif /* ndef _WIN32 */
