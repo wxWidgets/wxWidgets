@@ -63,7 +63,7 @@ void MyGesturePanel::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC paintDC(this);
 
-    wxGCDC dc( paintDC );
+    wxGCDC dc(paintDC);
 
     dc.Clear();
 
@@ -78,7 +78,7 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
         wxLogMessage("Pan gesture started\n");
     }
 
-    wxLogMessage(wxT("Pan gesture performed with deltaX = %d and deltaY = %d, with current position (%d,%d)\n"),
+    wxLogMessage("Pan gesture performed with deltaX = %d and deltaY = %d, with current position (%d,%d)\n",
         event.GetDeltaX(), event.GetDeltaY(), event.GetPosition().x, event.GetPosition().y);
 
     // Transform the distance using the tranpose of the matrix,
@@ -107,7 +107,7 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
         wxLogMessage("Zoom gesture started\n");
     }
 
-    wxLogMessage(wxT("Zoom gesture performed with zoom center at (%d, %d) and zoom Delta = %f\n"),
+    wxLogMessage("Zoom gesture performed with zoom center at (%d, %d) and zoom Delta = %f\n",
         event.GetPosition().x, event.GetPosition().y, event.GetZoomDelta());
 
     const wxPoint& zoomCenter = event.GetPosition();
@@ -134,7 +134,7 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
         wxLogMessage("Rotate gesture started\n");
     }
 
-    wxLogMessage(wxT("Rotate gesture performed with rotation center at (%d, %d) and rotation angle = %f\n"),
+    wxLogMessage("Rotate gesture performed with rotation center at (%d, %d) and rotation angle = %f\n",
         event.GetPosition().x, event.GetPosition().y, event.GetAngleDelta());
 
     const wxPoint& rotationCenter = event.GetPosition();
