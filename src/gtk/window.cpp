@@ -2879,7 +2879,7 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
     wxPanGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (x, y));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
@@ -2906,7 +2906,7 @@ vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequenc
     wxPanGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (x, y));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
@@ -2934,7 +2934,7 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
     wxPanGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
     // This is the difference between this and the last pan gesture event in the current sequence
     int delta = wxRound(offset - gs_lastOffset);
@@ -2987,7 +2987,7 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
     wxZoomGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
     gdouble zoomDelta = scale - gs_lastScale + 1.0;
 
@@ -3013,7 +3013,7 @@ zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxW
     wxZoomGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureStart();
 
     win->GTKProcessEvent(event);
@@ -3032,7 +3032,7 @@ zoom_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWin
     wxZoomGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
@@ -3053,7 +3053,7 @@ rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, w
     wxRotateGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureStart();
 
     win->GTKProcessEvent(event);
@@ -3072,7 +3072,7 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble angle_delta, gdouble angle,
     wxRotateGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
     // Angle provided by GTK is the cumulative angle since the "begin" signal was emitted.
     // We need the change in angle since the last event.
@@ -3097,7 +3097,7 @@ rotate_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxW
     wxRotateGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint (wxRound(x), wxRound(y)));
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
