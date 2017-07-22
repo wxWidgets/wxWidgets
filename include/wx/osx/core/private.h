@@ -685,7 +685,7 @@ public :
     virtual int GetNumberOfLines() const ;
     virtual long XYToPosition(long x, long y) const;
     virtual bool PositionToXY(long pos, long *x, long *y) const ;
-    virtual void ShowPosition(long WXUNUSED(pos)) ;
+    virtual void ShowPosition(long pos) ;
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
     virtual void CheckSpelling(bool WXUNUSED(check)) { }

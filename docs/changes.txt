@@ -221,6 +221,7 @@ wxOSX:
 - Fix handling CTM in wxGraphicsContext::SeTransform and GetTransform().
 - Allow turning on/off opacity selector in wxColourDialog.
 - Implement wxTextCtrl::PositionToXY() and XYToPosition().
+- Implement wxTextCtrl::ShowPosition().
 
 Unix:
 

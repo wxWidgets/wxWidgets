@@ -933,6 +933,15 @@ long wxNSTextViewControl::XYToPosition(long x, long y) const
     return lineRng.location + x;
 }
 
+void wxNSTextViewControl::ShowPosition(long pos)
+{
+    if ( !m_textView )
+        return;
+
+    wxCHECK_RET( pos >= 0, wxS("Invalid character position") );
+    [m_textView scrollRangeToVisible:NSMakeRange(pos, 1)];
+}
+
 void wxNSTextViewControl::WriteText(const wxString& str)
 {
     wxString st = str;
@@ -1244,6 +1253,16 @@ long wxNSTextFieldControl::XYToPosition(long x, long y) const
         return -1;
 
     return x;
+}
+
+void wxNSTextFieldControl::ShowPosition(long pos)
+{
+    wxCHECK_RET( pos >= 0, wxS("Invalid character position") );
+    NSText* editor = [m_textField currentEditor];
+    if ( editor )
+    {
+        [editor scrollRangeToVisible:NSMakeRange(pos, 1)];
+    }
 }
 
 void wxNSTextFieldControl::WriteText(const wxString& str)

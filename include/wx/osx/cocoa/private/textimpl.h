@@ -64,6 +64,7 @@ public :
     virtual void SetSelection( long from , long to );
     virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE;
     virtual long XYToPosition(long x, long y) const wxOVERRIDE;
+    virtual void ShowPosition(long pos) wxOVERRIDE;
     virtual void WriteText(const wxString& str) ;
     virtual bool HasOwnContextMenu() const { return true; }
     virtual bool SetHint(const wxString& hint);
@@ -106,6 +107,7 @@ public:
     virtual void SetSelection( long from , long to );
     virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE;
     virtual long XYToPosition(long x, long y) const wxOVERRIDE;
+    virtual void ShowPosition(long pos) wxOVERRIDE;
     virtual void WriteText(const wxString& str) ;
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
 
