@@ -873,6 +873,66 @@ void wxNSTextViewControl::SetSelection( long from , long to )
     [m_textView scrollRangeToVisible:selrange];
 }
 
+bool wxNSTextViewControl::PositionToXY(long pos, long *x, long *y) const
+{
+    wxCHECK( m_textView, false );
+    wxCHECK_MSG( pos >= 0, false, wxS("Invalid character position") );
+
+    NSString* txt = [m_textView string];
+    if ( pos > [txt length] )
+        return false;
+
+    // Last valid position is past the last character
+    // of the text control, so add one virtual character
+    // at the end to make calculations easier.
+    txt = [txt stringByAppendingString:@"x"];
+
+    long nline = 0;
+    NSRange lineRng;
+    for ( long i = 0; i <= pos; nline++ )
+    {
+        lineRng = [txt lineRangeForRange:NSMakeRange(i, 0)];
+        i = NSMaxRange(lineRng);
+    }
+
+    if ( y )
+        *y = nline-1;
+
+    if ( x )
+        *x = pos - lineRng.location;
+
+    return true;
+}
+
+long wxNSTextViewControl::XYToPosition(long x, long y) const
+{
+    wxCHECK( m_textView, -1 );
+    wxCHECK_MSG( x >= 0 && y >= 0, -1, wxS("Invalid line/column number") );
+
+    NSString* txt = [m_textView string];
+    const long txtLen = [txt length];
+    long nline = 0;
+    NSRange lineRng;
+    for ( long i = 0; i < txtLen && nline <= y; nline++ )
+    {
+        lineRng = [txt lineRangeForRange:NSMakeRange(i, 0)];
+        i = NSMaxRange(lineRng);
+    }
+    nline--;
+
+    // Return error if contol contains
+    // less lines than given y position.
+    if ( nline != y )
+        return  -1;
+
+    // Return error if given x position
+    // is past the line.
+    if ( x >= lineRng.length )
+        return  -1;
+
+    return lineRng.location + x;
+}
+
 void wxNSTextViewControl::WriteText(const wxString& str)
 {
     wxString st = str;
@@ -1158,6 +1218,32 @@ void wxNSTextFieldControl::SetSelection( long from , long to )
     // of the selection, so make sure we copy this
     m_selStart = from;
     m_selEnd = to;
+}
+
+bool wxNSTextFieldControl::PositionToXY(long pos, long *x, long *y) const
+{
+    wxCHECK_MSG( pos >= 0, false, wxS("Invalid character position") );
+
+    if ( pos > [[m_textField stringValue] length] )
+        return false;
+
+    if ( y )
+        *y = 0;
+
+    if ( x )
+        *x = pos;
+
+    return true;
+}
+
+long wxNSTextFieldControl::XYToPosition(long x, long y) const
+{
+    wxCHECK_MSG( x >= 0 && y >= 0, -1, wxS("Invalid line/column number") );
+
+    if ( y != 0 || x >= [[m_textField stringValue] length] )
+        return -1;
+
+    return x;
 }
 
 void wxNSTextFieldControl::WriteText(const wxString& str)
