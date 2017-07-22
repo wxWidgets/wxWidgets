@@ -2,6 +2,7 @@
  * jmemmgr.c
  *
  * Copyright (C) 1991-1997, Thomas G. Lane.
+ * Modified 2011-2012 by Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -156,9 +157,9 @@ struct jvirt_sarray_control {
   JDIMENSION rowsperchunk;	/* allocation chunk size in mem_buffer */
   JDIMENSION cur_start_row;	/* first logical row # in the buffer */
   JDIMENSION first_undef_row;	/* row # of first uninitialized row */
-  wxjpeg_boolean pre_zero;		/* pre-zero mode requested? */
-  wxjpeg_boolean dirty;		/* do current buffer contents need written? */
-  wxjpeg_boolean b_s_open;		/* is backing-store data valid? */
+  boolean pre_zero;		/* pre-zero mode requested? */
+  boolean dirty;		/* do current buffer contents need written? */
+  boolean b_s_open;		/* is backing-store data valid? */
   jvirt_sarray_ptr next;	/* link to next virtual sarray control block */
   backing_store_info b_s_info;	/* System-dependent control info */
 };
@@ -172,9 +173,9 @@ struct jvirt_barray_control {
   JDIMENSION rowsperchunk;	/* allocation chunk size in mem_buffer */
   JDIMENSION cur_start_row;	/* first logical row # in the buffer */
   JDIMENSION first_undef_row;	/* row # of first uninitialized row */
-  wxjpeg_boolean pre_zero;		/* pre-zero mode requested? */
-  wxjpeg_boolean dirty;		/* do current buffer contents need written? */
-  wxjpeg_boolean b_s_open;		/* is backing-store data valid? */
+  boolean pre_zero;		/* pre-zero mode requested? */
+  boolean dirty;		/* do current buffer contents need written? */
+  boolean b_s_open;		/* is backing-store data valid? */
   jvirt_barray_ptr next;	/* link to next virtual barray control block */
   backing_store_info b_s_info;	/* System-dependent control info */
 };
@@ -213,7 +214,7 @@ print_mem_stats (j_common_ptr cinfo, int pool_id)
 #endif /* MEM_STATS */
 
 
-LOCAL(void)
+LOCAL(noreturn_t)
 out_of_memory (j_common_ptr cinfo, int which)
 /* Report an out-of-memory error and stop execution */
 /* If we compiled MEM_STATS support, report alloc requests before dying */
@@ -520,7 +521,7 @@ alloc_barray (j_common_ptr cinfo, int pool_id,
 
 
 METHODDEF(jvirt_sarray_ptr)
-request_virt_sarray (j_common_ptr cinfo, int pool_id, wxjpeg_boolean pre_zero,
+request_virt_sarray (j_common_ptr cinfo, int pool_id, boolean pre_zero,
 		     JDIMENSION samplesperrow, JDIMENSION numrows,
 		     JDIMENSION maxaccess)
 /* Request a virtual 2-D sample array */
@@ -550,7 +551,7 @@ request_virt_sarray (j_common_ptr cinfo, int pool_id, wxjpeg_boolean pre_zero,
 
 
 METHODDEF(jvirt_barray_ptr)
-request_virt_barray (j_common_ptr cinfo, int pool_id, wxjpeg_boolean pre_zero,
+request_virt_barray (j_common_ptr cinfo, int pool_id, boolean pre_zero,
 		     JDIMENSION blocksperrow, JDIMENSION numrows,
 		     JDIMENSION maxaccess)
 /* Request a virtual 2-D coefficient-block array */
@@ -687,7 +688,7 @@ realize_virt_arrays (j_common_ptr cinfo)
 
 
 LOCAL(void)
-do_sarray_io (j_common_ptr cinfo, jvirt_sarray_ptr ptr, wxjpeg_boolean writing)
+do_sarray_io (j_common_ptr cinfo, jvirt_sarray_ptr ptr, boolean writing)
 /* Do backing store read or write of a virtual sample array */
 {
   long bytesperrow, file_offset, byte_count, rows, thisrow, i;
@@ -720,7 +721,7 @@ do_sarray_io (j_common_ptr cinfo, jvirt_sarray_ptr ptr, wxjpeg_boolean writing)
 
 
 LOCAL(void)
-do_barray_io (j_common_ptr cinfo, jvirt_barray_ptr ptr, wxjpeg_boolean writing)
+do_barray_io (j_common_ptr cinfo, jvirt_barray_ptr ptr, boolean writing)
 /* Do backing store read or write of a virtual coefficient-block array */
 {
   long bytesperrow, file_offset, byte_count, rows, thisrow, i;
@@ -755,7 +756,7 @@ do_barray_io (j_common_ptr cinfo, jvirt_barray_ptr ptr, wxjpeg_boolean writing)
 METHODDEF(JSAMPARRAY)
 access_virt_sarray (j_common_ptr cinfo, jvirt_sarray_ptr ptr,
 		    JDIMENSION start_row, JDIMENSION num_rows,
-		    wxjpeg_boolean writable)
+		    boolean writable)
 /* Access the part of a virtual sample array starting at start_row */
 /* and extending for num_rows rows.  writable is true if  */
 /* caller intends to modify the accessed area. */
@@ -821,7 +822,7 @@ access_virt_sarray (j_common_ptr cinfo, jvirt_sarray_ptr ptr,
       undef_row -= ptr->cur_start_row; /* make indexes relative to buffer */
       end_row -= ptr->cur_start_row;
       while (undef_row < end_row) {
-	jzero_far((void FAR *) ptr->mem_buffer[undef_row], bytesperrow);
+	FMEMZERO((void FAR *) ptr->mem_buffer[undef_row], bytesperrow);
 	undef_row++;
       }
     } else {
@@ -840,7 +841,7 @@ access_virt_sarray (j_common_ptr cinfo, jvirt_sarray_ptr ptr,
 METHODDEF(JBLOCKARRAY)
 access_virt_barray (j_common_ptr cinfo, jvirt_barray_ptr ptr,
 		    JDIMENSION start_row, JDIMENSION num_rows,
-		    wxjpeg_boolean writable)
+		    boolean writable)
 /* Access the part of a virtual block array starting at start_row */
 /* and extending for num_rows rows.  writable is true if  */
 /* caller intends to modify the accessed area. */
@@ -906,7 +907,7 @@ access_virt_barray (j_common_ptr cinfo, jvirt_barray_ptr ptr,
       undef_row -= ptr->cur_start_row; /* make indexes relative to buffer */
       end_row -= ptr->cur_start_row;
       while (undef_row < end_row) {
-	jzero_far((void FAR *) ptr->mem_buffer[undef_row], bytesperrow);
+	FMEMZERO((void FAR *) ptr->mem_buffer[undef_row], bytesperrow);
 	undef_row++;
       }
     } else {

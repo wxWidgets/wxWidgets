@@ -2,6 +2,7 @@
  * jcapistd.c
  *
  * Copyright (C) 1994-1996, Thomas G. Lane.
+ * Modified 2013 by Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -35,7 +36,7 @@
  */
 
 GLOBAL(void)
-jpeg_start_compress (j_compress_ptr cinfo, wxjpeg_boolean write_all_tables)
+jpeg_start_compress (j_compress_ptr cinfo, boolean write_all_tables)
 {
   if (cinfo->global_state != CSTATE_START)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
@@ -145,7 +146,7 @@ jpeg_write_raw_data (j_compress_ptr cinfo, JSAMPIMAGE data,
     (*cinfo->master->pass_startup) (cinfo);
 
   /* Verify that at least one iMCU row has been passed. */
-  lines_per_iMCU_row = cinfo->max_v_samp_factor * DCTSIZE;
+  lines_per_iMCU_row = cinfo->max_v_samp_factor * cinfo->min_DCT_v_scaled_size;
   if (num_lines < lines_per_iMCU_row)
     ERREXIT(cinfo, JERR_BUFFER_SIZE);
 

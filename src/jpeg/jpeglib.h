@@ -2,6 +2,7 @@
  * jpeglib.h
  *
  * Copyright (C) 1991-1998, Thomas G. Lane.
+ * Modified 2002-2015 by Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -26,19 +27,27 @@
 #include "jmorecfg.h"		/* seldom changed options */
 
 
-/* Version ID for the JPEG library.
- * Might be useful for tests like "#if JPEG_LIB_VERSION >= 60".
+#ifdef __cplusplus
+#ifndef DONT_USE_EXTERN_C
+extern "C" {
+#endif
+#endif
+
+/* Version IDs for the JPEG library.
+ * Might be useful for tests like "#if JPEG_LIB_VERSION >= 90".
  */
 
-#define JPEG_LIB_VERSION  62	/* Version 6b */
+#define JPEG_LIB_VERSION        90	/* Compatibility version 9.0 */
+#define JPEG_LIB_VERSION_MAJOR  9
+#define JPEG_LIB_VERSION_MINOR  2
 
 
 /* Various constants determining the sizes of things.
- * All of these are specified by the JPEG standard, so don't change them
- * if you want to be compatible.
+ * All of these are specified by the JPEG standard,
+ * so don't change them if you want to be compatible.
  */
 
-#define DCTSIZE		    8	/* The basic DCT block is 8x8 samples */
+#define DCTSIZE		    8	/* The basic DCT block is 8x8 coefficients */
 #define DCTSIZE2	    64	/* DCTSIZE squared; # of elements in a block */
 #define NUM_QUANT_TBLS      4	/* Quantization tables are numbered 0..3 */
 #define NUM_HUFF_TBLS       4	/* Huffman tables are numbered 0..3 */
@@ -91,7 +100,7 @@ typedef struct {
    * You could suppress output of a table by setting this to TRUE.
    * (See jpeg_suppress_tables for an example.)
    */
-  wxjpeg_boolean sent_table;		/* TRUE when table has been output */
+  boolean sent_table;		/* TRUE when table has been output */
 } JQUANT_TBL;
 
 
@@ -107,7 +116,7 @@ typedef struct {
    * You could suppress output of a table by setting this to TRUE.
    * (See jpeg_suppress_tables for an example.)
    */
-  wxjpeg_boolean sent_table;		/* TRUE when table has been output */
+  boolean sent_table;		/* TRUE when table has been output */
 } JHUFF_TBL;
 
 
@@ -128,9 +137,9 @@ typedef struct {
   /* The decompressor output side may not use these variables. */
   int dc_tbl_no;		/* DC entropy table selector (0..3) */
   int ac_tbl_no;		/* AC entropy table selector (0..3) */
-
+  
   /* Remaining fields should be treated as private by applications. */
-
+  
   /* These values are computed during compression or decompression startup: */
   /* Component's size in DCT blocks.
    * Any dummy blocks added to complete an MCU are not counted; therefore
@@ -138,33 +147,38 @@ typedef struct {
    */
   JDIMENSION width_in_blocks;
   JDIMENSION height_in_blocks;
-  /* Size of a DCT block in samples.  Always DCTSIZE for compression.
-   * For decompression this is the size of the output from one DCT block,
-   * reflecting any scaling we choose to apply during the IDCT step.
-   * Values of 1,2,4,8 are likely to be supported.  Note that different
-   * components may receive different IDCT scalings.
+  /* Size of a DCT block in samples,
+   * reflecting any scaling we choose to apply during the DCT step.
+   * Values from 1 to 16 are supported.
+   * Note that different components may receive different DCT scalings.
    */
-  int DCT_scaled_size;
+  int DCT_h_scaled_size;
+  int DCT_v_scaled_size;
   /* The downsampled dimensions are the component's actual, unpadded number
-   * of samples at the main buffer (preprocessing/compression interface), thus
-   * downsampled_width = ceil(image_width * Hi/Hmax)
-   * and similarly for height.  For decompression, IDCT scaling is included, so
-   * downsampled_width = ceil(image_width * Hi/Hmax * DCT_scaled_size/DCTSIZE)
+   * of samples at the main buffer (preprocessing/compression interface);
+   * DCT scaling is included, so
+   * downsampled_width =
+   *   ceil(image_width * Hi/Hmax * DCT_h_scaled_size/block_size)
+   * and similarly for height.
    */
   JDIMENSION downsampled_width;	 /* actual width in samples */
   JDIMENSION downsampled_height; /* actual height in samples */
-  /* This flag is used only for decompression.  In cases where some of the
-   * components will be ignored (eg grayscale output from YCbCr image),
-   * we can skip most computations for the unused components.
+  /* For decompression, in cases where some of the components will be
+   * ignored (eg grayscale output from YCbCr image), we can skip most
+   * computations for the unused components.
+   * For compression, some of the components will need further quantization
+   * scale by factor of 2 after DCT (eg BG_YCC output from normal RGB input).
+   * The field is first set TRUE for decompression, FALSE for compression
+   * in initial_setup, and then adapted in color conversion setup.
    */
-  wxjpeg_boolean component_needed;	/* do we need the value of this component? */
+  boolean component_needed;
 
   /* These values are computed before starting a scan of the component. */
   /* The decompressor output side may not use these variables. */
   int MCU_width;		/* number of blocks per MCU, horizontally */
   int MCU_height;		/* number of blocks per MCU, vertically */
   int MCU_blocks;		/* MCU_width * MCU_height */
-  int MCU_sample_width;		/* MCU width in samples, MCU_width*DCT_scaled_size */
+  int MCU_sample_width;	/* MCU width in samples: MCU_width * DCT_h_scaled_size */
   int last_col_width;		/* # of non-dummy blocks across in last MCU */
   int last_row_height;		/* # of non-dummy blocks down in last MCU */
 
@@ -206,11 +220,20 @@ struct jpeg_marker_struct {
 typedef enum {
 	JCS_UNKNOWN,		/* error/unspecified */
 	JCS_GRAYSCALE,		/* monochrome */
-	JCS_RGB,		/* red/green/blue */
-	JCS_YCbCr,		/* Y/Cb/Cr (also known as YUV) */
+	JCS_RGB,		/* red/green/blue, standard RGB (sRGB) */
+	JCS_YCbCr,		/* Y/Cb/Cr (also known as YUV), standard YCC */
 	JCS_CMYK,		/* C/M/Y/K */
-	JCS_YCCK		/* Y/Cb/Cr/K */
+	JCS_YCCK,		/* Y/Cb/Cr/K */
+	JCS_BG_RGB,		/* big gamut red/green/blue, bg-sRGB */
+	JCS_BG_YCC		/* big gamut Y/Cb/Cr, bg-sYCC */
 } J_COLOR_SPACE;
+
+/* Supported color transforms. */
+
+typedef enum {
+	JCT_NONE           = 0,
+	JCT_SUBTRACT_GREEN = 1
+} J_COLOR_TRANSFORM;
 
 /* DCT/IDCT algorithm options. */
 
@@ -243,7 +266,7 @@ typedef enum {
   struct jpeg_memory_mgr * mem;	/* Memory manager module */\
   struct jpeg_progress_mgr * progress; /* Progress monitor, or NULL if none */\
   void * client_data;		/* Available for use by application */\
-  wxjpeg_boolean is_decompressor;	/* So common code can tell which is which */\
+  boolean is_decompressor;	/* So common code can tell which is which */\
   int global_state		/* For checking call sequence validity */
 
 /* Routines that are to be used by both halves of the library are declared
@@ -291,6 +314,17 @@ struct jpeg_compress_struct {
    * helper routines to simplify changing parameters.
    */
 
+  unsigned int scale_num, scale_denom; /* fraction by which to scale image */
+
+  JDIMENSION jpeg_width;	/* scaled JPEG image width */
+  JDIMENSION jpeg_height;	/* scaled JPEG image height */
+  /* Dimensions of actual JPEG image that will be written to file,
+   * derived from input dimensions by scaling factors above.
+   * These fields are computed by jpeg_start_compress().
+   * You can also use jpeg_calc_jpeg_dimensions() to determine these values
+   * in advance of calling jpeg_start_compress().
+   */
+
   int data_precision;		/* bits of precision in image data */
 
   int num_components;		/* # of color components in JPEG image */
@@ -300,7 +334,10 @@ struct jpeg_compress_struct {
   /* comp_info[i] describes component that appears i'th in SOF */
 
   JQUANT_TBL * quant_tbl_ptrs[NUM_QUANT_TBLS];
-  /* ptrs to coefficient quantization tables, or NULL if not defined */
+  int q_scale_factor[NUM_QUANT_TBLS];
+  /* ptrs to coefficient quantization tables, or NULL if not defined,
+   * and corresponding scale factors (percentage, initialized 100).
+   */
 
   JHUFF_TBL * dc_huff_tbl_ptrs[NUM_HUFF_TBLS];
   JHUFF_TBL * ac_huff_tbl_ptrs[NUM_HUFF_TBLS];
@@ -317,10 +354,11 @@ struct jpeg_compress_struct {
    * set num_scans and scan_info to point to an array of scan definitions.
    */
 
-  wxjpeg_boolean raw_data_in;		/* TRUE=caller supplies downsampled data */
-  wxjpeg_boolean arith_code;		/* TRUE=arithmetic coding, FALSE=Huffman */
-  wxjpeg_boolean optimize_coding;	/* TRUE=optimize entropy encoding parms */
-  wxjpeg_boolean CCIR601_sampling;	/* TRUE=first samples are cosited */
+  boolean raw_data_in;		/* TRUE=caller supplies downsampled data */
+  boolean arith_code;		/* TRUE=arithmetic coding, FALSE=Huffman */
+  boolean optimize_coding;	/* TRUE=optimize entropy encoding parms */
+  boolean CCIR601_sampling;	/* TRUE=first samples are cosited */
+  boolean do_fancy_downsampling; /* TRUE=apply fancy downsampling */
   int smoothing_factor;		/* 1..100, or 0 for no input smoothing */
   J_DCT_METHOD dct_method;	/* DCT algorithm selector */
 
@@ -334,7 +372,7 @@ struct jpeg_compress_struct {
 
   /* Parameters controlling emission of special markers. */
 
-  wxjpeg_boolean write_JFIF_header;	/* should a JFIF marker be written? */
+  boolean write_JFIF_header;	/* should a JFIF marker be written? */
   UINT8 JFIF_major_version;	/* What to write for the JFIF version number */
   UINT8 JFIF_minor_version;
   /* These three values are not used by the JPEG code, merely copied */
@@ -344,7 +382,10 @@ struct jpeg_compress_struct {
   UINT8 density_unit;		/* JFIF code for pixel size units */
   UINT16 X_density;		/* Horizontal pixel density */
   UINT16 Y_density;		/* Vertical pixel density */
-  wxjpeg_boolean write_Adobe_marker;	/* should an Adobe marker be written? */
+  boolean write_Adobe_marker;	/* should an Adobe marker be written? */
+
+  J_COLOR_TRANSFORM color_transform;
+  /* Color transform identifier, writes LSE marker if nonzero */
 
   /* State variable: index of next scanline to be written to
    * jpeg_write_scanlines().  Application may use this to control its
@@ -360,9 +401,12 @@ struct jpeg_compress_struct {
   /*
    * These fields are computed during compression startup
    */
-  wxjpeg_boolean progressive_mode;	/* TRUE if scan script uses progressive mode */
+  boolean progressive_mode;	/* TRUE if scan script uses progressive mode */
   int max_h_samp_factor;	/* largest h_samp_factor */
   int max_v_samp_factor;	/* largest v_samp_factor */
+
+  int min_DCT_h_scaled_size;	/* smallest DCT_h_scaled_size of any component */
+  int min_DCT_v_scaled_size;	/* smallest DCT_v_scaled_size of any component */
 
   JDIMENSION total_iMCU_rows;	/* # of iMCU rows to be input to coef ctlr */
   /* The coefficient controller receives data in units of MCU rows as defined
@@ -370,7 +414,7 @@ struct jpeg_compress_struct {
    * There are v_samp_factor * DCTSIZE sample rows of each component in an
    * "iMCU" (interleaved MCU) row.
    */
-
+  
   /*
    * These fields are valid during any one scan.
    * They describe the components and MCUs actually appearing in the scan.
@@ -378,16 +422,20 @@ struct jpeg_compress_struct {
   int comps_in_scan;		/* # of JPEG components in this scan */
   jpeg_component_info * cur_comp_info[MAX_COMPS_IN_SCAN];
   /* *cur_comp_info[i] describes component that appears i'th in SOS */
-
+  
   JDIMENSION MCUs_per_row;	/* # of MCUs across the image */
   JDIMENSION MCU_rows_in_scan;	/* # of MCU rows in the image */
-
+  
   int blocks_in_MCU;		/* # of DCT blocks per MCU */
   int MCU_membership[C_MAX_BLOCKS_IN_MCU];
   /* MCU_membership[i] is index in cur_comp_info of component owning */
   /* i'th block in an MCU */
 
   int Ss, Se, Ah, Al;		/* progressive JPEG parameters for scan */
+
+  int block_size;		/* the basic DCT block size: 1..16 */
+  const int * natural_order;	/* natural-order position array */
+  int lim_Se;			/* min( Se, DCTSIZE2-1 ) */
 
   /*
    * Links to compression subobjects (methods and private variables of modules)
@@ -433,22 +481,22 @@ struct jpeg_decompress_struct {
 
   double output_gamma;		/* image gamma wanted in output */
 
-  wxjpeg_boolean buffered_image;	/* TRUE=multiple output passes */
-  wxjpeg_boolean raw_data_out;		/* TRUE=downsampled data wanted */
+  boolean buffered_image;	/* TRUE=multiple output passes */
+  boolean raw_data_out;		/* TRUE=downsampled data wanted */
 
   J_DCT_METHOD dct_method;	/* IDCT algorithm selector */
-  wxjpeg_boolean do_fancy_upsampling;	/* TRUE=apply fancy upsampling */
-  wxjpeg_boolean do_block_smoothing;	/* TRUE=apply interblock smoothing */
+  boolean do_fancy_upsampling;	/* TRUE=apply fancy upsampling */
+  boolean do_block_smoothing;	/* TRUE=apply interblock smoothing */
 
-  wxjpeg_boolean quantize_colors;	/* TRUE=colormapped output wanted */
+  boolean quantize_colors;	/* TRUE=colormapped output wanted */
   /* the following are ignored if not quantize_colors: */
   J_DITHER_MODE dither_mode;	/* type of color dithering to use */
-  wxjpeg_boolean two_pass_quantize;	/* TRUE=use two-pass color quantization */
+  boolean two_pass_quantize;	/* TRUE=use two-pass color quantization */
   int desired_number_of_colors;	/* max # colors to use in created colormap */
   /* these are significant only in buffered-image mode: */
-  wxjpeg_boolean enable_1pass_quant;	/* enable future use of 1-pass quantizer */
-  wxjpeg_boolean enable_external_quant;/* enable future use of external colormap */
-  wxjpeg_boolean enable_2pass_quant;	/* enable future use of 2-pass quantizer */
+  boolean enable_1pass_quant;	/* enable future use of 1-pass quantizer */
+  boolean enable_external_quant;/* enable future use of external colormap */
+  boolean enable_2pass_quant;	/* enable future use of 2-pass quantizer */
 
   /* Description of actual output image that will be returned to application.
    * These fields are computed by jpeg_start_decompress().
@@ -535,8 +583,9 @@ struct jpeg_decompress_struct {
   jpeg_component_info * comp_info;
   /* comp_info[i] describes component that appears i'th in SOF */
 
-  wxjpeg_boolean progressive_mode;	/* TRUE if SOFn specifies progressive mode */
-  wxjpeg_boolean arith_code;		/* TRUE=arithmetic coding, FALSE=Huffman */
+  boolean is_baseline;		/* TRUE if Baseline SOF0 encountered */
+  boolean progressive_mode;	/* TRUE if SOFn specifies progressive mode */
+  boolean arith_code;		/* TRUE=arithmetic coding, FALSE=Huffman */
 
   UINT8 arith_dc_L[NUM_ARITH_TBLS]; /* L values for DC arith-coding tables */
   UINT8 arith_dc_U[NUM_ARITH_TBLS]; /* U values for DC arith-coding tables */
@@ -547,17 +596,20 @@ struct jpeg_decompress_struct {
   /* These fields record data obtained from optional markers recognized by
    * the JPEG library.
    */
-  wxjpeg_boolean saw_JFIF_marker;	/* TRUE iff a JFIF APP0 marker was found */
+  boolean saw_JFIF_marker;	/* TRUE iff a JFIF APP0 marker was found */
   /* Data copied from JFIF marker; only valid if saw_JFIF_marker is TRUE: */
   UINT8 JFIF_major_version;	/* JFIF version number */
   UINT8 JFIF_minor_version;
   UINT8 density_unit;		/* JFIF code for pixel size units */
   UINT16 X_density;		/* Horizontal pixel density */
   UINT16 Y_density;		/* Vertical pixel density */
-  wxjpeg_boolean saw_Adobe_marker;	/* TRUE iff an Adobe APP14 marker was found */
+  boolean saw_Adobe_marker;	/* TRUE iff an Adobe APP14 marker was found */
   UINT8 Adobe_transform;	/* Color transform code from Adobe marker */
 
-  wxjpeg_boolean CCIR601_sampling;	/* TRUE=first samples are cosited */
+  J_COLOR_TRANSFORM color_transform;
+  /* Color transform identifier derived from LSE marker, otherwise zero */
+
+  boolean CCIR601_sampling;	/* TRUE=first samples are cosited */
 
   /* Aside from the specific data retained from APPn markers known to the
    * library, the uninterpreted contents of any or all APPn and COM markers
@@ -575,7 +627,8 @@ struct jpeg_decompress_struct {
   int max_h_samp_factor;	/* largest h_samp_factor */
   int max_v_samp_factor;	/* largest v_samp_factor */
 
-  int min_DCT_scaled_size;	/* smallest DCT_scaled_size of any component */
+  int min_DCT_h_scaled_size;	/* smallest DCT_h_scaled_size of any component */
+  int min_DCT_v_scaled_size;	/* smallest DCT_v_scaled_size of any component */
 
   JDIMENSION total_iMCU_rows;	/* # of iMCU rows in image */
   /* The coefficient controller's input and output progress is measured in
@@ -583,7 +636,7 @@ struct jpeg_decompress_struct {
    * in fully interleaved JPEG scans, but are used whether the scan is
    * interleaved or not.  We define an iMCU row as v_samp_factor DCT block
    * rows of each component.  Therefore, the IDCT output contains
-   * v_samp_factor*DCT_scaled_size sample rows of a component per iMCU row.
+   * v_samp_factor*DCT_v_scaled_size sample rows of a component per iMCU row.
    */
 
   JSAMPLE * sample_range_limit; /* table for fast range-limiting */
@@ -606,6 +659,12 @@ struct jpeg_decompress_struct {
   /* i'th block in an MCU */
 
   int Ss, Se, Ah, Al;		/* progressive JPEG parameters for scan */
+
+  /* These fields are derived from Se of first SOS marker.
+   */
+  int block_size;		/* the basic DCT block size: 1..16 */
+  const int * natural_order; /* natural-order position array for entropy decode */
+  int lim_Se;			/* min( Se, DCTSIZE2-1 ) for entropy decode */
 
   /* This field is shared between entropy decoder and marker parser.
    * It is either zero or the code of a JPEG marker that has been
@@ -642,7 +701,7 @@ struct jpeg_decompress_struct {
 
 struct jpeg_error_mgr {
   /* Error exit handler: does not return to caller */
-  JMETHOD(void, error_exit, (j_common_ptr cinfo));
+  JMETHOD(noreturn_t, error_exit, (j_common_ptr cinfo));
   /* Conditionally emit a trace or warning message */
   JMETHOD(void, emit_message, (j_common_ptr cinfo, int msg_level));
   /* Routine that actually outputs a trace or error message */
@@ -652,7 +711,7 @@ struct jpeg_error_mgr {
 #define JMSG_LENGTH_MAX  200	/* recommended size of format_message buffer */
   /* Reset error state variables at start of a new image */
   JMETHOD(void, reset_error_mgr, (j_common_ptr cinfo));
-
+  
   /* The message ID code and any parameters are saved here.
    * A message can have one string parameter or up to 8 int parameters.
    */
@@ -662,11 +721,11 @@ struct jpeg_error_mgr {
     int i[8];
     char s[JMSG_STR_PARM_MAX];
   } msg_parm;
-
+  
   /* Standard state variables for error facility */
-
+  
   int trace_level;		/* max msg_level that will be displayed */
-
+  
   /* For recoverable corrupt-data errors, we emit a warning message,
    * but keep going unless emit_message chooses to abort.  emit_message
    * should count warnings in num_warnings.  The surrounding application
@@ -715,7 +774,7 @@ struct jpeg_destination_mgr {
   size_t free_in_buffer;	/* # of byte spaces remaining in buffer */
 
   JMETHOD(void, init_destination, (j_compress_ptr cinfo));
-  JMETHOD(wxjpeg_boolean, empty_output_buffer, (j_compress_ptr cinfo));
+  JMETHOD(boolean, empty_output_buffer, (j_compress_ptr cinfo));
   JMETHOD(void, term_destination, (j_compress_ptr cinfo));
 };
 
@@ -727,9 +786,9 @@ struct jpeg_source_mgr {
   size_t bytes_in_buffer;	/* # of bytes remaining in buffer */
 
   JMETHOD(void, init_source, (j_decompress_ptr cinfo));
-  JMETHOD(wxjpeg_boolean, fill_input_buffer, (j_decompress_ptr cinfo));
+  JMETHOD(boolean, fill_input_buffer, (j_decompress_ptr cinfo));
   JMETHOD(void, skip_input_data, (j_decompress_ptr cinfo, long num_bytes));
-  JMETHOD(wxjpeg_boolean, resync_to_restart, (j_decompress_ptr cinfo, int desired));
+  JMETHOD(boolean, resync_to_restart, (j_decompress_ptr cinfo, int desired));
   JMETHOD(void, term_source, (j_decompress_ptr cinfo));
 };
 
@@ -767,13 +826,13 @@ struct jpeg_memory_mgr {
 				      JDIMENSION numrows));
   JMETHOD(jvirt_sarray_ptr, request_virt_sarray, (j_common_ptr cinfo,
 						  int pool_id,
-						  wxjpeg_boolean pre_zero,
+						  boolean pre_zero,
 						  JDIMENSION samplesperrow,
 						  JDIMENSION numrows,
 						  JDIMENSION maxaccess));
   JMETHOD(jvirt_barray_ptr, request_virt_barray, (j_common_ptr cinfo,
 						  int pool_id,
-						  wxjpeg_boolean pre_zero,
+						  boolean pre_zero,
 						  JDIMENSION blocksperrow,
 						  JDIMENSION numrows,
 						  JDIMENSION maxaccess));
@@ -782,12 +841,12 @@ struct jpeg_memory_mgr {
 					   jvirt_sarray_ptr ptr,
 					   JDIMENSION start_row,
 					   JDIMENSION num_rows,
-					   wxjpeg_boolean writable));
+					   boolean writable));
   JMETHOD(JBLOCKARRAY, access_virt_barray, (j_common_ptr cinfo,
 					    jvirt_barray_ptr ptr,
 					    JDIMENSION start_row,
 					    JDIMENSION num_rows,
-					    wxjpeg_boolean writable));
+					    boolean writable));
   JMETHOD(void, free_pool, (j_common_ptr cinfo, int pool_id));
   JMETHOD(void, self_destruct, (j_common_ptr cinfo));
 
@@ -806,7 +865,7 @@ struct jpeg_memory_mgr {
 /* Routine signature for application-supplied marker processing methods.
  * Need not pass marker code since it is stored in cinfo->unread_marker.
  */
-typedef JMETHOD(wxjpeg_boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
+typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
 
 
 /* Declarations for routines called by application.
@@ -824,7 +883,7 @@ typedef JMETHOD(wxjpeg_boolean, jpeg_marker_parser_method, (j_decompress_ptr cin
 /* Short forms of external names for systems with brain-damaged linkers.
  * We shorten external names to be unique in the first six letters, which
  * is good enough for all known systems.
- * (If your compiler itself needs names to be unique in less than 15
+ * (If your compiler itself needs names to be unique in less than 15 
  * characters, you are out of luck.  Get a better compiler.)
  */
 
@@ -836,11 +895,14 @@ typedef JMETHOD(wxjpeg_boolean, jpeg_marker_parser_method, (j_decompress_ptr cin
 #define jpeg_destroy_decompress	jDestDecompress
 #define jpeg_stdio_dest		jStdDest
 #define jpeg_stdio_src		jStdSrc
+#define jpeg_mem_dest		jMemDest
+#define jpeg_mem_src		jMemSrc
 #define jpeg_set_defaults	jSetDefaults
 #define jpeg_set_colorspace	jSetColorspace
 #define jpeg_default_colorspace	jDefColorspace
 #define jpeg_set_quality	jSetQuality
 #define jpeg_set_linear_quality	jSetLQuality
+#define jpeg_default_qtables	jDefQTables
 #define jpeg_add_quant_table	jAddQuantTable
 #define jpeg_quality_scaling	jQualityScaling
 #define jpeg_simple_progression	jSimProgress
@@ -850,6 +912,7 @@ typedef JMETHOD(wxjpeg_boolean, jpeg_marker_parser_method, (j_decompress_ptr cin
 #define jpeg_start_compress	jStrtCompress
 #define jpeg_write_scanlines	jWrtScanlines
 #define jpeg_finish_compress	jFinCompress
+#define jpeg_calc_jpeg_dimensions	jCjpegDimensions
 #define jpeg_write_raw_data	jWrtRawData
 #define jpeg_write_marker	jWrtMarker
 #define jpeg_write_m_header	jWrtMHeader
@@ -866,6 +929,7 @@ typedef JMETHOD(wxjpeg_boolean, jpeg_marker_parser_method, (j_decompress_ptr cin
 #define jpeg_input_complete	jInComplete
 #define jpeg_new_colormap	jNewCMap
 #define jpeg_consume_input	jConsumeInput
+#define jpeg_core_output_dimensions	jCoreDimensions
 #define jpeg_calc_output_dimensions	jCalcDimensions
 #define jpeg_save_markers	jSaveMarkers
 #define jpeg_set_marker_processor	jSetMarker
@@ -910,6 +974,14 @@ EXTERN(void) jpeg_destroy_decompress JPP((j_decompress_ptr cinfo));
 EXTERN(void) jpeg_stdio_dest JPP((j_compress_ptr cinfo, FILE * outfile));
 EXTERN(void) jpeg_stdio_src JPP((j_decompress_ptr cinfo, FILE * infile));
 
+/* Data source and destination managers: memory buffers. */
+EXTERN(void) jpeg_mem_dest JPP((j_compress_ptr cinfo,
+			       unsigned char ** outbuffer,
+			       unsigned long * outsize));
+EXTERN(void) jpeg_mem_src JPP((j_decompress_ptr cinfo,
+			      const unsigned char * inbuffer,
+			      unsigned long insize));
+
 /* Default parameter setup for compression */
 EXTERN(void) jpeg_set_defaults JPP((j_compress_ptr cinfo));
 /* Compression parameter setup aids */
@@ -917,35 +989,40 @@ EXTERN(void) jpeg_set_colorspace JPP((j_compress_ptr cinfo,
 				      J_COLOR_SPACE colorspace));
 EXTERN(void) jpeg_default_colorspace JPP((j_compress_ptr cinfo));
 EXTERN(void) jpeg_set_quality JPP((j_compress_ptr cinfo, int quality,
-				   wxjpeg_boolean force_baseline));
+				   boolean force_baseline));
 EXTERN(void) jpeg_set_linear_quality JPP((j_compress_ptr cinfo,
 					  int scale_factor,
-					  wxjpeg_boolean force_baseline));
+					  boolean force_baseline));
+EXTERN(void) jpeg_default_qtables JPP((j_compress_ptr cinfo,
+				       boolean force_baseline));
 EXTERN(void) jpeg_add_quant_table JPP((j_compress_ptr cinfo, int which_tbl,
 				       const unsigned int *basic_table,
 				       int scale_factor,
-				       wxjpeg_boolean force_baseline));
+				       boolean force_baseline));
 EXTERN(int) jpeg_quality_scaling JPP((int quality));
 EXTERN(void) jpeg_simple_progression JPP((j_compress_ptr cinfo));
 EXTERN(void) jpeg_suppress_tables JPP((j_compress_ptr cinfo,
-				       wxjpeg_boolean suppress));
+				       boolean suppress));
 EXTERN(JQUANT_TBL *) jpeg_alloc_quant_table JPP((j_common_ptr cinfo));
 EXTERN(JHUFF_TBL *) jpeg_alloc_huff_table JPP((j_common_ptr cinfo));
 
 /* Main entry points for compression */
 EXTERN(void) jpeg_start_compress JPP((j_compress_ptr cinfo,
-				      wxjpeg_boolean write_all_tables));
+				      boolean write_all_tables));
 EXTERN(JDIMENSION) jpeg_write_scanlines JPP((j_compress_ptr cinfo,
 					     JSAMPARRAY scanlines,
 					     JDIMENSION num_lines));
 EXTERN(void) jpeg_finish_compress JPP((j_compress_ptr cinfo));
+
+/* Precalculate JPEG dimensions for current compression parameters. */
+EXTERN(void) jpeg_calc_jpeg_dimensions JPP((j_compress_ptr cinfo));
 
 /* Replaces jpeg_write_scanlines when writing raw downsampled data. */
 EXTERN(JDIMENSION) jpeg_write_raw_data JPP((j_compress_ptr cinfo,
 					    JSAMPIMAGE data,
 					    JDIMENSION num_lines));
 
-/* Write a special marker.  See libjpeg.doc concerning safe usage. */
+/* Write a special marker.  See libjpeg.txt concerning safe usage. */
 EXTERN(void) jpeg_write_marker
 	JPP((j_compress_ptr cinfo, int marker,
 	     const JOCTET * dataptr, unsigned int datalen));
@@ -960,7 +1037,7 @@ EXTERN(void) jpeg_write_tables JPP((j_compress_ptr cinfo));
 
 /* Decompression startup: read start of JPEG datastream to see what's there */
 EXTERN(int) jpeg_read_header JPP((j_decompress_ptr cinfo,
-				  wxjpeg_boolean require_image));
+				  boolean require_image));
 /* Return value is one of: */
 #define JPEG_SUSPENDED		0 /* Suspended due to lack of input data */
 #define JPEG_HEADER_OK		1 /* Found valid image datastream */
@@ -972,11 +1049,11 @@ EXTERN(int) jpeg_read_header JPP((j_decompress_ptr cinfo,
  */
 
 /* Main entry points for decompression */
-EXTERN(wxjpeg_boolean) jpeg_start_decompress JPP((j_decompress_ptr cinfo));
+EXTERN(boolean) jpeg_start_decompress JPP((j_decompress_ptr cinfo));
 EXTERN(JDIMENSION) jpeg_read_scanlines JPP((j_decompress_ptr cinfo,
 					    JSAMPARRAY scanlines,
 					    JDIMENSION max_lines));
-EXTERN(wxjpeg_boolean) jpeg_finish_decompress JPP((j_decompress_ptr cinfo));
+EXTERN(boolean) jpeg_finish_decompress JPP((j_decompress_ptr cinfo));
 
 /* Replaces jpeg_read_scanlines when reading raw downsampled data. */
 EXTERN(JDIMENSION) jpeg_read_raw_data JPP((j_decompress_ptr cinfo,
@@ -984,11 +1061,11 @@ EXTERN(JDIMENSION) jpeg_read_raw_data JPP((j_decompress_ptr cinfo,
 					   JDIMENSION max_lines));
 
 /* Additional entry points for buffered-image mode. */
-EXTERN(wxjpeg_boolean) jpeg_has_multiple_scans JPP((j_decompress_ptr cinfo));
-EXTERN(wxjpeg_boolean) jpeg_start_output JPP((j_decompress_ptr cinfo,
+EXTERN(boolean) jpeg_has_multiple_scans JPP((j_decompress_ptr cinfo));
+EXTERN(boolean) jpeg_start_output JPP((j_decompress_ptr cinfo,
 				       int scan_number));
-EXTERN(wxjpeg_boolean) jpeg_finish_output JPP((j_decompress_ptr cinfo));
-EXTERN(wxjpeg_boolean) jpeg_input_complete JPP((j_decompress_ptr cinfo));
+EXTERN(boolean) jpeg_finish_output JPP((j_decompress_ptr cinfo));
+EXTERN(boolean) jpeg_input_complete JPP((j_decompress_ptr cinfo));
 EXTERN(void) jpeg_new_colormap JPP((j_decompress_ptr cinfo));
 EXTERN(int) jpeg_consume_input JPP((j_decompress_ptr cinfo));
 /* Return value is one of: */
@@ -999,6 +1076,7 @@ EXTERN(int) jpeg_consume_input JPP((j_decompress_ptr cinfo));
 #define JPEG_SCAN_COMPLETED	4 /* Completed last iMCU row of a scan */
 
 /* Precalculate output dimensions for current decompression parameters. */
+EXTERN(void) jpeg_core_output_dimensions JPP((j_decompress_ptr cinfo));
 EXTERN(void) jpeg_calc_output_dimensions JPP((j_decompress_ptr cinfo));
 
 /* Control saving of COM and APPn markers into marker_list. */
@@ -1034,7 +1112,7 @@ EXTERN(void) jpeg_abort JPP((j_common_ptr cinfo));
 EXTERN(void) jpeg_destroy JPP((j_common_ptr cinfo));
 
 /* Default restart-marker-resync procedure for use by data source modules */
-EXTERN(wxjpeg_boolean) jpeg_resync_to_restart JPP((j_decompress_ptr cinfo,
+EXTERN(boolean) jpeg_resync_to_restart JPP((j_decompress_ptr cinfo,
 					    int desired));
 
 
@@ -1091,6 +1169,12 @@ struct jpeg_color_quantizer { long dummy; };
 #ifdef JPEG_INTERNALS
 #include "jpegint.h"		/* fetch private declarations */
 #include "jerror.h"		/* fetch error codes too */
+#endif
+
+#ifdef __cplusplus
+#ifndef DONT_USE_EXTERN_C
+}
+#endif
 #endif
 
 #endif /* JPEGLIB_H */
