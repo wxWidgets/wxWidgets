@@ -318,6 +318,23 @@ typedef enum { FALSE = 0, TRUE = 1 } boolean;
 #endif
 #endif
 
+/*
+* Notes about boolean above:
+*
+* The main conflict we see is with the Windows headers of some compilers that
+* have a different definition of boolean. Therefore boolean has been replaced
+* with wxjpeg_boolean throughout the jpeg sources. The alternative would have
+* been to make the definition here the same as the Windows definition. It's
+* not enough to just define HAVE_BOOLEAN when using the jpeg library, the
+* definition of boolean must match when the jpeg library is compiled too.
+*
+* System jepg libs won't have this type, of course, so to use test
+* HAVE_WXJPEG_BOOLEAN and fall back to boolean when not defined.
+*/
+
+typedef int wxjpeg_boolean;
+#define HAVE_WXJPEG_BOOLEAN
+
 
 /*
  * The remaining options affect code selection within the JPEG library,

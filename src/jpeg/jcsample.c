@@ -480,7 +480,7 @@ jinit_downsampler (j_compress_ptr cinfo)
   my_downsample_ptr downsample;
   int ci;
   jpeg_component_info * compptr;
-  boolean smoothok = TRUE;
+  wxjpeg_boolean smoothok = TRUE;
   int h_in_group, v_in_group, h_out_group, v_out_group;
 
   downsample = (my_downsample_ptr)

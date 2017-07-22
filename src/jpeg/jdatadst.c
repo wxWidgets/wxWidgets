@@ -104,7 +104,7 @@ init_mem_destination (j_compress_ptr cinfo)
  * write it out when emptying the buffer externally.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 empty_output_buffer (j_compress_ptr cinfo)
 {
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
@@ -119,7 +119,7 @@ empty_output_buffer (j_compress_ptr cinfo)
   return TRUE;
 }
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 empty_mem_output_buffer (j_compress_ptr cinfo)
 {
   size_t nextsize;

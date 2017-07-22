@@ -229,7 +229,7 @@ typedef struct {
   savable_state saved;		/* Other state at start of MCU */
 
   /* These fields are NOT loaded into local working state. */
-  boolean insufficient_data;	/* set TRUE after emitting warning */
+  wxjpeg_boolean insufficient_data;	/* set TRUE after emitting warning */
   unsigned int restarts_to_go;	/* MCUs left in this restart interval */
 
   /* Following two fields used only in progressive mode */
@@ -320,7 +320,7 @@ static const int jpeg_zigzag_order2[2][2] = {
  */
 
 LOCAL(void)
-jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
+jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, wxjpeg_boolean isDC, int tblno,
 			 d_derived_tbl ** pdtbl)
 {
   JHUFF_TBL *htbl;
@@ -461,7 +461,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
 #endif
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 jpeg_fill_bit_buffer (bitread_working_state * state,
 		      register bit_buf_type get_buffer, register int bits_left,
 		      int nbits)
@@ -648,7 +648,7 @@ finish_pass_huff (j_decompress_ptr cinfo)
  * Returns FALSE if must suspend.
  */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 process_restart (j_decompress_ptr cinfo)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -704,7 +704,7 @@ process_restart (j_decompress_ptr cinfo)
  * or first pass of successive approximation).
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 decode_mcu_DC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {   
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -775,7 +775,7 @@ decode_mcu_DC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
  * or first pass of successive approximation).
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 decode_mcu_AC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {   
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -863,7 +863,7 @@ decode_mcu_AC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
  * although the spec is not very clear on the point.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 decode_mcu_DC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {   
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -910,7 +910,7 @@ decode_mcu_DC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
  * MCU decoding for AC successive approximation refinement scan.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 decode_mcu_AC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {   
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -1067,7 +1067,7 @@ undoit:
  * partial blocks.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 decode_mcu_sub (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -1195,7 +1195,7 @@ decode_mcu_sub (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
  * full-size blocks.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;

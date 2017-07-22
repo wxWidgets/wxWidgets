@@ -217,7 +217,7 @@ jpeg_calc_trans_dimensions (j_compress_ptr cinfo)
 
 
 LOCAL(void)
-initial_setup (j_compress_ptr cinfo, boolean transcode_only)
+initial_setup (j_compress_ptr cinfo, wxjpeg_boolean transcode_only)
 /* Do computations that are needed before master selection phase */
 {
   int ci, ssize;
@@ -357,7 +357,7 @@ validate_script (j_compress_ptr cinfo)
   const jpeg_scan_info * scanptr;
   int scanno, ncomps, ci, coefi, thisi;
   int Ss, Se, Ah, Al;
-  boolean component_sent[MAX_COMPONENTS];
+  wxjpeg_boolean component_sent[MAX_COMPONENTS];
 #ifdef C_PROGRESSIVE_SUPPORTED
   int * last_bitpos_ptr;
   int last_bitpos[MAX_COMPONENTS][DCTSIZE2];
@@ -798,7 +798,7 @@ finish_pass_master (j_compress_ptr cinfo)
  */
 
 GLOBAL(void)
-jinit_c_master_control (j_compress_ptr cinfo, boolean transcode_only)
+jinit_c_master_control (j_compress_ptr cinfo, wxjpeg_boolean transcode_only)
 {
   my_master_ptr master;
 

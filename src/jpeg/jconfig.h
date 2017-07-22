@@ -15,7 +15,6 @@
 #undef void
 #undef const
 
-/* use wxWidgets' configure */
 /* #undef CHAR_IS_UNSIGNED */
 #ifdef __CHAR_UNSIGNED__
   #ifndef CHAR_IS_UNSIGNED
@@ -44,14 +43,6 @@
 
 #undef RIGHT_SHIFT_IS_UNSIGNED
 
-/* use wxWidgets' configure */
-/* #define INLINE __inline__ */
-#if defined(__WATCOMC__)
-#define INLINE
-#else
-#define INLINE inline
-#endif
-
 /* These are for configuring the JPEG memory manager. */
 #undef DEFAULT_MAX_MEM
 #undef NO_MKTEMP
@@ -74,6 +65,5 @@
 #undef PROGRESS_REPORT
 
 #endif /* JPEG_CJPEG_DJPEG */
-#endif
-    /* _MSC_VER */
 
+#endif /* _MSC_VER */

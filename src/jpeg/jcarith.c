@@ -358,7 +358,7 @@ emit_restart (j_compress_ptr cinfo, int restart_num)
  * or first pass of successive approximation).
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   arith_entropy_ptr entropy = (arith_entropy_ptr) cinfo->entropy;
@@ -447,7 +447,7 @@ encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  * or first pass of successive approximation).
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   arith_entropy_ptr entropy = (arith_entropy_ptr) cinfo->entropy;
@@ -554,7 +554,7 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  * although the spec is not very clear on the point.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_DC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   arith_entropy_ptr entropy = (arith_entropy_ptr) cinfo->entropy;
@@ -589,7 +589,7 @@ encode_mcu_DC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  * MCU encoding for AC successive approximation refinement scan.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   arith_entropy_ptr entropy = (arith_entropy_ptr) cinfo->entropy;
@@ -688,7 +688,7 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  * Encode and output one MCU's worth of arithmetic-compressed coefficients.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   arith_entropy_ptr entropy = (arith_entropy_ptr) cinfo->entropy;
@@ -838,7 +838,7 @@ encode_mcu (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  */
 
 METHODDEF(void)
-start_pass (j_compress_ptr cinfo, boolean gather_statistics)
+start_pass (j_compress_ptr cinfo, wxjpeg_boolean gather_statistics)
 {
   arith_entropy_ptr entropy = (arith_entropy_ptr) cinfo->entropy;
   int ci, tbl;

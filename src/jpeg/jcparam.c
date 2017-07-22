@@ -23,7 +23,7 @@
 GLOBAL(void)
 jpeg_add_quant_table (j_compress_ptr cinfo, int which_tbl,
 		      const unsigned int *basic_table,
-		      int scale_factor, boolean force_baseline)
+		      int scale_factor, wxjpeg_boolean force_baseline)
 /* Define a quantization table equal to the basic_table times
  * a scale factor (given as a percentage).
  * If force_baseline is TRUE, the computed quantization table entries
@@ -88,7 +88,7 @@ static const unsigned int std_chrominance_quant_tbl[DCTSIZE2] = {
 
 
 GLOBAL(void)
-jpeg_default_qtables (j_compress_ptr cinfo, boolean force_baseline)
+jpeg_default_qtables (j_compress_ptr cinfo, wxjpeg_boolean force_baseline)
 /* Set or change the 'quality' (quantization) setting, using default tables
  * and straight percentage-scaling quality scales.
  * This entry point allows different scalings for luminance and chrominance.
@@ -104,7 +104,7 @@ jpeg_default_qtables (j_compress_ptr cinfo, boolean force_baseline)
 
 GLOBAL(void)
 jpeg_set_linear_quality (j_compress_ptr cinfo, int scale_factor,
-			 boolean force_baseline)
+			 wxjpeg_boolean force_baseline)
 /* Set or change the 'quality' (quantization) setting, using default tables
  * and a straight percentage-scaling quality scale.  In most cases it's better
  * to use jpeg_set_quality (below); this entry point is provided for
@@ -146,7 +146,7 @@ jpeg_quality_scaling (int quality)
 
 
 GLOBAL(void)
-jpeg_set_quality (j_compress_ptr cinfo, int quality, boolean force_baseline)
+jpeg_set_quality (j_compress_ptr cinfo, int quality, wxjpeg_boolean force_baseline)
 /* Set or change the 'quality' (quantization) setting, using default tables.
  * This is the standard quality-adjusting entry point for typical user
  * interfaces; only those who want detailed control over quantization tables

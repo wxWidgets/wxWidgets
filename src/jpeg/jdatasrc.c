@@ -28,7 +28,7 @@ typedef struct {
 
   FILE * infile;		/* source stream */
   JOCTET * buffer;		/* start of buffer */
-  boolean start_of_file;	/* have we gotten any data yet? */
+  wxjpeg_boolean start_of_file;	/* have we gotten any data yet? */
 } my_source_mgr;
 
 typedef my_source_mgr * my_src_ptr;
@@ -93,7 +93,7 @@ init_mem_source (j_decompress_ptr cinfo)
  * the front of the buffer rather than discarding it.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 fill_input_buffer (j_decompress_ptr cinfo)
 {
   my_src_ptr src = (my_src_ptr) cinfo->src;
@@ -118,7 +118,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
   return TRUE;
 }
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 fill_mem_input_buffer (j_decompress_ptr cinfo)
 {
   static const JOCTET mybuffer[4] = {

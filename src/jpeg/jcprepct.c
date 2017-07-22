@@ -315,7 +315,7 @@ create_context_buffer (j_compress_ptr cinfo)
  */
 
 GLOBAL(void)
-jinit_c_prep_controller (j_compress_ptr cinfo, boolean need_full_buffer)
+jinit_c_prep_controller (j_compress_ptr cinfo, wxjpeg_boolean need_full_buffer)
 {
   my_prep_ptr prep;
   int ci;

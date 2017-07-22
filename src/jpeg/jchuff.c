@@ -98,7 +98,7 @@ typedef struct {
   /* Following fields used only in progressive mode */
 
   /* Mode flag: TRUE for optimization, FALSE for actual data output */
-  boolean gather_statistics;
+  wxjpeg_boolean gather_statistics;
 
   /* next_output_byte/free_in_buffer are local copies of cinfo->dest fields.
    */
@@ -158,7 +158,7 @@ typedef struct {
  */
 
 LOCAL(void)
-jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
+jpeg_make_c_derived_tbl (j_compress_ptr cinfo, wxjpeg_boolean isDC, int tblno,
 			 c_derived_tbl ** pdtbl)
 {
   JHUFF_TBL *htbl;
@@ -265,7 +265,7 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
 	    dump_buffer_e(entropy); }
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 dump_buffer_s (working_state * state)
 /* Empty the output buffer; return TRUE if successful, FALSE if must suspend */
 {
@@ -303,7 +303,7 @@ dump_buffer_e (huff_entropy_ptr entropy)
  */
 
 INLINE
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 emit_bits_s (working_state * state, unsigned int code, int size)
 /* Emit some bits; return TRUE if successful, FALSE if must suspend */
 {
@@ -387,7 +387,7 @@ emit_bits_e (huff_entropy_ptr entropy, unsigned int code, int size)
 }
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 flush_bits_s (working_state * state)
 {
   if (! emit_bits_s(state, 0x7F, 7)) /* fill any partial byte with ones */
@@ -491,7 +491,7 @@ emit_eobrun (huff_entropy_ptr entropy)
  * Emit a restart marker & resynchronize predictions.
  */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 emit_restart_s (working_state * state, int restart_num)
 {
   int ci;
@@ -542,7 +542,7 @@ emit_restart_e (huff_entropy_ptr entropy, int restart_num)
  * or first pass of successive approximation).
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -625,7 +625,7 @@ encode_mcu_DC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  * or first pass of successive approximation).
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -736,7 +736,7 @@ encode_mcu_AC_first (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  * although the spec is not very clear on the point.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_DC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -779,7 +779,7 @@ encode_mcu_DC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
  * MCU encoding for AC successive approximation refinement scan.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -909,7 +909,7 @@ encode_mcu_AC_refine (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 
 /* Encode a single block's worth of coefficients */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
 		  c_derived_tbl *dctbl, c_derived_tbl *actbl)
 {
@@ -1009,7 +1009,7 @@ encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
  * Encode and output one MCU's worth of Huffman-compressed coefficients.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_huff (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -1190,7 +1190,7 @@ htest_one_block (j_compress_ptr cinfo, JCOEFPTR block, int last_dc_val,
  * No data is actually output, so no suspension return is possible.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_gather (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -1397,8 +1397,8 @@ finish_pass_gather (j_compress_ptr cinfo)
   int ci, tbl;
   jpeg_component_info * compptr;
   JHUFF_TBL **htblptr;
-  boolean did_dc[NUM_HUFF_TBLS];
-  boolean did_ac[NUM_HUFF_TBLS];
+  wxjpeg_boolean did_dc[NUM_HUFF_TBLS];
+  wxjpeg_boolean did_ac[NUM_HUFF_TBLS];
 
   /* It's important not to apply jpeg_gen_optimal_table more than once
    * per table, because it clobbers the input frequency counts!
@@ -1445,7 +1445,7 @@ finish_pass_gather (j_compress_ptr cinfo)
  */
 
 METHODDEF(void)
-start_pass_huff (j_compress_ptr cinfo, boolean gather_statistics)
+start_pass_huff (j_compress_ptr cinfo, wxjpeg_boolean gather_statistics)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
   int ci, tbl;
