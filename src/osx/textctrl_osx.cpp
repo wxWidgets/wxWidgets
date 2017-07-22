@@ -681,16 +681,80 @@ void wxTextWidgetImpl::Redo()
 {
 }
 
-long wxTextWidgetImpl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
+long wxTextWidgetImpl::XYToPosition(long x, long y) const
 {
-    return 0 ;
+    const wxString& content = GetStringValue() ;
+    long line = 1, pos = 0;
+
+    for ( wxString::const_iterator it = content.begin(); it != content.end(); ++it )
+    {
+        if (line == y)
+        {
+            for (long col = 1; it != content.end(); ++it, ++col)
+            {
+                if (col == x)
+                {
+                    break;
+                }
+                else if (*it == '\n') 
+                {
+                    pos = wxNOT_FOUND;
+                    break;
+                }
+                else 
+                {
+                   pos++; 
+                }
+            }
+            break;
+        }
+        else 
+        {
+           pos++; 
+        }
+        if (*it == '\n')
+        {
+            line++;
+        }
+    }
+    return line == y ? pos : wxNOT_FOUND ;
 }
 
-bool wxTextWidgetImpl::PositionToXY(long WXUNUSED(pos),
-                                    long *WXUNUSED(x),
-                                    long *WXUNUSED(y)) const
+bool wxTextWidgetImpl::PositionToXY(long pos,
+                                    long *x,
+                                    long *y) const
 {
-    return false ;
+    const wxString& content = GetStringValue() ;
+    long line = 1, length = 0, curPos = 0;
+    
+    if (x) 
+        *x = 0;
+
+    if (y)
+        *y = 0;
+
+    for ( wxString::const_iterator it = content.begin(); it != content.end(); ++it )
+    {
+        curPos++;
+        length++;
+        
+        if (curPos == pos) 
+        {
+            if (x)
+                *x = pos - (pos - length - 1);
+            
+            if (y)
+                *y = line;
+            
+            return true ;
+        }
+        else if (*it == '\n')
+        {
+            line++;
+            length = 0;
+        }
+    }
+    return wxNOT_FOUND ;
 }
 
 void wxTextWidgetImpl::ShowPosition( long WXUNUSED(pos) )
