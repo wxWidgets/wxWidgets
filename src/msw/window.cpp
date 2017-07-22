@@ -3301,6 +3301,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
                 }
                 break;
+
+                // Two Finger tap gesture
+                case GID_TWOFINGERTAP:
+                {
+                    processed = HandleTwoFingerTap(x, y, gestureInfo.dwFlags);
+                }
+                break;
             }
 
             if ( processed )
@@ -5808,6 +5815,28 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
     event.SetPosition(pt);
+
+    return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandleTwoFingerTap(int x, int y, WXDWORD flags)
+{
+    // wxEVT_TWO_FINGER_TAP
+    wxTwoFingerTapEvent event(GetId());
+
+    if ( flags & GF_BEGIN )
+    {
+	    event.SetGestureStart();
+    }
+
+    event.SetEventObject(this);
+    event.SetTimestamp(::GetMessageTime());
+    event.SetPosition(wxPoint(x, y));
+
+    if ( flags & GF_END )
+    {
+        event.SetGestureEnd();
+    }
 
     return HandleWindowEvent(event);
 }

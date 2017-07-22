@@ -21,6 +21,7 @@ public:
     void OnPan(wxPanGestureEvent& event);
     void OnZoom(wxZoomGestureEvent& event);
     void OnRotate(wxRotateGestureEvent& event);
+    void OnTwoFingerTap(wxTwoFingerTapEvent& event);
 
 private:
     wxBitmap m_bitmap;
