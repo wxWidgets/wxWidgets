@@ -115,10 +115,6 @@ public:
     virtual void ClearSelection() wxOVERRIDE;
     virtual wxString RunScript(const wxString& javascript) wxOVERRIDE;
     
-#if wxUSE_WEBVIEW_WEBKIT2
-    virtual void RunScriptAsync(const wxString& javascript, int id) wxOVERRIDE;
-#endif
-
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
     virtual wxVector<wxSharedPtr<wxWebViewHandler> > GetHandlers() { return m_handlerList; }

@@ -1108,88 +1108,30 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
     if (!js_result)
     {
         wxLogError("Error running javascript: %s", error.GetMessage());
-	return_value = wxString();
-	return return_value;
+        return_value = wxString();
+        return return_value;
     }
 
     context = webkit_javascript_result_get_global_context (js_result);
     value = webkit_javascript_result_get_value (js_result);
 
-    if (JSValueIsString (context,value)) {
-        JSStringRef js_str_value;
-        gsize str_length;
-	
-        js_str_value = JSValueToStringCopy (context, value, NULL);
-        str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
-        wxGtkString str_value((gchar *)g_malloc (str_length));
-	
-        JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
-        JSStringRelease (js_str_value);
-
-        return_value = wxString::FromUTF8(str_value);
-    }
-    else if (JSValueIsNumber (context,value))
-    {
-        double js_number_value;
-      
-        js_number_value = JSValueToNumber(context,value,NULL);
-        return_value = wxString::Format(wxT("%lf"),js_number_value);
-    }
-    else if (JSValueIsBoolean (context,value))
-    {
-        bool js_bool_value;
-      
-        js_bool_value = JSValueToBoolean(context, value);
-        return_value = _((js_bool_value) ? "true" : "false");
-    }
-    else if (JSValueIsObject (context,value))
-    {
-        JSStringRef js_object_value;
-        gsize str_length;
-      
-        js_object_value = JSValueCreateJSONString(context, value, 0, NULL);
-        str_length = JSStringGetMaximumUTF8CStringSize (js_object_value);
-        wxGtkString str_value((gchar *)g_malloc (str_length));
-        JSStringGetUTF8CString (js_object_value, (char*) str_value.c_str(), str_length);
-        JSStringRelease (js_object_value);
-
-        return_value = wxString::FromUTF8(str_value);
-
-	delete str_value;
-    }
-    else if (JSValueIsUndefined (context,value))
-    {
-        return_value = wxString::FromUTF8("undefined");
-    }
-    else if (JSValueIsNull (context,value))
-    {
-        return_value = wxString();
-    }
-    else 
-        wxLogError("Error running javascript: unexpected return value");
+    
+    JSStringRef js_str_value;
+    gsize str_length;
+    JSValueRef exception;
+    
+    js_str_value = JSValueToStringCopy (context, value, &exception);
+    str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
+    wxGtkString str_value((gchar *)g_malloc (str_length));
+    
+    JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
+    JSStringRelease (js_str_value);
+    
+    return_value = wxString::FromUTF8(str_value);
 
     webkit_javascript_result_unref (js_result);
 
     return return_value;
-}
-
-static void
-web_view_javascript_finished (GObject      *object,
-                              GAsyncResult *result,
-                              gpointer      user_data)
-{
-    wxString return_value;
-    wxWebViewEvent *event = (wxWebViewEvent*)user_data;
-    wxWebViewWebKit *wxwebviewwebkit = (wxWebViewWebKit*)(event -> GetEventObject());
-
-    return_value = JSResultToString(object, result);
-    
-    if (wxwebviewwebkit && wxwebviewwebkit->GetEventHandler())
-    {
-        event -> SetString(return_value);
-        wxwebviewwebkit->GetEventHandler()->ProcessEvent(*event);
-	delete event;
-    }
 }
 
 wxString wxWebViewWebKit::RunScript(const wxString& javascript)
@@ -1210,22 +1152,6 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     return_value = JSResultToString((GObject*)m_web_view, result);    
     
     return return_value;
-}
-
-void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, int id)
-{
-    wxWebViewEvent* event = new wxWebViewEvent(wxEVT_WEBVIEW_RUNSCRIPT_RESULT,
-                                               GetId(),
-                                               GetCurrentURL(),
-                                               "");
-    event -> SetEventObject(this);
-    event -> SetId(id);
-  
-    webkit_web_view_run_javascript(m_web_view,
-                                   javascript.mb_str(wxConvUTF8),
-                                   NULL,
-                                   web_view_javascript_finished,
-                                   event);
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

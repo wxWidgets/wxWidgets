@@ -53,13 +53,6 @@ private:
         CPPUNIT_TEST( RunScriptReturnObject );
         CPPUNIT_TEST( RunScriptReturnUndefined );
         CPPUNIT_TEST( RunScriptReturnNull );
-        CPPUNIT_TEST( RunScriptAsyncReturnString );
-        CPPUNIT_TEST( RunScriptAsyncReturnInteger );
-        CPPUNIT_TEST( RunScriptAsyncReturnDouble );
-        CPPUNIT_TEST( RunScriptAsyncReturnBoolean );
-        CPPUNIT_TEST( RunScriptAsyncReturnObject );
-        CPPUNIT_TEST( RunScriptAsyncReturnUndefined );
-        CPPUNIT_TEST( RunScriptAsyncReturnNull );   
     CPPUNIT_TEST_SUITE_END();
 
 #if !wxUSE_WEBVIEW_WEBKIT2
@@ -83,13 +76,6 @@ private:
     void RunScriptReturnObject();
     void RunScriptReturnUndefined();
     void RunScriptReturnNull();
-    void RunScriptAsyncReturnString();
-    void RunScriptAsyncReturnInteger();
-    void RunScriptAsyncReturnDouble();
-    void RunScriptAsyncReturnBoolean();
-    void RunScriptAsyncReturnObject();
-    void RunScriptAsyncReturnUndefined();
-    void RunScriptAsyncReturnNull();   
 
     wxWebView* m_browser;
     EventCounter* m_loaded;
@@ -355,43 +341,7 @@ void WebTestCase::RunScriptReturnUndefined()
 void WebTestCase::RunScriptReturnNull()
 {
     wxString result = m_browser->RunScript("function f(){return null;}f();");
-    CPPUNIT_ASSERT_EQUAL("", result);        
+    CPPUNIT_ASSERT_EQUAL("null", result);        
 }
-
-void WebTestCase::RunScriptAsyncReturnString()
-{
-    CPPUNIT_ASSERT(true);
-}
-
-void WebTestCase::RunScriptAsyncReturnInteger()
-{
-    CPPUNIT_ASSERT(true);
-}
-
-void WebTestCase::RunScriptAsyncReturnDouble()
-{
-    CPPUNIT_ASSERT(true);
-}
-
-void WebTestCase::RunScriptAsyncReturnBoolean()
-{
-    CPPUNIT_ASSERT(true);
-}
-
-void WebTestCase::RunScriptAsyncReturnUndefined()
-{
-    CPPUNIT_ASSERT(true);
-}
-
-void WebTestCase::RunScriptAsyncReturnObject()
-{
-    CPPUNIT_ASSERT(true);
-}
-
-void WebTestCase::RunScriptAsyncReturnNull()
-{
-    CPPUNIT_ASSERT(true);
-}
-
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)
