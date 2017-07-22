@@ -85,7 +85,8 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
     {
         dc.SetBrush( *wxGREY_BRUSH );
         dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle( win->m_width - 14, win->m_height-14, 14, 14 );
+        dc.DrawRectangle(win->m_width - 14, win->m_height - win->m_miniEdge, 14, win->m_miniEdge);
+        dc.DrawRectangle(win->m_width - win->m_miniEdge, win->m_height - 14, win->m_miniEdge, 14);
     }
 
     if (win->m_miniTitle && !win->GetTitle().empty())
