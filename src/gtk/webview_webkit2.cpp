@@ -1129,7 +1129,7 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
         JSStringRef ex_value = JSValueToStringCopy(context, exception, NULL);
         gsize ex_length;
         ex_length = JSStringGetMaximumUTF8CStringSize (ex_value);
-	gchar str[ex_length];
+        gchar str[ex_length];
     
         JSStringGetUTF8CString (ex_value, str, ex_length);
         JSStringRelease (ex_value);
