@@ -1116,18 +1116,37 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
     value = webkit_javascript_result_get_value (js_result);
 
     
-    JSStringRef js_str_value;
-    gsize str_length;
-    JSValueRef exception;
+    JSStringRef js_value;
+    gsize length;
+    JSValueRef exception = NULL;
     
-    js_str_value = JSValueToStringCopy (context, value, &exception);
-    str_length = JSStringGetMaximumUTF8CStringSize (js_str_value);
-    wxGtkString str_value((gchar *)g_malloc (str_length));
+    js_value = (JSValueIsObject (context,value)) ?
+               JSValueCreateJSONString(context, value, 0, &exception) :
+               JSValueToStringCopy (context, value, &exception);
+
+    if (exception)
+    {
+        JSStringRef ex_value = JSValueToStringCopy(context, exception, NULL);
+        gsize ex_length;
+        ex_length = JSStringGetMaximumUTF8CStringSize (ex_value);
+	gchar str[ex_length];
     
-    JSStringGetUTF8CString (js_str_value, (char*) str_value.c_str(), str_length);
-    JSStringRelease (js_str_value);
+        JSStringGetUTF8CString (ex_value, str, ex_length);
+        JSStringRelease (ex_value);
     
-    return_value = wxString::FromUTF8(str_value);
+        return_value = wxString::FromUTF8(str);
+    
+        webkit_javascript_result_unref (js_result);
+        return return_value;
+    }
+    
+    length = JSStringGetMaximumUTF8CStringSize (js_value);
+    gchar str[length];
+    
+    JSStringGetUTF8CString (js_value, str, length);
+    JSStringRelease (js_value);
+    
+    return_value = wxString::FromUTF8(str);
 
     webkit_javascript_result_unref (js_result);
 
