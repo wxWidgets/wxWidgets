@@ -33,7 +33,6 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( WebTestCase );
-#if !wxUSE_WEBVIEW_WEBKIT2
         CPPUNIT_TEST( Title );
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( History );
@@ -45,7 +44,6 @@ private:
         CPPUNIT_TEST( Zoom );
         CPPUNIT_TEST( SetPage );
         CPPUNIT_TEST( RunScriptWriteDOM );
-#endif
         CPPUNIT_TEST( RunScriptReturnString );
         CPPUNIT_TEST( RunScriptReturnInteger );
         CPPUNIT_TEST( RunScriptReturnDouble );
@@ -55,7 +53,6 @@ private:
         CPPUNIT_TEST( RunScriptReturnNull );
     CPPUNIT_TEST_SUITE_END();
 
-#if !wxUSE_WEBVIEW_WEBKIT2
     void Title();
     void Url();
     void History();
@@ -68,7 +65,6 @@ private:
     void SetPage();
     void LoadUrl(int times = 1);
     void RunScriptWriteDOM();
-#endif
     void RunScriptReturnString();
     void RunScriptReturnInteger();
     void RunScriptReturnDouble();
@@ -98,8 +94,7 @@ void WebTestCase::setUp()
     
     m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
     m_browser->LoadURL("about:blank");
-    //wxMilliSleep (3000);
-    //ENSURE_LOADED;
+    ENSURE_LOADED;
 }
 
 void WebTestCase::tearDown()
@@ -108,7 +103,6 @@ void WebTestCase::tearDown()
     wxDELETE(m_browser);
 }
 
-#if !wxUSE_WEBVIEW_WEBKIT2
 void WebTestCase::LoadUrl(int times)
 {
     //We alternate between urls as otherwise webkit merges them in the history
@@ -296,8 +290,6 @@ void WebTestCase::RunScriptWriteDOM()
     m_browser->RunScript("document.write(\"Hello World!\");");
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
 }
-
-#endif
 
 void WebTestCase::RunScriptReturnString()
 {

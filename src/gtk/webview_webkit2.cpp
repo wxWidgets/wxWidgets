@@ -541,13 +541,14 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     PostCreation(size);
 
-    /* Open a webpage */
-    webkit_web_view_load_uri(m_web_view, url.utf8_str());
 
     // last to avoid getting signal too early
     g_signal_connect_after(m_web_view, "load-changed",
                            G_CALLBACK(wxgtk_webview_webkit_load_changed),
                            this);
+
+        /* Open a webpage */
+    webkit_web_view_load_uri(m_web_view, url.utf8_str());
 
     return true;
 }
