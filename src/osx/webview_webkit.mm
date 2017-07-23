@@ -416,6 +416,17 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     NSString* result = [m_webView stringByEvaluatingJavaScriptFromString: 
                    wxCFStringRef( javascript ).AsNSString()];
 
+ 
+    if ([result length] == 0)
+    {
+        wxString evalJS = "JSON.stringify(eval(\""+javascript+"\"));";
+	result = [m_webView stringByEvaluatingJavaScriptFromString: 
+                   wxCFStringRef( evalJS ).AsNSString()];
+    }
+
+    if ([result length] == 0)
+	return "undefined";
+
     return wxCFStringRef::AsString(result);
 }
 
