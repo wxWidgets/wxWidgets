@@ -552,7 +552,7 @@ void wxTopLevelWindowGTK::Init()
     m_themeEnabled = true;
     m_gdkDecor =
     m_gdkFunc = 0;
-    m_grabbed = false;
+    m_grabbedEventLoop = NULL;
     m_deferShow = true;
     m_deferShowAllowed = true;
     m_updateDecorSize = true;
@@ -808,7 +808,7 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
         g_source_remove(m_netFrameExtentsTimerId);
     }
 
-    if (m_grabbed)
+    if (m_grabbedEventLoop)
     {
         wxFAIL_MSG(wxT("Window still grabbed"));
         RemoveGrab();
@@ -1478,22 +1478,29 @@ void wxTopLevelWindowGTK::SetIconizeState(bool iconize)
 
 void wxTopLevelWindowGTK::AddGrab()
 {
-    if (!m_grabbed)
+    if (!m_grabbedEventLoop)
     {
-        m_grabbed = true;
+        wxGUIEventLoop eventLoop;
+        m_grabbedEventLoop = &eventLoop;
         gtk_grab_add( m_widget );
-        wxGUIEventLoop().Run();
+        eventLoop.Run();
         gtk_grab_remove( m_widget );
+        m_grabbedEventLoop = NULL;
     }
 }
 
 void wxTopLevelWindowGTK::RemoveGrab()
 {
-    if (m_grabbed)
+    if (m_grabbedEventLoop)
     {
-        gtk_main_quit();
-        m_grabbed = false;
+        m_grabbedEventLoop->Exit();
+        m_grabbedEventLoop = NULL;
     }
+}
+
+bool wxTopLevelWindowGTK::IsGrabbed() const
+{
+    return m_grabbedEventLoop != NULL;
 }
 
 bool wxTopLevelWindowGTK::IsActive()
