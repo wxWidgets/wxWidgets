@@ -1543,7 +1543,7 @@ void wxTopLevelWindowGTK::RemoveGrab()
 {
     if (m_grabbed)
     {
-        gtk_main_quit();
+        wxGUIEventLoop::GetActive()->Exit();
         m_grabbed = false;
     }
 }
