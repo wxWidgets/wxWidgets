@@ -861,7 +861,7 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     if (!document)
     {
         wxLogMessage("!document");
-        return "";
+        return "!document";
     }
     
     wxCOMPtr<IHTMLWindow2> window;
@@ -869,11 +869,13 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     if (!SUCCEEDED(hr))
     {
         wxLogMessage("!SUCCEDED document->get_parentWindow(&window");
-        return "";
+        return "!SUCCEDED document->get_parentWindow(&window";
     }
 
     VARIANT result = {0};
 
+    wxLocale* locale = new wxLocale();
+    locale->Init();
     // get the ID for eval method
     DISPID idMethod = 0;
     DISPID idSave = 0;
@@ -884,7 +886,7 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     if (!SUCCEEDED(hr)) 
     {
         wxLogMessage("!SUCCEDED pScript->GetIDsOfNames(IID_NULL, &sMet");
-        return "";
+        return wxString::Format("!SUCCEDED pScript->GetIDsOfNames(IID_NULL, &sMet %i %i %i %i)",hr, S_OK, E_OUTOFMEMORY, DISP_E_UNKNOWNNAME, DISP_E_UNKNOWNLCID);
     }
 
     // invoke assuming one method parameter (the javascript)
@@ -901,16 +903,17 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     VarData[0].pbstrVal = &js;
     hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
                          &dpArgs, &result, NULL, NULL);
+
     if (!SUCCEEDED(hr))
     {
         wxLogMessage("!SUCCEDED pScript->Invoke(idSave, IID_NU");
-        return "";
+        return "!SUCCEDED pScript->Invoke(idSave, IID_NU";
     }
     
-        
     pScript->Release();
+    window->Release();
     document->Release();
-    return result.bstrVal;
+    return wxString::Format(wxT("%s%d%f %d"), result.bstrVal, result.intVal, result.fltVal,result.vt); 
 }
 
 
