@@ -863,59 +863,71 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
         wxLogMessage("!document");
         return "!document";
     }
-    
-    wxCOMPtr<IHTMLWindow2> window;
-    hr = document->get_parentWindow(&window);
-    if (!SUCCEEDED(hr))
+
+    wxCOMPtr<IDispatch> pScript;
+    document->get_Script(&pScript);
+    if (!pScript)
     {
-        wxLogMessage("!SUCCEDED document->get_parentWindow(&window");
-        return "!SUCCEDED document->get_parentWindow(&window";
+        wxLogMessage("!pScript");
+        return "!pScript";
     }
 
-    VARIANT result = {0};
-
-    wxLocale* locale = new wxLocale();
-    locale->Init();
     // get the ID for eval method
     DISPID idSave = 0;
-    OLECHAR FAR* sMethod = L"eval";
-    IDispatch* pScript = 0;
-    document->get_Script(&pScript);
+    LPOLESTR sMethod = L"eval";
     hr = pScript->GetIDsOfNames(IID_NULL, &sMethod, 1, LOCALE_SYSTEM_DEFAULT, &idSave);
-    if (!SUCCEEDED(hr)) 
+    if (!SUCCEEDED(hr))
     {
-        wxLogMessage("!SUCCEDED pScript->GetIDsOfNames(IID_NULL, &sMet");
-        return wxString::Format("!SUCCEDED pScript->GetIDsOfNames(IID_NULL, &sMet %i %i %i %i %i)",hr, S_OK, E_OUTOFMEMORY, DISP_E_UNKNOWNNAME, DISP_E_UNKNOWNLCID);
+        wxLogMessage("!SUCCEDED pScript->GetIDsOfNames");
+        return "!SUCCEDED pScript->GetIDsOfNames";
     }
 
     // invoke assuming one method parameter (the javascript)
-    DISPPARAMS dpArgs;
     VARIANTARG VarData[1];
+    VARIANT result = { 0 };
 
+    DISPPARAMS dpArgs;
     dpArgs.rgvarg = &VarData[0];
     dpArgs.cArgs = 1;
     dpArgs.cNamedArgs = 0;
     dpArgs.rgdispidNamedArgs = NULL;
 
+
+    //wxString newJS = "(function (p) {return (typeof (r=eval(p)) === 'object') ? JSON.stringify(r) : String(r);})('" + javascript + "');";
+    //return newJS;
     BSTR js = SysAllocString(javascript.wc_str());
     VarData[0].vt = VT_BSTR | VT_BYREF;
     VarData[0].pbstrVal = &js;
     hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
-                         &dpArgs, &result, NULL, NULL);
+        &dpArgs, &result, NULL, NULL);
+    SysFreeString(js);
 
     if (!SUCCEEDED(hr))
     {
-        wxLogMessage("!SUCCEDED pScript->Invoke(idSave, IID_NU");
-        return "!SUCCEDED pScript->Invoke(idSave, IID_NU";
+        wxLogMessage("!SUCCEDED pScript->Invoke");
+        return "!SUCCEDED pScript->Invoke";
     }
-    
-    pScript->Release();
-    window->Release();
-    document->Release();
-    return wxString::Format(wxT("%s"), result.bstrVal); 
+
+    wxString resultStr;
+    if (result.vt == VT_EMPTY)
+        resultStr = wxT("undefined");
+    else if (result.vt == VT_NULL)
+        resultStr = wxT("null");
+    else if (result.vt == VT_I4)
+        resultStr = wxString::Format(wxT("%d"), result.intVal);
+    else if (result.vt == VT_R8)
+        resultStr = wxString::Format(wxT("%f"), result.dblVal);
+    else if (result.vt == VT_BSTR)
+        resultStr = wxString::Format(wxT("%s"), result.bstrVal);
+    else if (result.vt == VT_BOOL)
+        resultStr = wxString::Format(wxT("%s"), result.boolVal ? "true" : "false");
+    else if (result.vt == VT_DISPATCH)
+        resultStr = RunScript("JSON.stringify(eval(\"" + javascript + "\"));");
+    else
+        resultStr = wxString::Format(wxT("unknown type: %u"), result.vt);
+
+    return resultStr;
 }
-
-
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
