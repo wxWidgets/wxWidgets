@@ -900,7 +900,6 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     VarData[0].pbstrVal = js.ByRef();
     hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
         &dpArgs, &result, NULL, NULL);
-    SysFreeString(js);
 
     if (!SUCCEEDED(hr))
     {
