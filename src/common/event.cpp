@@ -108,6 +108,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxZoomGestureEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxRotateGestureEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxTwoFingerTapEvent, wxGestureEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxLongPressEvent, wxGestureEvent);
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -268,6 +269,7 @@ wxDEFINE_EVENT( wxEVT_GESTURE_PAN, wxPanGestureEvent );
 wxDEFINE_EVENT( wxEVT_GESTURE_ZOOM, wxZoomGestureEvent );
 wxDEFINE_EVENT( wxEVT_GESTURE_ROTATE, wxRotateGestureEvent );
 wxDEFINE_EVENT( wxEVT_TWO_FINGER_TAP, wxTwoFingerTapEvent );
+wxDEFINE_EVENT( wxEVT_LONG_PRESS, wxLongPressEvent );
 
 // System events
 wxDEFINE_EVENT( wxEVT_SIZE, wxSizeEvent );

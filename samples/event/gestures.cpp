@@ -24,6 +24,7 @@ MyGestureFrame::MyGestureFrame()
     myPanel->Bind(wxEVT_GESTURE_ZOOM, &MyGestureFrame::OnGesture, this);
     myPanel->Bind(wxEVT_GESTURE_ROTATE, &MyGestureFrame::OnGesture, this);
     myPanel->Bind(wxEVT_TWO_FINGER_TAP, &MyGestureFrame::OnGesture, this);
+    myPanel->Bind(wxEVT_LONG_PRESS, &MyGestureFrame::OnGesture, this);
 
     Bind(wxEVT_CLOSE_WINDOW, &MyGestureFrame::OnQuit, this);
 }
@@ -46,6 +47,7 @@ MyGesturePanel::MyGesturePanel(MyGestureFrame *parent) : wxPanel(parent, wxID_AN
     Bind(wxEVT_GESTURE_ZOOM, &MyGesturePanel::OnZoom, this);
     Bind(wxEVT_GESTURE_ROTATE, &MyGesturePanel::OnRotate, this);
     Bind(wxEVT_TWO_FINGER_TAP, &MyGesturePanel::OnTwoFingerTap, this);
+    Bind(wxEVT_LONG_PRESS, &MyGesturePanel::OnLongPress, this);
 }
 
 void MyGestureFrame::OnQuit(wxCloseEvent& WXUNUSED(event))
@@ -168,5 +170,20 @@ void MyGesturePanel::OnTwoFingerTap(wxTwoFingerTapEvent& event)
     if ( event.IsGestureEnd() )
     {
         wxLogMessage("Two Finger Tap gesture Ended\n");
+    }
+}
+
+void MyGesturePanel::OnLongPress(wxLongPressEvent& event)
+{
+    if ( event.IsGestureStart() )
+    {
+        wxLogMessage("Long Press gesture started\n");
+    }
+
+    wxLogMessage("Long Press gesture performed at (%d,%d)\n", event.GetPosition().x, event.GetPosition().y);
+
+    if ( event.IsGestureEnd() )
+    {
+        wxLogMessage("Long Press gesture Ended\n");
     }
 }

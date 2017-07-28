@@ -3102,6 +3102,19 @@ rotate_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxW
 
     win->GTKProcessEvent(event);
 }
+
+static void
+long_press_gesture_callback(GtkGesture* gesture, gdouble x, gdouble y, wxWindowGTK* win)
+{
+    wxLongPressEvent event(win->GetId());
+
+    event.SetEventObject(win);
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
+    event.SetGestureStart();
+    event.SetGestureEnd();
+
+    win->GTKProcessEvent(event);
+}
 #endif // GTK_CHECK_VERSION(3,14,0)
 
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
@@ -3199,6 +3212,13 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK(rotate_gesture_end_callback), this);
     g_signal_connect (rotate_gesture, "cancel",
                       G_CALLBACK(rotate_gesture_end_callback), this);
+
+    GtkGesture* long_press_gesture = gtk_gesture_long_press_new(widget);
+
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(long_press_gesture), GTK_PHASE_TARGET);
+
+    g_signal_connect (long_press_gesture, "pressed",
+                      G_CALLBACK(long_press_gesture_callback), this);
 #endif // GTK_CHECK_VERSION(3,14,0)
 }
 
