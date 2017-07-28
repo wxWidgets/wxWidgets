@@ -895,9 +895,8 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
 
     //wxString newJS = "(function (p) {return (typeof (r=eval(p)) === 'object') ? JSON.stringify(r) : String(r);})('" + javascript + "');";
     //return newJS;
-    wxBasicString js = wxBasicString(javascript);
-    VarData[0].vt = VT_BSTR | VT_BYREF;
-    VarData[0].pbstrVal = js.ByRef();
+    VarData[0].vt = VT_BSTR;
+    VarData[0].bstrVal = wxBasicString(javascript);
     hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
         &dpArgs, &result, NULL, NULL);
 
