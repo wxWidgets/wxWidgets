@@ -146,6 +146,7 @@ public :
     virtual void        PanGestureEvent(NSPanGestureRecognizer *panGestureRecognizer);
     virtual void        ZoomGestureEvent(NSMagnificationGestureRecognizer *magnificationGestureRecognizer);
     virtual void        RotateGestureEvent(NSRotationGestureRecognizer *rotationGestureRecognizer);
+    virtual void        LongPressEvent(NSPressGestureRecognizer *pressGestureRecognizer);
 
 #if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);
@@ -196,6 +197,7 @@ protected:
     NSPanGestureRecognizer *panGestureRecognizer;
     NSMagnificationGestureRecognizer *magnificationGestureRecognizer;
     NSRotationGestureRecognizer *rotationGestureRecognizer;
+    NSPressGestureRecognizer *pressGestureRecognizer;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };

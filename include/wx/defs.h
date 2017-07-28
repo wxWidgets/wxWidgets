@@ -3106,6 +3106,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSPanGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSMagnificationGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSRotationGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSPressGestureRecognizer);
 #endif /* __WXMAC__ &__DARWIN__ */
 
 #ifdef __WXMAC__

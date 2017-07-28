@@ -1069,6 +1069,15 @@ void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognize
     impl->RotateGestureEvent(rotationGestureRecognizer);
 }
 
+void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pressGestureRecognizer)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl ==NULL )
+        return;
+
+    impl->LongPressEvent(pressGestureRecognizer);
+}
+
 BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1618,6 +1627,47 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
     GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
+void wxWidgetCocoaImpl::LongPressEvent(NSPressGestureRecognizer* pressGestureRecognizer)
+{
+    NSGestureRecognizerState gestureState = nil;
+
+    switch ( [pressGestureRecognizer state] )
+    {
+        case NSGestureRecognizerStateBegan:
+            gestureState = NSGestureRecognizerStateBegan;
+            break;
+        case NSGestureRecognizerStateChanged:
+            break;
+        case NSGestureRecognizerStateEnded:
+        case NSGestureRecognizerStateCancelled:
+            gestureState = NSGestureRecognizerStateEnded;
+            break;
+            // Do not process any other states
+        default:
+            return;
+    }
+
+    wxLongPressEvent wxevent(GetWXPeer()->GetId());
+    wxevent.SetEventObject(GetWXPeer());
+
+    NSPoint nspoint = [pressGestureRecognizer locationInView:m_osxView];
+    wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetPosition(pt);
+
+    if ( gestureState == NSGestureRecognizerStateBegan )
+    {
+        wxevent.SetGestureStart();
+    }
+
+    if ( gestureState == NSGestureRecognizerStateEnded )
+    {
+        wxevent.SetGestureEnd();
+    }
+
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
     bool result = false;
@@ -1968,6 +2018,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(handleLongPressGesture:), (IMP) wxOSX_longPressEvent, "v@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(magnifyWithEvent:), (IMP)wxOSX_mouseEvent, "v@:@")
 
@@ -2074,6 +2125,7 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         [panGestureRecognizer release];
         [magnificationGestureRecognizer release];
         [rotationGestureRecognizer release];
+        [pressGestureRecognizer release];
     }
 }
 
@@ -3003,9 +3055,13 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
         rotationGestureRecognizer =
         [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
 
+        pressGestureRecognizer =
+        [[NSPressGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleLongPressGesture:)];
+
         [m_osxView addGestureRecognizer:panGestureRecognizer];
         [m_osxView addGestureRecognizer:magnificationGestureRecognizer];
         [m_osxView addGestureRecognizer:rotationGestureRecognizer];
+        [m_osxView addGestureRecognizer:pressGestureRecognizer];
     }
 }
 
