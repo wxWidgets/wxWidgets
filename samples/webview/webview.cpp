@@ -974,7 +974,7 @@ void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
     {
-        m_browser->RunScript(dialog.GetValue());
+        wxLogMessage("RunScript result: %s\n", m_browser->RunScript(dialog.GetValue()));
     }
 }
 

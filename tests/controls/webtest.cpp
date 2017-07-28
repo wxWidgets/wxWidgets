@@ -8,7 +8,7 @@
 
 #include "testprec.h"
 
-#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)
+#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -42,8 +42,15 @@ private:
         CPPUNIT_TEST( Editable );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( Zoom );
-        CPPUNIT_TEST( RunScript );
         CPPUNIT_TEST( SetPage );
+        CPPUNIT_TEST( RunScriptWriteDOM );
+        CPPUNIT_TEST( RunScriptReturnString );
+        CPPUNIT_TEST( RunScriptReturnInteger );
+        CPPUNIT_TEST( RunScriptReturnDouble );
+        CPPUNIT_TEST( RunScriptReturnBoolean );
+        CPPUNIT_TEST( RunScriptReturnObject );
+        CPPUNIT_TEST( RunScriptReturnUndefined );
+        CPPUNIT_TEST( RunScriptReturnNull );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -55,9 +62,16 @@ private:
     void Editable();
     void Selection();
     void Zoom();
-    void RunScript();
     void SetPage();
     void LoadUrl(int times = 1);
+    void RunScriptWriteDOM();
+    void RunScriptReturnString();
+    void RunScriptReturnInteger();
+    void RunScriptReturnDouble();
+    void RunScriptReturnBoolean();
+    void RunScriptReturnObject();
+    void RunScriptReturnUndefined();
+    void RunScriptReturnNull();
 
     wxWebView* m_browser;
     EventCounter* m_loaded;
@@ -260,12 +274,6 @@ void WebTestCase::Zoom()
     }
 }
 
-void WebTestCase::RunScript()
-{
-    m_browser->RunScript("document.write(\"Hello World!\");");
-    CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
-}
-
 void WebTestCase::SetPage()
 {
     m_browser->SetPage("<html><body>text</body></html>", "");
@@ -275,6 +283,81 @@ void WebTestCase::SetPage()
     m_browser->SetPage("<html><body>other text</body></html>", "");
     ENSURE_LOADED;
     CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
+}
+
+#define WX_WEBVIEW_LOAD_URL_WAIT(browser, url, time) \
+{ \
+    browser->LoadURL(url); \
+    wxStopWatch sw; \
+    while (browser->GetBackwardHistory().empty() && sw.Time() < time) \
+        wxEventLoopBase::GetActive()->Dispatch(); \
+}
+
+void WebTestCase::RunScriptWriteDOM()
+{
+    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "http://www.google.com/", 5000);
+
+    m_browser->RunScript("document.write(\"Hello World!\");");
+    CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
+}
+
+void WebTestCase::RunScriptReturnString()
+{
+    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
+
+    wxString result = m_browser->RunScript("function f(a){return a;}f('Hello World!');");
+    CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
+}
+
+
+void WebTestCase::RunScriptReturnInteger()
+{
+    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
+
+    wxString result = m_browser->RunScript("function f(a){return a;}f(123);");
+    CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));
+}
+
+void WebTestCase::RunScriptReturnDouble()
+{
+    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
+
+    wxString result = m_browser->RunScript("function f(a){return a;}f(2.34);");
+    double value;
+    result.ToDouble(&value);
+    CPPUNIT_ASSERT_EQUAL(2.34, value);
+}
+
+void WebTestCase::RunScriptReturnBoolean()
+{
+    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
+
+    wxString result = m_browser->RunScript("function f(a){return a;}f(false);");
+    CPPUNIT_ASSERT_EQUAL(false, (result == "false") ? false : true);
+}
+
+void WebTestCase::RunScriptReturnObject()
+{
+    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
+
+    wxString result = m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();");
+    CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
+}
+
+void WebTestCase::RunScriptReturnUndefined()
+{
+    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
+
+    wxString result = m_browser->RunScript("function f(){var person = new Object();}f();");
+    CPPUNIT_ASSERT_EQUAL("undefined", result);
+}
+
+void WebTestCase::RunScriptReturnNull()
+{
+    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
+
+    wxString result = m_browser->RunScript("function f(){return null;}f();");
+    CPPUNIT_ASSERT_EQUAL("null", result);
 }
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)

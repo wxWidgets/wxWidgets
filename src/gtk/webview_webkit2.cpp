@@ -19,7 +19,11 @@
 #include "wx/base64.h"
 #include "wx/log.h"
 #include "wx/gtk/private/webview_webkit2_extension.h"
+#include "wx/gtk/private/string.h"
+#include "wx/gtk/private/error.h"
 #include <webkit2/webkit2.h>
+#include <JavaScriptCore/JSValueRef.h>
+#include <JavaScriptCore/JSStringRef.h>
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -536,14 +540,14 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     PostCreation(size);
 
-    /* Open a webpage */
-    webkit_web_view_load_uri(m_web_view, url.utf8_str());
 
     // last to avoid getting signal too early
     g_signal_connect_after(m_web_view, "load-changed",
                            G_CALLBACK(wxgtk_webview_webkit_load_changed),
                            this);
 
+    /* Open a webpage */
+    webkit_web_view_load_uri(m_web_view, url.utf8_str());
     return true;
 }
 
@@ -1092,14 +1096,89 @@ wxString wxWebViewWebKit::GetPageText() const
     }
     return wxString();
 }
-
-void wxWebViewWebKit::RunScript(const wxString& javascript)
+static void wxgtk_run_javascript_cb(WebKitWebView *,
+                                    GAsyncResult *res,
+                                    GAsyncResult **res_out)
 {
+    *res_out = (GAsyncResult*)g_object_ref(res);
+}
+
+wxString JSResultToString(GObject *object, GAsyncResult *result)
+{
+    wxString                return_value;
+    WebKitJavascriptResult  *js_result;
+    JSValueRef              value;
+    JSGlobalContextRef      context;
+    wxGtkError              error;
+
+    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object), (GAsyncResult *)result, error.Out());
+
+    if (!js_result)
+    {
+        wxLogError("Error running javascript: %s", error.GetMessage());
+        return_value = wxString();
+        return return_value;
+    }
+
+    context = webkit_javascript_result_get_global_context (js_result);
+    value = webkit_javascript_result_get_value (js_result);
+
+
+    JSStringRef js_value;
+    gsize length;
+    JSValueRef exception = NULL;
+
+    js_value = (JSValueIsObject (context,value)) ?
+               JSValueCreateJSONString(context, value, 0, &exception) :
+               JSValueToStringCopy (context, value, &exception);
+
+    if (exception)
+    {
+        JSStringRef ex_value = JSValueToStringCopy(context, exception, NULL);
+        gsize ex_length;
+        ex_length = JSStringGetMaximumUTF8CStringSize (ex_value);
+        gchar str[ex_length];
+
+        JSStringGetUTF8CString (ex_value, str, ex_length);
+        JSStringRelease (ex_value);
+
+        return_value = wxString::FromUTF8(str);
+
+        webkit_javascript_result_unref (js_result);
+        return return_value;
+    }
+
+    length = JSStringGetMaximumUTF8CStringSize (js_value);
+    gchar str[length];
+
+    JSStringGetUTF8CString (js_value, str, length);
+    JSStringRelease (js_value);
+
+    return_value = wxString::FromUTF8(str);
+
+    webkit_javascript_result_unref (js_result);
+
+    return return_value;
+}
+
+wxString wxWebViewWebKit::RunScript(const wxString& javascript)
+{
+    wxString return_value;
+    GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
-                                   javascript.mb_str(wxConvUTF8),
+                                   javascript,
                                    NULL,
-                                   NULL,
-                                   NULL);
+                                   (GAsyncReadyCallback)wxgtk_run_javascript_cb,
+                                   &result);
+
+    GMainContext *main_context = g_main_context_get_thread_default();
+
+    while (!result)
+        g_main_context_iteration(main_context, TRUE);
+
+    return_value = JSResultToString((GObject*)m_web_view, result);
+
+    return return_value;
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

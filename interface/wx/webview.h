@@ -460,11 +460,14 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
-        Runs the given javascript code.
+        Runs the given javascript code, returning a result if they is any.
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
+        @param A wxString containing the Javascript.
+        @return A wxString with Javascript return value.
+
     */
-    virtual void RunScript(const wxString& javascript) = 0;
+    virtual wxString RunScript(const wxString& javascript) = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user

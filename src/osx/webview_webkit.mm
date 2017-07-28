@@ -408,13 +408,25 @@ wxString wxWebViewWebKit::GetSelectedText() const
     return wxCFStringRef::AsString([dr toString]);
 }
 
-void wxWebViewWebKit::RunScript(const wxString& javascript)
+wxString wxWebViewWebKit::RunScript(const wxString& javascript)
 {
     if ( !m_webView )
-        return;
+        return wxString();
 
-    [[m_webView windowScriptObject] evaluateWebScript:
-                    wxCFStringRef( javascript ).AsNSString()];
+    NSString* result = [m_webView stringByEvaluatingJavaScriptFromString:
+                   wxCFStringRef( javascript ).AsNSString()];
+
+
+    if ([result length] == 0)
+    {
+        wxString evalJS = "JSON.stringify(eval(\""+javascript+"\"));";
+	result = [m_webView stringByEvaluatingJavaScriptFromString:
+                   wxCFStringRef( evalJS ).AsNSString()];
+        if ([result length] == 0)
+            return "undefined";
+    }
+
+    return wxCFStringRef::AsString(result);
 }
 
 void wxWebViewWebKit::OnSize(wxSizeEvent &event)
