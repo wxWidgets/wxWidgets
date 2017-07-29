@@ -882,12 +882,52 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
         return "!SUCCEDED pScript->GetIDsOfNames";
     }
 
-    //wxString newJS = "(function (p) {return (typeof (r=eval(p)) === 'object') ? JSON.stringify(r) : String(r);})('" + javascript + "');";
-    //return newJS;
+    /*
+    Some JSON.stringify implementations:
+    https://gist.github.com/alexhawkins/931c0af2d827dd67a3e8
+    https://gist.github.com/alexhawkins/6ede310cfbd9d604db78
+    https://gist.github.com/andrew8088/6f53af9579266d5c62c8
+    */
+    /*wxString newJS = " \
+                      function stringifyJSON(obj) \
+                      { \
+                          var objElements = []; \
+                          //check for literals \
+                          if (!(obj instanceof Object)) \
+                              return typeof obj === 'string' ? '\\\\\"' + obj + '\\\\\"' : '' + obj; \
+                          //check for arrays \
+                          else if (Array.isArray(obj)) \
+                          { \
+                              return '[' + obj.map(function(el) { return stringifyJSON(el); }) + ']'; \
+                          } \
+                          //check for object if not array \
+                          else if (obj instanceof Object) \
+                          { \
+                              for (var key in obj) \
+                              { \
+                                  if (obj[key] instanceof Function) \
+                                      return '{}'; \
+                                  else \
+                                      objElements.push('\\\\\"' + key + '\\\\\":' + stringifyJSON(obj[key])); \
+                              } \
+                              return '{' + objElements + '}'; \
+                          } \
+                      } \
+                      \
+                      function returnString (p) \
+                      { \
+                          return (typeof p === 'object') ? stringifyJSON(p) : String(p); \
+                      } \
+                      \
+                      "eval(\\\""+javascript+"\\\");\
+    ";*/
+    wxString newJS = "eval(\\\"" + javascript + "\\\");";
+
+    return newJS;
     VARIANT varJavascript;
     VariantInit(&varJavascript);
     V_VT(&varJavascript) = VT_BSTR;
-    V_BSTR(&varJavascript) = wxConvertStringToOle(javascript);
+    V_BSTR(&varJavascript) = wxConvertStringToOle(newJS);
 
     VARIANT result;
     VariantInit(&result);
@@ -907,9 +947,16 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     {
         VariantClear(&result);
         wxLogMessage("!SUCCEDED pScript->Invoke");
-        return "!SUCCEDED pScript->Invoke";
+        return "!SUCCEDED pScript->Invoke"; 
     }
 
+    wxString resultStr;
+    if (result.vt == VT_BSTR)
+        resultStr = wxString::Format(wxT("%s"), result.bstrVal);
+    else
+        resultStr = wxString::Format(wxT("unknown type: %u"), result.vt);
+
+    /*
     wxString resultStr;
     if (result.vt == VT_EMPTY)
         resultStr = wxT("undefined");
@@ -927,7 +974,7 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
         resultStr = RunScript("JSON.stringify(eval(\"" + javascript + "\"));");
     else
         resultStr = wxString::Format(wxT("unknown type: %u"), result.vt);
-
+   */
     VariantClear(&result);
     return resultStr;
 }
