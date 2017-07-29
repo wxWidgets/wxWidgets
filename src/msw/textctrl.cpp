@@ -1469,7 +1469,31 @@ int wxTextCtrl::GetNumberOfLines() const
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
     // This gets the char index for the _beginning_ of this line
-    long charIndex = ::SendMessage(GetHwnd(), EM_LINEINDEX, y, 0);
+    long charIndex;
+    if ( IsMultiLine() )
+    {
+        charIndex = ::SendMessage(GetHwnd(), EM_LINEINDEX, y, 0);
+        if ( charIndex == -1 )
+            return -1;
+    }
+    else
+    {
+        if ( y != 0 )
+            return -1;
+
+        charIndex = 0;
+    }
+
+    // Line is identified by a character position!
+    long lineLength = ::SendMessage(GetHwnd(), EM_LINELENGTH, charIndex, 0);
+    // For all lines but last one we need to adjust the length
+    // to include new line character (only one because both CR and LF
+    // are virtually "displayed" at the same position).
+    if ( y < GetNumberOfLines() - 1 )
+        lineLength += 1;
+
+    if ( x >= lineLength )
+        return -1;
 
     return charIndex + x;
 }
