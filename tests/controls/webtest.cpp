@@ -36,7 +36,7 @@ private:
         CPPUNIT_TEST( Title );
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( History );
-#ifndef wxUSE_WEBVIEW_WEBKIT2
+#if !wxUSE_WEBVIEW_WEBKIT2
         CPPUNIT_TEST( HistoryEnable );
         CPPUNIT_TEST( HistoryClear );
 #endif
@@ -127,7 +127,7 @@ void WebTestCase::setUp()
 
     m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
     m_browser->LoadURL("about:blank");
-#ifdef wxUSE_WEBVIEW_WEBKIT2
+#if wxUSE_WEBVIEW_WEBKIT2
     ENSURE_LOADED_TWO;
 #else
     ENSURE_LOADED;
