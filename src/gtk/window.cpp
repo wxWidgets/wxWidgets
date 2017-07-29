@@ -2850,7 +2850,7 @@ static gboolean source_dispatch(GSource*, GSourceFunc, void*)
 
 #if GTK_CHECK_VERSION(3,14,0)
 static void
-pan_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* WXUNUSED(win))
 {
     gs_gestureStart = true;
 
@@ -2999,7 +2999,7 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
 }
 
 static void
-zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
     gdouble x, y;
 
@@ -3020,7 +3020,7 @@ zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxW
 }
 
 static void
-zoom_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+zoom_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
     gdouble x, y;
 
@@ -3039,7 +3039,7 @@ zoom_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWin
 }
 
 static void
-rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
     gdouble x, y;
 
@@ -3060,7 +3060,7 @@ rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* sequence, w
 }
 
 static void
-rotate_gesture_callback(GtkGesture* gesture, gdouble angle_delta, gdouble angle, wxWindowGTK* win)
+rotate_gesture_callback(GtkGesture* gesture, gdouble WXUNUSED(angle_delta), gdouble angle, wxWindowGTK* win)
 {
     gdouble x, y;
 
@@ -3085,7 +3085,7 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble angle_delta, gdouble angle,
 }
 
 static void
-rotate_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+rotate_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
     gdouble x, y;
 
@@ -3104,7 +3104,7 @@ rotate_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxW
 }
 
 static void
-long_press_gesture_callback(GtkGesture* gesture, gdouble x, gdouble y, wxWindowGTK* win)
+long_press_gesture_callback(GtkGesture* WXUNUSED(gesture), gdouble x, gdouble y, wxWindowGTK* win)
 {
     wxLongPressEvent event(win->GetId());
 
