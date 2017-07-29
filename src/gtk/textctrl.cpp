@@ -1224,7 +1224,12 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 long wxTextCtrl::XYToPosition(long x, long y ) const
 {
     if ( IsSingleLine() )
-        return 0;
+    {
+        if ( y != 0 || x >= gtk_entry_get_text_length(GTK_ENTRY(m_text)) )
+            return -1;
+
+        return x;
+    }
 
     GtkTextIter iter;
     if (y >= gtk_text_buffer_get_line_count (m_buffer))

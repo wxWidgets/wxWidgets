@@ -162,6 +162,7 @@ wxGTK:
 - Fix wxMemoryDC::Blit() with itself as source (GTK+ 3).
 - Fix displaying labels of wxRadioBox items.
 - Add a native implementation for clearing bitmap/window wxGraphicsContexts
+- Implement XYToPosition() for single-line wxTextCtrl.
 
 wxMSW:
 
