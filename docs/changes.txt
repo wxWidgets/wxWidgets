@@ -163,6 +163,7 @@ wxGTK:
 - Fix displaying labels of wxRadioBox items.
 - Add a native implementation for clearing bitmap/window wxGraphicsContexts
 - Implement XYToPosition() for single-line wxTextCtrl.
+- Implement ShowPosition() for single-line wxTextCtrl.
 
 wxMSW:
 

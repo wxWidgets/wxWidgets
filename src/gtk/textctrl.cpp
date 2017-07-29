@@ -1444,6 +1444,11 @@ void wxTextCtrl::ShowPosition( long pos )
         else
             gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), mark);
     }
+    else // single line
+    {   // This function not only shows character at required position
+        // but also places the cursor at this position.
+        gtk_editable_set_position(GTK_EDITABLE(m_text), pos);
+    }
 }
 
 wxTextCtrlHitTestResult
