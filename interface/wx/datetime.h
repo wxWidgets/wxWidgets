@@ -561,8 +561,13 @@ public:
     /**
         Returns the number of seconds since Jan 1, 1970 UTC.
 
-        An assert failure will occur if the date is not in the range covered by
-        @c time_t type, use GetValue() if you work with dates outside of it.
+        If the date is not in the range covered by 32 bit @c time_t type, @c -1
+        is returned, use GetValue() if you work with dates outside of this
+        range.
+
+        Additionally, this method must be called on an initialized date object
+        and an assertion failure occurs if it is called on an object for which
+        IsValid() is false.
     */
     time_t GetTicks() const;
 
