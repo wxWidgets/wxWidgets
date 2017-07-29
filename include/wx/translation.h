@@ -32,15 +32,21 @@
 // ----------------------------------------------------------------------------
 
 // gettext() style macros (notice that xgettext should be invoked with
-// --keyword="_" --keyword="wxPLURAL:1,2" --keyword="wxCONTEXT:1c,2" 
-// --keyword="wxCONTEXTPLURAL:1c,2,3" options to extract the strings from the
-// sources)
+// --keyword="_" --keyword="wxPLURAL:1,2" options
+// to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
     #define _(s)                               wxGetTranslation((s))
     #define wxPLURAL(sing, plur, n)            wxGetTranslation((sing), (plur), n)
-    #define wxCONTEXT(c, s)                    wxGetTranslation((s), wxString(), c)
-    #define wxCONTEXTPLURAL(c, sing, plur, n)  wxGetTranslation((sing), (plur), n, wxString(), c)
 #endif
+
+// wx-specific macro for translating strings in the given context: if you use
+// them, you need to also add
+// --keyword="wxGETTEXT_IN_CONTEXT:1c,2" --keyword="wxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3"
+// options to xgettext invocation.
+#define wxGETTEXT_IN_CONTEXT(c, s) \
+    wxGetTranslation((s), wxString(), c)
+#define wxGETTEXT_IN_CONTEXT_PLURAL(c, sing, plur, n) \
+    wxGetTranslation((sing), (plur), n, wxString(), c)
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)
@@ -294,6 +300,8 @@ inline const wxString& wxGetTranslation(const wxString& str1,
         #define _(s)                 (s)
     #endif
     #define wxPLURAL(sing, plur, n)  ((n) == 1 ? (sing) : (plur))
+    #define wxGETTEXT_IN_CONTEXT(c, s)                     (s)
+    #define wxGETTEXT_IN_CONTEXT_PLURAL(c, sing, plur, n)  wxPLURAL(sing, plur, n)
 #endif
 
 #define wxTRANSLATE(str) str
@@ -326,7 +334,7 @@ inline TString wxGetTranslation(TString str1, TString str2, size_t n,
 
 template<typename TString, typename TDomain, typename TContext>
 inline TString wxGetTranslation(TString str1, TString str2, size_t n,
-                                TDomain WXUNUSED(domain), 
+                                TDomain WXUNUSED(domain),
                                 TContext WXUNUSED(context))
     { return n == 1 ? str1 : str2; }
 

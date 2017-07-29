@@ -317,16 +317,18 @@ MyFrame::MyFrame(wxLocale& locale)
     test_menu->Append(INTERNAT_TEST_MSGBOX, _("&Message box test"),
                       _("Tests message box buttons labels translation"));
 
+    // Note that all these strings are currently "translated" only in French
+    // catalog, so you need to use French locale to see them in action.
     wxMenu *macro_menu = new wxMenu;
     macro_menu->Append(INTERNAT_MACRO_1, _("item"));
-    macro_menu->Append(INTERNAT_MACRO_2, wxCONTEXT("cont1", "item"));
-    macro_menu->Append(INTERNAT_MACRO_3, wxCONTEXT("cont2", "item"));
+    macro_menu->Append(INTERNAT_MACRO_2, wxGETTEXT_IN_CONTEXT("context_1", "item"));
+    macro_menu->Append(INTERNAT_MACRO_3, wxGETTEXT_IN_CONTEXT("context_2", "item"));
     macro_menu->Append(INTERNAT_MACRO_4, wxPLURAL("sing", "plur", 1));
     macro_menu->Append(INTERNAT_MACRO_5, wxPLURAL("sing", "plur", 2));
-    macro_menu->Append(INTERNAT_MACRO_6, wxCONTEXTPLURAL("cont1", "sing", "plur", 1));
-    macro_menu->Append(INTERNAT_MACRO_7, wxCONTEXTPLURAL("cont1", "sing", "plur", 2));
-    macro_menu->Append(INTERNAT_MACRO_8, wxCONTEXTPLURAL("cont2", "sing", "plur", 1));
-    macro_menu->Append(INTERNAT_MACRO_9, wxCONTEXTPLURAL("cont2", "sing", "plur", 2));
+    macro_menu->Append(INTERNAT_MACRO_6, wxGETTEXT_IN_CONTEXT_PLURAL("context_1", "sing", "plur", 1));
+    macro_menu->Append(INTERNAT_MACRO_7, wxGETTEXT_IN_CONTEXT_PLURAL("context_1", "sing", "plur", 2));
+    macro_menu->Append(INTERNAT_MACRO_8, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 1));
+    macro_menu->Append(INTERNAT_MACRO_9, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 2));
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _("&File"));
