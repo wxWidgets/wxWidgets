@@ -246,6 +246,9 @@ static bool gs_horizontalPanActive = false;
 
 // True if "pam" signal was emitted for vertical pan gesture
 static bool gs_verticalPanActive = false;
+
+// Last Zoom/Rotate gesture point
+static wxPoint gs_lastGesturePoint;
 #endif // GTK_CHECK_VERSION(3,14,0)
 
 //-----------------------------------------------------------------------------
@@ -2995,6 +2998,10 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
 
     gs_lastScale = scale;
 
+    // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
+    // in the "end" signal is not a zoom center
+    gs_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
+
     win->GTKProcessEvent(event);
 }
 
@@ -3016,23 +3023,20 @@ zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequ
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureStart();
 
+    // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
+    // in the "end" signal is not a zoom center
+    gs_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
+
     win->GTKProcessEvent(event);
 }
 
 static void
-zoom_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
+zoom_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
-    gdouble x, y;
-
-    if ( !gtk_gesture_get_bounding_box_center(gesture, &x, &y) )
-    {
-        return;
-    }
-
     wxZoomGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
+    event.SetPosition(gs_lastGesturePoint);
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
@@ -3055,6 +3059,10 @@ rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(se
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureStart();
+
+    // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
+    // in the "end" signal is not a rotation center
+    gs_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
 
     win->GTKProcessEvent(event);
 }
@@ -3081,23 +3089,20 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble WXUNUSED(angle_delta), gdou
     // Update gs_lastAngle
     gs_lastAngle = angle;
 
+    // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
+    // in the "end" signal is not a rotation center
+    gs_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
+
     win->GTKProcessEvent(event);
 }
 
 static void
-rotate_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
+rotate_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
-    gdouble x, y;
-
-    if ( !gtk_gesture_get_bounding_box_center(gesture, &x, &y) )
-    {
-        return;
-    }
-
     wxRotateGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
+    event.SetPosition(gs_lastGesturePoint);
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
