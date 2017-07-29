@@ -896,7 +896,7 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     //wxString newJS = "(function (p) {return (typeof (r=eval(p)) === 'object') ? JSON.stringify(r) : String(r);})('" + javascript + "');";
     //return newJS;
     VarData[0].vt = VT_BSTR;
-    VarData[0].bstrVal = wxBasicString(javascript);
+    VarData[0].bstrVal = wxConvertStringToOle(javascript);
     hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
         &dpArgs, &result, NULL, NULL);
 
@@ -924,6 +924,7 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     else
         resultStr = wxString::Format(wxT("unknown type: %u"), result.vt);
 
+    VariantClear(&VarData[0]);
     return resultStr;
 }
 
