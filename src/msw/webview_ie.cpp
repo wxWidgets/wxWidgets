@@ -925,6 +925,7 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
         resultStr = wxString::Format(wxT("unknown type: %u"), result.vt);
 
     VariantClear(&VarData[0]);
+    VariantClear(&result);
     return resultStr;
 }
 

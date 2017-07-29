@@ -174,7 +174,7 @@
     <ClCompile>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;.;.\..\samples;%(AdditionalIncludeDirectories);.\cppunit\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -195,7 +195,7 @@
     <Link>
       <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_adv.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories);.\cppunit\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)\test_gui.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
