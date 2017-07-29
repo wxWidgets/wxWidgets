@@ -36,8 +36,10 @@ private:
         CPPUNIT_TEST( Title );
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( History );
+#ifndef wxUSE_WEBVIEW_WEBKIT2
         CPPUNIT_TEST( HistoryEnable );
         CPPUNIT_TEST( HistoryClear );
+#endif
         CPPUNIT_TEST( HistoryList );
         CPPUNIT_TEST( Editable );
         CPPUNIT_TEST( Selection );
@@ -80,7 +82,38 @@ private:
 };
 
 //Convenience macro
-#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS((*m_loaded), 1)
+
+#define WX_ASSERT_EVENT_OCCURS_LONG_WAIT(eventcounter, count) \
+{\
+    wxStopWatch sw; \
+    wxEventLoopBase* loop = wxEventLoopBase::GetActive(); \
+    while(eventcounter.GetCount() < count) \
+    { \
+        if(sw.Time() < 200) \
+            loop->Dispatch(); \
+        else \
+        { \
+            CPPUNIT_FAIL(wxString::Format("timeout reached with %d " \
+                                          "events received, %d expected", \
+                                          eventcounter.GetCount(), count).ToStdString()); \
+            break; \
+        } \
+    } \
+    eventcounter.Clear(); \
+}
+
+#define ENSURE_LOADED_COUNT(count) WX_ASSERT_EVENT_OCCURS_LONG_WAIT((*m_loaded), count)
+
+#define ENSURE_LOADED ENSURE_LOADED_COUNT(1)
+#define ENSURE_LOADED_TWO ENSURE_LOADED_COUNT(2)
+
+#define WX_WEBVIEW_LOAD_URL_WAIT(browser, url, time) \
+{ \
+    browser->LoadURL(url); \
+    wxStopWatch sw; \
+    while (browser->GetBackwardHistory().empty() && sw.Time() < time) \
+        wxEventLoopBase::GetActive()->Dispatch(); \
+}
 
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( WebTestCase );
@@ -94,7 +127,11 @@ void WebTestCase::setUp()
 
     m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
     m_browser->LoadURL("about:blank");
+#ifdef wxUSE_WEBVIEW_WEBKIT2
+    ENSURE_LOADED_TWO;
+#else
     ENSURE_LOADED;
+#endif
 }
 
 void WebTestCase::tearDown()
@@ -283,14 +320,6 @@ void WebTestCase::SetPage()
     m_browser->SetPage("<html><body>other text</body></html>", "");
     ENSURE_LOADED;
     CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
-}
-
-#define WX_WEBVIEW_LOAD_URL_WAIT(browser, url, time) \
-{ \
-    browser->LoadURL(url); \
-    wxStopWatch sw; \
-    while (browser->GetBackwardHistory().empty() && sw.Time() < time) \
-        wxEventLoopBase::GetActive()->Dispatch(); \
 }
 
 void WebTestCase::RunScriptWriteDOM()
