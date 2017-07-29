@@ -882,26 +882,30 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
         return "!SUCCEDED pScript->GetIDsOfNames";
     }
 
-    // invoke assuming one method parameter (the javascript)
-    VARIANTARG VarData[1];
-    VARIANT result = { 0 };
+    //wxString newJS = "(function (p) {return (typeof (r=eval(p)) === 'object') ? JSON.stringify(r) : String(r);})('" + javascript + "');";
+    //return newJS;
+    VARIANT varJavascript;
+    VariantInit(&varJavascript);
+    V_VT(&varJavascript) = VT_BSTR;
+    V_BSTR(&varJavascript) = wxConvertStringToOle(javascript);
+
+    VARIANT result;
+    VariantInit(&result);
+    V_VT(&result) = VT_EMPTY;
 
     DISPPARAMS dpArgs;
-    dpArgs.rgvarg = &VarData[0];
+    dpArgs.rgvarg = &varJavascript;
     dpArgs.cArgs = 1;
     dpArgs.cNamedArgs = 0;
     dpArgs.rgdispidNamedArgs = NULL;
 
-
-    //wxString newJS = "(function (p) {return (typeof (r=eval(p)) === 'object') ? JSON.stringify(r) : String(r);})('" + javascript + "');";
-    //return newJS;
-    VarData[0].vt = VT_BSTR;
-    VarData[0].bstrVal = wxConvertStringToOle(javascript);
     hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
         &dpArgs, &result, NULL, NULL);
 
+    VariantClear(&varJavascript);
     if (!SUCCEEDED(hr))
     {
+        VariantClear(&result);
         wxLogMessage("!SUCCEDED pScript->Invoke");
         return "!SUCCEDED pScript->Invoke";
     }
@@ -924,7 +928,6 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     else
         resultStr = wxString::Format(wxT("unknown type: %u"), result.vt);
 
-    VariantClear(&VarData[0]);
     VariantClear(&result);
     return resultStr;
 }
