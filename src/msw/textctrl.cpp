@@ -1528,9 +1528,52 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
         return false;
     }
 
-    // The X position must therefore be the different between pos and charIndex
+    // Line is identified by a character position!
+    // New lines characters are not included.
+    long lineLength = ::SendMessage(hWnd, EM_LINELENGTH, charIndex, 0);
+
+    // To simplify further calculations, make position relative
+    // to the beginning of the line.
+    pos -= charIndex;
+
+    // We need to apply different approach for the position referring
+    // to the last line so check if the next line exists.
+    long charIndexNextLn = IsMultiLine() ?
+                           ::SendMessage(hWnd, EM_LINEINDEX, lineNo + 1, 0)
+                           : -1;
+    if ( charIndexNextLn == -1 )
+    {
+        // No next line. Char position refers to the last line so
+        // the length of the line obtained with EM_LINELENGTH is
+        // correct because there are no new line characters at the end.
+        if ( pos > lineLength )
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // Next line found. Char position doesn't refer to the last line
+        // so we need to take into account new line characters which were
+        // not counted by EM_LINELENGTH.
+        long lineLengthFull = charIndexNextLn - charIndex;
+        wxASSERT(lineLengthFull - lineLength == 2); // In case.
+        if ( pos > lineLengthFull )
+        {
+            return false;
+        }
+        if ( pos > lineLength )
+        {
+            // Char position refers to the second character of the CR/LF mark
+            // and its physical X-Y position is the same as the position
+            // of the first one.
+            pos = lineLength;
+        }
+    }
+
+    // The X position is therefore a char position in the line.
     if ( x )
-        *x = pos - charIndex;
+        *x = pos;
     if ( y )
         *y = lineNo;
 

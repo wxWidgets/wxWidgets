@@ -195,7 +195,7 @@ wxMSW:
 - Fix placing 0RGB wxBitmaps on the clipboard.
 - Fix handling wxClipboard data when wxUSE_OLE == 0.
 - Fix caching of wxFONTSTYLE_SLANT fonts in wxTheFontList.
-- Fix wxTextCtrl::XYToPosition().
+- Fix wxTextCtrl::XYToPosition() and PositionToXY().
 
 wxOSX:
 
