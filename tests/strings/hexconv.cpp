@@ -85,7 +85,7 @@ void HexConvTestCase::DecToHex2()
 
         CPPUNIT_ASSERT_EQUAL( hexStr[0], (wxChar)szHexStrRef[0] );
         CPPUNIT_ASSERT_EQUAL( hexStr[1], (wxChar)szHexStrRef[1] );
-        CPPUNIT_ASSERT_EQUAL( hexStr[2], wxS('\0') );
+        CPPUNIT_ASSERT_EQUAL( hexStr[2], (wxChar)'\0' );
         CPPUNIT_ASSERT_EQUAL( hexStr[3], c3 );
     }
 }
