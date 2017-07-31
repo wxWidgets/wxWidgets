@@ -1204,7 +1204,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     }
     else // single line control
     {
-        if (pos <= gtk_entry_get_text_length(GTK_ENTRY(m_text)))
+        if (pos <= GTKGetEntryTextLength(GTK_ENTRY(m_text)))
         {
             if ( y )
                 *y = 0;
@@ -1225,7 +1225,8 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
 {
     if ( IsSingleLine() )
     {
-        if ( y != 0 || x >= gtk_entry_get_text_length(GTK_ENTRY(m_text)) )
+
+        if ( y != 0 || x >= GTKGetEntryTextLength(GTK_ENTRY(m_text)) )
             return -1;
 
         return x;
