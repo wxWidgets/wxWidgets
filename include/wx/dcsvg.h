@@ -16,6 +16,8 @@
 
 #if wxUSE_SVG
 
+#include "wx/scopedptr.h"
+
 #define wxSVGVersion wxT("v0101")
 
 class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
