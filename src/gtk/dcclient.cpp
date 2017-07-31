@@ -1551,7 +1551,8 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if (m_pen == pen) return;
+    if (m_pen == pen && (!pen.IsOk() || pen.GetStyle() != wxPENSTYLE_USER_DASH))
+        return;
 
     m_pen = pen;
 
