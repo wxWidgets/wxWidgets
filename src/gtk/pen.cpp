@@ -54,7 +54,7 @@ public:
         if ( m_dash )
         {
             if ( !data.m_dash ||
-                 memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxGTKDash)) )
+                 memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxDash)) )
             {
                 return false;
             }
@@ -78,7 +78,7 @@ public:
     wxPenCap   m_capStyle;
     wxColour   m_colour;
     int        m_countDashes;
-    wxGTKDash *m_dash;
+    const wxDash* m_dash;
 };
 
 //-----------------------------------------------------------------------------
@@ -139,7 +139,7 @@ void wxPen::SetDashes( int number_of_dashes, const wxDash *dash )
     AllocExclusive();
 
     M_PENDATA->m_countDashes = number_of_dashes;
-    M_PENDATA->m_dash = (wxGTKDash *)dash;
+    M_PENDATA->m_dash = dash;
 }
 
 void wxPen::SetColour( unsigned char red, unsigned char green, unsigned char blue )
