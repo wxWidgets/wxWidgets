@@ -818,6 +818,8 @@ void DateTimeTestCase::TestTimeFormat()
         }
     }
 
+    CPPUNIT_ASSERT(wxDateTime::Now().Format("%") == "%");
+
     wxDateTime dt;
 
 #if 0

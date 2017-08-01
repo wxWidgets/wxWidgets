@@ -356,6 +356,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     time_t time = GetTicks();
 
     bool canUseStrftime = time != (time_t)-1;
+    bool isPercent = false;
 
     // We also can't use strftime() if we use non standard specifier: either
     // our own extension "%l" or one of "%g", "%G", "%V", "%z" which are POSIX
@@ -364,11 +365,15 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
           canUseStrftime && p != format.end();
           ++p )
     {
-        if ( *p != '%' )
+        if (!isPercent)
+        {
+            isPercent = *p == '%';
             continue;
+        }
+        isPercent = false;
 
         // set the default format
-        switch ( (*++p).GetValue() )
+        switch ( (*p).GetValue() )
         {
             case 'l':
 #ifdef __WINDOWS__
