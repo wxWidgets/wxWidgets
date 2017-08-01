@@ -151,7 +151,7 @@ typedef DWORD   (__stdcall *PFNWXUGETTHEMEAPPPROPERTIES)();
 typedef void    (__stdcall *PFNWXUSETTHEMEAPPPROPERTIES)(DWORD);
 typedef HRESULT (__stdcall *PFNWXUGETCURRENTTHEMENAME)(wchar_t *, int, wchar_t *, int, wchar_t *, int);
 typedef HRESULT (__stdcall *PFNWXUGETTHEMEDOCUMENTATIONPROPERTY)(const wchar_t *, const wchar_t *, wchar_t *, int);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEPARENTBACKGROUND)(HWND, HDC, RECT *);
+typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEPARENTBACKGROUND)(HWND, HDC, const RECT *);
 typedef HRESULT (__stdcall *PFNWXUENABLETHEMING)(BOOL);
 
 // ----------------------------------------------------------------------------
