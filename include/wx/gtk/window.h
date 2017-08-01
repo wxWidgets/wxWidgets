@@ -10,6 +10,7 @@
 #define _WX_GTK_WINDOW_H_
 
 #include "wx/dynarray.h"
+#include "wx/gtk/private/gesturehelper.h"
 
 #ifdef __WXGTK3__
     typedef struct _cairo cairo_t;
@@ -355,6 +356,8 @@ public:
     bool m_needCursorReset:1;
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
+
+    GestureHelper m_gestureHelper;
 
 protected:
     // implement the base class pure virtuals
