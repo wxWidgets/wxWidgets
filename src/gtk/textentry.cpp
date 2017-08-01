@@ -42,7 +42,9 @@
 static unsigned int GetEntryTextLength(GtkEntry* entry)
 {
 #if GTK_CHECK_VERSION(2, 14, 0)
+#ifndef __WXGTK3__
     if ( gtk_check_version(2, 14, 0) == NULL )
+#endif // !GTK+ 3
     {
         return gtk_entry_get_text_length(entry);
     }
