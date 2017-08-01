@@ -38,7 +38,7 @@
 #endif
 
 #include "wx/tooltip.h"
-#include "wx/spinctrl.h"
+#include "wx/spinbutt.h"
 #include "wx/geometry.h"
 #include "wx/weakref.h"
 
