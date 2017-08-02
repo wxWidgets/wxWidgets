@@ -225,6 +225,7 @@ wxOSX:
 - Allow turning on/off opacity selector in wxColourDialog.
 - Implement wxTextCtrl::PositionToXY() and XYToPosition().
 - Implement wxTextCtrl::ShowPosition().
+- Add support for wxTE_NO_VSCROLL style to wxTextCtrl.
 
 Unix:
 

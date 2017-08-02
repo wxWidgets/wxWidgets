@@ -976,8 +976,8 @@ public:
     @style{wxTE_NO_VSCROLL}
            For multiline controls only: vertical scrollbar will never be
            created. This limits the amount of text which can be entered into
-           the control to what can be displayed in it under MSW but not under
-           GTK2. Currently not implemented for the other platforms.
+           the control to what can be displayed in it under wxMSW but not under
+           wxGTK or wxOSX. Currently not implemented for the other platforms.
     @style{wxTE_LEFT}
            The text in the control will be left-justified (default).
     @style{wxTE_CENTRE}

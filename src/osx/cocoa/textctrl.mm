@@ -716,6 +716,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
 
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:hasHScroll];
+    [m_scrollView setHasVerticalScroller:(style & wxTE_NO_VSCROLL)? NO: YES];
     NSSize contentSize = [m_scrollView contentSize];
     NSRect viewFrame = NSMakeRect(
             0, 0,
