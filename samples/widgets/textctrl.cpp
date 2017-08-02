@@ -181,7 +181,7 @@ protected:
 
     void OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event);
     void OnUpdateUINoVertScrollbarCheckbox(wxUpdateUIEvent& event);
-    void OnUpdateUIWrapLinesCheckbox(wxUpdateUIEvent& event);
+    void OnUpdateUIWrapLinesRadiobox(wxUpdateUIEvent& event);
 
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
 
@@ -326,7 +326,7 @@ wxBEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
 
     EVT_UPDATE_UI(TextPage_Password, TextWidgetsPage::OnUpdateUIPasswordCheckbox)
     EVT_UPDATE_UI(TextPage_NoVertScrollbar, TextWidgetsPage::OnUpdateUINoVertScrollbarCheckbox)
-    EVT_UPDATE_UI(TextPage_WrapLines, TextWidgetsPage::OnUpdateUIWrapLinesCheckbox)
+    EVT_UPDATE_UI(TextPage_WrapLines, TextWidgetsPage::OnUpdateUIWrapLinesRadiobox)
 
     EVT_UPDATE_UI(TextPage_Reset, TextWidgetsPage::OnUpdateUIResetButton)
 
@@ -443,7 +443,7 @@ void TextWidgetsPage::CreateContent()
         wxT("best wrap"),
     };
 
-    m_radioWrap = new wxRadioBox(this, wxID_ANY, wxT("&Wrap style:"),
+    m_radioWrap = new wxRadioBox(this, TextPage_WrapLines, wxT("&Wrap style:"),
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(wrap), wrap,
                                  1, wxRA_SPECIFY_COLS);
@@ -891,7 +891,7 @@ void TextWidgetsPage::OnUpdateUIClearButton(wxUpdateUIEvent& event)
     event.Enable(!m_text->GetValue().empty());
 }
 
-void TextWidgetsPage::OnUpdateUIWrapLinesCheckbox(wxUpdateUIEvent& event)
+void TextWidgetsPage::OnUpdateUIWrapLinesRadiobox(wxUpdateUIEvent& event)
 {
     event.Enable( !IsSingleLine() );
 }
