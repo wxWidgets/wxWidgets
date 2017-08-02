@@ -63,6 +63,7 @@ enum
     TextPage_StreamRedirector,
 
     TextPage_Password,
+    TextPage_NoVertScrollbar,
     TextPage_WrapLines,
     TextPage_Textctrl
 };
@@ -107,6 +108,7 @@ static const struct ControlValues
     bool readonly;
     bool processEnter;
     bool filename;
+    bool noVertScrollbar;
 
     WrapStyle wrapStyle;
 
@@ -120,6 +122,7 @@ static const struct ControlValues
     false,              // not readonly
     true,               // do process enter
     false,              // not filename
+    false,              // don't hide vertical scrollbar
     WrapStyle_Word,     // wrap on word boundaries
 #ifdef __WXMSW__
     TextKind_Plain      // plain EDIT control
@@ -177,6 +180,7 @@ protected:
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
 
     void OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event);
+    void OnUpdateUINoVertScrollbarCheckbox(wxUpdateUIEvent& event);
     void OnUpdateUIWrapLinesCheckbox(wxUpdateUIEvent& event);
 
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
@@ -208,7 +212,8 @@ protected:
     wxCheckBox *m_chkPassword,
                *m_chkReadonly,
                *m_chkProcessEnter,
-               *m_chkFilename;
+               *m_chkFilename,
+               *m_chkNoVertScrollbar;
 
     // under MSW we test rich edit controls as well here
 #ifdef __WXMSW__
@@ -320,6 +325,7 @@ wxBEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(TextPage_Clear, TextWidgetsPage::OnUpdateUIClearButton)
 
     EVT_UPDATE_UI(TextPage_Password, TextWidgetsPage::OnUpdateUIPasswordCheckbox)
+    EVT_UPDATE_UI(TextPage_NoVertScrollbar, TextWidgetsPage::OnUpdateUINoVertScrollbarCheckbox)
     EVT_UPDATE_UI(TextPage_WrapLines, TextWidgetsPage::OnUpdateUIWrapLinesCheckbox)
 
     EVT_UPDATE_UI(TextPage_Reset, TextWidgetsPage::OnUpdateUIResetButton)
@@ -369,7 +375,8 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
     m_chkPassword =
     m_chkReadonly =
     m_chkProcessEnter =
-    m_chkFilename = (wxCheckBox *)NULL;
+    m_chkFilename =
+    m_chkNoVertScrollbar = (wxCheckBox *)NULL;
 
     m_text =
     m_textPosCur =
@@ -420,6 +427,10 @@ void TextWidgetsPage::CreateContent()
                     );
     m_chkFilename = CreateCheckBoxAndAddToSizer(
                         sizerLeft, wxT("&Filename control")
+                    );
+    m_chkNoVertScrollbar = CreateCheckBoxAndAddToSizer(
+                        sizerLeft, wxT("No &vertical scrollbar"),
+                        TextPage_NoVertScrollbar
                     );
     m_chkFilename->Disable(); // not implemented yet
     sizerLeft->AddSpacer(5);
@@ -621,6 +632,7 @@ void TextWidgetsPage::Reset()
     m_chkReadonly->SetValue(DEFAULTS.readonly);
     m_chkProcessEnter->SetValue(DEFAULTS.processEnter);
     m_chkFilename->SetValue(DEFAULTS.filename);
+    m_chkNoVertScrollbar->SetValue(DEFAULTS.noVertScrollbar);
 
     m_radioWrap->SetSelection(DEFAULTS.wrapStyle);
 
@@ -652,6 +664,8 @@ void TextWidgetsPage::CreateText()
         flags |= wxTE_READONLY;
     if ( m_chkProcessEnter->GetValue() )
         flags |= wxTE_PROCESS_ENTER;
+    if ( m_chkNoVertScrollbar->GetValue() )
+        flags |= wxTE_NO_VSCROLL;
 
     switch ( m_radioWrap->GetSelection() )
     {
@@ -888,6 +902,12 @@ void TextWidgetsPage::OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event)
     event.Enable( IsSingleLine() );
 }
 
+void TextWidgetsPage::OnUpdateUINoVertScrollbarCheckbox(wxUpdateUIEvent& event)
+{
+    // Vertical scrollbar creation can be blocked only in multiline control
+    event.Enable( !IsSingleLine());
+}
+
 void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( (m_radioTextLines->GetSelection() != DEFAULTS.textLines) ||
@@ -898,6 +918,7 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
                   (m_chkProcessEnter->GetValue() != DEFAULTS.processEnter) ||
                   (m_chkFilename->GetValue() != DEFAULTS.filename) ||
+                  (m_chkNoVertScrollbar->GetValue() != DEFAULTS.noVertScrollbar) ||
                   (m_radioWrap->GetSelection() != DEFAULTS.wrapStyle) );
 }
 
