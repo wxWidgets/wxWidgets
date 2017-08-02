@@ -1398,10 +1398,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         }
                 
         NSTextFieldCell* cell = [v cell];
-        [cell setScrollable:YES];
-        // TODO: Remove if we definitely are sure, it's not needed
-        // as setting scrolling to yes, should turn off any wrapping
-        // [cell setLineBreakMode:NSLineBreakByClipping]; 
+        [cell setUsesSingleLineMode:YES];
 
         c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
         
