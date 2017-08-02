@@ -824,13 +824,13 @@ bool wxKeyEvent::IsKeyInCategory(int category) const
             return (category & WXK_CATEGORY_ARROW) != 0;
 
         case WXK_PAGEDOWN:
-        case WXK_END:
+        case WXK_PAGEUP:
         case WXK_NUMPAD_PAGEUP:
         case WXK_NUMPAD_PAGEDOWN:
             return (category & WXK_CATEGORY_PAGING) != 0;
 
         case WXK_HOME:
-        case WXK_PAGEUP:
+        case WXK_END:
         case WXK_NUMPAD_HOME:
         case WXK_NUMPAD_END:
             return (category & WXK_CATEGORY_JUMP) != 0;
