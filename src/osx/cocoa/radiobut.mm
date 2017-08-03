@@ -109,6 +109,7 @@ wxWidgetImplType* wxWidgetImpl::CreateRadioButton( wxWindowMac* wxpeer,
     wxNSRadioButton* v = [[wxNSRadioButton alloc] initWithFrame:r];
 
     [v setButtonType:NSRadioButton];
+    [v setAlignment:NSLeftTextAlignment];
 
     static int alternateAction = 1;
  
