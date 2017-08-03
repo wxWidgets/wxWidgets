@@ -86,6 +86,14 @@ enum WrapStyle
     WrapStyle_Max
 };
 
+// Alignment style radio box
+enum AlignmentStyle
+{
+    Align_Left,
+    Align_Center,
+    Align_Right,
+};
+
 #ifdef __WXMSW__
 
 // textctrl kind values
@@ -111,6 +119,7 @@ static const struct ControlValues
     bool noVertScrollbar;
 
     WrapStyle wrapStyle;
+    AlignmentStyle alignmentStyle;
 
 #ifdef __WXMSW__
     TextKind textKind;
@@ -124,6 +133,7 @@ static const struct ControlValues
     false,              // not filename
     false,              // don't hide vertical scrollbar
     WrapStyle_Word,     // wrap on word boundaries
+    Align_Left,         // leading-alignment
 #ifdef __WXMSW__
     TextKind_Plain      // plain EDIT control
 #endif // __WXMSW__
@@ -207,6 +217,9 @@ protected:
 
     // and another one to choose the wrapping style
     wxRadioBox *m_radioWrap;
+
+    // and yet another one to choose the alignment style
+    wxRadioBox *m_radioAlign;
 
     // the checkboxes controlling text ctrl styles
     wxCheckBox *m_chkPassword,
@@ -370,6 +383,7 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
     m_radioKind =
 #endif // __WXMSW__
     m_radioWrap =
+    m_radioAlign =
     m_radioTextLines = (wxRadioBox *)NULL;
 
     m_chkPassword =
@@ -448,6 +462,18 @@ void TextWidgetsPage::CreateContent()
                                  WXSIZEOF(wrap), wrap,
                                  1, wxRA_SPECIFY_COLS);
     sizerLeft->Add(m_radioWrap, 0, wxGROW | wxALL, 5);
+
+    static const wxString halign[] =
+    {
+        wxS("left"),
+        wxS("centre"),
+        wxS("right"),
+    };
+
+    m_radioAlign = new wxRadioBox(this, wxID_ANY, wxS("&Text alignment"),
+                                    wxDefaultPosition, wxDefaultSize,
+                                    WXSIZEOF(halign), halign, 1);
+    sizerLeft->Add(m_radioAlign, 0, wxGROW | wxALL, 5);
 
 #ifdef __WXMSW__
     static const wxString kinds[] =
@@ -635,6 +661,7 @@ void TextWidgetsPage::Reset()
     m_chkNoVertScrollbar->SetValue(DEFAULTS.noVertScrollbar);
 
     m_radioWrap->SetSelection(DEFAULTS.wrapStyle);
+    m_radioAlign->SetSelection(DEFAULTS.alignmentStyle);
 
 #ifdef __WXMSW__
     m_radioKind->SetSelection(DEFAULTS.textKind);
@@ -688,6 +715,21 @@ void TextWidgetsPage::CreateText()
             // this is default but use symbolic file name for consistency
             flags |= wxTE_BESTWRAP;
             break;
+    }
+
+    switch ( m_radioAlign->GetSelection() )
+    {
+        case Align_Left:
+            flags |= wxTE_LEFT;
+            break;
+        case Align_Center:
+            flags |= wxTE_CENTER;
+            break;
+        case Align_Right:
+            flags |= wxTE_RIGHT;
+            break;
+        default:
+            wxFAIL_MSG( wxS("unexpected alignment style radio box selection") );
     }
 
 #ifdef __WXMSW__
@@ -949,9 +991,47 @@ void TextWidgetsPage::OnTextPasted(wxClipboardTextEvent& event)
     event.Skip();
 }
 
-void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
+void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 {
-    CreateText();
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    // We should be able to change text alignment
+    // dynamically, without recreating the control.
+    if( event.GetEventObject() == m_radioAlign )
+    {
+        long flags = m_text->GetWindowStyle();
+        flags &= ~(wxTE_LEFT|wxTE_CENTER|wxTE_RIGHT);
+
+        switch ( event.GetSelection() )
+        {
+            case Align_Left:
+                flags |= wxTE_LEFT;
+                break;
+            case Align_Center:
+                flags |= wxTE_CENTER;
+                break;
+            case Align_Right:
+                flags |= wxTE_RIGHT;
+                break;
+            default:
+                wxFAIL_MSG( wxS("unexpected alignment style radio box selection") );
+                return;
+        }
+
+        m_text->SetWindowStyle(flags);
+        m_text->Refresh();
+
+        flags = m_text->GetWindowStyle();
+        wxLogMessage(wxString::Format("Text alignment: %s",
+               (flags & wxTE_RIGHT) ? "Right" :
+               (flags & wxTE_CENTER) ? "Center" : "Left"));
+    }
+    else
+#else
+    wxUnusedVar(event);
+#endif // WXMSW || WXGTK
+    {
+        CreateText();
+    }
 }
 
 void TextWidgetsPage::OnStreamRedirector(wxCommandEvent& WXUNUSED(event))
