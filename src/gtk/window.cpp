@@ -228,6 +228,29 @@ static GList* gs_sizeRevalidateList;
 static bool gs_inSizeAllocate;
 #endif
 
+#if GTK_CHECK_VERSION(3,14,0)
+// This is true when the gesture has just started (currently used for pan gesture only)
+static bool gs_gestureStart = false;
+
+// Last offset for the pan gesture, this is used to calculate deltas for pan gesture event
+static double gs_lastOffset = 0;
+
+// Last scale provided by GTK
+static gdouble gs_lastScale = 1.0;
+
+// This is used to calculate angle delta.
+static gdouble gs_lastAngle = 0;
+
+// True if "pan" signal was emitted for horizontal pan gesture
+static bool gs_horizontalPanActive = false;
+
+// True if "pan" signal was emitted for vertical pan gesture
+static bool gs_verticalPanActive = false;
+
+// Last Zoom/Rotate gesture point
+static wxPoint gs_lastGesturePoint;
+#endif // GTK_CHECK_VERSION(3,14,0)
+
 //-----------------------------------------------------------------------------
 // debug
 //-----------------------------------------------------------------------------
@@ -2830,26 +2853,19 @@ static gboolean source_dispatch(GSource*, GSourceFunc, void*)
 
 #if GTK_CHECK_VERSION(3,14,0)
 static void
-pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
+pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* WXUNUSED(win))
 {
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
-    gestureHelper.m_gestureStart = true;
+    gs_gestureStart = true;
 
     // Set it to 0, as this will be used to calculate the deltas for new pan gesture
-    gestureHelper.m_lastOffset = 0;
-
-    // Update m_gestureHelper
-    win->m_gestureHelper = gestureHelper;
+    gs_lastOffset = 0;
 }
 
 static void
 horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
     // Do not process horizontal pan, if there was no "pan" signal for it.
-    if ( !gestureHelper.m_horizontalPanActive )
+    if ( !gs_horizontalPanActive )
     {
         return;
     }
@@ -2861,16 +2877,13 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
         return;
     }
 
-    gestureHelper.m_horizontalPanActive = false;
+    gs_horizontalPanActive = false;
 
     wxPanGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureEnd();
-
-    // Update m_gestureHelper
-    win->m_gestureHelper = gestureHelper;
 
     win->GTKProcessEvent(event);
 }
@@ -2878,10 +2891,8 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
 static void
 vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
     // Do not process vertical pan, if there was no "pan" signal for it.
-    if ( !gestureHelper.m_verticalPanActive )
+    if ( !gs_verticalPanActive )
     {
         return;
     }
@@ -2893,16 +2904,13 @@ vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequenc
         return;
     }
 
-    gestureHelper.m_verticalPanActive = false;
+    gs_verticalPanActive = false;
 
     wxPanGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetGestureEnd();
-
-    // Update m_gestureHelper
-    win->m_gestureHelper = gestureHelper;
 
     win->GTKProcessEvent(event);
 }
@@ -2926,50 +2934,45 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
         return;
     }
 
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
     wxPanGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
     // This is the difference between this and the last pan gesture event in the current sequence
-    int delta = wxRound(offset - gestureHelper.m_lastOffset);
+    int delta = wxRound(offset - gs_lastOffset);
 
     switch ( direction )
     {
         case GTK_PAN_DIRECTION_UP:
             event.SetDeltaY(-delta);
-            gestureHelper.m_verticalPanActive = true;
+            gs_verticalPanActive = true;
             break;
 
         case GTK_PAN_DIRECTION_DOWN:
-            gestureHelper.m_verticalPanActive = true;
+            gs_verticalPanActive = true;
             event.SetDeltaY(delta);
             break;
 
         case GTK_PAN_DIRECTION_RIGHT:
-            gestureHelper.m_horizontalPanActive = true;
+            gs_horizontalPanActive = true;
             event.SetDeltaX(delta);
             break;
 
         case GTK_PAN_DIRECTION_LEFT:
-            gestureHelper.m_horizontalPanActive = true;
+            gs_horizontalPanActive = true;
             event.SetDeltaX(-delta);
             break;
     }
 
-    // Update m_lastOffset
-    gestureHelper.m_lastOffset = offset;
+    // Update gs_lastOffset
+    gs_lastOffset = offset;
 
-    if ( gestureHelper.m_gestureStart )
+    if ( gs_gestureStart )
     {
         event.SetGestureStart();
-        gestureHelper.m_gestureStart = false;
+        gs_gestureStart = false;
     }
-
-    // Update m_gestureHelper
-    win->m_gestureHelper = gestureHelper;
 
     win->GTKProcessEvent(event);
 }
@@ -2984,31 +2987,20 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
         return;
     }
 
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
     wxZoomGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
-    gdouble zoomDelta = scale - gestureHelper.m_lastScale + 1.0;
+    gdouble zoomDelta = scale - gs_lastScale + 1.0;
 
     event.SetZoomDelta(zoomDelta);
 
-    gestureHelper.m_lastScale = scale;
-
-    // Cancel "Two Finger Tap" if zoomDelta is not equal to 1.0
-    if ( zoomDelta != 1.0000 )
-    {
-        gestureHelper.m_isTwoFingerTapPossible = false;
-    }
+    gs_lastScale = scale;
 
     // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
     // in the "end" signal is not a zoom center
-    gestureHelper.m_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
-
-    // Update m_gestureHelperHelper
-    win->m_gestureHelper = gestureHelper;
+    gs_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
 
     win->GTKProcessEvent(event);
 }
@@ -3023,9 +3015,7 @@ zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequ
         return;
     }
 
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
-    gestureHelper.m_lastScale = 1.0;
+    gs_lastScale = 1.0;
 
     wxZoomGestureEvent event(win->GetId());
 
@@ -3035,10 +3025,7 @@ zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequ
 
     // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
     // in the "end" signal is not a zoom center
-    gestureHelper.m_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
-
-    // Update m_gestureHelper
-    win->m_gestureHelper = gestureHelper;
+    gs_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
 
     win->GTKProcessEvent(event);
 }
@@ -3046,12 +3033,10 @@ zoom_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(sequ
 static void
 zoom_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
     wxZoomGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(gestureHelper.m_lastGesturePoint);
+    event.SetPosition(gs_lastGesturePoint);
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
@@ -3067,9 +3052,7 @@ rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(se
         return;
     }
 
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
-    gestureHelper.m_lastAngle = 0;
+    gs_lastAngle = 0;
 
     wxRotateGestureEvent event(win->GetId());
 
@@ -3079,10 +3062,7 @@ rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(se
 
     // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
     // in the "end" signal is not a rotation center
-    gestureHelper.m_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
-
-    // Update m_gestureHelper
-    win->m_gestureHelper = gestureHelper;
+    gs_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
 
     win->GTKProcessEvent(event);
 }
@@ -3097,8 +3077,6 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble WXUNUSED(angle_delta), gdou
         return;
     }
 
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
     wxRotateGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
@@ -3106,17 +3084,14 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble WXUNUSED(angle_delta), gdou
 
     // Angle provided by GTK is the cumulative angle since the "begin" signal was emitted.
     // We need the change in angle since the last event.
-    event.SetAngleDelta(angle - gestureHelper.m_lastAngle);
+    event.SetAngleDelta(angle - gs_lastAngle);
 
-    // Update m_lastAngle
-    gestureHelper.m_lastAngle = angle;
+    // Update gs_lastAngle
+    gs_lastAngle = angle;
 
     // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
     // in the "end" signal is not a rotation center
-    gestureHelper.m_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
-
-    // Update m_gestureHelper
-    win->m_gestureHelper = gestureHelper;
+    gs_lastGesturePoint = wxPoint(wxRound(x), wxRound(y));
 
     win->GTKProcessEvent(event);
 }
@@ -3124,12 +3099,10 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble WXUNUSED(angle_delta), gdou
 static void
 rotate_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* win)
 {
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
     wxRotateGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
-    event.SetPosition(gestureHelper.m_lastGesturePoint);
+    event.SetPosition(gs_lastGesturePoint);
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
@@ -3146,81 +3119,6 @@ long_press_gesture_callback(GtkGesture* WXUNUSED(gesture), gdouble x, gdouble y,
     event.SetGestureEnd();
 
     win->GTKProcessEvent(event);
-}
-
-static void
-touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGTK* win)
-{
-    GestureHelper gestureHelper(win->m_gestureHelper);
-
-    switch(gdk_event->type)
-    {
-        case GDK_TOUCH_BEGIN:
-        {
-            gestureHelper.m_fingerCount++;
-
-            gestureHelper.m_isTwoFingerTapPossible = false;
-
-            if ( gestureHelper.m_fingerCount == 1 )
-            {
-                gestureHelper.m_lastTime = gdk_event->time;
-            }
-
-            // Check if two fingers are placed together .i.e difference between their time stamps is <= 200 milliseconds
-            else if ( gestureHelper.m_fingerCount == 2 && gdk_event->time - gestureHelper.m_lastTime <= 200 )
-            {
-                // "Two Finger Tap" may be possible in the future
-                gestureHelper.m_isTwoFingerTapPossible = true;
-            }
-        }
-
-        break;
-
-        case GDK_TOUCH_END:
-        case GDK_TOUCH_CANCEL:
-        {
-            gestureHelper.m_fingerCount--;
-
-            if ( gestureHelper.m_fingerCount == 1 )
-            {
-                gestureHelper.m_lastTime = gdk_event->time;
-                gestureHelper.m_lastTouchPoint.x = gdk_event->x;
-                gestureHelper.m_lastTouchPoint.y = gdk_event->y;
-            }
-
-            // Check if "Two Finger Tap" is possible and both the fingers have been lifted up together
-            else if ( gestureHelper.m_isTwoFingerTapPossible && gestureHelper.m_fingerCount == 0
-                 && gdk_event->time - gestureHelper.m_lastTime <= 200 )
-            {
-                wxTwoFingerTapEvent event(win->GetId());
-
-                event.SetEventObject(win);
-
-                double lastX = gestureHelper.m_lastTouchPoint.x;
-                double lastY = gestureHelper.m_lastTouchPoint.y;
-
-                double left = lastX <= gdk_event->x ? lastX : gdk_event->x;
-                double up = lastY <= gdk_event->y ? lastY : gdk_event->y;
-
-                // Calculate gesture point .i.e center of the box formed by two fingers
-                double x = left + abs(lastX - gdk_event->x)/2;
-                double y = up + abs(lastY - gdk_event->y)/2;
-
-                event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
-                event.SetGestureStart();
-                event.SetGestureEnd();
-
-                win->GTKProcessEvent(event);
-            }
-        }
-        break;
-
-        default:
-        break;
-    }
-
-    // Update m_gestureHelper
-    win->m_gestureHelper = gestureHelper;
 }
 #endif // GTK_CHECK_VERSION(3,14,0)
 
@@ -3326,8 +3224,6 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     g_signal_connect (long_press_gesture, "pressed",
                       G_CALLBACK(long_press_gesture_callback), this);
-     g_signal_connect (widget, "touch-event",
-                      G_CALLBACK(touch_callback), this);
 #endif // GTK_CHECK_VERSION(3,14,0)
 }
 
