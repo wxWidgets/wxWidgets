@@ -355,6 +355,12 @@ public:
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
+    bool                 m_isTwoFingerTapPossible;
+
+    int                  m_touchCount;
+    int                  m_lastTouchTime;
+    wxPoint              m_lastTouchPoint;
+
 protected:
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,

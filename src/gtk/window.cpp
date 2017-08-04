@@ -2453,6 +2453,12 @@ void wxWindowGTK::Init()
     m_imKeyEvent = NULL;
 
     m_dirtyTabOrder = false;
+
+    m_isTwoFingerTapPossible = false;
+    m_touchCount = 0;
+    m_lastTouchTime = 0;
+    m_lastTouchPoint.x = 0;
+    m_lastTouchPoint.y = 0;
 }
 
 wxWindowGTK::wxWindowGTK()
@@ -2996,6 +3002,12 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
 
     event.SetZoomDelta(zoomDelta);
 
+    // Cancel "Two FInger Tap Event" if scale has changed
+    if ( wxRound(scale * 1000) != wxRound(gs_lastScale * 1000) )
+    {
+        win->m_isTwoFingerTapPossible = false;
+    }
+
     gs_lastScale = scale;
 
     // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
@@ -3120,6 +3132,79 @@ long_press_gesture_callback(GtkGesture* WXUNUSED(gesture), gdouble x, gdouble y,
 
     win->GTKProcessEvent(event);
 }
+
+static void
+touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGTK* win)
+{
+    switch(gdk_event->type)
+    {
+        case GDK_TOUCH_BEGIN:
+        {
+            win->m_touchCount++;
+
+            win->m_isTwoFingerTapPossible = false;
+
+            if ( win->m_touchCount == 1 )
+            {
+                win->m_lastTouchTime = gdk_event->time;
+            }
+
+            // Check if two fingers are placed together .i.e difference between their time stamps is <= 200 milliseconds
+            else if ( win->m_touchCount == 2 && gdk_event->time - win->m_lastTouchTime <= 200 )
+            {
+                // "Two Finger Tap Event" may be possible in the future
+                win->m_isTwoFingerTapPossible = true;
+            }
+        }
+
+        break;
+
+        case GDK_TOUCH_END:
+        case GDK_TOUCH_CANCEL:
+        {
+            win->m_touchCount--;
+
+            if ( win->m_touchCount == 1 )
+            {
+                win->m_lastTouchTime = gdk_event->time;
+                win->m_lastTouchPoint.x = gdk_event->x;
+                win->m_lastTouchPoint.y = gdk_event->y;
+            }
+
+            // Check if "Two Finger Tap Event" is possible and both the fingers have been lifted up together
+            else if ( win->m_isTwoFingerTapPossible && win->m_touchCount == 0
+                      && gdk_event->time - win->m_lastTouchTime <= 200 )
+            {
+                wxTwoFingerTapEvent event(win->GetId());
+
+                event.SetEventObject(win);
+
+                double lastX = win->m_lastTouchPoint.x;
+                double lastY = win->m_lastTouchPoint.y;
+
+                // Calculate smaller of x coordinate between 2 touches
+                double left = lastX <= gdk_event->x ? lastX : gdk_event->x;
+
+                // Calculate smaller of y coordinate between 2 touches
+                double up = lastY <= gdk_event->y ? lastY : gdk_event->y;
+
+                // Calculate gesture point .i.e center of the box formed by two touches
+                double x = left + abs(lastX - gdk_event->x)/2;
+                double y = up + abs(lastY - gdk_event->y)/2;
+
+                event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
+                event.SetGestureStart();
+                event.SetGestureEnd();
+
+                win->GTKProcessEvent(event);
+            }
+        }
+        break;
+
+        default:
+        break;
+    }
+}
 #endif // GTK_CHECK_VERSION(3,14,0)
 
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
@@ -3224,6 +3309,8 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     g_signal_connect (long_press_gesture, "pressed",
                       G_CALLBACK(long_press_gesture_callback), this);
+    g_signal_connect (widget, "touch-event",
+                      G_CALLBACK(touch_callback), this);
 #endif // GTK_CHECK_VERSION(3,14,0)
 }
 
