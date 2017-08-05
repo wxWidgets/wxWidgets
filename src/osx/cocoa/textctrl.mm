@@ -713,6 +713,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     m_scrollView = sv;
 
     const bool hasHScroll = (style & wxHSCROLL) != 0;
+    m_useCharWrapping = (style & wxTE_CHARWRAP) != 0;
 
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:hasHScroll];
@@ -809,6 +810,8 @@ void wxNSTextViewControl::SetStringValue( const wxString &str)
             // Make sure that any URLs in the new text are highlighted.
             [m_textView checkTextInDocument:nil];
         }
+        // Some text styles have to be updated manually.
+        DoUpdateTextStyle();
     }
 }
 
@@ -952,6 +955,29 @@ void wxNSTextViewControl::WriteText(const wxString& str)
     m_lastKeyDownEvent = nil;
     [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
     m_lastKeyDownEvent = formerEvent;
+    // Some text styles have to be updated manually.
+    DoUpdateTextStyle();
+}
+
+void wxNSTextViewControl::controlTextDidChange()
+{
+    wxNSTextBase::controlTextDidChange();
+    // Some text styles have to be updated manually.
+    DoUpdateTextStyle();
+}
+
+void wxNSTextViewControl::DoUpdateTextStyle()
+{
+    if ( m_useCharWrapping )
+    {
+        // Set line wrapping at any position
+        // by applying a style to the entire text.
+        NSTextStorage* storage = [m_textView textStorage];
+        NSMutableParagraphStyle* style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [style setLineBreakMode:NSLineBreakByCharWrapping];
+        [storage addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, [storage length])];
+        [style release];
+    }
 }
 
 void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSED(foreground) , long WXUNUSED(windowStyle), bool WXUNUSED(ignoreBlack) )

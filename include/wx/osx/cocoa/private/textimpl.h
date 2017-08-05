@@ -124,9 +124,14 @@ public:
 
     virtual wxSize GetBestSize() const wxOVERRIDE;
 
+    virtual void controlTextDidChange() wxOVERRIDE;
+
 protected:
+    void DoUpdateTextStyle();
+
     NSScrollView* m_scrollView;
     NSTextView* m_textView;
+    bool m_useCharWrapping;
 };
 
 class wxNSComboBoxControl : public wxNSTextFieldControl, public wxComboWidgetImpl

@@ -990,7 +990,7 @@ public:
            scrollbar instead.
     @style{wxTE_CHARWRAP}
            For multiline controls only: wrap the lines too long to be shown
-           entirely at any position (wxUniv and wxGTK).
+           entirely at any position (wxUniv, wxGTK, wxOSX).
     @style{wxTE_WORDWRAP}
            For multiline controls only: wrap the lines too long to be shown
            entirely at word boundaries (wxUniv, wxMSW, wxGTK, wxOSX).

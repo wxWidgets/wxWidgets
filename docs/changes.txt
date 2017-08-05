@@ -226,6 +226,7 @@ wxOSX:
 - Implement wxTextCtrl::PositionToXY() and XYToPosition().
 - Implement wxTextCtrl::ShowPosition().
 - Add support for wxTE_NO_VSCROLL style to wxTextCtrl.
+- Add support for wxTE_CHARWRAP style to wxTextCtrl.
 
 Unix:
 
