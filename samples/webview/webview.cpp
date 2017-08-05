@@ -974,7 +974,9 @@ void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if(dialog.ShowModal() == wxID_OK)
     {
-        wxLogMessage("RunScript result: %s\n", m_browser->RunScript(dialog.GetValue()));
+        wxString result = m_browser->RunScript(dialog.GetValue());
+        if (!result.IsEmpty())
+            wxLogMessage("RunScript result: %s\n", result);
     }
 }
 
@@ -1014,6 +1016,10 @@ void WebFrame::OnError(wxWebViewEvent& evt)
         WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_REQUEST);
         WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_USER_CANCELLED);
         WX_ERROR_CASE(wxWEBVIEW_NAV_ERR_OTHER);
+        WX_ERROR_CASE(wxWEBVIEW_RUNSCRIPT_ERR_DOCUMENT);
+        WX_ERROR_CASE(wxWEBVIEW_RUNSCRIPT_ERR_GET_EVAL_ID);
+        WX_ERROR_CASE(wxWEBVIEW_RUNSCRIPT_ERR_RUN_SCRIPT);
+        WX_ERROR_CASE(wxWEBVIEW_RUNSCRIPT_ERR_SCRIPT);
     }
 
     wxLogMessage("%s", "Error; url='" + evt.GetURL() + "', error='" + category + " (" + evt.GetString() + ")'");
