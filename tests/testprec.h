@@ -100,13 +100,13 @@ public:
     #define WX_ASSERT_FAILS_WITH_ASSERT(cond)
 #endif
 
-#define WX_ASSERT_EVENT_OCCURS(eventcounter, count) \
+#define WX_ASSERT_EVENT_OCCURS_IN(eventcounter, count, ms) \
 {\
     wxStopWatch sw; \
     wxEventLoopBase* loop = wxEventLoopBase::GetActive(); \
     while(eventcounter.GetCount() < count) \
     { \
-        if(sw.Time() < 100) \
+        if(sw.Time() < ms) \
             loop->Dispatch(); \
         else \
         { \
@@ -118,6 +118,8 @@ public:
     } \
     eventcounter.Clear(); \
 }
+
+#define WX_ASSERT_EVENT_OCCURS(eventcounter,count) WX_ASSERT_EVENT_OCCURS_IN(eventcounter, count, 100)
 
 // these functions can be used to hook into wxApp event processing and are
 // currently used by the events propagation test

@@ -60,6 +60,10 @@ enum //Internal find flags
             event.SetInt(wxerror); \
             break;
 
+#define WX_ERROR(error, wxerror) \
+            event.SetString(error); \
+            event.SetInt(wxerror);
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
 
 wxBEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
@@ -855,75 +859,123 @@ wxString wxWebViewIE::GetPageText() const
 
 wxString wxWebViewIE::RunScript(const wxString& javascript)
 {
-    HRESULT hr;
-
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
     if (!document)
     {
-        wxLogMessage("!document");
-        return "!document";
+        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, GetId(),
+                             GetCurrentURL(), wxEmptyString);
+        event.SetEventObject(this);
+
+        WX_ERROR("HTML document is null", wxWEBVIEW_RUNSCRIPT_ERR_DOCUMENT)
+
+        HandleWindowEvent(event);
+        return "";
     }
 
     wxCOMPtr<IDispatch> pScript;
     document->get_Script(&pScript);
     if (!pScript)
     {
-        wxLogMessage("!pScript");
-        return "!pScript";
+        document->Release();
+        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, GetId(),
+                             GetCurrentURL(), wxEmptyString);
+        event.SetEventObject(this);
+
+        WX_ERROR("Can't get the script", wxWEBVIEW_RUNSCRIPT_ERR_SCRIPT)
+
+        HandleWindowEvent(event);
+        return "";
     }
 
-    // get the ID for eval method
     DISPID idSave = 0;
     LPOLESTR sMethod = L"eval";
-    hr = pScript->GetIDsOfNames(IID_NULL, &sMethod, 1, LOCALE_SYSTEM_DEFAULT, &idSave);
+    HRESULT hr = pScript->GetIDsOfNames(IID_NULL, &sMethod, 1, LOCALE_SYSTEM_DEFAULT, &idSave);
     if (!SUCCEEDED(hr))
     {
-        wxLogMessage("!SUCCEDED pScript->GetIDsOfNames");
-        return "!SUCCEDED pScript->GetIDsOfNames";
+        pScript->Release();
+        document->Release();
+        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, GetId(),
+                             GetCurrentURL(), wxEmptyString);
+        event.SetEventObject(this);
+
+        WX_ERROR("Can't get eval function ID", wxWEBVIEW_RUNSCRIPT_ERR_GET_EVAL_ID)
+
+        HandleWindowEvent(event);
+        return "";
     }
 
-    // invoke assuming one method parameter (the javascript)
-    VARIANTARG VarData[1];
-    VARIANT result = { 0 };
+    /*
+    Some JSON.stringify implementations:
+    https://gist.github.com/alexhawkins/931c0af2d827dd67a3e8
+    https://gist.github.com/alexhawkins/6ede310cfbd9d604db78
+    https://gist.github.com/andrew8088/6f53af9579266d5c62c8
+    */
+    wxString wrapJavascript = " function stringifyJSON(obj) \
+                                { \
+                                    var objElements = []; \
+                                    if (!(obj instanceof Object)) \
+                                        return typeof obj === \"string\" ? \'\"\' + obj + \'\"\' : \'\' + obj; \
+                                    else if (obj instanceof Array) \
+                                    { \
+                                        return \'[\' + obj.map(function(el) { return stringifyJSON(el); }) + \']\'; \
+                                    } \
+                                    else if (typeof obj === \"object\") \
+                                    { \
+                                        for (var key in obj) \
+                                        { \
+                                            if (typeof obj[key] === \"function\") \
+                                                return \'{}\'; \
+                                            else \
+                                                objElements.push(\'\"\' + key + \'\":\' + stringifyJSON(obj[key])); \
+                                        } \
+                                        return \'{\' + objElements + \'}\'; \
+                                    } \
+                                } \
+                                \
+                                function returnString (p) \
+                                { \
+                                    return p !== null && typeof p === \"object\" ? stringifyJSON(p) : String(p); \
+                                } \
+                                \
+                                returnString(eval(\"" + javascript + "\"));";
+
+    VARIANT varJavascript;
+    VariantInit(&varJavascript);
+    V_VT(&varJavascript) = VT_BSTR;
+    V_BSTR(&varJavascript) = wxConvertStringToOle(wrapJavascript);
+
+    VARIANT result;
+    VariantInit(&result);
+    V_VT(&result) = VT_EMPTY;
 
     DISPPARAMS dpArgs;
-    dpArgs.rgvarg = &VarData[0];
+    dpArgs.rgvarg = &varJavascript;
     dpArgs.cArgs = 1;
     dpArgs.cNamedArgs = 0;
     dpArgs.rgdispidNamedArgs = NULL;
 
-
-    //wxString newJS = "(function (p) {return (typeof (r=eval(p)) === 'object') ? JSON.stringify(r) : String(r);})('" + javascript + "');";
-    //return newJS;
-    VarData[0].vt = VT_BSTR;
-    VarData[0].bstrVal = wxBasicString(javascript);
     hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
-        &dpArgs, &result, NULL, NULL);
+                         &dpArgs, &result, NULL, NULL);
 
+    VariantClear(&varJavascript);
     if (!SUCCEEDED(hr))
     {
-        wxLogMessage("!SUCCEDED pScript->Invoke");
-        return "!SUCCEDED pScript->Invoke";
+        pScript->Release();
+        document->Release();
+        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, GetId(),
+                             GetCurrentURL(), wxEmptyString);
+        event.SetEventObject(this);
+
+        WX_ERROR("Can't run Javascript", wxWEBVIEW_RUNSCRIPT_ERR_RUN_SCRIPT)
+
+        HandleWindowEvent(event);
+        VariantClear(&result);
+        return "";
     }
 
-    wxString resultStr;
-    if (result.vt == VT_EMPTY)
-        resultStr = wxT("undefined");
-    else if (result.vt == VT_NULL)
-        resultStr = wxT("null");
-    else if (result.vt == VT_I4)
-        resultStr = wxString::Format(wxT("%d"), result.intVal);
-    else if (result.vt == VT_R8)
-        resultStr = wxString::Format(wxT("%f"), result.dblVal);
-    else if (result.vt == VT_BSTR)
-        resultStr = wxString::Format(wxT("%s"), result.bstrVal);
-    else if (result.vt == VT_BOOL)
-        resultStr = wxString::Format(wxT("%s"), result.boolVal ? "true" : "false");
-    else if (result.vt == VT_DISPATCH)
-        resultStr = RunScript("JSON.stringify(eval(\"" + javascript + "\"));");
-    else
-        resultStr = wxString::Format(wxT("unknown type: %u"), result.vt);
+    wxString resultStr = wxString::Format(wxT("%s"), result.bstrVal);
 
+    VariantClear(&result);
     return resultStr;
 }
 
