@@ -83,37 +83,7 @@ private:
 
 //Convenience macro
 
-#define WX_ASSERT_EVENT_OCCURS_LONG_WAIT(eventcounter, count) \
-{\
-    wxStopWatch sw; \
-    wxEventLoopBase* loop = wxEventLoopBase::GetActive(); \
-    while(eventcounter.GetCount() < count) \
-    { \
-        if(sw.Time() < 200) \
-            loop->Dispatch(); \
-        else \
-        { \
-            CPPUNIT_FAIL(wxString::Format("timeout reached with %d " \
-                                          "events received, %d expected", \
-                                          eventcounter.GetCount(), count).ToStdString()); \
-            break; \
-        } \
-    } \
-    eventcounter.Clear(); \
-}
-
-#define ENSURE_LOADED_COUNT(count) WX_ASSERT_EVENT_OCCURS_LONG_WAIT((*m_loaded), count)
-
-#define ENSURE_LOADED ENSURE_LOADED_COUNT(1)
-#define ENSURE_LOADED_TWO ENSURE_LOADED_COUNT(2)
-
-#define WX_WEBVIEW_LOAD_URL_WAIT(browser, url, time) \
-{ \
-    browser->LoadURL(url); \
-    wxStopWatch sw; \
-    while (browser->GetBackwardHistory().empty() && sw.Time() < time) \
-        wxEventLoopBase::GetActive()->Dispatch(); \
-}
+#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS_IN((*m_loaded), 1, 300)
 
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( WebTestCase );
@@ -126,12 +96,7 @@ void WebTestCase::setUp()
     m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY);
 
     m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
-    m_browser->LoadURL("about:blank");
-#if wxUSE_WEBVIEW_WEBKIT2
-    ENSURE_LOADED_TWO;
-#else
     ENSURE_LOADED;
-#endif
 }
 
 void WebTestCase::tearDown()
@@ -324,16 +289,12 @@ void WebTestCase::SetPage()
 
 void WebTestCase::RunScriptWriteDOM()
 {
-    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "http://www.google.com/", 5000);
-
     m_browser->RunScript("document.write(\"Hello World!\");");
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
 }
 
 void WebTestCase::RunScriptReturnString()
 {
-    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
-
     wxString result = m_browser->RunScript("function f(a){return a;}f('Hello World!');");
     CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
 }
@@ -341,7 +302,6 @@ void WebTestCase::RunScriptReturnString()
 
 void WebTestCase::RunScriptReturnInteger()
 {
-    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
 
     wxString result = m_browser->RunScript("function f(a){return a;}f(123);");
     CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));
@@ -349,8 +309,6 @@ void WebTestCase::RunScriptReturnInteger()
 
 void WebTestCase::RunScriptReturnDouble()
 {
-    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
-
     wxString result = m_browser->RunScript("function f(a){return a;}f(2.34);");
     double value;
     result.ToDouble(&value);
@@ -359,7 +317,6 @@ void WebTestCase::RunScriptReturnDouble()
 
 void WebTestCase::RunScriptReturnBoolean()
 {
-    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
 
     wxString result = m_browser->RunScript("function f(a){return a;}f(false);");
     CPPUNIT_ASSERT_EQUAL(false, (result == "false") ? false : true);
@@ -367,7 +324,6 @@ void WebTestCase::RunScriptReturnBoolean()
 
 void WebTestCase::RunScriptReturnObject()
 {
-    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
 
     wxString result = m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();");
     CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
@@ -375,7 +331,6 @@ void WebTestCase::RunScriptReturnObject()
 
 void WebTestCase::RunScriptReturnUndefined()
 {
-    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
 
     wxString result = m_browser->RunScript("function f(){var person = new Object();}f();");
     CPPUNIT_ASSERT_EQUAL("undefined", result);
@@ -383,7 +338,6 @@ void WebTestCase::RunScriptReturnUndefined()
 
 void WebTestCase::RunScriptReturnNull()
 {
-    WX_WEBVIEW_LOAD_URL_WAIT(m_browser, "https://www.google.com/", 5000);
 
     wxString result = m_browser->RunScript("function f(){return null;}f();");
     CPPUNIT_ASSERT_EQUAL("null", result);
