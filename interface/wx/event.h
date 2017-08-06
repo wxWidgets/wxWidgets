@@ -3666,7 +3666,8 @@ public:
 
     /**
         Returns the position where the event took effect, in client coordinates: position of Pan event,
-        center of zoom for Zoom event, center of rotation for Rotate event.
+        center of zoom for Zoom event, center of rotation for Rotate event, center of box formed by 2 fingers
+        for Two Finger Tap event.
     */
     const wxPoint& GetPosition() const;
 
@@ -3809,6 +3810,29 @@ public:
         gesture was first started i.e. when IsGestureStart() returned true.
     */
     void SetAngleDelta(double angleDelta);
+};
+
+/** @class wxTwoFingerTapEvent
+
+    This class contains information about the Two Finger Tap event.
+
+    @beginEventTable{wxTwoFingerTapEvent}
+    @event{EVT_TWO_FINGER_TAP(id, func)}
+        Process a @c wxEVT_TWO_FINGER_TAP.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.1.1
+*/
+class wxTwoFingerTapEvent : public wxGestureEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxTwoFingerTapEvent(wxWindowID windid = 0);
 };
 
 #endif // wxUSE_GUI
