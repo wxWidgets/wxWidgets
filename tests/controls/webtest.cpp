@@ -345,8 +345,8 @@ void WebTestCase::RunScriptReturnObject()
     ENSURE_LOADED;
 
     wxString result;
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
+    CPPUNIT_ASSERT(!m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();", &result));
+    CPPUNIT_ASSERT_EQUAL("", result);
 }
 
 void WebTestCase::RunScriptReturnUndefined()

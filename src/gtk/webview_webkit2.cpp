@@ -1124,9 +1124,16 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     gsize length;
     JSValueRef exception = NULL;
 
-    js_value = (JSValueIsObject (context,value)) ?
-               JSValueCreateJSONString(context, value, 0, &exception) :
-               JSValueToStringCopy (context, value, &exception);
+    if (!JSValueIsObject (context,value))
+    {
+        js_value = JSValueToStringCopy (context, value, &exception);
+    }
+    else
+    {
+        wxLogError("Return objects is not support");
+        webkit_javascript_result_unref (js_result);
+        return false;
+    }
 
     if (exception)
     {
