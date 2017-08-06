@@ -3835,6 +3835,30 @@ public:
     wxTwoFingerTapEvent(wxWindowID windid = 0);
 };
 
+/** @class wxLongPressEvent
+
+    This class contains information about the Long Press event.
+
+    Currently this event is generated in wxGTK and wxOSX only.
+
+    @beginEventTable{wxLongPressEvent}
+    @event{EVT_LONG_PRESS(id, func)}
+        Process a @c wxEVT_LONG_PRESS.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.1.1
+*/
+class wxLongPressEvent : public wxGestureEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxLongPressEvent(wxWindowID windid = 0);
+};
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
