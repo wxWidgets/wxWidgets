@@ -58,11 +58,7 @@ enum wxWebViewNavigationError
     wxWEBVIEW_NAV_ERR_NOT_FOUND,
     wxWEBVIEW_NAV_ERR_REQUEST,
     wxWEBVIEW_NAV_ERR_USER_CANCELLED,
-    wxWEBVIEW_NAV_ERR_OTHER,
-    wxWEBVIEW_RUNSCRIPT_ERR_DOCUMENT,
-    wxWEBVIEW_RUNSCRIPT_ERR_SCRIPT,
-    wxWEBVIEW_RUNSCRIPT_ERR_GET_EVAL_ID,
-    wxWEBVIEW_RUNSCRIPT_ERR_RUN_SCRIPT
+    wxWEBVIEW_NAV_ERR_OTHER
 };
 
 enum wxWebViewReloadFlags
@@ -165,7 +161,7 @@ public:
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
-    virtual wxString RunScript(const wxString& javascript) = 0;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {

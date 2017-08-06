@@ -292,7 +292,7 @@ void WebTestCase::RunScriptWriteDOM()
     m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
-    m_browser->RunScript("document.write(\"Hello World!\");");
+    CPPUNIT_ASSERT(m_browser->RunScript("document.write(\"Hello World!\");"));
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
 }
 
@@ -301,7 +301,8 @@ void WebTestCase::RunScriptReturnString()
     m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
-    wxString result = m_browser->RunScript("function f(a){return a;}f('Hello World!');");
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
     CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
 }
 
@@ -311,7 +312,8 @@ void WebTestCase::RunScriptReturnInteger()
     m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
-    wxString result = m_browser->RunScript("function f(a){return a;}f(123);");
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(123);", &result));
     CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));
 }
 
@@ -320,7 +322,8 @@ void WebTestCase::RunScriptReturnDouble()
     m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
-    wxString result = m_browser->RunScript("function f(a){return a;}f(2.34);");
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(2.34);", &result));
     double value;
     result.ToDouble(&value);
     CPPUNIT_ASSERT_EQUAL(2.34, value);
@@ -331,7 +334,8 @@ void WebTestCase::RunScriptReturnBoolean()
     m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
-    wxString result = m_browser->RunScript("function f(a){return a;}f(false);");
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(false);", &result));
     CPPUNIT_ASSERT_EQUAL(false, (result == "false") ? false : true);
 }
 
@@ -340,7 +344,8 @@ void WebTestCase::RunScriptReturnObject()
     m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
-    wxString result = m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();");
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();", &result));
     CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
 }
 
@@ -349,7 +354,8 @@ void WebTestCase::RunScriptReturnUndefined()
     m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
-    wxString result = m_browser->RunScript("function f(){var person = new Object();}f();");
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
     CPPUNIT_ASSERT_EQUAL("undefined", result);
 }
 
@@ -358,8 +364,9 @@ void WebTestCase::RunScriptReturnNull()
     m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
-    wxString result = m_browser->RunScript("function f(){return null;}f();");
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){return null;}f();", &result));
     CPPUNIT_ASSERT_EQUAL("null", result);
 }
 
-#endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)
+#endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)

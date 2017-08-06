@@ -1101,9 +1101,8 @@ static void wxgtk_run_javascript_cb(WebKitWebView *,
     *res_out = (GAsyncResult*)g_object_ref(res);
 }
 
-wxString JSResultToString(GObject *object, GAsyncResult *result)
+bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
 {
-    wxString                return_value;
     WebKitJavascriptResult  *js_result;
     JSValueRef              value;
     JSGlobalContextRef      context;
@@ -1114,8 +1113,7 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
     if (!js_result)
     {
         wxLogError("Error running javascript: %s", error.GetMessage());
-        return_value = wxString();
-        return return_value;
+        return false;
     }
 
     context = webkit_javascript_result_get_global_context (js_result);
@@ -1140,10 +1138,10 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
         JSStringGetUTF8CString (ex_value, str, ex_length);
         JSStringRelease (ex_value);
 
-        return_value = wxString::FromUTF8(str);
+        wxLogError("Exception running script: %s", wxString::FromUTF8(str));
 
         webkit_javascript_result_unref (js_result);
-        return return_value;
+        return false;
     }
 
     length = JSStringGetMaximumUTF8CStringSize (js_value);
@@ -1152,16 +1150,16 @@ wxString JSResultToString(GObject *object, GAsyncResult *result)
     JSStringGetUTF8CString (js_value, str, length);
     JSStringRelease (js_value);
 
-    return_value = wxString::FromUTF8(str);
+    if (output != NULL)
+        *output = wxString::FromUTF8(str);
 
     webkit_javascript_result_unref (js_result);
 
-    return return_value;
+    return true;
 }
 
-wxString wxWebViewWebKit::RunScript(const wxString& javascript)
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
-    wxString return_value;
     GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
                                    javascript,
@@ -1174,9 +1172,7 @@ wxString wxWebViewWebKit::RunScript(const wxString& javascript)
     while (!result)
         g_main_context_iteration(main_context, TRUE);
 
-    return_value = JSResultToString((GObject*)m_web_view, result);
-
-    return return_value;
+    return JSResultToString((GObject*)m_web_view, result, output);
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
