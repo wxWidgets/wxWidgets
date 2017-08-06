@@ -3859,6 +3859,7 @@ public:
     */
     wxLongPressEvent(wxWindowID windid = 0);
 };
+
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
