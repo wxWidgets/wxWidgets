@@ -312,6 +312,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 
     GetBuffer().AddEventHandler(this);
 
+#if wxUSE_ACCEL
     // Accelerators
     wxAcceleratorEntry entries[6];
 
@@ -324,6 +325,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 
     wxAcceleratorTable accel(6, entries);
     SetAcceleratorTable(accel);
+#endif // wxUSE_ACCEL
 
     m_contextMenu = new wxMenu;
     m_contextMenu->Append(wxID_UNDO, _("&Undo"));

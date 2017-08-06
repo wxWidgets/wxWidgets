@@ -2456,7 +2456,13 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
                                                      initWithString:cf.AsNSString()];
 
             [attrString beginEditing];
-            [attrString setAlignment:NSCenterTextAlignment
+
+            NSTextAlignment textAlign;
+            if ( [m_osxView isKindOfClass:[NSControl class]] )
+                textAlign = [(id)m_osxView alignment];
+            else
+                textAlign = NSCenterTextAlignment;
+            [attrString setAlignment:textAlign
                                range:NSMakeRange(0, [attrString length])];
 
             [attrString addAttribute:NSFontAttributeName

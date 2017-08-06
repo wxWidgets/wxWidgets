@@ -976,28 +976,28 @@ public:
     @style{wxTE_NO_VSCROLL}
            For multiline controls only: vertical scrollbar will never be
            created. This limits the amount of text which can be entered into
-           the control to what can be displayed in it under MSW but not under
-           GTK2. Currently not implemented for the other platforms.
+           the control to what can be displayed in it under wxMSW but not under
+           wxGTK or wxOSX. Currently not implemented for the other platforms.
     @style{wxTE_LEFT}
            The text in the control will be left-justified (default).
     @style{wxTE_CENTRE}
-           The text in the control will be centered (currently wxMSW and
-           wxGTK2 only).
+           The text in the control will be centered (wxMSW, wxGTK, wxOSX).
     @style{wxTE_RIGHT}
-           The text in the control will be right-justified (currently wxMSW
-           and wxGTK2 only).
+           The text in the control will be right-justified (wxMSW, wxGTK,
+           wxOSX).
     @style{wxTE_DONTWRAP}
            Same as wxHSCROLL style: don't wrap at all, show horizontal
            scrollbar instead.
     @style{wxTE_CHARWRAP}
-           Wrap the lines too long to be shown entirely at any position
-           (wxUniv and wxGTK2 only).
+           For multiline controls only: wrap the lines too long to be shown
+           entirely at any position (wxUniv, wxGTK, wxOSX).
     @style{wxTE_WORDWRAP}
-           Wrap the lines too long to be shown entirely at word boundaries
-           (wxUniv and wxGTK2 only).
+           For multiline controls only: wrap the lines too long to be shown
+           entirely at word boundaries (wxUniv, wxMSW, wxGTK, wxOSX).
     @style{wxTE_BESTWRAP}
-           Wrap the lines at word boundaries or at any other character if
-           there are words longer than the window width (this is the default).
+           For multiline controls only: wrap the lines at word boundaries
+           or at any other character if there are words longer than the window
+           width (this is the default).
     @style{wxTE_CAPITALIZE}
            On PocketPC and Smartphone, causes the first letter to be
            capitalized.

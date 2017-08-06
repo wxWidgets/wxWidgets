@@ -57,6 +57,8 @@ private:
         // These tests run for single line text controls.
         wxTEXT_ENTRY_TESTS();
         WXUISIM_TEST( MaxLength );
+        CPPUNIT_TEST( PositionToXYSingleLine );
+        CPPUNIT_TEST( XYToPositionSingleLine );
         SINGLE_AND_MULTI_TESTS();
 
         // Now switch to the multi-line text controls.
@@ -89,6 +91,8 @@ private:
         CPPUNIT_TEST( PositionToCoords );
         CPPUNIT_TEST( PositionToCoordsRich );
         CPPUNIT_TEST( PositionToCoordsRich2 );
+        CPPUNIT_TEST( PositionToXYMultiLine );
+        CPPUNIT_TEST( XYToPositionMultiLine );
     CPPUNIT_TEST_SUITE_END();
 
     void PseudoTestSwitchToMultiLineStyle()
@@ -111,6 +115,10 @@ private:
     void PositionToCoords();
     void PositionToCoordsRich();
     void PositionToCoordsRich2();
+    void PositionToXYMultiLine();
+    void XYToPositionMultiLine();
+    void PositionToXYSingleLine();
+    void XYToPositionSingleLine();
 
     void DoPositionToCoordsTestWithStyle(long style);
 
@@ -651,5 +659,400 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
     );
 }
 
+void TextCtrlTestCase::PositionToXYMultiLine()
+{
+    delete m_text;
+    CreateText(wxTE_MULTILINE|wxTE_DONTWRAP);
+
+    bool ok;
+    wxString text;
+    // empty field
+
+    m_text->Clear();
+    const long numChars_0 = 0;
+    CPPUNIT_ASSERT_EQUAL( m_text->GetLastPosition(), numChars_0 );
+    struct { long x, y; } coords_0[numChars_0+1] =
+        { { 0, 0 } };
+
+    for ( long i = 0; i < (long)WXSIZEOF(coords_0); i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( ok, true );
+        CPPUNIT_ASSERT_EQUAL( x, coords_0[i].x );
+        CPPUNIT_ASSERT_EQUAL( y, coords_0[i].y );
+    }
+    ok = m_text->PositionToXY(WXSIZEOF(coords_0), NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( ok, false );
+
+    // one line
+    text = wxS("1234");
+    m_text->SetValue(text);
+    const long numChars_1 = 4;
+    wxASSERT( numChars_1 == text.Length() );
+    CPPUNIT_ASSERT_EQUAL( m_text->GetLastPosition(), numChars_1 );
+    struct { long x, y; } coords_1[numChars_1+1] =
+        { { 0, 0 }, { 1, 0 }, { 2, 0}, { 3, 0 }, { 4, 0 } };
+
+    for ( long i = 0; i < (long)WXSIZEOF(coords_1); i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( ok, true );
+        CPPUNIT_ASSERT_EQUAL( x, coords_1[i].x );
+        CPPUNIT_ASSERT_EQUAL( y, coords_1[i].y );
+    }
+    ok = m_text->PositionToXY(WXSIZEOF(coords_1), NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( ok, false );
+
+    // few lines
+    text = wxS("123\nab\nX");
+    m_text->SetValue(text);
+#if defined(__WXMSW__)
+    // Take into account that every new line mark occupies
+    // two characters, not one.
+    const long numChars_2 = 8 + 2;
+#else
+    const long numChars_2 = 8;
+#endif // WXMSW/!WXMSW
+    CPPUNIT_ASSERT_EQUAL( m_text->GetLastPosition(), numChars_2 );
+#if defined(__WXMSW__)
+    // Note: Two new line characters refer to the same X-Y position.
+    struct { long x, y; } coords_2[numChars_2 + 1] =
+    { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 3, 0 },
+      { 0, 1 }, { 1, 1 }, { 2, 1 }, { 2, 1 },
+      { 0, 2 }, { 1, 2 } };
+#else
+    struct { long x, y; } coords_2[numChars_2 + 1] =
+    { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 },
+      { 0, 1 }, { 1, 1 }, { 2, 1 },
+      { 0, 2 }, { 1, 2 } };
+#endif // WXMSW/!WXMSW
+
+    for ( long i = 0; i < (long)WXSIZEOF(coords_2); i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( ok, true );
+        CPPUNIT_ASSERT_EQUAL( x, coords_2[i].x );
+        CPPUNIT_ASSERT_EQUAL( y, coords_2[i].y );
+    }
+    ok = m_text->PositionToXY(WXSIZEOF(coords_2), NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( ok, false );
+
+    // only empty lines
+    text = wxS("\n\n\n");
+    m_text->SetValue(text);
+#if defined(__WXMSW__)
+    // Take into account that every new line mark occupies
+    // two characters, not one.
+    const long numChars_3 = 3 + 3;
+#else
+    const long numChars_3 = 3;
+#endif // WXMSW/!WXMSW
+    CPPUNIT_ASSERT_EQUAL( m_text->GetLastPosition(), numChars_3 );
+#if defined(__WXMSW__)
+    // Note: Two new line characters refer to the same X-Y position.
+    struct { long x, y; } coords_3[numChars_3 + 1] =
+        { { 0, 0 }, { 0, 0 },
+          { 0, 1 }, { 0, 1 },
+          { 0, 2 }, { 0, 2 },
+          { 0, 3 } };
+#else
+    struct { long x, y; } coords_3[numChars_3+1] =
+        { { 0, 0 },
+          { 0, 1 },
+          { 0, 2 },
+          { 0, 3 } };
+#endif // WXMSW/!WXMSW
+
+    for ( long i = 0; i < (long)WXSIZEOF(coords_3); i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( ok, true );
+        CPPUNIT_ASSERT_EQUAL( x, coords_3[i].x );
+        CPPUNIT_ASSERT_EQUAL( y, coords_3[i].y );
+    }
+    ok = m_text->PositionToXY(WXSIZEOF(coords_3), NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( ok, false );
+
+    // mixed empty/non-empty lines
+    text = wxS("123\na\n\nX\n\n");
+    m_text->SetValue(text);
+#if defined(__WXMSW__)
+    // Take into account that every new line mark occupies
+    // two characters, not one.
+    const long numChars_4 = 10 + 5;
+#else
+    const long numChars_4 = 10;
+#endif // WXMSW/!WXMSW
+    CPPUNIT_ASSERT_EQUAL( m_text->GetLastPosition(), numChars_4 );
+#if defined(__WXMSW__)
+    // Note: Two new line characters refer to the same X-Y position.
+    struct { long x, y; } coords_4[numChars_4 + 1] =
+        { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 3, 0 },
+          { 0, 1 }, { 1, 1 }, { 1, 1 },
+          { 0, 2 }, { 0, 2 },
+          { 0, 3 }, { 1, 3 }, { 1, 3 },
+          { 0, 4 }, { 0, 4 },
+          { 0, 5 } };
+#else
+    struct { long x, y; } coords_4[numChars_4+1] =
+        { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 },
+          { 0, 1 }, { 1, 1 },
+          { 0, 2 },
+          { 0, 3 }, { 1, 3 },
+          { 0, 4 },
+          { 0, 5 } };
+#endif // WXMSW/!WXMSW
+
+    for ( long i = 0; i < (long)WXSIZEOF(coords_4); i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( ok, true );
+        CPPUNIT_ASSERT_EQUAL( x, coords_4[i].x );
+        CPPUNIT_ASSERT_EQUAL( y, coords_4[i].y );
+    }
+    ok = m_text->PositionToXY(WXSIZEOF(coords_4), NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( ok, false );
+}
+
+void TextCtrlTestCase::XYToPositionMultiLine()
+{
+    delete m_text;
+    CreateText(wxTE_MULTILINE|wxTE_DONTWRAP);
+
+    wxString text;
+    // empty field
+    m_text->Clear();
+    const long maxLineLength_0 = 0;
+    const long numLines_0 = 1;
+    CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_0 );
+    long pos_0[numLines_0+1][maxLineLength_0+1] =
+        { { -1 } };
+    for ( long y = 0; y < numLines_0; y++ )
+        for( long x = 0; x < maxLineLength_0+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            CPPUNIT_ASSERT_EQUAL( p, pos_0[y][x] );
+        }
+
+    // one line
+    text = wxS("1234");
+    m_text->SetValue(text);
+    const long maxLineLength_1 = 4;
+    const long numLines_1 = 1;
+    CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_1 );
+    long pos_1[numLines_1+1][maxLineLength_1+1] =
+        { {  0,  1,  2,  3, -1 },
+          { -1, -1, -1, -1, -1 } };
+    for ( long y = 0; y < numLines_1; y++ )
+        for( long x = 0; x < maxLineLength_1+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            CPPUNIT_ASSERT_EQUAL( p, pos_1[y][x] );
+        }
+
+    // few lines
+    text = wxS("123\nab\nX");
+    m_text->SetValue(text);
+    const long maxLineLength_2 = 4;
+    const long numLines_2 = 3;
+    CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_2 );
+#if defined(__WXMSW__)
+    // Note: New lines are occupied by two characters.
+    long pos_2[numLines_2 + 1][maxLineLength_2 + 1] =
+        { { 0,  1,  2,  3, -1 },    // New line occupies positions 3, 4
+          { 5,  6,  7, -1, -1 },    // New line occupies positions 7, 8
+          { 9, -1, -1, -1, -1 } };
+#else
+    long pos_2[numLines_2+1][maxLineLength_2+1] =
+        { {  0,  1,  2,  3, -1 },
+          {  4,  5,  6, -1, -1 },
+          {  7, -1, -1, -1, -1 } };
+#endif // WXMSW/!WXMSW
+
+    for ( long y = 0; y < numLines_2; y++ )
+        for( long x = 0; x < maxLineLength_2+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            CPPUNIT_ASSERT_EQUAL( p, pos_2[y][x] );
+        }
+
+    // only empty lines
+    text = wxS("\n\n\n");
+    m_text->SetValue(text);
+    const long maxLineLength_3 = 1;
+    const long numLines_3 = 4;
+    CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_3 );
+#if defined(__WXMSW__)
+    // Note: New lines are occupied by two characters.
+    long pos_3[numLines_3 + 1][maxLineLength_3 + 1] =
+        { {  0, -1 },    // New line occupies positions 0, 1
+          {  2, -1 },    // New line occupies positions 2, 3
+          {  4, -1 },    // New line occupies positions 4, 5
+          { -1, -1 },
+          { -1, -1 } };
+#else
+    long pos_3[numLines_3+1][maxLineLength_3+1] =
+        { {  0, -1 },
+          {  1, -1 },
+          {  2, -1 },
+          { -1, -1 },
+          { -1, -1 } };
+#endif // WXMSW/!WXMSW
+
+    for ( long y = 0; y < numLines_3; y++ )
+        for( long x = 0; x < maxLineLength_3+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            CPPUNIT_ASSERT_EQUAL( p, pos_3[y][x] );
+        }
+
+    // mixed empty/non-empty lines
+    text = wxS("123\na\n\nX\n\n");
+    m_text->SetValue(text);
+    const long maxLineLength_4 = 4;
+    const long numLines_4 = 6;
+    CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_4 );
+#if defined(__WXMSW__)
+    // Note: New lines are occupied by two characters.
+    long pos_4[numLines_4 + 1][maxLineLength_4 + 1] =
+        { {  0,  1,  2,  3, -1 },    // New line occupies positions 3, 4
+          {  5,  6, -1, -1, -1 },    // New line occupies positions 6, 7
+          {  8, -1, -1, -1, -1 },    // New line occupies positions 8, 9
+          { 10, 11, -1, -1, -1 },    // New line occupies positions 11, 12
+          { 13, -1, -1, -1, -1 },    // New line occupies positions 13, 14
+          { -1, -1, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 } };
+#else
+    long pos_4[numLines_4+1][maxLineLength_4+1] =
+        { {  0,  1,  2,  3, -1 },
+          {  4,  5, -1, -1, -1 },
+          {  6, -1, -1, -1, -1 },
+          {  7,  8, -1, -1, -1 },
+          {  9, -1, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 } };
+#endif // WXMSW/!WXMSW
+
+    for ( long y = 0; y < numLines_4; y++ )
+        for( long x = 0; x < maxLineLength_4+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            CPPUNIT_ASSERT_EQUAL( p, pos_4[y][x] );
+        }
+}
+
+void TextCtrlTestCase::PositionToXYSingleLine()
+{
+    delete m_text;
+    CreateText(wxTE_DONTWRAP);
+
+    bool ok;
+    wxString text;
+    // empty field
+    m_text->Clear();
+    const long numChars_0 = 0;
+    CPPUNIT_ASSERT_EQUAL( m_text->GetLastPosition(), numChars_0 );
+    for ( long i = 0; i <= numChars_0; i++ )
+    {
+        long x0, y0;
+        ok = m_text->PositionToXY(i, &x0, &y0);
+        CPPUNIT_ASSERT_EQUAL( ok, true );
+        CPPUNIT_ASSERT_EQUAL( x0, i );
+        CPPUNIT_ASSERT_EQUAL( y0, 0 );
+    }
+    ok = m_text->PositionToXY(numChars_0+1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( ok, false );
+
+    // pure one line
+    text = wxS("1234");
+    m_text->SetValue(text);
+    const long numChars_1 = text.Length();
+    CPPUNIT_ASSERT_EQUAL( m_text->GetLastPosition(), numChars_1 );
+    for ( long i = 0; i <= numChars_1; i++ )
+    {
+        long x1, y1;
+        ok = m_text->PositionToXY(i, &x1, &y1);
+        CPPUNIT_ASSERT_EQUAL( ok, true );
+        CPPUNIT_ASSERT_EQUAL( x1, i );
+        CPPUNIT_ASSERT_EQUAL( y1, 0 );
+    }
+    ok = m_text->PositionToXY(numChars_1+1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( ok, false );
+
+    // with new line characters
+    text = wxS("123\nab\nX");
+    m_text->SetValue(text);
+    const long numChars_2 = text.Length();
+    CPPUNIT_ASSERT_EQUAL( m_text->GetLastPosition(), numChars_2 );
+    for ( long i = 0; i <= numChars_2; i++ )
+    {
+        long x2, y2;
+        ok = m_text->PositionToXY(i, &x2, &y2);
+        CPPUNIT_ASSERT_EQUAL( ok, true );
+        CPPUNIT_ASSERT_EQUAL( x2, i );
+        CPPUNIT_ASSERT_EQUAL( y2, 0 );
+    }
+    ok = m_text->PositionToXY(numChars_2+1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( ok, false );
+}
+
+void TextCtrlTestCase::XYToPositionSingleLine()
+{
+    delete m_text;
+    CreateText(wxTE_DONTWRAP);
+
+    wxString text;
+    // empty field
+    m_text->Clear();
+    CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), 1 );
+    for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
+    {
+        long p0 = m_text->XYToPosition(x, 0);
+        if ( x < m_text->GetLastPosition() )
+            CPPUNIT_ASSERT_EQUAL( p0, x );
+        else
+            CPPUNIT_ASSERT_EQUAL( p0, -1 );
+
+        p0 = m_text->XYToPosition(x, 1);
+        CPPUNIT_ASSERT_EQUAL( p0, -1 );
+    }
+
+    // pure one line
+    text = wxS("1234");
+    m_text->SetValue(text);
+    CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), 1 );
+    for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
+    {
+        long p1 = m_text->XYToPosition(x, 0);
+        if ( x < m_text->GetLastPosition() )
+            CPPUNIT_ASSERT_EQUAL( p1, x );
+        else
+            CPPUNIT_ASSERT_EQUAL( p1, -1 );
+
+        p1 = m_text->XYToPosition(x, 1);
+        CPPUNIT_ASSERT_EQUAL( p1, -1 );
+    }
+
+    // with new line characters
+    text = wxS("123\nab\nX");
+    m_text->SetValue(text);
+    CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), 1 );
+    for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
+    {
+        long p2 = m_text->XYToPosition(x, 0);
+        if ( x < m_text->GetLastPosition() )
+            CPPUNIT_ASSERT_EQUAL( p2, x );
+        else
+            CPPUNIT_ASSERT_EQUAL( p2, -1 );
+
+        p2 = m_text->XYToPosition(x, 1);
+        CPPUNIT_ASSERT_EQUAL( p2, -1 );
+    }
+}
 
 #endif //wxUSE_TEXTCTRL

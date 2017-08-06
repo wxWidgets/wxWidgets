@@ -9,7 +9,7 @@
 #ifndef _WX_GTK_TOPLEVEL_H_
 #define _WX_GTK_TOPLEVEL_H_
 
-class WXDLLIMPEXP_CORE wxGUIEventLoop;
+class WXDLLIMPEXP_FWD_CORE wxGUIEventLoop;
 
 //-----------------------------------------------------------------------------
 // wxTopLevelWindowGTK

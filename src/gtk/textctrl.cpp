@@ -1204,7 +1204,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     }
     else // single line control
     {
-        if (pos <= gtk_entry_get_text_length(GTK_ENTRY(m_text)))
+        if (pos <= GTKGetEntryTextLength(GTK_ENTRY(m_text)))
         {
             if ( y )
                 *y = 0;
@@ -1224,7 +1224,13 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 long wxTextCtrl::XYToPosition(long x, long y ) const
 {
     if ( IsSingleLine() )
-        return 0;
+    {
+
+        if ( y != 0 || x >= GTKGetEntryTextLength(GTK_ENTRY(m_text)) )
+            return -1;
+
+        return x;
+    }
 
     GtkTextIter iter;
     if (y >= gtk_text_buffer_get_line_count (m_buffer))
@@ -1438,6 +1444,11 @@ void wxTextCtrl::ShowPosition( long pos )
             m_showPositionOnThaw = mark;
         else
             gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), mark);
+    }
+    else // single line
+    {   // This function not only shows character at required position
+        // but also places the cursor at this position.
+        gtk_editable_set_position(GTK_EDITABLE(m_text), pos);
     }
 }
 
