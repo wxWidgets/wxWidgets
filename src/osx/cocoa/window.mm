@@ -1738,7 +1738,8 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
 
     // Check if 2 fingers are lifted off together or if 2 fingers are lifted off within the time interval of 200 milliseconds
     if ( (touches.count == 2 && m_touchCount == 0 && m_isTwoFingerTapPossible)
-        || (m_touchCount == 0 && touches.count == 1 && m_isTwoFingerTapPossible && wxRound(event.timestamp * 1000) - m_lastTouchTime <= 200) )
+         || (m_touchCount == 0 && touches.count == 1 && m_isTwoFingerTapPossible &&
+         wxRound(event.timestamp * 1000) - m_lastTouchTime <= 200) )
     {
         wxTwoFingerTapEvent wxevent(GetWXPeer()->GetId());
         wxevent.SetEventObject(GetWXPeer());
