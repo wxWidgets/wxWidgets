@@ -1078,6 +1078,33 @@ void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pres
     impl->LongPressEvent(pressGestureRecognizer);
 }
 
+void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+        return;
+
+    impl->TouchesBegan(event);
+}
+
+void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+        return;
+
+    impl->TouchesMoved(event);
+}
+
+void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+        return;
+
+    impl->TouchesEnded(event);
+}
+
 BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1668,6 +1695,70 @@ void wxWidgetCocoaImpl::LongPressEvent(NSPressGestureRecognizer* pressGestureRec
     GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
+void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
+{
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseBegan inView:m_osxView];
+
+    m_touchCount += touches.count;
+    m_isTwoFingerTapPossible = false;
+
+    // Check if 2 fingers are placed together
+    if ( m_touchCount == 2 && touches.count == 2 )
+    {
+        m_isTwoFingerTapPossible = true;
+        return;
+    }
+
+    else if ( m_touchCount == 1 )
+    {
+        // Save the time of event in milliseconds
+        m_lastTouchTime = wxRound(event.timestamp * 1000);
+    }
+
+    touches = [event touchesMatchingPhase:NSTouchPhaseStationary inView:m_osxView];
+
+    // Check if 2 fingers are placed within the time interval of 200 milliseconds
+    if ( m_touchCount == 2 && touches.count == 1 && wxRound(event.timestamp * 1000) - m_lastTouchTime <= 200 )
+    {
+        m_isTwoFingerTapPossible = true;
+    }
+}
+
+void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent WXUNUSED(event))
+{
+    // Cancel if there is any movement
+    m_isTwoFingerTapPossible = false;
+}
+
+void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
+{
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseEnded inView:m_osxView];
+
+    m_touchCount -= touches.count;
+
+    // Check if 2 fingers are lifted off together or if 2 fingers are lifted off within the time interval of 200 milliseconds
+    if ( (touches.count == 2 && m_touchCount == 0 && m_isTwoFingerTapPossible)
+        || (m_touchCount == 0 && touches.count == 1 && m_isTwoFingerTapPossible && wxRound(event.timestamp * 1000) - m_lastTouchTime <= 200) )
+    {
+        wxTwoFingerTapEvent wxevent(GetWXPeer()->GetId());
+        wxevent.SetEventObject(GetWXPeer());
+        wxevent.SetGestureStart();
+        wxevent.SetGestureEnd();
+
+        // Get the mouse coordinates
+        wxCoord x, y;
+        SetupCoordinates(x, y, event);
+        wxevent.SetPosition(wxPoint (x,y));
+
+        GetWXPeer()->HandleWindowEvent(wxevent);
+    }
+
+    else if ( m_touchCount == 1 && m_isTwoFingerTapPossible )
+    {
+        m_lastTouchTime = wxRound(event.timestamp * 1000);
+    }
+}
+
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
     bool result = false;
@@ -2019,6 +2110,9 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(handleLongPressGesture:), (IMP) wxOSX_longPressEvent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(touchesBeganWithEvent:), (IMP) wxOSX_touchesBegan, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(touchesMovedWithEvent:), (IMP) wxOSX_touchesMoved, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(touchesEndedWithEvent:), (IMP) wxOSX_touchesEnded, "v@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(magnifyWithEvent:), (IMP)wxOSX_mouseEvent, "v@:@")
 
@@ -2101,6 +2195,10 @@ void wxWidgetCocoaImpl::Init()
 #endif
     m_lastKeyDownEvent = NULL;
     m_hasEditor = false;
+
+    m_touchCount = 0;
+    m_lastTouchTime = 0;
+    m_isTwoFingerTapPossible = false;
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -3062,6 +3160,8 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
         [m_osxView addGestureRecognizer:magnificationGestureRecognizer];
         [m_osxView addGestureRecognizer:rotationGestureRecognizer];
         [m_osxView addGestureRecognizer:pressGestureRecognizer];
+
+        [m_osxView setAcceptsTouchEvents:YES];
     }
 }
 

@@ -147,6 +147,9 @@ public :
     virtual void        ZoomGestureEvent(NSMagnificationGestureRecognizer *magnificationGestureRecognizer);
     virtual void        RotateGestureEvent(NSRotationGestureRecognizer *rotationGestureRecognizer);
     virtual void        LongPressEvent(NSPressGestureRecognizer *pressGestureRecognizer);
+    virtual void        TouchesBegan(NSEvent *event);
+    virtual void        TouchesMoved(NSEvent *event);
+    virtual void        TouchesEnded(NSEvent *event);
 
 #if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);
@@ -198,6 +201,11 @@ protected:
     NSMagnificationGestureRecognizer *magnificationGestureRecognizer;
     NSRotationGestureRecognizer *rotationGestureRecognizer;
     NSPressGestureRecognizer *pressGestureRecognizer;
+
+    bool m_isTwoFingerTapPossible;
+
+    int m_touchCount;
+    int m_lastTouchTime;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
