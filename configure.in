@@ -1361,6 +1361,7 @@ esac
 dnl This case is for OS X vs. everything else
 case "${host}" in
   *-*-darwin* )
+    CPPFLAGS="-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=1 $CPPFLAGS"
     AC_MSG_CHECKING([if CoreFoundation/CFBase.h is usable])
     AC_TRY_COMPILE([#include <CoreFoundation/CFBase.h>
 ],[],
