@@ -19770,6 +19770,7 @@ esac
 
 case "${host}" in
   *-*-darwin* )
+    CPPFLAGS="-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=1 $CPPFLAGS"
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking if CoreFoundation/CFBase.h is usable" >&5
 $as_echo_n "checking if CoreFoundation/CFBase.h is usable... " >&6; }
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
