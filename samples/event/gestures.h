@@ -23,6 +23,7 @@ public:
     void OnRotate(wxRotateGestureEvent& event);
     void OnTwoFingerTap(wxTwoFingerTapEvent& event);
     void OnLongPress(wxLongPressEvent& event);
+    void OnPressAndTap(wxPressAndTapEvent& event);
 
 private:
     wxBitmap m_bitmap;
