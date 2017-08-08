@@ -3308,6 +3308,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     processed = HandleTwoFingerTap(x, y, gestureInfo.dwFlags);
                 }
                 break;
+
+                // Press and Tap gesture
+                case GID_PRESSANDTAP:
+                {
+                    processed = HandlePressAndTap(x, y, gestureInfo.dwFlags);
+                }
             }
 
             if ( processed )
@@ -5839,6 +5845,27 @@ bool wxWindowMSW::HandleTwoFingerTap(int x, int y, WXDWORD flags)
     }
 
     return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandlePressAndTap(int x,int y, WXDWORD flags)
+{
+	wxPressAndTapEvent event(GetId());
+
+	if ( flags & GF_BEGIN )
+	{
+		event.SetGestureStart();
+	}
+
+	event.SetEventObject(this);
+	event.SetTimestamp(::GetMessageTime());
+	event.SetPosition(wxPoint(x, y));
+
+	if ( flags & GF_END )
+	{
+		event.SetGestureEnd();
+	}
+
+	return HandleWindowEvent(event);
 }
 #endif // WM_GESTURE
 

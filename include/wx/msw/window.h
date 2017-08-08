@@ -364,6 +364,7 @@ public:
     bool HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags);
     bool HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags);
     bool HandleTwoFingerTap(int x, int y, WXDWORD flags);
+    bool HandlePressAndTap(int x, int y, WXDWORD flags);
 #endif // WM_GESTURE
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
