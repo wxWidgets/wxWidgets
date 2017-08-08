@@ -51,8 +51,10 @@ private:
         CPPUNIT_TEST( RunScriptReturnDouble );
         CPPUNIT_TEST( RunScriptReturnBoolean );
         CPPUNIT_TEST( RunScriptReturnObject );
+        CPPUNIT_TEST( RunScriptReturnArray );
         CPPUNIT_TEST( RunScriptReturnUndefined );
         CPPUNIT_TEST( RunScriptReturnNull );
+        CPPUNIT_TEST( RunScriptInvalidJavaScript );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -72,8 +74,10 @@ private:
     void RunScriptReturnDouble();
     void RunScriptReturnBoolean();
     void RunScriptReturnObject();
+    void RunScriptReturnArray();
     void RunScriptReturnUndefined();
     void RunScriptReturnNull();
+    void RunScriptInvalidJavaScript();
 
     wxWebView* m_browser;
     EventCounter* m_loaded;
@@ -83,7 +87,7 @@ private:
 
 //Convenience macro
 
-#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS_IN((*m_loaded), 1, 300)
+#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS_IN((*m_loaded), 1, 500)
 
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( WebTestCase );
@@ -345,7 +349,17 @@ void WebTestCase::RunScriptReturnObject()
     ENSURE_LOADED;
 
     wxString result;
-    CPPUNIT_ASSERT(!m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();", &result));
+    CPPUNIT_ASSERT_EQUAL("", result);
+}
+
+void WebTestCase::RunScriptReturnArray()
+{
+    m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
+    ENSURE_LOADED;
+
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
     CPPUNIT_ASSERT_EQUAL("", result);
 }
 
@@ -356,7 +370,7 @@ void WebTestCase::RunScriptReturnUndefined()
 
     wxString result;
     CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("undefined", result);
+    CPPUNIT_ASSERT_EQUAL("", result);
 }
 
 void WebTestCase::RunScriptReturnNull()
@@ -366,7 +380,17 @@ void WebTestCase::RunScriptReturnNull()
 
     wxString result;
     CPPUNIT_ASSERT(m_browser->RunScript("function f(){return null;}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("null", result);
+    CPPUNIT_ASSERT_EQUAL("", result);
+}
+
+void WebTestCase::RunScriptInvalidJavaScript()
+{
+    m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
+    ENSURE_LOADED;
+
+    wxString result;
+    CPPUNIT_ASSERT(!m_browser->RunScript("int main() { return 0; }", &result));
+    CPPUNIT_ASSERT_EQUAL("", result);
 }
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
