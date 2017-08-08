@@ -97,9 +97,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WebTestCase, "WebTestCase" );
 
 void WebTestCase::setUp()
 {
-    m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY);
-
+    m_browser = wxWebView::New();
     m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
+
+    m_browser -> Create(wxTheApp->GetTopWindow(), wxID_ANY);
     ENSURE_LOADED;
 }
 
