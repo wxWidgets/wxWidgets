@@ -228,6 +228,7 @@ wxOSX:
 - Implement wxTextCtrl::ShowPosition().
 - Add support for wxTE_NO_VSCROLL style to wxTextCtrl.
 - Add support for wxTE_CHARWRAP style to wxTextCtrl.
+- Fix selecting RGB bitmaps (with no alpha channel) into wxMemoryDC.
 
 Unix:
 
