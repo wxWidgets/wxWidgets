@@ -303,8 +303,8 @@ bool wxRibbonPanel::IsMinimised(wxSize at_size) const
     if(!m_minimised_size.IsFullySpecified())
         return false;
 
-    return (at_size.GetX() <= m_minimised_size.GetX() &&
-        at_size.GetY() <= m_minimised_size.GetY()) ||
+    return (at_size.GetX() < m_minimised_size.GetX() &&
+        at_size.GetY() < m_minimised_size.GetY()) ||
         at_size.GetX() < m_smallest_unminimised_size.GetX() ||
         at_size.GetY() < m_smallest_unminimised_size.GetY();
 }
