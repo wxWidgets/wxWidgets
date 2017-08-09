@@ -1238,6 +1238,17 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int incW, int incH )
 {
     base_type::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+
+    if (!HasFlag(wxRESIZE_BORDER))
+    {
+        // It's not useful to set size hints for the windows which can't be
+        // resized anyhow, and it even results in warnings from Gnome window
+        // manager, so just don't do it (but notice that it's not an error to
+        // call this for non-resizeable windows, e.g. because it's done
+        // implicitly by SetSizerAndFit() which is useful even in this case).
+        return;
+    }
+
     m_incWidth = incW;
     m_incHeight = incH;
 
