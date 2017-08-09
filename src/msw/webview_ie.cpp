@@ -60,10 +60,6 @@ enum //Internal find flags
             event.SetInt(wxerror); \
             break;
 
-#define WX_ERROR(error, wxerror) \
-            event.SetString(error); \
-            event.SetInt(wxerror);
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
 
 wxBEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
@@ -857,34 +853,21 @@ wxString wxWebViewIE::GetPageText() const
     }
 }
 
-wxString wxWebViewIE::RunScript(const wxString& javascript)
+bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
     if (!document)
     {
-        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, GetId(),
-                             GetCurrentURL(), wxEmptyString);
-        event.SetEventObject(this);
-
-        WX_ERROR("HTML document is null", wxWEBVIEW_RUNSCRIPT_ERR_DOCUMENT)
-
-        HandleWindowEvent(event);
-        return "";
+        wxLogError("HTML document is null");
+        return false;
     }
 
     wxCOMPtr<IDispatch> pScript;
     document->get_Script(&pScript);
     if (!pScript)
     {
-        document->Release();
-        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, GetId(),
-                             GetCurrentURL(), wxEmptyString);
-        event.SetEventObject(this);
-
-        WX_ERROR("Can't get the script", wxWEBVIEW_RUNSCRIPT_ERR_SCRIPT)
-
-        HandleWindowEvent(event);
-        return "";
+        wxLogError("Can't get the script");
+        return false;
     }
 
     DISPID idSave = 0;
@@ -892,57 +875,14 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     HRESULT hr = pScript->GetIDsOfNames(IID_NULL, &sMethod, 1, LOCALE_SYSTEM_DEFAULT, &idSave);
     if (!SUCCEEDED(hr))
     {
-        pScript->Release();
-        document->Release();
-        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, GetId(),
-                             GetCurrentURL(), wxEmptyString);
-        event.SetEventObject(this);
-
-        WX_ERROR("Can't get eval function ID", wxWEBVIEW_RUNSCRIPT_ERR_GET_EVAL_ID)
-
-        HandleWindowEvent(event);
-        return "";
+        wxLogError("Can't get the script");
+        return false;
     }
-
-    /*
-    Some JSON.stringify implementations:
-    https://gist.github.com/alexhawkins/931c0af2d827dd67a3e8
-    https://gist.github.com/alexhawkins/6ede310cfbd9d604db78
-    https://gist.github.com/andrew8088/6f53af9579266d5c62c8
-    */
-    wxString wrapJavascript = " function stringifyJSON(obj) \
-                                { \
-                                    var objElements = []; \
-                                    if (!(obj instanceof Object)) \
-                                        return typeof obj === \"string\" ? \'\"\' + obj + \'\"\' : \'\' + obj; \
-                                    else if (obj instanceof Array) \
-                                    { \
-                                        return \'[\' + obj.map(function(el) { return stringifyJSON(el); }) + \']\'; \
-                                    } \
-                                    else if (typeof obj === \"object\") \
-                                    { \
-                                        for (var key in obj) \
-                                        { \
-                                            if (typeof obj[key] === \"function\") \
-                                                return \'{}\'; \
-                                            else \
-                                                objElements.push(\'\"\' + key + \'\":\' + stringifyJSON(obj[key])); \
-                                        } \
-                                        return \'{\' + objElements + \'}\'; \
-                                    } \
-                                } \
-                                \
-                                function returnString (p) \
-                                { \
-                                    return p !== null && typeof p === \"object\" ? stringifyJSON(p) : String(p); \
-                                } \
-                                \
-                                returnString(eval(\"" + javascript + "\"));";
 
     VARIANT varJavascript;
     VariantInit(&varJavascript);
     V_VT(&varJavascript) = VT_BSTR;
-    V_BSTR(&varJavascript) = wxConvertStringToOle(wrapJavascript);
+    V_BSTR(&varJavascript) = wxConvertStringToOle(javascript);
 
     VARIANT result;
     VariantInit(&result);
@@ -960,23 +900,27 @@ wxString wxWebViewIE::RunScript(const wxString& javascript)
     VariantClear(&varJavascript);
     if (!SUCCEEDED(hr))
     {
-        pScript->Release();
-        document->Release();
-        wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, GetId(),
-                             GetCurrentURL(), wxEmptyString);
-        event.SetEventObject(this);
-
-        WX_ERROR("Can't run Javascript", wxWEBVIEW_RUNSCRIPT_ERR_RUN_SCRIPT)
-
-        HandleWindowEvent(event);
         VariantClear(&result);
-        return "";
+        wxLogError("Can't run Javascript");
+        return false;
     }
 
-    wxString resultStr = wxString::Format(wxT("%s"), result.bstrVal);
+    if (output != NULL)
+    {
+        if (result.vt == VT_BSTR)
+            *output = wxString::Format(wxT("%s"), result.bstrVal);
+        else if (result.vt == VT_I4)
+            *output = wxString::Format(wxT("%d"), result.intVal);
+        else if (result.vt == VT_R8)
+            *output = wxString::Format(wxT("%f"), result.dblVal);
+        else if (result.vt == VT_BOOL)
+            *output = wxString::Format(wxT("%s"), result.boolVal ? "true" : "false");
+        else
+            wxLogError("Return objects, null or undefined is not supported");
+    }
 
     VariantClear(&result);
-    return resultStr;
+    return true;
 }
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
