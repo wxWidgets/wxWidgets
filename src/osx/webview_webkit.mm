@@ -418,7 +418,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     result = [m_webView stringByEvaluatingJavaScriptFromString:
                               wxCFStringRef( javascript ).AsNSString()];
 
-    if (result != NULL)
+    if (result != nil)
     {
         if (output != NULL)
 	{
@@ -427,6 +427,8 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     }
     else
     {
+        //This is not reacheable. There is a bug that
+	//stringByEvaluatingJavaScriptFromString never returns nil
         return false;
     }
 
