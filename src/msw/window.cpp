@@ -3314,6 +3314,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 {
                     processed = HandlePressAndTap(x, y, gestureInfo.dwFlags);
                 }
+                break;
             }
 
             if ( processed )
