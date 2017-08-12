@@ -3134,6 +3134,33 @@ long_press_gesture_callback(GtkGesture* WXUNUSED(gesture), gdouble x, gdouble y,
 }
 
 static void
+wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
+{
+	wxTwoFingerTapEvent event(win->GetId());
+
+    event.SetEventObject(win);
+
+    double lastX = win->m_lastTouchPoint.x;
+    double lastY = win->m_lastTouchPoint.y;
+
+    // Calculate smaller of x coordinate between 2 touches
+    double left = lastX <= gdk_event->x ? lastX : gdk_event->x;
+
+    // Calculate smaller of y coordinate between 2 touches
+    double up = lastY <= gdk_event->y ? lastY : gdk_event->y;
+
+    // Calculate gesture point .i.e center of the box formed by two touches
+    double x = left + abs(lastX - gdk_event->x)/2;
+    double y = up + abs(lastY - gdk_event->y)/2;
+
+    event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
+    event.SetGestureStart();
+    event.SetGestureEnd();
+
+    win->GTKProcessEvent(event);
+}
+
+static void
 touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGTK* win)
 {
     switch(gdk_event->type)
@@ -3175,28 +3202,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
             else if ( win->m_isTwoFingerTapPossible && win->m_touchCount == 0
                       && gdk_event->time - win->m_lastTouchTime <= 200 )
             {
-                wxTwoFingerTapEvent event(win->GetId());
-
-                event.SetEventObject(win);
-
-                double lastX = win->m_lastTouchPoint.x;
-                double lastY = win->m_lastTouchPoint.y;
-
-                // Calculate smaller of x coordinate between 2 touches
-                double left = lastX <= gdk_event->x ? lastX : gdk_event->x;
-
-                // Calculate smaller of y coordinate between 2 touches
-                double up = lastY <= gdk_event->y ? lastY : gdk_event->y;
-
-                // Calculate gesture point .i.e center of the box formed by two touches
-                double x = left + abs(lastX - gdk_event->x)/2;
-                double y = up + abs(lastY - gdk_event->y)/2;
-
-                event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
-                event.SetGestureStart();
-                event.SetGestureEnd();
-
-                win->GTKProcessEvent(event);
+            	wxEmitTwoFingerTapEvent(gdk_event, win);
             }
         }
         break;
