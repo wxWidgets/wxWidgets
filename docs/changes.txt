@@ -230,6 +230,7 @@ wxOSX:
 - Add support for wxTE_NO_VSCROLL style to wxTextCtrl.
 - Add support for wxTE_CHARWRAP style to wxTextCtrl.
 - Fix selecting RGB bitmaps (with no alpha channel) into wxMemoryDC.
+- Fix updating radio groups when menu item is inserted/removed from wxMenu.
 
 Unix:
 
