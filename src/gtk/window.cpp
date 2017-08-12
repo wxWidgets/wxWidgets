@@ -2451,6 +2451,7 @@ void wxWindowGTK::Init()
     m_isPressAndTapActive = false;
     m_touchCount = 0;
     m_lastTouchTime = 0;
+    m_allowedGestures = 0;
     m_lastTouchPoint.x = 0;
     m_lastTouchPoint.y = 0;
 }
