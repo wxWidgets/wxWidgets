@@ -3263,7 +3263,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
                 // If the touch corresponding to "press" is present and "tap" is produced by some ather touch
                 if ( win->m_allowedGestures & press_and_tap && gdk_event->sequence != win->m_sequence )
                 {
-                    // Press and Tap gesture Gesture becomes active now
+                    // Press and Tap gesture becomes active now
                     if ( !win->m_isPressAndTapActive )
                     {
                         win->m_gestureState = begin;
