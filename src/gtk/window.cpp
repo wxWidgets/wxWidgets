@@ -241,12 +241,6 @@ static gdouble gs_lastScale = 1.0;
 // This is used to calculate angle delta.
 static gdouble gs_lastAngle = 0;
 
-// True if "pan" signal was emitted for horizontal pan gesture
-static bool gs_horizontalPanActive = false;
-
-// True if "pan" signal was emitted for vertical pan gesture
-static bool gs_verticalPanActive = false;
-
 // Last Zoom/Rotate gesture point
 static wxPoint gs_lastGesturePoint;
 #endif // GTK_CHECK_VERSION(3,14,0)
@@ -2869,7 +2863,9 @@ enum GestureStates
 enum AllowedGestures
 {
 	two_finger_tap = 0x0001,
-	press_and_tap  = 0x0002
+	press_and_tap  = 0x0002,
+	horizontal_pan = 0x0004,
+	vertical_pan   = 0x0008
 };
 
 static void
@@ -2885,7 +2881,7 @@ static void
 horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
     // Do not process horizontal pan, if there was no "pan" signal for it.
-    if ( !gs_horizontalPanActive )
+    if ( !(win->m_allowedGestures & horizontal_pan) )
     {
         return;
     }
@@ -2897,7 +2893,7 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
         return;
     }
 
-    gs_horizontalPanActive = false;
+    win->m_allowedGestures &= ~horizontal_pan;
 
     wxPanGestureEvent event(win->GetId());
 
@@ -2912,7 +2908,7 @@ static void
 vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
     // Do not process vertical pan, if there was no "pan" signal for it.
-    if ( !gs_verticalPanActive )
+    if ( !(win->m_allowedGestures & vertical_pan) )
     {
         return;
     }
@@ -2924,7 +2920,7 @@ vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequenc
         return;
     }
 
-    gs_verticalPanActive = false;
+    win->m_allowedGestures &= ~vertical_pan;
 
     wxPanGestureEvent event(win->GetId());
 
@@ -2965,22 +2961,22 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
     switch ( direction )
     {
         case GTK_PAN_DIRECTION_UP:
+            win->m_allowedGestures |= vertical_pan;
             event.SetDeltaY(-delta);
-            gs_verticalPanActive = true;
             break;
 
         case GTK_PAN_DIRECTION_DOWN:
-            gs_verticalPanActive = true;
+            win->m_allowedGestures |= vertical_pan;
             event.SetDeltaY(delta);
             break;
 
         case GTK_PAN_DIRECTION_RIGHT:
-            gs_horizontalPanActive = true;
+            win->m_allowedGestures |= horizontal_pan;
             event.SetDeltaX(delta);
             break;
 
         case GTK_PAN_DIRECTION_LEFT:
-            gs_horizontalPanActive = true;
+            win->m_allowedGestures |= horizontal_pan;
             event.SetDeltaX(-delta);
             break;
     }
