@@ -3149,7 +3149,7 @@ long_press_gesture_callback(GtkGesture* WXUNUSED(gesture), gdouble x, gdouble y,
 static void
 wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 {
-	wxTwoFingerTapEvent event(win->GetId());
+    wxTwoFingerTapEvent event(win->GetId());
 
     event.SetEventObject(win);
 
