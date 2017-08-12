@@ -3270,6 +3270,7 @@ typedef struct _GdkDragContext  GdkDragContext;
 
 #if defined(__WXGTK3__)
     typedef struct _GdkWindow GdkWindow;
+    typedef struct _GdkEventSequence GdkEventSequence;
 #elif defined(__WXGTK20__)
     typedef struct _GdkDrawable GdkWindow;
     typedef struct _GdkDrawable GdkPixmap;

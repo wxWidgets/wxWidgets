@@ -2454,7 +2454,7 @@ void wxWindowGTK::Init()
 
     m_dirtyTabOrder = false;
 
-    m_isTwoFingerTapPossible = false;
+    m_isPressAndTapActive = false;
     m_touchCount = 0;
     m_lastTouchTime = 0;
     m_lastTouchPoint.x = 0;
@@ -2858,6 +2858,20 @@ static gboolean source_dispatch(GSource*, GSourceFunc, void*)
 }
 
 #if GTK_CHECK_VERSION(3,14,0)
+// Currently used for Press and Tap gesture only
+enum GestureStates
+{
+	begin  = 1,
+	update,
+	end
+};
+
+enum AllowedGestures
+{
+	two_finger_tap = 0x0001,
+	press_and_tap  = 0x0002
+};
+
 static void
 pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUNUSED(sequence), wxWindowGTK* WXUNUSED(win))
 {
@@ -3005,7 +3019,7 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
     // Cancel "Two FInger Tap Event" if scale has changed
     if ( wxRound(scale * 1000) != wxRound(gs_lastScale * 1000) )
     {
-        win->m_isTwoFingerTapPossible = false;
+        win->m_allowedGestures &= ~two_finger_tap;
     }
 
     gs_lastScale = scale;
@@ -3161,6 +3175,38 @@ wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 }
 
 static void
+wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
+{
+	wxPressAndTapEvent event(win->GetId());
+
+	event.SetEventObject(win);
+
+	switch ( win->m_gestureState )
+	{
+		case begin:
+		event.SetGestureStart();
+		break;
+
+		case update:
+		// Update touch point as the touch corresponding to "press" is moving
+		if ( win->m_sequence == gdk_event->sequence )
+		{
+			win->m_lastTouchPoint.x = gdk_event->x;
+			win->m_lastTouchPoint.y = gdk_event->y;
+		}
+		break;
+
+		case end:
+		event.SetGestureEnd();
+		break;
+	}
+
+	event.SetPosition(win->m_lastTouchPoint);
+
+	win->GTKProcessEvent(event);
+}
+
+static void
 touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGTK* win)
 {
     switch(gdk_event->type)
@@ -3169,21 +3215,43 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
         {
             win->m_touchCount++;
 
-            win->m_isTwoFingerTapPossible = false;
+            win->m_allowedGestures &= ~two_finger_tap;
 
             if ( win->m_touchCount == 1 )
             {
                 win->m_lastTouchTime = gdk_event->time;
+                win->m_lastTouchPoint.x = gdk_event->x;
+                win->m_lastTouchPoint.y = gdk_event->y;
+
+                // Save the sequence which identifies touch corresponding to "press"
+                win->m_sequence = gdk_event->sequence;
+
+                // "Press and Tap Event" may occur in future
+                win->m_allowedGestures |= press_and_tap;
             }
 
             // Check if two fingers are placed together .i.e difference between their time stamps is <= 200 milliseconds
             else if ( win->m_touchCount == 2 && gdk_event->time - win->m_lastTouchTime <= 200 )
             {
                 // "Two Finger Tap Event" may be possible in the future
-                win->m_isTwoFingerTapPossible = true;
+                win->m_allowedGestures |= two_finger_tap;
+
+                // Cancel "Press and Tap Event"
+                win->m_allowedGestures &= ~press_and_tap;
             }
         }
 
+        break;
+
+        case GDK_TOUCH_UPDATE:
+        {
+            // If press and tap gesture is active and touch corresponding to that gesture is moving
+            if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_sequence )
+            {
+                win->m_gestureState = update;
+                wxEmitPressAndTapEvent(gdk_event, win);
+            }
+        }
         break;
 
         case GDK_TOUCH_END:
@@ -3194,15 +3262,41 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
             if ( win->m_touchCount == 1 )
             {
                 win->m_lastTouchTime = gdk_event->time;
-                win->m_lastTouchPoint.x = gdk_event->x;
-                win->m_lastTouchPoint.y = gdk_event->y;
+
+                // If the touch corresponding to "press" is present and "tap" is produced by some ather touch
+                if ( win->m_allowedGestures & press_and_tap && gdk_event->sequence != win->m_sequence )
+                {
+                    // Press and Tap gesture Gesture becomes active now
+                    if ( !win->m_isPressAndTapActive )
+                    {
+                        win->m_gestureState = begin;
+                        win->m_isPressAndTapActive = true;
+                    }
+
+                    else
+                    {
+                        win->m_gestureState = update;
+                    }
+
+                    wxEmitPressAndTapEvent(gdk_event, win);
+                }
             }
 
             // Check if "Two Finger Tap Event" is possible and both the fingers have been lifted up together
-            else if ( win->m_isTwoFingerTapPossible && win->m_touchCount == 0
+            else if ( win->m_allowedGestures & two_finger_tap && win->m_touchCount == 0
                       && gdk_event->time - win->m_lastTouchTime <= 200 )
             {
+                // Process Two Finger Tap Event
                 wxEmitTwoFingerTapEvent(gdk_event, win);
+            }
+
+            // If the gesture was active and the touch corresponding to "press" is no longer on the screen
+            if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_sequence )
+            {
+                win->m_gestureState = end;
+                win->m_isPressAndTapActive = false;
+
+                wxEmitPressAndTapEvent(gdk_event, win);
             }
         }
         break;

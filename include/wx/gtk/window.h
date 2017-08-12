@@ -355,11 +355,14 @@ public:
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
-    bool                 m_isTwoFingerTapPossible;
+    bool                 m_isPressAndTapActive;
 
     int                  m_touchCount;
     int                  m_lastTouchTime;
+    int                  m_gestureState;
+    int                  m_allowedGestures;
     wxPoint              m_lastTouchPoint;
+    GdkEventSequence*    m_sequence;
 
 protected:
     // implement the base class pure virtuals
