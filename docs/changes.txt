@@ -199,6 +199,7 @@ wxMSW:
 - Fix handling wxClipboard data when wxUSE_OLE == 0.
 - Fix caching of wxFONTSTYLE_SLANT fonts in wxTheFontList.
 - Fix wxTextCtrl::XYToPosition() and PositionToXY().
+- Fix updating radio groups when non-radio item is inserted to wxMenu.
 
 wxOSX:
 
