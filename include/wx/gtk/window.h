@@ -355,6 +355,7 @@ public:
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
+#if GTK_CHECK_VERSION(3,14,0)
     bool                 m_isPressAndTapActive;
 
     int                  m_touchCount;
@@ -363,6 +364,7 @@ public:
     int                  m_allowedGestures;
     wxPoint              m_lastTouchPoint;
     GdkEventSequence*    m_sequence;
+#endif // GTK_CHECK_VERSION(3,14,0)
 
 protected:
     // implement the base class pure virtuals
