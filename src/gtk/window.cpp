@@ -3202,7 +3202,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
             else if ( win->m_isTwoFingerTapPossible && win->m_touchCount == 0
                       && gdk_event->time - win->m_lastTouchTime <= 200 )
             {
-            	wxEmitTwoFingerTapEvent(gdk_event, win);
+                wxEmitTwoFingerTapEvent(gdk_event, win);
             }
         }
         break;
