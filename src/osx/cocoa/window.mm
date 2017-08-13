@@ -2327,6 +2327,9 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         [magnificationGestureRecognizer release];
         [rotationGestureRecognizer release];
         [pressGestureRecognizer release];
+
+        if ( m_touch )
+            [m_touch release];
     }
 }
 
