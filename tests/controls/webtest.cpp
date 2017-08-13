@@ -55,10 +55,8 @@ private:
         CPPUNIT_TEST( RunScriptReturnArray );
         CPPUNIT_TEST( RunScriptReturnUndefined );
         CPPUNIT_TEST( RunScriptReturnNull );
-#if !(__WXOSX__)
-        //There is a bug: never returns false. See implementation.
+        CPPUNIT_TEST( RunScriptEvalQuotes );
         CPPUNIT_TEST( RunScriptInvalidJavaScript );
-#endif
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -82,6 +80,7 @@ private:
     void RunScriptReturnUndefined();
     void RunScriptReturnNull();
     void RunScriptInvalidJavaScript();
+    void RunScriptEvalQuotes();
 
     wxWebView* m_browser;
     EventCounter* m_loaded;
@@ -355,7 +354,7 @@ void WebTestCase::RunScriptReturnObject()
 
     wxString result;
     CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; person.lastName = 'Bar';return person;}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("", result);
+    CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
 }
 
 void WebTestCase::RunScriptReturnArray()
@@ -365,7 +364,7 @@ void WebTestCase::RunScriptReturnArray()
 
     wxString result;
     CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
-    CPPUNIT_ASSERT_EQUAL("", result);
+    CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
 }
 
 void WebTestCase::RunScriptReturnUndefined()
@@ -375,7 +374,7 @@ void WebTestCase::RunScriptReturnUndefined()
 
     wxString result;
     CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("", result);
+    CPPUNIT_ASSERT_EQUAL("undefined", result);
 }
 
 void WebTestCase::RunScriptReturnNull()
@@ -385,7 +384,7 @@ void WebTestCase::RunScriptReturnNull()
 
     wxString result;
     CPPUNIT_ASSERT(m_browser->RunScript("function f(){return null;}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("", result);
+    CPPUNIT_ASSERT_EQUAL("null", result);
 }
 
 void WebTestCase::RunScriptInvalidJavaScript()
@@ -395,7 +394,17 @@ void WebTestCase::RunScriptInvalidJavaScript()
 
     wxString result;
     CPPUNIT_ASSERT(!m_browser->RunScript("int main() { return 0; }", &result));
-    CPPUNIT_ASSERT_EQUAL("", result);
+    CPPUNIT_ASSERT(!result);
+}
+
+void WebTestCase::RunScriptEvalQuotes()
+{
+    m_browser->SetPage("<html><head><script></script></head><body></body></html>", "");
+    ENSURE_LOADED;
+
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->RunScript("function r() { return eval(\"function a() { return \\\"test\\\"; } a();\"); } r();", &result));
+    CPPUNIT_ASSERT_EQUAL("test", result);
 }
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
