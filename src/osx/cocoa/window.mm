@@ -1705,7 +1705,12 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
     // Check if 2 fingers are placed together
     if ( m_touchCount == 2 && touches.count == 2 )
     {
+        // Two Finger Tap Event may occur in future
         m_isTwoFingerTapPossible = true;
+
+        // Cancel Press and Tap Event
+        m_isPressAndTapPossible = false;
+
         return;
     }
 
@@ -1713,6 +1718,14 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
     {
         // Save the time of event in milliseconds
         m_lastTouchTime = wxRound(event.timestamp * 1000);
+
+        // Press and Tap may occur in future
+        m_isPressAndTapPossible = true;
+
+        NSArray* array = [touches allObjects];
+
+        // Save the touch corresponding to "press"
+        m_touch = [[array objectAtIndex:0] copy];
     }
 
     touches = [event touchesMatchingPhase:NSTouchPhaseStationary inView:m_osxView];
@@ -1720,14 +1733,46 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
     // Check if 2 fingers are placed within the time interval of 200 milliseconds
     if ( m_touchCount == 2 && touches.count == 1 && wxRound(event.timestamp * 1000) - m_lastTouchTime <= 200 )
     {
+        // Two Finger Tap Event may occur in future
         m_isTwoFingerTapPossible = true;
+
+        // Cancel Press and Tap
+        m_isPressAndTapPossible = false;
+        [m_touch release];
     }
 }
 
-void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent WXUNUSED(event))
+void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 {
-    // Cancel if there is any movement
+    // Cancel Two Finger Tap Event if there is any movement
     m_isTwoFingerTapPossible = false;
+
+    if ( m_isPressAndTapActive )
+    {
+        NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseMoved inView:m_osxView];
+
+        NSArray* array = [touches allObjects];
+
+        // Iterate through all moving touches
+        for ( int i = 0; i < [array count]; ++i )
+        {
+            NSTouch* touch = [array objectAtIndex:i];
+
+            // Process Press and Tap Event if the touch corresponding to "press" is moving
+            if ( [touch.identity isEqual:m_touch.identity] )
+            {
+                wxPressAndTapEvent wxevent(GetWXPeer()->GetId());
+                wxevent.SetEventObject(GetWXPeer());
+
+                // Get the mouse coordinates
+                wxCoord x, y;
+                SetupCoordinates(x, y, event);
+                wxevent.SetPosition(wxPoint (x,y));
+
+                GetWXPeer()->HandleWindowEvent(wxevent);
+            }
+        }
+    }
 }
 
 void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
@@ -1757,6 +1802,60 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
     else if ( m_touchCount == 1 && m_isTwoFingerTapPossible )
     {
         m_lastTouchTime = wxRound(event.timestamp * 1000);
+    }
+
+    else if ( m_isPressAndTapPossible )
+    {
+        NSArray* array = [touches allObjects];
+
+        // True if touch that ended is the touch corresponding to "press"
+        bool isPressTouch = false;
+
+        // Iterate through all ended touches
+        for( int i = 0; i < [array count]; ++i )
+        {
+            NSTouch* touch = [array objectAtIndex:i];
+
+            // Check if touch that ended is the touch corresponding to "press"
+            if ( [touch.identity isEqual:m_touch.identity] )
+            {
+                isPressTouch = true;
+                break;
+            }
+        }
+
+        // Cancel Press and Tap Event if the touch corresponding to press is ended
+        // and Press and Tap was not active
+        if ( isPressTouch && !m_isPressAndTapActive )
+        {
+            m_isPressAndTapPossible = false;
+            return;
+        }
+
+        wxPressAndTapEvent wxevent(GetWXPeer()->GetId());
+        wxevent.SetEventObject(GetWXPeer());
+
+        // Get the mouse coordinates
+        wxCoord x, y;
+        SetupCoordinates(x, y, event);
+        wxevent.SetPosition(wxPoint (x,y));
+
+        if ( !m_isPressAndTapActive )
+        {
+            wxevent.SetGestureStart();
+            m_isPressAndTapActive = true;
+        }
+
+        // End Press and Tap Event if the touch corresponding to "press" is lifted off
+        else if ( isPressTouch )
+        {
+            wxevent.SetGestureEnd();
+            m_isPressAndTapActive = false;
+            m_isPressAndTapPossible = false;
+            [m_touch release];
+        }
+
+        GetWXPeer()->HandleWindowEvent(wxevent);
     }
 }
 
@@ -2200,6 +2299,9 @@ void wxWidgetCocoaImpl::Init()
     m_touchCount = 0;
     m_lastTouchTime = 0;
     m_isTwoFingerTapPossible = false;
+    m_isPressAndTapPossible = false;
+    m_isPressAndTapActive = false;
+    m_touch = NULL;
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
