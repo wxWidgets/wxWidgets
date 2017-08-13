@@ -3176,33 +3176,33 @@ wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 static void
 wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 {
-	wxPressAndTapEvent event(win->GetId());
+    wxPressAndTapEvent event(win->GetId());
 
-	event.SetEventObject(win);
+    event.SetEventObject(win);
 
-	switch ( win->m_gestureState )
-	{
-		case begin:
-		event.SetGestureStart();
-		break;
+    switch ( win->m_gestureState )
+    {
+        case begin:
+        event.SetGestureStart();
+        break;
 
-		case update:
-		// Update touch point as the touch corresponding to "press" is moving
-		if ( win->m_sequence == gdk_event->sequence )
-		{
-			win->m_lastTouchPoint.x = gdk_event->x;
-			win->m_lastTouchPoint.y = gdk_event->y;
-		}
-		break;
+        case update:
+        // Update touch point as the touch corresponding to "press" is moving
+        if ( win->m_sequence == gdk_event->sequence )
+        {
+            win->m_lastTouchPoint.x = gdk_event->x;
+            win->m_lastTouchPoint.y = gdk_event->y;
+        }
+        break;
 
-		case end:
-		event.SetGestureEnd();
-		break;
-	}
+        case end:
+        event.SetGestureEnd();
+        break;
+    }
 
-	event.SetPosition(win->m_lastTouchPoint);
+    event.SetPosition(win->m_lastTouchPoint);
 
-	win->GTKProcessEvent(event);
+    win->GTKProcessEvent(event);
 }
 
 static void
