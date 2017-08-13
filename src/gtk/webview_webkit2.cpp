@@ -1124,18 +1124,9 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     gsize length;
     JSValueRef exception = NULL;
 
-    if (!JSValueIsObject (context,value) &&
-        !JSValueIsNull(context,value) &&
-        !JSValueIsUndefined(context,value))
-        js_value = JSValueToStringCopy (context, value, &exception);
-    else
-    {
-        wxLogError("Return objects, null or undefined is not supported");
-        if (output != NULL)
-            *output = "";
-        webkit_javascript_result_unref (js_result);
-        return true;
-    }
+    js_value = (JSValueIsObject(context, value)) ?
+               JSValueCreateJSONString(context, value, 0, &exception) :
+               JSValueToStringCopy (context, value, &exception);
 
     if (exception)
     {
