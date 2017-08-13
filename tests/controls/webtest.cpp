@@ -403,7 +403,7 @@ void WebTestCase::RunScriptEvalQuotes()
     ENSURE_LOADED;
 
     wxString result;
-    CPPUNIT_ASSERT(m_browser->RunScript("function r() { return eval(\"function a() { return \\\"test\\\"; } a();\"); } r();", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function a() { return eval(\"function b() { return eval(\\\"function c() { return \\\\\\\"test\\\\\\\" } c();\\\"); } b();\"); } a();", &result));
     CPPUNIT_ASSERT_EQUAL("test", result);
 }
 
