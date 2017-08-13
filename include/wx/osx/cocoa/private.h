@@ -203,9 +203,13 @@ protected:
     NSPressGestureRecognizer *pressGestureRecognizer;
 
     bool m_isTwoFingerTapPossible;
+    bool m_isPressAndTapPossible;
+    bool m_isPressAndTapActive;
 
     int m_touchCount;
     int m_lastTouchTime;
+
+    NSTouch* m_touch;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
