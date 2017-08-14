@@ -27,6 +27,7 @@
 
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
+#include "wx/regex.h"
 
 #if wxOSX_USE_IPHONE
 #include <UIKit/UIWebView.h>
@@ -411,27 +412,42 @@ wxString wxWebViewWebKit::GetSelectedText() const
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
     if ( !m_webView )
-        return false;
-
-    NSString* result = nil;
-
-    result = [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( javascript ).AsNSString()];
-
-    if (result != nil)
     {
-        if (output != NULL)
-	{
+        wxLogWarning("!m_webView");
+        return false;
+    }
+
+    wxString javascriptCopy = javascript;
+
+    wxRegEx escapeDoubleQuotes("(\\\\*)(\")");
+    escapeDoubleQuotes.Replace(&javascriptCopy,"\\1\\1\\\\\\2");
+
+    wxString checkerJS = "try { var someVarName = eval(\"" +
+                          javascriptCopy +
+                          "\"); true; } catch (e) { e.name + \": \" + e.message; }";
+
+    NSString* result = [m_webView stringByEvaluatingJavaScriptFromString:
+                              wxCFStringRef( checkerJS ).AsNSString()];
+
+    if (result != nil && [result isEqualToString:@"true"])
+    {
+        wxString returnJS = "if (typeof someVarName == 'object') \
+                                 JSON.stringify(someVarName); \
+                             else if (typeof someVarName == 'undefined') \
+                                 'undefined'; \
+                             else \
+                                 someVarName;";
+        result = [m_webView stringByEvaluatingJavaScriptFromString:
+                              wxCFStringRef( returnJS ).AsNSString()];
+        if (result != nil && output != NULL)
             *output = wxCFStringRef::AsString(result);
-	}
     }
     else
     {
-        //This is not reacheable. There is a bug that
-	//stringByEvaluatingJavaScriptFromString never returns nil
+        if (result != nil)
+            wxLogWarning("JS error: " + wxCFStringRef::AsString(result));
         return false;
     }
-
     return true;
 }
 
