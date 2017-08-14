@@ -90,7 +90,7 @@ private:
 
 //Convenience macro
 
-#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS_IN((*m_loaded), 1, 500)
+#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS_IN((*m_loaded), 1, 1000)
 
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( WebTestCase );
