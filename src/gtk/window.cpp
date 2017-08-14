@@ -3183,21 +3183,21 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
     switch ( win->m_gestureState )
     {
         case begin:
-        event.SetGestureStart();
-        break;
+            event.SetGestureStart();
+            break;
 
         case update:
-        // Update touch point as the touch corresponding to "press" is moving
-        if ( win->m_sequence == gdk_event->sequence )
-        {
-            win->m_lastTouchPoint.x = gdk_event->x;
-            win->m_lastTouchPoint.y = gdk_event->y;
-        }
-        break;
+            // Update touch point as the touch corresponding to "press" is moving
+            if ( win->m_sequence == gdk_event->sequence )
+            {
+                win->m_lastTouchPoint.x = gdk_event->x;
+                win->m_lastTouchPoint.y = gdk_event->y;
+            }
+            break;
 
         case end:
-        event.SetGestureEnd();
-        break;
+            event.SetGestureEnd();
+            break;
     }
 
     event.SetPosition(win->m_lastTouchPoint);
@@ -3239,7 +3239,6 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
                 win->m_allowedGestures &= ~press_and_tap;
             }
         }
-
         break;
 
         case GDK_TOUCH_UPDATE:
@@ -3263,7 +3262,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
                 win->m_lastTouchTime = gdk_event->time;
 
                 // If the touch corresponding to "press" is present and "tap" is produced by some ather touch
-                if ( win->m_allowedGestures & press_and_tap && gdk_event->sequence != win->m_sequence )
+                if ( (win->m_allowedGestures & press_and_tap) && gdk_event->sequence != win->m_sequence )
                 {
                     // Press and Tap gesture becomes active now
                     if ( !win->m_isPressAndTapActive )
@@ -3282,7 +3281,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
             }
 
             // Check if "Two Finger Tap Event" is possible and both the fingers have been lifted up together
-            else if ( win->m_allowedGestures & two_finger_tap && win->m_touchCount == 0
+            else if ( (win->m_allowedGestures & two_finger_tap) && !win->m_touchCount
                       && gdk_event->time - win->m_lastTouchTime <= 200 )
             {
                 // Process Two Finger Tap Event
