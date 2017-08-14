@@ -362,7 +362,7 @@ public:
     int                  m_gestureState;
     int                  m_allowedGestures;
     wxPoint              m_lastTouchPoint;
-    GdkEventSequence*    m_sequence;
+    GdkEventSequence*    m_touchSequence;
 
 protected:
     // implement the base class pure virtuals

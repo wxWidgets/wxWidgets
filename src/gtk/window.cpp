@@ -3188,7 +3188,7 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 
         case update:
             // Update touch point as the touch corresponding to "press" is moving
-            if ( win->m_sequence == gdk_event->sequence )
+            if ( win->m_touchSequence == gdk_event->sequence )
             {
                 win->m_lastTouchPoint.x = gdk_event->x;
                 win->m_lastTouchPoint.y = gdk_event->y;
@@ -3223,7 +3223,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
                 win->m_lastTouchPoint.y = gdk_event->y;
 
                 // Save the sequence which identifies touch corresponding to "press"
-                win->m_sequence = gdk_event->sequence;
+                win->m_touchSequence = gdk_event->sequence;
 
                 // "Press and Tap Event" may occur in future
                 win->m_allowedGestures |= press_and_tap;
@@ -3244,7 +3244,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
         case GDK_TOUCH_UPDATE:
         {
             // If press and tap gesture is active and touch corresponding to that gesture is moving
-            if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_sequence )
+            if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_touchSequence )
             {
                 win->m_gestureState = update;
                 wxEmitPressAndTapEvent(gdk_event, win);
@@ -3262,7 +3262,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
                 win->m_lastTouchTime = gdk_event->time;
 
                 // If the touch corresponding to "press" is present and "tap" is produced by some ather touch
-                if ( (win->m_allowedGestures & press_and_tap) && gdk_event->sequence != win->m_sequence )
+                if ( (win->m_allowedGestures & press_and_tap) && gdk_event->sequence != win->m_touchSequence )
                 {
                     // Press and Tap gesture becomes active now
                     if ( !win->m_isPressAndTapActive )
@@ -3289,7 +3289,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
             }
 
             // If the gesture was active and the touch corresponding to "press" is no longer on the screen
-            if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_sequence )
+            if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_touchSequence )
             {
                 win->m_gestureState = end;
                 win->m_isPressAndTapActive = false;
