@@ -18,6 +18,7 @@
 #include "wx/filesys.h"
 #include "wx/base64.h"
 #include "wx/log.h"
+#include "wx/regex.h"
 #include "wx/gtk/private/webview_webkit2_extension.h"
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/error.h"
@@ -1113,6 +1114,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     if (!js_result)
     {
         wxLogError("Error running javascript: %s", error.GetMessage());
+	*output = error.GetMessage();
         return false;
     }
 
@@ -1138,7 +1140,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
         JSStringGetUTF8CString (ex_value, str, ex_length);
         JSStringRelease (ex_value);
 
-        wxLogError("Exception running script: %s", wxString::FromUTF8(str));
+        wxLogWarning("Exception running script: %s", wxString::FromUTF8(str));
 
         webkit_javascript_result_unref (js_result);
         return false;
@@ -1160,9 +1162,19 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
+    wxString javascriptCopy = javascript;
+
+    wxRegEx escapeDoubleQuotes("(\\\\*)(\")");
+    escapeDoubleQuotes.Replace(&javascriptCopy,"\\1\\1\\\\\\2");
+
+    wxString checkerJS = "try { var someVarName = eval(\"" +
+                          javascriptCopy +
+                          "\"); true; } catch (e) { e.name + \": \" + e.message; }";
+
+
     GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
-                                   javascript,
+                                   checkerJS,
                                    NULL,
                                    (GAsyncReadyCallback)wxgtk_run_javascript_cb,
                                    &result);
@@ -1172,7 +1184,30 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     while (!result)
         g_main_context_iteration(main_context, TRUE);
 
-    return JSResultToString((GObject*)m_web_view, result, output);
+    wxString outputCheck;
+    bool isValidJS = JSResultToString((GObject*)m_web_view, result, &outputCheck);
+
+    if (isValidJS && outputCheck == "true")
+    {
+        result = NULL;
+        webkit_web_view_run_javascript(m_web_view,
+                                       "someVarName;",
+                                       NULL,
+                                       (GAsyncReadyCallback)wxgtk_run_javascript_cb,
+                                       &result);
+
+        GMainContext *main_context = g_main_context_get_thread_default();
+
+        while (!result)
+            g_main_context_iteration(main_context, TRUE);
+
+        return JSResultToString((GObject*)m_web_view, result, output);
+    }
+    else
+    {
+        wxLogWarning("JS error: %s", outputCheck);
+        return false;
+    }
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
