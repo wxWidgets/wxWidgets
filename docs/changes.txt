@@ -76,6 +76,7 @@ All:
 
 - Add wxSecretStore for storing passwords using the OS-provided facilities.
 - Add support for compiling application code with wxNO_UNSAFE_WXSTRING_CONV.
+- Add support for translating strings in different contexts (RickS).
 - Add support for the micro version (third component) to OS and toolkit version
   functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
 - wxLogInfo() now logs messages if the log level is high enough, even without
@@ -198,6 +199,7 @@ wxMSW:
 - Fix handling wxClipboard data when wxUSE_OLE == 0.
 - Fix caching of wxFONTSTYLE_SLANT fonts in wxTheFontList.
 - Fix wxTextCtrl::XYToPosition() and PositionToXY().
+- Fix updating radio groups when non-radio item is inserted to wxMenu.
 
 wxOSX:
 
@@ -227,6 +229,8 @@ wxOSX:
 - Implement wxTextCtrl::ShowPosition().
 - Add support for wxTE_NO_VSCROLL style to wxTextCtrl.
 - Add support for wxTE_CHARWRAP style to wxTextCtrl.
+- Fix selecting RGB bitmaps (with no alpha channel) into wxMemoryDC.
+- Fix updating radio groups when menu item is inserted/removed from wxMenu.
 
 Unix:
 
