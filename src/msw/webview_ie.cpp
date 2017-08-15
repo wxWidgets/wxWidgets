@@ -28,6 +28,7 @@
 #include "wx/filesys.h"
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
+#include "wx/regex.h"
 
 #include <initguid.h>
 #include <wininet.h>
@@ -855,71 +856,123 @@ wxString wxWebViewIE::GetPageText() const
 
 bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 {
+    wxString javascriptCopy = javascript;
+
+    wxRegEx escapeDoubleQuotes("(\\\\*)(\")");
+    escapeDoubleQuotes.Replace(&javascriptCopy, "\\1\\1\\\\\\2");
+
+    wxString checkerJS = "try { var someVarName = eval(\"" +
+                         javascriptCopy +
+                         "\"); true; } catch (e) { e.name + \": \" + e.message; }";
+
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    IDispatch* scriptDispatch = NULL;
+
     if (!document)
     {
-        wxLogError("HTML document is null");
+        wxLogWarning("HTML document is null");
         return false;
     }
 
-    wxCOMPtr<IDispatch> pScript;
-    document->get_Script(&pScript);
-    if (!pScript)
+    if (FAILED(document->get_Script(&scriptDispatch)))
     {
-        wxLogError("Can't get the script");
+        wxLogWarning("Can't get the script");
         return false;
     }
 
-    DISPID idSave = 0;
-    LPOLESTR sMethod = L"eval";
-    HRESULT hr = pScript->GetIDsOfNames(IID_NULL, &sMethod, 1, LOCALE_SYSTEM_DEFAULT, &idSave);
-    if (!SUCCEEDED(hr))
+    wxAutomationObject scriptAO(scriptDispatch);
+    wxVariant varJavascript(checkerJS);
+    wxVariant varResult;
+
+    if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript))
     {
-        wxLogError("Can't get the script");
+        wxLogWarning("Can't run Javascript");
         return false;
     }
 
-    VARIANT varJavascript;
-    VariantInit(&varJavascript);
-    V_VT(&varJavascript) = VT_BSTR;
-    V_BSTR(&varJavascript) = wxConvertStringToOle(javascript);
-
-    VARIANT result;
-    VariantInit(&result);
-    V_VT(&result) = VT_EMPTY;
-
-    DISPPARAMS dpArgs;
-    dpArgs.rgvarg = &varJavascript;
-    dpArgs.cArgs = 1;
-    dpArgs.cNamedArgs = 0;
-    dpArgs.rgdispidNamedArgs = NULL;
-
-    hr = pScript->Invoke(idSave, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
-                         &dpArgs, &result, NULL, NULL);
-
-    VariantClear(&varJavascript);
-    if (!SUCCEEDED(hr))
+    if (varResult.IsType("bool") && varResult.GetBool())
     {
-        VariantClear(&result);
-        wxLogError("Can't run Javascript");
+        wxVariant varJavascript2("(someVarName == null || typeof someVarName != 'object') ? String(someVarName) : someVarName;");
+        if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript2))
+        {
+            wxLogWarning("Can't run Javascript");
+            return false;
+        }
+
+        if (varResult.IsType("void*"))
+        {   // script returned an Object (JScriptTypeInfo IDispatch), convert it to JSON
+            IDispatch* dispatchResult = (IDispatch*)varResult.GetVoidPtr();
+            wxAutomationObject JSONAO;
+
+            if (dispatchResult)
+            {
+                // JSON is not available in Quirks or IE6/7 standards mode,
+                // which is unfortunately the default one for the embedded browser control, see
+                // https://docs.microsoft.com/en-us/scripting/javascript/reference/json-object-javascript#requirements
+                // and see here how to make a program run use "modern" modes
+                // https://msdn.microsoft.com/en-us/library/ee330730(v=vs.85)#browser_emulation
+                if (scriptAO.GetObject(JSONAO, "JSON"))
+                {
+                    wxVariant varJSONStr;
+
+                    dispatchResult->AddRef(); // work around the bug in wxAutomationObject::Invoke(), see https://trac.wxwidgets.org/ticket/14293
+                    if (JSONAO.Invoke("stringify", DISPATCH_METHOD, varJSONStr, 1, &varResult))
+                        varResult = varJSONStr;
+                }
+                else
+                {
+                    wxString wrapJavascript = " function stringifyJSON(obj) \
+                                                { \
+                                                    var objElements = []; \
+                                                    if (!(obj instanceof Object)) \
+                                                        return typeof obj === \"string\" ? \'\"\' + obj + \'\"\' : \'\' + obj; \
+                                                    else if (obj instanceof Array) \
+                                                    { \
+                                                        if (obj[0] === undefined) \
+                                                            return \'[]\'; \
+                                                        else \
+                                                        { \
+                                                            var arr = []; \
+                                                            for (var i = 0; i < obj.length; i++) \
+                                                                arr.push(stringifyJSON(obj[i])); \
+                                                            return \'[\' + arr + \']\'; \
+                                                        } \
+                                                    } \
+                                                    else if (typeof obj === \"object\") \
+                                                    { \
+                                                        for (var key in obj) \
+                                                        { \
+                                                            if (typeof obj[key] === \"function\") \
+                                                                return \'{}\'; \
+                                                            else \
+                                                                objElements.push(\'\"\' + key + \'\":\' + stringifyJSON(obj[key])); \
+                                                        } \
+                                                        return \'{\' + objElements + \'}\'; \
+                                                    } \
+                                                } \
+                                                \
+                                                stringifyJSON(eval(\"someVarName;\"));";
+
+                    wxVariant varJavascript3(wrapJavascript);
+                    if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript3))
+                    {
+                        wxLogWarning("Can't run Javascript");
+                        return false;
+                    }
+                }
+                dispatchResult->Release();
+            }
+        }
+    }
+    else
+    {
+        wxLogWarning("JS error: %s", varResult.MakeString());
         return false;
     }
 
     if (output != NULL)
-    {
-        if (result.vt == VT_BSTR)
-            *output = wxString::Format(wxT("%s"), result.bstrVal);
-        else if (result.vt == VT_I4)
-            *output = wxString::Format(wxT("%d"), result.intVal);
-        else if (result.vt == VT_R8)
-            *output = wxString::Format(wxT("%f"), result.dblVal);
-        else if (result.vt == VT_BOOL)
-            *output = wxString::Format(wxT("%s"), result.boolVal ? "true" : "false");
-        else
-            wxLogError("Return objects, null or undefined is not supported");
-    }
+        *output = varResult.MakeString();
 
-    VariantClear(&result);
     return true;
 }
 
