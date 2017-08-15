@@ -3700,7 +3700,10 @@ public:
 
 
 /** @class wxPanGestureEvent
-    This class contains information about the pan gesture event.
+
+    This event is generated when the user moves a finger on the surface.
+
+    Note that OSX requires the primary mouse button to be pressed while performing the finger movement.
 
     @beginEventTable{wxPanGestureEvent}
     @event{EVT_GESTURE_PAN(id, func)}
@@ -3744,7 +3747,7 @@ public:
 
 /** @class wxZoomGestureEvent
 
-    This class contains information about the zoom gesture event.
+    This event is generated when two fingers pinch the surface to zoom in or out.
 
     @beginEventTable{wxZoomGestureEvent}
     @event{EVT_GESTURE_ZOOM(id, func)}
@@ -3779,7 +3782,7 @@ public:
 
 /** @class wxRotateGestureEvent
 
-    This class contains information about the rotate gesture event.
+    This event is generated when two fingers move in opposite directions on the surface.
 
     @beginEventTable{wxRotateGestureEvent}
     @event{EVT_GESTURE_ROTATE(id, func)}
@@ -3814,7 +3817,7 @@ public:
 
 /** @class wxTwoFingerTapEvent
 
-    This class contains information about the Two Finger Tap event.
+    This event is generated when two fingers touch the surface at the same time.
 
     @beginEventTable{wxTwoFingerTapEvent}
     @event{EVT_TWO_FINGER_TAP(id, func)}
@@ -3837,9 +3840,9 @@ public:
 
 /** @class wxLongPressEvent
 
-    This class contains information about the Long Press event.
+    This event is generated when one finger touches the surface and remains stationary.
 
-    Currently this event is generated in wxGTK and wxOSX only.
+    Note that currently it is only generated under wxGTK and wxOSX.
 
     @beginEventTable{wxLongPressEvent}
     @event{EVT_LONG_PRESS(id, func)}
