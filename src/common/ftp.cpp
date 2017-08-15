@@ -582,7 +582,13 @@ wxSocketBase *wxFTP::GetActivePort()
     addrNew.AnyAddress();
     addrNew.Service(0); // pick an open port number.
 
-    wxSocketServer *sockSrv = new wxSocketServer(addrNew);
+    wxSocketServer* const
+        sockSrv = new wxSocketServer
+                      (
+                        addrNew,
+                        wxSocketServer::GetBlockingFlagIfNeeded()
+                      );
+
     if (!sockSrv->IsOk())
     {
         // We use IsOk() here to see if everything is ok
