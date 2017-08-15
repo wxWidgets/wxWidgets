@@ -218,7 +218,7 @@ public:
         if ( !ms_gestureSymbolsLoaded )
             LoadGestureSymbols();
 
-    return ms_pfnGetGestureInfo && ms_pfnCloseGestureInfoHandle && ms_pfnSetGestureConfig;
+        return ms_pfnGetGestureInfo && ms_pfnCloseGestureInfoHandle && ms_pfnSetGestureConfig;
     }
 
     typedef BOOL (WINAPI *GetGestureInfo_t)(HGESTUREINFO, PGESTUREINFO);
@@ -3276,8 +3276,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 {
                     // (x,y) is the current position of the pan
                     processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
+                    break;
                 }
-                break;
 
                 // Zoom gesture
                 case GID_ZOOM:
@@ -3288,8 +3288,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     // this is used to extract those lower 4 bytes
                     DWORD fingerDistance = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
                     processed = HandleZoomGesture(x, y, fingerDistance, gestureInfo.dwFlags);
+                    break;
                 }
-                break;
 
                 // Rotate gesture
                 case GID_ROTATE:
@@ -3299,22 +3299,22 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     // to obtain the angle to rotate
                     DWORD angleArgument = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
                     processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
+                    break;
                 }
-                break;
 
                 // Two Finger tap gesture
                 case GID_TWOFINGERTAP:
                 {
                     processed = HandleTwoFingerTap(x, y, gestureInfo.dwFlags);
+                    break;
                 }
-                break;
 
                 // Press and Tap gesture
                 case GID_PRESSANDTAP:
                 {
                     processed = HandlePressAndTap(x, y, gestureInfo.dwFlags);
+                    break;
                 }
-                break;
             }
 
             if ( processed )
@@ -5716,14 +5716,12 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
         event.SetGestureEnd();
     }
 
-    wxPoint pt(x, y);
-    
     // Determine the horizontal and vertical changes
     int DeltaX =  x - s_previousLocationX, DeltaY = y - s_previousLocationY;
     
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
-    event.SetPosition(pt);
+    event.SetPosition(wxPoint(x, y));
     event.SetDeltaX(DeltaX);
     event.SetDeltaY(DeltaY);
 
@@ -5817,11 +5815,9 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
         event.SetGestureEnd();
     }
 
-    wxPoint pt(x, y);
-
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
-    event.SetPosition(pt);
+    event.SetPosition(wxPoint(x, y));
 
     return HandleWindowEvent(event);
 }
@@ -5854,7 +5850,7 @@ bool wxWindowMSW::HandlePressAndTap(int x,int y, WXDWORD flags)
 
 	if ( flags & GF_BEGIN )
 	{
-		event.SetGestureStart();
+        event.SetGestureStart();
 	}
 
 	event.SetEventObject(this);
@@ -5863,7 +5859,7 @@ bool wxWindowMSW::HandlePressAndTap(int x,int y, WXDWORD flags)
 
 	if ( flags & GF_END )
 	{
-		event.SetGestureEnd();
+        event.SetGestureEnd();
 	}
 
 	return HandleWindowEvent(event);

@@ -2453,8 +2453,6 @@ void wxWindowGTK::Init()
     m_touchCount = 0;
     m_lastTouchTime = 0;
     m_allowedGestures = 0;
-    m_lastTouchPoint.x = 0;
-    m_lastTouchPoint.y = 0;
 #endif // GTK_CHECK_VERSION(3,14,0)
 }
 
@@ -2858,17 +2856,17 @@ static gboolean source_dispatch(GSource*, GSourceFunc, void*)
 // Currently used for Press and Tap gesture only
 enum GestureStates
 {
-	begin  = 1,
-	update,
-	end
+    begin  = 1,
+    update,
+    end
 };
 
 enum AllowedGestures
 {
-	two_finger_tap = 0x0001,
-	press_and_tap  = 0x0002,
-	horizontal_pan = 0x0004,
-	vertical_pan   = 0x0008
+    two_finger_tap = 0x0001,
+    press_and_tap  = 0x0002,
+    horizontal_pan = 0x0004,
+    vertical_pan   = 0x0008
 };
 
 static void
@@ -3208,10 +3206,9 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 static void
 touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGTK* win)
 {
-    switch(gdk_event->type)
+    switch ( gdk_event->type )
     {
         case GDK_TOUCH_BEGIN:
-        {
             win->m_touchCount++;
 
             win->m_allowedGestures &= ~two_finger_tap;
@@ -3238,23 +3235,19 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
                 // Cancel "Press and Tap Event"
                 win->m_allowedGestures &= ~press_and_tap;
             }
-        }
-        break;
+            break;
 
         case GDK_TOUCH_UPDATE:
-        {
             // If press and tap gesture is active and touch corresponding to that gesture is moving
             if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_touchSequence )
             {
                 win->m_gestureState = update;
                 wxEmitPressAndTapEvent(gdk_event, win);
             }
-        }
-        break;
+            break;
 
         case GDK_TOUCH_END:
         case GDK_TOUCH_CANCEL:
-        {
             win->m_touchCount--;
 
             if ( win->m_touchCount == 1 )
@@ -3296,8 +3289,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
 
                 wxEmitPressAndTapEvent(gdk_event, win);
             }
-        }
-        break;
+            break;
 
         default:
         break;
