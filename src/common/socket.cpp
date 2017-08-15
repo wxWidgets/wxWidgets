@@ -25,6 +25,7 @@
 #include "wx/socket.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/object.h"
     #include "wx/string.h"
     #include "wx/intl.h"
@@ -926,6 +927,14 @@ void wxSocketBase::SetError(wxSocketError error)
 wxSocketError wxSocketBase::LastError() const
 {
     return m_impl->GetError();
+}
+
+/* static */
+int wxSocketBase::GetBlockingFlagIfNeeded()
+{
+    return wxIsMainThread() && wxApp::IsMainLoopRunning()
+            ? wxSOCKET_NONE
+            : wxSOCKET_BLOCK;
 }
 
 // --------------------------------------------------------------------------
