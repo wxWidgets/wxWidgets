@@ -647,7 +647,11 @@ wxSocketBase *wxFTP::GetPassivePort()
     addr.Hostname(hostaddr);
     addr.Service(port);
 
-    wxSocketClient *client = new wxSocketClient();
+    // If we're used from a worker thread or can't dispatch events even though
+    // we're in the main one, we can't use non-blocking sockets.
+    wxSocketClient* const
+        client = new wxSocketClient(wxSocketClient::GetBlockingFlagIfNeeded());
+
     if ( !client->Connect(addr) )
     {
         m_lastError = wxPROTO_CONNERR;
