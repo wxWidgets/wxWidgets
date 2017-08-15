@@ -45,6 +45,7 @@
 
     @library{wxcore}
     @category{ctrl}
+    @genericAppearance{rearrangelist}
 */
 class wxRearrangeList : public wxCheckListBox
 {
@@ -178,6 +179,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
+    @genericAppearance{rearrangectrl}
  */
 class wxRearrangeCtrl : public wxPanel
 {
