@@ -5829,7 +5829,7 @@ bool wxWindowMSW::HandleTwoFingerTap(int x, int y, WXDWORD flags)
 
     if ( flags & GF_BEGIN )
     {
-	    event.SetGestureStart();
+        event.SetGestureStart();
     }
 
     event.SetEventObject(this);
