@@ -460,13 +460,29 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
-        Runs the given javascript code, returning a value.
+        Runs the given javascript code, returning the result if there is any.
+        It returns strings, integers, float point numbers, booleans and objects (as JSON).
+        @note When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
+              1) JavaScript allocations greater than 10MB are not allowed
+              2) JavaScript that takes longer than 10 seconds to execute is not allowed
         @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
+        @note When using wxWEBVIEW_BACKEND_IE, JSON is not available in Quirks or 
+              IE6/7 standards mode, which is unfortunately the default one for the embedded browser control, see
+              https://docs.microsoft.com/en-us/scripting/javascript/reference/json-object-javascript#requirements
+              and see here how to make a program run use "modern" modes
+              https://msdn.microsoft.com/en-us/library/ee330730(v=vs.85)#browser_emulation
+              Here is an example to get this working on webview.exe:
+              @code
+                  wxRegKey key(wxRegKey::HKCU, _T("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+                  if (key.Exists())
+                      key.SetValue(_T("webview.exe"), 11000);
+              @endcode
+              However, if you don't want to use this, there is an implementation of JSON parser
+              on RunScript that helps to return objects.
         @param A wxString containing the Javascript.
         @param wxString result pointer.
         @return True is there is a result, false if there is an error
-
     */
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
 
