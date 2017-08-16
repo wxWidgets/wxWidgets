@@ -22,6 +22,7 @@
 #include "wx/gtk/private/webview_webkit2_extension.h"
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/error.h"
+#include "wx/private/webviewutils.h"
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSValueRef.h>
 #include <JavaScriptCore/JSStringRef.h>
@@ -546,6 +547,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                            this);
 
     LoadURL(url);
+
+    m_runScriptCount = 0;
 
     return true;
 }
@@ -1160,21 +1163,11 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     return true;
 }
 
-bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewWebKit::RunScriptInternal(const wxString& javascript, wxString* output)
 {
-    wxString javascriptCopy = javascript;
-
-    wxRegEx escapeDoubleQuotes("(\\\\*)(\")");
-    escapeDoubleQuotes.Replace(&javascriptCopy,"\\1\\1\\\\\\2");
-
-    wxString checkerJS = "try { var someVarName = eval(\"" +
-                          javascriptCopy +
-                          "\"); true; } catch (e) { e.name + \": \" + e.message; }";
-
-
     GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
-                                   checkerJS,
+                                   javascript,
                                    NULL,
                                    (GAsyncReadyCallback)wxgtk_run_javascript_cb,
                                    &result);
@@ -1184,30 +1177,28 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     while (!result)
         g_main_context_iteration(main_context, TRUE);
 
-    wxString outputCheck;
-    bool isValidJS = JSResultToString((GObject*)m_web_view, result, &outputCheck);
+    return JSResultToString((GObject*)m_web_view, result, output);
+}
 
-    if (isValidJS && outputCheck == "true")
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+{
+    wxString result;
+    wxString counter;
+    wxString javaScriptVariable =
+        wxWebViewUtils::createVariableWithJavaScriptResult(javascript, &m_runScriptCount, &counter);
+
+    bool isValidJS = RunScriptInternal(javaScriptVariable, &result);
+
+    if (isValidJS && result == "true")
     {
-        result = NULL;
-        webkit_web_view_run_javascript(m_web_view,
-                                       "someVarName;",
-                                       NULL,
-                                       (GAsyncReadyCallback)wxgtk_run_javascript_cb,
-                                       &result);
-
-        GMainContext *main_context = g_main_context_get_thread_default();
-
-        while (!result)
-            g_main_context_iteration(main_context, TRUE);
-
-        return JSResultToString((GObject*)m_web_view, result, output);
+        RunScriptInternal("__wx$" + counter, output);
+        RunScriptInternal("__wx$" + counter + " = undefined;");
+        return true;
     }
-    else
-    {
-        wxLogWarning("JS error: %s", outputCheck);
-        return false;
-    }
+
+    wxLogWarning("JS error: %s", *output);
+    output = NULL;
+    return false;
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
