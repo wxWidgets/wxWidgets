@@ -112,6 +112,8 @@ bool wxWebViewIE::Create(wxWindow* parent,
     EnableControlFeature(21 /* FEATURE_DISABLE_NAVIGATION_SOUNDS */);
 
     LoadURL(url);
+
+    m_runScriptCount = 0;
     return true;
 }
 
