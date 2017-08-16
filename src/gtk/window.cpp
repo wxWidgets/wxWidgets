@@ -2449,10 +2449,10 @@ void wxWindowGTK::Init()
     m_dirtyTabOrder = false;
 
 #if GTK_CHECK_VERSION(3,14,0)
-    m_isPressAndTapActive = false;
     m_touchCount = 0;
     m_lastTouchTime = 0;
     m_allowedGestures = 0;
+    m_activeGestures = 0;
 #endif // GTK_CHECK_VERSION(3,14,0)
 }
 
@@ -2861,7 +2861,7 @@ enum GestureStates
     end
 };
 
-enum AllowedGestures
+enum TrackedGestures
 {
     two_finger_tap = 0x0001,
     press_and_tap  = 0x0002,
@@ -3239,7 +3239,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
 
         case GDK_TOUCH_UPDATE:
             // If press and tap gesture is active and touch corresponding to that gesture is moving
-            if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_touchSequence )
+            if ( (win->m_activeGestures & press_and_tap) && gdk_event->sequence == win->m_touchSequence )
             {
                 win->m_gestureState = update;
                 wxEmitPressAndTapEvent(gdk_event, win);
@@ -3258,10 +3258,10 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
                 if ( (win->m_allowedGestures & press_and_tap) && gdk_event->sequence != win->m_touchSequence )
                 {
                     // Press and Tap gesture becomes active now
-                    if ( !win->m_isPressAndTapActive )
+                    if ( !(win->m_activeGestures & press_and_tap) )
                     {
                         win->m_gestureState = begin;
-                        win->m_isPressAndTapActive = true;
+                        win->m_activeGestures |= press_and_tap;
                     }
 
                     else
@@ -3282,10 +3282,11 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
             }
 
             // If the gesture was active and the touch corresponding to "press" is no longer on the screen
-            if ( win->m_isPressAndTapActive && gdk_event->sequence == win->m_touchSequence )
+            if ( (win->m_activeGestures & press_and_tap) && gdk_event->sequence == win->m_touchSequence )
             {
                 win->m_gestureState = end;
-                win->m_isPressAndTapActive = false;
+
+                win->m_activeGestures &= ~press_and_tap;
 
                 wxEmitPressAndTapEvent(gdk_event, win);
             }

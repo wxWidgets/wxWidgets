@@ -355,12 +355,11 @@ public:
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
-    bool                 m_isPressAndTapActive;
-
     int                  m_touchCount;
     int                  m_lastTouchTime;
     int                  m_gestureState;
     int                  m_allowedGestures;
+    int                  m_activeGestures;
     wxPoint              m_lastTouchPoint;
     GdkEventSequence*    m_touchSequence;
 
