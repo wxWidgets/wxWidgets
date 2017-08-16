@@ -1753,19 +1753,20 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
     // Cancel Two Finger Tap Event if there is any movement
     m_allowedGestures &= ~two_finger_tap;
 
-    if ( m_activeGestures & press_and_tap )
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseMoved inView:m_osxView];
+
+    NSArray* array = [touches allObjects];
+
+    // Iterate through all moving touches
+    for ( int i = 0; i < [array count]; ++i )
     {
-        NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseMoved inView:m_osxView];
+        NSTouch* touch = [array objectAtIndex:i];
 
-        NSArray* array = [touches allObjects];
-
-        // Iterate through all moving touches
-        for ( int i = 0; i < [array count]; ++i )
+        // Check if this touch and m_initialTouch are same
+        if ( [touch.identity isEqual:m_initialTouch.identity] )
         {
-            NSTouch* touch = [array objectAtIndex:i];
-
             // Process Press and Tap Event if the touch corresponding to "press" is moving
-            if ( [touch.identity isEqual:m_initialTouch.identity] )
+            if ( m_activeGestures & press_and_tap )
             {
                 wxPressAndTapEvent wxevent(GetWXPeer()->GetId());
                 wxevent.SetEventObject(GetWXPeer());
@@ -1777,6 +1778,15 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 
                 GetWXPeer()->HandleWindowEvent(wxevent);
             }
+
+            // Cancel Press and Tap Event if the touch corresponding to "press" is moving
+            // and the gesture is not active.
+            else if ( m_allowedGestures & press_and_tap )
+            {
+                m_allowedGestures &= ~press_and_tap;
+            }
+
+            return;
         }
     }
 }
