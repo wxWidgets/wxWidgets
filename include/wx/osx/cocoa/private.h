@@ -202,10 +202,8 @@ protected:
     NSRotationGestureRecognizer *rotationGestureRecognizer;
     NSPressGestureRecognizer *pressGestureRecognizer;
 
-    bool m_isTwoFingerTapPossible;
-    bool m_isPressAndTapPossible;
-    bool m_isPressAndTapActive;
-
+    int m_allowedGestures;
+    int m_activeGestures;
     int m_touchCount;
     int m_lastTouchTime;
 
