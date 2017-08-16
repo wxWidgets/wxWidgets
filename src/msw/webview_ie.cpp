@@ -30,6 +30,8 @@
 #include "wx/scopeguard.h"
 #include "wx/regex.h"
 
+#include "wx/private/webviewutils.h"
+
 #include <initguid.h>
 #include <wininet.h>
 
@@ -856,14 +858,9 @@ wxString wxWebViewIE::GetPageText() const
 
 bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 {
-    wxString javascriptCopy = javascript;
-
-    wxRegEx escapeDoubleQuotes("(\\\\*)(\")");
-    escapeDoubleQuotes.Replace(&javascriptCopy, "\\1\\1\\\\\\2");
-
-    wxString checkerJS = "try { var someVarName = eval(\"" +
-                         javascriptCopy +
-                         "\"); true; } catch (e) { e.name + \": \" + e.message; }";
+    wxString counter;
+    wxString javaScriptVariable =
+        wxWebViewUtils::createVariableWithJavaScriptResult(javascript, &m_runScriptCount, &counter);
 
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
     IDispatch* scriptDispatch = NULL;
@@ -881,7 +878,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     }
 
     wxAutomationObject scriptAO(scriptDispatch);
-    wxVariant varJavascript(checkerJS);
+    wxVariant varJavascript(javaScriptVariable);
     wxVariant varResult;
 
     if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript))
@@ -892,8 +889,10 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 
     if (varResult.IsType("bool") && varResult.GetBool())
     {
-        wxVariant varJavascript2("(someVarName == null || typeof someVarName != 'object') ? String(someVarName) : someVarName;");
-        if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript2))
+        varJavascript = "(__wx$" + counter + " == null || \
+                        typeof __wx$" + counter + " != 'object') ? \
+                        String(__wx$" + counter + ") : __wx$" + counter;
+        if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript))
         {
             wxLogWarning("Can't run Javascript");
             return false;
@@ -921,40 +920,40 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                 }
                 else
                 {
-                    wxString wrapJavascript = " function stringifyJSON(obj) \
-                                                { \
-                                                    var objElements = []; \
-                                                    if (!(obj instanceof Object)) \
-                                                        return typeof obj === \"string\" ? \'\"\' + obj + \'\"\' : \'\' + obj; \
-                                                    else if (obj instanceof Array) \
-                                                    { \
-                                                        if (obj[0] === undefined) \
-                                                            return \'[]\'; \
-                                                        else \
-                                                        { \
-                                                            var arr = []; \
-                                                            for (var i = 0; i < obj.length; i++) \
-                                                                arr.push(stringifyJSON(obj[i])); \
-                                                            return \'[\' + arr + \']\'; \
-                                                        } \
-                                                    } \
-                                                    else if (typeof obj === \"object\") \
-                                                    { \
-                                                        for (var key in obj) \
-                                                        { \
-                                                            if (typeof obj[key] === \"function\") \
-                                                                return \'{}\'; \
-                                                            else \
-                                                                objElements.push(\'\"\' + key + \'\":\' + stringifyJSON(obj[key])); \
-                                                        } \
-                                                        return \'{\' + objElements + \'}\'; \
-                                                    } \
-                                                } \
+                    javaScriptVariable = " function stringifyJSON(obj) \
+                                           { \
+                                               var objElements = []; \
+                                               if (!(obj instanceof Object)) \
+                                                   return typeof obj === \"string\" ? \'\"\' + obj + \'\"\' : \'\' + obj; \
+                                               else if (obj instanceof Array) \
+                                               { \
+                                                   if (obj[0] === undefined) \
+                                                       return \'[]\'; \
+                                                   else \
+                                                   { \
+                                                       var arr = []; \
+                                                       for (var i = 0; i < obj.length; i++) \
+                                                           arr.push(stringifyJSON(obj[i])); \
+                                                       return \'[\' + arr + \']\'; \
+                                                   } \
+                                               } \
+                                               else if (typeof obj === \"object\") \
+                                               { \
+                                                   for (var key in obj) \
+                                                   { \
+                                                       if (typeof obj[key] === \"function\") \
+                                                           return \'{}\'; \
+                                                       else \
+                                                           objElements.push(\'\"\' + key + \'\":\' + stringifyJSON(obj[key])); \
+                                                       } \
+                                                       return \'{\' + objElements + \'}\'; \
+                                                   } \
+                                               } \
                                                 \
-                                                stringifyJSON(eval(\"someVarName;\"));";
+                                               stringifyJSON(eval(\"__wx$" + counter + ";\"));";
 
-                    wxVariant varJavascript3(wrapJavascript);
-                    if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript3))
+                    varJavascript = (javaScriptVariable);
+                    if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript))
                     {
                         wxLogWarning("Can't run Javascript");
                         return false;
