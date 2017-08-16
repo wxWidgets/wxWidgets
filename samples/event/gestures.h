@@ -1,9 +1,7 @@
-#ifndef _GESTURES_H_
-#define _GESTURES_H_
+#ifndef _WX_GESTURES_H_
+#define _WX_GESTURES_H_
 
 #include "wx/wx.h"
-
-#endif // _GESTURES_H_
 
 class MyGestureFrame : public wxFrame
 {
@@ -35,3 +33,5 @@ private:
     wxPoint2DDouble m_translateDistance;
     wxAffineMatrix2D m_affineMatrix;
 };
+
+#endif // _WX_GESTURES_H_
