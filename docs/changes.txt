@@ -147,6 +147,7 @@ All (GUI):
 - Fix wxGCDC::SetDeviceClippingRegion().
 - Never restore size smaller than the best one in wxPersistentTLW.
 - Fix escaping/unescaping characters in wxLongStringProperty in wxPG (mikek).
+- Ensure that navigation order reflects layout of wxStdDialogButtonSizer.
 
 wxGTK:
 
