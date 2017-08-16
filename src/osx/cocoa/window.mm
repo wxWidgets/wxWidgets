@@ -2328,10 +2328,10 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
 
     if ( IsUserPane() )
     {
-        [panGestureRecognizer release];
-        [magnificationGestureRecognizer release];
-        [rotationGestureRecognizer release];
-        [pressGestureRecognizer release];
+        [m_panGestureRecognizer release];
+        [m_magnificationGestureRecognizer release];
+        [m_rotationGestureRecognizer release];
+        [m_pressGestureRecognizer release];
 
         if ( m_initialTouch )
             [m_initialTouch release];
@@ -3255,22 +3255,22 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 
     if ( IsUserPane() )
     {
-        panGestureRecognizer =
+        m_panGestureRecognizer =
         [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
 
-        magnificationGestureRecognizer =
+        m_magnificationGestureRecognizer =
         [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
 
-        rotationGestureRecognizer =
+        m_rotationGestureRecognizer =
         [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
 
-        pressGestureRecognizer =
+        m_pressGestureRecognizer =
         [[NSPressGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleLongPressGesture:)];
 
-        [m_osxView addGestureRecognizer:panGestureRecognizer];
-        [m_osxView addGestureRecognizer:magnificationGestureRecognizer];
-        [m_osxView addGestureRecognizer:rotationGestureRecognizer];
-        [m_osxView addGestureRecognizer:pressGestureRecognizer];
+        [m_osxView addGestureRecognizer:m_panGestureRecognizer];
+        [m_osxView addGestureRecognizer:m_magnificationGestureRecognizer];
+        [m_osxView addGestureRecognizer:m_rotationGestureRecognizer];
+        [m_osxView addGestureRecognizer:m_pressGestureRecognizer];
 
         [m_osxView setAcceptsTouchEvents:YES];
     }

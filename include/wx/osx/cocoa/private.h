@@ -197,10 +197,10 @@ protected:
     // events, don't resend them
     bool m_hasEditor;
 
-    NSPanGestureRecognizer *panGestureRecognizer;
-    NSMagnificationGestureRecognizer *magnificationGestureRecognizer;
-    NSRotationGestureRecognizer *rotationGestureRecognizer;
-    NSPressGestureRecognizer *pressGestureRecognizer;
+    NSPanGestureRecognizer *m_panGestureRecognizer;
+    NSMagnificationGestureRecognizer *m_magnificationGestureRecognizer;
+    NSRotationGestureRecognizer *m_rotationGestureRecognizer;
+    NSPressGestureRecognizer *m_pressGestureRecognizer;
 
     int m_allowedGestures;
     int m_activeGestures;
