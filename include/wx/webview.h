@@ -223,6 +223,10 @@ public:
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 
+    //Counts number of calls of RunScript, to avoid
+    //a variable used twice on more than one call.
+    int m_runScriptCount;
+
 private:
     static void InitFactoryMap();
     static wxStringWebViewFactoryMap::iterator FindFactory(const wxString &backend);
