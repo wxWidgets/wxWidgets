@@ -2991,6 +2991,12 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
         gs_gestureStart = false;
     }
 
+    // Cancel press and tap gesture if it is not active during "pan" signal.
+    if( !(win->m_activeGestures & press_and_tap) )
+    {
+        win->m_allowedGestures &= ~press_and_tap;
+    }
+
     win->GTKProcessEvent(event);
 }
 
