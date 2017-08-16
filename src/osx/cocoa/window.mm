@@ -1725,7 +1725,7 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
         NSArray* array = [touches allObjects];
 
         // Save the touch corresponding to "press"
-        m_touch = [[array objectAtIndex:0] copy];
+        m_initialTouch = [[array objectAtIndex:0] copy];
     }
 
     touches = [event touchesMatchingPhase:NSTouchPhaseStationary inView:m_osxView];
@@ -1738,7 +1738,7 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 
         // Cancel Press and Tap
         m_isPressAndTapPossible = false;
-        [m_touch release];
+        [m_initalTouch release];
     }
 }
 
@@ -1759,7 +1759,7 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
             NSTouch* touch = [array objectAtIndex:i];
 
             // Process Press and Tap Event if the touch corresponding to "press" is moving
-            if ( [touch.identity isEqual:m_touch.identity] )
+            if ( [touch.identity isEqual:m_initialTouch.identity] )
             {
                 wxPressAndTapEvent wxevent(GetWXPeer()->GetId());
                 wxevent.SetEventObject(GetWXPeer());
@@ -1817,7 +1817,7 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
             NSTouch* touch = [array objectAtIndex:i];
 
             // Check if touch that ended is the touch corresponding to "press"
-            if ( [touch.identity isEqual:m_touch.identity] )
+            if ( [touch.identity isEqual:m_initialTouch.identity] )
             {
                 isPressTouch = true;
                 break;
@@ -1852,7 +1852,7 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
             wxevent.SetGestureEnd();
             m_isPressAndTapActive = false;
             m_isPressAndTapPossible = false;
-            [m_touch release];
+            [m_initialTouch release];
         }
 
         GetWXPeer()->HandleWindowEvent(wxevent);
@@ -2301,7 +2301,7 @@ void wxWidgetCocoaImpl::Init()
     m_isTwoFingerTapPossible = false;
     m_isPressAndTapPossible = false;
     m_isPressAndTapActive = false;
-    m_touch = NULL;
+    m_initialTouch = NULL;
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -2328,8 +2328,8 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         [rotationGestureRecognizer release];
         [pressGestureRecognizer release];
 
-        if ( m_touch )
-            [m_touch release];
+        if ( m_initialTouch )
+            [m_initialTouch release];
     }
 }
 

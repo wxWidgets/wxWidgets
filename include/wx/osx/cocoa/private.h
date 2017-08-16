@@ -209,7 +209,8 @@ protected:
     int m_touchCount;
     int m_lastTouchTime;
 
-    NSTouch* m_touch;
+    // Used to keep track of the touch corresponding to "press" in Press and Tap gesture
+    NSTouch* m_initialTouch;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
