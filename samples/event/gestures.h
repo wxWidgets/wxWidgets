@@ -1,4 +1,9 @@
+#ifndef _GESTURES_H_
+#define _GESTURES_H_
+
 #include "wx/wx.h"
+
+#endif // _GESTURES_H_
 
 class MyGestureFrame : public wxFrame
 {
