@@ -3288,6 +3288,8 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
 
                 win->m_activeGestures &= ~press_and_tap;
 
+                win->m_allowedGestures &= ~press_and_tap;
+
                 wxEmitPressAndTapEvent(gdk_event, win);
             }
             break;
