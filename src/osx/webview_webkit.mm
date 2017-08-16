@@ -24,10 +24,10 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/core/cfref.h"
+#include "wx/private/webviewutils.h"
 
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
-#include "wx/regex.h"
 
 #if wxOSX_USE_IPHONE
 #include <UIKit/UIWebView.h>
@@ -153,6 +153,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     [NSURLProtocol registerClass:[WebViewCustomProtocol class]];
 
     LoadURL(strURL);
+
+    m_runScriptCount = 0;
     return true;
 }
 
@@ -413,32 +415,29 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
     if ( !m_webView )
     {
-        wxLogWarning("!m_webView");
+        wxLogWarning("wxWebView is not created!");
         return false;
     }
 
-    wxString javascriptCopy = javascript;
-
-    wxRegEx escapeDoubleQuotes("(\\\\*)(\")");
-    escapeDoubleQuotes.Replace(&javascriptCopy,"\\1\\1\\\\\\2");
-
-    wxString checkerJS = "try { var someVarName = eval(\"" +
-                          javascriptCopy +
-                          "\"); true; } catch (e) { e.name + \": \" + e.message; }";
-
+    wxString counter;
+    wxString javaScriptVariable = wxWebViewUtils::createVariableWithJavaScriptResult(javascript, &m_runScriptCount, &counter);
     NSString* result = [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( checkerJS ).AsNSString()];
+                              wxCFStringRef( javaScriptVariable ).AsNSString()];
 
     if (result != nil && [result isEqualToString:@"true"])
     {
-        wxString returnJS = "if (typeof someVarName == 'object') \
-                                 JSON.stringify(someVarName); \
-                             else if (typeof someVarName == 'undefined') \
-                                 'undefined'; \
-                             else \
-                                 someVarName;";
+        javaScriptVariable = "if (typeof __wx$" + counter + " == 'object') \
+                                            JSON.stringify(__wx$" + counter + "); \
+                                        else if (typeof __wx$" + counter + " == 'undefined') \
+                                            'undefined'; \
+                                        else \
+                                            __wx$" + counter + ";";
         result = [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( returnJS ).AsNSString()];
+                              wxCFStringRef( javaScriptVariable ).AsNSString()];
+
+        [m_webView stringByEvaluatingJavaScriptFromString:
+                              wxCFStringRef( "__wx$" + counter + " = undefined;" ).AsNSString()];
+
         if (result != nil && output != NULL)
             *output = wxCFStringRef::AsString(result);
     }
