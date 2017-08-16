@@ -418,7 +418,7 @@ void WebTestCase::RunScriptStringBackslash()
     ENSURE_LOADED;
 
     wxString result;
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(\"This is a backslash: \\\");", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");", &result));
     CPPUNIT_ASSERT_EQUAL("This is a backslash: \\", result);
 }
 
