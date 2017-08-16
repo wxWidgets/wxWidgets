@@ -21,10 +21,10 @@ class wxWebViewUtils
 public:
     static wxString createVariableWithJavaScriptResult (const wxString& javascript, int* runScriptCount, wxString* counter) 
     {
-        *counter = wxString::Format("%i", (*runScriptCount)++);        
+        *counter = wxString::Format("%i", (*runScriptCount)++);
         wxString javascriptCopy = javascript;
 
-        wxRegEx escapeDoubleQuotes("(\\\\*)(['\"\n\r\v\t\b\f]|\\\\)");
+        wxRegEx escapeDoubleQuotes("(\\\\*)(['\"\n\r\v\t\b\f])");
         escapeDoubleQuotes.Replace(&javascriptCopy,"\\1\\1\\\\\\2");
         
         return "try { var __wx$" + *counter + " = eval(\"" +
