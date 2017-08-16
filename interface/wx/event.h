@@ -3863,6 +3863,31 @@ public:
     wxLongPressEvent(wxWindowID windid = 0);
 };
 
+/** @class wxPressAndTapEvent
+
+    This event is generated when the user press the surface with one finger and taps with another.
+
+    Note that once started the event will also be generated when the finger that was pressed moves on surface.
+
+    @beginEventTable{wxPressAndTapEvent}
+    @event{EVT_PRESS_AND_TAP(id, func)}
+        Process a @c wxEVT_PRESS_AND_TAP.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @since 3.1.1
+*/
+class wxPressAndTapEvent : public wxGestureEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxPressAndTapEvent(wxWindowID windid = 0);
+};
+
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
