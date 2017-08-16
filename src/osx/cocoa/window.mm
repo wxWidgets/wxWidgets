@@ -1781,7 +1781,7 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 
             // Cancel Press and Tap Event if the touch corresponding to "press" is moving
             // and the gesture is not active.
-            else if ( m_allowedGestures & press_and_tap )
+            else
             {
                 m_allowedGestures &= ~press_and_tap;
             }
