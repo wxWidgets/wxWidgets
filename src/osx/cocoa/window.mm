@@ -1744,7 +1744,7 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 
         // Cancel Press and Tap
         m_allowedGestures &= ~press_and_tap;
-        [m_initalTouch release];
+        [m_initialTouch release];
     }
 }
 
