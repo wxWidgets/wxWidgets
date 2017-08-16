@@ -76,7 +76,7 @@ public:
     void MakeEditable(bool enable = true);
     bool IsEditable();
 
-    wxString RunScript(const wxString& javascript);
+    bool RunScript(const wxString& javascript, wxString* output = NULL);
 
     void SetScrollPos(int pos);
     int GetScrollPos();
