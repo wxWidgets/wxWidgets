@@ -355,8 +355,8 @@ public:
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
-    int                  m_touchCount;
-    int                  m_lastTouchTime;
+    unsigned int         m_touchCount;
+    unsigned int         m_lastTouchTime;
     int                  m_gestureState;
     int                  m_allowedGestures;
     int                  m_activeGestures;
