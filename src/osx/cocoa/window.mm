@@ -1701,6 +1701,8 @@ enum TrackedGestures
     press_and_tap  = 0x0002
 };
 
+extern const unsigned int wxTwoFingerTimeInterval;
+
 void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 {
     NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseBegan inView:m_osxView];
@@ -1737,7 +1739,7 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
     touches = [event touchesMatchingPhase:NSTouchPhaseStationary inView:m_osxView];
 
     // Check if 2 fingers are placed within the time interval of 200 milliseconds
-    if ( m_touchCount == 2 && touches.count == 1 && wxRound(event.timestamp * 1000) - m_lastTouchTime <= 200 )
+    if ( m_touchCount == 2 && touches.count == 1 && wxRound(event.timestamp * 1000) - m_lastTouchTime <= wxTwoFingerTimeInterval )
     {
         // Two Finger Tap Event may occur in future
         m_allowedGestures |= two_finger_tap;
@@ -1800,7 +1802,7 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
     // Check if 2 fingers are lifted off together or if 2 fingers are lifted off within the time interval of 200 milliseconds
     if ( (!m_touchCount && (m_allowedGestures & two_finger_tap)) &&
          (touches.count == 2 ||
-         (touches.count == 1 && wxRound(event.timestamp * 1000) - m_lastTouchTime <= 200)) )
+         (touches.count == 1 && wxRound(event.timestamp * 1000) - m_lastTouchTime <= wxTwoFingerTimeInterval)) )
     {
         wxTwoFingerTapEvent wxevent(GetWXPeer()->GetId());
         wxevent.SetEventObject(GetWXPeer());

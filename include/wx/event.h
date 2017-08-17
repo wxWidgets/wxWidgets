@@ -1867,6 +1867,8 @@ private:
 
  // Gesture Event
 
+const unsigned int wxTwoFingerTimeInterval = 200;
+
 class WXDLLIMPEXP_CORE wxGestureEvent : public wxEvent
 {
 public:

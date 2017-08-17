@@ -243,6 +243,8 @@ static gdouble gs_lastAngle = 0;
 
 // Last Zoom/Rotate gesture point
 static wxPoint gs_lastGesturePoint;
+
+extern const unsigned int wxTwoFingerTimeInterval;
 #endif // GTK_CHECK_VERSION(3,14,0)
 
 //-----------------------------------------------------------------------------
@@ -3233,7 +3235,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
             }
 
             // Check if two fingers are placed together .i.e difference between their time stamps is <= 200 milliseconds
-            else if ( win->m_touchCount == 2 && gdk_event->time - win->m_lastTouchTime <= 200 )
+            else if ( win->m_touchCount == 2 && gdk_event->time - win->m_lastTouchTime <= wxTwoFingerTimeInterval )
             {
                 // "Two Finger Tap Event" may be possible in the future
                 win->m_allowedGestures |= two_finger_tap;
@@ -3281,7 +3283,7 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
 
             // Check if "Two Finger Tap Event" is possible and both the fingers have been lifted up together
             else if ( (win->m_allowedGestures & two_finger_tap) && !win->m_touchCount
-                      && gdk_event->time - win->m_lastTouchTime <= 200 )
+                      && gdk_event->time - win->m_lastTouchTime <= wxTwoFingerTimeInterval )
             {
                 // Process Two Finger Tap Event
                 wxEmitTwoFingerTapEvent(gdk_event, win);
