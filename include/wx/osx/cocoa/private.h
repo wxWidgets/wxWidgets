@@ -204,8 +204,8 @@ protected:
 
     int m_allowedGestures;
     int m_activeGestures;
-    int m_touchCount;
-    int m_lastTouchTime;
+    unsigned int m_touchCount;
+    unsigned int m_lastTouchTime;
 
     // Used to keep track of the touch corresponding to "press" in Press and Tap gesture
     NSTouch* m_initialTouch;
