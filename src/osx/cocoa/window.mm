@@ -1747,7 +1747,6 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 
         // Cancel Press and Tap
         m_allowedGestures &= ~press_and_tap;
-        [m_initialTouch release];
     }
 }
 
@@ -1755,6 +1754,11 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 {
     // Cancel Two Finger Tap Event if there is any movement
     m_allowedGestures &= ~two_finger_tap;
+
+    if ( !(m_allowedGestures & press_and_tap) )
+    {
+        return;
+    }
 
     NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseMoved inView:m_osxView];
 
@@ -1872,12 +1876,20 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
         else if ( isPressTouch )
         {
             wxevent.SetGestureEnd();
+
             m_activeGestures &= ~press_and_tap;
             m_allowedGestures &= ~press_and_tap;
             [m_initialTouch release];
         }
 
         GetWXPeer()->HandleWindowEvent(wxevent);
+    }
+
+    else
+    {
+        m_allowedGestures &= ~press_and_tap;
+        m_allowedGestures &= ~two_finger_tap;
+        m_activeGestures &= ~press_and_tap;
     }
 }
 
