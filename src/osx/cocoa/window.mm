@@ -1701,8 +1701,6 @@ enum TrackedGestures
     press_and_tap  = 0x0002
 };
 
-extern const unsigned int wxTwoFingerTimeInterval;
-
 void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 {
     NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseBegan inView:m_osxView];
