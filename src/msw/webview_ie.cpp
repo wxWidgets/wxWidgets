@@ -876,7 +876,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 
     wxString counter;
     wxString javaScriptVariable =
-        wxWebViewUtils::createVariableWithJavaScriptResult(javascript,
+        wxWebViewUtils::WrapJavaScript(javascript,
         &m_runScriptCount, &counter);
 
     wxAutomationObject scriptAO(scriptDispatch);

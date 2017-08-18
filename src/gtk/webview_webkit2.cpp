@@ -1184,7 +1184,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     wxString result;
     wxString counter;
     wxString javaScriptVariable =
-        wxWebViewUtils::createVariableWithJavaScriptResult(javascript,
+        wxWebViewUtils::WrapJavaScript(javascript,
         &m_runScriptCount, &counter);
 
     bool isValidJS = RunScriptInternal(javaScriptVariable, &result);

@@ -421,7 +421,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 
     wxString counter;
     wxString javaScriptVariable =
-        wxWebViewUtils::createVariableWithJavaScriptResult(javascript,
+        wxWebViewUtils::WrapJavaScript(javascript,
         &m_runScriptCount, &counter);
     NSString* result = [m_webView stringByEvaluatingJavaScriptFromString:
                               wxCFStringRef( javaScriptVariable ).AsNSString()];

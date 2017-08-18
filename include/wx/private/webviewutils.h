@@ -19,12 +19,17 @@
 class wxWebViewUtils
 {
 public:
-    static wxString createVariableWithJavaScriptResult
+
+    // This method is used to add a double quote level into a JavasSript code
+    // in order to get it working when eval is called programmatically.
+    static wxString WrapJavaScript
         (const wxString& javascript, int* runScriptCount, wxString* counter)
     {
         *counter = wxString::Format("%i", (*runScriptCount)++);
         wxString javascriptCopy = javascript;
 
+        // Adds one escape level if there is a single quote, double quotes or
+        // esacape characters
         wxRegEx escapeDoubleQuotes("(\\\\*)(['\"\n\r\v\t\b\f])");
         escapeDoubleQuotes.Replace(&javascriptCopy,"\\1\\1\\\\\\2");
         
