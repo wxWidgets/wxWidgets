@@ -460,7 +460,8 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
-        Runs the given Javascript code, returning the result if there is any.
+        Runs the given JavaScript. Also it does not return the result, it returns 
+        if there was an error and sets the output parameter to the result.
         It returns strings, integers, floating point numbers, booleans and objects (as JSON).
         @note When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
               1) Javascript allocations greater than 10MB.
