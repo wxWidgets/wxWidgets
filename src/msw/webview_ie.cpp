@@ -925,7 +925,8 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                         varResult = varJSONStr;
                     else
 		    {
-		        wxLogWarning(_("JSON.stringify fails when trying to convert object into JSON"));
+                        dispatchResult->Release();
+                        wxLogWarning(_("JSON.stringify fails when trying to convert object into JSON"));
                         return false;
 		    }
                 }
