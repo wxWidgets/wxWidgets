@@ -860,10 +860,6 @@ wxString wxWebViewIE::GetPageText() const
 
 bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 {
-    wxString counter;
-    wxString javaScriptVariable =
-        wxWebViewUtils::createVariableWithJavaScriptResult(javascript, &m_runScriptCount, &counter);
-
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
     IDispatch* scriptDispatch = NULL;
 
@@ -878,6 +874,10 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
         wxLogWarning("Can't get the script");
         return false;
     }
+
+    wxString counter;
+    wxString javaScriptVariable =
+        wxWebViewUtils::createVariableWithJavaScriptResult(javascript, &m_runScriptCount, &counter);
 
     wxAutomationObject scriptAO(scriptDispatch);
     wxVariant varJavascript(javaScriptVariable);
@@ -947,12 +947,12 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                                                            return \'{}\'; \
                                                        else \
                                                            objElements.push(\'\"\' + key + \'\":\' + stringifyJSON(obj[key])); \
-                                                       } \
-                                                       return \'{\' + objElements + \'}\'; \
                                                    } \
+                                                   return \'{\' + objElements + \'}\'; \
                                                } \
-                                                \
-                                               stringifyJSON(eval(\"__wx$" + counter + ";\"));";
+                                           } \
+                                           \
+                                           stringifyJSON(eval(\"__wx$" + counter + ";\"));";
 
                     varJavascript = (javaScriptVariable);
                     if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript))
