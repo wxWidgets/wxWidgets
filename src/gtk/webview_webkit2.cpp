@@ -1116,8 +1116,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
 
     if (!js_result)
     {
-        wxLogError("Error running javascript: %s", error.GetMessage());
-	*output = error.GetMessage();
+        wxLogWarning("Error running javascript: %s", error.GetMessage());
         return false;
     }
 
@@ -1197,7 +1196,6 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     }
 
     wxLogWarning("JS error: %s", *output);
-    output = NULL;
     return false;
 }
 
