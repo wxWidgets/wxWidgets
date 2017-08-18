@@ -461,7 +461,7 @@ public:
 
     /**
         Runs the given javascript code, returning the result if there is any.
-        It returns strings, integers, float point numbers, booleans and objects (as JSON).
+        It returns strings, integers, floating point numbers, booleans and objects (as JSON).
         @note When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
               1) JavaScript allocations greater than 10MB.
               2) JavaScript that takes longer than 10 seconds to execute.
@@ -484,7 +484,7 @@ public:
               on RunScript that helps to return objects.
         @param A wxString containing the Javascript.
         @param wxString result pointer.
-        @return True is there is a result, false if there is an error.
+        @return True if there is a result, false if there is an error.
     */
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
 
