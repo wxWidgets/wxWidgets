@@ -1154,7 +1154,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     JSStringGetUTF8CString (js_value, str, length);
     JSStringRelease (js_value);
 
-    if (output != NULL)
+    if ( output != NULL )
         *output = wxString::FromUTF8(str);
 
     webkit_javascript_result_unref (js_result);

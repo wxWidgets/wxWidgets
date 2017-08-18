@@ -921,7 +921,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                     // Work around the bug in wxAutomationObject::Invoke(),
                     // see https://trac.wxwidgets.org/ticket/14293
                     dispatchResult->AddRef();
-                    if (JSONAO.Invoke("stringify", DISPATCH_METHOD, varJSONStr, 1, &varResult))
+                    if ( JSONAO.Invoke("stringify", DISPATCH_METHOD, varJSONStr, 1, &varResult) )
                         varResult = varJSONStr;
                 }
                 else
@@ -979,7 +979,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
         return false;
     }
 
-    if (output != NULL)
+    if ( output != NULL )
         *output = varResult.MakeString();
 
     return true;
