@@ -865,13 +865,13 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 
     if ( !document )
     {
-        wxLogWarning("HTML document is null");
+        wxLogWarning(_("HTML document is null"));
         return false;
     }
 
     if ( FAILED(document->get_Script(&scriptDispatch)) )
     {
-        wxLogWarning("Can't get the script");
+        wxLogWarning(_("Can't get the script"));
         return false;
     }
 
@@ -886,7 +886,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 
     if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript) )
     {
-        wxLogWarning("Can't run Javascript");
+        wxLogWarning(_("Can't run Javascript"));
         return false;
     }
 
@@ -898,7 +898,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
         if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, 
             &varJavascript) )
         {
-            wxLogWarning("Can't run Javascript");
+            wxLogWarning(_("Can't run Javascript"));
             return false;
         }
 
@@ -966,7 +966,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                     if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1,
                         &varJavascript) )
                     {
-                        wxLogWarning("Can't run Javascript");
+		        wxLogWarning(_("Can't run Javascript"));
                         return false;
                     }
                 }
@@ -976,7 +976,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     }
     else
     {
-        wxLogWarning("JS error: %s", varResult.MakeString());
+        wxLogWarning(_("JS error: %s"), varResult.MakeString());
         return false;
     }
 
