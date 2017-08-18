@@ -863,13 +863,13 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
     IDispatch* scriptDispatch = NULL;
 
-    if (!document)
+    if ( !document )
     {
         wxLogWarning("HTML document is null");
         return false;
     }
 
-    if (FAILED(document->get_Script(&scriptDispatch)))
+    if ( FAILED(document->get_Script(&scriptDispatch)) )
     {
         wxLogWarning("Can't get the script");
         return false;
@@ -884,29 +884,30 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     wxVariant varJavascript(javaScriptVariable);
     wxVariant varResult;
 
-    if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript))
+    if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript) )
     {
         wxLogWarning("Can't run Javascript");
         return false;
     }
 
-    if (varResult.IsType("bool") && varResult.GetBool())
+    if ( varResult.IsType("bool") && varResult.GetBool() )
     {
         varJavascript = "(__wx$" + counter + " == null || \
                         typeof __wx$" + counter + " != 'object') ? \
                         String(__wx$" + counter + ") : __wx$" + counter;
-        if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript))
+        if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, 
+            &varJavascript) )
         {
             wxLogWarning("Can't run Javascript");
             return false;
         }
 
-        if (varResult.IsType("void*"))
-        {   // script returned an Object (JScriptTypeInfo IDispatch), convert it to JSON
+        if ( varResult.IsType("void*") )
+        {   // Script returned an Object (JScriptTypeInfo IDispatch), convert it to JSON
             IDispatch* dispatchResult = (IDispatch*)varResult.GetVoidPtr();
             wxAutomationObject JSONAO;
 
-            if (dispatchResult)
+            if ( dispatchResult )
             {
                 // JSON is not available in Quirks or IE6/7 standards mode,
                 // which is unfortunately the default one for the embedded
@@ -918,8 +919,8 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                 {
                     wxVariant varJSONStr;
 
-                    // work around the bug in wxAutomationObject::Invoke(),
-                    //see https://trac.wxwidgets.org/ticket/14293
+                    // Work around the bug in wxAutomationObject::Invoke(),
+                    // see https://trac.wxwidgets.org/ticket/14293
                     dispatchResult->AddRef();
                     if (JSONAO.Invoke("stringify", DISPATCH_METHOD, varJSONStr, 1, &varResult))
                         varResult = varJSONStr;
@@ -962,7 +963,8 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                                            stringifyJSON(eval(\"__wx$" + counter + ";\"));";
 
                     varJavascript = (javaScriptVariable);
-                    if (!scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1, &varJavascript))
+                    if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1,
+                        &varJavascript) )
                     {
                         wxLogWarning("Can't run Javascript");
                         return false;

@@ -1115,7 +1115,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object),
         (GAsyncResult *)result, error.Out());
 
-    if (!js_result)
+    if ( !js_result )
     {
         wxLogWarning("Error running javascript: %s", error.GetMessage());
         return false;
@@ -1133,7 +1133,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
                JSValueCreateJSONString(context, value, 0, &exception) :
                JSValueToStringCopy (context, value, &exception);
 
-    if (exception)
+    if ( exception )
     {
         JSStringRef ex_value = JSValueToStringCopy(context, exception, NULL);
         gsize ex_length;
@@ -1174,7 +1174,7 @@ bool wxWebViewWebKit::RunScriptInternal(const wxString& javascript, wxString* ou
 
     GMainContext *main_context = g_main_context_get_thread_default();
 
-    while (!result)
+    while ( !result )
         g_main_context_iteration(main_context, TRUE);
 
     return JSResultToString((GObject*)m_web_view, result, output);
@@ -1190,7 +1190,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 
     bool isValidJS = RunScriptInternal(javaScriptVariable, &result);
 
-    if (isValidJS && result == "true")
+    if ( isValidJS && result == "true" )
     {
         RunScriptInternal("__wx$" + counter, output);
         RunScriptInternal("__wx$" + counter + " = undefined;");
