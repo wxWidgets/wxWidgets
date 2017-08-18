@@ -460,11 +460,11 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
-        Runs the given javascript code, returning the result if there is any.
+        Runs the given Javascript code, returning the result if there is any.
         It returns strings, integers, floating point numbers, booleans and objects (as JSON).
         @note When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
-              1) JavaScript allocations greater than 10MB.
-              2) JavaScript that takes longer than 10 seconds to execute.
+              1) Javascript allocations greater than 10MB.
+              2) Javascript that takes longer than 10 seconds to execute.
 
               When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
@@ -482,6 +482,8 @@ public:
               @endcode
               However, if you don't want to use this, there is an implementation of JSON parser
               on RunScript that helps to return objects.
+              Also, it is necessary a script tag inside HTML to run Javascript. We recommend a minimum DOM
+              on the HTML document.
         @param A wxString containing the Javascript.
         @param wxString result pointer.
         @return True if there is a result, false if there is an error.
