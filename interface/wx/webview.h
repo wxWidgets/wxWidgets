@@ -463,11 +463,13 @@ public:
         Runs the given javascript code, returning the result if there is any.
         It returns strings, integers, float point numbers, booleans and objects (as JSON).
         @note When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
-              1) JavaScript allocations greater than 10MB are not allowed
-              2) JavaScript that takes longer than 10 seconds to execute is not allowed
-        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
+              1) JavaScript allocations greater than 10MB.
+              2) JavaScript that takes longer than 10 seconds to execute.
+
+              When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
-        @note When using wxWEBVIEW_BACKEND_IE, JSON is not available in Quirks or 
+
+              When using wxWEBVIEW_BACKEND_IE, JSON is not available in Quirks or 
               IE6/7 standards mode, which is unfortunately the default one for the embedded browser control, see
               https://docs.microsoft.com/en-us/scripting/javascript/reference/json-object-javascript#requirements
               and see here how to make a program run use "modern" modes
@@ -482,7 +484,7 @@ public:
               on RunScript that helps to return objects.
         @param A wxString containing the Javascript.
         @param wxString result pointer.
-        @return True is there is a result, false if there is an error
+        @return True is there is a result, false if there is an error.
     */
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
 
