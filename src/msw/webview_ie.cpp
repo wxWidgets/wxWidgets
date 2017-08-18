@@ -870,7 +870,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 
     if ( FAILED(document->get_Script(&scriptDispatch)) )
     {
-        wxLogWarning(_("Can't get the script"));
+        wxLogWarning(_("Can't get the Javascript"));
         return false;
     }
 
@@ -926,7 +926,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                 }
                 else
                 {
-                    javaScriptVariable = " function stringifyJSON(obj) \
+                    javaScriptVariable = " function __wx$stringifyJSON(obj) \
                                            { \
                                                var objElements = []; \
                                                if (!(obj instanceof Object)) \
@@ -940,7 +940,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                                                    { \
                                                        var arr = []; \
                                                        for (var i = 0; i < obj.length; i++) \
-                                                           arr.push(stringifyJSON(obj[i])); \
+                                                           arr.push(__wx$stringifyJSON(obj[i])); \
                                                        return \'[\' + arr + \']\'; \
                                                    } \
                                                } \
@@ -953,13 +953,13 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                                                        else \
                                                            objElements.push(\'\"\' \
                                                            + key + \'\":\' + \
-                                                           stringifyJSON(obj[key])); \
+                                                           __wx$stringifyJSON(obj[key])); \
                                                    } \
                                                    return \'{\' + objElements + \'}\'; \
                                                } \
                                            } \
                                            \
-                                           stringifyJSON(eval(\"__wx$" + counter + ";\"));";
+                                           __wx$stringifyJSON(eval(\"__wx$" + counter + ";\"));";
 
                     varJavascript = (javaScriptVariable);
                     if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1,
@@ -975,7 +975,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     }
     else
     {
-        wxLogWarning(_("JS error: %s"), varResult.MakeString());
+        wxLogWarning(_("Javascript error: %s"), varResult.MakeString());
         return false;
     }
 
