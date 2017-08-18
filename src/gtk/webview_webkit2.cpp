@@ -18,7 +18,6 @@
 #include "wx/filesys.h"
 #include "wx/base64.h"
 #include "wx/log.h"
-#include "wx/regex.h"
 #include "wx/gtk/private/webview_webkit2_extension.h"
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/error.h"

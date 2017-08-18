@@ -28,7 +28,6 @@
 #include "wx/filesys.h"
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
-#include "wx/regex.h"
 
 #include "wx/private/webviewutils.h"
 
