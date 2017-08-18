@@ -923,6 +923,11 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                     dispatchResult->AddRef();
                     if ( JSONAO.Invoke("stringify", DISPATCH_METHOD, varJSONStr, 1, &varResult) )
                         varResult = varJSONStr;
+                    else
+		    {
+		        wxLogWarning(_("JSON.stringify fails when trying to convert object into JSON"));
+                        return false;
+		    }
                 }
                 else
                 {
