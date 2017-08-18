@@ -977,6 +977,8 @@ void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
         wxString result;
         if ( m_browser->RunScript(dialog.GetValue(), &result) )
             wxLogMessage(_("RunScript result: %s\n"), result);
+        else
+            wxLogWarning(_("RunScript returned false"));
     }
 }
 
