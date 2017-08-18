@@ -576,7 +576,7 @@ wxString wxWebViewIE::GetCurrentURL() const
 wxString wxWebViewIE::GetCurrentTitle() const
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
-    
+
     wxString s;
     if(document)
     {
