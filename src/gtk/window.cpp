@@ -243,8 +243,6 @@ static gdouble gs_lastAngle = 0;
 
 // Last Zoom/Rotate gesture point
 static wxPoint gs_lastGesturePoint;
-
-extern const unsigned int wxTwoFingerTimeInterval;
 #endif // GTK_CHECK_VERSION(3,14,0)
 
 //-----------------------------------------------------------------------------
