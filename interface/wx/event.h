@@ -3667,7 +3667,7 @@ public:
     /**
         Returns the position where the event took effect, in client coordinates: position of Pan event,
         center of zoom for Zoom event, center of rotation for Rotate event, center of box formed by 2 fingers
-        for Two Finger Tap event.
+        for Two Finger Tap event and position of the pressed finger for Press and Tap Event.
     */
     const wxPoint& GetPosition() const;
 
