@@ -420,23 +420,26 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     }
 
     wxString counter;
-    wxString javaScriptVariable = wxWebViewUtils::createVariableWithJavaScriptResult(javascript, &m_runScriptCount, &counter);
+    wxString javaScriptVariable =
+        wxWebViewUtils::createVariableWithJavaScriptResult(javascript,
+        &m_runScriptCount, &counter);
     NSString* result = [m_webView stringByEvaluatingJavaScriptFromString:
                               wxCFStringRef( javaScriptVariable ).AsNSString()];
 
     if (result != nil && [result isEqualToString:@"true"])
     {
         javaScriptVariable = "if (typeof __wx$" + counter + " == 'object') \
-                                            JSON.stringify(__wx$" + counter + "); \
-                                        else if (typeof __wx$" + counter + " == 'undefined') \
-                                            'undefined'; \
-                                        else \
-                                            __wx$" + counter + ";";
+                                  JSON.stringify(__wx$" + counter + "); \
+                              else if (typeof __wx$" + counter + " == 'undefined') \
+                                  'undefined'; \
+                              else \
+                              __wx$" + counter + ";";
         result = [m_webView stringByEvaluatingJavaScriptFromString:
                               wxCFStringRef( javaScriptVariable ).AsNSString()];
 
         [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( "__wx$" + counter + " = undefined;" ).AsNSString()];
+                              wxCFStringRef( "__wx$" + counter + " = undefined;" ).
+                              AsNSString()];
 
         if (result != nil && output != NULL)
             *output = wxCFStringRef::AsString(result);

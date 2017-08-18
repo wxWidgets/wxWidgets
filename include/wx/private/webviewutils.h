@@ -19,7 +19,8 @@
 class wxWebViewUtils
 {
 public:
-    static wxString createVariableWithJavaScriptResult (const wxString& javascript, int* runScriptCount, wxString* counter) 
+    static wxString createVariableWithJavaScriptResult
+        (const wxString& javascript, int* runScriptCount, wxString* counter)
     {
         *counter = wxString::Format("%i", (*runScriptCount)++);
         wxString javascriptCopy = javascript;

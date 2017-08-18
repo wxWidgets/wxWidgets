@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/webview_ie.cpp
 // Purpose:     wxMSW wxWebViewIE class implementation for web view component
 // Author:      Marianne Gagnon
@@ -877,7 +877,8 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 
     wxString counter;
     wxString javaScriptVariable =
-        wxWebViewUtils::createVariableWithJavaScriptResult(javascript, &m_runScriptCount, &counter);
+        wxWebViewUtils::createVariableWithJavaScriptResult(javascript,
+        &m_runScriptCount, &counter);
 
     wxAutomationObject scriptAO(scriptDispatch);
     wxVariant varJavascript(javaScriptVariable);
@@ -908,7 +909,8 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
             if (dispatchResult)
             {
                 // JSON is not available in Quirks or IE6/7 standards mode,
-                // which is unfortunately the default one for the embedded browser control, see
+                // which is unfortunately the default one for the embedded
+                // browser control, see
                 // https://docs.microsoft.com/en-us/scripting/javascript/reference/json-object-javascript#requirements
                 // and see here how to make a program run use "modern" modes
                 // https://msdn.microsoft.com/en-us/library/ee330730(v=vs.85)#browser_emulation
@@ -916,7 +918,9 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                 {
                     wxVariant varJSONStr;
 
-                    dispatchResult->AddRef(); // work around the bug in wxAutomationObject::Invoke(), see https://trac.wxwidgets.org/ticket/14293
+                    // work around the bug in wxAutomationObject::Invoke(),
+                    //see https://trac.wxwidgets.org/ticket/14293
+                    dispatchResult->AddRef();
                     if (JSONAO.Invoke("stringify", DISPATCH_METHOD, varJSONStr, 1, &varResult))
                         varResult = varJSONStr;
                 }
@@ -926,7 +930,8 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                                            { \
                                                var objElements = []; \
                                                if (!(obj instanceof Object)) \
-                                                   return typeof obj === \"string\" ? \'\"\' + obj + \'\"\' : \'\' + obj; \
+                                                   return typeof obj === \"string\" \
+                                                   ? \'\"\' + obj + \'\"\' : \'\' + obj; \
                                                else if (obj instanceof Array) \
                                                { \
                                                    if (obj[0] === undefined) \
@@ -946,7 +951,9 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                                                        if (typeof obj[key] === \"function\") \
                                                            return \'{}\'; \
                                                        else \
-                                                           objElements.push(\'\"\' + key + \'\":\' + stringifyJSON(obj[key])); \
+                                                           objElements.push(\'\"\' \
+                                                           + key + \'\":\' + \
+                                                           stringifyJSON(obj[key])); \
                                                    } \
                                                    return \'{\' + objElements + \'}\'; \
                                                } \

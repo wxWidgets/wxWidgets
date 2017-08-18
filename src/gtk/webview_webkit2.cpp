@@ -1112,7 +1112,8 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     JSGlobalContextRef      context;
     wxGtkError              error;
 
-    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object), (GAsyncResult *)result, error.Out());
+    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object),
+        (GAsyncResult *)result, error.Out());
 
     if (!js_result)
     {
@@ -1184,7 +1185,8 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     wxString result;
     wxString counter;
     wxString javaScriptVariable =
-        wxWebViewUtils::createVariableWithJavaScriptResult(javascript, &m_runScriptCount, &counter);
+        wxWebViewUtils::createVariableWithJavaScriptResult(javascript,
+        &m_runScriptCount, &counter);
 
     bool isValidJS = RunScriptInternal(javaScriptVariable, &result);
 
