@@ -965,7 +965,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                     if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1,
                         &varJavascript) )
                     {
-		        wxLogWarning(_("Can't run Javascript"));
+                        wxLogWarning(_("Can't run Javascript"));
                         return false;
                     }
                 }
