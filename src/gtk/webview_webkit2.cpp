@@ -1116,7 +1116,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
 
     if ( !js_result )
     {
-        wxLogWarning("Error running javascript: %s", error.GetMessage());
+        wxLogWarning(_("Error running javascript: %s"), error.GetMessage());
         return false;
     }
 
@@ -1142,7 +1142,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
         JSStringGetUTF8CString (ex_value, str, ex_length);
         JSStringRelease (ex_value);
 
-        wxLogWarning("Exception running script: %s", wxString::FromUTF8(str));
+        wxLogWarning(_("Exception running script: %s"), wxString::FromUTF8(str));
 
         webkit_javascript_result_unref (js_result);
         return false;
@@ -1196,7 +1196,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
         return true;
     }
 
-    wxLogWarning("JS error: %s", *output);
+    wxLogWarning(_("JS error: %s"), *output);
     return false;
 }
 

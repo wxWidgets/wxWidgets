@@ -415,7 +415,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
     if ( !m_webView )
     {
-        wxLogWarning("wxWebView is not created!");
+        wxLogWarning(_("wxWebView is not created!"));
         return false;
     }
 
@@ -447,7 +447,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     else
     {
         if ( result != nil )
-            wxLogWarning("JS error: " + wxCFStringRef::AsString(result));
+            wxLogWarning(_("JS error: " + wxCFStringRef::AsString(result)));
         return false;
     }
     return true;

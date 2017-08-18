@@ -972,11 +972,11 @@ void WebFrame::OnHistory(wxCommandEvent& evt)
 void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
 {
     wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
-    if(dialog.ShowModal() == wxID_OK)
+    if( dialog.ShowModal() == wxID_OK )
     {
         wxString result;
-        if (m_browser->RunScript(dialog.GetValue(), &result))
-            wxLogMessage("RunScript result: %s\n", result);
+        if ( m_browser->RunScript(dialog.GetValue(), &result) )
+	    wxLogMessage(_("RunScript result: %s\n"), result);
     }
 }
 
