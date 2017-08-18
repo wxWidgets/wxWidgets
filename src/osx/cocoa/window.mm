@@ -1722,10 +1722,13 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
         return;
     }
 
-    else if ( m_touchCount == 1 )
+    // Time of event in milliseconds
+    const unsigned int eventTimeStamp = event.timestamp * 1000 + 0.5;
+
+    if ( m_touchCount == 1 )
     {
-        // Save the time of event in milliseconds
-        m_lastTouchTime = event.timestamp * 1000;
+        // Save the time of event
+        m_lastTouchTime = eventTimeStamp;
 
         // Press and Tap may occur in future
         m_allowedGestures |= press_and_tap;
@@ -1739,7 +1742,7 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
     touches = [event touchesMatchingPhase:NSTouchPhaseStationary inView:m_osxView];
 
     // Check if 2 fingers are placed within the time interval of 200 milliseconds
-    if ( m_touchCount == 2 && touches.count == 1 && (unsigned int)(event.timestamp * 1000) - m_lastTouchTime <= wxTwoFingerTimeInterval )
+    if ( m_touchCount == 2 && touches.count == 1 && eventTimeStamp - m_lastTouchTime <= wxTwoFingerTimeInterval )
     {
         // Two Finger Tap Event may occur in future
         m_allowedGestures |= two_finger_tap;
@@ -1799,10 +1802,13 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
 
     m_touchCount -= touches.count;
 
+    // Time of event in milliseconds
+    const unsigned int eventTimeStamp = event.timestamp * 1000 + 0.5;
+
     // Check if 2 fingers are lifted off together or if 2 fingers are lifted off within the time interval of 200 milliseconds
     if ( (!m_touchCount && (m_allowedGestures & two_finger_tap)) &&
          (touches.count == 2 ||
-         (touches.count == 1 && (unsigned int)(event.timestamp * 1000) - m_lastTouchTime <= wxTwoFingerTimeInterval)) )
+         (touches.count == 1 && eventTimeStamp - m_lastTouchTime <= wxTwoFingerTimeInterval)) )
     {
         wxTwoFingerTapEvent wxevent(GetWXPeer()->GetId());
         wxevent.SetEventObject(GetWXPeer());
@@ -1819,7 +1825,7 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
 
     else if ( m_touchCount == 1 && (m_allowedGestures & two_finger_tap) )
     {
-        m_lastTouchTime = event.timestamp * 1000;
+        m_lastTouchTime = eventTimeStamp;
     }
 
     else if ( m_allowedGestures & press_and_tap )
