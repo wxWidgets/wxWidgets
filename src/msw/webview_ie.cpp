@@ -932,7 +932,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                 }
                 else
                 {
-                    javaScriptVariable = " function __wx$stringifyJSON(obj) \
+                    javaScriptVariable = " try { function __wx$stringifyJSON(obj) \
                                            { \
                                                var objElements = []; \
                                                if (!(obj instanceof Object)) \
@@ -952,6 +952,35 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                                                } \
                                                else if (typeof obj === \"object\") \
                                                { \
+                                                   if (obj instanceof Date) \
+                                                   { \
+                                                       if (!Date.prototype.toISOString) \
+                                                       { \
+                                                           (function() \
+                                                           { \
+                                                               function pad(number) \
+                                                               { \
+                                                                   if (number < 10) \
+                                                                       return '0' + number; \
+                                                                   return number; \
+                                                               } \
+                                                               \
+                                                               Date.prototype.toISOString = function() \
+                                                               { \
+                                                                   return this.getUTCFullYear() + \
+                                                                   '-' + pad(this.getUTCMonth() + 1) + \
+                                                                   '-' + pad(this.getUTCDate()) + \
+                                                                   'T' + pad(this.getUTCHours()) + \
+                                                                   ':' + pad(this.getUTCMinutes()) + \
+                                                                   ':' + pad(this.getUTCSeconds()) + \
+                                                                   '.' + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + \
+                                                                   'Z\"'; \
+                                                               }; \
+                                                               \
+                                                           }()); \
+                                                       } \
+                                                       return '\"' + obj.toISOString(); + '\"' \
+                                                   } \
                                                    for (var key in obj) \
                                                    { \
                                                        if (typeof obj[key] === \"function\") \
@@ -965,7 +994,8 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                                                } \
                                            } \
                                            \
-                                           __wx$stringifyJSON(eval(\"__wx$" + counter + ";\"));";
+                                           __wx$stringifyJSON(eval(\"__wx$" + counter + ";\")); } \
+                                           catch (e) { e.name + \": \" + e.message; }";
 
                     varJavascript = (javaScriptVariable);
                     if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, varResult, 1,
