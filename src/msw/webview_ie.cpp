@@ -914,7 +914,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                 // https://docs.microsoft.com/en-us/scripting/javascript/reference/json-object-javascript#requirements
                 // and see here how to make a program run use "modern" modes
                 // https://msdn.microsoft.com/en-us/library/ee330730(v=vs.85)#browser_emulation
-                if (scriptAO.GetObject(JSONAO, "JSON"))
+                if ( scriptAO.GetObject(JSONAO, "JSON") )
                 {
                     wxVariant varJSONStr;
 
@@ -924,11 +924,11 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                     if ( JSONAO.Invoke("stringify", DISPATCH_METHOD, varJSONStr, 1, &varResult) )
                         varResult = varJSONStr;
                     else
-		    {
+                    {
                         dispatchResult->Release();
                         wxLogWarning(_("JSON.stringify fails when trying to convert object into JSON"));
                         return false;
-		    }
+                    }
                 }
                 else
                 {
