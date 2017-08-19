@@ -59,6 +59,7 @@ private:
         CPPUNIT_TEST( RunScriptEvalQuotes );
         CPPUNIT_TEST( RunScriptInvalidJavaScript );
         CPPUNIT_TEST( RunScriptStringBackslash );
+        CPPUNIT_TEST( RunScriptReturnDate );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -84,6 +85,7 @@ private:
     void RunScriptInvalidJavaScript();
     void RunScriptEvalQuotes();
     void RunScriptStringBackslash();
+    void RunScriptReturnDate();
 
     wxWebView* m_browser;
     EventCounter* m_loaded;
@@ -447,6 +449,19 @@ void WebTestCase::RunScriptStringBackslash()
         RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");",
         &result));
     CPPUNIT_ASSERT_EQUAL("This is a backslash: \\", result);
+}
+
+void WebTestCase::RunScriptReturnDate()
+{
+    m_browser->
+        SetPage("<html><head><script></script></head><body></body></html>", "");
+    ENSURE_LOADED;
+
+    wxString result;
+    CPPUNIT_ASSERT(m_browser->
+        RunScript("function f(a){return new Date(a);}f(\"10/08/2017 22:30:40\");",
+            &result));
+    CPPUNIT_ASSERT_EQUAL("Sun Oct 8 22:30:40 UTC +0100 2017", result);
 }
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || 
