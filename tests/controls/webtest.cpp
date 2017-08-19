@@ -461,7 +461,7 @@ void WebTestCase::RunScriptReturnDate()
     CPPUNIT_ASSERT(m_browser->
         RunScript("function f(a){return new Date(a);}f(\"10/08/2017 22:30:40\");",
             &result));
-    CPPUNIT_ASSERT_EQUAL("Sun Oct 8 22:30:40 UTC +0100 2017", result);
+    CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
 }
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || 
