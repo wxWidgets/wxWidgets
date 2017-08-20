@@ -857,6 +857,67 @@ wxString wxWebViewIE::GetPageText() const
     }
 }
 
+wxWebViewIEEmulationLevel wxWebViewIE::GetEmulationLevel()
+{
+    wxRegKey key(wxRegKey::HKCU, _T("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+    if ( key.Exists() )
+    {
+        long val = 0;
+
+        if ( !key.QueryValue(wxGetFullModuleName().AfterLast('\\'), &val) )
+        {
+            wxLogWarning(_("Can not get level value of registry key \
+                SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+            return wxWEBVIEWIE_EMULATION_LEVEL_EMPTY;
+        }
+
+        switch ( val )
+        {
+            case wxWEBVIEWIE_EMULATION_LEVEL_11:
+                return wxWEBVIEWIE_EMULATION_LEVEL_11;
+            case wxWEBVIEWIE_EMULATION_LEVEL_11_DEFAULT:
+                return wxWEBVIEWIE_EMULATION_LEVEL_11_DEFAULT;
+            case wxWEBVIEWIE_EMULATION_LEVEL_10:
+                return wxWEBVIEWIE_EMULATION_LEVEL_10;
+            case wxWEBVIEWIE_EMULATION_LEVEL_10_DEFAULT:
+                return wxWEBVIEWIE_EMULATION_LEVEL_10_DEFAULT;
+            case wxWEBVIEWIE_EMULATION_LEVEL_9:
+                return wxWEBVIEWIE_EMULATION_LEVEL_9;
+            case wxWEBVIEWIE_EMULATION_LEVEL_9_DEFAULT:
+                return wxWEBVIEWIE_EMULATION_LEVEL_9_DEFAULT;
+            case wxWEBVIEWIE_EMULATION_LEVEL_8:
+                return wxWEBVIEWIE_EMULATION_LEVEL_8;
+            case wxWEBVIEWIE_EMULATION_LEVEL_8_DEFAULT:
+                return wxWEBVIEWIE_EMULATION_LEVEL_8_DEFAULT;
+            case wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT:
+                return wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT;
+            default:
+                return wxWEBVIEWIE_EMULATION_LEVEL_EMPTY;
+        }
+    }
+    wxLogWarning(_("Registry key SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION \
+        does not exist"));
+    return wxWEBVIEWIE_EMULATION_LEVEL_EMPTY;
+}
+
+bool wxWebViewIE::SetEmulationLevel(wxWebViewIEEmulationLevel level)
+{
+    wxRegKey key(wxRegKey::HKCU, _T("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+    if ( key.Exists() )
+    {
+        if ( !key.SetValue(wxGetFullModuleName().AfterLast('\\'), level) )
+        {
+            wxLogWarning(_("Can not set level value of registry key \
+                SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+            return false;
+        }
+        return true;
+    }
+    wxLogWarning(_("Registry key SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION \
+        does not exist"));
+    return false;
+}
+
 bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());

@@ -47,6 +47,9 @@ private:
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( Zoom );
         CPPUNIT_TEST( SetPage );
+#if wxUSE_WEBVIEW_IE
+        CPPUNIT_TEST( EmulationLevel );
+#endif
         CPPUNIT_TEST( RunScriptWriteDOM );
         CPPUNIT_TEST( RunScriptReturnString );
         CPPUNIT_TEST( RunScriptReturnInteger );
@@ -73,6 +76,7 @@ private:
     void Zoom();
     void SetPage();
     void LoadUrl(int times = 1);
+    void EmulationLevel();
     void RunScriptWriteDOM();
     void RunScriptReturnString();
     void RunScriptReturnInteger();
@@ -300,6 +304,12 @@ void WebTestCase::SetPage()
     m_browser->SetPage("<html><body>other text</body></html>", "");
     ENSURE_LOADED;
     CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
+}
+
+void WebTestCase::EmulationLevel()
+{
+    CPPUNIT_ASSERT(m_browser->SetEmulationLevel(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT));
+    CPPUNIT_ASSERT_EQUAL(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT, m_browser->GetEmulationLevel());
 }
 
 void WebTestCase::RunScriptWriteDOM()

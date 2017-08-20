@@ -78,6 +78,20 @@ enum wxWebViewFindFlags
     wxWEBVIEW_FIND_DEFAULT =          0
 };
 
+enum wxWebViewIEEmulationLevel
+{
+    wxWEBVIEWIE_EMULATION_LEVEL_11 =         11001,
+    wxWEBVIEWIE_EMULATION_LEVEL_11_DEFAULT = 11000,
+    wxWEBVIEWIE_EMULATION_LEVEL_10 =         10001,
+    wxWEBVIEWIE_EMULATION_LEVEL_10_DEFAULT = 10000,
+    wxWEBVIEWIE_EMULATION_LEVEL_9 =          9999,
+    wxWEBVIEWIE_EMULATION_LEVEL_9_DEFAULT =  9000,
+    wxWEBVIEWIE_EMULATION_LEVEL_8 =          8888,
+    wxWEBVIEWIE_EMULATION_LEVEL_8_DEFAULT =  8000,
+    wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT =  7000,
+    wxWEBVIEWIE_EMULATION_LEVEL_EMPTY     =  0
+};
+
 //Base class for custom scheme handlers
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 {
@@ -219,6 +233,10 @@ public:
     virtual void* GetNativeBackend() const = 0;
     //Find function
     virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) = 0;
+
+    //Establish EmulationLevel for RunScript IE
+    virtual wxWebViewIEEmulationLevel GetEmulationLevel() = 0;
+    virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) = 0;
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;

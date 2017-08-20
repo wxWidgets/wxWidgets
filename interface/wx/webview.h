@@ -459,6 +459,21 @@ public:
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
+	/**
+        Gets current IE emulation level for the current program.
+        @return Current wxWebViewIEEmulationLevel.
+        @note Only avaliable on wxWEBVIEW_BACKEND_IE.
+	*/
+	virtual wxWebViewIEEmulationLevel GetEmulationLevel() = 0;
+
+	/**
+        Sets IE emulation level.
+        @param level A level from wxWebViewIEEmulationLevel enum.
+        @return True if level can be set, false if it is not.
+        @note Only avaliable on wxWEBVIEW_BACKEND_IE.
+	*/
+    virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) = 0;
+
     /**
         Runs the given JavaScript. Also it does not return the result, it returns 
         if there was an error and sets the output parameter to the result.
@@ -475,18 +490,16 @@ public:
               https://docs.microsoft.com/en-us/scripting/javascript/reference/json-object-javascript#requirements
               and see here how to make a program run use "modern" modes
               https://msdn.microsoft.com/en-us/library/ee330730(v=vs.85)#browser_emulation
-              Here is an example to get this working on webview.exe:
+              You can use SetEmulationLevel to change emulation level, for example:
               @code
-                  wxRegKey key(wxRegKey::HKCU, _T("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
-                  if (key.Exists())
-                      key.SetValue(_T("webview.exe"), 11000);
+                  SetEmulationLevel(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT);
               @endcode
               However, if you don't want to use this, there is an implementation of JSON parser
               on RunScript that helps to return objects.
               Also, it is necessary a script tag inside HTML to run Javascript. We recommend a minimum DOM
               on the HTML document.
-        @param A wxString containing the Javascript.
-        @param wxString result pointer.
+        @param javascript A wxString containing the Javascript.
+        @param output wxString result pointer.
         @return True if there is a result, false if there is an error.
     */
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
