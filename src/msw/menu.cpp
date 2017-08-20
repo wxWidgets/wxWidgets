@@ -360,7 +360,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // the group, but inserting non-radio item breaks it into two subgroups.)
     //
     bool checkInitially = false;
-    if ( pItem->GetKind() == wxITEM_RADIO )
+    if ( pItem->IsRadio() )
     {
         if ( !m_radioData )
             m_radioData = new wxMenuRadioItemsData;
@@ -627,7 +627,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     {
         if ( m_radioData->UpdateOnRemoveItem(pos) )
         {
-            wxASSERT_MSG( item->GetKind() == wxITEM_RADIO,
+            wxASSERT_MSG( item->IsRadio(),
                           wxT("Removing non radio button from radio group?") );
         }
         //else: item being removed is not in a radio group
@@ -778,7 +778,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
         wxMenuItem * const item = FindItem(id);
         if ( item )
         {
-            if ( (item->GetKind() == wxITEM_RADIO) && item->IsChecked() )
+            if ( item->IsRadio() && item->IsChecked() )
                 return true;
 
             if ( item->IsCheckable() )
