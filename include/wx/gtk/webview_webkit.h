@@ -122,6 +122,9 @@ public:
 
     virtual void* GetNativeBackend() const wxOVERRIDE { return m_web_view; }
 
+    virtual wxWebViewIEEmulationLevel GetEmulationLevel() { return wxWEBVIEWIE_EMULATION_LEVEL_EMPTY; };
+    virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) { return false; };
+
     /** TODO: check if this can be made private
      * The native control has a getter to check for busy state, but except in
      * very recent versions of webkit this getter doesn't say everything we need

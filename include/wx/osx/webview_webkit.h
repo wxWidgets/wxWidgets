@@ -144,6 +144,9 @@ public:
     void OnMove(wxMoveEvent &event);
     void OnMouseEvents(wxMouseEvent &event);
 
+    virtual wxWebViewIEEmulationLevel GetEmulationLevel() { return wxWEBVIEWIE_EMULATION_LEVEL_EMPTY; };
+    virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) { return false; };
+
     bool m_busy;
     bool m_nextNavigationIsNewWindow;
 
