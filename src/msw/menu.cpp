@@ -370,9 +370,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     }
     else if ( m_radioData )
     {
-        bool groupWasSplit = m_radioData->UpdateOnInsertNonRadio(pos);
-        wxASSERT_MSG( !groupWasSplit,
-                      wxS("Inserting non-radio item inside a radio group?") );
+        if ( m_radioData->UpdateOnInsertNonRadio(pos) )
+        {
+            // One of the exisiting groups has been split into two subgroups.
+            wxFAIL_MSG(wxS("Inserting non-radio item inside a radio group?"));
+        }
     }
 
     // Also handle the case of check menu items that had been checked before
