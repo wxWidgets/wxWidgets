@@ -1139,7 +1139,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
         ex_length = JSStringGetMaximumUTF8CStringSize (ex_value);
         wxGtkString str(g_new(gchar, ex_length));
 
-        JSStringGetUTF8CString (ex_value, (gchar*)str.c_str(), ex_length);
+        JSStringGetUTF8CString (ex_value, &*str, ex_length);
         JSStringRelease (ex_value);
 
         wxLogWarning(_("Exception running Javascript: %s"), wxString::FromUTF8(str));
@@ -1151,7 +1151,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     length = JSStringGetMaximumUTF8CStringSize (js_value);
     wxGtkString str(g_new(gchar, length));
 
-    JSStringGetUTF8CString (js_value, (gchar*)str.c_str(), length);
+    JSStringGetUTF8CString (js_value, &*str, length);
     JSStringRelease (js_value);
 
     if ( output != NULL )
