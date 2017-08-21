@@ -234,10 +234,6 @@ public:
     //Find function
     virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) = 0;
 
-    //Establish EmulationLevel for RunScript IE
-    virtual wxWebViewIEEmulationLevel GetEmulationLevel() = 0;
-    virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) = 0;
-
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 
