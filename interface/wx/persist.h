@@ -292,13 +292,14 @@ protected:
     bool SaveValue(const wxString& name, T value) const;
 
     /**
-        Restore the value saved by Save().
+        Restore a value saved by SaveValue().
 
         @param name
-            The same name as was used by Save().
+            The same name as was used by SaveValue().
         @param value
-            Non-@NULL pointer which will be filled with the value if it was
-            read successfully or not modified if it wasn't.
+            Non-@NULL pointer to the same type that was passed to SaveValue(). 
+            The pointed to object will be filled with the saved value if it 
+            was read successfully or not modified otherwise.
         @return
             @true if the value was successfully read or @false if it was not
             found or an error occurred.
