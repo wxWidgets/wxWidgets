@@ -459,26 +459,23 @@ public:
     */
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
-	/**
-        Gets current IE emulation level for the current program.
-        @return Current wxWebViewIEEmulationLevel.
-        @note Only avaliable on wxWEBVIEW_BACKEND_IE.
-	*/
-	virtual wxWebViewIEEmulationLevel GetEmulationLevel() = 0;
-
-	/**
+    /**
         Sets IE emulation level.
         @param level A level from wxWebViewIEEmulationLevel enum.
-        @return True if level can be set, false if it is not.
+        @return @true if level can be set, @false if it is not.
         @note Only avaliable on wxWEBVIEW_BACKEND_IE.
-	*/
+        @since 3.1.1
+    */
     virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) = 0;
 
     /**
-        Runs the given JavaScript. Also it does not return the result, it returns 
-        if there was an error and sets the output parameter to the result.
+        Runs the given JavaScript. It returns true if the script was run successfully and
+        additionally returns the script return value in output.
         It returns strings, integers, floating point numbers, booleans and objects (as JSON).
-        @note When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
+        @note When using wxWEBVIEW_WEBKIT (GTK), it returns true always unless you pass
+              an output param to the method. In that case, it would return false. RunScript
+              outputs are supported on wxWEBVIEW_WEBKIT2 (GTK3).
+              When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
               1) Javascript allocations greater than 10MB.
               2) Javascript that takes longer than 10 seconds to execute.
 
@@ -499,8 +496,8 @@ public:
               Also, it is necessary a script tag inside HTML to run Javascript. We recommend a minimum DOM
               on the HTML document.
         @param javascript A wxString containing the Javascript.
-        @param output wxString result pointer.
-        @return True if there is a result, false if there is an error.
+        @param output wxString result pointer. It can be NULL and it is new in wxWidgets 3.1.1.
+        @return @true if there is a result, @false if there is an error.
     */
     virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
 
