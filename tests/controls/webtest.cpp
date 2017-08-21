@@ -264,17 +264,6 @@ void WebTestCase::Zoom()
     }
 }
 
-void WebTestCase::SetPage()
-{
-    m_browser->SetPage("<html><body>text</body></html>", "");
-    ENSURE_LOADED;
-    CPPUNIT_ASSERT_EQUAL("text", m_browser->GetPageText());
-
-    m_browser->SetPage("<html><body>other text</body></html>", "");
-    ENSURE_LOADED;
-    CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
-}
-
 void WebTestCase::RunScript()
 {
 #if wxUSE_WEBVIEW_IE
@@ -335,6 +324,17 @@ void WebTestCase::RunScript()
     CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return new Date(a);}f(\"10/08/2017 22:30:40\");",
             &result));
     CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
+}
+
+void WebTestCase::SetPage()
+{
+    m_browser->SetPage("<html><body>text</body></html>", "");
+    ENSURE_LOADED;
+    CPPUNIT_ASSERT_EQUAL("text", m_browser->GetPageText());
+
+    m_browser->SetPage("<html><body>other text</body></html>", "");
+    ENSURE_LOADED;
+    CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
 }
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
