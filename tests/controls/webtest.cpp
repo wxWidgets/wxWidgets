@@ -8,8 +8,7 @@
 
 #include "testprec.h"
 
-#if wxUSE_WEBVIEW && \
-    (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
+#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -46,8 +45,8 @@ private:
         CPPUNIT_TEST( Editable );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( Zoom );
-        CPPUNIT_TEST( SetPage );
         CPPUNIT_TEST( RunScript );
+        CPPUNIT_TEST( SetPage );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -59,9 +58,9 @@ private:
     void Editable();
     void Selection();
     void Zoom();
+    void RunScript();
     void SetPage();
     void LoadUrl(int times = 1);
-    void RunScript();
 
     wxWebView* m_browser;
     EventCounter* m_loaded;
@@ -70,7 +69,6 @@ private:
 };
 
 //Convenience macro
-
 #define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS_IN((*m_loaded), 1, 1000)
 
 // register in the unnamed registry so that these tests are run by default
@@ -339,5 +337,4 @@ void WebTestCase::RunScript()
     CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
 }
 
-#endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || 
-    //wxUSE_WEBVIEW_IE)
+#endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
