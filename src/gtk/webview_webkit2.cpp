@@ -20,6 +20,7 @@
 #include "wx/log.h"
 #include "wx/gtk/private/webview_webkit2_extension.h"
 #include "wx/gtk/private/string.h"
+#include "wx/gtk/private/webkit.h"
 #include "wx/gtk/private/error.h"
 #include "wx/private/webviewutils.h"
 #include <webkit2/webkit2.h>
@@ -1097,67 +1098,45 @@ wxString wxWebViewWebKit::GetPageText() const
     }
     return wxString();
 }
+
 static void wxgtk_run_javascript_cb(WebKitWebView *,
                                     GAsyncResult *res,
                                     GAsyncResult **res_out)
 {
-    *res_out = (GAsyncResult*)g_object_ref(res);
+    g_object_ref(res);
+    *res_out = res;
 }
 
 bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
 {
-    WebKitJavascriptResult  *js_result;
-    JSValueRef              value;
-    JSGlobalContextRef      context;
-    wxGtkError              error;
+    wxGtkError error;
+    wxWebKitJavascriptResult js_result(webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object),
+        (GAsyncResult *)result, error.Out()));
 
-    js_result = webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object),
-        (GAsyncResult *)result, error.Out());
-
-    if ( !js_result )
+    if ( !&*js_result )
     {
         wxLogWarning(_("Error running Javascript: %s"), error.GetMessage());
         return false;
     }
 
-    context = webkit_javascript_result_get_global_context (js_result);
-    value = webkit_javascript_result_get_value (js_result);
+    JSGlobalContextRef context = webkit_javascript_result_get_global_context (&*js_result);
+    JSValueRef value = webkit_javascript_result_get_value (&*js_result);
 
-
-    JSStringRef js_value;
-    gsize length;
     JSValueRef exception = NULL;
-
-    js_value = (JSValueIsObject(context, value)) ?
+    wxJSStringRef js_value(JSValueIsObject(context, value) ?
                JSValueCreateJSONString(context, value, 0, &exception) :
-               JSValueToStringCopy (context, value, &exception);
+	       JSValueToStringCopy (context, value, &exception));
 
     if ( exception )
     {
-        JSStringRef ex_value = JSValueToStringCopy(context, exception, NULL);
-        gsize ex_length;
-        ex_length = JSStringGetMaximumUTF8CStringSize (ex_value);
-        wxGtkString str(g_new(gchar, ex_length));
+        JSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
+        wxLogWarning(_("Exception running Javascript: %s"), ex_value.ToWxString());
 
-        JSStringGetUTF8CString (ex_value, &*str, ex_length);
-        JSStringRelease (ex_value);
-
-        wxLogWarning(_("Exception running Javascript: %s"), wxString::FromUTF8(str));
-
-        webkit_javascript_result_unref (js_result);
         return false;
     }
 
-    length = JSStringGetMaximumUTF8CStringSize (js_value);
-    wxGtkString str(g_new(gchar, length));
-
-    JSStringGetUTF8CString (js_value, &*str, length);
-    JSStringRelease (js_value);
-
     if ( output != NULL )
-        *output = wxString::FromUTF8(str);
-
-    webkit_javascript_result_unref (js_result);
+        *output = js_value.ToWxString();
 
     return true;
 }
