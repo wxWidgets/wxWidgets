@@ -266,8 +266,13 @@ void WebTestCase::Zoom()
 void WebTestCase::RunScript()
 {
 #if wxUSE_WEBVIEW_IE
-    CPPUNIT_ASSERT(m_browser->SetEmulationLevel(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT));
-    CPPUNIT_ASSERT_EQUAL(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT, m_browser->GetEmulationLevel());
+    CPPUNIT_ASSERT((wxWebViewIE)m_browser->SetEmulationLevel(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT));
+#include "wx/msw/registry.h"
+    wxRegKey key(wxRegKey::HKCU, _T(REGISTRY_IE_PATH));
+    long val = 0;
+    key.QueryValue(wxGetFullModuleName().AfterLast('\\'), &val);
+    key.DeleteValue(wxGetFullModuleName().AfterLast('\\'));
+    CPPUNIT_ASSERT_EQUAL(val, wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT);
 #endif
 
     m_browser->
