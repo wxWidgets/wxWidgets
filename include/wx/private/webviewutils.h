@@ -25,6 +25,8 @@ public:
     static wxString WrapJavaScript
         (const wxString& javascript, int* runScriptCount, wxString* counter)
     {
+        // __wx$counter is used to have a different variable on every
+        // RunScript call, to not lose variable values between calls
         *counter = wxString::Format("%i", (*runScriptCount)++);
         wxString javascriptCopy = javascript;
 
@@ -33,9 +35,8 @@ public:
         wxRegEx escapeDoubleQuotes("(\\\\*)(['\"\n\r\v\t\b\f])");
         escapeDoubleQuotes.Replace(&javascriptCopy,"\\1\\1\\\\\\2");
         
-        return "try { var __wx$" + *counter + " = eval(\"" +
-                javascriptCopy +
-                "\"); true; } catch (e) { e.name + \": \" + e.message; }";
+        return wxString::Format("try { var __wx$%s = eval(\"%s\"); true; } \
+            catch (e) { e.name + \": \" + e.message; }", *counter, javascriptCopy);;
     }
 
 private:
