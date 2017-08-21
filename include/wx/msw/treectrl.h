@@ -207,10 +207,6 @@ protected:
     virtual void DoFreeze() wxOVERRIDE;
     virtual void DoThaw() wxOVERRIDE;
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
-
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
 
@@ -334,8 +330,8 @@ private:
     // whether we need to deselect other items on mouse up
     bool m_mouseUpDeselect;
 
-    // The size to restore the control to when it is thawed, see DoThaw().
-    wxSize m_thawnSize;
+    // whether we are waiting to freeze once the control becomes non-empty
+    bool m_pendingFreeze;
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;
