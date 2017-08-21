@@ -47,22 +47,7 @@ private:
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( Zoom );
         CPPUNIT_TEST( SetPage );
-#if wxUSE_WEBVIEW_IE
-        CPPUNIT_TEST( EmulationLevel );
-#endif
-        CPPUNIT_TEST( RunScriptWriteDOM );
-        CPPUNIT_TEST( RunScriptReturnString );
-        CPPUNIT_TEST( RunScriptReturnInteger );
-        CPPUNIT_TEST( RunScriptReturnDouble );
-        CPPUNIT_TEST( RunScriptReturnBoolean );
-        CPPUNIT_TEST( RunScriptReturnObject );
-        CPPUNIT_TEST( RunScriptReturnArray );
-        CPPUNIT_TEST( RunScriptReturnUndefined );
-        CPPUNIT_TEST( RunScriptReturnNull );
-        CPPUNIT_TEST( RunScriptEvalQuotes );
-        CPPUNIT_TEST( RunScriptInvalidJavaScript );
-        CPPUNIT_TEST( RunScriptStringBackslash );
-        CPPUNIT_TEST( RunScriptReturnDate );
+        CPPUNIT_TEST( RunScript );
     CPPUNIT_TEST_SUITE_END();
 
     void Title();
@@ -76,20 +61,7 @@ private:
     void Zoom();
     void SetPage();
     void LoadUrl(int times = 1);
-    void EmulationLevel();
-    void RunScriptWriteDOM();
-    void RunScriptReturnString();
-    void RunScriptReturnInteger();
-    void RunScriptReturnDouble();
-    void RunScriptReturnBoolean();
-    void RunScriptReturnObject();
-    void RunScriptReturnArray();
-    void RunScriptReturnUndefined();
-    void RunScriptReturnNull();
-    void RunScriptInvalidJavaScript();
-    void RunScriptEvalQuotes();
-    void RunScriptStringBackslash();
-    void RunScriptReturnDate();
+    void RunScript();
 
     wxWebView* m_browser;
     EventCounter* m_loaded;
@@ -275,8 +247,7 @@ void WebTestCase::Zoom()
     if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT))
     {
         m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
-        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TYPE_LAYOUT, m_browser->
-            GetZoomType());
+        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TYPE_LAYOUT, m_browser->GetZoomType());
 
         m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
         CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TINY, m_browser->GetZoom());
@@ -306,170 +277,64 @@ void WebTestCase::SetPage()
     CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
 }
 
-void WebTestCase::EmulationLevel()
+void WebTestCase::RunScript()
 {
+#if wxUSE_WEBVIEW_IE
     CPPUNIT_ASSERT(m_browser->SetEmulationLevel(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT));
     CPPUNIT_ASSERT_EQUAL(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT, m_browser->GetEmulationLevel());
-}
+#endif
 
-void WebTestCase::RunScriptWriteDOM()
-{
     m_browser->
         SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
     CPPUNIT_ASSERT(m_browser->RunScript("document.write(\"Hello World!\");"));
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
-}
-
-void WebTestCase::RunScriptReturnString()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
 
     wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(a){return a;}f('Hello World!');", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
     CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
-}
 
-
-void WebTestCase::RunScriptReturnInteger()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(a){return a;}f(123);", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(123);", &result));
     CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));
-}
 
-void WebTestCase::RunScriptReturnDouble()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
     CPPUNIT_ASSERT(m_browser->
         RunScript("function f(a){return a;}f(2.34);", &result));
     double value;
     result.ToDouble(&value);
     CPPUNIT_ASSERT_EQUAL(2.34, value);
-}
 
-void WebTestCase::RunScriptReturnBoolean()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(a){return a;}f(false);", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(false);", &result));
     CPPUNIT_ASSERT_EQUAL(false, (result == "false") ? false : true);
-}
 
-void WebTestCase::RunScriptReturnObject()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(){var person = new Object();person.name = 'Foo'; \
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; \
         person.lastName = 'Bar';return person;}f();", &result));
     CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
-}
 
-void WebTestCase::RunScriptReturnArray()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
     CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
-}
 
-void WebTestCase::RunScriptReturnUndefined()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(){var person = new Object();}f();", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
     CPPUNIT_ASSERT_EQUAL("undefined", result);
-}
 
-void WebTestCase::RunScriptReturnNull()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(){return null;}f();", &result));
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){return null;}f();", &result));
     CPPUNIT_ASSERT_EQUAL("null", result);
-}
 
-void WebTestCase::RunScriptInvalidJavaScript()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
+    result = "";
     CPPUNIT_ASSERT(!m_browser->RunScript("int main() { return 0; }", &result));
     CPPUNIT_ASSERT(!result);
-}
 
-void WebTestCase::RunScriptEvalQuotes()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function a() { return eval(\"function b() { \
+    CPPUNIT_ASSERT(m_browser->RunScript("function a() { return eval(\"function b() { \
         return eval(\\\"function c() { return eval(\\\\\\\"function d() { \
         return \\\\\\\\\\\\\\\"test\\\\\\\\\\\\\\\"; } d();\\\\\\\"); } \
         c();\\\"); } b();\"); } a();", &result));
     CPPUNIT_ASSERT_EQUAL("test", result);
-}
 
-void WebTestCase::RunScriptStringBackslash()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");",
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");",
         &result));
     CPPUNIT_ASSERT_EQUAL("This is a backslash: \\", result);
-}
 
-void WebTestCase::RunScriptReturnDate()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(a){return new Date(a);}f(\"10/08/2017 22:30:40\");",
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return new Date(a);}f(\"10/08/2017 22:30:40\");",
             &result));
     CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
 }
