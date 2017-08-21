@@ -30,6 +30,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/private/webviewutils.h"
+#include "wx/msw/private.h"
 
 #include <initguid.h>
 #include <wininet.h>
@@ -61,6 +62,9 @@ enum //Internal find flags
             event.SetString(#error); \
             event.SetInt(wxerror); \
             break;
+
+//Registry key where emulation level for programs are set
+#define REGISTRY_IE_PATH "SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
 
@@ -859,15 +863,14 @@ wxString wxWebViewIE::GetPageText() const
 
 wxWebViewIEEmulationLevel wxWebViewIE::GetEmulationLevel()
 {
-    wxRegKey key(wxRegKey::HKCU, _T("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+    wxRegKey key(wxRegKey::HKCU, _T(REGISTRY_IE_PATH));
     if ( key.Exists() )
     {
         long val = 0;
 
         if ( !key.QueryValue(wxGetFullModuleName().AfterLast('\\'), &val) )
         {
-            wxLogWarning(_("Can not get level value of registry key \
-                SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+	  wxLogWarning(_("Can not get level value of registry key %s"), REGISTRY_IE_PATH);
             return wxWEBVIEWIE_EMULATION_LEVEL_EMPTY;
         }
 
@@ -895,26 +898,23 @@ wxWebViewIEEmulationLevel wxWebViewIE::GetEmulationLevel()
                 return wxWEBVIEWIE_EMULATION_LEVEL_EMPTY;
         }
     }
-    wxLogWarning(_("Registry key SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION \
-        does not exist"));
+    wxLogWarning(_("Registry %s does not exist"), REGISTRY_IE_PATH);
     return wxWEBVIEWIE_EMULATION_LEVEL_EMPTY;
 }
 
 bool wxWebViewIE::SetEmulationLevel(wxWebViewIEEmulationLevel level)
 {
-    wxRegKey key(wxRegKey::HKCU, _T("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+    wxRegKey key(wxRegKey::HKCU, _T(REGISTRY_IE_PATH));
     if ( key.Exists() )
     {
         if ( !key.SetValue(wxGetFullModuleName().AfterLast('\\'), level) )
         {
-            wxLogWarning(_("Can not set level value of registry key \
-                SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"));
+	  wxLogWarning(_("Can not set level value of registry key %s"), REGISTRY_IE_PATH);
             return false;
         }
         return true;
     }
-    wxLogWarning(_("Registry key SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION \
-        does not exist"));
+    wxLogWarning(_("Registry key %s does not exist"), REGISTRY_IE_PATH);
     return false;
 }
 
