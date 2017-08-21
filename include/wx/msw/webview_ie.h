@@ -143,7 +143,7 @@ public:
     void onActiveXEvent(wxActiveXEvent& evt);
     void onEraseBg(wxEraseEvent&) {}
 
-    virtual wxWebViewIEEmulationLevel GetEmulationLevel() wxOVERRIDE;
+    //Establish EmulationLevel for RunScript IE
     virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) wxOVERRIDE;
 
     wxDECLARE_EVENT_TABLE();
