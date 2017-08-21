@@ -928,6 +928,14 @@ wxSocketError wxSocketBase::LastError() const
     return m_impl->GetError();
 }
 
+/* static */
+int wxSocketBase::GetBlockingFlagIfNeeded()
+{
+    return wxIsMainThread() && wxApp::IsMainLoopRunning()
+            ? wxSOCKET_NONE
+            : wxSOCKET_BLOCK;
+}
+
 // --------------------------------------------------------------------------
 // Basic IO calls
 // --------------------------------------------------------------------------
@@ -1966,6 +1974,15 @@ bool wxSocketBase::SetLocal(const wxIPV4address& local)
 wxSocketClient::wxSocketClient(wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_CLIENT)
 {
+    // Notice that we don't check for a running event loop here, unlike in
+    // GetBlockingFlagIfNeeded() because it is common to create the sockets
+    // before the event loop is entered and we shouldn't break existing code
+    // doing this as it can still work correctly if it only uses non-blocking
+    // sockets once the event loop is running.
+    wxASSERT_MSG( (flags & wxSOCKET_BLOCK) || wxIsMainThread(),
+                  wxS("Non-blocking sockets may only be created ")
+                  wxS("in the main thread") );
+
     m_initialRecvBufferSize =
     m_initialSendBufferSize = -1;
 }
