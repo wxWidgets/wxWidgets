@@ -214,8 +214,7 @@ void WebTestCase::Editable()
 
 void WebTestCase::Selection()
 {
-    m_browser->
-    SetPage("<html><body>Some <strong>strong</strong> text</body></html>", "");
+    m_browser->SetPage("<html><body>Some <strong>strong</strong> text</body></html>", "");
     ENSURE_LOADED;
     CPPUNIT_ASSERT(!m_browser->HasSelection());
 
