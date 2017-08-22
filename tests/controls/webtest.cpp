@@ -22,6 +22,10 @@
 #include "wx/uiaction.h"
 #include "wx/webview.h"
 #include "asserthelper.h"
+#if wxUSE_WEBVIEW_IE
+#include "wx/msw/registry.h"
+#include "wx/msw/webview_ie.h"
+#endif
 
 class WebTestCase : public CppUnit::TestCase
 {
@@ -266,13 +270,15 @@ void WebTestCase::Zoom()
 void WebTestCase::RunScript()
 {
 #if wxUSE_WEBVIEW_IE
-    CPPUNIT_ASSERT((wxWebViewIE)m_browser->SetEmulationLevel(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT));
-#include "wx/msw/registry.h"
+    CPPUNIT_ASSERT(wxWebViewIE::MSWSetEmulationLevel());
     wxRegKey key(wxRegKey::HKCU, _T(REGISTRY_IE_PATH));
     long val = 0;
     key.QueryValue(wxGetFullModuleName().AfterLast('\\'), &val);
-    key.DeleteValue(wxGetFullModuleName().AfterLast('\\'));
-    CPPUNIT_ASSERT_EQUAL(val, wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT);
+    CPPUNIT_ASSERT_EQUAL(val, IE_EMULATION_LEVEL);
+    CPPUNIT_ASSERT(wxWebViewIE::MSWSetEmulationLevel(true));
+    val = 0;
+    key.QueryValue(wxGetFullModuleName().AfterLast('\\'), &val);
+    CPPUNIT_ASSERT_EQUAL(val, 0);
 #endif
 
     m_browser->
