@@ -3412,6 +3412,9 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* long_press_gesture = gtk_gesture_long_press_new(widget);
 
+    // Enable long press Gesture only for touch events.
+    gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(long_press_gesture), TRUE);
+
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(long_press_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (long_press_gesture, "pressed",
