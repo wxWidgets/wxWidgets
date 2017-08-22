@@ -3015,7 +3015,7 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
-    gdouble zoomDelta = scale - gs_lastScale + 1.0;
+    gdouble zoomDelta = scale / gs_lastScale;
 
     event.SetZoomFactor(scale);
     event.SetZoomDelta(zoomDelta);
