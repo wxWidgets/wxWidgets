@@ -1596,6 +1596,7 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
     s_lastMagnification = magnification;
 
     wxevent.SetZoomDelta(zoomDelta);
+    wxevent.SetZoomFactor(magnification + 1.0);
 
     GetWXPeer()->HandleWindowEvent(wxevent);
 }

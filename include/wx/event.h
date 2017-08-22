@@ -1949,19 +1949,26 @@ class WXDLLIMPEXP_CORE wxZoomGestureEvent : public wxGestureEvent
 public:
     wxZoomGestureEvent(wxWindowID winid = 0)
                 : wxGestureEvent(winid, wxEVT_GESTURE_ZOOM)
-                { m_zoomDelta = 1.0; }
+                {
+                    m_zoomFactor = 1.0;
+                    m_zoomDelta  = 1.0;
+                }
       
     wxZoomGestureEvent(const wxZoomGestureEvent& event) : wxGestureEvent(event)
     {
-        m_zoomDelta = event.m_zoomDelta;
+        m_zoomFactor = event.m_zoomFactor;
+        m_zoomDelta  = event.m_zoomDelta;
     }
 
+    double GetZoomFactor() const { return m_zoomFactor; }
+    void SetZoomFactor(double zoomFactor) { m_zoomFactor = zoomFactor; }
     double GetZoomDelta() const { return m_zoomDelta; }
     void SetZoomDelta(double zoomDelta) { m_zoomDelta = zoomDelta; }
  
     virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
  
 private:
+	double m_zoomFactor;
     double m_zoomDelta;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);

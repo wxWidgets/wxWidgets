@@ -5738,7 +5738,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     wxZoomGestureEvent event(GetId());
 
     // These are used to calculate the center of the zoom and zoom factor
-    static int s_previousLocationX, s_previousLocationY, s_lastFingerDistance;
+    static int s_previousLocationX, s_previousLocationY, s_lastFingerDistance, s_intialFingerDistance;
 
     // This flag indicates that the gesture has just started
     // Store the current point and distance between the fingers for future calculations
@@ -5747,6 +5747,7 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
         s_previousLocationX = x;
         s_previousLocationY = y;
         s_lastFingerDistance = fingerDistance;
+        s_intialFingerDistance = fingerDistance;
         event.SetGestureStart();
     }
 
@@ -5764,14 +5765,17 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     pt.y = (s_previousLocationY + y) / 2;
 
     // Calculate the zoomDelta(zoom factor) which is the ratio of fingerDistance and s_lastFingerDistance
-    double zoomDelta = (double) fingerDistance / (double) s_lastFingerDistance;
+    double ZoomDelta = (double) fingerDistance / (double) s_lastFingerDistance;
 
+    double zoomFactor = (double) fingerDistance / (double) s_intialFingerDistance;
+
+    event.SetZoomFactor(zoomFactor);
+    event.SetZoomDelta(ZoomDelta);
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
 
     // This is not a gesture point but the center of a zoom
     event.SetPosition(pt);
-    event.SetZoomDelta(zoomDelta);
 
     // Update gesture event point and distance between the fingers
     s_previousLocationX = x;
