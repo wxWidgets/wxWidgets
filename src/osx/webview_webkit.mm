@@ -24,7 +24,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/core/cfref.h"
-#include "wx/private/webviewutils.h"
+#include "wx/private/jsscriptwrapper.h"
 
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
@@ -415,30 +415,23 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
     if ( !m_webView )
     {
-        wxLogWarning(_("wxWebView is not created!"));
+        wxCHECK_MSG( m_webView, false,
+            wxS("wxWebView must be created before running JS scripts") );
         return false;
     }
 
-    wxString counter;
-    wxString javaScriptVariable =
-        wxWebViewUtils::WrapJavaScript(javascript,
-        &m_runScriptCount, &counter);
+    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+
     NSString* result = [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( javaScriptVariable ).AsNSString()];
+                              wxCFStringRef( wrapJS.GetWrappedCode() ).AsNSString()];
 
     if ( result != nil && [result isEqualToString:@"true"] )
     {
-        javaScriptVariable = "if (typeof __wx$" + counter + " == 'object') \
-                                  JSON.stringify(__wx$" + counter + "); \
-                              else if (typeof __wx$" + counter + " == 'undefined') \
-                                  'undefined'; \
-                              else \
-                              __wx$" + counter + ";";
         result = [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( javaScriptVariable ).AsNSString()];
+                              wxCFStringRef( wrapJS.GetOutputCode() ).AsNSString()];
 
         [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( "__wx$" + counter + " = undefined;" ).
+                              wxCFStringRef( wrapJS.GetFreeOutputCode() ).
                               AsNSString()];
 
         if ( result != nil && output != NULL )
