@@ -3768,13 +3768,7 @@ public:
     wxZoomGestureEvent(wxWindowID windid = 0);
 
     /**
-        Returns the zoom Delta relative to the last zoom Factor. A value greater than 1.0 means we should enlarge
-        (or zoom in), a value less than 1.0 means we should shrink (or zoom out).
-    */
-    double GetZoomDelta() const;
-
-    /**
-        Returns the zoom Factor(absolute) since the gesture started. Hence, starting of the gesture
+        Returns the zoom Factor since the gesture started. Hence, starting of the gesture
         is considered as 1:1. A value greater than 1.0 means we should enlarge
         (or zoom in), a value less than 1.0 means we should shrink (or zoom out).
     */
@@ -3784,11 +3778,6 @@ public:
         Sets the zoom Factor.
     */
     double SetZoomFactor() const;
-
-    /**
-        Sets the zoom Delta.
-    */
-    void SetZoomDelta(double zoomFactor);
 };
 
 
