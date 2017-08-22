@@ -5765,12 +5765,12 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     pt.y = (s_previousLocationY + y) / 2;
 
     // Calculate the zoomDelta(zoom factor) which is the ratio of fingerDistance and s_lastFingerDistance
-    double ZoomDelta = (double) fingerDistance / (double) s_lastFingerDistance;
+    double zoomDelta = (double) fingerDistance / (double) s_lastFingerDistance;
 
     double zoomFactor = (double) fingerDistance / (double) s_intialFingerDistance;
 
     event.SetZoomFactor(zoomFactor);
-    event.SetZoomDelta(ZoomDelta);
+    event.SetZoomDelta(zoomDelta);
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
 
