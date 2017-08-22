@@ -3014,11 +3014,7 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
 
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
-
-    gdouble zoomDelta = scale / gs_lastScale;
-
     event.SetZoomFactor(scale);
-    event.SetZoomDelta(zoomDelta);
 
     // Cancel "Two FInger Tap Event" if scale has changed
     if ( wxRound(scale * 1000) != wxRound(gs_lastScale * 1000) )

@@ -1574,12 +1574,9 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
 
     wxevent.SetPosition(pt);
 
-    static double s_lastMagnification = 1.0;
-
     if ( gestureState == NSGestureRecognizerStateBegan )
     {
         wxevent.SetGestureStart();
-        s_lastMagnification = 0.0;
     }
 
     if ( gestureState == NSGestureRecognizerStateEnded )
@@ -1592,13 +1589,6 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
     // Add 1.0 get the magnification.
     magnification += 1.0;
 
-    // Calculate zoomDelta, which is the zoom factor relative to the
-    // last zoom gesture event in the current sequence.
-    double zoomDelta = magnification / s_lastMagnification;
-
-    s_lastMagnification = magnification;
-
-    wxevent.SetZoomDelta(zoomDelta);
     wxevent.SetZoomFactor(magnification);
 
     GetWXPeer()->HandleWindowEvent(wxevent);
