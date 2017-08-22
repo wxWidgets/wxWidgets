@@ -133,10 +133,12 @@ public:
             // TODO: Set the column's view position.
         }
         
-        // Restore the sort key and order.
+        // Restore the sort key and order if there is a valid model and sort
+        // criteria.
         wxString sortColumn;
-        if ( RestoreValue(wxPERSIST_DVLC_SORT_KEY, &sortColumn) && 
-                    sortColumn != "" )
+        if ( control->GetModel() &&
+             RestoreValue(wxPERSIST_DVLC_SORT_KEY, &sortColumn) && 
+             sortColumn != "" )
         {
             bool sortAsc = true;
             column = GetColumnByTitle(control, sortColumn);
@@ -145,6 +147,8 @@ public:
             {
                 RestoreValue(wxPERSIST_DVLC_SORT_ASC, &sortAsc);
                 column->SetSortOrder(sortAsc);
+                
+                // Resort the control based on the new sort criteria.
                 control->GetModel()->Resort();
             }
         }
