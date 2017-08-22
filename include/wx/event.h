@@ -1968,7 +1968,7 @@ public:
     virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
  
 private:
-	double m_zoomFactor;
+    double m_zoomFactor;
     double m_zoomDelta;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxZoomGestureEvent);
