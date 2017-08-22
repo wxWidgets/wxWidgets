@@ -149,9 +149,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *item, size_t pos)
     }
     else if ( m_radioData )
     {
-        bool groupWasSplit = m_radioData->UpdateOnInsertNonRadio(pos);
-        wxASSERT_MSG( !groupWasSplit,
-                      wxS("Inserting non-radio item inside a radio group?") );
+        if ( m_radioData->UpdateOnInsertNonRadio(pos) )
+        {
+            // One of the exisiting groups has been split into two subgroups.
+            wxFAIL_MSG(wxS("Inserting non-radio item inside a radio group?"));
+        }
     }
 
     // if we're already attached to the menubar, we must update it

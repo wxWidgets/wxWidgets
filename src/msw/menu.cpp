@@ -360,7 +360,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // the group, but inserting non-radio item breaks it into two subgroups.)
     //
     bool checkInitially = false;
-    if ( pItem->GetKind() == wxITEM_RADIO )
+    if ( pItem->IsRadio() )
     {
         if ( !m_radioData )
             m_radioData = new wxMenuRadioItemsData;
@@ -370,9 +370,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     }
     else if ( m_radioData )
     {
-        bool groupWasSplit = m_radioData->UpdateOnInsertNonRadio(pos);
-        wxASSERT_MSG( !groupWasSplit,
-                      wxS("Inserting non-radio item inside a radio group?") );
+        if ( m_radioData->UpdateOnInsertNonRadio(pos) )
+        {
+            // One of the exisiting groups has been split into two subgroups.
+            wxFAIL_MSG(wxS("Inserting non-radio item inside a radio group?"));
+        }
     }
 
     // Also handle the case of check menu items that had been checked before
@@ -625,7 +627,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     {
         if ( m_radioData->UpdateOnRemoveItem(pos) )
         {
-            wxASSERT_MSG( item->GetKind() == wxITEM_RADIO,
+            wxASSERT_MSG( item->IsRadio(),
                           wxT("Removing non radio button from radio group?") );
         }
         //else: item being removed is not in a radio group
@@ -776,7 +778,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
         wxMenuItem * const item = FindItem(id);
         if ( item )
         {
-            if ( (item->GetKind() == wxITEM_RADIO) && item->IsChecked() )
+            if ( item->IsRadio() && item->IsChecked() )
                 return true;
 
             if ( item->IsCheckable() )

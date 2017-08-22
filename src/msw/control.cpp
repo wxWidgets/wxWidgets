@@ -184,39 +184,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     InheritAttributes();
     if ( !m_hasFont )
     {
-        bool setFont = true;
-
-        wxFont font = GetDefaultAttributes().font;
-
-        // if we set a font for {list,tree}ctrls and the font size is changed in
-        // the display properties then the font size for these controls doesn't
-        // automatically adjust when they receive WM_SETTINGCHANGE
-
-        // FIXME: replace the dynamic casts with virtual function calls!!
-#if wxUSE_LISTCTRL || wxUSE_TREECTRL
-        bool testFont = false;
-#if wxUSE_LISTCTRL
-        if ( wxDynamicCastThis(wxListCtrl) )
-            testFont = true;
-#endif // wxUSE_LISTCTRL
-#if wxUSE_TREECTRL
-        if ( wxDynamicCastThis(wxTreeCtrl) )
-            testFont = true;
-#endif // wxUSE_TREECTRL
-
-        if ( testFont )
-        {
-            // we can't explicitly set the font here
-            // see wxGetCCDefaultFont() in src/msw/settings.cpp for explanation
-            // of why this test works
-            if ( font != wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) )
-            {
-                setFont = false;
-            }
-        }
-#endif // wxUSE_LISTCTRL || wxUSE_TREECTRL
-
-        if ( setFont )
+        if ( MSWShouldSetDefaultFont() )
         {
             SetFont(GetDefaultAttributes().font);
         }
