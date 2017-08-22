@@ -21,7 +21,7 @@
 
 #define wxPERSIST_DVLC_COL_PREFIX "Column"
 
-#define wxPERSIST_DVLC_WIDTH "ColWidth"
+#define wxPERSIST_DVLC_WIDTH "Width"
 #define wxPERSIST_DVLC_SORT_KEY "SortKey"
 #define wxPERSIST_DVLC_SORT_ASC "SortAsc"
 
@@ -52,7 +52,7 @@ public:
         {
             // Create a prefix string to identify each column.
             wxString columnPrefix;
-            columnPrefix.Printf("%s %d ", wxPERSIST_DVLC_COL_PREFIX, col);
+            columnPrefix.Printf("%s%d", wxPERSIST_DVLC_COL_PREFIX, col);
 
             // Save the width of each column.
             int width = control->GetColumn(col)->GetWidth();
@@ -88,7 +88,7 @@ public:
         {
             // Create a prefix string to identify each column.
             wxString columnPrefix = 
-                    wxString::Format("%s %d ", wxPERSIST_DVLC_COL_PREFIX, col);
+                    wxString::Format("%s%d", wxPERSIST_DVLC_COL_PREFIX, col);
                     
             // Restore the column width.
             int width;
@@ -106,6 +106,7 @@ public:
             
             RestoreValue(wxPERSIST_DVLC_SORT_ASC, &sortAsc);
             control->GetColumn(sortColumn)->SetSortOrder(sortAsc);
+            control->GetModel()->Resort();
         }
         return true;
     }
