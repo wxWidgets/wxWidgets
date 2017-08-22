@@ -50,6 +50,8 @@ MyGesturePanel::MyGesturePanel(MyGestureFrame *parent) : wxPanel(parent, wxID_AN
     Bind(wxEVT_TWO_FINGER_TAP, &MyGesturePanel::OnTwoFingerTap, this);
     Bind(wxEVT_LONG_PRESS, &MyGesturePanel::OnLongPress, this);
     Bind(wxEVT_PRESS_AND_TAP, &MyGesturePanel::OnPressAndTap, this);
+
+    m_lastZoomFactor = 1.0;
 }
 
 void MyGestureFrame::OnQuit(wxCloseEvent& WXUNUSED(event))
@@ -111,17 +113,19 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
     if ( event.IsGestureStart() )
     {
         wxLogMessage("Zoom gesture started\n");
+
+        m_lastZoomFactor = 1.0;
     }
 
-    wxLogMessage("Zoom gesture performed with zoom center at (%d, %d) and zoom Delta = %f\n",
-        event.GetPosition().x, event.GetPosition().y, event.GetZoomDelta());
+    wxLogMessage("Zoom gesture performed with zoom center at (%d, %d) and zoom Factor = %f\n",
+        event.GetPosition().x, event.GetPosition().y, event.GetZoomFactor());
 
     const wxPoint& zoomCenter = event.GetPosition();
 
     // Translate to zoom center
     m_affineMatrix.Translate(zoomCenter.x, zoomCenter.y);
     // Scale
-    m_affineMatrix.Scale(event.GetZoomDelta(), event.GetZoomDelta());
+    m_affineMatrix.Scale(event.GetZoomFactor() / m_lastZoomFactor, event.GetZoomFactor() / m_lastZoomFactor);
     // Translate back
     m_affineMatrix.Translate(-zoomCenter.x, -zoomCenter.y);
 
@@ -129,6 +133,8 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
     {
         wxLogMessage("Zoom gesture Ended\n");
     }
+
+    m_lastZoomFactor = event.GetZoomFactor();
 
     Refresh();
 }
