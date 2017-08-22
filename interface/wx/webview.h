@@ -461,12 +461,12 @@ public:
 
     /**
         Sets IE emulation level.
-        @param level A level from wxWebViewIEEmulationLevel enum.
+        @param defaultLevel @false to set level to IE7, @true to set level to old mode.
         @return @true if level can be set, @false if it is not.
         @note Only avaliable on wxWEBVIEW_BACKEND_IE.
         @since 3.1.1
     */
-    virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) = 0;
+    virtual bool MSWSetEmulationLevel(bool defaultLevel = false) = 0;
 
     /**
         Runs the given JavaScript. It returns true if the script was run successfully and
@@ -489,12 +489,11 @@ public:
               https://msdn.microsoft.com/en-us/library/ee330730(v=vs.85)#browser_emulation
               You can use SetEmulationLevel to change emulation level, for example:
               @code
-                  SetEmulationLevel(wxWEBVIEWIE_EMULATION_LEVEL_7_DEFAULT);
+                  SetEmulationLevel();
               @endcode
               However, if you don't want to use this, there is an implementation of JSON parser
               on RunScript that helps to return objects.
-              Also, it is necessary a script tag inside HTML to run Javascript. We recommend a minimum DOM
-              on the HTML document.
+              It is compulsory a script tag inside HTML to run Javascript.
         @param javascript A wxString containing the Javascript.
         @param output wxString result pointer. It can be NULL and it is new in wxWidgets 3.1.1.
         @return @true if there is a result, @false if there is an error.
