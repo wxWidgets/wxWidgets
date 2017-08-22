@@ -22,7 +22,7 @@
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/webkit.h"
 #include "wx/gtk/private/error.h"
-#include "wx/private/webviewutils.h"
+#include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSValueRef.h>
 #include <JavaScriptCore/JSStringRef.h>
@@ -1129,7 +1129,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
 
     if ( exception )
     {
-        JSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
+        wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
         wxLogWarning(_("Exception running Javascript: %s"), ex_value.ToWxString());
 
         return false;
@@ -1160,18 +1160,15 @@ bool wxWebViewWebKit::RunScriptInternal(const wxString& javascript, wxString* ou
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
-    wxString result;
-    wxString counter;
-    wxString javaScriptVariable =
-        wxWebViewUtils::WrapJavaScript(javascript,
-        &m_runScriptCount, &counter);
+    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
-    bool isValidJS = RunScriptInternal(javaScriptVariable, &result);
+    wxString result;
+    bool isValidJS = RunScriptInternal(wrapJS.GetWrappedCode(), &result);
 
     if ( isValidJS && result == "true" )
     {
-        RunScriptInternal("__wx$" + counter, output);
-        RunScriptInternal("__wx$" + counter + " = undefined;");
+        RunScriptInternal(wrapJS.GetOutputCode(), output);
+        RunScriptInternal(wrapJS.GetFreeOutputCode());
         return true;
     }
 
