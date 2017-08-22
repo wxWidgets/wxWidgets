@@ -24,6 +24,7 @@
 #include "wx/msw/webview_missing.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
+#include "wx/msw/private.h"
 
 struct IHTMLDocument2;
 struct IHTMLElement;
@@ -34,6 +35,11 @@ class wxIEContainer;
 class DocHostUIHandler;
 class wxFindPointers;
 class wxIInternetProtocol;
+
+#define IE_EMULATION_LEVEL 7000
+
+//Registry key where emulation level for programs are set
+#define REGISTRY_IE_PATH "SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
@@ -144,7 +150,7 @@ public:
     void onEraseBg(wxEraseEvent&) {}
 
     //Establish EmulationLevel for RunScript IE
-    virtual bool SetEmulationLevel(wxWebViewIEEmulationLevel level) wxOVERRIDE;
+    static bool MSWSetEmulationLevel(bool defaultLevel = false);
 
     wxDECLARE_EVENT_TABLE();
 
@@ -193,6 +199,9 @@ private:
     void FindClear();
     //Toggles control features see INTERNETFEATURELIST for values.
     bool EnableControlFeature(long flag, bool enable = true);
+
+    bool RunScriptInternal(wxVariant varJavascript,
+        wxAutomationObject* scriptAO, wxVariant* varResult, wxString function = "eval");
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
