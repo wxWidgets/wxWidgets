@@ -117,6 +117,7 @@ public:
     wxWebView()
     {
         m_showMenu = true;
+        m_runScriptCount = 0;
     }
 
     virtual ~wxWebView() {}
@@ -223,8 +224,8 @@ public:
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
 
-    //Counts number of calls of RunScript, to avoid
-    //a variable used twice on more than one call.
+    // Count the number of calls to RunScript() in order to prevent
+    // the_same variable from being used twice in more than one call.
     int m_runScriptCount;
 
 private:
