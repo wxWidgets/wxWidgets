@@ -548,8 +548,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     LoadURL(url);
 
-    m_runScriptCount = 0;
-
     return true;
 }
 
@@ -1113,7 +1111,7 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     wxWebKitJavascriptResult js_result(webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object),
         (GAsyncResult *)result, error.Out()));
 
-    if ( !&*js_result )
+    if ( !js_result )
     {
         wxLogWarning(_("Error running Javascript: %s"), error.GetMessage());
         return false;
@@ -1168,7 +1166,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     if ( isValidJS && result == "true" )
     {
         RunScriptInternal(wrapJS.GetOutputCode(), output);
-        RunScriptInternal(wrapJS.GetFreeOutputCode());
+        RunScriptInternal(wrapJS.GetCleanUpCode());
         return true;
     }
 
