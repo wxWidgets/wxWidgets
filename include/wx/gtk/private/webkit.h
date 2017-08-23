@@ -11,6 +11,8 @@
 #define _WX_GTK_PRIVATE_WEBKIT_H_
 
 #include <webkit2/webkit2.h>
+#include <JavaScriptCore/JSStringRef.h>
+#include <wx/buffer.h>
 
 // ----------------------------------------------------------------------------
 // Convenience class for WebKitJavascriptResult on scope exit automatically
@@ -30,8 +32,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebKitJavascriptResult);
 };
 
-#include <JavaScriptCore/JSStringRef.h>
-
 class wxJSStringRef
 {
 public:
@@ -40,10 +40,10 @@ public:
    
     const wxString ToWxString()
     {
-        gsize length = JSStringGetMaximumUTF8CStringSize (m_jssref);
-        wxGtkString str(g_new(gchar, length));
+        size_t length = JSStringGetMaximumUTF8CStringSize(m_jssref);
+        wxCharBuffer str(length);
 
-        JSStringGetUTF8CString(m_jssref, &*str, length);
+        JSStringGetUTF8CString(m_jssref, str.data(), length);
 
         return wxString::FromUTF8(str);
     }
