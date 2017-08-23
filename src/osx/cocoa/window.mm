@@ -1760,7 +1760,8 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 
     NSArray* array = [touches allObjects];
 
-    // Iterate through all moving touches
+    // Iterate through all moving touches to check if the touch corresponding to "press"
+    // in Press and Tap event is moving.
     for ( int i = 0; i < [array count]; ++i )
     {
         NSTouch* touch = [array objectAtIndex:i];
@@ -1769,6 +1770,7 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
         if ( [touch.identity isEqual:m_initialTouch.identity] )
         {
             // Process Press and Tap Event if the touch corresponding to "press" is moving
+            // and the gesture is active.
             if ( m_activeGestures & press_and_tap )
             {
                 wxPressAndTapEvent wxevent(GetWXPeer()->GetId());
@@ -1821,11 +1823,14 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
         GetWXPeer()->HandleWindowEvent(wxevent);
     }
 
+    // If Two Finger Tap Event is possible in future then save the timestamp to use it when the other touch
+    // leaves the surface.
     else if ( m_touchCount == 1 && (m_allowedGestures & two_finger_tap) )
     {
         m_lastTouchTime = eventTimeStamp;
     }
 
+    // Check if Press and Tap event is possible.
     else if ( m_allowedGestures & press_and_tap )
     {
         NSArray* array = [touches allObjects];
