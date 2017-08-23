@@ -5846,7 +5846,7 @@ bool wxWindowMSW::HandlePressAndTap(int x,int y, WXDWORD flags)
 {
 	wxPressAndTapEvent event(GetId());
 
-	if ( flags & GF_BEGIN )
+    if ( flags & GF_BEGIN )
 	{
         event.SetGestureStart();
 	}
@@ -5855,7 +5855,7 @@ bool wxWindowMSW::HandlePressAndTap(int x,int y, WXDWORD flags)
 	event.SetTimestamp(::GetMessageTime());
 	event.SetPosition(wxPoint(x, y));
 
-	if ( flags & GF_END )
+    if ( flags & GF_END )
 	{
         event.SetGestureEnd();
 	}
