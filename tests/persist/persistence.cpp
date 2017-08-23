@@ -6,11 +6,15 @@
 // Copyright:   (c) 2017 wxWidgets Team
 ///////////////////////////////////////////////////////////////////////////////
 
+// Note: The wxDataViewCtrl test currently uses the derivative class
+// wxDataViewListCtrl for convenience.
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
 
 #include "testprec.h"
+ #include <cppunit/extensions/HelperMacros.h>
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -31,7 +35,7 @@
 
 #define APP_NAME            "cpptest"
 #define PO_PREFIX           "/Persistent_Options"
-#define DVLC_PREFIX         PO_PREFIX "/DataViewList/dvlc"
+#define DVLC_PREFIX         PO_PREFIX "/DataView/dvlc"
 #define DVLC_COL            "Column #"
 #define DVLC_COL_PREFIX     DVLC_PREFIX "/Columns/" DVLC_COL
 #define DVLC_SORT_PREFIX    DVLC_PREFIX "/Sorting"
@@ -44,10 +48,20 @@
 class PersistenceTestCase : public CppUnit::TestCase
 {
 public:
-    PersistenceTestCase() {}
+    PersistenceTestCase() 
+    {
+        suite_setUp();
+    }
     
     virtual void setUp();
     virtual void tearDown();
+    
+    void suite_setUp()
+    {
+        wxTheApp->SetAppName("PersistTest");
+        wxConfig::Get()->DeleteGroup("/Persistent_Options");
+        wxConfig::Get()->Flush();
+    }
 
 private:
     CPPUNIT_TEST_SUITE( PersistenceTestCase );
@@ -76,14 +90,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( PersistenceTestCase, "PersistenceTestCase
 
 void PersistenceTestCase::setUp()
 {
-    wxConfigBase* conf = wxConfig::Get();
-    conf->SetAppName("PersistTest");
-    conf->SetVendorName("wxWidgets");
-    
-    // Clear any pre-existing settings.
-    conf->DeleteGroup("/Persistence_Options");
-    conf->Flush();
-
     // Create the objects to persist.
     m_frame =  new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY,
                                     "Persistence Test",

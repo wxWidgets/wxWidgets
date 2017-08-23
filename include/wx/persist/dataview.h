@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/persist/dataview.h
-// Purpose:     Persistence support for wxDataViewListCtrl
+// Purpose:     Persistence support for wxDataViewCtrl and its derivatives
 // Author:      wxWidgets Team
 // Created:     2017-08-21
 // Copyright:   (c) 2017 wxWidgets.org
@@ -14,20 +14,20 @@
 #include "wx/dataview.h"
 
 // ----------------------------------------------------------------------------
-// String constants used by wxPersistentDataViewListCtrl.
+// String constants used by wxPersistentDataViewCtrl.
 // ----------------------------------------------------------------------------
 
-#define wxPERSIST_DVLC_KIND "DataViewList"
+#define wxPERSIST_DVC_KIND "DataView"
 
-#define wxPERSIST_DVLC_COLUMNS "Columns"
+#define wxPERSIST_DVC_COLUMNS "Columns"
 
-#define wxPERSIST_DVLC_HIDDEN "Hidden"
-#define wxPERSIST_DVLC_POS "Position"
-#define wxPERSIST_DVLC_TITLE "Title"
-#define wxPERSIST_DVLC_WIDTH "Width"
+#define wxPERSIST_DVC_HIDDEN "Hidden"
+#define wxPERSIST_DVC_POS "Position"
+#define wxPERSIST_DVC_TITLE "Title"
+#define wxPERSIST_DVC_WIDTH "Width"
 
-#define wxPERSIST_DVLC_SORT_KEY "Sorting/Column"
-#define wxPERSIST_DVLC_SORT_ASC "Sorting/Asc"
+#define wxPERSIST_DVC_SORT_KEY "Sorting/Column"
+#define wxPERSIST_DVC_SORT_ASC "Sorting/Asc"
 
 // ----------------------------------------------------------------------------
 // Helper function to search for a column by its title.
@@ -47,7 +47,7 @@ wxDataViewColumn* GetColumnByTitle(wxDataViewCtrl* control,
 }
 
 // ----------------------------------------------------------------------------
-// wxPersistentDataViewListCtrl: Saves and restores user modified column widths
+// wxPersistentDataViewCtrl: Saves and restores user modified column widths
 // and single column sort order. 
 //
 // Future improvements could be to save and restore column order if the user
@@ -75,14 +75,14 @@ public:
 
             // Create a prefix string to identify each column.
             wxString columnPrefix;
-            columnPrefix.Printf("/%s/%s/", wxPERSIST_DVLC_COLUMNS, 
+            columnPrefix.Printf("/%s/%s/", wxPERSIST_DVC_COLUMNS, 
                                                         column->GetTitle());
 
             // Save the column attributes.
-            SaveValue(columnPrefix + wxPERSIST_DVLC_HIDDEN, column->IsHidden());
-            SaveValue(columnPrefix + wxPERSIST_DVLC_POS, 
+            SaveValue(columnPrefix + wxPERSIST_DVC_HIDDEN, column->IsHidden());
+            SaveValue(columnPrefix + wxPERSIST_DVC_POS, 
                                             control->GetColumnPosition(column));
-            SaveValue(columnPrefix + wxPERSIST_DVLC_WIDTH, column->GetWidth());
+            SaveValue(columnPrefix + wxPERSIST_DVC_WIDTH, column->GetWidth());
 
             // Check if this column is the current sort key.
             if ( column->IsSortKey() )
@@ -97,8 +97,8 @@ public:
         // Save the sort key and direction if there is a valid sort.
         if ( sortColumn )
         {
-            SaveValue(wxPERSIST_DVLC_SORT_KEY, sortColumn->GetTitle());
-            SaveValue(wxPERSIST_DVLC_SORT_ASC, 
+            SaveValue(wxPERSIST_DVC_SORT_KEY, sortColumn->GetTitle());
+            SaveValue(wxPERSIST_DVC_SORT_ASC, 
                                     sortColumn->IsSortOrderAscending());
         }
     }
@@ -117,17 +117,17 @@ public:
             // persistence store (columns are stored by title). The persistence
             // store benignly handles cases where the title is not found.
             wxString columnPrefix;
-            columnPrefix.Printf("/%s/%s/", wxPERSIST_DVLC_COLUMNS, 
+            columnPrefix.Printf("/%s/%s/", wxPERSIST_DVC_COLUMNS, 
                                                         column->GetTitle());
 
             // Restore column hidden status.
             bool hidden;
-            if ( RestoreValue(columnPrefix + wxPERSIST_DVLC_HIDDEN, &hidden) )
+            if ( RestoreValue(columnPrefix + wxPERSIST_DVC_HIDDEN, &hidden) )
                 column->SetHidden(hidden);
 
             // Restore the column width.
             int width;
-            if ( RestoreValue(columnPrefix + wxPERSIST_DVLC_WIDTH, &width) )
+            if ( RestoreValue(columnPrefix + wxPERSIST_DVC_WIDTH, &width) )
                 column->SetWidth(width);
                 
             // TODO: Set the column's view position.
@@ -137,7 +137,7 @@ public:
         // criteria.
         wxString sortColumn;
         if ( control->GetModel() &&
-             RestoreValue(wxPERSIST_DVLC_SORT_KEY, &sortColumn) && 
+             RestoreValue(wxPERSIST_DVC_SORT_KEY, &sortColumn) && 
              sortColumn != "" )
         {
             bool sortAsc = true;
@@ -145,7 +145,7 @@ public:
             
             if ( column )
             {
-                RestoreValue(wxPERSIST_DVLC_SORT_ASC, &sortAsc);
+                RestoreValue(wxPERSIST_DVC_SORT_ASC, &sortAsc);
                 column->SetSortOrder(sortAsc);
                 
                 // Resort the control based on the new sort criteria.
@@ -157,7 +157,7 @@ public:
 
     virtual wxString GetKind() const wxOVERRIDE
     { 
-        return wxPERSIST_DVLC_KIND; 
+        return wxPERSIST_DVC_KIND; 
     }
 };
 
