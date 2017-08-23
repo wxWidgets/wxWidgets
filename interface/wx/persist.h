@@ -204,6 +204,9 @@ protected:
 /**
     Base class for persistent object adapters.
 
+    See @ref overview_persistence for an overview of persistent objects within
+    wxWidgets.
+
     wxWidgets persistence framework is non-intrusive, i.e. can work with the
     classes which have no relationship to nor knowledge of it. To allow this,
     an intermediate persistence adapter is used: this is just a simple object

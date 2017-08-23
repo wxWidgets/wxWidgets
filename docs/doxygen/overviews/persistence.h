@@ -50,6 +50,8 @@ Currently the following classes are supported:
 
 - wxTopLevelWindow (and hence wxFrame and wxDialog)
 - wxBookCtrlBase (i.e. wxNotebook, wxListbook, wxToolbook and wxChoicebook)
+- wxDataViewCtrl and its derivatives 
+  (i.e. wxDataViewListCtrl and wxDataViewTreeCtrl)
 - wxTreebook
 
 To automatically save and restore the properties of the windows of classes
