@@ -29,7 +29,7 @@ public:
 
     // This method is used to add a double quote level into a JavasSript code
     // in order to get it working when eval is called programmatically.
-    wxString GetWrappedCode()
+    const wxString GetWrappedCode()
     {
         // Adds one escape level if there is a single quote, double quotes or
         // esacape characters
@@ -40,7 +40,7 @@ public:
             catch (e) { e.name + \": \" + e.message; }", m_wx$counter, m_jsscript);;
     }
 
-    wxString GetOutputCode()
+    const wxString GetOutputCode()
     {
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__) 
         return wxString::Format("if (typeof %s == 'object') \
@@ -58,12 +58,12 @@ public:
 #endif
     }
 
-    wxString GetFreeOutputCode()
+    const wxString GetCleanUpCode()
     {
         return wxString::Format("%s = undefined;", m_wx$counter);
     }
 
-    wxString GetOutputJSVariable()
+    const wxString GetOutputJSVariable()
     {
         return m_wx$counter;
     }
