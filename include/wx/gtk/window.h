@@ -10,6 +10,7 @@
 #define _WX_GTK_WINDOW_H_
 
 #include "wx/dynarray.h"
+
 #ifdef __WXGTK3__
     typedef struct _cairo cairo_t;
     typedef struct _GtkStyleProvider GtkStyleProvider;
