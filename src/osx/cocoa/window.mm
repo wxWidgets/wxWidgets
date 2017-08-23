@@ -1641,7 +1641,7 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
     // since the last rotate gesture event in the current sequence.
     double angleDelta = angle - s_lastAngle;
 
-    s_lastAngle  = angle;
+    s_lastAngle = angle;
 
     wxevent.SetAngleDelta(angleDelta);
 
