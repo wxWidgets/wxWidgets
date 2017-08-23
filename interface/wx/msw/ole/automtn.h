@@ -147,7 +147,7 @@ public:
         object.
 
         The implementation of this method uses @c VarBstrFromCy() Windows API
-        function with LOCALE_USER_DEFAULT.
+        function with @c LOCALE_USER_DEFAULT.
     */
     virtual bool Write(wxString& str) const;
 
