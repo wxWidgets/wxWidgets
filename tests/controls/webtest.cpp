@@ -331,7 +331,7 @@ void WebTestCase::RunScript()
         &result));
     CPPUNIT_ASSERT_EQUAL("This is a backslash: \\", result);
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return new Date(a);}f(\"10/08/2017 22:30:40\");",
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return new Date(a);}f(\"2017-10-08T21:30:40Z\");",
             &result));
     CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
 }
