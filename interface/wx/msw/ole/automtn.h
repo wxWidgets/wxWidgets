@@ -146,7 +146,7 @@ public:
         Fills the provided string with the textual representation of this
         object.
 
-        The implementation of this method using @c VarBstrFromCy() Windows API
+        The implementation of this method uses @c VarBstrFromCy() Windows API
         function with LOCALE_USER_DEFAULT.
     */
     virtual bool Write(wxString& str) const;
@@ -350,7 +350,7 @@ public:
         Fills the provided string with the textual representation of this
         object.
 
-        Only the address of SAFEARRAY pointer is output.
+        Only the address of @c SAFEARRAY pointer is output.
     */
     virtual bool Write(wxString& str) const;
 
@@ -450,6 +450,8 @@ public:
         Creates a new object based on the @a progID, returning @true if the object was
         successfully created,
         or @false if not.
+        
+        @see GetInstance()
     */
     bool CreateInstance(const wxString& progId) const;
 
@@ -459,7 +461,7 @@ public:
         Returns @true if the object was successfully initialized or @false if
         it has no valid @c IDispatch pointer.
 
-        @see GetDispatchPtr(), GetInstance()
+        @see GetDispatchPtr()
      */
     bool IsOk() const;
 
@@ -493,6 +495,8 @@ public:
         @param progId COM ProgID, e.g. "Excel.Application"
         @param flags The creation flags (this parameters was added in wxWidgets
             2.9.2)
+            
+        @see CreateInstance()
     */
     bool GetInstance(const wxString& progId,
                      int flags = wxAutomationInstance_CreateIfNeeded) const;
@@ -532,6 +536,8 @@ public:
         Note that @a property can contain dot-separated property names, to save the
         application
         needing to call GetProperty several times using several temporary objects.
+        
+        @see GetObject(), PutProperty()
     */
     wxVariant GetProperty(const wxString& property, int noArgs,
                           wxVariant args[]) const;
