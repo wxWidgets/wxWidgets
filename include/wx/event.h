@@ -1913,11 +1913,11 @@ class WXDLLIMPEXP_CORE wxPanGestureEvent : public wxGestureEvent
 {
 public:
     wxPanGestureEvent(wxWindowID winid = 0)
-                : wxGestureEvent(winid, wxEVT_GESTURE_PAN)
-                {
-                    m_deltaX = 0;
-                    m_deltaY = 0;
-                }
+        : wxGestureEvent(winid, wxEVT_GESTURE_PAN)
+    {
+        m_deltaX = 0;
+        m_deltaY = 0;
+    }
       
     wxPanGestureEvent(const wxPanGestureEvent& event) : wxGestureEvent(event)
     {
@@ -1948,8 +1948,8 @@ class WXDLLIMPEXP_CORE wxZoomGestureEvent : public wxGestureEvent
 {
 public:
     wxZoomGestureEvent(wxWindowID winid = 0)
-                : wxGestureEvent(winid, wxEVT_GESTURE_ZOOM)
-                { m_zoomFactor = 1.0; }
+        : wxGestureEvent(winid, wxEVT_GESTURE_ZOOM)
+        { m_zoomFactor = 1.0; }
       
     wxZoomGestureEvent(const wxZoomGestureEvent& event) : wxGestureEvent(event)
     {
@@ -1977,8 +1977,8 @@ class WXDLLIMPEXP_CORE wxRotateGestureEvent : public wxGestureEvent
 {
 public:
     wxRotateGestureEvent(wxWindowID winid = 0)
-                : wxGestureEvent(winid, wxEVT_GESTURE_ROTATE)
-                { m_angleDelta = 0.0; }
+        : wxGestureEvent(winid, wxEVT_GESTURE_ROTATE)
+        { m_angleDelta = 0.0; }
       
     wxRotateGestureEvent(const wxRotateGestureEvent& event) : wxGestureEvent(event)
     {
@@ -2006,8 +2006,8 @@ class WXDLLIMPEXP_CORE wxTwoFingerTapEvent : public wxGestureEvent
 {
 public:
     wxTwoFingerTapEvent(wxWindowID winid = 0)
-                   : wxGestureEvent(winid, wxEVT_TWO_FINGER_TAP)
-                   { }
+        : wxGestureEvent(winid, wxEVT_TWO_FINGER_TAP)
+        { }
 
     wxTwoFingerTapEvent(const wxTwoFingerTapEvent& event) : wxGestureEvent(event)
     { }
@@ -2028,8 +2028,9 @@ class WXDLLIMPEXP_CORE wxLongPressEvent : public wxGestureEvent
 {
 public:
     wxLongPressEvent(wxWindowID winid = 0)
-                 : wxGestureEvent(winid, wxEVT_LONG_PRESS)
-                 { }
+        : wxGestureEvent(winid, wxEVT_LONG_PRESS)
+        { }
+
     wxLongPressEvent(const wxLongPressEvent& event) : wxGestureEvent(event)
     { }
 
@@ -2048,8 +2049,9 @@ class WXDLLIMPEXP_CORE wxPressAndTapEvent : public wxGestureEvent
 {
 public:
     wxPressAndTapEvent(wxWindowID winid = 0)
-                   : wxGestureEvent(winid, wxEVT_PRESS_AND_TAP)
-                   { }
+        : wxGestureEvent(winid, wxEVT_PRESS_AND_TAP)
+        { }
+
     wxPressAndTapEvent(const wxPressAndTapEvent& event) : wxGestureEvent(event)
     { }
 
