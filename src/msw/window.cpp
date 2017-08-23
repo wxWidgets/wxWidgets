@@ -3254,7 +3254,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // This should fill gestureInfo with the gesture details
             if ( !GestureFuncs::GetGestureInfo()((HGESTUREINFO)lParam, &gestureInfo) )
             {
-                wxLogLastError(wxT("GetGestureInfo"));
+                wxLogLastError(wxS("GetGestureInfo"));
                 processed = false;
                 break;
             }
@@ -3322,7 +3322,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 // If processed, we must call this to avoid memory leaks
                 if ( !GestureFuncs::CloseGestureInfoHandle()((HGESTUREINFO)lParam) )
                 {
-                    wxLogLastError(wxT("CloseGestureInfoHandle"));
+                    wxLogLastError(wxS("CloseGestureInfoHandle"));
                 }
             }
         }
@@ -3875,7 +3875,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
         // Third argument is the number of elements in gestureConfig array, currently equal to 1
         if ( !GestureFuncs::SetGestureConfig()(m_hWnd, 0, 1, &gestureConfig, sizeof(GESTURECONFIG)) )
         {
-            wxLogLastError(wxT("SetGestureConfig"));
+            wxLogLastError(wxS("SetGestureConfig"));
         }
     }
 #endif // WM_GESTURE

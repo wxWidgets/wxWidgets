@@ -2,7 +2,7 @@
 #include "wx/dcgraph.h"
 
 MyGestureFrame::MyGestureFrame()
-    : wxFrame(NULL, wxID_ANY, wxT("Multi-touch Gestures"), wxDefaultPosition, wxSize(800, 600))
+    : wxFrame(NULL, wxID_ANY, wxS("Multi-touch Gestures"), wxDefaultPosition, wxSize(800, 600))
 {
     // Create controls
     MyGesturePanel *myPanel = new MyGesturePanel(this);
