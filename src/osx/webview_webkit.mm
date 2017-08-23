@@ -154,7 +154,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     LoadURL(strURL);
 
-    m_runScriptCount = 0;
     return true;
 }
 
@@ -431,7 +430,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
                               wxCFStringRef( wrapJS.GetOutputCode() ).AsNSString()];
 
         [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( wrapJS.GetFreeOutputCode() ).
+                              wxCFStringRef( wrapJS.GetCleanUpCode() ).
                               AsNSString()];
 
         if ( result != nil && output != NULL )
