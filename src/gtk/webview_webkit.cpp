@@ -951,10 +951,16 @@ wxString wxWebViewWebKit::GetPageText() const
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
+    if ( output != NULL )
+    {
+        wxLogWarning(_("Returning output is not supported on WEBKIT1"));
+        return false;
+    }
+
     webkit_web_view_execute_script(m_web_view,
                                    javascript.mb_str(wxConvUTF8));
 
-    return (output == NULL);
+    return true;
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
