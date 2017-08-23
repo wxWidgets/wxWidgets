@@ -36,10 +36,10 @@ class DocHostUIHandler;
 class wxFindPointers;
 class wxIInternetProtocol;
 
-#define IE_EMULATION_LEVEL 7000
+#define wxIE_EMULATION_LEVEL 7000
 
 //Registry key where emulation level for programs are set
-#define REGISTRY_IE_PATH "SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"
+#define wxREGISTRY_IE_PATH wxT("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION")
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
@@ -150,7 +150,7 @@ public:
     void onEraseBg(wxEraseEvent&) {}
 
     //Establish EmulationLevel for RunScript IE
-    static bool MSWSetEmulationLevel(bool defaultLevel = false);
+    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
 
     wxDECLARE_EVENT_TABLE();
 
