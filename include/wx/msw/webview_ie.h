@@ -36,7 +36,7 @@ class DocHostUIHandler;
 class wxFindPointers;
 class wxIInternetProtocol;
 
-#define wxIE_EMULATION_LEVEL 7000
+#define wxIE_EMULATION_LEVEL 8000
 
 //Registry key where emulation level for programs are set
 #define wxREGISTRY_IE_PATH wxT("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION")
