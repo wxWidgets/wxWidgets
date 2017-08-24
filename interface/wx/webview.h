@@ -463,7 +463,7 @@ public:
         Sets IE emulation level to a modern one, changing MSW registry. It is used to enable 
         JSON object on Runscript(), because it wouldn't work with default emulation level.
         @see RunScript() for further details.
-        @param modernLevel @true to set level to IE7, @false to set level to old mode.
+        @param modernLevel @true to set level to IE8, @false to set level to old mode.
         @return @true if level can be set, @false if it is not.
         @since 3.1.1
     */
