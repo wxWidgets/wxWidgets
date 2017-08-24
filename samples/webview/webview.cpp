@@ -66,7 +66,7 @@ class WebApp : public wxApp
 {
 public:
     WebApp() :
-        m_url("https://www.google.com")
+        m_url("http://www.wxwidgets.org")
     {
     }
 
