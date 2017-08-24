@@ -3703,6 +3703,8 @@ public:
 
     This event is generated when the user moves a finger on the surface.
 
+    wxGTK also generates this event during mouse dragging (mouse motion while a left mouse button is depressed).
+
     Note that OSX requires the primary mouse button to be pressed while performing the finger movement.
 
     @beginEventTable{wxPanGestureEvent}
@@ -3844,6 +3846,8 @@ public:
     This event is generated when one finger touches the surface and remains stationary.
 
     Note that currently it is only generated under wxGTK and wxOSX.
+
+    wxGTK also generates this event when left mouse button is being pressed for some minimum duration of time.
 
     @beginEventTable{wxLongPressEvent}
     @event{EVT_LONG_PRESS(id, func)}
