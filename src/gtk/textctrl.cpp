@@ -1034,8 +1034,20 @@ void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
+    if ( text.empty() )
+        return;
+
     // we're changing the text programmatically
     DontMarkDirtyOnNextChange();
+
+    // Inserting new text into the control below will emit insert-text signal
+    // which assumes that if m_imKeyEvent is set, it is called in response to
+    // this key press -- which is not the case here (but m_imKeyEvent might
+    // still be set e.g. because we're called from a menu event handler
+    // triggered by a keyboard accelerator), so reset m_imKeyEvent temporarily.
+    GdkEventKey* const imKeyEvent_save = m_imKeyEvent;
+    m_imKeyEvent = NULL;
+    wxON_BLOCK_EXIT_SET(m_imKeyEvent, imKeyEvent_save);
 
     if ( !IsMultiLine() )
     {
@@ -1076,16 +1088,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     gtk_text_buffer_get_iter_at_mark( m_buffer, &iter,
                                       gtk_text_buffer_get_insert (m_buffer) );
 
-    // This will emit insert-text signal which assumes that if m_imKeyEvent is
-    // set, it is called in response to this key press -- which is not the case
-    // here (but m_imKeyEvent might still be set e.g. because we're called from
-    // a menu event handler triggered by a keyboard accelerator).
-    GdkEventKey* const imKeyEvent_save = m_imKeyEvent;
-    m_imKeyEvent = NULL;
-
     gtk_text_buffer_insert( m_buffer, &iter, buffer, buffer.length() );
-
-    m_imKeyEvent = imKeyEvent_save;
 
     // Scroll to cursor, but only if scrollbar thumb is at the very bottom
     // won't work when frozen, text view is not using m_buffer then
