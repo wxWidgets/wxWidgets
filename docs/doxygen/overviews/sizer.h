@@ -133,7 +133,7 @@ the controls from the sizer and having to add them back later.
 
 @note This is supported only by wxBoxSizer and wxFlexGridSizer.
 
-@subsection overview_sizer_hiding_box wxBoxSizer
+@section overview_sizer_box wxBoxSizer
 
 wxBoxSizer can lay out its children either vertically or horizontally,
 depending on what flag is being used in its constructor. When using a vertical
@@ -147,14 +147,14 @@ last sample, only the box sizer is a vertical box sizer now:
 
 @image html overview_sizer_08.png
 
-@subsection overview_sizer_hiding_static wxStaticBoxSizer
+@section overview_sizer_staticbox wxStaticBoxSizer
 
 wxStaticBoxSixer is the same as a wxBoxSizer, but surrounded by a static box.
 Here is a sample:
 
 @image html overview_sizer_09.png
 
-@subsection overview_sizer_hiding_grid wxGridSizer
+@section overview_sizer_grid wxGridSizer
 
 wxGridSizer is a two-dimensional sizer. All children are given the same size,
 which is the minimal size required by the biggest child, in this case the text
@@ -166,7 +166,7 @@ orientation if new children are added:
 
 For programming information, see wxGridSizer.
 
-@subsection overview_sizer_hiding_flexgrid wxFlexGridSizer
+@section overview_sizer_flexgrid wxFlexGridSizer
 
 Another two-dimensional sizer derived from wxGridSizer. The width of each
 column and the height of each row are calculated individually according to the
@@ -178,7 +178,7 @@ as the one above, but using a flex grid sizer:
 @image html overview_sizer_11.png
 
 
-@section overview_sizer_box Programming with wxBoxSizer
+@section overview_sizer_programming_box Programming with wxBoxSizer
 
 The basic idea behind a wxBoxSizer is that windows will most often be laid out
 in rather simple basic geometry, typically in a row or a column or several
