@@ -269,26 +269,40 @@ void WebTestCase::Zoom()
 
 void WebTestCase::RunScript()
 {
-#if wxUSE_WEBVIEW_IE
-    CPPUNIT_ASSERT(wxWebViewIE::MSWSetEmulationLevel());
-    wxRegKey key(wxRegKey::HKCU, _T(REGISTRY_IE_PATH));
-    long val = 0;
-    key.QueryValue(wxGetFullModuleName().AfterLast('\\'), &val);
-    CPPUNIT_ASSERT_EQUAL(val, IE_EMULATION_LEVEL);
-    CPPUNIT_ASSERT(wxWebViewIE::MSWSetEmulationLevel(true));
-    val = 0;
-    key.QueryValue(wxGetFullModuleName().AfterLast('\\'), &val);
-    CPPUNIT_ASSERT_EQUAL(val, 0);
-#endif
-
     m_browser->
         SetPage("<html><head><script></script></head><body></body></html>", "");
     ENSURE_LOADED;
 
+    wxString result;
+#if wxUSE_WEBVIEW_IE
+    CPPUNIT_ASSERT(wxWebViewIE::MSWSetModernEmulationLevel());
+    wxRegKey key(wxRegKey::HKCU, wxREGISTRY_IE_PATH);
+    long val = 0;
+    wxString programName = wxGetFullModuleName().AfterLast('\\');
+    key.QueryValue(programName, &val);
+    CPPUNIT_ASSERT_EQUAL(val, wxIE_EMULATION_LEVEL);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Bar'; \
+        person.lastName = 'Foo';return person;}f();", &result));
+    CPPUNIT_ASSERT_EQUAL("{\"name\":\"Bar\",\"lastName\":\"Foo\"}", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
+    CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
+        var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
+        &result));
+    CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
+
+    CPPUNIT_ASSERT(wxWebViewIE::MSWSetModernEmulationLevel(false));
+    val = 0;
+    key.QueryValue(programName, &val);
+    CPPUNIT_ASSERT_EQUAL(val, 0);
+#endif
+
     CPPUNIT_ASSERT(m_browser->RunScript("document.write(\"Hello World!\");"));
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
 
-    wxString result;
     CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
     CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
 
@@ -331,9 +345,10 @@ void WebTestCase::RunScript()
         &result));
     CPPUNIT_ASSERT_EQUAL("This is a backslash: \\", result);
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return new Date(a);}f(\"2017-10-08T21:30:40Z\");",
-            &result));
-    CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var d = new Date('10/08/2016 21:30:40'); \
+        var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
+        &result));
+    CPPUNIT_ASSERT_EQUAL("\"2016-10-08T21:30:40.000Z\"", result);
 }
 
 void WebTestCase::SetPage()
