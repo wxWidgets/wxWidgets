@@ -720,11 +720,6 @@ public:
         return true;
     }
 
-    virtual bool Destroy() wxOVERRIDE
-    {
-        return BaseClass::Destroy();
-    }
-
 protected:
     // hook the child view into event handlers chain here
     virtual bool TryBefore(wxEvent& event) wxOVERRIDE
@@ -744,7 +739,7 @@ private:
     void OnCloseWindow(wxCloseEvent& event)
     {
         if ( CloseView(event) )
-            Destroy();
+            BaseClass::Destroy();
         //else: vetoed
     }
 
