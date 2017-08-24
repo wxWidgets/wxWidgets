@@ -71,6 +71,7 @@ private:
         // don't pass neither but this could be a bug.
         CPPUNIT_TEST( SetValue );
         CPPUNIT_TEST( Selection );
+        CPPUNIT_TEST( InsertionPoint );
         CPPUNIT_TEST( Replace );
         WXUISIM_TEST( Editable );
         CPPUNIT_TEST( CopyPaste );
