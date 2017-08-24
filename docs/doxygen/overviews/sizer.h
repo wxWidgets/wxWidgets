@@ -149,7 +149,7 @@ last sample, only the box sizer is a vertical box sizer now:
 
 @section overview_sizer_staticbox wxStaticBoxSizer
 
-wxStaticBoxSixer is the same as a wxBoxSizer, but surrounded by a static box.
+wxStaticBoxSizer is the same as a wxBoxSizer, but surrounded by a static box.
 Here is a sample:
 
 @image html overview_sizer_09.png
@@ -164,11 +164,10 @@ orientation if new children are added:
 
 @image html overview_sizer_10.png
 
-For programming information, see wxGridSizer.
 
 @section overview_sizer_flexgrid wxFlexGridSizer
 
-Another two-dimensional sizer derived from wxGridSizer. The width of each
+wxFlexGridSizer is a two-dimensional sizer derived from wxGridSizer. The width of each
 column and the height of each row are calculated individually according to the
 minimal requirements from the respectively biggest child. Additionally, columns
 and rows can be declared to be stretchable if the sizer is assigned a size
@@ -314,10 +313,6 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
 
 @section overview_sizer_types Other Types of Sizers
 
-wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static box
-around the sizer. The static box may be either created independently 
-or the sizer may create it itself as a convenience.
-
 wxStdDialogButtonSizer is a sizer that creates button layouts in dialogs 
 which conform to the standard button spacing and ordering defined by 
 the platform or toolkit's user interface guidelines (if such things exist).
@@ -328,18 +323,8 @@ sizer – as long as there is space available in that direction. Once all availabl
 space in the primary direction has been used, a new line is added and items 
 are added there. 
 
-wxGridSizer is a sizer which lays out its children in a two-dimensional table
-with all table fields having the same size, i.e. the width of each field is the
-width of the widest child, the height of each field is the height of the
-tallest child.
-
 wxGridBagSizer is a rather special kind of sizer which, unlike the other
 classes, allows to directly put the elements at the given position in the
-sizer. Please see its documentation for more details.
-
-wxFlexGridSizer is a sizer which lays out its children in a two-dimensional
-table with all table fields in one row having the same height and all fields in
-one column having the same width, but all rows or all columns are not
-necessarily the same height or width as in the wxGridSizer.
+sizer. 
 
 */
