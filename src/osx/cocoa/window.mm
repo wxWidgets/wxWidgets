@@ -1622,12 +1622,9 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
 
     wxevent.SetPosition(pt);
 
-    static double s_lastAngle = 0.0;
-
     if ( gestureState == NSGestureRecognizerStateBegan )
     {
         wxevent.SetGestureStart();
-        s_lastAngle = 0.0;
     }
 
     if ( gestureState == NSGestureRecognizerStateEnded )
@@ -1637,13 +1634,7 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
     // Multiply the returned rotation angle with -1 to obtain the angle in a clockwise sense.
     double angle = -[rotationGestureRecognizer rotation];
 
-    // Calculate angleDelta, which is the amount of rotation performed
-    // since the last rotate gesture event in the current sequence.
-    double angleDelta = angle - s_lastAngle;
-
-    s_lastAngle = angle;
-
-    wxevent.SetAngleDelta(angleDelta);
+    wxevent.SetRotationAngle(angle);
 
     GetWXPeer()->HandleWindowEvent(wxevent);
 }

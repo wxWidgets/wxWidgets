@@ -238,7 +238,7 @@ static double gs_lastOffset = 0;
 // Last scale provided by GTK
 static gdouble gs_lastScale = 1.0;
 
-// This is used to calculate angle delta.
+// This is used to set the angle when rotate gesture ends.
 static gdouble gs_lastAngle = 0;
 
 // Last Zoom/Rotate gesture point
@@ -3079,8 +3079,6 @@ rotate_gesture_begin_callback(GtkGesture* gesture, GdkEventSequence* WXUNUSED(se
         return;
     }
 
-    gs_lastAngle = 0;
-
     wxRotateGestureEvent event(win->GetId());
 
     event.SetEventObject(win);
@@ -3109,11 +3107,9 @@ rotate_gesture_callback(GtkGesture* gesture, gdouble WXUNUSED(angle_delta), gdou
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
-    // Angle provided by GTK is the cumulative angle since the "begin" signal was emitted.
-    // We need the change in angle since the last event.
-    event.SetAngleDelta(angle - gs_lastAngle);
+    event.SetRotationAngle(angle);
 
-    // Update gs_lastAngle
+    // Save the angle to set it when the gesture ends.
     gs_lastAngle = angle;
 
     // Save this point because the point obtained through gtk_gesture_get_bounding_box_center()
@@ -3131,6 +3127,7 @@ rotate_gesture_end_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXU
     event.SetEventObject(win);
     event.SetPosition(gs_lastGesturePoint);
     event.SetGestureEnd();
+    event.SetRotationAngle(gs_lastAngle);
 
     win->GTKProcessEvent(event);
 }

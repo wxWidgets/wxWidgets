@@ -5781,15 +5781,12 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
 
 bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags)
 {
-    static double s_lastAngle = 0.0;
-
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(GetId());
 
     // This flag indicates that the gesture has just started
     if ( flags & GF_BEGIN )
     {
-        s_lastAngle = 0;
         event.SetGestureStart();
     }
 
@@ -5801,11 +5798,8 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
         // So, multiply angle by -1 for positive angle for clockwise and negative in case of counterclockwise
         double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
 
-        // Set the change in angle
-        event.SetAngleDelta(angle - s_lastAngle);
-
-        // Update s_lastAngle
-        s_lastAngle = angle;
+        // Set the angle
+        event.SetRotationAngle(angle);
     }
 
     if ( flags & GF_END )

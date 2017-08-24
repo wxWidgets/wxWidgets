@@ -1978,20 +1978,20 @@ class WXDLLIMPEXP_CORE wxRotateGestureEvent : public wxGestureEvent
 public:
     wxRotateGestureEvent(wxWindowID winid = 0)
         : wxGestureEvent(winid, wxEVT_GESTURE_ROTATE)
-        { m_angleDelta = 0.0; }
+        { m_rotationAngle = 0.0; }
       
     wxRotateGestureEvent(const wxRotateGestureEvent& event) : wxGestureEvent(event)
     {
-        m_angleDelta = event.m_angleDelta;
+        m_rotationAngle = event.m_rotationAngle;
     }
      
-    double GetAngleDelta() const { return m_angleDelta; }
-    void SetAngleDelta(double angleDelta) { m_angleDelta = angleDelta; }
+    double GetRotationAngle() const { return m_rotationAngle; }
+    void SetRotationAngle(double rotationAngle) { m_rotationAngle = rotationAngle; }
  
     virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
  
 private:
-    double m_angleDelta;
+    double m_rotationAngle;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRotateGestureEvent);
 };
