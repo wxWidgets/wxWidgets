@@ -319,7 +319,7 @@ the platform or toolkit's user interface guidelines (if such things exist).
 As a convenience, wxDialog::CreateButtonSizer() can be used to create this sizer.
 
 wxWrapSizer is a sizer that lays out its items in a single line, like a box 
-sizer – as long as there is space available in that direction. Once all available 
+sizer -- as long as there is space available in that direction. Once all available 
 space in the primary direction has been used, a new line is added and items 
 are added there. 
 
