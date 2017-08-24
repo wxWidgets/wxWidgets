@@ -30,6 +30,9 @@
 #include "wx/notifmsg.h"
 #include "wx/settings.h"
 #include "wx/webview.h"
+#if wxUSE_WEBVIEW_IE
+#include "wx/msw/webview_ie.h"
+#endif
 #include "wx/webviewarchivehandler.h"
 #include "wx/webviewfshandler.h"
 #include "wx/infobar.h"
