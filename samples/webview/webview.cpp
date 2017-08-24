@@ -1052,8 +1052,13 @@ void WebFrame::RunScript(const wxString& javascript, wxString* result, const wxS
     wxTextEntryDialog dialog(this, messege, wxGetTextFromUserPromptStr, javascript, wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if( dialog.ShowModal() == wxID_OK )
     {
-        if ( m_browser->RunScript(dialog.GetValue(), result) && result != NULL)
-            wxLogMessage(_("RunScript result: %s\n"), *result);
+        if ( m_browser->RunScript(dialog.GetValue(), result))
+	{
+	    if ( result != NULL )
+	        wxLogMessage(_("RunScript result: %s\n"), *result);
+	    else
+	        wxLogMessage(_("RunScript ran properly"));
+	}
         else
             wxLogWarning(_("RunScript returned false"));
     }
