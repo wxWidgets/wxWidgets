@@ -831,7 +831,7 @@ void TextCtrlTestCase::XYToPositionMultiLine()
     const long numLines_0 = 1;
     CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_0 );
     long pos_0[numLines_0+1][maxLineLength_0+1] =
-        { { -1 } };
+        { { 0 } };
     for ( long y = 0; y < numLines_0; y++ )
         for( long x = 0; x < maxLineLength_0+1; x++ )
         {
@@ -846,7 +846,7 @@ void TextCtrlTestCase::XYToPositionMultiLine()
     const long numLines_1 = 1;
     CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_1 );
     long pos_1[numLines_1+1][maxLineLength_1+1] =
-        { {  0,  1,  2,  3, -1 },
+        { {  0,  1,  2,  3,  4 },
           { -1, -1, -1, -1, -1 } };
     for ( long y = 0; y < numLines_1; y++ )
         for( long x = 0; x < maxLineLength_1+1; x++ )
@@ -866,7 +866,7 @@ void TextCtrlTestCase::XYToPositionMultiLine()
     long pos_2[numLines_2 + 1][maxLineLength_2 + 1] =
         { { 0,  1,  2,  3, -1 },    // New line occupies positions 3, 4
           { 5,  6,  7, -1, -1 },    // New line occupies positions 7, 8
-          { 9, -1, -1, -1, -1 } };
+          { 9, 10, -1, -1, -1 } };
 #else
     long pos_2[numLines_2+1][maxLineLength_2+1] =
         { {  0,  1,  2,  3, -1 },
@@ -893,7 +893,7 @@ void TextCtrlTestCase::XYToPositionMultiLine()
         { {  0, -1 },    // New line occupies positions 0, 1
           {  2, -1 },    // New line occupies positions 2, 3
           {  4, -1 },    // New line occupies positions 4, 5
-          { -1, -1 },
+          {  6, -1 },
           { -1, -1 } };
 #else
     long pos_3[numLines_3+1][maxLineLength_3+1] =
@@ -925,7 +925,7 @@ void TextCtrlTestCase::XYToPositionMultiLine()
           {  8, -1, -1, -1, -1 },    // New line occupies positions 8, 9
           { 10, 11, -1, -1, -1 },    // New line occupies positions 11, 12
           { 13, -1, -1, -1, -1 },    // New line occupies positions 13, 14
-          { -1, -1, -1, -1, -1 },
+          { 15, -1, -1, -1, -1 },
           { -1, -1, -1, -1, -1 } };
 #else
     long pos_4[numLines_4+1][maxLineLength_4+1] =
@@ -1013,7 +1013,7 @@ void TextCtrlTestCase::XYToPositionSingleLine()
     for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
     {
         long p0 = m_text->XYToPosition(x, 0);
-        if ( x < m_text->GetLastPosition() )
+        if ( x <= m_text->GetLastPosition() )
             CPPUNIT_ASSERT_EQUAL( p0, x );
         else
             CPPUNIT_ASSERT_EQUAL( p0, -1 );
@@ -1029,7 +1029,7 @@ void TextCtrlTestCase::XYToPositionSingleLine()
     for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
     {
         long p1 = m_text->XYToPosition(x, 0);
-        if ( x < m_text->GetLastPosition() )
+        if ( x <= m_text->GetLastPosition() )
             CPPUNIT_ASSERT_EQUAL( p1, x );
         else
             CPPUNIT_ASSERT_EQUAL( p1, -1 );
@@ -1045,7 +1045,7 @@ void TextCtrlTestCase::XYToPositionSingleLine()
     for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
     {
         long p2 = m_text->XYToPosition(x, 0);
-        if ( x < m_text->GetLastPosition() )
+        if ( x <= m_text->GetLastPosition() )
             CPPUNIT_ASSERT_EQUAL( p2, x );
         else
             CPPUNIT_ASSERT_EQUAL( p2, -1 );

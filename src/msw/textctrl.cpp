@@ -1486,13 +1486,12 @@ long wxTextCtrl::XYToPosition(long x, long y) const
 
     // Line is identified by a character position!
     long lineLength = ::SendMessage(GetHwnd(), EM_LINELENGTH, charIndex, 0);
-    // For all lines but last one we need to adjust the length
-    // to include new line character (only one because both CR and LF
-    // are virtually "displayed" at the same position).
-    if ( y < GetNumberOfLines() - 1 )
-        lineLength += 1;
 
-    if ( x >= lineLength )
+    // Notice that x == lineLength is still valid because it corresponds either
+    // to the position of the LF at the end of any line except the last one or
+    // to the last position, which is the position after the last character,
+    // for the last line.
+    if ( x > lineLength )
         return -1;
 
     return charIndex + x;
