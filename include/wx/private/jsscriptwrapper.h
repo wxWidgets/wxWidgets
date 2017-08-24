@@ -51,8 +51,76 @@ public:
                                      %s;",
                                  m_wx$counter, m_wx$counter, m_wx$counter, m_wx$counter);
 #elif wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
-        return wxString::Format("(%s == null || typeof %s != 'object') ? String(%s) : %s;",
-                                 m_wx$counter, m_wx$counter, m_wx$counter, m_wx$counter);
+        return wxString::Format("try {(%s == null || typeof %s != 'object') ? String(%s) : JSON.stringify(%s);} \
+		    catch (e) { \
+				try \
+				{ \
+					function __wx$stringifyJSON(obj) \
+					{ \
+						var objElements = []; \
+						if (!(obj instanceof Object)) \
+							return typeof obj === \"string\" \
+								? \'\"\' + obj + \'\"\' : \'\' + obj; \
+						else if (obj instanceof Array) \
+						{ \
+							if (obj[0] === undefined) \
+								return \'[]\'; \
+							else \
+							{ \
+								var arr = []; \
+								for (var i = 0; i < obj.length; i++) \
+									arr.push(__wx$stringifyJSON(obj[i])); \
+								return \'[\' + arr + \']\'; \
+							} \
+						} \
+						else if (typeof obj === \"object\") \
+						{ \
+							if (obj instanceof Date) \
+							{ \
+								if (!Date.prototype.toISOString) \
+								{ \
+									(function() \
+									{ \
+										function pad(number) \
+										{ \
+											if (number < 10) \
+												return '0' + number; \
+											return number; \
+										} \
+										\
+										Date.prototype.toISOString = function() \
+										{ \
+											return this.getUTCFullYear() + \
+											'-' + pad(this.getUTCMonth() + 1) + \
+											'-' + pad(this.getUTCDate()) + \
+											'T' + pad(this.getUTCHours()) + \
+											':' + pad(this.getUTCMinutes()) + \
+											':' + pad(this.getUTCSeconds()) + \
+											'.' + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + \
+											'Z\"'; \
+										}; \
+										\
+									}()); \
+								} \
+								return '\"' + obj.toISOString(); + '\"' \
+							} \
+							for (var key in obj) \
+							{ \
+								if (typeof obj[key] === \"function\") \
+									return \'{}\'; \
+								else \
+									objElements.push(\'\"\' \
+									+ key + \'\":\' + \
+									__wx$stringifyJSON(obj[key])); \
+							} \
+							return \'{\' + objElements + \'}\'; \
+						} \
+					} \
+					\
+					__wx$stringifyJSON(%s); \
+				} \
+				catch (e) { e.name + \": \" + e.message; }}",
+                m_wx$counter, m_wx$counter, m_wx$counter, m_wx$counter, m_wx$counter);
 #else
         return m_wx$counter;
 #endif
