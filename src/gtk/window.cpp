@@ -3347,9 +3347,6 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 #if GTK_CHECK_VERSION(3,14,0)
     GtkGesture* vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
 
-    // Enable Pan Gesture only for touch events.
-    gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(vertical_pan_gesture), TRUE);
-
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(vertical_pan_gesture), GTK_PHASE_TARGET);
 
     g_signal_connect (vertical_pan_gesture, "begin",
@@ -3363,8 +3360,10 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
 
-    // Enable Pan Gesture only for touch events.
-    gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(horizontal_pan_gesture), TRUE);
+    // Pan signals are also generated in case of "left mouse down + mouse move". This can be disabled by
+    // calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(horizontal_pan_gesture), TRUE) and
+    // gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(verticaal_pan_gesture), TRUE) which will allow
+    // pan signals only for Touch events.
 
     gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(horizontal_pan_gesture), GTK_PHASE_TARGET);
 
@@ -3405,8 +3404,9 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     GtkGesture* long_press_gesture = gtk_gesture_long_press_new(widget);
 
-    // Enable long press Gesture only for touch events.
-    gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(long_press_gesture), TRUE);
+    // "pressed" signal is also generated when left mouse is down for some minimum duration of time.
+    // This can be disable by calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(long_press_gesture), TRUE)
+    // which will allow "pressed" signal only for Touch events.
 
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(long_press_gesture), GTK_PHASE_TARGET);
 
