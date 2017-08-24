@@ -736,9 +736,6 @@ public:
 
     virtual bool Destroy()
     {
-        // FIXME: why exactly do we do this? to avoid activation events during
-        //        destructions maybe?
-        m_childView = NULL;
         return BaseClass::Destroy();
     }
 
