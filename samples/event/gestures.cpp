@@ -144,17 +144,19 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
     if ( event.IsGestureStart() )
     {
         wxLogMessage("Rotate gesture started\n");
+
+        m_lastRotationAngle = 0.0;
     }
 
-    wxLogMessage("Rotate gesture performed with rotation center at (%d, %d) and rotation angle = %f\n",
-        event.GetPosition().x, event.GetPosition().y, event.GetAngleDelta());
+    wxLogMessage("Rotate gesture performed with rotation center at (%d, %d) and cumulative rotation angle = %f\n",
+        event.GetPosition().x, event.GetPosition().y, event.GetRotationAngle());
 
     const wxPoint& rotationCenter = event.GetPosition();
 
     // Translate to rotation center
     m_affineMatrix.Translate(rotationCenter.x, rotationCenter.y);
     // Rotate
-    m_affineMatrix.Rotate(event.GetAngleDelta());
+    m_affineMatrix.Rotate(event.GetRotationAngle() - m_lastRotationAngle);
     // Translate back
     m_affineMatrix.Translate(-rotationCenter.x, -rotationCenter.y);
 
@@ -162,6 +164,8 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
     {
         wxLogMessage("Rotate gesture Ended\n");
     }
+
+    m_lastRotationAngle = event.GetRotationAngle();
 
     Refresh();
 }

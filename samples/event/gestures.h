@@ -33,6 +33,7 @@ private:
     wxPoint2DDouble m_translateDistance;
     wxAffineMatrix2D m_affineMatrix;
     double m_lastZoomFactor;
+    double m_lastRotationAngle;
 };
 
 #endif // _WX_GESTURES_H_
