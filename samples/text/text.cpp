@@ -588,7 +588,7 @@ bool MyTextCtrl::ms_logClip = false;
 void MyTextCtrl::LogKeyEvent(const wxChar *name, wxKeyEvent& event) const
 {
     wxString key;
-    long keycode = event.GetKeyCode();
+    const int keycode = event.GetKeyCode();
     {
         switch ( keycode )
         {
@@ -710,12 +710,12 @@ void MyTextCtrl::LogKeyEvent(const wxChar *name, wxKeyEvent& event) const
 
             default:
             {
-               if ( wxIsprint((int)keycode) )
-                   key.Printf(wxT("'%c'"), (char)keycode);
+               if ( wxIsprint(keycode) )
+                   key.Printf(wxT("'%c'"), keycode);
                else if ( keycode > 0 && keycode < 27 )
                    key.Printf(_("Ctrl-%c"), wxT('A') + keycode - 1);
                else
-                   key.Printf(wxT("unknown (%ld)"), keycode);
+                   key.Printf(wxT("unknown (%d)"), keycode);
             }
         }
     }
