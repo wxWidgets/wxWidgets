@@ -881,9 +881,9 @@ bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
 }
 
 bool wxWebViewIE::RunScriptInternal(wxVariant varJavascript, wxAutomationObject* scriptAO,
-    wxVariant* varResult, wxString function)
+    wxVariant* varResult)
 {
-    if ( !scriptAO->Invoke(function, DISPATCH_METHOD, *varResult, 1, &varJavascript) )
+    if ( !scriptAO->Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varJavascript) )
     {
         wxLogWarning(_("Can't run Javascript"));
         return false;
@@ -915,145 +915,26 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     wxVariant varJavascript(wrapJS.GetWrappedCode());
     wxVariant varResult;
 
-    if (!RunScriptInternal(varJavascript, &scriptAO, &varResult))
-    {
+    if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
         return false;
-    }
 
     if ( varResult.IsType("bool") && varResult.GetBool() )
     {
         varJavascript = wrapJS.GetOutputCode();
-
         if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
             return false;
 
-        if ( varResult.IsType("void*") )
-        {
-            // Script returned an Object (JScriptTypeInfo IDispatch), convert it to JSON
-            IDispatch* dispatchResult = (IDispatch*)varResult.GetVoidPtr();
-            wxAutomationObject JSONAO;
+        if ( output != NULL )
+            *output = varResult.MakeString();
 
-            if ( dispatchResult )
-            {
-                // JSON is not available in Quirks or IE6/7 standards mode,
-                // which is unfortunately the default one for the embedded
-                // browser control, see
-                // https://docs.microsoft.com/en-us/scripting/javascript/reference/json-object-javascript#requirements
-                // and see here how to make a program run use "modern" modes
-                // https://msdn.microsoft.com/en-us/library/ee330730(v=vs.85)#browser_emulation
-                if ( scriptAO.GetObject(JSONAO, "JSON") )
-                {
-                    wxVariant varJSONStr;
-
-                    // Work around the bug in wxAutomationObject::Invoke(),
-                    // see https://trac.wxwidgets.org/ticket/14293
-                    dispatchResult->AddRef();
-
-                    if ( RunScriptInternal(varJSONStr, &JSONAO, &varResult, "stringify") )
-                    {
-                        varResult = varJSONStr;
-		            }
-                    else
-                    {
-                        dispatchResult->Release();
-                        wxLogWarning(_("JSON.stringify fails when trying to convert object into JSON"));
-                        varJavascript = wrapJS.GetCleanUpCode();
-                        if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
-                            return false;
-                        return false;
-                    }
-                }
-                else
-                {
-                    varJavascript = wxString::Format("try \
-                        { \
-                            function __wx$stringifyJSON(obj) \
-                            { \
-                                var objElements = []; \
-                                if (!(obj instanceof Object)) \
-                                    return typeof obj === \"string\" \
-                                        ? \'\"\' + obj + \'\"\' : \'\' + obj; \
-                                else if (obj instanceof Array) \
-                                { \
-                                    if (obj[0] === undefined) \
-                                        return \'[]\'; \
-                                    else \
-                                    { \
-                                        var arr = []; \
-                                        for (var i = 0; i < obj.length; i++) \
-                                            arr.push(__wx$stringifyJSON(obj[i])); \
-                                        return \'[\' + arr + \']\'; \
-                                    } \
-                                } \
-                                else if (typeof obj === \"object\") \
-                                { \
-                                    if (obj instanceof Date) \
-                                    { \
-                                        if (!Date.prototype.toISOString) \
-                                        { \
-                                            (function() \
-                                            { \
-                                                function pad(number) \
-                                                { \
-                                                    if (number < 10) \
-                                                        return '0' + number; \
-                                                    return number; \
-                                                } \
-                                                \
-                                                Date.prototype.toISOString = function() \
-                                                { \
-                                                    return this.getUTCFullYear() + \
-                                                    '-' + pad(this.getUTCMonth() + 1) + \
-                                                    '-' + pad(this.getUTCDate()) + \
-                                                    'T' + pad(this.getUTCHours()) + \
-                                                    ':' + pad(this.getUTCMinutes()) + \
-                                                    ':' + pad(this.getUTCSeconds()) + \
-                                                    '.' + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + \
-                                                    'Z\"'; \
-                                                }; \
-                                                \
-                                            }()); \
-                                        } \
-                                        return '\"' + obj.toISOString(); + '\"' \
-                                    } \
-                                    for (var key in obj) \
-                                    { \
-                                        if (typeof obj[key] === \"function\") \
-                                            return \'{}\'; \
-                                        else \
-                                            objElements.push(\'\"\' \
-                                            + key + \'\":\' + \
-                                            __wx$stringifyJSON(obj[key])); \
-                                    } \
-                                    return \'{\' + objElements + \'}\'; \
-                                } \
-                            } \
-                            \
-                            __wx$stringifyJSON(eval(\"%s\")); \
-                        } \
-                        catch (e) { e.name + \": \" + e.message; }", wrapJS.GetOutputJSVariable());
-
-                    if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
-                        return false;
-                }
-                dispatchResult->Release();
-            }
-        }
-    }
-    else
-    {
-        wxLogWarning(_("Javascript error: %s"), varResult.MakeString());
-        return false;
+        varJavascript = wrapJS.GetCleanUpCode();
+        if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
+            return false;
+        return true;
     }
 
-    if ( output != NULL )
-        *output = varResult.MakeString();
-
-    varJavascript = wrapJS.GetCleanUpCode();
-    if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
-        return false;
-
-    return true;
+    wxLogWarning(_("Javascript error: %s"), varResult.MakeString());
+    return false;
 }
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

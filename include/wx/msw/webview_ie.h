@@ -201,7 +201,7 @@ private:
     bool EnableControlFeature(long flag, bool enable = true);
 
     bool RunScriptInternal(wxVariant varJavascript,
-        wxAutomationObject* scriptAO, wxVariant* varResult, wxString function = "eval");
+        wxAutomationObject* scriptAO, wxVariant* varResult);
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
