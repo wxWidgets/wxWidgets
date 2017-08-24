@@ -1116,7 +1116,9 @@ void WebFrame::OnRunScriptNull(wxCommandEvent& WXUNUSED(evt))
 void WebFrame::OnRunScriptDate(wxCommandEvent& WXUNUSED(evt))
 {
     wxString result;
-    RunScript("function f(a){return new Date(a);}f(\"10-08-2017 21:30:40\");", &result);
+    RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
+        var tzoffset = d.getTimezoneOffset() * 60000; \
+        return new Date(d.getTime() - tzoffset);}f();", &result);
 }
 
 #if wxUSE_WEBVIEW_IE
@@ -1133,7 +1135,9 @@ void WebFrame::OnRunScriptDateWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
 {
     wxWebViewIE::MSWSetModernEmulationLevel();
     wxString result;
-    RunScript("function f(a){return new Date(a);}f(\"10-08-2017 21:30:40\");", &result);
+    RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
+        var tzoffset = d.getTimezoneOffset() * 60000; return \
+        new Date(d.getTime() - tzoffset);}f();", &result);
     wxWebViewIE::MSWSetModernEmulationLevel(false);
 }
 
