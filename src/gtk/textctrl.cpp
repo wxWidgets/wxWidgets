@@ -1030,6 +1030,30 @@ bool wxTextCtrl::IsEmpty() const
     return wxTextEntry::IsEmpty();
 }
 
+// Helper class used by DoSetValue() and WriteText() to temporarily reset
+// m_imKeyEvent to NULL and restore its original value in the dtor.
+class TemporarilyUnsetIMKeyEvent
+{
+public:
+    explicit TemporarilyUnsetIMKeyEvent(GdkEventKey*& event)
+        : m_event(event),
+          m_eventOrig(event)
+    {
+        m_event = NULL;
+    }
+
+    ~TemporarilyUnsetIMKeyEvent()
+    {
+        m_event = m_eventOrig;
+    }
+
+private:
+    GdkEventKey*& m_event;
+    GdkEventKey* const m_eventOrig;
+
+    wxDECLARE_NO_COPY_CLASS(TemporarilyUnsetIMKeyEvent);
+};
+
 void wxTextCtrl::DoSetValue( const wxString &value, int flags )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
@@ -1079,6 +1103,12 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         EnableTextChangedEvents(false);
     }
 
+    // This will emit insert-text signal which assumes that if m_imKeyEvent is
+    // set, it is called in response to this key press -- which is not the case
+    // here (but m_imKeyEvent might still be set e.g. because we're called from
+    // a menu event handler triggered by a keyboard accelerator).
+    TemporarilyUnsetIMKeyEvent unset(m_imKeyEvent);
+
     gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
 
     if ( !(flags & SetValue_SendEvent) )
@@ -1095,9 +1125,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     DontMarkDirtyOnNextChange();
 
     // avoid generating wxEVT_CHAR when called from wxEVT_CHAR handler
-    GdkEventKey* const imKeyEvent_save = m_imKeyEvent;
-    m_imKeyEvent = NULL;
-    wxON_BLOCK_EXIT_SET(m_imKeyEvent, imKeyEvent_save);
+    TemporarilyUnsetIMKeyEvent unset(m_imKeyEvent);
 
     if ( !IsMultiLine() )
     {
