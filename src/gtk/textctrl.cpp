@@ -1056,7 +1056,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     }
 
 #if wxUSE_UNICODE
-    const wxCharBuffer buffer(text.utf8_str());
+    const wxScopedCharBuffer buffer(text.utf8_str());
 #else
     // check if we have a specific style for the current position
     wxFontEncoding enc = wxFONTENCODING_SYSTEM;
@@ -1069,7 +1069,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( enc == wxFONTENCODING_SYSTEM )
         enc = GetTextEncoding();
 
-    const wxCharBuffer buffer(wxGTK_CONV_ENC(text, enc));
+    const wxScopedCharBuffer buffer(wxGTK_CONV_ENC(text, enc));
     if ( !buffer )
     {
         // we must log an error here as losing the text like this can be a
@@ -1088,7 +1088,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     gtk_text_buffer_get_iter_at_mark( m_buffer, &iter,
                                       gtk_text_buffer_get_insert (m_buffer) );
 
-    gtk_text_buffer_insert( m_buffer, &iter, buffer, strlen(buffer) );
+    gtk_text_buffer_insert( m_buffer, &iter, buffer, buffer.length() );
 
     // Scroll to cursor, but only if scrollbar thumb is at the very bottom
     // won't work when frozen, text view is not using m_buffer then
