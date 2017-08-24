@@ -112,7 +112,6 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     LoadURL(url);
 
-    m_runScriptCount = 0;
     return true;
 }
 
@@ -857,21 +856,24 @@ wxString wxWebViewIE::GetPageText() const
     }
 }
 
-bool wxWebViewIE::MSWSetEmulationLevel(bool defaultLevel)
+bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
 {
-    wxRegKey key(wxRegKey::HKCU, _T(REGISTRY_IE_PATH));
+    wxRegKey key(wxRegKey::HKCU, wxREGISTRY_IE_PATH);
     if ( key.Exists() )
     {
-        if ( !defaultLevel )
-	    {
-            if ( !key.SetValue(wxGetFullModuleName().AfterLast('\\'), IE_EMULATION_LEVEL) )
+        wxString programName = wxGetFullModuleName().AfterLast('\\');
+        if ( modernLevel )
+        {
+            if ( !key.SetValue(programName, wxIE_EMULATION_LEVEL) )
             {
 	            wxLogWarning(_("Failed to set the current browser control emulation level"));
                 return false;
             }
         }
         else
-            key.DeleteValue(wxGetFullModuleName().AfterLast('\\'));
+	{
+            key.DeleteValue(programName);
+	}
         return true;
     }
     wxLogWarning(_("Failed to find current browser control emulation level"));
@@ -913,12 +915,14 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     wxVariant varJavascript(wrapJS.GetWrappedCode());
     wxVariant varResult;
 
-    if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
+    if (!RunScriptInternal(varJavascript, &scriptAO, &varResult))
+    {
         return false;
+    }
 
     if ( varResult.IsType("bool") && varResult.GetBool() )
     {
-         varJavascript = wrapJS.GetOutputCode();
+        varJavascript = wrapJS.GetOutputCode();
 
         if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
             return false;
@@ -946,11 +950,16 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
                     dispatchResult->AddRef();
 
                     if ( RunScriptInternal(varJSONStr, &JSONAO, &varResult, "stringify") )
+                    {
                         varResult = varJSONStr;
+		            }
                     else
                     {
                         dispatchResult->Release();
                         wxLogWarning(_("JSON.stringify fails when trying to convert object into JSON"));
+                        varJavascript = wrapJS.GetCleanUpCode();
+                        if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
+                            return false;
                         return false;
                     }
                 }
@@ -1039,6 +1048,10 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 
     if ( output != NULL )
         *output = varResult.MakeString();
+
+    varJavascript = wrapJS.GetCleanUpCode();
+    if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
+        return false;
 
     return true;
 }
