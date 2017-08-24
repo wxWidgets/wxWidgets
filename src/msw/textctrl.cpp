@@ -1334,7 +1334,12 @@ wxTextPos wxTextCtrl::GetLastPosition() const
 {
     if ( IsMultiLine() )
     {
-        return ::GetWindowTextLength(GetHwnd());
+        int numLines = GetNumberOfLines();
+        long posStartLastLine = XYToPosition(0, numLines - 1);
+
+        long lenLastLine = GetLengthOfLineContainingPos(posStartLastLine);
+
+        return posStartLastLine + lenLastLine;
     }
 
     return wxTextEntry::GetLastPosition();
