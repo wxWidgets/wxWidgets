@@ -1058,7 +1058,7 @@ void WebFrame::RunScript(const wxString& javascript, wxString* result, const wxS
         if ( m_browser->RunScript(dialog.GetValue(), result))
 	{
 	    if ( result != NULL )
-	        wxLogMessage(_("RunScript result: %s\n"), *result);
+	        wxLogMessage(_("RunScript result: %s"), *result);
 	    else
 	        wxLogMessage(_("RunScript ran properly"));
 	}
