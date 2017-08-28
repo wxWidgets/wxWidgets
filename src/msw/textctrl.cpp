@@ -1557,7 +1557,8 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
         // so we need to take into account new line characters which were
         // not counted by EM_LINELENGTH.
         long lineLengthFull = charIndexNextLn - charIndex;
-        wxASSERT(lineLengthFull - lineLength == 2); // In case.
+        // (lineLengthFull - lineLength) can be 0 (for wrapped line),
+        // 1 (for \r new line mark) or 2 (for \r\n new line mark).
         if ( pos > lineLengthFull )
         {
             return false;
