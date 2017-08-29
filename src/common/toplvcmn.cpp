@@ -105,10 +105,10 @@ bool wxTopLevelWindowBase::Destroy()
     // as we will be deleted anyhow during its destruction and the pointer
     // stored in wxPendingDelete would become invalid, so just delete ourselves
     // immediately in this case.
-    if ( wxWindow* parent = GetParent() )
+    wxWindow* parent = GetParent();
+    if ( (parent && parent->IsBeingDeleted()) || !GetHandle() )
     {
-        if ( parent->IsBeingDeleted() )
-            return wxNonOwnedWindow::Destroy();
+        return wxNonOwnedWindow::Destroy();
     }
 
     // delayed destruction: the frame will be deleted during the next idle
