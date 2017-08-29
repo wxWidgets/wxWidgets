@@ -3806,14 +3806,16 @@ public:
     wxRotateGestureEvent(wxWindowID windid = 0);
 
     /**
-        Returns the cumulative angle of rotation in radians in clockwise direction since the
-        gesture was first started i.e. when IsGestureStart() returned true.
+        Returns the total angle of rotation in radians in clockwise direction since the
+        gesture was first started i.e. when IsGestureStart() returned true. This value is always
+        greater or equal to zero.
     */
     double GetRotationAngle() const;
 
      /**
-        Sets the cumulative angle of rotation in radians in clockwise direction since the
-        gesture was first started i.e. when IsGestureStart() returned true.
+        Sets the total angle of rotation in radians in clockwise direction since the
+        gesture was first started i.e. when IsGestureStart() returned true. This value is always
+        greater or equal to zero.
     */
     void SetRotationAngle(double rotationAngle);
 };
