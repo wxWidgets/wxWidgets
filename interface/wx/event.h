@@ -3808,14 +3808,14 @@ public:
     /**
         Returns the total angle of rotation in radians in clockwise direction since the
         gesture was first started i.e. when IsGestureStart() returned true. This value is always
-        greater or equal to zero.
+        greater than or equal to zero.
     */
     double GetRotationAngle() const;
 
      /**
         Sets the total angle of rotation in radians in clockwise direction since the
         gesture was first started i.e. when IsGestureStart() returned true. This value is always
-        greater or equal to zero.
+        greater than or equal to zero.
     */
     void SetRotationAngle(double rotationAngle);
 };
