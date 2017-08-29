@@ -5798,6 +5798,13 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
         // So, multiply angle by -1 for positive angle for clockwise and negative in case of counterclockwise
         double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
 
+        // If the rotation is anti-clockwise subtract the value of angle from 360 degrees (6.28319) to make it positive.
+        if ( angle < 0 )
+        {
+            angle = -angle;
+            angle = 6.28319 - angle;
+        }
+
         // Set the angle
         event.SetRotationAngle(angle);
     }
