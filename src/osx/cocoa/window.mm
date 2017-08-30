@@ -1634,7 +1634,7 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
     // Multiply the returned rotation angle with -1 to obtain the angle in a clockwise sense.
     double angle = -[rotationGestureRecognizer rotation];
 
-    //  If the rotation is anti-clockwise convert the angle to its corresponding positive value in a clockwise sense.
+    // If the rotation is anti-clockwise convert the angle to its corresponding positive value in a clockwise sense.
     if ( angle < 0 )
     {
         angle += 2 * M_PI;

@@ -5798,7 +5798,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
         // So, multiply angle by -1 for positive angle for clockwise and negative in case of counterclockwise
         double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
 
-        //  If the rotation is anti-clockwise convert the angle to its corresponding positive value in a clockwise sense.
+        // If the rotation is anti-clockwise convert the angle to its corresponding positive value in a clockwise sense.
         if ( angle < 0 )
         {
             angle += 2 * M_PI;
