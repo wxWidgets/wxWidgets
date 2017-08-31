@@ -845,6 +845,12 @@ void wxNSTextViewControl::SetEditable(bool editable)
         [m_textView setEditable: editable];
 }
 
+long wxNSTextViewControl::GetLastPosition() const
+{
+    wxCHECK( m_textView, 0 );
+    return [[m_textView string] length];
+}
+
 void wxNSTextViewControl::GetSelection( long* from, long* to) const
 {
     if (m_textView)
@@ -1219,6 +1225,11 @@ bool wxNSTextFieldControl::CanPaste() const
 void wxNSTextFieldControl::SetEditable(bool editable)
 {
     [m_textField setEditable:editable];
+}
+
+long wxNSTextFieldControl::GetLastPosition() const
+{
+    return [[m_textField stringValue] length];
 }
 
 void wxNSTextFieldControl::GetSelection( long* from, long* to) const
