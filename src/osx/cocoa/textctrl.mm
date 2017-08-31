@@ -915,14 +915,24 @@ long wxNSTextViewControl::XYToPosition(long x, long y) const
 
     NSString* txt = [m_textView string];
     const long txtLen = [txt length];
-    long nline = 0;
+    long nline = -1;
     NSRange lineRng;
-    for ( long i = 0; i < txtLen && nline <= y; nline++ )
+    long i = 0;
+    // We need to enter the counting loop at least once,
+    // even for empty text string.
+    do
     {
+        nline++;
         lineRng = [txt lineRangeForRange:NSMakeRange(i, 0)];
         i = NSMaxRange(lineRng);
-    }
-    nline--;
+    } while ( i < txtLen && nline < y );
+    // In the last line, the last valid position is after
+    // the last real character, so we need to extended actual
+    // range to count this additional virtual character.
+    // In any other line, the last valid position is at
+    // the new line character which is already counted.
+    if ( i == txtLen )
+        lineRng.length++;
 
     // Return error if contol contains
     // less lines than given y position.
@@ -1276,7 +1286,8 @@ long wxNSTextFieldControl::XYToPosition(long x, long y) const
 {
     wxCHECK_MSG( x >= 0 && y >= 0, -1, wxS("Invalid line/column number") );
 
-    if ( y != 0 || x >= [[m_textField stringValue] length] )
+    // Last valid position is after the last character.
+    if ( y != 0 || x > [[m_textField stringValue] length] )
         return -1;
 
     return x;
