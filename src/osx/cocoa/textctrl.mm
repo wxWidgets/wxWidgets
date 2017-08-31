@@ -933,14 +933,34 @@ long wxNSTextViewControl::XYToPosition(long x, long y) const
         i = NSMaxRange(lineRng);
     } while ( i < txtLen && nline < y );
     // In the last line, the last valid position is after
-    // the last real character, so we need to extended actual
-    // range to count this additional virtual character.
+    // the last real character, so we need to count
+    // this additional virtual character.
     // In any other line, the last valid position is at
     // the new line character which is already counted.
     if ( i == txtLen )
-        lineRng.length++;
-
-    // Return error if contol contains
+    {
+        const bool endsWithNewLine = txtLen > 0 &&
+                                     [txt characterAtIndex:txtLen-1] == '\n';
+        // If text ends with new line, simulated character
+        // is placed in the additional virtual line.
+        if ( endsWithNewLine )
+        {
+            //  Creating additional virtual line makes sense only
+            // if we look for a position beyond the last real line.
+            if ( nline < y )
+            {
+                nline++;
+                lineRng = NSMakeRange(i, 1);
+            }
+        }
+        else
+        {
+            // Just extended actual range to count
+            // additional virtual character
+            lineRng.length++;
+        }
+    }
+    // Return error if control contains
     // less lines than given y position.
     if ( nline != y )
         return  -1;
