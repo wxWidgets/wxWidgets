@@ -828,12 +828,13 @@ void TextCtrlTestCase::XYToPositionMultiLine()
     wxString text;
     // empty field
     m_text->Clear();
-    const long maxLineLength_0 = 0;
+    const long maxLineLength_0 = 0+1;
     const long numLines_0 = 1;
     CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_0 );
     long pos_0[numLines_0+1][maxLineLength_0+1] =
-        { { 0 } };
-    for ( long y = 0; y < numLines_0; y++ )
+        { {  0, -1 },
+          { -1, -1 } };
+    for ( long y = 0; y < numLines_0+1; y++ )
         for( long x = 0; x < maxLineLength_0+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
@@ -843,13 +844,13 @@ void TextCtrlTestCase::XYToPositionMultiLine()
     // one line
     text = wxS("1234");
     m_text->SetValue(text);
-    const long maxLineLength_1 = 4;
+    const long maxLineLength_1 = 4+1;
     const long numLines_1 = 1;
     CPPUNIT_ASSERT_EQUAL( m_text->GetNumberOfLines(), numLines_1 );
     long pos_1[numLines_1+1][maxLineLength_1+1] =
-        { {  0,  1,  2,  3,  4 },
-          { -1, -1, -1, -1, -1 } };
-    for ( long y = 0; y < numLines_1; y++ )
+        { {  0,  1,  2,  3,  4, -1 },
+          { -1, -1, -1, -1, -1, -1 } };
+    for ( long y = 0; y < numLines_1+1; y++ )
         for( long x = 0; x < maxLineLength_1+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
@@ -865,17 +866,19 @@ void TextCtrlTestCase::XYToPositionMultiLine()
 #if defined(__WXMSW__)
     // Note: New lines are occupied by two characters.
     long pos_2[numLines_2 + 1][maxLineLength_2 + 1] =
-        { { 0,  1,  2,  3, -1 },    // New line occupies positions 3, 4
-          { 5,  6,  7, -1, -1 },    // New line occupies positions 7, 8
-          { 9, 10, -1, -1, -1 } };
+        { {  0,  1,  2,  3, -1 },   // New line occupies positions 3, 4
+          {  5,  6,  7, -1, -1 },   // New line occupies positions 7, 8
+          {  9, 10, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 } };
 #else
     long pos_2[numLines_2+1][maxLineLength_2+1] =
         { {  0,  1,  2,  3, -1 },
           {  4,  5,  6, -1, -1 },
-          {  7, -1, -1, -1, -1 } };
+          {  7,  8, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 } };
 #endif // WXMSW/!WXMSW
 
-    for ( long y = 0; y < numLines_2; y++ )
+    for ( long y = 0; y < numLines_2+1; y++ )
         for( long x = 0; x < maxLineLength_2+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
@@ -901,11 +904,11 @@ void TextCtrlTestCase::XYToPositionMultiLine()
         { {  0, -1 },
           {  1, -1 },
           {  2, -1 },
-          { -1, -1 },
+          {  3, -1 },
           { -1, -1 } };
 #endif // WXMSW/!WXMSW
 
-    for ( long y = 0; y < numLines_3; y++ )
+    for ( long y = 0; y < numLines_3+1; y++ )
         for( long x = 0; x < maxLineLength_3+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
@@ -935,11 +938,11 @@ void TextCtrlTestCase::XYToPositionMultiLine()
           {  6, -1, -1, -1, -1 },
           {  7,  8, -1, -1, -1 },
           {  9, -1, -1, -1, -1 },
-          { -1, -1, -1, -1, -1 },
+          { 10, -1, -1, -1, -1 },
           { -1, -1, -1, -1, -1 } };
 #endif // WXMSW/!WXMSW
 
-    for ( long y = 0; y < numLines_4; y++ )
+    for ( long y = 0; y < numLines_4+1; y++ )
         for( long x = 0; x < maxLineLength_4+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
