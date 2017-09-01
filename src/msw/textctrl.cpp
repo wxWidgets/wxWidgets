@@ -1334,12 +1334,19 @@ wxTextPos wxTextCtrl::GetLastPosition() const
 {
     if ( IsMultiLine() )
     {
-        int numLines = GetNumberOfLines();
-        long posStartLastLine = XYToPosition(0, numLines - 1);
-
-        long lenLastLine = GetLengthOfLineContainingPos(posStartLastLine);
-
-        return posStartLastLine + lenLastLine;
+#if wxUSE_RICHEDIT
+        if ( IsRich() )
+        {
+            GETTEXTLENGTHEX gtl;
+            gtl.flags = GTL_NUMCHARS | GTL_PRECISE;
+            gtl.codepage = GetRichVersion() > 1 ? 1200 : CP_ACP;
+            return ::SendMessage(GetHwnd(), EM_GETTEXTLENGTHEX, (WPARAM)&gtl, 0);
+        }
+        else
+#endif // wxUSE_RICHEDIT
+        {
+            return ::GetWindowTextLength(GetHwnd());
+        }
     }
 
     return wxTextEntry::GetLastPosition();
