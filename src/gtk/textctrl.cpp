@@ -1030,71 +1030,21 @@ bool wxTextCtrl::IsEmpty() const
     return wxTextEntry::IsEmpty();
 }
 
-void wxTextCtrl::DoSetValue( const wxString &value, int flags )
-{
-    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
-
-    m_modified = false;
-
-    if ( !IsMultiLine() )
-    {
-        wxTextEntry::DoSetValue(value, flags);
-        return;
-    }
-
-    if (value.IsEmpty())
-    {
-        if ( !(flags & SetValue_SendEvent) )
-            EnableTextChangedEvents(false);
-
-        gtk_text_buffer_set_text( m_buffer, "", 0 );
-
-        if ( !(flags & SetValue_SendEvent) )
-            EnableTextChangedEvents(true);
-
-        return;
-    }
-
-#if wxUSE_UNICODE
-    const wxCharBuffer buffer(value.utf8_str());
-#else
-    wxFontEncoding enc = m_defaultStyle.HasFont()
-                            ? m_defaultStyle.GetFont().GetEncoding()
-                            : wxFONTENCODING_SYSTEM;
-    if ( enc == wxFONTENCODING_SYSTEM )
-        enc = GetTextEncoding();
-
-    const wxCharBuffer buffer(wxGTK_CONV_ENC(value, enc));
-    if ( !buffer )
-    {
-        // see comment in WriteText() as to why we must warn the user about
-        // this
-        wxLogWarning(_("Failed to set text in the text control."));
-        return;
-    }
-#endif
-
-    if ( !(flags & SetValue_SendEvent) )
-    {
-        EnableTextChangedEvents(false);
-    }
-
-    gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
-
-    if ( !(flags & SetValue_SendEvent) )
-    {
-        EnableTextChangedEvents(true);
-    }
-}
-
 void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
+    if ( text.empty() )
+        return;
+
     // we're changing the text programmatically
     DontMarkDirtyOnNextChange();
 
-    // avoid generating wxEVT_CHAR when called from wxEVT_CHAR handler
+    // Inserting new text into the control below will emit insert-text signal
+    // which assumes that if m_imKeyEvent is set, it is called in response to
+    // this key press -- which is not the case here (but m_imKeyEvent might
+    // still be set e.g. because we're called from a menu event handler
+    // triggered by a keyboard accelerator), so reset m_imKeyEvent temporarily.
     GdkEventKey* const imKeyEvent_save = m_imKeyEvent;
     m_imKeyEvent = NULL;
     wxON_BLOCK_EXIT_SET(m_imKeyEvent, imKeyEvent_save);
@@ -1106,7 +1056,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     }
 
 #if wxUSE_UNICODE
-    const wxCharBuffer buffer(text.utf8_str());
+    const wxScopedCharBuffer buffer(text.utf8_str());
 #else
     // check if we have a specific style for the current position
     wxFontEncoding enc = wxFONTENCODING_SYSTEM;
@@ -1119,7 +1069,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( enc == wxFONTENCODING_SYSTEM )
         enc = GetTextEncoding();
 
-    const wxCharBuffer buffer(wxGTK_CONV_ENC(text, enc));
+    const wxScopedCharBuffer buffer(wxGTK_CONV_ENC(text, enc));
     if ( !buffer )
     {
         // we must log an error here as losing the text like this can be a
@@ -1137,7 +1087,8 @@ void wxTextCtrl::WriteText( const wxString &text )
     GtkTextIter iter;
     gtk_text_buffer_get_iter_at_mark( m_buffer, &iter,
                                       gtk_text_buffer_get_insert (m_buffer) );
-    gtk_text_buffer_insert( m_buffer, &iter, buffer, strlen(buffer) );
+
+    gtk_text_buffer_insert( m_buffer, &iter, buffer, buffer.length() );
 
     // Scroll to cursor, but only if scrollbar thumb is at the very bottom
     // won't work when frozen, text view is not using m_buffer then

@@ -60,6 +60,7 @@ public :
     virtual void Paste() wxOVERRIDE ;
     virtual bool CanPaste() const wxOVERRIDE ;
     virtual void SetEditable(bool editable) wxOVERRIDE ;
+    virtual long GetLastPosition() const wxOVERRIDE;
     virtual void GetSelection( long* from, long* to) const wxOVERRIDE ;
     virtual void SetSelection( long from , long to ) wxOVERRIDE;
     virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE;
@@ -103,6 +104,7 @@ public:
     virtual void Paste() wxOVERRIDE ;
     virtual bool CanPaste() const wxOVERRIDE ;
     virtual void SetEditable(bool editable) wxOVERRIDE ;
+    virtual long GetLastPosition() const wxOVERRIDE;
     virtual void GetSelection( long* from, long* to) const wxOVERRIDE ;
     virtual void SetSelection( long from , long to ) wxOVERRIDE;
     virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE;

@@ -1334,7 +1334,19 @@ wxTextPos wxTextCtrl::GetLastPosition() const
 {
     if ( IsMultiLine() )
     {
-        return ::GetWindowTextLength(GetHwnd());
+#if wxUSE_RICHEDIT
+        if ( IsRich() )
+        {
+            GETTEXTLENGTHEX gtl;
+            gtl.flags = GTL_NUMCHARS | GTL_PRECISE;
+            gtl.codepage = GetRichVersion() > 1 ? 1200 : CP_ACP;
+            return ::SendMessage(GetHwnd(), EM_GETTEXTLENGTHEX, (WPARAM)&gtl, 0);
+        }
+        else
+#endif // wxUSE_RICHEDIT
+        {
+            return ::GetWindowTextLength(GetHwnd());
+        }
     }
 
     return wxTextEntry::GetLastPosition();
@@ -1486,13 +1498,12 @@ long wxTextCtrl::XYToPosition(long x, long y) const
 
     // Line is identified by a character position!
     long lineLength = ::SendMessage(GetHwnd(), EM_LINELENGTH, charIndex, 0);
-    // For all lines but last one we need to adjust the length
-    // to include new line character (only one because both CR and LF
-    // are virtually "displayed" at the same position).
-    if ( y < GetNumberOfLines() - 1 )
-        lineLength += 1;
 
-    if ( x >= lineLength )
+    // Notice that x == lineLength is still valid because it corresponds either
+    // to the position of the LF at the end of any line except the last one or
+    // to the last position, which is the position after the last character,
+    // for the last line.
+    if ( x > lineLength )
         return -1;
 
     return charIndex + x;
@@ -1557,7 +1568,8 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
         // so we need to take into account new line characters which were
         // not counted by EM_LINELENGTH.
         long lineLengthFull = charIndexNextLn - charIndex;
-        wxASSERT(lineLengthFull - lineLength == 2); // In case.
+        // (lineLengthFull - lineLength) can be 0 (for wrapped line),
+        // 1 (for \r new line mark) or 2 (for \r\n new line mark).
         if ( pos > lineLengthFull )
         {
             return false;

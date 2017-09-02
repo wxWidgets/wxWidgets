@@ -674,7 +674,7 @@ void wxToolBarBase::OnMouseEnter(int toolid)
     event.SetEventObject(this);
     event.SetInt(toolid);
 
-    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+    wxFrame *frame = wxDynamicCast(wxGetTopLevelParent(this), wxFrame);
     if ( frame )
     {
         wxString help;

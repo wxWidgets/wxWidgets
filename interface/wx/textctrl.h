@@ -1304,9 +1304,9 @@ public:
     /**
         Finds the position of the character at the specified point.
 
-        If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
-        character closest to this position are returned, otherwise the output
-        parameters are not modified.
+        If the return code is not @c wxTE_HT_UNKNOWN the position of the
+        character closest to this position is returned, otherwise the output
+        parameter is not modified.
 
         Please note that this function is currently only implemented in wxUniv,
         wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
@@ -1314,7 +1314,7 @@ public:
 
         @beginWxPerlOnly
         In wxPerl this function takes only the @a pt argument and
-        returns a 3-element list (result, col, row).
+        returns a 2-element list (result, pos).
         @endWxPerlOnly
 
         @param pt

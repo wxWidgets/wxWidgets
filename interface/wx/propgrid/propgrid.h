@@ -1426,6 +1426,22 @@ public:
     bool WasVetoed() const;
 };
 
+
+wxEventType wxEVT_PG_SELECTED;
+wxEventType wxEVT_PG_CHANGING;
+wxEventType wxEVT_PG_CHANGED;
+wxEventType wxEVT_PG_HIGHLIGHTED;
+wxEventType wxEVT_PG_RIGHT_CLICK;
+wxEventType wxEVT_PG_PAGE_CHANGED;
+wxEventType wxEVT_PG_ITEM_COLLAPSED;
+wxEventType wxEVT_PG_ITEM_EXPANDED;
+wxEventType wxEVT_PG_DOUBLE_CLICK;
+wxEventType wxEVT_PG_LABEL_EDIT_BEGIN;
+wxEventType wxEVT_PG_LABEL_EDIT_ENDING;
+wxEventType wxEVT_PG_COL_BEGIN_DRAG;
+wxEventType wxEVT_PG_COL_DRAGGING;
+wxEventType wxEVT_PG_COL_END_DRAG;
+
 // -----------------------------------------------------------------------
 
 /** @class wxPropertyGridPopulator
