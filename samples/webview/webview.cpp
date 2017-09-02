@@ -1056,14 +1056,16 @@ void WebFrame::RunScript(const wxString& javascript, wxString* result, const wxS
     if( dialog.ShowModal() == wxID_OK )
     {
         if ( m_browser->RunScript(dialog.GetValue(), result))
-	{
-	    if ( result != NULL )
-	        wxLogMessage(_("RunScript result: %s"), *result);
-	    else
-	        wxLogMessage(_("RunScript ran properly"));
-	}
+        {
+            if ( result != NULL )
+                wxLogMessage(_("RunScript result: %s"), *result);
+            else
+                wxLogMessage(_("RunScript ran properly"));
+        }
         else
+        {
             wxLogWarning(_("RunScript returned false"));
+        }
     }
 }
 

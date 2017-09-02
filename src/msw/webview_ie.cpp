@@ -866,14 +866,14 @@ bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
         {
             if ( !key.SetValue(programName, wxIE_EMULATION_LEVEL) )
             {
-	            wxLogWarning(_("Failed to set the current browser control emulation level"));
+                wxLogWarning(_("Failed to set the current browser control emulation level"));
                 return false;
             }
         }
         else
-	{
+        {
             key.DeleteValue(programName);
-	}
+        }
         return true;
     }
     wxLogWarning(_("Failed to find current browser control emulation level"));
