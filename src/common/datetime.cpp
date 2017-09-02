@@ -1770,10 +1770,7 @@ wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags)
         return *this;
     }
 
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     // the logic below based on comparing weekday and wdayThis works if Sun (0)
     // is the first day in the week, but breaks down for Monday_First case so
@@ -1928,10 +1925,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
 wxDateTime::wxDateTime_t
 wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
 {
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     Tm tm(GetTm(tz));
     wxDateTime_t nDayInYear = GetDayOfYearFromTm(tm);
@@ -2018,10 +2012,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
     const wxDateTime dateFirst = wxDateTime(1, tm.mon, tm.year);
     const wxDateTime::WeekDay wdFirst = dateFirst.GetWeekDay();
 
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     // compute offset of dateFirst from the beginning of the week
     int firstOffset;
@@ -2132,6 +2123,16 @@ wxDateTime& wxDateTime::MakeFromTimezone(const TimeZone& tz, bool noDST)
     }
 
     return Subtract(wxTimeSpan::Seconds(secDiff));
+}
+
+void wxDateTime::UseEffectiveWeekDayFlags(WeekFlags &flags) const
+{
+    if ( flags == Default_First )
+    {
+        WeekDay firstDay;
+        GetFirstWeekDay(&firstDay);
+        flags = firstDay == Sun ? Sunday_First : Monday_First;
+    }
 }
 
 // ============================================================================

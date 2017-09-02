@@ -1145,6 +1145,9 @@ private:
     // functions
     inline bool IsInStdRange() const;
 
+    // assign the preferred first day of a week to flags, if necessary
+    void UseEffectiveWeekDayFlags(WeekFlags &flags) const;
+
     // the internal representation of the time is the amount of milliseconds
     // elapsed since the origin which is set by convention to the UNIX/C epoch
     // value: the midnight of January 1, 1970 (UTC)
