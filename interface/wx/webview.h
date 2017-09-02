@@ -460,11 +460,50 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
-        Runs the given javascript code.
-        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
-              page to finish loading before calling RunScript().
+        Sets IE emulation level to a modern one, changing MSW registry. It is used to enable
+        JSON object on Runscript(), because it wouldn't work with default emulation level.
+        @see RunScript() for further details.
+        @param modernLevel @true to set level to IE8, @false to set level to old mode.
+        @return @true if level can be set, @false if it is not.
+        @since 3.1.1
     */
-    virtual void RunScript(const wxString& javascript) = 0;
+    bool MSWSetModernEmulationLevel(bool modernLevel = true) = 0;
+
+    /**
+        Runs the given JavaScript. It returns true if the script was run successfully and
+        additionally returns the script return value in output.
+        It returns strings, integers, floating point numbers, booleans and objects (as JSON).
+        @note When using wxWEBVIEW_WEBKIT (GTK), it returns true always unless you pass
+              an output param to the method. In that case, it would return false. RunScript
+              outputs are supported on wxWEBVIEW_WEBKIT2 (GTK3).
+
+              When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
+              1) Javascript allocations greater than 10MB.
+              2) Javascript that takes longer than 10 seconds to execute.
+
+              When using wxWEBVIEW_BACKEND_IE you must wait for the current
+              page to finish loading before calling RunScript().
+              It is compulsory to have a script tag inside HTML to run Javascript, on MSW.
+
+              When using wxWEBVIEW_BACKEND_IE, JSON is not available in Quirks or
+              IE6/7 standards mode, which is unfortunately the default one for the embedded browser control, see
+              https://docs.microsoft.com/en-us/scripting/javascript/reference/json-object-javascript#requirements
+              and see here how to make a program run use "modern" modes
+              https://msdn.microsoft.com/en-us/library/ee330730(v=vs.85)#browser_emulation
+              There are two ways to get JSON working:
+              1) You can use MSWModernEmulationLevel to change emulation level (recommended), for example:
+              @code
+                  MSWModernEmulationLevel();
+                  wxString result;
+                  browser->RunScript("some JS code that uses JSON", &result);
+              @endcode
+              2) There is an implementation of JSON.stringify on RunScript that helps to return objects.
+              You don't need to change IE emulation level but it could not work for some cases.
+        @param javascript A wxString containing the Javascript.
+        @param output wxString result pointer. It can be NULL and it is new in wxWidgets 3.1.1.
+        @return @true if there is a result, @false if there is an error.
+    */
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user

@@ -30,6 +30,9 @@
 #include "wx/notifmsg.h"
 #include "wx/settings.h"
 #include "wx/webview.h"
+#if wxUSE_WEBVIEW_IE
+#include "wx/msw/webview_ie.h"
+#endif
 #include "wx/webviewarchivehandler.h"
 #include "wx/webviewfshandler.h"
 #include "wx/infobar.h"
@@ -63,7 +66,7 @@ class WebApp : public wxApp
 {
 public:
     WebApp() :
-        m_url("http://www.wxwidgets.org")
+        m_url("http://wiki.wxwidgets.org")
     {
     }
 
@@ -133,7 +136,24 @@ public:
     void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
     void OnScrollPageUp(wxCommandEvent&) { m_browser->PageUp(); }
     void OnScrollPageDown(wxCommandEvent&) { m_browser->PageDown(); }
-    void OnRunScript(wxCommandEvent& evt);
+    void RunScript(const wxString& javascript, wxString* result = NULL,
+        const wxString& messege = "Click OK to run JavaScript.");
+    void OnRunScriptString(wxCommandEvent& evt);
+    void OnRunScriptInteger(wxCommandEvent& evt);
+    void OnRunScriptDouble(wxCommandEvent& evt);
+    void OnRunScriptBool(wxCommandEvent& evt);
+    void OnRunScriptObject(wxCommandEvent& evt);
+    void OnRunScriptArray(wxCommandEvent& evt);
+    void OnRunScriptDOM(wxCommandEvent& evt);
+    void OnRunScriptUndefined(wxCommandEvent& evt);
+    void OnRunScriptNull(wxCommandEvent& evt);
+    void OnRunScriptDate(wxCommandEvent& evt);
+#if wxUSE_WEBVIEW_IE
+    void OnRunScriptObjectWithEmulationLevel(wxCommandEvent& evt);
+    void OnRunScriptDateWithEmulationLevel(wxCommandEvent& evt);
+    void OnRunScriptArrayWithEmulationLevel(wxCommandEvent& evt);
+#endif
+    void OnRunScriptCustom(wxCommandEvent& evt);
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -186,6 +206,22 @@ private:
     wxMenuItem* m_scroll_line_down;
     wxMenuItem* m_scroll_page_up;
     wxMenuItem* m_scroll_page_down;
+    wxMenuItem* m_script_string;
+    wxMenuItem* m_script_integer;
+    wxMenuItem* m_script_double;
+    wxMenuItem* m_script_bool;
+    wxMenuItem* m_script_object;
+    wxMenuItem* m_script_array;
+    wxMenuItem* m_script_dom;
+    wxMenuItem* m_script_undefined;
+    wxMenuItem* m_script_null;
+    wxMenuItem* m_script_date;
+#if wxUSE_WEBVIEW_IE
+    wxMenuItem* m_script_object_el;
+    wxMenuItem* m_script_date_el;
+    wxMenuItem* m_script_array_el;
+#endif
+    wxMenuItem* m_script_custom;
     wxMenuItem* m_selection_clear;
     wxMenuItem* m_selection_delete;
     wxMenuItem* m_find;
@@ -393,7 +429,24 @@ WebFrame::WebFrame(const wxString& url) :
     m_scroll_page_down = scroll_menu->Append(wxID_ANY, "Page d&own");
     m_tools_menu->AppendSubMenu(scroll_menu, "Scroll");
 
-    wxMenuItem* script =  m_tools_menu->Append(wxID_ANY, _("Run Script"));
+    wxMenu* script_menu = new wxMenu;
+    m_script_string = script_menu->Append(wxID_ANY, "Return String");
+    m_script_integer = script_menu->Append(wxID_ANY, "Return integer");
+    m_script_double = script_menu->Append(wxID_ANY, "Return double");
+    m_script_bool = script_menu->Append(wxID_ANY, "Return bool");
+    m_script_object = script_menu->Append(wxID_ANY, "Return JSON object");
+    m_script_array = script_menu->Append(wxID_ANY, "Return array");
+    m_script_dom = script_menu->Append(wxID_ANY, "Modify DOM");
+    m_script_undefined = script_menu->Append(wxID_ANY, "Return undefined");
+    m_script_null = script_menu->Append(wxID_ANY, "Return null");
+    m_script_date = script_menu->Append(wxID_ANY, "Return Date");
+#if wxUSE_WEBVIEW_IE
+    m_script_object_el = script_menu->Append(wxID_ANY, "Return JSON object changing emulation level");
+    m_script_date_el = script_menu->Append(wxID_ANY, "Return Date changing emulation level");
+    m_script_array_el = script_menu->Append(wxID_ANY, "Return array changing emulation level");
+#endif
+    m_script_custom = script_menu->Append(wxID_ANY, "Custom script");
+    m_tools_menu->AppendSubMenu(script_menu, _("Run Script"));
 
     //Selection menu
     wxMenu* selection = new wxMenu();
@@ -502,8 +555,36 @@ WebFrame::WebFrame(const wxString& url) :
             wxCommandEventHandler(WebFrame::OnScrollPageUp),  NULL, this );
     Connect(m_scroll_page_down->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnScrollPageDown),  NULL, this );
-    Connect(script->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScript),  NULL, this );
+    Connect(m_script_string->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptString),  NULL, this );
+    Connect(m_script_integer->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptInteger),  NULL, this );
+    Connect(m_script_double->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptDouble),  NULL, this );
+    Connect(m_script_bool->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptBool),  NULL, this );
+    Connect(m_script_object->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptObject),  NULL, this );
+    Connect(m_script_array->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptArray),  NULL, this );
+    Connect(m_script_dom->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptDOM),  NULL, this );
+    Connect(m_script_undefined->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptUndefined),  NULL, this );
+    Connect(m_script_null->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptNull),  NULL, this );
+    Connect(m_script_date->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptDate),  NULL, this );
+#if wxUSE_WEBVIEW_IE
+    Connect(m_script_object_el->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptObjectWithEmulationLevel),  NULL, this );
+    Connect(m_script_date_el->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptDateWithEmulationLevel),  NULL, this );
+    Connect(m_script_array_el->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptArrayWithEmulationLevel),  NULL, this );
+#endif
+    Connect(m_script_custom->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnRunScriptCustom),  NULL, this );
     Connect(m_selection_clear->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
     Connect(m_selection_delete->GetId(), wxEVT_MENU,
@@ -969,13 +1050,120 @@ void WebFrame::OnHistory(wxCommandEvent& evt)
     m_browser->LoadHistoryItem(m_histMenuItems[evt.GetId()]);
 }
 
-void WebFrame::OnRunScript(wxCommandEvent& WXUNUSED(evt))
+void WebFrame::RunScript(const wxString& javascript, wxString* result, const wxString& messege)
 {
-    wxTextEntryDialog dialog(this, "Enter JavaScript to run.", wxGetTextFromUserPromptStr, "", wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
-    if(dialog.ShowModal() == wxID_OK)
+    wxTextEntryDialog dialog(this, messege, wxGetTextFromUserPromptStr, javascript, wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
+    if( dialog.ShowModal() == wxID_OK )
     {
-        m_browser->RunScript(dialog.GetValue());
+        if ( m_browser->RunScript(dialog.GetValue(), result))
+        {
+            if ( result != NULL )
+                wxLogMessage(_("RunScript result: %s"), *result);
+            else
+                wxLogMessage(_("RunScript ran properly"));
+        }
+        else
+        {
+            wxLogWarning(_("RunScript returned false"));
+        }
     }
+}
+
+void WebFrame::OnRunScriptString(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(a){return a;}f('Hello World!');", &result);
+}
+
+void WebFrame::OnRunScriptInteger(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(a){return a;}f(123);", &result);
+}
+
+void WebFrame::OnRunScriptDouble(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(a){return a;}f(2.34);", &result);
+}
+
+void WebFrame::OnRunScriptBool(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(a){return a;}f(false);", &result);
+}
+
+void WebFrame::OnRunScriptObject(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(){var person = new Object();person.name = 'Foo'; \
+        person.lastName = 'Bar';return person;}f();", &result);
+}
+
+void WebFrame::OnRunScriptArray(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result);
+}
+
+void WebFrame::OnRunScriptDOM(wxCommandEvent& WXUNUSED(evt))
+{
+    RunScript("document.write(\"Hello World!\");");
+}
+
+void WebFrame::OnRunScriptUndefined(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(){var person = new Object();}f();", &result);
+}
+
+void WebFrame::OnRunScriptNull(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(){return null;}f();", &result);
+}
+
+void WebFrame::OnRunScriptDate(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
+        var tzoffset = d.getTimezoneOffset() * 60000; \
+        return new Date(d.getTime() - tzoffset);}f();", &result);
+}
+
+#if wxUSE_WEBVIEW_IE
+void WebFrame::OnRunScriptObjectWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
+{
+    wxWebViewIE::MSWSetModernEmulationLevel();
+    wxString result;
+    RunScript("function f(){var person = new Object();person.name = 'Foo'; \
+        person.lastName = 'Bar';return person;}f();", &result);
+    wxWebViewIE::MSWSetModernEmulationLevel(false);
+}
+
+void WebFrame::OnRunScriptDateWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
+{
+    wxWebViewIE::MSWSetModernEmulationLevel();
+    wxString result;
+    RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
+        var tzoffset = d.getTimezoneOffset() * 60000; return \
+        new Date(d.getTime() - tzoffset);}f();", &result);
+    wxWebViewIE::MSWSetModernEmulationLevel(false);
+}
+
+void WebFrame::OnRunScriptArrayWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
+{
+    wxWebViewIE::MSWSetModernEmulationLevel();
+    wxString result;
+    RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result);
+    wxWebViewIE::MSWSetModernEmulationLevel(false);
+}
+#endif
+
+void WebFrame::OnRunScriptCustom(wxCommandEvent& WXUNUSED(evt))
+{
+    wxString result;
+    RunScript("", &result, "Enter JavaScript to run.");
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))

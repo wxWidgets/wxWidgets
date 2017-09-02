@@ -29,6 +29,8 @@
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
 
+#include "wx/private/jsscriptwrapper.h"
+
 #include <initguid.h>
 #include <wininet.h>
 
@@ -109,6 +111,7 @@ bool wxWebViewIE::Create(wxWindow* parent,
     EnableControlFeature(21 /* FEATURE_DISABLE_NAVIGATION_SOUNDS */);
 
     LoadURL(url);
+
     return true;
 }
 
@@ -853,25 +856,85 @@ wxString wxWebViewIE::GetPageText() const
     }
 }
 
-void wxWebViewIE::RunScript(const wxString& javascript)
+bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
+{
+    wxRegKey key(wxRegKey::HKCU, wxREGISTRY_IE_PATH);
+    if ( key.Exists() )
+    {
+        wxString programName = wxGetFullModuleName().AfterLast('\\');
+        if ( modernLevel )
+        {
+            if ( !key.SetValue(programName, wxIE_EMULATION_LEVEL) )
+            {
+                wxLogWarning(_("Failed to set the current browser control emulation level"));
+                return false;
+            }
+        }
+        else
+        {
+            key.DeleteValue(programName);
+        }
+        return true;
+    }
+    wxLogWarning(_("Failed to find current browser control emulation level"));
+    return false;
+}
+
+bool wxWebViewIE::RunScriptInternal(wxVariant varJavascript, wxAutomationObject* scriptAO,
+    wxVariant* varResult)
+{
+    if ( !scriptAO->Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varJavascript) )
+    {
+        wxLogWarning(_("Can't run Javascript"));
+        return false;
+    }
+
+    return true;
+}
+
+bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    IDispatch* scriptDispatch = NULL;
 
-    if(document)
+    if ( !document )
     {
-        wxCOMPtr<IHTMLWindow2> window;
-        wxString language = "javascript";
-        HRESULT hr = document->get_parentWindow(&window);
-        if(SUCCEEDED(hr))
-        {
-            VARIANT level;
-            VariantInit(&level);
-            V_VT(&level) = VT_EMPTY;
-            window->execScript(wxBasicString(javascript),
-                               wxBasicString(language),
-                               &level);
-        }
+        wxLogWarning(_("Can't run Javascript script without a valid HTML document"));
+        return false;
     }
+
+    if ( FAILED(document->get_Script(&scriptDispatch)) )
+    {
+        wxLogWarning(_("Can't get the Javascript"));
+        return false;
+    }
+
+    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+
+    wxAutomationObject scriptAO(scriptDispatch);
+    wxVariant varJavascript(wrapJS.GetWrappedCode());
+    wxVariant varResult;
+
+    if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
+        return false;
+
+    if ( varResult.IsType("bool") && varResult.GetBool() )
+    {
+        varJavascript = wrapJS.GetOutputCode();
+        if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
+            return false;
+
+        if ( output != NULL )
+            *output = varResult.MakeString();
+
+        varJavascript = wrapJS.GetCleanUpCode();
+        if ( !RunScriptInternal(varJavascript, &scriptAO, &varResult) )
+            return false;
+        return true;
+    }
+
+    wxLogWarning(_("Javascript error: %s"), varResult.MakeString());
+    return false;
 }
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
