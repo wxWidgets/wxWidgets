@@ -356,6 +356,7 @@ public:
     ////////////////////////////////////////////////////////////////////////////
     // Necessary for drawing hrules and vrules, if specified
     void OnPaint(wxPaintEvent& event);
+    void OnEraseBackground(wxEraseEvent& event);
 
 
     virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
@@ -375,6 +376,8 @@ public:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
                                     WXLPARAM lParam) wxOVERRIDE;
+
+    virtual bool IsDoubleBuffered() const wxOVERRIDE;
 
 protected:
     // common part of all ctors
