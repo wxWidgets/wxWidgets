@@ -51,7 +51,12 @@ public:
         win->Bind(wxEVT_TEXT, &wxTextEntryHintData::OnTextChanged, this);
     }
 
-    // default dtor is ok
+    ~wxTextEntryHintData()
+    {
+        m_win->Unbind(wxEVT_SET_FOCUS, &wxTextEntryHintData::OnSetFocus, this);
+        m_win->Unbind(wxEVT_KILL_FOCUS, &wxTextEntryHintData::OnKillFocus, this);
+        m_win->Unbind(wxEVT_TEXT, &wxTextEntryHintData::OnTextChanged, this);
+    }
 
     // Get the real text of the control such as it was before we replaced it
     // with the hint.
