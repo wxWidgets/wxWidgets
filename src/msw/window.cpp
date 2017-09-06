@@ -2969,8 +2969,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_GETDLGCODE:
             if ( !IsOfStandardClass() || HasFlag(wxWANTS_CHARS) )
             {
+                // Get current input processing flags to retain flags like DLGC_HASSETSEL, etc.
+                rc.result = MSWDefWindowProc(WM_GETDLGCODE, 0, 0);
                 // we always want to get the char events
-                rc.result = DLGC_WANTCHARS;
+                rc.result |= DLGC_WANTCHARS;
 
                 if ( HasFlag(wxWANTS_CHARS) )
                 {
@@ -2980,6 +2982,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                  DLGC_WANTALLKEYS;
                 }
 
+                // Message is marked as processed so MSWDefWindowProc() will not be called once more.
                 processed = true;
             }
             //else: get the dlg code from the DefWindowProc()
