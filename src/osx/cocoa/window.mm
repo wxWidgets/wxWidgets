@@ -2447,7 +2447,8 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
     if ( [m_osxView respondsToSelector:@selector(setAttributedTitle:) ] )
     {
         wxFont f = GetWXPeer()->GetFont();
-        wxColour col = GetWXPeer()->GetForegroundColour();
+        // we should not override system font colors unless explicitly specified
+        wxColour col = GetWXPeer()->UseForegroundColour() ? GetWXPeer()->GetForegroundColour() : wxNullColour;
         if ( f.GetStrikethrough() || f.GetUnderlined() || col.IsOk() )
         {
             wxCFStringRef cf(title, encoding );
