@@ -1127,6 +1127,10 @@ public:
     {
         return m_hasBgCol;
     }
+    bool UseBackgroundColour() const
+    {
+        return UseBgCol();
+    }
 
     virtual bool SetForegroundColour(const wxColour& colour);
     void SetOwnForegroundColour(const wxColour& colour)
@@ -1135,6 +1139,14 @@ public:
             m_inheritFgCol = false;
     }
     wxColour GetForegroundColour() const;
+    bool UseForegroundColour() const
+    {
+        return m_hasFgCol;
+    }
+    bool InheritsForgroundColour() const
+    {
+        return m_inheritFgCol;
+    }
 
         // Set/get the background style.
     virtual bool SetBackgroundStyle(wxBackgroundStyle style);
