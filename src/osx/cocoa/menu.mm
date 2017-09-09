@@ -23,6 +23,7 @@
 #include "wx/utils.h"
 #include "wx/frame.h"
 #include "wx/menuitem.h"
+#include "wx/dialog.h"
 #endif
 
 #include "wx/menu.h"
