@@ -946,6 +946,7 @@ GUI_CMN_HDR =
     wx/palette.h
     wx/panel.h
     wx/pen.h
+    wx/peninfobase.h
     wx/position.h
     wx/preferences.h
     wx/radiobox.h

@@ -26,6 +26,7 @@
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
     #include "wx/math.h"
+    #include "wx/pen.h"
     #include "wx/region.h"
     #include "wx/log.h"
 #endif
@@ -115,6 +116,21 @@ WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
 WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
 WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
 WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
+
+/* static */
+wxGraphicsPenInfo wxGraphicsPenInfo::CreateFromPen(const wxPen& pen)
+{
+    wxDash *dashes;
+    int nb_dashes = pen.GetDashes(&dashes);
+    return wxGraphicsPenInfo()
+        .Colour(pen.GetColour())
+        .Width(pen.GetWidth())
+        .Style(pen.GetStyle())
+        .Stipple(*pen.GetStipple())
+        .Dashes(nb_dashes, dashes)
+        .Join(pen.GetJoin())
+        .Cap(pen.GetCap());
+}
 
 //-----------------------------------------------------------------------------
 // matrix

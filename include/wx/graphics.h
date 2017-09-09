@@ -21,8 +21,8 @@
 #include "wx/dynarray.h"
 #include "wx/font.h"
 #include "wx/image.h"
+#include "wx/peninfobase.h"
 #include "wx/vector.h"
-#include "wx/pen.h"
 
 enum wxAntialiasMode
 {
@@ -148,20 +148,6 @@ public:
         m_width = width;
     }
 
-    static wxGraphicsPenInfo CreateFromPen(const wxPen& pen)
-    {
-        wxDash *dashes;
-        int nb_dashes = pen.GetDashes(&dashes);
-        return wxGraphicsPenInfo()
-            .Colour(pen.GetColour())
-            .Width(pen.GetWidth())
-            .Style(pen.GetStyle())
-            .Stipple(*pen.GetStipple())
-            .Dashes(nb_dashes, dashes)
-            .Join(pen.GetJoin())
-            .Cap(pen.GetCap());
-    }
-
     // Setters
 
     wxGraphicsPenInfo& Width(wxDouble width)
@@ -170,6 +156,10 @@ public:
     // Accessors
 
     wxDouble GetWidth() const { return m_width; }
+
+    // This is a helper used by wxWidgets itself, it doesn't make much sense to
+    // use it outside of the library.
+    static wxGraphicsPenInfo CreateFromPen(const wxPen& pen);
 
 private:
     wxDouble m_width;
