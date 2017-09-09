@@ -157,10 +157,6 @@ public:
 
     wxDouble GetWidth() const { return m_width; }
 
-    // This is a helper used by wxWidgets itself, it doesn't make much sense to
-    // use it outside of the library.
-    static wxGraphicsPenInfo CreateFromPen(const wxPen& pen);
-
 private:
     wxDouble m_width;
 };
@@ -512,8 +508,7 @@ public:
 
     wxGraphicsPath CreatePath() const;
 
-    wxGraphicsPen CreatePen(const wxPen& pen) const
-        { return DoCreatePen(wxGraphicsPenInfo::CreateFromPen(pen)); }
+    wxGraphicsPen CreatePen(const wxPen& pen) const;
 
     wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) const
         { return DoCreatePen(info); }

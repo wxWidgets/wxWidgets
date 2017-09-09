@@ -117,24 +117,6 @@ WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
 WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
 WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
 
-/* static */
-wxGraphicsPenInfo wxGraphicsPenInfo::CreateFromPen(const wxPen& pen)
-{
-    if ( !pen.IsOk() )
-        return wxGraphicsPenInfo().Style(wxPENSTYLE_TRANSPARENT);
-
-    wxDash *dashes;
-    int nb_dashes = pen.GetDashes(&dashes);
-    return wxGraphicsPenInfo()
-        .Colour(pen.GetColour())
-        .Width(pen.GetWidth())
-        .Style(pen.GetStyle())
-        .Stipple(*pen.GetStipple())
-        .Dashes(nb_dashes, dashes)
-        .Join(pen.GetJoin())
-        .Cap(pen.GetCap());
-}
-
 //-----------------------------------------------------------------------------
 // matrix
 //-----------------------------------------------------------------------------
@@ -839,6 +821,24 @@ wxGraphicsMatrix wxGraphicsContext::CreateMatrix( wxDouble a, wxDouble b, wxDoub
 wxGraphicsPath wxGraphicsContext::CreatePath() const
 {
     return GetRenderer()->CreatePath();
+}
+
+wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen) const
+{
+    if ( !pen.IsOk() )
+        return wxGraphicsPen();
+
+    wxDash *dashes;
+    int nb_dashes = pen.GetDashes(&dashes);
+
+    return DoCreatePen(wxGraphicsPenInfo()
+                        .Colour(pen.GetColour())
+                        .Width(pen.GetWidth())
+                        .Style(pen.GetStyle())
+                        .Stipple(*pen.GetStipple())
+                        .Dashes(nb_dashes, dashes)
+                        .Join(pen.GetJoin())
+                        .Cap(pen.GetCap()));
 }
 
 wxGraphicsPen wxGraphicsContext::DoCreatePen(const wxGraphicsPenInfo& info) const
