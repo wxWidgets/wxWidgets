@@ -81,10 +81,7 @@ wxPen::wxPen(const wxBitmap& WXUNUSED(stipple), int WXUNUSED(width))
 
 wxPen::wxPen(const wxPenInfo& info)
 {
-    m_refData = new wxPenRefData(
-        info.GetColour(),
-        info.GetStyle()
-    );
+    m_refData = new wxPenRefData(info.GetColour(), info.GetStyle());
 }
 
 bool wxPen::operator==(const wxPen& pen) const

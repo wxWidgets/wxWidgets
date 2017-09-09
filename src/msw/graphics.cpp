@@ -653,8 +653,9 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
     InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
 }
 
-wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info )
-: wxGraphicsObjectRefData(renderer)
+wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
+                                    const wxGraphicsPenInfo &info )
+    : wxGraphicsObjectRefData(renderer)
 {
     InitFromPenInfo(info);
 }

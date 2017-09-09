@@ -750,7 +750,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
 void wxCairoPenData::InitFromPenInfo( const wxGraphicsPenInfo &info )
 {
     Init();
-        m_width = info.GetWidth();
+    m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 

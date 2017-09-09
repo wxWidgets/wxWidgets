@@ -2478,9 +2478,9 @@ public:
     }
 
 private:
-    // We store the source info for later when we need to recreate the
-    // device-dependent resources.
-    const wxGraphicsPenInfo m_sourceInfo;
+    // We store the original pen description for later when we need to recreate
+    // the device-dependent resources.
+    const wxGraphicsPenInfo m_penInfo;
 
     // A stroke style is a device-independent resource.
     // Describes the caps, miter limit, line join, and dash information.
@@ -2500,10 +2500,10 @@ private:
 wxD2DPenData::wxD2DPenData(
     wxGraphicsRenderer* renderer,
     ID2D1Factory* direct2dFactory,
-    const wxPen& pen) :
-        wxGraphicsObjectRefData(renderer),
-        m_sourceInfo(wxGraphicsPenInfo::CreateFromPen(pen)),
-        m_width(pen.GetWidth())
+    const wxPen& pen)
+    : wxGraphicsObjectRefData(renderer),
+      m_penInfo(wxGraphicsPenInfo::CreateFromPen(pen)),
+      m_width(pen.GetWidth())
 {
     Init(renderer, direct2dFactory);
 }
@@ -2512,7 +2512,9 @@ wxD2DPenData::wxD2DPenData(
     wxGraphicsRenderer* renderer,
     ID2D1Factory* direct2dFactory,
     const wxGraphicsPenInfo& info)
-    : wxGraphicsObjectRefData(renderer), m_sourceInfo(info), m_width(info.GetWidth())
+    : wxGraphicsObjectRefData(renderer),
+      m_penInfo(info),
+      m_width(info.GetWidth())
 {
     Init(renderer, direct2dFactory);
 }
@@ -2525,19 +2527,19 @@ void wxD2DPenData::Init(
 
     wxBrush strokeBrush;
 
-    if (m_sourceInfo.GetStyle() == wxPENSTYLE_STIPPLE)
+    if (m_penInfo.GetStyle() == wxPENSTYLE_STIPPLE)
     {
-        strokeBrush.SetStipple(m_sourceInfo.GetStipple());
+        strokeBrush.SetStipple(m_penInfo.GetStipple());
         strokeBrush.SetStyle(wxBRUSHSTYLE_STIPPLE);
     }
-    else if(wxIsHatchPenStyle(m_sourceInfo.GetStyle()))
+    else if(wxIsHatchPenStyle(m_penInfo.GetStyle()))
     {
-        strokeBrush.SetStyle(wxConvertPenStyleToBrushStyle(m_sourceInfo.GetStyle()));
-        strokeBrush.SetColour(m_sourceInfo.GetColour());
+        strokeBrush.SetStyle(wxConvertPenStyleToBrushStyle(m_penInfo.GetStyle()));
+        strokeBrush.SetColour(m_penInfo.GetColour());
     }
     else
     {
-        strokeBrush.SetColour(m_sourceInfo.GetColour());
+        strokeBrush.SetColour(m_penInfo.GetColour());
         strokeBrush.SetStyle(wxBRUSHSTYLE_SOLID);
     }
 
@@ -2546,21 +2548,21 @@ void wxD2DPenData::Init(
 
 void wxD2DPenData::CreateStrokeStyle(ID2D1Factory* const direct2dfactory)
 {
-    D2D1_CAP_STYLE capStyle = wxD2DConvertPenCap(m_sourceInfo.GetCap());
-    D2D1_LINE_JOIN lineJoin = wxD2DConvertPenJoin(m_sourceInfo.GetJoin());
-    D2D1_DASH_STYLE dashStyle = wxD2DConvertPenStyle(m_sourceInfo.GetStyle());
+    D2D1_CAP_STYLE capStyle = wxD2DConvertPenCap(m_penInfo.GetCap());
+    D2D1_LINE_JOIN lineJoin = wxD2DConvertPenJoin(m_penInfo.GetJoin());
+    D2D1_DASH_STYLE dashStyle = wxD2DConvertPenStyle(m_penInfo.GetStyle());
 
     int dashCount = 0;
     FLOAT* dashes = NULL;
 
     if (dashStyle == D2D1_DASH_STYLE_CUSTOM)
     {
-        dashCount = m_sourceInfo.GetDashCount();
+        dashCount = m_penInfo.GetDashCount();
         dashes = new FLOAT[dashCount];
 
         for (int i = 0; i < dashCount; ++i)
         {
-            dashes[i] = m_sourceInfo.GetDash()[i];
+            dashes[i] = m_penInfo.GetDash()[i];
         }
 
     }

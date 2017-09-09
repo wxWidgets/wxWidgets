@@ -337,8 +337,9 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
     InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
 }
 
-wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info ) :
-    wxGraphicsObjectRefData( renderer )
+wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer,
+                                                    const wxGraphicsPenInfo& info )
+    : wxGraphicsObjectRefData( renderer )
 {
     InitFromPenInfo(info);
 }
@@ -350,7 +351,7 @@ void wxMacCoreGraphicsPenData::InitFromPenInfo( const wxGraphicsPenInfo& info )
     m_color.reset( wxMacCreateCGColor( info.GetColour() ) ) ;
 
     // TODO: * m_dc->m_scaleX
-        m_width = info.GetWidth();
+    m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = (CGFloat) 0.1;
 

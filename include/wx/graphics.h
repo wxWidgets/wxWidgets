@@ -140,8 +140,10 @@ protected:
 class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
 {
 public:
-    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(), wxDouble width = 1.0, wxPenStyle style = wxPENSTYLE_SOLID)
-    : wxPenInfoBase(colour, style)
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(),
+                               wxDouble width = 1.0,
+                               wxPenStyle style = wxPENSTYLE_SOLID)
+        : wxPenInfoBase(colour, style)
     {
         m_width = width;
     }

@@ -61,9 +61,10 @@ enum wxPenCap
 };
 
 // ----------------------------------------------------------------------------
-// wxPenInfo describes a wxPen
+// wxPenInfoBase is a common base for wxPenInfo and wxGraphicsPenInfo
 // ----------------------------------------------------------------------------
 
+// This class uses CRTP, the template parameter is the derived class itself.
 template <class T>
 class wxPenInfoBase
 {
@@ -82,21 +83,21 @@ public:
     // Setters for the various attributes. All of them return the object itself
     // so that the calls to them could be chained.
 
-    T &Colour(const wxColour& colour)
-        { m_colour = colour; return static_cast<T&>(*this); }
+    T& Colour(const wxColour& colour)
+        { m_colour = colour; return This(); }
 
-    T &Style(wxPenStyle style)
-        { m_style = style; return static_cast<T&>(*this); }
-    T &Stipple(const wxBitmap& stipple)
-        { m_stipple = stipple; m_style = wxPENSTYLE_STIPPLE; return static_cast<T&>(*this); }
-    T &Dashes(int nb_dashes, const wxDash *dash)
-        { m_nb_dashes = nb_dashes; m_dash = (wxDash *)dash; return static_cast<T&>(*this); }
-    T &Join(wxPenJoin join)
-        { m_join = join; return static_cast<T&>(*this); }
-    T &Cap(wxPenCap cap)
-        { m_cap = cap; return static_cast<T&>(*this); }
+    T& Style(wxPenStyle style)
+        { m_style = style; return This(); }
+    T& Stipple(const wxBitmap& stipple)
+        { m_stipple = stipple; m_style = wxPENSTYLE_STIPPLE; return This(); }
+    T& Dashes(int nb_dashes, const wxDash *dash)
+        { m_nb_dashes = nb_dashes; m_dash = (wxDash *)dash; return This(); }
+    T& Join(wxPenJoin join)
+        { m_join = join; return This(); }
+    T& Cap(wxPenCap cap)
+        { m_cap = cap; return This(); }
 
-    // Accessors are mostly meant to be used by wxPen itself.
+    // Accessors are mostly meant to be used by wxWidgets itself.
 
     wxColour GetColour() const { return m_colour; }
     wxBitmap GetStipple() const { return m_stipple; }
@@ -113,6 +114,9 @@ public:
     bool IsTransparent() const { return m_style == wxPENSTYLE_TRANSPARENT; }
 
 private:
+    // Helper to return this object itself cast to its real type T.
+    T& This() { return static_cast<T&>(*this); }
+
     wxColour m_colour;
     wxBitmap m_stipple;
     wxPenStyle m_style;
@@ -123,11 +127,17 @@ private:
     wxDash* m_dash;
 };
 
+// ----------------------------------------------------------------------------
+// wxPenInfo contains all parameters describing a wxPen
+// ----------------------------------------------------------------------------
+
 class wxPenInfo : public wxPenInfoBase<wxPenInfo>
 {
 public:
-    explicit wxPenInfo(const wxColour& colour = wxColour(), int width = 1, wxPenStyle style = wxPENSTYLE_SOLID)
-    : wxPenInfoBase(colour, style)
+    explicit wxPenInfo(const wxColour& colour = wxColour(),
+                       int width = 1,
+                       wxPenStyle style = wxPENSTYLE_SOLID)
+        : wxPenInfoBase(colour, style)
     {
         m_width = width;
     }
