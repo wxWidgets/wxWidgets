@@ -46,8 +46,7 @@ public:
 
     wxPenRefData();
     wxPenRefData(const wxPenRefData& data);
-    wxPenRefData(const wxColour& col, int width, wxPenStyle style);
-    wxPenRefData(const wxBitmap& stipple, int width);
+    wxPenRefData(const wxPenInfo& info);
     virtual ~wxPenRefData();
 
     bool operator==(const wxPenRefData& data) const
@@ -170,24 +169,17 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_hPen = 0;
 }
 
-wxPenRefData::wxPenRefData(const wxColour& col, int width, wxPenStyle style)
+wxPenRefData::wxPenRefData(const wxPenInfo& info)
 {
     Init();
 
-    m_style = style;
-    m_width = width;
-
-    m_colour = col;
-}
-
-wxPenRefData::wxPenRefData(const wxBitmap& stipple, int width)
-{
-    Init();
-
-    m_style = wxPENSTYLE_STIPPLE;
-    m_width = width;
-
-    m_stipple = stipple;
+    m_style = info.GetStyle();
+    m_width = info.GetWidth();
+    m_join = info.GetJoin();
+    m_cap = info.GetCap();
+    m_stipple = info.GetStipple();
+    m_nbDash = info.GetDashes(&m_dash);
+    m_colour = info.GetColour();
 }
 
 wxPenRefData::~wxPenRefData()
@@ -401,17 +393,25 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject);
 
 wxPen::wxPen(const wxColour& col, int width, wxPenStyle style)
 {
-    m_refData = new wxPenRefData(col, width, style);
+    m_refData = new wxPenRefData(wxPenInfo(col, width).Style(style));
 }
 
 wxPen::wxPen(const wxColour& colour, int width, int style)
 {
-    m_refData = new wxPenRefData(colour, width, (wxPenStyle)style);
+    m_refData = new wxPenRefData
+                    (
+                        wxPenInfo(colour, width).Style((wxPenStyle)style)
+                    );
 }
 
 wxPen::wxPen(const wxBitmap& stipple, int width)
 {
-    m_refData = new wxPenRefData(stipple, width);
+    m_refData = new wxPenRefData(wxPenInfo().Stipple(stipple).Width(width));
+}
+
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData(info);
 }
 
 bool wxPen::operator==(const wxPen& pen) const

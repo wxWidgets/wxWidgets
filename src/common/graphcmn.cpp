@@ -26,6 +26,7 @@
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
     #include "wx/math.h"
+    #include "wx/pen.h"
     #include "wx/region.h"
     #include "wx/log.h"
 #endif
@@ -824,7 +825,25 @@ wxGraphicsPath wxGraphicsContext::CreatePath() const
 
 wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen) const
 {
-    return GetRenderer()->CreatePen(pen);
+    if ( !pen.IsOk() )
+        return wxGraphicsPen();
+
+    wxDash *dashes;
+    int nb_dashes = pen.GetDashes(&dashes);
+
+    return DoCreatePen(wxGraphicsPenInfo()
+                        .Colour(pen.GetColour())
+                        .Width(pen.GetWidth())
+                        .Style(pen.GetStyle())
+                        .Stipple(*pen.GetStipple())
+                        .Dashes(nb_dashes, dashes)
+                        .Join(pen.GetJoin())
+                        .Cap(pen.GetCap()));
+}
+
+wxGraphicsPen wxGraphicsContext::DoCreatePen(const wxGraphicsPenInfo& info) const
+{
+    return GetRenderer()->CreatePen(info);
 }
 
 wxGraphicsBrush wxGraphicsContext::CreateBrush(const wxBrush& brush ) const

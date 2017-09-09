@@ -2394,6 +2394,9 @@
 				RelativePath="..\..\include\wx\pen.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\peninfobase.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\persist.h">
 			</File>
 			<File

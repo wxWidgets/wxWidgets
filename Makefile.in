@@ -3908,6 +3908,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/collheaderctrl.h \
 	wx/generic/collheaderctrl.h \
 	wx/itemattr.h \
+	wx/peninfobase.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	$(ADVANCED_HDR) \

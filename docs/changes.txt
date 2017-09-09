@@ -58,6 +58,10 @@ Changes in behaviour which may result in build errors
 - Never documented and not always available private wxGetClipboardData()
   function now doesn't exist at all any more in wxMSW, use wxClipboard instead.
 
+- wxGraphicsRenderer::CreatePen() now takes wxGraphicsPenInfo and not a wxPen.
+  This only affects code defining its own custom renderers, code just using
+  wxGraphicsContext::CreatePen() continues to compile and work as before.
+
 
 3.1.1: (not released yet)
 ----------------------------
@@ -97,6 +101,7 @@ All:
 
 All (GUI):
 
+- Allow using fractional pen widths with wxGraphicsContext (Adrien Tétar).
 - Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).

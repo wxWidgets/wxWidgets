@@ -2458,7 +2458,9 @@ wxBrushStyle wxConvertPenStyleToBrushStyle(wxPenStyle penStyle)
 class wxD2DPenData : public wxGraphicsObjectRefData, public wxD2DManagedGraphicsData
 {
 public:
-    wxD2DPenData(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, const wxPen& pen);
+    wxD2DPenData(wxGraphicsRenderer* renderer,
+                 ID2D1Factory* direct2dFactory,
+                 const wxGraphicsPenInfo& info);
 
     void CreateStrokeStyle(ID2D1Factory* const direct2dfactory);
 
@@ -2474,9 +2476,9 @@ public:
     }
 
 private:
-    // We store the source pen for later when we need to recreate the
-    // device-dependent resources.
-    const wxPen m_sourcePen;
+    // We store the original pen description for later when we need to recreate
+    // the device-dependent resources.
+    const wxGraphicsPenInfo m_penInfo;
 
     // A stroke style is a device-independent resource.
     // Describes the caps, miter limit, line join, and dash information.
@@ -2496,26 +2498,28 @@ private:
 wxD2DPenData::wxD2DPenData(
     wxGraphicsRenderer* renderer,
     ID2D1Factory* direct2dFactory,
-    const wxPen& pen)
-    : wxGraphicsObjectRefData(renderer), m_sourcePen(pen), m_width(pen.GetWidth())
+    const wxGraphicsPenInfo& info)
+    : wxGraphicsObjectRefData(renderer),
+      m_penInfo(info),
+      m_width(info.GetWidth())
 {
     CreateStrokeStyle(direct2dFactory);
 
     wxBrush strokeBrush;
 
-    if (m_sourcePen.GetStyle() == wxPENSTYLE_STIPPLE)
+    if (m_penInfo.GetStyle() == wxPENSTYLE_STIPPLE)
     {
-        strokeBrush.SetStipple(*(m_sourcePen.GetStipple()));
+        strokeBrush.SetStipple(m_penInfo.GetStipple());
         strokeBrush.SetStyle(wxBRUSHSTYLE_STIPPLE);
     }
-    else if(wxIsHatchPenStyle(m_sourcePen.GetStyle()))
+    else if(wxIsHatchPenStyle(m_penInfo.GetStyle()))
     {
-        strokeBrush.SetStyle(wxConvertPenStyleToBrushStyle(m_sourcePen.GetStyle()));
-        strokeBrush.SetColour(m_sourcePen.GetColour());
+        strokeBrush.SetStyle(wxConvertPenStyleToBrushStyle(m_penInfo.GetStyle()));
+        strokeBrush.SetColour(m_penInfo.GetColour());
     }
     else
     {
-        strokeBrush.SetColour(m_sourcePen.GetColour());
+        strokeBrush.SetColour(m_penInfo.GetColour());
         strokeBrush.SetStyle(wxBRUSHSTYLE_SOLID);
     }
 
@@ -2524,21 +2528,21 @@ wxD2DPenData::wxD2DPenData(
 
 void wxD2DPenData::CreateStrokeStyle(ID2D1Factory* const direct2dfactory)
 {
-    D2D1_CAP_STYLE capStyle = wxD2DConvertPenCap(m_sourcePen.GetCap());
-    D2D1_LINE_JOIN lineJoin = wxD2DConvertPenJoin(m_sourcePen.GetJoin());
-    D2D1_DASH_STYLE dashStyle = wxD2DConvertPenStyle(m_sourcePen.GetStyle());
+    D2D1_CAP_STYLE capStyle = wxD2DConvertPenCap(m_penInfo.GetCap());
+    D2D1_LINE_JOIN lineJoin = wxD2DConvertPenJoin(m_penInfo.GetJoin());
+    D2D1_DASH_STYLE dashStyle = wxD2DConvertPenStyle(m_penInfo.GetStyle());
 
     int dashCount = 0;
     FLOAT* dashes = NULL;
 
     if (dashStyle == D2D1_DASH_STYLE_CUSTOM)
     {
-        dashCount = m_sourcePen.GetDashCount();
+        dashCount = m_penInfo.GetDashCount();
         dashes = new FLOAT[dashCount];
 
         for (int i = 0; i < dashCount; ++i)
         {
-            dashes[i] = m_sourcePen.GetDash()[i];
+            dashes[i] = m_penInfo.GetDash()[i];
         }
 
     }
@@ -4384,7 +4388,7 @@ public :
         wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
         wxDouble tx = 0.0, wxDouble ty = 0.0) wxOVERRIDE;
 
-    wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE;
+    wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE;
 
     wxGraphicsBrush CreateBrush(const wxBrush& brush) wxOVERRIDE;
 
@@ -4553,16 +4557,16 @@ wxGraphicsMatrix wxD2DRenderer::CreateMatrix(
     return matrix;
 }
 
-wxGraphicsPen wxD2DRenderer::CreatePen(const wxPen& pen)
+wxGraphicsPen wxD2DRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
-    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( info.GetStyle() == wxPENSTYLE_TRANSPARENT )
     {
         return wxNullGraphicsPen;
     }
     else
     {
         wxGraphicsPen p;
-        wxD2DPenData* penData = new wxD2DPenData(this, m_direct2dFactory, pen);
+        wxD2DPenData* penData = new wxD2DPenData(this, m_direct2dFactory, info);
         p.SetRefData(penData);
         return p;
     }

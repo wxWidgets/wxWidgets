@@ -52,6 +52,18 @@ public:
         m_stipple = data.m_stipple;
     }
 
+    wxPenRefData( const wxPenInfo& info )
+    {
+        m_width = info.GetWidth();
+        m_style = info.GetStyle();
+        m_joinStyle = info.GetJoin();
+        m_capStyle = info.GetCap();
+        m_colour = info.GetColour();
+        wxDash* dash;
+        m_countDashes = info.GetDashes(&dash);
+        m_dash = (wxX11Dash*)dash;
+    }
+
     bool operator == (const wxPenRefData& data) const
     {
         return (m_style == data.m_style &&
@@ -79,18 +91,20 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject);
 
 wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style )
 {
-    m_refData = new wxPenRefData();
-    M_PENDATA->m_width = width;
-    M_PENDATA->m_style = style;
-    M_PENDATA->m_colour = colour;
+    m_refData = new wxPenRefData(wxPenInfo(colour, width).Style(style));
 }
 
 wxPen::wxPen(const wxColour& colour, int width, int style)
 {
-    m_refData = new wxPenRefData();
-    M_PENDATA->m_width = width;
-    M_PENDATA->m_style = (wxPenStyle)style;
-    M_PENDATA->m_colour = colour;
+    m_refData = new wxPenRefData
+                    (
+                        wxPenInfo(colour, width).Style((wxPenStyle)style)
+                    );
+}
+
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData(info);
 }
 
 wxPen::~wxPen()

@@ -102,6 +102,48 @@ enum wxPenCap
 
 
 /**
+    @class wxPenInfo
+
+    This class is a helper used for wxPen creation using named parameter
+    idiom: it allows to specify various wxPen attributes using the chained
+    calls to its clearly named methods instead of passing them in the fixed
+    order to wxPen constructors.
+
+    For instance, to create a dotted blue pen with the given join style you
+    could do
+    @code
+    wxPen pen(wxPenInfo(*wxBLUE).Style(wxPENSTYLE_DOT).Join(wxJOIN_BEVEL));
+    @endcode
+
+    @since 3.1.1
+ */
+class wxPenInfo
+{
+public:
+    explicit wxPenInfo(const wxColour& colour = wxColour(),
+                       int width = 1,
+                       wxPenStyle style = wxPENSTYLE_SOLID);
+
+    wxPenInfo& Colour(const wxColour& col);
+
+    wxPenInfo& Width(int width);
+
+    wxPenInfo& Style(wxPenStyle style);
+
+    wxPenInfo& Style(wxPenStyle style);
+
+    wxPenInfo& Stipple(const wxBitmap& stipple);
+
+    wxPenInfo& Dashes(int nb_dashes, const wxDash *dash);
+
+    wxPenInfo& Join(wxPenJoin join);
+
+    wxPenInfo& Cap(wxPenCap cap);
+};
+
+
+
+/**
     @class wxPen
 
     A pen is a drawing tool for drawing outlines. It is used for drawing
@@ -156,6 +198,11 @@ public:
         Default constructor. The pen will be uninitialised, and IsOk() will return @false.
     */
     wxPen();
+
+    /**
+        Creates a pen object using the specified pen description.
+    */
+    wxPen(const wxPenInfo& info);
 
     /**
         Constructs a pen from a colour object, pen width and style.

@@ -304,7 +304,7 @@ protected :
 class wxMacCoreGraphicsPenData : public wxGraphicsObjectRefData
 {
 public:
-    wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
+    wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info );
     ~wxMacCoreGraphicsPenData();
 
     void Init();
@@ -329,19 +329,20 @@ protected :
     CGFloat* m_patternColorComponents;
 };
 
-wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxPen &pen ) :
-    wxGraphicsObjectRefData( renderer )
+wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer,
+                                                    const wxGraphicsPenInfo& info )
+    : wxGraphicsObjectRefData( renderer )
 {
     Init();
 
-    m_color.reset( wxMacCreateCGColor( pen.GetColour() ) ) ;
+    m_color.reset( wxMacCreateCGColor( info.GetColour() ) ) ;
 
     // TODO: * m_dc->m_scaleX
-    m_width = pen.GetWidth();
+    m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = (CGFloat) 0.1;
 
-    switch ( pen.GetCap() )
+    switch ( info.GetCap() )
     {
         case wxCAP_ROUND :
             m_cap = kCGLineCapRound;
@@ -360,7 +361,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
             break;
     }
 
-    switch ( pen.GetJoin() )
+    switch ( info.GetJoin() )
     {
         case wxJOIN_BEVEL :
             m_join = kCGLineJoinBevel;
@@ -386,7 +387,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
     static const CGFloat dashed[] = { (CGFloat) 19.0 , (CGFloat) 9.0 };
     static const CGFloat dotted_dashed[] = { (CGFloat) 9.0 , (CGFloat) 6.0 , (CGFloat) 3.0 , (CGFloat) 3.0 };
 
-    switch ( pen.GetStyle() )
+    switch ( info.GetStyle() )
     {
         case wxPENSTYLE_SOLID:
             break;
@@ -415,7 +416,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
 
         case wxPENSTYLE_USER_DASH:
             wxDash *dashes;
-            m_count = pen.GetDashes( &dashes );
+            m_count = info.GetDashes( &dashes );
             if ((dashes != NULL) && (m_count > 0))
             {
                 m_userLengths = new CGFloat[m_count];
@@ -434,11 +435,11 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
 
         case wxPENSTYLE_STIPPLE:
             {
-                wxBitmap* bmp = pen.GetStipple();
-                if ( bmp && bmp->IsOk() )
+                wxBitmap bmp = info.GetStipple();
+                if ( bmp.IsOk() )
                 {
                     m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
-                    m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
+                    m_pattern.reset( (CGPatternRef) *( new ImagePattern( &bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                     m_patternColorComponents = new CGFloat[1] ;
                     m_patternColorComponents[0] = (CGFloat) 1.0;
                     m_isPattern = true;
@@ -450,12 +451,12 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
             {
                 m_isPattern = true;
                 m_colorSpace.reset( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) );
-                m_pattern.reset( (CGPatternRef) *( new HatchPattern( pen.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
+                m_pattern.reset( (CGPatternRef) *( new HatchPattern( info.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                 m_patternColorComponents = new CGFloat[4] ;
-                m_patternColorComponents[0] = (CGFloat) (pen.GetColour().Red() / 255.0);
-                m_patternColorComponents[1] = (CGFloat) (pen.GetColour().Green() / 255.0);
-                m_patternColorComponents[2] = (CGFloat) (pen.GetColour().Blue() / 255.0);
-                m_patternColorComponents[3] =  (CGFloat) (pen.GetColour().Alpha() / 255.0);
+                m_patternColorComponents[0] = (CGFloat) (info.GetColour().Red() / 255.0);
+                m_patternColorComponents[1] = (CGFloat) (info.GetColour().Green() / 255.0);
+                m_patternColorComponents[2] = (CGFloat) (info.GetColour().Blue() / 255.0);
+                m_patternColorComponents[3] =  (CGFloat) (info.GetColour().Alpha() / 255.0);
             }
             break;
     }
@@ -2536,7 +2537,7 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
 
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE ;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE ;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE ;
 
@@ -2705,14 +2706,14 @@ wxGraphicsMatrix wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b
     return m;
 }
 
-wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
+wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
-    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( info.IsTransparent() )
         return wxNullGraphicsPen;
     else
     {
         wxGraphicsPen p;
-        p.SetRefData(new wxMacCoreGraphicsPenData( this, pen ));
+        p.SetRefData(new wxMacCoreGraphicsPenData( this, info ));
         return p;
     }
 }
