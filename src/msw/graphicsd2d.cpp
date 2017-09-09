@@ -2458,11 +2458,9 @@ wxBrushStyle wxConvertPenStyleToBrushStyle(wxPenStyle penStyle)
 class wxD2DPenData : public wxGraphicsObjectRefData, public wxD2DManagedGraphicsData
 {
 public:
-    wxD2DPenData(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, const wxPen& pen);
-
-    wxD2DPenData(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, const wxGraphicsPenInfo& info);
-
-    void Init(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory);
+    wxD2DPenData(wxGraphicsRenderer* renderer,
+                 ID2D1Factory* direct2dFactory,
+                 const wxGraphicsPenInfo& info);
 
     void CreateStrokeStyle(ID2D1Factory* const direct2dfactory);
 
@@ -2500,28 +2498,10 @@ private:
 wxD2DPenData::wxD2DPenData(
     wxGraphicsRenderer* renderer,
     ID2D1Factory* direct2dFactory,
-    const wxPen& pen)
-    : wxGraphicsObjectRefData(renderer),
-      m_penInfo(wxGraphicsPenInfo::CreateFromPen(pen)),
-      m_width(pen.GetWidth())
-{
-    Init(renderer, direct2dFactory);
-}
-
-wxD2DPenData::wxD2DPenData(
-    wxGraphicsRenderer* renderer,
-    ID2D1Factory* direct2dFactory,
     const wxGraphicsPenInfo& info)
     : wxGraphicsObjectRefData(renderer),
       m_penInfo(info),
       m_width(info.GetWidth())
-{
-    Init(renderer, direct2dFactory);
-}
-
-void wxD2DPenData::Init(
-    wxGraphicsRenderer* renderer,
-    ID2D1Factory* direct2dFactory)
 {
     CreateStrokeStyle(direct2dFactory);
 
@@ -4408,8 +4388,6 @@ public :
         wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
         wxDouble tx = 0.0, wxDouble ty = 0.0) wxOVERRIDE;
 
-    wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE;
-
     wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE;
 
     wxGraphicsBrush CreateBrush(const wxBrush& brush) wxOVERRIDE;
@@ -4577,21 +4555,6 @@ wxGraphicsMatrix wxD2DRenderer::CreateMatrix(
     matrix.SetRefData(matrixData);
 
     return matrix;
-}
-
-wxGraphicsPen wxD2DRenderer::CreatePen(const wxPen& pen)
-{
-    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
-    {
-        return wxNullGraphicsPen;
-    }
-    else
-    {
-        wxGraphicsPen p;
-        wxD2DPenData* penData = new wxD2DPenData(this, m_direct2dFactory, pen);
-        p.SetRefData(penData);
-        return p;
-    }
 }
 
 wxGraphicsPen wxD2DRenderer::CreatePen(const wxGraphicsPenInfo& info)

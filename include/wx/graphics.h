@@ -512,9 +512,11 @@ public:
 
     wxGraphicsPath CreatePath() const;
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+    wxGraphicsPen CreatePen(const wxPen& pen) const
+        { return DoCreatePen(wxGraphicsPenInfo::CreateFromPen(pen)); }
 
-    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& pen) const;
+    wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) const
+        { return DoCreatePen(info); }
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) const;
 
@@ -779,6 +781,8 @@ protected:
     // implementations of overloaded public functions: we use different names
     // for them to avoid the virtual function hiding problems in the derived
     // classes
+    virtual wxGraphicsPen DoCreatePen(const wxGraphicsPenInfo& info) const;
+
     virtual void DoDrawText(const wxString& str, wxDouble x, wxDouble y) = 0;
     virtual void DoDrawRotatedText(const wxString& str, wxDouble x, wxDouble y,
                                    wxDouble angle);
@@ -895,8 +899,6 @@ public:
         wxDouble tx=0.0, wxDouble ty=0.0) = 0;
 
     // Paints
-
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
 
     virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) = 0;
 

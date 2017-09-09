@@ -120,6 +120,9 @@ WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
 /* static */
 wxGraphicsPenInfo wxGraphicsPenInfo::CreateFromPen(const wxPen& pen)
 {
+    if ( !pen.IsOk() )
+        return wxGraphicsPenInfo().Style(wxPENSTYLE_TRANSPARENT);
+
     wxDash *dashes;
     int nb_dashes = pen.GetDashes(&dashes);
     return wxGraphicsPenInfo()
@@ -838,12 +841,7 @@ wxGraphicsPath wxGraphicsContext::CreatePath() const
     return GetRenderer()->CreatePath();
 }
 
-wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen) const
-{
-    return GetRenderer()->CreatePen(pen);
-}
-
-wxGraphicsPen wxGraphicsContext::CreatePen(const wxGraphicsPenInfo& info) const
+wxGraphicsPen wxGraphicsContext::DoCreatePen(const wxGraphicsPenInfo& info) const
 {
     return GetRenderer()->CreatePen(info);
 }

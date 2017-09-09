@@ -260,12 +260,10 @@ private:
 class wxGDIPlusPenData : public wxGraphicsObjectRefData
 {
 public:
-    wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
     wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
     ~wxGDIPlusPenData();
 
     void Init();
-    void InitFromPenInfo( const wxGraphicsPenInfo &info );
 
     virtual wxDouble GetWidth() { return m_width; }
     virtual Pen* GetGDIPlusPen() { return m_pen; }
@@ -575,8 +573,6 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
 
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE;
-
     virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& pen) wxOVERRIDE;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE;
@@ -647,20 +643,9 @@ void wxGDIPlusPenData::Init()
     m_penBrush = NULL;
 }
 
-wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
-: wxGraphicsObjectRefData(renderer)
-{
-    InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
-}
-
 wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
                                     const wxGraphicsPenInfo &info )
     : wxGraphicsObjectRefData(renderer)
-{
-    InitFromPenInfo(info);
-}
-
-void wxGDIPlusPenData::InitFromPenInfo( const wxGraphicsPenInfo &info )
 {
     Init();
     m_width = info.GetWidth();
@@ -2462,19 +2447,6 @@ wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDoub
     data->Set( a,b,c,d,tx,ty ) ;
     m.SetRefData(data);
     return m;
-}
-
-wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
-{
-    ENSURE_LOADED_OR_RETURN(wxNullGraphicsPen);
-    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
-        return wxNullGraphicsPen;
-    else
-    {
-        wxGraphicsPen p;
-        p.SetRefData(new wxGDIPlusPenData( this, pen ));
-        return p;
-    }
 }
 
 wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxGraphicsPenInfo& info)

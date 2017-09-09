@@ -304,12 +304,10 @@ protected :
 class wxMacCoreGraphicsPenData : public wxGraphicsObjectRefData
 {
 public:
-    wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
     wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info );
     ~wxMacCoreGraphicsPenData();
 
     void Init();
-    void InitFromPenInfo( const wxGraphicsPenInfo& info );
     virtual void Apply( wxGraphicsContext* context );
     virtual wxDouble GetWidth() { return m_width; }
 
@@ -331,20 +329,9 @@ protected :
     CGFloat* m_patternColorComponents;
 };
 
-wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxPen &pen ) :
-    wxGraphicsObjectRefData( renderer )
-{
-    InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
-}
-
 wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer,
                                                     const wxGraphicsPenInfo& info )
     : wxGraphicsObjectRefData( renderer )
-{
-    InitFromPenInfo(info);
-}
-
-void wxMacCoreGraphicsPenData::InitFromPenInfo( const wxGraphicsPenInfo& info )
 {
     Init();
 
@@ -2550,8 +2537,6 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
 
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE ;
-
     virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE ;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE ;
@@ -2719,18 +2704,6 @@ wxGraphicsMatrix wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b
     data->Set( a,b,c,d,tx,ty ) ;
     m.SetRefData(data);
     return m;
-}
-
-wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
-{
-    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
-        return wxNullGraphicsPen;
-    else
-    {
-        wxGraphicsPen p;
-        p.SetRefData(new wxMacCoreGraphicsPenData( this, pen ));
-        return p;
-    }
 }
 
 wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxGraphicsPenInfo& info)

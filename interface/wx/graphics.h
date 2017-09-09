@@ -677,13 +677,19 @@ public:
 
     /**
         Creates a native pen from a wxPen.
+
+        Prefer to use the overload taking wxGraphicsPenInfo unless you already
+        have a wxPen as constructing one only to pass it to this method is
+        wasteful.
     */
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+    wxGraphicsPen CreatePen(const wxPen& pen) const;
 
     /**
         Creates a native pen from a wxGraphicsPenInfo.
+
+        @since 3.1.1
     */
-    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) const;
+    wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) const;
 
     /**
         Sets the pen used for stroking.
@@ -1420,9 +1426,11 @@ public:
     virtual wxGraphicsPath CreatePath() = 0;
 
     /**
-        Creates a native pen from a wxPen.
+        Creates a native pen from its description.
+
+        @since 3.1.1
     */
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) = 0;
 
     /**
         Creates a native brush with a radial gradient.

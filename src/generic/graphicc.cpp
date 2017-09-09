@@ -284,12 +284,10 @@ private:
 class WXDLLIMPEXP_CORE wxCairoPenData : public wxCairoPenBrushBaseData
 {
 public:
-    wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
     wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
     ~wxCairoPenData();
 
     void Init();
-    void InitFromPenInfo( const wxGraphicsPenInfo& info );
 
     virtual void Apply( wxGraphicsContext* context ) wxOVERRIDE;
     virtual wxDouble GetWidth() { return m_width; }
@@ -735,19 +733,8 @@ void wxCairoPenData::Init()
     m_count = 0;
 }
 
-wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
-    : wxCairoPenBrushBaseData(renderer, pen.GetColour(), pen.IsTransparent())
-{
-    InitFromPenInfo(wxGraphicsPenInfo::CreateFromPen(pen));
-}
-
 wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info )
     : wxCairoPenBrushBaseData(renderer, info.GetColour(), info.IsTransparent())
-{
-    InitFromPenInfo(info);
-}
-
-void wxCairoPenData::InitFromPenInfo( const wxGraphicsPenInfo &info )
 {
     Init();
     m_width = info.GetWidth();
@@ -2916,7 +2903,6 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
 
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE ;
     virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE ;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE ;
@@ -3091,17 +3077,6 @@ wxGraphicsMatrix wxCairoRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble
     data->Set( a,b,c,d,tx,ty ) ;
     m.SetRefData(data);
     return m;
-}
-
-wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
-{
-    wxGraphicsPen p;
-    ENSURE_LOADED_OR_RETURN(p);
-    if (pen.IsOk() && pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
-    {
-        p.SetRefData(new wxCairoPenData( this, pen ));
-    }
-    return p;
 }
 
 wxGraphicsPen wxCairoRenderer::CreatePen(const wxGraphicsPenInfo& info)
