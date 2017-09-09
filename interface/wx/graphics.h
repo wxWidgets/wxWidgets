@@ -1541,22 +1541,23 @@ public:
     calls to its clearly named methods instead of passing them in the fixed
     order to wxGraphicsPen constructors.
 
-    Typically you would use wxGraphicsPenInfo with a wxGraphicsContext:
+    Typically you would use wxGraphicsPenInfo with a wxGraphicsContext, e.g. to
+    start drawing with a dotted blue pen slightly wider than normal you could
+    write the following:
     @code
     wxGraphicsContext ctx = wxGraphicsContext::Create(dc);
 
-    ctx.SetPen(wxGraphicsPenInfo(*wxBLUE, 1.25));
+    ctx.SetPen(wxGraphicsPenInfo(*wxBLUE).Width(1.25).Style(wxPENSTYLE_DOT));
     @endcode
 
     @since 3.1.1
  */
-class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
+class wxGraphicsPenInfo
 {
 public:
-
-    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(), wxDouble width = 1.0, wxPenStyle style = wxPENSTYLE_SOLID);
-
-    static wxGraphicsPenInfo CreateFromPen(const wxPen& pen);
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(),
+                               wxDouble width = 1.0,
+                               wxPenStyle style = wxPENSTYLE_SOLID);
 
     wxGraphicsPenInfo& Colour(const wxColour& col);
 

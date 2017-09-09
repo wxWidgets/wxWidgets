@@ -109,18 +109,20 @@ enum wxPenCap
     calls to its clearly named methods instead of passing them in the fixed
     order to wxPen constructors.
 
-    For instance, to create a blue pen with a width of 0:
+    For instance, to create a dotted blue pen with the given join style you
+    could do
     @code
-    wxPen pen(wxPenInfo(*wxBLUE, 0));
+    wxPen pen(wxPenInfo(*wxBLUE).Style(wxPENSTYLE_DOT).Join(wxJOIN_BEVEL));
     @endcode
 
     @since 3.1.1
  */
-class wxPenInfo : public wxPenInfoBase<wxPenInfo>
+class wxPenInfo
 {
 public:
-
-    explicit wxPenInfo(const wxColour& colour = wxColour(), int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
+    explicit wxPenInfo(const wxColour& colour = wxColour(),
+                       int width = 1,
+                       wxPenStyle style = wxPENSTYLE_SOLID);
 
     wxPenInfo& Colour(const wxColour& col);
 
