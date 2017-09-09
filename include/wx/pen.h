@@ -69,17 +69,6 @@ template <class T>
 class wxPenInfoBase
 {
 public:
-    wxPenInfoBase(const wxColour& colour, wxPenStyle style)
-    {
-        m_nb_dashes = 0;
-        m_dash = NULL;
-        m_join = wxJOIN_ROUND;
-        m_cap = wxCAP_ROUND;
-
-        m_colour = colour;
-        m_style = style;
-    }
-
     // Setters for the various attributes. All of them return the object itself
     // so that the calls to them could be chained.
 
@@ -112,6 +101,18 @@ public:
     // Convenience
 
     bool IsTransparent() const { return m_style == wxPENSTYLE_TRANSPARENT; }
+
+protected:
+    wxPenInfoBase(const wxColour& colour, wxPenStyle style)
+    {
+        m_nb_dashes = 0;
+        m_dash = NULL;
+        m_join = wxJOIN_ROUND;
+        m_cap = wxCAP_ROUND;
+
+        m_colour = colour;
+        m_style = style;
+    }
 
 private:
     // Helper to return this object itself cast to its real type T.
