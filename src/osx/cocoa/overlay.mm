@@ -114,21 +114,6 @@ void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
     wxASSERT_MSG(m_overlayWindow != NULL, _("Couldn't create the overlay window"));
     m_overlayContext = (CGContextRef) [[m_overlayWindow graphicsContext] graphicsPort];
     wxASSERT_MSG(  m_overlayContext != NULL , _("Couldn't init the context on the overlay window") );
-    
-    int ySize = 0;
-    if ( m_window )
-    {
-        ySize = m_height;
-    }
-    else
-    {
-        CGRect cgbounds ;
-        cgbounds = CGDisplayBounds(CGMainDisplayID());
-        ySize = cgbounds.size.height;
-    }
-
-    CGContextTranslateCTM(m_overlayContext, 0, ySize);
-    CGContextScaleCTM(m_overlayContext, 1, -1);
 }
 
 void wxOverlayImpl::BeginDrawing( wxDC* dc)
@@ -137,7 +122,24 @@ void wxOverlayImpl::BeginDrawing( wxDC* dc)
     wxGCDCImpl *win_impl = wxDynamicCast(impl,wxGCDCImpl);
     if (win_impl)
     {
-        win_impl->SetGraphicsContext( wxGraphicsContext::CreateFromNative( m_overlayContext ) );
+        int ySize = 0;
+        if ( m_window )
+        {
+            ySize = m_height;
+        }
+        else
+        {
+            CGRect cgbounds ;
+            cgbounds = CGDisplayBounds(CGMainDisplayID());
+            ySize = cgbounds.size.height;
+        }
+
+        wxGraphicsContext* ctx = wxGraphicsContext::CreateFromNative( m_overlayContext );
+        ctx->Translate(0, ySize);
+        ctx->Scale(1,-1);
+        
+        win_impl->SetGraphicsContext( ctx );
+        
         if (m_window)
             dc->SetDeviceOrigin(dc->LogicalToDeviceX(-m_x), dc->LogicalToDeviceY(-m_y));
         dc->SetClippingRegion(m_x, m_y, m_width, m_height);
