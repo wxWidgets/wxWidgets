@@ -2298,7 +2298,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/frame.cpp
     src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
-    src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/renderer.cpp
     src/osx/carbon/statbrma.cpp
@@ -2461,6 +2460,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
     src/osx/cocoa/settings.mm
+    src/osx/cocoa/overlay.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
