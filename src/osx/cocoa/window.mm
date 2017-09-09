@@ -1042,6 +1042,7 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
     impl->insertText(text, self, _cmd);
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1104,6 +1105,7 @@ void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
 
     impl->TouchesEnded(event);
 }
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event)
 {
@@ -1491,6 +1493,7 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     m_lastKeyDownEvent = NULL;
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecognizer)
 {
     NSGestureRecognizerState gestureState = nil;
@@ -1890,6 +1893,7 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
         m_activeGestures &= ~press_and_tap;
     }
 }
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
@@ -2238,6 +2242,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseEntered:), (IMP) wxOSX_mouseEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseExited:), (IMP) wxOSX_mouseEvent, "v@:@" )
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     wxOSX_CLASS_ADD_METHOD(c, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" )
@@ -2245,6 +2250,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(touchesBeganWithEvent:), (IMP) wxOSX_touchesBegan, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(touchesMovedWithEvent:), (IMP) wxOSX_touchesMoved, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(touchesEndedWithEvent:), (IMP) wxOSX_touchesEnded, "v@:@" )
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(magnifyWithEvent:), (IMP)wxOSX_mouseEvent, "v@:@")
 
@@ -2328,11 +2334,13 @@ void wxWidgetCocoaImpl::Init()
     m_lastKeyDownEvent = NULL;
     m_hasEditor = false;
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     m_touchCount = 0;
     m_lastTouchTime = 0;
     m_allowedGestures = 0;
     m_activeGestures = 0;
     m_initialTouch = NULL;
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -2352,16 +2360,21 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
     if ( m_osxView )
         CFRelease(m_osxView);
 
-    if ( IsUserPane() )
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10) )
     {
-        [m_panGestureRecognizer release];
-        [m_magnificationGestureRecognizer release];
-        [m_rotationGestureRecognizer release];
-        [m_pressGestureRecognizer release];
+        if ( IsUserPane() )
+        {
+            [m_panGestureRecognizer release];
+            [m_magnificationGestureRecognizer release];
+            [m_rotationGestureRecognizer release];
+            [m_pressGestureRecognizer release];
 
-        if ( m_initialTouch )
-            [m_initialTouch release];
+            if ( m_initialTouch )
+                [m_initialTouch release];
+        }
     }
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
 bool wxWidgetCocoaImpl::IsVisible() const
@@ -3279,27 +3292,32 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
     [m_osxView addTrackingArea: area];
     [area release];
 
-    if ( IsUserPane() )
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10) )
     {
-        m_panGestureRecognizer =
-        [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
+        if ( IsUserPane() )
+        {
+            m_panGestureRecognizer =
+            [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
 
-        m_magnificationGestureRecognizer =
-        [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
+            m_magnificationGestureRecognizer =
+            [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
 
-        m_rotationGestureRecognizer =
-        [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
+            m_rotationGestureRecognizer =
+            [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
 
-        m_pressGestureRecognizer =
-        [[NSPressGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleLongPressGesture:)];
+            m_pressGestureRecognizer =
+            [[NSPressGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleLongPressGesture:)];
 
-        [m_osxView addGestureRecognizer:m_panGestureRecognizer];
-        [m_osxView addGestureRecognizer:m_magnificationGestureRecognizer];
-        [m_osxView addGestureRecognizer:m_rotationGestureRecognizer];
-        [m_osxView addGestureRecognizer:m_pressGestureRecognizer];
+            [m_osxView addGestureRecognizer:m_panGestureRecognizer];
+            [m_osxView addGestureRecognizer:m_magnificationGestureRecognizer];
+            [m_osxView addGestureRecognizer:m_rotationGestureRecognizer];
+            [m_osxView addGestureRecognizer:m_pressGestureRecognizer];
 
-        [m_osxView setAcceptsTouchEvents:YES];
+            [m_osxView setAcceptsTouchEvents:YES];
+        }
     }
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
 bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
