@@ -107,7 +107,7 @@ void wxCalendarCtrl::UpdateStyle()
     if ( !m_qtCalendar )
         return;
 
-    if ( WeekStartsOnMOnday() )
+    if ( WeekStartsOnMonday() )
         m_qtCalendar->setFirstDayOfWeek(Qt::Monday);
     else
         m_qtCalendar->setFirstDayOfWeek(Qt::Sunday);
