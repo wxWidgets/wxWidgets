@@ -32987,6 +32987,47 @@ $as_echo "$wx_cv_struct_tm_has_gmtoff" >&6; }
 
     fi
 
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for _NL_TIME_FIRST_WEEKDAY in langinfo.h" >&5
+$as_echo_n "checking for _NL_TIME_FIRST_WEEKDAY in langinfo.h... " >&6; }
+if ${wx_cv_have_nl_time_first_weekday+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+                     #define _GNU_SOURCE
+                     #include <langinfo.h>
+
+int
+main ()
+{
+
+                     _NL_TIME_FIRST_WEEKDAY;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+                     wx_cv_have_nl_time_first_weekday=yes
+
+else
+  wx_cv_have_nl_time_first_weekday=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_have_nl_time_first_weekday" >&5
+$as_echo "$wx_cv_have_nl_time_first_weekday" >&6; }
+
+    if test "$wx_cv_have_nl_time_first_weekday" = "yes"; then
+        $as_echo "#define HAVE_NL_TIME_FIRST_WEEKDAY 1" >>confdefs.h
+
+    fi
+
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
 fi
 

@@ -1484,6 +1484,18 @@ public:
                                   Country country = Country_Default);
 
     /**
+         Acquires the first weekday of a week based on locale and/or OS settings.
+         If the information was not available, returns @c Sun.
+         @param firstDay
+             The address of a WeekDay variable to which the first weekday will be
+             assigned to.
+         @return If the first day could not be determined, returns false,
+             and @a firstDay is set to a fallback value.
+         @since 3.1.1
+    */
+    static bool GetFirstWeekDay(WeekDay *firstDay);
+
+    /**
         Returns @true if the @a year is a leap one in the specified calendar.
         This functions supports Gregorian and Julian calendars.
     */

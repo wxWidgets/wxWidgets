@@ -77,6 +77,7 @@ All:
 - Add wxSecretStore for storing passwords using the OS-provided facilities.
 - Add support for compiling application code with wxNO_UNSAFE_WXSTRING_CONV.
 - Add support for translating strings in different contexts (RickS).
+- Add wxDateTime::GetFirstWeekDay() (Lauri Nurmi).
 - Add support for the micro version (third component) to OS and toolkit version
   functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
 - wxLogInfo() now logs messages if the log level is high enough, even without
@@ -101,6 +102,7 @@ All (GUI):
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
 - Update Scintilla to v3.7.2 (NewPagodi, Paul Kulchenko).
 - Update bundled libpng to 1.6.28 (Catalin Raceanu).
+- Automatically determine first day of the week in wxCalendarCtrl (Lauri Nurmi).
 - Fix vertical scrollbar visibility in wxStyledTextCtrl (yenwu, NewPagodi).
 - Fix bug with not being able to select AUI tab after dragging.
 - Make wxDataViewCtrl::Expand() expand ancestors in native ports too.

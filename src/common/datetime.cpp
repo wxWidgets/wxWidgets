@@ -541,6 +541,55 @@ bool wxDateTime::IsLeapYear(int year, wxDateTime::Calendar cal)
     }
 }
 
+#ifdef __WINDOWS__
+#include "wx/msw/registry.h"
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    wxRegKey key(wxRegKey::HKCU, "Control Panel\\International");
+    wxString val;
+
+    if ( key.Exists() && key.HasValue("iFirstDayOfWeek") )
+    {
+        key.QueryValue("iFirstDayOfWeek", val);
+        *firstDay = wxDateTime::WeekDay((wxAtoi(val) + 1) % 7);
+        return true;
+    }
+    else
+    {
+        *firstDay = wxDateTime::Sun;
+        return false;
+    }
+}
+
+#elif defined(__APPLE__)
+// implementation in utils_base.mm
+#elif defined(HAVE_NL_TIME_FIRST_WEEKDAY)
+
+#include <langinfo.h>
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    *firstDay = wxDateTime::WeekDay((*nl_langinfo(_NL_TIME_FIRST_WEEKDAY) - 1) % 7);
+    return true;
+}
+
+#else
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    *firstDay = wxDateTime::Sun;
+    return false;
+}
+
+#endif
+
 /* static */
 int wxDateTime::GetCentury(int year)
 {
@@ -1721,10 +1770,7 @@ wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags)
         return *this;
     }
 
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     // the logic below based on comparing weekday and wdayThis works if Sun (0)
     // is the first day in the week, but breaks down for Monday_First case so
@@ -1879,10 +1925,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
 wxDateTime::wxDateTime_t
 wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
 {
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     Tm tm(GetTm(tz));
     wxDateTime_t nDayInYear = GetDayOfYearFromTm(tm);
@@ -1969,10 +2012,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
     const wxDateTime dateFirst = wxDateTime(1, tm.mon, tm.year);
     const wxDateTime::WeekDay wdFirst = dateFirst.GetWeekDay();
 
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     // compute offset of dateFirst from the beginning of the week
     int firstOffset;
@@ -2083,6 +2123,16 @@ wxDateTime& wxDateTime::MakeFromTimezone(const TimeZone& tz, bool noDST)
     }
 
     return Subtract(wxTimeSpan::Seconds(secDiff));
+}
+
+void wxDateTime::UseEffectiveWeekDayFlags(WeekFlags &flags) const
+{
+    if ( flags == Default_First )
+    {
+        WeekDay firstDay;
+        GetFirstWeekDay(&firstDay);
+        flags = firstDay == Sun ? Sunday_First : Monday_First;
+    }
 }
 
 // ============================================================================

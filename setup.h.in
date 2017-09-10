@@ -935,6 +935,9 @@
 /* struct tm doesn't always have the tm_gmtoff field, define this if it does */
 #undef WX_GMTOFF_IN_TM
 
+/* check if nl_langinfo() can be called with argument _NL_TIME_FIRST_WEEKDAY */
+#undef HAVE_NL_TIME_FIRST_WEEKDAY
+
 /* Define if you have poll(2) function */
 #undef HAVE_POLL
 

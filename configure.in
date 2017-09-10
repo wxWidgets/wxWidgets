@@ -5949,6 +5949,28 @@ if test "$wxUSE_DATETIME" = "yes"; then
         AC_DEFINE(WX_GMTOFF_IN_TM)
     fi
 
+    AC_CACHE_CHECK([for _NL_TIME_FIRST_WEEKDAY in langinfo.h],
+                   wx_cv_have_nl_time_first_weekday,
+    [
+        AC_TRY_COMPILE(
+                [
+                     #define _GNU_SOURCE
+                     #include <langinfo.h>
+                ],
+                [
+                     _NL_TIME_FIRST_WEEKDAY;
+                ],
+                [
+                     wx_cv_have_nl_time_first_weekday=yes
+                ],
+                wx_cv_have_nl_time_first_weekday=no
+        )
+    ])
+
+    if test "$wx_cv_have_nl_time_first_weekday" = "yes"; then
+        AC_DEFINE(HAVE_NL_TIME_FIRST_WEEKDAY)
+    fi
+
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
 fi
 

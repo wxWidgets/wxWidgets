@@ -16,6 +16,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
+    #include "wx/datetime.h"
 #endif
 
 #include "wx/apptrait.h"
@@ -157,3 +158,14 @@ wxString wxGetOsDescription()
     return osDesc;
 }
 
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    [calendar setLocale:[NSLocale autoupdatingCurrentLocale]];
+
+    *firstDay = wxDateTime::WeekDay(([calendar firstWeekday] - 1) % 7);
+    return true;
+}
