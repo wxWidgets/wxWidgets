@@ -1496,7 +1496,7 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecognizer)
 {
-    NSGestureRecognizerState gestureState = nil;
+    NSGestureRecognizerState gestureState;
 
     switch ( [panGestureRecognizer state] )
     {
@@ -1551,7 +1551,7 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
 
 void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
 {
-    NSGestureRecognizerState gestureState = nil;
+    NSGestureRecognizerState gestureState;
 
     switch ( [magnificationGestureRecognizer state] )
     {
@@ -1599,7 +1599,7 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
 
 void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotationGestureRecognizer)
 {
-    NSGestureRecognizerState gestureState = nil;
+    NSGestureRecognizerState gestureState;
 
     switch ( [rotationGestureRecognizer state] )
     {
@@ -1650,7 +1650,7 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
 
 void wxWidgetCocoaImpl::LongPressEvent(NSPressGestureRecognizer* pressGestureRecognizer)
 {
-    NSGestureRecognizerState gestureState = nil;
+    NSGestureRecognizerState gestureState;
 
     switch ( [pressGestureRecognizer state] )
     {
