@@ -53,7 +53,7 @@ public:
         m_joinStyle = info.GetJoin();
         m_capStyle = info.GetCap();
         m_colour = info.GetColour();
-        m_countDashes = info.GetDashes((wxDash**)&m_dash);
+        m_countDashes = info.GetDashes(const_cast<wxDash**>(&m_dash));
     }
 
     bool operator == (const wxPenRefData& data) const

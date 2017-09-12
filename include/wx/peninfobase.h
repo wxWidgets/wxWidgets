@@ -79,7 +79,7 @@ public:
     T& Stipple(const wxBitmap& stipple)
         { m_stipple = stipple; m_style = wxPENSTYLE_STIPPLE; return This(); }
     T& Dashes(int nb_dashes, const wxDash *dash)
-        { m_nb_dashes = nb_dashes; m_dash = (wxDash *)dash; return This(); }
+        { m_nb_dashes = nb_dashes; m_dash = const_cast<wxDash*>(dash); return This(); }
     T& Join(wxPenJoin join)
         { m_join = join; return This(); }
     T& Cap(wxPenCap cap)
