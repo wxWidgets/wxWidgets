@@ -103,13 +103,12 @@ public:
 
 protected:
     wxPenInfoBase(const wxColour& colour, wxPenStyle style)
+        : m_colour(colour)
     {
         m_nb_dashes = 0;
         m_dash = NULL;
         m_join = wxJOIN_ROUND;
         m_cap = wxCAP_ROUND;
-
-        m_colour = colour;
         m_style = style;
     }
 
