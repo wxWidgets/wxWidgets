@@ -1507,7 +1507,8 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
 
     // don't use the hack below for the children of hidden root: this results
     // in a crash inside comctl32.dll when we call TreeView_GetItemRect()
-    const bool firstChild = !IsHiddenRoot(parent) &&
+    const bool oldWinVersion = (wxGetWinVersion() < wxWinVersion_Vista);
+    const bool firstChild = oldWinVersion && !IsHiddenRoot(parent) &&
                                 !TreeView_GetChild(GetHwnd(), HITEM(parent));
 
     HTREEITEM id = TreeView_InsertItem(GetHwnd(), &tvIns);
@@ -1519,7 +1520,7 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     // apparently some Windows versions (2000 and XP are reported to do this)
     // sometimes don't refresh the tree after adding the first child and so we
     // need this to make the "[+]" appear
-    if ( firstChild && (wxGetWinVersion() >= wxWinVersion_Vista) )
+    if ( firstChild )
     {
         TVGetItemRectParam param2;
 
