@@ -115,16 +115,16 @@ gboolean wxdataview_selection_func(GtkTreeSelection * WXUNUSED(selection),
 class wxGtkTreeSelectionLock
 {
 public:
-    wxGtkTreeSelectionLock(GtkTreeSelection *selection)
+    wxGtkTreeSelectionLock(GtkTreeSelection *selection, bool& alreadySet)
         : m_selection(selection)
     {
         wxASSERT_MSG( !ms_instance, "this class is not reentrant currently" );
 
         ms_instance = this;
 
-        if ( ms_firstTime )
+        if ( !alreadySet )
         {
-            ms_firstTime = false;
+            alreadySet = true;
             CheckCurrentSelectionFunc(NULL);
         }
         else
@@ -177,7 +177,6 @@ private:
     }
 
     static wxGtkTreeSelectionLock *ms_instance;
-    static bool ms_firstTime;
 
     GtkTreeSelection * const m_selection;
 
@@ -185,7 +184,6 @@ private:
 };
 
 wxGtkTreeSelectionLock *wxGtkTreeSelectionLock::ms_instance = NULL;
-bool wxGtkTreeSelectionLock::ms_firstTime = true;
 
 //-----------------------------------------------------------------------------
 // wxDataViewCtrlInternal
@@ -296,6 +294,11 @@ private:
     wxGtkDataViewModelNotifier *m_notifier;
 
     bool                  m_dirty;
+
+public:
+    // Allow direct access to this one from wxDataViewCtrl as it's just a
+    // simple flag and it doesn't make much sense to encapsulate it.
+    bool                  m_selectionFuncSet;
 };
 
 
@@ -3515,6 +3518,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataVie
     m_dropDataObject = NULL;
 
     m_dirty = false;
+    m_selectionFuncSet = false;
 
     m_gtk_model = wxgtk_tree_model_new();
     m_gtk_model->internal = this;
@@ -4908,7 +4912,8 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
     // Unfortunately the only way to do it seems to use our own selection
     // function and forbid any selection changes during set cursor call.
     wxGtkTreeSelectionLock
-        lock(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)));
+        lock(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)),
+             m_internal->m_selectionFuncSet);
 
     // Do move the cursor now.
     GtkTreeIter iter;
@@ -4949,7 +4954,8 @@ void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn
     // Unfortunately the only way to do it seems to use our own selection
     // function and forbid any selection changes during set cursor call.
     wxGtkTreeSelectionLock
-        lock(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)));
+        lock(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)),
+             m_internal->m_selectionFuncSet);
 
     // Do move the cursor now.
     GtkTreeIter iter;

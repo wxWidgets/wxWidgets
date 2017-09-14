@@ -1033,7 +1033,8 @@ bool wxZipEntry::LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool lo
     // seeking for the field with Header ID = 1.
     // (There is not stated in the documentation
     // that it should be the first one in the collection.)
-    while ( extraLen >= 4 )
+    const char* const extraDataEnd = extraData + extraLen;
+    while ( extraData + 4 <= extraDataEnd )
     {
         // Parse extra header
         wxZipHeader hds(extraData, 4);
@@ -1041,6 +1042,14 @@ bool wxZipEntry::LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool lo
         wxUint16 fieldLen = hds.Read16();
         if ( fieldID == 1 )
         {
+            // Check that we don't overflow the input buffer.
+            if ( extraData + 4 + fieldLen > extraDataEnd )
+            {
+                wxLogWarning(_("Ignoring malformed extra data record, "
+                               "ZIP file may be corrupted"));
+                return false;
+            }
+
             // Data block for extra field with Header ID = 1 (ZIP64)
             // can have length up to 28 bytes.
             wxZipHeader ds(extraData+4, wxMin(fieldLen, 28));
