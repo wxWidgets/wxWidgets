@@ -902,8 +902,6 @@ inline wxString wxGetFullModuleName()
 // for the other Windows versions 0 is currently returned
 enum wxWinVersion
 {
-    wxWinVersion_Unknown = 0,
-
     wxWinVersion_3 = 0x0300,
     wxWinVersion_NT3 = wxWinVersion_3,
 
@@ -930,7 +928,11 @@ enum wxWinVersion
     wxWinVersion_8 = 0x602,
     wxWinVersion_8_1 = 0x603,
 
-    wxWinVersion_10 = 0x1000
+    wxWinVersion_10 = 0x1000,
+
+    // Any version we can't recognize will be later than the last currently
+    // known one, so give it a value greater than any in the known range.
+    wxWinVersion_Unknown = 0x7fff
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
