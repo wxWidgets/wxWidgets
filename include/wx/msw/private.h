@@ -899,7 +899,7 @@ inline wxString wxGetFullModuleName()
 //      0x0603      Windows 8.1 (currently only returned for 8.1 if program has a manifest indicating 8.1 support)
 //      0x1000      Windows 10 (currently only returned for 10 if program has a manifest indicating 10 support)
 //
-// for the other Windows versions 0 is currently returned
+// for the other Windows versions wxWinVersion_Unknown is currently returned.
 enum wxWinVersion
 {
     wxWinVersion_3 = 0x0300,
