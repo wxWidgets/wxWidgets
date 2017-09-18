@@ -5431,6 +5431,12 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
         if( row >= 0 )
             m_clientArea->SelectRow(static_cast<unsigned int>(row), true);
     }
+
+    if (sel.size() > 0)
+    {
+        // Also make the first item as current item
+        DoSetCurrentItem(sel.front());
+    }
 }
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )
