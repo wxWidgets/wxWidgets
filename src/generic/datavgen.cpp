@@ -5434,8 +5434,8 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 
     if (sel.size() > 0)
     {
-        // Also make the first item as current item
-        DoSetCurrentItem(sel.front());
+        // Also make the last item as current item
+        DoSetCurrentItem(sel.Last());
     }
 }
 
