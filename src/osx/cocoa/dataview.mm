@@ -2089,6 +2089,8 @@ bool wxCocoaDataViewControl::ClearColumns()
     // columns cannot be deleted if there is an outline column in the view;
     // therefore, the whole view is deleted and newly constructed:
     RemoveAssociation(m_OutlineView); // undo InitOutlineView's association
+
+    [m_OutlineView removeFromSuperviewWithoutNeedingDisplay];
     [m_OutlineView release];
     m_OutlineView = [[wxCocoaOutlineView alloc] init];
     [((NSScrollView*) GetWXWidget()) setDocumentView:m_OutlineView];
