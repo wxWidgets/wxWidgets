@@ -1100,7 +1100,9 @@ wxRect wxRibbonPanel::GetExpandedPosition(wxRect panel,
 
 void wxRibbonPanel::HideIfExpanded()
 {
-    wxStaticCast(m_parent, wxRibbonPage)->HideIfExpanded();
+    wxRibbonPage* const containingPage = wxDynamicCast(m_parent, wxRibbonPage);
+    if (containingPage)
+        containingPage->HideIfExpanded();
 }
 
 #endif // wxUSE_RIBBON
