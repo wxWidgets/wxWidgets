@@ -3448,6 +3448,7 @@ wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
 
     g_object_unref( m_gtk_model );
 
+    delete m_root;
     delete m_dragDataObject;
     delete m_dropDataObject;
 }
