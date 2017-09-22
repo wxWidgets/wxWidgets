@@ -475,8 +475,6 @@ extern "C" {
 #define GTK_IS_WX_TREE_MODEL(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_TREE_MODEL))
 #define GTK_IS_WX_TREE_MODEL_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_TREE_MODEL))
 
-GType         gtk_wx_tree_model_get_type         (void);
-
 struct _GtkWxTreeModel
 {
   GObject parent;
@@ -557,7 +555,7 @@ static gboolean wxgtk_tree_model_row_drop_possible     (GtkTreeDragDest       *d
                                                         GtkTreePath           *dest_path,
                                                         GtkSelectionData      *selection_data);
 
-GType
+static GType
 gtk_wx_tree_model_get_type (void)
 {
     static GType tree_model_type = 0;
@@ -956,6 +954,7 @@ wxgtk_tree_model_get_sort_column_id (GtkTreeSortable *sortable,
     return TRUE;
 }
 
+static
 wxDataViewColumn *gs_lastLeftClickHeader = NULL;
 
 static void
@@ -1033,8 +1032,6 @@ extern "C" {
 #define GTK_IS_WX_CELL_RENDERER_TEXT(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_CELL_RENDERER_TEXT))
 #define GTK_IS_WX_CELL_RENDERER_TEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_CELL_RENDERER_TEXT))
 
-GType            gtk_wx_cell_renderer_text_get_type (void);
-
 typedef struct _GtkWxCellRendererText GtkWxCellRendererText;
 
 struct _GtkWxCellRendererText
@@ -1063,7 +1060,7 @@ static GObjectClass *text_cell_parent_class = NULL;
 
 }  // extern "C"
 
-GType
+static GType
 gtk_wx_cell_renderer_text_get_type (void)
 {
     static GType cell_wx_type = 0;
@@ -1108,7 +1105,7 @@ gtk_wx_cell_renderer_text_class_init(void* klass, void*)
     cell_class->start_editing = gtk_wx_cell_renderer_text_start_editing;
 }
 
-GtkWxCellRendererText*
+static GtkWxCellRendererText*
 gtk_wx_cell_renderer_text_new (void)
 {
     return (GtkWxCellRendererText*) g_object_new (GTK_TYPE_WX_CELL_RENDERER_TEXT, NULL);
@@ -1159,8 +1156,6 @@ extern "C" {
 #define GTK_IS_WX_CELL_EDITOR_BIN(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN))
 #define GTK_IS_WX_CELL_EDITOR_BIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_CELL_EDITOR_BIN))
 
-GType gtk_wx_cell_editor_bin_get_type();
-
 struct GtkWxCellEditorBin
 {
     GtkBin parent;
@@ -1182,7 +1177,7 @@ static void gtk_wx_cell_editor_bin_cell_editable_start_editing(
 
 }
 
-GType
+static GType
 gtk_wx_cell_editor_bin_get_type()
 {
     static GType cell_editor_bin_type = 0;
@@ -1256,7 +1251,7 @@ gtk_wx_cell_editor_bin_set_property(GObject*, guint, const GValue*, GParamSpec*)
 {
 }
 
-GtkWidget*
+static GtkWidget*
 gtk_wx_cell_editor_bin_new(wxWindow* editor)
 {
     if ( !editor )
@@ -1313,8 +1308,6 @@ extern "C" {
 #define GTK_WX_CELL_RENDERER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WX_CELL_RENDERER, GtkWxCellRenderer))
 #define GTK_IS_WX_CELL_RENDERER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_CELL_RENDERER))
 #define GTK_IS_WX_CELL_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_CELL_RENDERER))
-
-GType            gtk_wx_cell_renderer_get_type (void);
 
 typedef struct _GtkWxCellRenderer GtkWxCellRenderer;
 
@@ -1375,7 +1368,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
 
 }  // extern "C"
 
-GType
+static GType
 gtk_wx_cell_renderer_get_type (void)
 {
     static GType cell_wx_type = 0;
@@ -1422,7 +1415,7 @@ gtk_wx_cell_renderer_class_init(void* klass, void*)
     cell_class->start_editing = gtk_wx_cell_renderer_start_editing;
 }
 
-GtkCellRenderer*
+static GtkCellRenderer*
 gtk_wx_cell_renderer_new (void)
 {
     return (GtkCellRenderer*) g_object_new (GTK_TYPE_WX_CELL_RENDERER, NULL);
