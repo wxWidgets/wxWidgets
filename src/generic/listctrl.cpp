@@ -4097,7 +4097,8 @@ void wxListMainWindow::DeleteItem( long lindex )
     // with many items, the vertical scroll position may change so that the new
     // last item is not visible any longer, which is very annoying from the
     // user point of view. Ensure that whatever happens, this item is visible.
-    EnsureVisible(m_current);
+    if (count > 1)
+        EnsureVisible(m_current);
 }
 
 void wxListMainWindow::DeleteColumn( int col )
