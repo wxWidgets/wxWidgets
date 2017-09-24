@@ -83,7 +83,8 @@ void wxNativeWindow::DoDisown()
 // TODO: we probably need equivalent code for other GDK platforms
 #ifdef GDK_WINDOWING_X11
 
-extern "C" GdkFilterReturn
+extern "C" {
+static GdkFilterReturn
 wxNativeContainerWindowFilter(GdkXEvent *gdkxevent,
                               GdkEvent *event,
                               gpointer data)
@@ -100,6 +101,7 @@ wxNativeContainerWindowFilter(GdkXEvent *gdkxevent,
     }
 
     return GDK_FILTER_CONTINUE;
+}
 }
 
 #endif // GDK_WINDOWING_X11
