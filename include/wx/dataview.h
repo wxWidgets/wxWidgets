@@ -276,6 +276,16 @@ protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
 
+    // Helper function used by the default Compare() implementation to compare
+    // values of types it is not aware about. Can be overridden in the derived
+    // classes that use columns of custom types.
+    virtual int DoCompareValues(const wxVariant& WXUNUSED(value1),
+                                const wxVariant& WXUNUSED(value2)) const
+    {
+        return 0;
+    }
+
+
     wxDataViewModelNotifiers  m_notifiers;
 };
 

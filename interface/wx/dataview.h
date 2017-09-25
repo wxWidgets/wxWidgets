@@ -138,7 +138,9 @@ public:
         The compare function to be used by the control. The default compare
         function sorts most data types implemented by wxVariant (i.e. bool,
         int, long, double, string) as well as datetime and wxDataViewIconText.
-        Override this for a different sorting behaviour.
+        Override this method to implement a different sorting behaviour or
+        override just DoCompareValues() to extend it to support other wxVariant
+        types.
 
         The function should return negative, null or positive for an ascending
         comparison, depending on whether the first item is less than, equal to
@@ -171,7 +173,8 @@ public:
 
             return (ascending == (id1 > id2)) ? : 1 : -1;
         @endcode
-        @see HasDefaultCompare().
+
+        @see HasDefaultCompare(), DoCompareValues()
     */
     virtual int Compare(const wxDataViewItem& item1,
                         const wxDataViewItem& item2,
@@ -377,6 +380,32 @@ protected:
         Destructor. This should not be called directly. Use DecRef() instead.
     */
     virtual ~wxDataViewModel();
+
+    /**
+        Virtual method that can be overridden to define comparison for values
+        of non-standard types.
+
+        This function is called from the default Compare() implementation to
+        compare values of types it is not aware about (i.e. not any of the
+        standard ones). As Compare() itself, this method should return a
+        negative value if @a value1 is less than (i.e. should appear above) @a
+        value2 and a positive value if @a value2 is less than @a value1.
+
+        Unlike Compare(), if the values are equal, this method should just
+        return 0 to indicate it and let Compare() order them by their items
+        values. It also doesn't have to care about the sort order direction,
+        making it simpler to override than Compare() itself.
+
+        The default implementation just returns 0, so the derived class version
+        can simply forward to it if it doesn't know how to compare the given
+        values.
+
+        @see Compare()
+
+        @since 3.1.1
+    */
+    virtual int DoCompareValues(const wxVariant& value1,
+                                const wxVariant& value2) const;
 };
 
 
