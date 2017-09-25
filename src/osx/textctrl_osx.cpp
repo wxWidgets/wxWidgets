@@ -482,6 +482,17 @@ void wxTextCtrl::Command(wxCommandEvent & event)
     ProcessCommand(event);
 }
 
+void wxTextCtrl::SetWindowStyleFlag(long style)
+{
+    long styleOld = GetWindowStyleFlag();
+
+    wxTextCtrlBase::SetWindowStyleFlag(style);
+
+    static const long flagsAlign = wxTE_LEFT | wxTE_CENTRE | wxTE_RIGHT;
+    if ( (style & flagsAlign) != (styleOld & flagsAlign) )
+        GetTextPeer()->SetJustification();
+}
+
 // ----------------------------------------------------------------------------
 // standard handlers for standard edit menu events
 // ----------------------------------------------------------------------------
@@ -774,4 +785,7 @@ int wxTextWidgetImpl::GetLineLength(long lineNo) const
     return 0 ;
 }
 
+void wxTextWidgetImpl::SetJustification()
+{
+}
 #endif // wxUSE_TEXTCTRL

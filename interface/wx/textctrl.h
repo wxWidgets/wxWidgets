@@ -1004,9 +1004,10 @@ public:
     @endStyleTable
 
     Note that alignment styles (wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT) can be
-    changed dynamically after control creation on wxMSW and wxGTK. wxTE_READONLY,
-    wxTE_PASSWORD and wrapping styles can be dynamically changed under wxGTK but
-    not wxMSW. The other styles can be only set during control creation.
+    changed dynamically after control creation on wxMSW, wxGTK and wxOSX.
+    wxTE_READONLY, wxTE_PASSWORD and wrapping styles can be dynamically changed
+    under wxGTK but not wxMSW. The other styles can be only set during control
+    creation.
 
 
     @section textctrl_text_format wxTextCtrl Text Format

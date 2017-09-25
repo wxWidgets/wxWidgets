@@ -1142,6 +1142,23 @@ wxSize wxNSTextViewControl::GetBestSize() const
     return wxSize(0,0);
 }
 
+void wxNSTextViewControl::SetJustification()
+{
+    if ( !m_textView )
+        return;
+
+    NSTextAlignment align;
+
+    if ( m_wxPeer->HasFlag(wxTE_RIGHT) )
+        align = NSRightTextAlignment;
+    else if ( m_wxPeer->HasFlag(wxTE_CENTRE) )
+        align = NSCenterTextAlignment;
+    else // wxTE_LEFT == 0
+        align = NSLeftTextAlignment;
+
+    [m_textView setAlignment:align];
+}
+
 // wxNSTextFieldControl
 
 wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *text, WXWidget w )
@@ -1423,6 +1440,23 @@ bool wxNSTextFieldControl::SetHint(const wxString& hint)
     wxCFStringRef hintstring(hint);
     [[m_textField cell] setPlaceholderString:hintstring.AsNSString()];
     return true;
+}
+
+void wxNSTextFieldControl::SetJustification()
+{
+    if ( !m_textField )
+        return;
+
+    NSTextAlignment align;
+
+    if ( m_wxPeer->HasFlag(wxTE_RIGHT) )
+        align = NSRightTextAlignment;
+    else if ( m_wxPeer->HasFlag(wxTE_CENTRE) )
+        align = NSCenterTextAlignment;
+    else // wxTE_LEFT == 0
+        align = NSLeftTextAlignment;
+
+    [m_textField setAlignment:align];
 }
 
 //

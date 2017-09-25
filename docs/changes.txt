@@ -241,6 +241,7 @@ wxOSX:
 - Add support for wxTE_CHARWRAP style to wxTextCtrl.
 - Fix selecting RGB bitmaps (with no alpha channel) into wxMemoryDC.
 - Fix updating radio groups when menu item is inserted/removed from wxMenu.
+- Allow changing alignment styles after wxTextCtrl creation (Andreas Falkenhahn).
 
 Unix:
 
