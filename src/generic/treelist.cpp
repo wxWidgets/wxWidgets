@@ -387,6 +387,10 @@ public:
                         unsigned col,
                         bool ascending) const wxOVERRIDE;
 
+protected:
+    virtual int DoCompareValues(const wxVariant& value1,
+                                const wxVariant& value2) const wxOVERRIDE;
+
 private:
     // The control we're associated with.
     wxTreeListCtrl* const m_treelist;
@@ -1005,6 +1009,22 @@ wxTreeListModel::Compare(const wxDataViewItem& item1,
         result = -result;
 
     return result;
+}
+
+int wxTreeListModel::DoCompareValues(const wxVariant& value1,
+                                     const wxVariant& value2) const
+{
+    if ( value1.GetType() == wxS("wxDataViewCheckIconText") )
+    {
+        wxDataViewCheckIconText iconText1, iconText2;
+
+        iconText1 << value1;
+        iconText2 << value2;
+
+        return iconText1.GetText().Cmp(iconText2.GetText());
+    }
+
+    return wxDataViewModel::DoCompareValues(value1, value2);
 }
 
 // ============================================================================
