@@ -836,12 +836,18 @@ wxGraphicsPen wxGraphicsContext::CreatePen(const wxPen& pen) const
                                 .Cap(pen.GetCap())
                                 ;
 
-    wxDash *dashes;
-    if ( int nb_dashes = pen.GetDashes(&dashes) )
-        info.Dashes(nb_dashes, dashes);
+    if ( info.GetStyle() == wxPENSTYLE_USER_DASH )
+    {
+        wxDash *dashes;
+        if ( int nb_dashes = pen.GetDashes(&dashes) )
+            info.Dashes(nb_dashes, dashes);
+    }
 
-    if ( wxBitmap* const stipple = pen.GetStipple() )
-        info.Stipple(*stipple);
+    if ( info.GetStyle() == wxPENSTYLE_STIPPLE )
+    {
+        if ( wxBitmap* const stipple = pen.GetStipple() )
+            info.Stipple(*stipple);
+    }
 
     return DoCreatePen(info);
 }

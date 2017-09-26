@@ -695,6 +695,7 @@ public :
     virtual wxSize GetBestSize() const { return wxDefaultSize; }
 
     virtual bool SetHint(const wxString& WXUNUSED(hint)) { return false; }
+    virtual void SetJustification();
 private:
     wxTextEntry * const m_entry;
 

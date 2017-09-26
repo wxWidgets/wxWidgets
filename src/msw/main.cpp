@@ -305,7 +305,13 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     return wxEntry(wxArgs.argc, wxArgs.argv);
 }
 
-#else // !wxUSE_GUI
+#endif // wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// global HINSTANCE
+// ----------------------------------------------------------------------------
+
+#if wxUSE_BASE
 
 int wxEntry()
 {
@@ -313,14 +319,6 @@ int wxEntry()
 
     return wxEntry(wxArgs.argc, wxArgs.argv);
 }
-
-#endif // wxUSE_GUI/!wxUSE_GUI
-
-// ----------------------------------------------------------------------------
-// global HINSTANCE
-// ----------------------------------------------------------------------------
-
-#if wxUSE_BASE
 
 HINSTANCE wxhInstance = 0;
 

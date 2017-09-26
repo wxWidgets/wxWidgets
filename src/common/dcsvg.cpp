@@ -121,6 +121,7 @@ wxString wxBrushString(wxColour c, int style = wxBRUSHSTYLE_SOLID)
     return s;
 }
 
+static
 wxString wxGetPenPattern(wxPen& pen)
 {
     wxString s;

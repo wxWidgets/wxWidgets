@@ -58,8 +58,8 @@ static unsigned int GetEntryTextLength(GtkEntry* entry)
 // ============================================================================
 
 // "insert_text" handler for GtkEntry
-extern "C"
-void
+extern "C" {
+static void
 wx_gtk_insert_text_callback(GtkEditable *editable,
                             const gchar * new_text,
                             gint new_text_length,
@@ -145,6 +145,7 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
 
         g_signal_stop_emission_by_name (editable, "insert_text");
     }
+}
 }
 
 //-----------------------------------------------------------------------------

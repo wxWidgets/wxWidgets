@@ -471,6 +471,7 @@ void wxPGTextCtrlEditor::SetControlStringValue( wxPGProperty* property, wxWindow
 }
 
 
+static
 void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
                                  wxTextCtrl* tc )
 {
@@ -957,6 +958,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     }
 }
 
+static
 bool wxPGChoiceEditor_SetCustomPaintWidth( wxPropertyGrid* propGrid, wxPGComboBox* cb, int cmnVal )
 {
     wxPGProperty* property = propGrid->GetSelectedProperty();

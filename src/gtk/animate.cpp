@@ -32,6 +32,8 @@
 // implementation
 // ============================================================================
 
+extern "C" {
+static
 void gdk_pixbuf_area_updated(GdkPixbufLoader *loader,
                              gint             WXUNUSED(x),
                              gint             WXUNUSED(y),
@@ -46,7 +48,7 @@ void gdk_pixbuf_area_updated(GdkPixbufLoader *loader,
         anim->SetPixbuf(gdk_pixbuf_loader_get_animation(loader));
     }
 }
-
+}
 
 //-----------------------------------------------------------------------------
 // wxAnimation

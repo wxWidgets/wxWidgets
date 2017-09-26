@@ -5414,6 +5414,9 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 {
     m_clientArea->ClearSelection();
 
+    if ( sel.empty() )
+        return;
+
     wxDataViewItem last_parent;
 
     for ( size_t i = 0; i < sel.size(); i++ )
@@ -5431,6 +5434,9 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
         if( row >= 0 )
             m_clientArea->SelectRow(static_cast<unsigned int>(row), true);
     }
+
+    // Also make the last item as current item
+    DoSetCurrentItem(sel.Last());
 }
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )

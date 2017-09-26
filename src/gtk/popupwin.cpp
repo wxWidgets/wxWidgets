@@ -63,6 +63,7 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
 //-----------------------------------------------------------------------------
 
 extern "C" {
+static
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxPopupWindow *win )
 {
     if (win->IsEnabled())

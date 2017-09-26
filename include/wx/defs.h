@@ -3130,7 +3130,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIWebView);
 typedef WX_UIWindow WXWindow;
 typedef WX_UIView WXWidget;
 typedef WX_EAGLContext WXGLContext;
-typedef WX_NSString* WXGLPixelFormat;
+typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;
 
 #endif

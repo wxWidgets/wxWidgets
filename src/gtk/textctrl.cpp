@@ -444,7 +444,7 @@ extern "C" {
 
 // Normal version used for detecting IME input and generating appropriate
 // events for it.
-void
+static void
 wx_insert_text_callback(GtkTextBuffer* buffer,
                         GtkTextIter* WXUNUSED(end),
                         gchar *text,

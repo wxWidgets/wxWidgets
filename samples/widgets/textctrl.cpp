@@ -993,7 +993,7 @@ void TextWidgetsPage::OnTextPasted(wxClipboardTextEvent& event)
 
 void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 {
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX__)
     // We should be able to change text alignment
     // dynamically, without recreating the control.
     if( event.GetEventObject() == m_radioAlign )
@@ -1028,7 +1028,7 @@ void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
     else
 #else
     wxUnusedVar(event);
-#endif // WXMSW || WXGTK
+#endif // WXMSW || WXGTK || WXOSX
     {
         CreateText();
     }
