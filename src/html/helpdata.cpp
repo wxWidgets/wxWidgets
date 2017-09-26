@@ -700,7 +700,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
     wxFontEncoding enc = wxFONTENCODING_SYSTEM;
 #if wxUSE_FONTMAP
-    if (charset != wxEmptyString)
+    if (!charset.empty())
         enc = wxFontMapper::Get()->CharsetToEncoding(charset);
 #endif
 
@@ -807,7 +807,7 @@ wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& key
     m_Data = data;
     m_Keyword = keyword;
     wxHtmlBookRecord* bookr = NULL;
-    if (book != wxEmptyString)
+    if (!book.empty())
     {
         // we have to search in a specific book. Find it first
         int i, cnt = data->m_bookRecords.GetCount();

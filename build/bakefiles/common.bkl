@@ -795,4 +795,9 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     <set var="VARS_DONT_ELIMINATE" append="1">top_srcdir</set>
 
 
+    <set var="webviewdll_ext_dir_define">
+        <if cond="FORMAT=='autoconf' and USE_WEBVIEW_WEBKIT2=='1'">WX_WEB_EXTENSIONS_DIRECTORY=\"$(PLUGINS_INST_DIR)/web-extensions\"</if>
+    </set>
+
+
 </makefile>

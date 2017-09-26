@@ -80,6 +80,8 @@ protected:
     // Override the base class method to use GtkEntry IM context.
     virtual int GTKIMFilterKeypress(GdkEventKey* event) const;
 
+    static unsigned int GTKGetEntryTextLength(GtkEntry* entry);
+
 private:
     // implement this to return the associated GtkEntry or another widget
     // implementing GtkEditable

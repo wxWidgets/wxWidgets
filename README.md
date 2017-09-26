@@ -55,7 +55,7 @@ If you are looking for support, you can get it from
 - [#wxwidgets IRC channel](https://www.wxwidgets.org/support/irc/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/wxwidgets)
   (tag your questions with `wxwidgets`)
-- Please report bugs at http://trac.wxwidgets.org/newticket
+- Please report bugs at https://trac.wxwidgets.org/newticket
 
 We would also gladly welcome [your contributions](.github/CONTRIBUTING.md).
 

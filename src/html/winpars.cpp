@@ -338,10 +338,11 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     return GetFS()->OpenFile(myurl, flags);
 }
 
-#define NBSP_UNICODE_VALUE  (wxChar(160))
 #if !wxUSE_UNICODE
+    #define NBSP_UNICODE_VALUE  (160U)
     #define CUR_NBSP_VALUE m_nbsp
 #else
+    #define NBSP_UNICODE_VALUE  (wxChar(160))
     #define CUR_NBSP_VALUE NBSP_UNICODE_VALUE
 #endif
 
@@ -631,7 +632,7 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
 void wxHtmlWinParser::SetLink(const wxHtmlLinkInfo& link)
 {
     m_Link = link;
-    m_UseLink = (link.GetHref() != wxEmptyString);
+    m_UseLink = !link.GetHref().empty();
 }
 
 void wxHtmlWinParser::SetFontFace(const wxString& face)

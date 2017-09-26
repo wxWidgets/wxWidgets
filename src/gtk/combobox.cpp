@@ -153,6 +153,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
                                          !HasFlag(wxTE_PROCESS_ENTER) );
 
         gtk_editable_set_editable(GTK_EDITABLE(entry), true);
+#ifdef __WXGTK3__
+        gtk_entry_set_width_chars(entry, 0);
+#endif
     }
 
     Append(n, choices);

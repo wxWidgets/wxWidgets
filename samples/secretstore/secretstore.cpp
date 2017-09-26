@@ -68,14 +68,13 @@ bool Save(wxSecretStore& store, const wxString& service, const wxString& user)
     return true;
 }
 
-bool Load(wxSecretStore& store, const wxString& service, const wxString& user)
+bool Load(wxSecretStore& store, const wxString& service)
 {
-    wxSecretValue secret = store.Load(service, user);
-    if ( !secret.IsOk() )
+    wxString user;
+    wxSecretValue secret;
+    if ( !store.Load(service, user, secret) )
     {
-        wxFprintf(stderr,
-                  "Failed to load the password for %s/%s.\n",
-                  service, user);
+        wxFprintf(stderr, "Failed to load the password for %s.\n", service);
         return false;
     }
 
@@ -92,18 +91,15 @@ bool Load(wxSecretStore& store, const wxString& service, const wxString& user)
     return true;
 }
 
-bool Delete(wxSecretStore& store, const wxString& service, const wxString& user)
+bool Delete(wxSecretStore& store, const wxString& service)
 {
-    if ( !store.Delete(service, user) )
+    if ( !store.Delete(service) )
     {
-        wxFprintf(stderr,
-                  "Password for %s/%s not deleted.\n",
-                  service, user);
+        wxFprintf(stderr, "Password for %s not deleted.\n", service);
         return false;
     }
 
-    wxPrintf("Stored password for %s/%s deleted.\n",
-             service, user);
+    wxPrintf("Stored password for %s deleted.\n", service);
 
     return true;
 }
@@ -114,14 +110,15 @@ static bool PrintResult(bool ok)
     return ok;
 }
 
-bool SelfTest(wxSecretStore& store, const wxString& service, const wxString& user)
+bool SelfTest(wxSecretStore& store, const wxString& service)
 {
     wxPrintf("Running the tests...\n");
 
+    const wxString userTest("test");
     const wxSecretValue secret1(6, "secret");
 
     wxPrintf("Storing the password:\t");
-    bool ok = store.Save(service, user, secret1);
+    bool ok = store.Save(service, userTest, secret1);
     if ( !PrintResult(ok) )
     {
         // The rest of the tests will probably fail too, no need to continue.
@@ -130,12 +127,11 @@ bool SelfTest(wxSecretStore& store, const wxString& service, const wxString& use
     }
 
     wxPrintf("Loading the password:\t");
-    wxSecretValue secret = store.Load(service, user);
-    ok = secret.IsOk() &&
-            secret.GetSize() == secret1.GetSize() &&
-                memcmp(secret.GetData(), secret1.GetData(), secret1.GetSize()) == 0;
-    if ( !PrintResult(secret == secret1) )
-        ok = false;
+    wxSecretValue secret;
+    wxString user;
+    ok = PrintResult(store.Load(service, user, secret) &&
+                        user == userTest &&
+                            secret == secret1);
 
     // Overwriting the password should work.
     const wxSecretValue secret2(6, "privet");
@@ -144,25 +140,25 @@ bool SelfTest(wxSecretStore& store, const wxString& service, const wxString& use
     if ( PrintResult(store.Save(service, user, secret2)) )
     {
         wxPrintf("Reloading the password:\t");
-        secret = store.Load(service, user);
-        if ( !PrintResult(secret == secret2) )
+        if ( !PrintResult(store.Load(service, user, secret) &&
+                            secret == secret2) )
             ok = false;
     }
     else
         ok = false;
 
     wxPrintf("Deleting the password:\t");
-    if ( !PrintResult(store.Delete(service, user)) )
+    if ( !PrintResult(store.Delete(service)) )
         ok = false;
 
     // This is supposed to fail now.
     wxPrintf("Deleting it again:\t");
-    if ( !PrintResult(!store.Delete(service, user)) )
+    if ( !PrintResult(!store.Delete(service)) )
         ok = false;
 
     // And loading should fail too.
     wxPrintf("Loading after deleting:\t");
-    if ( !PrintResult(!store.Load(service, user).IsOk()) )
+    if ( !PrintResult(!store.Load(service, user, secret)) )
         ok = false;
 
     if ( ok )
@@ -183,16 +179,19 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    if ( argc != 4 )
+    if ( argc < 2 ||
+            argc != (argv[1] == wxString("save") ? 4 : 3) )
     {
         wxFprintf(stderr,
-                  "Usage: %s {save|load|delete|selftest} <service> <user>\n"
+                  "Usage: %s save <service> <user>\n"
+                  "   or  %s {load|delete|selftest} <service>\n"
                   "\n"
                   "Sample showing wxSecretStore class functionality.\n"
                   "Specify one of the commands to perform the corresponding\n"
-                  "function call. The \"service\" and \"user\" arguments are\n"
-                  "mandatory, \"save\" will also prompt for password.\n",
-                  argv[0]);
+                  "function call. The \"service\" argument is mandatory for\n"
+                  "all commands, \"save\" also requires \"user\" and will\n"
+                  "prompt for password.\n",
+                  argv[0], argv[0]);
         return EXIT_SYNTAX;
     }
 
@@ -205,24 +204,23 @@ int main(int argc, char **argv)
 
     const wxString operation = argv[1];
     const wxString service = argv[2];
-    const wxString user = argv[3];
 
     bool ok;
     if ( operation == "save" )
     {
-        ok = Save(store, service, user);
+        ok = Save(store, service, argv[3]);
     }
     else if ( operation == "load" )
     {
-        ok = Load(store, service, user);
+        ok = Load(store, service);
     }
     else if ( operation == "delete" )
     {
-        ok = Delete(store, service, user);
+        ok = Delete(store, service);
     }
     else if ( operation == "selftest" )
     {
-        ok = SelfTest(store, service, user);
+        ok = SelfTest(store, service);
     }
     else
     {

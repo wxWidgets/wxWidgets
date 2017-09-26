@@ -100,46 +100,6 @@
     #define __CYGWIN10__
 #endif
 
-/* Mingw runtime 1.0-20010604 has some missing _tXXXX functions,
-   so let's define them ourselves: */
-#if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 ) \
-    && !wxCHECK_W32API_VERSION( 1, 1 )
-    #ifndef _tsetlocale
-      #if wxUSE_UNICODE
-      #define _tsetlocale _wsetlocale
-      #else
-      #define _tsetlocale setlocale
-      #endif
-    #endif
-    #ifndef _tgetenv
-      #if wxUSE_UNICODE
-      #define _tgetenv _wgetenv
-      #else
-      #define _tgetenv getenv
-      #endif
-    #endif
-    #ifndef _tfopen
-      #if wxUSE_UNICODE
-      #define _tfopen _wfopen
-      #else
-      #define _tfopen fopen
-      #endif
-    #endif
-#endif
-
-/* current (= before mingw-runtime 3.3) mingw32 headers forget to
-   define _puttchar, this will probably be fixed in the next versions but
-   for now do it ourselves
- */
-#if defined( __MINGW32__ ) && \
-        !wxCHECK_MINGW32_VERSION(3,3) && !defined( _puttchar )
-    #ifdef wxUSE_UNICODE
-        #define  _puttchar   putwchar
-    #else
-        #define  _puttchar   puttchar
-    #endif
-#endif
-
 /*
     Traditional MinGW (but not MinGW-w64 nor TDM-GCC) omits many POSIX
     functions from their headers when compiled with __STRICT_ANSI__ defined.

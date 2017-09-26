@@ -72,14 +72,14 @@ FUNC_FOR_CMD = 1
 GENERATE_PROVISIONAL_ITEMS = 0
 
 # No wxSTC value will be generated for the following Scintilla values.
-notMappedSciValues = {
+notMappedSciValues = set([
     'SC_TECHNOLOGY_DIRECTWRITERETAIN',
     'SC_TECHNOLOGY_DIRECTWRITEDC',
     'INDIC0_MASK',
     'INDIC1_MASK',
     'INDIC2_MASK',
     'INDICS_MASK'
-}
+])
 
 # Map some generic typenames to wx types, using return value syntax
 retTypeMap = {

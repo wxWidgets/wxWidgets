@@ -71,6 +71,7 @@
 class MyApp : public wxApp
 {
 public:
+    MyApp();
     // override base class virtuals
     // ----------------------------
 
@@ -78,6 +79,9 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit() wxOVERRIDE;
+
+private:
+    wxLocale m_locale;
 };
 
 class MyPanel : public wxPanel
@@ -153,6 +157,8 @@ public:
     }
 #endif // wxHAS_NATIVE_CALENDARCTRL
 
+    void OnCalAutoWeekday(wxCommandEvent& event);
+    void OnCalSunday(wxCommandEvent& event);
     void OnCalMonday(wxCommandEvent& event);
     void OnCalHolidays(wxCommandEvent& event);
     void OnCalSpecial(wxCommandEvent& event);
@@ -240,6 +246,8 @@ enum
     Calendar_File_ClearLog = wxID_CLEAR,
     Calendar_File_Quit = wxID_EXIT,
     Calendar_Cal_Generic = 200,
+    Calendar_Cal_AutoWeekday,
+    Calendar_Cal_Sunday,
     Calendar_Cal_Monday,
     Calendar_Cal_Holidays,
     Calendar_Cal_Special,
@@ -298,6 +306,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Calendar_Cal_Generic, MyFrame::OnCalGeneric)
 #endif // wxHAS_NATIVE_CALENDARCTRL
 
+    EVT_MENU(Calendar_Cal_AutoWeekday, MyFrame::OnCalAutoWeekday)
+    EVT_MENU(Calendar_Cal_Sunday, MyFrame::OnCalSunday)
     EVT_MENU(Calendar_Cal_Monday, MyFrame::OnCalMonday)
     EVT_MENU(Calendar_Cal_Holidays, MyFrame::OnCalHolidays)
     EVT_MENU(Calendar_Cal_Special, MyFrame::OnCalSpecial)
@@ -319,6 +329,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(Calendar_Cal_SeqMonth, MyFrame::OnUpdateUIGenericOnly)
 #ifdef __WXGTK20__
+    EVT_UPDATE_UI(Calendar_Cal_AutoWeekday, MyFrame::OnUpdateUIGenericOnly)
+    EVT_UPDATE_UI(Calendar_Cal_Sunday, MyFrame::OnUpdateUIGenericOnly)
     EVT_UPDATE_UI(Calendar_Cal_Monday, MyFrame::OnUpdateUIGenericOnly)
     EVT_UPDATE_UI(Calendar_Cal_Holidays, MyFrame::OnUpdateUIGenericOnly)
 #endif
@@ -348,6 +360,13 @@ wxIMPLEMENT_APP(MyApp);
 // ----------------------------------------------------------------------------
 // the application class
 // ----------------------------------------------------------------------------
+
+MyApp::MyApp() :
+    // Locale affects on the language used in the calendar, and may affect
+    // on the first day of the week.
+    m_locale(wxLANGUAGE_DEFAULT)
+{
+}
 
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
@@ -396,10 +415,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                              "Toggle between native and generic control");
     menuCal->AppendSeparator();
 #endif // wxHAS_NATIVE_CALENDARCTRL
-    menuCal->Append(Calendar_Cal_Monday,
-                    wxT("Monday &first weekday\tCtrl-F"),
-                    wxT("Toggle between Mon and Sun as the first week day"),
-                    true);
+    menuCal->AppendRadioItem(Calendar_Cal_AutoWeekday,
+                    wxT("Automatic &first weekday\tCtrl-V"));
+    menuCal->AppendRadioItem(Calendar_Cal_Sunday,
+                    wxT("Sunday &first weekday\tCtrl-Z"));
+    menuCal->AppendRadioItem(Calendar_Cal_Monday,
+                    wxT("Monday &first weekday\tCtrl-F"));
     menuCal->Append(Calendar_Cal_Holidays, wxT("Show &holidays\tCtrl-H"),
                     wxT("Toggle highlighting the holidays"),
                     true);
@@ -462,7 +483,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuBar->Append(menuTime, wxT("&Time picker"));
 #endif // wxUSE_TIMEPICKCTRL
 
-    menuBar->Check(Calendar_Cal_Monday, true);
+    menuBar->Check(Calendar_Cal_AutoWeekday, true);
+    menuBar->Check(Calendar_Cal_Sunday, false);
+    menuBar->Check(Calendar_Cal_Monday, false);
     menuBar->Check(Calendar_Cal_Holidays, true);
     menuBar->Check(Calendar_Cal_Month, true);
     menuBar->Check(Calendar_Cal_LimitDates, false);
@@ -503,8 +526,21 @@ void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
     m_logWindow->Clear();
 }
 
+void MyFrame::OnCalAutoWeekday(wxCommandEvent&)
+{
+    m_panel->ToggleCalStyle(false, wxCAL_SUNDAY_FIRST);
+    m_panel->ToggleCalStyle(false, wxCAL_MONDAY_FIRST);
+}
+
+void MyFrame::OnCalSunday(wxCommandEvent& event)
+{
+    m_panel->ToggleCalStyle(false, wxCAL_MONDAY_FIRST);
+    m_panel->ToggleCalStyle(event.IsChecked(), wxCAL_SUNDAY_FIRST);
+}
+
 void MyFrame::OnCalMonday(wxCommandEvent& event)
 {
+    m_panel->ToggleCalStyle(false, wxCAL_SUNDAY_FIRST);
     m_panel->ToggleCalStyle(event.IsChecked(), wxCAL_MONDAY_FIRST);
 }
 
@@ -702,7 +738,7 @@ MyPanel::MyPanel(wxWindow *parent)
                 wxDateTime::Today().FormatISODate().c_str());
     m_date = new wxStaticText(this, wxID_ANY, date);
     m_calendar = DoCreateCalendar(wxDefaultDateTime,
-                                  wxCAL_MONDAY_FIRST | wxCAL_SHOW_HOLIDAYS);
+                                  wxCAL_SHOW_HOLIDAYS);
 
     // adjust to vertical/horizontal display
     bool horizontal = ( wxSystemSettings::GetMetric(wxSYS_SCREEN_X) > wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );

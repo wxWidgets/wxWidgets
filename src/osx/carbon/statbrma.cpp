@@ -155,7 +155,8 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
     // that case, statusbar appearance shouldn't change. It also shouldn't
     // change if a window-modal sheet attached to this window is key.
     wxTopLevelWindow *tlw = wxDynamicCast(MacGetTopLevelWindow(), wxTopLevelWindow);
-    wxWindow *keyWindow = wxNonOwnedWindow::GetFromWXWindow(wxOSXGetKeyWindow())->MacGetTopLevelWindow();
+    wxNonOwnedWindow* directKeyWindow = wxNonOwnedWindow::GetFromWXWindow(wxOSXGetKeyWindow());
+    wxWindow *keyWindow = directKeyWindow ? directKeyWindow->MacGetTopLevelWindow() : NULL;
     while ( keyWindow && keyWindow != tlw )
     {
         wxDialog *dlg = wxDynamicCast(keyWindow, wxDialog);

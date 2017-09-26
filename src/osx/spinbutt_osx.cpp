@@ -96,6 +96,10 @@ void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
     {
         inc = -1;
     }
+    else
+    {
+        wxFAIL_MSG( "Unexpected event" );
+    }
 
     // trigger scroll events
 
@@ -119,32 +123,23 @@ void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
             newValue = m_max;
     }
 
-    if ( newValue - oldValue == -1 )
-        scrollEvent = wxEVT_SCROLL_LINEDOWN;
-    else if ( newValue - oldValue == 1 )
-        scrollEvent = wxEVT_SCROLL_LINEUP;
-    else
-        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
-
     // Do not send an event if the value has not actually changed
     // (Also works for wxSpinCtrl)
     if ( newValue == oldValue )
         return;
 
-    if ( scrollEvent != wxEVT_SCROLL_THUMBTRACK )
-    {
-        wxSpinEvent event( scrollEvent, m_windowId );
+    wxSpinEvent event( scrollEvent, m_windowId );
 
-        event.SetPosition( newValue );
-        event.SetEventObject( this );
-        if ((HandleWindowEvent( event )) && !event.IsAllowed())
-            newValue = oldValue;
-    }
+    event.SetPosition( newValue );
+    event.SetEventObject( this );
+    if ((HandleWindowEvent( event )) && !event.IsAllowed())
+        newValue = oldValue;
 
-    GetPeer()->SetValue( newValue );
+    SetValue( newValue );
 
-    // always send a thumbtrack event
-    SendThumbTrackEvent() ;
+    // send a thumbtrack event if EVT_SPIN_UP/DOWN wasn't vetoed 
+    if ( newValue != oldValue )
+        SendThumbTrackEvent() ;
 }
 
 #endif // wxUSE_SPINBTN

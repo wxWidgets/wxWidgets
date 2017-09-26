@@ -36,8 +36,6 @@
 // trace mask for activation tracing messages
 #define TRACE_ACTIVATE "activation"
 
-wxWindow* g_MacLastWindow = NULL ;
-
 clock_t wxNonOwnedWindow::s_lastFlush = 0;
 
 // unified title and toolbar constant - not in Tiger headers, so we duplicate it here

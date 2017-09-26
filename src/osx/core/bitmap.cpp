@@ -834,20 +834,22 @@ wxBitmapRefData::~wxBitmapRefData()
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    bool created = false ;
     int w = icon.GetWidth() ;
     int h = icon.GetHeight() ;
 
-    Create( w , h ) ;
-    if ( !created )
+    if ( Create( w, h ) )
     {
         wxMemoryDC dc ;
         dc.SelectObject( *this ) ;
         dc.DrawIcon( icon , 0 , 0 ) ;
         dc.SelectObject( wxNullBitmap ) ;
+
+        // Assume 32 bpp icon has transparency values
+        UseAlpha(icon.GetDepth() == 32);
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
@@ -973,7 +975,7 @@ IconRef wxBitmap::GetIconRef() const
 IconRef wxBitmap::CreateIconRef() const
 {
     IconRef icon = GetIconRef();
-    verify_noerr( AcquireIconRef(icon) );
+    __Verify_noErr(AcquireIconRef(icon));
     return icon;
 }
 #endif
@@ -1212,7 +1214,9 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     // width and height of the device-dependent bitmap
     int width = image.GetWidth();
     int height = image.GetHeight();
-
+    // we always use 32 bit internally here
+    depth = 32;
+    
     wxBitmapRefData* bitmapRefData;
 
     m_refData = bitmapRefData = new wxBitmapRefData( width/scale, height/scale, depth, scale) ;
@@ -1867,9 +1871,9 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(dataBase))
     EndRawAccess() ;
 }
 
-void wxBitmap::UseAlpha()
+void wxBitmap::UseAlpha(bool use )
 {
     // remember that we are using alpha channel:
     // we'll need to create a proper mask in UngetRawData()
-    M_BITMAPDATA->UseAlpha( true );
+    M_BITMAPDATA->UseAlpha( use );
 }

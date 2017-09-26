@@ -38,7 +38,7 @@
 #endif
 
 #include "wx/tooltip.h"
-#include "wx/spinctrl.h"
+#include "wx/spinbutt.h"
 #include "wx/geometry.h"
 #include "wx/weakref.h"
 
@@ -221,7 +221,7 @@ void wxWindowMac::Init()
 wxWindowMac::~wxWindowMac()
 {
     SendDestroyEvent();
-    
+
 #if wxUSE_HOTKEY && wxOSX_USE_COCOA_OR_CARBON
     for ( int i = s_hotkeys.size()-1; i>=0; -- i )
     {
@@ -265,9 +265,6 @@ wxWindowMac::~wxWindowMac()
         if ( tlw->GetDefaultItem() == (wxButton*) this)
             tlw->SetDefaultItem(NULL);
     }
-
-    if ( g_MacLastWindow == this )
-        g_MacLastWindow = NULL ;
 
 #ifndef __WXUNIVERSAL__
     wxFrame* frame = wxDynamicCast( wxGetTopLevelParent( (wxWindow*)this ) , wxFrame ) ;
@@ -313,10 +310,10 @@ void wxWindowMac::SetWrappingPeer(wxOSXWidgetImpl* wrapper)
     wxOSXWidgetImpl* inner = GetPeer();
     wxASSERT_MSG( inner != NULL && inner->IsOk(), "missing or incomplete inner peer" );
     wxASSERT_MSG( wrapper != NULL && wrapper->IsOk(), "missing or incomplete wrapper" );
-    
+
     if ( !(inner != NULL && inner->IsOk() && wrapper != NULL && wrapper->IsOk()) )
         return;
-    
+
     inner->RemoveFromParent();
     wrapper->InstallEventHandler();
     wrapper->Embed(inner);
@@ -337,28 +334,28 @@ void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
     if ( GetPeer() && !GetPeer()->IsRootControl())
     {
         wxASSERT_MSG( GetPeer()->IsOk() , wxT("The native control must exist already") ) ;
-        
+
         if (!GetParent()->GetChildren().Find((wxWindow*)this))
             GetParent()->AddChild( this );
-        
+
         GetPeer()->InstallEventHandler();
         GetPeer()->Embed(GetParent()->GetPeer());
-        
+
         GetParent()->MacChildAdded() ;
-        
+
         // adjust font, controlsize etc
         GetPeer()->SetControlSize( m_windowVariant );
         InheritAttributes();
         // in case nothing has been set, use the variant default fonts
         if ( !m_hasFont )
             DoSetWindowVariant( m_windowVariant );
-        
+
         GetPeer()->SetInitialLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
-        
+
         // for controls we want to use best size for wxDefaultSize params )
         if ( !GetPeer()->IsUserPane() )
             SetInitialSize(GetMinSize());
-        
+
         SetCursor( *wxSTANDARD_CURSOR ) ;
     }
 }
@@ -642,13 +639,12 @@ void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
     GetPeer()->SetDropTarget(m_dropTarget) ;
 }
 
-#endif
-
 // Old-style File Manager Drag & Drop
 void wxWindowMac::DragAcceptFiles(bool WXUNUSED(accept))
 {
     // TODO:
 }
+#endif
 
 // From a wx position / size calculate the appropriate size of the native control
 
@@ -862,16 +858,16 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
         // we shouldn't return invalid width
         if ( ww < 0 )
             ww = 0;
-        
+
         *x = ww;
     }
-    
+
     if (y)
     {
         // we shouldn't return invalid height
         if ( hh < 0 )
             hh = 0;
-        
+
         *y = hh;
     }
 }
@@ -1247,7 +1243,7 @@ bool wxWindowMac::Show(bool show)
 {
     if ( !show )
         MacInvalidateBorders();
-    
+
     if ( !wxWindowBase::Show(show) )
         return false;
 
@@ -1378,7 +1374,7 @@ void wxWindowMac::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 
     if ( !IsShownOnScreen() )
         return ;
-    
+
     if ( IsFrozen() )
         return;
 
@@ -2002,7 +1998,7 @@ bool wxWindowMac::MacDoRedraw( long time )
     wxNonOwnedWindow* top = MacGetTopLevelWindow();
     if (top)
         top->WindowWasPainted() ;
-    
+
     return handled;
 }
 
@@ -2305,14 +2301,14 @@ long wxWindowMac::MacGetLeftBorderSize() const
 {
     // the wx borders are all symmetric in mac themes
     long border = MacGetWXBorderSize() ;
- 
+
     if ( GetPeer() )
     {
         int left, top, right, bottom;
         GetPeer()->GetLayoutInset( left, top, right, bottom );
         border -= left;
     }
-    
+
     return border;
 }
 
@@ -2321,14 +2317,14 @@ long wxWindowMac::MacGetRightBorderSize() const
 {
     // the wx borders are all symmetric in mac themes
     long border = MacGetWXBorderSize() ;
-    
+
     if ( GetPeer() )
     {
         int left, top, right, bottom;
         GetPeer()->GetLayoutInset( left, top, right, bottom );
         border -= right;
     }
-    
+
     return border;
 }
 
@@ -2336,14 +2332,14 @@ long wxWindowMac::MacGetTopBorderSize() const
 {
     // the wx borders are all symmetric in mac themes
     long border = MacGetWXBorderSize() ;
-    
+
     if ( GetPeer() )
     {
         int left, top, right, bottom;
         GetPeer()->GetLayoutInset( left, top, right, bottom );
         border -= top;
     }
-    
+
     return border;
 }
 
@@ -2351,14 +2347,14 @@ long wxWindowMac::MacGetBottomBorderSize() const
 {
     // the wx borders are all symmetric in mac themes
     long border = MacGetWXBorderSize() ;
-    
+
     if ( GetPeer() )
     {
         int left, top, right, bottom;
         GetPeer()->GetLayoutInset( left, top, right, bottom );
         border -= bottom;
     }
-    
+
     return border;
 }
 
@@ -2533,18 +2529,18 @@ wxHotKeyHandler(EventHandlerCallRef WXUNUSED(nextHandler),
             GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode );
             GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
             GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
-            
+
             UInt32 keymessage = (keyCode << 8) + charCode;
-            
+
             wxKeyEvent wxevent(wxEVT_HOTKEY);
             wxevent.SetId(hotKeyId.id);
             wxTheApp->MacCreateKeyEvent( wxevent, s_hotkeys[i].window , keymessage , 
                                         modifiers , when , 0 ) ;
-            
+
             s_hotkeys[i].window->HandleWindowEvent(wxevent);
         }
     }
-    
+
     return noErr;
 }
 
@@ -2555,11 +2551,11 @@ bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         if ( s_hotkeys[i].keyId == hotkeyId )
         {
             wxLogLastError(wxT("hotkeyId already registered"));
-                
+
             return false;
         }
     }
-    
+
     static bool installed = false;
     if ( !installed )
     {
@@ -2570,7 +2566,7 @@ bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         InstallApplicationEventHandler(&wxHotKeyHandler, 1, &eventType, NULL, NULL);
         installed = true;
     }
-    
+
     UInt32 mac_modifiers=0;
     if ( modifiers & wxMOD_ALT )
         mac_modifiers |= optionKey;
@@ -2580,18 +2576,18 @@ bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         mac_modifiers |= controlKey;
     if ( modifiers & wxMOD_CONTROL )
         mac_modifiers |= cmdKey;
-    
+
     EventHotKeyRef hotKeyRef;
     EventHotKeyID hotKeyIDmac;
-    
+
     hotKeyIDmac.signature = 'WXMC';
     hotKeyIDmac.id = hotkeyId;
-    
+
     if ( RegisterEventHotKey(wxCharCodeWXToOSX((wxKeyCode)keycode), mac_modifiers, hotKeyIDmac,
                         GetApplicationEventTarget(), 0, &hotKeyRef) != noErr )
     {
         wxLogLastError(wxT("RegisterHotKey"));
-        
+
         return false;
     }
     else
@@ -2600,10 +2596,10 @@ bool wxWindowMac::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         v.ref = hotKeyRef;
         v.keyId = hotkeyId;
         v.window = this;
-        
+
         s_hotkeys.push_back(v);
     }
-    
+
     return true;
 }
 
@@ -2618,14 +2614,14 @@ bool wxWindowMac::UnregisterHotKey(int hotkeyId)
             if ( UnregisterEventHotKey(ref) != noErr )
             {
                 wxLogLastError(wxT("UnregisterHotKey"));
-                
+
                 return false;
             }
             else 
                 return true;
         }
     }
-    
+
     return false;
 }
 
@@ -2634,7 +2630,7 @@ bool wxWindowMac::UnregisterHotKey(int hotkeyId)
 bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 {
     bool handled = false;
-    
+
     // moved the ordinary key event sending AFTER the accel evaluation
 
 #if wxUSE_ACCEL
@@ -2668,7 +2664,7 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
         }
     }
 #endif // wxUSE_ACCEL
-    
+
     if ( !handled )
     {
         handled = HandleWindowEvent( event ) ;
@@ -2741,9 +2737,9 @@ void wxWidgetImpl::RemoveAssociations(wxWidgetImpl* impl)
 
 void wxWidgetImpl::RemoveAssociation(WXWidget control)
 {
-	wxCHECK_RET( control != NULL, wxT("attempt to remove a NULL WXWidget from control map") );
+    wxCHECK_RET( control != NULL, wxT("attempt to remove a NULL WXWidget from control map") );
 
-	wxWinMacControlList.erase(control);
+    wxWinMacControlList.erase(control);
 }
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxWidgetImpl, wxObject);

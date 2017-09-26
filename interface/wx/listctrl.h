@@ -369,6 +369,13 @@ public:
                 const wxString& name = wxListCtrlNameStr);
 
     /**
+       Delete all columns in the list control.
+
+       @return @true if all columns were successfully deleted, @false otherwise.
+    */
+    bool DeleteAllColumns();
+    
+    /**
         Deletes all items in the list control.
 
         This function does @e not send the @c wxEVT_LIST_DELETE_ITEM

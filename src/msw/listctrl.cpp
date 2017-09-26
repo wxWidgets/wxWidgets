@@ -393,12 +393,10 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxLC_SORT_DESCENDING )
         wstyle |= LVS_SORTDESCENDING;
 
-#if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( style & wxLC_VIRTUAL )
     {
         wstyle |= LVS_OWNERDATA;
     }
-#endif // ancient cygwin
 
     return wstyle;
 }

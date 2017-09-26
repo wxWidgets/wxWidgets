@@ -44,7 +44,7 @@
 inline bool wxHasCGContext(wxWindow* WXUNUSED(win), wxDC& dc)
 {
     wxGCDCImpl* gcdc = wxDynamicCast( dc.GetImpl() , wxGCDCImpl);
-    
+
     if ( gcdc )
     {
         if ( gcdc->GetGraphicsContext()->GetNativeContext() )
@@ -198,34 +198,35 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
             memset( &drawInfo, 0, sizeof(drawInfo) );
             drawInfo.version = 0;
             drawInfo.kind = kThemeListHeaderButton;
-            drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
-            drawInfo.value = (flags & wxCONTROL_PRESSED) ? kThemeButtonOn : kThemeButtonOff;
             drawInfo.adornment = kThemeAdornmentNone;
+            drawInfo.value = kThemeButtonOff;
+            if ( flags & wxCONTROL_DISABLED )
+                drawInfo.state = kThemeStateInactive;
+            else if ( flags & wxCONTROL_PRESSED )
+                drawInfo.state = kThemeStatePressed;
+            else
+                drawInfo.state = kThemeStateActive;
 
-            // The down arrow is drawn automatically, change it to an up arrow if needed.
+            // The down arrow is drawn automatically (if value is kThemeButtonOn)
+            // change it to an up arrow if needed.
             if ( sortArrow == wxHDR_SORT_ICON_UP )
+            {
                 drawInfo.adornment = kThemeAdornmentHeaderButtonSortUp;
+                drawInfo.value = kThemeButtonOn;
+            }
+            else if (sortArrow == wxHDR_SORT_ICON_DOWN )
+            {
+                drawInfo.value = kThemeButtonOn;
+            }
 
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
-
-            // If we don't want any arrows we need to draw over the one already there
-            if ( (flags & wxCONTROL_PRESSED) && (sortArrow == wxHDR_SORT_ICON_NONE) )
-            {
-                // clip to the header rectangle
-                CGContextSaveGState( cgContext );
-                CGContextClipToRect( cgContext, headerRect );
-                // but draw bigger than that so the arrow will get clipped off
-                headerRect.size.width += 25;
-                HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
-                CGContextRestoreGState( cgContext );
-            }
         }
     }
 
     // Reserve room for the arrows before writing the label, and turn off the
     // flags we've already handled
     wxRect newRect(rect);
-    if ( (flags & wxCONTROL_PRESSED) && (sortArrow != wxHDR_SORT_ICON_NONE) )
+    if ( sortArrow != wxHDR_SORT_ICON_NONE )
     {
         newRect.width -= 12;
         sortArrow = wxHDR_SORT_ICON_NONE;
@@ -729,22 +730,22 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
         drawCircle = false;
         glyphColor = wxColour(145, 147, 149);
     }
-    
+
     if ( drawCircle )
     {
         wxRect circleRect(rect);
         circleRect.Deflate(2);
-    
+
         dc.DrawEllipse(circleRect);
     }
-    
+
     dc.SetPen(wxPen(glyphColor, 1));
-    
+
     wxRect centerRect(rect);
     centerRect.Deflate(5);
     centerRect.height++;
     centerRect.width++;
-	
+
     dc.DrawLine(centerRect.GetTopLeft(), centerRect.GetBottomRight());
     dc.DrawLine(centerRect.GetTopRight(), centerRect.GetBottomLeft());
 }

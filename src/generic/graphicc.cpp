@@ -98,7 +98,6 @@ using namespace std;
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #include <cairo-quartz.h>
-#include <cairo-atsui.h>
 #endif
 
 // Helper functions for dealing with alpha pre-multiplication.
@@ -285,7 +284,7 @@ private:
 class WXDLLIMPEXP_CORE wxCairoPenData : public wxCairoPenBrushBaseData
 {
 public:
-    wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
+    wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
     ~wxCairoPenData();
 
     void Init();
@@ -476,7 +475,9 @@ public:
 
     virtual void StrokePath( const wxGraphicsPath& p ) wxOVERRIDE;
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) wxOVERRIDE;
-
+    virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    
     virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
     virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
     virtual void Rotate( wxDouble angle ) wxOVERRIDE;
@@ -732,15 +733,15 @@ void wxCairoPenData::Init()
     m_count = 0;
 }
 
-wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
-    : wxCairoPenBrushBaseData(renderer, pen.GetColour(), pen.IsTransparent())
+wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info )
+    : wxCairoPenBrushBaseData(renderer, info.GetColour(), info.IsTransparent())
 {
     Init();
-    m_width = pen.GetWidth();
+    m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 
-    switch ( pen.GetCap() )
+    switch ( info.GetCap() )
     {
     case wxCAP_ROUND :
         m_cap = CAIRO_LINE_CAP_ROUND;
@@ -759,7 +760,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         break;
     }
 
-    switch ( pen.GetJoin() )
+    switch ( info.GetJoin() )
     {
     case wxJOIN_BEVEL :
         m_join = CAIRO_LINE_JOIN_BEVEL;
@@ -796,7 +797,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         9.0 , 6.0 , 3.0 , 3.0
     };
 
-    switch ( pen.GetStyle() )
+    switch ( info.GetStyle() )
     {
     case wxPENSTYLE_SOLID :
         break;
@@ -826,7 +827,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
     case wxPENSTYLE_USER_DASH :
         {
             wxDash *wxdashes ;
-            m_count = pen.GetDashes( &wxdashes ) ;
+            m_count = info.GetDashes( &wxdashes ) ;
             if ((wxdashes != NULL) && (m_count > 0))
             {
                 m_userLengths = new double[m_count] ;
@@ -847,14 +848,17 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
     case wxPENSTYLE_STIPPLE :
     case wxPENSTYLE_STIPPLE_MASK :
     case wxPENSTYLE_STIPPLE_MASK_OPAQUE :
-        InitStipple(pen.GetStipple());
+        {
+            wxBitmap stipple = info.GetStipple();
+            InitStipple(&stipple);
+        }
         break;
 
     default :
-        if ( pen.GetStyle() >= wxPENSTYLE_FIRST_HATCH
-            && pen.GetStyle() <= wxPENSTYLE_LAST_HATCH )
+        if ( info.GetStyle() >= wxPENSTYLE_FIRST_HATCH
+            && info.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
-            InitHatch(static_cast<wxHatchStyle>(pen.GetStyle()));
+            InitHatch(static_cast<wxHatchStyle>(info.GetStyle()));
         }
         break;
     }
@@ -1445,7 +1449,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         isSrcBpp32
 #elif defined(__WXGTK3__)
         isSrcBpp32 || bmp.GetMask() != NULL
-#elif defined(__WXMSW__)
+#elif defined(__WXMSW__) || defined(__WXOSX__)
         (isSrcBpp32 && bmp.HasAlpha()) || bmp.GetMask() != NULL
 #else
         isSrcBpp32
@@ -1538,7 +1542,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
         }
     }
 
-#if defined(__WXMSW__) || defined(__WXGTK3__)
+#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
     // if there is a mask, set the alpha bytes in the target buffer to 
     // fully transparent or fully opaque
 #if defined(__WXMSW__)
@@ -1559,7 +1563,12 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxUint32* const rowStartDst = data;
             for (int x=0; x < pixData.GetWidth(); x++)
             {
+                // contrary to the others OSX has natively its masked out pixels as white
+#ifdef __WXOSX__
+                if (p.Red() == 0xFF && p.Green() == 0xFF && p.Blue() == 0xFF )
+#else
                 if (p.Red()+p.Green()+p.Blue() == 0)
+#endif
                     *data = 0;
                 else
                     *data = (wxALPHA_OPAQUE << 24) | (*data & 0x00FFFFFF);
@@ -2440,6 +2449,32 @@ void wxCairoContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fi
     }
 }
 
+void wxCairoContext::ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    cairo_save(m_context);
+    cairo_set_operator(m_context, CAIRO_OPERATOR_CLEAR);
+    cairo_rectangle (m_context, x, y, w, h);
+    cairo_fill (m_context);
+    cairo_restore(m_context);
+}
+
+void wxCairoContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    if ( !m_brush.IsNull() )
+    {
+        ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
+        cairo_rectangle(m_context, x, y, w, h);
+        cairo_fill(m_context);
+    }
+    if ( !m_pen.IsNull() )
+    {
+        wxCairoOffsetHelper helper( m_context, ShouldOffset() ) ;
+        ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
+        cairo_rectangle(m_context, x, y, w, h);
+        cairo_stroke(m_context);
+    }
+}
+
 void wxCairoContext::Rotate( wxDouble angle )
 {
     cairo_rotate(m_context,angle);
@@ -2868,7 +2903,7 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
 
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE ;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE ;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE ;
 
@@ -3044,13 +3079,13 @@ wxGraphicsMatrix wxCairoRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble
     return m;
 }
 
-wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
+wxGraphicsPen wxCairoRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
     wxGraphicsPen p;
     ENSURE_LOADED_OR_RETURN(p);
-    if (pen.IsOk() && pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+    if (info.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
-        p.SetRefData(new wxCairoPenData( this, pen ));
+        p.SetRefData(new wxCairoPenData( this, info ));
     }
     return p;
 }

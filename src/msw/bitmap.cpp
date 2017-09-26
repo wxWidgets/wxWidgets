@@ -1374,19 +1374,11 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 #endif
 }
 
-void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
+void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
 #if wxUSE_WXDIB
     if ( !IsOk() )
         return;
-
-    if ( !&dataBase )
-    {
-        // invalid data, don't crash -- but don't assert neither as we're
-        // called automatically from wxPixelDataBase dtor and so there is no
-        // way to prevent this from happening
-        return;
-    }
 
     // if we're a DDB we need to convert DIB back to DDB now to make the
     // changes made via raw bitmap access effective

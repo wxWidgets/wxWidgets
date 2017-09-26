@@ -112,8 +112,11 @@
 @implementation WXCTabViewImageItem : NSTabViewItem
 - (id)init
 {
-    m_image = nil;
-    return [super initWithIdentifier:nil];
+    if (self = [super initWithIdentifier:nil])
+    {
+        m_image = nil;
+    }
+    return self;
 }
 - (void)dealloc
 {

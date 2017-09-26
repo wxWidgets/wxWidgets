@@ -142,7 +142,7 @@ Trac: mark the milestone corresponding to the release as completed and add a
 new version for it to allow reporting bugs against it and create the next
 milestone (ask Vadim or Robin to do it or to get admin password).
 
-Update the roadmap at http://trac.wxwidgets.org/wiki/Roadmap to at least
+Update the roadmap at https://trac.wxwidgets.org/wiki/Roadmap to at least
 mention the new release there.
 
 Run `misc/scripts/inc_release` to increment micro version, i.e. replace x.y.z

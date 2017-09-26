@@ -898,9 +898,6 @@ public:
       wxStringIteratorNode m_node;
   };
 
-  size_t IterToImplPos(wxString::iterator i) const
-    { return wxStringImpl::const_iterator(i.impl()) - m_impl.begin(); }
-
   iterator GetIterForNthChar(size_t n)
     { return iterator(this, m_impl.begin() + PosToImpl(n)); }
   const_iterator GetIterForNthChar(size_t n) const
@@ -974,6 +971,9 @@ public:
   iterator GetIterForNthChar(size_t n) { return begin() + n; }
   const_iterator GetIterForNthChar(size_t n) const { return begin() + n; }
 #endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
+
+  size_t IterToImplPos(wxString::iterator i) const
+    { return wxStringImpl::const_iterator(i.impl()) - m_impl.begin(); }
 
   #undef WX_STR_ITERATOR_TAG
   #undef WX_STR_ITERATOR_IMPL
@@ -1820,12 +1820,11 @@ public:
   {
     wxSTRING_INVALIDATE_CACHE();
 
-#if wxUSE_UNICODE_UTF8
-    if ( !ch.IsAscii() )
-        m_impl = wxStringOperations::EncodeChar(ch);
-    else
-#endif // wxUSE_UNICODE_UTF8
+    if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
         m_impl = (wxStringCharType)ch;
+    else
+        m_impl = wxStringOperations::EncodeChar(ch);
+
     return *this;
   }
 
@@ -2410,19 +2409,17 @@ public:
     // append n copies of ch
   wxString& append(size_t n, wxUniChar ch)
   {
-#if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
-      {
-          wxSTRING_INVALIDATE_CACHED_LENGTH();
-
-          m_impl.append(wxStringOperations::EncodeNChars(n, ch));
-      }
-      else // ASCII
-#endif
+      if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
       {
           wxSTRING_UPDATE_CACHED_LENGTH(n);
 
           m_impl.append(n, (wxStringCharType)ch);
+      }
+      else
+      {
+          wxSTRING_INVALIDATE_CACHED_LENGTH();
+
+          m_impl.append(wxStringOperations::EncodeNChars(n, ch));
       }
 
       return *this;
@@ -2556,12 +2553,10 @@ public:
   {
       wxSTRING_SET_CACHED_LENGTH(n);
 
-#if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
-          m_impl.assign(wxStringOperations::EncodeNChars(n, ch));
-      else
-#endif
+      if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
           m_impl.assign(n, (wxStringCharType)ch);
+      else
+          m_impl.assign(wxStringOperations::EncodeNChars(n, ch));
 
       return *this;
   }
@@ -2671,12 +2666,11 @@ public:
   {
       wxSTRING_UPDATE_CACHED_LENGTH(n);
 
-#if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
-          m_impl.insert(PosToImpl(nPos), wxStringOperations::EncodeNChars(n, ch));
-      else
-#endif
+      if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
           m_impl.insert(PosToImpl(nPos), n, (wxStringCharType)ch);
+      else
+          m_impl.insert(PosToImpl(nPos), wxStringOperations::EncodeNChars(n, ch));
+
       return *this;
   }
 
@@ -2684,16 +2678,14 @@ public:
   {
       wxSTRING_UPDATE_CACHED_LENGTH(1);
 
-#if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
+      if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
+          return iterator(this, m_impl.insert(it.impl(), (wxStringCharType)ch));
+      else
       {
           size_t pos = IterToImplPos(it);
           m_impl.insert(pos, wxStringOperations::EncodeChar(ch));
           return iterator(this, m_impl.begin() + pos);
       }
-      else
-#endif
-          return iterator(this, m_impl.insert(it.impl(), (wxStringCharType)ch));
   }
 
   void insert(iterator it, const_iterator first, const_iterator last)
@@ -2716,12 +2708,10 @@ public:
   {
       wxSTRING_UPDATE_CACHED_LENGTH(n);
 
-#if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
-          m_impl.insert(IterToImplPos(it), wxStringOperations::EncodeNChars(n, ch));
-      else
-#endif
+      if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
           m_impl.insert(it.impl(), n, (wxStringCharType)ch);
+      else
+          m_impl.insert(IterToImplPos(it), wxStringOperations::EncodeNChars(n, ch));
   }
 
     // delete characters from nStart to nStart + nLen
@@ -2800,12 +2790,11 @@ public:
 
       size_t from, len;
       PosLenToImpl(nStart, nLen, &from, &len);
-#if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
-          m_impl.replace(from, len, wxStringOperations::EncodeNChars(nCount, ch));
-      else
-#endif
+
+      if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
           m_impl.replace(from, len, nCount, (wxStringCharType)ch);
+      else
+          m_impl.replace(from, len, wxStringOperations::EncodeNChars(nCount, ch));
 
       return *this;
   }
@@ -2921,13 +2910,11 @@ public:
   {
       wxSTRING_INVALIDATE_CACHE();
 
-#if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
+      if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
+          m_impl.replace(first.impl(), last.impl(), n, (wxStringCharType)ch);
+      else
           m_impl.replace(first.impl(), last.impl(),
                   wxStringOperations::EncodeNChars(n, ch));
-      else
-#endif
-          m_impl.replace(first.impl(), last.impl(), n, (wxStringCharType)ch);
 
       return *this;
   }
@@ -2988,15 +2975,12 @@ public:
     // find the first occurrence of character ch after nStart
   size_t find(wxUniChar ch, size_t nStart = 0) const
   {
-#if wxUSE_UNICODE_UTF8
-    if ( !ch.IsAscii() )
-        return PosFromImpl(m_impl.find(wxStringOperations::EncodeChar(ch),
-                                       PosToImpl(nStart)));
-    else
-#endif
+    if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
         return PosFromImpl(m_impl.find((wxStringCharType)ch,
                                        PosToImpl(nStart)));
-
+    else
+        return PosFromImpl(m_impl.find(wxStringOperations::EncodeChar(ch),
+                                       PosToImpl(nStart)));
   }
   size_t find(wxUniCharRef ch, size_t nStart = 0) const
     {  return find(wxUniChar(ch), nStart); }
@@ -3033,13 +3017,11 @@ public:
     // as find, but from the end
   size_t rfind(wxUniChar ch, size_t nStart = npos) const
   {
-#if wxUSE_UNICODE_UTF8
-    if ( !ch.IsAscii() )
-        return PosFromImpl(m_impl.rfind(wxStringOperations::EncodeChar(ch),
+    if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
+        return PosFromImpl(m_impl.rfind((wxStringCharType)ch,
                                         PosToImpl(nStart)));
     else
-#endif
-        return PosFromImpl(m_impl.rfind((wxStringCharType)ch,
+        return PosFromImpl(m_impl.rfind(wxStringOperations::EncodeChar(ch),
                                         PosToImpl(nStart)));
   }
   size_t rfind(wxUniCharRef ch, size_t nStart = npos) const
@@ -3301,12 +3283,11 @@ public:
   {
       wxSTRING_UPDATE_CACHED_LENGTH(1);
 
-#if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
-          m_impl += wxStringOperations::EncodeChar(ch);
-      else
-#endif
+      if ( wxStringOperations::IsSingleCodeUnitCharacter(ch) )
           m_impl += (wxStringCharType)ch;
+      else
+          m_impl += wxStringOperations::EncodeChar(ch);
+
       return *this;
   }
   wxString& operator+=(wxUniCharRef ch) { return *this += wxUniChar(ch); }

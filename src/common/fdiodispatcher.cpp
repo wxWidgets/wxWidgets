@@ -33,6 +33,7 @@
     #include "wx/unix/private/epolldispatcher.h"
 #endif
 
+static
 wxFDIODispatcher *gs_dispatcher = NULL;
 
 // ============================================================================

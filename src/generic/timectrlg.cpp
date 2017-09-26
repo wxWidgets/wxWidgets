@@ -446,6 +446,7 @@ private:
 
             case Field_Max:
                 wxFAIL_MSG( "Invalid field" );
+                return;
         }
 
         UpdateText();
@@ -531,6 +532,7 @@ private:
             case Field_AMPM:
             case Field_Max:
                 wxFAIL_MSG( "Invalid field" );
+                return;
         }
 
         if ( moveToNextField && m_currentField < Field_Sec )

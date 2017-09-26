@@ -397,6 +397,7 @@ to run the tests, include CppUnit library here.
     <!-- ================================================================== -->
 
     <if cond="FORMAT=='autoconf'">
+        <option name="DEREZ"/>
         <option name="TOOLKIT"/>
         <option name="TOOLKIT_LOWERCASE"/>
         <option name="TOOLKIT_VERSION"/>

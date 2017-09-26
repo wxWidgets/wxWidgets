@@ -28,6 +28,7 @@
 #include "wx/module.h"
 #include "wx/hashmap.h"
 #include "wx/hashset.h"
+#include "wx/scopedptr.h"
 
 using namespace wxPrivate;
 
@@ -120,16 +121,27 @@ private:
     wxVector<wxAnyToVariantRegistration*>   m_anyToVariantRegs;
 };
 
-static wxAnyValueTypeGlobals* g_wxAnyValueTypeGlobals = NULL;
+static wxScopedPtr<wxAnyValueTypeGlobals>& GetAnyValueTypeGlobals()
+{
+    static wxScopedPtr<wxAnyValueTypeGlobals> s_wxAnyValueTypeGlobals;
+    if ( !s_wxAnyValueTypeGlobals )
+    {
+        // Notice that it is _not_ sufficient to just initialize the static
+        // object like this because it can be used after it was reset by
+        // wxAnyValueTypeGlobalsManager if the library is shut down and then
+        // initialized again.
+        s_wxAnyValueTypeGlobals.reset(new wxAnyValueTypeGlobals());
+    }
+
+    return s_wxAnyValueTypeGlobals;
+}
 
 
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplVariantData)
 
 void wxPreRegisterAnyToVariant(wxAnyToVariantRegistration* reg)
 {
-    if ( !g_wxAnyValueTypeGlobals )
-        g_wxAnyValueTypeGlobals = new wxAnyValueTypeGlobals();
-    g_wxAnyValueTypeGlobals->PreRegisterAnyToVariant(reg);
+    GetAnyValueTypeGlobals()->PreRegisterAnyToVariant(reg);
 }
 
 bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
@@ -174,7 +186,7 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
 
     // Find matching factory function
     wxVariantDataFactory f =
-        g_wxAnyValueTypeGlobals->FindVariantDataFactory(any.GetType());
+        GetAnyValueTypeGlobals()->FindVariantDataFactory(any.GetType());
 
     wxVariantData* data = NULL;
 
@@ -222,7 +234,7 @@ public:
     }
     virtual void OnExit() wxOVERRIDE
     {
-        wxDELETE(g_wxAnyValueTypeGlobals);
+        GetAnyValueTypeGlobals().reset();
     }
 private:
 };

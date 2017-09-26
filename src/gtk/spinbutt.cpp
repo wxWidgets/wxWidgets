@@ -30,8 +30,7 @@ extern "C" {
 static void
 gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
 {
-    const double value = gtk_spin_button_get_value(spinbutton);
-    const int pos = int(value);
+    const int pos = gtk_spin_button_get_value_as_int(spinbutton);
     const int oldPos = win->m_pos;
     if (g_blockEventsOnDrag || pos == oldPos)
     {
@@ -39,7 +38,19 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinButton* win)
         return;
     }
 
-    wxSpinEvent event(pos > oldPos ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN, win->GetId());
+    int inc = pos - oldPos;
+    // Adjust for wrap arounds
+    // (Doesn't work for degenerated cases, like [0..1] range.)
+    if ( win->HasFlag(wxSP_WRAP) )
+    {
+        if ( inc > 1 )
+            inc = -1;
+        else if ( inc < -1 )
+            inc = 1;
+    }
+    wxASSERT( inc == 1 || inc == -1 );
+
+    wxSpinEvent event(inc > 0 ? wxEVT_SCROLL_LINEUP : wxEVT_SCROLL_LINEDOWN, win->GetId());
     event.SetPosition(pos);
     event.SetEventObject(win);
 

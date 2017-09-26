@@ -2217,6 +2217,12 @@ public:
     bool UseBgCol() const;
 
     /**
+        Return @true if a background colour has been set for this window.
+        Same as @ref UseBgCol()
+    */
+    bool UseBackgroundColour() const;
+
+    /**
         Sets the font of the window but prevents it from being inherited by the
         children of this window.
 
@@ -2231,6 +2237,18 @@ public:
         @see SetForegroundColour(), InheritAttributes()
     */
     void SetOwnForegroundColour(const wxColour& colour);
+
+    /**
+        Return @true if a foreground colour has been set for this window.
+    */
+    bool UseForegroundColour() const;
+
+    /**
+        Return @true if this window inherits the foreground colour from its parent.
+
+        @see SetOwnForegroundColour(), InheritAttributes()
+    */
+    bool InheritsForegroundColour() const;
 
     /**
         @deprecated use wxDC::SetPalette instead.

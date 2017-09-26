@@ -46,6 +46,16 @@ public:
         m_dash = data.m_dash;
     }
 
+    wxPenRefData( const wxPenInfo& info )
+    {
+        m_width = info.GetWidth();
+        m_style = info.GetStyle();
+        m_joinStyle = info.GetJoin();
+        m_capStyle = info.GetCap();
+        m_colour = info.GetColour();
+        m_countDashes = info.GetDashes(const_cast<wxDash**>(&m_dash));
+    }
+
     bool operator == (const wxPenRefData& data) const
     {
         if ( m_countDashes != data.m_countDashes )
@@ -54,7 +64,7 @@ public:
         if ( m_dash )
         {
             if ( !data.m_dash ||
-                 memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxGTKDash)) )
+                 memcmp(m_dash, data.m_dash, m_countDashes*sizeof(wxDash)) )
             {
                 return false;
             }
@@ -78,7 +88,7 @@ public:
     wxPenCap   m_capStyle;
     wxColour   m_colour;
     int        m_countDashes;
-    wxGTKDash *m_dash;
+    const wxDash* m_dash;
 };
 
 //-----------------------------------------------------------------------------
@@ -89,18 +99,20 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject);
 
 wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style )
 {
-    m_refData = new wxPenRefData();
-    M_PENDATA->m_width = width;
-    M_PENDATA->m_style = style;
-    M_PENDATA->m_colour = colour;
+    m_refData = new wxPenRefData(wxPenInfo(colour, width).Style(style));
 }
 
 wxPen::wxPen(const wxColour& colour, int width, int style)
 {
-    m_refData = new wxPenRefData();
-    M_PENDATA->m_width = width;
-    M_PENDATA->m_style = (wxPenStyle)style;
-    M_PENDATA->m_colour = colour;
+    m_refData = new wxPenRefData
+                    (
+                        wxPenInfo(colour, width).Style((wxPenStyle)style)
+                    );
+}
+
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData(info);
 }
 
 wxPen::~wxPen()
@@ -139,7 +151,7 @@ void wxPen::SetDashes( int number_of_dashes, const wxDash *dash )
     AllocExclusive();
 
     M_PENDATA->m_countDashes = number_of_dashes;
-    M_PENDATA->m_dash = (wxGTKDash *)dash;
+    M_PENDATA->m_dash = dash;
 }
 
 void wxPen::SetColour( unsigned char red, unsigned char green, unsigned char blue )

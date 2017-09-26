@@ -780,6 +780,7 @@ unsigned int wxAuiManager::GetFlags() const
 }
 
 // Convenience function
+static
 bool wxAuiManager_HasLiveResize(wxAuiManager& manager)
 {
     // With Core Graphics on Mac, it's not possible to show sash feedback,

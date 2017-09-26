@@ -153,36 +153,10 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     // surface and use this copy in the drawing operations.
     if ( cr == cr_src )
     {
-	// Check if destination and source regions overlap.
-	bool regOverlap;
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
-        if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0) )
-        {
-            cairo_rectangle_int_t rdst;
-	    rdst.x = xdest;
-	    rdst.y = ydest;
-            rdst.width = dstWidth;
-	    rdst.height = dstHeight;
-	    cairo_region_t* regdst = cairo_region_create_rectangle(&rdst);
-
-	    cairo_rectangle_int_t rsrc;
-	    rsrc.x = xsrc;
-	    rsrc.y = ysrc;
-	    rsrc.width = srcWidth;
-	    rsrc.height = srcHeight;
-	    cairo_region_overlap_t ov = cairo_region_contains_rectangle(regdst, &rsrc);
-	    cairo_region_destroy(regdst);
-	    regOverlap = (ov !=  CAIRO_REGION_OVERLAP_OUT);
-        }
-        else
-#endif // Cairo 1.10
-        {
-	    wxRect rdst(xdest, ydest, dstWidth, dstHeight);
-	    wxRect rsrc(xsrc, ysrc, srcWidth, srcHeight);
-	    regOverlap = rdst.Intersects(rsrc);
-        }
+        // Check if destination and source regions overlap.
         // If necessary, copy source surface to the temporary one.
-        if ( regOverlap )
+        if (wxRect(xdest, ydest, dstWidth, dstHeight)
+            .Intersects(wxRect(xsrc, ysrc, srcWidth, srcHeight)))
         {
             const int w = cairo_image_surface_get_width(surfaceSrc);
             const int h = cairo_image_surface_get_height(surfaceSrc);
@@ -206,6 +180,8 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
             cairo_set_operator(crTmp, CAIRO_OPERATOR_SOURCE);
             cairo_fill(crTmp);
             cairo_destroy(crTmp);
+            cairo_surface_flush(surfaceTmp);
+            surfaceSrc = surfaceTmp;
         }
     }
     cairo_save(cr);
@@ -214,7 +190,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     double sx, sy;
     source->GetUserScale(&sx, &sy);
     cairo_scale(cr, dstWidth / (sx * srcWidth), dstHeight / (sy * srcHeight));
-    cairo_set_source_surface(cr, surfaceTmp ? surfaceTmp : surfaceSrc, -xsrc_dev, -ysrc_dev);
+    cairo_set_source_surface(cr, surfaceSrc, -xsrc_dev, -ysrc_dev);
     const wxRasterOperationMode rop_save = m_logicalFunction;
     SetLogicalFunction(rop);
     cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);
@@ -247,7 +223,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     cairo_restore(cr);
     if ( surfaceTmp )
     {
-	cairo_surface_destroy(surfaceTmp);
+        cairo_surface_destroy(surfaceTmp);
     }
     m_logicalFunction = rop_save;
     return true;

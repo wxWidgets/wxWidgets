@@ -196,7 +196,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 
 -(id) initWithColumnPointer:(const wxDataViewColumn*)column
 {
-    [self initWithIdentifier: [wxDVCNSTableColumn identifierForColumnPointer:column]];
+    self = [self initWithIdentifier: [wxDVCNSTableColumn identifierForColumnPointer:column]];
     return self;
 }
 
@@ -388,7 +388,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     [[nativeColumn headerCell] setAlignment:
         ConvertToNativeHorizontalTextAlignment(column->GetAlignment())];
     [[nativeColumn headerCell] setStringValue:
-        [[wxCFStringRef(column->GetTitle()).AsNSString() retain] autorelease]];
+        wxCFStringRef(column->GetTitle()).AsNSString()];
     renderData->ApplyLineBreakMode([nativeColumn headerCell]);
 
     // setting data cell's properties:
@@ -1252,27 +1252,12 @@ outlineView:(NSOutlineView*)outlineView
 // wxTextFieldCell
 // ============================================================================
 
-#ifndef _LP64
-    // The code below doesn't compile in 32 bits failing with
-    //
-    //      error: instance variables may not be placed in class extension
-    //
-    // Until this can be fixed, disable it to at least fix compilation.
-    #define wxTextFieldCell NSTextFieldCell
-#else
-@interface wxTextFieldCell ()
-{
-    int _wxAlignment;
-    BOOL _adjustRect;
-}
-@end
-
 @implementation wxTextFieldCell
 
 - (void)setWXAlignment:(int)alignment
 {
-    _wxAlignment = alignment;
-    _adjustRect = (alignment & (wxALIGN_CENTRE_VERTICAL | wxALIGN_BOTTOM)) != 0;
+    alignment_ = alignment;
+    adjustRect_ = (alignment & (wxALIGN_CENTRE_VERTICAL | wxALIGN_BOTTOM)) != 0;
 }
 
 // These three overrides implement vertical alignment of text cells.
@@ -1284,7 +1269,7 @@ outlineView:(NSOutlineView*)outlineView
     // Get the parent's idea of where we should draw
     NSRect r = [super drawingRectForBounds:theRect];
 
-    if (!_adjustRect)
+    if (!adjustRect_)
         return r;
     if (theRect.size.height <= MINIMUM_NATIVE_ROW_HEIGHT)
         return r;  // don't mess with default-sized rows as they are centered
@@ -1292,12 +1277,12 @@ outlineView:(NSOutlineView*)outlineView
     NSSize bestSize = [self cellSizeForBounds:theRect];
     if (bestSize.height < r.size.height)
     {
-        if (_wxAlignment & wxALIGN_CENTER_VERTICAL)
+        if (alignment_ & wxALIGN_CENTER_VERTICAL)
         {
             r.origin.y += int(r.size.height - bestSize.height) / 2;
             r.size.height = bestSize.height;
         }
-        else if (_wxAlignment & wxALIGN_BOTTOM)
+        else if (alignment_ & wxALIGN_BOTTOM)
         {
             r.origin.y += r.size.height - bestSize.height;
             r.size.height = bestSize.height;
@@ -1309,30 +1294,29 @@ outlineView:(NSOutlineView*)outlineView
 
 - (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
 {
-    BOOL oldAdjustRect = _adjustRect;
+    BOOL oldAdjustRect = adjustRect_;
     if (oldAdjustRect)
     {
         aRect = [self drawingRectForBounds:aRect];
-        _adjustRect = NO;
+        adjustRect_ = NO;
     }
     [super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
-    _adjustRect = oldAdjustRect;
+    adjustRect_ = oldAdjustRect;
 }
 
 - (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
 {
-    BOOL oldAdjustRect = _adjustRect;
+    BOOL oldAdjustRect = adjustRect_;
     if (oldAdjustRect)
     {
         aRect = [self drawingRectForBounds:aRect];
-        _adjustRect = NO;
+        adjustRect_ = NO;
     }
     [super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
-    _adjustRect = oldAdjustRect;
+    adjustRect_ = oldAdjustRect;
 }
 
 @end
-#endif // 32/64 bits
 
 
 // ============================================================================
@@ -1930,6 +1914,26 @@ outlineView:(NSOutlineView*)outlineView
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
+-(BOOL) textShouldBeginEditing:(NSText*)textEditor
+{
+    currentlyEditedColumn = [self editedColumn];
+    currentlyEditedRow = [self editedRow];
+    
+    wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]);
+    
+    NSTableColumn* tableColumn = [[self tableColumns] objectAtIndex:currentlyEditedColumn];
+    wxDataViewColumn* const col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
+    
+    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+    // Before doing anything we send an event asking if editing of this item is really wanted.
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_START_EDITING, dvc, col, item);
+    dvc->GetEventHandler()->ProcessEvent( event );
+    if( !event.IsAllowed() )
+        return NO;
+    
+    return YES;
+}
+
 -(void) textDidBeginEditing:(NSNotification*)notification
 {
     // this notification is only sent if the user started modifying the cell
@@ -2085,6 +2089,8 @@ bool wxCocoaDataViewControl::ClearColumns()
     // columns cannot be deleted if there is an outline column in the view;
     // therefore, the whole view is deleted and newly constructed:
     RemoveAssociation(m_OutlineView); // undo InitOutlineView's association
+
+    [m_OutlineView removeFromSuperviewWithoutNeedingDisplay];
     [m_OutlineView release];
     m_OutlineView = [[wxCocoaOutlineView alloc] init];
     [((NSScrollView*) GetWXWidget()) setDocumentView:m_OutlineView];
@@ -2534,7 +2540,7 @@ void wxCocoaDataViewControl::SetRowHeight(int height)
 int wxCocoaDataViewControl::GetDefaultRowHeight() const
 {
     // Custom setup of NSLayoutManager is necessary to match NSTableView sizing.
-    // See http://stackoverflow.com/questions/17095927/dynamically-changing-row-height-after-font-size-of-entire-nstableview-nsoutlin
+    // See https://stackoverflow.com/questions/17095927/dynamically-changing-row-height-after-font-size-of-entire-nstableview-nsoutlin
     NSLayoutManager *lm = [[NSLayoutManager alloc] init];
     [lm setTypesetterBehavior:NSTypesetterBehavior_10_2_WithCompatibility];
     [lm setUsesScreenFonts:NO];
@@ -2744,10 +2750,8 @@ void wxDataViewRenderer::OSXUpdateAlignment()
     int align = GetEffectiveAlignment();
     NSCell *cell = GetNativeData()->GetColumnCell();
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-#ifdef _LP64
     if ([cell respondsToSelector:@selector(setWXAlignment:)])
         [(wxTextFieldCell*)cell setWXAlignment:align];
-#endif // _LP64
 }
 
 void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
@@ -3040,14 +3044,14 @@ bool wxDataViewBitmapRenderer::MacRender()
         wxBitmap bitmap;
         bitmap << GetValue();
         if (bitmap.IsOk())
-            [GetNativeData()->GetItemCell() setObjectValue:[[bitmap.GetNSImage() retain] autorelease]];
+            [GetNativeData()->GetItemCell() setObjectValue:bitmap.GetNSImage()];
     }
     else if (GetValue().GetType() == wxS("wxIcon"))
     {
         wxIcon icon;
         icon << GetValue();
         if (icon.IsOk())
-            [GetNativeData()->GetItemCell() setObjectValue:[[icon.GetNSImage() retain] autorelease]];
+            [GetNativeData()->GetItemCell() setObjectValue:icon.GetNSImage()];
     }
     return true;
 }
@@ -3105,7 +3109,7 @@ wxDataViewChoiceRenderer::OSXOnCellChanged(NSObject *value,
 
 bool wxDataViewChoiceRenderer::MacRender()
 {
-    [((NSPopUpButtonCell*) GetNativeData()->GetItemCell()) selectItemWithTitle:[[wxCFStringRef(GetValue().GetString()).AsNSString() retain] autorelease]];
+    [((NSPopUpButtonCell*) GetNativeData()->GetItemCell()) selectItemWithTitle:wxCFStringRef(GetValue().GetString()).AsNSString()];
     return true;
 }
 
@@ -3267,25 +3271,35 @@ bool wxDataViewIconTextRenderer::MacRender()
     cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
     iconText << GetValue();
     if (iconText.GetIcon().IsOk())
-        [cell setImage:[[wxBitmap(iconText.GetIcon()).GetNSImage() retain] autorelease]];
+        [cell setImage:wxBitmap(iconText.GetIcon()).GetNSImage()];
     else
         [cell setImage:nil];
-    [cell setStringValue:[[wxCFStringRef(iconText.GetText()).AsNSString() retain] autorelease]];
+    [cell setStringValue:wxCFStringRef(iconText.GetText()).AsNSString()];
     return true;
 }
 
-void
-wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
+void wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
                                              const wxDataViewItem& item,
                                              unsigned col)
 {
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    
+    // The icon can't be edited so get its old value and reuse it.
+    wxVariant valueOld;
+    model->GetValue(valueOld, item, col);
+    
+    wxDataViewIconText iconText;
+    iconText << valueOld;
+    
+    // But replace the text with the value entered by user.
+    iconText.SetText(ObjectToString(value));
+    
     wxVariant valueIconText;
-    valueIconText << wxDataViewIconText(ObjectToString(value));
-
+    valueIconText << iconText;
+    
     if ( !Validate(valueIconText) )
         return;
-
-    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    
     model->ChangeValue(valueIconText, item, col);
 }
 
@@ -3439,7 +3453,7 @@ void wxDataViewColumn::SetBitmap(const wxBitmap& bitmap)
     // the title is removed:
     m_title = wxEmptyString;
     wxDataViewColumnBase::SetBitmap(bitmap);
-    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:[[bitmap.GetNSImage() retain] autorelease]];
+    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:bitmap.GetNSImage()];
 }
 
 void wxDataViewColumn::SetMaxWidth(int maxWidth)
@@ -3518,7 +3532,7 @@ void wxDataViewColumn::SetTitle(const wxString& title)
     // the bitmap is removed:
     wxDataViewColumnBase::SetBitmap(wxBitmap());
     m_title = title;
-    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setStringValue:[[wxCFStringRef(title).AsNSString() retain] autorelease]];
+    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setStringValue:wxCFStringRef(title).AsNSString()];
 }
 
 void wxDataViewColumn::SetWidth(int width)

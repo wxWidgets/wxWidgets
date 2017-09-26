@@ -11,43 +11,39 @@
 #ifndef MACCONFIG_H
 #define MACCONFIG_H
 
+/* use wxWidgets' configure */
+#include "wx/setup.h"
 
-/* 1234 = LIL_ENDIAN, 4321 = BIGENDIAN */
+#ifdef WORDS_BIGENDIAN
 #define BYTEORDER  4321
+#else
+#define BYTEORDER 1234
+#endif
 
-/* Define to 1 if you have the `bcopy' function. */
-#undef HAVE_BCOPY
-
-/* Define to 1 if you have the `memmove' function. */
-#define HAVE_MEMMOVE
-
-/* Define to 1 if you have a working `mmap' system call. */
-#undef HAVE_MMAP
-
-/* Define to 1 if you have the <unistd.h> header file. */
-#undef HAVE_UNISTD_H
-
-/* whether byteorder is bigendian */
-#define WORDS_BIGENDIAN
-
-/* Define to specify how much context to retain around the current parse
-   point. */
-#undef XML_CONTEXT_BYTES
-
-/* Define to make parameter entity parsing functionality available. */
-#define XML_DTD
-
-/* Define to make XML Namespaces functionality available. */
-#define XML_NS
-
-/* Define to empty if `const' does not conform to ANSI C. */
-#undef const
-
-/* Define to `long' if <sys/types.h> does not define. */
-#define off_t  long
-
-/* Define to `unsigned' if <sys/types.h> does not define. */
-#undef size_t
-
+#define STDC_HEADERS 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_STAT_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_STRING_H 1
+#define HAVE_MEMORY_H 1
+#define HAVE_STRINGS_H 1
+#define HAVE_INTTYPES_H 1
+#define HAVE_STDINT_H 1
+#define HAVE_UNISTD_H 1
+#define HAVE_DLFCN_H 1
+#define STDC_HEADERS 1
+#define HAVE_MEMMOVE 1
+#define HAVE_BCOPY 1
+#define HAVE_ARC4RANDOM_BUF 1
+#define HAVE_FCNTL_H 1
+#define HAVE_UNISTD_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_UNISTD_H 1
+#define HAVE_SYS_PARAM_H 1
+#define HAVE_GETPAGESIZE 1
+#define HAVE_MMAP 1
+#define XML_NS 1
+#define XML_DTD 1
+#define XML_CONTEXT_BYTES 1024
 
 #endif /* ifndef MACCONFIG_H */

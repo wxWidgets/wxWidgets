@@ -252,6 +252,9 @@ public:
     virtual wxString GetUserDataDir() const { return m_prefix; }
     virtual wxString GetPluginsDir() const { return m_prefix; }
     virtual wxString GetUserDir(Dir WXUNUSED(userDir)) const { return m_prefix; }
+    virtual wxString MakeConfigFileName(const wxString& basename,
+                                        ConfigFileConv WXUNUSED(conv)) const
+                         { return m_prefix + wxS("/") + basename; }
 
 protected:
     // Ctor is protected because wxStandardPaths::Get() should always be used

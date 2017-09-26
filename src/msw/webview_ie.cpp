@@ -231,9 +231,9 @@ wxString wxWebViewIE::GetPageSource() const
             hr = bodyTag->get_parentElement(&htmlTag);
             if(SUCCEEDED(hr))
             {
-                BSTR bstr;
-                if ( htmlTag->get_outerHTML(&bstr) == S_OK )
-                    source = wxString(bstr);
+                wxBasicString bstr;
+                if ( htmlTag->get_outerHTML(bstr.ByRef()) == S_OK )
+                    source = bstr;
             }
         }
         return source;
@@ -576,8 +576,8 @@ wxString wxWebViewIE::GetCurrentTitle() const
     wxString s;
     if(document)
     {
-        BSTR title;
-        if ( document->get_nameProp(&title) == S_OK )
+        wxBasicString title;
+        if ( document->get_nameProp(title.ByRef()) == S_OK )
             s = title;
     }
 
@@ -692,9 +692,9 @@ void wxWebViewIE::SetEditable(bool enable)
     if(document)
     {
         if( enable )
-            document->put_designMode(SysAllocString(L"On"));
+            document->put_designMode(wxBasicString("On"));
         else
-            document->put_designMode(SysAllocString(L"Off"));
+            document->put_designMode(wxBasicString("Off"));
 
     }
 }
@@ -705,8 +705,8 @@ bool wxWebViewIE::IsEditable() const
 
     if(document)
     {
-        BSTR mode;
-        if ( document->get_designMode(&mode) == S_OK )
+        wxBasicString mode;
+        if ( document->get_designMode(mode.ByRef()) == S_OK )
         {
             if ( wxString(mode) == "On" )
                 return true;
@@ -731,9 +731,9 @@ bool wxWebViewIE::HasSelection() const
         HRESULT hr = document->get_selection(&selection);
         if(SUCCEEDED(hr))
         {
-            BSTR type;
-            if ( selection->get_type(&type) == S_OK )
-                sel = wxString(type);
+            wxBasicString type;
+            if ( selection->get_type(type.ByRef()) == S_OK )
+                sel = type;
         }
         return sel != "None";
     }
@@ -767,9 +767,9 @@ wxString wxWebViewIE::GetSelectedText() const
                 hr = disrange->QueryInterface(IID_IHTMLTxtRange, (void**)&range);
                 if(SUCCEEDED(hr))
                 {
-                    BSTR text;
-                    if ( range->get_text(&text) == S_OK )
-                        selected = wxString(text);
+                    wxBasicString text;
+                    if ( range->get_text(text.ByRef()) == S_OK )
+                        selected = text;
                 }
             }
         }
@@ -800,9 +800,9 @@ wxString wxWebViewIE::GetSelectedSource() const
                 hr = disrange->QueryInterface(IID_IHTMLTxtRange, (void**)&range);
                 if(SUCCEEDED(hr))
                 {
-                    BSTR text;
-                    if ( range->get_htmlText(&text) == S_OK )
-                        selected = wxString(text);
+                    wxBasicString text;
+                    if ( range->get_htmlText(text.ByRef()) == S_OK )
+                        selected = text;
                 }
             }
         }
@@ -841,9 +841,9 @@ wxString wxWebViewIE::GetPageText() const
         HRESULT hr = document->get_body(&body);
         if(SUCCEEDED(hr))
         {
-            BSTR out;
-            if ( body->get_innerText(&out) == S_OK )
-                text = wxString(out);
+            wxBasicString out;
+            if ( body->get_innerText(out.ByRef()) == S_OK )
+                text = out;
         }
         return text;
     }
@@ -867,8 +867,8 @@ void wxWebViewIE::RunScript(const wxString& javascript)
             VARIANT level;
             VariantInit(&level);
             V_VT(&level) = VT_EMPTY;
-            window->execScript(SysAllocString(javascript.wc_str()),
-                               SysAllocString(language.wc_str()),
+            window->execScript(wxBasicString(javascript),
+                               wxBasicString(language),
                                &level);
         }
     }
@@ -913,7 +913,7 @@ bool wxWebViewIE::CanExecCommand(wxString command) const
     {
         VARIANT_BOOL enabled;
 
-        document->queryCommandEnabled(SysAllocString(command.wc_str()), &enabled);
+        document->queryCommandEnabled(wxBasicString(command), &enabled);
 
         return (enabled == VARIANT_TRUE);
     }
@@ -930,7 +930,7 @@ void wxWebViewIE::ExecCommand(wxString command)
 
     if(document)
     {
-        document->execCommand(SysAllocString(command.wc_str()), VARIANT_FALSE, VARIANT(), NULL);
+        document->execCommand(wxBasicString(command), VARIANT_FALSE, VARIANT(), NULL);
     }
 }
 
@@ -949,8 +949,7 @@ wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
 
 bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
 {
-    wxCOMPtr<IHTMLElement> elm1 = elm;
-    BSTR tmp_bstr;
+    wxCOMPtr<IHTMLElement> elm1 = elm;   
     bool is_visible = true;
     //This method is not perfect but it does discover most of the hidden elements.
     //so if a better solution is found, then please do improve.
@@ -962,15 +961,18 @@ bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
             wxCOMPtr<wxIHTMLCurrentStyle> style;
             if(SUCCEEDED(elm2->get_currentStyle(&style)))
             {
+                wxBasicString display_bstr;
+                wxBasicString visibility_bstr;
+
                 //Check if the object has the style display:none.
-                if((style->get_display(&tmp_bstr) != S_OK) || 
-                   (tmp_bstr != NULL && (wxCRT_StricmpW(tmp_bstr, L"none") == 0)))
+                if((style->get_display(display_bstr.ByRef()) != S_OK) || 
+                    wxString(display_bstr).IsSameAs(wxS("none"), false))
                 {
                     is_visible = false;
                 }
                 //Check if the object has the style visibility:hidden.
-                if((is_visible && (style->get_visibility(&tmp_bstr) != S_OK)) ||
-                  (tmp_bstr != NULL && wxCRT_StricmpW(tmp_bstr, L"hidden") == 0))
+                if((is_visible && (style->get_visibility(visibility_bstr.ByRef()) != S_OK)) ||
+                    wxString(visibility_bstr).IsSameAs(wxS("hidden"), false))
                 {
                     is_visible = false;
                 }
@@ -1007,8 +1009,9 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
         if(SUCCEEDED(document->QueryInterface(wxIID_IMarkupContainer, (void **)&pIMC)))
         {
             wxCOMPtr<wxIMarkupPointer> ptrBegin, ptrEnd;
-            BSTR attr_bstr = SysAllocString(L"style=\"background-color:#ffff00\"");
-            BSTR text_bstr = SysAllocString(text.wc_str());
+            wxBasicString attr_bstr(wxS("style=\"background-color:#ffff00\""));
+            wxBasicString text_bstr(text);
+            
             pIMS->CreateMarkupPointer(&ptrBegin);
             pIMS->CreateMarkupPointer(&ptrEnd);
 
@@ -1064,9 +1067,6 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
                 }
                 ptrBegin->MoveToPointer(ptrEnd);
             }
-            //Clean up.
-            SysFreeString(text_bstr);
-            SysFreeString(attr_bstr);
         }
     }
 }
@@ -1248,7 +1248,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
         {
             wxString url = evt[1].GetString();
             // TODO: set target parameter if possible
-            wxString target = wxEmptyString;
+            wxString target;
             wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATED,
                                  GetId(), url, target);
             event.SetEventObject(this);
@@ -1299,7 +1299,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
             //Reset the find values.
             FindClear();
             // TODO: set target parameter if possible
-            wxString target = wxEmptyString;
+            wxString target;
             wxWebViewEvent event(wxEVT_WEBVIEW_LOADED, GetId(),
                                  url, target);
             event.SetEventObject(this);

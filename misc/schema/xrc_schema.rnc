@@ -1508,7 +1508,9 @@ wxToggleButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element checked {_, t_bool }*
+        [xrc:p="o"] element checked {_, t_bool }* &
+        [xrc:p="o"] element bitmap         {_, t_bitmap }* &
+        [xrc:p="o"] element bitmapposition {_, t_direction }*
     }
 
 

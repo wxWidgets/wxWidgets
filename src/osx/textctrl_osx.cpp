@@ -194,36 +194,43 @@ bool wxTextCtrl::AcceptsFocus() const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
+    int wText = -1;
+    int hText = -1;
+
     if (GetTextPeer())
     {
         wxSize size = GetTextPeer()->GetBestSize();
         if (size.x > 0 && size.y > 0)
-            return size;
+        {
+            hText = size.y;
+            wText = size.x;
+        }
     }
 
-    int wText, hText;
-
-    // these are the numbers from the HIG:
-    // we reduce them by the borders first
-    wText = 100 ;
-
-    switch ( m_windowVariant )
+    if ( hText == - 1)
     {
-        case wxWINDOW_VARIANT_NORMAL :
-            hText = 22 - 6 ;
-            break ;
+        // these are the numbers from the HIG:
+        // we reduce them by the borders first
+        wText = 100 ;
 
-        case wxWINDOW_VARIANT_SMALL :
-            hText = 19 - 6 ;
-            break ;
+        switch ( m_windowVariant )
+        {
+            case wxWINDOW_VARIANT_NORMAL :
+                hText = 22 - 6 ;
+                break ;
 
-        case wxWINDOW_VARIANT_MINI :
-            hText = 15 - 6 ;
-            break ;
+            case wxWINDOW_VARIANT_SMALL :
+                hText = 19 - 6 ;
+                break ;
 
-        default :
-            hText = 22 - 6;
-            break ;
+            case wxWINDOW_VARIANT_MINI :
+                hText = 15 - 6 ;
+                break ;
+
+            default :
+                hText = 22 - 6;
+                break ;
+        }
     }
 
     // as the above numbers have some free space around the text
@@ -473,6 +480,17 @@ void wxTextCtrl::Command(wxCommandEvent & event)
 {
     SetValue(event.GetString());
     ProcessCommand(event);
+}
+
+void wxTextCtrl::SetWindowStyleFlag(long style)
+{
+    long styleOld = GetWindowStyleFlag();
+
+    wxTextCtrlBase::SetWindowStyleFlag(style);
+
+    static const long flagsAlign = wxTE_LEFT | wxTE_CENTRE | wxTE_RIGHT;
+    if ( (style & flagsAlign) != (styleOld & flagsAlign) )
+        GetTextPeer()->SetJustification();
 }
 
 // ----------------------------------------------------------------------------
@@ -767,4 +785,7 @@ int wxTextWidgetImpl::GetLineLength(long lineNo) const
     return 0 ;
 }
 
+void wxTextWidgetImpl::SetJustification()
+{
+}
 #endif // wxUSE_TEXTCTRL

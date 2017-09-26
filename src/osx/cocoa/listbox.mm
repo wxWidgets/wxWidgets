@@ -145,7 +145,7 @@ public :
 
     virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE;
 
-    
+
 protected :
     wxNSTableView*          m_tableView ;
 
@@ -160,8 +160,10 @@ protected :
 
 - (id) init
 {
-    self = [super init];
-    column = nil;
+    if ( self = [super init] )
+    {
+        column = nil;
+    }
     return self;
 }
 
@@ -223,8 +225,10 @@ protected:
 
 - (id) init
 {
-    self = [super init];
-    impl = nil;
+    if ( self = [super init] )
+    {
+        impl = nil;
+    }
     return self;
 }
 
@@ -289,9 +293,9 @@ protected:
 - (void) tableViewSelectionDidChange: (NSNotification *) notification
 {
     wxUnusedVar(notification);
-    
+
     int row = [self selectedRow];
-    
+
     if (row == -1) 
     {
         // no row selected
@@ -301,14 +305,14 @@ protected:
         wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
         wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
         wxCHECK_RET( list != NULL , wxT("Listbox expected"));
-        
+
         if ((row < 0) || (row > (int) list->GetCount()))  // OS X can select an item below the last item
             return;
-        
+
         if ( !list->MacGetBlockEvents() )
             list->HandleLineEvent( row, false );
     }
-    
+
 } 
 
 - (void)setFont:(NSFont *)aFont
@@ -384,11 +388,11 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const
         [col1 setWidth:1000];
     }
     [col1 setResizingMask: NSTableColumnAutoresizingMask];
-    
+
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
     if ( list != NULL )
         [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];
-    
+
     wxCocoaTableColumn* wxcol = new wxCocoaTableColumn( col1, editable );
     [col1 setColumn:wxcol];
 
@@ -408,30 +412,30 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
     [checkbox setTitle:@""];
     [checkbox setButtonType:NSSwitchButton];
     [col1 setDataCell:checkbox] ;
-    
+
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
     if ( list != NULL )
     {
         NSControlSize size = NSRegularControlSize;
-        
+
         switch ( list->GetWindowVariant() )
         {
             case wxWINDOW_VARIANT_NORMAL :
                 size = NSRegularControlSize;
                 break ;
-                
+
             case wxWINDOW_VARIANT_SMALL :
                 size = NSSmallControlSize;
                 break ;
-                
+
             case wxWINDOW_VARIANT_MINI :
                 size = NSMiniControlSize;
                 break ;
-                
+
             case wxWINDOW_VARIANT_LARGE :
                 size = NSRegularControlSize;
                 break ;
-                
+
             default:
                 break ;
         }
@@ -498,7 +502,7 @@ void wxListWidgetCocoaImpl::ListSetSelection( unsigned int n, bool select, bool 
     // TODO
     if ( select )
         [m_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:n]
-		     byExtendingSelection:multi];
+             byExtendingSelection:multi];
     else
         [m_tableView deselectRow: n];
 

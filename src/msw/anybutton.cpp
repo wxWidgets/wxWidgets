@@ -747,6 +747,19 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     else
     {
         m_imageData->SetBitmap(bitmap, which);
+
+        // if the focus bitmap is specified but current one isn't, use
+        // the focus bitmap for hovering as well if this is consistent
+        // with the current Windows version look and feel.
+        //
+        // rationale: this is compatible with the old wxGTK behaviour
+        // and also makes it much easier to do "the right thing" for
+        // all platforms (some of them, such as Windows, have "hot"
+        // buttons while others don't)
+        if ( which == State_Focused && !m_imageData->GetBitmap(State_Current).IsOk() )
+        {
+            m_imageData->SetBitmap(bitmap, State_Current);
+        }
     }
 
     // it should be enough to only invalidate the best size when the normal

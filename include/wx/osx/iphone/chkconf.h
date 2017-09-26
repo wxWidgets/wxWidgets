@@ -372,6 +372,11 @@
 #define wxUSE_WEBVIEW 0
 #endif
 
+#if wxUSE_SECRETSTORE
+    #undef wxUSE_SECRETSTORE
+    #define wxUSE_SECRETSTORE 0
+#endif
+
 #endif
     /* _WX_OSX_IPHONE_CHKCONF_H_ */
 

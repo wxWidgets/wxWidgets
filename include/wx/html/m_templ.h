@@ -75,7 +75,7 @@ I STRONGLY recommend reading and understanding these macros!!
 #define TAGS_MODULE_END(name)                                             \
                 }                                                         \
     };                                                                    \
-    wxIMPLEMENT_DYNAMIC_CLASS(wxHTML_Module##name , wxHtmlTagsModule);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxHTML_Module##name , wxHtmlTagsModule)
 
 
 

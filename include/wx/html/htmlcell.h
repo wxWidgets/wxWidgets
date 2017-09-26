@@ -648,16 +648,12 @@ protected:
 class WXDLLIMPEXP_HTML wxHtmlLinkInfo : public wxObject
 {
 public:
-    wxHtmlLinkInfo() : wxObject()
-          { m_Href = m_Target = wxEmptyString; m_Event = NULL, m_Cell = NULL; }
-    wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString) : wxObject()
-          { m_Href = href; m_Target = target; m_Event = NULL, m_Cell = NULL; }
-    wxHtmlLinkInfo(const wxHtmlLinkInfo& l) : wxObject()
-          { m_Href = l.m_Href, m_Target = l.m_Target, m_Event = l.m_Event;
-            m_Cell = l.m_Cell; }
-    wxHtmlLinkInfo& operator=(const wxHtmlLinkInfo& l)
-          { m_Href = l.m_Href, m_Target = l.m_Target, m_Event = l.m_Event;
-            m_Cell = l.m_Cell; return *this; }
+    wxHtmlLinkInfo()
+        { m_Event = NULL; m_Cell = NULL; }
+    wxHtmlLinkInfo(const wxString& href, const wxString& target = wxString())
+        : m_Href(href)
+        , m_Target(target)
+        { m_Event = NULL; m_Cell = NULL; }
 
     void SetEvent(const wxMouseEvent *e) { m_Event = e; }
     void SetHtmlCell(const wxHtmlCell *e) { m_Cell = e; }

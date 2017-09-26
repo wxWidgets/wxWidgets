@@ -127,6 +127,18 @@ wxAppBase::~wxAppBase()
     // this destructor is required for Darwin
 }
 
+void wxAppBase::DeleteAllTLWs()
+{
+    // TLWs remove themselves from wxTopLevelWindows when destroyed, so iterate
+    // until none are left.
+    while ( !wxTopLevelWindows.empty() )
+    {
+        // do not use Destroy() here as it only puts the TLW in pending list
+        // but we want to delete them now
+        delete wxTopLevelWindows.GetFirst()->GetData();
+    }
+}
+
 void wxAppBase::CleanUp()
 {
     // Clean up any still pending objects. Normally there shouldn't any as we
@@ -135,14 +147,8 @@ void wxAppBase::CleanUp()
     // the base class OnExit().
     DeletePendingObjects();
 
-    // and any remaining TLWs (they remove themselves from wxTopLevelWindows
-    // when destroyed, so iterate until none are left)
-    while ( !wxTopLevelWindows.empty() )
-    {
-        // do not use Destroy() here as it only puts the TLW in pending list
-        // but we want to delete them now
-        delete wxTopLevelWindows.GetFirst()->GetData();
-    }
+    // and any remaining TLWs
+    DeleteAllTLWs();
 
     // undo everything we did in Initialize() above
     wxBitmap::CleanUpHandlers();

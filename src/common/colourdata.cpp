@@ -25,7 +25,14 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject);
 wxColourData::wxColourData()
 {
     m_chooseFull = false;
+#ifdef __WXOSX__
+    // Under OSX, legacy wxColourDialog had opacity selector
+    // (slider) always enabled, so for backward compatibilty
+    // we should tell the dialog to enable it by default.
+    m_chooseAlpha = true;
+#else
     m_chooseAlpha = false;
+#endif // __WXOSX__ / !__WXOSX__
     m_dataColour.Set(0,0,0);
     // m_custColours are wxNullColours initially
 }

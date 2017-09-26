@@ -1039,6 +1039,8 @@ void wxPropertyGrid::DoBeginLabelEdit( unsigned int colIndex,
     tc->SetFocus();
 
     m_labelEditor = wxStaticCast(tc, wxTextCtrl);
+    // Get actual position within required rectangle
+    m_labelEditorPosRel = m_labelEditor->GetPosition() - r.GetPosition();
     m_labelEditorProperty = selected;
 }
 
@@ -1744,9 +1746,8 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, const wxStri
 
     bool prev_is_slash = false;
 
-    wxString::const_iterator i = src_str.begin();
-
-    for ( ; i != src_str.end(); ++i )
+    wxString::const_iterator i;
+    for ( i = src_str.begin(); i != src_str.end(); ++i )
     {
         wxUniChar a = *i;
 
@@ -1759,13 +1760,9 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, const wxStri
             else
             {
                 if ( a == wxS('n') )
-                {
-            #ifdef __WXMSW__
                     dst_str << wxS('\n');
-            #else
-                    dst_str << wxS('\n');
-            #endif
-                }
+                else if ( a == wxS('r') )
+                    dst_str << wxS('\r');
                 else if ( a == wxS('t') )
                     dst_str << wxS('\t');
                 else
@@ -1801,39 +1798,24 @@ wxString& wxPropertyGrid::CreateEscapeSequences( wxString& dst_str, const wxStri
     }
 
     wxString::const_iterator i;
-    wxUniChar prev_a = wxS('\0');
-
     for ( i = src_str.begin(); i != src_str.end(); ++i )
     {
         wxUniChar a = *i;
 
-        if ( a >= wxS(' ') )
-        {
-            // This surely is not something that requires an escape sequence.
-            dst_str << a;
-        }
+        if ( a == wxS('\r') )
+            // Carriage Return.
+            dst_str << wxS("\\r");
+        else if ( a == wxS('\n') )
+            // Line Feed.
+            dst_str << wxS("\\n");
+        else if ( a == wxS('\t') )
+            // Tab.
+            dst_str << wxS("\\t");
+        else if ( a == wxS('\\') )
+            // Escape character (backslash).
+            dst_str << wxS("\\\\");
         else
-        {
-            // This might need...
-            if ( a == wxS('\r')  )
-            {
-                // DOS style line end.
-                // Already taken care below
-            }
-            else if ( a == wxS('\n') )
-                // UNIX style line end.
-                dst_str << wxS("\\n");
-            else if ( a == wxS('\t') )
-                // Tab.
-                dst_str << wxS('\t');
-            else
-            {
-                //wxLogDebug(wxS("WARNING: Could not create escape sequence for character #%i"),(int)a);
-                dst_str << a;
-            }
-        }
-
-        prev_a = a;
+            dst_str << a;
     }
     return dst_str;
 }
@@ -4218,6 +4200,17 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 m_wndEditor = wndList.m_primary;
                 m_wndEditor2 = wndList.m_secondary;
+                // Remember actual positions within required cell.
+                // These values can be used when there will be required
+                // to reposition the cell.
+                if ( m_wndEditor )
+                {
+                    m_wndEditorPosRel = m_wndEditor->GetPosition() - goodPos;
+                }
+                if ( m_wndEditor2 )
+                {
+                    m_wndEditor2PosRel = m_wndEditor2->GetPosition() - goodPos;
+                }
                 primaryCtrl = GetEditorControl();
 
                 //

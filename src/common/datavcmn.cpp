@@ -1036,7 +1036,7 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     // necessary because the cell rectangle had been already adjusted to
     // account for the alignment in WXCallRender() and using the alignment here
     // results in problems with ellipsization when using native MSW renderer,
-    // see http://trac.wxwidgets.org/ticket/17363, so just don't do it.
+    // see https://trac.wxwidgets.org/ticket/17363, so just don't do it.
     wxRendererNative::Get().DrawItemText(
         GetOwner()->GetOwner(),
         *dc,

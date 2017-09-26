@@ -18,7 +18,7 @@ extern "C" {
 
 typedef struct {
     int count;                          /* # of chars, < 0 if not set */
-    XML_Char data[1024];
+    XML_Char data[2048];
 } CharData;
 
 

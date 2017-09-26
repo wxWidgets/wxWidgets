@@ -10,6 +10,31 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
+/*
+    We want to avoid compilation and, even more perniciously, link errors if
+    the user code includes <windows.h> before include wxWidgets headers. These
+    error happen because <windows.h> #define's many common symbols, such as
+    Yield or GetClassInfo, which are also used in wxWidgets API. Including our
+    "cleanup" header below un-#defines them to fix this.
+
+    Moreover, notice that it is also possible for the user code to include some
+    wx header (this including wx/defs.h), then include <windows.h> and then
+    include another wx header. To avoid the problem for the second header
+    inclusion, we must include wx/msw/winundef.h from here always and not just
+    during the first inclusion, so it has to be outside of _WX_DEFS_H_ guard
+    check below.
+ */
+#ifdef __cplusplus
+    /*
+        Test for WIN32, defined by windows.h itself, not our own __WINDOWS__,
+        which is not defined yet.
+     */
+#   ifdef WIN32
+#       include "wx/msw/winundef.h"
+#   endif /* WIN32 */
+#endif /* __cplusplus */
+
+
 #ifndef _WX_DEFS_H_
 #define _WX_DEFS_H_
 
@@ -672,47 +697,6 @@ typedef short int WXTYPE;
 /*  breaks C++ code) */
 #include <stddef.h>
 
-#ifdef __cplusplus
-
-// everybody gets the assert and other debug macros
-#include "wx/debug.h"
-
-    // delete pointer if it is not NULL and NULL it afterwards
-    template <typename T>
-    inline void wxDELETE(T*& ptr)
-    {
-        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
-
-        if ( ptr != NULL )
-        {
-            delete ptr;
-            ptr = NULL;
-        }
-    }
-
-    // delete an array and NULL it (see comments above)
-    template <typename T>
-    inline void wxDELETEA(T*& ptr)
-    {
-        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
-
-        if ( ptr != NULL )
-        {
-            delete [] ptr;
-            ptr = NULL;
-        }
-    }
-
-    // trivial implementation of std::swap() for primitive types
-    template <typename T>
-    inline void wxSwap(T& first, T& second)
-    {
-        T tmp(first);
-        first = second;
-        second = tmp;
-    }
-#endif /*__cplusplus*/
-
 /*  size of statically declared array */
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
 
@@ -1227,6 +1211,45 @@ typedef wxUint32 wxDword;
 #endif
 
 #ifdef __cplusplus
+
+// everybody gets the assert and other debug macros
+#include "wx/debug.h"
+
+    // delete pointer if it is not NULL and NULL it afterwards
+    template <typename T>
+    inline void wxDELETE(T*& ptr)
+    {
+        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
+
+        if ( ptr != NULL )
+        {
+            delete ptr;
+            ptr = NULL;
+        }
+    }
+
+    // delete an array and NULL it (see comments above)
+    template <typename T>
+    inline void wxDELETEA(T*& ptr)
+    {
+        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
+
+        if ( ptr != NULL )
+        {
+            delete [] ptr;
+            ptr = NULL;
+        }
+    }
+
+    // trivial implementation of std::swap() for primitive types
+    template <typename T>
+    inline void wxSwap(T& first, T& second)
+    {
+        T tmp(first);
+        first = second;
+        second = tmp;
+    }
+
 /* And also define a couple of simple functions to cast pointer to/from it. */
 inline wxUIntPtr wxPtrToUInt(const void *p)
 {
@@ -2943,6 +2966,7 @@ typedef const void * CFTypeRef;
 
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFString )
 typedef struct __CFString * CFMutableStringRef;
+DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFDictionary )
 
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopSource )
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CTFont )
@@ -3106,7 +3130,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIWebView);
 typedef WX_UIWindow WXWindow;
 typedef WX_UIView WXWidget;
 typedef WX_EAGLContext WXGLContext;
-typedef WX_NSString* WXGLPixelFormat;
+typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;
 
 #endif
@@ -3294,16 +3318,6 @@ typedef const void* WXWidget;
 #ifdef __WXQT__
 #include "wx/qt/defs.h"
 #endif
-
-/*  This is required because of clashing macros in windows.h, which may be */
-/*  included before or after wxWidgets classes, and therefore must be */
-/*  disabled here before any significant wxWidgets headers are included. */
-#ifdef __cplusplus
-#ifdef __WINDOWS__
-#include "wx/msw/winundef.h"
-#endif /* __WINDOWS__ */
-#endif /* __cplusplus */
-
 
 /*  include the feature test macros */
 #include "wx/features.h"

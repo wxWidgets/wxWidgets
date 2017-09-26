@@ -211,6 +211,8 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
 
+    virtual bool MSWShouldSetDefaultFont() const wxOVERRIDE { return false; }
+
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
 

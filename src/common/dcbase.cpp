@@ -697,11 +697,15 @@ void wxDCImpl::DrawSpline(int n, const wxPoint points[])
 
 // ----------------------------------- spline code ----------------------------------------
 
+static
 void wx_quadratic_spline(double a1, double b1, double a2, double b2,
                          double a3, double b3, double a4, double b4);
+static
 void wx_clear_stack();
+static
 int wx_spline_pop(double *x1, double *y1, double *x2, double *y2, double *x3,
         double *y3, double *x4, double *y4);
+static
 void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3,
           double x4, double y4);
 static bool wx_spline_add_point(double x, double y);

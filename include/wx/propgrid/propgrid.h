@@ -1465,6 +1465,9 @@ protected:
     // wxWindow pointers to editor control(s).
     wxWindow            *m_wndEditor;
     wxWindow            *m_wndEditor2;
+    // Actual positions of the editors within the cell.
+    wxPoint             m_wndEditorPosRel;
+    wxPoint             m_wndEditor2PosRel;
 
     wxBitmap            *m_doubleBuffer;
 
@@ -1644,8 +1647,9 @@ protected:
     // pointer to property that has mouse hovering
     wxPGProperty*       m_propHover;
 
-    // Active label editor
+    // Active label editor and its actual position within the cell
     wxTextCtrl*         m_labelEditor;
+    wxPoint             m_labelEditorPosRel;
 
     // For which property the label editor is active
     wxPGProperty*       m_labelEditorProperty;

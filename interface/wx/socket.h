@@ -289,6 +289,12 @@ public:
     /**
         Constructor.
 
+        Notice that if the object is created from a worker thread or if it is
+        created from the main thread but the event loop is not running, @a
+        flags parameter @em must include ::wxSOCKET_BLOCK as non-blocking
+        sockets require dispatching events, which can only be done in the main
+        thread.
+
         @param flags
             Socket flags (See wxSocketBase::SetFlags())
     */

@@ -502,7 +502,7 @@ wxScopedU16CharBuffer wxUString::utf16_str() const
 
         // TODO: error range checks
 
-        if (code < 0x10000)
+        if (wxUniChar::IsBMP(code))
            utf16_length++;
         else
            utf16_length += 2;
@@ -520,15 +520,15 @@ wxScopedU16CharBuffer wxUString::utf16_str() const
 
         // TODO: error range checks
 
-        if (code < 0x10000)
+        if (wxUniChar::IsBMP(code))
         {
            out[0] = code;
            out++;
         }
         else
         {
-           out[0] = (code - 0x10000) / 0x400 + 0xd800;
-           out[1] = (code - 0x10000) % 0x400 + 0xdc00;
+           out[0] = wxUniChar::HighSurrogate(code);
+           out[1] = wxUniChar::LowSurrogate(code);
            out += 2;
         }
     }

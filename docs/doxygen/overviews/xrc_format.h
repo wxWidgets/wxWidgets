@@ -2019,6 +2019,10 @@ No additional properties.
      Label to display on the button (default: empty).}
 @row3col{checked, @ref overview_xrcformat_type_bool,
      Should the button be checked/pressed initially (default: 0)?}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap to display in the button (optional). @since 3.1.1}
+@row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
+    Position of the bitmap in the button, see wxButton::SetBitmapPosition() (default: wxLEFT). @since 3.1.1}
 @endTable
 
 @subsubsection xrc_wxtoolbar wxToolBar

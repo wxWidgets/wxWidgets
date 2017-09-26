@@ -108,6 +108,7 @@ typedef struct _DTTOPTS
 typedef HTHEME  (__stdcall *PFNWXUOPENTHEMEDATA)(HWND, const wchar_t *);
 typedef HRESULT (__stdcall *PFNWXUCLOSETHEMEDATA)(HTHEME);
 typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEBACKGROUND)(HTHEME, HDC, int, int, const RECT *, const RECT *);
+typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEBACKGROUNDEX)(HTHEME, HDC, int, int, const RECT *, const DTBGOPTS *);
 typedef HRESULT (__stdcall *PFNWXUDRAWTHEMETEXT)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, DWORD, const RECT *);
 typedef HRESULT (__stdcall *PFNWXUDRAWTHEMETEXTEX)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const DTTOPTS *);
 typedef HRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDCONTENTRECT)(HTHEME, HDC, int, int, const RECT *, RECT *);
@@ -151,7 +152,7 @@ typedef DWORD   (__stdcall *PFNWXUGETTHEMEAPPPROPERTIES)();
 typedef void    (__stdcall *PFNWXUSETTHEMEAPPPROPERTIES)(DWORD);
 typedef HRESULT (__stdcall *PFNWXUGETCURRENTTHEMENAME)(wchar_t *, int, wchar_t *, int, wchar_t *, int);
 typedef HRESULT (__stdcall *PFNWXUGETTHEMEDOCUMENTATIONPROPERTY)(const wchar_t *, const wchar_t *, wchar_t *, int);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEPARENTBACKGROUND)(HWND, HDC, RECT *);
+typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEPARENTBACKGROUND)(HWND, HDC, const RECT *);
 typedef HRESULT (__stdcall *PFNWXUENABLETHEMING)(BOOL);
 
 // ----------------------------------------------------------------------------
@@ -182,6 +183,7 @@ public:
     wxUX_THEME_DECLARE(PFNWXUOPENTHEMEDATA, OpenThemeData)
     wxUX_THEME_DECLARE(PFNWXUCLOSETHEMEDATA, CloseThemeData)
     wxUX_THEME_DECLARE(PFNWXUDRAWTHEMEBACKGROUND, DrawThemeBackground)
+    wxUX_THEME_DECLARE(PFNWXUDRAWTHEMEBACKGROUNDEX, DrawThemeBackgroundEx)
     wxUX_THEME_DECLARE(PFNWXUDRAWTHEMETEXT, DrawThemeText)
     wxUX_THEME_DECLARE(PFNWXUDRAWTHEMETEXTEX, DrawThemeTextEx)
     wxUX_THEME_DECLARE(PFNWXUGETTHEMEBACKGROUNDCONTENTRECT, GetThemeBackgroundContentRect)

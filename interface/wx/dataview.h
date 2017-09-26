@@ -132,7 +132,7 @@ public:
         Called to inform the model that all data has been cleared.
         The control will reread the data from the model again.
     */
-    virtual bool Cleared();
+    bool Cleared();
 
     /**
         The compare function to be used by the control. The default compare
@@ -365,8 +365,7 @@ public:
         This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event to the user.
     */
-    virtual bool ValueChanged(const wxDataViewItem& item,
-                              unsigned int col);
+    bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 
     
     virtual bool IsListModel() const;

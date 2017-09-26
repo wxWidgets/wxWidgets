@@ -589,7 +589,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         else
         {
             wxList::compatibility_iterator node;
-            wxString src = wxEmptyString;
+            wxString src;
 
 #if wxUSE_STATUSBAR
             if (m_RelatedStatusBarIndex != -1)
@@ -611,7 +611,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
                 }
                 node = node->GetNext();
             }
-            if (src == wxEmptyString)
+            if (src.empty())
             {
                 if (m_DefaultFilter == NULL) m_DefaultFilter = GetDefaultFilter();
                 src = m_DefaultFilter->ReadFile(*f);
@@ -620,7 +620,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             m_FS->ChangePathTo(f->GetLocation());
             rt_val = SetPage(src);
             m_OpenedPage = f->GetLocation();
-            if (f->GetAnchor() != wxEmptyString)
+            if (!f->GetAnchor().empty())
             {
                 ScrollToAnchor(f->GetAnchor());
             }
@@ -651,7 +651,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         }
     }
 
-    if (m_OpenedPageTitle == wxEmptyString)
+    if (m_OpenedPageTitle.empty())
         OnSetTitle(wxFileNameFromPath(m_OpenedPage));
 
     if (needs_refresh)
@@ -818,7 +818,8 @@ void wxHtmlWindow::CreateLayout()
             (
                 wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
                 ScrollSteps(m_Cell->GetWidth(), clientWidth - vscrollbar),
-                ScrollSteps(m_Cell->GetHeight(), clientHeight)
+                ScrollSteps(m_Cell->GetHeight(), clientHeight),
+                m_xScrollPosition, m_yScrollPosition
             );
         }
     }
@@ -832,7 +833,7 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     int p_fontsizes[7];
     wxString p_fff, p_ffn;
 
-    if (path != wxEmptyString)
+    if (!path.empty())
     {
         oldpath = cfg->GetPath();
         cfg->SetPath(path);
@@ -848,7 +849,7 @@ void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
     }
     SetFonts(p_ffn, p_fff, p_fontsizes);
 
-    if (path != wxEmptyString)
+    if (!path.empty())
         cfg->SetPath(oldpath);
 }
 
@@ -859,7 +860,7 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
     wxString oldpath;
     wxString tmp;
 
-    if (path != wxEmptyString)
+    if (!path.empty())
     {
         oldpath = cfg->GetPath();
         cfg->SetPath(path);
@@ -874,7 +875,7 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
         cfg->Write(tmp, (long) m_Parser->m_FontsSizes[i]);
     }
 
-    if (path != wxEmptyString)
+    if (!path.empty())
         cfg->SetPath(oldpath);
 }
 #endif // wxUSE_CONFIG
@@ -897,7 +898,7 @@ bool wxHtmlWindow::HistoryBack()
     a = (*m_History)[m_HistoryPos].GetAnchor();
     m_HistoryOn = false;
     m_tmpCanDrawLocks++;
-    if (a == wxEmptyString) LoadPage(l);
+    if (a.empty()) LoadPage(l);
     else LoadPage(l + wxT("#") + a);
     m_HistoryOn = true;
     m_tmpCanDrawLocks--;
@@ -927,7 +928,7 @@ bool wxHtmlWindow::HistoryForward()
     a = (*m_History)[m_HistoryPos].GetAnchor();
     m_HistoryOn = false;
     m_tmpCanDrawLocks++;
-    if (a == wxEmptyString) LoadPage(l);
+    if (a.empty()) LoadPage(l);
     else LoadPage(l + wxT("#") + a);
     m_HistoryOn = true;
     m_tmpCanDrawLocks--;

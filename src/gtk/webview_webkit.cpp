@@ -63,8 +63,7 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
                              webKitCtrl->GetId(),
                              url, target);
 
-        if (webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
+        webKitCtrl->HandleWindowEvent(event);
     }
     else if (status ==  WEBKIT_LOAD_COMMITTED)
     {
@@ -73,8 +72,7 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
                              webKitCtrl->GetId(),
                              url, target);
 
-        if (webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
+        webKitCtrl->HandleWindowEvent(event);
     }
 }
 
@@ -88,7 +86,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
 {
     const gchar* uri = webkit_network_request_get_uri(request);
     wxString target = webkit_web_frame_get_name (frame);
-    
+
     //If m_creating is true then we are the result of a new window
     //and so we need to send the event and veto the load
     if(webKitCtrl->m_creating)
@@ -99,9 +97,8 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
                              wxString(uri, wxConvUTF8),
                              target);
 
-        if(webKitCtrl && webKitCtrl->GetEventHandler())
-            webKitCtrl->GetEventHandler()->ProcessEvent(event);
-        
+        webKitCtrl->HandleWindowEvent(event);
+
         webkit_web_policy_decision_ignore(policy_decision);
         return TRUE;
     }
@@ -123,8 +120,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
                          wxString( uri, wxConvUTF8 ),
                          target);
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
+    webKitCtrl->HandleWindowEvent(event);
 
     if (!event.IsAllowed())
     {
@@ -297,10 +293,7 @@ wxgtk_webview_webkit_error(WebKitWebView*,
     event.SetString(description);
     event.SetInt(type);
 
-    if (webKitWindow && webKitWindow->GetEventHandler())
-    {
-        webKitWindow->GetEventHandler()->ProcessEvent(event);
-    }
+    webKitWindow->HandleWindowEvent(event);
 
     return FALSE;
 }
@@ -321,8 +314,7 @@ wxgtk_webview_webkit_new_window(WebKitWebView*,
                                        wxString( uri, wxConvUTF8 ),
                                        target);
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
+    webKitCtrl->HandleWindowEvent(event);
 
     //We always want the user to handle this themselves
     webkit_web_policy_decision_ignore(policy_decision);
@@ -341,9 +333,7 @@ wxgtk_webview_webkit_title_changed(WebKitWebView*,
                          "");
     event.SetString(wxString(title, wxConvUTF8));
 
-    if (webKitCtrl && webKitCtrl->GetEventHandler())
-        webKitCtrl->GetEventHandler()->ProcessEvent(event);
-
+    webKitCtrl->HandleWindowEvent(event);
 }
 
 static void
@@ -404,10 +394,7 @@ wxgtk_webview_webkit_context_menu(WebKitWebView *,
                                   gboolean,
                                   wxWebViewWebKit *webKitCtrl)
 {
-    if(webKitCtrl->IsContextMenuEnabled())
-        return FALSE;
-    else
-        return TRUE;
+    return !webKitCtrl->IsContextMenuEnabled();
 }
 
 #endif
@@ -444,6 +431,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
+    m_web_view = NULL;
     m_busy = false;
     m_guard = false;
     m_creating = false;
@@ -479,12 +467,12 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     g_signal_connect_after(m_web_view, "resource-request-starting",
                            G_CALLBACK(wxgtk_webview_webkit_resource_req), this);
-      
+
 #if WEBKIT_CHECK_VERSION(1, 10, 0)    
      g_signal_connect_after(m_web_view, "context-menu",
                            G_CALLBACK(wxgtk_webview_webkit_context_menu), this);
 #endif
-     
+
      g_signal_connect_after(m_web_view, "create-web-view",
                            G_CALLBACK(wxgtk_webview_webkit_create_webview), this);
 
@@ -590,13 +578,13 @@ void wxWebViewWebKit::GoForward()
 
 bool wxWebViewWebKit::CanGoBack() const
 {
-    return webkit_web_view_can_go_back(m_web_view);
+    return webkit_web_view_can_go_back(m_web_view) != 0;
 }
 
 
 bool wxWebViewWebKit::CanGoForward() const
 {
-    return webkit_web_view_can_go_forward(m_web_view);
+    return webkit_web_view_can_go_forward(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::ClearHistory()
@@ -673,17 +661,17 @@ void wxWebViewWebKit::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
 
 bool wxWebViewWebKit::CanCut() const
 {
-    return webkit_web_view_can_cut_clipboard(m_web_view);
+    return webkit_web_view_can_cut_clipboard(m_web_view) != 0;
 }
 
 bool wxWebViewWebKit::CanCopy() const
 {
-    return webkit_web_view_can_copy_clipboard(m_web_view);
+    return webkit_web_view_can_copy_clipboard(m_web_view) != 0;
 }
 
 bool wxWebViewWebKit::CanPaste() const
 {
-    return webkit_web_view_can_paste_clipboard(m_web_view);
+    return webkit_web_view_can_paste_clipboard(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::Cut()
@@ -703,12 +691,12 @@ void wxWebViewWebKit::Paste()
 
 bool wxWebViewWebKit::CanUndo() const
 {
-    return webkit_web_view_can_undo(m_web_view);
+    return webkit_web_view_can_undo(m_web_view) != 0;
 }
 
 bool wxWebViewWebKit::CanRedo() const
 {
-    return webkit_web_view_can_redo(m_web_view);
+    return webkit_web_view_can_redo(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::Undo()
@@ -756,26 +744,19 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     {
         return wxWEBVIEW_ZOOM_TINY;
     }
-    else if (zoom > 0.65 && zoom <= 0.90)
+    if (zoom <= 0.90)
     {
         return wxWEBVIEW_ZOOM_SMALL;
     }
-    else if (zoom > 0.90 && zoom <= 1.15)
+    if (zoom <= 1.15)
     {
         return wxWEBVIEW_ZOOM_MEDIUM;
     }
-    else if (zoom > 1.15 && zoom <= 1.45)
+    if (zoom <= 1.45)
     {
         return wxWEBVIEW_ZOOM_LARGE;
     }
-    else if (zoom > 1.45)
-    {
-        return wxWEBVIEW_ZOOM_LARGEST;
-    }
-
-    // to shut up compilers, this can never be reached logically
-    wxFAIL;
-    return wxWEBVIEW_ZOOM_MEDIUM;
+    return wxWEBVIEW_ZOOM_LARGEST;
 }
 
 
@@ -812,8 +793,7 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
 void wxWebViewWebKit::SetZoomType(wxWebViewZoomType type)
 {
     webkit_web_view_set_full_content_zoom(m_web_view,
-                                          (type == wxWEBVIEW_ZOOM_TYPE_LAYOUT ?
-                                          TRUE : FALSE));
+                                          type == wxWEBVIEW_ZOOM_TYPE_LAYOUT);
 }
 
 wxWebViewZoomType wxWebViewWebKit::GetZoomType() const
@@ -886,7 +866,7 @@ void wxWebViewWebKit::SetEditable(bool enable)
 
 bool wxWebViewWebKit::IsEditable() const
 {
-    return webkit_web_view_get_editable(m_web_view);
+    return webkit_web_view_get_editable(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::DeleteSelection()
@@ -896,7 +876,7 @@ void wxWebViewWebKit::DeleteSelection()
 
 bool wxWebViewWebKit::HasSelection() const
 {
-    return webkit_web_view_has_selection(m_web_view);
+    return webkit_web_view_has_selection(m_web_view) != 0;
 }
 
 void wxWebViewWebKit::SelectAll()

@@ -530,19 +530,20 @@ bool g_lastButtonWasFakeRight = false ;
 
 void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEvent)
 {
-    NSPoint locationInWindow = [nsEvent locationInWindow];
+    NSRect locationInWindow = NSZeroRect;
+    locationInWindow.origin = [nsEvent locationInWindow];
     
     // adjust coordinates for the window of the target view
     if ( [nsEvent window] != [m_osxView window] )
     {
         if ( [nsEvent window] != nil )
-            locationInWindow = [[nsEvent window] convertBaseToScreen:locationInWindow];
+            locationInWindow = [[nsEvent window] convertRectToScreen:locationInWindow];
         
         if ( [m_osxView window] != nil )
-            locationInWindow = [[m_osxView window] convertScreenToBase:locationInWindow];
+            locationInWindow = [[m_osxView window] convertRectFromScreen:locationInWindow];
     }
     
-    NSPoint locationInView = [m_osxView convertPoint:locationInWindow fromView:nil];
+    NSPoint locationInView = [m_osxView convertPoint:locationInWindow.origin fromView:nil];
     wxPoint locationInViewWX = wxFromNSPoint( m_osxView, locationInView );
         
     x = locationInViewWX.x;
@@ -1916,11 +1917,11 @@ double wxWidgetCocoaImpl::GetContentScaleFactor() const
 
 - (id)init:(wxWindow *)win
 {
-    self = [super init];
-
-    m_win = win;
-    m_isDone = false;
-
+    if ( self = [super init] )
+    {
+        m_win = win;
+        m_isDone = false;
+    }
     return self;
 }
 
@@ -2128,9 +2129,11 @@ bool wxWidgetCocoaImpl::ShowWithEffect(bool show,
     return ShowViewOrWindowWithEffect(m_wxPeer, show, effect, timeout);
 }
 
-// To avoid warnings about incompatible pointer types with Xcode 7, we need to
-// constrain the comparison function arguments instead of just using "id".
-#if __has_feature(objc_kindof)
+// To avoid warnings about incompatible pointer types with macOS 10.12 SDK (and
+// maybe even earlier? This has changed at some time between 10.9 and 10.12),
+// we need to constrain the comparison function arguments instead of just using
+// "id".
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12 && __has_feature(objc_kindof)
 typedef __kindof NSView* KindOfView;
 #else
 typedef id KindOfView;
@@ -2372,7 +2375,7 @@ bool wxWidgetCocoaImpl::SetFocus()
 
     // TODO remove if no issues arise: should not raise the window, only assign focus
     //[[m_osxView window] makeKeyAndOrderFront:nil] ;
-    [[m_osxView window] makeFirstResponder: m_osxView] ;
+    [[m_osxView window] makeFirstResponder: targetView] ;
     return true;
 }
 
@@ -2444,7 +2447,9 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
     if ( [m_osxView respondsToSelector:@selector(setAttributedTitle:) ] )
     {
         wxFont f = GetWXPeer()->GetFont();
-        if ( f.GetStrikethrough() || f.GetUnderlined() )
+        // we should not override system font colors unless explicitly specified
+        wxColour col = GetWXPeer()->UseForegroundColour() ? GetWXPeer()->GetForegroundColour() : wxNullColour;
+        if ( f.GetStrikethrough() || f.GetUnderlined() || col.IsOk() )
         {
             wxCFStringRef cf(title, encoding );
 
@@ -2452,7 +2457,13 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
                                                      initWithString:cf.AsNSString()];
 
             [attrString beginEditing];
-            [attrString setAlignment:NSCenterTextAlignment
+
+            NSTextAlignment textAlign;
+            if ( [m_osxView isKindOfClass:[NSControl class]] )
+                textAlign = [(id)m_osxView alignment];
+            else
+                textAlign = NSCenterTextAlignment;
+            [attrString setAlignment:textAlign
                                range:NSMakeRange(0, [attrString length])];
 
             [attrString addAttribute:NSFontAttributeName
@@ -2473,9 +2484,18 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
 
             }
 
+            if ( col.IsOk() )
+            {
+                [attrString addAttribute:NSForegroundColorAttributeName
+                                   value:col.OSXGetNSColor()
+                                   range:NSMakeRange(0, [attrString length])];
+            }
+
             [attrString endEditing];
 
             [(id)m_osxView setAttributedTitle:attrString];
+            
+            [attrString release];
 
             return;
         }
@@ -2722,11 +2742,15 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bo
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
+    else if ( [m_osxView isKindOfClass:[NSBox class] ] )
+        targetView = [(NSBox*) m_osxView titleCell];
 
     if ([targetView respondsToSelector:@selector(setFont:)])
         [targetView setFont: font.OSXGetNSFont()];
     if ([targetView respondsToSelector:@selector(setTextColor:)])
         [targetView setTextColor: col.OSXGetNSColor()];
+    if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
+        SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics), GetWXPeer()->GetFont().GetEncoding());
 }
 
 void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
@@ -2816,6 +2840,41 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
     return result;
 }
 
+bool wxWidgetCocoaImpl::ShouldHandleKeyNavigation(const wxKeyEvent &WXUNUSED(event)) const
+{
+    // Only controls that intercept tabs for different behavior should return false (ie wxTE_PROCESS_TAB)
+    return true;
+}
+
+bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
+{
+    bool handled = false;
+    wxWindow *focus = GetWXPeer();
+    if (focus && event.GetKeyCode() == WXK_TAB)
+    {
+        if (ShouldHandleKeyNavigation(event))
+        {
+            wxWindow* iter = focus->GetParent() ;
+            while (iter && !handled)
+            {
+                if (iter->HasFlag(wxTAB_TRAVERSAL))
+                {
+                    wxNavigationKeyEvent new_event;
+                    new_event.SetEventObject( focus );
+                    new_event.SetDirection( !event.ShiftDown() );
+                    /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+                    new_event.SetWindowChange( event.ControlDown() );
+                    new_event.SetCurrentFocus( focus );
+                    handled = iter->HandleWindowEvent( new_event ) && !new_event.GetSkipped();
+                }
+
+                iter = iter->GetParent() ;
+            }
+        }
+    }
+    return handled;
+}
+
 bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
@@ -2829,6 +2888,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
         wxKeyEvent eventHook(wxEVT_CHAR_HOOK, wxevent);
         if ( GetWXPeer()->OSXHandleKeyEvent(eventHook)
                 && !eventHook.IsNextEventAllowed() )
+            return true;
+
+        if (DoHandleKeyNavigation(wxevent))
             return true;
     }
 
@@ -2932,10 +2994,11 @@ void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
 {
     if ( !wxIsBusy() )
     {
-        NSPoint location = [NSEvent mouseLocation];
-        location = [[m_osxView window] convertScreenToBase:location];
-        NSPoint locationInView = [m_osxView convertPoint:location fromView:nil];
-
+        NSRect location = NSZeroRect;
+        location.origin = [NSEvent mouseLocation];
+        location = [[m_osxView window] convertRectFromScreen:location];
+        NSPoint locationInView = [m_osxView convertPoint:location.origin fromView:nil];        
+        
         if( NSMouseInRect(locationInView, [m_osxView bounds], YES) )
         {
             [(NSCursor*)cursor.GetHCURSOR() set];

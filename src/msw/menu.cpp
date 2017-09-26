@@ -40,10 +40,9 @@
 #endif
 
 #include "wx/scopedarray.h"
-#include "wx/vector.h"
-
 #include "wx/msw/private.h"
 #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
+#include "wx/private/menuradio.h" // for wxMenuRadioItemsData
 
 // other standard headers
 #include <string.h>
@@ -64,150 +63,6 @@ static const int idMenuTitle = wxID_NONE;
 // ----------------------------------------------------------------------------
 // private helper classes and functions
 // ----------------------------------------------------------------------------
-
-// Contains the data about the radio items groups in the given menu.
-class wxMenuRadioItemsData
-{
-public:
-    wxMenuRadioItemsData() { }
-
-    // Default copy ctor, assignment operator and dtor are all ok.
-
-    // Find the start and end of the group containing the given position or
-    // return false if it's not inside any range.
-    bool GetGroupRange(int pos, int *start, int *end) const
-    {
-        // We use a simple linear search here because there are not that many
-        // items in a menu and hence even fewer radio items ranges anyhow, so
-        // normally there is no need to do anything fancy (like keeping the
-        // array sorted and using binary search).
-        for ( Ranges::const_iterator it = m_ranges.begin();
-              it != m_ranges.end();
-              ++it )
-        {
-            const Range& r = *it;
-
-            if ( r.start <= pos && pos <= r.end )
-            {
-                if ( start )
-                    *start = r.start;
-                if ( end )
-                    *end = r.end;
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    // Take into account the new radio item about to be added at the given
-    // position.
-    //
-    // Returns true if this item starts a new radio group, false if it extends
-    // an existing one.
-    bool UpdateOnInsert(int pos)
-    {
-        bool inExistingGroup = false;
-
-        for ( Ranges::iterator it = m_ranges.begin();
-              it != m_ranges.end();
-              ++it )
-        {
-            Range& r = *it;
-
-            if ( pos < r.start )
-            {
-                // Item is inserted before this range, update its indices.
-                r.start++;
-                r.end++;
-            }
-            else if ( pos <= r.end + 1 )
-            {
-                // Item is inserted in the middle of this range or immediately
-                // after it in which case it extends this range so make it span
-                // one more item in any case.
-                r.end++;
-
-                inExistingGroup = true;
-            }
-            //else: Item is inserted after this range, nothing to do for it.
-        }
-
-        if ( inExistingGroup )
-            return false;
-
-        // Make a new range for the group this item will belong to.
-        Range r;
-        r.start = pos;
-        r.end = pos;
-        m_ranges.push_back(r);
-
-        return true;
-    }
-
-    // Update the ranges of the existing radio groups after removing the menu
-    // item at the given position.
-    //
-    // The item being removed can be the item of any kind, not only the radio
-    // button belonging to the radio group, and this function checks for it
-    // and, as a side effect, returns true if this item was found inside an
-    // existing radio group.
-    bool UpdateOnRemoveItem(int pos)
-    {
-        bool inExistingGroup = false;
-
-        // Pointer to (necessarily unique) empty group which could be left
-        // after removing the last radio button from it.
-        Ranges::iterator itEmptyGroup = m_ranges.end();
-
-        for ( Ranges::iterator it = m_ranges.begin();
-              it != m_ranges.end();
-              ++it )
-        {
-            Range& r = *it;
-
-            if ( pos < r.start )
-            {
-                // Removed item was positioned before this range, update its
-                // indices.
-                r.start--;
-                r.end--;
-            }
-            else if ( pos <= r.end )
-            {
-                // Removed item belongs to this radio group (it is a radio
-                // button), update index of its end.
-                r.end--;
-
-                // Check if empty group left after removal.
-                // If so, it will be deleted later on.
-                if ( r.end < r.start )
-                    itEmptyGroup = it;
-
-                inExistingGroup = true;
-            }
-            //else: Removed item was after this range, nothing to do for it.
-        }
-
-        // Remove empty group from the list.
-        if ( itEmptyGroup != m_ranges.end() )
-            m_ranges.erase(itEmptyGroup);
-
-        return inExistingGroup;
-    }
-
-private:
-    // Contains the inclusive positions of the range start and end.
-    struct Range
-    {
-        int start;
-        int end;
-    };
-
-    typedef wxVector<Range> Ranges;
-    Ranges m_ranges;
-};
 
 namespace
 {
@@ -498,19 +353,28 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         pos = GetMenuItemCount() - 1;
     }
 
-    // Update radio groups data if we're inserting a new radio item.
+    // Update radio groups data if we're inserting a new menu item.
+    // Inserting radio and non-radio item has a different impact
+    // on radio groups so we have to handle each case separately.
+    // (Inserting a radio item in the middle of exisiting group extends
+    // the group, but inserting non-radio item breaks it into two subgroups.)
     //
-    // NB: If we supported inserting non-radio items in the middle of existing
-    //     radio groups to break them into two subgroups, we'd need to update
-    //     m_radioData in this case too but currently this is not supported.
     bool checkInitially = false;
-    if ( pItem->GetKind() == wxITEM_RADIO )
+    if ( pItem->IsRadio() )
     {
         if ( !m_radioData )
             m_radioData = new wxMenuRadioItemsData;
 
-        if ( m_radioData->UpdateOnInsert(pos) )
+        if ( m_radioData->UpdateOnInsertRadio(pos) )
             checkInitially = true;
+    }
+    else if ( m_radioData )
+    {
+        if ( m_radioData->UpdateOnInsertNonRadio(pos) )
+        {
+            // One of the exisiting groups has been split into two subgroups.
+            wxFAIL_MSG(wxS("Inserting non-radio item inside a radio group?"));
+        }
     }
 
     // Also handle the case of check menu items that had been checked before
@@ -763,7 +627,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     {
         if ( m_radioData->UpdateOnRemoveItem(pos) )
         {
-            wxASSERT_MSG( item->GetKind() == wxITEM_RADIO,
+            wxASSERT_MSG( item->IsRadio(),
                           wxT("Removing non radio button from radio group?") );
         }
         //else: item being removed is not in a radio group
@@ -914,7 +778,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
         wxMenuItem * const item = FindItem(id);
         if ( item )
         {
-            if ( (item->GetKind() == wxITEM_RADIO) && item->IsChecked() )
+            if ( item->IsRadio() && item->IsChecked() )
                 return true;
 
             if ( item->IsCheckable() )

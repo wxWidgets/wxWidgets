@@ -328,7 +328,7 @@ bool wxIcon::LoadIconFromSystemResource(const wxString& resourceName, int desire
     if ( theId != 0 )
     {
         IconRef iconRef = NULL ;
-        verify_noerr( GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef ) ) ;
+        __Verify_noErr(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
         if ( iconRef )
         {
             m_refData = new wxIconRefData( (WXHICON) iconRef, desiredWidth, desiredHeight ) ;

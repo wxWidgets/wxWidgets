@@ -4,19 +4,13 @@
 
 #include <stddef.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "winconfig.h"
-#elif defined(MACOS_CLASSIC)
+#elif defined( __APPLE__ ) && !defined(HAVE_EXPAT_CONFIG_H)
 #include "macconfig.h"
-#elif defined(__amigaos__)
-#include "amigaconfig.h"
-#elif defined(__WATCOMC__)
-#include "watcomconfig.h"
-#else
-#ifdef HAVE_EXPAT_CONFIG_H
+#elif defined(HAVE_EXPAT_CONFIG_H)
 #include <expat_config.h>
-#endif
-#endif /* ndef WIN32 */
+#endif /* ndef _WIN32 */
 
 #include "expat_external.h"
 #include "internal.h"

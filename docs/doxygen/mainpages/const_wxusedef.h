@@ -194,6 +194,7 @@ library:
 @itemdef{wxUSE_PROTOCOL_HTTP, Use wxHTTP class. (requireswxProtocol)}
 @itemdef{wxUSE_RADIOBOX, Use wxRadioBox class.}
 @itemdef{wxUSE_RADIOBTN, Use wxRadioButton class.}
+@itemdef{wxUSE_REPRODUCIBLE_BUILD, Make library builds reproducible.}
 @itemdef{wxUSE_REGEX, Use wxRegEx class.}
 @itemdef{wxUSE_RICHTEXT, Use wxRichTextCtrl class.}
 @itemdef{wxUSE_RICHTEXT_XML_HANDLER, See src/xrc/xh_richtext.cpp file.}

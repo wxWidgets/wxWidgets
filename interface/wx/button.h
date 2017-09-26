@@ -42,7 +42,7 @@
     @li @b current: bitmap shown when the mouse is over the button (but it is
         not pressed although it may have focus). Notice that if current bitmap
         is not specified but the current platform UI uses hover images for the
-        buttons (such as Windows XP or GTK+), then the focus bitmap is used for
+        buttons (such as Windows or GTK+), then the focus bitmap is used for
         hover state as well. This makes it possible to set focus bitmap only to
         get reasonably good behaviour on all platforms.
 

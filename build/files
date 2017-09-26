@@ -946,6 +946,7 @@ GUI_CMN_HDR =
     wx/palette.h
     wx/panel.h
     wx/pen.h
+    wx/peninfobase.h
     wx/position.h
     wx/preferences.h
     wx/radiobox.h
@@ -2140,7 +2141,6 @@ OSX_COMMON_SRC =
     src/osx/carbon/frame.cpp
     src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
-    src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/renderer.cpp
     src/osx/carbon/statbrma.cpp
@@ -2284,6 +2284,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/nonownedwnd.mm
     src/osx/cocoa/notebook.mm
     src/osx/cocoa/radiobut.mm
+    src/osx/cocoa/overlay.mm
     src/osx/cocoa/preferences.mm
     src/osx/cocoa/printdlg.mm
     src/osx/cocoa/scrolbar.mm

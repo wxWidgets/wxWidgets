@@ -720,14 +720,6 @@ public:
         return true;
     }
 
-    virtual bool Destroy() wxOVERRIDE
-    {
-        // FIXME: why exactly do we do this? to avoid activation events during
-        //        destructions maybe?
-        m_childView = NULL;
-        return BaseClass::Destroy();
-    }
-
 protected:
     // hook the child view into event handlers chain here
     virtual bool TryBefore(wxEvent& event) wxOVERRIDE
@@ -747,7 +739,7 @@ private:
     void OnCloseWindow(wxCloseEvent& event)
     {
         if ( CloseView(event) )
-            Destroy();
+            BaseClass::Destroy();
         //else: vetoed
     }
 

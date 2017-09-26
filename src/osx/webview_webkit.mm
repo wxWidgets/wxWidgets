@@ -690,8 +690,10 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
-    [super init];
-    webKitWindow = inWindow;    // non retained
+    if (self = [super init])
+    {
+        webKitWindow = inWindow;    // non retained
+    }
     return self;
 }
 
@@ -878,8 +880,10 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
-    [super init];
-    webKitWindow = inWindow;    // non retained
+    if (self = [super init])
+    {
+        webKitWindow = inWindow;    // non retained
+    }
     return self;
 }
 
@@ -1036,8 +1040,10 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
-    [super init];
-    webKitWindow = inWindow;    // non retained
+    if (self = [super init])
+    {
+        webKitWindow = inWindow;    // non retained
+    }
     return self;
 }
 

@@ -35,13 +35,31 @@
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/string.h"
 
+//-----------------------------------------------------------------------------
+//  helper function to get the length of the text
+//-----------------------------------------------------------------------------
+
+static unsigned int GetEntryTextLength(GtkEntry* entry)
+{
+#if GTK_CHECK_VERSION(2, 14, 0)
+#ifndef __WXGTK3__
+    if ( gtk_check_version(2, 14, 0) == NULL )
+#endif // !GTK+ 3
+    {
+        return gtk_entry_get_text_length(entry);
+    }
+#endif // GTK+ 2.14+
+
+    return strlen(gtk_entry_get_text(entry));
+}
+
 // ============================================================================
 // signal handlers implementation
 // ============================================================================
 
 // "insert_text" handler for GtkEntry
-extern "C"
-void
+extern "C" {
+static void
 wx_gtk_insert_text_callback(GtkEditable *editable,
                             const gchar * new_text,
                             gint new_text_length,
@@ -61,7 +79,7 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
     // check that we don't overflow the max length limit if we have it
     if ( text_max_length )
     {
-        const int text_length = gtk_entry_get_text_length(entry);
+        const int text_length = GetEntryTextLength(entry);
 
         // We can't use new_text_length as it is in bytes while we want to count
         // characters (in first approximation, anyhow...).
@@ -127,6 +145,7 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
 
         g_signal_stop_emission_by_name (editable, "insert_text");
     }
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -243,6 +262,12 @@ void wxTextEntry::Remove(long from, long to)
     gtk_editable_delete_text(GetEditable(), from, to);
 }
 
+// static
+unsigned int wxTextEntry::GTKGetEntryTextLength(GtkEntry* entry)
+{
+    return GetEntryTextLength(entry);
+}
+
 // ----------------------------------------------------------------------------
 // clipboard operations
 // ----------------------------------------------------------------------------
@@ -320,7 +345,7 @@ long wxTextEntry::GetLastPosition() const
     long pos = -1;
     GtkEntry* entry = (GtkEntry*)GetEditable();
     if (GTK_IS_ENTRY(entry))
-        pos = gtk_entry_get_text_length(entry);
+        pos = GetEntryTextLength(entry);
 
     return pos;
 }

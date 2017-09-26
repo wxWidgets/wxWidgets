@@ -169,7 +169,7 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
+#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0 // No focus ring on wxGTK
 
 #elif defined(__WXMAC__)
@@ -182,7 +182,7 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
+#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    3 // Reserve room for the textctrl's focus ring to display
 
 #undef DEFAULT_DROPBUTTON_WIDTH

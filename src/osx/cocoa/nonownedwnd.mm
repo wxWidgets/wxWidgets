@@ -1135,9 +1135,10 @@ void wxNonOwnedWindowCocoaImpl::RequestUserAttention(int flagsWX)
 void wxNonOwnedWindowCocoaImpl::ScreenToWindow( int *x, int *y )
 {
     wxPoint p((x ? *x : 0), (y ? *y : 0) );
-    NSPoint nspt = wxToNSPoint( NULL, p );
-    nspt = [m_macWindow convertScreenToBase:nspt];
-    nspt = [[m_macWindow contentView] convertPoint:nspt fromView:nil];
+    NSRect nsrect = NSZeroRect;
+    nsrect.origin = wxToNSPoint( NULL, p );
+    nsrect = [m_macWindow convertRectFromScreen:nsrect];
+    NSPoint nspt = [[m_macWindow contentView] convertPoint:nsrect.origin fromView:nil];
     p = wxFromNSPoint([m_macWindow contentView], nspt);
     if ( x )
         *x = p.x;
@@ -1150,8 +1151,10 @@ void wxNonOwnedWindowCocoaImpl::WindowToScreen( int *x, int *y )
     wxPoint p((x ? *x : 0), (y ? *y : 0) );
     NSPoint nspt = wxToNSPoint( [m_macWindow contentView], p );
     nspt = [[m_macWindow contentView] convertPoint:nspt toView:nil];
-    nspt = [m_macWindow convertBaseToScreen:nspt];
-    p = wxFromNSPoint( NULL, nspt);
+    NSRect nsrect = NSZeroRect;
+    nsrect.origin = nspt;
+    nsrect = [m_macWindow convertRectToScreen:nsrect];
+    p = wxFromNSPoint( NULL, nsrect.origin);
     if ( x )
         *x = p.x;
     if ( y )

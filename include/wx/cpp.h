@@ -157,7 +157,7 @@
    Up to eight arguments are supported.
 
    (With thanks to https://groups.google.com/d/topic/comp.std.c/d-6Mj5Lko_s/discussion
-   and http://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros)
+   and https://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros)
 */
 #define wxCALL_FOR_EACH_NARG(...)   wxCALL_FOR_EACH_NARG_((__VA_ARGS__, wxCALL_FOR_EACH_RSEQ_N()))
 #define wxCALL_FOR_EACH_NARG_(args) wxCALL_FOR_EACH_ARG_N args

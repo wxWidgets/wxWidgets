@@ -617,8 +617,8 @@ public:
     wxHtmlLinkEvent() {}
     wxHtmlLinkEvent(int id, const wxHtmlLinkInfo &linkinfo)
         : wxCommandEvent(wxEVT_HTML_LINK_CLICKED, id)
+        , m_linkInfo(linkinfo)
     {
-        m_linkInfo = linkinfo;
     }
 
     const wxHtmlLinkInfo &GetLinkInfo() const { return m_linkInfo; }

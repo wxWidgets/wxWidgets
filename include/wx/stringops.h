@@ -44,9 +44,38 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
     static ptrdiff_t DiffIters(const Iterator& i1, const Iterator& i2)
         { return i1 - i2; }
 
+#if wxUSE_UNICODE_UTF16
+    // encodes the characters as UTF-16:
+    struct Utf16CharBuffer
+    {
+        // Notice that data is left uninitialized, it is filled by EncodeChar()
+        // which is the only function creating objects of this class.
+
+        wchar_t data[3];
+        operator const wchar_t*() const { return data; }
+    };
+    static Utf16CharBuffer EncodeChar(const wxUniChar& ch);
+    static wxWCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
+    static bool IsSingleCodeUnitCharacter(const wxUniChar& ch)
+        { return !ch.IsSupplementary(); }
+#else
     // encodes the character to a form used to represent it in internal
-    // representation (returns a string in UTF8 version)
-    static wxChar EncodeChar(const wxUniChar& ch) { return (wxChar)ch; }
+    // representation
+    struct SingleCharBuffer
+    {
+        wxChar data[2];
+        operator const wxChar*() const { return data; }
+    };
+    static SingleCharBuffer EncodeChar(const wxUniChar& ch)
+    {
+        SingleCharBuffer buf;
+        buf.data[0] = (wxChar)ch;
+        buf.data[1] = 0;
+        return buf;
+    }
+    static wxWxCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
+    static bool IsSingleCodeUnitCharacter(const wxUniChar&) { return true; }
+#endif
 
     static wxUniChar DecodeChar(const wxStringImpl::const_iterator& i)
         { return *i; }
@@ -133,6 +162,9 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
 
         return dist;
     }
+
+    static bool IsSingleCodeUnitCharacter(const wxUniChar& ch)
+        { return ch.IsAscii(); }
 
     // encodes the character as UTF-8:
     typedef wxUniChar::Utf8CharBuffer Utf8CharBuffer;

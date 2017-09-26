@@ -3,6 +3,9 @@
 /* 1234 = LIL_ENDIAN, 4321 = BIGENDIAN */
 #undef BYTEORDER
 
+/* Define to 1 if you have the `arc4random_buf' function. */
+#undef HAVE_ARC4RANDOM_BUF
+
 /* Define to 1 if you have the `bcopy' function. */
 #undef HAVE_BCOPY
 
@@ -15,8 +18,14 @@
 /* Define to 1 if you have the `getpagesize' function. */
 #undef HAVE_GETPAGESIZE
 
+/* Define to 1 if you have the `getrandom' function. */
+#undef HAVE_GETRANDOM
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `bsd' library (-lbsd). */
+#undef HAVE_LIBBSD
 
 /* Define to 1 if you have the `memmove' function. */
 #undef HAVE_MEMMOVE
@@ -38,6 +47,9 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
+
+/* Define to 1 if you have `syscall' and `SYS_getrandom'. */
+#undef HAVE_SYSCALL_GETRANDOM
 
 /* Define to 1 if you have the <sys/param.h> header file. */
 #undef HAVE_SYS_PARAM_H
@@ -87,9 +99,6 @@
 
 /* Define to make XML Namespaces functionality available. */
 #undef XML_NS
-
-/* Define to __FUNCTION__ or "" if `__func__' does not conform to ANSI C. */
-#undef __func__
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const

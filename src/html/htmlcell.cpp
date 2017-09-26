@@ -179,7 +179,7 @@ wxHtmlCell::AdjustPagebreak(int *pagebreak,
 void wxHtmlCell::SetLink(const wxHtmlLinkInfo& link)
 {
     wxDELETE(m_Link);
-    if (link.GetHref() != wxEmptyString)
+    if (!link.GetHref().empty())
         m_Link = new wxHtmlLinkInfo(link);
 }
 

@@ -685,7 +685,8 @@ int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argpt
 
     // VsnprintfTestCase reveals that glibc's implementation of vswprintf
     // doesn't nul terminate on truncation.
-    str[size - 1] = 0;
+    if ( size )
+        str[size - 1] = 0;
 
     return rv;
 }

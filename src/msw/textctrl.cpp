@@ -1334,12 +1334,19 @@ wxTextPos wxTextCtrl::GetLastPosition() const
 {
     if ( IsMultiLine() )
     {
-        int numLines = GetNumberOfLines();
-        long posStartLastLine = XYToPosition(0, numLines - 1);
-
-        long lenLastLine = GetLengthOfLineContainingPos(posStartLastLine);
-
-        return posStartLastLine + lenLastLine;
+#if wxUSE_RICHEDIT
+        if ( IsRich() )
+        {
+            GETTEXTLENGTHEX gtl;
+            gtl.flags = GTL_NUMCHARS | GTL_PRECISE;
+            gtl.codepage = GetRichVersion() > 1 ? 1200 : CP_ACP;
+            return ::SendMessage(GetHwnd(), EM_GETTEXTLENGTHEX, (WPARAM)&gtl, 0);
+        }
+        else
+#endif // wxUSE_RICHEDIT
+        {
+            return ::GetWindowTextLength(GetHwnd());
+        }
     }
 
     return wxTextEntry::GetLastPosition();
@@ -1474,7 +1481,30 @@ int wxTextCtrl::GetNumberOfLines() const
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
     // This gets the char index for the _beginning_ of this line
-    long charIndex = ::SendMessage(GetHwnd(), EM_LINEINDEX, y, 0);
+    long charIndex;
+    if ( IsMultiLine() )
+    {
+        charIndex = ::SendMessage(GetHwnd(), EM_LINEINDEX, y, 0);
+        if ( charIndex == -1 )
+            return -1;
+    }
+    else
+    {
+        if ( y != 0 )
+            return -1;
+
+        charIndex = 0;
+    }
+
+    // Line is identified by a character position!
+    long lineLength = ::SendMessage(GetHwnd(), EM_LINELENGTH, charIndex, 0);
+
+    // Notice that x == lineLength is still valid because it corresponds either
+    // to the position of the LF at the end of any line except the last one or
+    // to the last position, which is the position after the last character,
+    // for the last line.
+    if ( x > lineLength )
+        return -1;
 
     return charIndex + x;
 }
@@ -1509,9 +1539,53 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
         return false;
     }
 
-    // The X position must therefore be the different between pos and charIndex
+    // Line is identified by a character position!
+    // New lines characters are not included.
+    long lineLength = ::SendMessage(hWnd, EM_LINELENGTH, charIndex, 0);
+
+    // To simplify further calculations, make position relative
+    // to the beginning of the line.
+    pos -= charIndex;
+
+    // We need to apply different approach for the position referring
+    // to the last line so check if the next line exists.
+    long charIndexNextLn = IsMultiLine() ?
+                           ::SendMessage(hWnd, EM_LINEINDEX, lineNo + 1, 0)
+                           : -1;
+    if ( charIndexNextLn == -1 )
+    {
+        // No next line. Char position refers to the last line so
+        // the length of the line obtained with EM_LINELENGTH is
+        // correct because there are no new line characters at the end.
+        if ( pos > lineLength )
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // Next line found. Char position doesn't refer to the last line
+        // so we need to take into account new line characters which were
+        // not counted by EM_LINELENGTH.
+        long lineLengthFull = charIndexNextLn - charIndex;
+        // (lineLengthFull - lineLength) can be 0 (for wrapped line),
+        // 1 (for \r new line mark) or 2 (for \r\n new line mark).
+        if ( pos > lineLengthFull )
+        {
+            return false;
+        }
+        if ( pos > lineLength )
+        {
+            // Char position refers to the second character of the CR/LF mark
+            // and its physical X-Y position is the same as the position
+            // of the first one.
+            pos = lineLength;
+        }
+    }
+
+    // The X position is therefore a char position in the line.
     if ( x )
-        *x = pos - charIndex;
+        *x = pos;
     if ( y )
         *y = lineNo;
 

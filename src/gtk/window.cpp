@@ -61,6 +61,10 @@ typedef guint KeySym;
 #define wxGTK_VERSION_REQUIRED_FOR_COMPOSITING 2,12,0
 #define wxGTK_HAS_COMPOSITING_SUPPORT (GTK_CHECK_VERSION(2,12,0) && wxUSE_CAIRO)
 
+#ifndef PANGO_VERSION_CHECK
+    #define PANGO_VERSION_CHECK(a,b,c) 0
+#endif
+
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
@@ -291,7 +295,6 @@ PangoContext* wxGetPangoContext()
         {
             context = gdk_pango_context_get_for_screen(screen);
         }
-#ifdef PANGO_VERSION_CHECK
 #if PANGO_VERSION_CHECK(1,22,0)
         else // No default screen.
         {
@@ -306,7 +309,6 @@ PangoContext* wxGetPangoContext()
             //else: pango_font_map_create_context() not available
         }
 #endif // Pango 1.22+
-#endif // PANGO_VERSION_CHECK
     }
 
     return context;
@@ -3421,7 +3423,17 @@ int wxWindowGTK::GetCharHeight() const
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
     pango_layout_set_text(layout, "H", 1);
-    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    PangoLayoutLine* line;
+#if PANGO_VERSION_CHECK(1,16,0)
+    if ( wx_pango_version_check(1,16,0) == NULL )
+    {
+        line = pango_layout_get_line_readonly(layout, 0);
+    }
+    else
+#endif // Pango 1.16+
+    {
+        line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    }
 
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);
@@ -3447,7 +3459,17 @@ int wxWindowGTK::GetCharWidth() const
     PangoLayout *layout = pango_layout_new(context);
     pango_layout_set_font_description(layout, desc);
     pango_layout_set_text(layout, "g", 1);
-    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    PangoLayoutLine* line;
+#if PANGO_VERSION_CHECK(1,16,0)
+    if ( wx_pango_version_check(1,16,0) == NULL )
+    {
+        line = pango_layout_get_line_readonly(layout, 0);
+    }
+    else
+#endif // Pango 1.16+
+    {
+        line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+    }
 
     PangoRectangle rect;
     pango_layout_line_get_extents(line, NULL, &rect);

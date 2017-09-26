@@ -16,6 +16,10 @@
 
 #if wxUSE_XRC && wxUSE_TOGGLEBTN
 
+# if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
+#  define wxHAVE_BITMAPS_IN_BUTTON 1
+# endif
+
 #include "wx/xrc/xh_tglbtn.h"
 #include "wx/tglbtn.h"
 #include "wx/button.h" // solely for wxBU_EXACTFIT
@@ -35,7 +39,7 @@ wxObject *wxToggleButtonXmlHandler::DoCreateResource()
 
    wxObject *control = m_instance;
 
-#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
+#ifdef wxHAVE_BITMAPS_IN_BUTTON
 
     if (m_class == wxT("wxBitmapToggleButton"))
     {
@@ -78,10 +82,18 @@ void wxToggleButtonXmlHandler::DoCreateToggleButton(wxObject *control)
                    wxDefaultValidator,
                    GetName());
 
+#ifdef wxHAVE_BITMAPS_IN_BUTTON
+    if ( GetParamNode("bitmap") )
+    {
+        button->SetBitmap(GetBitmap("bitmap", wxART_BUTTON),
+                          GetDirection("bitmapposition"));
+    }
+#endif
+   
     button->SetValue(GetBool( wxT("checked")));
 }
 
-#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
+#ifdef wxHAVE_BITMAPS_IN_BUTTON
 void wxToggleButtonXmlHandler::DoCreateBitmapToggleButton(wxObject *control)
 {
     wxBitmapToggleButton *button = wxDynamicCast(control, wxBitmapToggleButton);

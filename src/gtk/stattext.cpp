@@ -144,6 +144,9 @@ void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    if ( label == m_labelOrig )
+        return;
+
     m_labelOrig = label;
 
     GTKDoSetLabel(&wxStaticText::GTKSetLabelForLabel, label);

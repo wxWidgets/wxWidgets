@@ -68,7 +68,7 @@
 }
 
 - (void)dealloc {
-	[super dealloc];
+    [super dealloc];
 }
 
 
@@ -111,41 +111,9 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 
 // TODO : reorganize
 
-extern wxFont* CreateNormalFont()
-{
-    return new wxFont([UIFont systemFontSize] , wxSWISS, wxNORMAL, wxNORMAL, FALSE, "Helvetica" );
-}
-
-extern wxFont* CreateSmallFont()
-{
-    return new wxFont([UIFont smallSystemFontSize] , wxSWISS, wxNORMAL, wxNORMAL, FALSE, "Helvetica" );
-}
-
-extern UIFont* CreateUIFont( const wxFont& font )
-{
-    return [UIFont fontWithName:wxCFStringRef(font.GetFaceName() ).AsNSString() size:font.GetPointSize()];
-}
-
 CFArrayRef CopyAvailableFontFamilyNames()
 {
     return (CFArrayRef) [[UIFont familyNames] retain];
-}
-
-extern void DrawTextInContext( CGContextRef context, CGPoint where, UIFont *font, NSString* text )
-{
-    bool contextChanged = ( UIGraphicsGetCurrentContext() != context );
-    if ( contextChanged )
-        UIGraphicsPushContext(context);
-
-    [text drawAtPoint:where withFont:font];
-
-    if ( contextChanged )
-        UIGraphicsPopContext();
-}
-
-extern CGSize MeasureTextInContext( UIFont *font, NSString* text )
-{
-    return  [text sizeWithFont:font];
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
@@ -211,7 +179,6 @@ int wxDisplayDepth()
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-    CGRect r = [[UIScreen mainScreen] applicationFrame];
     CGRect bounds = [[UIScreen mainScreen] bounds];
 
     if ( UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) )
