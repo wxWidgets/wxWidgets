@@ -248,7 +248,7 @@ private:
 #endif
         CPPUNIT_TEST( DocView );
         WXUISIM_TEST( ContextMenuEvent );
-        CPPUNIT_TEST( PropagationLevel );
+        WXUISIM_TEST( PropagationLevel );
     CPPUNIT_TEST_SUITE_END();
 
     void OneHandler();
@@ -260,8 +260,10 @@ private:
     void ScrollWindowWithHandler();
     void MenuEvent();
     void DocView();
+#if wxUSE_UIACTIONSIMULATOR
     void ContextMenuEvent();
     void PropagationLevel();
+#endif
 
     wxDECLARE_NO_COPY_CLASS(EventPropagationTestCase);
 };
