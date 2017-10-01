@@ -402,6 +402,7 @@ public:
             1, m_events.size()
         );
 
+        delete e;
     }
 
     virtual void GenerateEvent() = 0;

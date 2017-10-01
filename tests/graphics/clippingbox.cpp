@@ -1230,6 +1230,7 @@ void ClippingBoxTestCaseDCBase::OneDevRegionNonRect()
                  m_dc->DeviceToLogicalXRel(clipW),
                  m_dc->DeviceToLogicalYRel(clipH), 1);
     CheckClipShape(bmpRef, 1);
+    delete memDC;
 }
 
 void ClippingBoxTestCaseDCBase::OneDevRegionAndReset()

@@ -146,6 +146,7 @@ void AtomicTestCase::TestWithThreads(int count, ETestType testType)
         if ( thread->Create() != wxTHREAD_NO_ERROR )
         {
             wxLogError(wxT("Can't create thread!"));
+            delete thread;
         }
         else
             threads.Add(thread);
@@ -161,6 +162,7 @@ void AtomicTestCase::TestWithThreads(int count, ETestType testType)
     {
         // each thread should return 0, else it detected some problem
         CPPUNIT_ASSERT (threads[i]->Wait() == (wxThread::ExitCode)0);
+        delete threads[i];
     }
 
     CPPUNIT_ASSERT( int1 == 0 );

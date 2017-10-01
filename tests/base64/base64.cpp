@@ -269,6 +269,8 @@ void Base64TestCase::EncodeDecodeRandom()
     size_t realsize = size;
     CPPUNIT_ASSERT(wxBase64Decode(buff2, realsize, (char *)buff, size));
     CPPUNIT_ASSERT(wxBase64Encode(buff2, size, buff2, realsize));
+    delete[] buff2;
+    delete[] buff;
 }
 
 void Base64TestCase::DecodeInvalid()

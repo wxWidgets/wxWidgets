@@ -130,6 +130,7 @@ void QueueTestCase::TestReceive()
         // if it returns a negative, then it detected some problem.
         wxThread::ExitCode code = threads[i]->Wait();
         CPPUNIT_ASSERT_EQUAL( code, (wxThread::ExitCode)wxMSGQUEUE_NO_ERROR );
+        delete threads[i];
     }
 }
 
@@ -162,6 +163,8 @@ void QueueTestCase::TestReceiveTimeout()
 
     CPPUNIT_ASSERT_EQUAL( code1, (wxThread::ExitCode)wxMSGQUEUE_NO_ERROR );
     CPPUNIT_ASSERT_EQUAL( code2, (wxThread::ExitCode)wxMSGQUEUE_TIMEOUT );
+    delete thread2;
+    delete thread1;
 }
 
 // every thread tries to read exactly m_maxMsgCount messages from its queue
