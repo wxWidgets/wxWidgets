@@ -29,12 +29,16 @@ const wxString sLF((wxChar)10);
 
 wxString wxMacConvertNewlines13To10(const wxString& data)
 {
-    return wxString(data)->Replace(sCR, sLF);
+    wxString string(data);
+    string.Replace(sCR, sLF);
+    return string;
 }
 
 wxString wxMacConvertNewlines10To13(const wxString& data)
 {
-    return wxString(data)->Replace(sLF, sCR);
+    wxString string(data);
+    string.Replace(sLF, sCR);
+    return string;
 }
 
 wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
