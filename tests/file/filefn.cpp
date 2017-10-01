@@ -149,7 +149,7 @@ void FileFunctionsTestCase::GetTempFolder()
 
 void FileFunctionsTestCase::CopyFile()
 {
-    const wxString filename1(wxT("horse.bmp"));
+    const wxString filename1(wxS("horse.xpm"));
     const wxString& filename2 = m_fileNameWork;
 
     const std::string msg =
@@ -166,8 +166,7 @@ void FileFunctionsTestCase::CopyFile()
 
     wxString s1, s2;
     CPPUNIT_ASSERT_MESSAGE( msg, f1.ReadAll(&s1) && f2.ReadAll(&s2) );
-    CPPUNIT_ASSERT_MESSAGE( msg, (s1.length() == s2.length()) &&
-                    (memcmp(s1.c_str(), s2.c_str(), s1.length()) == 0) );
+    CPPUNIT_ASSERT_MESSAGE( msg, s1 == s2 );
 
     CPPUNIT_ASSERT_MESSAGE( msg, f1.Close() && f2.Close() );
     CPPUNIT_ASSERT_MESSAGE( msg, wxRemoveFile(filename2) );
