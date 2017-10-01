@@ -241,7 +241,7 @@ extern "C"
     static void
     gtkfilechooserwidget_file_activated_callback( GtkWidget *WXUNUSED( widget ), wxGtkFileCtrl *fileCtrl )
     {
-        GenerateFileActivatedEvent( fileCtrl, fileCtrl );
+        wxGenerateFileActivatedEvent( fileCtrl, fileCtrl );
     }
 }
 
@@ -262,7 +262,7 @@ extern "C"
         }
 
         if ( !fileCtrl->m_checkNextSelEvent )
-            GenerateSelectionChangedEvent( fileCtrl, fileCtrl );
+            wxGenerateSelectionChangedEvent( fileCtrl, fileCtrl );
     }
 }
 
@@ -277,7 +277,7 @@ extern "C"
         }
         else
         {
-            GenerateFolderChangedEvent( fileCtrl, fileCtrl );
+            wxGenerateFolderChangedEvent( fileCtrl, fileCtrl );
         }
 
         fileCtrl->m_checkNextSelEvent = true;
@@ -294,7 +294,7 @@ extern "C"
              fileCtrl->HasFilterChoice() &&
              !fileCtrl->GTKShouldIgnoreNextFilterEvent() )
         {
-            GenerateFilterChangedEvent( fileCtrl, fileCtrl );
+            wxGenerateFilterChangedEvent( fileCtrl, fileCtrl );
         }
     }
 }

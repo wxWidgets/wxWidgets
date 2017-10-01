@@ -1187,7 +1187,7 @@ void wxGenericFileCtrl::DoSetFilterIndex( int filterindex )
         m_filterExtension.clear();
     }
 
-    GenerateFilterChangedEvent( this, this );
+    wxGenerateFilterChangedEvent( this, this );
 }
 
 void wxGenericFileCtrl::SetWildcard( const wxString& wildCard )
@@ -1301,7 +1301,7 @@ void wxGenericFileCtrl::OnSelected( wxListEvent &event )
     }
 
     if ( !m_noSelChgEvent )
-        GenerateSelectionChangedEvent( this, this );
+        wxGenerateSelectionChangedEvent( this, this );
 
     m_ignoreChanges = false;
     m_inSelected = false;
@@ -1331,7 +1331,7 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
         m_ignoreChanges = true;
         m_list->GoToParentDir();
 
-        GenerateFolderChangedEvent( this, this );
+        wxGenerateFolderChangedEvent( this, this );
 
         UpdateControls();
         m_ignoreChanges = false;
@@ -1344,7 +1344,7 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
         m_ignoreChanges = true;
         m_list->GoToHomeDir();
 
-        GenerateFolderChangedEvent( this, this );
+        wxGenerateFolderChangedEvent( this, this );
 
         UpdateControls();
         m_ignoreChanges = false;
@@ -1387,7 +1387,7 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
         m_list->GoToDir( filename );
         UpdateControls();
 
-        GenerateFolderChangedEvent( this, this );
+        wxGenerateFolderChangedEvent( this, this );
 
         m_ignoreChanges = false;
         return;
@@ -1409,11 +1409,11 @@ void wxGenericFileCtrl::HandleAction( const wxString &fn )
     if ( !( m_style & wxFC_OPEN ) || !wxFileExists( filename ) )
     {
         filename = wxFileDialogBase::AppendExtension( filename, m_filterExtension );
-        GenerateFileActivatedEvent( this, this, wxFileName( filename ).GetFullName() );
+        wxGenerateFileActivatedEvent( this, this, wxFileName( filename ).GetFullName() );
         return;
     }
 
-    GenerateFileActivatedEvent( this, this );
+    wxGenerateFileActivatedEvent( this, this );
 }
 
 bool wxGenericFileCtrl::SetPath( const wxString& path )
