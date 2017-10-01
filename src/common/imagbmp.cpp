@@ -432,7 +432,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
                     ((wxUint8)palette->GetPixel(data[pixel],
                                                 data[pixel+1],
                                                 data[pixel+2]) << 4) |
-                    (((x+1) > width)
+                    (((x+1) >= width)
                      ? 0
                      : ((wxUint8)palette->GetPixel(data[pixel+3],
                                                    data[pixel+4],
@@ -452,13 +452,13 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 #if wxUSE_PALETTE
                 buffer[x/8] = (wxUint8)(
                                            ((wxUint8)palette->GetPixel(data[pixel], data[pixel+1], data[pixel+2]) << 7) |
-                    (((x+1) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+3], data[pixel+4], data[pixel+5]) << 6)) |
-                    (((x+2) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+6], data[pixel+7], data[pixel+8]) << 5)) |
-                    (((x+3) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+9], data[pixel+10], data[pixel+11]) << 4)) |
-                    (((x+4) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+12], data[pixel+13], data[pixel+14]) << 3)) |
-                    (((x+5) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+15], data[pixel+16], data[pixel+17]) << 2)) |
-                    (((x+6) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+18], data[pixel+19], data[pixel+20]) << 1)) |
-                    (((x+7) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+21], data[pixel+22], data[pixel+23])     ))    );
+                    (((x+1) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+3], data[pixel+4], data[pixel+5]) << 6)) |
+                    (((x+2) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+6], data[pixel+7], data[pixel+8]) << 5)) |
+                    (((x+3) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+9], data[pixel+10], data[pixel+11]) << 4)) |
+                    (((x+4) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+12], data[pixel+13], data[pixel+14]) << 3)) |
+                    (((x+5) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+15], data[pixel+16], data[pixel+17]) << 2)) |
+                    (((x+6) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+18], data[pixel+19], data[pixel+20]) << 1)) |
+                    (((x+7) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+21], data[pixel+22], data[pixel+23])     ))    );
 #else
                 // FIXME: what should this be? use some std palette maybe?
                 buffer[x/8] = 0;
@@ -473,13 +473,13 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
                 buffer[x/8] = (wxUint8)(
                                           (((wxUint8)(data[pixel]   /128.)) << 7) |
-                   (((x+1) > width) ? 0 : (((wxUint8)(data[pixel+3] /128.)) << 6)) |
-                   (((x+2) > width) ? 0 : (((wxUint8)(data[pixel+6] /128.)) << 5)) |
-                   (((x+3) > width) ? 0 : (((wxUint8)(data[pixel+9] /128.)) << 4)) |
-                   (((x+4) > width) ? 0 : (((wxUint8)(data[pixel+12]/128.)) << 3)) |
-                   (((x+5) > width) ? 0 : (((wxUint8)(data[pixel+15]/128.)) << 2)) |
-                   (((x+6) > width) ? 0 : (((wxUint8)(data[pixel+18]/128.)) << 1)) |
-                   (((x+7) > width) ? 0 : (((wxUint8)(data[pixel+21]/128.))     ))    );
+                   (((x+1) >= width) ? 0 : (((wxUint8)(data[pixel+3] /128.)) << 6)) |
+                   (((x+2) >= width) ? 0 : (((wxUint8)(data[pixel+6] /128.)) << 5)) |
+                   (((x+3) >= width) ? 0 : (((wxUint8)(data[pixel+9] /128.)) << 4)) |
+                   (((x+4) >= width) ? 0 : (((wxUint8)(data[pixel+12]/128.)) << 3)) |
+                   (((x+5) >= width) ? 0 : (((wxUint8)(data[pixel+15]/128.)) << 2)) |
+                   (((x+6) >= width) ? 0 : (((wxUint8)(data[pixel+18]/128.)) << 1)) |
+                   (((x+7) >= width) ? 0 : (((wxUint8)(data[pixel+21]/128.))     ))    );
             }
         }
 
