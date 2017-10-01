@@ -696,7 +696,9 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
     delete m_text;
     CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
 
+#if defined(__WXMSW__)
     const bool isRichEdit = (style & (wxTE_RICH | wxTE_RICH2)) != 0;
+#endif
 
     typedef struct { long x, y; } XYPos;
     bool ok;
@@ -916,7 +918,9 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
     delete m_text;
     CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
 
+#if defined(__WXMSW__)
     const bool isRichEdit = (style & (wxTE_RICH | wxTE_RICH2)) != 0;
+#endif
 
     wxString text;
     // empty field
