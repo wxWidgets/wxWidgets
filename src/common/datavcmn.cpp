@@ -1929,6 +1929,200 @@ wxSize wxDataViewDateRenderer::GetSize() const
 
 #endif // (defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXGTK__)) && wxUSE_DATEPICKCTRL
 
+// ----------------------------------------------------------------------------
+// wxDataViewCheckIconTextRenderer implementation
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_ADV)
+
+wxIMPLEMENT_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
+
+wxIMPLEMENT_CLASS(wxDataViewCheckIconTextRenderer, wxDataViewRenderer);
+
+wxDataViewCheckIconTextRenderer::wxDataViewCheckIconTextRenderer
+                                 (
+                                      wxDataViewCellMode mode,
+                                      int align
+                                 )
+    : wxDataViewCustomRenderer(GetDefaultType(), mode, align)
+{
+    m_allow3rdStateForUser = false;
+}
+
+void wxDataViewCheckIconTextRenderer::Allow3rdStateForUser(bool allow)
+{
+    m_allow3rdStateForUser = allow;
+}
+
+bool wxDataViewCheckIconTextRenderer::SetValue(const wxVariant& value)
+{
+    m_value << value;
+    return true;
+}
+
+bool wxDataViewCheckIconTextRenderer::GetValue(wxVariant& value) const
+{
+    value << m_value;
+    return true;
+}
+
+#if wxUSE_ACCESSIBILITY
+wxString wxDataViewCheckIconTextRenderer::GetAccessibleDescription() const
+{
+    wxString text = m_value.GetText();
+    if ( !text.empty() )
+    {
+        text += wxS(" ");
+    }
+
+    switch ( m_value.GetCheckedState() )
+    {
+        case wxCHK_CHECKED:
+            /* TRANSLATORS: Checkbox state name */
+            text += _("checked");
+            break;
+        case wxCHK_UNCHECKED:
+            /* TRANSLATORS: Checkbox state name */
+            text += _("unchecked");
+            break;
+        case wxCHK_UNDETERMINED:
+            /* TRANSLATORS: Checkbox state name */
+            text += _("undetermined");
+            break;
+    }
+
+    return text;
+}
+#endif // wxUSE_ACCESSIBILITY
+
+wxSize wxDataViewCheckIconTextRenderer::GetSize() const
+{
+    wxSize size = GetCheckSize();
+    size.x += MARGIN_CHECK_ICON;
+
+    if ( m_value.GetIcon().IsOk() )
+    {
+        const wxSize sizeIcon = m_value.GetIcon().GetSize();
+        if ( sizeIcon.y > size.y )
+            size.y = sizeIcon.y;
+
+        size.x += sizeIcon.x + MARGIN_ICON_TEXT;
+    }
+
+    wxString text = m_value.GetText();
+    if ( text.empty() )
+        text = "Dummy";
+
+    const wxSize sizeText = GetTextExtent(text);
+    if ( sizeText.y > size.y )
+        size.y = sizeText.y;
+
+    size.x += sizeText.x;
+
+    return size;
+}
+
+bool wxDataViewCheckIconTextRenderer::Render(wxRect cell, wxDC* dc, int state)
+{
+    // Draw the checkbox first.
+    int renderFlags = 0;
+    switch ( m_value.GetCheckedState() )
+    {
+        case wxCHK_UNCHECKED:
+            break;
+
+        case wxCHK_CHECKED:
+            renderFlags |= wxCONTROL_CHECKED;
+            break;
+
+        case wxCHK_UNDETERMINED:
+            renderFlags |= wxCONTROL_UNDETERMINED;
+            break;
+    }
+
+    if ( state & wxDATAVIEW_CELL_PRELIT )
+        renderFlags |= wxCONTROL_CURRENT;
+
+    const wxSize sizeCheck = GetCheckSize();
+
+    wxRect rectCheck(cell.GetPosition(), sizeCheck);
+    rectCheck = rectCheck.CentreIn(cell, wxVERTICAL);
+
+    wxRendererNative::Get().DrawCheckBox
+                            (
+                                GetView(), *dc, rectCheck, renderFlags
+                            );
+
+    // Then the icon, if any.
+    int xoffset = sizeCheck.x + MARGIN_CHECK_ICON;
+
+    const wxIcon& icon = m_value.GetIcon();
+    if ( icon.IsOk() )
+    {
+        const wxSize sizeIcon = icon.GetSize();
+        wxRect rectIcon(cell.GetPosition(), sizeIcon);
+        rectIcon.x += xoffset;
+        rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);
+
+        dc->DrawIcon(icon, rectIcon.GetPosition());
+
+        xoffset += sizeIcon.x + MARGIN_ICON_TEXT;
+    }
+
+    // Finally the text.
+    RenderText(m_value.GetText(), xoffset, cell, dc, state);
+
+    return true;
+}
+
+bool
+wxDataViewCheckIconTextRenderer::ActivateCell(const wxRect& WXUNUSED(cell),
+                                              wxDataViewModel *model,
+                                              const wxDataViewItem & item,
+                                              unsigned int col,
+                                              const wxMouseEvent *mouseEvent)
+{
+    if ( mouseEvent )
+    {
+        if ( !wxRect(GetCheckSize()).Contains(mouseEvent->GetPosition()) )
+            return false;
+    }
+
+    // If the 3rd state is user-settable then the cycle is
+    // unchecked->checked->undetermined.
+    wxCheckBoxState checkedState = m_value.GetCheckedState();
+    switch ( checkedState )
+    {
+        case wxCHK_CHECKED:
+            checkedState = m_allow3rdStateForUser ? wxCHK_UNDETERMINED
+                                                  : wxCHK_UNCHECKED;
+            break;
+
+        case wxCHK_UNDETERMINED:
+            // Whether 3rd state is user-settable or not, the next state is
+            // unchecked.
+            checkedState = wxCHK_UNCHECKED;
+            break;
+
+        case wxCHK_UNCHECKED:
+            checkedState = wxCHK_CHECKED;
+            break;
+    }
+
+    m_value.SetCheckedState(checkedState);
+
+    wxVariant value;
+    value << m_value;
+
+    model->ChangeValue(value, item, col);
+    return true;
+}
+
+wxSize wxDataViewCheckIconTextRenderer::GetCheckSize() const
+{
+    return wxRendererNative::Get().GetCheckBoxSize(GetView());
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewListStore
 //-----------------------------------------------------------------------------

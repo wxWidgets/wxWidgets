@@ -1797,6 +1797,7 @@ enum wxDataViewCellRenderState
     There is a number of ready-to-use renderers provided:
     - wxDataViewTextRenderer,
     - wxDataViewIconTextRenderer,
+    - wxDataViewCheckIconTextRenderer,
     - wxDataViewToggleRenderer,
     - wxDataViewProgressRenderer,
     - wxDataViewBitmapRenderer,
@@ -2059,6 +2060,7 @@ public:
     wxDataViewIconText can be converted to and from a wxVariant using the left
     shift operator.
 
+    @see wxDataViewCheckIconTextRenderer
     @library{wxadv}
     @category{dvc}
 */
@@ -2080,6 +2082,58 @@ public:
                                int align = wxDVR_DEFAULT_ALIGNMENT );
 };
 
+
+/**
+    This renderer class shows a checkbox in addition to the icon and text shown
+    by the base class and also allows the user to toggle this checkbox.
+
+    By default this class doesn't allow the user to put the checkbox into the
+    third, i.e. indeterminate, state, even though it can display the state if
+    the program returns the corresponding value from the associated model. Call
+    Allow3rdStateForUser() explicitly if the user should be able to select the
+    3rd state interactively too.
+
+    This class is used internally by wxTreeListCtrl, and can be seen in action
+    in the corresponding sample.
+
+    @see wxDataViewIconTextRenderer, wxDataViewToggleRenderer
+    @library{wxadv}
+    @category{dvc}
+    @since 3.1.1
+ */
+class wxDataViewCheckIconTextRenderer : public wxDataViewRenderer
+{
+public:
+    static wxString GetDefaultType() { return wxS("wxDataViewCheckIconText"); }
+
+    /**
+        Create a new renderer.
+
+        By default the renderer is activatable, i.e. allows the user to toggle
+        the checkbox.
+     */
+    explicit wxDataViewCheckIconTextRenderer
+             (
+                  wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+                  int align = wxDVR_DEFAULT_ALIGNMENT
+             );
+
+    /**
+        Allow the user to interactively select the 3rd state for the items
+        rendered by this object.
+
+        As described in the class overview, this renderer can always display
+        the 3rd ("indeterminate") checkbox state if the model contains cells
+        with wxCHK_UNDETERMINED value, but it doesn't allow the user to set it
+        by default. Call this method to allow this to happen.
+
+        @param allow If @true, interactively clicking a checked cell switches
+            it to the indeterminate value and clicking it again unchecks it.
+            If @false, clicking a checked cell switches to the unchecked value,
+            skipping the indeterminate one.
+     */
+    void Allow3rdStateForUser(bool allow = true);
+};
 
 
 /**
@@ -2140,6 +2194,7 @@ public:
 
     This class is used by wxDataViewCtrl to render toggle controls.
 
+    @see wxDataViewCheckIconTextRenderer
     @library{wxadv}
     @category{dvc}
 */

@@ -136,6 +136,7 @@ All (GUI):
 - Fix calculating point position in wxDataViewCtrl::HitTest().
 - Fix position of the rectangle returned by wxDataViewCtrl::GetItemRect().
 - Add wxDataViewRenderer::GetAccessibleDescription().
+- Add wxDataViewCheckIconTextRenderer class.
 - Improve wxImage::Scale() handling of pixels with alpha channel (Tim Kosse).
 - Fix parsing of RGBA strings in wxColour (Laurent Poujoulat).
 - Refactor code in wxQuantize() for MSVC to avoid crash.
