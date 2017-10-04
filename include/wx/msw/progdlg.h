@@ -41,6 +41,8 @@ public:
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
     virtual wxString GetTitle() const wxOVERRIDE;
 
+    virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
+
     virtual bool Show( bool show = true ) wxOVERRIDE;
 
     // Must provide overload to avoid hiding it (and warnings about it)

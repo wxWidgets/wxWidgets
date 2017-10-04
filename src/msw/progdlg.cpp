@@ -60,6 +60,7 @@ const int wxSPDD_DISABLE_SKIP      = 0x0100;
 const int wxSPDD_DISABLE_ABORT     = 0x0200;
 const int wxSPDD_FINISHED          = 0x0400;
 const int wxSPDD_DESTROYED         = 0x0800;
+const int wxSPDD_ICON_CHANGED      = 0x1000;
 
 const int Id_SkipBtn = wxID_HIGHEST + 1;
 
@@ -95,6 +96,8 @@ public:
     wxString m_expandedInformation;
     wxString m_labelCancel; // Privately used by callback.
     unsigned long m_timeStop;
+    wxIcon m_iconSmall;
+    wxIcon m_iconBig;
 
     wxProgressDialog::State m_state;
     bool m_progressBarMarquee;
@@ -212,6 +215,12 @@ void PerformNotificationUpdates(HWND hwnd,
 
     if ( sharedData->m_notifications & wxSPDD_TITLE_CHANGED )
         ::SetWindowText( hwnd, sharedData->m_title.t_str() );
+
+    if ( sharedData->m_notifications & wxSPDD_ICON_CHANGED )
+    {
+        ::SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)GetHiconOf(sharedData->m_iconSmall));
+        ::SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)GetHiconOf(sharedData->m_iconBig));
+    }
 
     if ( sharedData->m_notifications & wxSPDD_MESSAGE_CHANGED )
     {
@@ -642,6 +651,40 @@ wxString wxProgressDialog::GetTitle() const
 #endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::GetTitle();
+}
+
+void wxProgressDialog::SetIcons(const wxIconBundle& icons)
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    if ( HasNativeTaskDialog() )
+    {
+        m_icons = icons; // We can't just call to parent's SetIcons()
+                         // (wxGenericProgressDialog::SetIcons == wxTopLevelWindowMSW::SetIcons)
+                         // because it does too many things.
+        wxIcon iconSmall;
+        wxIcon iconBig;
+        if (!icons.IsEmpty())
+        {
+            const wxSize sizeSmall(::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON));
+            iconSmall = icons.GetIcon(sizeSmall, wxIconBundle::FALLBACK_NEAREST_LARGER);
+
+            const wxSize sizeBig(::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON));
+            iconBig = icons.GetIcon(sizeBig, wxIconBundle::FALLBACK_NEAREST_LARGER);
+        }
+
+        if (m_sharedData)
+        {
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
+            m_sharedData->m_iconSmall = iconSmall;
+            m_sharedData->m_iconBig = iconBig;
+            m_sharedData->m_notifications |= wxSPDD_ICON_CHANGED;
+        }
+
+        return;
+    }
+#endif // wxHAS_MSW_TASKDIALOG
+
+    wxGenericProgressDialog::SetIcons(icons);
 }
 
 bool wxProgressDialog::Show(bool show)
