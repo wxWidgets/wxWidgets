@@ -4667,9 +4667,13 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
         }
         else
         {
+#ifdef __WXOSX_COCOA__
+            int w = m_doubleBuffer->GetScaledWidth() / scaleFactor;
+            int h = m_doubleBuffer->GetScaledHeight() / scaleFactor;
+#else
             int w = m_doubleBuffer->GetScaledWidth();
             int h = m_doubleBuffer->GetScaledHeight();
-
+#endif
             // Double buffer must be large enough
             if ( w < width || h < (height+dblh) )
             {
