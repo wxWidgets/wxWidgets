@@ -626,7 +626,7 @@ void wxProgressDialog::SetTitle(const wxString& title)
         {
             wxCriticalSectionLocker locker(m_sharedData->m_cs);
             m_sharedData->m_title = title;
-            m_sharedData->m_notifications = wxSPDD_TITLE_CHANGED;
+            m_sharedData->m_notifications |= wxSPDD_TITLE_CHANGED;
         }
     }
 #endif // wxHAS_MSW_TASKDIALOG
