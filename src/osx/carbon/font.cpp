@@ -146,6 +146,33 @@ public:
 
     wxFontEncoding GetEncoding() const { return m_info.GetEncoding(); }
     
+    void SetLetterSpacing( wxDouble spacing )
+    {
+        //if ( m_info.m_spacing != spacing )
+        //{
+        //    m_info.SetLetterSpacing( spacing );
+        //    Free();
+        //}
+
+        // Note: do NOT set kCTKernAttribute to zero, that's used to disable kerning! (tristate attr)
+        if (!spacing)
+        {
+            return;
+        }
+        CFDictionarySetValue(
+            m_ctFontAttributes, kCTKernAttributeName, CFNumberCreate( NULL, kCFNumberFloatType, &spacing));
+    }
+
+    wxDouble GetLetterSpacing() const {
+        //return m_info.GetLetterSpacing();
+        wxDouble spacing = 0;
+        CFNumberRef sp_ = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &spacing);
+        CFNumberGetValue((CFNumberRef) CFDictionaryGetValue(
+            m_ctFontAttributes, kCTKernAttributeName), kCFNumberFloatType, &spacing);
+        CFRelease(sp_);
+        return spacing;
+    }
+
     bool IsFixedWidth() const;
 
     void Free();
@@ -158,7 +185,7 @@ protected:
 public:
     bool            m_fontValid;
     wxCFRef<CTFontRef> m_ctFont;
-    wxCFRef<CFDictionaryRef> m_ctFontAttributes;
+    wxCFRef<CFMutableDictionaryRef> m_ctFontAttributes;
     wxCFRef<CGFontRef> m_cgFont;
     wxNativeFontInfo  m_info;
 };
@@ -561,6 +588,13 @@ void wxFont::SetStrikethrough(bool strikethrough)
      M_FONTDATA->SetStrikethrough( strikethrough );
 }
 
+void wxFont::SetLetterSpacing(wxDouble spacing)
+{
+    AllocExclusive();
+
+    M_FONTDATA->SetLetterSpacing( spacing );
+}
+
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
@@ -644,6 +678,13 @@ wxFontEncoding wxFont::GetEncoding() const
     wxCHECK_MSG( M_FONTDATA != NULL , wxFONTENCODING_DEFAULT , wxT("invalid font") );
 
     return M_FONTDATA->GetEncoding() ;
+}
+
+wxDouble wxFont::GetLetterSpacing() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , 0 , wxT("invalid font") );
+
+    return M_FONTDATA->GetLetterSpacing() ;
 }
 
 CTFontRef wxFont::OSXGetCTFont() const
@@ -791,6 +832,7 @@ void wxNativeFontInfo::Init()
     m_strikethrough = false;
     m_faceName.clear();
     m_encoding = wxFont::GetDefaultEncoding();
+    //m_spacing = 0;
 }
 
 void wxNativeFontInfo::Init(CTFontDescriptorRef descr)
@@ -829,6 +871,7 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
     m_strikethrough = info.m_strikethrough;
     m_faceName = info.m_faceName;
     m_encoding = info.m_encoding;
+    //m_spacing = info.m_spacing;
 }
 
 void wxNativeFontInfo::Init(int size,
@@ -986,6 +1029,11 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return m_encoding;
 }
 
+//wxDouble wxNativeFontInfo::GetLetterSpacing() const
+//{
+//    return m_spacing;
+//}
+
 bool wxNativeFontInfo::GetStrikethrough() const
 {
     return m_strikethrough;
@@ -1056,6 +1104,11 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
     m_encoding = encoding_;
     // not reflected in native descriptors
 }
+
+//void wxNativeFontInfo::SetLetterSpacing(wxDouble spacing_)
+//{
+//    m_spacing = spacing_;
+//}
 
 void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
 {

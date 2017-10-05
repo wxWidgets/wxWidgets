@@ -118,6 +118,8 @@ wxPROPERTY( Face, wxString, SetFaceName, GetFaceName, wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Encoding, wxFontEncoding, SetEncoding, GetEncoding, \
            wxFONTENCODING_DEFAULT, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
+wxPROPERTY( LetterSpacing, wxDouble, SetLetterSpacing, GetLetterSpacing, \
+            0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxEND_PROPERTIES_TABLE()
 
 wxCONSTRUCTOR_6( wxFont, int, Size, wxFontFamily, Family, wxFontStyle, Style, wxFontWeight, Weight, \
@@ -298,6 +300,18 @@ void wxFontBase::SetPixelSize( const wxSize& pixelSize )
 
     if (currentSize != largestGood)
         SetPointSize(largestGood);
+}
+
+wxDouble wxFontBase::GetLetterSpacing() const
+{
+    // ?
+    return 0;
+}
+
+void wxFontBase::SetLetterSpacing(wxDouble spacing)
+{
+    // ?
+    WXUNUSED(spacing);
 }
 
 void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
@@ -699,6 +713,7 @@ void wxNativeFontInfo::Init()
     strikethrough = false;
     faceName.clear();
     encoding = wxFONTENCODING_DEFAULT;
+    spacing = 0;
 }
 
 int wxNativeFontInfo::GetPointSize() const
@@ -741,6 +756,11 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return encoding;
 }
 
+wxDouble wxNativeFontInfo::GetLetterSpacing() const
+{
+    return spacing;
+}
+
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {
     pointSize = pointsize;
@@ -780,6 +800,11 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family_)
 void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
 {
     encoding = encoding_;
+}
+
+void wxNativeFontInfo::SetLetterSpacing(wxDouble spacing_)
+{
+    spacing = spacing_;
 }
 
 #endif // generic wxNativeFontInfo implementation

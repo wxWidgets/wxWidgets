@@ -79,6 +79,7 @@ public:
     // separately and handle them ourselves in {To,From}String() methods.
     bool m_underlined;
     bool m_strikethrough;
+    wxDouble m_spacing;
 #elif defined(_WX_X_FONTLIKE)
     // the members can't be accessed directly as we only parse the
     // xFontName on demand
@@ -170,6 +171,7 @@ public:
     bool          m_strikethrough;
     wxString      m_faceName;
     wxFontEncoding m_encoding;
+    wxDouble      m_spacing;
 public :
 #elif defined(__WXQT__)
     QFont m_qtFont;
@@ -188,6 +190,7 @@ public :
     bool          strikethrough;
     wxString      faceName;
     wxFontEncoding encoding;
+    wxDouble      spacing;
 #endif // platforms
 
     // default ctor (default copy ctor is ok)
@@ -260,6 +263,7 @@ public:
     wxString GetFaceName() const;
     wxFontFamily GetFamily() const;
     wxFontEncoding GetEncoding() const;
+    wxDouble GetLetterSpacing() const;
 
     void SetPointSize(int pointsize);
     void SetPixelSize(const wxSize& pixelSize);
@@ -270,6 +274,7 @@ public:
     bool SetFaceName(const wxString& facename);
     void SetFamily(wxFontFamily family);
     void SetEncoding(wxFontEncoding encoding);
+    void SetLetterSpacing(wxDouble spacing);
 
     // sets the first facename in the given array which is found
     // to be valid. If no valid facename is given, sets the

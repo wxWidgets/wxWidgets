@@ -40,6 +40,13 @@
 #include <dwrite.h>
 #include <wincodec.h>
 
+#if WINVER >= 0x602
+#include <dwrite_1.h>
+typedef wxIID_IDWriteFactory1 wxIID_IDWriteFactory_Current;
+#else
+typedef wxIID_IDWriteFactory wxIID_IDWriteFactory_Current;
+#endif
+
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
 #include <D3D11.h>
 #include <D2d1_1.h>
@@ -222,6 +229,9 @@ DEFINE_GUID(wxIID_IWICImagingFactory,
 DEFINE_GUID(wxIID_IDWriteFactory,
             0xb859ee5a, 0xd838, 0x4b5b, 0xa2, 0xe8, 0x1a, 0xdc, 0x7d, 0x93, 0xdb, 0x48);
 
+DEFINE_GUID(wxIID_IDWriteFactory1,
+            0x30572f99, 0xdac6, 0x41db, 0xa1, 0x6e, 0x04, 0x86, 0x30, 0x7e, 0x60, 0x6a);
+
 DEFINE_GUID(wxIID_IWICBitmapSource,
             0x00000120, 0xa8f2, 0x4877, 0xba, 0x0a, 0xfd, 0x2b, 0x66, 0x45, 0xfb, 0x94);
 
@@ -310,7 +320,7 @@ IDWriteFactory* wxDWriteFactory()
     {
         wxDirect2D::DWriteCreateFactory(
             DWRITE_FACTORY_TYPE_SHARED,
-            wxIID_IDWriteFactory,
+            wxIID_IDWriteFactory_Current,
             reinterpret_cast<IUnknown**>(&gs_IDWriteFactory)
             );
     }
@@ -2601,11 +2611,13 @@ private:
     bool m_underlined;
 
     bool m_strikethrough;
+
+    wxDouble m_spacing;
 };
 
 wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFactory, const wxFont& font, const wxColor& color) :
     wxGraphicsObjectRefData(renderer), m_brushData(renderer, wxBrush(color)),
-    m_underlined(font.GetUnderlined()), m_strikethrough(font.GetStrikethrough())
+    m_underlined(font.GetUnderlined()), m_strikethrough(font.GetStrikethrough()), m_spacing(font.GetLetterSpacing())
 {
     HRESULT hr;
 
@@ -2702,6 +2714,20 @@ wxCOMPtr<IDWriteTextLayout> wxD2DFontData::CreateTextLayout(const wxString& text
     if (m_strikethrough)
     {
         textLayout->SetStrikethrough(true, textRange);
+    }
+
+    if (m_spacing)
+    {
+        if (wxGetWinVersion() > wxWinVersion_8)
+        {
+            wxCOMPtr<IDWriteTextLayout1> textLayout1;
+            hr = textLayout->QueryInterface(wxIID_IDWriteTextLayout1, (void**)&textLayout1);
+            wxCHECK_HRESULT_RET(hr);
+            if (SUCCEDED(hr))
+            {
+            textLayout1->SetCharacterSpacing(0, m_spacing, 0, textRange);
+        }
+        }
     }
 
     return textLayout;
