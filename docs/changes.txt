@@ -211,6 +211,7 @@ wxMSW:
 - Fix wxTextCtrl::XYToPosition() and PositionToXY().
 - Fix updating radio groups when non-radio item is inserted to wxMenu.
 - Fix autoselecting the contents of wxTextCtrl with wxWANTS_CHARS style.
+- Implement SetIcon(), SetPosition(), GetPosition() for native wxProgressDialog.
 
 wxOSX:
 

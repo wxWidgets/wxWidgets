@@ -61,6 +61,7 @@ const int wxSPDD_DISABLE_ABORT     = 0x0200;
 const int wxSPDD_FINISHED          = 0x0400;
 const int wxSPDD_DESTROYED         = 0x0800;
 const int wxSPDD_ICON_CHANGED      = 0x1000;
+const int wxSPDD_WINDOW_MOVED      = 0x2000;
 
 const int Id_SkipBtn = wxID_HIGHEST + 1;
 
@@ -98,6 +99,7 @@ public:
     unsigned long m_timeStop;
     wxIcon m_iconSmall;
     wxIcon m_iconBig;
+    wxPoint m_winPosition;
 
     wxProgressDialog::State m_state;
     bool m_progressBarMarquee;
@@ -220,6 +222,13 @@ void PerformNotificationUpdates(HWND hwnd,
     {
         ::SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)GetHiconOf(sharedData->m_iconSmall));
         ::SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)GetHiconOf(sharedData->m_iconBig));
+    }
+
+    if ( sharedData->m_notifications & wxSPDD_WINDOW_MOVED )
+    {
+        ::SetWindowPos(hwnd, NULL, sharedData->m_winPosition.x, sharedData->m_winPosition.y,
+                       -1, -1, // ignored
+                       SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSIZE | SWP_NOZORDER);
     }
 
     if ( sharedData->m_notifications & wxSPDD_MESSAGE_CHANGED )
@@ -687,6 +696,48 @@ void wxProgressDialog::SetIcons(const wxIconBundle& icons)
     wxGenericProgressDialog::SetIcons(icons);
 }
 
+void wxProgressDialog::DoMoveWindow(int x, int y, int width, int height)
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    if ( HasNativeTaskDialog() )
+    {
+        if ( m_sharedData )
+        {
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
+            m_sharedData->m_winPosition = wxPoint(x, y);
+            m_sharedData->m_notifications |= wxSPDD_WINDOW_MOVED;
+        }
+
+        return;
+    }
+#endif // wxHAS_MSW_TASKDIALOG
+
+    wxGenericProgressDialog::DoMoveWindow(x, y, width, height);
+}
+
+void wxProgressDialog::DoGetPosition(int *x, int *y) const
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    if ( HasNativeTaskDialog() )
+    {
+        wxPoint pos;
+        {
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
+            m_sharedData->m_state = m_state;
+            pos = m_sharedData->m_winPosition;
+        }
+        if (x)
+            *x = pos.x;
+        if (y)
+            *y = pos.y;
+
+        return;
+    }
+#endif // wxHAS_MSW_TASKDIALOG
+
+    wxGenericProgressDialog::DoGetPosition(x, y);
+}
+
 bool wxProgressDialog::Show(bool show)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
@@ -917,6 +968,14 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                                SWP_NOZORDER);
             }
 
+            // Store current position for the main thread use
+            // if no position update is pending.
+            if ( !(sharedData->m_notifications & wxSPDD_WINDOW_MOVED) )
+            {
+                RECT r = wxGetWindowRect(hwnd);
+                sharedData->m_winPosition = wxPoint(r.left, r.top);
+            }
+
             // If we can't be aborted, the "Close" button will only be enabled
             // when the progress ends (and not even then with wxPD_AUTO_HIDE).
             if ( !(sharedData->m_style & wxPD_CAN_ABORT) )
@@ -986,6 +1045,11 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
             }
 
             sharedData->m_notifications = 0;
+            {
+                // Update current position for the main thread use.
+                RECT r = wxGetWindowRect(hwnd);
+                sharedData->m_winPosition = wxPoint(r.left, r.top);
+            }
 
             return TRUE;
     }

@@ -42,6 +42,8 @@ public:
     virtual wxString GetTitle() const wxOVERRIDE;
 
     virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
 
     virtual bool Show( bool show = true ) wxOVERRIDE;
 
