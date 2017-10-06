@@ -984,7 +984,7 @@ public:
         Resets column sizes and splitter positions, based on proportions.
 
         @param enableAutoResizing
-            If @true, automatic column resizing is enabled (only applicapple
+            If @true, automatic column resizing is enabled (only applicable
             if window style wxPG_SPLITTER_AUTO_CENTER is used).
 
         @see wxPropertyGridInterface::SetColumnProportion()
