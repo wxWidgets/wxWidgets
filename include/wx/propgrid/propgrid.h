@@ -942,7 +942,7 @@ public:
 
     // Resets column sizes and splitter positions, based on proportions.
     // enableAutoResizing - If true, automatic column resizing is enabled
-    // (only applicapple if window style wxPG_SPLITTER_AUTO_CENTER is used).
+    // (only applicable if window style wxPG_SPLITTER_AUTO_CENTER is used).
     void ResetColumnSizes( bool enableAutoResizing = false );
 
     // Selects a property.
