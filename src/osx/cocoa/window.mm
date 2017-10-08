@@ -1491,7 +1491,7 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
    
     // because performKeyEquivalent is going up the entire view hierarchy, we don't have to
     // walk up the ancestors ourselves but let cocoa do it
-    
+#if wxUSE_ACCEL
     int command = m_wxPeer->GetAcceleratorTable()->GetCommand( wxevent );
     if (command != -1)
     {
@@ -1508,7 +1508,8 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
             handled = handler->ProcessEvent( command_event );
         }
     }
-    
+#endif // wxUSE_ACCEL
+
     if ( !handled )
     {
         wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];

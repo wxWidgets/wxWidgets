@@ -125,6 +125,8 @@ class wxComboBox;
 class wxNotebook;
 class wxTextCtrl;
 class wxSearchCtrl;
+class wxMenuItem;
+class wxAcceleratorEntry;
 
 WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 
