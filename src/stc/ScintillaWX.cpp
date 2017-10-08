@@ -1180,6 +1180,12 @@ void ScintillaWX::DoOnListBox() {
 }
 
 
+void ScintillaWX::DoMouseCaptureLost()
+{
+    capturedMouse = false;
+}
+
+
 void ScintillaWX::DoOnIdle(wxIdleEvent& evt) {
 
     if ( Idle() )

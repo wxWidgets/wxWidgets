@@ -162,6 +162,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
     EVT_LISTBOX_DCLICK          (wxID_ANY, wxStyledTextCtrl::OnListBox)
+    EVT_MOUSE_CAPTURE_LOST      (wxStyledTextCtrl::OnMouseCaptureLost)
 wxEND_EVENT_TABLE()
 
 
@@ -881,6 +882,11 @@ void wxStyledTextCtrl::OnListBox(wxCommandEvent& WXUNUSED(evt)) {
 
 void wxStyledTextCtrl::OnIdle(wxIdleEvent& evt) {
     m_swx->DoOnIdle(evt);
+}
+
+
+void wxStyledTextCtrl::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(evt)) {
+    m_swx->DoMouseCaptureLost();
 }
 
 

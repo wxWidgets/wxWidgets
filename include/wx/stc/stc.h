@@ -5439,6 +5439,7 @@ protected:
     void OnMenu(wxCommandEvent& evt);
     void OnListBox(wxCommandEvent& evt);
     void OnIdle(wxIdleEvent& evt);
+    void OnMouseCaptureLost(wxMouseCaptureLostEvent& evt);
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
