@@ -3055,12 +3055,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     case VK_OEM_PERIOD:
                         break;
 
-                    // special case of VK_APPS: treat it the same as right mouse
-                    // click because both usually pop up a context menu
-                    case VK_APPS:
-                        processed = HandleMouseEvent(WM_RBUTTONDOWN, -1, -1, 0);
-                        break;
-
                     default:
                         if ( (wParam >= '0' && wParam <= '9') ||
                                 (wParam >= 'A' && wParam <= 'Z') )
@@ -3096,15 +3090,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_SYSKEYUP:
         case WM_KEYUP:
-            // special case of VK_APPS: treat it the same as right mouse button
-            if ( wParam == VK_APPS )
-            {
-                processed = HandleMouseEvent(WM_RBUTTONUP, -1, -1, 0);
-            }
-            else
-            {
-                processed = HandleKeyUp((WORD) wParam, lParam);
-            }
+            processed = HandleKeyUp((WORD) wParam, lParam);
             break;
 
         case WM_SYSCHAR:
