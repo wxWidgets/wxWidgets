@@ -234,6 +234,20 @@ static bool gs_inSizeAllocate;
 
 #ifdef wxGTK_HAS_GESTURES_SUPPORT
 
+// Per-window data for gestures support.
+struct wxWindowGesturesData
+{
+    wxWindowGesturesData(wxWindow* win, GtkWidget *widget);
+
+    unsigned int         m_touchCount;
+    unsigned int         m_lastTouchTime;
+    int                  m_gestureState;
+    int                  m_allowedGestures;
+    int                  m_activeGestures;
+    wxPoint              m_lastTouchPoint;
+    GdkEventSequence*    m_touchSequence;
+};
+
 // This is true when the gesture has just started (currently used for pan gesture only)
 static bool gs_gestureStart = false;
 
@@ -2455,10 +2469,7 @@ void wxWindowGTK::Init()
     m_dirtyTabOrder = false;
 
 #ifdef wxGTK_HAS_GESTURES_SUPPORT
-    m_touchCount = 0;
-    m_lastTouchTime = 0;
-    m_allowedGestures = 0;
-    m_activeGestures = 0;
+    m_gesturesData = NULL;
 #endif // wxGTK_HAS_GESTURES_SUPPORT
 }
 
@@ -2654,6 +2665,10 @@ wxWindowGTK::~wxWindowGTK()
 
     gs_sizeRevalidateList = g_list_remove_all(gs_sizeRevalidateList, this);
 #endif
+
+#ifdef wxGTK_HAS_GESTURES_SUPPORT
+    delete m_gesturesData;
+#endif // wxGTK_HAS_GESTURES_SUPPORT
 
     if (m_widget)
     {
@@ -2888,8 +2903,10 @@ pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUN
 static void
 horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
+    wxWindowGesturesData* const data = win->m_gesturesData;
+
     // Do not process horizontal pan, if there was no "pan" signal for it.
-    if ( !(win->m_allowedGestures & horizontal_pan) )
+    if ( !(data->m_allowedGestures & horizontal_pan) )
     {
         return;
     }
@@ -2901,7 +2918,7 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
         return;
     }
 
-    win->m_allowedGestures &= ~horizontal_pan;
+    data->m_allowedGestures &= ~horizontal_pan;
 
     wxPanGestureEvent event(win->GetId());
 
@@ -2915,8 +2932,10 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
 static void
 vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
+    wxWindowGesturesData* const data = win->m_gesturesData;
+
     // Do not process vertical pan, if there was no "pan" signal for it.
-    if ( !(win->m_allowedGestures & vertical_pan) )
+    if ( !(data->m_allowedGestures & vertical_pan) )
     {
         return;
     }
@@ -2928,7 +2947,7 @@ vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequenc
         return;
     }
 
-    win->m_allowedGestures &= ~vertical_pan;
+    data->m_allowedGestures &= ~vertical_pan;
 
     wxPanGestureEvent event(win->GetId());
 
@@ -2963,28 +2982,30 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
+    wxWindowGesturesData* const data = win->m_gesturesData;
+
     // This is the difference between this and the last pan gesture event in the current sequence
     int delta = wxRound(offset - gs_lastOffset);
 
     switch ( direction )
     {
         case GTK_PAN_DIRECTION_UP:
-            win->m_allowedGestures |= vertical_pan;
+            data->m_allowedGestures |= vertical_pan;
             event.SetDeltaY(-delta);
             break;
 
         case GTK_PAN_DIRECTION_DOWN:
-            win->m_allowedGestures |= vertical_pan;
+            data->m_allowedGestures |= vertical_pan;
             event.SetDeltaY(delta);
             break;
 
         case GTK_PAN_DIRECTION_RIGHT:
-            win->m_allowedGestures |= horizontal_pan;
+            data->m_allowedGestures |= horizontal_pan;
             event.SetDeltaX(delta);
             break;
 
         case GTK_PAN_DIRECTION_LEFT:
-            win->m_allowedGestures |= horizontal_pan;
+            data->m_allowedGestures |= horizontal_pan;
             event.SetDeltaX(-delta);
             break;
     }
@@ -2999,9 +3020,9 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
     }
 
     // Cancel press and tap gesture if it is not active during "pan" signal.
-    if( !(win->m_activeGestures & press_and_tap) )
+    if( !(data->m_activeGestures & press_and_tap) )
     {
-        win->m_allowedGestures &= ~press_and_tap;
+        data->m_allowedGestures &= ~press_and_tap;
     }
 
     win->GTKProcessEvent(event);
@@ -3023,10 +3044,12 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetZoomFactor(scale);
 
+    wxWindowGesturesData* const data = win->m_gesturesData;
+
     // Cancel "Two FInger Tap Event" if scale has changed
     if ( wxRound(scale * 1000) != wxRound(gs_lastScale * 1000) )
     {
-        win->m_allowedGestures &= ~two_finger_tap;
+        data->m_allowedGestures &= ~two_finger_tap;
     }
 
     gs_lastScale = scale;
@@ -3159,8 +3182,10 @@ wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 
     event.SetEventObject(win);
 
-    double lastX = win->m_lastTouchPoint.x;
-    double lastY = win->m_lastTouchPoint.y;
+    wxWindowGesturesData* const data = win->m_gesturesData;
+
+    double lastX = data->m_lastTouchPoint.x;
+    double lastY = data->m_lastTouchPoint.y;
 
     // Calculate smaller of x coordinate between 2 touches
     double left = lastX <= gdk_event->x ? lastX : gdk_event->x;
@@ -3186,7 +3211,9 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 
     event.SetEventObject(win);
 
-    switch ( win->m_gestureState )
+    wxWindowGesturesData* const data = win->m_gesturesData;
+
+    switch ( data->m_gestureState )
     {
         case begin:
             event.SetGestureStart();
@@ -3194,10 +3221,10 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 
         case update:
             // Update touch point as the touch corresponding to "press" is moving
-            if ( win->m_touchSequence == gdk_event->sequence )
+            if ( data->m_touchSequence == gdk_event->sequence )
             {
-                win->m_lastTouchPoint.x = gdk_event->x;
-                win->m_lastTouchPoint.y = gdk_event->y;
+                data->m_lastTouchPoint.x = gdk_event->x;
+                data->m_lastTouchPoint.y = gdk_event->y;
             }
             break;
 
@@ -3206,7 +3233,7 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
             break;
     }
 
-    event.SetPosition(win->m_lastTouchPoint);
+    event.SetPosition(data->m_lastTouchPoint);
 
     win->GTKProcessEvent(event);
 }
@@ -3214,67 +3241,69 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 static void
 touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGTK* win)
 {
+    wxWindowGesturesData* const data = win->m_gesturesData;
+
     switch ( gdk_event->type )
     {
         case GDK_TOUCH_BEGIN:
-            win->m_touchCount++;
+            data->m_touchCount++;
 
-            win->m_allowedGestures &= ~two_finger_tap;
+            data->m_allowedGestures &= ~two_finger_tap;
 
-            if ( win->m_touchCount == 1 )
+            if ( data->m_touchCount == 1 )
             {
-                win->m_lastTouchTime = gdk_event->time;
-                win->m_lastTouchPoint.x = gdk_event->x;
-                win->m_lastTouchPoint.y = gdk_event->y;
+                data->m_lastTouchTime = gdk_event->time;
+                data->m_lastTouchPoint.x = gdk_event->x;
+                data->m_lastTouchPoint.y = gdk_event->y;
 
                 // Save the sequence which identifies touch corresponding to "press"
-                win->m_touchSequence = gdk_event->sequence;
+                data->m_touchSequence = gdk_event->sequence;
 
                 // "Press and Tap Event" may occur in future
-                win->m_allowedGestures |= press_and_tap;
+                data->m_allowedGestures |= press_and_tap;
             }
 
             // Check if two fingers are placed together .i.e difference between their time stamps is <= 200 milliseconds
-            else if ( win->m_touchCount == 2 && gdk_event->time - win->m_lastTouchTime <= wxTwoFingerTimeInterval )
+            else if ( data->m_touchCount == 2 && gdk_event->time - data->m_lastTouchTime <= wxTwoFingerTimeInterval )
             {
                 // "Two Finger Tap Event" may be possible in the future
-                win->m_allowedGestures |= two_finger_tap;
+                data->m_allowedGestures |= two_finger_tap;
 
                 // Cancel "Press and Tap Event"
-                win->m_allowedGestures &= ~press_and_tap;
+                data->m_allowedGestures &= ~press_and_tap;
             }
             break;
 
         case GDK_TOUCH_UPDATE:
             // If press and tap gesture is active and touch corresponding to that gesture is moving
-            if ( (win->m_activeGestures & press_and_tap) && gdk_event->sequence == win->m_touchSequence )
+            if ( (data->m_activeGestures & press_and_tap) && gdk_event->sequence == data->m_touchSequence )
             {
-                win->m_gestureState = update;
+                data->m_gestureState = update;
                 wxEmitPressAndTapEvent(gdk_event, win);
             }
             break;
 
         case GDK_TOUCH_END:
         case GDK_TOUCH_CANCEL:
-            win->m_touchCount--;
+            data->m_touchCount--;
 
-            if ( win->m_touchCount == 1 )
+            if ( data->m_touchCount == 1 )
             {
-                win->m_lastTouchTime = gdk_event->time;
+                data->m_lastTouchTime = gdk_event->time;
 
                 // If the touch corresponding to "press" is present and "tap" is produced by some ather touch
-                if ( (win->m_allowedGestures & press_and_tap) && gdk_event->sequence != win->m_touchSequence )
+                if ( (data->m_allowedGestures & press_and_tap) && gdk_event->sequence != data->m_touchSequence )
                 {
                     // Press and Tap gesture becomes active now
-                    if ( !(win->m_activeGestures & press_and_tap) )
+                    if ( !(data->m_activeGestures & press_and_tap) )
                     {
-                        win->m_gestureState = begin;
-                        win->m_activeGestures |= press_and_tap;
+                        data->m_gestureState = begin;
+                        data->m_activeGestures |= press_and_tap;
                     }
 
                     else
                     {
-                        win->m_gestureState = update;
+                        data->m_gestureState = update;
                     }
 
                     wxEmitPressAndTapEvent(gdk_event, win);
@@ -3282,21 +3311,21 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
             }
 
             // Check if "Two Finger Tap Event" is possible and both the fingers have been lifted up together
-            else if ( (win->m_allowedGestures & two_finger_tap) && !win->m_touchCount
-                      && gdk_event->time - win->m_lastTouchTime <= wxTwoFingerTimeInterval )
+            else if ( (data->m_allowedGestures & two_finger_tap) && !data->m_touchCount
+                      && gdk_event->time - data->m_lastTouchTime <= wxTwoFingerTimeInterval )
             {
                 // Process Two Finger Tap Event
                 wxEmitTwoFingerTapEvent(gdk_event, win);
             }
 
             // If the gesture was active and the touch corresponding to "press" is no longer on the screen
-            if ( (win->m_activeGestures & press_and_tap) && gdk_event->sequence == win->m_touchSequence )
+            if ( (data->m_activeGestures & press_and_tap) && gdk_event->sequence == data->m_touchSequence )
             {
-                win->m_gestureState = end;
+                data->m_gestureState = end;
 
-                win->m_activeGestures &= ~press_and_tap;
+                data->m_activeGestures &= ~press_and_tap;
 
-                win->m_allowedGestures &= ~press_and_tap;
+                data->m_allowedGestures &= ~press_and_tap;
 
                 wxEmitPressAndTapEvent(gdk_event, win);
             }
@@ -3305,6 +3334,86 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
         default:
         break;
     }
+}
+
+wxWindowGesturesData::wxWindowGesturesData(wxWindowGTK* win, GtkWidget *widget)
+{
+    m_touchCount = 0;
+    m_lastTouchTime = 0;
+    m_gestureState = 0;
+    m_allowedGestures = 0;
+    m_activeGestures = 0;
+    m_touchSequence = NULL;
+
+    GtkGesture* vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
+
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(vertical_pan_gesture), GTK_PHASE_TARGET);
+
+    g_signal_connect (vertical_pan_gesture, "begin",
+                      G_CALLBACK(pan_gesture_begin_callback), win);
+    g_signal_connect (vertical_pan_gesture, "pan",
+                      G_CALLBACK(pan_gesture_callback), win);
+    g_signal_connect (vertical_pan_gesture, "end",
+                      G_CALLBACK(vertical_pan_gesture_end_callback), win);
+    g_signal_connect (vertical_pan_gesture, "cancel",
+                      G_CALLBACK(vertical_pan_gesture_end_callback), win);
+
+    GtkGesture* horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
+
+    // Pan signals are also generated in case of "left mouse down + mouse move". This can be disabled by
+    // calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(horizontal_pan_gesture), TRUE) and
+    // gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(verticaal_pan_gesture), TRUE) which will allow
+    // pan signals only for Touch events.
+
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(horizontal_pan_gesture), GTK_PHASE_TARGET);
+
+    g_signal_connect (horizontal_pan_gesture, "begin",
+                      G_CALLBACK(pan_gesture_begin_callback), win);
+    g_signal_connect (horizontal_pan_gesture, "pan",
+                      G_CALLBACK(pan_gesture_callback), win);
+    g_signal_connect (horizontal_pan_gesture, "end",
+                      G_CALLBACK(horizontal_pan_gesture_end_callback), win);
+    g_signal_connect (horizontal_pan_gesture, "cancel",
+                      G_CALLBACK(horizontal_pan_gesture_end_callback), win);
+
+    GtkGesture* zoom_gesture = gtk_gesture_zoom_new(widget);
+
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(zoom_gesture), GTK_PHASE_TARGET);
+
+    g_signal_connect (zoom_gesture, "begin",
+                      G_CALLBACK(zoom_gesture_begin_callback), win);
+    g_signal_connect (zoom_gesture, "scale-changed",
+                      G_CALLBACK(zoom_gesture_callback), win);
+    g_signal_connect (zoom_gesture, "end",
+                      G_CALLBACK(zoom_gesture_end_callback), win);
+    g_signal_connect (zoom_gesture, "cancel",
+                      G_CALLBACK(zoom_gesture_end_callback), win);
+
+    GtkGesture* rotate_gesture = gtk_gesture_rotate_new(widget);
+
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(rotate_gesture), GTK_PHASE_TARGET);
+
+    g_signal_connect (rotate_gesture, "begin",
+                      G_CALLBACK(rotate_gesture_begin_callback), win);
+    g_signal_connect (rotate_gesture, "angle-changed",
+                      G_CALLBACK(rotate_gesture_callback), win);
+    g_signal_connect (rotate_gesture, "end",
+                      G_CALLBACK(rotate_gesture_end_callback), win);
+    g_signal_connect (rotate_gesture, "cancel",
+                      G_CALLBACK(rotate_gesture_end_callback), win);
+
+    GtkGesture* long_press_gesture = gtk_gesture_long_press_new(widget);
+
+    // "pressed" signal is also generated when left mouse is down for some minimum duration of time.
+    // This can be disable by calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(long_press_gesture), TRUE)
+    // which will allow "pressed" signal only for Touch events.
+
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(long_press_gesture), GTK_PHASE_TARGET);
+
+    g_signal_connect (long_press_gesture, "pressed",
+                      G_CALLBACK(long_press_gesture_callback), win);
+    g_signal_connect (widget, "touch-event",
+                      G_CALLBACK(touch_callback), win);
 }
 
 #endif // wxGTK_HAS_GESTURES_SUPPORT
@@ -3353,78 +3462,9 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_leave_callback), this);
 
 #ifdef wxGTK_HAS_GESTURES_SUPPORT
+    // Check if gestures support is also available during run-time.
     if ( gtk_check_version(3, 14, 0) == NULL )
-    {
-        GtkGesture* vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
-
-        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(vertical_pan_gesture), GTK_PHASE_TARGET);
-
-        g_signal_connect (vertical_pan_gesture, "begin",
-                          G_CALLBACK(pan_gesture_begin_callback), this);
-        g_signal_connect (vertical_pan_gesture, "pan",
-                          G_CALLBACK(pan_gesture_callback), this);
-        g_signal_connect (vertical_pan_gesture, "end",
-                          G_CALLBACK(vertical_pan_gesture_end_callback), this);
-        g_signal_connect (vertical_pan_gesture, "cancel",
-                          G_CALLBACK(vertical_pan_gesture_end_callback), this);
-
-        GtkGesture* horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
-
-        // Pan signals are also generated in case of "left mouse down + mouse move". This can be disabled by
-        // calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(horizontal_pan_gesture), TRUE) and
-        // gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(verticaal_pan_gesture), TRUE) which will allow
-        // pan signals only for Touch events.
-
-        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(horizontal_pan_gesture), GTK_PHASE_TARGET);
-
-        g_signal_connect (horizontal_pan_gesture, "begin",
-                          G_CALLBACK(pan_gesture_begin_callback), this);
-        g_signal_connect (horizontal_pan_gesture, "pan",
-                          G_CALLBACK(pan_gesture_callback), this);
-        g_signal_connect (horizontal_pan_gesture, "end",
-                          G_CALLBACK(horizontal_pan_gesture_end_callback), this);
-        g_signal_connect (horizontal_pan_gesture, "cancel",
-                          G_CALLBACK(horizontal_pan_gesture_end_callback), this);
-
-        GtkGesture* zoom_gesture = gtk_gesture_zoom_new(widget);
-
-        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(zoom_gesture), GTK_PHASE_TARGET);
-
-        g_signal_connect (zoom_gesture, "begin",
-                          G_CALLBACK(zoom_gesture_begin_callback), this);
-        g_signal_connect (zoom_gesture, "scale-changed",
-                          G_CALLBACK(zoom_gesture_callback), this);
-        g_signal_connect (zoom_gesture, "end",
-                          G_CALLBACK(zoom_gesture_end_callback), this);
-        g_signal_connect (zoom_gesture, "cancel",
-                          G_CALLBACK(zoom_gesture_end_callback), this);
-
-        GtkGesture* rotate_gesture = gtk_gesture_rotate_new(widget);
-
-        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(rotate_gesture), GTK_PHASE_TARGET);
-
-        g_signal_connect (rotate_gesture, "begin",
-                          G_CALLBACK(rotate_gesture_begin_callback), this);
-        g_signal_connect (rotate_gesture, "angle-changed",
-                          G_CALLBACK(rotate_gesture_callback), this);
-        g_signal_connect (rotate_gesture, "end",
-                          G_CALLBACK(rotate_gesture_end_callback), this);
-        g_signal_connect (rotate_gesture, "cancel",
-                          G_CALLBACK(rotate_gesture_end_callback), this);
-
-        GtkGesture* long_press_gesture = gtk_gesture_long_press_new(widget);
-
-        // "pressed" signal is also generated when left mouse is down for some minimum duration of time.
-        // This can be disable by calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(long_press_gesture), TRUE)
-        // which will allow "pressed" signal only for Touch events.
-
-        gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(long_press_gesture), GTK_PHASE_TARGET);
-
-        g_signal_connect (long_press_gesture, "pressed",
-                          G_CALLBACK(long_press_gesture_callback), this);
-        g_signal_connect (widget, "touch-event",
-                          G_CALLBACK(touch_callback), this);
-    }
+        m_gesturesData = new wxWindowGesturesData(this, widget);
 #endif // wxGTK_HAS_GESTURES_SUPPORT
 }
 

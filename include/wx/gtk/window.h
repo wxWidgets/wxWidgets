@@ -356,14 +356,9 @@ public:
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
 #if defined(__WXGTK3__)
-    unsigned int         m_touchCount;
-    unsigned int         m_lastTouchTime;
-    int                  m_gestureState;
-    int                  m_allowedGestures;
-    int                  m_activeGestures;
-    wxPoint              m_lastTouchPoint;
-    GdkEventSequence*    m_touchSequence;
-#endif
+    // Data used for gesture support, if available.
+    class wxWindowGesturesData* m_gesturesData;
+#endif // __WXGTK3__
 
 protected:
     // implement the base class pure virtuals
