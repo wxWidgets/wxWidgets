@@ -229,6 +229,11 @@ static bool gs_inSizeAllocate;
 #endif
 
 #if GTK_CHECK_VERSION(3,14,0)
+    #define wxGTK_HAS_GESTURES_SUPPORT
+#endif
+
+#ifdef wxGTK_HAS_GESTURES_SUPPORT
+
 // This is true when the gesture has just started (currently used for pan gesture only)
 static bool gs_gestureStart = false;
 
@@ -243,7 +248,8 @@ static gdouble gs_lastAngle = 0;
 
 // Last Zoom/Rotate gesture point
 static wxPoint gs_lastGesturePoint;
-#endif // GTK_CHECK_VERSION(3,14,0)
+
+#endif // wxGTK_HAS_GESTURES_SUPPORT
 
 //-----------------------------------------------------------------------------
 // debug
@@ -2448,12 +2454,12 @@ void wxWindowGTK::Init()
 
     m_dirtyTabOrder = false;
 
-#if GTK_CHECK_VERSION(3,14,0)
+#ifdef wxGTK_HAS_GESTURES_SUPPORT
     m_touchCount = 0;
     m_lastTouchTime = 0;
     m_allowedGestures = 0;
     m_activeGestures = 0;
-#endif // GTK_CHECK_VERSION(3,14,0)
+#endif // wxGTK_HAS_GESTURES_SUPPORT
 }
 
 wxWindowGTK::wxWindowGTK()
@@ -2852,7 +2858,8 @@ static gboolean source_dispatch(GSource*, GSourceFunc, void*)
 }
 }
 
-#if GTK_CHECK_VERSION(3,14,0)
+#ifdef wxGTK_HAS_GESTURES_SUPPORT
+
 // Currently used for Press and Tap gesture only
 enum GestureStates
 {
@@ -3299,7 +3306,8 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
         break;
     }
 }
-#endif // GTK_CHECK_VERSION(3,14,0)
+
+#endif // wxGTK_HAS_GESTURES_SUPPORT
 
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 {
@@ -3344,7 +3352,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
     g_signal_connect (widget, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
 
-#if GTK_CHECK_VERSION(3,14,0)
+#ifdef wxGTK_HAS_GESTURES_SUPPORT
     if ( gtk_check_version(3, 14, 0) == NULL )
     {
         GtkGesture* vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
@@ -3417,7 +3425,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
         g_signal_connect (widget, "touch-event",
                           G_CALLBACK(touch_callback), this);
     }
-#endif // GTK_CHECK_VERSION(3,14,0)
+#endif // wxGTK_HAS_GESTURES_SUPPORT
 }
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
