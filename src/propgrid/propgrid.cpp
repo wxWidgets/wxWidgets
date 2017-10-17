@@ -484,6 +484,11 @@ void wxPropertyGrid::Init2()
     // This helps with flicker
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
+    // Rely on native double-buffering by default.
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+    SetExtraStyle(GetExtraStyle() | wxPG_EX_NATIVE_DOUBLE_BUFFERING);
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
+
     // Hook the top-level parent
     m_tlpClosed = NULL;
     m_tlpClosedTime = 0;
@@ -1153,26 +1158,9 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
 
     if ( exStyle & wxPG_EX_NATIVE_DOUBLE_BUFFERING )
     {
-#if defined(__WXMSW__)
-
-        /*
-        // Don't use WS_EX_COMPOSITED just now.
-        HWND hWnd;
-
-        if ( m_iFlags & wxPG_FL_IN_MANAGER )
-            hWnd = (HWND)GetParent()->GetHWND();
-        else
-            hWnd = (HWND)GetHWND();
-
-        ::SetWindowLong( hWnd, GWL_EXSTYLE,
-                         ::GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_COMPOSITED );
-        */
-
-//#elif defined(__WXGTK20__)
-#endif
         // Only apply wxPG_EX_NATIVE_DOUBLE_BUFFERING if the window
         // truly was double-buffered.
-        if ( !this->IsDoubleBuffered() )
+        if ( !IsDoubleBuffered() )
         {
             exStyle &= ~(wxPG_EX_NATIVE_DOUBLE_BUFFERING);
         }

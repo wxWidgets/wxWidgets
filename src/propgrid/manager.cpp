@@ -37,6 +37,8 @@
     #include "wx/intl.h"
 #endif
 
+#include "wx/dcbuffer.h" // for wxALWAYS_NATIVE_DOUBLE_BUFFER
+
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
 
@@ -587,7 +589,12 @@ void wxPropertyGridManager::Init2( int style )
 
     m_pState = m_pPropGrid->m_pState;
 
+    // Rely on native double-buffering by default.
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+    m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT | wxPG_EX_NATIVE_DOUBLE_BUFFERING);
+#else
     m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT);
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER/!wxALWAYS_NATIVE_DOUBLE_BUFFER
 
     // Connect to property grid onselect event.
     // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
