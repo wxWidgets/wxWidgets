@@ -493,3 +493,11 @@ public:
     */
     bool IsOk() const;
 };
+
+
+
+/**
+   Get the current locale object (note that it may be NULL!)
+*/
+wxLocale* wxGetLocale();
+
