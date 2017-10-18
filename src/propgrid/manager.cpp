@@ -675,8 +675,15 @@ bool wxPropertyGridManager::SetFont( const wxFont& font )
 
 void wxPropertyGridManager::SetExtraStyle( long exStyle )
 {
+    // Pass only relevant flags to wxPropertyGrid.
+    m_pPropGrid->SetExtraStyle(exStyle & wxPG_EX_WINDOW_PG_STYLE_MASK);
+    // Because it can happen that not all flags are actually changed
+    // by call to SetExtraStyle() (e.g. wxPG_EX_NATIVE_DOUBLE_BUFFERING),
+    // we have to get the actual style flags prior to storing them.
+    exStyle &= ~wxPG_EX_WINDOW_PG_STYLE_MASK;
+    exStyle |= m_pPropGrid->GetExtraStyle() & wxPG_EX_WINDOW_PG_STYLE_MASK;
+
     wxWindow::SetExtraStyle( exStyle );
-    m_pPropGrid->SetExtraStyle( exStyle & wxPG_EX_WINDOW_STYLE_MASK );
 #if wxUSE_TOOLBAR
     if ( (exStyle & (wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS)) && m_pToolbar )
         RecreateControls();
