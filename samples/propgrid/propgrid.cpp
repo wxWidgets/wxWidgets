@@ -66,6 +66,7 @@
 #endif
 
 #include "wx/artprov.h"
+#include "wx/dcbuffer.h" // for wxALWAYS_NATIVE_DOUBLE_BUFFER
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -1915,10 +1916,12 @@ void FormMain::CreateGrid( int style, int extraStyle )
     if ( extraStyle == -1 )
         // default extra style
         extraStyle = wxPG_EX_MODE_BUTTONS |
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+                     wxPG_EX_NATIVE_DOUBLE_BUFFERING |
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
                      wxPG_EX_MULTIPLE_SELECTION;
                 //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
                 //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
-                //| wxPG_EX_NATIVE_DOUBLE_BUFFERING
                 //| wxPG_EX_HELP_AS_TOOLTIPS
 
     bool wasCreated = m_panel ? false : true;
@@ -2018,11 +2021,13 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
                 wxPG_TOOLBAR |
                 wxPG_DESCRIPTION,
                 // extra style
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+                wxPG_EX_NATIVE_DOUBLE_BUFFERING |
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
                 wxPG_EX_MODE_BUTTONS |
                 wxPG_EX_MULTIPLE_SELECTION
                 //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
                 //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
-                //| wxPG_EX_NATIVE_DOUBLE_BUFFERING
                 //| wxPG_EX_HELP_AS_TOOLTIPS
               );
 
