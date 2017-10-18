@@ -2914,6 +2914,7 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         ADD_FLAG(wxPG_EX_ENABLE_TLP_TRACKING)
         ADD_FLAG(wxPG_EX_NO_TOOLBAR_DIVIDER)
         ADD_FLAG(wxPG_EX_TOOLBAR_SEPARATOR)
+        ADD_FLAG(wxPG_EX_ALWAYS_ALLOW_FOCUS)
         wxMultiChoiceDialog dlg( this, wxT("Select extra window styles to use"),
                                  wxT("wxPropertyGrid Extra Style"), chs );
         dlg.SetSelections(sel);
