@@ -83,7 +83,7 @@ wxAppBase::wxAppBase()
 
 bool wxAppBase::Initialize(int& argcOrig, wxChar **argvOrig)
 {
-#ifdef __WXOSX__
+#ifdef __DARWIN__
     // Mac OS X passes a process serial number command line argument when
     // the application is launched from the Finder. This argument must be
     // removed from the command line arguments before being handled by the
@@ -102,7 +102,7 @@ bool wxAppBase::Initialize(int& argcOrig, wxChar **argvOrig)
             memmove(argvOrig + 1, argvOrig + 2, argcOrig * sizeof(wxChar*));
         }
     }
-#endif // __WXOSX__
+#endif // __DARWIN__
 
     if ( !wxAppConsole::Initialize(argcOrig, argvOrig) )
         return false;
