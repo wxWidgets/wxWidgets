@@ -703,7 +703,31 @@ void wxGCDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawPoint - invalid DC") );
 
-    DoDrawLine( x , y , x + 1 , y + 1 );
+    if (!m_logicalFunctionSupported)
+        return;
+
+#if defined(__WXMSW__) && wxUSE_GRAPHICS_GDIPLUS
+    // single point path does not work with GDI+
+    if (m_graphicContext->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer())
+    {
+        const double dx = 0.25 / m_scaleX;
+        const double dy = 0.25 / m_scaleY;
+        m_graphicContext->StrokeLine(x - dx, y - dy, x + dx, y + dy);
+    }
+    else
+#endif
+    {
+#ifdef __WXOSX__
+        m_graphicContext->StrokeLine(x, y, x, y);
+#else
+        wxGraphicsPath path(m_graphicContext->CreatePath());
+        path.MoveToPoint(x, y);
+        path.CloseSubpath();
+        m_graphicContext->StrokePath(path);
+#endif
+    }
+
+    CalcBoundingBox(x, y);
 }
 
 void wxGCDCImpl::DoDrawLines(int n, const wxPoint points[],
