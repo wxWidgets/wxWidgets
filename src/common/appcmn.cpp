@@ -485,8 +485,11 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
                   wxT("You can also choose [Cancel] to suppress ")
                   wxT("further warnings.");
 
+        // "No" button means to continue execution, so it should be the default
+        // action as leaving the "Yes" button the default one would mean that
+        // accidentally pressing Space or Enter would trap and kill the program.
         switch ( wxMessageBox(msgDlg, wxT("wxWidgets Debug Alert"),
-                              wxYES_NO | wxCANCEL | wxICON_STOP ) )
+                              wxYES_NO | wxCANCEL | wxNO_DEFAULT | wxICON_STOP ) )
         {
             case wxYES:
                 // See the comment about using the same variable in

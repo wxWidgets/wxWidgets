@@ -1307,7 +1307,7 @@ bool DoShowAssertDialog(const wxString& msg)
               wxT("further warnings.");
 
     switch ( ::MessageBox(NULL, msgDlg.t_str(), wxT("wxWidgets Debug Alert"),
-                          MB_YESNOCANCEL | MB_ICONSTOP ) )
+                          MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP ) )
     {
         case IDYES:
             // If we called wxTrap() directly from here, the programmer would
