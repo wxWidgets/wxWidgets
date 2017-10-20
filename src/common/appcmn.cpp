@@ -489,7 +489,9 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
                               wxYES_NO | wxCANCEL | wxICON_STOP ) )
         {
             case wxYES:
-                wxTrap();
+                // See the comment about using the same variable in
+                // DoShowAssertDialog().
+                wxTrapInAssert = true;
                 break;
 
             case wxCANCEL:
