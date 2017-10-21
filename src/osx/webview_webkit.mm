@@ -153,7 +153,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     [NSURLProtocol registerClass:[WebViewCustomProtocol class]];
 
     LoadURL(strURL);
-
     return true;
 }
 
