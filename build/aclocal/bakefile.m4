@@ -598,16 +598,9 @@ AC_DEFUN([AC_BAKEFILE_RES_COMPILERS],
             dnl Check for win32 resources compiler:
             AC_CHECK_TOOL(WINDRES, windres)
          ;;
-
-      *-*-darwin* | powerpc-apple-macos* )
-            AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
-            AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
-        ;;
     esac
 
     AC_SUBST(WINDRES)
-    AC_SUBST(REZ)
-    AC_SUBST(SETFILE)
 ])
 
 dnl ---------------------------------------------------------------------------
@@ -752,7 +745,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_SUBST(OBJCXXFLAGS)
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.9"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.11"
 
     dnl includes autoconf_inc.m4:
     $1
