@@ -24,6 +24,7 @@
 #include "wx/msw/webview_missing.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
+#include "wx/msw/private.h"
 
 struct IHTMLDocument2;
 struct IHTMLElement;
@@ -34,6 +35,11 @@ class wxIEContainer;
 class DocHostUIHandler;
 class wxFindPointers;
 class wxIInternetProtocol;
+
+#define wxIE_EMULATION_LEVEL 8000
+
+//Registry key where emulation level for programs are set
+#define wxREGISTRY_IE_PATH wxT("SOFTWARE\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION")
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
@@ -121,7 +127,7 @@ public:
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
 
-    virtual void RunScript(const wxString& javascript) wxOVERRIDE;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
@@ -142,6 +148,9 @@ public:
 
     void onActiveXEvent(wxActiveXEvent& evt);
     void onEraseBg(wxEraseEvent&) {}
+
+    //Establish EmulationLevel for RunScript IE
+    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
 
     wxDECLARE_EVENT_TABLE();
 
@@ -190,6 +199,9 @@ private:
     void FindClear();
     //Toggles control features see INTERNETFEATURELIST for values.
     bool EnableControlFeature(long flag, bool enable = true);
+
+    bool RunScriptInternal(wxVariant varJavascript,
+        wxAutomationObject* scriptAO, wxVariant* varResult);
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewIE);
 };
