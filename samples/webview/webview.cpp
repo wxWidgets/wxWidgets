@@ -136,9 +136,7 @@ public:
     void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
     void OnScrollPageUp(wxCommandEvent&) { m_browser->PageUp(); }
     void OnScrollPageDown(wxCommandEvent&) { m_browser->PageDown(); }
-    void RunScript(const wxString& javascript,
-                   wxString* result = NULL,
-                   const wxString& message = "Click OK to run JavaScript.");
+    void RunScript(const wxString& javascript = wxString());
     void OnRunScriptString(wxCommandEvent& evt);
     void OnRunScriptInteger(wxCommandEvent& evt);
     void OnRunScriptDouble(wxCommandEvent& evt);
@@ -1051,60 +1049,59 @@ void WebFrame::OnHistory(wxCommandEvent& evt)
     m_browser->LoadHistoryItem(m_histMenuItems[evt.GetId()]);
 }
 
-void WebFrame::RunScript(const wxString& javascript, wxString* result, const wxString& message)
+void WebFrame::RunScript(const wxString& javascript)
 {
-    wxTextEntryDialog dialog(this, message, wxGetTextFromUserPromptStr, javascript, wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
-    if( dialog.ShowModal() == wxID_OK )
+    wxString message;
+    if ( javascript.empty() )
+        message = "Please enter JavaScript code to execute";
+    else
+        message = "Click \"OK\" to accept running this JavaScript code";
+
+    wxTextEntryDialog dialog(this, message, wxGetTextFromUserPromptStr, javascript,
+                             wxOK | wxCANCEL | wxCENTRE | wxTE_MULTILINE);
+    if( dialog.ShowModal() != wxID_OK )
+        return;
+
+    wxString result;
+    if ( m_browser->RunScript(dialog.GetValue(), &result) )
     {
-        if ( m_browser->RunScript(dialog.GetValue(), result))
-        {
-            if ( result != NULL )
-                wxLogMessage(_("RunScript result: %s"), *result);
-            else
-                wxLogMessage(_("RunScript ran properly"));
-        }
-        else
-        {
-            wxLogWarning(_("RunScript returned false"));
-        }
+        wxLogMessage("RunScript() returned \"%s\"", result);
+    }
+    else
+    {
+        wxLogWarning("RunScript() failed");
     }
 }
 
 void WebFrame::OnRunScriptString(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
-    RunScript("function f(a){return a;}f('Hello World!');", &result);
+    RunScript("function f(a){return a;}f('Hello World!');");
 }
 
 void WebFrame::OnRunScriptInteger(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
-    RunScript("function f(a){return a;}f(123);", &result);
+    RunScript("function f(a){return a;}f(123);");
 }
 
 void WebFrame::OnRunScriptDouble(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
-    RunScript("function f(a){return a;}f(2.34);", &result);
+    RunScript("function f(a){return a;}f(2.34);");
 }
 
 void WebFrame::OnRunScriptBool(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
-    RunScript("function f(a){return a;}f(false);", &result);
+    RunScript("function f(a){return a;}f(false);");
 }
 
 void WebFrame::OnRunScriptObject(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
     RunScript("function f(){var person = new Object();person.name = 'Foo'; \
-        person.lastName = 'Bar';return person;}f();", &result);
+        person.lastName = 'Bar';return person;}f();");
 }
 
 void WebFrame::OnRunScriptArray(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
-    RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result);
+    RunScript("function f(){ return [\"foo\", \"bar\"]; }f();");
 }
 
 void WebFrame::OnRunScriptDOM(wxCommandEvent& WXUNUSED(evt))
@@ -1114,57 +1111,50 @@ void WebFrame::OnRunScriptDOM(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnRunScriptUndefined(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
-    RunScript("function f(){var person = new Object();}f();", &result);
+    RunScript("function f(){var person = new Object();}f();");
 }
 
 void WebFrame::OnRunScriptNull(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
-    RunScript("function f(){return null;}f();", &result);
+    RunScript("function f(){return null;}f();");
 }
 
 void WebFrame::OnRunScriptDate(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
     RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
         var tzoffset = d.getTimezoneOffset() * 60000; \
-        return new Date(d.getTime() - tzoffset);}f();", &result);
+        return new Date(d.getTime() - tzoffset);}f();");
 }
 
 #if wxUSE_WEBVIEW_IE
 void WebFrame::OnRunScriptObjectWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
 {
     wxWebViewIE::MSWSetModernEmulationLevel();
-    wxString result;
     RunScript("function f(){var person = new Object();person.name = 'Foo'; \
-        person.lastName = 'Bar';return person;}f();", &result);
+        person.lastName = 'Bar';return person;}f();");
     wxWebViewIE::MSWSetModernEmulationLevel(false);
 }
 
 void WebFrame::OnRunScriptDateWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
 {
     wxWebViewIE::MSWSetModernEmulationLevel();
-    wxString result;
     RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
         var tzoffset = d.getTimezoneOffset() * 60000; return \
-        new Date(d.getTime() - tzoffset);}f();", &result);
+        new Date(d.getTime() - tzoffset);}f();");
     wxWebViewIE::MSWSetModernEmulationLevel(false);
 }
 
 void WebFrame::OnRunScriptArrayWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
 {
     wxWebViewIE::MSWSetModernEmulationLevel();
-    wxString result;
-    RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result);
+    RunScript("function f(){ return [\"foo\", \"bar\"]; }f();");
     wxWebViewIE::MSWSetModernEmulationLevel(false);
 }
 #endif
 
 void WebFrame::OnRunScriptCustom(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString result;
-    RunScript("", &result, "Enter JavaScript to run.");
+    RunScript();
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
