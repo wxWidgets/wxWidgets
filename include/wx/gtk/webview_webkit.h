@@ -160,7 +160,7 @@ private:
 #if wxUSE_WEBVIEW_WEBKIT2
     bool CanExecuteEditingCommand(const gchar* command) const;
     void SetupWebExtensionServer();
-    bool RunScriptInternal(const wxString& javascript, wxString* output = NULL);
+    bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
 #endif
 
     WebKitWebView *m_web_view;

@@ -1141,7 +1141,8 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
     return true;
 }
 
-bool wxWebViewWebKit::RunScriptInternal(const wxString& javascript, wxString* output)
+// Run the given script synchronously and return its result in output.
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
 {
     GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
@@ -1163,12 +1164,12 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
     wxString result;
-    bool isValidJS = RunScriptInternal(wrapJS.GetWrappedCode(), &result);
+    bool isValidJS = RunScriptSync(wrapJS.GetWrappedCode(), &result);
 
     if ( isValidJS && result == "true" )
     {
-        RunScriptInternal(wrapJS.GetOutputCode(), output);
-        RunScriptInternal(wrapJS.GetCleanUpCode());
+        RunScriptSync(wrapJS.GetOutputCode(), output);
+        RunScriptSync(wrapJS.GetCleanUpCode());
         return true;
     }
 
