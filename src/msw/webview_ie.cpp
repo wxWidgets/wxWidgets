@@ -885,7 +885,7 @@ bool wxWebViewIE::RunScriptInternal(wxVariant varJavascript, wxAutomationObject*
 {
     if ( !scriptAO->Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varJavascript) )
     {
-        wxLogWarning(_("Can't run Javascript"));
+        wxLogWarning(_("Can't run JavaScript"));
         return false;
     }
 
@@ -899,13 +899,13 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 
     if ( !document )
     {
-        wxLogWarning(_("Can't run Javascript script without a valid HTML document"));
+        wxLogWarning(_("Can't run JavaScript script without a valid HTML document"));
         return false;
     }
 
     if ( FAILED(document->get_Script(&scriptDispatch)) )
     {
-        wxLogWarning(_("Can't get the Javascript"));
+        wxLogWarning(_("Can't get the JavaScript"));
         return false;
     }
 
@@ -933,7 +933,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
         return true;
     }
 
-    wxLogWarning(_("Javascript error: %s"), varResult.MakeString());
+    wxLogWarning(_("JavaScript error: %s"), varResult.MakeString());
     return false;
 }
 

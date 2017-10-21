@@ -439,7 +439,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     else
     {
         if ( result != nil )
-            wxLogWarning(_("Javascript error: %s"), wxCFStringRef::AsString(result));
+            wxLogWarning(_("JavaScript error: %s"), wxCFStringRef::AsString(result));
         return false;
     }
     return true;

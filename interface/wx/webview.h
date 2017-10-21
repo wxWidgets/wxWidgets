@@ -478,12 +478,12 @@ public:
               outputs are supported on wxWEBVIEW_WEBKIT2 (GTK3).
 
               When using wxWEBVIEW_WEBKIT (OSX), there are two limits:
-              1) Javascript allocations greater than 10MB.
-              2) Javascript that takes longer than 10 seconds to execute.
+              1) JavaScript allocations greater than 10MB.
+              2) JavaScript that takes longer than 10 seconds to execute.
 
               When using wxWEBVIEW_BACKEND_IE you must wait for the current
               page to finish loading before calling RunScript().
-              It is compulsory to have a script tag inside HTML to run Javascript, on MSW.
+              It is compulsory to have a script tag inside HTML to run JavaScript, on MSW.
 
               When using wxWEBVIEW_BACKEND_IE, JSON is not available in Quirks or
               IE6/7 standards mode, which is unfortunately the default one for the embedded browser control, see
@@ -499,7 +499,7 @@ public:
               @endcode
               2) There is an implementation of JSON.stringify on RunScript that helps to return objects.
               You don't need to change IE emulation level but it could not work for some cases.
-        @param javascript A wxString containing the Javascript.
+        @param javascript A wxString containing the JavaScript.
         @param output wxString result pointer. It can be NULL and it is new in wxWidgets 3.1.1.
         @return @true if there is a result, @false if there is an error.
     */

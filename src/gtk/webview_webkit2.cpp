@@ -1141,7 +1141,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
 
     if ( !js_result )
     {
-        wxLogWarning(_("Error running Javascript: %s"), error.GetMessage());
+        wxLogWarning(_("Error running JavaScript: %s"), error.GetMessage());
         return false;
     }
 
@@ -1159,7 +1159,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
     if ( exception )
     {
         wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
-        wxLogWarning(_("Exception running Javascript: %s"), ex_value.ToWxString());
+        wxLogWarning(_("Exception running JavaScript: %s"), ex_value.ToWxString());
 
         return false;
     }
@@ -1184,7 +1184,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
         return true;
     }
 
-    wxLogWarning(_("Javascript error: %s"), result);
+    wxLogWarning(_("JavaScript error: %s"), result);
     return false;
 }
 
