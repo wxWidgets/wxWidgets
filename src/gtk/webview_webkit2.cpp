@@ -1172,6 +1172,9 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
+    wxCHECK_MSG( m_web_view, false,
+        wxS("wxWebView must be created before calling RunScript()") );
+
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
     wxString result;

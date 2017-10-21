@@ -951,6 +951,9 @@ wxString wxWebViewWebKit::GetPageText() const
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
+    wxCHECK_MSG( m_web_view, false,
+        wxS("wxWebView must be created before calling RunScript()") );
+
     if ( output != NULL )
     {
         wxLogWarning(_("Retrieving JavaScript script output is not supported with WebKit v1"));
