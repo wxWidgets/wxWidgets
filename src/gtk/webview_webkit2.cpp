@@ -1103,7 +1103,10 @@ static void wxgtk_run_javascript_cb(WebKitWebView *,
                                     GAsyncResult *res,
                                     GAsyncResult **res_out)
 {
+    // Ensure that it doesn't get freed by the time we use it in
+    // RunScriptSync() itself.
     g_object_ref(res);
+
     *res_out = res;
 }
 
@@ -1125,6 +1128,9 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
     wxGtkError error;
     wxWebKitJavascriptResult js_result(webkit_web_view_run_javascript_finish(m_web_view,
         result, error.Out()));
+
+    // Match g_object_ref() in wxgtk_run_javascript_cb()
+    g_object_unref(result);
 
     if ( !js_result )
     {
