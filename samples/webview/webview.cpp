@@ -136,8 +136,9 @@ public:
     void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
     void OnScrollPageUp(wxCommandEvent&) { m_browser->PageUp(); }
     void OnScrollPageDown(wxCommandEvent&) { m_browser->PageDown(); }
-    void RunScript(const wxString& javascript, wxString* result = NULL,
-        const wxString& messege = "Click OK to run JavaScript.");
+    void RunScript(const wxString& javascript,
+                   wxString* result = NULL,
+                   const wxString& message = "Click OK to run JavaScript.");
     void OnRunScriptString(wxCommandEvent& evt);
     void OnRunScriptInteger(wxCommandEvent& evt);
     void OnRunScriptDouble(wxCommandEvent& evt);
@@ -1050,9 +1051,9 @@ void WebFrame::OnHistory(wxCommandEvent& evt)
     m_browser->LoadHistoryItem(m_histMenuItems[evt.GetId()]);
 }
 
-void WebFrame::RunScript(const wxString& javascript, wxString* result, const wxString& messege)
+void WebFrame::RunScript(const wxString& javascript, wxString* result, const wxString& message)
 {
-    wxTextEntryDialog dialog(this, messege, wxGetTextFromUserPromptStr, javascript, wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
+    wxTextEntryDialog dialog(this, message, wxGetTextFromUserPromptStr, javascript, wxOK|wxCANCEL|wxCENTRE|wxTE_MULTILINE);
     if( dialog.ShowModal() == wxID_OK )
     {
         if ( m_browser->RunScript(dialog.GetValue(), result))
