@@ -1129,7 +1129,6 @@ enable_macosx_arch
 enable_compat28
 enable_compat30
 enable_rpath
-enable_objc_uniquifying
 enable_visibility
 enable_tls
 enable_repro_build
@@ -2070,7 +2069,6 @@ Optional Features:
   --enable-compat28       enable wxWidgets 2.8 compatibility
   --disable-compat30      disable wxWidgets 3.0 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
-  --enable-objc_uniquifying enable Objective-C class name uniquifying
   --disable-visibility    disable use of ELF symbols visibility even if supported
   --disable-tls           disable use of compiler TLS support
   --enable-repro-build    enable reproducible build mode
@@ -5123,6 +5121,8 @@ fi
           eval "$wx_cv_use_expat"
 
 
+if test "$USE_DARWIN" = 1; then
+
 
 # Check whether --with-macosx-sdk was given.
 if test "${with_macosx_sdk+set}" = set; then :
@@ -5143,6 +5143,7 @@ if test "${with_macosx_version_min+set}" = set; then :
 fi
 
 
+fi
 
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
@@ -5861,6 +5862,7 @@ fi
           eval "$wx_cv_use_vararg_macros"
 
 
+if test "$USE_DARWIN" = 1; then
 
           enablestring=
           # Check whether --enable-universal_binary was given.
@@ -5893,7 +5895,7 @@ fi
 
           eval "$wx_cv_use_macosx_arch"
 
-
+fi
 
           enablestring=
           defaultval=
@@ -5981,36 +5983,6 @@ fi
 
 
           eval "$wx_cv_use_rpath"
-
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-objc_uniquifying was given.
-if test "${enable_objc_uniquifying+set}" = set; then :
-  enableval=$enable_objc_uniquifying;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=yes'
-                          else
-                            wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=no'
-                          fi
-
-else
-
-                          wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=${'DEFAULT_wxUSE_OBJC_UNIQUIFYING":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_objc_uniquifying"
 
 
 
@@ -17380,7 +17352,7 @@ fi
 fi
 
 
-if test "$wxUSE_MAC" = 1; then
+if test "$USE_DARWIN" = 1; then
 
 retest_macosx_linking=no
 
@@ -17432,6 +17404,8 @@ $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary
     LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
 fi
 
+if test "$wxUSE_MAC" = 1; then
+
 if test "x$wxUSE_MACOSX_SDK" = "xno"; then
     wxUSE_MACOSX_SDK=
 elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
@@ -17456,6 +17430,7 @@ $as_echo "exists" >&6; }
     retest_macosx_linking=yes
             fi
 
+fi
 if test "x$wxUSE_MACOSX_VERSION_MIN" = "xno"; then
     wxUSE_MACOSX_VERSION_MIN=
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
@@ -32683,11 +32658,6 @@ fi
 
 if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
   $as_echo "#define wxUSE_PRINTF_POS_PARAMS 1" >>confdefs.h
-
-fi
-
-if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
-  $as_echo "#define wxUSE_OBJC_UNIQUIFYING 1" >>confdefs.h
 
 fi
 

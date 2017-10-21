@@ -307,13 +307,6 @@ library:
 @endDefList
 
 
-@section page_wxusedef_cocoa Cocoa Symbols
-
-@beginDefList
-@itemdef{wxUSE_OBJC_UNIQUIFYING, Enable Objective-C class name uniquifying.}
-@endDefList
-
-
 @section page_wxusedef_msw wxMSW Symbols
 
 @beginDefList
