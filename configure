@@ -1132,6 +1132,7 @@ enable_rpath
 enable_visibility
 enable_tls
 enable_repro_build
+enable_pch
 enable_intl
 enable_xlocale
 enable_config
@@ -2072,6 +2073,7 @@ Optional Features:
   --disable-visibility    disable use of ELF symbols visibility even if supported
   --disable-tls           disable use of compiler TLS support
   --enable-repro-build    enable reproducible build mode
+  --enable-pch            use precompiled headers if possible (off by default)
   --enable-intl           use internationalization system
   --enable-xlocale        use x-locale support (requires wxLocale)
   --enable-config         use wxConfig (and derived) classes
@@ -6072,6 +6074,35 @@ fi
 
 
           eval "$wx_cv_use_repro_build"
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-pch was given.
+if test "${enable_pch+set}" = set; then :
+  enableval=$enable_pch;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_pch='wxUSE_PCH=yes'
+                          else
+                            wx_cv_use_pch='wxUSE_PCH=no'
+                          fi
+
+else
+
+                          wx_cv_use_pch='wxUSE_PCH=${'DEFAULT_wxUSE_PCH":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_pch"
 
 
 
@@ -17390,9 +17421,11 @@ if test "x$OSX_ARCH_OPTS" != "x"; then
 $as_echo "$as_me: WARNING: Disabling dependency tracking due to universal binary build." >&2;}
         disable_macosx_deps=yes
 
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling precompiled headers due to universal binary build." >&5
+        if test "x$wxUSE_PCH" = "xyes"; then
+                                                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling precompiled headers due to universal binary build." >&5
 $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary build." >&2;}
-        bk_use_pch=no
+            wxUSE_PCH=no
+        fi
     fi
 
     OSX_ARCH_OPTS=`echo $OSX_ARCH_OPTS | sed -e 's/^/-arch /' -e 's/,/ -arch /g'`
@@ -35894,55 +35927,13 @@ case "$TOOLKIT" in
         ;;
 esac
 
+
+if test "$wxUSE_PCH" != "yes"; then
+    bk_use_pch=no
+fi
+
 if test "$wxUSE_WINE" = "yes"; then
     BAKEFILE_FORCE_PLATFORM=win32
-fi
-
-if test "$wxUSE_UNICODE" = yes -a "$GCC" = yes -a "$bk_use_pch" != no
-then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gcc precompiled header bug" >&5
-$as_echo_n "checking for gcc precompiled header bug... " >&6; }
-if ${wx_cv_gcc_pch_bug+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-            echo '#include <stdio.h>
-                  const wchar_t test_var[] = L"awidetest";' > conftest.h
-
-            echo '#include "conftest.h"
-                  int main()
-                  {
-                     printf("%ls", test_var);
-                     return 0;
-                  }' > conftest.cpp
-
-            wx_cv_gcc_pch_bug="pch not supported"
-
-            if $CXX conftest.h >/dev/null 2>&1
-            then
-                wx_cv_gcc_pch_bug=
-
-                if $CXX -o conftest$PROGRAM_EXT conftest.cpp >/dev/null 2>&1
-                then
-                    if tr -dc '[a-z]' < conftest$PROGRAM_EXT |
-                        grep awidetest >/dev/null
-                    then
-                        wx_cv_gcc_pch_bug=no
-                    else
-                        wx_cv_gcc_pch_bug=yes
-                    fi
-                fi
-            fi
-
-            rm -f conftest.h conftest.gch conftest.cpp conftest$PROGRAM_EXT
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gcc_pch_bug" >&5
-$as_echo "$wx_cv_gcc_pch_bug" >&6; }
-
-    if test "$wx_cv_gcc_pch_bug" = yes; then
-                        bk_use_pch=no
-    fi
 fi
 
 # Find a good install program.  We prefer a C program (faster),
@@ -38374,15 +38365,6 @@ fi
 
 if test $GCC_PCH = 1
 then
-    if test "$wx_cv_gcc_pch_bug" = yes; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** Precompiled header support is broken on this compiler" >&5
-$as_echo "$as_me: WARNING: *** Precompiled header support is broken on this compiler" >&2;}
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** --enable-precomp-headers is not recommended" >&5
-$as_echo "$as_me: WARNING: *** --enable-precomp-headers is not recommended" >&2;}
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=13361" >&5
-$as_echo "$as_me: WARNING: *** see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=13361" >&2;}
-    fi
-
     # Our WX_PRECOMP flag does not make sense for any language except C++ because
     # the headers that benefit from precompilation are mostly C++ headers.
     CXXFLAGS="-DWX_PRECOMP $CXXFLAGS"
