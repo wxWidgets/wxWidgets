@@ -66,7 +66,7 @@ class WebApp : public wxApp
 {
 public:
     WebApp() :
-        m_url("http://wiki.wxwidgets.org")
+        m_url("http://www.wxwidgets.org")
     {
     }
 
