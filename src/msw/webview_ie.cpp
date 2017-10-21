@@ -880,10 +880,10 @@ bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
 }
 
 static
-bool CallEval(wxVariant varJavascript, wxAutomationObject* scriptAO,
+bool CallEval(wxVariant varJavascript, wxAutomationObject& scriptAO,
     wxVariant* varResult)
 {
-    if ( !scriptAO->Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varJavascript) )
+    if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varJavascript) )
     {
         wxLogWarning(_("Can't run JavaScript"));
         return false;
@@ -915,20 +915,20 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     wxVariant varJavascript(wrapJS.GetWrappedCode());
     wxVariant varResult;
 
-    if ( !CallEval(varJavascript, &scriptAO, &varResult) )
+    if ( !CallEval(varJavascript, scriptAO, &varResult) )
         return false;
 
     if ( varResult.IsType("bool") && varResult.GetBool() )
     {
         varJavascript = wrapJS.GetOutputCode();
-        if ( !CallEval(varJavascript, &scriptAO, &varResult) )
+        if ( !CallEval(varJavascript, scriptAO, &varResult) )
             return false;
 
         if ( output != NULL )
             *output = varResult.MakeString();
 
         varJavascript = wrapJS.GetCleanUpCode();
-        if ( !CallEval(varJavascript, &scriptAO, &varResult) )
+        if ( !CallEval(varJavascript, scriptAO, &varResult) )
             return false;
         return true;
     }
