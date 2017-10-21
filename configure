@@ -5131,6 +5131,8 @@ fi
           eval "$wx_cv_use_expat"
 
 
+if test "$USE_DARWIN" = 1; then
+
 
 # Check whether --with-macosx-sdk was given.
 if test "${with_macosx_sdk+set}" = set; then :
@@ -5151,6 +5153,7 @@ if test "${with_macosx_version_min+set}" = set; then :
 fi
 
 
+fi
 
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
@@ -5869,6 +5872,7 @@ fi
           eval "$wx_cv_use_vararg_macros"
 
 
+if test "$USE_DARWIN" = 1; then
 
           enablestring=
           # Check whether --enable-universal_binary was given.
@@ -5901,7 +5905,7 @@ fi
 
           eval "$wx_cv_use_macosx_arch"
 
-
+fi
 
           enablestring=
           defaultval=
