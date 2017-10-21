@@ -673,6 +673,9 @@ bool wxPropertyGridManager::SetFont( const wxFont& font )
 
 // -----------------------------------------------------------------------
 
+// Which flags can affect the toolbar
+#define wxPG_EX_WINDOW_TOOLBAR_STYLE_MASK  (wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|wxPG_EX_NO_TOOLBAR_DIVIDER)
+
 void wxPropertyGridManager::SetExtraStyle( long exStyle )
 {
     // Pass only relevant flags to wxPropertyGrid.
@@ -683,9 +686,14 @@ void wxPropertyGridManager::SetExtraStyle( long exStyle )
     exStyle &= ~wxPG_EX_WINDOW_PG_STYLE_MASK;
     exStyle |= m_pPropGrid->GetExtraStyle() & wxPG_EX_WINDOW_PG_STYLE_MASK;
 
+#if wxUSE_TOOLBAR
+    bool toolbarStyleChanged =
+        (GetExtraStyle() & wxPG_EX_WINDOW_TOOLBAR_STYLE_MASK) != (exStyle & wxPG_EX_WINDOW_TOOLBAR_STYLE_MASK);
+#endif // wxUSE_TOOLBAR
+
     wxWindow::SetExtraStyle( exStyle );
 #if wxUSE_TOOLBAR
-    if ( (exStyle & (wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS)) && m_pToolbar )
+    if ( toolbarStyleChanged && m_pToolbar )
         RecreateControls();
 #endif
 }
@@ -1479,13 +1487,12 @@ void wxPropertyGridManager::RecreateControls()
     {
         bool tbModified = false;
 
+        long toolBarFlags = HasExtraStyle(wxPG_EX_NO_FLAT_TOOLBAR) ? 0 : wxTB_FLAT;
+        if ( HasExtraStyle(wxPG_EX_NO_TOOLBAR_DIVIDER) )
+            toolBarFlags |= wxTB_NODIVIDER;
         // Has toolbar.
         if ( !m_pToolbar )
         {
-            long toolBarFlags = HasExtraStyle(wxPG_EX_NO_FLAT_TOOLBAR)? 0: wxTB_FLAT;
-            if ( HasExtraStyle(wxPG_EX_NO_TOOLBAR_DIVIDER) )
-                toolBarFlags |= wxTB_NODIVIDER;
-
             m_pToolbar = new wxToolBar(this, wxID_ANY,
                                        wxDefaultPosition,
                                        wxDefaultSize,
@@ -1513,6 +1520,11 @@ void wxPropertyGridManager::RecreateControls()
             tbModified = true;
             m_categorizedModeToolId = -1;
             m_alphabeticModeToolId = -1;
+        }
+        else
+        {
+            m_pToolbar->SetWindowStyle(toolBarFlags);
+            tbModified = true;
         }
 
         if ( HasExtraStyle(wxPG_EX_MODE_BUTTONS) )
