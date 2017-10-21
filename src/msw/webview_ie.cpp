@@ -897,14 +897,13 @@ bool CallEval(const wxString& code,
 bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
-    IDispatch* scriptDispatch = NULL;
-
     if ( !document )
     {
         wxLogWarning(_("Can't run JavaScript script without a valid HTML document"));
         return false;
     }
 
+    IDispatch* scriptDispatch = NULL;
     if ( FAILED(document->get_Script(&scriptDispatch)) )
     {
         wxLogWarning(_("Can't get the JavaScript"));
