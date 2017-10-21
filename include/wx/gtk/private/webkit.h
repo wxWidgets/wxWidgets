@@ -10,19 +10,27 @@
 #ifndef _WX_GTK_PRIVATE_WEBKIT_H_
 #define _WX_GTK_PRIVATE_WEBKIT_H_
 
+#include "wx/buffer.h"
+
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSStringRef.h>
-#include <wx/buffer.h>
 
 // ----------------------------------------------------------------------------
-// Convenience class for WebKitJavascriptResult on scope exit automatically
+// RAII wrapper of WebKitJavascriptResult taking care of freeing it
 // ----------------------------------------------------------------------------
 
 class wxWebKitJavascriptResult
 {
 public:
-    explicit wxWebKitJavascriptResult(WebKitJavascriptResult *r) : m_jsresult(r) { }
-    ~wxWebKitJavascriptResult() { webkit_javascript_result_unref (m_jsresult); }
+    explicit wxWebKitJavascriptResult(WebKitJavascriptResult *r)
+        : m_jsresult(r)
+    {
+    }
+
+    ~wxWebKitJavascriptResult()
+    {
+        webkit_javascript_result_unref(m_jsresult);
+    }
 
     operator WebKitJavascriptResult *() const { return m_jsresult; }
 
@@ -32,15 +40,20 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebKitJavascriptResult);
 };
 
+// ----------------------------------------------------------------------------
+// RAII wrapper of JSStringRef, also providing conversion to wxString
+// ----------------------------------------------------------------------------
+
 class wxJSStringRef
 {
 public:
     explicit wxJSStringRef(JSStringRef r) : m_jssref(r) { }
-    ~wxJSStringRef() { JSStringRelease (m_jssref); }
+    ~wxJSStringRef() { JSStringRelease(m_jssref); }
 
-    const wxString ToWxString()
+    wxString ToWxString() const
     {
-        size_t length = JSStringGetMaximumUTF8CStringSize(m_jssref);
+        const size_t length = JSStringGetMaximumUTF8CStringSize(m_jssref);
+
         wxCharBuffer str(length);
 
         JSStringGetUTF8CString(m_jssref, str.data(), length);
