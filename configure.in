@@ -1121,7 +1121,10 @@ dnl ---------------------------------------------------------------------------
 dnl Mac-specific SDK/architectures checks
 dnl ---------------------------------------------------------------------------
 
-if test "$wxUSE_MAC" = 1; then
+dnl Note that some checks here are OS-specific, and need to be done for any
+dnl port, while others are wxOSX-specific and are performed only for it inside
+dnl another test below.
+if test "$USE_DARWIN" = 1; then
 
 retest_macosx_linking=no
 
@@ -1191,6 +1194,8 @@ if test "x$OSX_ARCH_OPTS" != "x"; then
     LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
 fi
 
+if test "$wxUSE_MAC" = 1; then
+
 dnl Set up the Mac OS X SDK.  We do this early so configure tests will occur
 dnl with the SDK in place.
 dnl NOTE: We clobber wxUSE_MACOSX_SDK with the SDK path
@@ -1216,6 +1221,8 @@ if test "x$wxUSE_MACOSX_SDK" != "x"; then
     dnl the syslibroot makes no difference.  We aren't using libtool now but
     dnl if we ever did, be aware that you don't need to worry about it.
 fi
+
+fi dnl wxUSE_MAC
 
 dnl Set up the deployment target
 dnl No   : Don't specify a min version even if using an SDK
@@ -1294,7 +1301,7 @@ if test "x$retest_macosx_linking" = "xyes"; then
     AC_LANG_POP()
 fi
 
-fi dnl wxUSE_MAC
+fi dnl USE_DARWIN
 
 case "${host}" in
 

@@ -17388,7 +17388,7 @@ fi
 fi
 
 
-if test "$wxUSE_MAC" = 1; then
+if test "$USE_DARWIN" = 1; then
 
 retest_macosx_linking=no
 
@@ -17440,6 +17440,8 @@ $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary
     LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
 fi
 
+if test "$wxUSE_MAC" = 1; then
+
 if test "x$wxUSE_MACOSX_SDK" = "xno"; then
     wxUSE_MACOSX_SDK=
 elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
@@ -17464,6 +17466,7 @@ $as_echo "exists" >&6; }
     retest_macosx_linking=yes
             fi
 
+fi
 if test "x$wxUSE_MACOSX_VERSION_MIN" = "xno"; then
     wxUSE_MACOSX_VERSION_MIN=
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
