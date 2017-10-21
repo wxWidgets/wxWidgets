@@ -1107,10 +1107,23 @@ static void wxgtk_run_javascript_cb(WebKitWebView *,
     *res_out = res;
 }
 
-bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
+// Run the given script synchronously and return its result in output.
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
 {
+    GAsyncResult *result = NULL;
+    webkit_web_view_run_javascript(m_web_view,
+                                   javascript,
+                                   NULL,
+                                   (GAsyncReadyCallback)wxgtk_run_javascript_cb,
+                                   &result);
+
+    GMainContext *main_context = g_main_context_get_thread_default();
+
+    while ( !result )
+        g_main_context_iteration(main_context, TRUE);
+
     wxGtkError error;
-    wxWebKitJavascriptResult js_result(webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (object),
+    wxWebKitJavascriptResult js_result(webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (m_web_view),
         (GAsyncResult *)result, error.Out()));
 
     if ( !js_result )
@@ -1139,24 +1152,6 @@ bool JSResultToString(GObject *object, GAsyncResult *result, wxString* output)
         *output = js_value.ToWxString();
 
     return true;
-}
-
-// Run the given script synchronously and return its result in output.
-bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
-{
-    GAsyncResult *result = NULL;
-    webkit_web_view_run_javascript(m_web_view,
-                                   javascript,
-                                   NULL,
-                                   (GAsyncReadyCallback)wxgtk_run_javascript_cb,
-                                   &result);
-
-    GMainContext *main_context = g_main_context_get_thread_default();
-
-    while ( !result )
-        g_main_context_iteration(main_context, TRUE);
-
-    return JSResultToString((GObject*)m_web_view, result, output);
 }
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
