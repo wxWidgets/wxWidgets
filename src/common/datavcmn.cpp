@@ -378,6 +378,12 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
         if (res != 0)
           return res;
     }
+    else
+    {
+        int res = DoCompareValues(value1, value2);
+        if (res != 0)
+            return res;
+    }
 
 
     // items must be different
