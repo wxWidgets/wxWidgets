@@ -1137,7 +1137,6 @@ enable_macosx_arch
 enable_compat28
 enable_compat30
 enable_rpath
-enable_objc_uniquifying
 enable_visibility
 enable_tls
 enable_repro_build
@@ -2078,7 +2077,6 @@ Optional Features:
   --enable-compat28       enable wxWidgets 2.8 compatibility
   --disable-compat30      disable wxWidgets 3.0 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
-  --enable-objc_uniquifying enable Objective-C class name uniquifying
   --disable-visibility    disable use of ELF symbols visibility even if supported
   --disable-tls           disable use of compiler TLS support
   --enable-repro-build    enable reproducible build mode
@@ -5993,36 +5991,6 @@ fi
 
 
           eval "$wx_cv_use_rpath"
-
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-objc_uniquifying was given.
-if test "${enable_objc_uniquifying+set}" = set; then :
-  enableval=$enable_objc_uniquifying;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=yes'
-                          else
-                            wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=no'
-                          fi
-
-else
-
-                          wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=${'DEFAULT_wxUSE_OBJC_UNIQUIFYING":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_objc_uniquifying"
 
 
 
@@ -32698,11 +32666,6 @@ fi
 
 if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
   $as_echo "#define wxUSE_PRINTF_POS_PARAMS 1" >>confdefs.h
-
-fi
-
-if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
-  $as_echo "#define wxUSE_OBJC_UNIQUIFYING 1" >>confdefs.h
 
 fi
 

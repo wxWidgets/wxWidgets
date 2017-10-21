@@ -670,8 +670,6 @@ WX_ARG_DISABLE(compat30,     [  --disable-compat30      disable wxWidgets 3.0 co
 
 WX_ARG_DISABLE(rpath,        [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
-WX_ARG_ENABLE(objc_uniquifying,[  --enable-objc_uniquifying enable Objective-C class name uniquifying], wxUSE_OBJC_UNIQUIFYING)
-
 WX_ARG_DISABLE(visibility,   [  --disable-visibility    disable use of ELF symbols visibility even if supported], wxUSE_VISIBILITY)
 WX_ARG_DISABLE(tls,          [  --disable-tls           disable use of compiler TLS support], wxUSE_COMPILER_TLS)
 
@@ -5799,10 +5797,6 @@ fi
 
 if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
   AC_DEFINE(wxUSE_PRINTF_POS_PARAMS)
-fi
-
-if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
-  AC_DEFINE(wxUSE_OBJC_UNIQUIFYING)
 fi
 
 dnl ---------------------------------------------------------------------------
