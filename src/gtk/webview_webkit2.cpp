@@ -1138,8 +1138,8 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
         return false;
     }
 
-    JSGlobalContextRef context = webkit_javascript_result_get_global_context (&*js_result);
-    JSValueRef value = webkit_javascript_result_get_value (&*js_result);
+    JSGlobalContextRef context = webkit_javascript_result_get_global_context(js_result);
+    JSValueRef value = webkit_javascript_result_get_value(js_result);
 
     JSValueRef exception = NULL;
     wxJSStringRef js_value(JSValueIsObject(context, value) ?
