@@ -1123,8 +1123,8 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
         g_main_context_iteration(main_context, TRUE);
 
     wxGtkError error;
-    wxWebKitJavascriptResult js_result(webkit_web_view_run_javascript_finish(WEBKIT_WEB_VIEW (m_web_view),
-        (GAsyncResult *)result, error.Out()));
+    wxWebKitJavascriptResult js_result(webkit_web_view_run_javascript_finish(m_web_view,
+        result, error.Out()));
 
     if ( !js_result )
     {
