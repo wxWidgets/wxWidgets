@@ -1099,16 +1099,20 @@ wxString wxWebViewWebKit::GetPageText() const
     return wxString();
 }
 
-static void wxgtk_run_javascript_cb(WebKitWebView *,
-                                    GAsyncResult *res,
-                                    GAsyncResult **res_out)
+extern "C"
 {
-    // Ensure that it doesn't get freed by the time we use it in
-    // RunScriptSync() itself.
+
+static void wxgtk_run_javascript_cb(GObject *,
+                                    GAsyncResult *res,
+                                    void *user_data)
+{
     g_object_ref(res);
 
+    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
     *res_out = res;
 }
+
+} // extern "C"
 
 // Run the given script synchronously and return its result in output.
 bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
@@ -1117,7 +1121,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
     webkit_web_view_run_javascript(m_web_view,
                                    javascript,
                                    NULL,
-                                   (GAsyncReadyCallback)wxgtk_run_javascript_cb,
+                                   wxgtk_run_javascript_cb,
                                    &result);
 
     GMainContext *main_context = g_main_context_get_thread_default();
