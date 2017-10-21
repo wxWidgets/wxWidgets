@@ -839,18 +839,9 @@ void wxLogBuffer::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
 // wxLogStderr class implementation
 // ----------------------------------------------------------------------------
 
-wxLogStderr::wxLogStderr(FILE *fp, const wxMBConv &conv):
-m_conv(conv.Clone())
+wxLogStderr::wxLogStderr(FILE *fp, const wxMBConv& conv)
+           : wxMessageOutputStderr(fp ? fp : stderr, conv)
 {
-    if ( fp == NULL )
-        m_fp = stderr;
-    else
-        m_fp = fp;
-}
-
-wxLogStderr::~wxLogStderr()
-{
-    delete m_conv;
 }
 
 void wxLogStderr::DoLogText(const wxString& msg)
@@ -858,7 +849,7 @@ void wxLogStderr::DoLogText(const wxString& msg)
     // First send it to stderr, even if we don't have it (e.g. in a Windows GUI
     // application under) it's not a problem to try to use it and it's easier
     // than determining whether we do have it or not.
-    wxMessageOutputStderr(m_fp, *m_conv).Output(msg);
+    wxMessageOutputStderr::Output(msg);
 
     // under GUI systems such as Windows or Mac, programs usually don't have
     // stderr at all, so show the messages also somewhere else, typically in
@@ -880,8 +871,8 @@ void wxLogStderr::DoLogText(const wxString& msg)
 
 #if wxUSE_STD_IOSTREAM
 #include "wx/ioswrap.h"
-wxLogStream::wxLogStream(wxSTD ostream *ostr, const wxMBConv &conv):
-m_conv(conv.Clone())
+wxLogStream::wxLogStream(wxSTD ostream *ostr, const wxMBConv& conv)
+    : wxMessageOutputWithConv(conv)
 {
     if ( ostr == NULL )
         m_ostr = &wxSTD cerr;
@@ -889,29 +880,9 @@ m_conv(conv.Clone())
         m_ostr = ostr;
 }
 
-wxLogStream::~wxLogStream()
-{
-    delete m_conv;
-}
-
 void wxLogStream::DoLogText(const wxString& msg)
 {
-    wxString msgLF(msg);
-    if ( msgLF.empty() || *msgLF.rbegin() != '\n' )
-        msgLF += '\n';
-
-#if defined(__WINDOWS__)
-    // Determine whether the encoding is UTF-16. In that case, the file
-    // should have been opened in "wb" mode, and EOL-style must be handled
-    // here.
-
-    if (m_conv->GetMBNulLen() == 2)
-    {
-        msgLF.Replace("\n", "\r\n");
-    }
-#endif
-
-    const wxCharBuffer buf = m_conv->cWX2MB(msgLF.c_str());
+    const wxCharBuffer& buf = PrepareForOutput(msg);
     m_ostr->write(buf, buf.length());
 }
 #endif // wxUSE_STD_IOSTREAM
