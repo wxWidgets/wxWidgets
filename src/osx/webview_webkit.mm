@@ -411,12 +411,8 @@ wxString wxWebViewWebKit::GetSelectedText() const
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
-    if ( !m_webView )
-    {
-        wxCHECK_MSG( m_webView, false,
-            wxS("wxWebView must be created before running JS scripts") );
-        return false;
-    }
+    wxCHECK_MSG( m_webView, false,
+        wxS("wxWebView must be created before calling RunScript()") );
 
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
