@@ -417,26 +417,42 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
     NSString* result = [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( wrapJS.GetWrappedCode() ).AsNSString()];
+                            wxCFStringRef( wrapJS.GetWrappedCode() ).AsNSString()];
 
-    if ( result != nil && [result isEqualToString:@"true"] )
+    wxString err;
+    if ( result == nil )
+    {
+        // This is not very informative, but we just don't have any other
+        // information in this case.
+        err = _("failed to evaluate");
+    }
+    else if ( [result isEqualToString:@"true"] )
     {
         result = [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( wrapJS.GetOutputCode() ).AsNSString()];
+                    wxCFStringRef( wrapJS.GetOutputCode() ).AsNSString()];
 
         [m_webView stringByEvaluatingJavaScriptFromString:
-                              wxCFStringRef( wrapJS.GetCleanUpCode() ).
-                              AsNSString()];
+            wxCFStringRef( wrapJS.GetCleanUpCode() ).AsNSString()];
 
-        if ( result != nil && output != NULL )
-            *output = wxCFStringRef::AsString(result);
+        if ( output != NULL )
+        {
+            if ( result )
+                *output = wxCFStringRef::AsString(result);
+            else
+                err = _("failed to retrieve execution result");
+        }
     }
-    else
+    else // result available but not the expected "true"
     {
-        if ( result != nil )
-            wxLogWarning(_("JavaScript error: %s"), wxCFStringRef::AsString(result));
+        err = wxCFStringRef::AsString(result);
+    }
+
+    if ( !err.empty() )
+    {
+        wxLogWarning(_("Error running JavaScript: %s"), err);
         return false;
     }
+
     return true;
 }
 

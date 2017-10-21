@@ -885,13 +885,7 @@ bool CallEval(const wxString& code,
               wxVariant* varResult)
 {
     wxVariant varCode(code);
-    if ( !scriptAO.Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varCode) )
-    {
-        wxLogWarning(_("Can't run JavaScript"));
-        return false;
-    }
-
-    return true;
+    return scriptAO.Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varCode);
 }
 
 bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
@@ -906,7 +900,7 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     IDispatch* scriptDispatch = NULL;
     if ( FAILED(document->get_Script(&scriptDispatch)) )
     {
-        wxLogWarning(_("Can't get the JavaScript"));
+        wxLogWarning(_("Can't get the JavaScript object"));
         return false;
     }
 
@@ -915,24 +909,35 @@ bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
     wxAutomationObject scriptAO(scriptDispatch);
     wxVariant varResult;
 
+    wxString err;
     if ( !CallEval(wrapJS.GetWrappedCode(), scriptAO, &varResult) )
-        return false;
-
-    if ( varResult.IsType("bool") && varResult.GetBool() )
     {
-        if ( !CallEval(wrapJS.GetOutputCode(), scriptAO, &varResult) )
-            return false;
-
+        err = _("failed to evaluate");
+    }
+    else if ( varResult.IsType("bool") && varResult.GetBool() )
+    {
         if ( output != NULL )
-            *output = varResult.MakeString();
+        {
+            if ( CallEval(wrapJS.GetOutputCode(), scriptAO, &varResult) )
+                *output = varResult.MakeString();
+            else
+                err = _("failed to retrieve execution result");
+        }
 
-        if ( !CallEval(wrapJS.GetCleanUpCode(), scriptAO, &varResult) )
-            return false;
-        return true;
+        CallEval(wrapJS.GetCleanUpCode(), scriptAO, &varResult);
+    }
+    else // result available but not the expected "true"
+    {
+        err = varResult.MakeString();
     }
 
-    wxLogWarning(_("JavaScript error: %s"), varResult.MakeString());
-    return false;
+    if ( !err.empty() )
+    {
+        wxLogWarning(_("Error running JavaScript: %s"), varResult.MakeString());
+        return false;
+    }
+
+    return true;
 }
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

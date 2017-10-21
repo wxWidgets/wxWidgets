@@ -1141,7 +1141,8 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
 
     if ( !js_result )
     {
-        wxLogWarning(_("Error running JavaScript: %s"), error.GetMessage());
+        if ( output )
+            *output = error.GetMessage();
         return false;
     }
 
@@ -1158,8 +1159,11 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
 
     if ( exception )
     {
-        wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
-        wxLogWarning(_("Exception running JavaScript: %s"), ex_value.ToWxString());
+        if ( output )
+        {
+            wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
+            *output = ex_value.ToWxString();
+        }
 
         return false;
     }
@@ -1172,23 +1176,31 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
 
 bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
-    wxCHECK_MSG( m_web_view, false,
-        wxS("wxWebView must be created before calling RunScript()") );
-
     wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
 
+    // This string is also used as an error indicator: it's cleared if there is
+    // no error or used in the warning message below if there is one.
     wxString result;
-    bool isValidJS = RunScriptSync(wrapJS.GetWrappedCode(), &result);
-
-    if ( isValidJS && result == "true" )
+    if ( RunScriptSync(wrapJS.GetWrappedCode(), &result)
+            && result == wxS("true") )
     {
-        RunScriptSync(wrapJS.GetOutputCode(), output);
+        if ( RunScriptSync(wrapJS.GetOutputCode(), &result) )
+        {
+            if ( output )
+                *output = result;
+            result.clear();
+        }
+
         RunScriptSync(wrapJS.GetCleanUpCode());
-        return true;
     }
 
-    wxLogWarning(_("JavaScript error: %s"), result);
-    return false;
+    if ( !result.empty() )
+    {
+        wxLogWarning(_("Error running JavaScript: %s"), result);
+        return false;
+    }
+
+    return true;
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
