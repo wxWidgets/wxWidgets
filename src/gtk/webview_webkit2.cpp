@@ -1126,8 +1126,15 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
         g_main_context_iteration(main_context, TRUE);
 
     wxGtkError error;
-    wxWebKitJavascriptResult js_result(webkit_web_view_run_javascript_finish(m_web_view,
-        result, error.Out()));
+    wxWebKitJavascriptResult js_result
+                             (
+                                webkit_web_view_run_javascript_finish
+                                (
+                                    m_web_view,
+                                    result,
+                                    error.Out()
+                                )
+                             );
 
     // Match g_object_ref() in wxgtk_run_javascript_cb()
     g_object_unref(result);
@@ -1142,9 +1149,12 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
     JSValueRef value = webkit_javascript_result_get_value(js_result);
 
     JSValueRef exception = NULL;
-    wxJSStringRef js_value(JSValueIsObject(context, value) ?
-               JSValueCreateJSONString(context, value, 0, &exception) :
-               JSValueToStringCopy (context, value, &exception));
+    wxJSStringRef js_value
+                  (
+                   JSValueIsObject(context, value)
+                       ? JSValueCreateJSONString(context, value, 0, &exception)
+                       : JSValueToStringCopy(context, value, &exception)
+                  );
 
     if ( exception )
     {
