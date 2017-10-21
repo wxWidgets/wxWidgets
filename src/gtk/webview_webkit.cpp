@@ -953,7 +953,7 @@ bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
     if ( output != NULL )
     {
-        wxLogWarning(_("Returning output is not supported on WEBKIT1"));
+        wxLogWarning(_("Retrieving JavaScript script output is not supported with WebKit v1"));
         return false;
     }
 
