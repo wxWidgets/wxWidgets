@@ -366,6 +366,11 @@ void WebTestCase::RunScript()
         var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
         &result));
     CPPUNIT_ASSERT_EQUAL("\"2016-10-08T21:30:40.000Z\"", result);
+
+    // Check for errors too.
+    CPPUNIT_ASSERT(!m_browser->RunScript("syntax(error"));
+    CPPUNIT_ASSERT(!m_browser->RunScript("syntax(error", &result));
+    CPPUNIT_ASSERT(!m_browser->RunScript("x.y.z"));
 }
 
 void WebTestCase::SetPage()
