@@ -149,11 +149,6 @@ public:
         return wxString::Format("%s = undefined;", m_outputVarName);
     }
 
-    wxString GetOutputJSVariable() const
-    {
-        return m_outputVarName;
-    }
-
 private:
     wxString m_escapedCode;
     wxString m_outputVarName;
