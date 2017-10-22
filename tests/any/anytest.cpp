@@ -666,7 +666,7 @@ public:
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
-                              wxAnyValueBuffer& dst) const
+                              wxAnyValueBuffer& dst) const wxOVERRIDE
     {
         MyClass value = GetValue(src);
 
