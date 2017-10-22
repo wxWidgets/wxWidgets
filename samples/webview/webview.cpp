@@ -136,7 +136,7 @@ public:
     void OnScrollLineDown(wxCommandEvent&) { m_browser->LineDown(); }
     void OnScrollPageUp(wxCommandEvent&) { m_browser->PageUp(); }
     void OnScrollPageDown(wxCommandEvent&) { m_browser->PageDown(); }
-    void RunScript(const wxString& javascript = wxString());
+    void RunScript(const wxString& javascript);
     void OnRunScriptString(wxCommandEvent& evt);
     void OnRunScriptInteger(wxCommandEvent& evt);
     void OnRunScriptDouble(wxCommandEvent& evt);
@@ -234,6 +234,9 @@ private:
     wxMenuHistoryMap m_histMenuItems;
     wxString m_findText;
     int m_findFlags, m_findCount;
+
+    // Last executed JavaScript snippet, for convenience.
+    wxString m_javascript;
 };
 
 class SourceViewDialog : public wxDialog
@@ -1051,19 +1054,14 @@ void WebFrame::OnHistory(wxCommandEvent& evt)
 
 void WebFrame::RunScript(const wxString& javascript)
 {
-    wxString message;
-    if ( javascript.empty() )
-        message = "Please enter JavaScript code to execute";
-    else
-        message = "Click \"OK\" to accept running this JavaScript code";
+    // Remember the script we run in any case, so the next time the user opens
+    // the "Run Script" dialog box, it is shown there for convenient updating.
+    m_javascript = javascript;
 
-    wxTextEntryDialog dialog(this, message, wxGetTextFromUserPromptStr, javascript,
-                             wxOK | wxCANCEL | wxCENTRE | wxTE_MULTILINE);
-    if( dialog.ShowModal() != wxID_OK )
-        return;
+    wxLogMessage("Running JavaScript:\n%s\n", javascript);
 
     wxString result;
-    if ( m_browser->RunScript(dialog.GetValue(), &result) )
+    if ( m_browser->RunScript(javascript, &result) )
     {
         wxLogMessage("RunScript() returned \"%s\"", result);
     }
@@ -1154,7 +1152,18 @@ void WebFrame::OnRunScriptArrayWithEmulationLevel(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnRunScriptCustom(wxCommandEvent& WXUNUSED(evt))
 {
-    RunScript();
+    wxTextEntryDialog dialog
+                      (
+                        this,
+                        "Please enter JavaScript code to execute",
+                        wxGetTextFromUserPromptStr,
+                        m_javascript,
+                        wxOK | wxCANCEL | wxCENTRE | wxTE_MULTILINE
+                      );
+    if( dialog.ShowModal() != wxID_OK )
+        return;
+
+    RunScript(dialog.GetValue());
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
