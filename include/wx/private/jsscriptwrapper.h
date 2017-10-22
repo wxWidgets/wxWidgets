@@ -21,9 +21,14 @@ class wxJSScriptWrapper
 public:
     wxJSScriptWrapper(const wxString& js, int* runScriptCount) : m_jsscript(js)
     {
-        // __outputVarName is used to have a different variable on every
-        // RunScript call, to not lose variable values between calls
-        m_outputVarName = wxString::Format("__wx$%i", (*runScriptCount)++);
+        // We assign the return value of JavaScript snippet we execute to the
+        // variable with this name in order to be able to access it later if
+        // needed.
+        //
+        // Note that we use a different name for it for each call to
+        // RunScript() (which creates a new wxJSScriptWrapper every time) to
+        // avoid any possible conflict between different calls.
+        m_outputVarName = wxString::Format("__wxOut%i", (*runScriptCount)++);
     }
 
     // This method is used to add a double quote level into a JavaScript code
