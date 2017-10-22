@@ -19,7 +19,7 @@
 class wxJSScriptWrapper
 {
 public:
-    wxJSScriptWrapper(const wxString& js, int* runScriptCount) : m_jsscript(js)
+    wxJSScriptWrapper(const wxString& js, int* runScriptCount)
         : m_escapedCode(js)
     {
         // We assign the return value of JavaScript snippet we execute to the
@@ -39,13 +39,13 @@ public:
 
     // This method is used to add a double quote level into a JavaScript code
     // in order to get it working when eval is called programmatically.
-    const wxString GetWrappedCode()
+    wxString GetWrappedCode() const
     {
         return wxString::Format("try { var %s = eval(\"%s\"); true; } \
             catch (e) { e.name + \": \" + e.message; }", m_outputVarName, m_escapedCode);
     }
 
-    const wxString GetOutputCode()
+    wxString GetOutputCode() const
     {
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
         return wxString::Format("if (typeof %s == 'object') \
@@ -131,12 +131,12 @@ public:
 #endif
     }
 
-    const wxString GetCleanUpCode()
+    wxString GetCleanUpCode() const
     {
         return wxString::Format("%s = undefined;", m_outputVarName);
     }
 
-    const wxString GetOutputJSVariable()
+    wxString GetOutputJSVariable() const
     {
         return m_outputVarName;
     }
