@@ -1119,7 +1119,7 @@ bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output
 {
     GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
-                                   javascript,
+                                   javascript.utf8_str(),
                                    NULL,
                                    wxgtk_run_javascript_cb,
                                    &result);
