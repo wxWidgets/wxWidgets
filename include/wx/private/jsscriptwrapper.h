@@ -26,12 +26,12 @@ public:
         m_outputVarName = wxString::Format("__wx$%i", (*runScriptCount)++);
     }
 
-    // This method is used to add a double quote level into a JavasSript code
+    // This method is used to add a double quote level into a JavaScript code
     // in order to get it working when eval is called programmatically.
     const wxString GetWrappedCode()
     {
         // Adds one escape level if there is a single quote, double quotes or
-        // esacape characters
+        // escape characters
         wxRegEx escapeDoubleQuotes("(\\\\*)(['\"\n\r\v\t\b\f])");
         escapeDoubleQuotes.Replace(&m_jsscript,"\\1\\1\\\\\\2");
 
