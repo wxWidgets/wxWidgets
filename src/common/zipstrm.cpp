@@ -1137,7 +1137,7 @@ size_t wxZipEntry::WriteLocal(wxOutputStream& stream, wxMBConv& conv) const
 
     wxDataOutputStream ds(stream);
 
-    ds << versionNeeded << m_Flags << m_Method;
+    ds << versionNeeded << GetInternalFlags(conv.IsUTF8()) << m_Method;
     ds.Write32(GetDateTime().GetAsDOS());
 
     ds.Write32(m_Crc);
@@ -1267,7 +1267,7 @@ size_t wxZipEntry::WriteCentral(wxOutputStream& stream, wxMBConv& conv) const
     ds << CENTRAL_MAGIC << m_VersionMadeBy << m_SystemMadeBy;
 
     ds.Write16(versionNeeded);
-    ds.Write16(wx_truncate_cast(wxUint16, GetFlags()));
+    ds.Write16(wx_truncate_cast(wxUint16, GetInternalFlags(conv.IsUTF8())));
     ds.Write16(wx_truncate_cast(wxUint16, GetMethod()));
     ds.Write32(GetDateTime().GetAsDOS());
     ds.Write32(GetCrc());
@@ -1359,6 +1359,16 @@ size_t wxZipEntry::WriteDescriptor(wxOutputStream& stream, wxUint32 crc,
     return SUMS_SIZE;
 }
 
+// Returns the flags as specified or including the UTF-8 flag if filename
+// contains non ASCII characters
+wxUint16 wxZipEntry::GetInternalFlags(bool checkForUTF8) const
+{
+    wxUint16 flags = m_Flags;
+    if (checkForUTF8 && (!m_Name.IsAscii() || !m_Comment.IsAscii()))
+        flags |= wxZIP_LANG_ENC_UTF8;
+
+    return flags;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // wxZipEndRec - holds the end of central directory record
@@ -2115,7 +2125,7 @@ WX_DEFINE_LIST(wxZipEntryList_)
 
 wxZipOutputStream::wxZipOutputStream(wxOutputStream& stream,
                                      int level      /*=-1*/,
-                                     wxMBConv& conv /*=wxConvLocal*/)
+                                     wxMBConv& conv /*=wxConvUTF8*/)
   : wxArchiveOutputStream(stream, conv)
 {
     Init(level);
@@ -2123,7 +2133,7 @@ wxZipOutputStream::wxZipOutputStream(wxOutputStream& stream,
 
 wxZipOutputStream::wxZipOutputStream(wxOutputStream *stream,
                                      int level      /*=-1*/,
-                                     wxMBConv& conv /*=wxConvLocal*/)
+                                     wxMBConv& conv /*=wxConvUTF8*/)
   : wxArchiveOutputStream(stream, conv)
 {
     Init(level);

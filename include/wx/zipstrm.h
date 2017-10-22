@@ -236,6 +236,8 @@ private:
 
     bool LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool localInfo);
 
+    wxUint16 GetInternalFlags(bool checkForUTF8) const;
+
     wxUint8      m_SystemMadeBy;       // one of enum wxZipSystem
     wxUint8      m_VersionMadeBy;      // major * 10 + minor
 
@@ -278,10 +280,10 @@ class WXDLLIMPEXP_BASE wxZipOutputStream : public wxArchiveOutputStream
 public:
     wxZipOutputStream(wxOutputStream& stream,
                       int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     wxZipOutputStream(wxOutputStream *stream,
                       int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     virtual WXZIPFIX ~wxZipOutputStream();
 
     bool PutNextEntry(wxZipEntry *entry)        { return DoCreate(entry); }

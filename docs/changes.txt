@@ -74,6 +74,9 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
 
 - The enum value wxTASKBAR_JUMP_LIST_DESTIONATION, which was added in 3.1.0,
   contains a typo and has been renamed to wxTASKBAR_JUMP_LIST_DESTINATION.
+  
+- wxZipOutputStream will now automatically convert filenames to UTF-8, if the
+  wxMBConv used when calling the constructor supports UTF-8 encoding.
 
 
 All:
@@ -98,6 +101,7 @@ All:
 - Add wxCMD_LINE_HIDDEN wxCmdLineParser flag (Lauri Nurmi).
 - Fix wxRmdir() with non-ASCII paths (trivia21).
 - Don't crash in wxFFile::Eof() or Error() on closed file (jprotopopov).
+- Add UTF-8 support to wxZipOutputStream (Tobias Taschner).
 
 All (GUI):
 
