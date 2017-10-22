@@ -50,8 +50,13 @@ public:
     // execution of this code.
     wxString GetWrappedCode() const
     {
-        return wxString::Format("try { var %s = eval(\"%s\"); true; } \
-            catch (e) { e.name + \": \" + e.message; }", m_outputVarName, m_escapedCode);
+        return wxString::Format
+               (
+                "try { var %s = eval(\"%s\"); true; } "
+                "catch (e) { e.name + \": \" + e.message; }",
+                m_outputVarName,
+                m_escapedCode
+               );
     }
 
     // Get code returning the result of the last successful execution of the
@@ -59,84 +64,87 @@ public:
     wxString GetOutputCode() const
     {
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
-        return wxString::Format("if (typeof %s == 'object') \
-                                     JSON.stringify(%s); \
-                                 else if (typeof %s == 'undefined') \
-                                     'undefined'; \
-                                 else \
-                                     %s;",
-                                 m_outputVarName, m_outputVarName, m_outputVarName, m_outputVarName);
+        return wxString::Format
+               (
+                "if (typeof %s == 'object') JSON.stringify(%s);"
+                "else if (typeof %s == 'undefined') 'undefined';"
+                "else %s;",
+                m_outputVarName,
+                m_outputVarName,
+                m_outputVarName,
+                m_outputVarName
+               );
 #elif wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
-        return wxString::Format("try {(%s == null || typeof %s != 'object') ? String(%s) : JSON.stringify(%s);} \
-		    catch (e) { \
-				try \
-				{ \
-					function __wx$stringifyJSON(obj) \
-					{ \
-						var objElements = []; \
-						if (!(obj instanceof Object)) \
-							return typeof obj === \"string\" \
-								? \'\"\' + obj + \'\"\' : \'\' + obj; \
-						else if (obj instanceof Array) \
-						{ \
-							if (obj[0] === undefined) \
-								return \'[]\'; \
-							else \
-							{ \
-								var arr = []; \
-								for (var i = 0; i < obj.length; i++) \
-									arr.push(__wx$stringifyJSON(obj[i])); \
-								return \'[\' + arr + \']\'; \
-							} \
-						} \
-						else if (typeof obj === \"object\") \
-						{ \
-							if (obj instanceof Date) \
-							{ \
-								if (!Date.prototype.toISOString) \
-								{ \
-									(function() \
-									{ \
-										function pad(number) \
-										{ \
-											if (number < 10) \
-												return '0' + number; \
-											return number; \
-										} \
-										\
-										Date.prototype.toISOString = function() \
-										{ \
-											return this.getUTCFullYear() + \
-											'-' + pad(this.getUTCMonth() + 1) + \
-											'-' + pad(this.getUTCDate()) + \
-											'T' + pad(this.getUTCHours()) + \
-											':' + pad(this.getUTCMinutes()) + \
-											':' + pad(this.getUTCSeconds()) + \
-											'.' + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + \
-											'Z\"'; \
-										}; \
-										\
-									}()); \
-								} \
-								return '\"' + obj.toISOString(); + '\"' \
-							} \
-							for (var key in obj) \
-							{ \
-								if (typeof obj[key] === \"function\") \
-									return \'{}\'; \
-								else \
-									objElements.push(\'\"\' \
-									+ key + \'\":\' + \
-									__wx$stringifyJSON(obj[key])); \
-							} \
-							return \'{\' + objElements + \'}\'; \
-						} \
-					} \
-					\
-					__wx$stringifyJSON(%s); \
-				} \
-				catch (e) { e.name + \": \" + e.message; }}",
-                m_outputVarName, m_outputVarName, m_outputVarName, m_outputVarName, m_outputVarName);
+        return wxString::Format
+               (
+                "try {"
+                    "(%s == null || typeof %s != 'object') ? String(%s)"
+                                                          ": JSON.stringify(%s);"
+                "}"
+                "catch (e) {"
+                    "try {"
+                        "function __wx$stringifyJSON(obj) {"
+                            "var objElements = [];"
+                            "if (!(obj instanceof Object))"
+                                "return typeof obj === \"string\""
+                                    "? \'\"\' + obj + \'\"\'"
+                                    ": \'\' + obj;"
+                            "else if (obj instanceof Array) {"
+                                "if (obj[0] === undefined)"
+                                    "return \'[]\';"
+                                "else {"
+                                    "var arr = [];"
+                                    "for (var i = 0; i < obj.length; i++)"
+                                        "arr.push(__wx$stringifyJSON(obj[i]));"
+                                    "return \'[\' + arr + \']\';"
+                                "}"
+                            "}"
+                            "else if (typeof obj === \"object\") {"
+                                "if (obj instanceof Date) {"
+                                    "if (!Date.prototype.toISOString) {"
+                                        "(function() {"
+                                            "function pad(number) {"
+                                                "return number < 10"
+                                                    "? '0' + number"
+                                                    ": number;"
+                                            "}"
+                                            "Date.prototype.toISOString = function() {"
+                                                "return this.getUTCFullYear() +"
+                                                    "'-' + pad(this.getUTCMonth() + 1) +"
+                                                    "'-' + pad(this.getUTCDate()) +"
+                                                    "'T' + pad(this.getUTCHours()) +"
+                                                    "':' + pad(this.getUTCMinutes()) +"
+                                                    "':' + pad(this.getUTCSeconds()) +"
+                                                    "'.' + (this.getUTCMilliseconds() / 1000)"
+                                                            ".toFixed(3).slice(2, 5) + 'Z\"';"
+                                            "};"
+                                        "}());"
+                                    "}"
+                                    "return '\"' + obj.toISOString(); + '\"'"
+                                "}"
+                                "for (var key in obj)"
+                                "{"
+                                    "if (typeof obj[key] === \"function\")"
+                                        "return \'{}\';"
+                                    "else {"
+                                        "objElements.push(\'\"\'"
+                                            "+ key + \'\":\' +"
+                                            "__wx$stringifyJSON(obj[key]));"
+                                    "}"
+                                "}"
+                                "return \'{\' + objElements + \'}\';"
+                            "}"
+                        "}"
+                        "__wx$stringifyJSON(%s);"
+                    "}"
+                    "catch (e) { e.name + \": \" + e.message; }"
+                "}",
+                m_outputVarName,
+                m_outputVarName,
+                m_outputVarName,
+                m_outputVarName,
+                m_outputVarName
+               );
 #else
         return m_outputVarName;
 #endif
