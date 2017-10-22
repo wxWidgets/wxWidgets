@@ -13,9 +13,14 @@
 #include "wx/regex.h"
 
 // ----------------------------------------------------------------------------
-// JS Script Wrapper for wxWebView
+// Helper for wxWebView::RunScript()
 // ----------------------------------------------------------------------------
 
+// This class provides GetWrappedCode(), GetOutputCode() and GetCleanUpCode()
+// functions that should be executed in the backend-appropriate way by each
+// wxWebView implementation in order to actually execute the user-provided
+// JavaScript code, retrieve its result (if it executed successfully) and
+// perform the cleanup at the end.
 class wxJSScriptWrapper
 {
 public:
@@ -37,14 +42,20 @@ public:
         escapeDoubleQuotes.Replace(&m_escapedCode,"\\1\\1\\\\\\2");
     }
 
-    // This method is used to add a double quote level into a JavaScript code
-    // in order to get it working when eval is called programmatically.
+    // Get the code to execute, its returned value will be either boolean true,
+    // if it executed successfully, or the exception message if an error
+    // occurred.
+    //
+    // Execute GetOutputCode() later to get the real output after successful
+    // execution of this code.
     wxString GetWrappedCode() const
     {
         return wxString::Format("try { var %s = eval(\"%s\"); true; } \
             catch (e) { e.name + \": \" + e.message; }", m_outputVarName, m_escapedCode);
     }
 
+    // Get code returning the result of the last successful execution of the
+    // code returned by GetWrappedCode().
     wxString GetOutputCode() const
     {
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
@@ -131,6 +142,8 @@ public:
 #endif
     }
 
+    // Execute the code returned by this function to let the output of the code
+    // we executed be garbage-collected.
     wxString GetCleanUpCode() const
     {
         return wxString::Format("%s = undefined;", m_outputVarName);
