@@ -118,6 +118,7 @@ public:
     void OnDocumentLoaded(wxWebViewEvent& evt);
     void OnNewWindow(wxWebViewEvent& evt);
     void OnTitleChanged(wxWebViewEvent& evt);
+    void OnSetPage(wxCommandEvent& evt);
     void OnViewSourceRequest(wxCommandEvent& evt);
     void OnViewTextRequest(wxCommandEvent& evt);
     void OnToolsClicked(wxCommandEvent& evt);
@@ -384,6 +385,7 @@ WebFrame::WebFrame(const wxString& url) :
     // Create the Tools menu
     m_tools_menu = new wxMenu();
     wxMenuItem* print = m_tools_menu->Append(wxID_ANY , _("Print"));
+    wxMenuItem* setPage = m_tools_menu->Append(wxID_ANY , _("Set page text"));
     wxMenuItem* viewSource = m_tools_menu->Append(wxID_ANY , _("View Source"));
     wxMenuItem* viewText = m_tools_menu->Append(wxID_ANY, _("View Text"));
     m_tools_menu->AppendSeparator();
@@ -515,6 +517,8 @@ WebFrame::WebFrame(const wxString& url) :
             wxWebViewEventHandler(WebFrame::OnTitleChanged), NULL, this);
 
     // Connect the menu events
+    Connect(setPage->GetId(), wxEVT_MENU,
+            wxCommandEventHandler(WebFrame::OnSetPage),  NULL, this );
     Connect(viewSource->GetId(), wxEVT_MENU,
             wxCommandEventHandler(WebFrame::OnViewSourceRequest),  NULL, this );
     Connect(viewText->GetId(), wxEVT_MENU,
@@ -892,6 +896,16 @@ void WebFrame::OnTitleChanged(wxWebViewEvent& evt)
 {
     SetTitle(evt.GetString());
     wxLogMessage("%s", "Title changed; title='" + evt.GetString() + "'");
+}
+
+void WebFrame::OnSetPage(wxCommandEvent& WXUNUSED(evt))
+{
+    m_browser->SetPage
+               (
+                "<html><title>New Page</title>"
+                "<body>Created using <tt>SetPage()</tt> method.</body></html>",
+                wxString()
+               );
 }
 
 /**
