@@ -20,6 +20,7 @@ class wxJSScriptWrapper
 {
 public:
     wxJSScriptWrapper(const wxString& js, int* runScriptCount) : m_jsscript(js)
+        : m_escapedCode(js)
     {
         // We assign the return value of JavaScript snippet we execute to the
         // variable with this name in order to be able to access it later if
@@ -29,19 +30,19 @@ public:
         // RunScript() (which creates a new wxJSScriptWrapper every time) to
         // avoid any possible conflict between different calls.
         m_outputVarName = wxString::Format("__wxOut%i", (*runScriptCount)++);
+
+        // Adds one escape level if there is a single quote, double quotes or
+        // escape characters
+        wxRegEx escapeDoubleQuotes("(\\\\*)(['\"\n\r\v\t\b\f])");
+        escapeDoubleQuotes.Replace(&m_escapedCode,"\\1\\1\\\\\\2");
     }
 
     // This method is used to add a double quote level into a JavaScript code
     // in order to get it working when eval is called programmatically.
     const wxString GetWrappedCode()
     {
-        // Adds one escape level if there is a single quote, double quotes or
-        // escape characters
-        wxRegEx escapeDoubleQuotes("(\\\\*)(['\"\n\r\v\t\b\f])");
-        escapeDoubleQuotes.Replace(&m_jsscript,"\\1\\1\\\\\\2");
-
         return wxString::Format("try { var %s = eval(\"%s\"); true; } \
-            catch (e) { e.name + \": \" + e.message; }", m_outputVarName, m_jsscript);;
+            catch (e) { e.name + \": \" + e.message; }", m_outputVarName, m_escapedCode);
     }
 
     const wxString GetOutputCode()
@@ -141,7 +142,7 @@ public:
     }
 
 private:
-    wxString m_jsscript;
+    wxString m_escapedCode;
     wxString m_outputVarName;
 
     wxDECLARE_NO_COPY_CLASS(wxJSScriptWrapper);
