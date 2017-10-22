@@ -21,9 +21,9 @@ class wxJSScriptWrapper
 public:
     wxJSScriptWrapper(const wxString& js, int* runScriptCount) : m_jsscript(js)
     {
-        // __wx$counter is used to have a different variable on every
+        // __outputVarName is used to have a different variable on every
         // RunScript call, to not lose variable values between calls
-        m_wx$counter = wxString::Format("__wx$%i", (*runScriptCount)++);
+        m_outputVarName = wxString::Format("__wx$%i", (*runScriptCount)++);
     }
 
     // This method is used to add a double quote level into a JavasSript code
@@ -36,7 +36,7 @@ public:
         escapeDoubleQuotes.Replace(&m_jsscript,"\\1\\1\\\\\\2");
 
         return wxString::Format("try { var %s = eval(\"%s\"); true; } \
-            catch (e) { e.name + \": \" + e.message; }", m_wx$counter, m_jsscript);;
+            catch (e) { e.name + \": \" + e.message; }", m_outputVarName, m_jsscript);;
     }
 
     const wxString GetOutputCode()
@@ -48,7 +48,7 @@ public:
                                      'undefined'; \
                                  else \
                                      %s;",
-                                 m_wx$counter, m_wx$counter, m_wx$counter, m_wx$counter);
+                                 m_outputVarName, m_outputVarName, m_outputVarName, m_outputVarName);
 #elif wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
         return wxString::Format("try {(%s == null || typeof %s != 'object') ? String(%s) : JSON.stringify(%s);} \
 		    catch (e) { \
@@ -119,25 +119,25 @@ public:
 					__wx$stringifyJSON(%s); \
 				} \
 				catch (e) { e.name + \": \" + e.message; }}",
-                m_wx$counter, m_wx$counter, m_wx$counter, m_wx$counter, m_wx$counter);
+                m_outputVarName, m_outputVarName, m_outputVarName, m_outputVarName, m_outputVarName);
 #else
-        return m_wx$counter;
+        return m_outputVarName;
 #endif
     }
 
     const wxString GetCleanUpCode()
     {
-        return wxString::Format("%s = undefined;", m_wx$counter);
+        return wxString::Format("%s = undefined;", m_outputVarName);
     }
 
     const wxString GetOutputJSVariable()
     {
-        return m_wx$counter;
+        return m_outputVarName;
     }
 
 private:
     wxString m_jsscript;
-    wxString m_wx$counter;
+    wxString m_outputVarName;
 
     wxDECLARE_NO_COPY_CLASS(wxJSScriptWrapper);
 };
