@@ -19,8 +19,7 @@
 class wxJSScriptWrapper
 {
 public:
-
-    explicit wxJSScriptWrapper(const wxString& js, int* runScriptCount) : m_jsscript(js)
+    wxJSScriptWrapper(const wxString& js, int* runScriptCount) : m_jsscript(js)
     {
         // __wx$counter is used to have a different variable on every
         // RunScript call, to not lose variable values between calls
