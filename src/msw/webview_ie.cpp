@@ -857,26 +857,40 @@ wxString wxWebViewIE::GetPageText() const
 
 bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
 {
-    wxRegKey key(wxRegKey::HKCU, wxREGISTRY_IE_PATH);
-    if ( key.Exists() )
+    // Registry key where emulation level for programs are set
+    static const wxChar* IE_EMULATION_KEY =
+        wxT("SOFTWARE\\Microsoft\\Internet Explorer\\Main")
+        wxT("\\FeatureControl\\FEATURE_BROWSER_EMULATION");
+
+    wxRegKey key(wxRegKey::HKCU, IE_EMULATION_KEY);
+    if ( !key.Exists() )
     {
-        wxString programName = wxGetFullModuleName().AfterLast('\\');
-        if ( modernLevel )
-        {
-            if ( !key.SetValue(programName, wxIE_EMULATION_LEVEL) )
-            {
-                wxLogWarning(_("Failed to set the current browser control emulation level"));
-                return false;
-            }
-        }
-        else
-        {
-            key.DeleteValue(programName);
-        }
-        return true;
+        wxLogWarning(_("Failed to find web view emulation level in the registry"));
+        return false;
     }
-    wxLogWarning(_("Failed to find current browser control emulation level"));
-    return false;
+
+    const wxString programName = wxGetFullModuleName().AfterLast('\\');
+    if ( modernLevel )
+    {
+        // IE8 (8000) is sufficiently modern for our needs, see
+        // https://msdn.microsoft.com/library/ee330730.aspx#browser_emulation
+        // for other values that could be used here.
+        if ( !key.SetValue(programName, 8000) )
+        {
+            wxLogWarning(_("Failed to set web view to modern emulation level"));
+            return false;
+        }
+    }
+    else
+    {
+        if ( !key.DeleteValue(programName) )
+        {
+            wxLogWarning(_("Failed to reset web view to standard emulation level"));
+            return false;
+        }
+    }
+
+    return true;
 }
 
 static

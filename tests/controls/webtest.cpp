@@ -23,8 +23,7 @@
 #include "wx/webview.h"
 #include "asserthelper.h"
 #if wxUSE_WEBVIEW_IE
-#include "wx/msw/registry.h"
-#include "wx/msw/webview_ie.h"
+    #include "wx/msw/webview_ie.h"
 #endif
 
 class WebTestCase : public CppUnit::TestCase
@@ -276,11 +275,32 @@ void WebTestCase::RunScript()
     wxString result;
 #if wxUSE_WEBVIEW_IE
     CPPUNIT_ASSERT(wxWebViewIE::MSWSetModernEmulationLevel());
-    wxRegKey key(wxRegKey::HKCU, wxREGISTRY_IE_PATH);
-    long val = 0;
-    wxString programName = wxGetFullModuleName().AfterLast('\\');
-    key.QueryValue(programName, &val);
-    CPPUNIT_ASSERT_EQUAL(val, wxIE_EMULATION_LEVEL);
+
+    // Define a specialized scope guard ensuring that we reset the emulation
+    // level to its default value even if any asserts below fail.
+    class ResetEmulationLevel
+    {
+    public:
+        ResetEmulationLevel()
+        {
+            m_reset = true;
+        }
+
+        bool DoReset()
+        {
+            m_reset = false;
+            return wxWebViewIE::MSWSetModernEmulationLevel(false);
+        }
+
+        ~ResetEmulationLevel()
+        {
+            if ( m_reset )
+                DoReset();
+        }
+
+    private:
+        bool m_reset;
+    } resetEmulationLevel;
 
     CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Bar'; \
         person.lastName = 'Foo';return person;}f();", &result));
@@ -294,11 +314,8 @@ void WebTestCase::RunScript()
         &result));
     CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
 
-    CPPUNIT_ASSERT(wxWebViewIE::MSWSetModernEmulationLevel(false));
-    val = 0;
-    key.QueryValue(programName, &val);
-    CPPUNIT_ASSERT_EQUAL(val, 0);
-#endif
+    CPPUNIT_ASSERT(resetEmulationLevel.DoReset());
+#endif // wxUSE_WEBVIEW_IE
 
     CPPUNIT_ASSERT(m_browser->RunScript("document.write(\"Hello World!\");"));
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
