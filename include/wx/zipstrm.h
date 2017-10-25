@@ -517,17 +517,37 @@ inline bool wxZipEntry::IsReadOnly() const
 
 inline bool wxZipEntry::IsMadeByUnix() const
 {
-    const int pattern =
-        (1 << wxZIP_SYSTEM_OPENVMS) |
-        (1 << wxZIP_SYSTEM_UNIX) |
-        (1 << wxZIP_SYSTEM_ATARI_ST) |
-        (1 << wxZIP_SYSTEM_ACORN_RISC) |
-        (1 << wxZIP_SYSTEM_BEOS) | (1 << wxZIP_SYSTEM_TANDEM);
+    switch ( m_SystemMadeBy )
+    {
+        case wxZIP_SYSTEM_MSDOS:
+            // note: some unix zippers put madeby = dos
+            return m_ExternalAttributes & ~0xFFFF;
 
-    // note: some unix zippers put madeby = dos
-    return (m_SystemMadeBy == wxZIP_SYSTEM_MSDOS
-            && (m_ExternalAttributes & ~0xFFFF))
-        || ((pattern >> m_SystemMadeBy) & 1);
+        case wxZIP_SYSTEM_OPENVMS:
+        case wxZIP_SYSTEM_UNIX:
+        case wxZIP_SYSTEM_ATARI_ST:
+        case wxZIP_SYSTEM_ACORN_RISC:
+        case wxZIP_SYSTEM_BEOS:
+        case wxZIP_SYSTEM_TANDEM:
+            return true;
+
+        case wxZIP_SYSTEM_AMIGA:
+        case wxZIP_SYSTEM_VM_CMS:
+        case wxZIP_SYSTEM_OS2_HPFS:
+        case wxZIP_SYSTEM_MACINTOSH:
+        case wxZIP_SYSTEM_Z_SYSTEM:
+        case wxZIP_SYSTEM_CPM:
+        case wxZIP_SYSTEM_WINDOWS_NTFS:
+        case wxZIP_SYSTEM_MVS:
+        case wxZIP_SYSTEM_VSE:
+        case wxZIP_SYSTEM_VFAT:
+        case wxZIP_SYSTEM_ALTERNATE_MVS:
+        case wxZIP_SYSTEM_OS_400:
+            return false;
+    }
+
+    // Unknown system, assume not Unix.
+    return false;
 }
 
 inline void wxZipEntry::SetIsText(bool isText)
