@@ -1738,6 +1738,9 @@ bool wxZipInputStream::FindEndRecord()
     while (pos > minpos) {
         size_t len = wx_truncate_cast(size_t,
                         pos - wxMax(pos - (BUFSIZE - 3), minpos));
+        if ( len < 3 )
+            break;
+
         memcpy(buf.data() + len, buf, 3);
         pos -= len;
 
