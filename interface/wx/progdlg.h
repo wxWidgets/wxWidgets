@@ -192,12 +192,12 @@ public:
         for the user to dismiss it, meaning that this function does not return
         until this happens.
 
-        Notice that you may want to call Fit() to change the dialog size to
-        conform to the length of the new message if desired. The dialog does
-        not do this automatically, except for the native MSW implementation
-        which does increase the dialog size if necessary (but still doesn't
-        shrink it back even if the text becomes shorter and you need to call
-        Fit() explicitly if you want this to happen).
+        Notice that if @a newmsg is longer than the currently shown message,
+        the dialog size will be automatically increased to account for it.
+        However if the new message is shorter than the previous one, the dialog
+        doesn't shrink back to avoid constant resizes if the message is changed
+        often. To shrink back the dialog to fit its current contents you may
+        call Fit() explicitly.
 
         @param value
             The new value of the progress meter. It should be less than or equal to
