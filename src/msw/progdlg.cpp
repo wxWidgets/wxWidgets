@@ -889,7 +889,6 @@ void* wxProgressDialogTaskRunner::Entry()
 
         // Undo some of the effects of MSWCommonTaskDialogInit().
         tdc.dwFlags &= ~TDF_EXPAND_FOOTER_AREA; // Expand in content area.
-        tdc.dwCommonButtons = 0; // Don't use common buttons.
 
         if ( m_sharedData.m_style & wxPD_CAN_SKIP )
             wxTdc.AddTaskDialogButton( tdc, Id_SkipBtn, 0, _("Skip") );
