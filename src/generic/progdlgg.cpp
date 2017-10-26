@@ -765,7 +765,16 @@ void wxGenericProgressDialog::UpdateMessage(const wxString &newmsg)
 {
     if ( !newmsg.empty() && newmsg != m_msg->GetLabel() )
     {
+        const wxSize sizeOld = m_msg->GetSize();
+
         m_msg->SetLabel(newmsg);
+
+        if ( m_msg->GetSize().x > sizeOld.x )
+        {
+            // Resize the dialog to fit its new, longer contents instead of
+            // just truncating it.
+            Fit();
+        }
 
         // allow the window to repaint:
         // NOTE: since we yield only for UI events with this call, there
