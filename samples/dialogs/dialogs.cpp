@@ -349,7 +349,20 @@ bool MyApp::OnInit()
                          );
         for ( int i = 0; i <= PROGRESS_COUNT; i++ )
         {
-            if ( !dlg.Update(i) )
+            wxString msg;
+            switch ( i )
+            {
+                case 15:
+                    msg = "And the same dialog but with a very, very, very long"
+                          " message, just to test how it appears in this case.";
+                    break;
+
+                case 30:
+                    msg = "Back to brevity";
+                    break;
+            }
+
+            if ( !dlg.Update(i, msg) )
                 break;
 
             wxMilliSleep(50);

@@ -81,6 +81,7 @@ public:
         m_value = 0;
         m_progressBarMarquee = false;
         m_skipped = false;
+        m_msgChangeElementText = TDM_SET_ELEMENT_TEXT;
         m_notifications = 0;
         m_parent = NULL;
     }
@@ -104,6 +105,14 @@ public:
     wxProgressDialog::State m_state;
     bool m_progressBarMarquee;
     bool m_skipped;
+
+    // The task dialog message to use for changing the text of its elements:
+    // it's TDM_SET_ELEMENT_TEXT initially as this message should be used to
+    // let the dialog adjust itself to the size of its elements, but
+    // TDM_UPDATE_ELEMENT_TEXT later to prevent the dialog from performing a
+    // layout on each update, which is annoying as it can result in its size
+    // constantly changing.
+    int m_msgChangeElementText;
 
     // Bit field that indicates fields that have been modified by the
     // main thread so the task dialog runner knows what to update.
@@ -260,14 +269,27 @@ void PerformNotificationUpdates(HWND hwnd,
         }
 
         ::SendMessage( hwnd,
-                       TDM_SET_ELEMENT_TEXT,
+                       sharedData->m_msgChangeElementText,
                        TDE_MAIN_INSTRUCTION,
                        wxMSW_CONV_LPARAM(title) );
 
         ::SendMessage( hwnd,
-                       TDM_SET_ELEMENT_TEXT,
+                       sharedData->m_msgChangeElementText,
                        TDE_CONTENT,
                        wxMSW_CONV_LPARAM(body) );
+
+        // After using TDM_SET_ELEMENT_TEXT once, we don't want to use it for
+        // the subsequent updates as it could result in dialog size changing
+        // unexpectedly, so reset it (which does nothing if we had already done
+        // it, of course, but it's not a problem).
+        //
+        // Notice that, contrary to its documentation, even using this message
+        // still increases the dialog size if the new text is longer (at least
+        // under Windows 7), but it doesn't shrink back if the text becomes
+        // shorter later and stays at the bigger size which is still a big gain
+        // as it prevents jumping back and forth between the smaller and larger
+        // sizes.
+        sharedData->m_msgChangeElementText = TDM_UPDATE_ELEMENT_TEXT;
     }
 
     if ( sharedData->m_notifications & wxSPDD_EXPINFO_CHANGED )
@@ -276,8 +298,15 @@ void PerformNotificationUpdates(HWND hwnd,
             sharedData->m_expandedInformation;
         if ( !expandedInformation.empty() )
         {
+            // Here we never need to use TDM_SET_ELEMENT_TEXT as the size of
+            // the expanded information doesn't change drastically.
+            //
+            // Notice that TDM_UPDATE_ELEMENT_TEXT for this element only works
+            // when using TDF_EXPAND_FOOTER_AREA, as we do. Without this flag,
+            // only TDM_SET_ELEMENT_TEXT could be used as otherwise the dialog
+            // layout becomes completely mangled (at least under Windows 7).
             ::SendMessage( hwnd,
-                           TDM_SET_ELEMENT_TEXT,
+                           TDM_UPDATE_ELEMENT_TEXT,
                            TDE_EXPANDED_INFORMATION,
                            wxMSW_CONV_LPARAM(expandedInformation) );
         }
@@ -777,8 +806,9 @@ bool wxProgressDialog::Show(bool show)
                          wxPD_ESTIMATED_TIME |
                             wxPD_REMAINING_TIME) )
         {
-            // Use a non-empty string just to have the collapsible pane shown.
-            m_sharedData->m_expandedInformation = " ";
+            // Set the expanded information field from the beginning to avoid
+            // having to re-layout the dialog later when it changes.
+            UpdateExpandedInformation(0);
         }
 
         // Do launch the thread.
@@ -886,9 +916,6 @@ void* wxProgressDialogTaskRunner::Entry()
         wxTdc.MSWCommonTaskDialogInit( tdc );
         tdc.pfCallback = TaskDialogCallbackProc;
         tdc.lpCallbackData = (LONG_PTR) &m_sharedData;
-
-        // Undo some of the effects of MSWCommonTaskDialogInit().
-        tdc.dwFlags &= ~TDF_EXPAND_FOOTER_AREA; // Expand in content area.
 
         if ( m_sharedData.m_style & wxPD_CAN_SKIP )
             wxTdc.AddTaskDialogButton( tdc, Id_SkipBtn, 0, _("Skip") );
