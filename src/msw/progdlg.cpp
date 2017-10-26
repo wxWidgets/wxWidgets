@@ -767,6 +767,24 @@ void wxProgressDialog::DoGetPosition(int *x, int *y) const
     wxGenericProgressDialog::DoGetPosition(x, y);
 }
 
+void wxProgressDialog::Fit()
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    if ( HasNativeTaskDialog() )
+    {
+        wxCriticalSectionLocker locker(m_sharedData->m_cs);
+
+        // Force the task dialog to use this message to adjust it layout.
+        m_sharedData->m_msgChangeElementText = TDM_SET_ELEMENT_TEXT;
+
+        // Don't change the message, but pretend that it did change.
+        m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
+    }
+#endif // wxHAS_MSW_TASKDIALOG
+
+    wxGenericProgressDialog::Fit();
+}
+
 bool wxProgressDialog::Show(bool show)
 {
 #ifdef wxHAS_MSW_TASKDIALOG

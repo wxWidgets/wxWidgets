@@ -360,6 +360,11 @@ bool MyApp::OnInit()
                 case 30:
                     msg = "Back to brevity";
                     break;
+
+                case 80:
+                    msg = "Back and adjusted";
+                    dlg.Fit();
+                    break;
             }
 
             if ( !dlg.Update(i, msg) )

@@ -196,7 +196,8 @@ public:
         conform to the length of the new message if desired. The dialog does
         not do this automatically, except for the native MSW implementation
         which does increase the dialog size if necessary (but still doesn't
-        shrink it back even if the text becomes shorter).
+        shrink it back even if the text becomes shorter and you need to call
+        Fit() explicitly if you want this to happen).
 
         @param value
             The new value of the progress meter. It should be less than or equal to
