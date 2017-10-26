@@ -521,7 +521,7 @@ inline bool wxZipEntry::IsMadeByUnix() const
     {
         case wxZIP_SYSTEM_MSDOS:
             // note: some unix zippers put madeby = dos
-            return m_ExternalAttributes & ~0xFFFF;
+            return (m_ExternalAttributes & ~0xFFFF) != 0;
 
         case wxZIP_SYSTEM_OPENVMS:
         case wxZIP_SYSTEM_UNIX:
