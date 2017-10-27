@@ -748,7 +748,6 @@ void wxProgressDialog::DoGetPosition(int *x, int *y) const
         wxPoint pos;
         {
             wxCriticalSectionLocker locker(m_sharedData->m_cs);
-            m_sharedData->m_state = m_state;
             pos = m_sharedData->m_winPosition;
         }
         if (x)
