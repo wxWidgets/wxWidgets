@@ -543,7 +543,7 @@ void wxProgressDialog::Resume()
 
         {
             wxCriticalSectionLocker locker(m_sharedData->m_cs);
-            m_sharedData->m_state = m_state;
+            m_sharedData->m_state = Continue;
 
             // "Skip" was disabled when "Cancel" had been clicked, so re-enable
             // it now.
