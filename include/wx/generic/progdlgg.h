@@ -12,6 +12,7 @@
 #define __PROGDLGH_G__
 
 #include "wx/dialog.h"
+#include "wx/weakref.h"
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
@@ -183,8 +184,9 @@ private:
                  *m_estimated,
                  *m_remaining;
 
-    // parent top level window (may be NULL)
-    wxWindow *m_parentTop;
+    // Reference to the parent top level window, automatically becomes NULL if
+    // it it is destroyed and could be always NULL if it's not given at all.
+    wxWindowRef m_parentTop;
 
     // Progress dialog styles: this is not the same as m_windowStyle because
     // wxPD_XXX constants clash with the existing TLW styles so to be sure we
