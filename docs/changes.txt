@@ -172,6 +172,7 @@ All (GUI):
 - Ensure that navigation order reflects layout of wxStdDialogButtonSizer.
 - Add Scintilla FineTicker methods to wxSTC (NewPagodi).
 - Add wxFontPickerCtrl::SetMinPointSize() (Andreas Falkenhahn).
+- Add Set/GetFooter/Text/Icon() to wxRichMessageDialog (Tobias Taschner)
 
 wxGTK:
 
