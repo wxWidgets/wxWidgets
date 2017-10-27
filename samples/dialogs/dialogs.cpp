@@ -233,6 +233,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if wxUSE_PROGRESSDLG
     EVT_MENU(DIALOGS_PROGRESS,                      MyFrame::ShowProgress)
+#ifdef wxHAS_NATIVE_PROGRESSDIALOG
+    EVT_MENU(DIALOGS_PROGRESS_GENERIC,              MyFrame::ShowProgressGeneric)
+#endif // wxHAS_NATIVE_PROGRESSDIALOG
 #endif // wxUSE_PROGRESSDLG
 
     EVT_MENU(DIALOGS_APP_PROGRESS,                  MyFrame::ShowAppProgress)
@@ -508,6 +511,10 @@ bool MyApp::OnInit()
 
     #if wxUSE_PROGRESSDLG
         info_menu->Append(DIALOGS_PROGRESS, wxT("Pro&gress dialog\tCtrl-G"));
+        #ifdef wxHAS_NATIVE_PROGRESSDIALOG
+            info_menu->Append(DIALOGS_PROGRESS_GENERIC,
+                              wxT("Generic progress dialog\tCtrl-Alt-G"));
+        #endif // wxHAS_NATIVE_PROGRESSDIALOG
     #endif // wxUSE_PROGRESSDLG
 
         info_menu->Append(DIALOGS_APP_PROGRESS, wxT("&App progress\tShift-Ctrl-G"));
@@ -2670,10 +2677,10 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 
 #if wxUSE_PROGRESSDLG
 
+static const int max = 100;
+
 void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 {
-    static const int max = 100;
-
     wxProgressDialog dialog("Progress dialog example",
                             // "Reserve" enough space for the multiline
                             // messages below, we'll change it anyhow
@@ -2691,6 +2698,30 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                             wxPD_SMOOTH // - makes indeterminate mode bar on WinXP very small
                             );
 
+    DoShowProgress(dialog);
+}
+
+#ifdef wxHAS_NATIVE_PROGRESSDIALOG
+void MyFrame::ShowProgressGeneric( wxCommandEvent& WXUNUSED(event) )
+{
+    wxGenericProgressDialog dialog("Generic progress dialog example",
+                                   wxString(' ', 100) + "\n\n\n\n",
+                                   max,
+                                   this,
+                                   wxPD_CAN_ABORT |
+                                   wxPD_CAN_SKIP |
+                                   wxPD_APP_MODAL |
+                                   wxPD_ELAPSED_TIME |
+                                   wxPD_ESTIMATED_TIME |
+                                   wxPD_REMAINING_TIME |
+                                   wxPD_SMOOTH);
+
+    DoShowProgress(dialog);
+}
+#endif // wxHAS_NATIVE_PROGRESSDIALOG
+
+void MyFrame::DoShowProgress(wxGenericProgressDialog& dialog)
+{
     bool cont = true;
     for ( int i = 0; i <= max; i++ )
     {
