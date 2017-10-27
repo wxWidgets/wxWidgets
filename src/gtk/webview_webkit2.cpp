@@ -391,7 +391,6 @@ wxgtk_webview_webkit_counted_matches(WebKitFindController *,
     *findCount = match_count;
 }
 
-static bool z;
 static void
 wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
@@ -402,7 +401,6 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                                     WX_WEB_EXTENSIONS_DIRECTORY);
     webkit_web_context_set_web_extensions_initialization_user_data(context,
                                                                    user_data);
-z = true;
 }
 
 static gboolean
@@ -507,9 +505,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                            m_dbusServer);
 
     m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
-
-    while (!z)
-        gtk_main_iteration();
     GTKCreateScrolledWindowWith(GTK_WIDGET(m_web_view));
     g_object_ref(m_widget);
 
