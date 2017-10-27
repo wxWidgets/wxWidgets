@@ -405,30 +405,9 @@ wxWindowMSW::~wxWindowMSW()
 {
     SendDestroyEvent();
 
-#ifndef __WXUNIVERSAL__
-    // VS: make sure there's no wxFrame with last focus set to us:
-    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
-    {
-        wxTopLevelWindow *frame = wxDynamicCast(win, wxTopLevelWindow);
-        if ( frame )
-        {
-            if ( frame->GetLastFocus() == this )
-            {
-                frame->SetLastFocus(NULL);
-            }
-
-            // apparently sometimes we can end up with our grand parent
-            // pointing to us as well: this is surely a bug in focus handling
-            // code but it's not clear where it happens so for now just try to
-            // fix it here by not breaking out of the loop
-            //break;
-        }
-    }
-#endif // __WXUNIVERSAL__
-
     // VS: destroy children first and _then_ detach *this from its parent.
     //     If we did it the other way around, children wouldn't be able
-    //     find their parent frame (see above).
+    //     find their parent frame.
     DestroyChildren();
 
     if ( m_hWnd )
