@@ -2128,9 +2128,7 @@ public:
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
     virtual size_t GetMBNulLen() const wxOVERRIDE;
 
-#if wxUSE_UNICODE_UTF8
     virtual bool IsUTF8() const wxOVERRIDE;
-#endif
 
     virtual wxMBConv *Clone() const wxOVERRIDE
     {
@@ -2516,13 +2514,11 @@ size_t wxMBConv_iconv::GetMBNulLen() const
     return m_minMBCharWidth;
 }
 
-#if wxUSE_UNICODE_UTF8
 bool wxMBConv_iconv::IsUTF8() const
 {
     return wxStricmp(m_name, "UTF-8") == 0 ||
            wxStricmp(m_name, "UTF8") == 0;
 }
-#endif
 
 #endif // HAVE_ICONV
 
@@ -3250,7 +3246,6 @@ size_t wxCSConv::GetMBNulLen() const
     return 1;
 }
 
-#if wxUSE_UNICODE_UTF8
 bool wxCSConv::IsUTF8() const
 {
     if ( m_convReal )
@@ -3259,7 +3254,6 @@ bool wxCSConv::IsUTF8() const
     // otherwise, we are ISO-8859-1
     return false;
 }
-#endif
 
 
 // ============================================================================

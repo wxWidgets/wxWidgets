@@ -133,12 +133,10 @@ public:
     // encoding
     static size_t GetMaxMBNulLen() { return 4 /* for UTF-32 */; }
 
-#if wxUSE_UNICODE_UTF8
     // return true if the converter's charset is UTF-8, i.e. char* strings
     // decoded using this object can be directly copied to wxString's internal
     // storage without converting to WC and than back to UTF-8 MB string
     virtual bool IsUTF8() const { return false; }
-#endif
 
     // The old conversion functions. The existing classes currently mostly
     // implement these ones but we're in transition to using To/FromWChar()
@@ -180,9 +178,7 @@ public:
 
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvLibc; }
 
-#if wxUSE_UNICODE_UTF8
     virtual bool IsUTF8() const wxOVERRIDE { return wxLocaleIsUtf8; }
-#endif
 };
 
 #ifdef __UNIX__
@@ -221,9 +217,7 @@ public:
         return m_conv->GetMBNulLen();
     }
 
-#if wxUSE_UNICODE_UTF8
     virtual bool IsUTF8() const wxOVERRIDE { return m_conv->IsUTF8(); }
-#endif
 
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxConvBrokenFileNames(*this); }
 
@@ -342,11 +336,9 @@ public:
 
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvStrictUTF8(); }
 
-#if wxUSE_UNICODE_UTF8
     // NB: other mapping modes are not, strictly speaking, UTF-8, so we can't
     //     take the shortcut in that case
     virtual bool IsUTF8() const wxOVERRIDE { return true; }
-#endif
 };
 
 class WXDLLIMPEXP_BASE wxMBConvUTF8 : public wxMBConvStrictUTF8
@@ -368,11 +360,9 @@ public:
 
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF8(m_options); }
 
-#if wxUSE_UNICODE_UTF8
     // NB: other mapping modes are not, strictly speaking, UTF-8, so we can't
     //     take the shortcut in that case
     virtual bool IsUTF8() const wxOVERRIDE { return m_options == MAP_INVALID_UTF8_NOT; }
-#endif
 
 private:
     int m_options;
@@ -496,9 +486,7 @@ public:
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
     virtual size_t GetMBNulLen() const wxOVERRIDE;
 
-#if wxUSE_UNICODE_UTF8
     virtual bool IsUTF8() const wxOVERRIDE;
-#endif
 
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxCSConv(*this); }
 

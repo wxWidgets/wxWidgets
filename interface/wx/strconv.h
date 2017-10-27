@@ -69,6 +69,13 @@ public:
     static size_t GetMaxMBNulLen();
 
     /**
+        return true if the converter's charset is UTF-8, i.e. char* strings
+        decoded using this object can be directly copied to wxString's internal
+        storage without converting to WC and than back to UTF-8 MB string
+    */
+    virtual bool IsUTF8() const;
+
+    /**
         Convert multibyte string to a wide character one.
 
         This is the most general function for converting a multibyte string to

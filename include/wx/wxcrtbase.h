@@ -75,7 +75,6 @@
    ------------------------------------------------------------------------- */
 
 #ifdef __cplusplus
-    #if wxUSE_UNICODE_UTF8
         /* flag indicating whether the current locale uses UTF-8 or not; must be
            updated every time the locale is changed! */
         #if wxUSE_UTF8_LOCALE_ONLY
@@ -85,9 +84,6 @@
         #endif
         /* function used to update the flag: */
         extern WXDLLIMPEXP_BASE void wxUpdateLocaleIsUtf8();
-    #else /* !wxUSE_UNICODE_UTF8 */
-        inline void wxUpdateLocaleIsUtf8() {}
-    #endif /* wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8 */
 #endif /* __cplusplus */
 
 
