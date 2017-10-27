@@ -1028,7 +1028,7 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                 case Id_SkipBtn:
                     ::SendMessage(hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
                     sharedData->m_skipped = true;
-                    return TRUE;
+                    return S_FALSE;
 
                 case IDCANCEL:
                     if ( sharedData->m_state == wxProgressDialog::Finished )
@@ -1038,7 +1038,7 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                         sharedData->m_state = wxProgressDialog::Dismissed;
 
                         // Let Windows close the dialog.
-                        return FALSE;
+                        return S_OK;
                     }
 
                     // Close button on the window triggers an IDCANCEL press,
@@ -1060,7 +1060,7 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                         sharedData->m_state = wxProgressDialog::Canceled;
                     }
 
-                    return TRUE;
+                    return S_FALSE;
             }
             break;
 
@@ -1091,11 +1091,11 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                 sharedData->m_winPosition = wxPoint(r.left, r.top);
             }
 
-            return TRUE;
+            return S_FALSE;
     }
 
     // Return anything.
-    return 0;
+    return S_OK;
 }
 
 #endif // wxHAS_MSW_TASKDIALOG
