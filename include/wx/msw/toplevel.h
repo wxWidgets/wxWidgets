@@ -11,6 +11,8 @@
 #ifndef _WX_MSW_TOPLEVEL_H_
 #define _WX_MSW_TOPLEVEL_H_
 
+#include "wx/weakref.h"
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW
 // ----------------------------------------------------------------------------
@@ -176,7 +178,7 @@ protected:
     // The last focused child: we remember it when we're deactivated and
     // restore focus to it when we're activated (this is done here) or restored
     // from iconic state (done by wxFrame).
-    wxWindow             *m_winLastFocused;
+    wxWindowRef m_winLastFocused;
 
 private:
 

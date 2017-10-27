@@ -102,8 +102,6 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsMaximized = false;
     m_fsIsShowing = false;
 
-    m_winLastFocused = NULL;
-
     m_menuSystem = NULL;
 }
 
@@ -1195,7 +1193,9 @@ void wxTopLevelWindowMSW::DoRestoreLastFocus()
         parent = this;
     }
 
-    wxSetFocusToChild(parent, &m_winLastFocused);
+    wxWindow* winPtr = m_winLastFocused;
+    wxSetFocusToChild(parent, &winPtr);
+    m_winLastFocused = winPtr;
 }
 
 void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
