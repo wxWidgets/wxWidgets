@@ -260,9 +260,9 @@ bool wxNotebook::Create(wxWindow *parent,
             (style & (wxBK_BOTTOM | wxBK_LEFT | wxBK_RIGHT)) )
     {
         // check if we use themes at all -- if we don't, we're still okay
-        if ( wxUxThemeEngine::GetIfActive() )
+        if ( wxUxThemeIsActive() )
         {
-            wxUxThemeEngine::GetIfActive()->SetWindowTheme(GetHwnd(), L"", L"");
+            ::SetWindowTheme(GetHwnd(), L"", L"");
 
             // correct the background color for the new non-themed control
             SetBackgroundColour(GetThemeBackgroundColour());
@@ -1116,7 +1116,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
     wxCopyRectToRECT(r, rc);
 
     WindowHDC hDC(GetHwnd());
-    wxUxThemeEngine::Get()->GetThemeBackgroundExtent
+    ::GetThemeBackgroundExtent
                             (
                                 theme,
                                 (HDC) hDC,
@@ -1131,7 +1131,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
 
     {
         SelectInHDC selectBmp(hDCMem, hBmp);
-        wxUxThemeEngine::Get()->DrawThemeBackground
+        ::DrawThemeBackground
                                 (
                                     theme,
                                     hDCMem,
@@ -1150,7 +1150,7 @@ void wxNotebook::UpdateBgBrush()
     if ( m_hbrBackground )
         ::DeleteObject((HBRUSH)m_hbrBackground);
 
-    if ( !m_hasBgCol && wxUxThemeEngine::GetIfActive() )
+    if ( !m_hasBgCol && wxUxThemeIsActive() )
     {
         m_hbrBackground = QueryBgBitmap();
     }
@@ -1191,7 +1191,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
         {
             // we have the content area (page size), but we need to draw all of the
             // background for it to be aligned correctly
-            wxUxThemeEngine::Get()->GetThemeBackgroundExtent
+            ::GetThemeBackgroundExtent
                                     (
                                         theme,
                                         (HDC) hDC,
@@ -1200,7 +1200,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
                                         &rc,
                                         &rc
                                     );
-            wxUxThemeEngine::Get()->DrawThemeBackground
+            ::DrawThemeBackground
                                     (
                                         theme,
                                         (HDC) hDC,
@@ -1222,7 +1222,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
 wxColour wxNotebook::GetThemeBackgroundColour() const
 {
 #if wxUSE_UXTHEME
-    if (wxUxThemeEngine::Get())
+    if (wxUxThemeIsActive())
     {
         wxUxThemeHandle hTheme((wxNotebook*) this, L"TAB");
         if (hTheme)
@@ -1231,7 +1231,7 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
             // See PlatformSDK\Include\Tmschema.h for values.
             // JACS: can also use 9 (TABP_PANE)
             COLORREF themeColor;
-            bool success = (S_OK == wxUxThemeEngine::Get()->GetThemeColor(
+            bool success = (S_OK == ::GetThemeColor(
                                         hTheme,
                                         10 /* TABP_BODY */,
                                         1 /* NORMAL */,
@@ -1251,7 +1251,7 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
             */
             if (themeColor == 1)
             {
-                wxUxThemeEngine::Get()->GetThemeColor(
+                ::GetThemeColor(
                                             hTheme,
                                             10 /* TABP_BODY */,
                                             1 /* NORMAL */,
@@ -1270,7 +1270,7 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
             {
                 WCHAR szwThemeFile[1024];
                 WCHAR szwThemeColor[256];
-                if (S_OK == wxUxThemeEngine::Get()->GetCurrentThemeName(szwThemeFile, 1024, szwThemeColor, 256, NULL, 0))
+                if (S_OK == ::GetCurrentThemeName(szwThemeFile, 1024, szwThemeColor, 256, NULL, 0))
                 {
                     wxString themeFile(szwThemeFile);
                     if (themeFile.Find(wxT("Aero")) != -1 && wxString(szwThemeColor) == wxT("NormalColor"))

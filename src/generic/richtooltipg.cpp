@@ -95,13 +95,12 @@ public:
 #ifdef __WXMSW__
             // When using themes MSW tooltips use larger bluish version of the
             // normal font.
-            wxUxThemeEngine* const theme = GetTooltipTheme();
-            if ( theme )
+            if ( UseTooltipTheme() )
             {
                 titleFont.MakeLarger();
 
                 COLORREF c;
-                if ( FAILED(theme->GetThemeColor
+                if ( FAILED(::GetThemeColor
                                    (
                                         wxUxThemeHandle(parent, L"TOOLTIP"),
                                         TTP_BALLOONTITLE,
@@ -140,7 +139,7 @@ public:
         wxSizer* sizerText = wrapper.CreateSizer(message, -1 /* No wrapping */);
 
 #ifdef __WXMSW__
-        if ( icon.IsOk() && GetTooltipTheme() )
+        if ( icon.IsOk() && UseTooltipTheme() )
         {
             // Themed tooltips under MSW align the text with the title, not
             // with the icon, so use a helper horizontal sizer in this case.
@@ -175,13 +174,12 @@ public:
         {
             // Determine the best colour(s) to use on our own.
 #ifdef __WXMSW__
-            wxUxThemeEngine* const theme = GetTooltipTheme();
-            if ( theme )
+            if ( UseTooltipTheme() )
             {
                 wxUxThemeHandle hTheme(GetParent(), L"TOOLTIP");
 
                 COLORREF c1, c2;
-                if ( FAILED(theme->GetThemeColor
+                if ( FAILED(::GetThemeColor
                                    (
                                         hTheme,
                                         TTP_BALLOONTITLE,
@@ -189,7 +187,7 @@ public:
                                         TMT_GRADIENTCOLOR1,
                                         &c1
                                     )) ||
-                    FAILED(theme->GetThemeColor
+                    FAILED(::GetThemeColor
                                   (
                                         hTheme,
                                         TTP_BALLOONTITLE,
@@ -280,13 +278,13 @@ protected:
 private:
 #ifdef __WXMSW__
     // Returns non-NULL theme only if we're using Win7-style tooltips.
-    static wxUxThemeEngine* GetTooltipTheme()
+    static bool UseTooltipTheme()
     {
         // Even themed applications under XP still use "classic" tooltips.
         if ( wxGetWinVersion() <= wxWinVersion_XP )
-            return NULL;
-
-        return wxUxThemeEngine::GetIfActive();
+            return false;
+		else
+			return wxUxThemeIsActive();
     }
 #endif // __WXMSW__
 
@@ -295,7 +293,7 @@ private:
     static int GetTipHeight()
     {
 #ifdef __WXMSW__
-        if ( GetTooltipTheme() )
+        if ( UseTooltipTheme() )
             return 20;
 #endif // __WXMSW__
 

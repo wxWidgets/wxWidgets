@@ -2674,10 +2674,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\uxthemep.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\msw\webview_ie.h"
 				>
 			</File>

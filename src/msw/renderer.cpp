@@ -38,6 +38,7 @@
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
+#include "wx/dynlib.h"
 
 // tmschema.h is in Win32 Platform SDK and might not be available with earlier
 // compilers
@@ -125,6 +126,30 @@
     #define TDLGEBS_EXPANDEDHOVER 5
     #define TDLGEBS_EXPANDEDPRESSED 6
 #endif
+
+// These Vista+ only types used by DrawThemeTextEx may not be available in older SDK headers
+typedef int(__stdcall *WXDTT_CALLBACK_PROC)(HDC hdc, const wchar_t * pszText,
+    int cchText, RECT * prc, unsigned int dwFlags, WXLPARAM lParam);
+
+typedef struct _WXDTTOPTS
+{
+    DWORD             dwSize;
+    DWORD             dwFlags;
+    COLORREF          crText;
+    COLORREF          crBorder;
+    COLORREF          crShadow;
+    int               iTextShadowType;
+    POINT             ptShadowOffset;
+    int               iBorderSize;
+    int               iFontPropId;
+    int               iColorPropId;
+    int               iStateId;
+    BOOL              fApplyOverlay;
+    int               iGlowSize;
+    WXDTT_CALLBACK_PROC pfnDrawTextCallback;
+    WXLPARAM          lParam;
+} WXDTTOPTS, *WXPDTTOPTS;
+
 
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
@@ -450,8 +475,7 @@ void wxRendererMSWBase::DrawComboBox(wxWindow* win,
 wxRendererNative& wxRendererNative::GetDefault()
 {
 #if wxUSE_UXTHEME
-    wxUxThemeEngine *themeEngine = wxUxThemeEngine::Get();
-    if ( themeEngine && themeEngine->IsAppThemed() )
+    if ( wxUxThemeIsActive() )
         return wxRendererXP::Get();
 #endif // wxUSE_UXTHEME
 
@@ -691,7 +715,7 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
     else
         state = CBXS_NORMAL;
 
-    wxUxThemeEngine::Get()->DrawThemeBackground
+    ::DrawThemeBackground
                             (
                                 hTheme,
                                 GetHdcOf(dc.GetTempHDC()),
@@ -731,7 +755,7 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
         state = HIS_HOT;
     else
         state = HIS_NORMAL;
-    wxUxThemeEngine::Get()->DrawThemeBackground
+    ::DrawThemeBackground
                             (
                                 hTheme,
                                 GetHdcOf(dc.GetTempHDC()),
@@ -771,7 +795,7 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
     wxCopyRectToRECT(adjustedRect, r);
 
     int state = flags & wxCONTROL_EXPANDED ? GLPS_OPENED : GLPS_CLOSED;
-    wxUxThemeEngine::Get()->DrawThemeBackground
+    ::DrawThemeBackground
                             (
                                 hTheme,
                                 GetHdcOf(dc.GetTempHDC()),
@@ -844,7 +868,7 @@ wxRendererXP::DoDrawButtonLike(HTHEME htheme,
     else if ( part == BP_PUSHBUTTON && (flags & wxCONTROL_ISDEFAULT) )
         state = PBS_DEFAULTED;
 
-    wxUxThemeEngine::Get()->DrawThemeBackground
+    ::DrawThemeBackground
                             (
                                 htheme,
                                 GetHdcOf(dc.GetTempHDC()),
@@ -905,12 +929,10 @@ wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
     wxUxThemeHandle hTheme(win, L"BUTTON");
     if (hTheme)
     {
-        wxUxThemeEngine* const te = wxUxThemeEngine::Get();
-
-        if (te && te->IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
+        if (::IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
         {
             SIZE checkSize;
-            if (te->GetThemePartSize(hTheme, NULL, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, NULL, TS_DRAW, &checkSize) == S_OK)
+            if (::GetThemePartSize(hTheme, NULL, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, NULL, TS_DRAW, &checkSize) == S_OK)
                 return wxSize(checkSize.cx, checkSize.cy);
         }
     }
@@ -924,7 +946,6 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
                                  int flags)
 {
     wxUxThemeHandle hTheme(win, L"TASKDIALOG");
-    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
 
     int state;
     if (flags & wxCONTROL_PRESSED)
@@ -937,7 +958,7 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
     if ( flags & wxCONTROL_EXPANDED )
         state += 3;
 
-    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
+    if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
         if (flags & wxCONTROL_EXPANDED)
             flags |= wxCONTROL_CHECKED;
@@ -947,7 +968,7 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
         RECT r;
         wxCopyRectToRECT(adjustedRect, r);
 
-        te->DrawThemeBackground
+        ::DrawThemeBackground
             (
             hTheme,
             GetHdcOf(dc.GetTempHDC()),
@@ -964,14 +985,13 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
 wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
 {
     wxUxThemeHandle hTheme(win, L"TASKDIALOG");
-    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
 
     // EXPANDOBUTTON scales ugly if not using the correct size, get size from theme
 
-    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
+    if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
         SIZE s;
-        te->GetThemePartSize(hTheme,
+        ::GetThemePartSize(hTheme,
             GetHdcOf(dc.GetTempHDC()),
             TDLG_EXPANDOBUTTON,
             TDLGEBS_NORMAL,
@@ -995,15 +1015,14 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
 
     const int itemState = GetListItemState(flags);
 
-    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
-    if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
+    if ( ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
         RECT rc;
         wxCopyRectToRECT(rect, rc);
-        if ( te->IsThemeBackgroundPartiallyTransparent(hTheme, LVP_LISTITEM, itemState) )
-            te->DrawThemeParentBackground(GetHwndOf(win), GetHdcOf(dc.GetTempHDC()), &rc);
+        if ( ::IsThemeBackgroundPartiallyTransparent(hTheme, LVP_LISTITEM, itemState) )
+            ::DrawThemeParentBackground(GetHwndOf(win), GetHdcOf(dc.GetTempHDC()), &rc);
 
-        te->DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), LVP_LISTITEM, itemState, &rc, 0);
+        ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), LVP_LISTITEM, itemState, &rc, 0);
     }
     else
     {
@@ -1023,14 +1042,22 @@ void wxRendererXP::DrawItemText(wxWindow* win,
 
     const int itemState = GetListItemState(flags);
 
-    wxUxThemeEngine* te = wxUxThemeEngine::Get();
-    if ( te->DrawThemeTextEx && // Might be not available if we're under XP
-            te->IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
+    typedef HRESULT(__stdcall *DrawThemeTextEx_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const WXDTTOPTS *);
+    static DrawThemeTextEx_t s_DrawThemeTextEx = NULL;
+
+    if (wxGetWinVersion() >= wxWinVersion_Vista)
+    {
+        wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
+        wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
+    }
+
+    if ( s_DrawThemeTextEx && // Might be not available if we're under XP
+            ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
         RECT rc;
         wxCopyRectToRECT(rect, rc);
 
-        DTTOPTS textOpts;
+        WXDTTOPTS textOpts;
         textOpts.dwSize = sizeof(textOpts);
         textOpts.dwFlags = DTT_STATEID;
         textOpts.iStateId = itemState;
@@ -1093,7 +1120,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                 break;
         }
 
-        te->DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
+        s_DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
                             drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
     }
     else
@@ -1119,7 +1146,7 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
     wxColour bdr;
     COLORREF cref;
 
-    wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
+    ::GetThemeColor(hTheme, EP_EDITTEXT,
                                           ETS_NORMAL, TMT_FILLCOLOR, &cref);
     fill = wxRGBToColour(cref);
 
@@ -1129,7 +1156,7 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
     else
         etsState = ETS_NORMAL;
 
-    wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
+    ::GetThemeColor(hTheme, EP_EDITTEXT,
                                               etsState, TMT_BORDERCOLOR, &cref);
     bdr = wxRGBToColour(cref);
 
@@ -1155,7 +1182,7 @@ void wxRendererXP::DrawGauge(wxWindow* win,
     RECT r;
     wxCopyRectToRECT(rect, r);
 
-    wxUxThemeEngine::Get()->DrawThemeBackground(
+    ::DrawThemeBackground(
         hTheme,
         GetHdcOf(dc.GetTempHDC()),
         PP_BAR,
@@ -1164,7 +1191,7 @@ void wxRendererXP::DrawGauge(wxWindow* win,
         NULL);
 
     RECT contentRect;
-    wxUxThemeEngine::Get()->GetThemeBackgroundContentRect(
+    ::GetThemeBackgroundContentRect(
         hTheme,
         GetHdcOf(dc.GetTempHDC()),
         PP_BAR,
@@ -1177,7 +1204,7 @@ void wxRendererXP::DrawGauge(wxWindow* win,
                                           value,
                                           max);
 
-    wxUxThemeEngine::Get()->DrawThemeBackground(
+    ::DrawThemeBackground(
         hTheme,
         GetHdcOf(dc.GetTempHDC()),
         PP_CHUNK,

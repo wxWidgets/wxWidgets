@@ -1793,7 +1793,6 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/ole/activex.h
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
-    wx/msw/uxthemep.h
     wx/msw/htmlhelp.h
 )
 

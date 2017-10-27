@@ -1140,7 +1140,6 @@
     <ClInclude Include="..\..\include\wx\msw\treectrl.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\uuid.h" />
     <ClInclude Include="..\..\include\wx\msw\uxtheme.h" />
-    <ClInclude Include="..\..\include\wx\msw\uxthemep.h" />
     <ClInclude Include="..\..\include\wx\msw\window.h" />
     <ClInclude Include="..\..\include\wx\generic\accel.h" />
     <ClInclude Include="..\..\include\wx\generic\busyinfo.h" />

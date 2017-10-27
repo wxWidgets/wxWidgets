@@ -156,14 +156,10 @@ bool wxComboCtrl::Create(wxWindow *parent,
     // Set border
     long border = style & wxBORDER_MASK;
 
-#if wxUSE_UXTHEME
-    wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-#endif
-
     if ( !border )
     {
 #if wxUSE_UXTHEME
-        if ( theme )
+        if ( wxUxThemeIsActive() )
         {
             // For XP, have 1-width custom border, for older version use sunken
             border = wxBORDER_NONE;
@@ -188,11 +184,8 @@ bool wxComboCtrl::Create(wxWindow *parent,
         return false;
 
 #if wxUSE_UXTHEME
-    if ( theme )
-    {
-        if ( ::wxGetWinVersion() >= wxWinVersion_Vista )
+    if ( wxUxThemeIsActive() && ::wxGetWinVersion() >= wxWinVersion_Vista )
             m_iFlags |= wxCC_BUTTON_STAYS_DOWN |wxCC_BUTTON_COVERS_BORDER;
-    }
 #endif
 
     if ( style & wxCC_STD_BUTTON )
@@ -332,10 +325,6 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
     selRect.x += wcp + focusSpacingX;
     selRect.width -= wcp + (focusSpacingX*2);
 
-    //wxUxThemeEngine* theme = NULL;
-    //if ( hTheme )
-    //    theme = wxUxThemeEngine::GetIfActive();
-
     wxColour fgCol;
     wxColour bgCol;
     bool doDrawDottedEdge = false;
@@ -430,11 +419,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     HDC hDc = GetHdcOf(*impl);
     HWND hWnd = GetHwndOf(this);
 
-    wxUxThemeEngine* theme = NULL;
     wxUxThemeHandle hTheme(this, L"COMBOBOX");
-
-    if ( hTheme )
-        theme = wxUxThemeEngine::GetIfActive();
 #endif // wxUSE_UXTHEME
 
     wxRect borderRect(0,0,sz.x,sz.y);
@@ -528,19 +513,19 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         // Draw parent's background, if necessary
         RECT* rUseForTb = NULL;
 
-        if ( theme->IsThemeBackgroundPartiallyTransparent( hTheme, comboBoxPart, bgState ) )
+        if ( ::IsThemeBackgroundPartiallyTransparent( hTheme, comboBoxPart, bgState ) )
             rUseForTb = &rFull;
         else if ( m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE )
             rUseForTb = &rButton;
 
         if ( rUseForTb )
-            theme->DrawThemeParentBackground( hWnd, hDc, rUseForTb );
+            ::DrawThemeParentBackground( hWnd, hDc, rUseForTb );
 
         //
         // Draw the control background (including the border)
         if ( m_widthCustomBorder > 0 )
         {
-            theme->DrawThemeBackground( hTheme, hDc, comboBoxPart, bgState, rUseForBg, NULL );
+            ::DrawThemeBackground( hTheme, hDc, comboBoxPart, bgState, rUseForBg, NULL );
         }
         else
         {
@@ -576,7 +561,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
                     butPart = CP_DROPDOWNBUTTONLEFT;
 
             }
-            theme->DrawThemeBackground( hTheme, hDc, butPart, butState, &rButton, NULL );
+            ::DrawThemeBackground( hTheme, hDc, butPart, butState, &rButton, NULL );
         }
         else if ( useVistaComboBox &&
                   (m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE) )
@@ -795,10 +780,8 @@ bool wxComboCtrl::AnimateShow( const wxRect& rect, int flags )
 
 wxCoord wxComboCtrl::GetNativeTextIndent() const
 {
-#if wxUSE_UXTHEME
-    if ( wxUxThemeEngine::GetIfActive() )
+    if ( wxUxThemeIsActive() )
         return NATIVE_TEXT_INDENT_XP;
-#endif
     return NATIVE_TEXT_INDENT_CLASSIC;
 }
 
