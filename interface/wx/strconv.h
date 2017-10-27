@@ -69,9 +69,15 @@ public:
     static size_t GetMaxMBNulLen();
 
     /**
-        return true if the converter's charset is UTF-8, i.e. char* strings
-        decoded using this object can be directly copied to wxString's internal
-        storage without converting to WC and than back to UTF-8 MB string
+        Return true if the converter's charset is UTF-8.
+
+        This is provided to optimize creating wxStrings from the @c char*
+        strings returned by this converter, as they can be directly used with
+        wxString::FromUTF8() or even wxString::FromUTF8Unchecked() when this
+        method returns @true.
+
+        This function is universally available since wxWidgets 3.1.1 (it was
+        previously only available in some of the build configurations).
     */
     virtual bool IsUTF8() const;
 
