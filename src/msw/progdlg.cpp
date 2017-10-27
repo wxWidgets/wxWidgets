@@ -576,13 +576,8 @@ WXWidget wxProgressDialog::GetHandle() const
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
-        HWND hwnd;
-        {
-            wxCriticalSectionLocker locker(m_sharedData->m_cs);
-            m_sharedData->m_state = m_state;
-            hwnd = m_sharedData->m_hwnd;
-        }
-        return hwnd;
+        wxCriticalSectionLocker locker(m_sharedData->m_cs);
+        return m_sharedData->m_hwnd;
     }
 #endif
     return wxGenericProgressDialog::GetHandle();
