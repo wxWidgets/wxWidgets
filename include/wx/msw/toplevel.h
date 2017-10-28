@@ -90,6 +90,9 @@ public:
     // NULL if getting the system menu failed.
     wxMenu *MSWGetSystemMenu() const;
 
+    // Enable or disable the close button of the specified window.
+    static bool MSWEnableCloseButton(WXHWND hwnd, bool enable = true);
+
 
     // implementation from now on
     // --------------------------
