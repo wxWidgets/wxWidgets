@@ -160,11 +160,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     // even if this means we have to start it ourselves (this happens most
     // commonly during the program initialization, e.g. for the progress
     // dialogs shown from overridden wxApp::OnInit()).
-    if ( !wxEventLoopBase::GetActive() )
-    {
-        m_tempEventLoop = new wxEventLoop;
-        wxEventLoop::SetActive(m_tempEventLoop);
-    }
+    EnsureActiveEventLoopExists();
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // we have to remove the "Close" button from the title bar then as it is
@@ -361,6 +357,15 @@ wxString wxGenericProgressDialog::GetFormattedTime(unsigned long timeInSec)
     }
 
     return timeAsHMS;
+}
+
+void wxGenericProgressDialog::EnsureActiveEventLoopExists()
+{
+    if ( !wxEventLoopBase::GetActive() )
+    {
+        m_tempEventLoop = new wxEventLoop;
+        wxEventLoop::SetActive(m_tempEventLoop);
+    }
 }
 
 wxStaticText *
