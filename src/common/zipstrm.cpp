@@ -1065,9 +1065,13 @@ bool wxZipEntry::LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool lo
             return true;
         }
 
-        fieldLen += 4;
-        extraData += fieldLen;
-        extraLen -= fieldLen;
+        // Avoid "optimizing" the lines below by doing "fieldLen += 4" as this
+        // could overflow wxUint16 range and, at worst, make fieldLen equal to
+        // 0 resulting in an infinite loop. Written as it is now, everything is
+        // promoted to int, which has range large enough to deal with any value
+        // of the field length.
+        extraData += fieldLen + 4;
+        extraLen -= fieldLen + 4;
     }
 
     // extraInfo had unknown format
