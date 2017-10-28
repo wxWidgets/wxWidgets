@@ -746,6 +746,7 @@ void wxProgressDialog::DoGetPosition(int *x, int *y) const
     if ( HasNativeTaskDialog() )
     {
         wxPoint pos;
+        if ( m_sharedData )
         {
             wxCriticalSectionLocker locker(m_sharedData->m_cs);
             pos = m_sharedData->m_winPosition;
