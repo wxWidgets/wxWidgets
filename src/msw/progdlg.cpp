@@ -57,7 +57,6 @@ const int wxSPDD_EXPINFO_CHANGED   = 0x0020;
 const int wxSPDD_ENABLE_SKIP       = 0x0040;
 const int wxSPDD_ENABLE_ABORT      = 0x0080;
 const int wxSPDD_DISABLE_SKIP      = 0x0100;
-const int wxSPDD_DISABLE_ABORT     = 0x0200;
 const int wxSPDD_FINISHED          = 0x0400;
 const int wxSPDD_DESTROYED         = 0x0800;
 const int wxSPDD_ICON_CHANGED      = 0x1000;
@@ -320,9 +319,6 @@ void PerformNotificationUpdates(HWND hwnd,
 
     if ( sharedData->m_notifications & wxSPDD_DISABLE_SKIP )
         ::SendMessage( hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE );
-
-    if ( sharedData->m_notifications & wxSPDD_DISABLE_ABORT )
-        ::SendMessage( hwnd, TDM_ENABLE_BUTTON, IDCANCEL, FALSE );
 
     // Is the progress finished?
     if ( sharedData->m_notifications & wxSPDD_FINISHED )
