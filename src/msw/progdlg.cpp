@@ -511,31 +511,28 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 bool wxProgressDialog::DoNativeBeforeUpdate(bool *skip)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeTaskDialog() )
+    wxCriticalSectionLocker locker(m_sharedData->m_cs);
+
+    if ( m_sharedData->m_skipped  )
     {
-        wxCriticalSectionLocker locker(m_sharedData->m_cs);
-
-        if ( m_sharedData->m_skipped  )
+        if ( skip && !*skip )
         {
-            if ( skip && !*skip )
-            {
-                *skip = true;
-                m_sharedData->m_skipped = false;
-                m_sharedData->m_notifications |= wxSPDD_ENABLE_SKIP;
-            }
+            *skip = true;
+            m_sharedData->m_skipped = false;
+            m_sharedData->m_notifications |= wxSPDD_ENABLE_SKIP;
         }
-
-        if ( m_sharedData->m_state == Canceled )
-            m_timeStop = m_sharedData->m_timeStop;
-
-        return m_sharedData->m_state != Canceled;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
+    if ( m_sharedData->m_state == Canceled )
+        m_timeStop = m_sharedData->m_timeStop;
+
+    return m_sharedData->m_state != Canceled;
+#else // !wxHAS_MSW_TASKDIALOG
     wxUnusedVar(skip);
     wxFAIL_MSG( "unreachable" );
 
     return false;
+#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
 }
 
 void wxProgressDialog::Resume()
