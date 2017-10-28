@@ -1719,8 +1719,11 @@ bool wxZipInputStream::LoadEndRecord()
                 ReadSignature() == magic) {
         m_signature = magic;
         m_position = endPos - recSize;
-        m_offsetAdjustment = m_position - endrec.GetOffset();
-        return true;
+        if ( endrec.GetOffset() >= 0 && endrec.GetOffset() < m_position )
+        {
+            m_offsetAdjustment = m_position - endrec.GetOffset();
+            return true;
+        }
     }
 
     wxLogError(_("can't find central directory in zip"));
