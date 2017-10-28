@@ -190,6 +190,16 @@ BOOL CALLBACK DisplayCloseButton(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
+// This function enables or disables both the cancel button in the task dialog
+// and the close button in its title bar, as they perform the same function and
+// so should be kept in the same state.
+void EnableCloseButtons(HWND hwnd, bool enable)
+{
+    ::SendMessage(hwnd, TDM_ENABLE_BUTTON, IDCANCEL, enable ? TRUE : FALSE);
+
+    wxTopLevelWindow::MSWEnableCloseButton(hwnd, enable);
+}
+
 void PerformNotificationUpdates(HWND hwnd,
                                 wxProgressDialogSharedData *sharedData)
 {
@@ -315,7 +325,7 @@ void PerformNotificationUpdates(HWND hwnd,
         ::SendMessage( hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, TRUE );
 
     if ( sharedData->m_notifications & wxSPDD_ENABLE_ABORT )
-        ::SendMessage( hwnd, TDM_ENABLE_BUTTON, IDCANCEL, TRUE );
+        EnableCloseButtons(hwnd, true);
 
     if ( sharedData->m_notifications & wxSPDD_DISABLE_SKIP )
         ::SendMessage( hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE );
@@ -329,7 +339,7 @@ void PerformNotificationUpdates(HWND hwnd,
         {
             // Change Cancel into Close and activate the button.
             ::SendMessage( hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE );
-            ::SendMessage( hwnd, TDM_ENABLE_BUTTON, IDCANCEL, TRUE );
+            EnableCloseButtons(hwnd, true);
             ::EnumChildWindows( hwnd, DisplayCloseButton,
                                 (LPARAM) sharedData );
         }
@@ -1116,7 +1126,7 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
             // If we can't be aborted, the "Close" button will only be enabled
             // when the progress ends (and not even then with wxPD_AUTO_HIDE).
             if ( !(sharedData->m_style & wxPD_CAN_ABORT) )
-                ::SendMessage( hwnd, TDM_ENABLE_BUTTON, IDCANCEL, FALSE );
+                EnableCloseButtons(hwnd, false);
             break;
 
         case TDN_BUTTON_CLICKED:
@@ -1151,7 +1161,7 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                         );
 
                         ::SendMessage(hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
-                        ::SendMessage(hwnd, TDM_ENABLE_BUTTON, IDCANCEL, FALSE);
+                        EnableCloseButtons(hwnd, false);
 
                         sharedData->m_timeStop = wxGetCurrentTime();
                         sharedData->m_state = wxProgressDialog::Canceled;
