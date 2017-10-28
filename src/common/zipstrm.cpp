@@ -1678,7 +1678,16 @@ bool wxZipInputStream::LoadEndRecord()
     wxZipEndRec endrec;
 
     // Read in the end record
-    wxFileOffset endPos = m_parent_i_stream->TellI() - 4;
+    const wxFileOffset curPos = m_parent_i_stream->TellI();
+    if ( curPos < 4 )
+    {
+        // Either failed to get the position (if it's negative) or can't be a
+        // valid ZIP file anyhow (this probably can't happen here, but it
+        // doesn't harm to check).
+        return false;
+    }
+
+    const size_t endPos = curPos - 4;
     if (!endrec.Read(*m_parent_i_stream, GetConv()))
         return false;
 
@@ -1700,10 +1709,12 @@ bool wxZipInputStream::LoadEndRecord()
     // If it's not there, then it could be that the zip has been appended
     // to a self extractor, so take the CD size (also in endrec), subtract
     // it from the file offset of the end-central-directory and look there.
-    if (m_parent_i_stream->SeekI(endPos - endrec.GetSize())
-            != wxInvalidOffset && ReadSignature() == magic) {
+    const wxUint64 recSize = endrec.GetSize();
+    if (recSize <= endPos &&
+            m_parent_i_stream->SeekI(endPos - recSize) != wxInvalidOffset &&
+                ReadSignature() == magic) {
         m_signature = magic;
-        m_position = endPos - endrec.GetSize();
+        m_position = endPos - recSize;
         m_offsetAdjustment = m_position - endrec.GetOffset();
         return true;
     }
