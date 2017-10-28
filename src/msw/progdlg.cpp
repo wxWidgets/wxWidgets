@@ -366,6 +366,7 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
         SetPDStyle(style);
         SetMaximum(maximum);
 
+        EnsureActiveEventLoopExists();
         Show();
         DisableOtherWindows();
 
@@ -388,14 +389,49 @@ wxProgressDialog::~wxProgressDialog()
         m_sharedData->m_notifications |= wxSPDD_DESTROYED;
     }
 
-    m_taskDialogRunner->Wait();
+    // We can't use simple wxThread::Wait() here as we would deadlock because
+    // the task dialog thread expects this thread to process some messages
+    // (presumably those the task dialog sends to its parent during its
+    // destruction).
+    const WXHANDLE hThread = m_taskDialogRunner->MSWGetHandle();
+    for ( bool cont = true; cont; )
+    {
+        DWORD rc = ::MsgWaitForMultipleObjects
+                     (
+                       1,                   // number of objects to wait for
+                       (HANDLE *)&hThread,  // the objects
+                       false,               // wait for any objects, not all
+                       INFINITE,            // no timeout
+                       QS_ALLINPUT |        // return as soon as there are any events
+                       QS_ALLPOSTMESSAGE
+                     );
 
-    delete m_taskDialogRunner;
+        switch ( rc )
+        {
+            case 0xFFFFFFFF:
+                // This is unexpected, but we can't do anything about it and
+                // probably shouldn't continue waiting as we risk doing it
+                // forever.
+                wxLogLastError("MsgWaitForMultipleObjectsEx");
+                cont = false;
+                break;
 
+            case WAIT_OBJECT_0:
+                // Thread has terminated.
+                cont = false;
+                break;
+
+            default:
+                // An event has arrive, so dispatch it.
+                wxEventLoop::GetActive()->Dispatch();
+        }
+    }
+
+    // Enable the windows before deleting the task dialog to ensure that we
+    // can regain the activation.
     ReenableOtherWindows();
 
-    if ( GetTopParent() )
-        GetTopParent()->Raise();
+    delete m_taskDialogRunner;
 #endif // wxHAS_MSW_TASKDIALOG
 }
 
@@ -513,14 +549,12 @@ void wxProgressDialog::DispatchEvents()
 #ifdef wxHAS_MSW_TASKDIALOG
     // No need for HasNativeTaskDialog() check, we're only called when this is
     // the case.
-    wxEventLoopBase* const loop = wxEventLoop::GetActive();
-    if ( loop )
-    {
-        // We don't need to dispatch the user input events as the task dialog
-        // handles its own ones in its thread and we shouldn't react to any
-        // other user actions while the dialog is shown.
-        loop->YieldFor(wxEVT_CATEGORY_ALL & ~wxEVT_CATEGORY_USER_INPUT);
-    }
+
+    // We don't need to dispatch the user input events as the task dialog
+    // handles its own ones in its thread and we shouldn't react to any
+    // other user actions while the dialog is shown.
+    wxEventLoop::GetActive()->
+        YieldFor(wxEVT_CATEGORY_ALL & ~wxEVT_CATEGORY_USER_INPUT);
 #else // !wxHAS_MSW_TASKDIALOG
     wxFAIL_MSG( "unreachable" );
 #endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
@@ -861,6 +895,16 @@ bool wxProgressDialog::Show(bool show)
             return false;
         }
 
+        // Wait until the dialog is shown as the program may need some time
+        // before it calls Update() and we want to show something to the user
+        // in the meanwhile.
+        while ( wxEventLoop::GetActive()->Dispatch() )
+        {
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
+            if ( m_sharedData->m_hwnd )
+                break;
+        }
+
         // Do not show the underlying dialog.
         return false;
     }
@@ -936,12 +980,42 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
 
 void* wxProgressDialogTaskRunner::Entry()
 {
+    // If we have a parent, we must use it to have correct Z-order and icon,
+    // but this can only be done if we attach this thread input to the thread
+    // that created the parent window, i.e. the main thread.
+    wxWindow* parent = NULL;
+    {
+        wxCriticalSectionLocker locker(m_sharedData.m_cs);
+        parent = m_sharedData.m_parent;
+    }
+
+    if ( parent )
+    {
+        // Force the creation of the message queue for this thread.
+        MSG msg;
+        ::PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
+
+        // Attach its message queue to the main thread in order to allow using
+        // the parent window created by the main thread as task dialog parent.
+        if ( !::AttachThreadInput(::GetCurrentThreadId(),
+                                  wxThread::GetMainId(),
+                                  TRUE) )
+        {
+            wxLogLastError(wxT("AttachThreadInput"));
+
+            // Don't even try using the parent window from another thread, this
+            // won't work.
+            parent = NULL;
+        }
+    }
+
     WinStruct<TASKDIALOGCONFIG> tdc;
     wxMSWTaskDialogConfig wxTdc;
 
     {
         wxCriticalSectionLocker locker(m_sharedData.m_cs);
 
+        wxTdc.parent = parent;
         wxTdc.caption = m_sharedData.m_title.wx_str();
         wxTdc.message = m_sharedData.m_message.wx_str();
 
@@ -1003,6 +1077,10 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
         case TDN_CREATED:
             // Store the HWND for the main thread use.
             sharedData->m_hwnd = hwnd;
+
+            // The main thread is sitting in an event dispatching loop waiting
+            // for this dialog to be shown, so make sure it does get an event.
+            wxWakeUpIdle();
 
             // Set the maximum value and disable Close button.
             ::SendMessage( hwnd,
