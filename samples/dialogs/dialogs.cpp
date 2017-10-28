@@ -2785,7 +2785,7 @@ void MyFrame::DoShowProgress(wxGenericProgressDialog& dialog)
             dialog.Resume();
         }
 
-        wxMilliSleep(200);
+        wxMilliSleep(100);
     }
 
     if ( !cont )
@@ -2817,7 +2817,7 @@ void MyFrame::ShowAppProgress( wxCommandEvent& WXUNUSED(event) )
     {
         progress.SetValue(i);
 
-        wxMilliSleep(500);
+        wxMilliSleep(200);
     }
 
     wxLogStatus("Progress finished");
