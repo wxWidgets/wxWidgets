@@ -26,7 +26,7 @@ public:
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL) wxOVERRIDE;
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL) wxOVERRIDE;
 
-    void Resume();
+    virtual void Resume() wxOVERRIDE;
 
     int GetValue() const;
     wxString GetMessage() const;

@@ -44,7 +44,7 @@ public:
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
 
-    void Resume();
+    virtual void Resume();
 
     int GetValue() const;
     int GetRange() const;
