@@ -404,16 +404,18 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
+        if ( !DoNativeBeforeUpdate(skip) )
+        {
+            // Dialog was cancelled.
+            return false;
+        }
+
+        value /= m_factor;
+
+        wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
+
         {
             wxCriticalSectionLocker locker(m_sharedData->m_cs);
-
-            // Do nothing in canceled state.
-            if ( !DoNativeBeforeUpdate(skip) )
-                return false;
-
-            value /= m_factor;
-
-            wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
             m_sharedData->m_value = value;
             m_sharedData->m_notifications |= wxSPDD_VALUE_CHANGED;
@@ -474,11 +476,13 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
-        wxCriticalSectionLocker locker(m_sharedData->m_cs);
-
-        // Do nothing in canceled state.
         if ( !DoNativeBeforeUpdate(skip) )
+        {
+            // Dialog was cancelled.
             return false;
+        }
+
+        wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
         if ( !m_sharedData->m_progressBarMarquee )
         {
@@ -509,6 +513,8 @@ bool wxProgressDialog::DoNativeBeforeUpdate(bool *skip)
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
+        wxCriticalSectionLocker locker(m_sharedData->m_cs);
+
         if ( m_sharedData->m_skipped  )
         {
             if ( skip && !*skip )

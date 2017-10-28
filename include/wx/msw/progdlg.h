@@ -54,8 +54,9 @@ public:
     virtual WXWidget GetHandle() const wxOVERRIDE;
 
 private:
-    // Performs common routines to Update() and Pulse(). Requires the
-    // shared object to have been entered.
+    // Common part of Update() and Pulse().
+    //
+    // Returns false if the user requested cancelling the dialog.
     bool DoNativeBeforeUpdate(bool *skip);
 
     // Updates the various timing informations for both determinate
