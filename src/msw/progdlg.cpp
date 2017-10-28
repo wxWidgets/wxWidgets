@@ -508,9 +508,29 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
     return wxGenericProgressDialog::Pulse( newmsg, skip );
 }
 
+void wxProgressDialog::DispatchEvents()
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    // No need for HasNativeTaskDialog() check, we're only called when this is
+    // the case.
+    wxEventLoopBase* const loop = wxEventLoop::GetActive();
+    if ( loop )
+    {
+        // We don't need to dispatch the user input events as the task dialog
+        // handles its own ones in its thread and we shouldn't react to any
+        // other user actions while the dialog is shown.
+        loop->YieldFor(wxEVT_CATEGORY_ALL & ~wxEVT_CATEGORY_USER_INPUT);
+    }
+#else // !wxHAS_MSW_TASKDIALOG
+    wxFAIL_MSG( "unreachable" );
+#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
+}
+
 bool wxProgressDialog::DoNativeBeforeUpdate(bool *skip)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
+    DispatchEvents();
+
     wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
     if ( m_sharedData->m_skipped  )

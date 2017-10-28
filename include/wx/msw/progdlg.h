@@ -59,6 +59,10 @@ private:
     // Returns false if the user requested cancelling the dialog.
     bool DoNativeBeforeUpdate(bool *skip);
 
+    // Dispatch the pending events to let the windows to update, just as the
+    // generic version does. This is done as part of DoNativeBeforeUpdate().
+    void DispatchEvents();
+
     // Updates the various timing informations for both determinate
     // and indeterminate modes. Requires the shared object to have
     // been entered.
