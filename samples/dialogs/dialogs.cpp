@@ -2770,8 +2770,8 @@ void MyFrame::DoShowProgress(wxGenericProgressDialog& dialog)
         {
             i += max/4;
 
-            if ( i >= 100 )
-                i = 99;
+            if ( i >= max )
+                i = max - 1;
         }
 
         if ( !cont )
