@@ -1175,18 +1175,38 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                     // a finished dialog.
                     if ( sharedData->m_style & wxPD_CAN_ABORT )
                     {
-                        wxCHECK_MSG
-                        (
-                            sharedData->m_state == wxProgressDialog::Continue,
-                            TRUE,
-                            "Dialog not in a cancelable state!"
-                        );
+                        switch ( sharedData->m_state )
+                        {
+                            case wxProgressDialog::Canceled:
+                                // It can happen that we receive a second
+                                // cancel request before we had time to process
+                                // the first one, in which case simply do
+                                // nothing for the subsequent one.
+                                break;
 
-                        ::SendMessage(hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
-                        EnableCloseButtons(hwnd, false);
+                            case wxProgressDialog::Continue:
+                                ::SendMessage(hwnd, TDM_ENABLE_BUTTON, Id_SkipBtn, FALSE);
+                                EnableCloseButtons(hwnd, false);
 
-                        sharedData->m_timeStop = wxGetCurrentTime();
-                        sharedData->m_state = wxProgressDialog::Canceled;
+                                sharedData->m_timeStop = wxGetCurrentTime();
+                                sharedData->m_state = wxProgressDialog::Canceled;
+                                break;
+
+                            // States which shouldn't be possible here:
+
+                            // We shouldn't have an (enabled) cancel button at
+                            // all then.
+                            case wxProgressDialog::Uncancelable:
+
+                            // This one was already dealt with above.
+                            case wxProgressDialog::Finished:
+
+                            // Normally it shouldn't be possible to get any
+                            // notifications after switching to this state.
+                            case wxProgressDialog::Dismissed:
+                                wxFAIL_MSG( "unreachable" );
+                                break;
+                        }
                     }
 
                     return S_FALSE;
