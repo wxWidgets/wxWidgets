@@ -459,10 +459,13 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
         {
             wxCriticalSectionLocker locker(m_sharedData->m_cs);
 
-            m_sharedData->m_value = value;
-            m_sharedData->m_notifications |= wxSPDD_VALUE_CHANGED;
+            if ( value != m_sharedData->m_value )
+            {
+                m_sharedData->m_value = value;
+                m_sharedData->m_notifications |= wxSPDD_VALUE_CHANGED;
+            }
 
-            if ( !newmsg.empty() )
+            if ( !newmsg.empty() && newmsg != m_message )
             {
                 m_message = newmsg;
                 m_sharedData->m_message = newmsg;
@@ -532,7 +535,7 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
             m_sharedData->m_notifications |= wxSPDD_PBMARQUEE_CHANGED;
         }
 
-        if ( !newmsg.empty() )
+        if ( !newmsg.empty() && newmsg != m_message )
         {
             m_message = newmsg;
             m_sharedData->m_message = newmsg;
@@ -1197,7 +1200,9 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
             break;
 
         case TDN_TIMER:
-            PerformNotificationUpdates(hwnd, sharedData);
+            // Don't perform updates if nothing needs to be done.
+            if ( sharedData->m_notifications )
+                PerformNotificationUpdates(hwnd, sharedData);
 
             /*
                 Decide whether we should end the dialog. This is done if either
