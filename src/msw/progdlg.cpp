@@ -1103,6 +1103,10 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                                 LONG_PTR dwRefData
                             )
 {
+    bool endDialog = false;
+
+    // Block for shared data critical section.
+    {
     wxProgressDialogSharedData * const sharedData =
         (wxProgressDialogSharedData *) dwRefData;
 
@@ -1230,11 +1234,26 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                     (sharedData->m_state == wxProgressDialog::Finished &&
                         sharedData->m_style & wxPD_AUTO_HIDE) )
             {
-                ::EndDialog( hwnd, IDCLOSE );
+                // Don't call EndDialog() from here as it could deadlock
+                // because we are inside the shared data critical section, do
+                // it below after leaving it instead.
+                endDialog = true;
             }
 
             sharedData->m_notifications = 0;
+
+            if ( endDialog )
+                break;
+
             return S_FALSE;
+    }
+
+    } // Leave shared data critical section.
+
+    if ( endDialog )
+    {
+        ::EndDialog( hwnd, IDCLOSE );
+        return S_FALSE;
     }
 
     // Return anything.
