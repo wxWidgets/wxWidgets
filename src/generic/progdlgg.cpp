@@ -146,10 +146,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
 
     m_pdStyle = style;
 
-    wxWindow* const
-        realParent = GetParentForModalDialog(parent, GetWindowStyle());
-
-    if (!wxDialog::Create(realParent, wxID_ANY, title, wxDefaultPosition, wxDefaultSize, GetWindowStyle()))
+    if (!wxDialog::Create(m_parentTop, wxID_ANY, title, wxDefaultPosition, wxDefaultSize, GetWindowStyle()))
         return false;
 
     SetMaximum(maximum);
