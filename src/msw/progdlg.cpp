@@ -838,6 +838,24 @@ void wxProgressDialog::DoGetPosition(int *x, int *y) const
     wxGenericProgressDialog::DoGetPosition(x, y);
 }
 
+void wxProgressDialog::DoGetSize(int *width, int *height) const
+{
+#ifdef wxHAS_MSW_TASKDIALOG
+    if ( HasNativeTaskDialog() )
+    {
+        const wxRect r = GetTaskDialogRect();
+        if ( width )
+            *width = r.width;
+        if ( height )
+            *height = r.height;
+
+        return;
+    }
+#endif // wxHAS_MSW_TASKDIALOG
+
+    wxGenericProgressDialog::DoGetSize(width, height);
+}
+
 void wxProgressDialog::Fit()
 {
 #ifdef wxHAS_MSW_TASKDIALOG

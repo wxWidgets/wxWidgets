@@ -44,6 +44,7 @@ public:
     virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
     virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
     virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
     virtual void Fit() wxOVERRIDE;
 
     virtual bool Show( bool show = true ) wxOVERRIDE;
