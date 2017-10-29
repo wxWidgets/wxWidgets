@@ -803,17 +803,29 @@ void wxProgressDialog::DoMoveWindow(int x, int y, int width, int height)
     wxGenericProgressDialog::DoMoveWindow(x, y, width, height);
 }
 
+wxRect wxProgressDialog::GetTaskDialogRect() const
+{
+    wxRect r;
+
+#ifdef wxHAS_MSW_TASKDIALOG
+    if ( m_sharedData )
+    {
+        wxCriticalSectionLocker locker(m_sharedData->m_cs);
+        r = wxRectFromRECT(wxGetWindowRect(m_sharedData->m_hwnd));
+    }
+#else // !wxHAS_MSW_TASKDIALOG
+    wxFAIL_MSG( "unreachable" );
+#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
+
+    return r;
+}
+
 void wxProgressDialog::DoGetPosition(int *x, int *y) const
 {
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
-        wxRect r;
-        if ( m_sharedData )
-        {
-            wxCriticalSectionLocker locker(m_sharedData->m_cs);
-            r = wxRectFromRECT(wxGetWindowRect(m_sharedData->m_hwnd));
-        }
+        const wxRect r = GetTaskDialogRect();
         if (x)
             *x = r.x;
         if (y)

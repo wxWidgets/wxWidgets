@@ -68,6 +68,10 @@ private:
     // been entered.
     void UpdateExpandedInformation(int value);
 
+    // Get the task dialog geometry when using the native dialog.
+    wxRect GetTaskDialogRect() const;
+
+
     wxProgressDialogTaskRunner *m_taskDialogRunner;
 
     wxProgressDialogSharedData *m_sharedData;
