@@ -1128,27 +1128,6 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                            0,
                            MAKELPARAM(0, sharedData->m_range) );
 
-            // We always create this task dialog with NULL parent because our
-            // parent in wx sense is a window created from a different thread
-            // and so can't be used as our real parent. However we still center
-            // this window on the parent one as the task dialogs do with their
-            // real parent usually.
-            if ( sharedData->m_parent )
-            {
-                wxRect rect(wxRectFromRECT(wxGetWindowRect(hwnd)));
-                rect = rect.CentreIn(sharedData->m_parent->GetRect());
-                ::SetWindowPos(hwnd,
-                               NULL,
-                               rect.x,
-                               rect.y,
-                               -1,
-                               -1,
-                               SWP_NOACTIVATE |
-                               SWP_NOOWNERZORDER |
-                               SWP_NOSIZE |
-                               SWP_NOZORDER);
-            }
-
             // If we can't be aborted, the "Close" button will only be enabled
             // when the progress ends (and not even then with wxPD_AUTO_HIDE).
             if ( !(sharedData->m_style & wxPD_CAN_ABORT) )
