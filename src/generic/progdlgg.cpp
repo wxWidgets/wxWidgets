@@ -144,7 +144,6 @@ bool wxGenericProgressDialog::Create( const wxString& title,
 {
     SetTopParent(parent);
 
-    m_parentTop = wxGetTopLevelParent(parent);
     m_pdStyle = style;
 
     wxWindow* const
