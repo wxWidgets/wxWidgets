@@ -808,16 +808,16 @@ void wxProgressDialog::DoGetPosition(int *x, int *y) const
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
-        wxPoint pos;
+        wxRect r;
         if ( m_sharedData )
         {
             wxCriticalSectionLocker locker(m_sharedData->m_cs);
-            pos = m_sharedData->m_winPosition;
+            r = wxRectFromRECT(wxGetWindowRect(m_sharedData->m_hwnd));
         }
         if (x)
-            *x = pos.x;
+            *x = r.x;
         if (y)
-            *y = pos.y;
+            *y = r.y;
 
         return;
     }
@@ -1115,14 +1115,6 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                                SWP_NOZORDER);
             }
 
-            // Store current position for the main thread use
-            // if no position update is pending.
-            if ( !(sharedData->m_notifications & wxSPDD_WINDOW_MOVED) )
-            {
-                RECT r = wxGetWindowRect(hwnd);
-                sharedData->m_winPosition = wxPoint(r.left, r.top);
-            }
-
             // If we can't be aborted, the "Close" button will only be enabled
             // when the progress ends (and not even then with wxPD_AUTO_HIDE).
             if ( !(sharedData->m_style & wxPD_CAN_ABORT) )
@@ -1192,12 +1184,6 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
             }
 
             sharedData->m_notifications = 0;
-            {
-                // Update current position for the main thread use.
-                RECT r = wxGetWindowRect(hwnd);
-                sharedData->m_winPosition = wxPoint(r.left, r.top);
-            }
-
             return S_FALSE;
     }
 
