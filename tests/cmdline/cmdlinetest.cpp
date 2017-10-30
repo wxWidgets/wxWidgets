@@ -58,6 +58,23 @@ CPPUNIT_TEST_SUITE_REGISTRATION( CmdLineTestCase );
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( CmdLineTestCase, "CmdLineTestCase" );
 
+// Use this macro to compare a wxArrayString with the pipe-separated elements
+// of the given string
+//
+// NB: it's a macro and not a function to have the correct line numbers in the
+//     test failure messages
+#define WX_ASSERT_STRARRAY_EQUAL(s, a)                                        \
+    {                                                                         \
+        wxArrayString expected(wxSplit(s, '|', '\0'));                        \
+                                                                              \
+        CPPUNIT_ASSERT_EQUAL( expected.size(), a.size() );                    \
+                                                                              \
+        for ( size_t n = 0; n < a.size(); n++ )                               \
+        {                                                                     \
+            CPPUNIT_ASSERT_EQUAL( expected[n], a[n] );                        \
+        }                                                                     \
+    }
+
 // ============================================================================
 // implementation
 // ============================================================================

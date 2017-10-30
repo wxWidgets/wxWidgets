@@ -168,23 +168,6 @@ WX_CPPUNIT_ALLOW_EQUALS_TO_INT(wxLongLong_t)
 WX_CPPUNIT_ALLOW_EQUALS_TO_INT(unsigned wxLongLong_t)
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
-// Use this macro to compare a wxArrayString with the pipe-separated elements
-// of the given string
-//
-// NB: it's a macro and not a function to have the correct line numbers in the
-//     test failure messages
-#define WX_ASSERT_STRARRAY_EQUAL(s, a)                                        \
-    {                                                                         \
-        wxArrayString expected(wxSplit(s, '|', '\0'));                        \
-                                                                              \
-        CPPUNIT_ASSERT_EQUAL( expected.size(), a.size() );                    \
-                                                                              \
-        for ( size_t n = 0; n < a.size(); n++ )                               \
-        {                                                                     \
-            CPPUNIT_ASSERT_EQUAL( expected[n], a[n] );                        \
-        }                                                                     \
-    }
-
 // Use this macro to assert with the given formatted message (it should contain
 // the format string and arguments in a separate pair of parentheses)
 #define WX_ASSERT_MESSAGE(msg, cond) \
