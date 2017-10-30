@@ -1347,7 +1347,24 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
       return wxControl::MSWOnNotify(idCtrl, lParam, result);
   }
 
-  event.SetSelection(TabCtrl_GetCurSel(GetHwnd()));
+  if (hdr->code == TCN_SELCHANGING)
+  {
+	  POINT client;//Get screen coordinate of the first tab
+	  client.x = 0;
+	  client.y = 0;
+	  ::ClientToScreen(GetHWND(), &client);
+
+	  TCHITTESTINFO test;
+	  GetCursorPos(&test.pt);//Get screen mouse position
+	  test.pt.x = test.pt.x - client.x;
+	  test.pt.y = test.pt.y - client.y;
+
+	  UINT index = TabCtrl_HitTest(GetHwnd(), &test);
+	  event.SetSelection(index == -1 ? TabCtrl_GetCurSel(GetHwnd()) : index);
+  }
+  else
+	  event.SetSelection(TabCtrl_GetCurSel(GetHwnd()));
+    
   event.SetOldSelection(m_selection);
   event.SetEventObject(this);
   event.SetInt(idCtrl);
