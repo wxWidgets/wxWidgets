@@ -1028,26 +1028,6 @@ void* wxProgressDialogTaskRunner::Entry()
         parent = m_sharedData.m_parent;
     }
 
-    if ( parent )
-    {
-        // Force the creation of the message queue for this thread.
-        MSG msg;
-        ::PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
-
-        // Attach its message queue to the main thread in order to allow using
-        // the parent window created by the main thread as task dialog parent.
-        if ( !::AttachThreadInput(::GetCurrentThreadId(),
-                                  wxThread::GetMainId(),
-                                  TRUE) )
-        {
-            wxLogLastError(wxT("AttachThreadInput"));
-
-            // Don't even try using the parent window from another thread, this
-            // won't work.
-            parent = NULL;
-        }
-    }
-
     WinStruct<TASKDIALOGCONFIG> tdc;
     wxMSWTaskDialogConfig wxTdc;
 
