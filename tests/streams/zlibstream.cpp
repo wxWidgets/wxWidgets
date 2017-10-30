@@ -29,9 +29,6 @@
 
 using std::string;
 
-#define WXTEST_WITH_GZIP_CONDITION(testMethod) \
-    WXTEST_WITH_CONDITION( COMPOSE_TEST_NAME(zlibStream), wxZlibInputStream::CanHandleGZip() && wxZlibOutputStream::CanHandleGZip(), testMethod )
-
 #define DATABUFFER_SIZE 1024
 
 static const wxString FILENAME_GZ = wxT("zlibtest.gz");
@@ -76,16 +73,16 @@ public:
         CPPUNIT_TEST(TestStream_ZLib_NoComp);
         CPPUNIT_TEST(TestStream_ZLib_SpeedComp);
         CPPUNIT_TEST(TestStream_ZLib_BestComp);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_Default);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_NoComp);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_SpeedComp);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_BestComp);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_Dictionary);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_ZLibGZip);
+        CPPUNIT_TEST(TestStream_GZip_Default);
+        CPPUNIT_TEST(TestStream_GZip_NoComp);
+        CPPUNIT_TEST(TestStream_GZip_SpeedComp);
+        CPPUNIT_TEST(TestStream_GZip_BestComp);
+        CPPUNIT_TEST(TestStream_GZip_Dictionary);
+        CPPUNIT_TEST(TestStream_ZLibGZip);
         CPPUNIT_TEST(Decompress_BadData);
         CPPUNIT_TEST(Decompress_wx251_zlib114_Data_NoHeader);
         CPPUNIT_TEST(Decompress_wx251_zlib114_Data_ZLib);
-        WXTEST_WITH_GZIP_CONDITION(Decompress_gzip135Data);
+        CPPUNIT_TEST(Decompress_gzip135Data);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
