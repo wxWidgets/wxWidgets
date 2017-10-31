@@ -214,6 +214,33 @@ void PerformNotificationUpdates(HWND hwnd,
 
     if ( sharedData->m_notifications & wxSPDD_VALUE_CHANGED )
     {
+        // Use a hack to avoid progress bar animation: we can't afford to use
+        // it because animating the gauge movement smoothly requires a
+        // constantly running message loop and while it does run in this (task
+        // dialog) thread, it is often blocked from proceeding by some lock
+        // held by the main thread which is busy doing something and may not
+        // dispatch events frequently enough. So, in practice, the animation
+        // can lag far behind the real value and results in showing a wrong
+        // value in the progress bar.
+        //
+        // To prevent this from happening, set the progress bar value to
+        // something greater than its maximal value and then move it back: in
+        // the current implementations of the progress bar control, moving its
+        // position backwards does it directly, without using the animation,
+        // which is exactly what we want here.
+        //
+        // Finally notice that this hack doesn't really work for the last
+        // value, but while we could use a nested hack and temporarily increase
+        // the progress bar range when the value is equal to it, it isn't
+        // actually necessary in practice because when we reach the end of the
+        // bar the dialog is either hidden immediately anyhow or the main
+        // thread enters a modal event loop which does dispatch events and so
+        // it's not a problem to have an animated transition in this particular
+        // case.
+        ::SendMessage( hwnd,
+                       TDM_SET_PROGRESS_BAR_POS,
+                       sharedData->m_value + 1,
+                       0 );
         ::SendMessage( hwnd,
                        TDM_SET_PROGRESS_BAR_POS,
                        sharedData->m_value,
