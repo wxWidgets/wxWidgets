@@ -170,8 +170,25 @@ void wxAppBase::CleanUp()
 wxWindow* wxAppBase::GetTopWindow() const
 {
     wxWindow* window = m_topWindow;
-    if (window == NULL && wxTopLevelWindows.GetCount() > 0)
-        window = wxTopLevelWindows.GetFirst()->GetData();
+
+    // If there is no top window or it is about to be destroyed,
+    // we need to search for the first TLW which is not pending delete
+    if ( !window || wxPendingDelete.Member(window) )
+    {
+        window = NULL;
+        wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
+        while ( node )
+        {
+            wxWindow* win = node->GetData();
+            if ( !wxPendingDelete.Member(win) )
+            {
+                window = win;
+                break;
+            }
+            node = node->GetNext();
+        }
+    }
+
     return window;
 }
 
