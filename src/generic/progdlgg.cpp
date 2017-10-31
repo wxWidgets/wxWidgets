@@ -697,6 +697,21 @@ wxGenericProgressDialog::~wxGenericProgressDialog()
 
     if ( m_tempEventLoop )
     {
+        // If another event loop has been installed as active during the life
+        // time of this object, we shouldn't deactivate it, but we also can't
+        // delete our m_tempEventLoop in this case because it risks leaving the
+        // new event loop with a dangling pointer, which it will set back as
+        // the active loop when it exits, resulting in a crash. So we have no
+        // choice but to just leak this pointer then, which is, of course, bad
+        // and usually easily avoidable by just destroying the progress dialog
+        // sooner, so warn the programmer about it.
+        wxCHECK_RET
+        (
+            wxEventLoopBase::GetActive() == m_tempEventLoop,
+            "current event loop must not be changed during "
+            "wxGenericProgressDialog lifetime"
+        );
+
         wxEventLoopBase::SetActive(NULL);
         delete m_tempEventLoop;
     }
