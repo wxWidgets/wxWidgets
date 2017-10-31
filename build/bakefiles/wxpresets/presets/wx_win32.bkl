@@ -289,6 +289,7 @@
             <sys-lib>winmm</sys-lib>
             <sys-lib>shell32</sys-lib>
             <sys-lib>comctl32</sys-lib>
+            <sys-lib>imm32</sys-lib>
             <sys-lib>ole32</sys-lib>
             <sys-lib>oleaut32</sys-lib>
             <sys-lib>uuid</sys-lib>

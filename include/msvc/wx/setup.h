@@ -237,6 +237,7 @@
     #pragma comment(lib, "winmm")
     #pragma comment(lib, "shell32")
     #pragma comment(lib, "comctl32")
+    #pragma comment(lib, "imm32")
     #pragma comment(lib, "ole32")
     #pragma comment(lib, "oleaut32")
     #pragma comment(lib, "uuid")
