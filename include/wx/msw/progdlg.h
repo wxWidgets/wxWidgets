@@ -28,15 +28,15 @@ public:
 
     virtual void Resume() wxOVERRIDE;
 
-    int GetValue() const;
-    wxString GetMessage() const;
+    virtual int GetValue() const wxOVERRIDE;
+    virtual wxString GetMessage() const wxOVERRIDE;
 
-    void SetRange(int maximum);
+    virtual void SetRange(int maximum) wxOVERRIDE;
 
     // Return whether "Cancel" or "Skip" button was pressed, always return
     // false if the corresponding button is not shown.
-    bool WasSkipped() const;
-    bool WasCancelled() const;
+    virtual bool WasSkipped() const wxOVERRIDE;
+    virtual bool WasCancelled() const wxOVERRIDE;
 
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
     virtual wxString GetTitle() const wxOVERRIDE;

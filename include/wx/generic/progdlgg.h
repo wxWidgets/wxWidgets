@@ -46,16 +46,16 @@ public:
 
     virtual void Resume();
 
-    int GetValue() const;
-    int GetRange() const;
-    wxString GetMessage() const;
+    virtual int GetValue() const;
+    virtual int GetRange() const;
+    virtual wxString GetMessage() const;
 
-    void SetRange(int maximum);
+    virtual void SetRange(int maximum);
 
     // Return whether "Cancel" or "Skip" button was pressed, always return
     // false if the corresponding button is not shown.
-    bool WasCancelled() const;
-    bool WasSkipped() const;
+    virtual bool WasCancelled() const;
+    virtual bool WasSkipped() const;
 
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() wxOVERRIDE { wxDialog::Update(); }
