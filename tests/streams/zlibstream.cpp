@@ -46,13 +46,13 @@ public:
 
     CPPUNIT_TEST_SUITE(zlibStream);
         // Base class stream tests the zlibstream supports.
-        CPPUNIT_TEST_FAIL(Input_GetSize);
+        CPPUNIT_TEST(Input_GetSizeFail);
         CPPUNIT_TEST(Input_GetC);
         CPPUNIT_TEST(Input_Read);
         CPPUNIT_TEST(Input_Eof);
         CPPUNIT_TEST(Input_LastRead);
         CPPUNIT_TEST(Input_CanRead);
-        CPPUNIT_TEST_FAIL(Input_SeekI);
+        CPPUNIT_TEST(Input_SeekIFail);
         CPPUNIT_TEST(Input_TellI);
         CPPUNIT_TEST(Input_Peek);
         CPPUNIT_TEST(Input_Ungetch);
@@ -60,7 +60,7 @@ public:
         CPPUNIT_TEST(Output_PutC);
         CPPUNIT_TEST(Output_Write);
         CPPUNIT_TEST(Output_LastWrite);
-        CPPUNIT_TEST_FAIL(Output_SeekO);
+        CPPUNIT_TEST(Output_SeekOFail);
         CPPUNIT_TEST(Output_TellO);
 
         // Other test specific for zlib stream test case.
