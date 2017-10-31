@@ -987,10 +987,12 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
     unsigned long remainingTime;
     UpdateTimeEstimates(value, elapsedTime, estimatedTime, remainingTime);
 
-    if ( m_sharedData->m_progressBarMarquee )
+    // The value of 0 is special, we can't estimate anything before we have at
+    // least one update, so leave the times dependent on it indeterminate.
+    //
+    // Similarly, in indeterminate mode we don't have any estimations neither.
+    if ( !value || m_sharedData->m_progressBarMarquee )
     {
-        // In indeterminate mode we don't have any estimation neither for the
-        // remaining nor for estimated time.
         estimatedTime =
         remainingTime = static_cast<unsigned long>(-1);
     }
@@ -1081,6 +1083,13 @@ void* wxProgressDialogTaskRunner::Entry()
         {
             tdc.pszExpandedInformation =
                 m_sharedData.m_expandedInformation.t_str();
+
+            // If we have elapsed/estimated/... times to show, show them from
+            // the beginning for consistency with the generic version and also
+            // because showing them later may be very sluggish if the main
+            // thread doesn't update the dialog sufficiently frequently, while
+            // hiding them still works reasonably well.
+            tdc.dwFlags |= TDF_EXPANDED_BY_DEFAULT;
         }
     }
 
