@@ -987,14 +987,12 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
     unsigned long remainingTime;
     UpdateTimeEstimates(value, elapsedTime, estimatedTime, remainingTime);
 
-    int realEstimatedTime = estimatedTime,
-        realRemainingTime = remainingTime;
     if ( m_sharedData->m_progressBarMarquee )
     {
         // In indeterminate mode we don't have any estimation neither for the
         // remaining nor for estimated time.
-        realEstimatedTime =
-        realRemainingTime = -1;
+        estimatedTime =
+        remainingTime = static_cast<unsigned long>(-1);
     }
 
     wxString expandedInformation;
@@ -1014,7 +1012,7 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
 
         expandedInformation << GetEstimatedLabel()
                             << " "
-                            << GetFormattedTime(realEstimatedTime);
+                            << GetFormattedTime(estimatedTime);
     }
 
     if ( HasPDFlag(wxPD_REMAINING_TIME) )
@@ -1024,7 +1022,7 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
 
         expandedInformation << GetRemainingLabel()
                             << " "
-                            << GetFormattedTime(realRemainingTime);
+                            << GetFormattedTime(remainingTime);
     }
 
     // Update with new timing information.
