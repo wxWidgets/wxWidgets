@@ -32,6 +32,7 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/object.h"
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -728,7 +729,17 @@ bool wxTextCtrl::Create( wxWindow *parent,
         gtk_entry_get_text((GtkEntry*)m_text);
 
         if (style & wxNO_BORDER)
-            g_object_set (m_text, "has-frame", FALSE, NULL);
+        {
+#ifdef __WXGTK3__
+            // this is sort of a workaround for when the builtin theme
+            // won't remove the frame by itself -- see
+            // https://bugzilla.gnome.org/show_bug.cgi?id=789732#c1
+            wxGtkObject<GtkCssProvider> provider(gtk_css_provider_new());
+            ApplyCssStyle(provider, "* { border: none; border-radius: 0; padding: 0 }");
+#else
+            gtk_entry_set_has_frame((GtkEntry*)m_text, FALSE);
+#endif
+        }
 
     }
     g_object_ref(m_widget);
