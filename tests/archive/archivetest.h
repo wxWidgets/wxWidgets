@@ -12,6 +12,7 @@
 #define WX_TEST_ARCHIVE_ITERATOR
 
 #include "wx/archive.h"
+#include "wx/scopedptr.h"
 #include "wx/wfstream.h"
 
 #include <map>
@@ -215,7 +216,7 @@ protected:
 
     typedef std::map<wxString, TestEntry*> TestEntries;
     TestEntries m_testEntries;              // test data
-    std::auto_ptr<ClassFactoryT> m_factory; // factory to make classes
+    wxScopedPtr<ClassFactoryT> m_factory;   // factory to make classes
     int m_options;                          // test options
     wxDateTime m_timeStamp;                 // timestamp to give test entries
     int m_id;                               // select between the possibilites

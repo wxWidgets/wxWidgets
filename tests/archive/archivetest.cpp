@@ -20,7 +20,6 @@
 
 #include "archivetest.h"
 #include "wx/dir.h"
-#include "wx/scopedptr.h"
 #include <string>
 #include <list>
 #include <map>

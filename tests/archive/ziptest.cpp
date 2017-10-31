@@ -22,7 +22,6 @@
 #include "wx/zipstrm.h"
 
 using std::string;
-using std::auto_ptr;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -188,7 +187,7 @@ void ZipPipeTestCase::runTest()
     TestInputStream in(out, m_id % ((m_options & PipeIn) ? 4 : 3));
     wxZipInputStream zip(in);
 
-    auto_ptr<wxZipEntry> entry(zip.GetNextEntry());
+    wxScopedPtr<wxZipEntry> entry(zip.GetNextEntry());
     CPPUNIT_ASSERT(entry.get() != NULL);
 
     if ((m_options & PipeIn) == 0)

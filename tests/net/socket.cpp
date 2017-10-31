@@ -26,12 +26,12 @@
 
 #include "wx/socket.h"
 #include "wx/url.h"
+#include "wx/scopedptr.h"
 #include "wx/sstream.h"
 #include "wx/evtloop.h"
-#include <memory>
 
-typedef std::auto_ptr<wxSockAddress> wxSockAddressPtr;
-typedef std::auto_ptr<wxSocketClient> wxSocketClientPtr;
+typedef wxScopedPtr<wxSockAddress> wxSockAddressPtr;
+typedef wxScopedPtr<wxSocketClient> wxSocketClientPtr;
 
 static wxString gs_serverHost(wxGetenv("WX_TEST_SERVER"));
 
@@ -88,11 +88,11 @@ private:
 
     // get the address to connect to, if NULL is returned it means that the
     // test is disabled and shouldn't run at all
-    wxSockAddressPtr GetServer() const;
+    wxSockAddress* GetServer() const;
 
     // get the socket to read HTTP reply from, returns NULL if the test is
     // disabled
-    wxSocketClientPtr GetHTTPSocket(int flags = wxSOCKET_NONE) const;
+    wxSocketClient* GetHTTPSocket(int flags = wxSOCKET_NONE) const;
 
     void PseudoTest_SetUseEventLoop() { ms_useLoop = true; }
 
@@ -115,23 +115,23 @@ bool SocketTestCase::ms_useLoop = false;
 CPPUNIT_TEST_SUITE_REGISTRATION( SocketTestCase );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SocketTestCase, "SocketTestCase" );
 
-wxSockAddressPtr SocketTestCase::GetServer() const
+wxSockAddress* SocketTestCase::GetServer() const
 {
     if ( gs_serverHost.empty() )
-        return wxSockAddressPtr();
+        return NULL;
 
     wxIPV4address *addr = new wxIPV4address;
     addr->Hostname(gs_serverHost);
     addr->Service("www");
 
-    return wxSockAddressPtr(addr);
+    return addr;
 }
 
-wxSocketClientPtr SocketTestCase::GetHTTPSocket(int flags) const
+wxSocketClient* SocketTestCase::GetHTTPSocket(int flags) const
 {
-    wxSockAddressPtr addr = GetServer();
-    if ( !addr.get() )
-        return wxSocketClientPtr();
+    wxSockAddress *addr = GetServer();
+    if ( !addr )
+        return NULL;
 
     wxSocketClient *sock = new wxSocketClient(flags);
     sock->SetTimeout(1);
@@ -144,12 +144,12 @@ wxSocketClientPtr SocketTestCase::GetHTTPSocket(int flags) const
 
     sock->Write(httpGetRoot.ToAscii(), httpGetRoot.length());
 
-    return wxSocketClientPtr(sock);
+    return sock;
 }
 
 void SocketTestCase::BlockingConnect()
 {
-    wxSockAddressPtr addr = GetServer();
+    wxSockAddressPtr addr(GetServer());
     if ( !addr.get() )
         return;
 
@@ -159,7 +159,7 @@ void SocketTestCase::BlockingConnect()
 
 void SocketTestCase::NonblockingConnect()
 {
-    wxSockAddressPtr addr = GetServer();
+    wxSockAddressPtr addr(GetServer());
     if ( !addr.get() )
         return;
 
@@ -257,7 +257,7 @@ void SocketTestCase::UrlTest()
 
     wxURL url("http://" + gs_serverHost);
 
-    const std::auto_ptr<wxInputStream> in(url.GetInputStream());
+    const wxScopedPtr<wxInputStream> in(url.GetInputStream());
     CPPUNIT_ASSERT( in.get() );
 
     wxStringOutputStream out;
