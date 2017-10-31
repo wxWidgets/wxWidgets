@@ -33,6 +33,23 @@
     wxProgressDialog in a multi-threaded application you should be sure to use
     wxThreadEvent for your inter-threads communications).
 
+    Although wxProgressDialog is not really modal, it should be created on the
+    stack, and not the heap, as other modal dialogs, e.g. use it like this:
+    @code
+        void MyFrame::SomeFunc()
+        {
+            wxProgressDialog dialog(...);
+            for ( int i = 0; i < 100; ++i ) {
+                if ( !dialog.Update(i)) {
+                    // Cancelled by user.
+                    break;
+                }
+
+                ... do something time-consuming (but not too much) ...
+            }
+        }
+    @endcode
+
     @beginStyleTable
     @style{wxPD_APP_MODAL}
            Make the progress dialog modal. If this flag is not given, it is
