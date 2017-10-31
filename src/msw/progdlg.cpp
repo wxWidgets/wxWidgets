@@ -569,8 +569,8 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
             m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
         }
 
-        // The value passed here doesn't matter, only elapsed time makes sense
-        // in indeterminate mode anyhow.
+        // Value of 0 is special and is used when we can't estimate the
+        // remaining and total times, which is exactly what we need here.
         UpdateExpandedInformation(0);
 
         return m_sharedData->m_state != Canceled;
@@ -990,8 +990,9 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
     // The value of 0 is special, we can't estimate anything before we have at
     // least one update, so leave the times dependent on it indeterminate.
     //
-    // Similarly, in indeterminate mode we don't have any estimations neither.
-    if ( !value || m_sharedData->m_progressBarMarquee )
+    // This value is also used by Pulse(), as in the indeterminate mode we can
+    // never estimate anything.
+    if ( !value )
     {
         estimatedTime =
         remainingTime = static_cast<unsigned long>(-1);
