@@ -124,9 +124,11 @@ void ZipTestCase::OnEntryExtracted(wxZipEntry& entry,
     CPPUNIT_ASSERT_MESSAGE("IsText" + error_context,
                            entry.IsText() == testEntry.IsText());
 
-    CPPUNIT_ASSERT_MESSAGE("Extra/LocalExtra mismatch for entry" + error_entry,
-        (entry.GetExtraLen() != 0 && entry.GetLocalExtraLen() != 0) ||
-        (entry.GetExtraLen() == 0 && entry.GetLocalExtraLen() == 0));
+    INFO("Extra/LocalExtra mismatch for entry" + error_entry);
+    if ( entry.GetExtraLen() )
+        CHECK( entry.GetLocalExtraLen() != 0 );
+    else
+        CHECK( entry.GetLocalExtraLen() == 0 );
 }
 
 // check the notifier mechanism by using it to fold the entry comments to
@@ -267,7 +269,6 @@ CppUnit::Test *ziptest::makeTest(
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ziptest);
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ziptest, "archive");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ziptest, "archive/zip");
 
 #endif // wxUSE_STREAMS && wxUSE_ZIPSTREAM

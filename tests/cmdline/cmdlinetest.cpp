@@ -339,7 +339,7 @@ void CmdLineTestCase::Usage()
         Line_Max
     };
 
-    CPPUNIT_ASSERT_EQUAL(Line_Max, usageLines.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)Line_Max, usageLines.size());
     CPPUNIT_ASSERT_EQUAL("Verbosity options", usageLines[Line_Text_Verbosity]);
     CPPUNIT_ASSERT_EQUAL("", usageLines[Line_Text_Dummy1]);
     CPPUNIT_ASSERT_EQUAL("Even more usage text", usageLines[Line_Text_Dummy2]);

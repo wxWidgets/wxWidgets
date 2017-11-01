@@ -472,8 +472,8 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
         }
     }
 
-    CPPUNIT_ASSERT_MESSAGE("Could not decompress the compressed data, original and restored value did not match.",
-                           i == value_size && bValueEq);
+    CPPUNIT_ASSERT_EQUAL( i, value_size );
+    CPPUNIT_ASSERT( bValueEq );
 }
 
 wxZlibInputStream *zlibStream::DoCreateInStream()

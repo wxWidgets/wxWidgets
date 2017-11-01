@@ -11,33 +11,54 @@
 
 #include "wx/image.h"
 
-CPPUNIT_NS_BEGIN
-
-template <>
-struct assertion_traits<wxImage>
+namespace Catch
 {
-    static bool equal(const wxImage& i1, const wxImage& i2)
+    template <>
+    struct StringMaker<wxImage>
     {
-        if ( i1.GetWidth() != i2.GetWidth() )
-            return false;
+        static std::string convert(const wxImage& image)
+        {
+            return wxString::Format("image of size %d*%d with%s alpha",
+                                    image.GetWidth(),
+                                    image.GetHeight(),
+                                    image.HasAlpha() ? "" : "out")
+                    .ToStdString();
+        }
+    };
+}
 
-        if ( i1.GetHeight() != i2.GetHeight() )
-            return false;
-
-        return memcmp(i1.GetData(), i2.GetData(),
-                      i1.GetWidth()*i1.GetHeight()*3) == 0;
+class ImageRGBMatcher : public Catch::MatcherBase<wxImage>
+{
+public:
+    ImageRGBMatcher(const wxImage& image)
+        : m_image(image)
+    {
     }
 
-    static std::string toString(const wxImage& image)
+    bool match(const wxImage& other) const wxOVERRIDE
     {
-        return wxString::Format("image of size %d*%d with%s alpha",
-                                image.GetWidth(),
-                                image.GetHeight(),
-                                image.HasAlpha() ? "" : "out")
-                .ToStdString();
+        if ( other.GetWidth() != m_image.GetWidth() )
+            return false;
+
+        if ( other.GetHeight() != m_image.GetHeight() )
+            return false;
+
+        return memcmp(other.GetData(), m_image.GetData(),
+                      other.GetWidth()*other.GetHeight()*3) == 0;
     }
+
+    std::string describe() const wxOVERRIDE
+    {
+        return "has same RGB data as " + Catch::toString(m_image);
+    }
+
+private:
+    const wxImage m_image;
 };
 
-CPPUNIT_NS_END
+inline ImageRGBMatcher RGBSameAs(const wxImage& image)
+{
+    return ImageRGBMatcher(image);
+}
 
 #endif // _WX_TESTS_TESTIMAGE_H_
