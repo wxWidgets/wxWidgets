@@ -1,5 +1,7 @@
 version: '{build}'
 
+os: Previous Visual Studio 2015
+
 branches:
   only:
   - master
