@@ -28,7 +28,7 @@
             <command>
                 export DYLD_LIBRARY_PATH=../lib
                 cd tests &amp;&amp;
-                ./test -t &amp;&amp;
+                ./test &amp;&amp;
                 open ./test_gui.app
             </command>
         </copy-with-defaults>
