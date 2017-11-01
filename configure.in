@@ -7903,8 +7903,6 @@ AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(SAMPLES_CXXFLAGS)
 AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
-AC_SUBST(CPPUNIT_CFLAGS)
-AC_SUBST(CPPUNIT_LIBS)
 
 case "$TOOLKIT" in
     GTK)
@@ -8189,16 +8187,7 @@ else
     dnl there are no wxBase programs in demos
     SUBDIRS="samples utils"
 fi
-dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
-AM_PATH_CPPUNIT(1.8.0,
-    [SUBDIRS="$SUBDIRS tests"],
-    [
-        PKG_CHECK_MODULES(CPPUNIT, [cppunit >= 1.8.0],
-            [SUBDIRS="$SUBDIRS tests"],
-            [AC_MSG_WARN([cppunit not found])]
-        )
-    ]
-)
+SUBDIRS="$SUBDIRS tests"
 
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then

@@ -81,8 +81,8 @@ void SettingsTestCase::GetFont()
     for (unsigned int i=0; i < WXSIZEOF(ids); i++)
     {
         const wxFont& font = wxSystemSettings::GetFont(ids[i]);
-        CPPUNIT_ASSERT( font.IsOk() && 
-                        wxFontEnumerator::IsValidFacename(font.GetFaceName()) );
+        CPPUNIT_ASSERT( font.IsOk() );
+        CPPUNIT_ASSERT( wxFontEnumerator::IsValidFacename(font.GetFaceName()) );
     }
 }
 

@@ -21,6 +21,18 @@
 
 #include <math.h>
 
+namespace Catch
+{
+    template <>
+    struct StringMaker<wxVariant>
+    {
+        static std::string convert(const wxVariant& v)
+        {
+            return v.MakeString().ToStdString(wxConvUTF8);
+        }
+    };
+}
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------

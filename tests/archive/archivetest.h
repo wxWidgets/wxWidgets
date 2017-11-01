@@ -14,6 +14,8 @@
 #include "wx/archive.h"
 #include "wx/wfstream.h"
 
+#include <map>
+#include <memory>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Bit flags for options for the tests

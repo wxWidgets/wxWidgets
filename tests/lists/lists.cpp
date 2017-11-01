@@ -132,12 +132,13 @@ void ListsTestCase::wxStdListTest()
         CPPUNIT_ASSERT( *rit == i + &i );
     }
 
-    CPPUNIT_ASSERT( *list1.rbegin() == *--list1.end() &&
-                    *list1.begin() == *--list1.rend() );
-    CPPUNIT_ASSERT( *list1.begin() == *--++list1.begin() &&
-                    *list1.rbegin() == *--++list1.rbegin() );
+    CPPUNIT_ASSERT( *list1.rbegin() == *--list1.end() );
+    CPPUNIT_ASSERT( *list1.begin() == *--list1.rend() );
+    CPPUNIT_ASSERT( *list1.begin() == *--++list1.begin() );
+    CPPUNIT_ASSERT( *list1.rbegin() == *--++list1.rbegin() );
 
-    CPPUNIT_ASSERT( list1.front() == &i && list1.back() == &i + 4 );
+    CPPUNIT_ASSERT( list1.front() == &i );
+    CPPUNIT_ASSERT( list1.back() == &i + 4 );
 
     list1.erase(list1.begin());
     list1.erase(--list1.end());

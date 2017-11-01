@@ -22,6 +22,8 @@
 #include "wx/thread.h"
 #include "wx/tls.h"
 
+#include <string>
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -61,8 +63,10 @@ public:
         gs_threadData.name = "worker";
         gs_threadData.number = 2;
 
-        CPPUNIT_ASSERT_EQUAL( "worker", gs_threadData.name );
-        CPPUNIT_ASSERT_EQUAL( 2, gs_threadData.number );
+        // We can't use Catch asserts outside of the main thread,
+        // unfortunately.
+        wxASSERT( gs_threadData.name == std::string("worker") );
+        wxASSERT( gs_threadData.number == 2 );
 
         return NULL;
     }
@@ -111,7 +115,7 @@ void TLSTestCase::TestInt()
 
 void TLSTestCase::TestStruct()
 {
-    CPPUNIT_ASSERT_EQUAL( "", gs_threadData.name );
+    CPPUNIT_ASSERT_EQUAL( NULL, gs_threadData.name );
     CPPUNIT_ASSERT_EQUAL( 0, gs_threadData.number );
 
     gs_threadData.name = "main";
@@ -121,7 +125,7 @@ void TLSTestCase::TestStruct()
 
     TLSTestThread().Wait();
 
-    CPPUNIT_ASSERT_EQUAL( "main", gs_threadData.name );
+    CPPUNIT_ASSERT_EQUAL( std::string("main"), gs_threadData.name );
     CPPUNIT_ASSERT_EQUAL( 1, gs_threadData.number );
 }
 

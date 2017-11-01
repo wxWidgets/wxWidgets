@@ -1,0 +1,3 @@
+[submodule "3rdparty/catch"]
+	path = 3rdparty/catch
+	url = https://github.com/wxWidgets/Catch.git
