@@ -875,6 +875,12 @@ void MBConvTestCase::BufSize()
     CPPUNIT_ASSERT(
         convUTF16.WC2MB(buf.data(), utf16text, lenMB + 3) != wxCONV_FAILED );
     CPPUNIT_ASSERT_EQUAL( '?', buf[lenMB + 2] );
+
+    // test if cWX2MB returns the same length as WC2MB
+    wxCharBuffer anotherBuf = convUTF16.cWX2MB(utf16text);
+    CPPUNIT_ASSERT( anotherBuf.length() % 2 == 0 );
+    CPPUNIT_ASSERT_EQUAL( 10, anotherBuf.length() );
+    CPPUNIT_ASSERT_EQUAL( lenMB, anotherBuf.length() );
 }
 
 void MBConvTestCase::FromWCharTests()
