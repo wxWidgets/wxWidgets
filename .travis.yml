@@ -48,7 +48,7 @@ script:
     - make -C tests
     - echo -en 'travis_fold:end:script.tests\\r'
     - echo 'Testing...' && echo -en 'travis_fold:start:script.testing\\r'
-    - pushd tests && ./test -t && popd
+    - pushd tests && ./test && popd
     - echo -en 'travis_fold:end:script.testing\\r'
     - echo 'Building samples...' && echo -en 'travis_fold:start:script.samples\\r'
     - (test "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make samples
