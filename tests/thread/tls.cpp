@@ -63,8 +63,10 @@ public:
         gs_threadData.name = "worker";
         gs_threadData.number = 2;
 
-        CPPUNIT_ASSERT_EQUAL( std::string("worker"), gs_threadData.name );
-        CPPUNIT_ASSERT_EQUAL( 2, gs_threadData.number );
+        // We can't use Catch asserts outside of the main thread,
+        // unfortunately.
+        wxASSERT( gs_threadData.name == std::string("worker") );
+        wxASSERT( gs_threadData.number == 2 );
 
         return NULL;
     }
