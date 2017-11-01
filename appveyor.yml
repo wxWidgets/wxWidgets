@@ -29,6 +29,10 @@ environment:
     MSYSTEM: MINGW32
   - TOOLSET: cygwin
 
+matrix:
+  allow_failures:
+  - TOOLSET: cygwin
+
 clone_depth: 50
 
 before_build:
