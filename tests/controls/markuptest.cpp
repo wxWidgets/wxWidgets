@@ -105,8 +105,8 @@ void MarkupTestCase::RoundTrip()
 
                 case wxMarkupSpanAttributes::Size_Symbolic:
                     {
-                        CPPUNIT_ASSERT( attrs.m_fontSize >= -3 &&
-                                            attrs.m_fontSize <= 3 );
+                        CPPUNIT_ASSERT( attrs.m_fontSize >= -3 );
+                        CPPUNIT_ASSERT( attrs.m_fontSize <= 3 );
                         static const char *cssSizes[] =
                         {
                             "xx-small", "x-small", "small",

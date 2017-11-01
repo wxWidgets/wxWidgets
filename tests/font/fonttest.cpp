@@ -204,12 +204,11 @@ void FontTestCase::GetSet()
         test.SetStyle(wxFONTSTYLE_SLANT);
         CPPUNIT_ASSERT( test.IsOk() );
 #ifdef __WXMSW__
-        // on wxMSW wxFONTSTYLE_SLANT==wxFONTSTYLE_ITALIC
-        CPPUNIT_ASSERT( wxFONTSTYLE_SLANT == test.GetStyle() ||
-                        wxFONTSTYLE_ITALIC == test.GetStyle() );
-#else
-        CPPUNIT_ASSERT_EQUAL( wxFONTSTYLE_SLANT, test.GetStyle() );
+        // on wxMSW wxFONTSTYLE_SLANT==wxFONTSTYLE_ITALIC, so accept the latter
+        // as a valid value too.
+        if ( test.GetStyle() != wxFONTSTYLE_ITALIC )
 #endif
+        CPPUNIT_ASSERT_EQUAL( wxFONTSTYLE_SLANT, test.GetStyle() );
 
         // test Get/SetUnderlined()
 

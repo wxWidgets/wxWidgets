@@ -436,5 +436,4 @@ CppUnit::Test* GetlargeFileSuite()
 
 #endif // __WINDOWS__
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(largeFile, "largeFile");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(largeFile, "Streams.largeFile");

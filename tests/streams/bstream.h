@@ -9,8 +9,6 @@
 #ifndef _WX_TESTBSTREAM_H__
 #define _WX_TESTBSTREAM_H__
 
-#include "wx/cppunit.h"
-
 ///////////////////////////////////////////////////////////////////////////////
 // Some macros preventing us from typing too much ;-)
 //
@@ -18,14 +16,8 @@
 #define STREAM_TEST_NAME "Streams"
 #define COMPOSE_TEST_NAME(Name) \
     STREAM_TEST_NAME "." #Name
-#define STREAM_REGISTER_SUB_SUITE(Name) \
-    extern CppUnit::Test* Get##Name##Suite(); \
-    suite->addTest(Get##Name##Suite())
-#define STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE(Name) \
-    CppUnit::Test* Get##Name##Suite() { return Name::suite(); }
 #define STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(Name) \
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Name, COMPOSE_TEST_NAME(Name) ); \
-    STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE( Name )
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Name, COMPOSE_TEST_NAME(Name) );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Template class that implements a test for all base stream functions.
