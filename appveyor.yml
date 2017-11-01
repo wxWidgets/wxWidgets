@@ -1,6 +1,6 @@
 version: '{build}'
 
-os: Previous Visual Studio 2015
+image: Previous Visual Studio 2015
 
 branches:
   only:
