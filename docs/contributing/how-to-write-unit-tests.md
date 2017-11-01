@@ -33,7 +33,7 @@ suite or you can run just it using
 
 (see below for more about running tests).
 
-See [Catch tutorial](hhttps://github.com/philsquared/Catch/blob/v1.11.0/docs/tutorial.md)
+See [Catch tutorial](https://github.com/philsquared/Catch/blob/v1.11.0/docs/tutorial.md)
 for more information.
 
 
