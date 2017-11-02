@@ -9,6 +9,7 @@ branches:
 
 environment:
   matrix:
+  - TOOLSET: cygwin
   - TOOLSET: msbuild
     CONFIGURATION: DLL Release
     ARCH: x64
@@ -27,7 +28,6 @@ environment:
     wxUSE_STL: 0
   - TOOLSET: msys2
     MSYSTEM: MINGW32
-  - TOOLSET: cygwin
 
 matrix:
   allow_failures:
