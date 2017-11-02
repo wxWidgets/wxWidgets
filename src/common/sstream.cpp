@@ -135,7 +135,14 @@ wxStringOutputStream::wxStringOutputStream(wxString *pString, wxMBConv& conv)
 #endif // wxUSE_UNICODE
 {
     m_str = pString ? pString : &m_strInternal;
-    m_pos = m_str->length() / sizeof(wxChar);
+
+#if wxUSE_UNICODE_WCHAR
+    m_pos = m_conv.FromWChar(NULL, 0, m_str->wc_str(), m_str->length());
+#elif wxUSE_UNICODE_UTF8
+    m_pos = m_str->utf8_length();
+#else // !wxUSE_UNICODE
+    m_pos = m_str->length();
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 // ----------------------------------------------------------------------------
