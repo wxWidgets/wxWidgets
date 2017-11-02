@@ -399,7 +399,7 @@ wxMBConv::~wxMBConv()
     // nothing to do here (necessary for Darwin linking probably)
 }
 
-const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
+wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
 {
     if ( psz )
     {
@@ -419,7 +419,7 @@ const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
     return wxWCharBuffer();
 }
 
-const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
+wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
 {
     if ( pwz )
     {
@@ -435,7 +435,7 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
     return wxCharBuffer();
 }
 
-const wxWCharBuffer
+wxWCharBuffer
 wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
 {
     const size_t dstLen = ToWChar(NULL, 0, inBuff, inLen);
@@ -470,7 +470,7 @@ wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
     return wxWCharBuffer();
 }
 
-const wxCharBuffer
+wxCharBuffer
 wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
 {
     size_t dstLen = FromWChar(NULL, 0, inBuff, inLen);
@@ -511,7 +511,7 @@ wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
     return wxCharBuffer();
 }
 
-const wxWCharBuffer wxMBConv::cMB2WC(const wxScopedCharBuffer& buf) const
+wxWCharBuffer wxMBConv::cMB2WC(const wxScopedCharBuffer& buf) const
 {
     const size_t srcLen = buf.length();
     if ( srcLen )
@@ -529,7 +529,7 @@ const wxWCharBuffer wxMBConv::cMB2WC(const wxScopedCharBuffer& buf) const
     return wxScopedWCharBuffer::CreateNonOwned(L"", 0);
 }
 
-const wxCharBuffer wxMBConv::cWC2MB(const wxScopedWCharBuffer& wbuf) const
+wxCharBuffer wxMBConv::cWC2MB(const wxScopedWCharBuffer& wbuf) const
 {
     const size_t srcLen = wbuf.length();
     if ( srcLen )

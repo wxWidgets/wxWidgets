@@ -74,11 +74,11 @@ public:
     // Convenience functions for translating NUL-terminated strings: return
     // the buffer containing the converted string or empty buffer if the
     // conversion failed.
-    const wxWCharBuffer cMB2WC(const char *in) const;
-    const wxCharBuffer cWC2MB(const wchar_t *in) const;
+    wxWCharBuffer cMB2WC(const char *in) const;
+    wxCharBuffer cWC2MB(const wchar_t *in) const;
 
-    const wxWCharBuffer cMB2WC(const wxScopedCharBuffer& in) const;
-    const wxCharBuffer cWC2MB(const wxScopedWCharBuffer& in) const;
+    wxWCharBuffer cMB2WC(const wxScopedCharBuffer& in) const;
+    wxCharBuffer cWC2MB(const wxScopedWCharBuffer& in) const;
 
 
     // Convenience functions for converting strings which may contain embedded
@@ -96,22 +96,22 @@ public:
     // number of characters converted, whether the last one of them was NUL or
     // not. But if inLen == wxNO_LEN then outLen doesn't account for the last
     // NUL even though it is present.
-    const wxWCharBuffer
+    wxWCharBuffer
         cMB2WC(const char *in, size_t inLen, size_t *outLen) const;
-    const wxCharBuffer
+    wxCharBuffer
         cWC2MB(const wchar_t *in, size_t inLen, size_t *outLen) const;
 
     // convenience functions for converting MB or WC to/from wxWin default
 #if wxUSE_UNICODE
-    const wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
-    const wxCharBuffer cWX2MB(const wchar_t *psz) const { return cWC2MB(psz); }
+    wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
+    wxCharBuffer cWX2MB(const wchar_t *psz) const { return cWC2MB(psz); }
     const wchar_t* cWC2WX(const wchar_t *psz) const { return psz; }
     const wchar_t* cWX2WC(const wchar_t *psz) const { return psz; }
 #else // ANSI
     const char* cMB2WX(const char *psz) const { return psz; }
     const char* cWX2MB(const char *psz) const { return psz; }
-    const wxCharBuffer cWC2WX(const wchar_t *psz) const { return cWC2MB(psz); }
-    const wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
+    wxCharBuffer cWC2WX(const wchar_t *psz) const { return cWC2MB(psz); }
+    wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
 #endif // Unicode/ANSI
 
     // this function is used in the implementation of cMB2WC() to distinguish

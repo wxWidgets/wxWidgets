@@ -190,7 +190,7 @@ public:
         invalid and @a outLen is set to 0 (and not @c wxCONV_FAILED for
         compatibility concerns).
     */
-    const wxWCharBuffer cMB2WC(const char* in,
+    wxWCharBuffer cMB2WC(const char* in,
                                size_t inLen,
                                size_t *outLen) const;
 
@@ -209,7 +209,7 @@ public:
 
         @since 2.9.1
      */
-    const wxWCharBuffer cMB2WC(const wxCharBuffer& buf) const;
+    wxWCharBuffer cMB2WC(const wxCharBuffer& buf) const;
 
     //@{
     /**
@@ -221,7 +221,7 @@ public:
         is defined as the correct return type (without const).
     */
     const char* cMB2WX(const char* psz) const;
-    const wxWCharBuffer cMB2WX(const char* psz) const;
+    wxWCharBuffer cMB2WX(const char* psz) const;
     //@}
 
     /**
@@ -234,7 +234,7 @@ public:
         Its parameters have the same meaning as the corresponding parameters of
         FromWChar(), please see the description of cMB2WC() for more details.
     */
-    const wxCharBuffer cWC2MB(const wchar_t* in,
+    wxCharBuffer cWC2MB(const wchar_t* in,
                               size_t inLen,
                               size_t *outLen) const;
 
@@ -253,7 +253,7 @@ public:
 
         @since 2.9.1
      */
-    const wxCharBuffer cWC2MB(const wxWCharBuffer& buf) const;
+    wxCharBuffer cWC2MB(const wxWCharBuffer& buf) const;
 
     //@{
     /**
@@ -264,7 +264,7 @@ public:
         defined as the correct return type (without const).
     */
     const wchar_t* cWC2WX(const wchar_t* psz) const;
-    const wxCharBuffer cWC2WX(const wchar_t* psz) const;
+    wxCharBuffer cWC2WX(const wchar_t* psz) const;
     //@}
 
     //@{
@@ -276,7 +276,7 @@ public:
         is defined as the correct return type (without const).
     */
     const char* cWX2MB(const wxChar* psz) const;
-    const wxCharBuffer cWX2MB(const wxChar* psz) const;
+    wxCharBuffer cWX2MB(const wxChar* psz) const;
     //@}
 
     //@{
@@ -288,7 +288,7 @@ public:
         defined as the correct return type (without const).
     */
     const wchar_t* cWX2WC(const wxChar* psz) const;
-    const wxWCharBuffer cWX2WC(const wxChar* psz) const;
+    wxWCharBuffer cWX2WC(const wxChar* psz) const;
     //@}
 
     /**
