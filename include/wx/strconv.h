@@ -74,11 +74,15 @@ public:
     // Convenience functions for translating NUL-terminated strings: return
     // the buffer containing the converted string or empty buffer if the
     // conversion failed.
-    wxWCharBuffer cMB2WC(const char *in) const;
-    wxCharBuffer cWC2MB(const wchar_t *in) const;
+    wxWCharBuffer cMB2WC(const char *in) const
+        { return DoConvertMB2WC(in, wxNO_LEN); }
+    wxCharBuffer cWC2MB(const wchar_t *in) const
+        { return DoConvertWC2MB(in, wxNO_LEN); }
 
-    wxWCharBuffer cMB2WC(const wxScopedCharBuffer& in) const;
-    wxCharBuffer cWC2MB(const wxScopedWCharBuffer& in) const;
+    wxWCharBuffer cMB2WC(const wxScopedCharBuffer& in) const
+        { return DoConvertMB2WC(in, in.length()); }
+    wxCharBuffer cWC2MB(const wxScopedWCharBuffer& in) const
+        { return DoConvertWC2MB(in, in.length()); }
 
 
     // Convenience functions for converting strings which may contain embedded
@@ -161,6 +165,11 @@ public:
 
     // virtual dtor for any base class
     virtual ~wxMBConv() { }
+
+private:
+    // Common part of single argument cWC2MB() and cMB2WC() overloads above.
+    wxCharBuffer DoConvertWC2MB(const wchar_t* pwz, size_t srcLen) const;
+    wxWCharBuffer DoConvertMB2WC(const char* psz, size_t srcLen) const;
 };
 
 // ----------------------------------------------------------------------------
