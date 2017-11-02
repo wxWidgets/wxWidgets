@@ -62,8 +62,8 @@ public:
     //
     // Note that the conversion object should have the life time greater than
     // this stream.
-    wxStringOutputStream(wxString *pString = NULL,
-                         wxMBConv& conv = wxConvUTF8);
+    explicit wxStringOutputStream(wxString *pString = NULL,
+                                  wxMBConv& conv = wxConvUTF8);
 
     // get the string containing current output
     const wxString& GetString() const { return *m_str; }
