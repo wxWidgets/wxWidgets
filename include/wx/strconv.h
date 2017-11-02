@@ -160,7 +160,7 @@ public:
     virtual wxMBConv *Clone() const = 0;
 
     // virtual dtor for any base class
-    virtual ~wxMBConv();
+    virtual ~wxMBConv() { }
 };
 
 // ----------------------------------------------------------------------------

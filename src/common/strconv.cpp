@@ -394,11 +394,6 @@ size_t wxMBConv::WC2MB(char *outBuff, const wchar_t *inBuff, size_t outLen) cons
     return rc;
 }
 
-wxMBConv::~wxMBConv()
-{
-    // nothing to do here (necessary for Darwin linking probably)
-}
-
 wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
 {
     if ( psz )
