@@ -246,14 +246,6 @@ private:
     // flag telling us whether we should run tests from our EVT_IDLE handler
     bool m_runTests;
 
-    // command lines options/parameters
-    bool m_list;
-    bool m_longlist;
-    bool m_detail;
-    bool m_timing;
-    wxArrayString m_registries;
-    wxLocale *m_locale;
-
     // event handling hooks
     FilterEventFunc m_filterEventFunc;
     ProcessEventFunc m_processEventFunc;
@@ -408,15 +400,11 @@ wxTestGLogHandler(const gchar* domain,
 // ----------------------------------------------------------------------------
 
 TestApp::TestApp()
-  : m_list(false),
-    m_longlist(false)
 {
     m_runTests = true;
 
     m_filterEventFunc = NULL;
     m_processEventFunc = NULL;
-
-    m_locale = NULL;
 
 #if wxUSE_GUI
     m_exitcode = EXIT_SUCCESS;
@@ -437,14 +425,9 @@ bool TestApp::OnInit()
 #endif
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << "\n"
          << "running under " << wxGetOsDescription()
-         << " as " << wxGetUserId();
-
-    if ( m_detail )
-    {
-        cout << ", locale is " << setlocale(LC_ALL, NULL);
-    }
-
-    cout << std::endl;
+         << " as " << wxGetUserId()
+         << ", locale is " << setlocale(LC_ALL, NULL)
+         << std::endl;
 
 #if wxUSE_GUI
     // create a parent window to be used as parent for the GUI controls
@@ -498,8 +481,6 @@ int TestApp::RunTests()
 
 int TestApp::OnExit()
 {
-    delete m_locale;
-
 #if wxUSE_GUI
     delete GetTopWindow();
 #endif // wxUSE_GUI
