@@ -412,6 +412,7 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
         {
             wxLogError(wxT("Data seems to not be zlib or gzip data!"));
         }
+        break;
     default:
         wxLogError(wxT("Unknown flag, skipping quick test."));
     };
