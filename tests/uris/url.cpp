@@ -74,7 +74,8 @@ void URLTestCase::GetInputStream()
     CPPUNIT_ASSERT_EQUAL(wxURL_NOERR, url.GetError());
 
     wxInputStream *in_stream = url.GetInputStream();
-    CPPUNIT_ASSERT(in_stream && in_stream->IsOk());
+    CPPUNIT_ASSERT(in_stream);
+    CPPUNIT_ASSERT(in_stream->IsOk());
 
     wxMemoryOutputStream ostream;
     CPPUNIT_ASSERT(in_stream->Read(ostream).GetLastError() == wxSTREAM_EOF);

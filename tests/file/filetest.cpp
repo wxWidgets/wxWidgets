@@ -123,7 +123,8 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
 void FileTestCase::TempFile()
 {
     wxTempFile tmpFile;
-    CPPUNIT_ASSERT( tmpFile.Open(wxT("test2")) && tmpFile.Write(wxT("the answer is 42")) );
+    CPPUNIT_ASSERT( tmpFile.Open(wxT("test2")) );
+    CPPUNIT_ASSERT( tmpFile.Write(wxT("the answer is 42")) );
     CPPUNIT_ASSERT( tmpFile.Commit() );
     CPPUNIT_ASSERT( wxRemoveFile(wxT("test2")) );
 }

@@ -134,7 +134,8 @@ void StopWatchTestCase::BackwardsClockBug()
 
         for ( size_t m = 0; m < 10000; m++ )
         {
-            CPPUNIT_ASSERT ( sw.Time() >= 0 && sw2.Time() >= 0 );
+            CPPUNIT_ASSERT( sw.Time() >= 0 );
+            CPPUNIT_ASSERT( sw2.Time() >= 0 );
         }
     }
 }

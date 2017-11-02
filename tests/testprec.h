@@ -4,7 +4,7 @@
 #include "wx/wxprec.h"
 #include "wx/stopwatch.h"
 #include "wx/evtloop.h"
-#include "wx/cppunit.h"
+#include "wx/catch_cppunit.h"
 
 // Custom test macro that is only defined when wxUIActionSimulator is available
 // this allows the tests that do not rely on it to run on platforms that don't
@@ -173,21 +173,9 @@ void DeleteTestWindow(wxWindow* win);
 
 #endif // wxUSE_GUI
 
-// Macro that can be used to register the test with the given name in both the
-// global unnamed registry so that it is ran by default and a registry with the
-// same name as this test to allow running just this test individually.
-//
-// Notice that the name shouldn't include the "TestCase" suffix, it's added
-// automatically by this macro.
-//
-// Implementation note: CPPUNIT_TEST_SUITE_[NAMED_]REGISTRATION macros can't be
-// used here because they both declare the variable with the same name (as the
-// "unique" name they generate is based on the line number which is the same
-// for both calls inside the macro), so we need to do it manually.
-#define wxREGISTER_UNIT_TEST(name) \
-    static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
-        CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterRegistry__ ); \
-    static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
-        CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterNamedRegistry__ )(#name "TestCase")
+// Convenience macro which registers a test case using just its "base" name,
+// i.e. without the common "TestCase" suffix, as its tag.
+#define wxREGISTER_UNIT_TEST(testclass) \
+    wxREGISTER_UNIT_TEST_WITH_TAGS(testclass ## TestCase, "[" #testclass "]")
 
 #endif

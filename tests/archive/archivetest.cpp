@@ -808,8 +808,8 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
         // non-seekable entries are allowed to have GetSize == wxInvalidOffset
         // until the end of the entry's data has been read past
         CPPUNIT_ASSERT_MESSAGE("entry size check" + error_context,
-            testEntry.GetLength() == entry->GetSize() ||
-            ((m_options & PipeIn) != 0 && entry->GetSize() == wxInvalidOffset));
+            (testEntry.GetLength() == entry->GetSize() ||
+            ((m_options & PipeIn) != 0 && entry->GetSize() == wxInvalidOffset)));
         CPPUNIT_ASSERT_MESSAGE(
             "arc->GetLength() == entry->GetSize()" + error_context,
             arc->GetLength() == entry->GetSize());

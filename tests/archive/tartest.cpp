@@ -70,7 +70,6 @@ CppUnit::Test *tartest::makeTest(
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(tartest);
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(tartest, "archive");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(tartest, "archive/tar");
 
 #endif // wxUSE_STREAMS

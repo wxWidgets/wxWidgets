@@ -436,24 +436,14 @@ wxMenu* CreateTestMenu(wxFrame* frame)
 // Helper for checking that the menu event processing resulted in the expected
 // output from the handlers.
 //
-// Notice that this is supposed to be used with ASSERT_MENU_EVENT_RESULT()
-// macro to make the file name and line number of the caller appear in the
-// failure messages.
-void
-CheckMenuEvent(wxMenu* menu, const char* result, CppUnit::SourceLine sourceLine)
-{
-    g_str.clear();
-
-    // Trigger the menu event: this is more reliable than using
-    // wxUIActionSimulator and currently works in all ports as they all call
-    // wxMenuBase::SendEvent() from their respective menu event handlers.
-    menu->SendEvent(wxID_APPLY);
-
-    CPPUNIT_NS::assertEquals( result, g_str, sourceLine, "" );
-}
-
+// Note that we trigger the menu event by sending it directly as this is more
+// reliable than using wxUIActionSimulator and currently works in all ports as
+// they all call wxMenuBase::SendEvent() from their respective menu event
+// handlers.
 #define ASSERT_MENU_EVENT_RESULT(menu, result) \
-    CheckMenuEvent((menu), (result), CPPUNIT_SOURCELINE())
+    g_str.clear();                             \
+    menu->SendEvent(wxID_APPLY);               \
+    CHECK( g_str == result )
 
 void EventPropagationTestCase::MenuEvent()
 {
