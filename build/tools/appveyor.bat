@@ -42,5 +42,7 @@ set CHERE_INVOKING=yes
 :: Workaround for "configure: Bad file descriptor"
 perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
 bash -lc "g++ --version"
+bash -c "/usr/bin/env python -V"
+bash -c "/usr/bin/env python2 -V"
 bash -lc "LDFLAGS=-L/usr/lib/w32api ./configure --disable-optimise --disable-shared && make -j3"
 goto :eof
