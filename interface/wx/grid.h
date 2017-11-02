@@ -4245,7 +4245,7 @@ public:
         wxGridTableBase::DeleteRows(). See InsertRows() for further
         information.
 
-        @return @true on success or @false if appending rows failed.
+        @return @true on success or @false if deleting rows failed.
     */
     bool DeleteRows(int pos = 0, int numRows = 1, bool updateLabels = true);
 
