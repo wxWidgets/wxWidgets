@@ -71,8 +71,8 @@ public:
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const;
 
 
-    // Convenience functions for translating NUL-terminated strings: returns
-    // the buffer containing the converted string or NULL pointer if the
+    // Convenience functions for translating NUL-terminated strings: return
+    // the buffer containing the converted string or empty buffer if the
     // conversion failed.
     const wxWCharBuffer cMB2WC(const char *in) const;
     const wxCharBuffer cWC2MB(const wchar_t *in) const;
