@@ -354,7 +354,7 @@ static void bg(GtkStyleContext* sc, wxColour& color, int state = GTK_STATE_FLAG_
                 {
                 case CAIRO_FORMAT_ARGB32:
                     a = guchar(pixel >> 24);
-                    // fallthrough
+                    wxFALLTHROUGH;
                 case CAIRO_FORMAT_RGB24:
                     r = guchar(pixel >> 16);
                     g = guchar(pixel >> 8);
@@ -451,7 +451,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_3DLIGHT:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:
@@ -491,7 +491,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_BTNTEXT:
         sc = ButtonLabelContext(path);
         fg(sc, color);
@@ -505,7 +505,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_GRAYTEXT:
         sc = StyleContext(path, GTK_TYPE_LABEL, "label");
         fg(sc, color, GTK_STATE_FLAG_INSENSITIVE);

@@ -800,6 +800,7 @@ void DateTimeTestCase::TestTimeFormat()
                                 dt2.SetYear(dt.GetYear());
                             }
                             // fall through and compare everything
+                            wxFALLTHROUGH;
 
                         case CompareBoth:
                             CPPUNIT_ASSERT_EQUAL( dt, dt2 );
