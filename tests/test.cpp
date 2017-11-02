@@ -18,11 +18,18 @@
     #pragma hdrstop
 #endif
 
+// Suppress some warnings in catch_impl.hpp.
+wxCLANG_WARNING_SUPPRESS(missing-braces)
+wxCLANG_WARNING_SUPPRESS(logical-op-parentheses)
+
 // This file needs to get the CATCH definitions in addition to the usual
 // assertion macros declarations from catch.hpp included by testprec.h.
 // Including an internal file like this is ugly, but there doesn't seem to be
 // any better way, see https://github.com/philsquared/Catch/issues/1061
 #include "internal/catch_impl.hpp"
+
+wxCLANG_WARNING_RESTORE(missing-braces)
+wxCLANG_WARNING_RESTORE(logical-op-parentheses)
 
 // This probably could be done by predefining CLARA_CONFIG_MAIN, but at the
 // point where we are, just define this global variable manually.
