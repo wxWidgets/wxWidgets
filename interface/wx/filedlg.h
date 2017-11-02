@@ -296,8 +296,6 @@ public:
         The @c creator function should take pointer to parent window (file dialog)
         and should return a window allocated with operator new.
 
-        Supported platforms: wxGTK, wxMSW, wxUniv.
-
         @since 2.9.0
     */
     bool SetExtraControlCreator(ExtraControlCreatorFunction creator);
