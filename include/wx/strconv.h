@@ -77,6 +77,10 @@ public:
     const wxWCharBuffer cMB2WC(const char *in) const;
     const wxCharBuffer cWC2MB(const wchar_t *in) const;
 
+    const wxWCharBuffer cMB2WC(const wxScopedCharBuffer& in) const;
+    const wxCharBuffer cWC2MB(const wxScopedWCharBuffer& in) const;
+
+
     // Convenience functions for converting strings which may contain embedded
     // NULs and don't have to be NUL-terminated.
     //
@@ -96,12 +100,6 @@ public:
         cMB2WC(const char *in, size_t inLen, size_t *outLen) const;
     const wxCharBuffer
         cWC2MB(const wchar_t *in, size_t inLen, size_t *outLen) const;
-
-    // And yet more convenience functions for converting the entire buffers:
-    // these are the simplest and least error-prone as you never need to bother
-    // with lengths/sizes directly.
-    const wxWCharBuffer cMB2WC(const wxScopedCharBuffer& in) const;
-    const wxCharBuffer cWC2MB(const wxScopedWCharBuffer& in) const;
 
     // convenience functions for converting MB or WC to/from wxWin default
 #if wxUSE_UNICODE
