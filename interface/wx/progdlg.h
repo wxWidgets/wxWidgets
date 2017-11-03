@@ -49,6 +49,9 @@
             }
         }
     @endcode
+    Note that this becomes even more important if the dialog is instantiated
+    during the program initialization, e.g. from wxApp::OnInit(): the dialog
+    must be destroyed before the main event loop is started in this case.
 
     @beginStyleTable
     @style{wxPD_APP_MODAL}
