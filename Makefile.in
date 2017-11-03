@@ -35293,7 +35293,7 @@ webkit2_ext_webview_webkit2_extension.o: $(srcdir)/src/gtk/webview_webkit2_exten
 @COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
 @COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
 @COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
-@COND_PYTHON@@COND_USE_STC_1@	cd $(srcdir)/src/stc && python ./gen_iface.py
+@COND_PYTHON@@COND_USE_STC_1@	cd $(srcdir)/src/stc && /usr/bin/python ./gen_iface.py
 @COND_PYTHON@@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
 @COND_PYTHON@@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
 

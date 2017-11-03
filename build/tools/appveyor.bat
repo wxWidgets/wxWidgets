@@ -41,8 +41,13 @@ path c:\cygwin\bin;%path%
 set CHERE_INVOKING=yes
 :: Workaround for "configure: Bad file descriptor"
 perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
+rem Avoid rerunning gen_iface.py, this is broken under AppVeyor for some reason
+touch include/wx/stc/stc.h
 bash -lc "g++ --version"
-bash -c "/usr/bin/env python -V"
-bash -c "/usr/bin/env python2 -V"
+echo --- Python version:
+python -V
+echo --- Python version from bash:
+bash -c "/usr/bin/python -V"
+echo --- Configuring:
 bash -lc "LDFLAGS=-L/usr/lib/w32api ./configure --disable-optimise --disable-shared && make -j3"
 goto :eof
