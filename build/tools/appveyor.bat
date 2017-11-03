@@ -41,6 +41,11 @@ path c:\cygwin\bin;%path%
 set CHERE_INVOKING=yes
 :: Workaround for "configure: Bad file descriptor"
 perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
+echo --- Cygwin Python:
+bash -c "command -v python"
+echo --- Cygwin Python version:
+bash -c "python -V"
+exit 0
 :: Workaround for currently broken Python under Cygwin: don't use it for
 :: running gen_iface.py.
 touch include/wx/stc/stc.h
