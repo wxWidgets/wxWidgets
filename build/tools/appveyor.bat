@@ -46,8 +46,10 @@ touch include/wx/stc/stc.h
 bash -lc "g++ --version"
 echo --- Python version:
 python -V
+echo --- Python used by bash:
+bash -c "command -v python"
 echo --- Python version from bash:
-bash -c "/usr/bin/python -V"
+bash -c "python -V"
 echo --- Configuring:
 bash -lc "LDFLAGS=-L/usr/lib/w32api ./configure --disable-optimise --disable-shared && make -j3"
 goto :eof
