@@ -9,7 +9,7 @@ matrix:
     include:
         - compiler: gcc
         - compiler: gcc
-          env: wxCONFIGURE_FLAGS="--disable-precomp-headers --enable-monolithic"
+          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic"
         - dist: trusty
           compiler: gcc
         - dist: trusty
