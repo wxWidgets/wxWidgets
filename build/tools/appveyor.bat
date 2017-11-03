@@ -36,14 +36,11 @@ bash -lc "CXXFLAGS=-Wno-deprecated-declarations ./configure --disable-optimise &
 goto :eof
 
 :cygwin
-C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P libjpeg-devel -P libpng-devel -P libtiff-devel -P libexpat-devel
+C:\cygwin\setup-x86.exe -qgnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P libjpeg-devel -P libpng-devel -P libtiff-devel -P libexpat-devel
 path c:\cygwin\bin;%path%
 set CHERE_INVOKING=yes
 :: Workaround for "configure: Bad file descriptor"
 perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
-:: Workaround for currently broken Python under Cygwin: don't use it for
-:: running gen_iface.py.
-touch include/wx/stc/stc.h
 bash -lc "g++ --version"
 bash -lc "LDFLAGS=-L/usr/lib/w32api ./configure --disable-optimise --disable-shared && make -j3"
 goto :eof
