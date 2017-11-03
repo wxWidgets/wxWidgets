@@ -128,6 +128,23 @@ size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
 // wxStringOutputStream implementation
 // ============================================================================
 
+wxStringOutputStream::wxStringOutputStream(wxString *pString, wxMBConv& conv)
+    : m_conv(conv)
+#if wxUSE_UNICODE
+    , m_unconv(0)
+#endif // wxUSE_UNICODE
+{
+    m_str = pString ? pString : &m_strInternal;
+
+#if wxUSE_UNICODE_WCHAR
+    m_pos = m_conv.FromWChar(NULL, 0, m_str->wc_str(), m_str->length());
+#elif wxUSE_UNICODE_UTF8
+    m_pos = m_str->utf8_length();
+#else // !wxUSE_UNICODE
+    m_pos = m_str->length();
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+}
+
 // ----------------------------------------------------------------------------
 // seek/tell
 // ----------------------------------------------------------------------------
