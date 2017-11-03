@@ -41,9 +41,6 @@ path c:\cygwin\bin;%path%
 set CHERE_INVOKING=yes
 :: Workaround for "configure: Bad file descriptor"
 perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
-:: Workaround for currently broken Python under Cygwin: don't use it for
-:: running gen_iface.py.
-touch include/wx/stc/stc.h
 bash -lc "g++ --version"
 bash -lc "LDFLAGS=-L/usr/lib/w32api ./configure --disable-optimise --disable-shared && make -j3"
 goto :eof
