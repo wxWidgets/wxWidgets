@@ -1,6 +1,6 @@
 version: '{build}'
 
-os: Previous Visual Studio 2015
+image: Previous Visual Studio 2015
 
 branches:
   only:
@@ -9,6 +9,7 @@ branches:
 
 environment:
   matrix:
+  - TOOLSET: cygwin
   - TOOLSET: msbuild
     CONFIGURATION: DLL Release
     ARCH: x64
@@ -27,6 +28,9 @@ environment:
     wxUSE_STL: 0
   - TOOLSET: msys2
     MSYSTEM: MINGW32
+
+matrix:
+  allow_failures:
   - TOOLSET: cygwin
 
 clone_depth: 50
