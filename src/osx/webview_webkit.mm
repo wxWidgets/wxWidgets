@@ -24,6 +24,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/core/cfref.h"
+#include "wx/private/jsscriptwrapper.h"
 
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
@@ -408,13 +409,51 @@ wxString wxWebViewWebKit::GetSelectedText() const
     return wxCFStringRef::AsString([dr toString]);
 }
 
-void wxWebViewWebKit::RunScript(const wxString& javascript)
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
 {
-    if ( !m_webView )
-        return;
+    wxCHECK_MSG( m_webView, false,
+        wxS("wxWebView must be created before calling RunScript()") );
 
-    [[m_webView windowScriptObject] evaluateWebScript:
-                    wxCFStringRef( javascript ).AsNSString()];
+    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+
+    NSString* result = [m_webView stringByEvaluatingJavaScriptFromString:
+                            wxCFStringRef( wrapJS.GetWrappedCode() ).AsNSString()];
+
+    wxString err;
+    if ( result == nil )
+    {
+        // This is not very informative, but we just don't have any other
+        // information in this case.
+        err = _("failed to evaluate");
+    }
+    else if ( [result isEqualToString:@"true"] )
+    {
+        result = [m_webView stringByEvaluatingJavaScriptFromString:
+                    wxCFStringRef( wrapJS.GetOutputCode() ).AsNSString()];
+
+        [m_webView stringByEvaluatingJavaScriptFromString:
+            wxCFStringRef( wrapJS.GetCleanUpCode() ).AsNSString()];
+
+        if ( output != NULL )
+        {
+            if ( result )
+                *output = wxCFStringRef::AsString(result);
+            else
+                err = _("failed to retrieve execution result");
+        }
+    }
+    else // result available but not the expected "true"
+    {
+        err = wxCFStringRef::AsString(result);
+    }
+
+    if ( !err.empty() )
+    {
+        wxLogWarning(_("Error running JavaScript: %s"), err);
+        return false;
+    }
+
+    return true;
 }
 
 void wxWebViewWebKit::OnSize(wxSizeEvent &event)

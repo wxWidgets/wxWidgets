@@ -24,6 +24,7 @@
 #include "wx/msw/webview_missing.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
+#include "wx/msw/private.h"
 
 struct IHTMLDocument2;
 struct IHTMLElement;
@@ -121,7 +122,7 @@ public:
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
 
-    virtual void RunScript(const wxString& javascript) wxOVERRIDE;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
@@ -142,6 +143,10 @@ public:
 
     void onActiveXEvent(wxActiveXEvent& evt);
     void onEraseBg(wxEraseEvent&) {}
+
+    // Establish sufficiently modern emulation level for the browser control to
+    // allow RunScript() to return any kind of values.
+    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
 
     wxDECLARE_EVENT_TABLE();
 

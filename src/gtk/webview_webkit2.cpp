@@ -19,7 +19,13 @@
 #include "wx/base64.h"
 #include "wx/log.h"
 #include "wx/gtk/private/webview_webkit2_extension.h"
+#include "wx/gtk/private/string.h"
+#include "wx/gtk/private/webkit.h"
+#include "wx/gtk/private/error.h"
+#include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
+#include <JavaScriptCore/JSValueRef.h>
+#include <JavaScriptCore/JSStringRef.h>
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -1098,13 +1104,112 @@ wxString wxWebViewWebKit::GetPageText() const
     return wxString();
 }
 
-void wxWebViewWebKit::RunScript(const wxString& javascript)
+extern "C"
 {
+
+static void wxgtk_run_javascript_cb(GObject *,
+                                    GAsyncResult *res,
+                                    void *user_data)
+{
+    g_object_ref(res);
+
+    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
+    *res_out = res;
+}
+
+} // extern "C"
+
+// Run the given script synchronously and return its result in output.
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
+{
+    GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
-                                   javascript.mb_str(wxConvUTF8),
+                                   javascript.utf8_str(),
                                    NULL,
-                                   NULL,
-                                   NULL);
+                                   wxgtk_run_javascript_cb,
+                                   &result);
+
+    GMainContext *main_context = g_main_context_get_thread_default();
+
+    while ( !result )
+        g_main_context_iteration(main_context, TRUE);
+
+    wxGtkError error;
+    wxWebKitJavascriptResult js_result
+                             (
+                                webkit_web_view_run_javascript_finish
+                                (
+                                    m_web_view,
+                                    result,
+                                    error.Out()
+                                )
+                             );
+
+    // Match g_object_ref() in wxgtk_run_javascript_cb()
+    g_object_unref(result);
+
+    if ( !js_result )
+    {
+        if ( output )
+            *output = error.GetMessage();
+        return false;
+    }
+
+    JSGlobalContextRef context = webkit_javascript_result_get_global_context(js_result);
+    JSValueRef value = webkit_javascript_result_get_value(js_result);
+
+    JSValueRef exception = NULL;
+    wxJSStringRef js_value
+                  (
+                   JSValueIsObject(context, value)
+                       ? JSValueCreateJSONString(context, value, 0, &exception)
+                       : JSValueToStringCopy(context, value, &exception)
+                  );
+
+    if ( exception )
+    {
+        if ( output )
+        {
+            wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
+            *output = ex_value.ToWxString();
+        }
+
+        return false;
+    }
+
+    if ( output != NULL )
+        *output = js_value.ToWxString();
+
+    return true;
+}
+
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+{
+    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+
+    // This string is also used as an error indicator: it's cleared if there is
+    // no error or used in the warning message below if there is one.
+    wxString result;
+    if ( RunScriptSync(wrapJS.GetWrappedCode(), &result)
+            && result == wxS("true") )
+    {
+        if ( RunScriptSync(wrapJS.GetOutputCode(), &result) )
+        {
+            if ( output )
+                *output = result;
+            result.clear();
+        }
+
+        RunScriptSync(wrapJS.GetCleanUpCode());
+    }
+
+    if ( !result.empty() )
+    {
+        wxLogWarning(_("Error running JavaScript: %s"), result);
+        return false;
+    }
+
+    return true;
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
