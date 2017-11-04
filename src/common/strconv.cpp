@@ -394,48 +394,7 @@ size_t wxMBConv::WC2MB(char *outBuff, const wchar_t *inBuff, size_t outLen) cons
     return rc;
 }
 
-wxMBConv::~wxMBConv()
-{
-    // nothing to do here (necessary for Darwin linking probably)
-}
-
-const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
-{
-    if ( psz )
-    {
-        // calculate the length of the buffer needed first
-        const size_t nLen = ToWChar(NULL, 0, psz);
-        if ( nLen != wxCONV_FAILED )
-        {
-            // now do the actual conversion
-            wxWCharBuffer buf(nLen - 1 /* +1 added implicitly */);
-
-            // +1 for the trailing NULL
-            if ( ToWChar(buf.data(), nLen, psz) != wxCONV_FAILED )
-                return buf;
-        }
-    }
-
-    return wxWCharBuffer();
-}
-
-const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
-{
-    if ( pwz )
-    {
-        const size_t nLen = FromWChar(NULL, 0, pwz);
-        if ( nLen != wxCONV_FAILED )
-        {
-            wxCharBuffer buf(nLen - 1);
-            if ( FromWChar(buf.data(), nLen, pwz) != wxCONV_FAILED )
-                return buf;
-        }
-    }
-
-    return wxCharBuffer();
-}
-
-const wxWCharBuffer
+wxWCharBuffer
 wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
 {
     const size_t dstLen = ToWChar(NULL, 0, inBuff, inLen);
@@ -470,7 +429,7 @@ wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
     return wxWCharBuffer();
 }
 
-const wxCharBuffer
+wxCharBuffer
 wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
 {
     size_t dstLen = FromWChar(NULL, 0, inBuff, inLen);
@@ -511,10 +470,13 @@ wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
     return wxCharBuffer();
 }
 
-const wxWCharBuffer wxMBConv::cMB2WC(const wxScopedCharBuffer& buf) const
+wxWCharBuffer wxMBConv::DoConvertMB2WC(const char* buf, size_t srcLen) const
 {
-    const size_t srcLen = buf.length();
-    if ( srcLen )
+    // Notice that converting NULL pointer should work, i.e. return an empty
+    // buffer instead of crashing, so we need to check both the length and the
+    // pointer because length is wxNO_LEN if it's a raw pointer and doesn't
+    // come from wxScopedCharBuffer.
+    if ( srcLen && buf )
     {
         const size_t dstLen = ToWChar(NULL, 0, buf, srcLen);
         if ( dstLen != wxCONV_FAILED )
@@ -522,17 +484,24 @@ const wxWCharBuffer wxMBConv::cMB2WC(const wxScopedCharBuffer& buf) const
             wxWCharBuffer wbuf(dstLen);
             wbuf.data()[dstLen] = L'\0';
             if ( ToWChar(wbuf.data(), dstLen, buf, srcLen) != wxCONV_FAILED )
+            {
+                // If the input string was NUL-terminated, we shouldn't include
+                // the length of the trailing NUL into the length of the return
+                // value.
+                if ( srcLen == wxNO_LEN )
+                    wbuf.shrink(dstLen - 1);
+
                 return wbuf;
+            }
         }
     }
 
-    return wxScopedWCharBuffer::CreateNonOwned(L"", 0);
+    return wxWCharBuffer();
 }
 
-const wxCharBuffer wxMBConv::cWC2MB(const wxScopedWCharBuffer& wbuf) const
+wxCharBuffer wxMBConv::DoConvertWC2MB(const wchar_t* wbuf, size_t srcLen) const
 {
-    const size_t srcLen = wbuf.length();
-    if ( srcLen )
+    if ( srcLen && wbuf )
     {
         const size_t dstLen = FromWChar(NULL, 0, wbuf, srcLen);
         if ( dstLen != wxCONV_FAILED )
@@ -540,11 +509,18 @@ const wxCharBuffer wxMBConv::cWC2MB(const wxScopedWCharBuffer& wbuf) const
             wxCharBuffer buf(dstLen);
             buf.data()[dstLen] = '\0';
             if ( FromWChar(buf.data(), dstLen, wbuf, srcLen) != wxCONV_FAILED )
+            {
+                // As above, in DoConvertMB2WC(), except that the length of the
+                // trailing NUL is variable in this case.
+                if ( srcLen == wxNO_LEN )
+                    buf.shrink(dstLen - GetMBNulLen());
+
                 return buf;
+            }
         }
     }
 
-    return wxScopedCharBuffer::CreateNonOwned("", 0);
+    return wxCharBuffer();
 }
 
 // ----------------------------------------------------------------------------

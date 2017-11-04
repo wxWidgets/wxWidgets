@@ -874,6 +874,16 @@ void MBConvTestCase::BufSize()
     CPPUNIT_ASSERT(
         convUTF16.WC2MB(buf.data(), utf16text, lenMB + 3) != wxCONV_FAILED );
     CPPUNIT_ASSERT_EQUAL( '?', buf[lenMB + 2] );
+
+    // Test cWC2MB() too.
+    const wxCharBuffer buf2 = convUTF16.cWC2MB(utf16text);
+    CHECK( buf2.length() == lenMB );
+    CHECK( memcmp(buf, buf2, lenMB) == 0 );
+
+    const wxWCharBuffer utf16buf = wxWCharBuffer::CreateNonOwned(utf16text);
+    const wxCharBuffer buf3 = convUTF16.cWC2MB(utf16buf);
+    CHECK( buf3.length() == lenMB );
+    CHECK( memcmp(buf, buf3, lenMB) == 0 );
 }
 
 void MBConvTestCase::FromWCharTests()
@@ -1448,3 +1458,36 @@ void MBConvTestCase::UTF8(const char *charSequence,
 }
 
 #endif // HAVE_WCHAR_H
+
+TEST_CASE("wxMBConv::cWC2MB", "[mbconv][wc2mb]")
+{
+    wxMBConvUTF16 convUTF16;
+
+    CHECK( convUTF16.cWC2MB(L"").length() == 0 );
+    CHECK( convUTF16.cWC2MB(wxWCharBuffer()).length() == 0 );
+    CHECK( convUTF16.cWC2MB(L"Hi").length() == 4 );
+    CHECK( convUTF16.cWC2MB(wxWCharBuffer::CreateNonOwned(L"Hi")).length() == 4 );
+
+    CHECK( wxConvUTF7.cWC2MB(L"").length() == 0 );
+    CHECK( wxConvUTF7.cWC2MB(wxWCharBuffer()).length() == 0 );
+    CHECK( wxConvUTF7.cWC2MB(L"\xa3").length() == 5 );
+    // This test currently fails, the returned value is 3 because the
+    // conversion object doesn't return to its unshifted state -- which is
+    // probably a bug in wxMBConvUTF7.
+    // TODO: fix it there and reenable the test.
+    CHECK_NOFAIL( wxConvUTF7.cWC2MB(wxWCharBuffer::CreateNonOwned(L"\xa3")).length() == 5 );
+}
+
+TEST_CASE("wxMBConv::cMB2WC", "[mbconv][mb2wc]")
+{
+    wxMBConvUTF16 convUTF16;
+
+    CHECK( convUTF16.cMB2WC("\0").length() == 0 );
+    CHECK( convUTF16.cMB2WC(wxCharBuffer()).length() == 0 );
+    CHECK( convUTF16.cMB2WC("H\0i\0").length() == 2 );
+    CHECK( convUTF16.cMB2WC(wxCharBuffer::CreateNonOwned("H\0i\0", 4)).length() == 2 );
+
+    CHECK( wxConvUTF7.cMB2WC("").length() == 0 );
+    CHECK( wxConvUTF7.cMB2WC(wxCharBuffer()).length() == 0 );
+    CHECK( wxConvUTF7.cMB2WC("+AKM-").length() == 1 );
+}
