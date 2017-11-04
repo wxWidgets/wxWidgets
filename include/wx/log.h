@@ -61,6 +61,7 @@ class WXDLLIMPEXP_FWD_BASE wxObject;
 
 #include "wx/dynarray.h"
 #include "wx/hashmap.h"
+#include "wx/msgout.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -716,17 +717,17 @@ private:
 
 
 // log everything to a "FILE *", stderr by default
-class WXDLLIMPEXP_BASE wxLogStderr : public wxLog
+class WXDLLIMPEXP_BASE wxLogStderr : public wxLog,
+                                     private wxMessageOutputStderr
 {
 public:
     // redirect log output to a FILE
-    wxLogStderr(FILE *fp = NULL);
+    wxLogStderr(FILE *fp = NULL,
+                const wxMBConv &conv = wxConvWhateverWorks);
 
 protected:
     // implement sink function
     virtual void DoLogText(const wxString& msg) wxOVERRIDE;
-
-    FILE *m_fp;
 
     wxDECLARE_NO_COPY_CLASS(wxLogStderr);
 };
@@ -734,11 +735,13 @@ protected:
 #if wxUSE_STD_IOSTREAM
 
 // log everything to an "ostream", cerr by default
-class WXDLLIMPEXP_BASE wxLogStream : public wxLog
+class WXDLLIMPEXP_BASE wxLogStream : public wxLog,
+                                     private wxMessageOutputWithConv
 {
 public:
     // redirect log output to an ostream
-    wxLogStream(wxSTD ostream *ostr = (wxSTD ostream *) NULL);
+    wxLogStream(wxSTD ostream *ostr = (wxSTD ostream *) NULL,
+                const wxMBConv& conv = wxConvWhateverWorks);
 
 protected:
     // implement sink function
@@ -746,6 +749,8 @@ protected:
 
     // using ptr here to avoid including <iostream.h> from this file
     wxSTD ostream *m_ostr;
+
+    wxDECLARE_NO_COPY_CLASS(wxLogStream);
 };
 
 #endif // wxUSE_STD_IOSTREAM

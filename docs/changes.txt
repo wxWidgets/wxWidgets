@@ -91,6 +91,7 @@ All:
   wxLog::SetVerbose() which now only affects wxLogVerbose().
 - Add wxFileType::GetExpandedCommand() (troelsk).
 - Make it easier to convert to/from UTF-8-encoded std::string (ARATA Mizuki).
+- Support custom conversions in wxLogStream and wxLogStderr (Catalin Raceanu).
 - Add support for loading dynamic lexer in wxStyledTextCtrl (New Pagodi).
 - Handle strings with embedded NULs in wxDataStream (Nitch).
 - Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
