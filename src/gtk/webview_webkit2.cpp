@@ -11,6 +11,9 @@
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT2
 
+#include "wx/dir.h"
+#include "wx/dynlib.h"
+#include "wx/filename.h"
 #include "wx/stockitem.h"
 #include "wx/gtk/webview_webkit.h"
 #include "wx/gtk/control.h"
@@ -397,14 +400,75 @@ wxgtk_webview_webkit_counted_matches(WebKitFindController *,
     *findCount = match_count;
 }
 
+// This function checks if the specified directory contains our web extension.
+static bool CheckDirectoryForWebExt(const char* dirname)
+{
+    wxDir dir;
+    if ( !wxDir::Exists(dirname) || !dir.Open(dirname) )
+        return false;
+
+    wxString file;
+    bool cont = dir.GetFirst
+                    (
+                        &file,
+                        "webkit2_ext*" + wxDynamicLibrary::GetDllExt(wxDL_MODULE),
+                        wxDIR_FILES
+                    );
+    while ( cont )
+    {
+        wxDynamicLibrary dl;
+        if ( dl.Load(wxFileName(dirname, file).GetFullPath(),
+                     wxDL_VERBATIM | wxDL_LAZY) &&
+                dl.HasSymbol("webkit_web_extension_initialize_with_user_data") )
+        {
+            // Looks like our extension.
+            return true;
+        }
+
+        cont = dir.GetNext(&file);
+    }
+
+    return false;
+}
+
 static void
 wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
 {
     const char *address = g_dbus_server_get_client_address(dbusServer);
     GVariant *user_data = g_variant_new("(s)", address);
-    webkit_web_context_set_web_extensions_directory(context,
-                                                    WX_WEB_EXTENSIONS_DIRECTORY);
+
+    // The first value is the location in which the extension is supposed to be
+    // normally installed, while the other two are used as fallbacks to allow
+    // running the tests and sample using wxWebView before installing it.
+    const char* const directories[] =
+    {
+        WX_WEB_EXTENSIONS_DIRECTORY,
+        "..",
+        "../..",
+    };
+
+    const char* dir = NULL;
+    for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
+    {
+        if ( CheckDirectoryForWebExt(directories[n]) )
+        {
+            dir = directories[n];
+            break;
+        }
+    }
+
+    if ( dir )
+    {
+        webkit_web_context_set_web_extensions_directory(context, dir);
+    }
+    else
+    {
+        wxLogWarning(_("Web extension not found in \"%s\", "
+                       "some wxWebView functionality will be not available"),
+                     WX_WEB_EXTENSIONS_DIRECTORY);
+    }
+
     webkit_web_context_set_web_extensions_initialization_user_data(context,
                                                                    user_data);
 }
