@@ -36,7 +36,7 @@ public:
     virtual void SetValue(bool state);
     virtual bool GetValue() const;
 
-    virtual QPushButton *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);
@@ -69,7 +69,7 @@ public:
     virtual void SetValue(bool state);
     virtual bool GetValue() const;
 
-    virtual QPushButton *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 private:
 

@@ -13,6 +13,7 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include <QtCore/QStringList>
+#include <QtWidgets/QApplication>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxAppBase);
 

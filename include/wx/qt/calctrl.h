@@ -11,7 +11,7 @@
 #define _WX_QT_CALCTRL_H_
 
 #include "wx/calctrl.h"
-#include <QtWidgets/QCalendarWidget>
+class QCalendarWidget;
 
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase
 {
@@ -70,7 +70,7 @@ public:
 
     using wxCalendarCtrlBase::GenerateAllChangeEvents;
 
-    virtual QCalendarWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     virtual void RefreshHolidays();

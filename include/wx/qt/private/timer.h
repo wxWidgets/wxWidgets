@@ -10,14 +10,14 @@
 
 #if wxUSE_TIMER
 
-#include "wx/private/timer.h"
-
 #include <QtCore/QObject>
+#include "wx/private/timer.h"
 
 //-----------------------------------------------------------------------------
 // wxTimer
 //-----------------------------------------------------------------------------
 
+class QTimerEvent;
 class WXDLLIMPEXP_CORE wxQtTimerImpl : public wxTimerImpl, QObject
 {
 public:

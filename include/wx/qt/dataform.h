@@ -8,6 +8,8 @@
 #ifndef _WX_QT_DATAFORM_H_
 #define _WX_QT_DATAFORM_H_
 
+class QString;
+
 class WXDLLIMPEXP_CORE wxDataFormat
 {
 public:
@@ -33,7 +35,7 @@ public:
     wxDataFormatId GetType() const;
     void SetType( wxDataFormatId type );
 
-    QString m_MimeType;
+    wxString m_MimeType;
 };
 
 #endif // _WX_QT_DATAFORM_H_

@@ -8,7 +8,7 @@
 #ifndef _WX_QT_CHECKBOX_H_
 #define _WX_QT_CHECKBOX_H_
 
-#include <QtWidgets/QCheckBox>
+class QCheckBox;
 
 class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase
 {
@@ -32,7 +32,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
-    virtual QCheckBox *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState state);

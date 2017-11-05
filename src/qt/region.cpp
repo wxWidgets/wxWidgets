@@ -15,6 +15,7 @@
 
 #include <QtGui/QRegion>
 #include <QtGui/QBitmap>
+#include <QtGui/QPainter>
 
 class wxRegionRefData: public wxGDIRefData
 {
@@ -34,7 +35,7 @@ class wxRegionRefData: public wxGDIRefData
         wxRegionRefData( QPolygon p, Qt::FillRule fr ) : m_qtRegion( p, fr )
         {
         }
-        
+
         wxRegionRefData( const wxRegionRefData& data )
         : wxGDIRefData()
         {
@@ -93,9 +94,38 @@ wxRegion::wxRegion(const wxBitmap& bmp)
         m_refData = new wxRegionRefData( QRect( 0, 0, bmp.GetWidth(), bmp.GetHeight() ) );
 }
 
-wxRegion::wxRegion(const wxBitmap& WXUNUSED(bmp), const wxColour& WXUNUSED(transp), int WXUNUSED(tolerance))
+wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    if ( !bmp.GetHandle() ) {
+        m_refData = new wxRegionRefData();
+        return;
+    }
+
+    if ( tolerance == 0 ) {
+        m_refData = new wxRegionRefData(bmp.GetHandle()->createMaskFromColor(transp.GetQColor()));
+        return;
+    }
+
+    unsigned char raw[bmp.GetWidth()*bmp.GetHeight()];
+    memset(raw, 0, bmp.GetWidth()*bmp.GetHeight());
+
+    QImage img(bmp.GetHandle()->toImage());
+    int r = transp.Red(), g = transp.Green(), b = transp.Blue();
+    for(int y=0; y<img.height(); y++)
+    {
+        for(int x=0; x<img.width(); x++)
+        {
+            QColor c = img.pixel(x, y);
+            if ( abs(c.red()   - r ) > tolerance ||
+               abs(c.green() - g) > tolerance ||
+               abs(c.blue()  - b) > tolerance) {
+                    int ind = y*img.width()+x;
+                    raw[ind>>3] |= 1<<(ind&7);
+            }
+        }
+    }
+            
+    m_refData = new wxRegionRefData(QBitmap::fromData(bmp.GetHandle()->size(), raw));
 }
 
 bool wxRegion::IsEmpty() const
@@ -215,9 +245,9 @@ bool wxRegion::DoXor(const wxRegion& region)
     return true;
 }
 
-QRegion wxRegion::GetHandle() const
+const QRegion &wxRegion::GetHandle() const
 {
-    wxCHECK_MSG( IsOk(), QRegion(), "Invalid region" );
+    wxCHECK_MSG( IsOk(), GetHandle(), "Invalid region" );
 
     return M_REGIONDATA;
 }
