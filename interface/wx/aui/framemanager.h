@@ -394,7 +394,7 @@ public:
         @sa LoadPerspective
         @sa SavePerspective
     */
-    wxString SavePaneInfo(wxAuiPaneInfo& pane);
+    wxString SavePaneInfo(const wxAuiPaneInfo& pane);
 
     /**
         Saves the entire user interface layout into an encoded wxString, which
