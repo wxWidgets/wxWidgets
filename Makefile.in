@@ -5036,6 +5036,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_msgdlg.o \
 	monodll_qt_notebook.o \
 	monodll_qt_palette.o \
+	monodll_qt_nonownedwnd.o \
 	monodll_qt_pen.o \
 	monodll_qt_popupwin.o \
 	monodll_qt_printdlg.o \
@@ -5744,6 +5745,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_msgdlg.o \
 	monodll_qt_notebook.o \
 	monodll_qt_palette.o \
+	monodll_qt_nonownedwnd.o \
 	monodll_qt_pen.o \
 	monodll_qt_popupwin.o \
 	monodll_qt_printdlg.o \
@@ -7060,6 +7062,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_msgdlg.o \
 	monolib_qt_notebook.o \
 	monolib_qt_palette.o \
+	monolib_qt_nonownedwnd.o \
 	monolib_qt_pen.o \
 	monolib_qt_popupwin.o \
 	monolib_qt_printdlg.o \
@@ -7768,6 +7771,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_msgdlg.o \
 	monolib_qt_notebook.o \
 	monolib_qt_palette.o \
+	monolib_qt_nonownedwnd.o \
 	monolib_qt_pen.o \
 	monolib_qt_popupwin.o \
 	monolib_qt_printdlg.o \
@@ -9228,6 +9232,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_msgdlg.o \
 	coredll_qt_notebook.o \
 	coredll_qt_palette.o \
+	coredll_qt_nonownedwnd.o \
 	coredll_qt_pen.o \
 	coredll_qt_popupwin.o \
 	coredll_qt_printdlg.o \
@@ -9936,6 +9941,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_msgdlg.o \
 	coredll_qt_notebook.o \
 	coredll_qt_palette.o \
+	coredll_qt_nonownedwnd.o \
 	coredll_qt_pen.o \
 	coredll_qt_popupwin.o \
 	coredll_qt_printdlg.o \
@@ -10704,6 +10710,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_msgdlg.o \
 	corelib_qt_notebook.o \
 	corelib_qt_palette.o \
+	corelib_qt_nonownedwnd.o \
 	corelib_qt_pen.o \
 	corelib_qt_popupwin.o \
 	corelib_qt_printdlg.o \
@@ -11412,6 +11419,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_msgdlg.o \
 	corelib_qt_notebook.o \
 	corelib_qt_palette.o \
+	corelib_qt_nonownedwnd.o \
 	corelib_qt_pen.o \
 	corelib_qt_popupwin.o \
 	corelib_qt_printdlg.o \
@@ -18730,6 +18738,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_palette.o: $(srcdir)/src/qt/palette.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/palette.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_nonownedwnd.o: $(srcdir)/src/qt/nonownedwnd.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/nonownedwnd.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_pen.o: $(srcdir)/src/qt/pen.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/pen.cpp
 
@@ -23586,6 +23597,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_palette.o: $(srcdir)/src/qt/palette.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/palette.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_nonownedwnd.o: $(srcdir)/src/qt/nonownedwnd.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/nonownedwnd.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_pen.o: $(srcdir)/src/qt/pen.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/pen.cpp
@@ -28510,6 +28524,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_palette.o: $(srcdir)/src/qt/palette.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/palette.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_nonownedwnd.o: $(srcdir)/src/qt/nonownedwnd.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/nonownedwnd.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_pen.o: $(srcdir)/src/qt/pen.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/pen.cpp
 
@@ -31908,6 +31925,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_palette.o: $(srcdir)/src/qt/palette.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/palette.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_nonownedwnd.o: $(srcdir)/src/qt/nonownedwnd.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/nonownedwnd.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_pen.o: $(srcdir)/src/qt/pen.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/pen.cpp

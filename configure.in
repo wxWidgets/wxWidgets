@@ -3322,7 +3322,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                 if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
                     dnl build with position independent code if Qt needs it
                     SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
-                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
+                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS"
                 fi
             ],
             [

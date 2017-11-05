@@ -12,7 +12,9 @@
 #include "wx/window.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
+
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QLineEdit>
 
 class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
@@ -123,12 +125,12 @@ wxString wxComboBox::DoGetValue() const
 
 void wxComboBox::Popup()
 {
-     GetHandle()->showPopup();
+    static_cast<QComboBox *>(GetHandle())->showPopup();
 }
 
 void wxComboBox::Dismiss()
 {
-    GetHandle()->hidePopup();
+    static_cast<QComboBox *>(GetHandle())->hidePopup();
 }
 
 void wxComboBox::SetSelection( long from, long to )

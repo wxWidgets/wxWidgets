@@ -15,7 +15,8 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QRadioButton>
-
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QBoxLayout>
 
 class wxQtRadioBox : public wxQtEventSignalHandler< QGroupBox, wxRadioBox >
 {
@@ -236,7 +237,7 @@ int wxRadioBox::GetSelection() const
         return wxNOT_FOUND;
 }
 
-QGroupBox *wxRadioBox::GetHandle() const
+QWidget *wxRadioBox::GetHandle() const
 {
     return m_qtGroupBox;
 }

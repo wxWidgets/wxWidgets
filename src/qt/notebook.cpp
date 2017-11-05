@@ -13,6 +13,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QTabWidget>
+
 class wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
 {
 public:
@@ -199,7 +201,7 @@ wxWindow *wxNotebook::DoRemovePage(size_t page)
     return QtRetrieveWindowPointer( qtWidget );
 }
 
-QTabWidget *wxNotebook::GetHandle() const
+QWidget *wxNotebook::GetHandle() const
 {
     return m_qtTabWidget;
 }

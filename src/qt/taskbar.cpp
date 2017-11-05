@@ -10,6 +10,8 @@
 
 #include "wx/taskbar.h"
 
+#include <QtWidgets/QSystemTrayIcon>
+
 //=============================================================================
 
 bool wxTaskBarIconBase::IsAvailable()
@@ -23,6 +25,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxTaskBarIconBase);
 
 wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType WXUNUSED(iconType))
 {
+    m_qtSystemTrayIcon = new QSystemTrayIcon;
+}
+
+wxTaskBarIcon::~wxTaskBarIcon()
+{
+    delete m_qtSystemTrayIcon;
 }
 
 bool wxTaskBarIcon::SetIcon(const wxIcon& WXUNUSED(icon),

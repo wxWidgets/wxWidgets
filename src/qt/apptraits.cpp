@@ -12,7 +12,8 @@
 #include "wx/stdpaths.h"
 #include "wx/evtloop.h"
 
-#include "wx/qt/timer.h"
+#include "wx/timer.h"
+#include "wx/qt/private/timer.h"
 
 #include <QtGlobal>
 

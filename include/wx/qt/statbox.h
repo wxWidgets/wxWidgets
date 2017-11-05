@@ -8,7 +8,7 @@
 #ifndef _WX_QT_STATBOX_H_
 #define _WX_QT_STATBOX_H_
 
-#include <QtWidgets/QGroupBox>
+class QGroupBox;
 
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
@@ -31,7 +31,7 @@ public:
 
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 
-    virtual QGroupBox *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
 
