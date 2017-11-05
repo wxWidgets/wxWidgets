@@ -31,6 +31,8 @@
     #include "wx/mstream.h"
 #endif // wxUSE_UNICODE
 
+#include "testfile.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -105,23 +107,22 @@ TextStreamTestCase::TextStreamTestCase()
 
 void TextStreamTestCase::Endline()
 {
-    wxFileOutputStream* pOutFile = new wxFileOutputStream(wxT("test.txt"));
-    wxTextOutputStream* pOutText = new wxTextOutputStream(*pOutFile);
-    *pOutText   << wxT("Test text") << endl
-                << wxT("More Testing Text (There should be newline before this)");
+    TempFile f("test.txt");
 
-    delete pOutText;
-    delete pOutFile;
+    {
+        wxFileOutputStream pOutFile(f.GetName());
+        wxTextOutputStream pOutText(pOutFile);
+        pOutText << wxT("Test text") << endl
+                 << wxT("More Testing Text (There should be newline before this)");
+    }
 
-    wxFileInputStream* pInFile = new wxFileInputStream(wxT("test.txt"));
+    wxFileInputStream pInFile(f.GetName());
 
     char szIn[9 + NEWLINELEN];
 
-    pInFile->Read(szIn, 9 + NEWLINELEN);
+    pInFile.Read(szIn, 9 + NEWLINELEN);
 
     CPPUNIT_ASSERT( memcmp(&szIn[9], NEWLINE, NEWLINELEN) == 0 );
-
-    delete pInFile;
 }
 
 void TextStreamTestCase::MiscTests()
@@ -147,8 +148,10 @@ void TextStreamTestCase::MiscTests()
 template <typename T>
 static void DoTestRoundTrip(const T *values, size_t numValues)
 {
+    TempFile f("test.txt");
+
     {
-        wxFileOutputStream fileOut(wxT("test.txt"));
+        wxFileOutputStream fileOut(f.GetName());
         wxTextOutputStream textOut(fileOut);
 
         for ( size_t n = 0; n < numValues; n++ )
@@ -158,7 +161,7 @@ static void DoTestRoundTrip(const T *values, size_t numValues)
     }
 
     {
-        wxFileInputStream fileIn(wxT("test.txt"));
+        wxFileInputStream fileIn(f.GetName());
         wxTextInputStream textIn(fileIn);
 
         T value;

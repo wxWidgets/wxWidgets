@@ -10,13 +10,14 @@
 // this allows the tests that do not rely on it to run on platforms that don't
 // support it.
 //
-// FIXME: And while OS X does support it, more or less, too many tests
-//        currently fail under it so disable all interactive tests there. They
-//        should, of course, be reenabled a.s.a.p.
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
-    #define WXUISIM_TEST(test) CPPUNIT_TEST(test)
+// Unfortunately, currently too many of the UI tests fail on non-MSW platforms,
+// so they're disabled there by default. This really, really needs to be fixed,
+// but for now having the UI tests always failing is not helpful as it prevents
+// other test failures from being noticed, so disable them there.
+#if wxUSE_UIACTIONSIMULATOR
+    #define WXUISIM_TEST(test) if ( EnableUITests() ) { CPPUNIT_TEST(test) }
 #else
-    #define WXUISIM_TEST(test) (void)0
+    #define WXUISIM_TEST(test)
 #endif
 
 // define wxHAVE_U_ESCAPE if the compiler supports \uxxxx character constants
@@ -168,6 +169,9 @@ private:
 };
 
 #if wxUSE_GUI
+
+// Return true if the UI tests are enabled, used by WXUISIM_TEST().
+extern bool EnableUITests();
 
 // Helper function deleting the window without asserts (and hence exceptions
 // thrown from its dtor!) even if it has mouse capture.

@@ -360,6 +360,37 @@ extern bool IsAutomaticTest()
 
 #if wxUSE_GUI
 
+bool EnableUITests()
+{
+    static int s_enabled = -1;
+    if ( s_enabled == -1 )
+    {
+        // Allow explicitly configuring this via an environment variable under
+        // all platforms.
+        wxString enabled;
+        if ( wxGetEnv("WX_UI_TESTS", &enabled) )
+        {
+            if ( enabled == "1" )
+                s_enabled = 1;
+            else if ( enabled == "0" )
+                s_enabled = 0;
+            else
+                wxFprintf(stderr, "Unknown \"WX_UI_TESTS\" value \"%s\" ignored.\n", enabled);
+        }
+
+        if ( s_enabled == -1 )
+        {
+#ifdef __WXMSW__
+            s_enabled = 1;
+#else // !__WXMSW__
+            s_enabled = 0;
+#endif // __WXMSW__/!__WXMSW__
+        }
+    }
+
+    return s_enabled == 1;
+}
+
 void DeleteTestWindow(wxWindow* win)
 {
     if ( !win )

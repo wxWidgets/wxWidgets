@@ -1484,8 +1484,8 @@ TEST_CASE("wxMBConv::cMB2WC", "[mbconv][mb2wc]")
 
     CHECK( convUTF16.cMB2WC("\0").length() == 0 );
     CHECK( convUTF16.cMB2WC(wxCharBuffer()).length() == 0 );
-    CHECK( convUTF16.cMB2WC("H\0i\0").length() == 2 );
-    CHECK( convUTF16.cMB2WC(wxCharBuffer::CreateNonOwned("H\0i\0", 4)).length() == 2 );
+    CHECK( convUTF16.cMB2WC("H\0i\0\0").length() == 2 );
+    CHECK( convUTF16.cMB2WC(wxCharBuffer::CreateNonOwned("H\0i\0\0", 4)).length() == 2 );
 
     CHECK( wxConvUTF7.cMB2WC("").length() == 0 );
     CHECK( wxConvUTF7.cMB2WC(wxCharBuffer()).length() == 0 );
