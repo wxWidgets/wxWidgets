@@ -109,23 +109,20 @@ void TextStreamTestCase::Endline()
 {
     TempFile f("test.txt");
 
-    wxFileOutputStream* pOutFile = new wxFileOutputStream(f.GetName());
-    wxTextOutputStream* pOutText = new wxTextOutputStream(*pOutFile);
-    *pOutText   << wxT("Test text") << endl
-                << wxT("More Testing Text (There should be newline before this)");
+    {
+        wxFileOutputStream pOutFile(f.GetName());
+        wxTextOutputStream pOutText(pOutFile);
+        pOutText << wxT("Test text") << endl
+                 << wxT("More Testing Text (There should be newline before this)");
+    }
 
-    delete pOutText;
-    delete pOutFile;
-
-    wxFileInputStream* pInFile = new wxFileInputStream(f.GetName());
+    wxFileInputStream pInFile(f.GetName());
 
     char szIn[9 + NEWLINELEN];
 
-    pInFile->Read(szIn, 9 + NEWLINELEN);
+    pInFile.Read(szIn, 9 + NEWLINELEN);
 
     CPPUNIT_ASSERT( memcmp(&szIn[9], NEWLINE, NEWLINELEN) == 0 );
-
-    delete pInFile;
 }
 
 void TextStreamTestCase::MiscTests()
