@@ -28,6 +28,7 @@
 
 #include "wx/nonownedwnd.h"
 #include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 
 #include <QtGui/QBitmap>
 #include <QtGui/QPainter>
