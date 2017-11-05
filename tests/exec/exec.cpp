@@ -171,6 +171,11 @@ void ExecTestCase::TestShell()
 
 void ExecTestCase::TestExecute()
 {
+    // Launching interactive programs doesn't work without an interactive
+    // session.
+    if ( IsAutomaticTest() )
+        return;
+
     AsyncInEventLoop asyncInEventLoop;
 
     // test asynch exec
@@ -238,6 +243,9 @@ void ExecTestCase::TestExecute()
 
 void ExecTestCase::TestProcess()
 {
+    if ( IsAutomaticTest() )
+        return;
+
     AsyncInEventLoop asyncInEventLoop;
 
     // test wxExecute with wxProcess
