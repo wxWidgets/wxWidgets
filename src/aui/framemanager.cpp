@@ -1434,7 +1434,7 @@ static wxString EscapeDelimiters(const wxString& s)
     return result;
 }
 
-wxString wxAuiManager::SavePaneInfo(wxAuiPaneInfo& pane)
+wxString wxAuiManager::SavePaneInfo(const wxAuiPaneInfo& pane)
 {
     wxString result = wxT("name=");
     result += EscapeDelimiters(pane.name);
