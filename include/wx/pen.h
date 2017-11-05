@@ -24,7 +24,7 @@ public:
     explicit wxPenInfo(const wxColour& colour = wxColour(),
                        int width = 1,
                        wxPenStyle style = wxPENSTYLE_SOLID)
-        : wxPenInfoBase(colour, style)
+        : wxPenInfoBase<wxPenInfo>(colour, style)
     {
         m_width = width;
     }
