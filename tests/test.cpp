@@ -416,10 +416,12 @@ wxTestGLogHandler(const gchar* domain,
                   const gchar* message,
                   gpointer data)
 {
-    fprintf(stderr, "** GTK log message while running %s(): ",
+    fprintf(stderr, "\n*** GTK log message while running %s(): ",
             wxGetCurrentTestName().c_str());
 
     g_log_default_handler(domain, level, message, data);
+
+    fprintf(stderr, "\n");
 }
 
 #endif // __WXGTK__
