@@ -476,7 +476,7 @@ protected:
 
     private:
         wxArrayString m_facenames;
-} fontEnumerator;
+};
 
 bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
                                   wxFontEncoding encoding,
