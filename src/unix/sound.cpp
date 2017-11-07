@@ -386,14 +386,11 @@ void wxSoundSyncOnlyAdaptor::Stop()
     wxLogTrace(wxT("sound"), wxT("asking audio to stop"));
 
 #if wxUSE_THREADS
+    m_mutexRightToPlay.Lock();
+
     // tell the player thread (if running) to stop playback ASAP:
     m_status.m_stopRequested = true;
 
-    // acquire the mutex to be sure no sound is being played, then
-    // release it because we don't need it for anything (the effect of this
-    // is that calling thread will wait until playback thread reacts to
-    // our request to interrupt playback):
-    m_mutexRightToPlay.Lock();
     m_mutexRightToPlay.Unlock();
     wxLogTrace(wxT("sound"), wxT("audio was stopped"));
 #endif
