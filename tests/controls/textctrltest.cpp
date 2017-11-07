@@ -935,6 +935,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
         for( long x = 0; x < maxLineLength_0+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
             CPPUNIT_ASSERT_EQUAL( pos_0[y][x], p );
         }
 
@@ -951,6 +952,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
         for( long x = 0; x < maxLineLength_1+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
             CPPUNIT_ASSERT_EQUAL( pos_1[y][x], p  );
         }
 
@@ -985,6 +987,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
         for( long x = 0; x < maxLineLength_2+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
             CPPUNIT_ASSERT_EQUAL( ref_pos_2[y][x], p );
         }
 
@@ -1021,6 +1024,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
         for( long x = 0; x < maxLineLength_3+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
             CPPUNIT_ASSERT_EQUAL( ref_pos_3[y][x], p );
         }
 
@@ -1061,6 +1065,7 @@ void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
         for( long x = 0; x < maxLineLength_4+1; x++ )
         {
             long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
             CPPUNIT_ASSERT_EQUAL( ref_pos_4[y][x], p );
         }
 }
