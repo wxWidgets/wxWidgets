@@ -603,7 +603,7 @@ void TextCtrlTestCase::PositionToCoordsRich2()
 void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
 {
     delete m_text;
-    CreateText(style);
+    CreateText(style|wxTE_MULTILINE);
 
     // Asking for invalid index should fail.
     WX_ASSERT_FAILS_WITH_ASSERT( m_text->PositionToCoords(1) );
