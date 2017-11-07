@@ -718,7 +718,7 @@ private:
 
 // log everything to a "FILE *", stderr by default
 class WXDLLIMPEXP_BASE wxLogStderr : public wxLog,
-                                     private wxMessageOutputStderr
+                                     protected wxMessageOutputStderr
 {
 public:
     // redirect log output to a FILE
