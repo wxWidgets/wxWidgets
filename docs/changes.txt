@@ -171,6 +171,7 @@ wxGTK:
 - Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
 - Make wxBORDER_NONE work for wxTextCtrl with GTK+ 3 (Adrien Tétar).
 - Apply wxTextCtrl::SetDefaultStyle() to user-entered text (Andreas Falkenhahn).
+- Fix wxTextCtrl::GetStyle() with GTK+ 3.
 - Support background colour in wxDataViewCtrl attributes.
 - Improve wxSpinCtrl best size calculation.
 - Implement support for icon locations in wxMimeTypesManager (Hanmac).

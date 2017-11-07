@@ -1046,7 +1046,12 @@ void wxTextCtrl::WriteText( const wxString &text )
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if ( text.empty() )
+    {
+        // We don't need to actually do anything, but we still need to generate
+        // an event expected from this call.
+        SendTextUpdatedEvent(this);
         return;
+    }
 
     // we're changing the text programmatically
     DontMarkDirtyOnNextChange();
@@ -1187,20 +1192,35 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
 {
     if ( IsSingleLine() )
     {
-
-        if ( y != 0 || x >= GTKGetEntryTextLength(GTK_ENTRY(m_text)) )
+        if ( y != 0 || x > GTKGetEntryTextLength(GTK_ENTRY(m_text)) )
             return -1;
 
         return x;
     }
 
+    const gint numLines = gtk_text_buffer_get_line_count (m_buffer);
+
     GtkTextIter iter;
-    if (y >= gtk_text_buffer_get_line_count (m_buffer))
+    if (y >= numLines)
         return -1;
 
     gtk_text_buffer_get_iter_at_line(m_buffer, &iter, y);
-    if (x >= gtk_text_iter_get_chars_in_line (&iter))
+
+    const gint lineLength = gtk_text_iter_get_chars_in_line (&iter);
+    if (x > lineLength)
+    {
+        // This coordinate is always invalid.
         return -1;
+    }
+
+    if (x == lineLength)
+    {
+        // In this case the coordinate is considered to be valid by wx if this
+        // is the last line, as it corresponds to the last position beyond the
+        // last character of the text, and invalid otherwise.
+        if (y != numLines - 1)
+            return -1;
+    }
 
     return gtk_text_iter_get_offset(&iter) + x;
 }
@@ -1757,8 +1777,13 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     }
     else // have custom attributes
     {
+#ifdef __WXGTK3__
+        style.SetBackgroundColour(*pattr->appearance.rgba[0]);
+        style.SetTextColour(*pattr->appearance.rgba[1]);
+#else
         style.SetBackgroundColour(pattr->appearance.bg_color);
         style.SetTextColour(pattr->appearance.fg_color);
+#endif
 
         const wxGtkString
             pangoFontString(pango_font_description_to_string(pattr->font));

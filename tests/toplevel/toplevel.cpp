@@ -73,7 +73,7 @@ void TopLevelWindowTestCase::FrameShowTest()
 
 void TopLevelWindowTestCase::TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 {
-    CPPUNIT_ASSERT(!tlw->IsShown());
+    CHECK(!tlw->IsShown());
 
     wxTextCtrl* textCtrl = new wxTextCtrl(tlw, -1, "test");
     textCtrl->SetFocus();
@@ -81,19 +81,26 @@ void TopLevelWindowTestCase::TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 // only run this test on platforms where ShowWithoutActivating is implemented.
 #if defined(__WXMSW__) || defined(__WXMAC__)
     tlw->ShowWithoutActivating();
-    CPPUNIT_ASSERT(tlw->IsShown());
-    CPPUNIT_ASSERT(!tlw->IsActive());
+    CHECK(tlw->IsShown());
+    CHECK(!tlw->IsActive());
 
     tlw->Hide();
-    CPPUNIT_ASSERT(!tlw->IsShown());
-    CPPUNIT_ASSERT(!tlw->IsActive());
+    CHECK(!tlw->IsShown());
+    CHECK(!tlw->IsActive());
 #endif
 
     tlw->Show(true);
-    CPPUNIT_ASSERT(tlw->IsActive());
-    CPPUNIT_ASSERT(tlw->IsShown());
+
+    // wxGTK needs many event loop iterations before the TLW becomes active and
+    // this doesn't happen in this test, so avoid checking for it.
+#ifndef __WXGTK__
+    CHECK(tlw->IsActive());
+#endif
+    CHECK(tlw->IsShown());
 
     tlw->Hide();
-    CPPUNIT_ASSERT(!tlw->IsShown());
-    CPPUNIT_ASSERT(tlw->IsActive());
+    CHECK(!tlw->IsShown());
+#ifndef __WXGTK__
+    CHECK(tlw->IsActive());
+#endif
 }

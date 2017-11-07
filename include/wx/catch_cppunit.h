@@ -202,22 +202,24 @@ inline std::string wxGetCurrentTestName()
     public:                             \
     void runTest() wxOVERRIDE           \
     {                                   \
-        struct EatNextSemicolon
+        using namespace wxPrivate;      \
+        TempStringAssign setClass(wxTheCurrentTestClass, #testclass)
 
-#define CPPUNIT_TEST(testname)          \
-        SECTION(#testname " test")      \
-        {                               \
-            setUp();                    \
-            try                         \
-            {                           \
-                testname();             \
-            }                           \
-            catch ( ... )               \
-            {                           \
-                tearDown();             \
-                throw;                  \
-            }                           \
-            tearDown();                 \
+#define CPPUNIT_TEST(testname)                                             \
+        SECTION(#testname)                                                 \
+        {                                                                  \
+            TempStringAssign setMethod(wxTheCurrentTestMethod, #testname); \
+            setUp();                                                       \
+            try                                                            \
+            {                                                              \
+                testname();                                                \
+            }                                                              \
+            catch ( ... )                                                  \
+            {                                                              \
+                tearDown();                                                \
+                throw;                                                     \
+            }                                                              \
+            tearDown();                                                    \
         }
 
 #define CPPUNIT_TEST_SUITE_END()        \

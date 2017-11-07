@@ -142,7 +142,7 @@ void WindowTestCase::FocusEvent()
 
     m_window->SetFocus();
 
-    CPPUNIT_ASSERT_EQUAL(1, setfocus.GetCount());
+    WX_ASSERT_EVENT_OCCURS(setfocus, 1);
     CPPUNIT_ASSERT(m_window->HasFocus());
 
     wxButton* button = new wxButton(wxTheApp->GetTopWindow(), wxID_ANY);

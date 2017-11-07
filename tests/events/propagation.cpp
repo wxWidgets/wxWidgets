@@ -37,7 +37,12 @@
 //        some tests there. But this should be fixed and the tests reenabled
 //        because wxPaintEvent propagation in wxScrolledWindow is a perfect
 //        example of fragile code that could be broken under OS X.
-#ifndef __WXOSX__
+//
+// FIXME: Under GTK+ 3 the test is broken because a simple wxYield() is not
+//        enough to map the frame. It should be also fixed there by waiting for
+//        it to come up, with some timeout, but for now it always fails, so
+//        it's useless to run it.
+#if !defined(__WXOSX__) && !defined(__WXGTK3__)
     #define CAN_TEST_PAINT_EVENTS
 #endif
 
