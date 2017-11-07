@@ -213,11 +213,14 @@ public:
         until this happens.
 
         Notice that if @a newmsg is longer than the currently shown message,
-        the dialog size will be automatically increased to account for it.
-        However if the new message is shorter than the previous one, the dialog
-        doesn't shrink back to avoid constant resizes if the message is changed
-        often. To shrink back the dialog to fit its current contents you may
-        call Fit() explicitly.
+        the dialog will be automatically made wider to account for it. However
+        if the new message is shorter than the previous one, the dialog doesn't
+        shrink back to avoid constant resizes if the message is changed often.
+        To do this and fit the dialog to its current contents you may call
+        Fit() explicitly. However the native MSW implementation of this class
+        does make the dialog shorter if the new text has fewer lines of text
+        than the old one, so it is recommended to keep the number of lines of
+        text constant in order to avoid jarring dialog size changes.
 
         @param value
             The new value of the progress meter. It should be less than or equal to
