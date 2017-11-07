@@ -30,6 +30,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/log.h"
+    #include "wx/module.h"
     #include "wx/msw/private.h"
 #endif // WX_PRECOMP
 
@@ -1102,6 +1103,22 @@ extern const wxArrayString& wxGetPrivateFontFileNames()
 {
     return gs_privateFontFileNames;
 }
+
+// We need to use a module to clean up the list of private fonts when the
+// library is shut down.
+class wxPrivateFontsListModule : public wxModule
+{
+public:
+    wxPrivateFontsListModule() { }
+
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE { gs_privateFontFileNames.clear(); }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxPrivateFontsListModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxPrivateFontsListModule, wxModule);
 
 bool wxFontBase::AddPrivateFont(const wxString& filename)
 {
