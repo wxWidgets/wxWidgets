@@ -294,7 +294,7 @@ class wxSoundSyncOnlyAdaptor : public wxSoundBackend
 {
 public:
     wxSoundSyncOnlyAdaptor(wxSoundBackend *backend)
-        : m_backend(backend), m_playing(false) {}
+        : m_backend(backend) {}
     virtual ~wxSoundSyncOnlyAdaptor()
     {
         delete m_backend;
@@ -324,7 +324,6 @@ private:
     friend class wxSoundAsyncPlaybackThread;
 
     wxSoundBackend *m_backend;
-    bool m_playing;
 #if wxUSE_THREADS
     // player thread holds this mutex and releases it after it finishes
     // playing, so that the main thread knows when it can play sound
@@ -341,7 +340,7 @@ wxThread::ExitCode wxSoundAsyncPlaybackThread::Entry()
                              &m_adapt->m_status);
 
     m_data->DecRef();
-    m_adapt->m_playing = false;
+    m_adapt->m_status.m_playing = false;
     m_adapt->m_mutexRightToPlay.Unlock();
     wxLogTrace(wxT("sound"), wxT("terminated async playback thread"));
     return 0;
