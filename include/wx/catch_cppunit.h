@@ -205,7 +205,7 @@ inline std::string wxGetCurrentTestName()
         struct EatNextSemicolon
 
 #define CPPUNIT_TEST(testname)          \
-        SECTION(#testname " test")      \
+        SECTION(#testname)              \
         {                               \
             setUp();                    \
             try                         \
