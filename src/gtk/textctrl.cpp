@@ -1192,8 +1192,7 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
 {
     if ( IsSingleLine() )
     {
-
-        if ( y != 0 || x >= GTKGetEntryTextLength(GTK_ENTRY(m_text)) )
+        if ( y != 0 || x > GTKGetEntryTextLength(GTK_ENTRY(m_text)) )
             return -1;
 
         return x;
