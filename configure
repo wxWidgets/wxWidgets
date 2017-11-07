@@ -978,6 +978,8 @@ X_CFLAGS
 XMKMF
 DIRECTFB_LIBS
 DIRECTFB_CFLAGS
+FONTCONFIG_LIBS
+FONTCONFIG_CFLAGS
 GTK_CONFIG
 GTK_LIBS
 GTK_CFLAGS
@@ -1366,6 +1368,8 @@ CXX
 CXXFLAGS
 CCC
 PKG_CONFIG
+FONTCONFIG_CFLAGS
+FONTCONFIG_LIBS
 DIRECTFB_CFLAGS
 DIRECTFB_LIBS
 XMKMF
@@ -2348,6 +2352,10 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   PKG_CONFIG  path to pkg-config utility
+  FONTCONFIG_CFLAGS
+              C compiler flags for FONTCONFIG, overriding pkg-config
+  FONTCONFIG_LIBS
+              linker flags for FONTCONFIG, overriding pkg-config
   DIRECTFB_CFLAGS
               C compiler flags for DIRECTFB, overriding pkg-config
   DIRECTFB_LIBS
@@ -22471,6 +22479,83 @@ $as_echo "not found" >&6; }
             fi
 
                                                                                                                     fi
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for FONTCONFIG" >&5
+$as_echo_n "checking for FONTCONFIG... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$FONTCONFIG_CFLAGS"; then
+        pkg_cv_FONTCONFIG_CFLAGS="$FONTCONFIG_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fontconfig\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "fontconfig") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_FONTCONFIG_CFLAGS=`$PKG_CONFIG --cflags "fontconfig" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$FONTCONFIG_LIBS"; then
+        pkg_cv_FONTCONFIG_LIBS="$FONTCONFIG_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fontconfig\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "fontconfig") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_FONTCONFIG_LIBS=`$PKG_CONFIG --libs "fontconfig" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        FONTCONFIG_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "fontconfig"`
+        else
+	        FONTCONFIG_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "fontconfig"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$FONTCONFIG_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: fontconfig library not found, run-time font loading won't be supported by wxFont" >&5
+$as_echo "$as_me: WARNING: fontconfig library not found, run-time font loading won't be supported by wxFont" >&2;}
+elif test $pkg_failed = untried; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: fontconfig library not found, run-time font loading won't be supported by wxFont" >&5
+$as_echo "$as_me: WARNING: fontconfig library not found, run-time font loading won't be supported by wxFont" >&2;}
+else
+	FONTCONFIG_CFLAGS=$pkg_cv_FONTCONFIG_CFLAGS
+	FONTCONFIG_LIBS=$pkg_cv_FONTCONFIG_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                            $as_echo "#define wxUSE_FONTCONFIG 1" >>confdefs.h
+
+                            CXXFLAGS="$FONTCONFIG_CFLAGS $CXXFLAGS"
+                            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $FONTCONFIG_LIBS"
+
+fi
     fi
 
     if test "$wxUSE_DFB" = 1; then

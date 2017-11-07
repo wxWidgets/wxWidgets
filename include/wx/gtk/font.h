@@ -118,7 +118,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxFont);
 };
 
-#ifndef __WXMSW__
+#if wxUSE_FONTCONFIG
     #define wxHAS_PRIVATE_FONTS 1
 #endif
 

@@ -20,6 +20,7 @@
 #include "wx/font.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
@@ -30,11 +31,6 @@
 #include "wx/tokenzr.h"
 
 #include "wx/gtk/private.h"
-
-#ifdef GDK_WINDOWING_X11
-    #include <X11/Xlib.h>
-    #include <X11/Xft/Xft.h>
-#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -563,6 +559,8 @@ bool wxFont::GTKSetPangoAttrs(PangoLayout* layout) const
 // ----------------------------------------------------------------------------
 
 #ifdef wxHAS_PRIVATE_FONTS
+
+#include <fontconfig/fontconfig.h>
 
 namespace
 {

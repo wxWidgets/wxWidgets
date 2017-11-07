@@ -2962,6 +2962,14 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl     AC_MSG_RESULT(not found)
             dnl fi
         fi
+
+        PKG_CHECK_MODULES(FONTCONFIG, [fontconfig],
+                          [
+                            AC_DEFINE(wxUSE_FONTCONFIG)
+                            CXXFLAGS="$FONTCONFIG_CFLAGS $CXXFLAGS"
+                            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $FONTCONFIG_LIBS"
+                          ],
+                          [AC_MSG_WARN([fontconfig library not found, run-time font loading won't be supported by wxFont])])
     fi
 
     if test "$wxUSE_DFB" = 1; then
