@@ -1046,7 +1046,12 @@ void wxTextCtrl::WriteText( const wxString &text )
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if ( text.empty() )
+    {
+        // We don't need to actually do anything, but we still need to generate
+        // an event expected from this call.
+        SendTextUpdatedEvent(this);
         return;
+    }
 
     // we're changing the text programmatically
     DontMarkDirtyOnNextChange();
