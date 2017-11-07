@@ -2644,7 +2644,10 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     if ( externalLeading )
         *externalLeading = 0;
 
-    if ( str.empty())
+    // We can skip computing the string width and height if it is empty, but
+    // not its descent and/or external leading, which still needs to be
+    // returned even for an empty string.
+    if ( str.empty() && !descent && !externalLeading )
         return;
 
     if ( ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this) )
