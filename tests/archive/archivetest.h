@@ -249,7 +249,7 @@ public:
     ArchiveTestSuite(std::string name);
 
 protected:
-    virtual ArchiveTestSuite *makeSuite();
+    void DoRunTest();
 
     virtual CppUnit::Test *makeTest(std::string descr,
                                     int options,

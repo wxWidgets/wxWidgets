@@ -31,7 +31,8 @@ class tartest : public ArchiveTestSuite
 {
 public:
     tartest();
-    static CppUnit::Test *suite() { return (new tartest)->makeSuite(); }
+
+    void runTest() wxOVERRIDE { DoRunTest(); }
 
 protected:
     CppUnit::Test *makeTest(string descr, int options,

@@ -1185,10 +1185,10 @@ public:
         m_options(options)
     { }
 
-protected:
     // the entry point for the test
-    void runTest();
+    void runTest() wxOVERRIDE;
 
+protected:
     void CreateArchive(wxOutputStream& out);
     void ExtractArchive(wxInputStream& in);
 
@@ -1299,9 +1299,9 @@ bool ArchiveTestSuite::IsInPath(const wxString& cmd)
     return !m_path.FindValidPath(c).empty();
 }
 
-// make the test suite
+// run all the tests in the test suite
 //
-ArchiveTestSuite *ArchiveTestSuite::makeSuite()
+void ArchiveTestSuite::DoRunTest()
 {
     typedef wxArrayString::iterator Iter;
 
@@ -1324,7 +1324,10 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
                                                    generic != 0, *j, *i);
 
                     if (test)
-                        addTest(test);
+                    {
+                        test->runTest();
+                        delete test;
+                    }
                 }
 
     for (int options = 0; options <= PipeIn; options += PipeIn)
@@ -1340,11 +1343,10 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
             if (options)
                 descr += " (PipeIn)";
 
-            addTest(new CorruptionTestCase(descr, factory, options));
+            CorruptionTestCase test(descr, factory, options);
+            test.runTest();
         }
     }
-
-    return this;
 }
 
 CppUnit::Test *ArchiveTestSuite::makeTest(

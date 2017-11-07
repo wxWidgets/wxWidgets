@@ -213,11 +213,10 @@ class ziptest : public ArchiveTestSuite
 {
 public:
     ziptest();
-    static CppUnit::Test *suite() { return (new ziptest)->makeSuite(); }
+
+    void runTest() wxOVERRIDE { DoRunTest(); }
 
 protected:
-    ArchiveTestSuite *makeSuite();
-
     CppUnit::Test *makeTest(string descr, int options,
                             bool genericInterface, const wxString& archiver,
                             const wxString& unarchiver);
@@ -228,23 +227,6 @@ ziptest::ziptest()
 {
     AddArchiver(wxT("zip -qr %s *"));
     AddUnArchiver(wxT("unzip -q %s"));
-}
-
-ArchiveTestSuite *ziptest::makeSuite()
-{
-    ArchiveTestSuite::makeSuite();
-
-#if 0
-    // zip doesn't support this any more so disabled
-    if (IsInPath(wxT("zip")))
-        for (int options = 0; options <= PipeIn; options += PipeIn) {
-            string name = Description(wxT("ZipPipeTestCase"), options,
-                                      false, wxT(""), wxT("zip -q - -"));
-            addTest(new ZipPipeTestCase(name, options));
-        }
-#endif
-
-    return this;
 }
 
 CppUnit::Test *ziptest::makeTest(
