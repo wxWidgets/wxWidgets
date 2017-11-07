@@ -118,4 +118,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxFont);
 };
 
+#ifndef __WXMSW__
+    #define wxHAS_PRIVATE_FONTS 1
+#endif
+
 #endif // _WX_GTK_FONT_H_

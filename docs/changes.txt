@@ -109,6 +109,7 @@ All (GUI):
 
 - Allow wxWebView::RunScript() return values (Jose Lorenzo, GSoC 2017).
 - Allow using fractional pen widths with wxGraphicsContext (Adrien Tétar).
+- Add support for loading fonts from external files (Arthur Norman).
 - Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).

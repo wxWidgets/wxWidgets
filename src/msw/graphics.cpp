@@ -37,6 +37,7 @@
     #include "wx/dcprint.h"
 #endif
 
+#include "wx/filename.h"
 #include "wx/stack.h"
 
 #include "wx/private/graphics.h"
@@ -960,6 +961,47 @@ wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 }
 
 //-----------------------------------------------------------------------------
+// Support for adding private fonts
+//-----------------------------------------------------------------------------
+
+namespace
+{
+
+wxArrayString gs_privateFontFileNames;
+Gdiplus::PrivateFontCollection* gs_privateFonts = NULL;
+Gdiplus::FontFamily* gs_pFontFamily = NULL;
+
+} // anonymous namespace
+
+bool wxFontBase::AddPrivateFont(const wxString& filename)
+{
+    if ( !wxFileName::FileExists(filename) )
+    {
+        wxLogError(_("Font file \"%s\" doesn't exist."), filename);
+        return false;
+    }
+
+    gs_privateFontFileNames.Add(filename);
+    return true;
+}
+
+bool wxFontBase::ActivatePrivateFonts()
+{
+    const int n = gs_privateFontFileNames.size();
+    for ( int i = 0 ; i < n; i++ )
+    {
+        const wxString& fname = gs_privateFontFileNames[i];
+        if ( !AddFontResourceEx(fname.t_str(), FR_PRIVATE, 0) )
+        {
+            wxLogSysError(_("Font file \"%s\" couldn't be loaded"),
+                          fname);
+        }
+    }
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
 // wxGDIPlusFont implementation
 //-----------------------------------------------------------------------------
 
@@ -970,7 +1012,31 @@ wxGDIPlusFontData::Init(const wxString& name,
                         const wxColour& col,
                         Unit fontUnit)
 {
-    m_font = new Font(name.wc_str(), size, style, fontUnit);
+    // If the user has registered any private fonts, they should be used in
+    // preference to any system-wide ones.
+    m_font = NULL;
+    if ( gs_privateFonts )
+    {
+        const int count = gs_privateFonts->GetFamilyCount();
+
+        // We should find all the families, i.e. "found" should be "count".
+        int found = 0;
+        gs_privateFonts->GetFamilies(count, gs_pFontFamily, &found);
+
+        for ( int j = 0 ; j < found; j++ )
+        {
+            wchar_t familyName[LF_FACESIZE];
+            int rc = gs_pFontFamily[j].GetFamilyName(familyName);
+            if ( rc == 0 && lstrcmp(name, familyName) == 0 )
+            {
+                m_font = new Font(&gs_pFontFamily[j], size, style, fontUnit);
+                break;
+            }
+        }
+    }
+
+    if ( !m_font )
+        m_font = new Font(name, size, style, fontUnit);
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
@@ -2275,6 +2341,20 @@ void wxGDIPlusRenderer::Load()
     {
         wxLogTrace("gdiplus", "successfully initialized GDI+");
         m_loaded = 1;
+
+        // Make private fonts available to GDI+, if any.
+        const int n = gs_privateFontFileNames.size();
+        if ( n )
+        {
+            gs_privateFonts = new Gdiplus::PrivateFontCollection();
+            for ( int i = 0 ; i < n; i++ )
+            {
+                const wxString& fname = gs_privateFontFileNames[i];
+                gs_privateFonts->AddFontFile(fname.t_str());
+            }
+
+            gs_pFontFamily = new Gdiplus::FontFamily[n];
+        }
     }
     else
     {
@@ -2289,6 +2369,15 @@ void wxGDIPlusRenderer::Unload()
     {
         GdiplusShutdown(m_gditoken);
         m_gditoken = 0;
+
+        if ( gs_privateFonts )
+        {
+            delete gs_privateFonts;
+            gs_privateFonts = NULL;
+
+            delete[] gs_pFontFamily;
+            gs_pFontFamily = NULL;
+        }
     }
     m_loaded = -1; // next Load() will try again
 }

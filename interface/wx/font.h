@@ -665,6 +665,44 @@ public:
     const wxNativeFontInfo *GetNativeFontInfo() const;
 
     /**
+        Specify the name of a file containing a TrueType font to be
+        made available to the current application.
+
+        This method can be used to allow this application to use the font from
+        the given file even if it is not globally installed on the system.
+
+        Under OS X this method actually doesn't do anything other than check
+        for the existence of the file in the "Fonts" subdirectory of the
+        application bundle "Resources" directory. You are responsible for
+        actually making the font file available in this directory and setting
+        @c ATSApplicationFontsPath to @c Fonts value in your @c Info.plist
+        file. See also wxStandardPaths::GetResourcesDir().
+
+        Notice that this method must be called before any graphics contexts
+        have been created.
+
+        Currently this method is implemented for all major platforms but you
+        may also test for @c wxHAS_PRIVATE_FONTS preprocessor symbol: if it is
+        not defined, this function and ActivatePrivatefonts() are not
+        implemented at all and always simply return false.
+
+        @return @true if the font was added and ActivatePrivatefonts() should
+            be called next or @false if adding it failed.
+
+        @since 2.9.5
+    */
+    static bool AddPrivateFont(const wxString& filename);
+
+    /**
+        Make all fonts registered by AddPrivateFont() actually available.
+
+        @return @true if the private fonts can now be used or @false on error.
+
+        @since 2.9.5
+    */
+    static bool ActivatePrivatefonts();
+
+    /**
         Gets the point size.
 
         @see SetPointSize()

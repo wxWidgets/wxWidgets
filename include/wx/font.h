@@ -328,6 +328,12 @@ public:
     // from the string representation of wxNativeFontInfo
     static wxFont *New(const wxString& strNativeFontDesc);
 
+    // These functions can be used to load private fonts if supported by this
+    // platform (wxHAS_PRIVATE_FONTS is defined): first add one or more files
+    // and then activate all of them at once.
+    static bool AddPrivateFont(const wxString& filename);
+    static bool ActivatePrivateFonts();
+
     // comparison
     bool operator==(const wxFont& font) const;
     bool operator!=(const wxFont& font) const { return !(*this == font); }

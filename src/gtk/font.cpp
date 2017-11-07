@@ -31,6 +31,11 @@
 
 #include "wx/gtk/private.h"
 
+#ifdef GDK_WINDOWING_X11
+    #include <X11/Xlib.h>
+    #include <X11/Xft/Xft.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -551,3 +556,58 @@ bool wxFont::GTKSetPangoAttrs(PangoLayout* layout) const
 
     return true;
 }
+
+
+// ----------------------------------------------------------------------------
+// Support for adding private fonts
+// ----------------------------------------------------------------------------
+
+#ifdef wxHAS_PRIVATE_FONTS
+
+namespace
+{
+    FcConfig* gs_fcConfig = NULL;
+}
+
+bool wxFontBase::AddPrivateFont(const wxString& filename)
+{
+    if ( !gs_fcConfig )
+    {
+        gs_fcConfig = FcConfigGetCurrent();
+        if ( !gs_fcConfig )
+        {
+            gs_fcConfig = FcConfigCreate();
+            if ( !gs_fcConfig )
+            {
+                wxLogError(_("Failed to add custom font \"%s\" as "
+                             "font configuration object creation failed."),
+                           filename);
+                return false;
+            }
+        }
+    }
+
+    if ( !FcConfigAppFontAddFile(gs_fcConfig,
+            reinterpret_cast<const FcChar8*>(
+                static_cast<const char*>(filename.utf8_str())
+            )) )
+    {
+        wxLogError(_("Failed to add custom font \"%s\"."), filename);
+        return false;
+    }
+
+    return true;
+}
+
+bool wxFontBase::ActivatePrivateFonts()
+{
+    if ( !FcConfigSetCurrent(gs_fcConfig) )
+    {
+        wxLogError(_("Failed to update current font configuration."));
+        return false;
+    }
+
+    return true;
+}
+
+#endif // wxHAS_PRIVATE_FONTS
