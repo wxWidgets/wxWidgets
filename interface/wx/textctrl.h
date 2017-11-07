@@ -1033,6 +1033,31 @@ public:
     correspond to the positions in the value string.
 
 
+    @section textctrl_positions_xy wxTextCtrl Positions and Coordinates
+
+    It is possible to use either linear positions, i.e. roughly (but @e not
+    always exactly, as explained in the previous section) the index of the
+    character in the text contained in the control or X-Y coordinates, i.e.
+    column and line of the character when working with this class and it
+    provides the functions PositionToXY() and XYToPosition() to convert between
+    the two.
+
+    Additionally, a position in the control can be converted to its coordinates
+    in pixels using PositionToCoords() which can be useful to e.g. show a popup
+    menu near the given character. And, in the other direction, HitTest() can
+    be used to find the character under, or near, the given pixel coordinates.
+
+    To be more precise, positions actually refer to the gaps between characters
+    and not the characters themselves. Thus, position 0 is the one before the
+    very first character in the control and so is a valid position even when
+    the control is empty. And if the control contains a single character, it
+    has two valid positions: 0 before this character and 1 -- after it. This,
+    when the documentation of various functions mentions "invalid position", it
+    doesn't consider the position just after the last character of the line to
+    be invalid, only the positions beyond that one (e.g. 2 and greater in the
+    single character example) are actually invalid.
+
+
     @section textctrl_styles wxTextCtrl Styles.
 
     Multi-line text controls support styling, i.e. provide a possibility to set
