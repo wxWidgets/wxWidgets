@@ -667,11 +667,31 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
     // last position is in its bounds.
     m_text->SetInsertionPointEnd();
 
-    CPPUNIT_ASSERT( m_text->PositionToCoords(0).y < 0 );
-    CPPUNIT_ASSERT
-    (
-        m_text->PositionToCoords(m_text->GetInsertionPoint()).y <= TEXT_HEIGHT
-    );
+    const int pos = m_text->GetInsertionPoint();
+
+    // wxGTK needs to yield here to update the text control.
+#ifdef __WXGTK__
+    wxStopWatch sw;
+    while ( m_text->PositionToCoords(0).y == 0 ||
+                m_text->PositionToCoords(pos).y > TEXT_HEIGHT )
+    {
+        if ( sw.Time() > 1000 )
+        {
+            FAIL("Timed out waiting for wxTextCtrl update.");
+            break;
+        }
+
+        wxYield();
+    }
+#endif // __WXGTK__
+
+    wxPoint coords = m_text->PositionToCoords(0);
+    INFO("First position coords = " << coords);
+    CPPUNIT_ASSERT( coords.y < 0 );
+
+    coords = m_text->PositionToCoords(pos);
+    INFO("Position is " << pos << ", coords = " << coords);
+    CPPUNIT_ASSERT( coords.y <= TEXT_HEIGHT );
 }
 
 void TextCtrlTestCase::PositionToXYMultiLine()
