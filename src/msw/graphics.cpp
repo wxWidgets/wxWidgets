@@ -37,7 +37,6 @@
     #include "wx/dcprint.h"
 #endif
 
-#include "wx/filename.h"
 #include "wx/stack.h"
 
 #include "wx/private/graphics.h"
@@ -967,39 +966,13 @@ wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 namespace
 {
 
-wxArrayString gs_privateFontFileNames;
 Gdiplus::PrivateFontCollection* gs_privateFonts = NULL;
 Gdiplus::FontFamily* gs_pFontFamily = NULL;
 
 } // anonymous namespace
 
-bool wxFontBase::AddPrivateFont(const wxString& filename)
-{
-    if ( !wxFileName::FileExists(filename) )
-    {
-        wxLogError(_("Font file \"%s\" doesn't exist."), filename);
-        return false;
-    }
-
-    gs_privateFontFileNames.Add(filename);
-    return true;
-}
-
-bool wxFontBase::ActivatePrivateFonts()
-{
-    const int n = gs_privateFontFileNames.size();
-    for ( int i = 0 ; i < n; i++ )
-    {
-        const wxString& fname = gs_privateFontFileNames[i];
-        if ( !AddFontResourceEx(fname.t_str(), FR_PRIVATE, 0) )
-        {
-            wxLogSysError(_("Font file \"%s\" couldn't be loaded"),
-                          fname);
-        }
-    }
-
-    return true;
-}
+// This function is defined in src/msw/font.cpp.
+extern const wxArrayString& wxGetPrivateFontFileNames();
 
 //-----------------------------------------------------------------------------
 // wxGDIPlusFont implementation
@@ -2343,13 +2316,14 @@ void wxGDIPlusRenderer::Load()
         m_loaded = 1;
 
         // Make private fonts available to GDI+, if any.
-        const int n = gs_privateFontFileNames.size();
+        const wxArrayString& privateFonts = wxGetPrivateFontFileNames();
+        const size_t n = privateFonts.size();
         if ( n )
         {
             gs_privateFonts = new Gdiplus::PrivateFontCollection();
-            for ( int i = 0 ; i < n; i++ )
+            for ( size_t i = 0 ; i < n; i++ )
             {
-                const wxString& fname = gs_privateFontFileNames[i];
+                const wxString& fname = privateFonts[i];
                 gs_privateFonts->AddFontFile(fname.t_str());
             }
 

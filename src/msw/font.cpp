@@ -34,6 +34,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/encinfo.h"
+#include "wx/filename.h"
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 
@@ -1082,4 +1083,50 @@ bool wxFont::IsFixedWidth() const
     // Quoting MSDN description of TMPF_FIXED_PITCH: "Note very carefully that
     // those meanings are the opposite of what the constant name implies."
     return !(tm.tmPitchAndFamily & TMPF_FIXED_PITCH);
+}
+
+// ----------------------------------------------------------------------------
+// Private fonts support
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Contains the file names of all fonts added by AddPrivateFont().
+wxArrayString gs_privateFontFileNames;
+
+} // anonymous namespace
+
+// Accessor for use in src/msw/graphics.cpp only.
+extern const wxArrayString& wxGetPrivateFontFileNames()
+{
+    return gs_privateFontFileNames;
+}
+
+bool wxFontBase::AddPrivateFont(const wxString& filename)
+{
+    if ( !wxFileName::FileExists(filename) )
+    {
+        wxLogError(_("Font file \"%s\" doesn't exist."), filename);
+        return false;
+    }
+
+    gs_privateFontFileNames.Add(filename);
+    return true;
+}
+
+bool wxFontBase::ActivatePrivateFonts()
+{
+    const int n = gs_privateFontFileNames.size();
+    for ( int i = 0 ; i < n; i++ )
+    {
+        const wxString& fname = gs_privateFontFileNames[i];
+        if ( !AddFontResourceEx(fname.t_str(), FR_PRIVATE, 0) )
+        {
+            wxLogSysError(_("Font file \"%s\" couldn't be loaded"),
+                          fname);
+        }
+    }
+
+    return true;
 }
