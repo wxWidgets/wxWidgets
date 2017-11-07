@@ -255,6 +255,11 @@ wxOSX:
 - Fix updating radio groups when menu item is inserted/removed from wxMenu.
 - Allow changing alignment styles after wxTextCtrl creation (Andreas Falkenhahn).
 
+wxQt
+
+- Many changes and improvements by Sean D'Epagnier merged into trunk (with
+  help from R.J.V. Bertin).
+
 Unix:
 
 - Support new gstreamer API in 1.7.2+ in wxMediaCtrl (Sebastian Dröge).

@@ -9,7 +9,7 @@
 #ifndef _WX_QT_ANYBUTTON_H_
 #define _WX_QT_ANYBUTTON_H_
 
-#include <QtWidgets/QPushButton>
+class QPushButton;
 
 //-----------------------------------------------------------------------------
 // wxAnyButton
@@ -28,7 +28,7 @@ public:
     virtual void SetLabel( const wxString &label );
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
 
-    virtual QPushButton *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
 

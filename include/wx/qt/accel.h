@@ -9,9 +9,6 @@
 #ifndef _WX_QT_ACCEL_H_
 #define _WX_QT_ACCEL_H_
 
-#include <QtCore/QList>
-#include <QtWidgets/QShortcut>
-
 /* wxQt accelerators implementation:
  *
  * Storing:
@@ -36,6 +33,9 @@
  * QShortcut. This handler will finally create and send the appropriate wx
  * event to the window. */
 
+class QShortcut;
+template < class T > class QList;
+
 class WXDLLIMPEXP_CORE wxAcceleratorTable : public wxObject
 {
 public:
@@ -43,7 +43,7 @@ public:
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
 
     // Implementation
-    QList< QShortcut* > ConvertShortcutTable( QWidget *parent ) const;
+    QList < QShortcut* > *ConvertShortcutTable( QWidget *parent ) const;
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;

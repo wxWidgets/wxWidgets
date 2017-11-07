@@ -247,7 +247,7 @@ wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style)
     m_refData = new wxPenRefData();
     M_PENDATA.setWidth(width);
     M_PENDATA.setStyle(ConvertPenStyle(style));
-    M_PENDATA.setColor(colour.GetHandle());
+    M_PENDATA.setColor(colour.GetQColor());
 }
 
 wxPen::wxPen(const wxColour& col, int width, int style)
@@ -255,7 +255,7 @@ wxPen::wxPen(const wxColour& col, int width, int style)
     m_refData = new wxPenRefData();
     M_PENDATA.setWidth(width);
     M_PENDATA.setStyle(ConvertPenStyle((wxPenStyle)style));
-    M_PENDATA.setColor(col.GetHandle());
+    M_PENDATA.setColor(col.GetQColor());
 }
 
 
@@ -276,7 +276,7 @@ bool wxPen::operator!=(const wxPen& pen) const
 void wxPen::SetColour(const wxColour& col)
 {
     AllocExclusive();
-    M_PENDATA.setColor(col.GetHandle());
+    M_PENDATA.setColor(col.GetQColor());
 }
 
 void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
