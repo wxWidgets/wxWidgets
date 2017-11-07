@@ -397,7 +397,7 @@ void TextCtrlTestCase::Style()
 #ifndef __WXOSX__
     delete m_text;
     // We need wxTE_RICH under windows for style support
-    CreateText(wxTE_RICH);
+    CreateText(wxTE_MULTILINE|wxTE_RICH);
 
     // Red text on a white background
     m_text->SetDefaultStyle(wxTextAttr(*wxRED, *wxWHITE));
@@ -431,20 +431,21 @@ void TextCtrlTestCase::Style()
     wxTextAttr style;
 
     // We have to check that styles are supported
-    if(m_text->GetStyle(3, style))
+    if ( !m_text->GetStyle(3, style) )
     {
-        CPPUNIT_ASSERT_EQUAL(style.GetTextColour(), *wxRED);
-        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour(), *wxWHITE);
+        WARN("Retrieving text style not supported, skipping test.");
+        return;
     }
+
+    CHECK( style.GetTextColour() == *wxRED );
+    CHECK( style.GetBackgroundColour() == *wxWHITE );
 
     // And then setting the style
-    if(m_text->SetStyle(15, 18, style))
-    {
-        m_text->GetStyle(17, style);
+    REQUIRE( m_text->SetStyle(15, 18, style) );
 
-        CPPUNIT_ASSERT_EQUAL(style.GetTextColour(), *wxRED);
-        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour(), *wxWHITE);
-    }
+    REQUIRE( m_text->GetStyle(17, style) );
+    CHECK( style.GetTextColour() == *wxRED );
+    CHECK( style.GetBackgroundColour() == *wxWHITE );
 #endif
 }
 

@@ -1777,8 +1777,13 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     }
     else // have custom attributes
     {
+#ifdef __WXGTK3__
+        style.SetBackgroundColour(*pattr->appearance.rgba[0]);
+        style.SetTextColour(*pattr->appearance.rgba[1]);
+#else
         style.SetBackgroundColour(pattr->appearance.bg_color);
         style.SetTextColour(pattr->appearance.fg_color);
+#endif
 
         const wxGtkString
             pangoFontString(pango_font_description_to_string(pattr->font));
