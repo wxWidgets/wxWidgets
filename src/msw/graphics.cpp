@@ -1000,7 +1000,7 @@ wxGDIPlusFontData::Init(const wxString& name,
         {
             wchar_t familyName[LF_FACESIZE];
             int rc = gs_pFontFamily[j].GetFamilyName(familyName);
-            if ( rc == 0 && lstrcmp(name, familyName) == 0 )
+            if ( rc == 0 && name == familyName )
             {
                 m_font = new Font(&gs_pFontFamily[j], size, style, fontUnit);
                 break;
@@ -1009,7 +1009,7 @@ wxGDIPlusFontData::Init(const wxString& name,
     }
 
     if ( !m_font )
-        m_font = new Font(name, size, style, fontUnit);
+        m_font = new Font(name.wc_str(), size, style, fontUnit);
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
