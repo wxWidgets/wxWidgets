@@ -336,6 +336,7 @@ private:
 #if wxUSE_THREADS
 wxThread::ExitCode wxSoundAsyncPlaybackThread::Entry()
 {
+    m_adapt->m_mutexRightToPlay.Lock();
     m_adapt->m_backend->Play(m_data, m_flags & ~wxSOUND_ASYNC,
                              &m_adapt->m_status);
 
@@ -361,6 +362,7 @@ bool wxSoundSyncOnlyAdaptor::Play(wxSoundData *data, unsigned flags,
         wxThread *th = new wxSoundAsyncPlaybackThread(this, data, flags);
         th->Create();
         th->Run();
+        m_mutexRightToPlay.Unlock();
         wxLogTrace(wxT("sound"), wxT("launched async playback thread"));
         return true;
 #else
