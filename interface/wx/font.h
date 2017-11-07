@@ -689,7 +689,7 @@ public:
         @return @true if the font was added and ActivatePrivatefonts() should
             be called next or @false if adding it failed.
 
-        @since 2.9.5
+        @since 3.1.1
     */
     static bool AddPrivateFont(const wxString& filename);
 
@@ -698,7 +698,7 @@ public:
 
         @return @true if the private fonts can now be used or @false on error.
 
-        @since 2.9.5
+        @since 3.1.1
     */
     static bool ActivatePrivatefonts();
 
