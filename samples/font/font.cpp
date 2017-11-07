@@ -422,8 +422,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
     privfont << "wxprivate.ttf";
 
-    if ( wxFont::AddPrivateFont(privfont) &&
-            wxFont::ActivatePrivateFonts() )
+    if ( !wxFont::AddPrivateFont(privfont) )
+    {
+        wxLogWarning("Failed to add private font from \"%s\"", privfont);
+    }
+    else if ( !wxFont::ActivatePrivateFonts() )
+    {
+        wxLogWarning("Failed to activate the private fonts");
+    }
+    else
     {
         menuSelect->AppendSeparator();
         menuSelect->Append(Font_Private,
