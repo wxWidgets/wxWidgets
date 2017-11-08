@@ -1047,22 +1047,16 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
 
 void* wxProgressDialogTaskRunner::Entry()
 {
-    // If we have a parent, we must use it to have correct Z-order and icon,
-    // but this can only be done if we attach this thread input to the thread
-    // that created the parent window, i.e. the main thread.
-    wxWindow* parent = NULL;
-    {
-        wxCriticalSectionLocker locker(m_sharedData.m_cs);
-        parent = m_sharedData.m_parent;
-    }
-
     WinStruct<TASKDIALOGCONFIG> tdc;
     wxMSWTaskDialogConfig wxTdc;
 
     {
         wxCriticalSectionLocker locker(m_sharedData.m_cs);
 
-        wxTdc.parent = parent;
+        // If we have a parent, we must use it to have correct Z-order and
+        // icon, even if this comes at the price of attaching this thread input
+        // to the thread that created the parent window, i.e. the main thread.
+        wxTdc.parent = m_sharedData.m_parent;
         wxTdc.caption = m_sharedData.m_title.wx_str();
         wxTdc.message = m_sharedData.m_message.wx_str();
 
