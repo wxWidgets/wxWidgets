@@ -80,7 +80,7 @@ public:
         m_value = 0;
         m_progressBarMarquee = false;
         m_skipped = false;
-        m_msgChangeElementText = TDM_SET_ELEMENT_TEXT;
+        m_msgChangeElementText = TDM_UPDATE_ELEMENT_TEXT;
         m_notifications = 0;
         m_parent = NULL;
     }
@@ -106,11 +106,11 @@ public:
     bool m_skipped;
 
     // The task dialog message to use for changing the text of its elements:
-    // it's TDM_SET_ELEMENT_TEXT initially as this message should be used to
-    // let the dialog adjust itself to the size of its elements, but
-    // TDM_UPDATE_ELEMENT_TEXT later to prevent the dialog from performing a
-    // layout on each update, which is annoying as it can result in its size
-    // constantly changing.
+    // it is set to TDM_SET_ELEMENT_TEXT by Fit() to let the dialog adjust
+    // itself to the size of its elements during the next update, but otherwise
+    // TDM_UPDATE_ELEMENT_TEXT is used in order to prevent the dialog from
+    // performing a layout on each update, which is annoying as it can result
+    // in its size constantly changing.
     int m_msgChangeElementText;
 
     // Bit field that indicates fields that have been modified by the
