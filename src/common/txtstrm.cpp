@@ -65,7 +65,7 @@ void wxTextInputStream::UngetLast()
     memset((void*)m_lastBytes, 0, 10);
 }
 
-wxChar wxTextInputStream::NextChar()
+wxChar wxTextInputStream::GetChar()
 {
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
@@ -87,7 +87,7 @@ wxChar wxTextInputStream::NextChar()
         m_lastBytes[inlen] = m_input.GetC();
 
         if(m_input.LastRead() <= 0)
-            return wxEOT;
+            return 0;
 
         switch ( m_conv->ToWChar(wbuf, WXSIZEOF(wbuf), m_lastBytes, inlen + 1) )
         {
@@ -108,7 +108,7 @@ wxChar wxTextInputStream::NextChar()
                 // them with an extra single byte, something fishy is going on
                 // (except if we use UTF-16, see below)
                 wxFAIL_MSG("unexpected decoding result");
-                return wxEOT;
+                return 0;
 
 #if SIZEOF_WCHAR_T == 2
             case 2:
@@ -131,12 +131,12 @@ wxChar wxTextInputStream::NextChar()
     // there should be no encoding which requires more than nine bytes for one
     // character so something must be wrong with our conversion but we have no
     // way to signal it from here
-    return wxEOT;
+    return 0;
 #else
     m_lastBytes[0] = m_input.GetC();
 
     if(m_input.LastRead() <= 0)
-        return wxEOT;
+        return 0;
 
     return m_lastBytes[0];
 #endif
@@ -147,8 +147,9 @@ wxChar wxTextInputStream::NextNonSeparators()
 {
     for (;;)
     {
-        wxChar c = NextChar();
-        if (c == wxEOT) return (wxChar) 0;
+        wxChar c = GetChar();
+        if (!c)
+            return c;
 
         if (c != wxT('\n') &&
             c != wxT('\r') &&
@@ -164,8 +165,8 @@ bool wxTextInputStream::EatEOL(const wxChar &c)
 
     if (c == wxT('\r')) // eat on both Mac and DOS
     {
-        wxChar c2 = NextChar();
-        if(c2 == wxEOT) return true; // end of stream reached, had enough :-)
+        wxChar c2 = GetChar();
+        if (!c2) return true; // end of stream reached, had enough :-)
 
         if (c2 != wxT('\n')) UngetLast(); // Don't eat on Mac
         return true;
@@ -261,8 +262,8 @@ wxString wxTextInputStream::ReadLine()
 
     while ( !m_input.Eof() )
     {
-        wxChar c = NextChar();
-        if(c == wxEOT)
+        wxChar c = GetChar();
+        if (!c)
             break;
 
         if (EatEOL(c))
@@ -289,8 +290,8 @@ wxString wxTextInputStream::ReadWord()
 
     while ( !m_input.Eof() )
     {
-        c = NextChar();
-        if(c == wxEOT)
+        c = GetChar();
+        if (!c)
             break;
 
         if (m_separators.Find(c) >= 0)

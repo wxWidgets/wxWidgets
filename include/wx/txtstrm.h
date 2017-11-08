@@ -25,7 +25,8 @@ typedef wxTextOutputStream& (*__wxTextOutputManip)(wxTextOutputStream&);
 WXDLLIMPEXP_BASE wxTextOutputStream &endl( wxTextOutputStream &stream );
 
 
-#define wxEOT wxT('\4') // the End-Of-Text control code (used only inside wxTextInputStream)
+// Obsolete constant defined only for compatibility, not used.
+#define wxEOT wxT('\4')
 
 // If you're scanning through a file using wxTextInputStream, you should check for EOF _before_
 // reading the next item (word / number), because otherwise the last item may get lost.
@@ -58,7 +59,7 @@ public:
     double   ReadDouble();
     wxString ReadLine();
     wxString ReadWord();
-    wxChar   GetChar() { wxChar c = NextChar(); return (wxChar)(c != wxEOT ? c : 0); }
+    wxChar   GetChar();
 
     wxString GetStringSeparators() const { return m_separators; }
     void SetStringSeparators(const wxString &c) { m_separators = c; }
@@ -100,8 +101,6 @@ protected:
 
     bool   EatEOL(const wxChar &c);
     void   UngetLast(); // should be used instead of wxInputStream::Ungetch() because of Unicode issues
-    // returns EOT (\4) if there is a stream error, or end of file
-    wxChar NextChar();   // this should be used instead of GetC() because of Unicode issues
     wxChar NextNonSeparators();
 
     wxDECLARE_NO_COPY_CLASS(wxTextInputStream);
