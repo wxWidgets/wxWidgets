@@ -84,7 +84,22 @@ public:
 protected:
     wxInputStream &m_input;
     wxString m_separators;
-    char m_lastBytes[10]; // stores the bytes that were read for the last character
+
+    // Data possibly (see m_validXXX) read from the stream but not decoded yet.
+    // This is necessary because GetChar() may only return a single character
+    // but we may get more than one character when decoding raw input bytes.
+    char m_lastBytes[10];
+
+    // The bytes [0, m_validEnd) of m_lastBytes contain the bytes read by the
+    // last GetChar() call (this interval may be empty if GetChar() hasn't been
+    // called yet). The bytes [0, m_validBegin) have been already decoded and
+    // returned to caller or stored in m_lastWChar in the particularly
+    // egregious case of decoding a non-BMP character when using UTF-16 for
+    // wchar_t. Finally, the bytes [m_validBegin, m_validEnd) remain to be
+    // decoded and returned during the next call (again, this interval can, and
+    // usually will, be empty too if m_validBegin == m_validEnd).
+    size_t m_validBegin,
+           m_validEnd;
 
 #if wxUSE_UNICODE
     wxMBConv *m_conv;
