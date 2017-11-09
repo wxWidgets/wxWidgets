@@ -1543,6 +1543,7 @@
 
 /* --- end common options --- */
 
+/* --- start OSX options --- */
 // ----------------------------------------------------------------------------
 // Unix-specific options settings
 // ----------------------------------------------------------------------------
@@ -1555,10 +1556,10 @@
 
 /*
  Use GStreamer for Unix.
- 
+
  Default is 0 as this requires a lot of dependencies which might not be
  available.
- 
+
  Recommended setting: 1 (wxMediaCtrl won't work by default without it).
  */
 #define wxUSE_GSTREAMER 0
@@ -1595,7 +1596,7 @@
 // make sure we have the proper dispatcher for the console event loop
 #define wxUSE_SELECT_DISPATCHER 1
 #define wxUSE_EPOLL_DISPATCHER 0
-
+/* --- end OSX options --- */
 
 #endif
     // _WX_SETUP_H_
