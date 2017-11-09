@@ -103,14 +103,15 @@ static size_t encode_utf16(wxUint32 input, wxUint16 *output)
     }
 }
 
-static size_t decode_utf16(const wxChar16* input, wxUint32& output)
+static size_t
+decode_utf16(const wxChar16* input, size_t len, wxUint32& output)
 {
     if ((*input < 0xd800) || (*input > 0xdfff))
     {
         output = *input;
         return 1;
     }
-    else if ((input[1] < 0xdc00) || (input[1] > 0xdfff))
+    else if ( !len || (input[1] < 0xdc00) || (input[1] > 0xdfff) )
     {
         output = *input;
         return wxCONV_FAILED;
@@ -122,15 +123,16 @@ static size_t decode_utf16(const wxChar16* input, wxUint32& output)
     }
 }
 
-// returns the next UTF-32 character from the wchar_t buffer and advances the
-// pointer to the character after this one
+// Returns the next UTF-32 character from the wchar_t buffer terminated by the
+// "end" pointer (the caller must ensure that on input "*pSrc < end") and
+// advances the pointer to the character after this one.
 //
-// if an invalid character is found, *pSrc is set to NULL, the caller must
-// check for this
-static wxUint32 wxDecodeSurrogate(const wxChar16 **pSrc)
+// If an invalid or incomplete character is found, *pSrc is set to NULL, the
+// caller must check for this.
+static wxUint32 wxDecodeSurrogate(const wxChar16 **pSrc, const wxChar16* end)
 {
     wxUint32 out;
-    const size_t n = decode_utf16(*pSrc, out);
+    const size_t n = decode_utf16(*pSrc, end - *pSrc - 1, out);
     if ( n == wxCONV_FAILED )
         *pSrc = NULL;
     else
@@ -1100,16 +1102,7 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
 
         wxUint32 code;
 #ifdef WC_UTF16
-        // Be careful here: decode_utf16() may need to read the next wchar_t
-        // but we might not have any left, so pass it a temporary buffer which
-        // always has 2 wide characters and take care to set its second element
-        // to 0, which is invalid as a second half of a surrogate, to ensure
-        // that we return an error when trying to convert a buffer ending with
-        // half of a surrogate.
-        wchar_t tmp[2];
-        tmp[0] = wp[0];
-        tmp[1] = srcLen != 0 ? wp[1] : 0;
-        switch ( decode_utf16(tmp, code) )
+        switch ( decode_utf16(wp, srcLen, code) )
         {
             case 1:
                 // Nothing special to do, just a character from BMP.
@@ -1390,13 +1383,20 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
         wxUint32 cc;
 
 #ifdef WC_UTF16
-        size_t pa = decode_utf16(psz, cc);
+        switch ( decode_utf16(psz++, srcLen, cc) )
+        {
+            case 1:
+                break;
 
-        // we could have consumed two input code units if we decoded a
-        // surrogate, so adjust the input pointer and, if necessary, the length
-        psz += (pa == wxCONV_FAILED) ? 1 : pa;
-        if ( pa == 2 && !isNulTerminated )
-            srcLen--;
+            case 2:
+                psz++;
+                if ( !isNulTerminated )
+                    srcLen--;
+                break;
+
+            case wxCONV_FAILED:
+                return wxCONV_FAILED;
+        }
 #else
         cc = (*psz++) & 0x7fffffff;
 #endif
@@ -1625,7 +1625,7 @@ wxMBConvUTF16straight::ToWChar(wchar_t *dst, size_t dstLen,
     const wxUint16 *inBuff = reinterpret_cast<const wxUint16 *>(src);
     for ( const wxUint16 * const inEnd = inBuff + inLen; inBuff < inEnd; )
     {
-        const wxUint32 ch = wxDecodeSurrogate(&inBuff);
+        const wxUint32 ch = wxDecodeSurrogate(&inBuff, inEnd);
         if ( !inBuff )
             return wxCONV_FAILED;
 
@@ -1698,26 +1698,33 @@ wxMBConvUTF16swap::ToWChar(wchar_t *dst, size_t dstLen,
         wxUint32 ch;
         wxUint16 tmp[2];
 
+        size_t len;
         tmp[0] = wxUINT16_SWAP_ALWAYS(*inBuff);
         if ( ++inBuff < inEnd )
         {
             // Normal case, we have a next character to decode.
+            len = 1;
             tmp[1] = wxUINT16_SWAP_ALWAYS(*inBuff);
         }
         else // End of input.
         {
-            // Setting the second character to 0 ensures we correctly return
-            // wxCONV_FAILED if the first one is the first half of a surrogate
-            // as the second half can't be 0 in this case.
-            tmp[1] = 0;
+            // Setting the length to 0 ensures we correctly return wxCONV_FAILED
+            // if the first one is the first half of a surrogate.
+            len = 0;
         }
 
-        const size_t numChars = decode_utf16(tmp, ch);
-        if ( numChars == wxCONV_FAILED )
-            return wxCONV_FAILED;
+        switch ( decode_utf16(tmp, len, ch) )
+        {
+            case 1:
+                break;
 
-        if ( numChars == 2 )
-            inBuff++;
+            case 2:
+                inBuff++;
+                break;
+
+            case wxCONV_FAILED:
+                return wxCONV_FAILED;
+        }
 
         outLen++;
 
@@ -1863,7 +1870,7 @@ wxMBConvUTF32straight::FromWChar(char *dst, size_t dstLen,
     size_t outLen = 0;
     for ( const wchar_t * const srcEnd = src + srcLen; src < srcEnd; )
     {
-        const wxUint32 ch = wxDecodeSurrogate(&src);
+        const wxUint32 ch = wxDecodeSurrogate(&src, srcEnd);
         if ( !src )
             return wxCONV_FAILED;
 
@@ -1932,7 +1939,7 @@ wxMBConvUTF32swap::FromWChar(char *dst, size_t dstLen,
     size_t outLen = 0;
     for ( const wchar_t * const srcEnd = src + srcLen; src < srcEnd; )
     {
-        const wxUint32 ch = wxDecodeSurrogate(&src);
+        const wxUint32 ch = wxDecodeSurrogate(&src, srcEnd);
         if ( !src )
             return wxCONV_FAILED;
 
