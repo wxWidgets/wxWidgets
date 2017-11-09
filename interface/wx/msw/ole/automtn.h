@@ -443,7 +443,7 @@ public:
     */
     wxVariant CallMethod(const wxString& method, int noArgs,
                          wxVariant args[]) const;
-    const wxVariant  CallMethod(const wxString& method, ... ) const;
+    wxVariant CallMethod(const wxString& method, ... ) const;
     //@}
 
     /**
@@ -471,7 +471,7 @@ public:
         Notice that the return value of this function is an untyped pointer but
         it can be safely cast to @c IDispatch.
     */
-    void* GetDispatchPtr() const;
+    WXIDISPATCH* GetDispatchPtr() const;
 
     /**
         Retrieves the current object associated with the specified ProgID, and
@@ -541,7 +541,7 @@ public:
     */
     wxVariant GetProperty(const wxString& property, int noArgs,
                           wxVariant args[]) const;
-    const wxVariant  GetProperty(const wxString& property, ... ) const;
+    wxVariant GetProperty(const wxString& property, ... ) const;
     //@}
 
     /**
@@ -596,7 +596,7 @@ public:
     */
     bool PutProperty(const wxString& property, int noArgs,
                      wxVariant args[]);
-    const bool PutProperty(const wxString& property, ... );
+    bool PutProperty(const wxString& property, ... );
     //@}
 
     /**
