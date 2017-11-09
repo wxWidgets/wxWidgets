@@ -699,6 +699,10 @@ size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
             // start of an encoded segment?
             if ( cc == '+' )
             {
+                // Can't end with a plus sign.
+                if ( src == srcEnd )
+                    return wxCONV_FAILED;
+
                 if ( *src == '-' )
                 {
                     // just the encoded plus sign, don't switch to shifted mode
