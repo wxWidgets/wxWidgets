@@ -103,7 +103,7 @@ static size_t encode_utf16(wxUint32 input, wxUint16 *output)
     }
 }
 
-static size_t decode_utf16(const wxUint16* input, wxUint32& output)
+static size_t decode_utf16(const wxChar16* input, wxUint32& output)
 {
     if ((*input < 0xd800) || (*input > 0xdfff))
     {
@@ -130,8 +130,7 @@ static size_t decode_utf16(const wxUint16* input, wxUint32& output)
 static wxUint32 wxDecodeSurrogate(const wxChar16 **pSrc)
 {
     wxUint32 out;
-    const size_t
-        n = decode_utf16(reinterpret_cast<const wxUint16 *>(*pSrc), out);
+    const size_t n = decode_utf16(*pSrc, out);
     if ( n == wxCONV_FAILED )
         *pSrc = NULL;
     else
@@ -1107,7 +1106,7 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
         // to 0, which is invalid as a second half of a surrogate, to ensure
         // that we return an error when trying to convert a buffer ending with
         // half of a surrogate.
-        wxUint16 tmp[2];
+        wchar_t tmp[2];
         tmp[0] = wp[0];
         tmp[1] = srcLen != 0 ? wp[1] : 0;
         switch ( decode_utf16(tmp, code) )
@@ -1391,8 +1390,7 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
         wxUint32 cc;
 
 #ifdef WC_UTF16
-        // cast is ok for WC_UTF16
-        size_t pa = decode_utf16((const wxUint16 *)psz, cc);
+        size_t pa = decode_utf16(psz, cc);
 
         // we could have consumed two input code units if we decoded a
         // surrogate, so adjust the input pointer and, if necessary, the length
