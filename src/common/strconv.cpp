@@ -103,26 +103,6 @@ static size_t encode_utf16(wxUint32 input, wxUint16 *output)
     }
 }
 
-static size_t
-decode_utf16(const wxChar16* input, size_t len, wxUint32& output)
-{
-    if ((*input < 0xd800) || (*input > 0xdfff))
-    {
-        output = *input;
-        return 1;
-    }
-    else if ( !len || (input[1] < 0xdc00) || (input[1] > 0xdfff) )
-    {
-        output = *input;
-        return wxCONV_FAILED;
-    }
-    else
-    {
-        output = ((input[0] - 0xd7c0) << 10) + (input[1] - 0xdc00);
-        return 2;
-    }
-}
-
 // Returns the next UTF-32 character from the wchar_t buffer terminated by the
 // "end" pointer (the caller must ensure that on input "*pSrc < end") and
 // advances the pointer to the character after this one.
@@ -131,14 +111,36 @@ decode_utf16(const wxChar16* input, size_t len, wxUint32& output)
 // caller must check for this.
 static wxUint32 wxDecodeSurrogate(const wxChar16 **pSrc, const wxChar16* end)
 {
-    wxUint32 out;
-    const size_t n = decode_utf16(*pSrc, end - *pSrc - 1, out);
-    if ( n == wxCONV_FAILED )
-        *pSrc = NULL;
-    else
-        *pSrc += n;
+    const wxChar16*& src = *pSrc;
 
-    return out;
+    // Is this a BMP character?
+    const wxUint16 u = *src++;
+    if ((u < 0xd800) || (u > 0xdfff))
+    {
+        // Yes, just return it.
+        return u;
+    }
+
+    // No, we have the first half of a surrogate, check if we also have the
+    // second half (notice that this check does nothing if end == NULL, as it
+    // is allowed to be, and this is correct).
+    if ( src == end )
+    {
+        // No, we don't because this is the end of input.
+        src = NULL;
+        return 0;
+    }
+
+    const wxUint16 u2 = *src++;
+    if ( (u2 < 0xdc00) || (u2 > 0xdfff) )
+    {
+        // No, it's not in the low surrogate range.
+        src = NULL;
+        return 0;
+    }
+
+    // Yes, decode it and return the corresponding Unicode character.
+    return ((u - 0xd7c0) << 10) + (u2 - 0xdc00);
 }
 
 // ----------------------------------------------------------------------------
@@ -1075,9 +1077,10 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
     char *out = dstLen ? dst : NULL;
     size_t written = 0;
 
-    for ( const wchar_t *wp = src; ; wp++ )
+    const wchar_t* const end = srcLen == wxNO_LEN ? NULL : src + srcLen;
+    for ( const wchar_t *wp = src; ; )
     {
-        if ( (srcLen == wxNO_LEN ? !*wp : !srcLen) )
+        if ( end ? wp == end : !*wp )
         {
             // all done successfully, just add the trailing NULL if we are not
             // using explicit length
@@ -1097,29 +1100,13 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
             return written;
         }
 
-        if ( srcLen != wxNO_LEN )
-            srcLen--;
-
         wxUint32 code;
 #ifdef WC_UTF16
-        switch ( decode_utf16(wp, srcLen, code) )
-        {
-            case 1:
-                // Nothing special to do, just a character from BMP.
-                break;
-
-            case 2:
-                // skip the next char too as we decoded a surrogate
-                wp++;
-                if ( srcLen != wxNO_LEN )
-                    srcLen--;
-                break;
-
-            case wxCONV_FAILED:
-                return wxCONV_FAILED;
-        }
+        code = wxDecodeSurrogate(&wp, end);
+        if ( !wp )
+            return wxCONV_FAILED;
 #else // wchar_t is UTF-32
-        code = *wp & 0x7fffffff;
+        code = *wp++ & 0x7fffffff;
 #endif
 
         unsigned len;
@@ -1377,26 +1364,15 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
 
     // The length can be either given explicitly or computed implicitly for the
     // NUL-terminated strings.
-    const bool isNulTerminated = srcLen == wxNO_LEN;
-    while ((isNulTerminated ? *psz : srcLen--) && ((!buf) || (len < n)))
+    const wchar_t* const end = srcLen == wxNO_LEN ? NULL : psz + srcLen;
+    while ((end ? psz < end : *psz) && ((!buf) || (len < n)))
     {
         wxUint32 cc;
 
 #ifdef WC_UTF16
-        switch ( decode_utf16(psz++, srcLen, cc) )
-        {
-            case 1:
-                break;
-
-            case 2:
-                psz++;
-                if ( !isNulTerminated )
-                    srcLen--;
-                break;
-
-            case wxCONV_FAILED:
-                return wxCONV_FAILED;
-        }
+        cc = wxDecodeSurrogate(&psz, end);
+        if ( !psz )
+            return wxCONV_FAILED;
 #else
         cc = (*psz++) & 0x7fffffff;
 #endif
@@ -1457,7 +1433,7 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
         }
     }
 
-    if ( isNulTerminated )
+    if ( !end )
     {
         // Add the trailing NUL in this case if we have a large enough buffer.
         if ( buf && (len < n) )
@@ -1695,36 +1671,26 @@ wxMBConvUTF16swap::ToWChar(wchar_t *dst, size_t dstLen,
     const wxUint16 *inBuff = reinterpret_cast<const wxUint16 *>(src);
     for ( const wxUint16 * const inEnd = inBuff + inLen; inBuff < inEnd; )
     {
-        wxUint32 ch;
         wxUint16 tmp[2];
+        const wxUint16* tmpEnd = tmp;
 
-        size_t len;
         tmp[0] = wxUINT16_SWAP_ALWAYS(*inBuff);
-        if ( ++inBuff < inEnd )
+        tmpEnd++;
+
+        if ( inBuff + 1 < inEnd )
         {
             // Normal case, we have a next character to decode.
-            len = 1;
-            tmp[1] = wxUINT16_SWAP_ALWAYS(*inBuff);
-        }
-        else // End of input.
-        {
-            // Setting the length to 0 ensures we correctly return wxCONV_FAILED
-            // if the first one is the first half of a surrogate.
-            len = 0;
+            tmp[1] = wxUINT16_SWAP_ALWAYS(inBuff[1]);
+            tmpEnd++;
         }
 
-        switch ( decode_utf16(tmp, len, ch) )
-        {
-            case 1:
-                break;
+        const wxUint16* p = tmp;
+        const wxUint32 ch = wxDecodeSurrogate(&p, tmpEnd);
+        if ( !p )
+            return wxCONV_FAILED;
 
-            case 2:
-                inBuff++;
-                break;
-
-            case wxCONV_FAILED:
-                return wxCONV_FAILED;
-        }
+        // Move the real pointer by the same amount as "p" was updated by.
+        inBuff += p - tmp;
 
         outLen++;
 
