@@ -985,6 +985,7 @@ void MBConvTestCase::NonBMPCharTests()
         TestDecoder(w, wchars, u8, sizeof(u8)-1, wxConvUTF8, 1);
         TestEncoder(w, wchars, u8, sizeof(u8)-1, wxConvUTF8, 1);
     }
+    SECTION("wxMBConvUTF16LE")
     {
         char u16le[sizeof(u16)];
         for (size_t i = 0; i < sizeof(u16)/2; ++i) {
@@ -995,6 +996,7 @@ void MBConvTestCase::NonBMPCharTests()
         TestDecoder(w, wchars, u16le, sizeof(u16le)-2, conv, 2);
         TestEncoder(w, wchars, u16le, sizeof(u16le)-2, conv, 2);
     }
+    SECTION("wxMBConvUTF16BE")
     {
         char u16be[sizeof(u16)];
         for (size_t i = 0; i < sizeof(u16)/2; ++i) {
@@ -1005,6 +1007,7 @@ void MBConvTestCase::NonBMPCharTests()
         TestDecoder(w, wchars, u16be, sizeof(u16be)-2, conv, 2);
         TestEncoder(w, wchars, u16be, sizeof(u16be)-2, conv, 2);
     }
+    SECTION("wxMBConvUTF32LE")
     {
         char u32le[sizeof(u32)];
         for (size_t i = 0; i < sizeof(u32)/4; ++i) {
@@ -1017,6 +1020,7 @@ void MBConvTestCase::NonBMPCharTests()
         TestDecoder(w, wchars, u32le, sizeof(u32le)-4, conv, 4);
         TestEncoder(w, wchars, u32le, sizeof(u32le)-4, conv, 4);
     }
+    SECTION("wxMBConvUTF32BE")
     {
         char u32be[sizeof(u32)];
         for (size_t i = 0; i < sizeof(u32)/4; ++i) {
