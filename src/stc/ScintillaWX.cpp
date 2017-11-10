@@ -490,9 +490,10 @@ void ScintillaWX::NotifyParent(SCNotification scn) {
 // a side effect that the AutoComp will also not be destroyed when switching
 // to another window, but I think that is okay.
 void ScintillaWX::CancelModes() {
-    if (! focusEvent)
+    if (! focusEvent) {
         AutoCompleteCancel();
-    ct.CallTipCancel();
+        ct.CallTipCancel();
+    }
     Editor::CancelModes();
 }
 
