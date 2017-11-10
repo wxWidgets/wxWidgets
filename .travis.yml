@@ -17,7 +17,7 @@ matrix:
           env: wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
         - dist: trusty
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--disable-shared"
+          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs"
         - os: osx
           osx_image: xcode6.4
           compiler: clang

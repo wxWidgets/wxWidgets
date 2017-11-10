@@ -54,7 +54,7 @@
 
 #if !defined(HAVE_GETRANDOM) && !defined(HAVE_SYSCALL_GETRANDOM) \
     && !defined(HAVE_ARC4RANDOM_BUF) && !defined(_WIN32) \
-    && !defined(XML_POOR_ENTROPY)
+    && !defined(XML_POOR_ENTROPY) && !defined(HAVE_EXPAT_CONFIG_H)
 # error  \
     You do not have support for any sources of high quality entropy \
     enabled.  For end user security, that is probably not what you want. \
