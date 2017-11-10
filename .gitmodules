@@ -1,3 +1,7 @@
 [submodule "3rdparty/catch"]
 	path = 3rdparty/catch
 	url = https://github.com/wxWidgets/Catch.git
+[submodule "src/zlib"]
+	path = src/zlib
+	url = https://github.com/wxWidgets/zlib.git
+	branch = wx
