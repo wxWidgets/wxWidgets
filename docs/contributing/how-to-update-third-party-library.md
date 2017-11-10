@@ -155,4 +155,24 @@ Example updating libexpat files under MSW:
 2) delete all files in src/expat;
 3) copy all files from libexpat to src/expat;
 4) commit the changes, including new and deleted files;
-5) define XML_STATIC in src/expat/lib/expat_external.h, see git log for the exact changes, and apply them in a separate commit.
+5) define XML_STATIC in src/expat/lib/expat_external.h, see git log for the exact changes, and apply them in a separate commit;
+6) reapply all the changes made to the expat sources since the previous libexpat update and commit the changes.
+
+
+Example updating libtiff files under MSW:
+1) get libtiff source code (http://www.simplesystems.org/libtiff/) to a separate location;
+2) delete all files in src/tiff, except libtiff/tif_config.h and libtiff/tiffconf.h;
+3) copy all files from libtiff to src/tiff;
+4) commit the changes, including new and deleted files;
+5) compare tif_config.h and tif_config.h.in, and update the first where needed (new entries, etc), commit the updated file;
+6) reapply all the changes made to the tiff sources since the previous libtiff update and commit the changes;
+7) update build/bakefiles/tiff.bkl if there are new files required or used files deleted, rebake and commit.
+
+
+Example updating libjpeg files under MSW:
+1) get libjpeg source code (http://www.ijg.org/) to a separate location;
+2) delete all files in src/jpeg, except jconfig.h;
+3) copy all files from libjpeg to src/jpeg;
+4) commit the changes, including new and deleted files;
+5) reapply all the changes made to the jpeg sources since the previous libjpeg update and commit the changes;
+6) update build/bakefiles/jpeg.bkl if there are new files required or used files deleted, rebake and commit.
