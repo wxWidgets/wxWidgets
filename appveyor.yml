@@ -29,6 +29,8 @@ environment:
 
 clone_depth: 50
 
+install: git submodule update --init
+
 before_build:
 - ps: |
     $env:PATH = $env:PATH -replace "C:\\Program Files \(x86\)\\Git\\bin",""
