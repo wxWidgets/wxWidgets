@@ -9,3 +9,7 @@
 	path = src/png
 	url = https://github.com/wxWidgets/libpng.git
 	branch = wx
+[submodule "src/expat"]
+	path = src/expat
+	url = https://github.com/wxWidgets/libexpat.git
+	branch = wx

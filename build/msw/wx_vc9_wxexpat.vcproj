@@ -667,15 +667,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\src\expat\lib\xmlparse.c"
+				RelativePath="..\..\src\expat\expat\lib\xmlparse.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\expat\lib\xmlrole.c"
+				RelativePath="..\..\src\expat\expat\lib\xmlrole.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\expat\lib\xmltok.c"
+				RelativePath="..\..\src\expat\expat\lib\xmltok.c"
 				>
 			</File>
 		</Filter>

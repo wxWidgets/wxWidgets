@@ -15,8 +15,8 @@ by wxWidgets with newer versions.
 -------------
 
 Normally all third party libraries should be managed using Git submodules.
-Currently only zlib and libpng use them, but this will be extended to the other
-third party libraries (i.e. expat, libjpeg and libtiff) soon.
+Currently expat, zlib and libpng use them, but this will be extended to the
+other third party libraries (i.e. libjpeg and libtiff) soon.
 
 As always with submodules, updating a library involves updating its sources in
 the submodule, pushing this submodule out and then committing the changes in

@@ -402,9 +402,9 @@
     <Xdcmake />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\expat\lib\xmlparse.c" />
-    <ClCompile Include="..\..\src\expat\lib\xmlrole.c" />
-    <ClCompile Include="..\..\src\expat\lib\xmltok.c" />
+    <ClCompile Include="..\..\src\expat\expat\lib\xmlparse.c" />
+    <ClCompile Include="..\..\src\expat\expat\lib\xmlrole.c" />
+    <ClCompile Include="..\..\src\expat\expat\lib\xmltok.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
