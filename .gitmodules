@@ -5,3 +5,7 @@
 	path = src/zlib
 	url = https://github.com/wxWidgets/zlib.git
 	branch = wx
+[submodule "src/png"]
+	path = src/png
+	url = https://github.com/wxWidgets/libpng.git
+	branch = wx
