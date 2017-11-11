@@ -122,8 +122,7 @@ public:
     virtual bool DoIsExposed( int x, int y ) const wxOVERRIDE;
     virtual bool DoIsExposed( int x, int y, int w, int h ) const wxOVERRIDE;
 
-    // currently wxGTK2-only
-    void SetDoubleBuffered(bool on);
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
     virtual bool IsDoubleBuffered() const wxOVERRIDE;
 
     // SetLabel(), which does nothing in wxWindow
