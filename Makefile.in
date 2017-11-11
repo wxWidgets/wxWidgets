@@ -208,8 +208,8 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_warning.o \
 	wxtiff_tif_write.o \
 	wxtiff_tif_zip.o
-WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat -DHAVE_EXPAT_CONFIG_H $(____SHARED) \
-	$(CPPFLAGS) $(CFLAGS)
+WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat/expat -DHAVE_EXPAT_CONFIG_H \
+	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
@@ -13897,7 +13897,7 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll_library_link_LIBR_0 \
 @COND_wxUSE_REGEX_builtin@__INC_REGEX_p_65 = \
 @COND_wxUSE_REGEX_builtin@	--include-dir $(top_srcdir)/src/regex
 @COND_wxUSE_EXPAT_builtin@__INC_EXPAT_p_65 = \
-@COND_wxUSE_EXPAT_builtin@	--include-dir $(top_srcdir)/src/expat/lib
+@COND_wxUSE_EXPAT_builtin@	--include-dir $(top_srcdir)/src/expat/expat/lib
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@__LIB_TIFF_p \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	-lwxtiff$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -13926,7 +13926,8 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 @COND_wxUSE_LIBPNG_builtin@__INC_PNG_p = -I$(top_srcdir)/src/png
 @COND_wxUSE_ZLIB_builtin@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
 @COND_wxUSE_REGEX_builtin@__INC_REGEX_p = -I$(top_srcdir)/src/regex
-@COND_wxUSE_EXPAT_builtin@__INC_EXPAT_p = -I$(top_srcdir)/src/expat/lib
+@COND_wxUSE_EXPAT_builtin@__INC_EXPAT_p = \
+@COND_wxUSE_EXPAT_builtin@	-I$(top_srcdir)/src/expat/expat/lib
 
 ### Targets: ###
 
@@ -15231,14 +15232,14 @@ wxtiff_tif_zip.o: $(srcdir)/src/tiff/libtiff/tif_zip.c
 @COND_PLATFORM_MACOSX_1@wxtiff_tif_unix.o: $(srcdir)/src/tiff/libtiff/tif_unix.c
 @COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_unix.c
 
-wxexpat_xmlparse.o: $(srcdir)/src/expat/lib/xmlparse.c
-	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/lib/xmlparse.c
+wxexpat_xmlparse.o: $(srcdir)/src/expat/expat/lib/xmlparse.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/xmlparse.c
 
-wxexpat_xmlrole.o: $(srcdir)/src/expat/lib/xmlrole.c
-	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/lib/xmlrole.c
+wxexpat_xmlrole.o: $(srcdir)/src/expat/expat/lib/xmlrole.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/xmlrole.c
 
-wxexpat_xmltok.o: $(srcdir)/src/expat/lib/xmltok.c
-	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/lib/xmltok.c
+wxexpat_xmltok.o: $(srcdir)/src/expat/expat/lib/xmltok.c
+	$(CCC) -c -o $@ $(WXEXPAT_CFLAGS) $(srcdir)/src/expat/expat/lib/xmltok.c
 
 wxscintilla_LexA68k.o: $(srcdir)/src/stc/scintilla/lexers/LexA68k.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexA68k.cxx

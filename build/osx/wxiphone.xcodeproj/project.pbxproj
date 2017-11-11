@@ -1151,7 +1151,7 @@
 		58EFF24DE2E737CA8A164F5C /* LexEScript.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexEScript.cxx; path = ../../src/stc/scintilla/lexers/LexEScript.cxx; sourceTree = "<group>"; };
 		59572A234F0636D78BFD9F6B /* spinctlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinctlg.cpp; path = ../../src/generic/spinctlg.cpp; sourceTree = "<group>"; };
 		59B19927E27F39ACB1D2BDA3 /* jdatadst.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdatadst.c; path = ../../src/jpeg/jdatadst.c; sourceTree = "<group>"; };
-		59C6B9849FF6325E890942EF /* xmlrole.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xmlrole.c; path = ../../src/expat/lib/xmlrole.c; sourceTree = "<group>"; };
+		59C6B9849FF6325E890942EF /* xmlrole.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xmlrole.c; path = ../../src/expat/expat/lib/xmlrole.c; sourceTree = "<group>"; };
 		59D075A3E96F3187B58F6D03 /* choice_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choice_osx.cpp; path = ../../src/osx/choice_osx.cpp; sourceTree = "<group>"; };
 		59ED0C057D8F388A89DC7177 /* page.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = page.cpp; path = ../../src/ribbon/page.cpp; sourceTree = "<group>"; };
 		5A562F1DA7EA3B909BBB1465 /* LexModula.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexModula.cxx; path = ../../src/stc/scintilla/lexers/LexModula.cxx; sourceTree = "<group>"; };
@@ -1301,7 +1301,7 @@
 		8555204EBA8930809B732842 /* accesscmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accesscmn.cpp; path = ../../src/common/accesscmn.cpp; sourceTree = "<group>"; };
 		861438BD294335D4B859EA71 /* toplvcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toplvcmn.cpp; path = ../../src/common/toplvcmn.cpp; sourceTree = "<group>"; };
 		864438709B363773B8C3382D /* datetimefmt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datetimefmt.cpp; path = ../../src/common/datetimefmt.cpp; sourceTree = "<group>"; };
-		8685B8ED68F23DB0B770FD74 /* xmltok.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xmltok.c; path = ../../src/expat/lib/xmltok.c; sourceTree = "<group>"; };
+		8685B8ED68F23DB0B770FD74 /* xmltok.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xmltok.c; path = ../../src/expat/expat/lib/xmltok.c; sourceTree = "<group>"; };
 		86884BC843F6337EABF744BB /* jdapimin.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdapimin.c; path = ../../src/jpeg/jdapimin.c; sourceTree = "<group>"; };
 		86A0C3603C8A343AAFBD2CE0 /* LexFortran.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexFortran.cxx; path = ../../src/stc/scintilla/lexers/LexFortran.cxx; sourceTree = "<group>"; };
 		86F26F6418C53AFE8154BFC8 /* LexPascal.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexPascal.cxx; path = ../../src/stc/scintilla/lexers/LexPascal.cxx; sourceTree = "<group>"; };
@@ -1424,7 +1424,7 @@
 		A87BF60D0D4A33E2AD2E1E25 /* uiactioncmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uiactioncmn.cpp; path = ../../src/common/uiactioncmn.cpp; sourceTree = "<group>"; };
 		A881F49ADCF33C299B041584 /* floatpane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = floatpane.cpp; path = ../../src/aui/floatpane.cpp; sourceTree = "<group>"; };
 		A8ABD099BCEA30DCBF7A04F4 /* animatecmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animatecmn.cpp; path = ../../src/common/animatecmn.cpp; sourceTree = "<group>"; };
-		A92B6033D8233DB1821F193B /* xmlparse.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xmlparse.c; path = ../../src/expat/lib/xmlparse.c; sourceTree = "<group>"; };
+		A92B6033D8233DB1821F193B /* xmlparse.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = xmlparse.c; path = ../../src/expat/expat/lib/xmlparse.c; sourceTree = "<group>"; };
 		A9B2316B32653DA0939A372D /* sound_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sound_osx.cpp; path = ../../src/osx/sound_osx.cpp; sourceTree = "<group>"; };
 		A9C7F740A55E39FD890B3C7F /* editors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = editors.cpp; path = ../../src/propgrid/editors.cpp; sourceTree = "<group>"; };
 		A9D5CF9CC4553336916FB27B /* fontpickercmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fontpickercmn.cpp; path = ../../src/common/fontpickercmn.cpp; sourceTree = "<group>"; };

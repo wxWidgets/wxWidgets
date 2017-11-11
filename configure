@@ -1406,7 +1406,7 @@ CAIRO_LIBS
 GST_CFLAGS
 GST_LIBS'
 ac_subdirs_all='src/tiff
-src/expat'
+src/expat/expat'
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -20877,7 +20877,7 @@ $as_echo "$as_me: WARNING: system expat library not found, will use built-in ins
         fi
     fi
     if test "$wxUSE_EXPAT" = "builtin" ; then
-                subdirs="$subdirs src/expat"
+                subdirs="$subdirs src/expat/expat"
 
     fi
 fi
