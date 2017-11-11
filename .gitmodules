@@ -17,3 +17,7 @@
 	path = src/tiff
 	url = https://github.com/wxWidgets/libtiff.git
 	branch = wx
+[submodule "src/jpeg"]
+	path = src/jpeg
+	url = https://github.com/wxWidgets/libjpeg-turbo.git
+	branch = wx
