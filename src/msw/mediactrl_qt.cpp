@@ -101,14 +101,11 @@ typedef struct ComponentInstanceRecord * ComponentInstance;
 #define MovieController ComponentInstance
 
 #ifndef URLDataHandlerSubType
-#if defined(__MINGW32__)
-// use magic numbers for compilers which complain about multicharacter integers
-const OSType URLDataHandlerSubType     = 1970433056;
-const OSType VisualMediaCharacteristic = 1702454643;
-#else
-const OSType URLDataHandlerSubType     = 'url ';
-const OSType VisualMediaCharacteristic = 'eyes';
-#endif
+// Under Mac this would be defined as 'url ' and 'eyes' multi-character
+// constants respectively (translate each byte to ASCII to see it), but this is
+// not accepted by non-Mac compilers, so use the numeric constants instead.
+const OSType URLDataHandlerSubType     = 0x75726c20;
+const OSType VisualMediaCharacteristic = 0x65796573;
 #endif
 
 struct FSSpec
