@@ -219,7 +219,8 @@ wxgtk_tlw_key_press_event(GtkWidget *widget, GdkEventKey *event)
     if ( gtk_window_activate_key(window, event) )
         return TRUE;
 
-    if (GTK_WIDGET_GET_CLASS(widget)->key_press_event(widget, event))
+    void* parent_class = g_type_class_peek_parent(G_OBJECT_GET_CLASS(widget));
+    if (GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event))
         return TRUE;
 
     return FALSE;
