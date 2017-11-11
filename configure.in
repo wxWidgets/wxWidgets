@@ -2651,7 +2651,7 @@ if test "$wxUSE_EXPAT" != "no"; then
     fi
     if test "$wxUSE_EXPAT" = "builtin" ; then
         dnl Expat needs this:
-        AC_CONFIG_SUBDIRS([src/expat])
+        AC_CONFIG_SUBDIRS([src/expat/expat])
     fi
 fi
 
