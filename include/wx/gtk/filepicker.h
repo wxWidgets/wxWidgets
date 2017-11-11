@@ -101,6 +101,10 @@ public:     // overrides
 protected:
     wxDialog *m_dialog;
 
+#if wxABI_VERSION >= 30004
+    virtual void DoApplyWidgetStyle(GtkRcStyle*);
+#endif
+
 private:
     // common part of all ctors
     void Init() { m_dialog = NULL; }
@@ -169,6 +173,10 @@ public:     // overrides
 
 protected:
     wxDialog *m_dialog;
+
+#if wxABI_VERSION >= 30004
+    virtual void DoApplyWidgetStyle(GtkRcStyle*);
+#endif
 
 public:    // used by the GTK callback only
 

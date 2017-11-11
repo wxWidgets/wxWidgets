@@ -158,6 +158,9 @@ void wxFileButton::SetInitialDirectory(const wxString& dir)
         wxGenericFileButton::SetInitialDirectory(dir);
 }
 
+void wxFileButton::DoApplyWidgetStyle(GtkRcStyle*)
+{
+}
 #endif // wxUSE_FILEPICKERCTRL
 
 #if wxUSE_DIRPICKERCTRL
@@ -331,4 +334,7 @@ void wxDirButton::SetInitialDirectory(const wxString& dir)
         wxGenericDirButton::SetInitialDirectory(dir);
 }
 
+void wxDirButton::DoApplyWidgetStyle(GtkRcStyle*)
+{
+}
 #endif // wxUSE_DIRPICKERCTRL

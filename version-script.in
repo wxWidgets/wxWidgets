@@ -21,6 +21,12 @@
 # and once released its version cannot be changed.
 
 
+# public symbols added in 3.0.4 (please keep in alphabetical order):
+@WX_VERSION_TAG@.4 {
+    *wxDirButton*DoApplyWidgetStyle*;
+    *wxFileButton*DoApplyWidgetStyle*;
+};
+
 # public symbols added in 3.0.3 (please keep in alphabetical order):
 @WX_VERSION_TAG@.3 {
     *wxDataViewRenderer*FinishEditing*;
