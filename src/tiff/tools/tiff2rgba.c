@@ -1,3 +1,4 @@
+/* $Id: tiff2rgba.c,v 1.22 2016-08-15 20:06:41 erouault Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -64,8 +65,10 @@ main(int argc, char* argv[])
 {
 	TIFF *in, *out;
 	int c;
+#if !HAVE_DECL_OPTARG
 	extern int optind;
 	extern char *optarg;
+#endif
 
 	while ((c = getopt(argc, argv, "c:r:t:bn8")) != -1)
 		switch (c) {
@@ -144,6 +147,7 @@ cvt_by_tile( TIFF *in, TIFF *out )
     uint32  row, col;
     uint32  *wrk_line;
     int	    ok = 1;
+    uint32  rastersize, wrk_linesize;
 
     TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
     TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
@@ -160,7 +164,13 @@ cvt_by_tile( TIFF *in, TIFF *out )
     /*
      * Allocate tile buffer
      */
-    raster = (uint32*)_TIFFmalloc(tile_width * tile_height * sizeof (uint32));
+    rastersize = tile_width * tile_height * sizeof (uint32);
+    if (tile_width != (rastersize / tile_height) / sizeof( uint32))
+    {
+	TIFFError(TIFFFileName(in), "Integer overflow when calculating raster buffer");
+	exit(-1);
+    }
+    raster = (uint32*)_TIFFmalloc(rastersize);
     if (raster == 0) {
         TIFFError(TIFFFileName(in), "No space for raster buffer");
         return (0);
@@ -170,7 +180,13 @@ cvt_by_tile( TIFF *in, TIFF *out )
      * Allocate a scanline buffer for swapping during the vertical
      * mirroring pass.
      */
-    wrk_line = (uint32*)_TIFFmalloc(tile_width * sizeof (uint32));
+    wrk_linesize = tile_width * sizeof (uint32);
+    if (tile_width != wrk_linesize / sizeof (uint32))
+    {
+        TIFFError(TIFFFileName(in), "Integer overflow when calculating wrk_line buffer");
+	exit(-1);
+    }
+    wrk_line = (uint32*)_TIFFmalloc(wrk_linesize);
     if (!wrk_line) {
         TIFFError(TIFFFileName(in), "No space for raster scanline buffer");
         ok = 0;
@@ -246,6 +262,7 @@ cvt_by_strip( TIFF *in, TIFF *out )
     uint32  row;
     uint32  *wrk_line;
     int	    ok = 1;
+    uint32  rastersize, wrk_linesize;
 
     TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
     TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
@@ -260,7 +277,13 @@ cvt_by_strip( TIFF *in, TIFF *out )
     /*
      * Allocate strip buffer
      */
-    raster = (uint32*)_TIFFmalloc(width * rowsperstrip * sizeof (uint32));
+    rastersize = width * rowsperstrip * sizeof (uint32);
+    if (width != (rastersize / rowsperstrip) / sizeof( uint32))
+    {
+	TIFFError(TIFFFileName(in), "Integer overflow when calculating raster buffer");
+	exit(-1);
+    }
+    raster = (uint32*)_TIFFmalloc(rastersize);
     if (raster == 0) {
         TIFFError(TIFFFileName(in), "No space for raster buffer");
         return (0);
@@ -270,7 +293,13 @@ cvt_by_strip( TIFF *in, TIFF *out )
      * Allocate a scanline buffer for swapping during the vertical
      * mirroring pass.
      */
-    wrk_line = (uint32*)_TIFFmalloc(width * sizeof (uint32));
+    wrk_linesize = width * sizeof (uint32);
+    if (width != wrk_linesize / sizeof (uint32))
+    {
+        TIFFError(TIFFFileName(in), "Integer overflow when calculating wrk_line buffer");
+	exit(-1);
+    }
+    wrk_line = (uint32*)_TIFFmalloc(wrk_linesize);
     if (!wrk_line) {
         TIFFError(TIFFFileName(in), "No space for raster scanline buffer");
         ok = 0;
@@ -505,7 +534,7 @@ static char* stuff[] = {
     "usage: tiff2rgba [-c comp] [-r rows] [-b] [-n] [-8] input... output",
     "where comp is one of the following compression algorithms:",
     " jpeg\t\tJPEG encoding",
-    " zip\t\tLempel-Ziv & Welch encoding",
+    " zip\t\tZip/Deflate encoding",
     " lzw\t\tLempel-Ziv & Welch encoding",
     " packbits\tPackBits encoding",
     " none\t\tno compression",

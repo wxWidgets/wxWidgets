@@ -1,3 +1,4 @@
+/* $Id: tif_thunder.c,v 1.13 2016-09-04 21:32:56 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -99,7 +100,8 @@ ThunderDecode(TIFF* tif, uint8* op, tmsize_t maxpixels)
 	while (cc > 0 && npixels < maxpixels) {
 		int n, delta;
 
-		n = *bp++, cc--;
+		n = *bp++;
+		cc--;
 		switch (n & THUNDER_CODE) {
 		case THUNDER_RUN:		/* pixel run */
 			/*

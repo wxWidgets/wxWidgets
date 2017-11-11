@@ -1,3 +1,4 @@
+/* $Id: tiffio.hxx,v 1.3 2010-06-08 18:55:15 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

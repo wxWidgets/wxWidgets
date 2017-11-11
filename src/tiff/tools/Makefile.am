@@ -26,19 +26,16 @@
 LIBPORT = $(top_builddir)/port/libport.la
 LIBTIFF = $(top_builddir)/libtiff/libtiff.la
 
-EXTRA_DIST = Makefile.vc
+EXTRA_DIST = \
+	CMakeLists.txt \
+	Makefile.vc
 
 bin_PROGRAMS = \
-	bmp2tiff \
 	fax2ps \
 	fax2tiff \
-	gif2tiff \
 	pal2rgb \
 	ppm2tiff \
-	ras2tiff \
 	raw2tiff \
-	rgb2ycbcr \
-	thumbnail \
 	tiff2bw \
 	tiff2pdf \
 	tiff2ps \
@@ -56,14 +53,16 @@ if HAVE_OPENGL
 bin_PROGRAMS += tiffgt
 endif
 
-EXTRA_PROGRAMS = sgi2tiff sgisv ycbcr
+EXTRA_PROGRAMS = rgb2ycbcr thumbnail
+
+# Executable programs which need to be built in order to support tests
+check_PROGRAMS = \
+	rgb2ycbcr \
+	thumbnail
 
 if HAVE_RPATH
 AM_LDFLAGS = $(LIBDIR)
 endif
-
-bmp2tiff_SOURCES = bmp2tiff.c
-bmp2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
 
 fax2ps_SOURCES = fax2ps.c
 fax2ps_LDADD = $(LIBTIFF) $(LIBPORT)
@@ -71,17 +70,11 @@ fax2ps_LDADD = $(LIBTIFF) $(LIBPORT)
 fax2tiff_SOURCES = fax2tiff.c
 fax2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
 
-gif2tiff_SOURCES = gif2tiff.c
-gif2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
-
 pal2rgb_SOURCES = pal2rgb.c
 pal2rgb_LDADD = $(LIBTIFF) $(LIBPORT)
 
 ppm2tiff_SOURCES = ppm2tiff.c
 ppm2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
-
-ras2tiff_SOURCES = ras2tiff.c rasterfile.h
-ras2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
 
 raw2tiff_SOURCES = raw2tiff.c
 raw2tiff_LDADD = $(LIBTIFF) $(LIBPORT)

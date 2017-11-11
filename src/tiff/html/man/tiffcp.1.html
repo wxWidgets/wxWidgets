@@ -70,27 +70,33 @@ any way.</p>
 <h2>OPTIONS</h2>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
-       cols="2" cellspacing="0" cellpadding="0">
+       cols="5" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
-<td width="8%"></td>
-<td width="91%">
-<p><b>&minus;b</b> <i>image</i></p></td>
-</table>
-<!-- INDENTATION -->
-<table width="100%" border=0 rules="none" frame="void"
-       cols="2" cellspacing="0" cellpadding="0">
+<td width="10%"></td>
+<td width="3%">
+<p><b>&minus;a</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Append to an existing output file instead of overwriting it.</p>
+</td>
+<td width="0%">
+</td>
+</tr>
 <tr valign="top" align="left">
-<td width="19%"></td>
+<td width="10%"></td>
+<td width="3%">
+<p><b>&minus;b</b></p></td>
+<td width="5%"></td>
 <td width="80%">
 <p>subtract the following monochrome image from all others
 processed. This can be used to remove a noise bias from a
 set of images. This bias image is typically an image of
 noise the camera saw with its shutter closed.</p>
 </td>
-</table>
-<!-- TABS -->
-<table width="100%" border=0 rules="none" frame="void"
-       cols="5" cellspacing="0" cellpadding="0">
+<td width="0%">
+</td>
 <tr valign="top" align="left">
 <td width="10%"></td>
 <td width="3%">
@@ -135,8 +141,9 @@ output file: <b>none</b> for no compression, <b>packbits</b>
 for PackBits compression, <b>lzw</b> for Lempel-Ziv &amp;
 Welch compression, <b>jpeg</b> for baseline JPEG
 compression, <b>zip</b> for Deflate compression, <b>g3</b>
-for CCITT Group 3 (T.4) compression, and <b>g4</b> for CCITT
-Group 4 (T.6) compression. By default <i>tiffcp</i> will
+for CCITT Group 3 (T.4) compression, <b>g4</b> for CCITT
+Group 4 (T.6) compression, or <b>sgilog</b> for SGILOG compression.
+By default <i>tiffcp</i> will
 compress data according to the value of the
 <i>Compression</i> tag found in the source file.</p>
 </td>
@@ -260,6 +267,19 @@ images.</p>
 <td width="10%"></td>
 <td width="3%">
 
+<p><b>&minus;o</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Set initial directory offset.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
 <p><b>&minus;p</b></p>
 </td>
 <td width="5%"></td>
@@ -352,6 +372,19 @@ of data appear in a tile.</p>
 
 <p>Force the output file to be written with PAGENUMBER value
 in sequence.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
+<p><b>&minus;8</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Write BigTIFF instead of classic TIFF format.</p>
 </td>
 <td width="0%">
 </td>
@@ -528,7 +561,7 @@ with image numbers, as follows:</p></td>
 <b>libtiff</b>(3TIFF)</p>
 <!-- INDENTATION -->
 <p>Libtiff library home page:
-<b>http://www.remotesensing.org/libtiff/</b></p>
+<b>http://www.simplesystems.org/libtiff/</b></p>
 </td>
 </table>
 <hr>

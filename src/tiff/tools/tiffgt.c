@@ -1,3 +1,4 @@
+/* $Id: tiffgt.c,v 1.15 2015-09-06 20:42:20 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -30,11 +31,14 @@
 #include <string.h>
 #include <unistd.h>
 
-#if HAVE_APPLE_OPENGL_FRAMEWORK
+#ifdef HAVE_OPENGL_GL_H
 # include <OpenGL/gl.h>
-# include <GLUT/glut.h>
 #else
 # include <GL/gl.h>
+#endif
+#ifdef HAVE_GLUT_GLUT_H
+# include <GLUT/glut.h>
+#else
 # include <GL/glut.h>
 #endif
 
@@ -73,8 +77,17 @@ static void	raster_reshape(int, int);
 static void	raster_keys(unsigned char, int, int);
 static void	raster_special(int, int, int);
 
+#if !HAVE_DECL_OPTARG
 extern  char* optarg;
 extern  int optind;
+#endif
+
+/* GLUT framework on MacOS X produces deprecation warnings */
+# if defined(__GNUC__) && defined(__APPLE__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+# endif
+
 static TIFF* tif = NULL;
 
 int
@@ -286,6 +299,7 @@ static void
 raster_draw(void)
 {
   glDrawPixels(img.width, img.height, GL_RGBA, GL_UNSIGNED_BYTE, (const GLvoid *) raster);
+  glFlush();
 }
 
 static void
@@ -305,6 +319,8 @@ raster_reshape(int win_w, int win_h)
 static void
 raster_keys(unsigned char key, int x, int y)
 {
+        (void) x;
+        (void) y;
         switch (key) {
                 case 'b':                       /* photometric MinIsBlack */
                     photo = PHOTOMETRIC_MINISBLACK;
@@ -350,6 +366,8 @@ raster_keys(unsigned char key, int x, int y)
 static void
 raster_special(int key, int x, int y)
 {
+        (void) x;
+        (void) y;
         switch (key) {
                 case GLUT_KEY_PAGE_UP:          /* previous logical image */
                     if (TIFFCurrentDirectory(tif) > 0) {
@@ -396,7 +414,10 @@ raster_special(int key, int x, int y)
         glutPostRedisplay();
 }
 
-
+/* GLUT framework on MacOS X produces deprecation warnings */
+# if defined(__GNUC__) && defined(__APPLE__)
+#  pragma GCC diagnostic pop
+# endif
 
 char* stuff[] = {
 "usage: tiffgt [options] file.tif",

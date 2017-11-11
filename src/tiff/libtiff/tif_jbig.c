@@ -1,3 +1,4 @@
+/* $Id: tif_jbig.c,v 1.15 2010-03-10 18:56:48 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler

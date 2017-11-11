@@ -1,3 +1,4 @@
+/* $Id: iptcutil.c,v 1.11 2015-06-21 01:09:09 bfriesen Exp $ */
 
 #include "tif_config.h"
 
@@ -34,58 +35,58 @@ typedef struct _tag_spec
 } tag_spec;
 
 static tag_spec tags[] = {
-    { 5,"Image Name" },
-    { 7,"Edit Status" },
-    { 10,"Priority" },
-    { 15,"Category" },
-    { 20,"Supplemental Category" },
-    { 22,"Fixture Identifier" },
-    { 25,"Keyword" },
-    { 30,"Release Date" },
-    { 35,"Release Time" },
-    { 40,"Special Instructions" },
-    { 45,"Reference Service" },
-    { 47,"Reference Date" },
-    { 50,"Reference Number" },
-    { 55,"Created Date" },
-    { 60,"Created Time" },
-    { 65,"Originating Program" },
-    { 70,"Program Version" },
-    { 75,"Object Cycle" },
-    { 80,"Byline" },
-    { 85,"Byline Title" },
-    { 90,"City" },
-    { 95,"Province State" },
-    { 100,"Country Code" },
-    { 101,"Country" },
-    { 103,"Original Transmission Reference" },
-    { 105,"Headline" },
-    { 110,"Credit" },
-    { 115,"Source" },
-    { 116,"Copyright String" },
-    { 120,"Caption" },
-    { 121,"Local Caption" },
-    { 122,"Caption Writer" },
-    { 200,"Custom Field 1" },
-    { 201,"Custom Field 2" },
-    { 202,"Custom Field 3" },
-    { 203,"Custom Field 4" },
-    { 204,"Custom Field 5" },
-    { 205,"Custom Field 6" },
-    { 206,"Custom Field 7" },
-    { 207,"Custom Field 8" },
-    { 208,"Custom Field 9" },
-    { 209,"Custom Field 10" },
-    { 210,"Custom Field 11" },
-    { 211,"Custom Field 12" },
-    { 212,"Custom Field 13" },
-    { 213,"Custom Field 14" },
-    { 214,"Custom Field 15" },
-    { 215,"Custom Field 16" },
-    { 216,"Custom Field 17" },
-    { 217,"Custom Field 18" },
-    { 218,"Custom Field 19" },
-    { 219,"Custom Field 20" }
+  { 5,"Image Name" },
+  { 7,"Edit Status" },
+  { 10,"Priority" },
+  { 15,"Category" },
+  { 20,"Supplemental Category" },
+  { 22,"Fixture Identifier" },
+  { 25,"Keyword" },
+  { 30,"Release Date" },
+  { 35,"Release Time" },
+  { 40,"Special Instructions" },
+  { 45,"Reference Service" },
+  { 47,"Reference Date" },
+  { 50,"Reference Number" },
+  { 55,"Created Date" },
+  { 60,"Created Time" },
+  { 65,"Originating Program" },
+  { 70,"Program Version" },
+  { 75,"Object Cycle" },
+  { 80,"Byline" },
+  { 85,"Byline Title" },
+  { 90,"City" },
+  { 95,"Province State" },
+  { 100,"Country Code" },
+  { 101,"Country" },
+  { 103,"Original Transmission Reference" },
+  { 105,"Headline" },
+  { 110,"Credit" },
+  { 115,"Source" },
+  { 116,"Copyright String" },
+  { 120,"Caption" },
+  { 121,"Local Caption" },
+  { 122,"Caption Writer" },
+  { 200,"Custom Field 1" },
+  { 201,"Custom Field 2" },
+  { 202,"Custom Field 3" },
+  { 203,"Custom Field 4" },
+  { 204,"Custom Field 5" },
+  { 205,"Custom Field 6" },
+  { 206,"Custom Field 7" },
+  { 207,"Custom Field 8" },
+  { 208,"Custom Field 9" },
+  { 209,"Custom Field 10" },
+  { 210,"Custom Field 11" },
+  { 211,"Custom Field 12" },
+  { 212,"Custom Field 13" },
+  { 213,"Custom Field 14" },
+  { 214,"Custom Field 15" },
+  { 215,"Custom Field 16" },
+  { 216,"Custom Field 17" },
+  { 217,"Custom Field 18" },
+  { 218,"Custom Field 19" },
+  { 219,"Custom Field 20" }
 };
 
 /*
@@ -128,7 +129,7 @@ typedef struct _html_code
   short
     len;
   const char
-    *code,
+   *code,
     val;
 } html_code;
 
@@ -156,19 +157,19 @@ int convertHTMLcodes(char *s, int len)
       int val, o;
 
       if (sscanf(s,"&#%d;",&val) == 1)
-      {
-        o = 3;
-        while (s[o] != ';')
         {
-          o++;
-          if (o > 5)
-            break;
+          o = 3;
+          while (s[o] != ';')
+            {
+              o++;
+              if (o > 5)
+                break;
+            }
+          if (o < 5)
+            strcpy(s+1, s+1+o);
+          *s = val;
+          return o;
         }
-        if (o < 5)
-          strcpy(s+1, s+1+o);
-        *s = val;
-        return o;
-      }
     }
   else
     {
@@ -177,15 +178,15 @@ int convertHTMLcodes(char *s, int len)
         codes = sizeof(html_codes) / sizeof(html_code);
 
       for (i=0; i < codes; i++)
-      {
-        if (html_codes[i].len <= len)
-          if (STRNICMP(s, html_codes[i].code, html_codes[i].len) == 0)
-            {
-              strcpy(s+1, s+html_codes[i].len);
-              *s = html_codes[i].val;
-              return html_codes[i].len-1;
-            }
-      }
+        {
+          if (html_codes[i].len <= len)
+            if (STRNICMP(s, html_codes[i].code, html_codes[i].len) == 0)
+              {
+                strcpy(s+1, s+html_codes[i].len);
+                *s = html_codes[i].val;
+                return html_codes[i].len-1;
+              }
+        }
     }
 
   return 0;
@@ -196,10 +197,6 @@ int formatIPTC(FILE *ifile, FILE *ofile)
   unsigned int
     foundiptc,
     tagsfound;
-
-  unsigned char
-    recnum,
-    dataset;
 
   char
     *readable,
@@ -213,104 +210,119 @@ int formatIPTC(FILE *ifile, FILE *ofile)
     i,
     tagcount = sizeof(tags) / sizeof(tag_spec);
 
-  char
-    c;
+  int
+    c,
+    dataset,
+    recnum;
 
   foundiptc = 0; /* found the IPTC-Header */
   tagsfound = 0; /* number of tags found */
 
   c = getc(ifile);
   while (c != EOF)
-  {
-	  if (c == 0x1c)
-	    foundiptc = 1;
-	  else
-      {
-        if (foundiptc)
-	        return -1;
-        else
-	        continue;
-	    }
-
-    /* we found the 0x1c tag and now grab the dataset and record number tags */
-    dataset = getc(ifile);
-	  if ((char) dataset == EOF)
-	    return -1;
-    recnum = getc(ifile);
-	  if ((char) recnum == EOF)
-	    return -1;
-    /* try to match this record to one of the ones in our named table */
-    for (i=0; i< tagcount; i++)
     {
-      if (tags[i].id == recnum)
-          break;
-    }
-    if (i < tagcount)
-      readable = tags[i].name;
-    else
-      readable = "";
-
-    /* then we decode the length of the block that follows - long or short fmt */
-    c = getc(ifile);
-	  if (c == EOF)
-	    return 0;
-	  if (c & (unsigned char) 0x80)
-      {
-        unsigned char
-          buffer[4];
-
-        for (i=0; i<4; i++)
+      if (c == 0x1c)
+        foundiptc = 1;
+      else
         {
-          c = buffer[i] = getc(ifile);
-          if (c == EOF)
-            return -1;
+          if (foundiptc)
+            {
+              return -1;
+            }
+          else
+            {
+              c = getc(ifile);
+              continue;
+            }
         }
-        taglen = (((long) buffer[ 0 ]) << 24) |
-                 (((long) buffer[ 1 ]) << 16) | 
-	               (((long) buffer[ 2 ]) <<  8) |
-                 (((long) buffer[ 3 ]));
-	    }
-    else
-      {
-        unsigned char
-          x = c;
 
-        taglen = ((long) x) << 8;
-        x = getc(ifile);
-        if ((char)x == EOF)
-          return -1;
-        taglen |= (long) x;
-	    }
-    /* make a buffer to hold the tag data and snag it from the input stream */
-    str = (char *) malloc((unsigned int) (taglen+1));
-    if (str == (char *) NULL)
-      {
-        printf("Memory allocation failed");
-        return 0;
-      }
-    for (tagindx=0; tagindx<taglen; tagindx++)
-    {
-      c = str[tagindx] = getc(ifile);
+      /* we found the 0x1c tag and now grab the dataset and record number tags */
+      dataset = getc(ifile);
+      if ((char) dataset == EOF)
+        return -1;
+      recnum = getc(ifile);
+      if ((char) recnum == EOF)
+        return -1;
+      /* try to match this record to one of the ones in our named table */
+      for (i=0; i< tagcount; i++)
+        {
+          if (tags[i].id == recnum)
+            break;
+        }
+      if (i < tagcount)
+        readable = tags[i].name;
+      else
+        readable = "";
+
+      /* then we decode the length of the block that follows - long or short fmt */
+      c = getc(ifile);
       if (c == EOF)
-      {
-          free(str);
+        return 0;
+      if (c & (unsigned char) 0x80)
+        {
+          unsigned char
+            buffer[4];
+
+          for (i=0; i<4; i++)
+            {
+              c = getc(ifile);
+              if (c == EOF)
+                return -1;
+              buffer[i] = c;
+            }
+          taglen = (((long) buffer[ 0 ]) << 24) |
+            (((long) buffer[ 1 ]) << 16) | 
+            (((long) buffer[ 2 ]) <<  8) |
+            (((long) buffer[ 3 ]));
+        }
+      else
+        {
+          int
+            x = c;
+
+          taglen = x << 8;
+          x = getc(ifile);
+          if (x == EOF)
+            return -1;
+          taglen |= (long) x;
+        }
+      /* Place limits on tag length */
+      if ((taglen <= 0) || (taglen > 1048576))
+        {
+          printf("Inappropriate IPTC tag length %ld\n",taglen);
           return -1;
-      }
+        }
+      /* make a buffer to hold the tag data and snag it from the input stream */
+      str = (char *) malloc((unsigned int) (taglen+1));
+      if (str == (char *) NULL)
+        {
+          printf("Memory allocation failed");
+          return 0;
+        }
+      for (tagindx=0; tagindx<taglen; tagindx++)
+        {
+          c = getc(ifile);
+          if (c == EOF)
+            {
+              free(str);
+              return -1;
+            }
+          str[tagindx] = c;
+        }
+      str[ taglen ] = 0;
+
+      /* now finish up by formatting this binary data into ASCII equivalent */
+      if (strlen(readable) > 0)
+        fprintf(ofile, "%d#%d#%s=",(unsigned int)dataset, (unsigned int) recnum, readable);
+      else
+        fprintf(ofile, "%d#%d=",(unsigned int)dataset, (unsigned int) recnum);
+      formatString( ofile, str, taglen );
+      free(str);
+
+      tagsfound++;
+
+      c = getc(ifile);
     }
-    str[ taglen ] = 0;
-
-    /* now finish up by formatting this binary data into ASCII equivalent */
-    if (strlen(readable) > 0)
-	    fprintf(ofile, "%d#%d#%s=",(unsigned int)dataset, (unsigned int) recnum, readable);
-    else
-	    fprintf(ofile, "%d#%d=",(unsigned int)dataset, (unsigned int) recnum);
-    formatString( ofile, str, taglen );
-    free(str);
-
-	  tagsfound++;
-
-    c = getc(ifile);
-  }
   return tagsfound;
 }
 
@@ -329,24 +341,24 @@ char *super_fgets(char *b, int *blen, FILE *file)
 
   len=*blen;
   for (q=b; ; q++)
-  {
-    c=fgetc(file);
-    if (c == EOF || c == '\n')
-      break;
-    if (((long)q - (long)b + 1 ) >= (long) len)
-      {
-        long
-          tlen;
+    {
+      c=fgetc(file);
+      if (c == EOF || c == '\n')
+        break;
+      if (((long)q - (long)b + 1 ) >= (long) len)
+        {
+          long
+            tlen;
 
-        tlen=(long)q-(long)b;
-        len<<=1;
-        b=(char *) realloc((char *) b,(len+2));
-        if ((char *) b == (char *) NULL)
-          break;
-        q=b+tlen;
-      }
-    *q=(unsigned char) c;
-  }
+          tlen=(long)q-(long)b;
+          len<<=1;
+          b=(char *) realloc((char *) b,(len+2));
+          if ((char *) b == (char *) NULL)
+            break;
+          q=b+tlen;
+        }
+      *q=(unsigned char) c;
+    }
   *blen=0;
   if ((unsigned char *)b != (unsigned char *) NULL)
     {
@@ -366,11 +378,11 @@ char *super_fgets(char *b, int *blen, FILE *file)
 
 int main(int argc, char *argv[])
 {            
-  unsigned int
-    length;
+  /* unsigned int */
+  /*   length; */
 
-  unsigned char
-    *buffer;
+  /*unsigned char
+   *buffer;*/
 
   int
     i,
@@ -387,68 +399,68 @@ int main(int argc, char *argv[])
   if( argc < 2 )
     {
       puts(usage);
-	    return 1;
+      return 1;
     }
 
   mode = 0;
-  length = -1;
-  buffer = (unsigned char *)NULL;
+  /* length = -1; */
+  /* buffer = (unsigned char *)NULL; */
 
   for (i=1; i<argc; i++)
-  {
-    c = argv[i][0];
-    if (c == '-' || c == '/')
-      {
-        c = argv[i][1];
-        switch( c )
+    {
+      c = argv[i][0];
+      if (c == '-' || c == '/')
         {
-        case 't':
-	        mode = 1;
-#ifdef WIN32
-          /* Set "stdout" to binary mode: */
-          _setmode( _fileno( ofile ), _O_BINARY );
-#endif
-	        break;
-        case 'b':
-	        mode = 0;
-#ifdef WIN32
-          /* Set "stdin" to binary mode: */
-          _setmode( _fileno( ifile ), _O_BINARY );
-#endif
-	        break;
-        case 'i':
-          if (mode == 0)
-            ifile = fopen(argv[++i], "rb");
-          else
-            ifile = fopen(argv[++i], "rt");
-          if (ifile == (FILE *)NULL)
+          c = argv[i][1];
+          switch( c )
             {
-	            printf("Unable to open: %s\n", argv[i]);
+            case 't':
+              mode = 1;
+#ifdef WIN32
+              /* Set "stdout" to binary mode: */
+              _setmode( _fileno( ofile ), _O_BINARY );
+#endif
+              break;
+            case 'b':
+              mode = 0;
+#ifdef WIN32
+              /* Set "stdin" to binary mode: */
+              _setmode( _fileno( ifile ), _O_BINARY );
+#endif
+              break;
+            case 'i':
+              if (mode == 0)
+                ifile = fopen(argv[++i], "rb");
+              else
+                ifile = fopen(argv[++i], "rt");
+              if (ifile == (FILE *)NULL)
+                {
+                  printf("Unable to open: %s\n", argv[i]);
+                  return 1;
+                }
+              break;
+            case 'o':
+              if (mode == 0)
+                ofile = fopen(argv[++i], "wt");
+              else
+                ofile = fopen(argv[++i], "wb");
+              if (ofile == (FILE *)NULL)
+                {
+                  printf("Unable to open: %s\n", argv[i]);
+                  return 1;
+                }
+              break;
+            default:
+              printf("Unknown option: %s\n", argv[i]);
               return 1;
             }
-	        break;
-        case 'o':
-          if (mode == 0)
-            ofile = fopen(argv[++i], "wt");
-          else
-            ofile = fopen(argv[++i], "wb");
-          if (ofile == (FILE *)NULL)
-            {
-	            printf("Unable to open: %s\n", argv[i]);
-              return 1;
-            }
-	        break;
-        default:
-	        printf("Unknown option: %s\n", argv[i]);
-	        return 1;
         }
-      }
-    else
-      {
-        puts(usage);
-	      return 1;
-      }
-  }
+      else
+        {
+          puts(usage);
+          return 1;
+        }
+    }
 
   if (mode == 0) /* handle binary iptc info */
     formatIPTC(ifile, ofile);
@@ -476,91 +488,91 @@ int main(int argc, char *argv[])
       line = (char *) malloc(inputlen);     
       token = (char *)NULL;
       while((line = super_fgets(line,&inputlen,ifile))!=NULL)
-      {
-        state=0;
-        next=0;
-
-        token = (char *) malloc(inputlen);     
-        newstr = (char *) malloc(inputlen);     
-        while(tokenizer(0, token, inputlen, line, "", "=", "\"", 0,
-          &brkused,&next,&quoted)==0)
         {
-          if (state == 0)
-            {                  
-              int
-                state,
-                next;
+          state=0;
+          next=0;
 
-              char
-                brkused,
-                quoted;
+          token = (char *) malloc(inputlen);     
+          newstr = (char *) malloc(inputlen);     
+          while(tokenizer(0, token, inputlen, line, "", "=", "\"", 0,
+                          &brkused,&next,&quoted)==0)
+            {
+              if (state == 0)
+                {                  
+                  int
+                    state,
+                    next;
 
-              state=0;
-              next=0;
-              while(tokenizer(0, newstr, inputlen, token, "", "#", "", 0,
-                &brkused, &next, &quoted)==0)
-              {
-                if (state == 0)
-                  dataset = (unsigned char) atoi(newstr);
-                else
-                   if (state == 1)
-                     recnum = (unsigned char) atoi(newstr);
-                state++;
-              }
-            }
-          else
-            if (state == 1)
-              {
-                int
-                  next;
+                  char
+                    brkused,
+                    quoted;
 
-                unsigned long
-                  len;
-
-                char
-                  brkused,
-                  quoted;
-
-                next=0;
-                len = strlen(token);
-                while(tokenizer(0, newstr, inputlen, token, "", "&", "", 0,
-                  &brkused, &next, &quoted)==0)
-                {
-                  if (brkused && next > 0)
+                  state=0;
+                  next=0;
+                  while(tokenizer(0, newstr, inputlen, token, "", "#", "", 0,
+                                  &brkused, &next, &quoted)==0)
                     {
-                      char
-                        *s = &token[next-1];
-
-                      len -= convertHTMLcodes(s, strlen(s));
+                      if (state == 0)
+                        dataset = (unsigned char) atoi(newstr);
+                      else
+                        if (state == 1)
+                          recnum = (unsigned char) atoi(newstr);
+                      state++;
                     }
                 }
+              else
+                if (state == 1)
+                  {
+                    int
+                      next;
 
-                fputc(0x1c, ofile);
-                fputc(dataset, ofile);
-                fputc(recnum, ofile);
-                if (len < 0x10000)
-                  {
-                    fputc((len >> 8) & 255, ofile);
-                    fputc(len & 255, ofile);
+                    unsigned long
+                      len;
+
+                    char
+                      brkused,
+                      quoted;
+
+                    next=0;
+                    len = strlen(token);
+                    while(tokenizer(0, newstr, inputlen, token, "", "&", "", 0,
+                                    &brkused, &next, &quoted)==0)
+                      {
+                        if (brkused && next > 0)
+                          {
+                            char
+                              *s = &token[next-1];
+
+                            len -= convertHTMLcodes(s, strlen(s));
+                          }
+                      }
+
+                    fputc(0x1c, ofile);
+                    fputc(dataset, ofile);
+                    fputc(recnum, ofile);
+                    if (len < 0x10000)
+                      {
+                        fputc((len >> 8) & 255, ofile);
+                        fputc(len & 255, ofile);
+                      }
+                    else
+                      {
+                        fputc(((len >> 24) & 255) | 0x80, ofile);
+                        fputc((len >> 16) & 255, ofile);
+                        fputc((len >> 8) & 255, ofile);
+                        fputc(len & 255, ofile);
+                      }
+                    next=0;
+                    while (len--)
+                      fputc(token[next++], ofile);
                   }
-                else
-                  {
-                    fputc(((len >> 24) & 255) | 0x80, ofile);
-                    fputc((len >> 16) & 255, ofile);
-                    fputc((len >> 8) & 255, ofile);
-                    fputc(len & 255, ofile);
-                  }
-                next=0;
-                while (len--)
-                  fputc(token[next++], ofile);
-              }
-          state++;
+              state++;
+            }
+          free(token);
+          token = (char *)NULL;
+          free(newstr);
+          newstr = (char *)NULL;
         }
-        free(token);
-        token = (char *)NULL;
-        free(newstr);
-        newstr = (char *)NULL;
-      }
       free(line);
 
       fclose( ifile );
@@ -782,32 +794,32 @@ void chstore(char *string,int max,char ch)
 {
   char c;
   if(_p_tokpos>=0&&_p_tokpos<max-1)
-  {
-    if(_p_state==IN_QUOTE)
-      c=ch;
-    else
-      switch(_p_flag&3)
-      {
-	    case 1: 	    /* convert to upper */
-	      c=toupper(ch);
-	      break;
+    {
+      if(_p_state==IN_QUOTE)
+        c=ch;
+      else
+        switch(_p_flag&3)
+          {
+          case 1: 	    /* convert to upper */
+            c=toupper((int) ch);
+            break;
 
-	    case 2: 	    /* convert to lower */
-	      c=tolower(ch);
-	      break;
+          case 2: 	    /* convert to lower */
+            c=tolower((int) ch);
+            break;
 
-	    default:	    /* use as is */
-	      c=ch;
-	      break;
-      }
-    string[_p_tokpos++]=c;
-  }
+          default:	    /* use as is */
+            c=ch;
+            break;
+          }
+      string[_p_tokpos++]=c;
+    }
   return;
 }
 
 int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
-  char *white,char *brkchar,char *quote,char eschar,char *brkused,
-    int *next,char *quoted)
+              char *white,char *brkchar,char *quote,char eschar,char *brkused,
+              int *next,char *quoted)
 {
   int qp;
   char c,nc;
@@ -823,11 +835,11 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
   _p_flag=inflag;	   /* set option flag */
 
   for(_p_tokpos=0;(c=line[*next]);++(*next))	/* main loop */
-  {
-    if((qp=sindex(c,brkchar))>=0)  /* break */
     {
-      switch(_p_state)
-      {
+      if((qp=sindex(c,brkchar))>=0)  /* break */
+        {
+          switch(_p_state)
+            {
 	    case IN_WHITE:		/* these are the same here ...	*/
 	    case IN_TOKEN:		/* ... just get out		*/
 	    case IN_OZONE:		/* ditto			*/
@@ -838,12 +850,12 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
 	    case IN_QUOTE:		 /* just keep going */
 	      chstore(token,tokmax,c);
 	      break;
-      }
-    }
-    else if((qp=sindex(c,quote))>=0)  /* quote */
-    {
-      switch(_p_state)
-      {
+            }
+        }
+      else if((qp=sindex(c,quote))>=0)  /* quote */
+        {
+          switch(_p_state)
+            {
 	    case IN_WHITE:	 /* these are identical, */
 	      _p_state=IN_QUOTE; /* change states   */
 	      _p_curquote=quote[qp]; /* save quote char */
@@ -852,10 +864,10 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
 
 	    case IN_QUOTE:
 	      if(quote[qp]==_p_curquote) /* same as the beginning quote? */
-	      {
-	        _p_state=IN_OZONE;
-	        _p_curquote=0;
-	      }
+                {
+                  _p_state=IN_OZONE;
+                  _p_curquote=0;
+                }
 	      else
 	        chstore(token,tokmax,c); /* treat as regular char */
 	      break;
@@ -864,12 +876,12 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
 	    case IN_OZONE:
 	      *brkused=c; /* uses quote as break char */
 	      goto byebye;
-      }
-    }
-    else if((qp=sindex(c,white))>=0) /* white */
-    {
-      switch(_p_state)
-      {
+            }
+        }
+      else if((qp=sindex(c,white))>=0) /* white */
+        {
+          switch(_p_state)
+            {
 	    case IN_WHITE:
 	    case IN_OZONE:
 	      break;		/* keep going */
@@ -881,20 +893,20 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
 	    case IN_QUOTE:
 	      chstore(token,tokmax,c); /* it's valid here */
 	      break;
-      }
-    }
-    else if(c==eschar)  /* escape */
-    {
-      nc=line[(*next)+1];
-      if(nc==0) 		/* end of line */
-      {
-	    *brkused=0;
-	    chstore(token,tokmax,c);
-	    ++(*next);
-	    goto byebye;
-      }
-      switch(_p_state)
-      {
+            }
+        }
+      else if(c==eschar)  /* escape */
+        {
+          nc=line[(*next)+1];
+          if(nc==0) 		/* end of line */
+            {
+              *brkused=0;
+              chstore(token,tokmax,c);
+              ++(*next);
+              goto byebye;
+            }
+          switch(_p_state)
+            {
 	    case IN_WHITE:
 	      --(*next);
 	      _p_state=IN_TOKEN;
@@ -908,12 +920,12 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
 
 	    case IN_OZONE:
 	      goto byebye;
-      }
-    }
-    else	/* anything else is just a real character */
-    {
-      switch(_p_state)
-      {
+            }
+        }
+      else	/* anything else is just a real character */
+        {
+          switch(_p_state)
+            {
 	    case IN_WHITE:
 	      _p_state=IN_TOKEN; /* switch states */
 
@@ -924,11 +936,11 @@ int tokenizer(unsigned inflag,char *token,int tokmax,char *line,
 
 	    case IN_OZONE:
 	      goto byebye;
-      }
-    }
-  }		/* end of main loop */
+            }
+        }
+    }		/* end of main loop */
 
-byebye:
+ byebye:
   token[_p_tokpos]=0;	/* make sure token ends with EOS */
 
   return 0;
@@ -936,7 +948,7 @@ byebye:
 /*
  * Local Variables:
  * mode: c
- * c-basic-offset: 8
+ * c-basic-offset: 2
  * fill-column: 78
  * End:
  */

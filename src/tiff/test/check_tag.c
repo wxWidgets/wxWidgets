@@ -1,3 +1,4 @@
+/* $Id: check_tag.c,v 1.3 2008/04/15 14:19:37 dron Exp $ */
 
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>

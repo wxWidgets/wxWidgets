@@ -1,3 +1,4 @@
+/* "$Id: mkg3states.c,v 1.12 2015-06-21 01:09:09 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -382,8 +383,11 @@ main(int argc, char* argv[])
     FILE* fd;
     char* outputfile;
     int c;
+
+#if !HAVE_DECL_OPTARG
     extern int optind;
     extern char* optarg;
+#endif
 
     while ((c = getopt(argc, argv, "c:s:bp")) != -1)
 	switch (c) {
