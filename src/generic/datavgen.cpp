@@ -3897,6 +3897,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                     break;
                 // else: fall through to WXK_SPACE handling
             }
+            wxFALLTHROUGH;
 
         case WXK_SPACE:
             if ( event.HasModifiers() )
