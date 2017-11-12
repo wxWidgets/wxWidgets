@@ -334,7 +334,7 @@ void wxToolBarTool::SetLabel(const wxString& label)
         {
             wxString newLabel = wxControl::RemoveMnemonics(label);
             gtk_tool_button_set_label(GTK_TOOL_BUTTON(m_item),
-                                      wxGTK_CONV(newLabel));
+                                      wxGTK_CONV_SYS(newLabel));
             // To show the label for toolbar with wxTB_HORZ_LAYOUT.
             gtk_tool_item_set_is_important(m_item, true);
         }

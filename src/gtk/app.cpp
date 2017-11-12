@@ -396,7 +396,11 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
     // update internal arg[cv] as GTK+ may have removed processed options:
     this->argc = argc_;
+#if wxUSE_UNICODE
     this->argv.Init(argc_, argv_);
+#else
+    this->argv = argv_;
+#endif
 
     if ( m_traits )
     {
