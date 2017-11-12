@@ -1072,6 +1072,8 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 #endif // !__WXOSX__
     cb->SetMargins(wxPG_XBEFORETEXT-1);
 
+    cb->SetBackgroundColour(propGrid->GetCellBackgroundColour());
+
     // Set hint text
     cb->SetHint(property->GetHintText());
 
