@@ -1057,6 +1057,8 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     cb->SetButtonPosition(si.y,0,wxRIGHT);
     cb->SetMargins(wxPG_XBEFORETEXT-1);
 
+    cb->SetBackgroundColour(propGrid->GetCellBackgroundColour());
+
     // Set hint text
     cb->SetHint(property->GetHintText());
 
