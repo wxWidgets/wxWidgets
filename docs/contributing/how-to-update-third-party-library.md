@@ -14,9 +14,8 @@ by wxWidgets with newer versions.
 1. Submodules
 -------------
 
-All third party libraries except libjpeg (which should be switched too soon)
-are managed using Git submodules. This includes 3rdparty/catch and expat, jpeg,
-png, tiff and zlib subdirectories of src.
+All third party libraries are managed using Git submodules. This includes
+3rdparty/catch and expat, jpeg, png, tiff and zlib subdirectories of src.
 
 As always with submodules, updating a library involves updating its sources in
 the submodule, pushing this submodule out and then committing the changes in
