@@ -147,6 +147,9 @@ public:
     // backwards compatibility and also because wxGTK has it we could start
     // using it for the same purpose in wxX11 too some day.
     virtual void *GetXVisualInfo()
+#ifdef __WXGTK20__
+                                    wxOVERRIDE
+#endif
     {
         return wxGLCanvasX11::GetDefaultXVisualInfo();
     }
