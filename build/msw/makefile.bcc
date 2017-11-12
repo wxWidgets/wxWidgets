@@ -97,52 +97,52 @@ WXJPEG_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I$(SETUPHDIR) -w-8004 -w-8008 \
 	-w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
-	$(OBJS)\wxjpeg_jcomapi.obj \
-	$(OBJS)\wxjpeg_jutils.obj \
-	$(OBJS)\wxjpeg_jerror.obj \
-	$(OBJS)\wxjpeg_jmemmgr.obj \
-	$(OBJS)\wxjpeg_jmemnobs.obj \
+	$(OBJS)\wxjpeg_jaricom.obj \
 	$(OBJS)\wxjpeg_jcapimin.obj \
 	$(OBJS)\wxjpeg_jcapistd.obj \
-	$(OBJS)\wxjpeg_jctrans.obj \
-	$(OBJS)\wxjpeg_jcparam.obj \
-	$(OBJS)\wxjpeg_jdatadst.obj \
-	$(OBJS)\wxjpeg_jcinit.obj \
-	$(OBJS)\wxjpeg_jcmaster.obj \
-	$(OBJS)\wxjpeg_jcmarker.obj \
-	$(OBJS)\wxjpeg_jcmainct.obj \
-	$(OBJS)\wxjpeg_jcprepct.obj \
+	$(OBJS)\wxjpeg_jcarith.obj \
 	$(OBJS)\wxjpeg_jccoefct.obj \
 	$(OBJS)\wxjpeg_jccolor.obj \
-	$(OBJS)\wxjpeg_jcsample.obj \
-	$(OBJS)\wxjpeg_jchuff.obj \
-	$(OBJS)\wxjpeg_jcphuff.obj \
 	$(OBJS)\wxjpeg_jcdctmgr.obj \
-	$(OBJS)\wxjpeg_jfdctfst.obj \
-	$(OBJS)\wxjpeg_jfdctflt.obj \
-	$(OBJS)\wxjpeg_jfdctint.obj \
+	$(OBJS)\wxjpeg_jchuff.obj \
+	$(OBJS)\wxjpeg_jcinit.obj \
+	$(OBJS)\wxjpeg_jcmainct.obj \
+	$(OBJS)\wxjpeg_jcmarker.obj \
+	$(OBJS)\wxjpeg_jcmaster.obj \
+	$(OBJS)\wxjpeg_jcomapi.obj \
+	$(OBJS)\wxjpeg_jcparam.obj \
+	$(OBJS)\wxjpeg_jcprepct.obj \
+	$(OBJS)\wxjpeg_jcsample.obj \
+	$(OBJS)\wxjpeg_jctrans.obj \
 	$(OBJS)\wxjpeg_jdapimin.obj \
 	$(OBJS)\wxjpeg_jdapistd.obj \
-	$(OBJS)\wxjpeg_jdtrans.obj \
+	$(OBJS)\wxjpeg_jdarith.obj \
+	$(OBJS)\wxjpeg_jdatadst.obj \
 	$(OBJS)\wxjpeg_jdatasrc.obj \
-	$(OBJS)\wxjpeg_jdmaster.obj \
-	$(OBJS)\wxjpeg_jdinput.obj \
-	$(OBJS)\wxjpeg_jdmarker.obj \
-	$(OBJS)\wxjpeg_jdhuff.obj \
-	$(OBJS)\wxjpeg_jdphuff.obj \
-	$(OBJS)\wxjpeg_jdmainct.obj \
 	$(OBJS)\wxjpeg_jdcoefct.obj \
-	$(OBJS)\wxjpeg_jdpostct.obj \
-	$(OBJS)\wxjpeg_jddctmgr.obj \
-	$(OBJS)\wxjpeg_jidctfst.obj \
-	$(OBJS)\wxjpeg_jidctflt.obj \
-	$(OBJS)\wxjpeg_jidctint.obj \
-	$(OBJS)\wxjpeg_jidctred.obj \
-	$(OBJS)\wxjpeg_jdsample.obj \
 	$(OBJS)\wxjpeg_jdcolor.obj \
+	$(OBJS)\wxjpeg_jddctmgr.obj \
+	$(OBJS)\wxjpeg_jdhuff.obj \
+	$(OBJS)\wxjpeg_jdinput.obj \
+	$(OBJS)\wxjpeg_jdmainct.obj \
+	$(OBJS)\wxjpeg_jdmarker.obj \
+	$(OBJS)\wxjpeg_jdmaster.obj \
+	$(OBJS)\wxjpeg_jdmerge.obj \
+	$(OBJS)\wxjpeg_jdpostct.obj \
+	$(OBJS)\wxjpeg_jdsample.obj \
+	$(OBJS)\wxjpeg_jdtrans.obj \
+	$(OBJS)\wxjpeg_jerror.obj \
+	$(OBJS)\wxjpeg_jfdctflt.obj \
+	$(OBJS)\wxjpeg_jfdctfst.obj \
+	$(OBJS)\wxjpeg_jfdctint.obj \
+	$(OBJS)\wxjpeg_jidctflt.obj \
+	$(OBJS)\wxjpeg_jidctfst.obj \
+	$(OBJS)\wxjpeg_jidctint.obj \
+	$(OBJS)\wxjpeg_jmemmgr.obj \
+	$(OBJS)\wxjpeg_jmemnobs.obj \
 	$(OBJS)\wxjpeg_jquant1.obj \
 	$(OBJS)\wxjpeg_jquant2.obj \
-	$(OBJS)\wxjpeg_jdmerge.obj
+	$(OBJS)\wxjpeg_jutils.obj
 WXTIFF_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I..\..\src\zlib \
 	-I..\..\src\jpeg -I..\..\src\tiff\libtiff -w-8004 -w-8012 -w-8057 -w-8060 \
@@ -5725,20 +5725,8 @@ $(OBJS)\wxpng_pngwtran.obj: ..\..\src\png\pngwtran.c
 $(OBJS)\wxpng_pngwutil.obj: ..\..\src\png\pngwutil.c
 	$(CC) -q -c -P- -o$@ $(WXPNG_CFLAGS) ..\..\src\png\pngwutil.c
 
-$(OBJS)\wxjpeg_jcomapi.obj: ..\..\src\jpeg\jcomapi.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcomapi.c
-
-$(OBJS)\wxjpeg_jutils.obj: ..\..\src\jpeg\jutils.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jutils.c
-
-$(OBJS)\wxjpeg_jerror.obj: ..\..\src\jpeg\jerror.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jerror.c
-
-$(OBJS)\wxjpeg_jmemmgr.obj: ..\..\src\jpeg\jmemmgr.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jmemmgr.c
-
-$(OBJS)\wxjpeg_jmemnobs.obj: ..\..\src\jpeg\jmemnobs.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jmemnobs.c
+$(OBJS)\wxjpeg_jaricom.obj: ..\..\src\jpeg\jaricom.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jaricom.c
 
 $(OBJS)\wxjpeg_jcapimin.obj: ..\..\src\jpeg\jcapimin.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcapimin.c
@@ -5746,29 +5734,8 @@ $(OBJS)\wxjpeg_jcapimin.obj: ..\..\src\jpeg\jcapimin.c
 $(OBJS)\wxjpeg_jcapistd.obj: ..\..\src\jpeg\jcapistd.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcapistd.c
 
-$(OBJS)\wxjpeg_jctrans.obj: ..\..\src\jpeg\jctrans.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jctrans.c
-
-$(OBJS)\wxjpeg_jcparam.obj: ..\..\src\jpeg\jcparam.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcparam.c
-
-$(OBJS)\wxjpeg_jdatadst.obj: ..\..\src\jpeg\jdatadst.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdatadst.c
-
-$(OBJS)\wxjpeg_jcinit.obj: ..\..\src\jpeg\jcinit.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcinit.c
-
-$(OBJS)\wxjpeg_jcmaster.obj: ..\..\src\jpeg\jcmaster.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcmaster.c
-
-$(OBJS)\wxjpeg_jcmarker.obj: ..\..\src\jpeg\jcmarker.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcmarker.c
-
-$(OBJS)\wxjpeg_jcmainct.obj: ..\..\src\jpeg\jcmainct.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcmainct.c
-
-$(OBJS)\wxjpeg_jcprepct.obj: ..\..\src\jpeg\jcprepct.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcprepct.c
+$(OBJS)\wxjpeg_jcarith.obj: ..\..\src\jpeg\jcarith.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcarith.c
 
 $(OBJS)\wxjpeg_jccoefct.obj: ..\..\src\jpeg\jccoefct.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jccoefct.c
@@ -5776,26 +5743,38 @@ $(OBJS)\wxjpeg_jccoefct.obj: ..\..\src\jpeg\jccoefct.c
 $(OBJS)\wxjpeg_jccolor.obj: ..\..\src\jpeg\jccolor.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jccolor.c
 
-$(OBJS)\wxjpeg_jcsample.obj: ..\..\src\jpeg\jcsample.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcsample.c
+$(OBJS)\wxjpeg_jcdctmgr.obj: ..\..\src\jpeg\jcdctmgr.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcdctmgr.c
 
 $(OBJS)\wxjpeg_jchuff.obj: ..\..\src\jpeg\jchuff.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jchuff.c
 
-$(OBJS)\wxjpeg_jcphuff.obj: ..\..\src\jpeg\jcphuff.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcphuff.c
+$(OBJS)\wxjpeg_jcinit.obj: ..\..\src\jpeg\jcinit.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcinit.c
 
-$(OBJS)\wxjpeg_jcdctmgr.obj: ..\..\src\jpeg\jcdctmgr.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcdctmgr.c
+$(OBJS)\wxjpeg_jcmainct.obj: ..\..\src\jpeg\jcmainct.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcmainct.c
 
-$(OBJS)\wxjpeg_jfdctfst.obj: ..\..\src\jpeg\jfdctfst.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jfdctfst.c
+$(OBJS)\wxjpeg_jcmarker.obj: ..\..\src\jpeg\jcmarker.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcmarker.c
 
-$(OBJS)\wxjpeg_jfdctflt.obj: ..\..\src\jpeg\jfdctflt.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jfdctflt.c
+$(OBJS)\wxjpeg_jcmaster.obj: ..\..\src\jpeg\jcmaster.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcmaster.c
 
-$(OBJS)\wxjpeg_jfdctint.obj: ..\..\src\jpeg\jfdctint.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jfdctint.c
+$(OBJS)\wxjpeg_jcomapi.obj: ..\..\src\jpeg\jcomapi.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcomapi.c
+
+$(OBJS)\wxjpeg_jcparam.obj: ..\..\src\jpeg\jcparam.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcparam.c
+
+$(OBJS)\wxjpeg_jcprepct.obj: ..\..\src\jpeg\jcprepct.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcprepct.c
+
+$(OBJS)\wxjpeg_jcsample.obj: ..\..\src\jpeg\jcsample.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jcsample.c
+
+$(OBJS)\wxjpeg_jctrans.obj: ..\..\src\jpeg\jctrans.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jctrans.c
 
 $(OBJS)\wxjpeg_jdapimin.obj: ..\..\src\jpeg\jdapimin.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdapimin.c
@@ -5803,56 +5782,77 @@ $(OBJS)\wxjpeg_jdapimin.obj: ..\..\src\jpeg\jdapimin.c
 $(OBJS)\wxjpeg_jdapistd.obj: ..\..\src\jpeg\jdapistd.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdapistd.c
 
-$(OBJS)\wxjpeg_jdtrans.obj: ..\..\src\jpeg\jdtrans.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdtrans.c
+$(OBJS)\wxjpeg_jdarith.obj: ..\..\src\jpeg\jdarith.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdarith.c
+
+$(OBJS)\wxjpeg_jdatadst.obj: ..\..\src\jpeg\jdatadst.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdatadst.c
 
 $(OBJS)\wxjpeg_jdatasrc.obj: ..\..\src\jpeg\jdatasrc.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdatasrc.c
 
-$(OBJS)\wxjpeg_jdmaster.obj: ..\..\src\jpeg\jdmaster.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdmaster.c
-
-$(OBJS)\wxjpeg_jdinput.obj: ..\..\src\jpeg\jdinput.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdinput.c
-
-$(OBJS)\wxjpeg_jdmarker.obj: ..\..\src\jpeg\jdmarker.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdmarker.c
-
-$(OBJS)\wxjpeg_jdhuff.obj: ..\..\src\jpeg\jdhuff.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdhuff.c
-
-$(OBJS)\wxjpeg_jdphuff.obj: ..\..\src\jpeg\jdphuff.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdphuff.c
-
-$(OBJS)\wxjpeg_jdmainct.obj: ..\..\src\jpeg\jdmainct.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdmainct.c
-
 $(OBJS)\wxjpeg_jdcoefct.obj: ..\..\src\jpeg\jdcoefct.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdcoefct.c
 
-$(OBJS)\wxjpeg_jdpostct.obj: ..\..\src\jpeg\jdpostct.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdpostct.c
+$(OBJS)\wxjpeg_jdcolor.obj: ..\..\src\jpeg\jdcolor.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdcolor.c
 
 $(OBJS)\wxjpeg_jddctmgr.obj: ..\..\src\jpeg\jddctmgr.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jddctmgr.c
 
-$(OBJS)\wxjpeg_jidctfst.obj: ..\..\src\jpeg\jidctfst.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jidctfst.c
+$(OBJS)\wxjpeg_jdhuff.obj: ..\..\src\jpeg\jdhuff.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdhuff.c
 
-$(OBJS)\wxjpeg_jidctflt.obj: ..\..\src\jpeg\jidctflt.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jidctflt.c
+$(OBJS)\wxjpeg_jdinput.obj: ..\..\src\jpeg\jdinput.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdinput.c
 
-$(OBJS)\wxjpeg_jidctint.obj: ..\..\src\jpeg\jidctint.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jidctint.c
+$(OBJS)\wxjpeg_jdmainct.obj: ..\..\src\jpeg\jdmainct.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdmainct.c
 
-$(OBJS)\wxjpeg_jidctred.obj: ..\..\src\jpeg\jidctred.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jidctred.c
+$(OBJS)\wxjpeg_jdmarker.obj: ..\..\src\jpeg\jdmarker.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdmarker.c
+
+$(OBJS)\wxjpeg_jdmaster.obj: ..\..\src\jpeg\jdmaster.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdmaster.c
+
+$(OBJS)\wxjpeg_jdmerge.obj: ..\..\src\jpeg\jdmerge.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdmerge.c
+
+$(OBJS)\wxjpeg_jdpostct.obj: ..\..\src\jpeg\jdpostct.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdpostct.c
 
 $(OBJS)\wxjpeg_jdsample.obj: ..\..\src\jpeg\jdsample.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdsample.c
 
-$(OBJS)\wxjpeg_jdcolor.obj: ..\..\src\jpeg\jdcolor.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdcolor.c
+$(OBJS)\wxjpeg_jdtrans.obj: ..\..\src\jpeg\jdtrans.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdtrans.c
+
+$(OBJS)\wxjpeg_jerror.obj: ..\..\src\jpeg\jerror.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jerror.c
+
+$(OBJS)\wxjpeg_jfdctflt.obj: ..\..\src\jpeg\jfdctflt.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jfdctflt.c
+
+$(OBJS)\wxjpeg_jfdctfst.obj: ..\..\src\jpeg\jfdctfst.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jfdctfst.c
+
+$(OBJS)\wxjpeg_jfdctint.obj: ..\..\src\jpeg\jfdctint.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jfdctint.c
+
+$(OBJS)\wxjpeg_jidctflt.obj: ..\..\src\jpeg\jidctflt.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jidctflt.c
+
+$(OBJS)\wxjpeg_jidctfst.obj: ..\..\src\jpeg\jidctfst.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jidctfst.c
+
+$(OBJS)\wxjpeg_jidctint.obj: ..\..\src\jpeg\jidctint.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jidctint.c
+
+$(OBJS)\wxjpeg_jmemmgr.obj: ..\..\src\jpeg\jmemmgr.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jmemmgr.c
+
+$(OBJS)\wxjpeg_jmemnobs.obj: ..\..\src\jpeg\jmemnobs.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jmemnobs.c
 
 $(OBJS)\wxjpeg_jquant1.obj: ..\..\src\jpeg\jquant1.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jquant1.c
@@ -5860,8 +5860,8 @@ $(OBJS)\wxjpeg_jquant1.obj: ..\..\src\jpeg\jquant1.c
 $(OBJS)\wxjpeg_jquant2.obj: ..\..\src\jpeg\jquant2.c
 	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jquant2.c
 
-$(OBJS)\wxjpeg_jdmerge.obj: ..\..\src\jpeg\jdmerge.c
-	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jdmerge.c
+$(OBJS)\wxjpeg_jutils.obj: ..\..\src\jpeg\jutils.c
+	$(CC) -q -c -P- -o$@ $(WXJPEG_CFLAGS) ..\..\src\jpeg\jutils.c
 
 $(OBJS)\wxtiff_tif_win32.obj: ..\..\src\tiff\libtiff\tif_win32.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_win32.c

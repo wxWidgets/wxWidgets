@@ -120,52 +120,52 @@ WXPNG_OBJECTS =  \
 	wxpng_pngwutil.o
 WXJPEG_CFLAGS =       -DNDEBUG  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
-	wxjpeg_jcomapi.o \
-	wxjpeg_jutils.o \
-	wxjpeg_jerror.o \
-	wxjpeg_jmemmgr.o \
-	wxjpeg_jmemnobs.o \
+	wxjpeg_jaricom.o \
 	wxjpeg_jcapimin.o \
 	wxjpeg_jcapistd.o \
-	wxjpeg_jctrans.o \
-	wxjpeg_jcparam.o \
-	wxjpeg_jdatadst.o \
-	wxjpeg_jcinit.o \
-	wxjpeg_jcmaster.o \
-	wxjpeg_jcmarker.o \
-	wxjpeg_jcmainct.o \
-	wxjpeg_jcprepct.o \
+	wxjpeg_jcarith.o \
 	wxjpeg_jccoefct.o \
 	wxjpeg_jccolor.o \
-	wxjpeg_jcsample.o \
-	wxjpeg_jchuff.o \
-	wxjpeg_jcphuff.o \
 	wxjpeg_jcdctmgr.o \
-	wxjpeg_jfdctfst.o \
-	wxjpeg_jfdctflt.o \
-	wxjpeg_jfdctint.o \
+	wxjpeg_jchuff.o \
+	wxjpeg_jcinit.o \
+	wxjpeg_jcmainct.o \
+	wxjpeg_jcmarker.o \
+	wxjpeg_jcmaster.o \
+	wxjpeg_jcomapi.o \
+	wxjpeg_jcparam.o \
+	wxjpeg_jcprepct.o \
+	wxjpeg_jcsample.o \
+	wxjpeg_jctrans.o \
 	wxjpeg_jdapimin.o \
 	wxjpeg_jdapistd.o \
-	wxjpeg_jdtrans.o \
+	wxjpeg_jdarith.o \
+	wxjpeg_jdatadst.o \
 	wxjpeg_jdatasrc.o \
-	wxjpeg_jdmaster.o \
-	wxjpeg_jdinput.o \
-	wxjpeg_jdmarker.o \
-	wxjpeg_jdhuff.o \
-	wxjpeg_jdphuff.o \
-	wxjpeg_jdmainct.o \
 	wxjpeg_jdcoefct.o \
-	wxjpeg_jdpostct.o \
-	wxjpeg_jddctmgr.o \
-	wxjpeg_jidctfst.o \
-	wxjpeg_jidctflt.o \
-	wxjpeg_jidctint.o \
-	wxjpeg_jidctred.o \
-	wxjpeg_jdsample.o \
 	wxjpeg_jdcolor.o \
+	wxjpeg_jddctmgr.o \
+	wxjpeg_jdhuff.o \
+	wxjpeg_jdinput.o \
+	wxjpeg_jdmainct.o \
+	wxjpeg_jdmarker.o \
+	wxjpeg_jdmaster.o \
+	wxjpeg_jdmerge.o \
+	wxjpeg_jdpostct.o \
+	wxjpeg_jdsample.o \
+	wxjpeg_jdtrans.o \
+	wxjpeg_jerror.o \
+	wxjpeg_jfdctflt.o \
+	wxjpeg_jfdctfst.o \
+	wxjpeg_jfdctint.o \
+	wxjpeg_jidctflt.o \
+	wxjpeg_jidctfst.o \
+	wxjpeg_jidctint.o \
+	wxjpeg_jmemmgr.o \
+	wxjpeg_jmemnobs.o \
 	wxjpeg_jquant1.o \
 	wxjpeg_jquant2.o \
-	wxjpeg_jdmerge.o
+	wxjpeg_jutils.o
 WXTIFF_CFLAGS = -DNDEBUG $(__INC_ZLIB_p) $(__INC_JPEG_p) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
@@ -14971,20 +14971,8 @@ wxpng_pngwtran.o: $(srcdir)/src/png/pngwtran.c
 wxpng_pngwutil.o: $(srcdir)/src/png/pngwutil.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/pngwutil.c
 
-wxjpeg_jcomapi.o: $(srcdir)/src/jpeg/jcomapi.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcomapi.c
-
-wxjpeg_jutils.o: $(srcdir)/src/jpeg/jutils.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jutils.c
-
-wxjpeg_jerror.o: $(srcdir)/src/jpeg/jerror.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jerror.c
-
-wxjpeg_jmemmgr.o: $(srcdir)/src/jpeg/jmemmgr.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jmemmgr.c
-
-wxjpeg_jmemnobs.o: $(srcdir)/src/jpeg/jmemnobs.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jmemnobs.c
+wxjpeg_jaricom.o: $(srcdir)/src/jpeg/jaricom.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jaricom.c
 
 wxjpeg_jcapimin.o: $(srcdir)/src/jpeg/jcapimin.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcapimin.c
@@ -14992,29 +14980,8 @@ wxjpeg_jcapimin.o: $(srcdir)/src/jpeg/jcapimin.c
 wxjpeg_jcapistd.o: $(srcdir)/src/jpeg/jcapistd.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcapistd.c
 
-wxjpeg_jctrans.o: $(srcdir)/src/jpeg/jctrans.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jctrans.c
-
-wxjpeg_jcparam.o: $(srcdir)/src/jpeg/jcparam.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcparam.c
-
-wxjpeg_jdatadst.o: $(srcdir)/src/jpeg/jdatadst.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdatadst.c
-
-wxjpeg_jcinit.o: $(srcdir)/src/jpeg/jcinit.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcinit.c
-
-wxjpeg_jcmaster.o: $(srcdir)/src/jpeg/jcmaster.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcmaster.c
-
-wxjpeg_jcmarker.o: $(srcdir)/src/jpeg/jcmarker.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcmarker.c
-
-wxjpeg_jcmainct.o: $(srcdir)/src/jpeg/jcmainct.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcmainct.c
-
-wxjpeg_jcprepct.o: $(srcdir)/src/jpeg/jcprepct.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcprepct.c
+wxjpeg_jcarith.o: $(srcdir)/src/jpeg/jcarith.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcarith.c
 
 wxjpeg_jccoefct.o: $(srcdir)/src/jpeg/jccoefct.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jccoefct.c
@@ -15022,26 +14989,38 @@ wxjpeg_jccoefct.o: $(srcdir)/src/jpeg/jccoefct.c
 wxjpeg_jccolor.o: $(srcdir)/src/jpeg/jccolor.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jccolor.c
 
-wxjpeg_jcsample.o: $(srcdir)/src/jpeg/jcsample.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcsample.c
+wxjpeg_jcdctmgr.o: $(srcdir)/src/jpeg/jcdctmgr.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcdctmgr.c
 
 wxjpeg_jchuff.o: $(srcdir)/src/jpeg/jchuff.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jchuff.c
 
-wxjpeg_jcphuff.o: $(srcdir)/src/jpeg/jcphuff.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcphuff.c
+wxjpeg_jcinit.o: $(srcdir)/src/jpeg/jcinit.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcinit.c
 
-wxjpeg_jcdctmgr.o: $(srcdir)/src/jpeg/jcdctmgr.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcdctmgr.c
+wxjpeg_jcmainct.o: $(srcdir)/src/jpeg/jcmainct.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcmainct.c
 
-wxjpeg_jfdctfst.o: $(srcdir)/src/jpeg/jfdctfst.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jfdctfst.c
+wxjpeg_jcmarker.o: $(srcdir)/src/jpeg/jcmarker.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcmarker.c
 
-wxjpeg_jfdctflt.o: $(srcdir)/src/jpeg/jfdctflt.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jfdctflt.c
+wxjpeg_jcmaster.o: $(srcdir)/src/jpeg/jcmaster.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcmaster.c
 
-wxjpeg_jfdctint.o: $(srcdir)/src/jpeg/jfdctint.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jfdctint.c
+wxjpeg_jcomapi.o: $(srcdir)/src/jpeg/jcomapi.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcomapi.c
+
+wxjpeg_jcparam.o: $(srcdir)/src/jpeg/jcparam.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcparam.c
+
+wxjpeg_jcprepct.o: $(srcdir)/src/jpeg/jcprepct.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcprepct.c
+
+wxjpeg_jcsample.o: $(srcdir)/src/jpeg/jcsample.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jcsample.c
+
+wxjpeg_jctrans.o: $(srcdir)/src/jpeg/jctrans.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jctrans.c
 
 wxjpeg_jdapimin.o: $(srcdir)/src/jpeg/jdapimin.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdapimin.c
@@ -15049,56 +15028,77 @@ wxjpeg_jdapimin.o: $(srcdir)/src/jpeg/jdapimin.c
 wxjpeg_jdapistd.o: $(srcdir)/src/jpeg/jdapistd.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdapistd.c
 
-wxjpeg_jdtrans.o: $(srcdir)/src/jpeg/jdtrans.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdtrans.c
+wxjpeg_jdarith.o: $(srcdir)/src/jpeg/jdarith.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdarith.c
+
+wxjpeg_jdatadst.o: $(srcdir)/src/jpeg/jdatadst.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdatadst.c
 
 wxjpeg_jdatasrc.o: $(srcdir)/src/jpeg/jdatasrc.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdatasrc.c
 
-wxjpeg_jdmaster.o: $(srcdir)/src/jpeg/jdmaster.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdmaster.c
-
-wxjpeg_jdinput.o: $(srcdir)/src/jpeg/jdinput.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdinput.c
-
-wxjpeg_jdmarker.o: $(srcdir)/src/jpeg/jdmarker.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdmarker.c
-
-wxjpeg_jdhuff.o: $(srcdir)/src/jpeg/jdhuff.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdhuff.c
-
-wxjpeg_jdphuff.o: $(srcdir)/src/jpeg/jdphuff.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdphuff.c
-
-wxjpeg_jdmainct.o: $(srcdir)/src/jpeg/jdmainct.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdmainct.c
-
 wxjpeg_jdcoefct.o: $(srcdir)/src/jpeg/jdcoefct.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdcoefct.c
 
-wxjpeg_jdpostct.o: $(srcdir)/src/jpeg/jdpostct.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdpostct.c
+wxjpeg_jdcolor.o: $(srcdir)/src/jpeg/jdcolor.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdcolor.c
 
 wxjpeg_jddctmgr.o: $(srcdir)/src/jpeg/jddctmgr.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jddctmgr.c
 
-wxjpeg_jidctfst.o: $(srcdir)/src/jpeg/jidctfst.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jidctfst.c
+wxjpeg_jdhuff.o: $(srcdir)/src/jpeg/jdhuff.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdhuff.c
 
-wxjpeg_jidctflt.o: $(srcdir)/src/jpeg/jidctflt.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jidctflt.c
+wxjpeg_jdinput.o: $(srcdir)/src/jpeg/jdinput.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdinput.c
 
-wxjpeg_jidctint.o: $(srcdir)/src/jpeg/jidctint.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jidctint.c
+wxjpeg_jdmainct.o: $(srcdir)/src/jpeg/jdmainct.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdmainct.c
 
-wxjpeg_jidctred.o: $(srcdir)/src/jpeg/jidctred.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jidctred.c
+wxjpeg_jdmarker.o: $(srcdir)/src/jpeg/jdmarker.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdmarker.c
+
+wxjpeg_jdmaster.o: $(srcdir)/src/jpeg/jdmaster.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdmaster.c
+
+wxjpeg_jdmerge.o: $(srcdir)/src/jpeg/jdmerge.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdmerge.c
+
+wxjpeg_jdpostct.o: $(srcdir)/src/jpeg/jdpostct.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdpostct.c
 
 wxjpeg_jdsample.o: $(srcdir)/src/jpeg/jdsample.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdsample.c
 
-wxjpeg_jdcolor.o: $(srcdir)/src/jpeg/jdcolor.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdcolor.c
+wxjpeg_jdtrans.o: $(srcdir)/src/jpeg/jdtrans.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdtrans.c
+
+wxjpeg_jerror.o: $(srcdir)/src/jpeg/jerror.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jerror.c
+
+wxjpeg_jfdctflt.o: $(srcdir)/src/jpeg/jfdctflt.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jfdctflt.c
+
+wxjpeg_jfdctfst.o: $(srcdir)/src/jpeg/jfdctfst.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jfdctfst.c
+
+wxjpeg_jfdctint.o: $(srcdir)/src/jpeg/jfdctint.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jfdctint.c
+
+wxjpeg_jidctflt.o: $(srcdir)/src/jpeg/jidctflt.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jidctflt.c
+
+wxjpeg_jidctfst.o: $(srcdir)/src/jpeg/jidctfst.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jidctfst.c
+
+wxjpeg_jidctint.o: $(srcdir)/src/jpeg/jidctint.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jidctint.c
+
+wxjpeg_jmemmgr.o: $(srcdir)/src/jpeg/jmemmgr.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jmemmgr.c
+
+wxjpeg_jmemnobs.o: $(srcdir)/src/jpeg/jmemnobs.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jmemnobs.c
 
 wxjpeg_jquant1.o: $(srcdir)/src/jpeg/jquant1.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jquant1.c
@@ -15106,8 +15106,8 @@ wxjpeg_jquant1.o: $(srcdir)/src/jpeg/jquant1.c
 wxjpeg_jquant2.o: $(srcdir)/src/jpeg/jquant2.c
 	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jquant2.c
 
-wxjpeg_jdmerge.o: $(srcdir)/src/jpeg/jdmerge.c
-	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jdmerge.c
+wxjpeg_jutils.o: $(srcdir)/src/jpeg/jutils.c
+	$(CCC) -c -o $@ $(WXJPEG_CFLAGS) $(srcdir)/src/jpeg/jutils.c
 
 wxtiff_tif_win32.o: $(srcdir)/src/tiff/libtiff/tif_win32.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_win32.c
