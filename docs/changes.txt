@@ -103,6 +103,7 @@ All:
 - Fix wxRmdir() with non-ASCII paths (trivia21).
 - Don't crash in wxFFile::Eof() or Error() on closed file (jprotopopov).
 - Add UTF-8 support to wxZipOutputStream (Tobias Taschner).
+- Update all bundled 3rd party libraries to their latest versions.
 
 All (GUI):
 
