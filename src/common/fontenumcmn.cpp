@@ -127,6 +127,12 @@ bool wxFontEnumerator::IsValidFacename(const wxString &facename)
     return true;
 }
 
+/* static */
+void wxFontEnumerator::InvalidateCache()
+{
+    gs_allFacenames.clear();
+}
+
 #ifdef wxHAS_UTF8_FONTS
 bool wxFontEnumerator::EnumerateEncodingsUTF8(const wxString& facename)
 {
