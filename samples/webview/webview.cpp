@@ -47,7 +47,7 @@
 #if wxUSE_STC
 #include "wx/stc/stc.h"
 #else
-#error "wxStyledTextControl is needed by this sample"
+#include "wx/textctrl.h"
 #endif
 
 #if defined(__WXMSW__) || defined(__WXOSX__)
@@ -925,8 +925,16 @@ void WebFrame::OnViewTextRequest(wxCommandEvent& WXUNUSED(evt))
     wxDialog textViewDialog(this, wxID_ANY, "Page Text",
                             wxDefaultPosition, wxSize(700,500),
                             wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+#if wxUSE_STC
     wxStyledTextCtrl* text = new wxStyledTextCtrl(&textViewDialog, wxID_ANY);
     text->SetText(m_browser->GetPageText());
+#else // !wxUSE_STC
+    wxTextCtrl* text = new wxTextCtrl(this, wxID_ANY, m_browser->GetPageText(),
+                                      wxDefaultPosition, wxDefaultSize,
+                                      wxTE_MULTILINE |
+                                      wxTE_RICH |
+                                      wxTE_READONLY);
+#endif // wxUSE_STC/!wxUSE_STC
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(text, 1, wxEXPAND);
     SetSizer(sizer);
@@ -1240,6 +1248,7 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
                            wxDefaultPosition, wxSize(700,500),
                            wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
+#if wxUSE_STC
     wxStyledTextCtrl* text = new wxStyledTextCtrl(this, wxID_ANY);
     text->SetMarginWidth(1, 30);
     text->SetMarginType(1, wxSTC_MARGIN_NUMBER);
@@ -1255,6 +1264,13 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
     text->StyleSetForeground(wxSTC_H_ATTRIBUTE, wxColour(0,0,150));
     text->StyleSetForeground(wxSTC_H_ATTRIBUTEUNKNOWN, wxColour(0,0,150));
     text->StyleSetForeground(wxSTC_H_COMMENT, wxColour(150,150,150));
+#else // !wxUSE_STC
+    wxTextCtrl* text = new wxTextCtrl(this, wxID_ANY, source,
+                                      wxDefaultPosition, wxDefaultSize,
+                                      wxTE_MULTILINE |
+                                      wxTE_RICH |
+                                      wxTE_READONLY);
+#endif // wxUSE_STC/!wxUSE_STC
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(text, 1, wxEXPAND);
