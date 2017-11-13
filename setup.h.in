@@ -836,7 +836,7 @@
 /*
  * Use FontConfig library for private fonts support in wxFont.
  */
-#define wxUSE_FONTCONFIG 0
+#undef wxHAVE_FONTCONFIG_2_8_0
 /*
  * Use GTK print for printing under GTK+ 2.10+
  */
