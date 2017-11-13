@@ -1200,14 +1200,15 @@ void ClippingBoxTestCaseDCBase::OneDevRegionNonRect()
 
     // Draw image with reference triangle.
     wxBitmap bmpRef(s_dcSize);
-    wxMemoryDC* memDC = new wxMemoryDC(bmpRef);
-    wxDC* dcRef = GetDC(memDC);
+    wxMemoryDC memDC(bmpRef);
+    wxDC* dcRef = GetDC(&memDC);
     dcRef->SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     dcRef->Clear();
     dcRef->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     dcRef->SetPen(wxPen(s_fgColour));
     dcRef->DrawPolygon(WXSIZEOF(poly), poly);
-    delete dcRef;
+    if ( dcRef != &memDC )
+        delete dcRef;
 
     m_dc->SetDeviceOrigin(10, 15);
     m_dc->SetUserScale(0.5, 1.5);
@@ -1229,7 +1230,6 @@ void ClippingBoxTestCaseDCBase::OneDevRegionNonRect()
                  m_dc->DeviceToLogicalXRel(clipW),
                  m_dc->DeviceToLogicalYRel(clipH), 1);
     CheckClipShape(bmpRef, 1);
-    delete memDC;
 }
 
 void ClippingBoxTestCaseDCBase::OneDevRegionAndReset()
