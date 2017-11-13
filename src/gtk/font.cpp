@@ -561,6 +561,7 @@ bool wxFont::GTKSetPangoAttrs(PangoLayout* layout) const
 #ifdef wxHAS_PRIVATE_FONTS
 
 #include "wx/fontenum.h"
+#include "wx/module.h"
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/object.h"
 
@@ -571,8 +572,32 @@ extern PangoContext* wxGetPangoContext();
 
 namespace
 {
-    FcConfig* gs_fcConfig = NULL;
-}
+
+FcConfig* gs_fcConfig = NULL;
+
+// Module used to clean up the global FcConfig.
+class wxFcConfigDestroyModule : public wxModule
+{
+public:
+    wxFcConfigDestroyModule() { }
+
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE
+    {
+        if ( gs_fcConfig )
+        {
+            FcConfigDestroy(gs_fcConfig);
+            gs_fcConfig = NULL;
+        }
+    }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxFcConfigDestroyModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxFcConfigDestroyModule, wxModule);
+
+} // anonymous namespace
 
 bool wxFontBase::AddPrivateFont(const wxString& filename)
 {
