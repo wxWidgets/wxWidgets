@@ -500,7 +500,12 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
             desc.push_back(wxString(entryDesc));
         }
 
+        // This function is deprecated in favour of g_option_group_unref(), but
+        // we need to continue using it as long as we support glib < 2.44 where
+        // the new function was introduced, so just suppress the warning.
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         g_option_group_free (gtkOpts);
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
     }
 
     return usage;
