@@ -426,10 +426,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     {
         wxLogWarning("Failed to add private font from \"%s\"", privfont);
     }
-    else if ( !wxFont::ActivatePrivateFonts() )
-    {
-        wxLogWarning("Failed to activate the private fonts");
-    }
     else
     {
         menuSelect->AppendSeparator();

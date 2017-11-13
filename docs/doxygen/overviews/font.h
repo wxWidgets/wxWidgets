@@ -82,12 +82,9 @@ system. On Macintosh/OSX this can be arranged by placing the desired fonts
 within the Application Bundle in Contents/Resources/Fonts and using
 the ATSApplicationFontsPath key to point there. The full details of the
 procedure there can be found as OSX developer resources. For the GTK+ and
-Windows ports it is possible to add TrueType fonts at run-time using
-a sequence of calls to wxFont::AddPrivateFont() to give the names of files
-containing font data, followed by a call to wxFont::ActivatePrivateFonts()
-to complete the process of making the fonts available. These functions
-return false if they fail. They should be called just once before any
-graphics contexts have been created or other activity liable to use fonts
-has happened.
+Windows ports it is possible to add TrueType fonts from arbitrary locations at
+run-time using wxFont::AddPrivateFont(). Notice that under MSW this function
+should be called before creating the first wxGraphicsContext object if you want
+the private font to be usable from it.
 
 */

@@ -601,42 +601,41 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFcConfigDestroyModule, wxModule);
 
 bool wxFontBase::AddPrivateFont(const wxString& filename)
 {
-    if ( !gs_fcConfig )
-    {
-        gs_fcConfig = FcInitLoadConfigAndFonts();
-        if ( !gs_fcConfig )
-        {
-            wxLogError(_("Failed to create font configuration object."));
-            return false;
-        }
-    }
-
-    if ( !FcConfigAppFontAddFile(gs_fcConfig,
-            reinterpret_cast<const FcChar8*>(
-                static_cast<const char*>(filename.utf8_str())
-            )) )
-    {
-        wxLogError(_("Failed to add custom font \"%s\"."), filename);
-        return false;
-    }
-
-    return true;
-}
-
-bool wxFontBase::ActivatePrivateFonts()
-{
-    wxGtkObject<PangoContext> context(wxGetPangoContext());
-    PangoFontMap* const fmap = pango_context_get_font_map(context);
-    if ( !fmap || !PANGO_IS_FC_FONT_MAP(fmap) )
-    {
-        wxLogError(_("Failed to register font configuration using private fonts."));
-        return false;
-    }
-
     wxString why;
+
+    // All this code only works if we have pango_context_get_font_map() which
+    // is new in 1.38, so don't bother compiling -- or running -- it if this is
+    // not the case.
 #if PANGO_VERSION_CHECK(1,38,0)
     if ( wx_pango_version_check(1,38,0) == NULL )
     {
+        if ( !gs_fcConfig )
+        {
+            gs_fcConfig = FcInitLoadConfigAndFonts();
+            if ( !gs_fcConfig )
+            {
+                wxLogError(_("Failed to create font configuration object."));
+                return false;
+            }
+        }
+
+        if ( !FcConfigAppFontAddFile(gs_fcConfig,
+                reinterpret_cast<const FcChar8*>(
+                    static_cast<const char*>(filename.utf8_str())
+                )) )
+        {
+            wxLogError(_("Failed to add custom font \"%s\"."), filename);
+            return false;
+        }
+
+        wxGtkObject<PangoContext> context(wxGetPangoContext());
+        PangoFontMap* const fmap = pango_context_get_font_map(context);
+        if ( !fmap || !PANGO_IS_FC_FONT_MAP(fmap) )
+        {
+            wxLogError(_("Failed to register font configuration using private fonts."));
+            return false;
+        }
+
         PangoFcFontMap* const fcfmap = PANGO_FC_FONT_MAP(fmap);
         pango_fc_font_map_set_config(fcfmap, gs_fcConfig);
 

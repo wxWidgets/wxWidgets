@@ -35,7 +35,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/encinfo.h"
-#include "wx/filename.h"
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 
@@ -1122,28 +1121,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPrivateFontsListModule, wxModule);
 
 bool wxFontBase::AddPrivateFont(const wxString& filename)
 {
-    if ( !wxFileName::FileExists(filename) )
+    if ( !AddFontResourceEx(filename.t_str(), FR_PRIVATE, 0) )
     {
-        wxLogError(_("Font file \"%s\" doesn't exist."), filename);
+        wxLogSysError(_("Font file \"%s\" couldn't be loaded"), filename);
         return false;
     }
 
+    // Remember it for use in wxGDIPlusRenderer::Load().
     gs_privateFontFileNames.Add(filename);
-    return true;
-}
-
-bool wxFontBase::ActivatePrivateFonts()
-{
-    const int n = gs_privateFontFileNames.size();
-    for ( int i = 0 ; i < n; i++ )
-    {
-        const wxString& fname = gs_privateFontFileNames[i];
-        if ( !AddFontResourceEx(fname.t_str(), FR_PRIVATE, 0) )
-        {
-            wxLogSysError(_("Font file \"%s\" couldn't be loaded"),
-                          fname);
-        }
-    }
-
     return true;
 }

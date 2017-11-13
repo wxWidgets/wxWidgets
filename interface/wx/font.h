@@ -678,29 +678,24 @@ public:
         @c ATSApplicationFontsPath to @c Fonts value in your @c Info.plist
         file. See also wxStandardPaths::GetResourcesDir().
 
-        Notice that this method must be called before any graphics contexts
-        have been created.
+        Under MSW this method must be called before any wxGraphicsContext
+        objects have been created, otherwise the private font won't be usable
+        from them.
+
+        Under Unix this method requires Pango 1.38 or later and will return @a
+        false and log an error message explaining the problem if this
+        requirement is not satisfied either at compile- or run-time.
 
         Currently this method is implemented for all major platforms but you
         may also test for @c wxHAS_PRIVATE_FONTS preprocessor symbol: if it is
-        not defined, this function and ActivatePrivatefonts() are not
-        implemented at all and always simply return false.
+        not defined, this function is not implemented at all and simply always
+        returns false.
 
-        @return @true if the font was added and ActivatePrivatefonts() should
-            be called next or @false if adding it failed.
+        @return @true if the font was added and can now be used.
 
         @since 3.1.1
     */
     static bool AddPrivateFont(const wxString& filename);
-
-    /**
-        Make all fonts registered by AddPrivateFont() actually available.
-
-        @return @true if the private fonts can now be used or @false on error.
-
-        @since 3.1.1
-    */
-    static bool ActivatePrivatefonts();
 
     /**
         Gets the point size.

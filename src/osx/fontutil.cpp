@@ -95,12 +95,6 @@ bool wxFontBase::AddPrivateFont(const wxString& filename)
     return true;
 }
 
-bool wxFontBase::ActivatePrivateFonts()
-{
-    // Nothing to do here.
-    return true;
-}
-
 // ----------------------------------------------------------------------------
 // helper functions
 // ----------------------------------------------------------------------------

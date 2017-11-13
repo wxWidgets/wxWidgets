@@ -1148,9 +1148,4 @@ bool wxFontBase::AddPrivateFont(const wxString& WXUNUSED(filename))
     return false;
 }
 
-bool wxFontBase::ActivatePrivateFonts()
-{
-    return false;
-}
-
 #endif // !wxHAS_PRIVATE_FONTS
