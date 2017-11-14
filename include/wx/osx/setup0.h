@@ -1148,6 +1148,16 @@
 // Recommended setting: 1 (but can be safely disabled if you don't use it)
 #define wxUSE_PREFERENCES_EDITOR 1
 
+// wxFont::AddPrivateFont() allows to use fonts not installed on the system by
+// loading them from font files during run-time.
+//
+// Default is 1 except under Unix where it will be turned off by configure if
+// the required libraries are not available or not new enough.
+//
+// Recommended setting: 1 (but can be safely disabled if you don't use it and
+// want to avoid extra dependencies under Linux, for example).
+#define wxUSE_PRIVATE_FONTS 1
+
 // wxRichToolTip is a customizable tooltip class which has more functionality
 // than the stock (but native, unlike this class) wxToolTip.
 //

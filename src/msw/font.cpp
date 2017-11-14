@@ -1089,6 +1089,8 @@ bool wxFont::IsFixedWidth() const
 // Private fonts support
 // ----------------------------------------------------------------------------
 
+#if wxUSE_PRIVATE_FONTS
+
 namespace
 {
 
@@ -1131,3 +1133,5 @@ bool wxFontBase::AddPrivateFont(const wxString& filename)
     gs_privateFontFileNames.Add(filename);
     return true;
 }
+
+#endif // wxUSE_PRIVATE_FONTS

@@ -188,7 +188,6 @@ Currently the following symbols exist:
 @itemdef{wxHAS_IMAGES_IN_RESOURCES, Defined if <a href="http://en.wikipedia.org/wiki/Resource_(Windows)">
     Windows resource files</a> or OS/2 resource files are available on the current platform.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
-@itemdef{wxHAS_PRIVATE_FONTS, Defined if wxFont::AddPrivateFont() is implemented.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,
         Defined if the current port supports radio menu items (see wxMenu::AppendRadioItem).}
 @itemdef{wxHAS_RAW_BITMAP, Defined if direct access to bitmap data using the classes in @c wx/rawbmp.h is supported.}

@@ -397,7 +397,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                      wxT("Find font for en&coding...\tCtrl-C"),
                      wxT("Find font families for given encoding"));
 
-#ifdef wxHAS_PRIVATE_FONTS
+#if wxUSE_PRIVATE_FONTS
     // Try to use a private font, under most platforms we just look for it in
     // the current directory but under OS X it must be in a specific location
     // so look for it there.
@@ -433,7 +433,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                            "Select private font",
                            "Select a font available only in this application");
     }
-#endif // wxHAS_PRIVATE_FONTS
+#endif // wxUSE_PRIVATE_FONTS
 
 
     // now append the freshly created menu to the menu bar...

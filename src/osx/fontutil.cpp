@@ -69,6 +69,8 @@ wxString wxNativeEncodingInfo::ToString() const
 // Private Fonts
 // ----------------------------------------------------------------------------
 
+#if wxUSE_PRIVATE_FONTS
+
 // On OSX one can provide private fonts simply by putting the font files in
 // with the resources in your application bundle. So the API for adding fonts
 // does not do anything except checking that the file you pass to it actually
@@ -94,6 +96,8 @@ bool wxFontBase::AddPrivateFont(const wxString& filename)
 
     return true;
 }
+
+#endif // wxUSE_PRIVATE_FONTS
 
 // ----------------------------------------------------------------------------
 // helper functions

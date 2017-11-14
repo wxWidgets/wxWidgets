@@ -903,14 +903,6 @@ typedef pid_t GPid;
  */
 #define wxUSE_LIBSDL 0
 /*
- * Use FontConfig library for private fonts support in wxFont.
- */
-#ifdef VMS_GTK2
-#define wxHAVE_FONTCONFIG_2_8_0 1
-#else
-#undef wxHAVE_FONTCONFIG_2_8_0
-#endif
-/*
  * Use GTK print for printing under GTK+ 2.10+
  */
 #ifdef VMS_GTK2

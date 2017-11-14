@@ -963,6 +963,8 @@ wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 // Support for adding private fonts
 //-----------------------------------------------------------------------------
 
+#if wxUSE_PRIVATE_FONTS
+
 namespace
 {
 
@@ -973,6 +975,8 @@ Gdiplus::FontFamily* gs_pFontFamily = NULL;
 
 // This function is defined in src/msw/font.cpp.
 extern const wxArrayString& wxGetPrivateFontFileNames();
+
+#endif // wxUSE_PRIVATE_FONTS
 
 //-----------------------------------------------------------------------------
 // wxGDIPlusFont implementation
@@ -985,6 +989,7 @@ wxGDIPlusFontData::Init(const wxString& name,
                         const wxColour& col,
                         Unit fontUnit)
 {
+#if wxUSE_PRIVATE_FONTS
     // If the user has registered any private fonts, they should be used in
     // preference to any system-wide ones.
     m_font = NULL;
@@ -1009,7 +1014,10 @@ wxGDIPlusFontData::Init(const wxString& name,
     }
 
     if ( !m_font )
+#endif // wxUSE_PRIVATE_FONTS
+    {
         m_font = new Font(name.wc_str(), size, style, fontUnit);
+    }
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
@@ -2315,6 +2323,7 @@ void wxGDIPlusRenderer::Load()
         wxLogTrace("gdiplus", "successfully initialized GDI+");
         m_loaded = 1;
 
+#if wxUSE_PRIVATE_FONTS
         // Make private fonts available to GDI+, if any.
         const wxArrayString& privateFonts = wxGetPrivateFontFileNames();
         const size_t n = privateFonts.size();
@@ -2329,6 +2338,7 @@ void wxGDIPlusRenderer::Load()
 
             gs_pFontFamily = new Gdiplus::FontFamily[n];
         }
+#endif // wxUSE_PRIVATE_FONTS
     }
     else
     {
@@ -2344,6 +2354,7 @@ void wxGDIPlusRenderer::Unload()
         GdiplusShutdown(m_gditoken);
         m_gditoken = 0;
 
+#if wxUSE_PRIVATE_FONTS
         if ( gs_privateFonts )
         {
             delete gs_privateFonts;
@@ -2352,6 +2363,7 @@ void wxGDIPlusRenderer::Unload()
             delete[] gs_pFontFamily;
             gs_pFontFamily = NULL;
         }
+#endif // wxUSE_PRIVATE_FONTS
     }
     m_loaded = -1; // next Load() will try again
 }
