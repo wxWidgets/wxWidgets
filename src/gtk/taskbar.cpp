@@ -28,6 +28,7 @@
 #ifndef __WXGTK3__
     #include "eggtrayicon.h"
 #endif
+#include "wx/gtk/private/gtk2-compat.h"
 
 #if !GTK_CHECK_VERSION(2,10,0)
     typedef struct _GtkStatusIcon GtkStatusIcon;
@@ -127,6 +128,9 @@ status_icon_popup_menu(GtkStatusIcon*, guint, guint, wxTaskBarIcon* taskBarIcon)
 bool wxTaskBarIconBase::IsAvailable()
 {
 #ifdef GDK_WINDOWING_X11
+    if (!GDK_IS_X11_DISPLAY(gdk_display_get_default()))
+        return false;
+
     char name[32];
     g_snprintf(name, sizeof(name), "_NET_SYSTEM_TRAY_S%d",
         gdk_x11_get_default_screen());
