@@ -186,6 +186,7 @@ library:
 @itemdef{wxUSE_POSTSCRIPT, Use wxPostScriptPrinter class.}
 @itemdef{wxUSE_PRINTF_POS_PARAMS, Use wxVsnprintf which supports positional parameters.}
 @itemdef{wxUSE_PRINTING_ARCHITECTURE, Enable printer classes.}
+@itemdef{wxUSE_PRIVATE_FONTS, Implement wxFont::AddPrivateFont() method.}
 @itemdef{wxUSE_PROGRESSDLG, Enables progress dialog classes.}
 @itemdef{wxUSE_PROPGRID, Use wxPropertyGrid library.}
 @itemdef{wxUSE_PROTOCOL, Use wxProtocol and derived classes.}

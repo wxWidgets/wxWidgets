@@ -558,7 +558,7 @@ bool wxFont::GTKSetPangoAttrs(PangoLayout* layout) const
 // Support for adding private fonts
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAS_PRIVATE_FONTS
+#if wxUSE_PRIVATE_FONTS
 
 #include "wx/fontenum.h"
 #include "wx/module.h"
@@ -649,4 +649,4 @@ bool wxFontBase::AddPrivateFont(const wxString& filename)
     return true;
 }
 
-#endif // wxHAS_PRIVATE_FONTS
+#endif // wxUSE_PRIVATE_FONTS

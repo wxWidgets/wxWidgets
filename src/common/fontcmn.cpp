@@ -1136,16 +1136,3 @@ bool wxFromString(const wxString& str, wxFontBase *font)
 
     return font->SetNativeFontInfo(str);
 }
-
-#ifndef wxHAS_PRIVATE_FONTS
-
-// Adding private fonts is not supported on this platform, so provide the
-// functions that would be used, but make them no-ops that return a code
-// that indicates failure.
-
-bool wxFontBase::AddPrivateFont(const wxString& WXUNUSED(filename))
-{
-    return false;
-}
-
-#endif // !wxHAS_PRIVATE_FONTS

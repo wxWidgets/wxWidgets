@@ -686,10 +686,10 @@ public:
         false and log an error message explaining the problem if this
         requirement is not satisfied either at compile- or run-time.
 
-        Currently this method is implemented for all major platforms but you
-        may also test for @c wxHAS_PRIVATE_FONTS preprocessor symbol: if it is
-        not defined, this function is not implemented at all and simply always
-        returns false.
+        Currently this method is implemented for all major platforms (subject
+        to having Pango 1.38 or later when running configure under Unix) and
+        @c wxUSE_PRIVATE_FONTS is always set to 0 under the other platforms,
+        making this function unavailable at compile-time.
 
         @return @true if the font was added and can now be used.
 
