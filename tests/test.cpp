@@ -409,6 +409,20 @@ void DeleteTestWindow(wxWindow* win)
 
 #ifdef __WXGTK__
 
+#ifdef GDK_WINDOWING_X11
+
+#include "X11/Xlib.h"
+
+extern "C"
+int wxTestX11ErrorHandler(Display*, XErrorEvent*)
+{
+    fprintf(stderr, "\n*** X11 error while running %s(): ",
+            wxGetCurrentTestName().c_str());
+    return 0;
+}
+
+#endif // GDK_WINDOWING_X11
+
 extern "C"
 void
 wxTestGLogHandler(const gchar* domain,
@@ -471,6 +485,10 @@ bool TestApp::OnInit()
 #ifdef __WXGTK20__
     g_log_set_default_handler(wxTestGLogHandler, NULL);
 #endif // __WXGTK__
+
+#ifdef GDK_WINDOWING_X11
+    XSetErrorHandler(wxTestX11ErrorHandler);
+#endif // GDK_WINDOWING_X11
 
 #endif // wxUSE_GUI
 
