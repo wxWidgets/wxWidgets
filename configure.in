@@ -2963,7 +2963,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl fi
         fi
 
-        PKG_CHECK_MODULES(FONTCONFIG, [fontconfig >= 2.8.0],
+        PKG_CHECK_MODULES(PRIVATE_FONTS, [fontconfig >= 2.8.0 pangoft2 >= 1.38.0],
                           [
                             AC_DEFINE(wxHAVE_FONTCONFIG_2_8_0)
                             CXXFLAGS="$FONTCONFIG_CFLAGS $CXXFLAGS"

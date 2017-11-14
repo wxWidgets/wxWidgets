@@ -601,61 +601,52 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFcConfigDestroyModule, wxModule);
 
 bool wxFontBase::AddPrivateFont(const wxString& filename)
 {
-    wxString why;
-
-    // All this code only works if we have pango_context_get_font_map() which
-    // is new in 1.38, so don't bother compiling -- or running -- it if this is
-    // not the case.
-#if PANGO_VERSION_CHECK(1,38,0)
-    if ( wx_pango_version_check(1,38,0) == NULL )
+    // We already checked that we have the required functions at compile-time,
+    // but we should also check if they're available at run-time in case we use
+    // older versions of them than the ones we were compiled with.
+    if ( wx_pango_version_check(1,38,0) != NULL )
     {
+        wxLogError(_("Using private fonts is not supported on this system: "
+                     "Pango library is too old, 1.38 or later required."));
+        return false;
+    }
+
+    if ( !gs_fcConfig )
+    {
+        gs_fcConfig = FcInitLoadConfigAndFonts();
         if ( !gs_fcConfig )
         {
-            gs_fcConfig = FcInitLoadConfigAndFonts();
-            if ( !gs_fcConfig )
-            {
-                wxLogError(_("Failed to create font configuration object."));
-                return false;
-            }
-        }
-
-        if ( !FcConfigAppFontAddFile(gs_fcConfig,
-                reinterpret_cast<const FcChar8*>(
-                    static_cast<const char*>(filename.utf8_str())
-                )) )
-        {
-            wxLogError(_("Failed to add custom font \"%s\"."), filename);
+            wxLogError(_("Failed to create font configuration object."));
             return false;
         }
-
-        wxGtkObject<PangoContext> context(wxGetPangoContext());
-        PangoFontMap* const fmap = pango_context_get_font_map(context);
-        if ( !fmap || !PANGO_IS_FC_FONT_MAP(fmap) )
-        {
-            wxLogError(_("Failed to register font configuration using private fonts."));
-            return false;
-        }
-
-        PangoFcFontMap* const fcfmap = PANGO_FC_FONT_MAP(fmap);
-        pango_fc_font_map_set_config(fcfmap, gs_fcConfig);
-
-        // Ensure that the face names defined by private fonts are recognized by
-        // our SetFaceName() which uses wxFontEnumerator to check if the name is in
-        // the list of available faces.
-        wxFontEnumerator::InvalidateCache();
-
-        return true;
     }
-    else
+
+    if ( !FcConfigAppFontAddFile(gs_fcConfig,
+            reinterpret_cast<const FcChar8*>(
+                static_cast<const char*>(filename.utf8_str())
+            )) )
     {
-        why = _("system Pango library is too old, 1.38 or later required");
+        wxLogError(_("Failed to add custom font \"%s\"."), filename);
+        return false;
     }
-#else // Pango < 1.38
-    why = _("this application was compiled with too old Pango library version");
-#endif // Pango 1.38+/1.38-
 
-    wxLogError(_("Using private fonts is not supported: %s."), why);
-    return false;
+    wxGtkObject<PangoContext> context(wxGetPangoContext());
+    PangoFontMap* const fmap = pango_context_get_font_map(context);
+    if ( !fmap || !PANGO_IS_FC_FONT_MAP(fmap) )
+    {
+        wxLogError(_("Failed to register font configuration using private fonts."));
+        return false;
+    }
+
+    PangoFcFontMap* const fcfmap = PANGO_FC_FONT_MAP(fmap);
+    pango_fc_font_map_set_config(fcfmap, gs_fcConfig);
+
+    // Ensure that the face names defined by private fonts are recognized by
+    // our SetFaceName() which uses wxFontEnumerator to check if the name is in
+    // the list of available faces.
+    wxFontEnumerator::InvalidateCache();
+
+    return true;
 }
 
 #endif // wxHAS_PRIVATE_FONTS
