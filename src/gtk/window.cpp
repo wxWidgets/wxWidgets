@@ -4476,7 +4476,7 @@ PangoContext *wxWindowGTK::GTKGetPangoDefaultContext()
 }
 
 #ifdef __WXGTK3__
-void wxWindowGTK::ApplyCssStyle(GtkCssProvider* provider, const char* style)
+void wxWindowGTK::GTKApplyCssStyle(GtkCssProvider* provider, const char* style)
 {
     wxCHECK_RET(m_widget, "invalid window");
 
@@ -4488,6 +4488,13 @@ void wxWindowGTK::ApplyCssStyle(GtkCssProvider* provider, const char* style)
     gtk_style_context_add_provider(gtk_widget_get_style_context(m_widget),
                                    GTK_STYLE_PROVIDER(provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
+
+void wxWindowGTK::GTKApplyCssStyle(const char* style)
+{
+    GtkCssProvider* provider = gtk_css_provider_new();
+    GTKApplyCssStyle(provider, style);
+    g_object_unref(provider);
 }
 #else // GTK+ < 3
 GtkRcStyle* wxWindowGTK::GTKCreateWidgetStyle()
