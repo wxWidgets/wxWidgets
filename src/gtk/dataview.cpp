@@ -4919,18 +4919,24 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
 
 wxDataViewItem wxDataViewCtrl::GetTopItem() const
 {
+#if GTK_CHECK_VERSION(2,8,0)
+#ifndef __WXGTK3__
+    if (gtk_check_version(2,8,0))
+        return wxDataViewItem();
+#endif
     wxGtkTreePath start;
-    if ( !gtk_tree_view_get_visible_range
+    if ( gtk_tree_view_get_visible_range
           (
            GTK_TREE_VIEW(m_treeview),
            start.ByRef(),
            NULL
           ) )
     {
-        return wxDataViewItem();
+        return GTKPathToItem(start);
     }
+#endif
 
-    return GTKPathToItem(start);
+    return wxDataViewItem();
 }
 
 int wxDataViewCtrl::GetCountPerPage() const
