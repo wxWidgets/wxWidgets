@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # build a list of English locales
 declare -a locale_list=("en_GB" "en_US")
