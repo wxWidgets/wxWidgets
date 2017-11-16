@@ -116,6 +116,37 @@ public:
     // Bit field that indicates fields that have been modified by the
     // main thread so the task dialog runner knows what to update.
     int m_notifications;
+
+
+    // Helper function to split a single message, passed via our public API,
+    // into the title and the main content body used by the native dialog.
+    //
+    // Note that it uses m_message and so must be called with m_cs locked.
+    void SplitMessageIntoTitleAndBody(wxString& title, wxString& body) const
+    {
+        title = m_message;
+
+        const size_t posNL = title.find('\n');
+        if ( posNL != wxString::npos )
+        {
+            // There can an extra new line between the first and subsequent
+            // lines to separate them as it looks better with the generic
+            // version -- but in this one, they're already separated by the use
+            // of different dialog elements, so suppress the extra new line.
+            int numNLs = 1;
+            if ( posNL < title.length() - 1 && title[posNL + 1] == '\n' )
+                numNLs++;
+
+            body.assign(title, posNL + numNLs, wxString::npos);
+            title.erase(posNL);
+        }
+        else // A single line
+        {
+            // Don't use title without the body, this doesn't make sense.
+            body.clear();
+            title.swap(body);
+        }
+    }
 };
 
 // Runner thread that takes care of displaying and updating the
@@ -280,29 +311,8 @@ void PerformNotificationUpdates(HWND hwnd,
     {
         // Split the message in the title string and the rest if it has
         // multiple lines.
-        wxString
-            title = sharedData->m_message,
-            body;
-
-        const size_t posNL = title.find('\n');
-        if ( posNL != wxString::npos )
-        {
-            // There can an extra new line between the first and subsequent
-            // lines to separate them as it looks better with the generic
-            // version -- but in this one, they're already separated by the use
-            // of different dialog elements, so suppress the extra new line.
-            int numNLs = 1;
-            if ( posNL < title.length() - 1 && title[posNL + 1] == '\n' )
-                numNLs++;
-
-            body.assign(title, posNL + numNLs, wxString::npos);
-            title.erase(posNL);
-        }
-        else // A single line
-        {
-            // Don't use title without the body, this doesn't make sense.
-            title.swap(body);
-        }
+        wxString title, body;
+        sharedData->SplitMessageIntoTitleAndBody(title, body);
 
         ::SendMessage( hwnd,
                        sharedData->m_msgChangeElementText,
@@ -1058,7 +1068,15 @@ void* wxProgressDialogTaskRunner::Entry()
         // to the thread that created the parent window, i.e. the main thread.
         wxTdc.parent = m_sharedData.m_parent;
         wxTdc.caption = m_sharedData.m_title.wx_str();
-        wxTdc.message = m_sharedData.m_message.wx_str();
+
+        // Split the message into the title and main body text in the same way
+        // as it's done later in PerformNotificationUpdates() when the message
+        // is changed by Update() or Pulse().
+        m_sharedData.SplitMessageIntoTitleAndBody
+                     (
+                        wxTdc.message,
+                        wxTdc.extendedMessage
+                     );
 
         // MSWCommonTaskDialogInit() will add an IDCANCEL button but we need to
         // give it the correct label.
