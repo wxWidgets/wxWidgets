@@ -1,0 +1,2 @@
+Copy `wxWidgets-x.y.z.zip` package into the same `distrib\release\x.y.z` folder
+on Windows.

@@ -1,0 +1,5 @@
+Copy these Windows packages back to your Linux or OSX `distrib/release/x.y.z`
+directory so you can continue with the upload step with all packages available:
+
+wxMSW-x.y.z-Setup.exe
+wxWidgets-x.y.z.chm

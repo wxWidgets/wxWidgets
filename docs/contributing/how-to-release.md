@@ -46,12 +46,16 @@ and then run it using the new DLLs.
 
 ## Pre-Release Steps
 
+1) Run `build/tools/step1-pre-release.sh` or manually apply the following:
+
 * Update `docs/readme.txt`. Please review its contents in addition to just
   changing the version number.
 * Update `docs/release.md` (the release sha1sums should be set to zeroes).
 * Put a date on the release line in `docs/changes.txt`.
 * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
 * Update the release announcement post in `docs/publicity/announce.txt`.
+
+2) Run `build/tools/step2-commits.sh` or manually apply the following:
 
 Commit the changes and finally tag the release, preferably GPG-signed:
 
@@ -71,18 +75,18 @@ generate all release package files under `distrib/release/x.y.z`. The scripts
 mostly build the release packages based on the current HEAD commit, so always
 ensure you have the appropriate tag or commit checked out.
 
-1. Run `./build/tools/release.sh x.y.z` to create source archives
+1. Run `build/tools/step3a-nix-release.sh x.y.z` to create source archives
    `wxWidgets-x.y.z.{7z,tar.bz2,zip}`, `wxWidgets-x.y.z-headers.7z`, and
    `wxWidgets-x.y.z-docs-html.{tar.bz2,zip}` packages.
 
 2. Copy just the `wxWidgets-x.y.z.zip` package into the same
    `distrib\release\x.y.z` folder on Windows.
 
-3. Run `build/tools/release.bat x.y.z` in a Windows command prompt. To avoid
-   confusion note that, unlike other generated files, the Windows installer is
-   created based on files as well as instructions (`build/tools/wxwidgets.iss`)
-   contained in the copied release ZIP and not from the current working wx
-   directory.
+3. Run `build/tools/step3c-win-release.bat x.y.z` in a Windows command prompt.
+   To avoid confusion note that, unlike other generated files, the Windows
+   installer is created based on files as well as instructions
+   (`build/tools/wxwidgets.iss`) contained in the copied release ZIP and not
+   from the current working wx directory.
 
 4. Copy these Windows packages back to your Linux or OSX `distrib/release/x.y.z`
    directory so you can continue with the upload step with all packages
@@ -91,7 +95,8 @@ ensure you have the appropriate tag or commit checked out.
     wxMSW-x.y.z-Setup.exe
     wxWidgets-x.y.z.chm
 
-5. Update the sha1sums in `docs/release.md` and commit the changes.
+5. Run `build/tools/step5-sha1sums.sh` or manually update the sha1sums in
+   `docs/release.md` and commit the changes.
 
 ## Uploading
 
