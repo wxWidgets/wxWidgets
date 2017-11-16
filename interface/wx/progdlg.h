@@ -220,7 +220,11 @@ public:
         Fit() explicitly. However the native MSW implementation of this class
         does make the dialog shorter if the new text has fewer lines of text
         than the old one, so it is recommended to keep the number of lines of
-        text constant in order to avoid jarring dialog size changes.
+        text constant in order to avoid jarring dialog size changes. You may
+        also want to make the initial message, specified when creating the
+        dialog, wide enough to avoid having to resize the dialog later, e.g. by
+        appending a long string of unbreakable spaces (@c wxString(L'\u00a0',
+        100)) to it.
 
         @param value
             The new value of the progress meter. It should be less than or equal to
