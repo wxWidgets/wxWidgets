@@ -2,7 +2,7 @@
 
 Creating a new release requires a few things before getting started:
 
-* Linux or OSX.
+* Linux (or another Unix but GNU tar is required).
 * Windows 7+ with HTML Help Workshop, and Inno Setup installed.
 * 7-Zip, Doxygen 1.8.8, and GraphViz installed on both machines.
 
