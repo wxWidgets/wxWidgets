@@ -14,7 +14,7 @@ ver_string=`grep '#define wxVERSION_STRING ' $topdir/include/wx/version.h | sed 
 for i in "${files[@]}"
 do
     # compute sha1sum
-    sha1sum=`sha1sum $topdir/distrib/release/$ver_string/$i`
+    sha1sum=`sha1sum $topdir/distrib/release/$ver_string/$i | cut -d' ' -f1`
 
     # save the sha1sum for this file
     sed -i -E "/^\s*[0]{40}\s{2}wx/ s/(^\s*)[0]{40}(\s{2}$i)/\1$sha1sum\2/" $topdir/docs/release.md
