@@ -53,7 +53,7 @@ find $prefix/include/wx -type f -name setup0.h | while read f; do
 done
 
 # Compile gettext catalogs.
-make -C $prefix/locale allmo
+make -C $prefix/locale -s MSGFMT=msgfmt allmo
 
 tar cjf $prefix.tar.bz2 $prefix
 
