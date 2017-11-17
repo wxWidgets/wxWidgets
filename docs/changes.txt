@@ -223,6 +223,7 @@ wxMSW:
 - Fix updating radio groups when non-radio item is inserted to wxMenu.
 - Fix autoselecting the contents of wxTextCtrl with wxWANTS_CHARS style.
 - Implement SetIcon(), SetPosition(), GetPosition() for native wxProgressDialog.
+- Fix focus-related problems when using native wxProgressDialog.
 - Fix crash when reparenting the currently focused window to another TLW.
 
 wxOSX:
