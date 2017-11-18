@@ -113,6 +113,34 @@ struct wxVectorMemOpsGeneric
     }
 };
 
+// We need to distinguish integers from iterators in assign() overloads and the
+// simplest way to do it would be by using std::iterator_traits<>, however this
+// might break existing code using custom iterator classes but not specializing
+// iterator_traits<> for them, so we approach the problem from the other end
+// and use our own traits that we specialize for all integer types.
+
+struct IsIntType {};
+struct IsNotIntType {};
+
+template <typename T> struct IsInt : IsNotIntType {};
+
+#define WX_DECLARE_TYPE_IS_INT(type) \
+    template <> struct IsInt<type> : IsIntType {}
+
+WX_DECLARE_TYPE_IS_INT(unsigned char);
+WX_DECLARE_TYPE_IS_INT(signed char);
+WX_DECLARE_TYPE_IS_INT(unsigned short int);
+WX_DECLARE_TYPE_IS_INT(signed short int);
+WX_DECLARE_TYPE_IS_INT(unsigned int);
+WX_DECLARE_TYPE_IS_INT(signed int);
+WX_DECLARE_TYPE_IS_INT(unsigned long int);
+WX_DECLARE_TYPE_IS_INT(signed long int);
+#ifdef wxLongLong_t
+WX_DECLARE_TYPE_IS_INT(wxLongLong_t);
+WX_DECLARE_TYPE_IS_INT(wxULongLong_t);
+#endif
+
+#undef WX_DECLARE_TYPE_IS_INT
 
 } // namespace wxPrivate
 
@@ -269,23 +297,13 @@ public:
 
     void assign(size_type p_size, const value_type& v)
     {
-        clear();
-        reserve(p_size);
-        for ( size_t n = 0; n < p_size; n++ )
-            push_back(v);
+        AssignFromValue(p_size, v);
     }
 
-    template <class InputIterator>
+    template <typename InputIterator>
     void assign(InputIterator first, InputIterator last)
     {
-        clear();
-
-        // Notice that it would be nice to call reserve() here but we can't do
-        // it for arbitrary input iterators, we should have a dispatch on
-        // iterator type and call it if possible.
-
-        for ( InputIterator it = first; it != last; ++it )
-            push_back(*it);
+        AssignDispatch(first, last, typename wxPrivate::IsInt<InputIterator>());
     }
 
     void swap(wxVector& v)
@@ -543,6 +561,36 @@ private:
         reserve(n);
         for ( size_type i = m_size; i < n; i++ )
             push_back(v);
+    }
+
+    void AssignFromValue(size_type p_size, const value_type& v)
+    {
+        clear();
+        reserve(p_size);
+        for ( size_t n = 0; n < p_size; n++ )
+            push_back(v);
+    }
+
+    template <typename InputIterator>
+    void AssignDispatch(InputIterator first, InputIterator last,
+                        wxPrivate::IsIntType)
+    {
+        AssignFromValue(static_cast<size_type>(first),
+                        static_cast<const value_type&>(last));
+    }
+
+    template <typename InputIterator>
+    void AssignDispatch(InputIterator first, InputIterator last,
+                        wxPrivate::IsNotIntType)
+    {
+        clear();
+
+        // Notice that it would be nice to call reserve() here but we can't do
+        // it for arbitrary input iterators, we should have a dispatch on
+        // iterator type and call it if possible.
+
+        for ( InputIterator it = first; it != last; ++it )
+            push_back(*it);
     }
 
     size_type m_size,
