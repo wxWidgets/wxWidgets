@@ -331,3 +331,23 @@ TEST_CASE("wxVector::operator==", "[vector][compare]")
     v2.push_back("baz");
     CHECK( v1 != v2 );
 }
+
+TEST_CASE("wxVector::reverse_iterator", "[vector][reverse_iterator]")
+{
+    wxVector<int> v;
+    for ( int i = 0; i < 10; ++i )
+        v.push_back(i + 1);
+
+    const wxVector<int>::reverse_iterator rb = v.rbegin();
+    const wxVector<int>::reverse_iterator re = v.rend();
+    CHECK( re - rb == 10 );
+
+    wxVector<int>::reverse_iterator ri = rb;
+    ++ri;
+    CHECK( ri - rb == 1 );
+    CHECK( re - ri == 9 );
+
+    ri = rb + 2;
+    CHECK( ri - rb == 2 );
+    CHECK( re - ri == 8 );
+}
