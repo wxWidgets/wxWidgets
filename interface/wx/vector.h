@@ -200,6 +200,20 @@ public:
     wxVector& operator=(const wxVector& vb);
 
     /**
+        Equality operator.
+
+        @since 3.1.1
+    */
+    wxVector& operator==(const wxVector& vb) const;
+
+    /**
+        Inequality operator.
+
+        @since 3.1.1
+    */
+    wxVector& operator!=(const wxVector& vb) const;
+
+    /**
         Returns item at position @a idx.
     */
     const value_type& operator[](size_type idx) const;
