@@ -195,6 +195,15 @@ public:
     iterator insert(iterator it, const value_type& v = value_type());
 
     /**
+        Insert the given number of copies of @a v at the given position.
+
+        @return Iterator for the first inserted item.
+
+        @since 3.1.1
+     */
+    iterator insert(iterator it, size_type count, const value_type& v);
+
+    /**
         Assignment operator.
     */
     wxVector& operator=(const wxVector& vb);

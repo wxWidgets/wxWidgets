@@ -442,14 +442,14 @@ public:
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end() - 1); }
     const_reverse_iterator rend() const { return const_reverse_iterator(begin() - 1); }
 
-    iterator insert(iterator it, const value_type& v = value_type())
+    iterator insert(iterator it, size_type count, const value_type& v)
     {
         // NB: this must be done before reserve(), because reserve()
         //     invalidates iterators!
         const size_t idx = it - begin();
         const size_t after = end() - it;
 
-        reserve(size() + 1);
+        reserve(size() + count);
 
         // the place where the new element is going to be inserted
         value_type * const place = m_values + idx;
@@ -457,25 +457,31 @@ public:
         // unless we're inserting at the end, move following elements out of
         // the way:
         if ( after > 0 )
-            Ops::MemmoveForward(place + 1, place, after);
+            Ops::MemmoveForward(place + count, place, after);
 
         // if the ctor called below throws an exception, we need to move all
         // the elements back to their original positions in m_values
         wxScopeGuard moveBack = wxMakeGuard(
-                Ops::MemmoveBackward, place, place + 1, after);
+                Ops::MemmoveBackward, place, place + count, after);
         if ( !after )
             moveBack.Dismiss();
 
         // use placement new to initialize new object in preallocated place in
         // m_values and store 'v' in it:
-        ::new(place) value_type(v);
+        for ( size_type i = 0; i < count; i++ )
+            ::new(place + i) value_type(v);
 
         // now that we did successfully add the new element, increment the size
         // and disable moving the items back
         moveBack.Dismiss();
-        m_size++;
+        m_size += count;
 
         return begin() + idx;
+    }
+
+    iterator insert(iterator it, const value_type& v = value_type())
+    {
+        return insert(it, 1, v);
     }
 
     iterator erase(iterator it)
