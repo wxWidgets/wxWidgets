@@ -162,6 +162,16 @@ void VectorsTestCase::Insert()
     CPPUNIT_ASSERT( v[1] == 'a' );
     CPPUNIT_ASSERT( v[2] == 'X' );
     CPPUNIT_ASSERT( v[3] == 'b' );
+
+    v.insert(v.begin() + 3, 3, 'Z');
+    REQUIRE( v.size() == 7 );
+    CHECK( v[0] == '0' );
+    CHECK( v[1] == 'a' );
+    CHECK( v[2] == 'X' );
+    CHECK( v[3] == 'Z' );
+    CHECK( v[4] == 'Z' );
+    CHECK( v[5] == 'Z' );
+    CHECK( v[6] == 'b' );
 }
 
 void VectorsTestCase::Erase()
