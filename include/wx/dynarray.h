@@ -18,7 +18,13 @@
     #include <vector>
     #include <algorithm>
     #include "wx/afterstd.h"
-#endif
+
+    #define wxDynArrayBaseTemplate std::vector
+#else // !wxUSE_STD_CONTAINERS
+    #include "wx/vector.h"
+
+    #define wxDynArrayBaseTemplate wxVector
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
 /*
   This header defines the dynamic arrays and object arrays (i.e. arrays which
@@ -80,8 +86,6 @@ typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 //     you cast "SomeArray *" as "BaseArray *" and then delete it)
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STD_CONTAINERS
-
 template<class T>
 class wxArray_SortFunction
 {
@@ -114,7 +118,7 @@ private:
    _WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
 
 #define  _WX_DECLARE_BASEARRAY_2(T, name, predicate, classexp)      \
-class name : public std::vector<T>                                  \
+class name : public wxDynArrayBaseTemplate<T>                       \
 {                                                                   \
   typedef predicate Predicate;                                      \
   typedef predicate::CMPFUNC SCMPFUNC;                              \
@@ -124,11 +128,13 @@ public:                                                             \
 public:                                                             \
   typedef T base_type;                                              \
                                                                     \
-  name() : std::vector<T>() { }                                     \
-  name(size_type n) : std::vector<T>(n) { }                         \
-  name(size_type n, const_reference v) : std::vector<T>(n, v) { }   \
+  name() : wxDynArrayBaseTemplate<T>() { }                          \
+  name(size_type n) : wxDynArrayBaseTemplate<T>(n) { }              \
+  name(size_type n, const_reference v)                              \
+    : wxDynArrayBaseTemplate<T>(n, v) { }                           \
   template <class InputIterator>                                    \
-  name(InputIterator first, InputIterator last) : std::vector<T>(first, last) { } \
+  name(InputIterator first, InputIterator last)                     \
+    : wxDynArrayBaseTemplate<T>(first, last) { }                    \
                                                                     \
   void Empty() { clear(); }                                         \
   void Clear() { clear(); }                                         \
@@ -204,134 +210,9 @@ public:                                                             \
   }                                                                 \
 }
 
-#else // if !wxUSE_STD_CONTAINERS
-
-#define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
-classexp name                                                       \
-{                                                                   \
-  typedef CMPFUNC SCMPFUNC; /* for compatibility wuth wxUSE_STD_CONTAINERS */  \
-public:                                                             \
-  name();                                                           \
-  name(const name& array);                                          \
-  name& operator=(const name& src);                                 \
-  ~name();                                                          \
-                                                                    \
-  void Empty() { m_nCount = 0; }                                    \
-  void Clear();                                                     \
-  void Alloc(size_t n) { if ( n > m_nSize ) Realloc(n); }           \
-  void Shrink();                                                    \
-                                                                    \
-  size_t GetCount() const { return m_nCount; }                      \
-  void SetCount(size_t n, T defval = T());                          \
-  bool IsEmpty() const { return m_nCount == 0; }                    \
-  size_t Count() const { return m_nCount; }                         \
-                                                                    \
-  typedef T base_type;                                              \
-                                                                    \
-protected:                                                          \
-  T& Item(size_t uiIndex) const                                     \
-    { wxASSERT( uiIndex < m_nCount ); return m_pItems[uiIndex]; }   \
-  T& operator[](size_t uiIndex) const { return Item(uiIndex); }     \
-                                                                    \
-  int Index(T lItem, bool bFromEnd = false) const;                  \
-  int Index(T lItem, CMPFUNC fnCompare) const;                      \
-  size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
-  void Add(T lItem, size_t nInsert = 1);                            \
-  size_t Add(T lItem, CMPFUNC fnCompare);                           \
-  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1);         \
-  void Remove(T lItem);                                             \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1);                \
-                                                                    \
-  void Sort(CMPFUNC fnCompare);                                     \
-                                                                    \
-  /* *minimal* STL-ish interface, for derived classes */            \
-  typedef T value_type;                                             \
-  typedef value_type* iterator;                                     \
-  typedef const value_type* const_iterator;                         \
-  typedef value_type& reference;                                    \
-  typedef const value_type& const_reference;                        \
-  typedef ptrdiff_t difference_type;                                \
-  typedef size_t size_type;                                         \
-                                                                    \
-  void assign(const_iterator first, const_iterator last);           \
-  void assign(size_type n, const_reference v);                      \
-  size_type capacity() const { return m_nSize; }                    \
-  iterator erase(iterator first, iterator last)                     \
-  {                                                                 \
-    size_type idx = first - begin();                                \
-    RemoveAt(idx, last - first);                                    \
-    return begin() + idx;                                           \
-  }                                                                 \
-  iterator erase(iterator it) { return erase(it, it + 1); }         \
-  void insert(iterator it, size_type n, const value_type& v)        \
-    { Insert(v, it - begin(), n); }                                 \
-  iterator insert(iterator it, const value_type& v = value_type())  \
-  {                                                                 \
-    size_type idx = it - begin();                                   \
-    Insert(v, idx);                                                 \
-    return begin() + idx;                                           \
-  }                                                                 \
-  void insert(iterator it, const_iterator first, const_iterator last);\
-  void pop_back() { RemoveAt(size() - 1); }                         \
-  void push_back(const value_type& v) { Add(v); }                   \
-  void reserve(size_type n) { Alloc(n); }                           \
-  void resize(size_type count, value_type defval = value_type())    \
-  {                                                                 \
-    if ( count < m_nCount )                                         \
-      m_nCount = count;                                             \
-    else                                                            \
-      SetCount(count, defval);                                      \
-  }                                                                 \
-                                                                    \
-  iterator begin() { return m_pItems; }                             \
-  iterator end() { return m_pItems + m_nCount; }                    \
-  const_iterator begin() const { return m_pItems; }                 \
-  const_iterator end() const { return m_pItems + m_nCount; }        \
-                                                                    \
-  void swap(name& other)                                            \
-  {                                                                 \
-    wxSwap(m_nSize, other.m_nSize);                                 \
-    wxSwap(m_nCount, other.m_nCount);                               \
-    wxSwap(m_pItems, other.m_pItems);                               \
-  }                                                                 \
-                                                                    \
-  /* the following functions may be made directly public because */ \
-  /* they don't use the type of the elements at all */              \
-public:                                                             \
-  void clear() { Clear(); }                                         \
-  bool empty() const { return IsEmpty(); }                          \
-  size_type max_size() const { return INT_MAX; }                    \
-  size_type size() const { return GetCount(); }                     \
-                                                                    \
-private:                                                            \
-  void Grow(size_t nIncrement = 0);                                 \
-  bool Realloc(size_t nSize);                                       \
-                                                                    \
-  size_t  m_nSize,                                                  \
-          m_nCount;                                                 \
-                                                                    \
-  T      *m_pItems;                                                 \
-}
-
-#endif // !wxUSE_STD_CONTAINERS
-
-// ============================================================================
-// The private helper macros containing the core of the array classes
-// ============================================================================
-
-// Implementation notes:
-//
-// JACS: Salford C++ doesn't like 'var->operator=' syntax, as in:
-//          { ((wxBaseArray *)this)->operator=((const wxBaseArray&)src);
-//       so using a temporary variable instead.
-//
-// The classes need a (even trivial) ~name() to link under Mac X
-
 // ----------------------------------------------------------------------------
 // _WX_DEFINE_TYPEARRAY: array for simple types
 // ----------------------------------------------------------------------------
-
-#if wxUSE_STD_CONTAINERS
 
 // in STL case we don't need the entire base arrays hack as standard container
 // don't suffer from alignment/storage problems as our home-grown do
@@ -340,178 +221,6 @@ private:                                                            \
 
 #define  _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)         \
          _WX_DEFINE_TYPEARRAY(T, name, base, classexp)
-
-#else // if !wxUSE_STD_CONTAINERS
-
-// common declaration used by both _WX_DEFINE_TYPEARRAY and
-// _WX_DEFINE_TYPEARRAY_PTR
-#define  _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, ptrop)  \
-wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
-                       TypeTooBigToBeStoredIn##base,                  \
-                       name);                                         \
-typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
-classexp name : public base                                           \
-{                                                                     \
-public:                                                               \
-  name() { }                                                          \
-  ~name() { }                                                         \
-                                                                      \
-  T& operator[](size_t uiIndex) const                                 \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Item(size_t uiIndex) const                                       \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Last() const                                                     \
-    { return (T&)(base::operator[](GetCount() - 1)); }                \
-                                                                      \
-  int Index(T lItem, bool bFromEnd = false) const                     \
-    { return base::Index((base_type)lItem, bFromEnd); }               \
-                                                                      \
-  void Add(T lItem, size_t nInsert = 1)                               \
-    { base::Add((base_type)lItem, nInsert); }                         \
-  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)            \
-    { base::Insert((base_type)lItem, uiIndex, nInsert) ; }            \
-                                                                      \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
-    { base::RemoveAt(uiIndex, nRemove); }                             \
-  void Remove(T lItem)                                                \
-    { int iIndex = Index(lItem);                                      \
-      wxCHECK_RET( iIndex != wxNOT_FOUND, _WX_ERROR_REMOVE);          \
-      base::RemoveAt((size_t)iIndex); }                               \
-                                                                      \
-  void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
-                                                                      \
-  /* STL-like interface */                                            \
-private:                                                              \
-  typedef base::iterator biterator;                                   \
-  typedef base::const_iterator bconst_iterator;                       \
-  typedef base::value_type bvalue_type;                               \
-  typedef base::const_reference bconst_reference;                     \
-public:                                                               \
-  typedef T value_type;                                               \
-  typedef value_type* pointer;                                        \
-  typedef const value_type* const_pointer;                            \
-  typedef value_type* iterator;                                       \
-  typedef const value_type* const_iterator;                           \
-  typedef value_type& reference;                                      \
-  typedef const value_type& const_reference;                          \
-  typedef base::difference_type difference_type;                      \
-  typedef base::size_type size_type;                                  \
-                                                                      \
-  class reverse_iterator                                              \
-  {                                                                   \
-    typedef T value_type;                                             \
-    typedef value_type& reference;                                    \
-    typedef value_type* pointer;                                      \
-    typedef reverse_iterator itor;                                    \
-    friend inline itor operator+(int o, const itor& it)               \
-        { return it.m_ptr - o; }                                      \
-    friend inline itor operator+(const itor& it, int o)               \
-        { return it.m_ptr - o; }                                      \
-    friend inline itor operator-(const itor& it, int o)               \
-        { return it.m_ptr + o; }                                      \
-    friend inline difference_type operator-(const itor& i1,           \
-                                            const itor& i2)           \
-        { return i1.m_ptr - i2.m_ptr; }                               \
-                                                                      \
-  public:                                                             \
-    pointer m_ptr;                                                    \
-    reverse_iterator() : m_ptr(NULL) { }                              \
-    reverse_iterator(pointer ptr) : m_ptr(ptr) { }                    \
-    reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }            \
-    reference operator*() const { return *m_ptr; }                    \
-    ptrop                                                             \
-    itor& operator++() { --m_ptr; return *this; }                     \
-    const itor operator++(int)                                        \
-      { reverse_iterator tmp = *this; --m_ptr; return tmp; }          \
-    itor& operator--() { ++m_ptr; return *this; }                     \
-    const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }\
-    bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }\
-    bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
-  };                                                                  \
-                                                                      \
-  class const_reverse_iterator                                        \
-  {                                                                   \
-    typedef T value_type;                                             \
-    typedef const value_type& reference;                              \
-    typedef const value_type* pointer;                                \
-    typedef const_reverse_iterator itor;                              \
-    friend inline itor operator+(int o, const itor& it)               \
-        { return it.m_ptr - o; }                                      \
-    friend inline itor operator+(const itor& it, int o)               \
-        { return it.m_ptr - o; }                                      \
-    friend inline itor operator-(const itor& it, int o)               \
-        { return it.m_ptr + o; }                                      \
-    friend inline difference_type operator-(const itor& i1,           \
-                                            const itor& i2)           \
-        { return i1.m_ptr - i2.m_ptr; }                               \
-                                                                      \
-  public:                                                             \
-    pointer m_ptr;                                                    \
-    const_reverse_iterator() : m_ptr(NULL) { }                        \
-    const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }              \
-    const_reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }      \
-    const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }\
-    reference operator*() const { return *m_ptr; }                    \
-    ptrop                                                             \
-    itor& operator++() { --m_ptr; return *this; }                     \
-    const itor operator++(int)                                        \
-      { itor tmp = *this; --m_ptr; return tmp; }                      \
-    itor& operator--() { ++m_ptr; return *this; }                     \
-    const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }\
-    bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }\
-    bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }\
-  };                                                                  \
-                                                                      \
-  name(size_type n) { assign(n, value_type()); }                      \
-  name(size_type n, const_reference v) { assign(n, v); }              \
-  name(const_iterator first, const_iterator last)                     \
-    { assign(first, last); }                                          \
-  void assign(const_iterator first, const_iterator last)              \
-    { base::assign((bconst_iterator)first, (bconst_iterator)last); }  \
-  void assign(size_type n, const_reference v)                         \
-    { base::assign(n, (bconst_reference)v); }                         \
-  reference back() { return *(end() - 1); }                           \
-  const_reference back() const { return *(end() - 1); }               \
-  iterator begin() { return (iterator)base::begin(); }                \
-  const_iterator begin() const { return (const_iterator)base::begin(); }\
-  size_type capacity() const { return base::capacity(); }             \
-  iterator end() { return (iterator)base::end(); }                    \
-  const_iterator end() const { return (const_iterator)base::end(); }  \
-  iterator erase(iterator first, iterator last)                       \
-    { return (iterator)base::erase((biterator)first, (biterator)last); }\
-  iterator erase(iterator it)                                         \
-    { return (iterator)base::erase((biterator)it); }                  \
-  reference front() { return *begin(); }                              \
-  const_reference front() const { return *begin(); }                  \
-  void insert(iterator it, size_type n, const_reference v)            \
-    { base::insert((biterator)it, n, (bconst_reference)v); }          \
-  iterator insert(iterator it, const_reference v = value_type())      \
-    { return (iterator)base::insert((biterator)it, (bconst_reference)v); }\
-  void insert(iterator it, const_iterator first, const_iterator last) \
-    { base::insert((biterator)it, (bconst_iterator)first,             \
-                   (bconst_iterator)last); }                          \
-  void pop_back() { base::pop_back(); }                               \
-  void push_back(const_reference v)                                   \
-    { base::push_back((bconst_reference)v); }                         \
-  reverse_iterator rbegin() { return reverse_iterator(end() - 1); }   \
-  const_reverse_iterator rbegin() const;                              \
-  reverse_iterator rend() { return reverse_iterator(begin() - 1); }   \
-  const_reverse_iterator rend() const;                                \
-  void reserve(size_type n) { base::reserve(n); }                     \
-  void resize(size_type n, value_type v = value_type())               \
-    { base::resize(n, v); }                                           \
-  void swap(name& other) { base::swap(other); }                       \
-}
-
-#define _WX_PTROP pointer operator->() const { return m_ptr; }
-#define _WX_PTROP_NONE
-
-#define _WX_DEFINE_TYPEARRAY(T, name, base, classexp)                 \
-    _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP)
-#define _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)          \
-    _WX_DEFINE_TYPEARRAY_HELPER(T, name, base, classexp, _WX_PTROP_NONE)
-
-#endif // !wxUSE_STD_CONTAINERS
 
 // ----------------------------------------------------------------------------
 // _WX_DEFINE_SORTED_TYPEARRAY: sorted array for simple data types
