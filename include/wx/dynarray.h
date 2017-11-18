@@ -24,8 +24,12 @@
     template <typename T>
     inline void wxVectorShrinkToFit(std::vector<T>& v)
     {
+    #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+        v.shrink_to_fit();
+    #else // C++98
         std::vector<T> tmp(v);
         v.swap(tmp);
+    #endif // C++11/C++98
     }
 #else // !wxUSE_STD_CONTAINERS
     #include "wx/vector.h"
