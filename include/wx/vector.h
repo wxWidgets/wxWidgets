@@ -170,6 +170,8 @@ public:
             { return reverse_iterator(m_ptr + n); }
         reverse_iterator& operator-=(difference_type n)
             { m_ptr += n; return *this; }
+        difference_type operator-(const reverse_iterator& it) const
+            { return it.m_ptr - m_ptr; }
 
         reference operator[](difference_type n) const
             { return *(*this + n); }
@@ -215,6 +217,8 @@ public:
             { return const_reverse_iterator(m_ptr + n); }
         const_reverse_iterator& operator-=(difference_type n)
             { m_ptr += n; return *this; }
+        difference_type operator-(const const_reverse_iterator& it) const
+            { return it.m_ptr - m_ptr; }
 
         const_reference operator[](difference_type n) const
             { return *(*this + n); }
