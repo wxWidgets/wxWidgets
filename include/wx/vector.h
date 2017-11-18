@@ -375,6 +375,12 @@ public:
         return m_capacity;
     }
 
+    void shrink_to_fit()
+    {
+        m_values = Ops::Realloc(m_values, m_size, m_size);
+        m_capacity = m_size;
+    }
+
     bool empty() const
     {
         return size() == 0;

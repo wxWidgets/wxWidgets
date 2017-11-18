@@ -361,3 +361,21 @@ TEST_CASE("wxVector::reverse_iterator", "[vector][reverse_iterator]")
     CHECK( ri - rb == 2 );
     CHECK( re - ri == 8 );
 }
+
+TEST_CASE("wxVector::capacity", "[vector][capacity][shrink_to_fit]")
+{
+    wxVector<int> v;
+    CHECK( v.capacity() == 0 );
+
+    v.push_back(0);
+    CHECK( v.capacity() > 1 );
+
+    v.shrink_to_fit();
+    CHECK( v.capacity() == 1 );
+
+    v.erase(v.begin());
+    CHECK( v.capacity() == 1 );
+
+    v.shrink_to_fit();
+    CHECK( v.capacity() == 0 );
+}

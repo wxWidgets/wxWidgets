@@ -20,10 +20,23 @@
     #include "wx/afterstd.h"
 
     #define wxDynArrayBaseTemplate std::vector
+
+    template <typename T>
+    inline void wxVectorShrinkToFit(std::vector<T>& v)
+    {
+        std::vector<T> tmp(v);
+        v.swap(tmp);
+    }
 #else // !wxUSE_STD_CONTAINERS
     #include "wx/vector.h"
 
     #define wxDynArrayBaseTemplate wxVector
+
+    template <typename T>
+    inline void wxVectorShrinkToFit(wxVector<T>& v)
+    {
+        v.shrink_to_fit();
+    }
 #endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
 /*
@@ -139,7 +152,7 @@ public:                                                             \
   void Empty() { clear(); }                                         \
   void Clear() { clear(); }                                         \
   void Alloc(size_t uiSize) { reserve(uiSize); }                    \
-  void Shrink() { name tmp(*this); swap(tmp); }                     \
+  void Shrink() { wxVectorShrinkToFit(*this); }                     \
                                                                     \
   size_t GetCount() const { return size(); }                        \
   void SetCount(size_t n, T v = T()) { resize(n, v); }              \
