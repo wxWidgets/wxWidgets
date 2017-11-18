@@ -368,6 +368,25 @@ public:
         return *this;
     }
 
+    bool operator==(const wxVector& vb) const
+    {
+        if ( vb.m_size != m_size )
+            return false;
+
+        for ( size_type i = 0; i < m_size; i++ )
+        {
+            if ( vb.m_values[i] != m_values[i] )
+                return false;
+        }
+
+        return true;
+    }
+
+    bool operator!=(const wxVector& vb) const
+    {
+        return !(*this == vb);
+    }
+
     void push_back(const value_type& v)
     {
         reserve(size() + 1);

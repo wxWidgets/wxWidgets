@@ -314,3 +314,20 @@ void VectorsTestCase::Sort()
         CPPUNIT_ASSERT( v[idx-1] <= v[idx] );
     }
 }
+
+TEST_CASE("wxVector::operator==", "[vector][compare]")
+{
+    wxVector<wxString> v1, v2;
+    CHECK( v1 == v2 );
+    CHECK( !(v1 != v2) );
+
+    v1.push_back("foo");
+    CHECK( v1 != v2 );
+
+    v2.push_back("foo");
+    CHECK( v1 == v2 );
+
+    v1.push_back("bar");
+    v2.push_back("baz");
+    CHECK( v1 != v2 );
+}
