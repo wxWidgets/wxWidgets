@@ -315,10 +315,8 @@ public:
         //
         // NB: casts to size_type are needed to suppress warnings about
         //     mixing enumeral and non-enumeral type in conditional expression
-        const size_type increment = m_size > 0
-                                     ? m_size < ALLOC_MAX_SIZE
-                                        ? m_size
-                                        : (size_type)ALLOC_MAX_SIZE
+        const size_type increment = m_size > ALLOC_INITIAL_SIZE
+                                     ? m_size
                                      : (size_type)ALLOC_INITIAL_SIZE;
         if ( m_capacity + increment > n )
             n = m_capacity + increment;
@@ -491,7 +489,6 @@ public:
 
 private:
     static const size_type ALLOC_INITIAL_SIZE = 16;
-    static const size_type ALLOC_MAX_SIZE = 4096;
 
     void Copy(const wxVector& vb)
     {
