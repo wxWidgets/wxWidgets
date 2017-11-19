@@ -224,7 +224,6 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     if (tmp != stereo)
     {
         wxLogTrace(wxT("sound"), wxT("Unable to set DSP to %s."), stereo?  wxT("stereo"):wxT("mono"));
-        m_needConversion = true;
     }
 
     tmp = data->m_samplingRate;
@@ -294,7 +293,7 @@ class wxSoundSyncOnlyAdaptor : public wxSoundBackend
 {
 public:
     wxSoundSyncOnlyAdaptor(wxSoundBackend *backend)
-        : m_backend(backend), m_playing(false) {}
+        : m_backend(backend) {}
     virtual ~wxSoundSyncOnlyAdaptor()
     {
         delete m_backend;
@@ -324,7 +323,6 @@ private:
     friend class wxSoundAsyncPlaybackThread;
 
     wxSoundBackend *m_backend;
-    bool m_playing;
 #if wxUSE_THREADS
     // player thread holds this mutex and releases it after it finishes
     // playing, so that the main thread knows when it can play sound
@@ -337,12 +335,14 @@ private:
 #if wxUSE_THREADS
 wxThread::ExitCode wxSoundAsyncPlaybackThread::Entry()
 {
+    wxMutexLocker locker(m_adapt->m_mutexRightToPlay);
+
     m_adapt->m_backend->Play(m_data, m_flags & ~wxSOUND_ASYNC,
                              &m_adapt->m_status);
 
     m_data->DecRef();
-    m_adapt->m_playing = false;
-    m_adapt->m_mutexRightToPlay.Unlock();
+    m_adapt->m_status.m_playing = false;
+
     wxLogTrace(wxT("sound"), wxT("terminated async playback thread"));
     return 0;
 }
@@ -355,7 +355,7 @@ bool wxSoundSyncOnlyAdaptor::Play(wxSoundData *data, unsigned flags,
     if (flags & wxSOUND_ASYNC)
     {
 #if wxUSE_THREADS
-        m_mutexRightToPlay.Lock();
+        wxMutexLocker locker(m_mutexRightToPlay);
         m_status.m_playing = true;
         m_status.m_stopRequested = false;
         data->IncRef();
@@ -372,13 +372,9 @@ bool wxSoundSyncOnlyAdaptor::Play(wxSoundData *data, unsigned flags,
     else
     {
 #if wxUSE_THREADS
-        m_mutexRightToPlay.Lock();
+        wxMutexLocker locker(m_mutexRightToPlay);
 #endif
-        bool rv = m_backend->Play(data, flags, status);
-#if wxUSE_THREADS
-        m_mutexRightToPlay.Unlock();
-#endif
-        return rv;
+        return m_backend->Play(data, flags, status);
     }
 }
 
@@ -387,15 +383,11 @@ void wxSoundSyncOnlyAdaptor::Stop()
     wxLogTrace(wxT("sound"), wxT("asking audio to stop"));
 
 #if wxUSE_THREADS
+    wxMutexLocker lock(m_mutexRightToPlay);
+
     // tell the player thread (if running) to stop playback ASAP:
     m_status.m_stopRequested = true;
 
-    // acquire the mutex to be sure no sound is being played, then
-    // release it because we don't need it for anything (the effect of this
-    // is that calling thread will wait until playback thread reacts to
-    // our request to interrupt playback):
-    m_mutexRightToPlay.Lock();
-    m_mutexRightToPlay.Unlock();
     wxLogTrace(wxT("sound"), wxT("audio was stopped"));
 #endif
 }
