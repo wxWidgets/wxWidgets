@@ -224,7 +224,6 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     if (tmp != stereo)
     {
         wxLogTrace(wxT("sound"), wxT("Unable to set DSP to %s."), stereo?  wxT("stereo"):wxT("mono"));
-        m_needConversion = true;
     }
 
     tmp = data->m_samplingRate;
