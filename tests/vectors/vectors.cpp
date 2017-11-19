@@ -361,3 +361,27 @@ TEST_CASE("wxVector::reverse_iterator", "[vector][reverse_iterator]")
     CHECK( ri - rb == 2 );
     CHECK( re - ri == 8 );
 }
+
+TEST_CASE("wxVector::capacity", "[vector][capacity][shrink_to_fit]")
+{
+    wxVector<int> v;
+    CHECK( v.capacity() == 0 );
+
+    v.push_back(0);
+    // When using the standard library vector, we don't know what growth
+    // strategy it uses, so we can't rely on this check passing, but with our
+    // own one we can, allowing us to check that shrink_to_fit() really shrinks
+    // the capacity below.
+#if !wxUSE_STD_CONTAINERS
+    CHECK( v.capacity() > 1 );
+#endif
+
+    v.shrink_to_fit();
+    CHECK( v.capacity() == 1 );
+
+    v.erase(v.begin());
+    CHECK( v.capacity() == 1 );
+
+    v.shrink_to_fit();
+    CHECK( v.capacity() == 0 );
+}

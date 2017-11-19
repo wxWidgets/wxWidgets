@@ -263,6 +263,18 @@ public:
     //@}
 
     /**
+        Free unused memory allocated by the vector.
+
+        Reduces the memory used by the vector to the bare minimum required to
+        hold its current number of elements, possibly 0.
+
+        After calling this method, capacity() returns the same as size().
+
+        @since 3.1.1
+     */
+    void shrink_to_fit();
+
+    /**
         Returns the size of the vector.
     */
     size_type size() const;
