@@ -36,8 +36,7 @@ wxArrayString::wxArrayString(size_t sz, const char** a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
 wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
@@ -45,8 +44,7 @@ wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
 wxArrayString::wxArrayString(size_t sz, const wxString* a)
@@ -54,8 +52,7 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
 #if !wxUSE_STD_CONTAINERS
