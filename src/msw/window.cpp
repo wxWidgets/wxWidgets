@@ -254,7 +254,7 @@ public:
 private:
     static void LoadGestureSymbols()
     {
-        wxDynamicLibrary dll("User32.dll");
+        wxLoadedDLL dll(wxS("user32.dll"));
 
         wxDL_INIT_FUNC(ms_pfn, GetGestureInfo, dll);
         wxDL_INIT_FUNC(ms_pfn, CloseGestureInfoHandle, dll);
