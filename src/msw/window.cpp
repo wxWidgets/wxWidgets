@@ -3206,12 +3206,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             if ( !GestureFuncs::IsOk() )
                 break;
 
-            // gestureInfo will contain the information about the gesture
-            GESTUREINFO gestureInfo = {0};
-            gestureInfo.cbSize = sizeof(GESTUREINFO);
+            HGESTUREINFO hGestureInfo = reinterpret_cast<HGESTUREINFO>(lParam);
 
-            // This should fill gestureInfo with the gesture details
-            if ( !GestureFuncs::GetGestureInfo()((HGESTUREINFO)lParam, &gestureInfo) )
+            WinStruct<GESTUREINFO> gestureInfo;
+            if ( !GestureFuncs::GetGestureInfo()(hGestureInfo, &gestureInfo) )
             {
                 wxLogLastError("GetGestureInfo");
                 break;
@@ -3278,7 +3276,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             if ( processed )
             {
                 // If processed, we must call this to avoid memory leaks
-                if ( !GestureFuncs::CloseGestureInfoHandle()((HGESTUREINFO)lParam) )
+                if ( !GestureFuncs::CloseGestureInfoHandle()(hGestureInfo) )
                 {
                     wxLogLastError("CloseGestureInfoHandle");
                 }
