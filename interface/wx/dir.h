@@ -16,6 +16,11 @@ enum wxDirTraverseResult
 };
 
 /**
+    The return value of wxDir::GetTotalSize() in case of error.
+*/
+wxULongLong wxInvalidSize;
+
+/**
     @class wxDirTraverser
 
     wxDirTraverser is an abstract interface which must be implemented by
