@@ -1500,6 +1500,126 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 }
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+
+// Class containing data used for gestures support.
+class wxCocoaGesturesImpl
+{
+public:
+    wxCocoaGesturesImpl(wxWidgetCocoaImpl* impl, NSView* view, int eventsMask)
+        : m_win(impl->GetWXPeer()),
+          m_view(view)
+    {
+        m_touchCount = 0;
+        m_lastTouchTime = 0;
+        m_allowedGestures = 0;
+        m_activeGestures = 0;
+        m_initialTouch = NULL;
+
+        Class cls = [m_view class];
+
+        if ( eventsMask & wxTOUCH_PAN_GESTURES )
+        {
+            eventsMask &= ~wxTOUCH_PAN_GESTURES;
+
+            m_panGestureRecognizer =
+            [[NSPanGestureRecognizer alloc] initWithTarget:m_view action: @selector(handlePanGesture:)];
+            if ( !class_respondsToSelector(cls, @selector(handlePanGesture:)) )
+                class_addMethod(cls, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" );
+            [m_view addGestureRecognizer:m_panGestureRecognizer];
+        }
+        else
+        {
+            m_panGestureRecognizer = nil;
+        }
+
+        if ( eventsMask & wxTOUCH_ZOOM_GESTURE )
+        {
+            eventsMask &= ~wxTOUCH_ZOOM_GESTURE;
+
+            m_magnificationGestureRecognizer =
+            [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_view action: @selector(handleZoomGesture:)];
+            if ( !class_respondsToSelector(cls, @selector(handleZoomGesture:)) )
+                class_addMethod(cls, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" );
+            [m_view addGestureRecognizer:m_magnificationGestureRecognizer];
+        }
+        else
+        {
+            m_magnificationGestureRecognizer = nil;
+        }
+
+        if ( eventsMask & wxTOUCH_ROTATE_GESTURE )
+        {
+            eventsMask &= ~wxTOUCH_ROTATE_GESTURE;
+
+            m_rotationGestureRecognizer =
+            [[NSRotationGestureRecognizer alloc] initWithTarget:m_view action: @selector(handleRotateGesture:)];
+            if ( !class_respondsToSelector(cls, @selector(handleRotateGesture:)) )
+                class_addMethod(cls, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" );
+            [m_view addGestureRecognizer:m_rotationGestureRecognizer];
+        }
+        else
+        {
+            m_rotationGestureRecognizer = nil;
+        }
+
+        if ( eventsMask & wxTOUCH_PRESS_GESTURES )
+        {
+            eventsMask &= ~wxTOUCH_PRESS_GESTURES;
+
+            m_pressGestureRecognizer =
+            [[NSPressGestureRecognizer alloc] initWithTarget:m_view action: @selector(handleLongPressGesture:)];
+            if ( !class_respondsToSelector(cls, @selector(handleLongPressGesture:)) )
+                class_addMethod(cls, @selector(handleLongPressGesture:), (IMP) wxOSX_longPressEvent, "v@:@" );
+            [m_view addGestureRecognizer:m_pressGestureRecognizer];
+        }
+        else
+        {
+            m_pressGestureRecognizer = nil;
+        }
+
+        wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
+
+        if ( !class_respondsToSelector(cls, @selector(touchesBeganWithEvent:)) )
+            class_addMethod(cls, @selector(touchesBeganWithEvent:), (IMP) wxOSX_touchesBegan, "v@:@" );
+        if ( !class_respondsToSelector(cls, @selector(touchesMovedWithEvent:)) )
+            class_addMethod(cls, @selector(touchesMovedWithEvent:), (IMP) wxOSX_touchesMoved, "v@:@" );
+        if ( !class_respondsToSelector(cls, @selector(touchesEndedWithEvent:)) )
+            class_addMethod(cls, @selector(touchesEndedWithEvent:), (IMP) wxOSX_touchesEnded, "v@:@" );
+    }
+
+    ~wxCocoaGesturesImpl()
+    {
+        [m_panGestureRecognizer release];
+        [m_magnificationGestureRecognizer release];
+        [m_rotationGestureRecognizer release];
+        [m_pressGestureRecognizer release];
+        [m_initialTouch release];
+    }
+
+    void TouchesBegan(NSEvent* event);
+    void TouchesMoved(NSEvent* event);
+    void TouchesEnded(NSEvent* event);
+
+private:
+    wxWindowMac* const m_win;
+    NSView* const m_view;
+
+    NSPanGestureRecognizer *m_panGestureRecognizer;
+    NSMagnificationGestureRecognizer *m_magnificationGestureRecognizer;
+    NSRotationGestureRecognizer *m_rotationGestureRecognizer;
+    NSPressGestureRecognizer *m_pressGestureRecognizer;
+
+    int m_allowedGestures;
+    int m_activeGestures;
+    unsigned int m_touchCount;
+    unsigned int m_lastTouchTime;
+
+    // Used to keep track of the touch corresponding to "press" in Press and Tap gesture
+    NSTouch* m_initialTouch;
+
+    wxDECLARE_NO_COPY_CLASS(wxCocoaGesturesImpl);
+};
+
 void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecognizer)
 {
     NSGestureRecognizerState gestureState;
@@ -1700,7 +1820,13 @@ enum TrackedGestures
 
 void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 {
-    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseBegan inView:m_osxView];
+    if ( m_gesturesImpl )
+        m_gesturesImpl->TouchesBegan(event);
+}
+
+void wxCocoaGesturesImpl::TouchesBegan(NSEvent* event)
+{
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseBegan inView:m_view];
 
     m_touchCount += touches.count;
     m_allowedGestures &= ~two_finger_tap;
@@ -1734,7 +1860,7 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
         m_initialTouch = [[array objectAtIndex:0] copy];
     }
 
-    touches = [event touchesMatchingPhase:NSTouchPhaseStationary inView:m_osxView];
+    touches = [event touchesMatchingPhase:NSTouchPhaseStationary inView:m_view];
 
     // Check if 2 fingers are placed within the time interval of 200 milliseconds
     if ( m_touchCount == 2 && touches.count == 1 && eventTimeStamp - m_lastTouchTime <= wxTwoFingerTimeInterval )
@@ -1751,6 +1877,12 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 
 void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 {
+    if ( m_gesturesImpl )
+        m_gesturesImpl->TouchesMoved(event);
+}
+
+void wxCocoaGesturesImpl::TouchesMoved(NSEvent* event)
+{
     // Cancel Two Finger Tap Event if there is any movement
     m_allowedGestures &= ~two_finger_tap;
 
@@ -1759,7 +1891,7 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
         return;
     }
 
-    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseMoved inView:m_osxView];
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseMoved inView:m_view];
 
     NSArray* array = [touches allObjects];
 
@@ -1776,15 +1908,15 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
             // and the gesture is active.
             if ( m_activeGestures & press_and_tap )
             {
-                wxPressAndTapEvent wxevent(GetWXPeer()->GetId());
-                wxevent.SetEventObject(GetWXPeer());
+                wxPressAndTapEvent wxevent(m_win->GetId());
+                wxevent.SetEventObject(m_win);
 
                 // Get the mouse coordinates
                 wxCoord x, y;
-                SetupCoordinates(x, y, event);
+                wxSetupCoordinates(m_view, x, y, event);
                 wxevent.SetPosition(wxPoint (x,y));
 
-                GetWXPeer()->HandleWindowEvent(wxevent);
+                m_win->HandleWindowEvent(wxevent);
             }
 
             // Cancel Press and Tap Event if the touch corresponding to "press" is moving
@@ -1801,7 +1933,13 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 
 void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
 {
-    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseEnded inView:m_osxView];
+    if ( m_gesturesImpl )
+        m_gesturesImpl->TouchesEnded(event);
+}
+
+void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
+{
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseEnded inView:m_view];
 
     m_touchCount -= touches.count;
 
@@ -1813,17 +1951,17 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
          (touches.count == 2 ||
          (touches.count == 1 && eventTimeStamp - m_lastTouchTime <= wxTwoFingerTimeInterval)) )
     {
-        wxTwoFingerTapEvent wxevent(GetWXPeer()->GetId());
-        wxevent.SetEventObject(GetWXPeer());
+        wxTwoFingerTapEvent wxevent(m_win->GetId());
+        wxevent.SetEventObject(m_win);
         wxevent.SetGestureStart();
         wxevent.SetGestureEnd();
 
         // Get the mouse coordinates
         wxCoord x, y;
-        SetupCoordinates(x, y, event);
+        wxSetupCoordinates(m_view, x, y, event);
         wxevent.SetPosition(wxPoint (x,y));
 
-        GetWXPeer()->HandleWindowEvent(wxevent);
+        m_win->HandleWindowEvent(wxevent);
     }
 
     // If Two Finger Tap Event is possible in future then save the timestamp to use it when the other touch
@@ -1862,12 +2000,12 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
             return;
         }
 
-        wxPressAndTapEvent wxevent(GetWXPeer()->GetId());
-        wxevent.SetEventObject(GetWXPeer());
+        wxPressAndTapEvent wxevent(m_win->GetId());
+        wxevent.SetEventObject(m_win);
 
         // Get the mouse coordinates
         wxCoord x, y;
-        SetupCoordinates(x, y, event);
+        wxSetupCoordinates(m_view, x, y, event);
         wxevent.SetPosition(wxPoint (x,y));
 
         if ( !(m_activeGestures & press_and_tap) )
@@ -1886,7 +2024,7 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
             [m_initialTouch release];
         }
 
-        GetWXPeer()->HandleWindowEvent(wxevent);
+        m_win->HandleWindowEvent(wxevent);
     }
 
     else
@@ -2329,16 +2467,7 @@ void wxWidgetCocoaImpl::Init()
     m_hasEditor = false;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    m_panGestureRecognizer = nil;
-    m_magnificationGestureRecognizer = nil;
-    m_rotationGestureRecognizer = nil;
-    m_pressGestureRecognizer = nil;
-
-    m_touchCount = 0;
-    m_lastTouchTime = 0;
-    m_allowedGestures = 0;
-    m_activeGestures = 0;
-    m_initialTouch = NULL;
+    m_gesturesImpl = NULL;
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
@@ -2360,19 +2489,7 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         CFRelease(m_osxView);
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10) )
-    {
-        if ( IsUserPane() )
-        {
-            [m_panGestureRecognizer release];
-            [m_magnificationGestureRecognizer release];
-            [m_rotationGestureRecognizer release];
-            [m_pressGestureRecognizer release];
-
-            if ( m_initialTouch )
-                [m_initialTouch release];
-        }
-    }
+    delete m_gesturesImpl;
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
@@ -3299,74 +3416,24 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
     {
         if ( IsUserPane() )
         {
+            // We need to get rid of the old data, if we have it, in any case.
+            delete m_gesturesImpl;
+
             if ( eventsMask == wxTOUCH_NONE )
             {
-                [m_panGestureRecognizer release];
-                [m_magnificationGestureRecognizer release];
-                [m_rotationGestureRecognizer release];
-                [m_pressGestureRecognizer release];
+                if ( m_gesturesImpl )
+                {
+                    m_gesturesImpl = NULL;
 
-                [m_osxView setAcceptsTouchEvents:NO];
-
-                return true;
+                    [m_osxView setAcceptsTouchEvents:NO];
+                }
             }
-
-            Class cls = [m_osxView class];
-
-            if ( eventsMask & wxTOUCH_PAN_GESTURES )
+            else // We do want to have gesture events.
             {
-                eventsMask &= ~wxTOUCH_PAN_GESTURES;
+                m_gesturesImpl = new wxCocoaGesturesImpl(this, m_osxView, eventsMask);
 
-                m_panGestureRecognizer =
-                [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
-                if ( !class_respondsToSelector(cls, @selector(handlePanGesture:)) )
-                    class_addMethod(cls, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" );
-                [m_osxView addGestureRecognizer:m_panGestureRecognizer];
+                [m_osxView setAcceptsTouchEvents:YES];
             }
-
-            if ( eventsMask & wxTOUCH_ZOOM_GESTURE )
-            {
-                eventsMask &= ~wxTOUCH_ZOOM_GESTURE;
-
-                m_magnificationGestureRecognizer =
-                [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
-                if ( !class_respondsToSelector(cls, @selector(handleZoomGesture:)) )
-                    class_addMethod(cls, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" );
-                [m_osxView addGestureRecognizer:m_magnificationGestureRecognizer];
-            }
-
-            if ( eventsMask & wxTOUCH_ROTATE_GESTURE )
-            {
-                eventsMask &= ~wxTOUCH_ROTATE_GESTURE;
-
-                m_rotationGestureRecognizer =
-                [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
-                if ( !class_respondsToSelector(cls, @selector(handleRotateGesture:)) )
-                    class_addMethod(cls, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" );
-                [m_osxView addGestureRecognizer:m_rotationGestureRecognizer];
-            }
-
-            if ( eventsMask & wxTOUCH_PRESS_GESTURES )
-            {
-                eventsMask &= ~wxTOUCH_PRESS_GESTURES;
-
-                m_pressGestureRecognizer =
-                [[NSPressGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleLongPressGesture:)];
-                if ( !class_respondsToSelector(cls, @selector(handleLongPressGesture:)) )
-                    class_addMethod(cls, @selector(handleLongPressGesture:), (IMP) wxOSX_longPressEvent, "v@:@" );
-                [m_osxView addGestureRecognizer:m_pressGestureRecognizer];
-            }
-
-            wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
-
-            if ( !class_respondsToSelector(cls, @selector(touchesBeganWithEvent:)) )
-                class_addMethod(cls, @selector(touchesBeganWithEvent:), (IMP) wxOSX_touchesBegan, "v@:@" );
-            if ( !class_respondsToSelector(cls, @selector(touchesMovedWithEvent:)) )
-                class_addMethod(cls, @selector(touchesMovedWithEvent:), (IMP) wxOSX_touchesMoved, "v@:@" );
-            if ( !class_respondsToSelector(cls, @selector(touchesEndedWithEvent:)) )
-                class_addMethod(cls, @selector(touchesEndedWithEvent:), (IMP) wxOSX_touchesEnded, "v@:@" );
-
-            [m_osxView setAcceptsTouchEvents:YES];
 
             return true;
         }

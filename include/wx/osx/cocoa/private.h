@@ -201,18 +201,8 @@ protected:
     bool m_hasEditor;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    NSPanGestureRecognizer *m_panGestureRecognizer;
-    NSMagnificationGestureRecognizer *m_magnificationGestureRecognizer;
-    NSRotationGestureRecognizer *m_rotationGestureRecognizer;
-    NSPressGestureRecognizer *m_pressGestureRecognizer;
-
-    int m_allowedGestures;
-    int m_activeGestures;
-    unsigned int m_touchCount;
-    unsigned int m_lastTouchTime;
-
-    // Used to keep track of the touch corresponding to "press" in Press and Tap gesture
-    NSTouch* m_initialTouch;
+    // Data used for gesture support, if available.
+    class wxCocoaGesturesImpl* m_gesturesImpl;
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
