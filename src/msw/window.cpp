@@ -205,29 +205,34 @@ bool gs_insideCaptureChanged = false;
 
 } // anonymous namespace
 
+#ifdef WM_GESTURE
+
 namespace
 {
 
 // Class used to dynamically load gestures related API functions.
-#ifdef WM_GESTURE
 class GestureFuncs
 {
 public:
+    // Must be called before using any other methods of this class (and they
+    // can't be used if this one returns false).
     static bool IsOk()
     {
         if ( !ms_gestureSymbolsLoaded )
+        {
+            ms_gestureSymbolsLoaded = true;
             LoadGestureSymbols();
+        }
 
-        return ms_pfnGetGestureInfo && ms_pfnCloseGestureInfoHandle && ms_pfnSetGestureConfig;
+        return ms_pfnGetGestureInfo &&
+                ms_pfnCloseGestureInfoHandle &&
+                    ms_pfnSetGestureConfig;
     }
 
     typedef BOOL (WINAPI *GetGestureInfo_t)(HGESTUREINFO, PGESTUREINFO);
 
     static GetGestureInfo_t GetGestureInfo()
     {
-        if ( !ms_gestureSymbolsLoaded )
-            LoadGestureSymbols();
-
         return ms_pfnGetGestureInfo;
     }
 
@@ -235,19 +240,14 @@ public:
 
     static CloseGestureInfoHandle_t CloseGestureInfoHandle()
     {
-        if ( !ms_gestureSymbolsLoaded )
-            LoadGestureSymbols();
-
         return ms_pfnCloseGestureInfoHandle;
     }
 
-    typedef BOOL (WINAPI *SetGestureConfig_t)(HWND, DWORD, UINT, PGESTURECONFIG, UINT);
+    typedef BOOL
+        (WINAPI *SetGestureConfig_t)(HWND, DWORD, UINT, PGESTURECONFIG, UINT);
 
     static SetGestureConfig_t SetGestureConfig()
     {
-        if ( !ms_gestureSymbolsLoaded )
-            LoadGestureSymbols();
-
         return ms_pfnSetGestureConfig;
     }
 
@@ -259,8 +259,6 @@ private:
         wxDL_INIT_FUNC(ms_pfn, GetGestureInfo, dll);
         wxDL_INIT_FUNC(ms_pfn, CloseGestureInfoHandle, dll);
         wxDL_INIT_FUNC(ms_pfn, SetGestureConfig, dll);
-
-        ms_gestureSymbolsLoaded = true;
     }
 
     static GetGestureInfo_t ms_pfnGetGestureInfo;
@@ -268,7 +266,6 @@ private:
     static SetGestureConfig_t ms_pfnSetGestureConfig;
 
     static bool ms_gestureSymbolsLoaded;
-
 };
 
 GestureFuncs::GetGestureInfo_t
@@ -280,9 +277,9 @@ GestureFuncs::SetGestureConfig_t
 
 bool GestureFuncs::ms_gestureSymbolsLoaded = false;
 
-#endif // WM_GESTURE
-
 } // anonymous namespace
+
+#endif // WM_GESTURE
 
 // ---------------------------------------------------------------------------
 // private functions
