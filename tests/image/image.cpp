@@ -1320,8 +1320,8 @@ void ImageTestCase::BMPFlippingAndRLECompression()
 }
 
 
-static bool
-CompareApprox(const wxImage& i1, const wxImage& i2)
+static int
+FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
 {
     if ( i1.GetWidth() != i2.GetWidth() )
         return false;
@@ -1332,26 +1332,21 @@ CompareApprox(const wxImage& i1, const wxImage& i2)
     const unsigned char* p1 = i1.GetData();
     const unsigned char* p2 = i2.GetData();
     const int numBytes = i1.GetWidth()*i1.GetHeight()*3;
+    int maxDiff = 0;
     for ( int n = 0; n < numBytes; n++, p1++, p2++ )
     {
-        switch ( *p1 - *p2 )
-        {
-            case -1:
-            case  0:
-            case +1:
-                // Accept up to one pixel difference, this happens because of
-                // different rounding behaviours in different compiler versions
-                // even under the same architecture, see the example in
-                // http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/151149/focus=151154
-                break;
-
-            default:
-                return false;
-        }
+        const int diff = std::abs(*p1 - *p2);
+        if ( diff > maxDiff )
+            maxDiff = diff;
     }
 
-    return true;
+    return maxDiff;
 }
+
+// Note that we accept up to one pixel difference, this happens because of
+// different rounding behaviours in different compiler versions
+// even under the same architecture, see the example in
+// http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/151149/focus=151154
 
 // The 0 below can be replaced with 1 to generate, instead of comparing with,
 // the test files.
@@ -1362,13 +1357,16 @@ CompareApprox(const wxImage& i1, const wxImage& i2)
     } \
     else \
     { \
-        wxImage imageFromFile(file); \
-        CPPUNIT_ASSERT_MESSAGE( "Failed to load " file, imageFromFile.IsOk() ); \
-        CPPUNIT_ASSERT_MESSAGE \
-        ( \
-            "Wrong scaled " + Catch::toString(image), \
-            CompareApprox(imageFromFile, image) \
-        ); \
+        const wxImage imageFromFile(file); \
+        if ( imageFromFile.IsOk() ) \
+        { \
+            INFO("Wrong scaled \"" << file << "\" " << Catch::toString(image)); \
+            CHECK(FindMaxChannelDiff(imageFromFile, image) <= 1); \
+        } \
+        else \
+        { \
+            FAIL("Failed to load \"" << file << "\""); \
+        } \
     }
 
 void ImageTestCase::ScaleCompare()
