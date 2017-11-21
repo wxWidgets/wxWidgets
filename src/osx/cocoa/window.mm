@@ -3293,27 +3293,65 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
     {
         if ( IsUserPane() )
         {
+            if ( eventsMask == wxTOUCH_NONE )
+            {
+                [m_panGestureRecognizer release];
+                [m_magnificationGestureRecognizer release];
+                [m_rotationGestureRecognizer release];
+                [m_pressGestureRecognizer release];
+
+                [m_osxView setAcceptsTouchEvents:NO];
+
+                return true;
+            }
+
             Class cls = [m_osxView class];
 
-            m_panGestureRecognizer =
-            [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
-            if ( !class_respondsToSelector(cls, @selector(handlePanGesture:)) )
-                class_addMethod(cls, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" );
+            if ( eventsMask & wxTOUCH_PAN_GESTURES )
+            {
+                eventsMask &= ~wxTOUCH_PAN_GESTURES;
 
-            m_magnificationGestureRecognizer =
-            [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
-            if ( !class_respondsToSelector(cls, @selector(handleZoomGesture:)) )
-                class_addMethod(cls, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" );
+                m_panGestureRecognizer =
+                [[NSPanGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handlePanGesture:)];
+                if ( !class_respondsToSelector(cls, @selector(handlePanGesture:)) )
+                    class_addMethod(cls, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" );
+                [m_osxView addGestureRecognizer:m_panGestureRecognizer];
+            }
 
-            m_rotationGestureRecognizer =
-            [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
-            if ( !class_respondsToSelector(cls, @selector(handleRotateGesture:)) )
-                class_addMethod(cls, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" );
+            if ( eventsMask & wxTOUCH_ZOOM_GESTURE )
+            {
+                eventsMask &= ~wxTOUCH_ZOOM_GESTURE;
 
-            m_pressGestureRecognizer =
-            [[NSPressGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleLongPressGesture:)];
-            if ( !class_respondsToSelector(cls, @selector(handleLongPressGesture:)) )
-                class_addMethod(cls, @selector(handleLongPressGesture:), (IMP) wxOSX_longPressEvent, "v@:@" );
+                m_magnificationGestureRecognizer =
+                [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleZoomGesture:)];
+                if ( !class_respondsToSelector(cls, @selector(handleZoomGesture:)) )
+                    class_addMethod(cls, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" );
+                [m_osxView addGestureRecognizer:m_magnificationGestureRecognizer];
+            }
+
+            if ( eventsMask & wxTOUCH_ROTATE_GESTURE )
+            {
+                eventsMask &= ~wxTOUCH_ROTATE_GESTURE;
+
+                m_rotationGestureRecognizer =
+                [[NSRotationGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleRotateGesture:)];
+                if ( !class_respondsToSelector(cls, @selector(handleRotateGesture:)) )
+                    class_addMethod(cls, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" );
+                [m_osxView addGestureRecognizer:m_rotationGestureRecognizer];
+            }
+
+            if ( eventsMask & wxTOUCH_PRESS_GESTURES )
+            {
+                eventsMask &= ~wxTOUCH_PRESS_GESTURES;
+
+                m_pressGestureRecognizer =
+                [[NSPressGestureRecognizer alloc] initWithTarget:m_osxView action: @selector(handleLongPressGesture:)];
+                if ( !class_respondsToSelector(cls, @selector(handleLongPressGesture:)) )
+                    class_addMethod(cls, @selector(handleLongPressGesture:), (IMP) wxOSX_longPressEvent, "v@:@" );
+                [m_osxView addGestureRecognizer:m_pressGestureRecognizer];
+            }
+
+            wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
 
             if ( !class_respondsToSelector(cls, @selector(touchesBeganWithEvent:)) )
                 class_addMethod(cls, @selector(touchesBeganWithEvent:), (IMP) wxOSX_touchesBegan, "v@:@" );
@@ -3321,11 +3359,6 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
                 class_addMethod(cls, @selector(touchesMovedWithEvent:), (IMP) wxOSX_touchesMoved, "v@:@" );
             if ( !class_respondsToSelector(cls, @selector(touchesEndedWithEvent:)) )
                 class_addMethod(cls, @selector(touchesEndedWithEvent:), (IMP) wxOSX_touchesEnded, "v@:@" );
-
-            [m_osxView addGestureRecognizer:m_panGestureRecognizer];
-            [m_osxView addGestureRecognizer:m_magnificationGestureRecognizer];
-            [m_osxView addGestureRecognizer:m_rotationGestureRecognizer];
-            [m_osxView addGestureRecognizer:m_pressGestureRecognizer];
 
             [m_osxView setAcceptsTouchEvents:YES];
 

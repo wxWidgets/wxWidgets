@@ -136,8 +136,15 @@ enum wxShowEffect
 // Values for EnableTouchEvents() mask.
 enum
 {
-    wxTOUCH_NONE            = 0x0000,
-    wxTOUCH_ALL_GESTURES    = 0x00ff
+    wxTOUCH_NONE                    = 0x0000,
+    wxTOUCH_VERTICAL_PAN_GESTURE    = 0x0001,
+    wxTOUCH_HORIZONTAL_PAN_GESTURE  = 0x0002,
+    wxTOUCH_PAN_GESTURES            = wxTOUCH_VERTICAL_PAN_GESTURE |
+                                      wxTOUCH_HORIZONTAL_PAN_GESTURE,
+    wxTOUCH_ZOOM_GESTURE            = 0x0004,
+    wxTOUCH_ROTATE_GESTURE          = 0x0008,
+    wxTOUCH_PRESS_GESTURES          = 0x0010,
+    wxTOUCH_ALL_GESTURES            = 0x001f
 };
 
 // flags for SendSizeEvent()

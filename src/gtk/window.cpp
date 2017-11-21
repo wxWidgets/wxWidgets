@@ -238,7 +238,7 @@ static bool gs_inSizeAllocate;
 class wxWindowGesturesData
 {
 public:
-    wxWindowGesturesData(wxWindow* win, GtkWidget *widget);
+    wxWindowGesturesData(wxWindow* win, GtkWidget *widget, int eventsMask);
     ~wxWindowGesturesData();
 
     unsigned int         m_touchCount;
@@ -3344,7 +3344,9 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
     }
 }
 
-wxWindowGesturesData::wxWindowGesturesData(wxWindowGTK* win, GtkWidget *widget)
+wxWindowGesturesData::wxWindowGesturesData(wxWindowGTK* win,
+                                           GtkWidget *widget,
+                                           int eventsMask)
 {
     m_touchCount = 0;
     m_lastTouchTime = 0;
@@ -3353,84 +3355,137 @@ wxWindowGesturesData::wxWindowGesturesData(wxWindowGTK* win, GtkWidget *widget)
     m_activeGestures = 0;
     m_touchSequence = NULL;
 
-    m_vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
+    if ( eventsMask & wxTOUCH_VERTICAL_PAN_GESTURE )
+    {
+        eventsMask &= ~wxTOUCH_VERTICAL_PAN_GESTURE;
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(m_vertical_pan_gesture), GTK_PHASE_TARGET);
+        m_vertical_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_VERTICAL);
 
-    g_signal_connect (m_vertical_pan_gesture, "begin",
-                      G_CALLBACK(pan_gesture_begin_callback), win);
-    g_signal_connect (m_vertical_pan_gesture, "pan",
-                      G_CALLBACK(pan_gesture_callback), win);
-    g_signal_connect (m_vertical_pan_gesture, "end",
-                      G_CALLBACK(vertical_pan_gesture_end_callback), win);
-    g_signal_connect (m_vertical_pan_gesture, "cancel",
-                      G_CALLBACK(vertical_pan_gesture_end_callback), win);
+        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(m_vertical_pan_gesture), GTK_PHASE_TARGET);
 
-    m_horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
+        g_signal_connect (m_vertical_pan_gesture, "begin",
+                          G_CALLBACK(pan_gesture_begin_callback), win);
+        g_signal_connect (m_vertical_pan_gesture, "pan",
+                          G_CALLBACK(pan_gesture_callback), win);
+        g_signal_connect (m_vertical_pan_gesture, "end",
+                          G_CALLBACK(vertical_pan_gesture_end_callback), win);
+        g_signal_connect (m_vertical_pan_gesture, "cancel",
+                          G_CALLBACK(vertical_pan_gesture_end_callback), win);
+    }
+    else
+    {
+        m_vertical_pan_gesture = NULL;
+    }
 
-    // Pan signals are also generated in case of "left mouse down + mouse move". This can be disabled by
-    // calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(m_horizontal_pan_gesture), TRUE) and
-    // gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(verticaal_pan_gesture), TRUE) which will allow
-    // pan signals only for Touch events.
+    if ( eventsMask & wxTOUCH_HORIZONTAL_PAN_GESTURE )
+    {
+        eventsMask &= ~wxTOUCH_HORIZONTAL_PAN_GESTURE;
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(m_horizontal_pan_gesture), GTK_PHASE_TARGET);
+        m_horizontal_pan_gesture = gtk_gesture_pan_new(widget, GTK_ORIENTATION_HORIZONTAL);
 
-    g_signal_connect (m_horizontal_pan_gesture, "begin",
-                      G_CALLBACK(pan_gesture_begin_callback), win);
-    g_signal_connect (m_horizontal_pan_gesture, "pan",
-                      G_CALLBACK(pan_gesture_callback), win);
-    g_signal_connect (m_horizontal_pan_gesture, "end",
-                      G_CALLBACK(horizontal_pan_gesture_end_callback), win);
-    g_signal_connect (m_horizontal_pan_gesture, "cancel",
-                      G_CALLBACK(horizontal_pan_gesture_end_callback), win);
+        // Pan signals are also generated in case of "left mouse down + mouse move". This can be disabled by
+        // calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(m_horizontal_pan_gesture), TRUE) and
+        // gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(verticaal_pan_gesture), TRUE) which will allow
+        // pan signals only for Touch events.
 
-    m_zoom_gesture = gtk_gesture_zoom_new(widget);
+        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(m_horizontal_pan_gesture), GTK_PHASE_TARGET);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(m_zoom_gesture), GTK_PHASE_TARGET);
+        g_signal_connect (m_horizontal_pan_gesture, "begin",
+                          G_CALLBACK(pan_gesture_begin_callback), win);
+        g_signal_connect (m_horizontal_pan_gesture, "pan",
+                          G_CALLBACK(pan_gesture_callback), win);
+        g_signal_connect (m_horizontal_pan_gesture, "end",
+                          G_CALLBACK(horizontal_pan_gesture_end_callback), win);
+        g_signal_connect (m_horizontal_pan_gesture, "cancel",
+                          G_CALLBACK(horizontal_pan_gesture_end_callback), win);
+    }
+    else
+    {
+        m_horizontal_pan_gesture = NULL;
+    }
 
-    g_signal_connect (m_zoom_gesture, "begin",
-                      G_CALLBACK(zoom_gesture_begin_callback), win);
-    g_signal_connect (m_zoom_gesture, "scale-changed",
-                      G_CALLBACK(zoom_gesture_callback), win);
-    g_signal_connect (m_zoom_gesture, "end",
-                      G_CALLBACK(zoom_gesture_end_callback), win);
-    g_signal_connect (m_zoom_gesture, "cancel",
-                      G_CALLBACK(zoom_gesture_end_callback), win);
+    if ( eventsMask & wxTOUCH_ZOOM_GESTURE )
+    {
+        eventsMask &= ~wxTOUCH_ZOOM_GESTURE;
 
-    m_rotate_gesture = gtk_gesture_rotate_new(widget);
+        m_zoom_gesture = gtk_gesture_zoom_new(widget);
 
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(m_rotate_gesture), GTK_PHASE_TARGET);
+        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(m_zoom_gesture), GTK_PHASE_TARGET);
 
-    g_signal_connect (m_rotate_gesture, "begin",
-                      G_CALLBACK(rotate_gesture_begin_callback), win);
-    g_signal_connect (m_rotate_gesture, "angle-changed",
-                      G_CALLBACK(rotate_gesture_callback), win);
-    g_signal_connect (m_rotate_gesture, "end",
-                      G_CALLBACK(rotate_gesture_end_callback), win);
-    g_signal_connect (m_rotate_gesture, "cancel",
-                      G_CALLBACK(rotate_gesture_end_callback), win);
+        g_signal_connect (m_zoom_gesture, "begin",
+                          G_CALLBACK(zoom_gesture_begin_callback), win);
+        g_signal_connect (m_zoom_gesture, "scale-changed",
+                          G_CALLBACK(zoom_gesture_callback), win);
+        g_signal_connect (m_zoom_gesture, "end",
+                          G_CALLBACK(zoom_gesture_end_callback), win);
+        g_signal_connect (m_zoom_gesture, "cancel",
+                          G_CALLBACK(zoom_gesture_end_callback), win);
+    }
+    else
+    {
+        m_zoom_gesture = NULL;
+    }
 
-    m_long_press_gesture = gtk_gesture_long_press_new(widget);
+    if ( eventsMask & wxTOUCH_ROTATE_GESTURE )
+    {
+        eventsMask &= ~wxTOUCH_ROTATE_GESTURE;
 
-    // "pressed" signal is also generated when left mouse is down for some minimum duration of time.
-    // This can be disable by calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(m_long_press_gesture), TRUE)
-    // which will allow "pressed" signal only for Touch events.
+        m_rotate_gesture = gtk_gesture_rotate_new(widget);
 
-    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_long_press_gesture), GTK_PHASE_TARGET);
+        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(m_rotate_gesture), GTK_PHASE_TARGET);
 
-    g_signal_connect (m_long_press_gesture, "pressed",
-                      G_CALLBACK(long_press_gesture_callback), win);
+        g_signal_connect (m_rotate_gesture, "begin",
+                          G_CALLBACK(rotate_gesture_begin_callback), win);
+        g_signal_connect (m_rotate_gesture, "angle-changed",
+                          G_CALLBACK(rotate_gesture_callback), win);
+        g_signal_connect (m_rotate_gesture, "end",
+                          G_CALLBACK(rotate_gesture_end_callback), win);
+        g_signal_connect (m_rotate_gesture, "cancel",
+                          G_CALLBACK(rotate_gesture_end_callback), win);
+    }
+    else
+    {
+        m_rotate_gesture = NULL;
+    }
+
+    if ( eventsMask & wxTOUCH_PRESS_GESTURES )
+    {
+        eventsMask &= ~wxTOUCH_PRESS_GESTURES;
+
+        m_long_press_gesture = gtk_gesture_long_press_new(widget);
+
+        // "pressed" signal is also generated when left mouse is down for some minimum duration of time.
+        // This can be disable by calling gtk_gesture_single_set_touch_only(GTK_GESTURE_SINGLE(m_long_press_gesture), TRUE)
+        // which will allow "pressed" signal only for Touch events.
+
+        gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_long_press_gesture), GTK_PHASE_TARGET);
+
+        g_signal_connect (m_long_press_gesture, "pressed",
+                          G_CALLBACK(long_press_gesture_callback), win);
+    }
+    else
+    {
+        m_long_press_gesture = NULL;
+    }
+
+    wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
+
     g_signal_connect (widget, "touch-event",
                       G_CALLBACK(touch_callback), win);
 }
 
 wxWindowGesturesData::~wxWindowGesturesData()
 {
-    g_object_unref(m_vertical_pan_gesture);
-    g_object_unref(m_horizontal_pan_gesture);
-    g_object_unref(m_zoom_gesture);
-    g_object_unref(m_rotate_gesture);
-    g_object_unref(m_long_press_gesture);
+    if ( m_vertical_pan_gesture )
+        g_object_unref(m_vertical_pan_gesture);
+    if ( m_horizontal_pan_gesture )
+        g_object_unref(m_horizontal_pan_gesture);
+    if ( m_zoom_gesture )
+        g_object_unref(m_zoom_gesture);
+    if ( m_rotate_gesture )
+        g_object_unref(m_rotate_gesture);
+    if ( m_long_press_gesture )
+        g_object_unref(m_long_press_gesture);
 }
 
 #endif // wxGTK_HAS_GESTURES_SUPPORT
@@ -3445,7 +3500,21 @@ bool wxWindowGTK::EnableTouchEvents(int eventsMask)
     // Check if gestures support is also available during run-time.
     if ( gtk_check_version(3, 14, 0) == NULL )
     {
-        m_gesturesData = new wxWindowGesturesData(this, GetConnectWidget());
+        if ( eventsMask == wxTOUCH_NONE )
+        {
+            delete m_gesturesData;
+            m_gesturesData = NULL;
+        }
+        else
+        {
+            m_gesturesData = new wxWindowGesturesData
+                                 (
+                                    this,
+                                    GetConnectWidget(),
+                                    eventsMask
+                                 );
+        }
+
         return true;
     }
 #endif // wxGTK_HAS_GESTURES_SUPPORT
