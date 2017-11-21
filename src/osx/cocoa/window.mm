@@ -528,27 +528,33 @@ bool g_lastButtonWasFakeRight = false ;
 - (CGFloat)scrollingDeltaY;
 @end
 
-void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEvent)
+static void
+wxSetupCoordinates(NSView* view, wxCoord &x, wxCoord &y, NSEvent* nsEvent)
 {
     NSRect locationInWindow = NSZeroRect;
     locationInWindow.origin = [nsEvent locationInWindow];
     
     // adjust coordinates for the window of the target view
-    if ( [nsEvent window] != [m_osxView window] )
+    if ( [nsEvent window] != [view window] )
     {
         if ( [nsEvent window] != nil )
             locationInWindow = [[nsEvent window] convertRectToScreen:locationInWindow];
         
-        if ( [m_osxView window] != nil )
-            locationInWindow = [[m_osxView window] convertRectFromScreen:locationInWindow];
+        if ( [view window] != nil )
+            locationInWindow = [[view window] convertRectFromScreen:locationInWindow];
     }
     
-    NSPoint locationInView = [m_osxView convertPoint:locationInWindow.origin fromView:nil];
-    wxPoint locationInViewWX = wxFromNSPoint( m_osxView, locationInView );
+    NSPoint locationInView = [view convertPoint:locationInWindow.origin fromView:nil];
+    wxPoint locationInViewWX = wxFromNSPoint( view, locationInView );
         
     x = locationInViewWX.x;
     y = locationInViewWX.y;
 
+}
+
+void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEvent)
+{
+    wxSetupCoordinates(m_osxView, x, y, nsEvent);
 }
 
 void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
