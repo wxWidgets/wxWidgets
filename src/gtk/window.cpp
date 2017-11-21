@@ -234,6 +234,12 @@ static bool gs_inSizeAllocate;
 
 #ifdef wxGTK_HAS_GESTURES_SUPPORT
 
+#include "wx/hashmap.h"
+#include "wx/private/extfield.h"
+
+namespace
+{
+
 // Per-window data for gestures support.
 class wxWindowGesturesData
 {
@@ -255,6 +261,16 @@ public:
     GtkGesture* m_rotate_gesture;
     GtkGesture* m_long_press_gesture;
 };
+
+WX_DECLARE_HASH_MAP(wxWindow*, wxWindowGesturesData*,
+                    wxPointerHash, wxPointerEqual,
+                    wxWindowGesturesMap);
+
+typedef wxExternalField<wxWindow,
+                        wxWindowGesturesData,
+                        wxWindowGesturesMap> wxWindowGestures;
+
+} // anonymous namespace
 
 // This is true when the gesture has just started (currently used for pan gesture only)
 static bool gs_gestureStart = false;
@@ -2475,10 +2491,6 @@ void wxWindowGTK::Init()
     m_imKeyEvent = NULL;
 
     m_dirtyTabOrder = false;
-
-#ifdef wxGTK_HAS_GESTURES_SUPPORT
-    m_gesturesData = NULL;
-#endif // wxGTK_HAS_GESTURES_SUPPORT
 }
 
 wxWindowGTK::wxWindowGTK()
@@ -2675,7 +2687,7 @@ wxWindowGTK::~wxWindowGTK()
 #endif
 
 #ifdef wxGTK_HAS_GESTURES_SUPPORT
-    delete m_gesturesData;
+    wxWindowGestures::EraseForWindow(this);
 #endif // wxGTK_HAS_GESTURES_SUPPORT
 
     if (m_widget)
@@ -2911,7 +2923,9 @@ pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUN
 static void
 horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
-    wxWindowGesturesData* const data = win->m_gesturesData;
+    wxWindowGesturesData* const data = wxWindowGestures::FromWindow(win);
+    if ( !data )
+        return;
 
     // Do not process horizontal pan, if there was no "pan" signal for it.
     if ( !(data->m_allowedGestures & horizontal_pan) )
@@ -2940,7 +2954,9 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
 static void
 vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
 {
-    wxWindowGesturesData* const data = win->m_gesturesData;
+    wxWindowGesturesData* const data = wxWindowGestures::FromWindow(win);
+    if ( !data )
+        return;
 
     // Do not process vertical pan, if there was no "pan" signal for it.
     if ( !(data->m_allowedGestures & vertical_pan) )
@@ -2990,7 +3006,9 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
     event.SetEventObject(win);
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
 
-    wxWindowGesturesData* const data = win->m_gesturesData;
+    wxWindowGesturesData* const data = wxWindowGestures::FromWindow(win);
+    if ( !data )
+        return;
 
     // This is the difference between this and the last pan gesture event in the current sequence
     int delta = wxRound(offset - gs_lastOffset);
@@ -3052,7 +3070,9 @@ zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
     event.SetPosition(wxPoint(wxRound(x), wxRound(y)));
     event.SetZoomFactor(scale);
 
-    wxWindowGesturesData* const data = win->m_gesturesData;
+    wxWindowGesturesData* const data = wxWindowGestures::FromWindow(win);
+    if ( !data )
+        return;
 
     // Cancel "Two FInger Tap Event" if scale has changed
     if ( wxRound(scale * 1000) != wxRound(gs_lastScale * 1000) )
@@ -3190,7 +3210,9 @@ wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 
     event.SetEventObject(win);
 
-    wxWindowGesturesData* const data = win->m_gesturesData;
+    wxWindowGesturesData* const data = wxWindowGestures::FromWindow(win);
+    if ( !data )
+        return;
 
     double lastX = data->m_lastTouchPoint.x;
     double lastY = data->m_lastTouchPoint.y;
@@ -3219,7 +3241,9 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 
     event.SetEventObject(win);
 
-    wxWindowGesturesData* const data = win->m_gesturesData;
+    wxWindowGesturesData* const data = wxWindowGestures::FromWindow(win);
+    if ( !data )
+        return;
 
     switch ( data->m_gestureState )
     {
@@ -3249,7 +3273,9 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 static void
 touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGTK* win)
 {
-    wxWindowGesturesData* const data = win->m_gesturesData;
+    wxWindowGesturesData* const data = wxWindowGestures::FromWindow(win);
+    if ( !data )
+        return;
 
     switch ( gdk_event->type )
     {
@@ -3502,17 +3528,15 @@ bool wxWindowGTK::EnableTouchEvents(int eventsMask)
     {
         if ( eventsMask == wxTOUCH_NONE )
         {
-            delete m_gesturesData;
-            m_gesturesData = NULL;
+            wxWindowGestures::EraseForWindow(this);
         }
         else
         {
-            m_gesturesData = new wxWindowGesturesData
-                                 (
-                                    this,
-                                    GetConnectWidget(),
-                                    eventsMask
-                                 );
+            wxWindowGestures::StoreForWindow
+            (
+                this,
+                new wxWindowGesturesData(this, GetConnectWidget(), eventsMask)
+            );
         }
 
         return true;

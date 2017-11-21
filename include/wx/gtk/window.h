@@ -358,11 +358,6 @@ public:
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
-#if defined(__WXGTK3__)
-    // Data used for gesture support, if available.
-    class wxWindowGesturesData* m_gesturesData;
-#endif // __WXGTK3__
-
 protected:
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,
