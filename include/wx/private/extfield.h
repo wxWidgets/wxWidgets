@@ -39,8 +39,8 @@ public:
     // existing one, if any.
     //
     // This method takes ownership of the field pointer which will be destroyed
-    // by EraseForWindow().
-    static void StoreForWindow(ObjectType* obj, FieldType* field)
+    // by EraseForObject().
+    static void StoreForObject(ObjectType* obj, FieldType* field)
     {
         const typename MapType::iterator it = ms_map.find(obj);
         if ( it != ms_map.end() )
@@ -55,7 +55,7 @@ public:
     }
 
     // Find the object for the corresponding window.
-    static FieldType* FromWindow(ObjectType* obj)
+    static FieldType* FromObject(ObjectType* obj)
     {
         const typename MapType::const_iterator it = ms_map.find(obj);
         return it == ms_map.end() ? NULL : it->second;
@@ -63,7 +63,7 @@ public:
 
     // Erase the object used for the corresponding window, return true if there
     // was one or false otherwise.
-    static bool EraseForWindow(ObjectType* obj)
+    static bool EraseForObject(ObjectType* obj)
     {
         const typename MapType::iterator it = ms_map.find(obj);
         if ( it == ms_map.end() )

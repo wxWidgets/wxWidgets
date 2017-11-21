@@ -1836,7 +1836,7 @@ enum TrackedGestures
 
 void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 {
-    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromWindow(this) )
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromObject(this) )
         gestures->TouchesBegan(event);
 }
 
@@ -1893,7 +1893,7 @@ void wxCocoaGesturesImpl::TouchesBegan(NSEvent* event)
 
 void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 {
-    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromWindow(this) )
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromObject(this) )
         gestures->TouchesMoved(event);
 }
 
@@ -1949,7 +1949,7 @@ void wxCocoaGesturesImpl::TouchesMoved(NSEvent* event)
 
 void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
 {
-    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromWindow(this) )
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromObject(this) )
         gestures->TouchesEnded(event);
 }
 
@@ -2501,7 +2501,7 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         CFRelease(m_osxView);
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    wxCocoaGestures::EraseForWindow(this);
+    wxCocoaGestures::EraseForObject(this);
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
@@ -3430,7 +3430,7 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
         {
             if ( eventsMask == wxTOUCH_NONE )
             {
-                if ( wxCocoaGestures::EraseForWindow(this) )
+                if ( wxCocoaGestures::EraseForObject(this) )
                 {
                     [m_osxView setAcceptsTouchEvents:NO];
                 }
@@ -3438,7 +3438,7 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
             }
             else // We do want to have gesture events.
             {
-                wxCocoaGestures::StoreForWindow
+                wxCocoaGestures::StoreForObject
                 (
                     this,
                     new wxCocoaGesturesImpl(this, m_osxView, eventsMask)
