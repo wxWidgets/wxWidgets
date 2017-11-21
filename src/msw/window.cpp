@@ -5742,7 +5742,11 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y,
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(GetId());
 
-    if ( !InitGestureEvent(event, x, y, flags) )
+    if ( InitGestureEvent(event, x, y, flags) )
+    {
+        event.SetRotationAngle(angleArgument);
+    }
+    else // Not the first event.
     {
         // Use angleArgument to obtain the cumulative angle since the gesture
         // was first started. This angle is in radians and MSW returns negative
