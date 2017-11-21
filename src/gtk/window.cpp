@@ -235,8 +235,9 @@ static bool gs_inSizeAllocate;
 #ifdef wxGTK_HAS_GESTURES_SUPPORT
 
 // Per-window data for gestures support.
-struct wxWindowGesturesData
+class wxWindowGesturesData
 {
+public:
     wxWindowGesturesData(wxWindow* win, GtkWidget *widget);
     ~wxWindowGesturesData();
 
