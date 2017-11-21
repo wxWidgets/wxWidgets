@@ -3227,50 +3227,41 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // dwID field is used to determine the type of gesture
             switch ( gestureInfo.dwID )
             {
-                // Pan gesture
                 case GID_PAN:
-                {
                     // (x,y) is the current position of the pan
                     processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
                     break;
-                }
 
-                // Zoom gesture
                 case GID_ZOOM:
-                {
-                    // (x,y) is the mid-point of 2 fingers
-                    // ullArgument field is a 64-bit unsigned integer, but the relevant information
-                    // is in it's lower 4 bytes and represents distance between the fingers
-                    // this is used to extract those lower 4 bytes
-                    DWORD fingerDistance = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
-                    processed = HandleZoomGesture(x, y, fingerDistance, gestureInfo.dwFlags);
+                    // (x,y) is the mid-point of 2 fingers and ullArgument
+                    // contains the distance between the fingers in its lower
+                    // half
+                    processed = HandleZoomGesture
+                                (
+                                    x, y,
+                                    static_cast<DWORD>(gestureInfo.ullArguments),
+                                    gestureInfo.dwFlags
+                                );
                     break;
-                }
 
-                // Rotate gesture
                 case GID_ROTATE:
-                {
-                    // (x,y) is the center point of rotation
-                    // Again, we need the lower 4 bytes and this will used as an argument
-                    // to obtain the angle to rotate
-                    DWORD angleArgument = (DWORD)((gestureInfo.ullArguments) & 0x00000000ffffffff);
-                    processed = HandleRotateGesture(x, y, angleArgument, gestureInfo.dwFlags);
+                    // (x,y) is the center point of rotation and ullArguments
+                    // contains the angle of rotation
+                    processed = HandleRotateGesture
+                                (
+                                    x, y,
+                                    static_cast<DWORD>(gestureInfo.ullArguments),
+                                    gestureInfo.dwFlags
+                                );
                     break;
-                }
 
-                // Two Finger tap gesture
                 case GID_TWOFINGERTAP:
-                {
                     processed = HandleTwoFingerTap(x, y, gestureInfo.dwFlags);
                     break;
-                }
 
-                // Press and Tap gesture
                 case GID_PRESSANDTAP:
-                {
                     processed = HandlePressAndTap(x, y, gestureInfo.dwFlags);
                     break;
-                }
             }
 
             if ( processed )
@@ -3827,9 +3818,15 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
         // Configure to receive all gestures
         GESTURECONFIG gestureConfig = {0, GC_ALLGESTURES, 0};
 
-        // This functions sets the configuration to the window. Second argument is reserved to be 0.
-        // Third argument is the number of elements in gestureConfig array, currently equal to 1
-        if ( !GestureFuncs::SetGestureConfig()(m_hWnd, 0, 1, &gestureConfig, sizeof(GESTURECONFIG)) )
+        if ( !GestureFuncs::SetGestureConfig()
+             (
+                m_hWnd,
+                0,                      // Reserved, must be always 0.
+                1,                      // Number of gesture configurations.
+                &gestureConfig,         // Pointer to the first one.
+                sizeof(GESTURECONFIG)   // Size of each configuration.
+             )
+           )
         {
             wxLogLastError("SetGestureConfig");
         }
@@ -5688,7 +5685,9 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags)
+bool wxWindowMSW::HandleZoomGesture(int x, int y,
+                                    WXDWORD fingerDistance,
+                                    WXDWORD flags)
 {
     // wxEVT_GESTURE_ZOOM
     wxZoomGestureEvent event(GetId());
@@ -5696,8 +5695,8 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     // These are used to calculate the center of the zoom and zoom factor
     static int s_previousLocationX, s_previousLocationY, s_intialFingerDistance;
 
-    // This flag indicates that the gesture has just started
-    // Store the current point and distance between the fingers for future calculations
+    // This flag indicates that the gesture has just started, store the current
+    // point and distance between the fingers for future calculations.
     if ( flags & GF_BEGIN )
     {
         s_previousLocationX = x;
@@ -5711,15 +5710,16 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
         event.SetGestureEnd();
     }
 
-    // Calculate center point of the zoom
-    // Human beings are not very good at moving two fingers at exactly the same rate outwards/inwards
-    // There is usually some error, which can cause the center to shift slightly
-    // So, it is recommended to take the average of center of fingers in the current and last positions
+    // Calculate center point of the zoom. Human beings are not very good at
+    // moving two fingers at exactly the same rate outwards/inwards and there
+    // is usually some error, which can cause the center to shift slightly. So,
+    // it is recommended to take the average of center of fingers in the
+    // current and last positions.
     wxPoint pt;
     pt.x = (s_previousLocationX + x) / 2;
     pt.y = (s_previousLocationY + y) / 2;
 
-    double zoomFactor = (double) fingerDistance / (double) s_intialFingerDistance;
+    const double zoomFactor = (double) fingerDistance / s_intialFingerDistance;
 
     event.SetZoomFactor(zoomFactor);
     event.SetEventObject(this);
@@ -5735,7 +5735,9 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWOR
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags)
+bool wxWindowMSW::HandleRotateGesture(int x, int y,
+                                      WXDWORD angleArgument,
+                                      WXDWORD flags)
 {
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(GetId());
@@ -5748,13 +5750,15 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWO
 
     else
     {
-        // Use angleArgument to obtain the cumulative angle since the gesture was first
-        // started. This angle is in radians
-        // MSW returns negative angle for clockwise rotation and positive otherwise
-        // So, multiply angle by -1 for positive angle for clockwise and negative in case of counterclockwise
+        // Use angleArgument to obtain the cumulative angle since the gesture
+        // was first started. This angle is in radians and MSW returns negative
+        // angle for clockwise rotation and positive otherwise, so, multiply
+        // angle by -1 for positive angle for clockwise and negative in case of
+        // counterclockwise.
         double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
 
-        // If the rotation is anti-clockwise convert the angle to its corresponding positive value in a clockwise sense.
+        // If the rotation is anti-clockwise convert the angle to its
+        // corresponding positive value in a clockwise sense.
         if ( angle < 0 )
         {
             angle += 2 * M_PI;
