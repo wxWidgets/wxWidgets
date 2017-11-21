@@ -5647,6 +5647,23 @@ void wxWindowMSW::GenerateMouseLeave()
 // Gesture events
 // ---------------------------------------------------------------------------
 
+bool wxWindowMSW::InitGestureEvent(wxGestureEvent& event,
+                                   int x, int y,
+                                   WXDWORD flags)
+{
+    event.SetEventObject(this);
+    event.SetTimestamp(::GetMessageTime());
+    event.SetPosition(wxPoint(x, y));
+
+    if ( flags & GF_BEGIN )
+        event.SetGestureStart();
+
+    if ( flags & GF_END )
+        event.SetGestureEnd();
+
+    return (flags & GF_BEGIN) != 0;
+}
+
 bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
 {
     // wxEVT_GESTURE_PAN
@@ -5655,26 +5672,17 @@ bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
     // These are used to calculate the pan delta
     static int s_previousLocationX, s_previousLocationY;
 
-    // This flag indicates that the gesture has just started
-    // Store the current point to determine the pan delta later on
-    if ( flags & GF_BEGIN )
+    // If the gesture has just started, store the current point to determine
+    // the pan delta later on.
+    if ( InitGestureEvent(event, x, y, flags) )
     {
         s_previousLocationX = x;
         s_previousLocationY = y;
-        event.SetGestureStart();
-    }
-
-    if ( flags & GF_END )
-    {
-        event.SetGestureEnd();
     }
 
     // Determine the horizontal and vertical changes
     int DeltaX =  x - s_previousLocationX, DeltaY = y - s_previousLocationY;
 
-    event.SetEventObject(this);
-    event.SetTimestamp(::GetMessageTime());
-    event.SetPosition(wxPoint(x, y));
     event.SetDeltaX(DeltaX);
     event.SetDeltaY(DeltaY);
 
@@ -5697,17 +5705,11 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y,
 
     // This flag indicates that the gesture has just started, store the current
     // point and distance between the fingers for future calculations.
-    if ( flags & GF_BEGIN )
+    if ( InitGestureEvent(event, x, y, flags) )
     {
         s_previousLocationX = x;
         s_previousLocationY = y;
         s_intialFingerDistance = fingerDistance;
-        event.SetGestureStart();
-    }
-
-    if ( flags & GF_END )
-    {
-        event.SetGestureEnd();
     }
 
     // Calculate center point of the zoom. Human beings are not very good at
@@ -5722,8 +5724,6 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y,
     const double zoomFactor = (double) fingerDistance / s_intialFingerDistance;
 
     event.SetZoomFactor(zoomFactor);
-    event.SetEventObject(this);
-    event.SetTimestamp(::GetMessageTime());
 
     // This is not a gesture point but the center of a zoom
     event.SetPosition(pt);
@@ -5742,13 +5742,7 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y,
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(GetId());
 
-    // This flag indicates that the gesture has just started
-    if ( flags & GF_BEGIN )
-    {
-        event.SetGestureStart();
-    }
-
-    else
+    if ( !InitGestureEvent(event, x, y, flags) )
     {
         // Use angleArgument to obtain the cumulative angle since the gesture
         // was first started. This angle is in radians and MSW returns negative
@@ -5768,15 +5762,6 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y,
         event.SetRotationAngle(angle);
     }
 
-    if ( flags & GF_END )
-    {
-        event.SetGestureEnd();
-    }
-
-    event.SetEventObject(this);
-    event.SetTimestamp(::GetMessageTime());
-    event.SetPosition(wxPoint(x, y));
-
     return HandleWindowEvent(event);
 }
 
@@ -5785,19 +5770,7 @@ bool wxWindowMSW::HandleTwoFingerTap(int x, int y, WXDWORD flags)
     // wxEVT_TWO_FINGER_TAP
     wxTwoFingerTapEvent event(GetId());
 
-    if ( flags & GF_BEGIN )
-    {
-        event.SetGestureStart();
-    }
-
-    event.SetEventObject(this);
-    event.SetTimestamp(::GetMessageTime());
-    event.SetPosition(wxPoint(x, y));
-
-    if ( flags & GF_END )
-    {
-        event.SetGestureEnd();
-    }
+    InitGestureEvent(event, x, y, flags);
 
     return HandleWindowEvent(event);
 }
@@ -5806,19 +5779,7 @@ bool wxWindowMSW::HandlePressAndTap(int x, int y, WXDWORD flags)
 {
     wxPressAndTapEvent event(GetId());
 
-    if ( flags & GF_BEGIN )
-    {
-        event.SetGestureStart();
-    }
-
-    event.SetEventObject(this);
-    event.SetTimestamp(::GetMessageTime());
-    event.SetPosition(wxPoint(x, y));
-
-    if ( flags & GF_END )
-    {
-        event.SetGestureEnd();
-    }
+    InitGestureEvent(event, x, y, flags);
 
     return HandleWindowEvent(event);
 }

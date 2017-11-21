@@ -360,6 +360,10 @@ public:
     bool HandleMouseWheel(wxMouseWheelAxis axis,
                           WXWPARAM wParam, WXLPARAM lParam);
 
+    // Common gesture event initialization, returns true if it is the initial
+    // event (GF_BEGIN set in flags), false otherwise.
+    bool InitGestureEvent(wxGestureEvent& event, int x, int y, WXDWORD flags);
+
     bool HandlePanGesture(int x, int y, WXDWORD flags);
     bool HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags);
     bool HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags);
