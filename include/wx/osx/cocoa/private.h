@@ -200,11 +200,6 @@ protected:
     // events, don't resend them
     bool m_hasEditor;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    // Data used for gesture support, if available.
-    class wxCocoaGesturesImpl* m_gesturesImpl;
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
 

@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/hashmap.h"
 
 #if wxUSE_CARET
     #include "wx/caret.h"
@@ -1501,6 +1502,11 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
+class wxCocoaGesturesImpl;
+WX_DECLARE_HASH_MAP(wxWidgetCocoaImpl*, wxCocoaGesturesImpl*,
+                    wxPointerHash, wxPointerEqual,
+                    wxCocoaGesturesImplMap);
+
 // Class containing data used for gestures support.
 class wxCocoaGesturesImpl
 {
@@ -1596,11 +1602,58 @@ public:
         [m_initialTouch release];
     }
 
+    // We keep all existing wxCocoaGesturesImpl objects in a
+    // wxWidgetCocoaImpl-indexed map. We do this instead of just having a data
+    // member containing wxCocoaGesturesImpl pointer in wxWidgetCocoaImpl
+    // itself because most windows don't need it and it seems wasteful to
+    // always increase their size unnecessarily.
+
+    // Store the object to be used for the given window, replacing the existing
+    // one, if any.
+    //
+    // This method takes ownership of wxCocoaGesturesImpl pointer which will be
+    // destroyed by EraseForWindow().
+    static void StoreForWindow(wxWidgetCocoaImpl* impl, wxCocoaGesturesImpl* obj)
+    {
+        const wxCocoaGesturesImplMap::iterator it = ms_map.find(impl);
+        if ( it != ms_map.end() )
+        {
+            delete it->second;
+            it->second = obj;
+        }
+        else
+        {
+            ms_map.insert(wxCocoaGesturesImplMap::value_type(impl, obj));
+        }
+    }
+
+    // Find the object for the corresponding window.
+    static wxCocoaGesturesImpl* FromWindow(wxWidgetCocoaImpl* impl)
+    {
+        const wxCocoaGesturesImplMap::const_iterator it = ms_map.find(impl);
+        return it == ms_map.end() ? NULL : it->second;
+    }
+
+    // Erase the object used for the corresponding window, return true if there
+    // was one or false otherwise.
+    static bool EraseForWindow(wxWidgetCocoaImpl* impl)
+    {
+        const wxCocoaGesturesImplMap::iterator it = ms_map.find(impl);
+        if ( it == ms_map.end() )
+            return false;
+
+        delete it->second;
+        ms_map.erase(it);
+        return true;
+    }
+
     void TouchesBegan(NSEvent* event);
     void TouchesMoved(NSEvent* event);
     void TouchesEnded(NSEvent* event);
 
 private:
+    static wxCocoaGesturesImplMap ms_map;
+
     wxWindowMac* const m_win;
     NSView* const m_view;
 
@@ -1619,6 +1672,8 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxCocoaGesturesImpl);
 };
+
+wxCocoaGesturesImplMap wxCocoaGesturesImpl::ms_map;
 
 void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecognizer)
 {
@@ -1820,8 +1875,8 @@ enum TrackedGestures
 
 void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 {
-    if ( m_gesturesImpl )
-        m_gesturesImpl->TouchesBegan(event);
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGesturesImpl::FromWindow(this) )
+        gestures->TouchesBegan(event);
 }
 
 void wxCocoaGesturesImpl::TouchesBegan(NSEvent* event)
@@ -1877,8 +1932,8 @@ void wxCocoaGesturesImpl::TouchesBegan(NSEvent* event)
 
 void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 {
-    if ( m_gesturesImpl )
-        m_gesturesImpl->TouchesMoved(event);
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGesturesImpl::FromWindow(this) )
+        gestures->TouchesMoved(event);
 }
 
 void wxCocoaGesturesImpl::TouchesMoved(NSEvent* event)
@@ -1933,8 +1988,8 @@ void wxCocoaGesturesImpl::TouchesMoved(NSEvent* event)
 
 void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
 {
-    if ( m_gesturesImpl )
-        m_gesturesImpl->TouchesEnded(event);
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGesturesImpl::FromWindow(this) )
+        gestures->TouchesEnded(event);
 }
 
 void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
@@ -2465,10 +2520,6 @@ void wxWidgetCocoaImpl::Init()
 #endif
     m_lastKeyDownEvent = NULL;
     m_hasEditor = false;
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    m_gesturesImpl = NULL;
-#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -2489,7 +2540,7 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         CFRelease(m_osxView);
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    delete m_gesturesImpl;
+    wxCocoaGesturesImpl::EraseForWindow(this);
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
@@ -3416,21 +3467,21 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
     {
         if ( IsUserPane() )
         {
-            // We need to get rid of the old data, if we have it, in any case.
-            delete m_gesturesImpl;
-
             if ( eventsMask == wxTOUCH_NONE )
             {
-                if ( m_gesturesImpl )
+                if ( wxCocoaGesturesImpl::EraseForWindow(this) )
                 {
-                    m_gesturesImpl = NULL;
-
                     [m_osxView setAcceptsTouchEvents:NO];
                 }
+                //else: we didn't have any gesture data anyhow
             }
             else // We do want to have gesture events.
             {
-                m_gesturesImpl = new wxCocoaGesturesImpl(this, m_osxView, eventsMask);
+                wxCocoaGesturesImpl::StoreForWindow
+                (
+                    this,
+                    new wxCocoaGesturesImpl(this, m_osxView, eventsMask)
+                );
 
                 [m_osxView setAcceptsTouchEvents:YES];
             }
