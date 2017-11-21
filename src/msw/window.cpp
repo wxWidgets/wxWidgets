@@ -3204,10 +3204,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_GESTURE:
         {
             if ( !GestureFuncs::IsOk() )
-            {
-                processed = false;
                 break;
-            }
 
             // gestureInfo will contain the information about the gesture
             GESTUREINFO gestureInfo = {0};
@@ -3217,7 +3214,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             if ( !GestureFuncs::GetGestureInfo()((HGESTUREINFO)lParam, &gestureInfo) )
             {
                 wxLogLastError("GetGestureInfo");
-                processed = false;
                 break;
             }
 
