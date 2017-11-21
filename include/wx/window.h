@@ -133,6 +133,13 @@ enum wxShowEffect
     wxSHOW_EFFECT_MAX
 };
 
+// Values for EnableTouchEvents() mask.
+enum
+{
+    wxTOUCH_NONE            = 0x0000,
+    wxTOUCH_ALL_GESTURES    = 0x00ff
+};
+
 // flags for SendSizeEvent()
 enum
 {
@@ -1032,6 +1039,13 @@ public:
         // does this window have the capture?
     virtual bool HasCapture() const
         { return (wxWindow *)this == GetCapture(); }
+
+        // enable the specified touch events for this window, return false if
+        // the requested events are not supported
+    virtual bool EnableTouchEvents(int WXUNUSED(eventsMask))
+    {
+        return false;
+    }
 
     // painting the window
     // -------------------

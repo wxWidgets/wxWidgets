@@ -128,6 +128,7 @@ public :
     void                SetToolTip( wxToolTip* tooltip );
 
     void                InstallEventHandler( WXWidget control = NULL );
+    bool                EnableTouchEvents(int eventsMask);
 
     virtual bool        ShouldHandleKeyNavigation(const wxKeyEvent &event) const;
     bool                DoHandleKeyNavigation(const wxKeyEvent &event);

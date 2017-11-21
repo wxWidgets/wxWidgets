@@ -906,6 +906,35 @@ void wxWindowMSW::WarpPointer(int x, int y)
     }
 }
 
+bool wxWindowMSW::EnableTouchEvents(int eventsMask)
+{
+#ifdef WM_GESTURE
+    if ( GestureFuncs::IsOk() && eventsMask == wxTOUCH_ALL_GESTURES )
+    {
+        // Configure to receive all gestures
+        GESTURECONFIG gestureConfig = {0, GC_ALLGESTURES, 0};
+
+        if ( !GestureFuncs::SetGestureConfig()
+             (
+                m_hWnd,
+                0,                      // Reserved, must be always 0.
+                1,                      // Number of gesture configurations.
+                &gestureConfig,         // Pointer to the first one.
+                sizeof(GESTURECONFIG)   // Size of each configuration.
+             )
+           )
+        {
+            wxLogLastError("SetGestureConfig");
+            return false;
+        }
+
+        return true;
+    }
+#endif // WM_GESTURE
+
+    return wxWindowBase::EnableTouchEvents(eventsMask);
+}
+
 void wxWindowMSW::MSWUpdateUIState(int action, int state)
 {
     // we send WM_CHANGEUISTATE so if nothing needs changing then the system
@@ -3814,26 +3843,6 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 
         return false;
     }
-#ifdef WM_GESTURE
-    if ( GestureFuncs::IsOk() )
-    {
-        // Configure to receive all gestures
-        GESTURECONFIG gestureConfig = {0, GC_ALLGESTURES, 0};
-
-        if ( !GestureFuncs::SetGestureConfig()
-             (
-                m_hWnd,
-                0,                      // Reserved, must be always 0.
-                1,                      // Number of gesture configurations.
-                &gestureConfig,         // Pointer to the first one.
-                sizeof(GESTURECONFIG)   // Size of each configuration.
-             )
-           )
-        {
-            wxLogLastError("SetGestureConfig");
-        }
-    }
-#endif // WM_GESTURE
 
     SubclassWin(m_hWnd);
 

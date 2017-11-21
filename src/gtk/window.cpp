@@ -3435,6 +3435,26 @@ wxWindowGesturesData::~wxWindowGesturesData()
 
 #endif // wxGTK_HAS_GESTURES_SUPPORT
 
+// This method must be always defined for GTK+ 3 as it's declared in the
+// header, where we can't (easily) test for wxGTK_HAS_GESTURES_SUPPORT.
+#ifdef __WXGTK3__
+
+bool wxWindowGTK::EnableTouchEvents(int eventsMask)
+{
+#ifdef wxGTK_HAS_GESTURES_SUPPORT
+    // Check if gestures support is also available during run-time.
+    if ( gtk_check_version(3, 14, 0) == NULL )
+    {
+        m_gesturesData = new wxWindowGesturesData(this, GetConnectWidget());
+        return true;
+    }
+#endif // wxGTK_HAS_GESTURES_SUPPORT
+
+    return wxWindowBase::EnableTouchEvents(eventsMask);
+}
+
+#endif // __WXGTK3__
+
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 {
     static bool isSourceAttached;
@@ -3477,12 +3497,6 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_enter_callback), this);
     g_signal_connect (widget, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
-
-#ifdef wxGTK_HAS_GESTURES_SUPPORT
-    // Check if gestures support is also available during run-time.
-    if ( gtk_check_version(3, 14, 0) == NULL )
-        m_gesturesData = new wxWindowGesturesData(this, widget);
-#endif // wxGTK_HAS_GESTURES_SUPPORT
 }
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)

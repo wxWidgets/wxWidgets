@@ -43,6 +43,13 @@ MyGesturePanel::MyGesturePanel(MyGestureFrame *parent) : wxPanel(parent, wxID_AN
         Bind(wxEVT_PAINT, &MyGesturePanel::OnPaint, this);
     }
 
+    if ( !EnableTouchEvents(wxTOUCH_ALL_GESTURES) )
+    {
+        wxLogError("Failed to enable touch events");
+
+        // Still bind event handlers just in case they still work?
+    }
+
     // Event handlers
     Bind(wxEVT_GESTURE_PAN, &MyGesturePanel::OnPan, this);
     Bind(wxEVT_GESTURE_ZOOM, &MyGesturePanel::OnZoom, this);

@@ -3424,6 +3424,19 @@ public:
     */
     virtual void WarpPointer(int x, int y);
 
+    /**
+        Request generation of touch events for this window.
+
+        @param eventsMask Either wxTOUCH_NONE or wxTOUCH_ALL_GESTURES to
+            disable or enable gesture events for this window.
+
+        @return @true if the specified events were enabled or @false if the
+            current platform doesn't support touch events.
+
+        @since 3.1.1
+     */
+    virtual bool EnableTouchEvents(int eventsMask);
+
     //@}
 
 
