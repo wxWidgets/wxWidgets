@@ -1525,13 +1525,12 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
     nspoint = [panGestureRecognizer translationInView:m_osxView];
     pt = wxFromNSPoint(m_osxView, nspoint);
 
-    static int s_lastLocationX = 0, s_lastLocationY = 0;
+    static wxPoint s_lastLocation;
 
     if ( gestureState == NSGestureRecognizerStateBegan )
     {
         wxevent.SetGestureStart();
-        s_lastLocationX = 0;
-        s_lastLocationY = 0;
+        s_lastLocation = wxPoint(0, 0);
     }
 
     if ( gestureState == NSGestureRecognizerStateEnded )
@@ -1539,12 +1538,10 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
         wxevent.SetGestureEnd();
     }
 
-    // Set the offsets
-    wxevent.SetDeltaX(pt.x - s_lastLocationX);
-    wxevent.SetDeltaY(pt.y - s_lastLocationY);
+    // Set the offset
+    wxevent.SetDelta(pt - s_lastLocation);
 
-    s_lastLocationX = pt.x;
-    s_lastLocationY = pt.y;
+    s_lastLocation = pt;
 
     GetWXPeer()->HandleWindowEvent(wxevent);
 }

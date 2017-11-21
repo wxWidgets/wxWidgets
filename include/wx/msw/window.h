@@ -362,13 +362,13 @@ public:
 
     // Common gesture event initialization, returns true if it is the initial
     // event (GF_BEGIN set in flags), false otherwise.
-    bool InitGestureEvent(wxGestureEvent& event, int x, int y, WXDWORD flags);
+    bool InitGestureEvent(wxGestureEvent& event, const wxPoint& pt, WXDWORD flags);
 
-    bool HandlePanGesture(int x, int y, WXDWORD flags);
-    bool HandleZoomGesture(int x, int y, WXDWORD fingerDistance, WXDWORD flags);
-    bool HandleRotateGesture(int x, int y, WXDWORD angleArgument, WXDWORD flags);
-    bool HandleTwoFingerTap(int x, int y, WXDWORD flags);
-    bool HandlePressAndTap(int x, int y, WXDWORD flags);
+    bool HandlePanGesture(const wxPoint& pt, WXDWORD flags);
+    bool HandleZoomGesture(const wxPoint& pt, WXDWORD fingerDistance, WXDWORD flags);
+    bool HandleRotateGesture(const wxPoint& pt, WXDWORD angleArgument, WXDWORD flags);
+    bool HandleTwoFingerTap(const wxPoint& pt, WXDWORD flags);
+    bool HandlePressAndTap(const wxPoint& pt, WXDWORD flags);
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);

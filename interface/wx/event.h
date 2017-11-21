@@ -3726,24 +3726,14 @@ public:
     wxPanGestureEvent(wxWindowID winid = 0);
 
     /**
-        Returns the horizontal component of the distance covered since the previous Pan event.
+        Returns the distance covered since the previous panning event.
     */
-    int GetDeltaX() const;
+    wxPoint GetDelta() const;
 
     /**
-        Returns the vertical component of the distance covered since the previous Pan event.
+        Sets the distance covered since the previous panning event.
     */
-    int GetDeltaY() const;
-
-    /**
-        Sets the horizontal component of the distance covered since the previous Pan event.
-    */
-    int SetDeltaX(int DeltaX);
-
-    /**
-        Sets the vertical component of the distance covered since the previous Pan event.
-    */
-    int SetDeltaY(int DeltaY);
+    void SetDelta(const wxPoint& delta);
 };
 
 

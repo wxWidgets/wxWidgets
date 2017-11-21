@@ -2998,22 +2998,22 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
     {
         case GTK_PAN_DIRECTION_UP:
             data->m_allowedGestures |= vertical_pan;
-            event.SetDeltaY(-delta);
+            event.SetDelta(wxPoint(0, -delta));
             break;
 
         case GTK_PAN_DIRECTION_DOWN:
             data->m_allowedGestures |= vertical_pan;
-            event.SetDeltaY(delta);
+            event.SetDelta(wxPoint(0, delta));
             break;
 
         case GTK_PAN_DIRECTION_RIGHT:
             data->m_allowedGestures |= horizontal_pan;
-            event.SetDeltaX(delta);
+            event.SetDelta(wxPoint(delta, 0));
             break;
 
         case GTK_PAN_DIRECTION_LEFT:
             data->m_allowedGestures |= horizontal_pan;
-            event.SetDeltaX(-delta);
+            event.SetDelta(wxPoint(-delta, 0));
             break;
     }
 

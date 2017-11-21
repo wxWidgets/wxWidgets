@@ -3220,47 +3220,49 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 wxLogDebug("This is Not the window targeted by this gesture!");
             }
 
-            int x = gestureInfo.ptsLocation.x;
-            int y = gestureInfo.ptsLocation.y;
-            ScreenToClient(&x, &y);
+            const wxPoint pt = ScreenToClient
+                               (
+                                    wxPoint(gestureInfo.ptsLocation.x,
+                                            gestureInfo.ptsLocation.y)
+                               );
 
             // dwID field is used to determine the type of gesture
             switch ( gestureInfo.dwID )
             {
                 case GID_PAN:
-                    // (x,y) is the current position of the pan
-                    processed = HandlePanGesture(x, y, gestureInfo.dwFlags);
+                    // Point contains the current position of the pan.
+                    processed = HandlePanGesture(pt, gestureInfo.dwFlags);
                     break;
 
                 case GID_ZOOM:
-                    // (x,y) is the mid-point of 2 fingers and ullArgument
+                    // Point is the mid-point of 2 fingers and ullArgument
                     // contains the distance between the fingers in its lower
                     // half
                     processed = HandleZoomGesture
                                 (
-                                    x, y,
+                                    pt,
                                     static_cast<DWORD>(gestureInfo.ullArguments),
                                     gestureInfo.dwFlags
                                 );
                     break;
 
                 case GID_ROTATE:
-                    // (x,y) is the center point of rotation and ullArguments
+                    // Point is the center point of rotation and ullArguments
                     // contains the angle of rotation
                     processed = HandleRotateGesture
                                 (
-                                    x, y,
+                                    pt,
                                     static_cast<DWORD>(gestureInfo.ullArguments),
                                     gestureInfo.dwFlags
                                 );
                     break;
 
                 case GID_TWOFINGERTAP:
-                    processed = HandleTwoFingerTap(x, y, gestureInfo.dwFlags);
+                    processed = HandleTwoFingerTap(pt, gestureInfo.dwFlags);
                     break;
 
                 case GID_PRESSANDTAP:
-                    processed = HandlePressAndTap(x, y, gestureInfo.dwFlags);
+                    processed = HandlePressAndTap(pt, gestureInfo.dwFlags);
                     break;
             }
 
@@ -5648,12 +5650,12 @@ void wxWindowMSW::GenerateMouseLeave()
 // ---------------------------------------------------------------------------
 
 bool wxWindowMSW::InitGestureEvent(wxGestureEvent& event,
-                                   int x, int y,
+                                   const wxPoint& pt,
                                    WXDWORD flags)
 {
     event.SetEventObject(this);
     event.SetTimestamp(::GetMessageTime());
-    event.SetPosition(wxPoint(x, y));
+    event.SetPosition(pt);
 
     if ( flags & GF_BEGIN )
         event.SetGestureStart();
@@ -5664,36 +5666,31 @@ bool wxWindowMSW::InitGestureEvent(wxGestureEvent& event,
     return (flags & GF_BEGIN) != 0;
 }
 
-bool wxWindowMSW::HandlePanGesture(int x, int y, WXDWORD flags)
+bool wxWindowMSW::HandlePanGesture(const wxPoint& pt, WXDWORD flags)
 {
     // wxEVT_GESTURE_PAN
     wxPanGestureEvent event(GetId());
 
-    // These are used to calculate the pan delta
-    static int s_previousLocationX, s_previousLocationY;
+    // This is used to calculate the pan delta.
+    static wxPoint s_previousLocation;
 
     // If the gesture has just started, store the current point to determine
     // the pan delta later on.
-    if ( InitGestureEvent(event, x, y, flags) )
+    if ( InitGestureEvent(event, pt, flags) )
     {
-        s_previousLocationX = x;
-        s_previousLocationY = y;
+        s_previousLocation = pt;
     }
 
     // Determine the horizontal and vertical changes
-    int DeltaX =  x - s_previousLocationX, DeltaY = y - s_previousLocationY;
-
-    event.SetDeltaX(DeltaX);
-    event.SetDeltaY(DeltaY);
+    event.SetDelta(pt - s_previousLocation);
 
     // Update the last gesture event point
-    s_previousLocationX = x;
-    s_previousLocationY = y;
+    s_previousLocation = pt;
 
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleZoomGesture(int x, int y,
+bool wxWindowMSW::HandleZoomGesture(const wxPoint& pt,
                                     WXDWORD fingerDistance,
                                     WXDWORD flags)
 {
@@ -5701,14 +5698,14 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y,
     wxZoomGestureEvent event(GetId());
 
     // These are used to calculate the center of the zoom and zoom factor
-    static int s_previousLocationX, s_previousLocationY, s_intialFingerDistance;
+    static wxPoint s_previousLocation;
+    static int s_intialFingerDistance;
 
     // This flag indicates that the gesture has just started, store the current
     // point and distance between the fingers for future calculations.
-    if ( InitGestureEvent(event, x, y, flags) )
+    if ( InitGestureEvent(event, pt, flags) )
     {
-        s_previousLocationX = x;
-        s_previousLocationY = y;
+        s_previousLocation = pt;
         s_intialFingerDistance = fingerDistance;
     }
 
@@ -5717,32 +5714,28 @@ bool wxWindowMSW::HandleZoomGesture(int x, int y,
     // is usually some error, which can cause the center to shift slightly. So,
     // it is recommended to take the average of center of fingers in the
     // current and last positions.
-    wxPoint pt;
-    pt.x = (s_previousLocationX + x) / 2;
-    pt.y = (s_previousLocationY + y) / 2;
+    const wxPoint ptCenter = (s_previousLocation + pt)/2;
 
     const double zoomFactor = (double) fingerDistance / s_intialFingerDistance;
 
     event.SetZoomFactor(zoomFactor);
 
-    // This is not a gesture point but the center of a zoom
-    event.SetPosition(pt);
+    event.SetPosition(ptCenter);
 
     // Update gesture event point
-    s_previousLocationX = x;
-    s_previousLocationY = y;
+    s_previousLocation = pt;
 
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleRotateGesture(int x, int y,
+bool wxWindowMSW::HandleRotateGesture(const wxPoint& pt,
                                       WXDWORD angleArgument,
                                       WXDWORD flags)
 {
     // wxEVT_GESTURE_ROTATE
     wxRotateGestureEvent event(GetId());
 
-    if ( InitGestureEvent(event, x, y, flags) )
+    if ( InitGestureEvent(event, pt, flags) )
     {
         event.SetRotationAngle(angleArgument);
     }
@@ -5769,21 +5762,21 @@ bool wxWindowMSW::HandleRotateGesture(int x, int y,
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleTwoFingerTap(int x, int y, WXDWORD flags)
+bool wxWindowMSW::HandleTwoFingerTap(const wxPoint& pt, WXDWORD flags)
 {
     // wxEVT_TWO_FINGER_TAP
     wxTwoFingerTapEvent event(GetId());
 
-    InitGestureEvent(event, x, y, flags);
+    InitGestureEvent(event, pt, flags);
 
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandlePressAndTap(int x, int y, WXDWORD flags)
+bool wxWindowMSW::HandlePressAndTap(const wxPoint& pt, WXDWORD flags)
 {
     wxPressAndTapEvent event(GetId());
 
-    InitGestureEvent(event, x, y, flags);
+    InitGestureEvent(event, pt, flags);
 
     return HandleWindowEvent(event);
 }

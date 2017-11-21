@@ -1915,25 +1915,21 @@ public:
     wxPanGestureEvent(wxWindowID winid = 0)
         : wxGestureEvent(winid, wxEVT_GESTURE_PAN)
     {
-        m_deltaX = 0;
-        m_deltaY = 0;
     }
 
-    wxPanGestureEvent(const wxPanGestureEvent& event) : wxGestureEvent(event)
+    wxPanGestureEvent(const wxPanGestureEvent& event)
+        : wxGestureEvent(event),
+          m_delta(event.m_delta)
     {
-        m_deltaX = event.m_deltaX;
-        m_deltaY = event.m_deltaY;
     }
 
-    int GetDeltaX() const { return m_deltaX; }
-    void SetDeltaX(int DeltaX) { m_deltaX = DeltaX; }
-    int GetDeltaY() const { return m_deltaY; }
-    void SetDeltaY(int DeltaY) { m_deltaY = DeltaY; }
+    wxPoint GetDelta() const { return m_delta; }
+    void SetDelta(const wxPoint& delta) { m_delta = delta; }
 
     virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
 
 private:
-    int m_deltaX, m_deltaY;
+    wxPoint m_delta;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPanGestureEvent);
 };
