@@ -369,13 +369,17 @@ TEST_CASE("wxVector::capacity", "[vector][capacity][shrink_to_fit]")
 
     v.push_back(0);
     // When using the standard library vector, we don't know what growth
-    // strategy it uses, so we can't rely on this check passing, but with our
-    // own one we can, allowing us to check that shrink_to_fit() really shrinks
-    // the capacity below.
+    // strategy it uses, so we can't rely on the stricter check passing, but
+    // with our own one we can, allowing us to check that shrink_to_fit()
+    // really shrinks the capacity below.
 #if !wxUSE_STD_CONTAINERS
     CHECK( v.capacity() > 1 );
+#else
+    CHECK( v.capacity() >= 1 );
 #endif
 
+    // There is no shrink_to_fit() in STL build when not using C++11.
+#if !wxUSE_STD_CONTAINERS || __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
     v.shrink_to_fit();
     CHECK( v.capacity() == 1 );
 
@@ -384,4 +388,5 @@ TEST_CASE("wxVector::capacity", "[vector][capacity][shrink_to_fit]")
 
     v.shrink_to_fit();
     CHECK( v.capacity() == 0 );
+#endif
 }
