@@ -194,9 +194,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     g_signal_connect_after (m_widget, "changed",
                         G_CALLBACK (gtkcombobox_changed_callback), this);
 
-#ifndef __WXGTK3__
-    if ( !gtk_check_version(2,10,0) )
-#endif
+    if ( wx_is_at_least_gtk2(10) )
     {
         g_signal_connect (m_widget, "notify::popup-shown",
                           G_CALLBACK (gtkcombobox_popupshown_callback), this);

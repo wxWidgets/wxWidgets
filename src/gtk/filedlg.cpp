@@ -44,7 +44,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
 #ifndef __WXGTK3__
 #if GTK_CHECK_VERSION(2,7,3)
-    if (gtk_check_version(2, 7, 3) != NULL)
+    if (!wx_is_at_least_gtk2(8))
 #endif
     {
         if ((style & wxFD_SAVE) && (style & wxFD_OVERWRITE_PROMPT))
@@ -306,11 +306,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
         }
 
 #if GTK_CHECK_VERSION(2,7,3)
-        if ((style & wxFD_OVERWRITE_PROMPT)
-#ifndef __WXGTK3__
-            && gtk_check_version(2,7,3) == NULL
-#endif
-            )
+        if ((style & wxFD_OVERWRITE_PROMPT) && wx_is_at_least_gtk2(8))
         {
             gtk_file_chooser_set_do_overwrite_confirmation(file_chooser, true);
         }

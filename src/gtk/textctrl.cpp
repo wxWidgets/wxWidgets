@@ -181,7 +181,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
 #elif GTK_CHECK_VERSION(2,11,0)
 // gtk+ doesn't support justify before gtk+-2.11.0 with pango-1.17 being available
 // (but if new enough pango isn't available it's a mere gtk warning)
-                if (!gtk_check_version(2,11,0))
+                if (wx_is_at_least_gtk2(11))
                 {
                     align = GTK_JUSTIFY_FILL;
                     break;
@@ -858,18 +858,14 @@ int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
     if (IsSingleLine())
         return wxTextEntry::GTKIMFilterKeypress(event);
 
-    int result;
+    int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
-#ifndef __WXGTK3__
-    result = false;
-    if (gtk_check_version(2,22,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(22))
     {
         result = gtk_text_view_im_context_filter_keypress(GTK_TEXT_VIEW(m_text), event);
     }
 #else // GTK+ < 2.22
     wxUnusedVar(event);
-    result = false;
 #endif // GTK+ 2.22+
 
     return result;

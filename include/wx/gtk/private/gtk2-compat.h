@@ -530,5 +530,23 @@ static inline void wx_gtk_widget_get_preferred_size(GtkWidget* widget, GtkRequis
 // backend is determined at compile time in that version.
 #define GDK_IS_X11_DISPLAY(dpy) true
 
-#endif // !__WXGTK3__
+// Do perform runtime checks for GTK+ 2 version: we only take the minor version
+// component here, major must be 2 and we never need to test for the micro one
+// anyhow.
+inline bool wx_is_at_least_gtk2(int minor)
+{
+    return gtk_check_version(2, minor, 0) == NULL;
+}
+
+#else // __WXGTK3__
+
+// With GTK+ 3 we don't need to check for GTK+ 2 version and
+// gtk_check_version() would fail due to major version mismatch.
+inline bool wx_is_at_least_gtk2(int WXUNUSED(minor))
+{
+    return true;
+}
+
+#endif // !__WXGTK3__/__WXGTK3__
+
 #endif // _WX_GTK_PRIVATE_COMPAT_H_

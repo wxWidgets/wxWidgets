@@ -42,9 +42,7 @@
 static unsigned int GetEntryTextLength(GtkEntry* entry)
 {
 #if GTK_CHECK_VERSION(2, 14, 0)
-#ifndef __WXGTK3__
-    if ( gtk_check_version(2, 14, 0) == NULL )
-#endif // !GTK+ 3
+    if ( wx_is_at_least_gtk2(14) )
     {
         return gtk_entry_get_text_length(entry);
     }
@@ -370,7 +368,7 @@ void wxTextEntry::SetSelection(long from, long to)
 #ifndef __WXGTK3__
     // avoid reported problem with RHEL 5 GTK+ 2.10 where selection is reset by
     // a clipboard callback, see #13277
-    if (gtk_check_version(2,12,0))
+    if (!wx_is_at_least_gtk2(12))
     {
         GtkEntry* entry = GTK_ENTRY(GetEditable());
         if (to < 0)
@@ -493,18 +491,14 @@ void wxTextEntry::ForceUpper()
 
 int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
 {
-    int result;
+    int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
-#ifndef __WXGTK3__
-    result = false;
-    if (gtk_check_version(2,22,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(22))
     {
         result = gtk_entry_im_context_filter_keypress(GetEntry(), event);
     }
 #else // GTK+ < 2.22
     wxUnusedVar(event);
-    result = false;
 #endif // GTK+ 2.22+
 
     return result;
@@ -532,10 +526,8 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 
     if ( !entry )
         return false;
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,10,0))
+    if ( !wx_is_at_least_gtk2(10) )
         return false;
-#endif
 
     const GtkBorder* oldBorder = gtk_entry_get_inner_border(entry);
     GtkBorder newBorder;
@@ -576,9 +568,7 @@ wxPoint wxTextEntry::DoGetMargins() const
     GtkEntry* entry = GetEntry();
     if (entry)
     {
-#ifndef __WXGTK3__
-        if (gtk_check_version(2,10,0) == NULL)
-#endif
+        if (wx_is_at_least_gtk2(10))
         {
             const GtkBorder* border = gtk_entry_get_inner_border(entry);
             if (border)

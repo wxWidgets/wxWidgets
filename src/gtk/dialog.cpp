@@ -148,10 +148,8 @@ int wxDialog::ShowModal()
 #if GTK_CHECK_VERSION(2,10,0)
     unsigned sigId = 0;
     gulong hookId = 0;
-#ifndef __WXGTK3__
     // Ubuntu overlay scrollbar uses at least GTK 2.24
-    if (gtk_check_version(2,24,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(24))
     {
         sigId = g_signal_lookup("realize", GTK_TYPE_WIDGET);
         hookId = g_signal_add_emission_hook(sigId, 0, realize_hook, NULL, NULL);

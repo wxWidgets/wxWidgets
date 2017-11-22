@@ -382,7 +382,7 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
 #if GTK_CHECK_VERSION(2,12,0)
         // gdk_screen_get_rgba_colormap was added in 2.8, but this code is for
         // compositing which requires 2.12
-        else if (gtk_check_version(2,12,0) == NULL &&
+        else if (wx_is_at_least_gtk2(12) &&
             m_cmap == gdk_screen_get_rgba_colormap(gdk_colormap_get_screen(m_cmap)))
         {
             m_penGC = wxGetPoolGC( m_gdkwindow, wxPEN_COLOUR_ALPHA );

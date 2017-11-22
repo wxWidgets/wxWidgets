@@ -46,6 +46,7 @@
 wxFORCE_LINK_THIS_MODULE(gtk_print)
 
 #include "wx/gtk/private/object.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // Useful to convert angles from degrees to radians.
 static const double DEG2RAD  = M_PI / 180.0;
@@ -185,9 +186,7 @@ static GtkPaperSize* wxGetGtkPaperSize(wxPaperSize paperId, const wxSize& size)
         return gtk_paper_size_new(gtk_paper_size_get_default());
 
 #if GTK_CHECK_VERSION(2,12,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,12,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(12))
     {
         // look for a size match in GTK's GtkPaperSize list
         const double w = size.x;
@@ -242,9 +241,7 @@ private:
 
 bool wxGtkPrintModule::OnInit()
 {
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,10,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(10))
     {
         wxPrintFactory::SetPrintFactory( new wxGtkPrintFactory );
     }
@@ -405,9 +402,7 @@ void wxGtkPrintNativeData::SetPrintJob(GtkPrintOperation* job)
 #if GTK_CHECK_VERSION(2,18,0)
     if (job)
     {
-#ifndef __WXGTK3__
-        if (gtk_check_version(2,18,0) == NULL)
-#endif
+        if (wx_is_at_least_gtk2(18))
         {
             gtk_print_operation_set_embed_page_setup(job, true);
         }
