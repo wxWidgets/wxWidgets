@@ -96,6 +96,14 @@ bool wxSpinButton::Create(wxWindow *parent,
     if (gtk_check_version(3,12,0) == NULL)
         gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), 0);
 #endif
+#ifdef __WXGTK3__
+    if (gtk_check_version(3,20,0) == NULL)
+    {
+        GTKApplyCssStyle(
+            "entry { min-width:0; padding-left:0; padding-right:0 }"
+            "button.down { border-style:none }");
+    }
+#endif
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
 
