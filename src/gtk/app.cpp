@@ -402,38 +402,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     this->argv = argv_;
 #endif
 
-    if ( m_traits )
-    {
-        // if there are still GTK+ standard options unparsed in the command
-        // line, it means that they were not syntactically correct and GTK+
-        // already printed a warning on the command line and we should now
-        // exit:
-        wxArrayString opt, desc;
-        m_traits->GetStandardCmdLineOptions(opt, desc);
-
-        for ( i = 0; i < argc_; i++ )
-        {
-            // leave just the names of the options with values
-            const wxString str = wxString(argv_[i]).BeforeFirst('=');
-
-            for ( size_t j = 0; j < opt.size(); j++ )
-            {
-                // remove the leading spaces from the option string as it does
-                // have them
-                if ( opt[j].Trim(false).BeforeFirst('=') == str )
-                {
-                    // a GTK+ option can be left on the command line only if
-                    // there was an error in (or before, in another standard
-                    // options) it, so abort, just as we do if incorrect
-                    // program option is given
-                    wxLogError(_("Invalid GTK+ command line option, use \"%s --help\""),
-                               argv_[0]);
-                    return false;
-                }
-            }
-        }
-    }
-
     if ( !init_result )
     {
         wxLogError(_("Unable to initialize GTK+, is DISPLAY set properly?"));
