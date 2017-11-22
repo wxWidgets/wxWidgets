@@ -84,16 +84,10 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             {
                 itemAction->setText( wxQtConvertString( wxGetStockLabel( id ) ) );
                 wxAcceleratorEntry accel = wxGetStockAccelerator( id );
-                QString opcode(QStringLiteral("Ctrl+"));
-                // keep this in sync with the flags set in wxGetStockAccelerator()!
-                if ( accel.GetFlags() & wxACCEL_SHIFT )
-                {
-                    opcode += QStringLiteral("Shift+");
-                }
                 QString shortcut;
                 if ( id == wxID_EXIT )
                 {
-                    shortcut = QStringLiteral("Q");
+                    shortcut = QStringLiteral("Ctrl+Q");
                 }
                 else if ( accel.IsOk() )
                 {
@@ -101,7 +95,7 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
                 }
                 if ( !shortcut.isEmpty() )
                 {
-                    itemAction->setShortcut( QKeySequence( opcode + shortcut ) );
+                    itemAction->setShortcut( QKeySequence( shortcut ) );
                 }
             }
             break;
