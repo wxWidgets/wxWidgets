@@ -650,6 +650,7 @@ wxGTK:
 - Cosmetic fix for empty wxCheckBoxes display (Chuddah).
 - Fix crashes in wxFileSystemWatcher implementation (David Hart).
 - Fix key events codes when using Wayland (David Hart).
+- Fix wxButton::SetBitmapPosition() with GTK+ 3 (Jake Nelson).
 
 wxMSW:
 
