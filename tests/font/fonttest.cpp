@@ -242,7 +242,7 @@ void FontTestCase::NativeFontInfo()
 {
     unsigned numFonts;
     const wxFont *pf = GetTestFonts(numFonts);
-    for ( size_t n = 0; n < numFonts; n++ )
+    for ( unsigned n = 0; n < numFonts; n++ )
     {
         wxFont test(*pf++);
 
@@ -254,7 +254,7 @@ void FontTestCase::NativeFontInfo()
         CPPUNIT_ASSERT( temp.SetNativeFontInfo(nid) );
         CPPUNIT_ASSERT( temp.IsOk() );
         WX_ASSERT_MESSAGE(
-            ("Test #%lu failed\ndump of test font: \"%s\"\ndump of temp font: \"%s\"", \
+            ("Test #%u failed\ndump of test font: \"%s\"\ndump of temp font: \"%s\"", \
              n, DumpFont(&test), DumpFont(&temp)),
             temp == test );
     }
@@ -296,7 +296,7 @@ void FontTestCase::NativeFontInfoUserDesc()
 {
     unsigned numFonts;
     const wxFont *pf = GetTestFonts(numFonts);
-    for ( size_t n = 0; n < numFonts; n++ )
+    for ( unsigned n = 0; n < numFonts; n++ )
     {
         wxFont test(*pf++);
 
@@ -311,7 +311,7 @@ void FontTestCase::NativeFontInfoUserDesc()
 #ifdef __WXGTK__
         // Pango saves/restores all font info in the user-friendly string:
         WX_ASSERT_MESSAGE(
-            ("Test #%lu failed; native info user desc was \"%s\" for test and \"%s\" for temp2", \
+            ("Test #%u failed; native info user desc was \"%s\" for test and \"%s\" for temp2", \
              n, niud, temp2.GetNativeFontInfoUserDesc()),
             temp2 == test );
 #else
