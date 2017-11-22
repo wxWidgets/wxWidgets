@@ -581,19 +581,18 @@ void ResampleBoxPrecalc(wxVector<BoxPrecalc>& boxes, int oldDim)
     {
         // We want to map pixels in the range [0..newDim-1]
         // to the range [0..oldDim-1]
-        const double scale_factor_1 = double(oldDim-1) / (newDim-1);
-        const int scale_factor_2 = (int)(scale_factor_1 / 2);
+        const double scale_factor = double(oldDim - 1) / ((newDim - 1) * 2.0);
 
         for ( int dst = 0; dst < newDim; ++dst )
         {
-            // Source pixel in the Y direction
-            const int src_p = int(dst * scale_factor_1);
+            // Source pixel
+            const int src_p = int((double)dst * (oldDim - 1) / (newDim - 1));
 
             BoxPrecalc& precalc = boxes[dst];
-            precalc.boxStart = BoxBetween(int(src_p - scale_factor_1/2.0 + 1),
+            precalc.boxStart = BoxBetween(int((double)src_p - scale_factor + 1.0),
                                           0, oldDim - 1);
             precalc.boxEnd = BoxBetween(wxMax(precalc.boxStart + 1,
-                                              int(src_p + scale_factor_2)),
+                                              (int)((double)src_p + scale_factor)),
                                         0, oldDim - 1);
         }
     }
