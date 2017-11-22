@@ -25,10 +25,10 @@
 #define FTP_ANONYMOUS
 
 #ifdef FTP_ANONYMOUS
-    static const char *hostname = "ftp.wxwidgets.org";
-    static const char *directory = "/pub/2.8.11";
+    static const char *hostname = "ftp.heanet.ie";
+    static const char *directory = "/mirrors/debian";
     static const char *invalid_filename = "a_file_which_does_not_exist";
-    static const char *valid_filename = "MD5SUM";
+    static const char *valid_filename = "README";
         // NOTE: choose a small file or otherwise the FTPTestCase::Download()
         //       function will take (a lot of) time to complete!
 #else
