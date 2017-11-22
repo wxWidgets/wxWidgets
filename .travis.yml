@@ -14,7 +14,7 @@ matrix:
           compiler: gcc
         - dist: trusty
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
+          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
         - dist: trusty
           compiler: clang
           env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs"
