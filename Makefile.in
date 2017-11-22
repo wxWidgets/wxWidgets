@@ -2786,6 +2786,7 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/menuitem.h \
 	wx/qt/minifram.h \
 	wx/qt/msgdlg.h \
+	wx/qt/nonownedwnd.h \
 	wx/qt/notebook.h \
 	wx/qt/palette.h \
 	wx/qt/pen.h \

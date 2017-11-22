@@ -290,6 +290,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/menuitem.h
     wx/qt/minifram.h
     wx/qt/msgdlg.h
+    wx/qt/nonownedwnd.h
     wx/qt/notebook.h
     wx/qt/palette.h
     wx/qt/pen.h

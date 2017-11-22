@@ -237,6 +237,7 @@ QT_LOWLEVEL_HDR =
     wx/qt/menuitem.h
     wx/qt/minifram.h
     wx/qt/msgdlg.h
+    wx/qt/nonownedwnd.h
     wx/qt/notebook.h
     wx/qt/palette.h
     wx/qt/pen.h
@@ -323,6 +324,7 @@ QT_LOWLEVEL_SRC=
     src/qt/menuitem.cpp
     src/qt/minifram.cpp
     src/qt/msgdlg.cpp
+    src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
     src/qt/palette.cpp
     src/qt/pen.cpp
