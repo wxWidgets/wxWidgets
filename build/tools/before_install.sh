@@ -10,7 +10,7 @@ case $(uname -s) in
     Linux)
         if [ -f /etc/apt/sources.list ]; then
             $SUDO apt-get update
-            $SUDO apt-get install -y libcppunit-dev libgtk2.0-dev libnotify-dev
+            $SUDO apt-get install -y libgtk2.0-dev libnotify-dev
         fi
         ;;
 
