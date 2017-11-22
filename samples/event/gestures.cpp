@@ -1,6 +1,8 @@
 #include "gestures.h"
 #include "wx/dcgraph.h"
 
+#include "../image/horse.xpm"
+
 MyGestureFrame::MyGestureFrame()
     : wxFrame(NULL, wxID_ANY, "Multi-touch Gestures", wxDefaultPosition, wxSize(800, 600))
 {
@@ -30,18 +32,11 @@ MyGestureFrame::MyGestureFrame()
     Bind(wxEVT_CLOSE_WINDOW, &MyGestureFrame::OnQuit, this);
 }
 
-MyGesturePanel::MyGesturePanel(MyGestureFrame *parent) : wxPanel(parent, wxID_ANY)
+MyGesturePanel::MyGesturePanel(MyGestureFrame *parent)
+    : wxPanel(parent, wxID_ANY),
+      m_bitmap(horse_xpm)
 {
-    // Load an image
-    if ( !m_bitmap.LoadFile("../image/horse.jpg", wxBITMAP_TYPE_JPEG) )
-    {
-        wxLogError("Can't load the image");
-    }
-
-    else
-    {
-        Bind(wxEVT_PAINT, &MyGesturePanel::OnPaint, this);
-    }
+    Bind(wxEVT_PAINT, &MyGesturePanel::OnPaint, this);
 
     if ( !EnableTouchEvents(wxTOUCH_ALL_GESTURES) )
     {

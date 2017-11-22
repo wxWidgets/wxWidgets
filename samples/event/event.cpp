@@ -298,8 +298,6 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    wxImage::AddHandler(new wxJPEGHandler);
-
     // create the main application window
     MyFrame *frame = new MyFrame(wxT("Event wxWidgets Sample"),
                                  wxPoint(50, 50), wxSize(600, 340));
