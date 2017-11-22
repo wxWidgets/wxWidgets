@@ -400,7 +400,11 @@ protected:
     // Copies m_children tab order to GTK focus chain:
     void RealizeTabOrder();
 
-#ifndef __WXGTK3__
+#ifdef __WXGTK3__
+#if wxABI_VERSION >= 30004
+    void GTKApplyCssStyle(const char* style);
+#endif
+#else
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create
     // modified GTK style with non-standard attributes.

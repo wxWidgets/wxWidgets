@@ -25,6 +25,7 @@
 @WX_VERSION_TAG@.4 {
     *wxDirButton*DoApplyWidgetStyle*;
     *wxFileButton*DoApplyWidgetStyle*;
+    *wxWindow*GTKApplyCssStyle*;
 };
 
 # public symbols added in 3.0.3 (please keep in alphabetical order):
