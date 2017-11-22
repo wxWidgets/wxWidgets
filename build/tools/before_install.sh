@@ -10,7 +10,11 @@ case $(uname -s) in
     Linux)
         if [ -f /etc/apt/sources.list ]; then
             $SUDO apt-get update
-            $SUDO apt-get install -y libcppunit-dev libgtk2.0-dev libnotify-dev
+            case "$wxGTK_VERSION" in
+                3) libgtk_dev=libgtk-3-dev ;;
+                *) libgtk_dev=libgtk2.0-dev;;
+            esac
+            $SUDO apt-get install -y $libgtk_dev libnotify-dev
         fi
         ;;
 
