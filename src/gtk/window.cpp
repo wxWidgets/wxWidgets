@@ -244,8 +244,21 @@ namespace
 class wxWindowGesturesData
 {
 public:
-    wxWindowGesturesData(wxWindow* win, GtkWidget *widget, int eventsMask);
-    ~wxWindowGesturesData();
+    // This class has rather unusual "resurrectable" semantics: it is
+    // initialized by the ctor as usual, but may then be uninitialized by
+    // calling Free() and re-initialized again by calling Reinit().
+    wxWindowGesturesData(wxWindow* win, GtkWidget *widget, int eventsMask)
+    {
+        Reinit(win, widget, eventsMask);
+    }
+
+    ~wxWindowGesturesData()
+    {
+        Free();
+    }
+
+    void Reinit(wxWindow* win, GtkWidget *widget, int eventsMask);
+    void Free();
 
     unsigned int         m_touchCount;
     unsigned int         m_lastTouchTime;
@@ -3370,9 +3383,9 @@ touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGT
     }
 }
 
-wxWindowGesturesData::wxWindowGesturesData(wxWindowGTK* win,
-                                           GtkWidget *widget,
-                                           int eventsMask)
+void wxWindowGesturesData::Reinit(wxWindowGTK* win,
+                                  GtkWidget *widget,
+                                  int eventsMask)
 {
     m_touchCount = 0;
     m_lastTouchTime = 0;
@@ -3500,18 +3513,13 @@ wxWindowGesturesData::wxWindowGesturesData(wxWindowGTK* win,
                       G_CALLBACK(touch_callback), win);
 }
 
-wxWindowGesturesData::~wxWindowGesturesData()
+void wxWindowGesturesData::Free()
 {
-    if ( m_vertical_pan_gesture )
-        g_object_unref(m_vertical_pan_gesture);
-    if ( m_horizontal_pan_gesture )
-        g_object_unref(m_horizontal_pan_gesture);
-    if ( m_zoom_gesture )
-        g_object_unref(m_zoom_gesture);
-    if ( m_rotate_gesture )
-        g_object_unref(m_rotate_gesture);
-    if ( m_long_press_gesture )
-        g_object_unref(m_long_press_gesture);
+    g_clear_object(&m_vertical_pan_gesture);
+    g_clear_object(&m_horizontal_pan_gesture);
+    g_clear_object(&m_zoom_gesture);
+    g_clear_object(&m_rotate_gesture);
+    g_clear_object(&m_long_press_gesture);
 }
 
 #endif // wxGTK_HAS_GESTURES_SUPPORT
@@ -3526,17 +3534,30 @@ bool wxWindowGTK::EnableTouchEvents(int eventsMask)
     // Check if gestures support is also available during run-time.
     if ( gtk_check_version(3, 14, 0) == NULL )
     {
+        wxWindowGesturesData* const dataOld = wxWindowGestures::FromObject(this);
+
         if ( eventsMask == wxTOUCH_NONE )
         {
-            wxWindowGestures::EraseForObject(this);
+            // Reset the gestures data used by this object, but don't destroy
+            // it, as we could be called from an event handler, in which case
+            // this object could be still used after the event handler returns.
+            if ( dataOld )
+                dataOld->Free();
         }
         else
         {
-            wxWindowGestures::StoreForObject
-            (
-                this,
-                new wxWindowGesturesData(this, GetConnectWidget(), eventsMask)
-            );
+            GtkWidget* const widget = GetConnectWidget();
+
+            if ( dataOld )
+            {
+                dataOld->Reinit(this, widget, eventsMask);
+            }
+            else
+            {
+                wxWindowGesturesData* const
+                    dataNew = new wxWindowGesturesData(this, widget, eventsMask);
+                wxWindowGestures::StoreForObject(this, dataNew);
+            }
         }
 
         return true;
