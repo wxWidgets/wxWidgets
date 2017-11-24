@@ -196,12 +196,13 @@ QT_HDR =
     wx/qt/brush.h
     wx/qt/anybutton.h
     wx/qt/button.h
+    wx/generic/caret.h
     wx/qt/checkbox.h
     wx/qt/checklst.h
     wx/qt/choice.h
     wx/qt/clipbrd.h
     wx/qt/clrpicker.h
-    wx/qt/generic/clrpickerg.h
+    wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/qt/colordlg.h
     wx/qt/colour.h
@@ -223,9 +224,12 @@ QT_HDR =
     wx/qt/dirdlg.h
     wx/qt/dnd.h
     wx/qt/evtloop.h
+    wx/generic/fdrepdlg.h
     wx/qt/filedlg.h
+    wx/generic/filepickerg.h
     wx/qt/font.h
     wx/qt/fontdlg.h
+    wx/generic/fontpickerg.h
     wx/qt/frame.h
     wx/qt/gauge.h
     wx/generic/icon.h

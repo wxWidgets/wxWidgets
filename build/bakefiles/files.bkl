@@ -254,7 +254,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/choice.h
     wx/qt/clipbrd.h
     wx/qt/clrpicker.h
-    wx/qt/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/qt/colordlg.h
     wx/qt/colour.h
@@ -322,6 +321,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/utils.h
     wx/qt/window.h
     wx/qt/private/winevent.h
+    wx/generic/fdrepdlg.h
+    wx/generic/filepickerg.h
+    wx/generic/clrpickerg.h
+    wx/generic/fontpickerg.h
+    wx/generic/caret.h
 </set>
 
 <set var="QT_SRC" hints="files">
