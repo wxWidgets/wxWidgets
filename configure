@@ -978,6 +978,8 @@ X_CFLAGS
 XMKMF
 DIRECTFB_LIBS
 DIRECTFB_CFLAGS
+PRIVATE_FONTS_LIBS
+PRIVATE_FONTS_CFLAGS
 GTK_CONFIG
 GTK_LIBS
 GTK_CFLAGS
@@ -1268,6 +1270,7 @@ enable_notifmsg
 enable_odcombobox
 enable_popupwin
 enable_prefseditor
+enable_privatefonts
 enable_radiobox
 enable_radiobtn
 enable_richmsgdlg
@@ -1366,6 +1369,8 @@ CXX
 CXXFLAGS
 CCC
 PKG_CONFIG
+PRIVATE_FONTS_CFLAGS
+PRIVATE_FONTS_LIBS
 DIRECTFB_CFLAGS
 DIRECTFB_LIBS
 XMKMF
@@ -2205,6 +2210,7 @@ Optional Features:
   --enable-odcombobox     use wxOwnerDrawnComboBox class
   --enable-popupwin       use wxPopUpWindow class
   --enable-prefseditor    use wxPreferencesEditor class
+  --enable-privatefonts   provide wxFont::AddPrivateFont() method
   --enable-radiobox       use wxRadioBox class
   --enable-radiobtn       use wxRadioButton class
   --enable-richmsgdlg     use wxRichMessageDialog class
@@ -2348,6 +2354,10 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   PKG_CONFIG  path to pkg-config utility
+  PRIVATE_FONTS_CFLAGS
+              C compiler flags for PRIVATE_FONTS, overriding pkg-config
+  PRIVATE_FONTS_LIBS
+              linker flags for PRIVATE_FONTS, overriding pkg-config
   DIRECTFB_CFLAGS
               C compiler flags for DIRECTFB, overriding pkg-config
   DIRECTFB_LIBS
@@ -10182,6 +10192,35 @@ fi
 
 
           eval "$wx_cv_use_prefseditor"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-privatefonts was given.
+if test "${enable_privatefonts+set}" = set; then :
+  enableval=$enable_privatefonts;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_privatefonts='wxUSE_PRIVATE_FONTS=yes'
+                          else
+                            wx_cv_use_privatefonts='wxUSE_PRIVATE_FONTS=no'
+                          fi
+
+else
+
+                          wx_cv_use_privatefonts='wxUSE_PRIVATE_FONTS=${'DEFAULT_wxUSE_PRIVATE_FONTS":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_privatefonts"
 
 
           enablestring=
@@ -22471,6 +22510,85 @@ $as_echo "not found" >&6; }
             fi
 
                                                                                                                     fi
+
+        if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PRIVATE_FONTS" >&5
+$as_echo_n "checking for PRIVATE_FONTS... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$PRIVATE_FONTS_CFLAGS"; then
+        pkg_cv_PRIVATE_FONTS_CFLAGS="$PRIVATE_FONTS_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fontconfig >= 2.8.0 pangoft2 >= 1.38.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PRIVATE_FONTS_CFLAGS=`$PKG_CONFIG --cflags "fontconfig >= 2.8.0 pangoft2 >= 1.38.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$PRIVATE_FONTS_LIBS"; then
+        pkg_cv_PRIVATE_FONTS_LIBS="$PRIVATE_FONTS_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fontconfig >= 2.8.0 pangoft2 >= 1.38.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PRIVATE_FONTS_LIBS=`$PKG_CONFIG --libs "fontconfig >= 2.8.0 pangoft2 >= 1.38.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        PRIVATE_FONTS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0"`
+        else
+	        PRIVATE_FONTS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$PRIVATE_FONTS_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: run-time font loading won't be supported by wxFont" >&5
+$as_echo "$as_me: WARNING: run-time font loading won't be supported by wxFont" >&2;}
+elif test $pkg_failed = untried; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: run-time font loading won't be supported by wxFont" >&5
+$as_echo "$as_me: WARNING: run-time font loading won't be supported by wxFont" >&2;}
+else
+	PRIVATE_FONTS_CFLAGS=$pkg_cv_PRIVATE_FONTS_CFLAGS
+	PRIVATE_FONTS_LIBS=$pkg_cv_PRIVATE_FONTS_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                                $as_echo "#define wxUSE_PRIVATE_FONTS 1" >>confdefs.h
+
+                                CXXFLAGS="$PRIVATE_FONTS_CFLAGS $CXXFLAGS"
+                                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PRIVATE_FONTS_LIBS"
+
+fi
+        fi
     fi
 
     if test "$wxUSE_DFB" = 1; then
@@ -34284,6 +34402,11 @@ if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
     $as_echo "#define wxUSE_PREFERENCES_EDITOR 1" >>confdefs.h
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS preferences"
+fi
+
+if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
+    $as_echo "#define wxUSE_PRIVATE_FONTS 1" >>confdefs.h
+
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
