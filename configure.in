@@ -6907,6 +6907,10 @@ if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS preferences"
 fi
 
+if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
+    AC_DEFINE(wxUSE_PRIVATE_FONTS)
+fi
+
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
     if test "$wxUSE_MAC" = 1; then
         AC_MSG_WARN([Dialup manager not supported on this platform... disabled])
