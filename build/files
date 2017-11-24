@@ -186,7 +186,7 @@ BASE_OSX_NOTWXMAC_HDR =
 
 ## Qt
 
-QT_LOWLEVEL_HDR =
+QT_HDR =
     wx/qt/accel.h
     wx/qt/app.h
     wx/qt/apptbase.h
@@ -269,7 +269,7 @@ QT_LOWLEVEL_HDR =
     wx/qt/window.h
     wx/qt/private/winevent.h
 
-QT_LOWLEVEL_SRC=
+QT_SRC=
     src/qt/accel.cpp
     src/qt/app.cpp
     src/qt/apptraits.cpp
