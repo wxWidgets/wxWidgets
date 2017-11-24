@@ -427,40 +427,39 @@ public:
     wxDragResult MyDropTarget::OnData(wxCoord x, wxCoord y,
                                       wxDragResult defaultDragResult)
     {
-        wxDragResult dragResult = wxDropTarget::OnData(x, y, defaultDragResult);
-        if ( dragResult == defaultDragResult )
+        if ( !GetData() )
+            return wxDragNone;
+
+        wxDataObjectComposite *
+            dataobjComp = static_cast<wxDataObjectComposite *>(GetDataObject());
+
+        wxDataFormat format = dataobjComp->GetReceivedFormat();
+        wxDataObject *dataobj = dataobjComp->GetObject(format);
+        switch ( format.GetType() )
         {
-            wxDataObjectComposite *
-                dataobjComp = static_cast<wxDataObjectComposite *>(GetDataObject());
+            case wxDF_BITMAP:
+                {
+                    wxBitmapDataObject *
+                        dataobjBitmap = static_cast<wxBitmapDataObject *>(dataobj);
 
-            wxDataFormat format = dataObjects->GetReceivedFormat();
-            wxDataObject *dataobj = dataobjComp->GetObject(format);
-            switch ( format.GetType() )
-            {
-                case wxDF_BITMAP:
-                    {
-                        wxBitmapDataObject *
-                            dataobjBitmap = static_cast<wxBitmapDataObject *>(dataobj);
+                    ... use dataobj->GetBitmap() ...
+                }
+                break;
 
-                        ... use dataobj->GetBitmap() ...
-                    }
-                    break;
+            case wxDF_FILENAME:
+                {
+                    wxFileDataObject *
+                        dataobjFile = static_cast<wxFileDataObject *>(dataobj);
 
-                case wxDF_FILENAME:
-                    {
-                        wxFileDataObject *
-                            dataobjFile = static_cast<wxFileDataObject *>(dataobj);
+                    ... use dataobj->GetFilenames() ...
+                }
+                break;
 
-                        ... use dataobj->GetFilenames() ...
-                    }
-                    break;
-
-                default:
-                    wxFAIL_MSG( "unexpected data object format" );
-            }
+            default:
+                wxFAIL_MSG( "unexpected data object format" );
         }
 
-        return dragResult;
+        return defaultDragResult;
     }
     @endcode
 
