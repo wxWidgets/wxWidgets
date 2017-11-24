@@ -2963,16 +2963,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             dnl     AC_MSG_RESULT(not found)
             dnl fi
         fi
-
-        if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
-            PKG_CHECK_MODULES(PRIVATE_FONTS, [fontconfig >= 2.8.0 pangoft2 >= 1.38.0],
-                              [
-                                AC_DEFINE(wxUSE_PRIVATE_FONTS)
-                                CXXFLAGS="$PRIVATE_FONTS_CFLAGS $CXXFLAGS"
-                                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PRIVATE_FONTS_LIBS"
-                              ],
-                              [AC_MSG_WARN([run-time font loading won't be supported by wxFont])])
-        fi
     fi
 
     if test "$wxUSE_DFB" = 1; then
@@ -6908,7 +6898,21 @@ if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
 fi
 
 if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
-    AC_DEFINE(wxUSE_PRIVATE_FONTS)
+    if test "$wxUSE_GTK" = 1; then
+        if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
+            PKG_CHECK_MODULES(PRIVATE_FONTS, [fontconfig >= 2.8.0 pangoft2 >= 1.38.0],
+                              [
+                                AC_DEFINE(wxUSE_PRIVATE_FONTS)
+                                CXXFLAGS="$PRIVATE_FONTS_CFLAGS $CXXFLAGS"
+                                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PRIVATE_FONTS_LIBS"
+                              ],
+                              [AC_MSG_WARN([run-time font loading won't be supported by wxFont])])
+        fi
+    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_MSW" = 1; then
+        dnl In these ports we don't need anything special.
+        AC_DEFINE(wxUSE_PRIVATE_FONTS)
+    fi
+    dnl And in the other ports wxUSE_PRIVATE_FONTS is not supported.
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
