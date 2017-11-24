@@ -983,6 +983,14 @@
 #   endif
 #endif /* !defined(wxUSE_PREFERENCES_EDITOR) */
 
+#ifndef wxUSE_PRIVATE_FONTS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PRIVATE_FONTS must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_PRIVATE_FONTS 0
+#   endif
+#endif /* !defined(wxUSE_PRIVATE_FONTS) */
+
 #ifndef wxUSE_PRINTING_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_PRINTING_ARCHITECTURE must be defined, please read comment near the top of this file."
@@ -2304,6 +2312,13 @@
 #       endif
 #   endif
 #endif /* wxUSE_PREFERENCES_EDITOR */
+
+#if wxUSE_PRIVATE_FONTS
+#   if !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXOSX__)
+#       undef wxUSE_PRIVATE_FONTS
+#       define wxUSE_PRIVATE_FONTS 0
+#   endif
+#endif /* wxUSE_PRIVATE_FONTS */
 
 #if wxUSE_MEDIACTRL
 #   if !wxUSE_LONGLONG

@@ -328,6 +328,12 @@ public:
     // from the string representation of wxNativeFontInfo
     static wxFont *New(const wxString& strNativeFontDesc);
 
+    // Load the font from the given file and return true on success or false on
+    // error (an error message will be logged in this case).
+#if wxUSE_PRIVATE_FONTS
+    static bool AddPrivateFont(const wxString& filename);
+#endif // wxUSE_PRIVATE_FONTS
+
     // comparison
     bool operator==(const wxFont& font) const;
     bool operator!=(const wxFont& font) const { return !(*this == font); }

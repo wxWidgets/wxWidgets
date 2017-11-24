@@ -194,7 +194,7 @@ data:
 
 data_doc: 
 	@mkdir -p ./doc
-	@for f in aindex.html down.gif dxxgifs.tex HIER.html icon1.gif icon2.gif index.html logo.gif wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm; do \
+	@for f in aindex.html ClassGraph.class ClassGraphPanel.class ClassLayout.class down.gif dxxgifs.tex HIER.html HIERjava.html icon1.gif icon2.gif index.html logo.gif NavigatorButton.class USE_HELP.html wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm; do \
 	if test ! -f ./doc/$$f -a ! -d ./doc/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/doc/$$f -newer ./doc/$$f -print` ; \

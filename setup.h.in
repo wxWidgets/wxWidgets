@@ -468,6 +468,8 @@
 
 #define wxUSE_PREFERENCES_EDITOR 0
 
+#define wxUSE_PRIVATE_FONTS 0
+
 #define wxUSE_RICHTOOLTIP 0
 
 #define wxUSE_SASH          0
