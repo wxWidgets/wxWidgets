@@ -3044,9 +3044,6 @@ public:
  */
 class WXDLLIMPEXP_CORE wxDPIChangedEvent : public wxEvent
 {
-private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDPIChangedEvent);
-
 public:
     wxDPIChangedEvent()
         : wxEvent(0, wxEVT_DPI_CHANGED)
@@ -3054,17 +3051,19 @@ public:
         , m_newDPI(wxDefaultSize)
         { }
 
-    void SetOldDPI(wxSize const oldDPI) { m_oldDPI = oldDPI; }
+    void SetOldDPI(const wxSize& oldDPI) { m_oldDPI = oldDPI; }
     wxSize GetOldDPI() const { return m_oldDPI; }
 
-    void SetNewDPI(wxSize const newDPI) { m_newDPI = newDPI; }
+    void SetNewDPI(const wxSize& newDPI) { m_newDPI = newDPI; }
     wxSize GetNewDPI() const { return m_newDPI; }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDPIChangedEvent(*this); }
 
-protected:
+private:
     wxSize m_oldDPI;
     wxSize m_newDPI;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDPIChangedEvent);
 };
 
 /*
