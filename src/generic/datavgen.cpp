@@ -3932,6 +3932,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                     break;
                 }
                 // else: fall through to WXK_F2 handling
+                wxFALLTHROUGH;
             }
 
         case WXK_F2:

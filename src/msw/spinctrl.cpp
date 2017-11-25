@@ -95,6 +95,7 @@ wxBuddyTextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             if ( (WXHWND)wParam == spin->GetHWND() )
                 break;
             //else: fall through
+            wxFALLTHROUGH;
 
         case WM_KILLFOCUS:
         case WM_CHAR:

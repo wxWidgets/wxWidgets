@@ -329,6 +329,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // fall through: for compatibility with wxGTK, also send the text
             // update event when the selection changes (this also seems more
             // logical as the text does change)
+            wxFALLTHROUGH;
 
         case CBN_EDITCHANGE:
             if ( m_allowTextEvents )
