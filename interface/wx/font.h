@@ -721,6 +721,8 @@ public:
         Currently only supported in wxMSW, other platforms return @c 0.
 
         @see SetPPI()
+
+        @since 3.1.1
     */
     virtual int GetPPI() const;
 
@@ -1066,6 +1068,8 @@ public:
         Currently only supported in wxMSW, it has no effect on other platforms.
 
         @see GetPPI()
+
+        @since 3.1.1
     */
     virtual void SetPPI(int ppi);
 
