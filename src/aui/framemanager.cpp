@@ -266,20 +266,8 @@ public:
         g_signal_connect( m_widget, "realize",
                       G_CALLBACK (gtk_pseudo_window_realized_callback), this );
 
-        // gtk_widget_modify_bg() is deprecated in 3.0 but doesn't seem to have
-        // any obvious replacement as gtk_widget_override_background_color()
-        // mentioned in the deprecation message it is itself deprecated in
-        // 3.16, so just continue using it for now. In longer term the best
-        // would probably be to catch "draw" signal and paint the background
-        // ourselves.
-        GdkColor col;
-        col.red = 128 * 256;
-        col.green = 192 * 256;
-        col.blue = 255 * 256;
-
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_widget_modify_bg( m_widget, GTK_STATE_NORMAL, &col );
-        wxGCC_WARNING_RESTORE(deprecated-declarations)
+        m_backgroundColour.Set(128, 192, 255);
+        GTKApplyWidgetStyle();
     }
 
     bool SetTransparent(wxByte WXUNUSED(alpha)) wxOVERRIDE
