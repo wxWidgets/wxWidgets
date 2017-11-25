@@ -797,6 +797,7 @@ struct wxPrintfConvSpecParser
 
     wxPrintfConvSpecParser(const CharType *fmt)
     {
+        nspecs =
         nargs = 0;
         posarg_present =
         nonposarg_present = false;
@@ -817,7 +818,7 @@ struct wxPrintfConvSpecParser
                 continue;
             }
 
-            ConvSpec *spec = &specs[nargs];
+            ConvSpec *spec = &specs[nspecs];
             spec->Init();
 
             // attempt to parse this format specification
@@ -838,7 +839,7 @@ struct wxPrintfConvSpecParser
 
                 for ( unsigned n = 0; n < numAsterisks; n++ )
                 {
-                    if ( ++nargs == wxMAX_SVNPRINTF_ARGUMENTS )
+                    if ( ++nspecs == wxMAX_SVNPRINTF_ARGUMENTS )
                         break;
 
                     // TODO: we need to support specifiers of the form "%2$*1$s"
@@ -861,19 +862,19 @@ struct wxPrintfConvSpecParser
                         );
                     }
 
-                    specs[nargs] = *spec;
+                    specs[nspecs] = *spec;
 
                     // make an entry for '*' and point to it from pspec
                     spec->Init();
                     spec->m_type = wxPAT_STAR;
-                    pspec[nargs - 1] = spec;
+                    pspec[nargs++] = spec;
 
-                    spec = &specs[nargs];
+                    spec = &specs[nspecs];
                 }
 
                 // If we hit the maximal number of arguments inside the inner
                 // loop, break out of the outer one as well.
-                if ( nargs == wxMAX_SVNPRINTF_ARGUMENTS )
+                if ( nspecs == wxMAX_SVNPRINTF_ARGUMENTS )
                     break;
             }
 
@@ -884,25 +885,44 @@ struct wxPrintfConvSpecParser
                 // the positional arguments start from number 1 so we need
                 // to adjust the index
                 spec->m_pos--;
+
+                // We could be reusing an already existing argument, only
+                // increment their number if it's really a new one.
+                if ( spec->m_pos >= nargs )
+                {
+                    nargs = spec->m_pos + 1;
+                }
+                else if ( pspec[spec->m_pos] ) // Had we seen it before?
+                {
+                    // Check that the type specified this time is compatible
+                    // with the previously-specified type.
+                    wxASSERT_MSG
+                    (
+                        pspec[spec->m_pos]->m_type == spec->m_type,
+                        "Positional parameter specified multiple times "
+                        "with incompatible types."
+                    );
+                }
+
                 posarg_present = true;
             }
             else // not a positional argument...
             {
-                spec->m_pos = nargs;
+                spec->m_pos = nargs++;
                 nonposarg_present = true;
             }
 
             // this conversion specifier is tied to the pos-th argument...
             pspec[spec->m_pos] = spec;
 
-            if ( ++nargs == wxMAX_SVNPRINTF_ARGUMENTS )
+            if ( ++nspecs == wxMAX_SVNPRINTF_ARGUMENTS )
                 break;
         }
 
 
         // warn if we lost any arguments (the program probably will crash
         // anyhow because of stack corruption...)
-        if ( nargs == wxMAX_SVNPRINTF_ARGUMENTS )
+        if ( nspecs == wxMAX_SVNPRINTF_ARGUMENTS )
         {
             wxFAIL_MSG
             (
@@ -919,6 +939,10 @@ struct wxPrintfConvSpecParser
     }
 
     // total number of valid elements in specs
+    unsigned nspecs;
+
+    // total number of arguments, also number of valid elements in pspec, and
+    // always less than or (usually) equal to nspecs
     unsigned nargs;
 
     // all format specifications in this format string in order of their

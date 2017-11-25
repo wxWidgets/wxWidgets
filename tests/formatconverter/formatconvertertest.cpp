@@ -311,7 +311,9 @@ void FormatConverterTestCase::check(const wxString& input,
 #if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
     result = (const wchar_t*)wxFormatString(input);
 
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) && \
+    !defined(__CYGWIN__) && \
+    !defined(__MINGW32__)
     wxString expectedWchar(expectedWcharWindows);
 #else
     wxString expectedWchar(expectedWcharUnix);

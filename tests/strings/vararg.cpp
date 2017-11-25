@@ -206,12 +206,12 @@ void VarArgTestCase::Sscanf()
 
     wxSscanf(input, "%d %s", &i, &str);
     CPPUNIT_ASSERT( i == 42 );
-    CPPUNIT_ASSERT( wxStrcmp(str, "test") == 0 );
+    CPPUNIT_ASSERT( wxString(str) == "test" );
 
     i = 0;
     wxSscanf(input, L"%d %s", &i, &wstr);
     CPPUNIT_ASSERT( i == 42 );
-    CPPUNIT_ASSERT( wxStrcmp(wstr, "test") == 0 );
+    CPPUNIT_ASSERT( wxString(wstr) == "test" );
 }
 
 void VarArgTestCase::RepeatedPrintf()
