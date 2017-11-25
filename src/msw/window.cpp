@@ -2955,12 +2955,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             {
                 int const xDPI = (int)LOWORD(wParam);
                 int const yDPI = (int)HIWORD(wParam);
-                wxSize const newDPI(xDPI, yDPI);
+                const RECT* const prcNewWindow = (RECT*)lParam;
 
-                RECT* const prcNewWindow = (RECT*)lParam;
-                wxRect const newRect(prcNewWindow->left, prcNewWindow->top, prcNewWindow->right - prcNewWindow->left, prcNewWindow->bottom - prcNewWindow->top);
-
-                processed = HandleDPIChange(newDPI, newRect);
+                processed = HandleDPIChange(wxSize(xDPI, yDPI),
+                                            wxRectFromRECT(*prcNewWindow));
             }
             break;
 
