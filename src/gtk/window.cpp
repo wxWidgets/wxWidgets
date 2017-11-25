@@ -4573,12 +4573,12 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
         if (isFg)
         {
             g_string_append_printf(css, "color:%s;",
-                static_cast<const char*>(fg.GetAsString(wxC2S_HTML_SYNTAX)));
+                wxGtkString(gdk_rgba_to_string(fg)).c_str());
         }
         if (isBg)
         {
             g_string_append_printf(css, "background:%s;",
-                static_cast<const char*>(bg.GetAsString(wxC2S_HTML_SYNTAX)));
+                wxGtkString(gdk_rgba_to_string(bg)).c_str());
         }
         if (isFont)
         {
@@ -4662,8 +4662,8 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
             if (gtk_check_version(3,20,0) == NULL)
                 s = "selection";
             g_string_append_printf(css, "%s{color:%s;background:%s}", s,
-                static_cast<const char*>(fg_sel.GetAsString(wxC2S_HTML_SYNTAX)),
-                static_cast<const char*>(bg_sel.GetAsString(wxC2S_HTML_SYNTAX)));
+                wxGtkString(gdk_rgba_to_string(fg_sel)).c_str(),
+                wxGtkString(gdk_rgba_to_string(bg_sel)).c_str());
         }
 
         if (m_styleProvider == NULL && (isFg || isBg || isFont))
