@@ -188,6 +188,8 @@ void StringTestCase::Format()
         "4 world hello world 3",
         wxString::Format("%4$d %2$s %1$s %2$s %3$d", "hello", "world", 3, 4)
     );
+
+    CHECK( wxString::Format("%1$o %1$d %1$x", 20) == "24 20 14" );
 }
 
 void StringTestCase::FormatUnicode()

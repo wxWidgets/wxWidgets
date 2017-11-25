@@ -139,7 +139,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
 
     // finally, process each conversion specifier with its own argument
     const CharType *toparse = format;
-    for (i=0; i < parser.nargs; i++)
+    for (i=0; i < parser.nspecs; i++)
     {
         wxPrintfConvSpec<CharType>& spec = parser.specs[i];
 
