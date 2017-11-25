@@ -414,7 +414,7 @@ bool wxToolBar::Create( wxWindow *parent,
 
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
 #ifndef __WXGTK3__
-    if (gtk_check_version(2, 12, 0))
+    if (!wx_is_at_least_gtk2(12))
     {
         m_tooltips = gtk_tooltips_new();
         g_object_ref(m_tooltips);
@@ -586,7 +586,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             if (!HasFlag(wxTB_NO_TOOLTIPS) && !tool->GetShortHelp().empty())
             {
 #if GTK_CHECK_VERSION(2, 12, 0)
-                if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
+                if (wx_is_at_least_gtk2(12))
                 {
                     gtk_tool_item_set_tooltip_text(tool->m_item,
                         wxGTK_CONV(tool->GetShortHelp()));
@@ -764,7 +764,7 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
         if (tool->m_item)
         {
 #if GTK_CHECK_VERSION(2, 12, 0)
-            if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
+            if (wx_is_at_least_gtk2(12))
             {
                 gtk_tool_item_set_tooltip_text(tool->m_item,
                     wxGTK_CONV(helpString));

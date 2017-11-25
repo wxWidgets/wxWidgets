@@ -94,9 +94,7 @@ bool wxDirDialog::Create(wxWindow* parent,
 
     gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
 #if GTK_CHECK_VERSION(2,18,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,18,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(18))
     {
         gtk_file_chooser_set_create_folders(
             GTK_FILE_CHOOSER(m_widget), (style & wxDD_DIR_MUST_EXIST) == 0);

@@ -130,11 +130,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
 #if defined( __WXGTK20__ )
 #if GTK_CHECK_VERSION(2,12,0)
-    if (HasFlag(wxSTB_SHOW_TIPS)
-#ifndef __WXGTK3__
-        && gtk_check_version(2,12,0) == NULL
-#endif
-        )
+    if (HasFlag(wxSTB_SHOW_TIPS) && wx_is_at_least_gtk2(12))
     {
         g_object_set(m_widget, "has-tooltip", TRUE, NULL);
         g_signal_connect(m_widget, "query-tooltip",

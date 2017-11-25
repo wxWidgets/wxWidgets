@@ -158,10 +158,8 @@ private:
         // We can only use gtk_tree_selection_get_select_function() with 2.14+
         // so check for its availability both during compile- and run-time.
 #if GTK_CHECK_VERSION(2, 14, 0)
-#ifndef __WXGTK3__
-        if ( gtk_check_version(2, 14, 0) != NULL )
+        if ( !wx_is_at_least_gtk2(14) )
             return;
-#endif
 
         // If this assert is triggered, it means the code elsewhere has called
         // gtk_tree_selection_set_select_function() but currently doing this
@@ -2335,10 +2333,8 @@ void wxDataViewTextRenderer::GtkUpdateAlignment()
 {
     wxDataViewRenderer::GtkUpdateAlignment();
 
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,10,0))
+    if (!wx_is_at_least_gtk2(10))
         return;
-#endif
 
     int align = GetEffectiveAlignmentIfKnown();
     if ( align == wxDVR_DEFAULT_ALIGNMENT )
@@ -2874,10 +2870,8 @@ void wxDataViewChoiceRenderer::GtkUpdateAlignment()
 {
     wxDataViewCustomRenderer::GtkUpdateAlignment();
 
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,10,0))
+    if (!wx_is_at_least_gtk2(10))
         return;
-#endif
 
     int align = GetEffectiveAlignmentIfKnown();
     if ( align == wxDVR_DEFAULT_ALIGNMENT )
@@ -4605,9 +4599,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     gtk_tree_view_set_headers_visible( GTK_TREE_VIEW(m_treeview), (style & wxDV_NO_HEADER) == 0 );
 
 #ifdef __WXGTK210__
-#ifndef __WXGTK3__
-    if (!gtk_check_version(2,10,0))
-#endif
+    if (wx_is_at_least_gtk2(10))
     {
         GtkTreeViewGridLines grid = GTK_TREE_VIEW_GRID_LINES_NONE;
 
@@ -4920,10 +4912,9 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
 wxDataViewItem wxDataViewCtrl::GetTopItem() const
 {
 #if GTK_CHECK_VERSION(2,8,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,8,0))
+    if (!wx_is_at_least_gtk2(8))
         return wxDataViewItem();
-#endif
+
     wxGtkTreePath start;
     if ( gtk_tree_view_get_visible_range
           (
@@ -5241,7 +5232,7 @@ void wxDataViewCtrl::DoSetExpanderColumn()
 void wxDataViewCtrl::DoSetIndent()
 {
 #if GTK_CHECK_VERSION(2, 12, 0)
-    if ( gtk_check_version(2, 12, 0) == NULL )
+    if ( wx_is_at_least_gtk2(12) )
     {
         gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(m_treeview), GetIndent());
     }

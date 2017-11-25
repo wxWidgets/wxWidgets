@@ -2680,9 +2680,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
 #ifdef __WXGTK__
 #if GTK_CHECK_VERSION(2,14,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,14,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(14))
     {
         GdkScreen* screen = gdk_window_get_screen(wxGetTopLevelGDK());
         if (gtk_show_uri(screen, params.url.utf8_str(), GDK_CURRENT_TIME, NULL))

@@ -101,7 +101,7 @@ bool wxStaticBox::Create( wxWindow *parent,
     gtk_frame_set_label_align(GTK_FRAME(m_widget), xalign, 0.5);
 
 #ifndef __WXGTK3__
-    if (gtk_check_version(2, 12, 0))
+    if (!wx_is_at_least_gtk2(12))
     {
         // we connect this signal to perform label-clipping as GTK >= 2.12 does
         g_signal_connect(m_widget, "size_allocate", G_CALLBACK(size_allocate), NULL);

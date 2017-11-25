@@ -132,7 +132,7 @@ static GtkWidget* ToolTipWidget()
         g_signal_connect_swapped(ContainerWidget(), "destroy",
             G_CALLBACK(gtk_widget_destroy), s_widget);
         const char* name = "gtk-tooltip";
-        if (gtk_check_version(2, 11, 0))
+        if (!wx_is_at_least_gtk2(11))
             name = "gtk-tooltips";
         gtk_widget_set_name(s_widget, name);
         gtk_widget_ensure_style(s_widget);

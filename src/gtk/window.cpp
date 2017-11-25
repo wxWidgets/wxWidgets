@@ -58,7 +58,6 @@ typedef guint KeySym;
 #endif
 
 // gdk_window_set_composited() is only supported since 2.12
-#define wxGTK_VERSION_REQUIRED_FOR_COMPOSITING 2,12,0
 #define wxGTK_HAS_COMPOSITING_SUPPORT (GTK_CHECK_VERSION(2,12,0) && wxUSE_CAIRO)
 
 #ifndef PANGO_VERSION_CHECK
@@ -2766,9 +2765,7 @@ void wxWindowGTK::PostCreation()
 #endif
 
 #if GTK_CHECK_VERSION(2, 8, 0)
-#ifndef __WXGTK3__
-    if ( gtk_check_version(2,8,0) == NULL )
-#endif
+    if ( wx_is_at_least_gtk2(8) )
     {
         // Make sure we can notify the app when mouse capture is lost
         if ( m_wxwindow )
@@ -4722,7 +4719,7 @@ bool wxWindowGTK::IsTransparentBackgroundSupported(wxString* reason) const
 {
 #if wxGTK_HAS_COMPOSITING_SUPPORT
 #ifndef __WXGTK3__
-    if (gtk_check_version(wxGTK_VERSION_REQUIRED_FOR_COMPOSITING) != NULL)
+    if (!wx_is_at_least_gtk2(12))
     {
         if (reason)
         {

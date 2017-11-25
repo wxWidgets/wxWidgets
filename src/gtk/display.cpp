@@ -35,7 +35,7 @@ static inline int wx_gdk_screen_get_primary_monitor(GdkScreen* screen)
 {
     int monitor = 0;
 #if GTK_CHECK_VERSION(2,20,0)
-    if (gtk_check_version(2,20,0) == NULL)
+    if (wx_is_at_least_gtk2(20))
         monitor = gdk_screen_get_primary_monitor(screen);
 #endif
     return monitor;

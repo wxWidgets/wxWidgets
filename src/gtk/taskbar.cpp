@@ -185,7 +185,7 @@ wxTaskBarIcon::Private::~Private()
 void wxTaskBarIcon::Private::SetIcon()
 {
 #if GTK_CHECK_VERSION(2,10,0)
-    if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,10,0) == NULL)
+    if (wx_is_at_least_gtk2(10))
     {
         if (m_statusIcon)
             gtk_status_icon_set_from_pixbuf(m_statusIcon, m_bitmap.GetPixbuf());
@@ -235,7 +235,7 @@ void wxTaskBarIcon::Private::SetIcon()
     if (m_statusIcon)
     {
 #if GTK_CHECK_VERSION(2,16,0)
-        if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,16,0) == NULL)
+        if (wx_is_at_least_gtk2(16))
             gtk_status_icon_set_tooltip_text(m_statusIcon, tip_text);
         else
 #endif

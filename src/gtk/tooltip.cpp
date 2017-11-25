@@ -57,7 +57,7 @@ void wxToolTip::GTKSetWindow(wxWindow* win)
 void wxToolTip::GTKApply(GtkWidget* widget, const char* tip)
 {
 #if GTK_CHECK_VERSION(2, 12, 0)
-    if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
+    if (wx_is_at_least_gtk2(12))
         gtk_widget_set_tooltip_text(widget, tip);
     else
 #endif
@@ -74,7 +74,7 @@ void wxToolTip::GTKApply(GtkWidget* widget, const char* tip)
 void wxToolTip::Enable( bool flag )
 {
 #if GTK_CHECK_VERSION(2, 12, 0)
-    if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
+    if (wx_is_at_least_gtk2(12))
     {
         GtkSettings* settings = gtk_settings_get_default();
         if (settings)
@@ -98,7 +98,7 @@ void wxToolTip::Enable( bool flag )
 void wxToolTip::SetDelay( long msecs )
 {
 #if GTK_CHECK_VERSION(2, 12, 0)
-    if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
+    if (wx_is_at_least_gtk2(12))
     {
         GtkSettings* settings = gtk_settings_get_default();
         if (settings)
