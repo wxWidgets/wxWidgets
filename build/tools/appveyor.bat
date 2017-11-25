@@ -20,10 +20,9 @@ goto :eof
 cd build\msw
 path C:\MinGW\bin;%path%
 echo --- Tools versions:
-g++ --version | head -1
-mingw32-make --version | head -1
-ar --version | head -1
-path C:\MinGW\bin;
+g++ --version | "C:\Program Files\Git\usr\bin\head" -n 1
+mingw32-make --version | "C:\Program Files\Git\usr\bin\head" -n 1
+ar --version | "C:\Program Files\Git\usr\bin\head" -n 1
 echo.
 echo --- Starting the build
 echo.
