@@ -4561,27 +4561,121 @@ GtkRcStyle* wxWindowGTK::GTKCreateWidgetStyle()
 
 void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
 {
-    if (forceStyle || m_font.IsOk() ||
-        m_foregroundColour.IsOk() || m_backgroundColour.IsOk())
+    const wxColour& fg = m_foregroundColour;
+    const wxColour& bg = m_backgroundColour;
+    const bool isFg = fg.IsOk();
+    const bool isBg = bg.IsOk();
+    const bool isFont = m_font.IsOk();
+    if (forceStyle || isFg || isBg || isFont)
     {
 #ifdef __WXGTK3__
-        if (m_backgroundColour.IsOk())
+        GString* css = g_string_new("*{");
+        if (isFg)
         {
-            // create a GtkStyleProvider to override "background-image"
-            if (m_styleProvider == NULL)
-                m_styleProvider = GTK_STYLE_PROVIDER(gtk_css_provider_new());
-            const char css[] =
-                "*{background-image:-gtk-gradient(linear,0 0,0 1,"
-                "from(rgba(%u,%u,%u,%g)),to(rgba(%u,%u,%u,%g)))}";
-            char buf[sizeof(css) + 20];
-            const unsigned r = m_backgroundColour.Red();
-            const unsigned g = m_backgroundColour.Green();
-            const unsigned b = m_backgroundColour.Blue();
-            const double a = m_backgroundColour.Alpha() / 255.0;
-            g_snprintf(buf, sizeof(buf), css, r, g, b, a, r, g, b, a);
-            gtk_css_provider_load_from_data(GTK_CSS_PROVIDER(m_styleProvider), buf, -1, NULL);
+            g_string_append_printf(css, "color:%s;",
+                static_cast<const char*>(fg.GetAsString(wxC2S_HTML_SYNTAX)));
         }
-        DoApplyWidgetStyle(NULL);
+        if (isBg)
+        {
+            g_string_append_printf(css, "background:%s;",
+                static_cast<const char*>(bg.GetAsString(wxC2S_HTML_SYNTAX)));
+        }
+        if (isFont)
+        {
+            g_string_append(css, "font:");
+            const PangoFontDescription* pfd = m_font.GetNativeFontInfo()->description;
+            if (gtk_check_version(3,22,0))
+                g_string_append(css, wxGtkString(pango_font_description_to_string(pfd)));
+            else
+            {
+                const PangoFontMask pfm = pango_font_description_get_set_fields(pfd);
+                if (pfm & PANGO_FONT_MASK_STYLE)
+                {
+                    const char* s = "";
+                    switch (pango_font_description_get_style(pfd))
+                    {
+                    case PANGO_STYLE_NORMAL: break;
+                    case PANGO_STYLE_OBLIQUE: s = "oblique "; break;
+                    case PANGO_STYLE_ITALIC: s = "italic "; break;
+                    }
+                    g_string_append(css, s);
+                }
+                if (pfm & PANGO_FONT_MASK_VARIANT)
+                {
+                    switch (pango_font_description_get_variant(pfd))
+                    {
+                    case PANGO_VARIANT_NORMAL:
+                        break;
+                    case PANGO_VARIANT_SMALL_CAPS:
+                        g_string_append(css, "small-caps ");
+                        break;
+                    }
+                }
+                if (pfm & PANGO_FONT_MASK_WEIGHT)
+                {
+                    const int weight = pango_font_description_get_weight(pfd);
+                    if (weight != PANGO_WEIGHT_NORMAL)
+                        g_string_append_printf(css, "%d ", weight);
+                }
+                if (pfm & PANGO_FONT_MASK_STRETCH)
+                {
+                    const char* s = "";
+                    switch (pango_font_description_get_stretch(pfd))
+                    {
+                    case PANGO_STRETCH_ULTRA_CONDENSED: s = "ultra-condensed "; break;
+                    case PANGO_STRETCH_EXTRA_CONDENSED: s = "extra-condensed "; break;
+                    case PANGO_STRETCH_CONDENSED: s = "condensed "; break;
+                    case PANGO_STRETCH_SEMI_CONDENSED: s = "semi-condensed "; break;
+                    case PANGO_STRETCH_NORMAL: break;
+                    case PANGO_STRETCH_SEMI_EXPANDED: s = "semi-expanded "; break;
+                    case PANGO_STRETCH_EXPANDED: s = "expanded "; break;
+                    case PANGO_STRETCH_EXTRA_EXPANDED: s = "extra-expanded "; break;
+                    case PANGO_STRETCH_ULTRA_EXPANDED: s = "ultra-expanded "; break;
+                    }
+                    g_string_append(css, s);
+                }
+                if (pfm & PANGO_FONT_MASK_SIZE)
+                {
+                    const int size = pango_font_description_get_size(pfd);
+                    if (pango_font_description_get_size_is_absolute(pfd))
+                        g_string_append_printf(css, "%dpx ", size);
+                    else
+                        g_string_append_printf(css, "%dpt ", size / PANGO_SCALE);
+                }
+                if (pfm & PANGO_FONT_MASK_FAMILY)
+                {
+                    g_string_append_printf(css, "\"%s\"",
+                        pango_font_description_get_family(pfd));
+                }
+            }
+        }
+        g_string_append_c(css, '}');
+
+        if (isFg && isBg)
+        {
+            // Selection will be invisible, so add textview selection colors.
+            // This is specifically for wxTextCtrl, but may be useful for other
+            // controls, and seems to do no harm to apply to all.
+            const wxColour fg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+            const wxColour bg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+            const char* s = "*:selected";
+            if (gtk_check_version(3,20,0) == NULL)
+                s = "selection";
+            g_string_append_printf(css, "%s{color:%s;background:%s}", s,
+                static_cast<const char*>(fg_sel.GetAsString(wxC2S_HTML_SYNTAX)),
+                static_cast<const char*>(bg_sel.GetAsString(wxC2S_HTML_SYNTAX)));
+        }
+
+        if (m_styleProvider == NULL && (isFg || isBg || isFont))
+            m_styleProvider = GTK_STYLE_PROVIDER(gtk_css_provider_new());
+
+        wxGtkString s(g_string_free(css, false));
+        if (m_styleProvider)
+        {
+            gtk_css_provider_load_from_data(
+                GTK_CSS_PROVIDER(m_styleProvider), s, -1, NULL);
+            DoApplyWidgetStyle(NULL);
+        }
 #else
         GtkRcStyle* style = GTKCreateWidgetStyle();
         DoApplyWidgetStyle(style);
@@ -4599,34 +4693,9 @@ void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 void wxWindowGTK::GTKApplyStyle(GtkWidget* widget, GtkRcStyle* WXUNUSED_IN_GTK3(style))
 {
 #ifdef __WXGTK3__
-    const PangoFontDescription* pfd = NULL;
-    if (m_font.IsOk())
-        pfd = m_font.GetNativeFontInfo()->description;
-    gtk_widget_override_font(widget, pfd);
-    gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, m_foregroundColour);
-    gtk_widget_override_background_color(widget, GTK_STATE_FLAG_NORMAL, m_backgroundColour);
-
-    // setting background color has no effect with some themes when the widget style
-    // has a "background-image" property, so we need to override that as well
-
     GtkStyleContext* context = gtk_widget_get_style_context(widget);
-    if (m_styleProvider)
-        gtk_style_context_remove_provider(context, m_styleProvider);
-    cairo_pattern_t* pattern = NULL;
-    if (m_backgroundColour.IsOk())
-    {
-        gtk_style_context_save(context);
-        gtk_style_context_set_state(context, GTK_STATE_FLAG_NORMAL);
-        gtk_style_context_get(context,
-            GTK_STATE_FLAG_NORMAL, "background-image", &pattern, NULL);
-        gtk_style_context_restore(context);
-    }
-    if (pattern)
-    {
-        cairo_pattern_destroy(pattern);
-        gtk_style_context_add_provider(context,
-            m_styleProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
+    gtk_style_context_add_provider(context,
+        m_styleProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #else
     gtk_widget_modify_style(widget, style);
 #endif

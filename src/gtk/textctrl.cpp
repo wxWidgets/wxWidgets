@@ -1796,41 +1796,6 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-#ifdef __WXGTK3__
-    // Preserve selection colors, otherwise the GTK_STATE_FLAG_NORMAL override
-    // will be used, and the selection is invisible
-    const GtkStateFlags selectedFocused =
-        GtkStateFlags(GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
-    // remove any previous override
-    gtk_widget_override_color(m_text, GTK_STATE_FLAG_NORMAL, NULL);
-    gtk_widget_override_color(m_text, selectedFocused, NULL);
-    gtk_widget_override_background_color(m_text, GTK_STATE_FLAG_NORMAL, NULL);
-    gtk_widget_override_background_color(m_text, selectedFocused, NULL);
-    const bool fg_ok = m_foregroundColour.IsOk();
-    const bool bg_ok = m_backgroundColour.IsOk();
-    if (fg_ok || bg_ok)
-    {
-        GdkRGBA *fg_orig, *bg_orig;
-        GtkStyleContext* context = gtk_widget_get_style_context(m_text);
-        gtk_style_context_save(context);
-        if (IsMultiLine())
-            gtk_style_context_add_class(context, GTK_STYLE_CLASS_VIEW);
-        gtk_style_context_set_state(context, selectedFocused);
-        gtk_style_context_get(context, selectedFocused,
-            "color", &fg_orig, "background-color", &bg_orig,
-            NULL);
-        gtk_style_context_restore(context);
-
-        if (fg_ok)
-            gtk_widget_override_color(m_text, selectedFocused, fg_orig);
-        if (bg_ok)
-            gtk_widget_override_background_color(m_text, selectedFocused, bg_orig);
-
-        gdk_rgba_free(fg_orig);
-        gdk_rgba_free(bg_orig);
-    }
-#endif // __WXGTK3__
-
     GTKApplyStyle(m_text, style);
 }
 
