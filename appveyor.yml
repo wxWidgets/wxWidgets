@@ -5,6 +5,12 @@ branches:
   - master
   - WX_3_0_BRANCH
 
+skip_commits:
+  files:
+    - docs/
+    - interface/
+    - misc/
+
 environment:
   matrix:
   - TOOLSET: msbuild
