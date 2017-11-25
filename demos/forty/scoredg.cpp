@@ -47,9 +47,9 @@ ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile, const wxPoint& 
 {
     SetBackgroundColour(*wxWHITE);
 #ifdef __WXGTK__
-    m_font = wxTheFontList->FindOrCreateFont(12, wxROMAN, wxNORMAL, wxNORMAL);
+    m_font = wxTheFontList->FindOrCreateFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
 #else
-    m_font = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
+    m_font = wxTheFontList->FindOrCreateFont(wxFontInfo(10).Family(wxFONTFAMILY_SWISS));
 #endif
 
     wxArrayString players;
@@ -92,7 +92,7 @@ void ScoreCanvas::OnDraw(wxDC& dc)
     // get the line spacing for the current font
     int lineSpacing;
     {
-        long w, h;
+        wxCoord w, h;
         dc.GetTextExtent(wxT("Testing"), &w, &h);
         lineSpacing = (int)h;
     }

@@ -99,9 +99,9 @@ MainWindow *TheMainWindow = NULL;
 // Create the fonts
 void MainWindow::CreateFonts()
 {
-    m_normalFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxNORMAL, wxNORMAL);
-    m_boldFont =   wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxNORMAL, wxBOLD);
-    m_italicFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxITALIC, wxNORMAL);
+    m_normalFont = wxTheFontList->FindOrCreateFont(wxFontInfo(pointSize).Family(wxFONTFAMILY_SWISS));
+    m_boldFont =   wxTheFontList->FindOrCreateFont(wxFontInfo(pointSize).Family(wxFONTFAMILY_SWISS).Bold());
+    m_italicFont = wxTheFontList->FindOrCreateFont(wxFontInfo(pointSize).Family(wxFONTFAMILY_SWISS).Italic());
 }
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
