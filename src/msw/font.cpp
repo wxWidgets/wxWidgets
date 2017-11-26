@@ -926,7 +926,6 @@ void wxFont::SetPointSize(int pointSize)
 {
     AllocExclusive();
 
-    M_FONTDATA->Free();
     M_FONTDATA->SetPointSize(pointSize);
 }
 
@@ -941,7 +940,6 @@ void wxFont::SetPPI(int ppi)
 {
     AllocExclusive();
 
-    M_FONTDATA->Free();
     M_FONTDATA->SetPPI(ppi);
 }
 
