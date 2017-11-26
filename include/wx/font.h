@@ -558,6 +558,12 @@ public:
                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
         { return FindOrCreateFont(pointSize, (wxFontFamily)family, (wxFontStyle)style,
                                   (wxFontWeight)weight, underline, face, encoding); }
+
+    wxFont *FindOrCreateFont(const wxFontInfo& fontInfo)
+        { return FindOrCreateFont(fontInfo.GetPointSize(), fontInfo.GetFamily(),
+                                  fontInfo.GetStyle(), fontInfo.GetWeight(),
+                                  fontInfo.IsUnderlined(), fontInfo.GetFaceName(),
+                                  fontInfo.GetEncoding()); }
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;

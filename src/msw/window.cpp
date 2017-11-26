@@ -5075,8 +5075,10 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         default:
             wxFAIL_MSG( wxT("unexpected WM_SIZE parameter") );
             // fall through nevertheless
+            wxFALLTHROUGH;
 
         case SIZE_MAXHIDE:
+            wxFALLTHROUGH;
         case SIZE_MAXSHOW:
             // we're not interested in these messages at all
             break;
@@ -5088,6 +5090,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         case SIZE_MAXIMIZED:
             /* processed = */ HandleMaximize();
             // fall through to send a normal size event as well
+            wxFALLTHROUGH;
 
         case SIZE_RESTORED:
             // don't use w and h parameters as they specify the client size
@@ -5097,6 +5100,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             event.SetEventObject(this);
 
             processed = HandleWindowEvent(event);
+            break;
     }
 
     return processed;
@@ -6195,60 +6199,70 @@ WXWORD WXToVK(int wxk, bool *isExtended)
     {
         case WXK_PAGEUP:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_PAGEUP:
             vk = VK_PRIOR;
             break;
 
         case WXK_PAGEDOWN:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_PAGEDOWN:
             vk = VK_NEXT;
             break;
 
         case WXK_END:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_END:
             vk = VK_END;
             break;
 
         case WXK_HOME:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_HOME:
             vk = VK_HOME;
             break;
 
         case WXK_LEFT:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_LEFT:
             vk = VK_LEFT;
             break;
 
         case WXK_UP:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_UP:
             vk = VK_UP;
             break;
 
         case WXK_RIGHT:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_RIGHT:
             vk = VK_RIGHT;
             break;
 
         case WXK_DOWN:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_DOWN:
             vk = VK_DOWN;
             break;
 
         case WXK_INSERT:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_INSERT:
             vk = VK_INSERT;
             break;
 
         case WXK_DELETE:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_DELETE:
             vk = VK_DELETE;
             break;
@@ -6264,6 +6278,7 @@ WXWORD WXToVK(int wxk, bool *isExtended)
             {
                 vk = (WXWORD)wxk;
             }
+            break;
     }
 
     if ( isExtended )

@@ -912,6 +912,7 @@ void FormMain::OnPropertyGridColDragging( wxPropertyGridEvent& event )
 
 void FormMain::OnPropertyGridColEndDrag( wxPropertyGridEvent& event )
 {
+    wxUnusedVar(event);
     wxLogDebug(wxT("Splitter %i resize ended"), event.GetColumn());
 }
 
@@ -1788,6 +1789,7 @@ wxEND_EVENT_TABLE()
 void wxMyPropertyGridPage::OnPropertySelect( wxPropertyGridEvent& event )
 {
     wxPGProperty* p = event.GetProperty();
+    wxUnusedVar(p);
     wxLogDebug(wxT("wxMyPropertyGridPage::OnPropertySelect('%s' is %s"),
                p->GetName().c_str(),
                IsPropertySelected(p)? wxT("selected"): wxT("unselected"));

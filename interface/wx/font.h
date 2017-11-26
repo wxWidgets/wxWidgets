@@ -1261,6 +1261,14 @@ public:
                              wxFontWeight weight, bool underline = false,
                              const wxString& facename = wxEmptyString,
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+    /**
+        Finds a font of the given specification, or creates one and adds it to the
+        list. See the @ref wxFont "wxFont constructor" for details of the arguments.
+        
+        @since 3.1.1
+    */
+    wxFont* FindOrCreateFont(const wxFontInfo& fontInfo);
 };
 
 

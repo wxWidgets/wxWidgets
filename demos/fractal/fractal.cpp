@@ -149,16 +149,16 @@ MyCanvas::MyCanvas(wxFrame *frame):
  wxWindow(frame, wxID_ANY)
 {
     wxColour wxCol1(255,255,255);
-    SnowPen = wxPen(wxCol1, 2, wxSOLID);
+    SnowPen = wxPen(wxCol1, 2);
 
     wxColour wxCol2(128,0,0);
-    MtnPen = wxPen(wxCol2, 1, wxSOLID);
+    MtnPen = wxPen(wxCol2);
 
     wxColour wxCol3(0,128,0);
-    GreenPen = wxPen(wxCol3, 1, wxSOLID);
+    GreenPen = wxPen(wxCol3);
 
     wxColour wxCol4(0,0,128);
-    WaterBrush = wxBrush(wxCol4, wxSOLID);
+    WaterBrush = wxBrush(wxCol4);
 }
 
 void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))

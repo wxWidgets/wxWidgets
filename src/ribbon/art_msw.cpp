@@ -1628,6 +1628,7 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
         {
         case wxRIBBON_SCROLL_BTN_LEFT:
             rect.x++;
+            wxFALLTHROUGH;
         case wxRIBBON_SCROLL_BTN_RIGHT:
             rect.y--;
             rect.width--;
