@@ -4690,9 +4690,12 @@ void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 void wxWindowGTK::GTKApplyStyle(GtkWidget* widget, GtkRcStyle* WXUNUSED_IN_GTK3(style))
 {
 #ifdef __WXGTK3__
-    GtkStyleContext* context = gtk_widget_get_style_context(widget);
-    gtk_style_context_add_provider(context,
-        m_styleProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    if (m_styleProvider)
+    {
+        GtkStyleContext* context = gtk_widget_get_style_context(widget);
+        gtk_style_context_add_provider(context,
+            m_styleProvider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
 #else
     gtk_widget_modify_style(widget, style);
 #endif
