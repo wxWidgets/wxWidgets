@@ -463,10 +463,6 @@ void wxWindowMSW::Init()
     m_pendingPosition = wxDefaultPosition;
     m_pendingSize = wxDefaultSize;
 #endif // wxUSE_DEFERRED_SIZING
-
-    m_activeDPI = wxDefaultSize;
-    m_updatingDPI = false;
-    m_perMonitorDPIaware = false;
 }
 
 // Destructor
@@ -523,9 +519,6 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
         return false;
 
     parent->AddChild(this);
-
-    m_perMonitorDPIaware = parent->m_perMonitorDPIaware;
-    m_activeDPI = parent->m_activeDPI;
 
     WXDWORD exstyle;
     DWORD msflags = MSWGetCreateWindowFlags(&exstyle);
@@ -2951,7 +2944,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 
         case WM_DPICHANGED:
-            if (m_perMonitorDPIaware)
             {
                 int const xDPI = (int)LOWORD(wParam);
                 int const yDPI = (int)HIWORD(wParam);
@@ -4684,33 +4676,6 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 // DPI
 // ---------------------------------------------------------------------------
 
-void wxWindowMSW::MSWInheritDPI(wxWindow* parent)
-{
-    if (parent)
-    {
-        m_activeDPI = parent->m_activeDPI;
-        m_perMonitorDPIaware = parent->m_perMonitorDPIaware;
-    }
-}
-
-wxSize wxWindowMSW::MSWGetActiveDPI() const
-{
-    wxSize dpi = m_activeDPI;
-
-    if (dpi == wxDefaultSize)
-    {
-        bool temp;
-        DetermineActiveDPI(dpi, temp);
-    }
-
-    return dpi;
-}
-
-bool wxWindowMSW::MSWIsDPIUpdating() const
-{
-    return m_updatingDPI || (GetParent() && GetParent()->MSWIsDPIUpdating());
-}
-
 void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
 {
     wxSize dpi = wxDefaultSize;
@@ -4768,30 +4733,33 @@ void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware
 
 bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
 {
-    wxSize const oldDPI = m_activeDPI;
+    wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if (!tlw || !tlw->IsPerMonitorDPIAware())
+        return false;
 
-    m_updatingDPI = true;
+    wxSize const oldDPI = tlw->GetActiveDPI();
+
+    tlw->SetDPIUpdating(true);
+
+    tlw->SetActiveDPI(newDPI);
 
     if (oldDPI != newDPI)
     {
-        HandleDPIChange(this, newDPI);
+        HandleDPIChange(this, oldDPI, newDPI);
     }
 
     SetSize(newRect);
     Layout();
 
-    m_updatingDPI = false;
+    tlw->SetDPIUpdating(false);
 
     Refresh();
 
     return true;
 }
 
-void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize newDPI) const
+void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSize newDPI) const
 {
-    wxSize const oldDPI = win->m_activeDPI;
-    win->m_activeDPI = newDPI;
-
     // update min and max size
     double const scaleFactor = (double)newDPI.y / oldDPI.y;
 
@@ -4833,7 +4801,7 @@ void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize newDPI) const
         // These could be on a different monitor and will get their own dpi-changed event.
         if (childWin && !childWin->IsTopLevel())
         {
-            HandleDPIChange(childWin, newDPI);
+            HandleDPIChange(childWin, oldDPI, newDPI);
         }
 
         current = current->GetNext();

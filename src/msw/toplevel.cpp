@@ -104,6 +104,10 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsShowing = false;
 
     m_menuSystem = NULL;
+
+    m_activeDPI = wxDefaultSize;
+    m_updatingDPI = false;
+    m_perMonitorDPIaware = false;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -1149,6 +1153,39 @@ wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
 #endif // #ifndef __WXUNIVERSAL__
 
     return m_menuSystem;
+}
+
+wxSize wxTopLevelWindowMSW::GetActiveDPI() const
+{
+    wxSize dpi = m_activeDPI;
+
+    if (dpi == wxDefaultSize)
+    {
+        bool temp;
+        DetermineActiveDPI(dpi, temp);
+    }
+
+    return dpi;
+}
+
+void wxTopLevelWindowMSW::SetActiveDPI(const wxSize& dpi)
+{
+    m_activeDPI = dpi;
+}
+
+bool wxTopLevelWindowMSW::IsDPIUpdating() const
+{
+    return m_updatingDPI;
+}
+
+void wxTopLevelWindowMSW::SetDPIUpdating(const bool active)
+{
+    m_updatingDPI = active;
+}
+
+bool wxTopLevelWindowMSW::IsPerMonitorDPIAware() const
+{
+    return m_perMonitorDPIaware;
 }
 
 // ----------------------------------------------------------------------------

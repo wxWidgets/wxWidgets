@@ -299,6 +299,10 @@ public:
 
     virtual void SetRepresentedFilename(const wxString& WXUNUSED(filename)) { }
 
+    // dpi related
+    virtual wxSize GetActiveDPI() const { return wxDefaultSize; };
+    virtual bool IsDPIUpdating() const { return false; };
+
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area

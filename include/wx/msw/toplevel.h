@@ -119,6 +119,14 @@ public:
     // This function is only for internal use.
     void MSWSetShowCommand(WXUINT showCmd) { m_showCmd = showCmd; }
 
+    // dpi related
+    wxSize GetActiveDPI() const wxOVERRIDE;
+    bool IsDPIUpdating() const wxOVERRIDE;
+    bool IsPerMonitorDPIAware() const;
+
+    void SetActiveDPI(const wxSize& dpi);
+    void SetDPIUpdating(const bool active);
+
 protected:
     // common part of all ctors
     void Init();
@@ -188,6 +196,10 @@ protected:
     wxWindowRef m_winLastFocused;
 
 private:
+    // dpi related
+    wxSize                m_activeDPI;
+    bool                  m_updatingDPI;
+    bool                  m_perMonitorDPIaware;
 
     // The system menu: initially NULL but can be set (once) by
     // MSWGetSystemMenu(). Owned by this window.
