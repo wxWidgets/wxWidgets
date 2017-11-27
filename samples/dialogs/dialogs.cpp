@@ -2677,7 +2677,7 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 
 #if wxUSE_PROGRESSDLG
 
-static const int max = 100;
+static const int max_ = 100;
 
 void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 {
@@ -2686,7 +2686,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                             // messages below, we'll change it anyhow
                             // immediately in the loop below
                             wxString(' ', 100) + "\n\n\n\n",
-                            max,    // range
+                            max_,    // range
                             this,   // parent
                             wxPD_CAN_ABORT |
                             wxPD_CAN_SKIP |
@@ -2706,7 +2706,7 @@ void MyFrame::ShowProgressGeneric( wxCommandEvent& WXUNUSED(event) )
 {
     wxGenericProgressDialog dialog("Generic progress dialog example",
                                    wxString(' ', 100) + "\n\n\n\n",
-                                   max,
+                                   max_,
                                    this,
                                    wxPD_CAN_ABORT |
                                    wxPD_CAN_SKIP |
@@ -2723,15 +2723,15 @@ void MyFrame::ShowProgressGeneric( wxCommandEvent& WXUNUSED(event) )
 void MyFrame::DoShowProgress(wxGenericProgressDialog& dialog)
 {
     bool cont = true;
-    for ( int i = 0; i <= max; i++ )
+    for ( int i = 0; i <= max_; i++ )
     {
         wxString msg;
 
         // test both modes of wxProgressDialog behaviour: start in
         // indeterminate mode but switch to the determinate one later
-        const bool determinate = i > max/2;
+        const bool determinate = i > max_/2;
 
-        if ( i == max )
+        if ( i == max_ )
         {
             msg = "That's all, folks!\n"
                   "\n"
@@ -2768,10 +2768,10 @@ void MyFrame::DoShowProgress(wxGenericProgressDialog& dialog)
         // each skip will move progress about quarter forward
         if ( skip )
         {
-            i += max/4;
+            i += max_/4;
 
-            if ( i >= max )
-                i = max - 1;
+            if ( i >= max_ )
+                i = max_ - 1;
         }
 
         if ( !cont )
@@ -2794,7 +2794,7 @@ void MyFrame::DoShowProgress(wxGenericProgressDialog& dialog)
     }
     else
     {
-        wxLogStatus(wxT("Countdown from %d finished"), max);
+        wxLogStatus(wxT("Countdown from %d finished"), max_);
     }
 }
 
