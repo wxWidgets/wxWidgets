@@ -2538,6 +2538,28 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
 fi
 
 dnl ------------------------------------------------------------------------
+dnl Check for lzma library
+dnl ------------------------------------------------------------------------
+
+LZMA_LINK=
+if test "$wxUSE_LIBLZMA" = "yes"; then
+    AC_CHECK_LIB(lzma, lzma_code, LZMA_LINK=" -llzma")
+else
+    ac_configure_args="$ac_configure_args --disable-lzma"
+fi
+
+dnl ------------------------------------------------------------------------
+dnl Check for jbig library
+dnl ------------------------------------------------------------------------
+
+JBIG_LINK=
+if test "$wxUSE_LIBJBIG" = "yes"; then
+    AC_CHECK_LIB(jbig, jbg_dec_init, JBIG_LINK=" -ljbig")
+else
+    ac_configure_args="$ac_configure_args --disable-jbig"
+fi
+
+dnl ------------------------------------------------------------------------
 dnl Check for tiff library
 dnl ------------------------------------------------------------------------
 
@@ -2554,6 +2576,12 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         fi
         if test "$wxUSE_ZLIB" = "sys"; then
             TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+        fi
+        if test "$wxUSE_LIBLZMA" = "yes"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
+        fi
+        if test "$wxUSE_LIBJBIG" = "yes"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JBIG_LINK"
         fi
         AC_CHECK_HEADER(tiffio.h,
                         [
@@ -2588,24 +2616,6 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl we need to hack around this
             ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
-
-        if test "$wxUSE_LIBLZMA" = "yes"; then
-            dnl If libtiff configure detects lzma library, it enables support for
-            dnl LZMA compression and using it requires linking with liblzma.
-            AC_CHECK_LIB(lzma, lzma_code, [LIBS="$LIBS -llzma"])
-        else
-            dnl Prevent libtiff configure from looking for liblzma if it's
-            dnl explicitly disabled.
-            ac_configure_args="$ac_configure_args --disable-lzma"
-        fi
-
-        dnl Similarly for jbig
-        if test "$wxUSE_LIBJBIG" = "yes"; then
-            AC_CHECK_LIB(jbig, jbg_dec_init, [LIBS="$LIBS -ljbig"])
-        else
-            ac_configure_args="$ac_configure_args --disable-jbig"
-        fi
-
         AC_CONFIG_SUBDIRS([src/tiff])
     fi
 fi
@@ -7807,7 +7817,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"

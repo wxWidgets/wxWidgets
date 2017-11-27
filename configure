@@ -20624,6 +20624,100 @@ fi
 fi
 
 
+LZMA_LINK=
+if test "$wxUSE_LIBLZMA" = "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
+$as_echo_n "checking for lzma_code in -llzma... " >&6; }
+if ${ac_cv_lib_lzma_lzma_code+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-llzma  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char lzma_code ();
+int
+main ()
+{
+return lzma_code ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_lzma_lzma_code=yes
+else
+  ac_cv_lib_lzma_lzma_code=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lzma_lzma_code" >&5
+$as_echo "$ac_cv_lib_lzma_lzma_code" >&6; }
+if test "x$ac_cv_lib_lzma_lzma_code" = xyes; then :
+  LZMA_LINK=" -llzma"
+fi
+
+else
+    ac_configure_args="$ac_configure_args --disable-lzma"
+fi
+
+
+JBIG_LINK=
+if test "$wxUSE_LIBJBIG" = "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jbg_dec_init in -ljbig" >&5
+$as_echo_n "checking for jbg_dec_init in -ljbig... " >&6; }
+if ${ac_cv_lib_jbig_jbg_dec_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ljbig  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char jbg_dec_init ();
+int
+main ()
+{
+return jbg_dec_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_jbig_jbg_dec_init=yes
+else
+  ac_cv_lib_jbig_jbg_dec_init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_jbig_jbg_dec_init" >&5
+$as_echo "$ac_cv_lib_jbig_jbg_dec_init" >&6; }
+if test "x$ac_cv_lib_jbig_jbg_dec_init" = xyes; then :
+  JBIG_LINK=" -ljbig"
+fi
+
+else
+    ac_configure_args="$ac_configure_args --disable-jbig"
+fi
+
+
 TIFF_LINK=
 TIFF_PREREQ_LINKS=-lm
 if test "$wxUSE_LIBTIFF" != "no" ; then
@@ -20636,6 +20730,12 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         fi
         if test "$wxUSE_ZLIB" = "sys"; then
             TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+        fi
+        if test "$wxUSE_LIBLZMA" = "yes"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
+        fi
+        if test "$wxUSE_LIBJBIG" = "yes"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JBIG_LINK"
         fi
         ac_fn_c_check_header_compile "$LINENO" "tiffio.h" "ac_cv_header_tiffio_h" "
 
@@ -20703,97 +20803,6 @@ $as_echo "$as_me: WARNING: system tiff library not found, will use built-in inst
         if test "$wxUSE_LIBJPEG" = "no"; then
                                                                                     ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
-
-        if test "$wxUSE_LIBLZMA" = "yes"; then
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
-$as_echo_n "checking for lzma_code in -llzma... " >&6; }
-if ${ac_cv_lib_lzma_lzma_code+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-llzma  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char lzma_code ();
-int
-main ()
-{
-return lzma_code ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_lzma_lzma_code=yes
-else
-  ac_cv_lib_lzma_lzma_code=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lzma_lzma_code" >&5
-$as_echo "$ac_cv_lib_lzma_lzma_code" >&6; }
-if test "x$ac_cv_lib_lzma_lzma_code" = xyes; then :
-  LIBS="$LIBS -llzma"
-fi
-
-        else
-                                    ac_configure_args="$ac_configure_args --disable-lzma"
-        fi
-
-                if test "$wxUSE_LIBJBIG" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jbg_dec_init in -ljbig" >&5
-$as_echo_n "checking for jbg_dec_init in -ljbig... " >&6; }
-if ${ac_cv_lib_jbig_jbg_dec_init+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ljbig  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char jbg_dec_init ();
-int
-main ()
-{
-return jbg_dec_init ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_jbig_jbg_dec_init=yes
-else
-  ac_cv_lib_jbig_jbg_dec_init=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_jbig_jbg_dec_init" >&5
-$as_echo "$ac_cv_lib_jbig_jbg_dec_init" >&6; }
-if test "x$ac_cv_lib_jbig_jbg_dec_init" = xyes; then :
-  LIBS="$LIBS -ljbig"
-fi
-
-        else
-            ac_configure_args="$ac_configure_args --disable-jbig"
-        fi
-
 
 
 subdirs="$subdirs src/tiff"
@@ -35883,7 +35892,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
