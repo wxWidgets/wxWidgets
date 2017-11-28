@@ -536,7 +536,11 @@ typedef pid_t GPid;
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
+#ifndef VMS_GTK2
+#define wxUSE_PRIVATE_FONTS 0
+#else
 #define wxUSE_PRIVATE_FONTS 1
+#endif
 
 #if defined (__WXMOTIF__)
 #define wxUSE_RICHTOOLTIP 0
