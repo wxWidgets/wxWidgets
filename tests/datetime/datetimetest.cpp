@@ -1628,10 +1628,15 @@ TEST_CASE("wxDateTime::SetOnDST", "[datetime][dst]")
         return;
     }
 
-    // End DST is the 2nd 1am after DST ends so go back an hour to the first 1am
-    DoTestSetFunctionsOnDST(dst - wxTimeSpan::Hour());
+    SECTION("An hour before DST end")
+    {
+        DoTestSetFunctionsOnDST(dst - wxTimeSpan::Hour());
+    }
 
-    DoTestSetFunctionsOnDST(dst);
+    SECTION("At DST end")
+    {
+        DoTestSetFunctionsOnDST(dst);
+    }
 }
 
 #endif // wxUSE_DATETIME
