@@ -1589,7 +1589,6 @@ static void DoTestSetFunctionsOnDST(const wxDateTime &orig)
         wxDateTime copy = orig; \
         copy.func; \
         INFO("Original date=" << orig << ", modified=" << copy); \
-        CHECK(orig.IsDST() == copy.IsDST()); \
         CHECK(orig.GetHour() == copy.GetHour()); \
     }
 
