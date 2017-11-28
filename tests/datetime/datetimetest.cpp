@@ -1588,6 +1588,7 @@ static void DoTestSetFunctionsOnDST(const wxDateTime &orig)
     { \
         wxDateTime copy = orig; \
         copy.func; \
+        INFO("Original date=" << orig << ", modified=" << copy); \
         CHECK(orig.IsDST() == copy.IsDST()); \
         CHECK(orig.GetHour() == copy.GetHour()); \
     }
@@ -1612,6 +1613,7 @@ static void DoTestSetFunctionsOnDST(const wxDateTime &orig)
         // Special case for set hour since it's ambiguous at DST we don't care if IsDST matches
         wxDateTime copy = orig;
         copy.SetHour(orig.GetHour());
+        INFO("Original date=" << orig << ", modified=" << copy);
         CHECK(orig.GetHour() == copy.GetHour());
     }
 #undef DST_TEST_FUN
