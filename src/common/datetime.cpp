@@ -1430,6 +1430,24 @@ unsigned long wxDateTime::GetAsDOS() const
 // time_t <-> broken down time conversions
 // ----------------------------------------------------------------------------
 
+const tm* wxTryGetTm(tm& tmstruct, time_t t, const wxDateTime::TimeZone& tz)
+{
+    if ( tz.GetOffset() == -wxGetTimeZone() )
+    {
+        // we are working with local time
+        return wxLocaltime_r(&t, &tmstruct);
+    }
+    else
+    {
+        t += (time_t)tz.GetOffset();
+#if !defined(__VMS__) // time is unsigned so avoid warning
+        if ( t < 0 )
+            return NULL;
+#endif
+        return wxGmtime_r(&t, &tmstruct);
+    }
+}
+
 wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
 {
     wxASSERT_MSG( IsValid(), wxT("invalid wxDateTime") );
@@ -1437,39 +1455,9 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     time_t time = GetTicks();
     if ( time != (time_t)-1 )
     {
-        // use C RTL functions
+        // Try to use the RTL.
         struct tm tmstruct;
-        tm *tm;
-        if ( tz.GetOffset() == -wxGetTimeZone() )
-        {
-            // we are working with local time
-            tm = wxLocaltime_r(&time, &tmstruct);
-
-            // should never happen
-            wxCHECK_MSG( tm, Tm(), wxT("wxLocaltime_r() failed") );
-        }
-        else
-        {
-            time += (time_t)tz.GetOffset();
-#if defined(__VMS__) // time is unsigned so avoid warning
-            int time2 = (int) time;
-            if ( time2 >= 0 )
-#else
-            if ( time >= 0 )
-#endif
-            {
-                tm = wxGmtime_r(&time, &tmstruct);
-
-                // should never happen
-                wxCHECK_MSG( tm, Tm(), wxT("wxGmtime_r() failed") );
-            }
-            else
-            {
-                tm = (struct tm *)NULL;
-            }
-        }
-
-        if ( tm )
+        if ( const tm* tm = wxTryGetTm(tmstruct, time, tz) )
         {
             // adjust the milliseconds
             Tm tm2(*tm, tz);
