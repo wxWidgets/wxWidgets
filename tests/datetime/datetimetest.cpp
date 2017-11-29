@@ -665,6 +665,15 @@ void DateTimeTestCase::TestTimeFormat()
         CompareTime         // time only
     };
 
+    const char* const compareKindStrings[] =
+    {
+        "nothing",
+        "both date and time",
+        "both date and time but without century",
+        "only dates",
+        "only times",
+    };
+
     static const struct
     {
         CompareKind compareKind;
@@ -785,13 +794,16 @@ void DateTimeTestCase::TestTimeFormat()
                     if ( !strstr(fmt, "%z") && !isLocalTz )
                         dt2.MakeFromTimezone(tz);
 
+                    INFO("Comparing " << compareKindStrings[kind] << " for "
+                            << dt << " with " << dt2
+                            << " (format result=\"" << s << "\")");
+
                     switch ( kind )
                     {
                         case CompareYear:
                             if ( dt2.GetCentury() != dt.GetCentury() )
                             {
-                                CPPUNIT_ASSERT_EQUAL(dt.GetYear() % 100,
-                                                     dt2.GetYear() % 100);
+                                CHECK( dt.GetYear() % 100 == dt2.GetYear() % 100);
 
                                 dt2.SetYear(dt.GetYear());
                             }
@@ -799,15 +811,15 @@ void DateTimeTestCase::TestTimeFormat()
                             wxFALLTHROUGH;
 
                         case CompareBoth:
-                            CPPUNIT_ASSERT_EQUAL( dt, dt2 );
+                            CHECK( dt == dt2 );
                             break;
 
                         case CompareDate:
-                            CPPUNIT_ASSERT( dt.IsSameDate(dt2) );
+                            CHECK( dt.IsSameDate(dt2) );
                             break;
 
                         case CompareTime:
-                            CPPUNIT_ASSERT( dt.IsSameTime(dt2) );
+                            CHECK( dt.IsSameTime(dt2) );
                             break;
 
                         case CompareNone:
