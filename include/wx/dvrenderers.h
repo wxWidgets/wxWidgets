@@ -81,7 +81,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 // wxDataViewCheckIconText: value class used by wxDataViewCheckIconTextRenderer
 // ----------------------------------------------------------------------------
 
-class wxDataViewCheckIconText : public wxDataViewIconText
+class WXDLLIMPEXP_ADV wxDataViewCheckIconText : public wxDataViewIconText
 {
 public:
     wxDataViewCheckIconText(const wxString& text = wxString(),
