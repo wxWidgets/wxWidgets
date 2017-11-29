@@ -301,15 +301,13 @@ void DateTimeTestCase::TestTimeSet()
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d1 = testDates[n];
-        wxDateTime dt = d1.DT();
+        const wxDateTime dt = d1.DT();
 
         Date d2;
         d2.Init(dt.GetTm());
 
-        wxString s1 = d1.Format(),
-                 s2 = d2.Format();
-
-        CPPUNIT_ASSERT_EQUAL( s1, s2 );
+        INFO("n=" << n);
+        CHECK( d1.Format() == d2.Format() );
     }
 }
 
@@ -324,10 +322,11 @@ void DateTimeTestCase::TestTimeJDN()
         // JDNs must be computed for UTC times
         double jdn = dt.FromUTC().GetJulianDayNumber();
 
-        CPPUNIT_ASSERT_EQUAL( d.jdn, jdn );
+        INFO("n=" << n);
+        CHECK( d.jdn == jdn );
 
         dt.Set(jdn);
-        CPPUNIT_ASSERT_EQUAL( jdn, dt.GetJulianDayNumber() );
+        CHECK( jdn == dt.GetJulianDayNumber() );
     }
 }
 
@@ -341,8 +340,10 @@ void DateTimeTestCase::TestTimeWDays()
         const Date& d = testDates[n];
         wxDateTime dt(d.day, d.month, d.year, d.hour, d.min, d.sec);
 
+        INFO("n=" << n);
+
         wxDateTime::WeekDay wday = dt.GetWeekDay();
-        CPPUNIT_ASSERT_EQUAL( d.wday, wday );
+        CHECK( d.wday == wday );
     }
 
     // test SetToWeekDay()
@@ -1020,16 +1021,18 @@ void DateTimeTestCase::TestTimeTicks()
 
         wxDateTime dt = d.DT().MakeTimezone(TZ_TEST, true /* no DST */);
 
+        INFO("n=" << n);
+
         // GetValue() returns internal UTC-based representation, we need to
         // convert it to local TZ before comparing
         time_t ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
         if ( dt.IsDST() )
             ticks += 3600;
-        CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks + tzOffset );
+        CHECK( d.gmticks == ticks + tzOffset );
 
         dt = d.DT().FromTimezone(wxDateTime::UTC);
         ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks );
+        CHECK( d.gmticks == ticks );
     }
 }
 
