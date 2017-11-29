@@ -2094,11 +2094,11 @@ wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
 {
     long secDiff = wxGetTimeZone() + tz.GetOffset();
 
-    // We are converting from the local time, but local time zone does not
-    // include the DST offset (as it varies depending on the date), so we have
-    // to handle DST manually, unless a special flag inhibiting this was
-    // specified.
-    if ( !noDST && (IsDST() == 1) )
+    // We are converting from the local time to some other time zone, but local
+    // time zone does not include the DST offset (as it varies depending on the
+    // date), so we have to handle DST manually, unless a special flag
+    // inhibiting this was specified.
+    if ( !noDST && (IsDST() == 1) && !tz.IsLocal() )
     {
         secDiff -= DST_OFFSET;
     }
@@ -2111,7 +2111,7 @@ wxDateTime& wxDateTime::MakeFromTimezone(const TimeZone& tz, bool noDST)
     long secDiff = wxGetTimeZone() + tz.GetOffset();
 
     // See comment in MakeTimezone() above, the logic here is exactly the same.
-    if ( !noDST && (IsDST() == 1) )
+    if ( !noDST && (IsDST() == 1) && !tz.IsLocal() )
     {
         secDiff -= DST_OFFSET;
     }

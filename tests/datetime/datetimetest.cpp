@@ -1565,21 +1565,20 @@ void DateTimeTestCase::TestTranslateFromUnicodeFormat()
 
 void DateTimeTestCase::TestConvToFromLocalTZ()
 {
-    // Choose a date when the DST is on in many time zones: in this case,
-    // converting to/from local TZ does modify the object because it
-    // adds/subtracts DST to/from it, so to get the expected results we need to
-    // explicitly disable DST support in these functions.
+    // Choose a date when the DST is on in many time zones and verify that
+    // converting from/to local time zone still doesn't modify time in this
+    // case as this used to be broken.
     wxDateTime dt(18, wxDateTime::Apr, 2017, 19);
 
-    CPPUNIT_ASSERT_EQUAL( dt.FromTimezone(wxDateTime::Local, true), dt );
-    CPPUNIT_ASSERT_EQUAL( dt.ToTimezone(wxDateTime::Local, true), dt );
+    CHECK( dt.FromTimezone(wxDateTime::Local) == dt );
+    CHECK( dt.ToTimezone(wxDateTime::Local) == dt );
 
-    // And another one when it is off: in this case, there is no need to pass
-    // "true" as "noDST" argument to these functions.
+    // For a date when the DST is not used, this always worked, but still
+    // verify that it continues to.
     dt = wxDateTime(18, wxDateTime::Jan, 2018, 19);
 
-    CPPUNIT_ASSERT_EQUAL( dt.FromTimezone(wxDateTime::Local), dt );
-    CPPUNIT_ASSERT_EQUAL( dt.ToTimezone(wxDateTime::Local), dt );
+    CHECK( dt.FromTimezone(wxDateTime::Local) == dt );
+    CHECK( dt.ToTimezone(wxDateTime::Local) == dt );
 }
 
 static void DoTestSetFunctionsOnDST(const wxDateTime &orig)

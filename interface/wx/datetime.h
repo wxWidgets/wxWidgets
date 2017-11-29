@@ -1257,10 +1257,7 @@ public:
 
         If @a noDST is @true, no DST adjustments will be made.
 
-        Notice using wxDateTime::Local for @a tz parameter doesn't really make
-        sense and may result in unexpected results as it will return a
-        different object when DST is in use and @a noDST has its default value
-        of @false.
+        If @a tz parameter is wxDateTime::Local, no adjustment is performed.
 
         @return The date adjusted by the different between the given and the
         local time zones.
@@ -1297,9 +1294,7 @@ public:
 
         If @a noDST is @true, no DST adjustments will be made.
 
-        Notice that, as with FromTimezone(), using wxDateTime::Local as @a tz
-        doesn't really make sense and may return a different object when DST is
-        in effect and @a noDST is @false.
+        If @a tz parameter is wxDateTime::Local, no adjustment is performed.
 
         @return The date adjusted by the different between the local and the
         given time zones.
