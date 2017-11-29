@@ -456,9 +456,8 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
     switch ( tz )
     {
         case wxDateTime::Local:
-            // get the offset from C RTL: it returns the difference GMT-local
-            // while we want to have the offset _from_ GMT, hence the '-'
-            m_offset = -wxGetTimeZone();
+            // Use a special value for local time zone.
+            m_offset = -1;
             break;
 
         case wxDateTime::GMT_12:
@@ -501,6 +500,13 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
         default:
             wxFAIL_MSG( wxT("unknown time zone") );
     }
+}
+
+long wxDateTime::TimeZone::GetOffset() const
+{
+    // get the offset from C RTL: it returns the difference GMT-local
+    // while we want to have the offset _from_ GMT, hence the '-'
+    return m_offset == -1 ? -wxGetTimeZone() : m_offset;
 }
 
 // ----------------------------------------------------------------------------
@@ -1432,7 +1438,7 @@ unsigned long wxDateTime::GetAsDOS() const
 
 const tm* wxTryGetTm(tm& tmstruct, time_t t, const wxDateTime::TimeZone& tz)
 {
-    if ( tz.GetOffset() == -wxGetTimeZone() )
+    if ( tz.IsLocal() )
     {
         // we are working with local time
         return wxLocaltime_r(&t, &tmstruct);

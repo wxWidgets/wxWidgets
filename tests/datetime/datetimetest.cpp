@@ -683,7 +683,7 @@ void DateTimeTestCase::TestTimeFormat()
 
     const long timeZonesOffsets[] =
     {
-        wxDateTime::TimeZone(wxDateTime::Local).GetOffset(),
+        -1, // This is pseudo-offset used for local time zone
 
         // Fictitious TimeZone offsets to ensure time zone formating and
         // interpretation works
@@ -1635,6 +1635,29 @@ TEST_CASE("wxDateTime::SetOnDST", "[datetime][dst]")
     SECTION("At DST end")
     {
         DoTestSetFunctionsOnDST(dst);
+    }
+}
+
+// Tests random problems that used to appear in BST time zone during DST.
+// This test is disabled by default as it only passes in BST time zone, due to
+// the times hard-coded in it.
+TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
+{
+    SECTION("bug-17220")
+    {
+        wxDateTime dt;
+        dt.Set(22, wxDateTime::Oct, 2015, 10, 10, 10, 10);
+        REQUIRE( dt.IsDST() );
+
+        CHECK( dt.GetTm().hour == 10 );
+        CHECK( dt.GetTm(wxDateTime::UTC).hour == 9 );
+
+        CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::Local ) == "2015-10-22 10:10:10" );
+        CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::UTC   ) == "2015-10-22 09:10:10" );
+
+        dt.MakeFromUTC();
+        CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::Local ) == "2015-10-22 11:10:10" );
+        CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::UTC   ) == "2015-10-22 10:10:10" );
     }
 }
 

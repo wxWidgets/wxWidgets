@@ -254,6 +254,17 @@ public:
         /// Create a time zone with the given offset in seconds.
         static TimeZone Make(long offset);
 
+        /**
+            Return true if this is the local time zone.
+
+            This method can be useful for distinguishing between UTC time zone
+            and local time zone in Great Britain, which use the same offset as
+            UTC (i.e. 0), but do use DST.
+
+            @since 3.1.1
+         */
+        bool IsLocal() const;
+
         /// Return the offset of this time zone from UTC, in seconds.
         long GetOffset() const;
     };
