@@ -3104,6 +3104,12 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSView);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLContext);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLPixelFormat);
 DECLARE_WXCOCOA_OBJC_CLASS( NSPrintInfo );
+DECLARE_WXCOCOA_OBJC_CLASS(NSGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSPanGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSMagnificationGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSRotationGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSPressGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSTouch);
 #endif /* __WXMAC__ &__DARWIN__ */
 
 #ifdef __WXMAC__
@@ -3267,6 +3273,7 @@ typedef struct _GdkDragContext  GdkDragContext;
 
 #if defined(__WXGTK3__)
     typedef struct _GdkWindow GdkWindow;
+    typedef struct _GdkEventSequence GdkEventSequence;
 #elif defined(__WXGTK20__)
     typedef struct _GdkDrawable GdkWindow;
     typedef struct _GdkDrawable GdkPixmap;

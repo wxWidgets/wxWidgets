@@ -355,6 +355,16 @@ public:
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
+#if defined(__WXGTK3__)
+    unsigned int         m_touchCount;
+    unsigned int         m_lastTouchTime;
+    int                  m_gestureState;
+    int                  m_allowedGestures;
+    int                  m_activeGestures;
+    wxPoint              m_lastTouchPoint;
+    GdkEventSequence*    m_touchSequence;
+#endif
+
 protected:
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,
