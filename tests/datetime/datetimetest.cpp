@@ -722,7 +722,7 @@ void DateTimeTestCase::TestTimeFormat()
     for ( unsigned idxtz = 0; idxtz < WXSIZEOF(timeZonesOffsets); ++idxtz )
     {
         wxDateTime::TimeZone tz(timeZonesOffsets[idxtz]);
-        const bool isLocalTz = tz.GetOffset() == -wxGetTimeZone();
+        const bool isLocalTz = tz.IsLocal();
 
         for ( size_t d = 0; d < WXSIZEOF(formatTestDates); d++ )
         {
