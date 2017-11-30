@@ -182,7 +182,7 @@ private:
     // the button used to highlight the event handlers execution order
     MyEvtTestButton *m_testBtn;
 
-    MyGestureFrame *m_gestureFrame;
+    wxWindowRef m_gestureFrame;
 
 
     // any class wishing to process wxWidgets events must use this macro
@@ -457,7 +457,8 @@ MyFrame::~MyFrame()
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // true is to force the frame to close
+    if ( m_gestureFrame )
+        m_gestureFrame->Close(true);
     Close(true);
 }
 
@@ -589,8 +590,15 @@ void MyFrame::OnPopEventHandler(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnGesture(wxCommandEvent& WXUNUSED(event))
 {
-    m_gestureFrame = new MyGestureFrame();
-    m_gestureFrame->Show(true);
+    if ( m_gestureFrame )
+    {
+        m_gestureFrame->Raise();
+    }
+    else
+    {
+        m_gestureFrame = new MyGestureFrame();
+        m_gestureFrame->Show(true);
+    }
 }
 
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
