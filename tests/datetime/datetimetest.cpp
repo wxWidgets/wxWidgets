@@ -1019,32 +1019,17 @@ void DateTimeTestCase::TestTimeSpanFormat()
 
 void DateTimeTestCase::TestTimeTicks()
 {
-    static const wxDateTime::TimeZone TZ_LOCAL(wxDateTime::Local);
-    static const wxDateTime::TimeZone TZ_TEST(wxDateTime::NZST);
-
-    // this offset is needed to make the test work in any time zone when we
-    // only have expected test results in UTC in testDates
-    static const long tzOffset = TZ_LOCAL.GetOffset() - TZ_TEST.GetOffset();
-
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d = testDates[n];
         if ( d.gmticks == -1 )
             continue;
 
-        wxDateTime dt = d.DT().MakeTimezone(TZ_TEST, true /* no DST */);
+        const wxDateTime dt = d.DT().FromTimezone(wxDateTime::UTC);
 
         INFO("n=" << n);
 
-        // GetValue() returns internal UTC-based representation, we need to
-        // convert it to local TZ before comparing
-        time_t ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
-        if ( dt.IsDST() )
-            ticks += 3600;
-        CHECK( d.gmticks == ticks + tzOffset );
-
-        dt = d.DT().FromTimezone(wxDateTime::UTC);
-        ticks = (dt.GetValue() / 1000).ToLong();
+        time_t ticks = (dt.GetValue() / 1000).ToLong();
         CHECK( d.gmticks == ticks );
     }
 }
