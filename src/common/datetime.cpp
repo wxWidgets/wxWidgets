@@ -2081,10 +2081,28 @@ int wxDateTime::IsDST(wxDateTime::Country country) const
     {
         int year = GetYear();
 
-        if ( !IsDSTApplicable(year, country) )
+        country = GetCountry();
+        switch ( country )
         {
-            // no DST time in this year in this country
-            return -1;
+            case UK:
+                // There is a special, but important, case of UK which was
+                // permanently on BST, i.e. using DST, during this period. It
+                // is important because it covers Unix epoch and without
+                // accounting for the DST during it, various tests done around
+                // the epoch time would fail in BST time zone (only!).
+                if ( IsEarlierThan(wxDateTime(31, Oct, 1971)) &&
+                        IsLaterThan(wxDateTime(27, Oct, 1968)) )
+                {
+                    return true;
+                }
+                wxFALLTHROUGH;
+
+            default:
+                if ( !IsDSTApplicable(year, country) )
+                {
+                    // no DST time in this year in this country
+                    return -1;
+                }
         }
 
         return IsBetween(GetBeginDST(year, country), GetEndDST(year, country));
