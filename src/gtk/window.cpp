@@ -3509,6 +3509,8 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
 
     wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
 
+    gtk_widget_add_events(widget, GDK_TOUCHPAD_GESTURE_MASK);
+
     g_signal_connect (widget, "touch-event",
                       G_CALLBACK(touch_callback), win);
 }
@@ -3520,6 +3522,11 @@ void wxWindowGesturesData::Free()
     g_clear_object(&m_zoom_gesture);
     g_clear_object(&m_rotate_gesture);
     g_clear_object(&m_long_press_gesture);
+
+    // We don't current remove GDK_TOUCHPAD_GESTURE_MASK as this can't be done
+    // for a window as long as it's realized, and this might still be the case
+    // if we're called from EnableTouchEvents(wxTOUCH_NONE) and not from the
+    // dtor, but it shouldn't really be a problem.
 }
 
 #endif // wxGTK_HAS_GESTURES_SUPPORT
