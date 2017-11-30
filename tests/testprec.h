@@ -4,6 +4,10 @@
 #include "wx/wxprec.h"
 #include "wx/stopwatch.h"
 #include "wx/evtloop.h"
+
+// This needs to be included before catch.hpp to be taken into account.
+#include "testdate.h"
+
 #include "wx/catch_cppunit.h"
 
 // Custom test macro that is only defined when wxUIActionSimulator is available

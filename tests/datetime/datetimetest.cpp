@@ -24,8 +24,6 @@
 
 #include "wx/wxcrt.h"       // for wxStrstr()
 
-#include "testdate.h"
-
 // to test Today() meaningfully we must be able to change the system date which
 // is not usually the case, but if we're under Win32 we can try it -- define
 // the macro below to do it
