@@ -1248,6 +1248,10 @@ public:
         for more information about time zones. Normally, these functions should
         be rarely used.
 
+        Note that all functions in this section always use the current offset
+        for the specified time zone and don't take into account its possibly
+        different historical value at the given date.
+
         Related functions in other groups: GetBeginDST(), GetEndDST()
     */
     //@{
