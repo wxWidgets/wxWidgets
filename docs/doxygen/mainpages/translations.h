@@ -451,7 +451,7 @@ Here are the steps you should follow:
    <a href="https://www.wxwidgets.org/develop/code-repository/">git</a>   
    you should already have it. Otherwise you can always retrieve it directly 
    from the git repository
-   <a href="https://raw.githubusercontent.com/wxWidgets/wxWidgets/WX_3_0_BRANCH/locale/wxstd.pot=co">Web interface</a>.
+   <a href="https://raw.githubusercontent.com/wxWidgets/wxWidgets/WX_3_0_BRANCH/locale/wxstd.pot">locale/wxstd.pot</a>.
 -# Rename it to <tt>XY.po</tt> where <tt>"XY"</tt> is the 2 letter
    <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-2 language code</a>
    for your language.
