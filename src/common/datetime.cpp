@@ -341,6 +341,33 @@ void wxInitTm(struct tm& tm)
     tm.tm_isdst = -1; // auto determine
 }
 
+// Internal helper function called only for times outside of standard time_t
+// range.
+//
+// It is just a hack to work around the fact that we can't call IsDST() and
+// related methods from GetTm() for the reasons explained there.
+static int GetDSTOffset(wxLongLong t)
+{
+    bool isDST = false;
+
+    switch ( wxDateTime::GetCountry() )
+    {
+        case wxDateTime::UK:
+            // We don't need to check for the end value in 1971 as this is
+            // inside the standard range, so check just for beginning of the
+            // permanent BST period in UK, see IsDST().
+            if ( t < 0 &&
+                    t >= wxDateTime(27, wxDateTime::Oct, 1968).GetValue() )
+                isDST = true;
+            break;
+
+        default:
+            break;
+    }
+
+    return isDST ? wxDateTime::DST_OFFSET : 0;
+}
+
 // ============================================================================
 // implementation of wxDateTime
 // ============================================================================
@@ -1475,10 +1502,20 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         //else: use generic code below
     }
 
+    long secDiff = tz.GetOffset();
+
+    // We need to account for DST as always when converting to broken down time
+    // components, but we can't call IsDST() from here because this would
+    // result in infinite recursion as IsDST() starts by calling GetYear()
+    // which just calls back to this function. So call a special function which
+    // is used just here to determine the DST offset to add.
+    if ( tz.IsLocal() )
+        secDiff += GetDSTOffset(m_time);
+
+    wxLongLong timeMidnight = m_time + secDiff * 1000;
+
     // remember the time and do the calculations with the date only - this
     // eliminates rounding errors of the floating point arithmetics
-
-    wxLongLong timeMidnight = m_time + tz.GetOffset() * 1000;
 
     long timeOnly = (timeMidnight % MILLISECONDS_PER_DAY).ToLong();
 
