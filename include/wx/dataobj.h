@@ -549,7 +549,7 @@ private:
     // wxURLDataObject defined in msw/ole/dataobj2.h
 #elif defined(__WXGTK20__)
     #include "wx/gtk/dataobj2.h"
-    // wxURLDataObject defined in msw/ole/dataobj2.h
+    // wxURLDataObject defined in gtk/dataobj2.h
 
 #else
     #if defined(__WXGTK__)
