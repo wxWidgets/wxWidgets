@@ -277,7 +277,7 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
 
 // this function is a wrapper around strftime(3) adding error checking
 // NOTE: not static because used by datetimefmt.cpp
-wxString CallStrftime(const wxString& format, const tm* tm)
+wxString wxCallStrftime(const wxString& format, const tm* tm)
 {
     wxChar buf[4096];
     // Create temp wxString here to work around mingw/cygwin bug 1046059
@@ -330,7 +330,7 @@ static void ReplaceDefaultYearMonthWithCurrent(int *year,
 
 // fill the struct tm with default values
 // NOTE: not static because used by datetimefmt.cpp
-void InitTm(struct tm& tm)
+void wxInitTm(struct tm& tm)
 {
     // struct tm may have etxra fields (undocumented and with unportable
     // names) which, nevertheless, must be set to 0
@@ -749,10 +749,10 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
     // notice that we must set all the fields to avoid confusing libc (GNU one
     // gets confused to a crash if we don't do this)
     tm tm;
-    InitTm(tm);
+    wxInitTm(tm);
     tm.tm_mon = month;
 
-    return CallStrftime(flags == Name_Abbr ? wxT("%b") : wxT("%B"), &tm);
+    return wxCallStrftime(flags == Name_Abbr ? wxS("%b") : wxS("%B"), &tm);
 #else // !wxHAS_STRFTIME
     return GetEnglishMonthName(month, flags);
 #endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
@@ -788,7 +788,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
     // after adding wday to it below we still have a valid date, e.g. don't
     // take 28 here!)
     tm tm;
-    InitTm(tm);
+    wxInitTm(tm);
     tm.tm_mday = 21;
     tm.tm_mon = Nov;
     tm.tm_year = 99;
@@ -800,7 +800,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
     (void)mktime(&tm);
 
     // ... and call strftime()
-    return CallStrftime(flags == Name_Abbr ? wxT("%a") : wxT("%A"), &tm);
+    return wxCallStrftime(flags == Name_Abbr ? wxS("%a") : wxS("%A"), &tm);
 #else // !wxHAS_STRFTIME
     return GetEnglishWeekDayName(wday, flags);
 #endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
@@ -810,7 +810,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
 void wxDateTime::GetAmPmStrings(wxString *am, wxString *pm)
 {
     tm tm;
-    InitTm(tm);
+    wxInitTm(tm);
     wxChar buffer[64];
     // @Note: Do not call 'CallStrftime' here! CallStrftime checks the return code
     // and causes an assertion failed if the buffer is to small (which is good) - OR -
@@ -854,7 +854,7 @@ wxDateTime::Country wxDateTime::GetCountry()
         struct tm tmstruct;
         struct tm *tm = wxLocaltime_r(&t, &tmstruct);
 
-        wxString tz = CallStrftime(wxT("%Z"), tm);
+        wxString tz = wxCallStrftime(wxS("%Z"), tm);
         if ( tz == wxT("WET") || tz == wxT("WEST") )
         {
             ms_country = UK;
@@ -1364,7 +1364,7 @@ wxDateTime wxDateTime::GetDateOnly() const
 wxDateTime& wxDateTime::SetFromDOS(unsigned long ddt)
 {
     struct tm tm;
-    InitTm(tm);
+    wxInitTm(tm);
 
     long year = ddt & 0xFE000000;
     year >>= 25;

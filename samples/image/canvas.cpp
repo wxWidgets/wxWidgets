@@ -253,7 +253,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     }
 #endif
 
-#if wxUSE_LIBTIFF
+#if wxUSE_TGA
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxT("horse.tga"), wxBITMAP_TYPE_TGA ) )

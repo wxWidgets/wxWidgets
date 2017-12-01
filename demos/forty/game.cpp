@@ -215,7 +215,7 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
 void Game::DisplayScore(wxDC& dc)
 {
     wxColour bgColour = FortyApp::BackgroundColour();
-    wxPen* pen = wxThePenList->FindOrCreatePen(bgColour, 1, wxSOLID);
+    wxPen* pen = wxThePenList->FindOrCreatePen(bgColour);
     dc.SetTextBackground(bgColour);
     dc.SetTextForeground(FortyApp::TextColour());
     dc.SetBrush(FortyApp::BackgroundBrush());

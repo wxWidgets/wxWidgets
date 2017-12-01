@@ -102,8 +102,6 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsMaximized = false;
     m_fsIsShowing = false;
 
-    m_winLastFocused = NULL;
-
     m_menuSystem = NULL;
 }
 
@@ -988,10 +986,11 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
     DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG);
 }
 
-bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
+// static
+bool wxTopLevelWindowMSW::MSWEnableCloseButton(WXHWND hwnd, bool enable)
 {
     // get system (a.k.a. window) menu
-    HMENU hmenu = GetSystemMenu(GetHwnd(), FALSE /* get it */);
+    HMENU hmenu = GetSystemMenu(hwnd, FALSE /* get it */);
     if ( !hmenu )
     {
         // no system menu at all -- ok if we want to remove the close button
@@ -1010,12 +1009,17 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
         return false;
     }
     // update appearance immediately
-    if ( !::DrawMenuBar(GetHwnd()) )
+    if ( !::DrawMenuBar(hwnd) )
     {
         wxLogLastError(wxT("DrawMenuBar"));
     }
 
     return true;
+}
+
+bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
+{
+    return MSWEnableCloseButton(GetHwnd(), enable);
 }
 
 // Window must have wxCAPTION and either wxCLOSE_BOX or wxSYSTEM_MENU for the
@@ -1195,7 +1199,9 @@ void wxTopLevelWindowMSW::DoRestoreLastFocus()
         parent = this;
     }
 
-    wxSetFocusToChild(parent, &m_winLastFocused);
+    wxWindow* winPtr = m_winLastFocused;
+    wxSetFocusToChild(parent, &winPtr);
+    m_winLastFocused = winPtr;
 }
 
 void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)

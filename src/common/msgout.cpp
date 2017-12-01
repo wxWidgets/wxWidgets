@@ -133,10 +133,10 @@ void wxMessageOutputBest::Output(const wxString& str)
 }
 
 // ----------------------------------------------------------------------------
-// wxMessageOutputStderr
+// wxMessageOutputWithConv
 // ----------------------------------------------------------------------------
 
-wxString wxMessageOutputStderr::AppendLineFeedIfNeeded(const wxString& str)
+wxString wxMessageOutputWithConv::AppendLineFeedIfNeeded(const wxString& str)
 {
     wxString strLF(str);
     if ( strLF.empty() || *strLF.rbegin() != '\n' )
@@ -145,11 +145,37 @@ wxString wxMessageOutputStderr::AppendLineFeedIfNeeded(const wxString& str)
     return strLF;
 }
 
+wxCharBuffer wxMessageOutputWithConv::PrepareForOutput(const wxString& str)
+{
+    wxString strWithLF = AppendLineFeedIfNeeded(str);
+
+#if defined(__WINDOWS__)
+    // Determine whether the encoding is UTF-16. In that case, the file
+    // should have been opened in "wb" mode, and EOL conversion must be done
+    // here as it won't be done at stdio level.
+    if ( m_conv->GetMBNulLen() == 2 )
+    {
+        strWithLF.Replace("\n", "\r\n");
+    }
+#endif // __WINDOWS__
+
+    return m_conv->cWX2MB(strWithLF.c_str());
+}
+
+// ----------------------------------------------------------------------------
+// wxMessageOutputStderr
+// ----------------------------------------------------------------------------
+
+wxMessageOutputStderr::wxMessageOutputStderr(FILE *fp, const wxMBConv& conv)
+                     : wxMessageOutputWithConv(conv),
+                       m_fp(fp)
+{
+}
+
 void wxMessageOutputStderr::Output(const wxString& str)
 {
-    const wxString strWithLF = AppendLineFeedIfNeeded(str);
-
-    fprintf(m_fp, "%s", (const char*) strWithLF.mb_str(wxConvWhateverWorks));
+    const wxCharBuffer& buf = PrepareForOutput(str);
+    fwrite(buf, buf.length(), 1, m_fp);
     fflush(m_fp);
 }
 

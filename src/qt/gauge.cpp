@@ -12,6 +12,7 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QProgressBar>
 
 class wxQtProgressBar : public wxQtEventSignalHandler< QProgressBar, wxGauge >
 {
@@ -62,7 +63,7 @@ bool wxGauge::Create(wxWindow *parent,
 }
 
 
-QProgressBar *wxGauge::GetHandle() const
+QWidget *wxGauge::GetHandle() const
 {
     return m_qtProgressBar;
 }

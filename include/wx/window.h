@@ -1065,6 +1065,9 @@ public:
         // adjust DC for drawing on this window
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
 
+        // enable or disable double buffering
+    virtual void SetDoubleBuffered(bool WXUNUSED(on)) { }
+
         // return true if the window contents is double buffered by the system
     virtual bool IsDoubleBuffered() const { return false; }
 

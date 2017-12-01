@@ -8,7 +8,7 @@
 #ifndef _WX_QT_RADIOBUT_H_
 #define _WX_QT_RADIOBUT_H_
 
-#include <QtWidgets/QRadioButton>
+class QRadioButton;
 
 class WXDLLIMPEXP_CORE wxRadioButton : public wxControl
 {
@@ -35,7 +35,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
-    virtual QRadioButton *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
 

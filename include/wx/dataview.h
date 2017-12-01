@@ -276,6 +276,16 @@ protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
 
+    // Helper function used by the default Compare() implementation to compare
+    // values of types it is not aware about. Can be overridden in the derived
+    // classes that use columns of custom types.
+    virtual int DoCompareValues(const wxVariant& WXUNUSED(value1),
+                                const wxVariant& WXUNUSED(value2)) const
+    {
+        return 0;
+    }
+
+
     wxDataViewModelNotifiers  m_notifiers;
 };
 
@@ -688,6 +698,9 @@ public:
     // functions are mostly useful for controls with wxDV_MULTIPLE style.
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
+
+    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(0); }
+    virtual int GetCountPerPage() const { return wxNOT_FOUND; }
 
     // Currently focused column of the current item or NULL if no column has focus
     virtual wxDataViewColumn *GetCurrentColumn() const = 0;

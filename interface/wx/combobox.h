@@ -253,12 +253,15 @@ public:
     /**
         Sets the text for the combobox text field.
 
-        Notice that this method will generate a @c wxEVT_TEXT
-        event, use wxTextEntry::ChangeValue() if this is undesirable.
+        For normal, editable comboboxes with a text entry field calling this
+        method will generate a @c wxEVT_TEXT event, consistently with
+        wxTextEntry::SetValue() behaviour, use wxTextEntry::ChangeValue() if
+        this is undesirable.
 
-        @note For a combobox with @c wxCB_READONLY style the string must be in
-              the combobox choices list, otherwise the call to SetValue() is
-              ignored. This is case insensitive.
+        For controls with @c wxCB_READONLY style the method behaves somewhat
+        differently: the string must be in the combobox choices list (the check
+        for this is case-insensitive) and @c wxEVT_TEXT is @e not generated in
+        this case.
 
         @param text
             The text to set.

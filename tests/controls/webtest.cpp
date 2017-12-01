@@ -8,7 +8,7 @@
 
 #include "testprec.h"
 
-#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)
+#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -22,6 +22,9 @@
 #include "wx/uiaction.h"
 #include "wx/webview.h"
 #include "asserthelper.h"
+#if wxUSE_WEBVIEW_IE
+    #include "wx/msw/webview_ie.h"
+#endif
 
 class WebTestCase : public CppUnit::TestCase
 {
@@ -36,8 +39,11 @@ private:
         CPPUNIT_TEST( Title );
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( History );
+#if !wxUSE_WEBVIEW_WEBKIT2
+        //This is not implemented on WEBKIT2. See implementation.
         CPPUNIT_TEST( HistoryEnable );
         CPPUNIT_TEST( HistoryClear );
+#endif
         CPPUNIT_TEST( HistoryList );
         CPPUNIT_TEST( Editable );
         CPPUNIT_TEST( Selection );
@@ -66,7 +72,7 @@ private:
 };
 
 //Convenience macro
-#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS((*m_loaded), 1)
+#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS_IN((*m_loaded), 1, 1000)
 
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION( WebTestCase );
@@ -76,10 +82,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WebTestCase, "WebTestCase" );
 
 void WebTestCase::setUp()
 {
-    m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY);
-
+    m_browser = wxWebView::New();
     m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
-    m_browser->LoadURL("about:blank");
+
+    m_browser -> Create(wxTheApp->GetTopWindow(), wxID_ANY);
     ENSURE_LOADED;
 }
 
@@ -262,8 +268,109 @@ void WebTestCase::Zoom()
 
 void WebTestCase::RunScript()
 {
-    m_browser->RunScript("document.write(\"Hello World!\");");
+    m_browser->
+        SetPage("<html><head><script></script></head><body></body></html>", "");
+    ENSURE_LOADED;
+
+    wxString result;
+#if wxUSE_WEBVIEW_IE
+    CPPUNIT_ASSERT(wxWebViewIE::MSWSetModernEmulationLevel());
+
+    // Define a specialized scope guard ensuring that we reset the emulation
+    // level to its default value even if any asserts below fail.
+    class ResetEmulationLevel
+    {
+    public:
+        ResetEmulationLevel()
+        {
+            m_reset = true;
+        }
+
+        bool DoReset()
+        {
+            m_reset = false;
+            return wxWebViewIE::MSWSetModernEmulationLevel(false);
+        }
+
+        ~ResetEmulationLevel()
+        {
+            if ( m_reset )
+                DoReset();
+        }
+
+    private:
+        bool m_reset;
+    } resetEmulationLevel;
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Bar'; \
+        person.lastName = 'Foo';return person;}f();", &result));
+    CPPUNIT_ASSERT_EQUAL("{\"name\":\"Bar\",\"lastName\":\"Foo\"}", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
+    CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
+        var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
+        &result));
+    CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
+
+    CPPUNIT_ASSERT(resetEmulationLevel.DoReset());
+#endif // wxUSE_WEBVIEW_IE
+
+    CPPUNIT_ASSERT(m_browser->RunScript("document.write(\"Hello World!\");"));
     CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
+    CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(123);", &result));
+    CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));
+
+    CPPUNIT_ASSERT(m_browser->
+        RunScript("function f(a){return a;}f(2.34);", &result));
+    double value;
+    result.ToDouble(&value);
+    CPPUNIT_ASSERT_EQUAL(2.34, value);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(false);", &result));
+    CPPUNIT_ASSERT_EQUAL("false", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; \
+        person.lastName = 'Bar';return person;}f();", &result));
+    CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
+    CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
+    CPPUNIT_ASSERT_EQUAL("undefined", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){return null;}f();", &result));
+    CPPUNIT_ASSERT_EQUAL("null", result);
+
+    result = "";
+    CPPUNIT_ASSERT(!m_browser->RunScript("int main() { return 0; }", &result));
+    CPPUNIT_ASSERT(!result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function a() { return eval(\"function b() { \
+        return eval(\\\"function c() { return eval(\\\\\\\"function d() { \
+        return \\\\\\\\\\\\\\\"test\\\\\\\\\\\\\\\"; } d();\\\\\\\"); } \
+        c();\\\"); } b();\"); } a();", &result));
+    CPPUNIT_ASSERT_EQUAL("test", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");",
+        &result));
+    CPPUNIT_ASSERT_EQUAL("This is a backslash: \\", result);
+
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var d = new Date('10/08/2016 21:30:40'); \
+        var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
+        &result));
+    CPPUNIT_ASSERT_EQUAL("\"2016-10-08T21:30:40.000Z\"", result);
+
+    // Check for errors too.
+    CPPUNIT_ASSERT(!m_browser->RunScript("syntax(error"));
+    CPPUNIT_ASSERT(!m_browser->RunScript("syntax(error", &result));
+    CPPUNIT_ASSERT(!m_browser->RunScript("x.y.z"));
 }
 
 void WebTestCase::SetPage()
@@ -277,4 +384,4 @@ void WebTestCase::SetPage()
     CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
 }
 
-#endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_IE)
+#endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)

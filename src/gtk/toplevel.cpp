@@ -99,7 +99,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
                                            gboolean setting)
 {
 #if GTK_CHECK_VERSION(2,7,0)
-    if (gtk_check_version(2,7,0) == NULL)
+    if (wx_is_at_least_gtk2(7))
         gtk_window_set_urgency_hint(win, setting);
     else
 #endif
@@ -155,6 +155,7 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
         default:
             g_source_remove( win->m_urgency_hint );
             // no break, fallthrough to remove hint too
+            wxFALLTHROUGH;
         case -1:
             gtk_window_set_urgency_hint(GTK_WINDOW(widget), false);
             win->m_urgency_hint = -2;
@@ -218,7 +219,8 @@ wxgtk_tlw_key_press_event(GtkWidget *widget, GdkEventKey *event)
     if ( gtk_window_activate_key(window, event) )
         return TRUE;
 
-    if (GTK_WIDGET_GET_CLASS(widget)->key_press_event(widget, event))
+    void* parent_class = g_type_class_peek_parent(G_OBJECT_GET_CLASS(widget));
+    if (GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event))
         return TRUE;
 
     return FALSE;
@@ -1580,28 +1582,29 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 {
     if (m_widget == NULL)
         return false;
-#if GTK_CHECK_VERSION(2,12,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,12,0) == NULL)
-#endif
-    {
+
+#ifdef __WXGTK3__
 #if GTK_CHECK_VERSION(3,8,0)
-        if(gtk_check_version(3,8,0) == NULL)
-        {
-            gtk_widget_set_opacity(m_widget, alpha / 255.0);
-        }
-        else
-#endif
-        {
-            // Can't avoid using this deprecated function with older GTK+.
-            wxGCC_WARNING_SUPPRESS(deprecated-declarations);
-            gtk_window_set_opacity(GTK_WINDOW(m_widget), alpha / 255.0);
-            wxGCC_WARNING_RESTORE();
-        }
+    if(gtk_check_version(3,8,0) == NULL)
+    {
+        gtk_widget_set_opacity(m_widget, alpha / 255.0);
+    }
+    else
+#endif // GTK+ 3.8+
+    {
+        gtk_window_set_opacity(GTK_WINDOW(m_widget), alpha / 255.0);
+    }
+
+    return true;
+#else // !__WXGTK3__
+
+#if GTK_CHECK_VERSION(2,12,0)
+    if (wx_is_at_least_gtk2(12))
+    {
+        gtk_window_set_opacity(GTK_WINDOW(m_widget), alpha / 255.0);
         return true;
     }
 #endif // GTK_CHECK_VERSION(2,12,0)
-#ifndef __WXGTK3__
 #ifdef GDK_WINDOWING_X11
     GdkWindow* window = gtk_widget_get_window(m_widget);
     if (window == NULL)
@@ -1624,7 +1627,7 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 #else // !GDK_WINDOWING_X11
     return false;
 #endif // GDK_WINDOWING_X11 / !GDK_WINDOWING_X11
-#endif // !__WXGTK3__
+#endif // __WXGTK3__/!__WXGTK3__
 }
 
 bool wxTopLevelWindowGTK::CanSetTransparent()
@@ -1636,11 +1639,8 @@ bool wxTopLevelWindowGTK::CanSetTransparent()
         return wxSystemOptions::GetOptionInt(SYSOPT_TRANSPARENT) != 0;
     }
 
-#ifdef __WXGTK3__
-    return gtk_widget_is_composited(m_widget) != 0;
-#else
 #if GTK_CHECK_VERSION(2,10,0)
-    if (!gtk_check_version(2,10,0))
+    if (wx_is_at_least_gtk2(10))
     {
         return gtk_widget_is_composited(m_widget) != 0;
     }
@@ -1649,7 +1649,6 @@ bool wxTopLevelWindowGTK::CanSetTransparent()
     {
         return false;
     }
-#endif // !__WXGTK3__
 
 #if 0 // Don't be optimistic here for the sake of wxAUI
     int opcode, event, error;

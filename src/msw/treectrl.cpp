@@ -460,6 +460,7 @@ public:
                     if ( image != -1 )
                         break;
                     //else: fall through
+                    wxFALLTHROUGH;
 
                 case wxTreeItemIcon_Selected:
                 case wxTreeItemIcon_Expanded:

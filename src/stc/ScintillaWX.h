@@ -183,6 +183,7 @@ public:
     void DoCommand(int ID);
     bool DoContextMenu(Point pt);
     void DoOnListBox();
+    void DoMouseCaptureLost();
 
 
     // helpers

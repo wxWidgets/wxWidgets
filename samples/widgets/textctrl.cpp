@@ -698,6 +698,7 @@ void TextWidgetsPage::CreateText()
     {
         default:
             wxFAIL_MSG( wxT("unexpected wrap style radio box selection") );
+            wxFALLTHROUGH;
 
         case WrapStyle_None:
             flags |= wxTE_DONTWRAP; // same as wxHSCROLL

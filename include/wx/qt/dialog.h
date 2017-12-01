@@ -9,7 +9,7 @@
 #define _WX_QT_DIALOG_H_
 
 #include "wx/dialog.h"
-#include <QtWidgets/QDialog>
+class QDialog;
 
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
 {
@@ -35,7 +35,7 @@ public:
     virtual void EndModal(int retCode);
     virtual bool IsModal() const;
 
-    virtual QDialog *GetHandle() const;
+    QDialog *GetDialogHandle() const;
 
 private:
 

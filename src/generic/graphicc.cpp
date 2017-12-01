@@ -88,6 +88,7 @@ using namespace std;
 #ifndef __WXGTK3__
 #include "wx/gtk/dc.h"
 #endif
+#include "wx/gtk/private/object.h"
 #endif
 
 #ifdef __WXQT__
@@ -2605,7 +2606,7 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( ((wxCairoFontData*)m_font.GetRefData())->Apply(this) )
     {
 #ifdef __WXGTK__
-        PangoLayout *layout = pango_cairo_create_layout (m_context);
+        wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
         const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
@@ -2613,8 +2614,6 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 
         cairo_move_to(m_context, x, y);
         pango_cairo_show_layout (m_context, layout);
-
-        g_object_unref (layout);
 
         // Don't use Cairo text API, we already did everything.
         return;
@@ -2644,7 +2643,10 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     if ( externalLeading )
         *externalLeading = 0;
 
-    if ( str.empty())
+    // We can skip computing the string width and height if it is empty, but
+    // not its descent and/or external leading, which still needs to be
+    // returned even for an empty string.
+    if ( str.empty() && !descent && !externalLeading )
         return;
 
     if ( ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this) )
@@ -2652,7 +2654,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
 #ifdef __WXGTK__
         int w, h;
 
-        PangoLayout *layout = pango_cairo_create_layout (m_context);
+        wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
         const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         const wxCharBuffer data = str.utf8_str();
@@ -2673,7 +2675,6 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
             pango_layout_iter_free(iter);
             *descent = h - PANGO_PIXELS(baseline);
         }
-        g_object_unref (layout);
         return;
 #endif
     }
@@ -2720,7 +2721,7 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
     int w = 0;
     if (data.length())
     {
-        PangoLayout* layout = pango_cairo_create_layout(m_context);
+        wxGtkObject<PangoLayout> layout(pango_cairo_create_layout(m_context));
         const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
@@ -2732,7 +2733,6 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
             widths.Add(PANGO_PIXELS(w));
         } while (pango_layout_iter_next_cluster(iter));
         pango_layout_iter_free(iter);
-        g_object_unref(layout);
     }
     size_t i = widths.GetCount();
     const size_t len = text.length();

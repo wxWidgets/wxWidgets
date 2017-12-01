@@ -74,6 +74,9 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
 
 - The enum value wxTASKBAR_JUMP_LIST_DESTIONATION, which was added in 3.1.0,
   contains a typo and has been renamed to wxTASKBAR_JUMP_LIST_DESTINATION.
+  
+- wxZipOutputStream will now automatically convert filenames to UTF-8, if the
+  wxMBConv used when calling the constructor supports UTF-8 encoding.
 
 
 All:
@@ -88,6 +91,7 @@ All:
   wxLog::SetVerbose() which now only affects wxLogVerbose().
 - Add wxFileType::GetExpandedCommand() (troelsk).
 - Make it easier to convert to/from UTF-8-encoded std::string (ARATA Mizuki).
+- Support custom conversions in wxLogStream and wxLogStderr (Catalin Raceanu).
 - Add support for loading dynamic lexer in wxStyledTextCtrl (New Pagodi).
 - Handle strings with embedded NULs in wxDataStream (Nitch).
 - Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
@@ -98,10 +102,14 @@ All:
 - Add wxCMD_LINE_HIDDEN wxCmdLineParser flag (Lauri Nurmi).
 - Fix wxRmdir() with non-ASCII paths (trivia21).
 - Don't crash in wxFFile::Eof() or Error() on closed file (jprotopopov).
+- Add UTF-8 support to wxZipOutputStream (Tobias Taschner).
+- Update all bundled 3rd party libraries to their latest versions.
 
 All (GUI):
 
+- Allow wxWebView::RunScript() return values (Jose Lorenzo, GSoC 2017).
 - Allow using fractional pen widths with wxGraphicsContext (Adrien Tétar).
+- Add support for loading fonts from external files (Arthur Norman).
 - Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
@@ -113,6 +121,7 @@ All (GUI):
 - Make wxDataViewCtrl::Expand() expand ancestors in native ports too.
 - Add wxDataViewTextRenderer::EnableMarkup().
 - Add wxDataViewCtrl::SetHeaderAttr().
+- Add wxDataViewCtrl::GetTopItem() and GetCountPerPage() (Andreas Falkenhahn).
 - Add wxListCtrl::SetHeaderAttr().
 - Add support for using markup in wxDataViewCtrl text items.
 - Implement auto complete in generic wxSearchCtrl (Eric Jensen).
@@ -136,6 +145,7 @@ All (GUI):
 - Fix calculating point position in wxDataViewCtrl::HitTest().
 - Fix position of the rectangle returned by wxDataViewCtrl::GetItemRect().
 - Add wxDataViewRenderer::GetAccessibleDescription().
+- Add wxDataViewCheckIconTextRenderer class.
 - Improve wxImage::Scale() handling of pixels with alpha channel (Tim Kosse).
 - Fix parsing of RGBA strings in wxColour (Laurent Poujoulat).
 - Refactor code in wxQuantize() for MSVC to avoid crash.
@@ -156,11 +166,15 @@ All (GUI):
 - Fix escaping/unescaping characters in wxLongStringProperty in wxPG (mikek).
 - Ensure that navigation order reflects layout of wxStdDialogButtonSizer.
 - Add Scintilla FineTicker methods to wxSTC (NewPagodi).
+- Add wxFontPickerCtrl::SetMinPointSize() (Andreas Falkenhahn).
 
 wxGTK:
 
 - Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
+- Make wxBORDER_NONE work for wxTextCtrl with GTK+ 3 (Adrien Tétar).
 - Apply wxTextCtrl::SetDefaultStyle() to user-entered text (Andreas Falkenhahn).
+- Fix wxTextCtrl::GetStyle() with GTK+ 3.
+- Fix wxButton::SetBitmapPosition() with GTK+ 3 (Jake Nelson).
 - Support background colour in wxDataViewCtrl attributes.
 - Improve wxSpinCtrl best size calculation.
 - Implement support for icon locations in wxMimeTypesManager (Hanmac).
@@ -210,6 +224,9 @@ wxMSW:
 - Fix wxTextCtrl::XYToPosition() and PositionToXY().
 - Fix updating radio groups when non-radio item is inserted to wxMenu.
 - Fix autoselecting the contents of wxTextCtrl with wxWANTS_CHARS style.
+- Implement SetIcon(), SetPosition(), GetPosition() for native wxProgressDialog.
+- Fix focus-related problems when using native wxProgressDialog.
+- Fix crash when reparenting the currently focused window to another TLW.
 
 wxOSX:
 
@@ -242,6 +259,11 @@ wxOSX:
 - Fix selecting RGB bitmaps (with no alpha channel) into wxMemoryDC.
 - Fix updating radio groups when menu item is inserted/removed from wxMenu.
 - Allow changing alignment styles after wxTextCtrl creation (Andreas Falkenhahn).
+
+wxQt
+
+- Many changes and improvements by Sean D'Epagnier merged into trunk (with
+  help from R.J.V. Bertin).
 
 Unix:
 

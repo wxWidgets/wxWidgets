@@ -72,8 +72,10 @@ void PointTestCase::Operators()
     wxPoint p4(5,1);
     wxPoint p5 = p2 + p1;
     wxPoint p6 = p2 - p1;
-    CPPUNIT_ASSERT( p3.x == p5.x && p3.y == p5.y );
-    CPPUNIT_ASSERT( p4.x == p6.x && p4.y == p6.y );
+    CPPUNIT_ASSERT( p3.x == p5.x );
+    CPPUNIT_ASSERT( p3.y == p5.y );
+    CPPUNIT_ASSERT( p4.x == p6.x );
+    CPPUNIT_ASSERT( p4.y == p6.y );
     CPPUNIT_ASSERT( p3 == p5 );
     CPPUNIT_ASSERT( p4 == p6 );
     CPPUNIT_ASSERT( p3 != p4 );
@@ -110,6 +112,8 @@ void RealPointTestCase::Operators()
     CPPUNIT_ASSERT( p4 == p6 );
     CPPUNIT_ASSERT( p3 != p4 );
     */
-    CPPUNIT_ASSERT( fabs( p3.x - p5.x ) < EPSILON && fabs( p3.y - p5.y ) < EPSILON );
-    CPPUNIT_ASSERT( fabs( p4.x - p6.x ) < EPSILON && fabs( p4.y - p6.y ) < EPSILON );
+    CPPUNIT_ASSERT( fabs( p3.x - p5.x ) < EPSILON );
+    CPPUNIT_ASSERT( fabs( p3.y - p5.y ) < EPSILON );
+    CPPUNIT_ASSERT( fabs( p4.x - p6.x ) < EPSILON );
+    CPPUNIT_ASSERT( fabs( p4.y - p6.y ) < EPSILON );
 }

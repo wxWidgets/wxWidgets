@@ -405,30 +405,9 @@ wxWindowMSW::~wxWindowMSW()
 {
     SendDestroyEvent();
 
-#ifndef __WXUNIVERSAL__
-    // VS: make sure there's no wxFrame with last focus set to us:
-    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
-    {
-        wxTopLevelWindow *frame = wxDynamicCast(win, wxTopLevelWindow);
-        if ( frame )
-        {
-            if ( frame->GetLastFocus() == this )
-            {
-                frame->SetLastFocus(NULL);
-            }
-
-            // apparently sometimes we can end up with our grand parent
-            // pointing to us as well: this is surely a bug in focus handling
-            // code but it's not clear where it happens so for now just try to
-            // fix it here by not breaking out of the loop
-            //break;
-        }
-    }
-#endif // __WXUNIVERSAL__
-
     // VS: destroy children first and _then_ detach *this from its parent.
     //     If we did it the other way around, children wouldn't be able
-    //     find their parent frame (see above).
+    //     find their parent frame.
     DestroyChildren();
 
     if ( m_hWnd )
@@ -3055,12 +3034,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     case VK_OEM_PERIOD:
                         break;
 
-                    // special case of VK_APPS: treat it the same as right mouse
-                    // click because both usually pop up a context menu
-                    case VK_APPS:
-                        processed = HandleMouseEvent(WM_RBUTTONDOWN, -1, -1, 0);
-                        break;
-
                     default:
                         if ( (wParam >= '0' && wParam <= '9') ||
                                 (wParam >= 'A' && wParam <= 'Z') )
@@ -3096,15 +3069,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_SYSKEYUP:
         case WM_KEYUP:
-            // special case of VK_APPS: treat it the same as right mouse button
-            if ( wParam == VK_APPS )
-            {
-                processed = HandleMouseEvent(WM_RBUTTONUP, -1, -1, 0);
-            }
-            else
-            {
-                processed = HandleKeyUp((WORD) wParam, lParam);
-            }
+            processed = HandleKeyUp((WORD) wParam, lParam);
             break;
 
         case WM_SYSCHAR:
@@ -5110,8 +5075,10 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         default:
             wxFAIL_MSG( wxT("unexpected WM_SIZE parameter") );
             // fall through nevertheless
+            wxFALLTHROUGH;
 
         case SIZE_MAXHIDE:
+            wxFALLTHROUGH;
         case SIZE_MAXSHOW:
             // we're not interested in these messages at all
             break;
@@ -5123,6 +5090,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         case SIZE_MAXIMIZED:
             /* processed = */ HandleMaximize();
             // fall through to send a normal size event as well
+            wxFALLTHROUGH;
 
         case SIZE_RESTORED:
             // don't use w and h parameters as they specify the client size
@@ -5132,6 +5100,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             event.SetEventObject(this);
 
             processed = HandleWindowEvent(event);
+            break;
     }
 
     return processed;
@@ -6230,60 +6199,70 @@ WXWORD WXToVK(int wxk, bool *isExtended)
     {
         case WXK_PAGEUP:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_PAGEUP:
             vk = VK_PRIOR;
             break;
 
         case WXK_PAGEDOWN:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_PAGEDOWN:
             vk = VK_NEXT;
             break;
 
         case WXK_END:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_END:
             vk = VK_END;
             break;
 
         case WXK_HOME:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_HOME:
             vk = VK_HOME;
             break;
 
         case WXK_LEFT:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_LEFT:
             vk = VK_LEFT;
             break;
 
         case WXK_UP:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_UP:
             vk = VK_UP;
             break;
 
         case WXK_RIGHT:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_RIGHT:
             vk = VK_RIGHT;
             break;
 
         case WXK_DOWN:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_DOWN:
             vk = VK_DOWN;
             break;
 
         case WXK_INSERT:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_INSERT:
             vk = VK_INSERT;
             break;
 
         case WXK_DELETE:
             extended = true;
+            wxFALLTHROUGH;
         case WXK_NUMPAD_DELETE:
             vk = VK_DELETE;
             break;
@@ -6299,6 +6278,7 @@ WXWORD WXToVK(int wxk, bool *isExtended)
             {
                 vk = (WXWORD)wxk;
             }
+            break;
     }
 
     if ( isExtended )

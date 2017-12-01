@@ -118,7 +118,7 @@ private:
  * BombsCanvas::x_cell and y_cell
  */
 
-#define BOMBS_FONT wxFont(14, wxROMAN, wxNORMAL, wxNORMAL)
+#define BOMBS_FONT wxFont(wxFontInfo(14).Family(wxFONTFAMILY_ROMAN))
 
 #endif // #ifndef _WX_DEMOS_BOMBS_BOMBS_H_
 

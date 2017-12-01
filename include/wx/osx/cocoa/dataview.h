@@ -480,8 +480,10 @@ public:
     virtual void EnsureVisible(const wxDataViewItem& item,
                                wxDataViewColumn const* columnPtr);
     virtual unsigned int GetCount() const;
+    virtual int GetCountPerPage() const;
     virtual wxRect GetRectangle(const wxDataViewItem& item,
                                 wxDataViewColumn const* columnPtr);
+    virtual wxDataViewItem GetTopItem() const;
     virtual bool IsExpanded(const wxDataViewItem& item) const;
     virtual bool Reload();
     virtual bool Remove(const wxDataViewItem& parent,

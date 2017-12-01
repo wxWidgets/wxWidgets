@@ -389,7 +389,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 void wxAnyButton::DoSetBitmapPosition(wxDirection dir)
 {
 #ifdef __WXGTK210__
-    if ( !gtk_check_version(2,10,0) )
+    if ( wx_is_at_least_gtk2(10) )
     {
         GtkPositionType gtkpos;
         switch ( dir )

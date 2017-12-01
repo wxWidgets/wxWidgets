@@ -11,7 +11,10 @@
 #include "wx/menu.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
+#include "wx/stockitem.h"
 
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
 
 static void ApplyStyle( QMenu *qtMenu, long style )
 {
@@ -54,23 +57,48 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
 {
     QMenu *qtMenu = menu->GetHandle();
     QAction *itemAction = item->GetHandle();
-    if ( item->GetKind() == wxITEM_RADIO )
+    switch ( item->GetKind() )
     {
-        // If the previous menu item is a radio item then add this item to the
-        // same action group, otherwise start a new group:
+        case wxITEM_RADIO:
+            // If the previous menu item is a radio item then add this item to the
+            // same action group, otherwise start a new group:
 
-        if ( previousItem != NULL && previousItem->GetKind() == wxITEM_RADIO )
+            if ( previousItem != NULL && previousItem->GetKind() == wxITEM_RADIO )
+            {
+                QAction *previousItemAction = previousItem->GetHandle();
+                QActionGroup *previousItemActionGroup = previousItemAction->actionGroup();
+                wxASSERT_MSG( previousItemActionGroup != NULL, "An action group should have been setup" );
+                previousItemActionGroup->addAction( itemAction );
+            }
+            else
+            {
+                QActionGroup *actionGroup = new QActionGroup( qtMenu );
+                actionGroup->addAction( itemAction );
+                wxASSERT_MSG( itemAction->actionGroup() == actionGroup, "Must be the same action group" );
+            }
+            break;
+        case wxITEM_NORMAL:
         {
-            QAction *previousItemAction = previousItem->GetHandle();
-            QActionGroup *previousItemActionGroup = previousItemAction->actionGroup();
-            wxASSERT_MSG( previousItemActionGroup != NULL, "An action group should have been setup" );
-            previousItemActionGroup->addAction( itemAction );
-        }
-        else
-        {
-            QActionGroup *actionGroup = new QActionGroup( qtMenu );
-            actionGroup->addAction( itemAction );
-            wxASSERT_MSG( itemAction->actionGroup() == actionGroup, "Must be the same action group" );
+            wxWindowID id = item->GetId();
+            if ( wxIsStockID( id ) )
+            {
+                itemAction->setText( wxQtConvertString( wxGetStockLabel( id ) ) );
+                wxAcceleratorEntry accel = wxGetStockAccelerator( id );
+                QString shortcut;
+                if ( id == wxID_EXIT )
+                {
+                    shortcut = QStringLiteral("Ctrl+Q");
+                }
+                else if ( accel.IsOk() )
+                {
+                    shortcut = wxQtConvertString( accel.ToRawString() );
+                }
+                if ( !shortcut.isEmpty() )
+                {
+                    itemAction->setShortcut( QKeySequence( shortcut ) );
+                }
+            }
+            break;
         }
     }
     // Insert the action into the actual menu:
@@ -245,7 +273,7 @@ void wxMenuBar::Detach()
     wxMenuBarBase::Detach();
 }
 
-QMenuBar *wxMenuBar::GetHandle() const
+QWidget *wxMenuBar::GetHandle() const
 {
     return m_qtMenuBar;
 }

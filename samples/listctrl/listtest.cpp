@@ -1344,8 +1344,9 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                 {
                     InsertItemInReportView(event.GetIndex());
                 }
+                break;
             }
-            //else: fall through
+            wxFALLTHROUGH;
 
         default:
             LogEvent(event, wxT("OnListKeyDown"));

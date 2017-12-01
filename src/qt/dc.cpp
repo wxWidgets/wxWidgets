@@ -13,6 +13,8 @@
 #endif
 
 #include <QtGui/QBitmap>
+#include <QtGui/QPen>
+#include <QtGui/QPainter>
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
@@ -24,6 +26,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
+#include <QtGui/QScreen>
+#include <QtWidgets/QApplication>
 
 static void SetPenColour( QPainter *qtPainter, QColor col )
 {
@@ -45,6 +49,8 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     m_clippingRegion = new wxRegion;
     m_qtImage = NULL;
     m_rasterColourOp = wxQtNONE;
+    m_qtPenColor = new QColor;
+    m_qtBrushColor = new QColor;
     m_ok = true;
 }
 
@@ -58,8 +64,10 @@ wxQtDCImpl::~wxQtDCImpl()
         }
         delete m_qtPainter;
     }
-    if ( m_clippingRegion != NULL )
-        delete m_clippingRegion;
+
+    delete m_clippingRegion;
+    delete m_qtPenColor;
+    delete m_qtBrushColor;
 }
 
 void wxQtDCImpl::QtPreparePainter( )
@@ -91,7 +99,7 @@ void wxQtDCImpl::QtPreparePainter( )
     }
     else
     {
-        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter not active!"));
+//        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter not active!"));
     }
 }
 
@@ -124,7 +132,11 @@ int wxQtDCImpl::GetDepth() const
 
 wxSize wxQtDCImpl::GetPPI() const
 {
-    return wxSize(m_qtPainter->device()->logicalDpiX(), m_qtPainter->device()->logicalDpiY());
+    QScreen *srn = QApplication::screens().at(0);
+    if (!srn)
+        return wxSize(m_qtPainter->device()->logicalDpiX(), m_qtPainter->device()->logicalDpiY());
+    qreal dotsPerInch = srn->logicalDotsPerInch();
+    return wxSize(round(dotsPerInch), round(dotsPerInch));
 }
 
 void wxQtDCImpl::SetFont(const wxFont& font)
@@ -152,7 +164,7 @@ void wxQtDCImpl::SetBrush(const wxBrush& brush)
     {
         // Use a monochrome mask: use foreground color for the mask
         QBrush b(brush.GetHandle());
-        b.setColor(m_textForegroundColour.GetHandle());
+        b.setColor(m_textForegroundColour.GetQColor());
         b.setTexture(b.texture().mask());
         m_qtPainter->setBrush(b);
     }
@@ -192,6 +204,10 @@ void wxQtDCImpl::SetBackgroundMode(int mode)
     m_backgroundMode = mode;
 }
 
+#include <QtGui/QPen>
+#include <QtGui/QPainter>
+#include <QtGui/QScreen>
+#include <QtWidgets/QApplication>
 
 #if wxUSE_PALETTE
 void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
@@ -279,8 +295,8 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
         m_rasterColourOp = rasterColourOp;
 
         // Restore original colours and apply new mode
-        SetPenColour( m_qtPainter, m_qtPenColor );
-        SetBrushColour( m_qtPainter, m_qtPenColor );
+        SetPenColour( m_qtPainter, *m_qtPenColor );
+        SetBrushColour( m_qtPainter, *m_qtPenColor );
 
         ApplyRasterColourOp();
     }
@@ -289,8 +305,8 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 void wxQtDCImpl::ApplyRasterColourOp()
 {
     // Save colours
-    m_qtPenColor = m_qtPainter->pen().color();
-    m_qtBrushColor = m_qtPainter->brush().color();
+    *m_qtPenColor = m_qtPainter->pen().color();
+    *m_qtBrushColor = m_qtPainter->brush().color();
 
     // Apply op
     switch ( m_rasterColourOp )
@@ -304,8 +320,8 @@ void wxQtDCImpl::ApplyRasterColourOp()
             SetBrushColour( m_qtPainter, QColor( Qt::black ) );
             break;
         case wxQtINVERT:
-            SetPenColour( m_qtPainter, QColor( ~m_qtPenColor.rgb() ) );
-            SetBrushColour( m_qtPainter, QColor( ~m_qtBrushColor.rgb() ) );
+            SetPenColour( m_qtPainter, QColor( ~m_qtPenColor->rgb() ) );
+            SetBrushColour( m_qtPainter, QColor( ~m_qtBrushColor->rgb() ) );
             break;
         case wxQtNONE:
             // No op
@@ -332,9 +348,11 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
                              wxCoord *externalLeading,
                              const wxFont *theFont ) const
 {
-    QFont f = m_qtPainter->font();
+    QFont f;
     if (theFont != NULL)
         f = theFont->GetHandle();
+    else
+        f = m_font.GetHandle();
 
     QFontMetrics metrics(f);
     if (x != NULL || y != NULL)
@@ -579,7 +597,7 @@ void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
         // Save pen/brush
         savedBrush = m_qtPainter->brush();
         // Fill with text background color ("no fill" like in wxGTK):
-        m_qtPainter->setBrush(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter->setBrush(QBrush(m_textBackgroundColour.GetQColor()));
     }
 
     // Draw
@@ -624,8 +642,8 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         QPen savedPen = m_qtPainter->pen();
         
         //Use text colors
-        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetHandle()));
-        m_qtPainter->setPen(QPen(m_textForegroundColour.GetHandle()));
+        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
+        m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
         //Draw
         m_qtPainter->drawPixmap(x, y, pix);
@@ -633,21 +651,11 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         //Restore saved settings
         m_qtPainter->setBackground(savedBrush);
         m_qtPainter->setPen(savedPen);
-    } else {
-        if ( !useMask && bmp.GetMask() )
-        {
-            // Temporarly disable mask
-            QBitmap mask;
-            mask = pix.mask();
-            pix.setMask( QBitmap() );
-
-            // Draw
-            m_qtPainter->drawPixmap(x, y, pix);
-
-            // Restore saved mask
-            pix.setMask( mask );
-        }
-        else
+    }
+    else
+    {
+            if ( useMask && bmp.GetMask() && bmp.GetMask()->GetHandle() )
+                pix.setMask(*bmp.GetMask()->GetHandle());
             m_qtPainter->drawPixmap(x, y, pix);
     }
 }
@@ -655,7 +663,7 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     QPen savedPen = m_qtPainter->pen();
-    m_qtPainter->setPen(QPen(m_textForegroundColour.GetHandle()));
+    m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
     // Disable logical function
     QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
@@ -669,7 +677,7 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
         QBrush savedBrush = m_qtPainter->background();
 
         //Use text colors
-        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
 
         //Draw
         m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
@@ -698,7 +706,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     m_qtPainter->rotate(-angle);
 
     QPen savedPen = m_qtPainter->pen();
-    m_qtPainter->setPen(QPen(m_textForegroundColour.GetHandle()));
+    m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
     // Disable logical function
     QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
@@ -712,7 +720,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
         QBrush savedBrush = m_qtPainter->background();
         
         //Use text colors
-        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
         
         //Draw
         m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
@@ -742,7 +750,7 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
 {
     wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
     
-    QImage *qtSource = implSource->m_qtImage;
+    QImage *qtSource = implSource->GetQImage();
     
     // Not a CHECK on purpose
     if ( !qtSource )

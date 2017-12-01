@@ -578,6 +578,8 @@ public:
 
         @see GetToolsCount()
     */
+    wxToolBarToolBase *GetToolByPos(int pos);
+
     const wxToolBarToolBase *GetToolByPos(int pos) const;
 
     /**

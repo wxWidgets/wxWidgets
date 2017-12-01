@@ -22,7 +22,6 @@
 #include "wx/zipstrm.h"
 
 using std::string;
-using std::auto_ptr;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,9 +123,11 @@ void ZipTestCase::OnEntryExtracted(wxZipEntry& entry,
     CPPUNIT_ASSERT_MESSAGE("IsText" + error_context,
                            entry.IsText() == testEntry.IsText());
 
-    CPPUNIT_ASSERT_MESSAGE("Extra/LocalExtra mismatch for entry" + error_entry,
-        (entry.GetExtraLen() != 0 && entry.GetLocalExtraLen() != 0) ||
-        (entry.GetExtraLen() == 0 && entry.GetLocalExtraLen() == 0));
+    INFO("Extra/LocalExtra mismatch for entry" + error_entry);
+    if ( entry.GetExtraLen() )
+        CHECK( entry.GetLocalExtraLen() != 0 );
+    else
+        CHECK( entry.GetLocalExtraLen() == 0 );
 }
 
 // check the notifier mechanism by using it to fold the entry comments to
@@ -186,7 +187,7 @@ void ZipPipeTestCase::runTest()
     TestInputStream in(out, m_id % ((m_options & PipeIn) ? 4 : 3));
     wxZipInputStream zip(in);
 
-    auto_ptr<wxZipEntry> entry(zip.GetNextEntry());
+    wxScopedPtr<wxZipEntry> entry(zip.GetNextEntry());
     CPPUNIT_ASSERT(entry.get() != NULL);
 
     if ((m_options & PipeIn) == 0)
@@ -211,11 +212,10 @@ class ziptest : public ArchiveTestSuite
 {
 public:
     ziptest();
-    static CppUnit::Test *suite() { return (new ziptest)->makeSuite(); }
+
+    void runTest() wxOVERRIDE { DoRunTest(); }
 
 protected:
-    ArchiveTestSuite *makeSuite();
-
     CppUnit::Test *makeTest(string descr, int options,
                             bool genericInterface, const wxString& archiver,
                             const wxString& unarchiver);
@@ -226,23 +226,6 @@ ziptest::ziptest()
 {
     AddArchiver(wxT("zip -qr %s *"));
     AddUnArchiver(wxT("unzip -q %s"));
-}
-
-ArchiveTestSuite *ziptest::makeSuite()
-{
-    ArchiveTestSuite::makeSuite();
-
-#if 0
-    // zip doesn't support this any more so disabled
-    if (IsInPath(wxT("zip")))
-        for (int options = 0; options <= PipeIn; options += PipeIn) {
-            string name = Description(wxT("ZipPipeTestCase"), options,
-                                      false, wxT(""), wxT("zip -q - -"));
-            addTest(new ZipPipeTestCase(name, options));
-        }
-#endif
-
-    return this;
 }
 
 CppUnit::Test *ziptest::makeTest(
@@ -267,7 +250,6 @@ CppUnit::Test *ziptest::makeTest(
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ziptest);
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ziptest, "archive");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ziptest, "archive/zip");
 
 #endif // wxUSE_STREAMS && wxUSE_ZIPSTREAM

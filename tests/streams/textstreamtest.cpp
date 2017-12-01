@@ -31,6 +31,8 @@
     #include "wx/mstream.h"
 #endif // wxUSE_UNICODE
 
+#include "testfile.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -105,23 +107,22 @@ TextStreamTestCase::TextStreamTestCase()
 
 void TextStreamTestCase::Endline()
 {
-    wxFileOutputStream* pOutFile = new wxFileOutputStream(wxT("test.txt"));
-    wxTextOutputStream* pOutText = new wxTextOutputStream(*pOutFile);
-    *pOutText   << wxT("Test text") << endl
-                << wxT("More Testing Text (There should be newline before this)");
+    TempFile f("test.txt");
 
-    delete pOutText;
-    delete pOutFile;
+    {
+        wxFileOutputStream pOutFile(f.GetName());
+        wxTextOutputStream pOutText(pOutFile);
+        pOutText << wxT("Test text") << endl
+                 << wxT("More Testing Text (There should be newline before this)");
+    }
 
-    wxFileInputStream* pInFile = new wxFileInputStream(wxT("test.txt"));
+    wxFileInputStream pInFile(f.GetName());
 
     char szIn[9 + NEWLINELEN];
 
-    pInFile->Read(szIn, 9 + NEWLINELEN);
+    pInFile.Read(szIn, 9 + NEWLINELEN);
 
     CPPUNIT_ASSERT( memcmp(&szIn[9], NEWLINE, NEWLINELEN) == 0 );
-
-    delete pInFile;
 }
 
 void TextStreamTestCase::MiscTests()
@@ -147,8 +148,10 @@ void TextStreamTestCase::MiscTests()
 template <typename T>
 static void DoTestRoundTrip(const T *values, size_t numValues)
 {
+    TempFile f("test.txt");
+
     {
-        wxFileOutputStream fileOut(wxT("test.txt"));
+        wxFileOutputStream fileOut(f.GetName());
         wxTextOutputStream textOut(fileOut);
 
         for ( size_t n = 0; n < numValues; n++ )
@@ -158,7 +161,7 @@ static void DoTestRoundTrip(const T *values, size_t numValues)
     }
 
     {
-        wxFileInputStream fileIn(wxT("test.txt"));
+        wxFileInputStream fileIn(f.GetName());
         wxTextInputStream textIn(fileIn);
 
         T value;
@@ -285,6 +288,42 @@ void TextStreamTestCase::TestInput(const wxMBConv& conv,
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(txtWchar), temp.length() );
 
     CPPUNIT_ASSERT_EQUAL( 0, memcmp(txtWchar, temp.wc_str(), sizeof(txtWchar)) );
+}
+
+TEST_CASE("wxTextInputStream::GetChar", "[text][input][stream][char]")
+{
+    // This is the simplest possible test that used to trigger assertion in
+    // wxTextInputStream::GetChar().
+    SECTION("starts-with-nul")
+    {
+        const wxUint8 buf[] = { 0x00, 0x01, };
+        wxMemoryInputStream mis(buf, sizeof(buf));
+        wxTextInputStream tis(mis);
+
+        REQUIRE( tis.GetChar() == 0x00 );
+        REQUIRE( tis.GetChar() == 0x01 );
+        REQUIRE( tis.GetChar() == 0x00 );
+        CHECK( tis.GetInputStream().Eof() );
+    }
+
+    // This exercises a problematic path in GetChar() as the first 3 bytes of
+    // this stream look like the start of UTF-32BE BOM, but this is not
+    // actually a BOM because the 4th byte is 0xFE and not 0xFF, so the stream
+    // should decode the buffer as Latin-1 once it gets there.
+    SECTION("almost-UTF-32-BOM")
+    {
+        const wxUint8 buf[] = { 0x00, 0x00, 0xFE, 0xFE, 0x01 };
+        wxMemoryInputStream mis(buf, sizeof(buf));
+        wxTextInputStream tis(mis);
+
+        REQUIRE( tis.GetChar() == 0x00 );
+        REQUIRE( tis.GetChar() == 0x00 );
+        REQUIRE( tis.GetChar() == 0xFE );
+        REQUIRE( tis.GetChar() == 0xFE );
+        REQUIRE( tis.GetChar() == 0x01 );
+        REQUIRE( tis.GetChar() == 0x00 );
+        CHECK( tis.GetInputStream().Eof() );
+    }
 }
 
 #endif // wxUSE_UNICODE

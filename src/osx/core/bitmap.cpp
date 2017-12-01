@@ -839,13 +839,14 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 
     if ( Create( w, h ) )
     {
+        // Assume 32 bpp icon has transparency values
+        UseAlpha(icon.GetDepth() == 32);
+
         wxMemoryDC dc ;
         dc.SelectObject( *this ) ;
         dc.DrawIcon( icon , 0 , 0 ) ;
         dc.SelectObject( wxNullBitmap ) ;
 
-        // Assume 32 bpp icon has transparency values
-        UseAlpha(icon.GetDepth() == 32);
         return true;
     }
 

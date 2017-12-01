@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 16 June 2017                                                       *
+ * Date : 27 November 2017                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -536,6 +536,12 @@ typedef pid_t GPid;
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
+#ifndef VMS_GTK2
+#define wxUSE_PRIVATE_FONTS 0
+#else
+#define wxUSE_PRIVATE_FONTS 1
+#endif
+
 #if defined (__WXMOTIF__)
 #define wxUSE_RICHTOOLTIP 0
 #else
@@ -979,11 +985,6 @@ typedef pid_t GPid;
  * wxWebKitCtrl
  */
 #define wxUSE_WEBKIT 1
-
-/*
- * Objective-C class name uniquifying
- */
-#define wxUSE_OBJC_UNIQUIFYING 0
 
 /*
  * The const keyword is being introduced more in wxWindows.

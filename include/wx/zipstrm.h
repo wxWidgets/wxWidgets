@@ -236,6 +236,8 @@ private:
 
     bool LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool localInfo);
 
+    wxUint16 GetInternalFlags(bool checkForUTF8) const;
+
     wxUint8      m_SystemMadeBy;       // one of enum wxZipSystem
     wxUint8      m_VersionMadeBy;      // major * 10 + minor
 
@@ -278,10 +280,10 @@ class WXDLLIMPEXP_BASE wxZipOutputStream : public wxArchiveOutputStream
 public:
     wxZipOutputStream(wxOutputStream& stream,
                       int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     wxZipOutputStream(wxOutputStream *stream,
                       int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     virtual WXZIPFIX ~wxZipOutputStream();
 
     bool PutNextEntry(wxZipEntry *entry)        { return DoCreate(entry); }
@@ -517,17 +519,37 @@ inline bool wxZipEntry::IsReadOnly() const
 
 inline bool wxZipEntry::IsMadeByUnix() const
 {
-    const int pattern =
-        (1 << wxZIP_SYSTEM_OPENVMS) |
-        (1 << wxZIP_SYSTEM_UNIX) |
-        (1 << wxZIP_SYSTEM_ATARI_ST) |
-        (1 << wxZIP_SYSTEM_ACORN_RISC) |
-        (1 << wxZIP_SYSTEM_BEOS) | (1 << wxZIP_SYSTEM_TANDEM);
+    switch ( m_SystemMadeBy )
+    {
+        case wxZIP_SYSTEM_MSDOS:
+            // note: some unix zippers put madeby = dos
+            return (m_ExternalAttributes & ~0xFFFF) != 0;
 
-    // note: some unix zippers put madeby = dos
-    return (m_SystemMadeBy == wxZIP_SYSTEM_MSDOS
-            && (m_ExternalAttributes & ~0xFFFF))
-        || ((pattern >> m_SystemMadeBy) & 1);
+        case wxZIP_SYSTEM_OPENVMS:
+        case wxZIP_SYSTEM_UNIX:
+        case wxZIP_SYSTEM_ATARI_ST:
+        case wxZIP_SYSTEM_ACORN_RISC:
+        case wxZIP_SYSTEM_BEOS:
+        case wxZIP_SYSTEM_TANDEM:
+            return true;
+
+        case wxZIP_SYSTEM_AMIGA:
+        case wxZIP_SYSTEM_VM_CMS:
+        case wxZIP_SYSTEM_OS2_HPFS:
+        case wxZIP_SYSTEM_MACINTOSH:
+        case wxZIP_SYSTEM_Z_SYSTEM:
+        case wxZIP_SYSTEM_CPM:
+        case wxZIP_SYSTEM_WINDOWS_NTFS:
+        case wxZIP_SYSTEM_MVS:
+        case wxZIP_SYSTEM_VSE:
+        case wxZIP_SYSTEM_VFAT:
+        case wxZIP_SYSTEM_ALTERNATE_MVS:
+        case wxZIP_SYSTEM_OS_400:
+            return false;
+    }
+
+    // Unknown system, assume not Unix.
+    return false;
 }
 
 inline void wxZipEntry::SetIsText(bool isText)

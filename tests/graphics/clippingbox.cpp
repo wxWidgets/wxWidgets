@@ -646,33 +646,32 @@ void ClippingBoxTestCaseBase::CheckClipRect(int x, int y, int width, int height)
         for( int py = ymin; py <= ymax; py++ )
             for( int px = xmin; px <= xmax; px++ )
             {
-                wxColour c;
                 unsigned char r = img.GetRed(px, py);
                 unsigned char g = img.GetGreen(px, py);
                 unsigned char b = img.GetBlue(px, py);
-                c.Set(r, g, b);
+                const wxColour col(r, g, b);
 
                 wxString msgColour;
                 if ( px >= x && px <= x + (width-1) &&
                      py >= y && py <= y + (height-1) )
                 {
                     // Pixel inside the box.
-                    if ( c != s_fgColour )
+                    if ( col != s_fgColour )
                     {
                         msgColour =
                             wxString::Format(wxS("Invalid colour drawn at (%i, %i): Actual: %s  Expected: %s"),
-                                    px, py, c.GetAsString().mbc_str(), s_fgColour.GetAsString().mbc_str());
+                                    px, py, col.GetAsString().mbc_str(), s_fgColour.GetAsString().mbc_str());
 
                     }
                 }
                 else
                 {
                     // Pixel outside the box.
-                    if ( c != s_bgColour )
+                    if ( col != s_bgColour )
                     {
                         msgColour =
                             wxString::Format(wxS("Invalid colour drawn at (%i, %i): Actual: %s  Expected: %s"),
-                                    px, py, c.GetAsString().mbc_str(), s_bgColour.GetAsString().mbc_str());
+                                    px, py, col.GetAsString().mbc_str(), s_bgColour.GetAsString().mbc_str());
                     }
                 }
 
@@ -1201,14 +1200,15 @@ void ClippingBoxTestCaseDCBase::OneDevRegionNonRect()
 
     // Draw image with reference triangle.
     wxBitmap bmpRef(s_dcSize);
-    wxMemoryDC* memDC = new wxMemoryDC(bmpRef);
-    wxDC* dcRef = GetDC(memDC);
+    wxMemoryDC memDC(bmpRef);
+    wxDC* dcRef = GetDC(&memDC);
     dcRef->SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     dcRef->Clear();
     dcRef->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     dcRef->SetPen(wxPen(s_fgColour));
     dcRef->DrawPolygon(WXSIZEOF(poly), poly);
-    delete dcRef;
+    if ( dcRef != &memDC )
+        delete dcRef;
 
     m_dc->SetDeviceOrigin(10, 15);
     m_dc->SetUserScale(0.5, 1.5);

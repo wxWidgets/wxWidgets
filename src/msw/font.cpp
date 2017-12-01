@@ -30,6 +30,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/log.h"
+    #include "wx/module.h"
     #include "wx/msw/private.h"
 #endif // WX_PRECOMP
 
@@ -1083,3 +1084,54 @@ bool wxFont::IsFixedWidth() const
     // those meanings are the opposite of what the constant name implies."
     return !(tm.tmPitchAndFamily & TMPF_FIXED_PITCH);
 }
+
+// ----------------------------------------------------------------------------
+// Private fonts support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_PRIVATE_FONTS
+
+namespace
+{
+
+// Contains the file names of all fonts added by AddPrivateFont().
+wxArrayString gs_privateFontFileNames;
+
+} // anonymous namespace
+
+// Accessor for use in src/msw/graphics.cpp only.
+extern const wxArrayString& wxGetPrivateFontFileNames()
+{
+    return gs_privateFontFileNames;
+}
+
+// We need to use a module to clean up the list of private fonts when the
+// library is shut down.
+class wxPrivateFontsListModule : public wxModule
+{
+public:
+    wxPrivateFontsListModule() { }
+
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE { gs_privateFontFileNames.clear(); }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxPrivateFontsListModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxPrivateFontsListModule, wxModule);
+
+bool wxFontBase::AddPrivateFont(const wxString& filename)
+{
+    if ( !AddFontResourceEx(filename.t_str(), FR_PRIVATE, 0) )
+    {
+        wxLogSysError(_("Font file \"%s\" couldn't be loaded"), filename);
+        return false;
+    }
+
+    // Remember it for use in wxGDIPlusRenderer::Load().
+    gs_privateFontFileNames.Add(filename);
+    return true;
+}
+
+#endif // wxUSE_PRIVATE_FONTS

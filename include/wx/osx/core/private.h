@@ -125,6 +125,8 @@ class wxComboBox;
 class wxNotebook;
 class wxTextCtrl;
 class wxSearchCtrl;
+class wxMenuItem;
+class wxAcceleratorEntry;
 
 WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 
@@ -613,6 +615,7 @@ public:
 
     virtual void            ListScrollTo( unsigned int n ) = 0;
     virtual int             ListGetTopItem() const = 0;
+    virtual int             ListGetCountPerPage() const = 0;
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) = 0;
     virtual void            UpdateLineToEnd( unsigned int n) = 0;
 

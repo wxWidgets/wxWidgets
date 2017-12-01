@@ -81,12 +81,8 @@ namespace
 
 inline bool UseNative()
 {
-#ifdef __WXGTK3__
-    return true;
-#else
     // native GtkInfoBar widget is only available in GTK+ 2.18 and later
-    return gtk_check_version(2, 18, 0) == 0;
-#endif
+    return wx_is_at_least_gtk2(18);
 }
 
 } // anonymous namespace

@@ -835,14 +835,9 @@ void ImageTestCase::SizeImage()
        //actual.SaveFile(wxString::Format("imagetest-%02d-actual.png", i), wxBITMAP_TYPE_PNG);
        //expected.SaveFile(wxString::Format("imagetest-%02d-exp.png", i), wxBITMAP_TYPE_PNG);
 
-       CPPUNIT_ASSERT_EQUAL( actual.GetSize().x, expected.GetSize().x );
-       CPPUNIT_ASSERT_EQUAL( actual.GetSize().y, expected.GetSize().y );
-
-       WX_ASSERT_EQUAL_MESSAGE
-       (
-         ("Resize test #%u: (%d, %d), (%d, %d)", i, st.w, st.h, st.dx, st.dy),
-         expected, actual
-       );
+       wxINFO_FMT("Resize test #%u: (%d, %d), (%d, %d)",
+                   i, st.w, st.h, st.dx, st.dy);
+       CHECK_THAT( actual, RGBSameAs(expected) );
    }
 }
 
@@ -870,12 +865,10 @@ void ImageTestCase::CompareLoadedImage()
         }
 
 
-        WX_ASSERT_EQUAL_MESSAGE
-        (
-            ("Compare test '%s' for loading failed", g_testfiles[i].file),
-            g_testfiles[i].bitDepth == 8 ? expected8 : expected24,
-            actual
-        );
+        wxINFO_FMT("Compare test '%s' for loading", g_testfiles[i].file);
+        CHECK_THAT( actual,
+                    RGBSameAs(g_testfiles[i].bitDepth == 8 ? expected8
+                                                           : expected24) );
     }
 
 }
@@ -936,16 +929,11 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
     CPPUNIT_ASSERT(actual.IsOk());
 
     const wxImage *expected = compareTo ? compareTo : &image;
-    CPPUNIT_ASSERT( actual.GetSize() == expected->GetSize() );
 
     unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
-    WX_ASSERT_EQUAL_MESSAGE
-    (
-        ("Compare test '%s (%d-bit)' for saving failed",
-            handler.GetExtension(), bitsPerPixel),
-        *expected,
-        actual
-    );
+    wxINFO_FMT("Compare test '%s (%d-bit)' for saving",
+               handler.GetExtension(), bitsPerPixel);
+    CHECK_THAT(actual, RGBSameAs(*expected));
 
 #if wxUSE_PALETTE
     CPPUNIT_ASSERT(actual.HasPalette()
@@ -959,12 +947,8 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
         return;
     }
 
-    WX_ASSERT_EQUAL_MESSAGE
-    (
-        ("Compare alpha test '%s' for saving failed", handler.GetExtension()),
-        *expected,
-        actual
-    );
+    wxINFO_FMT("Compare alpha test '%s' for saving", handler.GetExtension());
+    CHECK_THAT(actual, RGBSameAs(*expected));
 }
 
 static void SetAlpha(wxImage *image)
@@ -1180,12 +1164,8 @@ void ImageTestCase::SaveAnimatedGIF()
         CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true, i) );
         memIn.SeekI(pos);
 
-        WX_ASSERT_EQUAL_MESSAGE
-        (
-            ("Compare test for GIF frame number %d failed", i),
-            images[i],
-            image
-        );
+        wxINFO_FMT("Compare test for GIF frame number %d failed", i);
+        CHECK_THAT(image, RGBSameAs(images[i]));
     }
 #endif // #if wxUSE_PALETTE
 }
@@ -1340,8 +1320,8 @@ void ImageTestCase::BMPFlippingAndRLECompression()
 }
 
 
-static bool
-CompareApprox(const wxImage& i1, const wxImage& i2)
+static int
+FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
 {
     if ( i1.GetWidth() != i2.GetWidth() )
         return false;
@@ -1352,26 +1332,21 @@ CompareApprox(const wxImage& i1, const wxImage& i2)
     const unsigned char* p1 = i1.GetData();
     const unsigned char* p2 = i2.GetData();
     const int numBytes = i1.GetWidth()*i1.GetHeight()*3;
+    int maxDiff = 0;
     for ( int n = 0; n < numBytes; n++, p1++, p2++ )
     {
-        switch ( *p1 - *p2 )
-        {
-            case -1:
-            case  0:
-            case +1:
-                // Accept up to one pixel difference, this happens because of
-                // different rounding behaviours in different compiler versions
-                // even under the same architecture, see the example in
-                // http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/151149/focus=151154
-                break;
-
-            default:
-                return false;
-        }
+        const int diff = std::abs(*p1 - *p2);
+        if ( diff > maxDiff )
+            maxDiff = diff;
     }
 
-    return true;
+    return maxDiff;
 }
+
+// Note that we accept up to one pixel difference, this happens because of
+// different rounding behaviours in different compiler versions
+// even under the same architecture, see the example in
+// http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/151149/focus=151154
 
 // The 0 below can be replaced with 1 to generate, instead of comparing with,
 // the test files.
@@ -1382,13 +1357,16 @@ CompareApprox(const wxImage& i1, const wxImage& i2)
     } \
     else \
     { \
-        wxImage imageFromFile(file); \
-        CPPUNIT_ASSERT_MESSAGE( "Failed to load " file, imageFromFile.IsOk() ); \
-        CPPUNIT_ASSERT_MESSAGE \
-        ( \
-            "Wrong scaled " + CppUnit::assertion_traits<wxImage>::toString(image), \
-            CompareApprox(imageFromFile, image) \
-        ); \
+        const wxImage imageFromFile(file); \
+        if ( imageFromFile.IsOk() ) \
+        { \
+            INFO("Wrong scaled \"" << file << "\" " << Catch::toString(image)); \
+            CHECK(FindMaxChannelDiff(imageFromFile, image) <= 1); \
+        } \
+        else \
+        { \
+            FAIL("Failed to load \"" << file << "\""); \
+        } \
     }
 
 void ImageTestCase::ScaleCompare()

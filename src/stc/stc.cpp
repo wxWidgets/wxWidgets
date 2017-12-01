@@ -52,9 +52,7 @@
     #include "wx/file.h"
 #endif
 
-#ifdef __WXGTK__
-    #include "wx/dcbuffer.h"
-#endif
+#include "wx/dcbuffer.h"
 
 #include "ScintillaWX.h"
 
@@ -162,6 +160,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
     EVT_LISTBOX_DCLICK          (wxID_ANY, wxStyledTextCtrl::OnListBox)
+    EVT_MOUSE_CAPTURE_LOST      (wxStyledTextCtrl::OnMouseCaptureLost)
 wxEND_EVENT_TABLE()
 
 
@@ -224,6 +223,13 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
 
     // STC doesn't support RTL languages at all
     SetLayoutDirection(wxLayout_LeftToRight);
+
+    // Rely on native double buffering by default.
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+    SetBufferedDraw(false);
+#else
+    SetBufferedDraw(true);
+#endif
 
     return true;
 }
@@ -5163,11 +5169,7 @@ void wxStyledTextCtrl::StartStyling(int start, int unused)
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
-#ifdef __WXGTK__
-    wxBufferedPaintDC dc(this);
-#else
     wxPaintDC dc(this);
-#endif
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 
@@ -5366,6 +5368,11 @@ void wxStyledTextCtrl::OnListBox(wxCommandEvent& WXUNUSED(evt)) {
 
 void wxStyledTextCtrl::OnIdle(wxIdleEvent& evt) {
     m_swx->DoOnIdle(evt);
+}
+
+
+void wxStyledTextCtrl::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(evt)) {
+    m_swx->DoMouseCaptureLost();
 }
 
 

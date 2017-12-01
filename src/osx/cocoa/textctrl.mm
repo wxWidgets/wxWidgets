@@ -788,22 +788,22 @@ void wxNSTextViewControl::insertText(NSString* str, WXWidget slf, void *_cmd)
 
 wxString wxNSTextViewControl::GetStringValue() const
 {
+    wxString result;
     if (m_textView)
     {
-        wxString result = wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding());
-        wxMacConvertNewlines13To10( &result ) ;
-        return result;
+        result = wxMacConvertNewlines13To10(
+            wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding()));
     }
-    return wxEmptyString;
+    return result;
 }
+
 void wxNSTextViewControl::SetStringValue( const wxString &str)
 {
-    wxString st = str;
-    wxMacConvertNewlines10To13( &st );
     wxMacEditHelper helper(m_textView);
 
     if (m_textView)
     {
+        wxString st(wxMacConvertNewlines10To13(str));
         [m_textView setString: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
         if ( m_wxPeer->HasFlag(wxTE_AUTO_URL) )
         {
@@ -984,8 +984,7 @@ void wxNSTextViewControl::ShowPosition(long pos)
 
 void wxNSTextViewControl::WriteText(const wxString& str)
 {
-    wxString st = str;
-    wxMacConvertNewlines10To13( &st );
+    wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
     NSEvent* formerEvent = m_lastKeyDownEvent;
     m_lastKeyDownEvent = nil;

@@ -186,7 +186,7 @@ BASE_OSX_NOTWXMAC_HDR =
 
 ## Qt
 
-QT_LOWLEVEL_HDR =
+QT_HDR =
     wx/qt/accel.h
     wx/qt/app.h
     wx/qt/apptbase.h
@@ -196,12 +196,13 @@ QT_LOWLEVEL_HDR =
     wx/qt/brush.h
     wx/qt/anybutton.h
     wx/qt/button.h
+    wx/generic/caret.h
     wx/qt/checkbox.h
     wx/qt/checklst.h
     wx/qt/choice.h
     wx/qt/clipbrd.h
     wx/qt/clrpicker.h
-    wx/qt/generic/clrpickerg.h
+    wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/qt/colordlg.h
     wx/qt/colour.h
@@ -223,9 +224,12 @@ QT_LOWLEVEL_HDR =
     wx/qt/dirdlg.h
     wx/qt/dnd.h
     wx/qt/evtloop.h
+    wx/generic/fdrepdlg.h
     wx/qt/filedlg.h
+    wx/generic/filepickerg.h
     wx/qt/font.h
     wx/qt/fontdlg.h
+    wx/generic/fontpickerg.h
     wx/qt/frame.h
     wx/qt/gauge.h
     wx/generic/icon.h
@@ -237,6 +241,7 @@ QT_LOWLEVEL_HDR =
     wx/qt/menuitem.h
     wx/qt/minifram.h
     wx/qt/msgdlg.h
+    wx/qt/nonownedwnd.h
     wx/qt/notebook.h
     wx/qt/palette.h
     wx/qt/pen.h
@@ -268,7 +273,7 @@ QT_LOWLEVEL_HDR =
     wx/qt/window.h
     wx/qt/private/winevent.h
 
-QT_LOWLEVEL_SRC=
+QT_SRC=
     src/qt/accel.cpp
     src/qt/app.cpp
     src/qt/apptraits.cpp
@@ -323,6 +328,7 @@ QT_LOWLEVEL_SRC=
     src/qt/menuitem.cpp
     src/qt/minifram.cpp
     src/qt/msgdlg.cpp
+    src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
     src/qt/palette.cpp
     src/qt/pen.cpp

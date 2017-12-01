@@ -2,6 +2,10 @@
                 How to build the sources from git
 ------------------------------------------------------------------------
 
+When cloning the repository, use --recurse-submodules option. If you had
+already cloned it without it, run "git submodule update --init" to also
+get all 3rd party libraries code.
+
 Before building from git sources under Windows, you need to copy the
 file include/wx/msw/setup0.h to include/wx/msw/setup.h. This is
 necessary in order to allow having local modifications to the latter

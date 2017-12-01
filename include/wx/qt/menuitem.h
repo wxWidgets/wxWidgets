@@ -9,7 +9,7 @@
 #define _WX_QT_MENUITEM_H_
 
 #include "wx/menuitem.h"
-#include <QtWidgets/QAction>
+class QAction;
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxMenu;

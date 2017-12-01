@@ -35,7 +35,7 @@ static inline int wx_gdk_screen_get_primary_monitor(GdkScreen* screen)
 {
     int monitor = 0;
 #if GTK_CHECK_VERSION(2,20,0)
-    if (gtk_check_version(2,20,0) == NULL)
+    if (wx_is_at_least_gtk2(20))
         monitor = gdk_screen_get_primary_monitor(screen);
 #endif
     return monitor;
@@ -58,7 +58,7 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
         if (GDK_IS_X11_SCREEN(screen))
 #endif
         {
-            GdkRectangle rect = { 0 };
+            GdkRectangle rect = { 0, 0, 0, 0 };
             wxGetWorkAreaX11(GDK_SCREEN_XSCREEN(screen),
                 rect.x, rect.y, rect.width, rect.height);
             // in case _NET_WORKAREA result is too large

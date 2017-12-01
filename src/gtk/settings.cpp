@@ -132,7 +132,7 @@ static GtkWidget* ToolTipWidget()
         g_signal_connect_swapped(ContainerWidget(), "destroy",
             G_CALLBACK(gtk_widget_destroy), s_widget);
         const char* name = "gtk-tooltip";
-        if (gtk_check_version(2, 11, 0))
+        if (!wx_is_at_least_gtk2(11))
             name = "gtk-tooltips";
         gtk_widget_set_name(s_widget, name);
         gtk_widget_ensure_style(s_widget);
@@ -354,7 +354,7 @@ static void bg(GtkStyleContext* sc, wxColour& color, int state = GTK_STATE_FLAG_
                 {
                 case CAIRO_FORMAT_ARGB32:
                     a = guchar(pixel >> 24);
-                    // fallthrough
+                    wxFALLTHROUGH;
                 case CAIRO_FORMAT_RGB24:
                     r = guchar(pixel >> 16);
                     g = guchar(pixel >> 8);
@@ -451,7 +451,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_3DLIGHT:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:
@@ -491,7 +491,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_BTNTEXT:
         sc = ButtonLabelContext(path);
         fg(sc, color);
@@ -505,7 +505,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_GRAYTEXT:
         sc = StyleContext(path, GTK_TYPE_LABEL, "label");
         fg(sc, color, GTK_STATE_FLAG_INSENSITIVE);
@@ -1036,10 +1036,13 @@ void wxSystemSettingsModule::OnExit()
 {
 #ifdef __WXGTK3__
     GtkSettings* settings = gtk_settings_get_default();
-    g_signal_handlers_disconnect_by_func(settings,
-        (void*)notify_gtk_theme_name, NULL);
-    g_signal_handlers_disconnect_by_func(settings,
-        (void*)notify_gtk_font_name, NULL);
+    if (settings)
+    {
+        g_signal_handlers_disconnect_by_func(settings,
+            (void*)notify_gtk_theme_name, NULL);
+        g_signal_handlers_disconnect_by_func(settings,
+            (void*)notify_gtk_font_name, NULL);
+    }
 #else
     if (gs_tlw_parent)
     {

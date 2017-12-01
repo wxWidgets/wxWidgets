@@ -98,6 +98,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
 wxChoice::~wxChoice()
 {
+    Clear();
     delete m_strings;
 
  #ifdef __WXGTK3__

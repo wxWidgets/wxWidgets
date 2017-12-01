@@ -479,11 +479,18 @@ public:
         In a Unicode build the third parameter @a conv is used to translate
         the filename and comment fields to an 8-bit encoding.
         It has no effect on the stream's data.
+
+        Since version 3.1.1, filenames in the generated archive will be encoded
+        using UTF-8 and marked according to ZIP specification. To get the
+        previous behaviour wxConvLocal may be provided as the conv object.
+        Please note that not all unzip applications are fully ZIP spec
+        compatible and may not correctly decode UTF-8 characters. For the best
+        interoperability using only ASCII characters is the safest option.
     */
     wxZipOutputStream(wxOutputStream& stream, int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     wxZipOutputStream(wxOutputStream* stream, int level = -1,
-                      wxMBConv& conv = wxConvLocal);
+                      wxMBConv& conv = wxConvUTF8);
     //@}
 
     /**

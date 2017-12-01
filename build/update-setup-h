@@ -84,6 +84,12 @@ update_msw_setup_h()
     update_single_setup_h MSW include/wx/msw/setup_inc.h $1
 }
 
+# wrapper for update_single_setup_h which only updates the OSX options
+update_osx_setup_h()
+{
+    update_single_setup_h OSX include/wx/osx/setup_inc.h $1
+}
+
 # entry point
 if [ ! -f wxwin.m4 ]; then
     error "$0: must be ran from root wx directory"
@@ -100,6 +106,9 @@ update_common_setup_h setup.h.in
 
 update_msw_setup_h include/wx/msw/setup0.h
 update_msw_setup_h include/wx/gtk/setup0.h
+update_msw_setup_h setup.h.in
+
+update_osx_setup_h include/wx/osx/setup0.h
 update_msw_setup_h setup.h.in
 
 update_single_setup_h wxUniv include/wx/univ/setup_inc.h include/wx/univ/setup0.h
