@@ -239,20 +239,6 @@ wxWindowMac::~wxWindowMac()
 
     MacInvalidateBorders() ;
 
-#ifndef __WXUNIVERSAL__
-    // VS: make sure there's no wxFrame with last focus set to us:
-    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
-    {
-        wxFrame *frame = wxDynamicCast(win, wxFrame);
-        if ( frame )
-        {
-            if ( frame->GetLastFocus() == this )
-                frame->SetLastFocus(NULL);
-            break;
-        }
-    }
-#endif
-
     // destroy children before destroying this window itself
     DestroyChildren();
 
@@ -265,15 +251,6 @@ wxWindowMac::~wxWindowMac()
         if ( tlw->GetDefaultItem() == (wxButton*) this)
             tlw->SetDefaultItem(NULL);
     }
-
-#ifndef __WXUNIVERSAL__
-    wxFrame* frame = wxDynamicCast( wxGetTopLevelParent( (wxWindow*)this ) , wxFrame ) ;
-    if ( frame )
-    {
-        if ( frame->GetLastFocus() == this )
-            frame->SetLastFocus( NULL ) ;
-    }
-#endif
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP

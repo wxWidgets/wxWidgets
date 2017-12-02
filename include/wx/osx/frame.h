@@ -21,7 +21,7 @@ class WXDLLIMPEXP_CORE wxFrame: public wxFrameBase
 {
 public:
     // construction
-    wxFrame() { Init(); }
+    wxFrame() { }
     wxFrame(wxWindow *parent,
             wxWindowID id,
             const wxString& title,
@@ -30,8 +30,6 @@ public:
             long style = wxDEFAULT_FRAME_STYLE,
             const wxString& name = wxFrameNameStr)
     {
-        Init();
-
         Create(parent, id, title, pos, size, style, name);
     }
 
@@ -75,19 +73,12 @@ public:
                                            const wxString& name = wxStatusLineNameStr) wxOVERRIDE;
 #endif // wxUSE_STATUSBAR
 
-    // called by wxWindow whenever it gets focus
-    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
-    wxWindow *GetLastFocus() const { return m_winLastFocused; }
-
     void PositionBars();
 
     // internal response to size events
     virtual void MacOnInternalSize() wxOVERRIDE { PositionBars(); }
 
 protected:
-    // common part of all ctors
-    void Init();
-
 #if wxUSE_TOOLBAR
     virtual void PositionToolBar() wxOVERRIDE;
 #endif
@@ -103,9 +94,6 @@ protected:
     virtual void DetachMenuBar() wxOVERRIDE;
     virtual void AttachMenuBar(wxMenuBar *menubar) wxOVERRIDE;
 #endif
-
-    // the last focused child: we restore focus to it on activation
-    wxWindow             *m_winLastFocused;
 
     virtual bool        MacIsChildOfClientArea( const wxWindow* child ) const wxOVERRIDE;
 
