@@ -3506,7 +3506,15 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
 
     wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
 
-    gtk_widget_add_events(widget, GDK_TOUCHPAD_GESTURE_MASK);
+    // GDK_TOUCHPAD_GESTURE_MASK was added in 3.18, but we can just define it
+    // ourselves if we use an earlier version when compiling.
+#if !GTK_CHECK_VERSION(3,18,0)
+    #define GDK_TOUCHPAD_GESTURE_MASK (1 << 24)
+#endif
+    if ( gtk_check_version(3, 18, 0) == NULL )
+    {
+        gtk_widget_add_events(widget, GDK_TOUCHPAD_GESTURE_MASK);
+    }
 
     g_signal_connect (widget, "touch-event",
                       G_CALLBACK(touch_callback), win);
