@@ -482,6 +482,13 @@ wxTreeListModel::InsertItem(Node* parent,
     {
         // Not flat any more, this is a second level child.
         m_isFlat = false;
+
+        // This is a hack needed to work around wxOSX wxDataViewCtrl
+        // implementation which removes the indent if it thinks that the model
+        // is flat. We need to re-add the indent back if it turns out that it
+        // isn't flat, in fact.
+        wxDataViewCtrl* const dvc = m_treelist->GetDataView();
+        dvc->SetIndent(dvc->GetIndent());
     }
 
     wxScopedPtr<Node>
