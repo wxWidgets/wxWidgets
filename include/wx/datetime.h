@@ -306,7 +306,9 @@ public:
             return tz;
         }
 
-        long GetOffset() const { return m_offset; }
+        bool IsLocal() const { return m_offset == -1; }
+
+        long GetOffset() const;
 
     private:
         // offset for this timezone from GMT in seconds

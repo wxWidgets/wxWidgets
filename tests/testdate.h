@@ -11,6 +11,8 @@
 
 #include "wx/datetime.h"
 
+#include <ostream>
+
 // need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
 inline std::ostream& operator<<(std::ostream& ostr, const wxDateTime& dt)
 {
