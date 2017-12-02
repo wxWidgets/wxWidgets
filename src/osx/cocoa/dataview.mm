@@ -2033,8 +2033,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
         [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]
       ),
       m_DataSource(NULL),
-      m_OutlineView([[wxCocoaOutlineView alloc] init]),
-      m_removeIndentIfNecessary(false)
+      m_OutlineView([[wxCocoaOutlineView alloc] init])
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
@@ -2408,11 +2407,13 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
         m_DataSource = NULL;
     [m_OutlineView setDataSource:m_DataSource]; // if there is a data source the data is immediately going to be requested
 
-    // Set this to true to check if we need to remove the indent in the next
-    // OnSize() call: we can't do it directly here because the model might not
-    // be fully initialized yet and so might not know whether it has any items
-    // with children or not.
-    m_removeIndentIfNecessary = true;
+    // By default, the first column is indented to leave enough place for the
+    // expanders, but this looks bad if there are no expanders, so don't use
+    // indent in this case.
+    if ( model && model->IsListModel() )
+    {
+        DoSetIndent(0);
+    }
 
     return true;
 }
@@ -2577,21 +2578,6 @@ void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), 
 
 void wxCocoaDataViewControl::OnSize()
 {
-    if ( m_removeIndentIfNecessary )
-    {
-        m_removeIndentIfNecessary = false;
-
-        const wxDataViewModel* const model = GetDataViewCtrl()->GetModel();
-
-        // By default, the first column is indented to leave enough place for the
-        // expanders, but this looks bad if there are no expanders, so don't use
-        // indent in this case.
-        if ( model && model->IsListModel() )
-        {
-            DoSetIndent(0);
-        }
-    }
-
     if ([m_OutlineView numberOfColumns] == 1)
         [m_OutlineView sizeLastColumnToFit];
 }
