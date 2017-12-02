@@ -1429,6 +1429,11 @@ void wxWindowMac::WarpPointer(int x_pos, int y_pos)
 #endif
 }
 
+bool wxWindowMac::EnableTouchEvents(int eventsMask)
+{
+    return GetPeer() ? GetPeer()->EnableTouchEvents(eventsMask) : false;
+}
+
 int wxWindowMac::GetScrollPos(int orient) const
 {
 #if wxUSE_SCROLLBAR

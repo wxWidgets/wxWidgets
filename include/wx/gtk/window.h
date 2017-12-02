@@ -77,6 +77,9 @@ public:
     virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
 
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
+#ifdef __WXGTK3__
+    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
+#endif // __WXGTK3__
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
