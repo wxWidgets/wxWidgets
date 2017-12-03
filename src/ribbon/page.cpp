@@ -175,6 +175,8 @@ wxRibbonPage::wxRibbonPage(wxRibbonBar* parent,
 wxRibbonPage::~wxRibbonPage()
 {
     delete[] m_size_calc_array;
+    delete m_scroll_left_btn;
+    delete m_scroll_right_btn;
 }
 
 bool wxRibbonPage::Create(wxRibbonBar* parent,
