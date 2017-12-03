@@ -1002,7 +1002,6 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
 
 bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
 {
-    bool collapsed_something = false;
     while(minimum_amount > 0)
     {
         int largest_size = 0;
@@ -1086,7 +1085,6 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                     largest_panel_size->y -= amount;
                 }
                 minimum_amount -= amount;
-                collapsed_something = true;
             }
             else
             {
@@ -1094,7 +1092,6 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                 wxSize delta = (*largest_panel_size) - smaller;
                 *largest_panel_size = smaller;
                 minimum_amount -= GetSizeInOrientation(delta, direction);
-                collapsed_something = true;
             }
         }
         else
@@ -1102,7 +1099,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
             break;
         }
     }
-    return collapsed_something;
+    return minimum_amount <= 0;
 }
 
 bool wxRibbonPage::DismissExpandedPanel()
