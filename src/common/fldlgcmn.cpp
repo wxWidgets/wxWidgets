@@ -86,7 +86,6 @@ bool wxFileDialogBase::Create(wxWindow *parent,
 #endif
 
     m_windowStyle = style;
-    m_filterIndex = 0;
 
     if (!HasFdFlag(wxFD_OPEN) && !HasFdFlag(wxFD_SAVE))
         m_windowStyle |= wxFD_OPEN;     // wxFD_OPEN is the default
