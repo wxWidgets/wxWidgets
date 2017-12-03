@@ -4158,6 +4158,18 @@ void wxWindowGTK::DoEnable( bool enable )
     gtk_widget_set_sensitive( m_widget, enable );
     if (m_wxwindow && (m_wxwindow != m_widget))
         gtk_widget_set_sensitive( m_wxwindow, enable );
+
+    if (enable && AcceptsFocusFromKeyboard())
+    {
+        wxWindowGTK* parent = this;
+        while ((parent = parent->GetParent()))
+        {
+            parent->m_dirtyTabOrder = true;
+            if (parent->IsTopLevel())
+                break;
+        }
+        wxTheApp->WakeUpIdle();
+    }
 }
 
 int wxWindowGTK::GetCharHeight() const
