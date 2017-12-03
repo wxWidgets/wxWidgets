@@ -20,8 +20,14 @@ namespace wxGTKImpl
 inline bool ConvertMessageTypeFromWX(int style, GtkMessageType *type)
 {
 #ifdef __WXGTK210__
-    if ( gtk_check_version(2, 10, 0) == NULL && (style & wxICON_NONE))
+    if (
+#ifndef __WXGTK3__
+        gtk_check_version(2,10,0) == NULL &&
+#endif
+                                             (style & wxICON_NONE))
+    {
         *type = GTK_MESSAGE_OTHER;
+    }
     else
 #endif // __WXGTK210__
     if (style & wxICON_EXCLAMATION)
