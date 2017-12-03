@@ -1177,7 +1177,18 @@ pass2_fs_dither (j_decompress_ptr cinfo,
 
     bnexterr = cur0;    /* Process component 0 */
     delta = cur0 * 2;
+/*
+    Calculating cur0, cur1, cur2 gives bad results if code
+    optimization is enabled in VC++. This is apparently caused
+    by some bug in the compiler.
+    Use refactored code until it is fixed.
+*/
+#ifdef __VISUALC__
+    /* Use refactored code to prevent invalid optimization. */
+    cur0 *= 3;          /* form error * 3 */
+#else
     cur0 += delta;      /* form error * 3 */
+#endif
     errorptr[0] = (FSERROR) (bpreverr0 + cur0);
     cur0 += delta;      /* form error * 5 */
     bpreverr0 = belowerr0 + cur0;
@@ -1185,7 +1196,12 @@ pass2_fs_dither (j_decompress_ptr cinfo,
     cur0 += delta;      /* form error * 7 */
     bnexterr = cur1;    /* Process component 1 */
     delta = cur1 * 2;
+#ifdef __VISUALC__
+    /* Use refactored code to prevent invalid optimization. */
+    cur1 *= 3;          /* form error * 3 */
+#else
     cur1 += delta;      /* form error * 3 */
+#endif
     errorptr[1] = (FSERROR) (bpreverr1 + cur1);
     cur1 += delta;      /* form error * 5 */
     bpreverr1 = belowerr1 + cur1;
@@ -1193,7 +1209,12 @@ pass2_fs_dither (j_decompress_ptr cinfo,
     cur1 += delta;      /* form error * 7 */
     bnexterr = cur2;    /* Process component 2 */
     delta = cur2 * 2;
+#ifdef __VISUALC__
+    /* Use refactored code to prevent invalid optimization. */
+    cur2 *= 3;          /* form error * 3 */
+#else
     cur2 += delta;      /* form error * 3 */
+#endif
     errorptr[2] = (FSERROR) (bpreverr2 + cur2);
     cur2 += delta;      /* form error * 5 */
     bpreverr2 = belowerr2 + cur2;
