@@ -338,7 +338,8 @@ bool wxRibbonPage::ScrollPixels(int pixels)
         child->SetPosition(wxPoint(x, y));
     }
 
-    ShowScrollButtons();
+    if (ShowScrollButtons())
+        DoActualLayout();
     Refresh();
     return true;
 }
@@ -788,7 +789,7 @@ void wxRibbonPage::HideScrollButtons()
     ShowScrollButtons();
 }
 
-void wxRibbonPage::ShowScrollButtons()
+bool wxRibbonPage::ShowScrollButtons()
 {
     bool show_left = true;
     bool show_right = true;
@@ -891,6 +892,8 @@ void wxRibbonPage::ShowScrollButtons()
     {
         wxDynamicCast(GetParent(), wxRibbonBar)->RepositionPage(this);
     }
+
+    return reposition;
 }
 
 static int GetSizeInOrientation(wxSize size, wxOrientation orientation)
