@@ -65,6 +65,7 @@
 // ----------------------------------------------------------------------------
 
 extern void wxInitTm(struct tm& tm);
+extern const tm* wxTryGetTm(tm& tmstruct, time_t t, const wxDateTime::TimeZone& tz);
 
 extern wxString wxCallStrftime(const wxString& format, const tm* tm);
 
@@ -367,40 +368,9 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 
     if ( canUseStrftime )
     {
-        // use strftime()
+        // Try using strftime()
         struct tm tmstruct;
-        struct tm *tm;
-        if ( tz.GetOffset() == -wxGetTimeZone() )
-        {
-            // we are working with local time
-            tm = wxLocaltime_r(&time, &tmstruct);
-
-            // should never happen
-            wxCHECK_MSG( tm, wxEmptyString, wxT("wxLocaltime_r() failed") );
-        }
-        else
-        {
-            time += (int)tz.GetOffset();
-
-#if defined(__VMS__) // time is unsigned so avoid warning
-            int time2 = (int) time;
-            if ( time2 >= 0 )
-#else
-            if ( time >= 0 )
-#endif
-            {
-                tm = wxGmtime_r(&time, &tmstruct);
-
-                // should never happen
-                wxCHECK_MSG( tm, wxEmptyString, wxT("wxGmtime_r() failed") );
-            }
-            else
-            {
-                tm = (struct tm *)NULL;
-            }
-        }
-
-        if ( tm )
+        if ( const tm* tm = wxTryGetTm(tmstruct, time, tz) )
         {
             return wxCallStrftime(format, tm);
         }

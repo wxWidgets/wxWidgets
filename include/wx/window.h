@@ -133,6 +133,20 @@ enum wxShowEffect
     wxSHOW_EFFECT_MAX
 };
 
+// Values for EnableTouchEvents() mask.
+enum
+{
+    wxTOUCH_NONE                    = 0x0000,
+    wxTOUCH_VERTICAL_PAN_GESTURE    = 0x0001,
+    wxTOUCH_HORIZONTAL_PAN_GESTURE  = 0x0002,
+    wxTOUCH_PAN_GESTURES            = wxTOUCH_VERTICAL_PAN_GESTURE |
+                                      wxTOUCH_HORIZONTAL_PAN_GESTURE,
+    wxTOUCH_ZOOM_GESTURE            = 0x0004,
+    wxTOUCH_ROTATE_GESTURE          = 0x0008,
+    wxTOUCH_PRESS_GESTURES          = 0x0010,
+    wxTOUCH_ALL_GESTURES            = 0x001f
+};
+
 // flags for SendSizeEvent()
 enum
 {
@@ -1032,6 +1046,13 @@ public:
         // does this window have the capture?
     virtual bool HasCapture() const
         { return (wxWindow *)this == GetCapture(); }
+
+        // enable the specified touch events for this window, return false if
+        // the requested events are not supported
+    virtual bool EnableTouchEvents(int WXUNUSED(eventsMask))
+    {
+        return false;
+    }
 
     // painting the window
     // -------------------

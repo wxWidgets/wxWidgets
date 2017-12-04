@@ -51,6 +51,7 @@
     #include "wx/textctrl.h"
     #include "wx/menuitem.h"
     #include "wx/module.h"
+    #include "wx/vector.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -204,6 +205,82 @@ int gs_modalEntryWindowCount = 0;
 bool gs_insideCaptureChanged = false;
 
 } // anonymous namespace
+
+#ifdef WM_GESTURE
+
+namespace
+{
+
+// Class used to dynamically load gestures related API functions.
+class GestureFuncs
+{
+public:
+    // Must be called before using any other methods of this class (and they
+    // can't be used if this one returns false).
+    static bool IsOk()
+    {
+        if ( !ms_gestureSymbolsLoaded )
+        {
+            ms_gestureSymbolsLoaded = true;
+            LoadGestureSymbols();
+        }
+
+        return ms_pfnGetGestureInfo &&
+                ms_pfnCloseGestureInfoHandle &&
+                    ms_pfnSetGestureConfig;
+    }
+
+    typedef BOOL (WINAPI *GetGestureInfo_t)(HGESTUREINFO, PGESTUREINFO);
+
+    static GetGestureInfo_t GetGestureInfo()
+    {
+        return ms_pfnGetGestureInfo;
+    }
+
+    typedef BOOL (WINAPI *CloseGestureInfoHandle_t)(HGESTUREINFO);
+
+    static CloseGestureInfoHandle_t CloseGestureInfoHandle()
+    {
+        return ms_pfnCloseGestureInfoHandle;
+    }
+
+    typedef BOOL
+        (WINAPI *SetGestureConfig_t)(HWND, DWORD, UINT, PGESTURECONFIG, UINT);
+
+    static SetGestureConfig_t SetGestureConfig()
+    {
+        return ms_pfnSetGestureConfig;
+    }
+
+private:
+    static void LoadGestureSymbols()
+    {
+        wxLoadedDLL dll(wxS("user32.dll"));
+
+        wxDL_INIT_FUNC(ms_pfn, GetGestureInfo, dll);
+        wxDL_INIT_FUNC(ms_pfn, CloseGestureInfoHandle, dll);
+        wxDL_INIT_FUNC(ms_pfn, SetGestureConfig, dll);
+    }
+
+    static GetGestureInfo_t ms_pfnGetGestureInfo;
+    static CloseGestureInfoHandle_t ms_pfnCloseGestureInfoHandle;
+    static SetGestureConfig_t ms_pfnSetGestureConfig;
+
+    static bool ms_gestureSymbolsLoaded;
+};
+
+GestureFuncs::GetGestureInfo_t
+    GestureFuncs::ms_pfnGetGestureInfo = NULL;
+GestureFuncs::CloseGestureInfoHandle_t
+    GestureFuncs::ms_pfnCloseGestureInfoHandle = NULL;
+GestureFuncs::SetGestureConfig_t
+    GestureFuncs::ms_pfnSetGestureConfig = NULL;
+
+bool GestureFuncs::ms_gestureSymbolsLoaded = false;
+
+} // anonymous namespace
+
+#endif // WM_GESTURE
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -828,6 +905,123 @@ void wxWindowMSW::WarpPointer(int x, int y)
     {
         wxLogLastError(wxT("SetCursorPos"));
     }
+}
+
+bool wxWindowMSW::EnableTouchEvents(int eventsMask)
+{
+#ifdef WM_GESTURE
+    if ( GestureFuncs::IsOk() )
+    {
+        // Static struct used when we need to use just a single configuration.
+        GESTURECONFIG config = {0, 0, 0};
+
+        GESTURECONFIG* ptrConfigs = &config;
+        UINT numConfigs = 1;
+
+        // This is used only if we need to allocate the configurations
+        // dynamically.
+        wxVector<GESTURECONFIG> configs;
+
+        // There are two simple cases: enabling or disabling all gestures.
+        if ( eventsMask == wxTOUCH_NONE )
+        {
+            config.dwBlock = GC_ALLGESTURES;
+        }
+        else if ( eventsMask == wxTOUCH_ALL_GESTURES )
+        {
+            config.dwWant = GC_ALLGESTURES;
+        }
+        else // Need to enable the individual gestures
+        {
+            int wantedPan = 0;
+            switch ( eventsMask & wxTOUCH_PAN_GESTURES )
+            {
+                case wxTOUCH_VERTICAL_PAN_GESTURE:
+                    wantedPan = GC_PAN_WITH_SINGLE_FINGER_VERTICALLY;
+                    break;
+
+                case wxTOUCH_HORIZONTAL_PAN_GESTURE:
+                    wantedPan = GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY;
+                    break;
+
+                case wxTOUCH_PAN_GESTURES:
+                    wantedPan = GC_PAN;
+                    break;
+
+                case 0:
+                    // This is the only other possibility and wantedPan is
+                    // already initialized to 0 anyhow, so don't do anything,
+                    // just list it for completeness.
+                    break;
+            }
+
+            if ( wantedPan )
+            {
+                eventsMask &= ~wxTOUCH_PAN_GESTURES;
+
+                config.dwID = GID_PAN;
+                config.dwWant = wantedPan;
+                configs.push_back(config);
+            }
+
+            if ( eventsMask & wxTOUCH_ZOOM_GESTURE )
+            {
+                eventsMask &= ~wxTOUCH_ZOOM_GESTURE;
+
+                config.dwID = GID_ZOOM;
+                config.dwWant = GC_ZOOM;
+                configs.push_back(config);
+            }
+
+            if ( eventsMask & wxTOUCH_ROTATE_GESTURE )
+            {
+                eventsMask &= ~wxTOUCH_ROTATE_GESTURE;
+
+                config.dwID = GID_ROTATE;
+                config.dwWant = GC_ROTATE;
+                configs.push_back(config);
+            }
+
+            if ( eventsMask & wxTOUCH_PRESS_GESTURES )
+            {
+                eventsMask &= ~wxTOUCH_PRESS_GESTURES;
+
+                config.dwID = GID_TWOFINGERTAP;
+                config.dwWant = GC_TWOFINGERTAP;
+                configs.push_back(config);
+
+                config.dwID = GID_PRESSANDTAP;
+                config.dwWant = GC_PRESSANDTAP;
+                configs.push_back(config);
+            }
+
+            // As we clear all the known bits if they're set in the code above,
+            // there should be nothing left.
+            wxCHECK_MSG( eventsMask == 0, false,
+                         wxS("Unknown touch event mask bit specified") );
+
+            ptrConfigs = &configs[0];
+        }
+
+        if ( !GestureFuncs::SetGestureConfig()
+             (
+                m_hWnd,
+                0,                      // Reserved, must be always 0.
+                numConfigs,             // Number of gesture configurations.
+                ptrConfigs,             // Pointer to the first one.
+                sizeof(GESTURECONFIG)   // Size of each configuration.
+             )
+           )
+        {
+            wxLogLastError("SetGestureConfig");
+            return false;
+        }
+
+        return true;
+    }
+#endif // WM_GESTURE
+
+    return wxWindowBase::EnableTouchEvents(eventsMask);
 }
 
 void wxWindowMSW::MSWUpdateUIState(int action, int state)
@@ -3123,6 +3317,84 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                         code, pos, hwnd);
             }
             break;
+
+#ifdef WM_GESTURE
+        case WM_GESTURE:
+        {
+            if ( !GestureFuncs::IsOk() )
+                break;
+
+            HGESTUREINFO hGestureInfo = reinterpret_cast<HGESTUREINFO>(lParam);
+
+            WinStruct<GESTUREINFO> gestureInfo;
+            if ( !GestureFuncs::GetGestureInfo()(hGestureInfo, &gestureInfo) )
+            {
+                wxLogLastError("GetGestureInfo");
+                break;
+            }
+
+            if ( gestureInfo.hwndTarget != GetHWND() )
+            {
+                wxLogDebug("This is Not the window targeted by this gesture!");
+            }
+
+            const wxPoint pt = ScreenToClient
+                               (
+                                    wxPoint(gestureInfo.ptsLocation.x,
+                                            gestureInfo.ptsLocation.y)
+                               );
+
+            // dwID field is used to determine the type of gesture
+            switch ( gestureInfo.dwID )
+            {
+                case GID_PAN:
+                    // Point contains the current position of the pan.
+                    processed = HandlePanGesture(pt, gestureInfo.dwFlags);
+                    break;
+
+                case GID_ZOOM:
+                    // Point is the mid-point of 2 fingers and ullArgument
+                    // contains the distance between the fingers in its lower
+                    // half
+                    processed = HandleZoomGesture
+                                (
+                                    pt,
+                                    static_cast<DWORD>(gestureInfo.ullArguments),
+                                    gestureInfo.dwFlags
+                                );
+                    break;
+
+                case GID_ROTATE:
+                    // Point is the center point of rotation and ullArguments
+                    // contains the angle of rotation
+                    processed = HandleRotateGesture
+                                (
+                                    pt,
+                                    static_cast<DWORD>(gestureInfo.ullArguments),
+                                    gestureInfo.dwFlags
+                                );
+                    break;
+
+                case GID_TWOFINGERTAP:
+                    processed = HandleTwoFingerTap(pt, gestureInfo.dwFlags);
+                    break;
+
+                case GID_PRESSANDTAP:
+                    processed = HandlePressAndTap(pt, gestureInfo.dwFlags);
+                    break;
+            }
+
+            if ( processed )
+            {
+                // If processed, we must call this to avoid memory leaks
+                if ( !GestureFuncs::CloseGestureInfoHandle()(hGestureInfo) )
+                {
+                    wxLogLastError("CloseGestureInfoHandle");
+                }
+            }
+        }
+        break;
+#endif // WM_GESTURE
 
         // CTLCOLOR messages are sent by children to query the parent for their
         // colors
@@ -5473,6 +5745,144 @@ void wxWindowMSW::GenerateMouseLeave()
 
     (void)HandleWindowEvent(event);
 }
+
+#ifdef WM_GESTURE
+// ---------------------------------------------------------------------------
+// Gesture events
+// ---------------------------------------------------------------------------
+
+bool wxWindowMSW::InitGestureEvent(wxGestureEvent& event,
+                                   const wxPoint& pt,
+                                   WXDWORD flags)
+{
+    event.SetEventObject(this);
+    event.SetTimestamp(::GetMessageTime());
+    event.SetPosition(pt);
+
+    if ( flags & GF_BEGIN )
+        event.SetGestureStart();
+
+    if ( flags & GF_END )
+        event.SetGestureEnd();
+
+    return (flags & GF_BEGIN) != 0;
+}
+
+bool wxWindowMSW::HandlePanGesture(const wxPoint& pt, WXDWORD flags)
+{
+    // wxEVT_GESTURE_PAN
+    wxPanGestureEvent event(GetId());
+
+    // This is used to calculate the pan delta.
+    static wxPoint s_previousLocation;
+
+    // If the gesture has just started, store the current point to determine
+    // the pan delta later on.
+    if ( InitGestureEvent(event, pt, flags) )
+    {
+        s_previousLocation = pt;
+    }
+
+    // Determine the horizontal and vertical changes
+    event.SetDelta(pt - s_previousLocation);
+
+    // Update the last gesture event point
+    s_previousLocation = pt;
+
+    return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandleZoomGesture(const wxPoint& pt,
+                                    WXDWORD fingerDistance,
+                                    WXDWORD flags)
+{
+    // wxEVT_GESTURE_ZOOM
+    wxZoomGestureEvent event(GetId());
+
+    // These are used to calculate the center of the zoom and zoom factor
+    static wxPoint s_previousLocation;
+    static int s_intialFingerDistance;
+
+    // This flag indicates that the gesture has just started, store the current
+    // point and distance between the fingers for future calculations.
+    if ( InitGestureEvent(event, pt, flags) )
+    {
+        s_previousLocation = pt;
+        s_intialFingerDistance = fingerDistance;
+    }
+
+    // Calculate center point of the zoom. Human beings are not very good at
+    // moving two fingers at exactly the same rate outwards/inwards and there
+    // is usually some error, which can cause the center to shift slightly. So,
+    // it is recommended to take the average of center of fingers in the
+    // current and last positions.
+    const wxPoint ptCenter = (s_previousLocation + pt)/2;
+
+    const double zoomFactor = (double) fingerDistance / s_intialFingerDistance;
+
+    event.SetZoomFactor(zoomFactor);
+
+    event.SetPosition(ptCenter);
+
+    // Update gesture event point
+    s_previousLocation = pt;
+
+    return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandleRotateGesture(const wxPoint& pt,
+                                      WXDWORD angleArgument,
+                                      WXDWORD flags)
+{
+    // wxEVT_GESTURE_ROTATE
+    wxRotateGestureEvent event(GetId());
+
+    if ( InitGestureEvent(event, pt, flags) )
+    {
+        event.SetRotationAngle(angleArgument);
+    }
+    else // Not the first event.
+    {
+        // Use angleArgument to obtain the cumulative angle since the gesture
+        // was first started. This angle is in radians and MSW returns negative
+        // angle for clockwise rotation and positive otherwise, so, multiply
+        // angle by -1 for positive angle for clockwise and negative in case of
+        // counterclockwise.
+        double angle = -GID_ROTATE_ANGLE_FROM_ARGUMENT(angleArgument);
+
+        // If the rotation is anti-clockwise convert the angle to its
+        // corresponding positive value in a clockwise sense.
+        if ( angle < 0 )
+        {
+            angle += 2 * M_PI;
+        }
+
+        // Set the angle
+        event.SetRotationAngle(angle);
+    }
+
+    return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandleTwoFingerTap(const wxPoint& pt, WXDWORD flags)
+{
+    // wxEVT_TWO_FINGER_TAP
+    wxTwoFingerTapEvent event(GetId());
+
+    InitGestureEvent(event, pt, flags);
+
+    return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandlePressAndTap(const wxPoint& pt, WXDWORD flags)
+{
+    wxPressAndTapEvent event(GetId());
+
+    InitGestureEvent(event, pt, flags);
+
+    return HandleWindowEvent(event);
+}
+#endif // WM_GESTURE
 
 // ---------------------------------------------------------------------------
 // keyboard handling

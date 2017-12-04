@@ -158,7 +158,11 @@ public:
         line = line_;
         component = component_;
 
-        timestamp = time(NULL);
+        // don't initialize the timestamp yet, we might not need it at all if
+        // the message doesn't end up being logged and otherwise we'll fill it
+        // just before logging it, which won't change it by much and definitely
+        // less than a second resolution of the timestamp
+        timestamp = 0;
 
 #if wxUSE_THREADS
         threadId = wxThread::GetCurrentId();
@@ -1162,6 +1166,11 @@ private:
 
     void DoCallOnLog(wxLogLevel level, const wxString& format, va_list argptr)
     {
+        // As explained in wxLogRecordInfo ctor, we don't initialize its
+        // timestamp to avoid calling time() unnecessary, but now that we are
+        // about to log the message, we do need to do it.
+        m_info.timestamp = time(NULL);
+
         wxLog::OnLog(level, wxString::FormatV(format, argptr), m_info);
     }
 
