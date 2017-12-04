@@ -324,6 +324,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
                                         m_cancelBitmap);
 
     SetBackgroundColour( m_text->GetBackgroundColour() );
+    m_text->SetBackgroundColour(wxColour());
 
     RecalcBitmaps();
 
