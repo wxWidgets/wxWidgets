@@ -77,16 +77,18 @@ int wxDisplayDepth()
         CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
         CFStringRef encoding = CGDisplayModeCopyPixelEncoding(currentMode);
         
-        if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-            theDepth = 32;
-        else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-            theDepth = 16;
-        else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-            theDepth = 8;
-        else
-            theDepth = 32; // some reasonable default
+        theDepth = 32; // some reasonable default
+        if(encoding)
+        {
+            if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+                theDepth = 32;
+            else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+                theDepth = 16;
+            else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+                theDepth = 8;
+            CFRelease(encoding);
+        }
 
-        CFRelease(encoding);
         CGDisplayModeRelease(currentMode);
     }
     else
