@@ -281,9 +281,7 @@ bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
         length -= nread;
     }
 
-    *p = 0;
-
-    wxString strTmp(buf, conv);
+    wxString strTmp(buf, conv, length);
     str->swap(strTmp);
 
     return true;
