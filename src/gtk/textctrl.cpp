@@ -1114,6 +1114,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( !IsMultiLine() )
     {
         wxTextEntry::WriteText(text);
+        m_dontMarkDirty = false;
         return;
     }
 
@@ -1138,6 +1139,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         // serious problem (e.g. imagine the document edited by user being
         // empty instead of containing the correct text)
         wxLogWarning(_("Failed to insert text in the control."));
+        m_dontMarkDirty = false;
         return;
     }
 #endif
@@ -1162,6 +1164,7 @@ void wxTextCtrl::WriteText( const wxString &text )
                 gtk_text_buffer_get_insert(m_buffer), 0, false, 0, 1);
         }
     }
+    m_dontMarkDirty = false;
 }
 
 wxString wxTextCtrl::GetLineText( long lineNo ) const
