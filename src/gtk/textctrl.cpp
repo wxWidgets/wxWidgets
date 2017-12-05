@@ -1042,6 +1042,8 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     // we're changing the text programmatically
     DontMarkDirtyOnNextChange();
+    // make sure marking is re-enabled even if events are suppressed
+    wxON_BLOCK_EXIT_SET(m_dontMarkDirty, false);
 
     // Inserting new text into the control below will emit insert-text signal
     // which assumes that if m_imKeyEvent is set, it is called in response to
