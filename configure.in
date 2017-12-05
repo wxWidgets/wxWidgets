@@ -7831,6 +7831,9 @@ dnl wx-config must output 3rd party libs in --libs in static build:
 if test "$wxUSE_REGEX" = "builtin" ; then
     wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
 fi
+if test "$wxUSE_STC" = "yes" ; then
+    wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
+fi
 case "$wxUSE_EXPAT" in
     builtin)
         wxconfig_3rdparty="expat $wxconfig_3rdparty"
