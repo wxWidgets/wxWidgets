@@ -420,26 +420,6 @@
 
 // For ming and cygwin
 
-// GetFirstChild
-#ifdef GetFirstChild
-   #undef GetFirstChild
-   inline HWND GetFirstChild(HWND h)
-   {
-      return GetTopWindow(h);
-   }
-#endif
-
-
-// GetNextSibling
-#ifdef GetNextSibling
-   #undef GetNextSibling
-   inline HWND GetNextSibling(HWND h)
-   {
-     return GetWindow(h, GW_HWNDNEXT);
-   }
-#endif
-
-
 #ifdef Yield
     #undef Yield
 #endif
