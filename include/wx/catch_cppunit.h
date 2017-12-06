@@ -73,6 +73,32 @@ namespace Catch
             return wxString(ucr).ToStdString(wxConvUTF8);
         }
     };
+
+    // While this conversion already works due to the existence of the stream
+    // insertion operator for wxString, define a custom one making it more
+    // obvious when strings containing non-printable characters differ.
+    template <>
+    struct StringMaker<wxString>
+    {
+        static std::string convert(const wxString& wxs)
+        {
+            std::string s;
+            s.reserve(wxs.length());
+            for ( wxString::const_iterator i = wxs.begin();
+                  i != wxs.end();
+                  ++i )
+            {
+#if wxUSE_UNICODE
+                if ( !iswprint(*i) )
+                    s += wxString::Format("\\u%04X", *i).ToStdString();
+                else
+#endif // wxUSE_UNICODE
+                    s += *i;
+            }
+
+            return s;
+        }
+    };
 }
 
 // Use a different namespace for our mock ups of the real declarations in
