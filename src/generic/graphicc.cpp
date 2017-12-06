@@ -337,7 +337,7 @@ public:
                     const wxColour& col);
     ~wxCairoFontData();
 
-    virtual bool Apply( wxGraphicsContext* context );
+    virtual void Apply( wxGraphicsContext* context );
 #ifdef __WXGTK__
     const wxFont& GetFont() const { return m_wxfont; }
 #endif
@@ -1046,7 +1046,7 @@ wxCairoFontData::~wxCairoFontData()
 #endif
 }
 
-bool wxCairoFontData::Apply( wxGraphicsContext* context )
+void wxCairoFontData::Apply( wxGraphicsContext* context )
 {
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     cairo_set_source_rgba(ctext,m_red,m_green, m_blue,m_alpha);
@@ -1055,14 +1055,14 @@ bool wxCairoFontData::Apply( wxGraphicsContext* context )
     {
         // Nothing to do, the caller uses Pango layout functions to do
         // everything.
-        return true;
+        return;
     }
 #elif defined(__WXMAC__)
     if ( m_font )
     {
         cairo_set_font_face(ctext, m_font);
         cairo_set_font_size(ctext, m_size );
-        return true;
+        return;
     }
 #endif
 
@@ -1070,10 +1070,6 @@ bool wxCairoFontData::Apply( wxGraphicsContext* context )
     // we're using toy Cairo API even under wxGTK/wxMac.
     cairo_select_font_face(ctext, m_fontName, m_slant, m_weight );
     cairo_set_font_size(ctext, m_size );
-
-    // Indicate that we don't use native fonts for the platforms which care
-    // about this (currently only wxGTK).
-    return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -2603,11 +2599,16 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( !data )
         return;
 
-    if ( ((wxCairoFontData*)m_font.GetRefData())->Apply(this) )
-    {
+    wxCairoFontData* const
+        fontData = static_cast<wxCairoFontData*>(m_font.GetRefData());
+
+    fontData->Apply(this);
+
 #ifdef __WXGTK__
+    const wxFont& font = fontData->GetFont();
+    if ( font.IsOk() )
+    {
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
-        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
         font.GTKSetPangoAttrs(layout);
@@ -2617,8 +2618,8 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 
         // Don't use Cairo text API, we already did everything.
         return;
-#endif
     }
+#endif // __WXGTK__
 
     // Cairo's x,y for drawing text is at the baseline, so we need to adjust
     // the position we move to by the ascent.
@@ -2649,13 +2650,20 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     if ( str.empty() && !descent && !externalLeading )
         return;
 
-    if ( ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this) )
-    {
+    wxCairoFontData* const
+        fontData = static_cast<wxCairoFontData*>(m_font.GetRefData());
+
 #ifdef __WXGTK__
+    // Use Pango instead of Cairo toy font API if we have the font.
+    const wxFont& font = fontData->GetFont();
+    if ( font.IsOk() )
+    {
+        // Note that there is no need to call Apply() at all in this case, it
+        // just sets the text colour, but we don't care about this when
+        // measuring its extent.
         int w, h;
 
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
-        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         const wxCharBuffer data = str.utf8_str();
         if ( !data )
@@ -2676,8 +2684,10 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
             *descent = h - PANGO_PIXELS(baseline);
         }
         return;
-#endif
     }
+#endif // __WXGTK__
+
+    fontData->Apply(const_cast<wxCairoContext*>(this));
 
     if (width)
     {
