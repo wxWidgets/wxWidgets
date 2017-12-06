@@ -291,7 +291,7 @@ public:
     void Init();
 
     virtual void Apply( wxGraphicsContext* context ) wxOVERRIDE;
-    virtual wxDouble GetWidth() { return m_width; }
+    wxDouble GetWidth() { return m_width; }
 
 private :
     double m_width;
@@ -320,7 +320,7 @@ public:
                                    const wxGraphicsGradientStops& stops);
 
 protected:
-    virtual void Init();
+    void Init();
 
     // common part of Create{Linear,Radial}GradientBrush()
     void AddGradientStops(const wxGraphicsGradientStops& stops);
@@ -337,7 +337,7 @@ public:
                     const wxColour& col);
     ~wxCairoFontData();
 
-    virtual void Apply( wxGraphicsContext* context );
+    void Apply( wxGraphicsContext* context );
 #ifdef __WXGTK__
     const wxFont& GetFont() const { return m_wxfont; }
 #endif
@@ -383,10 +383,10 @@ public:
     wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap );
     ~wxCairoBitmapData();
 
-    virtual cairo_surface_t* GetCairoSurface() { return m_surface; }
-    virtual cairo_pattern_t* GetCairoPattern() { return m_pattern; }
-    virtual void* GetNativeBitmap() const wxOVERRIDE { return m_surface; }
-    virtual wxSize GetSize() { return wxSize(m_width, m_height); }
+    cairo_surface_t* GetCairoSurface() { return m_surface; }
+    cairo_pattern_t* GetCairoPattern() { return m_pattern; }
+    void* GetNativeBitmap() const wxOVERRIDE { return m_surface; }
+    wxSize GetSize() { return wxSize(m_width, m_height); }
 
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
