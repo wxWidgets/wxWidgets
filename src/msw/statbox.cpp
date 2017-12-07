@@ -374,14 +374,6 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
 // do anything in such case)
 void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
 {
-    // note that we do not use the box background colour here, it shouldn't
-    // apply to its interior for several reasons:
-    //  1. wxGTK doesn't do it
-    //  2. controls inside the box don't get correct bg colour because they
-    //     are not our children so we'd have some really ugly colour mix if
-    //     we did it
-    //  3. this is backwards compatible behaviour and some people rely on it,
-    //     see http://groups.google.com/groups?selm=4252E932.3080801%40able.es
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HBRUSH hbr = MSWGetBgBrush(impl->GetHDC());
 
