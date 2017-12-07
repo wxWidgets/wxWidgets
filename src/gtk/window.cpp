@@ -345,6 +345,13 @@ static bool wxGetTopLevel(GtkWidget** widget, GdkWindow** window)
     return false;
 }
 
+GtkWidget* wxGetTopLevelGTK()
+{
+    GtkWidget* widget = NULL;
+    wxGetTopLevel(&widget, NULL);
+    return widget;
+}
+
 GdkWindow* wxGetTopLevelGDK()
 {
     GdkWindow* window;
