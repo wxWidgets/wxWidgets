@@ -104,6 +104,7 @@ All:
 - Don't crash in wxFFile::Eof() or Error() on closed file (jprotopopov).
 - Add UTF-8 support to wxZipOutputStream (Tobias Taschner).
 - Update all bundled 3rd party libraries to their latest versions.
+- Use unique prefix for all zlib symbols to avoid link conflicts.
 
 All (GUI):
 
