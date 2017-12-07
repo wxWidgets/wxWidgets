@@ -2184,12 +2184,18 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
 {
     if (attr.HasColour())
     {
-        const GdkColor * const gcol = attr.GetColour().GetColor();
 
         GValue gvalue = G_VALUE_INIT;
+#ifdef __WXGTK3__
+        g_value_init(&gvalue, GDK_TYPE_RGBA);
+        g_value_set_boxed(&gvalue, static_cast<const GdkRGBA*>(attr.GetColour()));
+        g_object_set_property(G_OBJECT(renderer), "foreground-rgba", &gvalue);
+#else
+        const GdkColor* const gcol = attr.GetColour().GetColor();
         g_value_init( &gvalue, GDK_TYPE_COLOR );
         g_value_set_boxed( &gvalue, gcol );
         g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
+#endif
         g_value_unset( &gvalue );
     }
     else
@@ -2238,13 +2244,19 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
 
     if (attr.HasBackgroundColour())
     {
+        GValue gvalue = G_VALUE_INIT;
         wxColour colour = attr.GetBackgroundColour();
+#ifdef __WXGTK3__
+        g_value_init(&gvalue, GDK_TYPE_RGBA);
+        g_value_set_boxed(&gvalue, static_cast<const GdkRGBA*>(colour));
+        g_object_set_property(G_OBJECT(renderer), "cell-background-rgba", &gvalue);
+#else
         const GdkColor * const gcol = colour.GetColor();
 
-        GValue gvalue = G_VALUE_INIT;
         g_value_init( &gvalue, GDK_TYPE_COLOR );
         g_value_set_boxed( &gvalue, gcol );
         g_object_set_property( G_OBJECT(renderer), "cell-background_gdk", &gvalue );
+#endif
         g_value_unset( &gvalue );
     }
     else
