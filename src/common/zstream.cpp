@@ -26,16 +26,7 @@
     #include "wx/utils.h"
 #endif
 
-
-// normally, the compiler options should contain -I../zlib, but it is
-// apparently not the case for all MSW makefiles and so, unless we use
-// configure (which defines __WX_SETUP_H__) or it is explicitly overridden by
-// the user (who can define wxUSE_ZLIB_H_IN_PATH), we hardcode the path here
-#if defined(__WINDOWS__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
-    #include "../zlib/zlib.h"
-#else
-    #include "zlib.h"
-#endif
+#include "zlib.h"
 
 enum {
     ZSTREAM_BUFFER_SIZE = 16384,
