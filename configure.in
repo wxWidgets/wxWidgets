@@ -7827,29 +7827,13 @@ LDFLAGS="$LDFLAGS $PROFILE_FLAGS"
 
 WXCONFIG_LIBS="$LIBS"
 
-dnl wx-config must output 3rd party libs in --libs in static build:
-if test "$wxUSE_REGEX" = "builtin" ; then
-    wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
-fi
-if test "$wxUSE_STC" = "yes" ; then
-    wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
-fi
-case "$wxUSE_EXPAT" in
-    builtin)
-        wxconfig_3rdparty="expat $wxconfig_3rdparty"
-        ;;
-    sys)
-        WXCONFIG_LIBS="$EXPAT_LINK $WXCONFIG_LIBS"
-        ;;
-esac
-case "$wxUSE_ZLIB" in
-    builtin)
-        wxconfig_3rdparty="zlib $wxconfig_3rdparty"
-        ;;
-    sys)
-        WXCONFIG_LIBS="$ZLIB_LINK $WXCONFIG_LIBS"
-        ;;
-esac
+dnl wx-config must output 3rd party libs in --libs in static build, so collect
+dnl them in wxconfig_3rdparty variable
+dnl
+dnl Notice that the libraries must be listed in correct order whenever there
+dnl are dependencies between them for linking to work when using static
+dnl libraries, e.g. jpeg, used by tiff, must come after it and zlib, used by
+dnl png, must come after it as well.
 if test "$wxUSE_GUI" = "yes"; then
     case "$wxUSE_LIBTIFF" in
         builtin)
@@ -7876,6 +7860,28 @@ if test "$wxUSE_GUI" = "yes"; then
             ;;
     esac
 fi
+if test "$wxUSE_REGEX" = "builtin" ; then
+    wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
+fi
+if test "$wxUSE_STC" = "yes" ; then
+    wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
+fi
+case "$wxUSE_EXPAT" in
+    builtin)
+        wxconfig_3rdparty="expat $wxconfig_3rdparty"
+        ;;
+    sys)
+        WXCONFIG_LIBS="$EXPAT_LINK $WXCONFIG_LIBS"
+        ;;
+esac
+case "$wxUSE_ZLIB" in
+    builtin)
+        wxconfig_3rdparty="zlib $wxconfig_3rdparty"
+        ;;
+    sys)
+        WXCONFIG_LIBS="$ZLIB_LINK $WXCONFIG_LIBS"
+        ;;
+esac
 
 for i in $wxconfig_3rdparty ; do
     WXCONFIG_LIBS="-lwx${i}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"

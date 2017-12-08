@@ -35902,28 +35902,6 @@ LDFLAGS="$LDFLAGS $PROFILE_FLAGS"
 
 WXCONFIG_LIBS="$LIBS"
 
-if test "$wxUSE_REGEX" = "builtin" ; then
-    wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
-fi
-if test "$wxUSE_STC" = "yes" ; then
-    wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
-fi
-case "$wxUSE_EXPAT" in
-    builtin)
-        wxconfig_3rdparty="expat $wxconfig_3rdparty"
-        ;;
-    sys)
-        WXCONFIG_LIBS="$EXPAT_LINK $WXCONFIG_LIBS"
-        ;;
-esac
-case "$wxUSE_ZLIB" in
-    builtin)
-        wxconfig_3rdparty="zlib $wxconfig_3rdparty"
-        ;;
-    sys)
-        WXCONFIG_LIBS="$ZLIB_LINK $WXCONFIG_LIBS"
-        ;;
-esac
 if test "$wxUSE_GUI" = "yes"; then
     case "$wxUSE_LIBTIFF" in
         builtin)
@@ -35950,6 +35928,28 @@ if test "$wxUSE_GUI" = "yes"; then
             ;;
     esac
 fi
+if test "$wxUSE_REGEX" = "builtin" ; then
+    wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
+fi
+if test "$wxUSE_STC" = "yes" ; then
+    wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
+fi
+case "$wxUSE_EXPAT" in
+    builtin)
+        wxconfig_3rdparty="expat $wxconfig_3rdparty"
+        ;;
+    sys)
+        WXCONFIG_LIBS="$EXPAT_LINK $WXCONFIG_LIBS"
+        ;;
+esac
+case "$wxUSE_ZLIB" in
+    builtin)
+        wxconfig_3rdparty="zlib $wxconfig_3rdparty"
+        ;;
+    sys)
+        WXCONFIG_LIBS="$ZLIB_LINK $WXCONFIG_LIBS"
+        ;;
+esac
 
 for i in $wxconfig_3rdparty ; do
     WXCONFIG_LIBS="-lwx${i}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"
