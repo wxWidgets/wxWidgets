@@ -630,8 +630,8 @@ public:
     wxTheClipboard->SetData(new wxURLDataObject(url));
     @endcode
 
-    @note This class is derived from wxDataObjectComposite on Windows rather
-          than wxTextDataObject on all other platforms.
+    @note This class is derived from wxDataObjectComposite on Windows and
+          GTK+ 2.0 or higher rather than wxTextDataObject on all other platforms.
 
     @library{wxcore}
     @category{dnd}
