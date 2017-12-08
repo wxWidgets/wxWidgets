@@ -42,12 +42,17 @@ public:
 // MFC application class forwarding everything to wxApp
 // ----------------------------------------------------------------------------
 
-class wxMFCWinApp : public CWinApp
+// The template parameter here is an existing class deriving from CWinApp or,
+// if there is no such class, just CWinApp itself.
+template <typename T>
+class wxMFCApp : public T
 {
 public:
+    typedef T BaseApp;
+
     BOOL InitInstance() wxOVERRIDE
     {
-        if ( !CWinApp::InitInstance() )
+        if ( !BaseApp::InitInstance() )
             return FALSE;
 
         if ( !wxEntryStart(m_hInstance) )
@@ -71,7 +76,7 @@ public:
 
         wxEntryCleanup();
 
-        return CWinApp::ExitInstance();
+        return BaseApp::ExitInstance();
     }
 
     // Override this to provide wxWidgets message loop compatibility
@@ -82,12 +87,12 @@ public:
         if ( evtLoop && evtLoop->PreProcessMessage(msg) )
             return TRUE;
 
-        return CWinApp::PreTranslateMessage(msg);
+        return BaseApp::PreTranslateMessage(msg);
     }
 
     BOOL OnIdle(LONG lCount) wxOVERRIDE
     {
-        BOOL moreIdle = CWinApp::OnIdle(lCount);
+        BOOL moreIdle = BaseApp::OnIdle(lCount);
 
         if ( wxTheApp && wxTheApp->ProcessIdle() )
             moreIdle = TRUE;
@@ -118,6 +123,8 @@ protected:
         return TRUE;
     }
 };
+
+typedef wxMFCApp<CWinApp> wxMFCWinApp;
 
 // ----------------------------------------------------------------------------
 // wxWidgets application class to be used in MFC applications
