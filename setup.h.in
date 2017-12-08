@@ -349,7 +349,8 @@
 #endif
 
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || \
+    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
 #define wxUSE_GRAPHICS_CONTEXT 0
 #else
 #define wxUSE_GRAPHICS_CONTEXT 0

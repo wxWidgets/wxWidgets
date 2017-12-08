@@ -779,18 +779,18 @@
 
 // Enable wxGraphicsContext and related classes for a modern 2D drawing API.
 //
-// Default is 1 except if you're using a non-Microsoft compiler under Windows
-// as only MSVC is known to ship with at least gdiplus.h which is required to
-// compile GDI+-based implementation of wxGraphicsContext (MSVC10 and later
-// versions also include d2d1.h required for Direct2D-based implementation).
-// For other compilers (e.g. mingw32) you may need to install the headers (and
-// just the headers) yourself. If you do, change the setting below manually.
+// Default is 1 except if you're using a compiler without support for GDI+
+// under MSW, i.e. gdiplus.h and related headers (MSVC and MinGW >= 4.8 are
+// known to have them). For other compilers (e.g. older mingw32) you may need
+// to install the headers (and just the headers) yourself. If you do, change
+// the setting below manually.
 //
 // Recommended setting: 1 if supported by the compilation environment
 
-// notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
-// included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
-#ifdef _MSC_VER
+// Notice that we can't use wxCHECK_VISUALC_VERSION() nor wxCHECK_GCC_VERSION()
+// here as this file is included from wx/platform.h before they're defined.
+#if defined(_MSC_VER) || \
+    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
 #define wxUSE_GRAPHICS_CONTEXT 1
 #else
 // Disable support for other Windows compilers, enable it if your compiler
