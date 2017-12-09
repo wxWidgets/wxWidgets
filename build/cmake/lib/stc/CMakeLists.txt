@@ -43,6 +43,7 @@ wx_add_builtin_library(wxscintilla
     src/stc/scintilla/lexers/LexDMAP.cxx
     src/stc/scintilla/lexers/LexDMIS.cxx
     src/stc/scintilla/lexers/LexECL.cxx
+    src/stc/scintilla/lexers/LexEDIFACT.cxx
     src/stc/scintilla/lexers/LexEiffel.cxx
     src/stc/scintilla/lexers/LexErlang.cxx
     src/stc/scintilla/lexers/LexErrorList.cxx
