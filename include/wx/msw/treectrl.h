@@ -207,10 +207,6 @@ protected:
     virtual void DoFreeze() wxOVERRIDE;
     virtual void DoThaw() wxOVERRIDE;
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
-
     virtual bool MSWShouldSetDefaultFont() const wxOVERRIDE { return false; }
 
     // SetImageList helper
@@ -335,9 +331,6 @@ private:
 
     // whether we need to deselect other items on mouse up
     bool m_mouseUpDeselect;
-
-    // The size to restore the control to when it is thawed, see DoThaw().
-    wxSize m_thawnSize;
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;

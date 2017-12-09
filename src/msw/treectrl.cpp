@@ -3898,47 +3898,23 @@ void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 // Update locking.
 // ----------------------------------------------------------------------------
 
-// Using WM_SETREDRAW with the native control is a bad idea as it's broken in
-// some Windows versions (see http://support.microsoft.com/kb/130611) and
-// doesn't seem to do anything in other ones (e.g. under Windows 7 the tree
-// control keeps updating its scrollbars while the items are added to it,
-// resulting in horrible flicker when adding even a couple of dozen items).
-// So we resize it to the smallest possible size instead of freezing -- this
-// still flickers, but actually not as badly as it would if we didn't do it.
-
 void wxTreeCtrl::DoFreeze()
 {
-    if ( IsShown() )
-    {
-        RECT rc;
-        ::GetWindowRect(GetHwnd(), &rc);
-        m_thawnSize = wxRectFromRECT(rc).GetSize();
+    wxTreeCtrlBase::DoFreeze();
 
-        ::SetWindowPos(GetHwnd(), 0, 0, 0, 1, 1,
-                       SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW | SWP_NOACTIVATE);
-    }
+    // In addition to disabling redrawing, we also need to disable scrollbar
+    // updates that would still happen otherwise.
+    const LONG_PTR styleOld = ::GetWindowLongPtr(GetHwnd(), GWL_STYLE);
+    ::SetWindowLongPtr(GetHwnd(), GWL_STYLE, styleOld | TVS_NOSCROLL);
 }
 
 void wxTreeCtrl::DoThaw()
 {
-    if ( IsShown() )
-    {
-        if ( m_thawnSize != wxDefaultSize )
-        {
-            ::SetWindowPos(GetHwnd(), 0, 0, 0, m_thawnSize.x, m_thawnSize.y,
-                           SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-        }
-    }
-}
+    // Undo temporary TVS_NOSCROLL addition.
+    const LONG_PTR styleOld = ::GetWindowLongPtr(GetHwnd(), GWL_STYLE);
+    ::SetWindowLongPtr(GetHwnd(), GWL_STYLE, styleOld & ~TVS_NOSCROLL);
 
-// We also need to override DoSetSize() to ensure that m_thawnSize is reset if
-// the window is resized while being frozen -- in this case, we need to avoid
-// resizing it back to its original, pre-freeze, size when it's thawed.
-void wxTreeCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    m_thawnSize = wxDefaultSize;
-
-    wxTreeCtrlBase::DoSetSize(x, y, width, height, sizeFlags);
+    wxTreeCtrlBase::DoThaw();
 }
 
 #endif // wxUSE_TREECTRL
