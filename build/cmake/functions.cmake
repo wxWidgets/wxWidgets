@@ -693,11 +693,8 @@ function(wx_add_test name)
         list(INSERT test_src 0 "${wxSOURCE_DIR}/tests/dummy.cpp")
     endif()
     add_executable(${name} ${test_src})
-    target_include_directories(${name} PRIVATE "${wxSOURCE_DIR}/tests" ${CPPUNIT_INCLUDE_DIR})
+    target_include_directories(${name} PRIVATE "${wxSOURCE_DIR}/tests" "${wxSOURCE_DIR}/3rdparty/catch/include")
     wx_exe_link_libraries(${name} base net)
-    target_link_libraries(${name}
-        ${CPPUNIT_LIBRARIES}
-        )
     if(wxBUILD_SHARED)
         target_compile_definitions(${name} PRIVATE WXUSINGDLL)
     endif()
