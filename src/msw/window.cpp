@@ -79,6 +79,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/keyboard.h"
+#include "wx/msw/private/winstyle.h"
 #include "wx/msw/dcclient.h"
 #include "wx/msw/seh.h"
 #include "wx/private/textmeasure.h"
@@ -341,12 +342,8 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
      */
     while ( parent && !parent->IsTopLevel() )
     {
-        LONG exStyle = wxGetWindowExStyle(parent);
-        if ( !(exStyle & WS_EX_CONTROLPARENT) )
-        {
-            // force the parent to have this style
-            wxSetWindowExStyle(parent, exStyle | WS_EX_CONTROLPARENT);
-        }
+        // force the parent to have this style
+        wxMSWWinExStyleUpdater(GetHwndOf(parent)).TurnOn(WS_EX_CONTROLPARENT);
 
         parent = parent->GetParent();
     }
@@ -1406,11 +1403,8 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
         // this function so instead of simply setting the style to the new
         // value we clear the bits which were set in styleOld but are set in
         // the new one and set the ones which were not set before
-        long styleReal = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-        styleReal &= ~styleOld;
-        styleReal |= style;
-
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, styleReal);
+        wxMSWWinStyleUpdater updateStyle(GetHwnd());
+        updateStyle.TurnOff(styleOld).TurnOn(style);
 
         // we need to call SetWindowPos() if any of the styles affecting the
         // frame appearance have changed
@@ -1424,15 +1418,9 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
     }
 
     // and the extended style
-    long exstyleReal = wxGetWindowExStyle(this);
-
-    if ( exstyle != exstyleOld )
+    wxMSWWinExStyleUpdater updateExStyle(GetHwnd());
+    if ( updateExStyle.TurnOff(exstyleOld).TurnOn(exstyle).Apply() )
     {
-        exstyleReal &= ~exstyleOld;
-        exstyleReal |= exstyle;
-
-        wxSetWindowExStyle(this, exstyleReal);
-
         // ex style changes don't take effect without calling SetWindowPos
         callSWP = true;
     }
@@ -1443,8 +1431,8 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
         // also to make the change to wxSTAY_ON_TOP style take effect: just
         // setting the style simply doesn't work
         if ( !::SetWindowPos(GetHwnd(),
-                             exstyleReal & WS_EX_TOPMOST ? HWND_TOPMOST
-                                                         : HWND_NOTOPMOST,
+                             updateExStyle.IsOn(WS_EX_TOPMOST) ? HWND_TOPMOST
+                                                               : HWND_NOTOPMOST,
                              0, 0, 0, 0,
                              SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE |
                              SWP_FRAMECHANGED) )
@@ -2434,7 +2422,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
     // must not call IsDialogMessage() then, it would simply hang (see #15458).
     if ( m_hWnd &&
             HasFlag(wxTAB_TRAVERSAL) &&
-                (wxGetWindowExStyle(this) & WS_EX_CONTROLPARENT) )
+                wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
     {
         // intercept dialog navigation keys
         MSG *msg = (MSG *)pMsg;
@@ -4470,17 +4458,7 @@ bool wxWindowMSW::IsDoubleBuffered() const
 
 void wxWindowMSW::SetDoubleBuffered(bool on)
 {
-    // Get the current extended style bits
-    long exstyle = wxGetWindowExStyle(this);
-
-    // Twiddle the bit as needed
-    if ( on )
-        exstyle |= WS_EX_COMPOSITED;
-    else
-        exstyle &= ~WS_EX_COMPOSITED;
-
-    // put it back
-    wxSetWindowExStyle(this, exstyle);
+    wxMSWWinExStyleUpdater(GetHwnd()).TurnOnOrOff(on, WS_EX_COMPOSITED);
 }
 
 // ---------------------------------------------------------------------------
