@@ -702,6 +702,6 @@ function(wx_add_test name)
     set_target_properties(${name} PROPERTIES FOLDER "Tests")
 
     add_test(NAME ${name}
-        COMMAND ${name} -t
+        COMMAND ${name}
         WORKING_DIRECTORY ${wxSOURCE_DIR}/tests)
 endfunction()
