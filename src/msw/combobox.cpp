@@ -40,6 +40,7 @@
 #include "wx/clipbrd.h"
 #include "wx/wupdlock.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
@@ -711,11 +712,10 @@ void wxComboBox::SetLayoutDirection(wxLayoutDirection dir)
         }
         else
         {
-            LONG_PTR style = ::GetWindowLongPtr(GetEditHWND(), GWL_STYLE);
-            if ( !(style & ES_CENTER) )
+            wxMSWWinStyleUpdater styleUpdater(GetEditHWND());
+            if ( !styleUpdater.IsOn(ES_CENTER) )
             {
-                style &= ~ES_RIGHT;
-                ::SetWindowLongPtr(GetEditHWND(), GWL_STYLE, style);
+                styleUpdater.TurnOff(ES_RIGHT);
             }
         }
     }

@@ -44,6 +44,7 @@
 
 #include "wx/stockitem.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 #include <string.h>
 
@@ -1313,24 +1314,20 @@ bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
     if (!pChild || (pChild == this))
     {
         HWND hwndClient = GetWinHwnd(pFrameWnd->GetClientWindow());
-        DWORD dwStyle = ::GetWindowLong(hwndClient, GWL_EXSTYLE);
+
+        wxMSWWinStyleUpdater updateStyle(hwndClient);
 
         // we want to test whether there is a maximized child, so just set
         // dwThisStyle to 0 if there is no child at all
         DWORD dwThisStyle = pChild
             ? ::GetWindowLong(GetWinHwnd(pChild), GWL_STYLE) : 0;
-        DWORD dwNewStyle = dwStyle;
-        if ( dwThisStyle & WS_MAXIMIZE )
-            dwNewStyle &= ~(WS_EX_CLIENTEDGE);
-        else
-            dwNewStyle |= WS_EX_CLIENTEDGE;
+        updateStyle.TurnOnOrOff(!(dwThisStyle & WS_MAXIMIZE), WS_EX_CLIENTEDGE);
 
-        if (dwStyle != dwNewStyle)
+        if ( updateStyle.Apply() )
         {
             // force update of everything
             ::RedrawWindow(hwndClient, NULL, NULL,
                            RDW_INVALIDATE | RDW_ALLCHILDREN);
-            ::SetWindowLong(hwndClient, GWL_EXSTYLE, dwNewStyle);
             ::SetWindowPos(hwndClient, NULL, 0, 0, 0, 0,
                            SWP_FRAMECHANGED | SWP_NOACTIVATE |
                            SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |

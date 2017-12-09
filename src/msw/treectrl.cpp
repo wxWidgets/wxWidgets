@@ -40,6 +40,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/winundef.h"
+#include "wx/msw/private/winstyle.h"
 
 #include "wx/imaglist.h"
 #include "wx/itemattr.h"
@@ -3904,15 +3905,13 @@ void wxTreeCtrl::DoFreeze()
 
     // In addition to disabling redrawing, we also need to disable scrollbar
     // updates that would still happen otherwise.
-    const LONG_PTR styleOld = ::GetWindowLongPtr(GetHwnd(), GWL_STYLE);
-    ::SetWindowLongPtr(GetHwnd(), GWL_STYLE, styleOld | TVS_NOSCROLL);
+    wxMSWWinStyleUpdater(GetHwnd()).TurnOn(TVS_NOSCROLL);
 }
 
 void wxTreeCtrl::DoThaw()
 {
     // Undo temporary TVS_NOSCROLL addition.
-    const LONG_PTR styleOld = ::GetWindowLongPtr(GetHwnd(), GWL_STYLE);
-    ::SetWindowLongPtr(GetHwnd(), GWL_STYLE, styleOld & ~TVS_NOSCROLL);
+    wxMSWWinStyleUpdater(GetHwnd()).TurnOff(TVS_NOSCROLL);
 
     wxTreeCtrlBase::DoThaw();
 }
