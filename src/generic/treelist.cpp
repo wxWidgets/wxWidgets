@@ -1455,28 +1455,6 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& event)
         view->Refresh();
         view->Update();
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
-
-        // Resize the first column to take the remaining available space.
-        const unsigned numColumns = GetColumnCount();
-        if ( !numColumns )
-            return;
-
-        // There is a bug in generic wxDataViewCtrl: if the column width sums
-        // up to the total size, horizontal scrollbar (unnecessarily) appears,
-        // so subtract a bit to ensure this doesn't happen.
-        int remainingWidth = rect.width - 5;
-        for ( unsigned n = 1; n < GetColumnCount(); n++ )
-        {
-            remainingWidth -= GetColumnWidth(n);
-            if ( remainingWidth <= 0 )
-            {
-                // There is not enough space, as we're not going to give the
-                // first column negative width anyhow, just don't do anything.
-                return;
-            }
-        }
-
-        SetColumnWidth(0, remainingWidth);
     }
 }
 
