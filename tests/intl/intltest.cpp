@@ -189,19 +189,25 @@ void IntlTestCase::DateTimeFmtFrench()
 #else
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
     static const char *FRENCH_LONG_DATE_FMT = "%A %d %B %Y";
-#ifdef __WXOSX__
-    static const char *FRENCH_DATE_TIME_FMT = "%A %d %B %Y %H:%M:%S";
-#else
     static const char *FRENCH_DATE_TIME_FMT = "%d/%m/%Y %H:%M:%S";
-#endif
 #endif
 
     WX_ASSERT_EQUAL_FORMAT( "French short date", FRENCH_DATE_FMT,
                    m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
     WX_ASSERT_EQUAL_FORMAT( "French long date", FRENCH_LONG_DATE_FMT,
                     m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
-    WX_ASSERT_EQUAL_FORMAT( "French date and time", FRENCH_DATE_TIME_FMT,
-                    m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
+
+    const wxString fmtDT = m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT);
+#ifdef __WXOSX__
+    // Things are difficult to test under macOS as the format keeps changing,
+    // e.g. at some time between 10.10 and 10.12 a new " à " string appeared in
+    // its middle, so test it piece-wise and hope it doesn't change too much.
+    INFO("French date and time format is \"" << fmtDT << "\"");
+    CHECK( fmtDT.StartsWith("%A %d %B %Y") );
+    CHECK( fmtDT.EndsWith("%H:%M:%S") );
+#else
+    WX_ASSERT_EQUAL_FORMAT( "French date and time", FRENCH_DATE_TIME_FMT, fmtDT );
+#endif
     WX_ASSERT_EQUAL_FORMAT( "French time", "%H:%M:%S",
                     m_locale->GetInfo(wxLOCALE_TIME_FMT) );
 }
