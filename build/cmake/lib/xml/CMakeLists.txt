@@ -12,7 +12,7 @@ include(../../source_groups.cmake)
 if(wxUSE_EXPAT STREQUAL "builtin")
     ExternalProject_Add(wxexpat
         DOWNLOAD_COMMAND ""
-        SOURCE_DIR ${wxSOURCE_DIR}/src/expat
+        SOURCE_DIR ${wxSOURCE_DIR}/src/expat/expat
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
             -DBUILD_tools=OFF
