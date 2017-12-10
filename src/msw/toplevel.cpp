@@ -41,6 +41,7 @@
 #include "wx/tooltip.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 #include "wx/msw/winundef.h"
 #include "wx/msw/missing.h"
@@ -858,14 +859,14 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
         // zap the frame borders
 
         // save the 'normal' window style
-        m_fsOldWindowStyle = GetWindowLong(GetHwnd(), GWL_STYLE);
+        wxMSWWinStyleUpdater updateStyle(GetHwnd());
+        m_fsOldWindowStyle = updateStyle.Get();
 
         // save the old position, width & height, maximize state
         m_fsOldSize = GetRect();
         m_fsIsMaximized = IsMaximized();
 
         // decide which window style flags to turn off
-        LONG newStyle = m_fsOldWindowStyle;
         LONG offFlags = 0;
 
         if (style & wxFULLSCREEN_NOBORDER)
@@ -876,16 +877,16 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
         if (style & wxFULLSCREEN_NOCAPTION)
             offFlags |= WS_CAPTION | WS_SYSMENU;
 
-        newStyle &= ~offFlags;
+        updateStyle.TurnOff(offFlags);
 
         // Full screen windows should logically be popups as they don't have
         // decorations (and are definitely not children) and while not using
         // this style doesn't seem to make any difference for most windows, it
         // breaks wxGLCanvas in some cases, see #15434, so just always use it.
-        newStyle |= WS_POPUP;
+        updateStyle.TurnOn(WS_POPUP);
 
         // change our window style to be compatible with full-screen mode
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, newStyle);
+        updateStyle.Apply();
 
         wxRect rect;
 #if wxUSE_DISPLAY
@@ -1137,19 +1138,18 @@ wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
 
 bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
 {
-    LONG exstyle = GetWindowLong(GetHwnd(), GWL_EXSTYLE);
+    wxMSWWinExStyleUpdater updateExStyle(GetHwnd());
 
     // if setting alpha to fully opaque then turn off the layered style
     if (alpha == 255)
     {
-        SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle & ~WS_EX_LAYERED);
+        updateExStyle.TurnOff(WS_EX_LAYERED).Apply();
         Refresh();
         return true;
     }
 
     // Otherwise, set the layered style if needed and set the alpha value
-    if ((exstyle & WS_EX_LAYERED) == 0 )
-        SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle | WS_EX_LAYERED);
+    updateExStyle.TurnOn(WS_EX_LAYERED).Apply();
 
     if ( ::SetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) )
         return true;

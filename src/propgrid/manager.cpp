@@ -1508,10 +1508,8 @@ void wxPropertyGridManager::RecreateControls()
                 #define WS_EX_COMPOSITED        0x02000000L
             #endif
 
-            HWND hWnd = (HWND)m_pToolbar->GetHWND();
-
-            ::SetWindowLong( hWnd, GWL_EXSTYLE,
-                             ::GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_COMPOSITED );
+            wxMSWWinExStyleUpdater(GetHwndOf(m_pToolbar))
+                .TurnOn(WS_EX_COMPOSITED);
             */
 
         #endif

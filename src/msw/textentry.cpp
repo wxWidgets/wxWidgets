@@ -34,6 +34,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
@@ -913,9 +914,7 @@ void wxTextEntry::ForceUpper()
 {
     ConvertToUpperCase();
 
-    const HWND hwnd = GetEditHwnd();
-    const LONG styleOld = ::GetWindowLong(hwnd, GWL_STYLE);
-    ::SetWindowLong(hwnd, GWL_STYLE, styleOld | ES_UPPERCASE);
+    wxMSWWinStyleUpdater(GetEditHwnd()).TurnOn(ES_UPPERCASE);
 }
 
 // ----------------------------------------------------------------------------
