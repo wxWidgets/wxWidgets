@@ -87,7 +87,7 @@ if "%CONFIGURATION%"=="" set CONFIGURATION=Release
 if "%SKIPTESTS%"=="1" (
     set BUILD_TESTS=OFF
 ) else (
-    set BUILD_TESTS=CONSOLE_ONLY
+    set BUILD_TESTS=ALL
 )
 echo.
 echo --- Generating project files
@@ -111,13 +111,6 @@ if ERRORLEVEL 1 goto cmake_test
 appveyor PushArtifact wxWidgets_Binaries.zip
 
 :cmake_test
-if NOT "%SKIPTESTS%"=="1" (
-    echo.
-    echo --- Running tests
-    echo.
-    ctest -V -C %CONFIGURATION% --interactive-debug-mode 0 .
-    if ERRORLEVEL 1 goto error
-)
 if NOT "%SKIPINSTALL%"=="1" (
     echo.
     echo --- Installing
