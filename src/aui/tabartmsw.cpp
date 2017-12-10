@@ -232,6 +232,22 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
         tabState,
         &tabR, NULL);
 
+    // Apparently, in at least some Windows 10 installations the call above
+    // does not draw the left edge of the first tab and it needs to be drawn
+    // separately, or it wouldn't be drawn at all.
+    if ( tabX == GetIndentSize() )
+    {
+        te->DrawThemeBackground
+            (
+                hTabTheme,
+                GetHdcOf(dc.GetTempHDC()),
+                TABP_TABITEMLEFTEDGE,
+                tabState,
+                &tabR,
+                NULL
+            );
+    }
+
     wxRect textRect = tabRect;
     if ( !page.active )
         textRect.Offset(0, wnd->FromDIP(1));
