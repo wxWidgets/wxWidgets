@@ -582,7 +582,8 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
 
     // Add extra space under the label, if it exists.
     if (!wxControl::GetLabel().empty())
-        height += cy1/2;
+        height += wxRendererNative::Get().GetCheckBoxSize(
+            reinterpret_cast<wxWindow*>(const_cast<wxRadioBox*>(this))).y / 2;
 
     // and also wide enough for its label
     int widthLabel;
@@ -658,7 +659,8 @@ wxRadioBox::PositionAllButtons(int x, int y, int width, int WXUNUSED(height))
 
     // Add extra space under the label, if it exists.
     if (!wxControl::GetLabel().empty())
-        y_offset += cy1/2;
+        y_offset += wxRendererNative::Get().GetCheckBoxSize(
+            reinterpret_cast<wxWindow*>(this)).y / 2;
 
     int startX = x_offset;
     int startY = y_offset;
