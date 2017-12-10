@@ -141,6 +141,11 @@
 #define QS_ALLPOSTMESSAGE 0
 #endif
 
+// Missing from MinGW 4.8 SDK headers.
+#ifndef BS_TYPEMASK
+#define BS_TYPEMASK 0xf
+#endif
+
 // ----------------------------------------------------------------------------
 // menu stuff
 // ----------------------------------------------------------------------------

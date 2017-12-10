@@ -35,6 +35,8 @@
     #include "wx/log.h"
     #include "wx/settings.h"
     #include "wx/ctrlsub.h"
+    #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
 #endif
 
 #if wxUSE_LISTCTRL
@@ -46,15 +48,9 @@
 #endif // wxUSE_TREECTRL
 
 #include "wx/renderer.h"
-#include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
 #include "wx/msw/ownerdrawnbutton.h"
-
-// Missing from MinGW 4.8 SDK headers.
-#ifndef BS_TYPEMASK
-#define BS_TYPEMASK 0xf
-#endif
 
 // ----------------------------------------------------------------------------
 // wxWin macros
