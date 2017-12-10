@@ -443,6 +443,8 @@ wxMSW:
 - Fix UTF-32 conversion for non-BMP characters (ARATA Mizuki).
 - Use correct parent for the native modal dialogs (Andreas Falkenhahn).
 - Fix layout of wxSlider with wxSL_VALUE_LABEL only (gafatoa).
+- Fix flicker when resizing columns of report-mode wxListCtrl.
+- Implement wxTreeCtrl::SetDoubleBuffered() (Steve Browne).
 
 wxOSX/Cocoa:
 

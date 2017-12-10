@@ -978,19 +978,9 @@ inline bool wxStyleHasBorder(long style)
                      wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
-inline long wxGetWindowExStyle(const wxWindowMSW *win)
-{
-    return ::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE);
-}
-
 inline bool wxHasWindowExStyle(const wxWindowMSW *win, long style)
 {
-    return (wxGetWindowExStyle(win) & style) != 0;
-}
-
-inline long wxSetWindowExStyle(const wxWindowMSW *win, long style)
-{
-    return ::SetWindowLong(GetHwndOf(win), GWL_EXSTYLE, style);
+    return (::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE) & style) != 0;
 }
 
 // Common helper of wxUpdate{,Edit}LayoutDirection() below: sets or clears the

@@ -32627,6 +32627,9 @@ $as_echo "$as_me: WARNING: I18n code requires wxFile... disabled" >&2;}
 fi
 
 if test "$wxUSE_XLOCALE" = "yes" ; then
+    $as_echo "#define wxUSE_XLOCALE 1" >>confdefs.h
+
+
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking for complete xlocale" >&5
 $as_echo_n "checking for complete xlocale... " >&6; }
 if ${wx_cv_func_strtod_l+:} false; then :
@@ -32676,7 +32679,7 @@ fi
 $as_echo "$wx_cv_func_strtod_l" >&6; }
 
     if test "$wx_cv_func_strtod_l" = "yes" ; then
-        $as_echo "#define wxUSE_XLOCALE 1" >>confdefs.h
+                        $as_echo "#define HAVE_LOCALE_T 1" >>confdefs.h
 
     fi
 fi

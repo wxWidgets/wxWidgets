@@ -36,6 +36,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/dib.h"
+#include "wx/msw/private/winstyle.h"
 
 #include "wx/sysopt.h"
 
@@ -312,9 +313,9 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
         }
     }
 #endif // wxUSE_WXDIB
-    LONG style = ::GetWindowLong( (HWND)GetHWND(), GWL_STYLE ) ;
-    ::SetWindowLong( (HWND)GetHWND(), GWL_STYLE, ( style & ~( SS_BITMAP|SS_ICON ) ) |
-                     ( m_isIcon ? SS_ICON : SS_BITMAP ) );
+    wxMSWWinStyleUpdater(GetHwnd())
+        .TurnOff(SS_BITMAP | SS_ICON)
+        .TurnOn(m_isIcon ? SS_ICON : SS_BITMAP);
 
     MSWReplaceImageHandle((WXLPARAM)handle);
 

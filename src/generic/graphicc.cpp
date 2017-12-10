@@ -1013,6 +1013,10 @@ wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
                                  int flags,
                                  const wxColour& col) :
     wxGraphicsObjectRefData(renderer)
+#ifdef __WXGTK__
+    , m_wxfont(wxFontInfo(wxSize(sizeInPixels, sizeInPixels))
+                .AllFlags(flags).FaceName(facename))
+#endif
 {
     InitColour(col);
 
