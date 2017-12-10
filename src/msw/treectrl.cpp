@@ -796,6 +796,46 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     return true;
 }
 
+bool wxTreeCtrl::IsDoubleBuffered() const
+{
+    if ( !GetHwnd() )
+        return false;
+
+    // Notice that TVM_GETEXTENDEDSTYLE is supported since XP, so we can always
+    // send this message, no need for comctl32.dll version check here.
+    const LRESULT
+        exTreeStyle = ::SendMessage(GetHwnd(), TVM_GETEXTENDEDSTYLE, 0, 0);
+
+    return (exTreeStyle & TVS_EX_DOUBLEBUFFER) != 0;
+}
+
+void wxTreeCtrl::SetDoubleBuffered(bool on)
+{
+    if ( !GetHwnd() )
+        return;
+
+    // TVS_EX_DOUBLEBUFFER is only supported since Vista, don't try to set it
+    // under XP, who knows what could this do.
+    if ( wxApp::GetComCtl32Version() >= 610 )
+    {
+        const HRESULT hr = ::SendMessage(GetHwnd(),
+                                         TVM_SETEXTENDEDSTYLE,
+                                         TVS_EX_DOUBLEBUFFER,
+                                         on ? TVS_EX_DOUBLEBUFFER : 0);
+        if ( hr == S_OK )
+        {
+            // There is no need to erase background for a double-buffered
+            // window, so disable it when enabling double buffering and restore
+            // the default background style value when disabling it.
+            SetBackgroundStyle(on ? wxBG_STYLE_PAINT : wxBG_STYLE_ERASE);
+        }
+        else
+        {
+            wxLogApiError("TreeView_SetExtendedStyle(TVS_EX_DOUBLEBUFFER)", hr);
+        }
+    }
+}
+
 wxTreeCtrl::~wxTreeCtrl()
 {
     m_isBeingDeleted = true;
