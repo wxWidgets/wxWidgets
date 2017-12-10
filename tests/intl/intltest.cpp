@@ -191,11 +191,11 @@ void IntlTestCase::DateTimeFmtFrench()
 #endif
 
     WX_ASSERT_EQUAL_FORMAT( "French short date", FRENCH_DATE_FMT,
-                   m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
+                            wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT) );
     WX_ASSERT_EQUAL_FORMAT( "French long date", FRENCH_LONG_DATE_FMT,
-                    m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
+                            wxLocale::GetInfo(wxLOCALE_LONG_DATE_FMT) );
 
-    const wxString fmtDT = m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT);
+    const wxString fmtDT = wxLocale::GetInfo(wxLOCALE_DATE_TIME_FMT);
 #ifdef __WXOSX__
     // Things are difficult to test under macOS as the format keeps changing,
     // e.g. at some time between 10.10 and 10.12 a new " à " string appeared in
@@ -207,7 +207,7 @@ void IntlTestCase::DateTimeFmtFrench()
     WX_ASSERT_EQUAL_FORMAT( "French date and time", FRENCH_DATE_TIME_FMT, fmtDT );
 #endif
     WX_ASSERT_EQUAL_FORMAT( "French time", "%H:%M:%S",
-                    m_locale->GetInfo(wxLOCALE_TIME_FMT) );
+                            wxLocale::GetInfo(wxLOCALE_TIME_FMT) );
 }
 
 void IntlTestCase::IsAvailable()
