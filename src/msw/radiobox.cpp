@@ -36,6 +36,7 @@
 #endif
 
 #include "wx/msw/subwin.h"
+#include "wx/renderer.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -549,6 +550,15 @@ WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxRadioBox, wxStaticBox, m_radioButtons)
 
 wxSize wxRadioBox::GetMaxButtonSize() const
 {
+    // We use GetCheckBox() because there is no dedicated GetRadioBox() method
+    // in wxRendererNative, but check and radio boxes are usually of the same
+    // size anyhow. We also add half a character of width to account for the
+    // extra space after the radio box itself.
+    const int radioWidth =
+        wxRendererNative::Get().GetCheckBoxSize(
+            reinterpret_cast<wxWindow*>(const_cast<wxRadioBox*>(this))).x
+        + GetCharWidth() / 2;
+
     // calculate the max button size
     int widthMax = 0,
         heightMax = 0;
@@ -561,8 +571,7 @@ wxSize wxRadioBox::GetMaxButtonSize() const
             GetTextExtent(wxGetWindowText((*m_radioButtons)[i]), &width, &height);
 
             // adjust the size to take into account the radio box itself
-            // FIXME this is totally bogus!
-            width += RADIO_SIZE;
+            width += radioWidth;
             height *= 3;
             height /= 2;
         }
@@ -599,7 +608,6 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
     // and also wide enough for its label
     int widthLabel;
     GetTextExtent(GetLabelText(), &widthLabel, NULL);
-    widthLabel += RADIO_SIZE; // FIXME this is bogus too
     if ( widthLabel > width )
         width = widthLabel;
 

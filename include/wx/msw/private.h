@@ -100,7 +100,6 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 #define CHECK_IS_FAFA    FALSE
 #define RADIO_CLASS      wxT("BUTTON")
 #define RADIO_FLAGS      (BS_AUTORADIOBUTTON|WS_CHILD|WS_VISIBLE)
-#define RADIO_SIZE       20
 #define RADIO_IS_FAFA    FALSE
 #define PURE_WINDOWS
 #define GROUP_CLASS      wxT("BUTTON")
