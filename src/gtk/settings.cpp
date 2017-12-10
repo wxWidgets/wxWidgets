@@ -440,13 +440,18 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     {
     case wxSYS_COLOUR_ACTIVECAPTION:
     case wxSYS_COLOUR_INACTIVECAPTION:
+    case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
+    case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
 #if GTK_CHECK_VERSION(3,10,0)
         if (gtk_check_version(3,10,0) == NULL)
         {
             sc = HeaderbarContext(path);
             int state = GTK_STATE_FLAG_NORMAL;
-            if (index == wxSYS_COLOUR_INACTIVECAPTION)
+            if (index == wxSYS_COLOUR_INACTIVECAPTION ||
+                index == wxSYS_COLOUR_GRADIENTINACTIVECAPTION)
+            {
                 state = GTK_STATE_FLAG_BACKDROP;
+            }
             bg(sc, color, state);
             break;
         }
@@ -574,8 +579,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         bg(sc, color);
         break;
     case wxSYS_COLOUR_3DDKSHADOW:
-    case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
-    case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         color.Set(0, 0, 0);
         break;
     default:
@@ -628,6 +631,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_BACKGROUND:
         //case wxSYS_COLOUR_DESKTOP:
         case wxSYS_COLOUR_INACTIVECAPTION:
+        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         case wxSYS_COLOUR_MENU:
         case wxSYS_COLOUR_WINDOWFRAME:
         case wxSYS_COLOUR_ACTIVEBORDER:
@@ -712,13 +716,12 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_ACTIVECAPTION:
+        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
         case wxSYS_COLOUR_MENUHILIGHT:
             color = wxColor(MenuItemStyle()->bg[GTK_STATE_SELECTED]);
             break;
 
         case wxSYS_COLOUR_HOTLIGHT:
-        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
-        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
             // TODO
             color = *wxBLACK;
             break;
