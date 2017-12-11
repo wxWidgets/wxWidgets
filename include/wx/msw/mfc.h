@@ -79,12 +79,19 @@ public:
         return BaseApp::ExitInstance();
     }
 
-    // Override this to provide wxWidgets message loop compatibility
+    // Override this to provide messages pre-processing for wxWidgets windows.
     BOOL PreTranslateMessage(MSG *msg) wxOVERRIDE
     {
-        wxEventLoop * const
-            evtLoop = static_cast<wxEventLoop *>(wxEventLoop::GetActive());
-        if ( evtLoop && evtLoop->PreProcessMessage(msg) )
+        // Use the current event loop if there is one, or just fall back to the
+        // standard one otherwise, but make sure we pre-process messages in any
+        // case as otherwise many things would break (e.g. keyboard
+        // accelerators).
+        wxGUIEventLoop*
+            evtLoop = static_cast<wxGUIEventLoop *>(wxEventLoop::GetActive());
+        wxGUIEventLoop evtLoopStd;
+        if ( !evtLoop )
+            evtLoop = &evtLoopStd;
+        if ( evtLoop->PreProcessMessage(msg) )
             return TRUE;
 
         return BaseApp::PreTranslateMessage(msg);
