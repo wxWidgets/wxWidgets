@@ -43,12 +43,20 @@ GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
     gtk_widget_set_can_default(button, true);
 
     /* add a stock icon inside it */
+#ifdef __WXGTK4__
+    gtk_button_set_icon_name (GTK_BUTTON (button), stock);
+#else
     GtkWidget *image = gtk_image_new_from_stock (stock, GTK_ICON_SIZE_BUTTON);
     gtk_button_set_image (GTK_BUTTON (button), image);
+#endif
 
     /* add to the given (container) widget */
     if (box)
+#ifdef __WXGTK4__
+        gtk_box_pack_end (box, button);
+#else
         gtk_box_pack_end (box, button, FALSE, TRUE, 8);
+#endif
 
     return button;
 }
