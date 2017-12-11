@@ -106,7 +106,9 @@ GtkWidget *gtk_assert_dialog_create_backtrace_list_model ()
     /* create the tree view */
     treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL(store));
     g_object_unref (store);
+#ifndef __WXGTK4__
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview), TRUE);
+#endif
 
     /* append columns */
     gtk_assert_dialog_append_text_column(treeview, "#", STACKFRAME_LEVEL_COLIDX);
