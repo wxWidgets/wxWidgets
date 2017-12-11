@@ -122,12 +122,26 @@ protected:
         // running.
         m_pMainWnd = new wxMFCWnd(w);
 
+        // We also need to reset m_pMainWnd when this window will be destroyed
+        // to prevent MFC from using an invalid HWND, which is probably not
+        // fatal but can result in at least asserts failures.
+        w->Bind(wxEVT_DESTROY, &wxMFCApp::OnMainWindowDestroyed, this);
+
         // And we need to let wxWidgets know that it should exit the
         // application when this window is closed, as OnRun(), which does this
         // by default, won't be called when using MFC main message loop.
         wxTheApp->SetExitOnFrameDelete(true);
 
         return TRUE;
+    }
+
+private:
+    void OnMainWindowDestroyed(wxWindowDestroyEvent& event)
+    {
+        event.Skip();
+
+        delete m_pMainWnd;
+        m_pMainWnd = NULL;
     }
 };
 
