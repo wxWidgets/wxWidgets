@@ -2680,7 +2680,7 @@ bool
 wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
 #ifdef __WXGTK__
-#if GTK_CHECK_VERSION(3,90,0)
+#ifdef __WXGTK4__
     if (gtk_show_uri_on_window((GtkWindow*)wxGetTopLevelGTK(),
             params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
     {
