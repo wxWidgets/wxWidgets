@@ -26,9 +26,20 @@
 class wxMFCWnd : public CWnd
 {
 public:
+    // If default ctor is used, Attach() must be called later.
+    wxMFCWnd()
+    {
+    }
+
+    // Combines default ctor and Attach().
     explicit wxMFCWnd(wxWindow* w)
     {
-        Attach(w->GetHWND());
+        Attach(w);
+    }
+
+    void Attach(wxWindow* w)
+    {
+        CWnd::Attach(w->GetHWND());
     }
 
     ~wxMFCWnd()
