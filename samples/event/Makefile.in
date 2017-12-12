@@ -181,6 +181,7 @@ event_event.o: $(srcdir)/event.cpp
 event_gestures.o: $(srcdir)/gestures.cpp
 	$(CXXC) -c -o $@ $(EVENT_CXXFLAGS) $(srcdir)/gestures.cpp
 
+
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 

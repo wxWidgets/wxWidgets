@@ -240,3 +240,4 @@ $(OBJS)\event_event.obj: .\event.cpp
 
 $(OBJS)\event_gestures.obj: .\gestures.cpp
 	$(CXX) -q -c -P -o$@ $(EVENT_CXXFLAGS) .\gestures.cpp
+

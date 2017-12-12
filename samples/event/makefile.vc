@@ -363,3 +363,4 @@ $(OBJS)\event_event.obj: .\event.cpp
 
 $(OBJS)\event_gestures.obj: .\gestures.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(EVENT_CXXFLAGS) .\gestures.cpp
+
