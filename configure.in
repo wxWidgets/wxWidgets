@@ -414,7 +414,7 @@ fi
 
 dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
-AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3, 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 4 (EXPERIMENTAL), 3, 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iPhone OS X port], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
@@ -2737,6 +2737,7 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK127=
     WXGTK2=
     WXGTK3=
+    WXGTK4=
     WXGPE=
 
     if test "$wxUSE_MSW" = 1 ; then
@@ -2787,12 +2788,14 @@ if test "$wxUSE_GUI" = "yes"; then
                             fi
                     esac
 
-                    if test "$wxGTK_VERSION" != 3; then
+                    if test "$wxGTK_VERSION" != 4 -a "$wxGTK_VERSION" != 3; then
                         AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
                     fi
                     if test -z "$wx_cv_lib_gtk"; then
                         if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
                             AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
+                        elif test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
+                            AM_PATH_GTK_4_0(, wx_cv_lib_gtk=4, , $GTK_MODULES)
                         fi
                     fi
                 fi
@@ -2832,6 +2835,10 @@ if test "$wxUSE_GUI" = "yes"; then
         fi
 
         case "$wx_cv_lib_gtk" in
+            4)      WXGTK4=1
+                    WXGTK3=1
+                    TOOLKIT_VERSION=4
+                    ;;
             3)      WXGTK3=1
                     TOOLKIT_VERSION=3
                     ;;
@@ -5034,6 +5041,9 @@ else
   fi
 fi
 
+if test "$WXGTK4" = 1 ; then
+    AC_DEFINE_UNQUOTED(__WXGTK4__, 1)
+fi
 if test "$WXGTK3" = 1 ; then
     AC_DEFINE_UNQUOTED(__WXGTK3__, 1)
     WXGTK2=1
@@ -5490,7 +5500,7 @@ if test "$WXGTK2" = 1; then
 
         if test "$wxUSE_GTKPRINT" = "yes" ; then
             if test "$WXGTK3" = 1; then
-                gtk_unix_print="gtk+-unix-print-3.0"
+                gtk_unix_print="gtk+-unix-print-${TOOLKIT_VERSION}.0"
             else
                 gtk_unix_print="gtk+-unix-print-2.0 >= 2.10"
             fi
@@ -7140,7 +7150,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             if test "$USE_WEBVIEW_WEBKIT2" = 0; then
                 webkitgtk=webkit-1.0
                 if test "$WXGTK3" = 1; then
-                    webkitgtk=webkitgtk-3.0
+                    webkitgtk="webkitgtk-${TOOLKIT_VERSION}.0"
                 fi
                 PKG_CHECK_MODULES([WEBKIT],
                                   [$webkitgtk >= 1.3.1],
@@ -7778,7 +7788,7 @@ elif test "$GXX" = yes ; then
     dnl that they're deprecated but we still have to use them to support older
     dnl toolkit versions and leaving this warning enabled prevents seeing any
     dnl other ones
-    if test "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 ; then
+    if test "$WXGTK4" != 1 -a \( "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 \) ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
 
         dnl CXXWARNINGS is not used for Objective-C++ code compilation, but we
@@ -7978,7 +7988,7 @@ case "$TOOLKIT" in
         TOOLKIT_DESC="GTK+"
         if test "$WXGTK2" = 1; then
             if test "$WXGTK3" = 1; then
-                TOOLKIT_DESC="$TOOLKIT_DESC 3"
+                TOOLKIT_DESC="$TOOLKIT_DESC ${TOOLKIT_VERSION}"
             else
                 TOOLKIT_DESC="$TOOLKIT_DESC 2"
             fi
