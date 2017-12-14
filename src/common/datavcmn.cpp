@@ -801,7 +801,11 @@ wxDataViewRendererBase::CheckedGetValue(const wxDataViewModel* model,
                                         unsigned column) const
 {
     wxVariant value;
-    model->GetValue(value, item, column);
+    // Avoid calling GetValue() if the model isn't supposed to have any values
+    // in this cell (e.g. a non-first column of a container item), this could
+    // be unexpected.
+    if ( model->HasValue(item, column) )
+        model->GetValue(value, item, column);
 
     // We always allow the cell to be null, regardless of the renderer type.
     if ( !value.IsNull() )
