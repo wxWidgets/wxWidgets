@@ -261,6 +261,8 @@
                 applications.
              -->
             net/socket.cpp
+            persistence/tlw.cpp
+            persistence/dataview.cpp
             sizers/boxsizer.cpp
             sizers/gridsizer.cpp
             sizers/wrapsizer.cpp
