@@ -1723,6 +1723,9 @@
     <ClInclude Include="..\..\include\wx\persist\bookctrl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\persist\dataview.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\persist\splitter.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
