@@ -36,7 +36,11 @@
 
 static
 GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                                            const gchar *icon)
+#else
                                             const gchar *stock)
+#endif // GTK >= 3.10 / < 3.10
 {
     /* create the button */
     GtkWidget *button = gtk_button_new_with_mnemonic (label);
@@ -44,9 +48,13 @@ GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
 
     /* add a stock icon inside it */
 #ifdef __WXGTK4__
-    gtk_button_set_icon_name (GTK_BUTTON (button), stock);
+    gtk_button_set_icon_name (GTK_BUTTON (button), icon);
 #else
+  #if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+    GtkWidget *image = gtk_image_new_from_icon_name(icon, GTK_ICON_SIZE_BUTTON);
+  #else
     GtkWidget *image = gtk_image_new_from_stock (stock, GTK_ICON_SIZE_BUTTON);
+  #endif // GTK >= 3.10 / < 3.10
     gtk_button_set_image (GTK_BUTTON (button), image);
 #endif
 
@@ -292,7 +300,11 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
         gtk_box_pack_start (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
         /* icon */
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+        image = gtk_image_new_from_icon_name("dialog-error", GTK_ICON_SIZE_DIALOG);
+#else
         image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+#endif // GTK >= 3.10 / < 3.10
         gtk_box_pack_start (GTK_BOX(hbox), image, FALSE, FALSE, 12);
 
         {
@@ -349,12 +361,20 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
 
         /* add the buttons */
         button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Save to _file",
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                                                "document-save");
+#else
                                                 GTK_STOCK_SAVE);
+#endif // GTK >= 3.10 / < 3.10
         g_signal_connect (button, "clicked",
                             G_CALLBACK(gtk_assert_dialog_save_backtrace_callback), dlg);
 
         button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Copy to clip_board",
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                                                  "edit-copy");
+#else
                                                   GTK_STOCK_COPY);
+#endif // GTK >= 3.10 / < 3.10
         g_signal_connect (button, "clicked", G_CALLBACK(gtk_assert_dialog_copy_callback), dlg);
     }
 #endif // wxUSE_STACKWALKER
@@ -365,10 +385,22 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
     gtk_box_pack_end(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(dlg))), dlg->shownexttime, false, true, 8);
 
     /* add the stop button */
-    gtk_assert_dialog_add_button (dlg, "_Stop", GTK_STOCK_QUIT, GTK_ASSERT_DIALOG_STOP);
+    gtk_assert_dialog_add_button (dlg, "_Stop",
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                                  "application-exit",
+#else
+                                  GTK_STOCK_QUIT,
+#endif // GTK >= 3.10 / < 3.10
+                                  GTK_ASSERT_DIALOG_STOP);
 
     /* add the continue button */
-    continuebtn = gtk_assert_dialog_add_button (dlg, "_Continue", GTK_STOCK_YES, GTK_ASSERT_DIALOG_CONTINUE);
+    continuebtn = gtk_assert_dialog_add_button (dlg, "_Continue",
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                                                "go-next",
+#else
+                                                GTK_STOCK_YES,
+#endif
+                                                GTK_ASSERT_DIALOG_CONTINUE);
     gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_ASSERT_DIALOG_CONTINUE);
     g_signal_connect (continuebtn, "clicked", G_CALLBACK(gtk_assert_dialog_continue_callback), dlg);
 
