@@ -14,6 +14,7 @@
 #include "wx/gtk/assertdlg_gtk.h"
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/translation.h"
+#include "wx/stockitem.h"
 
 #include <stdio.h>
 
@@ -174,8 +175,8 @@ static void gtk_assert_dialog_save_backtrace_callback(GtkWidget*, GtkAssertDialo
 
     dialog = gtk_file_chooser_dialog_new ("Save assert info to file", GTK_WINDOW(dlg),
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
-                                          static_cast<const char*>(wxGetTranslation("Cancel").utf8_str()), GTK_RESPONSE_CANCEL,
-                                          static_cast<const char*>(wxGetTranslation("Save").utf8_str()), GTK_RESPONSE_ACCEPT,
+                                          static_cast<const char*>(wxGetStockLabel(wxID_CANCEL, wxSTOCK_NOFLAGS).utf8_str()), GTK_RESPONSE_CANCEL,
+                                          static_cast<const char*>(wxGetStockLabel(wxID_SAVE, wxSTOCK_NOFLAGS).utf8_str()), GTK_RESPONSE_ACCEPT,
                                           NULL);
 
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
