@@ -36,6 +36,7 @@ include:
 
 Some of the other improvements:
 
+- wxWidgets can now be built with CMake too.
 - Strings can now be translated differently depending on their context.
 - Converting between wxString and UTF-8 encoded std::string is now
   simpler and unsafe wxString can now be disabled on the opt-in basis

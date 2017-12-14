@@ -81,6 +81,7 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
 
 All:
 
+- Add CMake-based build system (Tobias Taschner).
 - Add wxSecretStore for storing passwords using the OS-provided facilities.
 - Add support for compiling application code with wxNO_UNSAFE_WXSTRING_CONV.
 - Add support for translating strings in different contexts (RickS).
