@@ -11,6 +11,7 @@
 
 #include "wx/app.h"
 #include "wx/config.h"
+#include "wx/persist.h"
 
 #define PO_PREFIX           "/Persistent_Options"
 
@@ -18,28 +19,49 @@ class PersistenceTests
 {
 public:
     PersistenceTests()
-        : m_cleanup(false)
+        : m_managerOld(&wxPersistenceManager::Get())
     {
-        wxTheApp->SetAppName("wxPersistenceTests");
+        // Install our custom manager, using custom config object, for the test
+        // duration.
+        wxPersistenceManager::Set(m_manager);
     }
 
-    // The tests using this fixture should call this method when they don't
-    // need the values saved into wxConfig any more.
-    void EnableCleanup()
+    // Access the config object used for storing the settings.
+    const wxConfigBase& GetConfig() const
     {
-        m_cleanup = true;
+        return *m_manager.GetConfig();
     }
 
     ~PersistenceTests()
     {
-        if ( m_cleanup )
-        {
-            wxConfig::Get()->DeleteGroup(PO_PREFIX);
-        }
+        wxPersistenceManager::Set(*m_managerOld);
     }
 
 private:
-    bool m_cleanup;
+    class TestPersistenceManager : public wxPersistenceManager
+    {
+    public:
+        TestPersistenceManager()
+            : m_config("PersistenceTests", "wxWidgets")
+        {
+        }
+
+        ~TestPersistenceManager() wxOVERRIDE
+        {
+            m_config.DeleteAll();
+        }
+
+        wxConfigBase* GetConfig() const wxOVERRIDE
+        {
+            return const_cast<wxConfig*>(&m_config);
+        }
+
+    private:
+        wxConfig m_config;
+    };
+
+    wxPersistenceManager *m_managerOld;
+    TestPersistenceManager m_manager;
 };
 
 #endif // WX_TESTS_PERSIST_TESTPERSISTENCE_H

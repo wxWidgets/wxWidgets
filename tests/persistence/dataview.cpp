@@ -33,13 +33,12 @@
 #define DVC_COL_PREFIX     DVC_PREFIX "/Columns/" DVC_COL
 #define DVC_SORT_PREFIX    DVC_PREFIX "/Sorting"
 
-// --------------------------------------------------------------------------
-// tests themselves
-// --------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// local helpers
+// ----------------------------------------------------------------------------
 
-// Note: The wxDataViewCtrl test currently uses the derivative class
-// wxDataViewListCtrl for convenience.
-TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
+// Create the control used for testing.
+static wxDataViewCtrl* CreatePersistenceTestDVC()
 {
     // We can't just destroy the control itself directly, we need to destroy
     // its parent as only this will ensure that it gets wxWindowDestroyEvent
@@ -77,39 +76,51 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
     data.push_back("FFFF");
     list->AppendItem(data);
 
-    SECTION("Save")
+    return list;
+}
+
+// --------------------------------------------------------------------------
+// tests themselves
+// --------------------------------------------------------------------------
+
+// Note: The wxDataViewCtrl test currently uses the derivative class
+// wxDataViewListCtrl for convenience.
+TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
+{
     {
+        wxDataViewCtrl* const list = CreatePersistenceTestDVC();
+
         // Adjust the initial settings.
         list->GetColumn(0)->SetWidth(150);
         list->GetColumn(1)->SetWidth(250);
         list->GetColumn(1)->SetSortOrder(false);
 
-        wxPersistenceManager::Get().Register(list);
+        CHECK(wxPersistenceManager::Get().Register(list));
 
-        delete parent;
+        // Deleting the control itself doesn't allow it to save its state as
+        // the wxEVT_DESTROY handler is called too late, so delete its parent
+        // (as would usually be the case) instead.
+        delete list->GetParent();
 
         // Test that the relevant keys have been stored correctly.
-        int val;
+        int val = -1;
         wxString text;
 
-        const wxConfigBase* const conf = wxConfig::Get();
-
-        CHECK(conf->Read(DVC_COL_PREFIX "1/Width", &val));
+        CHECK(GetConfig().Read(DVC_COL_PREFIX "1/Width", &val));
         CHECK(150 == val);
 
-        CHECK(conf->Read(DVC_COL_PREFIX "2/Width", &val));
+        CHECK(GetConfig().Read(DVC_COL_PREFIX "2/Width", &val));
         CHECK(250 == val);
 
-        CHECK(conf->Read(DVC_SORT_PREFIX "/Column", &text));
+        CHECK(GetConfig().Read(DVC_SORT_PREFIX "/Column", &text));
         CHECK(text == "Column #2");
 
-        CHECK(conf->Read(DVC_SORT_PREFIX "/Asc", &val));
+        CHECK(GetConfig().Read(DVC_SORT_PREFIX "/Asc", &val));
         CHECK(0 == val);
     }
 
-    SECTION("Restore")
     {
-        EnableCleanup();
+        wxDataViewCtrl* const list = CreatePersistenceTestDVC();
 
         // Test that the object was registered and restored.
         CHECK(wxPersistenceManager::Get().RegisterAndRestore(list));
@@ -119,5 +130,7 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
         CHECK(250 == list->GetColumn(1)->GetWidth());
         CHECK(list->GetColumn(1)->IsSortKey());
         CHECK(!list->GetColumn(1)->IsSortOrderAscending());
+
+        delete list->GetParent();
     }
 }
