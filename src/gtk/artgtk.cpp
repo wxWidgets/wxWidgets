@@ -205,6 +205,7 @@ GtkIconSize FindClosestIconSize(const wxSize& size)
     return best;
 }
 
+#ifndef __WXGTK4__
 GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
 {
     // FIXME: This code is not 100% correct, because stock pixmap are
@@ -217,12 +218,14 @@ GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
 
     GtkWidget* widget = wxGTKPrivate::GetButtonWidget();
 #ifdef __WXGTK3__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
     GtkIconSet* iconset = gtk_style_context_lookup_icon_set(sc, stockid);
     GdkPixbuf* pixbuf = NULL;
     if (iconset)
         pixbuf = gtk_icon_set_render_icon_pixbuf(iconset, sc, size);
     return pixbuf;
+    wxGCC_WARNING_RESTORE()
 #else
     GtkStyle* style = gtk_widget_get_style(widget);
     GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid);
@@ -235,6 +238,7 @@ GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
                                     GTK_STATE_NORMAL, size, NULL, NULL);
 #endif
 }
+#endif // !__WXGTK4__
 
 GdkPixbuf *CreateThemeIcon(const char *iconname, int size)
 {
@@ -253,10 +257,12 @@ GdkPixbuf *CreateThemeIcon(const char *iconname, int size)
 GdkPixbuf *CreateGtkIcon(const char *icon_name,
                          GtkIconSize stock_size, const wxSize& pixel_size)
 {
+#ifndef __WXGTK4__
     // try stock GTK+ icon first
     GdkPixbuf *pixbuf = CreateStockIcon(icon_name, stock_size);
     if ( pixbuf )
         return pixbuf;
+#endif
 
     // if that fails, try theme icon
     wxSize size(pixel_size);
@@ -328,6 +334,8 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
     wxIconBundle bundle;
     const wxString stockid = wxArtIDToStock(id);
 
+#ifndef __WXGTK4__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     // try to load the bundle as stock icon first
     GtkWidget* widget = wxGTKPrivate::GetButtonWidget();
 #ifdef __WXGTK3__
@@ -351,6 +359,8 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
         g_free(sizes);
         return bundle;
     }
+    wxGCC_WARNING_RESTORE()
+#endif // !__WXGTK4__
 
     // otherwise try icon themes
     gint *sizes = gtk_icon_theme_get_icon_sizes
