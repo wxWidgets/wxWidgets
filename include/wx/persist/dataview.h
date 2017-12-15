@@ -20,8 +20,6 @@
 
 #define wxPERSIST_DVC_KIND "DataView"
 
-#define wxPERSIST_DVC_COLUMNS "Columns"
-
 #define wxPERSIST_DVC_HIDDEN "Hidden"
 #define wxPERSIST_DVC_POS "Position"
 #define wxPERSIST_DVC_TITLE "Title"
@@ -29,28 +27,6 @@
 
 #define wxPERSIST_DVC_SORT_KEY "Sorting/Column"
 #define wxPERSIST_DVC_SORT_ASC "Sorting/Asc"
-
-// ----------------------------------------------------------------------------
-// Helper function to search for a column by its title.
-// ----------------------------------------------------------------------------
-
-namespace wxPrivate
-{
-
-inline
-wxDataViewColumn*
-GetColumnByTitle(wxDataViewCtrl* control, const wxString& name)
-{
-    for ( unsigned int col = 0; col < control->GetColumnCount(); col++)
-    {
-        if ( control->GetColumn(col)->GetTitle() == name )
-            return control->GetColumn(col);
-    }
-
-    return NULL;
-}
-
-} // namespace wxPrivate
 
 // ----------------------------------------------------------------------------
 // wxPersistentDataViewCtrl: Saves and restores user modified column widths
@@ -72,22 +48,19 @@ public:
     {
         wxDataViewCtrl* const control = Get();
 
-        wxDataViewColumn* sortColumn = NULL;
+        const wxDataViewColumn* sortColumn = NULL;
 
         for ( unsigned int col = 0; col < control->GetColumnCount(); col++ )
         {
-            wxDataViewColumn* column = control->GetColumn(col);
-            wxASSERT(column);
+            const wxDataViewColumn* const column = control->GetColumn(col);
 
             // Create a prefix string to identify each column.
-            wxString columnPrefix;
-            columnPrefix.Printf("/%s/%s/", wxPERSIST_DVC_COLUMNS,
-                                                        column->GetTitle());
+            const wxString columnPrefix = MakeColumnPrefix(column);
 
             // Save the column attributes.
             SaveValue(columnPrefix + wxPERSIST_DVC_HIDDEN, column->IsHidden());
             SaveValue(columnPrefix + wxPERSIST_DVC_POS,
-                                            control->GetColumnPosition(column));
+                      control->GetColumnPosition(column));
             SaveValue(columnPrefix + wxPERSIST_DVC_WIDTH, column->GetWidth());
 
             // Check if this column is the current sort key.
@@ -97,7 +70,7 @@ public:
 
         // Note: The current implementation does not save and restore multi-
         // column sort keys.
-        if (control->IsMultiColumnSortAllowed())
+        if ( control->IsMultiColumnSortAllowed() )
             return;
 
         // Save the sort key and direction if there is a valid sort.
@@ -105,26 +78,22 @@ public:
         {
             SaveValue(wxPERSIST_DVC_SORT_KEY, sortColumn->GetTitle());
             SaveValue(wxPERSIST_DVC_SORT_ASC,
-                                    sortColumn->IsSortOrderAscending());
+                      sortColumn->IsSortOrderAscending());
         }
     }
 
     virtual bool Restore() wxOVERRIDE
     {
         wxDataViewCtrl* const control = Get();
-        wxDataViewColumn* column;
 
         for ( unsigned int col = 0; col < control->GetColumnCount(); col++ )
         {
-            column = control->GetColumn(col);
-            wxASSERT(column);
+            wxDataViewColumn* const column = control->GetColumn(col);
 
             // Create a prefix string to identify each column within the
             // persistence store (columns are stored by title). The persistence
             // store benignly handles cases where the title is not found.
-            wxString columnPrefix;
-            columnPrefix.Printf("/%s/%s/", wxPERSIST_DVC_COLUMNS,
-                                                        column->GetTitle());
+            const wxString columnPrefix = MakeColumnPrefix(column);
 
             // Restore column hidden status.
             bool hidden;
@@ -144,12 +113,10 @@ public:
         wxString sortColumn;
         if ( control->GetModel() &&
              RestoreValue(wxPERSIST_DVC_SORT_KEY, &sortColumn) &&
-             sortColumn != "" )
+             !sortColumn.empty() )
         {
             bool sortAsc = true;
-            column = wxPrivate::GetColumnByTitle(control, sortColumn);
-
-            if ( column )
+            if ( wxDataViewColumn* column = GetColumnByTitle(control, sortColumn) )
             {
                 RestoreValue(wxPERSIST_DVC_SORT_ASC, &sortAsc);
                 column->SetSortOrder(sortAsc);
@@ -158,12 +125,33 @@ public:
                 control->GetModel()->Resort();
             }
         }
+
         return true;
     }
 
     virtual wxString GetKind() const wxOVERRIDE
     {
         return wxPERSIST_DVC_KIND;
+    }
+
+private:
+    // Return a (slash-terminated) prefix for the column-specific entries.
+    static wxString MakeColumnPrefix(const wxDataViewColumn* column)
+    {
+        return wxString::Format("/Columns/%s/", column->GetTitle());
+    }
+
+    // Return the column with the given title or NULL.
+    static wxDataViewColumn*
+    GetColumnByTitle(wxDataViewCtrl* control, const wxString& title)
+    {
+        for ( unsigned int col = 0; col < control->GetColumnCount(); col++ )
+        {
+            if ( control->GetColumn(col)->GetTitle() == title )
+                return control->GetColumn(col);
+        }
+
+        return NULL;
     }
 };
 
