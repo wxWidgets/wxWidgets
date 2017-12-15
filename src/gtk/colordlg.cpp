@@ -52,6 +52,12 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
                                            : NULL;
 
     wxString title(_("Choose colour"));
+#ifdef __WXGTK4__
+    m_widget = gtk_color_chooser_dialog_new(title.utf8_str(), parentGTK);
+    g_object_ref(m_widget);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(m_widget), m_data.GetChooseAlpha());
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     m_widget = gtk_color_selection_dialog_new(wxGTK_CONV(title));
 
     g_object_ref(m_widget);
@@ -66,6 +72,8 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
         GTK_COLOR_SELECTION_DIALOG(m_widget)));
     gtk_color_selection_set_has_palette(sel, true);
     gtk_color_selection_set_has_opacity_control(sel, m_data.GetChooseAlpha());
+    wxGCC_WARNING_RESTORE()
+#endif
 
     return true;
 }
@@ -86,11 +94,16 @@ int wxColourDialog::ShowModal()
 
 void wxColourDialog::ColourDataToDialog()
 {
+    const wxColour& color = m_data.GetColour();
+#ifdef __WXGTK4__
+    if (color.IsOk())
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(m_widget), color);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GtkColorSelection* sel = GTK_COLOR_SELECTION(
         gtk_color_selection_dialog_get_color_selection(
         GTK_COLOR_SELECTION_DIALOG(m_widget)));
 
-    const wxColour& color = m_data.GetColour();
     if (color.IsOk())
     {
 #ifdef __WXGTK3__
@@ -120,10 +133,18 @@ void wxColourDialog::ColourDataToDialog()
 
     GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(sel));
     g_object_set(settings, "gtk-color-palette", pal.c_str(), NULL);
+    wxGCC_WARNING_RESTORE()
+#endif // !__WXGTK4__
 }
 
 void wxColourDialog::DialogToColourData()
 {
+#ifdef __WXGTK4__
+    GdkRGBA clr;
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(m_widget), &clr);
+    m_data.SetColour(clr);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GtkColorSelection* sel = GTK_COLOR_SELECTION(
         gtk_color_selection_dialog_get_color_selection(
         GTK_COLOR_SELECTION_DIALOG(m_widget)));
@@ -161,6 +182,8 @@ void wxColourDialog::DialogToColourData()
     }
 
     g_free(pal);
+    wxGCC_WARNING_RESTORE()
+#endif // !__WXGTK4__
 }
 
 #endif // wxUSE_COLOURDLG
