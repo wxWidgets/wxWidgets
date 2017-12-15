@@ -66,7 +66,7 @@ const char* const wxId2Gtk[] = {
     ART(wxART_QUESTION,         GTK_STOCK_DIALOG_QUESTION, "dialog-question")
 
     //ART(wxART_HELP_SIDE_PANEL,)
-    ART(wxART_HELP_SETTINGS,    GTK_STOCK_SELECT_FONT, "gtk-select-font")
+    ART(wxART_HELP_SETTINGS,    GTK_STOCK_SELECT_FONT, "preferences-desktop-font")
     //ART(wxART_HELP_BOOK,      )
     ART(wxART_HELP_FOLDER,      GTK_STOCK_DIRECTORY, "folder")
     ART(wxART_HELP_PAGE,        GTK_STOCK_FILE, "text-x-generic")
@@ -87,9 +87,9 @@ const char* const wxId2Gtk[] = {
     ART(wxART_TIP,              GTK_STOCK_DIALOG_INFO, "dialog-information")
     //ART(wxART_REPORT_VIEW,    )
     //ART(wxART_LIST_VIEW,      )
-    //ART(wxART_NEW_DIR,        )
+    ART(wxART_NEW_DIR,          "folder-new", "folder-new")
     ART(wxART_FOLDER,           GTK_STOCK_DIRECTORY, "folder")
-    ART(wxART_FOLDER_OPEN,      GTK_STOCK_DIRECTORY, "folder")
+    ART(wxART_FOLDER_OPEN,      "folder-open", "folder-open")
     //ART(wxART_GO_DIR_UP,      )
     ART(wxART_EXECUTABLE_FILE,  GTK_STOCK_EXECUTE, "system-run")
     ART(wxART_NORMAL_FILE,      GTK_STOCK_FILE, "text-x-generic")
@@ -99,7 +99,7 @@ const char* const wxId2Gtk[] = {
     ART(wxART_FLOPPY,           GTK_STOCK_FLOPPY, "media-floppy")
     ART(wxART_CDROM,            GTK_STOCK_CDROM, "media-optical")
     ART(wxART_HARDDISK,         GTK_STOCK_HARDDISK, "drive-harddisk")
-    ART(wxART_REMOVABLE,        GTK_STOCK_HARDDISK, "drive-harddisk")
+    ART(wxART_REMOVABLE,        "drive-removable-media", "drive-removable-media")
 
     ART(wxART_FILE_SAVE,        GTK_STOCK_SAVE, "document-save")
     ART(wxART_FILE_SAVE_AS,     GTK_STOCK_SAVE_AS, "document-save-as")
@@ -122,6 +122,7 @@ const char* const wxId2Gtk[] = {
     ART(wxART_FIND,             GTK_STOCK_FIND, "edit-find")
     ART(wxART_FIND_AND_REPLACE, GTK_STOCK_FIND_AND_REPLACE, "edit-find-replace")
     ART(wxART_FULL_SCREEN,      GTK_STOCK_FULLSCREEN, "view-fullscreen")
+    ART(wxART_EDIT,             "accessories-text-editor", "accessories-text-editor")
 };
 
 #undef ART
