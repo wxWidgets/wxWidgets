@@ -15,6 +15,7 @@ if(wxUSE_EXPAT STREQUAL "builtin")
         SOURCE_DIR ${wxSOURCE_DIR}/src/expat/expat
         CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DBUILD_tools=OFF
             -DBUILD_examples=OFF
             -DBUILD_tests=OFF
