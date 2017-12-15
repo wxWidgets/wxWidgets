@@ -3579,13 +3579,13 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent(wxevent , event) ;
-    bool result = GetWXPeer()->HandleWindowEvent(wxevent);
-    
+    // Call this before handling the event in case the event handler destroys
+    // this window.
     (void)SetupCursor(event);
 
-    return result;
+    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+    SetupMouseEvent(wxevent , event) ;
+    return GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusSet()
