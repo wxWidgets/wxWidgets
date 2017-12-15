@@ -474,21 +474,6 @@ wxFileOffset wxFile::Length() const
 {
     wxASSERT( IsOpened() );
 
-    // we use a special method for Linux systems where files in sysfs (i.e.
-    // those under /sys typically) return length of 4096 bytes even when
-    // they're much smaller -- this is a problem as it results in errors later
-    // when we try reading 4KB from them
-#ifdef __LINUX__
-    struct stat st;
-    if ( fstat(m_fd, &st) == 0 )
-    {
-        // returning 0 for the special files indicates to the caller that they
-        // are not seekable
-        return st.st_blocks ? st.st_size : 0;
-    }
-    //else: failed to stat, try the normal method
-#endif // __LINUX__
-
     wxFileOffset iRc = Tell();
     if ( iRc != wxInvalidOffset ) {
         wxFileOffset iLen = const_cast<wxFile *>(this)->SeekEnd();

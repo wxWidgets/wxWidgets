@@ -144,6 +144,10 @@ void FileTestCase::TempFile()
 // Check that GetSize() works correctly for special files.
 TEST_CASE("wxFile::Special", "[file][linux][special-file]")
 {
+    // We can't test /proc/kcore here, unlike in the similar
+    // wxFileName::GetSize() test, as wxFile must be able to open it (at least
+    // for reading) and usually we don't have the permissions to do it.
+
     // This file is not seekable and has 0 size, but can still be read.
     wxFile fileProc("/proc/diskstats");
     CHECK( fileProc.IsOpened() );
@@ -155,6 +159,7 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
     // All files in /sys seem to have size of 4KiB currently, even if they
     // don't have that much data in them.
     wxFile fileSys("/sys/power/state");
+    CHECK( fileSys.Length() == 4096 );
     CHECK( fileSys.IsOpened() );
     CHECK( fileSys.ReadAll(&s) );
     CHECK( !s.empty() );

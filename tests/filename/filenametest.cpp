@@ -1049,3 +1049,18 @@ void FileNameTestCase::TestShortcuts()
 }
 
 #endif // __WINDOWS__
+
+#ifdef __LINUX__
+
+// Check that GetSize() works correctly for special files.
+TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
+{
+    wxULongLong size = wxFileName::GetSize("/proc/kcore");
+    INFO( "size of /proc/kcore=" << size );
+    CHECK( size > 0 );
+
+    // All files in /sys seem to have size of 4KiB currently.
+    CHECK( wxFileName::GetSize("/sys/power/state") == 4096 );
+}
+
+#endif // __LINUX__
