@@ -377,6 +377,8 @@ public:
     /**
         Reads the entire contents of the file into a string.
 
+        Since wxWidgets 3.1.1 this method also works for unseekable files.
+
         @param str
             Non-@NULL pointer to a string to read data into.
         @param conv

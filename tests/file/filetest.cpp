@@ -139,4 +139,28 @@ void FileTestCase::TempFile()
     CPPUNIT_ASSERT( wxRemoveFile(wxT("test2")) );
 }
 
+#ifdef __LINUX__
+
+// Check that GetSize() works correctly for special files.
+TEST_CASE("wxFile::Special", "[file][linux][special-file]")
+{
+    // This file is not seekable and has 0 size, but can still be read.
+    wxFile fileProc("/proc/diskstats");
+    CHECK( fileProc.IsOpened() );
+
+    wxString s;
+    CHECK( fileProc.ReadAll(&s) );
+    CHECK( !s.empty() );
+
+    // All files in /sys seem to have size of 4KiB currently, even if they
+    // don't have that much data in them.
+    wxFile fileSys("/sys/power/state");
+    CHECK( fileSys.IsOpened() );
+    CHECK( fileSys.ReadAll(&s) );
+    CHECK( !s.empty() );
+    CHECK( s.length() < 4096 );
+}
+
+#endif // __LINUX__
+
 #endif // wxUSE_FILE
