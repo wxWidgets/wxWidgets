@@ -3579,11 +3579,11 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
+    (void)SetupCursor(event);
+
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
     SetupMouseEvent(wxevent , event) ;
     bool result = GetWXPeer()->HandleWindowEvent(wxevent);
-    
-    (void)SetupCursor(event);
 
     return result;
 }
