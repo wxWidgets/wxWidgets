@@ -91,13 +91,13 @@ main ()
      exit(1);
    }
 
-  if ((GTK_MAJOR_VERSION != $gtk_config_major_version) ||
-      (GTK_MINOR_VERSION != $gtk_config_minor_version) ||
-      (GTK_MICRO_VERSION != $gtk_config_micro_version))
+  if ((gtk_get_major_version() != $gtk_config_major_version) ||
+      (gtk_get_minor_version() != $gtk_config_minor_version) ||
+      (gtk_get_micro_version() != $gtk_config_micro_version))
     {
       printf("\n*** 'pkg-config --modversion gtk+-4.0' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n", 
              $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
-             GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+             gtk_get_major_version(), gtk_get_minor_version(), gtk_get_micro_version());
       printf ("*** was found! If pkg-config was correct, then it is best\n");
       printf ("*** to remove the old version of GTK+. You may also be able to fix the error\n");
       printf("*** by modifying your LD_LIBRARY_PATH enviroment variable, or by editing\n");
@@ -106,18 +106,27 @@ main ()
       printf("*** If pkg-config was wrong, set the environment variable PKG_CONFIG_PATH\n");
       printf("*** to point to the correct configuration files\n");
     } 
+  else if ((gtk_get_major_version() != GTK_MAJOR_VERSION) ||
+	   (gtk_get_minor_version() != GTK_MINOR_VERSION) ||
+           (gtk_get_micro_version() != GTK_MICRO_VERSION))
+    {
+      printf("*** GTK+ header files (version %d.%d.%d) do not match\n",
+	     GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+      printf("*** library (version %d.%d.%d)\n",
+	     gtk_get_major_version(), gtk_get_minor_version(), gtk_get_micro_version());
+    }
   else
     {
-      if ((GTK_MAJOR_VERSION > major) ||
-        ((GTK_MAJOR_VERSION == major) && (GTK_MINOR_VERSION > minor)) ||
-        ((GTK_MAJOR_VERSION == major) && (GTK_MINOR_VERSION == minor) && (GTK_MICRO_VERSION >= micro)))
+      if ((gtk_get_major_version() > major) ||
+        ((gtk_get_major_version() == major) && (gtk_get_minor_version() > minor)) ||
+        ((gtk_get_major_version() == major) && (gtk_get_minor_version() == minor) && (gtk_get_micro_version() >= micro)))
       {
         return 0;
        }
      else
       {
         printf("\n*** An old version of GTK+ (%u.%u.%u) was found.\n",
-               GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+               gtk_get_major_version(), gtk_get_minor_version(), gtk_get_micro_version());
         printf("*** You need a version of GTK+ newer than %u.%u.%u. The latest version of\n",
 	       major, minor, micro);
         printf("*** GTK+ is always available from ftp://ftp.gtk.org.\n");
@@ -158,7 +167,7 @@ main ()
           AC_TRY_LINK([
 #include <gtk/gtk.h>
 #include <stdio.h>
-],      [ return ((gtk_major_version) || (gtk_minor_version) || (gtk_micro_version)); ],
+],      [ return ((gtk_get_major_version()) || (gtk_get_minor_version()) || (gtk_get_micro_version())); ],
         [ echo "*** The test program compiled, but did not run. This usually means"
           echo "*** that the run-time linker is not finding GTK+ or finding the wrong"
           echo "*** version of GTK+. If it is not finding GTK+, you'll need to set your"
@@ -169,7 +178,7 @@ main ()
           echo "*** If you have an old version installed, it is best to remove it, although"
           echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH" ],
         [ echo "*** The test program failed to compile or link. See the file config.log for the"
-          echo "*** exact error that occured. This usually means GTK+ is incorrectly installed."])
+          echo "*** exact error that occurred. This usually means GTK+ is incorrectly installed."])
           CFLAGS="$ac_save_CFLAGS"
           LIBS="$ac_save_LIBS"
        fi
