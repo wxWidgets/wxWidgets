@@ -2055,6 +2055,9 @@
 				RelativePath="..\..\include\wx\dataview.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\persist\dataview.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\datectrl.h">
 			</File>
 			<File

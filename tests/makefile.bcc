@@ -236,6 +236,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_safearrayconverttest.obj \
 	$(OBJS)\test_gui_settings.obj \
 	$(OBJS)\test_gui_socket.obj \
+	$(OBJS)\test_gui_tlw.obj \
+	$(OBJS)\test_gui_dataview.obj \
 	$(OBJS)\test_gui_boxsizer.obj \
 	$(OBJS)\test_gui_gridsizer.obj \
 	$(OBJS)\test_gui_wrapsizer.obj \
@@ -1067,6 +1069,12 @@ $(OBJS)\test_gui_settings.obj: .\misc\settings.cpp
 
 $(OBJS)\test_gui_socket.obj: .\net\socket.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\net\socket.cpp
+
+$(OBJS)\test_gui_tlw.obj: .\persistence\tlw.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\persistence\tlw.cpp
+
+$(OBJS)\test_gui_dataview.obj: .\persistence\dataview.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\persistence\dataview.cpp
 
 $(OBJS)\test_gui_boxsizer.obj: .\sizers\boxsizer.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\sizers\boxsizer.cpp

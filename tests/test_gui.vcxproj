@@ -545,6 +545,8 @@
     <ClCompile Include="misc\selstoretest.cpp" />
     <ClCompile Include="misc\settings.cpp" />
     <ClCompile Include="net\socket.cpp" />
+    <ClCompile Include="persistence\tlw.cpp" />
+    <ClCompile Include="persistence\dataview.cpp" />
     <ClCompile Include="sizers\boxsizer.cpp" />
     <ClCompile Include="sizers\gridsizer.cpp" />
     <ClCompile Include="sizers\wrapsizer.cpp" />
