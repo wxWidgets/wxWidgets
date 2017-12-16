@@ -29,6 +29,8 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/mnemonics.h"
+#include "wx/stockitem.h"
 
 extern "C" {
 static void gtk_dirdialog_response_callback(GtkWidget * WXUNUSED(w),
@@ -87,8 +89,18 @@ bool wxDirDialog::Create(wxWindow* parent,
                    wxGTK_CONV(m_message),
                    gtk_parent,
                    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                   GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                   static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
+#else
+                   GTK_STOCK_CANCEL,
+#endif // GTK >= 3.10 / < 3.10
+                   GTK_RESPONSE_CANCEL,
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                   static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN)))),
+#else
+                   GTK_STOCK_OPEN,
+#endif // GTK >= 3.10 / < 3.10
+                   GTK_RESPONSE_ACCEPT,
                    NULL);
     g_object_ref(m_widget);
 
