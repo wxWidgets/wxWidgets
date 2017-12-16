@@ -106,6 +106,7 @@ All:
 - Add UTF-8 support to wxZipOutputStream (Tobias Taschner).
 - Update all bundled 3rd party libraries to their latest versions.
 - Use unique prefix for all zlib symbols to avoid link conflicts.
+- Make wxFile::ReadAll() work for unseekable files too.
 
 All (GUI):
 
