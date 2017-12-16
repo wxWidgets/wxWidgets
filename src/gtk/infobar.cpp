@@ -34,6 +34,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/messagetype.h"
+#include "wx/gtk/private/mnemonics.h"
 
 // ----------------------------------------------------------------------------
 // local classes
@@ -138,6 +139,7 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     // finish creation and connect to all the signals we're interested in
     m_parent->DoAddChild(this);
 
+
     PostCreation(wxDefaultSize);
 
     GTKConnectWidget("response", G_CALLBACK(wxgtk_infobar_response));
@@ -208,9 +210,13 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
     GtkWidget *button = gtk_info_bar_add_button
                         (
                             GTK_INFO_BAR(m_widget),
-                            (label.empty()
-                                ? GTKConvertMnemonics(wxGetStockGtkID(btnid))
-                                : label).utf8_str(),
+                            label.empty() ?
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                                wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)))
+#else
+                                wxGTK_CONV(wxGetStockGtkID(btnid)
+#endif // GTK >= 3.10 / < 3.10
+                                : wxGTK_CONV(label),
                             btnid
                         );
 
