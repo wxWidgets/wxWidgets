@@ -80,14 +80,32 @@ void *wxGetDisplay()
 
 void wxDisplaySize( int *width, int *height )
 {
+#ifdef __WXGTK4__
+    GdkMonitor* monitor = gdk_display_get_primary_monitor(gdk_display_get_default());
+    GdkRectangle rect;
+    gdk_monitor_get_geometry(monitor, &rect);
+    if (width) *width = rect.width;
+    if (height) *height = rect.height;
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if (width) *width = gdk_screen_width();
     if (height) *height = gdk_screen_height();
+    wxGCC_WARNING_RESTORE()
+#endif
 }
 
 void wxDisplaySizeMM( int *width, int *height )
 {
+#ifdef __WXGTK4__
+    GdkMonitor* monitor = gdk_display_get_primary_monitor(gdk_display_get_default());
+    if (width) *width = gdk_monitor_get_width_mm(monitor);
+    if (height) *height = gdk_monitor_get_height_mm(monitor);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if (width) *width = gdk_screen_width_mm();
     if (height) *height = gdk_screen_height_mm();
+    wxGCC_WARNING_RESTORE()
+#endif
 }
 
 bool wxColourDisplay()
@@ -97,7 +115,11 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
+#ifdef __WXGTK4__
+    return 24;
+#else
     return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
+#endif
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
@@ -187,12 +209,21 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
                                            int *verMin,
                                            int *verMicro) const
 {
+#ifdef __WXGTK3__
+    if (verMaj)
+        *verMaj = gtk_get_major_version();
+    if (verMin)
+        *verMin = gtk_get_minor_version();
+    if (verMicro)
+        *verMicro = gtk_get_micro_version();
+#else
     if ( verMaj )
         *verMaj = gtk_major_version;
     if ( verMin )
         *verMin = gtk_minor_version;
     if ( verMicro )
         *verMicro = gtk_micro_version;
+#endif
 
     return wxPORT_GTK;
 }
@@ -339,10 +370,14 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
         gtk_assert_dialog_set_message(GTK_ASSERT_DIALOG(dialog), msg.mb_str());
 
         GdkDisplay* display = gtk_widget_get_display(dialog);
-#ifdef __WXGTK3__
+#ifdef __WXGTK4__
+        gdk_seat_ungrab(gdk_display_get_default_seat(display));
+#elif defined(__WXGTK3__)
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         GdkDeviceManager* manager = gdk_display_get_device_manager(display);
         GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
         gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+        wxGCC_WARNING_RESTORE()
 #else
         gdk_display_pointer_ungrab(display, unsigned(GDK_CURRENT_TIME));
 #endif

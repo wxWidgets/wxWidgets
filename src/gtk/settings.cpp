@@ -402,7 +402,11 @@ static void fg(GtkStyleContext* sc, wxColour& color, int state = GTK_STATE_FLAG_
 {
     GdkRGBA rgba;
     gtk_style_context_set_state(sc, GtkStateFlags(state));
+#ifdef __WXGTK4__
+    gtk_style_context_get_color(sc, &rgba);
+#else
     gtk_style_context_get_color(sc, GtkStateFlags(state), &rgba);
+#endif
     color = wxColour(rgba);
     StyleContextFree(sc);
 }
@@ -517,6 +521,9 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_HOTLIGHT:
         sc = StyleContext(path, GTK_TYPE_LINK_BUTTON, "button", "link");
+#ifdef __WXGTK4__
+        fg(sc, color, GTK_STATE_FLAG_LINK);
+#else
         if (gtk_check_version(3,12,0) == NULL)
             fg(sc, color, GTK_STATE_FLAG_LINK);
         else
@@ -534,6 +541,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             StyleContextFree(sc);
             wxGCC_WARNING_RESTORE()
         }
+#endif
         break;
     case wxSYS_COLOUR_INFOBK:
         sc = TooltipContext(path);
@@ -830,6 +838,20 @@ static int GetBorderWidth(wxSystemMetric index, wxWindow* win)
     return -1;
 }
 
+#ifdef __WXGTK4__
+static GdkRectangle GetMonitorGeom(GdkWindow* window)
+{
+    GdkMonitor* monitor;
+    if (window)
+        monitor = gdk_display_get_monitor_at_window(gdk_window_get_display(window), window);
+    else
+        monitor = gdk_display_get_primary_monitor(gdk_display_get_default());
+    GdkRectangle rect;
+    gdk_monitor_get_geometry(monitor, &rect);
+    return rect;
+}
+#endif
+
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
     GdkWindow *window = NULL;
@@ -961,16 +983,28 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             return 32;
 
         case wxSYS_SCREEN_X:
+#ifdef __WXGTK4__
+            return GetMonitorGeom(window).width;
+#else
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             if (window)
                 return gdk_screen_get_width(gdk_window_get_screen(window));
             else
                 return gdk_screen_width();
+            wxGCC_WARNING_RESTORE()
+#endif
 
         case wxSYS_SCREEN_Y:
+#ifdef __WXGTK4__
+            return GetMonitorGeom(window).height;
+#else
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             if (window)
                 return gdk_screen_get_height(gdk_window_get_screen(window));
             else
                 return gdk_screen_height();
+            wxGCC_WARNING_RESTORE()
+#endif
 
         case wxSYS_HSCROLL_Y:
         case wxSYS_VSCROLL_X:
