@@ -895,7 +895,6 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
             // fall through
         case wxITEM_NORMAL:
             const wxBitmap& bitmap = mitem->GetBitmap();
-            const char* stockid;
             if (bitmap.IsOk())
             {
                 // always use pixbuf, because pixmap mask does not
@@ -905,12 +904,18 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
                 gtk_widget_show(image);
                 gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuItem), image);
             }
-            else if ((stockid = wxGetStockGtkID(mitem->GetId())) != NULL)
-                // use stock bitmap for this item if available on the assumption
-                // that it never hurts to follow GTK+ conventions more closely
-                menuItem = gtk_image_menu_item_new_from_stock(stockid, NULL);
             else
-                menuItem = gtk_menu_item_new_with_label("");
+            {
+#if !defined(__WXGTK3__) || !GTK_CHECK_VERSION(3,10,0)
+                const char* stockid = wxGetStockGtkID(mitem->GetId());
+                if (stockid)
+                    // use stock bitmap for this item if available on the assumption
+                    // that it never hurts to follow GTK+ conventions more closely
+                    menuItem = gtk_image_menu_item_new_from_stock(stockid, NULL);
+                else
+#endif // GTK < 3.10
+                    menuItem = gtk_menu_item_new_with_label("");
+            }
             break;
     }
     mitem->SetMenuItem(menuItem);
@@ -1274,6 +1279,7 @@ wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_m
     const wxString string = GetGtkHotKey(*item);
     if (!string.empty())
         gtk_accelerator_parse(wxGTK_CONV_SYS(string), accel_key, accel_mods);
+#if !defined(__WXGTK3__) || !GTK_CHECK_VERSION(3,10,0)
     else
     {
         GtkStockItem stock_item;
@@ -1284,9 +1290,12 @@ wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_m
             *accel_mods = stock_item.modifier;
         }
     }
+#endif // GTK < 3.10
 }
 #endif // wxUSE_ACCEL
 
+// Stock items are deprecated since GTK+ 3.10
+#if !defined(__WXGTK3__) || !GTK_CHECK_VERSION(3,10,0)
 const char *wxGetStockGtkID(wxWindowID id)
 {
     #define STOCKITEM(wx,gtk)      \
@@ -1389,5 +1398,6 @@ const char *wxGetStockGtkID(wxWindowID id)
 
     return NULL;
 }
+#endif // GTK < 3.10
 
 #endif // wxUSE_MENUS
