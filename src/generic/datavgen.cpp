@@ -615,11 +615,11 @@ private:
         // Is the branch node currently open (expanded)?
         bool                 open;
 
-        // By which column are the children currently sorted
-        int                  sortColumn;
-
         // Are the children currently sorted ascending or descending
         bool                 sortAscending;
+
+        // By which column are the children currently sorted
+        int                  sortColumn;
 
         // Total count of expanded (i.e. visible with the help of some
         // scrolling) items in the subtree, but excluding this node. I.e. it is
