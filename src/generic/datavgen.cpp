@@ -602,9 +602,9 @@ private:
     {
         BranchNodeData()
             : open(false),
-              subTreeCount(0),
+              sortAscending(false),
               sortColumn(SortColumn_None),
-              sortAscending(false)
+              subTreeCount(0)
         {
         }
 
