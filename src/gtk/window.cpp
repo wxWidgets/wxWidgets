@@ -2427,13 +2427,19 @@ wxMouseState wxGetMouseState()
     gint y;
     GdkModifierType mask;
 
-    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+    GdkWindow* window = wxGetTopLevelGDK();
+    GdkDisplay* display = gdk_window_get_display(window);
 #ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    GdkSeat* seat = gdk_display_get_default_seat(display);
+    GdkDevice* device = gdk_seat_get_pointer(seat);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
-    GdkScreen* screen;
-    gdk_device_get_position(device, &screen, &x, &y);
-    GdkWindow* window = gdk_screen_get_root_window(screen);
+    wxGCC_WARNING_RESTORE()
+#endif
+    gdk_device_get_position(device, NULL, &x, &y);
     gdk_device_get_state(device, window, NULL, &mask);
 #else
     gdk_display_get_pointer(display, NULL, &x, &y, &mask);
@@ -4831,8 +4837,16 @@ void wxWindowGTK::WarpPointer( int x, int y )
     GdkDisplay* display = gtk_widget_get_display(m_widget);
     GdkScreen* screen = gtk_widget_get_screen(m_widget);
 #ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    GdkSeat* seat = gdk_display_get_default_seat(display);
+    GdkDevice* device = gdk_seat_get_pointer(seat);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
-    gdk_device_warp(gdk_device_manager_get_client_pointer(manager), screen, x, y);
+    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    wxGCC_WARNING_RESTORE()
+#endif
+    gdk_device_warp(device, screen, x, y);
 #else
 #ifdef GDK_WINDOWING_X11
     XWarpPointer(GDK_DISPLAY_XDISPLAY(display),
@@ -5768,6 +5782,11 @@ void wxWindowGTK::DoCaptureMouse()
 
     wxCHECK_RET( window, wxT("CaptureMouse() failed") );
 
+#ifdef __WXGTK4__
+    GdkDisplay* display = gdk_window_get_display(window);
+    GdkSeat* seat = gdk_display_get_default_seat(display);
+    gdk_seat_grab(seat, window, GDK_SEAT_CAPABILITY_POINTER, false, NULL, NULL, NULL, 0);
+#else
     const GdkEventMask mask = GdkEventMask(
         GDK_BUTTON_PRESS_MASK |
         GDK_BUTTON_RELEASE_MASK |
@@ -5775,11 +5794,13 @@ void wxWindowGTK::DoCaptureMouse()
         GDK_POINTER_MOTION_MASK);
 #ifdef __WXGTK3__
     GdkDisplay* display = gdk_window_get_display(window);
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
     gdk_device_grab(
         device, window, GDK_OWNERSHIP_NONE, false, mask,
         NULL, unsigned(GDK_CURRENT_TIME));
+    wxGCC_WARNING_RESTORE()
 #else
     gdk_pointer_grab( window, FALSE,
                       mask,
@@ -5787,6 +5808,7 @@ void wxWindowGTK::DoCaptureMouse()
                       NULL,
                       (guint32)GDK_CURRENT_TIME );
 #endif
+#endif // !__WXGTK4__
     g_captureWindow = this;
     g_captureWindowHasMouse = true;
 }
@@ -5810,9 +5832,15 @@ void wxWindowGTK::DoReleaseMouse()
 
 #ifdef __WXGTK3__
     GdkDisplay* display = gdk_window_get_display(window);
+#ifdef __WXGTK4__
+    gdk_seat_ungrab(gdk_display_get_default_seat(display));
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
     gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+    wxGCC_WARNING_RESTORE()
+#endif
 #else
     gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
 #endif
@@ -5822,9 +5850,15 @@ void wxWindowGTK::GTKReleaseMouseAndNotify()
 {
     GdkDisplay* display = gtk_widget_get_display(m_widget);
 #ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    gdk_seat_ungrab(gdk_display_get_default_seat(display));
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
     gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+    wxGCC_WARNING_RESTORE()
+#endif
 #else
     gdk_display_pointer_ungrab(display, unsigned(GDK_CURRENT_TIME));
 #endif
@@ -6067,8 +6101,15 @@ void wxGetMousePosition(int* x, int* y)
 {
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
 #ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    GdkSeat* seat = gdk_display_get_default_seat(display);
+    GdkDevice* device = gdk_seat_get_pointer(seat);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    wxGCC_WARNING_RESTORE()
+#endif
     gdk_device_get_position(device, NULL, x, y);
 #else
     gdk_display_get_pointer(display, NULL, x, y, NULL);
