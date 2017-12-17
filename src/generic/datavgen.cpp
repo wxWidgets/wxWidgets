@@ -67,7 +67,7 @@ class wxDataViewHeaderWindow;
 class wxDataViewCtrl;
 
 //-----------------------------------------------------------------------------
-// classes
+// constants
 //-----------------------------------------------------------------------------
 
 static const int SCROLL_UNIT_X = 15;
@@ -84,9 +84,8 @@ static const int EXPANDER_OFFSET = 4;
 static const int EXPANDER_OFFSET = 1;
 #endif
 
-// Below is the compare stuff.
-// For the generic implementation, both the leaf nodes and the nodes are sorted for
-// fast search when needed
+namespace
+{
 
 // The column is either the index of the column to be used for sorting or one
 // of the special values in this enum:
@@ -99,12 +98,45 @@ enum
     SortColumn_Default = -1
 };
 
+// A class storing the definition of sort order used, as a column index and
+// sort direction by this column.
+//
+// Notice that the sort order may be invalid, meaning that items shouldn't be
+// sorted.
+class SortOrder
+{
+public:
+    explicit SortOrder(int column = SortColumn_None, bool ascending = true)
+        : m_column(column),
+          m_ascending(ascending)
+    {
+    }
+
+    // Default copy ctor, assignment operator and dtor are all OK.
+
+    bool IsNone() const { return m_column == SortColumn_None; }
+
+    int GetColumn() const { return m_column; }
+    bool IsAscending() const { return m_ascending; }
+
+    bool operator==(const SortOrder& other) const
+    {
+        return m_column == other.m_column && m_ascending == other.m_ascending;
+    }
+
+    bool operator!=(const SortOrder& other) const
+    {
+        return !(*this == other);
+    }
+
+private:
+    int m_column;
+    bool m_ascending;
+};
+
 // ----------------------------------------------------------------------------
 // helper functions
 // ----------------------------------------------------------------------------
-
-namespace
-{
 
 // Return the expander column or, if it is not set, the first column and also
 // set it as the expander one for the future.
@@ -618,8 +650,6 @@ private:
     {
         BranchNodeData()
             : open(false),
-              sortAscending(false),
-              sortColumn(SortColumn_None),
               subTreeCount(0)
         {
         }
@@ -638,14 +668,11 @@ private:
         // case this branch of the tree wasn't expanded and realized yet.
         wxDataViewTreeNodes  children;
 
+        // Order in which children are sorted (possibly none).
+        SortOrder            sortOrder;
+
         // Is the branch node currently open (expanded)?
         bool                 open;
-
-        // Are the children currently sorted ascending or descending
-        bool                 sortAscending;
-
-        // By which column are the children currently sorted
-        int                  sortColumn;
 
         // Total count of expanded (i.e. visible with the help of some
         // scrolling) items in the subtree, but excluding this node. I.e. it is
@@ -688,30 +715,25 @@ public:
     {
         if (!IsVirtualList())
         {
-            SortPrepare();
             m_root->Resort();
         }
         UpdateDisplay();
     }
 
-    void SortPrepare()
+    SortOrder GetSortOrder() const
     {
-        wxDataViewModel* model = GetModel();
-
-        wxDataViewColumn* col = GetOwner()->GetSortingColumn();
+        wxDataViewColumn* const col = GetOwner()->GetSortingColumn();
         if ( col )
         {
-            m_sortColumn = col->GetModelColumn();
-            m_sortAscending = col->IsSortOrderAscending();
+            return SortOrder(col->GetModelColumn(),
+                             col->IsSortOrderAscending());
         }
         else
         {
-            if (model->HasDefaultCompare())
-                m_sortColumn = SortColumn_Default;
+            if (GetModel()->HasDefaultCompare())
+                return SortOrder(SortColumn_Default);
             else
-                m_sortColumn = SortColumn_None;
-
-            m_sortAscending = true;
+                return SortOrder();
         }
     }
 
@@ -852,9 +874,6 @@ public:
         return FindColumnForEditing(item, wxDATAVIEW_CELL_EDITABLE) != NULL;
     }
 
-    int GetSortColumn() const { return m_sortColumn; }
-    bool IsAscendingSort() const { return m_sortAscending; }
-
 private:
     void InvalidateCount() { m_count = -1; }
     void UpdateCount(int count)
@@ -922,10 +941,6 @@ private:
 
     // This is the tree node under the cursor
     wxDataViewTreeNode * m_underMouse;
-
-    // sorted column + extra flags
-    int m_sortColumn;
-    bool m_sortAscending;
 
     // The control used for editing or NULL.
     wxWeakRef<wxWindow> m_editorCtrl;
@@ -1624,49 +1639,68 @@ void wxDataViewRenameTimer::Notify()
 // wxDataViewTreeNode
 // ----------------------------------------------------------------------------
 
-// Used by wxGenericTreeModelNodeCmp sort callback only.
-//
-// This is not thread safe but it should be fine if all events are handled in
-// one thread.
-static wxDataViewModel* g_model;
-static int g_column;
-static bool g_asending;
-
-int LINKAGEMODE wxGenericTreeModelNodeCmp(wxDataViewTreeNode ** node1,
-    wxDataViewTreeNode ** node2)
+namespace
 {
-    return g_model->Compare((*node1)->GetItem(), (*node2)->GetItem(), g_column, g_asending);
-}
 
+// Comparator used for sorting the tree nodes using the model-defined sort
+// order and also for performing binary search in our own code.
+class wxGenericTreeModelNodeCmp
+{
+public:
+    wxGenericTreeModelNodeCmp(wxDataViewMainWindow* window,
+                              const SortOrder& sortOrder)
+        : m_model(window->GetModel()),
+          m_sortOrder(sortOrder)
+    {
+        wxASSERT_MSG( !m_sortOrder.IsNone(), "should have sort order" );
+    }
+
+    // Return negative, zero or positive value depending on whether the first
+    // item is less than, equal to or greater than the second one.
+    int Compare(wxDataViewTreeNode* first, wxDataViewTreeNode* second) const
+    {
+        return m_model->Compare(first->GetItem(), second->GetItem(),
+                                m_sortOrder.GetColumn(),
+                                m_sortOrder.IsAscending());
+    }
+
+    // Return true if the items are in order, i.e. the first item is less than
+    // or equal (because it's useless to exchange them in this case) than the
+    // second one. This is used by std::sort().
+    bool operator()(wxDataViewTreeNode* first, wxDataViewTreeNode* second) const
+    {
+        return Compare(first, second) <= 0;
+    }
+
+private:
+    wxDataViewModel* const m_model;
+    const SortOrder m_sortOrder;
+};
+
+} // anonymous namespace
 
 void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
 {
     if (!m_branchData)
         m_branchData = new BranchNodeData;
 
-    m_window->SortPrepare();
-
-    g_column = m_window->GetSortColumn();
-    g_model = m_window->GetModel();
-    g_asending = m_window->IsAscendingSort();
+    const SortOrder sortOrder = m_window->GetSortOrder();
 
     // Flag indicating whether we should retain existing sorted list when
     // inserting the child node.
     bool insertSorted = false;
 
-    if ( g_column == SortColumn_None )
+    if ( sortOrder.IsNone() )
     {
         // We should insert assuming an unsorted list. This will cause the
         // child list to lose the current sort order, if any.
-        m_branchData->sortColumn = SortColumn_None;
-        m_branchData->sortAscending = true;
+        m_branchData->sortOrder = SortOrder();
     }
     else if ( m_branchData->open )
     {
         // For open branches, children should be already sorted, with one
         // possible exception that we check for here:
-        if ( m_branchData->sortColumn != g_column ||
-                m_branchData->sortAscending != g_asending )
+        if ( m_branchData->sortOrder != sortOrder )
         {
             // This can happen for the root node, on the first child addition,
             // in which case the children are nevertheless sorted (because
@@ -1675,8 +1709,7 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
             wxASSERT_MSG( !m_parent && m_branchData->children.empty(),
                           "Logic error in wxDVC sorting code" );
 
-            m_branchData->sortColumn = g_column;
-            m_branchData->sortAscending = g_asending;
+            m_branchData->sortOrder = sortOrder;
         }
 
         // We can use fast insertion.
@@ -1688,11 +1721,9 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
         // whether to consider this empty child list sorted or unsorted.
         // By choosing unsorted, we postpone comparisons until the parent
         // node is opened in the view, which may be never.
-        m_branchData->sortColumn = SortColumn_None;
-        m_branchData->sortAscending = true;
+        m_branchData->sortOrder = SortOrder();
     }
-    else if ( (m_branchData->sortColumn == g_column) &&
-                (m_branchData->sortAscending == g_asending) )
+    else if ( m_branchData->sortOrder == sortOrder )
     {
         // The children are already sorted by the correct criteria (because
         // the node must have been opened in the same time in the past). Even
@@ -1704,19 +1735,19 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
     {
         // The children aren't sorted by the correct criteria, so we just
         // insert unsorted.
-        m_branchData->sortColumn = SortColumn_None;
-        m_branchData->sortAscending = true;
+        m_branchData->sortOrder = SortOrder();
     }
 
 
     if ( insertSorted )
     {
         // Use binary search to find the correct position to insert at.
+        wxGenericTreeModelNodeCmp cmp(m_window, sortOrder);
         int lo = 0, hi = m_branchData->children.size();
         while ( lo < hi )
         {
             int mid = lo + (hi - lo) / 2;
-            int r = wxGenericTreeModelNodeCmp(&node, &m_branchData->children[mid]);
+            int r = cmp.Compare(node, m_branchData->children[mid]);
             if ( r < 0 )
                 hi = mid;
             else if ( r > 0 )
@@ -1742,23 +1773,20 @@ void wxDataViewTreeNode::Resort()
     if ( !m_branchData->open )
         return;
 
-    g_column = m_window->GetSortColumn();
-    if ( g_column != SortColumn_None )
+    const SortOrder sortOrder = m_window->GetSortOrder();
+    if ( !sortOrder.IsNone() )
     {
-        g_model = m_window->GetModel();
-        g_asending = m_window->IsAscendingSort();
         wxDataViewTreeNodes& nodes = m_branchData->children;
 
         // Only sort the children if they aren't already sorted by the wanted
         // criteria.
-        if ( (g_column != m_branchData->sortColumn) ||
-                (g_asending != m_branchData->sortAscending) )
+        if ( m_branchData->sortOrder != sortOrder )
         {
-            qsort(&m_branchData->children[0], m_branchData->children.size(),
-                  sizeof(m_branchData->children[0]),
-                  (CMPFUNC)&wxGenericTreeModelNodeCmp);
-            m_branchData->sortColumn = g_column;
-            m_branchData->sortAscending = g_asending;
+            std::sort(m_branchData->children.begin(),
+                      m_branchData->children.end(),
+                      wxGenericTreeModelNodeCmp(m_window, sortOrder));
+
+            m_branchData->sortOrder = sortOrder;
         }
 
         // There may be open child nodes that also need a resort.
@@ -1781,7 +1809,7 @@ void wxDataViewTreeNode::PutChildInSortOrder(wxDataViewTreeNode* childNode)
         return;
     if ( !m_branchData->open )
         return;
-    if ( m_branchData->sortColumn == SortColumn_None )
+    if ( m_branchData->sortOrder.IsNone() )
         return;
 
     wxDataViewTreeNodes& nodes = m_branchData->children;
@@ -1791,14 +1819,8 @@ void wxDataViewTreeNode::PutChildInSortOrder(wxDataViewTreeNode* childNode)
     if ( nodes.size() == 1 )
         return;
 
-    m_window->SortPrepare();
-
-    g_column = m_window->GetSortColumn();
-    g_model = m_window->GetModel();
-    g_asending = m_window->IsAscendingSort();
-
-    wxASSERT(g_column == m_branchData->sortColumn);
-    wxASSERT(g_asending == m_branchData->sortAscending);
+    // We should already be sorted in the right order.
+    wxASSERT(m_branchData->sortOrder == m_window->GetSortOrder());
 
     // First find the node in the current child list
     int hi = nodes.size();
@@ -1813,6 +1835,8 @@ void wxDataViewTreeNode::PutChildInSortOrder(wxDataViewTreeNode* childNode)
     }
     wxCHECK_RET( oldLocation >= 0, "not our child?" );
 
+    wxGenericTreeModelNodeCmp cmp(m_window, m_branchData->sortOrder);
+
     // Check if we actually need to move the node.
     bool locationChanged = false;
 
@@ -1821,12 +1845,12 @@ void wxDataViewTreeNode::PutChildInSortOrder(wxDataViewTreeNode* childNode)
         // Compare with the next item (as we return early in the case of only a
         // single child, we know that there is one) to check if the item is now
         // out of order.
-        if ( wxGenericTreeModelNodeCmp(&childNode, &nodes[1]) > 0 )
+        if ( !cmp(childNode, nodes[1]) )
             locationChanged = true;
     }
     else // Compare with the previous item.
     {
-        if ( wxGenericTreeModelNodeCmp(&nodes[oldLocation - 1], &childNode) > 0 )
+        if ( !cmp(nodes[oldLocation - 1], childNode) )
             locationChanged = true;
     }
 
@@ -1840,7 +1864,7 @@ void wxDataViewTreeNode::PutChildInSortOrder(wxDataViewTreeNode* childNode)
     while ( lo < hi )
     {
         int mid = lo + (hi - lo) / 2;
-        int r = wxGenericTreeModelNodeCmp(&childNode, &m_branchData->children[mid]);
+        int r = cmp.Compare(childNode, m_branchData->children[mid]);
         if ( r < 0 )
             hi = mid;
         else if ( r > 0 )
@@ -1942,9 +1966,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     // Make m_count = -1 will cause the class recaculate the real displaying number of rows.
     m_count = -1;
     m_underMouse = NULL;
-
-    m_sortColumn = SortColumn_None;
-    m_sortAscending = true;
 
     UpdateDisplay();
 }
@@ -2723,7 +2744,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         itemNode->SetHasChildren(GetModel()->IsContainer(item));
         parentNode->SetHasChildren(true);
 
-        if ( m_sortColumn == SortColumn_None )
+        if ( GetSortOrder().IsNone() )
         {
             // There's no sorting, so we need to select an insertion position
 
@@ -2971,7 +2992,6 @@ bool wxDataViewMainWindow::Cleared()
 
     if (GetModel())
     {
-        SortPrepare();
         BuildTree( GetModel() );
     }
     else
@@ -3707,7 +3727,6 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
                 // Even though the item is a container, it doesn't have any
                 // child nodes in the control's representation yet. We have
                 // to realize its subtree now.
-                SortPrepare();
                 ::BuildTreeHelper(this, model, node->GetItem(), node);
             }
 
@@ -3955,7 +3974,6 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
 
     // First we define a invalid item to fetch the top-level elements
     wxDataViewItem item;
-    SortPrepare();
     BuildTreeHelper(this, model, item, m_root);
     InvalidateCount();
 }
