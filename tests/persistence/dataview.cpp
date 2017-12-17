@@ -47,6 +47,11 @@ static wxDataViewCtrl* CreatePersistenceTestDVC()
     wxDataViewListCtrl* const list = new wxDataViewListCtrl(parent, wxID_ANY);
     list->SetName("dvc");
 
+    // Ensure the control is big enough to allow making its columns as wide as
+    // we need them to be.
+    parent->SetSize(parent->GetParent()->GetClientSize());
+    list->SetSize(parent->GetClientSize());
+
     // Add some columns to the DVC.
     list->AppendTextColumn(DVC_COL "1",
                                 wxDATAVIEW_CELL_INERT, -1, wxALIGN_LEFT,
