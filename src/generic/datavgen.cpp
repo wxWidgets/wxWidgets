@@ -690,8 +690,6 @@ private:
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
-WX_DEFINE_SORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSelection);
-
 class wxDataViewMainWindow: public wxWindow
 {
 public:
