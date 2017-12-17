@@ -471,10 +471,10 @@ public:
 
     void InsertChild(wxDataViewTreeNode *node, unsigned index);
 
-    void RemoveChild(wxDataViewTreeNode *node)
+    void RemoveChild(unsigned index)
     {
         wxCHECK_RET( m_branchData != NULL, "leaf node doesn't have children" );
-        m_branchData->children.Remove(node);
+        m_branchData->children.RemoveAt(index);
     }
 
     // returns position of child node for given item in children list or wxNOT_FOUND
@@ -2835,7 +2835,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         // Delete the item from wxDataViewTreeNode representation:
         const int itemsDeleted = 1 + itemNode->GetSubTreeCount();
 
-        parentNode->RemoveChild(itemNode);
+        parentNode->RemoveChild(itemPosInNode);
         delete itemNode;
         parentNode->ChangeSubTreeCount(-itemsDeleted);
 
