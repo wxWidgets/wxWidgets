@@ -35,6 +35,7 @@
     #include "wx/msgdlg.h"
     #include "wx/dcscreen.h"
     #include "wx/frame.h"
+    #include "wx/vector.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -422,7 +423,8 @@ public:
 
 class wxDataViewMainWindow;
 class wxDataViewTreeNode;
-WX_DEFINE_ARRAY( wxDataViewTreeNode *, wxDataViewTreeNodes );
+
+typedef wxVector<wxDataViewTreeNode*> wxDataViewTreeNodes;
 
 class wxDataViewTreeNode
 {
@@ -474,7 +476,7 @@ public:
     void RemoveChild(unsigned index)
     {
         wxCHECK_RET( m_branchData != NULL, "leaf node doesn't have children" );
-        m_branchData->children.RemoveAt(index);
+        m_branchData->RemoveChild(index);
     }
 
     // returns position of child node for given item in children list or wxNOT_FOUND
@@ -525,7 +527,7 @@ public:
         int sum = 0;
 
         const wxDataViewTreeNodes& nodes = m_branchData->children;
-        const int len = nodes.GetCount();
+        const int len = nodes.size();
         for ( int i = 0;i < len; i ++)
             sum += 1 + nodes[i]->GetSubTreeCount();
 
@@ -620,6 +622,16 @@ private:
               sortColumn(SortColumn_None),
               subTreeCount(0)
         {
+        }
+
+        void InsertChild(wxDataViewTreeNode* node, unsigned index)
+        {
+            children.insert(children.begin() + index, node);
+        }
+
+        void RemoveChild(unsigned index)
+        {
+            children.erase(children.begin() + index);
         }
 
         // Child nodes. Note that this may be empty even if m_hasChildren in
@@ -1660,7 +1672,7 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
             // in which case the children are nevertheless sorted (because
             // there is only one of them), but we need to set the correct sort
             // order.
-            wxASSERT_MSG( !m_parent && m_branchData->children.IsEmpty(),
+            wxASSERT_MSG( !m_parent && m_branchData->children.empty(),
                           "Logic error in wxDVC sorting code" );
 
             m_branchData->sortColumn = g_column;
@@ -1670,7 +1682,7 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
         // We can use fast insertion.
         insertSorted = true;
     }
-    else if ( m_branchData->children.IsEmpty() )
+    else if ( m_branchData->children.empty() )
     {
         // We're inserting the first child of a closed node. We can choose
         // whether to consider this empty child list sorted or unsorted.
@@ -1712,11 +1724,11 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
             else
                 lo = hi = mid;
         }
-        m_branchData->children.Insert(node, lo);
+        m_branchData->InsertChild(node, lo);
     }
     else
     {
-        m_branchData->children.Insert(node, index);
+        m_branchData->InsertChild(node, index);
     }
 }
 
@@ -1742,13 +1754,15 @@ void wxDataViewTreeNode::Resort()
         if ( (g_column != m_branchData->sortColumn) ||
                 (g_asending != m_branchData->sortAscending) )
         {
-            nodes.Sort(&wxGenericTreeModelNodeCmp);
+            qsort(&m_branchData->children[0], m_branchData->children.size(),
+                  sizeof(m_branchData->children[0]),
+                  (CMPFUNC)&wxGenericTreeModelNodeCmp);
             m_branchData->sortColumn = g_column;
             m_branchData->sortAscending = g_asending;
         }
 
         // There may be open child nodes that also need a resort.
-        int len = nodes.GetCount();
+        int len = nodes.size();
         for ( int i = 0; i < len; i++ )
         {
             if ( nodes[i]->HasChildren() )
@@ -1820,7 +1834,7 @@ void wxDataViewTreeNode::PutChildInSortOrder(wxDataViewTreeNode* childNode)
         return;
 
     // Remove and reinsert the node in the child list
-    nodes.RemoveAt(oldLocation);
+    m_branchData->RemoveChild(oldLocation);
     hi = nodes.size();
     int lo = 0;
     while ( lo < hi )
@@ -1834,7 +1848,7 @@ void wxDataViewTreeNode::PutChildInSortOrder(wxDataViewTreeNode* childNode)
         else
             lo = hi = mid;
     }
-    nodes.Insert(childNode, lo);
+    m_branchData->InsertChild(childNode, lo);
 
     // Make sure the change is actually shown right away
     m_window->UpdateDisplay();
@@ -3700,7 +3714,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             const wxDataViewTreeNodes& nodes = node->GetChildNodes();
             bool found = false;
 
-            for (unsigned i = 0; i < nodes.GetCount(); ++i)
+            for (unsigned i = 0; i < nodes.size(); ++i)
             {
                 wxDataViewTreeNode* currentNode = nodes[i];
                 if (currentNode->GetItem() == parentChain[iter])
