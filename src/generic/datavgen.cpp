@@ -1694,32 +1694,32 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
         // child list to lose the current sort order, if any.
         m_branchData->sortOrder = SortOrder();
     }
-    else if ( m_branchData->open )
+    else if ( m_branchData->children.empty() )
     {
-        // For open branches, children should be already sorted, with one
-        // possible exception that we check for here:
-        if ( m_branchData->sortOrder != sortOrder )
+        if ( m_branchData->open )
         {
-            // This can happen for the root node, on the first child addition,
-            // in which case the children are nevertheless sorted (because
-            // there is only one of them), but we need to set the correct sort
-            // order.
-            wxASSERT_MSG( !m_parent && m_branchData->children.empty(),
-                          "Logic error in wxDVC sorting code" );
-
+            // We don't need to search for the right place to insert the first
+            // item (there is only one), but we do need to remember the sort
+            // order to use for the subsequent ones.
             m_branchData->sortOrder = sortOrder;
         }
+        else
+        {
+            // We're inserting the first child of a closed node. We can choose
+            // whether to consider this empty child list sorted or unsorted.
+            // By choosing unsorted, we postpone comparisons until the parent
+            // node is opened in the view, which may be never.
+            m_branchData->sortOrder = SortOrder();
+        }
+    }
+    else if ( m_branchData->open )
+    {
+        // For open branches, children should be already sorted.
+        wxASSERT_MSG( m_branchData->sortOrder == sortOrder,
+                      wxS("Logic error in wxDVC sorting code") );
 
         // We can use fast insertion.
         insertSorted = true;
-    }
-    else if ( m_branchData->children.empty() )
-    {
-        // We're inserting the first child of a closed node. We can choose
-        // whether to consider this empty child list sorted or unsorted.
-        // By choosing unsorted, we postpone comparisons until the parent
-        // node is opened in the view, which may be never.
-        m_branchData->sortOrder = SortOrder();
     }
     else if ( m_branchData->sortOrder == sortOrder )
     {
@@ -1731,8 +1731,8 @@ void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
     }
     else
     {
-        // The children aren't sorted by the correct criteria, so we just
-        // insert unsorted.
+        // The children of this closed node aren't sorted by the correct
+        // criteria, so we just insert unsorted.
         m_branchData->sortOrder = SortOrder();
     }
 
