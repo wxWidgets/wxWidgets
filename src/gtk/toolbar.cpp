@@ -423,6 +423,10 @@ bool wxToolBar::Create( wxWindow *parent,
 #endif
     GtkSetStyle();
 
+#ifdef __WXGTK4__
+    m_widget = m_toolbar;
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if ((style & wxTB_DOCKABLE)
 #ifdef __WXGTK3__
         // using GtkHandleBox prevents toolbar from drawing with GTK+ >= 3.19.7
@@ -445,8 +449,10 @@ bool wxToolBar::Create( wxWindow *parent,
         m_widget = gtk_event_box_new();
         ConnectWidget( m_widget );
     }
-    g_object_ref(m_widget);
     gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar));
+    wxGCC_WARNING_RESTORE()
+#endif // !__WXGTK4__
+    g_object_ref(m_widget);
     gtk_widget_show(GTK_WIDGET(m_toolbar));
 
     m_parent->DoAddChild( this );
