@@ -3156,13 +3156,11 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
             if (useDrawFix)
             {
-                dc.SetPen(*wxTRANSPARENT_PEN);
-                dc.SetBrush(wxBrush(GetBackgroundColour()));
+                wxDCPenChanger changePen(dc, *wxTRANSPARENT_PEN);
+                wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
+
                 dc.DrawRectangle(0, topItemRect.GetY() - gap,
                                  clientSize.GetWidth(), gap);
-
-                dc.SetPen(pen);
-                dc.SetBrush(*wxTRANSPARENT_BRUSH);
             }
 
             const int numCols = GetColumnCount();
