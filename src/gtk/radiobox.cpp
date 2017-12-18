@@ -18,13 +18,9 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
-
-#include <gdk/gdkkeysyms.h>
-#if GTK_CHECK_VERSION(3,0,0)
-#include <gdk/gdkkeysyms-compat.h>
-#endif
 
 //-----------------------------------------------------------------------------
 // wxGTKRadioButtonInfo
@@ -78,24 +74,24 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
 {
     if (g_blockEventsOnDrag) return FALSE;
 
-    if ( ((gdk_event->keyval == GDK_Tab) ||
-          (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
+    if ( ((gdk_event->keyval == GDK_KEY_Tab) ||
+          (gdk_event->keyval == GDK_KEY_ISO_Left_Tab)) &&
          rb->GetParent() && (rb->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
         wxNavigationKeyEvent new_event;
         new_event.SetEventObject( rb->GetParent() );
         // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
-        new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
+        new_event.SetDirection( (gdk_event->keyval == GDK_KEY_Tab) );
         // CTRL-TAB changes the (parent) window, i.e. switch notebook page
         new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) != 0 );
         new_event.SetCurrentFocus( rb );
         return rb->GetParent()->HandleWindowEvent(new_event);
     }
 
-    if ((gdk_event->keyval != GDK_Up) &&
-        (gdk_event->keyval != GDK_Down) &&
-        (gdk_event->keyval != GDK_Left) &&
-        (gdk_event->keyval != GDK_Right))
+    if ((gdk_event->keyval != GDK_KEY_Up) &&
+        (gdk_event->keyval != GDK_KEY_Down) &&
+        (gdk_event->keyval != GDK_KEY_Left) &&
+        (gdk_event->keyval != GDK_KEY_Right))
     {
         return FALSE;
     }
@@ -110,8 +106,8 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
         return FALSE;
     }
 
-    if ((gdk_event->keyval == GDK_Up) ||
-        (gdk_event->keyval == GDK_Left))
+    if ((gdk_event->keyval == GDK_KEY_Up) ||
+        (gdk_event->keyval == GDK_KEY_Left))
     {
         if (node == rb->m_buttonsInfo.GetFirst())
             node = rb->m_buttonsInfo.GetLast();

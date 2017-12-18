@@ -29,17 +29,13 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/eventsdisabler.h"
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/treeentry_gtk.h"
 #include "wx/gtk/private/treeview.h"
-
-#include <gdk/gdkkeysyms.h>
-#ifdef __WXGTK3__
-#include <gdk/gdkkeysyms-compat.h>
-#endif
 
 //-----------------------------------------------------------------------------
 // data
@@ -133,9 +129,9 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
                                 GdkEventKey *gdk_event,
                                 wxListBox *listbox )
 {
-    if ((gdk_event->keyval == GDK_Return) ||
-        (gdk_event->keyval == GDK_ISO_Enter) ||
-        (gdk_event->keyval == GDK_KP_Enter))
+    if ((gdk_event->keyval == GDK_KEY_Return) ||
+        (gdk_event->keyval == GDK_KEY_ISO_Enter) ||
+        (gdk_event->keyval == GDK_KEY_KP_Enter))
     {
         int index = -1;
         if (!listbox->HasMultipleSelection())
