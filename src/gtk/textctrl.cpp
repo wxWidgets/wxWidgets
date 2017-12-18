@@ -32,6 +32,7 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -2006,7 +2007,7 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
     SetCursor(wxCursor(wxCURSOR_HAND));
 
     start = end;
-    if(!gtk_text_iter_begins_tag(&start, tag))
+    if (!gtk_text_iter_starts_tag(&start, tag))
         gtk_text_iter_backward_to_tag_toggle(&start, tag);
     if(!gtk_text_iter_ends_tag(&end, tag))
         gtk_text_iter_forward_to_tag_toggle(&end, tag);
