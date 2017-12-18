@@ -3107,18 +3107,17 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         }
 
         /*
-        The drawing can be clipped horizontally to the rightmost column. This
-        happens when an item is added (and visible) and results in a
-        horizontal rule being clipped instead of drawn across the entire list
-        control. In that case we request for the part to the right of the
-        rightmost column to be drawn as well.
+            The drawing can be clipped horizontally to the rightmost column.
+            This happens when an item is added (and visible) and results in a
+            horizontal rule being clipped instead of drawn across the entire
+            list control. In that case we request for the part to the right of
+            the rightmost column to be drawn as well.
         */
-        if ( clipRect.GetRight()  != clientSize.GetWidth() - 1
-            && clipRect.width)
+        if ( clipRect.GetRight() != clientSize.x - 1 && clipRect.width )
         {
             RefreshRect(wxRect(clipRect.GetRight(), clipRect.y,
-                clientSize.x - clipRect.width, clipRect.height),
-                false /* erase background? */);
+                               clientSize.x - clipRect.width, clipRect.height),
+                        false /* don't erase background */);
         }
     }
 
@@ -3130,25 +3129,25 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         if (GetItemRect(bottom, bottomItemRect))
         {
             /*
-            This is a fix for ticket #747: erase the pixels which we would
-            otherwise leave on the screen.
+                This is a fix for ticket #747: erase the pixels which we would
+                otherwise leave on the screen.
 
-            The drawing of the rectangle as a fix to erase trailing pixels
-            when resizing a column is only needed for ComCtl32 prior to
-            6.0, i.e. when not using a manifest in which case 5.82 is
-            used. And even then it only happens when "Show window contents
-            while dragging" is enabled under Windows, resulting in live
-            updates when resizing columns. Note that even with that setting
-            on, at least under Windows 7 and 10 no live updating is done when
-            using ComCtl32 5.82.
+                The drawing of the rectangle as a fix to erase trailing pixels
+                when resizing a column is only needed for ComCtl32 prior to
+                6.0, i.e. when not using a manifest in which case 5.82 is used.
+                And even then it only happens when "Show window contents while
+                dragging" is enabled under Windows, resulting in live updates
+                when resizing columns. Note that even with that setting on, at
+                least under Windows 7 and 10 no live updating is done when
+                using ComCtl32 5.82.
 
-            Revision b66c3a67519caa9debfd76e6d74954eaebfa56d9 made this fix
-            almost redundant, except that when you do NOT handle
-            EVT_LIST_COL_DRAGGING (or do and skip the event) the trailing
-            pixels still appear. In case of wanting to reproduce the problem
-            in the listctrl sample: comment out handling oF
-            EVT_LIST_COL_DRAGGING and also set useDrawFix to false and gap to
-            2 (not 0).
+                Revision b66c3a67519caa9debfd76e6d74954eaebfa56d9 made this fix
+                almost redundant, except that when you do NOT handle
+                EVT_LIST_COL_DRAGGING (or do and skip the event) the trailing
+                pixels still appear. In case of wanting to reproduce the
+                problem in the listctrl sample: comment out handling oF
+                EVT_LIST_COL_DRAGGING and also set useDrawFix to false and gap
+                to 2 (not 0).
             */
 
             static const bool useDrawFix = wxApp::GetComCtl32Version() < 600;
