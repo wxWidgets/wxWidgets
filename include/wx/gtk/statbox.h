@@ -16,14 +16,21 @@
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
-    wxStaticBox();
+    wxStaticBox()
+    {
+    }
+
     wxStaticBox( wxWindow *parent,
                  wxWindowID id,
                  const wxString &label,
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = 0,
-                 const wxString &name = wxStaticBoxNameStr );
+                 const wxString &name = wxStaticBoxNameStr )
+    {
+        Create( parent, id, label, pos, size, style, name );
+    }
+
     bool Create( wxWindow *parent,
                  wxWindowID id,
                  const wxString &label,

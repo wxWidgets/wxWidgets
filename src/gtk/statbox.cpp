@@ -59,21 +59,6 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose*, wxWindow*)
 // wxStaticBox
 //-----------------------------------------------------------------------------
 
-wxStaticBox::wxStaticBox()
-{
-}
-
-wxStaticBox::wxStaticBox( wxWindow *parent,
-                          wxWindowID id,
-                          const wxString &label,
-                          const wxPoint& pos,
-                          const wxSize& size,
-                          long style,
-                          const wxString& name )
-{
-    Create( parent, id, label, pos, size, style, name );
-}
-
 bool wxStaticBox::Create( wxWindow *parent,
                           wxWindowID id,
                           const wxString& label,
