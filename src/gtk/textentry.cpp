@@ -521,7 +521,7 @@ bool wxTextEntry::GTKEntryOnInsertText(const char* text)
 
 bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 {
-#if GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,10,0) && !defined(__WXGTK4__)
     GtkEntry* entry = GetEntry();
 
     if ( !entry )
@@ -529,6 +529,7 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
     if ( !wx_is_at_least_gtk2(10) )
         return false;
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     const GtkBorder* oldBorder = gtk_entry_get_inner_border(entry);
     GtkBorder newBorder;
 
@@ -553,6 +554,7 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
         newBorder.top = margins.y;
 
     gtk_entry_set_inner_border(entry, &newBorder);
+    wxGCC_WARNING_RESTORE()
 
     return true;
 #else
@@ -564,13 +566,15 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 wxPoint wxTextEntry::DoGetMargins() const
 {
     wxPoint point(-1, -1);
-#if GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,10,0) && !defined(__WXGTK4__)
     GtkEntry* entry = GetEntry();
     if (entry)
     {
         if (wx_is_at_least_gtk2(10))
         {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             const GtkBorder* border = gtk_entry_get_inner_border(entry);
+            wxGCC_WARNING_RESTORE()
             if (border)
             {
                 point.x = border->left;
