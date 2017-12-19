@@ -108,7 +108,13 @@ bool wxStaticText::Create(wxWindow *parent,
 
     // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
+#ifdef __WXGTK4__
+    g_object_set(m_widget, "xalign", labelAlignments[justify], NULL);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
+    wxGCC_WARNING_RESTORE()
+#endif
 
     gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
 

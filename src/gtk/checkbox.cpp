@@ -123,7 +123,13 @@ bool wxCheckBox::Create(wxWindow *parent,
         m_widgetCheckbox = gtk_check_button_new();
 
         m_widgetLabel = gtk_label_new("");
+#ifdef __WXGTK4__
+        g_object_set(m_widgetLabel, "xalign", 0.0f, NULL);
+#else
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_misc_set_alignment(GTK_MISC(m_widgetLabel), 0.0, 0.5);
+        wxGCC_WARNING_RESTORE()
+#endif
 
         m_widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start(GTK_BOX(m_widget), m_widgetLabel, FALSE, FALSE, 3);
