@@ -49,11 +49,15 @@ public:
     //
     // Reparent all children of the static box under its parent and destroy the
     // box itself.
-    virtual void WXDestroyWithoutChildren();
+    void WXDestroyWithoutChildren();
 
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+
+    // If non-null, the window used as our label. This window is owned by the
+    // static box and will be deleted when it is.
+    wxWindow* m_labelWin;
 
     wxDECLARE_NO_COPY_CLASS(wxStaticBoxBase);
 };

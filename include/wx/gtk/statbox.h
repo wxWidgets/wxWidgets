@@ -18,7 +18,6 @@ class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 public:
     wxStaticBox()
     {
-        Init();
     }
 
     wxStaticBox( wxWindow *parent,
@@ -29,8 +28,6 @@ public:
                  long style = 0,
                  const wxString &name = wxStaticBoxNameStr )
     {
-        Init();
-
         Create( parent, id, label, pos, size, style, name );
     }
 
@@ -42,8 +39,6 @@ public:
                  long style = 0,
                  const wxString &name = wxStaticBoxNameStr )
     {
-        Init();
-
         Create( parent, id, label, pos, size, style, name );
     }
 
@@ -82,15 +77,7 @@ public:
 
     virtual void AddChild( wxWindowBase *child ) wxOVERRIDE;
 
-    virtual void WXDestroyWithoutChildren() wxOVERRIDE;
-
 protected:
-    // Common part of all ctors.
-    void Init()
-    {
-        m_labelWin = NULL;
-    }
-
     // Common implementation of both Create() overloads: exactly one of
     // labelStr and labelWin parameters must be non-null.
     bool DoCreate(wxWindow *parent,
@@ -106,10 +93,6 @@ protected:
     virtual void GTKWidgetDoSetMnemonic(GtkWidget* w) wxOVERRIDE;
 
     void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
-
-    // If non-null, the window used as our label. This window is owned by the
-    // static box and will be deleted when it is.
-    wxWindow* m_labelWin;
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticBox);
 };

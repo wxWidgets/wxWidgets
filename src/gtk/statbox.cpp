@@ -152,24 +152,6 @@ void wxStaticBox::AddChild( wxWindowBase *child )
     wxStaticBoxBase::AddChild(child);
 }
 
-void wxStaticBox::WXDestroyWithoutChildren()
-{
-    // The label window doesn't count as our child, it's really a part of
-    // static box itself and it makes no sense to leave it alive when the box
-    // is destroyed, so do it even when it's supposed to be destroyed without
-    // destroying its children.
-    if ( m_labelWin )
-    {
-        // By deleting it here, we indirectly remove this window from the list
-        // of our children and hence prevent the base class version of this
-        // method from reparenting it and thus keeping it alive.
-        delete m_labelWin;
-        m_labelWin = NULL;
-    }
-
-    wxStaticBoxBase::WXDestroyWithoutChildren();
-}
-
 void wxStaticBox::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid staticbox") );
