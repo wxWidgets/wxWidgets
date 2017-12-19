@@ -120,6 +120,7 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
 
     m_menubar = gtk_menu_bar_new();
 
+#ifndef __WXGTK4__
     if ((style & wxMB_DOCKABLE)
 #ifdef __WXGTK3__
         // using GtkHandleBox prevents menubar from drawing with GTK+ >= 3.19.7
@@ -127,11 +128,14 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
 #endif
         )
     {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         m_widget = gtk_handle_box_new();
+        wxGCC_WARNING_RESTORE()
         gtk_container_add(GTK_CONTAINER(m_widget), m_menubar);
         gtk_widget_show(m_menubar);
     }
     else
+#endif
     {
         m_widget = m_menubar;
     }
@@ -773,15 +777,19 @@ void wxMenu::Init()
 
     m_owner = NULL;
 
+#ifndef __WXGTK4__
     // Tearoffs are entries, just like separators. So if we want this
     // menu to be a tear-off one, we just append a tearoff entry
     // immediately.
     if ( m_style & wxMENU_TEAROFF )
     {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         GtkWidget *tearoff = gtk_tearoff_menu_item_new();
+        wxGCC_WARNING_RESTORE()
 
         gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), tearoff);
     }
+#endif
 
     // append the title as the very first entry if we have it
     if ( !m_title.empty() )
@@ -894,6 +902,12 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
             wxFAIL_MSG("unexpected menu item kind");
             // fall through
         case wxITEM_NORMAL:
+#ifdef __WXGTK4__
+            //TODO GtkImageMenuItem is gone, have to implement it ourselves with
+            //   GtkMenuItem GtkBox GtkAccelLabel GtkImage
+            menuItem = gtk_menu_item_new_with_label("");
+#else
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             const wxBitmap& bitmap = mitem->GetBitmap();
             if (bitmap.IsOk())
             {
@@ -906,16 +920,16 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
             }
             else
             {
-#if !defined(__WXGTK3__) || !GTK_CHECK_VERSION(3,10,0)
                 const char* stockid = wxGetStockGtkID(mitem->GetId());
                 if (stockid)
                     // use stock bitmap for this item if available on the assumption
                     // that it never hurts to follow GTK+ conventions more closely
                     menuItem = gtk_image_menu_item_new_from_stock(stockid, NULL);
                 else
-#endif // GTK < 3.10
                     menuItem = gtk_menu_item_new_with_label("");
             }
+            wxGCC_WARNING_RESTORE()
+#endif
             break;
     }
     mitem->SetMenuItem(menuItem);
@@ -1279,9 +1293,10 @@ wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_m
     const wxString string = GetGtkHotKey(*item);
     if (!string.empty())
         gtk_accelerator_parse(wxGTK_CONV_SYS(string), accel_key, accel_mods);
-#if !defined(__WXGTK3__) || !GTK_CHECK_VERSION(3,10,0)
+#ifndef __WXGTK4__
     else
     {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         GtkStockItem stock_item;
         const char* stockid = wxGetStockGtkID(item->GetId());
         if (stockid && gtk_stock_lookup(stockid, &stock_item))
@@ -1289,13 +1304,14 @@ wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_m
             *accel_key = stock_item.keyval;
             *accel_mods = stock_item.modifier;
         }
+        wxGCC_WARNING_RESTORE()
     }
-#endif // GTK < 3.10
+#endif
 }
 #endif // wxUSE_ACCEL
 
-// Stock items are deprecated since GTK+ 3.10
-#if !defined(__WXGTK3__) || !GTK_CHECK_VERSION(3,10,0)
+#ifndef __WXGTK4__
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 const char *wxGetStockGtkID(wxWindowID id)
 {
     #define STOCKITEM(wx,gtk)      \
@@ -1398,6 +1414,7 @@ const char *wxGetStockGtkID(wxWindowID id)
 
     return NULL;
 }
-#endif // GTK < 3.10
+wxGCC_WARNING_RESTORE()
+#endif // !__WXGTK4__
 
 #endif // wxUSE_MENUS
