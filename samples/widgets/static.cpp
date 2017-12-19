@@ -551,12 +551,12 @@ void StaticWidgetsPage::CreateStatic()
                                   isVert ? wxLI_VERTICAL : wxLI_HORIZONTAL);
 #endif // wxUSE_STATLINE
 
-    m_sizerStatBox->Add(m_statText, 0, wxGROW | wxALL, 5);
+    m_sizerStatBox->Add(m_statText, 0, wxGROW);
 #if wxUSE_STATLINE
-    m_sizerStatBox->Add(m_statLine, 0, wxGROW | wxALL, 5);
+    m_sizerStatBox->Add(m_statLine, 0, wxGROW | wxTOP | wxBOTTOM, 10);
 #endif // wxUSE_STATLINE
 #if wxUSE_MARKUP
-    m_sizerStatBox->Add(m_statMarkup, 0, wxALL, 5);
+    m_sizerStatBox->Add(m_statMarkup);
 #endif // wxUSE_MARKUP
 
     m_sizerStatic->Add(m_sizerStatBox, 0, wxGROW);
