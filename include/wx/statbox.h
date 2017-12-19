@@ -37,13 +37,7 @@ public:
     //
     // the top border is the margin at the top (where the title is),
     // borderOther is the margin on all other sides
-    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const
-    {
-        const int BORDER = FromDIP(5); // FIXME: hardcoded value
-
-        *borderTop = GetLabel().empty() ? BORDER : GetCharHeight();
-        *borderOther = BORDER;
-    }
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 
     // This is an internal function currently used by wxStaticBoxSizer only.
     //

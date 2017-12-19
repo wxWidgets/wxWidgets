@@ -38,6 +38,14 @@ wxStaticBoxBase::wxStaticBoxBase()
 #endif
 }
 
+void wxStaticBoxBase::GetBordersForSizer(int *borderTop, int *borderOther) const
+{
+    const int BORDER = FromDIP(5); // FIXME: hardcoded value
+
+    *borderTop = GetLabel().empty() ? BORDER : GetCharHeight();
+    *borderOther = BORDER;
+}
+
 void wxStaticBoxBase::WXDestroyWithoutChildren()
 {
     // Notice that we must make a copy of the list as it will be changed by
