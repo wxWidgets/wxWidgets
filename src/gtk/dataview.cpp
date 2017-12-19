@@ -3631,14 +3631,19 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     delete m_dragDataObject;
     m_dragDataObject = NULL;
 
+#ifdef __WXGTK4__
+    return false;
+#else
     wxDataViewCtrl* const dvc = GetOwner();
     wxDataViewItem item(dvc->GTKPathToItem(path));
     if ( !item )
         return FALSE;
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, dvc, item);
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gint x, y;
     gtk_widget_get_pointer(m_owner->GtkGetTreeView(), &x, &y);
+    wxGCC_WARNING_RESTORE()
     event.SetPosition(x, y);
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
@@ -3653,6 +3658,7 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     m_dragDataObject = obj;
 
     return TRUE;
+#endif
 }
 
 gboolean
