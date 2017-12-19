@@ -4627,8 +4627,11 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
             gtk_tree_view_set_grid_lines( GTK_TREE_VIEW(m_treeview), grid );
     }
 #endif
-
+#ifndef __WXGTK4__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_tree_view_set_rules_hint( GTK_TREE_VIEW(m_treeview), (style & wxDV_ROW_LINES) != 0 );
+    wxGCC_WARNING_RESTORE()
+#endif
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (m_widget),
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
