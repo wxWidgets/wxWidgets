@@ -42,7 +42,15 @@ void wxStaticBoxBase::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
     const int BORDER = FromDIP(5); // FIXME: hardcoded value
 
-    *borderTop = GetLabel().empty() ? BORDER : GetCharHeight();
+    if ( m_labelWin )
+    {
+        *borderTop = m_labelWin->GetSize().y;
+    }
+    else
+    {
+        *borderTop = GetLabel().empty() ? BORDER : GetCharHeight();
+    }
+
     *borderOther = BORDER;
 }
 
