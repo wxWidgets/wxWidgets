@@ -85,6 +85,42 @@ public:
                 const wxString& name = wxStaticBoxNameStr);
 
     /**
+        Constructor for a static box using the given window as label.
+
+        This constructor takes a pointer to an arbitrary window (although
+        usually a wxCheckBox or a wxRadioButton) instead of just the usual text
+        label and puts this window at the top of the box at the place where the
+        label would be shown.
+
+        The @a label window must be a non-null, fully created window and will
+        become a child of this wxStaticBox, i.e. it will be owned by this
+        control and will be deleted when the wxStaticBox itself is deleted.
+
+        An example of creating a wxStaticBox with window as a label:
+        @code
+        void MyFrame::CreateControls()
+        {
+            wxPanel* panel = new wxPanel(this);
+            wxCheckBox* checkbox = new wxCheckBox(panel, wxID_ANY, "Box checkbox");
+            wxStaticBox* box = new wxStaticBox(panel, wxID_ANY, checkbox);
+            ...
+        }
+        @endcode
+
+        Currently this constructor is only available in wxGTK, use
+        @c wxHAS_WINDOW_LABEL_IN_STATIC_BOX to check whether it can be used at
+        compile-time.
+
+        @since 3.1.1
+     */
+    wxStaticBox(wxWindow* parent, wxWindowID id,
+                wxWindow* label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxStaticBoxNameStr);
+
+    /**
         Destructor, destroying the group box.
     */
     virtual ~wxStaticBox();
@@ -97,5 +133,25 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
-};
 
+    /**
+        Creates the static box with the window as a label.
+
+        This method can only be called for an object created using its default
+        constructor.
+
+        See the constructor documentation for more details.
+
+        Currently this overload is only available in wxGTK, use
+        @c wxHAS_WINDOW_LABEL_IN_STATIC_BOX to check whether it can be used at
+        compile-time.
+
+        @since 3.1.1
+     */
+    wxStaticBox(wxWindow* parent, wxWindowID id,
+                wxWindow* label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxStaticBoxNameStr);
+};
