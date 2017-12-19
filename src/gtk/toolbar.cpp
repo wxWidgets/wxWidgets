@@ -17,6 +17,7 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -277,14 +278,28 @@ void wxToolBarTool::CreateDropDown()
 {
     gtk_tool_item_set_homogeneous(m_item, false);
     GtkOrientation orient = GTK_ORIENTATION_HORIZONTAL;
-    GtkArrowType arrowType = GTK_ARROW_DOWN;
     if (GetToolBar()->HasFlag(wxTB_LEFT | wxTB_RIGHT))
-    {
         orient = GTK_ORIENTATION_VERTICAL;
-        arrowType = GTK_ARROW_RIGHT;
-    }
     GtkWidget* box = gtk_box_new(orient, 0);
-    GtkWidget* arrow = gtk_arrow_new(arrowType, GTK_SHADOW_NONE);
+    GtkWidget* arrow;
+    if (wx_is_at_least_gtk3(14))
+    {
+        const char* icon = "pan-down-symbolic";
+        if (orient == GTK_ORIENTATION_VERTICAL)
+            icon = "pan-end-symbolic";
+        arrow = gtk_image_new_from_icon_name(icon, GTK_ICON_SIZE_BUTTON);
+    }
+#ifndef __WXGTK4__
+    else
+    {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        GtkArrowType arrowType = GTK_ARROW_DOWN;
+        if (orient == GTK_ORIENTATION_VERTICAL)
+            arrowType = GTK_ARROW_RIGHT;
+        arrow = gtk_arrow_new(arrowType, GTK_SHADOW_NONE);
+        wxGCC_WARNING_RESTORE()
+    }
+#endif
     GtkWidget* tool_button = gtk_bin_get_child(GTK_BIN(m_item));
     g_object_ref(tool_button);
     gtk_container_remove(GTK_CONTAINER(m_item), tool_button);
