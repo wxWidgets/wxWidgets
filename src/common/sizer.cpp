@@ -2582,20 +2582,7 @@ wxStaticBoxSizer::~wxStaticBoxSizer()
     // previous wxWidgets versions, so ensure they are left alive.
 
     if ( m_staticBox )
-    {
-        // Notice that we must make a copy of the list as it will be changed by
-        // Reparent() calls in the loop.
-        const wxWindowList children = m_staticBox->GetChildren();
-        wxWindow* const parent = m_staticBox->GetParent();
-        for ( wxWindowList::const_iterator i = children.begin();
-              i != children.end();
-              ++i )
-        {
-            (*i)->Reparent(parent);
-        }
-
-        delete m_staticBox;
-    }
+        m_staticBox->WXDestroyWithoutChildren();
 }
 
 void wxStaticBoxSizer::RecalcSizes()

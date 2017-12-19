@@ -36,6 +36,22 @@ wxStaticBoxBase::wxStaticBoxBase()
 #endif
 }
 
+void wxStaticBoxBase::WXDestroyWithoutChildren()
+{
+    // Notice that we must make a copy of the list as it will be changed by
+    // Reparent() calls in the loop.
+    const wxWindowList children = GetChildren();
+    wxWindow* const parent = GetParent();
+    for ( wxWindowList::const_iterator i = children.begin();
+          i != children.end();
+          ++i )
+    {
+        (*i)->Reparent(parent);
+    }
+
+    delete this;
+}
+
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------

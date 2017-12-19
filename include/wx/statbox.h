@@ -45,6 +45,12 @@ public:
         *borderOther = BORDER;
     }
 
+    // This is an internal function currently used by wxStaticBoxSizer only.
+    //
+    // Reparent all children of the static box under its parent and destroy the
+    // box itself.
+    virtual void WXDestroyWithoutChildren();
+
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
