@@ -217,9 +217,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXINDENT", &para_start, &para_end);
 
         // Convert indent from 1/10th of a mm into pixels
+#ifdef __WXGTK4__
+        GdkMonitor* monitor = gdk_display_get_monitor_at_window(
+            gtk_widget_get_display(text), gtk_widget_get_window(text));
+        GdkRectangle rect;
+        gdk_monitor_get_geometry(monitor, &rect);
+        float factor = float(rect.width) / gdk_monitor_get_width_mm(monitor);
+#else
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         float factor =
             (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
                       gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
+        wxGCC_WARNING_RESTORE()
+#endif
 
         const int indent = (int)(factor * attr.GetLeftIndent());
         const int subIndent = (int)(factor * attr.GetLeftSubIndent());
@@ -274,10 +284,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         if (!tag)
         {
             // Factor to convert from 1/10th of a mm into pixels
+#ifdef __WXGTK4__
+            GdkMonitor* monitor = gdk_display_get_monitor_at_window(
+                gtk_widget_get_display(text), gtk_widget_get_window(text));
+            GdkRectangle rect;
+            gdk_monitor_get_geometry(monitor, &rect);
+            float factor = float(rect.width) / gdk_monitor_get_width_mm(monitor);
+#else
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             float factor =
                 (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
                           gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
-
+            wxGCC_WARNING_RESTORE()
+#endif
             PangoTabArray* tabArray = pango_tab_array_new(tabs.GetCount(), TRUE);
             for (size_t i = 0; i < tabs.GetCount(); i++)
                 pango_tab_array_set_tab(tabArray, i, PANGO_TAB_LEFT, (gint)(tabs[i] * factor));
