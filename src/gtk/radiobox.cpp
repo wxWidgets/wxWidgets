@@ -236,11 +236,17 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     GtkRadioButton *rbtn = NULL;
 
+#ifdef __WXGTK3__
+    GtkWidget* grid = gtk_grid_new();
+    gtk_widget_show(grid);
+    gtk_container_add(GTK_CONTAINER(m_widget), grid);
+#else
     GtkWidget *table = gtk_table_new( num_of_rows, num_of_cols, FALSE );
     gtk_table_set_col_spacings( GTK_TABLE(table), 1 );
     gtk_table_set_row_spacings( GTK_TABLE(table), 1 );
     gtk_widget_show( table );
     gtk_container_add( GTK_CONTAINER(m_widget), table );
+#endif
 
     GSList *radio_button_group = NULL;
     for (unsigned int i = 0; i < (unsigned int)n; i++)
@@ -301,6 +307,20 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
         m_buttonsInfo.Append( new wxGTKRadioButtonInfo( rbtn, wxRect() ) );
 
+#ifdef __WXGTK3__
+        int left, top;
+        if (HasFlag(wxRA_SPECIFY_COLS))
+        {
+            left = i % num_of_cols;
+            top = i / num_of_cols;
+        }
+        else
+        {
+            left = i / num_of_rows;
+            top = i % num_of_rows;
+        }
+        gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(rbtn), left, top, 1, 1);
+#else
         if (HasFlag(wxRA_SPECIFY_COLS))
         {
             int left = i%num_of_cols;
@@ -319,6 +339,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(rbtn), left, right, top, bottom,
                   GTK_FILL, GTK_FILL, 1, 1 );
         }
+#endif
 
         ConnectWidget( GTK_WIDGET(rbtn) );
 
