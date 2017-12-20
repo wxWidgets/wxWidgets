@@ -167,7 +167,7 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
 
     // need extra space, don't know how much but this seems to be enough
-    *borderTop += GetCharHeight()/3;
+    *borderTop += FromDIP(LABEL_VERT_BORDER);
 }
 
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
