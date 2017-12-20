@@ -569,6 +569,8 @@ void StaticWidgetsPage::CreateStatic()
     staticBox->Connect(wxEVT_LEFT_UP,
                        wxMouseEventHandler(StaticWidgetsPage::OnMouseEvent),
                        NULL, this);
+
+    SetUpWidget();
 }
 
 // ----------------------------------------------------------------------------
