@@ -53,8 +53,12 @@ using namespace wxGTKImpl;
 typedef guint KeySym;
 #endif
 
+#ifdef __WXGTK4__
+#define wxGTK_HAS_COMPOSITING_SUPPORT 0
+#else
 // gdk_window_set_composited() is only supported since 2.12
 #define wxGTK_HAS_COMPOSITING_SUPPORT (GTK_CHECK_VERSION(2,12,0) && wxUSE_CAIRO)
+#endif
 
 #ifndef PANGO_VERSION_CHECK
     #define PANGO_VERSION_CHECK(a,b,c) 0
@@ -2310,8 +2314,10 @@ void wxWindowGTK::GTKHandleRealized()
 #if wxGTK_HAS_COMPOSITING_SUPPORT
         if (IsTransparentBackgroundSupported())
         {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             if (window)
                 gdk_window_set_composited(window, true);
+            wxGCC_WARNING_RESTORE()
         }
         else
 #endif // wxGTK_HAS_COMPOSITING_SUPPORT
