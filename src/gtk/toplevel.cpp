@@ -41,6 +41,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/win_gtk.h"
 
 // ----------------------------------------------------------------------------
@@ -1587,14 +1588,18 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 
 #ifdef __WXGTK3__
 #if GTK_CHECK_VERSION(3,8,0)
-    if(gtk_check_version(3,8,0) == NULL)
+    if (wx_is_at_least_gtk3(8))
     {
         gtk_widget_set_opacity(m_widget, alpha / 255.0);
     }
     else
 #endif // GTK+ 3.8+
     {
+#ifndef __WXGTK4__
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_window_set_opacity(GTK_WINDOW(m_widget), alpha / 255.0);
+        wxGCC_WARNING_RESTORE()
+#endif
     }
 
     return true;
