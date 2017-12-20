@@ -54,6 +54,21 @@
 
 #define TMT_FONT 210
 
+namespace
+{
+
+// Offset of the first pixel of the label from the box left border.
+//
+// FIXME: value is hardcoded as this is what it is on my system, no idea if
+//        it's true everywhere
+const int LABEL_HORZ_OFFSET = 9;
+
+// Extra borders around the label on left/right and bottom sides.
+const int LABEL_HORZ_BORDER = 2;
+const int LABEL_VERT_BORDER = 2;
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -443,23 +458,17 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
         dc.GetTextExtent(wxStripMenuCodes(label, wxStrip_Mnemonics),
                          &width, &height);
 
-        int x;
-        int y = height;
-
         // first we need to correctly paint the background of the label
         // as Windows ignores the brush offset when doing it
-        //
-        // FIXME: value of x is hardcoded as this is what it is on my system,
-        //        no idea if it's true everywhere
-        RECT dimensions = {0, 0, 0, y};
-        x = 9;
+        const int x = LABEL_HORZ_OFFSET;
+        RECT dimensions = { x, 0, 0, height };
         dimensions.left = x;
         dimensions.right = x + width;
 
         // need to adjust the rectangle to cover all the label background
-        dimensions.left -= 2;
-        dimensions.right += 2;
-        dimensions.bottom += 2;
+        dimensions.left -= LABEL_HORZ_BORDER;
+        dimensions.right += LABEL_HORZ_BORDER;
+        dimensions.bottom += LABEL_VERT_BORDER;
 
         if ( UseBgCol() )
         {
@@ -489,7 +498,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
         }
 
         // now draw the text
-        RECT rc2 = { x, 0, x + width, y };
+        RECT rc2 = { x, 0, x + width, height };
         ::DrawText(hdc, label.t_str(), label.length(), &rc2,
                    drawTextFlags);
     }
