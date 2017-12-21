@@ -183,6 +183,17 @@ static void gtk_radiobutton_size_allocate( GtkWidget *widget,
 }
 }
 
+#ifndef __WXGTK3__
+extern "C" {
+static gboolean expose_event(GtkWidget* widget, GdkEventExpose*, wxWindow*)
+{
+    const GtkAllocation& a = widget->allocation;
+    gtk_paint_flat_box(gtk_widget_get_style(widget), gtk_widget_get_window(widget),
+        GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, widget, "", a.x, a.y, a.width, a.height);
+    return false;
+}
+}
+#endif
 
 //-----------------------------------------------------------------------------
 // wxRadioBox
@@ -605,6 +616,12 @@ void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
 
         node = node->GetNext();
     }
+
+#ifndef __WXGTK3__
+    g_signal_handlers_disconnect_by_func(m_widget, (void*)expose_event, this);
+    if (m_backgroundColour.IsOk())
+        g_signal_connect(m_widget, "expose-event", G_CALLBACK(expose_event), this);
+#endif
 }
 
 bool wxRadioBox::GTKWidgetNeedsMnemonic() const
