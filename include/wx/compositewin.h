@@ -33,17 +33,6 @@ class wxCompositeWindow : public W
 public:
     typedef W BaseWindowClass;
 
-    // Default ctor doesn't do anything.
-    wxCompositeWindow()
-    {
-        this->Connect
-              (
-                  wxEVT_CREATE,
-                  wxWindowCreateEventHandler(wxCompositeWindow::OnWindowCreate)
-              );
-
-    }
-
     // Override all wxWindow methods which must be forwarded to the composite
     // window parts.
 
@@ -134,6 +123,17 @@ public:
     virtual void SetFocus() wxOVERRIDE
     {
         wxSetFocusToChild(this, NULL);
+    }
+
+protected:
+    // Default ctor sets things up for handling children events correctly.
+    wxCompositeWindow()
+    {
+        this->Connect
+              (
+                  wxEVT_CREATE,
+                  wxWindowCreateEventHandler(wxCompositeWindow::OnWindowCreate)
+              );
     }
 
 private:
