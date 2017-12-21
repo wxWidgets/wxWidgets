@@ -71,7 +71,11 @@ public:
             Checkbox size.
             If ::wxDefaultSize is specified then a default size is chosen.
         @param style
-            Window style. See wxStaticBox.
+            Window style. There are no wxStaticBox-specific styles, but generic
+            ::wxALIGN_LEFT, ::wxALIGN_CENTRE_HORIZONTAL and ::wxALIGN_RIGHT can
+            be used here to change the position of the static box label when
+            using wxGTK (these styles are ignored under the other platforms
+            currently).
         @param name
             Window name.
 
