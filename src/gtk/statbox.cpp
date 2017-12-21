@@ -130,6 +130,7 @@ void wxStaticBox::AddChild( wxWindowBase *child )
         m_wxwindow = wxPizza::New();
         gtk_widget_show( m_wxwindow );
         gtk_container_add( GTK_CONTAINER (m_widget), m_wxwindow );
+        GTKApplyWidgetStyle();
     }
 
     wxStaticBoxBase::AddChild(child);
