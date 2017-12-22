@@ -103,7 +103,7 @@
     #define wxPG_TEXTCTRLYADJUST            0
 
 #elif defined(__WXMAC__)
-    // *not* tested
+    // partially tested
     #define wxPG_CHECKMARK_XADJ                 4
     #define wxPG_CHECKMARK_YADJ                 4
     #define wxPG_CHECKMARK_WADJ                 -6
@@ -112,7 +112,7 @@
 
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
-    #define wxPG_TEXTCTRLYADJUST            0
+    #define wxPG_TEXTCTRLYADJUST            2
 
 #else
     // defaults
@@ -471,6 +471,7 @@ void wxPGTextCtrlEditor::SetControlStringValue( wxPGProperty* property, wxWindow
 }
 
 
+static
 void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
                                  wxTextCtrl* tc )
 {
@@ -701,6 +702,20 @@ public:
         return rect.width;
     }
 
+#if defined(__WXMSW__)
+#define wxPG_TEXTCTRLXADJUST3 0
+#elif defined(__WXGTK__)
+  #if defined(__WXGTK3__)
+  #define wxPG_TEXTCTRLXADJUST3 2
+  #else
+  #define wxPG_TEXTCTRLXADJUST3 0
+  #endif // wxGTK3/!wxGTK3
+#elif defined(__WXOSX__)
+#define wxPG_TEXTCTRLXADJUST3 6
+#else
+#define wxPG_TEXTCTRLXADJUST3 0
+#endif
+
     virtual void PositionTextCtrl( int textCtrlXAdjust,
                                    int WXUNUSED(textCtrlYAdjust) ) wxOVERRIDE
     {
@@ -709,9 +724,8 @@ public:
                           (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
     #endif
         wxOwnerDrawnComboBox::PositionTextCtrl(
-            textCtrlXAdjust,
-            0 // Under MSW vertical position is already properly adjusted.
-              // Note: This parameter is not used by other ports.
+            textCtrlXAdjust + wxPG_TEXTCTRLXADJUST3,
+            0
         );
     }
 
@@ -944,6 +958,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     }
 }
 
+static
 bool wxPGChoiceEditor_SetCustomPaintWidth( wxPropertyGrid* propGrid, wxPGComboBox* cb, int cmnVal )
 {
     wxPGProperty* property = propGrid->GetSelectedProperty();
@@ -1005,8 +1020,6 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 
     wxArrayString labels = choices.GetLabels();
 
-    wxPGComboBox* cb;
-
     wxPoint po(pos);
     wxSize si(sz);
     po.y += wxPG_CHOICEYADJUST;
@@ -1040,7 +1053,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
             labels.Add(propGrid->GetCommonValueLabel(i));
     }
 
-    cb = new wxPGComboBox();
+    wxPGComboBox* cb = new wxPGComboBox();
 #ifdef __WXMSW__
     cb->Hide();
 #endif
@@ -1052,8 +1065,14 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
                labels,
                odcbFlags);
 
+    // Under OSX default button seems to look fine
+    // so there is no need to change it.
+#ifndef __WXOSX__
     cb->SetButtonPosition(si.y,0,wxRIGHT);
+#endif // !__WXOSX__
     cb->SetMargins(wxPG_XBEFORETEXT-1);
+
+    cb->SetBackgroundColour(propGrid->GetCellBackgroundColour());
 
     // Set hint text
     cb->SetHint(property->GetHintText());
@@ -1820,12 +1839,7 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
         if ( m_labelEditor )
         {
             wxRect r = GetEditorWidgetRect(selected, m_selColumn);
-            wxPoint pos = m_labelEditor->GetPosition();
-
-            // Calculate y offset
-            int offset = pos.y % m_lineHeight;
-
-            m_labelEditor->Move(pos.x, r.y + offset);
+            m_labelEditor->Move(r.GetPosition() + m_labelEditorPosRel);
         }
 
         if ( m_wndEditor || m_wndEditor2 )
@@ -1834,19 +1848,12 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
 
             if ( m_wndEditor )
             {
-                wxPoint pos = m_wndEditor->GetPosition();
-
-                // Calculate y offset
-                int offset = pos.y % m_lineHeight;
-
-                m_wndEditor->Move(pos.x, r.y + offset);
+                m_wndEditor->Move(r.GetPosition() + m_wndEditorPosRel);
             }
 
             if ( m_wndEditor2 )
             {
-                wxPoint pos = m_wndEditor2->GetPosition();
-
-                m_wndEditor2->Move(pos.x, r.y);
+                m_wndEditor2->Move(r.GetPosition() + m_wndEditor2PosRel);
             }
         }
     }
@@ -1856,6 +1863,20 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
 
 // Fixes position of wxTextCtrl-like control (wxSpinCtrl usually
 // fits into that category as well).
+#ifndef wxPG_TEXTCTRLXADJUST
+#if defined(__WXMSW__)
+#define wxPG_TEXTCTRLXADJUST2 0
+#elif defined(__WXGTK__)
+  #if defined(__WXGTK3__)
+  #define wxPG_TEXTCTRLXADJUST2 (-2)
+  #else
+  #define wxPG_TEXTCTRLXADJUST2 0
+  #endif // wxGTK3/!wxGTK3
+#else
+#error "wxPG_TEXTCTRLXADJUST should be defined for this platform"
+#endif
+#endif // !wxPG_TEXTCTRLXADJUST
+
 void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
                                         unsigned int WXUNUSED(forColumn),
                                         const wxPoint& offset )
@@ -1872,7 +1893,7 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
     finalPos.height -= (y_adj+sz_dec);
 
 #ifndef wxPG_TEXTCTRLXADJUST
-    int textCtrlXAdjust = wxPG_XBEFORETEXT - 1;
+    int textCtrlXAdjust = wxPG_XBEFORETEXT - 1 + wxPG_TEXTCTRLXADJUST2;
 
     wxTextCtrl* tc = static_cast<wxTextCtrl*>(ctrl);
     tc->SetMargins(0);

@@ -57,6 +57,10 @@ void TextEntryTestCase::TextChangeEvents()
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
 
+    entry->SetValue("");
+    CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    updated.Clear();
+
     entry->ChangeValue("bar");
     CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
 

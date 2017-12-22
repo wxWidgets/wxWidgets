@@ -306,7 +306,9 @@ public:
             return tz;
         }
 
-        long GetOffset() const { return m_offset; }
+        bool IsLocal() const { return m_offset == -1; }
+
+        long GetOffset() const;
 
     private:
         // offset for this timezone from GMT in seconds
@@ -391,6 +393,9 @@ public:
 
         // returns true if the given year is a leap year in the given calendar
     static bool IsLeapYear(int year = Inv_Year, Calendar cal = Gregorian);
+
+        // acquires the first day of week based on locale and/or OS settings
+    static bool GetFirstWeekDay(WeekDay *firstDay);
 
         // get the century (19 for 1999, 20 for 2000 and -5 for 492 BC)
     static int GetCentury(int year);
@@ -1141,6 +1146,9 @@ private:
     // returns true if we fall in range in which we can use standard ANSI C
     // functions
     inline bool IsInStdRange() const;
+
+    // assign the preferred first day of a week to flags, if necessary
+    void UseEffectiveWeekDayFlags(WeekFlags &flags) const;
 
     // the internal representation of the time is the amount of milliseconds
     // elapsed since the origin which is set by convention to the UNIX/C epoch

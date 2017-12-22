@@ -37,6 +37,8 @@
     #include "wx/intl.h"
 #endif
 
+#include "wx/dcbuffer.h" // for wxALWAYS_NATIVE_DOUBLE_BUFFER
+
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
 
@@ -587,7 +589,12 @@ void wxPropertyGridManager::Init2( int style )
 
     m_pState = m_pPropGrid->m_pState;
 
+    // Rely on native double-buffering by default.
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+    m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT | wxPG_EX_NATIVE_DOUBLE_BUFFERING);
+#else
     m_pPropGrid->SetExtraStyle(wxPG_EX_INIT_NOCAT);
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER/!wxALWAYS_NATIVE_DOUBLE_BUFFER
 
     // Connect to property grid onselect event.
     // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
@@ -666,12 +673,27 @@ bool wxPropertyGridManager::SetFont( const wxFont& font )
 
 // -----------------------------------------------------------------------
 
+// Which flags can affect the toolbar
+#define wxPG_EX_WINDOW_TOOLBAR_STYLE_MASK  (wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|wxPG_EX_NO_TOOLBAR_DIVIDER)
+
 void wxPropertyGridManager::SetExtraStyle( long exStyle )
 {
-    wxWindow::SetExtraStyle( exStyle );
-    m_pPropGrid->SetExtraStyle( exStyle & wxPG_EX_WINDOW_STYLE_MASK );
+    // Pass only relevant flags to wxPropertyGrid.
+    m_pPropGrid->SetExtraStyle(exStyle & wxPG_EX_WINDOW_PG_STYLE_MASK);
+    // Because it can happen that not all flags are actually changed
+    // by call to SetExtraStyle() (e.g. wxPG_EX_NATIVE_DOUBLE_BUFFERING),
+    // we have to get the actual style flags prior to storing them.
+    exStyle &= ~wxPG_EX_WINDOW_PG_STYLE_MASK;
+    exStyle |= m_pPropGrid->GetExtraStyle() & wxPG_EX_WINDOW_PG_STYLE_MASK;
+
 #if wxUSE_TOOLBAR
-    if ( (exStyle & (wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS)) && m_pToolbar )
+    bool toolbarStyleChanged =
+        (GetExtraStyle() & wxPG_EX_WINDOW_TOOLBAR_STYLE_MASK) != (exStyle & wxPG_EX_WINDOW_TOOLBAR_STYLE_MASK);
+#endif // wxUSE_TOOLBAR
+
+    wxWindow::SetExtraStyle( exStyle );
+#if wxUSE_TOOLBAR
+    if ( toolbarStyleChanged && m_pToolbar )
         RecreateControls();
 #endif
 }
@@ -1465,13 +1487,12 @@ void wxPropertyGridManager::RecreateControls()
     {
         bool tbModified = false;
 
+        long toolBarFlags = HasExtraStyle(wxPG_EX_NO_FLAT_TOOLBAR) ? 0 : wxTB_FLAT;
+        if ( HasExtraStyle(wxPG_EX_NO_TOOLBAR_DIVIDER) )
+            toolBarFlags |= wxTB_NODIVIDER;
         // Has toolbar.
         if ( !m_pToolbar )
         {
-            long toolBarFlags = HasExtraStyle(wxPG_EX_NO_FLAT_TOOLBAR)? 0: wxTB_FLAT;
-            if ( HasExtraStyle(wxPG_EX_NO_TOOLBAR_DIVIDER) )
-                toolBarFlags |= wxTB_NODIVIDER;
-
             m_pToolbar = new wxToolBar(this, wxID_ANY,
                                        wxDefaultPosition,
                                        wxDefaultSize,
@@ -1487,10 +1508,8 @@ void wxPropertyGridManager::RecreateControls()
                 #define WS_EX_COMPOSITED        0x02000000L
             #endif
 
-            HWND hWnd = (HWND)m_pToolbar->GetHWND();
-
-            ::SetWindowLong( hWnd, GWL_EXSTYLE,
-                             ::GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_COMPOSITED );
+            wxMSWWinExStyleUpdater(GetHwndOf(m_pToolbar))
+                .TurnOn(WS_EX_COMPOSITED);
             */
 
         #endif
@@ -1499,6 +1518,11 @@ void wxPropertyGridManager::RecreateControls()
             tbModified = true;
             m_categorizedModeToolId = -1;
             m_alphabeticModeToolId = -1;
+        }
+        else
+        {
+            m_pToolbar->SetWindowStyle(toolBarFlags);
+            tbModified = true;
         }
 
         if ( HasExtraStyle(wxPG_EX_MODE_BUTTONS) )

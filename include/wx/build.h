@@ -67,7 +67,14 @@
     #define __WX_BO_COMPILER ",GCC " \
             __WX_BO_STRINGIZE(__GNUC__) "." __WX_BO_STRINGIZE(__GNUC_MINOR__)
 #elif defined(__VISUALC__)
-    #define __WX_BO_COMPILER ",Visual C++ " __WX_BO_STRINGIZE(_MSC_VER)
+    // VC15 (a.k.a. MSVS 2017) is ABI-compatible with VC14 (MSVS 2015), so use
+    // the same ABI version for both of them.
+    #if _MSC_VER >= 1900 && _MSC_VER < 2000
+        #define wxMSVC_ABI_VERSION 1900
+    #else
+        #define wxMSVC_ABI_VERSION _MSC_VER
+    #endif
+    #define __WX_BO_COMPILER ",Visual C++ " __WX_BO_STRINGIZE(wxMSVC_ABI_VERSION)
 #elif defined(__INTEL_COMPILER)
     // Notice that this must come after MSVC check as ICC under Windows is
     // ABI-compatible with the corresponding version of the MSVC and we want to

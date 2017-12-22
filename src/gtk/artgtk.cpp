@@ -53,80 +53,96 @@ protected:
 namespace
 {
 
+#ifdef __WXGTK3__
+    #define ART(wxId, unused, themeId) wxId, themeId,
+#else
+    #define ART(wxId, stockId, unused) wxId, stockId,
+#endif
+
+const char* const wxId2Gtk[] = {
+    ART(wxART_ERROR,            GTK_STOCK_DIALOG_ERROR, "dialog-error")
+    ART(wxART_INFORMATION,      GTK_STOCK_DIALOG_INFO, "dialog-information")
+    ART(wxART_WARNING,          GTK_STOCK_DIALOG_WARNING, "dialog-warning")
+    ART(wxART_QUESTION,         GTK_STOCK_DIALOG_QUESTION, "dialog-question")
+
+    //ART(wxART_HELP_SIDE_PANEL,)
+    ART(wxART_HELP_SETTINGS,    GTK_STOCK_SELECT_FONT, "preferences-desktop-font")
+    //ART(wxART_HELP_BOOK,      )
+    ART(wxART_HELP_FOLDER,      GTK_STOCK_DIRECTORY, "folder")
+    ART(wxART_HELP_PAGE,        GTK_STOCK_FILE, "text-x-generic")
+    ART(wxART_MISSING_IMAGE,    GTK_STOCK_MISSING_IMAGE, "image-missing")
+    ART(wxART_ADD_BOOKMARK,     GTK_STOCK_ADD, "list-add")
+    ART(wxART_DEL_BOOKMARK,     GTK_STOCK_REMOVE, "list-remove")
+    ART(wxART_GO_BACK,          GTK_STOCK_GO_BACK, "go-previous")
+    ART(wxART_GO_FORWARD,       GTK_STOCK_GO_FORWARD, "go-next")
+    ART(wxART_GO_UP,            GTK_STOCK_GO_UP, "go-up")
+    ART(wxART_GO_DOWN,          GTK_STOCK_GO_DOWN, "go-down")
+    ART(wxART_GO_TO_PARENT,     GTK_STOCK_GO_UP, "go-up")
+    ART(wxART_GO_HOME,          GTK_STOCK_HOME, "go-home")
+    ART(wxART_GOTO_FIRST,       GTK_STOCK_GOTO_FIRST, "go-first")
+    ART(wxART_GOTO_LAST,        GTK_STOCK_GOTO_LAST, "go-last")
+    ART(wxART_FILE_OPEN,        GTK_STOCK_OPEN, "document-open")
+    ART(wxART_PRINT,            GTK_STOCK_PRINT, "document-print")
+    ART(wxART_HELP,             GTK_STOCK_HELP, "help-contents")
+    ART(wxART_TIP,              GTK_STOCK_DIALOG_INFO, "dialog-information")
+    //ART(wxART_REPORT_VIEW,    )
+    //ART(wxART_LIST_VIEW,      )
+    ART(wxART_NEW_DIR,          "folder-new", "folder-new")
+    ART(wxART_FOLDER,           GTK_STOCK_DIRECTORY, "folder")
+    ART(wxART_FOLDER_OPEN,      "folder-open", "folder-open")
+    //ART(wxART_GO_DIR_UP,      )
+    ART(wxART_EXECUTABLE_FILE,  GTK_STOCK_EXECUTE, "system-run")
+    ART(wxART_NORMAL_FILE,      GTK_STOCK_FILE, "text-x-generic")
+    ART(wxART_TICK_MARK,        GTK_STOCK_APPLY, "gtk-apply")
+    ART(wxART_CROSS_MARK,       GTK_STOCK_CANCEL, "gtk-cancel")
+
+    ART(wxART_FLOPPY,           GTK_STOCK_FLOPPY, "media-floppy")
+    ART(wxART_CDROM,            GTK_STOCK_CDROM, "media-optical")
+    ART(wxART_HARDDISK,         GTK_STOCK_HARDDISK, "drive-harddisk")
+    ART(wxART_REMOVABLE,        "drive-removable-media", "drive-removable-media")
+
+    ART(wxART_FILE_SAVE,        GTK_STOCK_SAVE, "document-save")
+    ART(wxART_FILE_SAVE_AS,     GTK_STOCK_SAVE_AS, "document-save-as")
+
+    ART(wxART_COPY,             GTK_STOCK_COPY, "edit-copy")
+    ART(wxART_CUT,              GTK_STOCK_CUT, "edit-cut")
+    ART(wxART_PASTE,            GTK_STOCK_PASTE, "edit-paste")
+    ART(wxART_DELETE,           GTK_STOCK_DELETE, "edit-delete")
+    ART(wxART_NEW,              GTK_STOCK_NEW, "document-new")
+
+    ART(wxART_UNDO,             GTK_STOCK_UNDO, "edit-undo")
+    ART(wxART_REDO,             GTK_STOCK_REDO, "edit-redo")
+
+    ART(wxART_PLUS,             GTK_STOCK_ADD, "list-add")
+    ART(wxART_MINUS,            GTK_STOCK_REMOVE, "list-remove")
+
+    ART(wxART_CLOSE,            GTK_STOCK_CLOSE, "window-close")
+    ART(wxART_QUIT,             GTK_STOCK_QUIT, "application-exit")
+
+    ART(wxART_FIND,             GTK_STOCK_FIND, "edit-find")
+    ART(wxART_FIND_AND_REPLACE, GTK_STOCK_FIND_AND_REPLACE, "edit-find-replace")
+    ART(wxART_FULL_SCREEN,      GTK_STOCK_FULLSCREEN, "view-fullscreen")
+    ART(wxART_EDIT,             "accessories-text-editor", "accessories-text-editor")
+};
+
+#undef ART
+
 wxString wxArtIDToStock(const wxArtID& id)
 {
-    #define ART(wxid, gtkid) \
-           if (id == wxid) return gtkid;
-
-    ART(wxART_ERROR,                               GTK_STOCK_DIALOG_ERROR)
-    ART(wxART_INFORMATION,                         GTK_STOCK_DIALOG_INFO)
-    ART(wxART_WARNING,                             GTK_STOCK_DIALOG_WARNING)
-    ART(wxART_QUESTION,                            GTK_STOCK_DIALOG_QUESTION)
-
-    //ART(wxART_HELP_SIDE_PANEL,                     )
-    ART(wxART_HELP_SETTINGS,                       GTK_STOCK_SELECT_FONT)
-    //ART(wxART_HELP_BOOK,                           )
-    ART(wxART_HELP_FOLDER,                         GTK_STOCK_DIRECTORY)
-    ART(wxART_HELP_PAGE,                           GTK_STOCK_FILE)
-    ART(wxART_MISSING_IMAGE,                       GTK_STOCK_MISSING_IMAGE)
-    ART(wxART_ADD_BOOKMARK,                        GTK_STOCK_ADD)
-    ART(wxART_DEL_BOOKMARK,                        GTK_STOCK_REMOVE)
-    ART(wxART_GO_BACK,                             GTK_STOCK_GO_BACK)
-    ART(wxART_GO_FORWARD,                          GTK_STOCK_GO_FORWARD)
-    ART(wxART_GO_UP,                               GTK_STOCK_GO_UP)
-    ART(wxART_GO_DOWN,                             GTK_STOCK_GO_DOWN)
-    ART(wxART_GO_TO_PARENT,                        GTK_STOCK_GO_UP)
-    ART(wxART_GO_HOME,                             GTK_STOCK_HOME)
-    ART(wxART_GOTO_FIRST,                          GTK_STOCK_GOTO_FIRST)
-    ART(wxART_GOTO_LAST,                           GTK_STOCK_GOTO_LAST)
-    ART(wxART_FILE_OPEN,                           GTK_STOCK_OPEN)
-    ART(wxART_PRINT,                               GTK_STOCK_PRINT)
-    ART(wxART_HELP,                                GTK_STOCK_HELP)
-    ART(wxART_TIP,                                 GTK_STOCK_DIALOG_INFO)
-    //ART(wxART_REPORT_VIEW,                         )
-    //ART(wxART_LIST_VIEW,                           )
-    //ART(wxART_NEW_DIR,                             )
-    ART(wxART_FOLDER,                              GTK_STOCK_DIRECTORY)
-    ART(wxART_FOLDER_OPEN,                         GTK_STOCK_DIRECTORY)
-    //ART(wxART_GO_DIR_UP,                           )
-    ART(wxART_EXECUTABLE_FILE,                     GTK_STOCK_EXECUTE)
-    ART(wxART_NORMAL_FILE,                         GTK_STOCK_FILE)
-    ART(wxART_TICK_MARK,                           GTK_STOCK_APPLY)
-    ART(wxART_CROSS_MARK,                          GTK_STOCK_CANCEL)
-
-    ART(wxART_FLOPPY,                              GTK_STOCK_FLOPPY)
-    ART(wxART_CDROM,                               GTK_STOCK_CDROM)
-    ART(wxART_HARDDISK,                            GTK_STOCK_HARDDISK)
-    ART(wxART_REMOVABLE,                           GTK_STOCK_HARDDISK)
-
-    ART(wxART_FILE_SAVE,                           GTK_STOCK_SAVE)
-    ART(wxART_FILE_SAVE_AS,                        GTK_STOCK_SAVE_AS)
-
-    ART(wxART_COPY,                                GTK_STOCK_COPY)
-    ART(wxART_CUT,                                 GTK_STOCK_CUT)
-    ART(wxART_PASTE,                               GTK_STOCK_PASTE)
-    ART(wxART_DELETE,                              GTK_STOCK_DELETE)
-    ART(wxART_NEW,                                 GTK_STOCK_NEW)
-
-    ART(wxART_UNDO,                                GTK_STOCK_UNDO)
-    ART(wxART_REDO,                                GTK_STOCK_REDO)
-
-    ART(wxART_PLUS,                                GTK_STOCK_ADD)
-    ART(wxART_MINUS,                               GTK_STOCK_REMOVE)
-
-    ART(wxART_CLOSE,                               GTK_STOCK_CLOSE)
-    ART(wxART_QUIT,                                GTK_STOCK_QUIT)
-
-    ART(wxART_FIND,                                GTK_STOCK_FIND)
-    ART(wxART_FIND_AND_REPLACE,                    GTK_STOCK_FIND_AND_REPLACE)
-    ART(wxART_FULL_SCREEN,                         GTK_STOCK_FULLSCREEN)
-
-    #undef ART
-
     // allow passing GTK+ stock IDs to wxArtProvider -- if a recognized wx
     // ID wasn't found, pass it to GTK+ in the hope it is a GTK+ or theme
     // icon name:
-    return id;
+    wxString ret(id);
+
+    for (unsigned i = 0; i < WXSIZEOF(wxId2Gtk); i += 2)
+    {
+        if (id == wxId2Gtk[i])
+        {
+            ret = wxString::FromAscii(wxId2Gtk[i + 1]);
+            break;
+        }
+    }
+    return ret;
 }
 
 GtkIconSize ArtClientToIconSize(const wxArtClient& client)
@@ -190,6 +206,7 @@ GtkIconSize FindClosestIconSize(const wxSize& size)
     return best;
 }
 
+#ifndef __WXGTK4__
 GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
 {
     // FIXME: This code is not 100% correct, because stock pixmap are
@@ -202,12 +219,14 @@ GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
 
     GtkWidget* widget = wxGTKPrivate::GetButtonWidget();
 #ifdef __WXGTK3__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
     GtkIconSet* iconset = gtk_style_context_lookup_icon_set(sc, stockid);
     GdkPixbuf* pixbuf = NULL;
     if (iconset)
         pixbuf = gtk_icon_set_render_icon_pixbuf(iconset, sc, size);
     return pixbuf;
+    wxGCC_WARNING_RESTORE()
 #else
     GtkStyle* style = gtk_widget_get_style(widget);
     GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid);
@@ -220,6 +239,7 @@ GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
                                     GTK_STATE_NORMAL, size, NULL, NULL);
 #endif
 }
+#endif // !__WXGTK4__
 
 GdkPixbuf *CreateThemeIcon(const char *iconname, int size)
 {
@@ -238,10 +258,12 @@ GdkPixbuf *CreateThemeIcon(const char *iconname, int size)
 GdkPixbuf *CreateGtkIcon(const char *icon_name,
                          GtkIconSize stock_size, const wxSize& pixel_size)
 {
+#ifndef __WXGTK4__
     // try stock GTK+ icon first
     GdkPixbuf *pixbuf = CreateStockIcon(icon_name, stock_size);
     if ( pixbuf )
         return pixbuf;
+#endif
 
     // if that fails, try theme icon
     wxSize size(pixel_size);
@@ -313,6 +335,8 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
     wxIconBundle bundle;
     const wxString stockid = wxArtIDToStock(id);
 
+#ifndef __WXGTK4__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     // try to load the bundle as stock icon first
     GtkWidget* widget = wxGTKPrivate::GetButtonWidget();
 #ifdef __WXGTK3__
@@ -336,6 +360,8 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
         g_free(sizes);
         return bundle;
     }
+    wxGCC_WARNING_RESTORE()
+#endif // !__WXGTK4__
 
     // otherwise try icon themes
     gint *sizes = gtk_icon_theme_get_icon_sizes

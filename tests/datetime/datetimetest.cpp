@@ -24,8 +24,6 @@
 
 #include "wx/wxcrt.h"       // for wxStrstr()
 
-#include "testdate.h"
-
 // to test Today() meaningfully we must be able to change the system date which
 // is not usually the case, but if we're under Win32 we can try it -- define
 // the macro below to do it
@@ -262,11 +260,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(DateTimeTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( DateTimeTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DateTimeTestCase, "DateTimeTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(DateTimeTestCase, "[datetime]");
 
 // ============================================================================
 // implementation
@@ -305,15 +299,13 @@ void DateTimeTestCase::TestTimeSet()
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d1 = testDates[n];
-        wxDateTime dt = d1.DT();
+        const wxDateTime dt = d1.DT();
 
         Date d2;
         d2.Init(dt.GetTm());
 
-        wxString s1 = d1.Format(),
-                 s2 = d2.Format();
-
-        CPPUNIT_ASSERT_EQUAL( s1, s2 );
+        INFO("n=" << n);
+        CHECK( d1.Format() == d2.Format() );
     }
 }
 
@@ -328,10 +320,11 @@ void DateTimeTestCase::TestTimeJDN()
         // JDNs must be computed for UTC times
         double jdn = dt.FromUTC().GetJulianDayNumber();
 
-        CPPUNIT_ASSERT_EQUAL( d.jdn, jdn );
+        INFO("n=" << n);
+        CHECK( d.jdn == jdn );
 
         dt.Set(jdn);
-        CPPUNIT_ASSERT_EQUAL( jdn, dt.GetJulianDayNumber() );
+        CHECK( jdn == dt.GetJulianDayNumber() );
     }
 }
 
@@ -345,8 +338,10 @@ void DateTimeTestCase::TestTimeWDays()
         const Date& d = testDates[n];
         wxDateTime dt(d.day, d.month, d.year, d.hour, d.min, d.sec);
 
+        INFO("n=" << n);
+
         wxDateTime::WeekDay wday = dt.GetWeekDay();
-        CPPUNIT_ASSERT_EQUAL( d.wday, wday );
+        CHECK( d.wday == wday );
     }
 
     // test SetToWeekDay()
@@ -669,6 +664,15 @@ void DateTimeTestCase::TestTimeFormat()
         CompareTime         // time only
     };
 
+    const char* const compareKindStrings[] =
+    {
+        "nothing",
+        "both date and time",
+        "both date and time but without century",
+        "only dates",
+        "only times",
+    };
+
     static const struct
     {
         CompareKind compareKind;
@@ -687,7 +691,7 @@ void DateTimeTestCase::TestTimeFormat()
 
     const long timeZonesOffsets[] =
     {
-        wxDateTime::TimeZone(wxDateTime::Local).GetOffset(),
+        -1, // This is pseudo-offset used for local time zone
 
         // Fictitious TimeZone offsets to ensure time zone formating and
         // interpretation works
@@ -716,7 +720,7 @@ void DateTimeTestCase::TestTimeFormat()
     for ( unsigned idxtz = 0; idxtz < WXSIZEOF(timeZonesOffsets); ++idxtz )
     {
         wxDateTime::TimeZone tz(timeZonesOffsets[idxtz]);
-        const bool isLocalTz = tz.GetOffset() == -wxGetTimeZone();
+        const bool isLocalTz = tz.IsLocal();
 
         for ( size_t d = 0; d < WXSIZEOF(formatTestDates); d++ )
         {
@@ -757,6 +761,21 @@ void DateTimeTestCase::TestTimeFormat()
                 // do convert date to string
                 wxString s = dt.Format(fmt, tz);
 
+                // Normally, passing time zone to Format() should have exactly
+                // the same effect as converting to this time zone before
+                // calling it, however the former may use standard library date
+                // handling in strftime() implementation while the latter
+                // always uses our own code and they may disagree if the offset
+                // for this time zone has changed since the given date, as the
+                // standard library handles it correctly (at least under Unix),
+                // while our code doesn't handle time zone changes at all.
+                //
+                // Short of implementing full support for time zone database,
+                // we can't really do anything about this other than skipping
+                // the test in this case.
+                if ( s != dt.ToTimezone(tz).Format(fmt) )
+                    continue;
+
                 // convert back
                 wxDateTime dt2;
                 const char *result = dt2.ParseFormat(s, fmt);
@@ -789,28 +808,32 @@ void DateTimeTestCase::TestTimeFormat()
                     if ( !strstr(fmt, "%z") && !isLocalTz )
                         dt2.MakeFromTimezone(tz);
 
+                    INFO("Comparing " << compareKindStrings[kind] << " for "
+                            << dt << " with " << dt2
+                            << " (format result=\"" << s << "\")");
+
                     switch ( kind )
                     {
                         case CompareYear:
                             if ( dt2.GetCentury() != dt.GetCentury() )
                             {
-                                CPPUNIT_ASSERT_EQUAL(dt.GetYear() % 100,
-                                                     dt2.GetYear() % 100);
+                                CHECK( dt.GetYear() % 100 == dt2.GetYear() % 100);
 
                                 dt2.SetYear(dt.GetYear());
                             }
                             // fall through and compare everything
+                            wxFALLTHROUGH;
 
                         case CompareBoth:
-                            CPPUNIT_ASSERT_EQUAL( dt, dt2 );
+                            CHECK( dt == dt2 );
                             break;
 
                         case CompareDate:
-                            CPPUNIT_ASSERT( dt.IsSameDate(dt2) );
+                            CHECK( dt.IsSameDate(dt2) );
                             break;
 
                         case CompareTime:
-                            CPPUNIT_ASSERT( dt.IsSameTime(dt2) );
+                            CHECK( dt.IsSameTime(dt2) );
                             break;
 
                         case CompareNone:
@@ -821,6 +844,8 @@ void DateTimeTestCase::TestTimeFormat()
             }
         }
     }
+
+    CPPUNIT_ASSERT(wxDateTime::Now().Format("%%") == "%");
 
     wxDateTime dt;
 
@@ -994,31 +1019,18 @@ void DateTimeTestCase::TestTimeSpanFormat()
 
 void DateTimeTestCase::TestTimeTicks()
 {
-    static const wxDateTime::TimeZone TZ_LOCAL(wxDateTime::Local);
-    static const wxDateTime::TimeZone TZ_TEST(wxDateTime::NZST);
-
-    // this offset is needed to make the test work in any time zone when we
-    // only have expected test results in UTC in testDates
-    static const long tzOffset = TZ_LOCAL.GetOffset() - TZ_TEST.GetOffset();
-
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d = testDates[n];
         if ( d.gmticks == -1 )
             continue;
 
-        wxDateTime dt = d.DT().MakeTimezone(TZ_TEST, true /* no DST */);
+        const wxDateTime dt = d.DT().FromTimezone(wxDateTime::UTC);
 
-        // GetValue() returns internal UTC-based representation, we need to
-        // convert it to local TZ before comparing
-        time_t ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
-        if ( dt.IsDST() )
-            ticks += 3600;
-        CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks + tzOffset );
+        INFO("n=" << n);
 
-        dt = d.DT().FromTimezone(wxDateTime::UTC);
-        ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks );
+        time_t ticks = (dt.GetValue() / 1000).ToLong();
+        CHECK( d.gmticks == ticks );
     }
 }
 
@@ -1566,21 +1578,99 @@ void DateTimeTestCase::TestTranslateFromUnicodeFormat()
 
 void DateTimeTestCase::TestConvToFromLocalTZ()
 {
-    // Choose a date when the DST is on in many time zones: in this case,
-    // converting to/from local TZ does modify the object because it
-    // adds/subtracts DST to/from it, so to get the expected results we need to
-    // explicitly disable DST support in these functions.
+    // Choose a date when the DST is on in many time zones and verify that
+    // converting from/to local time zone still doesn't modify time in this
+    // case as this used to be broken.
     wxDateTime dt(18, wxDateTime::Apr, 2017, 19);
 
-    CPPUNIT_ASSERT_EQUAL( dt.FromTimezone(wxDateTime::Local, true), dt );
-    CPPUNIT_ASSERT_EQUAL( dt.ToTimezone(wxDateTime::Local, true), dt );
+    CHECK( dt.FromTimezone(wxDateTime::Local) == dt );
+    CHECK( dt.ToTimezone(wxDateTime::Local) == dt );
 
-    // And another one when it is off: in this case, there is no need to pass
-    // "true" as "noDST" argument to these functions.
+    // For a date when the DST is not used, this always worked, but still
+    // verify that it continues to.
     dt = wxDateTime(18, wxDateTime::Jan, 2018, 19);
 
-    CPPUNIT_ASSERT_EQUAL( dt.FromTimezone(wxDateTime::Local), dt );
-    CPPUNIT_ASSERT_EQUAL( dt.ToTimezone(wxDateTime::Local), dt );
+    CHECK( dt.FromTimezone(wxDateTime::Local) == dt );
+    CHECK( dt.ToTimezone(wxDateTime::Local) == dt );
+}
+
+static void DoTestSetFunctionsOnDST(const wxDateTime &orig)
+{
+#define DST_TEST_FUN(func) \
+    { \
+        wxDateTime copy = orig; \
+        copy.func; \
+        INFO("Original date=" << orig << ", modified=" << copy); \
+        CHECK(orig.GetHour() == copy.GetHour()); \
+    }
+
+    // Test the functions by just calling them with their existing values
+    // This is primarily just ensuring that we're not converting to a Tm and back
+    // but also if we do that we're handling it properly
+    DST_TEST_FUN(SetMinute(orig.GetMinute()));
+    DST_TEST_FUN(SetSecond(orig.GetSecond()));
+    DST_TEST_FUN(SetMillisecond(orig.GetMillisecond()));
+    DST_TEST_FUN(SetDay(orig.GetDay()));
+    DST_TEST_FUN(SetMonth(orig.GetMonth()));
+    DST_TEST_FUN(SetYear(orig.GetYear()));
+
+    // Test again by actually changing the time (this shouldn't affect DST)
+    // Can't test changing the date because that WILL affect DST
+    DST_TEST_FUN(SetMinute((orig.GetMinute() + 1) % 60));
+    DST_TEST_FUN(SetSecond((orig.GetSecond() + 1) % 60));
+    DST_TEST_FUN(SetMillisecond((orig.GetMillisecond() + 1) % 1000));
+
+    {
+        // Special case for set hour since it's ambiguous at DST we don't care if IsDST matches
+        wxDateTime copy = orig;
+        copy.SetHour(orig.GetHour());
+        INFO("Original date=" << orig << ", modified=" << copy);
+        CHECK(orig.GetHour() == copy.GetHour());
+    }
+#undef DST_TEST_FUN
+}
+
+TEST_CASE("wxDateTime::SetOnDST", "[datetime][dst]")
+{
+    wxDateTime dst = wxDateTime::GetEndDST();
+    if ( !dst.IsValid() )
+    {
+        WARN("Skipping test as DST period couldn't be determined.");
+        return;
+    }
+
+    SECTION("An hour before DST end")
+    {
+        DoTestSetFunctionsOnDST(dst - wxTimeSpan::Hour());
+    }
+
+    SECTION("At DST end")
+    {
+        DoTestSetFunctionsOnDST(dst);
+    }
+}
+
+// Tests random problems that used to appear in BST time zone during DST.
+// This test is disabled by default as it only passes in BST time zone, due to
+// the times hard-coded in it.
+TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
+{
+    SECTION("bug-17220")
+    {
+        wxDateTime dt;
+        dt.Set(22, wxDateTime::Oct, 2015, 10, 10, 10, 10);
+        REQUIRE( dt.IsDST() );
+
+        CHECK( dt.GetTm().hour == 10 );
+        CHECK( dt.GetTm(wxDateTime::UTC).hour == 9 );
+
+        CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::Local ) == "2015-10-22 10:10:10" );
+        CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::UTC   ) == "2015-10-22 09:10:10" );
+
+        dt.MakeFromUTC();
+        CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::Local ) == "2015-10-22 11:10:10" );
+        CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::UTC   ) == "2015-10-22 10:10:10" );
+    }
 }
 
 #endif // wxUSE_DATETIME

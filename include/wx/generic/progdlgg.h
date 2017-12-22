@@ -12,6 +12,7 @@
 #define __PROGDLGH_G__
 
 #include "wx/dialog.h"
+#include "wx/weakref.h"
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
@@ -43,18 +44,18 @@ public:
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
 
-    void Resume();
+    virtual void Resume();
 
-    int GetValue() const;
-    int GetRange() const;
-    wxString GetMessage() const;
+    virtual int GetValue() const;
+    virtual int GetRange() const;
+    virtual wxString GetMessage() const;
 
-    void SetRange(int maximum);
+    virtual void SetRange(int maximum);
 
     // Return whether "Cancel" or "Skip" button was pressed, always return
     // false if the corresponding button is not shown.
-    bool WasCancelled() const;
-    bool WasSkipped() const;
+    virtual bool WasCancelled() const;
+    virtual bool WasSkipped() const;
 
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() wxOVERRIDE { wxDialog::Update(); }
@@ -104,6 +105,9 @@ protected:
     // Converts seconds to HH:mm:ss format.
     static wxString GetFormattedTime(unsigned long timeInSec);
 
+    // Create a new event loop if there is no currently running one.
+    void EnsureActiveEventLoopExists();
+
     // callback for optional abort button
     void OnCancel(wxCommandEvent&);
 
@@ -120,8 +124,8 @@ protected:
     // the dialog was shown
     void ReenableOtherWindows();
 
-    // Set the top level parent we store from the parent window provided when
-    // creating the dialog.
+    // Store the parent window as wxWindow::m_parent and also set the top level
+    // parent reference we store in this class itself.
     void SetTopParent(wxWindow* parent);
 
     // return the top level parent window of this dialog (may be NULL)
@@ -183,8 +187,9 @@ private:
                  *m_estimated,
                  *m_remaining;
 
-    // parent top level window (may be NULL)
-    wxWindow *m_parentTop;
+    // Reference to the parent top level window, automatically becomes NULL if
+    // it it is destroyed and could be always NULL if it's not given at all.
+    wxWindowRef m_parentTop;
 
     // Progress dialog styles: this is not the same as m_windowStyle because
     // wxPD_XXX constants clash with the existing TLW styles so to be sure we

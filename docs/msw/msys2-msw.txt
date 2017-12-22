@@ -21,18 +21,17 @@ Building steps:
 #   The 32 bit Mingw packages are prefixed with "mingw-w64-i686-";
 #   Change the prefix to "mingw-w64-x86_64-" if you wish to do 64 bit.
 
-pacman -S make
-pacman -S mingw-w64-i686-cppunit
-pacman -S mingw-w64-i686-libjpeg-turbo
-pacman -S mingw-w64-i686-libpng
-pacman -S mingw-w64-i686-libtiff
-pacman -S mingw-w64-i686-gcc
+pacman -S --needed --noconfirm make
+pacman -S --needed --noconfirm mingw-w64-i686-libjpeg-turbo
+pacman -S --needed --noconfirm mingw-w64-i686-libpng
+pacman -S --needed --noconfirm mingw-w64-i686-libtiff
+pacman -S --needed --noconfirm mingw-w64-i686-gcc
 
 # Packages that are needed but are normally installed already.
-pacman -S mingw-w64-i686-gcc-libs
-pacman -S mingw-w64-i686-expat
-pacman -S mingw-w64-i686-xz
-pacman -S mingw-w64-i686-zlib
+pacman -S --needed --noconfirm mingw-w64-i686-gcc-libs
+pacman -S --needed --noconfirm mingw-w64-i686-expat
+pacman -S --needed --noconfirm mingw-w64-i686-xz
+pacman -S --needed --noconfirm mingw-w64-i686-zlib
 
 
 #2. Build the wxMSW static library
@@ -60,25 +59,34 @@ cd build-msw-static && make && cd ..
 
 
 #3  Build and run the minimal static sample
-#3a.Build the minimal sample
+#3a.Clean the minimal sample
+cd build-msw-static/samples/minimal && make clean && cd ../../..
+
+#3b.Build the minimal sample
 cd build-msw-static/samples/minimal && make && cd ../../..
 
-#3b.Run the minimal sample
+#3c.Run the minimal sample
 ./build-msw-static/samples/minimal/minimal.exe
 
 
-#4  Build and run the typetest static sample to verify MIME database works
+#4 Clean the static samples
+cd build-msw-static/samples && make clean && cd ../..
+
+#5  Build and run the typetest static sample to verify MIME database works
 cd build-msw-static/samples/typetest && make && cd ../../..
 ./build-msw-static/samples/typetest/typetest.exe
 
-#5  Build and run the drawing static sample
+#6  Build and run the drawing static sample
 cd build-msw-static/samples/drawing && make && cd ../../..
 cd samples/drawing && ../../build-msw-static/samples/drawing/drawing.exe && cd ../..
 
-#6  Build and run the splash static sample
+#7  Build and run the splash static sample
 cd build-msw-static/samples/splash && make && cd ../../..
 cd samples/splash && ../../build-msw-static/samples/splash/splash.exe && cd ../..
 
-#7  Build and run the widgets static sample
+#8  Build and run the widgets static sample
 cd build-msw-static/samples/widgets && make && cd ../../..
 cd samples/widgets && ../../build-msw-static/samples/widgets/widgets.exe && cd ../..
+
+#9  Build all the rest of the static samples
+cd build-msw-static/samples && make && cd ../..

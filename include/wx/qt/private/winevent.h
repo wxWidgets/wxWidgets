@@ -11,13 +11,15 @@
 #ifndef _WX_QT_EVENTSIGNALFORWARDER_H_
 #define _WX_QT_EVENTSIGNALFORWARDER_H_
 
+#include <QtCore/QEvent>
+#include <QtGui/QCloseEvent>
+
 #include "wx/log.h"
 #include "wx/window.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
-#include <QtCore/QEvent>
-#include <QtGui/QPaintEvent>
+class QPaintEvent;
 
 template< typename Handler >
 class wxQtSignalHandler

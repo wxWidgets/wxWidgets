@@ -57,6 +57,8 @@ private:
         // These tests run for single line text controls.
         wxTEXT_ENTRY_TESTS();
         WXUISIM_TEST( MaxLength );
+        CPPUNIT_TEST( PositionToXYSingleLine );
+        CPPUNIT_TEST( XYToPositionSingleLine );
         SINGLE_AND_MULTI_TESTS();
 
         // Now switch to the multi-line text controls.
@@ -69,6 +71,7 @@ private:
         // don't pass neither but this could be a bug.
         CPPUNIT_TEST( SetValue );
         CPPUNIT_TEST( Selection );
+        CPPUNIT_TEST( InsertionPoint );
         CPPUNIT_TEST( Replace );
         WXUISIM_TEST( Editable );
         CPPUNIT_TEST( CopyPaste );
@@ -89,6 +92,14 @@ private:
         CPPUNIT_TEST( PositionToCoords );
         CPPUNIT_TEST( PositionToCoordsRich );
         CPPUNIT_TEST( PositionToCoordsRich2 );
+        CPPUNIT_TEST( PositionToXYMultiLine );
+        CPPUNIT_TEST( XYToPositionMultiLine );
+#if wxUSE_RICHEDIT
+        CPPUNIT_TEST( PositionToXYMultiLineRich );
+        CPPUNIT_TEST( XYToPositionMultiLineRich );
+        CPPUNIT_TEST( PositionToXYMultiLineRich2 );
+        CPPUNIT_TEST( XYToPositionMultiLineRich2 );
+#endif // wxUSE_RICHEDIT
     CPPUNIT_TEST_SUITE_END();
 
     void PseudoTestSwitchToMultiLineStyle()
@@ -111,8 +122,20 @@ private:
     void PositionToCoords();
     void PositionToCoordsRich();
     void PositionToCoordsRich2();
+    void PositionToXYMultiLine();
+    void XYToPositionMultiLine();
+#if wxUSE_RICHEDIT
+    void PositionToXYMultiLineRich();
+    void XYToPositionMultiLineRich();
+    void PositionToXYMultiLineRich2();
+    void XYToPositionMultiLineRich2();
+#endif // wxUSE_RICHEDIT
+    void PositionToXYSingleLine();
+    void XYToPositionSingleLine();
 
     void DoPositionToCoordsTestWithStyle(long style);
+    void DoPositionToXYMultiLine(long style);
+    void DoXYToPositionMultiLine(long style);
 
     // Create the control with the following styles added to ms_style which may
     // (or not) already contain wxTE_MULTILINE.
@@ -353,6 +376,12 @@ void TextCtrlTestCase::ProcessEnter()
 void TextCtrlTestCase::Url()
 {
 #if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
+    // For some unfathomable reason, this test consistently fails when run in
+    // AppVeyor CI environment, even though it passes locally, so skip it
+    // there.
+    if ( wxGetEnv("APPVEYOR", NULL) )
+        return;
+
     delete m_text;
     CreateText(wxTE_RICH | wxTE_AUTO_URL);
 
@@ -374,7 +403,7 @@ void TextCtrlTestCase::Style()
 #ifndef __WXOSX__
     delete m_text;
     // We need wxTE_RICH under windows for style support
-    CreateText(wxTE_RICH);
+    CreateText(wxTE_MULTILINE|wxTE_RICH);
 
     // Red text on a white background
     m_text->SetDefaultStyle(wxTextAttr(*wxRED, *wxWHITE));
@@ -408,20 +437,21 @@ void TextCtrlTestCase::Style()
     wxTextAttr style;
 
     // We have to check that styles are supported
-    if(m_text->GetStyle(3, style))
+    if ( !m_text->GetStyle(3, style) )
     {
-        CPPUNIT_ASSERT_EQUAL(style.GetTextColour(), *wxRED);
-        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour(), *wxWHITE);
+        WARN("Retrieving text style not supported, skipping test.");
+        return;
     }
+
+    CHECK( style.GetTextColour() == *wxRED );
+    CHECK( style.GetBackgroundColour() == *wxWHITE );
 
     // And then setting the style
-    if(m_text->SetStyle(15, 18, style))
-    {
-        m_text->GetStyle(17, style);
+    REQUIRE( m_text->SetStyle(15, 18, style) );
 
-        CPPUNIT_ASSERT_EQUAL(style.GetTextColour(), *wxRED);
-        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour(), *wxWHITE);
-    }
+    REQUIRE( m_text->GetStyle(17, style) );
+    CHECK( style.GetTextColour() == *wxRED );
+    CHECK( style.GetBackgroundColour() == *wxWHITE );
 #endif
 }
 
@@ -580,7 +610,7 @@ void TextCtrlTestCase::PositionToCoordsRich2()
 void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
 {
     delete m_text;
-    CreateText(style);
+    CreateText(style|wxTE_MULTILINE);
 
     // Asking for invalid index should fail.
     WX_ASSERT_FAILS_WITH_ASSERT( m_text->PositionToCoords(1) );
@@ -644,12 +674,536 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
     // last position is in its bounds.
     m_text->SetInsertionPointEnd();
 
-    CPPUNIT_ASSERT( m_text->PositionToCoords(0).y < 0 );
-    CPPUNIT_ASSERT
-    (
-        m_text->PositionToCoords(m_text->GetInsertionPoint()).y <= TEXT_HEIGHT
-    );
+    const int pos = m_text->GetInsertionPoint();
+
+    // wxGTK needs to yield here to update the text control.
+#ifdef __WXGTK__
+    wxStopWatch sw;
+    while ( m_text->PositionToCoords(0).y == 0 ||
+                m_text->PositionToCoords(pos).y > TEXT_HEIGHT )
+    {
+        if ( sw.Time() > 1000 )
+        {
+            FAIL("Timed out waiting for wxTextCtrl update.");
+            break;
+        }
+
+        wxYield();
+    }
+#endif // __WXGTK__
+
+    wxPoint coords = m_text->PositionToCoords(0);
+    INFO("First position coords = " << coords);
+    CPPUNIT_ASSERT( coords.y < 0 );
+
+    coords = m_text->PositionToCoords(pos);
+    INFO("Position is " << pos << ", coords = " << coords);
+    CPPUNIT_ASSERT( coords.y <= TEXT_HEIGHT );
 }
 
+void TextCtrlTestCase::PositionToXYMultiLine()
+{
+    DoPositionToXYMultiLine(0);
+}
+
+#if wxUSE_RICHEDIT
+void TextCtrlTestCase::PositionToXYMultiLineRich()
+{
+    DoPositionToXYMultiLine(wxTE_RICH);
+}
+
+void TextCtrlTestCase::PositionToXYMultiLineRich2()
+{
+    DoPositionToXYMultiLine(wxTE_RICH2);
+}
+#endif // wxUSE_RICHEDIT
+
+void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
+{
+    delete m_text;
+    CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
+
+#if defined(__WXMSW__)
+    const bool isRichEdit = (style & (wxTE_RICH | wxTE_RICH2)) != 0;
+#endif
+
+    typedef struct { long x, y; } XYPos;
+    bool ok;
+    wxString text;
+
+    // empty field
+    m_text->Clear();
+    const long numChars_0 = 0;
+    wxASSERT(numChars_0 == text.Length());
+    XYPos coords_0[numChars_0+1] =
+        { { 0, 0 } };
+
+    CPPUNIT_ASSERT_EQUAL( numChars_0, m_text->GetLastPosition() );
+    for ( long i = 0; i < (long)WXSIZEOF(coords_0); i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( true, ok );
+        CPPUNIT_ASSERT_EQUAL( coords_0[i].x, x );
+        CPPUNIT_ASSERT_EQUAL( coords_0[i].y, y );
+    }
+    ok = m_text->PositionToXY(WXSIZEOF(coords_0), NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( false, ok );
+
+    // one line
+    text = wxS("1234");
+    m_text->SetValue(text);
+    const long numChars_1 = 4;
+    wxASSERT( numChars_1 == text.Length() );
+    XYPos coords_1[numChars_1+1] =
+        { { 0, 0 }, { 1, 0 }, { 2, 0}, { 3, 0 }, { 4, 0 } };
+
+    CPPUNIT_ASSERT_EQUAL( numChars_1, m_text->GetLastPosition() );
+    for ( long i = 0; i < (long)WXSIZEOF(coords_1); i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( true, ok );
+        CPPUNIT_ASSERT_EQUAL( coords_1[i].x, x );
+        CPPUNIT_ASSERT_EQUAL( coords_1[i].y, y );
+    }
+    ok = m_text->PositionToXY(WXSIZEOF(coords_1), NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( false, ok );
+
+    // few lines
+    text = wxS("123\nab\nX");
+    m_text->SetValue(text);
+
+#if defined(__WXMSW__)
+    // Take into account that every new line mark occupies
+    // two characters, not one.
+    const long numChars_msw_2 = 8 + 2;
+    // Note: Two new line characters refer to the same X-Y position.
+    XYPos coords_2_msw[numChars_msw_2 + 1] =
+        { { 0, 0 },{ 1, 0 },{ 2, 0 },{ 3, 0 },{ 3, 0 },
+          { 0, 1 },{ 1, 1 },{ 2, 1 },{ 2, 1 },
+          { 0, 2 },{ 1, 2 } };
+#endif // WXMSW
+
+    const long numChars_2 = 8;
+    wxASSERT(numChars_2 == text.Length());
+    XYPos coords_2[numChars_2 + 1] =
+        { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 },
+          { 0, 1 }, { 1, 1 }, { 2, 1 },
+          { 0, 2 }, { 1, 2 } };
+
+    const long &ref_numChars_2 =
+#if defined(__WXMSW__)
+        isRichEdit ? numChars_2 : numChars_msw_2;
+#else
+        numChars_2;
+#endif
+
+    XYPos *ref_coords_2 =
+#if defined(__WXMSW__)
+        isRichEdit ? coords_2 : coords_2_msw;
+#else
+        coords_2;
+#endif
+
+    CPPUNIT_ASSERT_EQUAL( ref_numChars_2, m_text->GetLastPosition() );
+    for ( long i = 0; i < ref_numChars_2+1; i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( true, ok );
+        CPPUNIT_ASSERT_EQUAL( ref_coords_2[i].x, x );
+        CPPUNIT_ASSERT_EQUAL( ref_coords_2[i].y, y );
+    }
+    ok = m_text->PositionToXY(ref_numChars_2 + 1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( false, ok );
+
+    // only empty lines
+    text = wxS("\n\n\n");
+    m_text->SetValue(text);
+
+#if defined(__WXMSW__)
+    // Take into account that every new line mark occupies
+    // two characters, not one.
+    const long numChars_msw_3 = 3 + 3;
+    // Note: Two new line characters refer to the same X-Y position.
+    XYPos coords_3_msw[numChars_msw_3 + 1] =
+        { { 0, 0 },{ 0, 0 },
+          { 0, 1 },{ 0, 1 },
+          { 0, 2 },{ 0, 2 },
+          { 0, 3 } };
+#endif // WXMSW
+
+    const long numChars_3 = 3;
+    wxASSERT(numChars_3 == text.Length());
+    XYPos coords_3[numChars_3+1] =
+        { { 0, 0 },
+          { 0, 1 },
+          { 0, 2 },
+          { 0, 3 } };
+
+    const long &ref_numChars_3 =
+#if defined(__WXMSW__)
+        isRichEdit ? numChars_3 : numChars_msw_3;
+#else
+        numChars_3;
+#endif
+
+    XYPos *ref_coords_3 =
+#if defined(__WXMSW__)
+        isRichEdit ? coords_3 : coords_3_msw;
+#else
+        coords_3;
+#endif
+
+    CPPUNIT_ASSERT_EQUAL( ref_numChars_3, m_text->GetLastPosition() );
+    for ( long i = 0; i < ref_numChars_3+1; i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( true, ok );
+        CPPUNIT_ASSERT_EQUAL( ref_coords_3[i].x, x );
+        CPPUNIT_ASSERT_EQUAL( ref_coords_3[i].y, y );
+    }
+    ok = m_text->PositionToXY(ref_numChars_3 + 1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( false, ok );
+
+    // mixed empty/non-empty lines
+    text = wxS("123\na\n\nX\n\n");
+    m_text->SetValue(text);
+
+#if defined(__WXMSW__)
+    // Take into account that every new line mark occupies
+    // two characters, not one.
+    const long numChars_msw_4 = 10 + 5;
+    // Note: Two new line characters refer to the same X-Y position.
+    XYPos coords_4_msw[numChars_msw_4 + 1] =
+        { { 0, 0 },{ 1, 0 },{ 2, 0 },{ 3, 0 },{ 3, 0 },
+          { 0, 1 },{ 1, 1 },{ 1, 1 },
+          { 0, 2 },{ 0, 2 },
+          { 0, 3 },{ 1, 3 },{ 1, 3 },
+          { 0, 4 },{ 0, 4 },
+          { 0, 5 } };
+#endif // WXMSW
+
+    const long numChars_4 = 10;
+    wxASSERT(numChars_4 == text.Length());
+    XYPos coords_4[numChars_4+1] =
+        { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 },
+          { 0, 1 }, { 1, 1 },
+          { 0, 2 },
+          { 0, 3 }, { 1, 3 },
+          { 0, 4 },
+          { 0, 5 } };
+
+    const long &ref_numChars_4 =
+#if defined(__WXMSW__)
+        isRichEdit ? numChars_4 : numChars_msw_4;
+#else
+        numChars_4;
+#endif
+
+    XYPos *ref_coords_4 =
+#if defined(__WXMSW__)
+        isRichEdit ? coords_4 : coords_4_msw;
+#else
+        coords_4;
+#endif
+
+    CPPUNIT_ASSERT_EQUAL( ref_numChars_4, m_text->GetLastPosition() );
+    for ( long i = 0; i < ref_numChars_4+1; i++ )
+    {
+        long x, y;
+        ok = m_text->PositionToXY(i, &x, &y);
+        CPPUNIT_ASSERT_EQUAL( true, ok );
+        CPPUNIT_ASSERT_EQUAL( ref_coords_4[i].x, x );
+        CPPUNIT_ASSERT_EQUAL( ref_coords_4[i].y, y  );
+    }
+    ok = m_text->PositionToXY(ref_numChars_4 + 1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( false, ok );
+}
+
+void TextCtrlTestCase::XYToPositionMultiLine()
+{
+    DoXYToPositionMultiLine(0);
+}
+
+#if wxUSE_RICHEDIT
+void TextCtrlTestCase::XYToPositionMultiLineRich()
+{
+    DoXYToPositionMultiLine(wxTE_RICH);
+}
+
+void TextCtrlTestCase::XYToPositionMultiLineRich2()
+{
+    DoXYToPositionMultiLine(wxTE_RICH2);
+}
+#endif // wxUSE_RICHEDIT
+
+void TextCtrlTestCase::DoXYToPositionMultiLine(long style)
+{
+    delete m_text;
+    CreateText(style|wxTE_MULTILINE|wxTE_DONTWRAP);
+
+#if defined(__WXMSW__)
+    const bool isRichEdit = (style & (wxTE_RICH | wxTE_RICH2)) != 0;
+#endif
+
+    wxString text;
+    // empty field
+    m_text->Clear();
+    const long maxLineLength_0 = 0+1;
+    const long numLines_0 = 1;
+    CPPUNIT_ASSERT_EQUAL( numLines_0, m_text->GetNumberOfLines() );
+    long pos_0[numLines_0+1][maxLineLength_0+1] =
+        { {  0, -1 },
+          { -1, -1 } };
+    for ( long y = 0; y < numLines_0+1; y++ )
+        for( long x = 0; x < maxLineLength_0+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
+            CPPUNIT_ASSERT_EQUAL( pos_0[y][x], p );
+        }
+
+    // one line
+    text = wxS("1234");
+    m_text->SetValue(text);
+    const long maxLineLength_1 = 4+1;
+    const long numLines_1 = 1;
+    CPPUNIT_ASSERT_EQUAL( numLines_1, m_text->GetNumberOfLines() );
+    long pos_1[numLines_1+1][maxLineLength_1+1] =
+        { {  0,  1,  2,  3,  4, -1 },
+          { -1, -1, -1, -1, -1, -1 } };
+    for ( long y = 0; y < numLines_1+1; y++ )
+        for( long x = 0; x < maxLineLength_1+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
+            CPPUNIT_ASSERT_EQUAL( pos_1[y][x], p  );
+        }
+
+    // few lines
+    text = wxS("123\nab\nX");
+    m_text->SetValue(text);
+    const long maxLineLength_2 = 4;
+    const long numLines_2 = 3;
+    CPPUNIT_ASSERT_EQUAL( numLines_2, m_text->GetNumberOfLines() );
+#if defined(__WXMSW__)
+    // Note: New lines are occupied by two characters.
+    long pos_2_msw[numLines_2 + 1][maxLineLength_2 + 1] =
+        { {  0,  1,  2,  3, -1 },   // New line occupies positions 3, 4
+          {  5,  6,  7, -1, -1 },   // New line occupies positions 7, 8
+          {  9, 10, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 } };
+#endif // WXMSW
+    long pos_2[numLines_2+1][maxLineLength_2+1] =
+        { {  0,  1,  2,  3, -1 },
+          {  4,  5,  6, -1, -1 },
+          {  7,  8, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 } };
+
+    long (&ref_pos_2)[numLines_2 + 1][maxLineLength_2 + 1] =
+#if defined(__WXMSW__)
+        isRichEdit ? pos_2 : pos_2_msw;
+#else
+        pos_2;
+#endif
+
+    for ( long y = 0; y < numLines_2+1; y++ )
+        for( long x = 0; x < maxLineLength_2+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
+            CPPUNIT_ASSERT_EQUAL( ref_pos_2[y][x], p );
+        }
+
+    // only empty lines
+    text = wxS("\n\n\n");
+    m_text->SetValue(text);
+    const long maxLineLength_3 = 1;
+    const long numLines_3 = 4;
+    CPPUNIT_ASSERT_EQUAL( numLines_3, m_text->GetNumberOfLines() );
+#if defined(__WXMSW__)
+    // Note: New lines are occupied by two characters.
+    long pos_3_msw[numLines_3 + 1][maxLineLength_3 + 1] =
+        { {  0, -1 },    // New line occupies positions 0, 1
+          {  2, -1 },    // New line occupies positions 2, 3
+          {  4, -1 },    // New line occupies positions 4, 5
+          {  6, -1 },
+          { -1, -1 } };
+#endif // WXMSW
+    long pos_3[numLines_3+1][maxLineLength_3+1] =
+        { {  0, -1 },
+          {  1, -1 },
+          {  2, -1 },
+          {  3, -1 },
+          { -1, -1 } };
+
+    long (&ref_pos_3)[numLines_3 + 1][maxLineLength_3 + 1] =
+#if defined(__WXMSW__)
+        isRichEdit ? pos_3 : pos_3_msw;
+#else
+        pos_3;
+#endif
+
+    for ( long y = 0; y < numLines_3+1; y++ )
+        for( long x = 0; x < maxLineLength_3+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
+            CPPUNIT_ASSERT_EQUAL( ref_pos_3[y][x], p );
+        }
+
+    // mixed empty/non-empty lines
+    text = wxS("123\na\n\nX\n\n");
+    m_text->SetValue(text);
+    const long maxLineLength_4 = 4;
+    const long numLines_4 = 6;
+    CPPUNIT_ASSERT_EQUAL( numLines_4, m_text->GetNumberOfLines() );
+#if defined(__WXMSW__)
+    // Note: New lines are occupied by two characters.
+    long pos_4_msw[numLines_4 + 1][maxLineLength_4 + 1] =
+        { {  0,  1,  2,  3, -1 },    // New line occupies positions 3, 4
+          {  5,  6, -1, -1, -1 },    // New line occupies positions 6, 7
+          {  8, -1, -1, -1, -1 },    // New line occupies positions 8, 9
+          { 10, 11, -1, -1, -1 },    // New line occupies positions 11, 12
+          { 13, -1, -1, -1, -1 },    // New line occupies positions 13, 14
+          { 15, -1, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 } };
+#endif // WXMSW
+    long pos_4[numLines_4+1][maxLineLength_4+1] =
+        { {  0,  1,  2,  3, -1 },
+          {  4,  5, -1, -1, -1 },
+          {  6, -1, -1, -1, -1 },
+          {  7,  8, -1, -1, -1 },
+          {  9, -1, -1, -1, -1 },
+          { 10, -1, -1, -1, -1 },
+          { -1, -1, -1, -1, -1 } };
+
+    long (&ref_pos_4)[numLines_4 + 1][maxLineLength_4 + 1] =
+#if defined(__WXMSW__)
+        isRichEdit ? pos_4 : pos_4_msw;
+#else
+        pos_4;
+#endif
+
+    for ( long y = 0; y < numLines_4+1; y++ )
+        for( long x = 0; x < maxLineLength_4+1; x++ )
+        {
+            long p = m_text->XYToPosition(x, y);
+            INFO("x=" << x << ", y=" << y);
+            CPPUNIT_ASSERT_EQUAL( ref_pos_4[y][x], p );
+        }
+}
+
+void TextCtrlTestCase::PositionToXYSingleLine()
+{
+    delete m_text;
+    CreateText(wxTE_DONTWRAP);
+
+    bool ok;
+    wxString text;
+    // empty field
+    m_text->Clear();
+    const long numChars_0 = 0;
+    CPPUNIT_ASSERT_EQUAL( numChars_0, m_text->GetLastPosition() );
+    for ( long i = 0; i <= numChars_0; i++ )
+    {
+        long x0, y0;
+        ok = m_text->PositionToXY(i, &x0, &y0);
+        CPPUNIT_ASSERT_EQUAL( true, ok );
+        CPPUNIT_ASSERT_EQUAL( i, x0 );
+        CPPUNIT_ASSERT_EQUAL( 0, y0 );
+    }
+    ok = m_text->PositionToXY(numChars_0+1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( false, ok );
+
+    // pure one line
+    text = wxS("1234");
+    m_text->SetValue(text);
+    const long numChars_1 = text.Length();
+    CPPUNIT_ASSERT_EQUAL( numChars_1, m_text->GetLastPosition() );
+    for ( long i = 0; i <= numChars_1; i++ )
+    {
+        long x1, y1;
+        ok = m_text->PositionToXY(i, &x1, &y1);
+        CPPUNIT_ASSERT_EQUAL( true, ok );
+        CPPUNIT_ASSERT_EQUAL( i, x1 );
+        CPPUNIT_ASSERT_EQUAL( 0, y1 );
+    }
+    ok = m_text->PositionToXY(numChars_1+1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( false, ok );
+
+    // with new line characters
+    text = wxS("123\nab\nX");
+    m_text->SetValue(text);
+    const long numChars_2 = text.Length();
+    CPPUNIT_ASSERT_EQUAL( numChars_2, m_text->GetLastPosition() );
+    for ( long i = 0; i <= numChars_2; i++ )
+    {
+        long x2, y2;
+        ok = m_text->PositionToXY(i, &x2, &y2);
+        CPPUNIT_ASSERT_EQUAL( true, ok );
+        CPPUNIT_ASSERT_EQUAL( i, x2 );
+        CPPUNIT_ASSERT_EQUAL( 0, y2 );
+    }
+    ok = m_text->PositionToXY(numChars_2+1, NULL, NULL);
+    CPPUNIT_ASSERT_EQUAL( false, ok );
+}
+
+void TextCtrlTestCase::XYToPositionSingleLine()
+{
+    delete m_text;
+    CreateText(wxTE_DONTWRAP);
+
+    wxString text;
+    // empty field
+    m_text->Clear();
+    CPPUNIT_ASSERT_EQUAL( 1, m_text->GetNumberOfLines() );
+    for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
+    {
+        long p0 = m_text->XYToPosition(x, 0);
+        if ( x <= m_text->GetLastPosition() )
+            CPPUNIT_ASSERT_EQUAL( x, p0 );
+        else
+            CPPUNIT_ASSERT_EQUAL( -1, p0 );
+
+        p0 = m_text->XYToPosition(x, 1);
+        CPPUNIT_ASSERT_EQUAL( -1, p0 );
+    }
+
+    // pure one line
+    text = wxS("1234");
+    m_text->SetValue(text);
+    CPPUNIT_ASSERT_EQUAL( 1, m_text->GetNumberOfLines() );
+    for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
+    {
+        long p1 = m_text->XYToPosition(x, 0);
+        if ( x <= m_text->GetLastPosition() )
+            CPPUNIT_ASSERT_EQUAL( x, p1 );
+        else
+            CPPUNIT_ASSERT_EQUAL( -1, p1 );
+
+        p1 = m_text->XYToPosition(x, 1);
+        CPPUNIT_ASSERT_EQUAL( -1, p1 );
+    }
+
+    // with new line characters
+    text = wxS("123\nab\nX");
+    m_text->SetValue(text);
+    CPPUNIT_ASSERT_EQUAL( 1, m_text->GetNumberOfLines() );
+    for( long x = 0; x < m_text->GetLastPosition()+2; x++ )
+    {
+        long p2 = m_text->XYToPosition(x, 0);
+        if ( x <= m_text->GetLastPosition() )
+            CPPUNIT_ASSERT_EQUAL( x, p2 );
+        else
+            CPPUNIT_ASSERT_EQUAL( -1, p2 );
+
+        p2 = m_text->XYToPosition(x, 1);
+        CPPUNIT_ASSERT_EQUAL( -1, p2 );
+    }
+}
 
 #endif //wxUSE_TEXTCTRL

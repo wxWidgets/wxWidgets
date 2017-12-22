@@ -146,7 +146,7 @@ wxPG_EX_INIT_NOCAT                  = 0x00001000,
 wxPG_EX_NO_FLAT_TOOLBAR             = 0x00002000,
 
 /**
-    Shows alphabetic/categoric mode buttons from tool bar.
+    Shows alphabetic/categoric mode buttons on wxPropertyGridManager tool bar.
     @hideinitializer
 */
 wxPG_EX_MODE_BUTTONS                = 0x00008000,
@@ -185,7 +185,7 @@ wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
 wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES    = 0x00400000,
 
 /**
-    Hides page selection buttons from tool bar.
+    Hides page selection buttons from wxPropertyGridManager tool bar.
     @hideinitializer
 */
 wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000,
@@ -219,12 +219,12 @@ wxPG_EX_MULTIPLE_SELECTION              = 0x02000000,
 */
 wxPG_EX_ENABLE_TLP_TRACKING             = 0x04000000,
 
-/** Don't show divider above toolbar, on Windows.
+/** Don't show divider above wxPropertyGridManager toolbar (wxMSW only).
     @hideinitializer
 */
 wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x04000000,
 
-/** Show a separator below the toolbar.
+/** Show a separator below the wxPropertyGridManager toolbar.
     @hideinitializer
 */
 wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000,
@@ -235,14 +235,23 @@ wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000,
 */
 wxPG_EX_ALWAYS_ALLOW_FOCUS              = 0x00100000,
 
+/** A mask which can be used to filter (out) all extra styles applicable to wxPropertyGrid.
+    @hideinitializer
+*/
+wxPG_EX_WINDOW_PG_STYLE_MASK = wxPG_EX_INIT_NOCAT|wxPG_EX_HELP_AS_TOOLTIPS|wxPG_EX_NATIVE_DOUBLE_BUFFERING|
+                               wxPG_EX_AUTO_UNSPECIFIED_VALUES|wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES|
+                               wxPG_EX_MULTIPLE_SELECTION|wxPG_EX_ENABLE_TLP_TRACKING|wxPG_EX_ALWAYS_ALLOW_FOCUS,
+
+/** A mask which can be used to filter (out) all extra styles applicable to wxPropertyGridManager.
+    @hideinitializer
+*/
+wxPG_EX_WINDOW_PGMAN_STYLE_MASK = wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|wxPG_EX_HIDE_PAGE_BUTTONS|
+                                  wxPG_EX_NO_TOOLBAR_DIVIDER|wxPG_EX_TOOLBAR_SEPARATOR,
+
 /** A mask which can be used to filter (out) all extra styles.
     @hideinitializer
 */
-wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_INIT_NOCAT|wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|
-                            wxPG_EX_HELP_AS_TOOLTIPS|wxPG_EX_NATIVE_DOUBLE_BUFFERING|wxPG_EX_AUTO_UNSPECIFIED_VALUES|
-                            wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES|wxPG_EX_HIDE_PAGE_BUTTONS|wxPG_EX_MULTIPLE_SELECTION|
-                            wxPG_EX_ENABLE_TLP_TRACKING|wxPG_EX_NO_TOOLBAR_DIVIDER|wxPG_EX_TOOLBAR_SEPARATOR|
-                            wxPG_EX_ALWAYS_ALLOW_FOCUS
+wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_WINDOW_PG_STYLE_MASK|wxPG_EX_WINDOW_PGMAN_STYLE_MASK
 };
 
 /** Combines various styles.
@@ -984,7 +993,7 @@ public:
         Resets column sizes and splitter positions, based on proportions.
 
         @param enableAutoResizing
-            If @true, automatic column resizing is enabled (only applicapple
+            If @true, automatic column resizing is enabled (only applicable
             if window style wxPG_SPLITTER_AUTO_CENTER is used).
 
         @see wxPropertyGridInterface::SetColumnProportion()
@@ -1425,6 +1434,22 @@ public:
     */
     bool WasVetoed() const;
 };
+
+
+wxEventType wxEVT_PG_SELECTED;
+wxEventType wxEVT_PG_CHANGING;
+wxEventType wxEVT_PG_CHANGED;
+wxEventType wxEVT_PG_HIGHLIGHTED;
+wxEventType wxEVT_PG_RIGHT_CLICK;
+wxEventType wxEVT_PG_PAGE_CHANGED;
+wxEventType wxEVT_PG_ITEM_COLLAPSED;
+wxEventType wxEVT_PG_ITEM_EXPANDED;
+wxEventType wxEVT_PG_DOUBLE_CLICK;
+wxEventType wxEVT_PG_LABEL_EDIT_BEGIN;
+wxEventType wxEVT_PG_LABEL_EDIT_ENDING;
+wxEventType wxEVT_PG_COL_BEGIN_DRAG;
+wxEventType wxEVT_PG_COL_DRAGGING;
+wxEventType wxEVT_PG_COL_END_DRAG;
 
 // -----------------------------------------------------------------------
 

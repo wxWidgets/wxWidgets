@@ -364,7 +364,6 @@ public:
     void SetItemData(Node* item, wxClientData* data);
 
     void CheckItem(Node* item, wxCheckBoxState checkedState);
-    void ToggleItem(wxDataViewItem item);
 
 
     // Implement the base class pure virtual methods.
@@ -387,6 +386,10 @@ public:
                         unsigned col,
                         bool ascending) const wxOVERRIDE;
 
+protected:
+    virtual int DoCompareValues(const wxVariant& value1,
+                                const wxVariant& value2) const wxOVERRIDE;
+
 private:
     // The control we're associated with.
     wxTreeListCtrl* const m_treelist;
@@ -402,214 +405,6 @@ private:
     // after this).
     bool m_isFlat;
 };
-
-// ============================================================================
-// wxDataViewCheckIconText[Renderer]: special renderer for our first column.
-// ============================================================================
-
-// Currently this class is private but it could be extracted and made part of
-// public API later as could be used directly with wxDataViewCtrl as well.
-namespace
-{
-
-const char* CHECK_ICON_TEXT_TYPE = "wxDataViewCheckIconText";
-
-// The value used by wxDataViewCheckIconTextRenderer
-class wxDataViewCheckIconText : public wxDataViewIconText
-{
-public:
-    wxDataViewCheckIconText(const wxString& text = wxString(),
-                            const wxIcon& icon = wxNullIcon,
-                            wxCheckBoxState checkedState = wxCHK_UNDETERMINED)
-        : wxDataViewIconText(text, icon),
-          m_checkedState(checkedState)
-    {
-    }
-
-    wxDataViewCheckIconText(const wxDataViewCheckIconText& other)
-        : wxDataViewIconText(other),
-          m_checkedState(other.m_checkedState)
-    {
-    }
-
-    // There is no encapsulation anyhow, so just expose this field directly.
-    wxCheckBoxState m_checkedState;
-
-
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxDataViewCheckIconText);
-};
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
-
-DECLARE_VARIANT_OBJECT(wxDataViewCheckIconText)
-IMPLEMENT_VARIANT_OBJECT(wxDataViewCheckIconText)
-
-
-class wxDataViewCheckIconTextRenderer : public wxDataViewCustomRenderer
-{
-public:
-    wxDataViewCheckIconTextRenderer()
-        : wxDataViewCustomRenderer(CHECK_ICON_TEXT_TYPE,
-                                   wxDATAVIEW_CELL_ACTIVATABLE)
-    {
-    }
-
-    virtual bool SetValue(const wxVariant& value) wxOVERRIDE
-    {
-        m_value << value;
-        return true;
-    }
-
-    virtual bool GetValue(wxVariant& WXUNUSED(value)) const wxOVERRIDE
-    {
-        return false;
-    }
-
-#if wxUSE_ACCESSIBILITY
-    virtual wxString GetAccessibleDescription() const wxOVERRIDE
-    {
-        wxString text = m_value.GetText();
-        if ( !text.empty() )
-        {
-            text += wxS(" ");
-        }
-
-        switch ( m_value.m_checkedState )
-        {
-            case wxCHK_CHECKED:
-                /* TRANSLATORS: Checkbox state name */
-                text += _("checked");
-                break;
-            case wxCHK_UNCHECKED:
-                /* TRANSLATORS: Checkbox state name */
-                text += _("unchecked");
-                break;
-            case wxCHK_UNDETERMINED:
-                /* TRANSLATORS: Checkbox state name */
-                text += _("undetermined");
-                break;
-        }
-
-        return text;
-    }
-#endif // wxUSE_ACCESSIBILITY
-
-    wxSize GetSize() const wxOVERRIDE
-    {
-        wxSize size = GetCheckSize();
-        size.x += MARGIN_CHECK_ICON;
-
-        if ( m_value.GetIcon().IsOk() )
-        {
-            const wxSize sizeIcon = m_value.GetIcon().GetSize();
-            if ( sizeIcon.y > size.y )
-                size.y = sizeIcon.y;
-
-            size.x += sizeIcon.x + MARGIN_ICON_TEXT;
-        }
-
-        wxString text = m_value.GetText();
-        if ( text.empty() )
-            text = "Dummy";
-
-        const wxSize sizeText = GetTextExtent(text);
-        if ( sizeText.y > size.y )
-            size.y = sizeText.y;
-
-        size.x += sizeText.x;
-
-        return size;
-    }
-
-    virtual bool Render(wxRect cell, wxDC* dc, int state) wxOVERRIDE
-    {
-        // Draw the checkbox first.
-        int renderFlags = 0;
-        switch ( m_value.m_checkedState )
-        {
-            case wxCHK_UNCHECKED:
-                break;
-
-            case wxCHK_CHECKED:
-                renderFlags |= wxCONTROL_CHECKED;
-                break;
-
-            case wxCHK_UNDETERMINED:
-                renderFlags |= wxCONTROL_UNDETERMINED;
-                break;
-        }
-
-        if ( state & wxDATAVIEW_CELL_PRELIT )
-            renderFlags |= wxCONTROL_CURRENT;
-
-        const wxSize sizeCheck = GetCheckSize();
-
-        wxRect rectCheck(cell.GetPosition(), sizeCheck);
-        rectCheck = rectCheck.CentreIn(cell, wxVERTICAL);
-
-        wxRendererNative::Get().DrawCheckBox
-                                (
-                                    GetView(), *dc, rectCheck, renderFlags
-                                );
-
-        // Then the icon, if any.
-        int xoffset = sizeCheck.x + MARGIN_CHECK_ICON;
-
-        const wxIcon& icon = m_value.GetIcon();
-        if ( icon.IsOk() )
-        {
-            const wxSize sizeIcon = icon.GetSize();
-            wxRect rectIcon(cell.GetPosition(), sizeIcon);
-            rectIcon.x += xoffset;
-            rectIcon = rectIcon.CentreIn(cell, wxVERTICAL);
-
-            dc->DrawIcon(icon, rectIcon.GetPosition());
-
-            xoffset += sizeIcon.x + MARGIN_ICON_TEXT;
-        }
-
-        // Finally the text.
-        RenderText(m_value.GetText(), xoffset, cell, dc, state);
-
-        return true;
-    }
-
-    // Event handlers toggling the items checkbox if it was clicked.
-    virtual bool ActivateCell(const wxRect& WXUNUSED(cell),
-                              wxDataViewModel *model,
-                              const wxDataViewItem & item,
-                              unsigned int WXUNUSED(col),
-                              const wxMouseEvent *mouseEvent) wxOVERRIDE
-    {
-        if ( mouseEvent )
-        {
-            if ( !wxRect(GetCheckSize()).Contains(mouseEvent->GetPosition()) )
-                return false;
-        }
-
-        static_cast<wxTreeListModel*>(model)->ToggleItem(item);
-        return true;
-    }
-
-protected:
-    wxSize GetCheckSize() const
-    {
-        return wxRendererNative::Get().GetCheckBoxSize(GetView());
-    }
-
-private:
-    // Just some arbitrary constants defining margins, in pixels.
-    enum
-    {
-        MARGIN_CHECK_ICON = 3,
-        MARGIN_ICON_TEXT = 4
-    };
-
-    wxDataViewCheckIconText m_value;
-};
-
-} // anonymous namespace
 
 // ============================================================================
 // wxTreeListModel implementation
@@ -837,40 +632,6 @@ void wxTreeListModel::CheckItem(Node* item, wxCheckBoxState checkedState)
     ItemChanged(ToDVI(item));
 }
 
-void wxTreeListModel::ToggleItem(wxDataViewItem dvi)
-{
-    Node* const item = FromDVI(dvi);
-
-    wxCHECK_RET( item, "Invalid item" );
-
-    const wxCheckBoxState stateOld = item->m_checkedState;
-
-    // If the 3rd state is user-settable then the cycle is
-    // unchecked->checked->undetermined.
-    switch ( stateOld )
-    {
-        case wxCHK_CHECKED:
-            item->m_checkedState = m_treelist->HasFlag(wxTL_USER_3STATE)
-                                        ? wxCHK_UNDETERMINED
-                                        : wxCHK_UNCHECKED;
-            break;
-
-        case wxCHK_UNDETERMINED:
-            // Whether 3rd state is user-settable or not, the next state is
-            // unchecked.
-            item->m_checkedState = wxCHK_UNCHECKED;
-            break;
-
-        case wxCHK_UNCHECKED:
-            item->m_checkedState = wxCHK_CHECKED;
-            break;
-    }
-
-    ItemChanged(ToDVI(item));
-
-    m_treelist->OnItemToggled(item, stateOld);
-}
-
 unsigned wxTreeListModel::GetColumnCount() const
 {
     return m_numColumns;
@@ -881,8 +642,8 @@ wxString wxTreeListModel::GetColumnType(unsigned col) const
     if ( col == 0 )
     {
         return m_treelist->HasFlag(wxTL_CHECKBOX)
-                    ? wxS("wxDataViewCheckIconText")
-                    : wxS("wxDataViewIconText");
+                    ? wxDataViewCheckIconTextRenderer::GetDefaultType()
+                    : wxDataViewIconTextRenderer::GetDefaultType();
     }
     else // All the other columns contain just text.
     {
@@ -928,12 +689,26 @@ wxTreeListModel::GetValue(wxVariant& variant,
 }
 
 bool
-wxTreeListModel::SetValue(const wxVariant& WXUNUSED(variant),
-                          const wxDataViewItem& WXUNUSED(item),
+wxTreeListModel::SetValue(const wxVariant& variant,
+                          const wxDataViewItem& item,
                           unsigned WXUNUSED(col))
 {
-    // We are not editable currently.
-    return false;
+    Node* const node = FromDVI(item);
+
+    wxCHECK_MSG( item, false, "Invalid item" );
+
+    const wxCheckBoxState stateOld = node->m_checkedState;
+
+    // We don't allow changing anything but the checked state currently, yet we
+    // still get the full wxVariant containing the text and the icon as well,
+    // so we need to extract just the part we're interested in from it first.
+    wxDataViewCheckIconText value;
+    value << variant;
+    node->m_checkedState = value.GetCheckedState();
+
+    m_treelist->OnItemToggled(node, stateOld);
+
+    return true;
 }
 
 wxDataViewItem wxTreeListModel::GetParent(const wxDataViewItem& item) const
@@ -1005,6 +780,22 @@ wxTreeListModel::Compare(const wxDataViewItem& item1,
         result = -result;
 
     return result;
+}
+
+int wxTreeListModel::DoCompareValues(const wxVariant& value1,
+                                     const wxVariant& value2) const
+{
+    if ( value1.GetType() == wxS("wxDataViewCheckIconText") )
+    {
+        wxDataViewCheckIconText iconText1, iconText2;
+
+        iconText1 << value1;
+        iconText2 << value2;
+
+        return iconText1.GetText().Cmp(iconText2.GetText());
+    }
+
+    return wxDataViewModel::DoCompareValues(value1, value2);
 }
 
 // ============================================================================
@@ -1122,7 +913,12 @@ wxTreeListCtrl::DoInsertColumn(const wxString& title,
         if ( HasFlag(wxTL_CHECKBOX) )
         {
             // Use our custom renderer to show the checkbox.
-            renderer = new wxDataViewCheckIconTextRenderer;
+            wxDataViewCheckIconTextRenderer* const
+                rendererCheckIconText = new wxDataViewCheckIconTextRenderer;
+            if ( HasFlag(wxTL_USER_3STATE) )
+                rendererCheckIconText->Allow3rdStateForUser();
+
+            renderer = rendererCheckIconText;
         }
         else // We still need a special renderer to show the icons.
         {
@@ -1659,28 +1455,6 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& event)
         view->Refresh();
         view->Update();
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
-
-        // Resize the first column to take the remaining available space.
-        const unsigned numColumns = GetColumnCount();
-        if ( !numColumns )
-            return;
-
-        // There is a bug in generic wxDataViewCtrl: if the column width sums
-        // up to the total size, horizontal scrollbar (unnecessarily) appears,
-        // so subtract a bit to ensure this doesn't happen.
-        int remainingWidth = rect.width - 5;
-        for ( unsigned n = 1; n < GetColumnCount(); n++ )
-        {
-            remainingWidth -= GetColumnWidth(n);
-            if ( remainingWidth <= 0 )
-            {
-                // There is not enough space, as we're not going to give the
-                // first column negative width anyhow, just don't do anything.
-                return;
-            }
-        }
-
-        SetColumnWidth(0, remainingWidth);
     }
 }
 

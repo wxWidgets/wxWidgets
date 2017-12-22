@@ -93,121 +93,12 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
     // file should be opened
     wxASSERT_MSG( m_file.IsOpened(), wxT("can't read closed file") );
 
-    // read the entire file in memory: this is not the most efficient thing to
-    // do it but there is no good way to avoid it in Unicode build because if
-    // we read the file block by block we can't convert each block to Unicode
-    // separately (the last multibyte char in the block might be only partially
-    // read and so the conversion would fail) and, as the file contents is kept
-    // in memory by wxTextFile anyhow, it shouldn't be a big problem to read
-    // the file entirely
-    size_t bufSize = 0;
-
-    // number of bytes to (try to) read from disk at once
-    static const size_t BLOCK_SIZE = 4096;
-
-    wxCharBuffer buf;
-
-    // first determine if the file is seekable or not and so whether we can
-    // determine its length in advance
-    wxFileOffset fileLength;
+    wxString str;
+    if ( !m_file.ReadAll(&str, conv) )
     {
-        wxLogNull logNull;
-        fileLength = m_file.Length();
-    }
-
-    // some non-seekable files under /proc under Linux pretend that they're
-    // seekable but always return 0; others do return an error
-    const bool seekable = fileLength != wxInvalidOffset && fileLength != 0;
-    if ( seekable )
-    {
-        // we know the required length, so set the buffer size in advance
-        bufSize = fileLength;
-        if ( !buf.extend(bufSize) )
-            return false;
-
-        // if the file is seekable, also check that we're at its beginning
-        wxASSERT_MSG( m_file.Tell() == 0, wxT("should be at start of file") );
-
-        char *dst = buf.data();
-        for ( size_t nRemaining = bufSize; nRemaining > 0; )
-        {
-            size_t nToRead = BLOCK_SIZE;
-
-            // the file size could have changed, avoid overflowing the buffer
-            // even if it did
-            if ( nToRead > nRemaining )
-                nToRead = nRemaining;
-
-            ssize_t nRead = m_file.Read(dst, nToRead);
-
-            if ( nRead == wxInvalidOffset )
-            {
-                // read error (error message already given in wxFile::Read)
-                return false;
-            }
-
-            if ( nRead == 0 )
-            {
-                // this file can't be empty because we checked for this above
-                // so this must be the end of file
-                break;
-            }
-
-            dst += nRead;
-            nRemaining -= nRead;
-        }
-
-        wxASSERT_MSG( dst - buf.data() == (wxFileOffset)bufSize,
-                      wxT("logic error") );
-    }
-    else // file is not seekable
-    {
-        char block[BLOCK_SIZE];
-        for ( ;; )
-        {
-            ssize_t nRead = m_file.Read(block, WXSIZEOF(block));
-
-            if ( nRead == wxInvalidOffset )
-            {
-                // read error (error message already given in wxFile::Read)
-                return false;
-            }
-
-            if ( nRead == 0 )
-            {
-                // if no bytes have been read, presumably this is a
-                // valid-but-empty file
-                if ( bufSize == 0 )
-                    return true;
-
-                // otherwise we've finished reading the file
-                break;
-            }
-
-            // extend the buffer for new data
-            if ( !buf.extend(bufSize + nRead) )
-                return false;
-
-            // and append it to the buffer
-            memcpy(buf.data() + bufSize, block, nRead);
-            bufSize += nRead;
-        }
-    }
-
-    const wxString str(buf, conv, bufSize);
-
-    // there's no risk of this happening in ANSI build
-#if wxUSE_UNICODE
-    if ( bufSize > 4 && str.empty() )
-    {
-        wxLogError(_("Failed to convert file \"%s\" to Unicode."), GetName());
+        wxLogError(_("Failed to read text file \"%s\"."), GetName());
         return false;
     }
-#endif // wxUSE_UNICODE
-
-    // we don't need this memory any more
-    buf.reset();
-
 
     // now break the buffer in lines
 

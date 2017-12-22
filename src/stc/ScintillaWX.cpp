@@ -56,16 +56,18 @@
 
 class wxSTCTimer : public wxTimer {
 public:
-    wxSTCTimer(ScintillaWX* swx) {
+    wxSTCTimer(ScintillaWX* swx, ScintillaWX::TickReason reason) {
         m_swx = swx;
+        m_reason = reason;
     }
 
     void Notify() wxOVERRIDE {
-        m_swx->DoTick();
+        m_swx->TickFor(m_reason);
     }
 
 private:
     ScintillaWX* m_swx;
+    ScintillaWX::TickReason m_reason;
 };
 
 
@@ -263,10 +265,19 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
 #endif
 #endif // wxHAVE_STC_RECT_FORMAT
 
+    //A timer is needed for each member of TickReason enum except tickPlatform
+    timers[tickCaret] = new wxSTCTimer(this,tickCaret);
+    timers[tickScroll] = new wxSTCTimer(this,tickScroll);
+    timers[tickWiden] = new wxSTCTimer(this,tickWiden);
+    timers[tickDwell] = new wxSTCTimer(this,tickDwell);
 }
 
 
 ScintillaWX::~ScintillaWX() {
+    for ( TimersHash::iterator i=timers.begin(); i!=timers.end(); ++i ) {
+        delete i->second;
+    }
+    timers.clear();
     Finalise();
 }
 
@@ -306,7 +317,6 @@ void ScintillaWX::Initialise() {
 
 void ScintillaWX::Finalise() {
     ScintillaBase::Finalise();
-    SetTicking(false);
     SetIdle(false);
     DestroySystemCaret();
 }
@@ -354,25 +364,6 @@ bool ScintillaWX::SetIdle(bool on) {
         idler.state = on;
     }
     return idler.state;
-}
-
-
-void ScintillaWX::SetTicking(bool on) {
-    wxSTCTimer* steTimer;
-    if (timer.ticking != on) {
-        timer.ticking = on;
-        if (timer.ticking) {
-            steTimer = new wxSTCTimer(this);
-            steTimer->Start(timer.tickSize);
-            timer.tickerID = steTimer;
-        } else {
-            steTimer = (wxSTCTimer*)timer.tickerID;
-            steTimer->Stop();
-            delete steTimer;
-            timer.tickerID = 0;
-        }
-    }
-    timer.ticksToWait = caret.period;
 }
 
 
@@ -741,6 +732,36 @@ bool ScintillaWX::DestroySystemCaret() {
 #endif
 }
 
+bool ScintillaWX::FineTickerAvailable() {
+    return true;
+}
+
+bool ScintillaWX::FineTickerRunning(TickReason reason) {
+    bool running = false;
+    TimersHash::iterator i = timers.find(reason);
+    wxASSERT_MSG( i != timers.end(), "At least one TickReason is missing a timer.");
+    if ( i != timers.end() ) {
+        running = i->second->IsRunning();
+    }
+    return running;
+}
+
+void ScintillaWX::FineTickerStart(TickReason reason, int millis,
+                                  int WXUNUSED(tolerance)) {
+    TimersHash::iterator i = timers.find(reason);
+    wxASSERT_MSG( i != timers.end(), "At least one TickReason is missing a timer." );
+    if ( i != timers.end() ) {
+        i->second->Start(millis);
+    }
+}
+
+void ScintillaWX::FineTickerCancel(TickReason reason) {
+    TimersHash::iterator i = timers.find(reason);
+    wxASSERT_MSG( i != timers.end(), "At least one TickReason is missing a timer." );
+    if ( i != timers.end() ) {
+        i->second->Stop();
+    }
+}
 
 //----------------------------------------------------------------------
 
@@ -971,7 +992,6 @@ void ScintillaWX::DoLoseFocus(){
     SetFocusState(false);
     focusEvent = false;
     DestroySystemCaret();
-    SetTicking(false);
 }
 
 void ScintillaWX::DoGainFocus(){
@@ -980,7 +1000,6 @@ void ScintillaWX::DoGainFocus(){
     focusEvent = false;
     DestroySystemCaret();
     CreateSystemCaret();
-    SetTicking(true);
 }
 
 void ScintillaWX::DoSysColourChange() {
@@ -1146,6 +1165,10 @@ void ScintillaWX::DoCommand(int ID) {
 bool ScintillaWX::DoContextMenu(Point pt) {
     if (ShouldDisplayPopup(pt))
     {
+        // To prevent generating EVT_MOUSE_CAPTURE_LOST.
+        if ( HaveMouseCapture() ) {
+            SetMouseCapture(false);
+        }
         ContextMenu(pt);
         return true;
     }
@@ -1154,6 +1177,12 @@ bool ScintillaWX::DoContextMenu(Point pt) {
 
 void ScintillaWX::DoOnListBox() {
     AutoCompleteCompleted(0, SC_AC_COMMAND);
+}
+
+
+void ScintillaWX::DoMouseCaptureLost()
+{
+    capturedMouse = false;
 }
 
 

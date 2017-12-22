@@ -100,6 +100,7 @@ public:
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
+    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
@@ -360,6 +361,16 @@ public:
     bool HandleMouseWheel(wxMouseWheelAxis axis,
                           WXWPARAM wParam, WXLPARAM lParam);
 
+    // Common gesture event initialization, returns true if it is the initial
+    // event (GF_BEGIN set in flags), false otherwise.
+    bool InitGestureEvent(wxGestureEvent& event, const wxPoint& pt, WXDWORD flags);
+
+    bool HandlePanGesture(const wxPoint& pt, WXDWORD flags);
+    bool HandleZoomGesture(const wxPoint& pt, WXDWORD fingerDistance, WXDWORD flags);
+    bool HandleRotateGesture(const wxPoint& pt, WXDWORD angleArgument, WXDWORD flags);
+    bool HandleTwoFingerTap(const wxPoint& pt, WXDWORD flags);
+    bool HandlePressAndTap(const wxPoint& pt, WXDWORD flags);
+
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
@@ -532,10 +543,8 @@ public:
     // check if mouse is in the window
     bool IsMouseInWindow() const;
 
-    // check if a native double-buffering applies for this window
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
     virtual bool IsDoubleBuffered() const wxOVERRIDE;
-
-    void SetDoubleBuffered(bool on);
 
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();

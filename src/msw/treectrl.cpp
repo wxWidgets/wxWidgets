@@ -40,6 +40,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/winundef.h"
+#include "wx/msw/private/winstyle.h"
 
 #include "wx/imaglist.h"
 #include "wx/itemattr.h"
@@ -460,6 +461,7 @@ public:
                     if ( image != -1 )
                         break;
                     //else: fall through
+                    wxFALLTHROUGH;
 
                 case wxTreeItemIcon_Selected:
                 case wxTreeItemIcon_Expanded:
@@ -792,6 +794,46 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     }
 
     return true;
+}
+
+bool wxTreeCtrl::IsDoubleBuffered() const
+{
+    if ( !GetHwnd() )
+        return false;
+
+    // Notice that TVM_GETEXTENDEDSTYLE is supported since XP, so we can always
+    // send this message, no need for comctl32.dll version check here.
+    const LRESULT
+        exTreeStyle = ::SendMessage(GetHwnd(), TVM_GETEXTENDEDSTYLE, 0, 0);
+
+    return (exTreeStyle & TVS_EX_DOUBLEBUFFER) != 0;
+}
+
+void wxTreeCtrl::SetDoubleBuffered(bool on)
+{
+    if ( !GetHwnd() )
+        return;
+
+    // TVS_EX_DOUBLEBUFFER is only supported since Vista, don't try to set it
+    // under XP, who knows what could this do.
+    if ( wxApp::GetComCtl32Version() >= 610 )
+    {
+        const HRESULT hr = ::SendMessage(GetHwnd(),
+                                         TVM_SETEXTENDEDSTYLE,
+                                         TVS_EX_DOUBLEBUFFER,
+                                         on ? TVS_EX_DOUBLEBUFFER : 0);
+        if ( hr == S_OK )
+        {
+            // There is no need to erase background for a double-buffered
+            // window, so disable it when enabling double buffering and restore
+            // the default background style value when disabling it.
+            SetBackgroundStyle(on ? wxBG_STYLE_PAINT : wxBG_STYLE_ERASE);
+        }
+        else
+        {
+            wxLogApiError("TreeView_SetExtendedStyle(TVS_EX_DOUBLEBUFFER)", hr);
+        }
+    }
 }
 
 wxTreeCtrl::~wxTreeCtrl()
@@ -1505,10 +1547,17 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     tvIns.item.lParam = (LPARAM)param;
     tvIns.item.mask = mask;
 
-    // don't use the hack below for the children of hidden root: this results
-    // in a crash inside comctl32.dll when we call TreeView_GetItemRect()
-    const bool firstChild = !IsHiddenRoot(parent) &&
-                                !TreeView_GetChild(GetHwnd(), HITEM(parent));
+    // apparently some Windows versions (2000 and XP are reported to do this)
+    // sometimes don't refresh the tree after adding the first child and so we
+    // need this to make the "[+]" appear
+    //
+    // don't use this hack below for the children of hidden root nor for modern
+    // MSW versions as it would just unnecessarily slow down the item insertion
+    // at best
+    const bool refreshFirstChild =
+        (wxGetWinVersion() < wxWinVersion_Vista) &&
+            !IsHiddenRoot(parent) &&
+                !TreeView_GetChild(GetHwnd(), HITEM(parent));
 
     HTREEITEM id = TreeView_InsertItem(GetHwnd(), &tvIns);
     if ( id == 0 )
@@ -1516,10 +1565,7 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
         wxLogLastError(wxT("TreeView_InsertItem"));
     }
 
-    // apparently some Windows versions (2000 and XP are reported to do this)
-    // sometimes don't refresh the tree after adding the first child and so we
-    // need this to make the "[+]" appear
-    if ( firstChild )
+    if ( refreshFirstChild )
     {
         TVGetItemRectParam param2;
 
@@ -3893,47 +3939,21 @@ void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 // Update locking.
 // ----------------------------------------------------------------------------
 
-// Using WM_SETREDRAW with the native control is a bad idea as it's broken in
-// some Windows versions (see http://support.microsoft.com/kb/130611) and
-// doesn't seem to do anything in other ones (e.g. under Windows 7 the tree
-// control keeps updating its scrollbars while the items are added to it,
-// resulting in horrible flicker when adding even a couple of dozen items).
-// So we resize it to the smallest possible size instead of freezing -- this
-// still flickers, but actually not as badly as it would if we didn't do it.
-
 void wxTreeCtrl::DoFreeze()
 {
-    if ( IsShown() )
-    {
-        RECT rc;
-        ::GetWindowRect(GetHwnd(), &rc);
-        m_thawnSize = wxRectFromRECT(rc).GetSize();
+    wxTreeCtrlBase::DoFreeze();
 
-        ::SetWindowPos(GetHwnd(), 0, 0, 0, 1, 1,
-                       SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW | SWP_NOACTIVATE);
-    }
+    // In addition to disabling redrawing, we also need to disable scrollbar
+    // updates that would still happen otherwise.
+    wxMSWWinStyleUpdater(GetHwnd()).TurnOn(TVS_NOSCROLL);
 }
 
 void wxTreeCtrl::DoThaw()
 {
-    if ( IsShown() )
-    {
-        if ( m_thawnSize != wxDefaultSize )
-        {
-            ::SetWindowPos(GetHwnd(), 0, 0, 0, m_thawnSize.x, m_thawnSize.y,
-                           SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-        }
-    }
-}
+    // Undo temporary TVS_NOSCROLL addition.
+    wxMSWWinStyleUpdater(GetHwnd()).TurnOff(TVS_NOSCROLL);
 
-// We also need to override DoSetSize() to ensure that m_thawnSize is reset if
-// the window is resized while being frozen -- in this case, we need to avoid
-// resizing it back to its original, pre-freeze, size when it's thawed.
-void wxTreeCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    m_thawnSize = wxDefaultSize;
-
-    wxTreeCtrlBase::DoSetSize(x, y, width, height, sizeFlags);
+    wxTreeCtrlBase::DoThaw();
 }
 
 #endif // wxUSE_TREECTRL

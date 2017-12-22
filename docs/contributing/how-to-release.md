@@ -2,7 +2,7 @@
 
 Creating a new release requires a few things before getting started:
 
-* Linux or OSX.
+* Linux (or another Unix but GNU tar is required).
 * Windows 7+ with HTML Help Workshop, and Inno Setup installed.
 * 7-Zip, Doxygen 1.8.8, and GraphViz installed on both machines.
 
@@ -46,23 +46,22 @@ and then run it using the new DLLs.
 
 ## Pre-Release Steps
 
-* Update `docs/readme.txt`. Please review its contents in addition to just
-  changing the version number.
-* Update `docs/release.md` (the release sha1sums should be set to zeroes).
-* Put a date on the release line in `docs/changes.txt`.
-* Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
-* Update the release announcement post in `docs/publicity/announce.txt`.
+1. Perform the following steps. You can run `build/tools/pre-release.sh` to do
+   the straightforward changes like updating the date and version number
+   automatically, but please also review and update the contents of the README
+   and announcement text.
+    * Update `docs/readme.txt`: version needs to be changed, content updated.
+    * Update `docs/release.md`: the release sha1sums should be set to zeroes.
+    * Put a date on the release line in `docs/changes.txt`.
+    * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
+    * Update the release announcement post in `docs/publicity/announce.txt`.
 
-Commit the changes and finally tag the release, preferably GPG-signed:
+2. Commit the changes and tag the release using your GPG key:
 
     git tag -s -m 'Tag X.Y.Z release' vX.Y.Z
 
-and otherwise unsigned:
-
-    git tag -m 'Tag X.Y.Z release' vX.Y.Z
-
-Don't overwrite existing tags. For non-final releases use e.g. `X.Y.Z-rc1`
-instead of `X.Y.Z`.
+   Don't overwrite existing tags. For non-final releases use e.g. `X.Y.Z-rc1`
+   instead of `X.Y.Z`.
 
 ## Creating Release Files
 
@@ -91,7 +90,8 @@ ensure you have the appropriate tag or commit checked out.
     wxMSW-x.y.z-Setup.exe
     wxWidgets-x.y.z.chm
 
-5. Update the sha1sums in `docs/release.md` and commit the changes.
+5. Run `./build/tools/post-release.sh` to update the sha1sums in
+   `docs/release.md` and commit the changes.
 
 ## Uploading
 
@@ -142,7 +142,7 @@ Trac: mark the milestone corresponding to the release as completed and add a
 new version for it to allow reporting bugs against it and create the next
 milestone (ask Vadim or Robin to do it or to get admin password).
 
-Update the roadmap at http://trac.wxwidgets.org/wiki/Roadmap to at least
+Update the roadmap at https://trac.wxwidgets.org/wiki/Roadmap to at least
 mention the new release there.
 
 Run `misc/scripts/inc_release` to increment micro version, i.e. replace x.y.z

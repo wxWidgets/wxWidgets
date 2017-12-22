@@ -85,10 +85,6 @@
 #       define __WXMSW__
 #   endif
 
-#   if !defined(__WINDOWS__)
-#       define __WINDOWS__
-#   endif
-
 #   ifndef _WIN32
 #        define _WIN32
 #   endif

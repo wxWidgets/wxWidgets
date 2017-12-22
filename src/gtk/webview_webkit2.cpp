@@ -11,6 +11,9 @@
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT2
 
+#include "wx/dir.h"
+#include "wx/dynlib.h"
+#include "wx/filename.h"
 #include "wx/stockitem.h"
 #include "wx/gtk/webview_webkit.h"
 #include "wx/gtk/control.h"
@@ -19,7 +22,13 @@
 #include "wx/base64.h"
 #include "wx/log.h"
 #include "wx/gtk/private/webview_webkit2_extension.h"
+#include "wx/gtk/private/string.h"
+#include "wx/gtk/private/webkit.h"
+#include "wx/gtk/private/error.h"
+#include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
+#include <JavaScriptCore/JSValueRef.h>
+#include <JavaScriptCore/JSStringRef.h>
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -391,14 +400,75 @@ wxgtk_webview_webkit_counted_matches(WebKitFindController *,
     *findCount = match_count;
 }
 
+// This function checks if the specified directory contains our web extension.
+static bool CheckDirectoryForWebExt(const char* dirname)
+{
+    wxDir dir;
+    if ( !wxDir::Exists(dirname) || !dir.Open(dirname) )
+        return false;
+
+    wxString file;
+    bool cont = dir.GetFirst
+                    (
+                        &file,
+                        "webkit2_ext*" + wxDynamicLibrary::GetDllExt(wxDL_MODULE),
+                        wxDIR_FILES
+                    );
+    while ( cont )
+    {
+        wxDynamicLibrary dl;
+        if ( dl.Load(wxFileName(dirname, file).GetFullPath(),
+                     wxDL_VERBATIM | wxDL_LAZY) &&
+                dl.HasSymbol("webkit_web_extension_initialize_with_user_data") )
+        {
+            // Looks like our extension.
+            return true;
+        }
+
+        cont = dir.GetNext(&file);
+    }
+
+    return false;
+}
+
 static void
 wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
 {
     const char *address = g_dbus_server_get_client_address(dbusServer);
     GVariant *user_data = g_variant_new("(s)", address);
-    webkit_web_context_set_web_extensions_directory(context,
-                                                    WX_WEB_EXTENSIONS_DIRECTORY);
+
+    // The first value is the location in which the extension is supposed to be
+    // normally installed, while the other two are used as fallbacks to allow
+    // running the tests and sample using wxWebView before installing it.
+    const char* const directories[] =
+    {
+        WX_WEB_EXTENSIONS_DIRECTORY,
+        "..",
+        "../..",
+    };
+
+    const char* dir = NULL;
+    for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
+    {
+        if ( CheckDirectoryForWebExt(directories[n]) )
+        {
+            dir = directories[n];
+            break;
+        }
+    }
+
+    if ( dir )
+    {
+        webkit_web_context_set_web_extensions_directory(context, dir);
+    }
+    else
+    {
+        wxLogWarning(_("Web extension not found in \"%s\", "
+                       "some wxWebView functionality will be not available"),
+                     WX_WEB_EXTENSIONS_DIRECTORY);
+    }
+
     webkit_web_context_set_web_extensions_initialization_user_data(context,
                                                                    user_data);
 }
@@ -552,7 +622,12 @@ wxWebViewWebKit::~wxWebViewWebKit()
     if (m_web_view)
         GTKDisconnect(m_web_view);
     if (m_dbusServer)
+    {
         g_dbus_server_stop(m_dbusServer);
+        g_signal_handlers_disconnect_matched(
+            webkit_web_context_get_default(), G_SIGNAL_MATCH_DATA,
+            0, 0, NULL, NULL, m_dbusServer);
+    }
     g_clear_object(&m_dbusServer);
     g_clear_object(&m_extension);
 }
@@ -950,14 +1025,23 @@ bool wxWebViewWebKit::IsBusy() const
 
 void wxWebViewWebKit::SetEditable(bool enable)
 {
+#if WEBKIT_CHECK_VERSION(2, 8, 0)
     webkit_web_view_set_editable(m_web_view, enable);
+#else
+    // Not supported in older versions.
+    wxUnusedVar(enable);
+#endif
 }
 
 bool wxWebViewWebKit::IsEditable() const
 {
+#if WEBKIT_CHECK_VERSION(2, 8, 0)
     gboolean editable;
     g_object_get(m_web_view, "editable", &editable, NULL);
     return editable != 0;
+#else
+    return false;
+#endif
 }
 
 void wxWebViewWebKit::DeleteSelection()
@@ -1084,13 +1168,112 @@ wxString wxWebViewWebKit::GetPageText() const
     return wxString();
 }
 
-void wxWebViewWebKit::RunScript(const wxString& javascript)
+extern "C"
 {
+
+static void wxgtk_run_javascript_cb(GObject *,
+                                    GAsyncResult *res,
+                                    void *user_data)
+{
+    g_object_ref(res);
+
+    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
+    *res_out = res;
+}
+
+} // extern "C"
+
+// Run the given script synchronously and return its result in output.
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
+{
+    GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
-                                   javascript.mb_str(wxConvUTF8),
+                                   javascript.utf8_str(),
                                    NULL,
-                                   NULL,
-                                   NULL);
+                                   wxgtk_run_javascript_cb,
+                                   &result);
+
+    GMainContext *main_context = g_main_context_get_thread_default();
+
+    while ( !result )
+        g_main_context_iteration(main_context, TRUE);
+
+    wxGtkError error;
+    wxWebKitJavascriptResult js_result
+                             (
+                                webkit_web_view_run_javascript_finish
+                                (
+                                    m_web_view,
+                                    result,
+                                    error.Out()
+                                )
+                             );
+
+    // Match g_object_ref() in wxgtk_run_javascript_cb()
+    g_object_unref(result);
+
+    if ( !js_result )
+    {
+        if ( output )
+            *output = error.GetMessage();
+        return false;
+    }
+
+    JSGlobalContextRef context = webkit_javascript_result_get_global_context(js_result);
+    JSValueRef value = webkit_javascript_result_get_value(js_result);
+
+    JSValueRef exception = NULL;
+    wxJSStringRef js_value
+                  (
+                   JSValueIsObject(context, value)
+                       ? JSValueCreateJSONString(context, value, 0, &exception)
+                       : JSValueToStringCopy(context, value, &exception)
+                  );
+
+    if ( exception )
+    {
+        if ( output )
+        {
+            wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
+            *output = ex_value.ToWxString();
+        }
+
+        return false;
+    }
+
+    if ( output != NULL )
+        *output = js_value.ToWxString();
+
+    return true;
+}
+
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+{
+    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+
+    // This string is also used as an error indicator: it's cleared if there is
+    // no error or used in the warning message below if there is one.
+    wxString result;
+    if ( RunScriptSync(wrapJS.GetWrappedCode(), &result)
+            && result == wxS("true") )
+    {
+        if ( RunScriptSync(wrapJS.GetOutputCode(), &result) )
+        {
+            if ( output )
+                *output = result;
+            result.clear();
+        }
+
+        RunScriptSync(wrapJS.GetCleanUpCode());
+    }
+
+    if ( !result.empty() )
+    {
+        wxLogWarning(_("Error running JavaScript: %s"), result);
+        return false;
+    }
+
+    return true;
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

@@ -107,6 +107,7 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_REDO)
     ART_ICON(wxART_PLUS)
     ART_ICON(wxART_MINUS)
+    ART_ICON(wxART_CLOSE)
     ART_ICON(wxART_QUIT)
     ART_ICON(wxART_FIND)
     ART_ICON(wxART_FIND_AND_REPLACE)

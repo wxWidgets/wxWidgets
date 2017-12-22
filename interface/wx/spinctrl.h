@@ -98,7 +98,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS,
+               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                int min = 0, int max = 100,
                int initial = 0, const wxString& name = "wxSpinCtrl");
 
@@ -110,7 +110,8 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS, int min = 0, int max = 100,
+                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                int min = 0, int max = 100,
                 int initial = 0, const wxString& name = "wxSpinCtrl");
 
     /**

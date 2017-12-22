@@ -22,7 +22,7 @@
 #include "wx/qt/private/winevent.h"
 
 #include <QtGui/QTextCharFormat>
-
+#include <QtWidgets/QCalendarWidget>
 
 class wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
 {
@@ -107,9 +107,9 @@ void wxCalendarCtrl::UpdateStyle()
     if ( !m_qtCalendar )
         return;
 
-    if ( m_windowStyle & wxCAL_MONDAY_FIRST )
+    if ( WeekStartsOnMonday() )
         m_qtCalendar->setFirstDayOfWeek(Qt::Monday);
-    else // wxCAL_SUNDAY_FIRST
+    else
         m_qtCalendar->setFirstDayOfWeek(Qt::Sunday);
 
     if ( m_windowStyle & wxCAL_SHOW_WEEK_NUMBERS )
@@ -229,7 +229,7 @@ void wxCalendarCtrl::SetHoliday(size_t day)
     date.setDate(date.year(), date.month(), day);
 
     QTextCharFormat format = m_qtCalendar->dateTextFormat(date);
-    format.setForeground(m_colHolidayFg.GetHandle());
+    format.setForeground(m_colHolidayFg.GetQColor());
     m_qtCalendar->setDateTextFormat(date, format);
 }
 
@@ -249,9 +249,9 @@ void wxCalendarCtrl::RefreshHolidays()
     if ( m_windowStyle & wxCAL_SHOW_HOLIDAYS )
     {
         if ( m_colHolidayFg.IsOk() )
-            format.setForeground(m_colHolidayFg.GetHandle());
+            format.setForeground(m_colHolidayFg.GetQColor());
         if ( m_colHolidayBg.IsOk() )
-            format.setBackground(m_colHolidayBg.GetHandle());
+            format.setBackground(m_colHolidayBg.GetQColor());
     }
     else
     {
@@ -278,9 +278,9 @@ void wxCalendarCtrl::SetHeaderColours(const wxColour& colFg, const wxColour& col
 
     QTextCharFormat format = m_qtCalendar->headerTextFormat();
     if ( m_colHeaderFg.IsOk() )
-        format.setForeground(m_colHeaderFg.GetHandle());
+        format.setForeground(m_colHeaderFg.GetQColor());
     if ( m_colHeaderBg.IsOk() )
-        format.setBackground(m_colHeaderBg.GetHandle());
+        format.setBackground(m_colHeaderBg.GetQColor());
     m_qtCalendar->setHeaderTextFormat(format);
 }
 
@@ -303,9 +303,9 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
 
     QTextCharFormat format = m_qtCalendar->dateTextFormat(date);
     if ( attr->HasTextColour() )
-        format.setForeground(attr->GetTextColour().GetHandle());
+        format.setForeground(attr->GetTextColour().GetQColor());
     if ( attr->HasBackgroundColour() )
-        format.setBackground(attr->GetBackgroundColour().GetHandle());
+        format.setBackground(attr->GetBackgroundColour().GetQColor());
 
     wxMISSING_IMPLEMENTATION( "Setting font" );
 
@@ -316,7 +316,7 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
     m_qtCalendar->setDateTextFormat(date, format);
 }
 
-QCalendarWidget *wxCalendarCtrl::GetHandle() const
+QWidget *wxCalendarCtrl::GetHandle() const
 {
     return m_qtCalendar;
 }

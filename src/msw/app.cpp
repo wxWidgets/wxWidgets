@@ -839,6 +839,13 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
     if ( !wxTopLevelWindows.empty() )
         wxTopLevelWindows[0]->SetHWND(0);
 
+    // Destroy all the remaining TLWs before calling OnExit() to have the same
+    // sequence of events in this case as in case of the normal shutdown,
+    // otherwise we could have many problems due to wxApp being already
+    // destroyed when window cleanup code (in close event handlers or dtor) is
+    // executed.
+    DeleteAllTLWs();
+
     const int rc = OnExit();
 
     wxEntryCleanup();

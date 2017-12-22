@@ -255,7 +255,7 @@ void TextFileTestCase::ReadMixedWithFuzzing()
 void TextFileTestCase::ReadCRCRLF()
 {
     // Notepad may create files with CRCRLF line endings (see
-    // http://stackoverflow.com/questions/6998506/text-file-with-0d-0d-0a-line-breaks).
+    // https://stackoverflow.com/questions/6998506/text-file-with-0d-0d-0a-line-breaks).
     // Older versions of wx would loose all data when reading such files.
     // Test that the data are read, but don't worry about empty lines in between or
     // line endings. Also include a longer streak of CRs, because they can
@@ -338,5 +338,29 @@ void TextFileTestCase::ReadBig()
                           f[NUM_LINES - 1] );
 }
 
-#endif // wxUSE_TEXTFILE
+#ifdef __LINUX__
 
+// Check if using wxTextFile with special files, whose reported size doesn't
+// correspond to the real amount of data in them, works.
+TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
+{
+    SECTION("/proc")
+    {
+        wxTextFile f;
+        CHECK( f.Open("/proc/diskstats") );
+        CHECK( f.GetLineCount() > 1 );
+    }
+
+    SECTION("/sys")
+    {
+        wxTextFile f;
+        CHECK( f.Open("/sys/power/state") );
+        REQUIRE( f.GetLineCount() == 1 );
+        INFO( "/sys/power/state contains \"" << f[0] << "\"" );
+        CHECK( f[0].find("mem") != wxString::npos );
+    }
+}
+
+#endif // __LINUX__
+
+#endif // wxUSE_TEXTFILE

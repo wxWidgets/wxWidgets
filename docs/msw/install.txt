@@ -457,9 +457,9 @@ VENDOR=<your company name>
   distribute wxWidgets DLLs with your application. Default value is 'custom'.
   This string is included as part of DLL name. wxWidgets DLLs contain compiler
   name, version information and vendor name in them. For example
-  wxmsw300_core_vc_custom.dll is one of DLLs build using Visual C++ with
+  wxmsw311u_core_vc_custom.dll is one of DLLs build using Visual C++ with
   default settings. If you set VENDOR=mycorp, the name will change to
-  wxmsw300_core_vc_mycorp.dll.
+  wxmsw311u_core_vc_mycorp.dll.
 
 CFG=<configuration name>
   Sets configuration name so that you can have multiple wxWidgets builds with
@@ -517,8 +517,8 @@ different ways, e.g. MSVC users should use $(WXWIN) instead of just $WXWIN):
 * Add the list of libraries to link with to the linker input. The exact list
   depends on which libraries you use and whether you built wxWidgets in
   monolithic or default multlib mode and basically should include all the
-  relevant libraries from the directory above, e.g. "wxmsw30ud_core.lib
-  wxbase30ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
+  relevant libraries from the directory above, e.g. "wxmsw31ud_core.lib
+  wxbase31ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
   wxexpatd.lib" for a debug build of an application using the core library only
   (all wxWidgets applications use the base library).
 

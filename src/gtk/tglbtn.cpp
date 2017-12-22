@@ -216,6 +216,8 @@ void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
     GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
     GTKApplyStyle(child, style);
 
+#ifndef __WXGTK4__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     // for buttons with images, the path to the label is (at least in 2.12)
     // GtkButton -> GtkAlignment -> GtkHBox -> GtkLabel
     if ( GTK_IS_ALIGNMENT(child) )
@@ -230,6 +232,8 @@ void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
             }
         }
     }
+    wxGCC_WARNING_RESTORE()
+#endif
 }
 
 // Get the "best" size for this control.

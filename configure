@@ -626,15 +626,9 @@ enable_option_checking=no
 enable_option_checking=fatal
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-CPPUNIT_CONFIG
+RESCOMP
 DLLTOOL
 GCC
-MACSETFILE
-POSTLINK_COMMAND
-LIBWXMACRES
-WX_RESOURCES_MACOSX_DATA
-WX_RESOURCES_MACOSX_ASCII
-RESCOMP
 WX_VERSION_TAG
 DMALLOC_LIBS
 OPENGL_LIBS
@@ -664,7 +658,6 @@ USE_GUI
 WX_LIBRARY_BASENAME_GUI
 WX_LIBRARY_BASENAME_NOGUI
 SHARED
-DEREZ
 COND_wxUSE_ZLIB_builtin
 COND_wxUSE_REGEX_builtin
 COND_wxUSE_LIBTIFF_builtin
@@ -708,6 +701,7 @@ COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_X11_USE_GUI_1
 COND_TOOLKIT_X11
 COND_TOOLKIT_Qt
+COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_QT_USE_GUI_1
 COND_TOOLKIT_QT
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
@@ -727,6 +721,10 @@ COND_TOOLKIT_MAC
 COND_TOOLKIT_GTK_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
@@ -759,16 +757,21 @@ COND_SHARED_0_TOOLKIT_PM_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0
 COND_SHARED_0
+COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
+COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_WIN32_1_SHARED_0
 COND_PLATFORM_WIN32_1
+COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_WIN32_0
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0
 COND_PLATFORM_UNIX_1_USE_GUI_1
+COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
+COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
@@ -776,8 +779,6 @@ COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_UNIX_1
 COND_PLATFORM_UNIX_0
 COND_PLATFORM_OS2_1
-COND_PLATFORM_MAC_1
-COND_PLATFORM_MAC_0
 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1
 COND_PLATFORM_MACOSX_1_USE_OPENGL_1
 COND_PLATFORM_MACOSX_1_USE_GUI_1
@@ -785,6 +786,8 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1
+COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
+COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
@@ -853,8 +856,6 @@ ICC_PCH_CREATE_SWITCH
 ICC_PCH
 GCC_PCH
 OBJCXXFLAGS
-SETFILE
-REZ
 WINDRES
 BK_DEPS
 DEPS_TRACKING
@@ -899,8 +900,6 @@ INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
 RANLIB
-CPPUNIT_LIBS
-CPPUNIT_CFLAGS
 HOST_SUFFIX
 HEADER_PAD_OPTION
 SAMPLES_CXXFLAGS
@@ -947,6 +946,8 @@ WEBKIT_LIBS
 WEBKIT_CFLAGS
 COND_PYTHON
 PYTHON
+PRIVATE_FONTS_LIBS
+PRIVATE_FONTS_CFLAGS
 XTST_LIBS
 XTST_CFLAGS
 LIBNOTIFY_LIBS
@@ -1137,10 +1138,10 @@ enable_macosx_arch
 enable_compat28
 enable_compat30
 enable_rpath
-enable_objc_uniquifying
 enable_visibility
 enable_tls
 enable_repro_build
+enable_pch
 enable_intl
 enable_xlocale
 enable_config
@@ -1279,6 +1280,7 @@ enable_notifmsg
 enable_odcombobox
 enable_popupwin
 enable_prefseditor
+enable_privatefonts
 enable_radiobox
 enable_radiobtn
 enable_richmsgdlg
@@ -1363,8 +1365,6 @@ with_sdl_exec_prefix
 enable_sdltest
 enable_dependency_tracking
 enable_precomp_headers
-with_cppunit_prefix
-with_cppunit_exec_prefix
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1412,16 +1412,16 @@ LIBNOTIFY_CFLAGS
 LIBNOTIFY_LIBS
 XTST_CFLAGS
 XTST_LIBS
+PRIVATE_FONTS_CFLAGS
+PRIVATE_FONTS_LIBS
 WEBKIT_CFLAGS
 WEBKIT_LIBS
 CAIRO_CFLAGS
 CAIRO_LIBS
 GST_CFLAGS
-GST_LIBS
-CPPUNIT_CFLAGS
-CPPUNIT_LIBS'
+GST_LIBS'
 ac_subdirs_all='src/tiff
-src/expat'
+src/expat/expat'
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -2078,10 +2078,10 @@ Optional Features:
   --enable-compat28       enable wxWidgets 2.8 compatibility
   --disable-compat30      disable wxWidgets 3.0 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
-  --enable-objc_uniquifying enable Objective-C class name uniquifying
   --disable-visibility    disable use of ELF symbols visibility even if supported
   --disable-tls           disable use of compiler TLS support
   --enable-repro-build    enable reproducible build mode
+  --enable-pch            use precompiled headers if possible (off by default)
   --enable-intl           use internationalization system
   --enable-xlocale        use x-locale support (requires wxLocale)
   --enable-config         use wxConfig (and derived) classes
@@ -2220,6 +2220,7 @@ Optional Features:
   --enable-odcombobox     use wxOwnerDrawnComboBox class
   --enable-popupwin       use wxPopUpWindow class
   --enable-prefseditor    use wxPreferencesEditor class
+  --enable-privatefonts   provide wxFont::AddPrivateFont() method
   --enable-radiobox       use wxRadioBox class
   --enable-radiobtn       use wxRadioButton class
   --enable-richmsgdlg     use wxRichMessageDialog class
@@ -2310,7 +2311,7 @@ Optional Packages:
   --without-subdirs       don't generate makefiles for samples/demos/...
   --with-flavour=NAME     specify a name to identify this build
   --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes
-  --with-gtk[=VERSION]    use GTK+, VERSION can be 3, 2 (default), 1 or "any"
+  --with-gtk[=VERSION]    use GTK+, VERSION can be 4 (EXPERIMENTAL), 3, 2 (default), 1 or "any"
   --with-motif            use Motif/Lesstif
   --with-osx_cocoa        use Mac OS X (Cocoa)
   --with-osx_iphone       use iPhone OS X port
@@ -2350,8 +2351,6 @@ Optional Packages:
   --with-libiconv-prefix=DIR  search for libiconv in DIR/include and DIR/lib
   --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
   --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
-  --with-cppunit-prefix=PFX   Prefix where CppUnit is installed (optional)
-  --with-cppunit-exec-prefix=PFX  Exec prefix where CppUnit is installed (optional)
 
 Some influential environment variables:
   CC          C compiler command
@@ -2417,6 +2416,10 @@ Some influential environment variables:
               linker flags for LIBNOTIFY, overriding pkg-config
   XTST_CFLAGS C compiler flags for XTST, overriding pkg-config
   XTST_LIBS   linker flags for XTST, overriding pkg-config
+  PRIVATE_FONTS_CFLAGS
+              C compiler flags for PRIVATE_FONTS, overriding pkg-config
+  PRIVATE_FONTS_LIBS
+              linker flags for PRIVATE_FONTS, overriding pkg-config
   WEBKIT_CFLAGS
               C compiler flags for WEBKIT, overriding pkg-config
   WEBKIT_LIBS linker flags for WEBKIT, overriding pkg-config
@@ -2425,10 +2428,6 @@ Some influential environment variables:
   CAIRO_LIBS  linker flags for CAIRO, overriding pkg-config
   GST_CFLAGS  C compiler flags for GST, overriding pkg-config
   GST_LIBS    linker flags for GST, overriding pkg-config
-  CPPUNIT_CFLAGS
-              C compiler flags for CPPUNIT, overriding pkg-config
-  CPPUNIT_LIBS
-              linker flags for CPPUNIT, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -5131,6 +5130,8 @@ fi
           eval "$wx_cv_use_expat"
 
 
+if test "$USE_DARWIN" = 1; then
+
 
 # Check whether --with-macosx-sdk was given.
 if test "${with_macosx_sdk+set}" = set; then :
@@ -5151,6 +5152,7 @@ if test "${with_macosx_version_min+set}" = set; then :
 fi
 
 
+fi
 
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
@@ -5869,6 +5871,7 @@ fi
           eval "$wx_cv_use_vararg_macros"
 
 
+if test "$USE_DARWIN" = 1; then
 
           enablestring=
           # Check whether --enable-universal_binary was given.
@@ -5901,7 +5904,7 @@ fi
 
           eval "$wx_cv_use_macosx_arch"
 
-
+fi
 
           enablestring=
           defaultval=
@@ -5992,36 +5995,6 @@ fi
 
 
 
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-objc_uniquifying was given.
-if test "${enable_objc_uniquifying+set}" = set; then :
-  enableval=$enable_objc_uniquifying;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=yes'
-                          else
-                            wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=no'
-                          fi
-
-else
-
-                          wx_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=${'DEFAULT_wxUSE_OBJC_UNIQUIFYING":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_objc_uniquifying"
-
-
-
           enablestring=disable
           defaultval=
           if test -z "$defaultval"; then
@@ -6108,6 +6081,35 @@ fi
 
 
           eval "$wx_cv_use_repro_build"
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-pch was given.
+if test "${enable_pch+set}" = set; then :
+  enableval=$enable_pch;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_pch='wxUSE_PCH=yes'
+                          else
+                            wx_cv_use_pch='wxUSE_PCH=no'
+                          fi
+
+else
+
+                          wx_cv_use_pch='wxUSE_PCH=${'DEFAULT_wxUSE_PCH":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_pch"
 
 
 
@@ -10200,6 +10202,35 @@ fi
 
 
           eval "$wx_cv_use_prefseditor"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-privatefonts was given.
+if test "${enable_privatefonts+set}" = set; then :
+  enableval=$enable_privatefonts;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_privatefonts='wxUSE_PRIVATE_FONTS=yes'
+                          else
+                            wx_cv_use_privatefonts='wxUSE_PRIVATE_FONTS=no'
+                          fi
+
+else
+
+                          wx_cv_use_privatefonts='wxUSE_PRIVATE_FONTS=${'DEFAULT_wxUSE_PRIVATE_FONTS":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_privatefonts"
 
 
           enablestring=
@@ -17388,7 +17419,7 @@ fi
 fi
 
 
-if test "$wxUSE_MAC" = 1; then
+if test "$USE_DARWIN" = 1; then
 
 retest_macosx_linking=no
 
@@ -17426,9 +17457,11 @@ if test "x$OSX_ARCH_OPTS" != "x"; then
 $as_echo "$as_me: WARNING: Disabling dependency tracking due to universal binary build." >&2;}
         disable_macosx_deps=yes
 
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling precompiled headers due to universal binary build." >&5
+        if test "x$wxUSE_PCH" = "xyes"; then
+                                                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling precompiled headers due to universal binary build." >&5
 $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary build." >&2;}
-        bk_use_pch=no
+            wxUSE_PCH=no
+        fi
     fi
 
     OSX_ARCH_OPTS=`echo $OSX_ARCH_OPTS | sed -e 's/^/-arch /' -e 's/,/ -arch /g'`
@@ -17439,6 +17472,8 @@ $as_echo "$as_me: WARNING: Disabling precompiled headers due to universal binary
     OBJCFLAGS="$OSX_ARCH_OPTS $OBJCFLAGS"
     LDFLAGS="$OSX_ARCH_OPTS $LDFLAGS"
 fi
+
+if test "$wxUSE_MAC" = 1; then
 
 if test "x$wxUSE_MACOSX_SDK" = "xno"; then
     wxUSE_MACOSX_SDK=
@@ -17464,6 +17499,7 @@ $as_echo "exists" >&6; }
     retest_macosx_linking=yes
             fi
 
+fi
 if test "x$wxUSE_MACOSX_VERSION_MIN" = "xno"; then
     wxUSE_MACOSX_VERSION_MIN=
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "xyes"; then
@@ -20599,6 +20635,100 @@ fi
 fi
 
 
+LZMA_LINK=
+if test "$wxUSE_LIBLZMA" = "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
+$as_echo_n "checking for lzma_code in -llzma... " >&6; }
+if ${ac_cv_lib_lzma_lzma_code+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-llzma  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char lzma_code ();
+int
+main ()
+{
+return lzma_code ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_lzma_lzma_code=yes
+else
+  ac_cv_lib_lzma_lzma_code=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lzma_lzma_code" >&5
+$as_echo "$ac_cv_lib_lzma_lzma_code" >&6; }
+if test "x$ac_cv_lib_lzma_lzma_code" = xyes; then :
+  LZMA_LINK=" -llzma"
+fi
+
+else
+    ac_configure_args="$ac_configure_args --disable-lzma"
+fi
+
+
+JBIG_LINK=
+if test "$wxUSE_LIBJBIG" = "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jbg_dec_init in -ljbig" >&5
+$as_echo_n "checking for jbg_dec_init in -ljbig... " >&6; }
+if ${ac_cv_lib_jbig_jbg_dec_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ljbig  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char jbg_dec_init ();
+int
+main ()
+{
+return jbg_dec_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_jbig_jbg_dec_init=yes
+else
+  ac_cv_lib_jbig_jbg_dec_init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_jbig_jbg_dec_init" >&5
+$as_echo "$ac_cv_lib_jbig_jbg_dec_init" >&6; }
+if test "x$ac_cv_lib_jbig_jbg_dec_init" = xyes; then :
+  JBIG_LINK=" -ljbig"
+fi
+
+else
+    ac_configure_args="$ac_configure_args --disable-jbig"
+fi
+
+
 TIFF_LINK=
 TIFF_PREREQ_LINKS=-lm
 if test "$wxUSE_LIBTIFF" != "no" ; then
@@ -20611,6 +20741,12 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         fi
         if test "$wxUSE_ZLIB" = "sys"; then
             TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+        fi
+        if test "$wxUSE_LIBLZMA" = "yes"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
+        fi
+        if test "$wxUSE_LIBJBIG" = "yes"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JBIG_LINK"
         fi
         ac_fn_c_check_header_compile "$LINENO" "tiffio.h" "ac_cv_header_tiffio_h" "
 
@@ -20678,97 +20814,6 @@ $as_echo "$as_me: WARNING: system tiff library not found, will use built-in inst
         if test "$wxUSE_LIBJPEG" = "no"; then
                                                                                     ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
-
-        if test "$wxUSE_LIBLZMA" = "yes"; then
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
-$as_echo_n "checking for lzma_code in -llzma... " >&6; }
-if ${ac_cv_lib_lzma_lzma_code+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-llzma  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char lzma_code ();
-int
-main ()
-{
-return lzma_code ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_lzma_lzma_code=yes
-else
-  ac_cv_lib_lzma_lzma_code=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lzma_lzma_code" >&5
-$as_echo "$ac_cv_lib_lzma_lzma_code" >&6; }
-if test "x$ac_cv_lib_lzma_lzma_code" = xyes; then :
-  LIBS="$LIBS -llzma"
-fi
-
-        else
-                                    ac_configure_args="$ac_configure_args --disable-lzma"
-        fi
-
-                if test "$wxUSE_LIBJBIG" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jbg_dec_init in -ljbig" >&5
-$as_echo_n "checking for jbg_dec_init in -ljbig... " >&6; }
-if ${ac_cv_lib_jbig_jbg_dec_init+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ljbig  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char jbg_dec_init ();
-int
-main ()
-{
-return jbg_dec_init ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_jbig_jbg_dec_init=yes
-else
-  ac_cv_lib_jbig_jbg_dec_init=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_jbig_jbg_dec_init" >&5
-$as_echo "$ac_cv_lib_jbig_jbg_dec_init" >&6; }
-if test "x$ac_cv_lib_jbig_jbg_dec_init" = xyes; then :
-  LIBS="$LIBS -ljbig"
-fi
-
-        else
-            ac_configure_args="$ac_configure_args --disable-jbig"
-        fi
-
 
 
 subdirs="$subdirs src/tiff"
@@ -20890,7 +20935,7 @@ $as_echo "$as_me: WARNING: system expat library not found, will use built-in ins
         fi
     fi
     if test "$wxUSE_EXPAT" = "builtin" ; then
-                subdirs="$subdirs src/expat"
+                subdirs="$subdirs src/expat/expat"
 
     fi
 fi
@@ -21016,6 +21061,7 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK127=
     WXGTK2=
     WXGTK3=
+    WXGTK4=
     WXGPE=
 
     if test "$wxUSE_MSW" = 1 ; then
@@ -21060,7 +21106,7 @@ $as_echo "" >&6; }
                             fi
                     esac
 
-                    if test "$wxGTK_VERSION" != 3; then
+                    if test "$wxGTK_VERSION" != 4 -a "$wxGTK_VERSION" != 3; then
                         # Check whether --enable-gtktest was given.
 if test "${enable_gtktest+set}" = set; then :
   enableval=$enable_gtktest;
@@ -21587,6 +21633,255 @@ fi
      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version)" >&5
 $as_echo "yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version)" >&6; }
      wx_cv_lib_gtk=3
+  else
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+     if test "$PKG_CONFIG" = "no" ; then
+       echo "*** A new enough version of pkg-config was not found."
+       echo "*** See http://pkgconfig.sourceforge.net"
+     else
+       if test -f conf.gtktest ; then
+        :
+       else
+          echo "*** Could not run GTK+ test program, checking why..."
+	  ac_save_CFLAGS="$CFLAGS"
+	  ac_save_LIBS="$LIBS"
+          CFLAGS="$CFLAGS $GTK_CFLAGS"
+          LIBS="$LIBS $GTK_LIBS"
+          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <gtk/gtk.h>
+#include <stdio.h>
+
+int
+main ()
+{
+ return ((gtk_major_version) || (gtk_minor_version) || (gtk_micro_version));
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+   echo "*** The test program compiled, but did not run. This usually means"
+          echo "*** that the run-time linker is not finding GTK+ or finding the wrong"
+          echo "*** version of GTK+. If it is not finding GTK+, you'll need to set your"
+          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+          echo "*** is required on your system"
+	  echo "***"
+          echo "*** If you have an old version installed, it is best to remove it, although"
+          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
+else
+   echo "*** The test program failed to compile or link. See the file config.log for the"
+          echo "*** exact error that occured. This usually means GTK+ is incorrectly installed."
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+          CFLAGS="$ac_save_CFLAGS"
+          LIBS="$ac_save_LIBS"
+       fi
+     fi
+     GTK_CFLAGS=""
+     GTK_LIBS=""
+     :
+  fi
+
+
+  rm -f conf.gtktest
+
+                        elif test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
+
+# Check whether --enable-gtktest was given.
+if test "${enable_gtktest+set}" = set; then :
+  enableval=$enable_gtktest;
+else
+  enable_gtktest=yes
+fi
+
+  min_gtk_version=3.90.0
+
+  pkg_config_args="gtk+-4.0 >= $min_gtk_version"
+  for module in . $GTK_MODULES
+  do
+      case "$module" in
+         gthread)
+             pkg_config_args="$pkg_config_args gthread-2.0"
+         ;;
+      esac
+  done
+
+  no_gtk=""
+
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+$as_echo "$PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+
+  if test x$PKG_CONFIG != xno ; then
+    if $PKG_CONFIG --atleast-pkgconfig-version 0.7 ; then
+      :
+    else
+      echo "*** pkg-config too old; version 0.7 or better required."
+      no_gtk=yes
+      PKG_CONFIG=no
+    fi
+  else
+    no_gtk=yes
+  fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK+ - version >= $min_gtk_version" >&5
+$as_echo_n "checking for GTK+ - version >= $min_gtk_version... " >&6; }
+
+  if test x$PKG_CONFIG != xno ; then
+    ## don't try to run the test against uninstalled libtool libs
+    if $PKG_CONFIG --uninstalled $pkg_config_args; then
+	  echo "Will use uninstalled version of GTK+ found in PKG_CONFIG_PATH"
+	  enable_gtktest=no
+    fi
+
+    if $PKG_CONFIG $pkg_config_args; then
+	  :
+    else
+	  no_gtk=yes
+    fi
+  fi
+
+  if test x"$no_gtk" = x ; then
+    GTK_CFLAGS=`$PKG_CONFIG $pkg_config_args --cflags`
+    GTK_LIBS=`$PKG_CONFIG $pkg_config_args --libs`
+    gtk_config_major_version=`$PKG_CONFIG --modversion gtk+-4.0 | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+    gtk_config_minor_version=`$PKG_CONFIG --modversion gtk+-4.0 | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+    gtk_config_micro_version=`$PKG_CONFIG --modversion gtk+-4.0 | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+    if test "x$enable_gtktest" = "xyes" ; then
+      ac_save_CFLAGS="$CFLAGS"
+      ac_save_LIBS="$LIBS"
+      CFLAGS="$CFLAGS $GTK_CFLAGS"
+      LIBS="$GTK_LIBS $LIBS"
+      rm -f conf.gtktest
+      if test "$cross_compiling" = yes; then :
+  echo $ac_n "cross compiling; assumed OK... $ac_c"
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <gtk/gtk.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int
+main ()
+{
+  unsigned int major, minor, micro;
+
+  fclose (fopen ("conf.gtktest", "w"));
+
+  if (sscanf("$min_gtk_version", "%u.%u.%u", &major, &minor, &micro) != 3) {
+     printf("%s, bad version string\n", "$min_gtk_version");
+     exit(1);
+   }
+
+  if ((GTK_MAJOR_VERSION != $gtk_config_major_version) ||
+      (GTK_MINOR_VERSION != $gtk_config_minor_version) ||
+      (GTK_MICRO_VERSION != $gtk_config_micro_version))
+    {
+      printf("\n*** 'pkg-config --modversion gtk+-4.0' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n",
+             $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
+             GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+      printf ("*** was found! If pkg-config was correct, then it is best\n");
+      printf ("*** to remove the old version of GTK+. You may also be able to fix the error\n");
+      printf("*** by modifying your LD_LIBRARY_PATH enviroment variable, or by editing\n");
+      printf("*** /etc/ld.so.conf. Make sure you have run ldconfig if that is\n");
+      printf("*** required on your system.\n");
+      printf("*** If pkg-config was wrong, set the environment variable PKG_CONFIG_PATH\n");
+      printf("*** to point to the correct configuration files\n");
+    }
+  else
+    {
+      if ((GTK_MAJOR_VERSION > major) ||
+        ((GTK_MAJOR_VERSION == major) && (GTK_MINOR_VERSION > minor)) ||
+        ((GTK_MAJOR_VERSION == major) && (GTK_MINOR_VERSION == minor) && (GTK_MICRO_VERSION >= micro)))
+      {
+        return 0;
+       }
+     else
+      {
+        printf("\n*** An old version of GTK+ (%u.%u.%u) was found.\n",
+               GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+        printf("*** You need a version of GTK+ newer than %u.%u.%u. The latest version of\n",
+	       major, minor, micro);
+        printf("*** GTK+ is always available from ftp://ftp.gtk.org.\n");
+        printf("***\n");
+        printf("*** If you have already installed a sufficiently new version, this error\n");
+        printf("*** probably means that the wrong copy of the pkg-config shell script is\n");
+        printf("*** being found. The easiest way to fix this is to remove the old version\n");
+        printf("*** of GTK+, but you can also set the PKG_CONFIG environment to point to the\n");
+        printf("*** correct copy of pkg-config. (In this case, you will have to\n");
+        printf("*** modify your LD_LIBRARY_PATH enviroment variable, or edit /etc/ld.so.conf\n");
+        printf("*** so that the correct libraries are found at run-time))\n");
+      }
+    }
+  return 1;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+
+else
+  no_gtk=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+     fi
+  fi
+  if test "x$no_gtk" = x ; then
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version)" >&5
+$as_echo "yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version)" >&6; }
+     wx_cv_lib_gtk=4
   else
      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -22217,6 +22512,10 @@ $as_echo "$wx_cv_lib_gtk" >&6; }
         fi
 
         case "$wx_cv_lib_gtk" in
+            4)      WXGTK4=1
+                    WXGTK3=1
+                    TOOLKIT_VERSION=4
+                    ;;
             3)      WXGTK3=1
                     TOOLKIT_VERSION=3
                     ;;
@@ -24075,7 +24374,7 @@ $as_echo "yes" >&6; }
                 GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
                 if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
                                         SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
-                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
+                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS"
                 fi
 
 fi
@@ -30590,6 +30889,12 @@ $as_echo "no" >&6; }
   fi
 fi
 
+if test "$WXGTK4" = 1 ; then
+    cat >>confdefs.h <<_ACEOF
+#define __WXGTK4__ 1
+_ACEOF
+
+fi
 if test "$WXGTK3" = 1 ; then
     cat >>confdefs.h <<_ACEOF
 #define __WXGTK3__ 1
@@ -31927,7 +32232,7 @@ if test "$WXGTK2" = 1; then
 
         if test "$wxUSE_GTKPRINT" = "yes" ; then
             if test "$WXGTK3" = 1; then
-                gtk_unix_print="gtk+-unix-print-3.0"
+                gtk_unix_print="gtk+-unix-print-${TOOLKIT_VERSION}.0"
             else
                 gtk_unix_print="gtk+-unix-print-2.0 >= 2.10"
             fi
@@ -32593,6 +32898,9 @@ $as_echo "$as_me: WARNING: I18n code requires wxFile... disabled" >&2;}
 fi
 
 if test "$wxUSE_XLOCALE" = "yes" ; then
+    $as_echo "#define wxUSE_XLOCALE 1" >>confdefs.h
+
+
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking for complete xlocale" >&5
 $as_echo_n "checking for complete xlocale... " >&6; }
 if ${wx_cv_func_strtod_l+:} false; then :
@@ -32642,7 +32950,7 @@ fi
 $as_echo "$wx_cv_func_strtod_l" >&6; }
 
     if test "$wx_cv_func_strtod_l" = "yes" ; then
-        $as_echo "#define wxUSE_XLOCALE 1" >>confdefs.h
+                        $as_echo "#define HAVE_LOCALE_T 1" >>confdefs.h
 
     fi
 fi
@@ -32691,11 +32999,6 @@ fi
 
 if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
   $as_echo "#define wxUSE_PRINTF_POS_PARAMS 1" >>confdefs.h
-
-fi
-
-if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
-  $as_echo "#define wxUSE_OBJC_UNIQUIFYING 1" >>confdefs.h
 
 fi
 
@@ -32984,6 +33287,47 @@ $as_echo "$wx_cv_struct_tm_has_gmtoff" >&6; }
 
     if test "$wx_cv_struct_tm_has_gmtoff" = "yes"; then
         $as_echo "#define WX_GMTOFF_IN_TM 1" >>confdefs.h
+
+    fi
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for _NL_TIME_FIRST_WEEKDAY in langinfo.h" >&5
+$as_echo_n "checking for _NL_TIME_FIRST_WEEKDAY in langinfo.h... " >&6; }
+if ${wx_cv_have_nl_time_first_weekday+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+                     #define _GNU_SOURCE
+                     #include <langinfo.h>
+
+int
+main ()
+{
+
+                     _NL_TIME_FIRST_WEEKDAY;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+                     wx_cv_have_nl_time_first_weekday=yes
+
+else
+  wx_cv_have_nl_time_first_weekday=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_have_nl_time_first_weekday" >&5
+$as_echo "$wx_cv_have_nl_time_first_weekday" >&6; }
+
+    if test "$wx_cv_have_nl_time_first_weekday" = "yes"; then
+        $as_echo "#define HAVE_NL_TIME_FIRST_WEEKDAY 1" >>confdefs.h
 
     fi
 
@@ -34263,6 +34607,92 @@ if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS preferences"
 fi
 
+if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
+    if test "$wxUSE_GTK" = 1; then
+        if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PRIVATE_FONTS" >&5
+$as_echo_n "checking for PRIVATE_FONTS... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$PRIVATE_FONTS_CFLAGS"; then
+        pkg_cv_PRIVATE_FONTS_CFLAGS="$PRIVATE_FONTS_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fontconfig >= 2.8.0 pangoft2 >= 1.38.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PRIVATE_FONTS_CFLAGS=`$PKG_CONFIG --cflags "fontconfig >= 2.8.0 pangoft2 >= 1.38.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$PRIVATE_FONTS_LIBS"; then
+        pkg_cv_PRIVATE_FONTS_LIBS="$PRIVATE_FONTS_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fontconfig >= 2.8.0 pangoft2 >= 1.38.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PRIVATE_FONTS_LIBS=`$PKG_CONFIG --libs "fontconfig >= 2.8.0 pangoft2 >= 1.38.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        PRIVATE_FONTS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0"`
+        else
+	        PRIVATE_FONTS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$PRIVATE_FONTS_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: run-time font loading won't be supported by wxFont" >&5
+$as_echo "$as_me: WARNING: run-time font loading won't be supported by wxFont" >&2;}
+elif test $pkg_failed = untried; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: run-time font loading won't be supported by wxFont" >&5
+$as_echo "$as_me: WARNING: run-time font loading won't be supported by wxFont" >&2;}
+else
+	PRIVATE_FONTS_CFLAGS=$pkg_cv_PRIVATE_FONTS_CFLAGS
+	PRIVATE_FONTS_LIBS=$pkg_cv_PRIVATE_FONTS_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                                $as_echo "#define wxUSE_PRIVATE_FONTS 1" >>confdefs.h
+
+                                CXXFLAGS="$PRIVATE_FONTS_CFLAGS $CXXFLAGS"
+                                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PRIVATE_FONTS_LIBS"
+
+fi
+        fi
+    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_MSW" = 1; then
+                $as_echo "#define wxUSE_PRIVATE_FONTS 1" >>confdefs.h
+
+    fi
+    fi
+
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
     if test "$wxUSE_MAC" = 1; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Dialup manager not supported on this platform... disabled" >&5
@@ -34605,7 +35035,7 @@ fi
             if test "$USE_WEBVIEW_WEBKIT2" = 0; then
                 webkitgtk=webkit-1.0
                 if test "$WXGTK3" = 1; then
-                    webkitgtk=webkitgtk-3.0
+                    webkitgtk="webkitgtk-${TOOLKIT_VERSION}.0"
                 fi
 
 pkg_failed=no
@@ -35703,7 +36133,7 @@ case ".$ac_cv_cxxflags_gcc_option__Woverloaded_virtual" in
 esac
 
 
-                        if test "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 ; then
+                        if test "$WXGTK4" != 1 -a \( "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 \) ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
 
                         OBJCXXFLAGS="$OBJCXXFLAGS -Wno-deprecated-declarations"
@@ -35736,7 +36166,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -35746,24 +36176,54 @@ LDFLAGS="$LDFLAGS $PROFILE_FLAGS"
 
 WXCONFIG_LIBS="$LIBS"
 
+if test "$wxUSE_GUI" = "yes"; then
+    case "$wxUSE_LIBTIFF" in
+        builtin)
+            wxconfig_3rdparty="tiff $wxconfig_3rdparty"
+            ;;
+        sys)
+            WXCONFIG_LIBS="$TIFF_LINK $LZMA_LINK $JBIG_LINK $WXCONFIG_LIBS"
+            ;;
+    esac
+    case "$wxUSE_LIBJPEG" in
+        builtin)
+            wxconfig_3rdparty="jpeg $wxconfig_3rdparty"
+            ;;
+        sys)
+            WXCONFIG_LIBS="$JPEG_LINK $WXCONFIG_LIBS"
+            ;;
+    esac
+    case "$wxUSE_LIBPNG" in
+        builtin)
+            wxconfig_3rdparty="png $wxconfig_3rdparty"
+            ;;
+        sys)
+            WXCONFIG_LIBS="$PNG_LINK $WXCONFIG_LIBS"
+            ;;
+    esac
+fi
 if test "$wxUSE_REGEX" = "builtin" ; then
     wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
 fi
-if test "$wxUSE_EXPAT" = "builtin" ; then
-    wxconfig_3rdparty="expat $wxconfig_3rdparty"
+if test "$wxUSE_STC" = "yes" ; then
+    wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
 fi
-if test "$wxUSE_LIBTIFF" = "builtin" ; then
-    wxconfig_3rdparty="tiff $wxconfig_3rdparty"
-fi
-if test "$wxUSE_LIBJPEG" = "builtin" ; then
-    wxconfig_3rdparty="jpeg $wxconfig_3rdparty"
-fi
-if test "$wxUSE_LIBPNG" = "builtin" ; then
-    wxconfig_3rdparty="png $wxconfig_3rdparty"
-fi
-if test "$wxUSE_ZLIB" = "builtin" ; then
-    wxconfig_3rdparty="zlib $wxconfig_3rdparty"
-fi
+case "$wxUSE_EXPAT" in
+    builtin)
+        wxconfig_3rdparty="expat $wxconfig_3rdparty"
+        ;;
+    sys)
+        WXCONFIG_LIBS="$EXPAT_LINK $WXCONFIG_LIBS"
+        ;;
+esac
+case "$wxUSE_ZLIB" in
+    builtin)
+        wxconfig_3rdparty="zlib $wxconfig_3rdparty"
+        ;;
+    sys)
+        WXCONFIG_LIBS="$ZLIB_LINK $WXCONFIG_LIBS"
+        ;;
+esac
 
 for i in $wxconfig_3rdparty ; do
     WXCONFIG_LIBS="-lwx${i}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"
@@ -35855,14 +36315,12 @@ TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[A-Z]' '[a-z]'`
 
 
 
-
-
 case "$TOOLKIT" in
     GTK)
         TOOLKIT_DESC="GTK+"
         if test "$WXGTK2" = 1; then
             if test "$WXGTK3" = 1; then
-                TOOLKIT_DESC="$TOOLKIT_DESC 3"
+                TOOLKIT_DESC="$TOOLKIT_DESC ${TOOLKIT_VERSION}"
             else
                 TOOLKIT_DESC="$TOOLKIT_DESC 2"
             fi
@@ -35891,55 +36349,13 @@ case "$TOOLKIT" in
         ;;
 esac
 
+
+if test "$wxUSE_PCH" != "yes"; then
+    bk_use_pch=no
+fi
+
 if test "$wxUSE_WINE" = "yes"; then
     BAKEFILE_FORCE_PLATFORM=win32
-fi
-
-if test "$wxUSE_UNICODE" = yes -a "$GCC" = yes -a "$bk_use_pch" != no
-then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gcc precompiled header bug" >&5
-$as_echo_n "checking for gcc precompiled header bug... " >&6; }
-if ${wx_cv_gcc_pch_bug+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-            echo '#include <stdio.h>
-                  const wchar_t test_var[] = L"awidetest";' > conftest.h
-
-            echo '#include "conftest.h"
-                  int main()
-                  {
-                     printf("%ls", test_var);
-                     return 0;
-                  }' > conftest.cpp
-
-            wx_cv_gcc_pch_bug="pch not supported"
-
-            if $CXX conftest.h >/dev/null 2>&1
-            then
-                wx_cv_gcc_pch_bug=
-
-                if $CXX -o conftest$PROGRAM_EXT conftest.cpp >/dev/null 2>&1
-                then
-                    if tr -dc '[a-z]' < conftest$PROGRAM_EXT |
-                        grep awidetest >/dev/null
-                    then
-                        wx_cv_gcc_pch_bug=no
-                    else
-                        wx_cv_gcc_pch_bug=yes
-                    fi
-                fi
-            fi
-
-            rm -f conftest.h conftest.gch conftest.cpp conftest$PROGRAM_EXT
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gcc_pch_bug" >&5
-$as_echo "$wx_cv_gcc_pch_bug" >&6; }
-
-    if test "$wx_cv_gcc_pch_bug" = yes; then
-                        bk_use_pch=no
-    fi
 fi
 
 # Find a good install program.  We prefer a C program (faster),
@@ -37257,85 +37673,6 @@ else
 fi
 
          ;;
-
-      *-*-darwin* | powerpc-apple-macos* )
-            # Extract the first word of "Rez", so it can be a program name with args.
-set dummy Rez; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_REZ+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$REZ"; then
-  ac_cv_prog_REZ="$REZ" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_REZ="Rez"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_prog_REZ" && ac_cv_prog_REZ="/Developer/Tools/Rez"
-fi
-fi
-REZ=$ac_cv_prog_REZ
-if test -n "$REZ"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $REZ" >&5
-$as_echo "$REZ" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-            # Extract the first word of "SetFile", so it can be a program name with args.
-set dummy SetFile; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_SETFILE+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$SETFILE"; then
-  ac_cv_prog_SETFILE="$SETFILE" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_SETFILE="SetFile"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_prog_SETFILE" && ac_cv_prog_SETFILE="/Developer/Tools/SetFile"
-fi
-fi
-SETFILE=$ac_cv_prog_SETFILE
-if test -n "$SETFILE"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SETFILE" >&5
-$as_echo "$SETFILE" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-        ;;
     esac
 
 
@@ -37344,12 +37681,10 @@ fi
 
 
 
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.11"
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.9"
-
-
-BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.9"
+BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.11"
 
 
 
@@ -37817,6 +38152,16 @@ EOF
         COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
     fi
 
+    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
+    fi
+
+    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
+    fi
+
     COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xOSX_COCOA" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1=""
@@ -37850,16 +38195,6 @@ EOF
     COND_PLATFORM_MACOSX_1_USE_SOVERSION_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_SOVERSION" = "x1" ; then
         COND_PLATFORM_MACOSX_1_USE_SOVERSION_1=""
-    fi
-
-    COND_PLATFORM_MAC_0="#"
-    if test "x$PLATFORM_MAC" = "x0" ; then
-        COND_PLATFORM_MAC_0=""
-    fi
-
-    COND_PLATFORM_MAC_1="#"
-    if test "x$PLATFORM_MAC" = "x1" ; then
-        COND_PLATFORM_MAC_1=""
     fi
 
     COND_PLATFORM_OS2_1="#"
@@ -37897,6 +38232,16 @@ EOF
         COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
     fi
 
+    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
+    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
+        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
+    fi
+
+    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
+    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
+    fi
+
     COND_PLATFORM_UNIX_1_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_USE_GUI_1=""
@@ -37915,6 +38260,11 @@ EOF
     COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
     if test "x$PLATFORM_WIN32" = "x0" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
         COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
+    fi
+
+    COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
+    if test "x$PLATFORM_WIN32" = "x0" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
+        COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
     fi
 
     COND_PLATFORM_WIN32_1="#"
@@ -37945,6 +38295,16 @@ EOF
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
+    fi
+
+    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
+    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
+        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
+    fi
+
+    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
+    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
     fi
 
     COND_SHARED_0="#"
@@ -38107,6 +38467,26 @@ EOF
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0=""
     fi
 
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
+    fi
+
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
+    fi
+
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0=""
+    fi
+
+    COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0=""
+    fi
+
     COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x" -a "x$USE_GUI" = "x1" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1=""
@@ -38200,6 +38580,11 @@ EOF
     COND_TOOLKIT_QT_USE_GUI_1="#"
     if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" ; then
         COND_TOOLKIT_QT_USE_GUI_1=""
+    fi
+
+    COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
     fi
 
     COND_TOOLKIT_Qt="#"
@@ -38447,76 +38832,11 @@ if test "$wxUSE_MSW" = 1 ; then
     RESCOMP="$WINDRES"
 fi
 
-if test "$wxUSE_MAC" = 1; then
-            WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"
-    WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
-
-        LIBWXMACRES="\$(wx_top_builddir)/lib/${WX_RESOURCES_MACOSX_ASCII}"
-
-    # Extract the first word of "DeRez", so it can be a program name with args.
-set dummy DeRez; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_DEREZ+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$DEREZ"; then
-  ac_cv_prog_DEREZ="$DEREZ" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_DEREZ="DeRez"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_prog_DEREZ" && ac_cv_prog_DEREZ="/Developer/Tools/DeRez"
-fi
-fi
-DEREZ=$ac_cv_prog_DEREZ
-if test -n "$DEREZ"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $DEREZ" >&5
-$as_echo "$DEREZ" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-
-    MACSETFILE="\$(SETFILE)"
-
-            POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
-    RESCOMP="cat /dev/null \| $REZ"
-    WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
-
-else
-        MACSETFILE="@true"
-    POSTLINK_COMMAND="@true"
-fi
-
 fi
 
 
 if test $GCC_PCH = 1
 then
-    if test "$wx_cv_gcc_pch_bug" = yes; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** Precompiled header support is broken on this compiler" >&5
-$as_echo "$as_me: WARNING: *** Precompiled header support is broken on this compiler" >&2;}
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** --enable-precomp-headers is not recommended" >&5
-$as_echo "$as_me: WARNING: *** --enable-precomp-headers is not recommended" >&2;}
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=13361" >&5
-$as_echo "$as_me: WARNING: *** see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=13361" >&2;}
-    fi
-
     # Our WX_PRECOMP flag does not make sense for any language except C++ because
     # the headers that benefit from precompilation are mostly C++ headers.
     CXXFLAGS="-DWX_PRECOMP $CXXFLAGS"
@@ -38562,15 +38882,6 @@ OBJCFLAGS="$OBJCFLAGS $CFLAGS_VISIBILITY"
 OBJCXXFLAGS="$OBJCXXFLAGS $CXXFLAGS_VISIBILITY"
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
-
-
-
-
-
-
-
-
-
 
 
 
@@ -38685,211 +38996,7 @@ if test "$wxUSE_GUI" = "yes"; then
 else
             SUBDIRS="samples utils"
 fi
-
-
-
-# Check whether --with-cppunit-prefix was given.
-if test "${with_cppunit_prefix+set}" = set; then :
-  withval=$with_cppunit_prefix; cppunit_config_prefix="$withval"
-else
-  cppunit_config_prefix=""
-fi
-
-
-# Check whether --with-cppunit-exec-prefix was given.
-if test "${with_cppunit_exec_prefix+set}" = set; then :
-  withval=$with_cppunit_exec_prefix; cppunit_config_exec_prefix="$withval"
-else
-  cppunit_config_exec_prefix=""
-fi
-
-
-  if test x$cppunit_config_exec_prefix != x ; then
-     cppunit_config_args="$cppunit_config_args --exec-prefix=$cppunit_config_exec_prefix"
-     if test x${CPPUNIT_CONFIG+set} != xset ; then
-        CPPUNIT_CONFIG=$cppunit_config_exec_prefix/bin/cppunit-config
-     fi
-  fi
-  if test x$cppunit_config_prefix != x ; then
-     cppunit_config_args="$cppunit_config_args --prefix=$cppunit_config_prefix"
-     if test x${CPPUNIT_CONFIG+set} != xset ; then
-        CPPUNIT_CONFIG=$cppunit_config_prefix/bin/cppunit-config
-     fi
-  fi
-
-  # Extract the first word of "cppunit-config", so it can be a program name with args.
-set dummy cppunit-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_CPPUNIT_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $CPPUNIT_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_CPPUNIT_CONFIG="$CPPUNIT_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_CPPUNIT_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_path_CPPUNIT_CONFIG" && ac_cv_path_CPPUNIT_CONFIG="no"
-  ;;
-esac
-fi
-CPPUNIT_CONFIG=$ac_cv_path_CPPUNIT_CONFIG
-if test -n "$CPPUNIT_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPPUNIT_CONFIG" >&5
-$as_echo "$CPPUNIT_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  cppunit_version_min=1.8.0
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Cppunit - version >= $cppunit_version_min" >&5
-$as_echo_n "checking for Cppunit - version >= $cppunit_version_min... " >&6; }
-  no_cppunit=""
-  if test "$CPPUNIT_CONFIG" = "no" ; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-    no_cppunit=yes
-  else
-    CPPUNIT_CFLAGS=`$CPPUNIT_CONFIG --cflags`
-    CPPUNIT_LIBS=`$CPPUNIT_CONFIG --libs`
-    cppunit_version=`$CPPUNIT_CONFIG --version`
-
-    cppunit_major_version=`echo $cppunit_version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-    cppunit_minor_version=`echo $cppunit_version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-    cppunit_micro_version=`echo $cppunit_version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-
-    cppunit_major_min=`echo $cppunit_version_min | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-    cppunit_minor_min=`echo $cppunit_version_min | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-    cppunit_micro_min=`echo $cppunit_version_min | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-
-    cppunit_version_proper=`expr \
-        $cppunit_major_version \> $cppunit_major_min \| \
-        $cppunit_major_version \= $cppunit_major_min \& \
-        $cppunit_minor_version \> $cppunit_minor_min \| \
-        $cppunit_major_version \= $cppunit_major_min \& \
-        $cppunit_minor_version \= $cppunit_minor_min \& \
-        $cppunit_micro_version \>= $cppunit_micro_min `
-
-    if test "$cppunit_version_proper" = "1" ; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $cppunit_major_version.$cppunit_minor_version.$cppunit_micro_version" >&5
-$as_echo "$cppunit_major_version.$cppunit_minor_version.$cppunit_micro_version" >&6; }
-    else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-      no_cppunit=yes
-    fi
-  fi
-
-  if test "x$no_cppunit" = x ; then
-     SUBDIRS="$SUBDIRS tests"
-  else
-     CPPUNIT_CFLAGS=""
-     CPPUNIT_LIBS=""
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CPPUNIT" >&5
-$as_echo_n "checking for CPPUNIT... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CPPUNIT_CFLAGS"; then
-        pkg_cv_CPPUNIT_CFLAGS="$CPPUNIT_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cppunit >= 1.8.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cppunit >= 1.8.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit >= 1.8.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CPPUNIT_LIBS"; then
-        pkg_cv_CPPUNIT_LIBS="$CPPUNIT_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cppunit >= 1.8.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cppunit >= 1.8.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit >= 1.8.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cppunit >= 1.8.0"`
-        else
-	        CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit >= 1.8.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CPPUNIT_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: cppunit not found" >&5
-$as_echo "$as_me: WARNING: cppunit not found" >&2;}
-
-elif test $pkg_failed = untried; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: cppunit not found" >&5
-$as_echo "$as_me: WARNING: cppunit not found" >&2;}
-
-else
-	CPPUNIT_CFLAGS=$pkg_cv_CPPUNIT_CFLAGS
-	CPPUNIT_LIBS=$pkg_cv_CPPUNIT_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	SUBDIRS="$SUBDIRS tests"
-fi
-
-
-  fi
-
-
-
-
+SUBDIRS="$SUBDIRS tests"
 
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then

@@ -245,6 +245,10 @@ void wxGenericCalendarCtrl::SetWindowStyleFlag(long style)
                     (m_windowStyle & wxCAL_SEQUENTIAL_MONTH_SELECTION),
                   wxT("wxCAL_SEQUENTIAL_MONTH_SELECTION can't be changed after creation") );
 
+    wxASSERT_MSG( !((style & wxCAL_SUNDAY_FIRST) &&
+                   (style & wxCAL_MONDAY_FIRST)),
+                 "wxCAL_SUNDAY_FIRST and wxCAL_MONDAY_FIRST cannot be both used" );
+
     wxControl::SetWindowStyleFlag(style);
 }
 
@@ -644,7 +648,7 @@ bool wxGenericCalendarCtrl::AdjustDateToRange(wxDateTime *date) const
 
 size_t wxGenericCalendarCtrl::GetWeek(const wxDateTime& date) const
 {
-    size_t retval = date.GetWeekOfMonth(HasFlag(wxCAL_MONDAY_FIRST)
+    size_t retval = date.GetWeekOfMonth(WeekStartsOnMonday()
                                    ? wxDateTime::Monday_First
                                    : wxDateTime::Sunday_First);
 
@@ -891,7 +895,7 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetPen(wxPen(m_colHeaderBg, 1, wxPENSTYLE_SOLID));
         dc.DrawRectangle(0, y, GetClientSize().x, m_heightRow);
 
-        bool startOnMonday = HasFlag(wxCAL_MONDAY_FIRST);
+        bool startOnMonday = WeekStartsOnMonday();
         for ( int wd = 0; wd < 7; wd++ )
         {
             size_t n;
@@ -1238,7 +1242,7 @@ bool wxGenericCalendarCtrl::GetDateCoord(const wxDateTime& date, int *day, int *
 
     if ( IsDateShown(date) )
     {
-        bool startOnMonday = HasFlag(wxCAL_MONDAY_FIRST);
+        bool startOnMonday = WeekStartsOnMonday();
 
         // Find day
         *day = date.GetWeekDay();
@@ -1479,7 +1483,7 @@ wxCalendarHitTestResult wxGenericCalendarCtrl::HitTest(const wxPoint& pos,
         {
             if ( wd )
             {
-                if ( HasFlag(wxCAL_MONDAY_FIRST) )
+                if ( WeekStartsOnMonday() )
                 {
                     wday = wday == 6 ? 0 : wday + 1;
                 }

@@ -834,20 +834,23 @@ wxBitmapRefData::~wxBitmapRefData()
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    bool created = false ;
     int w = icon.GetWidth() ;
     int h = icon.GetHeight() ;
 
-    Create( w , h ) ;
-    if ( !created )
+    if ( Create( w, h ) )
     {
+        // Assume 32 bpp icon has transparency values
+        UseAlpha(icon.GetDepth() == 32);
+
         wxMemoryDC dc ;
         dc.SelectObject( *this ) ;
         dc.DrawIcon( icon , 0 , 0 ) ;
         dc.SelectObject( wxNullBitmap ) ;
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
@@ -973,7 +976,7 @@ IconRef wxBitmap::GetIconRef() const
 IconRef wxBitmap::CreateIconRef() const
 {
     IconRef icon = GetIconRef();
-    verify_noerr( AcquireIconRef(icon) );
+    __Verify_noErr(AcquireIconRef(icon));
     return icon;
 }
 #endif

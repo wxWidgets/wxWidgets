@@ -57,7 +57,7 @@
 //      On a 300 dots-per-inch (dpi) printer, that may be rounded up to 3 dots
 //      (0.25 mm); on a 600 dpi printer, it can be rounded to 5 dots.
 //
-// See also http://trac.wxwidgets.org/ticket/10942.
+// See also https://trac.wxwidgets.org/ticket/10942.
 #define TYPICAL_SCREEN_DPI  96.0
 
 //--------------------------------------------------------------------------------

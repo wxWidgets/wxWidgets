@@ -35,13 +35,29 @@
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/string.h"
 
+//-----------------------------------------------------------------------------
+//  helper function to get the length of the text
+//-----------------------------------------------------------------------------
+
+static unsigned int GetEntryTextLength(GtkEntry* entry)
+{
+#if GTK_CHECK_VERSION(2, 14, 0)
+    if ( wx_is_at_least_gtk2(14) )
+    {
+        return gtk_entry_get_text_length(entry);
+    }
+#endif // GTK+ 2.14+
+
+    return strlen(gtk_entry_get_text(entry));
+}
+
 // ============================================================================
 // signal handlers implementation
 // ============================================================================
 
 // "insert_text" handler for GtkEntry
-extern "C"
-void
+extern "C" {
+static void
 wx_gtk_insert_text_callback(GtkEditable *editable,
                             const gchar * new_text,
                             gint new_text_length,
@@ -61,7 +77,7 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
     // check that we don't overflow the max length limit if we have it
     if ( text_max_length )
     {
-        const int text_length = gtk_entry_get_text_length(entry);
+        const int text_length = GetEntryTextLength(entry);
 
         // We can't use new_text_length as it is in bytes while we want to count
         // characters (in first approximation, anyhow...).
@@ -127,6 +143,7 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
 
         g_signal_stop_emission_by_name (editable, "insert_text");
     }
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -243,6 +260,12 @@ void wxTextEntry::Remove(long from, long to)
     gtk_editable_delete_text(GetEditable(), from, to);
 }
 
+// static
+unsigned int wxTextEntry::GTKGetEntryTextLength(GtkEntry* entry)
+{
+    return GetEntryTextLength(entry);
+}
+
 // ----------------------------------------------------------------------------
 // clipboard operations
 // ----------------------------------------------------------------------------
@@ -320,7 +343,7 @@ long wxTextEntry::GetLastPosition() const
     long pos = -1;
     GtkEntry* entry = (GtkEntry*)GetEditable();
     if (GTK_IS_ENTRY(entry))
-        pos = gtk_entry_get_text_length(entry);
+        pos = GetEntryTextLength(entry);
 
     return pos;
 }
@@ -345,7 +368,7 @@ void wxTextEntry::SetSelection(long from, long to)
 #ifndef __WXGTK3__
     // avoid reported problem with RHEL 5 GTK+ 2.10 where selection is reset by
     // a clipboard callback, see #13277
-    if (gtk_check_version(2,12,0))
+    if (!wx_is_at_least_gtk2(12))
     {
         GtkEntry* entry = GTK_ENTRY(GetEditable());
         if (to < 0)
@@ -468,18 +491,14 @@ void wxTextEntry::ForceUpper()
 
 int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
 {
-    int result;
+    int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
-#ifndef __WXGTK3__
-    result = false;
-    if (gtk_check_version(2,22,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(22))
     {
         result = gtk_entry_im_context_filter_keypress(GetEntry(), event);
     }
 #else // GTK+ < 2.22
     wxUnusedVar(event);
-    result = false;
 #endif // GTK+ 2.22+
 
     return result;
@@ -502,16 +521,15 @@ bool wxTextEntry::GTKEntryOnInsertText(const char* text)
 
 bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 {
-#if GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,10,0) && !defined(__WXGTK4__)
     GtkEntry* entry = GetEntry();
 
     if ( !entry )
         return false;
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,10,0))
+    if ( !wx_is_at_least_gtk2(10) )
         return false;
-#endif
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     const GtkBorder* oldBorder = gtk_entry_get_inner_border(entry);
     GtkBorder newBorder;
 
@@ -536,6 +554,7 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
         newBorder.top = margins.y;
 
     gtk_entry_set_inner_border(entry, &newBorder);
+    wxGCC_WARNING_RESTORE()
 
     return true;
 #else
@@ -547,15 +566,15 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 wxPoint wxTextEntry::DoGetMargins() const
 {
     wxPoint point(-1, -1);
-#if GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,10,0) && !defined(__WXGTK4__)
     GtkEntry* entry = GetEntry();
     if (entry)
     {
-#ifndef __WXGTK3__
-        if (gtk_check_version(2,10,0) == NULL)
-#endif
+        if (wx_is_at_least_gtk2(10))
         {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             const GtkBorder* border = gtk_entry_get_inner_border(entry);
+            wxGCC_WARNING_RESTORE()
             if (border)
             {
                 point.x = border->left;

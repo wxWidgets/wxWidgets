@@ -1650,12 +1650,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
             if (SUCCEEDED(hres))
             {
                 wxChar buf[2048];
-                // Wrong prototype in early versions
-#if defined(__MINGW32__) && !wxCHECK_W32API_VERSION(2, 2)
-                psl->GetPath((CHAR*) buf, 2048, NULL, SLGP_UNCPRIORITY);
-#else
                 psl->GetPath(buf, 2048, NULL, SLGP_UNCPRIORITY);
-#endif
                 targetFilename = wxString(buf);
                 success = (shortcutPath != targetFilename);
 

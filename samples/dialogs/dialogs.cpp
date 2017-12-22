@@ -233,6 +233,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if wxUSE_PROGRESSDLG
     EVT_MENU(DIALOGS_PROGRESS,                      MyFrame::ShowProgress)
+#ifdef wxHAS_NATIVE_PROGRESSDIALOG
+    EVT_MENU(DIALOGS_PROGRESS_GENERIC,              MyFrame::ShowProgressGeneric)
+#endif // wxHAS_NATIVE_PROGRESSDIALOG
 #endif // wxUSE_PROGRESSDLG
 
     EVT_MENU(DIALOGS_APP_PROGRESS,                  MyFrame::ShowAppProgress)
@@ -349,7 +352,25 @@ bool MyApp::OnInit()
                          );
         for ( int i = 0; i <= PROGRESS_COUNT; i++ )
         {
-            if ( !dlg.Update(i) )
+            wxString msg;
+            switch ( i )
+            {
+                case 15:
+                    msg = "And the same dialog but with a very, very, very long"
+                          " message, just to test how it appears in this case.";
+                    break;
+
+                case 30:
+                    msg = "Back to brevity";
+                    break;
+
+                case 80:
+                    msg = "Back and adjusted";
+                    dlg.Fit();
+                    break;
+            }
+
+            if ( !dlg.Update(i, msg) )
                 break;
 
             wxMilliSleep(50);
@@ -490,6 +511,10 @@ bool MyApp::OnInit()
 
     #if wxUSE_PROGRESSDLG
         info_menu->Append(DIALOGS_PROGRESS, wxT("Pro&gress dialog\tCtrl-G"));
+        #ifdef wxHAS_NATIVE_PROGRESSDIALOG
+            info_menu->Append(DIALOGS_PROGRESS_GENERIC,
+                              wxT("Generic progress dialog\tCtrl-Alt-G"));
+        #endif // wxHAS_NATIVE_PROGRESSDIALOG
     #endif // wxUSE_PROGRESSDLG
 
         info_menu->Append(DIALOGS_APP_PROGRESS, wxT("&App progress\tShift-Ctrl-G"));
@@ -2652,16 +2677,16 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 
 #if wxUSE_PROGRESSDLG
 
+static const int max_ = 100;
+
 void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 {
-    static const int max = 100;
-
     wxProgressDialog dialog("Progress dialog example",
                             // "Reserve" enough space for the multiline
                             // messages below, we'll change it anyhow
                             // immediately in the loop below
                             wxString(' ', 100) + "\n\n\n\n",
-                            max,    // range
+                            max_,    // range
                             this,   // parent
                             wxPD_CAN_ABORT |
                             wxPD_CAN_SKIP |
@@ -2673,16 +2698,40 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                             wxPD_SMOOTH // - makes indeterminate mode bar on WinXP very small
                             );
 
+    DoShowProgress(dialog);
+}
+
+#ifdef wxHAS_NATIVE_PROGRESSDIALOG
+void MyFrame::ShowProgressGeneric( wxCommandEvent& WXUNUSED(event) )
+{
+    wxGenericProgressDialog dialog("Generic progress dialog example",
+                                   wxString(' ', 100) + "\n\n\n\n",
+                                   max_,
+                                   this,
+                                   wxPD_CAN_ABORT |
+                                   wxPD_CAN_SKIP |
+                                   wxPD_APP_MODAL |
+                                   wxPD_ELAPSED_TIME |
+                                   wxPD_ESTIMATED_TIME |
+                                   wxPD_REMAINING_TIME |
+                                   wxPD_SMOOTH);
+
+    DoShowProgress(dialog);
+}
+#endif // wxHAS_NATIVE_PROGRESSDIALOG
+
+void MyFrame::DoShowProgress(wxGenericProgressDialog& dialog)
+{
     bool cont = true;
-    for ( int i = 0; i <= max; i++ )
+    for ( int i = 0; i <= max_; i++ )
     {
         wxString msg;
 
         // test both modes of wxProgressDialog behaviour: start in
         // indeterminate mode but switch to the determinate one later
-        const bool determinate = i > max/2;
+        const bool determinate = i > max_/2;
 
-        if ( i == max )
+        if ( i == max_ )
         {
             msg = "That's all, folks!\n"
                   "\n"
@@ -2719,10 +2768,10 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
         // each skip will move progress about quarter forward
         if ( skip )
         {
-            i += max/4;
+            i += max_/4;
 
-            if ( i >= 100 )
-                i = 99;
+            if ( i >= max_ )
+                i = max_ - 1;
         }
 
         if ( !cont )
@@ -2736,7 +2785,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
             dialog.Resume();
         }
 
-        wxMilliSleep(200);
+        wxMilliSleep(100);
     }
 
     if ( !cont )
@@ -2745,7 +2794,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
     }
     else
     {
-        wxLogStatus(wxT("Countdown from %d finished"), max);
+        wxLogStatus(wxT("Countdown from %d finished"), max_);
     }
 }
 
@@ -2768,7 +2817,7 @@ void MyFrame::ShowAppProgress( wxCommandEvent& WXUNUSED(event) )
     {
         progress.SetValue(i);
 
-        wxMilliSleep(500);
+        wxMilliSleep(200);
     }
 
     wxLogStatus("Progress finished");

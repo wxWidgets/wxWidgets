@@ -37,6 +37,7 @@
 #include "wx/apptrait.h"
 #include "wx/cmdline.h"
 #include "wx/msgout.h"
+#include "wx/richmsgdlg.h"
 #include "wx/thread.h"
 #include "wx/vidmode.h"
 #include "wx/evtloop.h"
@@ -83,7 +84,7 @@ wxAppBase::wxAppBase()
 
 bool wxAppBase::Initialize(int& argcOrig, wxChar **argvOrig)
 {
-#ifdef __WXOSX__
+#ifdef __DARWIN__
     // Mac OS X passes a process serial number command line argument when
     // the application is launched from the Finder. This argument must be
     // removed from the command line arguments before being handled by the
@@ -102,7 +103,7 @@ bool wxAppBase::Initialize(int& argcOrig, wxChar **argvOrig)
             memmove(argvOrig + 1, argvOrig + 2, argcOrig * sizeof(wxChar*));
         }
     }
-#endif // __WXOSX__
+#endif // __DARWIN__
 
     if ( !wxAppConsole::Initialize(argcOrig, argvOrig) )
         return false;
@@ -127,6 +128,18 @@ wxAppBase::~wxAppBase()
     // this destructor is required for Darwin
 }
 
+void wxAppBase::DeleteAllTLWs()
+{
+    // TLWs remove themselves from wxTopLevelWindows when destroyed, so iterate
+    // until none are left.
+    while ( !wxTopLevelWindows.empty() )
+    {
+        // do not use Destroy() here as it only puts the TLW in pending list
+        // but we want to delete them now
+        delete wxTopLevelWindows.GetFirst()->GetData();
+    }
+}
+
 void wxAppBase::CleanUp()
 {
     // Clean up any still pending objects. Normally there shouldn't any as we
@@ -135,14 +148,8 @@ void wxAppBase::CleanUp()
     // the base class OnExit().
     DeletePendingObjects();
 
-    // and any remaining TLWs (they remove themselves from wxTopLevelWindows
-    // when destroyed, so iterate until none are left)
-    while ( !wxTopLevelWindows.empty() )
-    {
-        // do not use Destroy() here as it only puts the TLW in pending list
-        // but we want to delete them now
-        delete wxTopLevelWindows.GetFirst()->GetData();
-    }
+    // and any remaining TLWs
+    DeleteAllTLWs();
 
     // undo everything we did in Initialize() above
     wxBitmap::CleanUpHandlers();
@@ -163,8 +170,25 @@ void wxAppBase::CleanUp()
 wxWindow* wxAppBase::GetTopWindow() const
 {
     wxWindow* window = m_topWindow;
-    if (window == NULL && wxTopLevelWindows.GetCount() > 0)
-        window = wxTopLevelWindows.GetFirst()->GetData();
+
+    // If there is no top window or it is about to be destroyed,
+    // we need to search for the first TLW which is not pending delete
+    if ( !window || wxPendingDelete.Member(window) )
+    {
+        window = NULL;
+        wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
+        while ( node )
+        {
+            wxWindow* win = node->GetData();
+            if ( !wxPendingDelete.Member(win) )
+            {
+                window = win;
+                break;
+            }
+            node = node->GetNext();
+        }
+    }
+
     return window;
 }
 
@@ -451,51 +475,94 @@ wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {
 #if wxDEBUG_LEVEL
-    // under MSW we prefer to use the base class version using ::MessageBox()
-    // even if wxMessageBox() is available because it has less chances to
-    // double fault our app than our wxMessageBox()
+    // If possible, show the assert using a dialog allowing to hide the stack
+    // trace by default to avoid frightening people unnecessarily.
     //
-    // under DFB the message dialog is not always functional right now
+    // Otherwise, show the assert using a basic message box, but under MSW
+    // we prefer to use the base class version using ::MessageBox() even if
+    // wxMessageBox() is available because it has less chances to double
+    // fault our app than our wxMessageBox()
     //
-    // and finally we can't use wxMessageBox() if it wasn't compiled in, of
-    // course
-#if !defined(__WXMSW__) && !defined(__WXDFB__) && wxUSE_MSGDLG
+    // Notice that under DFB the message dialog is not always functional right
+    // now and, finally, we can't use wxMessageBox() if it wasn't compiled in.
+#if wxUSE_RICHMSGDLG || \
+    (wxUSE_MSGDLG && !defined(__WXMSW__) && !defined(__WXDFB__))
 
     // we can't (safely) show the GUI dialog from another thread, only do it
     // for the asserts in the main thread
     if ( wxIsMainThread() )
     {
-        wxString msgDlg = msg;
+        // Note that this and the other messages here are intentionally not
+        // translated -- they are for developpers only.
+        static const wxStringCharType* caption = wxS("wxWidgets Debug Alert");
+
+        wxString msgDlg = wxS("A debugging check in this application ")
+                          wxS("has failed.\n\n") + msg;
+
+        // "No" button means to continue execution, so it should be the default
+        // action as leaving the "Yes" button the default one would mean that
+        // accidentally pressing Space or Enter would trap and kill the program.
+        const int flags = wxYES_NO | wxNO_DEFAULT | wxICON_STOP;
 
 #if wxUSE_STACKWALKER
         const wxString stackTrace = GetAssertStackTrace();
+#endif // wxUSE_STACKWALKER
+
+#if wxUSE_RICHMSGDLG
+        wxRichMessageDialog dlg(NULL, msgDlg, caption, flags);
+
+        dlg.SetYesNoLabels("Stop", "Continue");
+
+        dlg.ShowCheckBox("Don't show this dialog again");
+
+#if wxUSE_STACKWALKER
+        if ( !stackTrace.empty() )
+            dlg.ShowDetailedText(stackTrace);
+#endif // wxUSE_STACKWALKER
+#else // !wxUSE_RICHMSGDLG
+#if wxUSE_STACKWALKER
         if ( !stackTrace.empty() )
             msgDlg << wxT("\n\nCall stack:\n") << stackTrace;
 #endif // wxUSE_STACKWALKER
 
-        // this message is intentionally not translated -- it is for
-        // developpers only
         msgDlg += wxT("\nDo you want to stop the program?\n")
                   wxT("You can also choose [Cancel] to suppress ")
                   wxT("further warnings.");
 
-        switch ( wxMessageBox(msgDlg, wxT("wxWidgets Debug Alert"),
-                              wxYES_NO | wxCANCEL | wxICON_STOP ) )
+        wxMessageDialog dlg(NULL, msg, caption, flags);
+#endif // wxUSE_RICHMSGDLG/!wxUSE_RICHMSGDLG
+
+        switch ( dlg.ShowModal() )
         {
-            case wxYES:
-                wxTrap();
+            case wxID_YES:
+                // See the comment about using the same variable in
+                // DoShowAssertDialog().
+                wxTrapInAssert = true;
                 break;
 
-            case wxCANCEL:
-                // no more asserts
+            case wxID_CANCEL:
+                // This button is used with the plain message dialog only to
+                // indicate that no more assert dialogs should be shown, as
+                // there is no other way to do it with it.
                 return true;
 
-            //case wxNO: nothing to do
+            case wxID_NO:
+#if wxUSE_RICHMSGDLG
+                if ( dlg.IsCheckBoxChecked() )
+                {
+                    // With this dialog, the checkbox is used to indicate that
+                    // the subsequent asserts should be skipped.
+                    return true;
+                }
+#endif // wxUSE_RICHMSGDLG
+
+                // Nothing to do otherwise.
+                break;
         }
 
         return false;
     }
-#endif // wxUSE_MSGDLG
+#endif // wxUSE_RICHMSGDLG || wxUSE_MSGDLG
 #endif // wxDEBUG_LEVEL
 
     return wxAppTraitsBase::ShowAssertDialog(msg);

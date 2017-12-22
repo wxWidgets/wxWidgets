@@ -380,6 +380,8 @@ protected:
     // common part of all ctors
     void Init();
 
+    virtual bool MSWShouldSetDefaultFont() const wxOVERRIDE { return false; }
+
     // Implement constrained best size calculation.
     virtual int DoGetBestClientHeight(int width) const wxOVERRIDE
         { return MSWGetBestViewRect(width, -1).y; }

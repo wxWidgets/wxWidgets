@@ -1,0 +1,57 @@
+#############################################################################
+# Name:        CMakeLists.txt
+# Purpose:     Primary CMake for wxWidgets
+# Author:      Tobias Taschner
+# Created:     2016-09-20
+# Copyright:   (c) 2016 wxWidgets development team
+# Licence:     wxWindows licence
+#############################################################################
+
+cmake_minimum_required(VERSION 2.8.12)
+
+if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+    # If no deployment target has been set default to the minimum supported
+    # OS X version (this has to be set before the first project() call)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7 CACHE STRING "OS X Deployment Target")
+endif()
+
+project(wxWidgets)
+
+include(build/cmake/policies.cmake NO_POLICY_SCOPE)
+
+# Initialize variables for quick access to wx root dir in sub dirs
+set(wxSOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(wxBINARY_DIR ${CMAKE_BINARY_DIR})
+set(wxOUTPUT_DIR ${wxBINARY_DIR}/lib)
+
+# parse the version number from wx/version.h and include in wxMAJOR_VERSION and wxMINOR_VERSION
+file(READ include/wx/version.h WX_VERSION_H_CONTENTS)
+string(REGEX MATCH "wxMAJOR_VERSION[ \t]+([0-9]+)"
+    wxMAJOR_VERSION ${WX_VERSION_H_CONTENTS})
+string (REGEX MATCH "([0-9]+)"
+    wxMAJOR_VERSION ${wxMAJOR_VERSION})
+string(REGEX MATCH "wxMINOR_VERSION[ \t]+([0-9]+)"
+    wxMINOR_VERSION ${WX_VERSION_H_CONTENTS})
+string (REGEX MATCH "([0-9]+)"
+    wxMINOR_VERSION ${wxMINOR_VERSION})
+string(REGEX MATCH "wxRELEASE_NUMBER[ \t]+([0-9]+)"
+    wxRELEASE_NUMBER ${WX_VERSION_H_CONTENTS})
+string (REGEX MATCH "([0-9]+)"
+    wxRELEASE_NUMBER ${wxRELEASE_NUMBER})
+# Determine if current version is a "Development" release
+math(EXPR rel_dev "${wxMINOR_VERSION} % 2")
+if(rel_dev)
+    set(wxVERSION_IS_DEV TRUE)
+else()
+    set(wxVERSION_IS_DEV FALSE)
+endif()
+
+set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
+set(wxCOPYRIGHT "1992-2016 wxWidgets")
+
+include(build/cmake/main.cmake)
+
+# Set the default startup project for Visual Studio
+if(wxBUILD_SAMPLES AND wxUSE_GUI)
+    set_directory_properties(PROPERTIES VS_STARTUP_PROJECT minimal)
+endif()

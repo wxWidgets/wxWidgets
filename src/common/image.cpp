@@ -568,41 +568,46 @@ struct BoxPrecalc
     int boxEnd;
 };
 
-inline int BoxBetween(int value, int low, int high)
-{
-    return wxMax(wxMin(value, high), low);
-}
-
 void ResampleBoxPrecalc(wxVector<BoxPrecalc>& boxes, int oldDim)
 {
     const int newDim = boxes.size();
     wxASSERT( oldDim > 0 && newDim > 0 );
-    if ( newDim > 1 )
-    {
-        // We want to map pixels in the range [0..newDim-1]
-        // to the range [0..oldDim-1]
-        const double scale_factor_1 = double(oldDim-1) / (newDim-1);
-        const int scale_factor_2 = (int)(scale_factor_1 / 2);
 
-        for ( int dst = 0; dst < newDim; ++dst )
-        {
-            // Source pixel in the Y direction
-            const int src_p = int(dst * scale_factor_1);
+    // We need to map pixel values in the range [-0.5 .. (newDim-1)+0.5]
+    // to the pixel values in the range [-0.5 .. (oldDim-1)+0.5].
+    // Transformation function is therefore:
+    //   pOld = sc * (pNew + 0.5) - 0.5, where sc = oldDim/newDim
+    //
+    // A new pixel pNew in the interval [pNew-0.5 .. pNew+0.5]
+    // is mapped to the old pixel in the interval [pOldLoBound..pOldUpBound],
+    // where:
+    //   pOldLoBound = sc * ((pNew-0.5) + 0.5) - 0.5 = sc * pNew - 0.5
+    //   pOldUpBound = sc * ((pNew+0.5) + 0.5) - 0.5 = sc * (pNew+1) - 0.5
+    // So, the lower bound of the pixel box (interval) is:
+    //   boxStart = round(pOldLoBound) = trunc((sc * pNew - 0.5) + 0.5) = trunc(sc * pNew)
+    // and the upper bound is:
+    // - if fraction(pOldUpBound) != 0.5 (bound inside the pixel):
+    //   boxEnd = round(pixOldUpBound) = trunc((sc * (pNew+1) - 0.5) + 0.5) = trunc(sc * (pNew+1))
+    //    e.g. for UpBound = 7.2 -> boxEnd = 7
+    //         for UpBound = 7.6 -> boxEnd = 8
+    // - if fraction(pOldUpBound) == 0.5 (bound at the edge of the pixel):
+    //   boxEnd = round(pOldUpBound)-1 = trunc((sc * (pNew+1) - 0.5) + 0.5) - 1 = trunc(sc * (pNew+1))-1
+    //    e.g. for UpBound = 7.5 -> boxEnd = 7 (not 8)
+    //
+    // In integer arithmetic:
+    //  boxStart = (oldDim * pNew) / newDim
+    //  boxEnd:
+    //   vEnd =  oldDim * (pNew+1) = oldDim * pNew + oldDim
+    //  if vEnd % newDim != 0 (frac(pOldUpBound) != 0.5) => boxEnd = vEnd / newDim
+    //  if vEnd % newDim == 0 (frac(pOldUpBound) == 0.5) => boxEnd = (vEnd / newDim) - 1
 
-            BoxPrecalc& precalc = boxes[dst];
-            precalc.boxStart = BoxBetween(int(src_p - scale_factor_1/2.0 + 1),
-                                          0, oldDim - 1);
-            precalc.boxEnd = BoxBetween(wxMax(precalc.boxStart + 1,
-                                              int(src_p + scale_factor_2)),
-                                        0, oldDim - 1);
-        }
-    }
-    else
+    int v = 0; // oldDim * 0
+    for ( int dst = 0; dst < newDim; dst++ )
     {
-        // Let's take entire source image.
-        BoxPrecalc& precalc = boxes[0];
-        precalc.boxStart = 0;
-        precalc.boxEnd = oldDim - 1;
+        BoxPrecalc& precalc = boxes[dst];
+        precalc.boxStart = v/newDim;
+        v += oldDim;
+        precalc.boxEnd = v%newDim != 0 ? v/newDim : (v/newDim)-1;
     }
 }
 

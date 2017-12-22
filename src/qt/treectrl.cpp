@@ -10,6 +10,8 @@
 
 #include "wx/treectrl.h"
 
+#include <QtWidgets/QTreeWidget>
+
 wxTreeCtrl::wxTreeCtrl()
 {
 }
@@ -348,7 +350,7 @@ wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
     return wxTreeItemId();
 }
 
-QTreeWidget *wxTreeCtrl::GetHandle() const
+QWidget *wxTreeCtrl::GetHandle() const
 {
     return m_qtTreeWidget;
 }

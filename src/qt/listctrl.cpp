@@ -22,6 +22,7 @@
 #include "wx/imaglist.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QTreeWidget>
 
 class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 {
@@ -300,6 +301,8 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 bool wxListCtrl::SetItem(wxListItem& info)
 {
     const long id = info.GetId();
+    if ( id < 0 )
+        return false;
     QTreeWidgetItem *qitem = QtGetItem(id);
     if ( qitem != NULL )
     {
@@ -344,9 +347,9 @@ bool wxListCtrl::SetItem(wxListItem& info)
             if ( info.GetFont().IsOk() )
                 qitem->setFont(col, info.GetFont().GetHandle() );
             if ( info.GetTextColour().IsOk() )
-                qitem->setTextColor(col, info.GetTextColour().GetHandle());
+                qitem->setTextColor(col, info.GetTextColour().GetQColor());
             if ( info.GetBackgroundColour().IsOk() )
-                qitem->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+                qitem->setBackgroundColor(col, info.GetBackgroundColour().GetQColor());
         }
         return true;
     }
@@ -916,7 +919,7 @@ int wxListCtrl::OnGetItemColumnImage(long item, long column) const
     return -1;
 }
 
-QTreeWidget *wxListCtrl::GetHandle() const
+QWidget *wxListCtrl::GetHandle() const
 {
     return m_qtTreeWidget;
 }

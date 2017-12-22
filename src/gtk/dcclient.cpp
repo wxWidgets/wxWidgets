@@ -382,7 +382,7 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
 #if GTK_CHECK_VERSION(2,12,0)
         // gdk_screen_get_rgba_colormap was added in 2.8, but this code is for
         // compositing which requires 2.12
-        else if (gtk_check_version(2,12,0) == NULL &&
+        else if (wx_is_at_least_gtk2(12) &&
             m_cmap == gdk_screen_get_rgba_colormap(gdk_colormap_get_screen(m_cmap)))
         {
             m_penGC = wxGetPoolGC( m_gdkwindow, wxPEN_COLOUR_ALPHA );
@@ -1551,7 +1551,8 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    if (m_pen == pen) return;
+    if (m_pen == pen && (!pen.IsOk() || pen.GetStyle() != wxPENSTYLE_USER_DASH))
+        return;
 
     m_pen = pen;
 
@@ -1581,22 +1582,22 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         }
     }
 
-    static const wxGTKDash dotted[] = {1, 1};
-    static const wxGTKDash short_dashed[] = {2, 2};
-    static const wxGTKDash wxCoord_dashed[] = {2, 4};
-    static const wxGTKDash dotted_dashed[] = {3, 3, 1, 3};
+    static const wxDash dotted[] = {1, 1};
+    static const wxDash short_dashed[] = {2, 2};
+    static const wxDash wxCoord_dashed[] = {2, 4};
+    static const wxDash dotted_dashed[] = {3, 3, 1, 3};
 
     // We express dash pattern in pen width unit, so we are
     // independent of zoom factor and so on...
     int req_nb_dash;
-    const wxGTKDash *req_dash;
+    const wxDash* req_dash;
 
     GdkLineStyle lineStyle = GDK_LINE_ON_OFF_DASH;
     switch (m_pen.GetStyle())
     {
         case wxPENSTYLE_USER_DASH:
             req_nb_dash = m_pen.GetDashCount();
-            req_dash = (wxGTKDash*)m_pen.GetDash();
+            req_dash = m_pen.GetDash();
             break;
         case wxPENSTYLE_DOT:
             req_nb_dash = 2;
@@ -1628,7 +1629,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
 
     if (req_dash && req_nb_dash)
     {
-        wxGTKDash *real_req_dash = new wxGTKDash[req_nb_dash];
+        wxDash* real_req_dash = new wxDash[req_nb_dash];
         if (real_req_dash)
         {
             for (int i = 0; i < req_nb_dash; i++)
@@ -1639,7 +1640,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         else
         {
             // No Memory. We use non-scaled dash pattern...
-            gdk_gc_set_dashes( m_penGC, 0, (wxGTKDash*)req_dash, req_nb_dash );
+            gdk_gc_set_dashes(m_penGC, 0, const_cast<wxDash*>(req_dash), req_nb_dash);
         }
     }
 

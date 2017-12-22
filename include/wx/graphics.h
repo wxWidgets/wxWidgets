@@ -21,6 +21,7 @@
 #include "wx/dynarray.h"
 #include "wx/font.h"
 #include "wx/image.h"
+#include "wx/peninfobase.h"
 #include "wx/vector.h"
 
 enum wxAntialiasMode
@@ -130,6 +131,34 @@ protected:
     virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
+};
+
+// ----------------------------------------------------------------------------
+// wxGraphicsPenInfo describes a wxGraphicsPen
+// ----------------------------------------------------------------------------
+
+class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
+{
+public:
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(),
+                               wxDouble width = 1.0,
+                               wxPenStyle style = wxPENSTYLE_SOLID)
+        : wxPenInfoBase<wxGraphicsPenInfo>(colour, style)
+    {
+        m_width = width;
+    }
+
+    // Setters
+
+    wxGraphicsPenInfo& Width(wxDouble width)
+        { m_width = width; return *this; }
+
+    // Accessors
+
+    wxDouble GetWidth() const { return m_width; }
+
+private:
+    wxDouble m_width;
 };
 
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
@@ -479,7 +508,10 @@ public:
 
     wxGraphicsPath CreatePath() const;
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+    wxGraphicsPen CreatePen(const wxPen& pen) const;
+
+    wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) const
+        { return DoCreatePen(info); }
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) const;
 
@@ -744,6 +776,8 @@ protected:
     // implementations of overloaded public functions: we use different names
     // for them to avoid the virtual function hiding problems in the derived
     // classes
+    virtual wxGraphicsPen DoCreatePen(const wxGraphicsPenInfo& info) const;
+
     virtual void DoDrawText(const wxString& str, wxDouble x, wxDouble y) = 0;
     virtual void DoDrawRotatedText(const wxString& str, wxDouble x, wxDouble y,
                                    wxDouble angle);
@@ -861,7 +895,7 @@ public:
 
     // Paints
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) = 0;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) = 0;
 

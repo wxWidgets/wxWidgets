@@ -33,6 +33,26 @@
     wxProgressDialog in a multi-threaded application you should be sure to use
     wxThreadEvent for your inter-threads communications).
 
+    Although wxProgressDialog is not really modal, it should be created on the
+    stack, and not the heap, as other modal dialogs, e.g. use it like this:
+    @code
+        void MyFrame::SomeFunc()
+        {
+            wxProgressDialog dialog(...);
+            for ( int i = 0; i < 100; ++i ) {
+                if ( !dialog.Update(i)) {
+                    // Cancelled by user.
+                    break;
+                }
+
+                ... do something time-consuming (but not too much) ...
+            }
+        }
+    @endcode
+    Note that this becomes even more important if the dialog is instantiated
+    during the program initialization, e.g. from wxApp::OnInit(): the dialog
+    must be destroyed before the main event loop is started in this case.
+
     @beginStyleTable
     @style{wxPD_APP_MODAL}
            Make the progress dialog modal. If this flag is not given, it is
@@ -192,9 +212,19 @@ public:
         for the user to dismiss it, meaning that this function does not return
         until this happens.
 
-        Notice that you may want to call Fit() to change the dialog size to
-        conform to the length of the new message if desired. The dialog does
-        not do this automatically.
+        Notice that if @a newmsg is longer than the currently shown message,
+        the dialog will be automatically made wider to account for it. However
+        if the new message is shorter than the previous one, the dialog doesn't
+        shrink back to avoid constant resizes if the message is changed often.
+        To do this and fit the dialog to its current contents you may call
+        Fit() explicitly. However the native MSW implementation of this class
+        does make the dialog shorter if the new text has fewer lines of text
+        than the old one, so it is recommended to keep the number of lines of
+        text constant in order to avoid jarring dialog size changes. You may
+        also want to make the initial message, specified when creating the
+        dialog, wide enough to avoid having to resize the dialog later, e.g. by
+        appending a long string of unbreakable spaces (@c wxString(L'\u00a0',
+        100)) to it.
 
         @param value
             The new value of the progress meter. It should be less than or equal to

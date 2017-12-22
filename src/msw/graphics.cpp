@@ -260,7 +260,7 @@ private:
 class wxGDIPlusPenData : public wxGraphicsObjectRefData
 {
 public:
-    wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
+    wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
     ~wxGDIPlusPenData();
 
     void Init();
@@ -400,7 +400,7 @@ public:
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
 
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE;
-    
+
     virtual bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE;
 
     virtual void BeginLayer(wxDouble opacity) wxOVERRIDE;
@@ -573,7 +573,7 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
 
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& pen) wxOVERRIDE;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE;
 
@@ -643,18 +643,19 @@ void wxGDIPlusPenData::Init()
     m_penBrush = NULL;
 }
 
-wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
-: wxGraphicsObjectRefData(renderer)
+wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
+                                    const wxGraphicsPenInfo &info )
+    : wxGraphicsObjectRefData(renderer)
 {
     Init();
-    m_width = pen.GetWidth();
+    m_width = info.GetWidth();
     if (m_width <= 0.0)
         m_width = 0.1;
 
-    m_pen = new Pen(wxColourToColor(pen.GetColour()), m_width );
+    m_pen = new Pen(wxColourToColor(info.GetColour()), m_width );
 
     LineCap cap;
-    switch ( pen.GetCap() )
+    switch ( info.GetCap() )
     {
     case wxCAP_ROUND :
         cap = LineCapRound;
@@ -675,7 +676,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
     m_pen->SetLineCap(cap,cap, DashCapFlat);
 
     LineJoin join;
-    switch ( pen.GetJoin() )
+    switch ( info.GetJoin() )
     {
     case wxJOIN_BEVEL :
         join = LineJoinBevel;
@@ -699,7 +700,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
     m_pen->SetDashStyle(DashStyleSolid);
 
     DashStyle dashStyle = DashStyleSolid;
-    switch ( pen.GetStyle() )
+    switch ( info.GetStyle() )
     {
     case wxPENSTYLE_SOLID :
         break;
@@ -723,7 +724,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
         {
             dashStyle = DashStyleCustom;
             wxDash *dashes;
-            int count = pen.GetDashes( &dashes );
+            int count = info.GetDashes( &dashes );
             if ((dashes != NULL) && (count > 0))
             {
                 REAL *userLengths = new REAL[count];
@@ -738,12 +739,12 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
         break;
     case wxPENSTYLE_STIPPLE :
         {
-            wxBitmap* bmp = pen.GetStipple();
-            if ( bmp && bmp->IsOk() )
+            wxBitmap bmp = info.GetStipple();
+            if ( bmp.IsOk() )
             {
-                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
+                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
 #if wxUSE_PALETTE
-                    (HPALETTE)bmp->GetPalette()->GetHPALETTE()
+                    (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
                     NULL
 #endif
@@ -755,11 +756,11 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
         }
         break;
     default :
-        if ( pen.GetStyle() >= wxPENSTYLE_FIRST_HATCH &&
-             pen.GetStyle() <= wxPENSTYLE_LAST_HATCH )
+        if ( info.GetStyle() >= wxPENSTYLE_FIRST_HATCH &&
+             info.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
             HatchStyle style;
-            switch( pen.GetStyle() )
+            switch( info.GetStyle() )
             {
             case wxPENSTYLE_BDIAGONAL_HATCH :
                 style = HatchStyleBackwardDiagonal;
@@ -785,7 +786,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
             m_penBrush = new HatchBrush
                              (
                                 style,
-                                wxColourToColor(pen.GetColour()),
+                                wxColourToColor(info.GetColour()),
                                 Color::Transparent
                              );
             m_pen->SetBrush( m_penBrush );
@@ -959,6 +960,25 @@ wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 }
 
 //-----------------------------------------------------------------------------
+// Support for adding private fonts
+//-----------------------------------------------------------------------------
+
+#if wxUSE_PRIVATE_FONTS
+
+namespace
+{
+
+Gdiplus::PrivateFontCollection* gs_privateFonts = NULL;
+Gdiplus::FontFamily* gs_pFontFamily = NULL;
+
+} // anonymous namespace
+
+// This function is defined in src/msw/font.cpp.
+extern const wxArrayString& wxGetPrivateFontFileNames();
+
+#endif // wxUSE_PRIVATE_FONTS
+
+//-----------------------------------------------------------------------------
 // wxGDIPlusFont implementation
 //-----------------------------------------------------------------------------
 
@@ -969,7 +989,35 @@ wxGDIPlusFontData::Init(const wxString& name,
                         const wxColour& col,
                         Unit fontUnit)
 {
-    m_font = new Font(name.wc_str(), size, style, fontUnit);
+#if wxUSE_PRIVATE_FONTS
+    // If the user has registered any private fonts, they should be used in
+    // preference to any system-wide ones.
+    m_font = NULL;
+    if ( gs_privateFonts )
+    {
+        const int count = gs_privateFonts->GetFamilyCount();
+
+        // We should find all the families, i.e. "found" should be "count".
+        int found = 0;
+        gs_privateFonts->GetFamilies(count, gs_pFontFamily, &found);
+
+        for ( int j = 0 ; j < found; j++ )
+        {
+            wchar_t familyName[LF_FACESIZE];
+            int rc = gs_pFontFamily[j].GetFamilyName(familyName);
+            if ( rc == 0 && name == familyName )
+            {
+                m_font = new Font(&gs_pFontFamily[j], size, style, fontUnit);
+                break;
+            }
+        }
+    }
+
+    if ( !m_font )
+#endif // wxUSE_PRIVATE_FONTS
+    {
+        m_font = new Font(name.wc_str(), size, style, fontUnit);
+    }
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
@@ -2047,7 +2095,7 @@ void wxGDIPlusContext::DoDrawText(const wxString& str,
 
     wxGDIPlusFontData * const
         fontData = (wxGDIPlusFontData *)m_font.GetRefData();
- 
+
     m_context->DrawString
                (
                     str.wc_str(*wxConvUI),  // string to draw, always Unicode
@@ -2160,7 +2208,7 @@ bool wxGDIPlusContext::ShouldOffset() const
 {
     if ( !m_enableOffset )
         return false;
-    
+
     int penwidth = 0 ;
     if ( !m_pen.IsNull() )
     {
@@ -2274,6 +2322,23 @@ void wxGDIPlusRenderer::Load()
     {
         wxLogTrace("gdiplus", "successfully initialized GDI+");
         m_loaded = 1;
+
+#if wxUSE_PRIVATE_FONTS
+        // Make private fonts available to GDI+, if any.
+        const wxArrayString& privateFonts = wxGetPrivateFontFileNames();
+        const size_t n = privateFonts.size();
+        if ( n )
+        {
+            gs_privateFonts = new Gdiplus::PrivateFontCollection();
+            for ( size_t i = 0 ; i < n; i++ )
+            {
+                const wxString& fname = privateFonts[i];
+                gs_privateFonts->AddFontFile(fname.t_str());
+            }
+
+            gs_pFontFamily = new Gdiplus::FontFamily[n];
+        }
+#endif // wxUSE_PRIVATE_FONTS
     }
     else
     {
@@ -2288,6 +2353,17 @@ void wxGDIPlusRenderer::Unload()
     {
         GdiplusShutdown(m_gditoken);
         m_gditoken = 0;
+
+#if wxUSE_PRIVATE_FONTS
+        if ( gs_privateFonts )
+        {
+            delete gs_privateFonts;
+            gs_privateFonts = NULL;
+
+            delete[] gs_pFontFamily;
+            gs_pFontFamily = NULL;
+        }
+#endif // wxUSE_PRIVATE_FONTS
     }
     m_loaded = -1; // next Load() will try again
 }
@@ -2448,15 +2524,15 @@ wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDoub
     return m;
 }
 
-wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
+wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsPen);
-    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( info.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
         wxGraphicsPen p;
-        p.SetRefData(new wxGDIPlusPenData( this, pen ));
+        p.SetRefData(new wxGDIPlusPenData( this, info ));
         return p;
     }
 }

@@ -348,6 +348,7 @@ bool wxIntProperty::IntToValue( wxVariant& variant, int value, int WXUNUSED(argF
 // back to it when mode is wxPG_PROPERTY_VALIDATION_SATURATE or wxPG_PROPERTY_VALIDATION_WRAP.
 // For argument 'value' of type 'double' there is a specialized function (below).
 //
+namespace {
 template<typename T>
 bool NumericValidation( const wxPGProperty* property,
                         T& value,
@@ -549,6 +550,7 @@ bool NumericValidation( const wxPGProperty* property,
     }
     return true;
 }
+} // namespace
 
 #if wxUSE_LONGLONG
 bool wxIntProperty::DoValidation( const wxPGProperty* property,

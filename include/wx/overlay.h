@@ -15,6 +15,8 @@
 
 #if defined(__WXDFB__)
     #define wxHAS_NATIVE_OVERLAY 1
+#elif defined(__WXOSX__) && wxOSX_USE_COCOA
+    #define wxHAS_NATIVE_OVERLAY 1
 #else
     // don't define wxHAS_NATIVE_OVERLAY
 #endif

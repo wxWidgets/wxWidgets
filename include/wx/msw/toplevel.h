@@ -11,6 +11,8 @@
 #ifndef _WX_MSW_TOPLEVEL_H_
 #define _WX_MSW_TOPLEVEL_H_
 
+#include "wx/weakref.h"
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW
 // ----------------------------------------------------------------------------
@@ -87,6 +89,9 @@ public:
     // deleted when the window itself is, do not delete it yourself. May return
     // NULL if getting the system menu failed.
     wxMenu *MSWGetSystemMenu() const;
+
+    // Enable or disable the close button of the specified window.
+    static bool MSWEnableCloseButton(WXHWND hwnd, bool enable = true);
 
 
     // implementation from now on
@@ -176,7 +181,7 @@ protected:
     // The last focused child: we remember it when we're deactivated and
     // restore focus to it when we're activated (this is done here) or restored
     // from iconic state (done by wxFrame).
-    wxWindow             *m_winLastFocused;
+    wxWindowRef m_winLastFocused;
 
 private:
 

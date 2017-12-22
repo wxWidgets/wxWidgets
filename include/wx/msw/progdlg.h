@@ -26,20 +26,26 @@ public:
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL) wxOVERRIDE;
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL) wxOVERRIDE;
 
-    void Resume();
+    virtual void Resume() wxOVERRIDE;
 
-    int GetValue() const;
-    wxString GetMessage() const;
+    virtual int GetValue() const wxOVERRIDE;
+    virtual wxString GetMessage() const wxOVERRIDE;
 
-    void SetRange(int maximum);
+    virtual void SetRange(int maximum) wxOVERRIDE;
 
     // Return whether "Cancel" or "Skip" button was pressed, always return
     // false if the corresponding button is not shown.
-    bool WasSkipped() const;
-    bool WasCancelled() const;
+    virtual bool WasSkipped() const wxOVERRIDE;
+    virtual bool WasCancelled() const wxOVERRIDE;
 
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
     virtual wxString GetTitle() const wxOVERRIDE;
+
+    virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void Fit() wxOVERRIDE;
 
     virtual bool Show( bool show = true ) wxOVERRIDE;
 
@@ -49,14 +55,23 @@ public:
     virtual WXWidget GetHandle() const wxOVERRIDE;
 
 private:
-    // Performs common routines to Update() and Pulse(). Requires the
-    // shared object to have been entered.
+    // Common part of Update() and Pulse().
+    //
+    // Returns false if the user requested cancelling the dialog.
     bool DoNativeBeforeUpdate(bool *skip);
+
+    // Dispatch the pending events to let the windows to update, just as the
+    // generic version does. This is done as part of DoNativeBeforeUpdate().
+    void DispatchEvents();
 
     // Updates the various timing informations for both determinate
     // and indeterminate modes. Requires the shared object to have
     // been entered.
     void UpdateExpandedInformation(int value);
+
+    // Get the task dialog geometry when using the native dialog.
+    wxRect GetTaskDialogRect() const;
+
 
     wxProgressDialogTaskRunner *m_taskDialogRunner;
 

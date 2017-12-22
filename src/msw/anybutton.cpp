@@ -44,6 +44,7 @@
 #include "wx/stockitem.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/dc.h"
+#include "wx/msw/private/winstyle.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/private/window.h"
 
@@ -387,15 +388,11 @@ void wxMSWButton::UpdateMultilineStyle(HWND hwnd, const wxString& label)
     // have to set it whenever the label becomes multi line as otherwise it
     // wouldn't be shown correctly as we don't use BS_MULTILINE when creating
     // the control unless it already has new lines in its label)
-    long styleOld = ::GetWindowLong(hwnd, GWL_STYLE),
-         styleNew;
+    wxMSWWinStyleUpdater updateStyle(hwnd);
     if ( label.find(wxT('\n')) != wxString::npos )
-        styleNew = styleOld | BS_MULTILINE;
+        updateStyle.TurnOn(BS_MULTILINE);
     else
-        styleNew = styleOld & ~BS_MULTILINE;
-
-    if ( styleNew != styleOld )
-        ::SetWindowLong(hwnd, GWL_STYLE, styleNew);
+        updateStyle.TurnOff(BS_MULTILINE);
 }
 
 wxSize wxMSWButton::GetFittingSize(wxWindow *win,
@@ -747,6 +744,19 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     else
     {
         m_imageData->SetBitmap(bitmap, which);
+
+        // if the focus bitmap is specified but current one isn't, use
+        // the focus bitmap for hovering as well if this is consistent
+        // with the current Windows version look and feel.
+        //
+        // rationale: this is compatible with the old wxGTK behaviour
+        // and also makes it much easier to do "the right thing" for
+        // all platforms (some of them, such as Windows, have "hot"
+        // buttons while others don't)
+        if ( which == State_Focused && !m_imageData->GetBitmap(State_Current).IsOk() )
+        {
+            m_imageData->SetBitmap(bitmap, State_Current);
+        }
     }
 
     // it should be enough to only invalidate the best size when the normal
@@ -1164,11 +1174,7 @@ void wxAnyButton::MakeOwnerDrawn()
     if ( !IsOwnerDrawn() )
     {
         // make it so
-        // note that BS_OWNERDRAW is not independent from other style bits
-        long style = GetWindowLong(GetHwnd(), GWL_STYLE);
-        style &= ~(BS_3STATE | BS_AUTO3STATE | BS_AUTOCHECKBOX | BS_AUTORADIOBUTTON | BS_CHECKBOX | BS_DEFPUSHBUTTON | BS_GROUPBOX | BS_PUSHBUTTON | BS_RADIOBUTTON | BS_PUSHLIKE);
-        style |= BS_OWNERDRAW;
-        SetWindowLong(GetHwnd(), GWL_STYLE, style);
+        wxMSWWinStyleUpdater(GetHwnd()).TurnOff(BS_TYPEMASK).TurnOn(BS_OWNERDRAW);
     }
 }
 

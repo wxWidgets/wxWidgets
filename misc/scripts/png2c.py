@@ -2,7 +2,7 @@
 
 # This script is a slightly modified version of the original found at
 #
-#       http://wiki.wxwidgets.org/Embedding_PNG_Images-Bin2c_In_Python
+#       https://wiki.wxwidgets.org/Embedding_PNG_Images-Bin2c_In_Python
 #
 # without any copyright attribution so it is assumed it can be used under
 # wxWindows licence as the rest of the wiki material.

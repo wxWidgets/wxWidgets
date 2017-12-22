@@ -53,6 +53,68 @@ enum wxShowEffect
 
 
 /**
+    Values for wxWindow::EnableTouchEvents() mask.
+
+    The values other than ::wxTOUCH_NONE and ::wxTOUCH_ALL_GESTURES can be
+    combined together to request enabling events for the specified gestures and
+    for them only.
+
+    @since 3.1.1
+ */
+enum
+{
+    /**
+        Don't generate any touch events.
+     */
+    wxTOUCH_NONE,
+
+    /**
+        Generate wxPanGestureEvent for vertical pans.
+
+        Note that under macOS horizontal pan events are also enabled when this
+        flag is specified.
+     */
+    wxTOUCH_VERTICAL_PAN_GESTURE,
+
+    /**
+        Generate wxPanGestureEvent for horizontal pans.
+
+        Note that under macOS vertical pan events are also enabled when this
+        flag is specified.
+     */
+    wxTOUCH_HORIZONTAL_PAN_GESTURE,
+
+    /**
+        Generate wxPanGestureEvent for any pans.
+
+        This is just a convenient combination of wxTOUCH_VERTICAL_PAN_GESTURE
+        and wxTOUCH_HORIZONTAL_PAN_GESTURE.
+     */
+    wxTOUCH_PAN_GESTURES,
+
+    /**
+        Generate wxZoomGestureEvent.
+     */
+    wxTOUCH_ZOOM_GESTURE,
+
+    /**
+        Generate wxRotateGestureEvent.
+     */
+    wxTOUCH_ROTATE_GESTURE,
+
+    /**
+        Generate events for press or tap gestures such as wxTwoFingerTapEvent,
+        wxLongPressEvent and wxPressAndTapEvent.
+     */
+    wxTOUCH_PRESS_GESTURES,
+
+    /**
+        Enable all supported gesture events.
+     */
+    wxTOUCH_ALL_GESTURES
+};
+
+/**
    flags for SendSizeEvent()
 */
 enum
@@ -2217,6 +2279,12 @@ public:
     bool UseBgCol() const;
 
     /**
+        Return @true if a background colour has been set for this window.
+        Same as @ref UseBgCol()
+    */
+    bool UseBackgroundColour() const;
+
+    /**
         Sets the font of the window but prevents it from being inherited by the
         children of this window.
 
@@ -2231,6 +2299,18 @@ public:
         @see SetForegroundColour(), InheritAttributes()
     */
     void SetOwnForegroundColour(const wxColour& colour);
+
+    /**
+        Return @true if a foreground colour has been set for this window.
+    */
+    bool UseForegroundColour() const;
+
+    /**
+        Return @true if this window inherits the foreground colour from its parent.
+
+        @see SetOwnForegroundColour(), InheritAttributes()
+    */
+    bool InheritsForegroundColour() const;
 
     /**
         @deprecated use wxDC::SetPalette instead.
@@ -3405,6 +3485,28 @@ public:
             The new y position for the cursor.
     */
     virtual void WarpPointer(int x, int y);
+
+    /**
+        Request generation of touch events for this window.
+
+        Each call to this function supersedes the previous ones, i.e. if you
+        want to receive events for both zoom and rotate gestures, you need to
+        call
+        @code
+            EnableTouchEvents(wxTOUCH_ZOOM_GESTURE | wxTOUCH_ROTATE_GESTURE);
+        @endcode
+        instead of calling it twice in a row as the second call would disable
+        the first gesture.
+
+        @param eventsMask Either wxTOUCH_NONE or wxTOUCH_ALL_GESTURES to
+            disable or enable gesture events for this window.
+
+        @return @true if the specified events were enabled or @false if the
+            current platform doesn't support touch events.
+
+        @since 3.1.1
+     */
+    virtual bool EnableTouchEvents(int eventsMask);
 
     //@}
 

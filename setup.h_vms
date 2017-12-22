@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 16 June 2017                                                       *
+ * Date : 12 December 2017                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -391,27 +391,11 @@ typedef pid_t GPid;
 #define wxUSE_WEBVIEW_WEBKIT2 0
 #endif
 
-#ifdef _MSC_VER
-#   if _MSC_VER >= 1310
-
-
+#if defined(_MSC_VER) || \
+    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
 #define wxUSE_GRAPHICS_CONTEXT 0
-#   else
-
-
-#       define wxUSE_GRAPHICS_CONTEXT 0
-#   endif
 #else
-
-
-
-
-
-#ifdef __WXGTK3__
-#   define wxUSE_GRAPHICS_CONTEXT 1
-#else
-#   define wxUSE_GRAPHICS_CONTEXT 1
-#endif
+#define wxUSE_GRAPHICS_CONTEXT 1
 #endif
 
 #define wxUSE_CONTROLS     1
@@ -535,6 +519,14 @@ typedef pid_t GPid;
 #define wxUSE_MENUS         1
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
+
+#ifndef VMS_GTK2
+#define wxUSE_PRIVATE_FONTS 0
+#else
+/* wxUSE_PRIVATE_FONTS needs a newer version of PANGO than presently *
+ * available for OpenVMS                                             */
+#define wxUSE_PRIVATE_FONTS 0
+#endif
 
 #if defined (__WXMOTIF__)
 #define wxUSE_RICHTOOLTIP 0
@@ -979,11 +971,6 @@ typedef pid_t GPid;
  * wxWebKitCtrl
  */
 #define wxUSE_WEBKIT 1
-
-/*
- * Objective-C class name uniquifying
- */
-#define wxUSE_OBJC_UNIQUIFYING 0
 
 /*
  * The const keyword is being introduced more in wxWindows.

@@ -4,19 +4,24 @@
 #include "wx/wxprec.h"
 #include "wx/stopwatch.h"
 #include "wx/evtloop.h"
-#include "wx/cppunit.h"
+
+// This needs to be included before catch.hpp to be taken into account.
+#include "testdate.h"
+
+#include "wx/catch_cppunit.h"
 
 // Custom test macro that is only defined when wxUIActionSimulator is available
 // this allows the tests that do not rely on it to run on platforms that don't
 // support it.
 //
-// FIXME: And while OS X does support it, more or less, too many tests
-//        currently fail under it so disable all interactive tests there. They
-//        should, of course, be reenabled a.s.a.p.
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
-    #define WXUISIM_TEST(test) CPPUNIT_TEST(test)
+// Unfortunately, currently too many of the UI tests fail on non-MSW platforms,
+// so they're disabled there by default. This really, really needs to be fixed,
+// but for now having the UI tests always failing is not helpful as it prevents
+// other test failures from being noticed, so disable them there.
+#if wxUSE_UIACTIONSIMULATOR
+    #define WXUISIM_TEST(test) if ( EnableUITests() ) { CPPUNIT_TEST(test) }
 #else
-    #define WXUISIM_TEST(test) (void)0
+    #define WXUISIM_TEST(test)
 #endif
 
 // define wxHAVE_U_ESCAPE if the compiler supports \uxxxx character constants
@@ -100,13 +105,13 @@ public:
     #define WX_ASSERT_FAILS_WITH_ASSERT(cond)
 #endif
 
-#define WX_ASSERT_EVENT_OCCURS(eventcounter, count) \
+#define WX_ASSERT_EVENT_OCCURS_IN(eventcounter, count, ms) \
 {\
     wxStopWatch sw; \
     wxEventLoopBase* loop = wxEventLoopBase::GetActive(); \
     while(eventcounter.GetCount() < count) \
     { \
-        if(sw.Time() < 100) \
+        if(sw.Time() < ms) \
             loop->Dispatch(); \
         else \
         { \
@@ -118,6 +123,8 @@ public:
     } \
     eventcounter.Clear(); \
 }
+
+#define WX_ASSERT_EVENT_OCCURS(eventcounter,count) WX_ASSERT_EVENT_OCCURS_IN(eventcounter, count, 100)
 
 // these functions can be used to hook into wxApp event processing and are
 // currently used by the events propagation test
@@ -167,27 +174,18 @@ private:
 
 #if wxUSE_GUI
 
+// Return true if the UI tests are enabled, used by WXUISIM_TEST().
+extern bool EnableUITests();
+
 // Helper function deleting the window without asserts (and hence exceptions
 // thrown from its dtor!) even if it has mouse capture.
 void DeleteTestWindow(wxWindow* win);
 
 #endif // wxUSE_GUI
 
-// Macro that can be used to register the test with the given name in both the
-// global unnamed registry so that it is ran by default and a registry with the
-// same name as this test to allow running just this test individually.
-//
-// Notice that the name shouldn't include the "TestCase" suffix, it's added
-// automatically by this macro.
-//
-// Implementation note: CPPUNIT_TEST_SUITE_[NAMED_]REGISTRATION macros can't be
-// used here because they both declare the variable with the same name (as the
-// "unique" name they generate is based on the line number which is the same
-// for both calls inside the macro), so we need to do it manually.
-#define wxREGISTER_UNIT_TEST(name) \
-    static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
-        CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterRegistry__ ); \
-    static CPPUNIT_NS::AutoRegisterSuite< name##TestCase > \
-        CPPUNIT_MAKE_UNIQUE_NAME( autoRegisterNamedRegistry__ )(#name "TestCase")
+// Convenience macro which registers a test case using just its "base" name,
+// i.e. without the common "TestCase" suffix, as its tag.
+#define wxREGISTER_UNIT_TEST(testclass) \
+    wxREGISTER_UNIT_TEST_WITH_TAGS(testclass ## TestCase, "[" #testclass "]")
 
 #endif

@@ -11,6 +11,7 @@
 #include "wx/spinbutt.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QSpinBox>
 
 class wxQtSpinButton : public wxQtEventSignalHandler< QSpinBox, wxSpinButton  >
 {
@@ -81,7 +82,7 @@ void wxSpinButton::SetValue(int val)
     m_qtSpinBox->setValue( val );
 }
 
-QSpinBox *wxSpinButton::GetHandle() const
+QWidget *wxSpinButton::GetHandle() const
 {
     return m_qtSpinBox;
 }

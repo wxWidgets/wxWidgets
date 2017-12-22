@@ -402,6 +402,7 @@ public:
             1, m_events.size()
         );
 
+        delete e;
     }
 
     virtual void GenerateEvent() = 0;
@@ -830,7 +831,7 @@ void FileSystemWatcherTestCase::TestTrees()
         {
             CPPUNIT_ASSERT(m_watcher);
 
-            size_t treeitems = 1; // the trunk
+            int treeitems = 1; // the trunk
 #if !defined(__WINDOWS__) && !defined(wxHAVE_FSEVENTS_FILE_NOTIFICATIONS)
             // When there's no file mask, wxMSW and wxOSX set a single watch
             // on the trunk which is implemented recursively.
@@ -861,7 +862,7 @@ void FileSystemWatcherTestCase::TestTrees()
             // as it was the first time, despite also adding 'child' separately
             // Except that in wxMSW this isn't true: each watch will be a
             // single, recursive dir; so fudge the count
-            size_t fudge = 0;
+            int fudge = 0;
 #if defined(__WINDOWS__) || defined(wxHAVE_FSEVENTS_FILE_NOTIFICATIONS)
             fudge = 1;
 #endif // __WINDOWS__ || wxHAVE_FSEVENTS_FILE_NOTIFICATIONS
@@ -902,9 +903,9 @@ void FileSystemWatcherTestCase::TestTrees()
             // and another +1 for "child").
             // On OS X, if we use FSEvents then we still only have 1 watch.
 #ifdef wxHAVE_FSEVENTS_FILE_NOTIFICATIONS
-            const size_t treeitems = 1;
+            const int treeitems = 1;
 #else
-            const size_t treeitems = subdirs + 2;
+            const int treeitems = subdirs + 2;
 #endif
             m_watcher->AddTree(dir, wxFSW_EVENT_ALL, "*.txt");
 

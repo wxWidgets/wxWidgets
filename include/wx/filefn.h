@@ -127,8 +127,7 @@ enum wxPosixPermissions
       ( \
         defined(__VISUALC__) || \
         defined(__MINGW64_TOOLCHAIN__) || \
-        (defined(__MINGW32__) && !defined(__WINE__) && \
-                                wxCHECK_W32API_VERSION(0, 5)) || \
+        (defined(__MINGW32__) && !defined(__WINE__)) || \
         defined(__BORLANDC__) \
       )
 

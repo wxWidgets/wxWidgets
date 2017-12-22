@@ -334,6 +334,10 @@ void wxListCtrl::MSWSetExListStyles()
         // it seems better to enable it by default than disable
         LVS_EX_HEADERDRAGDROP
     );
+
+    // As we use LVS_EX_DOUBLEBUFFER above, we don't need to erase our
+    // background and doing it only results in flicker.
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -393,12 +397,10 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxLC_SORT_DESCENDING )
         wstyle |= LVS_SORTDESCENDING;
 
-#if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( style & wxLC_VIRTUAL )
     {
         wstyle |= LVS_OWNERDATA;
     }
-#endif // ancient cygwin
 
     return wstyle;
 }

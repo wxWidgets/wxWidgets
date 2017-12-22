@@ -216,6 +216,7 @@ void wxIconBundle::AddIcon(wxInputStream& stream, wxBitmapType type)
 // stored as an MS Windows resource.
 void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
 {
+#ifdef __WXMSW__
     const void* data = NULL;
     size_t outLen = 0;
 
@@ -249,6 +250,9 @@ void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
             wxLogDebug(wxS("Failed to load icon with id %u for group icon resource '%s'."), iconID, resourceName);
         }
     }
+#else
+    wxLogError(wxS("Loading icons from resources isn't implemented in this toolkit port yet."));
+#endif
 }
 
 #endif // defined(__WINDOWS__) && wxUSE_ICO_CUR

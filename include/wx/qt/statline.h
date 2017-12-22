@@ -8,7 +8,7 @@
 #ifndef _WX_QT_STATLINE_H_
 #define _WX_QT_STATLINE_H_
 
-#include <QtWidgets/QFrame>
+class QFrame;
 
 class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
@@ -29,7 +29,7 @@ public:
                  long style = wxLI_HORIZONTAL,
                  const wxString &name = wxStaticLineNameStr );
 
-    virtual QFrame *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 private:
     QFrame *m_qtFrame;

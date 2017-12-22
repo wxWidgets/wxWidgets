@@ -75,7 +75,7 @@ protected:
 
     bool ExpandPanels(wxOrientation direction, int maximum_amount);
     bool CollapsePanels(wxOrientation direction, int minimum_amount);
-    void ShowScrollButtons();
+    bool ShowScrollButtons();
     void HideScrollButtons();
 
     void CommonInit(const wxString& label, const wxBitmap& icon);

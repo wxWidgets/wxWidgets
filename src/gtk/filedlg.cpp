@@ -21,6 +21,7 @@
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/mnemonics.h"
 
 #ifdef __UNIX__
 #include <unistd.h> // chdir
@@ -44,7 +45,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
 #ifndef __WXGTK3__
 #if GTK_CHECK_VERSION(2,7,3)
-    if (gtk_check_version(2, 7, 3) != NULL)
+    if (!wx_is_at_least_gtk2(8))
 #endif
     {
         if ((style & wxFD_SAVE) && (style & wxFD_OVERWRITE_PROMPT))
@@ -213,24 +214,37 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
-    const gchar* ok_btn_stock;
+    wxString ok_btn_stock;
     if ( style & wxFD_SAVE )
     {
         gtk_action = GTK_FILE_CHOOSER_ACTION_SAVE;
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+        ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE));
+#else
         ok_btn_stock = GTK_STOCK_SAVE;
+#endif // GTK >= 3.10 / < 3.10
     }
     else
     {
         gtk_action = GTK_FILE_CHOOSER_ACTION_OPEN;
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+        ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN));
+#else
         ok_btn_stock = GTK_STOCK_OPEN;
+#endif // GTK >= 3.10 / < 3.10
     }
 
     m_widget = gtk_file_chooser_dialog_new(
                    wxGTK_CONV(m_message),
                    gtk_parent,
                    gtk_action,
-                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                   ok_btn_stock, GTK_RESPONSE_ACCEPT,
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                   static_cast<const gchar*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
+#else
+                   GTK_STOCK_CANCEL,
+#endif // GTK >= 3.10 / < 3.10
+                   GTK_RESPONSE_CANCEL,
+                   static_cast<const gchar*>(wxGTK_CONV(ok_btn_stock)), GTK_RESPONSE_ACCEPT,
                    NULL);
     g_object_ref(m_widget);
     GtkFileChooser* file_chooser = GTK_FILE_CHOOSER(m_widget);
@@ -306,11 +320,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
         }
 
 #if GTK_CHECK_VERSION(2,7,3)
-        if ((style & wxFD_OVERWRITE_PROMPT)
-#ifndef __WXGTK3__
-            && gtk_check_version(2,7,3) == NULL
-#endif
-            )
+        if ((style & wxFD_OVERWRITE_PROMPT) && wx_is_at_least_gtk2(8))
         {
             gtk_file_chooser_set_do_overwrite_confirmation(file_chooser, true);
         }

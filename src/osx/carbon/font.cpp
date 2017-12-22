@@ -680,35 +680,6 @@ CGFontRef wxFont::OSXGetCGFont() const
 
 #endif
 
-
-#if wxOSX_USE_COCOA
-
-NSFont* wxFont::OSXGetNSFont() const
-{
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
-
-    // cast away constness otherwise lazy font resolution is not possible
-    const_cast<wxFont *>(this)->RealizeResource();
-
-    return const_cast<NSFont*>(reinterpret_cast<const NSFont*>(OSXGetCTFont()));
-}
-
-#endif
-
-#if wxOSX_USE_IPHONE
-
-UIFont* wxFont::OSXGetUIFont() const
-{
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
-
-    // cast away constness otherwise lazy font resolution is not possible
-    const_cast<wxFont *>(this)->RealizeResource();
-
-    return const_cast<UIFont*>(reinterpret_cast<const UIFont*>(OSXGetCTFont()));
-}
-
-#endif
-
 const wxNativeFontInfo * wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );

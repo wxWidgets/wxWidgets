@@ -99,9 +99,9 @@ MainWindow *TheMainWindow = NULL;
 // Create the fonts
 void MainWindow::CreateFonts()
 {
-    m_normalFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxNORMAL, wxNORMAL);
-    m_boldFont =   wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxNORMAL, wxBOLD);
-    m_italicFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxITALIC, wxNORMAL);
+    m_normalFont = wxTheFontList->FindOrCreateFont(wxFontInfo(pointSize).Family(wxFONTFAMILY_SWISS));
+    m_boldFont =   wxTheFontList->FindOrCreateFont(wxFontInfo(pointSize).Family(wxFONTFAMILY_SWISS).Bold());
+    m_italicFont = wxTheFontList->FindOrCreateFont(wxFontInfo(pointSize).Family(wxFONTFAMILY_SWISS).Italic());
 }
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
@@ -119,7 +119,7 @@ MainWindow::MainWindow(wxFrame *frame, wxWindowID id, const wxString& title,
     ReadPreferences();
     CreateFonts();
 
-    SetIcon(wxpoem_xpm);
+    SetIcon(wxICON(wxpoem));
 
     m_corners[0] = new wxIcon( corner1_xpm );
     m_corners[1] = new wxIcon( corner2_xpm );
@@ -788,7 +788,7 @@ bool LoadPoem(const wxChar *file_name, long position)
     }
 
     wxSprintf(buf, wxT("%s.dat"), file_name);
-    data_file = wxFopen(buf, wxT("r"));
+    data_file = wxFopen(buf, wxT("rb"));
 
     if (data_file == NULL)
     {
@@ -862,7 +862,7 @@ long MainWindow::DoSearch(void)
     if (data_filename)
         wxSprintf(buf, wxT("%s.dat"), data_filename);
 
-    file = wxFopen(buf, wxT("r"));
+    file = wxFopen(buf, wxT("rb"));
     if (! (data_filename && file))
     {
         wxSprintf(error_buf, wxT("Poetry data file %s not found\n"), buf);
@@ -948,7 +948,7 @@ bool Compile(void)
     if (data_filename)
         wxSprintf(buf, wxT("%s.dat"), data_filename);
 
-    file = wxFopen(buf, wxT("r"));
+    file = wxFopen(buf, wxT("rb"));
     if (! (data_filename && file))
     {
         wxSprintf(error_buf, wxT("Poetry data file %s not found\n"), buf);

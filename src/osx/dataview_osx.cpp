@@ -563,6 +563,16 @@ int wxDataViewCtrl::GetSelections(wxDataViewItemArray& sel) const
   return GetDataViewPeer()->GetSelections(sel);
 }
 
+wxDataViewItem wxDataViewCtrl::GetTopItem() const
+{
+    return GetDataViewPeer()->GetTopItem();
+}
+
+int wxDataViewCtrl::GetCountPerPage() const
+{
+    return GetDataViewPeer()->GetCountPerPage();
+}
+
 void wxDataViewCtrl::HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
 {
   return GetDataViewPeer()->HitTest(point,item,columnPtr);

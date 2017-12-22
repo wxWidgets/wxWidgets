@@ -2764,15 +2764,47 @@ void wxStdDialogButtonSizer::SetCancelButton( wxButton *button )
 
 void wxStdDialogButtonSizer::Realize()
 {
+    // Helper used to move the most recently added button after the previously
+    // added one in TAB order.
+    class TabOrderUpdater
+    {
+    public:
+        TabOrderUpdater()
+            : m_lastAdded(NULL)
+        {
+        }
+
+        void Add(wxButton* btn)
+        {
+            if ( m_lastAdded )
+            {
+                // Button should follow previous one in the keyboard navigation
+                // order.
+                btn->MoveAfterInTabOrder(m_lastAdded);
+            }
+
+            m_lastAdded = btn;
+        }
+
+    private:
+        wxButton* m_lastAdded;
+    };
+
+    TabOrderUpdater tabOrder;
+
 #ifdef __WXMAC__
         Add(0, 0, 0, wxLEFT, 6);
         if (m_buttonHelp)
+        {
             Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
+            tabOrder.Add(m_buttonHelp);
+        }
 
         if (m_buttonNegative){
             // HIG POLICE BULLETIN - destructive buttons need extra padding
             // 24 pixels on either side
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 12);
+            tabOrder.Add(m_buttonNegative);
         }
 
         // extra whitespace between help/negative and cancel/ok buttons
@@ -2782,12 +2814,17 @@ void wxStdDialogButtonSizer::Realize()
             Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
             // Cancel or help should be default
             // m_buttonCancel->SetDefaultButton();
+
+            tabOrder.Add(m_buttonCancel);
         }
 
         // Ugh, Mac doesn't really have apply dialogs, so I'll just
         // figure the best place is between Cancel and OK
         if (m_buttonApply)
+        {
             Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
+            tabOrder.Add(m_buttonApply);
+        }
 
         if (m_buttonAffirmative){
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 6);
@@ -2798,6 +2835,7 @@ void wxStdDialogButtonSizer::Realize()
                 if (m_buttonNegative)
                     m_buttonNegative->SetLabel(_("Don't Save"));
             }
+            tabOrder.Add(m_buttonAffirmative);
         }
 
         // Extra space around and at the right
@@ -2816,22 +2854,37 @@ void wxStdDialogButtonSizer::Realize()
         AddSpacer(9);
 
         if (m_buttonHelp)
+        {
             Add(m_buttonHelp, flagsBtn);
+            tabOrder.Add(m_buttonHelp);
+        }
 
         // Align the rest of the buttons to the right.
         AddStretchSpacer();
 
         if (m_buttonNegative)
+        {
             Add(m_buttonNegative, flagsBtn);
+            tabOrder.Add(m_buttonNegative);
+        }
 
         if (m_buttonApply)
+        {
             Add(m_buttonApply, flagsBtn);
+            tabOrder.Add(m_buttonApply);
+        }
 
         if (m_buttonCancel)
+        {
             Add(m_buttonCancel, flagsBtn);
+            tabOrder.Add(m_buttonCancel);
+        }
 
         if (m_buttonAffirmative)
+        {
             Add(m_buttonAffirmative, flagsBtn);
+            tabOrder.Add(m_buttonAffirmative);
+        }
 
         // Ensure that the right margin is 12 as well.
         AddSpacer(9);
@@ -2843,45 +2896,64 @@ void wxStdDialogButtonSizer::Realize()
 
         if (m_buttonAffirmative){
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonAffirmative->ConvertDialogToPixels(wxSize(2, 0)).x);
+            tabOrder.Add(m_buttonAffirmative);
         }
 
         if (m_buttonNegative){
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonNegative->ConvertDialogToPixels(wxSize(2, 0)).x);
+            tabOrder.Add(m_buttonNegative);
         }
 
         if (m_buttonCancel){
             Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonCancel->ConvertDialogToPixels(wxSize(2, 0)).x);
+            tabOrder.Add(m_buttonCancel);
         }
+
         if (m_buttonApply)
+        {
             Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonApply->ConvertDialogToPixels(wxSize(2, 0)).x);
+            tabOrder.Add(m_buttonApply);
+        }
 
         if (m_buttonHelp)
+        {
             Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(2, 0)).x);
+            tabOrder.Add(m_buttonHelp);
+        }
 #else
         // GTK+1 and any other platform
 
         // Add(0, 0, 0, wxLEFT, 5); // Not sure what this was for but it unbalances the dialog
         if (m_buttonHelp)
+        {
             Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(4, 0)).x);
+            tabOrder.Add(m_buttonHelp);
+        }
 
         // extra whitespace between help and cancel/ok buttons
         Add(0, 0, 1, wxEXPAND, 0);
 
         if (m_buttonApply)
+        {
             Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonApply->ConvertDialogToPixels(wxSize(4, 0)).x);
+            tabOrder.Add(m_buttonApply);
+        }
 
         if (m_buttonAffirmative){
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonAffirmative->ConvertDialogToPixels(wxSize(4, 0)).x);
+            tabOrder.Add(m_buttonAffirmative);
         }
 
         if (m_buttonNegative){
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonNegative->ConvertDialogToPixels(wxSize(4, 0)).x);
+            tabOrder.Add(m_buttonNegative);
         }
 
         if (m_buttonCancel){
             Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonCancel->ConvertDialogToPixels(wxSize(4, 0)).x);
             // Cancel or help should be default
             // m_buttonCancel->SetDefaultButton();
+            tabOrder.Add(m_buttonCancel);
         }
 
 #endif

@@ -9,8 +9,6 @@
 #ifndef _WX_GTK_PEN_H_
 #define _WX_GTK_PEN_H_
 
-typedef signed char wxGTKDash;
-
 //-----------------------------------------------------------------------------
 // wxPen
 //-----------------------------------------------------------------------------
@@ -21,6 +19,8 @@ public:
     wxPen() { }
 
     wxPen( const wxColour &colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID );
+
+    wxPen( const wxPenInfo& info );
 
     virtual ~wxPen();
 

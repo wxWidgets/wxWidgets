@@ -75,4 +75,16 @@ implemented for Windows and Unix (GTK+ and Motif) ports only, all the methods
 are available for all the ports and should be used to make your program work
 correctly when they are implemented later.
 
+@section overview_font_privateinfo Private font information
+
+Sometimes an application needs fonts that are not globally installed on the
+system. On Macintosh/OSX this can be arranged by placing the desired fonts
+within the Application Bundle in Contents/Resources/Fonts and using
+the ATSApplicationFontsPath key to point there. The full details of the
+procedure there can be found as OSX developer resources. For the GTK+ and
+Windows ports it is possible to add TrueType fonts from arbitrary locations at
+run-time using wxFont::AddPrivateFont(). Notice that under MSW this function
+should be called before creating the first wxGraphicsContext object if you want
+the private font to be usable from it.
+
 */

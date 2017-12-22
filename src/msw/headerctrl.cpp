@@ -38,6 +38,7 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/customdraw.h"
+#include "wx/msw/private/winstyle.h"
 
 #ifndef HDM_SETBITMAPMARGIN
     #define HDM_SETBITMAPMARGIN 0x1234
@@ -95,6 +96,7 @@ void wxHeaderCtrl::Init()
     m_imageList = NULL;
     m_scrollOffset = 0;
     m_colBeingDragged = -1;
+    m_isColBeingResized = false;
     m_customDraw = NULL;
 }
 
@@ -401,12 +403,8 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
         }
     }
 
-    long controlStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-    if ( hasResizableColumns )
-        controlStyle &= ~HDS_NOSIZING;
-    else
-        controlStyle |= HDS_NOSIZING;
-    ::SetWindowLong(GetHwnd(), GWL_STYLE, controlStyle);
+    wxMSWWinStyleUpdater(GetHwnd())
+        .TurnOnOrOff(!hasResizableColumns, HDS_NOSIZING);
 }
 
 void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
@@ -695,8 +693,9 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 
+            m_isColBeingResized = true;
             evtType = wxEVT_HEADER_BEGIN_RESIZE;
-            // fall through
+            wxFALLTHROUGH;
 
         case HDN_ENDTRACKA:
         case HDN_ENDTRACKW:
@@ -710,6 +709,8 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 const int minWidth = GetColumn(idx).GetMinWidth();
                 if ( width < minWidth )
                     width = minWidth;
+
+                m_isColBeingResized = false;
             }
             break;
 
@@ -719,7 +720,31 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // just in case we are dealing with one of these buggy versions.
         case HDN_TRACK:
         case HDN_ITEMCHANGING:
-            if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) )
+            // With "Show window contents while dragging" option enabled
+            // the sequence of notifications is as follows:
+            //   HDN_BEGINTRACK
+            //   HDN_ITEMCHANGING
+            //   HDN_ITEMCHANGED
+            //   ...
+            //   HDN_ITEMCHANGING
+            //   HDN_ITEMCHANGED
+            //   HDN_ENDTRACK
+            //   HDN_ITEMCHANGING
+            //   HDN_ITEMCHANGED
+            // With "Show window contents while dragging" option disabled
+            // the sequence looks in turn like this:
+            //   HDN_BEGINTRACK
+            //   HDN_ITEMTRACK
+            //   HDN_ITEMCHANGING
+            //   ...
+            //   HDN_ITEMTRACK
+            //   HDN_ITEMCHANGING
+            //   HDN_ENDTRACK
+            //   HDN_ITEMCHANGING
+            //   HDN_ITEMCHANGED
+            // In both cases last HDN_ITEMCHANGING notification is sent
+            // after HDN_ENDTRACK so we have to skip it.
+            if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) && m_isColBeingResized )
             {
                 // prevent the column from being shrunk beneath its min width
                 width = nmhdr->pitem->cxy;

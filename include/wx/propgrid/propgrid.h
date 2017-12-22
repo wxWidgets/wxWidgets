@@ -303,12 +303,18 @@ wxPG_EX_TOOLBAR_SEPARATOR               = 0x10000000,
 // even if wxPropertyGrid is not a standalone control.
 wxPG_EX_ALWAYS_ALLOW_FOCUS              = 0x00100000,
 
+
+// A mask which can be used to filter (out) all extra styles applicable to wxPropertyGrid.
+wxPG_EX_WINDOW_PG_STYLE_MASK = wxPG_EX_INIT_NOCAT|wxPG_EX_HELP_AS_TOOLTIPS|wxPG_EX_NATIVE_DOUBLE_BUFFERING|
+                               wxPG_EX_AUTO_UNSPECIFIED_VALUES|wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES|
+                               wxPG_EX_MULTIPLE_SELECTION|wxPG_EX_ENABLE_TLP_TRACKING|wxPG_EX_ALWAYS_ALLOW_FOCUS,
+
+// A mask which can be used to filter (out) all extra styles applicable to wxPropertyGridManager.
+wxPG_EX_WINDOW_PGMAN_STYLE_MASK = wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|wxPG_EX_HIDE_PAGE_BUTTONS|
+                                  wxPG_EX_NO_TOOLBAR_DIVIDER|wxPG_EX_TOOLBAR_SEPARATOR,
+
 // A mask which can be used to filter (out) all extra styles.
-wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_INIT_NOCAT|wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|
-                            wxPG_EX_HELP_AS_TOOLTIPS|wxPG_EX_NATIVE_DOUBLE_BUFFERING|wxPG_EX_AUTO_UNSPECIFIED_VALUES|
-                            wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES|wxPG_EX_HIDE_PAGE_BUTTONS|wxPG_EX_MULTIPLE_SELECTION|
-                            wxPG_EX_ENABLE_TLP_TRACKING|wxPG_EX_NO_TOOLBAR_DIVIDER|wxPG_EX_TOOLBAR_SEPARATOR|
-                            wxPG_EX_ALWAYS_ALLOW_FOCUS
+wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_WINDOW_PG_STYLE_MASK|wxPG_EX_WINDOW_PGMAN_STYLE_MASK
 };
 
 #if wxPG_COMPATIBILITY_1_4
@@ -942,7 +948,7 @@ public:
 
     // Resets column sizes and splitter positions, based on proportions.
     // enableAutoResizing - If true, automatic column resizing is enabled
-    // (only applicapple if window style wxPG_SPLITTER_AUTO_CENTER is used).
+    // (only applicable if window style wxPG_SPLITTER_AUTO_CENTER is used).
     void ResetColumnSizes( bool enableAutoResizing = false );
 
     // Selects a property.
@@ -1465,6 +1471,9 @@ protected:
     // wxWindow pointers to editor control(s).
     wxWindow            *m_wndEditor;
     wxWindow            *m_wndEditor2;
+    // Actual positions of the editors within the cell.
+    wxPoint             m_wndEditorPosRel;
+    wxPoint             m_wndEditor2PosRel;
 
     wxBitmap            *m_doubleBuffer;
 
@@ -1644,8 +1653,9 @@ protected:
     // pointer to property that has mouse hovering
     wxPGProperty*       m_propHover;
 
-    // Active label editor
+    // Active label editor and its actual position within the cell
     wxTextCtrl*         m_labelEditor;
+    wxPoint             m_labelEditorPosRel;
 
     // For which property the label editor is active
     wxPGProperty*       m_labelEditorProperty;

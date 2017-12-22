@@ -162,6 +162,16 @@ void VectorsTestCase::Insert()
     CPPUNIT_ASSERT( v[1] == 'a' );
     CPPUNIT_ASSERT( v[2] == 'X' );
     CPPUNIT_ASSERT( v[3] == 'b' );
+
+    v.insert(v.begin() + 3, 3, 'Z');
+    REQUIRE( v.size() == 7 );
+    CHECK( v[0] == '0' );
+    CHECK( v[1] == 'a' );
+    CHECK( v[2] == 'X' );
+    CHECK( v[3] == 'Z' );
+    CHECK( v[4] == 'Z' );
+    CHECK( v[5] == 'Z' );
+    CHECK( v[6] == 'b' );
 }
 
 void VectorsTestCase::Erase()
@@ -313,4 +323,70 @@ void VectorsTestCase::Sort()
     {
         CPPUNIT_ASSERT( v[idx-1] <= v[idx] );
     }
+}
+
+TEST_CASE("wxVector::operator==", "[vector][compare]")
+{
+    wxVector<wxString> v1, v2;
+    CHECK( v1 == v2 );
+    CHECK( !(v1 != v2) );
+
+    v1.push_back("foo");
+    CHECK( v1 != v2 );
+
+    v2.push_back("foo");
+    CHECK( v1 == v2 );
+
+    v1.push_back("bar");
+    v2.push_back("baz");
+    CHECK( v1 != v2 );
+}
+
+TEST_CASE("wxVector::reverse_iterator", "[vector][reverse_iterator]")
+{
+    wxVector<int> v;
+    for ( int i = 0; i < 10; ++i )
+        v.push_back(i + 1);
+
+    const wxVector<int>::reverse_iterator rb = v.rbegin();
+    const wxVector<int>::reverse_iterator re = v.rend();
+    CHECK( re - rb == 10 );
+
+    wxVector<int>::reverse_iterator ri = rb;
+    ++ri;
+    CHECK( ri - rb == 1 );
+    CHECK( re - ri == 9 );
+
+    ri = rb + 2;
+    CHECK( ri - rb == 2 );
+    CHECK( re - ri == 8 );
+}
+
+TEST_CASE("wxVector::capacity", "[vector][capacity][shrink_to_fit]")
+{
+    wxVector<int> v;
+    CHECK( v.capacity() == 0 );
+
+    v.push_back(0);
+    // When using the standard library vector, we don't know what growth
+    // strategy it uses, so we can't rely on the stricter check passing, but
+    // with our own one we can, allowing us to check that shrink_to_fit()
+    // really shrinks the capacity below.
+#if !wxUSE_STD_CONTAINERS
+    CHECK( v.capacity() > 1 );
+#else
+    CHECK( v.capacity() >= 1 );
+#endif
+
+    // There is no shrink_to_fit() in STL build when not using C++11.
+#if !wxUSE_STD_CONTAINERS || __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+    v.shrink_to_fit();
+    CHECK( v.capacity() == 1 );
+
+    v.erase(v.begin());
+    CHECK( v.capacity() == 1 );
+
+    v.shrink_to_fit();
+    CHECK( v.capacity() == 0 );
+#endif
 }

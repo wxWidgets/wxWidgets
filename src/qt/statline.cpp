@@ -10,6 +10,8 @@
 
 #include "wx/statline.h"
 
+#include <QtWidgets/QFrame>
+
 wxStaticLine::wxStaticLine()
 {
 }
@@ -40,7 +42,7 @@ bool wxStaticLine::Create( wxWindow *parent,
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
-QFrame *wxStaticLine::GetHandle() const
+QWidget *wxStaticLine::GetHandle() const
 {
     return m_qtFrame;
 }

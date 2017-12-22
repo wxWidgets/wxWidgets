@@ -83,6 +83,7 @@ private:
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     void OnCustomHeaderHeight(wxCommandEvent& event);
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
+    void OnGetPageInfo(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
@@ -304,6 +305,7 @@ bool MyApp::OnInit()
 enum
 {
     ID_CLEARLOG = wxID_HIGHEST+1,
+    ID_GET_PAGE_INFO,
     ID_BACKGROUND_COLOUR,
     ID_FOREGROUND_COLOUR,
     ID_CUSTOM_HEADER_ATTR,
@@ -362,6 +364,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
     EVT_MENU( ID_CLEARLOG, MyFrame::OnClearLog )
 
+    EVT_MENU( ID_GET_PAGE_INFO, MyFrame::OnGetPageInfo )
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
     EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
     EVT_MENU( ID_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr )
@@ -453,6 +456,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
+    file_menu->Append(ID_GET_PAGE_INFO, "Show current &page info");
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
     file_menu->AppendCheckItem(ID_CUSTOM_HEADER_ATTR, "C&ustom header attributes");
@@ -797,6 +801,28 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 void MyFrame::OnClearLog( wxCommandEvent& WXUNUSED(event) )
 {
     m_log->Clear();
+}
+
+void MyFrame::OnGetPageInfo(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewCtrl* const dvc = m_ctrl[m_notebook->GetSelection()];
+
+    const wxDataViewItem top = dvc->GetTopItem();
+    wxString topDesc;
+    if ( top.IsOk() )
+    {
+        wxVariant value;
+        dvc->GetModel()->GetValue(value, top, 0);
+        topDesc.Printf("Top item is \"%s\"", value.GetString());
+    }
+    else
+    {
+        topDesc = "There is no top item";
+    }
+
+    wxLogMessage("%s and there are %d items per page",
+                 topDesc,
+                 dvc->GetCountPerPage());
 }
 
 void MyFrame::OnSetForegroundColour(wxCommandEvent& WXUNUSED(event))

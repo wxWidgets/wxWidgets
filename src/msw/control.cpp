@@ -35,6 +35,8 @@
     #include "wx/log.h"
     #include "wx/settings.h"
     #include "wx/ctrlsub.h"
+    #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
 #endif
 
 #if wxUSE_LISTCTRL
@@ -46,15 +48,10 @@
 #endif // wxUSE_TREECTRL
 
 #include "wx/renderer.h"
-#include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
 #include "wx/msw/ownerdrawnbutton.h"
-
-// Missing from MinGW 4.8 SDK headers.
-#ifndef BS_TYPEMASK
-#define BS_TYPEMASK 0xf
-#endif
+#include "wx/msw/private/winstyle.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -184,39 +181,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     InheritAttributes();
     if ( !m_hasFont )
     {
-        bool setFont = true;
-
-        wxFont font = GetDefaultAttributes().font;
-
-        // if we set a font for {list,tree}ctrls and the font size is changed in
-        // the display properties then the font size for these controls doesn't
-        // automatically adjust when they receive WM_SETTINGCHANGE
-
-        // FIXME: replace the dynamic casts with virtual function calls!!
-#if wxUSE_LISTCTRL || wxUSE_TREECTRL
-        bool testFont = false;
-#if wxUSE_LISTCTRL
-        if ( wxDynamicCastThis(wxListCtrl) )
-            testFont = true;
-#endif // wxUSE_LISTCTRL
-#if wxUSE_TREECTRL
-        if ( wxDynamicCastThis(wxTreeCtrl) )
-            testFont = true;
-#endif // wxUSE_TREECTRL
-
-        if ( testFont )
-        {
-            // we can't explicitly set the font here
-            // see wxGetCCDefaultFont() in src/msw/settings.cpp for explanation
-            // of why this test works
-            if ( font != wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) )
-            {
-                setFont = false;
-            }
-        }
-#endif // wxUSE_LISTCTRL || wxUSE_TREECTRL
-
-        if ( setFont )
+        if ( MSWShouldSetDefaultFont() )
         {
             SetFont(GetDefaultAttributes().font);
         }
@@ -457,14 +422,13 @@ bool wxMSWOwnerDrawnButtonBase::MSWIsOwnerDrawn() const
 
 void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)
 {
-    long style = ::GetWindowLong(GetHwndOf(m_win), GWL_STYLE);
+    wxMSWWinStyleUpdater updateStyle(GetHwndOf(m_win));
 
     // note that BS_CHECKBOX & BS_OWNERDRAW != 0 so we can't operate on
     // them as on independent style bits
     if ( ownerDrawn )
     {
-        style &= ~BS_TYPEMASK;
-        style |= BS_OWNERDRAW;
+        updateStyle.TurnOff(BS_TYPEMASK).TurnOn(BS_OWNERDRAW);
 
         m_win->Bind(wxEVT_ENTER_WINDOW,
                     &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
@@ -484,8 +448,7 @@ void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)
     }
     else // reset to default colour
     {
-        style &= ~BS_OWNERDRAW;
-        style |= MSWGetButtonStyle();
+        updateStyle.TurnOff(BS_OWNERDRAW).TurnOn(MSWGetButtonStyle());
 
         m_win->Unbind(wxEVT_ENTER_WINDOW,
                       &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
@@ -503,7 +466,7 @@ void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)
                       &wxMSWOwnerDrawnButtonBase::OnFocus, this);
     }
 
-    ::SetWindowLong(GetHwndOf(m_win), GWL_STYLE, style);
+    updateStyle.Apply();
 
     if ( !ownerDrawn )
         MSWOnButtonResetOwnerDrawn();

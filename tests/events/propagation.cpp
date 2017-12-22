@@ -37,7 +37,12 @@
 //        some tests there. But this should be fixed and the tests reenabled
 //        because wxPaintEvent propagation in wxScrolledWindow is a perfect
 //        example of fragile code that could be broken under OS X.
-#ifndef __WXOSX__
+//
+// FIXME: Under GTK+ 3 the test is broken because a simple wxYield() is not
+//        enough to map the frame. It should be also fixed there by waiting for
+//        it to come up, with some timeout, but for now it always fails, so
+//        it's useless to run it.
+#if !defined(__WXOSX__) && !defined(__WXGTK3__)
     #define CAN_TEST_PAINT_EVENTS
 #endif
 
@@ -248,7 +253,7 @@ private:
 #endif
         CPPUNIT_TEST( DocView );
         WXUISIM_TEST( ContextMenuEvent );
-        CPPUNIT_TEST( PropagationLevel );
+        WXUISIM_TEST( PropagationLevel );
     CPPUNIT_TEST_SUITE_END();
 
     void OneHandler();
@@ -260,8 +265,10 @@ private:
     void ScrollWindowWithHandler();
     void MenuEvent();
     void DocView();
+#if wxUSE_UIACTIONSIMULATOR
     void ContextMenuEvent();
     void PropagationLevel();
+#endif
 
     wxDECLARE_NO_COPY_CLASS(EventPropagationTestCase);
 };
@@ -434,24 +441,14 @@ wxMenu* CreateTestMenu(wxFrame* frame)
 // Helper for checking that the menu event processing resulted in the expected
 // output from the handlers.
 //
-// Notice that this is supposed to be used with ASSERT_MENU_EVENT_RESULT()
-// macro to make the file name and line number of the caller appear in the
-// failure messages.
-void
-CheckMenuEvent(wxMenu* menu, const char* result, CppUnit::SourceLine sourceLine)
-{
-    g_str.clear();
-
-    // Trigger the menu event: this is more reliable than using
-    // wxUIActionSimulator and currently works in all ports as they all call
-    // wxMenuBase::SendEvent() from their respective menu event handlers.
-    menu->SendEvent(wxID_APPLY);
-
-    CPPUNIT_NS::assertEquals( result, g_str, sourceLine, "" );
-}
-
+// Note that we trigger the menu event by sending it directly as this is more
+// reliable than using wxUIActionSimulator and currently works in all ports as
+// they all call wxMenuBase::SendEvent() from their respective menu event
+// handlers.
 #define ASSERT_MENU_EVENT_RESULT(menu, result) \
-    CheckMenuEvent((menu), (result), CPPUNIT_SOURCELINE())
+    g_str.clear();                             \
+    menu->SendEvent(wxID_APPLY);               \
+    CHECK( g_str == result )
 
 void EventPropagationTestCase::MenuEvent()
 {

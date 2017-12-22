@@ -24,30 +24,65 @@ download from:
 * https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.1/
 
 
-Changes
--------
+Changes since 3.1.0
+-------------------
 
-Compared to the stable 3.0.x series, this version brings many
-improvements and even more bug fixes, please see the change log
+There have been more than 2000 commits from more than 130 contributors (70 with
+multiple contributions) since 3.1.0 release. New features added since then
+include:
+
+- wxWebView can now return JavaScript results to the C++ code.
+- wxSecretStore allows to securely store user passwords.
+
+Some of the other improvements:
+
+- wxWidgets can now be built with CMake too.
+- Strings can now be translated differently depending on their context.
+- Converting between wxString and UTF-8 encoded std::string is now
+  simpler and unsafe wxString can now be disabled on the opt-in basis
+  (see http://wxwidgets.blogspot.com/2017/02/safer-s.html)
+- Many improvements to accessibility support under MSW.
+- Support for XDG file layout under Unix.
+- Many bug fixes to the appearances in both wxGTK3 and wxOSX, notably
+  related to borders (notable wxBORDER_NONE) and colours.
+- wxDataViewCtrl items and headers can be formatted using simple markup
+  and it is simpler to combine to put items with checkboxes into it.
+- Several enhancements to wxStyledTextCtrl including better support for
+  custom lexers and auto-completion.
+
+Additionally, the latest versions of compilers (e.g. MSVS 2017) and
+operating systems (macOS 10.12) are now supported and all the third
+party libraries have been updated to their latest versions.
+
+Please refer to the detailed change log for the full list of changes:
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1/docs/changes.txt
 
-for the incomplete list of the most important ones. Here is the
+
+Changes since 3.0
+-----------------
+
+Compared to the stable 3.0.x series, this version brings too many
+improvements and even more bug fixes to list them them all. Here is the
 maximally condensed summary:
 
 - New classes: wxActivityIndicator, wxAddRemoveCtrl,
-  wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker.
-- And methods: wxDateTime::GetWeekBasedYear(), wxListBox::GetTopItem(),
+  wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker,
+  wxSecretStore.
+- And methods: wxDateTime::GetWeekBasedYear() and GetFirstWeekDay(),
+  GetTopItem() and GetCountPerPage() in wxListBox and wxDataViewCtrl,
   wxProcess::Activate(), wxTextEntry::ForceUpper(), several ones in
-  wxRendererNative, wxStandardPaths::GetUserDir(), wxUIActionSimulator
-  ::Select() and many others. Also new wxEVT_MAGNIFY event.
+  wxRendererNative, wxStandardPaths::GetUserDir() and SetFileLayout(),
+  wxUIActionSimulator::Select(), wxFontPickerCtrl::SetMinPointSize() and
+  many others.
+- New events: wxEVT_MAGNIFY, wxEVT_STC_AUTOCOMP_COMPLETED.
 - Significant improvements to: wxBusyInfo, wxNotificationMessage.
 - All around better support for high DPI monitors.
 - Much newer versions of bundled 3rd party libraries (notably libpng)
-  and support for GStreamer 1.0 under Unix.
+  and support for GStreamer up to 1.7 under Unix.
 - Revamped OpenGL support better suited to modern OpenGL (3.2+).
 - Further C++11 support improvements.
-- Support for latest compilers: MSVS 2015, g++ 5.3, clang 3.8.
+- Support for latest compilers: MSVS 2017, g++ 7.2, clang 5.0.
 - A lot of bug fixes in wxGTK3 and wxOSX/Cocoa ports.
 - New experimental wxQt port.
 
@@ -145,7 +180,7 @@ Reporting Bugs
 
 The wxWidgets bug tracker can be found here:
 
-* http://trac.wxwidgets.org/newticket
+* https://trac.wxwidgets.org/newticket
 
 Please use the search function of our Trac installation to find any possibly
 relevant bugs before reporting new ones. Also please notice that often trying to

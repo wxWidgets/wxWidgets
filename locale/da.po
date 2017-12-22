@@ -1,13 +1,14 @@
 # Danish translation for wxWidgets.
 # Copyright (C) 2016 wxWidgets development team
 # This file is distributed under the same license as the wxWidgets package.
-# scootergrisen, 2016.
+# scootergrisen, 2016-2017.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n"
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-21 14:25+0200\n"
-"PO-Revision-Date: 2016-11-28 00:00+0000\n"
+"PO-Revision-Date: 2017-07-26 00:00+0000\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
@@ -15,6 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: da_DK\n"
+"X-Source-Language: C\n"
 
 #: ../src/common/debugrpt.cpp:586
 msgid ""
@@ -22,7 +25,8 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 "\n"
-"Send denne rapport til den ansvarlige for programmet. På forhånd tak.\n"
+"Send venligst denne rapport til vedligeholderen af programmet. På forhånd "
+"tak.\n"
 
 #: ../src/richtext/richtextstyledlg.cpp:210
 #: ../src/richtext/richtextstyledlg.cpp:222
@@ -31,7 +35,7 @@ msgstr " "
 
 #: ../src/generic/dbgrptg.cpp:326
 msgid "              Thank you and we're sorry for the inconvenience!\n"
-msgstr "              Mange tak. Vi undskylder ulejligheden.\n"
+msgstr "              Mange tak. Vi beklager ulejligheden.\n"
 
 #: ../src/common/prntbase.cpp:573
 #, c-format
@@ -50,7 +54,7 @@ msgstr " (i modul \"%s\")"
 
 #: ../src/osx/core/secretstore.cpp:138
 msgid " (while overwriting an existing item)"
-msgstr ""
+msgstr " (under overskrivning af et eksisterende punkt)"
 
 #: ../src/common/docview.cpp:1642
 msgid " - "
@@ -125,7 +129,7 @@ msgstr "%i af %u"
 msgid "%ld byte"
 msgid_plural "%ld bytes"
 msgstr[0] "%ld byte"
-msgstr[1] "%ld bytes"
+msgstr[1] "%ld byte"
 
 #: ../src/html/helpwnd.cpp:1033
 #, c-format
@@ -133,9 +137,9 @@ msgid "%lu of %lu"
 msgstr "%lu af %lu"
 
 #: ../src/generic/datavgen.cpp:6028
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%d items)"
-msgstr "%s (eller %s)"
+msgstr "%s (%d punkter)"
 
 #: ../src/common/cmdline.cpp:1221
 #, c-format
@@ -501,8 +505,7 @@ msgstr "&Netværk"
 msgid "&New"
 msgstr "&Ny"
 
-#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100
-#: ../src/msw/mdi.cpp:180
+#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100 ../src/msw/mdi.cpp:180
 msgid "&Next"
 msgstr "&Næste"
 
@@ -576,8 +579,7 @@ msgstr "&Position mode:"
 msgid "&Preferences"
 msgstr "&Indstillinger"
 
-#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:181
+#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101 ../src/msw/mdi.cpp:181
 msgid "&Previous"
 msgstr "&Tilbage"
 
@@ -1084,7 +1086,7 @@ msgstr "En fejlfindingsrapport er blevet oprettet. Den kan findes i"
 
 #: ../src/common/xtixml.cpp:418
 msgid "A non empty collection must consist of 'element' nodes"
-msgstr "En ikke-tom samling skal bestå af \"element\"-knuder"
+msgstr "En samling som ikke er tom skal bestå af \"element\"-knuder"
 
 #: ../src/richtext/richtextliststylepage.cpp:304
 #: ../src/richtext/richtextliststylepage.cpp:306
@@ -1509,9 +1511,8 @@ msgid "Blue"
 msgstr "Blå"
 
 #: ../src/generic/colrdlgg.cpp:345
-#, fuzzy
 msgid "Blue:"
-msgstr "Blå"
+msgstr "Blå:"
 
 #: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:355
 #: ../src/osx/carbon/fontdlg.cpp:354 ../src/common/stockitem.cpp:143
@@ -2255,7 +2256,7 @@ msgstr "Luk dette vindue"
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6006
 msgid "Collapse"
-msgstr ""
+msgstr "Fold sammen"
 
 #: ../src/common/stockitem.cpp:193
 msgid "Color"
@@ -2275,9 +2276,9 @@ msgid "Colour:"
 msgstr "Farve:"
 
 #: ../src/generic/datavgen.cpp:6077
-#, fuzzy, c-format
+#, c-format
 msgid "Column %u"
-msgstr "Tilføj kolonne"
+msgstr "Kolonne %u"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:114
@@ -2390,9 +2391,8 @@ msgid "Could not find tab for id"
 msgstr "Kunne ikke finde tab til id"
 
 #: ../src/gtk/notifmsg.cpp:108
-#, fuzzy
 msgid "Could not initalize libnotify."
-msgstr "Kunne ikke sætte justering."
+msgstr "Kunne ikke initialisere libnotify."
 
 #: ../src/html/chm.cpp:444
 #, c-format
@@ -2424,9 +2424,8 @@ msgstr "Kunne ikke tilføje et billede til billedlisten."
 
 #: ../src/osx/glcanvas_osx.cpp:414 ../src/unix/glx11.cpp:558
 #: ../src/msw/glcanvas.cpp:616
-#, fuzzy
 msgid "Couldn't create OpenGL context"
-msgstr "Kunne ikke oprette en timer"
+msgstr "Kunne ikke oprette OpenGL-kontekst"
 
 #: ../src/msw/timer.cpp:134
 msgid "Couldn't create a timer"
@@ -2683,9 +2682,9 @@ msgid "Deleted stale lock file '%s'."
 msgstr "Slettede gammel låsfilen \"%s\"."
 
 #: ../src/common/secretstore.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting password for \"%s/%s\" failed: %s."
-msgstr "Oprettelse af %s \"%s\" fejlede."
+msgstr "Kunne ikke slette adganskode for \"%s/%s\": %s."
 
 #: ../src/common/module.cpp:124
 #, c-format
@@ -2980,9 +2979,9 @@ msgid "Error closing kqueue instance"
 msgstr "Fejl under lukning af kqueue-instans"
 
 #: ../src/common/filefn.cpp:1049
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying the file '%s' to '%s'."
-msgstr "Kunne ikke kopiere filen \"%s\" til \"%s\""
+msgstr "Kunne ikke kopiere filen \"%s\" til \"%s\"."
 
 #: ../src/generic/dirdlgg.cpp:222
 msgid "Error creating directory"
@@ -3052,7 +3051,7 @@ msgstr "Executive, 7 1/4 x 10 1/2 tommer"
 #. TRANSLATORS: Action for manipulating a tree control
 #: ../src/generic/datavgen.cpp:6009
 msgid "Expand"
-msgstr ""
+msgstr "Fold ud"
 
 #: ../src/msw/registry.cpp:1240
 #, c-format
@@ -3258,7 +3257,7 @@ msgstr "Kunne ikke eksekvere \"%s\"\n"
 
 #: ../src/common/debugrpt.cpp:720
 msgid "Failed to execute curl, please install it in PATH."
-msgstr "Kunne ikke eksekvere curl. Venligst installer den i PATH."
+msgstr "Kunne ikke eksekvere curl. Installer den venligst i PATH."
 
 #: ../src/msw/ole/automtn.cpp:505
 #, c-format
@@ -3347,9 +3346,9 @@ msgid "Failed to load icon \"%s\" from resources."
 msgstr "Kunne ikke indlæse ikon \"%s\" fra ressourcer."
 
 #: ../src/common/iconbndl.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icons from resource '%s'."
-msgstr "Kunne ikke indlæse ikon \"%s\" fra ressourcer."
+msgstr "Kunne ikke indlæse ikoner fra ressource \"%s\"."
 
 #: ../src/common/iconbndl.cpp:200
 #, c-format
@@ -3915,9 +3914,8 @@ msgid "Green"
 msgstr "Grøn"
 
 #: ../src/generic/colrdlgg.cpp:342
-#, fuzzy
 msgid "Green:"
-msgstr "Grøn"
+msgstr "Grøn:"
 
 #: ../src/richtext/richtextborderspage.cpp:615
 msgid "Groove"
@@ -4104,8 +4102,8 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"Hvis du helt vil undertrykke denne fejlfindingsrapport, så vælg \"Annullér\"-"
-"knappen.\n"
+"Hvis du helt vil undertrykke denne fejlfindingsrapport, så vælg "
+"\"Annullér\"-knappen.\n"
 "Det kan imidlertid hindre forbedringer i programmet, så hvis\n"
 "det overhovedet er muligt, så fortsæt med at genere rapporten.\n"
 
@@ -5341,9 +5339,8 @@ msgid "Opaci&ty:"
 msgstr "Opaci&tet:"
 
 #: ../src/generic/colrdlgg.cpp:354
-#, fuzzy
 msgid "Opacity:"
-msgstr "Opaci&tet:"
+msgstr "Opacitet:"
 
 #: ../src/common/docview.cpp:1773 ../src/common/docview.cpp:1815
 msgid "Open File"
@@ -5363,9 +5360,8 @@ msgid "Open..."
 msgstr "Åbn..."
 
 #: ../src/unix/glx11.cpp:506 ../src/msw/glcanvas.cpp:592
-#, fuzzy
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
-msgstr "Kerne OpenGL-profil understøttes ikke af OpenGL-driveren."
+msgstr "OpenGL 3.0 eller senere understøttes ikke af OpenGL-driveren."
 
 #: ../src/generic/dirctrlg.cpp:599 ../src/generic/dirdlgg.cpp:323
 #: ../src/generic/filectrlg.cpp:642 ../src/generic/filectrlg.cpp:786
@@ -5867,8 +5863,8 @@ msgstr "Udskrift"
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
-"Behandling af fejlfindingsrapport fejlede. Efterlader filerne i mappen \"%s"
-"\"."
+"Behandling af fejlfindingsrapport fejlede. Efterlader filerne i mappen "
+"\"%s\"."
 
 #: ../src/common/prntbase.cpp:545
 msgid "Progress:"
@@ -5927,9 +5923,9 @@ msgid "Read error on file '%s'"
 msgstr "Læsefejl på filen \"%s\""
 
 #: ../src/common/secretstore.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Reading password for \"%s/%s\" failed: %s."
-msgstr "Oprettelse af %s \"%s\" fejlede."
+msgstr "Kunne ikke læse adganskode for \"%s/%s\": %s."
 
 #: ../src/common/prntbase.cpp:272
 msgid "Ready"
@@ -5941,7 +5937,7 @@ msgstr "Rød"
 
 #: ../src/generic/colrdlgg.cpp:339
 msgid "Red:"
-msgstr ""
+msgstr "Rød:"
 
 #: ../src/common/stockitem.cpp:185 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
@@ -5979,17 +5975,17 @@ msgstr ""
 #: ../src/msw/registry.cpp:954
 #, c-format
 msgid "Registry value \"%s\" is not binary (but of type %s)"
-msgstr ""
+msgstr "Registreringsværdien \"%s\" er ikke binær (men af typen %s)"
 
 #: ../src/msw/registry.cpp:917
 #, c-format
 msgid "Registry value \"%s\" is not numeric (but of type %s)"
-msgstr ""
+msgstr "Registreringsværdien \"%s\" er ikke numerisk (men af typen %s)"
 
 #: ../src/msw/registry.cpp:1003
 #, c-format
 msgid "Registry value \"%s\" is not text (but of type %s)"
-msgstr ""
+msgstr "Registreringsværdien \"%s\" er ikke tekst (men af typen %s)"
 
 #: ../src/msw/registry.cpp:521
 #, c-format
@@ -6118,7 +6114,7 @@ msgstr "Roman"
 #: ../src/generic/datavgen.cpp:5916
 #, c-format
 msgid "Row %i"
-msgstr ""
+msgstr "Række %i"
 
 #: ../src/richtext/richtextliststylepage.cpp:299
 #: ../src/richtext/richtextbulletspage.cpp:239
@@ -6163,9 +6159,9 @@ msgid "Save log contents to file"
 msgstr "Gen log indhold til fil"
 
 #: ../src/common/secretstore.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Saving password for \"%s/%s\" failed: %s."
-msgstr "Oprettelse af %s \"%s\" fejlede."
+msgstr "Kunne ikke gemme adganskode for \"%s/%s\": %s."
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Script"
@@ -7219,8 +7215,8 @@ msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
-"Type-operation \"%s\" fejlede: egenskab med navnet \"%s\" er af typen \"%s"
-"\", ikke \"%s\"."
+"Type-operation \"%s\" fejlede: egenskab med navnet \"%s\" er af typen "
+"\"%s\", ikke \"%s\"."
 
 #: ../src/common/paper.cpp:133
 msgid "US Std Fanfold, 14 7/8 x 11 in"
@@ -7311,9 +7307,9 @@ msgid "Unable to read from inotify descriptor"
 msgstr "Kunne ikke læse fra inotify-deskriptor"
 
 #: ../src/unix/fswatcher_inotify.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to remove inotify watch %i"
-msgstr "Kunne ikke fjerne inotify-overvågning"
+msgstr "Kunne ikke fjerne inotify-overvågning %i"
 
 #: ../src/unix/fswatcher_kqueue.cpp:153
 msgid "Unable to remove kqueue watch"
@@ -8070,7 +8066,7 @@ msgstr "antager at dette er en sammensat multi-part zip"
 #: ../src/common/fileconf.cpp:1847
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
-msgstr "forsøg på at ændre uforanderlignøglen \"%s\" ignoreret."
+msgstr "forsøg på at ændre uforanderlig nøgle \"%s\" ignoreret."
 
 #: ../src/html/chm.cpp:329
 msgid "bad arguments to library function"
@@ -8218,7 +8214,7 @@ msgstr "kan ikke skrive brugerkonfigurationsfilen."
 #. TRANSLATORS: Checkbox state name
 #: ../src/generic/treelist.cpp:482 ../src/generic/datavgen.cpp:1261
 msgid "checked"
-msgstr ""
+msgstr "tilvalgt"
 
 #: ../src/html/chm.cpp:345
 msgid "checksum error"
@@ -8339,9 +8335,8 @@ msgstr "kunne ikke flushe filen \"%s\""
 
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/generic/datavgen.cpp:1030
-#, fuzzy
 msgid "false"
-msgstr "Falsk"
+msgstr "falsk"
 
 #: ../src/common/datetimefmt.cpp:1966
 msgid "fifteenth"
@@ -8352,30 +8347,30 @@ msgid "fifth"
 msgstr "femte"
 
 #: ../src/common/fileconf.cpp:579
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: '%s' ignored after group header."
-msgstr "fil \"%s\", linje %d: \"%s\" ignoreret efter gruppe header."
+msgstr "fil \"%s\", linje %zu: \"%s\" ignoreret efter gruppe-header."
 
 #: ../src/common/fileconf.cpp:608
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: '=' expected."
-msgstr "fil \"%s\", linje %d: forventede \"=\"."
+msgstr "fil \"%s\", linje %zu: forventede \"=\"."
 
 #: ../src/common/fileconf.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: key '%s' was first found at line %d."
-msgstr "fil \"%s\", linje %d: nøgle \"%s\" blev først fundet på linje %d."
+msgstr "fil \"%s\", linje %zu: nøgle \"%s\" blev først fundet på linje %d."
 
 #: ../src/common/fileconf.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s', line %zu: value for immutable key '%s' ignored."
 msgstr ""
-"fil \"%s\", linje %d: værdi af uforanderlignøglen \"%s\" blev ignoreret."
+"fil \"%s\", linje %zu: værdi af uforanderlig nøgle \"%s\" blev ignoreret."
 
 #: ../src/common/fileconf.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s': unexpected character %c at line %zu."
-msgstr "fil \"%s\": uventet tegn %c på linje %d."
+msgstr "fil \"%s\": uventet tegn %c på linje %zu."
 
 #: ../src/richtext/richtextbuffer.cpp:8738
 msgid "files"
@@ -8746,7 +8741,7 @@ msgstr "scootergrisen"
 #. TRANSLATORS: Name of Boolean true value
 #: ../src/generic/datavgen.cpp:1028
 msgid "true"
-msgstr ""
+msgstr "sand"
 
 #: ../src/common/datetimefmt.cpp:1963
 msgid "twelfth"
@@ -8759,7 +8754,7 @@ msgstr "tyvende"
 #. TRANSLATORS: Checkbox state name
 #: ../src/generic/treelist.cpp:486 ../src/generic/datavgen.cpp:1263
 msgid "unchecked"
-msgstr ""
+msgstr "fravalgt"
 
 #: ../src/common/fontcmn.cpp:802 ../src/common/fontcmn.cpp:978
 msgid "underlined"
@@ -8767,9 +8762,8 @@ msgstr "understreget"
 
 #. TRANSLATORS: Checkbox state name
 #: ../src/generic/treelist.cpp:490
-#, fuzzy
 msgid "undetermined"
-msgstr "understreget"
+msgstr "ubestemt"
 
 #: ../src/common/fileconf.cpp:1979
 #, c-format
@@ -8786,9 +8780,9 @@ msgid "unknown"
 msgstr "ukendt"
 
 #: ../src/msw/registry.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "unknown (%lu)"
-msgstr "ukendt"
+msgstr "ukendt (%lu)"
 
 #: ../src/common/xtixml.cpp:253
 #, c-format
@@ -8861,291 +8855,3 @@ msgstr "zlib fejl %d"
 #: ../src/richtext/richtextbulletspage.cpp:288
 msgid "~"
 msgstr "~"
-
-#~ msgid "Adding flavor TEXT failed"
-#~ msgstr "Tilføjelse af flavor-tekst fejlede"
-
-#~ msgid "Adding flavor utxt failed"
-#~ msgstr "Tilføjelse af flavor-utxt fejlede"
-
-#~ msgid "Bitmap renderer cannot render value; value type: "
-#~ msgstr "Bitmap-gengiver kan ikke gengive værdien; værditype: "
-
-#~ msgid ""
-#~ "Cannot create new column's ID. Probably max. number of columns reached."
-#~ msgstr ""
-#~ "Kan ikke oprette den nye kolonnes ID. Sandsynligvis nået maks. antal "
-#~ "kolonner."
-
-#~ msgid "Column could not be added."
-#~ msgstr "Kolonne kunne ikke tilføjes."
-
-#~ msgid "Column description could not be initialized."
-#~ msgstr "Kolonnebeskrivelse kunne ikke initialiseres."
-
-#~ msgid "Column index not found."
-#~ msgstr "Kolonneindeks ikke fundet."
-
-#~ msgid "Column width could not be determined"
-#~ msgstr "Kolonnebredde kunne ikke bestemmes"
-
-#~ msgid "Column width could not be set."
-#~ msgstr "Kunne ikke sætte kolonnebredde."
-
-#~ msgid "Confirm registry update"
-#~ msgstr "Bekræft opdatering af registreringsdatabase"
-
-#~ msgid "Could not determine column index."
-#~ msgstr "Kunne ikke bestemme kolonneindeks."
-
-#~ msgid "Could not determine column's position"
-#~ msgstr "Kunne ikke bestemme kolonnens position"
-
-#~ msgid "Could not determine number of columns."
-#~ msgstr "Kunne ikke bestemme antallet af kolonner."
-
-#~ msgid "Could not determine number of items"
-#~ msgstr "Kunne ikke bestemme antallet af emner"
-
-#~ msgid "Could not get header description."
-#~ msgstr "Kunne ikke få fat i header-beskrivelse."
-
-#~ msgid "Could not get items."
-#~ msgstr "Kunne ikke få fat i emner."
-
-#~ msgid "Could not get property flags."
-#~ msgstr "Kunne ikke få fat i egenskabsflag."
-
-#~ msgid "Could not get selected items."
-#~ msgstr "Kunne ikke få fat i de valgte emner."
-
-#~ msgid "Could not remove column."
-#~ msgstr "Kunne ikke fjerne kolonne."
-
-#~ msgid "Could not retrieve number of items"
-#~ msgstr "Kunne ikke hente antallet af emner"
-
-#~ msgid "Could not set column width."
-#~ msgstr "Kunne ikke sætte kolonnebredde."
-
-#~ msgid "Could not set header description."
-#~ msgstr "Kunne ikke sætte header-beskrivelse."
-
-#~ msgid "Could not set icon."
-#~ msgstr "Kunne ikke sætte ikon."
-
-#~ msgid "Could not set maximum width."
-#~ msgstr "Kunne ikke sætte maksimum bredde."
-
-#~ msgid "Could not set minimum width."
-#~ msgstr "Kunne ikke sætte minimum bredde."
-
-#~ msgid "Could not set property flags."
-#~ msgstr "Kunne ikke sætte egenskabsflag."
-
-#~ msgid "Data object has invalid data format"
-#~ msgstr "Dataobjekt har et ugyldigt dataformat"
-
-#~ msgid "Date renderer cannot render value; value type: "
-#~ msgstr "Datogengiver kan ikke gengive værdien; værditype: "
-
-#~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension \"%s"
-#~ "\" ?\n"
-#~ "Current value is \n"
-#~ "%s, \n"
-#~ "New value is \n"
-#~ "%s %1"
-#~ msgstr ""
-#~ "Vil du overskrive kommandoen brugt til %s filer med efternavn \"%s\"?\n"
-#~ "Aktuel værdi er \n"
-#~ "%s, \n"
-#~ "Ny værdi er \n"
-#~ "%s %1"
-
-#~ msgid "Failed to retrieve data from the clipboard."
-#~ msgstr "Kunne ikke hente data fra udklipsholder."
-
-#~ msgid "GIF: Invalid gif index."
-#~ msgstr "GIF: ugyldigt gif-indeks."
-
-#~ msgid "GIF: unknown error!!!"
-#~ msgstr "GIF: ukendt fejl!!!"
-
-#~ msgid "Icon & text renderer cannot render value; value type: "
-#~ msgstr "Ikon- og tekstgengiver kan ikke gengive værdien; værditype: "
-
-#~ msgid "Invalid data view item"
-#~ msgstr "Ugyldigt datavisningsemne"
-
-#~ msgid "New directory"
-#~ msgstr "Ny mappe"
-
-#~ msgid "Next"
-#~ msgstr "Næste"
-
-#~ msgid "No column existing."
-#~ msgstr "Ingen kolonne eksisterer."
-
-#~ msgid "No column for the specified column existing."
-#~ msgstr "Der findes ingen kolonne for den angivne kolonne."
-
-#~ msgid "No column for the specified column position existing."
-#~ msgstr "Der findes ikke nogen kolonne for den angivne kolonneposition."
-
-#~ msgid ""
-#~ "No renderer or invalid renderer type specified for custom data column."
-#~ msgstr ""
-#~ "Ingen gengiver eller ugyldig gengivertype specificeret for speciel "
-#~ "datakolonne."
-
-#~ msgid "No renderer specified for column."
-#~ msgstr "Ingen gengiver specificeret for kolonne."
-
-#~ msgid "Number of columns could not be determined."
-#~ msgstr "Antallet af kolonner kunne ikke bestemmes."
-
-#~ msgid "OpenGL function \"%s\" failed: %s (error %d)"
-#~ msgstr "OpenGL-funktionen \"%s\" fejlede: %s (fejl %d)"
-
-#~ msgid ""
-#~ "Please install a newer version of comctl32.dll\n"
-#~ "(at least version 4.70 is required but you have %d.%02d)\n"
-#~ "or this program won't operate correctly."
-#~ msgstr ""
-#~ "Installér venligst en nyere version af comctl32.dll\n"
-#~ "(mindst version 4.70, du har %d.%02d)\n"
-#~ "ellers fungerer dette program ikke korrekt."
-
-#~ msgid "Pointer to data view control not set correctly."
-#~ msgstr "Pointer til datavisningskontrol er ikke sat korrekt."
-
-#~ msgid "Pointer to model not set correctly."
-#~ msgstr "Pointer til model er ikke sat korrekt."
-
-#~ msgid "Progress renderer cannot render value type; value type: "
-#~ msgstr "Behandlingsgengiver kan ikke gengive værditype; værditype: "
-
-#~ msgid "Rendering failed."
-#~ msgstr "Gengivelse fejlede."
-
-#~ msgid ""
-#~ "Setting directory access times is not supported under this OS version"
-#~ msgstr ""
-#~ "Indstilling af tilgangstider på mapper understøttes ikke i denne OS-"
-#~ "version"
-
-#~ msgid "Show hidden directories"
-#~ msgstr "Vis skjulte mapper"
-
-#~ msgid "Text renderer cannot render value; value type: "
-#~ msgstr "Tekstgengiver kan ikke gengive værdi; værditype: "
-
-#~ msgid "There is no column or renderer for the specified column index."
-#~ msgstr "Der er ingen kolonne eller gengiver for det angivne kolonneindeks."
-
-#~ msgid ""
-#~ "This system doesn't support date controls, please upgrade your version of "
-#~ "comctl32.dll"
-#~ msgstr ""
-#~ "Dette system understøtter ikke datokontroller. Opgradér venligst din "
-#~ "version af comctl32.dll"
-
-#~ msgid "Toggle renderer cannot render value; value type: "
-#~ msgstr "Toggle-gengiver kan ikke gengive værdi; værditype: "
-
-#~ msgid "Too many colours in PNG, the image may be slightly blurred."
-#~ msgstr "For mange farver i PNG, billedet kan være en smule uskarpt."
-
-#~ msgid "Unable to handle native drag&drop data"
-#~ msgstr "Kunne ikke håndtere native drag&drop data"
-
-#~ msgid "Unable to initialize Hildon program"
-#~ msgstr "Kunne ikke initialisere Hildon-program"
-
-#~ msgid "Unknown data format"
-#~ msgstr "Ukendt dataformat"
-
-#~ msgid "Valid pointer to native data view control does not exist"
-#~ msgstr "Gyldig pointer til native datavisningskontrol findes ikke"
-
-#~ msgid "Win32s on Windows 3.1"
-#~ msgstr "Win32'er på Windows 3.1"
-
-#~ msgid "Windows 10"
-#~ msgstr "Windows 10"
-
-#~ msgid "Windows 2000"
-#~ msgstr "Windows 2000"
-
-#~ msgid "Windows 7"
-#~ msgstr "Windows 7"
-
-#~ msgid "Windows 8"
-#~ msgstr "Windows 8"
-
-#~ msgid "Windows 8.1"
-#~ msgstr "Windows 8.1"
-
-#~ msgid "Windows 95"
-#~ msgstr "Windows 95"
-
-#~ msgid "Windows 95 OSR2"
-#~ msgstr "Windows 95 OSR2"
-
-#~ msgid "Windows 98"
-#~ msgstr "Windows 98"
-
-#~ msgid "Windows 98 SE"
-#~ msgstr "Windows 98 SE"
-
-#~ msgid "Windows 9x (%d.%d)"
-#~ msgstr "Windows 9x (%d.%d)"
-
-#~ msgid "Windows CE (%d.%d)"
-#~ msgstr "Windows CE (%d.%d)"
-
-#~ msgid "Windows ME"
-#~ msgstr "Windows ME"
-
-#~ msgid "Windows NT %lu.%lu"
-#~ msgstr "Windows NT %lu.%lu"
-
-#~ msgid "Windows Server 10"
-#~ msgstr "Windows Server 10"
-
-#~ msgid "Windows Server 2003"
-#~ msgstr "Windows Server 2003"
-
-#~ msgid "Windows Server 2008"
-#~ msgstr "Windows Server 2008"
-
-#~ msgid "Windows Server 2008 R2"
-#~ msgstr "Windows Server 2008 R2"
-
-#~ msgid "Windows Server 2012"
-#~ msgstr "Windows Server 2012"
-
-#~ msgid "Windows Server 2012 R2"
-#~ msgstr "Windows Server 2012 R2"
-
-#~ msgid "Windows Vista"
-#~ msgstr "Windows Vista"
-
-#~ msgid "Windows XP"
-#~ msgstr "Windows XP"
-
-#~ msgid "can't execute '%s'"
-#~ msgstr "kan ikke udføre \"%s\""
-
-#~ msgid "error opening '%s'"
-#~ msgstr "fejl ved åbning af \"%s\""
-
-#~ msgid "unknown seek origin"
-#~ msgstr "ukendt søgestart"
-
-#~ msgid "wxWidget control pointer is not a data view pointer"
-#~ msgstr "wxWidget kontrol pointer er ikke en datavisningspointer"
-
-#~ msgid "wxWidget's control not initialized."
-#~ msgstr "wxWidgetens kontrol ikke initialiseret."

@@ -44,6 +44,14 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc, void*)
         gtk_widget_size_allocate(label_widget, &a);
     }
 }
+
+static gboolean expose_event(GtkWidget* widget, GdkEventExpose*, wxWindow*)
+{
+    const GtkAllocation& a = widget->allocation;
+    gtk_paint_flat_box(gtk_widget_get_style(widget), gtk_widget_get_window(widget),
+        GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, widget, "", a.x, a.y, a.width, a.height);
+    return false;
+}
 }
 #endif
 
@@ -101,7 +109,7 @@ bool wxStaticBox::Create( wxWindow *parent,
     gtk_frame_set_label_align(GTK_FRAME(m_widget), xalign, 0.5);
 
 #ifndef __WXGTK3__
-    if (gtk_check_version(2, 12, 0))
+    if (!wx_is_at_least_gtk2(12))
     {
         // we connect this signal to perform label-clipping as GTK >= 2.12 does
         g_signal_connect(m_widget, "size_allocate", G_CALLBACK(size_allocate), NULL);
@@ -122,6 +130,7 @@ void wxStaticBox::AddChild( wxWindowBase *child )
         m_wxwindow = wxPizza::New();
         gtk_widget_show( m_wxwindow );
         gtk_container_add( GTK_CONTAINER (m_widget), m_wxwindow );
+        GTKApplyWidgetStyle();
     }
 
     wxStaticBoxBase::AddChild(child);
@@ -137,6 +146,14 @@ void wxStaticBox::SetLabel( const wxString& label )
 void wxStaticBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     GTKFrameApplyWidgetStyle(GTK_FRAME(m_widget), style);
+    if (m_wxwindow)
+        GTKApplyStyle(m_wxwindow, style);
+
+#ifndef __WXGTK3__
+    g_signal_handlers_disconnect_by_func(m_widget, (void*)expose_event, this);
+    if (m_backgroundColour.IsOk())
+        g_signal_connect(m_widget, "expose-event", G_CALLBACK(expose_event), this);
+#endif
 }
 
 bool wxStaticBox::GTKWidgetNeedsMnemonic() const

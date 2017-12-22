@@ -41,6 +41,7 @@
 #include "wx/timer.h"           // for wxStopWatch
 #include "wx/colordlg.h"        // for wxGetColourFromUser
 #include "wx/settings.h"
+#include "wx/sizer.h"
 #include "wx/sysopt.h"
 #include "wx/numdlg.h"
 
@@ -305,6 +306,13 @@ MyFrame::MyFrame(const wxChar *title)
 #if wxUSE_STATUSBAR
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
+
+    wxBoxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(m_listCtrl, wxSizerFlags(2).Expand().Border());
+    sizer->Add(m_logWindow, wxSizerFlags(1).Expand().Border());
+    m_panel->SetSizer(sizer);
+
+    SetClientSize(m_panel->GetBestSize());
 }
 
 MyFrame::~MyFrame()
@@ -313,24 +321,6 @@ MyFrame::~MyFrame()
 
     delete m_imageListNormal;
     delete m_imageListSmall;
-}
-
-void MyFrame::OnSize(wxSizeEvent& event)
-{
-    DoSize();
-
-    event.Skip();
-}
-
-void MyFrame::DoSize()
-{
-    if ( !m_logWindow )
-        return;
-
-    wxSize size = GetClientSize();
-    wxCoord y = (2*size.y)/3;
-    m_listCtrl->SetSize(0, 0, size.x, y);
-    m_logWindow->SetSize(0, y + 1, size.x, size.y - y -1);
 }
 
 bool MyFrame::CheckNonVirtual() const
@@ -495,8 +485,6 @@ void MyFrame::RecreateList(long flags, bool withText)
         if ( mb )
             m_listCtrl->EnableBellOnNoMatch(mb->IsChecked(LIST_TOGGLE_BELL));
     }
-
-    DoSize();
 
     GetMenuBar()->Check(LIST_ROW_LINES, false);
 
@@ -1356,8 +1344,9 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                 {
                     InsertItemInReportView(event.GetIndex());
                 }
+                break;
             }
-            //else: fall through
+            wxFALLTHROUGH;
 
         default:
             LogEvent(event, wxT("OnListKeyDown"));

@@ -12,6 +12,8 @@
 
 #include <gtk/gtk.h>
 
+#include "wx/gtk/private/gtk2-compat.h"
+
 namespace wxGTKImpl
 {
 
@@ -20,7 +22,7 @@ namespace wxGTKImpl
 inline bool ConvertMessageTypeFromWX(int style, GtkMessageType *type)
 {
 #ifdef __WXGTK210__
-    if ( gtk_check_version(2, 10, 0) == NULL && (style & wxICON_NONE))
+    if ( wx_is_at_least_gtk2(10) && (style & wxICON_NONE))
         *type = GTK_MESSAGE_OTHER;
     else
 #endif // __WXGTK210__

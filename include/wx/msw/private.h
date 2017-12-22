@@ -75,41 +75,8 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
     typedef FARPROC WndProcCast;
 #endif
 
-
 #define CASTWNDPROC (WndProcCast)
 
-
-
-// ---------------------------------------------------------------------------
-// some stuff for old Windows versions (FIXME: what does it do here??)
-// ---------------------------------------------------------------------------
-
-#if !defined(APIENTRY)  // NT defines APIENTRY, 3.x not
-    #define APIENTRY FAR PASCAL
-#endif
-
-/*
- * Decide what window classes we're going to use
- * for this combination of CTl3D/FAFA settings
- */
-
-#define STATIC_CLASS     wxT("STATIC")
-#define STATIC_FLAGS     (SS_LEFT|WS_CHILD|WS_VISIBLE)
-#define CHECK_CLASS      wxT("BUTTON")
-#define CHECK_FLAGS      (BS_AUTOCHECKBOX|WS_TABSTOP|WS_CHILD)
-#define CHECK_IS_FAFA    FALSE
-#define RADIO_CLASS      wxT("BUTTON")
-#define RADIO_FLAGS      (BS_AUTORADIOBUTTON|WS_CHILD|WS_VISIBLE)
-#define RADIO_SIZE       20
-#define RADIO_IS_FAFA    FALSE
-#define PURE_WINDOWS
-#define GROUP_CLASS      wxT("BUTTON")
-#define GROUP_FLAGS      (BS_GROUPBOX|WS_CHILD|WS_VISIBLE)
-
-/*
-#define BITCHECK_FLAGS   (FB_BITMAP|FC_BUTTONDRAW|FC_DEFAULT|WS_VISIBLE)
-#define BITRADIO_FLAGS   (FC_BUTTONDRAW|FB_BITMAP|FC_RADIO|WS_CHILD|WS_VISIBLE)
-*/
 
 // ---------------------------------------------------------------------------
 // misc macros
@@ -153,7 +120,7 @@ extern LONG APIENTRY
 #endif
 
 // close the handle in the class dtor
-template <wxUIntPtr INVALID_VALUE = (wxUIntPtr)INVALID_HANDLE_VALUE>
+template <wxUIntPtr INVALID_VALUE>
 class AutoHANDLE
 {
 public:
@@ -899,11 +866,9 @@ inline wxString wxGetFullModuleName()
 //      0x0603      Windows 8.1 (currently only returned for 8.1 if program has a manifest indicating 8.1 support)
 //      0x1000      Windows 10 (currently only returned for 10 if program has a manifest indicating 10 support)
 //
-// for the other Windows versions 0 is currently returned
+// for the other Windows versions wxWinVersion_Unknown is currently returned.
 enum wxWinVersion
 {
-    wxWinVersion_Unknown = 0,
-
     wxWinVersion_3 = 0x0300,
     wxWinVersion_NT3 = wxWinVersion_3,
 
@@ -930,7 +895,11 @@ enum wxWinVersion
     wxWinVersion_8 = 0x602,
     wxWinVersion_8_1 = 0x603,
 
-    wxWinVersion_10 = 0x1000
+    wxWinVersion_10 = 0x1000,
+
+    // Any version we can't recognize will be later than the last currently
+    // known one, so give it a value greater than any in the known range.
+    wxWinVersion_Unknown = 0x7fff
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
@@ -976,19 +945,9 @@ inline bool wxStyleHasBorder(long style)
                      wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
-inline long wxGetWindowExStyle(const wxWindowMSW *win)
-{
-    return ::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE);
-}
-
 inline bool wxHasWindowExStyle(const wxWindowMSW *win, long style)
 {
-    return (wxGetWindowExStyle(win) & style) != 0;
-}
-
-inline long wxSetWindowExStyle(const wxWindowMSW *win, long style)
-{
-    return ::SetWindowLong(GetHwndOf(win), GWL_EXSTYLE, style);
+    return (::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE) & style) != 0;
 }
 
 // Common helper of wxUpdate{,Edit}LayoutDirection() below: sets or clears the

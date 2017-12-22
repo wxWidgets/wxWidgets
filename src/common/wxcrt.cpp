@@ -1091,8 +1091,6 @@ char *strdup(const char *s)
 // wxLocaleIsUtf8
 // ============================================================================
 
-#if wxUSE_UNICODE_UTF8
-
 #if !wxUSE_UTF8_LOCALE_ONLY
 bool wxLocaleIsUtf8 = false; // the safer setting if not known
 #endif
@@ -1146,8 +1144,6 @@ void wxUpdateLocaleIsUtf8()
     wxLocaleIsUtf8 = wxIsLocaleUtf8();
 #endif
 }
-
-#endif // wxUSE_UNICODE_UTF8
 
 // ============================================================================
 // wx wrappers for CRT functions

@@ -276,6 +276,17 @@ public:
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
 
     /**
+       Find a cell inside this cell positioned at the given coordinates
+       (relative to this's positions). Returns NULL if no such cell exists.
+       The flag can be used to specify whether to look for terminal or
+       nonterminal cells or both. In either case, returned cell is deepest
+       cell in cells tree that contains [x,y].
+    */
+    virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
+                                  unsigned flags = wxHTML_FIND_EXACT) const;
+
+
+    /**
         Returns descent value of the cell (m_Descent member).
         See explanation:
         @image html htmlcell_descent.png

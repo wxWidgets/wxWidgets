@@ -41,7 +41,7 @@ public:
           m_controlName(controlName),
           m_control(NULL)
     {
-        m_bg = GetBackgroundColour();
+        m_bg = UseBgCol() ? GetBackgroundColour() : wxColour();
         SetBackgroundColour(wxColour(255, 0, 255));
     }
 

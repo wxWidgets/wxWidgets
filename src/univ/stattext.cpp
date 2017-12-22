@@ -70,6 +70,9 @@ void wxStaticText::DoDraw(wxControlRenderer *renderer)
 
 void wxStaticText::SetLabel(const wxString& str)
 {
+    if ( str == m_labelOrig )
+        return;
+
     // save original label
     m_labelOrig = str;
 

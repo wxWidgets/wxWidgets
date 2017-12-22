@@ -18,9 +18,9 @@
     #include "wx/wx.h"
 #endif
 
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/advprops.h>
-#include <wx/propgrid/manager.h>
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/advprops.h"
+#include "wx/propgrid/manager.h"
 
 #include "propgrid.h"
 #include "sampleprops.h"
@@ -285,10 +285,11 @@ inline bool GetRandomBooleanVal()
     return (rand() % 2) != 0;
 }
 
+extern "C"
 int gpiro_cmpfunc(const void* a, const void* b)
 {
-    const wxPGProperty* p1 = (const wxPGProperty*) a;
-    const wxPGProperty* p2 = (const wxPGProperty*) b;
+    const wxPGProperty* p1 = *static_cast<wxPGProperty* const*>(a);
+    const wxPGProperty* p2 = *static_cast<wxPGProperty* const*>(b);
     return (int) (((size_t)p1->GetClientData()) - ((size_t)p2->GetClientData()));
 }
 

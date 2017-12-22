@@ -45,6 +45,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/dc.h"
+#include "wx/msw/private/winstyle.h"
 
 // the values coincide with those in tmschema.h
 #define BP_GROUPBOX 4
@@ -303,10 +304,10 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
             continue;
         }
 
-        LONG style = ::GetWindowLong(child, GWL_STYLE);
+        wxMSWWinStyleUpdater updateStyle(child);
         wxString str(wxGetWindowClass(child));
         str.UpperCase();
-        if ( str == wxT("BUTTON") && (style & BS_GROUPBOX) == BS_GROUPBOX )
+        if ( str == wxT("BUTTON") && updateStyle.IsOn(BS_GROUPBOX) )
         {
             if ( child == GetHwnd() )
                 foundThis = true;
@@ -329,10 +330,9 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
         {
             // need to remove WS_CLIPSIBLINGS from all sibling windows
             // that are within this staticbox if set
-            if ( style & WS_CLIPSIBLINGS )
+            if ( updateStyle.IsOn(WS_CLIPSIBLINGS) )
             {
-                style &= ~WS_CLIPSIBLINGS;
-                ::SetWindowLong(child, GWL_STYLE, style);
+                updateStyle.TurnOff(WS_CLIPSIBLINGS).Apply();
 
                 // MSDN: "If you have changed certain window data using
                 // SetWindowLong, you must call SetWindowPos to have the
@@ -374,14 +374,6 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
 // do anything in such case)
 void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
 {
-    // note that we do not use the box background colour here, it shouldn't
-    // apply to its interior for several reasons:
-    //  1. wxGTK doesn't do it
-    //  2. controls inside the box don't get correct bg colour because they
-    //     are not our children so we'd have some really ugly colour mix if
-    //     we did it
-    //  3. this is backwards compatible behaviour and some people rely on it,
-    //     see http://groups.google.com/groups?selm=4252E932.3080801%40able.es
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HBRUSH hbr = MSWGetBgBrush(impl->GetHDC());
 

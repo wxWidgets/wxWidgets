@@ -492,7 +492,7 @@ private:
             // Check if the new value is acceptable. If not, we just handle
             // this digit as if it were the first one.
             int newValue = currentValue*10 + n;
-            if ( newValue < maxValue )
+            if ( newValue <= maxValue )
             {
                 n = newValue;
 

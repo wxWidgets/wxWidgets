@@ -32,6 +32,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPNMHandler,wxImageHandler);
 
 #if wxUSE_STREAMS
 
+static
 void Skip_Comment(wxInputStream &stream)
 {
     wxTextInputStream text_stream(stream);

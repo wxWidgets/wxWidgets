@@ -215,18 +215,6 @@ wxRect wxDisplayImplMacOSX::GetClientArea() const
     return wxDisplayImpl::GetClientArea();
 }
 
-static int wxCFDictKeyToInt( CFDictionaryRef desc, CFStringRef key )
-{
-    CFNumberRef value = (CFNumberRef) CFDictionaryGetValue( desc, key );
-    if (value == NULL)
-        return 0;
-
-    int num = 0;
-    CFNumberGetValue( value, kCFNumberIntType, &num );
-
-    return num;
-}
-
 static int wxOSXCGDisplayModeGetBitsPerPixel( CGDisplayModeRef theValue )
 {
     wxCFRef<CFStringRef> pixelEncoding( CGDisplayModeCopyPixelEncoding(theValue) );

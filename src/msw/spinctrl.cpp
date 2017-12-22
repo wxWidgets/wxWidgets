@@ -36,6 +36,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -95,6 +96,7 @@ wxBuddyTextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             if ( (WXHWND)wParam == spin->GetHWND() )
                 break;
             //else: fall through
+            wxFALLTHROUGH;
 
         case WM_KILLFOCUS:
         case WM_CHAR:
@@ -548,15 +550,8 @@ void wxSpinCtrl::UpdateBuddyStyle()
     // otherwise this would become impossible and also if we don't use
     // hexadecimal as entering "x" of the "0x" prefix wouldn't be allowed
     // neither then
-    const DWORD styleOld = ::GetWindowLong(GetBuddyHwnd(), GWL_STYLE);
-    DWORD styleNew;
-    if ( m_min < 0 || GetBase() != 10 )
-        styleNew = styleOld & ~ES_NUMBER;
-    else
-        styleNew = styleOld | ES_NUMBER;
-
-    if ( styleNew != styleOld )
-        ::SetWindowLong(GetBuddyHwnd(), GWL_STYLE, styleNew);
+    wxMSWWinStyleUpdater(GetBuddyHwnd())
+        .TurnOnOrOff(m_min >= 0 && GetBase() == 10, ES_NUMBER);
 }
 
 // ----------------------------------------------------------------------------

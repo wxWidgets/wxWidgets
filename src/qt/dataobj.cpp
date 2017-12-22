@@ -12,18 +12,17 @@
     #pragma hdrstop
 #endif
 
-#include <QObject>
-
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 #include "wx/dataobj.h"
 
+#include <QtCore/QMimeData>
 
 wxDataFormat::wxDataFormat()
 {
 }
 
-static QString DataFormatIdToMimeType( wxDataFormatId formatId )
+static wxString DataFormatIdToMimeType( wxDataFormatId formatId )
 {
     switch(formatId) {
         case wxDF_TEXT: return "text/plain";
@@ -58,32 +57,32 @@ wxDataFormat::wxDataFormat( wxDataFormatId formatId )
 
 wxDataFormat::wxDataFormat(const wxString &id)
 {
-    m_MimeType = wxQtConvertString(id);
+    m_MimeType = id;
 }
 
 wxDataFormat::wxDataFormat(const wxChar *id)
 {
-    m_MimeType = wxQtConvertString((wxString)id);
+    m_MimeType = id;
 }
 
 wxDataFormat::wxDataFormat(const QString &id)
 {
-    m_MimeType = id;
+    m_MimeType = wxQtConvertString(id);
 }
 
 void wxDataFormat::SetId( const wxChar *id )
 {
-    m_MimeType = wxQtConvertString((wxString)id);
+    m_MimeType = id;
 }
 
 void wxDataFormat::SetId( const wxString& id )
 {
-    m_MimeType = wxQtConvertString(id);
+    m_MimeType = id;
 }
 
 wxString wxDataFormat::GetId() const
 {
-    return wxQtConvertString(m_MimeType);
+    return m_MimeType;
 }
 
 wxDataFormatId wxDataFormat::GetType() const
@@ -119,6 +118,16 @@ bool wxDataFormat::operator!=(const wxDataFormat& format) const
 
 //#############################################################################
 
+wxDataObject::wxDataObject()
+{
+    m_qtMimeData = new QMimeData;
+}
+
+wxDataObject::~wxDataObject()
+{
+    delete m_qtMimeData;
+}
+
 bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction) const
 {
     return wxDataFormat(format) != wxDF_INVALID;
@@ -126,21 +135,21 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction) cons
 wxDataFormat wxDataObject::GetPreferredFormat(Direction) const
 {
     /* formats are in order of preference */
-    if (m_qtMimeData.formats().count())
-        return m_qtMimeData.formats().first();
+    if (m_qtMimeData->formats().count())
+        return m_qtMimeData->formats().first();
 
     return wxDataFormat();
 }
 
 size_t wxDataObject::GetFormatCount(Direction) const
 {
-    return m_qtMimeData.formats().count();
+    return m_qtMimeData->formats().count();
 }
 
 void wxDataObject::GetAllFormats(wxDataFormat *formats, Direction) const
 {
     int i = 0;
-    foreach (QString format, m_qtMimeData.formats())
+    foreach (QString format, m_qtMimeData->formats())
     {
         formats[i] = format;
         i++;
@@ -149,15 +158,15 @@ void wxDataObject::GetAllFormats(wxDataFormat *formats, Direction) const
 
 size_t wxDataObject::GetDataSize(const wxDataFormat& format) const
 {
-    return  m_qtMimeData.data( format.m_MimeType ).count();
+    return  m_qtMimeData->data( wxQtConvertString(format.m_MimeType) ).count();
 }
 
 bool wxDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 {
-    if (!m_qtMimeData.hasFormat(format.m_MimeType))
+    if (!m_qtMimeData->hasFormat(wxQtConvertString(format.m_MimeType)))
         return false;
 
-    QByteArray data = m_qtMimeData.data( format.m_MimeType ).data();
+    QByteArray data = m_qtMimeData->data( wxQtConvertString(format.m_MimeType) ).data();
     memcpy(buf, data.constData(), data.size());
     return true;
 }
@@ -165,7 +174,7 @@ bool wxDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 bool wxDataObject::SetData(const wxDataFormat& format, size_t len, const void * buf)
 {
     QByteArray bytearray((const char*)buf, len);
-    m_qtMimeData.setData(format.m_MimeType, bytearray);
+    m_qtMimeData->setData(wxQtConvertString(format.m_MimeType), bytearray);
 
     return true;
 }

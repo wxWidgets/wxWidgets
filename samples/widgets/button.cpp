@@ -457,7 +457,8 @@ void ButtonWidgetsPage::CreateButton()
         if ( m_chkUseBitmapClass->GetValue() )
         {
           bbtn = new wxBitmapButton(this, ButtonPage_Button,
-                                    CreateBitmap(wxT("normal")));
+                                    CreateBitmap(wxT("normal")),
+                                    wxDefaultPosition, wxDefaultSize, flags);
         }
         else
         {

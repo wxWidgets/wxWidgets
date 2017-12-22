@@ -132,13 +132,15 @@ public:
         Called to inform the model that all data has been cleared.
         The control will reread the data from the model again.
     */
-    virtual bool Cleared();
+    bool Cleared();
 
     /**
         The compare function to be used by the control. The default compare
         function sorts most data types implemented by wxVariant (i.e. bool,
         int, long, double, string) as well as datetime and wxDataViewIconText.
-        Override this for a different sorting behaviour.
+        Override this method to implement a different sorting behaviour or
+        override just DoCompareValues() to extend it to support other wxVariant
+        types.
 
         The function should return negative, null or positive for an ascending
         comparison, depending on whether the first item is less than, equal to
@@ -171,7 +173,8 @@ public:
 
             return (ascending == (id1 > id2)) ? : 1 : -1;
         @endcode
-        @see HasDefaultCompare().
+
+        @see HasDefaultCompare(), DoCompareValues()
     */
     virtual int Compare(const wxDataViewItem& item1,
                         const wxDataViewItem& item2,
@@ -365,8 +368,7 @@ public:
         This will eventually emit a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event to the user.
     */
-    virtual bool ValueChanged(const wxDataViewItem& item,
-                              unsigned int col);
+    bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 
     
     virtual bool IsListModel() const;
@@ -378,6 +380,32 @@ protected:
         Destructor. This should not be called directly. Use DecRef() instead.
     */
     virtual ~wxDataViewModel();
+
+    /**
+        Virtual method that can be overridden to define comparison for values
+        of non-standard types.
+
+        This function is called from the default Compare() implementation to
+        compare values of types it is not aware about (i.e. not any of the
+        standard ones). As Compare() itself, this method should return a
+        negative value if @a value1 is less than (i.e. should appear above) @a
+        value2 and a positive value if @a value2 is less than @a value1.
+
+        Unlike Compare(), if the values are equal, this method should just
+        return 0 to indicate it and let Compare() order them by their items
+        values. It also doesn't have to care about the sort order direction,
+        making it simpler to override than Compare() itself.
+
+        The default implementation just returns 0, so the derived class version
+        can simply forward to it if it doesn't know how to compare the given
+        values.
+
+        @see Compare()
+
+        @since 3.1.1
+    */
+    virtual int DoCompareValues(const wxVariant& value1,
+                                const wxVariant& value2) const;
 };
 
 
@@ -1619,6 +1647,28 @@ public:
         @since 3.1.0
     */
     virtual void ToggleSortByColumn(int column);
+
+    /**
+        Return the number of items that can fit vertically in the visible area of
+        the control.
+
+        Returns -1 if the number of items per page couldn't be determined. On
+        wxGTK this method can only determine the number of items per page if
+        there is at least one item in the control.
+
+        @since 3.1.1
+    */
+    int GetCountPerPage() const;
+
+    /**
+        Return the topmost visible item.
+
+        Returns an invalid item if there is no topmost visible item or if the method
+        is not implemented for the current platform.
+
+        @since 3.1.1
+    */
+    wxDataViewItem GetTopItem() const;
 };
 
 
@@ -1798,6 +1848,7 @@ enum wxDataViewCellRenderState
     There is a number of ready-to-use renderers provided:
     - wxDataViewTextRenderer,
     - wxDataViewIconTextRenderer,
+    - wxDataViewCheckIconTextRenderer,
     - wxDataViewToggleRenderer,
     - wxDataViewProgressRenderer,
     - wxDataViewBitmapRenderer,
@@ -2060,6 +2111,7 @@ public:
     wxDataViewIconText can be converted to and from a wxVariant using the left
     shift operator.
 
+    @see wxDataViewCheckIconTextRenderer
     @library{wxadv}
     @category{dvc}
 */
@@ -2081,6 +2133,58 @@ public:
                                int align = wxDVR_DEFAULT_ALIGNMENT );
 };
 
+
+/**
+    This renderer class shows a checkbox in addition to the icon and text shown
+    by the base class and also allows the user to toggle this checkbox.
+
+    By default this class doesn't allow the user to put the checkbox into the
+    third, i.e. indeterminate, state, even though it can display the state if
+    the program returns the corresponding value from the associated model. Call
+    Allow3rdStateForUser() explicitly if the user should be able to select the
+    3rd state interactively too.
+
+    This class is used internally by wxTreeListCtrl, and can be seen in action
+    in the corresponding sample.
+
+    @see wxDataViewIconTextRenderer, wxDataViewToggleRenderer
+    @library{wxadv}
+    @category{dvc}
+    @since 3.1.1
+ */
+class wxDataViewCheckIconTextRenderer : public wxDataViewRenderer
+{
+public:
+    static wxString GetDefaultType() { return wxS("wxDataViewCheckIconText"); }
+
+    /**
+        Create a new renderer.
+
+        By default the renderer is activatable, i.e. allows the user to toggle
+        the checkbox.
+     */
+    explicit wxDataViewCheckIconTextRenderer
+             (
+                  wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+                  int align = wxDVR_DEFAULT_ALIGNMENT
+             );
+
+    /**
+        Allow the user to interactively select the 3rd state for the items
+        rendered by this object.
+
+        As described in the class overview, this renderer can always display
+        the 3rd ("indeterminate") checkbox state if the model contains cells
+        with wxCHK_UNDETERMINED value, but it doesn't allow the user to set it
+        by default. Call this method to allow this to happen.
+
+        @param allow If @true, interactively clicking a checked cell switches
+            it to the indeterminate value and clicking it again unchecks it.
+            If @false, clicking a checked cell switches to the unchecked value,
+            skipping the indeterminate one.
+     */
+    void Allow3rdStateForUser(bool allow = true);
+};
 
 
 /**
@@ -2141,6 +2245,7 @@ public:
 
     This class is used by wxDataViewCtrl to render toggle controls.
 
+    @see wxDataViewCheckIconTextRenderer
     @library{wxadv}
     @category{dvc}
 */

@@ -45,6 +45,7 @@
 #endif
 #endif
 GdkWindow* wxGetTopLevelGDK();
+GtkWidget* wxGetTopLevelGTK();
 #endif
 
 // Only X11 backend is supported for wxGTK here
@@ -2679,14 +2680,20 @@ bool
 wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
 #ifdef __WXGTK__
-#if GTK_CHECK_VERSION(2,14,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,14,0) == NULL)
-#endif
+#ifdef __WXGTK4__
+    if (gtk_show_uri_on_window((GtkWindow*)wxGetTopLevelGTK(),
+            params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
+    {
+        return true;
+    }
+#elif GTK_CHECK_VERSION(2,14,0)
+    if (wx_is_at_least_gtk2(14))
     {
         GdkScreen* screen = gdk_window_get_screen(wxGetTopLevelGDK());
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         if (gtk_show_uri(screen, params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
             return true;
+        wxGCC_WARNING_RESTORE()
     }
 #endif // GTK_CHECK_VERSION(2,14,0)
 #endif // __WXGTK__

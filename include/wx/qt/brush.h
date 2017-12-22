@@ -8,8 +8,6 @@
 #ifndef _WX_QT_BRUSH_H_
 #define _WX_QT_BRUSH_H_
 
-#include <QtCore/Qt>
-
 class QBrush;
 
 class WXDLLIMPEXP_CORE wxBrush : public wxBrushBase

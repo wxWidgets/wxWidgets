@@ -279,6 +279,45 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                     handled = YES;
                 }
             }
+            else if (wxpeer->GetWindowStyle() & wxTE_PASSWORD)
+            {
+                // Make TAB and ESCAPE work on password fields. The general fix done in wxWidgetCocoaImpl::DoHandleKeyEvent()
+                // does not help for password fields because wxWidgetCocoaImpl::keyEvent() is not executed
+                // when TAB is pressed, only when it is released.
+                wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+                if (commandSelector == @selector(insertTab:))
+                {
+                    wxevent.m_keyCode = WXK_TAB;
+                }
+                else if (commandSelector == @selector(insertBacktab:))
+                {
+                    wxevent.m_keyCode = WXK_TAB;
+                    wxevent.SetShiftDown(true);
+                }
+                else if (commandSelector == @selector(selectNextKeyView:))
+                {
+                    wxevent.m_keyCode = WXK_TAB;
+                    wxevent.SetRawControlDown(true);
+                }
+                else if (commandSelector == @selector(selectPreviousKeyView:))
+                {
+                    wxevent.m_keyCode = WXK_TAB;
+                    wxevent.SetShiftDown(true);
+                    wxevent.SetRawControlDown(true);
+                }
+                else if (commandSelector == @selector(cancelOperation:))
+                {
+                    wxevent.m_keyCode = WXK_ESCAPE;
+                }
+                if (wxevent.GetKeyCode() != WXK_NONE)
+                {
+                    wxKeyEvent eventHook(wxEVT_CHAR_HOOK, wxevent);
+                    if (wxpeer->OSXHandleKeyEvent(eventHook) && !eventHook.IsNextEventAllowed())
+                        handled = YES;
+                    else if (impl->DoHandleKeyNavigation(wxevent))
+                        handled = YES;
+                }
+            }
         }
     }
     
@@ -649,6 +688,15 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 }
 @end
 
+
+bool wxNSTextBase::ShouldHandleKeyNavigation(const wxKeyEvent &event) const
+{
+    // Text controls must be allowed to handle the key even if wxWANTS_CHARS is not set, provided wxTE_PROCESS_TAB
+    // is set. To make Shift+TAB work with text controls we must process it here regardless of wxTE_PROCESS_TAB.
+    // For Ctrl(+Shift)+TAB to work as navigation key consistently in all types of text fields we must process it here as well.
+    return (!m_wxPeer->HasFlag(wxTE_PROCESS_TAB) || event.HasAnyModifiers());
+}
+
 // wxNSTextViewControl
 
 // Official Apple docs suggest to use FLT_MAX when embedding an NSTextView
@@ -659,16 +707,17 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 #define MAX_WIDTH 1000000
 
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
-    : wxWidgetCocoaImpl(wxPeer, w),
-      wxTextWidgetImpl(wxPeer)
+    : wxNSTextBase(wxPeer, w)
 {
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
 
     const bool hasHScroll = (style & wxHSCROLL) != 0;
+    m_useCharWrapping = (style & wxTE_CHARWRAP) != 0;
 
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:hasHScroll];
+    [m_scrollView setHasVerticalScroller:(style & wxTE_NO_VSCROLL)? NO: YES];
     NSSize contentSize = [m_scrollView contentSize];
     NSRect viewFrame = NSMakeRect(
             0, 0,
@@ -739,28 +788,30 @@ void wxNSTextViewControl::insertText(NSString* str, WXWidget slf, void *_cmd)
 
 wxString wxNSTextViewControl::GetStringValue() const
 {
+    wxString result;
     if (m_textView)
     {
-        wxString result = wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding());
-        wxMacConvertNewlines13To10( &result ) ;
-        return result;
+        result = wxMacConvertNewlines13To10(
+            wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding()));
     }
-    return wxEmptyString;
+    return result;
 }
+
 void wxNSTextViewControl::SetStringValue( const wxString &str)
 {
-    wxString st = str;
-    wxMacConvertNewlines10To13( &st );
     wxMacEditHelper helper(m_textView);
 
     if (m_textView)
     {
+        wxString st(wxMacConvertNewlines10To13(str));
         [m_textView setString: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
         if ( m_wxPeer->HasFlag(wxTE_AUTO_URL) )
         {
             // Make sure that any URLs in the new text are highlighted.
             [m_textView checkTextInDocument:nil];
         }
+        // Some text styles have to be updated manually.
+        DoUpdateTextStyle();
     }
 }
 
@@ -792,6 +843,12 @@ void wxNSTextViewControl::SetEditable(bool editable)
 {
     if (m_textView)
         [m_textView setEditable: editable];
+}
+
+long wxNSTextViewControl::GetLastPosition() const
+{
+    wxCHECK( m_textView, 0 );
+    return [[m_textView string] length];
 }
 
 void wxNSTextViewControl::GetSelection( long* from, long* to) const
@@ -826,15 +883,136 @@ void wxNSTextViewControl::SetSelection( long from , long to )
     [m_textView scrollRangeToVisible:selrange];
 }
 
+bool wxNSTextViewControl::PositionToXY(long pos, long *x, long *y) const
+{
+    wxCHECK( m_textView, false );
+    wxCHECK_MSG( pos >= 0, false, wxS("Invalid character position") );
+
+    NSString* txt = [m_textView string];
+    if ( pos > [txt length] )
+        return false;
+
+    // Last valid position is past the last character
+    // of the text control, so add one virtual character
+    // at the end to make calculations easier.
+    txt = [txt stringByAppendingString:@"x"];
+
+    long nline = 0;
+    NSRange lineRng;
+    for ( long i = 0; i <= pos; nline++ )
+    {
+        lineRng = [txt lineRangeForRange:NSMakeRange(i, 0)];
+        i = NSMaxRange(lineRng);
+    }
+
+    if ( y )
+        *y = nline-1;
+
+    if ( x )
+        *x = pos - lineRng.location;
+
+    return true;
+}
+
+long wxNSTextViewControl::XYToPosition(long x, long y) const
+{
+    wxCHECK( m_textView, -1 );
+    wxCHECK_MSG( x >= 0 && y >= 0, -1, wxS("Invalid line/column number") );
+
+    NSString* txt = [m_textView string];
+    const long txtLen = [txt length];
+    long nline = -1;
+    NSRange lineRng;
+    long i = 0;
+    // We need to enter the counting loop at least once,
+    // even for empty text string.
+    do
+    {
+        nline++;
+        lineRng = [txt lineRangeForRange:NSMakeRange(i, 0)];
+        i = NSMaxRange(lineRng);
+    } while ( i < txtLen && nline < y );
+    // In the last line, the last valid position is after
+    // the last real character, so we need to count
+    // this additional virtual character.
+    // In any other line, the last valid position is at
+    // the new line character which is already counted.
+    if ( i == txtLen )
+    {
+        const bool endsWithNewLine = txtLen > 0 &&
+                                     [txt characterAtIndex:txtLen-1] == '\n';
+        // If text ends with new line, simulated character
+        // is placed in the additional virtual line.
+        if ( endsWithNewLine )
+        {
+            //  Creating additional virtual line makes sense only
+            // if we look for a position beyond the last real line.
+            if ( nline < y )
+            {
+                nline++;
+                lineRng = NSMakeRange(i, 1);
+            }
+        }
+        else
+        {
+            // Just extended actual range to count
+            // additional virtual character
+            lineRng.length++;
+        }
+    }
+    // Return error if control contains
+    // less lines than given y position.
+    if ( nline != y )
+        return  -1;
+
+    // Return error if given x position
+    // is past the line.
+    if ( x >= lineRng.length )
+        return  -1;
+
+    return lineRng.location + x;
+}
+
+void wxNSTextViewControl::ShowPosition(long pos)
+{
+    if ( !m_textView )
+        return;
+
+    wxCHECK_RET( pos >= 0, wxS("Invalid character position") );
+    [m_textView scrollRangeToVisible:NSMakeRange(pos, 1)];
+}
+
 void wxNSTextViewControl::WriteText(const wxString& str)
 {
-    wxString st = str;
-    wxMacConvertNewlines10To13( &st );
+    wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
     NSEvent* formerEvent = m_lastKeyDownEvent;
     m_lastKeyDownEvent = nil;
     [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
     m_lastKeyDownEvent = formerEvent;
+    // Some text styles have to be updated manually.
+    DoUpdateTextStyle();
+}
+
+void wxNSTextViewControl::controlTextDidChange()
+{
+    wxNSTextBase::controlTextDidChange();
+    // Some text styles have to be updated manually.
+    DoUpdateTextStyle();
+}
+
+void wxNSTextViewControl::DoUpdateTextStyle()
+{
+    if ( m_useCharWrapping )
+    {
+        // Set line wrapping at any position
+        // by applying a style to the entire text.
+        NSTextStorage* storage = [m_textView textStorage];
+        NSMutableParagraphStyle* style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [style setLineBreakMode:NSLineBreakByCharWrapping];
+        [storage addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, [storage length])];
+        [style release];
+    }
 }
 
 void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSED(foreground) , long WXUNUSED(windowStyle), bool WXUNUSED(ignoreBlack) )
@@ -963,11 +1141,27 @@ wxSize wxNSTextViewControl::GetBestSize() const
     return wxSize(0,0);
 }
 
+void wxNSTextViewControl::SetJustification()
+{
+    if ( !m_textView )
+        return;
+
+    NSTextAlignment align;
+
+    if ( m_wxPeer->HasFlag(wxTE_RIGHT) )
+        align = NSRightTextAlignment;
+    else if ( m_wxPeer->HasFlag(wxTE_CENTRE) )
+        align = NSCenterTextAlignment;
+    else // wxTE_LEFT == 0
+        align = NSLeftTextAlignment;
+
+    [m_textView setAlignment:align];
+}
+
 // wxNSTextFieldControl
 
 wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *text, WXWidget w )
-    : wxWidgetCocoaImpl(text, w),
-      wxTextWidgetImpl(text)
+    : wxNSTextBase(text, w)
 {
     Init(w);
 }
@@ -975,8 +1169,7 @@ wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *text, WXWidget w )
 wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
                                            wxTextEntry *entry,
                                            WXWidget w)
-    : wxWidgetCocoaImpl(wxPeer, w),
-      wxTextWidgetImpl(entry)
+    : wxNSTextBase(wxPeer, entry, w)
 {
     Init(w);
 }
@@ -1070,6 +1263,11 @@ void wxNSTextFieldControl::SetEditable(bool editable)
     [m_textField setEditable:editable];
 }
 
+long wxNSTextFieldControl::GetLastPosition() const
+{
+    return [[m_textField stringValue] length];
+}
+
 void wxNSTextFieldControl::GetSelection( long* from, long* to) const
 {
     NSText* editor = [m_textField currentEditor];
@@ -1113,6 +1311,43 @@ void wxNSTextFieldControl::SetSelection( long from , long to )
     // of the selection, so make sure we copy this
     m_selStart = from;
     m_selEnd = to;
+}
+
+bool wxNSTextFieldControl::PositionToXY(long pos, long *x, long *y) const
+{
+    wxCHECK_MSG( pos >= 0, false, wxS("Invalid character position") );
+
+    if ( pos > [[m_textField stringValue] length] )
+        return false;
+
+    if ( y )
+        *y = 0;
+
+    if ( x )
+        *x = pos;
+
+    return true;
+}
+
+long wxNSTextFieldControl::XYToPosition(long x, long y) const
+{
+    wxCHECK_MSG( x >= 0 && y >= 0, -1, wxS("Invalid line/column number") );
+
+    // Last valid position is after the last character.
+    if ( y != 0 || x > [[m_textField stringValue] length] )
+        return -1;
+
+    return x;
+}
+
+void wxNSTextFieldControl::ShowPosition(long pos)
+{
+    wxCHECK_RET( pos >= 0, wxS("Invalid character position") );
+    NSText* editor = [m_textField currentEditor];
+    if ( editor )
+    {
+        [editor scrollRangeToVisible:NSMakeRange(pos, 1)];
+    }
 }
 
 void wxNSTextFieldControl::WriteText(const wxString& str)
@@ -1206,6 +1441,23 @@ bool wxNSTextFieldControl::SetHint(const wxString& hint)
     return true;
 }
 
+void wxNSTextFieldControl::SetJustification()
+{
+    if ( !m_textField )
+        return;
+
+    NSTextAlignment align;
+
+    if ( m_wxPeer->HasFlag(wxTE_RIGHT) )
+        align = NSRightTextAlignment;
+    else if ( m_wxPeer->HasFlag(wxTE_CENTRE) )
+        align = NSCenterTextAlignment;
+    else // wxTE_LEFT == 0
+        align = NSLeftTextAlignment;
+
+    [m_textField setAlignment:align];
+}
+
 //
 //
 //
@@ -1247,10 +1499,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         }
                 
         NSTextFieldCell* cell = [v cell];
-        [cell setScrollable:YES];
-        // TODO: Remove if we definitely are sure, it's not needed
-        // as setting scrolling to yes, should turn off any wrapping
-        // [cell setLineBreakMode:NSLineBreakByClipping]; 
+        [cell setUsesSingleLineMode:YES];
 
         c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
         

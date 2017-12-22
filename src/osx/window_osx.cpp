@@ -38,7 +38,7 @@
 #endif
 
 #include "wx/tooltip.h"
-#include "wx/spinctrl.h"
+#include "wx/spinbutt.h"
 #include "wx/geometry.h"
 #include "wx/weakref.h"
 
@@ -639,13 +639,12 @@ void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
     GetPeer()->SetDropTarget(m_dropTarget) ;
 }
 
-#endif
-
 // Old-style File Manager Drag & Drop
 void wxWindowMac::DragAcceptFiles(bool WXUNUSED(accept))
 {
     // TODO:
 }
+#endif
 
 // From a wx position / size calculate the appropriate size of the native control
 
@@ -1428,6 +1427,11 @@ void wxWindowMac::WarpPointer(int x_pos, int y_pos)
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
 #endif
+}
+
+bool wxWindowMac::EnableTouchEvents(int eventsMask)
+{
+    return GetPeer() ? GetPeer()->EnableTouchEvents(eventsMask) : false;
 }
 
 int wxWindowMac::GetScrollPos(int orient) const

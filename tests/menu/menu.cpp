@@ -353,7 +353,7 @@ GetTranslatedString(const wxTranslations& trans, const wxString& s)
 void MenuTestCase::TranslatedMnemonics()
 {
     // Check that appended mnemonics are correctly stripped;
-    // see http://trac.wxwidgets.org/ticket/16736
+    // see https://trac.wxwidgets.org/ticket/16736
     wxTranslations trans;
     trans.SetLanguage(wxLANGUAGE_JAPANESE);
     wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");

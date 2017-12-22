@@ -62,10 +62,10 @@ public:
     virtual void ShowHidden(bool show) = 0;
 };
 
-void GenerateFilterChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
-void GenerateFolderChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
-void GenerateSelectionChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
-void GenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, const wxString& filename = wxEmptyString );
+void wxGenerateFilterChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
+void wxGenerateFolderChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
+void wxGenerateSelectionChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
+void wxGenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, const wxString& filename = wxEmptyString );
 
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #define wxFileCtrl wxGtkFileCtrl

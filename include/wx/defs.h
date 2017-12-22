@@ -10,6 +10,31 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
+/*
+    We want to avoid compilation and, even more perniciously, link errors if
+    the user code includes <windows.h> before include wxWidgets headers. These
+    error happen because <windows.h> #define's many common symbols, such as
+    Yield or GetClassInfo, which are also used in wxWidgets API. Including our
+    "cleanup" header below un-#defines them to fix this.
+
+    Moreover, notice that it is also possible for the user code to include some
+    wx header (this including wx/defs.h), then include <windows.h> and then
+    include another wx header. To avoid the problem for the second header
+    inclusion, we must include wx/msw/winundef.h from here always and not just
+    during the first inclusion, so it has to be outside of _WX_DEFS_H_ guard
+    check below.
+ */
+#ifdef __cplusplus
+    /*
+        Test for WIN32, defined by windows.h itself, not our own __WINDOWS__,
+        which is not defined yet.
+     */
+#   ifdef WIN32
+#       include "wx/msw/winundef.h"
+#   endif /* WIN32 */
+#endif /* __cplusplus */
+
+
 #ifndef _WX_DEFS_H_
 #define _WX_DEFS_H_
 
@@ -262,10 +287,12 @@ typedef short int WXTYPE;
 
 /* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
 
-#if __cplusplus >= 201103L && defined(__has_warning)
-    #if WX_HAS_CLANG_FEATURE(cxx_attributes)
-        #define wxFALLTHROUGH [[clang::fallthrough]]
-    #endif
+#if __cplusplus >= 201703L
+    #define wxFALLTHROUGH [[fallthrough]]
+#elif __cplusplus >= 201103L && defined(__has_warning) && WX_HAS_CLANG_FEATURE(cxx_attributes)
+    #define wxFALLTHROUGH [[clang::fallthrough]]
+#elif wxCHECK_GCC_VERSION(7, 0)
+    #define wxFALLTHROUGH __attribute__ ((fallthrough))
 #endif
 
 #ifndef wxFALLTHROUGH
@@ -3077,6 +3104,12 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSView);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLContext);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLPixelFormat);
 DECLARE_WXCOCOA_OBJC_CLASS( NSPrintInfo );
+DECLARE_WXCOCOA_OBJC_CLASS(NSGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSPanGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSMagnificationGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSRotationGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSPressGestureRecognizer);
+DECLARE_WXCOCOA_OBJC_CLASS(NSTouch);
 #endif /* __WXMAC__ &__DARWIN__ */
 
 #ifdef __WXMAC__
@@ -3105,7 +3138,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIWebView);
 typedef WX_UIWindow WXWindow;
 typedef WX_UIView WXWidget;
 typedef WX_EAGLContext WXGLContext;
-typedef WX_NSString* WXGLPixelFormat;
+typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;
 
 #endif
@@ -3240,6 +3273,7 @@ typedef struct _GdkDragContext  GdkDragContext;
 
 #if defined(__WXGTK3__)
     typedef struct _GdkWindow GdkWindow;
+    typedef struct _GdkEventSequence GdkEventSequence;
 #elif defined(__WXGTK20__)
     typedef struct _GdkDrawable GdkWindow;
     typedef struct _GdkDrawable GdkPixmap;
@@ -3293,16 +3327,6 @@ typedef const void* WXWidget;
 #ifdef __WXQT__
 #include "wx/qt/defs.h"
 #endif
-
-/*  This is required because of clashing macros in windows.h, which may be */
-/*  included before or after wxWidgets classes, and therefore must be */
-/*  disabled here before any significant wxWidgets headers are included. */
-#ifdef __cplusplus
-#ifdef __WINDOWS__
-#include "wx/msw/winundef.h"
-#endif /* __WINDOWS__ */
-#endif /* __cplusplus */
-
 
 /*  include the feature test macros */
 #include "wx/features.h"

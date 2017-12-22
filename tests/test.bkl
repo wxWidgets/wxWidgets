@@ -10,8 +10,7 @@
     <include file="../build/bakefiles/common_samples.bkl"/>
 
     <template id="wx_test">
-        <cppflags>$(CPPUNIT_CFLAGS)</cppflags>
-        <ldflags>$(CPPUNIT_LIBS)</ldflags>
+        <include>$(TOP_SRCDIR)3rdparty/catch/include</include>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
             <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
@@ -85,7 +84,6 @@
             strings/crt.cpp
             strings/vsnprintf.cpp
             strings/hexconv.cpp
-            streams/bstream.cpp
             streams/datastreamtest.cpp
             streams/ffilestream.cpp
             streams/fileback.cpp
@@ -263,6 +261,8 @@
                 applications.
              -->
             net/socket.cpp
+            persistence/tlw.cpp
+            persistence/dataview.cpp
             sizers/boxsizer.cpp
             sizers/gridsizer.cpp
             sizers/wrapsizer.cpp

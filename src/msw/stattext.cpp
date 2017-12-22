@@ -28,6 +28,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 bool wxStaticText::Create(wxWindow *parent,
                           wxWindowID id,
@@ -120,8 +121,16 @@ wxSize wxStaticText::DoGetBestClientSize() const
 
 void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 {
+    // Keep track of the size before so we can see if it changed
+    const wxSize sizeBefore = GetSize();
+
     // note: we first need to set the size and _then_ call UpdateLabel
     wxStaticTextBase::DoSetSize(x, y, w, h, sizeFlags);
+
+    // Avoid flicker by not refreshing or updating the label if the size didn't
+    // change.
+    if ( sizeBefore == GetSize() )
+        return;
 
 #ifdef SS_ENDELLIPSIS
     // do we need to ellipsize the contents?
@@ -142,26 +151,26 @@ void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    // If the label doesn't really change, avoid flicker by not doing anything.
+    if ( label == m_labelOrig )
+        return;
+
 #ifdef SS_ENDELLIPSIS
-    long styleReal = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+    wxMSWWinStyleUpdater updateStyle(GetHwnd());
     if ( HasFlag(wxST_ELLIPSIZE_END) )
     {
         // adding SS_ENDELLIPSIS or SS_ENDELLIPSIS "disables" the correct
         // newline handling in static texts: the newlines in the labels are
         // shown as square. Thus we don't use it even on newer OS when
         // the static label contains a newline.
-        if ( label.Contains(wxT('\n')) )
-            styleReal &= ~SS_ENDELLIPSIS;
-        else
-            styleReal |= SS_ENDELLIPSIS;
-
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, styleReal);
+        updateStyle.TurnOnOrOff(!label.Contains(wxT('\n')), SS_ENDELLIPSIS);
     }
     else // style not supported natively
     {
-        styleReal &= ~SS_ENDELLIPSIS;
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, styleReal);
+        updateStyle.TurnOff(SS_ENDELLIPSIS);
     }
+
+    updateStyle.Apply();
 #endif // SS_ENDELLIPSIS
 
     // save the label in m_labelOrig with both the markup (if any) and
@@ -169,7 +178,7 @@ void wxStaticText::SetLabel(const wxString& label)
     m_labelOrig = label;
 
 #ifdef SS_ENDELLIPSIS
-    if ( styleReal & SS_ENDELLIPSIS )
+    if ( updateStyle.IsOn(SS_ENDELLIPSIS) )
         DoSetLabel(GetLabel());
     else
 #endif // SS_ENDELLIPSIS

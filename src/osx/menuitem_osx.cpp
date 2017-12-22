@@ -44,9 +44,6 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
         if ( wxStripMenuCodes(m_text).Upper() == wxT("EXIT") )
             m_text = wxT("Quit\tCtrl+Q") ;
 
-    m_radioGroup.start = -1;
-    m_isRadioGroupStart = false;
-
     wxString text = wxStripMenuCodes(m_text, (pParentMenu != NULL && pParentMenu->GetNoEventsMode()) ? wxStrip_Accel : wxStrip_All);
     if (text.IsEmpty() && !IsSeparator())
     {
@@ -54,10 +51,14 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
         text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
     }
 
-    wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
     // use accessors for ID and Kind because they might have been changed in the base constructor
+#if wxUSE_ACCEL
+    wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
     m_peer = wxMenuItemImpl::Create( this, pParentMenu, GetId(), text, entry, strHelp, GetKind(), pSubMenu );
     delete entry;
+#else
+    m_peer = wxMenuItemImpl::Create( this, pParentMenu, GetId(), text, NULL, strHelp, GetKind(), pSubMenu );
+#endif // wxUSE_ACCEL/!wxUSE_ACCEL
 }
 
 wxMenuItem::~wxMenuItem()
@@ -122,18 +123,9 @@ void wxMenuItem::Check(bool bDoCheck)
 
                 // get the radio group range
                 int start, end;
-
-                if ( m_isRadioGroupStart )
+                if ( !m_parentMenu->OSXGetRadioGroupRange(pos, &start, &end) )
                 {
-                    // we already have all information we need
-                    start = pos;
-                    end = m_radioGroup.end;
-                }
-                else // next radio group item
-                {
-                    // get the radio group end from the start item
-                    start = m_radioGroup.start;
-                    end = items.Item(start)->GetData()->m_radioGroup.end;
+                    wxFAIL_MSG( wxS("Menu radio item not part of radio group?") );
                 }
 
                 // also uncheck all the other items in this radio group
@@ -206,54 +198,13 @@ void wxMenuItem::UpdateItemText()
         text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
     }
 
+#if wxUSE_ACCEL
     wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
     GetPeer()->SetLabel( text, entry );
     delete entry ;
-}
-
-// radio group stuff
-// -----------------
-
-void wxMenuItem::SetAsRadioGroupStart(bool start)
-{
-    m_isRadioGroupStart = start;
-}
-
-void wxMenuItem::SetRadioGroupStart(int start)
-{
-    wxASSERT_MSG( !m_isRadioGroupStart,
-                  wxT("should only be called for the next radio items") );
-
-    m_radioGroup.start = start;
-}
-
-void wxMenuItem::SetRadioGroupEnd(int end)
-{
-    wxASSERT_MSG( m_isRadioGroupStart,
-                  wxT("should only be called for the first radio item") );
-
-    m_radioGroup.end = end;
-}
-
-bool wxMenuItem::IsRadioGroupStart() const
-{
-    return m_isRadioGroupStart;
-}
-
-int wxMenuItem::GetRadioGroupStart() const
-{
-    wxASSERT_MSG( !m_isRadioGroupStart,
-                  wxS("shouldn't be called for the first radio item") );
-
-    return m_radioGroup.start;
-}
-
-int wxMenuItem::GetRadioGroupEnd() const
-{
-    wxASSERT_MSG( m_isRadioGroupStart,
-                  wxS("shouldn't be called for the first radio item") );
-
-    return m_radioGroup.end;
+#else
+    GetPeer()->SetLabel( text, NULL );
+#endif // wxUSE_ACCEL/!wxUSE_ACCEL
 }
 
 // ----------------------------------------------------------------------------

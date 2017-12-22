@@ -29,6 +29,8 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/mnemonics.h"
+#include "wx/stockitem.h"
 
 extern "C" {
 static void gtk_dirdialog_response_callback(GtkWidget * WXUNUSED(w),
@@ -87,16 +89,24 @@ bool wxDirDialog::Create(wxWindow* parent,
                    wxGTK_CONV(m_message),
                    gtk_parent,
                    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                   GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                   static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
+#else
+                   GTK_STOCK_CANCEL,
+#endif // GTK >= 3.10 / < 3.10
+                   GTK_RESPONSE_CANCEL,
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                   static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN)))),
+#else
+                   GTK_STOCK_OPEN,
+#endif // GTK >= 3.10 / < 3.10
+                   GTK_RESPONSE_ACCEPT,
                    NULL);
     g_object_ref(m_widget);
 
     gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
 #if GTK_CHECK_VERSION(2,18,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,18,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(18))
     {
         gtk_file_chooser_set_create_folders(
             GTK_FILE_CHOOSER(m_widget), (style & wxDD_DIR_MUST_EXIST) == 0);

@@ -132,7 +132,7 @@ static GtkWidget* ToolTipWidget()
         g_signal_connect_swapped(ContainerWidget(), "destroy",
             G_CALLBACK(gtk_widget_destroy), s_widget);
         const char* name = "gtk-tooltip";
-        if (gtk_check_version(2, 11, 0))
+        if (!wx_is_at_least_gtk2(11))
             name = "gtk-tooltips";
         gtk_widget_set_name(s_widget, name);
         gtk_widget_ensure_style(s_widget);
@@ -354,7 +354,7 @@ static void bg(GtkStyleContext* sc, wxColour& color, int state = GTK_STATE_FLAG_
                 {
                 case CAIRO_FORMAT_ARGB32:
                     a = guchar(pixel >> 24);
-                    // fallthrough
+                    wxFALLTHROUGH;
                 case CAIRO_FORMAT_RGB24:
                     r = guchar(pixel >> 16);
                     g = guchar(pixel >> 8);
@@ -402,7 +402,11 @@ static void fg(GtkStyleContext* sc, wxColour& color, int state = GTK_STATE_FLAG_
 {
     GdkRGBA rgba;
     gtk_style_context_set_state(sc, GtkStateFlags(state));
+#ifdef __WXGTK4__
+    gtk_style_context_get_color(sc, &rgba);
+#else
     gtk_style_context_get_color(sc, GtkStateFlags(state), &rgba);
+#endif
     color = wxColour(rgba);
     StyleContextFree(sc);
 }
@@ -440,18 +444,23 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     {
     case wxSYS_COLOUR_ACTIVECAPTION:
     case wxSYS_COLOUR_INACTIVECAPTION:
+    case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
+    case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
 #if GTK_CHECK_VERSION(3,10,0)
         if (gtk_check_version(3,10,0) == NULL)
         {
             sc = HeaderbarContext(path);
             int state = GTK_STATE_FLAG_NORMAL;
-            if (index == wxSYS_COLOUR_INACTIVECAPTION)
+            if (index == wxSYS_COLOUR_INACTIVECAPTION ||
+                index == wxSYS_COLOUR_GRADIENTINACTIVECAPTION)
+            {
                 state = GTK_STATE_FLAG_BACKDROP;
+            }
             bg(sc, color, state);
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_3DLIGHT:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:
@@ -491,7 +500,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_BTNTEXT:
         sc = ButtonLabelContext(path);
         fg(sc, color);
@@ -505,13 +514,16 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
         }
 #endif
-        // fall through
+        wxFALLTHROUGH;
     case wxSYS_COLOUR_GRAYTEXT:
         sc = StyleContext(path, GTK_TYPE_LABEL, "label");
         fg(sc, color, GTK_STATE_FLAG_INSENSITIVE);
         break;
     case wxSYS_COLOUR_HOTLIGHT:
         sc = StyleContext(path, GTK_TYPE_LINK_BUTTON, "button", "link");
+#ifdef __WXGTK4__
+        fg(sc, color, GTK_STATE_FLAG_LINK);
+#else
         if (gtk_check_version(3,12,0) == NULL)
             fg(sc, color, GTK_STATE_FLAG_LINK);
         else
@@ -529,6 +541,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             StyleContextFree(sc);
             wxGCC_WARNING_RESTORE()
         }
+#endif
         break;
     case wxSYS_COLOUR_INFOBK:
         sc = TooltipContext(path);
@@ -574,8 +587,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         bg(sc, color);
         break;
     case wxSYS_COLOUR_3DDKSHADOW:
-    case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
-    case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         color.Set(0, 0, 0);
         break;
     default:
@@ -628,6 +639,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_BACKGROUND:
         //case wxSYS_COLOUR_DESKTOP:
         case wxSYS_COLOUR_INACTIVECAPTION:
+        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         case wxSYS_COLOUR_MENU:
         case wxSYS_COLOUR_WINDOWFRAME:
         case wxSYS_COLOUR_ACTIVEBORDER:
@@ -712,13 +724,12 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_ACTIVECAPTION:
+        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
         case wxSYS_COLOUR_MENUHILIGHT:
             color = wxColor(MenuItemStyle()->bg[GTK_STATE_SELECTED]);
             break;
 
         case wxSYS_COLOUR_HOTLIGHT:
-        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
-        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
             // TODO
             color = *wxBLACK;
             break;
@@ -826,6 +837,20 @@ static int GetBorderWidth(wxSystemMetric index, wxWindow* win)
     }
     return -1;
 }
+
+#ifdef __WXGTK4__
+static GdkRectangle GetMonitorGeom(GdkWindow* window)
+{
+    GdkMonitor* monitor;
+    if (window)
+        monitor = gdk_display_get_monitor_at_window(gdk_window_get_display(window), window);
+    else
+        monitor = gdk_display_get_primary_monitor(gdk_display_get_default());
+    GdkRectangle rect;
+    gdk_monitor_get_geometry(monitor, &rect);
+    return rect;
+}
+#endif
 
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
@@ -958,16 +983,28 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             return 32;
 
         case wxSYS_SCREEN_X:
+#ifdef __WXGTK4__
+            return GetMonitorGeom(window).width;
+#else
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             if (window)
                 return gdk_screen_get_width(gdk_window_get_screen(window));
             else
                 return gdk_screen_width();
+            wxGCC_WARNING_RESTORE()
+#endif
 
         case wxSYS_SCREEN_Y:
+#ifdef __WXGTK4__
+            return GetMonitorGeom(window).height;
+#else
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             if (window)
                 return gdk_screen_get_height(gdk_window_get_screen(window));
             else
                 return gdk_screen_height();
+            wxGCC_WARNING_RESTORE()
+#endif
 
         case wxSYS_HSCROLL_Y:
         case wxSYS_VSCROLL_X:
@@ -1036,10 +1073,13 @@ void wxSystemSettingsModule::OnExit()
 {
 #ifdef __WXGTK3__
     GtkSettings* settings = gtk_settings_get_default();
-    g_signal_handlers_disconnect_by_func(settings,
-        (void*)notify_gtk_theme_name, NULL);
-    g_signal_handlers_disconnect_by_func(settings,
-        (void*)notify_gtk_font_name, NULL);
+    if (settings)
+    {
+        g_signal_handlers_disconnect_by_func(settings,
+            (void*)notify_gtk_theme_name, NULL);
+        g_signal_handlers_disconnect_by_func(settings,
+            (void*)notify_gtk_font_name, NULL);
+    }
 #else
     if (gs_tlw_parent)
     {

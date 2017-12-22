@@ -77,6 +77,9 @@ public:
     virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
 
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
+#ifdef __WXGTK3__
+    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
+#endif // __WXGTK3__
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
@@ -122,8 +125,7 @@ public:
     virtual bool DoIsExposed( int x, int y ) const wxOVERRIDE;
     virtual bool DoIsExposed( int x, int y, int w, int h ) const wxOVERRIDE;
 
-    // currently wxGTK2-only
-    void SetDoubleBuffered(bool on);
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
     virtual bool IsDoubleBuffered() const wxOVERRIDE;
 
     // SetLabel(), which does nothing in wxWindow
@@ -413,7 +415,8 @@ protected:
 #ifdef __WXGTK3__
     // Use the given CSS string for styling the widget. The provider must be
     // allocated, and remains owned, by the caller.
-    void ApplyCssStyle(GtkCssProvider* provider, const char* style);
+    void GTKApplyCssStyle(GtkCssProvider* provider, const char* style);
+    void GTKApplyCssStyle(const char* style);
 #else // GTK+ < 3
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create

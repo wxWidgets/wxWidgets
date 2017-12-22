@@ -186,7 +186,7 @@ BASE_OSX_NOTWXMAC_HDR =
 
 ## Qt
 
-QT_LOWLEVEL_HDR =
+QT_HDR =
     wx/qt/accel.h
     wx/qt/app.h
     wx/qt/apptbase.h
@@ -196,12 +196,13 @@ QT_LOWLEVEL_HDR =
     wx/qt/brush.h
     wx/qt/anybutton.h
     wx/qt/button.h
+    wx/generic/caret.h
     wx/qt/checkbox.h
     wx/qt/checklst.h
     wx/qt/choice.h
     wx/qt/clipbrd.h
     wx/qt/clrpicker.h
-    wx/qt/generic/clrpickerg.h
+    wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/qt/colordlg.h
     wx/qt/colour.h
@@ -223,9 +224,12 @@ QT_LOWLEVEL_HDR =
     wx/qt/dirdlg.h
     wx/qt/dnd.h
     wx/qt/evtloop.h
+    wx/generic/fdrepdlg.h
     wx/qt/filedlg.h
+    wx/generic/filepickerg.h
     wx/qt/font.h
     wx/qt/fontdlg.h
+    wx/generic/fontpickerg.h
     wx/qt/frame.h
     wx/qt/gauge.h
     wx/generic/icon.h
@@ -237,6 +241,7 @@ QT_LOWLEVEL_HDR =
     wx/qt/menuitem.h
     wx/qt/minifram.h
     wx/qt/msgdlg.h
+    wx/qt/nonownedwnd.h
     wx/qt/notebook.h
     wx/qt/palette.h
     wx/qt/pen.h
@@ -268,7 +273,7 @@ QT_LOWLEVEL_HDR =
     wx/qt/window.h
     wx/qt/private/winevent.h
 
-QT_LOWLEVEL_SRC=
+QT_SRC=
     src/qt/accel.cpp
     src/qt/app.cpp
     src/qt/apptraits.cpp
@@ -323,6 +328,7 @@ QT_LOWLEVEL_SRC=
     src/qt/menuitem.cpp
     src/qt/minifram.cpp
     src/qt/msgdlg.cpp
+    src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
     src/qt/palette.cpp
     src/qt/pen.cpp
@@ -946,6 +952,7 @@ GUI_CMN_HDR =
     wx/palette.h
     wx/panel.h
     wx/pen.h
+    wx/peninfobase.h
     wx/position.h
     wx/preferences.h
     wx/radiobox.h
@@ -1059,6 +1066,7 @@ GUI_CMN_HDR =
     wx/paper.h
     wx/persist.h
     wx/persist/bookctrl.h
+    wx/persist/dataview.h
     wx/persist/splitter.h
     wx/persist/toplevel.h
     wx/persist/treebook.h
@@ -2140,7 +2148,6 @@ OSX_COMMON_SRC =
     src/osx/carbon/frame.cpp
     src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
-    src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/renderer.cpp
     src/osx/carbon/statbrma.cpp
@@ -2284,6 +2291,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/nonownedwnd.mm
     src/osx/cocoa/notebook.mm
     src/osx/cocoa/radiobut.mm
+    src/osx/cocoa/overlay.mm
     src/osx/cocoa/preferences.mm
     src/osx/cocoa/printdlg.mm
     src/osx/cocoa/scrolbar.mm
@@ -2826,6 +2834,20 @@ WEBVIEW_CMN_HDR =
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
 
+WEBVIEW_OSX_SHARED_HDR =
+    wx/osx/webviewhistoryitem_webkit.h
+    wx/osx/webview_webkit.h
+
+WEBVIEW_OSX_SHARED_SRC =
+    src/osx/webview_webkit.mm
+
+WEBVIEW_GTK_HDR =
+    wx/gtk/webviewhistoryitem_webkit.h
+    wx/gtk/webview_webkit.h
+
+WEBVIEW_GTK_SRC =
+    src/gtk/webview_webkit.cpp
+
 # wxXRC
 
 XRC_SRC =
@@ -2991,6 +3013,9 @@ OPENGL_MSW_SRC =
 OPENGL_MSW_HDR =
     wx/msw/glcanvas.h
 
+OPENGL_OSX_SHARED_SRC =
+    src/osx/cocoa/glcanvas.mm
+    src/osx/glcanvas_osx.cpp
 
 # Misc plugin sources:
 
@@ -3027,6 +3052,12 @@ AUI_MSW_HDR =
 AUI_MSW_SRC =
     src/aui/tabartmsw.cpp
     src/aui/barartmsw.cpp
+
+AUI_GTK_SRC =
+    src/aui/tabartgtk.cpp
+
+AUI_GTK_HDR =
+    wx/aui/tabartgtk.h
 
 # wxRibbon
 

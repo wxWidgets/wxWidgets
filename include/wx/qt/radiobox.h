@@ -8,9 +8,9 @@
 #ifndef _WX_QT_RADIOBOX_H_
 #define _WX_QT_RADIOBOX_H_
 
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QVBoxLayout>
+class QGroupBox;
+class QButtonGroup;
+class QBoxLayout;
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
@@ -77,7 +77,7 @@ public:
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
-    virtual QGroupBox *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 private:
     // The 'visual' group box:

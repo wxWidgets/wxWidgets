@@ -261,30 +261,74 @@ bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
 {
     wxCHECK_MSG( str, false, wxS("Output string must be non-NULL") );
 
+    static const ssize_t READSIZE = 4096;
+
+    wxCharBuffer buf;
+
     ssize_t length = Length();
-    wxCHECK_MSG( (wxFileOffset)length == Length(), false, wxT("huge file not supported") );
-
-    wxCharBuffer buf(length);
-    char* p = buf.data();
-    for ( ;; )
+    if ( length != -1 )
     {
-        static const ssize_t READSIZE = 4096;
+        wxCHECK_MSG( (wxFileOffset)length == Length(), false, wxT("huge file not supported") );
 
-        ssize_t nread = Read(p, length > READSIZE ? READSIZE : length);
-        if ( nread == wxInvalidOffset )
+        if ( !buf.extend(length) )
             return false;
 
-        p += nread;
-        if ( length <= nread )
-            break;
+        char* p = buf.data();
+        for ( ;; )
+        {
+            ssize_t nread = Read(p, length > READSIZE ? READSIZE : length);
+            if ( nread == wxInvalidOffset )
+                return false;
 
-        length -= nread;
+            if ( nread == 0 )
+            {
+                // We have reached EOF before reading the entire length of the
+                // file. This can happen for some special files (e.g. those
+                // under /sys on Linux systems) or even for regular files if
+                // another process has truncated the file since we started
+                // reading it, so deal with it gracefully.
+                buf.shrink(p - buf.data());
+                break;
+            }
+
+            p += nread;
+            length -= nread;
+
+            if ( !length )
+            {
+                // Notice that we don't keep reading after getting the expected
+                // number of bytes, even though in principle a situation
+                // similar to the one described above, with another process
+                // extending the file since we started to read it, is possible.
+                // But returning just the data that was in the file when we
+                // originally started reading it isn't really wrong in this
+                // case, so keep things simple and just do it like this.
+                break;
+            }
+        }
+    }
+    else // File is not seekable
+    {
+        for ( ;; )
+        {
+            const size_t len = buf.length();
+            if ( !buf.extend(len + READSIZE) )
+                return false;
+
+            ssize_t nread = Read(buf.data() + len, READSIZE);
+            if ( nread == wxInvalidOffset )
+                return false;
+
+            if ( nread < READSIZE )
+            {
+                // We have reached EOF.
+                buf.shrink(len + nread);
+                break;
+            }
+        }
     }
 
-    *p = 0;
-
-    wxString strTmp(buf, conv);
-    str->swap(strTmp);
+    str->assign(buf, conv);
 
     return true;
 }
@@ -429,21 +473,6 @@ wxFileOffset wxFile::Tell() const
 wxFileOffset wxFile::Length() const
 {
     wxASSERT( IsOpened() );
-
-    // we use a special method for Linux systems where files in sysfs (i.e.
-    // those under /sys typically) return length of 4096 bytes even when
-    // they're much smaller -- this is a problem as it results in errors later
-    // when we try reading 4KB from them
-#ifdef __LINUX__
-    struct stat st;
-    if ( fstat(m_fd, &st) == 0 )
-    {
-        // returning 0 for the special files indicates to the caller that they
-        // are not seekable
-        return st.st_blocks ? st.st_size : 0;
-    }
-    //else: failed to stat, try the normal method
-#endif // __LINUX__
 
     wxFileOffset iRc = Tell();
     if ( iRc != wxInvalidOffset ) {

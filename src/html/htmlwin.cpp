@@ -818,7 +818,8 @@ void wxHtmlWindow::CreateLayout()
             (
                 wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
                 ScrollSteps(m_Cell->GetWidth(), clientWidth - vscrollbar),
-                ScrollSteps(m_Cell->GetHeight(), clientHeight)
+                ScrollSteps(m_Cell->GetHeight(), clientHeight),
+                m_xScrollPosition, m_yScrollPosition
             );
         }
     }

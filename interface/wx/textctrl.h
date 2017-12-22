@@ -976,37 +976,38 @@ public:
     @style{wxTE_NO_VSCROLL}
            For multiline controls only: vertical scrollbar will never be
            created. This limits the amount of text which can be entered into
-           the control to what can be displayed in it under MSW but not under
-           GTK2. Currently not implemented for the other platforms.
+           the control to what can be displayed in it under wxMSW but not under
+           wxGTK or wxOSX. Currently not implemented for the other platforms.
     @style{wxTE_LEFT}
            The text in the control will be left-justified (default).
     @style{wxTE_CENTRE}
-           The text in the control will be centered (currently wxMSW and
-           wxGTK2 only).
+           The text in the control will be centered (wxMSW, wxGTK, wxOSX).
     @style{wxTE_RIGHT}
-           The text in the control will be right-justified (currently wxMSW
-           and wxGTK2 only).
+           The text in the control will be right-justified (wxMSW, wxGTK,
+           wxOSX).
     @style{wxTE_DONTWRAP}
            Same as wxHSCROLL style: don't wrap at all, show horizontal
            scrollbar instead.
     @style{wxTE_CHARWRAP}
-           Wrap the lines too long to be shown entirely at any position
-           (wxUniv and wxGTK2 only).
+           For multiline controls only: wrap the lines too long to be shown
+           entirely at any position (wxUniv, wxGTK, wxOSX).
     @style{wxTE_WORDWRAP}
-           Wrap the lines too long to be shown entirely at word boundaries
-           (wxUniv and wxGTK2 only).
+           For multiline controls only: wrap the lines too long to be shown
+           entirely at word boundaries (wxUniv, wxMSW, wxGTK, wxOSX).
     @style{wxTE_BESTWRAP}
-           Wrap the lines at word boundaries or at any other character if
-           there are words longer than the window width (this is the default).
+           For multiline controls only: wrap the lines at word boundaries
+           or at any other character if there are words longer than the window
+           width (this is the default).
     @style{wxTE_CAPITALIZE}
            On PocketPC and Smartphone, causes the first letter to be
            capitalized.
     @endStyleTable
 
     Note that alignment styles (wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT) can be
-    changed dynamically after control creation on wxMSW and wxGTK. wxTE_READONLY,
-    wxTE_PASSWORD and wrapping styles can be dynamically changed under wxGTK but
-    not wxMSW. The other styles can be only set during control creation.
+    changed dynamically after control creation on wxMSW, wxGTK and wxOSX.
+    wxTE_READONLY, wxTE_PASSWORD and wrapping styles can be dynamically changed
+    under wxGTK but not wxMSW. The other styles can be only set during control
+    creation.
 
 
     @section textctrl_text_format wxTextCtrl Text Format
@@ -1030,6 +1031,31 @@ public:
     back to the other wxTextCtrl methods. This problem doesn't arise for
     single-line platforms however where the indices in the control do
     correspond to the positions in the value string.
+
+
+    @section textctrl_positions_xy wxTextCtrl Positions and Coordinates
+
+    It is possible to use either linear positions, i.e. roughly (but @e not
+    always exactly, as explained in the previous section) the index of the
+    character in the text contained in the control or X-Y coordinates, i.e.
+    column and line of the character when working with this class and it
+    provides the functions PositionToXY() and XYToPosition() to convert between
+    the two.
+
+    Additionally, a position in the control can be converted to its coordinates
+    in pixels using PositionToCoords() which can be useful to e.g. show a popup
+    menu near the given character. And, in the other direction, HitTest() can
+    be used to find the character under, or near, the given pixel coordinates.
+
+    To be more precise, positions actually refer to the gaps between characters
+    and not the characters themselves. Thus, position 0 is the one before the
+    very first character in the control and so is a valid position even when
+    the control is empty. And if the control contains a single character, it
+    has two valid positions: 0 before this character and 1 -- after it. This,
+    when the documentation of various functions mentions "invalid position", it
+    doesn't consider the position just after the last character of the line to
+    be invalid, only the positions beyond that one (e.g. 2 and greater in the
+    single character example) are actually invalid.
 
 
     @section textctrl_styles wxTextCtrl Styles.
@@ -1304,9 +1330,9 @@ public:
     /**
         Finds the position of the character at the specified point.
 
-        If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
-        character closest to this position are returned, otherwise the output
-        parameters are not modified.
+        If the return code is not @c wxTE_HT_UNKNOWN the position of the
+        character closest to this position is returned, otherwise the output
+        parameter is not modified.
 
         Please note that this function is currently only implemented in wxUniv,
         wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
@@ -1314,7 +1340,7 @@ public:
 
         @beginWxPerlOnly
         In wxPerl this function takes only the @a pt argument and
-        returns a 3-element list (result, col, row).
+        returns a 2-element list (result, pos).
         @endWxPerlOnly
 
         @param pt

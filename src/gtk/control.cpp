@@ -97,6 +97,11 @@ void wxControl::PostCreation(const wxSize& size)
 {
     wxWindow::PostCreation();
 
+#ifdef __WXGTK3__
+    if (HasFlag(wxNO_BORDER))
+        GTKApplyCssStyle("*{ border:none; border-radius:0; padding:0 }");
+#endif
+
 #ifndef __WXGTK3__
     // NB: GetBestSize needs to know the style, otherwise it will assume
     //     default font and if the user uses a different font, determined
@@ -118,7 +123,7 @@ void wxControl::PostCreation(const wxSize& size)
 void wxControl::GTKFixSensitivity(bool WXUNUSED_IN_GTK3(onlyIfUnderMouse))
 {
 #ifndef __WXGTK3__
-    if (gtk_check_version(2,14,0)
+    if (!wx_is_at_least_gtk2(14)
 #if wxUSE_SYSTEM_OPTIONS
         && (wxSystemOptions::GetOptionInt(wxT("gtk.control.disable-sensitivity-fix")) != 1)
 #endif
@@ -343,7 +348,7 @@ wxPoint wxControl::GTKGetEntryMargins(GtkEntry* entry) const
 #if GTK_CHECK_VERSION(2,10,0)
     // The margins we have previously set
     const GtkBorder* border = NULL;
-    if (gtk_check_version(2,10,0) == NULL)
+    if (wx_is_at_least_gtk2(10))
         border = gtk_entry_get_inner_border(entry);
 
     if ( border )
