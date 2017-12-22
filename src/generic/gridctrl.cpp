@@ -630,7 +630,7 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
             for (int i = col + cell_cols; i <= col_end; i++)
             {
                 clip.width = grid.GetColSize(i) - 1;
-                dc.DestroyClippingRegion();
+                wxDCClipper clipper(dc, clip);
                 dc.SetClippingRegion(clip);
 
                 SetTextColoursAndFont(grid, attr, dc,
@@ -644,7 +644,6 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
             rect = rectCell;
             rect.Inflate(-1);
             rect.width++;
-            dc.DestroyClippingRegion();
         }
     }
 
