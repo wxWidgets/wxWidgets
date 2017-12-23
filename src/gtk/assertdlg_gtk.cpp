@@ -37,13 +37,10 @@
    GtkAssertDialog helpers
  ---------------------------------------------------------------------------- */
 
+// This function is called only for GTK+ < 3.10
 static
 GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
-                                            const gchar *icon)
-#else
                                             const gchar *stock)
-#endif // GTK >= 3.10 / < 3.10
 {
     /* create the button */
     GtkWidget *button = gtk_button_new_with_mnemonic (label);
@@ -51,13 +48,11 @@ GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
 
     /* add a stock icon inside it */
 #ifdef __WXGTK4__
-    gtk_button_set_icon_name (GTK_BUTTON (button), icon);
+    gtk_button_set_icon_name (GTK_BUTTON (button), stock);
 #else
-  #if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
-    GtkWidget *image = gtk_image_new_from_icon_name(icon, GTK_ICON_SIZE_BUTTON);
-  #else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GtkWidget *image = gtk_image_new_from_stock (stock, GTK_ICON_SIZE_BUTTON);
-  #endif // GTK >= 3.10 / < 3.10
+    wxGCC_WARNING_RESTORE()
     gtk_button_set_image (GTK_BUTTON (button), image);
 #endif
 
@@ -72,6 +67,7 @@ GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
     return button;
 }
 
+// This function is called only for GTK+ < 3.10
 static
 GtkWidget *gtk_assert_dialog_add_button (GtkAssertDialog *dlg, const gchar *label,
                                          const gchar *stock, gint response_id)
@@ -87,6 +83,7 @@ GtkWidget *gtk_assert_dialog_add_button (GtkAssertDialog *dlg, const gchar *labe
 
 #if wxUSE_STACKWALKER
 
+// This function is called only for GTK+ < 3.10
 static
 void gtk_assert_dialog_append_text_column (GtkWidget *treeview, const gchar *name, int index)
 {
@@ -101,6 +98,7 @@ void gtk_assert_dialog_append_text_column (GtkWidget *treeview, const gchar *nam
     gtk_tree_view_column_set_reorderable (column, TRUE);
 }
 
+// This function is called only for GTK+ < 3.10
 static
 GtkWidget *gtk_assert_dialog_create_backtrace_list_model ()
 {
@@ -256,6 +254,9 @@ static void gtk_assert_dialog_continue_callback(GtkWidget*, GtkAssertDialog* dlg
  ---------------------------------------------------------------------------- */
 
 extern "C" {
+#if GTK_CHECK_VERSION(3,10,0)
+static void gtk_assert_dialog_class_init(gpointer g_class, void*);
+#endif // GTK+ >= 3.10
 static void gtk_assert_dialog_init(GTypeInstance* instance, void*);
 }
 
@@ -270,7 +271,11 @@ GType gtk_assert_dialog_get_type()
             sizeof (GtkAssertDialogClass),
             NULL,           /* base_init */
             NULL,           /* base_finalize */
+#if GTK_CHECK_VERSION(3,10,0)
+            gtk_assert_dialog_class_init,  /* class init */
+#else
             NULL,
+#endif // GTK+ >= 3.10 / < 3.10
             NULL,           /* class_finalize */
             NULL,           /* class_data */
             sizeof (GtkAssertDialog),
@@ -285,139 +290,530 @@ GType gtk_assert_dialog_get_type()
 }
 
 extern "C" {
+// For GTK+ >= 3.10, Composite Widget Templates are used to define composite widgets.
+#if GTK_CHECK_VERSION(3,10,0)
+static void gtk_assert_dialog_class_init(gpointer g_class, void*)
+{
+    if (gtk_check_version(3,10,0) == NULL)
+    {
+        // GtkBuilder XML to be bound to the dialog class data
+        static const char dlgTempl[] =
+            "<interface>"
+              "<object class='GtkListStore' id='backtrace_list_store'>"
+                "<columns>"
+                  "<!-- column-name column_index -->"
+                  "<column type='gint'/>"
+                  "<!-- column-name column_func_prototype -->"
+                  "<column type='gchararray'/>"
+                  "<!-- column-name column_src_file -->"
+                  "<column type='gchararray'/>"
+                  "<!-- column-name column_line_no -->"
+                  "<column type='gchararray'/>"
+                "</columns>"
+              "</object>"
+              "<object class='GtkImage' id='imageBtnContinue'>"
+                "<property name='visible'>True</property>"
+                "<property name='can_focus'>False</property>"
+                "<property name='icon_name'>go-next</property>"
+              "</object>"
+              "<object class='GtkImage' id='imageBtnCopy'>"
+                "<property name='visible'>True</property>"
+                "<property name='can_focus'>False</property>"
+                "<property name='icon_name'>edit-copy</property>"
+              "</object>"
+              "<object class='GtkImage' id='imageBtnSave'>"
+                "<property name='visible'>True</property>"
+                "<property name='can_focus'>False</property>"
+                "<property name='icon_name'>document-save</property>"
+              "</object>"
+              "<object class='GtkImage' id='imageBtnStop'>"
+                "<property name='visible'>True</property>"
+                "<property name='can_focus'>False</property>"
+                "<property name='icon_name'>application-exit</property>"
+              "</object>"
+              "<template class='GtkAssertDialog' parent='GtkDialog'>"
+                "<property name='can_focus'>False</property>"
+                "<property name='resizable'>False</property>"
+                "<property name='type_hint'>dialog</property>"
+                "<child internal-child='vbox'>"
+                  "<object class='GtkBox' id='dialog_vbox'>"
+                    "<property name='can_focus'>False</property>"
+                    "<property name='orientation'>vertical</property>"
+                    "<property name='spacing'>2</property>"
+                    "<child internal-child='action_area'>"
+                      "<object class='GtkButtonBox' id='dialog_buttons'>"
+                        "<property name='can_focus'>False</property>"
+                        "<property name='layout_style'>end</property>"
+                        "<child>"
+                          "<object class='GtkCheckButton' id='shownexttime'>"
+                            "<property name='label' translatable='yes'>Show this _dialog the next time</property>"
+                            "<property name='visible'>True</property>"
+                            "<property name='can_focus'>True</property>"
+                            "<property name='receives_default'>False</property>"
+                            "<property name='use_underline'>True</property>"
+                            "<property name='xalign'>0.5</property>"
+                            "<property name='active'>True</property>"
+                            "<property name='draw_indicator'>True</property>"
+                          "</object>"
+                          "<packing>"
+                            "<property name='expand'>True</property>"
+                            "<property name='fill'>False</property>"
+                            "<property name='padding'>8</property>"
+                            "<property name='pack_type'>end</property>"
+                            "<property name='position'>0</property>"
+                          "</packing>"
+                        "</child>"
+                        "<child>"
+                          "<object class='GtkButton' id='button_stop'>"
+                            "<property name='label' translatable='yes'>_Stop</property>"
+                            "<property name='visible'>True</property>"
+                            "<property name='can_focus'>True</property>"
+                            "<property name='receives_default'>True</property>"
+                            "<property name='image'>imageBtnStop</property>"
+                            "<property name='use_underline'>True</property>"
+                          "</object>"
+                          "<packing>"
+                            "<property name='expand'>True</property>"
+                            "<property name='fill'>True</property>"
+                            "<property name='position'>1</property>"
+                          "</packing>"
+                        "</child>"
+                        "<child>"
+                          "<object class='GtkButton' id='button_continue'>"
+                            "<property name='label' translatable='yes'>_Continue</property>"
+                            "<property name='visible'>True</property>"
+                            "<property name='can_focus'>True</property>"
+                            "<property name='can_default'>True</property>"
+                            "<property name='has_default'>True</property>"
+                            "<property name='receives_default'>True</property>"
+                            "<property name='image'>imageBtnContinue</property>"
+                            "<property name='use_underline'>True</property>"
+                            "<signal name='clicked' handler='gtk_assert_dialog_continue_callback' swapped='no'/>"
+                          "</object>"
+                          "<packing>"
+                            "<property name='expand'>True</property>"
+                            "<property name='fill'>True</property>"
+                            "<property name='position'>2</property>"
+                          "</packing>"
+                        "</child>"
+                      "</object>"
+                      "<packing>"
+                        "<property name='expand'>False</property>"
+                        "<property name='fill'>False</property>"
+                        "<property name='position'>0</property>"
+                      "</packing>"
+                    "</child>"
+                    "<child>"
+                      "<object class='GtkBox' id='vbox'>"
+                        "<property name='visible'>True</property>"
+                        "<property name='can_focus'>False</property>"
+                        "<property name='orientation'>vertical</property>"
+                        "<child>"
+                          "<object class='GtkBox' id='hbox'>"
+                            "<property name='visible'>True</property>"
+                            "<property name='can_focus'>False</property>"
+                            "<property name='border_width'>8</property>"
+                            "<child>"
+                              "<object class='GtkImage' id='image'>"
+                                "<property name='visible'>True</property>"
+                                "<property name='can_focus'>False</property>"
+                                "<property name='icon_name'>dialog-error</property>"
+                                "<property name='icon_size'>6</property>"
+                              "</object>"
+                              "<packing>"
+                                "<property name='expand'>False</property>"
+                                "<property name='fill'>False</property>"
+                                "<property name='padding'>12</property>"
+                                "<property name='position'>0</property>"
+                              "</packing>"
+                            "</child>"
+                            "<child>"
+                              "<object class='GtkBox' id='vbox2'>"
+                                "<property name='visible'>True</property>"
+                                "<property name='can_focus'>False</property>"
+                                "<property name='orientation'>vertical</property>"
+                                "<child>"
+                                  "<object class='GtkLabel' id='info'>"
+                                    "<property name='visible'>True</property>"
+                                    "<property name='can_focus'>False</property>"
+                                    "<property name='label' translatable='yes'>An assertion failed!</property>"
+                                  "</object>"
+                                  "<packing>"
+                                    "<property name='expand'>True</property>"
+                                    "<property name='fill'>True</property>"
+                                    "<property name='padding'>8</property>"
+                                    "<property name='position'>0</property>"
+                                  "</packing>"
+                                "</child>"
+                                "<child>"
+                                  "<object class='GtkLabel' id='message'>"
+                                    "<property name='width_request'>450</property>"
+                                    "<property name='visible'>True</property>"
+                                    "<property name='can_focus'>False</property>"
+                                    "<property name='wrap'>True</property>"
+                                    "<property name='selectable'>True</property>"
+                                  "</object>"
+                                  "<packing>"
+                                    "<property name='expand'>True</property>"
+                                    "<property name='fill'>True</property>"
+                                    "<property name='padding'>8</property>"
+                                    "<property name='pack_type'>end</property>"
+                                    "<property name='position'>1</property>"
+                                  "</packing>"
+                                "</child>"
+                              "</object>"
+                              "<packing>"
+                                "<property name='expand'>True</property>"
+                                "<property name='fill'>True</property>"
+                                "<property name='position'>1</property>"
+                              "</packing>"
+                            "</child>"
+                          "</object>"
+                          "<packing>"
+                            "<property name='expand'>False</property>"
+                            "<property name='fill'>False</property>"
+                            "<property name='position'>0</property>"
+                          "</packing>"
+                        "</child>"
+#if wxUSE_STACKWALKER // expander is needed only if backtrace is enabled
+                        "<child>"
+                          "<object class='GtkExpander' id='expander'>"
+                            "<property name='visible'>True</property>"
+                            "<property name='can_focus'>True</property>"
+                            "<signal name='activate' handler='gtk_assert_dialog_expander_callback' swapped='no'/>"
+                            "<child>"
+                              "<object class='GtkBox' id='vbox_exp'>"
+                                "<property name='visible'>True</property>"
+                                "<property name='can_focus'>False</property>"
+                                "<property name='orientation'>vertical</property>"
+                                "<child>"
+                                  "<object class='GtkScrolledWindow' id='sw'>"
+                                    "<property name='visible'>True</property>"
+                                    "<property name='can_focus'>True</property>"
+                                    "<property name='shadow_type'>etched-in</property>"
+                                    "<child>"
+                                      "<object class='GtkTreeView' id='treeview'>"
+                                        "<property name='height_request'>180</property>"
+                                        "<property name='visible'>True</property>"
+                                        "<property name='can_focus'>True</property>"
+                                        "<property name='model'>backtrace_list_store</property>"
+                                        "<child internal-child='selection'>"
+                                          "<object class='GtkTreeSelection' id='treeview-selection'/>"
+                                        "</child>"
+                                        "<child>"
+                                          "<object class='GtkTreeViewColumn' id='column_index'>"
+                                            "<property name='resizable'>True</property>"
+                                            "<property name='spacing'>4</property>"
+                                            "<property name='title' translatable='yes'>#</property>"
+                                            "<property name='reorderable'>True</property>"
+                                            "<child>"
+                                              "<object class='GtkCellRendererText' id='index_renderer'/>"
+                                              "<attributes>"
+                                                "<attribute name='text'>0</attribute>"
+                                              "</attributes>"
+                                            "</child>"
+                                          "</object>"
+                                        "</child>"
+                                        "<child>"
+                                          "<object class='GtkTreeViewColumn' id='column_func_prototype'>"
+                                            "<property name='resizable'>True</property>"
+                                            "<property name='spacing'>4</property>"
+                                            "<property name='title' translatable='yes'>Function Prototype</property>"
+                                            "<property name='reorderable'>True</property>"
+                                            "<child>"
+                                              "<object class='GtkCellRendererText' id='function_renderer'/>"
+                                              "<attributes>"
+                                                "<attribute name='text'>1</attribute>"
+                                              "</attributes>"
+                                            "</child>"
+                                          "</object>"
+                                        "</child>"
+                                        "<child>"
+                                          "<object class='GtkTreeViewColumn' id='column_src_file'>"
+                                            "<property name='resizable'>True</property>"
+                                            "<property name='spacing'>4</property>"
+                                            "<property name='title' translatable='yes'>Source file</property>"
+                                            "<property name='reorderable'>True</property>"
+                                            "<child>"
+                                              "<object class='GtkCellRendererText' id='src_file_renderer'/>"
+                                              "<attributes>"
+                                                "<attribute name='text'>2</attribute>"
+                                              "</attributes>"
+                                            "</child>"
+                                          "</object>"
+                                        "</child>"
+                                        "<child>"
+                                          "<object class='GtkTreeViewColumn' id='column_line_no'>"
+                                            "<property name='resizable'>True</property>"
+                                            "<property name='spacing'>4</property>"
+                                            "<property name='title' translatable='yes'>Line #</property>"
+                                            "<property name='reorderable'>True</property>"
+                                            "<child>"
+                                              "<object class='GtkCellRendererText' id='line_no_renderer'/>"
+                                              "<attributes>"
+                                                "<attribute name='text'>3</attribute>"
+                                              "</attributes>"
+                                            "</child>"
+                                          "</object>"
+                                        "</child>"
+                                      "</object>"
+                                    "</child>"
+                                  "</object>"
+                                  "<packing>"
+                                    "<property name='expand'>True</property>"
+                                    "<property name='fill'>True</property>"
+                                    "<property name='padding'>8</property>"
+                                    "<property name='position'>0</property>"
+                                  "</packing>"
+                                "</child>"
+                                "<child>"
+                                  "<object class='GtkButtonBox' id='buttonbox_exp'>"
+                                    "<property name='visible'>True</property>"
+                                    "<property name='can_focus'>False</property>"
+                                    "<property name='layout_style'>end</property>"
+                                    "<child>"
+                                      "<object class='GtkButton' id='button_save'>"
+                                        "<property name='label' translatable='yes'>Save to _file</property>"
+                                        "<property name='visible'>True</property>"
+                                        "<property name='can_focus'>True</property>"
+                                        "<property name='receives_default'>True</property>"
+                                        "<property name='image'>imageBtnSave</property>"
+                                        "<property name='use_underline'>True</property>"
+                                        "<signal name='clicked' handler='gtk_assert_dialog_save_backtrace_callback' swapped='no'/>"
+                                      "</object>"
+                                      "<packing>"
+                                        "<property name='expand'>True</property>"
+                                        "<property name='fill'>True</property>"
+                                        "<property name='position'>0</property>"
+                                      "</packing>"
+                                    "</child>"
+                                    "<child>"
+                                      "<object class='GtkButton' id='button_copy'>"
+                                        "<property name='label' translatable='yes'>Copy to clip_board</property>"
+                                        "<property name='visible'>True</property>"
+                                        "<property name='can_focus'>True</property>"
+                                        "<property name='receives_default'>True</property>"
+                                        "<property name='image'>imageBtnCopy</property>"
+                                        "<property name='use_underline'>True</property>"
+                                        "<signal name='clicked' handler='gtk_assert_dialog_copy_callback' swapped='no'/>"
+                                      "</object>"
+                                      "<packing>"
+                                        "<property name='expand'>True</property>"
+                                        "<property name='fill'>True</property>"
+                                        "<property name='position'>1</property>"
+                                      "</packing>"
+                                    "</child>"
+                                  "</object>"
+                                  "<packing>"
+                                    "<property name='expand'>False</property>"
+                                    "<property name='fill'>True</property>"
+                                    "<property name='pack_type'>end</property>"
+                                    "<property name='position'>1</property>"
+                                  "</packing>"
+                                "</child>"
+                              "</object>"
+                            "</child>"
+                            "<child type='label'>"
+                              "<object class='GtkLabel' id='label_exp'>"
+                                "<property name='visible'>True</property>"
+                                "<property name='can_focus'>False</property>"
+                                "<property name='label' translatable='yes'>Back_trace:</property>"
+                                "<property name='use_underline'>True</property>"
+                              "</object>"
+                            "</child>"
+                          "</object>"
+                          "<packing>"
+                            "<property name='expand'>True</property>"
+                            "<property name='fill'>True</property>"
+                            "<property name='position'>1</property>"
+                          "</packing>"
+                        "</child>"
+#endif // wxUSE_STACKWALKER
+                      "</object>"
+                      "<packing>"
+                        "<property name='expand'>True</property>"
+                        "<property name='fill'>True</property>"
+                        "<property name='padding'>5</property>"
+                        "<property name='position'>1</property>"
+                      "</packing>"
+                    "</child>"
+                  "</object>"
+                "</child>"
+                "<action-widgets>"
+                  "<action-widget response='0'>button_stop</action-widget>"
+                  "<action-widget response='1'>button_continue</action-widget>"
+                "</action-widgets>"
+              "</template>"
+            "</interface>";
+
+        // Verify numeric values of response codes hard-coded in the XML
+        wxASSERT(GTK_ASSERT_DIALOG_STOP == 0);
+        wxASSERT(GTK_ASSERT_DIALOG_CONTINUE == 1);
+
+        GtkWidgetClass* widgetClass = GTK_WIDGET_CLASS(g_class);
+
+        GBytes* templBytes = g_bytes_new_static(dlgTempl, sizeof(dlgTempl)-1);
+        gtk_widget_class_set_template(widgetClass, templBytes);
+
+        // Define the relationship of the entries in GtkAssertDialog and entries defined in the XML
+        gtk_widget_class_bind_template_child(widgetClass, GtkAssertDialog, message);
+#if wxUSE_STACKWALKER
+        gtk_widget_class_bind_template_child(widgetClass, GtkAssertDialog, expander);
+        gtk_widget_class_bind_template_child(widgetClass, GtkAssertDialog, treeview);
+#endif // wxUSE_STACKWALKER
+        gtk_widget_class_bind_template_child(widgetClass, GtkAssertDialog, shownexttime);
+
+        // Bind <signal> connections defined in the GtkBuilder XML
+        // with callbacks exposed by GtkAssertDialog.
+#if wxUSE_STACKWALKER
+        gtk_widget_class_bind_template_callback(widgetClass, gtk_assert_dialog_expander_callback);
+        gtk_widget_class_bind_template_callback(widgetClass, gtk_assert_dialog_save_backtrace_callback);
+        gtk_widget_class_bind_template_callback(widgetClass, gtk_assert_dialog_copy_callback);
+#endif // wxUSE_STACKWALKER
+        gtk_widget_class_bind_template_callback(widgetClass, gtk_assert_dialog_continue_callback);
+    }
+}
+#endif // GTK+ >= 3.10
+
 static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
 {
-    GtkAssertDialog* dlg = GTK_ASSERT_DIALOG(instance);
-    GtkWidget *continuebtn;
-
+    // For GTK+ >= 3.10 create and initialize the dialog from the already assigned template
+    // or create the dialog "manually" otherwise.
+#if GTK_CHECK_VERSION(3,10,0)
+    if (gtk_check_version(3,10,0) == NULL)
     {
-        GtkWidget *vbox, *hbox, *image;
+        GtkAssertDialog* dlg = GTK_ASSERT_DIALOG(instance);
+        gtk_widget_init_template(GTK_WIDGET(dlg));
+        /* complete creation */
+        dlg->callback = NULL;
+        dlg->userdata = NULL;
+    }
+    else
+#endif // GTK+ >= 3.10
+    {
+        GtkAssertDialog* dlg = GTK_ASSERT_DIALOG(instance);
+        GtkWidget *continuebtn;
 
-        /* start the main vbox */
-        gtk_widget_push_composite_child ();
-        vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-        gtk_container_set_border_width (GTK_CONTAINER(vbox), 8);
-        gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg))), vbox, true, true, 5);
-
-
-        /* add the icon+message hbox */
-        hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-        gtk_box_pack_start (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
-
-        /* icon */
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
-        image = gtk_image_new_from_icon_name("dialog-error", GTK_ICON_SIZE_DIALOG);
-#else
-        image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
-#endif // GTK >= 3.10 / < 3.10
-        gtk_box_pack_start (GTK_BOX(hbox), image, FALSE, FALSE, 12);
-
+        // This code is called only for GTK+ < 3.10
         {
-            GtkWidget *vbox2, *info;
+            GtkWidget *vbox, *hbox, *image;
 
-            /* message */
-            vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-            gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 0);
-            info = gtk_label_new ("An assertion failed!");
-            gtk_box_pack_start (GTK_BOX(vbox2), info, TRUE, TRUE, 8);
+            /* start the main vbox */
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+            gtk_widget_push_composite_child ();
+            wxGCC_WARNING_RESTORE()
+            vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+            gtk_container_set_border_width (GTK_CONTAINER(vbox), 8);
+            gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dlg))), vbox, true, true, 5);
 
-            /* assert message */
-            dlg->message = gtk_label_new (NULL);
-            gtk_label_set_selectable (GTK_LABEL (dlg->message), TRUE);
-            gtk_label_set_line_wrap (GTK_LABEL (dlg->message), TRUE);
-            gtk_label_set_justify (GTK_LABEL (dlg->message), GTK_JUSTIFY_LEFT);
-            gtk_widget_set_size_request (GTK_WIDGET(dlg->message), 450, -1);
 
-            gtk_box_pack_end (GTK_BOX(vbox2), GTK_WIDGET(dlg->message), TRUE, TRUE, 8);
+            /* add the icon+message hbox */
+            hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+            gtk_box_pack_start (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+
+            /* icon */
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+            image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+            wxGCC_WARNING_RESTORE()
+            gtk_box_pack_start (GTK_BOX(hbox), image, FALSE, FALSE, 12);
+
+            {
+                GtkWidget *vbox2, *info;
+
+                /* message */
+                vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+                gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 0);
+                info = gtk_label_new ("An assertion failed!");
+                gtk_box_pack_start (GTK_BOX(vbox2), info, TRUE, TRUE, 8);
+
+                /* assert message */
+                dlg->message = gtk_label_new (NULL);
+                gtk_label_set_selectable (GTK_LABEL (dlg->message), TRUE);
+                gtk_label_set_line_wrap (GTK_LABEL (dlg->message), TRUE);
+                gtk_label_set_justify (GTK_LABEL (dlg->message), GTK_JUSTIFY_LEFT);
+                gtk_widget_set_size_request (GTK_WIDGET(dlg->message), 450, -1);
+
+                gtk_box_pack_end (GTK_BOX(vbox2), GTK_WIDGET(dlg->message), TRUE, TRUE, 8);
+            }
+
+#if wxUSE_STACKWALKER
+            /* add the expander */
+            dlg->expander = gtk_expander_new_with_mnemonic ("Back_trace:");
+            gtk_box_pack_start (GTK_BOX(vbox), dlg->expander, TRUE, TRUE, 0);
+            g_signal_connect (dlg->expander, "activate",
+                                G_CALLBACK(gtk_assert_dialog_expander_callback), dlg);
+#endif // wxUSE_STACKWALKER
         }
-
 #if wxUSE_STACKWALKER
-        /* add the expander */
-        dlg->expander = gtk_expander_new_with_mnemonic ("Back_trace:");
-        gtk_box_pack_start (GTK_BOX(vbox), dlg->expander, TRUE, TRUE, 0);
-        g_signal_connect (dlg->expander, "activate",
-                            G_CALLBACK(gtk_assert_dialog_expander_callback), dlg);
-#endif // wxUSE_STACKWALKER
-    }
-#if wxUSE_STACKWALKER
-    {
-        GtkWidget *hbox, *vbox, *button, *sw;
+        {
+            GtkWidget *hbox, *vbox, *button, *sw;
 
-        /* create expander's vbox */
-        vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-        gtk_container_add (GTK_CONTAINER (dlg->expander), vbox);
+            /* create expander's vbox */
+            vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+            gtk_container_add (GTK_CONTAINER (dlg->expander), vbox);
 
-        /* add a scrollable window under the expander */
-        sw = gtk_scrolled_window_new (NULL, NULL);
-        gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
-        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC,
-                                        GTK_POLICY_AUTOMATIC);
-        gtk_box_pack_start (GTK_BOX(vbox), sw, TRUE, TRUE, 8);
+            /* add a scrollable window under the expander */
+            sw = gtk_scrolled_window_new (NULL, NULL);
+            gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
+            gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC,
+                                            GTK_POLICY_AUTOMATIC);
+            gtk_box_pack_start (GTK_BOX(vbox), sw, TRUE, TRUE, 8);
 
-        /* add the treeview to the scrollable window */
-        dlg->treeview = gtk_assert_dialog_create_backtrace_list_model ();
-        gtk_widget_set_size_request (GTK_WIDGET(dlg->treeview), -1, 180);
-        gtk_container_add (GTK_CONTAINER (sw), dlg->treeview);
+            /* add the treeview to the scrollable window */
+            dlg->treeview = gtk_assert_dialog_create_backtrace_list_model ();
+            gtk_widget_set_size_request (GTK_WIDGET(dlg->treeview), -1, 180);
+            gtk_container_add (GTK_CONTAINER (sw), dlg->treeview);
 
-        /* create button's hbox */
-        hbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
-        gtk_box_pack_end (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
-        gtk_button_box_set_layout (GTK_BUTTON_BOX(hbox), GTK_BUTTONBOX_END);
+            /* create button's hbox */
+            hbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+            gtk_box_pack_end (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+            gtk_button_box_set_layout (GTK_BUTTON_BOX(hbox), GTK_BUTTONBOX_END);
 
-        /* add the buttons */
-        button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Save to _file",
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
-                                                "document-save");
-#else
-                                                GTK_STOCK_SAVE);
-#endif // GTK >= 3.10 / < 3.10
-        g_signal_connect (button, "clicked",
-                            G_CALLBACK(gtk_assert_dialog_save_backtrace_callback), dlg);
+            /* add the buttons */
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+            button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Save to _file", GTK_STOCK_SAVE);
+            wxGCC_WARNING_RESTORE()
+            g_signal_connect (button, "clicked",
+                                G_CALLBACK(gtk_assert_dialog_save_backtrace_callback), dlg);
 
-        button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Copy to clip_board",
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
-                                                  "edit-copy");
-#else
-                                                  GTK_STOCK_COPY);
-#endif // GTK >= 3.10 / < 3.10
-        g_signal_connect (button, "clicked", G_CALLBACK(gtk_assert_dialog_copy_callback), dlg);
-    }
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+            button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Copy to clip_board", GTK_STOCK_COPY);
+            wxGCC_WARNING_RESTORE()
+            g_signal_connect (button, "clicked", G_CALLBACK(gtk_assert_dialog_copy_callback), dlg);
+        }
 #endif // wxUSE_STACKWALKER
 
-    /* add the checkbutton */
-    dlg->shownexttime = gtk_check_button_new_with_mnemonic("Show this _dialog the next time");
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(dlg->shownexttime), TRUE);
-    gtk_box_pack_end(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(dlg))), dlg->shownexttime, false, true, 8);
+        /* add the checkbutton */
+        dlg->shownexttime = gtk_check_button_new_with_mnemonic("Show this _dialog the next time");
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(dlg->shownexttime), TRUE);
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        gtk_box_pack_end(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(dlg))), dlg->shownexttime, false, true, 8);
+        wxGCC_WARNING_RESTORE()
 
-    /* add the stop button */
-    gtk_assert_dialog_add_button (dlg, "_Stop",
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
-                                  "application-exit",
-#else
-                                  GTK_STOCK_QUIT,
-#endif // GTK >= 3.10 / < 3.10
-                                  GTK_ASSERT_DIALOG_STOP);
+        /* add the stop button */
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        gtk_assert_dialog_add_button (dlg, "_Stop", GTK_STOCK_QUIT, GTK_ASSERT_DIALOG_STOP);
+        wxGCC_WARNING_RESTORE()
 
-    /* add the continue button */
-    continuebtn = gtk_assert_dialog_add_button (dlg, "_Continue",
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
-                                                "go-next",
-#else
-                                                GTK_STOCK_YES,
-#endif
-                                                GTK_ASSERT_DIALOG_CONTINUE);
-    gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_ASSERT_DIALOG_CONTINUE);
-    g_signal_connect (continuebtn, "clicked", G_CALLBACK(gtk_assert_dialog_continue_callback), dlg);
+        /* add the continue button */
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        continuebtn = gtk_assert_dialog_add_button (dlg, "_Continue", GTK_STOCK_YES, GTK_ASSERT_DIALOG_CONTINUE);
+        wxGCC_WARNING_RESTORE()
+        gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_ASSERT_DIALOG_CONTINUE);
+        g_signal_connect (continuebtn, "clicked", G_CALLBACK(gtk_assert_dialog_continue_callback), dlg);
 
-    /* complete creation */
-    dlg->callback = NULL;
-    dlg->userdata = NULL;
+        /* complete creation */
+        dlg->callback = NULL;
+        dlg->userdata = NULL;
 
-    /* the resizable property of this window is modified by the expander:
-       when it's collapsed, the window must be non-resizable! */
-    gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
-    gtk_widget_pop_composite_child ();
-    gtk_widget_show_all (GTK_WIDGET(dlg));
+        /* the resizable property of this window is modified by the expander:
+           when it's collapsed, the window must be non-resizable! */
+        gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        gtk_widget_pop_composite_child ();
+        wxGCC_WARNING_RESTORE()
+        gtk_widget_show_all (GTK_WIDGET(dlg));
+    }
 }
 }
 
