@@ -1646,6 +1646,7 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
              gestureState = NSGestureRecognizerStateBegan;
              break;
         case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
              break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
