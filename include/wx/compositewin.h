@@ -26,9 +26,14 @@ class WXDLLIMPEXP_FWD_CORE wxToolTip;
 // base class name and implement GetCompositeWindowParts() pure virtual method.
 // ----------------------------------------------------------------------------
 
+// This is the base class of wxCompositeWindow which takes care of propagating
+// colours, fonts etc changes to all the children, but doesn't bother with
+// handling their events or focus. There should be rarely any need to use it
+// rather than the full wxCompositeWindow.
+
 // The template parameter W must be a wxWindow-derived class.
 template <class W>
-class wxCompositeWindow : public W
+class wxCompositeWindowSettersOnly : public W
 {
 public:
     typedef W BaseWindowClass;
@@ -120,6 +125,44 @@ public:
     }
 #endif // wxUSE_TOOLTIPS
 
+protected:
+    // Trivial but necessary default ctor.
+    wxCompositeWindowSettersOnly()
+    {
+    }
+
+private:
+    // Must be implemented by the derived class to return all children to which
+    // the public methods we override should forward to.
+    virtual wxWindowList GetCompositeWindowParts() const = 0;
+
+    template <class T, class TArg, class R>
+    void SetForAllParts(R (wxWindowBase::*func)(TArg), T arg)
+    {
+        // Simply call the setters for all parts of this composite window.
+        const wxWindowList parts = GetCompositeWindowParts();
+        for ( wxWindowList::const_iterator i = parts.begin();
+              i != parts.end();
+              ++i )
+        {
+            wxWindow * const child = *i;
+
+            // Allow NULL elements in the list, this makes the code of derived
+            // composite controls which may have optionally shown children
+            // simpler and it doesn't cost us much here.
+            if ( child )
+                (child->*func)(arg);
+        }
+    }
+
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxCompositeWindowSettersOnly, W);
+};
+
+// The real wxCompositeWindow itself, inheriting all the setters defined above.
+template <class W>
+class wxCompositeWindow : public wxCompositeWindowSettersOnly<W>
+{
+public:
     virtual void SetFocus() wxOVERRIDE
     {
         wxSetFocusToChild(this, NULL);
@@ -137,10 +180,6 @@ protected:
     }
 
 private:
-    // Must be implemented by the derived class to return all children to which
-    // the public methods we override should forward to.
-    virtual wxWindowList GetCompositeWindowParts() const = 0;
-
     void OnWindowCreate(wxWindowCreateEvent& event)
     {
         event.Skip();
@@ -204,25 +243,6 @@ private:
         // The event shouldn't be ignored, forward it to the main control:
         if ( !this->ProcessWindowEvent(event) )
             event.Skip();
-    }
-
-    template <class T, class TArg, class R>
-    void SetForAllParts(R (wxWindowBase::*func)(TArg), T arg)
-    {
-        // Simply call the setters for all parts of this composite window.
-        const wxWindowList parts = GetCompositeWindowParts();
-        for ( wxWindowList::const_iterator i = parts.begin();
-              i != parts.end();
-              ++i )
-        {
-            wxWindow * const child = *i;
-
-            // Allow NULL elements in the list, this makes the code of derived
-            // composite controls which may have optionally shown children
-            // simpler and it doesn't cost us much here.
-            if ( child )
-                (child->*func)(arg);
-        }
     }
 
     wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxCompositeWindow, W);
