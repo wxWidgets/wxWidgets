@@ -236,6 +236,27 @@ public:
         return ms_pfnSetGestureConfig;
     }
 
+    typedef BOOL (WINAPI *RegisterTouchWindow_t)(HWND,ULONG);
+
+    static RegisterTouchWindow_t RegisterTouchWindow()
+    {
+        return ms_pfnRegisterTouchWindow;
+    }
+
+    typedef BOOL (WINAPI *UnregisterTouchWindow_t)(HWND);
+
+    static UnregisterTouchWindow_t UnregisterTouchWindow()
+    {
+        return ms_pfnUnregisterTouchWindow;
+    }
+
+    typedef BOOL (WINAPI *GetTouchInputInfo_t)(HANDLE, UINT, PTOUCHINPUT, int);
+
+    static GetTouchInputInfo_t GetTouchInputInfo()
+    {
+        return ms_pfnGetTouchInputInfo;
+    }
+
 private:
     static void LoadGestureSymbols()
     {
@@ -244,11 +265,17 @@ private:
         wxDL_INIT_FUNC(ms_pfn, GetGestureInfo, dll);
         wxDL_INIT_FUNC(ms_pfn, CloseGestureInfoHandle, dll);
         wxDL_INIT_FUNC(ms_pfn, SetGestureConfig, dll);
+        wxDL_INIT_FUNC(ms_pfn, RegisterTouchWindow, dll);
+        wxDL_INIT_FUNC(ms_pfn, UnregisterTouchWindow, dll);
+        wxDL_INIT_FUNC(ms_pfn, GetTouchInputInfo, dll);
     }
 
     static GetGestureInfo_t ms_pfnGetGestureInfo;
     static CloseGestureInfoHandle_t ms_pfnCloseGestureInfoHandle;
     static SetGestureConfig_t ms_pfnSetGestureConfig;
+    static RegisterTouchWindow_t ms_pfnRegisterTouchWindow;
+    static UnregisterTouchWindow_t ms_pfnUnregisterTouchWindow;
+    static GetTouchInputInfo_t ms_pfnGetTouchInputInfo;
 
     static bool ms_gestureSymbolsLoaded;
 };
@@ -259,6 +286,12 @@ GestureFuncs::CloseGestureInfoHandle_t
     GestureFuncs::ms_pfnCloseGestureInfoHandle = nullptr;
 GestureFuncs::SetGestureConfig_t
     GestureFuncs::ms_pfnSetGestureConfig = nullptr;
+GestureFuncs::RegisterTouchWindow_t
+    GestureFuncs::ms_pfnRegisterTouchWindow = nullptr;
+GestureFuncs::UnregisterTouchWindow_t
+    GestureFuncs::ms_pfnUnregisterTouchWindow = nullptr;
+GestureFuncs::GetTouchInputInfo_t
+    GestureFuncs::ms_pfnGetTouchInputInfo = nullptr;
 
 bool GestureFuncs::ms_gestureSymbolsLoaded = false;
 
@@ -958,6 +991,17 @@ bool wxWindowMSW::EnableTouchEvents(int eventsMask)
         // This is used only if we need to allocate the configurations
         // dynamically.
         wxVector<GESTURECONFIG> configs;
+
+        if ( eventsMask & wxTOUCH_RAW_EVENTS )
+        {
+            eventsMask &= wxTOUCH_RAW_EVENTS;
+             if ( !GestureFuncs::RegisterTouchWindow() (m_hWnd, 0) )
+                wxLogLastError("SetGestureConfig");
+        }
+        else
+        {
+            GestureFuncs::UnregisterTouchWindow() (m_hWnd);
+        }
 
         // There are two simple cases: enabling or disabling all gestures.
         if ( eventsMask == wxTOUCH_NONE )
@@ -3555,6 +3599,17 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     wxLogLastError("CloseGestureInfoHandle");
                 }
             }
+        }
+        break;
+
+        case WM_TOUCH:
+        {
+            if ( !GestureFuncs::IsOk() )
+                break;
+
+            HandleTouch(wParam, lParam);
+            // Let DefWindowProc handle the touch events too
+            processed = false;
         }
         break;
 #endif // WM_GESTURE
@@ -6276,6 +6331,37 @@ bool wxWindowMSW::HandlePressAndTap(const wxPoint& pt, WXDWORD flags)
 
     return HandleWindowEvent(event);
 }
+
+bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
+{
+    const unsigned count = LOWORD(wParam);
+    wxVector<TOUCHINPUT> info(count);
+    if (GestureFuncs::GetTouchInputInfo() ((HTOUCHINPUT)lParam, count, &info[0], sizeof(TOUCHINPUT)))
+    {
+        for(unsigned i = 0; i < count; i++)
+        {
+            // hundredths of a pixel of physical screen coordinates
+            wxPoint pos = ScreenToClient(wxPoint(info[i].x / 100, info[i].y / 100));
+            wxEventType type;
+            if ( info[i].dwFlags & TOUCHEVENTF_DOWN )
+                type = wxEVT_TOUCH_BEGIN;
+            else if ( info[i].dwFlags & TOUCHEVENTF_MOVE )
+                type = wxEVT_TOUCH_MOVE;
+            else if ( info[i].dwFlags & TOUCHEVENTF_UP )
+                type = wxEVT_TOUCH_END;
+            else
+                continue;
+            wxMultiTouchEvent event(type);
+            event.SetPosition(pos);
+            event.SetSequenceIdId(wxTouchSequenceId(wxUIntToPtr(info[i].dwID + 1)));
+            event.SetPrimary(info[i].dwFlags & TOUCHEVENTF_PRIMARY);
+            HandleWindowEvent(event);
+        }
+        return true;
+    }
+    return false;
+}
+
 #endif // WM_GESTURE
 
 // ---------------------------------------------------------------------------
