@@ -183,6 +183,7 @@ All (GUI):
 - Extend wxRendererNative::DrawGauge() to work for vertical gauges too.
 - Add wxHD_BITMAP_ON_RIGHT style to wxHeaderCtrl.
 - Send wxEVT_DATAVIEW_ITEM_EDITING_DONE when editing was cancelled too.
+- Add wxIMAGE_OPTION_GIF_TRANSPARENCY (Hugo Elias).
 
 wxGTK:
 
