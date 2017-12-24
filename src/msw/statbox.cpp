@@ -123,9 +123,23 @@ bool wxStaticBox::Create(wxWindow* parent,
     m_labelWin = labelWin;
     m_labelWin->Reparent(this);
 
-    m_labelWin->Move(FromDIP(LABEL_HORZ_OFFSET), 0);
+    PositionLabelWindow();
 
     return true;
+}
+
+void wxStaticBox::PositionLabelWindow()
+{
+    m_labelWin->SetSize(m_labelWin->GetBestSize());
+    m_labelWin->Move(FromDIP(LABEL_HORZ_OFFSET), 0);
+}
+
+wxWindowList wxStaticBox::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    if ( m_labelWin )
+        parts.push_back(m_labelWin);
+    return parts;
 }
 
 WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -189,6 +203,30 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 
     // need extra space, don't know how much but this seems to be enough
     *borderTop += FromDIP(LABEL_VERT_BORDER);
+}
+
+bool wxStaticBox::SetBackgroundColour(const wxColour& colour)
+{
+    // Do _not_ call the immediate base class method, we don't need to set the
+    // label window (which is the only sub-window of this composite window)
+    // background explicitly because it will almost always be a wxCheckBox or
+    // wxRadioButton which inherits its background from the box anyhow, so
+    // setting it would be at best useless.
+    return wxStaticBoxBase::SetBackgroundColour(colour);
+}
+
+bool wxStaticBox::SetFont(const wxFont& font)
+{
+    if ( !wxCompositeWindowSettersOnly<wxStaticBoxBase>::SetFont(font) )
+        return false;
+
+    // We need to reposition the label as its size may depend on the font.
+    if ( m_labelWin )
+    {
+        PositionLabelWindow();
+    }
+
+    return true;
 }
 
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
