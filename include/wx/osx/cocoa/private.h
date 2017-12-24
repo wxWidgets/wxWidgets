@@ -188,6 +188,7 @@ public :
     virtual void        TouchesBegan(NSEvent *event);
     virtual void        TouchesMoved(NSEvent *event);
     virtual void        TouchesEnded(NSEvent *event);
+    virtual void        TouchesCancel(NSEvent *event);
 
 #if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);
