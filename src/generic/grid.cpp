@@ -1871,7 +1871,10 @@ void wxGrid::Render( wxDC& dc,
     dc.DrawRectangle( pointOffSet, sizeCells );
 
     // draw cells
-    DrawGridCellArea( dc, renderCells );
+    {
+        wxDCClipper clipper( dc, wxRect(pointOffSet, sizeCells) );
+        DrawGridCellArea( dc, renderCells );
+    }
 
     // draw grid lines
     if ( style & wxGRID_DRAW_CELL_LINES )
