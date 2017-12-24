@@ -371,6 +371,7 @@ public:
     int                  m_activeGestures;
     wxPoint              m_lastTouchPoint;
     GdkEventSequence*    m_touchSequence;
+    bool                 m_rawTouchEvents;
 
     GtkGesture* m_vertical_pan_gesture;
     GtkGesture* m_horizontal_pan_gesture;
@@ -3709,6 +3710,41 @@ touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
     if ( !data )
         return;
 
+    if ( data->m_rawTouchEvents)
+    {
+        wxEventType type;
+
+        switch(gdk_event->type)
+        {
+        case GDK_TOUCH_BEGIN:
+            type = wxEVT_TOUCH_BEGIN;
+            break;
+
+        case GDK_TOUCH_UPDATE:
+            type = wxEVT_TOUCH_MOVE;
+            break;
+
+        case GDK_TOUCH_END:
+            type = wxEVT_TOUCH_END;
+            break;
+
+        case GDK_TOUCH_CANCEL:
+            type = wxEVT_TOUCH_CANCEL;
+            break;
+
+        default:
+            type = wxEVT_NULL;
+        }
+        if (type != wxEVT_NULL)
+        {
+            wxMultiTouchEvent event(type);
+            event.SetPosition(wxPoint(gdk_event->x, gdk_event->y));
+            event.SetSequenceIdId(wxTouchSequenceId(gdk_event->sequence));
+            event.SetPrimary(gdk_event->emulating_pointer);
+            win->HandleWindowEvent(event);
+        }
+    }
+
     switch ( gdk_event->type )
     {
         case GDK_TOUCH_BEGIN:
@@ -3816,6 +3852,7 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
     m_allowedGestures = 0;
     m_activeGestures = 0;
     m_touchSequence = nullptr;
+    m_rawTouchEvents = false;
 
     if ( eventsMask & wxTOUCH_VERTICAL_PAN_GESTURE )
     {
@@ -3930,6 +3967,18 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
         m_long_press_gesture = nullptr;
     }
 
+    if ( eventsMask & wxTOUCH_RAW_EVENTS )
+    {
+        eventsMask &= ~wxTOUCH_RAW_EVENTS;
+        m_rawTouchEvents = true;
+    }
+
+    if ( eventsMask & wxTOUCH_RAW_EVENTS )
+    {
+        eventsMask &= ~wxTOUCH_RAW_EVENTS;
+        m_rawTouchEvents = true;
+    }
+
     wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
 
     // GDK_TOUCHPAD_GESTURE_MASK was added in 3.18, but we can just define it
@@ -3953,6 +4002,7 @@ void wxWindowGesturesData::Free()
     g_clear_object(&m_zoom_gesture);
     g_clear_object(&m_rotate_gesture);
     g_clear_object(&m_long_press_gesture);
+    m_rawTouchEvents = false;
 
     // We don't current remove GDK_TOUCHPAD_GESTURE_MASK as this can't be done
     // for a window as long as it's realized, and this might still be the case
