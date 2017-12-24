@@ -204,9 +204,10 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
         if ( !HandlePrintClient((WXHDC)wParam) )
         {
             // no, we don't, erase the background ourselves
-            // (don't use our own) - see PaintBackground for explanation
-            wxBrush brush(GetParent()->GetBackgroundColour());
-            wxFillRect(GetHwnd(), (HDC)wParam, GetHbrushOf(brush));
+            RECT rc;
+            ::GetClientRect(GetHwnd(), &rc);
+            wxDCTemp dc((WXHDC)wParam);
+            PaintBackground(dc, rc);
         }
 
         return 0;
