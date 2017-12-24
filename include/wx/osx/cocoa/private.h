@@ -152,6 +152,7 @@ public :
     virtual void        TouchesBegan(NSEvent *event);
     virtual void        TouchesMoved(NSEvent *event);
     virtual void        TouchesEnded(NSEvent *event);
+    virtual void        TouchesCancel(NSEvent *event);
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 #if !wxOSX_USE_NATIVE_FLIPPED
