@@ -111,7 +111,7 @@ public:
         }
         @endcode
 
-        Currently this constructor is only available in wxGTK, use
+        Currently this constructor is only available in wxGTK and wxMSW, use
         @c wxHAS_WINDOW_LABEL_IN_STATIC_BOX to check whether it can be used at
         compile-time.
 

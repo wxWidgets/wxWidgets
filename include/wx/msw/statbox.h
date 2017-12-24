@@ -27,8 +27,25 @@ public:
         Create(parent, id, label, pos, size, style, name);
     }
 
+    wxStaticBox(wxWindow* parent, wxWindowID id,
+                wxWindow* label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString &name = wxStaticBoxNameStr)
+    {
+        Create(parent, id, label, pos, size, style, name);
+    }
+
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxStaticBoxNameStr);
+
+    bool Create(wxWindow *parent, wxWindowID id,
+                wxWindow* label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -65,6 +82,9 @@ protected:
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox);
 };
+
+// Indicate that we have the ctor overload taking wxWindow as label.
+#define wxHAS_WINDOW_LABEL_IN_STATIC_BOX
 
 #endif // _WX_MSW_STATBOX_H_
 
