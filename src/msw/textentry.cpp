@@ -24,7 +24,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/arrstr.h"
+    #include "wx/event.h"
     #include "wx/string.h"
+    #include "wx/textctrl.h"    // Only for wxTE_PROCESS_XXX constants
 #endif // WX_PRECOMP
 
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
