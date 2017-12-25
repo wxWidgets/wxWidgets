@@ -115,6 +115,7 @@ static const struct ControlValues
     bool password;
     bool readonly;
     bool processEnter;
+    bool processTab;
     bool filename;
     bool noVertScrollbar;
 
@@ -130,6 +131,7 @@ static const struct ControlValues
     false,              // not password
     false,              // not readonly
     true,               // do process enter
+    false,              // do not process Tab
     false,              // not filename
     false,              // don't hide vertical scrollbar
     WrapStyle_Word,     // wrap on word boundaries
@@ -225,6 +227,7 @@ protected:
     wxCheckBox *m_chkPassword,
                *m_chkReadonly,
                *m_chkProcessEnter,
+               *m_chkProcessTab,
                *m_chkFilename,
                *m_chkNoVertScrollbar;
 
@@ -389,6 +392,7 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
     m_chkPassword =
     m_chkReadonly =
     m_chkProcessEnter =
+    m_chkProcessTab =
     m_chkFilename =
     m_chkNoVertScrollbar = (wxCheckBox *)NULL;
 
@@ -438,6 +442,9 @@ void TextWidgetsPage::CreateContent()
                     );
     m_chkProcessEnter = CreateCheckBoxAndAddToSizer(
                         sizerLeft, wxT("Process &Enter")
+                    );
+    m_chkProcessTab = CreateCheckBoxAndAddToSizer(
+                        sizerLeft, wxT("Process &Tab")
                     );
     m_chkFilename = CreateCheckBoxAndAddToSizer(
                         sizerLeft, wxT("&Filename control")
@@ -657,6 +664,7 @@ void TextWidgetsPage::Reset()
     m_chkPassword->SetValue(DEFAULTS.password);
     m_chkReadonly->SetValue(DEFAULTS.readonly);
     m_chkProcessEnter->SetValue(DEFAULTS.processEnter);
+    m_chkProcessTab->SetValue(DEFAULTS.processTab);
     m_chkFilename->SetValue(DEFAULTS.filename);
     m_chkNoVertScrollbar->SetValue(DEFAULTS.noVertScrollbar);
 
@@ -691,6 +699,8 @@ void TextWidgetsPage::CreateText()
         flags |= wxTE_READONLY;
     if ( m_chkProcessEnter->GetValue() )
         flags |= wxTE_PROCESS_ENTER;
+    if ( m_chkProcessTab->GetValue() )
+        flags |= wxTE_PROCESS_TAB;
     if ( m_chkNoVertScrollbar->GetValue() )
         flags |= wxTE_NO_VSCROLL;
 
@@ -960,6 +970,7 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   (m_chkPassword->GetValue() != DEFAULTS.password) ||
                   (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
                   (m_chkProcessEnter->GetValue() != DEFAULTS.processEnter) ||
+                  (m_chkProcessTab->GetValue() != DEFAULTS.processTab) ||
                   (m_chkFilename->GetValue() != DEFAULTS.filename) ||
                   (m_chkNoVertScrollbar->GetValue() != DEFAULTS.noVertScrollbar) ||
                   (m_radioWrap->GetSelection() != DEFAULTS.wrapStyle) );
