@@ -89,7 +89,7 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        wxLogMessage("Pan gesture started\n");
+        wxLogMessage("Pan gesture started");
     }
 
     const wxPoint delta = event.GetDelta();
@@ -111,7 +111,7 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Pan gesture Ended\n");
+        wxLogMessage("Pan gesture Ended");
     }
 
     Refresh();
@@ -121,12 +121,12 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        wxLogMessage("Zoom gesture started\n");
+        wxLogMessage("Zoom gesture started");
 
         m_lastZoomFactor = 1.0;
     }
 
-    wxLogMessage("Zoom gesture performed with zoom center at (%d, %d) and zoom Factor = %f\n",
+    wxLogMessage("Zoom gesture performed with zoom center at (%d, %d) and zoom Factor = %f",
         event.GetPosition().x, event.GetPosition().y, event.GetZoomFactor());
 
     const wxPoint& zoomCenter = event.GetPosition();
@@ -140,7 +140,7 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Zoom gesture Ended\n");
+        wxLogMessage("Zoom gesture Ended");
     }
 
     m_lastZoomFactor = event.GetZoomFactor();
@@ -152,12 +152,12 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        wxLogMessage("Rotate gesture started\n");
+        wxLogMessage("Rotate gesture started");
 
         m_lastRotationAngle = 0.0;
     }
 
-    wxLogMessage("Rotate gesture performed with rotation center at (%d, %d) and cumulative rotation angle = %f\n",
+    wxLogMessage("Rotate gesture performed with rotation center at (%d, %d) and cumulative rotation angle = %f",
         event.GetPosition().x, event.GetPosition().y, event.GetRotationAngle());
 
     const wxPoint& rotationCenter = event.GetPosition();
@@ -171,7 +171,7 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Rotate gesture Ended\n");
+        wxLogMessage("Rotate gesture Ended");
     }
 
     m_lastRotationAngle = event.GetRotationAngle();
@@ -183,14 +183,14 @@ void MyGesturePanel::OnTwoFingerTap(wxTwoFingerTapEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        wxLogMessage("Two Finger Tap gesture gesture started\n");
+        wxLogMessage("Two Finger Tap gesture gesture started");
     }
 
-    wxLogMessage("Two Finger Tap gesture performed at (%d, %d)\n", event.GetPosition().x, event.GetPosition().y);
+    wxLogMessage("Two Finger Tap gesture performed at (%d, %d)", event.GetPosition().x, event.GetPosition().y);
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Two Finger Tap gesture Ended\n");
+        wxLogMessage("Two Finger Tap gesture Ended");
     }
 }
 
@@ -198,14 +198,14 @@ void MyGesturePanel::OnLongPress(wxLongPressEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        wxLogMessage("Long Press gesture started\n");
+        wxLogMessage("Long Press gesture started");
     }
 
-    wxLogMessage("Long Press gesture performed at (%d,%d)\n", event.GetPosition().x, event.GetPosition().y);
+    wxLogMessage("Long Press gesture performed at (%d,%d)", event.GetPosition().x, event.GetPosition().y);
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Long Press gesture Ended\n");
+        wxLogMessage("Long Press gesture Ended");
     }
 }
 
@@ -213,13 +213,13 @@ void MyGesturePanel::OnPressAndTap(wxPressAndTapEvent& event)
 {
     if ( event.IsGestureStart() )
     {
-        wxLogMessage("Press and Tap gesture started\n");
+        wxLogMessage("Press and Tap gesture started");
     }
 
-    wxLogMessage("Press and Tap gesture performed at (%d,%d)\n", event.GetPosition().x, event.GetPosition().y);
+    wxLogMessage("Press and Tap gesture performed at (%d,%d)", event.GetPosition().x, event.GetPosition().y);
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Press and Tap gesture Ended\n");
+        wxLogMessage("Press and Tap gesture Ended");
     }
 }
