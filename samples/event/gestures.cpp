@@ -111,7 +111,7 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Pan gesture Ended");
+        wxLogMessage("Pan gesture ended");
     }
 
     Refresh();
@@ -140,7 +140,7 @@ void MyGesturePanel::OnZoom(wxZoomGestureEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Zoom gesture Ended");
+        wxLogMessage("Zoom gesture ended");
     }
 
     m_lastZoomFactor = event.GetZoomFactor();
@@ -171,7 +171,7 @@ void MyGesturePanel::OnRotate(wxRotateGestureEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Rotate gesture Ended");
+        wxLogMessage("Rotate gesture ended");
     }
 
     m_lastRotationAngle = event.GetRotationAngle();
@@ -190,7 +190,7 @@ void MyGesturePanel::OnTwoFingerTap(wxTwoFingerTapEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Two Finger Tap gesture Ended");
+        wxLogMessage("Two Finger Tap gesture ended");
     }
 }
 
@@ -205,7 +205,7 @@ void MyGesturePanel::OnLongPress(wxLongPressEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Long Press gesture Ended");
+        wxLogMessage("Long Press gesture ended");
     }
 }
 
@@ -220,6 +220,6 @@ void MyGesturePanel::OnPressAndTap(wxPressAndTapEvent& event)
 
     if ( event.IsGestureEnd() )
     {
-        wxLogMessage("Press and Tap gesture Ended");
+        wxLogMessage("Press and Tap gesture ended");
     }
 }
