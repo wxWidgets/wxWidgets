@@ -1,5 +1,6 @@
 #include "gestures.h"
 #include "wx/dcgraph.h"
+#include "wx/dcbuffer.h"
 
 #include "../image/horse.xpm"
 
@@ -40,6 +41,7 @@ MyGesturePanel::MyGesturePanel(MyGestureFrame *parent)
     : wxPanel(parent, wxID_ANY),
       m_bitmap(horse_xpm)
 {
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
     Bind(wxEVT_PAINT, &MyGesturePanel::OnPaint, this);
 
     if ( !EnableTouchEvents(wxTOUCH_ALL_GESTURES) )
@@ -75,12 +77,10 @@ void MyGestureFrame::OnGesture(wxGestureEvent& event)
 
 void MyGesturePanel::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxPaintDC paintDC(this);
+    wxAutoBufferedPaintDC paintDC(this);
+    paintDC.Clear();
 
     wxGCDC dc(paintDC);
-
-    dc.Clear();
-
     dc.SetTransformMatrix(m_affineMatrix);
     dc.DrawBitmap(m_bitmap, wxRound(m_translateDistance.m_x), wxRound(m_translateDistance.m_y));
 }
