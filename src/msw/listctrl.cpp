@@ -2716,6 +2716,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // ---------------
     switch ( nmhdr->code )
     {
+        case HDN_ITEMCHANGING:
+            // Always let the default handling of this event take place,
+            // otherwise the selected items are not redrawn to correspond to
+            // the new column widths, see #18032.
+            return false;
+
         case LVN_DELETEALLITEMS:
             // always return true to suppress all additional LVN_DELETEITEM
             // notifications - this makes deleting all items from a list ctrl
