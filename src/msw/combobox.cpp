@@ -218,54 +218,63 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     return wxChoice::MSWWindowProc(nMsg, wParam, lParam);
 }
 
+bool wxComboBox::MSWProcessEditSpecialKey(WXWPARAM vkey)
+{
+    // for compatibility with wxTextCtrl, generate a special message
+    // when Enter is pressed
+    switch ( vkey )
+    {
+        case VK_RETURN:
+            {
+                if (SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0))
+                    break;
+
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
+
+                const int sel = GetSelection();
+                event.SetInt(sel);
+                event.SetString(GetValue());
+                InitCommandEventWithItems(event, sel);
+
+                if ( ProcessCommand(event) )
+                {
+                    // don't let the event through to the native control
+                    // because it doesn't need it and may generate an annoying
+                    // beep if it gets it
+                    return true;
+                }
+            }
+            break;
+
+        case VK_TAB:
+            // If we have wxTE_PROCESS_ENTER style, we get all char
+            // events, including those for TAB which are usually used
+            // for keyboard navigation, but we should not process them
+            // unless we also have wxTE_PROCESS_TAB style.
+            if ( !HasFlag(wxTE_PROCESS_TAB) )
+            {
+                int flags = 0;
+                if ( !wxIsShiftDown() )
+                    flags |= wxNavigationKeyEvent::IsForward;
+                if ( wxIsCtrlDown() )
+                    flags |= wxNavigationKeyEvent::WinChange;
+                if ( Navigate(flags) )
+                    return true;
+            }
+            break;
+    }
+
+    return false;
+}
+
 bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
 {
     switch ( msg )
     {
         case WM_CHAR:
-            // for compatibility with wxTextCtrl, generate a special message
-            // when Enter is pressed
-            switch ( wParam )
-            {
-                case VK_RETURN:
-                    {
-                        if (SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0))
-                            return false;
-
-                        wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
-
-                        const int sel = GetSelection();
-                        event.SetInt(sel);
-                        event.SetString(GetValue());
-                        InitCommandEventWithItems(event, sel);
-
-                        if ( ProcessCommand(event) )
-                        {
-                            // don't let the event through to the native control
-                            // because it doesn't need it and may generate an annoying
-                            // beep if it gets it
-                            return true;
-                        }
-                    }
-                    break;
-
-                case VK_TAB:
-                    // If we have wxTE_PROCESS_ENTER style, we get all char
-                    // events, including those for TAB which are usually used
-                    // for keyboard navigation, but we should not process them
-                    // unless we also have wxTE_PROCESS_TAB style.
-                    if ( !HasFlag(wxTE_PROCESS_TAB) )
-                    {
-                        int flags = 0;
-                        if ( !wxIsShiftDown() )
-                            flags |= wxNavigationKeyEvent::IsForward;
-                        if ( wxIsCtrlDown() )
-                            flags |= wxNavigationKeyEvent::WinChange;
-                        if ( Navigate(flags) )
-                            return true;
-                    }
-                    break;
-            }
+            if ( MSWProcessEditSpecialKey(wParam) )
+                return true;
+            break;
     }
 
     if ( ShouldForwardFromEditToCombo(msg) )
@@ -382,6 +391,16 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 
     return wxChoice::MSWShouldPreProcessMessage(pMsg);
 }
+
+#if wxUSE_OLE
+
+void wxComboBox::MSWProcessSpecialKey(wxKeyEvent& event)
+{
+    if ( !MSWProcessEditSpecialKey(event.GetRawKeyCode()) )
+        event.Skip();
+}
+
+#endif // wxUSE_OLE
 
 WXHWND wxComboBox::GetEditHWNDIfAvailable() const
 {

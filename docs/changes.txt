@@ -232,6 +232,7 @@ wxMSW:
 - Implement SetIcon(), SetPosition(), GetPosition() for native wxProgressDialog.
 - Fix focus-related problems when using native wxProgressDialog.
 - Fix crash when reparenting the currently focused window to another TLW.
+- Fix sending wxEVT_TEXT_ENTER when using auto-completion (Dubby).
 
 wxOSX:
 

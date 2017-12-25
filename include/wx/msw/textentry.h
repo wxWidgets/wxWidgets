@@ -86,6 +86,16 @@ private:
     virtual WXHWND GetEditHWND() const = 0;
 
 #if wxUSE_OLE
+    // This method is called to process special keys such as Return and Tab
+    // before they're consumed by the auto-completer. Notice that it is only
+    // called if we do need to process the key, i.e. if the corresponding
+    // wxTE_PROCESS_XXX style is set in the associated object.
+    //
+    // It is not pure virtual because it won't get called if the derived class
+    // doesn't use auto-completer, but it does need to be overridden if it can
+    // be called and the default implementation asserts if this is not the case.
+    virtual void MSWProcessSpecialKey(wxKeyEvent& event);
+
     // Get the auto-complete object creating it if necessary. Returns NULL if
     // creating it failed.
     wxTextAutoCompleteData *GetOrCreateCompleter();

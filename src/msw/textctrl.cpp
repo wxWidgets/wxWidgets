@@ -2103,6 +2103,19 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     event.Skip();
 }
 
+#if wxUSE_OLE
+
+void wxTextCtrl::MSWProcessSpecialKey(wxKeyEvent& event)
+{
+    // It is not a good idea, in general, to manually call another event
+    // handler, but here we need to do exactly the same thing as in OnChar()
+    // above, so it doesn't seem to make much sense to add another function to
+    // forward to when we can just call it directly.
+    OnChar(event);
+}
+
+#endif // wxUSE_OLE
+
 void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
     // richedit control doesn't send WM_PASTE, WM_CUT and WM_COPY messages
