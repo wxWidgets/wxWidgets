@@ -102,7 +102,7 @@ public:
             return it->second;
 
         // Finally, attempt to find a compatible type
-        for ( it = anyToVariant.begin(); it != anyToVariant.end(); it++ )
+        for ( it = anyToVariant.begin(); it != anyToVariant.end(); ++it )
         {
             if ( type->IsSameType(it->first) )
             {
