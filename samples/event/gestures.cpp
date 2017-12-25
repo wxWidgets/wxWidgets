@@ -17,6 +17,10 @@ MyGestureFrame::MyGestureFrame()
     sizer->Add(m_logText, wxSizerFlags().Expand());
     SetSizer(sizer);
 
+    // Set a minimum size for the frame
+    wxSize dsplySz = wxGetDisplaySize();
+    SetSizeHints(wxMin(800,dsplySz.GetWidth()), wxMin(600,dsplySz.GetHeight()));
+
     // Log to the text control
     delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
 
