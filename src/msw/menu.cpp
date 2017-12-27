@@ -1195,7 +1195,7 @@ void wxMenuBar::RebuildAccelTable()
     size_t nAccelCount = 0;
     size_t i, count = GetMenuCount();
     wxMenuList::iterator it;
-    for ( i = 0, it = m_menus.begin(); i < count; i++, it++ )
+    for ( i = 0, it = m_menus.begin(); i < count; i++, ++it )
     {
         nAccelCount += (*it)->GetAccelCount();
     }
@@ -1205,7 +1205,7 @@ void wxMenuBar::RebuildAccelTable()
         wxAcceleratorEntry *accelEntries = new wxAcceleratorEntry[nAccelCount];
 
         nAccelCount = 0;
-        for ( i = 0, it = m_menus.begin(); i < count; i++, it++ )
+        for ( i = 0, it = m_menus.begin(); i < count; i++, ++it )
         {
             nAccelCount += (*it)->CopyAccels(&accelEntries[nAccelCount]);
         }

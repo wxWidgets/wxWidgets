@@ -2734,7 +2734,7 @@ unsigned int wxDataViewTreeStore::GetChildren( const wxDataViewItem &item, wxDat
     if (!node) return 0;
 
     wxDataViewTreeStoreNodeList::iterator iter;
-    for (iter = node->GetChildren().begin(); iter != node->GetChildren().end(); iter++)
+    for (iter = node->GetChildren().begin(); iter != node->GetChildren().end(); ++iter)
     {
         wxDataViewTreeStoreNode* child = *iter;
         children.Add( child->GetItem() );
@@ -2939,7 +2939,7 @@ void wxDataViewTreeCtrl::DeleteChildren( const wxDataViewItem& item )
 
     wxDataViewItemArray array;
     wxDataViewTreeStoreNodeList::iterator iter;
-    for (iter = node->GetChildren().begin(); iter != node->GetChildren().end(); iter++)
+    for (iter = node->GetChildren().begin(); iter != node->GetChildren().end(); ++iter)
     {
         wxDataViewTreeStoreNode* child = *iter;
         array.Add( child->GetItem() );
