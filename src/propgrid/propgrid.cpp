@@ -964,6 +964,8 @@ void wxPropertyGrid::DoSetSelection( const wxArrayPGProperty& newSelection,
 void wxPropertyGrid::MakeColumnEditable( unsigned int column,
                                          bool editable )
 {
+    // The second column is always editable. To make it read-only is a property
+    // by property decision by setting its wxPG_PROP_READONLY flag.
     wxASSERT( column != 1 );
 
     wxArrayInt& cols = m_pState->m_editableColumns;
