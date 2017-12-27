@@ -3654,7 +3654,7 @@ public:
 
         if( node->GetItem() == *m_iter )
         {
-            m_iter++;
+            ++m_iter;
             return DoJob::CONTINUE;
         }
         else
