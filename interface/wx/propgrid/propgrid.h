@@ -942,6 +942,10 @@ public:
         @param editable
             Using @false here will disable column from being editable.
 
+        Note that @param column must be != 1.
+        To make column #1 (second column) read-only, use
+        wxPGProperty::ChangeFlag(wxPG_PROP_READONLY, true).
+
         @see BeginLabelEdit(), EndLabelEdit()
     */
     void MakeColumnEditable( unsigned int column, bool editable = true );
