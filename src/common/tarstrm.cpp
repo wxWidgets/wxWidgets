@@ -903,7 +903,7 @@ wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
         wxTarNumber n = 0;
         wxString::const_iterator p = value.begin();
         while (p != value.end() && *p == ' ')
-            p++;
+            ++p;
         while (isdigit(*p))
             n = n * 10 + (*p++ - '0');
         return n;
