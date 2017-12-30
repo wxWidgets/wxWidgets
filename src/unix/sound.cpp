@@ -673,6 +673,13 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
         waveformat.ulSamplesPerSec * waveformat.uiBlockAlign)
         return false;
 
+    // We divide by this number below to obtain the number of samples, so it
+    // definitely can't be 0.
+    wxUint32 const sampleSize =
+        waveformat.uiChannels * waveformat.uiBitsPerSample / 8;
+    if (!sampleSize)
+        return false;
+
     // get file size from header
     wxUint32 chunkSize;
     memcpy(&chunkSize, &data[4], 4);
@@ -695,7 +702,7 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
     m_data->m_channels = waveformat.uiChannels;
     m_data->m_samplingRate = waveformat.ulSamplesPerSec;
     m_data->m_bitsPerSample = waveformat.uiBitsPerSample;
-    m_data->m_samples = ul / (m_data->m_channels * m_data->m_bitsPerSample / 8);
+    m_data->m_samples = ul / sampleSize;
     m_data->m_dataBytes = ul;
 
     if (copyData)
