@@ -669,8 +669,8 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
     if (waveformat.uiFormatTag != WAVE_FORMAT_PCM)
         return false;
 
-    if (waveformat.ulSamplesPerSec !=
-        waveformat.ulAvgBytesPerSec / waveformat.uiBlockAlign)
+    if (waveformat.ulAvgBytesPerSec !=
+        waveformat.ulSamplesPerSec * waveformat.uiBlockAlign)
         return false;
 
     // get file size from header
