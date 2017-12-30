@@ -657,6 +657,12 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
         return false;
     if (memcmp(&data[FMT_INDEX], "fmt ", 4) != 0)
         return false;
+
+    // Check that the format chunk size is correct: it must be 16 for PCM,
+    // which is the only format we handle.
+    if (waveformat.uiSize != 16)
+        return false;
+
     if (memcmp(&data[FMT_INDEX + waveformat.uiSize + 8], "data", 4) != 0)
         return false;
 
