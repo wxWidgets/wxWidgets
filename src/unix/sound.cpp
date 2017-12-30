@@ -651,14 +651,6 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
     waveformat.uiBlockAlign = wxUINT16_SWAP_ON_BE(waveformat.uiBlockAlign);
     waveformat.uiBitsPerSample = wxUINT16_SWAP_ON_BE(waveformat.uiBitsPerSample);
 
-    // get the sound data size
-    wxUint32 ul;
-    memcpy(&ul, &data[FMT_INDEX + waveformat.uiSize + 12], 4);
-    ul = wxUINT32_SWAP_ON_BE(ul);
-
-    if ( length < ul + FMT_INDEX + waveformat.uiSize + 16 )
-        return false;
-
     if (memcmp(data, "RIFF", 4) != 0)
         return false;
     if (memcmp(&data[WAVE_INDEX], "WAVE", 4) != 0)
@@ -673,6 +665,24 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
 
     if (waveformat.ulSamplesPerSec !=
         waveformat.ulAvgBytesPerSec / waveformat.uiBlockAlign)
+        return false;
+
+    // get file size from header
+    wxUint32 chunkSize;
+    memcpy(&chunkSize, &data[4], 4);
+    chunkSize = wxUINT32_SWAP_ON_BE(chunkSize);
+
+    // ensure file length is at least length in header
+    if (chunkSize > length - 8)
+        return false;
+
+    // get the sound data size
+    wxUint32 ul;
+    memcpy(&ul, &data[FMT_INDEX + waveformat.uiSize + 12], 4);
+    ul = wxUINT32_SWAP_ON_BE(ul);
+
+    // ensure we actually have at least that much data in the input
+    if (ul > length - FMT_INDEX - waveformat.uiSize - 16)
         return false;
 
     m_data = new wxSoundData;
