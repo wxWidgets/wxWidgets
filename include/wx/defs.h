@@ -378,40 +378,47 @@ typedef short int WXTYPE;
 #endif
 
 /*
-    Check for C++11 compilers, it is important to do it before the
-    __has_include() checks because at least g++ 4.9.2+ __has_include() returns
-    true for C++11 headers which can't be compiled in non-C++11 mode.
- */
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
-    #ifndef HAVE_TYPE_TRAITS
-        #define HAVE_TYPE_TRAITS
-    #endif
-    #ifndef HAVE_STD_UNORDERED_MAP
-        #define HAVE_STD_UNORDERED_MAP
-    #endif
-    #ifndef HAVE_STD_UNORDERED_SET
-        #define HAVE_STD_UNORDERED_SET
-    #endif
-#elif defined(__has_include)
+    If using configure, stick to the options detected by it even if different
+    compiler options could result in detecting something different here, as it
+    would cause ABI issues otherwise (see #18034).
+*/
+#ifndef __WX_SETUP_H__
     /*
-        We're in non-C++11 mode here, so only test for pre-C++11 headers. As
-        mentioned above, using __has_include() to test for C++11 would wrongly
-        detect them even though they can't be used in this case, don't do it.
+        Check for C++11 compilers, it is important to do it before the
+        __has_include() checks because at least g++ 4.9.2+ __has_include() returns
+        true for C++11 headers which can't be compiled in non-C++11 mode.
      */
-    #if !defined(HAVE_TR1_TYPE_TRAITS) && __has_include(<tr1/type_traits>)
-        #define HAVE_TR1_TYPE_TRAITS
-    #endif
+    #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+        #ifndef HAVE_TYPE_TRAITS
+            #define HAVE_TYPE_TRAITS
+        #endif
+        #ifndef HAVE_STD_UNORDERED_MAP
+            #define HAVE_STD_UNORDERED_MAP
+        #endif
+        #ifndef HAVE_STD_UNORDERED_SET
+            #define HAVE_STD_UNORDERED_SET
+        #endif
+    #elif defined(__has_include)
+        /*
+            We're in non-C++11 mode here, so only test for pre-C++11 headers. As
+            mentioned above, using __has_include() to test for C++11 would wrongly
+            detect them even though they can't be used in this case, don't do it.
+         */
+        #if !defined(HAVE_TR1_TYPE_TRAITS) && __has_include(<tr1/type_traits>)
+            #define HAVE_TR1_TYPE_TRAITS
+        #endif
 
-    #if !defined(HAVE_TR1_UNORDERED_MAP) && __has_include(<tr1/unordered_map>)
-        #define HAVE_TR1_UNORDERED_MAP
-    #endif
+        #if !defined(HAVE_TR1_UNORDERED_MAP) && __has_include(<tr1/unordered_map>)
+            #define HAVE_TR1_UNORDERED_MAP
+        #endif
 
-    #if !defined(HAVE_TR1_UNORDERED_SET) && __has_include(<tr1/unordered_set>)
-        #define HAVE_TR1_UNORDERED_SET
-    #endif
-#endif /* defined(__has_include) */
+        #if !defined(HAVE_TR1_UNORDERED_SET) && __has_include(<tr1/unordered_set>)
+            #define HAVE_TR1_UNORDERED_SET
+        #endif
+    #endif /* defined(__has_include) */
 
-#endif /* __cplusplus */
+    #endif /* __cplusplus */
+#endif /* __WX_SETUP_H__ */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 
