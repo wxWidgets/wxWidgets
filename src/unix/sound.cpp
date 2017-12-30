@@ -673,10 +673,16 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
         waveformat.ulSamplesPerSec * waveformat.uiBlockAlign)
         return false;
 
-    // We divide by this number below to obtain the number of samples, so it
-    // definitely can't be 0.
-    wxUint32 const sampleSize =
-        waveformat.uiChannels * waveformat.uiBitsPerSample / 8;
+    // We divide by the sample size below to obtain the number of samples, so
+    // it definitely can't be 0. Also take care to avoid integer overflow when
+    // computing it.
+    unsigned tmp = waveformat.uiChannels;
+    if (tmp >= 0x10000)
+        return false;
+
+    tmp *= waveformat.uiBitsPerSample;
+
+    wxUint32 const sampleSize = tmp / 8;
     if (!sampleSize)
         return false;
 
