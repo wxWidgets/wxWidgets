@@ -19111,8 +19111,20 @@ if test "x$COMPAQCXX" = "xyes"; then
                                 CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
 fi
 
-if test "$HAVE_CXX11" != "1" ; then
+if test "$HAVE_CXX11" = "1" ; then
 
+$as_echo "#define HAVE_STD_WSTRING 1" >>confdefs.h
+
+$as_echo "#define HAVE_STD_STRING_COMPARE 1" >>confdefs.h
+
+$as_echo "#define HAVE_STD_UNORDERED_MAP 1" >>confdefs.h
+
+$as_echo "#define HAVE_STD_UNORDERED_SET 1" >>confdefs.h
+
+$as_echo "#define HAVE_TYPE_TRAITS 1" >>confdefs.h
+
+
+else
 
 
     ac_ext=cpp

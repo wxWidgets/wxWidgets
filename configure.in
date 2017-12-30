@@ -1818,8 +1818,17 @@ if test "x$COMPAQCXX" = "xyes"; then
 fi
 
 dnl The checks below are for ancient compilers and are unnecessary when using
-dnl C++11.
-if test "$HAVE_CXX11" != "1" ; then
+dnl C++11, but we still need to define the symbols that would have been defined
+dnl by them if we did run them.
+if test "$HAVE_CXX11" = "1" ; then
+
+AC_DEFINE(HAVE_STD_WSTRING)
+AC_DEFINE(HAVE_STD_STRING_COMPARE)
+AC_DEFINE(HAVE_STD_UNORDERED_MAP)
+AC_DEFINE(HAVE_STD_UNORDERED_SET)
+AC_DEFINE(HAVE_TYPE_TRAITS)
+
+else dnl Not using C++11, so we do need to run the checks.
 
 dnl check for iostream (as opposed to iostream.h) standard header
 WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
