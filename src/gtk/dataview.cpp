@@ -1152,9 +1152,33 @@ extern "C" {
 #define GTK_TYPE_WX_CELL_EDITOR_BIN               (gtk_wx_cell_editor_bin_get_type ())
 #define GTK_WX_CELL_EDITOR_BIN(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN, GtkWxCellEditorBin))
 
+// In GTK+ < 3.8 GtkBin can't be used as widget base type without defining our
+// own size_allocate and related (either size_request for GTK+ 2 or
+// get_preferred_height for GTK+ 3) vfuncs, so we use GtkHBox instead. But in
+// GTK+ 4, GtkHBox is removed, so we do use GtkBin with it.
+#ifdef __WXGTK4__
+    typedef GtkBin GtkWxCellEditorBinBase;
+    typedef GtkBinClass GtkWxCellEditorBinBaseClass;
+
+    // Notice that this can't be just a (const) variable as GTK+ type constants
+    // are actually macros expanding into function calls, which shouldn't be
+    // performed before the library is initialized, so we need to use either an
+    // inline function or a define, which is simpler.
+    #define GtkWxCellEditorBinBaseType GTK_TYPE_BIN
+#else // GTK+ < 4
+    // GtkHBox is deprecated since 3.2, so avoid warnings about using it.
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+    typedef GtkHBox GtkWxCellEditorBinBase;
+    typedef GtkHBoxClass GtkWxCellEditorBinBaseClass;
+    #define GtkWxCellEditorBinBaseType GTK_TYPE_HBOX
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+#endif // GTK+ version
+
 struct GtkWxCellEditorBin
 {
-    GtkBin parent;
+    GtkWxCellEditorBinBase parent;
 
     // The actual user-created editor.
     wxWindow* editor;
@@ -1182,7 +1206,7 @@ gtk_wx_cell_editor_bin_get_type()
     {
         const GTypeInfo cell_editor_bin_info =
         {
-            sizeof (GtkBinClass),
+            sizeof (GtkWxCellEditorBinBaseClass),
             NULL, /* base_init */
             NULL, /* base_finalize */
             gtk_wx_cell_editor_bin_class_init,
@@ -1194,7 +1218,8 @@ gtk_wx_cell_editor_bin_get_type()
             NULL
         };
 
-        cell_editor_bin_type = g_type_register_static( GTK_TYPE_BIN,
+        cell_editor_bin_type = g_type_register_static(
+            GtkWxCellEditorBinBaseType,
             "GtkWxCellEditorBin", &cell_editor_bin_info, (GTypeFlags)0 );
 
 
