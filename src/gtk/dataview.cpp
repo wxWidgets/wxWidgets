@@ -1420,7 +1420,7 @@ gtk_wx_cell_renderer_new (void)
 static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
                         GtkCellRenderer         *renderer,
                         GdkEvent                *WXUNUSED(event),
-                        GtkWidget               *widget,
+                        GtkWidget               *WXUNUSED(widget),
                         const gchar             *path,
                         wxConstGdkRect          *WXUNUSED(background_area),
                         wxConstGdkRect          *cell_area,
@@ -1437,25 +1437,10 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
     if (cell->GetEditorCtrl())
         return NULL;
 
-    GdkRectangle rect;
-    gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
-                                   &rect.x,
-                                   &rect.y,
-                                   &rect.width,
-                                   &rect.height);
-
-    rect.x += cell_area->x;
-    rect.y += cell_area->y;
-//    rect.width  -= renderer->xpad * 2;
-//    rect.height -= renderer->ypad * 2;
-
-//    wxRect renderrect(wxRectFromGDKRect(&rect));
-    wxRect renderrect(wxRectFromGDKRect(cell_area));
-
     wxDataViewItem
         item(cell->GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(path)));
 
-    if (!cell->StartEditing(item, renderrect))
+    if (!cell->StartEditing(item, wxRectFromGDKRect(cell_area)))
         return NULL;
 
     wxrenderer->editor_bin = gtk_wx_cell_editor_bin_new(cell->GetEditorCtrl());
