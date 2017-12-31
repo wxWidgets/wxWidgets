@@ -1151,8 +1151,6 @@ extern "C" {
 
 #define GTK_TYPE_WX_CELL_EDITOR_BIN               (gtk_wx_cell_editor_bin_get_type ())
 #define GTK_WX_CELL_EDITOR_BIN(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN, GtkWxCellEditorBin))
-#define GTK_IS_WX_CELL_EDITOR_BIN(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN))
-#define GTK_IS_WX_CELL_EDITOR_BIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_CELL_EDITOR_BIN))
 
 struct GtkWxCellEditorBin
 {
