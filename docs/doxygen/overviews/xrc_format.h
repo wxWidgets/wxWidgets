@@ -48,20 +48,9 @@ be accessed using XRCCTRL().
 @section overview_xrcformat_root Resource Root Element
 
 The root element is always @c \<resource\>. It has one optional attribute, @c
-version. If set, it specifies version of the file. In absence of @c version
-attribute, the default is @c "0.0.0.0".
-
-The version consists of four integers separated by periods.  The first three
-components are major, minor and release number of the wxWidgets release when
-the change was introduced, the last one is revision number and is 0 for the
-first incompatible change in given wxWidgets release, 1 for the second and so
-on.  The version changes only if there was an incompatible change introduced;
-merely adding new kind of objects does not constitute incompatible change.
-
-At the time of writing, the latest version is @c "2.5.3.0".
-
-Note that even though @c version attribute is optional, it should always be
-specified to take advantage of the latest capabilities:
+version which, while optional, should always be set to the latest version. At
+the time of writing, it is @c "2.5.3.0", so all XRC documents should look like
+the following:
 
 @code
 <?xml version="1.0"?>
@@ -69,6 +58,13 @@ specified to take advantage of the latest capabilities:
     ...
 </resource>
 @endcode
+
+The version consists of four integers separated by periods.  The first three
+components are major, minor and release number of the wxWidgets release when
+the change was introduced, the last one is revision number and is 0 for the
+first incompatible change in given wxWidgets release, 1 for the second and so
+on.  The version changes only if there was an incompatible change introduced;
+merely adding new kind of objects does not constitute incompatible change.
 
 @c \<resource\> may have arbitrary number of
 @ref overview_xrcformat_objects "object elements" as its children; they are referred
