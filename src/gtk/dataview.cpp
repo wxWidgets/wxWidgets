@@ -1252,9 +1252,12 @@ static void gtk_wx_cell_editor_bin_class_init(void* klass, void*)
     oclass->set_property = gtk_wx_cell_editor_bin_set_property;
     oclass->get_property = gtk_wx_cell_editor_bin_get_property;
 
-    g_object_class_override_property(oclass,
+    if (wx_is_at_least_gtk2(20))
+    {
+        g_object_class_override_property(oclass,
                                      CELL_EDITOR_BIN_PROP_EDITING_CANCELED,
                                      "editing-canceled");
+    }
 }
 
 // We need to provide these virtual methods as we must support the
