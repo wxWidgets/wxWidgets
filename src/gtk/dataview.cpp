@@ -1150,7 +1150,6 @@ enum
 extern "C" {
 
 #define GTK_TYPE_WX_CELL_EDITOR_BIN               (gtk_wx_cell_editor_bin_get_type ())
-#define GTK_WX_CELL_EDITOR_BIN(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN, GtkWxCellEditorBin))
 
 // In GTK+ < 3.8 GtkBin can't be used as widget base type without defining our
 // own size_allocate and related (either size_request for GTK+ 2 or
@@ -1185,7 +1184,6 @@ struct GtkWxCellEditorBin
 };
 
 static GtkWidget* gtk_wx_cell_editor_bin_new(wxWindow* editor);
-static void gtk_wx_cell_editor_bin_init(GTypeInstance* instance, void*);
 static void gtk_wx_cell_editor_bin_class_init(void* klass, void*);
 static void gtk_wx_cell_editor_bin_get_property(GObject*, guint, GValue*, GParamSpec*);
 static void gtk_wx_cell_editor_bin_set_property(GObject*, guint, const GValue*, GParamSpec*);
@@ -1214,7 +1212,7 @@ gtk_wx_cell_editor_bin_get_type()
             NULL, /* class_data */
             sizeof (GtkWxCellEditorBin),
             0,    /* n_preallocs */
-            gtk_wx_cell_editor_bin_init,
+            NULL, // init
             NULL
         };
 
@@ -1236,13 +1234,6 @@ gtk_wx_cell_editor_bin_get_type()
     }
 
     return cell_editor_bin_type;
-}
-
-static void
-gtk_wx_cell_editor_bin_init(GTypeInstance* instance, void*)
-{
-    GtkWxCellEditorBin* const bin = GTK_WX_CELL_EDITOR_BIN(instance);
-    bin->editor = NULL;
 }
 
 static void gtk_wx_cell_editor_bin_class_init(void* klass, void*)
