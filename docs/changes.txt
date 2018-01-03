@@ -180,6 +180,7 @@ wxGTK:
 - Fix wxTextCtrl::GetStyle() with GTK+ 3.
 - Fix wxButton::SetBitmapPosition() with GTK+ 3 (Jake Nelson).
 - Support background colour in wxDataViewCtrl attributes.
+- Fix regression with showing custom wxDataViewCtrl editors.
 - Improve wxSpinCtrl best size calculation.
 - Implement support for icon locations in wxMimeTypesManager (Hanmac).
 - Improve wxRadioBox appearance in high DPI (Arrigo Marchiori, Maarten Bent).
