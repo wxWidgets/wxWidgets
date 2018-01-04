@@ -710,6 +710,7 @@
     <ClInclude Include="..\..\include\wx\event.h" />
     <ClInclude Include="..\..\include\wx\eventfilter.h" />
     <ClInclude Include="..\..\include\wx\evtloop.h" />
+    <ClInclude Include="..\..\include\wx\evtloopsrc.h" />
     <ClInclude Include="..\..\include\wx\except.h" />
     <ClInclude Include="..\..\include\wx\features.h" />
     <ClInclude Include="..\..\include\wx\ffile.h" />
