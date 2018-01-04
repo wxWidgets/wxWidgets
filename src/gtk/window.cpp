@@ -5439,9 +5439,9 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
         }
         g_string_append_c(css, '}');
 
-        if (isFg && isBg)
+        if (isFg || isBg)
         {
-            // Selection will be invisible, so add textview selection colors.
+            // Selection may be invisible, so add textview selection colors.
             // This is specifically for wxTextCtrl, but may be useful for other
             // controls, and seems to do no harm to apply to all.
             const wxColour fg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
