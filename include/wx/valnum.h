@@ -56,7 +56,7 @@ protected:
         m_style = style;
     }
 
-    wxNumValidatorBase(const wxNumValidatorBase& other) : wxValidator()
+    wxNumValidatorBase(const wxNumValidatorBase& other) : wxValidator(other)
     {
         m_style = other.m_style;
     }
