@@ -406,6 +406,7 @@ ALL_BASE_HEADERS =  \
 	wx/event.h \
 	wx/eventfilter.h \
 	wx/evtloop.h \
+	wx/evtloopsrc.h \
 	wx/except.h \
 	wx/features.h \
 	wx/flags.h \
@@ -588,6 +589,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/event.h \
 	wx/eventfilter.h \
 	wx/evtloop.h \
+	wx/evtloopsrc.h \
 	wx/except.h \
 	wx/features.h \
 	wx/flags.h \
@@ -3920,7 +3922,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/docmdi.h \
 	wx/docview.h \
 	wx/effects.h \
-	wx/evtloopsrc.h \
 	wx/fdrepdlg.h \
 	wx/filectrl.h \
 	wx/filehistory.h \

@@ -821,6 +821,7 @@
     <ClInclude Include="..\..\include\wx\thrimpl.cpp" />
     <ClInclude Include="..\..\include\wx\arrimpl.cpp" />
     <ClInclude Include="..\..\include\wx\secretstore.h" />
+    <ClInclude Include="..\..\include\wx\evtloopsrc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

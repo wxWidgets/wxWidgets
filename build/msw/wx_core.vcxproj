@@ -1235,7 +1235,6 @@
     <ClInclude Include="..\..\include\wx\dragimag.h" />
     <ClInclude Include="..\..\include\wx\effects.h" />
     <ClInclude Include="..\..\include\wx\encinfo.h" />
-    <ClInclude Include="..\..\include\wx\evtloopsrc.h" />
     <ClInclude Include="..\..\include\wx\fdrepdlg.h" />
     <ClInclude Include="..\..\include\wx\filectrl.h" />
     <ClInclude Include="..\..\include\wx\filedlg.h" />

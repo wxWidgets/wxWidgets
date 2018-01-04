@@ -3365,10 +3365,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\evtloopsrc.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\fdrepdlg.h"
 				>
 			</File>

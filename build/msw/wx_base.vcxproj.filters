@@ -499,6 +499,9 @@
     <ClInclude Include="..\..\include\wx\evtloop.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\evtloopsrc.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\except.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

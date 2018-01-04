@@ -1028,6 +1028,9 @@
 				RelativePath="..\..\include\wx\evtloop.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\evtloopsrc.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\except.h">
 			</File>
 			<File
