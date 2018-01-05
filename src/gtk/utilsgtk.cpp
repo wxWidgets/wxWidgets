@@ -254,7 +254,11 @@ static wxString GetSM()
 
     if ( !smc_conn )
     {
-        wxLogDebug("Failed to connect to session manager: %s", smerr);
+        // Don't report error if there is no session manager at all
+        if (getenv("SESSION_MANAGER"))
+        {
+            wxLogDebug("Failed to connect to session manager: %s", smerr);
+        }
         return wxEmptyString;
     }
 
