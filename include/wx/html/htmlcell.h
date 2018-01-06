@@ -232,7 +232,7 @@ public:
     virtual wxHtmlCell* GetFirstChild() const { return NULL; }
 
     // members writing methods
-    virtual void SetPos(int x, int y) {m_PosX = x, m_PosY = y;}
+    virtual void SetPos(int x, int y) {m_PosX = x; m_PosY = y;}
     void SetLink(const wxHtmlLinkInfo& link);
     void SetNext(wxHtmlCell *cell) {m_Next = cell;}
 
@@ -486,7 +486,7 @@ public:
     // returns background colour (of wxNullColour if none set), so that widgets can
     // adapt to it:
     wxColour GetBackgroundColour();
-    void SetBorder(const wxColour& clr1, const wxColour& clr2, int border = 1) {m_Border = border; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
+    void SetBorder(const wxColour& clr1, const wxColour& clr2, int border = 1) {m_Border = border; m_BorderColour1 = clr1; m_BorderColour2 = clr2;}
     virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const wxOVERRIDE;
     virtual const wxHtmlCell* Find(int condition, const void* param) const wxOVERRIDE;
 
