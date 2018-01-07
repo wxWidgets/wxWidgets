@@ -4,7 +4,7 @@
 // and more readably here: https://en.wikipedia.org/wiki/EDIFACT
 // This code is subject to the same license terms as the rest of the scintilla project:
 // The License.txt file describes the conditions under which this software may be distributed.
-//
+// 
 
 // Header order must match order in scripts/HeaderOrder.txt
 #include <cstdlib>
@@ -33,48 +33,48 @@ public:
 		return new LexerEDIFACT;
 	}
 
-	virtual int SCI_METHOD Version() const
+	int SCI_METHOD Version() const override
 	{
 		return lvOriginal;
 	}
-	virtual void SCI_METHOD Release()
+	void SCI_METHOD Release() override
 	{
 		delete this;
 	}
 
-	const char * SCI_METHOD PropertyNames()
+	const char * SCI_METHOD PropertyNames() override
 	{
 		return "fold";
 	}
-	int SCI_METHOD PropertyType(const char *)
+	int SCI_METHOD PropertyType(const char *) override
 	{
 		return SC_TYPE_BOOLEAN; // Only one property!
 	}
-	const char * SCI_METHOD DescribeProperty(const char *name)
+	const char * SCI_METHOD DescribeProperty(const char *name) override
 	{
 		if (strcmp(name, "fold"))
 			return NULL;
 		return "Whether to apply folding to document or not";
 	}
 
-	virtual Sci_Position SCI_METHOD PropertySet(const char *key, const char *val)
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override
 	{
 		if (strcmp(key, "fold"))
 			return -1;
 		m_bFold = strcmp(val, "0") ? true : false;
 		return 0;
 	}
-	const char * SCI_METHOD DescribeWordListSets()
+	const char * SCI_METHOD DescribeWordListSets() override
 	{
 		return NULL;
 	}
-	virtual Sci_Position SCI_METHOD WordListSet(int, const char *)
+	Sci_Position SCI_METHOD WordListSet(int, const char *) override
 	{
 		return -1;
 	}
-	virtual void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
-	virtual void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
-	virtual void * SCI_METHOD PrivateCall(int, void *)
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess) override;
+	void * SCI_METHOD PrivateCall(int, void *) override
 	{
 		return NULL;
 	}
@@ -146,7 +146,7 @@ void LexerEDIFACT::Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int, IDoc
 		if (SegmentStyle == SCE_EDI_UNA)
 		{
 			posCurrent += 9;
-			styler.ColourTo(posCurrent - 1, SCE_EDI_UNA); // UNA
+			styler.ColourTo(posCurrent - 1, SCE_EDI_UNA); // UNA   
 			continue;
 		}
 		posSegmentStart = posCurrent;
@@ -315,3 +315,5 @@ Sci_Position LexerEDIFACT::FindPreviousEnd(IDocument *pAccess, Sci_Position star
 	// We didn't find a ', so just go with the beginning
 	return 0;
 }
+
+

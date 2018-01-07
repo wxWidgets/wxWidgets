@@ -30,8 +30,6 @@ int Scintilla_LinkLexers(void);
 #if defined(_MSC_VER)
 // Older releases of MSVC did not have stdint.h.
 #include <stddef.h>
-#elif defined( __VMS )
-#include <inttypes.h>
 #else
 #include <stdint.h>
 #endif
@@ -331,6 +329,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_SETCARETLINEVISIBLE 2096
 #define SCI_GETCARETLINEBACK 2097
 #define SCI_SETCARETLINEBACK 2098
+#define SCI_GETCARETLINEFRAME 2704
+#define SCI_SETCARETLINEFRAME 2705
 #define SCI_STYLESETCHANGEABLE 2099
 #define SCI_AUTOCSHOW 2100
 #define SCI_AUTOCCANCEL 2101
@@ -595,6 +595,10 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_LINESSPLIT 2289
 #define SCI_SETFOLDMARGINCOLOUR 2290
 #define SCI_SETFOLDMARGINHICOLOUR 2291
+#define SC_ACCESSIBILITY_DISABLED 0
+#define SC_ACCESSIBILITY_ENABLED 1
+#define SCI_SETACCESSIBILITY 2702
+#define SCI_GETACCESSIBILITY 2703
 #define SCI_LINEDOWN 2300
 #define SCI_LINEDOWNEXTEND 2301
 #define SCI_LINEUP 2302
@@ -636,6 +640,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_LINECUT 2337
 #define SCI_LINEDELETE 2338
 #define SCI_LINETRANSPOSE 2339
+#define SCI_LINEREVERSE 2354
 #define SCI_LINEDUPLICATE 2404
 #define SCI_LOWERCASE 2340
 #define SCI_UPPERCASE 2341

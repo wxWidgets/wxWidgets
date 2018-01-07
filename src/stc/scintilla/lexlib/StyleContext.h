@@ -27,8 +27,6 @@ class StyleContext {
 	Sci_PositionU currentPosLastRelative;
 	Sci_Position offsetRelative;
 
-	StyleContext &operator=(const StyleContext &);
-
 	void GetNextChar() {
 		if (multiByteAccess) {
 			chNext = multiByteAccess->GetCharacterAndWidth(currentPos+width, &widthNext);
@@ -97,6 +95,9 @@ public:
 
 		GetNextChar();
 	}
+	// Deleted so StyleContext objects can not be copied.
+	StyleContext(const StyleContext &) = delete;
+	StyleContext &operator=(const StyleContext &) = delete;
 	void Complete() {
 		styler.ColourTo(currentPos - ((currentPos > lengthDocument) ? 2 : 1), state);
 		styler.Flush();
@@ -130,7 +131,7 @@ public:
 		}
 	}
 	void ForwardBytes(Sci_Position nb) {
-		Sci_PositionU forwardPos = currentPos + nb;
+		const Sci_PositionU forwardPos = currentPos + nb;
 		while (forwardPos > currentPos) {
 			Forward();
 		}
@@ -165,7 +166,7 @@ public:
 			}
 			Sci_Position diffRelative = n - offsetRelative;
 			Sci_Position posNew = multiByteAccess->GetRelativePosition(posRelative, diffRelative);
-			int chReturn = multiByteAccess->GetCharacterAndWidth(posNew, 0);
+			const int chReturn = multiByteAccess->GetCharacterAndWidth(posNew, 0);
 			posRelative = posNew;
 			currentPosLastRelative = currentPos;
 			offsetRelative = n;

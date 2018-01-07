@@ -19,7 +19,7 @@ public:
 	enum cc { ccSpace, ccNewLine, ccWord, ccPunctuation };
 	void SetDefaultCharClasses(bool includeWordClass);
 	void SetCharClasses(const unsigned char *chars, cc newCharClass);
-	int GetCharsOfClass(cc charClass, unsigned char *buffer) const;
+	int GetCharsOfClass(cc characterClass, unsigned char *buffer) const;
 	cc GetClass(unsigned char ch) const { return static_cast<cc>(charClass[ch]);}
 	bool IsWord(unsigned char ch) const { return static_cast<cc>(charClass[ch]) == ccWord;}
 

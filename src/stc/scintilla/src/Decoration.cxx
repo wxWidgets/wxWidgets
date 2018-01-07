@@ -4,13 +4,16 @@
 // Copyright 1998-2007 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
+#include <cstdarg>
 
 #include <stdexcept>
+#include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "Platform.h"
 
@@ -25,7 +28,7 @@
 using namespace Scintilla;
 #endif
 
-Decoration::Decoration(int indicator_) : next(0), indicator(indicator_) {
+Decoration::Decoration(int indicator_) : indicator(indicator_) {
 }
 
 Decoration::~Decoration() {
@@ -35,74 +38,48 @@ bool Decoration::Empty() const {
 	return (rs.Runs() == 1) && (rs.AllSameAs(0));
 }
 
-DecorationList::DecorationList() : currentIndicator(0), currentValue(1), current(0),
-	lengthDocument(0), root(0), clickNotified(false) {
+DecorationList::DecorationList() : currentIndicator(0), currentValue(1), current(nullptr),
+	lengthDocument(0), clickNotified(false) {
 }
 
 DecorationList::~DecorationList() {
-	Decoration *deco = root;
-	while (deco) {
-		Decoration *decoNext = deco->next;
-		delete deco;
-		deco = decoNext;
-	}
-	root = 0;
-	current = 0;
+	current = nullptr;
 }
 
 Decoration *DecorationList::DecorationFromIndicator(int indicator) {
-	for (Decoration *deco=root; deco; deco = deco->next) {
-		if (deco->indicator == indicator) {
-			return deco;
+	for (const std::unique_ptr<Decoration> &deco : decorationList) {
+		if (deco->Indicator() == indicator) {
+			return deco.get();
 		}
 	}
-	return 0;
+	return nullptr;
 }
 
 Decoration *DecorationList::Create(int indicator, int length) {
 	currentIndicator = indicator;
-	Decoration *decoNew = new Decoration(indicator);
+	std::unique_ptr<Decoration> decoNew(new Decoration(indicator));
 	decoNew->rs.InsertSpace(0, length);
 
-	Decoration *decoPrev = 0;
-	Decoration *deco = root;
+	std::vector<std::unique_ptr<Decoration>>::iterator it = std::lower_bound(
+		decorationList.begin(), decorationList.end(), decoNew, 
+		[](const std::unique_ptr<Decoration> &a, const std::unique_ptr<Decoration> &b) {
+		return a->Indicator() < b->Indicator();
+	});
+	std::vector<std::unique_ptr<Decoration>>::iterator itAdded = 
+		decorationList.insert(it, std::move(decoNew));
 
-	while (deco && (deco->indicator < indicator)) {
-		decoPrev = deco;
-		deco = deco->next;
-	}
-	if (decoPrev == 0) {
-		decoNew->next = root;
-		root = decoNew;
-	} else {
-		decoNew->next = deco;
-		decoPrev->next = decoNew;
-	}
-	return decoNew;
+	SetView();
+
+	return itAdded->get();
 }
 
 void DecorationList::Delete(int indicator) {
-	Decoration *decoToDelete = 0;
-	if (root) {
-		if (root->indicator == indicator) {
-			decoToDelete = root;
-			root = root->next;
-		} else {
-			Decoration *deco=root;
-			while (deco->next && !decoToDelete) {
-				if (deco->next && deco->next->indicator == indicator) {
-					decoToDelete = deco->next;
-					deco->next = decoToDelete->next;
-				} else {
-					deco = deco->next;
-				}
-			}
-		}
-	}
-	if (decoToDelete) {
-		delete decoToDelete;
-		current = 0;
-	}
+	decorationList.erase(std::remove_if(decorationList.begin(), decorationList.end(),
+		[=](const std::unique_ptr<Decoration> &deco) {
+		return deco->Indicator() == indicator;
+	}), decorationList.end());
+	current = nullptr;
+	SetView();
 }
 
 void DecorationList::SetCurrentIndicator(int indicator) {
@@ -122,7 +99,7 @@ bool DecorationList::FillRange(int &position, int value, int &fillLength) {
 			current = Create(currentIndicator, lengthDocument);
 		}
 	}
-	bool changed = current->rs.FillRange(position, value, fillLength);
+	const bool changed = current->rs.FillRange(position, value, fillLength);
 	if (current->Empty()) {
 		Delete(currentIndicator);
 	}
@@ -132,7 +109,7 @@ bool DecorationList::FillRange(int &position, int value, int &fillLength) {
 void DecorationList::InsertSpace(int position, int insertLength) {
 	const bool atEnd = position == lengthDocument;
 	lengthDocument += insertLength;
-	for (Decoration *deco=root; deco; deco = deco->next) {
+	for (const std::unique_ptr<Decoration> &deco : decorationList) {
 		deco->rs.InsertSpace(position, insertLength);
 		if (atEnd) {
 			deco->rs.FillRange(position, 0, insertLength);
@@ -142,31 +119,50 @@ void DecorationList::InsertSpace(int position, int insertLength) {
 
 void DecorationList::DeleteRange(int position, int deleteLength) {
 	lengthDocument -= deleteLength;
-	Decoration *deco;
-	for (deco=root; deco; deco = deco->next) {
+	for (const std::unique_ptr<Decoration> &deco : decorationList) {
 		deco->rs.DeleteRange(position, deleteLength);
 	}
 	DeleteAnyEmpty();
+	if (decorationList.size() != decorationView.size()) {
+		// One or more empty decorations deleted so update view.
+		current = nullptr;
+		SetView();
+	}
+}
+
+void DecorationList::DeleteLexerDecorations() {
+	decorationList.erase(std::remove_if(decorationList.begin(), decorationList.end(),
+		[=](const std::unique_ptr<Decoration> &deco) {
+		return deco->Indicator() < INDIC_CONTAINER;
+	}), decorationList.end());
+	current = nullptr;
+	SetView();
 }
 
 void DecorationList::DeleteAnyEmpty() {
-	Decoration *deco = root;
-	while (deco) {
-		if ((lengthDocument == 0) || deco->Empty()) {
-			Delete(deco->indicator);
-			deco = root;
-		} else {
-			deco = deco->next;
-		}
+	if (lengthDocument == 0) {
+		decorationList.clear();
+	} else {
+		decorationList.erase(std::remove_if(decorationList.begin(), decorationList.end(),
+			[=](const std::unique_ptr<Decoration> &deco) {
+			return deco->Empty();
+		}), decorationList.end());
+	}
+}
+
+void DecorationList::SetView() {
+	decorationView.clear();
+	for (const std::unique_ptr<Decoration> &deco : decorationList) {
+		decorationView.push_back(deco.get());
 	}
 }
 
 int DecorationList::AllOnFor(int position) const {
 	int mask = 0;
-	for (Decoration *deco=root; deco; deco = deco->next) {
+	for (const std::unique_ptr<Decoration> &deco : decorationList) {
 		if (deco->rs.ValueAt(position)) {
-			if (deco->indicator < INDIC_IME) {
-				mask |= 1 << deco->indicator;
+			if (deco->Indicator() < INDIC_IME) {
+				mask |= 1 << deco->Indicator();
 			}
 		}
 	}
@@ -174,7 +170,7 @@ int DecorationList::AllOnFor(int position) const {
 }
 
 int DecorationList::ValueAt(int indicator, int position) {
-	Decoration *deco = DecorationFromIndicator(indicator);
+	const Decoration *deco = DecorationFromIndicator(indicator);
 	if (deco) {
 		return deco->rs.ValueAt(position);
 	}
@@ -182,7 +178,7 @@ int DecorationList::ValueAt(int indicator, int position) {
 }
 
 int DecorationList::Start(int indicator, int position) {
-	Decoration *deco = DecorationFromIndicator(indicator);
+	const Decoration *deco = DecorationFromIndicator(indicator);
 	if (deco) {
 		return deco->rs.StartRun(position);
 	}
@@ -190,7 +186,7 @@ int DecorationList::Start(int indicator, int position) {
 }
 
 int DecorationList::End(int indicator, int position) {
-	Decoration *deco = DecorationFromIndicator(indicator);
+	const Decoration *deco = DecorationFromIndicator(indicator);
 	if (deco) {
 		return deco->rs.EndRun(position);
 	}

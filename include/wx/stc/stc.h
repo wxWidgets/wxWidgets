@@ -137,8 +137,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MARGIN_RTEXT 5
 #define wxSTC_MARGIN_COLOUR 6
 
-/// Styles in range 32..38 are predefined for parts of the UI and are not used as normal styles.
-/// Style 39 is for future use.
+/// Styles in range 32..39 are predefined for parts of the UI and are not used as normal styles.
 #define wxSTC_STYLE_DEFAULT 32
 #define wxSTC_STYLE_LINENUMBER 33
 #define wxSTC_STYLE_BRACELIGHT 34
@@ -290,6 +289,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_EFF_QUALITY_LCD_OPTIMIZED 3
 #define wxSTC_MULTIPASTE_ONCE 0
 #define wxSTC_MULTIPASTE_EACH 1
+#define wxSTC_ACCESSIBILITY_DISABLED 0
+#define wxSTC_ACCESSIBILITY_ENABLED 1
 #define wxSTC_EDGE_NONE 0
 #define wxSTC_EDGE_LINE 1
 #define wxSTC_EDGE_BACKGROUND 2
@@ -570,6 +571,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_TEHEX 119
 #define wxSTC_LEX_JSON 120
 #define wxSTC_LEX_EDIFACT 121
+#define wxSTC_LEX_INDENT 122
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -592,6 +594,10 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_P_STRINGEOL 13
 #define wxSTC_P_WORD2 14
 #define wxSTC_P_DECORATOR 15
+#define wxSTC_P_FSTRING 16
+#define wxSTC_P_FCHARACTER 17
+#define wxSTC_P_FTRIPLE 18
+#define wxSTC_P_FTRIPLEDOUBLE 19
 
 /// Lexical states for SCLEX_CPP, SCLEX_BULLANT, SCLEX_COBOL, SCLEX_TACL, SCLEX_TAL
 #define wxSTC_C_DEFAULT 0
@@ -3366,6 +3372,14 @@ public:
     // Set the colour of the background of the line containing the caret.
     void SetCaretLineBackground(const wxColour& back);
 
+    // Retrieve the caret line frame width.
+    // Width = 0 means this option is disabled.
+    int GetCaretLineFrame() const;
+
+    // Display the caret line framed.
+    // Set width != 0 to enable this option and width = 0 to disable it.
+    void SetCaretLineFrame(int width);
+
     // Set a style to be changeable or not (read only).
     // Experimental feature, currently buggy.
     void StyleSetChangeable(int style, bool changeable);
@@ -3988,6 +4002,12 @@ public:
     // Set the other colour used as a chequerboard pattern in the fold margin
     void SetFoldMarginHiColour(bool useSetting, const wxColour& fore);
 
+    // Enable or disable accessibility.
+    void SetAccessibility(int accessibility);
+
+    // Report accessibility status.
+    int GetAccessibility() const;
+
     // Move caret down one line.
     void LineDown();
 
@@ -4112,6 +4132,9 @@ public:
 
     // Switch the current line with the previous.
     void LineTranspose();
+
+    // Reverse order of selected lines.
+    void LineReverse();
 
     // Duplicate the current line.
     void LineDuplicate();
@@ -4763,7 +4786,7 @@ public:
     void ClearSelections();
 
     // Add a selection
-    int AddSelection(int caret, int anchor);
+    void AddSelection(int caret, int anchor);
 
     // Drop one selection
     void DropSelectionN(int selection);

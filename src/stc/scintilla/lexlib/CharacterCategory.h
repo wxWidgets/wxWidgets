@@ -24,6 +24,12 @@ enum CharacterCategory {
 
 CharacterCategory CategoriseCharacter(int character);
 
+// Common definitions of allowable characters in identifiers from UAX #31.
+bool IsIdStart(int character);
+bool IsIdContinue(int character);
+bool IsXidStart(int character);
+bool IsXidContinue(int character);
+
 #ifdef SCI_NAMESPACE
 }
 #endif

@@ -16,11 +16,11 @@ namespace Scintilla {
 template <typename T>
 class SplitVector {
 protected:
-	T *body;
-	int size;
+	std::vector<T> body;
+	T empty;	/// Returned as the result of out-of-bounds access.
 	int lengthBody;
 	int part1Length;
-	int gapLength;	/// invariant: gapLength == size - lengthBody
+	int gapLength;	/// invariant: gapLength == body.size() - lengthBody
 	int growSize;
 
 	/// Move the gap to a particular position so that insertion and
@@ -30,16 +30,16 @@ protected:
 		if (position != part1Length) {
 			if (position < part1Length) {
 				// Moving the gap towards start so moving elements towards end
-				std::copy_backward(
-					body + position,
-					body + part1Length,
-					body + gapLength + part1Length);
+				std::move_backward(
+					body.data() + position,
+					body.data() + part1Length,
+					body.data() + gapLength + part1Length);
 			} else {	// position > part1Length
 				// Moving the gap towards end so moving elements towards start
-				std::copy(
-					body + part1Length + gapLength,
-					body + gapLength + position,
-					body + part1Length);
+				std::move(
+					body.data() + part1Length + gapLength,
+					body.data() + gapLength + position,
+					body.data() + part1Length);
 			}
 			part1Length = position;
 		}
@@ -49,16 +49,16 @@ protected:
 	/// reallocating if more space needed.
 	void RoomFor(int insertionLength) {
 		if (gapLength <= insertionLength) {
-			while (growSize < size / 6)
+			while (growSize < static_cast<int>(body.size() / 6))
 				growSize *= 2;
-			ReAllocate(size + insertionLength + growSize);
+			ReAllocate(static_cast<int>(body.size()) + insertionLength + growSize);
 		}
 	}
 
 	void Init() {
-		body = NULL;
+		body.clear();
+		body.shrink_to_fit();
 		growSize = 8;
-		size = 0;
 		lengthBody = 0;
 		part1Length = 0;
 		gapLength = 0;
@@ -66,13 +66,15 @@ protected:
 
 public:
 	/// Construct a split buffer.
-	SplitVector() {
+	SplitVector() : empty() {
 		Init();
 	}
 
+	// Deleted so SplitVector objects can not be copied.
+	SplitVector(const SplitVector &) = delete;
+	void operator=(const SplitVector &) = delete;
+
 	~SplitVector() {
-		delete []body;
-		body = 0;
 	}
 
 	int GetGrowSize() const {
@@ -90,61 +92,73 @@ public:
 		if (newSize < 0)
 			throw std::runtime_error("SplitVector::ReAllocate: negative size.");
 
-		if (newSize > size) {
+		if (newSize > static_cast<int>(body.size())) {
 			// Move the gap to the end
 			GapTo(lengthBody);
-			T *newBody = new T[newSize];
-			if ((size != 0) && (body != 0)) {
-				std::copy(body, body + lengthBody, newBody);
-				delete []body;
-			}
-			body = newBody;
-			gapLength += newSize - size;
-			size = newSize;
+			gapLength += newSize - static_cast<int>(body.size());
+			// RoomFor implements a growth strategy but so does vector::resize so
+			// ensure vector::resize allocates exactly the amount wanted by
+			// calling reserve first.
+			body.reserve(newSize);
+			body.resize(newSize);
 		}
 	}
 
-	/// Retrieve the character at a particular position.
-	/// Retrieving positions outside the range of the buffer returns 0.
-	/// The assertions here are disabled since calling code can be
-	/// simpler if out of range access works and returns 0.
-	T ValueAt(int position) const {
+	/// Retrieve the element at a particular position.
+	/// Retrieving positions outside the range of the buffer returns empty or 0.
+	const T& ValueAt(int position) const {
 		if (position < part1Length) {
-			//PLATFORM_ASSERT(position >= 0);
 			if (position < 0) {
-				return 0;
+				return empty;
 			} else {
 				return body[position];
 			}
 		} else {
-			//PLATFORM_ASSERT(position < lengthBody);
 			if (position >= lengthBody) {
-				return 0;
+				return empty;
 			} else {
 				return body[gapLength + position];
 			}
 		}
 	}
 
-	void SetValueAt(int position, T v) {
+	/// Set the element at a particular position.
+	/// Setting positions outside the range of the buffer performs no assignment
+	/// but asserts in debug builds.
+	template <typename ParamType>
+	void SetValueAt(int position, ParamType&& v) {
 		if (position < part1Length) {
 			PLATFORM_ASSERT(position >= 0);
 			if (position < 0) {
 				;
 			} else {
-				body[position] = v;
+				body[position] = std::move(v);
 			}
 		} else {
 			PLATFORM_ASSERT(position < lengthBody);
 			if (position >= lengthBody) {
 				;
 			} else {
-				body[gapLength + position] = v;
+				body[gapLength + position] = std::move(v);
 			}
 		}
 	}
 
-	T &operator[](int position) const {
+	/// Retrieve the element at a particular position.
+	/// The position must be within bounds or an assertion is triggered.
+	const T &operator[](int position) const {
+		PLATFORM_ASSERT(position >= 0 && position < lengthBody);
+		if (position < part1Length) {
+			return body[position];
+		} else {
+			return body[gapLength + position];
+		}
+	}
+
+	/// Retrieve reference to the element at a particular position.
+	/// This, instead of the const variant, can be used to mutate in-place.
+	/// The position must be within bounds or an assertion is triggered.
+	T &operator[](int position) {
 		PLATFORM_ASSERT(position >= 0 && position < lengthBody);
 		if (position < part1Length) {
 			return body[position];
@@ -167,7 +181,7 @@ public:
 		}
 		RoomFor(1);
 		GapTo(position);
-		body[part1Length] = v;
+		body[part1Length] = std::move(v);
 		lengthBody++;
 		part1Length++;
 		gapLength--;
@@ -183,7 +197,28 @@ public:
 			}
 			RoomFor(insertLength);
 			GapTo(position);
-			std::fill(&body[part1Length], &body[part1Length + insertLength], v);
+			std::fill(body.data() + part1Length, body.data() + part1Length + insertLength, v);
+			lengthBody += insertLength;
+			part1Length += insertLength;
+			gapLength -= insertLength;
+		}
+	}
+
+	/// Add some new empty elements.
+	/// InsertValue is good for value objects but not for unique_ptr objects
+	/// since they can only be moved from once.
+	void InsertEmpty(int position, int insertLength) {
+		PLATFORM_ASSERT((position >= 0) && (position <= lengthBody));
+		if (insertLength > 0) {
+			if ((position < 0) || (position > lengthBody)) {
+				return;
+			}
+			RoomFor(insertLength);
+			GapTo(position);
+			for (int elem = part1Length; elem < part1Length + insertLength; elem++) {
+				T emptyOne = {};
+				body[elem] = std::move(emptyOne);
+			}
 			lengthBody += insertLength;
 			part1Length += insertLength;
 			gapLength -= insertLength;
@@ -194,7 +229,7 @@ public:
 	/// appending zero valued elements if needed.
 	void EnsureLength(int wantedLength) {
 		if (Length() < wantedLength) {
-			InsertValue(Length(), wantedLength - Length(), 0);
+			InsertEmpty(Length(), wantedLength - Length());
 		}
 	}
 
@@ -207,7 +242,7 @@ public:
 			}
 			RoomFor(insertLength);
 			GapTo(positionToInsert);
-			std::copy(s + positionFrom, s + positionFrom + insertLength, body + part1Length);
+			std::copy(s + positionFrom, s + positionFrom + insertLength, body.data() + part1Length);
 			lengthBody += insertLength;
 			part1Length += insertLength;
 			gapLength -= insertLength;
@@ -232,7 +267,8 @@ public:
 		}
 		if ((position == 0) && (deleteLength == lengthBody)) {
 			// Full deallocation returns storage and is faster
-			delete []body;
+			body.clear();
+			body.shrink_to_fit();
 			Init();
 		} else if (deleteLength > 0) {
 			GapTo(position);
@@ -243,47 +279,52 @@ public:
 
 	/// Delete all the buffer contents.
 	void DeleteAll() {
-		DeleteRange(0, lengthBody);
+		DeleteRange(0, static_cast<int>(lengthBody));
 	}
 
-	// Retrieve a range of elements into an array
+	/// Retrieve a range of elements into an array
 	void GetRange(T *buffer, int position, int retrieveLength) const {
 		// Split into up to 2 ranges, before and after the split then use memcpy on each.
 		int range1Length = 0;
 		if (position < part1Length) {
-			int part1AfterPosition = part1Length - position;
+			const int part1AfterPosition = part1Length - position;
 			range1Length = retrieveLength;
 			if (range1Length > part1AfterPosition)
 				range1Length = part1AfterPosition;
 		}
-		std::copy(body + position, body + position + range1Length, buffer);
+		std::copy(body.data() + position, body.data() + position + range1Length, buffer);
 		buffer += range1Length;
-		position = position + range1Length + gapLength;
+		position = static_cast<int>(position + range1Length + gapLength);
 		int range2Length = retrieveLength - range1Length;
-		std::copy(body + position, body + position + range2Length, buffer);
+		std::copy(body.data() + position, body.data() + position + range2Length, buffer);
 	}
 
+	/// Compact the buffer and return a pointer to the first element.
 	T *BufferPointer() {
 		RoomFor(1);
 		GapTo(lengthBody);
-		body[lengthBody] = 0;
-		return body;
+		T emptyOne = {};
+		body[lengthBody] = std::move(emptyOne);
+		return body.data();
 	}
 
+	/// Return a pointer to a range of elements, first rearranging the buffer if
+	/// needed to make that range contiguous.
 	T *RangePointer(int position, int rangeLength) {
 		if (position < part1Length) {
 			if ((position + rangeLength) > part1Length) {
 				// Range overlaps gap, so move gap to start of range.
 				GapTo(position);
-				return body + position + gapLength;
+				return body.data() + position + gapLength;
 			} else {
-				return body + position;
+				return body.data() + position;
 			}
 		} else {
-			return body + position + gapLength;
+			return body.data() + position + gapLength;
 		}
 	}
 
+	/// Return the position of the gap within the buffer.
 	int GapPosition() const {
 		return part1Length;
 	}

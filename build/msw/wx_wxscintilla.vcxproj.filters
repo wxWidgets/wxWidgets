@@ -200,6 +200,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexHex.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexIndent.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexInno.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>

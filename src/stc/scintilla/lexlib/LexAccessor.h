@@ -125,7 +125,7 @@ public:
 		} else {
 			// Old interface means only '\r', '\n' and '\r\n' line ends.
 			Sci_Position startNext = pAccess->LineStart(line+1);
-			char chLineEnd = SafeGetCharAt(startNext-1);
+			const char chLineEnd = SafeGetCharAt(startNext-1);
 			if (chLineEnd == '\n' && (SafeGetCharAt(startNext-2)  == '\r'))
 				return startNext - 2;
 			else

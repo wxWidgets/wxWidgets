@@ -4,6 +4,7 @@
 ** Based heavily on LexCPP.cxx
 **/
 // Copyright 2001- by Vamsi Potluru <vamsi@who.net> & Praveen Ambekar <ambekarpraveen@yahoo.com>
+// Maintainer Email: oirfeodent@yahoo.co.in
 // The License.txt file describes the conditions under which this software may be distributed.
 
 // C standard library
@@ -142,7 +143,7 @@ static inline int IsAnyOtherIdentifier(char *s, int sLength) {
 	switch (sLength) {
 	case 8:
 		if (isalpha(s[0]) && isalpha(s[1]) && isalpha(s[2]) && isalpha(s[3]) && isalpha(s[4]) && IsADigit(s[5]) && IsADigit(s[6]) && IsADigit(s[7])) {
-			//^^^^^###
+			//^^^^^### 
 			return(SCE_BAAN_TABLEDEF);
 		}
 		break;
@@ -399,39 +400,39 @@ public:
 	virtual ~LexerBaan() {
 	}
 
-	int SCI_METHOD Version() const {
+	int SCI_METHOD Version() const override {
 		return lvOriginal;
 	}
 
-	void SCI_METHOD Release() {
+	void SCI_METHOD Release() override {
 		delete this;
 	}
 
-	const char * SCI_METHOD PropertyNames() {
+	const char * SCI_METHOD PropertyNames() override {
 		return osBaan.PropertyNames();
 	}
 
-	int SCI_METHOD PropertyType(const char * name) {
+	int SCI_METHOD PropertyType(const char * name) override {
 		return osBaan.PropertyType(name);
 	}
 
-	const char * SCI_METHOD DescribeProperty(const char * name) {
+	const char * SCI_METHOD DescribeProperty(const char * name) override {
 		return osBaan.DescribeProperty(name);
 	}
 
-	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val);
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override;
 
-	const char * SCI_METHOD DescribeWordListSets() {
+	const char * SCI_METHOD DescribeWordListSets() override {
 		return osBaan.DescribeWordListSets();
 	}
 
-	Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
+	Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
 
-	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-	void * SCI_METHOD PrivateCall(int, void *) {
+	void * SCI_METHOD PrivateCall(int, void *) override {
 		return NULL;
 	}
 
@@ -504,6 +505,7 @@ void SCI_METHOD LexerBaan::Lex(Sci_PositionU startPos, Sci_Position length, int 
 	bool lineHasPreProc = false;
 	bool lineIgnoreString = false;
 	bool lineHasDefines = false;
+	bool numberIsHex = false;
 	char word[1000];
 	int wordlen = 0;
 
@@ -520,9 +522,18 @@ void SCI_METHOD LexerBaan::Lex(Sci_PositionU startPos, Sci_Position length, int 
 		case SCE_BAAN_OPERATOR:
 			sc.SetState(SCE_BAAN_DEFAULT);
 			break;
-		case SCE_BAAN_NUMBER:
-			if (!IsAWordChar(sc.ch)) {
+		case SCE_BAAN_NUMBER: 
+			if (IsASpaceOrTab(sc.ch) || sc.ch == '\r' || sc.ch == '\n' || IsAnOperator(sc.ch)) {
 				sc.SetState(SCE_BAAN_DEFAULT);
+			}
+			else if ((numberIsHex && !(MakeLowerCase(sc.ch) == 'x' || MakeLowerCase(sc.ch) == 'e' ||
+				IsADigit(sc.ch, 16) || sc.ch == '.' || sc.ch == '-' || sc.ch == '+')) ||
+				(!numberIsHex && !(MakeLowerCase(sc.ch) == 'e' || IsADigit(sc.ch)
+				|| sc.ch == '.' || sc.ch == '-' || sc.ch == '+'))) {
+					// check '-' for possible -10e-5. Add '+' as well.
+					numberIsHex = false;
+					sc.ChangeState(SCE_BAAN_IDENTIFIER);
+					sc.SetState(SCE_BAAN_DEFAULT);
 			}
 			break;
 		case SCE_BAAN_IDENTIFIER:
@@ -606,7 +617,7 @@ void SCI_METHOD LexerBaan::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			}
 			break;
 		case SCE_BAAN_COMMENT:
-			if (sc.atLineEnd) {
+			if (sc.ch == '\r' || sc.ch == '\n') {
 				sc.SetState(SCE_BAAN_DEFAULT);
 			}
 			break;
@@ -638,7 +649,13 @@ void SCI_METHOD LexerBaan::Lex(Sci_PositionU startPos, Sci_Position length, int 
 
 		// Determine if a new state should be entered.
 		if (sc.state == SCE_BAAN_DEFAULT) {
-			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
+			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))
+				|| ((sc.ch == '-' || sc.ch == '+') && (IsADigit(sc.chNext) || sc.chNext == '.'))
+				|| (MakeLowerCase(sc.ch) == 'e' && (IsADigit(sc.chNext) || sc.chNext == '+' || sc.chNext == '-'))) {
+				if ((sc.ch == '0' && MakeLowerCase(sc.chNext) == 'x') ||
+					((sc.ch == '-' || sc.ch == '+') && sc.chNext == '0' && MakeLowerCase(sc.GetRelativeCharacter(2)) == 'x')){
+					numberIsHex = true;
+				}
 				sc.SetState(SCE_BAAN_NUMBER);
 			}
 			else if (sc.MatchIgnoreCase("dllusage") || sc.MatchIgnoreCase("functionusage")) {
@@ -697,6 +714,7 @@ void SCI_METHOD LexerBaan::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			lineHasPreProc = false;
 			lineIgnoreString = false;
 			lineHasDefines = false;
+			numberIsHex = false;
 		}
 		if (!IsASpace(sc.ch)) {
 			visibleChars++;
@@ -911,7 +929,7 @@ void SCI_METHOD LexerBaan::Fold(Sci_PositionU startPos, Sci_Position length, int
 					levelCurrent++;
 			}
 			else if (nextLineStyle != 0 && currLineStyle != nextLineStyle
-				&& (priorSectionIsSubSection(lineCurrent -1 ,styler)
+				&& (priorSectionIsSubSection(lineCurrent -1 ,styler) 
 					|| !nextSectionIsSubSection(lineCurrent + 1, styler))) {
 				for (Sci_Position j = styler.LineStart(lineCurrent + 1); j < styler.LineStart(lineCurrent + 1 + 1) - 1; j++) {
 					if (IsASpaceOrTab(styler[j]))

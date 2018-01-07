@@ -97,13 +97,26 @@ static int opposite(int ch) {
 }
 
 static int GlobScan(StyleContext &sc) {
-	// forward scan for a glob-like (...), no whitespace allowed
+	// forward scan for zsh globs, disambiguate versus bash arrays
+	// complex expressions may still fail, e.g. unbalanced () '' "" etc
 	int c, sLen = 0;
+	int pCount = 0;
+	int hash = 0;
 	while ((c = sc.GetRelativeCharacter(++sLen)) != 0) {
 		if (IsASpace(c)) {
 			return 0;
+		} else if (c == '\'' || c == '\"') {
+			if (hash != 2) return 0;
+		} else if (c == '#' && hash == 0) {
+			hash = (sLen == 1) ? 2:1;
+		} else if (c == '(') {
+			pCount++;
 		} else if (c == ')') {
-			return sLen;
+			if (pCount == 0) {
+				if (hash) return sLen;
+				return 0;
+			}
+			pCount--;
 		}
 	}
 	return 0;

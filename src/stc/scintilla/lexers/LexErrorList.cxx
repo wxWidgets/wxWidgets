@@ -106,7 +106,8 @@ static int RecogniseErrorListLine(const char *lineBuffer, Sci_PositionU lengthLi
 		// perl error message:
 		// <message> at <file> line <line>
 		return SCE_ERR_PERL;
-	} else if ((memcmp(lineBuffer, "   at ", 6) == 0) &&
+	} else if ((lengthLine >= 6) && 
+	           (memcmp(lineBuffer, "   at ", 6) == 0) &&
 	           strstr(lineBuffer, ":line ")) {
 		// A .NET traceback
 		return SCE_ERR_NET;
@@ -141,7 +142,7 @@ static int RecogniseErrorListLine(const char *lineBuffer, Sci_PositionU lengthLi
 		// CTags: <identifier>\t<filename>\t<message>
 		// Lua 5 traceback: \t<filename>:<line>:<message>
 		// Lua 5.1: <exe>: <filename>:<line>:<message>
-		bool initialTab = (lineBuffer[0] == '\t');
+		const bool initialTab = (lineBuffer[0] == '\t');
 		bool initialColonPart = false;
 		bool canBeCtags = !initialTab;	// For ctags must have an identifier with no spaces then a tab
 		enum { stInitial,
@@ -151,7 +152,7 @@ static int RecogniseErrorListLine(const char *lineBuffer, Sci_PositionU lengthLi
 			stUnrecognized
 		} state = stInitial;
 		for (Sci_PositionU i = 0; i < lengthLine; i++) {
-			char ch = lineBuffer[i];
+			const char ch = lineBuffer[i];
 			char chNext = ' ';
 			if ((i + 1) < lengthLine)
 				chNext = lineBuffer[i + 1];
@@ -314,9 +315,9 @@ static void ColouriseErrorListLine(
 	Sci_Position startValue = -1;
 	int style = RecogniseErrorListLine(lineBuffer, lengthLine, startValue);
 	if (escapeSequences && strstr(lineBuffer, CSI)) {
-		const int startPos = endPos - lengthLine;
+		const Sci_Position startPos = endPos - lengthLine;
 		const char *linePortion = lineBuffer;
-		int startPortion = startPos;
+		Sci_Position startPortion = startPos;
 		int portionStyle = style;
 		while (const char *startSeq = strstr(linePortion, CSI)) {
 			if (startSeq > linePortion) {
@@ -325,7 +326,7 @@ static void ColouriseErrorListLine(
 			const char *endSeq = startSeq + 2;
 			while (!SequenceEnd(*endSeq))
 				endSeq++;
-			const int endSeqPosition = startPortion + static_cast<int>(endSeq - linePortion) + 1;
+			const Sci_Position endSeqPosition = startPortion + static_cast<Sci_Position>(endSeq - linePortion) + 1;
 			switch (*endSeq) {
 			case 0:
 				styler.ColourTo(endPos, SCE_ERR_ESCSEQ_UNKNOWN);
@@ -366,7 +367,7 @@ static void ColouriseErrorListDoc(Sci_PositionU startPos, Sci_Position length, i
 	//	diagnostics, style the path and line number separately from the rest of the
 	//	line with style 21 used for the rest of the line.
 	//	This allows matched text to be more easily distinguished from its location.
-	bool valueSeparate = styler.GetPropertyInt("lexer.errorlist.value.separate", 0) != 0;
+	const bool valueSeparate = styler.GetPropertyInt("lexer.errorlist.value.separate", 0) != 0;
 
 	// property lexer.errorlist.escape.sequences
 	//	Set to 1 to interpret escape sequences.

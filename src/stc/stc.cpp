@@ -1319,6 +1319,20 @@ void wxStyledTextCtrl::SetCaretLineBackground(const wxColour& back)
     SendMsg(SCI_SETCARETLINEBACK, wxColourAsLong(back), 0);
 }
 
+// Retrieve the caret line frame width.
+// Width = 0 means this option is disabled.
+int wxStyledTextCtrl::GetCaretLineFrame() const
+{
+    return SendMsg(SCI_GETCARETLINEFRAME, 0, 0);
+}
+
+// Display the caret line framed.
+// Set width != 0 to enable this option and width = 0 to disable it.
+void wxStyledTextCtrl::SetCaretLineFrame(int width)
+{
+    SendMsg(SCI_SETCARETLINEFRAME, width, 0);
+}
+
 // Set a style to be changeable or not (read only).
 // Experimental feature, currently buggy.
 void wxStyledTextCtrl::StyleSetChangeable(int style, bool changeable)
@@ -2587,6 +2601,18 @@ void wxStyledTextCtrl::SetFoldMarginHiColour(bool useSetting, const wxColour& fo
     SendMsg(SCI_SETFOLDMARGINHICOLOUR, useSetting, wxColourAsLong(fore));
 }
 
+// Enable or disable accessibility.
+void wxStyledTextCtrl::SetAccessibility(int accessibility)
+{
+    SendMsg(SCI_SETACCESSIBILITY, accessibility, 0);
+}
+
+// Report accessibility status.
+int wxStyledTextCtrl::GetAccessibility() const
+{
+    return SendMsg(SCI_GETACCESSIBILITY, 0, 0);
+}
+
 // Move caret down one line.
 void wxStyledTextCtrl::LineDown()
 {
@@ -2833,6 +2859,12 @@ void wxStyledTextCtrl::LineDelete()
 void wxStyledTextCtrl::LineTranspose()
 {
     SendMsg(SCI_LINETRANSPOSE, 0, 0);
+}
+
+// Reverse order of selected lines.
+void wxStyledTextCtrl::LineReverse()
+{
+    SendMsg(SCI_LINEREVERSE, 0, 0);
 }
 
 // Duplicate the current line.
@@ -4139,9 +4171,9 @@ void wxStyledTextCtrl::ClearSelections()
 }
 
 // Add a selection
-int wxStyledTextCtrl::AddSelection(int caret, int anchor)
+void wxStyledTextCtrl::AddSelection(int caret, int anchor)
 {
-    return SendMsg(SCI_ADDSELECTION, caret, anchor);
+    SendMsg(SCI_ADDSELECTION, caret, anchor);
 }
 
 // Drop one selection
@@ -5640,7 +5672,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 7, 2, "Scintilla 3.7.2");
+    return wxVersionInfo("Scintilla", 3, 7, 6, "Scintilla 3.7.6");
 }
 
 #endif // wxUSE_STC

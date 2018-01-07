@@ -18,6 +18,9 @@
  **
  ** Changes by John Donoghue 2016/11/15
  **   - update matlab code folding
+ **
+ ** Changes by John Donoghue 2017/01/18
+ **   - update matlab block comment detection
  **/
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -73,6 +76,15 @@ static int CheckKeywordFoldPoint(char *str) {
 	return 0;
 }
 
+static bool IsSpaceToEOL(Sci_Position startPos, Accessor &styler) {
+	Sci_Position line = styler.GetLine(startPos);
+	Sci_Position eol_pos = styler.LineStart(line + 1) - 1;
+	for (Sci_Position i = startPos; i < eol_pos; i++) {
+		char ch = styler[i];
+		if(!IsASpace(ch)) return false;
+	}
+	return true;
+}
 
 static void ColouriseMatlabOctaveDoc(
             Sci_PositionU startPos, Sci_Position length, int initStyle,
@@ -180,7 +192,7 @@ static void ColouriseMatlabOctaveDoc(
 			}
 		} else if (sc.state == SCE_MATLAB_COMMENT) {
 			// end or start of a nested a block comment?
-			if( IsCommentChar(sc.ch) && sc.chNext == '}' && nonSpaceColumn == column) {
+			if( IsCommentChar(sc.ch) && sc.chNext == '}' && nonSpaceColumn == column && IsSpaceToEOL(sc.currentPos+2, styler)) {
                            	if(commentDepth > 0) commentDepth --;
 
 				curLine = styler.GetLine(sc.currentPos);
@@ -192,7 +204,7 @@ static void ColouriseMatlabOctaveDoc(
 					transpose = false;
 				}
                         }
-                        else if( IsCommentChar(sc.ch) && sc.chNext == '{' && nonSpaceColumn == column)
+                        else if( IsCommentChar(sc.ch) && sc.chNext == '{' && nonSpaceColumn == column && IsSpaceToEOL(sc.currentPos+2, styler))
                         {
  				commentDepth ++;
 
@@ -214,8 +226,11 @@ static void ColouriseMatlabOctaveDoc(
 		if (sc.state == SCE_MATLAB_DEFAULT) {
 			if (IsCommentChar(sc.ch)) {
 				// ncrement depth if we are a block comment
-				if(sc.chNext == '{' && nonSpaceColumn == column)
-					commentDepth ++;
+				if(sc.chNext == '{' && nonSpaceColumn == column) {
+					if(IsSpaceToEOL(sc.currentPos+2, styler)) {
+						commentDepth ++;
+					}
+				}
 				curLine = styler.GetLine(sc.currentPos);
 				styler.SetLineState(curLine, commentDepth);
 				sc.SetState(SCE_MATLAB_COMMENT);
@@ -288,9 +303,9 @@ static void FoldMatlabOctaveDoc(Sci_PositionU startPos, Sci_Position length, int
 		// a line that starts with a comment
 		if (style == SCE_MATLAB_COMMENT && IsComment(ch) && visibleChars == 0) {
 			// start/end of block comment
-			if (chNext == '{')
+			if (chNext == '{' && IsSpaceToEOL(i+2, styler))
 				levelNext ++;
-			if (chNext == '}')
+			if (chNext == '}' && IsSpaceToEOL(i+2, styler))
 				levelNext --;
 		}
 		// keyword
@@ -305,7 +320,7 @@ static void FoldMatlabOctaveDoc(Sci_PositionU startPos, Sci_Position length, int
 				wordlen = 0;
 
 				levelNext += CheckKeywordFoldPoint(word);
-			}
+ 			}
 		}
 		if (!IsASpace(ch))
 			visibleChars++;

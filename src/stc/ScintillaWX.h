@@ -27,6 +27,10 @@
 #include <map>
 #include <algorithm>
 #include <stdexcept>
+// the following is needed when `stc=c++11` is used to resolve
+// `error: 'unique_ptr' in namespace 'std' does not name a template type`
+// as suggested in https://stackoverflow.com/questions/30854766/cant-compile-c11-source-using-gcc-5-1-toolchain
+#include <memory>
 
 // These are all Scintilla headers
 #include "Platform.h"
@@ -44,6 +48,8 @@
 #include "Accessor.h"
 #include "WordList.h"
 #endif
+#include "Position.h" // needed to define `Sci` namespace to resolve `error: 'Sci' does not name a type`
+#include "UniqueString.h"
 #include "ContractionState.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
