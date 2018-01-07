@@ -509,6 +509,7 @@ set(BASE_CMN_HDR
     wx/event.h
     wx/eventfilter.h
     wx/evtloop.h
+    wx/evtloopsrc.h
     wx/except.h
     wx/features.h
     wx/flags.h
@@ -1009,7 +1010,6 @@ set(GUI_CMN_HDR
     wx/docmdi.h
     wx/docview.h
     wx/effects.h
-    wx/evtloopsrc.h
     wx/fdrepdlg.h
     wx/filectrl.h
     wx/filehistory.h
@@ -1054,6 +1054,7 @@ set(GUI_CMN_HDR
     wx/paper.h
     wx/persist.h
     wx/persist/bookctrl.h
+    wx/persist/dataview.h
     wx/persist/splitter.h
     wx/persist/toplevel.h
     wx/persist/treebook.h
