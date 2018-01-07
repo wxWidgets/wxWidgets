@@ -952,7 +952,6 @@ set(GUI_CMN_HDR
     wx/renderer.h
     wx/richmsgdlg.h
     wx/scrolbar.h
-    wx/scrolbar.h
     wx/scrolwin.h
     wx/selstore.h
     wx/settings.h
