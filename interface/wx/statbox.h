@@ -158,4 +158,30 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
+
+    /**
+        Enables or disables the box without affecting its label window, if any.
+
+        wxStaticBox overrides wxWindow::Enable() in order to avoid disabling
+        the control used as a label, if this box is using one. This is done in
+        order to allow using a wxCheckBox, for example, label and enable or
+        disable the box according to the state of the checkbox: if disabling
+        the box also disabled the checkbox in this situation, it would make it
+        impossible for the user to re-enable the box after disabling it, so the
+        checkbox stays enabled even if @c box->Enable(false) is called.
+
+        However with the actual behaviour, implemented in this overridden
+        method, the following code (shown using C++11 only for convenience,
+        this behaviour is not C++11-specific):
+        @code
+            auto check = new wxCheckBox(parent, wxID_ANY, "Use the box");
+            auto box = new wxStaticBox(parent, wxID_ANY, check);
+            check->Bind(wxEVT_CHECKBOX,
+                        [box](wxCommandEvent& event) {
+                            box->Enable(event.IsChecked());
+                        });
+        @endcode
+        does work as expected.
+     */
+    virtual bool Enable(bool enable = true);
 };

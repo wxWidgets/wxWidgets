@@ -31,6 +31,7 @@ public:
 
     // overridden base class virtuals
     virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool Enable(bool enable = true) wxOVERRIDE;
 
     // implementation only: this is used by wxStaticBoxSizer to account for the
     // need for extra space taken by the static box

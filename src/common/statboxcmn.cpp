@@ -78,6 +78,45 @@ void wxStaticBoxBase::WXDestroyWithoutChildren()
     delete this;
 }
 
+bool wxStaticBoxBase::Enable(bool enable)
+{
+#ifdef wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+    // We want to keep the window label enabled even if the static box is
+    // disabled because this label is often used to enable/disable the box
+    // (e.g. a checkbox or a radio button is commonly used for this purpose)
+    // and it would be impossible to re-enable the box back if disabling it
+    // also disabled the label control.
+    //
+    // Unfortunately it is _not_ enough to just disable the box and then enable
+    // the label window as it would still remain disabled under some platforms
+    // (those where wxHAS_NATIVE_ENABLED_MANAGEMENT is defined, e.g. wxGTK) for
+    // as long as its parent is disabled. So we avoid disabling the box at all
+    // in this case and only disable its children, but still pretend that the
+    // box is disabled by updating its m_isEnabled, as it would be surprising
+    // if IsEnabled() didn't return false after disabling the box, for example.
+    if ( m_labelWin )
+    {
+        if ( enable == IsThisEnabled() )
+            return false;
+
+        const wxWindowList& children = GetChildren();
+        for ( wxWindowList::const_iterator i = children.begin();
+              i != children.end();
+              ++i )
+        {
+            if ( *i != m_labelWin )
+                (*i)->Enable(enable);
+        }
+
+        m_isEnabled = enable;
+
+        return true;
+    }
+#endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+
+    return wxNavigationEnabled<wxControl>::Enable(enable);
+}
+
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
