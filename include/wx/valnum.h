@@ -50,6 +50,10 @@ public:
     // we don't need this as we do our validation on the fly here.
     virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return true; }
 
+    // Override base class method to check that the window is a text control or
+    // combobox.
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE;
+
 protected:
     wxNumValidatorBase(int style)
     {
