@@ -1,4 +1,4 @@
-# Automatically generated from build/files by update_files.py
+# Automatically generated from build/files by build/upmake
 # DO NOT MODIFY MANUALLY !
 
 set(BASE_UNIX_AND_DARWIN_SRC
