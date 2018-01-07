@@ -1782,10 +1782,10 @@ void wxWindowBase::SetValidator(const wxValidator& validator)
     if ( m_windowValidator )
         delete m_windowValidator;
 
-    m_windowValidator = (wxValidator *)validator.Clone();
+    m_windowValidator = static_cast<wxValidator *>(validator.Clone());
 
     if ( m_windowValidator )
-        m_windowValidator->SetWindow(this);
+        m_windowValidator->SetWindow(static_cast<wxWindow*>(this));
 }
 #endif // wxUSE_VALIDATORS
 
