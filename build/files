@@ -2067,7 +2067,6 @@ DFB_LOWLEVEL_HDR =
 
 OSX_LOWLEVEL_SRC =
     # Shared wxMac and wxCocoa files
-    <if cond="PLATFORM_MACOSX=='1'">
     src/osx/artmac.cpp
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
@@ -2091,12 +2090,10 @@ OSX_LOWLEVEL_SRC =
     src/osx/core/printmac.cpp
     src/osx/core/timer.cpp
     src/osx/core/utilsexc_cf.cpp
-    </if>
 
 OSX_LOWLEVEL_HDR =
 
 OSX_COMMON_SRC =
-<if cond="PLATFORM_MACOSX=='1'">
     # Common controls implementation
     src/osx/anybutton_osx.cpp
     src/osx/bmpbuttn_osx.cpp
@@ -2169,7 +2166,6 @@ OSX_COMMON_SRC =
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
-</if>
 
 # Header files like wx/osx/foo.h which include wx/osx/carbon/foo.h
 OSX_SHARED_HDR =
