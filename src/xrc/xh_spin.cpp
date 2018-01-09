@@ -18,6 +18,8 @@
 
 #include "wx/xrc/xh_spin.h"
 
+// ------------------------------------------------------------------------------------------
+
 #if wxUSE_SPINBTN
 
 #include "wx/spinbutt.h"
@@ -62,6 +64,8 @@ bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 }
 
 #endif // wxUSE_SPINBTN
+
+// ------------------------------------------------------------------------------------------
 
 #if wxUSE_SPINCTRL
 
@@ -110,5 +114,59 @@ bool wxSpinCtrlXmlHandler::CanHandle(wxXmlNode *node)
 }
 
 #endif // wxUSE_SPINCTRL
+
+// ------------------------------------------------------------------------------------------
+
+#if wxUSE_SPINCTRLDOUBLE
+
+#ifndef wxUSE_SPINCTRL
+    #include "wx/spinctrl.h"
+#endif
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDoubleXmlHandler, wxXmlResourceHandler);
+
+wxSpinCtrlDoubleXmlHandler::wxSpinCtrlDoubleXmlHandler()
+: wxXmlResourceHandler()
+{
+    XRC_ADD_STYLE(wxSP_HORIZONTAL);
+    XRC_ADD_STYLE(wxSP_VERTICAL);
+    XRC_ADD_STYLE(wxSP_ARROW_KEYS);
+    XRC_ADD_STYLE(wxSP_WRAP);
+    XRC_ADD_STYLE(wxALIGN_LEFT);
+    XRC_ADD_STYLE(wxALIGN_CENTER);
+    XRC_ADD_STYLE(wxALIGN_RIGHT);
+}
+
+wxObject *wxSpinCtrlDoubleXmlHandler::DoCreateResource()
+{
+    XRC_MAKE_INSTANCE(control, wxSpinCtrl)
+
+        control->Create(m_parentAsWindow,
+            GetID(),
+            GetText(wxT("value")),
+            GetPosition(), GetSize(),
+            GetStyle(wxT("style"), wxSP_ARROW_KEYS | wxALIGN_RIGHT),
+            GetLong(wxT("min"), DEFAULT_MIN),
+            GetLong(wxT("max"), DEFAULT_MAX),
+            GetLong(wxT("value"), DEFAULT_VALUE),
+            GetName());
+
+    const long base = GetLong(wxS("base"), 10);
+    if (base != 10)
+        control->SetBase(base);
+
+    SetupWindow(control);
+
+    return control;
+}
+
+bool wxSpinCtrlDoubleXmlHandler::CanHandle(wxXmlNode *node)
+{
+    return IsOfClass(node, wxT("wxSpinCtrlDouble"));
+}
+
+#endif // wxUSE_SPINCTRLDOUBLE
+
+// ------------------------------------------------------------------------------------------
 
 #endif // wxUSE_XRC
