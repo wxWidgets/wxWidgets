@@ -14,8 +14,6 @@
 
 #if wxUSE_XRC
 
-// ------------------------------------------------------------------------------------------
-
 #if wxUSE_SPINBTN
 
 class WXDLLIMPEXP_XRC wxSpinButtonXmlHandler : public wxXmlResourceHandler
@@ -44,12 +42,6 @@ public:
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlXmlHandler);
 };
 
-#endif // wxUSE_SPINCTRL
-
-// ------------------------------------------------------------------------------------------
-
-#if wxUSE_SPINCTRLDOUBLE
-
 class WXDLLIMPEXP_XRC wxSpinCtrlDoubleXmlHandler : public wxXmlResourceHandler
 {
 public:
@@ -60,7 +52,7 @@ public:
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDoubleXmlHandler);
 };
 
-#endif // wxUSE_SPINCTRLDOUBLE
+#endif // wxUSE_SPINCTRL
 
 // ------------------------------------------------------------------------------------------
 

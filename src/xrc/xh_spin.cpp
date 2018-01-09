@@ -24,6 +24,7 @@
 
 #include "wx/spinbutt.h"
 
+static const long DEFAULT_INC = 1;
 static const long DEFAULT_VALUE = 0;
 static const long DEFAULT_MIN = 0;
 static const long DEFAULT_MAX = 100;
@@ -113,15 +114,6 @@ bool wxSpinCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxSpinCtrl"));
 }
 
-#endif // wxUSE_SPINCTRL
-
-// ------------------------------------------------------------------------------------------
-
-#if wxUSE_SPINCTRLDOUBLE
-
-#ifndef wxUSE_SPINCTRL
-    #include "wx/spinctrl.h"
-#endif
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDoubleXmlHandler, wxXmlResourceHandler);
 
@@ -139,16 +131,17 @@ wxSpinCtrlDoubleXmlHandler::wxSpinCtrlDoubleXmlHandler()
 
 wxObject *wxSpinCtrlDoubleXmlHandler::DoCreateResource()
 {
-    XRC_MAKE_INSTANCE(control, wxSpinCtrl)
+    XRC_MAKE_INSTANCE(control, wxSpinCtrlDouble)
 
         control->Create(m_parentAsWindow,
             GetID(),
             GetText(wxT("value")),
             GetPosition(), GetSize(),
             GetStyle(wxT("style"), wxSP_ARROW_KEYS | wxALIGN_RIGHT),
-            GetLong(wxT("min"), DEFAULT_MIN),
-            GetLong(wxT("max"), DEFAULT_MAX),
-            GetLong(wxT("value"), DEFAULT_VALUE),
+            GetFloat(wxT("min"), (float)DEFAULT_MIN),
+            GetFloat(wxT("max"), (float)DEFAULT_MAX),
+            GetFloat(wxT("value"), (float)DEFAULT_VALUE),
+            GetFloat(wxT("inc"), (float)DEFAULT_INC),
             GetName());
 
     const long base = GetLong(wxS("base"), 10);
@@ -165,7 +158,7 @@ bool wxSpinCtrlDoubleXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxSpinCtrlDouble"));
 }
 
-#endif // wxUSE_SPINCTRLDOUBLE
+#endif // wxUSE_SPINCTRL
 
 // ------------------------------------------------------------------------------------------
 
