@@ -69,18 +69,23 @@ bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 
 static const float DEFAULT_INC = 1.;
 
+static void AddSpinCtrlStyles(wxXmlResourceHandler& handler)
+{
+    handler.XRC_ADD_STYLE(wxSP_HORIZONTAL);
+    handler.XRC_ADD_STYLE(wxSP_VERTICAL);
+    handler.XRC_ADD_STYLE(wxSP_ARROW_KEYS);
+    handler.XRC_ADD_STYLE(wxSP_WRAP);
+    handler.XRC_ADD_STYLE(wxALIGN_LEFT);
+    handler.XRC_ADD_STYLE(wxALIGN_CENTER);
+    handler.XRC_ADD_STYLE(wxALIGN_RIGHT);
+}
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlXmlHandler, wxXmlResourceHandler);
 
 wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler()
-: wxXmlResourceHandler()
+    : wxXmlResourceHandler()
 {
-    XRC_ADD_STYLE(wxSP_HORIZONTAL);
-    XRC_ADD_STYLE(wxSP_VERTICAL);
-    XRC_ADD_STYLE(wxSP_ARROW_KEYS);
-    XRC_ADD_STYLE(wxSP_WRAP);
-    XRC_ADD_STYLE(wxALIGN_LEFT);
-    XRC_ADD_STYLE(wxALIGN_CENTER);
-    XRC_ADD_STYLE(wxALIGN_RIGHT);
+    AddSpinCtrlStyles(*this);
 }
 
 wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
@@ -117,13 +122,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDoubleXmlHandler, wxXmlResourceHandler);
 wxSpinCtrlDoubleXmlHandler::wxSpinCtrlDoubleXmlHandler()
     : wxXmlResourceHandler()
 {
-    XRC_ADD_STYLE(wxSP_HORIZONTAL);
-    XRC_ADD_STYLE(wxSP_VERTICAL);
-    XRC_ADD_STYLE(wxSP_ARROW_KEYS);
-    XRC_ADD_STYLE(wxSP_WRAP);
-    XRC_ADD_STYLE(wxALIGN_LEFT);
-    XRC_ADD_STYLE(wxALIGN_CENTER);
-    XRC_ADD_STYLE(wxALIGN_RIGHT);
+    AddSpinCtrlStyles(*this);
 }
 
 wxObject *wxSpinCtrlDoubleXmlHandler::DoCreateResource()
