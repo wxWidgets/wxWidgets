@@ -1906,6 +1906,19 @@ wxWidgets 2.9.5, another one:
 @endTable
 
 
+@subsubsection xrc_wxspinctrldouble wxSpinCtrlDouble
+
+wxSpinCtrlDouble supports the same properties as @ref xrc_wxspinbutton but @c
+value, @c min and @a max are all of type float instead of int. There is one
+additional property:
+@beginTable
+@row3col{inc, float,
+    The amount by which the number is changed by a single arrow press.}
+@endTable
+
+This handler was added in wxWidgets 3.1.1.
+
+
 @subsubsection xrc_wxsplitterwindow wxSplitterWindow
 
 @beginTable
