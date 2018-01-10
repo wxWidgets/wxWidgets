@@ -8,10 +8,10 @@
 #############################################################################
 
 wx_add_sample(access accesstest.cpp)
-wx_add_sample(animate anitest.cpp LIBRARIES adv DATA throbber.gif hourglass.ani)
+wx_add_sample(animate anitest.cpp anitest.h LIBRARIES adv DATA throbber.gif hourglass.ani)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)
 wx_add_sample(aui auidemo.cpp LIBRARIES adv aui html NAME auidemo)
-wx_add_sample(calendar LIBRARIES adv)
+wx_add_sample(calendar RES calendar.rc LIBRARIES adv)
 wx_add_sample(caret)
 wx_add_sample(clipboard)
 wx_add_sample(collpane LIBRARIES adv)
@@ -30,20 +30,18 @@ wx_add_sample(dragimag dragimag.cpp dragimag.h RES dragimag.rc
     DATA backgrnd.png shape01.png shape02.png shape03.png)
 wx_add_sample(drawing DATA pat4.bmp pat35.bmp pat36.bmp image.bmp mask.bmp)
 wx_add_sample(erase)
-wx_add_sample(event)
+wx_add_sample(event event.cpp gestures.cpp gestures.h)
 wx_add_sample(except)
 wx_add_sample(exec)
-wx_add_sample(font)
+wx_add_sample(font DATA wxprivate.ttf)
 wx_add_sample(fswatcher)
 wx_add_sample(grid griddemo.cpp griddemo.h LIBRARIES adv)
 
 wx_list_add_prefix(HELP_DOC_FILES doc/
-    aindex.html ClassGraph.class ClassGraphPanel.class ClassLayout.class
-    down.gif dxxgifs.tex HIER.html HIERjava.html icon1.gif icon2.gif
-    index.html logo.gif NavigatorButton.class USE_HELP.html wx204.htm
-    wx34.htm wxExtHelpController.html wxhelp.map wx.htm
+    aindex.html down.gif dxxgifs.tex HIER.html icon1.gif icon2.gif index.html
+    logo.gif wx204.htm wx34.htm wxExtHelpController.html wxhelp.map wx.htm
     )
-wx_add_sample(help demo.cpp doc.h LIBRARIES html adv
+wx_add_sample(help demo.cpp LIBRARIES html adv
     DATA
     back.gif bullet.bmp contents.gif cshelp.txt doc.chm doc.cnt doc.hhc
     doc.hhk doc.hhp doc.hlp doc.hpj doc.zip forward.gif up.gif
@@ -52,7 +50,7 @@ wx_add_sample(help demo.cpp doc.h LIBRARIES html adv
     )
 wx_add_sample(htlbox LIBRARIES html)
 include(html.cmake)
-wx_add_sample(image image.cpp canvas.cpp canvas.h RES image.rc
+wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
     DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
     horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur
     horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg cursor.png)
@@ -105,7 +103,7 @@ wx_add_sample(render FOLDER render)
 wx_add_sample(render DLL renddll.cpp NAME renddll FOLDER render)
 wx_add_sample(ribbon ribbondemo.cpp LIBRARIES ribbon adv NAME ribbondemo)
 wx_add_sample(richtext LIBRARIES richtext adv html xml NAME richtextdemo)
-wx_add_sample(sashtest sashtest.cpp sashtest.h LIBRARIES adv)
+wx_add_sample(sashtest sashtest.cpp sashtest.h RES sashtest.rc LIBRARIES adv)
 wx_add_sample(scroll)
 wx_add_sample(secretstore CONSOLE DEPENDS wxUSE_SECRETSTORE)
 wx_add_sample(shaped DATA star.png)
@@ -122,7 +120,7 @@ wx_add_sample(splitter)
 wx_add_sample(statbar)
 wx_add_sample(stc stctest.cpp edit.cpp prefs.cpp edit.h defsext.h prefs.h
     DATA stctest.cpp NAME stctest LIBRARIES stc)
-wx_add_sample(svg svgtest.cpp)
+wx_add_sample(svg svgtest.cpp RES svgtest.rc)
 wx_add_sample(taborder)
 wx_add_sample(taskbar tbtest.cpp tbtest.h LIBRARIES adv DEPENDS wxUSE_TASKBARICON)
 wx_add_sample(text)
@@ -132,7 +130,7 @@ wx_add_sample(treectrl treetest.cpp treetest.h)
 wx_add_sample(treelist LIBRARIES adv)
 wx_add_sample(typetest typetest.cpp typetest.h)
 wx_add_sample(uiaction)
-wx_add_sample(validate)
+wx_add_sample(validate validate.cpp validate.h)
 wx_add_sample(vscroll vstest.cpp)
 wx_add_sample(webview LIBRARIES webview stc adv NAME webviewsample)
 # widgets Sample
@@ -210,26 +208,27 @@ wx_add_sample(xrc
     myframe.h
     custclas.h
     objrefdlg.h
-    ${XRC_RC_FILES}
+    DATA ${XRC_RC_FILES}
     LIBRARIES aui ribbon xrc html adv
     NAME xrcdemo
     )
-wx_add_sample(xti xti.cpp classlist.cpp codereadercallback.cpp LIBRARIES xml
+wx_add_sample(xti xti.cpp classlist.cpp codereadercallback.cpp
+    classlist.h codereadercallback.h LIBRARIES xml
     DEPENDS wxUSE_EXTENDED_RTTI)
 
 if(WIN32)
     # Windows only samples
 
     # DLL Sample
-    wx_add_sample(dll DLL my_dll.cpp NAME my_dll FOLDER dll
+    wx_add_sample(dll DLL my_dll.cpp my_dll.h NAME my_dll FOLDER dll
         DEFINITIONS MY_DLL_BUILDING)
     if(NOT wxBUILD_SHARED)
         # this test only makes sense with statically built wx, otherwise
         # the same copy of wx would be used
-        wx_add_sample(dll wx_exe.cpp NAME wx_exe FOLDER dll LIBRARIES my_dll)
+        wx_add_sample(dll wx_exe.cpp my_dll.h NAME wx_exe FOLDER dll LIBRARIES my_dll)
     endif()
 
-    wx_add_sample(dll sdk_exe.cpp NAME sdk_exe FOLDER dll LIBRARIES my_dll)
+    wx_add_sample(dll sdk_exe.cpp my_dll.h NAME sdk_exe FOLDER dll LIBRARIES my_dll)
     wx_add_sample(flash)
     #TODO: renable when sample is fixed
     #wx_add_sample(mfc mfctest.cpp mfctest.h resource.h stdafx.h RES mfctest.rc)
