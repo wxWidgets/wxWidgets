@@ -214,6 +214,7 @@ builtinWindowClasses =
     | wxSlider
     | wxSpinButton
     | wxSpinCtrl
+    | wxSpinCtrlDouble
     | wxSplitterWindow
     | wxSearchCtrl
     | wxStatusBar
@@ -310,6 +311,7 @@ builtinClassesNames =
     | "wxSlider"
     | "wxSpinButton"
     | "wxSpinCtrl"
+    | "wxSpinCtrlDouble"
     | "wxSplitterWindow"
     | "wxSearchCtrl"
     | "wxStatusBar"
@@ -1410,6 +1412,18 @@ wxSpinCtrl =
         [xrc:p="o"] element min   {_, t_integer }* &
         [xrc:p="o"] element max   {_, t_integer }* &
         [xrc:p="o"] element base  {_, ("10" | "16") }*
+    }
+
+
+wxSpinCtrlDouble =
+    element object {
+        attribute class { "wxSpinCtrlDouble" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element value {_, t_float }* &
+        [xrc:p="o"] element min   {_, t_float }* &
+        [xrc:p="o"] element max   {_, t_float }* &
+        [xrc:p="o"] element inc   {_, t_float}*
     }
 
 
