@@ -610,6 +610,9 @@ function(wx_add_sample name)
     set_target_properties(${target_name} PROPERTIES
         FOLDER ${folder}
         )
+    set_target_properties(${target_name} PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}"
+        )
 endfunction()
 
 # Link libraries to a sample
@@ -704,6 +707,9 @@ function(wx_add_test name)
     endif()
     wx_set_common_target_properties(${name})
     set_target_properties(${name} PROPERTIES FOLDER "Tests")
+    set_target_properties(${name} PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxSOURCE_DIR}/tests"
+        )
 
     add_test(NAME ${name}
         COMMAND ${name}
