@@ -36,18 +36,13 @@
         <srcdir>$(SRCDIR)/doc</srcdir>
         <files>
             aindex.html
-            ClassGraph.class
-            ClassGraphPanel.class
-            ClassLayout.class
             down.gif
             dxxgifs.tex
             HIER.html
-            HIERjava.html
             icon1.gif
             icon2.gif
             index.html
             logo.gif
-            NavigatorButton.class
             USE_HELP.html
             wx204.htm
             wx34.htm
