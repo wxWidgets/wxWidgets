@@ -18,10 +18,13 @@
 
 #include "wx/xrc/xh_spin.h"
 
+// ------------------------------------------------------------------------------------------
+
 #if wxUSE_SPINBTN
 
 #include "wx/spinbutt.h"
 
+static const long DEFAULT_INC = 1;
 static const long DEFAULT_VALUE = 0;
 static const long DEFAULT_MIN = 0;
 static const long DEFAULT_MAX = 100;
@@ -63,6 +66,8 @@ bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 
 #endif // wxUSE_SPINBTN
 
+// ------------------------------------------------------------------------------------------
+
 #if wxUSE_SPINCTRL
 
 #include "wx/spinctrl.h"
@@ -96,7 +101,7 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
                     GetName());
 
     const long base = GetLong(wxS("base"), 10);
-    if ( base != 10 )
+    if (base != 10)
         control->SetBase(base);
 
     SetupWindow(control);
@@ -109,6 +114,48 @@ bool wxSpinCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxSpinCtrl"));
 }
 
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDoubleXmlHandler, wxXmlResourceHandler);
+
+wxSpinCtrlDoubleXmlHandler::wxSpinCtrlDoubleXmlHandler()
+: wxXmlResourceHandler()
+{
+    XRC_ADD_STYLE(wxSP_HORIZONTAL);
+    XRC_ADD_STYLE(wxSP_VERTICAL);
+    XRC_ADD_STYLE(wxSP_ARROW_KEYS);
+    XRC_ADD_STYLE(wxSP_WRAP);
+    XRC_ADD_STYLE(wxALIGN_LEFT);
+    XRC_ADD_STYLE(wxALIGN_CENTER);
+    XRC_ADD_STYLE(wxALIGN_RIGHT);
+}
+
+wxObject *wxSpinCtrlDoubleXmlHandler::DoCreateResource()
+{
+    XRC_MAKE_INSTANCE(control, wxSpinCtrlDouble)
+
+        control->Create(m_parentAsWindow,
+            GetID(),
+            GetText(wxT("value")),
+            GetPosition(), GetSize(),
+            GetStyle(wxT("style"), wxSP_ARROW_KEYS | wxALIGN_RIGHT),
+            GetFloat(wxT("min"), (float)DEFAULT_MIN),
+            GetFloat(wxT("max"), (float)DEFAULT_MAX),
+            GetFloat(wxT("value"), (float)DEFAULT_VALUE),
+            GetFloat(wxT("inc"), (float)DEFAULT_INC),
+            GetName());
+
+    SetupWindow(control);
+
+    return control;
+}
+
+bool wxSpinCtrlDoubleXmlHandler::CanHandle(wxXmlNode *node)
+{
+    return IsOfClass(node, wxT("wxSpinCtrlDouble"));
+}
+
 #endif // wxUSE_SPINCTRL
+
+// ------------------------------------------------------------------------------------------
 
 #endif // wxUSE_XRC
