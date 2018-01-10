@@ -574,7 +574,7 @@ function(wx_add_sample name)
         foreach(data_file ${SAMPLE_DATA})
             list(APPEND cmds COMMAND ${CMAKE_COMMAND}
                 -E copy ${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/${data_file}
-                ${wxOUTPUT_DIR}/${data_file})
+                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_file})
         endforeach()
         add_custom_command(
             TARGET ${target_name} ${cmds}
