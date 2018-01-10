@@ -175,6 +175,7 @@ function(wx_set_target_properties target_name is_base)
             _CRT_SECURE_NO_DEPRECATE=1
             _CRT_NON_CONFORMING_SWPRINTFS=1
             _SCL_SECURE_NO_WARNINGS=1
+            _WINSOCK_DEPRECATED_NO_WARNINGS=1
             )
     endif()
 
@@ -381,7 +382,10 @@ function(wx_set_builtin_target_properties target_name)
         # standard C functions in the 3rd party libraries (these warnings
         # are only given by VC8+ but it's simpler to just always define
         # this symbol which disables them, even for previous VC versions)
-        target_compile_definitions(${target_name} PRIVATE _CRT_SECURE_NO_WARNINGS)
+        target_compile_definitions(${target_name} PRIVATE
+            _CRT_SECURE_NO_DEPRECATE=1
+            _SCL_SECURE_NO_WARNINGS=1
+        )
     endif()
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
