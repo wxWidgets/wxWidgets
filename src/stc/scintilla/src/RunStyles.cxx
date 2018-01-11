@@ -4,13 +4,16 @@
 // Copyright 1998-2007 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
+#include <cstdarg>
 
 #include <stdexcept>
+#include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "Platform.h"
 
@@ -37,7 +40,7 @@ int RunStyles::RunFromPosition(int position) const {
 // If there is no run boundary at position, insert one continuing style.
 int RunStyles::SplitRun(int position) {
 	int run = RunFromPosition(position);
-	int posRun = starts->PositionFromPartition(run);
+	const int posRun = starts->PositionFromPartition(run);
 	if (posRun < position) {
 		int runStyle = ValueAt(position);
 		run++;
@@ -69,16 +72,12 @@ void RunStyles::RemoveRunIfSameAsPrevious(int run) {
 }
 
 RunStyles::RunStyles() {
-	starts = new Partitioning(8);
-	styles = new SplitVector<int>();
+	starts.reset(new Partitioning(8));
+	styles.reset(new SplitVector<int>());
 	styles->InsertValue(0, 2, 0);
 }
 
 RunStyles::~RunStyles() {
-	delete starts;
-	starts = NULL;
-	delete styles;
-	styles = NULL;
 }
 
 int RunStyles::Length() const {
@@ -90,12 +89,12 @@ int RunStyles::ValueAt(int position) const {
 }
 
 int RunStyles::FindNextChange(int position, int end) const {
-	int run = starts->PartitionFromPosition(position);
+	const int run = starts->PartitionFromPosition(position);
 	if (run < starts->Partitions()) {
-		int runChange = starts->PositionFromPartition(run);
+		const int runChange = starts->PositionFromPartition(run);
 		if (runChange > position)
 			return runChange;
-		int nextChange = starts->PositionFromPartition(run + 1);
+		const int nextChange = starts->PositionFromPartition(run + 1);
 		if (nextChange > position) {
 			return nextChange;
 		} else if (position < end) {
@@ -199,12 +198,8 @@ void RunStyles::InsertSpace(int position, int insertLength) {
 }
 
 void RunStyles::DeleteAll() {
-	delete starts;
-	starts = NULL;
-	delete styles;
-	styles = NULL;
-	starts = new Partitioning(8);
-	styles = new SplitVector<int>();
+	starts.reset(new Partitioning(8));
+	styles.reset(new SplitVector<int>());
 	styles->InsertValue(0, 2, 0);
 }
 
@@ -272,7 +267,7 @@ void RunStyles::Check() const {
 	}
 	int start=0;
 	while (start < Length()) {
-		int end = EndRun(start);
+		const int end = EndRun(start);
 		if (start >= end) {
 			throw std::runtime_error("RunStyles: Partition is 0 length.");
 		}

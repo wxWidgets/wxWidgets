@@ -37,7 +37,7 @@ static inline bool isassignchar(unsigned char ch) {
 }
 
 static void ColourisePropsLine(
-    char *lineBuffer,
+	const char *lineBuffer,
     Sci_PositionU lengthLine,
     Sci_PositionU startLine,
     Sci_PositionU endPos,
@@ -91,7 +91,7 @@ static void ColourisePropsDoc(Sci_PositionU startPos, Sci_Position length, int, 
 	//	For properties files, set to 0 to style all lines that start with whitespace in the default style.
 	//	This is not suitable for SciTE .properties files which use indentation for flow control but
 	//	can be used for RFC2822 text where indentation is used for continuation lines.
-	bool allowInitialSpaces = styler.GetPropertyInt("lexer.props.allow.initial.spaces", 1) != 0;
+	const bool allowInitialSpaces = styler.GetPropertyInt("lexer.props.allow.initial.spaces", 1) != 0;
 
 	for (Sci_PositionU i = startPos; i < startPos + length; i++) {
 		lineBuffer[linePos++] = styler[i];
@@ -111,9 +111,9 @@ static void ColourisePropsDoc(Sci_PositionU startPos, Sci_Position length, int, 
 // adaption by ksc, using the "} else {" trick of 1.53
 // 030721
 static void FoldPropsDoc(Sci_PositionU startPos, Sci_Position length, int, WordList *[], Accessor &styler) {
-	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+	const bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 
-	Sci_PositionU endPos = startPos + length;
+	const Sci_PositionU endPos = startPos + length;
 	int visibleChars = 0;
 	Sci_Position lineCurrent = styler.GetLine(startPos);
 
@@ -123,12 +123,12 @@ static void FoldPropsDoc(Sci_PositionU startPos, Sci_Position length, int, WordL
 	int lev;
 
 	for (Sci_PositionU i = startPos; i < endPos; i++) {
-		char ch = chNext;
+		const char ch = chNext;
 		chNext = styler[i+1];
 
-		int style = styleNext;
+		const int style = styleNext;
 		styleNext = styler.StyleAt(i + 1);
-		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
+		const bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 
 		if (style == SCE_PROPS_SECTION) {
 			headerPoint = true;
@@ -138,7 +138,7 @@ static void FoldPropsDoc(Sci_PositionU startPos, Sci_Position length, int, WordL
 			lev = SC_FOLDLEVELBASE;
 
 			if (lineCurrent > 0) {
-				int levelPrevious = styler.LevelAt(lineCurrent - 1);
+				const int levelPrevious = styler.LevelAt(lineCurrent - 1);
 
 				if (levelPrevious & SC_FOLDLEVELHEADERFLAG) {
 					lev = SC_FOLDLEVELBASE + 1;
@@ -169,7 +169,7 @@ static void FoldPropsDoc(Sci_PositionU startPos, Sci_Position length, int, WordL
 	}
 
 	if (lineCurrent > 0) {
-		int levelPrevious = styler.LevelAt(lineCurrent - 1);
+		const int levelPrevious = styler.LevelAt(lineCurrent - 1);
 		if (levelPrevious & SC_FOLDLEVELHEADERFLAG) {
 			lev = SC_FOLDLEVELBASE + 1;
 		} else {

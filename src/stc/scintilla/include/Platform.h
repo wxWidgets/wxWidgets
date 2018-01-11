@@ -78,7 +78,7 @@ namespace Scintilla {
 typedef float XYPOSITION;
 typedef double XYACCUMULATOR;
 inline int RoundXYPosition(XYPOSITION xyPos) {
-	return int(xyPos + 0.5);
+	return static_cast<int>(xyPos + 0.5);
 }
 
 // Underlying the implementation of the platform classes are platform specific types.
@@ -136,7 +136,7 @@ public:
 
 	// Other automatically defined methods (assignment, copy constructor, destructor) are fine
 
-	bool operator==(PRectangle &rc) const {
+	bool operator==(const PRectangle &rc) const {
 		return (rc.left == left) && (rc.right == right) &&
 			(rc.top == top) && (rc.bottom == bottom);
 	}
@@ -363,6 +363,14 @@ public:
 	virtual ~Window();
 	Window &operator=(WindowID wid_) {
 		wid = wid_;
+		cursorLast = cursorInvalid;
+		return *this;
+	}
+	Window &operator=(const Window &other) {
+		if (this != &other) {
+			wid = other.wid;
+			cursorLast = other.cursorLast;
+		}
 		return *this;
 	}
 	WindowID GetID() const { return wid; }

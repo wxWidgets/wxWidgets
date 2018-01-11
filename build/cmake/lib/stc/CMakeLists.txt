@@ -56,6 +56,7 @@ wx_add_builtin_library(wxscintilla
     src/stc/scintilla/lexers/LexHaskell.cxx
     src/stc/scintilla/lexers/LexHex.cxx
     src/stc/scintilla/lexers/LexHTML.cxx
+    src/stc/scintilla/lexers/LexIndent.cxx
     src/stc/scintilla/lexers/LexInno.cxx
     src/stc/scintilla/lexers/LexJSON.cxx
     src/stc/scintilla/lexers/LexKix.cxx

@@ -6,11 +6,8 @@
 // Copyright 1998-2010 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <assert.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <cassert>
 
 #include "CharacterSet.h"
 
@@ -25,8 +22,8 @@ namespace Scintilla {
 int CompareCaseInsensitive(const char *a, const char *b) {
 	while (*a && *b) {
 		if (*a != *b) {
-			char upperA = static_cast<char>(MakeUpperCase(*a));
-			char upperB = static_cast<char>(MakeUpperCase(*b));
+			const char upperA = static_cast<char>(MakeUpperCase(*a));
+			const char upperB = static_cast<char>(MakeUpperCase(*b));
 			if (upperA != upperB)
 				return upperA - upperB;
 		}
@@ -40,8 +37,8 @@ int CompareCaseInsensitive(const char *a, const char *b) {
 int CompareNCaseInsensitive(const char *a, const char *b, size_t len) {
 	while (*a && *b && len) {
 		if (*a != *b) {
-			char upperA = static_cast<char>(MakeUpperCase(*a));
-			char upperB = static_cast<char>(MakeUpperCase(*b));
+			const char upperA = static_cast<char>(MakeUpperCase(*a));
+			const char upperB = static_cast<char>(MakeUpperCase(*b));
 			if (upperA != upperB)
 				return upperA - upperB;
 		}

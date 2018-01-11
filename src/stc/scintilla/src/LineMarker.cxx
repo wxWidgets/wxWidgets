@@ -5,12 +5,13 @@
 // Copyright 1998-2011 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 
 #include <stdexcept>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "Platform.h"
 
@@ -25,20 +26,17 @@ using namespace Scintilla;
 #endif
 
 void LineMarker::SetXPM(const char *textForm) {
-	delete pxpm;
-	pxpm = new XPM(textForm);
+	pxpm.reset(new XPM(textForm));
 	markType = SC_MARK_PIXMAP;
 }
 
 void LineMarker::SetXPM(const char *const *linesForm) {
-	delete pxpm;
-	pxpm = new XPM(linesForm);
+	pxpm.reset(new XPM(linesForm));
 	markType = SC_MARK_PIXMAP;
 }
 
 void LineMarker::SetRGBAImage(Point sizeRGBAImage, float scale, const unsigned char *pixelsRGBAImage) {
-	delete image;
-	image = new RGBAImage(static_cast<int>(sizeRGBAImage.x), static_cast<int>(sizeRGBAImage.y), scale, pixelsRGBAImage);
+	image.reset(new RGBAImage(static_cast<int>(sizeRGBAImage.x), static_cast<int>(sizeRGBAImage.y), scale, pixelsRGBAImage));
 	markType = SC_MARK_RGBAIMAGE;
 }
 
@@ -73,7 +71,7 @@ static void DrawMinus(Surface *surface, int centreX, int centreY, int armSize, C
 }
 
 void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharacter, typeOfFold tFold, int marginStyle) const {
-	if (customDraw != NULL) {
+	if (customDraw) {
 		customDraw(surface, rcWhole, fontForCharacter, tFold, marginStyle, this);
 		return;
 	}
@@ -122,11 +120,11 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 	int minDim = Platform::Minimum(static_cast<int>(rc.Width()), static_cast<int>(rc.Height()));
 	minDim--;	// Ensure does not go beyond edge
 	int centreX = static_cast<int>(floor((rc.right + rc.left) / 2.0));
-	int centreY = static_cast<int>(floor((rc.bottom + rc.top) / 2.0));
-	int dimOn2 = minDim / 2;
-	int dimOn4 = minDim / 4;
+	const int centreY = static_cast<int>(floor((rc.bottom + rc.top) / 2.0));
+	const int dimOn2 = minDim / 2;
+	const int dimOn4 = minDim / 4;
 	int blobSize = dimOn2-1;
-	int armSize = dimOn2-2;
+	const int armSize = dimOn2-2;
 	if (marginStyle == SC_MARGIN_NUMBER || marginStyle == SC_MARGIN_TEXT || marginStyle == SC_MARGIN_RTEXT) {
 		// On textual margins move marker to the left to try to avoid overlapping the text
 		centreX = static_cast<int>(rc.left) + dimOn2 + 1;
@@ -384,7 +382,7 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 		rcLeft.right = rcLeft.left + 4;
 		surface->FillRectangle(rcLeft, back);
 	} else if (markType == SC_MARK_BOOKMARK) {
-		int halfHeight = minDim / 3;
+		const int halfHeight = minDim / 3;
 		Point pts[] = {
 			Point::FromInts(static_cast<int>(rc.left), centreY-halfHeight),
 			Point::FromInts(static_cast<int>(rc.right) - 3, centreY - halfHeight),

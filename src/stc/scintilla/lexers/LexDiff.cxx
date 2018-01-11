@@ -51,8 +51,10 @@ static void ColouriseDiffLine(char *lineBuffer, Sci_Position endLine, Accessor &
 			styler.ColourTo(endLine, SCE_DIFF_POSITION);
 		else if (lineBuffer[3] == '\r' || lineBuffer[3] == '\n')
 			styler.ColourTo(endLine, SCE_DIFF_POSITION);
-		else
+		else if (lineBuffer[3] == ' ')
 			styler.ColourTo(endLine, SCE_DIFF_HEADER);
+		else
+			styler.ColourTo(endLine, SCE_DIFF_DELETED);
 	} else if (0 == strncmp(lineBuffer, "+++ ", 4)) {
 		// I don't know of any diff where "+++ " is a position marker, but for
 		// consistency, do the same as with "--- " and "*** ".
@@ -124,7 +126,7 @@ static void FoldDiffDoc(Sci_PositionU startPos, Sci_Position length, int, WordLi
 	int nextLevel;
 
 	do {
-		int lineType = styler.StyleAt(curLineStart);
+		const int lineType = styler.StyleAt(curLineStart);
 		if (lineType == SCE_DIFF_COMMAND)
 			nextLevel = SC_FOLDLEVELBASE | SC_FOLDLEVELHEADERFLAG;
 		else if (lineType == SCE_DIFF_HEADER)

@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "Platform.h"
 
@@ -21,7 +22,8 @@ using namespace Scintilla;
 
 static PRectangle PixelGridAlign(const PRectangle &rc) {
 	// Move left and right side to nearest pixel to avoid blurry visuals
-	return PRectangle::FromInts(int(rc.left + 0.5), int(rc.top), int(rc.right + 0.5), int(rc.bottom));
+	return PRectangle::FromInts(static_cast<int>(rc.left + 0.5), static_cast<int>(rc.top),
+		static_cast<int>(rc.right + 0.5), static_cast<int>(rc.bottom));
 }
 
 void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine, const PRectangle &rcCharacter, DrawState drawState, int value) const {
@@ -35,8 +37,8 @@ void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &r
 	surface->PenColour(sacDraw.fore);
 	int ymid = static_cast<int>(rc.bottom + rc.top) / 2;
 	if (sacDraw.style == INDIC_SQUIGGLE) {
-		int x = int(rc.left+0.5);
-		int xLast = int(rc.right+0.5);
+		int x = static_cast<int>(rc.left+0.5);
+		const int xLast = static_cast<int>(rc.right+0.5);
 		int y = 0;
 		surface->MoveTo(x, static_cast<int>(rc.top) + y);
 		while (x < xLast) {

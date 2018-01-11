@@ -24,7 +24,7 @@ protected:
 public:
 	CaseFolderTable();
 	virtual ~CaseFolderTable();
-	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed);
+	size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) override;
 	void SetTranslation(char ch, char chTranslation);
 	void StandardASCII();
 };
@@ -35,7 +35,7 @@ class CaseFolderUnicode : public CaseFolderTable {
 	ICaseConverter *converter;
 public:
 	CaseFolderUnicode();
-	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed);
+	size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) override;
 };
 
 #ifdef SCI_NAMESPACE

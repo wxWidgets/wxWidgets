@@ -22,31 +22,31 @@ public:
 	int mask;
 	bool sensitive;
 	int cursor;
-	MarginStyle();
+	MarginStyle(int style_= SC_MARGIN_SYMBOL, int width_=0, int mask_=0);
 };
 
 /**
  */
 class FontNames {
 private:
-	std::vector<char *> names;
-
-	// Private so FontNames objects can not be copied
-	FontNames(const FontNames &);
+	std::vector<UniqueString> names;
 public:
 	FontNames();
+	// FontNames objects can not be copied.
+	FontNames(const FontNames &) = delete;
+	FontNames &operator=(const FontNames &) = delete;
 	~FontNames();
 	void Clear();
 	const char *Save(const char *name);
 };
 
 class FontRealised : public FontMeasurements {
-	// Private so FontRealised objects can not be copied
-	FontRealised(const FontRealised &);
-	FontRealised &operator=(const FontRealised &);
 public:
 	Font font;
 	FontRealised();
+	// FontRealised objects can not be copied.
+	FontRealised(const FontRealised &) = delete;
+	FontRealised &operator=(const FontRealised &) = delete;
 	virtual ~FontRealised();
 	void Realise(Surface &surface, int zoomLevel, int technology, const FontSpecification &fs);
 };
@@ -57,7 +57,7 @@ enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterInden
 
 enum TabDrawMode {tdLongArrow=0, tdStrikeOut=1};
 
-typedef std::map<FontSpecification, FontRealised *> FontMap;
+typedef std::map<FontSpecification, std::unique_ptr<FontRealised>> FontMap;
 
 enum WrapMode { eWrapNone, eWrapWord, eWrapChar, eWrapWhitespace };
 
@@ -94,11 +94,11 @@ class ViewStyle {
 public:
 	std::vector<Style> styles;
 	size_t nextExtendedStyle;
-	LineMarker markers[MARKER_MAX + 1];
+	std::vector<LineMarker> markers;
 	int largestMarkerHeight;
-	Indicator indicators[INDIC_MAX + 1];
-	unsigned int indicatorsDynamic;
-	unsigned int indicatorsSetFore;
+	std::vector<Indicator> indicators;
+	bool indicatorsDynamic;
+	bool indicatorsSetFore;
 	int technology;
 	int lineHeight;
 	int lineOverlap;
@@ -141,6 +141,7 @@ public:
 	bool viewEOL;
 	ColourDesired caretcolour;
 	ColourDesired additionalCaretColour;
+	int caretLineFrame;
 	bool showCaretLineBackground;
 	bool alwaysShowCaretLineBackground;
 	ColourDesired caretLineBackground;
@@ -175,6 +176,8 @@ public:
 
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
+	// Can only be copied through copy constructor which ensures font names initialised correctly
+	ViewStyle &operator=(const ViewStyle &) = delete;
 	~ViewStyle();
 	void CalculateMarginWidthAndMask();
 	void Init(size_t stylesSize_=256);
@@ -190,6 +193,8 @@ public:
 	int MarginFromLocation(Point pt) const;
 	bool ValidStyle(size_t styleIndex) const;
 	void CalcLargestMarkerHeight();
+	int GetFrameWidth() const;
+	bool IsLineFrameOpaque(bool caretActive, bool lineContainsCaret) const;
 	ColourOptional Background(int marksOfLine, bool caretActive, bool lineContainsCaret) const;
 	bool SelectionBackgroundDrawn() const;
 	bool WhitespaceBackgroundDrawn() const;
@@ -208,8 +213,6 @@ private:
 	void CreateAndAddFont(const FontSpecification &fs);
 	FontRealised *Find(const FontSpecification &fs);
 	void FindMaxAscentDescent();
-	// Private so can only be copied through copy constructor which ensures font names initialised correctly
-	ViewStyle &operator=(const ViewStyle &);
 };
 
 #ifdef SCI_NAMESPACE

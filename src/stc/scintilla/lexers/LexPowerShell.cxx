@@ -33,7 +33,7 @@ static inline bool IsAWordChar(int ch) {
 }
 
 static void ColourisePowerShellDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
-                           WordList *keywordlists[], Accessor &styler) {
+				   WordList *keywordlists[], Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
 	WordList &keywords2 = *keywordlists[1];
@@ -53,8 +53,8 @@ static void ColourisePowerShellDoc(Sci_PositionU startPos, Sci_Position length, 
 				sc.SetState(SCE_POWERSHELL_DEFAULT);
 			}
 		} else if (sc.state == SCE_POWERSHELL_COMMENTSTREAM) {
-			if(sc.atLineStart) {
-				while(IsASpaceOrTab(sc.ch)) {
+			if (sc.atLineStart) {
+				while (IsASpaceOrTab(sc.ch)) {
 					sc.Forward();
 				}
 				if (sc.ch == '.' && IsAWordChar(sc.chNext)) {
@@ -65,7 +65,7 @@ static void ColourisePowerShellDoc(Sci_PositionU startPos, Sci_Position length, 
 				sc.ForwardSetState(SCE_POWERSHELL_DEFAULT);
 			}
 		} else if (sc.state == SCE_POWERSHELL_COMMENTDOCKEYWORD) {
-			if(!IsAWordChar(sc.ch)) {
+			if (!IsAWordChar(sc.ch)) {
 				char s[100];
 				sc.GetCurrentLowered(s, sizeof(s));
 				if (!keywords6.InList(s + 1)) {
@@ -77,11 +77,15 @@ static void ColourisePowerShellDoc(Sci_PositionU startPos, Sci_Position length, 
 			// This is a doubles quotes string
 			if (sc.ch == '\"') {
 				sc.ForwardSetState(SCE_POWERSHELL_DEFAULT);
+			} else if (sc.ch == '`') {
+				sc.Forward(); // skip next escaped character
 			}
 		} else if (sc.state == SCE_POWERSHELL_CHARACTER) {
 			// This is a single quote string
 			if (sc.ch == '\'') {
 				sc.ForwardSetState(SCE_POWERSHELL_DEFAULT);
+			} else if (sc.ch == '`') {
+				sc.Forward(); // skip next escaped character
 			}
 		} else if (sc.state == SCE_POWERSHELL_HERE_STRING) {
 			// This is a doubles quotes here-string
@@ -161,7 +165,7 @@ static void ColourisePowerShellDoc(Sci_PositionU startPos, Sci_Position length, 
 // level store to make it easy to pick up with each increment
 // and to make it possible to fiddle the current level for "} else {".
 static void FoldPowerShellDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
-                           WordList *[], Accessor &styler) {
+			      WordList *[], Accessor &styler) {
 	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	bool foldAtElse = styler.GetPropertyInt("fold.at.else", 0) != 0;
@@ -236,7 +240,7 @@ static void FoldPowerShellDoc(Sci_PositionU startPos, Sci_Position length, int i
 	}
 }
 
-static const char * const powershellWordLists[] = {
+static const char *const powershellWordLists[] = {
 	"Commands",
 	"Cmdlets",
 	"Aliases",

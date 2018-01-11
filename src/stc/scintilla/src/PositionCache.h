@@ -47,10 +47,10 @@ enum PointEnd {
 class LineLayout {
 private:
 	friend class LineLayoutCache;
-	int *lineStarts;
+	std::unique_ptr<int []>lineStarts;
 	int lenLineStarts;
 	/// Drawing is only performed for @a maxLineLength characters on each line.
-	int lineNumber;
+	Sci::Line lineNumber;
 	bool inCache;
 public:
 	enum { wrapWidthInfinite = 0x7ffffff };
@@ -63,9 +63,9 @@ public:
 	bool highlightColumn;
 	bool containsCaret;
 	int edgeColumn;
-	char *chars;
-	unsigned char *styles;
-	XYPOSITION *positions;
+	std::unique_ptr<char[]> chars;
+	std::unique_ptr<unsigned char[]> styles;
+	std::unique_ptr<XYPOSITION[]> positions;
 	char bracePreviousStyles[2];
 
 	// Hotspot support
@@ -77,18 +77,21 @@ public:
 	XYPOSITION wrapIndent; // In pixels
 
 	explicit LineLayout(int maxLineLength_);
+	// Deleted so LineLayout objects can not be copied.
+	LineLayout(const LineLayout &) = delete;
+	void operator=(const LineLayout &) = delete;
 	virtual ~LineLayout();
 	void Resize(int maxLineLength_);
 	void Free();
 	void Invalidate(validLevel validity_);
 	int LineStart(int line) const;
 	int LineLastVisible(int line) const;
-	Range SubLineRange(int line) const;
+	Range SubLineRange(int subLine) const;
 	bool InLine(int offset, int line) const;
 	void SetLineStart(int line, int start);
-	void SetBracesHighlight(Range rangeLine, const Position braces[],
+	void SetBracesHighlight(Range rangeLine, const Sci::Position braces[],
 		char bracesMatchStyle, int xHighlight, bool ignoreStyle);
-	void RestoreBracesHighlight(Range rangeLine, const Position braces[], bool ignoreStyle);
+	void RestoreBracesHighlight(Range rangeLine, const Sci::Position braces[], bool ignoreStyle);
 	int FindBefore(XYPOSITION x, int lower, int upper) const;
 	int FindPositionFromX(XYPOSITION x, Range range, bool charPosition) const;
 	Point PointFromPosition(int posInLine, int lineHeight, PointEnd pe) const;
@@ -99,14 +102,17 @@ public:
  */
 class LineLayoutCache {
 	int level;
-	std::vector<LineLayout *>cache;
+	std::vector<std::unique_ptr<LineLayout>>cache;
 	bool allInvalidated;
 	int styleClock;
 	int useCount;
 	void Allocate(size_t length_);
-	void AllocateForLevel(int linesOnScreen, int linesInDoc);
+	void AllocateForLevel(Sci::Line linesOnScreen, Sci::Line linesInDoc);
 public:
 	LineLayoutCache();
+	// Deleted so LineLayoutCache objects can not be copied.
+	LineLayoutCache(const LineLayoutCache &) = delete;
+	void operator=(const LineLayoutCache &) = delete;
 	virtual ~LineLayoutCache();
 	void Deallocate();
 	enum {
@@ -118,8 +124,8 @@ public:
 	void Invalidate(LineLayout::validLevel validity_);
 	void SetLevel(int level_);
 	int GetLevel() const { return level; }
-	LineLayout *Retrieve(int lineNumber, int lineCaret, int maxChars, int styleClock_,
-		int linesOnScreen, int linesInDoc);
+	LineLayout *Retrieve(Sci::Line lineNumber, Sci::Line lineCaret, int maxChars, int styleClock_,
+		Sci::Line linesOnScreen, Sci::Line linesInDoc);
 	void Dispose(LineLayout *ll);
 };
 
@@ -127,14 +133,18 @@ class PositionCacheEntry {
 	unsigned int styleNumber:8;
 	unsigned int len:8;
 	unsigned int clock:16;
-	XYPOSITION *positions;
+	std::unique_ptr<XYPOSITION []> positions;
 public:
 	PositionCacheEntry();
+	// Copy constructor not currently used, but needed for being element in std::vector.
+	PositionCacheEntry(const PositionCacheEntry &);
+	// Deleted so PositionCacheEntry objects can not be assigned.
+	void operator=(const PositionCacheEntry &) = delete;
 	~PositionCacheEntry();
 	void Set(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_, unsigned int clock_);
 	void Clear();
 	bool Retrieve(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_) const;
-	static unsigned int Hash(unsigned int styleNumber_, const char *s, unsigned int len);
+	static unsigned int Hash(unsigned int styleNumber_, const char *s, unsigned int len_);
 	bool NewerThan(const PositionCacheEntry &other) const;
 	void ResetClock();
 };
@@ -176,7 +186,7 @@ struct TextSegment {
 class BreakFinder {
 	const LineLayout *ll;
 	Range lineRange;
-	int posLineStart;
+	Sci::Position posLineStart;
 	int nextBreak;
 	std::vector<int> selAndEdge;
 	unsigned int saeCurrentPos;
@@ -186,16 +196,17 @@ class BreakFinder {
 	EncodingFamily encodingFamily;
 	const SpecialRepresentations *preprs;
 	void Insert(int val);
-	// Private so BreakFinder objects can not be copied
-	BreakFinder(const BreakFinder &);
 public:
 	// If a whole run is longer than lengthStartSubdivision then subdivide
 	// into smaller runs at spaces or punctuation.
 	enum { lengthStartSubdivision = 300 };
 	// Try to make each subdivided run lengthEachSubdivision or shorter.
 	enum { lengthEachSubdivision = 100 };
-	BreakFinder(const LineLayout *ll_, const Selection *psel, Range rangeLine_, int posLineStart_,
+	BreakFinder(const LineLayout *ll_, const Selection *psel, Range lineRange_, Sci::Position posLineStart_,
 		int xStart, bool breakForSelection, const Document *pdoc_, const SpecialRepresentations *preprs_, const ViewStyle *pvsDraw);
+	// Deleted so BreakFinder objects can not be copied.
+	BreakFinder(const BreakFinder &) = delete;
+	void operator=(const BreakFinder &) = delete;
 	~BreakFinder();
 	TextSegment Next();
 	bool More() const;
@@ -205,16 +216,17 @@ class PositionCache {
 	std::vector<PositionCacheEntry> pces;
 	unsigned int clock;
 	bool allClear;
-	// Private so PositionCache objects can not be copied
-	PositionCache(const PositionCache &);
 public:
 	PositionCache();
+	// Deleted so PositionCache objects can not be copied.
+	PositionCache(const PositionCache &) = delete;
+	void operator=(const PositionCache &) = delete;
 	~PositionCache();
 	void Clear();
 	void SetSize(size_t size_);
 	size_t GetSize() const { return pces.size(); }
 	void MeasureWidths(Surface *surface, const ViewStyle &vstyle, unsigned int styleNumber,
-		const char *s, unsigned int len, XYPOSITION *positions, Document *pdoc);
+		const char *s, unsigned int len, XYPOSITION *positions, const Document *pdoc);
 };
 
 inline bool IsSpaceOrTab(int ch) {

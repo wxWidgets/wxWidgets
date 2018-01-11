@@ -5,11 +5,9 @@
 // Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <cassert>
+#include <cstring>
 
 #include <algorithm>
 
@@ -29,10 +27,7 @@ static char **ArrayFromWordList(char *wordlist, int *len, bool onlyLineEnds = fa
 	int words = 0;
 	// For rapid determination of whether a character is a separator, build
 	// a look up table.
-	bool wordSeparator[256];
-	for (int i=0; i<256; i++) {
-		wordSeparator[i] = false;
-	}
+	bool wordSeparator[256] = {};	// Initialise all to false.
 	wordSeparator[static_cast<unsigned int>('\r')] = true;
 	wordSeparator[static_cast<unsigned int>('\n')] = true;
 	if (!onlyLineEnds) {
@@ -40,7 +35,7 @@ static char **ArrayFromWordList(char *wordlist, int *len, bool onlyLineEnds = fa
 		wordSeparator[static_cast<unsigned int>('\t')] = true;
 	}
 	for (int j = 0; wordlist[j]; j++) {
-		int curr = static_cast<unsigned char>(wordlist[j]);
+		const int curr = static_cast<unsigned char>(wordlist[j]);
 		if (!wordSeparator[curr] && wordSeparator[prev])
 			words++;
 		prev = curr;
@@ -62,6 +57,7 @@ static char **ArrayFromWordList(char *wordlist, int *len, bool onlyLineEnds = fa
 			prev = wordlist[k];
 		}
 	}
+	assert(wordsStore < (words + 1));
 	keywords[wordsStore] = &wordlist[slen];
 	*len = wordsStore;
 	return keywords;
@@ -118,7 +114,7 @@ static int cmpWords(const void *a, const void *b) {
 }
 
 static void SortWordList(char **words, unsigned int len) {
-	qsort(reinterpret_cast<void *>(words), len, sizeof(*words), cmpWords);
+	qsort(static_cast<void *>(words), len, sizeof(*words), cmpWords);
 }
 
 #endif
@@ -134,8 +130,7 @@ void WordList::Set(const char *s) {
 #else
 	SortWordList(words, len);
 #endif
-	for (unsigned int k = 0; k < ELEMENTS(starts); k++)
-		starts[k] = -1;
+	std::fill(starts, starts + ELEMENTS(starts), -1);
 	for (int l = len - 1; l >= 0; l--) {
 		unsigned char indexChar = words[l][0];
 		starts[indexChar] = l;
@@ -150,7 +145,7 @@ void WordList::Set(const char *s) {
 bool WordList::InList(const char *s) const {
 	if (0 == words)
 		return false;
-	unsigned char firstChar = s[0];
+	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
 	if (j >= 0) {
 		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
@@ -192,7 +187,7 @@ bool WordList::InList(const char *s) const {
 bool WordList::InListAbbreviated(const char *s, const char marker) const {
 	if (0 == words)
 		return false;
-	unsigned char firstChar = s[0];
+	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
 	if (j >= 0) {
 		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
@@ -246,7 +241,7 @@ bool WordList::InListAbbreviated(const char *s, const char marker) const {
 bool WordList::InListAbridged(const char *s, const char marker) const {
 	if (0 == words)
 		return false;
-	unsigned char firstChar = s[0];
+	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
 	if (j >= 0) {
 		while (static_cast<unsigned char>(words[j][0]) == firstChar) {

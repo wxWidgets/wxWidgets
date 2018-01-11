@@ -56,33 +56,33 @@ class LexerDMIS : public ILexer
 		LexerDMIS(void);
 		virtual ~LexerDMIS(void);
 
-		int SCI_METHOD Version() const {
+		int SCI_METHOD Version() const override {
 			return lvOriginal;
 		}
 
-		void SCI_METHOD Release() {
+		void SCI_METHOD Release() override {
 			delete this;
 		}
 
-		const char * SCI_METHOD PropertyNames() {
+		const char * SCI_METHOD PropertyNames() override {
 			return NULL;
 		}
 
-		int SCI_METHOD PropertyType(const char *) {
+		int SCI_METHOD PropertyType(const char *) override {
 			return -1;
 		}
 
-		const char * SCI_METHOD DescribeProperty(const char *) {
+		const char * SCI_METHOD DescribeProperty(const char *) override {
 			return NULL;
 		}
 
-		Sci_Position SCI_METHOD PropertySet(const char *, const char *) {
+		Sci_Position SCI_METHOD PropertySet(const char *, const char *) override {
 			return -1;
 		}
 
-		Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
+		Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
 
-		void * SCI_METHOD PrivateCall(int, void *) {
+		void * SCI_METHOD PrivateCall(int, void *) override {
 			return NULL;
 		}
 
@@ -90,9 +90,9 @@ class LexerDMIS : public ILexer
 			return new LexerDMIS;
 		}
 
-		const char * SCI_METHOD DescribeWordListSets();
-		void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
-		void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess);
+		const char * SCI_METHOD DescribeWordListSets() override;
+		void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess) override;
+		void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle, IDocument *pAccess) override;
 };
 
 

@@ -931,6 +931,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexIndent.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexInno.cxx"
 				>
 			</File>

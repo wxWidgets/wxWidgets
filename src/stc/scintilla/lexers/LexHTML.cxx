@@ -490,9 +490,9 @@ static bool isMakoBlockEnd(const int ch, const int chNext, const char *blockType
 		return ((ch == '/') && (chNext == '>'));
 	} else if (0 == strcmp(blockType, "%")) {
 		if (ch == '/' && isLineEnd(chNext))
-			return 1;
+			return true;
 		else
-		    return isLineEnd(ch);
+			return isLineEnd(ch);
 	} else if (0 == strcmp(blockType, "{")) {
 		return ch == '}';
 	} else {
@@ -502,13 +502,13 @@ static bool isMakoBlockEnd(const int ch, const int chNext, const char *blockType
 
 static bool isDjangoBlockEnd(const int ch, const int chNext, const char *blockType) {
 	if (strlen(blockType) == 0) {
-		return 0;
+		return false;
 	} else if (0 == strcmp(blockType, "%")) {
 		return ((ch == '%') && (chNext == '}'));
 	} else if (0 == strcmp(blockType, "{")) {
 		return ((ch == '}') && (chNext == '}'));
 	} else {
-		return 0;
+		return false;
 	}
 }
 
