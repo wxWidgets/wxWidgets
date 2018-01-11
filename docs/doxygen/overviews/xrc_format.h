@@ -1611,7 +1611,7 @@ Example:
         <item tooltip="E=mc^2">Energy 98.3</item>
         <item helptext="Favourite chukcha's radio">CHUM FM</item>
         <item>92FM</item>
-        <item hidden="1">Very quit station</item>
+        <item hidden="1">Very quiet station</item>
     </content>
 </object>
 @endcode
