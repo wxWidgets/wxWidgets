@@ -107,7 +107,13 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
         // we handle handle <item>Label</item> constructs here, and the item
         // tag can have tooltip, helptext, enabled and hidden attributes
 
-        m_labels.push_back(GetNodeText(m_node, wxXRC_TEXT_NO_ESCAPE));
+        // For compatibility, labels are not escaped in XRC by default and
+        // label="1" attribute needs to be explicitly specified to handle them
+        // consistently with the other labels.
+        m_labels.push_back(GetNodeText(m_node,
+                                       GetBoolAttr("label", 0)
+                                        ? 0
+                                        : wxXRC_TEXT_NO_ESCAPE));
 #if wxUSE_TOOLTIPS
         m_tooltips.push_back(GetNodeText(GetParamNode(wxT("tooltip")),
                                          wxXRC_TEXT_NO_ESCAPE));

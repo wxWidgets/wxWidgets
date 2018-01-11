@@ -981,9 +981,14 @@ GetNodeContentsKind(wxXmlNode& node, const wxString& contents)
     }
 
     // This one is special: it is translated in XRC, but its contents is not
-    // escaped.
+    // escaped, except for the special case of wxRadioBox when it can be, if
+    // "label" attribute is supplied.
     if ( node.GetName() == wxT("item") )
-        return Contents_TransOnly;
+    {
+        return node.GetAttribute(wxT("label"), wxT("0")) == wxT("1")
+                ? Contents_Text
+                : Contents_TransOnly;
+    }
 
     return Contents_NotTrans;
 }
