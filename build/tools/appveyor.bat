@@ -42,8 +42,8 @@ bash -lc "CXXFLAGS=-Wno-deprecated-declarations ./configure --disable-optimise &
 goto :eof
 
 :cygwin
-C:\cygwin\setup-x86.exe -qgnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P libjpeg-devel -P libpng-devel -P libtiff-devel -P libexpat-devel
-path c:\cygwin\bin;%path%
+C:\cygwin64\setup-x86_64.exe -qgnNdO -R C:/cygwin64 -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P libjpeg-devel -P libpng-devel -P libtiff-devel -P libexpat-devel
+path c:\cygwin64\bin;%path%
 set CHERE_INVOKING=yes
 :: Workaround for "configure: Bad file descriptor"
 perl -i".bak" -pe "s/^test -n \".DJDIR\"/#$&/" configure
