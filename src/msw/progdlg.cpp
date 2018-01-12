@@ -1133,6 +1133,18 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
                                 LONG_PTR dwRefData
                             )
 {
+    if ( uNotification == TDN_CREATED )
+    {
+        // The main thread may be sitting in an event dispatching loop waiting
+        // for this dialog to be shown, so make sure it does wake up now that
+        // it is. Notice that we must do it from here and not from inside the
+        // block below in which sharedData is locked as otherwise we could
+        // deadlock if wxWakeUpIdle() dispatched some event which tried to call
+        // any of wxProgressDialog methods, which also lock this data, from the
+        // main thread.
+        wxWakeUpIdle();
+    }
+
     bool endDialog = false;
 
     // Block for shared data critical section.
@@ -1147,10 +1159,6 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
         case TDN_CREATED:
             // Store the HWND for the main thread use.
             sharedData->m_hwnd = hwnd;
-
-            // The main thread is sitting in an event dispatching loop waiting
-            // for this dialog to be shown, so make sure it does get an event.
-            wxWakeUpIdle();
 
             // Set the maximum value and disable Close button.
             ::SendMessage( hwnd,
