@@ -68,7 +68,18 @@ static WNetCloseEnumPtr s_pWNetCloseEnum;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Globals/Statics
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-static long s_cancelSearch = FALSE;
+
+#if defined(__CYGWIN__) && defined(__LP64__)
+    // We can't use long in 64 bit Cygwin build because Cygwin uses LP64 model
+    // (unlike all the other MSW compilers) and long is 64 bits, while
+    // InterlockedExchange(), with which this variable is used, requires a 32
+    // bit-sized value, so use Cygwin-specific type with the right size.
+    typedef __LONG32 wxInterlockedArg_t;
+#else
+    typedef long wxInterlockedArg_t;
+#endif
+
+static wxInterlockedArg_t s_cancelSearch = FALSE;
 
 struct FileInfo
 {
