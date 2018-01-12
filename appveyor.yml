@@ -1,5 +1,8 @@
 version: '{build}'
 
+init:
+- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 branches:
   only:
   - master
@@ -57,3 +60,6 @@ before_build:
 build_script: c:\projects\wxwidgets\build\tools\appveyor.bat
 
 test_script: c:\projects\wxwidgets\build\tools\appveyor-test.bat
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
