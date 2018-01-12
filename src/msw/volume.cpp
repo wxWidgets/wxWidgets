@@ -68,7 +68,11 @@ static WNetCloseEnumPtr s_pWNetCloseEnum;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Globals/Statics
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-static long s_cancelSearch = FALSE;
+
+// This must be a 32 bit type even in 64 bit build and even with Cygwin, which
+// uses LP64 model (uniquely amongst MSW compilers which are mostly LLP64), as
+// it's used with InterlockedExchange().
+static wxInt32 s_cancelSearch = FALSE;
 
 struct FileInfo
 {
