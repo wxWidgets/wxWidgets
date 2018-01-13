@@ -88,11 +88,6 @@ void wxEventLoopBase::OnExit()
         wxTheApp->OnEventLoopExit(this);
 }
 
-void wxEventLoopBase::WakeUpIdle()
-{
-    WakeUp();
-}
-
 bool wxEventLoopBase::ProcessIdle()
 {
     return wxTheApp && wxTheApp->ProcessIdle();
