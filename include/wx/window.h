@@ -48,22 +48,6 @@
     #define wxUSE_MENUS_NATIVE wxUSE_MENUS
 #endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
 
-
-// Define this macro if the corresponding operating system handles the state
-// of children windows automatically when the parent is enabled/disabled.
-// Otherwise wx itself must ensure that when the parent is disabled its
-// children are disabled too, and their initial state is restored when the
-// parent is enabled back.
-#if defined(__WXMSW__)
-    // must do everything ourselves
-    #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
-#elif defined(__WXOSX__)
-    // must do everything ourselves
-    #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
-#else
-    #define wxHAS_NATIVE_ENABLED_MANAGEMENT
-#endif
-
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
