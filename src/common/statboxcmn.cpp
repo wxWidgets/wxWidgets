@@ -94,7 +94,26 @@ bool wxStaticBoxBase::Enable(bool enable)
     // in this case and only disable its children, but still pretend that the
     // box is disabled by updating its m_isEnabled, as it would be surprising
     // if IsEnabled() didn't return false after disabling the box, for example.
-    if ( m_labelWin )
+    //
+    // Finally note that this really needs to be done only when disabling the
+    // box and not when re-enabling it, at least for the platforms without
+    // native enabled state management (e.g. wxMSW) because otherwise we could
+    // have a bug in the following scenario:
+    //
+    //  0. The box is initially enabled
+    //  1. Its parent gets disabled, calling DoEnable(false) on the box and all
+    //     its children from its NotifyWindowOnEnableChange() (including the
+    //     label).
+    //  2. The box is itself disabled (for whatever app logic reason).
+    //  3. The parent gets enabled but this time doesn't do anything with the
+    //     box, because it should continue being disabled.
+    //  4. The box is re-enabled -- but remains actually disabled as
+    //     DoEnable(true) was never called on it (nor on the label).
+    //
+    // To avoid this possibility, we always call the base class version, which
+    // does call DoEnable(true) on the box itself and all its children,
+    // including the label, when re-enabling it.
+    if ( m_labelWin && !enable )
     {
         if ( enable == IsThisEnabled() )
             return false;
@@ -109,10 +128,6 @@ bool wxStaticBoxBase::Enable(bool enable)
         }
 
         m_isEnabled = enable;
-
-        // Notice that we don't call DoEnable() on the box itself: under MSW it
-        // doesn't actually change anything and under GTK this would disable
-        // the label window.
 
         return true;
     }
