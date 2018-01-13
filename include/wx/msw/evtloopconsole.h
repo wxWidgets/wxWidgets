@@ -30,6 +30,10 @@ public:
     WXDWORD MSWWaitForThread(WXHANDLE hThread);
 #endif // wxUSE_THREADS
 
+    // Return true if wake up was requested and not handled yet, i.e. if
+    // m_heventWake is signaled.
+    bool MSWIsWakeUpRequested();
+
 protected:
     // get the next message from queue and return true or return false if we
     // got WM_QUIT or an error occurred
