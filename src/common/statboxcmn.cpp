@@ -105,10 +105,14 @@ bool wxStaticBoxBase::Enable(bool enable)
               ++i )
         {
             if ( *i != m_labelWin )
-                (*i)->Enable(enable);
+                (*i)->NotifyWindowOnEnableChange(enable);
         }
 
         m_isEnabled = enable;
+
+        // Notice that we don't call DoEnable() on the box itself: under MSW it
+        // doesn't actually change anything and under GTK this would disable
+        // the label window.
 
         return true;
     }
