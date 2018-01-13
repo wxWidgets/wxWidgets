@@ -219,6 +219,16 @@ public:
     }
 #endif // __WIN32__
 
+    // Also override this method to avoid showing any dialogs from here -- and
+    // show some details about the exception along the way.
+    virtual bool OnExceptionInMainLoop()
+    {
+        wxFprintf(stderr, "Unhandled exception in the main loop: %s\n",
+                  Catch::translateActiveException());
+
+        throw;
+    }
+
     // used by events propagation test
     virtual int FilterEvent(wxEvent& event);
     virtual bool ProcessEvent(wxEvent& event);
