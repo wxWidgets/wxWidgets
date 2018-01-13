@@ -146,13 +146,13 @@ public:
 
         See the constructor documentation for more details.
 
-        Currently this overload is only available in wxGTK, use
+        Currently this overload is only available in wxGTK and wxMSW, use
         @c wxHAS_WINDOW_LABEL_IN_STATIC_BOX to check whether it can be used at
         compile-time.
 
         @since 3.1.1
      */
-    wxStaticBox(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 wxWindow* label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
