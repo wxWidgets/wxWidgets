@@ -23,6 +23,15 @@
 
 #if defined(__CYGWIN__)
     #include <winsock.h>
+    #ifdef __LP64__
+        // We can't use long in this case because it is 64 bits with Cygwin, so
+        // use their special type used for working around this instead.
+        #define wxIoctlSocketArg_t __ms_u_long
+    #endif
+#endif
+
+#ifndef wxIoctlSocketArg_t
+    #define wxIoctlSocketArg_t u_long
 #endif
 
 // ----------------------------------------------------------------------------
@@ -61,7 +70,7 @@ private:
             // just useless) as they would be dispatched by the main thread
             // while this blocking socket can be used from a worker one, so it
             // would result in data races and other unpleasantness.
-            unsigned long trueArg = 1;
+            wxIoctlSocketArg_t trueArg = 1;
             ioctlsocket(m_fd, FIONBIO, &trueArg);
         }
         else

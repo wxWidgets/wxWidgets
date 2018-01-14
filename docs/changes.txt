@@ -201,6 +201,7 @@ wxMSW:
 - Add support for building with Microsoft Visual Studio 2017 (Tobias Taschner).
 - Allow loading icons from resources in wxIconBundle (PB).
 - Enable wxStackWalker in MinGW64 builds.
+- Fix build under Cygwin in 64 bits.
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
 - Fix wxSpinCtrl appearance: show arrows inside the control (Catalin Raceanu).
 - Fix MDI menu display after failure to create a child frame (troelsk).
