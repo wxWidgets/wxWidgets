@@ -49,8 +49,7 @@ class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
     friend class WXDLLIMPEXP_FWD_CORE wxIcon;
     friend class WXDLLIMPEXP_FWD_CORE wxCursor;
 public:
-    wxBitmapRefData(int width , int height , int depth, double logicalscale);
-    wxBitmapRefData(int width , int height , int depth);
+    wxBitmapRefData(int width , int height , int depth, double logicalscale = 1.0);
     wxBitmapRefData(CGContextRef context);
     wxBitmapRefData(CGImageRef image, double scale);
     wxBitmapRefData();
@@ -106,8 +105,7 @@ public:
 
     int           GetBytesPerRow() const { return m_bytesPerRow; }
     private :
-    bool Create(int width , int height , int depth);
-    bool Create(int width , int height , int depth, double logicalScale);
+    bool Create(int width , int height , int depth, double logicalscale);
     bool Create( CGImageRef image, double scale );
     bool Create( CGContextRef bitmapcontext);
     void Init();
@@ -269,13 +267,7 @@ wxBitmapRefData::wxBitmapRefData()
     Init() ;
 }
 
-wxBitmapRefData::wxBitmapRefData( int w , int h , int d )
-{
-    Init() ;
-    Create( w , h , d ) ;
-}
-
-wxBitmapRefData::wxBitmapRefData(int w , int h , int d, double logicalscale)
+wxBitmapRefData::wxBitmapRefData( int w , int h , int d , double logicalscale)
 {
     Init() ;
     Create( w , h , d, logicalscale ) ;
@@ -370,11 +362,12 @@ bool wxBitmapRefData::Create(CGContextRef context)
     return m_ok ;
 }
 
-bool wxBitmapRefData::Create( int w , int h , int d )
+bool wxBitmapRefData::Create( int w , int h , int d, double logicalscale )
 {
     m_width = wxMax(1, w);
     m_height = wxMax(1, h);
     m_depth = d ;
+    m_scaleFactor = logicalscale;
     m_hBitmap = NULL ;
 
     m_bytesPerRow = GetBestBytesPerRow( m_width * 4 ) ;
@@ -393,12 +386,6 @@ bool wxBitmapRefData::Create( int w , int h , int d )
     m_ok = ( m_hBitmap != NULL ) ;
 
     return m_ok ;
-}
-
-bool wxBitmapRefData::Create( int w , int h , int d, double logicalScale )
-{
-    m_scaleFactor = logicalScale;
-    return Create(w*logicalScale,h*logicalScale,d);
 }
 
 void wxBitmapRefData::UseAlpha( bool use )
@@ -1125,7 +1112,7 @@ bool wxBitmap::CreateScaled(int w, int h, int d, double logicalScale)
     if ( d < 0 )
         d = wxDisplayDepth() ;
     
-    m_refData = new wxBitmapRefData( w , h , d, logicalScale );
+    m_refData = new wxBitmapRefData( w*logicalScale , h*logicalScale , d, logicalScale );
     
     return M_BITMAPDATA->IsOk() ;
 }
@@ -1220,7 +1207,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     
     wxBitmapRefData* bitmapRefData;
 
-    m_refData = bitmapRefData = new wxBitmapRefData( width/scale, height/scale, depth, scale) ;
+    m_refData = bitmapRefData = new wxBitmapRefData( width, height, depth, scale) ;
 
     if ( bitmapRefData->IsOk())
     {
