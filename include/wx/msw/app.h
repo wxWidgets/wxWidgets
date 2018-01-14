@@ -103,6 +103,10 @@ public:
     // use it.
     static wxLayoutDirection MSWGetDefaultLayout(wxWindow* parent = NULL);
 
+    // Call ProcessPendingEvents() but only if we need to do it, i.e. there was
+    // a recent call to WakeUpIdle().
+    void MSWProcessPendingEventsIfNeeded();
+
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
 

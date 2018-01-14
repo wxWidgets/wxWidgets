@@ -7511,10 +7511,9 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 #endif // wxUSE_HOTKEY
 
 // this class installs a message hook which really wakes up our idle processing
-// each time a WM_NULL is received (wxWakeUpIdle does this), even if we're
-// sitting inside a local modal loop (e.g. a menu is opened or scrollbar is
-// being dragged or even inside ::MessageBox()) and so don't control message
-// dispatching otherwise
+// each time a message is handled, even if we're sitting inside a local modal
+// loop (e.g. a menu is opened or scrollbar is being dragged or even inside
+// ::MessageBox()) and so don't control message dispatching otherwise
 class wxIdleWakeUpModule : public wxModule
 {
 public:
@@ -7545,15 +7544,11 @@ public:
 
     static LRESULT CALLBACK MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam)
     {
-        MSG *msg = (MSG*)lParam;
-
-        // only process the message if it is actually going to be removed from
-        // the message queue, this prevents that the same event from being
-        // processed multiple times if now someone just called PeekMessage()
-        if ( msg->message == WM_NULL && wParam == PM_REMOVE )
-        {
-            wxTheApp->ProcessPendingEvents();
-        }
+        // Don't process idle events unless the message is going to be really
+        // handled, i.e. removed from the queue, as it seems wrong to do it
+        // just because someone called PeekMessage(PM_NOREMOVE).
+        if ( wParam == PM_REMOVE )
+            wxTheApp->MSWProcessPendingEventsIfNeeded();
 
         return CallNextHookEx(ms_hMsgHookProc, nCode, wParam, lParam);
     }
