@@ -175,6 +175,7 @@ function(wx_set_target_properties target_name is_base)
             _CRT_SECURE_NO_DEPRECATE=1
             _CRT_NON_CONFORMING_SWPRINTFS=1
             _SCL_SECURE_NO_WARNINGS=1
+            _WINSOCK_DEPRECATED_NO_WARNINGS=1
             )
     endif()
 
@@ -381,7 +382,10 @@ function(wx_set_builtin_target_properties target_name)
         # standard C functions in the 3rd party libraries (these warnings
         # are only given by VC8+ but it's simpler to just always define
         # this symbol which disables them, even for previous VC versions)
-        target_compile_definitions(${target_name} PRIVATE _CRT_SECURE_NO_WARNINGS)
+        target_compile_definitions(${target_name} PRIVATE
+            _CRT_SECURE_NO_DEPRECATE=1
+            _SCL_SECURE_NO_WARNINGS=1
+        )
     endif()
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
@@ -574,7 +578,7 @@ function(wx_add_sample name)
         foreach(data_file ${SAMPLE_DATA})
             list(APPEND cmds COMMAND ${CMAKE_COMMAND}
                 -E copy ${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/${data_file}
-                ${wxOUTPUT_DIR}/${data_file})
+                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_file})
         endforeach()
         add_custom_command(
             TARGET ${target_name} ${cmds}
@@ -605,6 +609,9 @@ function(wx_add_sample name)
     wx_set_common_target_properties(${target_name})
     set_target_properties(${target_name} PROPERTIES
         FOLDER ${folder}
+        )
+    set_target_properties(${target_name} PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}"
         )
 endfunction()
 
@@ -700,6 +707,9 @@ function(wx_add_test name)
     endif()
     wx_set_common_target_properties(${name})
     set_target_properties(${name} PROPERTIES FOLDER "Tests")
+    set_target_properties(${name} PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxSOURCE_DIR}/tests"
+        )
 
     add_test(NAME ${name}
         COMMAND ${name}

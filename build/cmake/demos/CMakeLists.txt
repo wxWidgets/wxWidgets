@@ -26,7 +26,7 @@ function(wx_add_demo name)
         foreach(data_file ${DEMO_DATA})
             list(APPEND cmds COMMAND ${CMAKE_COMMAND}
                 -E copy ${wxSOURCE_DIR}/demos/${name}/${data_file}
-                ${wxOUTPUT_DIR}/${data_file})
+                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_file})
         endforeach()
         add_custom_command(
             TARGET ${DEMO_NAME} ${cmds}
@@ -38,6 +38,9 @@ function(wx_add_demo name)
     target_link_libraries(${DEMO_NAME} core ${DEMO_LIBRARIES})
     wx_set_common_target_properties(${DEMO_NAME})
     set_target_properties(${DEMO_NAME} PROPERTIES FOLDER "Demos")
+    set_target_properties(${DEMO_NAME} PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}"
+        )
 endfunction()
 
 wx_add_demo(bombs
