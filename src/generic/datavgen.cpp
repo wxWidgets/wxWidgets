@@ -2959,6 +2959,9 @@ bool wxDataViewMainWindow::DoItemChanged(const wxDataViewItem & item, int view_c
         GetOwner()->InvalidateColBestWidth(view_column);
     }
 
+    // Update the displayed value(s).
+    RefreshRow(GetRowByItem(item));
+
     // Send event
     wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, column, item);
     m_owner->ProcessWindowEvent(le);
