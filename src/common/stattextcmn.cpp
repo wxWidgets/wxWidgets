@@ -210,9 +210,6 @@ void wxStaticTextBase::AutoResizeIfNecessary()
     // any more.
     InvalidateBestSize();
 
-    if ( IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
-        return;
-
     // This flag is specifically used to prevent the control from resizing even
     // when its label changes.
     if ( HasFlag(wxST_NO_AUTORESIZE) )
