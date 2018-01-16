@@ -704,7 +704,10 @@ public:
     // notifications from wxDataViewModel
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
-    bool ItemChanged( const wxDataViewItem &item );
+    bool ItemChanged( const wxDataViewItem &item )
+    {
+        return DoItemChanged(item, wxNOT_FOUND);
+    }
     bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
     bool Cleared();
     void Resort()
@@ -890,6 +893,10 @@ private:
     bool IsCellEditableInMode(const wxDataViewItem& item, const wxDataViewColumn *col, wxDataViewCellMode mode) const;
 
     void DrawCellBackground( wxDataViewRenderer* cell, wxDC& dc, const wxRect& rect );
+
+    // Common part of {Item,Value}Changed(): if view_column is wxNOT_FOUND,
+    // assumes that all columns were modified, otherwise just this one.
+    bool DoItemChanged(const wxDataViewItem& item, int view_column);
 
 private:
     wxDataViewCtrl             *m_owner;
@@ -2926,17 +2933,34 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     return true;
 }
 
-bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
+bool wxDataViewMainWindow::DoItemChanged(const wxDataViewItem & item, int view_column)
 {
     // Move this node to its new correct place after it was updated.
+    //
+    // In principle, we could skip the call to PutInSortOrder() if the modified
+    // column is not the sort column, but in real-world applications it's fully
+    // possible and likely that custom compare uses not only the selected model
+    // column but also falls back to other values for comparison. To ensure
+    // consistency it is better to treat a value change as if it was an item
+    // change.
     wxDataViewTreeNode* const node = FindNode(item);
     wxCHECK_MSG( node, false, "invalid item" );
     node->PutInSortOrder(this);
 
-    GetOwner()->InvalidateColBestWidths();
+    wxDataViewColumn* column;
+    if ( view_column == wxNOT_FOUND )
+    {
+        column = NULL;
+        GetOwner()->InvalidateColBestWidths();
+    }
+    else
+    {
+        column = m_owner->GetColumn(view_column);
+        GetOwner()->InvalidateColBestWidth(view_column);
+    }
 
     // Send event
-    wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, item);
+    wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, column, item);
     m_owner->ProcessWindowEvent(le);
 
     return true;
@@ -2948,39 +2972,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     if ( view_column == wxNOT_FOUND )
         return false;
 
-    // NOTE: to be valid, we cannot use e.g. INT_MAX - 1
-/*#define MAX_VIRTUAL_WIDTH       100000
-
-    wxRect rect( 0, row*m_lineHeight, MAX_VIRTUAL_WIDTH, m_lineHeight );
-    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-    Refresh( true, &rect );
-
-    return true;
-*/
-
-    // In principle, we could skip the call to PutInSortOrder() if the modified
-    // column is not the sort column, but in real-world applications it's fully
-    // possible and likely that custom compare uses not only the selected model
-    // column but also falls back to other values for comparison. To ensure
-    // consistency it is better to treat a value change as if it was an item
-    // change.
-    //
-    // Alternatively, one could require the user to use ItemChanged() rather
-    // than ValueChanged() when the changed value may affect sorting, and add a
-    // check for model_column vs sort column here.
-
-    wxDataViewTreeNode* const node = FindNode(item);
-    wxCHECK_MSG( node, false, "invalid item" );
-    node->PutInSortOrder(this);
-
-    GetOwner()->InvalidateColBestWidth(view_column);
-
-    // Send event
-    wxDataViewColumn* const column = m_owner->GetColumn(view_column);
-    wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, column, item);
-    m_owner->ProcessWindowEvent(le);
-
-    return true;
+    return DoItemChanged(item, view_column);
 }
 
 bool wxDataViewMainWindow::Cleared()
