@@ -175,7 +175,8 @@ bool wxStaticText::SetFont( const wxFont &font )
     const bool wasUnderlined = GetFont().GetUnderlined();
     const bool wasStrickenThrough = GetFont().GetStrikethrough();
 
-    bool ret = wxControl::SetFont(font);
+    if ( !wxControl::SetFont(font) )
+        return false;
 
     const bool isUnderlined = GetFont().GetUnderlined();
     const bool isStrickenThrough = GetFont().GetStrikethrough();
@@ -219,7 +220,7 @@ bool wxStaticText::SetFont( const wxFont &font )
 
     AutoResizeIfNecessary();
 
-    return ret;
+    return true;
 }
 
 wxSize wxStaticText::DoGetBestSize() const
