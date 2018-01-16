@@ -205,15 +205,20 @@ void wxStaticTextBase::Wrap(int width)
 
 void wxStaticTextBase::AutoResizeIfNecessary()
 {
-    // This method is only called if either the label or the font changed, i.e.
-    // if the label extent changed, so the best size is not the same neither
-    // any more.
-    InvalidateBestSize();
-
     // This flag is specifically used to prevent the control from resizing even
     // when its label changes.
     if ( HasFlag(wxST_NO_AUTORESIZE) )
         return;
+
+    // This method is only called if either the label or the font changed, i.e.
+    // if the label extent changed, so the best size is not the same neither
+    // any more.
+    //
+    // Note that we don't invalidate it when wxST_NO_AUTORESIZE is on because
+    // this would result in the control being effectively resized during the
+    // next Layout() and this style is used expressly to prevent this from
+    // happening.
+    InvalidateBestSize();
 
     SetSize(GetBestSize());
 }
