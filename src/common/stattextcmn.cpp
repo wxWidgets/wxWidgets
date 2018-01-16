@@ -205,13 +205,20 @@ void wxStaticTextBase::Wrap(int width)
 
 void wxStaticTextBase::AutoResizeIfNecessary()
 {
-    // adjust the size of the window to fit to the label unless autoresizing is
-    // disabled
-    if ( !HasFlag(wxST_NO_AUTORESIZE) )
-    {
-        DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxDefaultCoord,
-                  wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
-    }
+    // This method is only called if either the label or the font changed, i.e.
+    // if the label extent changed, so the best size is not the same neither
+    // any more.
+    InvalidateBestSize();
+
+    if ( IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
+        return;
+
+    // This flag is specifically used to prevent the control from resizing even
+    // when its label changes.
+    if ( HasFlag(wxST_NO_AUTORESIZE) )
+        return;
+
+    SetSize(GetBestSize());
 }
 
 // ----------------------------------------------------------------------------
