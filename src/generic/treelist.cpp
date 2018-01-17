@@ -572,12 +572,16 @@ void wxTreeListModel::DeleteItem(Node* item)
 
 void wxTreeListModel::DeleteAllItems()
 {
+    // Note that this must be called before actually deleting the items as
+    // clearing GTK+ wxDataViewCtrl results in SELECTION_CHANGED events being
+    // sent and these events contain pointers to the model items, so they must
+    // still be valid.
+    Cleared();
+
     while ( m_root->GetChild() )
     {
         m_root->DeleteChild();
     }
-
-    Cleared();
 }
 
 const wxString& wxTreeListModel::GetItemText(Node* item, unsigned col) const
