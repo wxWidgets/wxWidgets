@@ -496,7 +496,6 @@ public:
 
     const wxDataViewTreeNodes& GetChildNodes() const
     {
-        wxASSERT( m_branchData != NULL );
         return m_branchData->children;
     }
 
