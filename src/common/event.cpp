@@ -1635,8 +1635,21 @@ void wxEvtHandler::WXConsumeException()
     {
         if ( !wxTheApp || !wxTheApp->OnExceptionInMainLoop() )
         {
-            if ( loop )
-                loop->Exit();
+            // If OnExceptionInMainLoop() returns false, we're supposed to exit
+            // the program and for this we need to exit the main loop, not the
+            // possibly nested one we're running right now.
+            if ( wxTheApp )
+            {
+                wxTheApp->ExitMainLoop();
+            }
+            else
+            {
+                // We must not continue running after an exception, unless
+                // explicitly requested, so if we can't ensure this in any
+                // other way, do it brutally like this.
+                wxAbort();
+            }
+
         }
         //else: continue running current event loop
     }
