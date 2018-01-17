@@ -2739,6 +2739,8 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         if ( !parentNode )
             return false;
 
+        parentNode->SetHasChildren(true);
+
         // If the parent node isn't and hadn't been opened yet, we don't have
         // anything to do here, all the items will be added to it when it's
         // opened for the first time.
@@ -2749,7 +2751,6 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
 
         wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
         itemNode->SetHasChildren(GetModel()->IsContainer(item));
-        parentNode->SetHasChildren(true);
 
         if ( GetSortOrder().IsNone() )
         {
@@ -3963,8 +3964,8 @@ static void BuildTreeHelper( wxDataViewMainWindow *window, const wxDataViewModel
         node->InsertChild(window, n, index);
     }
 
-    wxASSERT( node->IsOpen() );
-    node->ChangeSubTreeCount(+num);
+    if ( node->IsOpen() )
+        node->ChangeSubTreeCount(+num);
 }
 
 void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
