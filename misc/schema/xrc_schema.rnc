@@ -1225,6 +1225,7 @@ wxRadioBox =
                 attribute helptext { t_string }?,
                 attribute enabled  { t_bool }?,
                 attribute hidden   { t_bool }?,
+                attribute label    { t_bool }?,
                 t_text
             }*
         }?

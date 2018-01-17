@@ -1595,6 +1595,11 @@ can also have some optional XML @em attributes (not properties!):
      Is the button enabled (default: 1)?}
 @row3col{hidden, @ref overview_xrcformat_type_bool,
      Is the button hidden initially (default: 0)?}
+@row3col{label, @ref overview_xrcformat_type_bool,
+     Should this item text be interpreted as a label, i.e. escaping underscores
+     in it as done for the label properties of other controls? This attribute
+     exists since wxWidgets 3.1.1 and was always treated as having the value of
+     0, which still remains its default, until then.}
 @endTable
 
 Example:
@@ -1611,7 +1616,7 @@ Example:
         <item tooltip="E=mc^2">Energy 98.3</item>
         <item helptext="Favourite chukcha's radio">CHUM FM</item>
         <item>92FM</item>
-        <item hidden="1">Very quit station</item>
+        <item hidden="1">Very quiet station</item>
     </content>
 </object>
 @endcode

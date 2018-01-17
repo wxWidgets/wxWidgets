@@ -1506,73 +1506,83 @@ int wxXmlResourceHandlerImpl::GetStyle(const wxString& param, int defaults)
 
 
 
-wxString wxXmlResourceHandlerImpl::GetText(const wxString& param, bool translate)
+wxString wxXmlResourceHandlerImpl::GetNodeText(const wxXmlNode* node, int flags)
 {
-    wxXmlNode *parNode = GetParamNode(param);
-    wxString str1(GetNodeContent(parNode));
+    wxString str1(GetNodeContent(node));
+    if ( str1.empty() )
+        return str1;
+
     wxString str2;
 
-    // "\\" wasn't translated to "\" prior to 2.5.3.0:
-    const bool escapeBackslash = (m_handler->m_resource->CompareVersion(2,5,3,0) >= 0);
-
-    // VS: First version of XRC resources used $ instead of & (which is
-    //     illegal in XML), but later I realized that '_' fits this purpose
-    //     much better (because &File means "File with F underlined").
-    const wxChar amp_char = (m_handler->m_resource->CompareVersion(2,3,0,1) < 0)
-                            ? '$' : '_';
-
-    for ( wxString::const_iterator dt = str1.begin(); dt != str1.end(); ++dt )
+    if ( !(flags & wxXRC_TEXT_NO_ESCAPE) )
     {
-        // Remap amp_char to &, map double amp_char to amp_char (for things
-        // like "&File..." -- this is illegal in XML, so we use "_File..."):
-        if ( *dt == amp_char )
+        // "\\" wasn't translated to "\" prior to 2.5.3.0:
+        const bool escapeBackslash = (m_handler->m_resource->CompareVersion(2,5,3,0) >= 0);
+
+        // VS: First version of XRC resources used $ instead of & (which is
+        //     illegal in XML), but later I realized that '_' fits this purpose
+        //     much better (because &File means "File with F underlined").
+        const wxChar amp_char = (m_handler->m_resource->CompareVersion(2,3,0,1) < 0)
+                                ? '$' : '_';
+
+        for ( wxString::const_iterator dt = str1.begin(); dt != str1.end(); ++dt )
         {
-            if ( dt+1 == str1.end() || *(++dt) == amp_char )
-                str2 << amp_char;
-            else
-                str2 << wxT('&') << *dt;
-        }
-        // Remap \n to CR, \r to LF, \t to TAB, \\ to \:
-        else if ( *dt == wxT('\\') )
-        {
-            switch ( (*(++dt)).GetValue() )
+            // Remap amp_char to &, map double amp_char to amp_char (for things
+            // like "&File..." -- this is illegal in XML, so we use "_File..."):
+            if ( *dt == amp_char )
             {
-                case wxT('n'):
-                    str2 << wxT('\n');
-                    break;
-
-                case wxT('t'):
-                    str2 << wxT('\t');
-                    break;
-
-                case wxT('r'):
-                    str2 << wxT('\r');
-                    break;
-
-                case wxT('\\') :
-                    // "\\" wasn't translated to "\" prior to 2.5.3.0:
-                    if ( escapeBackslash )
-                    {
-                        str2 << wxT('\\');
+                if ( dt+1 == str1.end() || *(++dt) == amp_char )
+                    str2 << amp_char;
+                else
+                    str2 << wxT('&') << *dt;
+            }
+            // Remap \n to CR, \r to LF, \t to TAB, \\ to \:
+            else if ( *dt == wxT('\\') )
+            {
+                switch ( (*(++dt)).GetValue() )
+                {
+                    case wxT('n'):
+                        str2 << wxT('\n');
                         break;
-                    }
-                    wxFALLTHROUGH;// else fall-through to default: branch below
 
-                default:
-                    str2 << wxT('\\') << *dt;
-                    break;
+                    case wxT('t'):
+                        str2 << wxT('\t');
+                        break;
+
+                    case wxT('r'):
+                        str2 << wxT('\r');
+                        break;
+
+                    case wxT('\\') :
+                        // "\\" wasn't translated to "\" prior to 2.5.3.0:
+                        if ( escapeBackslash )
+                        {
+                            str2 << wxT('\\');
+                            break;
+                        }
+                        wxFALLTHROUGH;// else fall-through to default: branch below
+
+                    default:
+                        str2 << wxT('\\') << *dt;
+                        break;
+                }
+            }
+            else
+            {
+                str2 << *dt;
             }
         }
-        else
-        {
-            str2 << *dt;
-        }
+    }
+    else // Don't escape anything in this string.
+    {
+        // We won't use str1 at all, so move its contents to str2.
+        str2.swap(str1);
     }
 
     if (m_handler->m_resource->GetFlags() & wxXRC_USE_LOCALE)
     {
-        if (translate && parNode &&
-            parNode->GetAttribute(wxT("translate"), wxEmptyString) != wxT("0"))
+        if (!(flags & wxXRC_TEXT_NO_TRANSLATE) && node &&
+            node->GetAttribute(wxT("translate"), wxEmptyString) != wxT("0"))
         {
             return wxGetTranslation(str2, m_handler->m_resource->GetDomain());
         }
@@ -2508,14 +2518,14 @@ void wxXmlResourceHandlerImpl::SetupWindow(wxWindow *wnd)
         wnd->SetFocus();
 #if wxUSE_TOOLTIPS
     if (HasParam(wxT("tooltip")))
-        wnd->SetToolTip(GetText(wxT("tooltip")));
+        wnd->SetToolTip(GetNodeText(GetParamNode(wxT("tooltip"))));
 #endif
     if (HasParam(wxT("font")))
         wnd->SetFont(GetFont(wxT("font"), wnd));
     if (HasParam(wxT("ownfont")))
         wnd->SetOwnFont(GetFont(wxT("ownfont"), wnd));
     if (HasParam(wxT("help")))
-        wnd->SetHelpText(GetText(wxT("help")));
+        wnd->SetHelpText(GetNodeText(GetParamNode(wxT("help"))));
 }
 
 
