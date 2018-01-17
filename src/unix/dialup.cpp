@@ -722,11 +722,12 @@ wxDialUpManagerImpl::CheckIfconfig()
                     hasModem = strstr(output.fn_str(),"ipdptp") != NULL;
                     hasLAN = strstr(output.fn_str(), "hme") != NULL;
 #elif defined(__LINUX__) || defined (__FREEBSD__) || defined (__QNX__) || \
-      defined(__OPENBSD__)
+      defined(__OPENBSD__) || defined(__DARWIN__)
                     hasModem = strstr(output.fn_str(),"ppp")    // ppp
                         || strstr(output.fn_str(),"sl")  // slip
                         || strstr(output.fn_str(),"pl"); // plip
-                    hasLAN = strstr(output.fn_str(), "eth") != NULL;
+                    hasLAN = strstr(output.fn_str(), "eth") != NULL
+                        || strstr(output.fn_str(),"en") != NULL; // en0, en1 osx
 #elif defined(__SGI__)  // IRIX
                     hasModem = strstr(output.fn_str(), "ppp") != NULL; // PPP
 #elif defined(__HPUX__)
