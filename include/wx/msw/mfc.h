@@ -81,6 +81,7 @@ public:
     int ExitInstance() wxOVERRIDE
     {
         delete m_pMainWnd;
+        m_pMainWnd = NULL;
 
         if ( wxTheApp )
             wxTheApp->OnExit();
