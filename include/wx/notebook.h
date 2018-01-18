@@ -139,10 +139,6 @@ public:
     // new is wxNOT_FOUND)
     void SendPageChangedEvent(int nPageOld, int nPageNew = wxNOT_FOUND);
 
-    // wxBookCtrlBase overrides this method to return false but we do need
-    // focus because we have tabs
-    virtual bool AcceptsFocus() const wxOVERRIDE { return wxControl::AcceptsFocus(); }
-
 #if wxUSE_EXTENDED_RTTI    
     // XTI accessors
     virtual void AddPageInfo( wxNotebookPageInfo* info );
