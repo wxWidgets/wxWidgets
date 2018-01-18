@@ -54,6 +54,13 @@ protected:
     // static box and will be deleted when it is.
     wxWindow* m_labelWin;
 
+    // For boxes with window label this member variable is used instead of
+    // m_isEnabled to remember the last value passed to Enable(). It is
+    // required because the box itself doesn't get disabled by Enable(false) in
+    // this case (see comments in Enable() implementation), and m_isEnabled
+    // must correspond to its real state.
+    bool m_areChildrenEnabled;
+
     wxDECLARE_NO_COPY_CLASS(wxStaticBoxBase);
 };
 

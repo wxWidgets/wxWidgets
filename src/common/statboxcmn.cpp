@@ -32,6 +32,7 @@ extern WXDLLEXPORT_DATA(const char) wxStaticBoxNameStr[] = "groupBox";
 wxStaticBoxBase::wxStaticBoxBase()
 {
     m_labelWin = NULL;
+    m_areChildrenEnabled = true;
 
 #ifndef __WXGTK__
     m_container.DisableSelfFocus();
@@ -88,35 +89,15 @@ bool wxStaticBoxBase::Enable(bool enable)
     // also disabled the label control.
     //
     // Unfortunately it is _not_ enough to just disable the box and then enable
-    // the label window as it would still remain disabled under some platforms
-    // (those where wxHAS_NATIVE_ENABLED_MANAGEMENT is defined, e.g. wxGTK) for
-    // as long as its parent is disabled. So we avoid disabling the box at all
-    // in this case and only disable its children, but still pretend that the
-    // box is disabled by updating its m_isEnabled, as it would be surprising
-    // if IsEnabled() didn't return false after disabling the box, for example.
-    //
-    // Finally note that this really needs to be done only when disabling the
-    // box and not when re-enabling it, at least for the platforms without
-    // native enabled state management (e.g. wxMSW) because otherwise we could
-    // have a bug in the following scenario:
-    //
-    //  0. The box is initially enabled
-    //  1. Its parent gets disabled, calling DoEnable(false) on the box and all
-    //     its children from its NotifyWindowOnEnableChange() (including the
-    //     label).
-    //  2. The box is itself disabled (for whatever app logic reason).
-    //  3. The parent gets enabled but this time doesn't do anything with the
-    //     box, because it should continue being disabled.
-    //  4. The box is re-enabled -- but remains actually disabled as
-    //     DoEnable(true) was never called on it (nor on the label).
-    //
-    // To avoid this possibility, we always call the base class version, which
-    // does call DoEnable(true) on the box itself and all its children,
-    // including the label, when re-enabling it.
-    if ( m_labelWin && !enable )
+    // the label window as it would still remain disabled for as long as its
+    // parent is disabled. So we avoid disabling the box at all in this case
+    // and only disable its children.
+    if ( m_labelWin )
     {
-        if ( enable == IsThisEnabled() )
+        if ( enable == m_areChildrenEnabled )
             return false;
+
+        m_areChildrenEnabled = enable;
 
         const wxWindowList& children = GetChildren();
         for ( wxWindowList::const_iterator i = children.begin();
@@ -124,10 +105,8 @@ bool wxStaticBoxBase::Enable(bool enable)
               ++i )
         {
             if ( *i != m_labelWin )
-                (*i)->NotifyWindowOnEnableChange(enable);
+                (*i)->Enable(enable);
         }
-
-        m_isEnabled = enable;
 
         return true;
     }

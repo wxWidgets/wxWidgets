@@ -182,6 +182,21 @@ public:
                         });
         @endcode
         does work as expected.
+
+        Please note that overriding Enable() to not actually disable this
+        window itself has two possibly unexpected consequences:
+
+        - The box retains its enabled status, i.e. IsEnabled() still returns
+          @true, after calling @c Enable(false).
+        - The box children are enabled or disabled when the box is, which can
+          result in the loss of their original state. E.g. if a box child is
+          initially disabled, then the box itself is disabled and, finally, the
+          box is enabled again, this child will end up being enabled too (this
+          wouldn't happen with any other parent window as its children would
+          inherit the disabled state from the parent instead of being really
+          disabled themselves when it is disabled). To avoid this problem,
+          consider using ::wxEVT_UPDATE_UI to ensure that the child state is
+          always correct or restoring it manually after re-enabling the box.
      */
     virtual bool Enable(bool enable = true);
 };

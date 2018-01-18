@@ -1580,11 +1580,6 @@ public:
         return false;
     }
 
-    // Recursively call our own and our children DoEnable() when the
-    // enabled/disabled status changed because a parent window had been
-    // enabled/disabled. This is only used by the library implementation.
-    void NotifyWindowOnEnableChange(bool enabled);
-
 
 protected:
     // helper for the derived class Create() methods: the first overload, with
@@ -1896,6 +1891,11 @@ protected:
     static void NotifyCaptureLost();
 
 private:
+    // recursively call our own and our children DoEnable() when the
+    // enabled/disabled status changed because a parent window had been
+    // enabled/disabled
+    void NotifyWindowOnEnableChange(bool enabled);
+
 #if wxUSE_MENUS
     // temporary event handlers used by GetPopupMenuSelectionFromUser()
     void InternalOnPopupMenu(wxCommandEvent& event);
