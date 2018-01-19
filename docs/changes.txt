@@ -173,6 +173,7 @@ wxMSW:
 - Send wxEVT_WEBVIEW_NAVIGATING when redirecting (Josue Andrade Gomes).
 - Fix build with MSVS 2005 broken in 3.1.1.
 - Add wxwidgets.props property sheet file for MSVS users.
+- Fix jumping to the given position in wxMediaCtrl (ashishmore).
 
 wxOSX:
 

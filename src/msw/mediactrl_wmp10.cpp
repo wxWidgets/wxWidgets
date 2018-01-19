@@ -105,6 +105,7 @@ const IID IID_IWMPPlayer2 = {0x0E6B01D1,0xD407,0x4C85,{0xBF,0x5F,0x1C,0x01,0xF6,
 const IID IID_IWMPCore2 = {0xBC17E5B7,0x7561,0x4C18,{0xBB,0x90,0x17,0xD4,0x85,0x77,0x56,0x59}};
 const IID IID_IWMPCore3 = {0x7587C667,0x628F,0x499F,{0x88,0xE7,0x6A,0x6F,0x4E,0x88,0x84,0x64}};
 const IID IID_IWMPNetwork = {0xEC21B779,0xEDEF,0x462D,{0xBB,0xA4,0xAD,0x9D,0xDE,0x2B,0x29,0xA7}};
+const IID IID_IWMPControls2 = {0X6F030D25,0X0890,0X480F,{0X97, 0X75, 0X1F,0X7E,0X40,0XAB,0X5B,0X8E}};
 
 enum WMPOpenState
 {
@@ -265,6 +266,12 @@ public:
 
 };
 
+struct IWMPControls2 : public IWMPControls
+{
+public:
+    virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE step(
+        /* [in] */ long lStep ) = 0;
+};
 
 struct IWMPSettings : public IDispatch
 {
@@ -665,6 +672,8 @@ public:
     IWMPPlayer* m_pWMPPlayer;       // Main activex interface
     IWMPSettings* m_pWMPSettings;   // Settings such as volume
     IWMPControls* m_pWMPControls;   // Control interface (play etc.)
+    IWMPControls2* m_pWMPControls2; // Control interface (play etc.)
+
     wxSize m_bestSize;              // Actual movie size
 
     bool m_bWasStateChanged;        // See the "introduction"
@@ -717,7 +726,8 @@ wxWMP10MediaBackend::wxWMP10MediaBackend()
 #endif
                 m_pWMPPlayer(NULL),
                 m_pWMPSettings(NULL),
-                m_pWMPControls(NULL)
+                m_pWMPControls(NULL),
+                m_pWMPControls2(NULL)
 
 {
     m_evthandler = NULL;
@@ -748,6 +758,8 @@ wxWMP10MediaBackend::~wxWMP10MediaBackend()
         if (m_pWMPSettings)
             m_pWMPSettings->Release();
         if (m_pWMPControls)
+            m_pWMPControls->Release();
+        if (m_pWMPControls2)
             m_pWMPControls->Release();
     }
 }
@@ -787,6 +799,8 @@ bool wxWMP10MediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
             wxLogSysError(wxT("Could not obtain controls from WMP10!"));
             return false;
         }
+        if (m_pWMPControls )
+            m_pWMPControls->QueryInterface(IID_IWMPControls2, (void**)&m_pWMPControls2);
     }
 #endif
 
@@ -1136,14 +1150,28 @@ bool wxWMP10MediaBackend::Stop()
 //---------------------------------------------------------------------------
 bool wxWMP10MediaBackend::SetPosition(wxLongLong where)
 {
+    // The display does not update if only put_currentPosition is called.
+    // We have to find the time for the previous frame, set the control
+    // to that position and then tell it to step forward one frame.  This
+    // forces the control to draw the frame to the screen, otherwise we get
+    // just a black screen.
+
+    double timePerFrameInMSec = 0;
+    if (m_pWMPControls2)
+        timePerFrameInMSec = 1000 / GetPlaybackRate();
+
     HRESULT hr = m_pWMPControls->put_currentPosition(
-                        ((LONGLONG)where.GetValue()) / 1000.0
+                        ((LONGLONG)where.GetValue() - timePerFrameInMSec) / 1000.0
                                      );
     if(FAILED(hr))
     {
         wxWMP10LOG(hr);
         return false;
     }
+
+    if (m_pWMPControls2)
+        m_pWMPControls2->step(1);
+
 
     return true;
 }
