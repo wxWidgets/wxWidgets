@@ -675,7 +675,7 @@ public:
     IWMPPlayer* m_pWMPPlayer;       // Main activex interface
     IWMPSettings* m_pWMPSettings;   // Settings such as volume
     IWMPControls* m_pWMPControls;   // Control interface (play etc.)
-	IWMPControls2* m_pWMPControls2;   // Control interface (play etc.)
+    IWMPControls2* m_pWMPControls2;   // Control interface (play etc.)
 
     wxSize m_bestSize;              // Actual movie size
 
