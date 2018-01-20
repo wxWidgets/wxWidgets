@@ -166,6 +166,9 @@ function(wx_set_target_properties target_name is_base)
     endif()
 
     if(wxUSE_UNICODE)
+        if(WIN32)
+            target_compile_definitions(${target_name} PUBLIC UNICODE)
+        endif()
         target_compile_definitions(${target_name} PUBLIC _UNICODE)
     endif()
 
