@@ -1864,6 +1864,7 @@ wxStaticBoxSizer_horz =
         stdObjectNodeAttributes &
         stdSizerProperties &
         [xrc:p="important"] element label {_, t_text }* &
+        element windowlabel {windowNode}* &
         [xrc:p="o"] element orient  {_, "wxHORIZONTAL" }* &
         (wxBoxSizer_horz_item | objectRef)*
     }
@@ -1874,6 +1875,7 @@ wxStaticBoxSizer_vert =
         stdObjectNodeAttributes &
         stdSizerProperties &
         [xrc:p="important"] element label {_, t_text }* &
+        element windowlabel {windowNode}* &
         element orient {_, "wxVERTICAL" } &
         (wxBoxSizer_vert_item | objectRef)*
     }
