@@ -15,7 +15,6 @@
 
 class wxGTKCairoDCImpl: public wxGCDCImpl
 {
-    typedef wxGCDCImpl base_type;
 public:
     wxGTKCairoDCImpl(wxDC* owner);
     wxGTKCairoDCImpl(wxDC* owner, int);
@@ -42,7 +41,6 @@ protected:
 
 class wxWindowDCImpl: public wxGTKCairoDCImpl
 {
-    typedef wxGTKCairoDCImpl base_type;
 public:
     wxWindowDCImpl(wxWindowDC* owner, wxWindow* window);
 
@@ -52,7 +50,6 @@ public:
 
 class wxClientDCImpl: public wxGTKCairoDCImpl
 {
-    typedef wxGTKCairoDCImpl base_type;
 public:
     wxClientDCImpl(wxClientDC* owner, wxWindow* window);
 
@@ -62,7 +59,6 @@ public:
 
 class wxPaintDCImpl: public wxGTKCairoDCImpl
 {
-    typedef wxGTKCairoDCImpl base_type;
 public:
     wxPaintDCImpl(wxPaintDC* owner, wxWindow* window);
 
@@ -72,7 +68,6 @@ public:
 
 class wxScreenDCImpl: public wxGTKCairoDCImpl
 {
-    typedef wxGTKCairoDCImpl base_type;
 public:
     wxScreenDCImpl(wxScreenDC* owner);
 
@@ -82,7 +77,6 @@ public:
 
 class wxMemoryDCImpl: public wxGTKCairoDCImpl
 {
-    typedef wxGTKCairoDCImpl base_type;
 public:
     wxMemoryDCImpl(wxMemoryDC* owner);
     wxMemoryDCImpl(wxMemoryDC* owner, wxBitmap& bitmap);
@@ -102,7 +96,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxGTKCairoDC: public wxDC
 {
-    typedef wxDC base_type;
 public:
     wxGTKCairoDC(cairo_t* cr, wxWindow* window);
 
