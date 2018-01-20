@@ -268,6 +268,8 @@ private:
     wxTextCtrl *m_textCheckBox;
     wxCheckBox *m_initialValueCheckBox;
     wxTextCtrl *m_textDetailed;
+    wxTextCtrl *m_textFooter;
+    wxChoice *m_iconsFooter;
 
     wxDECLARE_EVENT_TABLE();
 };
