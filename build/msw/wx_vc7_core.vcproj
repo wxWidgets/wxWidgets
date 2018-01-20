@@ -1753,6 +1753,9 @@
 				RelativePath="..\..\include\wx\generic\logg.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\maskededit.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\msgdlgg.h">
 			</File>
 			<File
@@ -2320,6 +2323,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\propgrid\manager.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\maskededit.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\matrix.h">

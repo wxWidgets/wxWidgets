@@ -435,6 +435,8 @@
 
 #cmakedefine01 wxUSE_ADDREMOVECTRL
 
+#cmakedefine01 wxUSE_MASKED_EDIT
+
 
 #cmakedefine01 wxUSE_ACCEL
 

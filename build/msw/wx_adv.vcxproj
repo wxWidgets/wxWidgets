@@ -509,6 +509,7 @@
     <ClCompile Include="..\..\src\common\addremovectrl.cpp" />
     <ClCompile Include="..\..\src\generic\activityindicator.cpp" />
     <ClCompile Include="..\..\src\msw\rt\notifmsgrt.cpp" />
+    <ClCompile Include="..\..\src\generic\maskededit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -602,6 +603,8 @@
     <ClInclude Include="..\..\include\wx\addremovectrl.h" />
     <ClInclude Include="..\..\include\wx\activityindicator.h" />
     <ClInclude Include="..\..\include\wx\generic\activityindicator.h" />
+    <ClInclude Include="..\..\include\wx\maskededit.h" />
+    <ClInclude Include="..\..\include\wx\generic\maskededit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

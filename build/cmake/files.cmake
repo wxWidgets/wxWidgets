@@ -2523,6 +2523,7 @@ set(ADVANCED_CMN_SRC
     src/generic/tipdlg.cpp
     src/generic/treelist.cpp
     src/generic/wizard.cpp
+    src/generic/maskededit.cpp
 )
 
 set(ADVANCED_CMN_HDR
@@ -2577,6 +2578,8 @@ set(ADVANCED_CMN_HDR
     wx/tipdlg.h
     wx/treelist.h
     wx/wizard.h
+    wx/maskededit.h
+    wx/generic/maskededit.h
 )
 
 set(ADVANCED_MSW_SRC
