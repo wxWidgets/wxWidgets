@@ -4477,8 +4477,6 @@ public:
 
     An event being sent when the frame is iconized (minimized) or restored.
 
-    @onlyfor{wxmsw,wxgtk}
-
     @beginEventTable{wxIconizeEvent}
     @event{EVT_ICONIZE(func)}
         Process a @c wxEVT_ICONIZE event.
