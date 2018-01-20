@@ -32,8 +32,13 @@ public:
     virtual bool DoStretchBlit(int xdest, int ydest, int dstWidth, int dstHeight, wxDC* source, int xsrc, int ysrc, int srcWidth, int srcHeight, wxRasterOperationMode rop, bool useMask, int xsrcMask, int ysrcMask) wxOVERRIDE;
     virtual void* GetCairoContext() const wxOVERRIDE;
 
+    virtual wxSize GetPPI() const wxOVERRIDE;
+
 protected:
     int m_width, m_height;
+
+private:
+    bool TryGetWindowSize(wxSize& size, wxSize& sizeMM) const;
 
     wxDECLARE_NO_COPY_CLASS(wxGTKCairoDCImpl);
 };

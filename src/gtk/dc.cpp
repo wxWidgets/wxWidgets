@@ -15,6 +15,7 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/dcscreen.h"
+#include "wx/gdicmn.h"
 #include "wx/icon.h"
 #include "wx/gtk/dc.h"
 
@@ -235,6 +236,18 @@ void* wxGTKCairoDCImpl::GetCairoContext() const
     if (m_graphicContext)
         cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
     return cr;
+}
+
+wxSize wxGTKCairoDCImpl::GetPPI() const
+{
+    if ( m_window )
+    {
+        return wxGetDisplayPPI();
+    }
+
+    // For a non-window-based DC the concept of PPI doesn't make much sense
+    // anyhow, so just return the hardcoded value used by the base class.
+    return wxGCDCImpl::GetPPI();
 }
 
 //-----------------------------------------------------------------------------
