@@ -41,7 +41,6 @@
         #define wxXLOCALE_IDENT(name) _ ## name
     #elif defined(HAVE_LOCALE_T)
         #include <locale.h>
-        #include <xlocale.h>
         #include <ctype.h>
         #include <stdlib.h>
 

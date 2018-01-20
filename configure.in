@@ -5757,17 +5757,11 @@ if test "$wxUSE_INTL" = "yes" ; then
 fi
 
 if test "$wxUSE_XLOCALE" = "yes" ; then
-    AC_DEFINE(wxUSE_XLOCALE)
-
-    dnl even if xlocale.h exists, it may not contain all that
-    dnl wx needs. check if strtod_l() really is available.
-    AC_CACHE_CHECK([for complete xlocale],
-                   wx_cv_func_strtod_l,
+    AC_CACHE_CHECK([for locale_t], wx_cv_type_locale_t,
     [
         AC_LANG_PUSH(C++)
         AC_TRY_COMPILE(
         [
-        #include <xlocale.h>
         #include <locale.h>
         #include <stdlib.h>
         ],
@@ -5775,16 +5769,20 @@ if test "$wxUSE_XLOCALE" = "yes" ; then
         locale_t t;
         strtod_l(NULL, NULL, t);
         ],
-        wx_cv_func_strtod_l=yes,
-        wx_cv_func_strtod_l=no
+        wx_cv_type_locale_t=yes,
+        wx_cv_type_locale_t=no
         )
         AC_LANG_POP()
     ])
 
-    if test "$wx_cv_func_strtod_l" = "yes" ; then
+    if test "$wx_cv_type_locale_t" = "yes" ; then
+        AC_DEFINE(wxUSE_XLOCALE)
+
         dnl We don't test (just) for locale_t existence, but we still define
         dnl this symbol to avoid changing the existing code using it.
         AC_DEFINE(HAVE_LOCALE_T)
+    else
+        AC_MSG_WARN([No locale_t support, wxXLocale won't be available])
     fi
 fi
 
