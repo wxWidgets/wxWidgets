@@ -99,40 +99,33 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
     //     (redraw/relayout/resize) so that it's flicker-free
     p->SetMinSize(sz);
 
-    if (p->HasFlag(wxCP_NO_TLW_RESIZE))
+    if (!p->HasFlag(wxCP_NO_TLW_RESIZE))
     {
-        // fire an event
-        wxCollapsiblePaneEvent ev(p, p->GetId(), p->IsCollapsed());
-        p->HandleWindowEvent(ev);
-
-        // the user asked to explicitly handle the resizing itself...
-        return;
-    }
-
-    wxTopLevelWindow *
-        top = wxDynamicCast(wxGetTopLevelParent(p), wxTopLevelWindow);
-    if ( top && top->GetSizer() )
-    {
-        // 2) recalculate minimal size of the top window
-        sz = top->GetSizer()->CalcMin();
-
-        if (top->m_mainWidget)
+        wxTopLevelWindow *
+            top = wxDynamicCast(wxGetTopLevelParent(p), wxTopLevelWindow);
+        if ( top && top->GetSizer() )
         {
-            // 3) MAGIC HACK: if you ever used GtkExpander in a GTK+ program
-            //    you know that this magic call is required to make it possible
-            //    to shrink the top level window in the expanded->collapsed
-            //    transition.  This may be sometimes undesired but *is*
-            //    necessary and if you look carefully, all GTK+ programs using
-            //    GtkExpander perform this trick (e.g. the standard "open file"
-            //    dialog of GTK+>=2.4 is not resizable when the expander is
-            //    collapsed!)
-            gtk_window_set_resizable (GTK_WINDOW (top->m_widget), p->IsExpanded());
+            // 2) recalculate minimal size of the top window
+            sz = top->GetSizer()->CalcMin();
 
-            // 4) set size hints
-            top->SetMinClientSize(sz);
+            if (top->m_mainWidget)
+            {
+                // 3) MAGIC HACK: if you ever used GtkExpander in a GTK+ program
+                //    you know that this magic call is required to make it possible
+                //    to shrink the top level window in the expanded->collapsed
+                //    transition.  This may be sometimes undesired but *is*
+                //    necessary and if you look carefully, all GTK+ programs using
+                //    GtkExpander perform this trick (e.g. the standard "open file"
+                //    dialog of GTK+>=2.4 is not resizable when the expander is
+                //    collapsed!)
+                gtk_window_set_resizable (GTK_WINDOW (top->m_widget), p->IsExpanded());
 
-            // 5) set size
-            top->SetClientSize(sz);
+                // 4) set size hints
+                top->SetMinClientSize(sz);
+
+                // 5) set size
+                top->SetClientSize(sz);
+            }
         }
     }
 
