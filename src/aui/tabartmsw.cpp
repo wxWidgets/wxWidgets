@@ -25,40 +25,6 @@
 
 #if wxUSE_AUI
 
-#ifndef CP_DROPDOWNBUTTON
-
-    #define TABP_TABITEM 1
-    #define TABP_TABITEMLEFTEDGE 2
-    #define TABP_TABITEMRIGHTEDGE 3
-    #define TABP_TABITEMBOTHEDGE 4
-    #define TABP_TOPTABITEM 5
-    #define TABP_TOPTABITEMLEFTEDGE 6
-    #define TABP_TOPTABITEMRIGHTEDGE 7
-    #define TABP_TOPTABITEMBOTHEDGE 8
-    #define TABP_PANE 9
-    #define TABP_BODY 10
-    #define TABP_AEROWIZARDBODY 11
-
-    #define TIS_NORMAL 1
-    #define TIS_HOT 2
-    #define TIS_SELECTED 3
-    #define TIS_DISABLED 4
-    #define TIS_FOCUSED 5
-
-    #define TTP_CLOSE 5
-
-    #define TTCS_NORMAL 1
-    #define TTCS_HOT 2
-    #define TTCS_PRESSED 3
-
-    #define SPNP_UPHORZ 3
-    #define SPNP_DOWNHORZ 4
-
-    #define CP_DROPDOWNBUTTON1  1
-
-    #define WP_CLOSEBUTTON 18
-#endif
-
 wxAuiMSWTabArt::wxAuiMSWTabArt()
 {
     m_closeBtnSize = wxDefaultSize;
@@ -410,7 +376,7 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
         break;
     case wxAUI_BUTTON_WINDOWLIST:
         themeId = L"Combobox";
-        part = CP_DROPDOWNBUTTON1;
+        part = CP_DROPDOWNBUTTON;
         break;
     }
 

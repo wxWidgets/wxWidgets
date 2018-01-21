@@ -55,19 +55,6 @@
 using namespace wxMSWImpl;
 
 #if wxUSE_UXTHEME
-    // no need to include tmschema.h
-    #ifndef BP_PUSHBUTTON
-        #define BP_PUSHBUTTON 1
-
-        #define PBS_NORMAL    1
-        #define PBS_HOT       2
-        #define PBS_PRESSED   3
-        #define PBS_DISABLED  4
-        #define PBS_DEFAULTED 5
-
-        #define TMT_CONTENTMARGINS 3602
-    #endif
-
     // provide the necessary declarations ourselves if they're missing from
     // headers
     #ifndef BCM_SETIMAGELIST

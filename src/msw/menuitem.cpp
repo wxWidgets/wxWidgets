@@ -143,53 +143,6 @@ inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 #include "wx/fontutil.h"
 #include "wx/msw/private/metrics.h"
 
-#if wxUSE_UXTHEME
-
-enum MENUPARTS
-{
-    MENU_MENUITEM_TMSCHEMA = 1,
-    MENU_SEPARATOR_TMSCHEMA = 6,
-    MENU_POPUPBACKGROUND = 9,
-    MENU_POPUPBORDERS = 10,
-    MENU_POPUPCHECK = 11,
-    MENU_POPUPCHECKBACKGROUND = 12,
-    MENU_POPUPGUTTER = 13,
-    MENU_POPUPITEM = 14,
-    MENU_POPUPSEPARATOR = 15,
-    MENU_POPUPSUBMENU = 16,
-};
-
-
-enum POPUPITEMSTATES
-{
-    MPI_NORMAL = 1,
-    MPI_HOT = 2,
-    MPI_DISABLED = 3,
-    MPI_DISABLEDHOT = 4,
-};
-
-enum POPUPCHECKBACKGROUNDSTATES
-{
-    MCB_DISABLED = 1,
-    MCB_NORMAL = 2,
-    MCB_BITMAP = 3,
-};
-
-enum POPUPCHECKSTATES
-{
-    MC_CHECKMARKNORMAL = 1,
-    MC_CHECKMARKDISABLED = 2,
-    MC_BULLETNORMAL = 3,
-    MC_BULLETDISABLED = 4,
-};
-
-const int TMT_MENUFONT       = 803;
-const int TMT_BORDERSIZE     = 2403;
-const int TMT_CONTENTMARGINS = 3602;
-const int TMT_SIZINGMARGINS  = 3601;
-
-#endif // wxUSE_UXTHEME
-
 #endif // wxUSE_OWNER_DRAWN
 
 // ----------------------------------------------------------------------------

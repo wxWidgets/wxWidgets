@@ -48,12 +48,6 @@
 
 #ifdef __WXMSW__
     #include "wx/msw/uxtheme.h"
-
-    static const int TTP_BALLOONTITLE = 4;
-
-    static const int TMT_TEXTCOLOR = 3803;
-    static const int TMT_GRADIENTCOLOR1 = 3810;
-    static const int TMT_GRADIENTCOLOR2 = 3811;
 #endif
 
 // ----------------------------------------------------------------------------

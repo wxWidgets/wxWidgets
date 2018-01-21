@@ -27,37 +27,6 @@
 
 #if wxUSE_AUI
 
-#define RP_GRIPPER 1
-#define RP_GRIPPERVERT 2
-#define RP_BAND 3
-#define RP_CHEVRON 4
-#define RP_CHEVRONVERT 5
-#define RP_BACKGROUND 6
-#define RP_SPLITTER 7
-#define RP_SPLITTERVERT 8
-
-#define CHEVS_NORMAL 1
-#define CHEVS_HOT 2
-#define CHEVS_PRESSED 3
-
-#define TP_BUTTON 1
-#define TP_DROPDOWNBUTTON 2
-#define TP_SPLITBUTTON 3
-#define TP_SPLITBUTTONDROPDOWN 4
-#define TP_SEPARATOR 5
-#define TP_SEPARATORVERT 6
-#define TP_DROPDOWNBUTTONGLYPH 7
-
-#define TS_NORMAL 1
-#define TS_HOT 2
-#define TS_PRESSED 3
-#define TS_DISABLED 4
-#define TS_CHECKED 5
-#define TS_HOTCHECKED 6
-#define TS_NEARHOT 7
-#define TS_OTHERSIDEHOT 8
-
-
 wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
 {
     if ( wxUxThemeIsActive() )

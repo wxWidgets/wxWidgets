@@ -47,13 +47,6 @@
 #include "wx/msw/dc.h"
 #include "wx/msw/private/winstyle.h"
 
-// the values coincide with those in tmschema.h
-#define BP_GROUPBOX 4
-
-#define GBS_NORMAL 1
-
-#define TMT_FONT 210
-
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
