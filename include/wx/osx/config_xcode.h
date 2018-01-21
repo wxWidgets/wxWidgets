@@ -121,6 +121,7 @@
 #define HAVE_GETPWUID_R 1
 #define HAVE_GETGRGID_R 1
 #define HAVE_LOCALE_T 1
+#define HAVE_XLOCALE_H 1
 #define wxHAS_KQUEUE 1
 
 #define PACKAGE_BUGREPORT "wx-dev@googlegroups.com"
