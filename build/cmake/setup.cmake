@@ -649,6 +649,7 @@ if(wxUSE_FSWATCHER)
 endif()
 
 if(wxUSE_XLOCALE)
+    check_include_file(xlocale.h HAVE_XLOCALE_H)
     set(CMAKE_EXTRA_INCLUDE_FILES xlocale.h locale.h)
     check_type_size(locale_t LOCALE_T)
     set(CMAKE_EXTRA_INCLUDE_FILES)

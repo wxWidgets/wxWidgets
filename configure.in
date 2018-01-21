@@ -5757,11 +5757,18 @@ if test "$wxUSE_INTL" = "yes" ; then
 fi
 
 if test "$wxUSE_XLOCALE" = "yes" ; then
+    dnl Some platforms (e.g. macOS) require an extra header, others (Linux)
+    dnl don't, but it's simpler to just check for it under all of them.
+    AC_CHECK_HEADERS([xlocale.h])
+
     AC_CACHE_CHECK([for locale_t], wx_cv_type_locale_t,
     [
         AC_LANG_PUSH(C++)
         AC_TRY_COMPILE(
         [
+        #ifdef HAVE_XLOCALE_H
+        #include <xlocale.h>
+        #endif
         #include <locale.h>
         #include <stdlib.h>
         ],

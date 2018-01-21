@@ -1257,6 +1257,9 @@
 /* Define if setpriority() is available. */
 #cmakedefine HAVE_SETPRIORITY 1
 
+/* Define if xlocale.h header file exists. */
+#cmakedefine HAVE_XLOCALE_H 1
+
 /* Define if locale_t is available */
 #cmakedefine HAVE_LOCALE_T 1
 
