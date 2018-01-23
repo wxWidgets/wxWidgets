@@ -668,7 +668,7 @@ void wxComboBox::DoSetToolTip(wxToolTip *tip)
 bool wxComboBox::SetHint(const wxString& hintOrig)
 {
     wxString hint(hintOrig);
-    if ( wxUxThemeEngine::GetIfActive() )
+    if ( wxUxThemeIsActive() )
     {
         // under XP (but not Vista) there is a bug in cue banners
         // implementation for combobox edit control: the first character is

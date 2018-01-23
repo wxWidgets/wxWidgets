@@ -113,14 +113,6 @@
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
-    #define EP_EDITTEXT         1
-    #define ETS_NORMAL          1
-    #define ETS_HOT             2
-    #define ETS_SELECTED        3
-    #define ETS_DISABLED        4
-    #define ETS_FOCUSED         5
-    #define ETS_READONLY        6
-    #define ETS_ASSIST          7
 #endif
 
 #if wxUSE_DYNLIB_CLASS
@@ -1461,8 +1453,7 @@ wxBorder wxWindowMSW::TranslateBorder(wxBorder border) const
     {
         if (CanApplyThemeBorder())
         {
-            wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-            if (theme)
+            if ( wxUxThemeIsActive() )
                 return wxBORDER_THEME;
         }
         return wxBORDER_SUNKEN;
@@ -3647,9 +3638,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         // If we want the default themed border then we need to draw it ourselves
         case WM_NCCALCSIZE:
             {
-                wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
                 const wxBorder border = TranslateBorder(GetBorder());
-                if (theme && border == wxBORDER_THEME)
+                if (wxUxThemeIsActive() && border == wxBORDER_THEME)
                 {
                     // first ask the widget to calculate the border size
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -3674,7 +3664,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     wxClientDC dc((wxWindow *)this);
                     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
 
-                    if ( theme->GetThemeBackgroundContentRect
+                    if ( ::GetThemeBackgroundContentRect
                                 (
                                  hTheme,
                                  GetHdcOf(*impl),
@@ -3699,9 +3689,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_NCPAINT:
             {
-                wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
                 const wxBorder border = TranslateBorder(GetBorder());
-                if (theme && border == wxBORDER_THEME)
+                if (wxUxThemeIsActive() && border == wxBORDER_THEME)
                 {
                     // first ask the widget to paint its non-client area, such as scrollbars, etc.
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -3716,7 +3705,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     wxCopyRectToRECT(GetSize(), rcBorder);
 
                     RECT rcClient;
-                    theme->GetThemeBackgroundContentRect(
+                    ::GetThemeBackgroundContentRect(
                         hTheme, GetHdcOf(*impl), EP_EDITTEXT, ETS_NORMAL, &rcBorder, &rcClient);
                     InflateRect(&rcClient, -1, -1);
 
@@ -3724,9 +3713,9 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                       rcClient.right, rcClient.bottom);
 
                     // Make sure the background is in a proper state
-                    if (theme->IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                    if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
                     {
-                        theme->DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
+                        ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
                     }
 
                     // Draw the border
@@ -3738,7 +3727,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     //    nState = ETS_READONLY;
                     else
                         nState = ETS_NORMAL;
-                    theme->DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, NULL);
+                    ::DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, NULL);
                 }
             }
             break;
@@ -4846,8 +4835,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
                                         wxSystemColour fallback) const
 {
 #if wxUSE_UXTHEME
-    const wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-    if ( theme )
+    if ( wxUxThemeIsActive() )
     {
         int themeProperty = 0;
 
@@ -4869,7 +4857,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
 
         wxUxThemeHandle hTheme((const wxWindow *)this, themeName);
         COLORREF col;
-        HRESULT hr = theme->GetThemeColor
+        HRESULT hr = ::GetThemeColor
                             (
                                 hTheme,
                                 themePart,

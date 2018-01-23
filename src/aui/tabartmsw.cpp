@@ -25,52 +25,12 @@
 
 #if wxUSE_AUI
 
-#ifndef CP_DROPDOWNBUTTON
-
-    #define TABP_TABITEM 1
-    #define TABP_TABITEMLEFTEDGE 2
-    #define TABP_TABITEMRIGHTEDGE 3
-    #define TABP_TABITEMBOTHEDGE 4
-    #define TABP_TOPTABITEM 5
-    #define TABP_TOPTABITEMLEFTEDGE 6
-    #define TABP_TOPTABITEMRIGHTEDGE 7
-    #define TABP_TOPTABITEMBOTHEDGE 8
-    #define TABP_PANE 9
-    #define TABP_BODY 10
-    #define TABP_AEROWIZARDBODY 11
-
-    #define TIS_NORMAL 1
-    #define TIS_HOT 2
-    #define TIS_SELECTED 3
-    #define TIS_DISABLED 4
-    #define TIS_FOCUSED 5
-
-    #define TTP_CLOSE 5
-
-    #define TTCS_NORMAL 1
-    #define TTCS_HOT 2
-    #define TTCS_PRESSED 3
-
-    #define SPNP_UPHORZ 3
-    #define SPNP_DOWNHORZ 4
-
-    #define CP_DROPDOWNBUTTON1  1
-
-    #define WP_CLOSEBUTTON 18
-#endif
-
 wxAuiMSWTabArt::wxAuiMSWTabArt()
 {
     m_closeBtnSize = wxDefaultSize;
     m_maxTabHeight = 0;
 
-    wxUxThemeEngine* te = wxUxThemeEngine::GetIfActive();
-    if ( te && te->IsAppThemed() )
-    {
-        m_themed = true;
-    }
-    else
-        m_themed = false;
+    m_themed = wxUxThemeIsActive();
 }
 
 wxAuiMSWTabArt::~wxAuiMSWTabArt()
@@ -113,7 +73,7 @@ void wxAuiMSWTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
 
     wxUxThemeHandle hTheme(wnd, L"TAB");
 
-    wxUxThemeEngine::Get()->DrawThemeBackground(
+    ::DrawThemeBackground(
         hTheme,
         GetHdcOf(dc.GetTempHDC()),
         TABP_PANE,
@@ -153,7 +113,7 @@ void wxAuiMSWTabArt::DrawBackground(wxDC& dc,
 
     wxUxThemeHandle hTheme(wnd, L"TAB");
 
-    wxUxThemeEngine::Get()->DrawThemeBackground(
+    ::DrawThemeBackground(
         hTheme,
         GetHdcOf(dc.GetTempHDC()),
         TABP_PANE,
@@ -223,12 +183,10 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     else
         tabState = TIS_NORMAL;
 
-    wxUxThemeEngine* te = wxUxThemeEngine::Get();
-
     wxUxThemeHandle hTabTheme(wnd, L"Tab");
     RECT tabR;
     wxCopyRectToRECT(tabRect, tabR);
-    te->DrawThemeBackground(hTabTheme, GetHdcOf(dc.GetTempHDC()), TABP_TABITEM,
+    ::DrawThemeBackground(hTabTheme, GetHdcOf(dc.GetTempHDC()), TABP_TABITEM,
         tabState,
         &tabR, NULL);
 
@@ -237,7 +195,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     // separately, or it wouldn't be drawn at all.
     if ( tabX == GetIndentSize() )
     {
-        te->DrawThemeBackground
+        ::DrawThemeBackground
             (
                 hTabTheme,
                 GetHdcOf(dc.GetTempHDC()),
@@ -290,7 +248,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
 
         RECT btnR;
         wxCopyRectToRECT(rect, btnR);
-        te->DrawThemeBackground(hToolTipTheme, GetHdcOf(dc.GetTempHDC()), TTP_CLOSE, btnState, &btnR, NULL);
+        ::DrawThemeBackground(hToolTipTheme, GetHdcOf(dc.GetTempHDC()), TTP_CLOSE, btnState, &btnR, NULL);
 
         if ( out_button_rect )
             *out_button_rect = rect;
@@ -399,8 +357,6 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
         return;
     }
 
-    wxUxThemeEngine* te = wxUxThemeEngine::Get();
-
     const wchar_t* themeId = NULL;
     int part = 0;
 
@@ -420,7 +376,7 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
         break;
     case wxAUI_BUTTON_WINDOWLIST:
         themeId = L"Combobox";
-        part = CP_DROPDOWNBUTTON1;
+        part = CP_DROPDOWNBUTTON;
         break;
     }
 
@@ -468,7 +424,7 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
 
     RECT btnR;
     wxCopyRectToRECT(btnRect, btnR);
-    te->DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), part, btnState, &btnR, NULL);
+    ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), part, btnState, &btnR, NULL);
 
     if ( out_rect )
         *out_rect = rect;
@@ -490,18 +446,17 @@ int wxAuiMSWTabArt::GetBestTabCtrlSize(wxWindow* wnd,
 
 void wxAuiMSWTabArt::InitSizes(wxWindow* wnd, wxDC& dc)
 {
-    wxUxThemeEngine* te = wxUxThemeEngine::Get();
     SIZE uxSize;
 
     // Borrow close button from tooltip (best fit on various backgrounds)
     wxUxThemeHandle hTooltipTheme(wnd, L"Tooltip");
 
-    te->GetThemePartSize(hTooltipTheme, GetHdcOf(dc.GetTempHDC()),
+    ::GetThemePartSize(hTooltipTheme, GetHdcOf(dc.GetTempHDC()),
         TTP_CLOSE, 0, NULL, TS_TRUE, &uxSize);
     m_closeBtnSize.Set(uxSize.cx, uxSize.cy);
 
     wxUxThemeHandle hTabTheme(wnd, L"Tab");
-    te->GetThemePartSize(hTabTheme, GetHdcOf(dc.GetTempHDC()),
+    ::GetThemePartSize(hTabTheme, GetHdcOf(dc.GetTempHDC()),
         TABP_TABITEM, 0, NULL, TS_TRUE, &uxSize);
     m_tabSize.Set(uxSize.cx, uxSize.cy);
 }

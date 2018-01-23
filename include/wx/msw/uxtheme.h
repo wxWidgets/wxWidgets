@@ -14,7 +14,146 @@
 #include "wx/defs.h"
 
 #include "wx/msw/private.h"     // we use GetHwndOf()
-#include "wx/msw/uxthemep.h"
+#include <uxtheme.h>
+
+#if defined(DTPB_WINDOWDC)
+// DTPB_WINDOWDC has been added for Vista so it's save to assume that an SDK
+// including it has vssym32.h available
+#define HAVE_VSSYM32
+#endif
+
+#if defined(HAVE_VSSYM32)
+#include <vssym32.h>
+#else
+#include <tmschema.h>
+#endif
+
+// ----------------------------------------------------------------------------
+// Definitions for legacy Windows SDKs
+// ----------------------------------------------------------------------------
+// Some defintions introduced with Windows Vista might be missing in older SDKs
+// Missing defintions are added here for compatiblity
+
+#ifndef VSCLASS_LISTVIEW
+#define LISS_NORMAL 1
+#define LISS_HOT 2
+#define LISS_SELECTED 3
+#define LISS_DISABLED 4
+#define LISS_SELECTEDNOTFOCUS 5
+#define LISS_HOTSELECTED 6
+#endif
+
+#ifndef DTT_TEXTCOLOR
+#define DTT_TEXTCOLOR       (1UL << 0)      // crText has been specified
+#define DTT_STATEID         (1UL << 8)      // IStateId has been specified
+#endif
+
+#ifndef DSS_HIDEPREFIX
+#define DSS_HIDEPREFIX  0x0200
+#define DSS_PREFIXONLY  0x0400
+#endif
+
+#ifndef TMT_FONT
+#define TMT_FONT	210
+#endif
+
+#ifndef HAVE_VSSYM32
+enum EXPANDOBUTTONSTATES {
+    TDLGEBS_NORMAL = 1,
+    TDLGEBS_HOVER = 2,
+    TDLGEBS_PRESSED = 3,
+    TDLGEBS_EXPANDEDNORMAL = 4,
+    TDLGEBS_EXPANDEDHOVER = 5,
+    TDLGEBS_EXPANDEDPRESSED = 6,
+    TDLGEBS_NORMALDISABLED = 7,
+    TDLGEBS_EXPANDEDDISABLED = 8,
+};
+
+enum TASKDIALOGPARTS {
+    TDLG_PRIMARYPANEL = 1,
+    TDLG_MAININSTRUCTIONPANE = 2,
+    TDLG_MAINICON = 3,
+    TDLG_CONTENTPANE = 4,
+    TDLG_CONTENTICON = 5,
+    TDLG_EXPANDEDCONTENT = 6,
+    TDLG_COMMANDLINKPANE = 7,
+    TDLG_SECONDARYPANEL = 8,
+    TDLG_CONTROLPANE = 9,
+    TDLG_BUTTONSECTION = 10,
+    TDLG_BUTTONWRAPPER = 11,
+    TDLG_EXPANDOTEXT = 12,
+    TDLG_EXPANDOBUTTON = 13,
+    TDLG_VERIFICATIONTEXT = 14,
+    TDLG_FOOTNOTEPANE = 15,
+    TDLG_FOOTNOTEAREA = 16,
+    TDLG_FOOTNOTESEPARATOR = 17,
+    TDLG_EXPANDEDFOOTERAREA = 18,
+    TDLG_PROGRESSBAR = 19,
+    TDLG_IMAGEALIGNMENT = 20,
+    TDLG_RADIOBUTTONPANE = 21,
+};
+
+#define CP_BACKGROUND 2
+#define CP_TRANSPARENTBACKGROUND 3
+#define CP_BORDER 4
+#define CP_READONLY 5
+#define CP_DROPDOWNBUTTONRIGHT 6
+#define CP_DROPDOWNBUTTONLEFT 7
+#define CP_CUEBANNER 8
+
+#define RP_BACKGROUND 6
+#define RP_SPLITTER 7
+#define RP_SPLITTERVERT 8
+
+enum BORDERSTATES {
+    CBB_NORMAL = 1,
+    CBB_HOT = 2,
+    CBB_FOCUSED = 3,
+    CBB_DISABLED = 4,
+};
+
+enum MENUPARTS
+{
+    MENU_MENUITEM_TMSCHEMA = 1,
+    MENU_SEPARATOR_TMSCHEMA = 6,
+    MENU_POPUPBACKGROUND = 9,
+    MENU_POPUPBORDERS = 10,
+    MENU_POPUPCHECK = 11,
+    MENU_POPUPCHECKBACKGROUND = 12,
+    MENU_POPUPGUTTER = 13,
+    MENU_POPUPITEM = 14,
+    MENU_POPUPSEPARATOR = 15,
+    MENU_POPUPSUBMENU = 16,
+};
+
+enum POPUPITEMSTATES
+{
+    MPI_NORMAL = 1,
+    MPI_HOT = 2,
+    MPI_DISABLED = 3,
+    MPI_DISABLEDHOT = 4,
+};
+
+enum POPUPCHECKBACKGROUNDSTATES
+{
+    MCB_DISABLED = 1,
+    MCB_NORMAL = 2,
+    MCB_BITMAP = 3,
+};
+
+enum POPUPCHECKSTATES
+{
+    MC_CHECKMARKNORMAL = 1,
+    MC_CHECKMARKDISABLED = 2,
+    MC_BULLETNORMAL = 3,
+    MC_BULLETDISABLED = 4,
+};
+
+#endif
+
+// ----------------------------------------------------------------------------
+// End definitions for legacy Windows SDKs
+// ----------------------------------------------------------------------------
 
 // Amazingly, GetThemeFont() and GetThemeSysFont() functions use LOGFONTA under
 // XP but LOGFONTW (even in non-Unicode build) under later versions of Windows.
@@ -32,21 +171,18 @@ public:
     // Trivial default ctor.
     wxUxThemeFont() { }
 
-    // Just some unique type.
-    struct Ptr { };
-
 #if wxUSE_UNICODE
     // In Unicode build we always use LOGFONT anyhow so this class is
     // completely trivial.
-    Ptr *GetPtr() { return reinterpret_cast<Ptr *>(&m_lfW); }
+    LPLOGFONTW GetPtr() { return &m_lfW; }
     const LOGFONTW& GetLOGFONT() { return m_lfW; }
 #else // !wxUSE_UNICODE
     // Return either LOGFONTA or LOGFONTW pointer as required by the current
     // Windows version.
-    Ptr *GetPtr()
+    LPLOGFONTW GetPtr()
     {
-        return UseLOGFONTW() ? reinterpret_cast<Ptr *>(&m_lfW)
-                             : reinterpret_cast<Ptr *>(&m_lfA);
+        return UseLOGFONTW() ? &m_lfW
+                             : reinterpret_cast<LPLOGFONTW>(&m_lfA);
     }
 
     // This method returns LOGFONT (i.e. LOGFONTA in ANSI build and LOGFONTW in
@@ -84,208 +220,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxUxThemeFont);
 };
 
-typedef int(__stdcall *DTT_CALLBACK_PROC)(HDC hdc, const wchar_t * pszText, int cchText, RECT * prc, unsigned int dwFlags, WXLPARAM lParam);
-
-typedef struct _DTTOPTS
-{
-    DWORD             dwSize;
-    DWORD             dwFlags;
-    COLORREF          crText;
-    COLORREF          crBorder;
-    COLORREF          crShadow;
-    int               iTextShadowType;
-    POINT             ptShadowOffset;
-    int               iBorderSize;
-    int               iFontPropId;
-    int               iColorPropId;
-    int               iStateId;
-    BOOL              fApplyOverlay;
-    int               iGlowSize;
-    DTT_CALLBACK_PROC pfnDrawTextCallback;
-    WXLPARAM          lParam;
-} DTTOPTS, *PDTTOPTS;
-
-typedef HTHEME  (__stdcall *PFNWXUOPENTHEMEDATA)(HWND, const wchar_t *);
-typedef HRESULT (__stdcall *PFNWXUCLOSETHEMEDATA)(HTHEME);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEBACKGROUND)(HTHEME, HDC, int, int, const RECT *, const RECT *);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEBACKGROUNDEX)(HTHEME, HDC, int, int, const RECT *, const DTBGOPTS *);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMETEXT)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, DWORD, const RECT *);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMETEXTEX)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const DTTOPTS *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDCONTENTRECT)(HTHEME, HDC, int, int, const RECT *, RECT *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDEXTENT)(HTHEME, HDC, int, int, const RECT *, RECT *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEPARTSIZE)(HTHEME, HDC, int, int, const RECT *, /* enum */ THEMESIZE, SIZE *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMETEXTEXTENT)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, const RECT *, RECT *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMETEXTMETRICS)(HTHEME, HDC, int, int, TEXTMETRIC*);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEBACKGROUNDREGION)(HTHEME, HDC, int, int, const RECT *, HRGN *);
-typedef HRESULT (__stdcall *PFNWXUHITTESTTHEMEBACKGROUND)(HTHEME, HDC, int, int, DWORD, const RECT *, HRGN, POINT, unsigned short *);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEEDGE)(HTHEME, HDC, int, int, const RECT *, unsigned int, unsigned int, RECT *);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEICON)(HTHEME, HDC, int, int, const RECT *, HIMAGELIST, int);
-typedef BOOL    (__stdcall *PFNWXUISTHEMEPARTDEFINED)(HTHEME, int, int);
-typedef BOOL    (__stdcall *PFNWXUISTHEMEBACKGROUNDPARTIALLYTRANSPARENT)(HTHEME, int, int);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMECOLOR)(HTHEME, int, int, int, COLORREF*);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEMETRIC)(HTHEME, HDC, int, int, int, int *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMESTRING)(HTHEME, int, int, int, wchar_t *, int);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEBOOL)(HTHEME, int, int, int, BOOL *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEINT)(HTHEME, int, int, int, int *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEENUMVALUE)(HTHEME, int, int, int, int *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEPOSITION)(HTHEME, int, int, int, POINT *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEFONT)(HTHEME, HDC, int, int, int, wxUxThemeFont::Ptr *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMERECT)(HTHEME, int, int, int, RECT *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEMARGINS)(HTHEME, HDC, int, int, int, RECT *, MARGINS *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEINTLIST)(HTHEME, int, int, int, INTLIST*);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEPROPERTYORIGIN)(HTHEME, int, int, int, /* enum */ PROPERTYORIGIN *);
-typedef HRESULT (__stdcall *PFNWXUSETWINDOWTHEME)(HWND, const wchar_t*, const wchar_t *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEFILENAME)(HTHEME, int, int, int, wchar_t *, int);
-typedef COLORREF(__stdcall *PFNWXUGETTHEMESYSCOLOR)(HTHEME, int);
-typedef HBRUSH  (__stdcall *PFNWXUGETTHEMESYSCOLORBRUSH)(HTHEME, int);
-typedef BOOL    (__stdcall *PFNWXUGETTHEMESYSBOOL)(HTHEME, int);
-typedef int     (__stdcall *PFNWXUGETTHEMESYSSIZE)(HTHEME, int);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMESYSFONT)(HTHEME, int, wxUxThemeFont::Ptr *);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMESYSSTRING)(HTHEME, int, wchar_t *, int);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMESYSINT)(HTHEME, int, int *);
-typedef BOOL    (__stdcall *PFNWXUISTHEMEACTIVE)();
-typedef BOOL    (__stdcall *PFNWXUISAPPTHEMED)();
-typedef HTHEME  (__stdcall *PFNWXUGETWINDOWTHEME)(HWND);
-typedef HRESULT (__stdcall *PFNWXUENABLETHEMEDIALOGTEXTURE)(HWND, DWORD);
-typedef BOOL    (__stdcall *PFNWXUISTHEMEDIALOGTEXTUREENABLED)(HWND);
-typedef DWORD   (__stdcall *PFNWXUGETTHEMEAPPPROPERTIES)();
-typedef void    (__stdcall *PFNWXUSETTHEMEAPPPROPERTIES)(DWORD);
-typedef HRESULT (__stdcall *PFNWXUGETCURRENTTHEMENAME)(wchar_t *, int, wchar_t *, int, wchar_t *, int);
-typedef HRESULT (__stdcall *PFNWXUGETTHEMEDOCUMENTATIONPROPERTY)(const wchar_t *, const wchar_t *, wchar_t *, int);
-typedef HRESULT (__stdcall *PFNWXUDRAWTHEMEPARENTBACKGROUND)(HWND, HDC, const RECT *);
-typedef HRESULT (__stdcall *PFNWXUENABLETHEMING)(BOOL);
-
-// ----------------------------------------------------------------------------
-// wxUxThemeEngine: provides all theme functions from uxtheme.dll
-// ----------------------------------------------------------------------------
-
-// we always define this class, even if wxUSE_UXTHEME == 0, but we just make it
-// empty in this case -- this allows to use it elsewhere without any #ifdefs
-#if wxUSE_UXTHEME
-    #include "wx/dynlib.h"
-
-    #define wxUX_THEME_DECLARE(type, func) type func;
-#else
-    #define wxUX_THEME_DECLARE(type, func) type func(...) { return 0; }
-#endif
-
-class WXDLLIMPEXP_CORE wxUxThemeEngine
-{
-public:
-    // get the theme engine or NULL if themes are not available
-    static wxUxThemeEngine *Get();
-
-    // get the theme enging or NULL if themes are not available or not used for
-    // this application
-    static wxUxThemeEngine *GetIfActive();
-
-    // all uxtheme.dll functions
-    wxUX_THEME_DECLARE(PFNWXUOPENTHEMEDATA, OpenThemeData)
-    wxUX_THEME_DECLARE(PFNWXUCLOSETHEMEDATA, CloseThemeData)
-    wxUX_THEME_DECLARE(PFNWXUDRAWTHEMEBACKGROUND, DrawThemeBackground)
-    wxUX_THEME_DECLARE(PFNWXUDRAWTHEMEBACKGROUNDEX, DrawThemeBackgroundEx)
-    wxUX_THEME_DECLARE(PFNWXUDRAWTHEMETEXT, DrawThemeText)
-    wxUX_THEME_DECLARE(PFNWXUDRAWTHEMETEXTEX, DrawThemeTextEx)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEBACKGROUNDCONTENTRECT, GetThemeBackgroundContentRect)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEBACKGROUNDEXTENT, GetThemeBackgroundExtent)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEPARTSIZE, GetThemePartSize)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMETEXTEXTENT, GetThemeTextExtent)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMETEXTMETRICS, GetThemeTextMetrics)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEBACKGROUNDREGION, GetThemeBackgroundRegion)
-    wxUX_THEME_DECLARE(PFNWXUHITTESTTHEMEBACKGROUND, HitTestThemeBackground)
-    wxUX_THEME_DECLARE(PFNWXUDRAWTHEMEEDGE, DrawThemeEdge)
-    wxUX_THEME_DECLARE(PFNWXUDRAWTHEMEICON, DrawThemeIcon)
-    wxUX_THEME_DECLARE(PFNWXUISTHEMEPARTDEFINED, IsThemePartDefined)
-    wxUX_THEME_DECLARE(PFNWXUISTHEMEBACKGROUNDPARTIALLYTRANSPARENT, IsThemeBackgroundPartiallyTransparent)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMECOLOR, GetThemeColor)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEMETRIC, GetThemeMetric)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMESTRING, GetThemeString)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEBOOL, GetThemeBool)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEINT, GetThemeInt)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEENUMVALUE, GetThemeEnumValue)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEPOSITION, GetThemePosition)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEFONT, GetThemeFont)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMERECT, GetThemeRect)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEMARGINS, GetThemeMargins)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEINTLIST, GetThemeIntList)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEPROPERTYORIGIN, GetThemePropertyOrigin)
-    wxUX_THEME_DECLARE(PFNWXUSETWINDOWTHEME, SetWindowTheme)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEFILENAME, GetThemeFilename)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMESYSCOLOR, GetThemeSysColor)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMESYSCOLORBRUSH, GetThemeSysColorBrush)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMESYSBOOL, GetThemeSysBool)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMESYSSIZE, GetThemeSysSize)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMESYSFONT, GetThemeSysFont)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMESYSSTRING, GetThemeSysString)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMESYSINT, GetThemeSysInt)
-    wxUX_THEME_DECLARE(PFNWXUISTHEMEACTIVE, IsThemeActive)
-    wxUX_THEME_DECLARE(PFNWXUISAPPTHEMED, IsAppThemed)
-    wxUX_THEME_DECLARE(PFNWXUGETWINDOWTHEME, GetWindowTheme)
-    wxUX_THEME_DECLARE(PFNWXUENABLETHEMEDIALOGTEXTURE, EnableThemeDialogTexture)
-    wxUX_THEME_DECLARE(PFNWXUISTHEMEDIALOGTEXTUREENABLED, IsThemeDialogTextureEnabled)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEAPPPROPERTIES, GetThemeAppProperties)
-    wxUX_THEME_DECLARE(PFNWXUSETTHEMEAPPPROPERTIES, SetThemeAppProperties)
-    wxUX_THEME_DECLARE(PFNWXUGETCURRENTTHEMENAME, GetCurrentThemeName)
-    wxUX_THEME_DECLARE(PFNWXUGETTHEMEDOCUMENTATIONPROPERTY, GetThemeDocumentationProperty)
-    wxUX_THEME_DECLARE(PFNWXUDRAWTHEMEPARENTBACKGROUND, DrawThemeParentBackground)
-    wxUX_THEME_DECLARE(PFNWXUENABLETHEMING, EnableTheming)
-
-private:
-    // construcor is private as only Get() can create us and is also trivial as
-    // everything really happens in Initialize()
-    wxUxThemeEngine() { }
-
-    // destructor is private as only Get() and wxUxThemeModule delete us, it is
-    // not virtual as we're not supposed to be derived from
-    ~wxUxThemeEngine() { }
-
-#if wxUSE_UXTHEME
-    // initialize the theme engine: load the DLL, resolve the functions
-    //
-    // return true if we can be used, false if themes are not available
-    bool Initialize();
-
-
-    // uxtheme.dll
-    wxDynamicLibrary m_dllUxTheme;
-
-
-    // the one and only theme engine, initially NULL
-    static wxUxThemeEngine *ms_themeEngine;
-
-    // this is a bool which initially has the value -1 meaning "unknown"
-    static int ms_isThemeEngineAvailable;
-
-    // it must be able to delete us
-    friend class wxUxThemeModule;
-#endif // wxUSE_UXTHEME
-
-    wxDECLARE_NO_COPY_CLASS(wxUxThemeEngine);
-};
-
-#if wxUSE_UXTHEME
-
-/* static */ inline wxUxThemeEngine *wxUxThemeEngine::GetIfActive()
-{
-    wxUxThemeEngine *engine = Get();
-    return engine && engine->IsAppThemed() && engine->IsThemeActive()
-                ? engine
-                : NULL;
-}
-
-#else // !wxUSE_UXTHEME
-
-/* static */ inline wxUxThemeEngine *wxUxThemeEngine::Get()
-{
-    return NULL;
-}
-
-/* static */ inline wxUxThemeEngine *wxUxThemeEngine::GetIfActive()
-{
-    return NULL;
-}
-
-#endif // wxUSE_UXTHEME/!wxUSE_UXTHEME
+WXDLLIMPEXP_CORE bool wxUxThemeIsActive();
 
 // ----------------------------------------------------------------------------
 // wxUxThemeHandle: encapsulates ::Open/CloseThemeData()
@@ -296,10 +231,7 @@ class wxUxThemeHandle
 public:
     wxUxThemeHandle(const wxWindow *win, const wchar_t *classes)
     {
-        wxUxThemeEngine *engine = wxUxThemeEngine::Get();
-
-        m_hTheme = engine ? (HTHEME)engine->OpenThemeData(GetHwndOf(win), classes)
-                          : NULL;
+        m_hTheme = (HTHEME)::OpenThemeData(GetHwndOf(win), classes);
     }
 
     operator HTHEME() const { return m_hTheme; }
@@ -308,7 +240,7 @@ public:
     {
         if ( m_hTheme )
         {
-            wxUxThemeEngine::Get()->CloseThemeData(m_hTheme);
+            ::CloseThemeData(m_hTheme);
         }
     }
 

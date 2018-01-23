@@ -570,6 +570,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
                  wx/msw/libraries.h when wxUSE_ACCESSIBILITY==1 -->
             <if cond="IS_MSVC=='0'">
                 <sys-lib>oleacc</sys-lib>
+                <sys-lib>uxtheme</sys-lib>
             </if>
         </if>
     </template>

@@ -47,13 +47,6 @@
 #include "wx/msw/dc.h"
 #include "wx/msw/private/winstyle.h"
 
-// the values coincide with those in tmschema.h
-#define BP_GROUPBOX 4
-
-#define GBS_NORMAL 1
-
-#define TMT_FONT 210
-
 namespace
 {
 
@@ -488,7 +481,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
     // background mode doesn't change anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
     // ourselves if we have a non default fg colour
-    if ( m_hasFgCol && wxUxThemeEngine::GetIfActive() && !m_labelWin )
+    if ( m_hasFgCol && wxUxThemeIsActive() && !m_labelWin )
     {
         // draw over the text in default colour in our colour
         HDC hdc = GetHdcOf(*impl);
@@ -510,7 +503,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
             if ( hTheme )
             {
                 wxUxThemeFont themeFont;
-                if ( wxUxThemeEngine::Get()->GetThemeFont
+                if ( ::GetThemeFont
                                              (
                                                 hTheme,
                                                 hdc,
