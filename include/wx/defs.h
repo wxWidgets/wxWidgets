@@ -26,10 +26,10 @@
  */
 #ifdef __cplusplus
     /*
-        Test for WIN32, defined by windows.h itself, not our own __WINDOWS__,
-        which is not defined yet.
+        Test for _WINDOWS_, used as header guard by windows.h itself, not our
+        own __WINDOWS__, which is not defined yet.
      */
-#   ifdef WIN32
+#   ifdef _WINDOWS_
 #       include "wx/msw/winundef.h"
 #   endif /* WIN32 */
 #endif /* __cplusplus */
