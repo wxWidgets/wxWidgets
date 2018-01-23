@@ -1008,6 +1008,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\maskededit.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\notifmsgg.cpp"
 				>
 			</File>
@@ -1371,6 +1375,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\maskededit.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\notifmsg.h"
 				>
 			</File>
@@ -1473,6 +1481,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\laywin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\maskededit.h"
 				>
 			</File>
 			<File

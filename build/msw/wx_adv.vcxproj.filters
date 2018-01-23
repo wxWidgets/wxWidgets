@@ -111,6 +111,9 @@
     <ClCompile Include="..\..\src\generic\laywin.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\maskededit.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\notifmsgg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
@@ -286,6 +289,9 @@
     <ClInclude Include="..\..\include\wx\generic\laywin.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\maskededit.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\notifmsg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
@@ -314,6 +320,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\laywin.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\maskededit.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\bmpcbox.h">

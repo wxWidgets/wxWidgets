@@ -2491,6 +2491,7 @@ ADVANCED_CMN_SRC =
     src/generic/helpext.cpp
     src/generic/hyperlinkg.cpp
     src/generic/laywin.cpp
+    src/generic/maskededit.cpp
     src/generic/notifmsgg.cpp
     src/generic/odcombo.cpp
     src/generic/propdlg.cpp
@@ -2532,6 +2533,7 @@ ADVANCED_CMN_HDR =
     wx/generic/helpext.h
     wx/generic/hyperlink.h
     wx/generic/laywin.h
+    wx/generic/maskededit.h
     wx/generic/notifmsg.h
     wx/generic/propdlg.h
     wx/generic/sashwin.h
@@ -2542,6 +2544,7 @@ ADVANCED_CMN_HDR =
     wx/hyperlink.h
     wx/joystick.h
     wx/laywin.h
+    wx/maskededit.h
     wx/notifmsg.h
     wx/odcombo.h
     wx/propdlg.h
