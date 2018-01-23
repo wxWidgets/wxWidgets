@@ -102,6 +102,7 @@ private:
     void OnExpand(wxCommandEvent& event);
     void OnShowCurrent(wxCommandEvent& event);
     void OnSetNinthCurrent(wxCommandEvent& event);
+    void OnChangeNinthTitle(wxCommandEvent& event);
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
@@ -342,6 +343,7 @@ enum
     ID_EXPAND           = 105,
     ID_SHOW_CURRENT,
     ID_SET_NINTH_CURRENT,
+    ID_CHANGE_NINTH_TITLE,
 
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
@@ -384,6 +386,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_EXPAND, MyFrame::OnExpand )
     EVT_BUTTON( ID_SHOW_CURRENT, MyFrame::OnShowCurrent )
     EVT_BUTTON( ID_SET_NINTH_CURRENT, MyFrame::OnSetNinthCurrent )
+    EVT_BUTTON( ID_CHANGE_NINTH_TITLE, MyFrame::OnChangeNinthTitle )
 
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
@@ -512,6 +515,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                                    "&Show current"), border);
     sizerCurrent->Add(new wxButton(firstPanel, ID_SET_NINTH_CURRENT,
                                    "Make &ninth symphony current"), border);
+    sizerCurrent->Add(new wxButton(firstPanel, ID_CHANGE_NINTH_TITLE,
+                                   "Change ninth &title"), border);
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
     m_ctrl[0]->SetMinSize(wxSize(-1, 200));
@@ -1135,6 +1140,19 @@ void MyFrame::OnSetNinthCurrent(wxCommandEvent& WXUNUSED(event))
     }
 
     m_ctrl[0]->SetCurrentItem(item);
+}
+
+void MyFrame::OnChangeNinthTitle(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewItem item(m_music_model->GetNinthItem());
+    if ( !item.IsOk() )
+    {
+        wxLogError( "Cannot change the ninth symphony title: it was removed!" );
+        return;
+    }
+
+    m_music_model->SetValue("Symphony No. 9", item, 0);
+    m_music_model->ItemChanged(item);
 }
 
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
