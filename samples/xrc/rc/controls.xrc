@@ -983,6 +983,58 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxStaticBoxSizer">
                                     <orient>wxVERTICAL</orient>
                                     <label>Internet options</label>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <style>wxRB_GROUP</style>
+                                            <label>Use _proxy</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <label>Use _VPN</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <label>Use _Tor</label>
+                                            <value>1</value>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticBoxSizer">
+                                    <orient>wxVERTICAL</orient>
+                                    <windowlabel>
+                                        <object class="wxCheckBox">
+                                            <label>Enable quantum mechanics</label>
+                                            <checked>1</checked>
+                                        </object>
+                                    </windowlabel>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <style>wxRB_GROUP</style>
+                                            <label>Cat is dead</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <label>Cat is alive</label>
+                                            <value>1</value>
+                                        </object>
+                                    </object>
                                 </object>
                             </object>
                         </object>

@@ -206,6 +206,15 @@ public:
     virtual void GTKHandleRealized();
     void GTKHandleUnrealize();
 
+    // Apply the widget style to the given window. Should normally only be
+    // called from the overridden DoApplyWidgetStyle() implementation in
+    // another window and exists solely to provide access to protected
+    // DoApplyWidgetStyle() when it's really needed.
+    static void GTKDoApplyWidgetStyle(wxWindowGTK* win, GtkRcStyle *style)
+    {
+        win->DoApplyWidgetStyle(style);
+    }
+
 protected:
     // for controls composed of multiple GTK widgets, return true to eliminate
     // spurious focus events if the focus changes between GTK+ children within
@@ -426,8 +435,11 @@ protected:
 
     void GTKApplyWidgetStyle(bool forceStyle = false);
 
-    // helper function to ease native widgets wrapping, called by
-    // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
+    // Helper function to ease native widgets wrapping, called by
+    // GTKApplyWidgetStyle() and supposed to be overridden, not called.
+    //
+    // And if you actually need to call it, e.g. to propagate style change to a
+    // composite control, use public static GTKDoApplyWidgetStyle().
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
     void GTKApplyStyle(GtkWidget* widget, GtkRcStyle* style);

@@ -2430,6 +2430,9 @@ support the following properties:
     Sizer orientation, "wxHORIZONTAL" or "wxVERTICAL" (default: wxHORIZONTAL).}
 @row3col{label, @ref overview_xrcformat_type_text,
     Label to be used for the static box around the sizer (default: empty).}
+@row3col{windowlabel, any window,
+    Window to be used instead of the plain text label (default: none).
+    This property is only available since wxWidgets 3.1.1.}}
 @endTable
 
 @subsection overview_xrcformat_wxgridsizer wxGridSizer
