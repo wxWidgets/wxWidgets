@@ -188,6 +188,25 @@ public:
 
     int GTKGetUniformRowHeight() const { return m_uniformRowHeight; }
 
+    // Simple RAII helper for disabling selection events during its lifetime.
+    class SelectionEventsSuppressor
+    {
+    public:
+        explicit SelectionEventsSuppressor(wxDataViewCtrl* ctrl)
+            : m_ctrl(ctrl)
+        {
+            m_ctrl->GtkDisableSelectionEvents();
+        }
+
+        ~SelectionEventsSuppressor()
+        {
+            m_ctrl->GtkEnableSelectionEvents();
+        }
+
+    private:
+        wxDataViewCtrl* const m_ctrl;
+    };
+
 protected:
     virtual void DoSetExpanderColumn() wxOVERRIDE;
     virtual void DoSetIndent() wxOVERRIDE;

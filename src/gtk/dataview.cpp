@@ -5068,7 +5068,7 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 {
     wxCHECK_RET( m_internal, "model must be associated before calling SetSelections" );
 
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
@@ -5093,8 +5093,6 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
         iter.user_data = (gpointer) item.GetID();
         gtk_tree_selection_select_iter( selection, &iter );
     }
-
-    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )
@@ -5103,7 +5101,7 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
 
     ExpandAncestors(item);
 
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
@@ -5111,15 +5109,13 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
     iter.stamp = m_internal->GetGtkModel()->stamp;
     iter.user_data = (gpointer) item.GetID();
     gtk_tree_selection_select_iter( selection, &iter );
-
-    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::Unselect( const wxDataViewItem & item )
 {
     wxCHECK_RET( m_internal, "model must be associated before calling Unselect" );
 
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
@@ -5127,8 +5123,6 @@ void wxDataViewCtrl::Unselect( const wxDataViewItem & item )
     iter.stamp = m_internal->GetGtkModel()->stamp;
     iter.user_data = (gpointer) item.GetID();
     gtk_tree_selection_unselect_iter( selection, &iter );
-
-    GtkEnableSelectionEvents();
 }
 
 bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
@@ -5146,24 +5140,20 @@ bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
 
 void wxDataViewCtrl::SelectAll()
 {
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     gtk_tree_selection_select_all( selection );
-
-    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::UnselectAll()
 {
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     gtk_tree_selection_unselect_all( selection );
-
-    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::EnsureVisible(const wxDataViewItem& item,
