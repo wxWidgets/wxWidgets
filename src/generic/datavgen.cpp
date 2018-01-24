@@ -1666,12 +1666,11 @@ public:
                                 m_sortOrder.IsAscending());
     }
 
-    // Return true if the items are in order, i.e. the first item is less than
-    // or equal (because it's useless to exchange them in this case) than the
-    // second one. This is used by std::sort().
+    // Return true if the items are (strictly) in order, i.e. the first item is
+    // less than the second one. This is used by std::sort().
     bool operator()(wxDataViewTreeNode* first, wxDataViewTreeNode* second) const
     {
-        return Compare(first, second) <= 0;
+        return Compare(first, second) < 0;
     }
 
 private:
