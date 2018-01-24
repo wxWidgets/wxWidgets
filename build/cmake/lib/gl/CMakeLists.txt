@@ -13,6 +13,8 @@ wx_append_sources(GL_FILES OPENGL_CMN)
 
 if(WIN32)
     wx_append_sources(GL_FILES OPENGL_MSW)
+elseif(WXGTK)
+    wx_append_sources(GL_FILES OPENGL_GTK)
 elseif(APPLE)
     wx_append_sources(GL_FILES OPENGL_OSX_SHARED)
 endif()

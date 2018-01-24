@@ -3099,6 +3099,16 @@ set(OPENGL_MSW_HDR
     wx/msw/glcanvas.h
 )
 
+set(OPENGL_GTK_SRC
+    src/gtk/glcanvas.cpp
+    src/unix/glx11.cpp
+)
+
+set(OPENGL_GTK_HDR
+    wx/gtk/glcanvas.h
+    wx/unix/glx11.h
+)
+
 set(OPENGL_OSX_SHARED_SRC
     src/osx/cocoa/glcanvas.mm
     src/osx/glcanvas_osx.cpp
