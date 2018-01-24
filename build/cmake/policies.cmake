@@ -48,3 +48,8 @@ if(POLICY CMP0054)
     # only interpret if() arguments as variables or keywords when unquoted
     cmake_policy(SET CMP0054 NEW)
 endif()
+
+if(POLICY CMP0067)
+    # Honor language standard in try_compile() source-file signature.
+    cmake_policy(SET CMP0067 NEW)
+endif()
