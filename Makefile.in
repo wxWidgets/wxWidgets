@@ -3299,6 +3299,7 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/generic/listctrl.h \
 	wx/generic/prntdlgg.h \
 	wx/generic/statusbr.h \
+	wx/osx/appprogress.h \
 	wx/osx/cocoa/chkconf.h \
 	wx/osx/cocoa/evtloop.h \
 	wx/osx/cocoa/private.h \
@@ -3395,6 +3396,7 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/generic/listctrl.h \
 	wx/generic/prntdlgg.h \
 	wx/generic/statusbr.h \
+	wx/osx/appprogress.h \
 	wx/osx/iphone/chkconf.h \
 	wx/osx/iphone/evtloop.h \
 	wx/osx/iphone/private.h \

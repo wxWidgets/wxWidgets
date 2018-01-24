@@ -2174,6 +2174,7 @@ OSX_SHARED_HDR =
     wx/osx/accel.h
     wx/osx/anybutton.h
     wx/osx/app.h
+    wx/osx/appprogress.h
     wx/osx/bitmap.h
     wx/osx/bmpbuttn.h
     wx/osx/brush.h

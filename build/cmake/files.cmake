@@ -2280,6 +2280,7 @@ set(OSX_SHARED_HDR
     wx/generic/listctrl.h
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
+    wx/osx/appprogress.h
 )
 
 set(OSX_COCOA_SRC
