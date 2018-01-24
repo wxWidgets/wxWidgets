@@ -7,6 +7,8 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+# Please keep the policies in the order of their numbers.
+
 if(POLICY CMP0025)
     # Compiler id for Apple Clang is now AppleClang
     cmake_policy(SET CMP0025 NEW)
@@ -15,6 +17,11 @@ endif()
 if(POLICY CMP0038)
     # targets may not link directly to themselves
     cmake_policy(SET CMP0038 NEW)
+endif()
+
+if(POLICY CMP0042)
+    # MACOSX_RPATH is enabled by default.
+    cmake_policy(SET CMP0042 NEW)
 endif()
 
 if(POLICY CMP0045)
@@ -40,9 +47,4 @@ endif()
 if(POLICY CMP0054)
     # only interpret if() arguments as variables or keywords when unquoted
     cmake_policy(SET CMP0054 NEW)
-endif()
-
-if(POLICY CMP0042)
-    # MACOSX_RPATH is enabled by default.
-    cmake_policy(SET CMP0042 NEW)
 endif()
