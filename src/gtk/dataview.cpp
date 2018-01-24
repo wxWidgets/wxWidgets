@@ -1902,10 +1902,6 @@ bool wxGtkDataViewModelNotifier::Cleared()
     // has been deleted so call row_deleted() for every
     // child of root...
 
-    int count = m_internal->iter_n_children( NULL ); // number of children of root
-
-    GtkTreePath *path = gtk_tree_path_new_first();  // points to root
-
     // It is important to avoid selection changed events being generated from
     // here as they would reference the already deleted model items, which
     // would result in crashes in any code attempting to handle these events.
@@ -1917,11 +1913,12 @@ bool wxGtkDataViewModelNotifier::Cleared()
     const gint stampOrig = wxgtk_model->stamp;
     wxgtk_model->stamp = 0;
 
-    int i;
-    for (i = 0; i < count; i++)
-        gtk_tree_model_row_deleted( GTK_TREE_MODEL(wxgtk_model), path );
-
-    gtk_tree_path_free( path );
+    {
+        wxGtkTreePath path(gtk_tree_path_new_first());  // points to root
+        const int count = m_internal->iter_n_children( NULL ); // number of children of root
+        for (int i = 0; i < count; i++)
+            gtk_tree_model_row_deleted( GTK_TREE_MODEL(wxgtk_model), path );
+    }
 
     wxgtk_model->stamp = stampOrig;
 
