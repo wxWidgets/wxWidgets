@@ -3963,6 +3963,12 @@ public:
     // to overlap from one line to the next.
     void SetPhasesDraw(int phases);
 
+    // Choose the quality level for text.
+    void SetFontQuality(int fontQuality);
+
+    // Retrieve the quality level for text.
+    int GetFontQuality() const;
+
     // Scroll so that a display line is at the top of the display.
     void SetFirstVisibleLine(int displayLine);
 

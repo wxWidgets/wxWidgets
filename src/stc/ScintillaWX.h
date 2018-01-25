@@ -87,6 +87,7 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;           // forward
 class ScintillaWX;
 class wxSTCTimer;
+class SurfaceData;
 
 //----------------------------------------------------------------------
 // Helper classes
@@ -196,6 +197,8 @@ public:
     void ClipChildren(wxDC& dc, PRectangle rect);
     void SetUseAntiAliasing(bool useAA);
     bool GetUseAntiAliasing();
+    SurfaceData* GetSurfaceData() const {return m_surfaceData;}
+    void SetPaintAbandoned(){paintState = paintAbandoned;}
 
 private:
     bool                capturedMouse;
@@ -212,6 +215,7 @@ private:
 
     int                 wheelVRotation;
     int                 wheelHRotation;
+    SurfaceData*        m_surfaceData;
 
     // For use in creating a system caret
     bool HasCaretSizeChanged();
