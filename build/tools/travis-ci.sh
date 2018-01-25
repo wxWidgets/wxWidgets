@@ -4,6 +4,14 @@
 
 set -e
 
+wxPROC_COUNT=`getconf _NPROCESSORS_ONLN`
+((wxPROC_COUNT++))
+if [ "$wxTOOLSET" == "cmake" ] && [ "$wxCMAKE_GENERATOR" == "Xcode" ]; then
+    wxJOBS="-jobs $wxPROC_COUNT"
+else
+    wxJOBS="-j$wxPROC_COUNT"
+fi
+
 case $wxTOOLSET in
     cmake)
         if [ `uname -s` = "Linux" ] && [ `lsb_release -cs` = "precise" ]; then
@@ -22,7 +30,7 @@ case $wxTOOLSET in
         echo 'travis_fold:end:configure'
         echo 'travis_fold:start:building'
         echo 'Building...'
-        cmake --build .
+        cmake --build . -- $wxJOBS
         echo 'travis_fold:end:building'
         if [ "$wxCMAKE_TESTS" != "OFF" ]; then
             echo 'travis_fold:start:testing'
@@ -36,10 +44,10 @@ case $wxTOOLSET in
         ./configure --disable-optimise $wxCONFIGURE_FLAGS
         echo -en 'travis_fold:end:script.configure\\r'
         echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
-        make
+        make $wxJOBS
         echo -en 'travis_fold:end:script.build\\r'
         echo 'Building tests...' && echo -en 'travis_fold:start:script.tests\\r'
-        make -C tests
+        make -C tests $wxJOBS
         echo -en 'travis_fold:end:script.tests\\r'
         echo 'Testing...' && echo -en 'travis_fold:start:script.testing\\r'
         pushd tests && ./test && popd
