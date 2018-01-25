@@ -91,16 +91,14 @@ class wxFontWithAscent : public wxFont
 public:
     explicit wxFontWithAscent(const wxFont &font)
         : wxFont(font),
-          m_ascent(0),m_surfaceFontData(NULL)
+          m_ascent(0),
+          m_surfaceFontData(NULL)
     {
     }
 
-    ~wxFontWithAscent()
+    virtual ~wxFontWithAscent()
     {
-        if ( m_surfaceFontData )
-        {
-            delete m_surfaceFontData;
-        }
+        delete m_surfaceFontData;
     }
 
     static wxFontWithAscent* FromFID(FontID fid)
@@ -111,8 +109,8 @@ public:
     void SetAscent(int ascent) { m_ascent = ascent; }
     int GetAscent() const { return m_ascent; }
 
-    SurfaceData* GetSurfaceFontData() const {return m_surfaceFontData;}
-    void SetSurfaceFontData(SurfaceData* data){m_surfaceFontData=data;}
+    SurfaceData* GetSurfaceFontData() const { return m_surfaceFontData; }
+    void SetSurfaceFontData(SurfaceData* data) { m_surfaceFontData=data; }
 
 private:
     int m_ascent;
@@ -847,10 +845,12 @@ bool SurfaceFontDataD2D::Initialised() const
 //----------------------------------------------------------------------
 // SurfaceDataD2D
 
-SurfaceDataD2D::SurfaceDataD2D(ScintillaWX* editor):m_editor(editor),
-    m_pD2DFactory(::wxD2D1Factory()), m_pDWriteFactory(::wxDWriteFactory())
+SurfaceDataD2D::SurfaceDataD2D(ScintillaWX* editor)
+    : m_editor(editor),
+      m_pD2DFactory(::wxD2D1Factory()),
+      m_pDWriteFactory(::wxDWriteFactory())
 {
-    if( Initialised() )
+    if ( Initialised() )
     {
         HRESULT hr =
             m_pDWriteFactory->CreateRenderingParams(&m_defaultRenderingParams);
@@ -1044,7 +1044,8 @@ private:
     FontID m_curFontID;
 };
 
-SurfaceD2D::SurfaceD2D():m_pDWriteFactory(::wxDWriteFactory())
+SurfaceD2D::SurfaceD2D()
+    : m_pDWriteFactory(::wxDWriteFactory())
 {
     m_unicodeMode = false;
     m_x = 0;
@@ -1068,7 +1069,7 @@ SurfaceD2D::~SurfaceD2D()
     Release();
 }
 
-void SurfaceD2D::Init(WindowID WXUNUSED(wid) )
+void SurfaceD2D::Init(WindowID WXUNUSED(wid))
 {
     Release();
 
@@ -1080,32 +1081,24 @@ void SurfaceD2D::Init(SurfaceID sid, WindowID wid)
 {
     Release();
 
-    wxDC* dc = static_cast<wxDC*>(sid);
-    wxStyledTextCtrl* stc(NULL);
-    ScintillaWX* sciwx(NULL);
     wxWindow* win = wxDynamicCast(wid,wxWindow);
-    wxSize sz = dc->GetSize();
-    RECT rc;
-    HRESULT hr;
-
     if ( win && win->GetName() == "wxSTCCallTip" )
-    {
-        stc = wxDynamicCast(win->GetParent(),wxStyledTextCtrl);
-    }
-    else
-    {
-        stc = wxDynamicCast(wid,wxStyledTextCtrl);
-    }
+        win = win->GetParent();
 
+    wxStyledTextCtrl* const stc = wxDynamicCast(wid, wxStyledTextCtrl);
     if ( stc )
     {
+        wxDC* const dc = static_cast<wxDC*>(sid);
+        const wxSize sz = dc->GetSize();
         SetScale(dc);
-        sciwx = reinterpret_cast<ScintillaWX*>(stc->GetDirectPointer());
+        ScintillaWX* const
+            sciwx = reinterpret_cast<ScintillaWX*>(stc->GetDirectPointer());
         m_surfaceData = static_cast<SurfaceDataD2D*>(sciwx->GetSurfaceData());
-        hr = m_surfaceData->CreateGraphicsResources();
+        HRESULT hr = m_surfaceData->CreateGraphicsResources();
 
         if ( SUCCEEDED(hr) )
         {
+            RECT rc;
             ::SetRect(&rc,0,0,sz.GetWidth(),sz.GetHeight());
             hr = m_surfaceData->GetRenderTarget()
                 ->BindDC(reinterpret_cast<HDC>(dc->GetHandle()),&rc);

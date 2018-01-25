@@ -4500,7 +4500,8 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDirect2DRenderer()
     return gs_D2DRenderer;
 }
 
-wxD2DRenderer::wxD2DRenderer():m_direct2dFactory(wxD2D1Factory())
+wxD2DRenderer::wxD2DRenderer()
+    : m_direct2dFactory(wxD2D1Factory())
 {
     if ( m_direct2dFactory.get() == NULL )
     {
