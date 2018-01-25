@@ -231,6 +231,10 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     SetBufferedDraw(true);
 #endif
 
+#if wxUSE_GRAPHICS_DIRECT2D
+    SetFontQuality(wxSTC_EFF_QUALITY_DEFAULT);
+#endif
+
     return true;
 }
 
