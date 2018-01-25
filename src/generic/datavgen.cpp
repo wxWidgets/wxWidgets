@@ -458,6 +458,11 @@ class wxDataViewTreeNode;
 
 typedef wxVector<wxDataViewTreeNode*> wxDataViewTreeNodes;
 
+// Note: this class is not used at all for virtual list models, so all code
+// using it, i.e. any functions taking or returning objects of this type,
+// including wxDataViewMainWindow::m_root, can only be called after checking
+// that we're using a non-"virtual list" model.
+
 class wxDataViewTreeNode
 {
 public:
@@ -2942,17 +2947,20 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
 bool wxDataViewMainWindow::DoItemChanged(const wxDataViewItem & item, int view_column)
 {
-    // Move this node to its new correct place after it was updated.
-    //
-    // In principle, we could skip the call to PutInSortOrder() if the modified
-    // column is not the sort column, but in real-world applications it's fully
-    // possible and likely that custom compare uses not only the selected model
-    // column but also falls back to other values for comparison. To ensure
-    // consistency it is better to treat a value change as if it was an item
-    // change.
-    wxDataViewTreeNode* const node = FindNode(item);
-    wxCHECK_MSG( node, false, "invalid item" );
-    node->PutInSortOrder(this);
+    if ( !IsVirtualList() )
+    {
+        // Move this node to its new correct place after it was updated.
+        //
+        // In principle, we could skip the call to PutInSortOrder() if the modified
+        // column is not the sort column, but in real-world applications it's fully
+        // possible and likely that custom compare uses not only the selected model
+        // column but also falls back to other values for comparison. To ensure
+        // consistency it is better to treat a value change as if it was an item
+        // change.
+        wxDataViewTreeNode* const node = FindNode(item);
+        wxCHECK_MSG( node, false, "invalid item" );
+        node->PutInSortOrder(this);
+    }
 
     wxDataViewColumn* column;
     if ( view_column == wxNOT_FOUND )
