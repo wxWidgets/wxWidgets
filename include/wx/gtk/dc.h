@@ -35,10 +35,10 @@ public:
     virtual wxSize GetPPI() const wxOVERRIDE;
 
 protected:
-    int m_width, m_height;
+    // Set m_width and m_height from the given (valid) GdkWindow.
+    void InitSize(GdkWindow* window);
 
-private:
-    bool TryGetWindowSize(wxSize& size, wxSize& sizeMM) const;
+    int m_width, m_height;
 
     wxDECLARE_NO_COPY_CLASS(wxGTKCairoDCImpl);
 };

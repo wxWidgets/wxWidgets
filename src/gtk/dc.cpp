@@ -55,6 +55,12 @@ wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, wxWindow* window)
     m_contentScaleFactor = window->GetContentScaleFactor();
 }
 
+void wxGTKCairoDCImpl::InitSize(GdkWindow* window)
+{
+    m_width = gdk_window_get_width(window);
+    m_height = gdk_window_get_height(window);
+}
+
 void wxGTKCairoDCImpl::DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool useMask)
 {
     wxCHECK_RET(IsOk(), "invalid DC");
@@ -343,9 +349,7 @@ wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
 {
     cairo_t* cr = window->GTKPaintContext();
     wxCHECK_RET(cr, "using wxPaintDC without being in a native paint event");
-    GdkWindow* gdkWindow = gtk_widget_get_window(window->m_wxwindow);
-    m_width = gdk_window_get_width(gdkWindow);
-    m_height = gdk_window_get_height(gdkWindow);
+    InitSize(gtk_widget_get_window(window->m_wxwindow));
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
     gc->EnableOffset(m_contentScaleFactor <= 1);
     SetGraphicsContext(gc);
@@ -356,8 +360,8 @@ wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
     : wxGTKCairoDCImpl(owner, 0)
 {
     GdkWindow* window = gdk_get_default_root_window();
-    m_width = gdk_window_get_width(window);
-    m_height = gdk_window_get_height(window);
+    InitSize(window);
+
     cairo_t* cr = gdk_cairo_create(window);
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
     cairo_destroy(cr);
