@@ -28,13 +28,6 @@ wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner)
     m_height = 0;
 }
 
-wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, int)
-    : wxGCDCImpl(owner, 0)
-{
-    m_width = 0;
-    m_height = 0;
-}
-
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, double scaleFactor)
     : wxGCDCImpl(owner, 0)
 {
@@ -46,13 +39,17 @@ wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, double scaleFactor)
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, wxWindow* window)
     : wxGCDCImpl(owner, 0)
 {
-    m_window = window;
-    m_font = window->GetFont();
-    m_textForegroundColour = window->GetForegroundColour();
-    m_textBackgroundColour = window->GetBackgroundColour();
     m_width = 0;
     m_height = 0;
-    m_contentScaleFactor = window->GetContentScaleFactor();
+
+    if ( window )
+    {
+        m_window = window;
+        m_font = window->GetFont();
+        m_textForegroundColour = window->GetForegroundColour();
+        m_textBackgroundColour = window->GetBackgroundColour();
+        m_contentScaleFactor = window->GetContentScaleFactor();
+    }
 }
 
 void wxGTKCairoDCImpl::InitSize(GdkWindow* window)
@@ -357,7 +354,7 @@ wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
 //-----------------------------------------------------------------------------
 
 wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
-    : wxGTKCairoDCImpl(owner, 0)
+    : wxGTKCairoDCImpl(owner, static_cast<wxWindow*>(NULL))
 {
     GdkWindow* window = gdk_get_default_root_window();
     InitSize(window);
@@ -383,7 +380,7 @@ wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner)
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner, wxBitmap& bitmap)
-    : wxGTKCairoDCImpl(owner, 0)
+    : wxGTKCairoDCImpl(owner, static_cast<wxWindow*>(NULL))
     , m_bitmap(bitmap)
 {
     Setup();

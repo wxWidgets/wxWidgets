@@ -17,7 +17,6 @@ class wxGTKCairoDCImpl: public wxGCDCImpl
 {
 public:
     wxGTKCairoDCImpl(wxDC* owner);
-    wxGTKCairoDCImpl(wxDC* owner, int);
     wxGTKCairoDCImpl(wxDC* owner, double scaleFactor);
     wxGTKCairoDCImpl(wxDC* owner, wxWindow* window);
 
