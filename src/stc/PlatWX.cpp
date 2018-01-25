@@ -1858,6 +1858,8 @@ void SurfaceD2D::DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
 #endif // wxUSE_GRAPHICS_DIRECT2D
 
 Surface *Surface::Allocate(int technology) {
+    wxUnusedVar(technology);
+
 #if wxUSE_GRAPHICS_DIRECT2D
     if ( technology == wxSTC_TECHNOLOGY_DIRECTWRITE ) {
         return new SurfaceD2D;
