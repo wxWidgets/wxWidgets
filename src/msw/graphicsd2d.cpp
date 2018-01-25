@@ -40,6 +40,12 @@
 #include <dwrite.h>
 #include <wincodec.h>
 
+#ifdef __MINGW64_TOOLCHAIN__
+#ifndef DRWITE_E_NOFONT
+#define DWRITE_E_NOFONT _HRESULT_TYPEDEF_(0x88985002)
+#endif
+#endif
+
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
 #include <D3D11.h>
 #include <D2d1_1.h>

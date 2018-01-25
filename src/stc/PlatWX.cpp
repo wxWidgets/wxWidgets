@@ -48,6 +48,8 @@
 
 #if wxUSE_GRAPHICS_DIRECT2D
 #include "ScintillaWX.h"
+#include <float.h>
+#include "wx/dcscreen.h"
 #endif
 
 Point Point::FromLong(long lpoint) {
@@ -732,10 +734,12 @@ SurfaceFontDataD2D::SurfaceFontDataD2D(const FontParameters& fp)
         {
             fontWeight = DWRITE_FONT_WEIGHT_LIGHT;
         }
+#ifndef __MINGW64_TOOLCHAIN__
         else if ( weight <= 350 )
         {
             fontWeight = DWRITE_FONT_WEIGHT_SEMI_LIGHT;
         }
+#endif
         else if ( weight <= 400 )
         {
             fontWeight = DWRITE_FONT_WEIGHT_NORMAL;
