@@ -1128,7 +1128,19 @@ public:
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
 
     void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 )
-        { GetStore()->AppendItem( values, data ); }
+    {
+        wxDataViewListStore *store = GetStore();
+        if(values.size() < store->GetColumnCount())
+        {
+            wxVector<wxVariant> temp = values;
+            temp.resize(store->GetColumnCount());
+            store->AppendItem( temp, data );
+        }
+        else
+        {
+            store->AppendItem( values, data );
+        }
+    }
     void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 )
         { GetStore()->PrependItem( values, data ); }
     void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = 0 )
