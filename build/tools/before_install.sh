@@ -19,7 +19,5 @@ case $(uname -s) in
         ;;
 
     Darwin)
-        brew update
-        brew install cppunit --universal
         ;;
 esac

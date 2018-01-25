@@ -14,12 +14,6 @@ fi
 
 case $wxTOOLSET in
     cmake)
-        if [ `uname -s` = "Linux" ] && [ `lsb_release -cs` = "precise" ]; then
-            echo Updating CMake...
-            wget -O - https://cmake.org/files/v3.6/cmake-3.6.2-Linux-x86_64.tar.gz | tar xzf -
-            export PATH=`pwd`/cmake-3.6.2-Linux-x86_64/bin:$PATH
-        fi
-
         if [ -z $wxCMAKE_TESTS ]; then wxCMAKE_TESTS=CONSOLE_ONLY; fi
         cmake --version
         echo 'travis_fold:start:configure'
