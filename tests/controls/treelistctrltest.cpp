@@ -39,7 +39,6 @@ private:
         CPPUNIT_TEST( Traversal );
         CPPUNIT_TEST( ItemText );
         CPPUNIT_TEST( ItemCheck );
-        CPPUNIT_TEST( DeleteAll );
     CPPUNIT_TEST_SUITE_END();
 
     // Create the control with the given style.
@@ -56,7 +55,6 @@ private:
     void Traversal();
     void ItemText();
     void ItemCheck();
-    void DeleteAll();
 
 
     // The control itself.
@@ -231,13 +229,6 @@ void TreeListCtrlTestCase::ItemCheck()
                           m_treelist->GetCheckedState(m_code_osx) );
     CPPUNIT_ASSERT_EQUAL( wxCHK_UNDETERMINED,
                           m_treelist->GetCheckedState(m_code) );
-}
-
-void TreeListCtrlTestCase::DeleteAll()
-{
-    m_treelist->DeleteAllItems();
-
-    CHECK( !m_treelist->GetFirstChild(m_treelist->GetRootItem()).IsOk() );
 }
 
 #endif // wxUSE_TREELISTCTRL
