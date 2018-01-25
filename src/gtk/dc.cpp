@@ -364,6 +364,12 @@ wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
     gc->EnableOffset(m_contentScaleFactor <= 1);
     SetGraphicsContext(gc);
 }
+
+wxSize wxScreenDCImpl::GetPPI() const
+{
+    return wxGetDisplayPPI();
+}
+
 //-----------------------------------------------------------------------------
 
 wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner)

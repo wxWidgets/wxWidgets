@@ -76,6 +76,8 @@ class wxScreenDCImpl: public wxGTKCairoDCImpl
 public:
     wxScreenDCImpl(wxScreenDC* owner);
 
+    virtual wxSize GetPPI() const wxOVERRIDE;
+
     wxDECLARE_NO_COPY_CLASS(wxScreenDCImpl);
 };
 //-----------------------------------------------------------------------------
