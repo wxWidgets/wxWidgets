@@ -166,7 +166,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog..."), wxT("Demonstrate validators"));
+    file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog...\tCtrl-T"), wxT("Demonstrate validators"));
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, wxT("E&xit"));
@@ -297,14 +297,6 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     flexgridsizer->AddGrowableRow(1);
 
 
-    // setup the button sizer
-    // ----------------------
-
-    wxStdDialogButtonSizer *btn = new wxStdDialogButtonSizer();
-    btn->AddButton(new wxButton(this, wxID_OK));
-    btn->AddButton(new wxButton(this, wxID_CANCEL));
-    btn->Realize();
-
     // setup a sizer with the controls for numeric validators
     // ------------------------------------------------------
 
@@ -391,7 +383,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     mainsizer->Add( numSizer, wxSizerFlags().Expand().DoubleBorder() );
 
-    mainsizer->Add(btn, 0, wxGROW | wxALL, 10);
+    mainsizer->Add(CreateButtonSizer(wxOK | wxCANCEL),
+                   wxSizerFlags().Expand().DoubleBorder());
 
     SetSizer(mainsizer);
     mainsizer->SetSizeHints(this);
