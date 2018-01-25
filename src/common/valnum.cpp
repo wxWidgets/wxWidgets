@@ -251,14 +251,21 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 
 wxString wxFloatingPointValidatorBase::ToString(LongestValueType value) const
 {
-    return wxNumberFormatter::ToString(value, m_precision, GetFormatFlags());
+    return wxNumberFormatter::ToString(value*m_factor,
+                                       m_precision,
+                                       GetFormatFlags());
 }
 
 bool
 wxFloatingPointValidatorBase::FromString(const wxString& s,
-                                         LongestValueType *value)
+                                         LongestValueType *value) const
 {
-    return wxNumberFormatter::FromString(s, value);
+    if ( !wxNumberFormatter::FromString(s, value) )
+        return false;
+
+    *value /= m_factor;
+
+    return true;
 }
 
 bool

@@ -175,6 +175,7 @@ All (GUI):
 - Add Scintilla FineTicker methods to wxSTC (NewPagodi).
 - Add wxFontPickerCtrl::SetMinPointSize() (Andreas Falkenhahn).
 - Add Set/GetFooter/Text/Icon() to wxRichMessageDialog (Tobias Taschner)
+- Add wxFloatingPointValidator::SetFactor().
 
 wxGTK:
 
