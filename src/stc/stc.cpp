@@ -231,6 +231,10 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     SetBufferedDraw(true);
 #endif
 
+#if wxUSE_GRAPHICS_DIRECT2D
+    SetFontQuality(wxSTC_EFF_QUALITY_DEFAULT);
+#endif
+
     return true;
 }
 
@@ -2531,6 +2535,18 @@ int wxStyledTextCtrl::GetPhasesDraw() const
 void wxStyledTextCtrl::SetPhasesDraw(int phases)
 {
     SendMsg(SCI_SETPHASESDRAW, phases, 0);
+}
+
+// Choose the quality level for text.
+void wxStyledTextCtrl::SetFontQuality(int fontQuality)
+{
+    SendMsg(SCI_SETFONTQUALITY, fontQuality, 0);
+}
+
+// Retrieve the quality level for text.
+int wxStyledTextCtrl::GetFontQuality() const
+{
+    return SendMsg(SCI_GETFONTQUALITY, 0, 0);
 }
 
 // Scroll so that a display line is at the top of the display.

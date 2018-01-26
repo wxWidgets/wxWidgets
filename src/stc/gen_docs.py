@@ -517,6 +517,7 @@ docsMap = {
     'SetMouseDwellTime':'Notifications',
     'GetBufferedDraw':'OtherSettings',
     'GetCodePage':'OtherSettings',
+    'GetFontQuality':'OtherSettings',
     'GetFocus':'OtherSettings',
     'GetIMEInteraction':'OtherSettings',
     'GetPhasesDraw':'OtherSettings',
@@ -525,6 +526,7 @@ docsMap = {
     'SetBufferedDraw':'OtherSettings',
     'SetCodePage':'OtherSettings',
     'SetFocus':'OtherSettings',
+    'SetFontQuality':'OtherSettings',
     'SetIMEInteraction':'OtherSettings',
     'SetLayoutCache':'OtherSettings',
     'SetPhasesDraw':'OtherSettings',
@@ -840,7 +842,9 @@ docSubstitutions = {
 
     'SetSelectionMode':{'SC_SEL_STREAM':'wxSTC_SEL_STREAM',
         'SC_SEL_RECTANGLE':'wxSTC_SEL_RECTANGLE','SC_SEL_THIN':'wxSTC_SEL_THIN',
-        'SC_SEL_LINES':'wxSTC_SEL_LINES'}
+        'SC_SEL_LINES':'wxSTC_SEL_LINES'},
+
+    'SetFontQuality':{' from the FontQuality enumeration':''}
 }
 
 
@@ -1033,9 +1037,23 @@ extendedDocs = {
         '@endlink constants.',),
 
     'SetTechnology':
-        ('The input should be one of the',
-        '@link wxStyledTextCtrl::wxSTC_TECHNOLOGY_DEFAULT wxSTC_TECHNOLOGY_* '
+        ('@remarks',
+        'For the wxMSW port, the input can be either wxSTC_TECHNOLOGY_DEFAULT',
+        'or wxSTC_TECHNOLOGY_DIRECTWRITE.  With other ports, this method has',
+        'no effect.',),
+
+    'GetFontQuality':
+        ('The return value will be one of the',
+        '@link wxStyledTextCtrl::wxSTC_EFF_QUALITY_DEFAULT wxSTC_EFF_QUALITY_* '
         '@endlink constants.',),
+
+    'SetFontQuality':
+        ('The input should be one of the',
+        '@link wxStyledTextCtrl::wxSTC_EFF_QUALITY_DEFAULT wxSTC_EFF_QUALITY_* '
+        '@endlink constants.',
+        '@remarks',
+        'This method only has any effect with the wxMSW port and when',
+        'technology has been set to wxSTC_TECHNOLOGY_DIRECTWRITE.',),
 
     'GetIMEInteraction':
         ('The return value will be one of the',
@@ -1362,6 +1380,7 @@ sinceAnnotations= {
     'FoldDisplayTextSetStyle':'3.1.1',
     'GetDirectFunction':'3.1.1',
     'GetDirectPointer':'3.1.1',
+    'GetFontQuality':'3.1.1',
     'GetIdleStyling':'3.1.1',
     'GetLexerLanguage':'3.1.1',
     'GetMarginBackN':'3.1.1',
@@ -1374,6 +1393,7 @@ sinceAnnotations= {
     'MultiEdgeClearAll':'3.1.1',
     'MultipleSelectAddEach':'3.1.1',
     'MultipleSelectAddNext':'3.1.1',
+    'SetFontQuality':'3.1.1',
     'SetIdleStyling':'3.1.1',
     'SetMarginBackN':'3.1.1',
     'SetMargins':'3.1.1',
