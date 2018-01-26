@@ -240,10 +240,8 @@ public:
             AppendToStore(store, *i);
         }
 
-        gtk_entry_completion_set_model (GetEntryCompletion(), GTK_TREE_MODEL(store));
+        UseModel(store);
         g_object_unref (store);
-
-        DoRefresh();
     }
 
     // Takes ownership of the pointer if it is non-NULL.
@@ -375,9 +373,12 @@ private:
         }
     }
 
-    void DoRefresh()
+    // Really change the completion model (which may be NULL).
+    void UseModel(GtkListStore* store)
     {
-        gtk_entry_completion_complete (GetEntryCompletion());
+        GtkEntryCompletion* const c = gtk_entry_get_completion (GetGtkEntry());
+        gtk_entry_completion_set_model (c, GTK_TREE_MODEL(store));
+        gtk_entry_completion_complete (c);
     }
 
     // Recreate the model to contain all completions for the current prefix.
@@ -402,17 +403,15 @@ private:
                 AppendToStore(store, s);
             }
 
-            gtk_entry_completion_set_model (GetEntryCompletion(), GTK_TREE_MODEL(store));
+            UseModel(store);
             g_object_unref (store);
 
             m_newCompletionsNeeded = false;
         }
         else
         {
-            gtk_entry_completion_set_model (GetEntryCompletion(), NULL);
+            UseModel(NULL);
         }
-
-        DoRefresh();
     }
 
 
