@@ -200,8 +200,8 @@ wx_gtk_paste_clipboard_callback( GtkWidget *widget, wxWindow *win )
 //
 // GTK already has completion functionality support for a GtkEntry via
 // GtkEntryCompletion. This class simply forwards to GtkListStore
-// in case we used ChangeStrings() overload. or to wxTextCompleter
-// associated with it otherwise.
+// in case we used ChangeStrings() overload, or to wxTextCompleter
+// associated with it if ChangeCustomCompleter() was called.
 class wxTextAutoCompleteData
 {
 public:
@@ -350,7 +350,7 @@ private:
         wxWindow * const win = m_entry->GetEditableWindow();
 
         // Disconnect from the event handler if we request
-        // a non-dynamic behaviour of our completion methode
+        // a non-dynamic behaviour of our completion methods
         // (e.g. completions are supplied via
         //       ChangeStrings() or wxTextCompleterFixed )
         // Connect otherwise.
@@ -376,6 +376,9 @@ private:
         gtk_entry_completion_complete (GetEntryCompletion());
     }
 
+    // Recreate the model to contain all completions for the current prefix.
+    //
+    // This should only be called when using a custom completer.
     void DoUpdateCompletionModel()
     {
         wxASSERT_MSG( m_completer, "m_completer should not be null." );
@@ -428,8 +431,8 @@ private:
     // to/from the event handler.
     bool m_isDynamicCompleter;
 
-    // Each time we entered a new prefix, GtkEntryCompletion needs to be fed
-    // with new completions. And this flag lets as try to DoUpdateCompletionModel()
+    // Each time we enter a new prefix, GtkEntryCompletion needs to be fed with
+    // new completions. And this flag lets us try to DoUpdateCompletionModel()
     // and if it succeeds, it'll set the flag to false and OnEntryChanged()
     // will not try to call it again unless we entered a new prefix.
     bool m_newCompletionsNeeded;
