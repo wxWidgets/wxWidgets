@@ -205,34 +205,22 @@ wx_gtk_paste_clipboard_callback( GtkWidget *widget, wxWindow *win )
 class wxTextAutoCompleteData
 {
 public:
-    // The constructor associates us with the given text entry.
-    wxEXPLICIT wxTextAutoCompleteData(wxTextEntry *entry)
-        : m_entry(entry)
+    // Factory function, may return NULL if entry is invalid.
+    static wxTextAutoCompleteData* New(wxTextEntry *entry)
     {
-        m_completer = NULL;
+        if ( !GTK_IS_ENTRY(entry->GetEntry()) )
+        {
+            // This is probably a multiline wxTextCtrl which doesn't have any
+            // associated GtkEntry.
+            return NULL;
+        }
 
-        m_isDynamicCompleter = false;
-
-        m_newCompletionsNeeded = m_entry->IsEmpty();
-
-        // this asserts if entry is multiline.
-        // because multiline is actually a GtkTextView not a GtkEntry.
-        // even GetEditable() will return NULL if entry is multiline.
-
-        wxCHECK_RET( GTK_IS_ENTRY(GetGtkEntry()),
-            "auto completion doesn't work with this control" );
+        return new wxTextAutoCompleteData(entry);
     }
 
     ~wxTextAutoCompleteData()
     {
         delete m_completer;
-    }
-
-    // Must be called after creating this object to verify if initializing it
-    // succeeded.
-    bool IsOk() const
-    {
-        return GTK_IS_ENTRY( GetGtkEntry() );
     }
 
     void ChangeStrings(const wxArrayString& strings)
@@ -305,6 +293,16 @@ public:
     }
 
 private:
+    // Ctor is private, use New() to create objects of this type.
+    explicit wxTextAutoCompleteData(wxTextEntry *entry)
+        : m_entry(entry)
+    {
+        m_completer = NULL;
+
+        m_isDynamicCompleter = false;
+
+        m_newCompletionsNeeded = m_entry->IsEmpty();
+    }
 
     void DoEnableCompletion()
     {
@@ -676,11 +674,7 @@ wxTextAutoCompleteData *wxTextEntry::GetOrCreateCompleter()
 {
     if ( !m_autoCompleteData )
     {
-        wxTextAutoCompleteData * const ac = new wxTextAutoCompleteData(this);
-        if ( ac->IsOk() )
-            m_autoCompleteData = ac;
-        else
-            delete ac;
+        m_autoCompleteData = wxTextAutoCompleteData::New(this);
     }
 
     return m_autoCompleteData;
