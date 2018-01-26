@@ -310,7 +310,7 @@ private:
 
     void DoEnableCompletion()
     {
-        if ( !GetEntryCompletion() )
+        if ( !gtk_entry_get_completion (GetGtkEntry()) )
         {
             GtkEntryCompletion * const completion = gtk_entry_completion_new();
 
@@ -417,10 +417,6 @@ private:
 
     GtkEntry* GetGtkEntry() const { return m_entry->GetEntry(); }
 
-    GtkEntryCompletion* GetEntryCompletion() const
-    {
-        return gtk_entry_get_completion (GetGtkEntry());
-    }
 
     // The text entry we're associated with.
     wxTextEntry * const m_entry;
