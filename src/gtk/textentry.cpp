@@ -252,20 +252,6 @@ public:
 
         if ( m_completer )
         {
-            wxTextCompleterFixed* fixedCompl =
-                dynamic_cast<wxTextCompleterFixed*>(m_completer);
-
-            if ( fixedCompl )
-            {
-                wxArrayString completions;
-                fixedCompl->GetCompletions(wxEmptyString, completions);
-
-                ChangeStrings(completions);
-
-                wxDELETE(m_completer);
-                return true;
-            }
-
             DoEnableCompletion();
 
             DoUpdateCompletionModel();
