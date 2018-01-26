@@ -232,14 +232,12 @@ public:
         DoEnableCompletion();
 
         GtkListStore * const store = gtk_list_store_new (1, G_TYPE_STRING);
-        GtkTreeIter iter;
 
         for ( wxArrayString::const_iterator i = strings.begin();
               i != strings.end();
               ++i )
         {
-            gtk_list_store_append (store, &iter);
-            gtk_list_store_set (store, &iter, 0, (const gchar *)i->utf8_str(), -1);
+            AppendToStore(store, *i);
         }
 
         gtk_entry_completion_set_model (GetEntryCompletion(), GTK_TREE_MODEL(store));
@@ -302,6 +300,14 @@ private:
         m_isDynamicCompleter = false;
 
         m_newCompletionsNeeded = m_entry->IsEmpty();
+    }
+
+    // Helper function for appending a string to GtkListStore.
+    void AppendToStore(GtkListStore* store, const wxString& s)
+    {
+        GtkTreeIter iter;
+        gtk_list_store_append (store, &iter);
+        gtk_list_store_set (store, &iter, 0, (const gchar *)s.utf8_str(), -1);
     }
 
     void DoEnableCompletion()
@@ -386,7 +392,6 @@ private:
         if ( m_completer->Start(prefix) )
         {
             GtkListStore * const store = gtk_list_store_new (1, G_TYPE_STRING);
-            GtkTreeIter iter;
 
             for (;;)
             {
@@ -394,8 +399,7 @@ private:
                 if ( s.empty() )
                     break;
 
-                gtk_list_store_append (store, &iter);
-                gtk_list_store_set (store, &iter, 0, (const gchar *)s.utf8_str(), -1);
+                AppendToStore(store, s);
             }
 
             gtk_entry_completion_set_model (GetEntryCompletion(), GTK_TREE_MODEL(store));
