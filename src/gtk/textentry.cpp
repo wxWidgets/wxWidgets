@@ -25,9 +25,11 @@
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
 #ifndef WX_PRECOMP
+    #include "wx/event.h"
     #include "wx/textentry.h"
-    #include "wx/window.h"
     #include "wx/textctrl.h"
+    #include "wx/textcompleter.h"
+    #include "wx/window.h"
 #endif //WX_PRECOMP
 
 #include <gtk/gtk.h>
@@ -193,9 +195,267 @@ wx_gtk_paste_clipboard_callback( GtkWidget *widget, wxWindow *win )
 
 } // extern "C"
 
+// This class gathers the all auto-complete-related stuff we use. It is
+// allocated on demand by wxTextEntry when AutoComplete() is called.
+//
+// GTK already has completion functionality support for a GtkEntry via
+// GtkEntryCompletion. This class simply forwards to GtkListStore
+// in case we used ChangeStrings() overload. or to wxTextCompleter
+// associated with it otherwise.
+class wxTextAutoCompleteData
+{
+public:
+    // The constructor associates us with the given text entry.
+    wxEXPLICIT wxTextAutoCompleteData(wxTextEntry *entry)
+        : m_entry(entry)
+    {
+        m_completer = NULL;
+
+        m_isDynamicCompleter = false;
+
+        m_newCompletionsNeeded = m_entry->IsEmpty();
+
+        // this asserts if entry is multiline.
+        // because multiline is actually a GtkTextView not a GtkEntry.
+        // even GetEditable() will return NULL if entry is multiline.
+
+        wxCHECK_RET( GTK_IS_ENTRY(GetGtkEntry()),
+            "auto completion doesn't work with this control" );
+    }
+
+    ~wxTextAutoCompleteData()
+    {
+        delete m_completer;
+    }
+
+    // Must be called after creating this object to verify if initializing it
+    // succeeded.
+    bool IsOk() const
+    {
+        return GTK_IS_ENTRY( GetGtkEntry() );
+    }
+
+    void ChangeStrings(const wxArrayString& strings)
+    {
+        wxDELETE( m_completer );
+
+        DoUpdateCompleterType();
+
+        DoEnableCompletion();
+
+        GtkListStore * const store = gtk_list_store_new (1, G_TYPE_STRING);
+        GtkTreeIter iter;
+
+        for ( wxArrayString::const_iterator i = strings.begin();
+              i != strings.end();
+              ++i )
+        {
+            gtk_list_store_append (store, &iter);
+            gtk_list_store_set (store, &iter, 0, (const gchar *)i->utf8_str(), -1);
+        }
+
+        gtk_entry_completion_set_model (GetEntryCompletion(), GTK_TREE_MODEL(store));
+        g_object_unref (store);
+
+        DoRefresh();
+    }
+
+    // Takes ownership of the pointer if it is non-NULL.
+    bool ChangeCustomCompleter(wxTextCompleter *completer)
+    {
+        delete m_completer;
+        m_completer = completer;
+
+        if ( m_completer )
+        {
+            wxTextCompleterFixed* fixedCompl =
+                dynamic_cast<wxTextCompleterFixed*>(m_completer);
+
+            if ( fixedCompl )
+            {
+                wxArrayString completions;
+                fixedCompl->GetCompletions(wxEmptyString, completions);
+
+                ChangeStrings(completions);
+
+                wxDELETE(m_completer);
+                return true;
+            }
+
+            DoEnableCompletion();
+
+            DoUpdateCompletionModel();
+        }
+        else
+        {
+            DisableCompletion();
+        }
+
+        DoUpdateCompleterType();
+
+        return true;
+    }
+
+    void DisableCompletion()
+    {
+        gtk_entry_set_completion (GetGtkEntry(), NULL);
+
+        wxDELETE(m_completer);
+        DoUpdateCompleterType();
+    }
+
+private:
+
+    void DoEnableCompletion()
+    {
+        if ( !GetEntryCompletion() )
+        {
+            GtkEntryCompletion * const completion = gtk_entry_completion_new();
+
+            gtk_entry_completion_set_text_column (completion, 0);
+            gtk_entry_set_completion (GetGtkEntry(), completion);
+        }
+    }
+
+    // for a given prefix, if DoUpdateCompletionModel() succeeds,
+    // we won't do any further update of the model as long as we
+    // do not clear the textentry. but then we have to start over again.
+
+    void OnEntryChanged( wxCommandEvent& event )
+    {
+        if ( event.GetString().empty() )
+        {
+            m_newCompletionsNeeded = true;
+        }
+        else
+        {
+            if ( m_newCompletionsNeeded )
+                DoUpdateCompletionModel();
+        }
+
+        event.Skip();
+    }
+
+    void DoUpdateCompleterType()
+    {
+        const bool isDynamic = (m_completer != NULL);
+
+        if ( m_isDynamicCompleter == isDynamic )
+            // we already connected/disconnected to/from
+            // the event handler.
+            return;
+
+        m_isDynamicCompleter = isDynamic;
+
+        wxWindow * const win = m_entry->GetEditableWindow();
+
+        // Disconnect from the event handler if we request
+        // a non-dynamic behaviour of our completion methode
+        // (e.g. completions are supplied via
+        //       ChangeStrings() or wxTextCompleterFixed )
+        // Connect otherwise.
+        //
+        // The event handler role is to request from the m_completer
+        // to generate dynamically new completions (e.g from database)
+        // if a certain condition is met (e.g. textentry is cleared
+        // and/or typed in text length >= *MIN_PREFIX_LENGTH* )
+        //
+
+        if ( !m_completer )
+        {
+            win->Unbind(wxEVT_TEXT, &wxTextAutoCompleteData::OnEntryChanged, this);
+        }
+        else
+        {
+            win->Bind(wxEVT_TEXT, &wxTextAutoCompleteData::OnEntryChanged, this);
+        }
+    }
+
+    void DoRefresh()
+    {
+        gtk_entry_completion_complete (GetEntryCompletion());
+    }
+
+    void DoUpdateCompletionModel()
+    {
+        wxASSERT_MSG( m_completer, "m_completer should not be null." );
+
+        const wxString prefix = m_entry->GetValue();
+
+        if ( m_completer->Start(prefix) )
+        {
+            GtkListStore * const store = gtk_list_store_new (1, G_TYPE_STRING);
+            GtkTreeIter iter;
+
+            for (;;)
+            {
+                const wxString s = m_completer->GetNext();
+                if ( s.empty() )
+                    break;
+
+                gtk_list_store_append (store, &iter);
+                gtk_list_store_set (store, &iter, 0, (const gchar *)s.utf8_str(), -1);
+            }
+
+            gtk_entry_completion_set_model (GetEntryCompletion(), GTK_TREE_MODEL(store));
+            g_object_unref (store);
+
+            m_newCompletionsNeeded = false;
+        }
+        else
+        {
+            gtk_entry_completion_set_model (GetEntryCompletion(), NULL);
+        }
+
+        DoRefresh();
+    }
+
+
+    GtkEntry* GetGtkEntry() const { return m_entry->GetEntry(); }
+
+    GtkEntryCompletion* GetEntryCompletion() const
+    {
+        return gtk_entry_get_completion (GetGtkEntry());
+    }
+
+    // The text entry we're associated with.
+    wxTextEntry * const m_entry;
+
+    // Custom completer or NULL if none.
+    wxTextCompleter *m_completer;
+
+    // helps to decide if we should connect/disconnect
+    // to/from the event handler.
+    bool m_isDynamicCompleter;
+
+    // Each time we entered a new prefix, GtkEntryCompletion needs to be fed
+    // with new completions. And this flag lets as try to DoUpdateCompletionModel()
+    // and if it succeeds, it'll set the flag to false and OnEntryChanged()
+    // will not try to call it again unless we entered a new prefix.
+    bool m_newCompletionsNeeded;
+
+    wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
+};
+
+
 // ============================================================================
 // wxTextEntry implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// initialization and destruction
+// ----------------------------------------------------------------------------
+
+wxTextEntry::wxTextEntry()
+{
+    m_autoCompleteData = NULL;
+    m_isUpperCase = false;
+}
+
+wxTextEntry::~wxTextEntry()
+{
+    delete m_autoCompleteData;
+}
 
 // ----------------------------------------------------------------------------
 // text operations
@@ -409,32 +669,58 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 // auto completion
 // ----------------------------------------------------------------------------
 
-bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
+wxTextAutoCompleteData *wxTextEntry::GetOrCreateCompleter()
 {
-    GtkEntry* const entry = (GtkEntry*)GetEditable();
-    wxCHECK_MSG(GTK_IS_ENTRY(entry), false, "auto completion doesn't work with this control");
-
-    GtkListStore * const store = gtk_list_store_new(1, G_TYPE_STRING);
-    GtkTreeIter iter;
-
-    for ( wxArrayString::const_iterator i = choices.begin();
-          i != choices.end();
-          ++i )
+    if ( !m_autoCompleteData )
     {
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter,
-                           0, (const gchar *)i->utf8_str(),
-                           -1);
+        wxTextAutoCompleteData * const ac = new wxTextAutoCompleteData(this);
+        if ( ac->IsOk() )
+            m_autoCompleteData = ac;
+        else
+            delete ac;
     }
 
-    GtkEntryCompletion * const completion = gtk_entry_completion_new();
-    gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(store));
-    gtk_entry_completion_set_text_column(completion, 0);
-    gtk_entry_set_completion(entry, completion);
-    g_object_unref(completion);
+    return m_autoCompleteData;
+}
+
+bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
+{
+    wxTextAutoCompleteData * const ac = GetOrCreateCompleter();
+    if ( !ac )
+        return false;
+
+    ac->ChangeStrings(choices);
+
     return true;
 }
 
+bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
+{
+    // First deal with the case when we just want to disable auto-completion.
+    if ( !completer )
+    {
+        if ( m_autoCompleteData )
+            m_autoCompleteData->DisableCompletion();
+        //else: Nothing to do, we hadn't used auto-completion even before.
+    }
+    else // Have a valid completer.
+    {
+        wxTextAutoCompleteData * const ac = GetOrCreateCompleter();
+        if ( !ac )
+        {
+            // Delete the custom completer for consistency with the case when
+            // we succeed to avoid memory leaks in user code.
+            delete completer;
+            return false;
+        }
+
+        // This gives ownership of the custom completer to m_autoCompleteData.
+        if ( !ac->ChangeCustomCompleter(completer) )
+            return false;
+    }
+
+    return true;
+}
 // ----------------------------------------------------------------------------
 // editable status
 // ----------------------------------------------------------------------------

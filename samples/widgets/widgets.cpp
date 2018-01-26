@@ -46,6 +46,7 @@
 #include "wx/sizer.h"
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
+#include "wx/numdlg.h"
 #include "wx/textdlg.h"
 #include "wx/imaglist.h"
 #include "wx/wupdlock.h"
@@ -108,6 +109,7 @@ enum
     TextEntry_AutoCompleteFilenames,
     TextEntry_AutoCompleteDirectories,
     TextEntry_AutoCompleteCustom,
+    TextEntry_AutoCompleteKeyLength,
 
     TextEntry_SetHint,
     TextEntry_End
@@ -188,6 +190,7 @@ protected:
     void OnAutoCompleteFilenames(wxCommandEvent& event);
     void OnAutoCompleteDirectories(wxCommandEvent& event);
     void OnAutoCompleteCustom(wxCommandEvent& event);
+    void OnAutoCompleteKeyLength(wxCommandEvent& event);
 
     void OnSetHint(wxCommandEvent& event);
 
@@ -217,6 +220,9 @@ private:
 
     // the book containing the test pages
     WidgetsBookCtrl *m_book;
+
+    //
+    int m_prefixMinLength;
 
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
@@ -317,6 +323,7 @@ wxBEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU(TextEntry_AutoCompleteFilenames, WidgetsFrame::OnAutoCompleteFilenames)
     EVT_MENU(TextEntry_AutoCompleteDirectories, WidgetsFrame::OnAutoCompleteDirectories)
     EVT_MENU(TextEntry_AutoCompleteCustom,    WidgetsFrame::OnAutoCompleteCustom)
+    EVT_MENU(TextEntry_AutoCompleteKeyLength, WidgetsFrame::OnAutoCompleteKeyLength)
 
     EVT_MENU(TextEntry_SetHint, WidgetsFrame::OnSetHint)
 
@@ -386,6 +393,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #endif // USE_LOG
     m_book = NULL;
 
+    m_prefixMinLength = 1;
+
 #if wxUSE_MENUS
     // create the menubar
     wxMenuBar *mbar = new wxMenuBar;
@@ -444,6 +453,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteCustom,
                                    wxT("&Custom auto-completion"));
     menuTextEntry->AppendSeparator();
+    menuTextEntry->Append(TextEntry_AutoCompleteKeyLength,
+                          wxT("&Minimum key length for auto-completion"));
     menuTextEntry->Append(TextEntry_SetHint, "Set help &hint");
 
     mbar->Append(menuTextEntry, wxT("&Text"));
@@ -1038,6 +1049,8 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
     class CustomTextCompleter : public wxTextCompleterSimple
     {
     public:
+        CustomTextCompleter( int length ) : m_minLength( length ) {}
+
         virtual void GetCompletions(const wxString& prefix, wxArrayString& res) wxOVERRIDE
         {
             // This is used for illustrative purposes only and shows how many
@@ -1066,7 +1079,10 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
 
             // Normally it doesn't make sense to complete empty control, there
             // are too many choices and listing them all wouldn't be helpful.
-            if ( prefix.empty() )
+            // Or if we know in advance that a prefix with one or two characters
+            // would still results in too many choices too.
+            if ( prefix.empty() ||
+                 prefix.length() < static_cast<size_t>(m_minLength) )
                 return;
 
             // The only valid strings start with 3 digits so check for their
@@ -1117,9 +1133,11 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
                     res.push_back(prefix + c);
             }
         }
+
+        int m_minLength;
     };
 
-    if ( entry->AutoComplete(new CustomTextCompleter) )
+    if ( entry->AutoComplete( new CustomTextCompleter( m_prefixMinLength ) ) )
     {
         wxLogMessage("Enabled custom auto completer for \"NNN XX\" items "
                      "(where N is a digit and X is a letter).");
@@ -1128,6 +1146,22 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
     {
         wxLogMessage("AutoComplete() failed.");
     }
+}
+
+void WidgetsFrame::OnAutoCompleteKeyLength(wxCommandEvent& WXUNUSED(event))
+{
+    const wxString message = "The auto-completion is triggered if and only if\n"
+                             "the length of the search key (prefix) is at least [LENGTH].\n"
+                             "Hint: negative values disable auto-completion.";
+    const wxString prompt = "Enter the minimum key length:";
+    const wxString caption = "Minimum key length";
+
+    m_prefixMinLength = wxGetNumberFromUser(message, prompt, caption, 1, -1, 100, this);
+
+    wxCommandEvent theEvent(wxEVT_MENU, TextEntry_AutoCompleteCustom);
+    ProcessEventLocally(theEvent);
+
+    wxLogMessage("The minimum key length for autocomplete is : %d.", m_prefixMinLength);
 }
 
 void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
