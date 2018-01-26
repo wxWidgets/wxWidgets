@@ -35,6 +35,7 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/object.h"
 #include "wx/gtk/private/string.h"
 
 //-----------------------------------------------------------------------------
@@ -231,7 +232,7 @@ public:
 
         DoEnableCompletion();
 
-        GtkListStore * const store = gtk_list_store_new (1, G_TYPE_STRING);
+        wxGtkObject<GtkListStore> store(gtk_list_store_new (1, G_TYPE_STRING));
 
         for ( wxArrayString::const_iterator i = strings.begin();
               i != strings.end();
@@ -241,7 +242,6 @@ public:
         }
 
         UseModel(store);
-        g_object_unref (store);
     }
 
     // Takes ownership of the pointer if it is non-NULL.
@@ -392,7 +392,7 @@ private:
 
         if ( m_completer->Start(prefix) )
         {
-            GtkListStore * const store = gtk_list_store_new (1, G_TYPE_STRING);
+            wxGtkObject<GtkListStore> store(gtk_list_store_new (1, G_TYPE_STRING));
 
             for (;;)
             {
@@ -404,7 +404,6 @@ private:
             }
 
             UseModel(store);
-            g_object_unref (store);
 
             m_newCompletionsNeeded = false;
         }
