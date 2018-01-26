@@ -1811,9 +1811,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtextsymboldlg.o \
 	$(OBJS)\monodll_richtextxml.o \
 	$(OBJS)\monodll_xh_richtext.o \
-	$(OBJS)\monodll_stc.o \
-	$(OBJS)\monodll_PlatWX.o \
-	$(OBJS)\monodll_ScintillaWX.o
+	$(____MONOLIB_STC_SRC_FILENAMES_OBJECTS)
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
@@ -2493,6 +2491,12 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_animateg.o
 endif
 ifeq ($(USE_STC),1)
+____MONOLIB_STC_SRC_FILENAMES_OBJECTS =  \
+	$(OBJS)\monodll_stc.o \
+	$(OBJS)\monodll_PlatWX.o \
+	$(OBJS)\monodll_ScintillaWX.o
+endif
+ifeq ($(USE_STC),1)
 __wxscintilla_library_link_DEP = $(__wxscintilla)
 endif
 ifeq ($(MONOLITHIC),1)
@@ -2650,9 +2654,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtextsymboldlg.o \
 	$(OBJS)\monolib_richtextxml.o \
 	$(OBJS)\monolib_xh_richtext.o \
-	$(OBJS)\monolib_stc.o \
-	$(OBJS)\monolib_PlatWX.o \
-	$(OBJS)\monolib_ScintillaWX.o
+	$(____MONOLIB_STC_SRC_FILENAMES_1_OBJECTS)
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
@@ -3330,6 +3332,12 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_activityindicator.o \
 	$(OBJS)\monolib_joystick.o \
 	$(OBJS)\monolib_animateg.o
+endif
+ifeq ($(USE_STC),1)
+____MONOLIB_STC_SRC_FILENAMES_1_OBJECTS =  \
+	$(OBJS)\monolib_stc.o \
+	$(OBJS)\monolib_PlatWX.o \
+	$(OBJS)\monolib_ScintillaWX.o
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)

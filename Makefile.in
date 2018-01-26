@@ -4456,9 +4456,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_richtextsymboldlg.o \
 	monodll_richtextxml.o \
 	monodll_xh_richtext.o \
-	monodll_stc.o \
-	monodll_PlatWX.o \
-	monodll_ScintillaWX.o
+	$(__MONOLIB_STC_SRC_OBJECTS)
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS) \
@@ -6296,6 +6294,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_tabartmsw.o monodll_barartmsw.o
+@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS = monodll_stc.o \
+@COND_USE_STC_1@	monodll_PlatWX.o monodll_ScintillaWX.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monodll_sound_sdl.o
 @COND_PLATFORM_WIN32_1@__monodll___win32rc = monodll_version_rc.o
@@ -6539,9 +6539,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_richtextsymboldlg.o \
 	monolib_richtextxml.o \
 	monolib_xh_richtext.o \
-	monolib_stc.o \
-	monolib_PlatWX.o \
-	monolib_ScintillaWX.o
+	$(__MONOLIB_STC_SRC_OBJECTS_1)
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS_1 = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_2) \
@@ -8379,6 +8377,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_tabartmsw.o monolib_barartmsw.o
+@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS_1 = monolib_stc.o \
+@COND_USE_STC_1@	monolib_PlatWX.o monolib_ScintillaWX.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_1 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monolib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1___basedll___depname = \
