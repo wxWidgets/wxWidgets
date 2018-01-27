@@ -1950,6 +1950,9 @@ child and the second one for right/bottom child window.
 @hdr3col{property, type, description}
 @row3col{value, @ref overview_xrcformat_type_text,
     Initial value of the control (default: empty).}
+@row3col{hint, @ref overview_xrcformat_type_text,
+    Descriptive text shown in the empty control (default: "Search"). This
+    property is new since wxWidgets 3.1.1.}
 @endTable
 
 
