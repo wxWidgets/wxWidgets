@@ -1652,9 +1652,10 @@ void SurfaceD2D::MeasureWidths(Font &font_, const char *s, int len,
     }
     else
     {
+        const size_t buflen = static_cast<size_t>(len);
         // One character per position
-        PLATFORM_ASSERT(len == tbuf.Length());
-        for ( size_t kk=0; kk<static_cast<size_t>(len); kk++ )
+        PLATFORM_ASSERT(buflen == tbuf.Length());
+        for ( size_t kk=0; kk<buflen; kk++ )
         {
             positions[kk] = poses[kk];
         }
