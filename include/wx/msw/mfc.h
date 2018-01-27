@@ -113,8 +113,13 @@ public:
     {
         BOOL moreIdle = BaseApp::OnIdle(lCount);
 
-        if ( wxTheApp && wxTheApp->ProcessIdle() )
-            moreIdle = TRUE;
+        if ( wxTheApp )
+        {
+            wxTheApp->ProcessPendingEvents();
+
+            if ( wxTheApp->ProcessIdle() )
+                moreIdle = TRUE;
+        }
 
         return moreIdle;
     }
@@ -171,6 +176,17 @@ public:
         // There is no wxEventLoop to exit, tell MFC to stop pumping messages
         // instead.
         ::PostQuitMessage(0);
+    }
+
+    void WakeUpIdle() wxOVERRIDE
+    {
+        // As above, we can't wake up any wx event loop, so try to wake up the
+        // MFC one instead.
+        CWinApp* const mfcApp = AfxGetApp();
+        if ( mfcApp && mfcApp->m_pMainWnd )
+        {
+            ::PostMessage(mfcApp->m_pMainWnd->m_hWnd, WM_NULL, 0, 0);
+        }
     }
 };
 
