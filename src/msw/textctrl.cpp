@@ -2078,7 +2078,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             // forces at the moment unfortunately
             if ( !(m_windowStyle & wxTE_PROCESS_TAB))
             {
-                if ( FindFocus() == this )
+                if ( ::GetFocus() == GetHwnd() )
                 {
                     int flags = 0;
                     if (!event.ShiftDown())
