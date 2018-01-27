@@ -199,6 +199,7 @@ wxGTK:
 - Add a native implementation for clearing bitmap/window wxGraphicsContexts
 - Implement XYToPosition() for single-line wxTextCtrl.
 - Implement ShowPosition() for single-line wxTextCtrl.
+- Improve wx{Client,Paint,Screen,Window}DC::GetPPI() (GTK+ 3).
 
 wxMSW:
 
