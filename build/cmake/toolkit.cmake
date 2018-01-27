@@ -39,10 +39,6 @@ wx_option(wxBUILD_TOOLKIT "Toolkit used by wxWidgets" ${wxDEFAULT_TOOLKIT}
 # TODO: set to univ for universal build
 set(wxBUILD_WIDGETSET "")
 
-if(NOT wxUSE_GUI)
-    set(wxBUILD_TOOLKIT "base")
-endif()
-
 # Create shortcut variable for easy toolkit tests
 string(TOUPPER ${wxBUILD_TOOLKIT} toolkit_upper)
 set(WX${toolkit_upper} ON)
@@ -53,6 +49,13 @@ elseif(wxBUILD_TOOLKIT MATCHES "^osx*")
 endif()
 
 set(wxTOOLKIT_DEFINITIONS __WX${toolkit_upper}__)
+
+if(NOT wxUSE_GUI)
+    set(wxBUILD_TOOLKIT "base")
+    string(TOUPPER ${wxBUILD_TOOLKIT} toolkit_upper)
+    set(WX${toolkit_upper} ON)
+    set(wxTOOLKIT_DEFINITIONS __WX${toolkit_upper}__)
+endif()
 
 # Initialize toolkit variables
 if(wxUSE_GUI)
@@ -66,29 +69,7 @@ if(UNIX AND NOT APPLE AND NOT WIN32)
     list(APPEND wxTOOLKIT_LIBRARIES ${X11_LIBRARIES})
 endif()
 
-if(WXMSW)
-    set(wxTOOLKIT_LIBRARIES
-        kernel32
-        user32
-        gdi32
-        comdlg32
-        winspool
-        winmm
-        shell32
-        shlwapi
-        comctl32
-        ole32
-        oleaut32
-        uuid
-        rpcrt4
-        advapi32
-        version
-        wsock32
-        wininet
-        oleacc
-        uxtheme
-        )
-elseif(WXGTK)
+if(WXGTK)
     if(WXGTK3)
         set(gtk_lib GTK3)
     elseif(WXGTK2)

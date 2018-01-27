@@ -193,6 +193,33 @@ function(wx_set_target_properties target_name is_base)
         target_include_directories(${target_name}
             PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
+
+    if (WXMSW)
+        set(WXMSW_LIBRARIES
+            kernel32
+            user32
+            gdi32
+            comdlg32
+            winspool
+            winmm
+            shell32
+            shlwapi
+            comctl32
+            ole32
+            oleaut32
+            uuid
+            rpcrt4
+            advapi32
+            version
+            wsock32
+            wininet
+            oleacc
+            uxtheme
+        )
+        target_link_libraries(${target_name}
+            PUBLIC ${WXMSW_LIBRARIES})
+    endif()
+
     if(wxTOOLKIT_LIBRARIES)
         target_link_libraries(${target_name}
             PUBLIC ${wxTOOLKIT_LIBRARIES})
