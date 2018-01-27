@@ -68,6 +68,9 @@ public:
     virtual void ShowCancelButton( bool show ) = 0;
     virtual bool IsCancelButtonVisible() const = 0;
 
+    virtual void SetDescriptiveText(const wxString& text) = 0;
+    virtual wxString GetDescriptiveText() const = 0;
+
 private:
     // implement wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
