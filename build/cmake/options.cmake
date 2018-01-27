@@ -56,8 +56,6 @@ wx_option(wxUSE_VISIBILITY "use of ELF symbols visibility")
 # ---------------------------------------------------------------------------
 # external libraries
 # ---------------------------------------------------------------------------
-wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing"
-    DEFAULT_APPLE sys)
 
 wx_option(wxUSE_OPENGL "use OpenGL (or Mesa)")
 
