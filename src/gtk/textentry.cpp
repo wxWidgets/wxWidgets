@@ -28,9 +28,10 @@
     #include "wx/event.h"
     #include "wx/textentry.h"
     #include "wx/textctrl.h"
-    #include "wx/textcompleter.h"
     #include "wx/window.h"
 #endif //WX_PRECOMP
+
+#include "wx/textcompleter.h"
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
