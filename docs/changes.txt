@@ -182,6 +182,7 @@ wxGTK:
 - Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
 - Make wxBORDER_NONE work for wxTextCtrl with GTK+ 3 (Adrien Tétar).
 - Apply wxTextCtrl::SetDefaultStyle() to user-entered text (Andreas Falkenhahn).
+- Implement dynamic auto-completion in wxTextEntry (AliKet).
 - Fix wxTextCtrl::GetStyle() with GTK+ 3.
 - Fix wxButton::SetBitmapPosition() with GTK+ 3 (Jake Nelson).
 - Support background colour in wxDataViewCtrl attributes.
