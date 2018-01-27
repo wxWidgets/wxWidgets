@@ -363,26 +363,12 @@ private:
     {
         m_completer = NULL;
 
-        m_newCompletionsNeeded = m_entry->IsEmpty();
-
         win->Bind(wxEVT_TEXT, &wxTextAutoCompleteDynamic::OnEntryChanged, this);
     }
 
-    // for a given prefix, if DoUpdateCompletionModel() succeeds,
-    // we won't do any further update of the model as long as we
-    // do not clear the textentry. but then we have to start over again.
-
-    void OnEntryChanged( wxCommandEvent& event )
+    void OnEntryChanged(wxCommandEvent& event)
     {
-        if ( event.GetString().empty() )
-        {
-            m_newCompletionsNeeded = true;
-        }
-        else
-        {
-            if ( m_newCompletionsNeeded )
-                DoUpdateCompletionModel();
-        }
+        DoUpdateCompletionModel();
 
         event.Skip();
     }
@@ -406,8 +392,6 @@ private:
             }
 
             UseModel(store);
-
-            m_newCompletionsNeeded = false;
         }
         else
         {
@@ -421,12 +405,6 @@ private:
 
     // The associated window, we need to store it to unbind our event handler.
     wxWindow* const m_win;
-
-    // Each time we enter a new prefix, GtkEntryCompletion needs to be fed with
-    // new completions. And this flag lets us try to DoUpdateCompletionModel()
-    // and if it succeeds, it'll set the flag to false and OnEntryChanged()
-    // will not try to call it again unless we entered a new prefix.
-    bool m_newCompletionsNeeded;
 
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteDynamic);
 };
