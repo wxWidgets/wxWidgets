@@ -94,13 +94,11 @@ private:
     // implement this to return the associated GtkEntry
     virtual GtkEntry *GetEntry() const = 0;
 
-    wxTextAutoCompleteData *GetOrCreateCompleter();
-
     // Various auto-completion-related stuff, only used if any of AutoComplete()
-    // methods are called. Use the function above to access it.
+    // methods are called.
     wxTextAutoCompleteData *m_autoCompleteData;
 
-    // It needs to call our GetEditable() method.
+    // It needs to call our GetEntry() method.
     friend class wxTextAutoCompleteData;
 
     bool m_isUpperCase;
