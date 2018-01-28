@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_thirdparty_library(wxUSE_LIBTIFF TIFF "use libtiff (TIFF file format)")
-
 if(wxUSE_LIBTIFF STREQUAL "builtin")
     # TODO: implement building libtiff via ExternalProject_Add()
     if(UNIX AND NOT APPLE)

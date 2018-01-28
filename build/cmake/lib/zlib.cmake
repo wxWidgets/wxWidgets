@@ -7,9 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_thirdparty_library(wxUSE_ZLIB ZLIB "use zlib for LZW compression"
-    DEFAULT_APPLE sys)
-
 if(wxUSE_ZLIB STREQUAL "builtin")
     wx_add_builtin_library(wxzlib
         src/zlib/adler32.c

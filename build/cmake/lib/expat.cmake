@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing" DEFAULT_APPLE sys)
-
 if(wxUSE_EXPAT STREQUAL "builtin")
     wx_add_builtin_library(wxexpat
         src/expat/expat/lib/xmlparse.c

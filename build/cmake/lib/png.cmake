@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_thirdparty_library(wxUSE_LIBPNG PNG "use libpng (PNG image format)")
-
 if(wxUSE_LIBPNG STREQUAL "builtin")
     wx_add_builtin_library(wxpng
             src/png/png.c
