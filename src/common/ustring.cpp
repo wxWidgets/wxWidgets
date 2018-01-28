@@ -431,7 +431,7 @@ wxScopedCharBuffer wxUString::utf8_str() const
         {
             utf8_length += 2;
         }
-        else if ( code < 0xFFFF )
+        else if ( code <= 0xFFFF )
         {
             utf8_length += 3;
         }

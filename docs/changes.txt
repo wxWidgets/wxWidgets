@@ -108,6 +108,7 @@ All:
 - Update all bundled 3rd party libraries to their latest versions.
 - Use unique prefix for all zlib symbols to avoid link conflicts.
 - Make wxFile::ReadAll() work for unseekable files too.
+- Correct UTF-8 encoding of U+FFFF (axiom).
 
 All (GUI):
 

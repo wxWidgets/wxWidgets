@@ -1135,7 +1135,7 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
                 out[0] = 0xC0 | code;
             }
         }
-        else if ( code < 0xFFFF )
+        else if ( code <= 0xFFFF )
         {
             len = 3;
             if ( out )
