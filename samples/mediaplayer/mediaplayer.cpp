@@ -1588,7 +1588,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     wxASSERT_MSG(bOK, wxT("Could not create media control!"));
     wxUnusedVar(bOK);
 
-    sizer->Add(m_mediactrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5);
+    sizer->Add(m_mediactrl, wxSizerFlags().Expand().Border());
 
     //
     //  Create the playlist/listctrl
