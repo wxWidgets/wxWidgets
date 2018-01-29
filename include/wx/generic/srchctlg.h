@@ -88,6 +88,8 @@ public:
     // operations
     // ----------
 
+    virtual void ChangeValue(const wxString& value) wxOVERRIDE;
+
     // editing
     virtual void Clear() wxOVERRIDE;
     virtual void Replace(long from, long to, const wxString& value) wxOVERRIDE;

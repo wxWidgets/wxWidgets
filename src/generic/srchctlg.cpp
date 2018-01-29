@@ -915,6 +915,14 @@ wxTextCtrl& operator<<(double d);
 wxTextCtrl& operator<<(const wxChar c);
 #endif
 
+// Note that overriding DoSetValue() is currently insufficient because the base
+// class ChangeValue() only updates m_hintData of this object (which is null
+// anyhow), instead of updating m_text->m_hintData, see #16998.
+void wxSearchCtrl::ChangeValue(const wxString& value)
+{
+    m_text->ChangeValue(value);
+}
+
 void wxSearchCtrl::DoSetValue(const wxString& value, int flags)
 {
     m_text->DoSetValue(value, flags);
