@@ -49,4 +49,12 @@ SEARCH_CTRL_TEST_CASE("wxSearchCtrl::Focus", "[wxSearchCtrl][focus]")
 }
 #endif // !__WXOSX__
 
+SEARCH_CTRL_TEST_CASE("wxSearchCtrl::ChangeValue", "[wxSearchCtrl][text]")
+{
+    CHECK( m_search->GetValue() == wxString() );
+
+    m_search->ChangeValue("foo");
+    CHECK( m_search->GetValue() == "foo" );
+}
+
 #endif // wxUSE_SEARCHCTRL
