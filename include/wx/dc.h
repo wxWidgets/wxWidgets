@@ -1454,7 +1454,8 @@ public:
     ~wxDCClipper()
     {
         m_dc.DestroyClippingRegion();
-        m_dc.SetClippingRegion(m_oldClipRect);
+        if ( !m_oldClipRect.IsEmpty() )
+            m_dc.SetClippingRegion(m_oldClipRect);
     }
 
 private:
