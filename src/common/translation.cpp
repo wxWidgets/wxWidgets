@@ -1624,6 +1624,14 @@ wxString wxTranslations::GetBestTranslation(const wxString& domain,
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
+
+    wxASSERT_MSG(gs_translationsOwned,
+            "Translations not ready (using _() from static initializer?)");
+
+    // Fallback for release builds
+    if( gs_translationsOwned == false)
+        return str;
+
     wxLocaleUntranslatedStrings& strings = wxThreadInfo.untranslatedStrings;
 
     wxLocaleUntranslatedStrings::iterator i = strings.find(str);
