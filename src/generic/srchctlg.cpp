@@ -241,7 +241,6 @@ wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
     EVT_SEARCHCTRL_CANCEL_BTN(wxID_ANY, wxSearchCtrl::OnCancelButton)
-    EVT_SET_FOCUS(wxSearchCtrl::OnSetFocus)
     EVT_SIZE(wxSearchCtrl::OnSize)
 wxEND_EVENT_TABLE()
 
@@ -1233,14 +1232,6 @@ void wxSearchCtrl::OnCancelButton( wxCommandEvent& event )
 {
     m_text->Clear();
     event.Skip();
-}
-
-void wxSearchCtrl::OnSetFocus( wxFocusEvent& /*event*/ )
-{
-    if ( m_text )
-    {
-        m_text->SetFocus();
-    }
 }
 
 void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )

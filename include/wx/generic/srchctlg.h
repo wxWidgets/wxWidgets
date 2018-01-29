@@ -223,7 +223,6 @@ protected:
 
     void OnCancelButton( wxCommandEvent& event );
 
-    void OnSetFocus( wxFocusEvent& event );
     void OnSize( wxSizeEvent& event );
 
     bool HasMenu() const
