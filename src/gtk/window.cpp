@@ -41,6 +41,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/private/textmeasure.h"
@@ -2191,10 +2192,19 @@ gtk_window_realized_callback(GtkWidget* WXUNUSED(widget), wxWindowGTK* win)
 //-----------------------------------------------------------------------------
 
 static void
-size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
+size_allocate(GtkWidget* WXUNUSED_IN_GTK2(widget), GtkAllocation* alloc, wxWindow* win)
 {
     int w = alloc->width;
     int h = alloc->height;
+#if GTK_CHECK_VERSION(3,14,0)
+    if (wx_is_at_least_gtk3(14))
+    {
+        GtkAllocation clip;
+        gtk_widget_get_clip(widget, &clip);
+        if (clip.width > w || clip.height > h)
+            gtk_widget_set_clip(widget, alloc);
+    }
+#endif
     if (win->m_wxwindow)
     {
         GtkBorder border;
