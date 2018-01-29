@@ -209,10 +209,9 @@ public:
     // Default copy ctor, assignment operator and dtor are OK.
 
 private:
-    // Common part of all ctor, initializing everything except the size (which
-    // is initialized by the ctors themselves).
     void Init()
     {
+        m_pointSize = -1;
         m_family = wxFONTFAMILY_DEFAULT;
         m_flags = wxFONTFLAG_DEFAULT;
         m_encoding = wxFONTENCODING_DEFAULT;
