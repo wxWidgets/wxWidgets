@@ -83,6 +83,8 @@ protected:
     void OnToggleCancelButton(wxCommandEvent&);
     void OnToggleSearchMenu(wxCommandEvent&);
 
+    void OnTextEnter(wxCommandEvent& event);
+
     void OnSearch(wxCommandEvent& event);
     void OnSearchCancel(wxCommandEvent& event);
 
@@ -113,6 +115,8 @@ wxBEGIN_EVENT_TABLE(SearchCtrlWidgetsPage, WidgetsPage)
     EVT_CHECKBOX(ID_SEARCH_CB, SearchCtrlWidgetsPage::OnToggleSearchButton)
     EVT_CHECKBOX(ID_CANCEL_CB, SearchCtrlWidgetsPage::OnToggleCancelButton)
     EVT_CHECKBOX(ID_MENU_CB, SearchCtrlWidgetsPage::OnToggleSearchMenu)
+
+    EVT_TEXT_ENTER(wxID_ANY, SearchCtrlWidgetsPage::OnTextEnter)
 
     EVT_SEARCHCTRL_SEARCH_BTN(wxID_ANY, SearchCtrlWidgetsPage::OnSearch)
     EVT_SEARCHCTRL_CANCEL_BTN(wxID_ANY, SearchCtrlWidgetsPage::OnSearchCancel)
@@ -231,6 +235,12 @@ void SearchCtrlWidgetsPage::OnToggleSearchMenu(wxCommandEvent&)
         m_srchCtrl->SetMenu( CreateTestMenu() );
     else
         m_srchCtrl->SetMenu(NULL);
+}
+
+void SearchCtrlWidgetsPage::OnTextEnter(wxCommandEvent& event)
+{
+    wxLogMessage("Search control: enter pressed, contents is \"%s\".",
+                 event.GetString());
 }
 
 void SearchCtrlWidgetsPage::OnSearch(wxCommandEvent& event)
