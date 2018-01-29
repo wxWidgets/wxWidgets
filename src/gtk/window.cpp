@@ -1994,10 +1994,23 @@ gtk_window_realized_callback(GtkWidget* WXUNUSED(widget), wxWindowGTK* win)
 //-----------------------------------------------------------------------------
 
 static void
-size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
+size_allocate(GtkWidget*
+#if GTK_CHECK_VERSION(3,14,0)
+                         widget
+#endif
+                               , GtkAllocation* alloc, wxWindow* win)
 {
     int w = alloc->width;
     int h = alloc->height;
+#if GTK_CHECK_VERSION(3,14,0)
+    if (gtk_check_version(3,14,0) == NULL)
+    {
+        GtkAllocation clip;
+        gtk_widget_get_clip(widget, &clip);
+        if (clip.width > w || clip.height > h)
+            gtk_widget_set_clip(widget, alloc);
+    }
+#endif
     if (win->m_wxwindow)
     {
         GtkBorder border;
