@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_thirdparty_library(wxUSE_REGEX REGEX "enable support for wxRegEx class" DEFAULT builtin)
-
 if(wxUSE_REGEX)
     # TODO: Forcing builtin until sys is implemented
     set(wxUSE_REGEX builtin)

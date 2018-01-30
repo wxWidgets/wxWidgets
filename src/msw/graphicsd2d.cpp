@@ -235,6 +235,17 @@ DEFINE_GUID(wxIID_IDWriteFactory,
 DEFINE_GUID(wxIID_IWICBitmapSource,
             0x00000120, 0xa8f2, 0x4877, 0xba, 0x0a, 0xfd, 0x2b, 0x66, 0x45, 0xfb, 0x94);
 
+DEFINE_GUID(GUID_WICPixelFormat32bppPBGRA,
+            0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x10);
+
+DEFINE_GUID(GUID_WICPixelFormat32bppBGR,
+            0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0e);
+
+#ifndef CLSID_WICImagingFactory
+DEFINE_GUID(CLSID_WICImagingFactory,
+            0xcacaf262, 0x9370, 0x4615, 0xa1, 0x3b, 0x9f, 0x55, 0x39, 0xda, 0x4c, 0xa);
+#endif
+
 // Implementation of the Direct2D functions
 HRESULT WINAPI wxD2D1CreateFactory(
     D2D1_FACTORY_TYPE factoryType,
@@ -3071,7 +3082,7 @@ public:
         wxCHECK_HRESULT_RET(hr);
     }
 
-    void DrawBitmap(ID2D1Image* image, D2D1_POINT_2F offset,
+    void DrawBitmap(ID2D1Bitmap* image, D2D1_POINT_2F offset,
         D2D1_RECT_F imageRectangle, wxInterpolationQuality interpolationQuality,
         wxCompositionMode compositionMode) wxOVERRIDE
     {

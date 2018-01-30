@@ -20,7 +20,7 @@ if(wxBUILD_MONOLITHIC)
 endif()
 
 # Define third party libraries
-set(LIBS_THIRDPARTY regex zlib)
+set(LIBS_THIRDPARTY regex zlib expat)
 if(wxUSE_GUI)
     list(APPEND LIBS_THIRDPARTY jpeg png tiff)
 endif()

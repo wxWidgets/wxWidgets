@@ -471,24 +471,6 @@ endif() # CMAKE_USE_PTHREADS_INIT
 check_symbol_exists(localtime_r time.h HAVE_LOCALTIME_R)
 check_symbol_exists(gmtime_r time.h HAVE_GMTIME_R)
 
-if(WXMSW)
-    set(wxUSE_WEBVIEW_IE ON)
-elseif(WXGTK OR APPLE)
-    set(wxUSE_WEBVIEW_WEBKIT ON)
-endif()
-
-if(MSVC)
-    set(wxUSE_GRAPHICS_CONTEXT ON)
-endif()
-
-if(MSVC_VERSION GREATER 1600 AND NOT CMAKE_VS_PLATFORM_TOOLSET MATCHES "_xp$")
-    set(wxUSE_WINRT ON)
-endif()
-
-if(wxUSE_OPENGL)
-    set(wxUSE_GLCANVAS ON)
-endif()
-
 # ---------------------------------------------------------------------------
 # Checks for typedefs
 # ---------------------------------------------------------------------------
