@@ -96,7 +96,7 @@ protected:
     {
         if ( !IsEmpty() )
         {
-            wxCommandEvent event(wxEVT_SEARCHCTRL_SEARCH_BTN, m_search->GetId());
+            wxCommandEvent event(wxEVT_SEARCH, m_search->GetId());
             event.SetEventObject(m_search);
             event.SetString(m_search->GetValue());
 
@@ -196,7 +196,7 @@ protected:
         wxCommandEvent event(m_eventType, m_search->GetId());
         event.SetEventObject(m_search);
 
-        if ( m_eventType == wxEVT_SEARCHCTRL_SEARCH_BTN )
+        if ( m_eventType == wxEVT_SEARCH )
         {
             // it's convenient to have the string to search for directly in the
             // event instead of having to retrieve it from the control in the
@@ -209,7 +209,7 @@ protected:
         m_search->SetFocus();
 
 #if wxUSE_MENUS
-        if ( m_eventType == wxEVT_SEARCHCTRL_SEARCH_BTN )
+        if ( m_eventType == wxEVT_SEARCH )
         {
             // this happens automatically, just like on Mac OS X
             m_search->PopupSearchMenu();
@@ -238,7 +238,7 @@ wxBEGIN_EVENT_TABLE(wxSearchButton, wxControl)
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
-    EVT_SEARCHCTRL_CANCEL_BTN(wxID_ANY, wxSearchCtrl::OnCancelButton)
+    EVT_SEARCH_CANCEL(wxID_ANY, wxSearchCtrl::OnCancelButton)
     EVT_SIZE(wxSearchCtrl::OnSize)
 wxEND_EVENT_TABLE()
 
@@ -322,10 +322,10 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     m_text = new wxSearchTextCtrl(this, value, style);
 
     m_searchButton = new wxSearchButton(this,
-                                        wxEVT_SEARCHCTRL_SEARCH_BTN,
+                                        wxEVT_SEARCH,
                                         m_searchBitmap);
     m_cancelButton = new wxSearchButton(this,
-                                        wxEVT_SEARCHCTRL_CANCEL_BTN,
+                                        wxEVT_SEARCH_CANCEL,
                                         m_cancelBitmap);
 
     SetBackgroundColour( m_text->GetBackgroundColour() );

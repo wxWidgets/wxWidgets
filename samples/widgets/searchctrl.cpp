@@ -120,8 +120,8 @@ wxBEGIN_EVENT_TABLE(SearchCtrlWidgetsPage, WidgetsPage)
     EVT_TEXT(wxID_ANY, SearchCtrlWidgetsPage::OnText)
     EVT_TEXT_ENTER(wxID_ANY, SearchCtrlWidgetsPage::OnTextEnter)
 
-    EVT_SEARCHCTRL_SEARCH_BTN(wxID_ANY, SearchCtrlWidgetsPage::OnSearch)
-    EVT_SEARCHCTRL_CANCEL_BTN(wxID_ANY, SearchCtrlWidgetsPage::OnSearchCancel)
+    EVT_SEARCH(wxID_ANY, SearchCtrlWidgetsPage::OnSearch)
+    EVT_SEARCH_CANCEL(wxID_ANY, SearchCtrlWidgetsPage::OnSearchCancel)
 wxEND_EVENT_TABLE()
 
 // ============================================================================

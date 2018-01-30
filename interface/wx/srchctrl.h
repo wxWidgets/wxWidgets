@@ -35,19 +35,19 @@
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
-    To react to the changes in the control contents, use EVT_TEXT event, just
+    To react to the changes in the control contents, use wxEVT_TEXT event, just
     as you would do with wxTextCtrl. However it is recommended to use
-    EVT_SEARCHCTRL_SEARCH_BTN to actually start searching to avoid doing it too
-    soon, while the user is still typing (note that EVT_SEARCHCTRL_SEARCH_BTN
-    is also triggered by pressing Enter in the control).
-    @event{EVT_SEARCHCTRL_SEARCH_BTN(id, func)}
-        Respond to a @c wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the
+    wxEVT_SEARCH to actually start searching to avoid doing it too soon, while
+    the user is still typing (note that wxEVT_SEARCH is also triggered by
+    pressing Enter in the control).
+    @event{EVT_SEARCH(id, func)}
+        Respond to a @c wxEVT_SEARCH event, generated when the
         search button is clicked. Note that this does not initiate a search on
         its own, you need to perform the appropriate action in your event
         handler. You may use @code event.GetString() @endcode to retrieve the
         string to search for in the event handler code.
-    @event{EVT_SEARCHCTRL_CANCEL_BTN(id, func)}
-        Respond to a @c wxEVT_SEARCHCTRL_CANCEL_BTN event, generated when the
+    @event{EVT_SEARCH_CANCEL(id, func)}
+        Respond to a @c wxEVT_SEARCH_CANCEL event, generated when the
         cancel button is clicked.
     @endEventTable
 
@@ -161,5 +161,5 @@ public:
 };
 
 
-wxEventType  wxEVT_SEARCHCTRL_CANCEL_BTN;
-wxEventType  wxEVT_SEARCHCTRL_SEARCH_BTN;
+wxEventType  wxEVT_SEARCH_CANCEL;
+wxEventType  wxEVT_SEARCH;
