@@ -162,7 +162,9 @@ public:
           m_search(search),
           m_eventType(eventType),
           m_bmp(bmp)
-    { }
+    {
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+    }
 
     void SetBitmapLabel(const wxBitmap& label)
     {
