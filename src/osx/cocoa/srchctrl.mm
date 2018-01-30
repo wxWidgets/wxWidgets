@@ -30,8 +30,12 @@
 
 @interface wxNSSearchField : NSSearchField
 {
+    // This flag is set in controlTextDidChange and reset when it's tested in
+    // checkIfAlreadyCleared.
+    bool m_justCleared;
 }
 
+- (bool) checkIfAlreadyCleared;
 @end
 
 @implementation wxNSSearchField
@@ -48,7 +52,10 @@
 
 - (id)initWithFrame:(NSRect)frame
 {
-    self = [super initWithFrame:frame];
+    if ( self = [super initWithFrame:frame] )
+    {
+        m_justCleared = false;
+    }
     return self;
 }
  
@@ -58,6 +65,18 @@
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
         impl->controlTextDidChange();
+
+    m_justCleared = [self stringValue].length == 0;
+}
+
+- (bool)checkIfAlreadyCleared
+{
+    if ( !m_justCleared )
+        return false;
+
+    m_justCleared = false;
+
+    return true;
 }
 
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
@@ -157,7 +176,12 @@ public :
             NSString *searchString = [m_searchField stringValue];
             if ( searchString == nil || !searchString.length )
             {
-                wxpeer->HandleSearchFieldCancelHit();
+                // For some reason, we're getting called twice: first before
+                // the associated wxTextCtrl is cleared and then again after
+                // this. Avoid generating duplicate events by letting through
+                // only the second one.
+                if ( [m_searchField checkIfAlreadyCleared] )
+                    wxpeer->HandleSearchFieldCancelHit();
             }
             else
             {
