@@ -92,19 +92,16 @@ protected:
         m_search->GetEventHandler()->ProcessEvent(event);
     }
 
-    void OnTextUrl(wxTextUrlEvent& eventText)
+    void OnTextEnter(wxCommandEvent& WXUNUSED(event))
     {
-        // copy constructor is disabled for some reason?
-        //wxTextUrlEvent event(eventText);
-        wxTextUrlEvent event(
-            m_search->GetId(),
-            eventText.GetMouseEvent(),
-            eventText.GetURLStart(),
-            eventText.GetURLEnd()
-            );
-        event.SetEventObject(m_search);
+        if ( !IsEmpty() )
+        {
+            wxCommandEvent event(wxEVT_SEARCH, m_search->GetId());
+            event.SetEventObject(m_search);
+            event.SetString(m_search->GetValue());
 
-        m_search->GetEventHandler()->ProcessEvent(event);
+            m_search->ProcessWindowEvent(event);
+        }
     }
 
 #ifdef __WXMSW__
@@ -149,8 +146,7 @@ private:
 
 wxBEGIN_EVENT_TABLE(wxSearchTextCtrl, wxTextCtrl)
     EVT_TEXT(wxID_ANY, wxSearchTextCtrl::OnText)
-    EVT_TEXT_ENTER(wxID_ANY, wxSearchTextCtrl::OnText)
-    EVT_TEXT_URL(wxID_ANY, wxSearchTextCtrl::OnTextUrl)
+    EVT_TEXT_ENTER(wxID_ANY, wxSearchTextCtrl::OnTextEnter)
     EVT_TEXT_MAXLEN(wxID_ANY, wxSearchTextCtrl::OnText)
 wxEND_EVENT_TABLE()
 
@@ -166,7 +162,9 @@ public:
           m_search(search),
           m_eventType(eventType),
           m_bmp(bmp)
-    { }
+    {
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+    }
 
     void SetBitmapLabel(const wxBitmap& label)
     {
@@ -198,7 +196,7 @@ protected:
         wxCommandEvent event(m_eventType, m_search->GetId());
         event.SetEventObject(m_search);
 
-        if ( m_eventType == wxEVT_SEARCHCTRL_SEARCH_BTN )
+        if ( m_eventType == wxEVT_SEARCH )
         {
             // it's convenient to have the string to search for directly in the
             // event instead of having to retrieve it from the control in the
@@ -211,7 +209,7 @@ protected:
         m_search->SetFocus();
 
 #if wxUSE_MENUS
-        if ( m_eventType == wxEVT_SEARCHCTRL_SEARCH_BTN )
+        if ( m_eventType == wxEVT_SEARCH )
         {
             // this happens automatically, just like on Mac OS X
             m_search->PopupSearchMenu();
@@ -240,8 +238,7 @@ wxBEGIN_EVENT_TABLE(wxSearchButton, wxControl)
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
-    EVT_SEARCHCTRL_CANCEL_BTN(wxID_ANY, wxSearchCtrl::OnCancelButton)
-    EVT_SET_FOCUS(wxSearchCtrl::OnSetFocus)
+    EVT_SEARCH_CANCEL(wxID_ANY, wxSearchCtrl::OnCancelButton)
     EVT_SIZE(wxSearchCtrl::OnSize)
 wxEND_EVENT_TABLE()
 
@@ -325,10 +322,10 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     m_text = new wxSearchTextCtrl(this, value, style);
 
     m_searchButton = new wxSearchButton(this,
-                                        wxEVT_SEARCHCTRL_SEARCH_BTN,
+                                        wxEVT_SEARCH,
                                         m_searchBitmap);
     m_cancelButton = new wxSearchButton(this,
-                                        wxEVT_SEARCHCTRL_CANCEL_BTN,
+                                        wxEVT_SEARCH_CANCEL,
                                         m_cancelBitmap);
 
     SetBackgroundColour( m_text->GetBackgroundColour() );
@@ -916,6 +913,14 @@ wxTextCtrl& operator<<(double d);
 wxTextCtrl& operator<<(const wxChar c);
 #endif
 
+// Note that overriding DoSetValue() is currently insufficient because the base
+// class ChangeValue() only updates m_hintData of this object (which is null
+// anyhow), instead of updating m_text->m_hintData, see #16998.
+void wxSearchCtrl::ChangeValue(const wxString& value)
+{
+    m_text->ChangeValue(value);
+}
+
 void wxSearchCtrl::DoSetValue(const wxString& value, int flags)
 {
     m_text->DoSetValue(value, flags);
@@ -1233,14 +1238,6 @@ void wxSearchCtrl::OnCancelButton( wxCommandEvent& event )
 {
     m_text->Clear();
     event.Skip();
-}
-
-void wxSearchCtrl::OnSetFocus( wxFocusEvent& /*event*/ )
-{
-    if ( m_text )
-    {
-        m_text->SetFocus();
-    }
 }
 
 void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )

@@ -193,7 +193,10 @@ private:
         if ( child == this )
             return; // not a child, we don't want to Connect() to ourselves
 
-        // Always capture wxEVT_KILL_FOCUS:
+        child->Connect(wxEVT_SET_FOCUS,
+                       wxFocusEventHandler(wxCompositeWindow::OnSetFocus),
+                       NULL, this);
+
         child->Connect(wxEVT_KILL_FOCUS,
                        wxFocusEventHandler(wxCompositeWindow::OnKillFocus),
                        NULL, this);
@@ -219,6 +222,27 @@ private:
     {
         if ( !this->ProcessWindowEvent(event) )
             event.Skip();
+    }
+
+    void OnSetFocus(wxFocusEvent& event)
+    {
+        event.Skip();
+
+        // When a child of a composite window gains focus, the entire composite
+        // focus gains focus as well -- unless it had it already.
+        //
+        // We suppose that we hadn't had focus if the event doesn't carry the
+        // previously focused window as it normally means that it comes from
+        // outside of this program.
+        wxWindow* const oldFocus = event.GetWindow();
+        if ( !oldFocus || oldFocus->GetMainWindowOfCompositeControl() != this )
+        {
+            wxFocusEvent eventThis(wxEVT_SET_FOCUS, this->GetId());
+            eventThis.SetEventObject(this);
+            eventThis.SetWindow(event.GetWindow());
+
+            this->ProcessWindowEvent(eventThis);
+        }
     }
 
     void OnKillFocus(wxFocusEvent& event)
