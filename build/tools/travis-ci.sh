@@ -4,14 +4,16 @@
 
 set -e
 
+wxPROC_COUNT=`getconf _NPROCESSORS_ONLN`
+((wxPROC_COUNT++))
+if [ "$wxTOOLSET" == "cmake" ] && [ "$wxCMAKE_GENERATOR" == "Xcode" ]; then
+    wxJOBS="-jobs $wxPROC_COUNT"
+else
+    wxJOBS="-j$wxPROC_COUNT"
+fi
+
 case $wxTOOLSET in
     cmake)
-        if [ `uname -s` = "Linux" ] && [ `lsb_release -cs` = "precise" ]; then
-            echo Updating CMake...
-            wget -O - https://cmake.org/files/v3.6/cmake-3.6.2-Linux-x86_64.tar.gz | tar xzf -
-            export PATH=`pwd`/cmake-3.6.2-Linux-x86_64/bin:$PATH
-        fi
-
         if [ -z $wxCMAKE_TESTS ]; then wxCMAKE_TESTS=CONSOLE_ONLY; fi
         cmake --version
         echo 'travis_fold:start:configure'
@@ -22,7 +24,7 @@ case $wxTOOLSET in
         echo 'travis_fold:end:configure'
         echo 'travis_fold:start:building'
         echo 'Building...'
-        cmake --build .
+        cmake --build . -- $wxJOBS
         echo 'travis_fold:end:building'
         if [ "$wxCMAKE_TESTS" != "OFF" ]; then
             echo 'travis_fold:start:testing'
@@ -36,10 +38,10 @@ case $wxTOOLSET in
         ./configure --disable-optimise $wxCONFIGURE_FLAGS
         echo -en 'travis_fold:end:script.configure\\r'
         echo 'Building...' && echo -en 'travis_fold:start:script.build\\r'
-        make
+        make $wxJOBS
         echo -en 'travis_fold:end:script.build\\r'
         echo 'Building tests...' && echo -en 'travis_fold:start:script.tests\\r'
-        make -C tests
+        make -C tests $wxJOBS
         echo -en 'travis_fold:end:script.tests\\r'
         echo 'Testing...' && echo -en 'travis_fold:start:script.testing\\r'
         pushd tests && ./test && popd
