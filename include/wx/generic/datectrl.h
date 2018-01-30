@@ -19,7 +19,7 @@ class WXDLLIMPEXP_FWD_ADV wxCalendarCtrl;
 class WXDLLIMPEXP_FWD_ADV wxCalendarComboPopup;
 
 class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric
-    : public wxCompositeWindow<wxDatePickerCtrlBase>
+    : public wxCompositeWindowSettersOnly<wxDatePickerCtrlBase>
 {
 public:
     // creating the control
