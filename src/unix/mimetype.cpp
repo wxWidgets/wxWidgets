@@ -520,6 +520,11 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
 }
 
 
+static void AppendToPathIfExists(wxString& pathvar, const wxString& dir)
+{
+    if ( wxFileName::DirExists(dir) )
+        pathvar << ":" << dir;
+}
 
 // read system and user mailcaps and other files
 void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
@@ -546,10 +551,18 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
         if ( xdgDataDirs.empty() )
         {
             xdgDataDirs = "/usr/local/share:/usr/share";
-            if (mailcapStyles & wxMAILCAP_GNOME)
-                xdgDataDirs += ":/usr/share/gnome:/opt/gnome/share";
-            if (mailcapStyles & wxMAILCAP_KDE)
-                xdgDataDirs += ":/usr/share/kde3:/opt/kde3/share";
+
+            if ( mailcapStyles & wxMAILCAP_GNOME )
+            {
+                AppendToPathIfExists(xdgDataDirs, "/usr/share/gnome");
+                AppendToPathIfExists(xdgDataDirs, "/opt/gnome/share");
+            }
+
+            if ( mailcapStyles & wxMAILCAP_KDE )
+            {
+                AppendToPathIfExists(xdgDataDirs, "/usr/share/kde3");
+                AppendToPathIfExists(xdgDataDirs, "/opt/kde3/share");
+            }
         }
         if ( !sExtraDir.empty() )
         {
