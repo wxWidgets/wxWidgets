@@ -520,10 +520,13 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
 }
 
 
-static void AppendToPathIfExists(wxString& pathvar, const wxString& dir)
+static bool AppendToPathIfExists(wxString& pathvar, const wxString& dir)
 {
-    if ( wxFileName::DirExists(dir) )
-        pathvar << ":" << dir;
+    if ( !wxFileName::DirExists(dir) )
+        return false;
+
+    pathvar << ":" << dir;
+    return true;
 }
 
 // read system and user mailcaps and other files
@@ -560,8 +563,17 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
 
             if ( mailcapStyles & wxMAILCAP_KDE )
             {
-                AppendToPathIfExists(xdgDataDirs, "/usr/share/kde3");
-                AppendToPathIfExists(xdgDataDirs, "/opt/kde3/share");
+                for ( int kdeVer = 5; kdeVer >= 3; kdeVer-- )
+                {
+                    const wxString& kdeDir = wxString::Format("kde%d", kdeVer);
+                    if ( AppendToPathIfExists(xdgDataDirs, "/usr/share/" + kdeDir)
+                            || AppendToPathIfExists(xdgDataDirs, "/opt/" + kdeDir + "/share") )
+                    {
+                        // We don't need to use earlier versions if we found a
+                        // later one.
+                        break;
+                    }
+                }
             }
         }
         if ( !sExtraDir.empty() )
