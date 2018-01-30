@@ -30,8 +30,6 @@
 
 #endif
 
-#include "wx/dcbuffer.h"
-
 extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 
 class WXDLLIMPEXP_CORE wxGenericComboCtrl : public wxComboCtrlBase
@@ -96,19 +94,7 @@ protected:
 #endif
 
     // For better transparent background rendering
-    virtual bool HasTransparentBackground() wxOVERRIDE
-    {
-        #if wxALWAYS_NATIVE_DOUBLE_BUFFER
-          #ifdef __WXGTK__
-            // Sanity check for GTK+
-            return IsDoubleBuffered();
-          #else
-            return true;
-          #endif
-        #else
-            return false;
-        #endif
-    }
+    virtual bool HasTransparentBackground() wxOVERRIDE;
 
     // Mandatory virtuals
     virtual void OnResize() wxOVERRIDE;

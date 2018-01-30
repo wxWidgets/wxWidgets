@@ -198,6 +198,20 @@ wxGenericComboCtrl::~wxGenericComboCtrl()
 {
 }
 
+bool wxGenericComboCtrl::HasTransparentBackground()
+{
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+  #ifdef __WXGTK__
+    // Sanity check for GTK+
+    return IsDoubleBuffered();
+  #else
+    return true;
+  #endif
+#else
+    return false;
+#endif
+}
+
 void wxGenericComboCtrl::OnResize()
 {
 
