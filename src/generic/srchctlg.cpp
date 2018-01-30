@@ -104,21 +104,6 @@ protected:
         }
     }
 
-    void OnTextUrl(wxTextUrlEvent& eventText)
-    {
-        // copy constructor is disabled for some reason?
-        //wxTextUrlEvent event(eventText);
-        wxTextUrlEvent event(
-            m_search->GetId(),
-            eventText.GetMouseEvent(),
-            eventText.GetURLStart(),
-            eventText.GetURLEnd()
-            );
-        event.SetEventObject(m_search);
-
-        m_search->GetEventHandler()->ProcessEvent(event);
-    }
-
 #ifdef __WXMSW__
     // We increase the text control height to be the same as for the controls
     // with border as this is what we actually need here because even though
@@ -162,7 +147,6 @@ private:
 wxBEGIN_EVENT_TABLE(wxSearchTextCtrl, wxTextCtrl)
     EVT_TEXT(wxID_ANY, wxSearchTextCtrl::OnText)
     EVT_TEXT_ENTER(wxID_ANY, wxSearchTextCtrl::OnTextEnter)
-    EVT_TEXT_URL(wxID_ANY, wxSearchTextCtrl::OnTextUrl)
     EVT_TEXT_MAXLEN(wxID_ANY, wxSearchTextCtrl::OnText)
 wxEND_EVENT_TABLE()
 
