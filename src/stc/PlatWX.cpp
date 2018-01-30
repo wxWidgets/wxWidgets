@@ -710,8 +710,6 @@ SurfaceFontDataD2D::SurfaceFontDataD2D(const FontParameters& fp)
         wxCOMPtr<IDWriteTextLayout> pTextLayout;
         wxString faceName = fp.faceName;
         wxString extentTest(EXTENT_TEST);
-        int weight = fp.weight;
-        DWRITE_FONT_WEIGHT fontWeight;
         DWRITE_FONT_STYLE fontStyle;
         DWRITE_TEXT_METRICS textmetrics = {0,0,0,0,0,0,0,0,0};
         const int maxLines = 2;
@@ -720,59 +718,12 @@ SurfaceFontDataD2D::SurfaceFontDataD2D(const FontParameters& fp)
         FLOAT emHeight = 0;
         HRESULT hr;
 
-        if ( weight <= 100 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_THIN;
-        }
-        else if ( weight <= 200 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_EXTRA_LIGHT;
-        }
-        else if ( weight <= 300 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_LIGHT;
-        }
-#ifndef __MINGW64_TOOLCHAIN__
-        else if ( weight <= 350 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_SEMI_LIGHT;
-        }
-#endif
-        else if ( weight <= 400 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_NORMAL;
-        }
-        else if ( weight <= 500 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_MEDIUM;
-        }
-        else if ( weight <= 600 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_SEMI_BOLD;
-        }
-        else if ( weight <= 700 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_BOLD;
-        }
-        else if ( weight <= 800 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_EXTRA_BOLD;
-        }
-        else if ( weight <= 900 )
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_HEAVY;
-        }
-        else
-        {
-            fontWeight = DWRITE_FONT_WEIGHT_EXTRA_BLACK;
-        }
-
         fontStyle = fp.italic?DWRITE_FONT_STYLE_ITALIC:DWRITE_FONT_STYLE_NORMAL;
 
         hr = pDWriteFactory->CreateTextFormat(
             faceName.wc_str(),
             NULL,
-            fontWeight,
+            static_cast<DWRITE_FONT_WEIGHT>(fp.weight),
             fontStyle,
             DWRITE_FONT_STRETCH_NORMAL,
             fp.size,
