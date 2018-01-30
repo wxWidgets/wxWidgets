@@ -92,6 +92,18 @@ protected:
         m_search->GetEventHandler()->ProcessEvent(event);
     }
 
+    void OnTextEnter(wxCommandEvent& WXUNUSED(event))
+    {
+        if ( !IsEmpty() )
+        {
+            wxCommandEvent event(wxEVT_SEARCHCTRL_SEARCH_BTN, m_search->GetId());
+            event.SetEventObject(m_search);
+            event.SetString(m_search->GetValue());
+
+            m_search->ProcessWindowEvent(event);
+        }
+    }
+
     void OnTextUrl(wxTextUrlEvent& eventText)
     {
         // copy constructor is disabled for some reason?
@@ -149,7 +161,7 @@ private:
 
 wxBEGIN_EVENT_TABLE(wxSearchTextCtrl, wxTextCtrl)
     EVT_TEXT(wxID_ANY, wxSearchTextCtrl::OnText)
-    EVT_TEXT_ENTER(wxID_ANY, wxSearchTextCtrl::OnText)
+    EVT_TEXT_ENTER(wxID_ANY, wxSearchTextCtrl::OnTextEnter)
     EVT_TEXT_URL(wxID_ANY, wxSearchTextCtrl::OnTextUrl)
     EVT_TEXT_MAXLEN(wxID_ANY, wxSearchTextCtrl::OnText)
 wxEND_EVENT_TABLE()

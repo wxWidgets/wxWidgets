@@ -12,10 +12,6 @@
     control, and a cancel button.
 
     @beginStyleTable
-    @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_TEXT_ENTER
-           (otherwise pressing Enter key is either processed internally by the
-           control or used for navigation between dialog controls).
     @style{wxTE_PROCESS_TAB}
            The control will receive @c wxEVT_CHAR events for TAB pressed -
            normally, TAB is used for passing to the next control in a dialog
@@ -39,8 +35,11 @@
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
-    To retrieve actual search queries, use EVT_TEXT and EVT_TEXT_ENTER events,
-    just as you would with wxTextCtrl.
+    To react to the changes in the control contents, use EVT_TEXT event, just
+    as you would do with wxTextCtrl. However it is recommended to use
+    EVT_SEARCHCTRL_SEARCH_BTN to actually start searching to avoid doing it too
+    soon, while the user is still typing (note that EVT_SEARCHCTRL_SEARCH_BTN
+    is also triggered by pressing Enter in the control).
     @event{EVT_SEARCHCTRL_SEARCH_BTN(id, func)}
         Respond to a @c wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the
         search button is clicked. Note that this does not initiate a search on
@@ -56,7 +55,7 @@
     @category{ctrl}
     @appearance{searchctrl}
 
-    @see wxTextCtrl::Create, wxValidator
+    @see wxTextCtrl
 */
 class wxSearchCtrl : public wxTextCtrl
 {

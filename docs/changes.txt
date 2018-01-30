@@ -177,6 +177,7 @@ All (GUI):
 - Add Set/GetFooter/Text/Icon() to wxRichMessageDialog (Tobias Taschner)
 - Add wxFloatingPointValidator::SetFactor().
 - Add "hint" property to wxSearchCtrl XRC handler.
+- Generate wxEVT_SEARCHCTRL_SEARCH_BTN on Enter under all platforms.
 
 wxGTK:
 
