@@ -751,9 +751,7 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
 
     if ( !combo->GetEventHandler()->ProcessEvent(redirectedEvent) )
     {
-        // Don't let TAB through to the text ctrl - looks ugly
-        if ( event.GetKeyCode() != WXK_TAB )
-            event.Skip();
+        event.Skip();
     }
 }
 
