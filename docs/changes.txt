@@ -185,6 +185,7 @@ wxGTK:
 
 - Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
 - Make wxBORDER_NONE work for wxTextCtrl with GTK+ 3 (Adrien Tétar).
+- Handle wxTE_PROCESS_TAB, and its absence, correctly in multiline wxTextCtrl.
 - Apply wxTextCtrl::SetDefaultStyle() to user-entered text (Andreas Falkenhahn).
 - Implement dynamic auto-completion in wxTextEntry (AliKet).
 - Fix wxTextCtrl::GetStyle() with GTK+ 3.

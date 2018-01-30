@@ -323,6 +323,14 @@ au_apply_tag_callback(GtkTextBuffer *buffer,
 }
 }
 
+// Check if the style contains wxTE_PROCESS_TAB and update the given
+// GtkTextView accordingly.
+static void wxGtkSetAcceptsTab(GtkWidget* text, long style)
+{
+    gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(text),
+                                  (style & wxTE_PROCESS_TAB) != 0);
+}
+
 //-----------------------------------------------------------------------------
 //  GtkTextCharPredicates for gtk_text_iter_*_find_char
 //-----------------------------------------------------------------------------
@@ -800,6 +808,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     if (multi_line)
     {
+        wxGtkSetAcceptsTab(m_text, style);
+
         // Handle URLs on multi-line controls with wxTE_AUTO_URL style
         if (style & wxTE_AUTO_URL)
         {
@@ -983,6 +993,15 @@ void wxTextCtrl::SetWindowStyleFlag(long style)
 
     if ( (style & wxTE_PROCESS_ENTER) != (styleOld & wxTE_PROCESS_ENTER) )
         GTKSetActivatesDefault();
+
+    if ( IsMultiLine() )
+    {
+        wxGtkSetAcceptsTab(m_text, style);
+    }
+    //else: there doesn't seem to be any way to do it for entries and while we
+    //      could emulate wxTE_PROCESS_TAB for them by handling Tab key events
+    //      explicitly, it doesn't seem to be worth doing it, this style is
+    //      pretty useless with single-line controls.
 
     static const long flagsWrap = wxTE_WORDWRAP | wxTE_CHARWRAP | wxTE_DONTWRAP;
     if ( (style & flagsWrap) != (styleOld & flagsWrap) )
