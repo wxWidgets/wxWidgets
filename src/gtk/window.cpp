@@ -213,6 +213,8 @@ static wxWindowGTK *gs_currentFocus = NULL;
 // The window that is scheduled to get focus in the next event loop iteration
 // or NULL if there's no pending focus change:
 static wxWindowGTK *gs_pendingFocus = NULL;
+// The window that had focus before we lost it last time:
+static wxWindowGTK *gs_lastFocus = NULL;
 
 // the window that has deferred focus-out event pending, if any (see
 // GTKAddDeferredFocusOut() for details)
@@ -2685,6 +2687,8 @@ wxWindowGTK::~wxWindowGTK()
         gs_currentFocus = NULL;
     if (gs_pendingFocus == this)
         gs_pendingFocus = NULL;
+    if (gs_lastFocus == this)
+        gs_lastFocus = NULL;
 
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
@@ -4374,6 +4378,9 @@ bool wxWindowGTK::GTKHandleFocusIn()
 
     wxFocusEvent eventFocus(wxEVT_SET_FOCUS, GetId());
     eventFocus.SetEventObject(this);
+    eventFocus.SetWindow(gs_lastFocus);
+    gs_lastFocus = this;
+
     GTKProcessEvent(eventFocus);
 
     return retval;
@@ -4414,6 +4421,8 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
     wxLogTrace(TRACE_FOCUS,
                "handling focus_out event for %s(%p, %s)",
                GetClassInfo()->GetClassName(), this, GetLabel());
+
+    gs_lastFocus = this;
 
     if (m_imContext)
         gtk_im_context_focus_out(m_imContext);
