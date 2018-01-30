@@ -200,6 +200,7 @@ either MSYS or Cygwin.
 
         $ cd $WXWIN
         $ mkdir build-debug
+        $ cd build-debug
 
 2. Run configure passing it any of the options shown by "configure
    --help". Notice that configure builds shared libraries by default,
