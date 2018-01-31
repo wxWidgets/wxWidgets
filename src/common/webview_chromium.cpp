@@ -343,10 +343,15 @@ void wxWebViewChromium::ClearSelection()
     RunScript(jsclear);
 }
 
-void wxWebViewChromium::RunScript(const wxString& javascript)
+bool wxWebViewChromium::RunScript(const wxString& javascript, wxString* output)
 {
     m_clientHandler->GetBrowser()->GetMainFrame()->ExecuteJavaScript(javascript.ToStdString(),
                                                                      "", 0);
+    // Returning a result is currently unsupported
+    if (output)
+        return false;
+    else
+        return true;
 }
 
 bool wxWebViewChromium::IsBusy() const
