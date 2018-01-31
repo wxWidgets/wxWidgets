@@ -77,7 +77,7 @@ void wxGenericRichMessageDialog::AddMessageDialogDetails(wxSizer *sizer)
         sizerPane->Add( new wxStaticText( windowPane, -1, m_detailedText ) );
         windowPane->SetSizer( sizerPane );
 
-        sizerDetails->Add( m_detailsPane, wxSizerFlags().Right().Expand() );
+        sizerDetails->Add( m_detailsPane, wxSizerFlags().Expand() );
         sizer->Add( sizerDetails, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
     }
 
