@@ -945,10 +945,12 @@ public:
            (otherwise pressing Enter key is either processed internally by the
            control or used to activate the default button of the dialog, if any).
     @style{wxTE_PROCESS_TAB}
-           The control will receive @c wxEVT_CHAR events for TAB pressed -
-           normally, TAB is used for passing to the next control in a dialog
-           instead. For the control created with this style, you can still use
-           Ctrl-Enter to pass to the next control from the keyboard.
+           Normally, TAB key is used for keyboard navigation and pressing it in
+           a control switches focus to the next one. With this style, this
+           won't happen and if the TAB is not otherwise processed (e.g. by @c
+           wxEVT_CHAR event handler), a literal TAB character is inserted into
+           the control. Notice that this style has no effect for single-line
+           text controls when using wxGTK.
     @style{wxTE_MULTILINE}
            The text control allows multiple lines. If this style is not
            specified, line break characters should not be used in the controls
