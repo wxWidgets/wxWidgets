@@ -319,6 +319,8 @@
 /src/*.opt
 /src/*.plg
 
+/src/cef
+
 # /src/common/
 /src/common/y_tab.c
 
