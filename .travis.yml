@@ -5,11 +5,28 @@
 language: cpp
 sudo: required
 
-compiler: gcc
+matrix:
+    include:
+        - compiler: gcc
+        - compiler: gcc
+          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic"
+        - dist: trusty
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--enable-stl"
+        - dist: trusty
+          compiler: clang
+          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs"
+        - os: osx
+          osx_image: xcode6.4
+          compiler: clang
+          env:
+             - wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11 CPPFLAGS=-stdlib=libc++ LDFLAGS=-stdlib=libc++"
+             - wxCONFIGURE_FLAGS="--with-macosx-version-min=10.7 $wxMAKEFILE_FLAGS"
 
 branches:
     only:
         - master
+        - WX_3_0_BRANCH
 
 notifications:
     email:
@@ -19,22 +36,9 @@ notifications:
         on_failure: change
 
 before_install:
-    - sudo apt-get update
-    - sudo apt-get install -y libcppunit-dev
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update                                 ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libcppunit-dev libgtk2.0-dev; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]  ; then brew update                                         ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]  ; then brew install cppunit                                ; fi
 
-env:
-    - wxCONFIGURE_FLAGS=
-    - wxCONFIGURE_FLAGS="--disable-shared"
-    - wxCONFIGURE_FLAGS="--disable-precomp-headers --enable-monolithic"
-    - wxCONFIGURE_FLAGS="--enable-stl" CXXFLAGS=-std=c++0x
-
-script:
-    - ./configure --disable-optimise $wxCONFIGURE_FLAGS
-    - make
-    - make -C tests
-    - pushd tests
-    - ./test -t
-    - popd
-    - make samples
-    - sudo make install
-    - make -C samples/minimal -f makefile.unx
+script: bash build/tools/travis-ci.sh
