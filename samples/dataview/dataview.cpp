@@ -753,6 +753,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             page2_model->DecRef();
 
             lc->AppendToggleColumn( "Toggle" );
+            lc->AppendToggleColumn( "Inert", wxDATAVIEW_CELL_INERT );
             lc->AppendTextColumn( "Text" );
             lc->AppendProgressColumn( "Progress" );
 
@@ -761,6 +762,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             {
                 data.clear();
                 data.push_back( (i%3) == 0 );
+                data.push_back( (i%2) != 0 );
                 data.push_back( wxString::Format("row %d", i) );
                 data.push_back( long(5*i) );
 
