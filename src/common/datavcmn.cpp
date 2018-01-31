@@ -862,20 +862,7 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
 
     // Finally determine the enabled/disabled state and apply it, even to the
     // empty cells.
-    bool enabled = true;
-    switch ( GetMode() )
-    {
-        case wxDATAVIEW_CELL_INERT:
-            enabled = false;
-            break;
-
-        case wxDATAVIEW_CELL_ACTIVATABLE:
-        case wxDATAVIEW_CELL_EDITABLE:
-            enabled = model->IsEnabled(item, column);
-            break;
-    }
-
-    SetEnabled(enabled);
+    SetEnabled(model->IsEnabled(item, column));
 
     }
     wxCATCH_ALL

@@ -2897,12 +2897,6 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 
 void wxDataViewRenderer::SetEnabled(bool enabled)
 {
-    // setting the appearance to disabled grey should only be done for
-    // the active cells which are disabled, not for the cells which can
-    // never be edited at all
-    if ( GetMode() == wxDATAVIEW_CELL_INERT )
-        enabled = true;
-
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
@@ -3071,7 +3065,7 @@ wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
                                                    wxDataViewCellMode mode,
                                                    int alignment)
-    : wxDataViewRenderer(wxT("string"), mode, alignment),
+    : wxOSXDataViewDisabledInertRenderer(wxT("string"), mode, alignment),
       m_choices(choices)
 {
     NSPopUpButtonCell* cell;
@@ -3318,7 +3312,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer);
 wxDataViewToggleRenderer::wxDataViewToggleRenderer(const wxString& varianttype,
                                                    wxDataViewCellMode mode,
                                                    int align)
-    : wxDataViewRenderer(varianttype,mode)
+    : wxOSXDataViewDisabledInertRenderer(varianttype, mode, align)
 {
     NSButtonCell* cell;
 
