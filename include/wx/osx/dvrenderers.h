@@ -42,6 +42,29 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer);
 };
 
+// ---------------------------------------------------------------------------
+// This is a Mac-specific class that should be used as the base class for the
+// renderers that should be disabled when they're inert, to prevent the user
+// from editing them.
+// ---------------------------------------------------------------------------
+
+class wxOSXDataViewDisabledInertRenderer : public wxDataViewRenderer
+{
+protected:
+    wxOSXDataViewDisabledInertRenderer(const wxString& varianttype,
+                                       wxDataViewCellMode mode,
+                                       int alignment)
+        : wxDataViewRenderer(varianttype, mode, alignment)
+    {
+    }
+
+    virtual void SetEnabled(bool enabled) wxOVERRIDE
+    {
+        wxDataViewRenderer::SetEnabled(enabled &&
+                                        GetMode() != wxDATAVIEW_CELL_INERT);
+    }
+};
+
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------
@@ -97,7 +120,8 @@ private:
 // wxDataViewChoiceRenderer
 // -------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewChoiceRenderer: public wxDataViewRenderer
+class WXDLLIMPEXP_ADV wxDataViewChoiceRenderer
+    : public wxOSXDataViewDisabledInertRenderer
 {
 public:
     wxDataViewChoiceRenderer(const wxArrayString& choices,
@@ -164,7 +188,8 @@ private:
 // wxDataViewToggleRenderer
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewToggleRenderer: public wxDataViewRenderer
+class WXDLLIMPEXP_ADV wxDataViewToggleRenderer
+    : public wxOSXDataViewDisabledInertRenderer
 {
 public:
     static wxString GetDefaultType() { return wxS("bool"); }
