@@ -7,11 +7,13 @@ sudo: required
 
 matrix:
     include:
-        - compiler: gcc
-        - compiler: gcc
-          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic"
+        - dist: precise
+          compiler: gcc
         - dist: trusty
           compiler: gcc
+        - dist: trusty
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic"
         - dist: trusty
           compiler: gcc
           env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
