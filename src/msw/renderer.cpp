@@ -322,8 +322,7 @@ void wxRendererMSWBase::DrawFocusRect(wxWindow * WXUNUSED(win),
                                       const wxRect& rect,
                                       int WXUNUSED(flags))
 {
-    RECT rc;
-    wxCopyRectToRECT(rect, rc);
+    RECT rc = ConvertToRECT(dc, rect);
 
     ::DrawFocusRect(GetHdcOf(dc.GetTempHDC()), &rc);
 }
@@ -919,8 +918,8 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
 
     if ( ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
-        RECT rc;
-        wxCopyRectToRECT(rect, rc);
+        RECT rc = ConvertToRECT(dc, rect);
+
         if ( ::IsThemeBackgroundPartiallyTransparent(hTheme, LVP_LISTITEM, itemState) )
             ::DrawThemeParentBackground(GetHwndOf(win), GetHdcOf(dc.GetTempHDC()), &rc);
 
@@ -956,8 +955,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
     if ( s_DrawThemeTextEx && // Might be not available if we're under XP
             ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
-        RECT rc;
-        wxCopyRectToRECT(rect, rc);
+        RECT rc = ConvertToRECT(dc, rect);
 
         WXDTTOPTS textOpts;
         textOpts.dwSize = sizeof(textOpts);
@@ -1081,8 +1079,7 @@ void wxRendererXP::DrawGauge(wxWindow* win,
         return;
     }
 
-    RECT r;
-    wxCopyRectToRECT(rect, r);
+    RECT r = ConvertToRECT(dc, rect);
 
     ::DrawThemeBackground(
         hTheme,
