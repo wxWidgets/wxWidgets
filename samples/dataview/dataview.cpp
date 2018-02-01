@@ -84,6 +84,7 @@ private:
     void OnCustomHeaderHeight(wxCommandEvent& event);
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
     void OnGetPageInfo(wxCommandEvent& event);
+    void OnDisable(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
@@ -307,6 +308,7 @@ enum
 {
     ID_CLEARLOG = wxID_HIGHEST+1,
     ID_GET_PAGE_INFO,
+    ID_DISABLE,
     ID_BACKGROUND_COLOUR,
     ID_FOREGROUND_COLOUR,
     ID_CUSTOM_HEADER_ATTR,
@@ -367,6 +369,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_CLEARLOG, MyFrame::OnClearLog )
 
     EVT_MENU( ID_GET_PAGE_INFO, MyFrame::OnGetPageInfo )
+    EVT_MENU( ID_DISABLE, MyFrame::OnDisable )
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
     EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
     EVT_MENU( ID_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr )
@@ -460,6 +463,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
     file_menu->Append(ID_GET_PAGE_INFO, "Show current &page info");
+    file_menu->AppendCheckItem(ID_DISABLE, "&Disable\tCtrl-D");
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
     file_menu->AppendCheckItem(ID_CUSTOM_HEADER_ATTR, "C&ustom header attributes");
@@ -830,6 +834,11 @@ void MyFrame::OnGetPageInfo(wxCommandEvent& WXUNUSED(event))
                  dvc->GetCountPerPage());
 }
 
+void MyFrame::OnDisable(wxCommandEvent& event)
+{
+    m_ctrl[m_notebook->GetSelection()]->Enable(!event.IsChecked());
+}
+
 void MyFrame::OnSetForegroundColour(wxCommandEvent& WXUNUSED(event))
 {
     wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
@@ -934,6 +943,8 @@ void MyFrame::OnPageChanged( wxBookCtrlEvent& WXUNUSED(event) )
 
         GetMenuBar()->FindItem(id)->Check( m_ctrl[nPanel]->HasFlag(style) );
     }
+
+    GetMenuBar()->FindItem(ID_DISABLE)->Check(!m_ctrl[nPanel]->IsEnabled());
 }
 
 void MyFrame::OnStyleChange( wxCommandEvent& WXUNUSED(event) )
