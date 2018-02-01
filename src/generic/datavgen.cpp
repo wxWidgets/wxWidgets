@@ -4728,9 +4728,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if ( UnselectAllRows(m_lineSelectSingleOnUp) )
             {
                 SelectRow( m_lineSelectSingleOnUp, true );
-                SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
             }
-            //else: it was already selected, nothing to do
+
+            SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
         }
 
         // If the user click the expander, we do not do editing even if the column
