@@ -5228,17 +5228,6 @@ bool wxDataViewCtrl::Show(bool show)
     return changed;
 }
 
-bool wxDataViewCtrl::Enable(bool enable)
-{
-    bool changed = wxControl::Enable(enable);
-    if ( changed )
-    {
-        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
-    }
-
-    return changed;
-}
-
 void wxDataViewCtrl::SetName(const wxString &name)
 {
     wxControl::SetName(name);
@@ -5256,6 +5245,20 @@ bool wxDataViewCtrl::Reparent(wxWindowBase *newParent)
     return changed;
 }
 #endif // wxUSE_ACCESIBILITY
+
+bool wxDataViewCtrl::Enable(bool enable)
+{
+    bool changed = wxControl::Enable(enable);
+    if ( changed )
+    {
+#if wxUSE_ACCESSIBILITY
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESIBILITY
+        Refresh();
+    }
+
+    return changed;
+}
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {
