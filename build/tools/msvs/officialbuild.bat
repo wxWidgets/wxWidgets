@@ -9,9 +9,7 @@ cd ..\..\msw
 rem VS2017 changes the build directory when environment batch files
 rem are called, so remember where we are building from.
 
-set build_dir=%cd%
-
-del ..\..\include\wx\msw\setup.h
+set "VSCMD_START_DIR=%CD%"
 
 rem ================ wxWidgets Official Build ===============
 rem
@@ -29,7 +27,6 @@ if "%1" == "vc141" (
   set comp=141
   set compvers=vc141
   call "%VS150COMNTOOLS%VsDevCmd.bat"
-  cd %build_dir%
 )
 if "%1" == "vc140" (
   @echo Building for vc140 / vs2015
@@ -95,8 +92,6 @@ if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X64 /Release
 if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X64 /Release
 
-cd %build_dir%
-
 @echo 64 bit release build
 
 nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 TARGET_CPU=AMD64 >> %compvers%x64_Release.txt
@@ -118,8 +113,6 @@ if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X86 /Release
 if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X86 /Release
-
-cd %build_dir%
 
 @echo 32 bit release build
 
