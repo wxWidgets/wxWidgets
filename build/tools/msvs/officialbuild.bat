@@ -6,6 +6,13 @@ set curr_dir=%cd%
 
 cd ..\..\msw
 
+rem VS2017 changes the build directory when environment batch files
+rem are called, so remember where we are building from.
+
+set build_dir=%cd%
+
+del ..\..\include\wx\msw\setup.h
+
 rem ================ wxWidgets Official Build ===============
 rem
 rem Open a command prompt and run this from the build\tools\msvs folder.
@@ -17,9 +24,12 @@ set compvers="Unknown"
 
 if "%1" == "vc141" (
   @echo Building for vc141 / vs2017
+  @echo This will only work if the environment varialbe VS150COMNTOOLS is set
+  @echo or a VS2017 command prompt is used.
   set comp=141
   set compvers=vc141
   call "%VS150COMNTOOLS%VsDevCmd.bat"
+  cd %build_dir%
 )
 if "%1" == "vc140" (
   @echo Building for vc140 / vs2015
@@ -80,10 +90,12 @@ del %compvers%x64_Release.txt
 
 if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x64
 if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64
-if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x64
-if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x64
+if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
+if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X64 /Release
 if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X64 /Release
+
+cd %build_dir%
 
 @echo 64 bit release build
 
@@ -106,6 +118,8 @@ if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X86 /Release
 if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X86 /Release
+
+cd %build_dir%
 
 @echo 32 bit release build
 
