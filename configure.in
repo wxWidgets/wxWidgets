@@ -7226,6 +7226,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         AC_CHECK_HEADER([include/cef_version.h],
                         [
                             FOUND_WEBVIEW_BACKEND=1
+                            USE_WEBVIEW_CHROMIUM=1
                             AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
                             SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview_chromium"
                         ],
@@ -7238,9 +7239,11 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     fi
     if test "$FOUND_WEBVIEW_BACKEND" = 1; then
         wxUSE_WEBVIEW="yes"
+        USE_WEBVIEW=1
         AC_DEFINE(wxUSE_WEBVIEW)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
     else
+        USE_WEBVIEW=0
         wxUSE_WEBVIEW="no"
         AC_MSG_WARN([No wxWebView backends found, disabling wxWebView])
     fi
