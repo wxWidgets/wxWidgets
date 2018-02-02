@@ -338,7 +338,7 @@ ID2D1Factory* wxD2D1Factory()
 #if defined(__WXDEBUG__) && defined(__VISUALC__) && wxCHECK_VISUALC_VERSION(11)
         if ( wxGetWinVersion() >= wxWinVersion_8 )
         {
-            factoryOptions.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
+            factoryOptions.debugLevel = D2D1_DEBUG_LEVEL_WARNING;
         }
 #endif  //__WXDEBUG__
 
