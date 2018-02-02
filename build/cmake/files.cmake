@@ -2935,6 +2935,14 @@ set(WEBVIEW_GTK_SRC
     src/gtk/webview_webkit.cpp
 )
 
+set(WEBVIEWCHROMIUM_HDR
+    wx/webview.h
+    wx/webview_chromium.h
+)
+set(WEBVIEWCHROMIUM_SRC
+    src/common/webview_chromium.cpp
+)
+
 set(XRC_SRC
     src/xrc/xh_activityindicator.cpp
     src/xrc/xh_animatctrl.cpp

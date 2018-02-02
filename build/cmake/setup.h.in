@@ -321,6 +321,8 @@
 
 #cmakedefine01 wxUSE_WEBVIEW
 
+#cmakedefine01 wxUSE_WEBVIEW_CHROMIUM
+
 #ifdef __WXMSW__
 #cmakedefine01 wxUSE_WEBVIEW_IE
 #else

@@ -60,6 +60,7 @@ if(wxUSE_GUI)
     add_opt_lib(media wxUSE_MEDIACTRL)
     add_opt_lib(gl wxUSE_OPENGL)
     add_opt_lib(qa wxUSE_DEBUGREPORT)
+    add_opt_lib(webview_chromium wxUSE_WEBVIEW_CHROMIUM)
 endif() # wxUSE_GUI
 
 # Include cmake file for every library
