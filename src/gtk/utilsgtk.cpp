@@ -435,7 +435,7 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
     // which the code below works because, as we use the undocumented
     // _GOptionGroup struct, we don't want to run this code with future
     // versions which might change it and result in run-time crashes.
-    if (glib_check_version(2,50,0))
+    if (glib_check_version(2,44,0))
     {
         usage << _("The following standard GTK+ options are also supported:\n");
 
