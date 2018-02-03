@@ -53,7 +53,9 @@ wx_add_sample(help demo.cpp LIBRARIES html adv
     DEPENDS wxUSE_HELP
     )
 wx_add_sample(htlbox LIBRARIES html DEPENDS wxUSE_HTML)
-include(html.cmake)
+if (wxUSE_HTML)
+    include(html.cmake)
+endif()    
 wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
     DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
     horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur
