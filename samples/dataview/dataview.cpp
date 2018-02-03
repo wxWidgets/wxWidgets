@@ -23,6 +23,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/dataview.h"
 #include "wx/datetime.h"
 #include "wx/splitter.h"
@@ -689,6 +690,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             wxDataViewColumn *column5 =
                 new wxDataViewColumn( "custom", cr, 5, -1, wxALIGN_LEFT,
                                       wxDATAVIEW_COL_RESIZABLE );
+            column5->SetBitmap(wxArtProvider::GetBitmap(wxART_INFORMATION, wxART_MENU));
             m_ctrl[0]->AppendColumn( column5 );
 
 

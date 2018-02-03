@@ -264,7 +264,9 @@ class wxDataViewHeaderWindow : public wxHeaderCtrl
 {
 public:
     wxDataViewHeaderWindow(wxDataViewCtrl *parent)
-        : wxHeaderCtrl(parent)
+        : wxHeaderCtrl(parent, wxID_ANY,
+                       wxDefaultPosition, wxDefaultSize,
+                       wxHD_DEFAULT_STYLE | wxHD_BITMAP_ON_RIGHT)
     {
     }
 
