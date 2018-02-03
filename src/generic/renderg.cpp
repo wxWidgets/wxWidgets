@@ -910,7 +910,7 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
                                   const wxRect& rect,
                                   int value,
                                   int max,
-                                  int WXUNUSED(flags))
+                                  int flags)
 {
     // Use same background as text controls.
     DrawTextCtrl(win, dc, rect);
@@ -918,7 +918,16 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
     // Calculate the progress bar size.
     wxRect progRect(rect);
     progRect.Deflate(2);
-    progRect.width = wxMulDivInt32(progRect.width, value, max);
+    if ( flags & wxCONTROL_SPECIAL )
+    {
+        const int h = wxMulDivInt32(progRect.height, value, max);
+        progRect.y += progRect.height - h;
+        progRect.height = h;
+    }
+    else // Horizontal.
+    {
+        progRect.width = wxMulDivInt32(progRect.width, value, max);
+    }
 
     dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     dc.SetPen(*wxTRANSPARENT_PEN);
