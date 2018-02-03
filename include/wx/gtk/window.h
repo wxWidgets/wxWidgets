@@ -199,7 +199,7 @@ public:
     bool GTKHandleFocusIn();
     bool GTKHandleFocusOut();
     void GTKHandleFocusOutNoDeferring();
-    static void GTKHandleDeferredFocusOut();
+    void GTKHandleDeferredFocusOut();
 
     // Called when m_widget becomes realized. Derived classes must call the
     // base class method if they override it.
