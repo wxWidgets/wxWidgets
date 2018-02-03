@@ -11,158 +11,12 @@
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
 
-#include "wx/control.h"
 #include "wx/webview.h"
-#include "wx/sharedptr.h"
-#include "wx/vector.h"
-
-#ifdef __VISUALC__
-#pragma warning(push)
-#pragma warning(disable:4100)
-#endif
-
-#include "include/cef_browser.h"
-#include "include/cef_client.h"
-#include "include/cef_scheme.h"
-#include "include/cef_version.h"
-#include "include/base/cef_lock.h"
-
-#ifdef __VISUALC__
-#pragma warning(pop)
-#endif
 
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[];
 
 class wxWebViewChromium;
-
-// ClientHandler implementation.
-class ClientHandler : public CefClient,
-                      public CefContextMenuHandler,
-                      public CefDisplayHandler,
-                      public CefLifeSpanHandler,
-                      public CefLoadHandler
-{
-public:
-    ClientHandler() : m_loadErrorCode(-1) {}
-    virtual ~ClientHandler() {}
-
-    virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() { return this; }
-    virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() { return this; }
-    virtual CefRefPtr<CefLoadHandler> GetLoadHandler() { return this; }
-    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() { return this; }
-
-    // CefDisplayHandler methods
-    virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser,
-                                      bool isLoading,  bool canGoBack,
-                                      bool canGoForward);
-    virtual void OnAddressChange(CefRefPtr<CefBrowser> browser,
-                                 CefRefPtr<CefFrame> frame,
-                                 const CefString& url);
-    virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
-                               const CefString& title);
-    virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser,
-                                  const CefString& message,
-                                  const CefString& source,
-                                  int line);
-
-    // CefContextMenuHandler methods
-    virtual void OnBeforeContextMenu(CefRefPtr<CefBrowser> browser,
-                                     CefRefPtr<CefFrame> frame,
-                                     CefRefPtr<CefContextMenuParams> params,
-                                     CefRefPtr<CefMenuModel> model);
-    virtual bool OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
-                                      CefRefPtr<CefFrame> frame,
-                                      CefRefPtr<CefContextMenuParams> params,
-                                      int command_id,
-                                      CefContextMenuHandler::EventFlags event_flags);
-    virtual void OnContextMenuDismissed(CefRefPtr<CefBrowser> browser,
-                                        CefRefPtr<CefFrame> frame);
-
-    // CefLifeSpanHandler methods
-    virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser,
-                               CefRefPtr<CefFrame> frame,
-                               const CefString& target_url,
-                               const CefString& target_frame_name,
-                               const CefPopupFeatures& popupFeatures,
-                               CefWindowInfo& windowInfo,
-                               CefRefPtr<CefClient>& client,
-                               CefBrowserSettings& settings,
-                               bool* no_javascript_access);
-    virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser);
-    virtual bool DoClose(CefRefPtr<CefBrowser> browser);
-    virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser);
-
-    // CefLoadHandler methods
-    virtual void OnLoadStart(CefRefPtr<CefBrowser> browser,
-                             CefRefPtr<CefFrame> frame);
-    virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser,
-                           CefRefPtr<CefFrame> frame,
-                           int httpStatusCode);
-    virtual void OnLoadError(CefRefPtr<CefBrowser> browser,
-                             CefRefPtr<CefFrame> frame,
-                             ErrorCode errorCode,
-                             const CefString& errorText,
-                             const CefString& failedUrl);
-
-    CefRefPtr<CefBrowser> GetBrowser() { return m_browser; }
-
-    void SetWebView(wxWebViewChromium *webview) { m_webview = webview; }
-
-private:
-    CefRefPtr<CefBrowser> m_browser;
-    wxWebViewChromium *m_webview;
-    int m_browserId;
-    // Record the load error code: enum wxWebViewNavigationError
-    // -1 means no error.
-    int m_loadErrorCode;
-    IMPLEMENT_REFCOUNTING(ClientHandler);
-};
-
-class SchemeHandler : public CefResourceHandler
-{
-public:
-    SchemeHandler(const wxSharedPtr<wxWebViewHandler>& handler) : m_handler(handler), m_offset(0) {}
-
-    // CefResourceHandler methods
-    virtual bool ProcessRequest(CefRefPtr<CefRequest> request,
-                                CefRefPtr<CefCallback> callback);
-    virtual void GetResponseHeaders(CefRefPtr<CefResponse> response,
-                                    int64& response_length,
-                                    CefString& redirectUrl);
-    virtual bool ReadResponse(void* data_out,
-                              int bytes_to_read,
-                              int& bytes_read,
-                              CefRefPtr<CefCallback> callback);
-    virtual void Cancel() {}
-
-private:
-    wxSharedPtr<wxWebViewHandler> m_handler;
-    std::string m_data;
-    std::string m_mime_type;
-    size_t m_offset;
-
-    IMPLEMENT_REFCOUNTING(SchemeHandler);
-    base::Lock m_lock;
-};
-
-class SchemeHandlerFactory : public CefSchemeHandlerFactory
-{
-public:
-    SchemeHandlerFactory(wxSharedPtr<wxWebViewHandler> handler): m_handler(handler) {}
-
-    // Return a new scheme handler instance to handle the request.
-    virtual CefRefPtr<CefResourceHandler> Create(CefRefPtr<CefBrowser> WXUNUSED(browser),
-                                                 CefRefPtr<CefFrame> WXUNUSED(frame),
-                                                 const CefString& WXUNUSED(scheme_name),
-                                                 CefRefPtr<CefRequest> WXUNUSED(request))
-    {
-        return new SchemeHandler( m_handler );
-    }
-
-    IMPLEMENT_REFCOUNTING(SchemeHandlerFactory);
-private:
-    wxSharedPtr<wxWebViewHandler> m_handler;
-};
+class ClientHandler;
 
 class WXDLLIMPEXP_WEBVIEW_CHROMIUM wxWebViewChromium : public wxWebView
 {
@@ -293,7 +147,7 @@ private:
 
     //We also friend ClientHandler so it can access the history
     friend class ClientHandler;
-    CefRefPtr<ClientHandler> m_clientHandler;
+    ClientHandler* m_clientHandler;
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewChromium);
 };
