@@ -197,7 +197,7 @@ public:
     GdkWindow* GTKGetDrawingWindow() const;
 
     bool GTKHandleFocusIn();
-    bool GTKHandleFocusOut();
+    virtual bool GTKHandleFocusOut();
     void GTKHandleFocusOutNoDeferring();
     void GTKHandleDeferredFocusOut();
 

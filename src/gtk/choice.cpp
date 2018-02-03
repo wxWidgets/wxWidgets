@@ -111,6 +111,23 @@ wxChoice::~wxChoice()
  #endif // __WXGTK3__
 }
 
+bool wxChoice::GTKHandleFocusOut()
+{
+    if ( wx_is_at_least_gtk2(10) )
+    {
+        gboolean isShown;
+        g_object_get( m_widget, "popup-shown", &isShown, NULL );
+
+        // Don't send "focus lost" events if the focus is grabbed by our own
+        // popup, it counts as part of this window, even though wx doesn't know
+        // about it (and can't, because GtkComboBox doesn't expose it).
+        if ( isShown )
+            return true;
+    }
+
+    return wxChoiceBase::GTKHandleFocusOut();
+}
+
 void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
 {
 #ifdef __WXGTK3__
