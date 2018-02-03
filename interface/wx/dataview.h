@@ -3405,6 +3405,13 @@ public:
     without having to derive any class from it, but it is mostly used from within
     wxDataViewTreeCtrl.
 
+    Notice that by default this class sorts all items with children before the
+    leaf items. If this behaviour is inappropriate, you need to derive a custom
+    class from this one and override either its HasDefaultCompare() method to
+    return false, which would result in items being sorted just in the order in
+    which they were added, or its Compare() function to compare the items using
+    some other criterion, e.g. alphabetically.
+
     @library{wxadv}
     @category{dvc}
 */
