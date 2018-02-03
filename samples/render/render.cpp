@@ -138,6 +138,7 @@ private:
     void OnUseIcon(wxCommandEvent& event);
     void OnUseBitmap(wxCommandEvent& event);
 
+    void OnUseGeneric(wxCommandEvent& event);
 #if wxUSE_DYNLIB_CLASS
     void OnLoad(wxCommandEvent& event);
     void OnUnload(wxCommandEvent& event);
@@ -163,7 +164,8 @@ public:
         m_flags = 0;
         m_align = wxALIGN_LEFT;
         m_useIcon =
-        m_useBitmap = false;
+        m_useBitmap =
+        m_useGeneric = false;
     }
 
     int GetFlags() const { return m_flags; }
@@ -172,13 +174,15 @@ public:
     void SetAlignment(int align) { m_align = align; }
     void SetUseIcon(bool useIcon) { m_useIcon = useIcon; }
     void SetUseBitmap(bool useBitmap) { m_useBitmap = useBitmap; }
+    void SetUseGeneric(bool useGeneric) { m_useGeneric = useGeneric; }
 
 private:
     void OnPaint(wxPaintEvent&)
     {
         wxPaintDC dc(this);
 
-        wxRendererNative& renderer = wxRendererNative::Get();
+        wxRendererNative& renderer = m_useGeneric ? wxRendererNative::GetGeneric()
+                                                  : wxRendererNative::Get();
 
         int x1 = 10,    // text offset
             x2 = 300,   // drawing offset
@@ -305,7 +309,8 @@ private:
     int m_flags;
     int m_align;
     bool m_useIcon,
-         m_useBitmap;
+         m_useBitmap,
+         m_useGeneric;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -337,6 +342,7 @@ enum
     Render_UseIcon,
     Render_UseBitmap,
 
+    Render_UseGeneric,
 #if wxUSE_DYNLIB_CLASS
     Render_Load,
     Render_Unload,
@@ -373,6 +379,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_UseIcon, MyFrame::OnUseIcon)
     EVT_MENU(Render_UseBitmap, MyFrame::OnUseBitmap)
 
+    EVT_MENU(Render_UseGeneric, MyFrame::OnUseGeneric)
 #if wxUSE_DYNLIB_CLASS
     EVT_MENU(Render_Load,  MyFrame::OnLoad)
     EVT_MENU(Render_Unload,MyFrame::OnUnload)
@@ -457,6 +464,7 @@ MyFrame::MyFrame()
     menuFile->AppendCheckItem(Render_UseBitmap, "Draw &bitmap\tCtrl-B");
     menuFile->AppendSeparator();
 
+    menuFile->AppendCheckItem(Render_UseGeneric, "Use &generic renderer\tCtrl-G");
 #if wxUSE_DYNLIB_CLASS
     menuFile->Append(Render_Load, wxT("&Load renderer...\tCtrl-L"));
     menuFile->Append(Render_Unload, wxT("&Unload renderer\tCtrl-U"));
@@ -525,6 +533,12 @@ void MyFrame::OnUseIcon(wxCommandEvent& event)
 void MyFrame::OnUseBitmap(wxCommandEvent& event)
 {
     m_panel->SetUseBitmap(event.IsChecked());
+    m_panel->Refresh();
+}
+
+void MyFrame::OnUseGeneric(wxCommandEvent& event)
+{
+    m_panel->SetUseGeneric(event.IsChecked());
     m_panel->Refresh();
 }
 
