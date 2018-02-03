@@ -1443,6 +1443,16 @@ public:
                                const wxDataViewColumn* col = NULL) const;
 
     /**
+        Returns the window corresponding to the main area of the control.
+
+        This is the window that actually shows the control items and may be
+        different from wxDataViewCtrl window itself in some ports (currently
+        this is only the case for the generic implementation used by default
+        under MSW).
+     */
+    wxWindow* GetMainWindow();
+
+    /**
         Returns pointer to the data model associated with the control (if any).
     */
     wxDataViewModel* GetModel();
