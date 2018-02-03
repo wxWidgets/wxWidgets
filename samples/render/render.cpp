@@ -223,6 +223,8 @@ private:
                                                                wxART_LIST);
         }
 
+        // Note that we need to use GetDefault() explicitly to show the default
+        // implementation.
         dc.DrawText("DrawHeaderButton() (default)", x1, y);
         wxRendererNative::GetDefault().DrawHeaderButton(this, dc,
                                   wxRect(x2, y, widthHdr, heightHdr), m_flags,
@@ -282,7 +284,7 @@ private:
         const wxCoord widthGauge = 180;
 
         dc.DrawText("DrawGauge()", x1, y);
-        wxRendererNative::GetDefault().DrawGauge(this, dc,
+        renderer.DrawGauge(this, dc,
             wxRect(x2, y, widthGauge, heightGauge), 25, 100, m_flags);
 
         y += lineHeight + heightGauge;
@@ -291,10 +293,10 @@ private:
         const wxCoord widthListItem = 260;
 
         dc.DrawText("DrawItemSelectionRect()", x1, y);
-        wxRendererNative::GetDefault().DrawItemSelectionRect(this, dc,
+        renderer.DrawItemSelectionRect(this, dc,
             wxRect(x2, y, widthListItem, heightListItem), m_flags | wxCONTROL_SELECTED);
 
-        wxRendererNative::GetDefault().DrawItemText(this, dc, "DrawItemText()",
+        renderer.DrawItemText(this, dc, "DrawItemText()",
             wxRect(x2, y, widthListItem, heightListItem).Inflate(-2, -2), m_align, m_flags | wxCONTROL_SELECTED);
 
         y += lineHeight + heightListItem;
