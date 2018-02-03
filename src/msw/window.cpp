@@ -4169,6 +4169,14 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
         return false;
     }
 
+    if ( ContainsHWND(hwnd) )
+    {
+        // If another subwindow of this window already had focus before, this
+        // window should already have focus at wx level, no need for another
+        // event.
+        return false;
+    }
+
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
     wxChildFocusEvent eventFocus((wxWindow *)this);
@@ -4193,6 +4201,20 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
 
 bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
 {
+    // Don't send the event when in the process of being deleted.  This can
+    // only cause problems if the event handler tries to access the object.
+    if ( m_isBeingDeleted )
+    {
+        return false;
+    }
+
+    if ( ContainsHWND(hwnd) )
+    {
+        // If the focus switches to another HWND which is part of the same
+        // wxWindow, we must not generate a wxEVT_KILL_FOCUS.
+        return false;
+    }
+
 #if wxUSE_CARET
     // Deal with caret
     if ( m_caret )
@@ -4200,13 +4222,6 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
         m_caret->OnKillFocus();
     }
 #endif // wxUSE_CARET
-
-    // Don't send the event when in the process of being deleted.  This can
-    // only cause problems if the event handler tries to access the object.
-    if ( m_isBeingDeleted )
-    {
-        return false;
-    }
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
     event.SetEventObject(this);
