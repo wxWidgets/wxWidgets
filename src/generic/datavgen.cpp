@@ -75,15 +75,6 @@ static const int SCROLL_UNIT_X = 15;
 // the cell padding on the left/right
 static const int PADDING_RIGHTLEFT = 3;
 
-// the expander space margin
-static const int EXPANDER_MARGIN = 4;
-
-#ifdef __WXMSW__
-static const int EXPANDER_OFFSET = 4;
-#else
-static const int EXPANDER_OFFSET = 1;
-#endif
-
 namespace
 {
 
@@ -2540,23 +2531,20 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 // Calculate the indent first
                 indent = GetOwner()->GetIndent() * node->GetIndentLevel();
 
-                // we reserve m_lineHeight of horizontal space for the expander
-                // but leave EXPANDER_MARGIN around the expander itself
-                int exp_x = cell_rect.x + indent + EXPANDER_MARGIN;
+                // We don't have any method to return the size of the expander
+                // button currently (TODO: add one to wxRendererNative), so
+                // just guesstimate it.
+                const int expWidth = 3*dc.GetCharWidth();
 
-                indent += m_lineHeight;
-
-                // draw expander if needed and visible
-                if ( node->HasChildren() && exp_x < cell_rect.GetRight() )
+                // draw expander if needed
+                if ( node->HasChildren() )
                 {
                     dc.SetPen( m_penExpander );
                     dc.SetBrush( wxNullBrush );
 
-                    int exp_size = m_lineHeight - 2*EXPANDER_MARGIN;
-                    int exp_y = cell_rect.y + (cell_rect.height - exp_size)/2
-                                   + EXPANDER_MARGIN - EXPANDER_OFFSET;
-
-                    const wxRect rect(exp_x, exp_y, exp_size, exp_size);
+                    wxRect rect = cell_rect;
+                    rect.x += indent;
+                    rect.width = expWidth;
 
                     int flag = 0;
                     if ( m_underMouse == node )
@@ -2570,6 +2558,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                     wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
                 }
+
+                indent += expWidth;
 
                 // force the expander column to left-center align
                 cell->SetAlignment( wxALIGN_CENTER_VERTICAL );
