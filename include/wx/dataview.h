@@ -1212,8 +1212,7 @@ private:
     wxClientData             *m_data;
 };
 
-WX_DECLARE_LIST_WITH_DECL(wxDataViewTreeStoreNode, wxDataViewTreeStoreNodeList,
-                          class WXDLLIMPEXP_ADV);
+typedef wxVector<wxDataViewTreeStoreNode*> wxDataViewTreeStoreNodes;
 
 class WXDLLIMPEXP_ADV wxDataViewTreeStoreContainerNode: public wxDataViewTreeStoreNode
 {
@@ -1223,10 +1222,12 @@ public:
         wxClientData *data = NULL );
     virtual ~wxDataViewTreeStoreContainerNode();
 
-    const wxDataViewTreeStoreNodeList &GetChildren() const
+    const wxDataViewTreeStoreNodes &GetChildren() const
         { return m_children; }
-    wxDataViewTreeStoreNodeList &GetChildren()
+    wxDataViewTreeStoreNodes &GetChildren()
         { return m_children; }
+
+    wxDataViewTreeStoreNodes::iterator FindChild(wxDataViewTreeStoreNode* node);
 
     void SetExpandedIcon( const wxIcon &icon )
         { m_iconExpanded = icon; }
@@ -1241,8 +1242,10 @@ public:
     virtual bool IsContainer() wxOVERRIDE
         { return true; }
 
+    void DestroyChildren();
+
 private:
-    wxDataViewTreeStoreNodeList  m_children;
+    wxDataViewTreeStoreNodes     m_children;
     wxIcon                       m_iconExpanded;
     bool                         m_isExpanded;
 };
