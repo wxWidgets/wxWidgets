@@ -424,9 +424,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame()
        : wxFrame(NULL,
                  wxID_ANY,
-                 wxT("Render wxWidgets Sample"),
-                 wxPoint(50, 50),
-                 wxSize(450, 340))
+                 wxT("Render wxWidgets Sample"))
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -480,6 +478,8 @@ MyFrame::MyFrame()
 #endif // wxUSE_MENUS
 
     m_panel = new MyPanel(this);
+
+    SetClientSize(600, 600);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
