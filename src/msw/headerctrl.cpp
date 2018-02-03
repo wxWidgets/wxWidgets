@@ -314,6 +314,9 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     {
         hdi.mask |= HDI_IMAGE;
 
+        if ( HasFlag(wxHD_BITMAP_ON_RIGHT) )
+            hdi.fmt |= HDF_BITMAP_ON_RIGHT;
+
         if ( bmp.IsOk() )
         {
             const int bmpWidth = bmp.GetWidth(),

@@ -181,6 +181,7 @@ All (GUI):
 - Add wxEVT_SEARCH[_CANCEL] synonyms for wxSearchCtrl events.
 - Generate wxEVT_SEARCH on Enter under all platforms.
 - Extend wxRendererNative::DrawGauge() to work for vertical gauges too.
+- Add wxHD_BITMAP_ON_RIGHT style to wxHeaderCtrl.
 
 wxGTK:
 
