@@ -1373,7 +1373,18 @@ wxString wxDataViewProgressRenderer::GetAccessibleDescription() const
 bool
 wxDataViewProgressRenderer::Render(wxRect rect, wxDC *dc, int WXUNUSED(state))
 {
-    wxRendererNative::Get().DrawGauge(
+    const wxDataViewItemAttr& attr = GetAttr();
+    if ( attr.HasColour() )
+        dc->SetBackground(attr.GetColour());
+
+    // This is a hack, but native renderers don't support using custom colours,
+    // but typically gauge colour is important (e.g. it's commonly green/red to
+    // indicate some qualitative difference), so we fall back to the generic
+    // implementation which looks ugly but does support using custom colour.
+    wxRendererNative& renderer = attr.HasColour()
+                                    ? wxRendererNative::GetGeneric()
+                                    : wxRendererNative::Get();
+    renderer.DrawGauge(
         GetOwner()->GetOwner(),
         *dc,
         rect,
