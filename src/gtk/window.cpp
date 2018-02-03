@@ -4465,17 +4465,14 @@ void wxWindowGTK::GTKHandleDeferredFocusOut()
     // NB: See GTKHandleFocusOut() for explanation. This function is called
     //     from either GTKHandleFocusIn() or OnInternalIdle() to process
     //     deferred event.
-    if ( gs_deferredFocusOut )
-    {
-        wxWindowGTK *win = gs_deferredFocusOut;
-        gs_deferredFocusOut = NULL;
+    wxWindowGTK *win = gs_deferredFocusOut;
+    gs_deferredFocusOut = NULL;
 
-        wxLogTrace(TRACE_FOCUS,
-                   "processing deferred focus_out event for %s(%p, %s)",
-                   win->GetClassInfo()->GetClassName(), win, win->GetLabel());
+    wxLogTrace(TRACE_FOCUS,
+               "processing deferred focus_out event for %s(%p, %s)",
+               win->GetClassInfo()->GetClassName(), win, win->GetLabel());
 
-        win->GTKHandleFocusOutNoDeferring();
-    }
+    win->GTKHandleFocusOutNoDeferring();
 }
 
 void wxWindowGTK::SetFocus()
