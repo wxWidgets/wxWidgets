@@ -53,7 +53,7 @@ wx_add_sample(help demo.cpp LIBRARIES html adv
     DEPENDS wxUSE_HELP
     )
 wx_add_sample(htlbox LIBRARIES html DEPENDS wxUSE_HTML)
-if (wxUSE_HTML)
+if(wxUSE_HTML)
     include(html.cmake)
 endif()    
 wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
