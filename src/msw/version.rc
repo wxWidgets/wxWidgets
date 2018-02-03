@@ -68,6 +68,8 @@
     #define WXLIBDESC "styled text"
 #elif defined WXMAKINGDLL_WEBVIEW
     #define WXLIBDESC "webview"
+#elif defined WXMAKINGDLL_WEBVIEW_CHROMIUM
+    #define WXLIBDESC "webview_chromium"
 #elif defined WXMAKINGDLL
     #define WXLIBDESC "monolithic"
 #else
