@@ -284,12 +284,17 @@ private:
         y += lineHeight + rBtn.height;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+        // The meanings of those are reversed for the vertical gauge below.
         const wxCoord heightGauge = 24;
         const wxCoord widthGauge = 180;
 
         dc.DrawText("DrawGauge()", x1, y);
         renderer.DrawGauge(this, dc,
             wxRect(x2, y, widthGauge, heightGauge), 25, 100, m_flags);
+        renderer.DrawGauge(this, dc,
+            wxRect(x2 + widthGauge + 30, y + heightGauge - widthGauge,
+                   heightGauge, widthGauge),
+            25, 100, m_flags | wxCONTROL_SPECIAL);
 
         y += lineHeight + heightGauge;
 

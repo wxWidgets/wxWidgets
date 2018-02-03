@@ -180,6 +180,7 @@ All (GUI):
 - Add "hint" property to wxSearchCtrl XRC handler.
 - Add wxEVT_SEARCH[_CANCEL] synonyms for wxSearchCtrl events.
 - Generate wxEVT_SEARCH on Enter under all platforms.
+- Extend wxRendererNative::DrawGauge() to work for vertical gauges too.
 
 wxGTK:
 

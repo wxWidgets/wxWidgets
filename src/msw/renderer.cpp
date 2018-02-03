@@ -1098,7 +1098,7 @@ void wxRendererXP::DrawGauge(wxWindow* win,
     ::DrawThemeBackground(
         hTheme,
         GetHdcOf(dc.GetTempHDC()),
-        PP_BAR,
+        flags & wxCONTROL_SPECIAL ? PP_BARVERT : PP_BAR,
         0,
         &r,
         NULL);
@@ -1107,20 +1107,31 @@ void wxRendererXP::DrawGauge(wxWindow* win,
     ::GetThemeBackgroundContentRect(
         hTheme,
         GetHdcOf(dc.GetTempHDC()),
-        PP_BAR,
+        flags & wxCONTROL_SPECIAL ? PP_BARVERT : PP_BAR,
         0,
         &r,
         &contentRect);
 
-    contentRect.right = contentRect.left +
+    if ( flags & wxCONTROL_SPECIAL )
+    {
+        // For a vertical gauge, the value grows from the bottom to the top.
+        contentRect.top = contentRect.bottom -
+                          wxMulDivInt32(contentRect.bottom - contentRect.top,
+                                        value,
+                                        max);
+    }
+    else // Horizontal.
+    {
+        contentRect.right = contentRect.left +
                             wxMulDivInt32(contentRect.right - contentRect.left,
                                           value,
                                           max);
+    }
 
     ::DrawThemeBackground(
         hTheme,
         GetHdcOf(dc.GetTempHDC()),
-        PP_CHUNK,
+        flags & wxCONTROL_SPECIAL ? PP_CHUNKVERT : PP_CHUNK,
         0,
         &contentRect,
         NULL);
