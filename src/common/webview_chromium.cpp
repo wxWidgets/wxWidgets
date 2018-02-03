@@ -30,6 +30,10 @@
 #pragma warning(pop)
 #endif
 
+#if CHROME_VERSION_BUILD < 3000
+#error "Unsupported CEF version"
+#endif
+
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
@@ -131,14 +135,6 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 
 wxWebViewChromium::~wxWebViewChromium()
 {
-    CefRefPtr<CefBrowser> browser = m_clientHandler->GetBrowser();
-    if ( browser.get() )
-    {
-#if CHROME_VERSION_BUILD < 1916
-        // Let the browser window know we are about to destroy it.
-        browser->GetHost()->ParentWindowWillClose();
-#endif
-    }
 }
 
 void wxWebViewChromium::OnSize(wxSizeEvent& event)
@@ -452,19 +448,13 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     // If there is no subprocess then we need to execute on this process
     if ( path.empty() )
     {
-#if CHROME_VERSION_BUILD >= 1750
         code = CefExecuteProcess(args, NULL, NULL);
-#else
-        code = CefExecuteProcess(args, NULL);
-#endif
         if ( code >= 0 )
             return false;
     }
 
     CefSettings settings;
-#if CHROME_VERSION_BUILD >= 1750
     settings.no_sandbox = true;
-#endif
 
 #ifdef __WXDEBUG__
     settings.log_severity = LOGSEVERITY_INFO;
@@ -472,11 +462,7 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
 #endif
     CefString(&settings.browser_subprocess_path) = path.ToStdString();
 
-#if CHROME_VERSION_BUILD >= 1750
     return CefInitialize(args, settings, NULL, NULL);
-#else
-    return CefInitialize(args, settings, NULL);
-#endif
 }
 
 void wxWebViewChromium::DoCEFWork()
@@ -732,11 +718,7 @@ bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,
 {
     bool handled = false;
 
-#if CHROME_VERSION_BUILD >= 2062
     base::AutoLock lock_scope(m_lock);
-#else
-    AutoLock lock_scope(this);
-#endif
 
     std::string url = request->GetURL();
     wxFSFile* file = m_handler->GetFile( url );
@@ -783,11 +765,7 @@ bool SchemeHandler::ReadResponse(void* data_out,
     bool has_data = false;
     bytes_read = 0;
 
-#if CHROME_VERSION_BUILD >= 2062
     base::AutoLock lock_scope(m_lock);
-#else
-    AutoLock lock_scope(this);
-#endif
 
     if ( m_offset < m_data.length() )
     {

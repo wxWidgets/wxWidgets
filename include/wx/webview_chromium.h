@@ -25,9 +25,7 @@
 #include "include/cef_client.h"
 #include "include/cef_scheme.h"
 #include "include/cef_version.h"
-#if CHROME_VERSION_BUILD >= 2062
 #include "include/base/cef_lock.h"
-#endif
 
 #ifdef __VISUALC__
 #pragma warning(pop)
@@ -144,11 +142,7 @@ private:
     size_t m_offset;
 
     IMPLEMENT_REFCOUNTING(SchemeHandler);
-#if CHROME_VERSION_BUILD >= 2062
     base::Lock m_lock;
-#else
-    IMPLEMENT_LOCKING(SchemeHandler);
-#endif
 };
 
 class SchemeHandlerFactory : public CefSchemeHandlerFactory
