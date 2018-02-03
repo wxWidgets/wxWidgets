@@ -27,6 +27,7 @@
 #include "wx/dataobj.h"
 #include "wx/withimages.h"
 #include "wx/systhemectrl.h"
+#include "wx/vector.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class wxItemAttr;
@@ -179,8 +180,7 @@ private:
 // wxDataViewModel
 // ---------------------------------------------------------
 
-WX_DECLARE_LIST_WITH_DECL(wxDataViewModelNotifier, wxDataViewModelNotifiers,
-                          class WXDLLIMPEXP_ADV);
+typedef wxVector<wxDataViewModelNotifier*> wxDataViewModelNotifiers;
 
 class WXDLLIMPEXP_ADV wxDataViewModel: public wxRefCounter
 {
@@ -273,8 +273,9 @@ public:
     virtual bool IsVirtualListModel() const { return false; }
 
 protected:
-    // the user should not delete this class directly: he should use DecRef() instead!
-    virtual ~wxDataViewModel() { }
+    // Dtor is protected because the objects of this class must not be deleted,
+    // DecRef() must be used instead.
+    virtual ~wxDataViewModel();
 
     // Helper function used by the default Compare() implementation to compare
     // values of types it is not aware about. Can be overridden in the derived
@@ -285,7 +286,7 @@ protected:
         return 0;
     }
 
-
+private:
     wxDataViewModelNotifiers  m_notifiers;
 };
 

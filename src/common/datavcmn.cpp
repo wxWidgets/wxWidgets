@@ -95,9 +95,6 @@ wxFont wxDataViewItemAttr::GetEffectiveFont(const wxFont& font) const
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
 
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxDataViewModelNotifiers)
-
 bool wxDataViewModelNotifier::ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items )
 {
     size_t count = items.GetCount();
@@ -134,7 +131,15 @@ bool wxDataViewModelNotifier::ItemsChanged( const wxDataViewItemArray &items )
 
 wxDataViewModel::wxDataViewModel()
 {
-    m_notifiers.DeleteContents( true );
+}
+
+wxDataViewModel::~wxDataViewModel()
+{
+    wxDataViewModelNotifiers::const_iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        delete *iter;
+    }
 }
 
 bool wxDataViewModel::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
@@ -305,7 +310,20 @@ void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier )
 
 void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
 {
-    m_notifiers.DeleteObject( notifier );
+    wxDataViewModelNotifiers::iterator iter;
+    for (iter = m_notifiers.begin(); iter != m_notifiers.end(); ++iter)
+    {
+        if ( *iter == notifier )
+        {
+            delete notifier;
+            m_notifiers.erase(iter);
+
+            // Skip the assert below.
+            return;
+        }
+    }
+
+    wxFAIL_MSG(wxS("Removing non-registered notifier"));
 }
 
 int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
