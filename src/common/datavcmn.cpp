@@ -2770,16 +2770,11 @@ int wxDataViewTreeStore::Compare( const wxDataViewItem &item1, const wxDataViewI
     if (!node1 || !node2)
         return 0;
 
-    wxDataViewTreeStoreContainerNode* parent1 =
+    wxDataViewTreeStoreContainerNode* const parent =
         (wxDataViewTreeStoreContainerNode*) node1->GetParent();
-    wxDataViewTreeStoreContainerNode* parent2 =
-        (wxDataViewTreeStoreContainerNode*) node2->GetParent();
 
-    if (parent1 != parent2)
-    {
-        wxLogError( wxT("Comparing items with different parent.") );
-        return 0;
-    }
+    wxCHECK_MSG( node2->GetParent() == parent, 0
+                 wxS("Comparing items with different parent.") );
 
     if (node1->IsContainer() && !node2->IsContainer())
         return -1;
