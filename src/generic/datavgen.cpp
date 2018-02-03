@@ -932,9 +932,6 @@ private:
     // the pen used to draw horiz/vertical rules
     wxPen m_penRule;
 
-    // the pen used to draw the expander and the lines
-    wxPen m_penExpander;
-
     // This is the tree structure of the model
     wxDataViewTreeNode * m_root;
     int m_count;
@@ -1959,10 +1956,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     m_penRule = wxPen(GetRuleColour());
 
-    // compose a pen whichcan draw black lines
-    // TODO: maybe there is something system colour to use
-    m_penExpander = wxPen(wxColour(0,0,0));
-
     m_root = wxDataViewTreeNode::CreateRootNode();
 
     // Make m_count = -1 will cause the class recaculate the real displaying number of rows.
@@ -2541,9 +2534,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 // draw expander if needed
                 if ( node->HasChildren() )
                 {
-                    dc.SetPen( m_penExpander );
-                    dc.SetBrush( wxNullBrush );
-
                     wxRect rect = cell_rect;
                     rect.x += indent;
                     rect.width = expWidth;
