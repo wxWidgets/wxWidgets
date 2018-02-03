@@ -30,7 +30,7 @@ wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
     RES docview.rc DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
 wx_add_sample(dragimag dragimag.cpp dragimag.h RES dragimag.rc
     DATA backgrnd.png shape01.png shape02.png shape03.png
-     DEPENDS wxUSE_DRAGIMAGE)
+    DEPENDS wxUSE_DRAGIMAGE)
 wx_add_sample(drawing DATA pat4.bmp pat35.bmp pat36.bmp image.bmp mask.bmp)
 wx_add_sample(erase)
 wx_add_sample(event event.cpp gestures.cpp gestures.h)
@@ -52,7 +52,7 @@ wx_add_sample(help demo.cpp LIBRARIES html adv
     NAME helpdemo
     DEPENDS wxUSE_HELP
     )
-wx_add_sample(htlbox LIBRARIES html  DEPENDS wxUSE_HTML)
+wx_add_sample(htlbox LIBRARIES html DEPENDS wxUSE_HTML)
 include(html.cmake)
 wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
     DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
@@ -62,7 +62,7 @@ wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
 foreach(lang ar bg cs de fr it ka pl ru sv ja ja_JP.EUC-JP)
     list(APPEND INTERNAT_DATA_FILES ${lang}/internat.po ${lang}/internat.mo)
 endforeach()
-wx_add_sample(internat DATA ${INTERNAT_DATA_FILES}  DEPENDS wxUSE_INTL)
+wx_add_sample(internat DATA ${INTERNAT_DATA_FILES} DEPENDS wxUSE_INTL)
 # IPC samples
 set(wxSAMPLE_FOLDER ipc)
 wx_add_sample(ipc client.cpp client.h connection.h ipcsetup.h NAME ipcclient LIBRARIES net DEPENDS wxUSE_IPC)
