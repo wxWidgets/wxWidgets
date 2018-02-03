@@ -179,6 +179,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #include "wx/textctrl.h"
+#include "wx/valnum.h"
 
 class WXDLLIMPEXP_CORE wxSpinCtrlGenericBase : public wxTextCtrl
 {
@@ -380,9 +381,17 @@ public:
                 double inc = 1,
                 const wxString& name = wxT("wxSpinCtrlDouble"))
     {
-        return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
-                                             style, min, max, initial,
-                                             inc, name);
+        if(!wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
+                                          style, min, max, initial,
+                                          inc, name))
+            return false;
+
+        wxFloatingPointValidator<double> val(6,&m_value,wxNUM_VAL_THOUSANDS_SEPARATOR | wxNUM_VAL_NO_TRAILING_ZEROES);
+        val.SetMin(min);
+        val.SetMax(max);
+        m_textCtrl->SetValidator(val);
+
+        return true;
     }
 
     // accessors
@@ -396,7 +405,13 @@ public:
     void SetValue(const wxString& value) wxOVERRIDE
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue(double value)                 { DoSetValue(value, SendEvent_None); }
-    void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
+    void SetRange(double minVal, double maxVal)
+    {
+        wxFloatingPointValidator<double>* val = (wxFloatingPointValidator<double>*)m_textCtrl->GetValidator();
+        val->SetMin(minVal);
+        val->SetMax(maxVal);
+        DoSetRange(minVal, maxVal);
+    }
     void SetIncrement(double inc)               { DoSetIncrement(inc); }
     void SetDigits(unsigned digits);
 
