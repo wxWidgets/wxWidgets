@@ -3828,7 +3828,7 @@ bool wxWindowGTK::GTKShowFromOnIdle()
 void wxWindowGTK::OnInternalIdle()
 {
     if ( gs_deferredFocusOut )
-        GTKHandleDeferredFocusOut();
+        gs_deferredFocusOut->GTKHandleDeferredFocusOut();
 
     // Check if we have to show window now
     if (GTKShowFromOnIdle()) return;
@@ -4348,7 +4348,7 @@ bool wxWindowGTK::GTKHandleFocusIn()
         // otherwise we need to send focus-out first
         wxASSERT_MSG ( gs_deferredFocusOut != this,
                        "GTKHandleFocusIn(GTKFocus_Normal) called even though focus changed back to itself - derived class should handle this" );
-        GTKHandleDeferredFocusOut();
+        gs_deferredFocusOut->GTKHandleDeferredFocusOut();
     }
 
 
@@ -4459,23 +4459,18 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
     GTKProcessEvent( event );
 }
 
-/*static*/
 void wxWindowGTK::GTKHandleDeferredFocusOut()
 {
     // NB: See GTKHandleFocusOut() for explanation. This function is called
     //     from either GTKHandleFocusIn() or OnInternalIdle() to process
-    //     deferred event.
-    if ( gs_deferredFocusOut )
-    {
-        wxWindowGTK *win = gs_deferredFocusOut;
-        gs_deferredFocusOut = NULL;
+    //     deferred event for this window.
+    gs_deferredFocusOut = NULL;
 
-        wxLogTrace(TRACE_FOCUS,
-                   "processing deferred focus_out event for %s(%p, %s)",
-                   win->GetClassInfo()->GetClassName(), win, win->GetLabel());
+    wxLogTrace(TRACE_FOCUS,
+               "processing deferred focus_out event for %s(%p, %s)",
+               GetClassInfo()->GetClassName(), this, GetLabel());
 
-        win->GTKHandleFocusOutNoDeferring();
-    }
+    GTKHandleFocusOutNoDeferring();
 }
 
 void wxWindowGTK::SetFocus()
