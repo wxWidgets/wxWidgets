@@ -2155,26 +2155,24 @@ bool wxDataViewRenderer::IsHighlighted() const
            GetOwner()->GetOwner()->IsSelected(m_itemBeingRendered);
 }
 
+wxVariant
+wxDataViewRenderer::GtkGetValueFromString(const wxString& str) const
+{
+    return str;
+}
+
 void
 wxDataViewRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
 {
-    wxVariant value(str);
+    wxVariant value(GtkGetValueFromString(str));
     if (!Validate( value ))
         return;
 
     wxDataViewItem
         item(GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(itempath)));
 
-    GtkOnCellChanged(value, item, GetOwner()->GetModelColumn());
-}
-
-void
-wxDataViewRenderer::GtkOnCellChanged(const wxVariant& value,
-                                     const wxDataViewItem& item,
-                                     unsigned col)
-{
     wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
-    model->ChangeValue( value, item, col );
+    model->ChangeValue( value, item, GetOwner()->GetModelColumn() );
 }
 
 void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& WXUNUSED(attr))
@@ -2941,17 +2939,10 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
     m_variantType = wxS("long");
 }
 
-void wxDataViewChoiceByIndexRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
+wxVariant
+wxDataViewChoiceByIndexRenderer::GtkGetValueFromString(const wxString& str) const
 {
-    wxVariant value( (long) GetChoices().Index( str ) );
-
-    if (!Validate( value ))
-        return;
-
-    wxDataViewItem
-        item(GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(itempath)));
-
-    GtkOnCellChanged(value, item, GetOwner()->GetModelColumn());
+    return static_cast<long>(GetChoices().Index(str));
 }
 
 bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
@@ -3024,17 +3015,15 @@ bool wxDataViewIconTextRenderer::GetValue(wxVariant& value) const
     return true;
 }
 
-void
-wxDataViewIconTextRenderer::GtkOnCellChanged(const wxVariant& value,
-                                             const wxDataViewItem& item,
-                                             unsigned col)
+wxVariant
+wxDataViewIconTextRenderer::GtkGetValueFromString(const wxString& str) const
 {
     // we receive just the text part of our value as it's the only one which
     // can be edited, but we need the full wxDataViewIconText value for the
     // model
     wxVariant valueIconText;
-    valueIconText << wxDataViewIconText(value.GetString(), m_value.GetIcon());
-    wxDataViewTextRenderer::GtkOnCellChanged(valueIconText, item, col);
+    valueIconText << wxDataViewIconText(str, m_value.GetIcon());
+    return valueIconText;
 }
 
 // ---------------------------------------------------------
