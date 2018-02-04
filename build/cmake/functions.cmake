@@ -407,6 +407,14 @@ function(wx_set_builtin_target_properties target_name)
                 OUTPUT_NAME_DEBUG ${target_name}${lib_unicode}d
         )
     endif()
+
+    if(wxUSE_UNICODE)
+        if(WIN32)
+            target_compile_definitions(${target_name} PUBLIC UNICODE)
+        endif()
+        target_compile_definitions(${target_name} PUBLIC _UNICODE)
+    endif()
+
     if(MSVC)
         # we're not interested in deprecation warnings about the use of
         # standard C functions in the 3rd party libraries (these warnings
