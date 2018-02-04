@@ -1227,7 +1227,11 @@ void MyFrame::OnEditingStarted( wxDataViewEvent &event )
 void MyFrame::OnEditingDone( wxDataViewEvent &event )
 {
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_EDITING_DONE, Item: %s", title );
+    wxLogMessage("wxEVT_DATAVIEW_ITEM_EDITING_DONE, Item: %s, new value %s",
+                 title,
+                 event.IsEditCancelled()
+                    ? wxString("unavailable because editing was cancelled")
+                    : event.GetValue().GetString());
 }
 
 void MyFrame::OnExpanded( wxDataViewEvent &event )

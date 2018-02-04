@@ -259,6 +259,9 @@ protected:
     wxDataViewCtrl* GetView() const;
 
 private:
+    // Common part of {Cancel,Finish}Editing().
+    bool DoFinishOrCancelEditing(bool cancelled);
+
     // Called from {Called,Finish}Editing() and dtor to cleanup m_editorCtrl
     void DestroyEditControl();
 

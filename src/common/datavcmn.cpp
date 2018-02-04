@@ -766,44 +766,67 @@ void wxDataViewRendererBase::DestroyEditControl()
 
 void wxDataViewRendererBase::CancelEditing()
 {
-    if (!m_editorCtrl)
-        return;
-
-    DestroyEditControl();
+    DoFinishOrCancelEditing(true);
 }
 
 bool wxDataViewRendererBase::FinishEditing()
 {
+    return DoFinishOrCancelEditing(false);
+}
+
+bool wxDataViewRendererBase::DoFinishOrCancelEditing(bool cancelled)
+{
     if (!m_editorCtrl)
         return true;
 
-    // Try to get the value, normally we should succeed but if we fail, don't
-    // return immediately, we still need to destroy the edit control.
+    bool gotValue = false;
+
     wxVariant value;
-    const bool gotValue = GetValueFromEditorCtrl(m_editorCtrl, value);
+    if ( !cancelled )
+    {
+        if ( GetValueFromEditorCtrl(m_editorCtrl, value) )
+        {
+            // This is the normal case and we will use this value below (if it
+            // passes validation).
+            gotValue = true;
+        }
+        //else: Not really supposed to happen, but still proceed with
+        //      destroying the edit control if it does.
+    }
 
     wxDataViewColumn* const column = GetOwner();
     wxDataViewCtrl* const dv_ctrl = column->GetOwner();
 
     DestroyEditControl();
 
-    dv_ctrl->GetMainWindow()->SetFocus();
+    // If we're cancelled, it can be because focus was switched elsewhere,
+    // don't bring it back here.
+    if ( !cancelled )
+        dv_ctrl->GetMainWindow()->SetFocus();
 
-    if ( !gotValue )
-        return false;
+    if ( gotValue )
+    {
+        if ( !Validate(value) )
+        {
+            // Invalid value can't be used, so if it's the same as if we hadn't
+            // got it in the first place.
+            gotValue = false;
+        }
+    }
 
-    bool isValid = Validate(value);
     unsigned int col = GetOwner()->GetModelColumn();
 
     // Now we should send Editing Done event
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl, column, m_item);
-    event.SetValue( value );
-    if ( !isValid )
+    if ( gotValue )
+        event.SetValue(value);
+    else
         event.SetEditCancelled();
+
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
     bool accepted = false;
-    if ( isValid && event.IsAllowed() )
+    if ( gotValue && event.IsAllowed() )
     {
         dv_ctrl->GetModel()->ChangeValue(value, m_item, col);
         accepted = true;
