@@ -23,11 +23,12 @@ wx_list_add_prefix(HELP_DATA_FILES helpfiles/
     page2-b.htm
     testing.hhp
     )
-wx_add_sample(help DATA ${HELP_DATA_FILES} LIBRARIES html NAME htmlhelp)
-wx_add_sample(helpview DATA test.zip LIBRARIES html)
+wx_add_sample(help DATA ${HELP_DATA_FILES} LIBRARIES html NAME htmlhelp DEPENDS wxUSE_HELP)
+wx_add_sample(helpview DATA test.zip LIBRARIES html DEPENDS wxUSE_HELP)
 #TODO: htmlctrl sample uses outdated definitions
 #wx_add_sample(htmlctrl LIBRARIES html)
-wx_add_sample(printing DATA logo6.gif test.htm LIBRARIES html NAME htmlprinting)
+wx_add_sample(printing DATA logo6.gif test.htm LIBRARIES html NAME htmlprinting
+    DEPENDS wxUSE_PRINTING_ARCHITECTURE)
 wx_add_sample(test
     DATA
         imagemap.png pic.png pic2.bmp i18n.gif
@@ -36,7 +37,7 @@ wx_add_sample(test
     LIBRARIES net html NAME htmltest)
 wx_add_sample(virtual DATA start.htm LIBRARIES html)
 wx_add_sample(widget DATA start.htm LIBRARIES html)
-wx_add_sample(zip DATA pages.zip start.htm LIBRARIES html)
+wx_add_sample(zip DATA pages.zip start.htm LIBRARIES html DEPENDS wxUSE_FSZIP)
 
 set(wxSAMPLE_SUBDIR)
 set(wxSAMPLE_FOLDER)
