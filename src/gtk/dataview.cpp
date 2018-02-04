@@ -4681,7 +4681,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 
     PostCreation(size);
 
-    GtkEnableSelectionEvents();
+    g_signal_connect_after(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)),
+        "changed", G_CALLBACK(wxdataview_selection_changed_callback), this);
 
     g_signal_connect_after (m_treeview, "row-activated",
                             G_CALLBACK (wxdataview_row_activated_callback), this);
@@ -5287,15 +5288,15 @@ void wxDataViewCtrl::DoSetIndent()
 void wxDataViewCtrl::GtkDisableSelectionEvents()
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    g_signal_handlers_disconnect_by_func( selection,
-                            (gpointer) (wxdataview_selection_changed_callback), this);
+    g_signal_handlers_block_by_func(
+        selection, (void*)wxdataview_selection_changed_callback, this);
 }
 
 void wxDataViewCtrl::GtkEnableSelectionEvents()
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    g_signal_connect_after (selection, "changed",
-                            G_CALLBACK (wxdataview_selection_changed_callback), this);
+    g_signal_handlers_unblock_by_func(
+        selection, (void*)wxdataview_selection_changed_callback, this);
 }
 
 // ----------------------------------------------------------------------------
