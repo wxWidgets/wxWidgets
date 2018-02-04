@@ -187,7 +187,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                     align = GTK_JUSTIFY_FILL;
                     break;
                 }
-                // fallthrough
+                wxFALLTHROUGH;
 #endif
             default:
                 align = GTK_JUSTIFY_LEFT;
