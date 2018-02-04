@@ -170,7 +170,8 @@ void wxChoice::DoClear()
 
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     GtkTreeModel* model = gtk_combo_box_get_model( combobox );
-    gtk_list_store_clear(GTK_LIST_STORE(model));
+    if (model)
+        gtk_list_store_clear(GTK_LIST_STORE(model));
 
     m_clientData.Clear();
 
