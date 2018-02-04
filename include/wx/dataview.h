@@ -755,6 +755,12 @@ public:
     virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr))
         { return false; }
 
+    // Set the colour used for the "alternate" rows when wxDV_ROW_LINES is on.
+    // Also only supported in the generic version, which returns true to
+    // indicate it.
+    virtual bool SetAlternateRowColour(const wxColour& WXUNUSED(colour))
+        { return false; }
+
     virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {
         return GetClassDefaultAttributes(GetWindowVariant());

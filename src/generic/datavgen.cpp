@@ -5781,9 +5781,10 @@ bool wxDataViewCtrl::SetHeaderAttr(const wxItemAttr& attr)
     return true;
 }
 
-void wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)
+bool wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)
 {
     m_alternateRowColour = colour;
+    return true;
 }
 
 void wxDataViewCtrl::SelectAll()

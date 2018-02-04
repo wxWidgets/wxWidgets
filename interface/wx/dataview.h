@@ -1567,6 +1567,21 @@ public:
     virtual void SelectAll();
 
     /**
+        Set custom colour for the alternate rows used with wxDV_ROW_LINES
+        style.
+
+        Note that calling this method has no effect if wxDV_ROW_LINES is off.
+
+        @param colour The colour to use for the alternate rows.
+        @return @true if customizing this colour is supported (currently only
+            in the generic version), @false if this method is not implemented
+            under this platform.
+
+        @since 3.1.1
+     */
+    bool SetAlternateRowColour(const wxColour& colour);
+
+    /**
         Set which column shall contain the tree-like expanders.
     */
     void SetExpanderColumn(wxDataViewColumn* col);
