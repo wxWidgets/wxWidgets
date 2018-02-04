@@ -798,7 +798,8 @@ bool wxDataViewRendererBase::FinishEditing()
     // Now we should send Editing Done event
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl, column, m_item);
     event.SetValue( value );
-    event.SetEditCanceled( !isValid );
+    if ( !isValid )
+        event.SetEditCancelled();
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
     bool accepted = false;

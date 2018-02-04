@@ -859,7 +859,6 @@ public:
 
     // for wxEVT_DATAVIEW_ITEM_EDITING_DONE only
     bool IsEditCancelled() const { return m_editCancelled; }
-    void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
     // for wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only
     wxDataViewColumn *GetDataViewColumn() const { return m_column; }
@@ -907,6 +906,7 @@ public:
 #endif // WXWIN_COMPATIBILITY_3_0
 
     void SetColumn( int col ) { m_col = col; }
+    void SetEditCancelled() { m_editCancelled = true; }
 
 protected:
     wxDataViewItem      m_item;

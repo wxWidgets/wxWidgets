@@ -3818,7 +3818,6 @@ public:
      */
     wxDataViewItem GetItem() const;
     void SetItem( const wxDataViewItem &item );
-    void SetEditCanceled(bool editCancelled);
     void SetPosition( int x, int y );
     void SetCache(int from, int to);
     wxDataObject *GetDataObject() const;
