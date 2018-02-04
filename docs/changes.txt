@@ -181,6 +181,7 @@ All (GUI):
 - Add wxEVT_SEARCH[_CANCEL] synonyms for wxSearchCtrl events.
 - Generate wxEVT_SEARCH on Enter under all platforms.
 - Extend wxRendererNative::DrawGauge() to work for vertical gauges too.
+- Add wxHD_BITMAP_ON_RIGHT style to wxHeaderCtrl.
 
 wxGTK:
 
@@ -249,6 +250,7 @@ wxMSW:
 - Fix focus-related problems when using native wxProgressDialog.
 - Fix crash when reparenting the currently focused window to another TLW.
 - Fix sending wxEVT_TEXT_ENTER when using auto-completion (Dubby).
+- Fix missing selection event on click in multiselection wxDataViewCtrl (mikek).
 
 wxOSX:
 
@@ -281,6 +283,7 @@ wxOSX:
 - Fix selecting RGB bitmaps (with no alpha channel) into wxMemoryDC.
 - Fix updating radio groups when menu item is inserted/removed from wxMenu.
 - Allow changing alignment styles after wxTextCtrl creation (Andreas Falkenhahn).
+- Fix wxDataViewColumn::SetSortOrder() (hartwigw).
 
 wxQt
 

@@ -37,6 +37,9 @@ enum
     // right clicking the header
     wxHD_ALLOW_HIDE = 0x0002,
 
+    // force putting column images on right
+    wxHD_BITMAP_ON_RIGHT = 0x0004,
+
     // style used by default when creating the control
     wxHD_DEFAULT_STYLE = wxHD_ALLOW_REORDER
 };

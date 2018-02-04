@@ -155,7 +155,8 @@ public:
         @param column
             The column holding the items to be compared.
         @param ascending
-            The sort is being peformed in ascending or descending order.
+            Indicates whether the sort is being performed in ascending or
+            descending order.
         @return
             For an ascending comparison: a negative value if the item1 is less
             than (i.e. should appear above) item2, zero if the two items are
@@ -163,11 +164,12 @@ public:
             appear below) the second one. The reverse for a descending
             comparison.
         @note If there can be multiple rows with the same value, consider
-            differentiating them form each other by their ID's rather than
+            differentiating them form each other by their IDs rather than
             returning zero. This to prevent rows with the same value jumping
             positions when items are added etc. For example:
         @code
-            // Differentiate items with the same value.
+            // Note that we need to distinguish between items with the same
+            // value.
             wxUIntPtr id1 = wxPtrToUInt(item1.GetID()),
                       id2 = wxPtrToUInt(item2.GetID());
 
@@ -1441,6 +1443,16 @@ public:
                                const wxDataViewColumn* col = NULL) const;
 
     /**
+        Returns the window corresponding to the main area of the control.
+
+        This is the window that actually shows the control items and may be
+        different from wxDataViewCtrl window itself in some ports (currently
+        this is only the case for the generic implementation used by default
+        under MSW).
+     */
+    wxWindow* GetMainWindow();
+
+    /**
         Returns pointer to the data model associated with the control (if any).
     */
     wxDataViewModel* GetModel();
@@ -1956,7 +1968,7 @@ public:
 
     /**
         Sets the alignment of the renderer's content.
-        The default value of @c wxDVR_DEFAULT_ALIGMENT indicates that the content
+        The default value of @c wxDVR_DEFAULT_ALIGNMENT indicates that the content
         should have the same alignment as the column header.
 
         The method is not implemented under OS X and the renderer always aligns
@@ -3402,6 +3414,13 @@ public:
     and implements all virtual methods from the base class so it can be used directly
     without having to derive any class from it, but it is mostly used from within
     wxDataViewTreeCtrl.
+
+    Notice that by default this class sorts all items with children before the
+    leaf items. If this behaviour is inappropriate, you need to derive a custom
+    class from this one and override either its HasDefaultCompare() method to
+    return false, which would result in items being sorted just in the order in
+    which they were added, or its Compare() function to compare the items using
+    some other criterion, e.g. alphabetically.
 
     @library{wxadv}
     @category{dvc}

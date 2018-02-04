@@ -75,15 +75,6 @@ static const int SCROLL_UNIT_X = 15;
 // the cell padding on the left/right
 static const int PADDING_RIGHTLEFT = 3;
 
-// the expander space margin
-static const int EXPANDER_MARGIN = 4;
-
-#ifdef __WXMSW__
-static const int EXPANDER_OFFSET = 4;
-#else
-static const int EXPANDER_OFFSET = 1;
-#endif
-
 namespace
 {
 
@@ -273,7 +264,9 @@ class wxDataViewHeaderWindow : public wxHeaderCtrl
 {
 public:
     wxDataViewHeaderWindow(wxDataViewCtrl *parent)
-        : wxHeaderCtrl(parent)
+        : wxHeaderCtrl(parent, wxID_ANY,
+                       wxDefaultPosition, wxDefaultSize,
+                       wxHD_DEFAULT_STYLE | wxHD_BITMAP_ON_RIGHT)
     {
     }
 
@@ -939,9 +932,6 @@ private:
     // the pen used to draw horiz/vertical rules
     wxPen m_penRule;
 
-    // the pen used to draw the expander and the lines
-    wxPen m_penExpander;
-
     // This is the tree structure of the model
     wxDataViewTreeNode * m_root;
     int m_count;
@@ -1383,7 +1373,18 @@ wxString wxDataViewProgressRenderer::GetAccessibleDescription() const
 bool
 wxDataViewProgressRenderer::Render(wxRect rect, wxDC *dc, int WXUNUSED(state))
 {
-    wxRendererNative::Get().DrawGauge(
+    const wxDataViewItemAttr& attr = GetAttr();
+    if ( attr.HasColour() )
+        dc->SetBackground(attr.GetColour());
+
+    // This is a hack, but native renderers don't support using custom colours,
+    // but typically gauge colour is important (e.g. it's commonly green/red to
+    // indicate some qualitative difference), so we fall back to the generic
+    // implementation which looks ugly but does support using custom colour.
+    wxRendererNative& renderer = attr.HasColour()
+                                    ? wxRendererNative::GetGeneric()
+                                    : wxRendererNative::Get();
+    renderer.DrawGauge(
         GetOwner()->GetOwner(),
         *dc,
         rect,
@@ -1966,10 +1967,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     m_penRule = wxPen(GetRuleColour());
 
-    // compose a pen whichcan draw black lines
-    // TODO: maybe there is something system colour to use
-    m_penExpander = wxPen(wxColour(0,0,0));
-
     m_root = wxDataViewTreeNode::CreateRootNode();
 
     // Make m_count = -1 will cause the class recaculate the real displaying number of rows.
@@ -2540,23 +2537,17 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 // Calculate the indent first
                 indent = GetOwner()->GetIndent() * node->GetIndentLevel();
 
-                // we reserve m_lineHeight of horizontal space for the expander
-                // but leave EXPANDER_MARGIN around the expander itself
-                int exp_x = cell_rect.x + indent + EXPANDER_MARGIN;
+                // We don't have any method to return the size of the expander
+                // button currently (TODO: add one to wxRendererNative), so
+                // just guesstimate it.
+                const int expWidth = 3*dc.GetCharWidth();
 
-                indent += m_lineHeight;
-
-                // draw expander if needed and visible
-                if ( node->HasChildren() && exp_x < cell_rect.GetRight() )
+                // draw expander if needed
+                if ( node->HasChildren() )
                 {
-                    dc.SetPen( m_penExpander );
-                    dc.SetBrush( wxNullBrush );
-
-                    int exp_size = m_lineHeight - 2*EXPANDER_MARGIN;
-                    int exp_y = cell_rect.y + (cell_rect.height - exp_size)/2
-                                   + EXPANDER_MARGIN - EXPANDER_OFFSET;
-
-                    const wxRect rect(exp_x, exp_y, exp_size, exp_size);
+                    wxRect rect = cell_rect;
+                    rect.x += indent;
+                    rect.width = expWidth;
 
                     int flag = 0;
                     if ( m_underMouse == node )
@@ -2570,6 +2561,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                     wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
                 }
+
+                indent += expWidth;
 
                 // force the expander column to left-center align
                 cell->SetAlignment( wxALIGN_CENTER_VERTICAL );
@@ -4728,9 +4721,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if ( UnselectAllRows(m_lineSelectSingleOnUp) )
             {
                 SelectRow( m_lineSelectSingleOnUp, true );
-                SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
             }
-            //else: it was already selected, nothing to do
+
+            SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
         }
 
         // If the user click the expander, we do not do editing even if the column
@@ -5228,17 +5221,6 @@ bool wxDataViewCtrl::Show(bool show)
     return changed;
 }
 
-bool wxDataViewCtrl::Enable(bool enable)
-{
-    bool changed = wxControl::Enable(enable);
-    if ( changed )
-    {
-        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
-    }
-
-    return changed;
-}
-
 void wxDataViewCtrl::SetName(const wxString &name)
 {
     wxControl::SetName(name);
@@ -5256,6 +5238,20 @@ bool wxDataViewCtrl::Reparent(wxWindowBase *newParent)
     return changed;
 }
 #endif // wxUSE_ACCESIBILITY
+
+bool wxDataViewCtrl::Enable(bool enable)
+{
+    bool changed = wxControl::Enable(enable);
+    if ( changed )
+    {
+#if wxUSE_ACCESSIBILITY
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESIBILITY
+        Refresh();
+    }
+
+    return changed;
+}
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {

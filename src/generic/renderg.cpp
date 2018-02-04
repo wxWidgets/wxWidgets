@@ -912,6 +912,18 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
                                   int max,
                                   int flags)
 {
+    // This is a hack, but we want to allow customizing the colour used for the
+    // gauge body, as this is important for the generic wxDataViewCtrl
+    // implementation which uses this method. So we assume that if the caller
+    // had set up a brush using background colour different from the default,
+    // it should be used. Otherwise we use the default one.
+    const wxBrush& bg = dc.GetBackground();
+    wxColour colBar;
+    if ( bg.IsOk() && bg.GetColour() != win->GetBackgroundColour() )
+        colBar = bg.GetColour();
+    else
+        colBar = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+
     // Use same background as text controls.
     DrawTextCtrl(win, dc, rect);
 
@@ -929,7 +941,7 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
         progRect.width = wxMulDivInt32(progRect.width, value, max);
     }
 
-    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    dc.SetBrush(colBar);
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(progRect);
 }

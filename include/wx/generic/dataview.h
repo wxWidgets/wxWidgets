@@ -257,10 +257,10 @@ public:
 
 #if wxUSE_ACCESSIBILITY
     virtual bool Show(bool show = true) wxOVERRIDE;
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
     virtual void SetName(const wxString &name) wxOVERRIDE;
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 #endif // wxUSE_ACCESSIBILITY
+    virtual bool Enable(bool enable = true) wxOVERRIDE;
 
     virtual bool AllowMultiColumnSort(bool allow) wxOVERRIDE;
     virtual bool IsMultiColumnSortAllowed() const wxOVERRIDE { return m_allowMultiColumnSort; }
