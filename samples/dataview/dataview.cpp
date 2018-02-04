@@ -417,8 +417,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_SELECTION_CHANGED(ID_MUSIC_CTRL, MyFrame::OnSelectionChanged)
 
     EVT_DATAVIEW_ITEM_START_EDITING(ID_MUSIC_CTRL, MyFrame::OnStartEditing)
-    EVT_DATAVIEW_ITEM_EDITING_STARTED(ID_MUSIC_CTRL, MyFrame::OnEditingStarted)
-    EVT_DATAVIEW_ITEM_EDITING_DONE(ID_MUSIC_CTRL, MyFrame::OnEditingDone)
+    EVT_DATAVIEW_ITEM_EDITING_STARTED(wxID_ANY, MyFrame::OnEditingStarted)
+    EVT_DATAVIEW_ITEM_EDITING_DONE(wxID_ANY, MyFrame::OnEditingDone)
 
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
@@ -1220,15 +1220,17 @@ void MyFrame::OnStartEditing( wxDataViewEvent &event )
 
 void MyFrame::OnEditingStarted( wxDataViewEvent &event )
 {
-    wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_EDITING_STARTED, Item: %s", title );
+    // This event doesn't, currently, carry the value, so get it ourselves.
+    wxDataViewModel* const model = event.GetModel();
+    wxVariant value;
+    model->GetValue(value, event.GetItem(), event.GetColumn());
+    wxLogMessage("wxEVT_DATAVIEW_ITEM_EDITING_STARTED, current value %s",
+                 value.GetString());
 }
 
 void MyFrame::OnEditingDone( wxDataViewEvent &event )
 {
-    wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage("wxEVT_DATAVIEW_ITEM_EDITING_DONE, Item: %s, new value %s",
-                 title,
+    wxLogMessage("wxEVT_DATAVIEW_ITEM_EDITING_DONE, new value %s",
                  event.IsEditCancelled()
                     ? wxString("unavailable because editing was cancelled")
                     : event.GetValue().GetString());
