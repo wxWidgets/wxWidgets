@@ -133,6 +133,7 @@ private:
     void OnHeaderClickList( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
     void OnSortedList( wxDataViewEvent &event );
+    void OnColumnReordered( wxDataViewEvent &event);
 
     void OnContextMenu( wxDataViewEvent &event );
 
@@ -423,6 +424,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
     EVT_DATAVIEW_COLUMN_SORTED(ID_ATTR_CTRL, MyFrame::OnSortedList)
+    EVT_DATAVIEW_COLUMN_REORDERED(wxID_ANY, MyFrame::OnColumnReordered)
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnHeaderClickList)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
@@ -1288,6 +1290,19 @@ void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column position: %d", pos );
+}
+
+void MyFrame::OnColumnReordered(wxDataViewEvent& event)
+{
+    wxDataViewColumn* const col = event.GetDataViewColumn();
+    if ( !col )
+    {
+        wxLogError("Unknown column reordered?");
+        return;
+    }
+
+    wxLogMessage("wxEVT_DATAVIEW_COLUMN_REORDERED: \"%s\" is now at position %d",
+                 col->GetTitle(), event.GetColumn());
 }
 
 void MyFrame::OnSortedList( wxDataViewEvent &/*event*/)

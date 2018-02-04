@@ -903,10 +903,10 @@ public:
     wxDEPRECATED_MSG("Pass the argument to the ctor instead")
     void SetDataViewColumn( wxDataViewColumn *col ) { m_column = col; }
     wxDEPRECATED_MSG("Pass the argument to the ctor instead")
-    void SetColumn( int col ) { m_col = col; }
-    wxDEPRECATED_MSG("Pass the argument to the ctor instead")
     void SetItem( const wxDataViewItem &item ) { m_item = item; }
 #endif // WXWIN_COMPATIBILITY_3_0
+
+    void SetColumn( int col ) { m_col = col; }
 
 protected:
     wxDataViewItem      m_item;

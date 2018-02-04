@@ -3648,8 +3648,8 @@ public:
            Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
-           Currently this event is only generated when using the native OS X
-           version.
+           Currently this event is not generated when using the native GTK+
+           version of the control.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
@@ -3675,6 +3675,9 @@ public:
     /**
         Returns the position of the column in the control or -1
         if no column field was set by the event emitter.
+
+        For wxEVT_DATAVIEW_COLUMN_REORDERED, this is the new position of the
+        column.
     */
     int GetColumn() const;
 
