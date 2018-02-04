@@ -348,11 +348,6 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
     // a GtkEntry for wxComboBox and a GtkCellView for wxChoice
     GtkWidget* childPart = gtk_bin_get_child(GTK_BIN(m_widget));
 
-    // Set a as small as possible size for the control, so preferred sizes
-    // return "natural" sizes, not taking into account the previous ones (which
-    // seems to be GTK+3 behaviour)
-    gtk_widget_set_size_request(m_widget, 0, 0);
-
     // We are interested in the difference of sizes between the whole contol
     // and its child part. I.e. arrow, separators, etc.
     GtkRequisition req;
