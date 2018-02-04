@@ -209,6 +209,7 @@ wxGTK:
 - Implement ShowPosition() for single-line wxTextCtrl.
 - Improve wx{Client,Paint,Screen,Window}DC::GetPPI() (GTK+ 3).
 - Suppress focus loss events for wxChoice and wxComboBox on opening popup.
+- Make custom URI schemes work WebKit2-based wxWebView (Scott Talbert).
 
 wxMSW:
 
