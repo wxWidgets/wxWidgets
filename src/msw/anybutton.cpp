@@ -842,7 +842,13 @@ void DrawButtonText(HDC hdc,
 
     // To get a native look for owner-drawn button in disabled state (without
     // theming) we must use DrawState() to draw the text label.
-    if ( !wxUxThemeIsActive() && !btn->IsEnabled() )
+    //
+    // Notice that we use the enabled state at MSW, not wx, level because we
+    // don't want to grey it out when it's disabled just because its parent is
+    // disabled by MSW as it happens when showing a modal dialog, but we do
+    // want to grey it out if either it or its parent are explicitly disabled
+    // at wx level, see #18011.
+    if ( !wxUxThemeIsActive() && !::IsWindowEnabled(GetHwndOf(btn)) )
     {
         // However using DrawState() has some drawbacks:
         // 1. It generally doesn't support alignment flags (except right
