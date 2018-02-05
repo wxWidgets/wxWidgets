@@ -133,6 +133,7 @@ private:
     void OnHeaderClickList( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
     void OnSortedList( wxDataViewEvent &event );
+    void OnColumnReordered( wxDataViewEvent &event);
 
     void OnContextMenu( wxDataViewEvent &event );
 
@@ -416,13 +417,14 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_SELECTION_CHANGED(ID_MUSIC_CTRL, MyFrame::OnSelectionChanged)
 
     EVT_DATAVIEW_ITEM_START_EDITING(ID_MUSIC_CTRL, MyFrame::OnStartEditing)
-    EVT_DATAVIEW_ITEM_EDITING_STARTED(ID_MUSIC_CTRL, MyFrame::OnEditingStarted)
-    EVT_DATAVIEW_ITEM_EDITING_DONE(ID_MUSIC_CTRL, MyFrame::OnEditingDone)
+    EVT_DATAVIEW_ITEM_EDITING_STARTED(wxID_ANY, MyFrame::OnEditingStarted)
+    EVT_DATAVIEW_ITEM_EDITING_DONE(wxID_ANY, MyFrame::OnEditingDone)
 
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
     EVT_DATAVIEW_COLUMN_SORTED(ID_ATTR_CTRL, MyFrame::OnSortedList)
+    EVT_DATAVIEW_COLUMN_REORDERED(wxID_ANY, MyFrame::OnColumnReordered)
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnHeaderClickList)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
@@ -1218,14 +1220,20 @@ void MyFrame::OnStartEditing( wxDataViewEvent &event )
 
 void MyFrame::OnEditingStarted( wxDataViewEvent &event )
 {
-    wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_EDITING_STARTED, Item: %s", title );
+    // This event doesn't, currently, carry the value, so get it ourselves.
+    wxDataViewModel* const model = event.GetModel();
+    wxVariant value;
+    model->GetValue(value, event.GetItem(), event.GetColumn());
+    wxLogMessage("wxEVT_DATAVIEW_ITEM_EDITING_STARTED, current value %s",
+                 value.GetString());
 }
 
 void MyFrame::OnEditingDone( wxDataViewEvent &event )
 {
-    wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_EDITING_DONE, Item: %s", title );
+    wxLogMessage("wxEVT_DATAVIEW_ITEM_EDITING_DONE, new value %s",
+                 event.IsEditCancelled()
+                    ? wxString("unavailable because editing was cancelled")
+                    : event.GetValue().GetString());
 }
 
 void MyFrame::OnExpanded( wxDataViewEvent &event )
@@ -1288,6 +1296,19 @@ void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column position: %d", pos );
+}
+
+void MyFrame::OnColumnReordered(wxDataViewEvent& event)
+{
+    wxDataViewColumn* const col = event.GetDataViewColumn();
+    if ( !col )
+    {
+        wxLogError("Unknown column reordered?");
+        return;
+    }
+
+    wxLogMessage("wxEVT_DATAVIEW_COLUMN_REORDERED: \"%s\" is now at position %d",
+                 col->GetTitle(), event.GetColumn());
 }
 
 void MyFrame::OnSortedList( wxDataViewEvent &/*event*/)

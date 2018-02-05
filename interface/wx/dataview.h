@@ -1567,6 +1567,21 @@ public:
     virtual void SelectAll();
 
     /**
+        Set custom colour for the alternate rows used with wxDV_ROW_LINES
+        style.
+
+        Note that calling this method has no effect if wxDV_ROW_LINES is off.
+
+        @param colour The colour to use for the alternate rows.
+        @return @true if customizing this colour is supported (currently only
+            in the generic version), @false if this method is not implemented
+            under this platform.
+
+        @since 3.1.1
+     */
+    bool SetAlternateRowColour(const wxColour& colour);
+
+    /**
         Set which column shall contain the tree-like expanders.
     */
     void SetExpanderColumn(wxDataViewColumn* col);
@@ -3633,8 +3648,8 @@ public:
            Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
-           Currently this even is only generated when using the native OS X
-           version.
+           Currently this event is not generated when using the native GTK+
+           version of the control.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
@@ -3660,6 +3675,9 @@ public:
     /**
         Returns the position of the column in the control or -1
         if no column field was set by the event emitter.
+
+        For wxEVT_DATAVIEW_COLUMN_REORDERED, this is the new position of the
+        column.
     */
     int GetColumn() const;
 
@@ -3800,7 +3818,6 @@ public:
      */
     wxDataViewItem GetItem() const;
     void SetItem( const wxDataViewItem &item );
-    void SetEditCanceled(bool editCancelled);
     void SetPosition( int x, int y );
     void SetCache(int from, int to);
     wxDataObject *GetDataObject() const;

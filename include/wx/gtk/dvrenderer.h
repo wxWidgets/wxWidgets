@@ -47,9 +47,10 @@ public:
 
     // called when the cell value was edited by user with the new value
     //
-    // it validates the new value and notifies the model about the change by
-    // calling GtkOnCellChanged() if it was accepted
-    virtual void GtkOnTextEdited(const char *itempath, const wxString& value);
+    // it uses GtkGetValueFromString() to parse the new value, then validates
+    // it by calling Validate() and notifies the model about the change if it
+    // passes validation
+    void GtkOnTextEdited(const char *itempath, const wxString& value);
 
     GtkCellRenderer* GetGtkHandle() { return m_renderer; }
     void GtkInitHandlers();
@@ -78,13 +79,15 @@ protected:
 
     virtual bool IsHighlighted() const wxOVERRIDE;
 
-    virtual void GtkOnCellChanged(const wxVariant& value,
-                                  const wxDataViewItem& item,
-                                  unsigned col);
-
     // Apply our effective alignment (i.e. m_alignment if specified or the
     // associated column alignment by default) to the given renderer.
     void GtkApplyAlignment(GtkCellRenderer *renderer);
+
+    // This method is used to interpret the string entered by user and by
+    // default just uses it as is, but can be overridden for classes requiring
+    // special treatment.
+    virtual wxVariant GtkGetValueFromString(const wxString& str) const;
+
 
     GtkCellRenderer    *m_renderer;
     int                 m_alignment;

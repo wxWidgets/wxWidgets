@@ -5512,13 +5512,16 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
     return max_width;
 }
 
-void wxDataViewCtrl::ColumnMoved(wxDataViewColumn * WXUNUSED(col),
-                                unsigned int WXUNUSED(new_pos))
+void wxDataViewCtrl::ColumnMoved(wxDataViewColumn *col, unsigned int new_pos)
 {
     // do _not_ reorder m_cols elements here, they should always be in the
     // order in which columns were added, we only display the columns in
     // different order
     m_clientArea->UpdateDisplay();
+
+    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_REORDERED, this, col);
+    event.SetColumn(new_pos);
+    ProcessWindowEvent(event);
 }
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
@@ -5781,9 +5784,10 @@ bool wxDataViewCtrl::SetHeaderAttr(const wxItemAttr& attr)
     return true;
 }
 
-void wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)
+bool wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)
 {
     m_alternateRowColour = colour;
+    return true;
 }
 
 void wxDataViewCtrl::SelectAll()

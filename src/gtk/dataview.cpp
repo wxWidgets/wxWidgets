@@ -1932,9 +1932,24 @@ bool wxGtkDataViewModelNotifier::Cleared()
 // ---------------------------------------------------------
 
 static void
-wxgtk_cell_editable_editing_done( GtkCellEditable *WXUNUSED(editable),
+wxgtk_cell_editable_editing_done( GtkCellEditable *editable,
                                   wxDataViewRenderer *wxrenderer )
 {
+    // "editing-cancelled" property is documented as being new since 2.20 in
+    // GtkCellEditable, but seems to have existed basically forever (since GTK+
+    // 1.3 days) in GtkCellRendererText, so try to use it in any case.
+    if ( g_object_class_find_property(G_OBJECT_GET_CLASS(editable),
+                                      "editing-canceled") )
+    {
+        gboolean wasCancelled;
+        g_object_get(editable, "editing-canceled", &wasCancelled, NULL);
+        if ( wasCancelled )
+        {
+            wxrenderer->CancelEditing();
+            return;
+        }
+    }
+
     wxrenderer->FinishEditing();
 }
 
@@ -2155,26 +2170,19 @@ bool wxDataViewRenderer::IsHighlighted() const
            GetOwner()->GetOwner()->IsSelected(m_itemBeingRendered);
 }
 
-void
-wxDataViewRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
+wxVariant
+wxDataViewRenderer::GtkGetValueFromString(const wxString& str) const
 {
-    wxVariant value(str);
-    if (!Validate( value ))
-        return;
-
-    wxDataViewItem
-        item(GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(itempath)));
-
-    GtkOnCellChanged(value, item, GetOwner()->GetModelColumn());
+    return str;
 }
 
 void
-wxDataViewRenderer::GtkOnCellChanged(const wxVariant& value,
-                                     const wxDataViewItem& item,
-                                     unsigned col)
+wxDataViewRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
 {
-    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
-    model->ChangeValue( value, item, col );
+    m_item = wxDataViewItem(GetView()->GTKPathToItem(wxGtkTreePath(itempath)));
+
+    wxVariant value(GtkGetValueFromString(str));
+    DoHandleEditingDone(&value);
 }
 
 void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& WXUNUSED(attr))
@@ -2941,17 +2949,10 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
     m_variantType = wxS("long");
 }
 
-void wxDataViewChoiceByIndexRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
+wxVariant
+wxDataViewChoiceByIndexRenderer::GtkGetValueFromString(const wxString& str) const
 {
-    wxVariant value( (long) GetChoices().Index( str ) );
-
-    if (!Validate( value ))
-        return;
-
-    wxDataViewItem
-        item(GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(itempath)));
-
-    GtkOnCellChanged(value, item, GetOwner()->GetModelColumn());
+    return static_cast<long>(GetChoices().Index(str));
 }
 
 bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
@@ -3024,17 +3025,15 @@ bool wxDataViewIconTextRenderer::GetValue(wxVariant& value) const
     return true;
 }
 
-void
-wxDataViewIconTextRenderer::GtkOnCellChanged(const wxVariant& value,
-                                             const wxDataViewItem& item,
-                                             unsigned col)
+wxVariant
+wxDataViewIconTextRenderer::GtkGetValueFromString(const wxString& str) const
 {
     // we receive just the text part of our value as it's the only one which
     // can be edited, but we need the full wxDataViewIconText value for the
     // model
     wxVariant valueIconText;
-    valueIconText << wxDataViewIconText(value.GetString(), m_value.GetIcon());
-    wxDataViewTextRenderer::GtkOnCellChanged(valueIconText, item, col);
+    valueIconText << wxDataViewIconText(str, m_value.GetIcon());
+    return valueIconText;
 }
 
 // ---------------------------------------------------------

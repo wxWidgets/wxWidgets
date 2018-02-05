@@ -755,6 +755,12 @@ public:
     virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr))
         { return false; }
 
+    // Set the colour used for the "alternate" rows when wxDV_ROW_LINES is on.
+    // Also only supported in the generic version, which returns true to
+    // indicate it.
+    virtual bool SetAlternateRowColour(const wxColour& WXUNUSED(colour))
+        { return false; }
+
     virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {
         return GetClassDefaultAttributes(GetWindowVariant());
@@ -853,7 +859,6 @@ public:
 
     // for wxEVT_DATAVIEW_ITEM_EDITING_DONE only
     bool IsEditCancelled() const { return m_editCancelled; }
-    void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
     // for wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only
     wxDataViewColumn *GetDataViewColumn() const { return m_column; }
@@ -897,10 +902,11 @@ public:
     wxDEPRECATED_MSG("Pass the argument to the ctor instead")
     void SetDataViewColumn( wxDataViewColumn *col ) { m_column = col; }
     wxDEPRECATED_MSG("Pass the argument to the ctor instead")
-    void SetColumn( int col ) { m_col = col; }
-    wxDEPRECATED_MSG("Pass the argument to the ctor instead")
     void SetItem( const wxDataViewItem &item ) { m_item = item; }
 #endif // WXWIN_COMPATIBILITY_3_0
+
+    void SetColumn( int col ) { m_col = col; }
+    void SetEditCancelled() { m_editCancelled = true; }
 
 protected:
     wxDataViewItem      m_item;
