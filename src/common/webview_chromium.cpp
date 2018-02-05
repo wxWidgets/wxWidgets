@@ -53,63 +53,66 @@ public:
     ClientHandler() : m_loadErrorCode(-1) {}
     virtual ~ClientHandler() {}
 
-    virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() { return this; }
-    virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() { return this; }
-    virtual CefRefPtr<CefLoadHandler> GetLoadHandler() { return this; }
-    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() { return this; }
+    virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() wxOVERRIDE { return this; }
+    virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() wxOVERRIDE  { return this; }
+    virtual CefRefPtr<CefLoadHandler> GetLoadHandler() wxOVERRIDE  { return this; }
+    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() wxOVERRIDE  { return this; }
 
     // CefDisplayHandler methods
     virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser,
         bool isLoading, bool canGoBack,
-        bool canGoForward);
+        bool canGoForward) wxOVERRIDE;
     virtual void OnAddressChange(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
-        const CefString& url);
+        const CefString& url) wxOVERRIDE;
     virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
-        const CefString& title);
+        const CefString& title) wxOVERRIDE;
     virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser,
         const CefString& message,
         const CefString& source,
-        int line);
+        int line) wxOVERRIDE;
 
     // CefContextMenuHandler methods
     virtual void OnBeforeContextMenu(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
         CefRefPtr<CefContextMenuParams> params,
-        CefRefPtr<CefMenuModel> model);
+        CefRefPtr<CefMenuModel> model) wxOVERRIDE;
     virtual bool OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
         CefRefPtr<CefContextMenuParams> params,
         int command_id,
-        CefContextMenuHandler::EventFlags event_flags);
+        CefContextMenuHandler::EventFlags event_flags) wxOVERRIDE;
     virtual void OnContextMenuDismissed(CefRefPtr<CefBrowser> browser,
-        CefRefPtr<CefFrame> frame);
+        CefRefPtr<CefFrame> frame) wxOVERRIDE;
 
     // CefLifeSpanHandler methods
     virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
         const CefString& target_url,
         const CefString& target_frame_name,
+        WindowOpenDisposition target_disposition,
+        bool user_gesture,
         const CefPopupFeatures& popupFeatures,
         CefWindowInfo& windowInfo,
         CefRefPtr<CefClient>& client,
         CefBrowserSettings& settings,
-        bool* no_javascript_access);
-    virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser);
-    virtual bool DoClose(CefRefPtr<CefBrowser> browser);
-    virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser);
+        bool* no_javascript_access) wxOVERRIDE;
+    virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) wxOVERRIDE;
+    virtual bool DoClose(CefRefPtr<CefBrowser> browser) wxOVERRIDE;
+    virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) wxOVERRIDE;
 
     // CefLoadHandler methods
     virtual void OnLoadStart(CefRefPtr<CefBrowser> browser,
-        CefRefPtr<CefFrame> frame);
+        CefRefPtr<CefFrame> frame,
+        TransitionType transition_type) wxOVERRIDE;
     virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
-        int httpStatusCode);
+        int httpStatusCode) wxOVERRIDE;
     virtual void OnLoadError(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
         ErrorCode errorCode,
         const CefString& errorText,
-        const CefString& failedUrl);
+        const CefString& failedUrl) wxOVERRIDE;
 
     CefRefPtr<CefBrowser> GetBrowser() { return m_browser; }
 
@@ -132,15 +135,15 @@ public:
 
     // CefResourceHandler methods
     virtual bool ProcessRequest(CefRefPtr<CefRequest> request,
-        CefRefPtr<CefCallback> callback);
+        CefRefPtr<CefCallback> callback) wxOVERRIDE;
     virtual void GetResponseHeaders(CefRefPtr<CefResponse> response,
         int64& response_length,
-        CefString& redirectUrl);
+        CefString& redirectUrl) wxOVERRIDE;
     virtual bool ReadResponse(void* data_out,
         int bytes_to_read,
         int& bytes_read,
-        CefRefPtr<CefCallback> callback);
-    virtual void Cancel() {}
+        CefRefPtr<CefCallback> callback) wxOVERRIDE;
+    virtual void Cancel() wxOVERRIDE {}
 
 private:
     wxSharedPtr<wxWebViewHandler> m_handler;
@@ -161,7 +164,7 @@ public:
     virtual CefRefPtr<CefResourceHandler> Create(CefRefPtr<CefBrowser> WXUNUSED(browser),
         CefRefPtr<CefFrame> WXUNUSED(frame),
         const CefString& WXUNUSED(scheme_name),
-        CefRefPtr<CefRequest> WXUNUSED(request))
+        CefRefPtr<CefRequest> WXUNUSED(request)) wxOVERRIDE
     {
         return new SchemeHandler(m_handler);
     }
@@ -181,7 +184,7 @@ public:
     };
     wxStringVisitor(wxWebViewChromium* webview, StringType type) :
         m_type(type), m_webview(webview) {}
-    void Visit(const CefString& string)
+    void Visit(const CefString& string) wxOVERRIDE
     {
         switch(m_type)
         {
@@ -673,6 +676,8 @@ bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> WXUNUSED(browser),
                              CefRefPtr<CefFrame> WXUNUSED(frame),
                              const CefString& target_url,
                              const CefString& target_frame_name,
+							 WindowOpenDisposition WXUNUSED(target_disposition),
+							 bool WXUNUSED(user_gesture),
                              const CefPopupFeatures& WXUNUSED(popupFeatures),
                              CefWindowInfo& WXUNUSED(windowInfo),
                              CefRefPtr<CefClient>& WXUNUSED(client),
@@ -713,7 +718,8 @@ void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 
 // CefLoadHandler methods
 void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> WXUNUSED(browser),
-                                CefRefPtr<CefFrame> frame)
+								CefRefPtr<CefFrame> frame,
+								TransitionType WXUNUSED(transition_type))
 {
     wxString url = frame->GetURL().ToString();
     wxString target = frame->GetName().ToString();
