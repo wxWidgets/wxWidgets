@@ -12,6 +12,7 @@
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
 
 #include "wx/webview.h"
+#include "wx/timer.h"
 
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[];
 
@@ -115,16 +116,6 @@ public:
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
 
-#ifdef __WXMSW__
-    static bool StartUp(int &code, const wxString &path = "");
-#else
-    static bool StartUp(int &code, const wxString &path,
-                        int argc, char* argv[]);
-#endif
-
-    static void Shutdown();
-    static void DoCEFWork();
-
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
 
@@ -148,6 +139,12 @@ private:
     //We also friend ClientHandler so it can access the history
     friend class ClientHandler;
     ClientHandler* m_clientHandler;
+
+    static int ms_activeWebViewCount;
+    // A timer to run CEF message loop.
+    static wxTimer* ms_workTimer;
+
+    static void OnWorkTimer(wxTimerEvent& evt);
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewChromium);
 };

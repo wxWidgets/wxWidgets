@@ -40,7 +40,6 @@
 #include "wx/filesys.h"
 #include "wx/fs_arc.h"
 #include "wx/fs_mem.h"
-#include "wx/timer.h"
 
 #ifdef wxWEBVIEW_SAMPLE_CHROMIUM
 #include "wx/webview_chromium.h"
@@ -77,7 +76,6 @@ public:
     }
 
     virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
 
 #if wxUSE_CMDLINE_PARSER
     virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE
@@ -112,7 +110,6 @@ public:
     virtual ~WebFrame();
 
     void UpdateState();
-    void OnTimer(wxTimerEvent& evt);
     void OnIdle(wxIdleEvent& evt);
     void OnUrl(wxCommandEvent& evt);
     void OnBack(wxCommandEvent& evt);
@@ -172,16 +169,10 @@ public:
     void OnFindText(wxCommandEvent& evt);
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
-    void OnClose(wxCloseEvent& evt);
 
 private:
     wxTextCtrl* m_url;
     wxWebView* m_browser;
-
-#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-    // A timer to run CEF message loop.
-    wxTimer* m_timer;
-#endif
 
     wxToolBar* m_toolbar;
     wxToolBarToolBase* m_toolbar_back;
@@ -268,18 +259,6 @@ wxIMPLEMENT_APP(WebApp);
 
 bool WebApp::OnInit()
 {
-#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-    // We spawn a separate subprocess
-    int code = 0;
-#ifdef __WXMSW__
-    if(!wxWebViewChromium::StartUp(code, ""))
-#else
-    if(!wxWebViewChromium::StartUp(code, "",
-                                   wxApp::argc, wxApp::argv))
-#endif
-        exit(code);
-#endif // wxWEBVIEW_SAMPLE_CHROMIUM
-
     if ( !wxApp::OnInit() )
         return false;
 
@@ -308,14 +287,6 @@ bool WebApp::OnInit()
     frame->Show();
 
     return true;
-}
-
-int WebApp::OnExit()
-{
-#if defined(wxWEBVIEW_SAMPLE_CHROMIUM) && (defined(__WXMSW__) || defined(__WXGTK__))
-    wxWebViewChromium::Shutdown();
-#endif
-    return wxApp::OnExit();
 }
 
 WebFrame::WebFrame(const wxString& url) :
@@ -401,9 +372,6 @@ WebFrame::WebFrame(const wxString& url) :
 
     // Create the webview
 #ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-    wxWebView::RegisterFactory(wxWebViewBackendChromium, wxSharedPtr<wxWebViewFactory>
-                                                                     (new wxWebViewFactoryChromium));
-
     m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxSize(800, 525), wxWebViewBackendChromium);
 #else
     m_browser = wxWebView::New(this, wxID_ANY, url);
@@ -649,13 +617,6 @@ WebFrame::WebFrame(const wxString& url) :
 
     //Connect the idle events
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(WebFrame::OnIdle), NULL, this);
-    Connect(wxID_ANY, wxEVT_CLOSE_WINDOW, wxCloseEventHandler(WebFrame::OnClose), NULL, this);
-    Connect(wxID_ANY, wxEVT_TIMER, wxTimerEventHandler(WebFrame::OnTimer), NULL, this);
-
-#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-    m_timer = new wxTimer(this);
-    m_timer->Start(25);
-#endif
 }
 
 WebFrame::~WebFrame()
@@ -683,13 +644,6 @@ void WebFrame::UpdateState()
 
     SetTitle( m_browser->GetCurrentTitle() );
     m_url->SetValue( m_browser->GetCurrentURL() );
-}
-
-void WebFrame::OnTimer(wxTimerEvent& WXUNUSED(evt))
-{
-#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-    wxWebViewChromium::DoCEFWork();
-#endif
 }
 
 void WebFrame::OnIdle(wxIdleEvent& WXUNUSED(evt))
@@ -1330,21 +1284,4 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(text, 1, wxEXPAND);
     SetSizer(sizer);
-}
-
-void WebFrame::OnClose(wxCloseEvent & evt)
-{
-#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-    wxUnusedVar(evt);
-    delete m_timer;
-// On Windows/Linux, calling `Shutdown` here will cause a crash when closing WebFrame.
-// This is a temporary fix.
-#ifdef __WXOSX__
-    wxWebViewChromium::Shutdown();
-#endif
-
-    Destroy();
-#else
-    evt.Skip();
-#endif
 }

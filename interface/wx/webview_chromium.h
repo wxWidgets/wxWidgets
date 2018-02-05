@@ -166,24 +166,17 @@ public:
                         long style = 0,
                         const wxString& name = wxWebViewNameStr);
     /**
-        StartUp function for Windows platform.
+        StartUp function
 
         Setup CEF3 environment, creating and initializing browser/renderer processes.
     */
     static bool StartUp(int &code, const wxString &path = "");
 
     /**
-        StartUp function for Linux/Mac OS X platforms.
-        Setup CEF3 environment, creating and initializing browser/renderer processes.
-    */
-    static bool StartUp(int &code, const wxString &path,
-                        int argc, char* argv[]);
-
-    /** 
         Shutdown CEF
 
         The function should be called before client application exits.
-        
+
         Since there is a bug of CEF3, the behavior is different between
         Mac OS X with Linux/Windows platforms.  On Mac OS X, it should
         be called in wxFrame::OnClose.  On Linux/Windows, it shuold be

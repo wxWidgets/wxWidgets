@@ -12,6 +12,8 @@
 #include "wx/webview_chromium.h"
 #include "wx/filesys.h"
 #include "wx/rtti.h"
+#include "wx/app.h"
+#include "wx/module.h"
 
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
@@ -39,6 +41,9 @@
 #endif
 
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
+
+int wxWebViewChromium::ms_activeWebViewCount = 0;
+wxTimer* wxWebViewChromium::ms_workTimer = NULL;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
 
@@ -267,16 +272,36 @@ bool wxWebViewChromium::Create(wxWindow* parent,
                                   url.ToStdString(), browsersettings, NULL);
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
+
+    // Initalize CEF message work timer if necessary
+    if (ms_workTimer == NULL)
+    {
+        ms_workTimer = new wxTimer();
+        ms_workTimer->Bind(wxEVT_TIMER, &wxWebViewChromium::OnWorkTimer);
+        ms_workTimer->Start(25);
+    }
+    ms_activeWebViewCount++;
+
     return true;
 }
 
 wxWebViewChromium::~wxWebViewChromium()
 {
+    // Delete CEF work timer when there is no active webview
+    ms_activeWebViewCount--;
+    if (ms_activeWebViewCount == 0)
+        wxDELETE(ms_workTimer);
+
     if (m_clientHandler)
     {
         m_clientHandler->Release();
         m_clientHandler = NULL;
     }
+}
+
+void wxWebViewChromium::OnWorkTimer(wxTimerEvent& evt)
+{
+    CefDoMessageLoopWork();
 }
 
 void wxWebViewChromium::OnSize(wxSizeEvent& event)
@@ -573,48 +598,6 @@ void wxWebViewChromium::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     CefRegisterSchemeHandlerFactory( handler->GetName().ToStdWstring(), "",
                                      new SchemeHandlerFactory(handler) );
-}
-
-#ifdef __WXMSW__
-bool wxWebViewChromium::StartUp(int &code, const wxString &path)
-#else
-bool wxWebViewChromium::StartUp(int &code, const wxString &path,
-                                int argc, char* argv[])
-#endif
-{
-#ifdef __WXMSW__
-    CefMainArgs args(wxGetInstance());
-#else
-    CefMainArgs args(argc, argv);
-#endif
-    // If there is no subprocess then we need to execute on this process
-    if ( path.empty() )
-    {
-        code = CefExecuteProcess(args, NULL, NULL);
-        if ( code >= 0 )
-            return false;
-    }
-
-    CefSettings settings;
-    settings.no_sandbox = true;
-
-#ifdef __WXDEBUG__
-    settings.log_severity = LOGSEVERITY_INFO;
-    CefString(&settings.log_file).FromASCII("./debug.log");
-#endif
-    CefString(&settings.browser_subprocess_path) = path.ToStdString();
-
-    return CefInitialize(args, settings, NULL, NULL);
-}
-
-void wxWebViewChromium::DoCEFWork()
-{
-    CefDoMessageLoopWork();
-}
-
-void wxWebViewChromium::Shutdown()
-{
-    CefShutdown();
 }
 
 // CefDisplayHandler methods
@@ -926,5 +909,60 @@ bool SchemeHandler::ReadResponse(void* data_out,
 
     return has_data;
 }
+
+class wxWebViewChromiumModule : public wxModule
+{
+public:
+    wxWebViewChromiumModule() { }
+    virtual bool OnInit() wxOVERRIDE
+    {
+        m_isHelperProcess = false;
+#ifdef __WXMSW__
+        CefMainArgs args(wxGetInstance());
+#else
+        wxAppConsole* app = wxApp::GetInstance();
+        CefMainArgs args(app->argc, app->argv);
+#endif
+        // If there is no subprocess then we need to execute on this process
+        int code = CefExecuteProcess(args, NULL, NULL);
+        if (code >= 0)
+        {
+            m_isHelperProcess = true;
+            exit(code);
+            return false;
+        }
+
+        // Register with wxWebView
+        wxWebView::RegisterFactory(wxWebViewBackendChromium,
+            wxSharedPtr<wxWebViewFactory>(new wxWebViewFactoryChromium));
+
+        CefSettings settings;
+        settings.no_sandbox = true;
+
+#ifdef __WXDEBUG__
+        settings.log_severity = LOGSEVERITY_INFO;
+        CefString(&settings.log_file).FromASCII("./debug.log");
+#endif
+
+        return CefInitialize(args, settings, NULL, NULL);
+    };
+    virtual void OnExit() wxOVERRIDE
+    {
+        if (m_isHelperProcess)
+            return;
+
+        // Give CEF a chance for some cleanup work
+        for (int i = 0; i < 10; i++)
+            CefDoMessageLoopWork();
+
+        CefShutdown();
+    };
+private:
+    bool m_isHelperProcess;
+
+    wxDECLARE_DYNAMIC_CLASS(wxWebViewChromiumModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromiumModule, wxModule);
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
