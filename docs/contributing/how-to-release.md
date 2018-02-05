@@ -83,15 +83,18 @@ ensure you have the appropriate tag or commit checked out.
    contained in the copied release ZIP and not from the current working wx
    directory.
 
-4. Copy these Windows packages back to your Linux or OSX `distrib/release/x.y.z`
+4. Copy `wxMSW-x.y.z-Setup.exe` back to your Linux or OSX `distrib/release/x.y.z`
    directory so you can continue with the upload step with all packages
-   available:
+   available. Also create a ZIP file from the CHM one:
 
-    wxMSW-x.y.z-Setup.exe
-    wxWidgets-x.y.z.chm
+    zip wxWidgets-x.y.z-docs-chm.zip wxWidgets-x.y.z.chm
 
-5. Run `./build/tools/post-release.sh` to update the sha1sums in
-   `docs/release.md` and commit the changes.
+   and copy/move it to the same directory.
+
+5. Update the version in `docs/release.md` (typically just a global search and
+   replace) and run `./build/tools/post-release.sh` to update the sha1sums in
+   it, then commit the changes. Notice that when making an RC, the version must
+   be explicitly specified on this script command line.
 
 ## Uploading
 
@@ -105,7 +108,7 @@ Attach the following files to it:
     wxWidgets-x.y.z.7z
     wxWidgets-x.y.z.tar.bz2
     wxWidgets-x.y.z.zip
-    wxWidgets-x.y.z.chm
+    wxWidgets-x.y.z-docs-chm.zip
     wxWidgets-x.y.z-docs-html.tar.bz2
     wxWidgets-x.y.z-docs-html.zip
     wxWidgets-x.y.z-headers.7z
