@@ -1,10 +1,12 @@
+*WARNING* This is a release candidate and not the final 3.1.1 release yet.
+
 Welcome to wxWidgets, a free and open source cross-platform C++ framework for writing advanced GUI applications using native controls.
 
 wxWidgets 3.1.1 is the second release in the 3.1 development branch. This release is a "development" one as it makes (very few) incompatible API changes compared to 3.0 and does not guarantee the ABI stability, unlike the 3.0.x series. It is not inherently more buggy or less stable than the "stable" releases and you're encouraged to use it. If you're already using 3.0, upgrading shouldn't require any special effort, so please try it out.
 
 Please notice that we provide a single source distribution containing files for all platforms, so you only need to download either the archive with the `.zip` (or `.7z` for much smaller size) extension for Microsoft Windows systems or the one with `.tar.bz2` extenstion for Unix ones, including Mac OS X.
 
-See [README](https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1/docs/readme.txt) for more information about this release and the [change log](https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1/docs/changes.txt) for details of the changes in it.
+See [README](https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1-rc/docs/readme.txt) for more information about this release and the [change log](https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1-rc/docs/changes.txt) for details of the changes in it.
 
 ## Reporting Problems
 
@@ -27,11 +29,8 @@ To verify your download please use the following SHA-1 checksums:
 
 We provide pre-built binary files for the following compilers:
 
-* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0 and 14.1
-  (corresponding to marketing product names of Microsoft Visual Studio 2008,
-   2010, 2012, 2013, 2015 and 2017 respectively).
-* MinGW-TDM versions 4.9 and 5.1 (with the default SJLJ exceptions propagation
-  method, using C++11).
+* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0 and 14.1 (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015 and 2017 respectively).
+* MinGW-TDM versions 5.1 and 7.2 (with the default SJLJ exceptions propagation method, using C++11). Please note that you need to use the very latest MinGW 7.2 compiler release with this version of the compiler which can be downloaded from [here for 32 bits](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.2.0/threads-win32/sjlj/i686-7.2.0-release-win32-sjlj-rt_v5-rev1.7z/download) and [here for 64 bits](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.2.0/threads-win32/seh/x86_64-7.2.0-release-win32-seh-rt_v5-rev1.7z/download), the older "rev0" release has a known bug affecting building wxWidgets in some scenarios.
 
 ### For Developers
 
@@ -45,26 +44,22 @@ End users may download one of `wxMSW-3.1.1_vcXXX_ReleaseDLL.7z` or `wxMSW-3.1.1_
 
 ### For Debugging
 
-* Microsoft Visual C++ users: Files `wxMSW-3.1.1_vcXXX_ReleasePDB.7z` contain
-  the debug symbols for the release build of the DLLs. Download them if you want
-  to debug your own applications in release build or if you want to get
-  meaningful information from mini-dumps retrieved from your users machines.
-* MinGW-TDM users: Currently the debug symbols are not available for the release
-  build of the DLLs (only the debug versions of the DLLs contains the debug
+* Microsoft Visual C++ users: Files `wxMSW-3.1.1_vcXXX_ReleasePDB.7z` contain the debug symbols for the release build of the DLLs. Download them if you want to debug your own applications in release build or if you want to get meaningful information from mini-dumps retrieved from your users machines.
+* MinGW-TDM users: Currently the debug symbols are not available for the release build of the DLLs (only the debug versions of the DLLs contains the debug
   symbols).
 
 ### Binary File Download Verification
 
 To verify your download please use the following SHA-1 checksums:
 
-    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc492TDM_Dev.7z*
-    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc492TDM_ReleaseDLL.7z*
-    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc492TDM_x64_Dev.7z*
-    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc492TDM_x64_ReleaseDLL.7z*
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc510TDM_Dev.7z*
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc510TDM_ReleaseDLL.7z*
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc510TDM_x64_Dev.7z*
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc510TDM_x64_ReleaseDLL.7z*
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc720TDM_Dev.7z*
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc720TDM_ReleaseDLL.7z*
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc720TDM_x64_Dev.7z*
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_gcc720TDM_x64_ReleaseDLL.7z*
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc90_Dev.7z
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc90_ReleaseDLL.7z
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc90_ReleasePDB.7z
@@ -95,3 +90,9 @@ To verify your download please use the following SHA-1 checksums:
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc140_x64_Dev.7z
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc140_x64_ReleaseDLL.7z
     0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc140_x64_ReleasePDB.7z
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc141_Dev.7z
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc141_ReleaseDLL.7z
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc141_ReleasePDB.7z
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc141_x64_Dev.7z
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc141_x64_ReleaseDLL.7z
+    0000000000000000000000000000000000000000 wxMSW-3.1.1-rc_vc141_x64_ReleasePDB.7z
