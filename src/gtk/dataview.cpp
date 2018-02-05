@@ -1932,9 +1932,24 @@ bool wxGtkDataViewModelNotifier::Cleared()
 // ---------------------------------------------------------
 
 static void
-wxgtk_cell_editable_editing_done( GtkCellEditable *WXUNUSED(editable),
+wxgtk_cell_editable_editing_done( GtkCellEditable *editable,
                                   wxDataViewRenderer *wxrenderer )
 {
+    // "editing-cancelled" property is documented as being new since 2.20 in
+    // GtkCellEditable, but seems to have existed basically forever (since GTK+
+    // 1.3 days) in GtkCellRendererText, so try to use it in any case.
+    if ( g_object_class_find_property(G_OBJECT_GET_CLASS(editable),
+                                      "editing-canceled") )
+    {
+        gboolean wasCancelled;
+        g_object_get(editable, "editing-canceled", &wasCancelled, NULL);
+        if ( wasCancelled )
+        {
+            wxrenderer->CancelEditing();
+            return;
+        }
+    }
+
     wxrenderer->FinishEditing();
 }
 
@@ -2164,15 +2179,10 @@ wxDataViewRenderer::GtkGetValueFromString(const wxString& str) const
 void
 wxDataViewRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
 {
+    m_item = wxDataViewItem(GetView()->GTKPathToItem(wxGtkTreePath(itempath)));
+
     wxVariant value(GtkGetValueFromString(str));
-    if (!Validate( value ))
-        return;
-
-    wxDataViewItem
-        item(GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(itempath)));
-
-    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
-    model->ChangeValue( value, item, GetOwner()->GetModelColumn() );
+    DoHandleEditingDone(&value);
 }
 
 void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& WXUNUSED(attr))

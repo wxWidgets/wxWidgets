@@ -247,6 +247,12 @@ protected:
                               const wxDataViewItem& item,
                               unsigned column) const;
 
+    // Validates the given value (if it is non-null) and sends (in any case)
+    // ITEM_EDITING_DONE event and, finally, updates the model with the value
+    // (f it is valid, of course) if the event wasn't vetoed.
+    bool DoHandleEditingDone(wxVariant* value);
+
+
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
     wxWeakRef<wxWindow>     m_editorCtrl;
@@ -259,9 +265,6 @@ protected:
     wxDataViewCtrl* GetView() const;
 
 private:
-    // Common part of {Cancel,Finish}Editing().
-    bool DoFinishOrCancelEditing(bool cancelled);
-
     // Called from {Called,Finish}Editing() and dtor to cleanup m_editorCtrl
     void DestroyEditControl();
 

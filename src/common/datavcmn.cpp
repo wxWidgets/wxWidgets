@@ -766,15 +766,13 @@ void wxDataViewRendererBase::DestroyEditControl()
 
 void wxDataViewRendererBase::CancelEditing()
 {
-    DoFinishOrCancelEditing(true);
+    if ( m_editorCtrl )
+        DestroyEditControl();
+
+    DoHandleEditingDone(NULL);
 }
 
 bool wxDataViewRendererBase::FinishEditing()
-{
-    return DoFinishOrCancelEditing(false);
-}
-
-bool wxDataViewRendererBase::DoFinishOrCancelEditing(bool cancelled)
 {
     if (!m_editorCtrl)
         return true;
@@ -782,53 +780,52 @@ bool wxDataViewRendererBase::DoFinishOrCancelEditing(bool cancelled)
     bool gotValue = false;
 
     wxVariant value;
-    if ( !cancelled )
+    if ( GetValueFromEditorCtrl(m_editorCtrl, value) )
     {
-        if ( GetValueFromEditorCtrl(m_editorCtrl, value) )
+        // This is the normal case and we will use this value below (if it
+        // passes validation).
+        gotValue = true;
+    }
+    //else: Not really supposed to happen, but still proceed with
+    //      destroying the edit control if it does.
+
+    DestroyEditControl();
+
+    GetView()->GetMainWindow()->SetFocus();
+
+    return DoHandleEditingDone(gotValue ? &value : NULL);
+}
+
+bool
+wxDataViewRendererBase::DoHandleEditingDone(wxVariant* value)
+{
+    if ( value )
+    {
+        if ( !Validate(*value) )
         {
-            // This is the normal case and we will use this value below (if it
-            // passes validation).
-            gotValue = true;
+            // Invalid value can't be used, so if it's the same as if we hadn't
+            // got it in the first place.
+            value = NULL;
         }
-        //else: Not really supposed to happen, but still proceed with
-        //      destroying the edit control if it does.
     }
 
     wxDataViewColumn* const column = GetOwner();
     wxDataViewCtrl* const dv_ctrl = column->GetOwner();
-
-    DestroyEditControl();
-
-    // If we're cancelled, it can be because focus was switched elsewhere,
-    // don't bring it back here.
-    if ( !cancelled )
-        dv_ctrl->GetMainWindow()->SetFocus();
-
-    if ( gotValue )
-    {
-        if ( !Validate(value) )
-        {
-            // Invalid value can't be used, so if it's the same as if we hadn't
-            // got it in the first place.
-            gotValue = false;
-        }
-    }
-
-    unsigned int col = GetOwner()->GetModelColumn();
+    unsigned int col = column->GetModelColumn();
 
     // Now we should send Editing Done event
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl, column, m_item);
-    if ( gotValue )
-        event.SetValue(value);
+    if ( value )
+        event.SetValue(*value);
     else
         event.SetEditCancelled();
 
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
     bool accepted = false;
-    if ( gotValue && event.IsAllowed() )
+    if ( value && event.IsAllowed() )
     {
-        dv_ctrl->GetModel()->ChangeValue(value, m_item, col);
+        dv_ctrl->GetModel()->ChangeValue(*value, m_item, col);
         accepted = true;
     }
 
