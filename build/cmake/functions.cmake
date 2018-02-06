@@ -74,7 +74,13 @@ function(wx_set_common_target_properties target_name)
         # TODO: implement for older CMake versions ?
         set_target_properties(${target_name} PROPERTIES CXX_STANDARD ${wxBUILD_CXX_STANDARD})
         if(wxBUILD_CXX_STANDARD EQUAL 11 OR wxBUILD_CXX_STANDARD EQUAL 14)
-            set_target_properties(${target_name} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
+            if (APPLE)
+                if(CMAKE_GENERATOR EQUAL "Xcode")
+                    set_target_properties(${target_name} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
+                else()
+                    target_compile_options(${target_name} PUBLIC "-stdlib=libc++")
+                endif()
+            endif()
             #TODO: define for other generators than Xcode
         endif()
     endif()
@@ -304,7 +310,7 @@ endfunction()
 # Enable cotire for target if precompiled headers are enabled
 macro(wx_target_enable_precomp target_name)
     if(wxBUILD_PRECOMP)
-        if(CMAKE_GENERATOR STREQUAL "Xcode" AND ${target_name} STREQUAL "wxscintilla")
+        if(APPLE AND ${target_name} STREQUAL "wxscintilla")
             # TODO: workaround/fix cotire issue with wxscintilla when using Xcode
         else()
             set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
