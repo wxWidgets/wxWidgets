@@ -279,7 +279,7 @@ public:
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
 private:
-    virtual wxVariant GtkGetValueFromString(const wxString& str) const;
+    virtual wxVariant GtkGetValueFromString(const wxString& str) const wxOVERRIDE;
 };
 
 
