@@ -3333,27 +3333,27 @@ public:
     /**
         Appends an item (=row) and fills it with @a values.
 
-        The values must match the values specifies in the column
-        in number and type. No (default) values are filled in
-        automatically.
+        The vector values may have fewer size than columns, in this case
+        for remaining columns will used default values.
+        The values must match the values specifies in the column in type.
     */
     void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
         Prepends an item (=row) and fills it with @a values.
 
-        The values must match the values specifies in the column
-        in number and type. No (default) values are filled in
-        automatically.
+        The vector values may have fewer size than columns, in this case
+        for remaining columns will used default values.
+        The values must match the values specifies in the column in type.
     */
     void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
         Inserts an item (=row) and fills it with @a values.
 
-        The values must match the values specifies in the column
-        in number and type. No (default) values are filled in
-        automatically.
+        The vector values may have fewer size than columns, in this case
+        for remaining columns will used default values.
+        The values must match the values specifies in the column in type.
     */
     void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 

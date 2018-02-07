@@ -2282,12 +2282,17 @@ wxUIntPtr wxDataViewListStore::GetItemData( const wxDataViewItem& item ) const
 void wxDataViewListStore::GetValueByRow( wxVariant &value, unsigned int row, unsigned int col ) const
 {
     wxDataViewListStoreLine *line = m_data[row];
-    value = line->m_values[col];
+    if(col < line->m_values.size())
+        value = line->m_values[col];
+    else
+        value = wxVariant();
 }
 
 bool wxDataViewListStore::SetValueByRow( const wxVariant &value, unsigned int row, unsigned int col )
 {
     wxDataViewListStoreLine *line = m_data[row];
+    if(col >= line->m_values.size())
+        line->m_values.resize(col+1);
     line->m_values[col] = value;
 
     return true;
