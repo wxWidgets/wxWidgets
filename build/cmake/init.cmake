@@ -22,6 +22,11 @@ if(DEFINED wxBUILD_USE_STATIC_RUNTIME AND wxBUILD_USE_STATIC_RUNTIME)
     endforeach()
 endif()
 
+if(wxBUILD_MSVC_MULTIPROC)
+    wx_string_append(CMAKE_C_FLAGS " /MP")
+    wx_string_append(CMAKE_CXX_FLAGS " /MP")
+endif()
+
 if(wxBUILD_COMPATIBILITY VERSION_LESS 3.0)
     set(WXWIN_COMPATIBILITY_2_8 ON)
 endif()
