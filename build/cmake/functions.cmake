@@ -73,15 +73,17 @@ function(wx_set_common_target_properties target_name)
     if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
         # TODO: implement for older CMake versions ?
         set_target_properties(${target_name} PROPERTIES CXX_STANDARD ${wxBUILD_CXX_STANDARD})
-        if(wxBUILD_CXX_STANDARD EQUAL 11 OR wxBUILD_CXX_STANDARD EQUAL 14)
-            if (APPLE)
-                if(CMAKE_GENERATOR EQUAL "Xcode")
-                    set_target_properties(${target_name} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
-                else()
-                    target_compile_options(${target_name} PUBLIC "-stdlib=libc++")
-                endif()
+        if(
+            APPLE AND
+            CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND
+            (wxBUILD_CXX_STANDARD EQUAL 11 OR wxBUILD_CXX_STANDARD EQUAL 14)
+          )
+            if(CMAKE_GENERATOR STREQUAL "Xcode")
+                set_target_properties(${target_name} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
+            else()
+                target_compile_options(${target_name} PUBLIC "-stdlib=libc++")
+                target_link_libraries(${target_name} PRIVATE "-stdlib=libc++")
             endif()
-            #TODO: define for other generators than Xcode
         endif()
     endif()
     set_target_properties(${target_name} PROPERTIES
@@ -363,7 +365,7 @@ macro(wx_exe_link_libraries name)
     if(wxBUILD_MONOLITHIC)
         target_link_libraries(${name} PUBLIC mono)
     else()
-        target_link_libraries(${name};${ARGN})
+        target_link_libraries(${name};PRIVATE;${ARGN})
     endif()
 endmacro()
 

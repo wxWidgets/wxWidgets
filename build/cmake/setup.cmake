@@ -23,6 +23,14 @@ include(CheckTypeSize)
 include(CMakePushCheckState)
 include(TestBigEndian)
 
+if(
+    APPLE AND
+    CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND
+    (CMAKE_CXX_STANDARD EQUAL 11 OR CMAKE_CXX_STANDARD EQUAL 14)
+  )
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-stdlib=libc++")
+endif()
+
 # Add a definition to setup.h and append it to a list of defines for
 # for compile checks
 macro(wx_setup_definition def)

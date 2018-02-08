@@ -20,12 +20,7 @@ endif()
 if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
     # If no deployment target has been set default to the minimum supported
     # OS X version (this has to be set before the first project() call)
-    if(CMAKE_CXX_STANDARD EQUAL 11 OR CMAKE_CXX_STANDARD EQUAL 14)
-        set(OSX_DEFAULT_DEPLOYMENT_TARGET 10.9)
-    else()
-        set(OSX_DEFAULT_DEPLOYMENT_TARGET 10.7)
-    endif()
-    set(CMAKE_OSX_DEPLOYMENT_TARGET ${OSX_DEFAULT_DEPLOYMENT_TARGET} CACHE STRING "OS X Deployment Target")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7 CACHE STRING "OS X Deployment Target")
 endif()
 
 project(wxWidgets)
