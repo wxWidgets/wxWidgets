@@ -2408,10 +2408,21 @@ void wxCairoContext::ResetClip()
 void wxCairoContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
 {
     double x1, y1, x2, y2;
-    cairo_clip_extents(m_context, &x1, &y1, &x2, &y2);
-    // Check if we have an empty clipping box.
-    if ( x2 - x1 <= DBL_MIN || y2 - y1 <= DBL_MIN )
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
+    if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 4, 0) )
+    {
+        cairo_clip_extents(m_context, &x1, &y1, &x2, &y2);
+        // Check if we have an empty clipping box.
+        if ( x2 - x1 <= DBL_MIN || y2 - y1 <= DBL_MIN )
+            x1 = x2 = y1 = y2 = 0.0;
+    }
+    else
+#endif // Cairo >= 1.4
+    {
+        // There doesn't seem to be any way to get the clipping box with this
+        // ancient version.
         x1 = x2 = y1 = y2 = 0.0;
+    }
 
     if ( x )
         *x = x1;
