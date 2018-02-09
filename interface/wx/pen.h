@@ -130,8 +130,6 @@ public:
 
     wxPenInfo& Style(wxPenStyle style);
 
-    wxPenInfo& Style(wxPenStyle style);
-
     wxPenInfo& Stipple(const wxBitmap& stipple);
 
     wxPenInfo& Dashes(int nb_dashes, const wxDash *dash);

@@ -3721,7 +3721,7 @@ public:
 
     @since 3.1.1
 */
-class wxPanGestureEvent : class wxGestureEvent
+class wxPanGestureEvent : public wxGestureEvent
 {
 public:
     /**
@@ -3773,7 +3773,7 @@ public:
     /**
         Sets the zoom Factor.
     */
-    double SetZoomFactor() const;
+    void SetZoomFactor(double zoomFactor);
 };
 
 
@@ -4930,6 +4930,7 @@ wxEventType wxEVT_SET_FOCUS;
 wxEventType wxEVT_KILL_FOCUS;
 wxEventType wxEVT_CHILD_FOCUS;
 wxEventType wxEVT_MOUSEWHEEL;
+wxEventType wxEVT_MAGNIFY;
 wxEventType wxEVT_AUX1_DOWN;
 wxEventType wxEVT_AUX1_UP;
 wxEventType wxEVT_AUX1_DCLICK;
@@ -4963,6 +4964,12 @@ wxEventType wxEVT_SCROLLWIN_PAGEUP;
 wxEventType wxEVT_SCROLLWIN_PAGEDOWN;
 wxEventType wxEVT_SCROLLWIN_THUMBTRACK;
 wxEventType wxEVT_SCROLLWIN_THUMBRELEASE;
+wxEventType wxEVT_GESTURE_PAN;
+wxEventType wxEVT_GESTURE_ZOOM;
+wxEventType wxEVT_GESTURE_ROTATE;
+wxEventType wxEVT_TWO_FINGER_TAP;
+wxEventType wxEVT_LONG_PRESS;
+wxEventType wxEVT_PRESS_AND_TAP;
 wxEventType wxEVT_SIZE;
 wxEventType wxEVT_MOVE;
 wxEventType wxEVT_CLOSE_WINDOW;

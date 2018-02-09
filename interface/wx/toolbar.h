@@ -106,6 +106,7 @@ public:
     bool IsStretchableSpace() const;
     int GetStyle() const;
     wxItemKind GetKind() const;
+    void MakeStretchable();
 
     bool IsEnabled() const;
     bool IsToggled() const;
@@ -122,9 +123,21 @@ public:
 
     wxObject *GetClientData() const;
 
+    virtual bool Enable(bool enable);
+    virtual bool Toggle(bool toggle);
+    virtual bool SetToggle(bool toggle);
+    virtual bool SetShortHelp(const wxString& help);
+    virtual bool SetLongHelp(const wxString& help);
+    void Toggle();
+    virtual void SetNormalBitmap(const wxBitmap& bmp);
+    virtual void SetDisabledBitmap(const wxBitmap& bmp);
+    virtual void SetLabel(const wxString& label);
+    void SetClientData(wxObject *clientData);
+    
     virtual void Detach();
     virtual void Attach(wxToolBarBase *tbar);
 
+    virtual void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const;
 };
 

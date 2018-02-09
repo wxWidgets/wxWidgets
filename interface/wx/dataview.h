@@ -3667,11 +3667,32 @@ class wxDataViewEvent : public wxNotifyEvent
 {
 public:
     /**
-        Constructor. Typically used by wxWidgets internals only.
+       Default ctor, normally shouldn't be used and mostly exists only for
+       backwards compatibility.
     */
-    wxDataViewEvent(wxEventType commandType = wxEVT_NULL,
-                    int winid = 0);
+    wxDataViewEvent();
 
+    /**
+       Constructor for the events affecting columns (and possibly also items).
+    */
+    wxDataViewEvent(wxEventType evtType,
+                    wxDataViewCtrl* dvc,
+                    wxDataViewColumn* column,
+                    const wxDataViewItem& item = wxDataViewItem());
+
+    /**
+       Constructor for the events affecting only the items.
+    */
+    wxDataViewEvent(wxEventType evtType,
+                    wxDataViewCtrl* dvc,
+                    const wxDataViewItem& item);
+
+    /**
+       Copy constructor.
+    */
+    wxDataViewEvent(const wxDataViewEvent& event);
+
+    
     /**
         Returns the position of the column in the control or -1
         if no column field was set by the event emitter.
@@ -3808,7 +3829,6 @@ public:
     int GetCacheTo() const;
 
 
-
     /**
         Returns the item affected by the event.
 
@@ -3817,6 +3837,7 @@ public:
         indicating that the drop is about to happen outside of the item area.
      */
     wxDataViewItem GetItem() const;
+
     void SetItem( const wxDataViewItem &item );
     void SetPosition( int x, int y );
     void SetCache(int from, int to);
@@ -3826,6 +3847,7 @@ public:
     void SetDataBuffer( void* buf );
     int GetDragFlags() const;
     void SetDropEffect( wxDragResult effect );
+    void SetEditCancelled();
 
 };
 
