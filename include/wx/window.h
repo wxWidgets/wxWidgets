@@ -1151,7 +1151,7 @@ public:
     {
         return m_hasFgCol;
     }
-    bool InheritsForgroundColour() const
+    bool InheritsForegroundColour() const
     {
         return m_inheritFgCol;
     }
