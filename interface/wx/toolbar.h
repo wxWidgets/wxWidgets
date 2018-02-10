@@ -123,21 +123,21 @@ public:
 
     wxObject *GetClientData() const;
 
-    virtual bool Enable(bool enable);
-    virtual bool Toggle(bool toggle);
-    virtual bool SetToggle(bool toggle);
-    virtual bool SetShortHelp(const wxString& help);
-    virtual bool SetLongHelp(const wxString& help);
+    bool Enable(bool enable);
+    bool Toggle(bool toggle);
+    bool SetToggle(bool toggle);
+    bool SetShortHelp(const wxString& help);
+    bool SetLongHelp(const wxString& help);
     void Toggle();
-    virtual void SetNormalBitmap(const wxBitmap& bmp);
-    virtual void SetDisabledBitmap(const wxBitmap& bmp);
-    virtual void SetLabel(const wxString& label);
+    void SetNormalBitmap(const wxBitmap& bmp);
+    void SetDisabledBitmap(const wxBitmap& bmp);
+    void SetLabel(const wxString& label);
     void SetClientData(wxObject *clientData);
-    
-    virtual void Detach();
-    virtual void Attach(wxToolBarBase *tbar);
 
-    virtual void SetDropdownMenu(wxMenu *menu);
+    void Detach();
+    void Attach(wxToolBarBase *tbar);
+
+    void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const;
 };
 
