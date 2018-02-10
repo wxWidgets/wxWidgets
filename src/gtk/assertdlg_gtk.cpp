@@ -177,8 +177,8 @@ static void gtk_assert_dialog_save_backtrace_callback(GtkWidget*, GtkAssertDialo
 
     dialog = gtk_file_chooser_dialog_new ("Save assert info to file", GTK_WINDOW(dlg),
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
-                                          static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))), GTK_RESPONSE_CANCEL,
-                                          static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE)))), GTK_RESPONSE_ACCEPT,
+                                          static_cast<const char*>(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)).utf8_str()), GTK_RESPONSE_CANCEL,
+                                          static_cast<const char*>(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE)).utf8_str()), GTK_RESPONSE_ACCEPT,
                                           NULL);
 
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
