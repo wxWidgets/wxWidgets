@@ -1164,6 +1164,23 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
     wxPROCESS_EVENT_ONCE(GdkEventKey, gdk_event);
 
+    extern int wxTLWKeyPressHandlerLevel;
+
+    // When we receive the event corresponding to the Enter key from the
+    // completion popup used with GtkEntry, we want to avoid handling this
+    // event in wxTextCtrl (or another class using wxTextEntry, such as
+    // wxComboBox, which explains why do we do it at GTK level here and not in
+    // wxTextCtrl itself), as it would be translated into wxEVT_TEXT_ENTER
+    // there, while we want it to be used only for accepting the selection in
+    // the popup.
+    //
+    // To distinguish between these events and the ones happening in the text
+    // entry itself, we check if event passed via our TLW key-press-event
+    // handler, as is the case usually, or was sent directly to this widget, as
+    // (only?) GtkEntryCompletion does.
+    if ( gdk_event->keyval == GDK_KEY_Return && !wxTLWKeyPressHandlerLevel )
+        return FALSE;
+
     wxKeyEvent event( wxEVT_KEY_DOWN );
     bool ret = false;
     bool return_after_IM = false;
