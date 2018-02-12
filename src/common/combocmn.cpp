@@ -1994,7 +1994,9 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
             kevent.m_keyCode = event.GetWheelRotation() > 0
                                ? WXK_UP
                                : WXK_DOWN;
-            GetEventHandler()->ProcessEvent(kevent);
+
+            if (!GetEventHandler()->ProcessEvent(kevent))
+                event.Skip();
         }
         else
         {
