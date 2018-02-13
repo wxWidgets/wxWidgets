@@ -80,6 +80,19 @@ enum wxZipFlags
     wxZIP_RESERVED          = 0xF000
 };
 
+/**
+    Zip archive format
+
+    @since 3.1.1
+*/
+enum wxZipArchiveFormat
+{
+    /// Default zip format
+    wxZIP_FORMAT_DEFAULT,
+    /// ZIP64 format
+    wxZIP_FORMAT_ZIP64
+};
+
 
 /**
     @class wxZipNotifier
@@ -558,11 +571,17 @@ public:
     //@{
     /**
         Takes ownership of @a entry and uses it to create a new entry in the zip.
+
+        If you do not specify a size and plan to put more than 4GB data into the
+        entry see SetFormat()
     */
     bool PutNextEntry(wxZipEntry* entry);
 
     /**
         Create a new entry with the given name, timestamp and size.
+
+        If you do not specify a size and plan to put more than 4GB data into the
+        entry see SetFormat()
     */
     bool PutNextEntry(const wxString& name,
                       const wxDateTime& dt = wxDateTime::Now(),
@@ -574,5 +593,30 @@ public:
         It is written at the end of the zip.
     */
     void SetComment(const wxString& comment);
+
+    /**
+        Set the format of the archive.
+
+        The normal zip format is limited to single files and the complete
+        archive smaller than 4GB with less then 65k files. If any of these
+        limits are exceed this class will automatically create a ZIP64 file.
+
+        However to support single entries with more than 4GB of data
+        (compressed or original) which sizes are unknown when adding the
+        entry with PutNextEntry() the format has to be set to
+        wxZIP_FORMAT_ZIP64 adding such entries.
+
+        @since 3.1.1
+    */
+    void SetFormat(wxZipArchiveFormat format);
+
+    /**
+        Get the format of the archive.
+
+        @since 3.1.1
+
+        @see SetFormat()
+    */
+    wxZipArchiveFormat GetFormat() const;
 };
 
