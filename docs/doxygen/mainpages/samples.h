@@ -76,6 +76,14 @@ in wxAnimation.
 
 @sampledir{animate}
 
+@section page_samples_archive Archive Sample
+
+This sample shows how you can use wxArchiveClassFactory, wxArchiveOutputStream
+and wxArchiveInputStream. This shows how to process ZIP and TAR archives using
+wxZipOutputStream and wxTarOutputStream
+
+@sampledir{archive}
+
 @section page_samples_artprov Art Provider Sample
 
 This sample shows how you can customize the look of standard
