@@ -797,9 +797,9 @@ bool SurfaceFontDataD2D::Initialised() const
 // SurfaceDataD2D
 
 SurfaceDataD2D::SurfaceDataD2D(ScintillaWX* editor)
-    : m_editor(editor),
-      m_pD2DFactory(::wxD2D1Factory()),
-      m_pDWriteFactory(::wxDWriteFactory())
+    : m_pD2DFactory(::wxD2D1Factory()),
+      m_pDWriteFactory(::wxDWriteFactory()),
+      m_editor(editor)
 {
     if ( Initialised() )
     {
@@ -1107,7 +1107,7 @@ void SurfaceD2D::Release()
             m_clipsActive--;
         }
         hr = m_pRenderTarget->EndDraw();
-        if ( hr == D2DERR_RECREATE_TARGET && m_surfaceData && !m_ownRenderTarget )
+        if ( hr == (HRESULT)D2DERR_RECREATE_TARGET && m_surfaceData && !m_ownRenderTarget )
         {
             m_surfaceData->DiscardGraphicsResources();
             m_surfaceData->SetEditorPaintAbandoned();
