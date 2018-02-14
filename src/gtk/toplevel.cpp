@@ -30,6 +30,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/recguard.h"
 #include "wx/sysopt.h"
 
 #include <gtk/gtk.h>
@@ -200,10 +201,17 @@ gboolean gtk_frame_focus_out_callback(GtkWidget * WXUNUSED(widget),
 // "key_press_event"
 // ----------------------------------------------------------------------------
 
+// This is a hack used in src/gtk/window.cpp, please see there.
+int wxTLWKeyPressHandlerLevel = 0;
+
 extern "C" {
 static gboolean
 wxgtk_tlw_key_press_event(GtkWidget *widget, GdkEventKey *event)
 {
+    // This is not really used as a guard, but just to update the value of
+    // wxTLWKeyPressHandlerLevel correctly in all cases.
+    wxRecursionGuard guard(wxTLWKeyPressHandlerLevel);
+
     GtkWindow* const window = GTK_WINDOW(widget);
 
     // By default GTK+ checks for the menu accelerators in this (top level)
