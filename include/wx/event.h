@@ -4204,7 +4204,7 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
     wxEVENT_HANDLER_CAST(wxTwoFingerTapEventFunction, func)
 #define wxLongPressEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxLongPressEventFunction, func)
-#define wxPressAndTapEvent(func) \
+#define wxPressAndTapEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxPressAndTapEventFunction, func)
 
 #endif // wxUSE_GUI

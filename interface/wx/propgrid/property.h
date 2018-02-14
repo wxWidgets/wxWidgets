@@ -2190,7 +2190,7 @@ public:
 
     /** Paints property category selection rectangle.
     */
-    virtual void DrawCaptionSelectionRect(wxWindow *win, wxDC& dc,
+    virtual void DrawCaptionSelectionRect(wxDC& dc,
                                           int x, int y, int w, int h) const;
 
     /** Utility to draw vertically centered text.
@@ -2702,28 +2702,6 @@ protected:
 
     void Init();
     void Free();
-};
-
-// -----------------------------------------------------------------------
-
-/** @class wxPGChoiceEntry
-
-    Data of a single wxPGChoices choice.
-*/
-class wxPGChoiceEntry : public wxPGCell
-{
-public:
-    wxPGChoiceEntry();
-    wxPGChoiceEntry(const wxPGChoiceEntry& other);
-    wxPGChoiceEntry( const wxString& label,
-                     int value = wxPG_INVALID_VALUE );
-
-    virtual ~wxPGChoiceEntry();
-
-    void SetValue( int value );
-    int GetValue() const;
-
-    wxPGChoiceEntry& operator=( const wxPGChoiceEntry& other );
 };
 
 // -----------------------------------------------------------------------

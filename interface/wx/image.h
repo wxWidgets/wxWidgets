@@ -322,6 +322,14 @@ public:
     void SetName(const wxString& name);
 
     /**
+       Sets the bitmap type for the handler.
+
+       @param mimetype
+           The bitmap type.
+    */
+    void SetType(wxBitmapType type);
+
+    /**
         Retrieve the version information about the image library used by this
         handler.
 
