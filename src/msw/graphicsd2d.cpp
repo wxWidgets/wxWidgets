@@ -41,8 +41,8 @@
 #include <wincodec.h>
 
 #ifdef __MINGW64_TOOLCHAIN__
-#ifndef DRWITE_E_NOFONT
-#define DWRITE_E_NOFONT _HRESULT_TYPEDEF_(0x88985002)
+#ifndef DWRITE_E_NOFONT
+#define DWRITE_E_NOFONT _HRESULT_TYPEDEF_(0x88985002L)
 #endif
 #endif
 
