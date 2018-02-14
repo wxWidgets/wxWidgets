@@ -148,7 +148,19 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
         g_signal_stop_emission_by_name (editable, "insert_text");
     }
 }
-}
+
+// GTK+ does not expose any mechanism that we can really rely on to detect if/when
+// the completion popup is shown or hidden. And the sole reliable way (for now) to
+// know its state is to connect to the "grab-notify" signal and be notified then
+// for its state. this is the best we can do for now than any other alternative.
+// (GtkEntryCompletion grabs/ungrabs keyboard and mouse events on popups/popdowns).
+
+static void
+wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
+                                 gboolean was_grabbed,
+                                 wxTextAutoCompleteData *data);
+
+} // extern "C"
 
 //-----------------------------------------------------------------------------
 //  clipboard events: "copy-clipboard", "cut-clipboard", "paste-clipboard"
@@ -210,9 +222,23 @@ public:
     // for wxTextAutoCompleteFixed.
     virtual bool ChangeCompleter(wxTextCompleter* completer) = 0;
 
+    // We should toggle off wxTE_PROCESS_ENTER flag of our wxTextEntry while
+    // the completion popup is shown to let it see Enter event and process it
+    // on its own (e.g. to dismiss itself). This is done by "grab-notify" signal
+    // see wxTextCtrl::OnChar()
+    void ToggleProcessEnterFlag( bool toggleOff )
+    {
+        if ( toggleOff )
+            GetEditableWindow(m_entry)->SetWindowStyleFlag(m_origWinFlags & ~wxTE_PROCESS_ENTER);
+        else
+            GetEditableWindow(m_entry)->SetWindowStyleFlag(m_origWinFlags);
+    }
+
     void DisableCompletion()
     {
         gtk_entry_set_completion (GetGtkEntry(), NULL);
+
+        g_signal_handlers_disconnect_by_data (GetGtkEntry(), this);
     }
 
     virtual ~wxTextAutoCompleteData()
@@ -234,10 +260,17 @@ protected:
     explicit wxTextAutoCompleteData(wxTextEntry* entry)
         : m_entry(entry)
     {
+        // Save original flags
+        m_origWinFlags = GetEditableWindow(m_entry)->GetWindowStyleFlag();
+
         GtkEntryCompletion* const completion = gtk_entry_completion_new();
 
         gtk_entry_completion_set_text_column (completion, 0);
         gtk_entry_set_completion (GetGtkEntry(), completion);
+
+        g_signal_connect (GTK_WIDGET(GetGtkEntry()), "grab-notify",
+                          G_CALLBACK (wx_gtk_entry_parent_grab_notify),
+                          this);
     }
 
     // Provide access to wxTextEntry::GetEditableWindow() to the derived
@@ -269,6 +302,9 @@ protected:
 
     // The text entry we're associated with.
     wxTextEntry * const m_entry;
+
+    // The original flags of the associated wxTextEntry.
+    long m_origWinFlags;
 
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
 };
@@ -410,6 +446,33 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteDynamic);
 };
 
+extern "C"
+{
+
+static void
+wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
+                                 gboolean was_grabbed,
+                                 wxTextAutoCompleteData *data)
+{
+    g_return_if_fail (GTK_IS_ENTRY(widget));
+
+    bool toggleOff = false;
+
+    if ( gtk_widget_has_focus (widget) )
+    {
+        // If was_grabbed is FALSE that means the topmost grab widget ancestor
+        // of our GtkEntry becomes shadowed by a call to gtk_grab_add()
+        // which means that the GtkEntryCompletion popup window is actually
+        // shown on screen.
+
+        if ( !was_grabbed )
+            toggleOff = true;
+    }
+
+    data->ToggleProcessEnterFlag(toggleOff);
+}
+
+} // extern "C"
 
 // ============================================================================
 // wxTextEntry implementation
