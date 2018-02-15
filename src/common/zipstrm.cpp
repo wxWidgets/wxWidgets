@@ -133,7 +133,7 @@ static inline wxUint64 CrackUint64(const char *m)
         (static_cast<wxUint64>(n[6]) << 48) |
         (static_cast<wxUint64>(n[5]) << 40) |
         (static_cast<wxUint64>(n[4]) << 32) |
-        (n[3] << 24) | (n[2] << 16) | (n[1] << 8) | n[0];
+        (static_cast<wxUint64>(n[3]) << 24) | (n[2] << 16) | (n[1] << 8) | n[0];
 }
 
 // Decode a little endian wxUint32 number from a character array
