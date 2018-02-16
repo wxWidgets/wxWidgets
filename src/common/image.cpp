@@ -844,7 +844,7 @@ wxImage wxImage::ResampleBilinear(int width, int height) const
             dst_data += 3;
 
             if ( src_alpha )
-                *dst_alpha++ = static_cast<unsigned char>(a1 * dy1 + a2 * dy);
+                *dst_alpha++ = static_cast<unsigned char>(a1 * dy1 + a2 * dy +.5);
         }
     }
 
