@@ -226,19 +226,20 @@ public:
     // the completion popup is shown to let it see Enter event and process it
     // on its own (e.g. to dismiss itself). This is done by "grab-notify" signal
     // see wxTextCtrl::OnChar()
-    void ToggleProcessEnterFlag( bool toggleOff )
+    void ToggleProcessEnterFlag(bool toggleOff)
     {
+        long flags = m_origWinFlags;
         if ( toggleOff )
-            GetEditableWindow(m_entry)->SetWindowStyleFlag(m_origWinFlags & ~wxTE_PROCESS_ENTER);
-        else
-            GetEditableWindow(m_entry)->SetWindowStyleFlag(m_origWinFlags);
+            flags &= ~wxTE_PROCESS_ENTER;
+
+        GetEditableWindow(m_entry)->SetWindowStyleFlag(flags);
     }
 
     void DisableCompletion()
     {
         gtk_entry_set_completion (GetGtkEntry(), NULL);
 
-        g_signal_handlers_disconnect_by_data (GetGtkEntry(), this);
+        g_signal_handlers_disconnect_by_data(GetGtkEntry(), this);
     }
 
     virtual ~wxTextAutoCompleteData()
@@ -258,11 +259,9 @@ protected:
     }
 
     explicit wxTextAutoCompleteData(wxTextEntry* entry)
-        : m_entry(entry)
+        : m_entry(entry),
+          m_origWinFlags(GetEditableWindow(m_entry)->GetWindowStyleFlag())
     {
-        // Save original flags
-        m_origWinFlags = GetEditableWindow(m_entry)->GetWindowStyleFlag();
-
         GtkEntryCompletion* const completion = gtk_entry_completion_new();
 
         gtk_entry_completion_set_text_column (completion, 0);
@@ -304,7 +303,7 @@ protected:
     wxTextEntry * const m_entry;
 
     // The original flags of the associated wxTextEntry.
-    long m_origWinFlags;
+    const long m_origWinFlags;
 
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
 };
@@ -458,7 +457,7 @@ wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
 
     bool toggleOff = false;
 
-    if ( gtk_widget_has_focus (widget) )
+    if ( gtk_widget_has_focus(widget) )
     {
         // If was_grabbed is FALSE that means the topmost grab widget ancestor
         // of our GtkEntry becomes shadowed by a call to gtk_grab_add()
