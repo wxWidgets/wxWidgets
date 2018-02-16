@@ -282,7 +282,29 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
         // For all the messages forward from the edit control the
         // result is not used.
         WXLRESULT result;
-        return MSWHandleMessage(&result, msg, wParam, lParam);
+		bool processed = MSWHandleMessage(&result, msg, wParam, lParam);
+
+		if ( !processed )
+		{
+			if ( msg == WM_CHAR )
+			{
+				// we don't care about the returned value here, just let
+				// wxComboEditWndProc know that the default processing has taken place.
+				::CallWindowProc(CASTWNDPROC gs_wndprocEdit, (HWND)GetEditHWND(),
+								 (UINT)msg, (WPARAM)wParam, (LPARAM)lParam);
+
+				// Special hack used by wxTextEntry auto-completion only: this event is
+				// sent after the normal keyboard processing so that its handler could use
+				// the updated contents of the text control, after taking the key that was
+				// pressed into account.
+				wxKeyEvent event(CreateCharEvent(wxEVT_AFTER_CHAR, wParam, lParam));
+				HandleWindowEvent(event);
+
+				processed = true;
+			}
+		}
+
+        return processed;
     }
 
     return false;
