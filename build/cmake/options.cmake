@@ -25,6 +25,7 @@ mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
 
 if(MSVC)
     wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" OFF)
+    wx_option(wxBUILD_MSVC_MULTIPROC "Enable multi-processor compilation for MSVC")
 else()
     # Other compilers support setting the C++ standard, present it an option to the user
     if(DEFINED CMAKE_CXX_STANDARD)
