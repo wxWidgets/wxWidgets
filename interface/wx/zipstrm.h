@@ -87,9 +87,9 @@ enum wxZipFlags
 */
 enum wxZipArchiveFormat
 {
-    /// Default zip format
+    /// Default zip format: use ZIP64 if it is determined to be necessary.
     wxZIP_FORMAT_DEFAULT,
-    /// ZIP64 format
+    /// ZIP64 format: force the use of ZIP64 format.
     wxZIP_FORMAT_ZIP64
 };
 
@@ -599,12 +599,13 @@ public:
 
         The normal zip format is limited to single files and the complete
         archive smaller than 4GB with less then 65k files. If any of these
-        limits are exceed this class will automatically create a ZIP64 file.
+        limits are exceeded, this class will automatically create a ZIP64 file,
+        so in most situations calling SetFormat() is not necessary.
 
         However to support single entries with more than 4GB of data
-        (compressed or original) which sizes are unknown when adding the
-        entry with PutNextEntry() the format has to be set to
-        wxZIP_FORMAT_ZIP64 adding such entries.
+        (compressed or original) whose sizes are unknown when adding the
+        entry with PutNextEntry(), the format has to be set to
+        wxZIP_FORMAT_ZIP64 before adding such entries.
 
         @since 3.1.1
     */
@@ -613,10 +614,12 @@ public:
     /**
         Get the format of the archive.
 
+        This returns the value passed to SetFormat() and not necessarily the
+        actual archive format (e.g. this method could return
+        wxZIP_FORMAT_DEFAULT even if a ZIP64 will end up being created).
+
         @since 3.1.1
 
-        @see SetFormat()
-    */
     wxZipArchiveFormat GetFormat() const;
 };
 
