@@ -541,7 +541,7 @@ void WidgetsFrame::InitBook()
     wxArrayString labels[MAX_PAGES];
 
     wxMenu *menuPages = new wxMenu;
-    unsigned int nPage = 0, nFKey = 0;
+    unsigned int nPage = 0;
     int cat, imageId = 1;
 
     // we need to first create all pages and only then add them to the book
@@ -579,16 +579,9 @@ void WidgetsFrame::InitBook()
             labels[cat].Add(info->GetLabel());
             if ( cat == ALL_PAGE )
             {
-                wxString radioLabel(info->GetLabel());
-                nFKey++;
-                if ( nFKey <= 12 )
-                {
-                    radioLabel << wxT("\tF" ) << nFKey;
-                }
-
                 menuPages->AppendRadioItem(
                             Widgets_GoToPage + nPage,
-                            radioLabel
+                            info->GetLabel()
                            );
 #if !USE_TREEBOOK
                 // consider only for book in book architecture
