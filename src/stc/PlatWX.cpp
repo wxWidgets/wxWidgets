@@ -1036,7 +1036,7 @@ void SurfaceD2D::Init(SurfaceID sid, WindowID wid)
     if ( win && win->GetName() == "wxSTCCallTip" )
         win = win->GetParent();
 
-    wxStyledTextCtrl* const stc = wxDynamicCast(wid, wxStyledTextCtrl);
+    wxStyledTextCtrl* const stc = wxDynamicCast(win, wxStyledTextCtrl);
     if ( stc )
     {
         wxDC* const dc = static_cast<wxDC*>(sid);
