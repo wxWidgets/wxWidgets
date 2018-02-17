@@ -619,7 +619,7 @@ public:
         wxZIP_FORMAT_DEFAULT even if a ZIP64 will end up being created).
 
         @since 3.1.1
-
+    */
     wxZipArchiveFormat GetFormat() const;
 };
 
