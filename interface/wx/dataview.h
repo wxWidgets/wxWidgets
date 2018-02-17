@@ -2960,17 +2960,29 @@ public:
     //@{
 
     /**
-        Appends an item (=row) to the control and store.
+        Appends an item (i.e.\ a row) to the control.
+
+        Note that the size of @a values vector must be exactly equal to the
+        number of columns in the control and that columns must not be modified
+        after adding any items to the control (or, conversely, items must not
+        be added before the columns are set up).
     */
     void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
-        Prepends an item (=row) to the control and store.
+        Prepends an item (i.e.\ a row) to the control.
+
+        See remarks for AppendItem() for preconditions of this method.
     */
     void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
-        Inserts an item (=row) to the control and store.
+        Inserts an item (i.e.\ a row) to the control.
+
+        See remarks for AppendItem() for preconditions of this method.
+
+        Additionally, @a row must be less than or equal to the current number
+        of items in the control (see GetItemCount()).
     */
     void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
