@@ -228,11 +228,33 @@ public:
     // see wxTextCtrl::OnChar()
     void ToggleProcessEnterFlag(bool toggleOff)
     {
-        long flags = m_origWinFlags;
-        if ( toggleOff )
-            flags &= ~wxTE_PROCESS_ENTER;
+        wxWindow* const win = GetEditableWindow(m_entry);
 
-        GetEditableWindow(m_entry)->SetWindowStyleFlag(flags);
+        long flags = win->GetWindowStyleFlag();
+        if ( toggleOff )
+        {
+            // Store the original window flags before we change them.
+            m_hadProcessEnterFlag = (flags & wxTE_PROCESS_ENTER) != 0;
+            if ( !m_hadProcessEnterFlag )
+            {
+                // No need to do anything, it was already off.
+                return;
+            }
+
+            flags &= ~wxTE_PROCESS_ENTER;
+        }
+        else // Restore the original flags.
+        {
+            if ( !m_hadProcessEnterFlag )
+            {
+                // We hadn't turned it off, no need to turn it back on.
+                return;
+            }
+
+            flags |= wxTE_PROCESS_ENTER;
+        }
+
+        win->SetWindowStyleFlag(flags);
     }
 
     virtual ~wxTextAutoCompleteData()
@@ -261,9 +283,11 @@ protected:
 
     explicit wxTextAutoCompleteData(wxTextEntry* entry)
         : m_entry(entry),
-          m_widgetEntry(entry->GetEntry()),
-          m_origWinFlags(GetEditableWindow(m_entry)->GetWindowStyleFlag())
+          m_widgetEntry(entry->GetEntry())
     {
+        // This will be really set in ToggleProcessEnterFlag().
+        m_hadProcessEnterFlag = false;
+
         GtkEntryCompletion* const completion = gtk_entry_completion_new();
 
         gtk_entry_completion_set_text_column (completion, 0);
@@ -305,8 +329,9 @@ protected:
     // And its GTK widget.
     GtkEntry* const m_widgetEntry;
 
-    // The original flags of the associated wxTextEntry.
-    const long m_origWinFlags;
+    // True if the window had wxTE_PROCESS_ENTER flag before we turned it off
+    // in ToggleProcessEnterFlag().
+    bool m_hadProcessEnterFlag;
 
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
 };
