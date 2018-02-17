@@ -235,18 +235,19 @@ public:
         GetEditableWindow(m_entry)->SetWindowStyleFlag(flags);
     }
 
-    void DisableCompletion()
-    {
-        gtk_entry_set_completion (GetGtkEntry(), NULL);
-
-        g_signal_handlers_disconnect_by_data(GetGtkEntry(), this);
-    }
-
     virtual ~wxTextAutoCompleteData()
     {
-        // Do not call DisableCompletion() here, it would result in problems
-        // when this object is destroyed from wxTextEntry dtor as the real
-        // control (e.g. wxTextCtrl) is already destroyed by then.
+        // Note that we must not use m_entry here because this could result in
+        // using an already half-destroyed wxTextEntry when we're destroyed
+        // from its dtor (which is executed after wxTextCtrl dtor, which had
+        // already destroyed the actual entry). So use the stored widget
+        // instead and only after checking that it is still valid.
+        if ( GTK_IS_ENTRY(m_widgetEntry) )
+        {
+            gtk_entry_set_completion(m_widgetEntry, NULL);
+
+            g_signal_handlers_disconnect_by_data(m_widgetEntry, this);
+        }
     }
 
 protected:
@@ -260,14 +261,15 @@ protected:
 
     explicit wxTextAutoCompleteData(wxTextEntry* entry)
         : m_entry(entry),
+          m_widgetEntry(entry->GetEntry()),
           m_origWinFlags(GetEditableWindow(m_entry)->GetWindowStyleFlag())
     {
         GtkEntryCompletion* const completion = gtk_entry_completion_new();
 
         gtk_entry_completion_set_text_column (completion, 0);
-        gtk_entry_set_completion (GetGtkEntry(), completion);
+        gtk_entry_set_completion(m_widgetEntry, completion);
 
-        g_signal_connect (GTK_WIDGET(GetGtkEntry()), "grab-notify",
+        g_signal_connect (m_widgetEntry, "grab-notify",
                           G_CALLBACK (wx_gtk_entry_parent_grab_notify),
                           this);
     }
@@ -280,8 +282,6 @@ protected:
         return entry->GetEditableWindow();
     }
 
-    GtkEntry* GetGtkEntry() const { return m_entry->GetEntry(); }
-
     // Helper function for appending a string to GtkListStore.
     void AppendToStore(GtkListStore* store, const wxString& s)
     {
@@ -293,7 +293,7 @@ protected:
     // Really change the completion model (which may be NULL).
     void UseModel(GtkListStore* store)
     {
-        GtkEntryCompletion* const c = gtk_entry_get_completion (GetGtkEntry());
+        GtkEntryCompletion* const c = gtk_entry_get_completion(m_widgetEntry);
         gtk_entry_completion_set_model (c, GTK_TREE_MODEL(store));
         gtk_entry_completion_complete (c);
     }
@@ -301,6 +301,9 @@ protected:
 
     // The text entry we're associated with.
     wxTextEntry * const m_entry;
+
+    // And its GTK widget.
+    GtkEntry* const m_widgetEntry;
 
     // The original flags of the associated wxTextEntry.
     const long m_origWinFlags;
@@ -709,6 +712,9 @@ bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
     // Try to update the existing data first.
     if ( !m_autoCompleteData || !m_autoCompleteData->ChangeStrings(choices) )
     {
+        delete m_autoCompleteData;
+        m_autoCompleteData = NULL;
+
         // If it failed, try creating a new object for fixed completion.
         wxTextAutoCompleteFixed* const ac = wxTextAutoCompleteFixed::New(this);
         if ( !ac )
@@ -716,7 +722,6 @@ bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 
         ac->ChangeStrings(choices);
 
-        delete m_autoCompleteData;
         m_autoCompleteData = ac;
     }
 
@@ -730,12 +735,6 @@ bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
     {
         if ( m_autoCompleteData )
         {
-            // This is not done in dtor because it's unnecessary when replacing
-            // one completer with another one, and even dangerous, when the
-            // control is being destroyed anyhow, so we need to call it
-            // explicitly here to really disable completion.
-            m_autoCompleteData->DisableCompletion();
-
             delete m_autoCompleteData;
             m_autoCompleteData = NULL;
         }
@@ -748,6 +747,9 @@ bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
         if ( !m_autoCompleteData ||
                 !m_autoCompleteData->ChangeCompleter(completer) )
         {
+            delete m_autoCompleteData;
+            m_autoCompleteData = NULL;
+
             wxTextAutoCompleteDynamic* const
                 ac = wxTextAutoCompleteDynamic::New(this);
             if ( !ac )
@@ -755,7 +757,6 @@ bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
 
             ac->ChangeCompleter(completer);
 
-            delete m_autoCompleteData;
             m_autoCompleteData = ac;
         }
     }
