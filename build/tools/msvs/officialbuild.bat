@@ -1,4 +1,6 @@
-ECHO ON
+@echo off
+
+rem SetLocal EnableDelayedExpansion
 
 if "%1" == "" goto ERR_NOPARM
 
@@ -22,11 +24,20 @@ set compvers="Unknown"
 
 if "%1" == "vc141" (
   @echo Building for vc141 / vs2017
-  @echo This will only work if the environment varialbe VS150COMNTOOLS is set
-  @echo or a VS2017 command prompt is used.
   set comp=141
   set compvers=vc141
-  call "%VS150COMNTOOLS%VsDevCmd.bat"
+
+  if NOT "%VS150COMNTOOLS%" == "" (
+    call "%VS150COMNTOOLS%VsDevCmd.bat"
+  )
+  if "%VS150COMNTOOLS%" == "" (
+    call %curr_dir%\findvs 15.0 16.0
+
+    if errorlevel 1 (
+      @echo vswhere.exe must be in your path or a VS2017 developer command prompt must be used.
+      goto end
+    )
+  )
 )
 if "%1" == "vc140" (
   @echo Building for vc140 / vs2015
