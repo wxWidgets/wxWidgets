@@ -12,7 +12,6 @@ wx_add_sample(webview LIBRARIES webview stc adv NAME webviewsample)
 if(wxUSE_WEBVIEW_CHROMIUM)
     wx_add_sample(webview LIBRARIES webview_chromium stc adv NAME webviewsample_chromium)
     target_compile_definitions(webviewsample_chromium PRIVATE -DwxWEBVIEW_SAMPLE_CHROMIUM)
-    ExternalProject_Get_property(cef SOURCE_DIR)
     if(WIN32)
         add_custom_command(
             TARGET webviewsample_chromium
@@ -24,17 +23,17 @@ if(wxUSE_WEBVIEW_CHROMIUM)
                     "-outputresource:$<TARGET_FILE:webviewsample_chromium>;#1"
             # Copy CEF libraries
             COMMAND
-                ${CMAKE_COMMAND} -E copy_directory ${SOURCE_DIR}/$<CONFIG> $<TARGET_FILE_DIR:webviewsample_chromium>
+                ${CMAKE_COMMAND} -E copy_directory ${CEF_ROOT}/$<CONFIG> $<TARGET_FILE_DIR:webviewsample_chromium>
             # Copy CEF resources
             COMMAND
-                ${CMAKE_COMMAND} -E copy_directory ${SOURCE_DIR}/Resources $<TARGET_FILE_DIR:webviewsample_chromium>
+                ${CMAKE_COMMAND} -E copy_directory ${CEF_ROOT}/Resources $<TARGET_FILE_DIR:webviewsample_chromium>
             COMMENT "Prepare executable for runtime..."
         )
     elseif(APPLE)
         # Define helper bundle
         set(CEF_HELPER_OUTPUT_NAME "webviewsample_chromium Helper")
         add_executable(webviewsample_chromium_helper MACOSX_BUNDLE ${wxSOURCE_DIR}/samples/webview/cef_process_helper.cpp)
-        target_include_directories(webviewsample_chromium_helper PRIVATE ${SOURCE_DIR})
+        target_include_directories(webviewsample_chromium_helper PRIVATE ${CEF_ROOT})
         target_link_libraries(webviewsample_chromium_helper libcef libcef_dll_wrapper)
         set_target_properties(webviewsample_chromium_helper PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST ${wxSOURCE_DIR}/samples/webview/cef_helper_info.plist.in
@@ -42,6 +41,13 @@ if(wxUSE_WEBVIEW_CHROMIUM)
             BUILD_WITH_INSTALL_RPATH TRUE
             OUTPUT_NAME ${CEF_HELPER_OUTPUT_NAME}
         )
+
+        if(NOT wxBUILD_SHARED)
+            set_target_properties(webviewsample_chromium PROPERTIES
+                INSTALL_RPATH "@executable_path/.."
+                BUILD_WITH_INSTALL_RPATH TRUE
+            )
+        endif()
 
         add_dependencies(webviewsample_chromium webviewsample_chromium_helper)
 
@@ -55,7 +61,7 @@ if(wxUSE_WEBVIEW_CHROMIUM)
                 "$<TARGET_FILE_DIR:webviewsample_chromium>/../Frameworks/${CEF_HELPER_OUTPUT_NAME}.app"
             # Copy the CEF framework into the Frameworks directory.
             COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    "${SOURCE_DIR}/$<CONFIG>/Chromium Embedded Framework.framework"
+                    "${CEF_ROOT}/$<CONFIG>/Chromium Embedded Framework.framework"
                     "$<TARGET_FILE_DIR:webviewsample_chromium>/../Frameworks/Chromium Embedded Framework.framework"
         )
     endif()
