@@ -280,7 +280,25 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
     // For all the messages forwarded from the edit control the result is not
     // used and 0 must be returned if the message is handled.
     WXLRESULT result;
-    return MSWHandleMessage(&result, msg, wParam, lParam);
+    bool processed = MSWHandleMessage(&result, msg, wParam, lParam);
+
+    // Special hack for WM_CHAR needed by wxTextEntry auto-completion support.
+    if ( !processed && msg == WM_CHAR )
+    {
+        // Here we reproduce what MSWDefWindowProc() does for this window
+        // itself, but for the EDIT window.
+        ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, (HWND)GetEditHWND(),
+                         msg, wParam, lParam);
+
+        // Send the event allowing completion code to do its thing.
+        wxKeyEvent event(CreateCharEvent(wxEVT_AFTER_CHAR, wParam, lParam));
+        HandleWindowEvent(event);
+
+        // Default window proc was already called, don't call it again.
+        processed = true;
+    }
+
+    return processed;
 }
 
 bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
