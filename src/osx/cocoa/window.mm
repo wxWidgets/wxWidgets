@@ -3552,8 +3552,9 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 
 bool wxWidgetCocoaImpl::ShouldHandleKeyNavigation(const wxKeyEvent &WXUNUSED(event)) const
 {
-    // Only controls that intercept tabs for different behavior should return false (ie wxTE_PROCESS_TAB)
-    return true;
+    // If the window wants to have all keys, let it have it and don't process
+    // TAB as key navigation event.
+    return !m_wxPeer->HasFlag(wxWANTS_CHARS);
 }
 
 bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
