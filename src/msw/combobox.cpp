@@ -277,15 +277,10 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
             break;
     }
 
-    if ( ShouldForwardFromEditToCombo(msg) )
-    {
-        // For all the messages forward from the edit control the
-        // result is not used.
-        WXLRESULT result;
-        return MSWHandleMessage(&result, msg, wParam, lParam);
-    }
-
-    return false;
+    // For all the messages forwarded from the edit control the result is not
+    // used and 0 must be returned if the message is handled.
+    WXLRESULT result;
+    return MSWHandleMessage(&result, msg, wParam, lParam);
 }
 
 bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
