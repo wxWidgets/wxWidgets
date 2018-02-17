@@ -371,11 +371,11 @@ WebFrame::WebFrame(const wxString& url) :
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
     // Create the webview
+    m_browser = wxWebView::New(this, wxID_ANY, url
 #ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-    m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxSize(800, 525), wxWebViewBackendChromium);
-#else
-    m_browser = wxWebView::New(this, wxID_ANY, url);
+        , wxDefaultPosition, wxDefaultSize, wxWebViewBackendChromium
 #endif
+    );
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     //We register the wxfs:// protocol for testing purposes

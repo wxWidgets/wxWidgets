@@ -684,6 +684,9 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
     {
         m_browser = browser;
         m_browserId = browser->GetIdentifier();
+
+        wxSizeEvent evt;
+        m_webview->OnSize(evt);
     }
 }
 bool ClientHandler::DoClose(CefRefPtr<CefBrowser> WXUNUSED(browser))
