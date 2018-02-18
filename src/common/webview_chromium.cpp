@@ -19,6 +19,11 @@
 #include "wx/msw/private.h"
 #endif
 
+#ifdef __WXGTK__
+#include <gtk/gtk.h>
+#include <gdk/gdkx.h>
+#endif
+
 #ifdef __VISUALC__
 #pragma warning(push)
 #pragma warning(disable:4100)
@@ -256,7 +261,10 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     GtkWidget* view_port = gtk_viewport_new( NULL, NULL );
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(scrolled_window),
                                            view_port );
-    info.SetAsChild( view_port );
+    // TODO: figure out correct parameters for Linux SetAsChild() call
+    ::Window xid = GDK_WINDOW_XID(gtk_widget_get_window(view_port));
+    wxASSERT(xid != 0);
+    info.SetAsChild(xid, CefRect(0, 0, size.GetX(), size.GetY()));
     m_parent->DoAddChild( this );
     PostCreation( size );
 
