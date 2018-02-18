@@ -19,7 +19,7 @@ ABBREVIATE_BRIEF       =
 ALWAYS_DETAILED_SEC    = YES # Default: NO
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = "$(WXWIDGETS)/"
+STRIP_FROM_PATH        = ../..
 STRIP_FROM_INC_PATH    = "$(WXWIDGETS)/include/" \
                          "$(WXWIDGETS)/interface/"
 SHORT_NAMES            = NO
