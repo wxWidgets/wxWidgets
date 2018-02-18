@@ -12,6 +12,7 @@
 
 #include "wx/msw/wrapwin.h"
 
+#if 0
 // these macros must be defined before gdiplus.h is included but we explicitly
 // prevent windows.h from defining them in wx/msw/wrapwin.h as they conflict
 // with standard functions of the same name elsewhere, so we have to pay for it
@@ -22,6 +23,7 @@
 
 #ifndef min
     #define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
 #endif
 
 // There are many clashes between the names of the member fields and parameters
