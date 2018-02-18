@@ -3875,7 +3875,7 @@ public:
     alternative to implementing an entire wxDataViewCustomRenderer
     specialization.
 
-    @example
+    @code
     // Markup renderer that removes bgcolor attributes when in selection
     class DataViewMarkupRenderer : public wxDataViewTextRenderer
     {
@@ -3904,7 +3904,7 @@ public:
             }
         };
     };
-    @endexample
+    @endcode
 
     @since 3.1.1
 
