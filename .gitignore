@@ -319,7 +319,7 @@
 /src/*.opt
 /src/*.plg
 
-/src/cef
+/3rdparty/cef
 
 # /src/common/
 /src/common/y_tab.c

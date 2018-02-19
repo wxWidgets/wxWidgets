@@ -7220,15 +7220,14 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         wxUSE_WEBVIEW_IE="no"
     fi
     if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
-        dnl Search for the Chromium headers in src/cef
+        dnl Search for the Chromium headers in 3rdparty/cef
         old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="-I$srcdir/src/cef $CPPFLAGS"
+        CPPFLAGS="-I$srcdir/3rdparty/cef $CPPFLAGS"
         AC_CHECK_HEADER([include/cef_version.h],
                         [
                             FOUND_WEBVIEW_BACKEND=1
                             USE_WEBVIEW_CHROMIUM=1
                             AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
-                            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview_chromium"
                         ],
                         [
                             wxUSE_WEBVIEW_CHROMIUM="no"
