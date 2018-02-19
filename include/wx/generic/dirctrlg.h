@@ -20,6 +20,7 @@
 #include "wx/dialog.h"
 #include "wx/dirdlg.h"
 #include "wx/choice.h"
+#include "wx/menu.h"
 
 //-----------------------------------------------------------------------------
 // classes
