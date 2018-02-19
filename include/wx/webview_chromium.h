@@ -141,10 +141,8 @@ private:
     ClientHandler* m_clientHandler;
 
     static int ms_activeWebViewCount;
-    // A timer to run CEF message loop.
-    static wxTimer* ms_workTimer;
-
-    static void OnWorkTimer(wxTimerEvent& evt);
+	
+	static void OnIdle(wxIdleEvent& evt);
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewChromium);
 };

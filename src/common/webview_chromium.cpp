@@ -43,7 +43,6 @@
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
 int wxWebViewChromium::ms_activeWebViewCount = 0;
-wxTimer* wxWebViewChromium::ms_workTimer = NULL;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
 
@@ -273,13 +272,9 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
-    // Initalize CEF message work timer if necessary
-    if (ms_workTimer == NULL)
-    {
-        ms_workTimer = new wxTimer();
-        ms_workTimer->Bind(wxEVT_TIMER, &wxWebViewChromium::OnWorkTimer);
-        ms_workTimer->Start(25);
-    }
+    // Initalize CEF message loop handling
+	if (ms_activeWebViewCount == 0)
+		wxTheApp->Bind(wxEVT_IDLE, &wxWebViewChromium::OnIdle);
     ms_activeWebViewCount++;
 
     return true;
@@ -287,10 +282,10 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 
 wxWebViewChromium::~wxWebViewChromium()
 {
-    // Delete CEF work timer when there is no active webview
+    // Delete CEF idle handler when there is no active webview
     ms_activeWebViewCount--;
     if (ms_activeWebViewCount == 0)
-        wxDELETE(ms_workTimer);
+		wxTheApp->Unbind(wxEVT_IDLE, &wxWebViewChromium::OnIdle);
 
     if (m_clientHandler)
     {
@@ -299,9 +294,9 @@ wxWebViewChromium::~wxWebViewChromium()
     }
 }
 
-void wxWebViewChromium::OnWorkTimer(wxTimerEvent& evt)
+void wxWebViewChromium::OnIdle(wxIdleEvent& evt)
 {
-    CefDoMessageLoopWork();
+	CefDoMessageLoopWork();
 }
 
 void wxWebViewChromium::OnSize(wxSizeEvent& event)
