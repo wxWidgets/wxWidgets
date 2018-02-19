@@ -2942,6 +2942,9 @@ set(WEBVIEWCHROMIUM_HDR
 set(WEBVIEWCHROMIUM_SRC
     src/common/webview_chromium.cpp
 )
+set(WEBVIEWCHROMIUM_OSX_SHARED_SRC
+    src/osx/webview_chromium.mm
+)
 
 set(XRC_SRC
     src/xrc/xh_activityindicator.cpp

@@ -51,6 +51,10 @@ else()
 endif()
 
 wx_append_sources(WEBVIEW_CHROMIUM_FILES WEBVIEWCHROMIUM)
+if(APPLE)
+    wx_append_sources(WEBVIEW_CHROMIUM_FILES WEBVIEWCHROMIUM_OSX_SHARED)
+endif()
+
 wx_add_library(webview_chromium ${WEBVIEW_CHROMIUM_FILES})
 wx_lib_include_directories(webview_chromium PRIVATE ${SOURCE_DIR})
 wx_lib_link_libraries(webview_chromium PUBLIC webview PRIVATE libcef libcef_dll_wrapper)

@@ -908,6 +908,10 @@ bool SchemeHandler::ReadResponse(void* data_out,
     return has_data;
 }
 
+#ifdef __WXOSX__
+void wxWebViewChromium_InitOSX();
+#endif
+
 class wxWebViewChromiumModule : public wxModule
 {
 public:
@@ -940,6 +944,9 @@ public:
 #ifdef __WXDEBUG__
         settings.log_severity = LOGSEVERITY_INFO;
         CefString(&settings.log_file).FromASCII("./debug.log");
+#endif
+#ifdef __WXOSX__
+		wxWebViewChromium_InitOSX();
 #endif
 
         return CefInitialize(args, settings, NULL, NULL);
