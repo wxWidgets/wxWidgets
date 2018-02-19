@@ -25,7 +25,7 @@ ExternalProject_Add(
 
 ExternalProject_Get_property(cef SOURCE_DIR)
 ExternalProject_Get_property(cef BINARY_DIR)
-add_library(libcef_dll_wrapper STATIC IMPORTED)
+add_library(libcef_dll_wrapper STATIC IMPORTED GLOBAL)
 get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(HAVE_MULTI_CONFIG_GENERATOR)
     set_target_properties(libcef_dll_wrapper PROPERTIES
@@ -37,7 +37,7 @@ else()
         IMPORTED_LOCATION ${BINARY_DIR}/libcef_dll_wrapper/libcef_dll_wrapper${CMAKE_STATIC_LIBRARY_SUFFIX}
     )
 endif()
-add_library(libcef STATIC IMPORTED)
+add_library(libcef STATIC IMPORTED GLOBAL)
 if(APPLE)
     set_target_properties(libcef PROPERTIES
         IMPORTED_LOCATION_DEBUG "${SOURCE_DIR}/Debug/Chromium Embedded Framework.framework/Chromium Embedded Framework"

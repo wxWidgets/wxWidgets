@@ -28,9 +28,35 @@ if(wxUSE_WEBVIEW_CHROMIUM)
             # Copy CEF resources
             COMMAND
                 ${CMAKE_COMMAND} -E copy_directory ${SOURCE_DIR}/Resources $<TARGET_FILE_DIR:webviewsample_chromium>
-            COMMENT "Prepare executable for runtime..." 
+            COMMENT "Prepare executable for runtime..."
         )
     elseif(APPLE)
-        # TODO: define and build helper bundle
+        # Define helper bundle
+        set(CEF_HELPER_OUTPUT_NAME "webviewsample_chromium Helper")
+        add_executable(webviewsample_chromium_helper MACOSX_BUNDLE ${wxSOURCE_DIR}/samples/webview/cef_process_helper.cpp)
+        target_include_directories(webviewsample_chromium_helper PRIVATE ${SOURCE_DIR})
+        target_link_libraries(webviewsample_chromium_helper libcef libcef_dll_wrapper)
+        set_target_properties(webviewsample_chromium_helper PROPERTIES
+            MACOSX_BUNDLE_INFO_PLIST ${wxSOURCE_DIR}/samples/webview/cef_helper_info.plist.in
+            INSTALL_RPATH "@executable_path/../../../.."
+            BUILD_WITH_INSTALL_RPATH TRUE
+            OUTPUT_NAME ${CEF_HELPER_OUTPUT_NAME}
+        )
+
+        add_dependencies(webviewsample_chromium webviewsample_chromium_helper)
+
+        add_custom_command(
+            TARGET webviewsample_chromium
+            POST_BUILD
+            # Copy the helper app bundle into the Frameworks directory.
+            COMMAND
+                ${CMAKE_COMMAND} -E copy_directory
+                "$<TARGET_FILE_DIR:webviewsample_chromium_helper>/../../../${CEF_HELPER_OUTPUT_NAME}.app"
+                "$<TARGET_FILE_DIR:webviewsample_chromium>/../Frameworks/${CEF_HELPER_OUTPUT_NAME}.app"
+            # Copy the CEF framework into the Frameworks directory.
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    "${SOURCE_DIR}/$<CONFIG>/Chromium Embedded Framework.framework"
+                    "$<TARGET_FILE_DIR:webviewsample_chromium>/../Frameworks/Chromium Embedded Framework.framework"
+        )
     endif()
 endif()
