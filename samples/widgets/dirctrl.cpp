@@ -223,7 +223,7 @@ void DirCtrlWidgetsPage::CreateContent()
         wxDirDialogDefaultFolderStr,
         wxDefaultPosition,
         wxDefaultSize,
-        0
+        wxDIRCTRL_RCLICK_MENU | wxDIRCTRL_RCLICK_MENU_SORT_NAME | wxDIRCTRL_RCLICK_MENU_SORT_DATE
     );
 
     // the 3 panes panes compose the window
