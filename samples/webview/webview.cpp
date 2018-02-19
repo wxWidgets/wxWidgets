@@ -373,7 +373,14 @@ WebFrame::WebFrame(const wxString& url) :
     // Create the webview
     m_browser = wxWebView::New(this, wxID_ANY, url
 #ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-        , wxDefaultPosition, wxDefaultSize, wxWebViewBackendChromium
+        , wxDefaultPosition,
+#ifdef __WXOSX__
+		// OSX implementation currently cannot handle the default size
+		wxSize(800, 600)
+#else
+		wxDefaultSize
+#endif
+		, wxWebViewBackendChromium
 #endif
     );
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
