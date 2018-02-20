@@ -61,8 +61,8 @@ set_target_properties(libcef_dll_wrapper PROPERTIES FOLDER "Third Party Librarie
 if (MSVC)
     # Modify CEF compiler options to match VC runtime
     get_target_property(cef_compile_options libcef_dll_wrapper COMPILE_OPTIONS)
-    string(REGEX REPLACE "/MTd?" "" cef_compile_options ${cef_compile_options})
-    set_target_properties(libcef_dll_wrapper PROPERTIES COMPILE_OPTIONS ${cef_compile_options})
+    string(REGEX REPLACE "/MTd?" "" cef_compile_options "${cef_compile_options}")
+    set_target_properties(libcef_dll_wrapper PROPERTIES COMPILE_OPTIONS "${cef_compile_options}")
 endif()
 
 add_library(libcef SHARED IMPORTED GLOBAL)
