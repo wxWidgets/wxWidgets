@@ -731,7 +731,6 @@ void wxGenericDirCtrl::OnRightClick(wxTreeEvent& event)
 
 void wxGenericDirCtrl::MenuRename(wxCommandEvent & evt)
 {
-    std::cout << "Renaming " << m_rightClickedItemId.GetID() << std::endl;
     m_treeCtrl->EditLabel(m_rightClickedItemId);
 }
 
@@ -1670,13 +1669,6 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
     return m_smallImageList;
 }
 
-wxImageList *wxFileIconsTable::GetSmallImageList()
-{
-    if (!m_smallImageList)
-        Create(m_size);
-
-    return m_smallImageList;
-}
 
 int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 {
