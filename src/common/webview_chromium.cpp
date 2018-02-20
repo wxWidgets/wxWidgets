@@ -43,7 +43,7 @@
 #pragma warning(pop)
 #endif
 
-#if CHROME_VERSION_BUILD < 3000
+#if CHROME_VERSION_BUILD < 3239
 #error "Unsupported CEF version"
 #endif
 
