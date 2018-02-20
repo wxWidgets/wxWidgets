@@ -10,8 +10,10 @@
 
 #include "wx/webview.h"
 #include "wx/webview_chromium.h"
+#include "wx/filename.h"
 #include "wx/filesys.h"
 #include "wx/rtti.h"
+#include "wx/stdpaths.h"
 #include "wx/app.h"
 #include "wx/module.h"
 
@@ -48,6 +50,7 @@
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
 int wxWebViewChromium::ms_activeWebViewCount = 0;
+bool wxWebViewChromium::ms_cefInitialized = false;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
 
@@ -234,6 +237,8 @@ bool wxWebViewChromium::Create(wxWindow* parent,
         return false;
     }
 #endif
+    if ( !InitCEF() )
+        return false;
 
     m_historyLoadingFromList = false;
     m_historyEnabled = true;
@@ -299,6 +304,61 @@ wxWebViewChromium::~wxWebViewChromium()
     {
         m_clientHandler->Release();
         m_clientHandler = NULL;
+    }
+}
+
+bool wxWebViewChromium::InitCEF()
+{
+    if (ms_cefInitialized)
+        return true;
+
+    wxFileName cefDataFolder(wxStandardPaths::Get().GetUserLocalDataDir(), "");
+    cefDataFolder.AppendDir("CEF");
+    cefDataFolder.Mkdir(wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+    CefSettings settings;
+
+    wxFileName cachePath(cefDataFolder.GetFullPath(), "Cache");
+    CefString(&settings.cache_path).FromWString(cachePath.GetFullPath().ToStdWstring());
+
+    wxFileName userDataPath(cefDataFolder.GetFullPath(), "UserData");
+    CefString(&settings.user_data_path).FromWString(userDataPath.GetFullPath().ToStdWstring());
+
+    settings.no_sandbox = true;
+
+#ifdef __WXDEBUG__
+    wxFileName logFileName(cefDataFolder.GetFullPath(), "debug.log");
+    settings.log_severity = LOGSEVERITY_INFO;
+    CefString(&settings.log_file).FromWString(logFileName.GetFullPath().ToStdWstring());
+#endif
+
+#ifdef __WXMSW__
+    CefMainArgs args(wxGetInstance());
+#else
+    wxAppConsole* app = wxApp::GetInstance();
+    CefMainArgs args(app->argc, app->argv);
+#endif
+    if (CefInitialize(args, settings, NULL, NULL))
+    {
+        ms_cefInitialized = true;
+        return true;
+    }
+    else
+    {
+        wxLogError("Could not initialize CEF");
+        return false;
+    }
+}
+
+void wxWebViewChromium::ShutdownCEF()
+{
+    if (ms_cefInitialized)
+    {
+        // Give CEF a chance for some cleanup work
+        for (int i = 0; i < 10; i++)
+            CefDoMessageLoopWork();
+
+        CefShutdown();
     }
 }
 
@@ -946,29 +1006,17 @@ public:
         wxWebView::RegisterFactory(wxWebViewBackendChromium,
             wxSharedPtr<wxWebViewFactory>(new wxWebViewFactoryChromium));
 
-        CefSettings settings;
-        settings.no_sandbox = true;
-
-#ifdef __WXDEBUG__
-        settings.log_severity = LOGSEVERITY_INFO;
-        CefString(&settings.log_file).FromASCII("./debug.log");
-#endif
 #ifdef __WXOSX__
-		wxWebViewChromium_InitOSX();
+        wxWebViewChromium_InitOSX();
 #endif
-
-        return CefInitialize(args, settings, NULL, NULL);
+        return true;
     };
     virtual void OnExit() wxOVERRIDE
     {
         if (m_isHelperProcess)
             return;
 
-        // Give CEF a chance for some cleanup work
-        for (int i = 0; i < 10; i++)
-            CefDoMessageLoopWork();
-
-        CefShutdown();
+        wxWebViewChromium::ShutdownCEF();
     };
 private:
     bool m_isHelperProcess;
