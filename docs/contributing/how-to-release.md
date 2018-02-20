@@ -153,8 +153,8 @@ with x.y.z+1 (minor or major versions updates require manual intervention)
 and rerun both `bakefile_gen` and `autoconf` afterwards to update the version
 in the generated files too.
 
-Update the definition of the stable and release branches in
-`build/buildbot/config/include/defs.xml` after a minor version change.
+Update `master.cfg` in [wx/buildbot](https://github.com/wxWidgets/buildbot)
+repository after a minor or major version change.
 
 ## MSW Visual Studio Official Builds
 
