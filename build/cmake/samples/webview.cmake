@@ -64,5 +64,17 @@ if(wxUSE_WEBVIEW_CHROMIUM)
                     "${CEF_ROOT}/$<CONFIG>/Chromium Embedded Framework.framework"
                     "$<TARGET_FILE_DIR:webviewsample_chromium>/../Frameworks/Chromium Embedded Framework.framework"
         )
+    else()
+        add_custom_command(
+            TARGET webviewsample_chromium
+            POST_BUILD
+            # Copy CEF libraries
+            COMMAND
+                ${CMAKE_COMMAND} -E copy_directory ${CEF_ROOT}/Release $<TARGET_FILE_DIR:webviewsample_chromium>
+            # Copy CEF resources
+            COMMAND
+                ${CMAKE_COMMAND} -E copy_directory ${CEF_ROOT}/Resources $<TARGET_FILE_DIR:webviewsample_chromium>
+            COMMENT "Prepare executable for runtime..."
+        )
     endif()
 endif()

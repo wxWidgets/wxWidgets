@@ -73,6 +73,7 @@ if(APPLE)
     )
 else()
     set_target_properties(libcef PROPERTIES
+        IMPORTED_LOCATION ${CEF_ROOT}/Release/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
         IMPORTED_LOCATION_DEBUG ${CEF_ROOT}/Debug/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
         IMPORTED_IMPLIB_DEBUG ${CEF_ROOT}/Debug/libcef${CMAKE_IMPORT_LIBRARY_SUFFIX}
         IMPORTED_LOCATION_RELEASE ${CEF_ROOT}/Release/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
@@ -88,6 +89,10 @@ endif()
 wx_add_library(webview_chromium ${WEBVIEW_CHROMIUM_FILES})
 wx_lib_include_directories(webview_chromium PRIVATE ${CEF_ROOT})
 wx_lib_link_libraries(webview_chromium PUBLIC webview PRIVATE libcef libcef_dll_wrapper)
+
+# Add NDEBUG definition required by CEF headers for release build
+set_property(TARGET webview_chromium APPEND PROPERTY
+    COMPILE_DEFINITIONS "$<$<NOT:$<CONFIG:Debug>>:NDEBUG>")
 
 if(APPLE AND wxBUILD_SHARED)
     add_custom_command(
