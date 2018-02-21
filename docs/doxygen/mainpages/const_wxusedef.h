@@ -209,6 +209,7 @@ library:
 @itemdef{wxUSE_SOUND, Use wxSound class.}
 @itemdef{wxUSE_SPINBTN, Use wxSpinButton class.}
 @itemdef{wxUSE_SPINCTRL, Use wxSpinCtrl class.}
+@itemdef{wxUSE_SPELLCHECK, Allow use of native spellcheckers in wxTextCtrl.}
 @itemdef{wxUSE_SPLASH, Use wxSplashScreen class.}
 @itemdef{wxUSE_SPLINES, Provide methods for spline drawing in wxDC.}
 @itemdef{wxUSE_SPLITTER, Use wxSplitterWindow class.}

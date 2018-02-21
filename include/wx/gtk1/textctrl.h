@@ -105,6 +105,18 @@ public:
 
     virtual void DoEnable( bool enable );
 
+#if wxUSE_SPELLCHECK    
+    // Spell checking is not available in wxGTK1.
+    virtual wxTextSpellcheckStatus EnableSpellcheck(const bool enable = true) wxOVERRIDE
+    {
+        return wxTEXT_SPELLCHECK_NOT_AVAILABLE;
+    }
+    virtual bool IsSpellcheckEnabled() wxOVERRIDE
+    {
+        return false;
+    }
+#endif // wxUSE_SPELLCHECK
+
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );
     void OnChar( wxKeyEvent &event );

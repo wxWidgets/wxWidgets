@@ -34,6 +34,16 @@
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/gtk3-compat.h"
 
+#if wxUSE_SPELLCHECK
+extern "C" {
+#if GTK_CHECK_VERSION(3,0,0)
+#include <gtkspell-3.0/gtkspell/gtkspell.h>
+#else // GTK_CHECK_VERSION(3,0,0)
+#include <gtkspell-2.0/gtkspell/gtkspell.h>
+#endif // GTK_CHECK_VERSION(3,0,0)
+}
+#endif // wxUSE_SPELLCHECK
+
 // ----------------------------------------------------------------------------
 // helpers
 // ----------------------------------------------------------------------------
@@ -978,6 +988,83 @@ void wxTextCtrl::GTKSetJustification()
         gtk_entry_set_alignment(GTK_ENTRY(m_text), align);
     }
 }
+
+#if wxUSE_SPELLCHECK
+
+wxTextSpellcheckStatus wxTextCtrl::EnableSpellcheck(const bool enable)
+{
+    if (!IsMultiLine())
+        return wxTEXT_SPELLCHECK_NOT_AVAILABLE;
+    
+    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+    wxASSERT_MSG( textview, wxS("wxTextCtrl is not a GtkTextView" ));
+    
+    wxString lang = wxLocale::GetLanguageCanonicalName(wxLANGUAGE_DEFAULT);
+    
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);
+
+    if (enable)
+    {
+        if (!spell)
+        {
+            spell = gtk_spell_checker_new();
+            gtk_spell_checker_attach(spell, textview);
+        }
+
+        if (!gtk_spell_checker_set_language(spell, NULL, NULL))
+            return wxTEXT_SPELLCHECK_ERROR;
+    }
+    else
+    {
+        if (spell)
+            gtk_spell_checker_detach(spell);
+    }
+
+#else // GTK_CHECK_VERSION(3,0,0) 
+    // GTK+ 2.x code.
+    GtkSpell *spell = gtkspell_get_from_text_view(textview);
+    GError *err = NULL;
+
+    if (enable)
+    {
+        if (spell)
+            gtkspell_set_language(spell, NULL, &err);
+        else
+            gtkspell_new_attach(textview, NULL, &err);
+
+        if (err)
+        {
+            puts (err->message);
+            g_error_free(err);
+            return wxTEXT_SPELLCHECK_ERROR;
+        }
+    }
+    else
+    {
+        if (spell)
+            gtkspell_detach(spell);
+    }
+
+#endif // GTK_CHECK_VERSION(3,0,0)
+
+   return wxTEXT_SPELLCHECK_OK;
+}
+
+bool wxTextCtrl::IsSpellcheckEnabled()
+{
+    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkSpellChecker *spell = gtk_spell_checker_get_from_text_view(textview);   
+#else
+    GtkSpell *spell = gtkspell_get_from_text_view(textview);
+#endif // GTK_CHECK_VERSION(3,0,0)    
+
+    return (spell != NULL);
+}
+
+#endif // wxUSE_SPELLCHECK
 
 void wxTextCtrl::SetWindowStyleFlag(long style)
 {

@@ -270,6 +270,18 @@ enum wxTextAttrLineSpacing
     wxTEXT_ATTR_LINE_SPACING_TWICE          = 20
 };
 
+#if wxUSE_SPELLCHECK
+/*!
+ * Spellcheck status values
+ */
+enum wxTextSpellcheckStatus
+{
+    wxTEXT_SPELLCHECK_NOT_AVAILABLE,
+    wxTEXT_SPELLCHECK_ERROR,
+    wxTEXT_SPELLCHECK_OK
+};
+#endif // wxUSE_SPELLCHECK
+
 // ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------
@@ -741,6 +753,12 @@ public:
     {
         return GetCompositeControlsDefaultAttributes(variant);
     }
+
+#if wxUSE_SPELLCHECK    
+    // Use native spelling and grammer checking functions.
+    virtual wxTextSpellcheckStatus EnableSpellcheck(const bool enable) = 0;
+    virtual bool IsSpellcheckEnabled() = 0;
+#endif // wxUSE_SPELLCHECK
 
 protected:
     // Override wxEvtHandler method to check for a common problem of binding

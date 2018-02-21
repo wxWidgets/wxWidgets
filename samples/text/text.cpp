@@ -142,6 +142,9 @@ public:
     MyTextCtrl    *m_password;
     MyTextCtrl    *m_enter;
     MyTextCtrl    *m_tab;
+#if wxUSE_SPELLCHECK
+    MyTextCtrl    *m_spell;
+#endif // wxUSE_SPELLCHECK
     MyTextCtrl    *m_readonly;
     MyTextCtrl    *m_limited;
 
@@ -1204,6 +1207,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
       wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER );
     m_enter->SetClientData((void *)wxT("enter"));
 
+#if wxUSE_SPELLCHECK    
+    m_spell = new MyTextCtrl(this, 100, wxT("Multiline, spellcheck enabled."),
+    wxPoint(180,270), wxSize(200,70), wxTE_MULTILINE);
+    wxASSERT(m_spell->EnableSpellcheck(true) != wxTEXT_SPELLCHECK_ERROR);
+    wxASSERT(m_spell->IsSpellcheckEnabled());
+    m_spell->SetClientData((void *)wxT("spell"));
+#endif
+
     m_textrich = new MyTextCtrl(this, wxID_ANY, wxT("Allows more than 30Kb of text\n")
                                 wxT("(on all Windows versions)\n")
                                 wxT("and a very very very very very ")
@@ -1241,8 +1252,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxBoxSizer *column2 = new wxBoxSizer(wxVERTICAL);
     column2->Add( m_multitext, 1, wxALL | wxEXPAND, 10 );
     column2->Add( m_tab, 0, wxALL | wxEXPAND, 10 );
-    column2->Add( m_enter, 1, wxALL | wxEXPAND, 10 );
-
+    column2->Add( m_enter, 0, wxALL | wxEXPAND, 10 );
+#if wxUSE_SPELLCHECK
+    column2->Add( m_spell, 1, wxALL | wxEXPAND, 10 );
+#endif
     wxBoxSizer *row1 = new wxBoxSizer(wxHORIZONTAL);
     row1->Add( column1, 0, wxALL | wxEXPAND, 10 );
     row1->Add( column2, 1, wxALL | wxEXPAND, 10 );
