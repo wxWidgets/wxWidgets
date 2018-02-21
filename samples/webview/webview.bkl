@@ -19,7 +19,7 @@
         </if>
     </exe>
 
-    <exe id="webview_chromium_helper" cond="PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
+    <exe id="webview_chromium_helper" cond="PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1' and FORMAT[:3] != 'msv'">
         <sources>
             cef_process_helper.cpp
         </sources>
@@ -98,8 +98,6 @@
 
                 <!--Copy helper app-->
                 cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
-                $(TOP_SRCDIR)/samples/webview/mac/tools/make_more_helpers.sh $(wx_top_builddir)/samples/webview/webview_chromium.app/Contents/Frameworks \
-                    webview_chromium
             </command>
         </add-target>
 
