@@ -38,7 +38,7 @@ public:
 
         // Adds one escape level if there is a single quote, double quotes or
         // escape characters
-        wxRegEx escapeDoubleQuotes("(\\\\*)(['\"\n\r\v\t\b\f])");
+        wxRegEx escapeDoubleQuotes("(\\\\*)([\\'\"\n\r\v\t\b\f])");
         escapeDoubleQuotes.Replace(&m_escapedCode,"\\1\\1\\\\\\2");
     }
 
