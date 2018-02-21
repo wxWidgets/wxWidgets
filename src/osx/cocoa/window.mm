@@ -3025,7 +3025,14 @@ bool wxWidgetCocoaImpl::CanFocus() const
     NSView* targetView = m_osxView;
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
-    return [targetView canBecomeKeyView] == YES;
+
+    if ( [targetView canBecomeKeyView] == YES )
+        return true;
+    else if ( [[NSApplication sharedApplication] isFullKeyboardAccessEnabled] )
+        return [targetView acceptsFirstResponder] == YES;
+    else
+        return [m_osxView isKindOfClass:[NSButton class]] == NO &&
+               [targetView acceptsFirstResponder] == YES;
 }
 
 bool wxWidgetCocoaImpl::HasFocus() const
