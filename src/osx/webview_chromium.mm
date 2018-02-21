@@ -59,7 +59,7 @@ void wxWebViewChromium_InitOSX()
     Protocol* prot = objc_getProtocol("CefAppProtocol");
     if (prot)
     {
-		Class appClass = objc_getClass("wxNSApplication");
+        Class appClass = objc_getClass("wxNSApplication");
         class_addProtocol(appClass, prot);
         if (!class_addMethod(appClass, @selector(isHandlingSendEvent), &isHandlingSendEventImpl, "c@:"))
             wxLogError("Could not add isHandlingSendEvent impl");

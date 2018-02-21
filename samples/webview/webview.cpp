@@ -268,7 +268,7 @@ bool WebApp::OnInit()
 
     // Create the memory files
     wxImage::AddHandler(new wxPNGHandler);
-    wxMemoryFSHandler::AddFile("logo.png", 
+    wxMemoryFSHandler::AddFile("logo.png",
         wxBitmap(wxlogo_xpm), wxBITMAP_TYPE_PNG);
     wxMemoryFSHandler::AddFile("page1.htm",
         "<html><head><title>File System Example</title>"
@@ -375,12 +375,12 @@ WebFrame::WebFrame(const wxString& url) :
 #ifdef wxWEBVIEW_SAMPLE_CHROMIUM
         , wxDefaultPosition,
 #ifdef __WXOSX__
-		// OSX implementation currently cannot handle the default size
-		wxSize(800, 600)
+        // OSX implementation currently cannot handle the default size
+        wxSize(800, 600)
 #else
-		wxDefaultSize
+        wxDefaultSize
 #endif
-		, wxWebViewBackendChromium
+        , wxWebViewBackendChromium
 #endif
     );
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
@@ -1223,7 +1223,7 @@ void WebFrame::OnSelectAll(wxCommandEvent& WXUNUSED(evt))
   * Callback invoked when a loading error occurs
   */
 void WebFrame::OnError(wxWebViewEvent& evt)
-{   
+{
 #define WX_ERROR_CASE(type) \
     case type: \
         category = #type; \

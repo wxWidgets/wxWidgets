@@ -246,11 +246,11 @@ public:
     <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
     class. This backend has full support for custom schemes and virtual file
     systems.
-	
-	@par wxWEBVIEW_CHROMIUM (MSW, OSX, GTK)
-	
-	The Chromium Embedded Framework backend has to be enabled when building wxWidgets,
-	see wxWebViewChromium for additional usage and build instructions.
+
+    @par wxWEBVIEW_CHROMIUM (MSW, OSX, GTK)
+
+    The Chromium Embedded Framework backend has to be enabled when building wxWidgets,
+    see wxWebViewChromium for additional usage and build instructions.
 
     @section async Asynchronous Notifications
 

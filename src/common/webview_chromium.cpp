@@ -80,7 +80,7 @@ public:
     virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
         const CefString& title) wxOVERRIDE;
     virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser,
-		cef_log_severity_t level,
+        cef_log_severity_t level,
         const CefString& message,
         const CefString& source,
         int line) wxOVERRIDE;
@@ -287,8 +287,8 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
     // Initalize CEF message loop handling
-	if (ms_activeWebViewCount == 0)
-		wxTheApp->Bind(wxEVT_IDLE, &wxWebViewChromium::OnIdle);
+    if (ms_activeWebViewCount == 0)
+        wxTheApp->Bind(wxEVT_IDLE, &wxWebViewChromium::OnIdle);
     ms_activeWebViewCount++;
 
     return true;
@@ -299,7 +299,7 @@ wxWebViewChromium::~wxWebViewChromium()
     // Delete CEF idle handler when there is no active webview
     ms_activeWebViewCount--;
     if (ms_activeWebViewCount == 0)
-		wxTheApp->Unbind(wxEVT_IDLE, &wxWebViewChromium::OnIdle);
+        wxTheApp->Unbind(wxEVT_IDLE, &wxWebViewChromium::OnIdle);
 
     if (m_clientHandler)
     {
@@ -365,7 +365,7 @@ void wxWebViewChromium::ShutdownCEF()
 
 void wxWebViewChromium::OnIdle(wxIdleEvent& evt)
 {
-	CefDoMessageLoopWork();
+    CefDoMessageLoopWork();
 }
 
 void wxWebViewChromium::OnSize(wxSizeEvent& event)
@@ -405,7 +405,7 @@ void* wxWebViewChromium::GetNativeBackend() const
 }
 
 bool wxWebViewChromium::CanGoForward() const
-{ 
+{
     if ( m_historyEnabled )
         return m_historyPosition != static_cast<int>(m_historyList.size()) - 1;
     else
@@ -413,7 +413,7 @@ bool wxWebViewChromium::CanGoForward() const
 }
 
 bool wxWebViewChromium::CanGoBack() const
-{ 
+{
     if ( m_historyEnabled )
         return m_historyPosition > 0;
     else
@@ -471,7 +471,7 @@ void wxWebViewChromium::GoForward()
 }
 
 void wxWebViewChromium::LoadURL(const wxString& url)
-{ 
+{
     m_clientHandler->GetBrowser()->GetMainFrame()->LoadURL(url.ToStdString());
 }
 
@@ -508,7 +508,7 @@ wxString wxWebViewChromium::GetPageSource() const
     return m_pageSource;
 }
 
-wxString wxWebViewChromium::GetPageText() const 
+wxString wxWebViewChromium::GetPageText() const
 {
     return m_pageText;
 }
@@ -592,7 +592,7 @@ bool wxWebViewChromium::IsBusy() const
 void wxWebViewChromium::SetEditable(bool enable)
 {
     wxString mode = enable ? "\"on\"" : "\"off\"";
-    RunScript("document.designMode = " + mode); 
+    RunScript("document.designMode = " + mode);
 }
 
 void wxWebViewChromium::DoSetPage(const wxString& html, const wxString& baseUrl)
@@ -689,7 +689,7 @@ void ClientHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString
 }
 
 bool ClientHandler::OnConsoleMessage(CefRefPtr<CefBrowser> WXUNUSED(browser),
-									 cef_log_severity_t level,
+                                     cef_log_severity_t level,
                                      const CefString& WXUNUSED(message),
                                      const CefString& WXUNUSED(source), int WXUNUSED(line))
 {
@@ -724,8 +724,8 @@ bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> WXUNUSED(browser),
                              CefRefPtr<CefFrame> WXUNUSED(frame),
                              const CefString& target_url,
                              const CefString& target_frame_name,
-							 WindowOpenDisposition WXUNUSED(target_disposition),
-							 bool WXUNUSED(user_gesture),
+                             WindowOpenDisposition WXUNUSED(target_disposition),
+                             bool WXUNUSED(user_gesture),
                              const CefPopupFeatures& WXUNUSED(popupFeatures),
                              CefWindowInfo& WXUNUSED(windowInfo),
                              CefRefPtr<CefClient>& WXUNUSED(client),
@@ -769,8 +769,8 @@ void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 
 // CefLoadHandler methods
 void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> WXUNUSED(browser),
-								CefRefPtr<CefFrame> frame,
-								TransitionType WXUNUSED(transition_type))
+                                CefRefPtr<CefFrame> frame,
+                                TransitionType WXUNUSED(transition_type))
 {
     wxString url = frame->GetURL().ToString();
     wxString target = frame->GetName().ToString();

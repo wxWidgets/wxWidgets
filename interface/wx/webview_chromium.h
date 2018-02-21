@@ -31,11 +31,11 @@
 
     The wxWebViewChromium backend is built into a separate webview_chromium
     library which depends on the webview library.
-	
-	When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF will
-	automatically downloaded during configuration based on your platform.
-	
-	For other build systems please follow the following instructions:
+
+    When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF will
+    automatically downloaded during configuration based on your platform.
+
+    For other build systems please follow the following instructions:
 
     Once you have a copy of CEF3, either from compiling it yourself or using
     prebuilt binaries you should copy it into `wx_root/3rdparty/cef`. To run the
@@ -50,7 +50,7 @@
     either by passing --enable-webviewchromium for autoconf based builds or
     setting wxUSE_WEBVIEW_CHROMIUM equal to 1 in setup.h for Visual Studio
     based builds.
-	
+
 
     __Mac OS X Platform__
 
