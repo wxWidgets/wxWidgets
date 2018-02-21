@@ -43,7 +43,7 @@
 #pragma warning(pop)
 #endif
 
-#if CHROME_VERSION_BUILD < 3239
+#if CHROME_VERSION_BUILD < 3282
 #error "Unsupported CEF version"
 #endif
 
@@ -80,6 +80,7 @@ public:
     virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
         const CefString& title) wxOVERRIDE;
     virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser,
+		cef_log_severity_t level,
         const CefString& message,
         const CefString& source,
         int line) wxOVERRIDE;
@@ -688,6 +689,7 @@ void ClientHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString
 }
 
 bool ClientHandler::OnConsoleMessage(CefRefPtr<CefBrowser> WXUNUSED(browser),
+									 cef_log_severity_t level,
                                      const CefString& WXUNUSED(message),
                                      const CefString& WXUNUSED(source), int WXUNUSED(line))
 {
