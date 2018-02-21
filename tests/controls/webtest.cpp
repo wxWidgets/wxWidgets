@@ -323,6 +323,9 @@ void WebTestCase::RunScript()
     CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
     CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
 
+    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\vb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
+    CPPUNIT_ASSERT_EQUAL(_("a\'aa\n\rb\vb\tb\\ccc\"ddd\b\fx"), result);
+
     CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(123);", &result));
     CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));
 
