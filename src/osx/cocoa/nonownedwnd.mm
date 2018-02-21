@@ -998,7 +998,12 @@ bool wxNonOwnedWindowCocoaImpl::IsMaximized() const
 {
     if (([m_macWindow styleMask] & NSResizableWindowMask) != 0)
     {
-        return [m_macWindow isZoomed];
+        // isZoomed internally calls windowWillResize which would trigger
+        // an wxEVT_SIZE. Setting ignore resizing supresses the event
+        m_wxPeer->OSXSetIgnoreResizing(true);
+        BOOL result = [m_macWindow isZoomed];
+        m_wxPeer->OSXSetIgnoreResizing(false);
+        return result;
     }
     else
     {
