@@ -597,8 +597,13 @@ void wxWebViewChromium::SetEditable(bool enable)
 
 void wxWebViewChromium::DoSetPage(const wxString& html, const wxString& baseUrl)
 {
+	wxString pageBaseUrl = baseUrl;
+	// CEF needs a baseURL that is not empty, set one if not specified
+	if(pageBaseUrl.empty())
+		pageBaseUrl = "file://";
+
     m_clientHandler->GetBrowser()->GetMainFrame()->LoadString(html.ToStdString(),
-                                                              baseUrl.ToStdString());
+                                                              pageBaseUrl.ToStdString());
 }
 
 wxWebViewZoom wxWebViewChromium::GetZoom() const
