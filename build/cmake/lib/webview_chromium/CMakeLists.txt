@@ -87,6 +87,8 @@ if(APPLE)
 endif()
 
 wx_add_library(webview_chromium ${WEBVIEW_CHROMIUM_FILES})
+# CEF headers always need C++11
+set_target_properties(webview_chromium PROPERTIES CXX_STANDARD 11)
 wx_lib_include_directories(webview_chromium PRIVATE ${CEF_ROOT})
 wx_lib_link_libraries(webview_chromium PUBLIC webview PRIVATE libcef libcef_dll_wrapper)
 

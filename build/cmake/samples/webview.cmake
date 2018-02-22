@@ -41,6 +41,7 @@ if(wxUSE_WEBVIEW_CHROMIUM)
                 INSTALL_RPATH "@executable_path/../../../.."
                 BUILD_WITH_INSTALL_RPATH TRUE
                 OUTPUT_NAME ${CEF_HELPER_OUTPUT_NAME}
+                CXX_STANDARD 11
             )
 
             if(NOT wxBUILD_SHARED)
