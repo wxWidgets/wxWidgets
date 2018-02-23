@@ -69,7 +69,7 @@ Changes in behaviour which may result in build errors
 
 All:
 
-- Make wxList iterators conform to input iterator requirements.
+- Make wxList and wxVector iterators conform to input iterator requirements.
 
 
 3.1.1: (released 2018-02-19)
