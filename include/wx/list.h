@@ -761,7 +761,6 @@ private:
                                                                             \
         classexp iterator                                                   \
         {                                                                   \
-            typedef name list;                                              \
         public:                                                             \
             typedef nodetype Node;                                          \
             typedef iterator itor;                                          \
@@ -811,7 +810,6 @@ private:
         };                                                                  \
         classexp const_iterator                                             \
         {                                                                   \
-            typedef name list;                                              \
         public:                                                             \
             typedef nodetype Node;                                          \
             typedef T* value_type;                                          \
@@ -864,7 +862,6 @@ private:
         };                                                                  \
         classexp reverse_iterator                                           \
         {                                                                   \
-            typedef name list;                                              \
         public:                                                             \
             typedef nodetype Node;                                          \
             typedef T* value_type;                                          \
@@ -903,7 +900,6 @@ private:
         };                                                                  \
         classexp const_reverse_iterator                                     \
         {                                                                   \
-            typedef name list;                                              \
         public:                                                             \
             typedef nodetype Node;                                          \
             typedef T* value_type;                                          \
