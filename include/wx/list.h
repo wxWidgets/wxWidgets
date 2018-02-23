@@ -780,14 +780,13 @@ private:
                                                                             \
             typedef nodetype Node;                                          \
             typedef iterator itor;                                          \
-            typedef value_type* ptr_type;                                   \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
             /* Compatibility typedefs, don't use */                         \
             typedef reference reference_type;                               \
-            typedef ptr_type pointer_type;                                  \
+            typedef pointer pointer_type;                                   \
                                                                             \
             iterator(Node* node, Node* init) : m_node(node), m_init(init) {}\
             iterator() : m_node(NULL), m_init(NULL) { }                     \
@@ -834,13 +833,12 @@ private:
             typedef nodetype Node;                                          \
             typedef const value_type& const_reference;                      \
             typedef const_iterator itor;                                    \
-            typedef value_type* ptr_type;                                   \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
-            typedef const_reference reference_type;                         \
-            typedef const ptr_type pointer_type;                            \
+            typedef reference reference_type;                               \
+            typedef pointer pointer_type;                                   \
                                                                             \
             const_iterator(Node* node, Node* init)                          \
                 : m_node(node), m_init(init) { }                            \
@@ -889,13 +887,12 @@ private:
                                                                             \
             typedef nodetype Node;                                          \
             typedef reverse_iterator itor;                                  \
-            typedef value_type* ptr_type;                                   \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
             typedef reference reference_type;                               \
-            typedef ptr_type pointer_type;                                  \
+            typedef pointer pointer_type;                                   \
                                                                             \
             reverse_iterator(Node* node, Node* init)                        \
                 : m_node(node), m_init(init) { }                            \
@@ -930,14 +927,13 @@ private:
                                                                             \
             typedef nodetype Node;                                          \
             typedef const_reverse_iterator itor;                            \
-            typedef value_type* ptr_type;                                   \
             typedef const value_type& const_reference;                      \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
-            typedef const_reference reference_type;                         \
-            typedef const ptr_type pointer_type;                            \
+            typedef reference reference_type;                               \
+            typedef pointer pointer_type;                                   \
                                                                             \
             const_reverse_iterator(Node* node, Node* init)                  \
                 : m_node(node), m_init(init) { }                            \
