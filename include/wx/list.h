@@ -831,7 +831,6 @@ private:
             typedef const value_type& reference;                            \
                                                                             \
             typedef nodetype Node;                                          \
-            typedef const value_type& const_reference;                      \
             typedef const_iterator itor;                                    \
                                                                             \
             Node* m_node;                                                   \
@@ -927,7 +926,6 @@ private:
                                                                             \
             typedef nodetype Node;                                          \
             typedef const_reverse_iterator itor;                            \
-            typedef const value_type& const_reference;                      \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
