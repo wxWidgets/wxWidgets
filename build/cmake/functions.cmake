@@ -636,6 +636,7 @@ function(wx_add_sample name)
     elseif(APPLE)
         if(NOT IPHONE)
             set_target_properties(${target_name} PROPERTIES
+                MACOSX_BUNDLE_INFO_PLIST "${wxSOURCE_DIR}/samples/Info.plist.in"
                 RESOURCE "${wxSOURCE_DIR}/src/osx/carbon/wxmac.icns")
         endif()
         set_target_properties(${target_name} PROPERTIES
