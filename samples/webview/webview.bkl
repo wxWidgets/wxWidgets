@@ -19,7 +19,8 @@
         </if>
     </exe>
 
-    <exe id="webview_chromium_helper" cond="PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1' and FORMAT[:3] != 'msv'">
+    <exe id="webview_chromium_helper"
+        cond="PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1' and FORMAT[:3] != 'msv'">
         <sources>
             cef_process_helper.cpp
         </sources>
@@ -32,7 +33,7 @@
             <ldflags>$(LIBCEF_FRAMEWORK)</ldflags>
         </if>
         <add-target target="fix_cef_link" type="action"
-                    cond="target and PLATFORM_MACOSX=='1'">
+                    cond="target and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
             <dependency-of>all</dependency-of>
             <command>
                 <!--make helper app bundle -->
@@ -41,7 +42,7 @@
                 mkdir -p webview_chromium_helper.app/Contents/Resources
                 sed -e "s/\$${PRODUCT_NAME}/webview_chromium Helper/"  \
                     -e "s/\$${EXECUTABLE_NAME}/webview_chromium Helper/" \
-                    $(TOP_SRCDIR)/samples/webview/mac/helper-Info.plist >webview_chromium_helper.app/Contents/Info.plist
+                    $(TOP_SRCDIR)/samples/webview/cef_helper_info.plist.in >webview_chromium_helper.app/Contents/Info.plist
                 /bin/echo "APPL????" >webview_chromium_helper.app/Contents/PkgInfo
                 <!--Fix CEF link path -->
                 install_name_tool -change "@executable_path/Chromium Embedded Framework" \
@@ -51,7 +52,7 @@
                 cp -f $(TOP_SRCDIR)/src/osx/carbon/wxmac.icns webview_chromium_helper.app/Contents/Resources/wxmac.icns
             </command>
         </add-target>
-        <modify-target target="clean" cond="PLATFORM_MACOSX=='1'">
+        <modify-target target="clean" cond="PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
             <command>rm -rf $(id).app</command>
         </modify-target>
     </exe>
@@ -83,7 +84,8 @@
         </if>
         <win32-res>../sample.rc</win32-res>
 
-        <add-target target="package" type="action" cond="PLATFORM_MACOSX=='1'">
+        <add-target target="package" type="action"
+            cond="PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
             <depends>webview_chromium_helper</depends>
             <dependency-of>all</dependency-of>
             <command>
@@ -105,7 +107,8 @@
             1. Copy webview_chromium library to webview_chromium.app/Contents/Frameworks/
             2. correct the CEF Frameworks executable path of webview_chromium library.
         -->
-        <add-target target="copy_and_correct_webviewchromium" type="action" cond="PLATFORM_MACOSX=='1' and SHARED=='1'">
+        <add-target target="copy_and_correct_webviewchromium" type="action"
+            cond="PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1' and SHARED=='1'">
             <depends>package</depends>
             <dependency-of>all</dependency-of>
             <set var="webviewdll">$(DLLPREFIX)$(wxwin.mkDllName("webview")).dylib</set>

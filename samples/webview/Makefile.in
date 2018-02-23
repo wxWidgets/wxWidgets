@@ -151,9 +151,11 @@ COND_PLATFORM_OS2_1___webview_chromium___os2_emxbindcmd = $(NM) \
 @COND_TOOLKIT_OSX_IPHONE@	$(__webview_chromium_app_Contents_PkgInfo___depname)
 @COND_PLATFORM_WIN32_1@__webview_chromium___win32rc \
 @COND_PLATFORM_WIN32_1@	= webview_chromium_sample_rc.o
-@COND_PLATFORM_MACOSX_1@__package___depname = package
-@COND_PLATFORM_MACOSX_1_SHARED_1@__copy_and_correct_webviewchromium___depname \
-@COND_PLATFORM_MACOSX_1_SHARED_1@	= copy_and_correct_webviewchromium
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__package___depname \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= package
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@__copy_and_correct_webviewchromium___depname \
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	= \
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	copy_and_correct_webviewchromium
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_0 = --define __WXUNIVERSAL__
 @COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
@@ -276,7 +278,7 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium_helper.app/Contents/Resources
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${PRODUCT_NAME}/webview_chromium Helper/"  \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${EXECUTABLE_NAME}/webview_chromium Helper/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/mac/helper-Info.plist >webview_chromium_helper.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in >webview_chromium_helper.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	/bin/echo "APPL????" >webview_chromium_helper.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	install_name_tool -change "@executable_path/Chromium Embedded Framework" \
@@ -311,25 +313,25 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@webview_chromium_bundle: $(____webview_chromium_BUNDLE_TGT_REF_DEP)
 
-@COND_PLATFORM_MACOSX_1@package: $(__webview_chromium_helper___depname)
-@COND_PLATFORM_MACOSX_1@	mkdir -p webview_chromium.app/Contents/Frameworks/
-@COND_PLATFORM_MACOSX_1@	mkdir -p webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
-@COND_PLATFORM_MACOSX_1@	cp -Rf $(top_srcdir)//3rdparty/cef/Release//Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
-@COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	install_name_tool -change "@executable_path/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1@	"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1@	webview_chromium.app/Contents/MacOS/webview_chromium
-@COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@package: $(__webview_chromium_helper___depname)
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium.app/Contents/Frameworks/
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf $(top_srcdir)//3rdparty/cef/Release//Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	install_name_tool -change "@executable_path/Chromium Embedded Framework" \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	webview_chromium.app/Contents/MacOS/webview_chromium
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
 
-@COND_PLATFORM_MACOSX_1_SHARED_1@copy_and_correct_webviewchromium: $(__package___depname)
-@COND_PLATFORM_MACOSX_1_SHARED_1@	cp $(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib webview_chromium.app/Contents/Frameworks/
-@COND_PLATFORM_MACOSX_1_SHARED_1@	cp $(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webviewchromium$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib webview_chromium.app/Contents/Frameworks/
-@COND_PLATFORM_MACOSX_1_SHARED_1@	install_name_tool -change "@executable_path/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1_SHARED_1@	"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1_SHARED_1@	$(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webviewchromium$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@copy_and_correct_webviewchromium: $(__package___depname)
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	cp $(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib webview_chromium.app/Contents/Frameworks/
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	cp $(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webviewchromium$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib webview_chromium.app/Contents/Frameworks/
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	install_name_tool -change "@executable_path/Chromium Embedded Framework" \
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
+@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	$(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webviewchromium$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib
 
 webview_webview.o: $(srcdir)/webview.cpp
 	$(CXXC) -c -o $@ $(WEBVIEW_CXXFLAGS) $(srcdir)/webview.cpp
