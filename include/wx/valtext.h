@@ -31,7 +31,8 @@ enum wxTextValidatorStyle
     wxFILTER_INCLUDE_LIST = 0x40,
     wxFILTER_INCLUDE_CHAR_LIST = 0x80,
     wxFILTER_EXCLUDE_LIST = 0x100,
-    wxFILTER_EXCLUDE_CHAR_LIST = 0x200
+    wxFILTER_EXCLUDE_CHAR_LIST = 0x200,
+    wxFILTER_SPACE = 0x400
 };
 
 class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
