@@ -62,7 +62,13 @@ enum wxTextValidatorStyle
     /// Use an exclude list. The validator checks if each input character is
     /// in the list (one character per list element), complaining if it is.
     /// See wxTextValidator::SetCharExcludes().
-    wxFILTER_EXCLUDE_CHAR_LIST
+    wxFILTER_EXCLUDE_CHAR_LIST,
+
+    /// Do not filter out spaces and tabs.
+    /// more useful if used in conjunction with @c wxFILTER_ALPHANUMERIC
+    /// @c wxFILTER_ALPHA or @c wxFILTER_DIGITS to allow spaces to be entered
+    /// with the accepted characters.
+    wxFILTER_SPACE
 };
 
 /**

@@ -223,11 +223,28 @@ bool wxTextValidator::TransferFromWindow()
 namespace
 {
 
-bool CheckString(bool (*func)(const wxUniChar&), const wxString& str)
+template<bool Allow>
+bool IsSpacesAllowed(const wxUniChar& c)
+{
+    return wxIsspace(c);
+}
+
+template<>
+bool IsSpacesAllowed<false>(const wxUniChar&)
+{
+    return false;
+}
+
+typedef bool (*Func)(const wxUniChar&);
+
+// Relax wxFILTER_ALPHA, wxFILTER_ALPHANUMERIC and wxFILTER_DIGITS
+// filters by allowing spaces too if the user explicitly want them
+// thanks to wxFILTER_SPACE. (Spaces are checked by func2).
+bool CheckString(Func func, const wxString& str, Func func2)
 {
     for ( wxString::const_iterator i = str.begin(); i != str.end(); ++i )
     {
-        if ( !func(*i) )
+        if ( !func(*i) && !func2(*i) )
             return false;
     }
 
@@ -242,11 +259,15 @@ wxString wxTextValidator::IsValid(const wxString& val) const
 
     if ( HasFlag(wxFILTER_ASCII) && !val.IsAscii() )
         return _("'%s' should only contain ASCII characters.");
-    if ( HasFlag(wxFILTER_ALPHA) && !CheckString(wxIsalpha, val) )
+
+    Func func2 = HasFlag(wxFILTER_SPACE) ? 
+        IsSpacesAllowed<true> : IsSpacesAllowed<false>;
+
+    if ( HasFlag(wxFILTER_ALPHA) && !CheckString(wxIsalpha, val, func2) )
         return _("'%s' should only contain alphabetic characters.");
-    if ( HasFlag(wxFILTER_ALPHANUMERIC) && !CheckString(wxIsalnum, val) )
+    if ( HasFlag(wxFILTER_ALPHANUMERIC) && !CheckString(wxIsalnum, val, func2) )
         return _("'%s' should only contain alphabetic or numeric characters.");
-    if ( HasFlag(wxFILTER_DIGITS) && !CheckString(wxIsdigit, val) )
+    if ( HasFlag(wxFILTER_DIGITS) && !CheckString(wxIsdigit, val, func2) )
         return _("'%s' should only contain digits.");
     if ( HasFlag(wxFILTER_NUMERIC) && !wxIsNumeric(val) )
         return _("'%s' should be numeric.");
