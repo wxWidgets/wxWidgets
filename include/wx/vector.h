@@ -160,7 +160,7 @@ private:
 
 public:
     typedef size_t size_type;
-    typedef size_t difference_type;
+    typedef ptrdiff_t difference_type;
     typedef T value_type;
     typedef value_type* pointer;
     typedef const value_type* const_pointer;
