@@ -121,7 +121,7 @@ public:
             virtual wxWindow* GetItemsCtrl() const { return m_lbox; }
 
             virtual bool CanAdd() const { return true; }
-            virtual bool CanRename() const { return m_lbox->GetSelection() != wxNOT_FOUND; }
+            virtual bool CanRemove() const { return m_lbox->GetSelection() != wxNOT_FOUND; }
             virtual void OnAdd() { ... get the new item from user and add it ... }
             virtual void OnRemove() { m_lbox->Delete(m_lbox->GetSelection()); }
 
