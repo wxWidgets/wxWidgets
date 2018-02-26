@@ -3050,13 +3050,6 @@ AUI_CMN_HDR =
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
 
-AUI_MSW_HDR =
-    wx/aui/tabartmsw.h
-    wx/aui/barartmsw.h
-AUI_MSW_SRC =
-    src/aui/tabartmsw.cpp
-    src/aui/barartmsw.cpp
-
 AUI_GTK_SRC =
     src/aui/tabartgtk.cpp
 

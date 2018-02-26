@@ -3085,10 +3085,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\aui\barartmsw.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\bitmap.h"
 				>
 			</File>
@@ -3978,10 +3974,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\tabart.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\aui\tabartmsw.h"
 				>
 			</File>
 			<File

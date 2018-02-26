@@ -1062,10 +1062,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\aui\barartmsw.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\aui\dockart.h"
 				>
 			</File>
@@ -1079,10 +1075,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\tabart.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\aui\tabartmsw.h"
 				>
 			</File>
 			<File
@@ -1112,10 +1104,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\aui\barartmsw.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\aui\dockart.cpp"
 				>
 			</File>
@@ -1129,10 +1117,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\aui\tabart.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\aui\tabartmsw.cpp"
 				>
 			</File>
 			<File

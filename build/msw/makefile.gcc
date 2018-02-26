@@ -1378,9 +1378,7 @@ AUIDLL_OBJECTS =  \
 	$(OBJS)\auidll_tabmdi.o \
 	$(OBJS)\auidll_tabart.o \
 	$(OBJS)\auidll_xh_aui.o \
-	$(OBJS)\auidll_xh_auitoolb.o \
-	$(OBJS)\auidll_tabartmsw.o \
-	$(OBJS)\auidll_barartmsw.o
+	$(OBJS)\auidll_xh_auitoolb.o
 AUILIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1399,9 +1397,7 @@ AUILIB_OBJECTS =  \
 	$(OBJS)\auilib_tabmdi.o \
 	$(OBJS)\auilib_tabart.o \
 	$(OBJS)\auilib_xh_aui.o \
-	$(OBJS)\auilib_xh_auitoolb.o \
-	$(OBJS)\auilib_tabartmsw.o \
-	$(OBJS)\auilib_barartmsw.o
+	$(OBJS)\auilib_xh_auitoolb.o
 RIBBONDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1779,8 +1775,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tabart.o \
 	$(OBJS)\monodll_xh_aui.o \
 	$(OBJS)\monodll_xh_auitoolb.o \
-	$(OBJS)\monodll_tabartmsw.o \
-	$(OBJS)\monodll_barartmsw.o \
 	$(OBJS)\monodll_advprops.o \
 	$(OBJS)\monodll_editors.o \
 	$(OBJS)\monodll_manager.o \
@@ -2622,8 +2616,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tabart.o \
 	$(OBJS)\monolib_xh_aui.o \
 	$(OBJS)\monolib_xh_auitoolb.o \
-	$(OBJS)\monolib_tabartmsw.o \
-	$(OBJS)\monolib_barartmsw.o \
 	$(OBJS)\monolib_advprops.o \
 	$(OBJS)\monolib_editors.o \
 	$(OBJS)\monolib_manager.o \
@@ -7667,12 +7659,6 @@ $(OBJS)\monodll_xh_aui.o: ../../src/xrc/xh_aui.cpp
 $(OBJS)\monodll_xh_auitoolb.o: ../../src/xrc/xh_auitoolb.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_tabartmsw.o: ../../src/aui/tabartmsw.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_barartmsw.o: ../../src/aui/barartmsw.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_advprops.o: ../../src/propgrid/advprops.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10213,12 +10199,6 @@ $(OBJS)\monolib_xh_aui.o: ../../src/xrc/xh_aui.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_auitoolb.o: ../../src/xrc/xh_auitoolb.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_tabartmsw.o: ../../src/aui/tabartmsw.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_barartmsw.o: ../../src/aui/barartmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_advprops.o: ../../src/propgrid/advprops.cpp
@@ -16489,12 +16469,6 @@ $(OBJS)\auidll_xh_aui.o: ../../src/xrc/xh_aui.cpp
 $(OBJS)\auidll_xh_auitoolb.o: ../../src/xrc/xh_auitoolb.cpp
 	$(CXX) -c -o $@ $(AUIDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\auidll_tabartmsw.o: ../../src/aui/tabartmsw.cpp
-	$(CXX) -c -o $@ $(AUIDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\auidll_barartmsw.o: ../../src/aui/barartmsw.cpp
-	$(CXX) -c -o $@ $(AUIDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\auilib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(AUILIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -16523,12 +16497,6 @@ $(OBJS)\auilib_xh_aui.o: ../../src/xrc/xh_aui.cpp
 	$(CXX) -c -o $@ $(AUILIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\auilib_xh_auitoolb.o: ../../src/xrc/xh_auitoolb.cpp
-	$(CXX) -c -o $@ $(AUILIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\auilib_tabartmsw.o: ../../src/aui/tabartmsw.cpp
-	$(CXX) -c -o $@ $(AUILIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\auilib_barartmsw.o: ../../src/aui/barartmsw.cpp
 	$(CXX) -c -o $@ $(AUILIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ribbondll_dummy.o: ../../src/common/dummy.cpp

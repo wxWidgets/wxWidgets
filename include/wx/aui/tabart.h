@@ -2,9 +2,13 @@
 // Name:        wx/aui/tabart.h
 // Purpose:     wxaui: wx advanced user interface - notebook
 // Author:      Benjamin I. Williams
+// Modified by: Malcolm MacLeod (mmacleod@webmail.co.za)
 // Modified by: Jens Lody (extracted from wx/aui/auibook.h)
 // Created:     2012-03-21
+// RCS-ID:      $Id:$
 // Copyright:   (C) Copyright 2006, Kirix Corporation, All Rights Reserved.
+//                            2012, Jens Lody for the code related to left
+//                                  and right positioning
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -20,6 +24,8 @@
 
 #if wxUSE_AUI
 
+#include "wx/aui/auibook.h"
+
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 #include "wx/font.h"
@@ -28,11 +34,10 @@
 #include "wx/bitmap.h"
 
 
-class wxAuiNotebookPage;
-class wxAuiNotebookPageArray;
 class wxWindow;
 class wxDC;
-
+class wxAuiPaneInfo;
+class wxAuiPaneInfoPtrArray;
 
 // tab art class
 
@@ -54,12 +59,18 @@ public:
     virtual void SetMeasuringFont(const wxFont& font) = 0;
     virtual void SetColour(const wxColour& colour) = 0;
     virtual void SetActiveColour(const wxColour& colour) = 0;
+    // this should actually set the requested size
+    virtual void SetTabCtrlHeight(int size) = 0;
+    // this should actually set the requested size
+    virtual void SetTabCtrlWidth(int size) = 0;
+
+    virtual void SetUniformBitmapSize(const wxSize& size) = 0;
 
     virtual void DrawBorder(
-                 wxDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& rect) = 0;
-
+                            wxDC& dc,
+                            wxWindow* wnd,
+                            const wxRect& rect) = 0;
+    
     virtual void DrawBackground(
                          wxDC& dc,
                          wxWindow* wnd,
@@ -67,9 +78,10 @@ public:
 
     virtual void DrawTab(wxDC& dc,
                          wxWindow* wnd,
-                         const wxAuiNotebookPage& pane,
+                         const wxAuiPaneInfo& pane,
                          const wxRect& inRect,
                          int closeButtonState,
+                         bool haveFocus,
                          wxRect* outTabRect,
                          wxRect* outButtonRect,
                          int* xExtent) = 0;
@@ -94,21 +106,33 @@ public:
 
     virtual int ShowDropDown(
                          wxWindow* wnd,
-                         const wxAuiNotebookPageArray& items,
+                         const wxAuiPaneInfoPtrArray& items,
                          int activeIdx) = 0;
 
     virtual int GetIndentSize() = 0;
 
-    virtual int GetBorderWidth(
-                         wxWindow* wnd) = 0;
+
 
     virtual int GetAdditionalBorderSpace(
                          wxWindow* wnd) = 0;
 
+    virtual wxSize GetBestTabSize(
+                         wxWindow* wnd,
+                         const wxAuiPaneInfoPtrArray& pages,
+                         const wxSize& requiredBmpSize) = 0;
+
     virtual int GetBestTabCtrlSize(
                          wxWindow* wnd,
-                         const wxAuiNotebookPageArray& pages,
-                         const wxSize& requiredBmpSize) = 0;
+                         const wxAuiPaneInfoPtrArray& pages) = 0;
+
+    // this should return -1,-1 if there is no requested width \ height
+    virtual wxSize GetRequestedSize() const = 0;
+    virtual wxSize GetRequiredBitmapSize() const = 0;
+
+    int m_fixedTabSize;
+    int m_tabCtrlHeight;
+    int m_tabCtrlWidth;
+    unsigned int m_flags;
 };
 
 
@@ -120,35 +144,39 @@ public:
     wxAuiGenericTabArt();
     virtual ~wxAuiGenericTabArt();
 
-    wxAuiTabArt* Clone() wxOVERRIDE;
-    void SetFlags(unsigned int flags) wxOVERRIDE;
+    wxAuiTabArt* Clone();
+    void SetFlags(unsigned int flags);
     void SetSizingInfo(const wxSize& tabCtrlSize,
-                       size_t tabCount) wxOVERRIDE;
+                       size_t tabCount);
 
-    void SetNormalFont(const wxFont& font) wxOVERRIDE;
-    void SetSelectedFont(const wxFont& font) wxOVERRIDE;
-    void SetMeasuringFont(const wxFont& font) wxOVERRIDE;
-    void SetColour(const wxColour& colour) wxOVERRIDE;
-    void SetActiveColour(const wxColour& colour) wxOVERRIDE;
+    void SetNormalFont(const wxFont& font);
+    void SetSelectedFont(const wxFont& font);
+    void SetMeasuringFont(const wxFont& font);
+    void SetColour(const wxColour& colour);
+    void SetActiveColour(const wxColour& colour);
+    void SetTabCtrlHeight(int size);
+    void SetTabCtrlWidth(int size);
+    void SetUniformBitmapSize(const wxSize& size);
 
     void DrawBorder(
                  wxDC& dc,
                  wxWindow* wnd,
-                 const wxRect& rect) wxOVERRIDE;
+                 const wxRect& rect);
 
     void DrawBackground(
                  wxDC& dc,
                  wxWindow* wnd,
-                 const wxRect& rect) wxOVERRIDE;
+                 const wxRect& rect);
 
     void DrawTab(wxDC& dc,
                  wxWindow* wnd,
-                 const wxAuiNotebookPage& pane,
+                 const wxAuiPaneInfo& pane,
                  const wxRect& inRect,
                  int closeButtonState,
+                 bool haveFocus,
                  wxRect* outTabRect,
                  wxRect* outButtonRect,
-                 int* xExtent) wxOVERRIDE;
+                 int* xExtent);
 
     void DrawButton(
                  wxDC& dc,
@@ -157,15 +185,15 @@ public:
                  int bitmapId,
                  int buttonState,
                  int orientation,
-                 wxRect* outRect) wxOVERRIDE;
+                 wxRect* outRect);
 
-    int GetIndentSize() wxOVERRIDE;
+    int GetIndentSize();
 
     int GetBorderWidth(
-                 wxWindow* wnd) wxOVERRIDE;
+                 wxWindow* wnd);
 
     int GetAdditionalBorderSpace(
-                 wxWindow* wnd) wxOVERRIDE;
+                 wxWindow* wnd);
 
     wxSize GetTabSize(
                  wxDC& dc,
@@ -174,18 +202,35 @@ public:
                  const wxBitmap& bitmap,
                  bool active,
                  int closeButtonState,
-                 int* xExtent) wxOVERRIDE;
+                 int* xExtent);
 
     int ShowDropDown(
                  wxWindow* wnd,
-                 const wxAuiNotebookPageArray& items,
-                 int activeIdx) wxOVERRIDE;
+                 const wxAuiPaneInfoPtrArray& items,
+                 int activeIdx);
+
+    wxSize GetBestTabSize(wxWindow* wnd,
+                 const wxAuiPaneInfoPtrArray& pages,
+                 const wxSize& requiredBmpSize);
 
     int GetBestTabCtrlSize(wxWindow* wnd,
-                 const wxAuiNotebookPageArray& pages,
-                 const wxSize& requiredBmpSize) wxOVERRIDE;
+                 const wxAuiPaneInfoPtrArray& pages)
+                 {
+                     return GetBestTabSize(wnd, pages, m_requiredBitmapSize).GetHeight();
+                 }
+
+
+    wxSize GetRequiredBitmapSize() const;
+    wxSize GetRequestedSize() const;
+
+    // Returns true if the tabart has the given flag bit set
+    bool HasFlag(int flag) const    { return (m_flags & flag) != 0; }
+    // returns true if we have wxAUI_NB_TOP or wxAUI_NB_BOTTOM style
+    bool IsHorizontal() const { return HasFlag(wxAUI_NB_TOP | wxAUI_NB_BOTTOM); }
 
 protected:
+    wxSize m_requiredBitmapSize;
+    wxSize m_requestedSize;
 
     wxFont m_normalFont;
     wxFont m_selectedFont;
@@ -199,14 +244,14 @@ protected:
     wxBitmap m_disabledCloseBmp;
     wxBitmap m_activeLeftBmp;
     wxBitmap m_disabledLeftBmp;
+    wxBitmap m_activeUpBmp;
+    wxBitmap m_disabledUpBmp;
+    wxBitmap m_activeDownBmp;
+    wxBitmap m_disabledDownBmp;
     wxBitmap m_activeRightBmp;
     wxBitmap m_disabledRightBmp;
     wxBitmap m_activeWindowListBmp;
     wxBitmap m_disabledWindowListBmp;
-
-    int m_fixedTabWidth;
-    int m_tabCtrlHeight;
-    unsigned int m_flags;
 };
 
 
@@ -218,36 +263,40 @@ public:
     wxAuiSimpleTabArt();
     virtual ~wxAuiSimpleTabArt();
 
-    wxAuiTabArt* Clone() wxOVERRIDE;
-    void SetFlags(unsigned int flags) wxOVERRIDE;
+    wxAuiTabArt* Clone();
+    void SetFlags(unsigned int flags);
 
     void SetSizingInfo(const wxSize& tabCtrlSize,
-                       size_t tabCount) wxOVERRIDE;
+                       size_t tabCount);
 
-    void SetNormalFont(const wxFont& font) wxOVERRIDE;
-    void SetSelectedFont(const wxFont& font) wxOVERRIDE;
-    void SetMeasuringFont(const wxFont& font) wxOVERRIDE;
-    void SetColour(const wxColour& colour) wxOVERRIDE;
-    void SetActiveColour(const wxColour& colour) wxOVERRIDE;
+    void SetNormalFont(const wxFont& font);
+    void SetSelectedFont(const wxFont& font);
+    void SetMeasuringFont(const wxFont& font);
+    void SetColour(const wxColour& colour);
+    void SetActiveColour(const wxColour& colour);
+    void SetTabCtrlHeight(int size);
+    void SetTabCtrlWidth(int size);
+    void SetUniformBitmapSize(const wxSize& size);
 
     void DrawBorder(
                  wxDC& dc,
                  wxWindow* wnd,
-                 const wxRect& rect) wxOVERRIDE;
+                 const wxRect& rect);
 
     void DrawBackground(
                  wxDC& dc,
                  wxWindow* wnd,
-                 const wxRect& rect) wxOVERRIDE;
+                 const wxRect& rect);
 
     void DrawTab(wxDC& dc,
                  wxWindow* wnd,
-                 const wxAuiNotebookPage& pane,
+                 const wxAuiPaneInfo& pane,
                  const wxRect& inRect,
                  int closeButtonState,
+                 bool haveFocus,
                  wxRect* outTabRect,
                  wxRect* outButtonRect,
-                 int* xExtent) wxOVERRIDE;
+                 int* xExtent);
 
     void DrawButton(
                  wxDC& dc,
@@ -256,15 +305,15 @@ public:
                  int bitmapId,
                  int buttonState,
                  int orientation,
-                 wxRect* outRect) wxOVERRIDE;
+                 wxRect* outRect);
 
-    int GetIndentSize() wxOVERRIDE;
+    int GetIndentSize();
 
     int GetBorderWidth(
-                 wxWindow* wnd) wxOVERRIDE;
+                 wxWindow* wnd);
 
     int GetAdditionalBorderSpace(
-                 wxWindow* wnd) wxOVERRIDE;
+                 wxWindow* wnd);
 
     wxSize GetTabSize(
                  wxDC& dc,
@@ -273,19 +322,34 @@ public:
                  const wxBitmap& bitmap,
                  bool active,
                  int closeButtonState,
-                 int* xExtent) wxOVERRIDE;
+                 int* xExtent);
 
     int ShowDropDown(
                  wxWindow* wnd,
-                 const wxAuiNotebookPageArray& items,
-                 int activeIdx) wxOVERRIDE;
+                 const wxAuiPaneInfoPtrArray& items,
+                 int activeIdx);
+
+   wxSize GetBestTabSize(wxWindow* wnd,
+                 const wxAuiPaneInfoPtrArray& pages,
+                 const wxSize& requiredBmpSize);
 
     int GetBestTabCtrlSize(wxWindow* wnd,
-                 const wxAuiNotebookPageArray& pages,
-                 const wxSize& requiredBmpSize) wxOVERRIDE;
+                 const wxAuiPaneInfoPtrArray& pages)
+                 {
+                     return GetBestTabSize(wnd, pages, m_requiredBitmapSize).GetHeight();
+                 }
+
+    wxSize GetRequiredBitmapSize() const;
+    wxSize GetRequestedSize() const;
+
+    // Returns true if the tabart has the given flag bit set
+    bool HasFlag(int flag) const    { return (m_flags & flag) != 0; }
+    // returns true if we have wxAUI_NB_TOP or wxAUI_NB_BOTTOM style
+    bool IsHorizontal() const { return HasFlag(wxAUI_NB_TOP | wxAUI_NB_BOTTOM); }
 
 protected:
-
+    wxSize m_requiredBitmapSize;
+    wxSize m_requestedSize;
     wxFont m_normalFont;
     wxFont m_selectedFont;
     wxFont m_measuringFont;
@@ -298,13 +362,14 @@ protected:
     wxBitmap m_disabledCloseBmp;
     wxBitmap m_activeLeftBmp;
     wxBitmap m_disabledLeftBmp;
+    wxBitmap m_activeUpBmp;
+    wxBitmap m_disabledUpBmp;
+    wxBitmap m_activeDownBmp;
+    wxBitmap m_disabledDownBmp;
     wxBitmap m_activeRightBmp;
     wxBitmap m_disabledRightBmp;
     wxBitmap m_activeWindowListBmp;
     wxBitmap m_disabledWindowListBmp;
-
-    int m_fixedTabWidth;
-    unsigned int m_flags;
 };
 
 #ifndef __WXUNIVERSAL__
@@ -312,10 +377,7 @@ protected:
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartgtk.h"
         #define wxAuiDefaultTabArt wxAuiGtkTabArt
-    #elif defined(__WXMSW__)
-        #define wxHAS_NATIVE_TABART
-        #include "wx/aui/tabartmsw.h"
-        #define wxAuiDefaultTabArt wxAuiMSWTabArt
+        #define wxAuiNativeTabArt wxAuiGtkTabArt
     #endif
 #endif // !__WXUNIVERSAL__
 
