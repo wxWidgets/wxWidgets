@@ -43,9 +43,6 @@ public:
     void SetPaneWindow(const wxAuiPaneInfo& pane);
     wxAuiManager* GetOwnerManager() const;
 
-    // Allow processing accelerators to the parent frame
-    virtual bool IsTopNavigationDomain(NavigationKind kind) const wxOVERRIDE;
-
 protected:
     virtual void OnMoveStart();
     virtual void OnMoving(const wxRect& windowRect, wxDirection dir);
@@ -73,8 +70,8 @@ private:
     wxAuiManager m_mgr;
 
 #ifndef SWIG
-    wxDECLARE_EVENT_TABLE();
-    wxDECLARE_CLASS(wxAuiFloatingFrame);
+    DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxAuiFloatingFrame)
 #endif // SWIG
 };
 

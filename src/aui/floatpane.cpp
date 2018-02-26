@@ -2,8 +2,9 @@
 // Name:        src/aui/floatpane.cpp
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
-// Modified by:
+// Modified by: Malcolm MacLeod (mmacleod@webmail.co.za)
 // Created:     2005-05-17
+// RCS-ID:      $Id: floatpane.cpp 60940 2009-06-07 10:56:38Z MJM $
 // Copyright:   (C) Copyright 2005-2006, Kirix Corporation, All Rights Reserved
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,7 @@
 #include "wx/msw/private.h"
 #endif
 
-wxIMPLEMENT_CLASS(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass);
+IMPLEMENT_CLASS(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass)
 
 wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
                 wxAuiManager* owner_mgr,
@@ -46,7 +47,7 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
                               wxCLIP_CHILDREN
                            */)
                 : wxAuiFloatingFrameBaseClass(parent, id, wxEmptyString,
-                        pane.floating_pos, pane.floating_size,
+                        pane.GetFloatingPosition(), pane.GetFloatingSize(),
                         style |
                         (pane.HasCloseButton()?wxCLOSE_BOX:0) |
                         (pane.HasMaximizeButton()?wxMAXIMIZE_BOX:0) |
@@ -82,35 +83,35 @@ wxAuiFloatingFrame::~wxAuiFloatingFrame()
 
 void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
 {
-    m_paneWindow = pane.window;
+    m_paneWindow = pane.GetWindow();
     m_paneWindow->Reparent(this);
 
-    wxAuiPaneInfo contained_pane = pane;
-    contained_pane.Dock().Center().Show().
+    wxAuiPaneInfo containedPane = pane;
+    containedPane.Dock().Center().Show().
                     CaptionVisible(false).
                     PaneBorder(false).
-                    Layer(0).Row(0).Position(0);
+                    Layer(0).Row(0).Position(0).SetFlag(wxAuiPaneInfo::optionAlwaysDockInNotebook, false);
 
     // Carry over the minimum size
-    wxSize pane_min_size = pane.window->GetMinSize();
+    wxSize paneMinSize = pane.GetWindow()->GetMinSize();
 
     // if the frame window's max size is greater than the min size
     // then set the max size to the min size as well
-    wxSize cur_max_size = GetMaxSize();
-    if (cur_max_size.IsFullySpecified() &&
-          (cur_max_size.x < pane.min_size.x ||
-           cur_max_size.y < pane.min_size.y)
+    wxSize curMaxSize = GetMaxSize();
+    if (curMaxSize.IsFullySpecified() &&
+          (curMaxSize.x < pane.GetMinSize().x ||
+           curMaxSize.y < pane.GetMinSize().y)
        )
     {
-        SetMaxSize(pane_min_size);
+        SetMaxSize(paneMinSize);
     }
 
-    SetMinSize(pane.window->GetMinSize());
+    SetMinSize(pane.GetWindow()->GetMinSize());
 
-    m_mgr.AddPane(m_paneWindow, contained_pane);
+    m_mgr.AddPane(m_paneWindow, containedPane);
     m_mgr.Update();
 
-    if (pane.min_size.IsFullySpecified())
+    if (pane.GetMinSize().IsFullySpecified())
     {
         // because SetSizeHints() calls Fit() too (which sets the window
         // size to its minimum allowed), we keep the size before calling
@@ -120,7 +121,7 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
         SetSize(tmp);
     }
 
-    SetTitle(pane.caption);
+    SetTitle(pane.GetCaption());
 
     // This code is slightly awkward because we need to reset wxRESIZE_BORDER
     // before calling SetClientSize() below as doing it after setting the
@@ -131,7 +132,7 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     // So we must call it first but doing it generates a size event and updates
     // pane.floating_size from inside it so we must also record its original
     // value before doing it.
-    const bool hasFloatingSize = pane.floating_size != wxDefaultSize;
+    const bool hasFloatingSize = pane.GetFloatingSize() != wxDefaultSize;
     if (pane.IsFixed())
     {
         SetWindowStyleFlag(GetWindowStyleFlag() & ~wxRESIZE_BORDER);
@@ -139,13 +140,13 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
 
     if ( hasFloatingSize )
     {
-        SetSize(pane.floating_size);
+        SetSize(pane.GetFloatingSize());
     }
     else
     {
-        wxSize size = pane.best_size;
+        wxSize size = pane.GetBestSize();
         if (size == wxDefaultSize)
-            size = pane.min_size;
+            size = pane.GetMinSize();
         if (size == wxDefaultSize)
             size = m_paneWindow->GetSize();
         if (m_ownerMgr && pane.HasGripper())
@@ -158,6 +159,7 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
 
         SetClientSize(size);
     }
+
 }
 
 wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const
@@ -165,22 +167,6 @@ wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const
     return m_ownerMgr;
 }
 
-bool wxAuiFloatingFrame::IsTopNavigationDomain(NavigationKind kind) const
-{
-    switch ( kind )
-    {
-        case Navigation_Tab:
-            break;
-
-        case Navigation_Accel:
-            // Floating frames are often used as tool palettes and it's
-            // convenient for the accelerators defined in the parent frame to
-            // work in them, so don't block their propagation.
-            return false;
-    }
-
-    return wxAuiFloatingFrameBaseClass::IsTopNavigationDomain(kind);
-}
 
 void wxAuiFloatingFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
@@ -248,7 +234,7 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
         if (m_ownerMgr)
         {
             m_ownerMgr->GetPane(m_paneWindow).
-                floating_pos = winRect.GetPosition();
+                FloatingPosition( winRect.GetPosition() );
         }
 
         return;
@@ -266,10 +252,10 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 
     wxDirection dir = wxALL;
 
-    int horiz_dist = abs(winRect.x - m_last3Rect.x);
-    int vert_dist = abs(winRect.y - m_last3Rect.y);
+    int horizDist = abs(winRect.x - m_last3Rect.x);
+    int vertDist = abs(winRect.y - m_last3Rect.y);
 
-    if (vert_dist >= horiz_dist)
+    if (vertDist >= horizDist)
     {
         if (winRect.y < m_last3Rect.y)
             dir = wxNORTH;
@@ -368,14 +354,14 @@ bool wxAuiFloatingFrame::isMouseDown()
 }
 
 
-wxBEGIN_EVENT_TABLE(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass)
+BEGIN_EVENT_TABLE(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass)
     EVT_SIZE(wxAuiFloatingFrame::OnSize)
     EVT_MOVE(wxAuiFloatingFrame::OnMoveEvent)
     EVT_MOVING(wxAuiFloatingFrame::OnMoveEvent)
     EVT_CLOSE(wxAuiFloatingFrame::OnClose)
     EVT_IDLE(wxAuiFloatingFrame::OnIdle)
     EVT_ACTIVATE(wxAuiFloatingFrame::OnActivate)
-wxEND_EVENT_TABLE()
+END_EVENT_TABLE()
 
 
 #endif // wxUSE_AUI
