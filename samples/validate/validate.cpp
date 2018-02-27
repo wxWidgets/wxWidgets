@@ -30,7 +30,6 @@
 #include "wx/sizer.h"
 #include "wx/valgen.h"
 #include "wx/valtext.h"
-#include "wx/valtext2.h"
 #include "wx/valnum.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
