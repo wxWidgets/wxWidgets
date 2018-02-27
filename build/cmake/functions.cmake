@@ -202,8 +202,8 @@ function(wx_set_target_properties target_name is_base)
             PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
 
-    if (WXMSW)
-        set(WXMSW_LIBRARIES
+    if (WIN32)
+        set(WIN32_LIBRARIES
             kernel32
             user32
             gdi32
@@ -225,7 +225,38 @@ function(wx_set_target_properties target_name is_base)
             uxtheme
         )
         target_link_libraries(${target_name}
-            PUBLIC ${WXMSW_LIBRARIES})
+            PUBLIC ${WIN32_LIBRARIES})
+
+        if(WXGTK)
+            if(WXGTK4)
+                set(WXGTK_WIN32_LIBRARIES
+                    libgtk-4.dll.a
+                    libgdk-4.dll.a
+                )
+            elseif(WXGTK3)
+                set(WXGTK_WIN32_LIBRARIES
+                    libgtk-3.dll.a
+                    libgdk-3.dll.a
+                )
+            elseif(WXGTK2)
+                set(WXGTK_WIN32_LIBRARIES
+                    gtk-win32-2.0.lib
+                    gdk-win32-2.0.lib
+                )
+            endif()
+            set(WXGTK_WIN32_LIBRARIES ${WXGTK_WIN32_LIBRARIES}
+                gio-2.0.lib
+                pangocairo-1.0.lib
+                gdk_pixbuf-2.0.lib
+                cairo.lib
+                pango-1.0.lib
+                gobject-2.0.lib
+                gthread-2.0.lib
+                glib-2.0.lib
+            )
+            target_link_libraries(${target_name}
+                PUBLIC ${WXGTK_WIN32_LIBRARIES})
+        endif()
     endif()
 
     if(wxTOOLKIT_LIBRARIES)
