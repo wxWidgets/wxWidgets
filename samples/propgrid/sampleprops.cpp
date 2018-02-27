@@ -650,16 +650,13 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
 #if wxUSE_VALIDATORS
     WX_PG_DOGETVALIDATOR_ENTRY()
 
-    wxTextValidator* validator = new wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST);
+    // Accept space character
+    wxTextValidator* validator = new wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST|wxFILTER_SPACE);
 
     // Accept characters for numeric elements
     wxNumericPropertyValidator numValidator(wxNumericPropertyValidator::Float);
-    wxArrayString incChars(numValidator.GetIncludes());
-    // Accept also a delimiter and space character
-    incChars.Add(m_delimiter);
-    incChars.Add(wxT(" "));
-
-    validator->SetIncludes(incChars);
+    // Accept also a delimiter character
+    validator->AddCharIncludes(m_delimiter);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else

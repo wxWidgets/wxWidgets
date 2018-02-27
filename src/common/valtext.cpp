@@ -53,13 +53,9 @@ wxTextValidatorBase::wxTextValidatorBase(wxString* str, long style)
     // Notice that we should keep "include char list" always at the end
     // of m_includes as a one string item so that wxFILTER_INCLUDE_LIST
     // can safely be used in combination with wxFILTER_INCLUDE_CHAR_LIST.
-    // Hint: 
-    // Remember that wxFILTER_SPACE is nothing but a wxFILTER_INCLUDE_CHAR_LIST
-    // in disguise, added for clarity's sake. So it is not a problem to
-    // initialize "include char list" string here as long as the user code
-    // does not remove the space char later (e.g when calling SetCharIncludes()).
+    // Same goes for "exclude char list".
     if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
-        m_includes.Add(" ");
+        m_includes.Add(wxEmptyString);
 
     // See notice above...
     if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
@@ -203,19 +199,35 @@ void wxTextValidatorBase::SetCharIncludes(const wxString& chars)
         }
     }
 
-    // warn if wxFILTER_INCLUDE_CHAR_LIST was intended for wxFILTER_SPACE
-    // but the user unintentionally removes the 'space' from the char list!
-    if ( chars.Find(' ') == wxNOT_FOUND )
-    {
-        if ( !HasFlag(wxFILTER_ASCII) )
-            wxLogWarning("You may lose the effect of wxFILTER_SPACE!");
-    }
-
 #endif // wxDEBUG_LEVEL
 
     // "include char list" is allocated in the constructor, and should
     // always be the last item in m_includes.
     m_includes.Last() = chars;
+}
+
+void wxTextValidatorBase::AddCharIncludes(const wxString& chars)
+{
+    wxASSERT( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) );
+
+#if wxDEBUG_LEVEL
+
+    if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
+    {
+        for ( wxString::const_iterator i = chars.begin();
+              i != chars.end(); ++i )
+        {
+            if ( m_excludes.Last().Find(*i) != wxNOT_FOUND )
+            {
+                wxLogWarning("Charactes in the exclude char list won't be included!");
+                break;
+            }
+        }
+    }
+
+#endif // wxDEBUG_LEVEL
+
+    m_includes.Last() += chars;
 }
 
 void wxTextValidatorBase::SetCharExcludes(const wxString& chars)
@@ -242,6 +254,30 @@ void wxTextValidatorBase::SetCharExcludes(const wxString& chars)
     // "exclude char list" is allocated in the constructor, and should
     // always be the last item in m_excludes.
     m_excludes.Last() = chars;
+}
+
+void wxTextValidatorBase::AddCharExcludes(const wxString& chars)
+{
+    wxASSERT( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) );
+
+#if wxDEBUG_LEVEL
+
+    if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
+    {
+        for ( wxString::const_iterator i = chars.begin();
+              i != chars.end(); ++i )
+        {
+            if ( m_includes.Last().Find(*i) != wxNOT_FOUND )
+            {
+                wxLogWarning("Charactes in the include char list will be excluded!");
+                break;
+            }
+        }
+    }
+
+#endif // wxDEBUG_LEVEL
+
+    m_excludes.Last() += chars;
 }
 
 void wxTextValidatorBase::DoSetIncludes(const wxArrayString& includes)
@@ -274,6 +310,30 @@ void wxTextValidatorBase::DoSetExcludes(const wxArrayString& excludes)
     {
         m_excludes = excludes;
     }
+}
+
+void wxTextValidatorBase::DoAddInclude(const wxString& include)
+{
+    if ( include.empty() )
+        return;
+
+    if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
+        // Always keep the "include char list" at the end of m_includes
+        m_includes.Insert(include, m_includes.GetCount()-1);
+    else
+        m_includes.Add(include);
+}
+
+void wxTextValidatorBase::DoAddExclude(const wxString& exclude)
+{
+    if ( exclude.empty() )
+        return;
+
+    if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
+        // Always keep the "exclude char list" at the end m_excludes
+        m_excludes.Insert(exclude, m_excludes.GetCount()-1);
+    else
+        m_excludes.Add(exclude);
 }
 
 void wxTextValidatorBase::OnChar(wxKeyEvent& event)
@@ -322,7 +382,7 @@ wxTextValidator::wxTextValidator(const wxTextValidator& val)
     Copy(val);
 }
 
-bool wxTextValidator::Copy(const wxTextValidator& val)
+bool wxTextValidator::Copy(const wxTextValidator& WXUNUSED(val))
 {
     return true;
 }
@@ -331,7 +391,10 @@ bool wxTextValidator::IsValid(const wxUniChar& c) const
 {
     using wxPrivate::wxIsNumeric;
 
-    // For now, just preserve the old logic and behaviour!
+    if ( HasFlag(wxFILTER_SPACE) && wxIsspace(c) )
+        return true;
+
+    // FIXME: for now, just preserve the old logic and behaviour!
 
     if ( HasFlag(wxFILTER_ASCII) && !c.IsAscii() )
         return false;

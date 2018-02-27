@@ -41,7 +41,7 @@ enum wxTextValidatorStyle
     wxFILTER_INCLUDE_CHAR_LIST = 0x80,
     wxFILTER_EXCLUDE_LIST = 0x100,
     wxFILTER_EXCLUDE_CHAR_LIST = 0x200,
-    wxFILTER_SPACE = wxFILTER_INCLUDE_CHAR_LIST
+    wxFILTER_SPACE = 0x400
 };
 
 namespace wxPrivate
@@ -146,6 +146,24 @@ struct wxFilterChar<wxFILTER_NUMERIC, true>
     }
 };
 
+template<>
+struct wxFilterChar<wxFILTER_SPACE, true>
+{
+    static inline bool IsValid(const wxUniChar& c)
+    {
+        return wxIsspace(c);
+    }
+};
+
+template<>
+struct wxFilterChar<wxFILTER_SPACE, false>
+{
+    static inline bool IsValid(const wxUniChar&)
+    {
+        return false;
+    }
+};
+
 } // namespace wxPrivate
 
 //
@@ -184,12 +202,18 @@ public:
     wxTextEntry *GetTextEntry();
 
     void SetCharIncludes(const wxString& chars);
+    void AddCharIncludes(const wxString& chars);
+
     void SetIncludes(const wxArrayString& includes){ DoSetIncludes(includes); }
-    inline wxArrayString& GetIncludes() { return m_includes; }
+    void AddInclude(const wxString& include){ DoAddInclude(include); }
+    const wxArrayString& GetIncludes() { return m_includes; }
 
     void SetCharExcludes(const wxString& chars);
+    void AddCharExcludes(const wxString& chars);
+
     void SetExcludes(const wxArrayString& excludes){ DoSetExcludes(excludes); }
-    inline wxArrayString& GetExcludes() { return m_excludes; }
+    void AddExclude(const wxString& exclude){ DoAddExclude(exclude); }
+    const wxArrayString& GetExcludes() { return m_excludes; }
 
     bool HasFlag(wxTextValidatorStyle style) const
         { return (m_style & style) != 0; }
@@ -242,6 +266,8 @@ protected:
 
     virtual void DoSetIncludes(const wxArrayString& includes);
     virtual void DoSetExcludes(const wxArrayString& excludes);
+    virtual void DoAddInclude(const wxString& include);
+    virtual void DoAddExclude(const wxString& exclude);
 
     // returns the error message if the contents of 'str' are invalid
     wxString IsValid(const wxString& str) const;
@@ -395,6 +421,8 @@ wxGCC_WARNING_SUPPRESS(parentheses)
                             Flags & wxFILTER_ALPHANUMERIC>::IsValid(c) &&
                wxFilterChar<wxFILTER_NUMERIC,
                             Flags & wxFILTER_NUMERIC>::IsValid(c) || // yes it is a logical OR.
+               wxFilterChar<wxFILTER_SPACE,
+                            Flags & wxFILTER_SPACE>::IsValid(c) || // yes it is a logical OR.
                wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST,
                             Flags & wxFILTER_INCLUDE_CHAR_LIST>::IsValid(c, this);
 wxGCC_WARNING_RESTORE()
