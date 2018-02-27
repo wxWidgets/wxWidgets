@@ -428,6 +428,9 @@ wxGCC_WARNING_SUPPRESS(parentheses)
 wxGCC_WARNING_RESTORE()
     }
 
+    // Styles cannot be changed for this class.
+    virtual void DoSetStyle(long style) wxOVERRIDE { m_style = Flags; }
+
 private:
     wxSharedPtr<wxRegEx>   m_regex;
     wxString               m_intent;
