@@ -30,6 +30,7 @@
 #include "wx/sizer.h"
 #include "wx/valgen.h"
 #include "wx/valtext.h"
+#include "wx/valtext2.h"
 #include "wx/valnum.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -151,6 +152,7 @@ bool MyApp::OnInit()
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
+    EVT_MENU(VALIDATE_TEST_DIALOG2, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
 wxEND_EVENT_TABLE()
 
@@ -167,6 +169,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
     wxMenu *file_menu = new wxMenu;
 
     file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog...\tCtrl-T"), wxT("Demonstrate validators"));
+    file_menu->Append(VALIDATE_TEST_DIALOG2, wxT("T&est dialog2...\tCtrl-E"), wxT("Demonstrate validators (new)"));
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, wxT("E&xit"));
@@ -190,40 +193,58 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(true);
 }
 
-void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnTestDialog(wxCommandEvent& event)
 {
-    // The validators defined in the dialog implementation bind controls
-    // and variables together. Values are transferred between them behind
-    // the scenes, so here we don't have to query the controls for their
-    // values.
-    MyDialog dialog(this, wxT("Validator demonstration"));
+    const int id = event.GetId();
 
-    // When the dialog is displayed, validators automatically transfer
-    // data from variables to their corresponding controls.
-    if ( dialog.ShowModal() == wxID_OK )
+    if (id == VALIDATE_TEST_DIALOG)
     {
-        // 'OK' was pressed, so controls that have validators are
-        // automatically transferred to the variables we specified
-        // when we created the validators.
-        m_listbox->Clear();
-        m_listbox->Append(wxString(wxT("string: ")) + g_data.m_string);
-        m_listbox->Append(wxString(wxT("string #2: ")) + g_data.m_string2);
+        // The validators defined in the dialog implementation bind controls
+        // and variables together. Values are transferred between them behind
+        // the scenes, so here we don't have to query the controls for their
+        // values.
+        MyDialog dialog(this, wxT("Validator demonstration"));
 
-        for(unsigned int i = 0; i < g_data.m_listbox_choices.GetCount(); ++i)
+        // When the dialog is displayed, validators automatically transfer
+        // data from variables to their corresponding controls.
+        if ( dialog.ShowModal() == wxID_OK )
         {
-            int j = g_data.m_listbox_choices[i];
-            m_listbox->Append(wxString(wxT("listbox choice(s): ")) + g_listbox_choices[j]);
+            // 'OK' was pressed, so controls that have validators are
+            // automatically transferred to the variables we specified
+            // when we created the validators.
+            m_listbox->Clear();
+            m_listbox->Append(wxString(wxT("string: ")) + g_data.m_string);
+            m_listbox->Append(wxString(wxT("string #2: ")) + g_data.m_string2);
+
+            for(unsigned int i = 0; i < g_data.m_listbox_choices.GetCount(); ++i)
+            {
+                int j = g_data.m_listbox_choices[i];
+                m_listbox->Append(wxString(wxT("listbox choice(s): ")) + g_listbox_choices[j]);
+            }
+
+            wxString checkbox_state(g_data.m_checkbox_state ? wxT("checked") : wxT("unchecked"));
+            m_listbox->Append(wxString(wxT("checkbox: ")) + checkbox_state);
+            m_listbox->Append(wxString(wxT("combobox: ")) + g_data.m_combobox_choice);
+            m_listbox->Append(wxString(wxT("radiobox: ")) + g_radiobox_choices[g_data.m_radiobox_choice]);
+
+            m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
+            m_listbox->Append(wxString::Format("small int value: %u", g_data.m_smallIntValue));
+            m_listbox->Append(wxString::Format("double value: %.3f", g_data.m_doubleValue));
+            m_listbox->Append(wxString::Format("percent value: %.4f", g_data.m_percentValue));
         }
+    }
+    else if (id == VALIDATE_TEST_DIALOG2)
+    {
+        MyDialog2 dialog(this, "Validator demonstration (new impl.)");
 
-        wxString checkbox_state(g_data.m_checkbox_state ? wxT("checked") : wxT("unchecked"));
-        m_listbox->Append(wxString(wxT("checkbox: ")) + checkbox_state);
-        m_listbox->Append(wxString(wxT("combobox: ")) + g_data.m_combobox_choice);
-        m_listbox->Append(wxString(wxT("radiobox: ")) + g_radiobox_choices[g_data.m_radiobox_choice]);
-
-        m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
-        m_listbox->Append(wxString::Format("small int value: %u", g_data.m_smallIntValue));
-        m_listbox->Append(wxString::Format("double value: %.3f", g_data.m_doubleValue));
-        m_listbox->Append(wxString::Format("percent value: %.4f", g_data.m_percentValue));
+        // When the dialog is displayed, validators automatically transfer
+        // data from variables to their corresponding controls.
+        if ( dialog.ShowModal() == wxID_OK )
+        {
+            m_listbox->Clear();
+            m_listbox->Append(wxString("Your name is: ") + g_data.m_name);
+            m_listbox->Append(wxString("Your security number is: ") + g_data.m_securityNumber);
+        }
     }
 }
 
@@ -401,6 +422,75 @@ bool MyDialog::TransferDataToWindow()
     // dialog has been created.
     m_text->SetFocus();
     m_combobox->SetSelection(0);
+
+    return r;
+}
+
+// ----------------------------------------------------------------------------
+// MyDialog2
+// ----------------------------------------------------------------------------
+
+MyDialog2::MyDialog2( wxWindow *parent, const wxString& title,
+                    const wxPoint& pos, const wxSize& size, const long WXUNUSED(style) ) :
+    wxDialog(parent, VALIDATE_DIALOG2_ID, title, pos, size, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
+{
+    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
+
+    const long flags1 = wxFILTER_EMPTY|wxFILTER_ALPHA|wxFILTER_SPACE;
+
+    m_text1 = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                             wxDefaultPosition, wxDefaultSize, 0,
+                             wxRegexTextValidator<flags1>(&g_data.m_name));
+    m_text1->SetToolTip("Validator flags: wxFILTER_EMPTY|wxFILTER_ALPHA|wxFILTER_SPACE");
+    m_text1->SetHint("Enter your name please...");
+    mainsizer->Add( m_text1, wxSizerFlags().Expand().DoubleBorder() );
+
+    // Now set a wxRegexTextValidator with an explicit list of characters NOT allowed:
+    const long flags2 = wxFILTER_EMPTY|wxFILTER_ALPHANUMERIC|
+                        wxFILTER_EXCLUDE_CHAR_LIST|
+                        wxFILTER_INCLUDE_CHAR_LIST|
+                        wxFILTER_EXCLUDE_LIST;
+    const wxString pattern = "^(?:#\\w{3}:)?\\d{3}-\\d{2}-\\d{4}$";
+    const wxString intent = "Company-Z- security number!\n\n"
+                            "S.N. Format: (#ccc:)ddd-dd-ddd";
+
+    wxRegexTextValidator<flags2> textVal(&g_data.m_securityNumber, pattern, intent);
+    textVal.SetCharExcludes("_wyzWYZ");
+    textVal.SetCharIncludes("#-: "); // try to remove the space an see the warning!
+    
+    wxArrayString excludes;
+    excludes.Add("000-00-0000");
+    excludes.Add("#xxx:000-00-0000");
+    textVal.SetExcludes(excludes);
+
+    m_text2 = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                             wxDefaultPosition, wxDefaultSize, 0, textVal);
+    m_text2->SetToolTip("Validator flags: wxFILTER_EMPTY|wxFILTER_ALPHANUMERIC|\n"
+                        "                 wxFILTER_EXCLUDE_CHAR_LIST|\n"
+                        "                 wxFILTER_INCLUDE_CHAR_LIST|\n"
+                        "                 wxFILTER_EXCLUDE_LIST\n"
+                        "Excludes: '_wyzWYZ'\n"
+                        "Includes: '#-: '");
+    m_text2->SetHint("Enter your security number please...");
+    mainsizer->Add( m_text2, wxSizerFlags().Expand().DoubleBorder() );
+
+    mainsizer->AddStretchSpacer();
+
+    mainsizer->Add(CreateButtonSizer(wxOK | wxCANCEL),
+                   wxSizerFlags().Expand());
+
+    SetSizer(mainsizer);
+    mainsizer->SetSizeHints(this);
+
+    // make the dialog a bit bigger than its minimal size:
+    SetSize(GetBestSize()*1.5);
+}
+
+bool MyDialog2::TransferDataToWindow()
+{
+    bool r = wxDialog::TransferDataToWindow();
+
+    m_text1->SetFocus();
 
     return r;
 }

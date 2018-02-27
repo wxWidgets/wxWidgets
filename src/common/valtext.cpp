@@ -396,7 +396,7 @@ wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>::IsValid(
 
 } // namespace wxPrivate
 
-if wxUSE_REGEX
+#if wxUSE_REGEX
 
 template<>
 bool WXDLLIMPEXP_CORE wxRegexTextValidator<wxFILTER_INCLUDE_CHAR_LIST>::IsValid(const wxUniChar& c) const

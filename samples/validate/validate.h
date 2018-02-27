@@ -56,6 +56,20 @@ public:
     wxTextCtrl *m_numericTextDouble;
 };
 
+class MyDialog2 : public wxDialog
+{
+public:
+    MyDialog2(wxWindow *parent, const wxString& title,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            const long style = wxDEFAULT_DIALOG_STYLE);
+
+    bool TransferDataToWindow() wxOVERRIDE;
+
+    wxTextCtrl *m_text1;
+    wxTextCtrl *m_text2;
+};
+
 class MyData
 {
 public:
@@ -82,6 +96,10 @@ public:
 
     bool m_checkbox_state;
     int m_radiobox_choice;
+
+    // For controls in MyDialog2
+    wxString m_name;
+    wxString m_securityNumber;
 };
 
 class MyComboBoxValidator : public wxValidator
@@ -105,8 +123,10 @@ protected:
 enum
 {
     VALIDATE_DIALOG_ID = wxID_HIGHEST,
+    VALIDATE_DIALOG2_ID,
 
     VALIDATE_TEST_DIALOG,
+    VALIDATE_TEST_DIALOG2,
     VALIDATE_TOGGLE_BELL,
 
     VALIDATE_TEXT,
