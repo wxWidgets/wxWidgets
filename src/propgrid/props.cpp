@@ -158,62 +158,33 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 wxNumericPropertyValidator::
     wxNumericPropertyValidator( NumericType numericType, int base )
-    : wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST)
+    : wxTextValidator(wxFILTER_EMPTY|wxFILTER_INCLUDE_CHAR_LIST)
 {
-    wxArrayString arr;
-    arr.Add(wxS("0"));
-    arr.Add(wxS("1"));
-    arr.Add(wxS("2"));
-    arr.Add(wxS("3"));
-    arr.Add(wxS("4"));
-    arr.Add(wxS("5"));
-    arr.Add(wxS("6"));
-    arr.Add(wxS("7"));
+    wxString allowedChars = wxS("01234567");
 
     if ( base >= 10 )
     {
-        arr.Add(wxS("8"));
-        arr.Add(wxS("9"));
+        allowedChars += wxS("89");
+
         if ( base >= 16 )
         {
-            arr.Add(wxS("a")); arr.Add(wxS("A"));
-            arr.Add(wxS("b")); arr.Add(wxS("B"));
-            arr.Add(wxS("c")); arr.Add(wxS("C"));
-            arr.Add(wxS("d")); arr.Add(wxS("D"));
-            arr.Add(wxS("e")); arr.Add(wxS("E"));
-            arr.Add(wxS("f")); arr.Add(wxS("F"));
+            allowedChars += wxS("abcdefABCDEF");
         }
     }
 
     if ( numericType == Signed )
     {
-        arr.Add(wxS("+"));
-        arr.Add(wxS("-"));
+        allowedChars += wxS("+-");
     }
     else if ( numericType == Float )
     {
-        arr.Add(wxS("+"));
-        arr.Add(wxS("-"));
-        arr.Add(wxS("e")); arr.Add(wxS("E"));
+        allowedChars += wxS("+-eE");
 
         // Use locale-specific decimal point
-        arr.Add(wxString::Format(wxS("%g"), 1.1)[1]);
+        allowedChars += wxString::Format(wxS("%g"), 1.1)[1];
     }
 
-    SetIncludes(arr);
-}
-
-bool wxNumericPropertyValidator::Validate(wxWindow* parent)
-{
-    if ( !wxTextValidator::Validate(parent) )
-        return false;
-
-    wxTextCtrl* tc = wxDynamicCast(GetWindow(), wxTextCtrl);
-    if ( !tc )
-        return true;
-
-    // Do not allow zero-length string
-    return !tc->IsEmpty();
+    SetCharIncludes(allowedChars);
 }
 
 #endif // wxUSE_VALIDATORS
@@ -2021,15 +1992,9 @@ wxValidator* wxFileProperty::GetClassValidator()
     static wxString v;
     wxTextValidator* validator = new wxTextValidator(wxFILTER_EXCLUDE_CHAR_LIST,&v);
 
-    wxArrayString exChars;
-    exChars.Add(wxS("?"));
-    exChars.Add(wxS("*"));
-    exChars.Add(wxS("|"));
-    exChars.Add(wxS("<"));
-    exChars.Add(wxS(">"));
-    exChars.Add(wxS("\""));
+    wxString exChars = wxS("?*|<>\"");
 
-    validator->SetExcludes(exChars);
+    validator->SetCharExcludes(exChars);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else

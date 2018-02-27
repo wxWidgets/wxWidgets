@@ -149,7 +149,6 @@ public:
 
     wxNumericPropertyValidator( NumericType numericType, int base = 10 );
     virtual ~wxNumericPropertyValidator() { }
-    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
 };
 
 #endif // wxUSE_VALIDATORS
