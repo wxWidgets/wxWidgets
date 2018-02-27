@@ -170,9 +170,9 @@ struct wxFilterChar<wxFILTER_SPACE, false>
 class WXDLLIMPEXP_CORE wxTextValidatorBase: public wxValidator
 {
     // Need to call IsIncluded().
-    friend wxPrivate::wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST, true>;
+    friend class wxPrivate::wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST, true>;
     // Need to call IsNotExcluded().
-    friend wxPrivate::wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>;
+    friend class wxPrivate::wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>;
 
 public:
     wxTextValidatorBase(wxString* str, long style = wxFILTER_NONE);
@@ -276,7 +276,7 @@ protected:
     virtual bool IsValid(const wxUniChar& c) const = 0;
 
     // Called by Validate() to do the actual validation
-    virtual wxString DoValidate(const wxString& val) = 0;
+    virtual wxString DoValidate(const wxString& str) = 0;
 
     //
     virtual void DoSetStyle(long style){ m_style = style; }
