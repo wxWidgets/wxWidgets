@@ -476,7 +476,7 @@ MyDialog2::MyDialog2( wxWindow *parent, const wxString& title,
     mainsizer->AddStretchSpacer();
 
     mainsizer->Add(CreateButtonSizer(wxOK | wxCANCEL),
-                   wxSizerFlags().Expand());
+                   wxSizerFlags().Expand().DoubleBorder());
 
     SetSizer(mainsizer);
     mainsizer->SetSizeHints(this);
