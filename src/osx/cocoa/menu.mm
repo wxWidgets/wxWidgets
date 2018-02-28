@@ -233,6 +233,7 @@ public :
     virtual NSMenu* MacCreateOrFindWindowMenu()
     {
         wxMenu* peer = GetWXPeer();
+        wxString windowMenuTitle = wxStripMenuCodes(_("&Window"));
         
         NSMenu* windowMenu = nil;
         int windowmenuid = peer->FindItem(wxApp::s_macWindowMenuTitleName);
@@ -249,8 +250,8 @@ public :
 
         if ( windowMenu == nil )
         {
-            windowMenu = [[NSMenu alloc] initWithTitle:@"Window"];
-            NSMenuItem* windowMenuItem = [[NSMenuItem alloc] initWithTitle:@"Window" action:nil keyEquivalent:@""];
+            windowMenu = [[NSMenu alloc] initWithTitle:wxNSStringWithWxString(windowMenuTitle)];
+            NSMenuItem* windowMenuItem = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(windowMenuTitle) action:nil keyEquivalent:@""];
             [windowMenuItem setSubmenu:windowMenu];
             [windowMenu release];
             [m_osxMenu addItem:windowMenuItem];
@@ -270,18 +271,18 @@ public :
             
             if ( item == nil || [item action] != @selector(performMiniaturize:) )
             {
-                item = [[NSMenuItem alloc] initWithTitle:@"Minimize" action:@selector(performMiniaturize:) keyEquivalent:@"m"];
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Minimize")) action:@selector(performMiniaturize:) keyEquivalent:@"m"];
                 [windowMenu insertItem:item atIndex:0];
                 [item setEnabled:YES];
                 [item release];
                 
-                item = [[NSMenuItem alloc] initWithTitle:@"Zoom" action:@selector(performZoom:) keyEquivalent:@""];
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Zoom")) action:@selector(performZoom:) keyEquivalent:@""];
                 [windowMenu insertItem:item atIndex:1];
                 [item release];
                 
                 [windowMenu insertItem:[NSMenuItem separatorItem] atIndex:2];
                 
-                item = [[NSMenuItem alloc] initWithTitle:@"Bring All to Front" action:@selector(arrangeInFront:) keyEquivalent:@""];
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Bring All to Front")) action:@selector(arrangeInFront:) keyEquivalent:@""];
                 [windowMenu insertItem:item atIndex:3];
                 [item release];
                 
