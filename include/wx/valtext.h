@@ -408,20 +408,22 @@ public:
 private:
 // Truth table for wxFILTER_*:
 // ---------------------------
-// Is set? | EXC_CHARS |  ASCII  |  DIGITS |  ALPHA  |  ALNUM  |  NUMERIC  | SPACE  | INC_CHAR
-//---------------------------------------------------------------------------------------------
+// Is set? | EXC_CHARS |  ASCII  |  DIGITS |  ALPHA  |  ALNUM  |  NUMERIC  | SPACE  | INC_CHARS
+//----------------------------------------------------------------------------------------------
 //   Yes   |     ?     &&   ?    &&   ?    &&    ?   &&   ?    &&    ?     ||   ?   ||    ?
-//---------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 //   No    |    TRUE   &&  TRUE  &&  TRUE  &&  TRUE  &&  TRUE  &&   TRUE   || FALSE ||  FALSE
-//---------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
     virtual bool IsValid(const wxUniChar& c) const wxOVERRIDE
     {
 wxGCC_WARNING_SUPPRESS(parentheses)
 
         using wxPrivate::wxFilterChar;
 
+        // chars in the EXCLUDE_CHAR_LIST should be excluded no matter what!
         return wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST,
                             Flags & wxFILTER_EXCLUDE_CHAR_LIST>::IsValid(c, this) &&
+            (
                wxFilterChar<wxFILTER_ASCII,
                             Flags & wxFILTER_ASCII>::IsValid(c) &&
                wxFilterChar<wxFILTER_DIGITS,
@@ -435,7 +437,8 @@ wxGCC_WARNING_SUPPRESS(parentheses)
                wxFilterChar<wxFILTER_SPACE,
                             Flags & wxFILTER_SPACE>::IsValid(c) || // yes it is a logical OR.
                wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST,
-                            Flags & wxFILTER_INCLUDE_CHAR_LIST>::IsValid(c, this);
+                            Flags & wxFILTER_INCLUDE_CHAR_LIST>::IsValid(c, this)
+            );
 wxGCC_WARNING_RESTORE()
     }
 
