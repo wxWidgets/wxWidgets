@@ -317,6 +317,9 @@ protected:
     // Called by Validate() to do the actual validation
     virtual wxString DoValidate(const wxString& val) wxOVERRIDE;
 
+    //
+    virtual void DoSetStyle(long style) wxOVERRIDE;
+
 private:
     wxDECLARE_NO_ASSIGN_CLASS(wxTextValidator);
     wxDECLARE_DYNAMIC_CLASS(wxTextValidator);

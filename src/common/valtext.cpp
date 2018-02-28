@@ -438,6 +438,39 @@ wxString wxTextValidator::DoValidate(const wxString& str)
     return wxEmptyString;
 }
 
+void wxTextValidator::DoSetStyle(long style)
+{
+    // Add or remove "in/exclude char list" item when needed
+    
+    if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
+    {
+        // want to unset wxFILTER_INCLUDE_CHAR_LIST
+        if ( (style & wxFILTER_INCLUDE_CHAR_LIST) == 0 )
+            m_includes.RemoveAt(m_includes.GetCount()-1);
+    }
+    else // wxFILTER_INCLUDE_CHAR_LIST was not set
+    {
+        // want to set wxFILTER_INCLUDE_CHAR_LIST
+        if ( (style & wxFILTER_INCLUDE_CHAR_LIST) != 0 )
+            m_includes.Add(wxEmptyString);
+    }
+
+    if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
+    {
+        // want to unset wxFILTER_EXCLUDE_CHAR_LIST
+        if ( (style & wxFILTER_EXCLUDE_CHAR_LIST) == 0 )
+            m_excludes.RemoveAt(m_excludes.GetCount()-1);
+    }
+    else // wxFILTER_EXCLUDE_CHAR_LIST was not set
+    {
+        // want to set wxFILTER_EXCLUDE_CHAR_LIST
+        if ( (style & wxFILTER_EXCLUDE_CHAR_LIST) != 0 )
+            m_excludes.Add(wxEmptyString);
+    }
+
+    m_style = style;
+}
+
 namespace wxPrivate
 {
 
