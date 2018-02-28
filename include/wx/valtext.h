@@ -418,24 +418,27 @@ wxGCC_WARNING_SUPPRESS(parentheses)
         using wxPrivate::wxFilterChar;
 
         // chars in the EXCLUDE_CHAR_LIST should be excluded no matter what!
-        return wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST,
-                            Flags & wxFILTER_EXCLUDE_CHAR_LIST>::IsValid(c, this) &&
-            (
-               wxFilterChar<wxFILTER_ASCII,
-                            Flags & wxFILTER_ASCII>::IsValid(c) &&
-               wxFilterChar<wxFILTER_DIGITS,
-                            Flags & wxFILTER_DIGITS>::IsValid(c) &&
-               wxFilterChar<wxFILTER_ALPHA,
-                            Flags & wxFILTER_ALPHA>::IsValid(c) &&
-               wxFilterChar<wxFILTER_ALPHANUMERIC,
-                            Flags & wxFILTER_ALPHANUMERIC>::IsValid(c) &&
-               wxFilterChar<wxFILTER_NUMERIC,
-                            Flags & wxFILTER_NUMERIC>::IsValid(c) || // yes it is a logical OR.
-               wxFilterChar<wxFILTER_SPACE,
-                            Flags & wxFILTER_SPACE>::IsValid(c) || // yes it is a logical OR.
-               wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST,
-                            Flags & wxFILTER_INCLUDE_CHAR_LIST>::IsValid(c, this)
-            );
+        // unless it is a space in which case we shouldn't cancel the effect
+        // of wxFILTER_SPACE anyhow.
+        return 
+        ( wxFilterChar<wxFILTER_SPACE,
+                       Flags & wxFILTER_SPACE>::IsValid(c) || // yes it is a logical OR.
+          wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST,
+                       Flags & wxFILTER_EXCLUDE_CHAR_LIST>::IsValid(c, this) 
+        ) &&
+        ( wxFilterChar<wxFILTER_ASCII,
+                       Flags & wxFILTER_ASCII>::IsValid(c) &&
+          wxFilterChar<wxFILTER_DIGITS,
+                       Flags & wxFILTER_DIGITS>::IsValid(c) &&
+          wxFilterChar<wxFILTER_ALPHA,
+                       Flags & wxFILTER_ALPHA>::IsValid(c) &&
+          wxFilterChar<wxFILTER_ALPHANUMERIC,
+                       Flags & wxFILTER_ALPHANUMERIC>::IsValid(c) &&
+          wxFilterChar<wxFILTER_NUMERIC,
+                       Flags & wxFILTER_NUMERIC>::IsValid(c) || // yes it is a logical OR.
+          wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST,
+                       Flags & wxFILTER_INCLUDE_CHAR_LIST>::IsValid(c, this)
+        );
 wxGCC_WARNING_RESTORE()
     }
 
