@@ -206,14 +206,14 @@ public:
 
     void SetIncludes(const wxArrayString& includes){ DoSetIncludes(includes); }
     void AddInclude(const wxString& include){ DoAddInclude(include); }
-    const wxArrayString& GetIncludes() { return m_includes; }
+    const wxArrayString& GetIncludes() const { return m_includes; }
 
     void SetCharExcludes(const wxString& chars);
     void AddCharExcludes(const wxString& chars);
 
     void SetExcludes(const wxArrayString& excludes){ DoSetExcludes(excludes); }
     void AddExclude(const wxString& exclude){ DoAddExclude(exclude); }
-    const wxArrayString& GetExcludes() { return m_excludes; }
+    const wxArrayString& GetExcludes() const { return m_excludes; }
 
     bool HasFlag(wxTextValidatorStyle style) const
         { return (m_style & style) != 0; }
@@ -238,7 +238,7 @@ protected:
         return true;
     }
 
-    bool IsExcluded(const wxString& str)
+    bool IsExcluded(const wxString& str) const
     {
         const int idx = m_excludes.Index(str);
 
@@ -251,7 +251,7 @@ protected:
         return idx != wxNOT_FOUND;
     }
 
-    bool IsNotIncluded(const wxString& str)
+    bool IsNotIncluded(const wxString& str) const
     {
         const int idx = m_includes.Index(str);
 
