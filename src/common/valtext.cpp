@@ -168,9 +168,9 @@ bool wxTextValidatorBase::TransferFromWindow()
     return true;
 }
 
-wxString wxTextValidatorBase::IsValid(const wxString& val) const
+wxString wxTextValidatorBase::IsValid(const wxString& str) const
 {
-    for ( wxString::const_iterator i = val.begin(); i != val.end(); ++i )
+    for ( wxString::const_iterator i = str.begin(); i != str.end(); ++i )
     {
         if ( !IsValid(*i) )
             return _("'%s' has invalid characters!");
@@ -411,9 +411,9 @@ bool wxTextValidator::IsValid(const wxUniChar& c) const
         return false;
     if ( HasFlag(wxFILTER_NUMERIC) && !wxIsNumeric(c) )
         return false;
-    if ( !IsIncluded(c) )
+    if ( !IsCharIncluded(c) )
         return false;
-    if ( !IsNotExcluded(c) )
+    if ( !IsCharExcluded(c) )
         return false;
 
     return true;
@@ -427,7 +427,7 @@ wxString wxTextValidator::DoValidate(const wxString& str)
         return _("Required information entry is empty.");
     else if ( HasFlag(wxFILTER_EXCLUDE_LIST) && IsExcluded(str) )
         return wxString::Format(_("'%s' is one of the invalid strings"), str);
-    else if ( HasFlag(wxFILTER_INCLUDE_LIST) && IsNotIncluded(str) )
+    else if ( HasFlag(wxFILTER_INCLUDE_LIST) && !IsIncluded(str) )
         return wxString::Format(_("'%s' is not one of the valid strings"), str);
 
     wxString errormsg = wxTextValidatorBase::IsValid(str);
@@ -484,7 +484,7 @@ bool WXDLLIMPEXP_CORE
 wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST, true>::IsValid(
     const wxUniChar& c, const wxTextValidatorBase* obj)
 {
-    return obj->IsIncluded(c);
+    return obj->IsCharIncluded(c);
 }
 
 //template<>
@@ -492,7 +492,7 @@ bool WXDLLIMPEXP_CORE
 wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>::IsValid(
     const wxUniChar& c, const wxTextValidatorBase* obj)
 {
-    return obj->IsNotExcluded(c);
+    return !obj->IsCharExcluded(c);
 }
 
 } // namespace wxPrivate

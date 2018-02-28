@@ -167,9 +167,9 @@ struct wxFilterChar<wxFILTER_SPACE, false>
 //
 class WXDLLIMPEXP_CORE wxTextValidatorBase: public wxValidator
 {
-    // Need to call IsIncluded().
+    // Need to call IsCharIncluded().
     friend class wxPrivate::wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST, true>;
-    // Need to call IsNotExcluded().
+    // Need to call IsCharExcluded().
     friend class wxPrivate::wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>;
 
 public:
@@ -218,7 +218,7 @@ public:
 
 protected:
 
-    bool IsIncluded(const wxUniChar& c) const
+    bool IsCharIncluded(const wxUniChar& c) const
     {
         if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
             // We always keep the included characters at the end of m_includes
@@ -227,39 +227,38 @@ protected:
         return true;
     }
 
-    bool IsNotExcluded(const wxUniChar& c) const
+    bool IsCharExcluded(const wxUniChar& c) const
     {
         if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
             // We always keep the excluded characters at the end of m_excludes
-            return (m_excludes.Last().Find(c) == wxNOT_FOUND);
+            return (m_excludes.Last().Find(c) != wxNOT_FOUND);
 
-        return true;
+        return false;
+    }
+
+    // Helper used by IsIncluded and IsExcluded
+    inline bool IsStrFound(const wxArrayString& arr, 
+                           const wxString& str, wxTextValidatorStyle style) const
+    {
+        const int idx = arr.Index(str);
+
+        if ( HasFlag(style) )
+        {
+            return idx != wxNOT_FOUND &&
+                   idx+1 != (int)arr.GetCount(); // the [inc|exc]lude char list
+        }
+
+        return idx != wxNOT_FOUND;        
+    }
+
+    bool IsIncluded(const wxString& str) const
+    {
+        return IsStrFound(m_includes, str, wxFILTER_INCLUDE_CHAR_LIST);
     }
 
     bool IsExcluded(const wxString& str) const
     {
-        const int idx = m_excludes.Index(str);
-
-        if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
-        {
-            return idx != wxNOT_FOUND && 
-                   idx+1 != (int)m_excludes.GetCount(); // the exclude char list
-        }
-
-        return idx != wxNOT_FOUND;
-    }
-
-    bool IsNotIncluded(const wxString& str) const
-    {
-        const int idx = m_includes.Index(str);
-
-        if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
-        {
-            return idx == wxNOT_FOUND ||
-                   idx+1 >= (int)m_includes.GetCount(); // the include char list
-        }
-
-        return idx == wxNOT_FOUND;
+        return IsStrFound(m_excludes, str, wxFILTER_EXCLUDE_CHAR_LIST);
     }
 
     virtual void DoSetIncludes(const wxArrayString& includes);
@@ -314,7 +313,7 @@ protected:
     virtual bool IsValid(const wxUniChar& c) const wxOVERRIDE;
 
     // Called by Validate() to do the actual validation
-    virtual wxString DoValidate(const wxString& val) wxOVERRIDE;
+    virtual wxString DoValidate(const wxString& str) wxOVERRIDE;
 
     virtual void DoSetStyle(long style) wxOVERRIDE;
 
@@ -387,7 +386,7 @@ public:
             return wxString::Format(_("'%s' doesn't match %s"), str, m_intent);
         else if ( HasFlag(wxFILTER_EXCLUDE_LIST) && IsExcluded(str) )
             return wxString::Format(_("'%s' is one of the invalid strings"), str);
-        else if ( HasFlag(wxFILTER_INCLUDE_LIST) && IsNotIncluded(str) )
+        else if ( HasFlag(wxFILTER_INCLUDE_LIST) && !IsIncluded(str) )
             return wxString::Format(_("'%s' is not one of the valid strings"), str);
 
         wxString errormsg = wxTextValidatorBase::IsValid(str);
