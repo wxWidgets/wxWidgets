@@ -82,6 +82,35 @@ if(WXGTK)
     list(APPEND wxTOOLKIT_DEFINITIONS ${${gtk_lib}_DEFINITIONS})
     list(APPEND wxTOOLKIT_DEFINITIONS __WXGTK__)
     set(wxTOOLKIT_VERSION ${${gtk_lib}_VERSION})
+
+    if(WIN32 AND MSVC)
+        if(WXGTK4)
+            list(APPEND wxTOOLKIT_LIBRARIES
+                libgtk-4.dll.a
+                libgdk-4.dll.a
+            )
+        elseif(WXGTK3)
+            list(APPEND wxTOOLKIT_LIBRARIES
+                libgtk-3.dll.a
+                libgdk-3.dll.a
+            )
+        elseif(WXGTK2)
+            list(APPEND wxTOOLKIT_LIBRARIES
+                gtk-win32-2.0
+                gdk-win32-2.0
+            )
+        endif()
+        list(APPEND wxTOOLKIT_LIBRARIES
+            gio-2.0
+            pangocairo-1.0
+            gdk_pixbuf-2.0
+            cairo
+            pango-1.0
+            gobject-2.0
+            gthread-2.0
+            glib-2.0
+        )
+    endif()
 endif()
 
 if(APPLE)
