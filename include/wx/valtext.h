@@ -224,7 +224,7 @@ protected:
             // We always keep the included characters at the end of m_includes
             return (m_includes.Last().Find(c) != wxNOT_FOUND);
 
-        return true;
+        return false;
     }
 
     bool IsCharExcluded(const wxUniChar& c) const

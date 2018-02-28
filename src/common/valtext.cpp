@@ -396,27 +396,39 @@ bool wxTextValidator::IsValid(const wxUniChar& c) const
 {
     using wxPrivate::wxIsNumeric;
 
+    if ( !m_style ) // no filtering if HasFlag(wxFILTER_NONE)
+        return true;
+
     if ( HasFlag(wxFILTER_SPACE) && wxIsspace(c) )
         return true;
 
-    // FIXME: for now, just preserve the old logic and behaviour!
+    if ( IsCharExcluded(c) )
+        return false;
+
+    if ( IsCharIncluded(c) )
+        return true;
+
+    static const long mask = wxFILTER_ASCII|wxFILTER_ALPHA|
+                      wxFILTER_ALPHANUMERIC|wxFILTER_DIGITS|wxFILTER_NUMERIC;
+    
+    long flags = m_style & mask;
+
+    if ( !flags )
+        // accept whatever this character is.
+        return true;
 
     if ( HasFlag(wxFILTER_ASCII) && !c.IsAscii() )
-        return false;
+        flags ^= wxFILTER_ASCII;
     if ( HasFlag(wxFILTER_ALPHA) && !wxIsalpha(c) )
-        return false;
+        flags ^= wxFILTER_ALPHA;
     if ( HasFlag(wxFILTER_ALPHANUMERIC) && !wxIsalnum(c) )
-        return false;
+        flags ^= wxFILTER_ALPHANUMERIC;
     if ( HasFlag(wxFILTER_DIGITS) && !wxIsdigit(c) )
-        return false;
+        flags ^= wxFILTER_DIGITS;
     if ( HasFlag(wxFILTER_NUMERIC) && !wxIsNumeric(c) )
-        return false;
-    if ( !IsCharIncluded(c) )
-        return false;
-    if ( !IsCharExcluded(c) )
-        return false;
+        flags ^= wxFILTER_NUMERIC;
 
-    return true;
+    return flags != 0;
 }
 
 wxString wxTextValidator::DoValidate(const wxString& str)

@@ -276,8 +276,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // so that we can use them elsewhere, like this one.
     m_text = new wxTextCtrl(this, VALIDATE_TEXT, wxEmptyString,
                             wxDefaultPosition, wxDefaultSize, 0,
-                            wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
-    m_text->SetToolTip("uses wxTextValidator with wxFILTER_ALPHA");
+                            wxTextValidator(wxFILTER_ALPHA|wxFILTER_NUMERIC, &g_data.m_string));
+    m_text->SetToolTip("uses wxTextValidator with wxFILTER_ALPHA|wxFILTER_NUMERIC");
     flexgridsizer->Add(m_text, 1, wxGROW);
 
 
