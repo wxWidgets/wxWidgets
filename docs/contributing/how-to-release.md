@@ -20,7 +20,7 @@ Add the missing installed folder locations of any executables to your Path.
 For the stable (even) releases only, check that binary compatibility hasn't
 been broken since the last stable release.
 
-### Checking under Unix systems using `abi-complicance-checker` tool.
+### Checking under Unix systems using `abi-compliance-checker` tool.
 
 Instructions:
 
@@ -32,11 +32,11 @@ Instructions:
 1. Create directories for temporary files containing the ABI dumps for the old
    and new libraries: `mkdir -p ../compat/{$old,$new}`.
 1. Run abi-dumper on all libraries: `for l in $old/lib/*.so; do abi-dumper $l
-   -lver $old -o ../compat/$old/$(basename $l).dump` and the same thing with
+   -lver $old -o ../compat/$old/$(basename $l).dump; done` and the same thing with
    the new libraries.
 1. Run abi-compliance-checker on each pair of produced dumps to generate HTML
-   reports: `for l in 3.0.2/*dump; abi-compliance-checker -l $(basename $l
-   .dump) -old $l -new 3.0.3/$(basename $l)`.
+   reports: `for l in 3.0.2/*dump; do abi-compliance-checker -l $(basename $l
+   .dump) -old $l -new 3.0.3/$(basename $l); done`.
 1. Examine these reports, paying attention to the problem summary.
 
 ### Checking under MSW systems.
