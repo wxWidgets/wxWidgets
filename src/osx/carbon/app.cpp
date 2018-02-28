@@ -68,6 +68,7 @@ long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 long      wxApp::s_macPreferencesMenuItemId = wxID_PREFERENCES ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
 wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
+wxString  wxApp::s_macWindowMenuTitleName = wxT("&Window") ;
 
 bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
 
