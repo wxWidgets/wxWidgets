@@ -371,8 +371,13 @@ void wxTextValidatorBase::OnChar(wxKeyEvent& event)
 //
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxTextValidatorBase);
 
-wxTextValidator::wxTextValidator(long style, wxString *val)
-    : wxTextValidatorBase(val, style)
+wxTextValidator::wxTextValidator(wxString *str, long style)
+    : wxTextValidatorBase(str, style)
+{
+}
+
+wxTextValidator::wxTextValidator(long style, wxString *str)
+    : wxTextValidatorBase(str, style)
 {
 }
 
@@ -441,7 +446,7 @@ wxString wxTextValidator::DoValidate(const wxString& str)
 void wxTextValidator::DoSetStyle(long style)
 {
     // Add or remove "in/exclude char list" item when needed
-    
+
     if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
     {
         // want to unset wxFILTER_INCLUDE_CHAR_LIST

@@ -278,7 +278,7 @@ protected:
     // Called by Validate() to do the actual validation
     virtual wxString DoValidate(const wxString& str) = 0;
 
-    //
+    // For each derived class set m_style properly
     virtual void DoSetStyle(long style){ m_style = style; }
 
 protected:
@@ -298,7 +298,8 @@ private:
 class WXDLLIMPEXP_CORE wxTextValidator: public wxTextValidatorBase
 {
 public:
-    wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
+    explicit wxTextValidator(wxString *str, long style = wxFILTER_NONE);
+    wxTextValidator(long style = wxFILTER_NONE, wxString *str = NULL);
     wxTextValidator(const wxTextValidator& val);
 
     virtual ~wxTextValidator(){}
@@ -317,7 +318,6 @@ protected:
     // Called by Validate() to do the actual validation
     virtual wxString DoValidate(const wxString& val) wxOVERRIDE;
 
-    //
     virtual void DoSetStyle(long style) wxOVERRIDE;
 
 private:
@@ -343,9 +343,9 @@ public:
     // str param not defaulted to NULL to force client code to do so explicitly
     // to avoid silly bugs (e.g. TransferToWindow() and TransferFromWindow()
     // would seem to be doing nothing!).
-    wxRegexTextValidator(wxString* str,
-                         const wxString& pattern = wxEmptyString,
-                         const wxString& intent = wxEmptyString)
+    explicit wxRegexTextValidator(wxString* str,
+                        const wxString& pattern = wxEmptyString,
+                        const wxString& intent = wxEmptyString)
         : wxTextValidatorBase(str, Flags), m_regex(new wxRegEx)
     {
         if ( !pattern.empty() )
@@ -406,6 +406,14 @@ public:
     }
 
 private:
+// Truth table for wxFILTER_*:
+// ---------------------------
+// Is set? | EXC_CHARS |  ASCII  |  DIGITS |  ALPHA  |  ALNUM  |  NUMERIC  | SPACE  | INC_CHAR
+//---------------------------------------------------------------------------------------------
+//   Yes   |     ?     &&   ?    &&   ?    &&    ?   &&   ?    &&    ?     ||   ?   ||    ?
+//---------------------------------------------------------------------------------------------
+//   No    |    TRUE   &&  TRUE  &&  TRUE  &&  TRUE  &&  TRUE  &&   TRUE   || FALSE ||  FALSE
+//---------------------------------------------------------------------------------------------
     virtual bool IsValid(const wxUniChar& c) const wxOVERRIDE
     {
 wxGCC_WARNING_SUPPRESS(parentheses)
