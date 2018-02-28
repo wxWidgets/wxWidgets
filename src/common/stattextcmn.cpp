@@ -106,6 +106,8 @@ wxCONSTRUCTOR_6( wxStaticText, wxWindow*, Parent, wxWindowID, Id, \
 void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
     const wxClientDC dc(win);
+    
+    const wxString zeroWidthSpace = wxString::FromUTF8("\xE2\x80\x8B");
 
     const wxArrayString ls = wxSplit(text, '\n', '\0');
     for ( wxArrayString::const_iterator i = ls.begin(); i != ls.end(); ++i )
@@ -145,7 +147,13 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             }
 
             // Find the last word to chop off.
-            const size_t lastSpace = line.rfind(' ', posEnd);
+            const size_t lastSpace1 = line.rfind(' ', posEnd);
+            const size_t lastSpace2 = line.rfind(zeroWidthSpace, posEnd);
+            
+            size_t lastSpace = max(lastSpace1, lastSpace2);
+            if ( lastSpace == wxString::npos )
+                lastSpace = min(lastSpace1, lastSpace2);
+            
             if ( lastSpace == wxString::npos )
             {
                 // No spaces, so can't wrap.
@@ -157,7 +165,7 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             DoOutputLine(line.substr(0, lastSpace));
 
             // And redo the layout with the rest.
-            line = line.substr(lastSpace + 1);
+            line = line.substr(lastSpace + (line[lastSpace] == ' ' ? 1 : zeroWidthSpace.size()));
         }
     }
 }
