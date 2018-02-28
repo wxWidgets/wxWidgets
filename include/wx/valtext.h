@@ -378,17 +378,38 @@ public:
 
     virtual wxString DoValidate(const wxString& str) wxOVERRIDE
     {
-        // We can only do some kinds of validation once the input is complete, so
-        // check for them here:
         if ( HasFlag(wxFILTER_EMPTY) && str.empty() )
             return _("Required information entry is empty.");
-        else if ( m_regex->IsValid() && !m_regex->Matches(str) )
-            return wxString::Format(_("'%s' doesn't match %s"), str, m_intent);
-        else if ( HasFlag(wxFILTER_EXCLUDE_LIST) && IsExcluded(str) )
+        if ( HasFlag(wxFILTER_EXCLUDE_LIST) && IsExcluded(str) )
             return wxString::Format(_("'%s' is one of the invalid strings"), str);
-        else if ( HasFlag(wxFILTER_INCLUDE_LIST) && !IsIncluded(str) )
-            return wxString::Format(_("'%s' is not one of the valid strings"), str);
 
+        //
+        bool hasIncludesButNotIncluded = false;
+
+        do
+        {
+            if ( hasIncludesButNotIncluded )
+                return wxString::Format(_("'%s' is not one of the valid strings"), str);
+
+            if ( HasFlag(wxFILTER_INCLUDE_LIST) )
+            {
+                hasIncludesButNotIncluded = !IsIncluded(str);
+            }
+        
+            if ( m_regex->IsValid() && !m_regex->Matches(str) )
+            {
+                // Either we should return the above message If hasIncludesButNotIncluded is true,
+                // or exit this loop if str is one of the included strings. if neither is true,
+                // return the message that follows.
+                if ( HasFlag(wxFILTER_INCLUDE_LIST) )
+                    continue;
+                
+                return wxString::Format(_("'%s' doesn't match %s"), str, m_intent);
+            }
+
+        } while ( hasIncludesButNotIncluded );
+
+        // str shouldn't contain invalid chars.
         wxString errormsg = wxTextValidatorBase::IsValid(str);
 
         if ( !errormsg.empty() )
@@ -405,12 +426,12 @@ public:
 private:
 // Truth table for wxFILTER_*:
 // ---------------------------
-// Is set? | EXC_CHARS |  ASCII  |  DIGITS |  ALPHA  |  ALNUM  |  NUMERIC  | SPACE  | INC_CHARS
-//----------------------------------------------------------------------------------------------
-//   Yes   |     ?     &&   ?    &&   ?    &&    ?   &&   ?    &&    ?     ||   ?   ||    ?
-//----------------------------------------------------------------------------------------------
-//   No    |    TRUE   &&  TRUE  &&  TRUE  &&  TRUE  &&  TRUE  &&   TRUE   || FALSE ||  FALSE
-//----------------------------------------------------------------------------------------------
+// Is set? | SPACE |  | EXC_CHARS |  ASCII  |  DIGITS |  ALPHA  |  ALNUM  |  NUMERIC  | INC_CHARS
+//------------------  ---------------------------------------------------------------------------
+//   Yes   |   ?   || |     ?     &&   ?    &&   ?    &&    ?   &&   ?    &&    ?     ||    ?
+//------------------- ---------------------------------------------------------------------------
+//   No    | FALSE || |   TRUE    &&  TRUE  &&  TRUE  &&  TRUE  &&  TRUE  &&   TRUE   ||  FALSE
+//------------------- ---------------------------------------------------------------------------
     virtual bool IsValid(const wxUniChar& c) const wxOVERRIDE
     {
 wxGCC_WARNING_SUPPRESS(parentheses)
@@ -420,13 +441,12 @@ wxGCC_WARNING_SUPPRESS(parentheses)
         // chars in the EXCLUDE_CHAR_LIST should be excluded no matter what!
         // unless it is a space in which case we shouldn't cancel the effect
         // of wxFILTER_SPACE anyhow.
-        return 
-        ( wxFilterChar<wxFILTER_SPACE,
-                       Flags & wxFILTER_SPACE>::IsValid(c) || // yes it is a logical OR.
+        return wxFilterChar<wxFILTER_SPACE,
+                            Flags & wxFILTER_SPACE>::IsValid(c) || // yes it is a logical OR.
+        (
           wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST,
-                       Flags & wxFILTER_EXCLUDE_CHAR_LIST>::IsValid(c, this) 
-        ) &&
-        ( wxFilterChar<wxFILTER_ASCII,
+                       Flags & wxFILTER_EXCLUDE_CHAR_LIST>::IsValid(c, this) &&
+          wxFilterChar<wxFILTER_ASCII,
                        Flags & wxFILTER_ASCII>::IsValid(c) &&
           wxFilterChar<wxFILTER_DIGITS,
                        Flags & wxFILTER_DIGITS>::IsValid(c) &&
@@ -443,7 +463,7 @@ wxGCC_WARNING_RESTORE()
     }
 
     // Styles cannot be changed for this class.
-    virtual void DoSetStyle(long style) wxOVERRIDE { m_style = Flags; }
+    virtual void DoSetStyle(long WXUNUSED(style)) wxOVERRIDE { m_style = Flags; }
 
 private:
     wxSharedPtr<wxRegEx>   m_regex;

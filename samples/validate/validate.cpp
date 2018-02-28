@@ -446,28 +446,33 @@ MyDialog2::MyDialog2( wxWindow *parent, const wxString& title,
 
     // Now set a wxRegexTextValidator with an explicit list of characters NOT allowed:
     const long flags2 = wxFILTER_EMPTY|wxFILTER_ALPHANUMERIC|
-                        wxFILTER_EXCLUDE_CHAR_LIST|
-                        wxFILTER_INCLUDE_CHAR_LIST|
-                        wxFILTER_EXCLUDE_LIST;
+                        wxFILTER_EXCLUDE_CHAR_LIST|wxFILTER_INCLUDE_CHAR_LIST|
+                        wxFILTER_EXCLUDE_LIST|wxFILTER_INCLUDE_LIST;
     const wxString pattern = "^(?:#\\w{3}:)?\\d{3}-\\d{2}-\\d{4}$";
-    const wxString intent = "Company-Z- security number!\n\n"
+    const wxString intent = "Company-Z- security number!\n"
                             "S.N. Format: (#ccc:)ddd-dd-ddd";
 
     wxRegexTextValidator<flags2> textVal(&g_data.m_securityNumber, pattern, intent);
-    textVal.SetCharExcludes("_wyzWYZ");
-    textVal.SetCharIncludes("#-: "); // try to remove the space an see the warning!
+    textVal.SetCharExcludes("_wyzWYZ ");
+    textVal.SetCharIncludes("#-:");
     
     wxArrayString excludes;
     excludes.Add("000-00-0000");
+    excludes.Add("999-99-9999");
     excludes.Add("#xxx:000-00-0000");
+    excludes.Add("#xxx:999-99-9999");
     textVal.SetExcludes(excludes);
+
+    // do allow this special S.N.
+    textVal.AddInclude("13579-02468");
 
     m_text2 = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                              wxDefaultPosition, wxDefaultSize, 0, textVal);
     m_text2->SetToolTip("Validator flags: wxFILTER_EMPTY|wxFILTER_ALPHANUMERIC|\n"
                         "                 wxFILTER_EXCLUDE_CHAR_LIST|\n"
                         "                 wxFILTER_INCLUDE_CHAR_LIST|\n"
-                        "                 wxFILTER_EXCLUDE_LIST\n"
+                        "                 wxFILTER_EXCLUDE_LIST|"
+                        "                 wxFILTER_INCLUDE_LIST\n"
                         "Excludes: '_wyzWYZ'\n"
                         "Includes: '#-: '");
     m_text2->SetHint("Enter your security number please...");
