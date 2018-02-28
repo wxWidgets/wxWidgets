@@ -19,9 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 class WXDLLIMPEXP_FWD_CORE wxTextValidatorBase;
 
 #include "wx/validate.h"
-#if wxUSE_REGEX
-    #include "wx/regex.h"
-#endif // wxUSE_REGEX
+#include "wx/regex.h"
 #include "wx/sharedptr.h"
 #include "wx/intl.h"
 
