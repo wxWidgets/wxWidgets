@@ -428,12 +428,70 @@ bool MyDialog::TransferDataToWindow()
 // ----------------------------------------------------------------------------
 // MyDialog2
 // ----------------------------------------------------------------------------
+class TextValidator: public wxTextValidatorBase
+{
+public:
+    explicit TextValidator(wxString *str, long style = wxFILTER_NONE)
+        : wxTextValidatorBase(str, style){}
+
+    TextValidator(long style = wxFILTER_NONE, wxString *str = NULL)
+        : wxTextValidatorBase(str, style){}
+
+    TextValidator(const TextValidator& val)
+        : wxTextValidatorBase(val)
+    {
+        Copy(val);
+    }
+
+    virtual ~TextValidator(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new TextValidator(*this); }
+    bool Copy(const TextValidator& WXUNUSED(val))
+    {
+        return true;
+    }
+
+protected:
+    // returns false if the character is invalid
+    virtual bool IsValid(const wxUniChar& ) const wxOVERRIDE
+    {
+        return true;
+    }
+
+    // Called by Validate() to do the actual validation
+    virtual wxString DoValidate(const wxString& str) wxOVERRIDE
+    {
+        if ( str.length() > 16 )
+            return "string too long!";
+
+        if ( !str.StartsWith("wx") )
+            return "Missed the prefix 'wx'";
+
+        return wxEmptyString;
+    }
+
+    // this is not required, but we override it to make it
+    // clear that we don't care much about the used style.
+    virtual void DoSetStyle(long WXUNUSED(style)) wxOVERRIDE
+    {
+        m_style = wxFILTER_NONE;
+    }
+
+private:
+    wxDECLARE_NO_ASSIGN_CLASS(TextValidator);
+};
 
 MyDialog2::MyDialog2( wxWindow *parent, const wxString& title,
                     const wxPoint& pos, const wxSize& size, const long WXUNUSED(style) ) :
     wxDialog(parent, VALIDATE_DIALOG2_ID, title, pos, size, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
+
+    wxTextCtrl* txtCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                        wxDefaultPosition, wxDefaultSize, 0, TextValidator());
+    txtCtrl->SetToolTip("with custom validator.");
+    txtCtrl->SetHint("No more than sixteen chars please...");
+    mainsizer->Add( txtCtrl, wxSizerFlags().Expand().DoubleBorder() );
 
     const long flags1 = wxFILTER_EMPTY|wxFILTER_ALPHA|wxFILTER_SPACE|wxFILTER_INCLUDE_CHAR_LIST;
     wxRegexTextValidator<flags1> textVal1(&g_data.m_name);
