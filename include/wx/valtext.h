@@ -32,7 +32,7 @@ enum wxTextValidatorStyle
     wxFILTER_EMPTY = 0x1,
     wxFILTER_ASCII = 0x2,
     wxFILTER_ALPHA = 0x4,
-    wxFILTER_ALPHANUMERIC = 0x8, // should be wxFILTER_ALPHA|wxFILTER_DIGITS, shouldn't it?
+    wxFILTER_ALPHANUMERIC = 0x8,
     wxFILTER_DIGITS = 0x10,
     wxFILTER_NUMERIC = 0x20,
     wxFILTER_INCLUDE_LIST = 0x40,
@@ -160,6 +160,34 @@ struct wxFilterChar<wxFILTER_SPACE, false>
     {
         return false;
     }
+};
+
+
+// The purpose of AlnumFlag is to beg you to use:
+// -----------------------------------------------
+// 1. template<wxFILTER_ALPHANUMERIC|...>
+//
+// instead of these (redundants) constructs:
+// ----------------------------
+// 2. template<wxFILTER_ALPHA|wxFILTER_DIGITS|...>
+// 3. template<wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA|...>
+// 4. template<wxFILTER_ALPHANUMERIC|wxFILTER_DIGITS|...>
+// 5. template<wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA|wxFILTER_DIGITS|...>
+//
+template<long Flags>
+struct AlnumFlag
+{
+    enum
+    {
+        mask1 = wxFILTER_ALPHA|wxFILTER_DIGITS,
+        mask2 = wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA,
+        mask3 = wxFILTER_ALPHANUMERIC|wxFILTER_DIGITS,
+    };
+
+    static const bool normalized = 
+        ((Flags & (mask1))!=(mask1)) &&
+        ((Flags & (mask2))!=(mask2)) &&
+        ((Flags & (mask3))!=(mask3));
 };
 
 } // namespace wxPrivate
@@ -325,14 +353,6 @@ private:
 
 #if wxUSE_REGEX
 
-// TODO:
-// wxFILTER_ALPHANUMERIC should be wxFILTER_ALPHA|wxFILTER_DIGITS so:
-// template<wxFILTER_ALPHANUMERIC>
-// template<wxFILTER_ALPHA|wxFILTER_DIGITS>
-// template<wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA>
-// template<wxFILTER_ALPHANUMERIC|wxFILTER_DIGITS>
-// template<wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA|wxFILTER_DIGITS>
-// would generate only one copy!
 template<long Flags>
 class WXDLLIMPEXP_CORE wxRegexTextValidator : public wxTextValidatorBase
 {
@@ -364,6 +384,14 @@ public:
         }
     }
 
+    ~wxRegexTextValidator()
+    {
+#if wxDEBUG_LEVEL
+        wxCOMPILE_TIME_ASSERT(wxPrivate::AlnumFlag<Flags>::normalized,
+                              please_sanitize_the_wxFILTER_ALPHANUMERIC_flag);
+#endif // wxDEBUG_LEVEL
+    }
+
     virtual wxObject *Clone() const wxOVERRIDE { return new wxRegexTextValidator(*this); }
 
     bool Copy(const wxRegexTextValidator& val)
@@ -383,31 +411,24 @@ public:
         if ( HasFlag(wxFILTER_EXCLUDE_LIST) && IsExcluded(str) )
             return wxString::Format(_("'%s' is one of the invalid strings"), str);
 
-        //
-        bool hasIncludesButNotIncluded = false;
-
         do
         {
-            if ( hasIncludesButNotIncluded )
-                return wxString::Format(_("'%s' is not one of the valid strings"), str);
-
-            if ( HasFlag(wxFILTER_INCLUDE_LIST) )
-            {
-                hasIncludesButNotIncluded = !IsIncluded(str);
-            }
+            if ( HasFlag(wxFILTER_INCLUDE_LIST) && IsIncluded(str) )
+                break; // str is one of the included strings.
         
-            if ( m_regex->IsValid() && !m_regex->Matches(str) )
+            if ( m_regex->IsValid() )
             {
-                // Either we should return the above message If hasIncludesButNotIncluded is true,
-                // or exit this loop if str is one of the included strings. if neither is true,
-                // return the message that follows.
-                if ( HasFlag(wxFILTER_INCLUDE_LIST) )
-                    continue;
-                
+                if ( m_regex->Matches(str) )                
+                    break; // str does match regex pattern.
                 return wxString::Format(_("'%s' doesn't match %s"), str, m_intent);
             }
 
-        } while ( hasIncludesButNotIncluded );
+            if ( HasFlag(wxFILTER_INCLUDE_LIST) )
+                return wxString::Format(_("'%s' is not one of the valid strings"), str);
+
+        //  we haven't set wxFILTER_INCLUDE_LIST nor we have a regex to match against.
+
+        } while ( 0 ); // don't touch the zero!
 
         // str shouldn't contain invalid chars.
         wxString errormsg = wxTextValidatorBase::IsValid(str);

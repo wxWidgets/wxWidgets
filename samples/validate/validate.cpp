@@ -435,11 +435,12 @@ MyDialog2::MyDialog2( wxWindow *parent, const wxString& title,
 {
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
-    const long flags1 = wxFILTER_EMPTY|wxFILTER_ALPHA|wxFILTER_SPACE;
+    const long flags1 = wxFILTER_EMPTY|wxFILTER_ALPHA|wxFILTER_SPACE|wxFILTER_INCLUDE_CHAR_LIST;
+    wxRegexTextValidator<flags1> textVal1(&g_data.m_name);
+    textVal1.SetCharIncludes("'-");
 
     m_text1 = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
-                             wxDefaultPosition, wxDefaultSize, 0,
-                             wxRegexTextValidator<flags1>(&g_data.m_name));
+                             wxDefaultPosition, wxDefaultSize, 0, textVal1);
     m_text1->SetToolTip("Validator flags: wxFILTER_EMPTY|wxFILTER_ALPHA|wxFILTER_SPACE");
     m_text1->SetHint("Enter your name please...");
     mainsizer->Add( m_text1, wxSizerFlags().Expand().DoubleBorder() );
@@ -452,29 +453,27 @@ MyDialog2::MyDialog2( wxWindow *parent, const wxString& title,
     const wxString intent = "Company-Z- security number!\n"
                             "S.N. Format: (#ccc:)ddd-dd-ddd";
 
-    wxRegexTextValidator<flags2> textVal(&g_data.m_securityNumber, pattern, intent);
-    textVal.SetCharExcludes("_wyzWYZ ");
-    textVal.SetCharIncludes("#-:");
+    wxRegexTextValidator<flags2> textVal2(&g_data.m_securityNumber, pattern, intent);
+    textVal2.SetCharExcludes("_wyzWYZ ");
+    textVal2.SetCharIncludes("#-:");
     
     wxArrayString excludes;
     excludes.Add("000-00-0000");
     excludes.Add("999-99-9999");
     excludes.Add("#xxx:000-00-0000");
     excludes.Add("#xxx:999-99-9999");
-    textVal.SetExcludes(excludes);
+    textVal2.SetExcludes(excludes);
 
     // do allow this special S.N.
-    textVal.AddInclude("13579-02468");
+    textVal2.AddInclude("13579-02468");
 
     m_text2 = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
-                             wxDefaultPosition, wxDefaultSize, 0, textVal);
+                             wxDefaultPosition, wxDefaultSize, 0, textVal2);
     m_text2->SetToolTip("Validator flags: wxFILTER_EMPTY|wxFILTER_ALPHANUMERIC|\n"
                         "                 wxFILTER_EXCLUDE_CHAR_LIST|\n"
                         "                 wxFILTER_INCLUDE_CHAR_LIST|\n"
                         "                 wxFILTER_EXCLUDE_LIST|"
-                        "                 wxFILTER_INCLUDE_LIST\n"
-                        "Excludes: '_wyzWYZ'\n"
-                        "Includes: '#-: '");
+                        "                 wxFILTER_INCLUDE_LIST");
     m_text2->SetHint("Enter your security number please...");
     mainsizer->Add( m_text2, wxSizerFlags().Expand().DoubleBorder() );
 
