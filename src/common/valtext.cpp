@@ -531,6 +531,89 @@ wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>::IsValid(
 
 #if wxUSE_REGEX
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxRegexTextValidatorBase, wxTextValidatorBase)
+
+
+wxRegexTextValidatorBase::wxRegexTextValidatorBase(wxString* str, long style,
+                                                   const wxString& pattern,
+                                                   const wxString& intent)
+    : wxTextValidatorBase(str, style), m_regex(new wxRegEx)
+{
+    if ( !pattern.empty() )
+    {
+        wxCHECK_RET(m_regex->Compile(pattern, wxRE_ADVANCED),
+                    _("Invalid pattern passed to wxTextValidatorBase() !"));
+
+        m_intent = !intent.empty() ? intent : _("pattern");
+    }
+}
+
+wxRegexTextValidatorBase::wxRegexTextValidatorBase(wxString* str, long style,
+                                                   wxSharedPtr<wxRegEx> regex, 
+                                                   const wxString& intent)
+    : wxTextValidatorBase(str, style), m_regex(new wxRegEx)
+{
+    if ( regex->IsValid() )
+    {
+        m_regex = regex;
+        m_intent = !intent.empty() ? intent : _("pattern");
+    }
+}
+
+wxRegexTextValidatorBase::wxRegexTextValidatorBase(const wxRegexTextValidatorBase& val)
+    : wxTextValidatorBase(val)
+{
+    Copy(val);
+}
+
+bool wxRegexTextValidatorBase::Copy(const wxRegexTextValidatorBase& val)
+{
+    m_regex = val.m_regex;
+    m_intent = val.m_intent;
+
+    return true;
+}
+
+wxString wxRegexTextValidatorBase::DoValidate(const wxString& str)
+{
+    if ( HasFlag(wxFILTER_EMPTY) && str.empty() )
+        return _("Required information entry is empty.");
+    if ( HasFlag(wxFILTER_EXCLUDE_LIST) && IsExcluded(str) )
+        return wxString::Format(_("'%s' is one of the invalid strings"), str);
+
+    do
+    {
+        if ( HasFlag(wxFILTER_INCLUDE_LIST) && IsIncluded(str) )
+            break; // str is one of the included strings.
+        
+        if ( m_regex->IsValid() )
+        {
+            if ( m_regex->Matches(str) )                
+                break; // str does match regex pattern.
+            return wxString::Format(_("'%s' doesn't match %s"), str, m_intent);
+        }
+
+        if ( HasFlag(wxFILTER_INCLUDE_LIST) )
+            return wxString::Format(_("'%s' is not one of the valid strings"), str);
+
+    //  we haven't set wxFILTER_INCLUDE_LIST nor we have a regex to match against.
+
+    } while ( 0 ); // don't touch the zero!
+
+    // str shouldn't contain invalid chars.
+    wxString errormsg = wxTextValidatorBase::IsValid(str);
+
+    if ( !errormsg.empty() )
+    {
+        // NB: this format string should always contain exactly one '%s'
+        wxString buf;
+        buf.Printf(errormsg, str);
+        return buf;
+    }
+    
+    return wxEmptyString;
+}
+
 template<>
 bool WXDLLIMPEXP_CORE wxRegexTextValidator<wxFILTER_INCLUDE_CHAR_LIST>::IsValid(const wxUniChar& c) const
 {

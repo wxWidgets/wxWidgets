@@ -15,8 +15,10 @@
 
 #if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
+class WXDLLIMPEXP_FWD_BASE wxRegEx;
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 class WXDLLIMPEXP_FWD_CORE wxTextValidatorBase;
+class WXDLLIMPEXP_FWD_CORE wxRegexTextValidatorBase;
 
 #include "wx/validate.h"
 #include "wx/regex.h"
@@ -196,9 +198,9 @@ struct AlnumFlag
 class WXDLLIMPEXP_CORE wxTextValidatorBase: public wxValidator
 {
     // Need to call IsCharIncluded().
-    friend struct wxPrivate::wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST, true>;
+    friend struct WXDLLIMPEXP_FWD_CORE wxPrivate::wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST, true>;
     // Need to call IsCharExcluded().
-    friend struct wxPrivate::wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>;
+    friend struct WXDLLIMPEXP_FWD_CORE wxPrivate::wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>;
 
 public:
     wxTextValidatorBase(wxString* str, long style = wxFILTER_NONE);
@@ -360,35 +362,53 @@ private:
 
 #if wxUSE_REGEX
 
-template<long Flags>
-class WXDLLIMPEXP_CORE wxRegexTextValidator : public wxTextValidatorBase
+class WXDLLIMPEXP_CORE wxRegexTextValidatorBase : public wxTextValidatorBase
 {
 public:
-    // str param not defaulted to NULL to force client code to do so explicitly
-    // to avoid silly bugs (e.g. TransferToWindow() and TransferFromWindow()
-    // would seem to be doing nothing!).
+    wxRegexTextValidatorBase(wxString* str, long style,
+                             const wxString& pattern, const wxString& intent);
+
+    wxRegexTextValidatorBase(wxString* str, long style,
+                             wxSharedPtr<wxRegEx> regex, const wxString& intent);
+
+    wxRegexTextValidatorBase(const wxRegexTextValidatorBase& val);
+
+    virtual ~wxRegexTextValidatorBase(){}
+
+    bool Copy(const wxRegexTextValidatorBase& val);
+
+protected:
+    virtual wxString DoValidate(const wxString& str) wxOVERRIDE;
+
+
+    wxSharedPtr<wxRegEx>   m_regex;
+    wxString               m_intent;
+
+private:
+    wxDECLARE_NO_ASSIGN_CLASS(wxRegexTextValidatorBase);
+    wxDECLARE_ABSTRACT_CLASS(wxRegexTextValidatorBase);
+};
+
+template<long Flags>
+class wxRegexTextValidator : public wxRegexTextValidatorBase
+{
+public:
     explicit wxRegexTextValidator(wxString* str,
                         const wxString& pattern = wxEmptyString,
                         const wxString& intent = wxEmptyString)
-        : wxTextValidatorBase(str, Flags), m_regex(new wxRegEx)
+        : wxRegexTextValidatorBase(str, Flags, pattern, intent)
     {
-        if ( !pattern.empty() )
-        {
-            wxCHECK_RET(m_regex->Compile(pattern, wxRE_ADVANCED),
-                        _("Invalid pattern passed to wxTextValidatorBase() !"));
-
-            m_intent = !intent.empty() ? intent : _("pattern");
-        }
     }
 
     wxRegexTextValidator(wxString* str, wxSharedPtr<wxRegEx> regex, const wxString& intent)
-        : wxTextValidatorBase(str, Flags), m_regex(new wxRegEx)
+        : wxRegexTextValidatorBase(str, Flags, regex, intent)
     {
-        if ( regex->IsValid() )
-        {
-            m_regex = regex;
-            m_intent = !intent.empty() ? intent : _("pattern");
-        }
+    }
+
+    wxRegexTextValidator(const wxRegexTextValidator& val)
+        : wxRegexTextValidatorBase(val)
+    {
+        Copy(val);
     }
 
     ~wxRegexTextValidator()
@@ -401,54 +421,9 @@ public:
 
     virtual wxObject *Clone() const wxOVERRIDE { return new wxRegexTextValidator(*this); }
 
-    bool Copy(const wxRegexTextValidator& val)
+    bool Copy(const wxRegexTextValidator& WXUNUSED(val))
     {
-        wxTextValidatorBase::Copy(val);
-
-        m_regex = val.m_regex;
-        m_intent = val.m_intent;
-
         return true;
-    }
-
-    virtual wxString DoValidate(const wxString& str) wxOVERRIDE
-    {
-        if ( HasFlag(wxFILTER_EMPTY) && str.empty() )
-            return _("Required information entry is empty.");
-        if ( HasFlag(wxFILTER_EXCLUDE_LIST) && IsExcluded(str) )
-            return wxString::Format(_("'%s' is one of the invalid strings"), str);
-
-        do
-        {
-            if ( HasFlag(wxFILTER_INCLUDE_LIST) && IsIncluded(str) )
-                break; // str is one of the included strings.
-        
-            if ( m_regex->IsValid() )
-            {
-                if ( m_regex->Matches(str) )                
-                    break; // str does match regex pattern.
-                return wxString::Format(_("'%s' doesn't match %s"), str, m_intent);
-            }
-
-            if ( HasFlag(wxFILTER_INCLUDE_LIST) )
-                return wxString::Format(_("'%s' is not one of the valid strings"), str);
-
-        //  we haven't set wxFILTER_INCLUDE_LIST nor we have a regex to match against.
-
-        } while ( 0 ); // don't touch the zero!
-
-        // str shouldn't contain invalid chars.
-        wxString errormsg = wxTextValidatorBase::IsValid(str);
-
-        if ( !errormsg.empty() )
-        {
-            // NB: this format string should always contain exactly one '%s'
-            wxString buf;
-            buf.Printf(errormsg, str);
-            return buf;
-        }
-    
-        return wxEmptyString;
     }
 
 private:
@@ -462,6 +437,11 @@ private:
 //------------------- ---------------------------------------------------------------------------
     virtual bool IsValid(const wxUniChar& c) const wxOVERRIDE
     {
+#ifdef __VISUALC__
+    #pragma warning(push)
+    #pragma warning(disable: 4305) // truncation from 'long' to 'bool'
+#endif
+
 wxGCC_WARNING_SUPPRESS(parentheses)
 
         using wxPrivate::wxFilterChar;
@@ -487,15 +467,15 @@ wxGCC_WARNING_SUPPRESS(parentheses)
           wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST,
                        Flags & wxFILTER_INCLUDE_CHAR_LIST>::IsValid(c, this)
         );
-wxGCC_WARNING_RESTORE()
+wxGCC_WARNING_RESTORE(parentheses)
+
+#ifdef __VISUALC__
+    #pragma warning(pop)
+#endif
     }
 
     // Styles cannot be changed for this class.
     virtual void DoSetStyle(long WXUNUSED(style)) wxOVERRIDE { m_style = Flags; }
-
-private:
-    wxSharedPtr<wxRegEx>   m_regex;
-    wxString               m_intent;
 
 private:
     wxDECLARE_NO_ASSIGN_CLASS(wxRegexTextValidator);
