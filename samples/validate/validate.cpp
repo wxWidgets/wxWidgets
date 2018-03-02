@@ -31,11 +31,22 @@
 #include "wx/valgen.h"
 #include "wx/valtext.h"
 #include "wx/valnum.h"
+#include "wx/richtooltip.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
+// To show errormsg in a richtooltip instead of the default modal dialog.
+static void OnValidationFailed(const wxString &errormsg, 
+                               wxWindow* const window, 
+                               wxWindow* const parent)
+{
+    wxUnusedVar(parent);
+    wxRichToolTip tip(_("Validation conflict"), errormsg);
+    tip.SetIcon(wxICON_WARNING);
+    tip.ShowFor(window);
+}
 // ----------------------------------------------------------------------------
 // Global data
 // ----------------------------------------------------------------------------
@@ -153,6 +164,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TEST_DIALOG2, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
+    EVT_MENU(VALIDATE_TOGGLE_RTTIP, MyFrame::OnToggleRichtooltip)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
@@ -170,6 +182,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
     file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog...\tCtrl-T"), wxT("Demonstrate validators"));
     file_menu->Append(VALIDATE_TEST_DIALOG2, wxT("T&est dialog2...\tCtrl-E"), wxT("Demonstrate validators (new)"));
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
+    file_menu->AppendCheckItem(VALIDATE_TOGGLE_RTTIP, 
+        wxT("&Richtooltip on error"), wxT("Toggle richtooltip on error"));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, wxT("E&xit"));
 
@@ -251,6 +265,13 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 {
     m_silent = !m_silent;
     wxValidator::SuppressBellOnError(m_silent);
+    event.Skip();
+}
+
+void MyFrame::OnToggleRichtooltip(wxCommandEvent& event)
+{
+    wxTextValidator::UseCustomValidationPopup(
+        event.IsChecked() ? OnValidationFailed : NULL);
     event.Skip();
 }
 

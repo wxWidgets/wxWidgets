@@ -323,6 +323,10 @@ private:
 class WXDLLIMPEXP_CORE wxTextValidator: public wxTextValidatorBase
 {
 public:
+typedef void(*OnValidationFailedFunc)(const wxString& errormsg,
+                                      wxWindow* const window, 
+                                      wxWindow* const parent);
+public:
     explicit wxTextValidator(wxString *str, long style = wxFILTER_NONE);
     wxTextValidator(long style = wxFILTER_NONE, wxString *str = NULL);
     wxTextValidator(const wxTextValidator& val);
@@ -335,6 +339,9 @@ public:
     // (so the calling code can use a copy constructor of the relevant class).
     virtual wxObject *Clone() const wxOVERRIDE { return new wxTextValidator(*this); }
     bool Copy(const wxTextValidator& val);
+
+    // 
+    static void UseCustomValidationPopup(OnValidationFailedFunc func);
 
 protected:
     // returns false if the character is invalid

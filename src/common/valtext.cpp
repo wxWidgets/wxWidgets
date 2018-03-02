@@ -34,10 +34,26 @@
 
 #include "wx/combo.h"
 
-
 // ----------------------------------------------------------------------------
 // wxTextValidatorBase
 // ----------------------------------------------------------------------------
+
+namespace // anonymous
+{
+static void DefaultValidationPopup(const wxString& errormsg,
+                                   wxWindow* const window, 
+                                   wxWindow* const parent)
+{
+    window->SetFocus();
+    wxMessageBox(errormsg, _("Validation conflict"),
+                 wxOK | wxICON_EXCLAMATION, parent);
+}
+
+static
+wxTextValidator::OnValidationFailedFunc gs_valPopup = DefaultValidationPopup;
+
+} // anonymous
+
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxTextValidatorBase, wxValidator)
 
@@ -128,9 +144,7 @@ bool wxTextValidatorBase::Validate(wxWindow *parent)
 
     if ( !errormsg.empty() )
     {
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, parent);
+        gs_valPopup(errormsg, m_validatorWindow, parent);
 
         return false;
     }
@@ -486,6 +500,12 @@ void wxTextValidator::DoSetStyle(long style)
     }
 
     m_style = style;
+}
+
+/*static*/
+void wxTextValidator::UseCustomValidationPopup(OnValidationFailedFunc func)
+{
+    gs_valPopup = (func != NULL) ? func : DefaultValidationPopup;
 }
 
 namespace wxPrivate
