@@ -196,9 +196,9 @@ struct AlnumFlag
 class WXDLLIMPEXP_CORE wxTextValidatorBase: public wxValidator
 {
     // Need to call IsCharIncluded().
-    friend class wxPrivate::wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST, true>;
+    friend struct wxPrivate::wxFilterChar<wxFILTER_INCLUDE_CHAR_LIST, true>;
     // Need to call IsCharExcluded().
-    friend class wxPrivate::wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>;
+    friend struct wxPrivate::wxFilterChar<wxFILTER_EXCLUDE_CHAR_LIST, true>;
 
 public:
     wxTextValidatorBase(wxString* str, long style = wxFILTER_NONE);
