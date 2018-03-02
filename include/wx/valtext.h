@@ -21,9 +21,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextValidatorBase;
 class WXDLLIMPEXP_FWD_CORE wxRegexTextValidatorBase;
 
 #include "wx/validate.h"
-#include "wx/regex.h"
 #include "wx/sharedptr.h"
-#include "wx/intl.h"
 
 // TODO:
 //  - 
@@ -373,7 +371,7 @@ public:
 
     wxRegexTextValidatorBase(const wxRegexTextValidatorBase& val);
 
-    virtual ~wxRegexTextValidatorBase(){}
+    virtual ~wxRegexTextValidatorBase();
 
     bool Copy(const wxRegexTextValidatorBase& val);
 

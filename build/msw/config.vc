@@ -20,7 +20,7 @@ CXX = cl
 CFLAGS = 
 
 # Standard flags for C++ 
-CXXFLAGS = /Zm124
+CXXFLAGS = 
 
 # Standard preprocessor flags (common for CC and CXX) 
 CPPFLAGS = 
@@ -32,7 +32,7 @@ LDFLAGS =
 CPP = $(CC) /EP /nologo
 
 # What type of library to build? [0,1]
-SHARED = 1
+SHARED = 0
 
 # GTK+ toolkit version [,2]
 TOOLKIT_VERSION = 
@@ -83,7 +83,7 @@ USE_HTML = 1
 USE_WEBVIEW = 1
 
 # Build multimedia library (USE_GUI must be 1)? [0,1]
-USE_MEDIA = 0
+USE_MEDIA = 1
 
 # Build wxXRC library (USE_GUI must be 1)? [0,1]
 USE_XRC = 1
@@ -92,7 +92,7 @@ USE_XRC = 1
 USE_AUI = 1
 
 # Build wxRibbon library (USE_GUI must be 1)? [0,1]
-USE_RIBBON = 0
+USE_RIBBON = 1
 
 # Build wxPropertyGrid library (USE_GUI must be 1)? [0,1]
 USE_PROPGRID = 1
@@ -101,7 +101,7 @@ USE_PROPGRID = 1
 USE_RICHTEXT = 1
 
 # Build wxStyledTextCtrl library (USE_GUI must be 1)? [0,1]
-USE_STC = 0
+USE_STC = 1
 
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 USE_OPENGL = 1
@@ -125,7 +125,7 @@ USE_CAIRO = 0
 OFFICIAL_BUILD = 0
 
 # Use this to name your customized DLLs differently 
-VENDOR = vrsoft
+VENDOR = custom
 
 #  
 WX_FLAVOUR = 

@@ -26,6 +26,7 @@
   #include "wx/msgdlg.h"
   #include "wx/textctrl.h"
   #include "wx/utils.h"
+  #include "wx/intl.h"
 #endif
 
 #include <ctype.h>
@@ -33,6 +34,7 @@
 #include <stdlib.h>
 
 #include "wx/combo.h"
+#include "wx/regex.h"
 
 // ----------------------------------------------------------------------------
 // wxTextValidatorBase
@@ -564,6 +566,10 @@ wxRegexTextValidatorBase::wxRegexTextValidatorBase(const wxRegexTextValidatorBas
     : wxTextValidatorBase(val)
 {
     Copy(val);
+}
+
+wxRegexTextValidatorBase::~wxRegexTextValidatorBase()
+{
 }
 
 bool wxRegexTextValidatorBase::Copy(const wxRegexTextValidatorBase& val)
