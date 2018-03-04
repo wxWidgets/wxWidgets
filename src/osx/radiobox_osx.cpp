@@ -565,4 +565,18 @@ bool wxRadioBox::SetFont(const wxFont& font)
     return retval;
 }
 
+bool wxRadioBox::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetSelection(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxRadioBox::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetSelection();
+    return true; 
+}
+
 #endif // wxUSE_RADIOBOX

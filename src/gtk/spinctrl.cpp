@@ -480,6 +480,20 @@ bool wxSpinCtrl::SetBase(int base)
     return true;
 }
 
+bool wxSpinCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetValue(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxSpinCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetValue();
+    return true; 
+}
+
 //-----------------------------------------------------------------------------
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------
@@ -499,6 +513,20 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 
     wxSpinCtrlEventDisabler disable(this);
     gtk_spin_button_set_digits( GTK_SPIN_BUTTON(m_widget), digits);
+}
+
+bool wxSpinCtrlDouble::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
+    SetValue(*(static_cast<double* const>(value)));
+    return true; 
+}
+
+bool wxSpinCtrlDouble::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
+    *(static_cast<double* const>(value)) = GetValue();
+    return true; 
 }
 
 #endif // wxUSE_SPINCTRL

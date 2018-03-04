@@ -106,6 +106,20 @@ wxWindow *wxButtonBase::SetDefault()
     return tlw->SetDefaultItem(this);
 }
 
+bool wxButtonBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_string, false, "Expected type: 'wxString'");
+    SetLabel(*(static_cast<wxString* const>(value)));
+    return true; 
+}
+
+bool wxButtonBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_string, false, "Expected type: 'wxString'");
+    *(static_cast<wxString* const>(value)) = GetLabel();
+    return true; 
+}
+
 void wxAnyButtonBase::SetBitmapPosition(wxDirection dir)
 {
     wxASSERT_MSG( !(dir & ~wxDIRECTION_MASK), "non-direction flag used" );

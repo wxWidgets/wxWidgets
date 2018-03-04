@@ -20,6 +20,20 @@
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
+enum wxDataTransferTypes
+{
+    wxData_void,
+    wxData_bool,
+    wxData_int,
+    wxData_float,
+    wxData_double,
+    wxData_string,
+    wxData_arrayint,
+    wxData_datetime,
+    wxData_filename,
+};
+
+
 /*
  A validator has up to three purposes:
 

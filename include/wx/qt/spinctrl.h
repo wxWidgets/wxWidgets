@@ -78,6 +78,11 @@ public:
     virtual void SetValue(const wxString & val);
     virtual void SetValue(int val) { wxSpinCtrlQt<int,QSpinBox>::SetValue(val); }
 
+protected:
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
 private:
     // Common part of all ctors.
     void Init()
@@ -119,6 +124,11 @@ public:
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
     virtual void SetValue(const wxString & val);
     virtual void SetValue(double val) { wxSpinCtrlQt<double,QDoubleSpinBox>::SetValue(val); }
+
+protected:
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );

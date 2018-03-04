@@ -81,6 +81,10 @@ protected:
     // From wxTextEntry:
     virtual wxString DoGetValue() const wxOVERRIDE;
 
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
 private:
 
     // From wxTextEntry:

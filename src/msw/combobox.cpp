@@ -762,4 +762,51 @@ void wxComboBox::SetLayoutDirection(wxLayoutDirection dir)
     wxChoice::SetLayoutDirection(dir);
 }
 
+bool wxComboBox::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_int )
+    {
+        SetSelection(*(static_cast<int* const>(value)));
+    }
+    else if ( type == wxData_string )
+    {
+        const wxString str = *(static_cast<wxString* const>(value));
+
+        if ( FindString(str) != wxNOT_FOUND )
+            SetStringSelection(str);
+
+        if ( (GetWindowStyle() & wxCB_READONLY) == 0 )
+            SetValue(str);
+    }
+    else
+    {
+        wxASSERT_MSG(false, "Expected types: int, wxString");
+        return false;
+    }
+
+    return true;
+}
+
+bool wxComboBox::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_int )
+    {
+        *(static_cast<int* const>(value)) = GetSelection();
+    }
+    else if ( type == wxData_string )
+    {
+        if ( GetWindowStyle() & wxCB_READONLY )
+            *(static_cast<wxString* const>(value)) = GetStringSelection();
+        else
+            *(static_cast<wxString* const>(value)) = GetValue();
+    }
+    else
+    {
+        wxASSERT_MSG(false, "Expected types: int, wxString");
+        return false;
+    }
+            
+    return true;
+}
+
 #endif // wxUSE_COMBOBOX

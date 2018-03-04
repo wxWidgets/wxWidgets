@@ -86,4 +86,23 @@ wxEMPTY_HANDLERS_TABLE(wxScrollBar)
 wxCONSTRUCTOR_5( wxScrollBar, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle )
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+bool wxScrollBarBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetThumbPosition(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxScrollBarBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetThumbPosition();
+    return true; 
+}
+
+
 #endif // wxUSE_SCROLLBAR

@@ -32,6 +32,21 @@ public:
     // Set/get the date or time (in the latter case, time part is ignored).
     virtual void SetValue(const wxDateTime& dt) = 0;
     virtual wxDateTime GetValue() const = 0;
+
+protected:
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
+    {
+        wxCHECK_MSG(type == wxData_datetime, false, "Expected type: 'wxDateTime'");
+        SetValue(*(static_cast<wxDateTime* const>(value)));
+        return true; 
+    }
+
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
+    {
+        wxCHECK_MSG(type == wxData_datetime, false, "Expected type: 'wxDateTime'");
+        *(static_cast<wxDateTime* const>(value)) = GetValue();
+        return true; 
+    }
 };
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)

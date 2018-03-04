@@ -316,6 +316,44 @@ void wxListBoxBase::Command(wxCommandEvent& event)
     (void)GetEventHandler()->ProcessEvent(event);
 }
 
+bool wxListBoxBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+
+    // clear all selections
+    size_t i, count = GetCount();
+
+    // clear all selections
+    for ( i = 0 ; i < count; ++i )
+        Deselect(i);
+
+    wxArrayInt* arr = static_cast<wxArrayInt* const>(value);
+
+    // select each item in our array
+    count = arr->GetCount();
+    for ( i = 0 ; i < count; ++i )
+        SetSelection(arr->Item(i));
+
+    return true;
+}
+
+bool wxListBoxBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+
+    wxArrayInt* arr = static_cast<wxArrayInt* const>(value);
+        
+    arr->Clear();
+
+    for (size_t i = 0, count = GetCount(); i < count; ++i)
+    {
+        if ( IsSelected(i) )
+            arr->Add(i);
+    }
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // SetFirstItem() and such
 // ----------------------------------------------------------------------------

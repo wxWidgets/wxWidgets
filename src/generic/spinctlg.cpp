@@ -659,6 +659,20 @@ wxString wxSpinCtrl::DoValueToText(double val)
     }
 }
 
+bool wxSpinCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetValue(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxSpinCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetValue(wxSPINCTRL_GETVALUE_FIX);
+    return true; 
+}
+
 #endif // !wxHAS_NATIVE_SPINCTRL
 
 //-----------------------------------------------------------------------------
@@ -698,6 +712,20 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     m_format.Printf(wxT("%%0.%ulf"), digits);
 
     DoSetValue(m_value, SendEvent_None);
+}
+
+bool wxSpinCtrlDouble::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
+    SetValue(*(static_cast<double* const>(value)));
+    return true; 
+}
+
+bool wxSpinCtrlDouble::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
+    *(static_cast<double* const>(value)) = GetValue(wxSPINCTRL_GETVALUE_FIX);
+    return true; 
 }
 
 #endif // wxUSE_SPINBTN

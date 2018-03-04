@@ -119,6 +119,10 @@ protected:
             return value;
     }
 
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxSliderBase);
 };

@@ -288,4 +288,18 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
     return wxControl::Ellipsize(label, dc, mode, sz.GetWidth());
 }
 
+bool wxStaticTextBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_string, false, "Expected type: 'wxString'");
+    SetLabel(*(static_cast<wxString* const>(value)));
+    return true; 
+}
+
+bool wxStaticTextBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_string, false, "Expected type: 'wxString'");
+    *(static_cast<wxString* const>(value)) = GetLabel();
+    return true; 
+}
+
 #endif // wxUSE_STATTEXT

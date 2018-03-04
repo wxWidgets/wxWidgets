@@ -146,6 +146,10 @@ protected:
     virtual bool GTKWidgetNeedsMnemonic() const wxOVERRIDE;
     virtual void GTKWidgetDoSetMnemonic(GtkWidget* w) wxOVERRIDE;
 
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
 private:
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };

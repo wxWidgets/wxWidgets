@@ -849,4 +849,18 @@ void wxSpinCtrl::DoGetPosition(int *x, int *y) const
     *x = wxMin(xBuddy, xText);
 }
 
+bool wxSpinCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetValue(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxSpinCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetValue();
+    return true; 
+}
+
 #endif // wxUSE_SPINCTRL

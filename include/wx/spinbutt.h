@@ -63,6 +63,10 @@ public:
     bool IsVertical() const { return (m_windowStyle & wxSP_VERTICAL) != 0; }
 
 protected:
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
     // the range value
     int   m_min;
     int   m_max;

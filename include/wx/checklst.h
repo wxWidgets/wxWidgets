@@ -32,6 +32,11 @@ public:
 
     virtual unsigned int GetCheckedItems(wxArrayInt& checkedItems) const;
 
+protected:
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
     wxDECLARE_NO_COPY_CLASS(wxCheckListBoxBase);
 };
 

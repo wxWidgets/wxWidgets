@@ -10,6 +10,7 @@
 
 #include "wx/app.h"
 #include "wx/combobox.h"
+#include "wx/datetime.h"
 #include "wx/dialog.h"
 #include "wx/dynarray.h"
 #include "wx/frame.h"
@@ -82,6 +83,11 @@ public:
 
     bool m_checkbox_state;
     int m_radiobox_choice;
+
+    int m_spinctrl_int;
+    double m_spinctrl_double;
+
+    wxDateTime m_datetime;
 };
 
 class MyComboBoxValidator : public wxValidator

@@ -332,6 +332,10 @@ protected:
     virtual bool DoTextToValue(const wxString& text, double *val);
     virtual wxString DoValueToText(double val);
 
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
 private:
     // Common part of all ctors.
     void Init()
@@ -410,6 +414,10 @@ protected:
 
     virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
     virtual wxString DoValueToText(double val) wxOVERRIDE;
+
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
 
     unsigned m_digits;
 

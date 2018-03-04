@@ -130,6 +130,10 @@ protected:
 
     virtual void EnableTextChangedEvents(bool enable);
 
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
     // the subcontrols
     wxComboBoxText*     m_text;
     wxComboBoxChoice*   m_choice;

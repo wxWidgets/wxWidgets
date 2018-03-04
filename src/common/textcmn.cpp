@@ -33,6 +33,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/ffile.h"
+#include "wx/filename.h"
 
 extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
 
@@ -922,6 +923,73 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
     else
         m_defaultStyle = wxTextAttr::Combine(style, m_defaultStyle, this);
 
+    return true;
+}
+
+bool wxTextCtrlBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxString str;
+
+    if ( type == wxData_string )
+    {
+        str = *(static_cast<wxString* const>(value));
+    }
+    else if ( type == wxData_int )
+    {
+        str.Printf("%d", *(static_cast<int* const>(value)));
+    }
+    else if ( type == wxData_float )
+    {
+        str.Printf("%g", *(static_cast<float* const>(value)));
+    }
+    else if ( type == wxData_double )
+    {
+        str.Printf("%g", *(static_cast<double* const>(value)));
+    }
+    else if ( type == wxData_filename )
+    {
+        wxFileName* const fn = static_cast<wxFileName* const>(value);
+        str = fn->GetFullPath();
+    }
+    else
+    {
+        wxASSERT_MSG(false, "Expected types: int, float, double, wxString, wxFileName");
+        return false;
+    }
+
+    SetValue(str);
+    return true;
+}
+
+bool wxTextCtrlBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_string )
+    {
+        *(static_cast<wxString* const>(value)) = GetValue() ;
+    }
+    else if ( type == wxData_int )
+    {
+        *(static_cast<int* const>(value)) = wxAtoi(GetValue());
+    }
+    else if ( type == wxData_float )
+    {
+        *(static_cast<float* const>(value)) = (float)wxAtof(GetValue());
+    }
+    else if ( type == wxData_double )
+    {
+        *(static_cast<double* const>(value)) = wxAtof(GetValue());
+    }
+    else if ( type == wxData_filename )
+    {
+        wxFileName* const fn = static_cast<wxFileName* const>(value);
+        fn->Assign(GetValue());
+    }
+    else
+    {
+        wxASSERT_MSG(false, "Expected types: int, float, double, wxString, wxFileName");
+        return false;
+    }
+            
     return true;
 }
 

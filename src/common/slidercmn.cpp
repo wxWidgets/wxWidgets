@@ -108,4 +108,22 @@ wxCONSTRUCTOR_8( wxSlider, wxWindow*, Parent, wxWindowID, Id, int, Value, \
                  int, Minimum, int, Maximum, wxPoint, Position, wxSize, Size, \
                  long, WindowStyle )
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+bool wxSliderBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetValue(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxSliderBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetValue();
+    return true; 
+}
+
 #endif // wxUSE_SLIDER

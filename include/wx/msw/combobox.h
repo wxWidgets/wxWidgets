@@ -152,6 +152,11 @@ protected:
         m_allowTextEvents = enable;
     }
 
+protected:
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
 private:
     // there are the overridden wxTextEntry methods which should only be called
     // when we do have an edit control so they assert if this is not the case

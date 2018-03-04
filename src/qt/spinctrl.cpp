@@ -214,6 +214,20 @@ void wxSpinCtrl::SetValue( const wxString &value )
         qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
 }
 
+bool wxSpinCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetValue(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxSpinCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetValue();
+    return true; 
+}
+
 void wxQtSpinBox::valueChanged(int value)
 {
     wxControl *handler = GetHandler();
@@ -274,5 +288,18 @@ void wxSpinCtrlDouble::SetValue( const wxString &value )
         qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
 }
 
+bool wxSpinCtrlDouble::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
+    SetValue(*(static_cast<double* const>(value)));
+    return true; 
+}
+
+bool wxSpinCtrlDouble::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
+    *(static_cast<double* const>(value)) = GetValue();
+    return true; 
+}
 
 #endif // wxUSE_SPINCTRL

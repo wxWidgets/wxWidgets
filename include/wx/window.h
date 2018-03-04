@@ -925,6 +925,11 @@ public:
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
 
+        // each window knows how to transfere data to/from itself (for wxGenericValidator)
+    virtual bool DoTransferDataToWindow(void* const WXUNUSED(value), 
+                                        wxDataTransferTypes WXUNUSED(type)) { return false; }
+    virtual bool DoTransferDataFromWindow(void* const WXUNUSED(value), 
+                                        wxDataTransferTypes WXUNUSED(type)) { return false; }
     virtual void InitDialog();
 
 #if wxUSE_ACCEL

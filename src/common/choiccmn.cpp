@@ -119,6 +119,49 @@ wxSize wxChoiceBase::DoGetBestSize() const
     return best;
 }
 
+bool wxChoiceBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_int )
+    {
+        SetSelection(*(static_cast<int* const>(value)));
+    }
+    else if ( type == wxData_string )
+    {
+        const wxString str = *(static_cast<wxString* const>(value));
+
+        if ( FindString(str) != wxNOT_FOUND )
+        {
+            SetStringSelection(str);
+        }
+    }
+    else
+    {
+        wxASSERT_MSG(false, "Expected 'int or wxString' types");
+        return false;
+    }
+        
+    return true;
+}
+
+bool wxChoiceBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_int )
+    {
+        *(static_cast<int* const>(value)) = GetSelection();
+    }
+    else if ( type == wxData_string )
+    {
+        *(static_cast<wxString* const>(value)) = GetStringSelection();
+    }
+    else
+    {
+        wxASSERT_MSG(false, "Expected 'int or wxString' types");
+        return false;
+    }
+        
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // misc
 // ----------------------------------------------------------------------------

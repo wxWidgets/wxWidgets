@@ -94,5 +94,23 @@ wxCONSTRUCTOR_5( wxSpinButton, wxWindow*, Parent, wxWindowID, Id, \
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent);
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+bool wxSpinButtonBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetValue(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxSpinButtonBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetValue();
+    return true; 
+}
+
 
 #endif // wxUSE_SPINBTN

@@ -79,6 +79,11 @@ public:
 
     virtual QWidget *GetHandle() const;
 
+protected:
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
 private:
     // The 'visual' group box:
     QGroupBox *m_qtGroupBox;

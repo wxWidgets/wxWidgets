@@ -86,5 +86,22 @@ wxEMPTY_HANDLERS_TABLE(wxCheckBox)
 wxCONSTRUCTOR_6( wxCheckBox, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+bool wxCheckBoxBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_bool, false, "Expected 'bool' type.");
+    SetValue(*(static_cast<bool* const>(value)));
+    return true; 
+}
+
+bool wxCheckBoxBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_bool, false, "Expected 'bool' type.");
+    *(static_cast<bool* const>(value)) = GetValue();
+    return true; 
+}
 
 #endif // wxUSE_CHECKBOX

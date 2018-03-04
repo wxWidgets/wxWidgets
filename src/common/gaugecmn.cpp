@@ -220,4 +220,21 @@ void wxGaugeBase::Pulse()
         m_appProgressIndicator->Pulse();
 }
 
+// ----------------------------------------------------------------------------
+// wxGauge data transfere
+// ----------------------------------------------------------------------------
+bool wxGaugeBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetValue(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxGaugeBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetValue();
+    return true; 
+}
+
 #endif // wxUSE_GAUGE

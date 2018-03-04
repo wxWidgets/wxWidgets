@@ -116,4 +116,41 @@ unsigned int wxCheckListBoxBase::GetCheckedItems(wxArrayInt& checkedItems) const
     return checkedItems.size();
 }
 
+bool wxCheckListBoxBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+
+    // clear all selections
+    size_t i, count = GetCount();
+
+    for ( i = 0 ; i < count; ++i )
+        Check(i, false);
+
+    wxArrayInt* arr = static_cast<wxArrayInt* const>(value);
+
+    // select each item in our array
+    count = arr->GetCount();
+    for ( i = 0 ; i < count; ++i )
+        Check(arr->Item(i));
+
+    return true;
+}
+
+bool wxCheckListBoxBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+
+    wxArrayInt* arr = static_cast<wxArrayInt* const>(value);
+        
+    arr->Clear();
+
+    for (size_t i = 0, count = GetCount(); i < count; ++i)
+    {
+        if ( IsChecked(i) )
+            arr->Add(i);
+    }
+
+    return true;
+}
+
 #endif

@@ -93,6 +93,10 @@ protected:
     // resolve ambiguity in base classes
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxRadioBoxBase::GetDefaultBorder(); }
 
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
     wxRadioButton    *m_radioButtonCycle;
 
     unsigned int      m_noItems;

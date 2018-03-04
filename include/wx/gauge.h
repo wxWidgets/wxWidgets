@@ -83,6 +83,7 @@ public:
     // overridden base class virtuals
     virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
 
+
     // Deprecated methods not doing anything since a long time.
     wxDEPRECATED_MSG("Remove calls to this method, it doesn't do anything")
     void SetShadowWidth(int WXUNUSED(w)) { }
@@ -105,6 +106,9 @@ protected:
     // already does it, after initializing the window style and range.
     void InitProgressIndicatorIfNeeded();
 
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
 
     // the max position
     int m_rangeMax;
