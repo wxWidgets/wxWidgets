@@ -335,6 +335,13 @@ protected:
 
     // does the week start on monday based on flags and OS settings?
     bool WeekStartsOnMonday() const;
+
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
+private:
+    wxDECLARE_ABSTRACT_CLASS(wxCalendarCtrlBase);
 };
 
 // ----------------------------------------------------------------------------

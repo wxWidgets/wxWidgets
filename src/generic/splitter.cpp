@@ -923,6 +923,20 @@ wxSize wxSplitterWindow::DoGetBestSize() const
     return sizeBest;
 }
 
+bool wxSplitterWindow::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    SetSashPosition(*(static_cast<int* const>(value)));
+    return true; 
+}
+
+bool wxSplitterWindow::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
+    *(static_cast<int* const>(value)) = GetSashPosition();
+    return true; 
+}
+
 // ---------------------------------------------------------------------------
 // wxSplitterWindow virtual functions: they now just generate the events
 // ---------------------------------------------------------------------------

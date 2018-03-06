@@ -43,6 +43,21 @@ public:
 
     virtual wxString GetLabel() const wxOVERRIDE = 0;
     virtual void SetLabel(const wxString& label) wxOVERRIDE = 0;
+
+protected:
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
+    {
+        wxCHECK_MSG(type == wxData_bool, false, "Expected type: 'bool'");
+        Collapse(*(static_cast<bool* const>(value)));
+        return true; 
+    }
+
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
+    {
+        wxCHECK_MSG(type == wxData_bool, false, "Expected type: 'bool'");
+        *(static_cast<bool* const>(value)) = IsCollapsed();
+        return true; 
+    }
 };
 
 

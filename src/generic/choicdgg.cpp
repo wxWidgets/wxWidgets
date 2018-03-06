@@ -530,72 +530,18 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
 
 void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
 {
-#if wxUSE_CHECKLISTBOX
-    wxCheckListBox* checkListBox = wxDynamicCast(m_listbox, wxCheckListBox);
-    if (checkListBox)
-    {
-        // first clear all currently selected items
-        size_t n,
-            count = checkListBox->GetCount();
-        for ( n = 0; n < count; ++n )
-        {
-            if (checkListBox->IsChecked(n))
-                checkListBox->Check(n, false);
-        }
+    m_selections = selections;
+    TransferDataToWindow();
+}
 
-        // now select the ones which should be selected
-        count = selections.GetCount();
-        for ( n = 0; n < count; n++ )
-        {
-            checkListBox->Check(selections[n]);
-        }
-
-        return;
-    }
-#endif
-
-    // first clear all currently selected items
-    size_t n,
-           count = m_listbox->GetCount();
-    for ( n = 0; n < count; ++n )
-    {
-        m_listbox->Deselect(n);
-    }
-
-    // now select the ones which should be selected
-    count = selections.GetCount();
-    for ( n = 0; n < count; n++ )
-    {
-        m_listbox->Select(selections[n]);
-    }
+bool wxMultiChoiceDialog::TransferDataToWindow()
+{
+    return ((wxWindow*)m_listbox)->DoTransferDataToWindow(&m_selections, wxData_arrayint);    
 }
 
 bool wxMultiChoiceDialog::TransferDataFromWindow()
 {
-    m_selections.Empty();
-
-#if wxUSE_CHECKLISTBOX
-    wxCheckListBox* checkListBox = wxDynamicCast(m_listbox, wxCheckListBox);
-    if (checkListBox)
-    {
-        size_t count = checkListBox->GetCount();
-        for ( size_t n = 0; n < count; n++ )
-        {
-            if ( checkListBox->IsChecked(n) )
-                m_selections.Add(n);
-        }
-        return true;
-    }
-#endif
-
-    size_t count = m_listbox->GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        if ( m_listbox->IsSelected(n) )
-            m_selections.Add(n);
-    }
-
-    return true;
+    return ((wxWindow*)m_listbox)->DoTransferDataFromWindow(&m_selections, wxData_arrayint);
 }
 
 #if wxUSE_CHECKLISTBOX

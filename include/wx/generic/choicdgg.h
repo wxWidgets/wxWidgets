@@ -269,6 +269,7 @@ public:
     wxArrayInt GetSelections() const { return m_selections; }
 
     // implementation from now on
+    virtual bool TransferDataToWindow() wxOVERRIDE;
     virtual bool TransferDataFromWindow() wxOVERRIDE;
 
 protected:

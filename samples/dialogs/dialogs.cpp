@@ -1092,11 +1092,13 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
                                 wxT("A single-choice convenience dialog"),
                                 wxT("Please select a value"),
                                 WXSIZEOF(choices), choices);
-
-    dialog.SetSelection(2);
+    // remember selection upon each run.
+    static int sel = 2;
+    dialog.SetSelection(sel);
 
     if (dialog.ShowModal() == wxID_OK)
     {
+        sel = dialog.GetSelection();
         wxMessageDialog dialog2(this, dialog.GetStringSelection(), wxT("Got string"));
         dialog2.ShowModal();
     }
@@ -1111,7 +1113,8 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
         wxT("Eleven"), wxT("Twelve"), wxT("Seventeen"),
     };
 
-    wxArrayInt selections;
+    // remember selected choices upon each run.
+    static wxArrayInt selections;
     const int count = wxGetSelectedChoices(selections,
                                         wxT("This is a small sample\n")
                                         wxT("A multi-choice convenience dialog"),

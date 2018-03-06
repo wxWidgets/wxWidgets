@@ -276,6 +276,9 @@ protected:
     // subwindows
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
+    // wxGenericValidator uses these to do the actual transfer of data
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
 
     wxSplitMode m_splitMode;
     wxWindow*   m_windowOne;

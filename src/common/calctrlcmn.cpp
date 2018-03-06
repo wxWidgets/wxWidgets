@@ -112,6 +112,12 @@ wxDEFINE_EVENT( wxEVT_CALENDAR_YEAR_CHANGED, wxCalendarEvent );
 
 wxCalendarDateAttr wxCalendarDateAttr::m_mark(wxCAL_BORDER_SQUARE);
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxCalendarCtrlBase, wxControl);
+
 bool wxCalendarCtrlBase::EnableMonthChange(bool enable)
 {
     const long styleOrig = GetWindowStyle();
@@ -214,6 +220,19 @@ bool wxCalendarCtrlBase::WeekStartsOnMonday() const
         wxDateTime::GetFirstWeekDay(&firstDay);
         return firstDay == wxDateTime::Mon;
     }
+}
+
+bool wxCalendarCtrlBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_datetime, false, "Expected type: 'wxDateTime'");
+    return SetDate(*(static_cast<wxDateTime* const>(value)));
+}
+
+bool wxCalendarCtrlBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_datetime, false, "Expected type: 'wxDateTime'");
+    *(static_cast<wxDateTime* const>(value)) = GetDate();
+    return true; 
 }
 
 #endif // wxUSE_CALENDARCTRL
