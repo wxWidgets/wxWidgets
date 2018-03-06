@@ -547,12 +547,12 @@ inline wxRealPoint operator*(unsigned long i, const wxRealPoint& s)
 
 inline wxRealPoint operator*(const wxRealPoint& s, double i)
 {
-    return wxRealPoint(int(s.x * i), int(s.y * i));
+    return wxRealPoint(s.x * i, s.y * i);
 }
 
 inline wxRealPoint operator*(double i, const wxRealPoint& s)
 {
-    return wxRealPoint(int(s.x * i), int(s.y * i));
+    return wxRealPoint(s.x * i, s.y * i);
 }
 
 
