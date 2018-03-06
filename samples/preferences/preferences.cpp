@@ -50,7 +50,7 @@ struct MySettings
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     void ShowPreferencesEditor(wxWindow* parent);
     void DismissPreferencesEditor();
@@ -156,7 +156,7 @@ public:
                            this);
     }
 
-    virtual bool TransferDataToWindow()
+    virtual bool TransferDataToWindow() wxOVERRIDE
     {
         m_settingsCurrent = wxGetApp().GetSettings();
         m_useMarkdown->SetValue(m_settingsCurrent.m_useMarkdown);
@@ -164,7 +164,7 @@ public:
         return true;
     }
 
-    virtual bool TransferDataFromWindow()
+    virtual bool TransferDataFromWindow() wxOVERRIDE
     {
         // Called on platforms with modal preferences dialog to save and apply
         // the changes.
@@ -211,7 +211,7 @@ class PrefsPageGeneral : public wxStockPreferencesPage
 {
 public:
     PrefsPageGeneral() : wxStockPreferencesPage(Kind_General) {}
-    virtual wxWindow *CreateWindow(wxWindow *parent)
+    virtual wxWindow *CreateWindow(wxWindow *parent) wxOVERRIDE
         { return new PrefsPageGeneralPanel(parent); }
 };
 
@@ -239,7 +239,7 @@ public:
         }
     }
 
-    virtual bool TransferDataToWindow()
+    virtual bool TransferDataToWindow() wxOVERRIDE
     {
         // This is the place where you can initialize values, e.g. from wxConfig.
         // For demonstration purposes, we just set hardcoded values.
@@ -248,7 +248,7 @@ public:
         return true;
     }
 
-    virtual bool TransferDataFromWindow()
+    virtual bool TransferDataFromWindow() wxOVERRIDE
     {
         // Called on platforms with modal preferences dialog to save and apply
         // the changes.
@@ -270,10 +270,10 @@ private:
 class PrefsPageTopics : public wxPreferencesPage
 {
 public:
-    virtual wxString GetName() const { return "Topics"; }
-    virtual wxBitmap GetLargeIcon() const
+    virtual wxString GetName() const wxOVERRIDE { return "Topics"; }
+    virtual wxBitmap GetLargeIcon() const wxOVERRIDE
         { return wxArtProvider::GetBitmap(wxART_HELP, wxART_TOOLBAR); }
-    virtual wxWindow *CreateWindow(wxWindow *parent)
+    virtual wxWindow *CreateWindow(wxWindow *parent) wxOVERRIDE
         { return new PrefsPageTopicsPanel(parent); }
 };
 
