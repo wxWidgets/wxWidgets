@@ -78,6 +78,7 @@ wxGTK:
 wxMSW:
 
 - Fix hang after clearing wxTAB_TRAVERSAL style on a window with children.
+- Fix handling of AUX2 mouse button events (Trylz).
 
 
 3.1.1: (released 2018-02-19)
