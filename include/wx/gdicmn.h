@@ -318,7 +318,7 @@ public:
     void DecBy(int d) { DecBy(d, d); }
 
 
-    wxSize& Scale(float xscale, float yscale)
+    wxSize& Scale(double xscale, double yscale)
         { x = (int)(x*xscale); y = (int)(y*yscale); return *this; }
 
     // accessors
