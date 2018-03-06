@@ -75,15 +75,6 @@ static const int SCROLL_UNIT_X = 15;
 // the cell padding on the left/right
 static const int PADDING_RIGHTLEFT = 3;
 
-// the expander space margin
-static const int EXPANDER_MARGIN = 4;
-
-#ifdef __WXMSW__
-static const int EXPANDER_OFFSET = 4;
-#else
-static const int EXPANDER_OFFSET = 1;
-#endif
-
 namespace
 {
 
@@ -273,7 +264,9 @@ class wxDataViewHeaderWindow : public wxHeaderCtrl
 {
 public:
     wxDataViewHeaderWindow(wxDataViewCtrl *parent)
-        : wxHeaderCtrl(parent)
+        : wxHeaderCtrl(parent, wxID_ANY,
+                       wxDefaultPosition, wxDefaultSize,
+                       wxHD_DEFAULT_STYLE | wxHD_BITMAP_ON_RIGHT)
     {
     }
 
@@ -458,6 +451,11 @@ class wxDataViewTreeNode;
 
 typedef wxVector<wxDataViewTreeNode*> wxDataViewTreeNodes;
 
+// Note: this class is not used at all for virtual list models, so all code
+// using it, i.e. any functions taking or returning objects of this type,
+// including wxDataViewMainWindow::m_root, can only be called after checking
+// that we're using a non-"virtual list" model.
+
 class wxDataViewTreeNode
 {
 public:
@@ -496,7 +494,6 @@ public:
 
     const wxDataViewTreeNodes& GetChildNodes() const
     {
-        wxASSERT( m_branchData != NULL );
         return m_branchData->children;
     }
 
@@ -704,7 +701,10 @@ public:
     // notifications from wxDataViewModel
     bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
-    bool ItemChanged( const wxDataViewItem &item );
+    bool ItemChanged( const wxDataViewItem &item )
+    {
+        return DoItemChanged(item, wxNOT_FOUND);
+    }
     bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
     bool Cleared();
     void Resort()
@@ -891,6 +891,10 @@ private:
 
     void DrawCellBackground( wxDataViewRenderer* cell, wxDC& dc, const wxRect& rect );
 
+    // Common part of {Item,Value}Changed(): if view_column is wxNOT_FOUND,
+    // assumes that all columns were modified, otherwise just this one.
+    bool DoItemChanged(const wxDataViewItem& item, int view_column);
+
 private:
     wxDataViewCtrl             *m_owner;
     int                         m_lineHeight;
@@ -927,9 +931,6 @@ private:
 
     // the pen used to draw horiz/vertical rules
     wxPen m_penRule;
-
-    // the pen used to draw the expander and the lines
-    wxPen m_penExpander;
 
     // This is the tree structure of the model
     wxDataViewTreeNode * m_root;
@@ -1372,7 +1373,18 @@ wxString wxDataViewProgressRenderer::GetAccessibleDescription() const
 bool
 wxDataViewProgressRenderer::Render(wxRect rect, wxDC *dc, int WXUNUSED(state))
 {
-    wxRendererNative::Get().DrawGauge(
+    const wxDataViewItemAttr& attr = GetAttr();
+    if ( attr.HasColour() )
+        dc->SetBackground(attr.GetColour());
+
+    // This is a hack, but native renderers don't support using custom colours,
+    // but typically gauge colour is important (e.g. it's commonly green/red to
+    // indicate some qualitative difference), so we fall back to the generic
+    // implementation which looks ugly but does support using custom colour.
+    wxRendererNative& renderer = attr.HasColour()
+                                    ? wxRendererNative::GetGeneric()
+                                    : wxRendererNative::Get();
+    renderer.DrawGauge(
         GetOwner()->GetOwner(),
         *dc,
         rect,
@@ -1660,12 +1672,11 @@ public:
                                 m_sortOrder.IsAscending());
     }
 
-    // Return true if the items are in order, i.e. the first item is less than
-    // or equal (because it's useless to exchange them in this case) than the
-    // second one. This is used by std::sort().
+    // Return true if the items are (strictly) in order, i.e. the first item is
+    // less than the second one. This is used by std::sort().
     bool operator()(wxDataViewTreeNode* first, wxDataViewTreeNode* second) const
     {
-        return Compare(first, second) <= 0;
+        return Compare(first, second) < 0;
     }
 
 private:
@@ -1955,10 +1966,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
     m_penRule = wxPen(GetRuleColour());
-
-    // compose a pen whichcan draw black lines
-    // TODO: maybe there is something system colour to use
-    m_penExpander = wxPen(wxColour(0,0,0));
 
     m_root = wxDataViewTreeNode::CreateRootNode();
 
@@ -2530,23 +2537,17 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 // Calculate the indent first
                 indent = GetOwner()->GetIndent() * node->GetIndentLevel();
 
-                // we reserve m_lineHeight of horizontal space for the expander
-                // but leave EXPANDER_MARGIN around the expander itself
-                int exp_x = cell_rect.x + indent + EXPANDER_MARGIN;
+                // We don't have any method to return the size of the expander
+                // button currently (TODO: add one to wxRendererNative), so
+                // just guesstimate it.
+                const int expWidth = 3*dc.GetCharWidth();
 
-                indent += m_lineHeight;
-
-                // draw expander if needed and visible
-                if ( node->HasChildren() && exp_x < cell_rect.GetRight() )
+                // draw expander if needed
+                if ( node->HasChildren() )
                 {
-                    dc.SetPen( m_penExpander );
-                    dc.SetBrush( wxNullBrush );
-
-                    int exp_size = m_lineHeight - 2*EXPANDER_MARGIN;
-                    int exp_y = cell_rect.y + (cell_rect.height - exp_size)/2
-                                   + EXPANDER_MARGIN - EXPANDER_OFFSET;
-
-                    const wxRect rect(exp_x, exp_y, exp_size, exp_size);
+                    wxRect rect = cell_rect;
+                    rect.x += indent;
+                    rect.width = expWidth;
 
                     int flag = 0;
                     if ( m_underMouse == node )
@@ -2560,6 +2561,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                     wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
                 }
+
+                indent += expWidth;
 
                 // force the expander column to left-center align
                 cell->SetAlignment( wxALIGN_CENTER_VERTICAL );
@@ -2739,9 +2742,18 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         if ( !parentNode )
             return false;
 
+        parentNode->SetHasChildren(true);
+
+        // If the parent node isn't and hadn't been opened yet, we don't have
+        // anything to do here, all the items will be added to it when it's
+        // opened for the first time.
+        if ( !parentNode->IsOpen() && parentNode->GetChildNodes().empty() )
+        {
+            return true;
+        }
+
         wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
         itemNode->SetHasChildren(GetModel()->IsContainer(item));
-        parentNode->SetHasChildren(true);
 
         if ( GetSortOrder().IsNone() )
         {
@@ -2926,17 +2938,40 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     return true;
 }
 
-bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
+bool wxDataViewMainWindow::DoItemChanged(const wxDataViewItem & item, int view_column)
 {
-    // Move this node to its new correct place after it was updated.
-    wxDataViewTreeNode* const node = FindNode(item);
-    wxCHECK_MSG( node, false, "invalid item" );
-    node->PutInSortOrder(this);
+    if ( !IsVirtualList() )
+    {
+        // Move this node to its new correct place after it was updated.
+        //
+        // In principle, we could skip the call to PutInSortOrder() if the modified
+        // column is not the sort column, but in real-world applications it's fully
+        // possible and likely that custom compare uses not only the selected model
+        // column but also falls back to other values for comparison. To ensure
+        // consistency it is better to treat a value change as if it was an item
+        // change.
+        wxDataViewTreeNode* const node = FindNode(item);
+        wxCHECK_MSG( node, false, "invalid item" );
+        node->PutInSortOrder(this);
+    }
 
-    GetOwner()->InvalidateColBestWidths();
+    wxDataViewColumn* column;
+    if ( view_column == wxNOT_FOUND )
+    {
+        column = NULL;
+        GetOwner()->InvalidateColBestWidths();
+    }
+    else
+    {
+        column = m_owner->GetColumn(view_column);
+        GetOwner()->InvalidateColBestWidth(view_column);
+    }
+
+    // Update the displayed value(s).
+    RefreshRow(GetRowByItem(item));
 
     // Send event
-    wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, item);
+    wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, column, item);
     m_owner->ProcessWindowEvent(le);
 
     return true;
@@ -2948,39 +2983,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     if ( view_column == wxNOT_FOUND )
         return false;
 
-    // NOTE: to be valid, we cannot use e.g. INT_MAX - 1
-/*#define MAX_VIRTUAL_WIDTH       100000
-
-    wxRect rect( 0, row*m_lineHeight, MAX_VIRTUAL_WIDTH, m_lineHeight );
-    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-    Refresh( true, &rect );
-
-    return true;
-*/
-
-    // In principle, we could skip the call to PutInSortOrder() if the modified
-    // column is not the sort column, but in real-world applications it's fully
-    // possible and likely that custom compare uses not only the selected model
-    // column but also falls back to other values for comparison. To ensure
-    // consistency it is better to treat a value change as if it was an item
-    // change.
-    //
-    // Alternatively, one could require the user to use ItemChanged() rather
-    // than ValueChanged() when the changed value may affect sorting, and add a
-    // check for model_column vs sort column here.
-
-    wxDataViewTreeNode* const node = FindNode(item);
-    wxCHECK_MSG( node, false, "invalid item" );
-    node->PutInSortOrder(this);
-
-    GetOwner()->InvalidateColBestWidth(view_column);
-
-    // Send event
-    wxDataViewColumn* const column = m_owner->GetColumn(view_column);
-    wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, column, item);
-    m_owner->ProcessWindowEvent(le);
-
-    return true;
+    return DoItemChanged(item, view_column);
 }
 
 bool wxDataViewMainWindow::Cleared()
@@ -3955,8 +3958,8 @@ static void BuildTreeHelper( wxDataViewMainWindow *window, const wxDataViewModel
         node->InsertChild(window, n, index);
     }
 
-    wxASSERT( node->IsOpen() );
-    node->ChangeSubTreeCount(+num);
+    if ( node->IsOpen() )
+        node->ChangeSubTreeCount(+num);
 }
 
 void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
@@ -4718,9 +4721,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if ( UnselectAllRows(m_lineSelectSingleOnUp) )
             {
                 SelectRow( m_lineSelectSingleOnUp, true );
-                SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
             }
-            //else: it was already selected, nothing to do
+
+            SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
         }
 
         // If the user click the expander, we do not do editing even if the column
@@ -5218,17 +5221,6 @@ bool wxDataViewCtrl::Show(bool show)
     return changed;
 }
 
-bool wxDataViewCtrl::Enable(bool enable)
-{
-    bool changed = wxControl::Enable(enable);
-    if ( changed )
-    {
-        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
-    }
-
-    return changed;
-}
-
 void wxDataViewCtrl::SetName(const wxString &name)
 {
     wxControl::SetName(name);
@@ -5246,6 +5238,20 @@ bool wxDataViewCtrl::Reparent(wxWindowBase *newParent)
     return changed;
 }
 #endif // wxUSE_ACCESIBILITY
+
+bool wxDataViewCtrl::Enable(bool enable)
+{
+    bool changed = wxControl::Enable(enable);
+    if ( changed )
+    {
+#if wxUSE_ACCESSIBILITY
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESIBILITY
+        Refresh();
+    }
+
+    return changed;
+}
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {
@@ -5506,13 +5512,16 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
     return max_width;
 }
 
-void wxDataViewCtrl::ColumnMoved(wxDataViewColumn * WXUNUSED(col),
-                                unsigned int WXUNUSED(new_pos))
+void wxDataViewCtrl::ColumnMoved(wxDataViewColumn *col, unsigned int new_pos)
 {
     // do _not_ reorder m_cols elements here, they should always be in the
     // order in which columns were added, we only display the columns in
     // different order
     m_clientArea->UpdateDisplay();
+
+    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_REORDERED, this, col);
+    event.SetColumn(new_pos);
+    ProcessWindowEvent(event);
 }
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
@@ -5775,9 +5784,10 @@ bool wxDataViewCtrl::SetHeaderAttr(const wxItemAttr& attr)
     return true;
 }
 
-void wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)
+bool wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)
 {
     m_alternateRowColour = colour;
+    return true;
 }
 
 void wxDataViewCtrl::SelectAll()

@@ -1,10 +1,17 @@
-ECHO ON
+@echo off
+
+rem SetLocal EnableDelayedExpansion
 
 if "%1" == "" goto ERR_NOPARM
 
 set curr_dir=%cd%
 
 cd ..\..\msw
+
+rem VS2017 changes the build directory when environment batch files
+rem are called, so remember where we are building from.
+
+set "VSCMD_START_DIR=%CD%"
 
 rem ================ wxWidgets Official Build ===============
 rem
@@ -19,7 +26,18 @@ if "%1" == "vc141" (
   @echo Building for vc141 / vs2017
   set comp=141
   set compvers=vc141
-  call "%VS150COMNTOOLS%VsDevCmd.bat"
+
+  if NOT "%VS150COMNTOOLS%" == "" (
+    call "%VS150COMNTOOLS%VsDevCmd.bat"
+  )
+  if "%VS150COMNTOOLS%" == "" (
+    call %curr_dir%\findvs 15.0 16.0
+
+    if errorlevel 1 (
+      @echo vswhere.exe must be in your path or a VS2017 developer command prompt must be used.
+      goto end
+    )
+  )
 )
 if "%1" == "vc140" (
   @echo Building for vc140 / vs2015
@@ -80,8 +98,8 @@ del %compvers%x64_Release.txt
 
 if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x64
 if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64
-if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x64
-if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x64
+if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
+if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X64 /Release
 if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X64 /Release
 

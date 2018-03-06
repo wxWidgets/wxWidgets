@@ -9,6 +9,14 @@
 
 cmake_minimum_required(VERSION 2.8.12)
 
+if(NOT CMAKE_CONFIGURATION_TYPES)
+    get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+    # Set default configuration types for multi-config generators
+    if(HAVE_MULTI_CONFIG_GENERATOR)
+        set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
+    endif()
+endif()
+
 if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
     # If no deployment target has been set default to the minimum supported
     # OS X version (this has to be set before the first project() call)

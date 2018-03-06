@@ -72,6 +72,10 @@ from wxThread and wxEvtHandler to send messages to it: in fact, this does not
 work at all. You're instead encouraged to use wxThreadHelper as it greatly
 simplifies the communication and the sharing of resources.
 
+For communication between the main thread and worker threads, you can use
+wxMessageQueue<> class that allows to send any kind of custom messages. It is
+often convenient to have a special message asking the thread to terminate.
+
 You should also look at the wxThread docs for important notes about secondary
 threads and their deletion.
 

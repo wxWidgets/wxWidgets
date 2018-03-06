@@ -47,12 +47,20 @@
 #include "wx/msw/dc.h"
 #include "wx/msw/private/winstyle.h"
 
-// the values coincide with those in tmschema.h
-#define BP_GROUPBOX 4
+namespace
+{
 
-#define GBS_NORMAL 1
+// Offset of the first pixel of the label from the box left border.
+//
+// FIXME: value is hardcoded as this is what it is on my system, no idea if
+//        it's true everywhere
+const int LABEL_HORZ_OFFSET = 9;
 
-#define TMT_FONT 210
+// Extra borders around the label on left/right and bottom sides.
+const int LABEL_HORZ_BORDER = 2;
+const int LABEL_VERT_BORDER = 2;
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -90,6 +98,41 @@ bool wxStaticBox::Create(wxWindow *parent,
     }
 
     return true;
+}
+
+bool wxStaticBox::Create(wxWindow* parent,
+                         wxWindowID id,
+                         wxWindow* labelWin,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& name)
+{
+    wxCHECK_MSG( labelWin, false, wxS("Label window can't be null") );
+
+    if ( !Create(parent, id, wxString(), pos, size, style, name) )
+        return false;
+
+    m_labelWin = labelWin;
+    m_labelWin->Reparent(this);
+
+    PositionLabelWindow();
+
+    return true;
+}
+
+void wxStaticBox::PositionLabelWindow()
+{
+    m_labelWin->SetSize(m_labelWin->GetBestSize());
+    m_labelWin->Move(FromDIP(LABEL_HORZ_OFFSET), 0);
+}
+
+wxWindowList wxStaticBox::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    if ( m_labelWin )
+        parts.push_back(m_labelWin);
+    return parts;
 }
 
 WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -152,7 +195,31 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
 
     // need extra space, don't know how much but this seems to be enough
-    *borderTop += GetCharHeight()/3;
+    *borderTop += FromDIP(LABEL_VERT_BORDER);
+}
+
+bool wxStaticBox::SetBackgroundColour(const wxColour& colour)
+{
+    // Do _not_ call the immediate base class method, we don't need to set the
+    // label window (which is the only sub-window of this composite window)
+    // background explicitly because it will almost always be a wxCheckBox or
+    // wxRadioButton which inherits its background from the box anyhow, so
+    // setting it would be at best useless.
+    return wxStaticBoxBase::SetBackgroundColour(colour);
+}
+
+bool wxStaticBox::SetFont(const wxFont& font)
+{
+    if ( !wxCompositeWindowSettersOnly<wxStaticBoxBase>::SetFont(font) )
+        return false;
+
+    // We need to reposition the label as its size may depend on the font.
+    if ( m_labelWin )
+    {
+        PositionLabelWindow();
+    }
+
+    return true;
 }
 
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
@@ -189,9 +256,10 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
         if ( !HandlePrintClient((WXHDC)wParam) )
         {
             // no, we don't, erase the background ourselves
-            // (don't use our own) - see PaintBackground for explanation
-            wxBrush brush(GetParent()->GetBackgroundColour());
-            wxFillRect(GetHwnd(), (HDC)wParam, GetHbrushOf(brush));
+            RECT rc;
+            ::GetClientRect(GetHwnd(), &rc);
+            wxDCTemp dc((WXHDC)wParam);
+            PaintBackground(dc, rc);
         }
 
         return 0;
@@ -253,7 +321,21 @@ void wxStaticBox::MSWGetRegionWithoutSelf(WXHRGN hRgn, int w, int h)
     GetBordersForSizer(&borderTop, &border);
 
     // top
-    SubtractRectFromRgn(hrgn, 0, 0, w, borderTop);
+    if ( m_labelWin )
+    {
+        // Don't exclude the entire rectangle at the top, we do need to paint
+        // the background of the gap between the label window and the box
+        // frame.
+        const wxRect labelRect = m_labelWin->GetRect();
+        const int gap = FromDIP(LABEL_HORZ_BORDER);
+
+        SubtractRectFromRgn(hrgn, 0, 0, labelRect.GetLeft() - gap, borderTop);
+        SubtractRectFromRgn(hrgn, labelRect.GetRight() + gap, 0, w, borderTop);
+    }
+    else
+    {
+        SubtractRectFromRgn(hrgn, 0, 0, w, borderTop);
+    }
 
     // bottom
     SubtractRectFromRgn(hrgn, 0, h - border, w, h);
@@ -399,7 +481,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
     // background mode doesn't change anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
     // ourselves if we have a non default fg colour
-    if ( m_hasFgCol && wxUxThemeEngine::GetIfActive() )
+    if ( m_hasFgCol && wxUxThemeIsActive() && !m_labelWin )
     {
         // draw over the text in default colour in our colour
         HDC hdc = GetHdcOf(*impl);
@@ -421,7 +503,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
             if ( hTheme )
             {
                 wxUxThemeFont themeFont;
-                if ( wxUxThemeEngine::Get()->GetThemeFont
+                if ( ::GetThemeFont
                                              (
                                                 hTheme,
                                                 hdc,
@@ -443,23 +525,17 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
         dc.GetTextExtent(wxStripMenuCodes(label, wxStrip_Mnemonics),
                          &width, &height);
 
-        int x;
-        int y = height;
-
         // first we need to correctly paint the background of the label
         // as Windows ignores the brush offset when doing it
-        //
-        // FIXME: value of x is hardcoded as this is what it is on my system,
-        //        no idea if it's true everywhere
-        RECT dimensions = {0, 0, 0, y};
-        x = 9;
+        const int x = FromDIP(LABEL_HORZ_OFFSET);
+        RECT dimensions = { x, 0, 0, height };
         dimensions.left = x;
         dimensions.right = x + width;
 
         // need to adjust the rectangle to cover all the label background
-        dimensions.left -= 2;
-        dimensions.right += 2;
-        dimensions.bottom += 2;
+        dimensions.left -= FromDIP(LABEL_HORZ_BORDER);
+        dimensions.right += FromDIP(LABEL_HORZ_BORDER);
+        dimensions.bottom += FromDIP(LABEL_VERT_BORDER);
 
         if ( UseBgCol() )
         {
@@ -489,7 +565,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
         }
 
         // now draw the text
-        RECT rc2 = { x, 0, x + width, y };
+        RECT rc2 = { x, 0, x + width, height };
         ::DrawText(hdc, label.t_str(), label.length(), &rc2,
                    drawTextFlags);
     }
@@ -525,8 +601,31 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     GetBordersForSizer(&borderTop, &border);
 
     // top
-    dc.Blit(border, 0, rc.right - border, borderTop,
-            &memdc, border, 0);
+    if ( m_labelWin )
+    {
+        // We also have to exclude the area taken by the label window,
+        // otherwise there would be flicker when it draws itself on top of it.
+        const wxRect labelRect = m_labelWin->GetRect();
+
+        // We also leave a small border around label window to make it appear
+        // more similarly to a plain text label.
+        const int gap = FromDIP(LABEL_HORZ_BORDER);
+
+        dc.Blit(border, 0,
+                labelRect.GetLeft() - gap - border,
+                borderTop,
+                &memdc, border, 0);
+        dc.Blit(labelRect.GetRight() + gap, 0,
+                rc.right - (labelRect.GetRight() + gap),
+                borderTop,
+                &memdc, border, 0);
+    }
+    else
+    {
+        dc.Blit(border, 0, rc.right - border, borderTop,
+                &memdc, border, 0);
+    }
+
     // bottom
     dc.Blit(border, rc.bottom - border, rc.right - border, border,
             &memdc, border, rc.bottom - border);

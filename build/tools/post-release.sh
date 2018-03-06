@@ -8,8 +8,12 @@ topdir=`dirname $0`/../..
 # Build the file list for sha1sums, from `docs/release.md`
 declare -a files=(`sed -n '/^## Download Verification/,/^## Binaries/p' $topdir/docs/release.md | sed -n -E 's/^\s*0{40}\s{2}(wx.*)/\1/p'`)
 
-# Get the release version
-ver_string=`grep '#define wxVERSION_STRING ' $topdir/include/wx/version.h | sed 's/^.*"wxWidgets \(.*\)")/\1/'`
+# Get the release version unless it's given explicitly on the command line.
+if [ -z $1 ]; then
+    ver_string=`grep '#define wxVERSION_STRING ' $topdir/include/wx/version.h | sed 's/^.*"wxWidgets \(.*\)")/\1/'`
+else
+    ver_string=$1
+fi
 
 for i in "${files[@]}"
 do
@@ -20,5 +24,4 @@ do
     sed -i -E "/^\s*[0]{40}\s{2}wx/ s/(^\s*)[0]{40}(\s{2}$i)/\1$sha1sum\2/" $topdir/docs/release.md
 done
 
-# Commit sha1sum related changes
-git commit -m "Update released files sha1sums after $ver_string release" $topdir/docs/release.md
+echo "File $topdir/docs/release.md updated after $ver_string release, don't forget to commit it."

@@ -22,6 +22,9 @@ set(TEST_DRAWING_SRC
     drawing/fonttest.cpp
     )
 wx_add_test(test_drawing ${TEST_DRAWING_SRC})
+if(wxUSE_SOCKETS)
+    wx_exe_link_libraries(test_drawing net)
+endif()
 wx_exe_link_libraries(test_drawing core)
 wx_test_enable_precomp(test_drawing)
 

@@ -67,9 +67,9 @@ wx_print_thirdparty_library_summary()
 
 message(STATUS "Configured wxWidgets ${wxVERSION} for ${CMAKE_SYSTEM}
     Min OS Version required at runtime:                ${wxREQUIRED_OS_DESC}
-    Which GUI toolkit should wxWidgets use?:           ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION}
+    Which GUI toolkit should wxWidgets use?            ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION}
     Should wxWidgets be compiled into single library?  ${wxBUILD_MONOLITHIC}
     Should wxWidgets be linked as a shared library?    ${wxBUILD_SHARED}
     Should wxWidgets support Unicode?                  ${wxUSE_UNICODE}
-    What level of wxWidgets compatibility should be enabled? ${wxBUILD_COMPATIBILITY}"
+    What wxWidgets compatibility level should be used? ${wxBUILD_COMPATIBILITY}"
     )

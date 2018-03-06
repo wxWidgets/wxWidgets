@@ -118,6 +118,7 @@ public:
           m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
         {
             SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+            SetName("wxSTCCallTip");
         }
 
     ~wxSTCCallTip() {
@@ -134,7 +135,7 @@ public:
     void OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
         wxAutoBufferedPaintDC dc(this);
-        Surface* surfaceWindow = Surface::Allocate(0);
+        Surface* surfaceWindow = Surface::Allocate(m_swx->technology);
         surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
         m_ct->PaintCT(surfaceWindow);
         surfaceWindow->Release();
@@ -270,6 +271,8 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     timers[tickScroll] = new wxSTCTimer(this,tickScroll);
     timers[tickWiden] = new wxSTCTimer(this,tickWiden);
     timers[tickDwell] = new wxSTCTimer(this,tickDwell);
+
+    m_surfaceData = NULL;
 }
 
 
@@ -278,6 +281,11 @@ ScintillaWX::~ScintillaWX() {
         delete i->second;
     }
     timers.clear();
+
+    if ( m_surfaceData != NULL ) {
+        delete m_surfaceData;
+    }
+
     Finalise();
 }
 
@@ -490,9 +498,10 @@ void ScintillaWX::NotifyParent(SCNotification scn) {
 // a side effect that the AutoComp will also not be destroyed when switching
 // to another window, but I think that is okay.
 void ScintillaWX::CancelModes() {
-    if (! focusEvent)
+    if (! focusEvent) {
         AutoCompleteCancel();
-    ct.CallTipCancel();
+        ct.CallTipCancel();
+    }
     Editor::CancelModes();
 }
 
@@ -814,6 +823,36 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
           ct.wCallTip.Show();
           break;
       }
+#endif
+
+#if wxUSE_GRAPHICS_DIRECT2D
+        case SCI_SETTECHNOLOGY:
+            if ((wParam == SC_TECHNOLOGY_DEFAULT) || (wParam == SC_TECHNOLOGY_DIRECTWRITE)) {
+                if (technology != static_cast<int>(wParam)) {
+                    SurfaceDataD2D* newSurfaceData(NULL);
+
+                    if (static_cast<int>(wParam) > SC_TECHNOLOGY_DEFAULT) {
+                        newSurfaceData =  new SurfaceDataD2D(this);
+
+                        if (!newSurfaceData->Initialised()) {
+                            // Failed to load Direct2D or DirectWrite so no effect
+                            delete newSurfaceData;
+                            return 0;
+                        }
+                    }
+
+                    technology = static_cast<int>(wParam);
+                    if ( m_surfaceData ) {
+                        delete m_surfaceData;
+                    }
+                    m_surfaceData = newSurfaceData;
+
+                    // Invalidate all cached information including layout.
+                    DropGraphics(true);
+                    InvalidateStyleRedraw();
+                }
+            }
+            break;
 #endif
 
 #ifdef SCI_LEXER

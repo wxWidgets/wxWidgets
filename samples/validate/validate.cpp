@@ -64,7 +64,9 @@ MyData::MyData()
     m_string2 = "Valid text";
     m_listbox_choices.Add(0);
     m_intValue = 0;
+    m_smallIntValue = 3;
     m_doubleValue = 12354.31;
+    m_percentValue = 0.25;
 }
 
 // ----------------------------------------------------------------------------
@@ -164,7 +166,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog..."), wxT("Demonstrate validators"));
+    file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog...\tCtrl-T"), wxT("Demonstrate validators"));
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, wxT("E&xit"));
@@ -219,7 +221,9 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         m_listbox->Append(wxString(wxT("radiobox: ")) + g_radiobox_choices[g_data.m_radiobox_choice]);
 
         m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
+        m_listbox->Append(wxString::Format("small int value: %u", g_data.m_smallIntValue));
         m_listbox->Append(wxString::Format("double value: %.3f", g_data.m_doubleValue));
+        m_listbox->Append(wxString::Format("percent value: %.4f", g_data.m_percentValue));
     }
 }
 
@@ -293,16 +297,13 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     flexgridsizer->AddGrowableRow(1);
 
 
-    // setup the button sizer
-    // ----------------------
-
-    wxStdDialogButtonSizer *btn = new wxStdDialogButtonSizer();
-    btn->AddButton(new wxButton(this, wxID_OK));
-    btn->AddButton(new wxButton(this, wxID_CANCEL));
-    btn->Realize();
-
     // setup a sizer with the controls for numeric validators
     // ------------------------------------------------------
+
+    wxFlexGridSizer* const
+        numSizer = new wxFlexGridSizer(5, FromDIP(wxSize(5, 5)));
+
+    const wxSizerFlags center = wxSizerFlags().CenterVertical();
 
     wxIntegerValidator<int> valInt(&g_data.m_intValue,
                                    wxNUM_VAL_THOUSANDS_SEPARATOR |
@@ -319,8 +320,11 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                 wxTE_RIGHT,
                                 valInt
                             );
-    m_numericTextInt->SetToolTip("uses wxIntegerValidator to accept positive "
-                                 "integers only");
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Positive integer:"),
+                  center);
+    numSizer->Add(m_numericTextInt, wxSizerFlags(center).Expand());
+
+    numSizer->AddSpacer(FromDIP(10));
 
     m_numericTextDouble = new wxTextCtrl
                               (
@@ -338,12 +342,31 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                     wxNUM_VAL_NO_TRAILING_ZEROES
                                 )
                               );
-    m_numericTextDouble->SetToolTip("uses wxFloatingPointValidator with 3 decimals");
-    wxBoxSizer *numSizer = new wxBoxSizer( wxHORIZONTAL );
-    numSizer->Add( m_numericTextInt, 1, wxALL, 10 );
-    numSizer->Add( m_numericTextDouble, 1, wxALL, 10 );
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Up to 3 decimals:"),
+                  center);
+    numSizer->Add(m_numericTextDouble, wxSizerFlags(center).Expand());
 
+    wxIntegerValidator<unsigned short> smallIntVal(&g_data.m_smallIntValue);
+    smallIntVal.SetRange(1, 5);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Int between 1 and 5:"),
+                  center);
+    numSizer->Add(new wxTextCtrl(this, wxID_ANY, "",
+                                 wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
+                                 smallIntVal),
+                  wxSizerFlags(center).Expand());
 
+    numSizer->AddSpacer(FromDIP(10));
+
+    wxFloatingPointValidator<float> percentVal(&g_data.m_percentValue);
+    percentVal.SetPrecision(2);
+    percentVal.SetFactor(100.0);
+
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Value displayed in %:"),
+                  center);
+    numSizer->Add(new wxTextCtrl(this, wxID_ANY, "",
+                                 wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
+                                 percentVal),
+                  wxSizerFlags(center).Expand());
 
     // setup the main sizer
     // --------------------
@@ -358,9 +381,10 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                     wxGenericValidator(&g_data.m_radiobox_choice)),
                    0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
 
-    mainsizer->Add( numSizer, 0, wxGROW | wxALL );
+    mainsizer->Add( numSizer, wxSizerFlags().Expand().DoubleBorder() );
 
-    mainsizer->Add(btn, 0, wxGROW | wxALL, 10);
+    mainsizer->Add(CreateButtonSizer(wxOK | wxCANCEL),
+                   wxSizerFlags().Expand().DoubleBorder());
 
     SetSizer(mainsizer);
     mainsizer->SetSizeHints(this);

@@ -751,9 +751,7 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
 
     if ( !combo->GetEventHandler()->ProcessEvent(redirectedEvent) )
     {
-        // Don't let TAB through to the text ctrl - looks ugly
-        if ( event.GetKeyCode() != WXK_TAB )
-            event.Skip();
+        event.Skip();
     }
 }
 
@@ -1996,7 +1994,9 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
             kevent.m_keyCode = event.GetWheelRotation() > 0
                                ? WXK_UP
                                : WXK_DOWN;
-            GetEventHandler()->ProcessEvent(kevent);
+
+            if (!GetEventHandler()->ProcessEvent(kevent))
+                event.Skip();
         }
         else
         {

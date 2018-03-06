@@ -257,10 +257,10 @@ public:
 
 #if wxUSE_ACCESSIBILITY
     virtual bool Show(bool show = true) wxOVERRIDE;
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
     virtual void SetName(const wxString &name) wxOVERRIDE;
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 #endif // wxUSE_ACCESSIBILITY
+    virtual bool Enable(bool enable = true) wxOVERRIDE;
 
     virtual bool AllowMultiColumnSort(bool allow) wxOVERRIDE;
     virtual bool IsMultiColumnSortAllowed() const wxOVERRIDE { return m_allowMultiColumnSort; }
@@ -277,10 +277,11 @@ public:
 
     virtual bool SetHeaderAttr(const wxItemAttr& attr) wxOVERRIDE;
 
-    // These methods are specific to generic wxDataViewCtrl implementation and
+    virtual bool SetAlternateRowColour(const wxColour& colour) wxOVERRIDE;
+
+    // This method is specific to generic wxDataViewCtrl implementation and
     // should not be used in portable code.
     wxColour GetAlternateRowColour() const { return m_alternateRowColour; }
-    void SetAlternateRowColour(const wxColour& colour);
 
     // The returned pointer is null if the control has wxDV_NO_HEADER style.
     //

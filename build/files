@@ -1785,7 +1785,6 @@ MSW_LOWLEVEL_HDR =
     wx/msw/ole/activex.h
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
-    wx/msw/uxthemep.h
     wx/msw/htmlhelp.h
 
 MSW_DESKTOP_LOWLEVEL_SRC =
@@ -2175,6 +2174,7 @@ OSX_SHARED_HDR =
     wx/osx/accel.h
     wx/osx/anybutton.h
     wx/osx/app.h
+    wx/osx/appprogress.h
     wx/osx/bitmap.h
     wx/osx/bmpbuttn.h
     wx/osx/brush.h
@@ -3005,6 +3005,14 @@ OPENGL_CMN_HDR =
 
 OPENGL_MSW_SRC =
     src/msw/glcanvas.cpp
+
+OPENGL_GTK_HDR =
+    wx/gtk/glcanvas.h
+    wx/unix/glx11.h
+
+OPENGL_GTK_SRC =
+    src/gtk/glcanvas.cpp
+    src/unix/glx11.cpp
 
 OPENGL_MSW_HDR =
     wx/msw/glcanvas.h

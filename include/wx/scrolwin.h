@@ -415,17 +415,7 @@ public:
         if ( !(style & (wxHSCROLL | wxVSCROLL)) )
             style |= wxHSCROLL | wxVSCROLL;
 
-#ifdef __WXOSX__
-        bool retval = T::Create(parent, winid, pos, size, style, name);
-        if ( retval && (style & wxALWAYS_SHOW_SB) )
-            ShowScrollbars(wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS);
-        return retval;
-#else
-        if ( style & wxALWAYS_SHOW_SB )
-            ShowScrollbars(wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS);
-
         return T::Create(parent, winid, pos, size, style, name);
-#endif
     }
 
 #ifdef __WXMSW__

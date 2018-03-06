@@ -239,20 +239,6 @@ wxWindowMac::~wxWindowMac()
 
     MacInvalidateBorders() ;
 
-#ifndef __WXUNIVERSAL__
-    // VS: make sure there's no wxFrame with last focus set to us:
-    for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
-    {
-        wxFrame *frame = wxDynamicCast(win, wxFrame);
-        if ( frame )
-        {
-            if ( frame->GetLastFocus() == this )
-                frame->SetLastFocus(NULL);
-            break;
-        }
-    }
-#endif
-
     // destroy children before destroying this window itself
     DestroyChildren();
 
@@ -265,15 +251,6 @@ wxWindowMac::~wxWindowMac()
         if ( tlw->GetDefaultItem() == (wxButton*) this)
             tlw->SetDefaultItem(NULL);
     }
-
-#ifndef __WXUNIVERSAL__
-    wxFrame* frame = wxDynamicCast( wxGetTopLevelParent( (wxWindow*)this ) , wxFrame ) ;
-    if ( frame )
-    {
-        if ( frame->GetLastFocus() == this )
-            frame->SetLastFocus( NULL ) ;
-    }
-#endif
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
@@ -1638,6 +1615,15 @@ void wxWindowMac::RemoveChild( wxWindowBase *child )
     if ( child == m_growBox )
         m_growBox = NULL ;
 #endif
+    if (!child->IsBeingDeleted() && !child->IsTopLevel())
+    {
+        // Must be removed prior to RemoveChild and next AddChild call
+        // Otherwise the next AddChild may freeze the wrong window
+        wxWindowMac *mac = (wxWindowMac *)child;
+        if (mac->GetPeer() && mac->GetPeer()->IsOk())
+            mac->GetPeer()->RemoveFromParent();
+    }
+
     wxWindowBase::RemoveChild( child ) ;
 }
 
@@ -2458,10 +2444,9 @@ bool wxWindowMac::Reparent(wxWindowBase *newParentBase)
     if ( !wxWindowBase::Reparent(newParent) )
         return false;
 
-    GetPeer()->RemoveFromParent();
     GetPeer()->Embed( GetParent()->GetPeer() );
 
-    MacChildAdded();
+    GetParent()->MacChildAdded();
     return true;
 }
 

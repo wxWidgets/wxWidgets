@@ -1793,7 +1793,6 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/ole/activex.h
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
-    wx/msw/uxthemep.h
     wx/msw/htmlhelp.h
 )
 
@@ -2281,6 +2280,7 @@ set(OSX_SHARED_HDR
     wx/generic/listctrl.h
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
+    wx/osx/appprogress.h
 )
 
 set(OSX_COCOA_SRC
@@ -3098,6 +3098,16 @@ set(OPENGL_MSW_SRC
 
 set(OPENGL_MSW_HDR
     wx/msw/glcanvas.h
+)
+
+set(OPENGL_GTK_SRC
+    src/gtk/glcanvas.cpp
+    src/unix/glx11.cpp
+)
+
+set(OPENGL_GTK_HDR
+    wx/gtk/glcanvas.h
+    wx/unix/glx11.h
 )
 
 set(OPENGL_OSX_SHARED_SRC

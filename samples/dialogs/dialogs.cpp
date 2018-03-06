@@ -3892,6 +3892,34 @@ void TestRichMessageDialog::AddAdditionalTextOptions(wxSizer *sizer)
                                     wxTE_MULTILINE);
     sizerMsgs->Add(m_textDetailed, wxSizerFlags().Expand());
 
+    // add option to show footer text
+    wxSizer * const sizerFooter = new wxBoxSizer(wxHORIZONTAL);
+    sizerFooter->Add(new wxStaticText(this, wxID_ANY, "&Footer Text:"),
+        wxSizerFlags().Centre().Border(wxRIGHT));
+    m_textFooter = new wxTextCtrl(this, wxID_ANY);
+    sizerFooter->Add(m_textFooter, wxSizerFlags(1).Centre());
+
+    // add option to select footer icon
+    const wxString icons[] =
+    {
+        "None",
+        "Info",
+        "Warning",
+        "Error",
+        "Auth needed"
+    };
+
+    sizerFooter->Add(new wxStaticText(this, wxID_ANY, "Icon:"),
+        wxSizerFlags().Centre().Border(wxLEFT));
+    m_iconsFooter = new wxChoice(this, wxID_ANY,
+        wxDefaultPosition, wxDefaultSize,
+        WXSIZEOF(icons), icons);
+    // Make the None the default:
+    m_iconsFooter->SetSelection(0);
+    sizerFooter->Add(m_iconsFooter, wxSizerFlags().Expand().Border());
+
+    sizerMsgs->Add(sizerFooter, wxSizerFlags().Expand().Border(wxTOP));
+
     sizer->Add(sizerMsgs, wxSizerFlags().Expand().Border());
 }
 
@@ -3912,6 +3940,25 @@ void TestRichMessageDialog::OnApply(wxCommandEvent& WXUNUSED(event))
     dlg.ShowCheckBox(m_textCheckBox->GetValue(),
                      m_initialValueCheckBox->GetValue());
     dlg.ShowDetailedText(m_textDetailed->GetValue());
+    dlg.SetFooterText(m_textFooter->GetValue());
+    switch ( m_iconsFooter->GetSelection() )
+    {
+        case 1:
+            dlg.SetFooterIcon(wxICON_INFORMATION);
+            break;
+
+        case 2:
+            dlg.SetFooterIcon(wxICON_WARNING);
+            break;
+
+        case 3:
+            dlg.SetFooterIcon(wxICON_ERROR);
+            break;
+
+        case 4:
+            dlg.SetFooterIcon(wxICON_AUTH_NEEDED);
+            break;
+    }
 
     ShowResult(dlg.ShowModal());
 }

@@ -184,12 +184,7 @@ void wxStaticText::SetLabel(const wxString& label)
 #endif // SS_ENDELLIPSIS
         DoSetLabel(GetEllipsizedLabel());
 
-    InvalidateBestSize();
-
-    if ( !IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
-    {
-        AutoResizeIfNecessary();
-    }
+    AutoResizeIfNecessary();
 }
 
 bool wxStaticText::SetFont(const wxFont& font)

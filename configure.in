@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.1.1], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.1.2], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -40,7 +40,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=1
-wx_release_number=1
+wx_release_number=2
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -633,7 +633,7 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
 AC_ARG_ENABLE(cxx11,       [  --enable-cxx11          use C++11 compiler if available], [wxWITH_CXX=11 wxWITH_CXX_IS_OPTIONAL=1])
-AC_ARG_WITH(cxx,           [  --with-cxx=11|14        use the given C++11], [wxWITH_CXX="$withval"])
+AC_ARG_WITH(cxx,           [  --with-cxx=11|14|17     use the given C++ dialect], [wxWITH_CXX="$withval"])
 WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
 if test "$wxUSE_STL" = "yes"; then
     DEFAULT_wxUSE_STD_CONTAINERS=yes
@@ -1101,8 +1101,14 @@ if test -n "$wxWITH_CXX"; then
             HAVE_CXX11=1
             ;;
 
+        17)
+            dnl This is similar to 14 above.
+            AX_CXX_COMPILE_STDCXX(17)
+            HAVE_CXX11=1
+            ;;
+
         *)
-            AC_MSG_ERROR([Invalid --with-cxx="$wxWITH_CXX" option value, only 11 or 14 supported])
+            AC_MSG_ERROR([Invalid --with-cxx="$wxWITH_CXX" option value, only 11, 14 or 17 supported])
     esac
 
     if test "$HAVE_CXX11" = "1" ; then
@@ -1818,8 +1824,17 @@ if test "x$COMPAQCXX" = "xyes"; then
 fi
 
 dnl The checks below are for ancient compilers and are unnecessary when using
-dnl C++11.
-if test "$HAVE_CXX11" != "1" ; then
+dnl C++11, but we still need to define the symbols that would have been defined
+dnl by them if we did run them.
+if test "$HAVE_CXX11" = "1" ; then
+
+AC_DEFINE(HAVE_STD_WSTRING)
+AC_DEFINE(HAVE_STD_STRING_COMPARE)
+AC_DEFINE(HAVE_STD_UNORDERED_MAP)
+AC_DEFINE(HAVE_STD_UNORDERED_SET)
+AC_DEFINE(HAVE_TYPE_TRAITS)
+
+else dnl Not using C++11, so we do need to run the checks.
 
 dnl check for iostream (as opposed to iostream.h) standard header
 WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
@@ -2705,7 +2720,7 @@ if test "$USE_WIN32" = 1 ; then
     ],
     [ ])
 
-    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
+    LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
         x86_64-*-mingw32* )
             dnl we need to define this to embed the manifest for correct
@@ -5757,17 +5772,18 @@ if test "$wxUSE_INTL" = "yes" ; then
 fi
 
 if test "$wxUSE_XLOCALE" = "yes" ; then
-    AC_DEFINE(wxUSE_XLOCALE)
+    dnl Some platforms (e.g. macOS) require an extra header, others (Linux)
+    dnl don't, but it's simpler to just check for it under all of them.
+    AC_CHECK_HEADERS([xlocale.h])
 
-    dnl even if xlocale.h exists, it may not contain all that
-    dnl wx needs. check if strtod_l() really is available.
-    AC_CACHE_CHECK([for complete xlocale],
-                   wx_cv_func_strtod_l,
+    AC_CACHE_CHECK([for locale_t], wx_cv_type_locale_t,
     [
         AC_LANG_PUSH(C++)
         AC_TRY_COMPILE(
         [
+        #ifdef HAVE_XLOCALE_H
         #include <xlocale.h>
+        #endif
         #include <locale.h>
         #include <stdlib.h>
         ],
@@ -5775,16 +5791,20 @@ if test "$wxUSE_XLOCALE" = "yes" ; then
         locale_t t;
         strtod_l(NULL, NULL, t);
         ],
-        wx_cv_func_strtod_l=yes,
-        wx_cv_func_strtod_l=no
+        wx_cv_type_locale_t=yes,
+        wx_cv_type_locale_t=no
         )
         AC_LANG_POP()
     ])
 
-    if test "$wx_cv_func_strtod_l" = "yes" ; then
+    if test "$wx_cv_type_locale_t" = "yes" ; then
+        AC_DEFINE(wxUSE_XLOCALE)
+
         dnl We don't test (just) for locale_t existence, but we still define
         dnl this symbol to avoid changing the existing code using it.
         AC_DEFINE(HAVE_LOCALE_T)
+    else
+        AC_MSG_WARN([No locale_t support, wxXLocale won't be available])
     fi
 fi
 
@@ -7720,7 +7740,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl      library features they need are present)
 
     dnl TODO some samples are never built so far: mfc (requires VC++)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov dialogs drawing \
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS archive artprov dialogs drawing \
                      erase event exec font image minimal power render \
                      shaped svg taborder vscroll widgets wrapsizer"
 

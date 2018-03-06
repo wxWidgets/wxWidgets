@@ -58,21 +58,7 @@ endif()
 if(wxUSE_THREADS AND CMAKE_THREAD_LIBS_INIT)
     wx_lib_link_libraries(base PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 endif()
-if(WIN32)
-    wx_lib_link_libraries(base PUBLIC
-        kernel32
-        user32
-        shell32
-        ole32
-        oleaut32
-        uuid
-        rpcrt4
-        advapi32
-        Shlwapi
-        version
-        uuid
-    )
-elseif(APPLE)
+if(APPLE)
     wx_lib_link_libraries(base
         PRIVATE
         "-framework Security"

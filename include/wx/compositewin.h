@@ -26,23 +26,17 @@ class WXDLLIMPEXP_FWD_CORE wxToolTip;
 // base class name and implement GetCompositeWindowParts() pure virtual method.
 // ----------------------------------------------------------------------------
 
+// This is the base class of wxCompositeWindow which takes care of propagating
+// colours, fonts etc changes to all the children, but doesn't bother with
+// handling their events or focus. There should be rarely any need to use it
+// rather than the full wxCompositeWindow.
+
 // The template parameter W must be a wxWindow-derived class.
 template <class W>
-class wxCompositeWindow : public W
+class wxCompositeWindowSettersOnly : public W
 {
 public:
     typedef W BaseWindowClass;
-
-    // Default ctor doesn't do anything.
-    wxCompositeWindow()
-    {
-        this->Connect
-              (
-                  wxEVT_CREATE,
-                  wxWindowCreateEventHandler(wxCompositeWindow::OnWindowCreate)
-              );
-
-    }
 
     // Override all wxWindow methods which must be forwarded to the composite
     // window parts.
@@ -109,7 +103,7 @@ public:
         // SetLayoutDirection(wxLayout_Default) wouldn't result in a re-layout
         // neither, but then we're not supposed to be called with it at all.
         if ( dir != wxLayout_Default )
-            this->SetSize(-1, -1, -1, -1, wxSIZE_AUTO | wxSIZE_FORCE);
+            this->SetSize(-1, -1, -1, -1, wxSIZE_FORCE);
     }
 
 #if wxUSE_TOOLTIPS
@@ -131,9 +125,10 @@ public:
     }
 #endif // wxUSE_TOOLTIPS
 
-    virtual void SetFocus() wxOVERRIDE
+protected:
+    // Trivial but necessary default ctor.
+    wxCompositeWindowSettersOnly()
     {
-        wxSetFocusToChild(this, NULL);
     }
 
 private:
@@ -141,6 +136,50 @@ private:
     // the public methods we override should forward to.
     virtual wxWindowList GetCompositeWindowParts() const = 0;
 
+    template <class T, class TArg, class R>
+    void SetForAllParts(R (wxWindowBase::*func)(TArg), T arg)
+    {
+        // Simply call the setters for all parts of this composite window.
+        const wxWindowList parts = GetCompositeWindowParts();
+        for ( wxWindowList::const_iterator i = parts.begin();
+              i != parts.end();
+              ++i )
+        {
+            wxWindow * const child = *i;
+
+            // Allow NULL elements in the list, this makes the code of derived
+            // composite controls which may have optionally shown children
+            // simpler and it doesn't cost us much here.
+            if ( child )
+                (child->*func)(arg);
+        }
+    }
+
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxCompositeWindowSettersOnly, W);
+};
+
+// The real wxCompositeWindow itself, inheriting all the setters defined above.
+template <class W>
+class wxCompositeWindow : public wxCompositeWindowSettersOnly<W>
+{
+public:
+    virtual void SetFocus() wxOVERRIDE
+    {
+        wxSetFocusToChild(this, NULL);
+    }
+
+protected:
+    // Default ctor sets things up for handling children events correctly.
+    wxCompositeWindow()
+    {
+        this->Connect
+              (
+                  wxEVT_CREATE,
+                  wxWindowCreateEventHandler(wxCompositeWindow::OnWindowCreate)
+              );
+    }
+
+private:
     void OnWindowCreate(wxWindowCreateEvent& event)
     {
         event.Skip();
@@ -154,7 +193,10 @@ private:
         if ( child == this )
             return; // not a child, we don't want to Connect() to ourselves
 
-        // Always capture wxEVT_KILL_FOCUS:
+        child->Connect(wxEVT_SET_FOCUS,
+                       wxFocusEventHandler(wxCompositeWindow::OnSetFocus),
+                       NULL, this);
+
         child->Connect(wxEVT_KILL_FOCUS,
                        wxFocusEventHandler(wxCompositeWindow::OnKillFocus),
                        NULL, this);
@@ -182,6 +224,27 @@ private:
             event.Skip();
     }
 
+    void OnSetFocus(wxFocusEvent& event)
+    {
+        event.Skip();
+
+        // When a child of a composite window gains focus, the entire composite
+        // focus gains focus as well -- unless it had it already.
+        //
+        // We suppose that we hadn't had focus if the event doesn't carry the
+        // previously focused window as it normally means that it comes from
+        // outside of this program.
+        wxWindow* const oldFocus = event.GetWindow();
+        if ( !oldFocus || oldFocus->GetMainWindowOfCompositeControl() != this )
+        {
+            wxFocusEvent eventThis(wxEVT_SET_FOCUS, this->GetId());
+            eventThis.SetEventObject(this);
+            eventThis.SetWindow(event.GetWindow());
+
+            this->ProcessWindowEvent(eventThis);
+        }
+    }
+
     void OnKillFocus(wxFocusEvent& event)
     {
         // Ignore focus changes within the composite control:
@@ -204,25 +267,6 @@ private:
         // The event shouldn't be ignored, forward it to the main control:
         if ( !this->ProcessWindowEvent(event) )
             event.Skip();
-    }
-
-    template <class T, class TArg, class R>
-    void SetForAllParts(R (wxWindowBase::*func)(TArg), T arg)
-    {
-        // Simply call the setters for all parts of this composite window.
-        const wxWindowList parts = GetCompositeWindowParts();
-        for ( wxWindowList::const_iterator i = parts.begin();
-              i != parts.end();
-              ++i )
-        {
-            wxWindow * const child = *i;
-
-            // Allow NULL elements in the list, this makes the code of derived
-            // composite controls which may have optionally shown children
-            // simpler and it doesn't cost us much here.
-            if ( child )
-                (child->*func)(arg);
-        }
     }
 
     wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxCompositeWindow, W);

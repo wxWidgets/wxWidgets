@@ -183,7 +183,7 @@ wxSize wxButtonBase::GetDefaultSize()
         GtkWidget *box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
 #if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
         wxString labelGTK = GTKConvertMnemonics(wxGetStockLabel(wxID_CANCEL));
-        GtkWidget *btn = gtk_button_new_with_mnemonic(wxGTK_CONV(labelGTK));
+        GtkWidget *btn = gtk_button_new_with_mnemonic(labelGTK.utf8_str());
 #else
         GtkWidget *btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 #endif // GTK >= 3.10 / < 3.10

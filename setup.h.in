@@ -1267,6 +1267,9 @@
 /* Define if setpriority() is available. */
 #undef HAVE_SETPRIORITY
 
+/* Define if xlocale.h header file exists. */
+#undef HAVE_XLOCALE_H
+
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
 

@@ -61,7 +61,9 @@
         list is selected or the selection changes.
     @event{EVT_LISTBOX_DCLICK(id, func)}
         Process a @c wxEVT_LISTBOX_DCLICK event, when the listbox
-        is double-clicked.
+        is double-clicked. On some platforms (notably wxGTK2) 
+	pressing the enter key is handled as an equivalent of a 
+	double-click.
     @endEventTable
 
     @library{wxcore}

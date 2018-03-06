@@ -62,13 +62,29 @@ Build options                          {#cmake_options}
 The following list of build options can either be configured in the CMake UI
 or specified via the -D command line option when running the cmake command.
 
-Option Name                   | Type   | Description
------------------------------ | -----  | ------------------------------------
-wxBUILD_SHARED                | BOOL   | Build shared libraries
-wxBUILD_TESTS                 | STRING | CONSOLE_ONLY, ALL or OFF
-wxBUILD_SAMPLES               | STRING | SOME, ALL or OFF
-wxUSE_GUI                     | BOOL   | Build the UI libraries
-wxBUILD_COMPATIBILITY         | STRING | 2.8, 3.0 or 3.1 API compatibility
+Option Name               | Type   | Default | Description
+------------------------- | -----  | ------- | ----------------------------
+wxBUILD_SHARED            | BOOL   | ON      | Build shared libraries
+wxBUILD_TESTS             | STRING | OFF     | CONSOLE_ONLY, ALL or OFF
+wxBUILD_SAMPLES           | STRING | OFF     | SOME, ALL or OFF
+wxBUILD_DEMOS             | BOOL   | OFF     | Build demo applications
+wxUSE_GUI                 | BOOL   | ON      | Build the UI libraries
+wxBUILD_COMPATIBILITY     | STRING | 3.0     | 2.8, 3.0 or 3.1 API compatibility
+wxBUILD_PRECOMP           | BOOL   | ON      | Use precompiled headers
+wxBUILD_MONOLITHIC        | BOOL   | OFF     | Build a single library
+
+A complete list of options and advanced options can be found when using the
+CMake GUI.
+
+Recommendations                       {#cmake_recommendations}
+=======================
+While CMake in wxWidgets aims to support most generators available
+in CMake the following generators are recommended:
+* Windows: Visual Studio (any supported version)
+* macOS: Xcode
+* Linux: Ninja or Makefiles
+
+CMake 3.10 or newer is recommended. The minimum version required is 2.8.12.
 
 Using CMake with your applications     {#cmake_apps}
 ==================================

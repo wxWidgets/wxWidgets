@@ -733,31 +733,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
     }
     
-    // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
-    // to be in NSModalPanelWindowLevel and not NSFloatingWindowLevel to stay
-    // above the parent.
-    wxDialog * const parentDialog = parent == NULL ? NULL : wxDynamicCast(parent->MacGetTopLevelWindow(), wxDialog);
-    if (parentDialog && parentDialog->IsModal())
-    {
-        if (level == NSFloatingWindowLevel)
-        {
-            level = NSModalPanelWindowLevel;
-        }
-
-        // Cocoa's modal loop does not process other windows by default, but
-        // don't call this on normal window levels so nested modal dialogs will
-        // still behave modally.
-        if (level != NSNormalWindowLevel)
-        {
-            if ([m_macWindow isKindOfClass:[NSPanel class]])
-            {
-                [(NSPanel*)m_macWindow setWorksWhenModal:YES];
-            }
-        }
-    }
-
-    [m_macWindow setLevel:level];
     m_macWindowLevel = level;
+    SetUpForModalParent();
+    [m_macWindow setLevel:m_macWindowLevel];
 
     [m_macWindow setDelegate:controller];
 
@@ -791,8 +769,41 @@ void wxNonOwnedWindowCocoaImpl::Lower()
     [m_macWindow orderWindow:NSWindowBelow relativeTo:0];
 }
 
+void wxNonOwnedWindowCocoaImpl::SetUpForModalParent()
+{
+    wxNonOwnedWindow* wxpeer = GetWXPeer();
+    if (wxpeer)
+    {
+        // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
+        // to be in NSModalPanelWindowLevel and not NSFloatingWindowLevel to stay
+        // above the parent.
+        wxDialog* const parentDialog = wxDynamicCast(wxGetTopLevelParent(wxpeer->GetParent()), wxDialog);
+        if (parentDialog && parentDialog->IsModal())
+        {
+            if (m_macWindowLevel == NSFloatingWindowLevel)
+            {
+                m_macWindowLevel = NSModalPanelWindowLevel;
+                if ([m_macWindow level] == NSFloatingWindowLevel)
+                    [m_macWindow setLevel:m_macWindowLevel];
+            }
+
+            // Cocoa's modal loop does not process other windows by default, but
+            // don't call this on normal window levels so nested modal dialogs will
+            // still behave modally.
+            if (m_macWindowLevel != NSNormalWindowLevel)
+            {
+                if ([m_macWindow isKindOfClass:[NSPanel class]])
+                {
+                    [(NSPanel*)m_macWindow setWorksWhenModal:YES];
+                }
+            }
+        }
+    }
+}
+
 void wxNonOwnedWindowCocoaImpl::ShowWithoutActivating()
 {
+    SetUpForModalParent();
     [m_macWindow orderFront:nil];
     [[m_macWindow contentView] setNeedsDisplay: YES];
 }
@@ -826,7 +837,8 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
                 }
             }
             
-            if (!(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW)) 
+            SetUpForModalParent();
+            if (!(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW))
                 [m_macWindow makeKeyAndOrderFront:nil];
             else 
                 [m_macWindow orderFront:nil]; 
@@ -986,7 +998,12 @@ bool wxNonOwnedWindowCocoaImpl::IsMaximized() const
 {
     if (([m_macWindow styleMask] & NSResizableWindowMask) != 0)
     {
-        return [m_macWindow isZoomed];
+        // isZoomed internally calls windowWillResize which would trigger
+        // an wxEVT_SIZE. Setting ignore resizing supresses the event
+        m_wxPeer->OSXSetIgnoreResizing(true);
+        BOOL result = [m_macWindow isZoomed];
+        m_wxPeer->OSXSetIgnoreResizing(false);
+        return result;
     }
     else
     {

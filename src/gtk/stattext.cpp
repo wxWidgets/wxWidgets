@@ -138,14 +138,9 @@ void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid static text") );
 
-    InvalidateBestSize();
-
     (this->*setter)(GTK_LABEL(m_widget), label);
 
-    // adjust the label size to the new label unless disabled
-    if ( !HasFlag(wxST_NO_AUTORESIZE) &&
-         !IsEllipsized() )  // if ellipsization is ON, then we don't want to get resized!
-        SetSize( GetBestSize() );
+    AutoResizeIfNecessary();
 }
 
 void wxStaticText::SetLabel(const wxString& label)
@@ -180,7 +175,8 @@ bool wxStaticText::SetFont( const wxFont &font )
     const bool wasUnderlined = GetFont().GetUnderlined();
     const bool wasStrickenThrough = GetFont().GetStrikethrough();
 
-    bool ret = wxControl::SetFont(font);
+    if ( !wxControl::SetFont(font) )
+        return false;
 
     const bool isUnderlined = GetFont().GetUnderlined();
     const bool isStrickenThrough = GetFont().GetStrikethrough();
@@ -222,12 +218,9 @@ bool wxStaticText::SetFont( const wxFont &font )
         gtk_label_set_use_underline(GTK_LABEL(m_widget), !isUnderlined);
     }
 
-    // adjust the label size to the new label unless disabled
-    if (!HasFlag(wxST_NO_AUTORESIZE))
-    {
-        SetSize( GetBestSize() );
-    }
-    return ret;
+    AutoResizeIfNecessary();
+
+    return true;
 }
 
 wxSize wxStaticText::DoGetBestSize() const

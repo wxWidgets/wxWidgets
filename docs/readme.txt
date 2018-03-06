@@ -1,4 +1,4 @@
-wxWidgets 3.1.1 Release Notes
+wxWidgets 3.1.2 Release Notes
 =============================
 
 Welcome to the latest development release of wxWidgets, a free and open source
@@ -16,23 +16,24 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* http://docs.wxwidgets.org/3.1.1/
+* http://docs.wxwidgets.org/3.1.2/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.1/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.2/
 
 
 Changes since 3.1.0
 -------------------
 
-There have been more than 2000 commits from more than 130 contributors (70 with
+There have been more than 2800 commits from more than 160 contributors (79 with
 multiple contributions) since 3.1.0 release. New features added since then
 include:
 
-- wxWebView can now return JavaScript results to the C++ code.
-- wxSecretStore allows to securely store user passwords.
+- Support for gesture events has been added (GSoC 2017 project).
+- wxWebView can now return JavaScript results to the C++ code (GSoC 2017).
+- New wxSecretStore class for securely storing user passwords.
 
 Some of the other improvements:
 
@@ -41,14 +42,18 @@ Some of the other improvements:
 - Converting between wxString and UTF-8 encoded std::string is now
   simpler and unsafe wxString can now be disabled on the opt-in basis
   (see http://wxwidgets.blogspot.com/2017/02/safer-s.html)
+- It is possible to use any window (e.g. wxCheckBox) as wxStaticBox label now.
 - Many improvements to accessibility support under MSW.
+- wxGraphicsContext now supports pens with fractional widths.
 - Support for XDG file layout under Unix.
-- Many bug fixes to the appearances in both wxGTK3 and wxOSX, notably
-  related to borders (notable wxBORDER_NONE) and colours.
+- Many bug fixes to the behaviour (including TAB navigation) and appearances,
+  especially in wxGTK3 and wxOSX ports.
 - wxDataViewCtrl items and headers can be formatted using simple markup
-  and it is simpler to combine to put items with checkboxes into it.
+  and it is simpler to combine to put items with checkboxes into it. Many bugs
+  and inconsistencies between platforms in this control have been fixed too.
 - Several enhancements to wxStyledTextCtrl including better support for
   custom lexers and auto-completion.
+- Many improvements to the (still experimental) wxQt port.
 
 Additionally, the latest versions of compilers (e.g. MSVS 2017) and
 operating systems (macOS 10.12) are now supported and all the third
@@ -56,7 +61,7 @@ party libraries have been updated to their latest versions.
 
 Please refer to the detailed change log for the full list of changes:
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.2/docs/changes.txt
 
 
 Changes since 3.0
@@ -66,24 +71,26 @@ Compared to the stable 3.0.x series, this version brings too many
 improvements and even more bug fixes to list them them all. Here is the
 maximally condensed summary:
 
+- New features: support for mouse gesture events (GSoC 2017 project);
+  fractional pen widths in wxGraphicsContext; arbitrary label windows in
+  wxStaticBox; markup in wxDataViewCtrl items text; better support for high DPI
+  monitors; support for ZIP 64 files; much improved accessibility support under
+  MSW.
 - New classes: wxActivityIndicator, wxAddRemoveCtrl,
   wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker,
   wxSecretStore.
-- And methods: wxDateTime::GetWeekBasedYear() and GetFirstWeekDay(),
-  GetTopItem() and GetCountPerPage() in wxListBox and wxDataViewCtrl,
+- And methods: wxDateTime::GetWeekBasedYear(), wxListBox::GetTopItem(),
   wxProcess::Activate(), wxTextEntry::ForceUpper(), several ones in
-  wxRendererNative, wxStandardPaths::GetUserDir() and SetFileLayout(),
-  wxUIActionSimulator::Select(), wxFontPickerCtrl::SetMinPointSize() and
-  many others.
-- New events: wxEVT_MAGNIFY, wxEVT_STC_AUTOCOMP_COMPLETED.
+  wxRendererNative, wxStandardPaths::GetUserDir(), wxUIActionSimulator
+  ::Select() and many others.
 - Significant improvements to: wxBusyInfo, wxNotificationMessage.
-- All around better support for high DPI monitors.
-- Much newer versions of bundled 3rd party libraries (notably libpng)
-  and support for GStreamer up to 1.7 under Unix.
+- Latest versions of all bundled 3rd party libraries, including all the
+  security fixed and support for WebKit 2 and GStreamer 1.7 under Unix.
 - Revamped OpenGL support better suited to modern OpenGL (3.2+).
 - Further C++11 support improvements.
-- Support for latest compilers: MSVS 2017, g++ 7.2, clang 5.0.
-- A lot of bug fixes in wxGTK3 and wxOSX/Cocoa ports.
+- New CMake-based alternative build system.
+- Support for latest compilers: MSVS 2017, g++ 7, clang 6.
+- A lot of bug fixes, especially in wxGTK3 and wxOSX/Cocoa ports.
 - New experimental wxQt port.
 
 
@@ -203,4 +210,4 @@ If you are looking for support, you can get it from
 
 Have fun!
 
-The wxWidgets Team, February 2016
+The wxWidgets Team, February 2018

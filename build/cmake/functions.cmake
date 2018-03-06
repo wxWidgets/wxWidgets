@@ -73,9 +73,17 @@ function(wx_set_common_target_properties target_name)
     if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
         # TODO: implement for older CMake versions ?
         set_target_properties(${target_name} PROPERTIES CXX_STANDARD ${wxBUILD_CXX_STANDARD})
-        if(wxBUILD_CXX_STANDARD EQUAL 11 OR wxBUILD_CXX_STANDARD EQUAL 14)
-            set_target_properties(${target_name} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
-            #TODO: define for other generators than Xcode
+        if(
+            APPLE AND
+            CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND
+            (wxBUILD_CXX_STANDARD EQUAL 11 OR wxBUILD_CXX_STANDARD EQUAL 14)
+          )
+            if(CMAKE_GENERATOR STREQUAL "Xcode")
+                set_target_properties(${target_name} PROPERTIES XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY libc++)
+            else()
+                target_compile_options(${target_name} PUBLIC "-stdlib=libc++")
+                target_link_libraries(${target_name} PRIVATE "-stdlib=libc++")
+            endif()
         endif()
     endif()
     set_target_properties(${target_name} PROPERTIES
@@ -166,6 +174,9 @@ function(wx_set_target_properties target_name is_base)
     endif()
 
     if(wxUSE_UNICODE)
+        if(WIN32)
+            target_compile_definitions(${target_name} PUBLIC UNICODE)
+        endif()
         target_compile_definitions(${target_name} PUBLIC _UNICODE)
     endif()
 
@@ -175,6 +186,7 @@ function(wx_set_target_properties target_name is_base)
             _CRT_SECURE_NO_DEPRECATE=1
             _CRT_NON_CONFORMING_SWPRINTFS=1
             _SCL_SECURE_NO_WARNINGS=1
+            _WINSOCK_DEPRECATED_NO_WARNINGS=1
             )
     endif()
 
@@ -189,6 +201,33 @@ function(wx_set_target_properties target_name is_base)
         target_include_directories(${target_name}
             PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
+
+    if (WXMSW)
+        set(WXMSW_LIBRARIES
+            kernel32
+            user32
+            gdi32
+            comdlg32
+            winspool
+            winmm
+            shell32
+            shlwapi
+            comctl32
+            ole32
+            oleaut32
+            uuid
+            rpcrt4
+            advapi32
+            version
+            wsock32
+            wininet
+            oleacc
+            uxtheme
+        )
+        target_link_libraries(${target_name}
+            PUBLIC ${WXMSW_LIBRARIES})
+    endif()
+
     if(wxTOOLKIT_LIBRARIES)
         target_link_libraries(${target_name}
             PUBLIC ${wxTOOLKIT_LIBRARIES})
@@ -273,7 +312,7 @@ endfunction()
 # Enable cotire for target if precompiled headers are enabled
 macro(wx_target_enable_precomp target_name)
     if(wxBUILD_PRECOMP)
-        if(CMAKE_GENERATOR STREQUAL "Xcode" AND ${target_name} STREQUAL "wxscintilla")
+        if(APPLE AND ${target_name} STREQUAL "wxscintilla")
             # TODO: workaround/fix cotire issue with wxscintilla when using Xcode
         else()
             set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
@@ -326,7 +365,7 @@ macro(wx_exe_link_libraries name)
     if(wxBUILD_MONOLITHIC)
         target_link_libraries(${name} PUBLIC mono)
     else()
-        target_link_libraries(${name};${ARGN})
+        target_link_libraries(${name};PRIVATE;${ARGN})
     endif()
 endmacro()
 
@@ -376,12 +415,23 @@ function(wx_set_builtin_target_properties target_name)
                 OUTPUT_NAME_DEBUG ${target_name}${lib_unicode}d
         )
     endif()
+
+    if(wxUSE_UNICODE)
+        if(WIN32)
+            target_compile_definitions(${target_name} PUBLIC UNICODE)
+        endif()
+        target_compile_definitions(${target_name} PUBLIC _UNICODE)
+    endif()
+
     if(MSVC)
         # we're not interested in deprecation warnings about the use of
         # standard C functions in the 3rd party libraries (these warnings
         # are only given by VC8+ but it's simpler to just always define
         # this symbol which disables them, even for previous VC versions)
-        target_compile_definitions(${target_name} PRIVATE _CRT_SECURE_NO_WARNINGS)
+        target_compile_definitions(${target_name} PRIVATE
+            _CRT_SECURE_NO_DEPRECATE=1
+            _SCL_SECURE_NO_WARNINGS=1
+        )
     endif()
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
@@ -574,7 +624,7 @@ function(wx_add_sample name)
         foreach(data_file ${SAMPLE_DATA})
             list(APPEND cmds COMMAND ${CMAKE_COMMAND}
                 -E copy ${wxSOURCE_DIR}/samples/${wxSAMPLE_SUBDIR}${name}/${data_file}
-                ${wxOUTPUT_DIR}/${data_file})
+                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_file})
         endforeach()
         add_custom_command(
             TARGET ${target_name} ${cmds}
@@ -605,6 +655,9 @@ function(wx_add_sample name)
     wx_set_common_target_properties(${target_name})
     set_target_properties(${target_name} PROPERTIES
         FOLDER ${folder}
+        )
+    set_target_properties(${target_name} PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxOUTPUT_DIR}/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}"
         )
 endfunction()
 
@@ -694,12 +747,15 @@ function(wx_add_test name)
     endif()
     add_executable(${name} ${test_src})
     target_include_directories(${name} PRIVATE "${wxSOURCE_DIR}/tests" "${wxSOURCE_DIR}/3rdparty/catch/include")
-    wx_exe_link_libraries(${name} base net)
+    wx_exe_link_libraries(${name} base)
     if(wxBUILD_SHARED)
         target_compile_definitions(${name} PRIVATE WXUSINGDLL)
     endif()
     wx_set_common_target_properties(${name})
     set_target_properties(${name} PROPERTIES FOLDER "Tests")
+    set_target_properties(${name} PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${wxSOURCE_DIR}/tests"
+        )
 
     add_test(NAME ${name}
         COMMAND ${name}

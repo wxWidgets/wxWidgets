@@ -15,43 +15,40 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/dcscreen.h"
+#include "wx/gdicmn.h"
 #include "wx/icon.h"
 #include "wx/gtk/dc.h"
 
 #include <gtk/gtk.h>
 
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner)
-    : base_type(owner)
+    : wxGCDCImpl(owner)
 {
-    m_width = 0;
-    m_height = 0;
-}
-
-wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, int)
-    : base_type(owner, 0)
-{
-    m_width = 0;
-    m_height = 0;
 }
 
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, double scaleFactor)
-    : base_type(owner, 0)
+    : wxGCDCImpl(owner, 0)
 {
-    m_width = 0;
-    m_height = 0;
     m_contentScaleFactor = scaleFactor;
 }
 
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, wxWindow* window)
-    : base_type(owner, 0)
+    : wxGCDCImpl(owner, 0)
 {
-    m_window = window;
-    m_font = window->GetFont();
-    m_textForegroundColour = window->GetForegroundColour();
-    m_textBackgroundColour = window->GetBackgroundColour();
-    m_width = 0;
-    m_height = 0;
-    m_contentScaleFactor = window->GetContentScaleFactor();
+    if ( window )
+    {
+        m_window = window;
+        m_font = window->GetFont();
+        m_textForegroundColour = window->GetForegroundColour();
+        m_textBackgroundColour = window->GetBackgroundColour();
+        m_contentScaleFactor = window->GetContentScaleFactor();
+    }
+}
+
+void wxGTKCairoDCImpl::InitSize(GdkWindow* window)
+{
+    m_size.x = gdk_window_get_width(window);
+    m_size.y = gdk_window_get_height(window);
 }
 
 void wxGTKCairoDCImpl::DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool useMask)
@@ -118,9 +115,9 @@ bool wxGTKCairoDCImpl::DoGetPixel(int x, int y, wxColour* col) const
 void wxGTKCairoDCImpl::DoGetSize(int* width, int* height) const
 {
     if (width)
-        *width = m_width;
+        *width = m_size.x;
     if (height)
-        *height = m_height;
+        *height = m_size.y;
 }
 
 bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dstHeight, wxDC* source, int xsrc, int ysrc, int srcWidth, int srcHeight, wxRasterOperationMode rop, bool useMask, int xsrcMask, int ysrcMask)
@@ -236,10 +233,23 @@ void* wxGTKCairoDCImpl::GetCairoContext() const
         cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
     return cr;
 }
+
+wxSize wxGTKCairoDCImpl::GetPPI() const
+{
+    if ( m_window )
+    {
+        return wxGetDisplayPPI();
+    }
+
+    // For a non-window-based DC the concept of PPI doesn't make much sense
+    // anyhow, so just return the hardcoded value used by the base class.
+    return wxGCDCImpl::GetPPI();
+}
+
 //-----------------------------------------------------------------------------
 
 wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
-    : base_type(owner, window)
+    : wxGTKCairoDCImpl(owner, window)
 {
     GtkWidget* widget = window->m_wxwindow;
     if (widget == NULL)
@@ -262,15 +272,15 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
         int x, y;
         if (gtk_widget_get_has_window(widget))
         {
-            m_width = gdk_window_get_width(gdkWindow);
-            m_height = gdk_window_get_height(gdkWindow);
-            x = m_width - a.width;
-            y = m_height - a.height;
+            m_size.x = gdk_window_get_width(gdkWindow);
+            m_size.y = gdk_window_get_height(gdkWindow);
+            x = m_size.x - a.width;
+            y = m_size.y - a.height;
         }
         else
         {
-            m_width = a.width;
-            m_height = a.height;
+            m_size.x = a.width;
+            m_size.y = a.height;
             x = a.x;
             y = a.y;
             cairo_rectangle(cr, a.x, a.y, a.width, a.height);
@@ -285,7 +295,7 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
 //-----------------------------------------------------------------------------
 
 wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
-    : base_type(owner, window)
+    : wxGTKCairoDCImpl(owner, window)
 {
     GtkWidget* widget = window->m_wxwindow;
     if (widget == NULL)
@@ -305,15 +315,15 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
         SetGraphicsContext(gc);
         if (gtk_widget_get_has_window(widget))
         {
-            m_width = gdk_window_get_width(gdkWindow);
-            m_height = gdk_window_get_height(gdkWindow);
+            m_size.x = gdk_window_get_width(gdkWindow);
+            m_size.y = gdk_window_get_height(gdkWindow);
         }
         else
         {
             GtkAllocation a;
             gtk_widget_get_allocation(widget, &a);
-            m_width = a.width;
-            m_height = a.height;
+            m_size.x = a.width;
+            m_size.y = a.height;
             cairo_rectangle(cr, a.x, a.y, a.width, a.height);
             cairo_clip(cr);
             SetDeviceLocalOrigin(a.x, a.y);
@@ -325,13 +335,11 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
 //-----------------------------------------------------------------------------
 
 wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
-    : base_type(owner, window)
+    : wxGTKCairoDCImpl(owner, window)
 {
     cairo_t* cr = window->GTKPaintContext();
     wxCHECK_RET(cr, "using wxPaintDC without being in a native paint event");
-    GdkWindow* gdkWindow = gtk_widget_get_window(window->m_wxwindow);
-    m_width = gdk_window_get_width(gdkWindow);
-    m_height = gdk_window_get_height(gdkWindow);
+    InitSize(gtk_widget_get_window(window->m_wxwindow));
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
     gc->EnableOffset(m_contentScaleFactor <= 1);
     SetGraphicsContext(gc);
@@ -339,34 +347,40 @@ wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
 //-----------------------------------------------------------------------------
 
 wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
-    : base_type(owner, 0)
+    : wxGTKCairoDCImpl(owner, static_cast<wxWindow*>(NULL))
 {
     GdkWindow* window = gdk_get_default_root_window();
-    m_width = gdk_window_get_width(window);
-    m_height = gdk_window_get_height(window);
+    InitSize(window);
+
     cairo_t* cr = gdk_cairo_create(window);
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
     cairo_destroy(cr);
     gc->EnableOffset(m_contentScaleFactor <= 1);
     SetGraphicsContext(gc);
 }
+
+wxSize wxScreenDCImpl::GetPPI() const
+{
+    return wxGetDisplayPPI();
+}
+
 //-----------------------------------------------------------------------------
 
 wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner)
-    : base_type(owner)
+    : wxGTKCairoDCImpl(owner)
 {
     m_ok = false;
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner, wxBitmap& bitmap)
-    : base_type(owner, 0)
+    : wxGTKCairoDCImpl(owner, static_cast<wxWindow*>(NULL))
     , m_bitmap(bitmap)
 {
     Setup();
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner, wxDC*)
-    : base_type(owner)
+    : wxGTKCairoDCImpl(owner)
 {
     m_ok = false;
 }
@@ -398,8 +412,7 @@ void wxMemoryDCImpl::Setup()
     m_ok = m_bitmap.IsOk();
     if (m_ok)
     {
-        m_width = int(m_bitmap.GetScaledWidth());
-        m_height = int(m_bitmap.GetScaledHeight());
+        m_size = m_bitmap.GetScaledSize();
         m_contentScaleFactor = m_bitmap.GetScaleFactor();
         cairo_t* cr = m_bitmap.CairoCreate();
         gc = wxGraphicsContext::CreateFromNative(cr);
@@ -411,7 +424,7 @@ void wxMemoryDCImpl::Setup()
 //-----------------------------------------------------------------------------
 
 wxGTKCairoDC::wxGTKCairoDC(cairo_t* cr, wxWindow* window)
-    : base_type(new wxGTKCairoDCImpl(this, window->GetContentScaleFactor()))
+    : wxDC(new wxGTKCairoDCImpl(this, window->GetContentScaleFactor()))
 {
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
     gc->EnableOffset(window->GetContentScaleFactor() <= 1);

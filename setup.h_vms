@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 12 December 2017                                                   *
+ * Date : 22 January 2018                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -1386,6 +1386,9 @@ typedef pid_t GPid;
 
 /* Define if setpriority() is available. */
 #undef HAVE_SETPRIORITY
+
+/* Define if xlocale.h header file exists. */
+#undef HAVE_XLOCALE_H
 
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T

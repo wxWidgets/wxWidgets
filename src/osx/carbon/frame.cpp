@@ -36,11 +36,6 @@ wxEND_EVENT_TABLE()
 // creation/destruction
 // ----------------------------------------------------------------------------
 
-void wxFrame::Init()
-{
-    m_winLastFocused = NULL;
-}
-
 bool wxFrame::Create(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
@@ -156,38 +151,10 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 {
     if ( !event.GetActive() )
     {
-       // remember the last focused child if it is our child
-        m_winLastFocused = FindFocus();
-
-        // so we NULL it out if it's a child from some other frame
-        wxWindow *win = m_winLastFocused;
-        while ( win )
-        {
-            if ( win->IsTopLevel() )
-            {
-                if ( win != this )
-                    m_winLastFocused = NULL;
-
-                break;
-            }
-
-            win = win->GetParent();
-        }
-
         event.Skip();
     }
     else
     {
-        // restore focus to the child which was last focused
-        wxWindow *parent = m_winLastFocused
-            ? m_winLastFocused->GetParent()
-            : NULL;
-
-        if (parent == NULL)
-            parent = this;
-
-        wxSetFocusToChild(parent, &m_winLastFocused);
-
 #if wxUSE_MENUS
         if (m_frameMenuBar != NULL)
         {

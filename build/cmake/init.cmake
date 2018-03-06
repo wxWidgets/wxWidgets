@@ -22,6 +22,11 @@ if(DEFINED wxBUILD_USE_STATIC_RUNTIME AND wxBUILD_USE_STATIC_RUNTIME)
     endforeach()
 endif()
 
+if(wxBUILD_MSVC_MULTIPROC)
+    wx_string_append(CMAKE_C_FLAGS " /MP")
+    wx_string_append(CMAKE_CXX_FLAGS " /MP")
+endif()
+
 if(wxBUILD_COMPATIBILITY VERSION_LESS 3.0)
     set(WXWIN_COMPATIBILITY_2_8 ON)
 endif()
@@ -119,18 +124,24 @@ set(wxUSE_STD_DEFAULT ON)
 if(wxUSE_UNICODE)
     set(wxUSE_WCHAR_T ON)
 endif()
-if(wxUSE_EXPAT)
-    set(wxUSE_XML ON)
-else()
-    set(wxUSE_XML OFF)
+if(NOT wxUSE_EXPAT)
+    set(wxUSE_XRC OFF)
 endif()
+set(wxUSE_XML ${wxUSE_XRC})
 if(wxUSE_CONFIG)
     set(wxUSE_CONFIG_NATIVE ON)
 endif()
 
 if(DEFINED wxUSE_OLE AND wxUSE_OLE)
     set(wxUSE_OLE_AUTOMATION ON)
-    set(wxUSE_ACTIVEX ON)
+endif()
+
+if(DEFINED wxUSE_GRAPHICS_DIRECT2D AND NOT wxUSE_GRAPHICS_CONTEXT)
+    set(wxUSE_GRAPHICS_DIRECT2D OFF)
+endif()
+
+if(wxUSE_OPENGL)
+    set(wxUSE_GLCANVAS ON)
 endif()
 
 if(wxUSE_THREADS)
@@ -138,20 +149,9 @@ if(wxUSE_THREADS)
 endif()
 
 if(wxUSE_GUI)
-    # Constants for GUI
-    set(wxUSE_COMMON_DIALOGS ON)
-
-    if(wxUSE_TASKBARICON)
-        set(wxUSE_TASKBARICON_BALLOONS ON)
-    endif()
-
     if(WIN32 AND wxUSE_METAFILE)
         # this one should probably be made separately configurable
         set(wxUSE_ENH_METAFILE ON)
-    endif()
-
-    if(wxUSE_IMAGE)
-        set(wxUSE_WXDIB ON)
     endif()
 
     if(wxUSE_OPENGL)

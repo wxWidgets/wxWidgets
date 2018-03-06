@@ -352,6 +352,11 @@ public:
     // supported by the type handled by the validator.
     void SetPrecision(unsigned precision) { m_precision = precision; }
 
+    // Set multiplier applied for displaying the value, e.g. 100 if the value
+    // should be displayed in percents, so that the variable containing 0.5
+    // would be displayed as 50.
+    void SetFactor(double factor) { m_factor = factor; }
+
 protected:
     // Notice that we can't use "long double" here because it's not supported
     // by wxNumberFormatter yet, so restrict ourselves to just double (and
@@ -361,12 +366,14 @@ protected:
     wxFloatingPointValidatorBase(int style)
         : wxNumValidatorBase(style)
     {
+        m_factor = 1.0;
     }
 
     wxFloatingPointValidatorBase(const wxFloatingPointValidatorBase& other)
         : wxNumValidatorBase(other)
     {
         m_precision = other.m_precision;
+        m_factor = other.m_factor;
 
         m_min = other.m_min;
         m_max = other.m_max;
@@ -374,7 +381,7 @@ protected:
 
     // Provide methods for wxNumValidator use.
     wxString ToString(LongestValueType value) const;
-    static bool FromString(const wxString& s, LongestValueType *value);
+    bool FromString(const wxString& s, LongestValueType *value) const;
 
     void DoSetMin(LongestValueType min) { m_min = min; }
     void DoSetMax(LongestValueType max) { m_max = max; }
@@ -390,6 +397,9 @@ protected:
 private:
     // Maximum number of decimals digits after the decimal separator.
     unsigned m_precision;
+
+    // Factor applied for the displayed the value.
+    double m_factor;
 
     // Minimal and maximal values accepted (inclusive).
     LongestValueType m_min, m_max;

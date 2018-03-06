@@ -51,88 +51,47 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
                                       GParamSpec * WXUNUSED(param_spec),
                                       wxCollapsiblePane *p)
 {
-    // NB: unlike for the "activate" signal, when this callback is called, if
-    //     we try to query the "collapsed" status through p->IsCollapsed(), we
-    //     get the right value. I.e. here p->IsCollapsed() will return false if
-    //     this callback has been called at the end of a collapsed->expanded
-    //     transition and viceversa. Inside the "activate" signal callback
-    //     p->IsCollapsed() would return the wrong value!
+    // When the pane is expanded or collapsed, its best size changes, so it
+    // needs to be invalidated in any case.
+    p->InvalidateBestSize();
 
-    wxSize sz;
-    if ( p->IsExpanded() )
+    if (!p->HasFlag(wxCP_NO_TLW_RESIZE))
     {
-        // NB: we cannot use the p->GetBestSize() or p->GetMinSize() functions
-        //     here as they would return the size for the collapsed expander
-        //     even if the collapsed->expanded transition has already been
-        //     completed; we solve this problem doing:
+        wxTopLevelWindow *
+            top = wxDynamicCast(wxGetTopLevelParent(p), wxTopLevelWindow);
 
-        sz = p->m_szCollapsed;
-
-        wxSize panesz = p->GetPane()->GetBestSize();
-        sz.x = wxMax(sz.x, panesz.x);
-        sz.y += gtk_expander_get_spacing(GTK_EXPANDER(p->m_widget)) + panesz.y;
-    }
-    else // collapsed
-    {
-        // same problem described above: using p->Get[Best|Min]Size() here we
-        // would get the size of the control when it is expanded even if the
-        // expanded->collapsed transition should be complete now...
-        // So, we use the size cached at control-creation time...
-        sz = p->m_szCollapsed;
-    }
-
-    // VERY IMPORTANT:
-    // just calling
-    //          p->OnStateChange(sz);
-    // here would work work BUT:
-    //     1) in the expanded->collapsed transition it provokes a lot of flickering
-    //     2) in the collapsed->expanded transition using the "Change status" wxButton
-    //        in samples/collpane application some strange warnings would be generated
-    //        by the "clearlooks" theme, if that's your theme.
-    //
-    // So we prefer to use some GTK+ native optimized calls, which prevent too many resize
-    // calculations to happen. Note that the following code has been very carefully designed
-    // and tested - be VERY careful when changing it!
-
-    // 1) need to update our size hints
-    // NB: this function call won't actually do any long operation
-    //     (redraw/relayout/resize) so that it's flicker-free
-    p->SetMinSize(sz);
-
-    if (p->HasFlag(wxCP_NO_TLW_RESIZE))
-    {
-        // fire an event
-        wxCollapsiblePaneEvent ev(p, p->GetId(), p->IsCollapsed());
-        p->HandleWindowEvent(ev);
-
-        // the user asked to explicitly handle the resizing itself...
-        return;
-    }
-
-    wxTopLevelWindow *
-        top = wxDynamicCast(wxGetTopLevelParent(p), wxTopLevelWindow);
-    if ( top && top->GetSizer() )
-    {
-        // 2) recalculate minimal size of the top window
-        sz = top->GetSizer()->CalcMin();
-
-        if (top->m_mainWidget)
+        // If we want to automatically resize the entire TLW to adopt to the
+        // new pane size, we also need to invalidate the cached best sizes of
+        // all the intermediate windows to ensure that it's recalculated
+        // correctly when doing the layout below.
+        for ( wxWindow* w = p->GetParent(); w != top; w = w->GetParent() )
         {
-            // 3) MAGIC HACK: if you ever used GtkExpander in a GTK+ program
-            //    you know that this magic call is required to make it possible
-            //    to shrink the top level window in the expanded->collapsed
-            //    transition.  This may be sometimes undesired but *is*
-            //    necessary and if you look carefully, all GTK+ programs using
-            //    GtkExpander perform this trick (e.g. the standard "open file"
-            //    dialog of GTK+>=2.4 is not resizable when the expander is
-            //    collapsed!)
-            gtk_window_set_resizable (GTK_WINDOW (top->m_widget), p->IsExpanded());
+            w->InvalidateBestSize();
+        }
 
-            // 4) set size hints
-            top->SetMinClientSize(sz);
+        if ( top && top->GetSizer() )
+        {
+            // 2) recalculate minimal size of the top window
+            const wxSize sz = top->GetSizer()->CalcMin();
 
-            // 5) set size
-            top->SetClientSize(sz);
+            if (top->m_mainWidget)
+            {
+                // 3) MAGIC HACK: if you ever used GtkExpander in a GTK+ program
+                //    you know that this magic call is required to make it possible
+                //    to shrink the top level window in the expanded->collapsed
+                //    transition.  This may be sometimes undesired but *is*
+                //    necessary and if you look carefully, all GTK+ programs using
+                //    GtkExpander perform this trick (e.g. the standard "open file"
+                //    dialog of GTK+>=2.4 is not resizable when the expander is
+                //    collapsed!)
+                gtk_window_set_resizable (GTK_WINDOW (top->m_widget), p->IsExpanded());
+
+                // 4) set size hints
+                top->SetMinClientSize(sz);
+
+                // 5) set size
+                top->SetClientSize(sz);
+            }
         }
     }
 
@@ -191,9 +150,10 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
         gtk_expander_new_with_mnemonic(wxGTK_CONV(GTKConvertMnemonics(label)));
     g_object_ref(m_widget);
 
-    // see the gtk_collapsiblepane_expanded_callback comments to understand why
-    // we connect to the "notify::expanded" signal instead of the more common
-    // "activate" one
+    // Connect to the "notify::expanded" signal instead of the more common
+    // "activate" one in order to use the new state in our callback, which is
+    // more convenient e.g. because calling GetBestSize() returns the suitable
+    // size for the new state.
     g_signal_connect(m_widget, "notify::expanded",
                      G_CALLBACK(gtk_collapsiblepane_expanded_callback), this);
 
@@ -211,7 +171,7 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
     m_pPane->SetBackgroundColour(bg);
 
     // remember the size of this control when it's collapsed
-    m_szCollapsed = GetBestSize();
+    m_szCollapsed = GTKGetPreferredSize(m_widget);
 
     return true;
 }
@@ -220,9 +180,16 @@ wxSize wxCollapsiblePane::DoGetBestSize() const
 {
     wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
 
-    // notice that we do not cache our best size here as it changes
-    // all times the user expands/hide our pane
-    return GTKGetPreferredSize(m_widget);
+    wxSize sz = m_szCollapsed;
+
+    if ( IsExpanded() )
+    {
+        const wxSize panesz = m_pPane->GetBestSize();
+        sz.x = wxMax(sz.x, panesz.x);
+        sz.y += gtk_expander_get_spacing(GTK_EXPANDER(m_widget)) + panesz.y;
+    }
+
+    return sz;
 }
 
 void wxCollapsiblePane::Collapse(bool collapse)

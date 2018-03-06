@@ -22,6 +22,10 @@
 
 #include "wx/vector.h"
 
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+    #include <vector>
+#endif // wxUSE_STD_CONTAINERS_COMPATIBLY
+
 // ----------------------------------------------------------------------------
 // simple class capable of detecting leaks of its objects
 // ----------------------------------------------------------------------------
@@ -360,6 +364,13 @@ TEST_CASE("wxVector::reverse_iterator", "[vector][reverse_iterator]")
     ri = rb + 2;
     CHECK( ri - rb == 2 );
     CHECK( re - ri == 8 );
+
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+    std::vector<int> stdvec(rb, re);
+    REQUIRE( stdvec.size() == 10 );
+    CHECK( stdvec[0] == 10 );
+    CHECK( stdvec[9] == 1 );
+#endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 }
 
 TEST_CASE("wxVector::capacity", "[vector][capacity][shrink_to_fit]")

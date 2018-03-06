@@ -41,6 +41,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/private/textmeasure.h"
@@ -212,6 +213,8 @@ static wxWindowGTK *gs_currentFocus = NULL;
 // The window that is scheduled to get focus in the next event loop iteration
 // or NULL if there's no pending focus change:
 static wxWindowGTK *gs_pendingFocus = NULL;
+// The window that had focus before we lost it last time:
+static wxWindowGTK *gs_lastFocus = NULL;
 
 // the window that has deferred focus-out event pending, if any (see
 // GTKAddDeferredFocusOut() for details)
@@ -2191,10 +2194,19 @@ gtk_window_realized_callback(GtkWidget* WXUNUSED(widget), wxWindowGTK* win)
 //-----------------------------------------------------------------------------
 
 static void
-size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
+size_allocate(GtkWidget* WXUNUSED_IN_GTK2(widget), GtkAllocation* alloc, wxWindow* win)
 {
     int w = alloc->width;
     int h = alloc->height;
+#if GTK_CHECK_VERSION(3,14,0)
+    if (wx_is_at_least_gtk3(14))
+    {
+        GtkAllocation clip;
+        gtk_widget_get_clip(widget, &clip);
+        if (clip.width > w || clip.height > h)
+            gtk_widget_set_clip(widget, alloc);
+    }
+#endif
     if (win->m_wxwindow)
     {
         GtkBorder border;
@@ -2675,6 +2687,8 @@ wxWindowGTK::~wxWindowGTK()
         gs_currentFocus = NULL;
     if (gs_pendingFocus == this)
         gs_pendingFocus = NULL;
+    if (gs_lastFocus == this)
+        gs_lastFocus = NULL;
 
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
@@ -3814,7 +3828,7 @@ bool wxWindowGTK::GTKShowFromOnIdle()
 void wxWindowGTK::OnInternalIdle()
 {
     if ( gs_deferredFocusOut )
-        GTKHandleDeferredFocusOut();
+        gs_deferredFocusOut->GTKHandleDeferredFocusOut();
 
     // Check if we have to show window now
     if (GTKShowFromOnIdle()) return;
@@ -4334,7 +4348,7 @@ bool wxWindowGTK::GTKHandleFocusIn()
         // otherwise we need to send focus-out first
         wxASSERT_MSG ( gs_deferredFocusOut != this,
                        "GTKHandleFocusIn(GTKFocus_Normal) called even though focus changed back to itself - derived class should handle this" );
-        GTKHandleDeferredFocusOut();
+        gs_deferredFocusOut->GTKHandleDeferredFocusOut();
     }
 
 
@@ -4364,6 +4378,9 @@ bool wxWindowGTK::GTKHandleFocusIn()
 
     wxFocusEvent eventFocus(wxEVT_SET_FOCUS, GetId());
     eventFocus.SetEventObject(this);
+    eventFocus.SetWindow(gs_lastFocus);
+    gs_lastFocus = this;
+
     GTKProcessEvent(eventFocus);
 
     return retval;
@@ -4405,6 +4422,8 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
                "handling focus_out event for %s(%p, %s)",
                GetClassInfo()->GetClassName(), this, GetLabel());
 
+    gs_lastFocus = this;
+
     if (m_imContext)
         gtk_im_context_focus_out(m_imContext);
 
@@ -4440,23 +4459,18 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
     GTKProcessEvent( event );
 }
 
-/*static*/
 void wxWindowGTK::GTKHandleDeferredFocusOut()
 {
     // NB: See GTKHandleFocusOut() for explanation. This function is called
     //     from either GTKHandleFocusIn() or OnInternalIdle() to process
-    //     deferred event.
-    if ( gs_deferredFocusOut )
-    {
-        wxWindowGTK *win = gs_deferredFocusOut;
-        gs_deferredFocusOut = NULL;
+    //     deferred event for this window.
+    gs_deferredFocusOut = NULL;
 
-        wxLogTrace(TRACE_FOCUS,
-                   "processing deferred focus_out event for %s(%p, %s)",
-                   win->GetClassInfo()->GetClassName(), win, win->GetLabel());
+    wxLogTrace(TRACE_FOCUS,
+               "processing deferred focus_out event for %s(%p, %s)",
+               GetClassInfo()->GetClassName(), this, GetLabel());
 
-        win->GTKHandleFocusOutNoDeferring();
-    }
+    GTKHandleFocusOutNoDeferring();
 }
 
 void wxWindowGTK::SetFocus()

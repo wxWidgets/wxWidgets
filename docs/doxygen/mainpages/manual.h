@@ -14,7 +14,7 @@
 @author Julian Smart, Vadim Zeitlin, Robin Dunn, Stefan Csomor,
         Bryan Petty, Francesco Montorsi, Robert Roebling et al
 
-@date February 29, 2016
+@date February 19, 2018
 
 @n
 
@@ -23,10 +23,10 @@ developing native cross-platform GUI applications in C++!
 
 @n
 
-If you are new to wxWidgets, please start with the @subpage page_introduction
-and follow with the @subpage page_topics, with maybe a look at
-@subpage page_samples as you go. If you are already familiar with wxWidgets,
-please read about @subpage overview_changes_since28 "the changes" in the latest
+If you are new to wxWidgets, please start with the @ref page_introduction
+and follow with the @ref page_topics, with maybe a look at
+@ref page_samples as you go. If you are already familiar with wxWidgets,
+please read about @ref overview_changes_since28 "the changes" in the latest
 version compared to 2.8 series. And you can also follow the links in the
 reference section or jump directly to the
 <a href="classes.html">alphabetical list of classes</a> to find out more about

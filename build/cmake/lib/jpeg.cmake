@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_thirdparty_library(wxUSE_LIBJPEG JPEG "use libjpeg (JPEG file format)")
-
 if(wxUSE_LIBJPEG STREQUAL "builtin")
     wx_add_builtin_library(wxjpeg
         src/jpeg/jaricom.c

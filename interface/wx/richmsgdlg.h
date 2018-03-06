@@ -108,6 +108,54 @@ public:
     wxString GetDetailedText() const;
 
     /**
+        Shows or hides a footer text that is used at the bottom of
+        the dialog together with an optional icon.
+
+        @param footerText
+            The footer text if empty no footer text will be used.
+
+        @see SetFooterIcon(), GetFooterText()
+        
+        @since 3.1.1
+    */
+    void SetFooterText(const wxString& footerText);
+
+    /**
+        Retrieves the footer text.
+
+        @return
+            The footer text or empty if footer text is not used.
+
+        @since 3.1.1
+    */
+    wxString GetFooterText() const;
+
+    /**
+        Specify the footer icon set together with the footer text.
+
+        Valid values are @c wxICON_INFORMATION, @c wxICON_WARNING,
+        @c wxICON_AUTH_NEEDED and @c wxICON_ERROR (notice that
+        @c wxICON_QUESTION is not allowed here).
+
+        @see GetFooterIcon(), SetFooterText()
+
+        @since 3.1.1
+    */
+    void SetFooterIcon(int icon);
+
+    /**
+        Retrieves the footer icon.
+
+        @return
+            The footer icon or 0 if footer icon is not used.
+
+        @see SetFooterIcon()
+
+        @since 3.1.1
+    */
+    int GetFooterIcon() const;
+
+    /**
         Retrieves the state of the checkbox.
 
         If this method is called before showing the dialog, the initial value

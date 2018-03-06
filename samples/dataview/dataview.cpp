@@ -23,6 +23,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/dataview.h"
 #include "wx/datetime.h"
 #include "wx/splitter.h"
@@ -84,6 +85,7 @@ private:
     void OnCustomHeaderHeight(wxCommandEvent& event);
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
     void OnGetPageInfo(wxCommandEvent& event);
+    void OnDisable(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
@@ -102,6 +104,7 @@ private:
     void OnExpand(wxCommandEvent& event);
     void OnShowCurrent(wxCommandEvent& event);
     void OnSetNinthCurrent(wxCommandEvent& event);
+    void OnChangeNinthTitle(wxCommandEvent& event);
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
@@ -130,6 +133,7 @@ private:
     void OnHeaderClickList( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
     void OnSortedList( wxDataViewEvent &event );
+    void OnColumnReordered( wxDataViewEvent &event);
 
     void OnContextMenu( wxDataViewEvent &event );
 
@@ -306,6 +310,7 @@ enum
 {
     ID_CLEARLOG = wxID_HIGHEST+1,
     ID_GET_PAGE_INFO,
+    ID_DISABLE,
     ID_BACKGROUND_COLOUR,
     ID_FOREGROUND_COLOUR,
     ID_CUSTOM_HEADER_ATTR,
@@ -342,6 +347,7 @@ enum
     ID_EXPAND           = 105,
     ID_SHOW_CURRENT,
     ID_SET_NINTH_CURRENT,
+    ID_CHANGE_NINTH_TITLE,
 
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
@@ -365,6 +371,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_CLEARLOG, MyFrame::OnClearLog )
 
     EVT_MENU( ID_GET_PAGE_INFO, MyFrame::OnGetPageInfo )
+    EVT_MENU( ID_DISABLE, MyFrame::OnDisable )
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
     EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
     EVT_MENU( ID_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr )
@@ -384,6 +391,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_EXPAND, MyFrame::OnExpand )
     EVT_BUTTON( ID_SHOW_CURRENT, MyFrame::OnShowCurrent )
     EVT_BUTTON( ID_SET_NINTH_CURRENT, MyFrame::OnSetNinthCurrent )
+    EVT_BUTTON( ID_CHANGE_NINTH_TITLE, MyFrame::OnChangeNinthTitle )
 
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
@@ -409,13 +417,14 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_SELECTION_CHANGED(ID_MUSIC_CTRL, MyFrame::OnSelectionChanged)
 
     EVT_DATAVIEW_ITEM_START_EDITING(ID_MUSIC_CTRL, MyFrame::OnStartEditing)
-    EVT_DATAVIEW_ITEM_EDITING_STARTED(ID_MUSIC_CTRL, MyFrame::OnEditingStarted)
-    EVT_DATAVIEW_ITEM_EDITING_DONE(ID_MUSIC_CTRL, MyFrame::OnEditingDone)
+    EVT_DATAVIEW_ITEM_EDITING_STARTED(wxID_ANY, MyFrame::OnEditingStarted)
+    EVT_DATAVIEW_ITEM_EDITING_DONE(wxID_ANY, MyFrame::OnEditingDone)
 
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
     EVT_DATAVIEW_COLUMN_SORTED(ID_ATTR_CTRL, MyFrame::OnSortedList)
+    EVT_DATAVIEW_COLUMN_REORDERED(wxID_ANY, MyFrame::OnColumnReordered)
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnHeaderClickList)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
@@ -457,6 +466,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
     file_menu->Append(ID_GET_PAGE_INFO, "Show current &page info");
+    file_menu->AppendCheckItem(ID_DISABLE, "&Disable\tCtrl-D");
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
     file_menu->AppendCheckItem(ID_CUSTOM_HEADER_ATTR, "C&ustom header attributes");
@@ -512,6 +522,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                                    "&Show current"), border);
     sizerCurrent->Add(new wxButton(firstPanel, ID_SET_NINTH_CURRENT,
                                    "Make &ninth symphony current"), border);
+    sizerCurrent->Add(new wxButton(firstPanel, ID_CHANGE_NINTH_TITLE,
+                                   "Change ninth &title"), border);
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
     m_ctrl[0]->SetMinSize(wxSize(-1, 200));
@@ -680,6 +692,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             wxDataViewColumn *column5 =
                 new wxDataViewColumn( "custom", cr, 5, -1, wxALIGN_LEFT,
                                       wxDATAVIEW_COL_RESIZABLE );
+            column5->SetBitmap(wxArtProvider::GetBitmap(wxART_INFORMATION, wxART_MENU));
             m_ctrl[0]->AppendColumn( column5 );
 
 
@@ -825,6 +838,11 @@ void MyFrame::OnGetPageInfo(wxCommandEvent& WXUNUSED(event))
                  dvc->GetCountPerPage());
 }
 
+void MyFrame::OnDisable(wxCommandEvent& event)
+{
+    m_ctrl[m_notebook->GetSelection()]->Enable(!event.IsChecked());
+}
+
 void MyFrame::OnSetForegroundColour(wxCommandEvent& WXUNUSED(event))
 {
     wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
@@ -929,6 +947,8 @@ void MyFrame::OnPageChanged( wxBookCtrlEvent& WXUNUSED(event) )
 
         GetMenuBar()->FindItem(id)->Check( m_ctrl[nPanel]->HasFlag(style) );
     }
+
+    GetMenuBar()->FindItem(ID_DISABLE)->Check(!m_ctrl[nPanel]->IsEnabled());
 }
 
 void MyFrame::OnStyleChange( wxCommandEvent& WXUNUSED(event) )
@@ -1137,6 +1157,19 @@ void MyFrame::OnSetNinthCurrent(wxCommandEvent& WXUNUSED(event))
     m_ctrl[0]->SetCurrentItem(item);
 }
 
+void MyFrame::OnChangeNinthTitle(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewItem item(m_music_model->GetNinthItem());
+    if ( !item.IsOk() )
+    {
+        wxLogError( "Cannot change the ninth symphony title: it was removed!" );
+        return;
+    }
+
+    m_music_model->SetValue("Symphony No. 9", item, 0);
+    m_music_model->ItemChanged(item);
+}
+
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
 {
     wxString title = m_music_model->GetTitle( event.GetItem() );
@@ -1187,14 +1220,20 @@ void MyFrame::OnStartEditing( wxDataViewEvent &event )
 
 void MyFrame::OnEditingStarted( wxDataViewEvent &event )
 {
-    wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_EDITING_STARTED, Item: %s", title );
+    // This event doesn't, currently, carry the value, so get it ourselves.
+    wxDataViewModel* const model = event.GetModel();
+    wxVariant value;
+    model->GetValue(value, event.GetItem(), event.GetColumn());
+    wxLogMessage("wxEVT_DATAVIEW_ITEM_EDITING_STARTED, current value %s",
+                 value.GetString());
 }
 
 void MyFrame::OnEditingDone( wxDataViewEvent &event )
 {
-    wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_EDITING_DONE, Item: %s", title );
+    wxLogMessage("wxEVT_DATAVIEW_ITEM_EDITING_DONE, new value %s",
+                 event.IsEditCancelled()
+                    ? wxString("unavailable because editing was cancelled")
+                    : event.GetValue().GetString());
 }
 
 void MyFrame::OnExpanded( wxDataViewEvent &event )
@@ -1257,6 +1296,19 @@ void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column position: %d", pos );
+}
+
+void MyFrame::OnColumnReordered(wxDataViewEvent& event)
+{
+    wxDataViewColumn* const col = event.GetDataViewColumn();
+    if ( !col )
+    {
+        wxLogError("Unknown column reordered?");
+        return;
+    }
+
+    wxLogMessage("wxEVT_DATAVIEW_COLUMN_REORDERED: \"%s\" is now at position %d",
+                 col->GetTitle(), event.GetColumn());
 }
 
 void MyFrame::OnSortedList( wxDataViewEvent &/*event*/)

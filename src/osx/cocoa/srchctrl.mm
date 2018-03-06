@@ -30,6 +30,7 @@
 
 @interface wxNSSearchField : NSSearchField
 {
+    BOOL m_withinTextDidChange;
 }
 
 @end
@@ -48,10 +49,20 @@
 
 - (id)initWithFrame:(NSRect)frame
 {
-    self = [super initWithFrame:frame];
+    if ( self = [super initWithFrame:frame] )
+    {
+        m_withinTextDidChange = NO;
+    }
     return self;
 }
- 
+
+- (void)textDidChange:(NSNotification *)aNotification
+{
+    m_withinTextDidChange = YES;
+    [super textDidChange:aNotification];
+    m_withinTextDidChange = NO;
+}
+
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
@@ -82,6 +93,11 @@
     
     
     return matches;
+}
+
+- (BOOL) isWithinTextDidChange
+{
+    return m_withinTextDidChange;
 }
 
 @end
@@ -157,7 +173,8 @@ public :
             NSString *searchString = [m_searchField stringValue];
             if ( searchString == nil || !searchString.length )
             {
-                wxpeer->HandleSearchFieldCancelHit();
+                if ( ![m_searchField isWithinTextDidChange])
+                   wxpeer->HandleSearchFieldCancelHit();
             }
             else
             {

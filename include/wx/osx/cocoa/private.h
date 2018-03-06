@@ -288,6 +288,10 @@ protected :
     CGWindowLevel   m_macWindowLevel;
     WXWindow        m_macWindow;
     void *          m_macFullScreenData ;
+    
+private:
+    void SetUpForModalParent();
+    
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl);
 };
 
@@ -495,6 +499,11 @@ const short kwxCursorLast = kwxCursorWatch;
 extern ClassicCursor gMacCursors[];
 
 extern NSLayoutManager* gNSLayoutManager;
+
+// NSString<->wxString
+
+wxString wxStringWithNSString(NSString *nsstring);
+NSString* wxNSStringWithWxString(const wxString &wxstring);
 
 #endif // wxUSE_GUI
 

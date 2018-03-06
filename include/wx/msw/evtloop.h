@@ -53,7 +53,6 @@ public:
     // override/implement base class virtuals
     virtual bool Dispatch() wxOVERRIDE;
     virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
-    virtual void WakeUp() wxOVERRIDE;
 
 protected:
     virtual void OnNextIteration() wxOVERRIDE;

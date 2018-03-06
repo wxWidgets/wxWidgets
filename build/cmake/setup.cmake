@@ -23,6 +23,14 @@ include(CheckTypeSize)
 include(CMakePushCheckState)
 include(TestBigEndian)
 
+if(
+    APPLE AND
+    CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND
+    (CMAKE_CXX_STANDARD EQUAL 11 OR CMAKE_CXX_STANDARD EQUAL 14)
+  )
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-stdlib=libc++")
+endif()
+
 # Add a definition to setup.h and append it to a list of defines for
 # for compile checks
 macro(wx_setup_definition def)
@@ -471,24 +479,6 @@ endif() # CMAKE_USE_PTHREADS_INIT
 check_symbol_exists(localtime_r time.h HAVE_LOCALTIME_R)
 check_symbol_exists(gmtime_r time.h HAVE_GMTIME_R)
 
-if(WXMSW)
-    set(wxUSE_WEBVIEW_IE ON)
-elseif(WXGTK OR APPLE)
-    set(wxUSE_WEBVIEW_WEBKIT ON)
-endif()
-
-if(MSVC)
-    set(wxUSE_GRAPHICS_CONTEXT ON)
-endif()
-
-if(MSVC_VERSION GREATER 1600 AND NOT CMAKE_VS_PLATFORM_TOOLSET MATCHES "_xp$")
-    set(wxUSE_WINRT ON)
-endif()
-
-if(wxUSE_OPENGL)
-    set(wxUSE_GLCANVAS ON)
-endif()
-
 # ---------------------------------------------------------------------------
 # Checks for typedefs
 # ---------------------------------------------------------------------------
@@ -649,6 +639,7 @@ if(wxUSE_FSWATCHER)
 endif()
 
 if(wxUSE_XLOCALE)
+    check_include_file(xlocale.h HAVE_XLOCALE_H)
     set(CMAKE_EXTRA_INCLUDE_FILES xlocale.h locale.h)
     check_type_size(locale_t LOCALE_T)
     set(CMAKE_EXTRA_INCLUDE_FILES)

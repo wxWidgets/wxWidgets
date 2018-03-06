@@ -59,28 +59,14 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose*, wxWindow*)
 // wxStaticBox
 //-----------------------------------------------------------------------------
 
-wxStaticBox::wxStaticBox()
-{
-}
-
-wxStaticBox::wxStaticBox( wxWindow *parent,
-                          wxWindowID id,
-                          const wxString &label,
-                          const wxPoint& pos,
-                          const wxSize& size,
-                          long style,
-                          const wxString& name )
-{
-    Create( parent, id, label, pos, size, style, name );
-}
-
-bool wxStaticBox::Create( wxWindow *parent,
-                          wxWindowID id,
-                          const wxString& label,
-                          const wxPoint& pos,
-                          const wxSize& size,
-                          long style,
-                          const wxString& name )
+bool wxStaticBox::DoCreate(wxWindow *parent,
+                           wxWindowID id,
+                           const wxString* labelStr,
+                           wxWindow* labelWin,
+                           const wxPoint& pos,
+                           const wxSize& size,
+                           long style,
+                           const wxString& name)
 {
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -89,11 +75,41 @@ bool wxStaticBox::Create( wxWindow *parent,
         return false;
     }
 
-    m_widget = GTKCreateFrame(label);
-    g_object_ref(m_widget);
+    if ( labelStr )
+    {
+        m_widget = GTKCreateFrame(*labelStr);
 
-    // only base SetLabel needs to be called after GTKCreateFrame
-    wxControl::SetLabel(label);
+        // only base SetLabel needs to be called after GTKCreateFrame
+        wxControl::SetLabel(*labelStr);
+    }
+    else // Use the given window as the label.
+    {
+        wxCHECK_MSG( labelWin, false, wxS("Label window can't be null") );
+
+        GtkWidget* const labelWidget = labelWin->m_widget;
+        wxCHECK_MSG( labelWidget, false, wxS("Label window must be created") );
+
+        // The widget must not have any parent at GTK+ level or setting it as
+        // label widget would fail.
+        GtkWidget* const oldParent = gtk_widget_get_parent(labelWidget);
+        gtk_container_remove(GTK_CONTAINER(oldParent), labelWidget);
+        gtk_widget_unparent(labelWidget);
+
+        // It also should be our child at wx API level, but without being our
+        // child in wxGTK, i.e. it must not be added to the GtkFrame container,
+        // so we can't call Reparent() here (not even wxWindowBase version, as
+        // it still would end up in our overridden AddChild()), nor the normal
+        // AddChild() for the same reason.
+        labelWin->GetParent()->RemoveChild(labelWin);
+        wxWindowBase::AddChild(labelWin);
+
+        m_labelWin = labelWin;
+
+        m_widget = gtk_frame_new(NULL);
+        gtk_frame_set_label_widget(GTK_FRAME(m_widget), labelWidget);
+    }
+
+    g_object_ref(m_widget);
 
     m_parent->DoAddChild( this );
 
@@ -140,12 +156,16 @@ void wxStaticBox::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid staticbox") );
 
+    wxCHECK_RET( !m_labelWin, wxS("Doesn't make sense when using label window") );
+
     GTKSetLabelForFrame(GTK_FRAME(m_widget), label);
 }
 
 void wxStaticBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     GTKFrameApplyWidgetStyle(GTK_FRAME(m_widget), style);
+    if ( m_labelWin )
+        GTKDoApplyWidgetStyle(m_labelWin, style);
     if (m_wxwindow)
         GTKApplyStyle(m_wxwindow, style);
 

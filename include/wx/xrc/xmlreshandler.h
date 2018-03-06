@@ -32,6 +32,13 @@ class WXDLLIMPEXP_FWD_CORE wxXmlResourceHandler;
 // by wxXmlResourceHandler implementation itself.
 #define XRC_ADD_STYLE(style) AddStyle(wxT(#style), style)
 
+// Flags for GetNodeText().
+enum
+{
+    wxXRC_TEXT_NO_TRANSLATE = 1,
+    wxXRC_TEXT_NO_ESCAPE    = 2
+};
+
 // Abstract base class for the implementation object used by
 // wxXmlResourceHandlerImpl. The real implementation is in
 // wxXmlResourceHandlerImpl class in the "xrc" library while this class is in
@@ -61,7 +68,7 @@ public:
     virtual wxString GetParamValue(const wxString& param) = 0;
     virtual wxString GetParamValue(const wxXmlNode* node) = 0;
     virtual int GetStyle(const wxString& param = wxT("style"), int defaults = 0) = 0;
-    virtual wxString GetText(const wxString& param, bool translate = true) = 0;
+    virtual wxString GetNodeText(const wxXmlNode *node, int flags = 0) = 0;
     virtual int GetID() = 0;
     virtual wxString GetName() = 0;
     virtual bool GetBool(const wxString& param, bool defaultv = false) = 0;
@@ -254,9 +261,14 @@ protected:
     {
         return GetImpl()->GetStyle(param, defaults);
     }
+    wxString GetNodeText(const wxXmlNode *node, int flags = 0)
+    {
+        return GetImpl()->GetNodeText(node, flags);
+    }
     wxString GetText(const wxString& param, bool translate = true)
     {
-        return GetImpl()->GetText(param, translate);
+        return GetImpl()->GetNodeText(GetImpl()->GetParamNode(param),
+                                      translate ? 0 : wxXRC_TEXT_NO_TRANSLATE);
     }
     int GetID() const
     {

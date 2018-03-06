@@ -948,20 +948,13 @@ public:
     virtual wxSize WindowToClientSize(const wxSize& size) const;
 
     /**
-        Sizes the window so that it fits around its subwindows.
+        Sizes the window to fit its best size.
 
-        This function won't do anything if there are no subwindows and will only really
-        work correctly if sizers are used for the subwindows layout.
+        Using this function is equivalent to setting window size to the return
+        value of GetBestSize().
 
-        Also, if the window has exactly one subwindow it is better (faster and the result
-        is more precise as Fit() adds some margin to account for fuzziness of its calculations)
-        to call:
-
-        @code
-        window->SetClientSize(child->GetSize());
-        @endcode
-
-        instead of calling Fit().
+        Note that, unlike SetSizerAndFit(), this function only changes the
+        current window size and doesn't change its minimal size.
 
         @see @ref overview_windowsizing
     */
@@ -1051,7 +1044,7 @@ public:
     static wxPoint FromDIP(const wxPoint& pt, const wxWindow* w);
 
     /// @overload
-    static wxSize FromDIP(int d, const wxWindow* w);
+    static int FromDIP(int d, const wxWindow* w);
 
 
     /**
@@ -1118,7 +1111,7 @@ public:
     static wxPoint ToDIP(const wxPoint& pt, const wxWindow* w);
 
     /// @overload
-    static wxSize ToDIP(int d, const wxWindow* w);
+    static int ToDIP(int d, const wxWindow* w);
 
     /**
         This functions returns the best acceptable minimal size for the window.
@@ -3336,10 +3329,15 @@ public:
     void SetSizer(wxSizer* sizer, bool deleteOld = true);
 
     /**
-        This method calls SetSizer() and then wxSizer::SetSizeHints which sets the initial
-        window size to the size needed to accommodate all sizer elements and sets the
-        size hints which, if this window is a top level one, prevent the user from
-        resizing it to be less than this minimal size.
+        Associate the sizer with the window and set the window size and minimal
+        size accordingly.
+
+        This method calls SetSizer() and then wxSizer::SetSizeHints() which
+        sets the initial window size to the size needed to accommodate all
+        sizer elements and sets the minimal size to the same size, this
+        preventing the user from resizing this window to be less than this
+        minimal size (if it's a top-level window which can be directly resized
+        by the user).
     */
     void SetSizerAndFit(wxSizer* sizer, bool deleteOld = true);
 

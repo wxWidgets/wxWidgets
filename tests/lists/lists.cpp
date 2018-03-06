@@ -210,3 +210,27 @@ void ListsTestCase::wxListCtorTest()
     CPPUNIT_ASSERT( Baz::GetNumber() == 0 );
 }
 
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+
+#include <list>
+
+// Check that we convert wxList to std::list using the latter's ctor taking 2
+// iterators: this used to be broken in C++11 because wxList iterators didn't
+// fully implement input iterator requirements.
+TEST_CASE("wxList::iterator", "[list][std][iterator]")
+{
+    Baz baz1("one"),
+        baz2("two");
+
+    wxListBazs li;
+    li.push_back(&baz1);
+    li.push_back(&baz2);
+
+    std::list<Baz*> stdli(li.begin(), li.end());
+    CHECK( stdli.size() == 2 );
+
+    const wxListBazs cli;
+    CHECK( std::list<Baz*>(cli.begin(), cli.end()).empty() );
+}
+
+#endif // wxUSE_STD_CONTAINERS_COMPATIBLY

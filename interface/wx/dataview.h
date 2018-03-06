@@ -155,7 +155,8 @@ public:
         @param column
             The column holding the items to be compared.
         @param ascending
-            The sort is being peformed in ascending or descending order.
+            Indicates whether the sort is being performed in ascending or
+            descending order.
         @return
             For an ascending comparison: a negative value if the item1 is less
             than (i.e. should appear above) item2, zero if the two items are
@@ -163,11 +164,12 @@ public:
             appear below) the second one. The reverse for a descending
             comparison.
         @note If there can be multiple rows with the same value, consider
-            differentiating them form each other by their ID's rather than
+            differentiating them form each other by their IDs rather than
             returning zero. This to prevent rows with the same value jumping
             positions when items are added etc. For example:
         @code
-            // Differentiate items with the same value.
+            // Note that we need to distinguish between items with the same
+            // value.
             wxUIntPtr id1 = wxPtrToUInt(item1.GetID()),
                       id2 = wxPtrToUInt(item2.GetID());
 
@@ -1441,6 +1443,16 @@ public:
                                const wxDataViewColumn* col = NULL) const;
 
     /**
+        Returns the window corresponding to the main area of the control.
+
+        This is the window that actually shows the control items and may be
+        different from wxDataViewCtrl window itself in some ports (currently
+        this is only the case for the generic implementation used by default
+        under MSW).
+     */
+    wxWindow* GetMainWindow();
+
+    /**
         Returns pointer to the data model associated with the control (if any).
     */
     wxDataViewModel* GetModel();
@@ -1553,6 +1565,21 @@ public:
         Select all items.
     */
     virtual void SelectAll();
+
+    /**
+        Set custom colour for the alternate rows used with wxDV_ROW_LINES
+        style.
+
+        Note that calling this method has no effect if wxDV_ROW_LINES is off.
+
+        @param colour The colour to use for the alternate rows.
+        @return @true if customizing this colour is supported (currently only
+            in the generic version), @false if this method is not implemented
+            under this platform.
+
+        @since 3.1.1
+     */
+    bool SetAlternateRowColour(const wxColour& colour);
 
     /**
         Set which column shall contain the tree-like expanders.
@@ -1956,7 +1983,7 @@ public:
 
     /**
         Sets the alignment of the renderer's content.
-        The default value of @c wxDVR_DEFAULT_ALIGMENT indicates that the content
+        The default value of @c wxDVR_DEFAULT_ALIGNMENT indicates that the content
         should have the same alignment as the column header.
 
         The method is not implemented under OS X and the renderer always aligns
@@ -2426,6 +2453,10 @@ public:
             If the activation was triggered by mouse click, contains the
             corresponding event. Is @NULL otherwise (for keyboard activation).
             Mouse coordinates are adjusted to be relative to the cell.
+
+        @note Currently support for this method is not implemented in the
+            native macOS version of the control, i.e. it will be never called
+            there.
 
         @since 2.9.3
 
@@ -2929,17 +2960,29 @@ public:
     //@{
 
     /**
-        Appends an item (=row) to the control and store.
+        Appends an item (i.e.\ a row) to the control.
+
+        Note that the size of @a values vector must be exactly equal to the
+        number of columns in the control and that columns must not be modified
+        after adding any items to the control (or, conversely, items must not
+        be added before the columns are set up).
     */
     void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
-        Prepends an item (=row) to the control and store.
+        Prepends an item (i.e.\ a row) to the control.
+
+        See remarks for AppendItem() for preconditions of this method.
     */
     void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
     /**
-        Inserts an item (=row) to the control and store.
+        Inserts an item (i.e.\ a row) to the control.
+
+        See remarks for AppendItem() for preconditions of this method.
+
+        Additionally, @a row must be less than or equal to the current number
+        of items in the control (see GetItemCount()).
     */
     void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
 
@@ -3399,6 +3442,13 @@ public:
     without having to derive any class from it, but it is mostly used from within
     wxDataViewTreeCtrl.
 
+    Notice that by default this class sorts all items with children before the
+    leaf items. If this behaviour is inappropriate, you need to derive a custom
+    class from this one and override either its HasDefaultCompare() method to
+    return false, which would result in items being sorted just in the order in
+    which they were added, or its Compare() function to compare the items using
+    some other criterion, e.g. alphabetically.
+
     @library{wxadv}
     @category{dvc}
 */
@@ -3610,8 +3660,8 @@ public:
            Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
-           Currently this even is only generated when using the native OS X
-           version.
+           Currently this event is not generated when using the native GTK+
+           version of the control.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
@@ -3629,14 +3679,38 @@ class wxDataViewEvent : public wxNotifyEvent
 {
 public:
     /**
-        Constructor. Typically used by wxWidgets internals only.
+       Default ctor, normally shouldn't be used and mostly exists only for
+       backwards compatibility.
     */
-    wxDataViewEvent(wxEventType commandType = wxEVT_NULL,
-                    int winid = 0);
+    wxDataViewEvent();
 
+    /**
+       Constructor for the events affecting columns (and possibly also items).
+    */
+    wxDataViewEvent(wxEventType evtType,
+                    wxDataViewCtrl* dvc,
+                    wxDataViewColumn* column,
+                    const wxDataViewItem& item = wxDataViewItem());
+
+    /**
+       Constructor for the events affecting only the items.
+    */
+    wxDataViewEvent(wxEventType evtType,
+                    wxDataViewCtrl* dvc,
+                    const wxDataViewItem& item);
+
+    /**
+       Copy constructor.
+    */
+    wxDataViewEvent(const wxDataViewEvent& event);
+
+    
     /**
         Returns the position of the column in the control or -1
         if no column field was set by the event emitter.
+
+        For wxEVT_DATAVIEW_COLUMN_REORDERED, this is the new position of the
+        column.
     */
     int GetColumn() const;
 
@@ -3767,7 +3841,6 @@ public:
     int GetCacheTo() const;
 
 
-
     /**
         Returns the item affected by the event.
 
@@ -3776,8 +3849,8 @@ public:
         indicating that the drop is about to happen outside of the item area.
      */
     wxDataViewItem GetItem() const;
+
     void SetItem( const wxDataViewItem &item );
-    void SetEditCanceled(bool editCancelled);
     void SetPosition( int x, int y );
     void SetCache(int from, int to);
     wxDataObject *GetDataObject() const;
@@ -3786,7 +3859,6 @@ public:
     void SetDataBuffer( void* buf );
     int GetDragFlags() const;
     void SetDropEffect( wxDragResult effect );
-
 };
 
 
@@ -3803,7 +3875,7 @@ public:
     alternative to implementing an entire wxDataViewCustomRenderer
     specialization.
 
-    @example
+    @code
     // Markup renderer that removes bgcolor attributes when in selection
     class DataViewMarkupRenderer : public wxDataViewTextRenderer
     {
@@ -3832,7 +3904,7 @@ public:
             }
         };
     };
-    @endexample
+    @endcode
 
     @since 3.1.1
 

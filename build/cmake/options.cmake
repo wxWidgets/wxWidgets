@@ -25,6 +25,7 @@ mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
 
 if(MSVC)
     wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" OFF)
+    wx_option(wxBUILD_MSVC_MULTIPROC "Enable multi-processor compilation for MSVC")
 else()
     # Other compilers support setting the C++ standard, present it an option to the user
     if(DEFINED CMAKE_CXX_STANDARD)
@@ -47,17 +48,24 @@ wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" OF
 wx_option(wxUSE_UNICODE "compile with Unicode support (NOT RECOMMENDED to be turned off)")
 if(NOT WIN32)
     wx_option(wxUSE_UNICODE_UTF8 "use UTF-8 representation for strings (Unix only)" OFF)
-    wx_dependent_option(wxUSE_UNICODE_UTF8_LOCALE "only support UTF-8 locales in UTF-8 build (Unix only)" ON "wxUSE_UNICODE_UTF8" OFF)
+    wx_dependent_option(wxUSE_UTF8_LOCALE_ONLY "only support UTF-8 locales in UTF-8 build (Unix only)" ON "wxUSE_UNICODE_UTF8" OFF)
 endif()
 
 wx_option(wxUSE_COMPILER_TLS "enable use of compiler TLS support")
 wx_option(wxUSE_VISIBILITY "use of ELF symbols visibility")
+wx_option(wxUSE_UNSAFE_WXSTRING_CONV "provide unsafe implicit conversions in wxString to const char* or std::string")
+wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducable build" OFF)
 
 # ---------------------------------------------------------------------------
 # external libraries
 # ---------------------------------------------------------------------------
-wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing"
-    DEFAULT_APPLE sys)
+
+wx_add_thirdparty_library(wxUSE_REGEX REGEX "enable support for wxRegEx class" DEFAULT builtin)
+wx_add_thirdparty_library(wxUSE_ZLIB ZLIB "use zlib for LZW compression" DEFAULT_APPLE sys)
+wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing" DEFAULT_APPLE sys)
+wx_add_thirdparty_library(wxUSE_LIBJPEG JPEG "use libjpeg (JPEG file format)")
+wx_add_thirdparty_library(wxUSE_LIBPNG PNG "use libpng (PNG image format)")
+wx_add_thirdparty_library(wxUSE_LIBTIFF TIFF "use libtiff (TIFF file format)")
 
 wx_option(wxUSE_OPENGL "use OpenGL (or Mesa)")
 
@@ -72,10 +80,6 @@ wx_option(wxUSE_INTL "use internationalization system")
 wx_option(wxUSE_XLOCALE "use x-locale support (requires wxLocale)")
 wx_option(wxUSE_CONFIG "use wxConfig (and derived) classes")
 
-wx_option(wxUSE_PROTOCOL "use wxProtocol and derived classes")
-wx_option(wxUSE_PROTOCOL_FTP "use wxFTP (requires wxProtocol")
-wx_option(wxUSE_PROTOCOL_HTTP "use wxHTTP (requires wxProtocol")
-wx_option(wxUSE_PROTOCOL_FILE "use wxFileProto class (requires wxProtocol")
 wx_option(wxUSE_SOCKETS "use socket/network classes")
 wx_option(wxUSE_IPV6 "enable IPv6 support in wxSocket")
 if(WIN32)
@@ -93,7 +97,7 @@ wx_option(wxUSE_APPLE_IEEE "use the Apple IEEE codec")
 wx_option(wxUSE_ARCHIVE_STREAMS "use wxArchive streams")
 wx_option(wxUSE_BASE64 "use base64 encoding/decoding functions")
 wx_option(wxUSE_STACKWALKER "use wxStackWalker class for getting backtraces")
-wx_option(wxUSE_ON_FATAL_EXCEPTION "catch signals in wxApp::OnFatalException (Unix only)")
+wx_option(wxUSE_ON_FATAL_EXCEPTION "catch signals in wxApp::OnFatalException")
 wx_option(wxUSE_CMDLINE_PARSER "use wxCmdLineParser class")
 wx_option(wxUSE_DATETIME "use wxDateTime class")
 wx_option(wxUSE_DEBUGREPORT "use wxDebugReport class")
@@ -165,6 +169,7 @@ wx_option(wxUSE_MS_HTML_HELP "use MS HTML Help (win32)")
 wx_option(wxUSE_HTML "use wxHTML sub-library")
 wx_option(wxUSE_WXHTML_HELP "use wxHTML-based help")
 wx_option(wxUSE_XRC "use XRC resources sub-library")
+wx_option(wxUSE_XML "use the xml library (overruled by wxUSE_XRC)")
 wx_option(wxUSE_AUI "use AUI docking library")
 wx_option(wxUSE_PROPGRID "use wxPropertyGrid library")
 wx_option(wxUSE_RIBBON "use wxRibbon library")
@@ -172,16 +177,19 @@ wx_option(wxUSE_STC "use wxStyledTextCtrl library")
 wx_option(wxUSE_CONSTRAINTS "use layout-constraints system")
 wx_option(wxUSE_LOGGUI "use standard GUI logger")
 wx_option(wxUSE_LOGWINDOW "use wxLogWindow")
-wx_option(wxUSE_LOGDIALOG "use wxLogDialog")
+wx_option(wxUSE_LOG_DIALOG "use wxLogDialog")
 wx_option(wxUSE_MDI "use multiple document interface architecture")
 wx_option(wxUSE_MDI_ARCHITECTURE "use docview architecture with MDI")
 wx_option(wxUSE_MEDIACTRL "use wxMediaCtrl class")
 wx_option(wxUSE_RICHTEXT "use wxRichTextCtrl")
 wx_option(wxUSE_POSTSCRIPT "use wxPostscriptDC device context (default for gtk+)")
+wx_option(wxUSE_AFM_FOR_POSTSCRIPT "in wxPostScriptDC class use AFM (adobe font metrics) file for character widths")
 wx_option(wxUSE_PRINTING_ARCHITECTURE "use printing architecture")
 wx_option(wxUSE_SVG "use wxSVGFileDC device context")
-wx_option(wxUSE_WEBKIT "use wxWebKitCtrl (Mac-only, use wxWebView instead)")
 wx_option(wxUSE_WEBVIEW "use wxWebView library")
+if(APPLE)
+    wx_option(wxUSE_WEBKIT "use wxWebKitCtrl (Mac-only, use wxWebView instead)")
+endif()
 
 # wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 # can't be disabled, don't even provide an option to do it
@@ -189,7 +197,17 @@ if(APPLE)
     set(wxUSE_GRAPHICS_CONTEXT ON)
 else()
     wx_option(wxUSE_GRAPHICS_CONTEXT "use graphics context 2D drawing API")
+    if (WIN32 AND (NOT MSVC OR MSVC_VERSION LESS 1600))
+        wx_option(wxUSE_GRAPHICS_DIRECT2D "enable Direct2D graphics context" OFF)
+    endif()
 endif()
+
+if(WXGTK)
+    set(wxUSE_CAIRO_DEFAULT ON)
+else()
+    set(wxUSE_CAIRO_DEFAULT OFF)
+endif()
+wx_option(wxUSE_CAIRO "enable Cairo graphics context" ${wxUSE_CAIRO_DEFAULT})
 
 # ---------------------------------------------------------------------------
 # IPC &c
@@ -293,7 +311,7 @@ wx_option(wxUSE_TREELISTCTRL "use wxTreeListCtrl class")
 # common dialogs
 # ---------------------------------------------------------------------------
 
-wx_option(wxUSE_COMMONDLGS "use all common dialogs")
+wx_option(wxUSE_COMMON_DIALOGS "use all common dialogs")
 wx_option(wxUSE_ABOUTDLG "use wxAboutBox")
 wx_option(wxUSE_CHOICEDLG "use wxChoiceDialog")
 wx_option(wxUSE_COLOURDLG "use wxColourDialog")
@@ -325,11 +343,18 @@ wx_option(wxUSE_JOYSTICK "use wxJoystick")
 wx_option(wxUSE_METAFILE "use wxMetaFile")
 wx_option(wxUSE_DRAGIMAGE "use wxDragImage")
 if(WIN32)
-    wx_option(wxUSE_ACCESSIBILITY "enable accessibility support" ON)
+    wx_option(wxUSE_ACCESSIBILITY "enable accessibility support")
 endif()
 wx_option(wxUSE_UIACTIONSIMULATOR "use wxUIActionSimulator (experimental)")
 wx_option(wxUSE_DC_TRANSFORM_MATRIX "use wxDC::SetTransformMatrix and related")
 wx_option(wxUSE_WEBVIEW_WEBKIT "use wxWebView WebKit backend")
+# TODO: wxUSE_WEBVIEW_WEBKIT2
+if(WIN32 OR APPLE)
+    set(wxUSE_PRIVATE_FONTS_DEFAULT ON)
+else()
+    set(wxUSE_PRIVATE_FONTS_DEFAULT OFF)
+endif()
+wx_option(wxUSE_PRIVATE_FONTS "use fonts not installed on the system" ${wxUSE_PRIVATE_FONTS_DEFAULT})
 
 # ---------------------------------------------------------------------------
 # support for image formats that do not rely on external library
@@ -343,19 +368,31 @@ wx_option(wxUSE_TGA "use tga images (TGA file format)")
 wx_option(wxUSE_IFF "use iff images (IFF file format)")
 wx_option(wxUSE_PNM "use pnm images (PNM file format)")
 wx_option(wxUSE_XPM "use xpm images (XPM file format)")
-wx_option(wxUSE_ICO_CUR "_cur        use Windows ICO and CUR formats")
+wx_option(wxUSE_ICO_CUR "use Windows ICO and CUR formats")
 
 # ---------------------------------------------------------------------------
 # wxMSW-only options
 # ---------------------------------------------------------------------------
 
 if(WIN32)
+    wx_option(wxUSE_ACTIVEX " enable wxActiveXContainer class (Win32 only)")
+    wx_option(wxUSE_CRASHREPORT "enable wxCrashReport::Generate() to create mini dumps (Win32 only)")
     wx_option(wxUSE_DC_CACHEING "cache temporary wxDC objects (Win32 only)")
-    wx_option(wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW "use PS printing in wxMSW (Win32 only)")
+    wx_option(wxUSE_NATIVE_PROGRESSDLG "use native progress dialog implementation")
+    wx_option(wxUSE_NATIVE_STATUSBAR "use native statusbar implementation)")
     wx_option(wxUSE_OWNER_DRAWN "use owner drawn controls (Win32)")
+    wx_option(wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW "use PS printing in wxMSW (Win32 only)")
+    wx_option(wxUSE_TASKBARICON_BALLOONS "enable wxTaskBarIcon::ShowBalloon() method (Win32 only)")
     wx_option(wxUSE_UXTHEME "enable support for Windows XP themed look (Win32 only)")
-    wx_option(wxUSE_DIB "use wxDIB class (Win32 only)")
     wx_option(wxUSE_WEBVIEW_IE "use wxWebView IE backend (Win32 only)")
+    wx_option(wxUSE_WXDIB "use wxDIB class (Win32 only)")
+    if(MSVC_VERSION GREATER 1600 AND NOT CMAKE_VS_PLATFORM_TOOLSET MATCHES "_xp$")
+        set(wxUSE_WINRT_DEFAULT ON)
+    else()
+        set(wxUSE_WINRT_DEFAULT OFF)
+    endif()
+    wx_option(wxUSE_WINRT "enable WinRT support" ${wxUSE_WINRT_DEFAULT})
+    
 endif()
 
 # this one is not really MSW-specific but it exists mainly to be turned off
