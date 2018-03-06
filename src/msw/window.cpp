@@ -5547,7 +5547,7 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
         case WM_XBUTTONDOWN:
         case WM_XBUTTONUP:
         case WM_XBUTTONDBLCLK:
-            if (GET_XBUTTON_WPARAM(flags) == XBUTTON2)
+            if (HIWORD(flags) == XBUTTON2)
                 msg += wxEVT_AUX2_DOWN - wxEVT_AUX1_DOWN;
     }
 
