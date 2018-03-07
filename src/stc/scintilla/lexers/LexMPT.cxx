@@ -103,7 +103,7 @@ static void ColourizeLotDoc(Sci_PositionU startPos, Sci_Position length, int, Wo
 			++i; // Advances past the '\n'
 			chNext = styler.SafeGetCharAt(i + 1); // Gets character of next line
 			styler.ColourTo(i, GetLotLineState(line));
-			line = "";
+            line.clear();
 			atLineStart = true; // Arms flag for next line
 		}
 	}

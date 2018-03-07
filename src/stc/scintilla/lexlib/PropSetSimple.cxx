@@ -103,7 +103,7 @@ struct VarChain {
 static int ExpandAllInPlace(const PropSetSimple &props, std::string &withVars, int maxExpands, const VarChain &blankVars) {
 	size_t varStart = withVars.find("$(");
 	while ((varStart != std::string::npos) && (maxExpands > 0)) {
-		size_t varEnd = withVars.find(")", varStart+2);
+		size_t varEnd = withVars.find(')', varStart+2);
 		if (varEnd == std::string::npos) {
 			break;
 		}
@@ -120,7 +120,7 @@ static int ExpandAllInPlace(const PropSetSimple &props, std::string &withVars, i
 		std::string val = props.Get(var.c_str());
 
 		if (blankVars.contains(var.c_str())) {
-			val = ""; // treat blankVar as an empty string (e.g. to block self-reference)
+			val.clear(); // treat blankVar as an empty string (e.g. to block self-reference)
 		}
 
 		if (--maxExpands >= 0) {

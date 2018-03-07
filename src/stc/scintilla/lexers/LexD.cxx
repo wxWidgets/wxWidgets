@@ -90,8 +90,6 @@ struct OptionsD {
 		foldComment = false;
 		foldCommentMultiline = true;
 		foldCommentExplicit = true;
-		foldExplicitStart = "";
-		foldExplicitEnd   = "";
 		foldExplicitAnywhere = false;
 		foldCompact = true;
 		foldAtElseInt = -1;

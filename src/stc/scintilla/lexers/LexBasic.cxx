@@ -168,8 +168,6 @@ struct OptionsBasic {
 		fold = false;
 		foldSyntaxBased = true;
 		foldCommentExplicit = false;
-		foldExplicitStart = "";
-		foldExplicitEnd   = "";
 		foldExplicitAnywhere = false;
 		foldCompact = true;
 	}
