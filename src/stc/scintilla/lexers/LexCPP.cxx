@@ -338,8 +338,6 @@ struct OptionsCPP {
 		foldComment = false;
 		foldCommentMultiline = true;
 		foldCommentExplicit = true;
-		foldExplicitStart = "";
-		foldExplicitEnd = "";
 		foldExplicitAnywhere = false;
 		foldPreprocessor = false;
 		foldPreprocessorAtElse = false;
@@ -755,7 +753,7 @@ void SCI_METHOD LexerCPP::Lex(Sci_PositionU startPos, Sci_Position length, int i
 			lineCurrent++;
 			lineEndNext = styler.LineEnd(lineCurrent);
 			vlls.Add(lineCurrent, preproc);
-			if (rawStringTerminator != "") {
+			if (!rawStringTerminator.empty()) {
 				rawSTNew.Set(lineCurrent-1, rawStringTerminator);
 			}
 		}
@@ -766,7 +764,7 @@ void SCI_METHOD LexerCPP::Lex(Sci_PositionU startPos, Sci_Position length, int i
 				lineCurrent++;
 				lineEndNext = styler.LineEnd(lineCurrent);
 				vlls.Add(lineCurrent, preproc);
-				if (rawStringTerminator != "") {
+				if (!rawStringTerminator.empty()) {
 					rawSTNew.Set(lineCurrent-1, rawStringTerminator);
 				}
 				sc.Forward();
@@ -1008,7 +1006,7 @@ void SCI_METHOD LexerCPP::Lex(Sci_PositionU startPos, Sci_Position length, int i
 					for (size_t termPos=rawStringTerminator.size(); termPos; termPos--)
 						sc.Forward();
 					sc.SetState(SCE_C_DEFAULT|activitySet);
-					rawStringTerminator = "";
+					rawStringTerminator.clear();
 				}
 				break;
 			case SCE_C_CHARACTER:
