@@ -34,14 +34,14 @@ Changes in this release
 This is a bug fix release with no significant new features compared to
 the previous 3.0.x releases and compatible with them at both the API
 and the ABI level (i.e. all applications linked against earlier 3.0.x
-DLLs or shared libraries will continue to work when using 3.0.3
+DLLs or shared libraries will continue to work when using 3.0.4
 libraries).
 
 The full list of changes in this release is available at
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.4/docs/changes.txt
 
-(starting from the line 583, or search for "3.0.3" in this file), here are
+(starting from the line 583, or search for "3.0.4" in this file), here are
 some selected ones:
 
 * In all ports:
