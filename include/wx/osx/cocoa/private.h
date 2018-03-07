@@ -500,6 +500,11 @@ extern ClassicCursor gMacCursors[];
 
 extern NSLayoutManager* gNSLayoutManager;
 
+// NSString<->wxString
+
+wxString wxStringWithNSString(NSString *nsstring);
+NSString* wxNSStringWithWxString(const wxString &wxstring);
+
 #endif // wxUSE_GUI
 
 #endif

@@ -110,8 +110,6 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_SIZE(MyFrame::OnSize)
-
     EVT_MENU(LIST_QUIT, MyFrame::OnQuit)
     EVT_MENU(LIST_ABOUT, MyFrame::OnAbout)
     EVT_MENU(LIST_LIST_VIEW, MyFrame::OnListView)
@@ -449,12 +447,22 @@ void MyFrame::RecreateList(long flags, bool withText)
             (m_listCtrl->GetWindowStyleFlag() & wxLC_VIRTUAL)) )
 #endif
     {
-        delete m_listCtrl;
+        wxListCtrl* const old = m_listCtrl;
 
         m_listCtrl = new MyListCtrl(m_panel, LIST_CTRL,
                                     wxDefaultPosition, wxDefaultSize,
                                     flags |
                                     wxBORDER_THEME | wxLC_EDIT_LABELS);
+
+        if ( old )
+        {
+            wxSizer* const sizer = m_panel->GetSizer();
+            sizer->Replace(old, m_listCtrl);
+
+            delete old;
+
+            sizer->Layout();
+        }
 
         switch ( flags & wxLC_MASK_TYPE )
         {

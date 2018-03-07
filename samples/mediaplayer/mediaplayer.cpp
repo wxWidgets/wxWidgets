@@ -141,7 +141,7 @@ class wxMediaPlayerApp : public wxApp
 {
 public:
 #ifdef __WXMAC__
-    virtual void MacOpenFiles(const wxArrayString & fileNames );
+    virtual void MacOpenFiles(const wxArrayString & fileNames ) wxOVERRIDE;
 #endif
 
 #if wxUSE_CMDLINE_PARSER

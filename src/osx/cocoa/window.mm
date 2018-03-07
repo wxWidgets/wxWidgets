@@ -1741,6 +1741,7 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
              gestureState = NSGestureRecognizerStateBegan;
              break;
         case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
              break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -1789,6 +1790,7 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
              gestureState = NSGestureRecognizerStateBegan;
              break;
         case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
              break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -1840,6 +1842,7 @@ void wxWidgetCocoaImpl::LongPressEvent(NSPressGestureRecognizer* pressGestureRec
             gestureState = NSGestureRecognizerStateBegan;
             break;
         case NSGestureRecognizerStateChanged:
+            gestureState = NSGestureRecognizerStateChanged;
             break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:

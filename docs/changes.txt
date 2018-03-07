@@ -64,6 +64,18 @@ Changes in behaviour which may result in build errors
   wxGraphicsContext::CreatePen() continues to compile and work as before.
 
 
+3.1.2: (released 2018-??-??)
+----------------------------
+
+All:
+
+- Make wxList and wxVector iterators conform to input iterator requirements.
+
+wxMSW:
+
+- Fix hang after clearing wxTAB_TRAVERSAL style on a window with children.
+
+
 3.1.1: (released 2018-02-19)
 ----------------------------
 

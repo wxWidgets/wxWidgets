@@ -198,7 +198,7 @@ public :
 protected :
     wxMenu* m_peer;
 
-    wxDECLARE_ABSTRACT_CLASS(wxMenuItemImpl);
+    wxDECLARE_ABSTRACT_CLASS(wxMenuImpl);
 } ;
 #endif
 
