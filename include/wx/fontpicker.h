@@ -173,6 +173,8 @@ public:        // internal functions
     virtual wxFont String2Font(const wxString &font);
 
 protected:
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
 
     // extracts the style for our picker from wxFontPickerCtrl's style
     long GetPickerStyle(long style) const wxOVERRIDE

@@ -166,6 +166,20 @@ void wxFontPickerCtrl::SetMaxPointSize(unsigned int max)
     SetMinMaxPointSize(m_nMinPointSize, m_nMaxPointSize);
 }
 
+bool wxFontPickerCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_font, false, "Expected type: 'wxFont'");
+    SetSelectedFont(*(static_cast<wxFont* const>(value)));
+    return true;
+}
+
+bool wxFontPickerCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_font, false, "Expected type: 'wxFont'");
+    *(static_cast<wxFont* const>(value)) = GetSelectedFont();
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl - event handlers
 // ----------------------------------------------------------------------------

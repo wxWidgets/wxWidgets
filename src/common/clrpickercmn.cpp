@@ -119,6 +119,19 @@ void wxColourPickerCtrl::UpdateTextCtrlFromPicker()
     m_text->ChangeValue(M_PICKER->GetColour().GetAsString());
 }
 
+bool wxColourPickerCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_colour, false, "Expected type: 'wxColour'");
+    SetColour(*(static_cast<wxColour* const>(value)));
+    return true; 
+}
+
+bool wxColourPickerCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_colour, false, "Expected type: 'wxColour'");
+    *(static_cast<wxColour* const>(value)) = GetColour();
+    return true; 
+}
 
 
 // ----------------------------------------------------------------------------

@@ -126,7 +126,7 @@ bool wxCheckListBoxBase::DoTransferDataToWindow(void* const value, wxDataTransfe
     for ( i = 0 ; i < count; ++i )
         Check(i, false);
 
-    wxArrayInt* arr = static_cast<wxArrayInt* const>(value);
+    wxArrayInt* const arr = static_cast<wxArrayInt* const>(value);
 
     // select each item in our array
     count = arr->GetCount();
@@ -140,7 +140,7 @@ bool wxCheckListBoxBase::DoTransferDataFromWindow(void* const value, wxDataTrans
 {
     wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
 
-    wxArrayInt* arr = static_cast<wxArrayInt* const>(value);
+    wxArrayInt* const arr = static_cast<wxArrayInt* const>(value);
         
     arr->Clear();
 

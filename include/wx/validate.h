@@ -31,6 +31,8 @@ enum wxDataTransferTypes
     wxData_arrayint,
     wxData_datetime,
     wxData_filename,
+    wxData_font,
+    wxData_colour,
 };
 
 

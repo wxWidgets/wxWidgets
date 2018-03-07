@@ -149,6 +149,9 @@ protected:
     virtual long GetPickerStyle(long style) const wxOVERRIDE
         { return (style & (wxCLRP_SHOW_LABEL | wxCLRP_SHOW_ALPHA)); }
 
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
 private:
     wxDECLARE_DYNAMIC_CLASS(wxColourPickerCtrl);
 };

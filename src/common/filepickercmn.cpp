@@ -151,7 +151,35 @@ void wxFileDirPickerCtrlBase::UpdateTextCtrlFromPicker()
     m_text->ChangeValue(m_pickerIface->GetPath());
 }
 
+bool wxFileDirPickerCtrlBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_string )
+    {
+        SetPath(*(static_cast<wxString* const>(value)));
+        return true;
+    }
+    else
+    {
+        // wxFilePickerCtrl and wxDirPickerCtrl expect a wxFileName
+        wxASSERT_MSG(false, "Expected types: 'wxString, wxFileName'");
+        return false;
+    }
+}
 
+bool wxFileDirPickerCtrlBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_string )
+    {
+        *(static_cast<wxString* const>(value)) = GetPath();
+        return true; 
+    }
+    else
+    {
+        // wxFilePickerCtrl and wxDirPickerCtrl expect a wxFileName
+        wxASSERT_MSG(false, "Expected types: 'wxString, wxFileName'");
+        return false;
+    }
+}
 
 // ----------------------------------------------------------------------------
 // wxFileDirPickerCtrlBase - event handlers
@@ -207,6 +235,28 @@ wxString wxFilePickerCtrl::GetTextCtrlValue() const
     return wxFileName(m_text->GetValue()).GetFullPath();
 }
 
+bool wxFilePickerCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_filename )
+    {
+        SetFileName(*(static_cast<wxFileName* const>(value)));
+        return true;
+    }
+
+    return wxFileDirPickerCtrlBase::DoTransferDataToWindow(value, type);
+}
+
+bool wxFilePickerCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_filename )
+    {
+        *(static_cast<wxFileName* const>(value)) = GetFileName();
+        return true;
+    }
+
+    return wxFileDirPickerCtrlBase::DoTransferDataFromWindow(value, type);
+}
+
 #endif // wxUSE_FILEPICKERCTRL
 
 // ----------------------------------------------------------------------------
@@ -243,6 +293,28 @@ wxString wxDirPickerCtrl::GetTextCtrlValue() const
 {
     // filter it through wxFileName to remove any spurious path separator
     return wxFileName::DirName(m_text->GetValue()).GetPath();
+}
+
+bool wxDirPickerCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_filename )
+    {
+        SetDirName(*(static_cast<wxFileName* const>(value)));
+        return true;
+    }
+
+    return wxFileDirPickerCtrlBase::DoTransferDataToWindow(value, type);
+}
+
+bool wxDirPickerCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    if ( type == wxData_filename )
+    {
+        *(static_cast<wxFileName* const>(value)) = GetDirName();
+        return true;
+    }
+
+    return wxFileDirPickerCtrlBase::DoTransferDataFromWindow(value, type);
 }
 
 #endif // wxUSE_DIRPICKERCTRL

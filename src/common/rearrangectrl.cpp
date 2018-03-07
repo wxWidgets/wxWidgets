@@ -60,8 +60,7 @@ bool wxRearrangeList::Create(wxWindow *parent,
 
     wxArrayString itemsInOrder;
     itemsInOrder.reserve(count);
-    size_t n;
-    for ( n = 0; n < count; n++ )
+    for ( size_t n = 0; n < count; ++n )
     {
         int idx = order[n];
         if ( idx < 0 )
@@ -70,22 +69,13 @@ bool wxRearrangeList::Create(wxWindow *parent,
     }
 
     // do create the real control
-    m_order.reserve(count);
     if ( !wxCheckListBox::Create(parent, id, pos, size, itemsInOrder,
                                  style, validator, name) )
         return false;
 
-    // and now check all the items which should be initially checked
-    for ( n = 0; n < count; n++ )
-    {
-        if ( order[n] >= 0 )
-        {
-            // Be careful to call the base class version here and not our own
-            // which would also update m_order itself.
-            wxCheckListBox::Check(n);
-        }
-        m_order[n] = order[n];
-    }
+    m_order = order;
+
+    // The visual state will be reflected upon the call to TransferDataToWindow()
 
     return true;
 }
@@ -231,6 +221,49 @@ void wxRearrangeList::DoClear()
 {
     wxCheckListBox::DoClear();
     m_order.Clear();
+}
+
+bool wxRearrangeList::TransferDataToWindow()
+{
+    return DoTransferDataToWindow(&m_order, wxData_arrayint);
+}
+
+bool wxRearrangeList::TransferDataFromWindow()
+{
+    return DoTransferDataFromWindow(&m_order, wxData_arrayint);
+}
+
+bool wxRearrangeList::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+
+    const size_t count = GetCount();
+    const wxArrayInt& arr = *static_cast<wxArrayInt* const>(value);
+
+    wxCHECK_MSG( arr.size() == count, false, "arrays not in sync" );
+
+    for ( size_t i = 0 ; i < count; ++i )
+        Check(i, (arr[i] >= 0));
+
+    return true;
+}
+
+bool wxRearrangeList::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+{
+    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+
+    const size_t count = GetCount();
+    wxArrayInt* const arr = static_cast<wxArrayInt* const>(value);
+
+    wxCHECK_MSG( arr->size() == count, false, "arrays not in sync" );
+
+    for ( size_t i = 0; i < count; ++i )
+    {
+        if ( ((*arr)[i] >= 0) != IsChecked(i) )
+            (*arr)[i] = ~(*arr)[i];
+    }
+
+    return true;
 }
 
 // ============================================================================

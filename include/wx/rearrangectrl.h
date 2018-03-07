@@ -95,6 +95,8 @@ public:
     bool MoveCurrentUp();
     bool MoveCurrentDown();
 
+    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() wxOVERRIDE;
 
     // Override this to keep our m_order array in sync with the real item state.
     virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
@@ -105,6 +107,9 @@ public:
     void DoClear() wxOVERRIDE;
 
 private:
+    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+
     // swap two items at the given positions in the listbox
     void Swap(int pos1, int pos2);
 
