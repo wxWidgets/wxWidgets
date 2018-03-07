@@ -580,17 +580,61 @@ Major new features in this release
 
 
 
-3.0.4: (released 2017-??-??)
+3.0.4: (released 2017-03-08)
 ----------------------------
+
+All (non-GUI):
+
+- Don't crash on trailing '%' in wxDateTime::Format().
+- Fix various problems when parsing invalid ZIP files.
+- Fix generic wxTimePickerCtrl to accept max values from keyboard.
+- Multiple surrogate-related fixes in UTF-16 support.
+- Fix reading wide character data in wxFile::ReadAll().
+- Make parsing WAV data more robust.
+- Fix copy ctor in numeric validators classes.
 
 All (GUI):
 
 - Fix wxListbook::GetPageImage() to not always return -1 (Kinaou Hervé).
+- Don't reset scroll position to zero when window size changes.
+- Prevent use of deleted wxDocMDIChildFrame in wxView dtor.
+- Avoid delayed destruction if TLW was never created.
+- Unbind events when destroying wxTextEntryHintData.
+- Fix wxHTML parse bug in non-unicode, ? characters are not displayed.
+- Fix memory leak of wxClientData when wxChoice is deleted.
+- Draw a point instead of a line in wxGCDC::DrawPoint().
+- Set wxPG cell background colour as wxPGComboBox background colour.
+- Fix ribbon page issues.
+- Avoid permanently setting text hint color when using generic text entry hints.
+- Avoid overriding text control color in generic wxSearchCtrl.
+- Fix auto-sizing multiline wxGrid column labels with empty lines.
+- Fix displaying labels of wxRadioBox items.
+- Update selection in wxAuiNotebook correctly after tab move.
 
 wxGTK:
 
 - Allow using more recent WebKit2GTK+ in wxWebView (Scott Talbert).
 - Fix displaying wxRadioBox items labels containing ampersands.
+- Fix creating cursor from XBM data with GTK3.
+- Fix wxComboBox entry sizing with GTK+ >= 3.20.
+- Fix drawing miniframe resize grip with GTK3.
+- Fix unresponsive frame after using wxHtmlHelpFrame from a dialog.
+- Fix SetPen() with a re-used user dash array.
+- Fix memory leak when wxDataViewCtrl is deleted.
+- Avoid some GTK+ run-time errors when using wx{File,Dir}PickerCtrl.
+- Avoid crashing when wxTaskBarIcon is used with a non-X11 display.
+- Hide wxSpinButton's underlying GtkEntry using CSS on GTK+ >= 3.20.
+- Fix wxButton::SetBitmapPosition() with GTK+ 3.
+- Use CSS for window font and colors on GTK3.
+- Fix keyboard navigation for controls which are initially disabled.
+- Don't destroy clipping region if empty clipping region is required (wxDC, GTK).
+- Fix for modified state not set after next change following a ChangeValue().
+- Avoid invisible wxTextCtrl selection with GTK+3.
+- Fix non-default background issues with GTK+2.
+- Apply current style to wxStaticBox container when it's created.
+- Prevent widgets from drawing outside their allocation with GTK+3.
+- Fix custom scheme handling in wxWebView WebKit2 implementation.
+- Fix "chaining up" to parent class in key-press-event handler.
 
 wxMSW:
 
@@ -599,6 +643,16 @@ wxMSW:
 wxOSX:
 
 - Fix build with 10.13 (High Sierra) SDK (François-Xavier Coudert).
+- Fix removing tools from wxToolBar.
+- Fix crash when switching between monitors.
+
+macOS:
+
+- Handle stand-alone weekday and month names in macOS date formats.
+
+wxOSX:
+
+- Disable use of AVKit is 32 bit wxOSX builds.
 
 
 3.0.3: (released 2017-05-02)
