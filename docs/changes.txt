@@ -580,7 +580,7 @@ Major new features in this release
 
 
 
-3.0.4: (released 2017-03-08)
+3.0.4: (released 2018-03-08)
 ----------------------------
 
 All (non-GUI):
@@ -599,8 +599,8 @@ All (GUI):
 - Don't reset scroll position to zero when window size changes.
 - Prevent use of deleted wxDocMDIChildFrame in wxView dtor.
 - Avoid delayed destruction if TLW was never created.
-- Unbind events when destroying wxTextEntryHintData.
-- Fix wxHTML parse bug in non-unicode, ? characters are not displayed.
+- Fix possible crash when destroying wxTextCtrl using hints.
+- Fix display of non-breaking spaces in wxHTML non-Unicode build.
 - Fix memory leak of wxClientData when wxChoice is deleted.
 - Draw a point instead of a line in wxGCDC::DrawPoint().
 - Set wxPG cell background colour as wxPGComboBox background colour.
@@ -627,14 +627,13 @@ wxGTK:
 - Fix wxButton::SetBitmapPosition() with GTK+ 3.
 - Use CSS for window font and colors on GTK3.
 - Fix keyboard navigation for controls which are initially disabled.
-- Don't destroy clipping region if empty clipping region is required (wxDC, GTK).
+- Don't destroy clipping region if empty clipping region is required.
 - Fix for modified state not set after next change following a ChangeValue().
 - Avoid invisible wxTextCtrl selection with GTK+3.
 - Fix non-default background issues with GTK+2.
 - Apply current style to wxStaticBox container when it's created.
 - Prevent widgets from drawing outside their allocation with GTK+3.
 - Fix custom scheme handling in wxWebView WebKit2 implementation.
-- Fix "chaining up" to parent class in key-press-event handler.
 
 wxMSW:
 
@@ -645,12 +644,7 @@ wxOSX:
 - Fix build with 10.13 (High Sierra) SDK (François-Xavier Coudert).
 - Fix removing tools from wxToolBar.
 - Fix crash when switching between monitors.
-
-macOS:
-
 - Handle stand-alone weekday and month names in macOS date formats.
-
-wxOSX:
 
 - Disable use of AVKit is 32 bit wxOSX builds.
 
