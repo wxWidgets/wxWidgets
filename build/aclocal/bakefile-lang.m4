@@ -87,17 +87,6 @@ AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER_LATER_THAN],
     AC_LANG_POP($2)
 ])
 
-dnl CodeWarrior Metrowerks compiler defines __MWERKS__ for both C and C++
-AC_DEFUN([AC_BAKEFILE_PROG_MWCC],
-[
-    _AC_BAKEFILE_LANG_COMPILER(Metrowerks, C, __MWERKS__, MWCC=yes)
-])
-
-AC_DEFUN([AC_BAKEFILE_PROG_MWCXX],
-[
-    _AC_BAKEFILE_LANG_COMPILER(Metrowerks, C++, __MWERKS__, MWCXX=yes)
-])
-
 dnl IBM xlC compiler defines __xlC__ for both C and C++
 AC_DEFUN([AC_BAKEFILE_PROG_XLCC],
 [
@@ -191,46 +180,6 @@ AC_DEFUN([AC_BAKEFILE_PROG_COMPAQCXX],
 ])
 
 dnl ===========================================================================
-dnl macros to detect specialty compiler options
-dnl ===========================================================================
-
-dnl Figure out if we need to pass -ext o to compiler (MetroWerks)
-AC_DEFUN([AC_BAKEFILE_METROWERKS_EXTO],
-[AC_CACHE_CHECK([if the _AC_LANG compiler requires -ext o], bakefile_cv_[]_AC_LANG_ABBREV[]_exto,
-dnl First create an empty conf test
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
-dnl Now remove .o and .c.o or .cc.o
-rm -f conftest.$ac_objext conftest.$ac_ext.o
-dnl Now compile the test
-AS_IF([AC_TRY_EVAL(ac_compile)],
-dnl If the test succeeded look for conftest.c.o or conftest.cc.o
-[for ac_file in `(ls conftest.* 2>/dev/null)`; do
-    case $ac_file in
-        conftest.$ac_ext.o)
-            bakefile_cv_[]_AC_LANG_ABBREV[]_exto="-ext o"
-            ;;
-        *)
-            ;;
-    esac
-done],
-[AC_MSG_FAILURE([cannot figure out if compiler needs -ext o: cannot compile])
-]) dnl AS_IF
-
-rm -f conftest.$ac_ext.o conftest.$ac_objext conftest.$ac_ext
-]) dnl AC_CACHE_CHECK
-
-if test "x$bakefile_cv_[]_AC_LANG_ABBREV[]_exto" '!=' "x"; then
-    if test "[]_AC_LANG_ABBREV[]" = "c"; then
-        CFLAGS="$bakefile_cv_[]_AC_LANG_ABBREV[]_exto $CFLAGS"
-    fi
-    if test "[]_AC_LANG_ABBREV[]" = "cxx"; then
-        CXXFLAGS="$bakefile_cv_[]_AC_LANG_ABBREV[]_exto $CXXFLAGS"
-    fi
-fi
-]) dnl AC_DEFUN
-
-
-dnl ===========================================================================
 dnl Macros to do all of the compiler detections as one macro
 dnl ===========================================================================
 
@@ -253,14 +202,6 @@ AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
 
     dnl if we're using gcc, we can't be using any of incompatible compilers
     if test "x$G$1" != "xyes"; then
-        if test "x$1" = "xC"; then
-            AC_BAKEFILE_METROWERKS_EXTO
-            if test "x$bakefile_cv_c_exto" '!=' "x"; then
-                unset ac_cv_prog_cc_g
-                _AC_PROG_CC_G
-            fi
-        fi
-
         dnl most of these compilers are only used under well-defined OS so
         dnl don't waste time checking for them on other ones
         case `uname -s` in
@@ -269,10 +210,7 @@ AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
                 ;;
 
             Darwin)
-                AC_BAKEFILE_PROG_MW$1
-                if test "$MW$1" != "yes"; then
-                    AC_BAKEFILE_PROG_XL$1
-                fi
+                AC_BAKEFILE_PROG_XL$1
                 ;;
 
             IRIX*)

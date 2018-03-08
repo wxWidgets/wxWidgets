@@ -2544,10 +2544,6 @@ SOURCE=..\..\include\wx\encinfo.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\evtloopsrc.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\fdrepdlg.h
 # End Source File
 # Begin Source File

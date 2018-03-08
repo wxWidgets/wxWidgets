@@ -27,7 +27,7 @@ dnl
 
 dnl ---------------------------------------------------------------------------
 dnl Lots of compiler & linker detection code contained here was taken from
-dnl wxWidgets configure.in script (see http://www.wxwidgets.org)
+dnl wxWidgets configure.in script (see https://www.wxwidgets.org)
 dnl ---------------------------------------------------------------------------
 
 
@@ -69,23 +69,15 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
 [
     PLATFORM_UNIX=0
     PLATFORM_WIN32=0
-    PLATFORM_MSDOS=0
     PLATFORM_MAC=0
     PLATFORM_MACOS=0
     PLATFORM_MACOSX=0
-    PLATFORM_OS2=0
     PLATFORM_BEOS=0
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
         case "${BAKEFILE_HOST}" in
             *-*-mingw32* )
                 PLATFORM_WIN32=1
-            ;;
-            *-pc-msdosdjgpp )
-                PLATFORM_MSDOS=1
-            ;;
-            *-pc-os2_emx | *-pc-os2-emx )
-                PLATFORM_OS2=1
             ;;
             *-*-darwin* )
                 PLATFORM_MAC=1
@@ -107,12 +99,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
             win32 )
                 PLATFORM_WIN32=1
             ;;
-            msdos )
-                PLATFORM_MSDOS=1
-            ;;
-            os2 )
-                PLATFORM_OS2=1
-            ;;
             darwin )
                 PLATFORM_MAC=1
                 PLATFORM_MACOSX=1
@@ -131,11 +117,9 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
 
     AC_SUBST(PLATFORM_UNIX)
     AC_SUBST(PLATFORM_WIN32)
-    AC_SUBST(PLATFORM_MSDOS)
     AC_SUBST(PLATFORM_MAC)
     AC_SUBST(PLATFORM_MACOS)
     AC_SUBST(PLATFORM_MACOSX)
-    AC_SUBST(PLATFORM_OS2)
     AC_SUBST(PLATFORM_BEOS)
 ])
 
@@ -148,10 +132,6 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([AC_BAKEFILE_PLATFORM_SPECIFICS],
 [
-    AC_ARG_ENABLE([omf], AS_HELP_STRING([--enable-omf],
-                                        [use OMF object format (OS/2)]),
-                  [bk_os2_use_omf="$enableval"])
-
     case "${BAKEFILE_HOST}" in
       *-*-darwin* )
         dnl For Unix to MacOS X porting instructions, see:
@@ -163,19 +143,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM_SPECIFICS],
         if test "x$XLCC" = "xyes"; then
             CFLAGS="$CFLAGS -qnocommon"
             CXXFLAGS="$CXXFLAGS -qnocommon"
-        fi
-        ;;
-
-      *-pc-os2_emx | *-pc-os2-emx )
-        if test "x$bk_os2_use_omf" = "xyes" ; then
-            AR=emxomfar
-            RANLIB=:
-            LDFLAGS="-Zomf $LDFLAGS"
-            CFLAGS="-Zomf $CFLAGS"
-            CXXFLAGS="-Zomf $CXXFLAGS"
-            OS2_LIBEXT="lib"
-        else
-            OS2_LIBEXT="a"
         fi
         ;;
 
@@ -236,21 +203,6 @@ AC_DEFUN([AC_BAKEFILE_SUFFIXES],
             DLLIMP_SUFFIX="dll.a"
             EXEEXT=".exe"
             DLLPREFIX=""
-            dlldir="$bindir"
-        ;;
-        *-pc-msdosdjgpp )
-            EXEEXT=".exe"
-            DLLPREFIX=""
-            dlldir="$bindir"
-        ;;
-        *-pc-os2_emx | *-pc-os2-emx )
-            SO_SUFFIX="dll"
-            SO_SUFFIX_MODULE="dll"
-            DLLIMP_SUFFIX=$OS2_LIBEXT
-            EXEEXT=".exe"
-            DLLPREFIX=""
-            LIBPREFIX=""
-            LIBEXT=".$OS2_LIBEXT"
             dlldir="$bindir"
         ;;
         *-*-darwin* )
@@ -432,22 +384,13 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
         WINDOWS_IMPLIB=1
       ;;
 
-      *-pc-os2_emx | *-pc-os2-emx )
-        SHARED_LD_CC="`pwd`/dllar.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        SHARED_LD_CXX="`pwd`/dllar.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        PIC_FLAG=""
-        AC_BAKEFILE_CREATE_FILE_DLLAR_SH
-        chmod +x dllar.sh
-      ;;
-
       powerpc-apple-macos* | \
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
       *-*-mirbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
-      *-*-sysv5* | \
-      *-pc-msdosdjgpp )
+      *-*-sysv5* )
         dnl defaults are ok
       ;;
 
@@ -558,10 +501,6 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
             DEPSMODE=gcc
             DEPSFLAG="-MMD"
             AC_MSG_RESULT([gcc])
-        elif test "x$MWCC" = "xyes"; then
-            DEPSMODE=mwcc
-            DEPSFLAG="-MM"
-            AC_MSG_RESULT([mwcc])
         elif test "x$SUNCC" = "xyes"; then
             DEPSMODE=unixcc
             DEPSFLAG="-xM1"
@@ -633,7 +572,7 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     AC_CHECK_TOOL(STRIP, strip, :)
     AC_CHECK_TOOL(NM, nm, :)
 
-    dnl Don't use `install -d`, see http://trac.wxwidgets.org/ticket/13452
+    dnl Don't use `install -d`, see https://trac.wxwidgets.org/ticket/13452
     INSTALL_DIR="mkdir -p"
     AC_SUBST(INSTALL_DIR)
 
@@ -659,16 +598,9 @@ AC_DEFUN([AC_BAKEFILE_RES_COMPILERS],
             dnl Check for win32 resources compiler:
             AC_CHECK_TOOL(WINDRES, windres)
          ;;
-
-      *-*-darwin* | powerpc-apple-macos* )
-            AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
-            AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
-        ;;
     esac
 
     AC_SUBST(WINDRES)
-    AC_SUBST(REZ)
-    AC_SUBST(SETFILE)
 ])
 
 dnl ---------------------------------------------------------------------------
@@ -813,7 +745,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_SUBST(OBJCXXFLAGS)
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.9"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.11"
 
     dnl includes autoconf_inc.m4:
     $1
@@ -900,34 +832,6 @@ if test ${D}DEPSMODE = gcc ; then
     fi
     exit 0
 
-elif test ${D}DEPSMODE = mwcc ; then
-    ${D}* || exit ${D}?
-    # Run mwcc again with -MM and redirect into the dep file we want
-    # NOTE: We can't use shift here because we need ${D}* to be valid
-    prevarg=
-    for arg in ${D}* ; do
-        if test "${D}prevarg" = "-o"; then
-            objfile=${D}arg
-        else
-            case "${D}arg" in
-                -* )
-                ;;
-                * )
-                    srcfile=${D}arg
-                ;;
-            esac
-        fi
-        prevarg="${D}arg"
-    done
-
-    objfilebase=\`basename ${D}objfile\`
-    builddir=\`dirname ${D}objfile\`
-    depsdir=${D}builddir/${D}DEPSDIRBASE
-    mkdir -p ${D}depsdir
-
-    ${D}* ${D}DEPSFLAG >${D}{depsdir}/${D}{objfilebase}.d
-    exit 0
-
 elif test ${D}DEPSMODE = unixcc; then
     ${D}* || exit ${D}?
     # Run compiler again with deps flag and redirect into the dep file.
@@ -1003,7 +907,7 @@ while test ${D}# -gt 0; do
         args="${D}{args} ${D}1 ${D}2"
         shift
         ;;
-       
+
        -arch|-isysroot)
         # collect these options and values
         ldargs="${D}{ldargs} ${D}1 ${D}2"

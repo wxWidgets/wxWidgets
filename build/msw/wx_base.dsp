@@ -1033,6 +1033,10 @@ SOURCE=..\..\include\wx\evtloop.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\evtloopsrc.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\except.h
 # End Source File
 # Begin Source File
