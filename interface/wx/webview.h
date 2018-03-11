@@ -536,6 +536,10 @@ public:
         - When using WebKit under macOS, code execution is limited to at most
           10MiB of memory and 10 seconds of execution time.
 
+        - When using Chromium backend, retrieving the result of JavaScript
+          execution is unsupported and this function will always return false
+          if @a output is non-null to indicate this.
+
         - When using IE backend under MSW, scripts can only be executed when
           the current page is fully loaded (i.e. @c wxEVT_WEBVIEW_LOADED event
           was received). A script tag inside the page HTML is required in order
