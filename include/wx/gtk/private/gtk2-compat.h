@@ -426,6 +426,14 @@ static inline void wx_gdk_cairo_set_source_window(cairo_t* cr, GdkWindow* window
 #endif
 
 // ----------------------------------------------------------------------------
+// the following were introduced in Glib 2.32
+
+#ifndef g_signal_handlers_disconnect_by_data
+#define g_signal_handlers_disconnect_by_data(instance, data) \
+      g_signal_handlers_disconnect_matched ((instance), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, (data))
+#endif
+
+// ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 3.0
 
 static inline void wx_gdk_window_get_geometry(GdkWindow* window, gint* x, gint* y, gint* width, gint* height)
