@@ -78,12 +78,12 @@
        - Require `process_helper_mac.cpp`
        - Require link frameworks: Chromium Embedded Framework.framework,
          AppKit.frameworks.
-       - Reuquire app bundle configuration: Info.plist
+       - Require app bundle configuration: Info.plist
        - Use system tool `install_name_tool -change` to correct `Chromium
          Embedded Framework.framework/Chromium Embedded Framework` location.
     3. Compile/link/package the `webviewchromium` app:
        - Require `webview.cpp`
-       - Reuqire link frameworks: Chromium Embedded Framework.framework,
+       - Require link frameworks: Chromium Embedded Framework.framework,
          AppKit.frameworks.
        - Require app bundle configuration: Info.plist
        - Use system tool `install_name_tool -change` to correct `Chromium
