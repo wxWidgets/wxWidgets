@@ -2675,8 +2675,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
 void wxWindowGTK::GTKDisconnect(void* instance)
 {
-    g_signal_handlers_disconnect_matched(instance,
-        GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, this);
+    g_signal_handlers_disconnect_by_data(instance, this);
 }
 
 wxWindowGTK::~wxWindowGTK()
