@@ -71,6 +71,10 @@ All:
 
 - Make wxList and wxVector iterators conform to input iterator requirements.
 
+wxGTK:
+
+- Fix the build with glib < 2.32 (e.g. CentOS 6).
+
 wxMSW:
 
 - Fix hang after clearing wxTAB_TRAVERSAL style on a window with children.
