@@ -23,7 +23,7 @@
     - C/C++ - Code Generation - Enable C++ Exceptions - Yes
     - C/C++ - Language - Enable Run-Time Type Information - Yes
 
-    The following release branches of CEF have been tested: 3.3239.1723.
+    The following release branches of CEF3 have been tested: 3.3239.1723.
 
     @section instructions Build Instructions
 
@@ -32,13 +32,13 @@
     The wxWebViewChromium backend is built into a separate webview_chromium
     library which depends on the webview library.
 
-    When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF will
+    When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF3 will be
     automatically downloaded during configuration based on your platform.
 
     For other build systems please follow the following instructions:
 
     Once you have a copy of CEF3, either from compiling it yourself or using
-    prebuilt binaries you should copy it into `wx_root/3rdparty/cef`. To run the
+    prebuilt binaries, you should copy it into `wx_root/3rdparty/cef`. To run the
     webview_chromium sample you need to copy the CEF3 resources into the
     sample directory. The following files need to be copied:
 
@@ -51,32 +51,39 @@
     setting wxUSE_WEBVIEW_CHROMIUM equal to 1 in setup.h for Visual Studio
     based builds.
 
+    __Microsoft Windows Platform__
+    
+    Windows 7 or newer is required to run applications using wxWebViewChromium.
+    Such applications should also have an application manifest declaring compatibility 
+    with supported Windows versions.
+
+    Only Microsoft Visual C++ 2015 or newer can be used to build wxWebViewChromium.
 
     __Mac OS X Platform__
 
     OS X 10.9 or above is required.
 
     Due to the application bundle structure on OS X, wxWebviewChromium is a
-    little complicated than on Windows/Linux platforms. An extra helper
-    application for executing separate Chromium  processes(renderer, plugin,
+    little more complicated than on Windows/Linux platforms. An extra helper
+    application for executing separate Chromium processes(renderer, plugin,
     etc) is required.
 
-    For applications using wxWebviewChromium below are details steps to make
-    is worked, based off the webview_chromium sample bakefile.
+    For applications using wxWebviewChromium, below are the steps to make
+    it work, based off the webview_chromium sample bakefile.
 
     1. Build the webview_chromium library.
        - Use system tool `install_name_tool -change` to correct `Chromium
          Embedded Framework.framework/Chromium Embedded Framework` location.
-    2. Compiled/link/package the `helper` app:
+    2. Compile/link/package the `helper` app:
        - Require `process_helper_mac.cpp`
-       - Reuqire link frameworks: Chromium Embedded Framework.framework,
+       - Require link frameworks: Chromium Embedded Framework.framework,
          AppKit.frameworks.
-       - Reuqire app bundle configuration: Info.plist
+       - Require app bundle configuration: Info.plist
        - Use system tool `install_name_tool -change` to correct `Chromium
          Embedded Framework.framework/Chromium Embedded Framework` location.
-    3. Compiled/link/package the `webviewchromium` app:
+    3. Compile/link/package the `webviewchromium` app:
        - Require `webview.cpp`
-       - Reuqire link frameworks: Chromium Embedded Framework.framework,
+       - Require link frameworks: Chromium Embedded Framework.framework,
          AppKit.frameworks.
        - Require app bundle configuration: Info.plist
        - Use system tool `install_name_tool -change` to correct `Chromium
@@ -85,7 +92,7 @@
        and copy `helper.app`, `webviewchromium.dylib`, 'webview.dylib'
        and `Chromium Embedded Framework` into it.
     5. Use `samples/webview_chromium/mac/tools/make_more_helper.sh` to make
-       sub-process helper app bundles based on `helper` app.
+       sub-process helper app bundles based on the `helper` app.
 
     Below is the wxWebviewChromium sample app bundle directory structure:
 
@@ -117,13 +124,15 @@
     @section differences API Differences
 
     wxWebViewChromium aims to support the full wxWebView API, but there are
-    some features which are currently unsupported by the CEF3 API, these are:
+    some features which are currently unsupported:
 
-    - GetSelectedSource/GetSelectedText: returns ""
-    - HasSelection: returns false
-    - IsEditable: returns false
-    - CanUndo/CanRedo/CanCut/CanCopy/CanPaste: returns true
-    - Find: returns -1
+    - GetSelectedSource/GetSelectedText: Always returns "".
+    - HasSelection: Always returns false.
+    - IsEditable: Always returns false.
+    - CanUndo/CanRedo/CanCut/CanCopy/CanPaste: Always returns true.
+    - Find: Always returns -1.
+    - RunScript: Retrieving the result of JavaScript execution is not supported and
+      if the @a output parameter is non-null, the function will always return false.
 
     @since 3.1.2
     @library{wxwebview_chromium}
