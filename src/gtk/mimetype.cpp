@@ -13,7 +13,6 @@
 
 #include "wx/gtk/mimetype.h"
 
-#include <gio/gio.h>
 #include <gtk/gtk.h>
 
 #include "wx/gtk/private/string.h"
