@@ -70,6 +70,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Make wxList and wxVector iterators conform to input iterator requirements.
+- Use Last[Read/Write]Count in stream functions to improve thread safety.
 
 wxGTK:
 
@@ -91,7 +92,7 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
 
 - The enum value wxTASKBAR_JUMP_LIST_DESTIONATION, which was added in 3.1.0,
   contains a typo and has been renamed to wxTASKBAR_JUMP_LIST_DESTINATION.
-  
+
 - wxZipOutputStream will now automatically convert filenames to UTF-8, if the
   wxMBConv used when calling the constructor supports UTF-8 encoding.
 
