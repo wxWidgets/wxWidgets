@@ -477,6 +477,33 @@ public:
     virtual void ToggleButton(int button_id, bool checked);
 
     /**
+        Changes the bitmap of an existing button.
+
+        @param button_id
+            ID of the button to manipulate.
+        @param bitmap
+            Large bitmap of the new button. Must be the same size as all other
+            large bitmaps used on the button bar.
+        @param bitmap_small
+            Small bitmap of the new button. If left as null, then a small
+            bitmap will be automatically generated. Must be the same size as
+            all other small bitmaps used on the button bar.
+        @param bitmap_disabled
+            Large bitmap of the new button when it is disabled. If left as
+            null, then a bitmap will be automatically generated from @a bitmap.
+        @param bitmap_small_disabled
+            Small bitmap of the new button when it is disabled. If left as
+            null, then a bitmap will be automatically generated from @a
+            bitmap_small.
+    */
+    virtual void SetButtonIcon(
+                int button_id,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap);
+
+    /**
         Returns the active item of the button bar or NULL if there is none.
         The active button is the one being clicked.
 

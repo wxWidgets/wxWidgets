@@ -139,6 +139,13 @@ public:
     virtual void EnableButton(int button_id, bool enable = true);
     virtual void ToggleButton(int button_id, bool checked);
 
+    virtual void SetButtonIcon(
+                int button_id,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap);
+
     virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
     virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
 
@@ -172,6 +179,11 @@ protected:
     void CommonInit(long style);
     void MakeLayouts();
     bool TryCollapseLayout(wxRibbonButtonBarLayout* original, size_t first_btn, size_t* last_button);
+    void MakeBitmaps(wxRibbonButtonBarButtonBase* base,
+                     const wxBitmap& bitmap_large,
+                     const wxBitmap& bitmap_large_disabled,
+                     const wxBitmap& bitmap_small,
+                     const wxBitmap& bitmap_small_disabled);
     static wxBitmap MakeResizedBitmap(const wxBitmap& original, wxSize size);
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
