@@ -504,6 +504,71 @@ public:
                 const wxBitmap& bitmap_small_disabled = wxNullBitmap);
 
     /**
+        Changes the label text of an existing button.
+
+        @param button_id
+            ID of the button to manipulate.
+        @param label
+            New label of the button.
+
+        @remarks
+            If text size has changed, Realize() must be called
+            on the top level wxRibbonBar object to recalculate panel sizes.
+            Use SetButtonTextMinWidth() to avoid calling Realize()
+            after every change.
+
+        @see SetButtonTextMinWidth
+    */
+    virtual void SetButtonText(int button_id, const wxString& label);
+
+    /**
+        Sets the minimum width of the button label, to indicate to
+        the wxRibbonArtProvider layout mechanism that this is the
+        minimum required size.
+
+        You have to call Realize() after calling this function to
+        apply the given minimum width.
+
+        @param button_id
+            ID of the button to manipulate.
+        @param min_width_medium
+            Requested minimum width of the button text in pixel
+            if the button is medium size.
+        @param min_width_medium
+            Requested minimum width of the button text in pixel
+            if the button is large size.
+
+        @remarks
+            This function is used together with SetButtonText() to change
+            button labels on the fly without modifying the button bar layout.
+
+        @see SetButtonText()
+    */
+    virtual void SetButtonTextMinWidth(int button_id,
+                int min_width_medium, int min_width_large);
+
+    /**
+        Sets the minimum width of the button label, to indicate to
+        the wxRibbonArtProvider layout mechanism that this is the
+        minimum required size.
+
+        You have to call Realize() after calling this function to
+        apply the given minimum width.
+
+        @param button_id
+            ID of the button to manipulate.
+        @param label
+            The minimum width is set to the width of this label.
+
+        @remarks
+            This function is used together with SetButtonText() to change
+            button labels on the fly without modifying the button bar layout.
+
+        @see SetButtonText()
+    */
+    virtual void SetButtonTextMinWidth(int button_id, const wxString& label);
+
+    /**
         Returns the active item of the button bar or NULL if there is none.
         The active button is the one being clicked.
 

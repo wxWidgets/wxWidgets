@@ -381,11 +381,17 @@ public:
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
+                        wxCoord text_min_width,
                         wxSize bitmap_size_large,
                         wxSize bitmap_size_small,
                         wxSize* button_size,
                         wxRect* normal_region,
                         wxRect* dropdown_region) = 0;
+
+    virtual wxCoord GetButtonBarButtonTextWidth(
+                        wxDC& dc, const wxString& label,
+                        wxRibbonButtonKind kind,
+                        wxRibbonButtonBarButtonState size) = 0;
 
     virtual wxSize GetMinimisedPanelMinimumSize(
                         wxDC& dc,
@@ -584,11 +590,17 @@ public:
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
+                        wxCoord text_min_width,
                         wxSize bitmap_size_large,
                         wxSize bitmap_size_small,
                         wxSize* button_size,
                         wxRect* normal_region,
                         wxRect* dropdown_region) wxOVERRIDE;
+
+    wxCoord GetButtonBarButtonTextWidth(
+                        wxDC& dc, const wxString& label,
+                        wxRibbonButtonKind kind,
+                        wxRibbonButtonBarButtonState size) wxOVERRIDE;
 
     wxSize GetMinimisedPanelMinimumSize(
                         wxDC& dc,

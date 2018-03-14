@@ -118,6 +118,7 @@ public:
     wxBitmap bitmap_large_disabled;
     wxBitmap bitmap_small;
     wxBitmap bitmap_small_disabled;
+    wxCoord text_min_width[3];
     wxRibbonButtonBarButtonSizeInfo sizes[3];
     wxClientDataContainer client_data;
     int id;
@@ -328,6 +329,9 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     base->kind = kind;
     base->help_string = help_string;
     base->state = 0;
+    base->text_min_width[0] = 0;
+    base->text_min_width[1] = 0;
+    base->text_min_width[2] = 0;
 
     wxClientDC temp_dc(this);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
@@ -427,9 +431,9 @@ void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
     if(m_art)
     {
         info.is_supported = m_art->GetButtonBarButtonSize(dc, this,
-            button->kind, size, button->label, m_bitmap_size_large,
-            m_bitmap_size_small, &info.size, &info.normal_region,
-            &info.dropdown_region);
+            button->kind, size, button->label, button->text_min_width[size],
+            m_bitmap_size_large, m_bitmap_size_small, &info.size,
+            &info.normal_region, &info.dropdown_region);
     }
     else
         info.is_supported = false;
@@ -578,6 +582,57 @@ void wxRibbonButtonBar::SetButtonIcon(
     MakeBitmaps(base, bitmap, bitmap_small,
                 bitmap_disabled, bitmap_small_disabled);
     Refresh();
+}
+
+void wxRibbonButtonBar::SetButtonText(int button_id, const wxString& label)
+{
+    wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
+    if(base == NULL)
+        return;
+    base->label = label;
+
+    wxClientDC temp_dc(this);
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
+    m_layouts_valid = false;
+    Refresh();
+}
+
+void wxRibbonButtonBar::SetButtonTextMinWidth(int button_id,
+                int min_width_medium, int min_width_large)
+{
+    wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
+    if(base == NULL)
+        return;
+    base->text_min_width[0] = 0;
+    base->text_min_width[1] = min_width_medium;
+    base->text_min_width[2] = min_width_large;
+    wxClientDC temp_dc(this);
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
+    m_layouts_valid = false;
+}
+
+void wxRibbonButtonBar::SetButtonTextMinWidth(
+                int button_id, const wxString& label)
+{
+    wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
+    if(base == NULL)
+        return;
+    wxClientDC temp_dc(this);
+    base->text_min_width[wxRIBBON_BUTTONBAR_BUTTON_MEDIUM] =
+        m_art->GetButtonBarButtonTextWidth(
+        temp_dc, label, base->kind, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
+    base->text_min_width[wxRIBBON_BUTTONBAR_BUTTON_LARGE] =
+        m_art->GetButtonBarButtonTextWidth(
+        temp_dc, label, base->kind, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
+
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
+    FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
+    m_layouts_valid = false;
 }
 
 void wxRibbonButtonBar::SetArtProvider(wxRibbonArtProvider* art)

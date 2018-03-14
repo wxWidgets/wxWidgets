@@ -146,6 +146,11 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxBitmap& bitmap_small_disabled = wxNullBitmap);
 
+    virtual void SetButtonText(int button_id, const wxString& label);
+    virtual void SetButtonTextMinWidth(int button_id,
+                int min_width_medium, int min_width_large);
+    virtual void SetButtonTextMinWidth(int button_id, const wxString& label);
+
     virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
     virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
 

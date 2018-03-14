@@ -3036,6 +3036,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
+                        wxCoord text_min_width,
                         wxSize bitmap_size_large,
                         wxSize bitmap_size_small,
                         wxSize* button_size,
@@ -3074,9 +3075,11 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
         // Small bitmap, with label to the right
         {
             GetButtonBarButtonSize(dc, wnd, kind, wxRIBBON_BUTTONBAR_BUTTON_SMALL,
-                label, bitmap_size_large, bitmap_size_small, button_size,
-                normal_region, dropdown_region);
+                label, text_min_width, bitmap_size_large, bitmap_size_small,
+                button_size, normal_region, dropdown_region);
             int text_size = dc.GetTextExtent(label).GetWidth();
+            if(text_size < text_min_width)
+                text_size = text_min_width;
             button_size->SetWidth(button_size->GetWidth() + text_size);
             switch(kind)
             {
@@ -3101,6 +3104,8 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             wxCoord label_height;
             wxCoord best_width;
             dc.GetTextExtent(label, &best_width, &label_height);
+            if(best_width < text_min_width)
+                best_width = text_min_width;
             int last_line_extra_width = 0;
             if(kind != wxRIBBON_BUTTON_NORMAL && kind != wxRIBBON_BUTTON_TOGGLE)
             {
@@ -3114,6 +3119,8 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                     int width = wxMax(
                         dc.GetTextExtent(label.Left(i)).GetWidth(),
                         dc.GetTextExtent(label.Mid(i + 1)).GetWidth() + last_line_extra_width);
+                    if(best_width < text_min_width)
+                        best_width = text_min_width;
                     if(width < best_width)
                     {
                         best_width = width;
@@ -3147,6 +3154,47 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
         }
     };
     return true;
+}
+
+wxCoord wxRibbonMSWArtProvider::GetButtonBarButtonTextWidth(
+                        wxDC& dc, const wxString& label,
+                        wxRibbonButtonKind kind,
+                        wxRibbonButtonBarButtonState size)
+{
+    wxCoord best_width = 0;
+    dc.SetFont(m_button_bar_label_font);
+
+    if((size & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
+       == wxRIBBON_BUTTONBAR_BUTTON_LARGE)
+    {
+        best_width = dc.GetTextExtent(label).GetWidth();
+        int last_line_extra_width = 0;
+        if(kind != wxRIBBON_BUTTON_NORMAL && kind != wxRIBBON_BUTTON_TOGGLE)
+        {
+            last_line_extra_width += 8;
+        }
+        size_t i;
+        for(i = 0; i < label.Len(); ++i)
+        {
+            if(wxRibbonCanLabelBreakAtPosition(label, i))
+            {
+                int width = wxMax(
+                    dc.GetTextExtent(label.Left(i)).GetWidth(),
+                    dc.GetTextExtent(label.Mid(i + 1)).GetWidth() + last_line_extra_width);
+                if(width < best_width)
+                {
+                    best_width = width;
+                }
+            }
+        }
+    }
+    else if((size & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
+       == wxRIBBON_BUTTONBAR_BUTTON_MEDIUM)
+    {
+        best_width = dc.GetTextExtent(label).GetWidth();
+    }
+
+    return best_width;
 }
 
 wxSize wxRibbonMSWArtProvider::GetMinimisedPanelMinimumSize(
