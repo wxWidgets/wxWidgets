@@ -188,7 +188,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_REPLACE,             _("Rep&lace"),            _("Replace"));
         STOCKITEM(wxID_REVERT_TO_SAVED,     _("Revert to Saved"),     _("Revert to Saved"));
         STOCKITEM(wxID_SAVE,                _("&Save"),               _("Save"));
-        STOCKITEM(wxID_SAVEAS,              _("&Save as"),            _("Save as"));
+        STOCKITEM(wxID_SAVEAS,              _("Save &as..."),         _("Save as..."));
         STOCKITEM(wxID_SELECTALL,           _("Select &All"),         _("Select All"));
         STOCKITEM(wxID_SELECT_COLOR,        _("&Color"),              _("Color"));
         STOCKITEM(wxID_SELECT_FONT,         _("&Font"),               _("Font"));
