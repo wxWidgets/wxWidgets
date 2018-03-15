@@ -569,6 +569,38 @@ public:
     virtual void SetButtonTextMinWidth(int button_id, const wxString& label);
 
     /**
+        Sets the minimum size class of a ribbon button.
+
+        You have to call Realize() after calling this function to
+        apply the given minimum size.
+
+        @param button_id
+            ID of the button to manipulate.
+        @param min_size_class
+            The minimum size-class of the button. Buttons on a button bar
+            can have three distinct sizes: wxRIBBON_BUTTONBAR_BUTTON_SMALL,
+            wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, and wxRIBBON_BUTTONBAR_BUTTON_LARGE.
+    */
+    virtual void SetButtonMinSizeClass(int button_id,
+                wxRibbonButtonBarButtonState min_size_class);
+
+    /**
+        Sets the maximum size class of a ribbon button.
+
+        You have to call Realize() after calling this function to
+        apply the given maximum size.
+
+        @param button_id
+            ID of the button to manipulate.
+        @param max_size_class
+            The maximum size-class of the button. Buttons on a button bar
+            can have three distinct sizes: wxRIBBON_BUTTONBAR_BUTTON_SMALL,
+            wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, and wxRIBBON_BUTTONBAR_BUTTON_LARGE.
+    */
+    virtual void SetButtonMaxSizeClass(int button_id,
+                wxRibbonButtonBarButtonState max_size_class);
+
+    /**
         Returns the active item of the button bar or NULL if there is none.
         The active button is the one being clicked.
 
