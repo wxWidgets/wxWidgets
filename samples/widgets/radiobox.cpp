@@ -83,7 +83,6 @@ class RadioWidgetsPage : public WidgetsPage
 {
 public:
     RadioWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~RadioWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_radio; }
     virtual void RecreateWidget() wxOVERRIDE { CreateRadio(); }

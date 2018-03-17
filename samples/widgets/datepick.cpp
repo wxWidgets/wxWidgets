@@ -68,7 +68,6 @@ class DatePickerWidgetsPage : public WidgetsPage
 {
 public:
     DatePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~DatePickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_datePicker; }
     virtual void RecreateWidget() wxOVERRIDE { CreateDatePicker(); }

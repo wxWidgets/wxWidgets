@@ -63,7 +63,6 @@ class FontPickerWidgetsPage : public WidgetsPage
 {
 public:
     FontPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~FontPickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_fontPicker; }
     virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }

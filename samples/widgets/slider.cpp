@@ -94,7 +94,6 @@ class SliderWidgetsPage : public WidgetsPage
 {
 public:
     SliderWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~SliderWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_slider; }
     virtual void RecreateWidget() wxOVERRIDE { CreateSlider(); }

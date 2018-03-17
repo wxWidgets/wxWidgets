@@ -64,7 +64,6 @@ class TimePickerWidgetsPage : public WidgetsPage
 {
 public:
     TimePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~TimePickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_timePicker; }
     virtual void RecreateWidget() wxOVERRIDE { CreateTimePicker(); }

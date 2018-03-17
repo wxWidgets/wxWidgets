@@ -72,7 +72,6 @@ class FilePickerWidgetsPage : public WidgetsPage
 {
 public:
     FilePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~FilePickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_filePicker; }
     virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }

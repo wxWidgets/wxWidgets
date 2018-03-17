@@ -65,7 +65,6 @@ class DirPickerWidgetsPage : public WidgetsPage
 {
 public:
     DirPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~DirPickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_dirPicker; }
     virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }

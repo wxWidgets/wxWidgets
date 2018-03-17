@@ -151,7 +151,6 @@ class TextWidgetsPage : public WidgetsPage
 public:
     // ctor(s) and dtor
     TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~TextWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_text; }
     virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_text; }
