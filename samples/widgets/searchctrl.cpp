@@ -68,7 +68,6 @@ class SearchCtrlWidgetsPage : public WidgetsPage
 {
 public:
     SearchCtrlWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~SearchCtrlWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_srchCtrl; }
     virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_srchCtrl; }
@@ -176,7 +175,7 @@ void SearchCtrlWidgetsPage::CreateControl()
     if (m_srchCtrl)
         m_srchCtrl->Destroy();
 
-    int style = 0;
+    long style = GetAttrs().m_defaultFlags;
 
     m_srchCtrl = new wxSearchCtrl(this, -1, wxEmptyString, wxDefaultPosition,
                                   wxSize(150, -1), style);

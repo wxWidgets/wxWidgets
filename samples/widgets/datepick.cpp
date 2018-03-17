@@ -243,7 +243,7 @@ void DatePickerWidgetsPage::CreateDatePicker()
 
     delete m_datePicker;
 
-    long style = 0;
+    long style = GetAttrs().m_defaultFlags;
     switch ( m_radioKind->GetSelection() )
     {
         case 0:

@@ -115,7 +115,7 @@ struct WidgetAttributes
     wxWindowVariant m_variant;
     wxCursor m_cursor;
     // the default flags, currently only contains border flags
-    int m_defaultFlags;
+    long m_defaultFlags;
 };
 
 class WidgetsPage : public wxPanel

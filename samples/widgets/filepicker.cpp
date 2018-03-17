@@ -90,9 +90,6 @@ protected:
     // restore the checkboxes state to the initial values
     void Reset();
 
-    // get the initial style for the picker of the given kind
-    long GetPickerStyle();
-
     // update filepicker radiobox
     void UpdateFilePickerMode();
 
@@ -223,17 +220,7 @@ void FilePickerWidgetsPage::CreatePicker()
 {
     delete m_filePicker;
 
-    // pass an empty string as initial file
-    m_filePicker = new wxFilePickerCtrl(this, PickerPage_File,
-                                        wxEmptyString,
-                                        wxT("Hello!"), wxT("*"),
-                                        wxDefaultPosition, wxDefaultSize,
-                                        GetPickerStyle());
-}
-
-long FilePickerWidgetsPage::GetPickerStyle()
-{
-    long style = 0;
+    long style = GetAttrs().m_defaultFlags;
 
     if ( m_chkFileTextCtrl->GetValue() )
         style |= wxFLP_USE_TEXTCTRL;
@@ -255,7 +242,12 @@ long FilePickerWidgetsPage::GetPickerStyle()
     else
         style |= wxFLP_SAVE;
 
-    return style;
+    // pass an empty string as initial file
+    m_filePicker = new wxFilePickerCtrl(this, PickerPage_File,
+                                        wxEmptyString,
+                                        wxT("Hello!"), wxT("*"),
+                                        wxDefaultPosition, wxDefaultSize,
+                                        style);
 }
 
 void FilePickerWidgetsPage::RecreatePicker()

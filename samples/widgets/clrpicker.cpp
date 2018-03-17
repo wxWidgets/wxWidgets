@@ -81,9 +81,6 @@ protected:
     // restore the checkboxes state to the initial values
     void Reset();
 
-    // get the initial style for the picker of the given kind
-    long GetPickerStyle();
-
 
     void OnColourChange(wxColourPickerEvent &ev);
     void OnCheckBox(wxCommandEvent &ev);
@@ -175,14 +172,7 @@ void ColourPickerWidgetsPage::CreatePicker()
 {
     delete m_clrPicker;
 
-    m_clrPicker = new wxColourPickerCtrl(this, PickerPage_Colour, *wxRED,
-                                            wxDefaultPosition, wxDefaultSize,
-                                            GetPickerStyle());
-}
-
-long ColourPickerWidgetsPage::GetPickerStyle()
-{
-    long style = 0;
+    long style = GetAttrs().m_defaultFlags;
 
     if ( m_chkColourTextCtrl->GetValue() )
         style |= wxCLRP_USE_TEXTCTRL;
@@ -193,7 +183,9 @@ long ColourPickerWidgetsPage::GetPickerStyle()
     if ( m_chkColourShowAlpha->GetValue() )
         style |= wxCLRP_SHOW_ALPHA;
 
-    return style;
+    m_clrPicker = new wxColourPickerCtrl(this, PickerPage_Colour, *wxRED,
+                                         wxDefaultPosition, wxDefaultSize,
+                                         style);
 }
 
 void ColourPickerWidgetsPage::RecreatePicker()
