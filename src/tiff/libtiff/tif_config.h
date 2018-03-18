@@ -364,8 +364,12 @@
 /* Set the native cpu bit order */
 #define HOST_FILLORDER FILLORDER_LSB2MSB
 
-/* MSVC 14 does have snprintf() and doesn't allow defining it */
-#if !defined(_MSC_VER) || _MSC_VER < 1900
+/* MSVC 14 does have snprintf() and doesn't allow defining it.  Also MinGW32
+   starting with GCC 6.3 has changed _snprintf so that it is no longer suitable.
+   It does have snprintf, so just use it. */
+#if defined (__MINGW32__) && (__GNUC__ > 6 || (__GNUC__ == 6 && __GNUC_MINOR__ > 2))
+  /* do nothing*/
+#elif !defined(_MSC_VER) || _MSC_VER < 1900
 # define snprintf _snprintf
 #endif
 
