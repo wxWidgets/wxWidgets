@@ -323,6 +323,7 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
         style |= wxDIRCTRL_EDIT_LABELS;
     if ( m_chkMulti->IsChecked() )
         style |= wxDIRCTRL_MULTIPLE;
+
     if ( m_chkNames->IsChecked() )
         style |= wxDIRCTRL_RCLICK_MENU_SORT_NAME;
     if ( m_chkDates->IsChecked() )
