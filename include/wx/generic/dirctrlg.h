@@ -52,8 +52,9 @@ enum
     // Allow multiple selection
     wxDIRCTRL_MULTIPLE       = 0x0200,
     // Enable right-click menu
-    wxDIRCTRL_RCLICK_MENU_SORT_NAME     = 0x0400,
-    wxDIRCTRL_RCLICK_MENU_SORT_DATE     = 0x0800,
+    wxDIRCTRL_RCLICK_MENU               = 0x0400,           // Create an r-click menu, even if the next two options aren't used.
+    wxDIRCTRL_RCLICK_MENU_SORT_NAME     = 0x0800,
+    wxDIRCTRL_RCLICK_MENU_SORT_DATE     = 0x1000,
 
     wxDIRCTRL_DEFAULT_STYLE  = wxDIRCTRL_3D_INTERNAL
 };

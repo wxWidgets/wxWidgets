@@ -440,7 +440,8 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
         m_filterListCtrl->FillFilterList(filter, defaultFilter);
 
     // Did they ask for sorting by 
-    if ( style & (wxDIRCTRL_EDIT_LABELS           |
+    if ( style & (wxDIRCTRL_RCLICK_MENU           |
+                  wxDIRCTRL_EDIT_LABELS           |
                   wxDIRCTRL_RCLICK_MENU_SORT_NAME |
                   wxDIRCTRL_RCLICK_MENU_SORT_DATE ))
     {
