@@ -22,6 +22,7 @@
 #include "wx/choice.h"
 #include "wx/menu.h"
 
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -52,23 +53,44 @@ enum
     wxDIRCTRL_MULTIPLE       = 0x0200,
     // Enable right-click menu
     wxDIRCTRL_RCLICK_MENU               = 0x0400,
-    wxDIRCTRL_RCLICK_MENU_SORT_NAME     = 0x0800,
+    wxDIRCTRL_RCLICK_MENU_RENAME        = 0x0800,
+    wxDIRCTRL_RCLICK_MENU_SORT_NAME     = 0x1000,
     wxDIRCTRL_RCLICK_MENU_SORT_DATE     = 0x2000,
 
     wxDIRCTRL_DEFAULT_STYLE  = wxDIRCTRL_3D_INTERNAL
 };
 
 
+
+class wxDirSortingItem;
+
+typedef bool(*wxDirSortingItemCmpFunction)(const wxDirSortingItem&, const wxDirSortingItem&);
+
 class wxDirSortingItem
 {
 public:
-    wxDirSortingItem(const wxString& _label, const wxDateTime& _dateTime)
-        : label(_label),
-        dateTime(_dateTime)
+    wxDirSortingItem(const wxString& lab, const wxDateTime& dt, wxDirSortingItemCmpFunction compareFunc)
+        : label(lab),
+        dateTime(dt),
+        m_compareFunc(compareFunc)
     {}
+
+    bool operator <(const wxDirSortingItem &rhs) const
+    {
+        if (m_compareFunc)
+        {
+            return m_compareFunc(*this, rhs);
+        }
+        else
+        {
+            return label.CmpNoCase(rhs.label) < 0;
+        }
+    }
 
     wxString   label;
     wxDateTime dateTime;
+
+    wxDirSortingItemCmpFunction m_compareFunc;
 };
 
 
@@ -137,23 +159,17 @@ public:
     void OnTreeSelChange(wxTreeEvent &event);
     void OnItemActivated(wxTreeEvent &event);
     void OnSize(wxSizeEvent &event );
-
     void OnRightClick(wxTreeEvent& event);
 
-    void AddRightClickMenuItem(wxString label, void(wxGenericDirCtrl::*function)(wxCommandEvent &));
-    int NewMenuItem(wxString label);
+    int NewMenuItem(const wxString& label);
 
     wxDirItemData* GetRightClickItemData()
     {
         return GetItemData(m_rightClickedItemId);
     }
 
-
-    void MenuRename(wxCommandEvent & evt);
-    void MenuSortAlpha(wxCommandEvent & evt);
-    void MenuSortHuman(wxCommandEvent & evt);
-    void MenuSortDate(wxCommandEvent & evt);
-    void MenuSortDateReverse(wxCommandEvent & evt);
+    wxMenu* GetMenu()        { return m_rightClickMenu; }
+    int     GetAvailableID() { return m_availableID++;  }
 
     wxTreeItemId    GetRightClickedItemId() { return m_rightClickedItemId; }
 
@@ -237,18 +253,29 @@ protected:
 private:
     void PopulateNode(wxTreeItemId node);
     wxDirItemData* GetItemData(wxTreeItemId itemId);
+    void AddRightClickMenuItem(const wxString& label, void(wxGenericDirCtrl::*function)(wxCommandEvent &));
+    void MenuRename(wxCommandEvent & evt);
+    void MenuSortAlpha(wxCommandEvent & evt);
+    void MenuSortNameReversed(wxCommandEvent & evt);
+    void MenuSortNatural(wxCommandEvent & evt);
+    void MenuSortDate(wxCommandEvent & evt);
+    void MenuSortDateReverse(wxCommandEvent & evt);
+    void HandleDirMenu();
+    void HandleFileMenu();
 
-    bool            m_showHidden;
-    wxTreeItemId    m_rootId;
-    wxTreeItemId    m_rightClickedItemId;
-    wxString        m_defaultPath; // Starting path
-    long            m_styleEx; // Extended style
-    wxString        m_filter;  // Wildcards in same format as per wxFileDialog
-    int             m_currentFilter; // The current filter index
-    wxString        m_currentFilterStr; // Current filter string
-    wxTreeCtrl*     m_treeCtrl;
-    wxDirFilterListCtrl* m_filterListCtrl;
-    wxMenu          m_rightClickMenu;
+    bool                    m_showHidden;
+    wxTreeItemId            m_rootId;
+    wxTreeItemId            m_rightClickedItemId;
+    wxString                m_defaultPath; // Starting path
+    long                    m_styleEx; // Extended style
+    wxString                m_filter;  // Wildcards in same format as per wxFileDialog
+    int                     m_currentFilter; // The current filter index
+    wxString                m_currentFilterStr; // Current filter string
+    wxTreeCtrl*             m_treeCtrl;
+    wxDirFilterListCtrl*    m_filterListCtrl;
+    wxMenu*                 m_rightClickMenu;
+    long                    m_style;
+    int                     m_availableID;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -258,12 +285,18 @@ private:
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_MENU_POPPED_UP, wxCommandEvent );
 
 #define wx__DECLARE_DIRCTRL_EVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_DIRCTRL_ ## evt, id, wxTreeEventHandler(fn))
 
-#define EVT_DIRCTRL_SELECTIONCHANGED(id, fn) wx__DECLARE_DIRCTRL_EVT(SELECTIONCHANGED, id, fn)
-#define EVT_DIRCTRL_FILEACTIVATED(id, fn) wx__DECLARE_DIRCTRL_EVT(FILEACTIVATED, id, fn)
+#define wx__DECLARE_DIRCTRL_EVT_CMD(evt, id, fn) \
+    wx__DECLARE_EVT1(wxEVT_DIRCTRL_ ## evt, id, wxCommandEventHandler(fn))
+
+#define EVT_DIRCTRL_SELECTIONCHANGED(id, fn) wx__DECLARE_DIRCTRL_EVT(    SELECTIONCHANGED, id, fn)
+#define EVT_DIRCTRL_FILEACTIVATED(   id, fn) wx__DECLARE_DIRCTRL_EVT(    FILEACTIVATED,    id, fn)
+#define EVT_DIRCTRL_MENU_POPPED_UP(  id, fn) wx__DECLARE_DIRCTRL_EVT_CMD(MENU_POPPED_UP,   id, fn)
+
 
 //-----------------------------------------------------------------------------
 // wxDirFilterListCtrl
@@ -312,6 +345,8 @@ protected:
 // Symbols for accessing individual controls
 #define wxID_TREECTRL          7000
 #define wxID_FILTERLISTCTRL    7001
+#define wxID_MENU_DIR          7002
+#define wxID_MENU_FILE         7003
 
 #endif // wxUSE_DIRDLG
 
@@ -366,6 +401,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxFileIconsTable *) wxTheFileIconsTable;
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_DIRCTRL_SELECTIONCHANGED wxEVT_DIRCTRL_SELECTIONCHANGED
 #define wxEVT_COMMAND_DIRCTRL_FILEACTIVATED   wxEVT_DIRCTRL_FILEACTIVATED
+#define wxEVT_COMMAND_DIRCTRL_MENU_POPPED_UP   wxEVT_DIRCTRL_MENU_POPPED_UP
 
 #endif
     // _WX_DIRCTRLG_H_
