@@ -116,7 +116,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         switch (vol.GetKind())
         {
             case wxFS_VOL_FLOPPY:
-                if ((path == wxT("a:\\")) || (path == wxT("b:\\")))
+                if ( (path == wxT("a:\\")) || (path == wxT("b:\\")) )
                     imageId = wxFileIconsTable::floppy;
                 else
                     imageId = wxFileIconsTable::removeable;
@@ -439,8 +439,10 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     if (m_filterListCtrl)
         m_filterListCtrl->FillFilterList(filter, defaultFilter);
 
-
-    if (style & wxDIRCTRL_RCLICK_MENU)
+    // Did they ask for sorting by 
+    if ( style & (wxDIRCTRL_EDIT_LABELS           |
+                  wxDIRCTRL_RCLICK_MENU_SORT_NAME |
+                  wxDIRCTRL_RCLICK_MENU_SORT_DATE ))
     {
         Connect(wxID_TREECTRL, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, wxTreeEventHandler(wxGenericDirCtrl::OnRightClick));
     }
@@ -979,7 +981,8 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
         if (!wxEndsWithPathSeparator(path))
             path += wxString(wxFILE_SEP_PATH);
         path += eachFilename;
-        path += wxString(wxFILE_SEP_PATH);
+        path += wxString(wxFILE_SEP_PATH);      // Directories must end with pah separator so that OnRightClick() can
+                                                // tell them apart from files.
 
 
         wxDirItemData *dir_item = new wxDirItemData(path, eachFilename, true);
@@ -1006,7 +1009,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
             if (!wxEndsWithPathSeparator(path))
                 path += wxString(wxFILE_SEP_PATH);
             path += eachFilename;
-            //path = dirName + wxString(wxT("/")) + eachFilename;
+
             wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,false);
             int image_id = wxFileIconsTable::file;
             if (eachFilename.Find(wxT('.')) != wxNOT_FOUND)

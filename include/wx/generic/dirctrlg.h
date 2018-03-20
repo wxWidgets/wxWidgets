@@ -29,7 +29,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_BASE wxHashTable;
-class wxGenericDirCtrl;
+class WXDLLIMPEXP_FWD_CORE wxGenericDirCtrl;
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogDefaultFolderStr[];
 
@@ -52,10 +52,8 @@ enum
     // Allow multiple selection
     wxDIRCTRL_MULTIPLE       = 0x0200,
     // Enable right-click menu
-    wxDIRCTRL_RCLICK_MENU               = 0x0400,
-    wxDIRCTRL_RCLICK_MENU_RENAME        = 0x0800,
-    wxDIRCTRL_RCLICK_MENU_SORT_NAME     = 0x1000,
-    wxDIRCTRL_RCLICK_MENU_SORT_DATE     = 0x2000,
+    wxDIRCTRL_RCLICK_MENU_SORT_NAME     = 0x0400,
+    wxDIRCTRL_RCLICK_MENU_SORT_DATE     = 0x0800,
 
     wxDIRCTRL_DEFAULT_STYLE  = wxDIRCTRL_3D_INTERNAL
 };
