@@ -324,11 +324,6 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
     if ( m_chkMulti->IsChecked() )
         style |= wxDIRCTRL_MULTIPLE;
 
-    if ( m_chkNames->IsChecked() )
-        style |= wxDIRCTRL_RCLICK_MENU_SORT_NAME;
-    if ( m_chkDates->IsChecked() )
-        style |= wxDIRCTRL_RCLICK_MENU_SORT_DATE;
-
     wxGenericDirCtrl *dirCtrl = new wxGenericDirCtrl(
         this,
         DirCtrlPage_Ctrl,
@@ -337,6 +332,14 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
         wxDefaultSize,
         style
     );
+
+    /*
+    // These lines have been placed here until the conflict can be resolved.
+    if (m_chkNames->IsChecked())
+        style |= wxDIRCTRL_RCLICK_MENU_SORT_NAME;
+    if (m_chkDates->IsChecked())
+        style |= wxDIRCTRL_RCLICK_MENU_SORT_DATE;
+    */
 
     wxString filter;
     for (int i = 0; i < 3; ++i)
