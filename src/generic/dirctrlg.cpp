@@ -302,7 +302,7 @@ wxDirItemData::wxDirItemData(const wxString& path, const wxString& name,
   m_isHidden(false),
   m_isExpanded(false),
   m_isDir(isDir),
-  m_compareFunc(0)
+  m_compareFunc(wxDirSortedItemsNameCompare)
 {
     /* Insert logic to detect hidden files here
     * In UnixLand we just check whether the first char is a dot
@@ -923,6 +923,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
                 {
                     newPath = rootPath;
                     newPath.AppendDir(eachFilename);
+                    std::cout << "compareFunc " << compareFunc << std::endl;
                     directoryItems.push_back( wxDirSortingItem(eachFilename, newPath.GetModificationTime(), compareFunc) );
                 }
             }
