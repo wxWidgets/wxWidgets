@@ -989,8 +989,8 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
         wxDirItemData *dir_item = new wxDirItemData(path, eachFilename, true);
         wxTreeItemId treeid = AppendItem(parentId, eachFilename,
             wxFileIconsTable::folder, -1, dir_item);
-        m_treeCtrl->SetItemImage(treeid, wxFileIconsTable::folder_open,
-            wxTreeItemIcon_Expanded);
+        m_treeCtrl->SetItemImage( treeid, wxFileIconsTable::folder_open,
+            wxTreeItemIcon_Expanded );
 
         // assume that it does have children by default as it can take a long
         // time to really check for this (think remote drives...)
