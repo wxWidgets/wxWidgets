@@ -311,21 +311,21 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
     wxWindowUpdateLocker noUpdates(this);
 
     long style = GetAttrs().m_defaultFlags;
-    if (m_chkDirOnly->IsChecked())
+    if ( m_chkDirOnly->IsChecked() )
         style |= wxDIRCTRL_DIR_ONLY;
-    if (m_chk3D->IsChecked())
+    if ( m_chk3D->IsChecked() )
         style |= wxDIRCTRL_3D_INTERNAL;
-    if (m_chkFirst->IsChecked())
+    if ( m_chkFirst->IsChecked() )
         style |= wxDIRCTRL_SELECT_FIRST;
-    if (m_chkFilters->IsChecked())
+    if ( m_chkFilters->IsChecked() )
         style |= wxDIRCTRL_SHOW_FILTERS;
-    if (m_chkLabels->IsChecked())
+    if ( m_chkLabels->IsChecked() )
         style |= wxDIRCTRL_EDIT_LABELS;
-    if (m_chkMulti->IsChecked())
+    if ( m_chkMulti->IsChecked() )
         style |= wxDIRCTRL_MULTIPLE;
-    if (m_chkNames->IsChecked())
+    if ( m_chkNames->IsChecked() )
         style |= wxDIRCTRL_RCLICK_MENU_SORT_NAME;
-    if (m_chkDates->IsChecked())
+    if ( m_chkDates->IsChecked() )
         style |= wxDIRCTRL_RCLICK_MENU_SORT_DATE;
 
     wxGenericDirCtrl *dirCtrl = new wxGenericDirCtrl(
