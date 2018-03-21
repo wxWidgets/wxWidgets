@@ -268,6 +268,40 @@ bool wxIsDriveAvailable(const wxString& dirName)
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG
 
 
+// ----------------------------------------------------------------------------
+// wxDirSortingItem
+// Used by PopulateNode() to allow sorting directories and files by either
+// name or date
+// ----------------------------------------------------------------------------
+
+class wxDirSortingItem
+{
+public:
+    wxDirSortingItem(const wxString& lab, const wxDateTime& dt, wxDirSortingItemCmpFunction compareFunc)
+        : label(lab),
+        dateTime(dt),
+        m_compareFunc(compareFunc)
+    {}
+
+    bool operator <(const wxDirSortingItem &rhs) const
+    {
+        if (m_compareFunc)
+        {
+            return m_compareFunc(*this, rhs);
+        }
+        else
+        {
+            return label.CmpNoCase(rhs.label) < 0;
+        }
+    }
+
+    wxString   label;
+    wxDateTime dateTime;
+
+    wxDirSortingItemCmpFunction m_compareFunc;
+};
+
+
 
 #if wxUSE_DIRDLG
 

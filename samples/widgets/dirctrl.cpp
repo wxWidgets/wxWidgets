@@ -36,6 +36,7 @@
     #include "wx/checkbox.h"
     #include "wx/button.h"
     #include "wx/filedlg.h"
+    #include "wx/dir.h"
 #endif
 
 #include "wx/generic/dirctrlg.h"
@@ -207,9 +208,13 @@ void DirCtrlWidgetsPage::DirProperties(wxCommandEvent &evt)
 
     wxString dirInfo;
     wxDateTime modTime = dirName.GetModificationTime();
+    wxDir directory(itemData->m_path);
+    wxULongLong totalSizeBytes = wxDir::GetTotalSize(itemData->m_path);
+    double totalSizeMegabytes = totalSizeBytes.ToDouble() * (1.0 / 1000000.0);
 
-    dirInfo.Printf("Modified: %s", modTime.FormatISOCombined());
-    
+    //dirInfo.Printf("Modified: %s", modTime.FormatISOCombined());
+    dirInfo.Printf("Modified: %s\nSize: %.2fMB", modTime.FormatISOCombined(), totalSizeMegabytes);
+
     wxDialog  *dlg = new wxMessageDialog(this, dirInfo, wxT("Directory Properties"));
     dlg->ShowModal();
     dlg->Destroy();

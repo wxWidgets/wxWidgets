@@ -65,33 +65,6 @@ class wxDirSortingItem;
 
 typedef bool(*wxDirSortingItemCmpFunction)(const wxDirSortingItem&, const wxDirSortingItem&);
 
-class wxDirSortingItem
-{
-public:
-    wxDirSortingItem(const wxString& lab, const wxDateTime& dt, wxDirSortingItemCmpFunction compareFunc)
-        : label(lab),
-        dateTime(dt),
-        m_compareFunc(compareFunc)
-    {}
-
-    bool operator <(const wxDirSortingItem &rhs) const
-    {
-        if (m_compareFunc)
-        {
-            return m_compareFunc(*this, rhs);
-        }
-        else
-        {
-            return label.CmpNoCase(rhs.label) < 0;
-        }
-    }
-
-    wxString   label;
-    wxDateTime dateTime;
-
-    wxDirSortingItemCmpFunction m_compareFunc;
-};
-
 
 //-----------------------------------------------------------------------------
 // wxDirItemData
@@ -160,17 +133,13 @@ public:
     void OnSize(wxSizeEvent &event );
     void OnRightClick(wxTreeEvent& event);
 
+    // Add a new menu item to the popup right-click menu
     int NewMenuItem(const wxString& label);
-
+    wxMenu* GetMenu() { return m_rightClickMenu; }
     wxDirItemData* GetRightClickItemData()
     {
         return GetItemData(m_rightClickedItemId);
     }
-
-    wxMenu* GetMenu()        { return m_rightClickMenu; }
-    int     GetAvailableID() { return m_availableID++;  }
-
-    wxTreeItemId    GetRightClickedItemId() { return m_rightClickedItemId; }
 
     // Try to expand as much of the given path as possible.
     virtual bool ExpandPath(const wxString& path);
@@ -250,6 +219,7 @@ protected:
     bool ExtractWildcard(const wxString& filterStr, int n, wxString& filter, wxString& description);
 
 private:
+    int  GetAvailableID() { return m_availableID++; }
     void PopulateNode(wxTreeItemId node);
     wxDirItemData* GetItemData(wxTreeItemId itemId);
     void AddRightClickMenuItem(const wxString& label, void(wxGenericDirCtrl::*function)(wxCommandEvent &));
