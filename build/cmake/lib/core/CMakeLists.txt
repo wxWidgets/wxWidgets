@@ -9,8 +9,6 @@
 
 include(../../source_groups.cmake)
 
-wx_option(wxUSE_IMAGE "use wxImage class" ON)
-
 wx_append_sources(CORE_SRC GUI_CMN)
 wx_append_sources(CORE_SRC BASE_AND_GUI_CMN)
 if(WIN32)
