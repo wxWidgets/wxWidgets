@@ -24,7 +24,7 @@ if(wxUSE_ON_FATAL_EXCEPTION AND (NOT WIN32 OR MSVC))
     wx_add_sample(debugrpt LIBRARIES qa DEPENDS wxUSE_DEBUGREPORT)
 endif()
 wx_add_sample(dialogs dialogs.cpp dialogs.h LIBRARIES adv DATA tips.txt)
-wx_add_sample(dialup nettest.cpp DEPENDS wxUSE_DIALUP_MANAGER)
+wx_add_sample(dialup nettest.cpp LIBRARIES net DEPENDS wxUSE_DIALUP_MANAGER)
 wx_add_sample(display DEPENDS wxUSE_DISPLAY)
 wx_add_sample(dnd dnd.cpp RES dnd.rc DATA wxwin.png DEPENDS wxUSE_DRAG_AND_DROP)
 wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
