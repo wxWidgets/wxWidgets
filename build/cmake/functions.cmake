@@ -378,7 +378,7 @@ macro(wx_lib_include_directories name)
         list(APPEND wxMONO_INCLUDE_DIRS_PUBLIC ${_LIB_INCLUDE_DIRS_PUBLIC})
         list(APPEND wxMONO_INCLUDE_DIRS_PRIVATE ${_LIB_INCLUDE_DIRS_PRIVATE})
     else()
-        target_include_directories(${name};${ARGN})
+        target_include_directories(${name};BEFORE;${ARGN})
     endif()
 endmacro()
 
