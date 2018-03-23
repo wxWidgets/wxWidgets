@@ -7,7 +7,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSBILITY)
+wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSIBILITY)
 wx_add_sample(animate anitest.cpp anitest.h LIBRARIES adv DATA throbber.gif hourglass.ani DEPENDS wxUSE_ANIMATIONCTRL)
 wx_add_sample(archive CONSOLE)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)
@@ -231,7 +231,7 @@ if(WIN32)
     # Windows only samples
 
     # DLL Sample
-    if(wxUSE_DYNLIBCLASS)
+    if(wxUSE_DYNLIB_CLASS)
         wx_add_sample(dll DLL my_dll.cpp my_dll.h NAME my_dll FOLDER dll
             DEFINITIONS MY_DLL_BUILDING)
         if(NOT wxBUILD_SHARED)
