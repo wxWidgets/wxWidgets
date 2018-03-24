@@ -173,7 +173,7 @@ wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
         wxT("DoRemovePage: invalid notebook page") );
 
     wxNotebookPage* page = m_pages[nPage] ;
-    m_pages.RemoveAt(nPage);
+    m_pages.erase(m_pages.begin() + nPage);
     m_images.RemoveAt(nPage);
 
     MacSetupTabs();
@@ -285,7 +285,7 @@ wxRect wxNotebook::GetPageRect() const
 //     time because doing it in ::Create() doesn't work (for unknown reasons)
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
-    unsigned int nCount = m_pages.Count();
+    unsigned int nCount = m_pages.size();
     wxRect rect = GetPageRect() ;
 
     for ( unsigned int nPage = 0; nPage < nCount; nPage++ )
