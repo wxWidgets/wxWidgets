@@ -622,19 +622,11 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-    size_t nPageCount = GetPageCount();
-    size_t nPage;
-    for ( nPage = 0; nPage < nPageCount; nPage++ )
-        delete m_pages[nPage];
-
-    m_pages.Clear();
+    wxBookCtrlBase::DeleteAllPages();
 
     if ( !TabCtrl_DeleteAllItems(GetHwnd()) )
         wxLogLastError(wxS("TabCtrl_DeleteAllItems()"));
 
-    m_selection = wxNOT_FOUND;
-
-    InvalidateBestSize();
     return true;
 }
 

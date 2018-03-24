@@ -199,11 +199,10 @@ wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-    WX_CLEAR_ARRAY(m_pages);
+    wxBookCtrlBase::DeleteAllPages();
+
     m_images.clear();
     MacSetupTabs();
-    m_selection = wxNOT_FOUND ;
-    InvalidateBestSize();
 
     return true;
 }
