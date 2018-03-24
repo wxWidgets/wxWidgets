@@ -32,6 +32,7 @@
 #endif
 
 #include "wx/imaglist.h"
+#include "wx/treectrl.h"
 
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
@@ -140,7 +141,7 @@ bool wxTreebook::InsertSubPage(size_t pagePos,
 bool wxTreebook::AddPage(wxWindow *page, const wxString& text, bool bSelect,
                          int imageId)
 {
-    return DoInsertPage(m_treeIds.GetCount(), page, text, bSelect, imageId);
+    return DoInsertPage(m_treeIds.size(), page, text, bSelect, imageId);
 }
 
 // insertion time is linear to the number of top-pages
@@ -312,7 +313,7 @@ wxTreebookPage *wxTreebook::DoRemovePage(size_t pagePos)
 bool wxTreebook::DeleteAllPages()
 {
     wxBookCtrlBase::DeleteAllPages();
-    m_treeIds.Clear();
+    m_treeIds.clear();
     m_selection =
     m_actualSelection = wxNOT_FOUND;
 
@@ -326,20 +327,20 @@ void wxTreebook::DoInternalAddPage(size_t newPos,
                                    wxTreebookPage *page,
                                    wxTreeItemId pageId)
 {
-    wxASSERT_MSG( newPos <= m_treeIds.GetCount(), wxT("Ivalid index passed to wxTreebook::DoInternalAddPage") );
+    wxASSERT_MSG( newPos <= m_treeIds.size(), wxT("Ivalid index passed to wxTreebook::DoInternalAddPage") );
 
     // hide newly inserted page initially (it will be shown when selected)
     if ( page )
         page->Hide();
 
-    if ( newPos == m_treeIds.GetCount() )
+    if ( newPos == m_treeIds.size() )
     {
         // append
-        m_treeIds.Add(pageId);
+        m_treeIds.push_back(pageId);
     }
     else // insert
     {
-        m_treeIds.Insert(pageId, newPos);
+        m_treeIds.insert(m_treeIds.begin() + newPos, pageId);
 
         if ( m_selection != wxNOT_FOUND && newPos <= (size_t)m_selection )
         {
@@ -361,12 +362,13 @@ void wxTreebook::DoInternalRemovePageRange(size_t pagePos, size_t subCount)
     // Attention: this function is only for a situation when we delete a node
     // with all its children so pagePos is the node's index and subCount is the
     // node children count
-    wxASSERT_MSG( pagePos + subCount < m_treeIds.GetCount(),
+    wxASSERT_MSG( pagePos + subCount < m_treeIds.size(),
                     wxT("Ivalid page index") );
 
     wxTreeItemId pageId = m_treeIds[pagePos];
 
-    m_treeIds.RemoveAt(pagePos, subCount + 1);
+    wxVector<wxTreeItemId>::iterator itPos = m_treeIds.begin() + pagePos;
+    m_treeIds.erase(itPos, itPos + subCount + 1);
 
     if ( m_selection != wxNOT_FOUND )
     {
@@ -454,7 +456,7 @@ void wxTreebook::DoUpdateSelection(bool bSelect, int newPos)
 
 wxTreeItemId wxTreebook::DoInternalGetPage(size_t pagePos) const
 {
-    if ( pagePos >= m_treeIds.GetCount() )
+    if ( pagePos >= m_treeIds.size() )
     {
         // invalid position but ok here, in this internal function, don't assert
         // (the caller will do it)
@@ -466,7 +468,7 @@ wxTreeItemId wxTreebook::DoInternalGetPage(size_t pagePos) const
 
 int wxTreebook::DoInternalFindPageById(wxTreeItemId pageId) const
 {
-    const size_t count = m_treeIds.GetCount();
+    const size_t count = m_treeIds.size();
     for ( size_t i = 0; i < count; ++i )
     {
         if ( m_treeIds[i] == pageId )
