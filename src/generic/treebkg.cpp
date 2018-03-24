@@ -327,7 +327,8 @@ void wxTreebook::DoInternalAddPage(size_t newPos,
                                    wxTreebookPage *page,
                                    wxTreeItemId pageId)
 {
-    wxASSERT_MSG( newPos <= m_treeIds.size(), wxT("Ivalid index passed to wxTreebook::DoInternalAddPage") );
+    wxASSERT_MSG( newPos <= m_treeIds.size(),
+                  wxT("Invalid index passed to wxTreebook::DoInternalAddPage") );
 
     // hide newly inserted page initially (it will be shown when selected)
     if ( page )
@@ -363,7 +364,7 @@ void wxTreebook::DoInternalRemovePageRange(size_t pagePos, size_t subCount)
     // with all its children so pagePos is the node's index and subCount is the
     // node children count
     wxASSERT_MSG( pagePos + subCount < m_treeIds.size(),
-                    wxT("Ivalid page index") );
+                    wxT("Invalid page index") );
 
     wxTreeItemId pageId = m_treeIds[pagePos];
 
