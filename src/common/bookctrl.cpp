@@ -500,6 +500,7 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
             DoShowPage(page, true);
 
             // change selection now to ignore the selection change event
+            m_selection = n;
             UpdateSelectedPage(n);
 
             if ( flags & SetSelection_SendEvent )
