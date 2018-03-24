@@ -18,6 +18,7 @@
 #include "wx/bookctrl.h"
 #include "wx/containr.h"
 #include "wx/treebase.h"        // for wxTreeItemId
+#include "wx/vector.h"
 
 typedef wxWindow wxTreebookPage;
 
@@ -150,7 +151,7 @@ protected:
     void OnTreeNodeExpandedCollapsed(wxTreeEvent& event);
 
     // array of page ids and page windows
-    wxArrayTreeItemIds m_treeIds;
+    wxVector<wxTreeItemId> m_treeIds;
 
     // in the situation when m_selection page is not wxNOT_FOUND but page is
     // NULL this is the first (sub)child that has a non-NULL page
@@ -217,7 +218,7 @@ private:
 
     // Returns internal number of pages which can be different from
     // GetPageCount() while performing a page insertion or removal.
-    size_t DoInternalGetPageCount() const { return m_treeIds.GetCount(); }
+    size_t DoInternalGetPageCount() const { return m_treeIds.size(); }
 
 
     wxDECLARE_EVENT_TABLE();
