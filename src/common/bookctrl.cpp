@@ -479,7 +479,7 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
     if ( n != (size_t)oldSel )
     {
         wxBookCtrlEvent *event = CreatePageChangingEvent();
-        bool allowed = false;
+        bool allowed = true;
 
         if ( flags & SetSelection_SendEvent )
         {
@@ -490,7 +490,7 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
             allowed = !GetEventHandler()->ProcessEvent(*event) || event->IsAllowed();
         }
 
-        if ( !(flags & SetSelection_SendEvent) || allowed)
+        if ( allowed )
         {
             if ( oldSel != wxNOT_FOUND )
                 DoShowPage(m_pages[oldSel], false);
