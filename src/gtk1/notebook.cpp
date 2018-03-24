@@ -586,7 +586,6 @@ bool wxNotebook::DeleteAllPages()
 
     wxASSERT_MSG( GetPageCount() == 0, wxT("all pages must have been deleted") );
 
-    InvalidateBestSize();
     return wxNotebookBase::DeleteAllPages();
 }
 
