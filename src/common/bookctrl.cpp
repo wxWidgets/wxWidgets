@@ -493,9 +493,9 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
         if ( allowed )
         {
             if ( oldSel != wxNOT_FOUND )
-                DoShowPage(m_pages[oldSel], false);
+                DoShowPage(DoGetNonNullPage(oldSel), false);
 
-            wxWindow *page = m_pages[n];
+            wxWindow* const page = DoGetNonNullPage(n);
             page->SetSize(GetPageRect());
             DoShowPage(page, true);
 
@@ -508,6 +508,15 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
                 // program allows the page change
                 MakeChangedEvent(*event);
                 (void)GetEventHandler()->ProcessEvent(*event);
+            }
+        }
+        else
+        {
+            // Selection in the control might have already had changed.
+            if ( oldSel != wxNOT_FOUND )
+            {
+                m_selection = oldSel;
+                UpdateSelectedPage(oldSel);
             }
         }
 
