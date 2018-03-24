@@ -17,7 +17,7 @@
 
 #include "wx/bookctrl.h"
 #include "wx/containr.h"
-#include "wx/treectrl.h"        // for wxArrayTreeItemIds
+#include "wx/treebase.h"        // for wxTreeItemId
 
 typedef wxWindow wxTreebookPage;
 
