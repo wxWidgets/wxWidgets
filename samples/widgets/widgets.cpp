@@ -49,6 +49,7 @@
 #include "wx/numdlg.h"
 #include "wx/textdlg.h"
 #include "wx/imaglist.h"
+#include "wx/treectrl.h"
 #include "wx/wupdlock.h"
 #include "wx/textcompleter.h"
 
