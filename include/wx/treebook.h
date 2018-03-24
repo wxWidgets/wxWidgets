@@ -38,7 +38,6 @@ public:
     // Default ctor doesn't create the control, use Create() afterwards
     wxTreebook()
     {
-        Init();
     }
 
     // This ctor creates the tree book control
@@ -49,8 +48,6 @@ public:
                long style = wxBK_DEFAULT,
                const wxString& name = wxEmptyString)
     {
-        Init();
-
         (void)Create(parent, id, pos, size, style, name);
     }
 
@@ -145,22 +142,16 @@ protected:
 
     // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
     virtual bool AllowNullPage() const wxOVERRIDE { return true; }
+    virtual wxWindow *DoGetNonNullPage(size_t page) wxOVERRIDE;
 
     // event handlers
     void OnTreeSelectionChange(wxTreeEvent& event);
     void OnTreeNodeExpandedCollapsed(wxTreeEvent& event);
 
-    // array of page ids and page windows
+    // array of tree item ids corresponding to the page indices
     wxVector<wxTreeItemId> m_treeIds;
 
-    // in the situation when m_selection page is not wxNOT_FOUND but page is
-    // NULL this is the first (sub)child that has a non-NULL page
-    int m_actualSelection;
-
 private:
-    // common part of all constructors
-    void Init();
-
     // The real implementations of page insertion functions
     // ------------------------------------------------------
     // All DoInsert/Add(Sub)Page functions add the page into :
@@ -182,12 +173,11 @@ private:
                          bool bSelect = false,
                          int imageId = NO_IMAGE);
 
-    // Sets selection in the tree control and updates the page being shown.
-    int DoSetSelection(size_t pos, int flags = 0) wxOVERRIDE;
-
-    // Returns currently shown page. In a case when selected the node
-    // has empty (NULL) page finds first (sub)child with not-empty page.
-    wxTreebookPage *DoGetCurrentPage() const;
+    // Overridden methods used by the base class DoSetSelection()
+    // implementation.
+    void UpdateSelectedPage(size_t newsel) wxOVERRIDE;
+    wxBookCtrlEvent* CreatePageChangingEvent() const wxOVERRIDE;
+    void MakeChangedEvent(wxBookCtrlEvent &event) wxOVERRIDE;
 
     // Does the selection update. Called from page insertion functions
     // to update selection if the selected page was pushed by the newly inserted

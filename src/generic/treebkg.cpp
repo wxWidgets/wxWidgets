@@ -66,12 +66,6 @@ wxEND_EVENT_TABLE()
 // wxTreebook creation
 // ----------------------------------------------------------------------------
 
-void wxTreebook::Init()
-{
-    m_selection =
-    m_actualSelection = wxNOT_FOUND;
-}
-
 bool
 wxTreebook::Create(wxWindow *parent,
                    wxWindowID id,
@@ -314,8 +308,6 @@ bool wxTreebook::DeleteAllPages()
 {
     wxBookCtrlBase::DeleteAllPages();
     m_treeIds.clear();
-    m_selection =
-    m_actualSelection = wxNOT_FOUND;
 
     wxTreeCtrl *tree = GetTreeCtrl();
     tree->DeleteChildren(tree->GetRootItem());
@@ -347,13 +339,6 @@ void wxTreebook::DoInternalAddPage(size_t newPos,
         {
             // selection has been moved one unit toward the end
             ++m_selection;
-            if ( m_actualSelection != wxNOT_FOUND )
-                ++m_actualSelection;
-        }
-        else if ( m_actualSelection != wxNOT_FOUND &&
-                    newPos <= (size_t)m_actualSelection )
-        {
-            DoSetSelection(m_selection);
         }
     }
 }
@@ -377,10 +362,6 @@ void wxTreebook::DoInternalRemovePageRange(size_t pagePos, size_t subCount)
         {
             // selection is far after the deleted page, so just update the index and move on
             m_selection -= 1 + subCount;
-            if ( m_actualSelection != wxNOT_FOUND)
-            {
-                m_actualSelection -= subCount + 1;
-            }
         }
         else if ( (size_t)m_selection >= pagePos )
         {
@@ -391,7 +372,6 @@ void wxTreebook::DoInternalRemovePageRange(size_t pagePos, size_t subCount)
             wxTreeItemId nodeId = tree->GetNextSibling(pageId);
 
             m_selection = wxNOT_FOUND;
-            m_actualSelection = wxNOT_FOUND;
 
             if ( nodeId.IsOk() )
             {
@@ -412,17 +392,6 @@ void wxTreebook::DoInternalRemovePageRange(size_t pagePos, size_t subCount)
                     DoUpdateSelection(false, wxNOT_FOUND);
                 }
             }
-        }
-        else if ( m_actualSelection != wxNOT_FOUND &&
-                    (size_t)m_actualSelection >= pagePos )
-        {
-            // nothing to do -- selection is before the deleted node, but
-            // actually shown page (the first (sub)child with page != NULL) is
-            // already deleted
-            m_actualSelection = m_selection;
-
-            // send event as documented
-            DoSetSelection(m_selection, SetSelection_SendEvent);
         }
         //else: nothing to do -- selection is before the deleted node
     }
@@ -558,91 +527,41 @@ bool wxTreebook::SetPageImage(size_t n, int imageId)
     return true;
 }
 
-int wxTreebook::DoSetSelection(size_t pagePos, int flags)
+void wxTreebook::UpdateSelectedPage(size_t newsel)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(pagePos), wxNOT_FOUND,
-                 wxT("invalid page index in wxListbook::DoSetSelection()") );
-    wxASSERT_MSG( GetPageCount() == DoInternalGetPageCount(),
-                  wxT("wxTreebook logic error: m_treeIds and m_pages not in sync!"));
-
-    wxBookCtrlEvent event(wxEVT_TREEBOOK_PAGE_CHANGING, m_windowId);
-    const int oldSel = m_selection;
-    wxTreeCtrl *tree = GetTreeCtrl();
-    bool allowed = false;
-
-    if (flags & SetSelection_SendEvent)
-    {
-        event.SetEventObject(this);
-        event.SetSelection(pagePos);
-        event.SetOldSelection(m_selection);
-
-        // don't send the event if the old and new pages are the same; do send it
-        // otherwise and be prepared for it to be vetoed
-        allowed = (int)pagePos == m_selection ||
-                  !GetEventHandler()->ProcessEvent(event) ||
-                  event.IsAllowed();
-    }
-
-    if ( !(flags & SetSelection_SendEvent) || allowed )
-    {
-        // hide the previously shown page
-        wxTreebookPage * const oldPage = DoGetCurrentPage();
-        if ( oldPage )
-            oldPage->Hide();
-
-        // then show the new one
-        m_selection = pagePos;
-        wxTreebookPage *page = wxBookCtrlBase::GetPage(m_selection);
-        if ( !page )
-        {
-            // find the next page suitable to be shown: the first (grand)child
-            // of this one with a non-NULL associated page
-            wxTreeItemId childId = m_treeIds[pagePos];
-            int actualPagePos = pagePos;
-            while ( !page && childId.IsOk() )
-            {
-                wxTreeItemIdValue cookie;
-                childId = tree->GetFirstChild( childId, cookie );
-                if ( childId.IsOk() )
-                {
-                    page = wxBookCtrlBase::GetPage(++actualPagePos);
-                }
-            }
-
-            m_actualSelection = page ? actualPagePos : m_selection;
-        }
-
-        if ( page )
-            page->Show();
-
-        tree->SelectItem(DoInternalGetPage(pagePos));
-
-        if (flags & SetSelection_SendEvent)
-        {
-            // notify about the (now completed) page change
-            event.SetEventType(wxEVT_TREEBOOK_PAGE_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(event);
-        }
-    }
-    else if ( (flags & SetSelection_SendEvent) && !allowed) // page change vetoed
-    {
-        // tree selection might have already had changed
-        if ( oldSel != wxNOT_FOUND )
-            tree->SelectItem(DoInternalGetPage(oldSel));
-    }
-
-    return oldSel;
+    GetTreeCtrl()->SelectItem(DoInternalGetPage(newsel));
 }
 
-wxTreebookPage *wxTreebook::DoGetCurrentPage() const
+wxBookCtrlEvent* wxTreebook::CreatePageChangingEvent() const
 {
-    if ( m_selection == wxNOT_FOUND )
-        return NULL;
+    return new wxBookCtrlEvent(wxEVT_TREEBOOK_PAGE_CHANGING, m_windowId);
+}
 
-    wxTreebookPage *page = wxBookCtrlBase::GetPage(m_selection);
-    if ( !page && m_actualSelection != wxNOT_FOUND )
+void wxTreebook::MakeChangedEvent(wxBookCtrlEvent &event)
+{
+    event.SetEventType(wxEVT_TREEBOOK_PAGE_CHANGED);
+}
+
+wxWindow *wxTreebook::DoGetNonNullPage(size_t n)
+{
+    wxWindow* page = wxBookCtrlBase::GetPage(n);
+
+    if ( !page )
     {
-        page = wxBookCtrlBase::GetPage(m_actualSelection);
+        // Find the next suitable page, i.e. the first (grand)child
+        // of this one with a non-NULL associated page
+        wxTreeCtrl* const tree = GetTreeCtrl();
+        for ( wxTreeItemId childId = m_treeIds[n]; childId.IsOk(); )
+        {
+            wxTreeItemIdValue cookie;
+            childId = tree->GetFirstChild( childId, cookie );
+            if ( childId.IsOk() )
+            {
+                page = wxBookCtrlBase::GetPage(++n);
+                if ( page )
+                    break;
+            }
+        }
     }
 
     return page;
