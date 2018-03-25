@@ -49,6 +49,7 @@
 #include "wx/numdlg.h"
 #include "wx/textdlg.h"
 #include "wx/imaglist.h"
+#include "wx/treectrl.h"
 #include "wx/wupdlock.h"
 #include "wx/textcompleter.h"
 
@@ -723,20 +724,7 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
     {
         wxWindowUpdateLocker noUpdates(curPage);
         curPage->CreateContent();
-        //curPage->Layout();
-        curPage->GetSizer()->Fit(curPage);
-
-        WidgetsBookCtrl *book = wxStaticCast(curPage->GetParent(), WidgetsBookCtrl);
-        wxSize size;
-        for ( size_t i = 0; i < book->GetPageCount(); ++i )
-        {
-            wxWindow *page = book->GetPage(i);
-            if ( page )
-            {
-                size.IncTo(page->GetSize());
-            }
-        }
-        curPage->SetSize(size);
+        curPage->Layout();
     }
     // re-apply the attributes to the widget(s)
     curPage->SetUpWidget();

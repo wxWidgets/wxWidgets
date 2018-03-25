@@ -418,7 +418,7 @@ bool wxNotebook::InsertPage( size_t position,
 
     wxGtkNotebookPage* pageData = new wxGtkNotebookPage;
 
-    m_pages.Insert(win, position);
+    m_pages.insert(m_pages.begin() + position, win);
     m_pagesData.Insert(position, pageData);
 
     // set the label image and text
