@@ -39,7 +39,7 @@ Also note that you can retrieve stock bitmaps using wxArtProvider.
 @stock{wxID_EXECUTE,execute,&Execute}
 @stock{wxID_EXIT,quit,&Quit}
 @stock{wxID_FILE,file,&File}
-@stock{wxID_FIND,find,&Find}
+@stock{wxID_FIND,find,&Find...}
 @stock{wxID_FIRST,goto-first-ltr,&First}
 @stock{wxID_FLOPPY,floppy,&Floppy}
 @stock{wxID_FORWARD,go-forward-ltr,&Forward}
@@ -69,7 +69,7 @@ Also note that you can retrieve stock bitmaps using wxArtProvider.
 @stock{wxID_REDO,redo-ltr,&Redo}
 @stock{wxID_REFRESH,refresh,Refresh}
 @stock{wxID_REMOVE,remove,Remove}
-@stock{wxID_REPLACE,find-and-replace,Rep&lace}
+@stock{wxID_REPLACE,find-and-replace,Rep&lace...}
 @stock{wxID_REVERT_TO_SAVED,revert-to-saved-ltr,Revert to Saved}
 @stock{wxID_SAVE,save,&Save}
 @stock{wxID_SAVEAS,save-as,Save &As...}

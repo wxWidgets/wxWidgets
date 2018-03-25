@@ -72,6 +72,10 @@ All:
 - Make wxList and wxVector iterators conform to input iterator requirements.
 - Fix MT-safety problem when reading and writing from wxSocket (jkubalik).
 
+All (GUI):
+
+- Improve stock items consistency and aesthetics (dhowland).
+
 wxGTK:
 
 - Fix the build with glib < 2.32 (e.g. CentOS 6).
