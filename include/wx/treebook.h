@@ -22,6 +22,7 @@
 
 typedef wxWindow wxTreebookPage;
 
+class WXDLLIMPEXP_FWD_CORE wxTreeCtrl;
 class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
 // ----------------------------------------------------------------------------
