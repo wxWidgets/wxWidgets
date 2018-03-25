@@ -578,6 +578,14 @@ Major new features in this release
 - Support for persistent objects automatically saving and restoring their state
   was added.
 
+  
+  3.0.5: (released ????-??-??)
+----------------------------
+
+wxMSW:
+
+- Fix libtiff compilation with MinGW-w32 6.3.
+
 
 
 3.0.5 (released 2018-??-??)
