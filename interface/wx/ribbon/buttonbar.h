@@ -495,6 +495,8 @@ public:
             Small bitmap of the new button when it is disabled. If left as
             null, then a bitmap will be automatically generated from @a
             bitmap_small.
+
+        @since 3.1.2
     */
     virtual void SetButtonIcon(
                 int button_id,
@@ -518,6 +520,8 @@ public:
             after every change.
 
         @see SetButtonTextMinWidth
+
+        @since 3.1.2
     */
     virtual void SetButtonText(int button_id, const wxString& label);
 
@@ -543,6 +547,8 @@ public:
             button labels on the fly without modifying the button bar layout.
 
         @see SetButtonText()
+
+        @since 3.1.2
     */
     virtual void SetButtonTextMinWidth(int button_id,
                 int min_width_medium, int min_width_large);
@@ -565,6 +571,8 @@ public:
             button labels on the fly without modifying the button bar layout.
 
         @see SetButtonText()
+
+        @since 3.1.2
     */
     virtual void SetButtonTextMinWidth(int button_id, const wxString& label);
 
@@ -580,6 +588,8 @@ public:
             The minimum size-class of the button. Buttons on a button bar
             can have three distinct sizes: wxRIBBON_BUTTONBAR_BUTTON_SMALL,
             wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, and wxRIBBON_BUTTONBAR_BUTTON_LARGE.
+
+        @since 3.1.2
     */
     virtual void SetButtonMinSizeClass(int button_id,
                 wxRibbonButtonBarButtonState min_size_class);
@@ -596,6 +606,8 @@ public:
             The maximum size-class of the button. Buttons on a button bar
             can have three distinct sizes: wxRIBBON_BUTTONBAR_BUTTON_SMALL,
             wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, and wxRIBBON_BUTTONBAR_BUTTON_LARGE.
+
+        @since 3.1.2
     */
     virtual void SetButtonMaxSizeClass(int button_id,
                 wxRibbonButtonBarButtonState max_size_class);

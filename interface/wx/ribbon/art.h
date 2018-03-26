@@ -983,6 +983,8 @@ public:
         @return Width of the given label text in pixel.
 
         @note This function only works with single-line strings.
+
+        @since 3.1.2
     */
     virtual wxCoord GetButtonBarButtonTextWidth(
                         wxDC& dc, const wxString& label,
