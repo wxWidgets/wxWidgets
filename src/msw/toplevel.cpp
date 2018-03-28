@@ -38,6 +38,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/dynlib.h"
+#include "wx/scopeguard.h"
 #include "wx/tooltip.h"
 
 #include "wx/msw/private.h"
@@ -438,6 +439,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         // don't use DS_SETFONT we don't need the fourth WORD for the font)
         static const int dlgsize = sizeof(DLGTEMPLATE) + (sizeof(WORD) * 3);
         DLGTEMPLATE *dlgTemplate = (DLGTEMPLATE *)malloc(dlgsize);
+        wxON_BLOCK_EXIT1(free, dlgTemplate);
+
         memset(dlgTemplate, 0, dlgsize);
 
         // these values are arbitrary, they won't be used normally anyhow
@@ -470,7 +473,6 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
             dlgTemplate->style |= DS_MODALFRAME;
 
         ret = CreateDialog(dlgTemplate, title, pos, sizeReal);
-        free(dlgTemplate);
     }
     else // !dialog
     {
