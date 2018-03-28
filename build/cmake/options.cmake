@@ -67,6 +67,12 @@ wx_add_thirdparty_library(wxUSE_LIBJPEG JPEG "use libjpeg (JPEG file format)")
 wx_add_thirdparty_library(wxUSE_LIBPNG PNG "use libpng (PNG image format)")
 wx_add_thirdparty_library(wxUSE_LIBTIFF TIFF "use libtiff (TIFF file format)")
 
+wx_option(wxUSE_LIBLZMA "use LZMA compression" OFF)
+if(wxUSE_LIBLZMA)
+    find_package(LibLZMA REQUIRED)
+endif()
+set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzma for LZMA compression")
+
 wx_option(wxUSE_OPENGL "use OpenGL (or Mesa)")
 
 if(NOT WIN32)

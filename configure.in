@@ -525,14 +525,12 @@ WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image form
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
 
-dnl We don't provide built-in versions of these libraries, so if the use of
-dnl system libraries is explicitly disabled, we can't use them at all.
+dnl We don't provide built-in version of this library, so if the use of system
+dnl libraries is explicitly disabled, we can't use it at all.
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
     wxUSE_LIBJBIG=no
-    wxUSE_LIBLZMA=no
 else
     WX_ARG_WITHOUT(libjbig,    [  --without-libjbig       don't use libjbig in libtiff even if available)], wxUSE_LIBJBIG)
-    WX_ARG_WITHOUT(liblzma,    [  --without-liblzma       don't use liblzma in libtiff even if available)], wxUSE_LIBLZMA)
 fi
 
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
@@ -550,6 +548,7 @@ dnl for GUI only
 WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (http://dmalloc.com/)], wxUSE_DMALLOC)
 WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
 WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx class], wxUSE_REGEX)
+WX_ARG_WITH(liblzma,       [  --with-liblzma          use LZMA compression)], wxUSE_LIBLZMA)
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
@@ -2556,10 +2555,28 @@ dnl ------------------------------------------------------------------------
 dnl Check for lzma library
 dnl ------------------------------------------------------------------------
 
-LZMA_LINK=
-if test "$wxUSE_LIBLZMA" = "yes"; then
-    AC_CHECK_LIB(lzma, lzma_code, LZMA_LINK=" -llzma")
-else
+if test "$wxUSE_LIBLZMA" != "no"; then
+    AC_CHECK_HEADER(lzma.h,,,[])
+
+    if test "$ac_cv_header_lzma_h" = "yes"; then
+        AC_CHECK_LIB(lzma, lzma_code,
+            [
+                LZMA_LINK="-llzma"
+                LIBS="$LZMA_LINK $LIBS"
+                AC_DEFINE(wxUSE_LIBLZMA)
+            ])
+    fi
+
+    if test -z "$LZMA_LINK"; then
+        wxUSE_LIBLZMA=no
+    fi
+fi
+
+dnl We need to disable the use of lzma in built-in libtiff explicitly, as
+dnl otherwise we'd depend on the system lzma library, which is typically
+dnl undesirable when using builtin libraries. We also disable the use of lzma
+dnl if it's not available anyhow, just to speed up libtiff configure a little.
+if test "$HAVE_LZMA" = "no" -o "$wxUSE_LIBTIFF" = "builtin"; then
     ac_configure_args="$ac_configure_args --disable-lzma"
 fi
 
@@ -2592,7 +2609,7 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         if test "$wxUSE_ZLIB" = "sys"; then
             TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
         fi
-        if test "$wxUSE_LIBLZMA" = "yes"; then
+        if test -n "$LZMA_LINK"; then
             TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
         fi
         if test "$wxUSE_LIBJBIG" = "yes"; then
@@ -7908,6 +7925,13 @@ case "$wxUSE_EXPAT" in
         WXCONFIG_LIBS="$EXPAT_LINK $WXCONFIG_LIBS"
         ;;
 esac
+if test "$wxUSE_LIBLZMA" = "yes"; then
+    dnl It could be already present in WXCONFIG_LIBS as tiff dependency, avoid
+    dnl adding it again in this case:
+    if test "$wxUSE_GUI" != "yes" -o "$wxUSE_LIBTIFF" != "sys"; then
+        WXCONFIG_LIBS="$LZMA_LINK $WXCONFIG_LIBS"
+    fi
+fi
 case "$wxUSE_ZLIB" in
     builtin)
         wxconfig_3rdparty="zlib $wxconfig_3rdparty"
@@ -8389,6 +8413,7 @@ echo "                                       tiff               ${wxUSE_LIBTIFF-
 if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
+echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
