@@ -71,6 +71,52 @@ private:
     void Init();
 };
 
+// ----------------------------------------------------------------------------
+// Filter for compressing data using LZMA(2) algorithm
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxLZMAOutputStream : public wxFilterOutputStream,
+                                            private wxPrivate::wxLZMAData
+{
+public:
+    explicit wxLZMAOutputStream(wxOutputStream& stream, int level = -1)
+        : wxFilterOutputStream(stream)
+    {
+        Init(level);
+    }
+
+    explicit wxLZMAOutputStream(wxOutputStream* stream, int level = -1)
+        : wxFilterOutputStream(stream)
+    {
+        Init(level);
+    }
+
+    virtual ~wxLZMAOutputStream() { Close(); }
+
+    void Sync() wxOVERRIDE { DoFlush(false); }
+    bool Close() wxOVERRIDE;
+    wxFileOffset GetLength() const wxOVERRIDE { return m_pos; }
+
+protected:
+    size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
+    wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
+
+private:
+    void Init(int level);
+
+    // Write the contents of the internal buffer to the output stream.
+    bool UpdateOutput();
+
+    // Write out the current buffer if necessary, i.e. if no space remains in
+    // it, and reinitialize m_stream to point to it. Returns false on success
+    // or false on error, in which case m_lasterror is updated.
+    bool UpdateOutputIfNecessary();
+
+    // Run LZMA_FINISH (if argument is true) or LZMA_FULL_FLUSH, return true on
+    // success or false on error.
+    bool DoFlush(bool finish);
+};
+
 WXDLLIMPEXP_BASE wxVersionInfo wxGetLibLZMAVersionInfo();
 
 #endif // wxUSE_LIBLZMA && wxUSE_STREAMS
