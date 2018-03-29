@@ -162,6 +162,9 @@
     <ClCompile Include="..\..\src\common\longlong.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\lzmastream.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\memory.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -602,6 +605,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\longlong.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\lzmastream.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\math.h">

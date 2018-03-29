@@ -463,6 +463,9 @@
 				RelativePath="..\..\src\common\longlong.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\lzmastream.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\memory.cpp">
 			</File>
 			<File
@@ -1134,6 +1137,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\longlong.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\lzmastream.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\math.h">
