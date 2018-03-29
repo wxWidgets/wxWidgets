@@ -33,11 +33,14 @@
 
 #include <lzma.h>
 
+namespace wxPrivate
+{
+
 // ----------------------------------------------------------------------------
 // Constants
 // ----------------------------------------------------------------------------
 
-static const size_t wxLZMA_BUF_SIZE = 4096;
+const size_t wxLZMA_BUF_SIZE = 4096;
 
 // ----------------------------------------------------------------------------
 // Private helpers
@@ -57,6 +60,10 @@ struct wxLZMAStream : lzma_stream
         lzma_end(this);
     }
 };
+
+} // namespace wxPrivate
+
+using namespace wxPrivate;
 
 // ============================================================================
 // implementation
@@ -81,27 +88,28 @@ wxVersionInfo wxGetLibLZMAVersionInfo()
 }
 
 // ----------------------------------------------------------------------------
+// wxLZMAData: common helpers for compression and decompression
+// ----------------------------------------------------------------------------
+
+wxLZMAData::wxLZMAData()
+{
+    m_stream = new wxLZMAStream;
+    m_streamBuf = new wxUint8[wxLZMA_BUF_SIZE];
+    m_pos = 0;
+}
+
+wxLZMAData::~wxLZMAData()
+{
+    delete [] m_streamBuf;
+    delete m_stream;
+}
+
+// ----------------------------------------------------------------------------
 // wxLZMAInputStream: decompression
 // ----------------------------------------------------------------------------
 
-wxLZMAInputStream::wxLZMAInputStream(wxInputStream& stream)
-    : wxFilterInputStream(stream)
-{
-    Init();
-}
-
-wxLZMAInputStream::wxLZMAInputStream(wxInputStream* stream)
-    : wxFilterInputStream(stream)
-{
-    Init();
-}
-
 void wxLZMAInputStream::Init()
 {
-    m_stream = new wxLZMAStream;
-    m_inbuf = new wxUint8[wxLZMA_BUF_SIZE];
-    m_pos = 0;
-
     // We don't specify any memory usage limit nor any flags, not even
     // LZMA_CONCATENATED recommended by liblzma documentation, because we don't
     // foresee the need to support concatenated compressed files for now.
@@ -126,12 +134,6 @@ void wxLZMAInputStream::Init()
     m_lasterror = wxSTREAM_READ_ERROR;
 }
 
-wxLZMAInputStream::~wxLZMAInputStream()
-{
-    delete [] m_inbuf;
-    delete m_stream;
-}
-
 size_t wxLZMAInputStream::OnSysRead(void* outbuf, size_t size)
 {
     m_stream->next_out = static_cast<uint8_t*>(outbuf);
@@ -145,8 +147,8 @@ size_t wxLZMAInputStream::OnSysRead(void* outbuf, size_t size)
         // Get more input data if needed.
         if ( !m_stream->avail_in )
         {
-            m_parent_i_stream->Read(m_inbuf, wxLZMA_BUF_SIZE);
-            m_stream->next_in = m_inbuf;
+            m_parent_i_stream->Read(m_streamBuf, wxLZMA_BUF_SIZE);
+            m_stream->next_in = m_streamBuf;
             m_stream->avail_in = m_parent_i_stream->LastRead();
 
             if ( !m_stream->avail_in )
