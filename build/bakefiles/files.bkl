@@ -546,6 +546,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/fswatchercmn.cpp
     src/generic/fswatcherg.cpp
     src/common/secretstore.cpp
+    src/common/lzmastream.cpp
 </set>
 <set var="BASE_AND_GUI_CMN_SRC" hints="files">
     src/common/event.cpp
@@ -719,6 +720,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/fswatcher.h
     wx/generic/fswatcher.h
     wx/secretstore.h
+    wx/lzmastream.h
 </set>
 
 

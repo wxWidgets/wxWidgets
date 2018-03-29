@@ -530,6 +530,7 @@ ALL_BASE_HEADERS =  \
 	wx/fswatcher.h \
 	wx/generic/fswatcher.h \
 	wx/secretstore.h \
+	wx/lzmastream.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
@@ -713,6 +714,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/fswatcher.h \
 	wx/generic/fswatcher.h \
 	wx/secretstore.h \
+	wx/lzmastream.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -851,6 +853,7 @@ ALL_BASE_SOURCES =  \
 	src/common/fswatchercmn.cpp \
 	src/generic/fswatcherg.cpp \
 	src/common/secretstore.cpp \
+	src/common/lzmastream.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -1034,6 +1037,7 @@ MONODLL_OBJECTS =  \
 	monodll_fswatchercmn.o \
 	monodll_fswatcherg.o \
 	monodll_common_secretstore.o \
+	monodll_lzmastream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS) \
 	monodll_event.o \
 	monodll_fs_mem.o \
@@ -1176,6 +1180,7 @@ MONOLIB_OBJECTS =  \
 	monolib_fswatchercmn.o \
 	monolib_fswatcherg.o \
 	monolib_common_secretstore.o \
+	monolib_lzmastream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_1) \
 	monolib_event.o \
 	monolib_fs_mem.o \
@@ -1307,6 +1312,7 @@ BASEDLL_OBJECTS =  \
 	basedll_fswatchercmn.o \
 	basedll_fswatcherg.o \
 	basedll_common_secretstore.o \
+	basedll_lzmastream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_2) \
 	basedll_event.o \
 	basedll_fs_mem.o \
@@ -1421,6 +1427,7 @@ BASELIB_OBJECTS =  \
 	baselib_fswatchercmn.o \
 	baselib_fswatcherg.o \
 	baselib_common_secretstore.o \
+	baselib_lzmastream.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_3) \
 	baselib_event.o \
 	baselib_fs_mem.o \
@@ -16270,6 +16277,9 @@ monodll_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(MONODLL_ODEP)
 monodll_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/secretstore.cpp
 
+monodll_lzmastream.o: $(srcdir)/src/common/lzmastream.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/lzmastream.cpp
+
 monodll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -21528,6 +21538,9 @@ monolib_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(MONOLIB_ODEP)
 
 monolib_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/secretstore.cpp
+
+monolib_lzmastream.o: $(srcdir)/src/common/lzmastream.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/lzmastream.cpp
 
 monolib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
@@ -26788,6 +26801,9 @@ basedll_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(BASEDLL_ODEP)
 basedll_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/secretstore.cpp
 
+basedll_lzmastream.o: $(srcdir)/src/common/lzmastream.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/lzmastream.cpp
+
 basedll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
 
@@ -27264,6 +27280,9 @@ baselib_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(BASELIB_ODEP)
 
 baselib_common_secretstore.o: $(srcdir)/src/common/secretstore.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/secretstore.cpp
+
+baselib_lzmastream.o: $(srcdir)/src/common/lzmastream.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/lzmastream.cpp
 
 baselib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
