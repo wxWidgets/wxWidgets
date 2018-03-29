@@ -65,7 +65,6 @@ class DirPickerWidgetsPage : public WidgetsPage
 {
 public:
     DirPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~DirPickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_dirPicker; }
     virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }
@@ -83,9 +82,6 @@ protected:
 
     // restore the checkboxes state to the initial values
     void Reset();
-
-    // get the initial style for the picker of the given kind
-    long GetPickerStyle();
 
 
     void OnDirChange(wxFileDirPickerEvent &ev);
@@ -195,15 +191,7 @@ void DirPickerWidgetsPage::CreatePicker()
 {
     delete m_dirPicker;
 
-    m_dirPicker = new wxDirPickerCtrl(this, PickerPage_Dir,
-                                        wxGetHomeDir(), wxT("Hello!"),
-                                        wxDefaultPosition, wxDefaultSize,
-                                        GetPickerStyle());
-}
-
-long DirPickerWidgetsPage::GetPickerStyle()
-{
-    long style = 0;
+    long style = GetAttrs().m_defaultFlags;
 
     if ( m_chkDirTextCtrl->GetValue() )
         style |= wxDIRP_USE_TEXTCTRL;
@@ -217,7 +205,10 @@ long DirPickerWidgetsPage::GetPickerStyle()
     if ( m_chkSmall->GetValue() )
         style |= wxDIRP_SMALL;
 
-    return style;
+    m_dirPicker = new wxDirPickerCtrl(this, PickerPage_Dir,
+                                      wxGetHomeDir(), wxT("Hello!"),
+                                      wxDefaultPosition, wxDefaultSize,
+                                      style);
 }
 
 void DirPickerWidgetsPage::RecreatePicker()

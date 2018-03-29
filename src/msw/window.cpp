@@ -79,6 +79,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/keyboard.h"
+#include "wx/msw/private/winstyle.h"
 #include "wx/msw/dcclient.h"
 #include "wx/msw/seh.h"
 #include "wx/private/textmeasure.h"
@@ -112,14 +113,6 @@
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
-    #define EP_EDITTEXT         1
-    #define ETS_NORMAL          1
-    #define ETS_HOT             2
-    #define ETS_SELECTED        3
-    #define ETS_DISABLED        4
-    #define ETS_FOCUSED         5
-    #define ETS_READONLY        6
-    #define ETS_ASSIST          7
 #endif
 
 #if wxUSE_DYNLIB_CLASS
@@ -341,12 +334,8 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
      */
     while ( parent && !parent->IsTopLevel() )
     {
-        LONG exStyle = wxGetWindowExStyle(parent);
-        if ( !(exStyle & WS_EX_CONTROLPARENT) )
-        {
-            // force the parent to have this style
-            wxSetWindowExStyle(parent, exStyle | WS_EX_CONTROLPARENT);
-        }
+        // force the parent to have this style
+        wxMSWWinExStyleUpdater(GetHwndOf(parent)).TurnOn(WS_EX_CONTROLPARENT);
 
         parent = parent->GetParent();
     }
@@ -1406,11 +1395,8 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
         // this function so instead of simply setting the style to the new
         // value we clear the bits which were set in styleOld but are set in
         // the new one and set the ones which were not set before
-        long styleReal = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-        styleReal &= ~styleOld;
-        styleReal |= style;
-
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, styleReal);
+        wxMSWWinStyleUpdater updateStyle(GetHwnd());
+        updateStyle.TurnOff(styleOld).TurnOn(style);
 
         // we need to call SetWindowPos() if any of the styles affecting the
         // frame appearance have changed
@@ -1423,16 +1409,17 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
                                       WS_SYSMENU) ) != 0;
     }
 
-    // and the extended style
-    long exstyleReal = wxGetWindowExStyle(this);
+    // There is one extra complication with the extended style: we must never
+    // reset WS_EX_CONTROLPARENT because it may break the invariant that the
+    // parent of any window with this style bit set has it as well. We enforce
+    // this invariant elsewhere and must not clear it here to avoid the fatal
+    // problems (hangs) which happen if we break it, so ensure it is preserved.
+    if ( exstyleOld & WS_EX_CONTROLPARENT )
+        exstyle |= WS_EX_CONTROLPARENT;
 
-    if ( exstyle != exstyleOld )
+    wxMSWWinExStyleUpdater updateExStyle(GetHwnd());
+    if ( updateExStyle.TurnOff(exstyleOld).TurnOn(exstyle).Apply() )
     {
-        exstyleReal &= ~exstyleOld;
-        exstyleReal |= exstyle;
-
-        wxSetWindowExStyle(this, exstyleReal);
-
         // ex style changes don't take effect without calling SetWindowPos
         callSWP = true;
     }
@@ -1443,8 +1430,8 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
         // also to make the change to wxSTAY_ON_TOP style take effect: just
         // setting the style simply doesn't work
         if ( !::SetWindowPos(GetHwnd(),
-                             exstyleReal & WS_EX_TOPMOST ? HWND_TOPMOST
-                                                         : HWND_NOTOPMOST,
+                             updateExStyle.IsOn(WS_EX_TOPMOST) ? HWND_TOPMOST
+                                                               : HWND_NOTOPMOST,
                              0, 0, 0, 0,
                              SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE |
                              SWP_FRAMECHANGED) )
@@ -1473,8 +1460,7 @@ wxBorder wxWindowMSW::TranslateBorder(wxBorder border) const
     {
         if (CanApplyThemeBorder())
         {
-            wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-            if (theme)
+            if ( wxUxThemeIsActive() )
                 return wxBORDER_THEME;
         }
         return wxBORDER_SUNKEN;
@@ -2434,7 +2420,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
     // must not call IsDialogMessage() then, it would simply hang (see #15458).
     if ( m_hWnd &&
             HasFlag(wxTAB_TRAVERSAL) &&
-                (wxGetWindowExStyle(this) & WS_EX_CONTROLPARENT) )
+                wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
     {
         // intercept dialog navigation keys
         MSG *msg = (MSG *)pMsg;
@@ -3659,9 +3645,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         // If we want the default themed border then we need to draw it ourselves
         case WM_NCCALCSIZE:
             {
-                wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
                 const wxBorder border = TranslateBorder(GetBorder());
-                if (theme && border == wxBORDER_THEME)
+                if (wxUxThemeIsActive() && border == wxBORDER_THEME)
                 {
                     // first ask the widget to calculate the border size
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -3686,7 +3671,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     wxClientDC dc((wxWindow *)this);
                     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
 
-                    if ( theme->GetThemeBackgroundContentRect
+                    if ( ::GetThemeBackgroundContentRect
                                 (
                                  hTheme,
                                  GetHdcOf(*impl),
@@ -3711,9 +3696,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_NCPAINT:
             {
-                wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
                 const wxBorder border = TranslateBorder(GetBorder());
-                if (theme && border == wxBORDER_THEME)
+                if (wxUxThemeIsActive() && border == wxBORDER_THEME)
                 {
                     // first ask the widget to paint its non-client area, such as scrollbars, etc.
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -3728,7 +3712,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     wxCopyRectToRECT(GetSize(), rcBorder);
 
                     RECT rcClient;
-                    theme->GetThemeBackgroundContentRect(
+                    ::GetThemeBackgroundContentRect(
                         hTheme, GetHdcOf(*impl), EP_EDITTEXT, ETS_NORMAL, &rcBorder, &rcClient);
                     InflateRect(&rcClient, -1, -1);
 
@@ -3736,9 +3720,9 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                       rcClient.right, rcClient.bottom);
 
                     // Make sure the background is in a proper state
-                    if (theme->IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                    if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
                     {
-                        theme->DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
+                        ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
                     }
 
                     // Draw the border
@@ -3750,7 +3734,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     //    nState = ETS_READONLY;
                     else
                         nState = ETS_NORMAL;
-                    theme->DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, NULL);
+                    ::DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, NULL);
                 }
             }
             break;
@@ -4192,6 +4176,14 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
         return false;
     }
 
+    if ( ContainsHWND(hwnd) )
+    {
+        // If another subwindow of this window already had focus before, this
+        // window should already have focus at wx level, no need for another
+        // event.
+        return false;
+    }
+
     // notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it
     wxChildFocusEvent eventFocus((wxWindow *)this);
@@ -4216,6 +4208,20 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
 
 bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
 {
+    // Don't send the event when in the process of being deleted.  This can
+    // only cause problems if the event handler tries to access the object.
+    if ( m_isBeingDeleted )
+    {
+        return false;
+    }
+
+    if ( ContainsHWND(hwnd) )
+    {
+        // If the focus switches to another HWND which is part of the same
+        // wxWindow, we must not generate a wxEVT_KILL_FOCUS.
+        return false;
+    }
+
 #if wxUSE_CARET
     // Deal with caret
     if ( m_caret )
@@ -4223,13 +4229,6 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
         m_caret->OnKillFocus();
     }
 #endif // wxUSE_CARET
-
-    // Don't send the event when in the process of being deleted.  This can
-    // only cause problems if the event handler tries to access the object.
-    if ( m_isBeingDeleted )
-    {
-        return false;
-    }
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
     event.SetEventObject(this);
@@ -4470,17 +4469,7 @@ bool wxWindowMSW::IsDoubleBuffered() const
 
 void wxWindowMSW::SetDoubleBuffered(bool on)
 {
-    // Get the current extended style bits
-    long exstyle = wxGetWindowExStyle(this);
-
-    // Twiddle the bit as needed
-    if ( on )
-        exstyle |= WS_EX_COMPOSITED;
-    else
-        exstyle &= ~WS_EX_COMPOSITED;
-
-    // put it back
-    wxSetWindowExStyle(this, exstyle);
+    wxMSWWinExStyleUpdater(GetHwnd()).TurnOnOrOff(on, WS_EX_COMPOSITED);
 }
 
 // ---------------------------------------------------------------------------
@@ -4868,8 +4857,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
                                         wxSystemColour fallback) const
 {
 #if wxUSE_UXTHEME
-    const wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-    if ( theme )
+    if ( wxUxThemeIsActive() )
     {
         int themeProperty = 0;
 
@@ -4891,7 +4879,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
 
         wxUxThemeHandle hTheme((const wxWindow *)this, themeName);
         COLORREF col;
-        HRESULT hr = theme->GetThemeColor
+        HRESULT hr = ::GetThemeColor
                             (
                                 hTheme,
                                 themePart,
@@ -5559,7 +5547,7 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
         case WM_XBUTTONDOWN:
         case WM_XBUTTONUP:
         case WM_XBUTTONDBLCLK:
-            if ( flags & MK_XBUTTON2 )
+            if (HIWORD(flags) == XBUTTON2)
                 msg += wxEVT_AUX2_DOWN - wxEVT_AUX1_DOWN;
     }
 
@@ -7533,10 +7521,9 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 #endif // wxUSE_HOTKEY
 
 // this class installs a message hook which really wakes up our idle processing
-// each time a WM_NULL is received (wxWakeUpIdle does this), even if we're
-// sitting inside a local modal loop (e.g. a menu is opened or scrollbar is
-// being dragged or even inside ::MessageBox()) and so don't control message
-// dispatching otherwise
+// each time a message is handled, even if we're sitting inside a local modal
+// loop (e.g. a menu is opened or scrollbar is being dragged or even inside
+// ::MessageBox()) and so don't control message dispatching otherwise
 class wxIdleWakeUpModule : public wxModule
 {
 public:
@@ -7567,15 +7554,11 @@ public:
 
     static LRESULT CALLBACK MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam)
     {
-        MSG *msg = (MSG*)lParam;
-
-        // only process the message if it is actually going to be removed from
-        // the message queue, this prevents that the same event from being
-        // processed multiple times if now someone just called PeekMessage()
-        if ( msg->message == WM_NULL && wParam == PM_REMOVE )
-        {
-            wxTheApp->ProcessPendingEvents();
-        }
+        // Don't process idle events unless the message is going to be really
+        // handled, i.e. removed from the queue, as it seems wrong to do it
+        // just because someone called PeekMessage(PM_NOREMOVE).
+        if ( wParam == PM_REMOVE )
+            wxTheApp->MSWProcessPendingEventsIfNeeded();
 
         return CallNextHookEx(ms_hMsgHookProc, nCode, wParam, lParam);
     }

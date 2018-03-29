@@ -393,7 +393,7 @@ const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
         // pane. Notice that it's not the value returned by SB_GETBORDERS
         // which, at least on this Windows 2003 system, returns {0, 2, 2}
 #if wxUSE_UXTHEME
-        if ( wxUxThemeEngine::GetIfActive() )
+        if ( wxUxThemeIsActive() )
         {
             s_metrics.gripWidth = 20;
             s_metrics.textMargin = 8;
@@ -450,7 +450,7 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
             r.left -= 2;
         }
 
-        wxUxThemeEngine::Get()->GetThemeBackgroundContentRect(theme, NULL,
+        ::GetThemeBackgroundContentRect(theme, NULL,
                                                               1 /* SP_PANE */, 0,
                                                               &r, &r);
     }

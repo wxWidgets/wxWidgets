@@ -291,7 +291,7 @@ void Base64TestCase::DecodeInvalid()
     CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
     CPPUNIT_ASSERT_EQUAL( 0, posErr );
 
-    const size_t POS_INVALID = -1;
+    const size_t POS_INVALID = (size_t)-1;
     posErr = POS_INVALID;
     rc = wxBase64Decode(NULL, 0, " QQ==", wxNO_LEN,
                         wxBase64DecodeMode_SkipWS, &posErr);

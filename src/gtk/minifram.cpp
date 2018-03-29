@@ -171,6 +171,11 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
 
     gdk_window_raise(gtk_widget_get_window(win->m_widget));
 
+#ifdef __WXGTK4__
+    gdk_seat_grab(
+        gdk_event_get_seat((GdkEvent*)gdk_event), gdk_event_get_window((GdkEvent*)gdk_event),
+        GDK_SEAT_CAPABILITY_POINTER, false, NULL, (GdkEvent*)gdk_event, NULL, 0);
+#else
     const GdkEventMask mask = GdkEventMask(
         GDK_BUTTON_PRESS_MASK |
         GDK_BUTTON_RELEASE_MASK |
@@ -179,12 +184,15 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
         GDK_BUTTON_MOTION_MASK |
         GDK_BUTTON1_MOTION_MASK);
 #ifdef __WXGTK3__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gdk_device_grab(
         gdk_event->device, gdk_event->window, GDK_OWNERSHIP_NONE,
         false, mask, NULL, gdk_event->time);
+    wxGCC_WARNING_RESTORE()
 #else
     gdk_pointer_grab(gdk_event->window, false, mask, NULL, NULL, gdk_event->time);
 #endif
+#endif // !__WXGTK4__
 
     win->m_diffX = x;
     win->m_diffY = y;
@@ -216,8 +224,12 @@ gtk_window_button_release_callback(GtkWidget* widget, GdkEventButton* gdk_event,
     int x = (int)gdk_event->x;
     int y = (int)gdk_event->y;
 
-#ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    gdk_seat_ungrab(gdk_event_get_seat((GdkEvent*)gdk_event));
+#elif defined(__WXGTK3__)
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gdk_device_ungrab(gdk_event->device, gdk_event->time);
+    wxGCC_WARNING_RESTORE()
 #else
     gdk_pointer_ungrab(gdk_event->time);
 #endif

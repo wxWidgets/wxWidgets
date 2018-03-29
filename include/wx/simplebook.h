@@ -146,6 +146,14 @@ public:
         return NO_IMAGE;
     }
 
+    // Override some wxWindow methods too.
+    virtual void SetFocus() wxOVERRIDE
+    {
+        wxWindow* const page = GetCurrentPage();
+        if ( page )
+            page->SetFocus();
+    }
+
 protected:
     virtual void UpdateSelectedPage(size_t newsel) wxOVERRIDE
     {

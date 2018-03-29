@@ -48,20 +48,9 @@ be accessed using XRCCTRL().
 @section overview_xrcformat_root Resource Root Element
 
 The root element is always @c \<resource\>. It has one optional attribute, @c
-version. If set, it specifies version of the file. In absence of @c version
-attribute, the default is @c "0.0.0.0".
-
-The version consists of four integers separated by periods.  The first three
-components are major, minor and release number of the wxWidgets release when
-the change was introduced, the last one is revision number and is 0 for the
-first incompatible change in given wxWidgets release, 1 for the second and so
-on.  The version changes only if there was an incompatible change introduced;
-merely adding new kind of objects does not constitute incompatible change.
-
-At the time of writing, the latest version is @c "2.5.3.0".
-
-Note that even though @c version attribute is optional, it should always be
-specified to take advantage of the latest capabilities:
+version which, while optional, should always be set to the latest version. At
+the time of writing, it is @c "2.5.3.0", so all XRC documents should look like
+the following:
 
 @code
 <?xml version="1.0"?>
@@ -69,6 +58,13 @@ specified to take advantage of the latest capabilities:
     ...
 </resource>
 @endcode
+
+The version consists of four integers separated by periods.  The first three
+components are major, minor and release number of the wxWidgets release when
+the change was introduced, the last one is revision number and is 0 for the
+first incompatible change in given wxWidgets release, 1 for the second and so
+on.  The version changes only if there was an incompatible change introduced;
+merely adding new kind of objects does not constitute incompatible change.
 
 @c \<resource\> may have arbitrary number of
 @ref overview_xrcformat_objects "object elements" as its children; they are referred
@@ -1599,6 +1595,11 @@ can also have some optional XML @em attributes (not properties!):
      Is the button enabled (default: 1)?}
 @row3col{hidden, @ref overview_xrcformat_type_bool,
      Is the button hidden initially (default: 0)?}
+@row3col{label, @ref overview_xrcformat_type_bool,
+     Should this item text be interpreted as a label, i.e. escaping underscores
+     in it as done for the label properties of other controls? This attribute
+     exists since wxWidgets 3.1.1 and was always treated as having the value of
+     0, which still remains its default, until then.}
 @endTable
 
 Example:
@@ -1615,7 +1616,7 @@ Example:
         <item tooltip="E=mc^2">Energy 98.3</item>
         <item helptext="Favourite chukcha's radio">CHUM FM</item>
         <item>92FM</item>
-        <item hidden="1">Very quit station</item>
+        <item hidden="1">Very quiet station</item>
     </content>
 </object>
 @endcode
@@ -1910,6 +1911,19 @@ wxWidgets 2.9.5, another one:
 @endTable
 
 
+@subsubsection xrc_wxspinctrldouble wxSpinCtrlDouble
+
+wxSpinCtrlDouble supports the same properties as @ref xrc_wxspinbutton but @c
+value, @c min and @a max are all of type float instead of int. There is one
+additional property:
+@beginTable
+@row3col{inc, float,
+    The amount by which the number is changed by a single arrow press.}
+@endTable
+
+This handler was added in wxWidgets 3.1.1.
+
+
 @subsubsection xrc_wxsplitterwindow wxSplitterWindow
 
 @beginTable
@@ -1936,6 +1950,9 @@ child and the second one for right/bottom child window.
 @hdr3col{property, type, description}
 @row3col{value, @ref overview_xrcformat_type_text,
     Initial value of the control (default: empty).}
+@row3col{hint, @ref overview_xrcformat_type_text,
+    Descriptive text shown in the empty control (default: "Search"). This
+    property is new since wxWidgets 3.1.1.}
 @endTable
 
 
@@ -2416,6 +2433,9 @@ support the following properties:
     Sizer orientation, "wxHORIZONTAL" or "wxVERTICAL" (default: wxHORIZONTAL).}
 @row3col{label, @ref overview_xrcformat_type_text,
     Label to be used for the static box around the sizer (default: empty).}
+@row3col{windowlabel, any window,
+    Window to be used instead of the plain text label (default: none).
+    This property is only available since wxWidgets 3.1.1.}}
 @endTable
 
 @subsection overview_xrcformat_wxgridsizer wxGridSizer

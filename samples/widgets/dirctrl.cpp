@@ -246,18 +246,27 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
 {
     wxWindowUpdateLocker noUpdates(this);
 
+    long style = GetAttrs().m_defaultFlags;
+    if ( m_chkDirOnly->IsChecked() )
+        style |= wxDIRCTRL_DIR_ONLY;
+    if ( m_chk3D->IsChecked() )
+        style |= wxDIRCTRL_3D_INTERNAL;
+    if ( m_chkFirst->IsChecked() )
+        style |= wxDIRCTRL_SELECT_FIRST;
+    if ( m_chkFilters->IsChecked() )
+        style |= wxDIRCTRL_SHOW_FILTERS;
+    if ( m_chkLabels->IsChecked() )
+        style |= wxDIRCTRL_EDIT_LABELS;
+    if ( m_chkMulti->IsChecked() )
+        style |= wxDIRCTRL_MULTIPLE;
+
     wxGenericDirCtrl *dirCtrl = new wxGenericDirCtrl(
         this,
         DirCtrlPage_Ctrl,
         wxDirDialogDefaultFolderStr,
         wxDefaultPosition,
         wxDefaultSize,
-        ( m_chkDirOnly->IsChecked() ? wxDIRCTRL_DIR_ONLY : 0 ) |
-        ( m_chk3D->IsChecked() ? wxDIRCTRL_3D_INTERNAL : 0 ) |
-        ( m_chkFirst->IsChecked() ? wxDIRCTRL_SELECT_FIRST : 0 ) |
-        ( m_chkFilters->IsChecked() ? wxDIRCTRL_SHOW_FILTERS : 0 ) |
-        ( m_chkLabels->IsChecked() ? wxDIRCTRL_EDIT_LABELS : 0 ) |
-        ( m_chkMulti->IsChecked() ? wxDIRCTRL_MULTIPLE : 0)
+        style
     );
 
     wxString filter;

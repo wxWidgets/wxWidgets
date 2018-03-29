@@ -132,7 +132,10 @@
           Processes a @c wxEVT_TREE_ITEM_GETTOOLTIP event type.
     @event{EVT_TREE_ITEM_MENU(id, func)}
           The context menu for the selected item has been requested, either by a
-          right click or by using the menu key.
+          right click or by using the menu key. Notice that these events always
+          carry a valid tree item and so are not generated when (right)
+          clicking outside of the items area. If you need to handle such
+          events, consider using @c wxEVT_CONTEXT_MENU instead.
           Processes a @c wxEVT_TREE_ITEM_MENU event type.
     @event{EVT_TREE_STATE_IMAGE_CLICK(id, func)}
           The state image has been clicked.

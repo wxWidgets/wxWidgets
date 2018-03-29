@@ -69,17 +69,16 @@ void XLocaleTestCase::TestCtor()
     CPPUNIT_ASSERT( wxXLocale("C").IsOk() );
     CPPUNIT_ASSERT( !wxXLocale("bloordyblop").IsOk() );
 
-    if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
-        return;     // you should have french support installed to continue this test!
-
 #ifdef wxHAS_XLOCALE_SUPPORT
-    CPPUNIT_ASSERT( wxXLocale(wxLANGUAGE_FRENCH).IsOk() );
+    if ( wxXLocale(wxLANGUAGE_FRENCH).IsOk() )
+    {
 #ifdef __WINDOWS__
-    CPPUNIT_ASSERT( wxXLocale("french").IsOk() );
+        CPPUNIT_ASSERT( wxXLocale("french").IsOk() );
 #else
-    CPPUNIT_ASSERT( wxXLocale("fr_FR").IsOk() );
+        CPPUNIT_ASSERT( wxXLocale("fr_FR").IsOk() );
 #endif
-#endif
+    }
+#endif // wxHAS_XLOCALE_SUPPORT
 }
 
 void XLocaleTestCase::PreserveLocale()

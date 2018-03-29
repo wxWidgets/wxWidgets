@@ -80,13 +80,14 @@ endif
 
 ### Targets: ###
 
-all: access animate artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) widgets wizard wrapsizer $(__xrc___depname)
+all: access animate archive artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.o del .\*.o
 	-if exist .\*.d del .\*.d
 	$(MAKE) -C access -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C animate -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C archive -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C artprov -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C aui -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) clean
@@ -172,6 +173,9 @@ access:
 
 animate: 
 	$(MAKE) -C animate -f makefile.gcc $(MAKEARGS) all
+
+archive: 
+	$(MAKE) -C archive -f makefile.gcc $(MAKEARGS) all
 
 artprov: 
 	$(MAKE) -C artprov -f makefile.gcc $(MAKEARGS) all
@@ -440,14 +444,14 @@ endif
 memcheck: 
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean access animate artprov aui calendar caret clipboard collpane combo \
-	config console dataview dialogs dialup display dll dnd docview dragimag drawing \
-	erase event except exec font grid help htlbox html image internat ipc joytest \
-	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
-	opengl ownerdrw popup power preferences printing propgrid regtest render ribbon \
-	richtext sashtest scroll secretstore shaped sockets sound splash splitter statbar \
-	stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate \
-	vscroll webview widgets wizard wrapsizer xrc memcheck
+.PHONY: all clean access animate archive artprov aui calendar caret clipboard \
+	collpane combo config console dataview dialogs dialup display dll dnd docview \
+	dragimag drawing erase event except exec font grid help htlbox html image internat \
+	ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg \
+	notebook oleauto opengl ownerdrw popup power preferences printing propgrid \
+	regtest render ribbon richtext sashtest scroll secretstore shaped sockets sound \
+	splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl \
+	typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc memcheck
 
 
 SHELL := $(COMSPEC)

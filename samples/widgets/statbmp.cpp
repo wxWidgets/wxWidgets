@@ -132,10 +132,21 @@ void StatBmpWidgetsPage::RecreateWidget()
         wxLogMessage("Reading image from file '%s' failed.", filepath.c_str());
         return;
     }
+
+    long style = GetAttrs().m_defaultFlags;
+
     if (m_radio->GetSelection() == 0)
-        m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxBitmap(image));
+    {
+        m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxBitmap(image),
+                                       wxDefaultPosition, wxDefaultSize,
+                                       style);
+    }
     else
-        m_statbmp = new wxGenericStaticBitmap(this, wxID_ANY, wxBitmap(image));
+    {
+        m_statbmp = new wxGenericStaticBitmap(this, wxID_ANY, wxBitmap(image),
+                                              wxDefaultPosition, wxDefaultSize,
+                                              style);
+    }
 
     wxStaticBitmapBase::ScaleMode scaleMode = (wxStaticBitmapBase::ScaleMode) m_scaleRadio->GetSelection();
     m_statbmp->SetScaleMode(scaleMode);

@@ -47,7 +47,7 @@
 int wxConvertToWindowsRole(wxAccRole wxrole);
 
 // Convert to Windows state
-long wxConvertToWindowsState(long wxstate);
+LONG wxConvertToWindowsState(long wxstate);
 
 // Convert to Windows selection flag
 int wxConvertToWindowsSelFlag(wxAccSelectionFlags sel);
@@ -69,10 +69,10 @@ public:
     DECLARE_IUNKNOWN_METHODS;
 
     // IEnumVARIANT
-    STDMETHODIMP Next(ULONG celt, VARIANT *rgelt, ULONG *pceltFetched);
-    STDMETHODIMP Skip(ULONG celt);
-    STDMETHODIMP Reset();
-    STDMETHODIMP Clone(IEnumVARIANT **ppenum);
+    STDMETHODIMP Next(ULONG celt, VARIANT *rgelt, ULONG *pceltFetched) wxOVERRIDE;
+    STDMETHODIMP Skip(ULONG celt) wxOVERRIDE;
+    STDMETHODIMP Reset() wxOVERRIDE;
+    STDMETHODIMP Clone(IEnumVARIANT **ppenum) wxOVERRIDE;
 
 private:
     wxVariant m_variant;  // List of further variants
@@ -191,86 +191,86 @@ public:
         // Retrieves the child element or child object at a given point on the screen.
         // All visual objects support this method; sound objects do not support it.
 
-    STDMETHODIMP accHitTest(long xLeft, long yLeft, VARIANT* pVarID);
+    STDMETHODIMP accHitTest(LONG xLeft, LONG yLeft, VARIANT* pVarID) wxOVERRIDE;
 
         // Retrieves the specified object's current screen location. All visual objects must
         // support this method; sound objects do not support it.
 
-    STDMETHODIMP accLocation ( long* pxLeft, long* pyTop, long* pcxWidth, long* pcyHeight, VARIANT varID);
+    STDMETHODIMP accLocation ( LONG* pxLeft, LONG* pyTop, LONG* pcxWidth, LONG* pcyHeight, VARIANT varID) wxOVERRIDE;
 
         // Traverses to another user interface element within a container and retrieves the object.
         // All visual objects must support this method.
 
-    STDMETHODIMP accNavigate ( long navDir, VARIANT varStart, VARIANT* pVarEnd);
+    STDMETHODIMP accNavigate ( LONG navDir, VARIANT varStart, VARIANT* pVarEnd) wxOVERRIDE;
 
         // Retrieves the address of an IDispatch interface for the specified child.
         // All objects must support this property.
 
-    STDMETHODIMP get_accChild ( VARIANT varChildID, IDispatch** ppDispChild);
+    STDMETHODIMP get_accChild ( VARIANT varChildID, IDispatch** ppDispChild) wxOVERRIDE;
 
         // Retrieves the number of children that belong to this object.
         // All objects must support this property.
 
-    STDMETHODIMP get_accChildCount ( long* pCountChildren);
+    STDMETHODIMP get_accChildCount ( LONG* pCountChildren) wxOVERRIDE;
 
         // Retrieves the IDispatch interface of the object's parent.
         // All objects support this property.
 
-    STDMETHODIMP get_accParent ( IDispatch** ppDispParent);
+    STDMETHODIMP get_accParent ( IDispatch** ppDispParent) wxOVERRIDE;
 
 // Descriptive Properties and Methods
 
         // Performs the object's default action. Not all objects have a default
         // action.
 
-    STDMETHODIMP accDoDefaultAction(VARIANT varID);
+    STDMETHODIMP accDoDefaultAction(VARIANT varID) wxOVERRIDE;
 
         // Retrieves a string that describes the object's default action.
         // Not all objects have a default action.
 
-    STDMETHODIMP get_accDefaultAction ( VARIANT varID, BSTR* pszDefaultAction);
+    STDMETHODIMP get_accDefaultAction ( VARIANT varID, BSTR* pszDefaultAction) wxOVERRIDE;
 
         // Retrieves a string that describes the visual appearance of the specified object.
         // Not all objects have a description.
 
-    STDMETHODIMP get_accDescription ( VARIANT varID, BSTR* pszDescription);
+    STDMETHODIMP get_accDescription ( VARIANT varID, BSTR* pszDescription) wxOVERRIDE;
 
         // Retrieves an object's Help property string.
         // Not all objects support this property.
 
-    STDMETHODIMP get_accHelp ( VARIANT varID, BSTR* pszHelp);
+    STDMETHODIMP get_accHelp ( VARIANT varID, BSTR* pszHelp) wxOVERRIDE;
 
         // Retrieves the full path of the WinHelp file associated with the specified
         // object and the identifier of the appropriate topic within that file.
         // Not all objects support this property.
 
-    STDMETHODIMP get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, long* pidTopic);
+    STDMETHODIMP get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, LONG* pidTopic) wxOVERRIDE;
 
         // Retrieves the specified object's shortcut key or access key, also known as
         // the mnemonic. All objects that have a shortcut key or access key support
         // this property.
 
-    STDMETHODIMP get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKeyboardShortcut);
+    STDMETHODIMP get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKeyboardShortcut) wxOVERRIDE;
 
         // Retrieves the name of the specified object.
         // All objects support this property.
 
-    STDMETHODIMP get_accName ( VARIANT varID, BSTR* pszName);
+    STDMETHODIMP get_accName ( VARIANT varID, BSTR* pszName) wxOVERRIDE;
 
         // Retrieves information that describes the role of the specified object.
         // All objects support this property.
 
-    STDMETHODIMP get_accRole ( VARIANT varID, VARIANT* pVarRole);
+    STDMETHODIMP get_accRole ( VARIANT varID, VARIANT* pVarRole) wxOVERRIDE;
 
         // Retrieves the current state of the specified object.
         // All objects support this property.
 
-    STDMETHODIMP get_accState ( VARIANT varID, VARIANT* pVarState);
+    STDMETHODIMP get_accState ( VARIANT varID, VARIANT* pVarState) wxOVERRIDE;
 
         // Retrieves the value of the specified object.
         // Not all objects have a value.
 
-    STDMETHODIMP get_accValue ( VARIANT varID, BSTR* pszValue);
+    STDMETHODIMP get_accValue ( VARIANT varID, BSTR* pszValue) wxOVERRIDE;
 
 // Selection and Focus
 
@@ -278,44 +278,44 @@ public:
         // specified object. All objects that select or receive the
         // keyboard focus must support this method.
 
-    STDMETHODIMP accSelect ( long flagsSelect, VARIANT varID );
+    STDMETHODIMP accSelect ( LONG flagsSelect, VARIANT varID ) wxOVERRIDE;
 
         // Retrieves the object that has the keyboard focus. All objects
         // that receive the keyboard focus must support this property.
 
-    STDMETHODIMP get_accFocus ( VARIANT* pVarID);
+    STDMETHODIMP get_accFocus ( VARIANT* pVarID) wxOVERRIDE;
 
         // Retrieves the selected children of this object. All objects
         // selected must support this property.
 
-    STDMETHODIMP get_accSelection ( VARIANT * pVarChildren);
+    STDMETHODIMP get_accSelection ( VARIANT * pVarChildren) wxOVERRIDE;
 
 // Obsolete
 
-    STDMETHODIMP put_accName(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) { return E_FAIL; }
-    STDMETHODIMP put_accValue(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) { return E_FAIL; }
+    STDMETHODIMP put_accName(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) wxOVERRIDE { return E_FAIL; }
+    STDMETHODIMP put_accValue(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) wxOVERRIDE { return E_FAIL; }
 
 // IDispatch
 
         // Get type info
 
-    STDMETHODIMP GetTypeInfo(unsigned int typeInfo, LCID lcid, ITypeInfo** ppTypeInfo);
+    STDMETHODIMP GetTypeInfo(unsigned int typeInfo, LCID lcid, ITypeInfo** ppTypeInfo) wxOVERRIDE;
 
         // Get type info count
 
-    STDMETHODIMP GetTypeInfoCount(unsigned int* typeInfoCount);
+    STDMETHODIMP GetTypeInfoCount(unsigned int* typeInfoCount) wxOVERRIDE;
 
         // Get ids of names
 
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** names, unsigned int cNames,
-        LCID lcid, DISPID* dispId);
+        LCID lcid, DISPID* dispId) wxOVERRIDE;
 
         // Invoke
 
     STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
                         WORD wFlags, DISPPARAMS *pDispParams,
                         VARIANT *pVarResult, EXCEPINFO *pExcepInfo,
-                        unsigned int *puArgErr );
+                        unsigned int *puArgErr ) wxOVERRIDE;
 
 // Helpers
 
@@ -368,7 +368,7 @@ void wxIAccessible::Quiesce()
 // Retrieves the child element or child object at a given point on the screen.
 // All visual objects support this method; sound objects do not support it.
 
-STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
+STDMETHODIMP wxIAccessible::accHitTest(LONG xLeft, LONG yLeft, VARIANT* pVarID)
 {
     wxLogTrace(wxT("access"), wxT("accHitTest"));
     wxASSERT( ( m_pAccessible != NULL ) || ( m_bQuiescing == true ) );
@@ -441,7 +441,7 @@ STDMETHODIMP wxIAccessible::accHitTest(long xLeft, long yLeft, VARIANT* pVarID)
 // Retrieves the specified object's current screen location. All visual objects must
 // support this method; sound objects do not support it.
 
-STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWidth, long* pcyHeight, VARIANT varID)
+STDMETHODIMP wxIAccessible::accLocation ( LONG* pxLeft, LONG* pyTop, LONG* pcxWidth, LONG* pcyHeight, VARIANT varID)
 {
     wxLogTrace(wxT("access"), wxT("accLocation"));
     wxASSERT( ( m_pAccessible != NULL ) || ( m_bQuiescing == true ) );
@@ -492,7 +492,7 @@ STDMETHODIMP wxIAccessible::accLocation ( long* pxLeft, long* pyTop, long* pcxWi
 // Traverses to another user interface element within a container and retrieves the object.
 // All visual objects must support this method.
 
-STDMETHODIMP wxIAccessible::accNavigate ( long navDir, VARIANT varStart, VARIANT* pVarEnd)
+STDMETHODIMP wxIAccessible::accNavigate ( LONG navDir, VARIANT varStart, VARIANT* pVarEnd)
 {
     wxASSERT( ( m_pAccessible != NULL ) || ( m_bQuiescing == true ) );
     if (!m_pAccessible)
@@ -727,7 +727,7 @@ STDMETHODIMP wxIAccessible::get_accChild ( VARIANT varChildID, IDispatch** ppDis
 // Retrieves the number of children that belong to this object.
 // All objects must support this property.
 
-STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
+STDMETHODIMP wxIAccessible::get_accChildCount ( LONG* pCountChildren)
 {
     wxLogTrace(wxT("access"), wxT("get_accChildCount"));
     wxASSERT( ( m_pAccessible != NULL ) || ( m_bQuiescing == true ) );
@@ -757,7 +757,7 @@ STDMETHODIMP wxIAccessible::get_accChildCount ( long* pCountChildren)
     }
     else
     {
-        * pCountChildren = (long) childCount;
+        * pCountChildren = (LONG) childCount;
         return S_OK;
     }
 
@@ -1071,7 +1071,7 @@ STDMETHODIMP wxIAccessible::get_accHelp ( VARIANT varID, BSTR* pszHelp)
 // NOTE: not supported by wxWidgets at this time. Use
 // GetHelpText instead.
 
-STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, long* pidTopic)
+STDMETHODIMP wxIAccessible::get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, LONG* pidTopic)
 {
     wxLogTrace(wxT("access"), wxT("get_accHelpTopic"));
     wxASSERT( ( m_pAccessible != NULL ) || ( m_bQuiescing == true ) );
@@ -1346,7 +1346,7 @@ STDMETHODIMP wxIAccessible::get_accState ( VARIANT varID, VARIANT* pVarState)
     }
     else
     {
-        long state = wxConvertToWindowsState(wxstate);
+        LONG state = wxConvertToWindowsState(wxstate);
         pVarState->lVal = state;
         pVarState->vt = VT_I4;
         return S_OK;
@@ -1422,7 +1422,7 @@ STDMETHODIMP wxIAccessible::get_accValue ( VARIANT varID, BSTR* pszValue)
 // specified object. All objects that select or receive the
 // keyboard focus must support this method.
 
-STDMETHODIMP wxIAccessible::accSelect ( long flagsSelect, VARIANT varID )
+STDMETHODIMP wxIAccessible::accSelect ( LONG flagsSelect, VARIANT varID )
 {
     wxLogTrace(wxT("access"), wxT("get_accSelect"));
     wxASSERT( ( m_pAccessible != NULL ) || ( m_bQuiescing == true ) );
@@ -1693,13 +1693,13 @@ IAccessible* wxIAccessible::GetChildStdAccessible(int id)
 #if 0
     {
         // Loop until we find the right id
-        long nChildren = 0;
+        LONG nChildren = 0;
         this->get_accChildCount(& nChildren);
 
         int i;
         for (i = 0; i < nChildren; i++)
         {
-            long obtained = 0;
+            LONG obtained = 0;
             VARIANT var;
             VariantInit(& var);
             var.vt = VT_I4;
@@ -1983,9 +1983,9 @@ int wxConvertToWindowsRole(wxAccRole wxrole)
 }
 
 // Convert to Windows state
-long wxConvertToWindowsState(long wxstate)
+LONG wxConvertToWindowsState(long wxstate)
 {
-    long state = 0;
+    LONG state = 0;
     if (wxstate & wxACC_STATE_SYSTEM_ALERT_HIGH)
         state |= STATE_SYSTEM_ALERT_HIGH;
 

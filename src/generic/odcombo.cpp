@@ -991,7 +991,9 @@ void wxOwnerDrawnComboBox::DoClear()
 
     GetVListBoxComboPopup()->Clear();
 
-    wxTextEntry::Clear();
+    // There is no text entry when using wxCB_READONLY style, so test for it.
+    if ( GetTextCtrl() )
+        wxTextEntry::Clear();
 }
 
 void wxOwnerDrawnComboBox::Clear()

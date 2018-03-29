@@ -599,6 +599,17 @@ private:
 // macros for definition of "template" list type
 // -----------------------------------------------------------------------------
 
+// Helper macro defining common iterator typedefs
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+    #include <iterator>
+
+    #define WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()                          \
+        typedef std::ptrdiff_t difference_type;                               \
+        typedef std::bidirectional_iterator_tag iterator_category;
+#else
+    #define WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()
+#endif
+
 // and now some heavy magic...
 
 // declare a list type named 'name' and containing elements of type 'T *'
@@ -761,19 +772,21 @@ private:
                                                                             \
         classexp iterator                                                   \
         {                                                                   \
-            typedef name list;                                              \
         public:                                                             \
+            WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()                        \
+            typedef T* value_type;                                          \
+            typedef value_type* pointer;                                    \
+            typedef value_type& reference;                                  \
+                                                                            \
             typedef nodetype Node;                                          \
             typedef iterator itor;                                          \
-            typedef T* value_type;                                          \
-            typedef value_type* ptr_type;                                   \
-            typedef value_type& reference;                                  \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
+            /* Compatibility typedefs, don't use */                         \
             typedef reference reference_type;                               \
-            typedef ptr_type pointer_type;                                  \
+            typedef pointer pointer_type;                                   \
                                                                             \
             iterator(Node* node, Node* init) : m_node(node), m_init(init) {}\
             iterator() : m_node(NULL), m_init(NULL) { }                     \
@@ -811,19 +824,20 @@ private:
         };                                                                  \
         classexp const_iterator                                             \
         {                                                                   \
-            typedef name list;                                              \
         public:                                                             \
-            typedef nodetype Node;                                          \
+            WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()                        \
             typedef T* value_type;                                          \
-            typedef const value_type& const_reference;                      \
+            typedef const value_type* pointer;                              \
+            typedef const value_type& reference;                            \
+                                                                            \
+            typedef nodetype Node;                                          \
             typedef const_iterator itor;                                    \
-            typedef value_type* ptr_type;                                   \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
-            typedef const_reference reference_type;                         \
-            typedef const ptr_type pointer_type;                            \
+            typedef reference reference_type;                               \
+            typedef pointer pointer_type;                                   \
                                                                             \
             const_iterator(Node* node, Node* init)                          \
                 : m_node(node), m_init(init) { }                            \
@@ -864,19 +878,20 @@ private:
         };                                                                  \
         classexp reverse_iterator                                           \
         {                                                                   \
-            typedef name list;                                              \
         public:                                                             \
-            typedef nodetype Node;                                          \
+            WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()                        \
             typedef T* value_type;                                          \
-            typedef reverse_iterator itor;                                  \
-            typedef value_type* ptr_type;                                   \
+            typedef value_type* pointer;                                    \
             typedef value_type& reference;                                  \
+                                                                            \
+            typedef nodetype Node;                                          \
+            typedef reverse_iterator itor;                                  \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
             typedef reference reference_type;                               \
-            typedef ptr_type pointer_type;                                  \
+            typedef pointer pointer_type;                                   \
                                                                             \
             reverse_iterator(Node* node, Node* init)                        \
                 : m_node(node), m_init(init) { }                            \
@@ -903,19 +918,20 @@ private:
         };                                                                  \
         classexp const_reverse_iterator                                     \
         {                                                                   \
-            typedef name list;                                              \
         public:                                                             \
-            typedef nodetype Node;                                          \
+            WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()                        \
             typedef T* value_type;                                          \
+            typedef const value_type* pointer;                              \
+            typedef const value_type& reference;                            \
+                                                                            \
+            typedef nodetype Node;                                          \
             typedef const_reverse_iterator itor;                            \
-            typedef value_type* ptr_type;                                   \
-            typedef const value_type& const_reference;                      \
                                                                             \
             Node* m_node;                                                   \
             Node* m_init;                                                   \
         public:                                                             \
-            typedef const_reference reference_type;                         \
-            typedef const ptr_type pointer_type;                            \
+            typedef reference reference_type;                               \
+            typedef pointer pointer_type;                                   \
                                                                             \
             const_reverse_iterator(Node* node, Node* init)                  \
                 : m_node(node), m_init(init) { }                            \

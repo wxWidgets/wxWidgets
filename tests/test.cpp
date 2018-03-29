@@ -46,6 +46,7 @@ std::string wxTheCurrentTestClass, wxTheCurrentTestMethod;
     #include "wx/wx.h"
 #endif
 
+#include "wx/apptrait.h"
 #include "wx/cmdline.h"
 #include <exception>
 #include <iostream>
@@ -171,8 +172,10 @@ CATCH_TRANSLATE_EXCEPTION(TestAssertFailure& e)
 
 #if wxUSE_GUI
     typedef wxApp TestAppBase;
+    typedef wxGUIAppTraits TestAppTraitsBase;
 #else
     typedef wxAppConsole TestAppBase;
+    typedef wxConsoleAppTraits TestAppTraitsBase;
 #endif
 
 // The application class
@@ -185,6 +188,46 @@ public:
     // standard overrides
     virtual bool OnInit();
     virtual int  OnExit();
+
+#ifdef __WIN32__
+    virtual wxAppTraits *CreateTraits()
+    {
+        // Define a new class just to customize CanUseStderr() behaviour.
+        class TestAppTraits : public TestAppTraitsBase
+        {
+        public:
+            // We want to always use stderr, tests are also run unattended and
+            // in this case we really don't want to show any message boxes, as
+            // wxMessageOutputBest, used e.g. from the default implementation
+            // of wxApp::OnUnhandledException(), would do by default.
+            virtual bool CanUseStderr() { return true; }
+
+            // Overriding CanUseStderr() is not enough, we also need to
+            // override this one to avoid returning false from it.
+            virtual bool WriteToStderr(const wxString& text)
+            {
+                wxFputs(text, stderr);
+                fflush(stderr);
+
+                // Intentionally ignore any errors, we really don't want to
+                // show any message boxes in any case.
+                return true;
+            }
+        };
+
+        return new TestAppTraits;
+    }
+#endif // __WIN32__
+
+    // Also override this method to avoid showing any dialogs from here -- and
+    // show some details about the exception along the way.
+    virtual bool OnExceptionInMainLoop()
+    {
+        wxFprintf(stderr, "Unhandled exception in the main loop: %s\n",
+                  Catch::translateActiveException());
+
+        throw;
+    }
 
     // used by events propagation test
     virtual int FilterEvent(wxEvent& event);

@@ -109,6 +109,7 @@ public:
     static long           s_macPreferencesMenuItemId ;
     static long           s_macExitMenuItemId ;
     static wxString       s_macHelpMenuTitleName ;
+    static wxString       s_macWindowMenuTitleName ;
 
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
 

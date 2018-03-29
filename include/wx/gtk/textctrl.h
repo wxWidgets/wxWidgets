@@ -205,8 +205,8 @@ private:
     // the widget used for single line controls
     GtkWidget  *m_text;
 
-    bool        m_modified:1;
-    bool        m_dontMarkDirty:1;
+    bool m_modified;
+    bool m_dontMarkDirty;
 
     int         m_countUpdatesToIgnore;
 

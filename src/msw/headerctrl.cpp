@@ -38,6 +38,7 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/customdraw.h"
+#include "wx/msw/private/winstyle.h"
 
 #ifndef HDM_SETBITMAPMARGIN
     #define HDM_SETBITMAPMARGIN 0x1234
@@ -313,6 +314,9 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     {
         hdi.mask |= HDI_IMAGE;
 
+        if ( HasFlag(wxHD_BITMAP_ON_RIGHT) )
+            hdi.fmt |= HDF_BITMAP_ON_RIGHT;
+
         if ( bmp.IsOk() )
         {
             const int bmpWidth = bmp.GetWidth(),
@@ -402,12 +406,8 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
         }
     }
 
-    long controlStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-    if ( hasResizableColumns )
-        controlStyle &= ~HDS_NOSIZING;
-    else
-        controlStyle |= HDS_NOSIZING;
-    ::SetWindowLong(GetHwnd(), GWL_STYLE, controlStyle);
+    wxMSWWinStyleUpdater(GetHwnd())
+        .TurnOnOrOff(!hasResizableColumns, HDS_NOSIZING);
 }
 
 void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)

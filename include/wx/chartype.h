@@ -13,8 +13,13 @@
 #ifndef _WX_WXCHARTYPE_H_
 #define _WX_WXCHARTYPE_H_
 
-/* defs.h indirectly includes this file, so don't include it here */
-#include "wx/platform.h"
+/*
+    wx/defs.h indirectly includes this file, so we can't include it here,
+    include just its subset which defines SIZEOF_WCHAR_T that is used here
+    (under Unix it's in configure-generated setup.h, so including wx/platform.h
+    would have been enough, but this is not the case under other platforms).
+ */
+#include "wx/types.h"
 
 /* check whether we have wchar_t and which size it is if we do */
 #if !defined(wxUSE_WCHAR_T)

@@ -63,7 +63,6 @@ class FontPickerWidgetsPage : public WidgetsPage
 {
 public:
     FontPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~FontPickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_fontPicker; }
     virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }
@@ -81,9 +80,6 @@ protected:
 
     // restore the checkboxes state to the initial values
     void Reset();
-
-    // get the initial style for the picker of the given kind
-    long GetPickerStyle();
 
 
     void OnFontChange(wxFontPickerEvent &ev);
@@ -176,15 +172,7 @@ void FontPickerWidgetsPage::CreatePicker()
 {
     delete m_fontPicker;
 
-    m_fontPicker = new wxFontPickerCtrl(this, PickerPage_Font,
-                                        *wxSWISS_FONT,
-                                        wxDefaultPosition, wxDefaultSize,
-                                        GetPickerStyle());
-}
-
-long FontPickerWidgetsPage::GetPickerStyle()
-{
-    long style = 0;
+    long style = GetAttrs().m_defaultFlags;
 
     if ( m_chkFontTextCtrl->GetValue() )
         style |= wxFNTP_USE_TEXTCTRL;
@@ -193,9 +181,12 @@ long FontPickerWidgetsPage::GetPickerStyle()
         style |= wxFNTP_USEFONT_FOR_LABEL;
 
     if ( m_chkFontDescAsLabel->GetValue() )
-            style |= wxFNTP_FONTDESC_AS_LABEL;
+        style |= wxFNTP_FONTDESC_AS_LABEL;
 
-    return style;
+    m_fontPicker = new wxFontPickerCtrl(this, PickerPage_Font,
+                                        *wxSWISS_FONT,
+                                        wxDefaultPosition, wxDefaultSize,
+                                        style);
 }
 
 void FontPickerWidgetsPage::RecreatePicker()

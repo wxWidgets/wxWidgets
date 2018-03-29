@@ -200,7 +200,7 @@ enum
     @event{EVT_LIST_BEGIN_RDRAG(id, func)}
            Begin dragging with the right mouse button.
            Processes a @c wxEVT_LIST_BEGIN_RDRAG event type.
-    @event{EVT_BEGIN_LABEL_EDIT(id, func)}
+    @event{EVT_LIST_BEGIN_LABEL_EDIT(id, func)}
            Begin editing a label. This can be prevented by calling Veto().
            Processes a @c wxEVT_LIST_BEGIN_LABEL_EDIT event type.
     @event{EVT_LIST_END_LABEL_EDIT(id, func)}

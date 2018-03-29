@@ -194,6 +194,8 @@ Currently the following symbols exist:
 @itemdef{wxHAS_RAW_KEY_CODES, Defined if raw key codes (see wxKeyEvent::GetRawKeyCode are supported.}
 @itemdef{wxHAS_REGEX_ADVANCED, Defined if advanced syntax is available in wxRegEx.}
 @itemdef{wxHAS_TASK_BAR_ICON, Defined if wxTaskBarIcon is available on the current platform.}
+@itemdef{wxHAS_WINDOW_LABEL_IN_STATIC_BOX, Defined if wxStaticBox::Create()
+    overload taking @c wxWindow* instead of the text label is available on the current platform.}
 @itemdef{wxHAS_MODE_T, Defined when wxWidgets defines @c mode_t typedef for the
     compilers not providing it. If another library used in a wxWidgets
     application, such as ACE (http://www.cs.wustl.edu/~schmidt/ACE.html), also

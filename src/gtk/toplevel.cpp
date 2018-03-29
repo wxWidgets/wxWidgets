@@ -41,6 +41,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/win_gtk.h"
 
 // ----------------------------------------------------------------------------
@@ -214,16 +215,16 @@ wxgtk_tlw_key_press_event(GtkWidget *widget, GdkEventKey *event)
     // GTK+ gtk_window_key_press_event() handler.
 
     if ( gtk_window_propagate_key_event(window, event) )
-        return TRUE;
+        return true;
 
     if ( gtk_window_activate_key(window, event) )
-        return TRUE;
+        return true;
 
     void* parent_class = g_type_class_peek_parent(G_OBJECT_GET_CLASS(widget));
-    if (GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event))
-        return TRUE;
+    GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event);
 
-    return FALSE;
+    // Avoid calling the default handler, we have already done everything it does
+    return true;
 }
 }
 
@@ -852,7 +853,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
 
     m_fsIsShowing = show;
 
-#ifdef GDK_WINDOWING_X11
+#if defined(GDK_WINDOWING_X11) && !defined(__WXGTK4__)
     GdkScreen* screen = gtk_widget_get_screen(m_widget);
     GdkDisplay* display = gdk_screen_get_display(screen);
     Display* xdpy = NULL;
@@ -878,7 +879,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
         else
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
     }
-#ifdef GDK_WINDOWING_X11
+#if defined(GDK_WINDOWING_X11) && !defined(__WXGTK4__)
     else if (xdpy != NULL)
     {
         GdkWindow* window = gtk_widget_get_window(m_widget);
@@ -889,8 +890,10 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
             GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
 
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             const int screen_width = gdk_screen_get_width(screen);
             const int screen_height = gdk_screen_get_height(screen);
+            wxGCC_WARNING_RESTORE()
 
             gint client_x, client_y, root_x, root_y;
             gint width, height;
@@ -1585,14 +1588,18 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 
 #ifdef __WXGTK3__
 #if GTK_CHECK_VERSION(3,8,0)
-    if(gtk_check_version(3,8,0) == NULL)
+    if (wx_is_at_least_gtk3(8))
     {
         gtk_widget_set_opacity(m_widget, alpha / 255.0);
     }
     else
 #endif // GTK+ 3.8+
     {
+#ifndef __WXGTK4__
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_window_set_opacity(GTK_WINDOW(m_widget), alpha / 255.0);
+        wxGCC_WARNING_RESTORE()
+#endif
     }
 
     return true;
@@ -1639,16 +1646,22 @@ bool wxTopLevelWindowGTK::CanSetTransparent()
         return wxSystemOptions::GetOptionInt(SYSOPT_TRANSPARENT) != 0;
     }
 
+#ifdef __WXGTK4__
+    return gdk_display_is_composited(gtk_widget_get_display(m_widget)) != 0;
+#else
 #if GTK_CHECK_VERSION(2,10,0)
     if (wx_is_at_least_gtk2(10))
     {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         return gtk_widget_is_composited(m_widget) != 0;
+        wxGCC_WARNING_RESTORE()
     }
     else
 #endif // In case of lower versions than gtk+-2.10.0 we could look for _NET_WM_CM_Sn ourselves
     {
         return false;
     }
+#endif
 
 #if 0 // Don't be optimistic here for the sake of wxAUI
     int opcode, event, error;

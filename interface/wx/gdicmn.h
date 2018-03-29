@@ -1014,7 +1014,7 @@ public:
         @return A reference to this object (so that you can concatenate other
                  operations in the same line).
     */
-    wxSize& Scale(float xscale, float yscale);
+    wxSize& Scale(double xscale, double yscale);
 
     /**
         Sets the width and height members.

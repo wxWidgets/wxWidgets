@@ -28,8 +28,8 @@
 #include "wx/unix/utilsx11.h"
 
 #ifdef __WXGTK3__
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
+GtkWidget* wxGetTopLevelGTK();
 #endif
 
 // Normally we fall back on "plain X" implementation if XTest is not available,
@@ -256,15 +256,12 @@ bool wxUIActionSimulatorXTestImpl::DoX11MouseMove(long x, long y)
 #if GTK_CHECK_VERSION(3,10,0)
     if ( gtk_check_version(3, 10, 0) == NULL )
     {
-        if ( GdkScreen* const screen = gdk_screen_get_default() )
-        {
-            // For multi-monitor support we would need to determine to which
-            // monitor the point (x, y) belongs, for now just use the scale
-            // factor of the main one.
-            gint const scale = gdk_screen_get_monitor_scale_factor(screen, 0);
-            x *= scale;
-            y *= scale;
-        }
+        // For multi-monitor support we would need to determine to which
+        // monitor the point (x, y) belongs, for now just use the scale
+        // factor of the main one.
+        gint const scale = gtk_widget_get_scale_factor(wxGetTopLevelGTK());
+        x *= scale;
+        y *= scale;
     }
 #endif // GTK+ 3.10+
 #endif // __WXGTK3__

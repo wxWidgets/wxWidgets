@@ -32,6 +32,7 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -186,7 +187,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                     align = GTK_JUSTIFY_FILL;
                     break;
                 }
-                // fallthrough
+                wxFALLTHROUGH;
 #endif
             default:
                 align = GTK_JUSTIFY_LEFT;
@@ -216,9 +217,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXINDENT", &para_start, &para_end);
 
         // Convert indent from 1/10th of a mm into pixels
+#ifdef __WXGTK4__
+        GdkMonitor* monitor = gdk_display_get_monitor_at_window(
+            gtk_widget_get_display(text), gtk_widget_get_window(text));
+        GdkRectangle rect;
+        gdk_monitor_get_geometry(monitor, &rect);
+        float factor = float(rect.width) / gdk_monitor_get_width_mm(monitor);
+#else
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         float factor =
             (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
                       gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
+        wxGCC_WARNING_RESTORE()
+#endif
 
         const int indent = (int)(factor * attr.GetLeftIndent());
         const int subIndent = (int)(factor * attr.GetLeftSubIndent());
@@ -273,10 +284,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         if (!tag)
         {
             // Factor to convert from 1/10th of a mm into pixels
+#ifdef __WXGTK4__
+            GdkMonitor* monitor = gdk_display_get_monitor_at_window(
+                gtk_widget_get_display(text), gtk_widget_get_window(text));
+            GdkRectangle rect;
+            gdk_monitor_get_geometry(monitor, &rect);
+            float factor = float(rect.width) / gdk_monitor_get_width_mm(monitor);
+#else
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             float factor =
                 (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
                           gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
-
+            wxGCC_WARNING_RESTORE()
+#endif
             PangoTabArray* tabArray = pango_tab_array_new(tabs.GetCount(), TRUE);
             for (size_t i = 0; i < tabs.GetCount(); i++)
                 pango_tab_array_set_tab(tabArray, i, PANGO_TAB_LEFT, (gint)(tabs[i] * factor));
@@ -301,6 +321,14 @@ au_apply_tag_callback(GtkTextBuffer *buffer,
     if(tag == gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl"))
         g_signal_stop_emission_by_name (buffer, "apply_tag");
 }
+}
+
+// Check if the style contains wxTE_PROCESS_TAB and update the given
+// GtkTextView accordingly.
+static void wxGtkSetAcceptsTab(GtkWidget* text, long style)
+{
+    gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(text),
+                                  (style & wxTE_PROCESS_TAB) != 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -780,6 +808,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     if (multi_line)
     {
+        wxGtkSetAcceptsTab(m_text, style);
+
         // Handle URLs on multi-line controls with wxTE_AUTO_URL style
         if (style & wxTE_AUTO_URL)
         {
@@ -964,6 +994,15 @@ void wxTextCtrl::SetWindowStyleFlag(long style)
     if ( (style & wxTE_PROCESS_ENTER) != (styleOld & wxTE_PROCESS_ENTER) )
         GTKSetActivatesDefault();
 
+    if ( IsMultiLine() )
+    {
+        wxGtkSetAcceptsTab(m_text, style);
+    }
+    //else: there doesn't seem to be any way to do it for entries and while we
+    //      could emulate wxTE_PROCESS_TAB for them by handling Tab key events
+    //      explicitly, it doesn't seem to be worth doing it, this style is
+    //      pretty useless with single-line controls.
+
     static const long flagsWrap = wxTE_WORDWRAP | wxTE_CHARWRAP | wxTE_DONTWRAP;
     if ( (style & flagsWrap) != (styleOld & flagsWrap) )
         GTKSetWrapMode();
@@ -1042,6 +1081,8 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     // we're changing the text programmatically
     DontMarkDirtyOnNextChange();
+    // make sure marking is re-enabled even if events are suppressed
+    wxON_BLOCK_EXIT_SET(m_dontMarkDirty, false);
 
     // Inserting new text into the control below will emit insert-text signal
     // which assumes that if m_imKeyEvent is set, it is called in response to
@@ -2004,7 +2045,7 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
     SetCursor(wxCursor(wxCURSOR_HAND));
 
     start = end;
-    if(!gtk_text_iter_begins_tag(&start, tag))
+    if (!gtk_text_iter_starts_tag(&start, tag))
         gtk_text_iter_backward_to_tag_toggle(&start, tag);
     if(!gtk_text_iter_ends_tag(&end, tag))
         gtk_text_iter_forward_to_tag_toggle(&end, tag);

@@ -256,14 +256,14 @@ clean:
 
 $(OBJS)\my_dll.dll: $(MY_DLL_OBJECTS)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(MY_DLL_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_1).lib,,
+	c0d32.obj $(MY_DLL_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_1).lib,,
 |
 	implib -f $(OBJS)\my_dll $@
 
 !if "$(SHARED)" == "0"
 $(OBJS)\wx_exe.exe: $(WX_EXE_OBJECTS)  $(OBJS)\wx_exe_sample.res $(OBJS)\my_dll.dll
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0w32.obj $(WX_EXE_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(OBJS)\my_dll.lib $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_1).lib,, $(OBJS)\wx_exe_sample.res
+	c0w32.obj $(WX_EXE_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(OBJS)\my_dll.lib $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_1).lib,, $(OBJS)\wx_exe_sample.res
 |
 !endif
 

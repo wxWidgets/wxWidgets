@@ -1436,16 +1436,31 @@ class WXDLLIMPEXP_CORE wxDCClipper
 {
 public:
     wxDCClipper(wxDC& dc, const wxRegion& r) : m_dc(dc)
-        { dc.SetClippingRegion(r.GetBox()); }
+    {
+        dc.GetClippingBox(m_oldClipRect);
+        dc.SetClippingRegion(r.GetBox());
+    }
     wxDCClipper(wxDC& dc, const wxRect& r) : m_dc(dc)
-        { dc.SetClippingRegion(r.x, r.y, r.width, r.height); }
+    {
+        dc.GetClippingBox(m_oldClipRect);
+        dc.SetClippingRegion(r.x, r.y, r.width, r.height);
+    }
     wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h) : m_dc(dc)
-        { dc.SetClippingRegion(x, y, w, h); }
+    {
+        dc.GetClippingBox(m_oldClipRect);
+        dc.SetClippingRegion(x, y, w, h);
+    }
 
-    ~wxDCClipper() { m_dc.DestroyClippingRegion(); }
+    ~wxDCClipper()
+    {
+        m_dc.DestroyClippingRegion();
+        if ( !m_oldClipRect.IsEmpty() )
+            m_dc.SetClippingRegion(m_oldClipRect);
+    }
 
 private:
     wxDC& m_dc;
+    wxRect m_oldClipRect;
 
     wxDECLARE_NO_COPY_CLASS(wxDCClipper);
 };

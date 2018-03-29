@@ -48,10 +48,11 @@ Changes in behaviour which may result in build errors
 - "webview" library is not included in `wx-config --libs` output any more, you
   need to request it explicitly, e.g. `wx-config --libs std,webview`.
 
-- wxMSW now requires linking with shlwapi.lib and version.lib. This is done
-  automatically in most cases, but if you use a static build of the library
-  with a non-MSVC compiler such as MinGW and do not use wx-config, then you
-  will need to add these libraries to your make or project files yourself.
+- wxMSW now requires linking with uxtheme.lib, shlwapi.lib and version.lib.
+  This is done automatically in most cases, but if you use a static build of
+  the library with a non-MSVC compiler such as MinGW and do not use wx-config,
+  then you will need to add these libraries to your make or project files
+  yourself.
 
 - WXWIN_OS_DESCRIPTION doesn't exist any longer, use wxGetOsDescription().
 
@@ -63,7 +64,29 @@ Changes in behaviour which may result in build errors
   wxGraphicsContext::CreatePen() continues to compile and work as before.
 
 
-3.1.1: (not released yet)
+3.1.2: (released 2018-??-??)
+----------------------------
+
+All:
+
+- Make wxList and wxVector iterators conform to input iterator requirements.
+- Fix MT-safety problem when reading and writing from wxSocket (jkubalik).
+
+All (GUI):
+
+- Improve stock items consistency and aesthetics (dhowland).
+
+wxGTK:
+
+- Fix the build with glib < 2.32 (e.g. CentOS 6).
+
+wxMSW:
+
+- Fix hang after clearing wxTAB_TRAVERSAL style on a window with children.
+- Fix handling of AUX2 mouse button events (Trylz).
+
+
+3.1.1: (released 2018-02-19)
 ----------------------------
 
 INCOMPATIBLE CHANGES SINCE 3.1.0:
@@ -81,6 +104,7 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
 
 All:
 
+- Add CMake-based build system (Tobias Taschner).
 - Add wxSecretStore for storing passwords using the OS-provided facilities.
 - Add support for compiling application code with wxNO_UNSAFE_WXSTRING_CONV.
 - Add support for translating strings in different contexts (RickS).
@@ -91,7 +115,7 @@ All:
   wxLog::SetVerbose() which now only affects wxLogVerbose().
 - Add wxFileType::GetExpandedCommand() (troelsk).
 - Make it easier to convert to/from UTF-8-encoded std::string (ARATA Mizuki).
-- Support custom conversions in wxLogStream and wxLogStderr (Catalin Raceanu).
+- Support custom conversions in wxLogStream and wxLogStderr (Lauri Nurmi).
 - Add support for loading dynamic lexer in wxStyledTextCtrl (New Pagodi).
 - Handle strings with embedded NULs in wxDataStream (Nitch).
 - Don't crash in wxTextFile::GetLastLine() if the file is empty (crohr).
@@ -104,14 +128,19 @@ All:
 - Don't crash in wxFFile::Eof() or Error() on closed file (jprotopopov).
 - Add UTF-8 support to wxZipOutputStream (Tobias Taschner).
 - Update all bundled 3rd party libraries to their latest versions.
+- Use unique prefix for all zlib symbols to avoid link conflicts.
+- Make wxFile::ReadAll() work for unseekable files too.
+- Correct UTF-8 encoding of U+FFFF (axiom).
 
 All (GUI):
 
 - Allow wxWebView::RunScript() return values (Jose Lorenzo, GSoC 2017).
 - Allow using fractional pen widths with wxGraphicsContext (Adrien Tétar).
 - Add support for loading fonts from external files (Arthur Norman).
+- Add support for using arbitrary windows as wxStaticBox labels.
 - Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
+- Add XRC handler for wxSpinCtrlDouble (Trylz).
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
 - Update Scintilla to v3.7.2 (NewPagodi, Paul Kulchenko).
 - Update bundled libpng to 1.6.28 (Catalin Raceanu).
@@ -146,6 +175,7 @@ All (GUI):
 - Fix position of the rectangle returned by wxDataViewCtrl::GetItemRect().
 - Add wxDataViewRenderer::GetAccessibleDescription().
 - Add wxDataViewCheckIconTextRenderer class.
+- Implement persistence support for wxDataViewCtrl (iwbnwif).
 - Improve wxImage::Scale() handling of pixels with alpha channel (Tim Kosse).
 - Fix parsing of RGBA strings in wxColour (Laurent Poujoulat).
 - Refactor code in wxQuantize() for MSVC to avoid crash.
@@ -167,17 +197,30 @@ All (GUI):
 - Ensure that navigation order reflects layout of wxStdDialogButtonSizer.
 - Add Scintilla FineTicker methods to wxSTC (NewPagodi).
 - Add wxFontPickerCtrl::SetMinPointSize() (Andreas Falkenhahn).
+- Add Set/GetFooter/Text/Icon() to wxRichMessageDialog (Tobias Taschner)
+- Add wxFloatingPointValidator::SetFactor().
+- Add "hint" property to wxSearchCtrl XRC handler.
+- Add wxEVT_SEARCH[_CANCEL] synonyms for wxSearchCtrl events.
+- Generate wxEVT_SEARCH on Enter under all platforms.
+- Extend wxRendererNative::DrawGauge() to work for vertical gauges too.
+- Add wxHD_BITMAP_ON_RIGHT style to wxHeaderCtrl.
+- Send wxEVT_DATAVIEW_ITEM_EDITING_DONE when editing was cancelled too.
+- Add wxIMAGE_OPTION_GIF_TRANSPARENCY (Hugo Elias).
 
 wxGTK:
 
 - Make wxUIActionSimulator work with GTK+ 3 (Scott Talbert).
 - Make wxBORDER_NONE work for wxTextCtrl with GTK+ 3 (Adrien Tétar).
+- Handle wxTE_PROCESS_TAB, and its absence, correctly in multiline wxTextCtrl.
 - Apply wxTextCtrl::SetDefaultStyle() to user-entered text (Andreas Falkenhahn).
+- Implement dynamic auto-completion in wxTextEntry (AliKet).
 - Fix wxTextCtrl::GetStyle() with GTK+ 3.
 - Fix wxButton::SetBitmapPosition() with GTK+ 3 (Jake Nelson).
 - Support background colour in wxDataViewCtrl attributes.
+- Fix regression with showing custom wxDataViewCtrl editors.
 - Improve wxSpinCtrl best size calculation.
 - Implement support for icon locations in wxMimeTypesManager (Hanmac).
+- Improve wxRadioBox appearance in high DPI (Arrigo Marchiori, Maarten Bent).
 - Cosmetic fix for empty wxCheckBoxes display (Chuddah).
 - Fix crashes in wxFileSystemWatcher implementation (David Hart).
 - Fix wxBitmap ctor from XBM for non-square bitmaps.
@@ -188,12 +231,16 @@ wxGTK:
 - Add a native implementation for clearing bitmap/window wxGraphicsContexts
 - Implement XYToPosition() for single-line wxTextCtrl.
 - Implement ShowPosition() for single-line wxTextCtrl.
+- Improve wx{Client,Paint,Screen,Window}DC::GetPPI() (GTK+ 3).
+- Suppress focus loss events for wxChoice and wxComboBox on opening popup.
+- Make custom URI schemes work WebKit2-based wxWebView (Scott Talbert).
 
 wxMSW:
 
 - Add support for building with Microsoft Visual Studio 2017 (Tobias Taschner).
 - Allow loading icons from resources in wxIconBundle (PB).
 - Enable wxStackWalker in MinGW64 builds.
+- Fix build under Cygwin in 64 bits.
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
 - Fix wxSpinCtrl appearance: show arrows inside the control (Catalin Raceanu).
 - Fix MDI menu display after failure to create a child frame (troelsk).
@@ -227,6 +274,8 @@ wxMSW:
 - Implement SetIcon(), SetPosition(), GetPosition() for native wxProgressDialog.
 - Fix focus-related problems when using native wxProgressDialog.
 - Fix crash when reparenting the currently focused window to another TLW.
+- Fix sending wxEVT_TEXT_ENTER when using auto-completion (Dubby).
+- Fix missing selection event on click in multiselection wxDataViewCtrl (mikek).
 
 wxOSX:
 
@@ -259,6 +308,7 @@ wxOSX:
 - Fix selecting RGB bitmaps (with no alpha channel) into wxMemoryDC.
 - Fix updating radio groups when menu item is inserted/removed from wxMenu.
 - Allow changing alignment styles after wxTextCtrl creation (Andreas Falkenhahn).
+- Fix wxDataViewColumn::SetSortOrder() (hartwigw).
 
 wxQt
 
@@ -441,6 +491,8 @@ wxMSW:
 - Fix UTF-32 conversion for non-BMP characters (ARATA Mizuki).
 - Use correct parent for the native modal dialogs (Andreas Falkenhahn).
 - Fix layout of wxSlider with wxSL_VALUE_LABEL only (gafatoa).
+- Fix flicker when resizing columns of report-mode wxListCtrl.
+- Implement wxTreeCtrl::SetDoubleBuffered() (Steve Browne).
 
 wxOSX/Cocoa:
 

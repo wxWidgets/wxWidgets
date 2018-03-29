@@ -15,6 +15,8 @@
 
 #include "wx/taskbar.h"
 
+#ifndef __WXGTK4__
+
 #ifndef WX_PRECOMP
     #include "wx/toplevel.h"
     #include "wx/menu.h"
@@ -29,6 +31,8 @@
     #include "eggtrayicon.h"
 #endif
 #include "wx/gtk/private/gtk2-compat.h"
+
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
 #if !GTK_CHECK_VERSION(2,10,0)
     typedef struct _GtkStatusIcon GtkStatusIcon;
@@ -342,4 +346,36 @@ bool wxTaskBarIcon::PopupMenu(wxMenu* menu)
     return true;
 }
 
+#else
+wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler);
+
+wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType)
+{
+    m_priv = NULL;
+}
+
+wxTaskBarIcon::~wxTaskBarIcon()
+{
+}
+
+bool wxTaskBarIcon::SetIcon(const wxIcon&, const wxString&)
+{
+    return false;
+}
+
+bool wxTaskBarIcon::RemoveIcon()
+{
+    return false;
+}
+
+bool wxTaskBarIcon::IsIconInstalled() const
+{
+    return false;
+}
+
+bool wxTaskBarIcon::PopupMenu(wxMenu*)
+{
+    return false;
+}
+#endif // __WXGTK4__
 #endif // wxUSE_TASKBARICON

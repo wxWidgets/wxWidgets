@@ -138,6 +138,7 @@ private:
     void OnUseIcon(wxCommandEvent& event);
     void OnUseBitmap(wxCommandEvent& event);
 
+    void OnUseGeneric(wxCommandEvent& event);
 #if wxUSE_DYNLIB_CLASS
     void OnLoad(wxCommandEvent& event);
     void OnUnload(wxCommandEvent& event);
@@ -163,7 +164,8 @@ public:
         m_flags = 0;
         m_align = wxALIGN_LEFT;
         m_useIcon =
-        m_useBitmap = false;
+        m_useBitmap =
+        m_useGeneric = false;
     }
 
     int GetFlags() const { return m_flags; }
@@ -172,13 +174,15 @@ public:
     void SetAlignment(int align) { m_align = align; }
     void SetUseIcon(bool useIcon) { m_useIcon = useIcon; }
     void SetUseBitmap(bool useBitmap) { m_useBitmap = useBitmap; }
+    void SetUseGeneric(bool useGeneric) { m_useGeneric = useGeneric; }
 
 private:
     void OnPaint(wxPaintEvent&)
     {
         wxPaintDC dc(this);
 
-        wxRendererNative& renderer = wxRendererNative::Get();
+        wxRendererNative& renderer = m_useGeneric ? wxRendererNative::GetGeneric()
+                                                  : wxRendererNative::Get();
 
         int x1 = 10,    // text offset
             x2 = 300,   // drawing offset
@@ -223,6 +227,8 @@ private:
                                                                wxART_LIST);
         }
 
+        // Note that we need to use GetDefault() explicitly to show the default
+        // implementation.
         dc.DrawText("DrawHeaderButton() (default)", x1, y);
         wxRendererNative::GetDefault().DrawHeaderButton(this, dc,
                                   wxRect(x2, y, widthHdr, heightHdr), m_flags,
@@ -278,12 +284,17 @@ private:
         y += lineHeight + rBtn.height;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+        // The meanings of those are reversed for the vertical gauge below.
         const wxCoord heightGauge = 24;
         const wxCoord widthGauge = 180;
 
         dc.DrawText("DrawGauge()", x1, y);
-        wxRendererNative::GetDefault().DrawGauge(this, dc,
+        renderer.DrawGauge(this, dc,
             wxRect(x2, y, widthGauge, heightGauge), 25, 100, m_flags);
+        renderer.DrawGauge(this, dc,
+            wxRect(x2 + widthGauge + 30, y + heightGauge - widthGauge,
+                   heightGauge, widthGauge),
+            25, 100, m_flags | wxCONTROL_SPECIAL);
 
         y += lineHeight + heightGauge;
 
@@ -291,10 +302,10 @@ private:
         const wxCoord widthListItem = 260;
 
         dc.DrawText("DrawItemSelectionRect()", x1, y);
-        wxRendererNative::GetDefault().DrawItemSelectionRect(this, dc,
+        renderer.DrawItemSelectionRect(this, dc,
             wxRect(x2, y, widthListItem, heightListItem), m_flags | wxCONTROL_SELECTED);
 
-        wxRendererNative::GetDefault().DrawItemText(this, dc, "DrawItemText()",
+        renderer.DrawItemText(this, dc, "DrawItemText()",
             wxRect(x2, y, widthListItem, heightListItem).Inflate(-2, -2), m_align, m_flags | wxCONTROL_SELECTED);
 
         y += lineHeight + heightListItem;
@@ -303,7 +314,8 @@ private:
     int m_flags;
     int m_align;
     bool m_useIcon,
-         m_useBitmap;
+         m_useBitmap,
+         m_useGeneric;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -335,6 +347,7 @@ enum
     Render_UseIcon,
     Render_UseBitmap,
 
+    Render_UseGeneric,
 #if wxUSE_DYNLIB_CLASS
     Render_Load,
     Render_Unload,
@@ -371,6 +384,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_UseIcon, MyFrame::OnUseIcon)
     EVT_MENU(Render_UseBitmap, MyFrame::OnUseBitmap)
 
+    EVT_MENU(Render_UseGeneric, MyFrame::OnUseGeneric)
 #if wxUSE_DYNLIB_CLASS
     EVT_MENU(Render_Load,  MyFrame::OnLoad)
     EVT_MENU(Render_Unload,MyFrame::OnUnload)
@@ -422,9 +436,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame()
        : wxFrame(NULL,
                  wxID_ANY,
-                 wxT("Render wxWidgets Sample"),
-                 wxPoint(50, 50),
-                 wxSize(450, 340))
+                 wxT("Render wxWidgets Sample"))
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -457,6 +469,7 @@ MyFrame::MyFrame()
     menuFile->AppendCheckItem(Render_UseBitmap, "Draw &bitmap\tCtrl-B");
     menuFile->AppendSeparator();
 
+    menuFile->AppendCheckItem(Render_UseGeneric, "Use &generic renderer\tCtrl-G");
 #if wxUSE_DYNLIB_CLASS
     menuFile->Append(Render_Load, wxT("&Load renderer...\tCtrl-L"));
     menuFile->Append(Render_Unload, wxT("&Unload renderer\tCtrl-U"));
@@ -478,6 +491,8 @@ MyFrame::MyFrame()
 #endif // wxUSE_MENUS
 
     m_panel = new MyPanel(this);
+
+    SetClientSize(600, 600);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
@@ -523,6 +538,12 @@ void MyFrame::OnUseIcon(wxCommandEvent& event)
 void MyFrame::OnUseBitmap(wxCommandEvent& event)
 {
     m_panel->SetUseBitmap(event.IsChecked());
+    m_panel->Refresh();
+}
+
+void MyFrame::OnUseGeneric(wxCommandEvent& event)
+{
+    m_panel->SetUseGeneric(event.IsChecked());
     m_panel->Refresh();
 }
 

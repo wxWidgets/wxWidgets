@@ -46,6 +46,7 @@
 #include "wx/sizer.h"
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
+#include "wx/numdlg.h"
 #include "wx/textdlg.h"
 #include "wx/imaglist.h"
 #include "wx/wupdlock.h"
@@ -108,6 +109,7 @@ enum
     TextEntry_AutoCompleteFilenames,
     TextEntry_AutoCompleteDirectories,
     TextEntry_AutoCompleteCustom,
+    TextEntry_AutoCompleteKeyLength,
 
     TextEntry_SetHint,
     TextEntry_End
@@ -188,6 +190,9 @@ protected:
     void OnAutoCompleteFilenames(wxCommandEvent& event);
     void OnAutoCompleteDirectories(wxCommandEvent& event);
     void OnAutoCompleteCustom(wxCommandEvent& event);
+    void OnAutoCompleteKeyLength(wxCommandEvent& event);
+
+    void DoUseCustomAutoComplete(size_t minLength = 1);
 
     void OnSetHint(wxCommandEvent& event);
 
@@ -317,6 +322,7 @@ wxBEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU(TextEntry_AutoCompleteFilenames, WidgetsFrame::OnAutoCompleteFilenames)
     EVT_MENU(TextEntry_AutoCompleteDirectories, WidgetsFrame::OnAutoCompleteDirectories)
     EVT_MENU(TextEntry_AutoCompleteCustom,    WidgetsFrame::OnAutoCompleteCustom)
+    EVT_MENU(TextEntry_AutoCompleteKeyLength, WidgetsFrame::OnAutoCompleteKeyLength)
 
     EVT_MENU(TextEntry_SetHint, WidgetsFrame::OnSetHint)
 
@@ -443,6 +449,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                                    wxT("&Directories names auto-completion"));
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteCustom,
                                    wxT("&Custom auto-completion"));
+    menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteKeyLength,
+                                   wxT("Custom with &min length"));
     menuTextEntry->AppendSeparator();
     menuTextEntry->Append(TextEntry_SetHint, "Set help &hint");
 
@@ -533,7 +541,7 @@ void WidgetsFrame::InitBook()
     wxArrayString labels[MAX_PAGES];
 
     wxMenu *menuPages = new wxMenu;
-    unsigned int nPage = 0, nFKey = 0;
+    unsigned int nPage = 0;
     int cat, imageId = 1;
 
     // we need to first create all pages and only then add them to the book
@@ -571,16 +579,9 @@ void WidgetsFrame::InitBook()
             labels[cat].Add(info->GetLabel());
             if ( cat == ALL_PAGE )
             {
-                wxString radioLabel(info->GetLabel());
-                nFKey++;
-                if ( nFKey <= 12 )
-                {
-                    radioLabel << wxT("\tF" ) << nFKey;
-                }
-
                 menuPages->AppendRadioItem(
                             Widgets_GoToPage + nPage,
-                            radioLabel
+                            info->GetLabel()
                            );
 #if !USE_TREEBOOK
                 // consider only for book in book architecture
@@ -1026,6 +1027,11 @@ void WidgetsFrame::OnAutoCompleteDirectories(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
 {
+    DoUseCustomAutoComplete();
+}
+
+void WidgetsFrame::DoUseCustomAutoComplete(size_t minLength)
+{
     wxTextEntryBase *entry = CurrentPage()->GetTextEntry();
     wxCHECK_RET( entry, "menu item should be disabled" );
 
@@ -1038,6 +1044,11 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
     class CustomTextCompleter : public wxTextCompleterSimple
     {
     public:
+        explicit CustomTextCompleter(size_t minLength)
+            : m_minLength(minLength)
+        {
+        }
+
         virtual void GetCompletions(const wxString& prefix, wxArrayString& res) wxOVERRIDE
         {
             // This is used for illustrative purposes only and shows how many
@@ -1064,9 +1075,10 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
             } logCompletions(prefix, res);
 
 
-            // Normally it doesn't make sense to complete empty control, there
-            // are too many choices and listing them all wouldn't be helpful.
-            if ( prefix.empty() )
+            // Wait for enough text to be entered before proposing completions:
+            // this is done to avoid proposing too many of them when the
+            // control is empty, for example.
+            if ( prefix.length() < m_minLength )
                 return;
 
             // The only valid strings start with 3 digits so check for their
@@ -1117,9 +1129,11 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
                     res.push_back(prefix + c);
             }
         }
+
+        size_t m_minLength;
     };
 
-    if ( entry->AutoComplete(new CustomTextCompleter) )
+    if ( entry->AutoComplete(new CustomTextCompleter(minLength)))
     {
         wxLogMessage("Enabled custom auto completer for \"NNN XX\" items "
                      "(where N is a digit and X is a letter).");
@@ -1128,6 +1142,23 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
     {
         wxLogMessage("AutoComplete() failed.");
     }
+}
+
+void WidgetsFrame::OnAutoCompleteKeyLength(wxCommandEvent& WXUNUSED(event))
+{
+    const wxString message = "The auto-completion is triggered if and only if\n"
+                             "the length of the search key (prefix) is at least [LENGTH].\n"
+                             "Hint: 0 disables the length check completely.";
+    const wxString prompt = "Enter the minimum key length:";
+    const wxString caption = "Minimum key length";
+
+    int res = wxGetNumberFromUser(message, prompt, caption, 1, 0, 100, this);
+    if ( res == -1 )
+        return;
+
+    wxLogMessage("The minimum key length for autocomplete is %d.", res);
+
+    DoUseCustomAutoComplete(static_cast<size_t>(res));
 }
 
 void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))

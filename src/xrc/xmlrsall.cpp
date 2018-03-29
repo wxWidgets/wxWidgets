@@ -165,6 +165,7 @@ void wxXmlResource::InitAllHandlers()
 #endif
 #if wxUSE_SPINCTRL
     AddHandler(new wxSpinCtrlXmlHandler);
+    AddHandler(new wxSpinCtrlDoubleXmlHandler);
 #endif
 #if wxUSE_SPLITTER
     AddHandler(new wxSplitterWindowXmlHandler);

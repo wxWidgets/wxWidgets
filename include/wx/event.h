@@ -1893,7 +1893,7 @@ public:
     bool IsGestureEnd() const { return m_isEnd; }
     void SetGestureEnd(bool isEnd = true) { m_isEnd = isEnd; }
 
-    virtual wxEvent *Clone() const { return new wxGestureEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxGestureEvent(*this); }
 
 protected:
     wxPoint m_pos;
@@ -1926,7 +1926,7 @@ public:
     wxPoint GetDelta() const { return m_delta; }
     void SetDelta(const wxPoint& delta) { m_delta = delta; }
 
-    virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxPanGestureEvent(*this); }
 
 private:
     wxPoint m_delta;
@@ -1955,7 +1955,7 @@ public:
     double GetZoomFactor() const { return m_zoomFactor; }
     void SetZoomFactor(double zoomFactor) { m_zoomFactor = zoomFactor; }
 
-    virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxZoomGestureEvent(*this); }
 
 private:
     double m_zoomFactor;
@@ -1984,7 +1984,7 @@ public:
     double GetRotationAngle() const { return m_rotationAngle; }
     void SetRotationAngle(double rotationAngle) { m_rotationAngle = rotationAngle; }
 
-    virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxRotateGestureEvent(*this); }
 
 private:
     double m_rotationAngle;
@@ -2008,7 +2008,7 @@ public:
     wxTwoFingerTapEvent(const wxTwoFingerTapEvent& event) : wxGestureEvent(event)
     { }
 
-    virtual wxEvent *Clone() const { return new wxTwoFingerTapEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxTwoFingerTapEvent(*this); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTwoFingerTapEvent);
@@ -2030,7 +2030,7 @@ public:
     wxLongPressEvent(const wxLongPressEvent& event) : wxGestureEvent(event)
     { }
 
-    virtual wxEvent *Clone() const { return new wxLongPressEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxLongPressEvent(*this); }
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxLongPressEvent);
 };
@@ -2051,7 +2051,7 @@ public:
     wxPressAndTapEvent(const wxPressAndTapEvent& event) : wxGestureEvent(event)
     { }
 
-    virtual wxEvent *Clone() const { return new wxPressAndTapEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxPressAndTapEvent(*this); }
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPressAndTapEvent);
 };
@@ -4204,7 +4204,7 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
     wxEVENT_HANDLER_CAST(wxTwoFingerTapEventFunction, func)
 #define wxLongPressEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxLongPressEventFunction, func)
-#define wxPressAndTapEvent(func) \
+#define wxPressAndTapEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxPressAndTapEventFunction, func)
 
 #endif // wxUSE_GUI

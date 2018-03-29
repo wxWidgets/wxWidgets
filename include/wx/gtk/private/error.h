@@ -21,6 +21,7 @@ class wxGtkError
 {
 public:
     wxGtkError() { m_error = NULL; }
+    explicit wxGtkError(GError* error) { m_error = error; }
     ~wxGtkError() { if ( m_error ) g_error_free(m_error); }
 
     GError** Out()
@@ -35,6 +36,11 @@ public:
     operator bool() const
     {
         return m_error != NULL;
+    }
+
+    operator GError*() const
+    {
+        return m_error;
     }
 
     wxString GetMessage() const

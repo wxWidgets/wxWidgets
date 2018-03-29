@@ -680,7 +680,13 @@ wxgtk_tree_model_init(GTypeInstance* instance, void*)
 {
     GtkWxTreeModel* tree_model = GTK_WX_TREE_MODEL(instance);
     tree_model->internal = NULL;
-    tree_model->stamp = g_random_int();
+
+    // 0 is handled specially in wxGtkTreeCellDataFunc, so don't use it as the
+    // stamp.
+    do
+    {
+        tree_model->stamp = g_random_int();
+    } while ( tree_model->stamp == 0 );
 }
 
 } // extern "C"
@@ -746,9 +752,18 @@ static GtkTreePath *
 wxgtk_tree_model_get_path (GtkTreeModel *tree_model,
                            GtkTreeIter  *iter)
 {
-    GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
-    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), NULL);
-    g_return_val_if_fail (iter->stamp == GTK_WX_TREE_MODEL (wxtree_model)->stamp, NULL);
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (tree_model), NULL);
+
+    GtkWxTreeModel *wxtree_model = GTK_WX_TREE_MODEL (tree_model);
+    if ( wxtree_model->stamp == 0 )
+    {
+        // The model is temporarily invalid and can't be used, see Cleared(),
+        // but we need to return some valid path from here -- just return an
+        // empty one.
+        return gtk_tree_path_new();
+    }
+
+    g_return_val_if_fail (iter->stamp == wxtree_model->stamp, NULL);
 
     return wxtree_model->internal->get_path( iter );
 }
@@ -1150,20 +1165,40 @@ enum
 extern "C" {
 
 #define GTK_TYPE_WX_CELL_EDITOR_BIN               (gtk_wx_cell_editor_bin_get_type ())
-#define GTK_WX_CELL_EDITOR_BIN(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN, GtkWxCellEditorBin))
-#define GTK_IS_WX_CELL_EDITOR_BIN(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN))
-#define GTK_IS_WX_CELL_EDITOR_BIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_CELL_EDITOR_BIN))
+
+// In GTK+ < 3.8 GtkBin can't be used as widget base type without defining our
+// own size_allocate and related (either size_request for GTK+ 2 or
+// get_preferred_height for GTK+ 3) vfuncs, so we use GtkHBox instead. But in
+// GTK+ 4, GtkHBox is removed, so we do use GtkBin with it.
+#ifdef __WXGTK4__
+    typedef GtkBin GtkWxCellEditorBinBase;
+    typedef GtkBinClass GtkWxCellEditorBinBaseClass;
+
+    // Notice that this can't be just a (const) variable as GTK+ type constants
+    // are actually macros expanding into function calls, which shouldn't be
+    // performed before the library is initialized, so we need to use either an
+    // inline function or a define, which is simpler.
+    #define GtkWxCellEditorBinBaseType GTK_TYPE_BIN
+#else // GTK+ < 4
+    // GtkHBox is deprecated since 3.2, so avoid warnings about using it.
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+    typedef GtkHBox GtkWxCellEditorBinBase;
+    typedef GtkHBoxClass GtkWxCellEditorBinBaseClass;
+    #define GtkWxCellEditorBinBaseType GTK_TYPE_HBOX
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+#endif // GTK+ version
 
 struct GtkWxCellEditorBin
 {
-    GtkBin parent;
+    GtkWxCellEditorBinBase parent;
 
     // The actual user-created editor.
     wxWindow* editor;
 };
 
 static GtkWidget* gtk_wx_cell_editor_bin_new(wxWindow* editor);
-static void gtk_wx_cell_editor_bin_init(GTypeInstance* instance, void*);
 static void gtk_wx_cell_editor_bin_class_init(void* klass, void*);
 static void gtk_wx_cell_editor_bin_get_property(GObject*, guint, GValue*, GParamSpec*);
 static void gtk_wx_cell_editor_bin_set_property(GObject*, guint, const GValue*, GParamSpec*);
@@ -1184,7 +1219,7 @@ gtk_wx_cell_editor_bin_get_type()
     {
         const GTypeInfo cell_editor_bin_info =
         {
-            sizeof (GtkBinClass),
+            sizeof (GtkWxCellEditorBinBaseClass),
             NULL, /* base_init */
             NULL, /* base_finalize */
             gtk_wx_cell_editor_bin_class_init,
@@ -1192,11 +1227,12 @@ gtk_wx_cell_editor_bin_get_type()
             NULL, /* class_data */
             sizeof (GtkWxCellEditorBin),
             0,    /* n_preallocs */
-            gtk_wx_cell_editor_bin_init,
+            NULL, // init
             NULL
         };
 
-        cell_editor_bin_type = g_type_register_static( GTK_TYPE_BIN,
+        cell_editor_bin_type = g_type_register_static(
+            GtkWxCellEditorBinBaseType,
             "GtkWxCellEditorBin", &cell_editor_bin_info, (GTypeFlags)0 );
 
 
@@ -1215,13 +1251,6 @@ gtk_wx_cell_editor_bin_get_type()
     return cell_editor_bin_type;
 }
 
-static void
-gtk_wx_cell_editor_bin_init(GTypeInstance* instance, void*)
-{
-    GtkWxCellEditorBin* const bin = GTK_WX_CELL_EDITOR_BIN(instance);
-    bin->editor = NULL;
-}
-
 static void gtk_wx_cell_editor_bin_class_init(void* klass, void*)
 {
     GObjectClass* const oclass = G_OBJECT_CLASS(klass);
@@ -1229,9 +1258,12 @@ static void gtk_wx_cell_editor_bin_class_init(void* klass, void*)
     oclass->set_property = gtk_wx_cell_editor_bin_set_property;
     oclass->get_property = gtk_wx_cell_editor_bin_get_property;
 
-    g_object_class_override_property(oclass,
+    if (wx_is_at_least_gtk2(20))
+    {
+        g_object_class_override_property(oclass,
                                      CELL_EDITOR_BIN_PROP_EDITING_CANCELED,
                                      "editing-canceled");
+    }
 }
 
 // We need to provide these virtual methods as we must support the
@@ -1422,7 +1454,7 @@ gtk_wx_cell_renderer_new (void)
 static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
                         GtkCellRenderer         *renderer,
                         GdkEvent                *WXUNUSED(event),
-                        GtkWidget               *widget,
+                        GtkWidget               *WXUNUSED(widget),
                         const gchar             *path,
                         wxConstGdkRect          *WXUNUSED(background_area),
                         wxConstGdkRect          *cell_area,
@@ -1439,25 +1471,10 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
     if (cell->GetEditorCtrl())
         return NULL;
 
-    GdkRectangle rect;
-    gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
-                                   &rect.x,
-                                   &rect.y,
-                                   &rect.width,
-                                   &rect.height);
-
-    rect.x += cell_area->x;
-    rect.y += cell_area->y;
-//    rect.width  -= renderer->xpad * 2;
-//    rect.height -= renderer->ypad * 2;
-
-//    wxRect renderrect(wxRectFromGDKRect(&rect));
-    wxRect renderrect(wxRectFromGDKRect(cell_area));
-
     wxDataViewItem
         item(cell->GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(path)));
 
-    if (!cell->StartEditing(item, renderrect))
+    if (!cell->StartEditing(item, wxRectFromGDKRect(cell_area)))
         return NULL;
 
     wxrenderer->editor_bin = gtk_wx_cell_editor_bin_new(cell->GetEditorCtrl());
@@ -1885,15 +1902,25 @@ bool wxGtkDataViewModelNotifier::Cleared()
     // has been deleted so call row_deleted() for every
     // child of root...
 
-    int count = m_internal->iter_n_children( NULL ); // number of children of root
+    // It is important to avoid selection changed events being generated from
+    // here as they would reference the already deleted model items, which
+    // would result in crashes in any code attempting to handle these events.
+    wxDataViewCtrl::SelectionEventsSuppressor noSelection(m_internal->GetOwner());
 
-    GtkTreePath *path = gtk_tree_path_new_first();  // points to root
+    // We also need to prevent wxGtkTreeCellDataFunc from using the model items
+    // not existing any longer, so change the model stamp to indicate that it
+    // temporarily can't be used.
+    const gint stampOrig = wxgtk_model->stamp;
+    wxgtk_model->stamp = 0;
 
-    int i;
-    for (i = 0; i < count; i++)
-        gtk_tree_model_row_deleted( GTK_TREE_MODEL(wxgtk_model), path );
+    {
+        wxGtkTreePath path(gtk_tree_path_new_first());  // points to root
+        const int count = m_internal->iter_n_children( NULL ); // number of children of root
+        for (int i = 0; i < count; i++)
+            gtk_tree_model_row_deleted( GTK_TREE_MODEL(wxgtk_model), path );
+    }
 
-    gtk_tree_path_free( path );
+    wxgtk_model->stamp = stampOrig;
 
     m_internal->Cleared();
 
@@ -1905,9 +1932,24 @@ bool wxGtkDataViewModelNotifier::Cleared()
 // ---------------------------------------------------------
 
 static void
-wxgtk_cell_editable_editing_done( GtkCellEditable *WXUNUSED(editable),
+wxgtk_cell_editable_editing_done( GtkCellEditable *editable,
                                   wxDataViewRenderer *wxrenderer )
 {
+    // "editing-cancelled" property is documented as being new since 2.20 in
+    // GtkCellEditable, but seems to have existed basically forever (since GTK+
+    // 1.3 days) in GtkCellRendererText, so try to use it in any case.
+    if ( g_object_class_find_property(G_OBJECT_GET_CLASS(editable),
+                                      "editing-canceled") )
+    {
+        gboolean wasCancelled;
+        g_object_get(editable, "editing-canceled", &wasCancelled, NULL);
+        if ( wasCancelled )
+        {
+            wxrenderer->CancelEditing();
+            return;
+        }
+    }
+
     wxrenderer->FinishEditing();
 }
 
@@ -2128,26 +2170,19 @@ bool wxDataViewRenderer::IsHighlighted() const
            GetOwner()->GetOwner()->IsSelected(m_itemBeingRendered);
 }
 
-void
-wxDataViewRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
+wxVariant
+wxDataViewRenderer::GtkGetValueFromString(const wxString& str) const
 {
-    wxVariant value(str);
-    if (!Validate( value ))
-        return;
-
-    wxDataViewItem
-        item(GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(itempath)));
-
-    GtkOnCellChanged(value, item, GetOwner()->GetModelColumn());
+    return str;
 }
 
 void
-wxDataViewRenderer::GtkOnCellChanged(const wxVariant& value,
-                                     const wxDataViewItem& item,
-                                     unsigned col)
+wxDataViewRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
 {
-    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
-    model->ChangeValue( value, item, col );
+    m_item = wxDataViewItem(GetView()->GTKPathToItem(wxGtkTreePath(itempath)));
+
+    wxVariant value(GtkGetValueFromString(str));
+    DoHandleEditingDone(&value);
 }
 
 void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& WXUNUSED(attr))
@@ -2184,12 +2219,18 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
 {
     if (attr.HasColour())
     {
-        const GdkColor * const gcol = attr.GetColour().GetColor();
 
         GValue gvalue = G_VALUE_INIT;
+#ifdef __WXGTK3__
+        g_value_init(&gvalue, GDK_TYPE_RGBA);
+        g_value_set_boxed(&gvalue, static_cast<const GdkRGBA*>(attr.GetColour()));
+        g_object_set_property(G_OBJECT(renderer), "foreground-rgba", &gvalue);
+#else
+        const GdkColor* const gcol = attr.GetColour().GetColor();
         g_value_init( &gvalue, GDK_TYPE_COLOR );
         g_value_set_boxed( &gvalue, gcol );
         g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
+#endif
         g_value_unset( &gvalue );
     }
     else
@@ -2238,13 +2279,19 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
 
     if (attr.HasBackgroundColour())
     {
+        GValue gvalue = G_VALUE_INIT;
         wxColour colour = attr.GetBackgroundColour();
+#ifdef __WXGTK3__
+        g_value_init(&gvalue, GDK_TYPE_RGBA);
+        g_value_set_boxed(&gvalue, static_cast<const GdkRGBA*>(colour));
+        g_object_set_property(G_OBJECT(renderer), "cell-background-rgba", &gvalue);
+#else
         const GdkColor * const gcol = colour.GetColor();
 
-        GValue gvalue = G_VALUE_INIT;
         g_value_init( &gvalue, GDK_TYPE_COLOR );
         g_value_set_boxed( &gvalue, gcol );
         g_object_set_property( G_OBJECT(renderer), "cell-background_gdk", &gvalue );
+#endif
         g_value_unset( &gvalue );
     }
     else
@@ -2902,17 +2949,10 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
     m_variantType = wxS("long");
 }
 
-void wxDataViewChoiceByIndexRenderer::GtkOnTextEdited(const char *itempath, const wxString& str)
+wxVariant
+wxDataViewChoiceByIndexRenderer::GtkGetValueFromString(const wxString& str) const
 {
-    wxVariant value( (long) GetChoices().Index( str ) );
-
-    if (!Validate( value ))
-        return;
-
-    wxDataViewItem
-        item(GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(itempath)));
-
-    GtkOnCellChanged(value, item, GetOwner()->GetModelColumn());
+    return static_cast<long>(GetChoices().Index(str));
 }
 
 bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
@@ -2985,17 +3025,15 @@ bool wxDataViewIconTextRenderer::GetValue(wxVariant& value) const
     return true;
 }
 
-void
-wxDataViewIconTextRenderer::GtkOnCellChanged(const wxVariant& value,
-                                             const wxDataViewItem& item,
-                                             unsigned col)
+wxVariant
+wxDataViewIconTextRenderer::GtkGetValueFromString(const wxString& str) const
 {
     // we receive just the text part of our value as it's the only one which
     // can be edited, but we need the full wxDataViewIconText value for the
     // model
     wxVariant valueIconText;
-    valueIconText << wxDataViewIconText(value.GetString(), m_value.GetIcon());
-    wxDataViewTextRenderer::GtkOnCellChanged(valueIconText, item, col);
+    valueIconText << wxDataViewIconText(str, m_value.GetIcon());
+    return valueIconText;
 }
 
 // ---------------------------------------------------------
@@ -3044,6 +3082,13 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 {
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (model));
     GtkWxTreeModel *tree_model = (GtkWxTreeModel *) model;
+
+    if ( !tree_model->stamp )
+    {
+        // The model is temporarily invalid and can't be used, see the code in
+        // wxGtkDataViewModelNotifier::Cleared().
+        return;
+    }
 
     wxDataViewRenderer *cell = (wxDataViewRenderer*) data;
 
@@ -3619,14 +3664,19 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     delete m_dragDataObject;
     m_dragDataObject = NULL;
 
+#ifdef __WXGTK4__
+    return false;
+#else
     wxDataViewCtrl* const dvc = GetOwner();
     wxDataViewItem item(dvc->GTKPathToItem(path));
     if ( !item )
         return FALSE;
 
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, dvc, item);
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gint x, y;
     gtk_widget_get_pointer(m_owner->GtkGetTreeView(), &x, &y);
+    wxGCC_WARNING_RESTORE()
     event.SetPosition(x, y);
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
@@ -3641,6 +3691,7 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     m_dragDataObject = obj;
 
     return TRUE;
+#endif
 }
 
 gboolean
@@ -4615,8 +4666,11 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
             gtk_tree_view_set_grid_lines( GTK_TREE_VIEW(m_treeview), grid );
     }
 #endif
-
+#ifndef __WXGTK4__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_tree_view_set_rules_hint( GTK_TREE_VIEW(m_treeview), (style & wxDV_ROW_LINES) != 0 );
+    wxGCC_WARNING_RESTORE()
+#endif
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (m_widget),
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -4626,7 +4680,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 
     PostCreation(size);
 
-    GtkEnableSelectionEvents();
+    g_signal_connect_after(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)),
+        "changed", G_CALLBACK(wxdataview_selection_changed_callback), this);
 
     g_signal_connect_after (m_treeview, "row-activated",
                             G_CALLBACK (wxdataview_row_activated_callback), this);
@@ -5045,7 +5100,7 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 {
     wxCHECK_RET( m_internal, "model must be associated before calling SetSelections" );
 
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
@@ -5070,8 +5125,6 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
         iter.user_data = (gpointer) item.GetID();
         gtk_tree_selection_select_iter( selection, &iter );
     }
-
-    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )
@@ -5080,7 +5133,7 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
 
     ExpandAncestors(item);
 
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
@@ -5088,15 +5141,13 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
     iter.stamp = m_internal->GetGtkModel()->stamp;
     iter.user_data = (gpointer) item.GetID();
     gtk_tree_selection_select_iter( selection, &iter );
-
-    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::Unselect( const wxDataViewItem & item )
 {
     wxCHECK_RET( m_internal, "model must be associated before calling Unselect" );
 
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
@@ -5104,8 +5155,6 @@ void wxDataViewCtrl::Unselect( const wxDataViewItem & item )
     iter.stamp = m_internal->GetGtkModel()->stamp;
     iter.user_data = (gpointer) item.GetID();
     gtk_tree_selection_unselect_iter( selection, &iter );
-
-    GtkEnableSelectionEvents();
 }
 
 bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
@@ -5123,24 +5172,20 @@ bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
 
 void wxDataViewCtrl::SelectAll()
 {
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     gtk_tree_selection_select_all( selection );
-
-    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::UnselectAll()
 {
-    GtkDisableSelectionEvents();
+    SelectionEventsSuppressor noSelection(this);
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     gtk_tree_selection_unselect_all( selection );
-
-    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::EnsureVisible(const wxDataViewItem& item,
@@ -5242,15 +5287,15 @@ void wxDataViewCtrl::DoSetIndent()
 void wxDataViewCtrl::GtkDisableSelectionEvents()
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    g_signal_handlers_disconnect_by_func( selection,
-                            (gpointer) (wxdataview_selection_changed_callback), this);
+    g_signal_handlers_block_by_func(
+        selection, (void*)wxdataview_selection_changed_callback, this);
 }
 
 void wxDataViewCtrl::GtkEnableSelectionEvents()
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    g_signal_connect_after (selection, "changed",
-                            G_CALLBACK (wxdataview_selection_changed_callback), this);
+    g_signal_handlers_unblock_by_func(
+        selection, (void*)wxdataview_selection_changed_callback, this);
 }
 
 // ----------------------------------------------------------------------------

@@ -474,6 +474,20 @@ void MBConvTestCase::UTF8Tests()
     const wchar_t wc = 0xd800;
     CPPUNIT_ASSERT_EQUAL(wxCONV_FAILED, wxConvUTF8.FromWChar(NULL, 0, &wc, 1));
 #endif // SIZEOF_WCHAR_T == 2
+
+    SECTION("UTF-8-FFFF")
+    {
+        const wchar_t wcFFFF = 0xFFFF;
+        REQUIRE(wxConvUTF8.FromWChar(NULL, 0, &wcFFFF, 1) == 3);
+
+        char buf[4];
+        buf[3] = '\0';
+        REQUIRE(wxConvUTF8.FromWChar(buf, 3, &wcFFFF, 1) == 3);
+
+        CHECK(static_cast<unsigned char>(buf[0]) == 0xef);
+        CHECK(static_cast<unsigned char>(buf[1]) == 0xbf);
+        CHECK(static_cast<unsigned char>(buf[2]) == 0xbf);
+    }
 }
 
 void MBConvTestCase::UTF16LETests()

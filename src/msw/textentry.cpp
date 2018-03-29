@@ -24,7 +24,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/arrstr.h"
+    #include "wx/event.h"
     #include "wx/string.h"
+    #include "wx/textctrl.h"    // Only for wxTE_PROCESS_XXX constants
 #endif // WX_PRECOMP
 
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
@@ -34,6 +36,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
@@ -572,21 +575,54 @@ private:
 
     void OnCharHook(wxKeyEvent& event)
     {
-        // If the autocomplete drop-down list is currently displayed when the
-        // user presses Escape, we need to dismiss it manually from here as
-        // Escape could be eaten by something else (e.g. EVT_CHAR_HOOK in the
-        // dialog that this control is found in) otherwise.
-        if ( event.GetKeyCode() == WXK_ESCAPE )
+        // We need to override the default handling of some keys here.
+        bool specialKey = false;
+        switch ( event.GetKeyCode() )
         {
+            case WXK_RETURN:
+                if ( m_win->HasFlag(wxTE_PROCESS_ENTER) )
+                    specialKey = true;
+                break;
+
+            case WXK_TAB:
+                if ( m_win->HasFlag(wxTE_PROCESS_TAB) )
+                    specialKey = true;
+                break;
+
+            case WXK_ESCAPE:
+                specialKey = true;
+                break;
+        }
+
+        if ( specialKey )
+        {
+            // Check if the drop down is currently open.
             DWORD dwFlags = 0;
             if ( SUCCEEDED(m_autoCompleteDropDown->GetDropDownStatus(&dwFlags,
                                                                      NULL))
                     && dwFlags == ACDD_VISIBLE )
             {
-                ::SendMessage(GetHwndOf(m_win), WM_KEYDOWN, WXK_ESCAPE, 0);
+                if ( event.GetKeyCode() == WXK_ESCAPE )
+                {
+                    // We need to dismiss the drop-down manually as Escape
+                    // could be eaten by something else (e.g. EVT_CHAR_HOOK in
+                    // the dialog that this control is found in) otherwise.
+                    ::SendMessage(GetHwndOf(m_win), WM_KEYDOWN, WXK_ESCAPE, 0);
 
-                // Do not skip the event in this case, we've already handled it.
-                return;
+                    // Do not skip the event in this case, we've already handled it.
+                    return;
+                }
+            }
+            else // Drop down is not open.
+            {
+                // In this case we need to handle Return and Tab as both of
+                // them are simply eaten by the auto completer and never reach
+                // us at all otherwise.
+                if ( event.GetKeyCode() != WXK_ESCAPE )
+                {
+                    m_entry->MSWProcessSpecialKey(event);
+                    return;
+                }
             }
         }
 
@@ -803,6 +839,11 @@ bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 
 #endif // wxUSE_DYNLIB_CLASS
 
+void wxTextEntry::MSWProcessSpecialKey(wxKeyEvent& WXUNUSED(event))
+{
+    wxFAIL_MSG(wxS("Must be overridden if can be called"));
+}
+
 wxTextAutoCompleteData *wxTextEntry::GetOrCreateCompleter()
 {
     if ( !m_autoCompleteData )
@@ -913,9 +954,7 @@ void wxTextEntry::ForceUpper()
 {
     ConvertToUpperCase();
 
-    const HWND hwnd = GetEditHwnd();
-    const LONG styleOld = ::GetWindowLong(hwnd, GWL_STYLE);
-    ::SetWindowLong(hwnd, GWL_STYLE, styleOld | ES_UPPERCASE);
+    wxMSWWinStyleUpdater(GetEditHwnd()).TurnOn(ES_UPPERCASE);
 }
 
 // ----------------------------------------------------------------------------
@@ -931,7 +970,7 @@ void wxTextEntry::ForceUpper()
 
 bool wxTextEntry::SetHint(const wxString& hint)
 {
-    if ( wxGetWinVersion() >= wxWinVersion_Vista && wxUxThemeEngine::GetIfActive() )
+    if ( wxGetWinVersion() >= wxWinVersion_Vista && wxUxThemeIsActive() )
     {
         // notice that this message always works with Unicode strings
         //
@@ -948,7 +987,7 @@ bool wxTextEntry::SetHint(const wxString& hint)
 
 wxString wxTextEntry::GetHint() const
 {
-    if ( wxUxThemeEngine::GetIfActive() )
+    if ( wxUxThemeIsActive() )
     {
         wchar_t buf[256];
         if ( ::SendMessage(GetEditHwnd(), EM_GETCUEBANNER,

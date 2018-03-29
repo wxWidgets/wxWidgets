@@ -30,7 +30,8 @@ public:
     virtual wxString GetPluginsDir() const wxOVERRIDE;
     virtual wxString GetUserDir(Dir userDir) const wxOVERRIDE;
     virtual wxString MakeConfigFileName(const wxString& basename,
-                                        ConfigFileConv conv) const wxOVERRIDE;
+                                        ConfigFileConv conv = ConfigFileConv_Ext
+                                        ) const wxOVERRIDE;
 
 
     // MSW-specific methods

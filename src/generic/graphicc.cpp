@@ -291,7 +291,7 @@ public:
     void Init();
 
     virtual void Apply( wxGraphicsContext* context ) wxOVERRIDE;
-    virtual wxDouble GetWidth() { return m_width; }
+    wxDouble GetWidth() { return m_width; }
 
 private :
     double m_width;
@@ -320,7 +320,7 @@ public:
                                    const wxGraphicsGradientStops& stops);
 
 protected:
-    virtual void Init();
+    void Init();
 
     // common part of Create{Linear,Radial}GradientBrush()
     void AddGradientStops(const wxGraphicsGradientStops& stops);
@@ -337,7 +337,7 @@ public:
                     const wxColour& col);
     ~wxCairoFontData();
 
-    virtual bool Apply( wxGraphicsContext* context );
+    void Apply( wxGraphicsContext* context );
 #ifdef __WXGTK__
     const wxFont& GetFont() const { return m_wxfont; }
 #endif
@@ -383,10 +383,10 @@ public:
     wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap );
     ~wxCairoBitmapData();
 
-    virtual cairo_surface_t* GetCairoSurface() { return m_surface; }
-    virtual cairo_pattern_t* GetCairoPattern() { return m_pattern; }
-    virtual void* GetNativeBitmap() const wxOVERRIDE { return m_surface; }
-    virtual wxSize GetSize() { return wxSize(m_width, m_height); }
+    cairo_surface_t* GetCairoSurface() { return m_surface; }
+    cairo_pattern_t* GetCairoPattern() { return m_pattern; }
+    void* GetNativeBitmap() const wxOVERRIDE { return m_surface; }
+    wxSize GetSize() { return wxSize(m_width, m_height); }
 
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
@@ -1013,6 +1013,10 @@ wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
                                  int flags,
                                  const wxColour& col) :
     wxGraphicsObjectRefData(renderer)
+#ifdef __WXGTK__
+    , m_wxfont(wxFontInfo(wxSize(sizeInPixels, sizeInPixels))
+                .AllFlags(flags).FaceName(facename))
+#endif
 {
     InitColour(col);
 
@@ -1046,7 +1050,7 @@ wxCairoFontData::~wxCairoFontData()
 #endif
 }
 
-bool wxCairoFontData::Apply( wxGraphicsContext* context )
+void wxCairoFontData::Apply( wxGraphicsContext* context )
 {
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     cairo_set_source_rgba(ctext,m_red,m_green, m_blue,m_alpha);
@@ -1055,14 +1059,14 @@ bool wxCairoFontData::Apply( wxGraphicsContext* context )
     {
         // Nothing to do, the caller uses Pango layout functions to do
         // everything.
-        return true;
+        return;
     }
 #elif defined(__WXMAC__)
     if ( m_font )
     {
         cairo_set_font_face(ctext, m_font);
         cairo_set_font_size(ctext, m_size );
-        return true;
+        return;
     }
 #endif
 
@@ -1070,10 +1074,6 @@ bool wxCairoFontData::Apply( wxGraphicsContext* context )
     // we're using toy Cairo API even under wxGTK/wxMac.
     cairo_select_font_face(ctext, m_fontName, m_slant, m_weight );
     cairo_set_font_size(ctext, m_size );
-
-    // Indicate that we don't use native fonts for the platforms which care
-    // about this (currently only wxGTK).
-    return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -2408,10 +2408,21 @@ void wxCairoContext::ResetClip()
 void wxCairoContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
 {
     double x1, y1, x2, y2;
-    cairo_clip_extents(m_context, &x1, &y1, &x2, &y2);
-    // Check if we have an empty clipping box.
-    if ( x2 - x1 <= DBL_MIN || y2 - y1 <= DBL_MIN )
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
+    if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 4, 0) )
+    {
+        cairo_clip_extents(m_context, &x1, &y1, &x2, &y2);
+        // Check if we have an empty clipping box.
+        if ( x2 - x1 <= DBL_MIN || y2 - y1 <= DBL_MIN )
+            x1 = x2 = y1 = y2 = 0.0;
+    }
+    else
+#endif // Cairo >= 1.4
+    {
+        // There doesn't seem to be any way to get the clipping box with this
+        // ancient version.
         x1 = x2 = y1 = y2 = 0.0;
+    }
 
     if ( x )
         *x = x1;
@@ -2603,11 +2614,16 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( !data )
         return;
 
-    if ( ((wxCairoFontData*)m_font.GetRefData())->Apply(this) )
-    {
+    wxCairoFontData* const
+        fontData = static_cast<wxCairoFontData*>(m_font.GetRefData());
+
+    fontData->Apply(this);
+
 #ifdef __WXGTK__
+    const wxFont& font = fontData->GetFont();
+    if ( font.IsOk() )
+    {
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
-        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
         font.GTKSetPangoAttrs(layout);
@@ -2617,8 +2633,8 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 
         // Don't use Cairo text API, we already did everything.
         return;
-#endif
     }
+#endif // __WXGTK__
 
     // Cairo's x,y for drawing text is at the baseline, so we need to adjust
     // the position we move to by the ascent.
@@ -2649,13 +2665,20 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     if ( str.empty() && !descent && !externalLeading )
         return;
 
-    if ( ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this) )
-    {
+    wxCairoFontData* const
+        fontData = static_cast<wxCairoFontData*>(m_font.GetRefData());
+
 #ifdef __WXGTK__
+    // Use Pango instead of Cairo toy font API if we have the font.
+    const wxFont& font = fontData->GetFont();
+    if ( font.IsOk() )
+    {
+        // Note that there is no need to call Apply() at all in this case, it
+        // just sets the text colour, but we don't care about this when
+        // measuring its extent.
         int w, h;
 
         wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
-        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         const wxCharBuffer data = str.utf8_str();
         if ( !data )
@@ -2676,8 +2699,10 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
             *descent = h - PANGO_PIXELS(baseline);
         }
         return;
-#endif
     }
+#endif // __WXGTK__
+
+    fontData->Apply(const_cast<wxCairoContext*>(this));
 
     if (width)
     {

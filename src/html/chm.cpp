@@ -366,19 +366,19 @@ public:
     virtual ~wxChmInputStream();
 
     /// Return the size of the accessed file in archive
-    virtual size_t GetSize() const { return m_size; }
+    virtual size_t GetSize() const wxOVERRIDE { return m_size; }
     /// End of Stream?
-    virtual bool Eof() const;
+    virtual bool Eof() const wxOVERRIDE;
     /// Set simulation-mode of HHP-File (if non is found)
     void SimulateHHP(bool sim) { m_simulateHHP = sim; }
 
 protected:
     /// See wxInputStream
-    virtual size_t OnSysRead(void *buffer, size_t bufsize);
+    virtual size_t OnSysRead(void *buffer, size_t bufsize) wxOVERRIDE;
     /// See wxInputStream
-    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) wxOVERRIDE;
     /// See wxInputStream
-    virtual wxFileOffset OnSysTell() const { return m_pos; }
+    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
 
 private:
     size_t m_size;
@@ -761,16 +761,16 @@ class wxChmFSHandler : public wxFileSystemHandler
 public:
     /// Constructor and Destructor
     wxChmFSHandler();
-    virtual ~wxChmFSHandler();
+    virtual ~wxChmFSHandler() wxOVERRIDE;
 
     /// Is able to open location?
-    virtual bool CanOpen(const wxString& location);
+    virtual bool CanOpen(const wxString& location) wxOVERRIDE;
     /// Open a file
-    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) wxOVERRIDE;
     /// Find first occurrence of spec
-    virtual wxString FindFirst(const wxString& spec, int flags = 0);
+    virtual wxString FindFirst(const wxString& spec, int flags = 0) wxOVERRIDE;
     /// Find next occurrence of spec
-    virtual wxString FindNext();
+    virtual wxString FindNext() wxOVERRIDE;
 
 private:
     int m_lasterror;
@@ -912,12 +912,12 @@ class wxChmSupportModule : public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxChmSupportModule);
 
 public:
-    virtual bool OnInit()
+    virtual bool OnInit() wxOVERRIDE
     {
         wxFileSystem::AddHandler(new wxChmFSHandler);
         return true;
     }
-    virtual void OnExit() {}
+    virtual void OnExit() wxOVERRIDE {}
 }
 ;
 

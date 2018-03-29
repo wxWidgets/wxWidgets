@@ -228,9 +228,6 @@ public:
     // we do have multiple pages
     virtual bool HasMultiplePages() const wxOVERRIDE { return true; }
 
-    // we don't want focus for ourselves
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
-
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 

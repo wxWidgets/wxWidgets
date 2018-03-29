@@ -141,6 +141,11 @@
 #define QS_ALLPOSTMESSAGE 0
 #endif
 
+// Missing from MinGW 4.8 SDK headers.
+#ifndef BS_TYPEMASK
+#define BS_TYPEMASK 0xf
+#endif
+
 // ----------------------------------------------------------------------------
 // menu stuff
 // ----------------------------------------------------------------------------
@@ -239,6 +244,10 @@
     #define TV_FIRST                0x1100
 #endif
 
+#ifndef TVS_EX_DOUBLEBUFFER
+    #define TVS_EX_DOUBLEBUFFER     0x0004
+#endif
+
 #ifndef TVS_FULLROWSELECT
     #define TVS_FULLROWSELECT       0x1000
 #endif
@@ -246,6 +255,11 @@
 #ifndef TVM_SETBKCOLOR
     #define TVM_SETBKCOLOR          (TV_FIRST + 29)
     #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
+#endif
+
+#ifndef TVM_SETEXTENDEDSTYLE
+    #define TVM_SETEXTENDEDSTYLE    (TV_FIRST + 44)
+    #define TVM_GETEXTENDEDSTYLE    (TV_FIRST + 45)
 #endif
 
 // Various defines used by the webview library that are needed by mingw 

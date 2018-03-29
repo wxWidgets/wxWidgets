@@ -36,6 +36,7 @@
 #endif
 
 #include "wx/msw/subwin.h"
+#include "wx/renderer.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -146,8 +147,6 @@ void wxRadioBox::Init()
     m_selectedButton = wxNOT_FOUND;
     m_radioButtons = NULL;
     m_dummyHwnd = NULL;
-    m_radioWidth = NULL;
-    m_radioHeight = NULL;
 }
 
 bool wxRadioBox::Create(wxWindow *parent,
@@ -186,13 +185,8 @@ bool wxRadioBox::Create(wxWindow *parent,
     // buttons to include the dummy button
     m_radioButtons = new wxSubwindows(n);
 
-    m_radioWidth = new int[n];
-    m_radioHeight = new int[n];
-
     for ( int i = 0; i < n; i++ )
     {
-        m_radioWidth[i] =
-        m_radioHeight[i] = wxDefaultCoord;
         long styleBtn = BS_AUTORADIOBUTTON | WS_TABSTOP | WS_CHILD | WS_VISIBLE;
         if ( i == 0 )
             styleBtn |= WS_GROUP;
@@ -295,9 +289,6 @@ wxRadioBox::~wxRadioBox()
 
     if ( m_dummyHwnd )
         DestroyWindow((HWND)m_dummyHwnd);
-
-    delete[] m_radioWidth;
-    delete[] m_radioHeight;
 }
 
 // NB: if this code is changed, wxGetWindowForHWND() which relies on having the
@@ -396,9 +387,6 @@ unsigned int wxRadioBox::GetCount() const
 void wxRadioBox::SetString(unsigned int item, const wxString& label)
 {
     wxCHECK_RET( IsValid(item), wxT("invalid radiobox index") );
-
-    m_radioWidth[item] =
-    m_radioHeight[item] = wxDefaultCoord;
 
     ::SetWindowText((*m_radioButtons)[item], label.c_str());
 
@@ -549,6 +537,15 @@ WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxRadioBox, wxStaticBox, m_radioButtons)
 
 wxSize wxRadioBox::GetMaxButtonSize() const
 {
+    // We use GetCheckBox() because there is no dedicated GetRadioBox() method
+    // in wxRendererNative, but check and radio boxes are usually of the same
+    // size anyhow. We also add half a character of width to account for the
+    // extra space after the radio box itself.
+    const int radioWidth =
+        wxRendererNative::Get().GetCheckBoxSize(
+            reinterpret_cast<wxWindow*>(const_cast<wxRadioBox*>(this))).x
+        + GetCharWidth() / 2;
+
     // calculate the max button size
     int widthMax = 0,
         heightMax = 0;
@@ -556,21 +553,12 @@ wxSize wxRadioBox::GetMaxButtonSize() const
     for ( unsigned int i = 0 ; i < count; i++ )
     {
         int width, height;
-        if ( m_radioWidth[i] < 0 )
-        {
-            GetTextExtent(wxGetWindowText((*m_radioButtons)[i]), &width, &height);
+        GetTextExtent(wxGetWindowText((*m_radioButtons)[i]), &width, &height);
 
-            // adjust the size to take into account the radio box itself
-            // FIXME this is totally bogus!
-            width += RADIO_SIZE;
-            height *= 3;
-            height /= 2;
-        }
-        else
-        {
-            width = m_radioWidth[i];
-            height = m_radioHeight[i];
-        }
+        // adjust the size to take into account the radio box itself
+        width += radioWidth;
+        height *= 3;
+        height /= 2;
 
         if ( widthMax < width )
             widthMax = width;
@@ -594,12 +582,12 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
 
     // Add extra space under the label, if it exists.
     if (!wxControl::GetLabel().empty())
-        height += cy1/2;
+        height += wxRendererNative::Get().GetCheckBoxSize(
+            reinterpret_cast<wxWindow*>(const_cast<wxRadioBox*>(this))).y / 2;
 
     // and also wide enough for its label
     int widthLabel;
     GetTextExtent(GetLabelText(), &widthLabel, NULL);
-    widthLabel += RADIO_SIZE; // FIXME this is bogus too
     if ( widthLabel > width )
         width = widthLabel;
 
@@ -671,7 +659,8 @@ wxRadioBox::PositionAllButtons(int x, int y, int width, int WXUNUSED(height))
 
     // Add extra space under the label, if it exists.
     if (!wxControl::GetLabel().empty())
-        y_offset += cy1/2;
+        y_offset += wxRendererNative::Get().GetCheckBoxSize(
+            reinterpret_cast<wxWindow*>(this)).y / 2;
 
     int startX = x_offset;
     int startY = y_offset;
@@ -709,8 +698,6 @@ wxRadioBox::PositionAllButtons(int x, int y, int width, int WXUNUSED(height))
             {
                 x_offset = startX;
                 y_offset += maxHeight;
-                if (m_radioWidth[0]>0)
-                    y_offset += cy1/2;
             }
         }
 
@@ -739,8 +726,6 @@ wxRadioBox::PositionAllButtons(int x, int y, int width, int WXUNUSED(height))
         {
             // below this one
             y_offset += maxHeight;
-            if (m_radioWidth[0]>0)
-                y_offset += cy1/2;
         }
         else
         {

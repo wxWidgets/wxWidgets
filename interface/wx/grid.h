@@ -5,6 +5,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+/// Magic constant which tells (to some functions) to automatically calculate
+/// the appropriate size
+#define wxGRID_AUTOSIZE (-1)
+
+
 /**
     @class wxGridCellRenderer
 
@@ -69,8 +75,8 @@ public:
 
         @since 3.1.0
     */
-    virtual wxSize GetBestHeight(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
-                               int row, int col, int width);
+    virtual int GetBestHeight(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                              int row, int col, int width);
 
     /**
         Get the preferred width of the cell at the given height.
@@ -79,8 +85,8 @@ public:
 
         @since 3.1.0
     */
-    virtual wxSize GetBestWidth(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
-                               int row, int col, int height);
+    virtual int GetBestWidth(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                             int row, int col, int height);
 
 protected:
     /**

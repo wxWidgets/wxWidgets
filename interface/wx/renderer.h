@@ -359,6 +359,8 @@ public:
         bar that is drawn as being filled in, @a max must be strictly positive
         and @a value must be between 0 and @a max.
 
+        @c wxCONTROL_SPECIAL must be set in @a flags for the vertical gauges.
+
         @since 3.1.0
      */
     virtual void DrawGauge(wxWindow* win,

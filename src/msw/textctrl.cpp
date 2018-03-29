@@ -2078,7 +2078,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             // forces at the moment unfortunately
             if ( !(m_windowStyle & wxTE_PROCESS_TAB))
             {
-                if ( FindFocus() == this )
+                if ( ::GetFocus() == GetHwnd() )
                 {
                     int flags = 0;
                     if (!event.ShiftDown())
@@ -2102,6 +2102,19 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     // no, we didn't process it
     event.Skip();
 }
+
+#if wxUSE_OLE
+
+void wxTextCtrl::MSWProcessSpecialKey(wxKeyEvent& event)
+{
+    // It is not a good idea, in general, to manually call another event
+    // handler, but here we need to do exactly the same thing as in OnChar()
+    // above, so it doesn't seem to make much sense to add another function to
+    // forward to when we can just call it directly.
+    OnChar(event);
+}
+
+#endif // wxUSE_OLE
 
 void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 {

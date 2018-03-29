@@ -38,8 +38,10 @@
 #include <ctype.h>
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/private/textmeasure.h"
@@ -52,13 +54,12 @@ using namespace wxGTKImpl;
 typedef guint KeySym;
 #endif
 
-#include <gdk/gdkkeysyms.h>
-#ifdef __WXGTK3__
-#include <gdk/gdkkeysyms-compat.h>
-#endif
-
+#ifdef __WXGTK4__
+#define wxGTK_HAS_COMPOSITING_SUPPORT 0
+#else
 // gdk_window_set_composited() is only supported since 2.12
 #define wxGTK_HAS_COMPOSITING_SUPPORT (GTK_CHECK_VERSION(2,12,0) && wxUSE_CAIRO)
+#endif
 
 #ifndef PANGO_VERSION_CHECK
     #define PANGO_VERSION_CHECK(a,b,c) 0
@@ -212,6 +213,8 @@ static wxWindowGTK *gs_currentFocus = NULL;
 // The window that is scheduled to get focus in the next event loop iteration
 // or NULL if there's no pending focus change:
 static wxWindowGTK *gs_pendingFocus = NULL;
+// The window that had focus before we lost it last time:
+static wxWindowGTK *gs_lastFocus = NULL;
 
 // the window that has deferred focus-out event pending, if any (see
 // GTKAddDeferredFocusOut() for details)
@@ -343,6 +346,13 @@ static bool wxGetTopLevel(GtkWidget** widget, GdkWindow** window)
         }
     }
     return false;
+}
+
+GtkWidget* wxGetTopLevelGTK()
+{
+    GtkWidget* widget = NULL;
+    wxGetTopLevel(&widget, NULL);
+    return widget;
 }
 
 GdkWindow* wxGetTopLevelGDK()
@@ -551,311 +561,311 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
     switch ( keysym )
     {
         // Shift, Control and Alt don't generate the CHAR events at all
-        case GDK_Shift_L:
-        case GDK_Shift_R:
+        case GDK_KEY_Shift_L:
+        case GDK_KEY_Shift_R:
             key_code = isChar ? 0 : WXK_SHIFT;
             break;
-        case GDK_Control_L:
-        case GDK_Control_R:
+        case GDK_KEY_Control_L:
+        case GDK_KEY_Control_R:
             key_code = isChar ? 0 : WXK_CONTROL;
             break;
-        case GDK_Meta_L:
-        case GDK_Meta_R:
-        case GDK_Alt_L:
-        case GDK_Alt_R:
-        case GDK_Super_L:
-        case GDK_Super_R:
+        case GDK_KEY_Meta_L:
+        case GDK_KEY_Meta_R:
+        case GDK_KEY_Alt_L:
+        case GDK_KEY_Alt_R:
+        case GDK_KEY_Super_L:
+        case GDK_KEY_Super_R:
             key_code = isChar ? 0 : WXK_ALT;
             break;
 
         // neither do the toggle modifies
-        case GDK_Scroll_Lock:
+        case GDK_KEY_Scroll_Lock:
             key_code = isChar ? 0 : WXK_SCROLL;
             break;
 
-        case GDK_Caps_Lock:
+        case GDK_KEY_Caps_Lock:
             key_code = isChar ? 0 : WXK_CAPITAL;
             break;
 
-        case GDK_Num_Lock:
+        case GDK_KEY_Num_Lock:
             key_code = isChar ? 0 : WXK_NUMLOCK;
             break;
 
 
         // various other special keys
-        case GDK_Menu:
+        case GDK_KEY_Menu:
             key_code = WXK_MENU;
             break;
 
-        case GDK_Help:
+        case GDK_KEY_Help:
             key_code = WXK_HELP;
             break;
 
-        case GDK_BackSpace:
+        case GDK_KEY_BackSpace:
             key_code = WXK_BACK;
             break;
 
-        case GDK_ISO_Left_Tab:
-        case GDK_Tab:
+        case GDK_KEY_ISO_Left_Tab:
+        case GDK_KEY_Tab:
             key_code = WXK_TAB;
             break;
 
-        case GDK_Linefeed:
-        case GDK_Return:
+        case GDK_KEY_Linefeed:
+        case GDK_KEY_Return:
             key_code = WXK_RETURN;
             break;
 
-        case GDK_Clear:
+        case GDK_KEY_Clear:
             key_code = WXK_CLEAR;
             break;
 
-        case GDK_Pause:
+        case GDK_KEY_Pause:
             key_code = WXK_PAUSE;
             break;
 
-        case GDK_Select:
+        case GDK_KEY_Select:
             key_code = WXK_SELECT;
             break;
 
-        case GDK_Print:
+        case GDK_KEY_Print:
             key_code = WXK_PRINT;
             break;
 
-        case GDK_Execute:
+        case GDK_KEY_Execute:
             key_code = WXK_EXECUTE;
             break;
 
-        case GDK_Escape:
+        case GDK_KEY_Escape:
             key_code = WXK_ESCAPE;
             break;
 
         // cursor and other extended keyboard keys
-        case GDK_Delete:
+        case GDK_KEY_Delete:
             key_code = WXK_DELETE;
             break;
 
-        case GDK_Home:
+        case GDK_KEY_Home:
             key_code = WXK_HOME;
             break;
 
-        case GDK_Left:
+        case GDK_KEY_Left:
             key_code = WXK_LEFT;
             break;
 
-        case GDK_Up:
+        case GDK_KEY_Up:
             key_code = WXK_UP;
             break;
 
-        case GDK_Right:
+        case GDK_KEY_Right:
             key_code = WXK_RIGHT;
             break;
 
-        case GDK_Down:
+        case GDK_KEY_Down:
             key_code = WXK_DOWN;
             break;
 
-        case GDK_Prior:     // == GDK_Page_Up
+        case GDK_KEY_Prior:     // == GDK_KEY_Page_Up
             key_code = WXK_PAGEUP;
             break;
 
-        case GDK_Next:      // == GDK_Page_Down
+        case GDK_KEY_Next:      // == GDK_KEY_Page_Down
             key_code = WXK_PAGEDOWN;
             break;
 
-        case GDK_End:
+        case GDK_KEY_End:
             key_code = WXK_END;
             break;
 
-        case GDK_Begin:
+        case GDK_KEY_Begin:
             key_code = WXK_HOME;
             break;
 
-        case GDK_Insert:
+        case GDK_KEY_Insert:
             key_code = WXK_INSERT;
             break;
 
 
         // numpad keys
-        case GDK_KP_0:
-        case GDK_KP_1:
-        case GDK_KP_2:
-        case GDK_KP_3:
-        case GDK_KP_4:
-        case GDK_KP_5:
-        case GDK_KP_6:
-        case GDK_KP_7:
-        case GDK_KP_8:
-        case GDK_KP_9:
-            key_code = (isChar ? '0' : int(WXK_NUMPAD0)) + keysym - GDK_KP_0;
+        case GDK_KEY_KP_0:
+        case GDK_KEY_KP_1:
+        case GDK_KEY_KP_2:
+        case GDK_KEY_KP_3:
+        case GDK_KEY_KP_4:
+        case GDK_KEY_KP_5:
+        case GDK_KEY_KP_6:
+        case GDK_KEY_KP_7:
+        case GDK_KEY_KP_8:
+        case GDK_KEY_KP_9:
+            key_code = (isChar ? '0' : int(WXK_NUMPAD0)) + keysym - GDK_KEY_KP_0;
             break;
 
-        case GDK_KP_Space:
+        case GDK_KEY_KP_Space:
             key_code = isChar ? ' ' : int(WXK_NUMPAD_SPACE);
             break;
 
-        case GDK_KP_Tab:
+        case GDK_KEY_KP_Tab:
             key_code = isChar ? WXK_TAB : WXK_NUMPAD_TAB;
             break;
 
-        case GDK_KP_Enter:
+        case GDK_KEY_KP_Enter:
             key_code = isChar ? WXK_RETURN : WXK_NUMPAD_ENTER;
             break;
 
-        case GDK_KP_F1:
+        case GDK_KEY_KP_F1:
             key_code = isChar ? WXK_F1 : WXK_NUMPAD_F1;
             break;
 
-        case GDK_KP_F2:
+        case GDK_KEY_KP_F2:
             key_code = isChar ? WXK_F2 : WXK_NUMPAD_F2;
             break;
 
-        case GDK_KP_F3:
+        case GDK_KEY_KP_F3:
             key_code = isChar ? WXK_F3 : WXK_NUMPAD_F3;
             break;
 
-        case GDK_KP_F4:
+        case GDK_KEY_KP_F4:
             key_code = isChar ? WXK_F4 : WXK_NUMPAD_F4;
             break;
 
-        case GDK_KP_Home:
+        case GDK_KEY_KP_Home:
             key_code = isChar ? WXK_HOME : WXK_NUMPAD_HOME;
             break;
 
-        case GDK_KP_Left:
+        case GDK_KEY_KP_Left:
             key_code = isChar ? WXK_LEFT : WXK_NUMPAD_LEFT;
             break;
 
-        case GDK_KP_Up:
+        case GDK_KEY_KP_Up:
             key_code = isChar ? WXK_UP : WXK_NUMPAD_UP;
             break;
 
-        case GDK_KP_Right:
+        case GDK_KEY_KP_Right:
             key_code = isChar ? WXK_RIGHT : WXK_NUMPAD_RIGHT;
             break;
 
-        case GDK_KP_Down:
+        case GDK_KEY_KP_Down:
             key_code = isChar ? WXK_DOWN : WXK_NUMPAD_DOWN;
             break;
 
-        case GDK_KP_Prior: // == GDK_KP_Page_Up
+        case GDK_KEY_KP_Prior: // == GDK_KP_Page_Up
             key_code = isChar ? WXK_PAGEUP : WXK_NUMPAD_PAGEUP;
             break;
 
-        case GDK_KP_Next: // == GDK_KP_Page_Down
+        case GDK_KEY_KP_Next: // == GDK_KP_Page_Down
             key_code = isChar ? WXK_PAGEDOWN : WXK_NUMPAD_PAGEDOWN;
             break;
 
-        case GDK_KP_End:
+        case GDK_KEY_KP_End:
             key_code = isChar ? WXK_END : WXK_NUMPAD_END;
             break;
 
-        case GDK_KP_Begin:
+        case GDK_KEY_KP_Begin:
             key_code = isChar ? WXK_HOME : WXK_NUMPAD_BEGIN;
             break;
 
-        case GDK_KP_Insert:
+        case GDK_KEY_KP_Insert:
             key_code = isChar ? WXK_INSERT : WXK_NUMPAD_INSERT;
             break;
 
-        case GDK_KP_Delete:
+        case GDK_KEY_KP_Delete:
             key_code = isChar ? WXK_DELETE : WXK_NUMPAD_DELETE;
             break;
 
-        case GDK_KP_Equal:
+        case GDK_KEY_KP_Equal:
             key_code = isChar ? '=' : int(WXK_NUMPAD_EQUAL);
             break;
 
-        case GDK_KP_Multiply:
+        case GDK_KEY_KP_Multiply:
             key_code = isChar ? '*' : int(WXK_NUMPAD_MULTIPLY);
             break;
 
-        case GDK_KP_Add:
+        case GDK_KEY_KP_Add:
             key_code = isChar ? '+' : int(WXK_NUMPAD_ADD);
             break;
 
-        case GDK_KP_Separator:
+        case GDK_KEY_KP_Separator:
             // FIXME: what is this?
             key_code = isChar ? '.' : int(WXK_NUMPAD_SEPARATOR);
             break;
 
-        case GDK_KP_Subtract:
+        case GDK_KEY_KP_Subtract:
             key_code = isChar ? '-' : int(WXK_NUMPAD_SUBTRACT);
             break;
 
-        case GDK_KP_Decimal:
+        case GDK_KEY_KP_Decimal:
             key_code = isChar ? '.' : int(WXK_NUMPAD_DECIMAL);
             break;
 
-        case GDK_KP_Divide:
+        case GDK_KEY_KP_Divide:
             key_code = isChar ? '/' : int(WXK_NUMPAD_DIVIDE);
             break;
 
 
         // function keys
-        case GDK_F1:
-        case GDK_F2:
-        case GDK_F3:
-        case GDK_F4:
-        case GDK_F5:
-        case GDK_F6:
-        case GDK_F7:
-        case GDK_F8:
-        case GDK_F9:
-        case GDK_F10:
-        case GDK_F11:
-        case GDK_F12:
-            key_code = WXK_F1 + keysym - GDK_F1;
+        case GDK_KEY_F1:
+        case GDK_KEY_F2:
+        case GDK_KEY_F3:
+        case GDK_KEY_F4:
+        case GDK_KEY_F5:
+        case GDK_KEY_F6:
+        case GDK_KEY_F7:
+        case GDK_KEY_F8:
+        case GDK_KEY_F9:
+        case GDK_KEY_F10:
+        case GDK_KEY_F11:
+        case GDK_KEY_F12:
+            key_code = WXK_F1 + keysym - GDK_KEY_F1;
             break;
 #if GTK_CHECK_VERSION(2,18,0)
-        case GDK_Back:
+        case GDK_KEY_Back:
             key_code = WXK_BROWSER_BACK;
             break;
-        case GDK_Forward:
+        case GDK_KEY_Forward:
             key_code = WXK_BROWSER_FORWARD;
             break;
-        case GDK_Refresh:
+        case GDK_KEY_Refresh:
             key_code = WXK_BROWSER_REFRESH;
             break;
-        case GDK_Stop:
+        case GDK_KEY_Stop:
             key_code = WXK_BROWSER_STOP;
             break;
-        case GDK_Search:
+        case GDK_KEY_Search:
             key_code = WXK_BROWSER_SEARCH;
             break;
-        case GDK_Favorites:
+        case GDK_KEY_Favorites:
             key_code = WXK_BROWSER_FAVORITES;
             break;
-        case GDK_HomePage:
+        case GDK_KEY_HomePage:
             key_code = WXK_BROWSER_HOME;
             break;
-        case GDK_AudioMute:
+        case GDK_KEY_AudioMute:
             key_code = WXK_VOLUME_MUTE;
             break;
-        case GDK_AudioLowerVolume:
+        case GDK_KEY_AudioLowerVolume:
             key_code = WXK_VOLUME_DOWN;
             break;
-        case GDK_AudioRaiseVolume:
+        case GDK_KEY_AudioRaiseVolume:
             key_code = WXK_VOLUME_UP;
             break;
-        case GDK_AudioNext:
+        case GDK_KEY_AudioNext:
             key_code = WXK_MEDIA_NEXT_TRACK;
             break;
-        case GDK_AudioPrev:
+        case GDK_KEY_AudioPrev:
             key_code = WXK_MEDIA_PREV_TRACK;
             break;
-        case GDK_AudioStop:
+        case GDK_KEY_AudioStop:
             key_code = WXK_MEDIA_STOP;
             break;
-        case GDK_AudioPlay:
+        case GDK_KEY_AudioPlay:
             key_code = WXK_MEDIA_PLAY_PAUSE;
             break;
-        case GDK_Mail:
+        case GDK_KEY_Mail:
             key_code = WXK_LAUNCH_MAIL;
             break;
-        case GDK_LaunchA:
+        case GDK_KEY_LaunchA:
             key_code = WXK_LAUNCH_APP1;
             break;
-        case GDK_LaunchB:
+        case GDK_KEY_LaunchB:
             key_code = WXK_LAUNCH_APP2;
             break;
 #endif // GTK_CHECK_VERSION(2,18,0)
@@ -913,25 +923,25 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     const bool isPress = gdk_event->type == GDK_KEY_PRESS;
     switch ( gdk_event->keyval )
     {
-        case GDK_Shift_L:
-        case GDK_Shift_R:
+        case GDK_KEY_Shift_L:
+        case GDK_KEY_Shift_R:
             event.m_shiftDown = isPress;
             break;
 
-        case GDK_Control_L:
-        case GDK_Control_R:
+        case GDK_KEY_Control_L:
+        case GDK_KEY_Control_R:
             event.m_controlDown = isPress;
             break;
 
-        case GDK_Alt_L:
-        case GDK_Alt_R:
+        case GDK_KEY_Alt_L:
+        case GDK_KEY_Alt_R:
             event.m_altDown = isPress;
             break;
 
-        case GDK_Meta_L:
-        case GDK_Meta_R:
-        case GDK_Super_L:
-        case GDK_Super_R:
+        case GDK_KEY_Meta_L:
+        case GDK_KEY_Meta_R:
+        case GDK_KEY_Super_L:
+        case GDK_KEY_Super_R:
             event.m_metaDown = isPress;
             break;
     }
@@ -2184,10 +2194,19 @@ gtk_window_realized_callback(GtkWidget* WXUNUSED(widget), wxWindowGTK* win)
 //-----------------------------------------------------------------------------
 
 static void
-size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
+size_allocate(GtkWidget* WXUNUSED_IN_GTK2(widget), GtkAllocation* alloc, wxWindow* win)
 {
     int w = alloc->width;
     int h = alloc->height;
+#if GTK_CHECK_VERSION(3,14,0)
+    if (wx_is_at_least_gtk3(14))
+    {
+        GtkAllocation clip;
+        gtk_widget_get_clip(widget, &clip);
+        if (clip.width > w || clip.height > h)
+            gtk_widget_set_clip(widget, alloc);
+    }
+#endif
     if (win->m_wxwindow)
     {
         GtkBorder border;
@@ -2307,8 +2326,10 @@ void wxWindowGTK::GTKHandleRealized()
 #if wxGTK_HAS_COMPOSITING_SUPPORT
         if (IsTransparentBackgroundSupported())
         {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             if (window)
                 gdk_window_set_composited(window, true);
+            wxGCC_WARNING_RESTORE()
         }
         else
 #endif // wxGTK_HAS_COMPOSITING_SUPPORT
@@ -2420,13 +2441,19 @@ wxMouseState wxGetMouseState()
     gint y;
     GdkModifierType mask;
 
-    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
+    GdkWindow* window = wxGetTopLevelGDK();
+    GdkDisplay* display = gdk_window_get_display(window);
 #ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    GdkSeat* seat = gdk_display_get_default_seat(display);
+    GdkDevice* device = gdk_seat_get_pointer(seat);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
-    GdkScreen* screen;
-    gdk_device_get_position(device, &screen, &x, &y);
-    GdkWindow* window = gdk_screen_get_root_window(screen);
+    wxGCC_WARNING_RESTORE()
+#endif
+    gdk_device_get_position(device, NULL, &x, &y);
     gdk_device_get_state(device, window, NULL, &mask);
 #else
     gdk_display_get_pointer(display, NULL, &x, &y, &mask);
@@ -2543,8 +2570,8 @@ void wxWindowGTK::GTKCreateScrolledWindowWith(GtkWidget* view)
             bindings = gtk_binding_set_by_class(G_OBJECT_GET_CLASS(m_widget));
         if ( bindings )
         {
-            gtk_binding_entry_remove(bindings, GDK_Page_Up, GDK_CONTROL_MASK);
-            gtk_binding_entry_remove(bindings, GDK_Page_Down, GDK_CONTROL_MASK);
+            gtk_binding_entry_remove(bindings, GDK_KEY_Page_Up, GDK_CONTROL_MASK);
+            gtk_binding_entry_remove(bindings, GDK_KEY_Page_Down, GDK_CONTROL_MASK);
         }
     }
 
@@ -2648,8 +2675,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
 void wxWindowGTK::GTKDisconnect(void* instance)
 {
-    g_signal_handlers_disconnect_matched(instance,
-        GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, this);
+    g_signal_handlers_disconnect_by_data(instance, this);
 }
 
 wxWindowGTK::~wxWindowGTK()
@@ -2660,6 +2686,8 @@ wxWindowGTK::~wxWindowGTK()
         gs_currentFocus = NULL;
     if (gs_pendingFocus == this)
         gs_pendingFocus = NULL;
+    if (gs_lastFocus == this)
+        gs_lastFocus = NULL;
 
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
@@ -3799,7 +3827,7 @@ bool wxWindowGTK::GTKShowFromOnIdle()
 void wxWindowGTK::OnInternalIdle()
 {
     if ( gs_deferredFocusOut )
-        GTKHandleDeferredFocusOut();
+        gs_deferredFocusOut->GTKHandleDeferredFocusOut();
 
     // Check if we have to show window now
     if (GTKShowFromOnIdle()) return;
@@ -4319,7 +4347,7 @@ bool wxWindowGTK::GTKHandleFocusIn()
         // otherwise we need to send focus-out first
         wxASSERT_MSG ( gs_deferredFocusOut != this,
                        "GTKHandleFocusIn(GTKFocus_Normal) called even though focus changed back to itself - derived class should handle this" );
-        GTKHandleDeferredFocusOut();
+        gs_deferredFocusOut->GTKHandleDeferredFocusOut();
     }
 
 
@@ -4349,6 +4377,9 @@ bool wxWindowGTK::GTKHandleFocusIn()
 
     wxFocusEvent eventFocus(wxEVT_SET_FOCUS, GetId());
     eventFocus.SetEventObject(this);
+    eventFocus.SetWindow(gs_lastFocus);
+    gs_lastFocus = this;
+
     GTKProcessEvent(eventFocus);
 
     return retval;
@@ -4390,6 +4421,8 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
                "handling focus_out event for %s(%p, %s)",
                GetClassInfo()->GetClassName(), this, GetLabel());
 
+    gs_lastFocus = this;
+
     if (m_imContext)
         gtk_im_context_focus_out(m_imContext);
 
@@ -4425,23 +4458,18 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
     GTKProcessEvent( event );
 }
 
-/*static*/
 void wxWindowGTK::GTKHandleDeferredFocusOut()
 {
     // NB: See GTKHandleFocusOut() for explanation. This function is called
     //     from either GTKHandleFocusIn() or OnInternalIdle() to process
-    //     deferred event.
-    if ( gs_deferredFocusOut )
-    {
-        wxWindowGTK *win = gs_deferredFocusOut;
-        gs_deferredFocusOut = NULL;
+    //     deferred event for this window.
+    gs_deferredFocusOut = NULL;
 
-        wxLogTrace(TRACE_FOCUS,
-                   "processing deferred focus_out event for %s(%p, %s)",
-                   win->GetClassInfo()->GetClassName(), win, win->GetLabel());
+    wxLogTrace(TRACE_FOCUS,
+               "processing deferred focus_out event for %s(%p, %s)",
+               GetClassInfo()->GetClassName(), this, GetLabel());
 
-        win->GTKHandleFocusOutNoDeferring();
-    }
+    GTKHandleFocusOutNoDeferring();
 }
 
 void wxWindowGTK::SetFocus()
@@ -4824,8 +4852,16 @@ void wxWindowGTK::WarpPointer( int x, int y )
     GdkDisplay* display = gtk_widget_get_display(m_widget);
     GdkScreen* screen = gtk_widget_get_screen(m_widget);
 #ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    GdkSeat* seat = gdk_display_get_default_seat(display);
+    GdkDevice* device = gdk_seat_get_pointer(seat);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
-    gdk_device_warp(gdk_device_manager_get_client_pointer(manager), screen, x, y);
+    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    wxGCC_WARNING_RESTORE()
+#endif
+    gdk_device_warp(device, screen, x, y);
 #else
 #ifdef GDK_WINDOWING_X11
     XWarpPointer(GDK_DISPLAY_XDISPLAY(display),
@@ -5416,9 +5452,9 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
         }
         g_string_append_c(css, '}');
 
-        if (isFg && isBg)
+        if (isFg || isBg)
         {
-            // Selection will be invisible, so add textview selection colors.
+            // Selection may be invisible, so add textview selection colors.
             // This is specifically for wxTextCtrl, but may be useful for other
             // controls, and seems to do no harm to apply to all.
             const wxColour fg_sel(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
@@ -5761,6 +5797,11 @@ void wxWindowGTK::DoCaptureMouse()
 
     wxCHECK_RET( window, wxT("CaptureMouse() failed") );
 
+#ifdef __WXGTK4__
+    GdkDisplay* display = gdk_window_get_display(window);
+    GdkSeat* seat = gdk_display_get_default_seat(display);
+    gdk_seat_grab(seat, window, GDK_SEAT_CAPABILITY_POINTER, false, NULL, NULL, NULL, 0);
+#else
     const GdkEventMask mask = GdkEventMask(
         GDK_BUTTON_PRESS_MASK |
         GDK_BUTTON_RELEASE_MASK |
@@ -5768,11 +5809,13 @@ void wxWindowGTK::DoCaptureMouse()
         GDK_POINTER_MOTION_MASK);
 #ifdef __WXGTK3__
     GdkDisplay* display = gdk_window_get_display(window);
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
     gdk_device_grab(
         device, window, GDK_OWNERSHIP_NONE, false, mask,
         NULL, unsigned(GDK_CURRENT_TIME));
+    wxGCC_WARNING_RESTORE()
 #else
     gdk_pointer_grab( window, FALSE,
                       mask,
@@ -5780,6 +5823,7 @@ void wxWindowGTK::DoCaptureMouse()
                       NULL,
                       (guint32)GDK_CURRENT_TIME );
 #endif
+#endif // !__WXGTK4__
     g_captureWindow = this;
     g_captureWindowHasMouse = true;
 }
@@ -5803,9 +5847,15 @@ void wxWindowGTK::DoReleaseMouse()
 
 #ifdef __WXGTK3__
     GdkDisplay* display = gdk_window_get_display(window);
+#ifdef __WXGTK4__
+    gdk_seat_ungrab(gdk_display_get_default_seat(display));
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
     gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+    wxGCC_WARNING_RESTORE()
+#endif
 #else
     gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
 #endif
@@ -5815,9 +5865,15 @@ void wxWindowGTK::GTKReleaseMouseAndNotify()
 {
     GdkDisplay* display = gtk_widget_get_display(m_widget);
 #ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    gdk_seat_ungrab(gdk_display_get_default_seat(display));
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
     gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+    wxGCC_WARNING_RESTORE()
+#endif
 #else
     gdk_display_pointer_ungrab(display, unsigned(GDK_CURRENT_TIME));
 #endif
@@ -6060,8 +6116,15 @@ void wxGetMousePosition(int* x, int* y)
 {
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
 #ifdef __WXGTK3__
+#ifdef __WXGTK4__
+    GdkSeat* seat = gdk_display_get_default_seat(display);
+    GdkDevice* device = gdk_seat_get_pointer(seat);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    wxGCC_WARNING_RESTORE()
+#endif
     gdk_device_get_position(device, NULL, x, y);
 #else
     gdk_display_get_pointer(display, NULL, x, y, NULL);

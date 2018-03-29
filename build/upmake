@@ -18,9 +18,44 @@ $fatpacked{"Makefile/Update.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   
   our @EXPORT = qw(read_files_list upmake);
   
-  our $VERSION = '0.3'; # VERSION
+  # VERSION
   
+  =head1 SYNOPSIS
   
+      use Makefile::Update;
+      my $vars = read_files_list('files.lst');
+      upmake('foo.vcxproj', $vars->{sources}, $vars->{headers});
+  
+  =cut
+  
+  =func read_files_list
+  
+  Reads the file containing the file lists definitions and returns a hash ref
+  with variable names as keys and refs to arrays of the file names as values.
+  
+  Takes an (open) file handle as argument.
+  
+  The file contents is supposed to have the following very simple format:
+  
+      # Comments are allowed and ignored.
+      #
+      # The variable definitions must always be in the format shown below,
+      # i.e. whitespace is significant and there should always be a single
+      # file per line.
+      sources =
+          file1.cpp
+          file2.cpp
+  
+      headers =
+          file1.h
+          file2.h
+  
+      # It is also possible to define variables in terms of other variables
+      # defined before it in the file (no forward references):
+      everything =
+          $sources
+          $headers
+  =cut
   
   sub read_files_list
   {
@@ -55,6 +90,41 @@ $fatpacked{"Makefile/Update.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       return \%vars;
   }
   
+  =func upmake
+  
+  Update a file in place using the specified function and passing it the rest of
+  the arguments.
+  
+  The first parameter is either just the file path or a hash reference which may
+  contain the following keys:
+  
+  =over
+  
+  =item C<file>
+  
+  The path to the file to be updated, required.
+  
+  =item C<verbose>
+  
+  If true, give more messages about what is being done.
+  
+  =item C<quiet>
+  
+  If true, don't output any non-error messages.
+  
+  =item C<dryrun>
+  
+  If true, don't really update the file but just output whether it would have
+  been updated or not. If C<verbose> is also true, also output the diff of the
+  changes that would have been done.
+  
+  =back
+  
+  This is meant to be used with C<update_xxx()> defined in different
+  Makefile::Update::Xxx modules.
+  
+  Returns 1 if the file was changed or 0 otherwise.
+  =cut
   
   sub upmake
   {
@@ -137,104 +207,6 @@ $fatpacked{"Makefile/Update.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   }
   
   1;
-  
-  __END__
-  
-  =pod
-  
-  =encoding UTF-8
-  
-  =head1 NAME
-  
-  Makefile::Update - Update make files.
-  
-  =head1 VERSION
-  
-  version 0.3
-  
-  =head1 SYNOPSIS
-  
-      use Makefile::Update;
-      my $vars = read_files_list('files.lst');
-      upmake('foo.vcxproj', $vars->{sources}, $vars->{headers});
-  
-  =head1 FUNCTIONS
-  
-  =head2 read_files_list
-  
-  Reads the file containing the file lists definitions and returns a hash ref
-  with variable names as keys and refs to arrays of the file names as values.
-  
-  Takes an (open) file handle as argument.
-  
-  The file contents is supposed to have the following very simple format:
-  
-      # Comments are allowed and ignored.
-      #
-      # The variable definitions must always be in the format shown below,
-      # i.e. whitespace is significant and there should always be a single
-      # file per line.
-      sources =
-          file1.cpp
-          file2.cpp
-  
-      headers =
-          file1.h
-          file2.h
-  
-      # It is also possible to define variables in terms of other variables
-      # defined before it in the file (no forward references):
-      everything =
-          $sources
-          $headers
-  
-  =head2 upmake
-  
-  Update a file in place using the specified function and passing it the rest of
-  the arguments.
-  
-  The first parameter is either just the file path or a hash reference which may
-  contain the following keys:
-  
-  =over
-  
-  =item C<file>
-  
-  The path to the file to be updated, required.
-  
-  =item C<verbose>
-  
-  If true, give more messages about what is being done.
-  
-  =item C<quiet>
-  
-  If true, don't output any non-error messages.
-  
-  =item C<dryrun>
-  
-  If true, don't really update the file but just output whether it would have
-  been updated or not. If C<verbose> is also true, also output the diff of the
-  changes that would have been done.
-  
-  =back
-  
-  This is meant to be used with C<update_xxx()> defined in different
-  Makefile::Update::Xxx modules.
-  
-  Returns 1 if the file was changed or 0 otherwise.
-  
-  =head1 AUTHOR
-  
-  Vadim Zeitlin <vz-cpan@zeitlins.org>
-  
-  =head1 COPYRIGHT AND LICENSE
-  
-  This software is copyright (c) 2015 by Vadim Zeitlin.
-  
-  This is free software; you can redistribute it and/or modify it under
-  the same terms as the Perl 5 programming language system itself.
-  
-  =cut
 MAKEFILE_UPDATE
 
 $fatpacked{"Makefile/Update/Bakefile0.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MAKEFILE_UPDATE_BAKEFILE0';
@@ -247,9 +219,32 @@ $fatpacked{"Makefile/Update/Bakefile0.pm"} = '#line '.(1+__LINE__).' "'.__FILE__
   use strict;
   use warnings;
   
-  our $VERSION = '0.3'; # VERSION
+  # VERSION
   
+  =head1 SYNOPSIS
   
+  This is used exclusively to update wxWidgets C<files.bkl> and is probably not
+  useful outside of wxWidgets project.
+  
+      use Makefile::Update::Bakefile0;
+      Makefile::Update::upmake('bakefiles/files.bkl', \&update_bakefile_0, $vars);
+  
+  =head1 SEE ALSO
+  
+  Makefile::Update
+  
+  =cut
+  
+  =func update_bakefile_0
+  
+  Update file with variable definitions in bakefile-0 format with the data
+  from the hash ref containing all the file lists.
+  
+  Takes the (open) file handles of the files to read and to write and the file
+  lists hash ref as arguments.
+  
+  Returns 1 if any changes were made.
+  =cut
   
   sub update_bakefile_0
   {
@@ -275,6 +270,8 @@ $fatpacked{"Makefile/Update/Bakefile0.pm"} = '#line '.(1+__LINE__).' "'.__FILE__
               s/<!-- .* -->//;
               s/^\s+//;
               s/\s+$//;
+              s{<if [^>]+>}{};
+              s{</if>}{};
               if (m{</set>}) {
                   # Check if we have any new files.
                   #
@@ -311,58 +308,133 @@ $fatpacked{"Makefile/Update/Bakefile0.pm"} = '#line '.(1+__LINE__).' "'.__FILE__
   
       $changed
   }
+MAKEFILE_UPDATE_BAKEFILE0
+
+$fatpacked{"Makefile/Update/CMakefile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MAKEFILE_UPDATE_CMAKEFILE';
+  package Makefile::Update::CMakefile;
+  # ABSTRACT: Update lists of files in CMake variables.
   
-  __END__
+  use Exporter qw(import);
+  our @EXPORT = qw(update_cmakefile);
   
-  =pod
+  use strict;
+  use warnings;
   
-  =encoding UTF-8
-  
-  =head1 NAME
-  
-  Makefile::Update::Bakefile0 - Update bakefile-0.x files list.
-  
-  =head1 VERSION
-  
-  version 0.3
+  # VERSION
   
   =head1 SYNOPSIS
   
-  This is used exclusively to update wxWidgets C<files.bkl> and is probably not
-  useful outside of wxWidgets project.
+  This can be used to update the contents of a variable containing a list of
+  files in a CMake file.
   
-      use Makefile::Update::Bakefile0;
-      Makefile::Update::upmake('bakefiles/files.bkl', \&update_bakefile_0, $vars);
-  
-  =head1 FUNCTIONS
-  
-  =head2 update_bakefile_0
-  
-  Update file with variable definitions in bakefile-0 format with the data
-  from the hash ref containing all the file lists.
-  
-  Takes the (open) file handles of the files to read and to write and the file
-  lists hash ref as arguments.
-  
-  Returns 1 if any changes were made.
+      use Makefile::Update::CMakefile;
+      Makefile::Update::upmake('CMakeLists.txt', \&update_cmakefile, $vars);
   
   =head1 SEE ALSO
   
   Makefile::Update
   
-  =head1 AUTHOR
-  
-  Vadim Zeitlin <vz-cpan@zeitlins.org>
-  
-  =head1 COPYRIGHT AND LICENSE
-  
-  This software is copyright (c) 2015 by Vadim Zeitlin.
-  
-  This is free software; you can redistribute it and/or modify it under
-  the same terms as the Perl 5 programming language system itself.
-  
   =cut
-MAKEFILE_UPDATE_BAKEFILE0
+  
+  # Variables in our input files use make-like $(var) syntax while CMake uses
+  # shell-like ${var}, so convert to the target format.
+  sub _var_to_cmake
+  {
+      my ($var) = @_;
+      $var =~ s/\((\w+)\)/{$1}/g;
+      $var;
+  }
+  
+  =func update_cmakefile
+  
+  Update variable definitions in a CMake file with the data from the hash
+  ref containing all the file lists.
+  
+  The variables are supposed to be defined in the following format:
+  
+      set(var
+          foo
+          bar
+          baz
+      )
+  
+  Notably, each file has to be on its own line, including the first one.
+  
+  Takes the (open) file handles of the files to read and to write and the file
+  lists hash ref as arguments.
+  
+  Returns 1 if any changes were made.
+  =cut
+  
+  sub update_cmakefile
+  {
+      my ($in, $out, $vars) = @_;
+  
+      # Variable whose contents is being currently replaced.
+      my $var;
+  
+      # Hash with files defined for the specified variable as keys and 0 or 1
+      # depending on whether we have seen them in the input file as values.
+      my %files;
+  
+      # Set to 1 if we made any changes.
+      my $changed = 0;
+      while (<$in>) {
+          # Preserve the original line to be able to output it with any comments
+          # that we strip below.
+          my $line_orig = $_;
+  
+          # Get rid of white space and comments.
+          chomp;
+          s/^\s+//;
+          s/\s+$//;
+          s/ *#.*$//;
+  
+          # Are we inside a variable definition?
+          if (defined $var) {
+              if (/^\)$/) {
+                  # End of variable definition, check if we have any new files.
+                  #
+                  # TODO Insert them in alphabetical order.
+                  while (my ($file, $seen) = each(%files)) {
+                      if (!$seen) {
+                          # This file wasn't present in the input, add it.
+                          # TODO Use proper indentation.
+                          print $out "    $file\n";
+  
+                          $changed = 1;
+                      }
+                  }
+  
+                  undef $var;
+              } elsif ($_) {
+                  # We're inside a variable definition.
+                  if (not exists $files{$_}) {
+                      # This file was removed.
+                      $changed = 1;
+                      next;
+                  }
+  
+                  if ($files{$_}) {
+                      warn qq{Duplicate file "$_" in the definition of the } .
+                           qq{variable "$var" at line $.\n}
+                  } else {
+                      $files{$_} = 1;
+                  }
+              }
+          } elsif (/^set *\( *(\w+)$/ && exists $vars->{$1}) {
+              # Start of a new variable definition.
+              $var = $1;
+  
+              %files = map { _var_to_cmake($_) => 0 } @{$vars->{$var}};
+          }
+  
+          print $out $line_orig;
+      }
+  
+      $changed
+  }
+MAKEFILE_UPDATE_CMAKEFILE
 
 $fatpacked{"Makefile/Update/MSBuild.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MAKEFILE_UPDATE_MSBUILD';
   package Makefile::Update::MSBuild;
@@ -374,9 +446,34 @@ $fatpacked{"Makefile/Update/MSBuild.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."
   use strict;
   use warnings;
   
-  our $VERSION = '0.3'; # VERSION
+  # VERSION
   
+  =head1 SYNOPSIS
   
+  Given an MSBuild project C<project.vcxproj> and its associated filters file
+  C<projects.vcxproj.filters>, the functions in this module can be used to update
+  the list of files in them to correspond to the given ones.
+  
+      use Makefile::Update::MSBuild;
+      upmake_msbuild_project('project.vcxproj', \@sources, \@headers);
+  
+  =head1 SEE ALSO
+  
+  Makefile::Update, Makefile::Update::VCProj
+  
+  =cut
+  
+  =func update_msbuild_project
+  
+  Update sources and headers in an MSBuild project and filter files.
+  
+  Pass the path of the project to update or a hash with the same keys as used by
+  C<Makefile::Update::upmake> as the first parameter and the references to the
+  sources and headers arrays as the subsequent ones.
+  
+  Returns 1 if any changes were made, either to the project itself or to its
+  associated C<.filters> file.
+  =cut
   
   sub update_msbuild_project
   {
@@ -405,6 +502,15 @@ $fatpacked{"Makefile/Update/MSBuild.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."
   }
   
   
+  =func update_msbuild
+  
+  Update sources and headers in an MSBuild project.
+  
+  Parameters: input and output file handles and array references to the sources
+  and the headers to be used in this project.
+  
+  Returns 1 if any changes were made.
+  =cut
   
   sub update_msbuild
   {
@@ -508,6 +614,16 @@ $fatpacked{"Makefile/Update/MSBuild.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."
       $changed
   }
   
+  =func update_msbuild_filters
+  
+  Update sources and headers in an MSBuild filters file.
+  
+  Parameters: input and output file handles, array references to the sources
+  and the headers to be used in this project and a callback used to determine
+  the filter for the new files.
+  
+  Returns 1 if any changes were made.
+  =cut
   
   sub update_msbuild_filters
   {
@@ -635,78 +751,6 @@ $fatpacked{"Makefile/Update/MSBuild.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."
   
       $changed
   }
-  
-  __END__
-  
-  =pod
-  
-  =encoding UTF-8
-  
-  =head1 NAME
-  
-  Makefile::Update::MSBuild - Update list of sources and headers in MSBuild projects.
-  
-  =head1 VERSION
-  
-  version 0.3
-  
-  =head1 SYNOPSIS
-  
-  Given an MSBuild project C<project.vcxproj> and its associated filters file
-  C<projects.vcxproj.filters>, the functions in this module can be used to update
-  the list of files in them to correspond to the given ones.
-  
-      use Makefile::Update::MSBuild;
-      upmake_msbuild_project('project.vcxproj', \@sources, \@headers);
-  
-  =head1 FUNCTIONS
-  
-  =head2 update_msbuild_project
-  
-  Update sources and headers in an MSBuild project and filter files.
-  
-  Pass the path of the project to update or a hash with the same keys as used by
-  C<Makefile::Update::upmake> as the first parameter and the references to the
-  sources and headers arrays as the subsequent ones.
-  
-  Returns 1 if any changes were made, either to the project itself or to its
-  associated C<.filters> file.
-  
-  =head2 update_msbuild
-  
-  Update sources and headers in an MSBuild project.
-  
-  Parameters: input and output file handles and array references to the sources
-  and the headers to be used in this project.
-  
-  Returns 1 if any changes were made.
-  
-  =head2 update_msbuild_filters
-  
-  Update sources and headers in an MSBuild filters file.
-  
-  Parameters: input and output file handles, array references to the sources
-  and the headers to be used in this project and a callback used to determine
-  the filter for the new files.
-  
-  Returns 1 if any changes were made.
-  
-  =head1 SEE ALSO
-  
-  Makefile::Update, Makefile::Update::VCProj
-  
-  =head1 AUTHOR
-  
-  Vadim Zeitlin <vz-cpan@zeitlins.org>
-  
-  =head1 COPYRIGHT AND LICENSE
-  
-  This software is copyright (c) 2015 by Vadim Zeitlin.
-  
-  This is free software; you can redistribute it and/or modify it under
-  the same terms as the Perl 5 programming language system itself.
-  
-  =cut
 MAKEFILE_UPDATE_MSBUILD
 
 $fatpacked{"Makefile/Update/Makefile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MAKEFILE_UPDATE_MAKEFILE';
@@ -719,9 +763,53 @@ $fatpacked{"Makefile/Update/Makefile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
   use strict;
   use warnings;
   
-  our $VERSION = '0.3'; # VERSION
+  # VERSION
   
+  =head1 SYNOPSIS
   
+  This can be used to update the contents of a variable containing a list of
+  files in a makefile.
+  
+      use Makefile::Update::Makefile;
+      Makefile::Update::upmake('GNUmakefile', \&update_makefile, $vars);
+  
+  =head1 SEE ALSO
+  
+  Makefile::Update
+  
+  =cut
+  
+  =func update_makefile
+  
+  Update variable definitions in a makefile format with the data from the hash
+  ref containing all the file lists.
+  
+  Only most straightforward cases of variable or target definitions are
+  recognized here, i.e. just "var := value", "var = value" or "target: value".
+  In particular we don't support any GNU make extensions such as "export" or
+  "override" without speaking of anything more complex.
+  
+  On top of it, currently the value should contain a single file per line with
+  none at all on the first line (but this restriction could be relaxed later if
+  needed), i.e. the only supported case is
+  
+      var = \
+            foo \
+            bar \
+            baz
+  
+  and it must be followed by an empty line, too.
+  
+  Notice that if any of the "files" in the variable value looks like a makefile
+  variable, i.e. has "$(foo)" form, it is ignored by this function, i.e. not
+  removed even if it doesn't appear in the list of files (which will never be
+  the case normally).
+  
+  Takes the (open) file handles of the files to read and to write and the file
+  lists hash ref as arguments.
+  
+  Returns 1 if any changes were made.
+  =cut
   
   sub update_makefile
   {
@@ -1002,78 +1090,6 @@ $fatpacked{"Makefile/Update/Makefile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
   
       $changed
   }
-  
-  __END__
-  
-  =pod
-  
-  =encoding UTF-8
-  
-  =head1 NAME
-  
-  Makefile::Update::Makefile - Update lists of files in makefile variables.
-  
-  =head1 VERSION
-  
-  version 0.3
-  
-  =head1 SYNOPSIS
-  
-  This can be used to update the contents of a variable containing a list of
-  files in a makefile.
-  
-      use Makefile::Update::Makefile;
-      Makefile::Update::upmake('GNUmakefile', \&update_makefile, $vars);
-  
-  =head1 FUNCTIONS
-  
-  =head2 update_makefile
-  
-  Update variable definitions in a makefile format with the data from the hash
-  ref containing all the file lists.
-  
-  Only most straightforward cases of variable or target definitions are
-  recognized here, i.e. just "var := value", "var = value" or "target: value".
-  In particular we don't support any GNU make extensions such as "export" or
-  "override" without speaking of anything more complex.
-  
-  On top of it, currently the value should contain a single file per line with
-  none at all on the first line (but this restriction could be relaxed later if
-  needed), i.e. the only supported case is
-  
-      var = \
-            foo \
-            bar \
-            baz
-  
-  and it must be followed by an empty line, too.
-  
-  Notice that if any of the "files" in the variable value looks like a makefile
-  variable, i.e. has "$(foo)" form, it is ignored by this function, i.e. not
-  removed even if it doesn't appear in the list of files (which will never be
-  the case normally).
-  
-  Takes the (open) file handles of the files to read and to write and the file
-  lists hash ref as arguments.
-  
-  Returns 1 if any changes were made.
-  
-  =head1 SEE ALSO
-  
-  Makefile::Update
-  
-  =head1 AUTHOR
-  
-  Vadim Zeitlin <vz-cpan@zeitlins.org>
-  
-  =head1 COPYRIGHT AND LICENSE
-  
-  This software is copyright (c) 2015 by Vadim Zeitlin.
-  
-  This is free software; you can redistribute it and/or modify it under
-  the same terms as the Perl 5 programming language system itself.
-  
-  =cut
 MAKEFILE_UPDATE_MAKEFILE
 
 $fatpacked{"Makefile/Update/VCProj.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MAKEFILE_UPDATE_VCPROJ';
@@ -1086,9 +1102,32 @@ $fatpacked{"Makefile/Update/VCProj.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   use strict;
   use warnings;
   
-  our $VERSION = '0.3'; # VERSION
+  # VERSION
   
+  =head1 SYNOPSIS
   
+  The function L<update_vcproj()> can be used to update the list of headers and
+  sources in the given Visual C++ project file C<project.vcproj>:
+  
+      use Makefile::Update::VCProj;
+      upmake_msbuild_project('project.vcproj', \@sources, \@headers);
+  
+  =head1 SEE ALSO
+  
+  Makefile::Update, Makefile::Update::MSBuild
+  
+  =cut
+  
+  =func update_vcproj
+  
+  Update sources and headers in a VC++ project.
+  
+  Parameters: input and output file handles, array references to the sources
+  and the headers to be used in this project and a callback used to determine
+  the filter for the new files.
+  
+  Returns 1 if any changes were made.
+  =cut
   
   sub update_vcproj
   {
@@ -1252,57 +1291,6 @@ $fatpacked{"Makefile/Update/VCProj.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   
       $changed
   }
-  
-  __END__
-  
-  =pod
-  
-  =encoding UTF-8
-  
-  =head1 NAME
-  
-  Makefile::Update::VCProj - Update list of sources and headers in Visual C++ projects.
-  
-  =head1 VERSION
-  
-  version 0.3
-  
-  =head1 SYNOPSIS
-  
-  The function L<update_vcproj()> can be used to update the list of headers and
-  sources in the given Visual C++ project file C<project.vcproj>:
-  
-      use Makefile::Update::VCProj;
-      upmake_msbuild_project('project.vcproj', \@sources, \@headers);
-  
-  =head1 FUNCTIONS
-  
-  =head2 update_vcproj
-  
-  Update sources and headers in a VC++ project.
-  
-  Parameters: input and output file handles, array references to the sources
-  and the headers to be used in this project and a callback used to determine
-  the filter for the new files.
-  
-  Returns 1 if any changes were made.
-  
-  =head1 SEE ALSO
-  
-  Makefile::Update, Makefile::Update::MSBuild
-  
-  =head1 AUTHOR
-  
-  Vadim Zeitlin <vz-cpan@zeitlins.org>
-  
-  =head1 COPYRIGHT AND LICENSE
-  
-  This software is copyright (c) 2015 by Vadim Zeitlin.
-  
-  This is free software; you can redistribute it and/or modify it under
-  the same terms as the Perl 5 programming language system itself.
-  
-  =cut
 MAKEFILE_UPDATE_VCPROJ
 
 s/^  //mg for values %fatpacked;
@@ -1313,15 +1301,17 @@ no strict 'refs';
 
 if ($] < 5.008) {
   *{"${class}::INC"} = sub {
-     if (my $fat = $_[0]{$_[1]}) {
-       return sub {
-         return 0 unless length $fat;
-         $fat =~ s/^([^\n]*\n?)//;
-         $_ = $1;
-         return 1;
-       };
-     }
-     return;
+    if (my $fat = $_[0]{$_[1]}) {
+      my $pos = 0;
+      my $last = length $fat;
+      return (sub {
+        return 0 if $pos == $last;
+        my $next = (1 + index $fat, "\n", $pos) || $last;
+        $_ .= substr $fat, $pos, $next - $pos;
+        $pos = $next;
+        return 1;
+      });
+    }
   };
 }
 
@@ -1350,6 +1340,7 @@ use FindBin qw($Bin);
 
 use Makefile::Update;
 use Makefile::Update::Bakefile0;
+use Makefile::Update::CMakefile;
 use Makefile::Update::MSBuild;
 use Makefile::Update::VCProj;
 
@@ -1393,8 +1384,12 @@ my $vars = read_files_list($files);
 
 if (!$only_msvs) {
     if (call_upmake("$Bin/bakefiles/files.bkl", \&update_bakefile_0, $vars)) {
-        print qq{Don't forget to run "bakefile_gen -b wx.bkl".\n} if $verbose;
+        print qq{Don't forget to run "bakefile_gen -b wx.bkl".\n};
     }
+}
+
+if (!$only_msvs && !$only_bkl) {
+    call_upmake("$Bin/cmake/files.cmake", \&update_cmakefile, $vars);
 }
 
 if (!$only_bkl) {

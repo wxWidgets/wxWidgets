@@ -58,6 +58,27 @@ int wxRichMessageDialog::ShowModal()
         if ( !m_detailedText.empty() )
             tdc.pszExpandedInformation = m_detailedText.t_str();
 
+        // Add footer text
+        if ( !m_footerText.empty() )
+        {
+            tdc.pszFooter = m_footerText.t_str();
+            switch ( m_footerIcon )
+            {
+                case wxICON_INFORMATION:
+                    tdc.pszFooterIcon = TD_INFORMATION_ICON;
+                    break;
+                case wxICON_WARNING:
+                    tdc.pszFooterIcon = TD_WARNING_ICON;
+                    break;
+                case wxICON_ERROR:
+                    tdc.pszFooterIcon = TD_ERROR_ICON;
+                    break;
+                case wxICON_AUTH_NEEDED:
+                    tdc.pszFooterIcon = TD_SHIELD_ICON;
+                    break;
+            }
+        }
+
         TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
         if ( !taskDialogIndirect )
             return wxID_CANCEL;

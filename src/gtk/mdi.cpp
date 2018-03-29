@@ -422,7 +422,13 @@ void wxMDIClientWindow::AddChildGTK(wxWindowGTK* child)
         s = _("MDI child");
 
     GtkWidget *label_widget = gtk_label_new( s.mbc_str() );
+#ifdef __WXGTK4__
+    g_object_set(label_widget, "xalign", 0.0f, NULL);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_misc_set_alignment( GTK_MISC(label_widget), 0.0, 0.5 );
+    wxGCC_WARNING_RESTORE()
+#endif
 
     GtkNotebook* notebook = GTK_NOTEBOOK(m_widget);
 

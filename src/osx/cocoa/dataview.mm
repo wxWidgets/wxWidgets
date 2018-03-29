@@ -1881,6 +1881,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_REORDERED, dvc, col);
+    event.SetColumn(newColumnPosition);
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -2033,8 +2034,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
         [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]
       ),
       m_DataSource(NULL),
-      m_OutlineView([[wxCocoaOutlineView alloc] init]),
-      m_removeIndentIfNecessary(false)
+      m_OutlineView([[wxCocoaOutlineView alloc] init])
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
@@ -2408,11 +2408,13 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
         m_DataSource = NULL;
     [m_OutlineView setDataSource:m_DataSource]; // if there is a data source the data is immediately going to be requested
 
-    // Set this to true to check if we need to remove the indent in the next
-    // OnSize() call: we can't do it directly here because the model might not
-    // be fully initialized yet and so might not know whether it has any items
-    // with children or not.
-    m_removeIndentIfNecessary = true;
+    // By default, the first column is indented to leave enough place for the
+    // expanders, but this looks bad if there are no expanders, so don't use
+    // indent in this case.
+    if ( model && model->IsListModel() )
+    {
+        DoSetIndent(0);
+    }
 
     return true;
 }
@@ -2577,21 +2579,6 @@ void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), 
 
 void wxCocoaDataViewControl::OnSize()
 {
-    if ( m_removeIndentIfNecessary )
-    {
-        m_removeIndentIfNecessary = false;
-
-        const wxDataViewModel* const model = GetDataViewCtrl()->GetModel();
-
-        // By default, the first column is indented to leave enough place for the
-        // expanders, but this looks bad if there are no expanders, so don't use
-        // indent in this case.
-        if ( model && model->IsListModel() )
-        {
-            DoSetIndent(0);
-        }
-    }
-
     if ([m_OutlineView numberOfColumns] == 1)
         [m_OutlineView sizeLastColumnToFit];
 }
@@ -2911,12 +2898,6 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 
 void wxDataViewRenderer::SetEnabled(bool enabled)
 {
-    // setting the appearance to disabled grey should only be done for
-    // the active cells which are disabled, not for the cells which can
-    // never be edited at all
-    if ( GetMode() == wxDATAVIEW_CELL_INERT )
-        enabled = true;
-
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
@@ -3085,7 +3066,7 @@ wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
                                                    wxDataViewCellMode mode,
                                                    int alignment)
-    : wxDataViewRenderer(wxT("string"), mode, alignment),
+    : wxOSXDataViewDisabledInertRenderer(wxT("string"), mode, alignment),
       m_choices(choices)
 {
     NSPopUpButtonCell* cell;
@@ -3332,7 +3313,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer);
 wxDataViewToggleRenderer::wxDataViewToggleRenderer(const wxString& varianttype,
                                                    wxDataViewCellMode mode,
                                                    int align)
-    : wxDataViewRenderer(varianttype,mode)
+    : wxOSXDataViewDisabledInertRenderer(varianttype, mode, align)
 {
     NSButtonCell* cell;
 
@@ -3527,23 +3508,27 @@ void wxDataViewColumn::SetSortable(bool sortable)
 
 void wxDataViewColumn::SetSortOrder(bool ascending)
 {
-    if (m_ascending != ascending)
+    NSTableColumn* const tableColumn = m_NativeDataPtr->GetNativeColumnPtr();
+    NSTableView* tableView = [tableColumn tableView];
+
+    wxCHECK_RET( tableView, wxS("Column has to be associated with a table view when the sorting order is set") );
+
+    if ( (m_ascending != ascending) || ([tableColumn sortDescriptorPrototype] == nil) )
     {
         m_ascending = ascending;
-        if (IsSortKey())
-        {
-            // change sorting order:
-            NSArray*          sortDescriptors;
-            NSSortDescriptor* sortDescriptor;
-            NSTableColumn*    tableColumn;
 
-            tableColumn     = m_NativeDataPtr->GetNativeColumnPtr();
-            sortDescriptor  = [[NSSortDescriptor alloc] initWithKey:[[tableColumn sortDescriptorPrototype] key] ascending:m_ascending];
-            sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-            [tableColumn setSortDescriptorPrototype:sortDescriptor];
-            [[tableColumn tableView] setSortDescriptors:sortDescriptors];
-            [sortDescriptor release];
-        }
+        // change sorting order for the native implementation (this will
+        // trigger a call to outlineView:sortDescriptorsDidChange: where the
+        // wxWidget's sort descriptors are going to be set):
+        NSSortDescriptor* const
+            sortDescriptor = [[NSSortDescriptor alloc]
+                                initWithKey:[NSString stringWithFormat:@"%ld",(long)[tableView columnWithIdentifier:[tableColumn identifier]]]
+                                ascending:m_ascending];
+
+        NSArray* sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+        [tableColumn setSortDescriptorPrototype:sortDescriptor];
+        [tableView setSortDescriptors:sortDescriptors];
+        [sortDescriptor release];
     }
 }
 

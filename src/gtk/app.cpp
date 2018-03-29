@@ -361,6 +361,8 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 #ifdef __WXGPE__
     init_result = true;  // is there a _check() version of this?
     gpe_application_init( &argcGTK, &argvGTK );
+#elif defined(__WXGTK4__)
+    init_result = gtk_init_check() != 0;
 #else
     init_result = gtk_init_check( &argcGTK, &argvGTK ) != 0;
 #endif

@@ -68,7 +68,6 @@ class SearchCtrlWidgetsPage : public WidgetsPage
 {
 public:
     SearchCtrlWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~SearchCtrlWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_srchCtrl; }
     virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_srchCtrl; }
@@ -83,8 +82,14 @@ protected:
     void OnToggleCancelButton(wxCommandEvent&);
     void OnToggleSearchMenu(wxCommandEvent&);
 
+    void OnText(wxCommandEvent& event);
+    void OnTextEnter(wxCommandEvent& event);
+
     void OnSearch(wxCommandEvent& event);
     void OnSearchCancel(wxCommandEvent& event);
+
+    void OnSetFocus(wxFocusEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
 
     wxMenu* CreateTestMenu();
 
@@ -111,8 +116,11 @@ wxBEGIN_EVENT_TABLE(SearchCtrlWidgetsPage, WidgetsPage)
     EVT_CHECKBOX(ID_CANCEL_CB, SearchCtrlWidgetsPage::OnToggleCancelButton)
     EVT_CHECKBOX(ID_MENU_CB, SearchCtrlWidgetsPage::OnToggleSearchMenu)
 
-    EVT_SEARCHCTRL_SEARCH_BTN(wxID_ANY, SearchCtrlWidgetsPage::OnSearch)
-    EVT_SEARCHCTRL_CANCEL_BTN(wxID_ANY, SearchCtrlWidgetsPage::OnSearchCancel)
+    EVT_TEXT(wxID_ANY, SearchCtrlWidgetsPage::OnText)
+    EVT_TEXT_ENTER(wxID_ANY, SearchCtrlWidgetsPage::OnTextEnter)
+
+    EVT_SEARCH(wxID_ANY, SearchCtrlWidgetsPage::OnSearch)
+    EVT_SEARCH_CANCEL(wxID_ANY, SearchCtrlWidgetsPage::OnSearchCancel)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -167,10 +175,13 @@ void SearchCtrlWidgetsPage::CreateControl()
     if (m_srchCtrl)
         m_srchCtrl->Destroy();
 
-    int style = 0;
+    long style = GetAttrs().m_defaultFlags;
 
     m_srchCtrl = new wxSearchCtrl(this, -1, wxEmptyString, wxDefaultPosition,
                                   wxSize(150, -1), style);
+
+    m_srchCtrl->Bind(wxEVT_SET_FOCUS, &SearchCtrlWidgetsPage::OnSetFocus, this);
+    m_srchCtrl->Bind(wxEVT_KILL_FOCUS, &SearchCtrlWidgetsPage::OnKillFocus, this);
 }
 
 void SearchCtrlWidgetsPage::RecreateWidget()
@@ -227,6 +238,18 @@ void SearchCtrlWidgetsPage::OnToggleSearchMenu(wxCommandEvent&)
         m_srchCtrl->SetMenu(NULL);
 }
 
+void SearchCtrlWidgetsPage::OnText(wxCommandEvent& event)
+{
+    wxLogMessage("Search control: text changes, contents is \"%s\".",
+                 event.GetString());
+}
+
+void SearchCtrlWidgetsPage::OnTextEnter(wxCommandEvent& event)
+{
+    wxLogMessage("Search control: enter pressed, contents is \"%s\".",
+                 event.GetString());
+}
+
 void SearchCtrlWidgetsPage::OnSearch(wxCommandEvent& event)
 {
     wxLogMessage("Search button: search for \"%s\".", event.GetString());
@@ -235,6 +258,20 @@ void SearchCtrlWidgetsPage::OnSearch(wxCommandEvent& event)
 void SearchCtrlWidgetsPage::OnSearchCancel(wxCommandEvent& event)
 {
     wxLogMessage("Cancel button pressed.");
+
+    event.Skip();
+}
+
+void SearchCtrlWidgetsPage::OnSetFocus(wxFocusEvent& event)
+{
+    wxLogMessage("Search control got focus");
+
+    event.Skip();
+}
+
+void SearchCtrlWidgetsPage::OnKillFocus(wxFocusEvent& event)
+{
+    wxLogMessage("Search control lost focus");
 
     event.Skip();
 }

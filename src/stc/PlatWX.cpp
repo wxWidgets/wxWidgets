@@ -46,6 +46,11 @@
 #include "wx/stc/stc.h"
 #include "wx/stc/private.h"
 
+#if wxUSE_GRAPHICS_DIRECT2D
+#include "ScintillaWX.h"
+#include <float.h>
+#include "wx/dcscreen.h"
+#endif
 
 Point Point::FromLong(long lpoint) {
     return Point(lpoint & 0xFFFF, lpoint >> 16);
@@ -86,8 +91,14 @@ class wxFontWithAscent : public wxFont
 public:
     explicit wxFontWithAscent(const wxFont &font)
         : wxFont(font),
-          m_ascent(0)
+          m_ascent(0),
+          m_surfaceFontData(NULL)
     {
+    }
+
+    virtual ~wxFontWithAscent()
+    {
+        delete m_surfaceFontData;
     }
 
     static wxFontWithAscent* FromFID(FontID fid)
@@ -98,8 +109,12 @@ public:
     void SetAscent(int ascent) { m_ascent = ascent; }
     int GetAscent() const { return m_ascent; }
 
+    SurfaceData* GetSurfaceFontData() const { return m_surfaceFontData; }
+    void SetSurfaceFontData(SurfaceData* data) { m_surfaceFontData=data; }
+
 private:
     int m_ascent;
+    SurfaceData* m_surfaceFontData;
 };
 
 void SetAscent(Font& f, int ascent)
@@ -149,7 +164,14 @@ void Font::Create(const FontParameters &fp) {
         false,
         stc2wx(fp.faceName),
         encoding);
-    fid = new wxFontWithAscent(font);
+    wxFontWithAscent* newFont = new wxFontWithAscent(font);
+    fid = newFont;
+
+#if wxUSE_GRAPHICS_DIRECT2D
+    if ( fp.technology == wxSTC_TECHNOLOGY_DIRECTWRITE ) {
+        newFont->SetSurfaceFontData(new SurfaceFontDataD2D(fp));
+    }
+#endif // wxUSE_GRAPHICS_DIRECT2D
 }
 
 
@@ -674,8 +696,1127 @@ void SurfaceImpl::SetDBCSMode(int WXUNUSED(codePage)) {
     // dbcsMode = codePage == SC_CP_DBCS;
 }
 
+#if wxUSE_GRAPHICS_DIRECT2D
 
-Surface *Surface::Allocate(int WXUNUSED(technology)) {
+//----------------------------------------------------------------------
+// SurfaceFontDataD2D
+
+SurfaceFontDataD2D::SurfaceFontDataD2D(const FontParameters& fp)
+{
+    wxCOMPtr<IDWriteFactory> pDWriteFactory(::wxDWriteFactory());
+
+    if ( pDWriteFactory.get() )
+    {
+        wxCOMPtr<IDWriteTextLayout> pTextLayout;
+        wxString faceName = fp.faceName;
+        wxString extentTest(EXTENT_TEST);
+        DWRITE_FONT_STYLE fontStyle;
+        DWRITE_TEXT_METRICS textmetrics = {0,0,0,0,0,0,0,0,0};
+        const int maxLines = 2;
+        DWRITE_LINE_METRICS lineMetrics[maxLines];
+        UINT32 lineCount = 0;
+        FLOAT emHeight = 0;
+        HRESULT hr;
+
+        fontStyle = fp.italic?DWRITE_FONT_STYLE_ITALIC:DWRITE_FONT_STYLE_NORMAL;
+
+        hr = pDWriteFactory->CreateTextFormat(
+            faceName.wc_str(),
+            NULL,
+            static_cast<DWRITE_FONT_WEIGHT>(fp.weight),
+            fontStyle,
+            DWRITE_FONT_STRETCH_NORMAL,
+            fp.size,
+            L"en-us", //locale
+            &m_pTextFormat
+            );
+
+        if ( SUCCEEDED(hr) )
+        {
+            m_pTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+
+            hr = pDWriteFactory->CreateTextLayout(extentTest.wc_str(),
+                extentTest.Length(), m_pTextFormat, FLT_MAX, FLT_MAX,
+                &pTextLayout);
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            hr = pTextLayout->GetMetrics(&textmetrics);
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            hr = pTextLayout->GetLineMetrics(lineMetrics, maxLines, &lineCount);
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            hr = pTextLayout->GetFontSize(0, &emHeight);
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            m_ascent = lineMetrics[0].baseline;
+            m_descent = lineMetrics[0].height - lineMetrics[0].baseline;
+            m_internalLeading = lineMetrics[0].height - emHeight;
+            m_averageCharWidth = textmetrics.width/extentTest.Length();
+
+            switch ( fp.extraFontFlag & wxSTC_EFF_QUALITY_MASK )
+            {
+                case wxSTC_EFF_QUALITY_NON_ANTIALIASED:
+                    m_aaMode = D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
+                    break;
+                case wxSTC_EFF_QUALITY_ANTIALIASED:
+                    m_aaMode = D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE;
+                    break;
+                case wxSTC_EFF_QUALITY_LCD_OPTIMIZED:
+                    m_aaMode = D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE;
+                    break;
+                default:
+                    m_aaMode = D2D1_TEXT_ANTIALIAS_MODE_DEFAULT;
+                    break;
+            }
+
+            m_pTextFormat->SetLineSpacing(DWRITE_LINE_SPACING_METHOD_UNIFORM,
+                lineMetrics[0].height, m_ascent);
+        }
+        else
+        {
+            m_pTextFormat.reset();
+        }
+    }
+}
+
+bool SurfaceFontDataD2D::Initialised() const
+{
+    return (m_pTextFormat.get() != NULL);
+}
+
+//----------------------------------------------------------------------
+// SurfaceDataD2D
+
+SurfaceDataD2D::SurfaceDataD2D(ScintillaWX* editor)
+    : m_pD2DFactory(::wxD2D1Factory()),
+      m_pDWriteFactory(::wxDWriteFactory()),
+      m_editor(editor)
+{
+    if ( Initialised() )
+    {
+        HRESULT hr =
+            m_pDWriteFactory->CreateRenderingParams(&m_defaultRenderingParams);
+
+        if ( SUCCEEDED(hr) )
+        {
+            unsigned int clearTypeContrast;
+            if ( ::SystemParametersInfo(SPI_GETFONTSMOOTHINGCONTRAST, 0,
+                    &clearTypeContrast, 0) )
+            {
+                FLOAT gamma;
+                if (clearTypeContrast >= 1000 && clearTypeContrast <= 2200)
+                    gamma = static_cast<FLOAT>(clearTypeContrast) / 1000.0f;
+                else
+                    gamma = m_defaultRenderingParams->GetGamma();
+
+                m_pDWriteFactory->CreateCustomRenderingParams(
+                    gamma,
+                    m_defaultRenderingParams->GetEnhancedContrast(),
+                    m_defaultRenderingParams->GetClearTypeLevel(),
+                    m_defaultRenderingParams->GetPixelGeometry(),
+                    m_defaultRenderingParams->GetRenderingMode(),
+                    &m_customClearTypeRenderingParams);
+            }
+        }
+    }
+}
+
+bool SurfaceDataD2D::Initialised() const
+{
+    return (m_pD2DFactory.get() != NULL && m_pDWriteFactory.get() != NULL);
+}
+
+void SurfaceDataD2D::DiscardGraphicsResources()
+{
+    m_pRenderTarget.reset();
+    m_pSolidBrush.reset();
+    m_pPatternBrush.reset();
+}
+
+HRESULT SurfaceDataD2D::CreateGraphicsResources()
+{
+    HRESULT hr = S_OK;
+    if ( m_pRenderTarget.get() == NULL )
+    {
+        D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties =
+            D2D1::RenderTargetProperties(
+                D2D1_RENDER_TARGET_TYPE_DEFAULT,
+                D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM,
+                    D2D1_ALPHA_MODE_PREMULTIPLIED));
+
+        hr = m_pD2DFactory->CreateDCRenderTarget(
+            &renderTargetProperties,
+            &m_pRenderTarget);
+
+        if ( SUCCEEDED(hr) )
+        {
+            const D2D1_COLOR_F color = D2D1::ColorF(0, 0, 0);
+            hr = m_pRenderTarget->CreateSolidColorBrush(color, &m_pSolidBrush);
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            D2D1_BITMAP_BRUSH_PROPERTIES brushProperties =
+                D2D1::BitmapBrushProperties(D2D1_EXTEND_MODE_WRAP,
+                    D2D1_EXTEND_MODE_WRAP,
+                    D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
+
+            wxCOMPtr<ID2D1Bitmap> bitmap;
+
+            D2D1_PIXEL_FORMAT pixel_format =
+                D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM,
+                                  D2D1_ALPHA_MODE_PREMULTIPLIED);
+
+
+            m_pRenderTarget->CreateBitmap(D2D1::SizeU(1,1),
+                                          D2D1::BitmapProperties(pixel_format),
+                                          &bitmap);
+
+            hr = m_pRenderTarget->CreateBitmapBrush(bitmap, brushProperties,
+                                                    &m_pPatternBrush);
+        }
+    }
+    return hr;
+}
+
+void SurfaceDataD2D::SetEditorPaintAbandoned()
+{
+    m_editor->SetPaintAbandoned();
+}
+
+//----------------------------------------------------------------------
+// SurfaceD2D - This is basically SurfaceD2D from the Scintilla source
+// code adapted to draw in the wxMSW environment.
+
+class SurfaceD2D : public Surface
+{
+public:
+    SurfaceD2D();
+    virtual ~SurfaceD2D();
+
+    // base class virtuals
+    virtual void Init(WindowID wid) wxOVERRIDE;
+    virtual void Init(SurfaceID sid, WindowID wid) wxOVERRIDE;
+    virtual void InitPixMap(int width, int height, Surface *surface_,
+                            WindowID wid) wxOVERRIDE;
+
+    virtual void Release() wxOVERRIDE;
+    virtual bool Initialised() wxOVERRIDE;
+    virtual void PenColour(ColourDesired fore) wxOVERRIDE;
+    virtual int LogPixelsY() wxOVERRIDE;
+    virtual int DeviceHeightFont(int points) wxOVERRIDE;
+    virtual void MoveTo(int x_, int y_) wxOVERRIDE;
+    virtual void LineTo(int x_, int y_) wxOVERRIDE;
+    virtual void Polygon(Point *pts, int npts, ColourDesired fore,
+                         ColourDesired back) wxOVERRIDE;
+    virtual void RectangleDraw(PRectangle rc, ColourDesired fore,
+                               ColourDesired back) wxOVERRIDE;
+    virtual void FillRectangle(PRectangle rc, ColourDesired back) wxOVERRIDE;
+    virtual void FillRectangle(PRectangle rc, Surface &surfacePattern) wxOVERRIDE;
+    virtual void RoundedRectangle(PRectangle rc, ColourDesired fore,
+                                  ColourDesired back) wxOVERRIDE;
+    virtual void AlphaRectangle(PRectangle rc, int cornerSize,
+                                ColourDesired fill, int alphaFill,
+                                ColourDesired outline, int alphaOutline,
+                                int flags) wxOVERRIDE;
+    virtual void DrawRGBAImage(PRectangle rc, int width, int height,
+                               const unsigned char *pixelsImage) wxOVERRIDE;
+    virtual void Ellipse(PRectangle rc, ColourDesired fore,
+                         ColourDesired back) wxOVERRIDE;
+    virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource) wxOVERRIDE;
+
+    virtual void DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase,
+                                const char *s, int len, ColourDesired fore,
+                                ColourDesired back) wxOVERRIDE;
+    virtual void DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase,
+                                 const char *s, int len, ColourDesired fore,
+                                 ColourDesired back) wxOVERRIDE;
+    virtual void DrawTextTransparent(PRectangle rc, Font &font_,
+                                     XYPOSITION ybase, const char *s, int len,
+                                     ColourDesired fore) wxOVERRIDE;
+    virtual void MeasureWidths(Font &font_, const char *s, int len,
+                               XYPOSITION *positions) wxOVERRIDE;
+    virtual XYPOSITION WidthText(Font &font_, const char *s, int len) wxOVERRIDE;
+    virtual XYPOSITION WidthChar(Font &font_, char ch) wxOVERRIDE;
+    virtual XYPOSITION Ascent(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION Descent(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION InternalLeading(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION ExternalLeading(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION Height(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION AverageCharWidth(Font &font_) wxOVERRIDE;
+
+    virtual void SetClip(PRectangle rc) wxOVERRIDE;
+    virtual void FlushCachedState() wxOVERRIDE;
+
+    virtual void SetUnicodeMode(bool unicodeMode_) wxOVERRIDE;
+    virtual void SetDBCSMode(int codePage) wxOVERRIDE;
+
+    // helpers
+    void SetFont(Font &font_);
+    void SetScale(wxDC* dc);
+    HRESULT FlushDrawing();
+    void D2DPenColour(ColourDesired fore, int alpha=255);
+    void DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
+                        const char *s, int len, UINT fuOptions);
+
+private:
+    // Private so SurfaceD2D objects can not be copied
+    SurfaceD2D(const SurfaceD2D &);
+    SurfaceD2D &operator=(const SurfaceD2D &);
+
+    bool m_unicodeMode;
+    int m_x, m_y;
+    int m_logPixelsY;
+
+    bool m_ownRenderTarget;
+    int m_clipsActive;
+
+    XYPOSITION m_yAscent;
+    XYPOSITION m_yDescent;
+    XYPOSITION m_yInternalLeading;
+    XYPOSITION m_averageCharWidth;
+
+    wxCOMPtr<IDWriteFactory> m_pDWriteFactory;
+    wxCOMPtr<ID2D1RenderTarget> m_pRenderTarget;
+    wxCOMPtr<ID2D1SolidColorBrush> m_pSolidBrush;
+    wxCOMPtr<ID2D1BitmapBrush> m_pPatternBrush;
+    wxCOMPtr<IDWriteTextFormat> m_pTextFormat;
+
+    SurfaceDataD2D* m_surfaceData;
+    FontID m_curFontID;
+};
+
+SurfaceD2D::SurfaceD2D()
+    : m_pDWriteFactory(::wxDWriteFactory())
+{
+    m_unicodeMode = false;
+    m_x = 0;
+    m_y = 0;
+    m_logPixelsY = 72;
+
+    m_ownRenderTarget = false;
+    m_clipsActive = 0;
+
+    m_yAscent = 2;
+    m_yDescent = 1;
+    m_yInternalLeading = 0;
+    m_averageCharWidth = 1;
+
+    m_surfaceData = NULL;
+    m_curFontID = NULL;
+}
+
+SurfaceD2D::~SurfaceD2D()
+{
+    Release();
+}
+
+void SurfaceD2D::Init(WindowID WXUNUSED(wid))
+{
+    Release();
+
+    wxScreenDC sdc;
+    SetScale(&sdc);
+}
+
+void SurfaceD2D::Init(SurfaceID sid, WindowID wid)
+{
+    Release();
+
+    wxWindow* win = wxDynamicCast(wid,wxWindow);
+    if ( win && win->GetName() == "wxSTCCallTip" )
+        win = win->GetParent();
+
+    wxStyledTextCtrl* const stc = wxDynamicCast(win, wxStyledTextCtrl);
+    if ( stc )
+    {
+        wxDC* const dc = static_cast<wxDC*>(sid);
+        const wxSize sz = dc->GetSize();
+        SetScale(dc);
+        ScintillaWX* const
+            sciwx = reinterpret_cast<ScintillaWX*>(stc->GetDirectPointer());
+        m_surfaceData = static_cast<SurfaceDataD2D*>(sciwx->GetSurfaceData());
+        HRESULT hr = m_surfaceData->CreateGraphicsResources();
+
+        if ( SUCCEEDED(hr) )
+        {
+            RECT rc;
+            ::SetRect(&rc,0,0,sz.GetWidth(),sz.GetHeight());
+            hr = m_surfaceData->GetRenderTarget()
+                ->BindDC(reinterpret_cast<HDC>(dc->GetHandle()),&rc);
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            m_pRenderTarget.reset(m_surfaceData->GetRenderTarget());
+            m_pSolidBrush.reset(m_surfaceData->GetSolidBrush());
+            m_pPatternBrush.reset(m_surfaceData->GetPatternBrush());
+            m_pRenderTarget->BeginDraw();
+        }
+    }
+}
+
+void SurfaceD2D::InitPixMap(int width, int height, Surface *surface_, WindowID)
+{
+    Release();
+
+    SurfaceD2D *psurfOther = static_cast<SurfaceD2D *>(surface_);
+    wxCOMPtr<ID2D1BitmapRenderTarget> pCompatibleRenderTarget;
+    D2D1_SIZE_F desiredSize = D2D1::SizeF(static_cast<float>(width),
+        static_cast<float>(height));
+    D2D1_PIXEL_FORMAT desiredFormat;
+
+#ifdef __MINGW32__
+    desiredFormat.format = DXGI_FORMAT_UNKNOWN;
+#else
+    desiredFormat = psurfOther->m_pRenderTarget->GetPixelFormat();
+#endif
+
+    desiredFormat.alphaMode = D2D1_ALPHA_MODE_IGNORE;
+    HRESULT hr = psurfOther->m_pRenderTarget->CreateCompatibleRenderTarget(
+        &desiredSize, NULL, &desiredFormat,
+        D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE, &pCompatibleRenderTarget);
+    if ( SUCCEEDED(hr) )
+    {
+        m_pRenderTarget = pCompatibleRenderTarget;
+        m_pRenderTarget->BeginDraw();
+        m_ownRenderTarget = true;
+    }
+    SetUnicodeMode(psurfOther->m_unicodeMode);
+    m_logPixelsY = psurfOther->LogPixelsY();
+    m_surfaceData = psurfOther->m_surfaceData;
+}
+
+void SurfaceD2D::Release()
+{
+    if ( m_pRenderTarget.get() )
+    {
+        HRESULT hr;
+        while ( m_clipsActive )
+        {
+            m_pRenderTarget->PopAxisAlignedClip();
+            m_clipsActive--;
+        }
+        hr = m_pRenderTarget->EndDraw();
+        if ( hr == (HRESULT)D2DERR_RECREATE_TARGET && m_surfaceData && !m_ownRenderTarget )
+        {
+            m_surfaceData->DiscardGraphicsResources();
+            m_surfaceData->SetEditorPaintAbandoned();
+        }
+    }
+
+    m_pRenderTarget.reset();
+    m_pSolidBrush.reset();
+    m_pPatternBrush.reset();
+    m_pTextFormat.reset();
+    m_curFontID = NULL;
+}
+
+bool SurfaceD2D::Initialised()
+{
+    return m_pRenderTarget.get() != NULL;
+}
+
+void SurfaceD2D::PenColour(ColourDesired fore)
+{
+    D2DPenColour(fore);
+}
+
+int SurfaceD2D::LogPixelsY()
+{
+    return m_logPixelsY;
+}
+
+int SurfaceD2D::DeviceHeightFont(int points)
+{
+    return ::MulDiv(points, LogPixelsY(), 72);
+}
+
+void SurfaceD2D::MoveTo(int x_, int y_)
+{
+    m_x = x_;
+    m_y = y_;
+}
+
+static int Delta(int difference)
+{
+    if ( difference < 0 )
+        return -1;
+    else if ( difference > 0 )
+        return 1;
+    else
+        return 0;
+}
+
+static float RoundFloat(float f)
+{
+    return float(int(f+0.5f));
+}
+
+void SurfaceD2D::LineTo(int x_, int y_)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        int xDiff = x_ - m_x;
+        int xDelta = Delta(xDiff);
+        int yDiff = y_ - m_y;
+        int yDelta = Delta(yDiff);
+        if ( (xDiff == 0) || (yDiff == 0) )
+        {
+            // Horizontal or vertical lines can be more precisely drawn as a
+            // filled rectangle
+            int xEnd = x_ - xDelta;
+            int left = Platform::Minimum(m_x, xEnd);
+            int width = abs(m_x - xEnd) + 1;
+            int yEnd = y_ - yDelta;
+            int top = Platform::Minimum(m_y, yEnd);
+            int height = abs(m_y - yEnd) + 1;
+            D2D1_RECT_F rectangle1 = D2D1::RectF(static_cast<float>(left),
+                static_cast<float>(top), static_cast<float>(left+width),
+                static_cast<float>(top+height));
+            m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
+        }
+        else if ( (abs(xDiff) == abs(yDiff)) )
+        {
+            // 45 degree slope
+            m_pRenderTarget->DrawLine(D2D1::Point2F(m_x + 0.5f, m_y + 0.5f),
+                D2D1::Point2F(x_ + 0.5f - xDelta, y_ + 0.5f - yDelta),
+                m_pSolidBrush);
+        }
+        else
+        {
+            // Line has a different slope so difficult to avoid last pixel
+            m_pRenderTarget->DrawLine(D2D1::Point2F(m_x + 0.5f, m_y + 0.5f),
+                D2D1::Point2F(x_ + 0.5f, y_ + 0.5f), m_pSolidBrush);
+        }
+        m_x = x_;
+        m_y = y_;
+    }
+}
+
+void SurfaceD2D::Polygon(Point *pts, int npts, ColourDesired fore,
+                         ColourDesired back)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        wxCOMPtr<ID2D1Factory> pFactory;
+        wxCOMPtr<ID2D1PathGeometry> geometry;
+        wxCOMPtr<ID2D1GeometrySink> sink;
+
+        m_pRenderTarget->GetFactory(&pFactory);
+
+        HRESULT hr = pFactory->CreatePathGeometry(&geometry);
+        if ( SUCCEEDED(hr) )
+        {
+            hr = geometry->Open(&sink);
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            sink->BeginFigure(D2D1::Point2F(pts[0].x + 0.5f, pts[0].y + 0.5f),
+                D2D1_FIGURE_BEGIN_FILLED);
+            for ( size_t i=1; i<static_cast<size_t>(npts); i++ )
+            {
+                sink->AddLine(D2D1::Point2F(pts[i].x + 0.5f, pts[i].y + 0.5f));
+            }
+            sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+            sink->Close();
+
+            D2DPenColour(back);
+            m_pRenderTarget->FillGeometry(geometry,m_pSolidBrush);
+            D2DPenColour(fore);
+            m_pRenderTarget->DrawGeometry(geometry,m_pSolidBrush);
+        }
+    }
+}
+
+void SurfaceD2D::RectangleDraw(PRectangle rc, ColourDesired fore,
+                               ColourDesired back)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        D2D1_RECT_F rectangle1 = D2D1::RectF(RoundFloat(rc.left) + 0.5f,
+            rc.top+0.5f, RoundFloat(rc.right) - 0.5f, rc.bottom-0.5f);
+        D2DPenColour(back);
+        m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
+        D2DPenColour(fore);
+        m_pRenderTarget->DrawRectangle(&rectangle1, m_pSolidBrush);
+    }
+}
+
+void SurfaceD2D::FillRectangle(PRectangle rc, ColourDesired back)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        D2DPenColour(back);
+        D2D1_RECT_F rectangle1 = D2D1::RectF(RoundFloat(rc.left), rc.top,
+            RoundFloat(rc.right), rc.bottom);
+        m_pRenderTarget->FillRectangle(&rectangle1, m_pSolidBrush);
+    }
+}
+
+void SurfaceD2D::FillRectangle(PRectangle rc, Surface &surfacePattern)
+{
+    SurfaceD2D &surfOther = static_cast<SurfaceD2D &>(surfacePattern);
+    surfOther.FlushDrawing();
+
+    wxCOMPtr<ID2D1Bitmap> pBitmap;
+    wxCOMPtr<ID2D1BitmapRenderTarget> pCompatibleRenderTarget(
+        reinterpret_cast<ID2D1BitmapRenderTarget*>(
+            surfOther.m_pRenderTarget.get()));
+
+    HRESULT hr = pCompatibleRenderTarget->GetBitmap(&pBitmap);
+
+    if ( SUCCEEDED(hr) )
+    {
+        if ( m_pPatternBrush.get() )
+        {
+            m_pPatternBrush->SetBitmap(pBitmap);
+        }
+        else
+        {
+            D2D1_BITMAP_BRUSH_PROPERTIES brushProperties =
+                D2D1::BitmapBrushProperties(D2D1_EXTEND_MODE_WRAP,
+                    D2D1_EXTEND_MODE_WRAP,
+                    D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
+
+            hr = m_pRenderTarget->CreateBitmapBrush(pBitmap, brushProperties,
+                &m_pPatternBrush);
+        }
+    }
+
+    if ( SUCCEEDED(hr) )
+    {
+        m_pRenderTarget->FillRectangle(
+            D2D1::RectF(rc.left, rc.top, rc.right, rc.bottom),
+            m_pPatternBrush);
+    }
+}
+
+void SurfaceD2D::RoundedRectangle(PRectangle rc, ColourDesired fore,
+                                  ColourDesired back)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        D2D1_ROUNDED_RECT roundedRectFill = {
+            D2D1::RectF(rc.left+1.0f, rc.top+1.0f, rc.right-1.0f, rc.bottom-1.0f),
+            4, 4};
+        D2DPenColour(back);
+        m_pRenderTarget->FillRoundedRectangle(roundedRectFill, m_pSolidBrush);
+
+        D2D1_ROUNDED_RECT roundedRect = {
+            D2D1::RectF(rc.left + 0.5f, rc.top+0.5f, rc.right - 0.5f, rc.bottom-0.5f),
+            4, 4};
+        D2DPenColour(fore);
+        m_pRenderTarget->DrawRoundedRectangle(roundedRect, m_pSolidBrush);
+    }
+}
+
+void SurfaceD2D::AlphaRectangle(PRectangle rc, int cornerSize,
+                                ColourDesired fill, int alphaFill,
+                                ColourDesired outline, int alphaOutline,
+                                int /* flags*/ )
+{
+    if ( m_pRenderTarget.get() )
+    {
+        if (cornerSize == 0)
+        {
+            // When corner size is zero, draw square rectangle to prevent
+            // blurry pixels at corners
+            D2D1_RECT_F rectFill = D2D1::RectF(RoundFloat(rc.left) + 1.0f,
+                rc.top + 1.0f, RoundFloat(rc.right) - 1.0f, rc.bottom - 1.0f);
+            D2DPenColour(fill, alphaFill);
+            m_pRenderTarget->FillRectangle(rectFill, m_pSolidBrush);
+
+            D2D1_RECT_F rectOutline = D2D1::RectF(RoundFloat(rc.left) + 0.5f,
+                rc.top + 0.5f, RoundFloat(rc.right) - 0.5f, rc.bottom - 0.5f);
+            D2DPenColour(outline, alphaOutline);
+            m_pRenderTarget->DrawRectangle(rectOutline, m_pSolidBrush);
+        }
+        else
+        {
+            const float cornerSizeF = static_cast<float>(cornerSize);
+            D2D1_ROUNDED_RECT roundedRectFill = {
+                D2D1::RectF(RoundFloat(rc.left) + 1.0f, rc.top + 1.0f,
+                    RoundFloat(rc.right) - 1.0f, rc.bottom - 1.0f),
+                cornerSizeF, cornerSizeF};
+            D2DPenColour(fill, alphaFill);
+            m_pRenderTarget->FillRoundedRectangle(roundedRectFill, m_pSolidBrush);
+
+            D2D1_ROUNDED_RECT roundedRect = {
+                D2D1::RectF(RoundFloat(rc.left) + 0.5f, rc.top + 0.5f,
+                    RoundFloat(rc.right) - 0.5f, rc.bottom - 0.5f),
+                cornerSizeF, cornerSizeF};
+            D2DPenColour(outline, alphaOutline);
+            m_pRenderTarget->DrawRoundedRectangle(roundedRect, m_pSolidBrush);
+        }
+    }
+}
+
+void SurfaceD2D::DrawRGBAImage(PRectangle rc, int width, int height,
+                               const unsigned char *pixelsImage)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        if (rc.Width() > width)
+            rc.left += static_cast<int>((rc.Width() - width) / 2);
+        rc.right = rc.left + width;
+        if (rc.Height() > height)
+            rc.top += static_cast<int>((rc.Height() - height) / 2);
+        rc.bottom = rc.top + height;
+
+        wxVector<unsigned char> image(height * width * 4);
+        for ( int yPixel=0; yPixel<height; yPixel++ )
+        {
+            for ( int xPixel = 0; xPixel<width; xPixel++ )
+            {
+                unsigned char *pixel = &image[0] + (yPixel*width + xPixel) * 4;
+                unsigned char alpha = pixelsImage[3];
+                // Input is RGBA, output is BGRA with premultiplied alpha
+                pixel[2] = (*pixelsImage++) * alpha / 255;
+                pixel[1] = (*pixelsImage++) * alpha / 255;
+                pixel[0] = (*pixelsImage++) * alpha / 255;
+                pixel[3] = *pixelsImage++;
+            }
+        }
+
+        wxCOMPtr<ID2D1Bitmap> bitmap;
+        D2D1_SIZE_U size = D2D1::SizeU(width, height);
+        D2D1_BITMAP_PROPERTIES props = {{DXGI_FORMAT_B8G8R8A8_UNORM,
+            D2D1_ALPHA_MODE_PREMULTIPLIED}, 72.0, 72.0};
+        HRESULT hr = m_pRenderTarget->CreateBitmap(size, &image[0],
+                  width * 4, &props, &bitmap);
+
+        if ( SUCCEEDED(hr) )
+        {
+            D2D1_RECT_F rcDestination = {rc.left, rc.top, rc.right, rc.bottom};
+            m_pRenderTarget->DrawBitmap(bitmap, rcDestination);
+        }
+    }
+}
+
+void SurfaceD2D::Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        FLOAT radius = rc.Width() / 2.0f;
+        D2D1_ELLIPSE ellipse = {
+            D2D1::Point2F((rc.left + rc.right) / 2.0f,
+                (rc.top + rc.bottom) / 2.0f),
+            radius, radius};
+
+        PenColour(back);
+        m_pRenderTarget->FillEllipse(ellipse, m_pSolidBrush);
+        PenColour(fore);
+        m_pRenderTarget->DrawEllipse(ellipse, m_pSolidBrush);
+    }
+}
+
+void SurfaceD2D::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
+    SurfaceD2D &surfOther = static_cast<SurfaceD2D &>(surfaceSource);
+    surfOther.FlushDrawing();
+
+    wxCOMPtr<ID2D1Bitmap> pBitmap;
+    wxCOMPtr<ID2D1BitmapRenderTarget> pCompatibleRenderTarget(
+        reinterpret_cast<ID2D1BitmapRenderTarget*>(surfOther.m_pRenderTarget.get()));
+
+    HRESULT hr = pCompatibleRenderTarget->GetBitmap(&pBitmap);
+
+    if ( SUCCEEDED(hr) )
+    {
+        D2D1_RECT_F rcDestination = {rc.left, rc.top, rc.right, rc.bottom};
+        D2D1_RECT_F rcSource =
+            {from.x, from.y, from.x + rc.Width(), from.y + rc.Height()};
+        m_pRenderTarget->DrawBitmap(pBitmap, rcDestination, 1.0f,
+            D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, rcSource);
+
+        hr = m_pRenderTarget->Flush();
+        if ( FAILED(hr) )
+        {
+            Platform::DebugPrintf("Failed Flush 0x%x\n", hr);
+        }
+    }
+}
+
+void SurfaceD2D::DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase,
+                                const char *s, int len, ColourDesired fore,
+                                ColourDesired back)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        FillRectangle(rc, back);
+        D2DPenColour(fore);
+        DrawTextCommon(rc, font_, ybase, s, len, ETO_OPAQUE);
+    }
+}
+
+void SurfaceD2D::DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase,
+                                 const char *s, int len, ColourDesired fore,
+                                 ColourDesired back)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        FillRectangle(rc, back);
+        D2DPenColour(fore);
+        DrawTextCommon(rc, font_, ybase, s, len, ETO_OPAQUE | ETO_CLIPPED);
+    }
+}
+
+void SurfaceD2D::DrawTextTransparent(PRectangle rc, Font &font_,
+                                     XYPOSITION ybase, const char *s, int len,
+                                     ColourDesired fore)
+{
+    // Avoid drawing spaces in transparent mode
+    for ( int i=0; i<len; i++ )
+    {
+        if ( s[i] != ' ' )
+        {
+            if ( m_pRenderTarget.get() )
+            {
+                D2DPenColour(fore);
+                DrawTextCommon(rc, font_, ybase, s, len, 0);
+            }
+            return;
+        }
+    }
+}
+
+XYPOSITION SurfaceD2D::WidthText(Font &font_, const char *s, int len)
+{
+    XYPOSITION width = 1.0;
+    wxString tbuf = stc2wx(s,len);
+    SetFont(font_);
+
+    if ( m_pDWriteFactory.get() && m_pTextFormat.get() )
+    {
+        wxCOMPtr<IDWriteTextLayout> pTextLayout;
+        DWRITE_TEXT_METRICS textMetrics = {0,0,0,0,0,0,0,0,0};
+
+        HRESULT hr = m_pDWriteFactory->CreateTextLayout(tbuf.wc_str(),
+            tbuf.Length(), m_pTextFormat, FLT_MAX, FLT_MAX, &pTextLayout);
+
+        if ( SUCCEEDED(hr) )
+        {
+            hr = pTextLayout->GetMetrics(&textMetrics);
+        }
+
+        if ( SUCCEEDED(hr) )
+        {
+            width = textMetrics.widthIncludingTrailingWhitespace;
+        }
+    }
+    return width;
+}
+
+void SurfaceD2D::MeasureWidths(Font &font_, const char *s, int len,
+                               XYPOSITION *positions)
+{
+    int fit = 0;
+    wxString tbuf = stc2wx(s,len);
+    wxVector<FLOAT> poses;
+    poses.reserve(tbuf.Length());
+    poses.resize(tbuf.Length());
+
+    fit = tbuf.Length();
+    const int clusters = 1000;
+    DWRITE_CLUSTER_METRICS clusterMetrics[clusters];
+    UINT32 count = 0;
+    SetFont(font_);
+
+    if ( m_pDWriteFactory.get() && m_pTextFormat.get() )
+    {
+        wxCOMPtr<IDWriteTextLayout> pTextLayout;
+
+        HRESULT hr = m_pDWriteFactory->CreateTextLayout(tbuf.wc_str(),
+            tbuf.Length(), m_pTextFormat, FLT_MAX, FLT_MAX, &pTextLayout);
+        if ( !SUCCEEDED(hr) )
+            return;
+
+        hr = pTextLayout->GetClusterMetrics(clusterMetrics, clusters, &count);
+        if ( !SUCCEEDED(hr) )
+            return;
+
+        // A cluster may be more than one WCHAR, such as for "ffi" which is a
+        // ligature in the Candara font
+        FLOAT position = 0.0f;
+        size_t ti=0;
+        for ( size_t ci=0; ci<count; ci++ )
+        {
+            for ( size_t inCluster=0; inCluster<clusterMetrics[ci].length;
+                inCluster++)
+            {
+                poses[ti++] =
+                    position + clusterMetrics[ci].width * (inCluster + 1) /
+                        clusterMetrics[ci].length;
+            }
+            position += clusterMetrics[ci].width;
+        }
+        PLATFORM_ASSERT(ti == tbuf.Length());
+    }
+    if (m_unicodeMode)
+    {
+        // Map the widths given for UTF-16 characters back onto the UTF-8 input
+        // string
+        int ui=0;
+        const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
+        int i=0;
+        while ( ui<fit )
+        {
+            unsigned char uch = us[i];
+            unsigned int lenChar = 1;
+            if (uch >= (0x80 + 0x40 + 0x20 + 0x10))
+            {
+                lenChar = 4;
+                ui++;
+            }
+            else if (uch >= (0x80 + 0x40 + 0x20))
+            {
+                lenChar = 3;
+            }
+            else if (uch >= (0x80))
+            {
+                lenChar = 2;
+            }
+
+            for ( unsigned int bytePos=0; (bytePos<lenChar) && (i<len); bytePos++ )
+            {
+                positions[i++] = poses[ui];
+            }
+            ui++;
+        }
+        XYPOSITION lastPos = 0.0f;
+        if ( i > 0 )
+            lastPos = positions[i-1];
+        while ( i<len )
+        {
+            positions[i++] = lastPos;
+        }
+    }
+    else
+    {
+        const size_t buflen = static_cast<size_t>(len);
+        // One character per position
+        PLATFORM_ASSERT(buflen == tbuf.Length());
+        for ( size_t kk=0; kk<buflen; kk++ )
+        {
+            positions[kk] = poses[kk];
+        }
+    }
+}
+
+XYPOSITION SurfaceD2D::WidthChar(Font &font_, char ch)
+{
+    FLOAT width = 1.0;
+    SetFont(font_);
+    if ( m_pDWriteFactory.get() && m_pTextFormat.get() )
+    {
+        wxCOMPtr<IDWriteTextLayout> pTextLayout;
+        const WCHAR wch = ch;
+        HRESULT hr = m_pDWriteFactory->CreateTextLayout(&wch, 1, m_pTextFormat,
+            1000.0, 1000.0, &pTextLayout);
+
+        if ( SUCCEEDED(hr) )
+        {
+            DWRITE_TEXT_METRICS textMetrics;
+            if (SUCCEEDED(pTextLayout->GetMetrics(&textMetrics)))
+                width = textMetrics.widthIncludingTrailingWhitespace;
+        }
+    }
+    return width;
+}
+
+XYPOSITION SurfaceD2D::Ascent(Font &font_)
+{
+    SetFont(font_);
+    return ceil(m_yAscent);
+}
+
+XYPOSITION SurfaceD2D::Descent(Font &font_)
+{
+    SetFont(font_);
+    return ceil(m_yDescent);
+}
+
+XYPOSITION SurfaceD2D::InternalLeading(Font &font_)
+{
+    SetFont(font_);
+    return floor(m_yInternalLeading);
+}
+
+XYPOSITION SurfaceD2D::ExternalLeading(Font &)
+{
+    // Not implemented, always return one
+    return 1;
+}
+
+XYPOSITION SurfaceD2D::Height(Font &font_)
+{
+    return Ascent(font_) + Descent(font_);
+}
+
+XYPOSITION SurfaceD2D::AverageCharWidth(Font &font_)
+{
+    SetFont(font_);
+    return m_averageCharWidth;
+}
+
+void SurfaceD2D::SetClip(PRectangle rc)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        D2D1_RECT_F rcClip = {rc.left, rc.top, rc.right, rc.bottom};
+        m_pRenderTarget->PushAxisAlignedClip(rcClip, D2D1_ANTIALIAS_MODE_ALIASED);
+        m_clipsActive++;
+    }
+}
+
+void SurfaceD2D::FlushCachedState()
+{
+}
+
+void SurfaceD2D::SetUnicodeMode(bool unicodeMode_)
+{
+    m_unicodeMode=unicodeMode_;
+}
+
+void SurfaceD2D::SetDBCSMode(int WXUNUSED(codePage_))
+{
+}
+
+void SurfaceD2D::SetFont(Font &font_)
+{
+    FontID id = font_.GetID();
+
+    if (m_curFontID != id)
+    {
+        wxFontWithAscent *pfm = static_cast<wxFontWithAscent *>(id);
+        SurfaceFontDataD2D* sfd =
+            static_cast<SurfaceFontDataD2D*>(pfm->GetSurfaceFontData());
+
+        if ( sfd->Initialised() )
+        {
+            m_pTextFormat.reset(sfd->GetFormat());
+            m_yAscent = sfd->GetAscent();
+            m_yDescent = sfd->GetDescent();
+            m_yInternalLeading = sfd->GetInternalLeading();
+            m_averageCharWidth = sfd->GetAverageCharWidth();
+
+            if ( m_pRenderTarget.get() )
+            {
+                D2D1_TEXT_ANTIALIAS_MODE aaMode = sfd->GetFontQuality();
+
+                if ( m_surfaceData && m_surfaceData->Initialised() )
+                {
+                    if ( aaMode == D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE )
+                    {
+                        m_pRenderTarget->SetTextRenderingParams(
+                            m_surfaceData->GetCustomClearTypeRenderingParams());
+                    }
+                    else
+                    {
+                        m_pRenderTarget->SetTextRenderingParams(
+                            m_surfaceData->GetDefaultRenderingParams());
+                    }
+                }
+
+                m_pRenderTarget->SetTextAntialiasMode(aaMode);
+            }
+
+            m_curFontID = id;
+        }
+    }
+}
+
+void SurfaceD2D::SetScale(wxDC* dc)
+{
+    wxSize sz = dc->GetPPI();
+    m_logPixelsY = sz.GetY();
+}
+
+HRESULT SurfaceD2D::FlushDrawing()
+{
+    return m_pRenderTarget->Flush();
+}
+
+void SurfaceD2D::D2DPenColour(ColourDesired fore, int alpha)
+{
+    if ( m_pRenderTarget.get() )
+    {
+        D2D_COLOR_F col;
+        col.r = (fore.AsLong() & 0xff) / 255.0f;
+        col.g = ((fore.AsLong() & 0xff00) >> 8) / 255.0f;
+        col.b = (fore.AsLong() >> 16) / 255.0f;
+        col.a = alpha / 255.0f;
+        if ( m_pSolidBrush.get() )
+        {
+            m_pSolidBrush->SetColor(col);
+        }
+        else
+        {
+            HRESULT hr = m_pRenderTarget->CreateSolidColorBrush(col, &m_pSolidBrush);
+            if ( !SUCCEEDED(hr) )
+            {
+                m_pSolidBrush.reset();
+            }
+        }
+    }
+}
+
+void SurfaceD2D::DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
+                                const char *s, int len, UINT fuOptions)
+{
+    SetFont(font_);
+
+    if ( m_pRenderTarget.get() && m_pSolidBrush.get() && m_pTextFormat.get() )
+    {
+        // Explicitly creating a text layout appears a little faster
+        wxCOMPtr<IDWriteTextLayout> pTextLayout;
+        wxString tbuf = stc2wx(s, len);
+        HRESULT hr;
+
+        if ( fuOptions & ETO_CLIPPED )
+        {
+            D2D1_RECT_F rcClip = {rc.left, rc.top, rc.right, rc.bottom};
+            m_pRenderTarget->PushAxisAlignedClip(rcClip,
+                D2D1_ANTIALIAS_MODE_ALIASED);
+        }
+
+        hr = m_pDWriteFactory->CreateTextLayout(tbuf.wc_str(), tbuf.Length(),
+            m_pTextFormat, rc.Width(), rc.Height(), &pTextLayout);
+
+        if ( SUCCEEDED(hr) )
+        {
+            D2D1_POINT_2F origin = {rc.left, ybase-m_yAscent};
+            m_pRenderTarget->DrawTextLayout(origin, pTextLayout, m_pSolidBrush,
+                D2D1_DRAW_TEXT_OPTIONS_NONE);
+        }
+
+        if ( fuOptions & ETO_CLIPPED )
+        {
+            m_pRenderTarget->PopAxisAlignedClip();
+        }
+    }
+}
+
+#endif // wxUSE_GRAPHICS_DIRECT2D
+
+Surface *Surface::Allocate(int technology) {
+    wxUnusedVar(technology);
+
+#if wxUSE_GRAPHICS_DIRECT2D
+    if ( technology == wxSTC_TECHNOLOGY_DIRECTWRITE ) {
+        return new SurfaceD2D;
+    }
+#endif // wxUSE_GRAPHICS_DIRECT2D
     return new SurfaceImpl;
 }
 

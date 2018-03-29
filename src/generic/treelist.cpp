@@ -482,6 +482,13 @@ wxTreeListModel::InsertItem(Node* parent,
     {
         // Not flat any more, this is a second level child.
         m_isFlat = false;
+
+        // This is a hack needed to work around wxOSX wxDataViewCtrl
+        // implementation which removes the indent if it thinks that the model
+        // is flat. We need to re-add the indent back if it turns out that it
+        // isn't flat, in fact.
+        wxDataViewCtrl* const dvc = m_treelist->GetDataView();
+        dvc->SetIndent(dvc->GetIndent());
     }
 
     wxScopedPtr<Node>
@@ -1455,28 +1462,6 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& event)
         view->Refresh();
         view->Update();
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
-
-        // Resize the first column to take the remaining available space.
-        const unsigned numColumns = GetColumnCount();
-        if ( !numColumns )
-            return;
-
-        // There is a bug in generic wxDataViewCtrl: if the column width sums
-        // up to the total size, horizontal scrollbar (unnecessarily) appears,
-        // so subtract a bit to ensure this doesn't happen.
-        int remainingWidth = rect.width - 5;
-        for ( unsigned n = 1; n < GetColumnCount(); n++ )
-        {
-            remainingWidth -= GetColumnWidth(n);
-            if ( remainingWidth <= 0 )
-            {
-                // There is not enough space, as we're not going to give the
-                // first column negative width anyhow, just don't do anything.
-                return;
-            }
-        }
-
-        SetColumnWidth(0, remainingWidth);
     }
 }
 

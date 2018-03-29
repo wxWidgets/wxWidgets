@@ -102,8 +102,11 @@ private:
 
         // Save the old text colour and set a more inconspicuous one for the
         // hint.
-        m_colFg = m_win->GetForegroundColour();
-        m_win->SetForegroundColour(*wxLIGHT_GREY);
+        if (!m_colFg.IsOk())
+        {
+            m_colFg = m_win->GetForegroundColour();
+            m_win->SetForegroundColour(*wxLIGHT_GREY);
+        }
 
         m_entry->DoSetValue(m_hint, wxTextEntryBase::SetValue_NoEvent);
     }

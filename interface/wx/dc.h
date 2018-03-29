@@ -1669,11 +1669,10 @@ public:
     }
     @endcode
 
-    @note Unlike other similar classes such as wxDCFontChanger, wxDCClipper
-        currently doesn't restore the previously active clipping region when it
-        is destroyed but simply resets clipping on the associated wxDC. This
-        may be changed in the future wxWidgets versions but has to be taken
-        into account explicitly in the current one.
+    @note Since 3.1.1 wxDCClipper restores the previously active clipping
+        region when it is destroyed. Previously it reset clipping on the
+        associated wxDC and this has to be taken into account explicitly in
+        previous wxWidgets versions.
 
     @library{wxcore}
     @category{gdi}

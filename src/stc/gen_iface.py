@@ -895,8 +895,6 @@ methodOverrideMap = {
          return stc2wx(buf);'''
     ),
 
-    'SetFontQuality' : (None, 0, 0),
-    'GetFontQuality' : (None, 0, 0),
     'SetSelection' : (None, 0, 0),
 
     'GetCharacterPointer' : (0,

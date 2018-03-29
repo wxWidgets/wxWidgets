@@ -241,14 +241,17 @@ protected:
     // (typically selection with dark background). For internal use only.
     virtual bool IsHighlighted() const = 0;
 
-    // Called from {Cancel,Finish}Editing() to cleanup m_editorCtrl
-    void DestroyEditControl();
-
     // Helper of PrepareForItem() also used in StartEditing(): returns the
     // value checking that its type matches our GetVariantType().
     wxVariant CheckedGetValue(const wxDataViewModel* model,
                               const wxDataViewItem& item,
                               unsigned column) const;
+
+    // Validates the given value (if it is non-null) and sends (in any case)
+    // ITEM_EDITING_DONE event and, finally, updates the model with the value
+    // (f it is valid, of course) if the event wasn't vetoed.
+    bool DoHandleEditingDone(wxVariant* value);
+
 
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
@@ -261,7 +264,10 @@ protected:
     // renderer is required
     wxDataViewCtrl* GetView() const;
 
-protected:
+private:
+    // Called from {Called,Finish}Editing() and dtor to cleanup m_editorCtrl
+    void DestroyEditControl();
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRendererBase);
 };
 

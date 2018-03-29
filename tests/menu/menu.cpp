@@ -254,7 +254,7 @@ void MenuTestCase::FindInMenu()
 
     // Find by id:
     CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Bar) );
-    CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Foo) == NULL );
+    CPPUNIT_ASSERT( !menuHelp->FindItem(MenuTestCase_Foo) );
 
     for (n=0; n < menuHelp->GetMenuItemCount(); ++n)
     {

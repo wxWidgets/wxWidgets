@@ -18,12 +18,15 @@
 
 #ifndef WX_PRECOMP
     #include "wx/checkbox.h"
+    #include "wx/statbmp.h"
     #include "wx/stattext.h"
     #include "wx/sizer.h"
 #endif
 
 #include "wx/collpane.h"
 #include "wx/richmsgdlg.h"
+#include "wx/statline.h"
+#include "wx/artprov.h"
 
 wxIMPLEMENT_CLASS(wxRichMessageDialog, wxDialog)
 
@@ -74,8 +77,28 @@ void wxGenericRichMessageDialog::AddMessageDialogDetails(wxSizer *sizer)
         sizerPane->Add( new wxStaticText( windowPane, -1, m_detailedText ) );
         windowPane->SetSizer( sizerPane );
 
-        sizerDetails->Add( m_detailsPane, wxSizerFlags().Right().Expand() );
+        sizerDetails->Add( m_detailsPane, wxSizerFlags().Expand() );
         sizer->Add( sizerDetails, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
+    }
+
+    if ( !m_footerText.empty() )
+    {
+        // add footer
+        sizer->Add( new wxStaticLine(this), wxSizerFlags().Expand().Border() );
+        wxSizer *footerSizer = new wxBoxSizer(wxHORIZONTAL);
+        if (m_footerIcon)
+        {
+            wxSize iconSize = wxArtProvider::GetNativeSizeHint(wxART_MENU);
+
+            wxStaticBitmap* footerIcon = new wxStaticBitmap(this, wxID_ANY,
+                wxArtProvider::GetIcon(wxArtProvider::GetMessageBoxIconId(m_footerIcon),
+                wxART_MESSAGE_BOX, iconSize));
+            footerSizer->Add( footerIcon,
+                wxSizerFlags().Border(wxLEFT|wxRIGHT).CenterVertical() );
+        }
+        footerSizer->Add( new wxStaticText(this, wxID_ANY, m_footerText),
+            wxSizerFlags().CenterVertical() );
+        sizer->Add( footerSizer, wxSizerFlags().Border().Expand() );
     }
 }
 

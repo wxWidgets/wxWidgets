@@ -356,6 +356,9 @@
 				RelativePath=".\config\config.cpp">
 			</File>
 			<File
+				RelativePath=".\persistence\dataview.cpp">
+			</File>
+			<File
 				RelativePath=".\controls\dataviewctrltest.cpp">
 			</File>
 			<File
@@ -558,6 +561,9 @@
 			</File>
 			<File
 				RelativePath=".\controls\textentrytest.cpp">
+			</File>
+			<File
+				RelativePath=".\persistence\tlw.cpp">
 			</File>
 			<File
 				RelativePath=".\controls\togglebuttontest.cpp">

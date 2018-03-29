@@ -1166,15 +1166,26 @@ bool wxWindowBase::IsEnabled() const
     return IsThisEnabled() && (IsTopLevel() || !GetParent() || GetParent()->IsEnabled());
 }
 
+// Define this macro if the corresponding operating system handles the state
+// of children windows automatically when the parent is enabled/disabled.
+// Otherwise wx itself must ensure that when the parent is disabled its
+// children are disabled too, and their initial state is restored when the
+// parent is enabled back.
+#if defined(__WXMSW__)
+    // must do everything ourselves
+    #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
+#elif defined(__WXOSX__)
+    // must do everything ourselves
+    #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
+#else
+    #define wxHAS_NATIVE_ENABLED_MANAGEMENT
+#endif
+
 void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
 {
-    // Under some platforms there is no need to update the window state
-    // explicitly, it will become disabled when its parent is. On other ones we
-    // do need to disable all windows recursively though.
-#ifndef wxHAS_NATIVE_ENABLED_MANAGEMENT
     DoEnable(enabled);
-#endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 
+#ifndef wxHAS_NATIVE_ENABLED_MANAGEMENT
     // Disabling a top level window is typically done when showing a modal
     // dialog and we don't need to disable its children in this case, they will
     // be logically disabled anyhow (i.e. their IsEnabled() will return false)
@@ -1190,7 +1201,6 @@ void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
     // they would still show as enabled even though they wouldn't actually
     // accept any input (at least under MSW where children don't accept input
     // if any of the windows in their parent chain is enabled).
-#ifndef wxHAS_NATIVE_ENABLED_MANAGEMENT
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
@@ -1208,12 +1218,6 @@ bool wxWindowBase::Enable(bool enable)
         return false;
 
     m_isEnabled = enable;
-
-    // If we call DoEnable() from NotifyWindowOnEnableChange(), we don't need
-    // to do it from here.
-#ifdef wxHAS_NATIVE_ENABLED_MANAGEMENT
-    DoEnable(enable);
-#endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 
     NotifyWindowOnEnableChange(enable);
 
@@ -1782,10 +1786,10 @@ void wxWindowBase::SetValidator(const wxValidator& validator)
     if ( m_windowValidator )
         delete m_windowValidator;
 
-    m_windowValidator = (wxValidator *)validator.Clone();
+    m_windowValidator = static_cast<wxValidator *>(validator.Clone());
 
     if ( m_windowValidator )
-        m_windowValidator->SetWindow(this);
+        m_windowValidator->SetWindow(static_cast<wxWindow*>(this));
 }
 #endif // wxUSE_VALIDATORS
 

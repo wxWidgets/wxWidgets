@@ -769,6 +769,30 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     }
 }
 
+static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool enable)
+{
+    if (!impl->GetWXPeer())
+        return;
+
+    if (impl->GetWXPeer()->IsFrozen())
+        impl->SetDrawingEnabled(enable);
+
+    for ( wxWindowList::iterator i = impl->GetWXPeer()->GetChildren().begin();
+          i != impl->GetWXPeer()->GetChildren().end();
+          ++i )
+    {
+        wxWindow *child = *i;
+        if ( child->IsTopLevel() || !child->IsFrozen() )
+            continue;
+
+        // Skip any user panes as they'll handle this themselves
+        if ( !child->GetPeer() || child->GetPeer()->IsUserPane() )
+            continue;
+
+        SetDrawingEnabledIfFrozenRecursive((wxWidgetCocoaImpl *)child->GetPeer(), enable);
+    }
+}
+
 @implementation wxNSView
 
 + (void)initialize
@@ -885,6 +909,24 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         return nil;
 
     return [super hitTest:aPoint];
+}
+
+- (void) viewWillMoveToWindow:(NSWindow *)newWindow
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget( self );
+    if (viewimpl)
+        SetDrawingEnabledIfFrozenRecursive(viewimpl, true);
+
+    [super viewWillMoveToWindow:newWindow];
+}
+
+- (void) viewDidMoveToWindow
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget( self );
+    if (viewimpl)
+        SetDrawingEnabledIfFrozenRecursive(viewimpl, false);
+
+    [super viewDidMoveToWindow];
 }
 
 @end // wxNSView
@@ -1646,6 +1688,7 @@ void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecogn
              gestureState = NSGestureRecognizerStateBegan;
              break;
         case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
              break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -1698,6 +1741,7 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
              gestureState = NSGestureRecognizerStateBegan;
              break;
         case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
              break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -1746,6 +1790,7 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
              gestureState = NSGestureRecognizerStateBegan;
              break;
         case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
              break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -1797,6 +1842,7 @@ void wxWidgetCocoaImpl::LongPressEvent(NSPressGestureRecognizer* pressGestureRec
             gestureState = NSGestureRecognizerStateBegan;
             break;
         case NSGestureRecognizerStateChanged:
+            gestureState = NSGestureRecognizerStateChanged;
             break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -2486,7 +2532,7 @@ void wxWidgetCocoaImpl::Init()
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
 {
     if ( GetWXPeer() && GetWXPeer()->IsFrozen() )
-        [[m_osxView window] enableFlushWindow];
+        SetDrawingEnabled(true);
     
     RemoveAssociations( this );
 
@@ -3002,8 +3048,6 @@ bool wxWidgetCocoaImpl::SetFocus()
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
 
-    // TODO remove if no issues arise: should not raise the window, only assign focus
-    //[[m_osxView window] makeKeyAndOrderFront:nil] ;
     [[m_osxView window] makeFirstResponder: targetView] ;
     return true;
 }
@@ -3034,6 +3078,10 @@ void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
 
 void wxWidgetCocoaImpl::RemoveFromParent()
 {
+    // User panes will be thawed in the removeFromSuperview call below
+    if (!IsUserPane() && m_wxPeer->IsFrozen())
+        SetDrawingEnabled(true);
+
     [m_osxView removeFromSuperview];
 }
 
@@ -3043,8 +3091,9 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
     [container addSubview:m_osxView];
     
-    if( m_wxPeer->IsFrozen() )
-        [[m_osxView window] disableFlushWindow];
+    // User panes will be frozen elsewhere
+    if( m_wxPeer->IsFrozen() && !IsUserPane() )
+        SetDrawingEnabled(false);
 }
 
 void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
@@ -3506,8 +3555,9 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 
 bool wxWidgetCocoaImpl::ShouldHandleKeyNavigation(const wxKeyEvent &WXUNUSED(event)) const
 {
-    // Only controls that intercept tabs for different behavior should return false (ie wxTE_PROCESS_TAB)
-    return true;
+    // If the window wants to have all keys, let it have it and don't process
+    // TAB as key navigation event.
+    return !m_wxPeer->HasFlag(wxWANTS_CHARS);
 }
 
 bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
@@ -3579,13 +3629,13 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent(wxevent , event) ;
-    bool result = GetWXPeer()->HandleWindowEvent(wxevent);
-    
+    // Call this before handling the event in case the event handler destroys
+    // this window.
     (void)SetupCursor(event);
 
-    return result;
+    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+    SetupMouseEvent(wxevent , event) ;
+    return GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusSet()
@@ -3693,6 +3743,9 @@ void wxWidgetCocoaImpl::SetFlipped(bool flipped)
 
 void wxWidgetCocoaImpl::SetDrawingEnabled(bool enabled)
 {
+    if ( [m_osxView window] == nil )
+        return;
+
     if ( enabled )
     {
         [[m_osxView window] enableFlushWindow];

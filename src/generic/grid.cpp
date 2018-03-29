@@ -1871,7 +1871,10 @@ void wxGrid::Render( wxDC& dc,
     dc.DrawRectangle( pointOffSet, sizeCells );
 
     // draw cells
-    DrawGridCellArea( dc, renderCells );
+    {
+        wxDCClipper clipper( dc, wxRect(pointOffSet, sizeCells) );
+        DrawGridCellArea( dc, renderCells );
+    }
 
     // draw grid lines
     if ( style & wxGRID_DRAW_CELL_LINES )
@@ -6139,9 +6142,18 @@ void wxGrid::GetTextBoxSize( const wxDC& dc,
     size_t i;
     for ( i = 0; i < lines.GetCount(); i++ )
     {
-        dc.GetTextExtent( lines[i], &lineW, &lineH );
-        w = wxMax( w, lineW );
-        h += lineH;
+        if ( lines[i].empty() )
+        {
+            // GetTextExtent() would return 0 for empty lines, but we still
+            // need to account for their height.
+            h += dc.GetCharHeight();
+        }
+        else
+        {
+            dc.GetTextExtent( lines[i], &lineW, &lineH );
+            w = wxMax( w, lineW );
+            h += lineH;
+        }
     }
 
     *width = w;

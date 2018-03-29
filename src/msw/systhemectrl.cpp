@@ -22,13 +22,10 @@
 
 void wxSystemThemedControlBase::DoEnableSystemTheme(bool enable, wxWindow* window)
 {
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    if ( wxGetWinVersion() >= wxWinVersion_Vista && wxUxThemeIsActive() )
     {
-        if ( wxUxThemeEngine *te = wxUxThemeEngine::GetIfActive() )
-        {
-            const wchar_t* const sysThemeId = enable ? L"EXPLORER" : NULL;
-            te->SetWindowTheme(GetHwndOf(window), sysThemeId, NULL);
-        }
+         const wchar_t* const sysThemeId = enable ? L"EXPLORER" : NULL;
+         ::SetWindowTheme(GetHwndOf(window), sysThemeId, NULL);
     }
 }
 
