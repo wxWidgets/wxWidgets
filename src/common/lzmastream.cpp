@@ -209,4 +209,164 @@ size_t wxLZMAInputStream::OnSysRead(void* outbuf, size_t size)
     return size;
 }
 
+// ----------------------------------------------------------------------------
+// wxLZMAOutputStream: compression
+// ----------------------------------------------------------------------------
+
+void wxLZMAOutputStream::Init(int level)
+{
+    if ( level == -1 )
+        level = LZMA_PRESET_DEFAULT;
+
+    // Use the check type recommended by liblzma documentation.
+    const lzma_ret rc = lzma_easy_encoder(m_stream, level, LZMA_CHECK_CRC64);
+    switch ( rc )
+    {
+        case LZMA_OK:
+            // Prepare for the first call to OnSysWrite().
+            m_stream->next_out = m_streamBuf;
+            m_stream->avail_out = wxLZMA_BUF_SIZE;
+
+            // Skip setting m_lasterror below.
+            return;
+
+        case LZMA_MEM_ERROR:
+            wxLogError(_("Failed to allocate memory for LZMA compression."));
+            break;
+
+        default:
+            wxLogError(_("Failed to initialize LZMA compression: "
+                         "unexpected error %u."),
+                       rc);
+            break;
+    }
+
+    m_lasterror = wxSTREAM_WRITE_ERROR;
+}
+
+size_t wxLZMAOutputStream::OnSysWrite(const void *inbuf, size_t size)
+{
+    m_stream->next_in = static_cast<const uint8_t*>(inbuf);
+    m_stream->avail_in = size;
+
+    // Compress as long as we have any input data, but stop at first error as
+    // it's useless to try to continue after it (or even starting if the stream
+    // had already been in an error state).
+    while ( m_lasterror == wxSTREAM_NO_ERROR && m_stream->avail_in > 0 )
+    {
+        // Flush the output buffer if necessary.
+        if ( !UpdateOutputIfNecessary() )
+            return 0;
+
+        const lzma_ret rc = lzma_code(m_stream, LZMA_RUN);
+
+        wxString err;
+        switch ( rc )
+        {
+            case LZMA_OK:
+                continue;
+
+            case LZMA_MEM_ERROR:
+                err = wxTRANSLATE("out of memory");
+                break;
+
+            case LZMA_STREAM_END:
+                // This is unexpected as we don't use LZMA_FINISH here.
+                wxFAIL_MSG( "Unexpected LZMA stream end" );
+                wxFALLTHROUGH;
+
+            default:
+                err = wxTRANSLATE("unknown compression error");
+                break;
+        }
+
+        wxLogError(_("LZMA compression error: %s"), wxGetTranslation(err));
+
+        m_lasterror = wxSTREAM_WRITE_ERROR;
+        return 0;
+    }
+
+    m_pos += size;
+    return size;
+}
+
+bool wxLZMAOutputStream::UpdateOutput()
+{
+    // Write the buffer contents to the real output, taking care only to write
+    // as much of it as we actually have, as the buffer can (and very likely
+    // will) be incomplete.
+    const size_t numOut = wxLZMA_BUF_SIZE - m_stream->avail_out;
+    m_parent_o_stream->Write(m_streamBuf, numOut);
+    if ( m_parent_o_stream->LastWrite() != numOut )
+    {
+        m_lasterror = wxSTREAM_WRITE_ERROR;
+        return false;
+    }
+
+    return true;
+}
+
+bool wxLZMAOutputStream::UpdateOutputIfNecessary()
+{
+    if ( !m_stream->avail_out )
+    {
+        if ( !UpdateOutput() )
+            return false;
+
+        m_stream->next_out = m_streamBuf;
+        m_stream->avail_out = wxLZMA_BUF_SIZE;
+    }
+
+    return true;
+}
+
+bool wxLZMAOutputStream::DoFlush(bool finish)
+{
+    const lzma_action action = finish ? LZMA_FINISH : LZMA_FULL_FLUSH;
+
+    while ( m_lasterror == wxSTREAM_NO_ERROR )
+    {
+        if ( !UpdateOutputIfNecessary() )
+            break;
+
+        const lzma_ret rc = lzma_code(m_stream, action);
+
+        wxString err;
+        switch ( rc )
+        {
+            case LZMA_OK:
+                continue;
+
+            case LZMA_STREAM_END:
+                // Don't forget to output the last part of the data.
+                return UpdateOutput();
+
+            case LZMA_MEM_ERROR:
+                err = wxTRANSLATE("out of memory");
+
+            default:
+                err = wxTRANSLATE("unknown compression error");
+                break;
+        }
+
+        wxLogError(_("LZMA compression error when flushing output: %s"),
+                   wxGetTranslation(err));
+
+        m_lasterror = wxSTREAM_WRITE_ERROR;
+    }
+
+    return false;
+}
+
+bool wxLZMAOutputStream::Close()
+{
+    if ( !DoFlush(true) )
+        return false;
+
+    m_stream->next_out = m_streamBuf;
+    m_stream->avail_out = wxLZMA_BUF_SIZE;
+
+    return wxFilterOutputStream::Close() && IsOk();
+}
+
 #endif // wxUSE_LIBLZMA && wxUSE_STREAMS
