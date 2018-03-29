@@ -17,18 +17,48 @@
 #include "wx/stream.h"
 #include "wx/versioninfo.h"
 
+namespace wxPrivate
+{
+
+// Private wrapper for lzma_stream struct.
 struct wxLZMAStream;
+
+// Common part of input and output LZMA streams: this is just an implementation
+// detail and is not part of the public API.
+class WXDLLIMPEXP_BASE wxLZMAData
+{
+protected:
+    wxLZMAData();
+    ~wxLZMAData();
+
+    wxLZMAStream* m_stream;
+    wxUint8* m_streamBuf;
+    wxFileOffset m_pos;
+
+    wxDECLARE_NO_COPY_CLASS(wxLZMAData);
+};
+
+} // namespace wxPrivate
 
 // ----------------------------------------------------------------------------
 // Filter for decompressing data compressed using LZMA
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxLZMAInputStream : public wxFilterInputStream
+class WXDLLIMPEXP_BASE wxLZMAInputStream : public wxFilterInputStream,
+                                           private wxPrivate::wxLZMAData
 {
 public:
-    explicit wxLZMAInputStream(wxInputStream& stream);
-    explicit wxLZMAInputStream(wxInputStream* stream);
-    virtual ~wxLZMAInputStream();
+    explicit wxLZMAInputStream(wxInputStream& stream)
+        : wxFilterInputStream(stream)
+    {
+        Init();
+    }
+
+    explicit wxLZMAInputStream(wxInputStream* stream)
+        : wxFilterInputStream(stream)
+    {
+        Init();
+    }
 
     char Peek() wxOVERRIDE { return wxInputStream::Peek(); }
     wxFileOffset GetLength() const wxOVERRIDE { return wxInputStream::GetLength(); }
@@ -39,12 +69,6 @@ protected:
 
 private:
     void Init();
-
-    wxLZMAStream* m_stream;
-    wxUint8* m_inbuf;
-    wxFileOffset m_pos;
-
-    wxDECLARE_NO_COPY_CLASS(wxLZMAInputStream);
 };
 
 WXDLLIMPEXP_BASE wxVersionInfo wxGetLibLZMAVersionInfo();
