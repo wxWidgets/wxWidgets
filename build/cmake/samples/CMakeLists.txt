@@ -7,7 +7,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSBILITY)
+wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSIBILITY)
 wx_add_sample(animate anitest.cpp anitest.h LIBRARIES adv DATA throbber.gif hourglass.ani DEPENDS wxUSE_ANIMATIONCTRL)
 wx_add_sample(archive CONSOLE)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)
@@ -24,7 +24,7 @@ if(wxUSE_ON_FATAL_EXCEPTION AND (NOT WIN32 OR MSVC))
     wx_add_sample(debugrpt LIBRARIES qa DEPENDS wxUSE_DEBUGREPORT)
 endif()
 wx_add_sample(dialogs dialogs.cpp dialogs.h LIBRARIES adv DATA tips.txt)
-wx_add_sample(dialup nettest.cpp DEPENDS wxUSE_DIALUP_MANAGER)
+wx_add_sample(dialup nettest.cpp LIBRARIES net DEPENDS wxUSE_DIALUP_MANAGER)
 wx_add_sample(display DEPENDS wxUSE_DISPLAY)
 wx_add_sample(dnd dnd.cpp RES dnd.rc DATA wxwin.png DEPENDS wxUSE_DRAG_AND_DROP)
 wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
@@ -231,7 +231,7 @@ if(WIN32)
     # Windows only samples
 
     # DLL Sample
-    if(wxUSE_DYNLIBCLASS)
+    if(wxUSE_DYNLIB_CLASS)
         wx_add_sample(dll DLL my_dll.cpp my_dll.h NAME my_dll FOLDER dll
             DEFINITIONS MY_DLL_BUILDING)
         if(NOT wxBUILD_SHARED)

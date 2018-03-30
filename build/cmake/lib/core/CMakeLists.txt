@@ -9,8 +9,6 @@
 
 include(../../source_groups.cmake)
 
-wx_option(wxUSE_IMAGE "use wxImage class" ON)
-
 wx_append_sources(CORE_SRC GUI_CMN)
 wx_append_sources(CORE_SRC BASE_AND_GUI_CMN)
 if(WIN32)
@@ -25,8 +23,13 @@ if(WXMSW)
     wx_append_sources(CORE_SRC MSW)
     wx_append_sources(CORE_SRC MSW_DESKTOP)
 elseif(WXGTK)
-    wx_append_sources(CORE_SRC GTK2_LOWLEVEL)
-    wx_append_sources(CORE_SRC GTK2)
+    if(WXGTK2)
+        wx_append_sources(CORE_SRC GTK2_LOWLEVEL)
+        wx_append_sources(CORE_SRC GTK2)
+    else()
+        wx_append_sources(CORE_SRC GTK_LOWLEVEL)
+        wx_append_sources(CORE_SRC GTK)
+    endif()
 
     if(UNIX)
         wx_append_sources(CORE_SRC XWIN_LOWLEVEL)
