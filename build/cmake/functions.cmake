@@ -202,8 +202,8 @@ function(wx_set_target_properties target_name is_base)
             PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
 
-    if (WXMSW)
-        set(WXMSW_LIBRARIES
+    if (WIN32)
+        set(WIN32_LIBRARIES
             kernel32
             user32
             gdi32
@@ -225,7 +225,7 @@ function(wx_set_target_properties target_name is_base)
             uxtheme
         )
         target_link_libraries(${target_name}
-            PUBLIC ${WXMSW_LIBRARIES})
+            PUBLIC ${WIN32_LIBRARIES})
     endif()
 
     if(wxTOOLKIT_LIBRARIES)
