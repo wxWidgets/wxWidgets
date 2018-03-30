@@ -18,7 +18,7 @@
 #include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/filename.h"
-#include "wx/sharedptr.h"
+#include "wx/scopedptr.h"
 #include "wx/vector.h"
 #include "wx/wfstream.h"
 #include "wx/zipstrm.h"
@@ -149,7 +149,7 @@ int ArchiveApp::DoCreate()
     }
 
     wxTempFileOutputStream fileOutputStream(m_archiveFileName);
-    wxSharedPtr<wxArchiveOutputStream> archiveOutputStream(m_archiveClassFactory->NewStream(fileOutputStream));
+    wxScopedPtr<wxArchiveOutputStream> archiveOutputStream(m_archiveClassFactory->NewStream(fileOutputStream));
     if (m_archiveClassFactory->GetProtocol().IsSameAs("zip", false) && m_forceZip64)
         reinterpret_cast<wxZipOutputStream*>(archiveOutputStream.get())->SetFormat(wxZIP_FORMAT_ZIP64);
 
@@ -184,7 +184,7 @@ int ArchiveApp::DoList()
     if (!fileInputStream.IsOk())
         return 1;
 
-    wxSharedPtr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
+    wxScopedPtr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
     wxPrintf("Archive: %s\n", m_archiveFileName);
     wxPrintf("Length     Date       Time     Name\n");
     wxPrintf("---------- ---------- -------- ----\n");
@@ -213,7 +213,7 @@ int ArchiveApp::DoExtract()
     if (!fileInputStream.IsOk())
         return 1;
 
-    wxSharedPtr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
+    wxScopedPtr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
     wxPrintf("Extracting from: %s\n", m_archiveFileName);
     for (wxArchiveEntry* entry = archiveStream->GetNextEntry(); entry;
          entry = archiveStream->GetNextEntry())
