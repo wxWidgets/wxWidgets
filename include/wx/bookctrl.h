@@ -20,10 +20,8 @@
 #if wxUSE_BOOKCTRL
 
 #include "wx/control.h"
-#include "wx/dynarray.h"
+#include "wx/vector.h"
 #include "wx/withimages.h"
-
-WX_DEFINE_EXPORTED_ARRAY_PTR(wxWindow *, wxArrayPages);
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxBookCtrlEvent;
@@ -94,7 +92,7 @@ public:
     virtual size_t GetPageCount() const { return m_pages.size(); }
 
     // get the panel which represents the given page
-    virtual wxWindow *GetPage(size_t n) const { return m_pages[n]; }
+    virtual wxWindow *GetPage(size_t n) const { return m_pages.at(n); }
 
     // get the current page or NULL if none
     wxWindow *GetCurrentPage() const
@@ -292,6 +290,12 @@ protected:
     // having nodes without any associated page)
     virtual bool AllowNullPage() const { return false; }
 
+    // For classes that allow null pages, we also need a way to find the
+    // closest non-NULL page corresponding to the given index, e.g. the first
+    // leaf item in wxTreebook tree and this method must be overridden to
+    // return it if AllowNullPage() is overridden.
+    virtual wxWindow *DoGetNonNullPage(size_t page) { return m_pages[page]; }
+
     // Remove the page and return a pointer to it.
     //
     // It also needs to update the current selection if necessary, i.e. if the
@@ -325,7 +329,7 @@ protected:
 
 
     // the array of all pages of this control
-    wxArrayPages m_pages;
+    wxVector<wxWindow*> m_pages;
 
     // get the page area
     virtual wxRect GetPageRect() const;
