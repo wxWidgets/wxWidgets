@@ -96,3 +96,15 @@ class wxLZMAOutputStream : public wxFilterOutputStream
      */
     wxLZMAOutputStream(wxOutputStream* stream);
 };
+
+/**
+    Return the version of liblzma library used by LZMA stream classes.
+
+    @see wxVersionInfo
+
+    @header{wx/lzmastream.h}
+    @library{wxbase}
+
+    @since 3.1.2
+*/
+wxVersionInfo wxGetLibLZMAVersionInfo();
