@@ -120,6 +120,7 @@ TEST_OBJECTS =  \
 	test_filestream.o \
 	test_iostreams.o \
 	test_largefile.o \
+	test_lzmastream.o \
 	test_memstream.o \
 	test_socketstream.o \
 	test_sstream.o \
@@ -686,6 +687,9 @@ test_iostreams.o: $(srcdir)/streams/iostreams.cpp $(TEST_ODEP)
 
 test_largefile.o: $(srcdir)/streams/largefile.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/largefile.cpp
+
+test_lzmastream.o: $(srcdir)/streams/lzmastream.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/lzmastream.cpp
 
 test_memstream.o: $(srcdir)/streams/memstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/memstream.cpp

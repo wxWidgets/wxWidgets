@@ -262,5 +262,8 @@
     <ClCompile Include="streams\zlibstream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="streams\lzmastream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
