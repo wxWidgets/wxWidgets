@@ -38,6 +38,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/dynlib.h"
+#include "wx/scopeguard.h"
 #include "wx/tooltip.h"
 
 #include "wx/msw/private.h"
@@ -420,8 +421,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // non-TLW windows
     wxTopLevelWindows.Append(this);
 
-    bool ret = CreateBase(parent, id, pos, sizeReal, style, name);
-    if ( !ret )
+    if ( !CreateBase(parent, id, pos, sizeReal, style, name) )
         return false;
 
     if ( parent )
@@ -438,6 +438,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         // don't use DS_SETFONT we don't need the fourth WORD for the font)
         static const int dlgsize = sizeof(DLGTEMPLATE) + (sizeof(WORD) * 3);
         DLGTEMPLATE *dlgTemplate = (DLGTEMPLATE *)malloc(dlgsize);
+        wxON_BLOCK_EXIT1(free, dlgTemplate);
+
         memset(dlgTemplate, 0, dlgsize);
 
         // these values are arbitrary, they won't be used normally anyhow
@@ -469,15 +471,16 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         if ( style & (wxRESIZE_BORDER | wxCAPTION) )
             dlgTemplate->style |= DS_MODALFRAME;
 
-        ret = CreateDialog(dlgTemplate, title, pos, sizeReal);
-        free(dlgTemplate);
+        if ( !CreateDialog(dlgTemplate, title, pos, sizeReal) )
+            return false;
     }
     else // !dialog
     {
-        ret = CreateFrame(title, pos, sizeReal);
+        if ( !CreateFrame(title, pos, sizeReal) )
+            return false;
     }
 
-    if ( ret && !(GetWindowStyleFlag() & wxCLOSE_BOX) )
+    if ( !(GetWindowStyleFlag() & wxCLOSE_BOX) )
     {
         EnableCloseButton(false);
     }
@@ -486,12 +489,9 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // itself but for custom windows we have to do it ourselves in order to
     // make the keyboard indicators (such as underlines for accelerators and
     // focus rectangles) work under Win2k+
-    if ( ret )
-    {
-        MSWUpdateUIState(UIS_INITIALIZE);
-    }
+    MSWUpdateUIState(UIS_INITIALIZE);
 
-    return ret;
+    return true;
 }
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
