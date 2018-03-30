@@ -138,7 +138,14 @@ bool ArchiveApp::CopyStreamData(wxInputStream& inputStream, wxOutputStream& outp
         if (copiedData + readSize > size)
             readSize = size - copiedData;
         inputStream.Read(buf, readSize);
-        outputStream.Write(buf, readSize);
+        size_t actuallyRead = inputStream.LastRead();
+        outputStream.Write(buf, actuallyRead);
+        if (outputStream.LastWrite() != actuallyRead)
+        {
+            wxLogError("Failed to output data");
+            return false;
+        }
+
         copiedData += readSize;
     }
 
@@ -170,7 +177,8 @@ int ArchiveApp::DoCreate()
         }
         if (!archiveOutputStream->PutNextEntry(inputFileName.GetFullName(), wxDateTime::Now(), inputFileStream.GetLength()))
             break;
-        CopyStreamData(inputFileStream, *archiveOutputStream, inputFileStream.GetLength());
+        if (!CopyStreamData(inputFileStream, *archiveOutputStream, inputFileStream.GetLength()))
+            return 1;
     }
 
     if (archiveOutputStream->Close())
@@ -225,7 +233,8 @@ int ArchiveApp::DoExtract()
     {
         wxPrintf("Extracting: %s...\n", entry->GetName());
         wxTempFileOutputStream outputFileStream(entry->GetName());
-        CopyStreamData(*archiveStream, outputFileStream, entry->GetSize());
+        if (!CopyStreamData(*archiveStream, outputFileStream, entry->GetSize()))
+            return 1;
         outputFileStream.Commit();
     }
     wxPrintf("Extracted all files\n");
