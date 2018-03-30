@@ -214,7 +214,7 @@ int ArchiveApp::DoExtract()
         return 1;
 
     wxSharedPtr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
-    wxPrintf("Extrating from: %s\n", m_archiveFileName);
+    wxPrintf("Extracting from: %s\n", m_archiveFileName);
     for (wxArchiveEntry* entry = archiveStream->GetNextEntry(); entry;
          entry = archiveStream->GetNextEntry())
     {
