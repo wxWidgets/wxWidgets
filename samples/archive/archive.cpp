@@ -26,6 +26,11 @@
 class ArchiveApp: public wxAppConsole
 {
 public:
+    ArchiveApp()
+    {
+        m_forceZip64 = false;
+        m_archiveClassFactory = NULL;
+    }
 
     virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
 
