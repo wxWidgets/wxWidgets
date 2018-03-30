@@ -102,6 +102,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filestream.obj \
 	$(OBJS)\test_iostreams.obj \
 	$(OBJS)\test_largefile.obj \
+	$(OBJS)\test_lzmastream.obj \
 	$(OBJS)\test_memstream.obj \
 	$(OBJS)\test_socketstream.obj \
 	$(OBJS)\test_sstream.obj \
@@ -733,6 +734,9 @@ $(OBJS)\test_iostreams.obj: .\streams\iostreams.cpp
 
 $(OBJS)\test_largefile.obj: .\streams\largefile.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\streams\largefile.cpp
+
+$(OBJS)\test_lzmastream.obj: .\streams\lzmastream.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\streams\lzmastream.cpp
 
 $(OBJS)\test_memstream.obj: .\streams\memstream.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\streams\memstream.cpp
