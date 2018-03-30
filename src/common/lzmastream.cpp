@@ -369,4 +369,37 @@ bool wxLZMAOutputStream::Close()
     return wxFilterOutputStream::Close() && IsOk();
 }
 
+// ----------------------------------------------------------------------------
+// wxLZMAClassFactory: allow creating streams from extension/MIME type
+// ----------------------------------------------------------------------------
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxLZMAClassFactory, wxFilterClassFactory);
+
+static wxLZMAClassFactory g_wxLZMAClassFactory;
+
+wxLZMAClassFactory::wxLZMAClassFactory()
+{
+    if ( this == &g_wxLZMAClassFactory )
+        PushFront();
+}
+
+const wxChar * const *
+wxLZMAClassFactory::GetProtocols(wxStreamProtocolType type) const
+{
+    static const wxChar *mime[] = { wxT("application/xz"), NULL };
+    static const wxChar *encs[] = { wxT("xz"), NULL };
+    static const wxChar *exts[] = { wxT(".xz"), NULL };
+
+    const wxChar* const* ret = NULL;
+    switch ( type )
+    {
+        case wxSTREAM_PROTOCOL: ret = encs; break;
+        case wxSTREAM_MIMETYPE: ret = mime; break;
+        case wxSTREAM_ENCODING: ret = encs; break;
+        case wxSTREAM_FILEEXT:  ret = exts; break;
+    }
+
+    return ret;
+}
+
 #endif // wxUSE_LIBLZMA && wxUSE_STREAMS

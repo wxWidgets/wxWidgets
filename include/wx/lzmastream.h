@@ -117,6 +117,31 @@ private:
     bool DoFlush(bool finish);
 };
 
+// ----------------------------------------------------------------------------
+// Support for creating LZMA streams from extension/MIME type
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxLZMAClassFactory: public wxFilterClassFactory
+{
+public:
+    wxLZMAClassFactory();
+
+    wxFilterInputStream *NewStream(wxInputStream& stream) const wxOVERRIDE
+        { return new wxLZMAInputStream(stream); }
+    wxFilterOutputStream *NewStream(wxOutputStream& stream) const wxOVERRIDE
+        { return new wxLZMAOutputStream(stream, -1); }
+    wxFilterInputStream *NewStream(wxInputStream *stream) const wxOVERRIDE
+        { return new wxLZMAInputStream(stream); }
+    wxFilterOutputStream *NewStream(wxOutputStream *stream) const wxOVERRIDE
+        { return new wxLZMAOutputStream(stream, -1); }
+
+    const wxChar * const *GetProtocols(wxStreamProtocolType type
+                                       = wxSTREAM_PROTOCOL) const wxOVERRIDE;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxLZMAClassFactory);
+};
+
 WXDLLIMPEXP_BASE wxVersionInfo wxGetLibLZMAVersionInfo();
 
 #endif // wxUSE_LIBLZMA && wxUSE_STREAMS
