@@ -1852,8 +1852,35 @@ void Window::SetPosition(PRectangle rc) {
     GETWIN(wid)->SetSize(r);
 }
 
-void Window::SetPositionRelative(PRectangle rc, Window) {
-    SetPosition(rc);  // ????
+void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
+    wxWindow *relativeWin = GETWIN(relativeTo.wid);
+
+    wxPoint position = relativeWin->GetScreenPosition();
+    position.x = wxRound(position.x + rc.left);
+    position.y = wxRound(position.y + rc.top);
+
+    const int currentDisplay = wxDisplay::GetFromWindow(relativeWin);
+    const wxRect displayRect = wxDisplay(currentDisplay).GetClientArea();
+
+    if (position.x < displayRect.GetLeft())
+        position.x = displayRect.GetLeft();
+
+    const int width = rc.Width();
+    if (width > displayRect.GetWidth())
+    {
+        // We want to show at least the beginning of the window.
+        position.x = displayRect.GetLeft();
+    }
+    else if (position.x + width > displayRect.GetRight())
+        position.x = displayRect.GetRight() - width;
+
+    const int height = rc.Height();
+    if (position.y + height > displayRect.GetBottom())
+        position.y = displayRect.GetBottom() - height;
+
+    position = relativeWin->ScreenToClient(position);
+    wxWindow *window = GETWIN(wid);
+    window->SetSize(position.x, position.y, width, height);
 }
 
 PRectangle Window::GetClientPosition() {
