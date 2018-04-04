@@ -24,7 +24,7 @@ endif()
 wx_add_library(net IS_BASE ${NET_FILES})
 
 if(WIN32)
-    wx_lib_link_libraries(net PRIVATE Ws2_32)
+    wx_lib_link_libraries(net PRIVATE ws2_32)
 endif()
 
 wx_finalize_lib(net)
