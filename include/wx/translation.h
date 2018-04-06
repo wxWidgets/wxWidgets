@@ -272,6 +272,13 @@ inline const wxString& wxGetTranslation(const wxString& str,
         return wxTranslations::GetUntranslatedString(str);
 }
 
+inline const wxString& wxGetTranslation(const char* str,
+                                        const wxString& domain = wxString(),
+                                        const wxString& context = wxString())
+{
+    return wxGetTranslation(wxString::FromUTF8(str), domain, context);
+}
+
 inline const wxString& wxGetTranslation(const wxString& str1,
                                         const wxString& str2,
                                         unsigned n,
@@ -289,6 +296,16 @@ inline const wxString& wxGetTranslation(const wxString& str1,
         return n == 1
                ? wxTranslations::GetUntranslatedString(str1)
                : wxTranslations::GetUntranslatedString(str2);
+}
+
+inline const wxString& wxGetTranslation(const char* str1,
+                                        const char* str2,
+                                        unsigned int n,
+                                        const wxString& domain = wxString(),
+                                        const wxString& context = wxString())
+{
+    return wxGetTranslation(wxString::FromUTF8(str1), wxString::FromUTF8(str2),
+                            n, domain, context);
 }
 
 #else // !wxUSE_INTL
