@@ -458,6 +458,7 @@ set(BASE_CMN_SRC
     src/common/zstream.cpp
     src/common/fswatchercmn.cpp
     src/generic/fswatcherg.cpp
+    src/common/lzmastream.cpp
 )
 
 set(BASE_AND_GUI_CMN_SRC
@@ -633,6 +634,7 @@ set(BASE_CMN_HDR
     wx/meta/removeref.h
     wx/fswatcher.h
     wx/generic/fswatcher.h
+    wx/lzmastream.h
 )
 
 set(NET_UNIX_SRC

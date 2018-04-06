@@ -455,6 +455,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_fswatchercmn.obj \
 	$(OBJS)\monodll_fswatcherg.obj \
 	$(OBJS)\monodll_common_secretstore.obj \
+	$(OBJS)\monodll_lzmastream.obj \
 	$(OBJS)\monodll_basemsw.obj \
 	$(OBJS)\monodll_crashrpt.obj \
 	$(OBJS)\monodll_debughlp.obj \
@@ -607,6 +608,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_fswatchercmn.obj \
 	$(OBJS)\monolib_fswatcherg.obj \
 	$(OBJS)\monolib_common_secretstore.obj \
+	$(OBJS)\monolib_lzmastream.obj \
 	$(OBJS)\monolib_basemsw.obj \
 	$(OBJS)\monolib_crashrpt.obj \
 	$(OBJS)\monolib_debughlp.obj \
@@ -755,6 +757,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_fswatchercmn.obj \
 	$(OBJS)\basedll_fswatcherg.obj \
 	$(OBJS)\basedll_common_secretstore.obj \
+	$(OBJS)\basedll_lzmastream.obj \
 	$(OBJS)\basedll_basemsw.obj \
 	$(OBJS)\basedll_crashrpt.obj \
 	$(OBJS)\basedll_debughlp.obj \
@@ -888,6 +891,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_fswatchercmn.obj \
 	$(OBJS)\baselib_fswatcherg.obj \
 	$(OBJS)\baselib_common_secretstore.obj \
+	$(OBJS)\baselib_lzmastream.obj \
 	$(OBJS)\baselib_basemsw.obj \
 	$(OBJS)\baselib_crashrpt.obj \
 	$(OBJS)\baselib_debughlp.obj \
@@ -6690,6 +6694,9 @@ $(OBJS)\monodll_fswatcherg.obj: ..\..\src\generic\fswatcherg.cpp
 $(OBJS)\monodll_common_secretstore.obj: ..\..\src\common\secretstore.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\secretstore.cpp
 
+$(OBJS)\monodll_lzmastream.obj: ..\..\src\common\lzmastream.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\lzmastream.cpp
+
 $(OBJS)\monodll_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\basemsw.cpp
 
@@ -9235,6 +9242,9 @@ $(OBJS)\monolib_fswatcherg.obj: ..\..\src\generic\fswatcherg.cpp
 
 $(OBJS)\monolib_common_secretstore.obj: ..\..\src\common\secretstore.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\secretstore.cpp
+
+$(OBJS)\monolib_lzmastream.obj: ..\..\src\common\lzmastream.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\lzmastream.cpp
 
 $(OBJS)\monolib_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\basemsw.cpp
@@ -11782,6 +11792,9 @@ $(OBJS)\basedll_fswatcherg.obj: ..\..\src\generic\fswatcherg.cpp
 $(OBJS)\basedll_common_secretstore.obj: ..\..\src\common\secretstore.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\secretstore.cpp
 
+$(OBJS)\basedll_lzmastream.obj: ..\..\src\common\lzmastream.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\lzmastream.cpp
+
 $(OBJS)\basedll_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\basemsw.cpp
 
@@ -12126,6 +12139,9 @@ $(OBJS)\baselib_fswatcherg.obj: ..\..\src\generic\fswatcherg.cpp
 
 $(OBJS)\baselib_common_secretstore.obj: ..\..\src\common\secretstore.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\secretstore.cpp
+
+$(OBJS)\baselib_lzmastream.obj: ..\..\src\common\lzmastream.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\lzmastream.cpp
 
 $(OBJS)\baselib_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\basemsw.cpp

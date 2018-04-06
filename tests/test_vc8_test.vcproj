@@ -1067,6 +1067,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\streams\lzmastream.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\mbconv\mbconvtest.cpp"
 				>
 			</File>

@@ -443,6 +443,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_fswatchercmn.o \
 	$(OBJS)\monodll_fswatcherg.o \
 	$(OBJS)\monodll_common_secretstore.o \
+	$(OBJS)\monodll_lzmastream.o \
 	$(OBJS)\monodll_basemsw.o \
 	$(OBJS)\monodll_crashrpt.o \
 	$(OBJS)\monodll_debughlp.o \
@@ -596,6 +597,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_fswatchercmn.o \
 	$(OBJS)\monolib_fswatcherg.o \
 	$(OBJS)\monolib_common_secretstore.o \
+	$(OBJS)\monolib_lzmastream.o \
 	$(OBJS)\monolib_basemsw.o \
 	$(OBJS)\monolib_crashrpt.o \
 	$(OBJS)\monolib_debughlp.o \
@@ -745,6 +747,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_fswatchercmn.o \
 	$(OBJS)\basedll_fswatcherg.o \
 	$(OBJS)\basedll_common_secretstore.o \
+	$(OBJS)\basedll_lzmastream.o \
 	$(OBJS)\basedll_basemsw.o \
 	$(OBJS)\basedll_crashrpt.o \
 	$(OBJS)\basedll_debughlp.o \
@@ -878,6 +881,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_fswatchercmn.o \
 	$(OBJS)\baselib_fswatcherg.o \
 	$(OBJS)\baselib_common_secretstore.o \
+	$(OBJS)\baselib_lzmastream.o \
 	$(OBJS)\baselib_basemsw.o \
 	$(OBJS)\baselib_crashrpt.o \
 	$(OBJS)\baselib_debughlp.o \
@@ -6872,6 +6876,9 @@ $(OBJS)\monodll_fswatcherg.o: ../../src/generic/fswatcherg.cpp
 $(OBJS)\monodll_common_secretstore.o: ../../src/common/secretstore.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_lzmastream.o: ../../src/common/lzmastream.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_basemsw.o: ../../src/msw/basemsw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9418,6 +9425,9 @@ $(OBJS)\monolib_fswatcherg.o: ../../src/generic/fswatcherg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_common_secretstore.o: ../../src/common/secretstore.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_lzmastream.o: ../../src/common/lzmastream.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_basemsw.o: ../../src/msw/basemsw.cpp
@@ -11968,6 +11978,9 @@ $(OBJS)\basedll_fswatcherg.o: ../../src/generic/fswatcherg.cpp
 $(OBJS)\basedll_common_secretstore.o: ../../src/common/secretstore.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_lzmastream.o: ../../src/common/lzmastream.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_basemsw.o: ../../src/msw/basemsw.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12311,6 +12324,9 @@ $(OBJS)\baselib_fswatcherg.o: ../../src/generic/fswatcherg.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_common_secretstore.o: ../../src/common/secretstore.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_lzmastream.o: ../../src/common/lzmastream.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_basemsw.o: ../../src/msw/basemsw.cpp

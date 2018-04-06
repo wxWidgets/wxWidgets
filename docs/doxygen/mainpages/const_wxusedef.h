@@ -148,6 +148,7 @@ library:
 @itemdef{wxUSE_IPV6, Use experimental wxIPV6address and related classes.}
 @itemdef{wxUSE_JOYSTICK, Use wxJoystick class.}
 @itemdef{wxUSE_LIBJPEG, Enables JPEG format support (requires libjpeg).}
+@itemdef{wxUSE_LIBLZMA, Enables LZMA compression support (see @ref page_build_liblzma).}
 @itemdef{wxUSE_LIBPNG, Enables PNG format support (requires libpng). Also requires wxUSE_ZLIB.}
 @itemdef{wxUSE_LIBTIFF, Enables TIFF format support (requires libtiff).}
 @itemdef{wxUSE_LISTBOOK, Use wxListbook class.}

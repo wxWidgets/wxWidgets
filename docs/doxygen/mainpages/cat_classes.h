@@ -703,6 +703,8 @@ Related overview: @ref overview_stream
 @li wxTempFileOutputStream: Stream to safely replace an existing file
 @li wxStringInputStream: String input stream class
 @li wxStringOutputStream: String output stream class
+@li wxLZMAInputStream: LZMA decompression stream class
+@li wxLZMAOutputStream: LZMA compression stream class
 @li wxZlibInputStream: Zlib and gzip (compression) input stream class
 @li wxZlibOutputStream: Zlib and gzip (compression) output stream class
 @li wxZipInputStream: Input stream for reading from ZIP archives

@@ -72,6 +72,7 @@ Changes in behaviour which may result in build errors
 
 All:
 
+- Add wxLZMA{Input,Output}Stream classes using external liblzma.
 - Make wxList and wxVector iterators conform to input iterator requirements.
 - Fix MT-safety problem when reading and writing from wxSocket (jkubalik).
 

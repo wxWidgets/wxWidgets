@@ -605,6 +605,7 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)common_%(Filename).obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)common_%(Filename).obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\lzmastream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -822,6 +823,7 @@
     <ClInclude Include="..\..\include\wx\arrimpl.cpp" />
     <ClInclude Include="..\..\include\wx\secretstore.h" />
     <ClInclude Include="..\..\include\wx\evtloopsrc.h" />
+    <ClInclude Include="..\..\include\wx\lzmastream.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
