@@ -109,8 +109,7 @@ private:
 };
 
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
-   typedef int (wxCMPFUNC_CONV *CMPFUN##name)(T pItem1, T pItem2);  \
-   typedef wxSortedArray_SortFunction<T, CMPFUN##name> name##_Predicate; \
+   typedef wxArray_SortFunction<T> name##_Predicate; \
    _WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
 
 #define  _WX_DECLARE_BASEARRAY_2(T, name, predicate, classexp)      \
