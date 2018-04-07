@@ -53,9 +53,7 @@ wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2)
 
 typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
 typedef wxString _wxArraywxBaseArrayStringBase;
-_WX_DECLARE_BASEARRAY_2(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase,
-                        wxArray_SortFunction<wxString>,
-                        class WXDLLIMPEXP_BASE);
+_WX_DECLARE_BASEARRAY(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase, class WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase,
                                   wxBaseArrayStringBase, WXDLLIMPEXP_BASE);
 

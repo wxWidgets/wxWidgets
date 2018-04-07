@@ -96,14 +96,9 @@ private:
 };
 
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
-   typedef wxArray_SortFunction<T> name##_Predicate; \
-   _WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
-
-#define  _WX_DECLARE_BASEARRAY_2(T, name, predicate, classexp)      \
 class name : public std::vector<T>                                  \
 {                                                                   \
-  typedef predicate Predicate;                                      \
-  typedef predicate::CMPFUNC SCMPFUNC;                              \
+  typedef wxArray_SortFunction<T> Predicate;                        \
 public:                                                             \
   typedef wxArray_SortFunction<T>::CMPFUNC CMPFUNC;                 \
                                                                     \
@@ -153,14 +148,14 @@ public:                                                             \
   }                                                                 \
   int Index(T lItem, CMPFUNC fnCompare) const                       \
   {                                                                 \
-      Predicate p((SCMPFUNC)fnCompare);                             \
+      Predicate p(fnCompare);                                       \
       const_iterator i = std::lower_bound(begin(), end(), lItem, p);\
       return i != end() && !p(lItem, *i) ? (int)(i - begin())       \
                                          : wxNOT_FOUND;             \
   }                                                                 \
   size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const           \
   {                                                                 \
-      Predicate p((SCMPFUNC)fnCompare);                             \
+      Predicate p(fnCompare);                                       \
       const_iterator i = std::lower_bound(begin(), end(), lItem, p);\
       return i - begin();                                           \
   }                                                                 \
