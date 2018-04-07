@@ -95,19 +95,6 @@ private:
     CMPFUNC m_f;
 };
 
-template<class T, typename F>
-class wxSortedArray_SortFunction
-{
-public:
-    typedef F CMPFUNC;
-
-    wxSortedArray_SortFunction(CMPFUNC f) : m_f(f) { }
-    bool operator()(const T& i1, const T& i2)
-      { return m_f(i1, i2) < 0; }
-private:
-    CMPFUNC m_f;
-};
-
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
    typedef wxArray_SortFunction<T> name##_Predicate; \
    _WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
