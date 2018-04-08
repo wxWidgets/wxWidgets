@@ -427,7 +427,6 @@ void MyFrame::OnRemoveThubmBarButton(wxCommandEvent& WXUNUSED(event))
     if ( m_thumbBarButtons.empty() )
         return;
 
-    wxThumbBarButton* button = m_thumbBarButtons.back();
     m_thumbBarButtons.pop_back();
     delete MSWGetTaskBarButton()->RemoveThumbBarButton(button);
 }
