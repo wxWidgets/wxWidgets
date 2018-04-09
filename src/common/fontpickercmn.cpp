@@ -33,6 +33,7 @@
 
 #include "wx/fontenum.h"
 #include "wx/tokenzr.h"
+#include "wx/valgen.h"
 
 // ============================================================================
 // implementation
@@ -166,19 +167,23 @@ void wxFontPickerCtrl::SetMaxPointSize(unsigned int max)
     SetMinMaxPointSize(m_nMinPointSize, m_nMaxPointSize);
 }
 
-bool wxFontPickerCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxFontPickerCtrl::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_font, false, "Expected type: 'wxFont'");
-    SetSelectedFont(*(static_cast<wxFont* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<wxFont>(), "Expected type: 'wxFont'");
+    SetSelectedFont(ptr->GetValue<wxFont>());
     return true;
 }
 
-bool wxFontPickerCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxFontPickerCtrl::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_font, false, "Expected type: 'wxFont'");
-    *(static_cast<wxFont* const>(value)) = GetSelectedFont();
+    wxASSERT_MSG(ptr->IsOfType<wxFont>(), "Expected type: 'wxFont'");
+    ptr->SetValue<wxFont>(GetSelectedFont());
     return true;
 }
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl - event handlers

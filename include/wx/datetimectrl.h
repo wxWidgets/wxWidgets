@@ -17,8 +17,8 @@
 #define wxNEEDS_DATETIMEPICKCTRL
 
 #include "wx/control.h"         // the base class
-
 #include "wx/datetime.h"
+#include "wx/valgen.h"
 
 // ----------------------------------------------------------------------------
 // wxDateTimePickerCtrl: Private common base class of wx{Date,Time}PickerCtrl.
@@ -34,19 +34,21 @@ public:
     virtual wxDateTime GetValue() const = 0;
 
 protected:
-    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE
     {
-        wxCHECK_MSG(type == wxData_datetime, false, "Expected type: 'wxDateTime'");
-        SetValue(*(static_cast<wxDateTime* const>(value)));
+        wxASSERT_MSG(ptr->IsOfType<wxDateTime>(), "Expected type: 'wxDateTime'");
+        SetValue(ptr->GetValue<wxDateTime>());
         return true; 
     }
 
-    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE
     {
-        wxCHECK_MSG(type == wxData_datetime, false, "Expected type: 'wxDateTime'");
-        *(static_cast<wxDateTime* const>(value)) = GetValue();
+        wxASSERT_MSG(ptr->IsOfType<wxDateTime>(), "Expected type: 'wxDateTime'");
+        ptr->SetValue<wxDateTime>(GetValue());
         return true; 
     }
+#endif // wxUSE_VALIDATORS
 };
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)

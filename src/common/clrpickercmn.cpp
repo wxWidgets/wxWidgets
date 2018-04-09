@@ -31,6 +31,8 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/valgen.h"
+
 const char wxColourPickerCtrlNameStr[] = "colourpicker";
 const char wxColourPickerWidgetNameStr[] = "colourpickerwidget";
 
@@ -119,20 +121,23 @@ void wxColourPickerCtrl::UpdateTextCtrlFromPicker()
     m_text->ChangeValue(M_PICKER->GetColour().GetAsString());
 }
 
-bool wxColourPickerCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxColourPickerCtrl::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_colour, false, "Expected type: 'wxColour'");
-    SetColour(*(static_cast<wxColour* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<wxColour>(), "Expected type: 'wxColour'");
+    SetColour(ptr->GetValue<wxColour>());
     return true; 
 }
 
-bool wxColourPickerCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxColourPickerCtrl::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_colour, false, "Expected type: 'wxColour'");
-    *(static_cast<wxColour* const>(value)) = GetColour();
+    wxASSERT_MSG(ptr->IsOfType<wxColour>(), "Expected type: 'wxColour'");
+    ptr->SetValue<wxColour>(GetColour());
     return true; 
 }
 
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // wxColourPickerCtrl - event handlers

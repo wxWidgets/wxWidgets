@@ -32,6 +32,8 @@
 #ifndef WX_PRECOMP
 #endif
 
+#include "wx/valgen.h"
+
 const char wxChoiceNameStr[] = "choice";
 
 
@@ -119,15 +121,17 @@ wxSize wxChoiceBase::DoGetBestSize() const
     return best;
 }
 
-bool wxChoiceBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxChoiceBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    if ( type == wxData_int )
+    if ( ptr->IsOfType<int>() )
     {
-        SetSelection(*(static_cast<int* const>(value)));
+        SetSelection(ptr->GetValue<int>());
     }
-    else if ( type == wxData_string )
+    else if ( ptr->IsOfType<wxString>() )
     {
-        const wxString str = *(static_cast<wxString* const>(value));
+        const wxString& str = ptr->GetValue<wxString>();
 
         if ( FindString(str) != wxNOT_FOUND )
         {
@@ -136,31 +140,33 @@ bool wxChoiceBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes
     }
     else
     {
-        wxASSERT_MSG(false, "Expected 'int or wxString' types");
+        wxFAIL_MSG("Expected types: 'int or wxString'");
         return false;
     }
         
     return true;
 }
 
-bool wxChoiceBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxChoiceBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    if ( type == wxData_int )
+    if ( ptr->IsOfType<int>() )
     {
-        *(static_cast<int* const>(value)) = GetSelection();
+        ptr->SetValue<int>(GetSelection());
     }
-    else if ( type == wxData_string )
+    else if ( ptr->IsOfType<wxString>() )
     {
-        *(static_cast<wxString* const>(value)) = GetStringSelection();
+        ptr->SetValue<wxString>(GetStringSelection());
     }
     else
     {
-        wxASSERT_MSG(false, "Expected 'int or wxString' types");
+        wxFAIL_MSG("Expected types: 'int or wxString'");
         return false;
     }
         
     return true;
 }
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // misc

@@ -34,6 +34,8 @@
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/valgen.h"
+
 extern WXDLLEXPORT_DATA(const char) wxListBoxNameStr[] = "listBox";
 
 // ============================================================================
@@ -316,11 +318,13 @@ void wxListBoxBase::Command(wxCommandEvent& event)
     (void)GetEventHandler()->ProcessEvent(event);
 }
 
-bool wxListBoxBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxListBoxBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
     if ( (GetWindowStyle() & wxLB_MULTIPLE) )
     {
-        wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+        wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
 
         // clear all selections
         size_t i, count = GetCount();
@@ -329,46 +333,47 @@ bool wxListBoxBase::DoTransferDataToWindow(void* const value, wxDataTransferType
         for ( i = 0 ; i < count; ++i )
             Deselect(i);
 
-        wxArrayInt* arr = static_cast<wxArrayInt* const>(value);
+        const wxArrayInt& arr = ptr->GetValue<wxArrayInt>();
 
         // select each item in our array
-        count = arr->GetCount();
+        count = arr.GetCount();
         for ( i = 0 ; i < count; ++i )
-            SetSelection(arr->Item(i));
+            SetSelection(arr.Item(i));
     }
     else // wxLB_SINGLE
     {
-        wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-        SetSelection(*static_cast<int* const>(value));
+        wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+        SetSelection(ptr->GetValue<int>());
     }
 
     return true;
 }
 
-bool wxListBoxBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxListBoxBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
     if ( (GetWindowStyle() & wxLB_MULTIPLE) )
     {
-        wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+        wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
 
-        wxArrayInt* arr = static_cast<wxArrayInt* const>(value);
-        
-        arr->Clear();
+        wxArrayInt& arr = ptr->GetValue<wxArrayInt>();       
+        arr.Clear();
 
-        for (size_t i = 0, count = GetCount(); i < count; ++i)
+        for ( size_t i = 0, count = GetCount(); i < count; ++i )
         {
             if ( IsSelected(i) )
-                arr->Add(i);
+                arr.Add(i);
         }
     }
     else // wxLB_SINGLE
     {
-        wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-        *static_cast<int* const>(value) = GetSelection();
+        wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+        ptr->SetValue<int>(GetSelection());
     }
     
     return true;
 }
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // SetFirstItem() and such

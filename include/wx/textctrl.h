@@ -762,9 +762,10 @@ protected:
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
 
-    // wxGenericValidator uses these to do the actual transfer of data
-    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
-    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     wxDECLARE_ABSTRACT_CLASS(wxTextCtrlBase);

@@ -22,6 +22,8 @@
 
 #include "wx/gtk/private.h"
 
+#include "wx/valgen.h"
+
 // ----------------------------------------------------------------------------
 // GTK callbacks
 // ----------------------------------------------------------------------------
@@ -441,15 +443,17 @@ wxSize wxComboBox::DoGetSizeFromTextSize(int xlen, int ylen) const
     return tsize;
 }
 
-bool wxComboBox::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxComboBox::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    if ( type == wxData_int )
+    if ( ptr->IsOfType<int>() )
     {
-        SetSelection(*(static_cast<int* const>(value)));
+        SetSelection(ptr->GetValue<int>());
     }
-    else if ( type == wxData_string )
+    else if ( ptr->IsOfType<wxString>() )
     {
-        const wxString str = *(static_cast<wxString* const>(value));
+        const wxString& str = ptr->GetValue<wxString>();
 
         if ( FindString(str) != wxNOT_FOUND )
         {
@@ -462,33 +466,35 @@ bool wxComboBox::DoTransferDataToWindow(void* const value, wxDataTransferTypes t
     }
     else
     {
-        wxASSERT_MSG(false, "Expected types: int, wxString");
+        wxFAIL_MSG("Expected types: int or wxString");
         return false;
     }
 
     return true;
 }
 
-bool wxComboBox::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxComboBox::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    if ( type == wxData_int )
+    if ( ptr->IsOfType<int>() )
     {
-        *(static_cast<int* const>(value)) = GetSelection();
+        ptr->SetValue<int>(GetSelection());
     }
-    else if ( type == wxData_string )
+    else if ( ptr->IsOfType<wxString>() )
     {
         if ( GetWindowStyle() & wxCB_READONLY )
-            *(static_cast<wxString* const>(value)) = GetStringSelection();
+            ptr->SetValue<wxString>(GetStringSelection());
         else
-            *(static_cast<wxString* const>(value)) = GetValue();
+            ptr->SetValue<wxString>(GetValue());
     }
     else
     {
-        wxASSERT_MSG(false, "Expected types: int, wxString");
+        wxFAIL_MSG("Expected types: int or wxString");
         return false;
     }
             
     return true;
 }
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_COMBOBOX

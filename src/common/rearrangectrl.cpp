@@ -31,6 +31,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/rearrangectrl.h"
+#include "wx/valgen.h"
 
 // ============================================================================
 // wxRearrangeList implementation
@@ -68,14 +69,18 @@ bool wxRearrangeList::Create(wxWindow *parent,
         itemsInOrder.push_back(items[idx]);
     }
 
+    // TODO: use the passed in validator if it's not null (a.k.a wxDefaultValidator)
+    wxUnusedVar(validator);
+
     // do create the real control
     if ( !wxCheckListBox::Create(parent, id, pos, size, itemsInOrder,
-                                 style, validator, name) )
+                                 style, wxGenericValidator(&m_order), name) )
         return false;
 
     m_order = order;
 
-    // The visual state will be reflected upon the call to TransferDataToWindow()
+    // TransferDataToWindow() will update the visual state for us. 
+    // done automatically if we are child of a dialog.
 
     return true;
 }
@@ -223,22 +228,14 @@ void wxRearrangeList::DoClear()
     m_order.Clear();
 }
 
-bool wxRearrangeList::TransferDataToWindow()
-{
-    return DoTransferDataToWindow(&m_order, wxData_arrayint);
-}
+#if wxUSE_VALIDATORS
 
-bool wxRearrangeList::TransferDataFromWindow()
+bool wxRearrangeList::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    return DoTransferDataFromWindow(&m_order, wxData_arrayint);
-}
-
-bool wxRearrangeList::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
-{
-    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+    wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
 
     const size_t count = GetCount();
-    const wxArrayInt& arr = *static_cast<wxArrayInt* const>(value);
+    const wxArrayInt& arr = ptr->GetValue<wxArrayInt>();
 
     wxCHECK_MSG( arr.size() == count, false, "arrays not in sync" );
 
@@ -248,23 +245,25 @@ bool wxRearrangeList::DoTransferDataToWindow(void* const value, wxDataTransferTy
     return true;
 }
 
-bool wxRearrangeList::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxRearrangeList::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+    wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
 
     const size_t count = GetCount();
-    wxArrayInt* const arr = static_cast<wxArrayInt* const>(value);
+    wxArrayInt& arr = ptr->GetValue<wxArrayInt>();
 
-    wxCHECK_MSG( arr->size() == count, false, "arrays not in sync" );
+    wxCHECK_MSG( arr.size() == count, false, "arrays not in sync" );
 
     for ( size_t i = 0; i < count; ++i )
     {
-        if ( ((*arr)[i] >= 0) != IsChecked(i) )
-            (*arr)[i] = ~(*arr)[i];
+        if ( (arr[i] >= 0) != IsChecked(i) )
+            arr[i] = ~arr[i];
     }
 
     return true;
 }
+
+#endif // wxUSE_VALIDATORS
 
 // ============================================================================
 // wxRearrangeCtrl implementation

@@ -39,6 +39,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/valgen.h"
+
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
@@ -116,9 +118,11 @@ unsigned int wxCheckListBoxBase::GetCheckedItems(wxArrayInt& checkedItems) const
     return checkedItems.size();
 }
 
-bool wxCheckListBoxBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxCheckListBoxBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+    wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
 
     // clear all selections
     size_t i, count = GetCount();
@@ -126,31 +130,33 @@ bool wxCheckListBoxBase::DoTransferDataToWindow(void* const value, wxDataTransfe
     for ( i = 0 ; i < count; ++i )
         Check(i, false);
 
-    wxArrayInt* const arr = static_cast<wxArrayInt* const>(value);
+    const wxArrayInt& arr = ptr->GetValue<wxArrayInt>();
 
     // select each item in our array
-    count = arr->GetCount();
+    count = arr.GetCount();
     for ( i = 0 ; i < count; ++i )
-        Check(arr->Item(i));
+        Check(arr.Item(i));
 
     return true;
 }
 
-bool wxCheckListBoxBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxCheckListBoxBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_arrayint, false, "Expected type: 'wxArrayInt'");
+    wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
 
-    wxArrayInt* const arr = static_cast<wxArrayInt* const>(value);
+    wxArrayInt& arr = ptr->GetValue<wxArrayInt>();
         
-    arr->Clear();
+    arr.Clear();
 
-    for (size_t i = 0, count = GetCount(); i < count; ++i)
+    for ( size_t i = 0, count = GetCount(); i < count; ++i )
     {
         if ( IsChecked(i) )
-            arr->Add(i);
+            arr.Add(i);
     }
 
     return true;
 }
 
-#endif
+#endif // wxUSE_VALIDATORS
+
+#endif // wxUSE_CHECKLISTBOX

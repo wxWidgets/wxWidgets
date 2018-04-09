@@ -45,19 +45,10 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE = 0;
 
 protected:
-    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
-    {
-        wxCHECK_MSG(type == wxData_bool, false, "Expected type: 'bool'");
-        Collapse(*(static_cast<bool* const>(value)));
-        return true; 
-    }
-
-    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
-    {
-        wxCHECK_MSG(type == wxData_bool, false, "Expected type: 'bool'");
-        *(static_cast<bool* const>(value)) = IsCollapsed();
-        return true; 
-    }
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 };
 
 

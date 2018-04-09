@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/tooltip.h"
+#include "wx/valgen.h"
 
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
@@ -480,19 +481,23 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
     }
 }
 
-bool wxRadioBox::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxRadioBox::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    SetSelection(*(static_cast<int* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetSelection(ptr->GetValue<int>());
     return true; 
 }
 
-bool wxRadioBox::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxRadioBox::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    *(static_cast<int* const>(value)) = GetSelection();
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetSelection());
     return true; 
 }
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // keyboard navigation

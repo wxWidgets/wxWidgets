@@ -912,6 +912,11 @@ public:
         // user input
     virtual void SetValidator( const wxValidator &validator );
     virtual wxValidator *GetValidator() { return m_windowValidator; }
+
+        // each window (control) knows how to transfere data to/from itself.
+        // wxGenericValidator just forwards to these functions to do the transfere.
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& WXUNUSED(ptr)) { return false; }
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& WXUNUSED(ptr)) { return false; }
 #endif // wxUSE_VALIDATORS
 
 
@@ -924,12 +929,7 @@ public:
         // transfer data between internal and GUI representations
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
-
-        // each window knows how to transfere data to/from itself (for wxGenericValidator)
-    virtual bool DoTransferDataToWindow(void* const WXUNUSED(value), 
-                                        wxDataTransferTypes WXUNUSED(type)) { return false; }
-    virtual bool DoTransferDataFromWindow(void* const WXUNUSED(value), 
-                                        wxDataTransferTypes WXUNUSED(type)) { return false; }
+    
     virtual void InitDialog();
 
 #if wxUSE_ACCEL

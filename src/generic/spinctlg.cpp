@@ -29,6 +29,7 @@
 
 #include "wx/spinctrl.h"
 #include "wx/tooltip.h"
+#include "wx/valgen.h"
 
 #if wxUSE_SPINCTRL
 
@@ -659,19 +660,23 @@ wxString wxSpinCtrl::DoValueToText(double val)
     }
 }
 
-bool wxSpinCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrl::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    SetValue(*(static_cast<int* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetValue(ptr->GetValue<int>());
     return true; 
 }
 
-bool wxSpinCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxSpinCtrl::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    *(static_cast<int* const>(value)) = GetValue(wxSPINCTRL_GETVALUE_FIX);
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetValue(wxSPINCTRL_GETVALUE_FIX));
     return true; 
 }
+
+#endif // wxUSE_VALIDATORS
 
 #endif // !wxHAS_NATIVE_SPINCTRL
 
@@ -714,19 +719,23 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     DoSetValue(m_value, SendEvent_None);
 }
 
-bool wxSpinCtrlDouble::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrlDouble::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
-    SetValue(*(static_cast<double* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<double>(), "Expected type: 'double'");
+    SetValue(ptr->GetValue<double>());
     return true; 
 }
 
-bool wxSpinCtrlDouble::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxSpinCtrlDouble::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
-    *(static_cast<double* const>(value)) = GetValue(wxSPINCTRL_GETVALUE_FIX);
+    wxASSERT_MSG(ptr->IsOfType<double>(), "Expected type: 'double'");
+    ptr->SetValue<double>(GetValue(wxSPINCTRL_GETVALUE_FIX));
     return true; 
 }
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_SPINBTN
 

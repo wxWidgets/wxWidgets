@@ -79,9 +79,10 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // but may contain the mnemonic characters.
     virtual void DoSetLabel(const wxString& WXUNUSED(str)) { }
 
-    // wxGenericValidator uses these to do the actual transfer of data
-    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
-    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     // Update the current size to match the best size unless wxST_NO_AUTORESIZE
     // style is explicitly used.

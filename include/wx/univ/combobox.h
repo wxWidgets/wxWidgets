@@ -169,9 +169,10 @@ protected:
     virtual void DoSetItemClientData(unsigned int n, void* clientData) wxOVERRIDE;
     virtual void* DoGetItemClientData(unsigned int n) const wxOVERRIDE;
 
-    // wxGenericValidator uses these to do the actual transfer of data
-    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
-    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     // common part of all ctors
     void Init();

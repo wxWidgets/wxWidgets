@@ -22,6 +22,8 @@
 
 #include "wx/gtk/private.h"
 
+#include "wx/valgen.h"
+
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -480,19 +482,23 @@ bool wxSpinCtrl::SetBase(int base)
     return true;
 }
 
-bool wxSpinCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrl::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    SetValue(*(static_cast<int* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetValue(ptr->GetValue<int>());
     return true; 
 }
 
-bool wxSpinCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxSpinCtrl::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    *(static_cast<int* const>(value)) = GetValue();
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetValue());
     return true; 
 }
+
+#endif // wxUSE_VALIDATORS
 
 //-----------------------------------------------------------------------------
 // wxSpinCtrlDouble
@@ -515,18 +521,22 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
     gtk_spin_button_set_digits( GTK_SPIN_BUTTON(m_widget), digits);
 }
 
-bool wxSpinCtrlDouble::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrlDouble::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
-    SetValue(*(static_cast<double* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<double>(), "Expected type: 'double'");
+    SetValue(ptr->GetValue<double>());
     return true; 
 }
 
-bool wxSpinCtrlDouble::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxSpinCtrlDouble::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_double, false, "Expected type: 'double'");
-    *(static_cast<double* const>(value)) = GetValue();
+    wxASSERT_MSG(ptr->IsOfType<double>(), "Expected type: 'double'");
+    ptr->SetValue<double>(GetValue());
     return true; 
 }
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_SPINCTRL

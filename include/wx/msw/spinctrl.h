@@ -139,9 +139,10 @@ protected:
     // called to ensure that the value is in the correct range
     virtual void NormalizeValue() wxOVERRIDE;
 
-    // wxGenericValidator uses these to do the actual transfer of data
-    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
-    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE;
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     // the value of the control before the latest change (which might not have
     // changed anything in fact -- this is why we need this field)

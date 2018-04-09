@@ -2,6 +2,7 @@
 // Name:        wx/valgen.h
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
+// Modified by: Ali Kettab (2018-04-07)
 // Created:     Jan 22 1999
 // Copyright:   (c) 1999 Julian Smart (assigned from Kevin)
 // Licence:     wxWindows licence
@@ -14,10 +15,20 @@
 
 #if wxUSE_VALIDATORS
 
-class WXDLLIMPEXP_FWD_BASE wxArrayInt;
-class WXDLLIMPEXP_FWD_BASE wxDateTime;
-class WXDLLIMPEXP_FWD_BASE wxFileName;
-class WXDLLIMPEXP_FWD_BASE wxString;
+#include "wx/typeinfo.h"
+
+// Internal struct to implement type-erasure idiom.
+struct wxValidatorData
+{
+    virtual ~wxValidatorData() {}
+    virtual wxValidatorData * Clone() const = 0;
+
+    template<class T> bool IsOfType();
+
+    template<class T> T& GetValue();
+    template<class T> const T& GetValue() const;
+    template<class T> void SetValue(const T& value);
+};
 
 // ----------------------------------------------------------------------------
 // wxGenericValidator performs data transfer between many standard controls and
@@ -26,50 +37,20 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 // It doesn't do any validation so its name is a slight misnomer.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxGenericValidatorBase: public wxValidator
 {
 public:
-    wxGenericValidator(void* value, wxDataTransferTypes type = wxData_void)
-        : m_value(value), m_type(type)
-    {}
 
-    // Different constructors: each of them creates a validator which can only
-    // be used with some controls, the comments before each constructor
-    // indicate which ones:
-        // wxCheckBox, wxRadioButton, wx(Bitmap)ToggleButton
-    wxGenericValidator(bool* value) : m_value(value), m_type(wxData_bool){}
+    wxGenericValidatorBase(const wxGenericValidatorBase& val);
 
-        // wxChoice, wxGauge, wxRadioBox, wxScrollBar, wxSlider, wxSpinButton
-    wxGenericValidator(int* value) : m_value(value), m_type(wxData_int){}
-
-        // wxComboBox, wxTextCtrl, wxButton, wxStaticText (read-only)
-    wxGenericValidator(wxString* value) : m_value(value), m_type(wxData_string){}
-
-        // wxListBox, wxCheckListBox
-    wxGenericValidator(wxArrayInt* value) : m_value(value), m_type(wxData_arrayint){}
-
-#if wxUSE_DATETIME
-        // wxDatePickerCtrl
-    wxGenericValidator(wxDateTime* value) : m_value(value), m_type(wxData_datetime){}
-#endif // wxUSE_DATETIME
-
-        // wxTextCtrl
-    wxGenericValidator(wxFileName* value) : m_value(value), m_type(wxData_filename){}
-        // wxTextCtrl
-    wxGenericValidator(float* value) : m_value(value), m_type(wxData_float){}
-        // wxTextCtrl
-    wxGenericValidator(double* value) : m_value(value), m_type(wxData_double){}
-
-    wxGenericValidator(const wxGenericValidator& val);
-
-    virtual ~wxGenericValidator(){}
+    virtual ~wxGenericValidatorBase(){}
 
     // Make a clone of this validator (or return NULL) - currently necessary
     // if you're passing a reference to a validator.
     // Another possibility is to always pass a pointer to a new validator
     // (so the calling code can use a copy constructor of the relevant class).
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidator(*this); }
-    bool Copy(const wxGenericValidator& val);
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorBase(*this); }
+    bool Copy(const wxGenericValidatorBase& val);
 
     // Called when the value in the window must be validated: this is not used
     // by this class
@@ -82,14 +63,99 @@ public:
     virtual bool TransferFromWindow() wxOVERRIDE;
 
 protected:
+    wxGenericValidatorBase(wxValidatorData* data) : m_data(data){}
 
-    void* m_value;
-    wxDataTransferTypes m_type;
+    // DataPtr is a wxScopedPtr<wxValidatorData> defined inside wxValidator.
+    DataPtr m_data;
 
 private:
-    wxDECLARE_CLASS(wxGenericValidator);
-    wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidator);
+    wxDECLARE_CLASS(wxGenericValidatorBase);
+    wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidatorBase);
 };
+
+//-----------------------------------------------------------------------------
+
+template<typename T>
+class wxGenericValidatorType: public wxGenericValidatorBase
+{
+public:
+    struct Data : wxValidatorData
+    {
+        Data(T* value) : m_value(value) {}
+
+        wxValidatorData* Clone() const wxOVERRIDE { return new Data(m_value); }
+
+        T& GetValue() { return *m_value; }
+        const T& GetValue() const { return *m_value; }
+        void SetValue(const T& value){ *m_value = value; }
+        
+    private:
+        T* m_value;
+    };
+
+public:
+
+    wxGenericValidatorType(T* value) : wxGenericValidatorBase(new Data(value)){}
+
+    virtual ~wxGenericValidatorType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorType(*this); }
+};
+
+//-----------------------------------------------------------------------------
+// wxValidatorData implementation
+//
+// Notice that using static_cast<> here (rather than dynamic_cast<>)
+// is just fine & safe AS LONG AS we check the stored value type before
+// calling any of these methods (e.g. dataPtr->IsOfType<wxString>())
+// 
+
+template<class T> 
+inline T& wxValidatorData::GetValue()
+{
+    typedef typename wxGenericValidatorType<T>::Data Data;
+    return static_cast<Data&>(*this).GetValue();
+}
+
+template<class T>
+inline const T& wxValidatorData::GetValue() const
+{ 
+    typedef typename wxGenericValidatorType<T>::Data Data;
+    return static_cast<const Data&>(*this).GetValue();
+}
+
+template<class T>
+inline void wxValidatorData::SetValue(const T& value)
+{
+    typedef typename wxGenericValidatorType<T>::Data Data;
+    return static_cast<Data&>(*this).SetValue(value);
+}
+
+template<class T>
+inline bool wxValidatorData::IsOfType()
+{
+    typedef typename wxGenericValidatorType<T>::Data Data;
+    const Data& data = static_cast<const Data&>(*this);
+
+    return wxTypeId(data.GetValue()) == wxTypeId(T);
+}
+
+//-----------------------------------------------------------------------------
+// wxGenericValidator function
+//-----------------------------------------------------------------------------
+//
+// Use this function to create your validators.
+// e.g.:
+//      bool b;
+//      wxString s;
+//      wxGenaricValidator(&b);
+//      wxGenaricValidator(&s);
+
+template<class T>
+wxGenericValidatorType<T> wxGenericValidator(T* value)
+{
+    return wxGenericValidatorType<T>(value);
+}
 
 #endif // wxUSE_VALIDATORS
 

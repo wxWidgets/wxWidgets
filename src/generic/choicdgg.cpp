@@ -41,6 +41,7 @@
 #include "wx/statline.h"
 #include "wx/settings.h"
 #include "wx/generic/choicdgg.h"
+#include "wx/valgen.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -439,6 +440,8 @@ bool wxSingleChoiceDialog::Create( wxWindow *parent,
             m_listbox->SetClientData(i, clientData[i]);
     }
 
+    m_listbox->SetValidator(wxGenericValidator(&m_selection));
+
     return true;
 }
 
@@ -513,6 +516,8 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
                                     styleLbox) )
         return false;
 
+    m_listbox->SetValidator(wxGenericValidator(&m_selections));
+
     return true;
 }
 
@@ -536,12 +541,12 @@ void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
 
 bool wxMultiChoiceDialog::TransferDataToWindow()
 {
-    return ((wxWindow*)m_listbox)->DoTransferDataToWindow(&m_selections, wxData_arrayint);    
+    return m_listbox->TransferDataToWindow();
 }
 
 bool wxMultiChoiceDialog::TransferDataFromWindow()
 {
-    return ((wxWindow*)m_listbox)->DoTransferDataFromWindow(&m_selections, wxData_arrayint);
+    return m_listbox->TransferDataFromWindow();
 }
 
 #if wxUSE_CHECKLISTBOX

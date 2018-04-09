@@ -42,6 +42,8 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
+#include "wx/valgen.h"
+
 #include <limits.h>         // for INT_MIN
 
 // ----------------------------------------------------------------------------
@@ -849,18 +851,22 @@ void wxSpinCtrl::DoGetPosition(int *x, int *y) const
     *x = wxMin(xBuddy, xText);
 }
 
-bool wxSpinCtrl::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrl::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    SetValue(*(static_cast<int* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetValue(ptr->GetValue<int>());
     return true; 
 }
 
-bool wxSpinCtrl::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxSpinCtrl::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    *(static_cast<int* const>(value)) = GetValue();
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetValue());
     return true; 
 }
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_SPINCTRL

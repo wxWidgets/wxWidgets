@@ -64,19 +64,10 @@ public:
     }
 
 protected:
-    virtual bool DoTransferDataToWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
-    {
-        wxCHECK_MSG(type == wxData_bool, false, "Expected type: 'bool'");
-        SetValue(*(static_cast<bool* const>(value)));
-        return true; 
-    }
-
-    virtual bool DoTransferDataFromWindow(void* const value, wxDataTransferTypes type) wxOVERRIDE
-    {
-        wxCHECK_MSG(type == wxData_bool, false, "Expected type: 'bool'");
-        *(static_cast<bool* const>(value)) = GetValue();
-        return true; 
-    }
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     wxDECLARE_NO_COPY_CLASS(wxToggleButtonBase);
 };

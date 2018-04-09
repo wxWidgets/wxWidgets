@@ -16,25 +16,13 @@
 #if wxUSE_VALIDATORS
 
 #include "wx/event.h"
+#include "wx/scopedptr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
-enum wxDataTransferTypes
-{
-    wxData_void,
-    wxData_bool,
-    wxData_int,
-    wxData_float,
-    wxData_double,
-    wxData_string,
-    wxData_arrayint,
-    wxData_datetime,
-    wxData_filename,
-    wxData_font,
-    wxData_colour,
-};
-
+// Internal struct defined in "wx/valgen.h"
+struct wxValidatorData;
 
 /*
  A validator has up to three purposes:
@@ -50,6 +38,10 @@ enum wxDataTransferTypes
 
 class WXDLLIMPEXP_CORE wxValidator : public wxEvtHandler
 {
+public:
+    // Used by wxGenericValidator only.
+    typedef wxScopedPtr<wxValidatorData> DataPtr;
+
 public:
     wxValidator();
     wxValidator(const wxValidator& other)

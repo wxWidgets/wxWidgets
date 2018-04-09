@@ -34,6 +34,7 @@
 
 #include "wx/ffile.h"
 #include "wx/filename.h"
+#include "wx/valgen.h"
 
 extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
 
@@ -926,34 +927,36 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
     return true;
 }
 
-bool wxTextCtrlBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxTextCtrlBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
     wxString str;
 
-    if ( type == wxData_string )
+    if ( ptr->IsOfType<wxString>() )
     {
-        str = *(static_cast<wxString* const>(value));
+        str = ptr->GetValue<wxString>();
     }
-    else if ( type == wxData_int )
+    else if ( ptr->IsOfType<int>() )
     {
-        str.Printf("%d", *(static_cast<int* const>(value)));
+        str.Printf("%d", ptr->GetValue<int>());
     }
-    else if ( type == wxData_float )
+    else if ( ptr->IsOfType<float>() )
     {
-        str.Printf("%g", *(static_cast<float* const>(value)));
+        str.Printf("%g", ptr->GetValue<float>());
     }
-    else if ( type == wxData_double )
+    else if ( ptr->IsOfType<double>() )
     {
-        str.Printf("%g", *(static_cast<double* const>(value)));
+        str.Printf("%g", ptr->GetValue<double>());
     }
-    else if ( type == wxData_filename )
+    else if ( ptr->IsOfType<wxFileName>() )
     {
-        wxFileName* const fn = static_cast<wxFileName* const>(value);
-        str = fn->GetFullPath();
+        const wxFileName& fn = ptr->GetValue<wxFileName>();
+        str = fn.GetFullPath();
     }
     else
     {
-        wxASSERT_MSG(false, "Expected types: int, float, double, wxString, wxFileName");
+        wxFAIL_MSG("Expected types: int, float, double, wxString or wxFileName");
         return false;
     }
 
@@ -961,37 +964,38 @@ bool wxTextCtrlBase::DoTransferDataToWindow(void* const value, wxDataTransferTyp
     return true;
 }
 
-bool wxTextCtrlBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxTextCtrlBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    if ( type == wxData_string )
+    if ( ptr->IsOfType<wxString>() )
     {
-        *(static_cast<wxString* const>(value)) = GetValue() ;
+        ptr->SetValue<wxString>(GetValue());
     }
-    else if ( type == wxData_int )
+    else if ( ptr->IsOfType<int>() )
     {
-        *(static_cast<int* const>(value)) = wxAtoi(GetValue());
+        ptr->SetValue<int>(wxAtoi(GetValue()));
     }
-    else if ( type == wxData_float )
+    else if ( ptr->IsOfType<float>() )
     {
-        *(static_cast<float* const>(value)) = (float)wxAtof(GetValue());
+        ptr->SetValue<float>((float)wxAtof(GetValue()));
     }
-    else if ( type == wxData_double )
+    else if ( ptr->IsOfType<double>() )
     {
-        *(static_cast<double* const>(value)) = wxAtof(GetValue());
+        ptr->SetValue<double>(wxAtof(GetValue()));
     }
-    else if ( type == wxData_filename )
+    else if ( ptr->IsOfType<wxFileName>() )
     {
-        wxFileName* const fn = static_cast<wxFileName* const>(value);
-        fn->Assign(GetValue());
+        ptr->SetValue<wxFileName>(GetValue());
     }
     else
     {
-        wxASSERT_MSG(false, "Expected types: int, float, double, wxString, wxFileName");
+        wxFAIL_MSG("Expected types: int, float, double, wxString or wxFileName");
         return false;
     }
             
     return true;
 }
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // file IO functions

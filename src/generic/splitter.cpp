@@ -35,6 +35,7 @@
 #endif
 
 #include "wx/renderer.h"
+#include "wx/valgen.h"
 
 #include <stdlib.h>
 
@@ -923,19 +924,23 @@ wxSize wxSplitterWindow::DoGetBestSize() const
     return sizeBest;
 }
 
-bool wxSplitterWindow::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxSplitterWindow::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    SetSashPosition(*(static_cast<int* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetSashPosition(ptr->GetValue<int>());
     return true; 
 }
 
-bool wxSplitterWindow::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxSplitterWindow::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_int, false, "Expected type: 'int'");
-    *(static_cast<int* const>(value)) = GetSashPosition();
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetSashPosition());
     return true; 
 }
+
+#endif // wxUSE_VALIDATORS
 
 // ---------------------------------------------------------------------------
 // wxSplitterWindow virtual functions: they now just generate the events

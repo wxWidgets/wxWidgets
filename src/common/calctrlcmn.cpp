@@ -28,6 +28,7 @@ wxDEFINE_EVENT(wxEVT_TIME_CHANGED, wxDateEvent);
 #if wxUSE_CALENDARCTRL
 
 #include "wx/calctrl.h"
+#include "wx/valgen.h"
 
 // ----------------------------------------------------------------------------
 // XTI
@@ -222,18 +223,22 @@ bool wxCalendarCtrlBase::WeekStartsOnMonday() const
     }
 }
 
-bool wxCalendarCtrlBase::DoTransferDataToWindow(void* const value, wxDataTransferTypes type)
+#if wxUSE_VALIDATORS
+
+bool wxCalendarCtrlBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_datetime, false, "Expected type: 'wxDateTime'");
-    return SetDate(*(static_cast<wxDateTime* const>(value)));
+    wxASSERT_MSG(ptr->IsOfType<wxDateTime>(), "Expected type: 'wxDateTime'");
+    return SetDate(ptr->GetValue<wxDateTime>());
 }
 
-bool wxCalendarCtrlBase::DoTransferDataFromWindow(void* const value, wxDataTransferTypes type)
+bool wxCalendarCtrlBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
 {
-    wxCHECK_MSG(type == wxData_datetime, false, "Expected type: 'wxDateTime'");
-    *(static_cast<wxDateTime* const>(value)) = GetDate();
+    wxASSERT_MSG(ptr->IsOfType<wxDateTime>(), "Expected type: 'wxDateTime'");
+    ptr->SetValue<wxDateTime>(GetDate());
     return true; 
 }
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_CALENDARCTRL
 
