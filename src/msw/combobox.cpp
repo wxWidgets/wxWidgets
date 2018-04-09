@@ -802,7 +802,7 @@ bool wxComboBox::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
         if ( GetWindowStyle() & wxCB_READONLY )
             ptr->SetValue<wxString>(GetStringSelection());
         else
-            ptr->GetValue<wxString>(GetValue());
+            ptr->SetValue<wxString>(GetValue());
     }
     else
     {
