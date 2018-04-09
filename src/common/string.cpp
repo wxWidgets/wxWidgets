@@ -37,6 +37,7 @@
 #include "wx/hashmap.h"
 #include "wx/vector.h"
 #include "wx/xlocale.h"
+#include "wx/regex.h"
 
 #ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
@@ -80,6 +81,8 @@ UntypedBufferData *GetUntypedNullData()
 
 //According to STL _must_ be a -1 size_t
 const size_t wxString::npos = (size_t) -1;
+wxRegEx wxString::naturalNumeric = "[0-9.]+";
+wxRegEx wxString::naturalAlpha   = "[^0-9.]+";
 
 #if wxUSE_STRING_POS_CACHE
 
@@ -2303,3 +2306,109 @@ int wxString::Freq(wxUniChar ch) const
     return count;
 }
 
+
+int wxString::CmpNatural(const wxString &s, bool noCase) const
+{
+    wxString lhs(*this);
+    wxString rhs(s);
+    wxStringFragment fragL;
+    wxStringFragment fragR;
+
+    int comparison = 0;
+
+    while ((comparison == 0) && (lhs.Length() || rhs.Length()))
+    {
+        fragL = GetFragment(lhs);
+        fragR = GetFragment(rhs);
+        comparison = CompareFragmentNatural(fragL, fragR, noCase);
+    };
+
+    return comparison;
+}
+
+int wxString::CompareFragmentNatural(const wxStringFragment &lhs, const wxStringFragment &rhs, bool noCase) const
+{
+    if ((lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
+        (rhs.type == wxFRAGMENT_TYPE_ALPHA))
+    {
+        if (noCase)
+            return lhs.text.CmpNoCase(rhs.text);
+        else
+            return lhs.text.Cmp(rhs.text);
+    }
+
+    if ((lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
+        (rhs.type == wxFRAGMENT_TYPE_DIGIT))
+    {
+        if (lhs.value == rhs.value)     return  0;
+        if (lhs.value  < rhs.value)     return -1;
+        if (lhs.value  > rhs.value)     return  1;
+    }
+
+    if ((lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
+        (rhs.type == wxFRAGMENT_TYPE_ALPHA))
+    {
+        return -1;
+    }
+
+    if ((lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
+        (rhs.type == wxFRAGMENT_TYPE_DIGIT))
+    {
+        return 1;
+    }
+
+    if (lhs.type == wxFRAGMENT_TYPE_EMPTY)
+    {
+        return -1;
+    }
+
+    if (rhs.type == wxFRAGMENT_TYPE_EMPTY)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+wxStringFragment wxString::GetFragment(wxString &text) const
+{
+    size_t digitStart  = 0;
+    size_t digitLength = 0;
+    size_t alphaStart  = 0;
+    size_t alphaLength = 0;
+    wxStringFragment fragment;
+
+    if (text.Length() == 0)
+        return fragment;
+
+    if (naturalNumeric.Matches(text))
+    {
+        naturalNumeric.GetMatch(&digitStart, &digitLength, 0);
+    }
+
+    if (naturalAlpha.Matches(text))
+    {
+        naturalAlpha.GetMatch(&alphaStart, &alphaLength, 0);
+    }
+
+
+    if (alphaStart == 0)
+    {
+        fragment.text  = text.Mid(0, alphaLength);
+        fragment.value = 0;
+        fragment.type  = wxFRAGMENT_TYPE_ALPHA;
+
+        text.Remove(0, alphaLength);
+    }
+
+    if (digitStart == 0)
+    {
+        fragment.text = text.Mid(0, digitLength);
+        fragment.text.ToDouble(&fragment.value);
+        fragment.type = wxFRAGMENT_TYPE_DIGIT;
+
+        text.Remove(0, digitLength);
+    }
+
+    return fragment;
+}
