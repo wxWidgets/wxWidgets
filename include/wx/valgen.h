@@ -63,7 +63,7 @@ public:
     virtual bool TransferFromWindow() wxOVERRIDE;
 
 protected:
-    wxGenericValidatorBase(wxValidatorData* data) : m_data(data){}
+    explicit wxGenericValidatorBase(wxValidatorData* data) : m_data(data){}
 
     // DataPtr is a wxScopedPtr<wxValidatorData> defined inside wxValidator.
     DataPtr m_data;
@@ -81,7 +81,7 @@ class wxGenericValidatorType: public wxGenericValidatorBase
 public:
     struct Data : wxValidatorData
     {
-        Data(T* value) : m_value(value) {}
+        explicit Data(T* value) : m_value(value) {}
 
         wxValidatorData* Clone() const wxOVERRIDE { return new Data(m_value); }
 
@@ -95,7 +95,7 @@ public:
 
 public:
 
-    wxGenericValidatorType(T* value) : wxGenericValidatorBase(new Data(value)){}
+    explicit wxGenericValidatorType(T* value) : wxGenericValidatorBase(new Data(value)){}
 
     virtual ~wxGenericValidatorType(){}
 
