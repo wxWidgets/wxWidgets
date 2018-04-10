@@ -81,8 +81,12 @@ UntypedBufferData *GetUntypedNullData()
 
 //According to STL _must_ be a -1 size_t
 const size_t wxString::npos = (size_t) -1;
-wxRegEx wxString::naturalNumeric = "[0-9.]+";
-wxRegEx wxString::naturalAlpha   = "[^0-9.]+";
+
+#ifdef wxUSE_REGEX
+    // Natural comparison uses regex
+    wxRegEx wxString::naturalNumeric(_T("[0-9.]+"));
+    wxRegEx wxString::naturalAlpha(_T("[^0-9.]+"));
+#endif
 
 #if wxUSE_STRING_POS_CACHE
 
@@ -2306,7 +2310,7 @@ int wxString::Freq(wxUniChar ch) const
     return count;
 }
 
-
+#ifdef wxUSE_REGEX
 int wxString::CmpNatural(const wxString &s, bool noCase) const
 {
     wxString lhs(*this);
@@ -2412,3 +2416,5 @@ wxStringFragment wxString::GetFragment(wxString &text) const
 
     return fragment;
 }
+
+#endif // wxUSE_REGEX

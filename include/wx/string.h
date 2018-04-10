@@ -74,7 +74,10 @@
 #endif // wxUSE_STRING_POS_CACHE
 
 class WXDLLIMPEXP_FWD_BASE wxString;
-class wxRegEx;
+
+#ifdef wxUSE_REGEX
+    class wxRegEx;
+#endif
 
 // unless this symbol is predefined to disable the compatibility functions, do
 // use them
@@ -2064,10 +2067,12 @@ public:
     // same as Cmp() but not case-sensitive
   int CmpNoCase(const wxString& s) const;
 
+#ifdef wxUSE_REGEX
+  // The Natural comparison functions use wxRegex
   int CmpNatural(const wxString &s, bool noCase = false) const;
   int CmpNaturalNoCase(const wxString &s) const
     { return CmpNatural(s, true); }
-
+#endif
 
 
     // test for the string equality, either considering case or not
@@ -3330,12 +3335,14 @@ public:
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
+#ifdef wxUSE_REGEX
     // These are used by the CmpNatural() functions.
+    // They require wxRegex, so are only declared if regex is available
     int CompareFragmentNatural(const wxStringFragment &lhs, const wxStringFragment &rhs, bool noCase) const;
     wxStringFragment GetFragment(wxString &text) const;
     static wxRegEx naturalNumeric;        
     static wxRegEx naturalAlpha;
-
+#endif
 
 #if !wxUSE_STL_BASED_WXSTRING
   // helpers for wxStringBuffer and wxStringBufferLength
