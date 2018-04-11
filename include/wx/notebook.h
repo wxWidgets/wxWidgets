@@ -65,7 +65,7 @@ class WXDLLEXPORT wxNotebookPageInfo : public wxObject
 public:
     wxNotebookPageInfo() { m_page = NULL; m_imageId = -1; m_selected = false; }
     virtual ~wxNotebookPageInfo() { }
-    
+
     bool Create(wxNotebookPage *page,
                 const wxString& text,
                 bool selected,
@@ -77,18 +77,18 @@ public:
         m_imageId = imageId;
         return true;
     }
-    
+
     wxNotebookPage* GetPage() const { return m_page; }
     wxString GetText() const { return m_text; }
     bool GetSelected() const { return m_selected; }
     int GetImageId() const { return m_imageId; }
-    
+
 private:
     wxNotebookPage *m_page;
     wxString m_text;
     bool m_selected;
     int m_imageId;
-    
+
     wxDECLARE_DYNAMIC_CLASS(wxNotebookPageInfo);
 };
 
@@ -139,16 +139,16 @@ public:
     // new is wxNOT_FOUND)
     void SendPageChangedEvent(int nPageOld, int nPageNew = wxNOT_FOUND);
 
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
     // XTI accessors
     virtual void AddPageInfo( wxNotebookPageInfo* info );
     virtual const wxNotebookPageInfoList& GetPageInfos() const;
 #endif
-        
+
 protected:
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
     wxNotebookPageInfoList m_pageInfos;
-#endif    
+#endif
     wxDECLARE_NO_COPY_CLASS(wxNotebookBase);
 };
 

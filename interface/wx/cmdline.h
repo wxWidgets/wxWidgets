@@ -13,7 +13,7 @@
     parameter - this may be changed by giving non-default flags to it, i.e. use
     @c wxCMD_LINE_OPTION_MANDATORY to require that the option is given and
     @c wxCMD_LINE_PARAM_OPTIONAL to make a parameter optional.
-    
+
     Also, @c wxCMD_LINE_PARAM_MULTIPLE may be specified if the programs accepts a
     variable number of parameters - but it only can be given for the last
     parameter in the command line description. If you use this flag, you will
@@ -67,17 +67,17 @@ enum wxCmdLineEntryType
 {
     /// A boolean argument of the program; e.g. @c -v to enable verbose mode.
     wxCMD_LINE_SWITCH,
-    
+
     /// An argument with an associated value; e.g. @c "-o filename" to specify
     /// an optional output filename.
     wxCMD_LINE_OPTION,
-    
+
     /// A parameter: a required program argument.
     wxCMD_LINE_PARAM,
-    
+
     /// Additional usage text. See wxCmdLineParser::AddUsageText.
     wxCMD_LINE_USAGE_TEXT,
-    
+
     wxCMD_LINE_NONE     ///< Use this to terminate the list.
 };
 
@@ -126,7 +126,7 @@ struct wxCmdLineEntryDesc
 
     /**
         The usual, short, name of the switch or the option.
-        
+
         It may contain only letters, digits and the underscores.
         This field is unused if <tt>kind == wxCMD_LINE_PARAM</tt>.
     */
@@ -135,7 +135,7 @@ struct wxCmdLineEntryDesc
     /**
         The long name for this program argument (may be empty if the option
         has no long name).
-        
+
         It may contain only letters, digits and the underscores.
         This field is unused if <tt>kind == wxCMD_LINE_PARAM</tt>.
     */
@@ -152,7 +152,7 @@ struct wxCmdLineEntryDesc
         See ::wxCmdLineParamType for more info.
     */
     wxCmdLineParamType type;
-    
+
     /**
         A combination of one or more ::wxCmdLineEntryFlags enum values.
     */
@@ -348,12 +348,12 @@ public:
 
     In the documentation below the following terminology is used:
 
-    - @b switch: a boolean option which can be given or not, but which doesn't have 
+    - @b switch: a boolean option which can be given or not, but which doesn't have
                  any value. We use the word @e switch to distinguish
                  such boolean options from more generic options like those
                  described below. For example, @c "-v" might be a switch
                  meaning "enable verbose mode".
-    - @b option: a switch with a value associated to it. 
+    - @b option: a switch with a value associated to it.
                  For example, @c "-o filename" might be an
                  option for specifying the name of the output file.
     - @b parameter: a required program argument.

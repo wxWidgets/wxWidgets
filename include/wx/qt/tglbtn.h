@@ -57,7 +57,7 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxCheckBoxNameStr);
-    
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& label,

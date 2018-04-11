@@ -89,7 +89,7 @@ void wxToggleButtonXmlHandler::DoCreateToggleButton(wxObject *control)
                           GetDirection("bitmapposition"));
     }
 #endif
-   
+
     button->SetValue(GetBool( wxT("checked")));
 }
 

@@ -302,7 +302,7 @@ int wxAppConsoleBase::OnRun()
 }
 
 void wxAppConsoleBase::OnLaunched()
-{    
+{
 }
 
 int wxAppConsoleBase::OnExit()
@@ -376,7 +376,7 @@ int wxAppConsoleBase::MainLoop()
 
     if (wxTheApp)
         wxTheApp->OnLaunched();
-    
+
     return m_mainLoop ? m_mainLoop->Run() : -1;
 }
 

@@ -634,7 +634,7 @@ void RemoveTrailingSeparatorsFromPath(wxString& strPath)
     }
 }
 
-#endif // __WINDOWS_ 
+#endif // __WINDOWS_
 
 bool
 wxFileSystemObjectExists(const wxString& path, int flags)

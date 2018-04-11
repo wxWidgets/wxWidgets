@@ -407,7 +407,7 @@ protected:
     wxObject* GetInstance() const             { return m_instance; }
     wxWindow* GetParentAsWindow() const       { return m_parentAsWindow; }
 
-    
+
     wxArrayString m_styleNames;
     wxArrayInt m_styleValues;
 

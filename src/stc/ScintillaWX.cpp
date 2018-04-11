@@ -782,7 +782,7 @@ sptr_t ScintillaWX::DefWndProc(unsigned int /*iMessage*/, uptr_t /*wParam*/, spt
 sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
       switch (iMessage) {
 #if 0  // TODO: check this
-          
+
       case SCI_CALLTIPSHOW: {
           // NOTE: This is copied here from scintilla/src/ScintillaBase.cxx
           // because of the little tweak that needs done below for wxGTK.
@@ -896,7 +896,7 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
         // highlight positions.  So trigger a new paint event that will
         // repaint the whole window.
         stc->Refresh(false);
-        
+
 #if defined(__WXOSX__)
         // On Mac we also need to finish the current paint to make sure that
         // everything is on the screen that needs to be there between now and

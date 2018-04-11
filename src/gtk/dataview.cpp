@@ -5219,11 +5219,11 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
     GtkTreeViewDropPosition pos = GTK_TREE_VIEW_DROP_INTO_OR_AFTER;
     gint cell_x = 0;
     gint cell_y = 0;
-    
+
     // cannot directly call GtkGetTreeView(), HitTest is const and so is this pointer
     wxDataViewCtrl* self = const_cast<wxDataViewCtrl *>(this); // ugly workaround, self is NOT const
     GtkTreeView* treeView = GTK_TREE_VIEW(self->GtkGetTreeView());
-    
+
     // is there possibly a better suited function to get the column?
     gtk_tree_view_get_path_at_pos(                // and this is the wrong call but it delivers the column
       treeView,
@@ -5232,13 +5232,13 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
       &GtkColumn,                                 // here we get the GtkColumn
       &cell_x,
       &cell_y );
-      
+
     if ( GtkColumn != NULL )
-    {                                             
+    {
         // we got GTK column
         // the right call now which takes the header into account
         gtk_tree_view_get_dest_row_at_pos( treeView, (int) point.x, (int) point.y, path.ByRef(), &pos);
-          
+
         if (path)
             item = wxDataViewItem(GTKPathToItem(path));
         // else we got a GTK column but the position is not over an item, e.g. below last item
