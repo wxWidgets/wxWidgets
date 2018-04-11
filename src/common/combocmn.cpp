@@ -2078,7 +2078,7 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
     // On Mac, setting focus here led to infinite recursion so
     // m_resetFocus is used as a guard
-    
+
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
         if ( !m_resetFocus && GetTextCtrl() && !GetTextCtrl()->HasFocus() )
@@ -2088,7 +2088,7 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
             m_resetFocus = false;
         }
     }
-    
+
     Refresh();
 }
 

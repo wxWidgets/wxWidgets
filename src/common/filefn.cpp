@@ -806,7 +806,7 @@ wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathCompon
     fullURLRef = CFURLCreateFromFSRef(NULL, fsRef);
     if ( fullURLRef == NULL)
         return wxEmptyString;
-    
+
     if ( additionalPathComponent )
     {
         CFURLRef parentURLRef = fullURLRef ;

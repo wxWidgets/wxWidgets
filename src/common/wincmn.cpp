@@ -137,13 +137,13 @@ wxEND_EVENT_TABLE()
 
 #if wxUSE_EXTENDED_RTTI
 
-// windows that are created from a parent window during its Create method, 
-// eg. spin controls in a calendar controls must never been streamed out 
-// separately otherwise chaos occurs. Right now easiest is to test for negative ids, 
+// windows that are created from a parent window during its Create method,
+// eg. spin controls in a calendar controls must never been streamed out
+// separately otherwise chaos occurs. Right now easiest is to test for negative ids,
 // as windows with negative ids never can be recreated anyway
 
 
-bool wxWindowStreamingCallback( const wxObject *object, wxObjectWriter *, 
+bool wxWindowStreamingCallback( const wxObject *object, wxObjectWriter *,
                                wxObjectWriterCallback *, const wxStringToAnyHashMap & )
 {
     const wxWindow * win = wx_dynamic_cast(const wxWindow*, object);
@@ -159,7 +159,7 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxWindow, wxWindowBase, "wx/window.h", \
 
 wxCOLLECTION_TYPE_INFO( wxWindow*, wxWindowList );
 
-template<> void wxCollectionToVariantArray( wxWindowList const &theList, 
+template<> void wxCollectionToVariantArray( wxWindowList const &theList,
                                            wxAnyList &value)
 {
     wxListCollectionToAnyList<wxWindowList::compatibility_iterator>( theList, value );

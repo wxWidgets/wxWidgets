@@ -22,7 +22,7 @@
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
-#define cairo_public 
+#define cairo_public
 
 #include <cairo.h>
 #include <float.h>
@@ -440,7 +440,7 @@ public:
     {
         if ( !m_enableOffset )
             return false;
-        
+
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -478,7 +478,7 @@ public:
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) wxOVERRIDE;
     virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
     virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
-    
+
     virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
     virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
     virtual void Rotate( wxDouble angle ) wxOVERRIDE;
@@ -1544,7 +1544,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     }
 
 #if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
-    // if there is a mask, set the alpha bytes in the target buffer to 
+    // if there is a mask, set the alpha bytes in the target buffer to
     // fully transparent or fully opaque
 #if defined(__WXMSW__)
     if (bmp.GetMask() != NULL && !bmp.HasAlpha())
@@ -1782,7 +1782,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 : wxGraphicsContext(renderer)
 {
 #ifdef __WXMSW__
-    // wxMSW contexts always use MM_ANISOTROPIC, which messes up 
+    // wxMSW contexts always use MM_ANISOTROPIC, which messes up
     // text rendering when printing using Cairo. Switch it to MM_TEXT
     // map mode to avoid this problem.
     HDC hdc = (HDC)dc.GetHDC();
@@ -2045,7 +2045,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     if ( adjustTransformFromDC )
         ApplyTransformFromDC(dc);
 #endif // __WXMSW__
-    
+
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);

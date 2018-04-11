@@ -93,7 +93,7 @@ public:
      */
     void InsertHandler(wxXmlResourceHandler *handler);
 
-    
+
     /**
         Attaches an unknown control to the given panel/window/dialog.
         Unknown controls are used in conjunction with \<object class="unknown"\>.
@@ -115,7 +115,7 @@ public:
     */
     static void AddSubclassFactory(wxXmlSubclassFactory *factory);
 
-    
+
     /**
         Compares the XRC version to the argument.
 
@@ -785,7 +785,7 @@ protected:
     /**
        After CreateResource has been called this will return the current
        wxXmlResource object.
-       
+
        @since 2.9.5
     */
     wxXmlResource* GetResource() const;
@@ -829,6 +829,6 @@ protected:
 
        @since 2.9.5
     */
-    wxWindow* GetParentAsWindow() const;    
+    wxWindow* GetParentAsWindow() const;
 };
 

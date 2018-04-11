@@ -125,7 +125,7 @@ wxCONSTRUCTOR_5( wxListCtrl, wxWindow*, Parent, wxWindowID, Id, \
                 wxPoint, Position, wxSize, Size, long, WindowStyle )
 
 /*
- TODO : Expose more information of a list's layout etc. via appropriate objects 
+ TODO : Expose more information of a list's layout etc. via appropriate objects
  (see NotebookPageInfo)
  */
 

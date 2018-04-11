@@ -151,7 +151,7 @@ wxDEFINE_EVENT( wxEVT_GRID_TABBING, wxGridEvent );
 
 namespace
 {
-    
+
     // ensure that first is less or equal to second, swapping the values if
     // necessary
     void EnsureFirstLessThanSecond(int& first, int& second)
@@ -159,7 +159,7 @@ namespace
         if ( first > second )
             wxSwap(first, second);
     }
-    
+
 } // anonymous namespace
 
 // ============================================================================
@@ -3941,7 +3941,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                        bool isFirstDrag)
 {
     bool performDefault = true ;
-    
+
     if ( coords == wxGridNoCellCoords )
         return performDefault; // we're outside any valid cell
 
@@ -3973,7 +3973,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                     // if event is handled by user code, no further processing
                     if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) != 0 )
                         performDefault = false;
-                    
+
                     return performDefault;
                 }
             }
@@ -3985,7 +3985,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
             // we don't handle the other key modifiers
             event.Skip();
     }
-    
+
     return performDefault;
 }
 
@@ -4700,7 +4700,7 @@ wxGrid::SendEvent(wxEventType type,
            // explicitly allow the event for it to take place
            gridEvt.Veto();
        }
-              
+
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
    }
