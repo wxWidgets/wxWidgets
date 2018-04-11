@@ -2584,7 +2584,7 @@ void wxXmlResource::ReportError(const wxXmlNode *context, const wxString& messag
 {
     if ( !context )
     {
-        DoReportError("", NULL, message);
+        DoReportError(wxString(), NULL, message);
         return;
     }
 

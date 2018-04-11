@@ -110,7 +110,7 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle win)
 {
     wxCHECK( win, false );
 
-    if ( !wxTopLevelWindow::Create(NULL, wxID_ANY, "") )
+    if ( !wxTopLevelWindow::Create(NULL, wxID_ANY, wxString()) )
         return false;
 
     // we need to realize the window first before reparenting it
