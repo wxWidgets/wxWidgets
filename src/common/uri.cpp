@@ -177,7 +177,7 @@ wxString wxURI::GetPassword() const
       size_t posColon = m_userinfo.find(':');
 
       if ( posColon == wxString::npos )
-          return "";
+          return wxString();
 
       return m_userinfo(posColon + 1, wxString::npos);
 }
@@ -742,7 +742,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
             // if we have an empty path it means we were constructed from a "."
             // string or something similar (e.g. "././././"), it should count
             // as (empty) segment
-            our.push_back("");
+            our.push_back(wxString());
         }
 
         const wxArrayString::const_iterator end = our.end();
@@ -753,7 +753,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
                 // as in ParsePath(), while normally we ignore the empty
                 // segments, we need to take account of them at the end
                 if ( i == end - 1 )
-                    result.push_back("");
+                    result.push_back(wxString());
                 continue;
             }
 
@@ -764,7 +764,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
                     result.pop_back();
 
                     if ( i == end - 1 )
-                        result.push_back("");
+                        result.push_back(wxString());
                 }
                 //else: just ignore, extra ".." don't accumulate
             }
@@ -773,7 +773,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
                 if ( result.empty() )
                 {
                     // ensure that the resulting path will always be absolute
-                    result.push_back("");
+                    result.push_back(wxString());
                 }
 
                 result.push_back(*i);

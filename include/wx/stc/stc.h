@@ -5239,7 +5239,7 @@ public:
 
     virtual void Remove(long from, long to) wxOVERRIDE
     {
-        Replace(from, to, "");
+        Replace(from, to, wxString());
     }
     virtual void Replace(long from, long to, const wxString& text) wxOVERRIDE
     {
