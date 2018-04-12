@@ -1935,38 +1935,6 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
 bool
 wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
 {
-#if wxUSE_DEFERRED_SIZING
-    // if our parent had prepared a defer window handle for us, use it (unless
-    // we are a top level window)
-    wxWindowMSW * const parent = IsTopLevel() ? NULL : GetParent();
-
-    HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
-    if ( hdwp )
-    {
-        hdwp = ::DeferWindowPos(hdwp, (HWND)hwnd, NULL, x, y, width, height,
-                                SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
-        if ( !hdwp )
-        {
-            wxLogLastError(wxT("DeferWindowPos"));
-        }
-    }
-
-    if ( parent )
-    {
-        // hdwp must be updated as it may have been changed
-        parent->m_hDWP = (WXHANDLE)hdwp;
-    }
-
-    if ( hdwp )
-    {
-        // did deferred move, remember new coordinates of the window as they're
-        // different from what Windows would return for it
-        return true;
-    }
-
-    // otherwise (or if deferring failed) move the window in place immediately
-#endif // wxUSE_DEFERRED_SIZING
-
     // toplevel window's coordinates are mirrored if the TLW is a child of another
     // RTL window and changing width without moving the position would enlarge the
     // window in the wrong direction, so we need to adjust for it
@@ -1985,6 +1953,41 @@ wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
             // else: not a simple resize
         }
     }
+
+#if wxUSE_DEFERRED_SIZING
+    else
+    {
+        // if our parent had prepared a defer window handle for us, use it (unless
+        // we are a top level window)
+        wxWindowMSW * const parent = GetParent();
+
+        HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
+        if ( hdwp )
+        {
+            hdwp = ::DeferWindowPos(hdwp, (HWND)hwnd, NULL, x, y, width, height,
+                                    SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
+            if ( !hdwp )
+            {
+                wxLogLastError(wxT("DeferWindowPos"));
+            }
+        }
+
+        if ( parent )
+        {
+            // hdwp must be updated as it may have been changed
+            parent->m_hDWP = (WXHANDLE)hdwp;
+        }
+
+        if ( hdwp )
+        {
+            // did deferred move, remember new coordinates of the window as they're
+            // different from what Windows would return for it
+            return true;
+        }
+
+        // otherwise (or if deferring failed) move the window in place immediately
+    }
+#endif // wxUSE_DEFERRED_SIZING
 
     if ( !::MoveWindow((HWND)hwnd, x, y, width, height, IsShown()) )
     {
