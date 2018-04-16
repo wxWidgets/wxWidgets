@@ -826,6 +826,13 @@ bool wxGStreamerMediaBackend::TryVideoSink(GstElement* videosink)
         g_object_unref(videosink);
         return false;
     }
+
+    if ( gst_element_set_state (videosink,
+                                GST_STATE_READY) == GST_STATE_CHANGE_FAILURE )
+    {
+        g_object_unref(videosink);
+        return false;
+    }
 #else
     // Check if the video sink either is an xoverlay or might contain one...
     if( !GST_IS_BIN(videosink) && !GST_IS_X_OVERLAY(videosink) )
