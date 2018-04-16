@@ -885,12 +885,6 @@ public:
         @true value if the strings are the same and not 0 (which is usually @false
         in C) as Cmp() does.
 
-        An alternative comparison function CmpNatural() recognises numbers within the
-        string, and compares those numbers numerically, rather than alphabetically.
-        This is especially useful for implementing Natural Sort, whereby filenames or
-        numbered labels, e.g.  "file1", "file2", "file11", "file100" would be sorted
-        in correct numerical order.
-        
         Matches() is a poor man's regular expression matcher: it only understands
         '*' and '?' metacharacters in the sense of DOS command line interpreter.
 

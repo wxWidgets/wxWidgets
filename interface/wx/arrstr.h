@@ -365,6 +365,13 @@ public:
 
     @see wxStringSortDescending(), wxDictionaryStringSortAscending()
 
+            An alternative comparison function CmpNatural() recognises numbers within the
+        string, and compares those numbers numerically, rather than alphabetically.
+        This is especially useful for implementing Natural Sort, whereby filenames or
+        numbered labels, e.g.  "file1", "file2", "file11", "file100" would be sorted
+        in correct numerical order.
+        
+
     @since 3.1.0
  */
 int wxStringSortAscending(const wxString& s1, const wxString& s2);
@@ -408,6 +415,54 @@ int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
     @since 3.1.0
  */
 int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
+
+
+    /**
+        Case-sensitive comparison used for Natural Sort functions.
+        Functions in the same way as Cmp(), with the exception that numbers within
+        the string are recognised, and compared numerically, rather than alphabetically.
+        When used for sorting, the result is that e.g. file names containing numbers
+        are sorted in a natural way.
+        
+        e.g. Sorting using Cmp()
+        - file1.txt
+        - file10.txt
+        - file100.txt
+        - file2.txt
+        - file20.txt
+        - file3.txt
+        
+        e.g. Sorting using CmpNatural()
+        - file1.txt
+        - file2.txt
+        - file3.txt
+        - file11.txt
+        - file20.txt
+        - file100.txt
+        
+        @see wxNaturalStringSortDecending(), wxNaturalStringSortNoCaseAscending(), wxNaturalStringSortNoCaseDescending()
+    */
+int wxNaturalStringSortAscending(const wxString& s1, const wxString& s2);
+
+
+    /**
+        Same as wxNaturalStringSortAscending(), but in the reverse direction
+        @see wxNaturalStringSortAscending(), wxNaturalStringSortNoCaseAscending(), wxNaturalStringSortNoCaseDescending()
+    */
+int wxNaturalStringSortDecending(const wxString& s1, const wxString& s2);
+
+    /**
+        Same as wxNaturalStringSortAscending(), but ignores case
+        @see wxNaturalStringSortAscending(), wxNaturalStringSortDecending(), wxNaturalStringSortNoCaseDescending()
+    */
+int wxNaturalStringSortNoCaseAscending(const wxString& s1, const wxString& s2);
+
+    /**
+        Same as wxNaturalStringSortNoCaseAscending(), but in the reverse direction
+        @see wxNaturalStringSortAscending(), wxNaturalStringSortDecending(), wxNaturalStringSortNoCaseAscending()
+    */
+int wxNaturalStringSortNoCaseDecending(const wxString& s1, const wxString& s2);
+
 
 // ============================================================================
 // Global functions/macros

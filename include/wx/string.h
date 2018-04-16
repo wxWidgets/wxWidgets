@@ -239,21 +239,6 @@ private:
     friend class WXDLLIMPEXP_FWD_BASE wxString;
 };
 
-enum wxStringFragmentType
-{
-    wxFRAGMENT_TYPE_EMPTY = 0,
-    wxFRAGMENT_TYPE_ALPHA = 1,
-    wxFRAGMENT_TYPE_DIGIT = 2
-};
-
-// ----------------------------------------------------------------------------
-// wxStringFragment
-// ----------------------------------------------------------------------------
-// 
-// Lightweight object returned by wxString::GetNaturalFragment()
-// Consists of either a string which represents a number, or a string which contains no numerical digits.
-// Is used by wxString::CompareNatural()
-class wxStringFragment;
 
 // ----------------------------------------------------------------------------
 // wxString: string class trying to be compatible with std::string, MFC
@@ -2067,13 +2052,6 @@ public:
     // same as Cmp() but not case-sensitive
   int CmpNoCase(const wxString& s) const;
 
-#ifdef wxUSE_REGEX
-  // The Natural comparison functions use wxRegex
-  int CmpNatural(const wxString &s, bool noCase = false) const;
-  int CmpNaturalNoCase(const wxString &s) const
-    { return CmpNatural(s, true); }
-#endif
-
 
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
@@ -3335,14 +3313,6 @@ public:
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
-#ifdef wxUSE_REGEX
-    // These are used by the CmpNatural() functions.
-    // They require wxRegex, so are only declared if regex is available
-    int CompareFragmentNatural(const wxStringFragment &lhs, const wxStringFragment &rhs, bool noCase) const;
-    wxStringFragment GetFragment(wxString &text) const;
-    static wxRegEx naturalNumeric;        
-    static wxRegEx naturalAlpha;
-#endif
 
 #if !wxUSE_STL_BASED_WXSTRING
   // helpers for wxStringBuffer and wxStringBufferLength
@@ -4276,23 +4246,5 @@ template<bool (T)(const wxUniChar& c)>
     }
 
 
-// ----------------------------------------------------------------------------
-// wxStringFragment
-// ----------------------------------------------------------------------------
-// 
-// Lightweight object returned by wxString::GetNaturalFragment()
-// Consists of either a string which represents a number, or a string which contains no numerical digits.
-// Is used by wxString::CompareNatural()
-class wxStringFragment
-{
-public:
-    wxStringFragment()
-        : type(wxFRAGMENT_TYPE_EMPTY)
-    {}
-
-    wxString             text;
-    double               value;
-    wxStringFragmentType type;
-};
 
 #endif  // _WX_WXSTRING_H_

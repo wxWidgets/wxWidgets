@@ -26,6 +26,8 @@
 #include <algorithm>
 #include <functional>
 #include "wx/afterstd.h"
+#include "wx/regex.h"
+
 
 // ============================================================================
 // ArrayString
@@ -573,3 +575,170 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
 
     return ret;
 }
+
+
+#ifdef wxUSE_REGEX
+
+wxRegEx naturalNumeric(_T("[0-9.]+"));
+wxRegEx naturalAlpha(_T("[^0-9.]+"));
+
+enum wxStringFragmentType
+{
+    wxFRAGMENT_TYPE_EMPTY = 0,
+    wxFRAGMENT_TYPE_ALPHA = 1,
+    wxFRAGMENT_TYPE_DIGIT = 2
+};
+
+// ----------------------------------------------------------------------------
+// wxStringFragment
+// ----------------------------------------------------------------------------
+// 
+// Lightweight object returned by wxString::GetNaturalFragment()
+// Consists of either a string which represents a number, or a string which contains no numerical digits.
+// Is used by wxString::CompareNatural()
+class wxStringFragment
+{
+public:
+    wxStringFragment()
+        : type(wxFRAGMENT_TYPE_EMPTY)
+    {}
+
+    wxString             text;
+    double               value;
+    wxStringFragmentType type;
+};
+
+
+wxStringFragment GetFragment(wxString &text)
+{
+    size_t digitStart = 0;
+    size_t digitLength = 0;
+    size_t alphaStart = 0;
+    size_t alphaLength = 0;
+    wxStringFragment fragment;
+
+    if (text.Length() == 0)
+        return fragment;
+
+    if (naturalNumeric.Matches(text))
+    {
+        naturalNumeric.GetMatch(&digitStart, &digitLength, 0);
+    }
+
+    if (naturalAlpha.Matches(text))
+    {
+        naturalAlpha.GetMatch(&alphaStart, &alphaLength, 0);
+    }
+
+
+    if (alphaStart == 0)
+    {
+        fragment.text = text.Mid(0, alphaLength);
+        fragment.value = 0;
+        fragment.type = wxFRAGMENT_TYPE_ALPHA;
+
+        text.Remove(0, alphaLength);
+    }
+
+    if (digitStart == 0)
+    {
+        fragment.text = text.Mid(0, digitLength);
+        fragment.text.ToDouble(&fragment.value);
+        fragment.type = wxFRAGMENT_TYPE_DIGIT;
+
+        text.Remove(0, digitLength);
+    }
+
+    return fragment;
+}
+
+int CompareFragmentNatural(const wxStringFragment &lhs, const wxStringFragment &rhs, bool noCase)
+{
+    if ((lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
+        (rhs.type == wxFRAGMENT_TYPE_ALPHA))
+    {
+        if (noCase)
+            return lhs.text.CmpNoCase(rhs.text);
+        else
+            return lhs.text.Cmp(rhs.text);
+    }
+
+    if ((lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
+        (rhs.type == wxFRAGMENT_TYPE_DIGIT))
+    {
+        if (lhs.value == rhs.value)     return  0;
+        if (lhs.value  < rhs.value)     return -1;
+        if (lhs.value  > rhs.value)     return  1;
+    }
+
+    if ((lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
+        (rhs.type == wxFRAGMENT_TYPE_ALPHA))
+    {
+        return -1;
+    }
+
+    if ((lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
+        (rhs.type == wxFRAGMENT_TYPE_DIGIT))
+    {
+        return 1;
+    }
+
+    if (lhs.type == wxFRAGMENT_TYPE_EMPTY)
+    {
+        return -1;
+    }
+
+    if (rhs.type == wxFRAGMENT_TYPE_EMPTY)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
+inline int CompareNaturalFunction(const wxString &s1, const wxString &s2, bool noCase)
+{
+    wxString lhs(s1);
+    wxString rhs(s2);
+    wxStringFragment fragL;
+    wxStringFragment fragR;
+
+    int comparison = 0;
+
+    while ((comparison == 0) && (lhs.Length() || rhs.Length()))
+    {
+        fragL = GetFragment(lhs);
+        fragR = GetFragment(rhs);
+        comparison = CompareFragmentNatural(fragL, fragR, noCase);
+    };
+
+    return comparison;
+}
+
+
+int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2)
+{
+    bool noCase = false;
+    return CompareNaturalFunction(s1, s2, noCase);
+}
+
+int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2)
+{
+    bool noCase = false;
+    return CompareNaturalFunction(s2, s1, noCase);
+}
+
+int wxCMPFUNC_CONV wxNaturalStringSortNoCaseAscending(const wxString& s1, const wxString& s2)
+{
+    bool noCase = true;
+    return CompareNaturalFunction(s1, s2, noCase);
+}
+
+int wxCMPFUNC_CONV wxNaturalStringSortNoCaseDescending(const wxString& s1, const wxString& s2)
+{
+    bool noCase = true;
+    return CompareNaturalFunction(s2, s1, noCase);
+}
+
+#endif
