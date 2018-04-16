@@ -23,6 +23,7 @@
 
 #include "wx/msw/ole/oleutils.h" // wxBasicString &c
 #include "wx/msw/ole/uuid.h"
+#include "wx/msw/private/comptr.h"
 #include "wx/window.h"
 #include "wx/variant.h"
 
@@ -68,76 +69,48 @@ class FrameSite;
 //
 //---------------------------------------------------------------------------
 
-template<typename I>
-class wxAutoOleInterface
+template <class T>
+class wxAutoOleInterface : public wxCOMPtr<T>
 {
+    typedef wxCOMPtr<T> base;
 public:
-    typedef I Interface;
-
-    explicit wxAutoOleInterface(I *pInterface = NULL) : m_interface(pInterface)
-        {}
-    wxAutoOleInterface(REFIID riid, IUnknown *pUnk) : m_interface(NULL)
-        { QueryInterface(riid, pUnk); }
-    wxAutoOleInterface(REFIID riid, IDispatch *pDispatch) : m_interface(NULL)
-        { QueryInterface(riid, pDispatch); }
-    wxAutoOleInterface(REFCLSID clsid, REFIID riid) : m_interface(NULL)
-        { CreateInstance(clsid, riid); }
-    wxAutoOleInterface(const wxAutoOleInterface& ti) : m_interface(NULL)
-        { operator=(ti); }
-
-    wxAutoOleInterface& operator=(const wxAutoOleInterface& ti)
+    wxAutoOleInterface() {}
+    wxAutoOleInterface(REFIID riid, IUnknown* pUnk)
     {
-        if ( ti.m_interface )
-            ti.m_interface->AddRef();
-        Free();
-        m_interface = ti.m_interface;
-        return *this;
+        QueryInterface(riid, pUnk);
     }
 
-    wxAutoOleInterface& operator=(I*& ti)
+    wxAutoOleInterface& operator=(T*& ti)
     {
         Free();
-        m_interface = ti;
+        base::reset(ti);
         return *this;
     }
-
-    ~wxAutoOleInterface() { Free(); }
-
     void Free()
     {
-        if ( m_interface )
-            m_interface->Release();
-        m_interface = NULL;
+        base::reset();
     }
 
-    HRESULT QueryInterface(REFIID riid, IUnknown *pUnk)
+    HRESULT QueryInterface(REFIID riid, IUnknown* pUnk)
     {
         Free();
         wxASSERT(pUnk != NULL);
-        return pUnk->QueryInterface(riid, (void **)&m_interface);
+        return pUnk->QueryInterface(riid, (void**)GetRef());
     }
 
-    HRESULT CreateInstance(REFCLSID clsid, REFIID riid)
+    HRESULT CreateInstance(REFCLSID clsid, REFIID riid, DWORD dwClsContext = CLSCTX_ALL)
     {
         Free();
-        return CoCreateInstance
-               (
+        return ::CoCreateInstance(
                    clsid,
                    NULL,
-                   CLSCTX_ALL,
+                   dwClsContext,
                    riid,
-                   (void **)&m_interface
-               );
+                   (void**)GetRef());
     }
 
-    operator I*() const {return m_interface; }
-    I* operator->() {return m_interface; }
-    I** GetRef() {return &m_interface; }
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_interface != NULL; }
-
-protected:
-    I *m_interface;
+    bool IsOk() const { return base::get() != NULL; }
+    T** GetRef() { return base::operator&(); }
 };
 
 #if WXWIN_COMPATIBILITY_2_8
