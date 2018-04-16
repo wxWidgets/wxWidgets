@@ -43,39 +43,47 @@ WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str)
 
 WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 {
-    // NULL BSTR is equivalent to an empty string (this is the convention used
-    // by VB and hence we must follow it)
-    if ( !bStr )
-        return wxString();
-
-    const int len = SysStringLen(bStr);
-
-#if wxUSE_UNICODE
-    wxString str(bStr, len);
-#else
-    wxString str;
-    if (len)
-    {
-        wxStringBufferLength buf(str, len); // asserts if len == 0
-        buf.SetLength(WideCharToMultiByte(CP_ACP, 0 /* no flags */,
-                                  bStr, len /* not necessarily NUL-terminated */,
-                                  buf, len,
-                                  NULL, NULL /* no default char */));
-    }
-#endif
-
+    wxBasicString temp;
+    temp.Attach(bStr);
+    wxString str = temp.ToString();
+    temp.Detach();
     return str;
 }
 
 // ----------------------------------------------------------------------------
 // wxBasicString
 // ----------------------------------------------------------------------------
+
+wxString wxBasicString::ToString() const
+{
+    // NULL BSTR is equivalent to an empty string (this is the convention used
+    // by VB and hence we must follow it)
+    if ( !m_bstrBuf )
+        return wxString();
+
+    const int len = SysStringLen(m_bstrBuf);
+
+#if wxUSE_UNICODE
+    wxString str(m_bstrBuf, len);
+#else
+    wxString str;
+    if (len)
+    {
+        wxStringBufferLength buf(str, len); // asserts if len == 0
+        buf.SetLength(WideCharToMultiByte(CP_ACP, 0 /* no flags */,
+                                  m_bstrBuf, len /* not necessarily NUL-terminated */,
+                                  buf, len,
+                                  NULL, NULL /* no default char */));
+    }
+#endif
+    return str;
+}
+
 void wxBasicString::AssignFromString(const wxString& str)
 {
     SysFreeString(m_bstrBuf);
     m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
 }
-
 BSTR wxBasicString::Detach()
 {
     BSTR bstr = m_bstrBuf;
