@@ -228,8 +228,7 @@ methodOverrideMap = {
         strm.CopyTo(buff, len);
         buff[len] = 0;
         SendMsg(%s, markerNumber, (sptr_t)buff);
-        delete [] buff;
-        '''
+        delete [] buff;'''
     ),
 
     'GetMargins' : ('GetMarginCount', 0, 0),
@@ -552,8 +551,7 @@ methodOverrideMap = {
         strm.CopyTo(buff, len);
         buff[len] = 0;
         SendMsg(%s, type, (sptr_t)buff);
-        delete [] buff;
-     '''
+        delete [] buff;'''
     ),
 
     'SetHScrollBar' : ('SetUseHorizontalScrollBar', 0, 0),
@@ -1049,7 +1047,7 @@ methodOverrideMap = {
     (0,
      'void* %s(int bytes) const;',
      """void* %s(int bytes) const {
-         return (void*)(sptr_t)SendMsg(%s, bytes); """
+         return (void*)(sptr_t)SendMsg(%s, bytes);"""
     ),
 
     'GetRepresentation' :
@@ -1070,7 +1068,7 @@ methodOverrideMap = {
      (0,
       'void* %s(int operation, void* pointer);',
       """void* %s(int operation, void* pointer) {
-           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer); """
+           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer);"""
      ),
 
     'GetSubStyleBases' :
