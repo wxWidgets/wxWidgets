@@ -915,41 +915,6 @@ public:
         @see Cmp(), IsSameAs().
     */
     int CmpNoCase(const wxString& s) const;
-
-    /**
-        Case-sensitive comparison used for Natural Sort functions.
-        Functions in the same way as Cmp(), with the exception that numbers within
-        the string are recognised, and compared numerically, rather than alphabetically.
-        When used for sorting, the result is that e.g. file names containing numbers
-        are sorted in a natural way.
-        
-        e.g. Sorting using Cmp()
-        - file1.txt
-        - file10.txt
-        - file100.txt
-        - file2.txt
-        - file20.txt
-        - file3.txt
-        
-        e.g. Sorting using CmpNatural()
-        - file1.txt
-        - file2.txt
-        - file3.txt
-        - file11.txt
-        - file20.txt
-        - file100.txt
-        
-        @see CmpNoCase(), IsSameAs().
-    */
-    int CmpNatural(const wxString& s, bool noCase = false) const;
-    
-    /**
-        Case-insensitive version of CmpNatural(). Same behaviour as
-        calling CmpNatural() with noCase = true.
-        
-        @see Cmp(), CmpNaturalNoCase().
-    */
-    int CmpNaturalNoCase(const wxString& s) const;
     
     /**
         Test whether the string is equal to another string @a s.
