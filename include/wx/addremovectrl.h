@@ -14,7 +14,7 @@
 
 #if wxUSE_ADDREMOVECTRL
 
-extern WXDLLIMPEXP_DATA_ADV(const char) wxAddRemoveCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const wxString) wxAddRemoveCtrlNameStr;
 
 // ----------------------------------------------------------------------------
 // wxAddRemoveAdaptor: used by wxAddRemoveCtrl to work with the list control

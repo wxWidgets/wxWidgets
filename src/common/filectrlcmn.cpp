@@ -22,7 +22,7 @@
 #    include "wx/debug.h"
 #endif
 
-const char wxFileCtrlNameStr[] = "wxfilectrl";
+const wxString wxFileCtrlNameStr("wxfilectrl");
 
 wxDEFINE_EVENT( wxEVT_FILECTRL_SELECTIONCHANGED, wxFileCtrlEvent );
 wxDEFINE_EVENT( wxEVT_FILECTRL_FILEACTIVATED, wxFileCtrlEvent );

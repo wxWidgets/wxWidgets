@@ -19,7 +19,7 @@
 #include "wx/event.h"
 #include "wx/anybutton.h"     // base class
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxCheckBoxNameStr;
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TOGGLEBUTTON, wxCommandEvent );
 

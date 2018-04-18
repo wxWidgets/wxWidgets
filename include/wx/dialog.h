@@ -59,7 +59,7 @@ enum wxDialogModality
     wxDIALOG_MODALITY_APP_MODAL = 2
 };
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxDialogNameStr;
 
 class WXDLLIMPEXP_CORE wxDialogBase : public wxNavigationEnabled<wxTopLevelWindow>
 {

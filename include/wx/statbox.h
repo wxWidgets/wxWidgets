@@ -18,7 +18,7 @@
 #include "wx/control.h"
 #include "wx/containr.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxStaticBoxNameStr;
 
 // ----------------------------------------------------------------------------
 // wxStaticBox: a grouping box with a label

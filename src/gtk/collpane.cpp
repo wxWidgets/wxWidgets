@@ -30,7 +30,7 @@
 // the lines below duplicate the same definitions in collpaneg.cpp, if we have
 // another implementation of this class we should extract them to a common file
 
-const char wxCollapsiblePaneNameStr[] = "collapsiblePane";
+const wxString wxCollapsiblePaneNameStr("collapsiblePane");
 
 wxDEFINE_EVENT( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEvent );
 

@@ -15,7 +15,7 @@
 #include "wx/control.h"
 #include "wx/filectrl.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxFileSelectorDefaultWildcardStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxFileSelectorDefaultWildcardStr;
 
 typedef struct _GtkFileChooser GtkFileChooser;
 

@@ -27,7 +27,7 @@ WX_DEFINE_EXPORTED_ARRAY_PTR(wxToolTip *, wxToolTipArray);
 
 #endif // wxUSE_TOOLTIPS
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxRadioBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxRadioBoxNameStr;
 
 // ----------------------------------------------------------------------------
 // wxRadioBoxBase is not a normal base class, but rather a mix-in because the

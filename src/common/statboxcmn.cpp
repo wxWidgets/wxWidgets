@@ -27,7 +27,7 @@
 
 #include "wx/statbox.h"
 
-extern WXDLLEXPORT_DATA(const char) wxStaticBoxNameStr[] = "groupBox";
+extern WXDLLEXPORT_DATA(const wxString) wxStaticBoxNameStr("groupBox");
 
 wxStaticBoxBase::wxStaticBoxBase()
 {

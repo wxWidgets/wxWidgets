@@ -36,12 +36,12 @@
 // implementation
 // ============================================================================
 
-const char wxFilePickerCtrlNameStr[] = "filepicker";
-const char wxFilePickerWidgetNameStr[] = "filepickerwidget";
-const char wxDirPickerCtrlNameStr[] = "dirpicker";
-const char wxDirPickerWidgetNameStr[] = "dirpickerwidget";
-const char wxFilePickerWidgetLabel[] = wxTRANSLATE("Browse");
-const char wxDirPickerWidgetLabel[] = wxTRANSLATE("Browse");
+const wxString wxFilePickerCtrlNameStr("filepicker");
+const wxString wxFilePickerWidgetNameStr("filepickerwidget");
+const wxString wxDirPickerCtrlNameStr("dirpicker");
+const wxString wxDirPickerWidgetNameStr("dirpickerwidget");
+const wxString wxFilePickerWidgetLabel(wxTRANSLATE("Browse"));
+const wxString wxDirPickerWidgetLabel(wxTRANSLATE("Browse"));
 
 wxDEFINE_EVENT( wxEVT_FILEPICKER_CHANGED, wxFileDirPickerEvent );
 wxDEFINE_EVENT( wxEVT_DIRPICKER_CHANGED,  wxFileDirPickerEvent );

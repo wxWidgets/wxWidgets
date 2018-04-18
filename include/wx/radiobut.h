@@ -32,7 +32,7 @@
 
 #include "wx/control.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxRadioButtonNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxRadioButtonNameStr;
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/radiobut.h"

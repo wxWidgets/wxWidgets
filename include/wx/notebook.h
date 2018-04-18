@@ -52,7 +52,7 @@ enum
 
 typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxNotebookNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxNotebookNameStr;
 
 #if wxUSE_EXTENDED_RTTI
 

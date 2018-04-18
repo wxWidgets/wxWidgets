@@ -18,7 +18,7 @@
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxToolTip;
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxButtonNameStr;
 
 // ----------------------------------------------------------------------------
 // wxPickerBase is the base class for the picker controls which support

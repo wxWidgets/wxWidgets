@@ -34,7 +34,7 @@
 
 #include "wx/ffile.h"
 
-extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
+extern WXDLLEXPORT_DATA(const wxString) wxTextCtrlNameStr("text");
 
 // ----------------------------------------------------------------------------
 // macros

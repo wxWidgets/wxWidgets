@@ -39,7 +39,7 @@
 // Constants
 // ----------------------------------------------------------------------------
 
-const char wxTreeListCtrlNameStr[] = "wxTreeListCtrl";
+const wxString wxTreeListCtrlNameStr("wxTreeListCtrl");
 
 const wxTreeListItem wxTLI_FIRST(reinterpret_cast<wxTreeListModelNode*>(-1));
 const wxTreeListItem wxTLI_LAST(reinterpret_cast<wxTreeListModelNode*>(-2));

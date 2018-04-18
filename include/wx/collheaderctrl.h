@@ -17,7 +17,7 @@
 #include "wx/control.h"
 
 // class name
-extern WXDLLIMPEXP_DATA_CORE(const char) wxCollapsibleHeaderCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxCollapsibleHeaderCtrlNameStr;
 
 //
 // wxGenericCollapsibleHeaderCtrl

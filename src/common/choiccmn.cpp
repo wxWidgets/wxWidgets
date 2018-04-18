@@ -32,7 +32,7 @@
 #ifndef WX_PRECOMP
 #endif
 
-const char wxChoiceNameStr[] = "choice";
+const wxString wxChoiceNameStr("choice");
 
 
 wxDEFINE_FLAGS( wxChoiceStyle )

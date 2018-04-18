@@ -29,7 +29,7 @@
 // -----------------------------------------------------------------------
 
 #ifndef SWIG
-extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridManagerNameStr[];
+extern WXDLLIMPEXP_DATA_PROPGRID(const wxString) wxPropertyGridManagerNameStr;
 #endif
 
 // Holder of property grid page information. You can subclass this and

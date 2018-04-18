@@ -27,15 +27,15 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
-extern WXDLLEXPORT_DATA(const char) wxFileDialogNameStr[] = "filedlg";
-extern WXDLLEXPORT_DATA(const char) wxFileSelectorPromptStr[] = "Select a file";
-extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[] =
+extern WXDLLEXPORT_DATA(const wxString) wxFileDialogNameStr("filedlg");
+extern WXDLLEXPORT_DATA(const wxString) wxFileSelectorPromptStr("Select a file");
+extern WXDLLEXPORT_DATA(const wxString) wxFileSelectorDefaultWildcardStr(
 #if defined(__WXMSW__)
     "*.*"
 #else // Unix/Mac
     "*"
 #endif
-    ;
+);
 
 //----------------------------------------------------------------------------
 // wxFileDialogBase

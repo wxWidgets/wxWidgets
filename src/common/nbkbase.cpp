@@ -34,7 +34,7 @@
 // implementation
 // ============================================================================
 
-extern WXDLLEXPORT_DATA(const char) wxNotebookNameStr[] = "notebook";
+extern WXDLLEXPORT_DATA(const wxString) wxNotebookNameStr("notebook");
 
 wxDEFINE_EVENT( wxEVT_NOTEBOOK_PAGE_CHANGED, wxBookCtrlEvent );
 wxDEFINE_EVENT( wxEVT_NOTEBOOK_PAGE_CHANGING, wxBookCtrlEvent );

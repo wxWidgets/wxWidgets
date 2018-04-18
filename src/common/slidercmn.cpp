@@ -28,7 +28,7 @@
 
 #include "wx/slider.h"
 
-extern WXDLLEXPORT_DATA(const char) wxSliderNameStr[] = "slider";
+extern WXDLLEXPORT_DATA(const wxString) wxSliderNameStr("slider");
 
 // ----------------------------------------------------------------------------
 // XTI

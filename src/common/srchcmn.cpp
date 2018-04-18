@@ -32,7 +32,7 @@
 
 // ----------------------------------------------------------------------------
 
-const char wxSearchCtrlNameStr[] = "searchCtrl";
+const wxString wxSearchCtrlNameStr("searchCtrl");
 
 wxDEFINE_EVENT(wxEVT_SEARCH_CANCEL, wxCommandEvent);
 wxDEFINE_EVENT(wxEVT_SEARCH, wxCommandEvent);

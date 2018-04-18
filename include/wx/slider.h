@@ -41,7 +41,7 @@
 #define wxSL_VALUE_LABEL     0x4000
 #define wxSL_LABELS          (wxSL_MIN_MAX_LABELS|wxSL_VALUE_LABEL)
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxSliderNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxSliderNameStr;
 
 // ----------------------------------------------------------------------------
 // wxSliderBase: define wxSlider interface

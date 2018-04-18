@@ -53,9 +53,9 @@ enum
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxFileDialogNameStr[];
-extern WXDLLIMPEXP_DATA_CORE(const char) wxFileSelectorPromptStr[];
-extern WXDLLIMPEXP_DATA_CORE(const char) wxFileSelectorDefaultWildcardStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxFileDialogNameStr;
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxFileSelectorPromptStr;
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxFileSelectorDefaultWildcardStr;
 
 //----------------------------------------------------------------------------
 // wxFileDialogBase

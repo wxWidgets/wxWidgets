@@ -10,7 +10,7 @@
 
 #include "wx/tglbtn.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxCheckBoxNameStr;
 
 class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButtonBase
 {

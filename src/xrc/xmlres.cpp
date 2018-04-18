@@ -180,7 +180,7 @@ inline bool IsObjectNode(wxXmlNode *node)
 }
 
 // special XML attribute with name of input file, see GetFileNameFromNode()
-const char *ATTR_INPUT_FILENAME = "__wx:filename";
+const wxString ATTR_INPUT_FILENAME("__wx:filename");
 
 // helper to get filename corresponding to an XML node
 wxString
