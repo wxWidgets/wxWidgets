@@ -37,7 +37,7 @@
 // ============================================================================
 
 extern
-WXDLLIMPEXP_DATA_CORE(const char) wxRearrangeListNameStr[] = "wxRearrangeList";
+WXDLLIMPEXP_DATA_CORE(const wxString) wxRearrangeListNameStr("wxRearrangeList");
 
 wxBEGIN_EVENT_TABLE(wxRearrangeList, wxCheckListBox)
     EVT_CHECKLISTBOX(wxID_ANY, wxRearrangeList::OnCheck)
@@ -306,7 +306,7 @@ void wxRearrangeCtrl::OnButton(wxCommandEvent& event)
 // ============================================================================
 
 extern
-WXDLLIMPEXP_DATA_CORE(const char) wxRearrangeDialogNameStr[] = "wxRearrangeDlg";
+WXDLLIMPEXP_DATA_CORE(const wxString) wxRearrangeDialogNameStr("wxRearrangeDlg");
 
 namespace
 {

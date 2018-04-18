@@ -19,8 +19,8 @@
 #include "wx/statusbr.h"
 
 // the default names for various classs
-extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusLineNameStr[];
-extern WXDLLIMPEXP_DATA_CORE(const char) wxToolBarNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxStatusLineNameStr;
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxToolBarNameStr;
 
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;

@@ -11,10 +11,10 @@
 #define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE)
 
 /// Default text dialog caption.
-const char wxGetTextFromUserPromptStr[] = "Input Text";
+const wxString wxGetTextFromUserPromptStr = "Input Text";
 
 /// Default password dialog caption.
-const char wxGetPasswordFromUserPromptStr[] = "Enter Password";
+const wxString wxGetPasswordFromUserPromptStr = "Enter Password";
 
 
 /**

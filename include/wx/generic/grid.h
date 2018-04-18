@@ -23,7 +23,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_DATA_ADV(const char) wxGridNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const wxString) wxGridNameStr;
 
 // Default parameters for wxGrid
 //

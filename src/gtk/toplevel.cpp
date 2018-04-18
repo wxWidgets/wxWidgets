@@ -1640,7 +1640,7 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 bool wxTopLevelWindowGTK::CanSetTransparent()
 {
     // allow to override automatic detection as it's far from perfect
-    const wxString SYSOPT_TRANSPARENT = "gtk.tlw.can-set-transparent";
+    const wxString SYSOPT_TRANSPARENT("gtk.tlw.can-set-transparent");
     if ( wxSystemOptions::HasOption(SYSOPT_TRANSPARENT) )
     {
         return wxSystemOptions::GetOptionInt(SYSOPT_TRANSPARENT) != 0;

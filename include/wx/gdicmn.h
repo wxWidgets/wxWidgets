@@ -1067,7 +1067,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxIconBundle) wxNullIconBundle;
 
 extern WXDLLIMPEXP_DATA_CORE(wxColourDatabase*)  wxTheColourDatabase;
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxPanelNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxPanelNameStr;
 
 extern WXDLLIMPEXP_DATA_CORE(const wxSize) wxDefaultSize;
 extern WXDLLIMPEXP_DATA_CORE(const wxPoint) wxDefaultPosition;

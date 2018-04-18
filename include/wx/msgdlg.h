@@ -18,7 +18,7 @@
 #include "wx/dialog.h"
 #include "wx/stockitem.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxMessageBoxCaptionStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxMessageBoxCaptionStr;
 
 // ----------------------------------------------------------------------------
 // wxMessageDialogBase: base class defining wxMessageDialog interface

@@ -30,7 +30,7 @@
     #include "wx/dcclient.h"
 #endif
 
-const char wxListCtrlNameStr[] = "listCtrl";
+const wxString wxListCtrlNameStr("listCtrl");
 
 // ListCtrl events
 wxDEFINE_EVENT( wxEVT_LIST_BEGIN_DRAG, wxListEvent );

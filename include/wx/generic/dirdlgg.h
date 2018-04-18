@@ -19,8 +19,8 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
 // we may be included directly as well as from wx/dirdlg.h (FIXME)
-extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogNameStr[];
-extern WXDLLIMPEXP_DATA_CORE(const char) wxDirSelectorPromptStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxDirDialogNameStr;
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxDirSelectorPromptStr;
 
 #ifndef wxDD_DEFAULT_STYLE
 #define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)

@@ -19,7 +19,7 @@
 // styles with wxComboBox without explicitly including it in the user code.
 #include "wx/textctrl.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxComboBoxNameStr;
 
 // ----------------------------------------------------------------------------
 // wxComboBoxBase: this interface defines the methods wxComboBox must implement

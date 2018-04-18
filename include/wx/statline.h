@@ -27,7 +27,7 @@
 // ----------------------------------------------------------------------------
 
 // the default name for objects of class wxStaticLine
-extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticLineNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxStaticLineNameStr;
 
 // ----------------------------------------------------------------------------
 // wxStaticLine - a line in a dialog

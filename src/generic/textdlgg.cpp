@@ -41,8 +41,8 @@
     #include "wx/statline.h"
 #endif
 
-const char wxGetTextFromUserPromptStr[] = "Input Text";
-const char wxGetPasswordFromUserPromptStr[] = "Enter Password";
+const wxString wxGetTextFromUserPromptStr("Input Text");
+const wxString wxGetPasswordFromUserPromptStr("Enter Password");
 
 // ----------------------------------------------------------------------------
 // constants

@@ -102,8 +102,8 @@ struct _SYSTEMTIME;
 // wxInvalidDateTime)
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 
-extern WXDLLIMPEXP_DATA_BASE(const char) wxDefaultDateTimeFormat[];
-extern WXDLLIMPEXP_DATA_BASE(const char) wxDefaultTimeSpanFormat[];
+extern WXDLLIMPEXP_DATA_BASE(const wxString) wxDefaultDateTimeFormat;
+extern WXDLLIMPEXP_DATA_BASE(const wxString) wxDefaultTimeSpanFormat;
 extern WXDLLIMPEXP_DATA_BASE(const wxDateTime) wxDefaultDateTime;
 
 #define wxInvalidDateTime wxDefaultDateTime

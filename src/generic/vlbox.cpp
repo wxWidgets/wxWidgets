@@ -59,7 +59,7 @@ wxEND_EVENT_TABLE()
 // ============================================================================
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxVListBox, wxVScrolledWindow);
-const char wxVListBoxNameStr[] = "wxVListBox";
+const wxString wxVListBoxNameStr("wxVListBox");
 
 // ----------------------------------------------------------------------------
 // wxVListBox creation

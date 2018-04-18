@@ -31,7 +31,7 @@
     #include "wx/frame.h"
 #endif //WX_PRECOMP
 
-const char wxStatusBarNameStr[] = "statusBar";
+const wxString wxStatusBarNameStr("statusBar");
 
 // ============================================================================
 // wxStatusBarPane implementation

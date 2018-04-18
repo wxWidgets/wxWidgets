@@ -22,7 +22,7 @@
 #include "wx/window.h"      // base class
 #include "wx/gdicmn.h"      // wxEllipsize...
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxControlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxControlNameStr;
 
 
 // ----------------------------------------------------------------------------

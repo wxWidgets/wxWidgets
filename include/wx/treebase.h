@@ -178,7 +178,7 @@ static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
                                           wxTREE_HITTEST_ONITEMLABEL;
 
 // tree ctrl default name
-extern WXDLLIMPEXP_DATA_CORE(const char) wxTreeCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxString) wxTreeCtrlNameStr;
 
 // ----------------------------------------------------------------------------
 // wxTreeEvent is a special class for all events associated with tree controls
