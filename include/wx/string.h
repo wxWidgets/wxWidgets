@@ -75,9 +75,6 @@
 
 class WXDLLIMPEXP_FWD_BASE wxString;
 
-#ifdef wxUSE_REGEX
-    class wxRegEx;
-#endif
 
 // unless this symbol is predefined to disable the compatibility functions, do
 // use them
