@@ -757,5 +757,18 @@ int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxStr
     #endif
 }
 
+#else   // wxUSE_REGEX
 
-#endif
+
+int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2)
+{
+    return wxDictionaryStringSortAscending(s1, s2);
+}
+
+int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2)
+{
+    return wxDictionaryStringSortDescending(s1, s2);
+}
+
+
+#endif   // wxUSE_REGEX
