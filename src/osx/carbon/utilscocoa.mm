@@ -102,10 +102,18 @@ wxFont::wxFont(WX_NSFont nsfont)
     wxNativeFontInfo info;
     SetNativeInfoFromNSFont(nsfont, &info);
     Create(info);
+#if wxDEBUG_LEVEL
+    wxCFStringRef wxFullNSName = CTFontCopyFullName((CTFontRef)nsfont);
+	wxCFStringRef wxFullCTName = CTFontCopyFullName(OSXGetCTFont());
+    wxString fullNSName = wxFullNSName.AsString();
+	wxString fullCTName = wxFullCTName.AsString();
+    wxASSERT_MSG(fullNSName != fullCTName, wxString::Format("wxFont creaated with wrong font name %s != %s", fullNSName, fullCTName));
+#endif
 }
 
 void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
 {   
+    wxCFRef<CTFontDescriptorRef> descriptorRef(CTFontCopyFontDescriptor((CTFontRef)theFont));
     if ( info->m_faceName.empty())
     {
         //Get more information about the user's chosen font
@@ -134,9 +142,9 @@ void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
         if ( theTraits & NSItalicFontMask )
             fontstyle = wxFONTSTYLE_ITALIC ;
 
+        wxCFStringRef fullName( (CFStringRef) CTFontDescriptorCopyAttribute(descriptorRef.get(), kCTFontDisplayNameAttribute));
         info->Init(size,fontFamily,fontstyle,fontweight,underlined, strikethrough,
-                   wxCFStringRef::AsString([theFont familyName]), wxFONTENCODING_DEFAULT);
-
+                   fullName.AsString(), wxFONTENCODING_DEFAULT);
     }
 }
 

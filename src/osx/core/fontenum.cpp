@@ -79,6 +79,40 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         }
         
         CFRelease(cfFontFamilies);
+        
+#if wxOSX_USE_COCOA_OR_CARBON
+        ATSFontIterator theFontIterator = NULL;
+        ATSFontRef theATSFontRef = 0;
+        // Create the iterator
+        OSStatus status = ATSFontIteratorCreate(kATSFontContextLocal, nil,nil,
+                                       kATSOptionFlagsUnRestrictedScope,
+                                       &theFontIterator );
+        
+        while (status == noErr)
+        {
+            // Get the next font in the iteration.
+            status = ATSFontIteratorNext( theFontIterator, &theATSFontRef );
+            if(status == noErr)
+            {
+                CFStringRef theName = NULL;
+                ATSFontGetName(theATSFontRef, kATSOptionFlagsDefault, &theName);
+                wxCFStringRef cfName(theName) ;
+                wxString fontName(cfName.AsString(wxLocale::GetSystemEncoding()));
+                // only add the font name if its not already in the list
+                if (fontFamilies.Index(fontName) == wxNOT_FOUND)
+                    fontFamilies.Add(fontName);
+            }
+            else if (status == kATSIterationScopeModified) // Make sure the font database hasn't changed.
+            {
+                // reset the iterator
+                status = ATSFontIteratorReset (kATSFontContextLocal, nil, nil,
+                                               kATSOptionFlagsUnRestrictedScope,
+                                               &theFontIterator);
+                fontFamilies.Clear() ;
+            }
+        }
+        ATSFontIteratorRelease(&theFontIterator);
+#endif
     }
     for ( size_t i = 0 ; i < fontFamilies.Count() ; ++i )
     {

@@ -712,7 +712,7 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
 
     if (attributes != NULL) {
         // Add a family name to our attributes.
-        CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, iFamilyName);
+        CFDictionaryAddValue(attributes, kCTFontDisplayNameAttribute, iFamilyName);
 
 
         if ( iTraits ) {
@@ -775,7 +775,7 @@ void wxNativeFontInfo::Init(CTFontDescriptorRef descr)
 
     wxCFRef< CFDictionaryRef > traitsvalue( (CFDictionaryRef) CTFontDescriptorCopyAttribute( descr, kCTFontTraitsAttribute ) );
     CTFontSymbolicTraits traits;
-    if ( CFNumberGetValue((CFNumberRef) CFDictionaryGetValue(traitsvalue,kCTFontSymbolicTrait),kCFNumberIntType,&traits) )
+    if ( traitsvalue.get() && CFNumberGetValue((CFNumberRef) CFDictionaryGetValue(traitsvalue,kCTFontSymbolicTrait),kCFNumberIntType,&traits) )
     {
         if ( traits & kCTFontItalicTrait )
             m_style = wxFONTSTYLE_ITALIC;
@@ -783,8 +783,9 @@ void wxNativeFontInfo::Init(CTFontDescriptorRef descr)
             m_weight = wxFONTWEIGHT_BOLD ;
     }
 
-    wxCFStringRef familyName( (CFStringRef) CTFontDescriptorCopyAttribute(descr, kCTFontFamilyNameAttribute));
-    m_faceName = familyName.AsString();
+    wxCFStringRef familyName( (CFStringRef) CTFontDescriptorCopyAttribute(descr, kCTFontDisplayNameAttribute));
+    if (familyName.get())
+        m_faceName = familyName.AsString();
     
     UpdateNamesMap(m_faceName, descr);
 }
