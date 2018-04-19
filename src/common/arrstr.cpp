@@ -28,6 +28,10 @@
 #include "wx/afterstd.h"
 #include "wx/regex.h"
 
+#ifdef __WXMSW__
+    #include "shlwapi.h"
+#endif
+
 
 // ============================================================================
 // ArrayString
@@ -734,14 +738,23 @@ namespace {
 
 int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2)
 {
-    bool noCase = true;
-    return CompareNaturalFunction(s1, s2, noCase);
+    #ifdef __WXMSW__
+        return StrCmpLogicalW(s1.c_str(), s2.c_str());
+    #else
+        bool noCase = true;
+        return CompareNaturalFunction(s1, s2, noCase);
+    #endif
 }
+
 
 int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2)
 {
-    bool noCase = true;
-    return CompareNaturalFunction(s2, s1, noCase);
+    #ifdef __WXMSW__
+        return StrCmpLogicalW(s2.c_str(), s1.c_str());
+    #else
+        bool noCase = true;
+        return CompareNaturalFunction(s2, s1, noCase);
+    #endif
 }
 
 
