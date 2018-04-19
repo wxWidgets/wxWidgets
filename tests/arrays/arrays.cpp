@@ -754,3 +754,53 @@ void ArraysTestCase::IndexFromEnd()
     CPPUNIT_ASSERT_EQUAL( 1, a.Index(1, /*bFromEnd=*/true) );
     CPPUNIT_ASSERT_EQUAL( 2, a.Index(42, /*bFromEnd=*/true) );
 }
+
+
+TEST_CASE("wxNaturalStringSortAscending()", "[array][sort][string]")
+{
+    wxString s01(".3String");
+    wxString s02("0.312String");
+    
+    wxString s03("2string");
+    wxString s04("2String");
+    
+    wxString s05("10String");
+    wxString s06("Str3ing");
+    wxString s07("Str20ing");
+    wxString s08("Str200ing");
+    wxString s09("String8");
+    wxString s10("String90");
+    
+    wxString s11("St1ring");
+    wxString s12("St1.2ring");
+    wxString s13("St1.21ring");
+    
+    CHECK(wxNaturalStringSortAscending(s01, s02) < 0);          // Check that decimals work
+    CHECK(wxNaturalStringSortAscending(s02, s03) < 0);
+    CHECK(wxNaturalStringSortAscending(s03, s04) == 0);         // Check that case is ignored
+    CHECK(wxNaturalStringSortAscending(s04, s05) < 0);
+    CHECK(wxNaturalStringSortAscending(s05, s06) < 0);
+    CHECK(wxNaturalStringSortAscending(s06, s07) < 0);
+    CHECK(wxNaturalStringSortAscending(s07, s08) < 0);
+    CHECK(wxNaturalStringSortAscending(s08, s09) < 0);
+    CHECK(wxNaturalStringSortAscending(s09, s10) < 0);
+    CHECK(wxNaturalStringSortAscending(s11, s12) < 0);
+    CHECK(wxNaturalStringSortAscending(s12, s13) < 0);
+
+    CHECK(wxNaturalStringSortAscending(s01, s01) == 0);         // Check that equality works in all cases
+    CHECK(wxNaturalStringSortAscending(s02, s02) == 0);
+    CHECK(wxNaturalStringSortAscending(s03, s03) == 0);
+    CHECK(wxNaturalStringSortAscending(s04, s04) == 0);
+    CHECK(wxNaturalStringSortAscending(s05, s05) == 0);
+    CHECK(wxNaturalStringSortAscending(s06, s06) == 0);
+    CHECK(wxNaturalStringSortAscending(s07, s07) == 0);
+    CHECK(wxNaturalStringSortAscending(s08, s08) == 0);
+    CHECK(wxNaturalStringSortAscending(s09, s09) == 0);
+    CHECK(wxNaturalStringSortAscending(s10, s10) == 0);
+    CHECK(wxNaturalStringSortAscending(s11, s11) == 0);
+    CHECK(wxNaturalStringSortAscending(s12, s12) == 0);
+    CHECK(wxNaturalStringSortAscending(s13, s13) == 0);
+    
+    CHECK(wxNaturalStringSortDescending(s01, s02) > 0);         // Check that reverse sort works
+}
+
