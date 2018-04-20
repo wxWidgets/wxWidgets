@@ -581,9 +581,8 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
 }
 
 
-#ifdef wxUSE_REGEX
-
-namespace {
+namespace
+{
     wxRegEx naturalNumeric(wxS("[0-9.]+"));
     wxRegEx naturalAlpha(wxS("[^0-9.]+"));
 
@@ -736,6 +735,7 @@ namespace {
 } // unnamed namespace
 
 
+WXDLLIMPEXP_BASE
 int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2)
 {
     #ifdef __WXMSW__
@@ -747,6 +747,7 @@ int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxStri
 }
 
 
+WXDLLIMPEXP_BASE
 int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2)
 {
     #ifdef __WXMSW__
@@ -756,19 +757,3 @@ int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxStr
         return CompareNaturalFunction(s2, s1, noCase);
     #endif
 }
-
-#else   // wxUSE_REGEX
-
-
-int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2)
-{
-    return wxDictionaryStringSortAscending(s1, s2);
-}
-
-int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2)
-{
-    return wxDictionaryStringSortDescending(s1, s2);
-}
-
-
-#endif   // wxUSE_REGEX
