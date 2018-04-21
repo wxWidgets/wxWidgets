@@ -47,8 +47,8 @@ wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2)
     return wxDictionaryStringSortAscending(s2, s1);
 }
 
-int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2);
-int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2);
+WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2);
+WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2);
 
 
 #if wxUSE_STD_CONTAINERS
