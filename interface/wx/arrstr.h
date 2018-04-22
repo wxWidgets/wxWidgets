@@ -376,8 +376,8 @@ int wxStringSortAscending(const wxString& s1, const wxString& s2);
     This function can be used with wxSortedArrayString::Sort() or passed as an
     argument to wxSortedArrayString constructor.
 
-    @see wxStringSortAscending(), wxDictionaryStringSortAscending(),
-         wxNaturalStringSortAscending()
+    @see wxStringSortAscending(), wxDictionaryStringSortDescending(),
+         wxNaturalStringSortDescending()
 
     @since 3.1.0
  */
@@ -394,7 +394,8 @@ int wxStringSortDescending(const wxString& s1, const wxString& s2);
     This function can be used with wxSortedArrayString::Sort() or passed as an
     argument to wxSortedArrayString constructor.
 
-    @see wxStringSortAscending(), wxDictionaryStringSortDescending(),
+    @see wxDictionaryStringSortDescending(),
+         wxStringSortAscending(),
          wxNaturalStringSortAscending()
          
     @since 3.1.0
@@ -406,15 +407,18 @@ int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
 
     See wxDictionaryStringSortAscending() for the dictionary sort description.
 
-    @see wxStringSortDescending(), wxNaturalStringSortAscending()
+    @see wxDictionaryStringSortAscending(),
+         wxStringSortDescending(),
+         wxNaturalStringSortDescending()
 
     @since 3.1.0
  */
-int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
+int wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2);
 
 
     /**
-        Case-sensitive comparison used for Natural Sort functions.
+        Comparison fucntion used for Natural Sort.
+        
         Functions in the same way as wxDictionaryStringSortAscending(), with
         the exception that numbers within the string are recognised, and
         compared numerically, rather than alphabetically. When used for
@@ -422,7 +426,7 @@ int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
         sorted in a natural way.
 
         Comparison is case insensitive.
-        
+            
         e.g. Sorting using wxDictionaryStringSortAscending() results in:
         - file1.txt
         - file10.txt
@@ -440,21 +444,22 @@ int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
         - file100.txt
         
         @see wxNaturalStringSortDescending(),
-             wxNaturalStringSortNoCaseAscending(),
-             wxNaturalStringSortNoCaseDescending()
+             wxStringSortAscending(),
+             wxDictionaryStringSortAscending()
         
-        @since 3.1.2
-        
+        @since 3.1.2  
     */
 int wxNaturalStringSortAscending(const wxString& s1, const wxString& s2);
 
 
     /**
-        Same as wxNaturalStringSortAscending(), but in the reverse direction.
+        Comparison function comparing strings in reverse natural order.
         
+        See wxNaturalStringSortAscending() for the natural sort description.
+    
         @see wxNaturalStringSortAscending(),
-             wxNaturalStringSortNoCaseAscending(),
-             wxNaturalStringSortNoCaseDescending()
+             wxStringSortDescending(),
+             wxDictionaryStringSortDescending()
              
         @since 3.1.2
     */
