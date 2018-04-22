@@ -739,22 +739,9 @@ WXDLLIMPEXP_BASE
 int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
     #ifdef __WXMSW__
-        return StrCmpLogicalW(s1.c_str(), s2.c_str());
+        return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
     #else
         bool noCase = true;
         return CompareNaturalFunction(s1, s2, noCase);
     #endif
 }
-
-/*
-WXDLLIMPEXP_BASE
-int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2)
-{
-    #ifdef __WXMSW__
-        return StrCmpLogicalW(s2.c_str(), s1.c_str());
-    #else
-        bool noCase = true;
-        return CompareNaturalFunction(s2, s1, noCase);
-    #endif
-}
-*/
