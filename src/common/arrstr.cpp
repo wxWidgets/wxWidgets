@@ -736,7 +736,7 @@ namespace
 
 
 WXDLLIMPEXP_BASE
-int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxString& s2)
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
     #ifdef __WXMSW__
         return StrCmpLogicalW(s1.c_str(), s2.c_str());
@@ -746,7 +746,7 @@ int wxCMPFUNC_CONV wxNaturalStringSortAscending(const wxString& s1, const wxStri
     #endif
 }
 
-
+/*
 WXDLLIMPEXP_BASE
 int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxString& s2)
 {
@@ -757,3 +757,4 @@ int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, const wxStr
         return CompareNaturalFunction(s2, s1, noCase);
     #endif
 }
+*/
