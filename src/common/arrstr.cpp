@@ -657,15 +657,12 @@ namespace
         return fragment;
     }
 
-    int CompareFragmentNatural(const wxStringFragment &lhs, const wxStringFragment &rhs, bool noCase)
+    int CompareFragmentNatural(const wxStringFragment &lhs, const wxStringFragment &rhs)
     {
         if ((lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
             (rhs.type == wxFRAGMENT_TYPE_ALPHA))
         {
-            if (noCase)
-                return lhs.text.CmpNoCase(rhs.text);
-            else
-                return lhs.text.Cmp(rhs.text);
+            return lhs.text.CmpNoCase(rhs.text);
         }
 
         if ((lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
@@ -713,7 +710,7 @@ namespace
     }
 
 
-    inline int CompareNaturalFunction(const wxString &s1, const wxString &s2, bool noCase)
+    inline int CompareNaturalFunction(const wxString &s1, const wxString &s2)
     {
         wxString lhs(s1);
         wxString rhs(s2);
@@ -722,11 +719,11 @@ namespace
 
         int comparison = 0;
 
-        while ((comparison == 0) && (lhs.Length() || rhs.Length()))
+        while ((comparison == 0) && (!lhs.empty() || !rhs.empty()))
         {
             fragL = GetFragment(lhs);
             fragR = GetFragment(rhs);
-            comparison = CompareFragmentNatural(fragL, fragR, noCase);
+            comparison = CompareFragmentNatural(fragL, fragR);
         }
 
         return comparison;
@@ -735,13 +732,12 @@ namespace
 } // unnamed namespace
 
 
-WXDLLIMPEXP_BASE
 int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
-    #ifdef __WXMSW__
-        return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
-    #else
-        bool noCase = true;
-        return CompareNaturalFunction(s1, s2, noCase);
-    #endif
+#ifdef __WXMSW__
+    return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
+#else
+    return CompareNaturalFunction(s1, s2);
+#endif
 }
+
