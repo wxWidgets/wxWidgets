@@ -915,7 +915,7 @@ public:
         @see Cmp(), IsSameAs().
     */
     int CmpNoCase(const wxString& s) const;
-    
+
     /**
         Test whether the string is equal to another string @a s.
 
