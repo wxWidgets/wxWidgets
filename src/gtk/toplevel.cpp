@@ -456,10 +456,22 @@ static void notify_gtk_theme_name(GObject*, GParamSpec*, wxTopLevelWindowGTK* wi
 }
 
 //-----------------------------------------------------------------------------
+// Dealing with decorations size under X11
+//-----------------------------------------------------------------------------
+
+#ifndef GDK_WINDOWING_X11
+
+// We still need to define a stab for this function as it's used in
+// gtk/settings.cpp
+bool wxGetFrameExtents(GdkWindow*, int*, int*, int*, int*)
+{
+    return false;
+}
+
+#else // GDK_WINDOWING_X11
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
 {
-#ifdef GDK_WINDOWING_X11
     GdkDisplay* display = gdk_window_get_display(window);
 
     if (!GDK_IS_X11_DISPLAY(display))
@@ -489,12 +501,8 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     if (data)
         XFree(data);
     return success;
-#else
-    return false;
-#endif
 }
 
-#ifdef GDK_WINDOWING_X11
 //-----------------------------------------------------------------------------
 // "property_notify_event" from m_widget
 //-----------------------------------------------------------------------------
