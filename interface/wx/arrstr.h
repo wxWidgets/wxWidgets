@@ -417,7 +417,7 @@ int wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2);
 
 
     /**
-        Comparison fucntion used for Natural Sort.
+        Comparison function used for Natural Sort.
         
         Functions in the same way as wxDictionaryStringSortAscending(), with
         the exception that numbers within the string are recognised, and

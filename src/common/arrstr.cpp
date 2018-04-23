@@ -605,38 +605,38 @@ namespace
             : type(wxFRAGMENT_TYPE_EMPTY)
         {}
 
-        wxString             text;
-        double               value;
-        wxStringFragmentType type;
+        wxString              text;
+        long                  value;
+        wxStringFragmentType  type;
     };
 
 
-    wxStringFragment GetFragment(wxString &text)
+    wxStringFragment GetFragment(wxString& text)
     {
-        static wxRegEx naturalNumeric(wxS("[0-9]+"));
-        static wxRegEx naturalAlpha(wxS("[^0-9]+"));
+        static const wxRegEx naturalNumeric(wxS("[0-9]+"));
+        static const wxRegEx naturalAlpha(wxS("[^0-9]+"));
 
-        size_t digitStart = 0;
-        size_t digitLength = 0;
-        size_t alphaStart = 0;
-        size_t alphaLength = 0;
+        size_t           digitStart  = 0;
+        size_t           digitLength = 0;
+        size_t           alphaStart  = 0;
+        size_t           alphaLength = 0;
         wxStringFragment fragment;
 
-        if (text.empty())
+        if ( text.empty() )
             return fragment;
 
-        if (naturalNumeric.Matches(text))
+        if ( naturalNumeric.Matches(text) )
         {
             naturalNumeric.GetMatch(&digitStart, &digitLength, 0);
         }
 
-        if (naturalAlpha.Matches(text))
+        if ( naturalAlpha.Matches(text) )
         {
             naturalAlpha.GetMatch(&alphaStart, &alphaLength, 0);
         }
 
 
-        if (alphaStart == 0)
+        if ( alphaStart == 0 )
         {
             fragment.text = text.Mid(0, alphaLength);
             fragment.value = 0;
@@ -645,7 +645,7 @@ namespace
             text.erase(0, alphaLength);
         }
 
-        if (digitStart == 0)
+        if ( digitStart == 0 )
         {
             fragment.text = text.Mid(0, digitLength);
             fragment.text.ToDouble(&fragment.value);
@@ -657,51 +657,51 @@ namespace
         return fragment;
     }
 
-    int CompareFragmentNatural(const wxStringFragment &lhs, const wxStringFragment &rhs)
+    int CompareFragmentNatural(const wxStringFragment& lhs, const wxStringFragment& rhs)
     {
-        if ((lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
-            (rhs.type == wxFRAGMENT_TYPE_ALPHA))
+        if ( (lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
+             (rhs.type == wxFRAGMENT_TYPE_ALPHA) )
         {
             return lhs.text.CmpNoCase(rhs.text);
         }
 
-        if ((lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
-            (rhs.type == wxFRAGMENT_TYPE_DIGIT))
+        if ( (lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
+             (rhs.type == wxFRAGMENT_TYPE_DIGIT) )
         {
-            if (lhs.value == rhs.value)
+            if ( lhs.value == rhs.value )
             {
                 return  0;
             }
 
-            if (lhs.value < rhs.value)
+            if ( lhs.value < rhs.value )
             {
                 return -1;
             }
 
-            if (lhs.value > rhs.value)
+            if ( lhs.value > rhs.value )
             {
                 return  1;
             }
         }
 
-        if ((lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
-            (rhs.type == wxFRAGMENT_TYPE_ALPHA))
+        if ( (lhs.type == wxFRAGMENT_TYPE_DIGIT) &&
+             (rhs.type == wxFRAGMENT_TYPE_ALPHA) )
         {
             return -1;
         }
 
-        if ((lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
-            (rhs.type == wxFRAGMENT_TYPE_DIGIT))
+        if ( (lhs.type == wxFRAGMENT_TYPE_ALPHA) &&
+             (rhs.type == wxFRAGMENT_TYPE_DIGIT) )
         {
             return 1;
         }
 
-        if (lhs.type == wxFRAGMENT_TYPE_EMPTY)
+        if ( lhs.type == wxFRAGMENT_TYPE_EMPTY )
         {
             return -1;
         }
 
-        if (rhs.type == wxFRAGMENT_TYPE_EMPTY)
+        if ( rhs.type == wxFRAGMENT_TYPE_EMPTY )
         {
             return 1;
         }
@@ -710,20 +710,18 @@ namespace
     }
 
 
-    inline int CompareNaturalFunction(const wxString &s1, const wxString &s2)
+    int CompareNaturalFunction(const wxString& s1, const wxString& s2)
     {
         wxString lhs(s1);
         wxString rhs(s2);
-        wxStringFragment fragL;
-        wxStringFragment fragR;
 
         int comparison = 0;
 
-        while ((comparison == 0) && (!lhs.empty() || !rhs.empty()))
+        while ( (comparison == 0) && (!lhs.empty() || !rhs.empty()) )
         {
-            fragL = GetFragment(lhs);
-            fragR = GetFragment(rhs);
-            comparison = CompareFragmentNatural(fragL, fragR);
+            wxStringFragment fragmentL = GetFragment(lhs);
+            wxStringFragment fragmentR = GetFragment(rhs);
+            comparison = CompareFragmentNatural(fragmentL, fragmentR);
         }
 
         return comparison;
@@ -735,9 +733,9 @@ namespace
 int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
 #ifdef __WXMSW__
-    return StrCmpLogicalW(s1.wc_str(), s2.wc_str());
+    return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
 #else
-    return CompareNaturalFunction(s1, s2);
+    return CompareNaturalFunction( s1, s2 );
 #endif
 }
 
