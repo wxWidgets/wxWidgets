@@ -974,6 +974,13 @@ bool wxTopLevelWindowGTK::Show( bool show )
     wxCHECK_MSG(m_widget, false, "invalid frame");
 
 #ifdef GDK_WINDOWING_X11
+    // If we already have some decoration value, we must have either reused it
+    // from the cache or it was explicitly set (this is used by wxPersistentTLW
+    // for example) to avoid having to guess it, so skip deferred showing in
+    // this case.
+    if (m_decorSize.left || m_decorSize.right || m_decorSize.top || m_decorSize.bottom)
+        m_deferShow = false;
+
     bool deferShow = show && !m_isShown && m_deferShow;
     if (deferShow)
     {
