@@ -2302,3 +2302,4 @@ int wxString::Freq(wxUniChar ch) const
     }
     return count;
 }
+

@@ -583,9 +583,6 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
 
 namespace
 {
-    wxRegEx naturalNumeric(wxS("[0-9.]+"));
-    wxRegEx naturalAlpha(wxS("[^0-9.]+"));
-
     enum wxStringFragmentType
     {
         wxFRAGMENT_TYPE_EMPTY = 0,
@@ -616,6 +613,9 @@ namespace
 
     wxStringFragment GetFragment(wxString &text)
     {
+        static wxRegEx naturalNumeric(wxS("[0-9]+"));
+        static wxRegEx naturalAlpha(wxS("[^0-9]+"));
+
         size_t digitStart = 0;
         size_t digitLength = 0;
         size_t alphaStart = 0;

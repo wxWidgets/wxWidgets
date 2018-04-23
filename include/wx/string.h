@@ -75,7 +75,6 @@
 
 class WXDLLIMPEXP_FWD_BASE wxString;
 
-
 // unless this symbol is predefined to disable the compatibility functions, do
 // use them
 #ifndef WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
@@ -235,7 +234,6 @@ private:
 
     friend class WXDLLIMPEXP_FWD_BASE wxString;
 };
-
 
 // ----------------------------------------------------------------------------
 // wxString: string class trying to be compatible with std::string, MFC
@@ -2049,7 +2047,6 @@ public:
     // same as Cmp() but not case-sensitive
   int CmpNoCase(const wxString& s) const;
 
-
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
   bool IsSameAs(const wxString& str, bool compareWithCase = true) const
@@ -3310,7 +3307,6 @@ public:
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
-
 #if !wxUSE_STL_BASED_WXSTRING
   // helpers for wxStringBuffer and wxStringBufferLength
   wxStringCharType *DoGetWriteBuf(size_t nLen)
@@ -4241,7 +4237,5 @@ template<bool (T)(const wxUniChar& c)>
                 return false;
         return true;
     }
-
-
 
 #endif  // _WX_WXSTRING_H_

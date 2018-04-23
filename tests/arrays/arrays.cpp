@@ -758,11 +758,11 @@ void ArraysTestCase::IndexFromEnd()
 
 TEST_CASE("wxNaturalStringSortAscending()", "[array][sort][string]")
 {
-    wxString s01(".3String");
-    wxString s02("0.312String");
+    wxString s01("3String");
+    wxString s02("21String");
     
-    wxString s03("2string");
-    wxString s04("2String");
+    wxString s03("100string");
+    wxString s04("100String");
     
     wxString s05("10String");
     wxString s06("Str3ing");
@@ -771,14 +771,14 @@ TEST_CASE("wxNaturalStringSortAscending()", "[array][sort][string]")
     wxString s09("String8");
     wxString s10("String90");
     
-    wxString s11("St1ring");
-    wxString s12("St1.2ring");
-    wxString s13("St1.21ring");
+    wxString s11("7String3");
+    wxString s12("07String20");
+    wxString s13("007String100");
     
-    CHECK(wxNaturalStringSortAscending(s01, s02) < 0);          // Check that decimals work
+    CHECK(wxNaturalStringSortAscending(s01, s02) < 0);
     CHECK(wxNaturalStringSortAscending(s02, s03) < 0);
     CHECK(wxNaturalStringSortAscending(s03, s04) == 0);         // Check that case is ignored
-    CHECK(wxNaturalStringSortAscending(s04, s05) < 0);
+
     CHECK(wxNaturalStringSortAscending(s05, s06) < 0);
     CHECK(wxNaturalStringSortAscending(s06, s07) < 0);
     CHECK(wxNaturalStringSortAscending(s07, s08) < 0);
