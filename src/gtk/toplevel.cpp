@@ -317,8 +317,12 @@ void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
     if (gs_decorCacheValid)
     {
         const DecorSize& decorSize = GetCachedDecorSize();
-        point.x = x - decorSize.left;
-        point.y = y - decorSize.top;
+        // Decoration sizes come directly from X11 and are in physical pixels,
+        // while our position is expressed in GTK+ logical/scaled pixels, which
+        // may be different.
+        const double scale = GetContentScaleFactor();
+        point.x = x - decorSize.left / scale;
+        point.y = y - decorSize.top / scale;
     }
     else
 #endif
@@ -456,10 +460,23 @@ static void notify_gtk_theme_name(GObject*, GParamSpec*, wxTopLevelWindowGTK* wi
 }
 
 //-----------------------------------------------------------------------------
+// Dealing with decorations size under X11
+//-----------------------------------------------------------------------------
 
-bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
+#ifndef GDK_WINDOWING_X11
+
+// We still need to define a stab for this function as it's used in
+// gtk/settings.cpp
+bool wxGetFrameExtents(GdkWindow*, wxTopLevelWindowGTK::DecorSize*)
 {
-#ifdef GDK_WINDOWING_X11
+    return false;
+}
+
+#else // GDK_WINDOWING_X11
+
+bool wxGetFrameExtents(GdkWindow* window,
+                       wxTopLevelWindowGTK::DecorSize* decorSize)
+{
     GdkDisplay* display = gdk_window_get_display(window);
 
     if (!GDK_IS_X11_DISPLAY(display))
@@ -481,20 +498,16 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     if (success)
     {
         long* p = (long*)data;
-        if (left)   *left   = int(p[0]);
-        if (right)  *right  = int(p[1]);
-        if (top)    *top    = int(p[2]);
-        if (bottom) *bottom = int(p[3]);
+        decorSize->left   = int(p[0]);
+        decorSize->right  = int(p[1]);
+        decorSize->top    = int(p[2]);
+        decorSize->bottom = int(p[3]);
     }
     if (data)
         XFree(data);
     return success;
-#else
-    return false;
-#endif
 }
 
-#ifdef GDK_WINDOWING_X11
 //-----------------------------------------------------------------------------
 // "property_notify_event" from m_widget
 //-----------------------------------------------------------------------------
@@ -516,8 +529,7 @@ static gboolean property_notify_event(
         }
 
         wxTopLevelWindowGTK::DecorSize decorSize = win->m_decorSize;
-        gs_decorCacheValid = wxGetFrameExtents(event->window,
-            &decorSize.left, &decorSize.right, &decorSize.top, &decorSize.bottom);
+        gs_decorCacheValid = wxGetFrameExtents(event->window, &decorSize);
 
         win->GTKUpdateDecorSize(decorSize);
     }
@@ -534,8 +546,7 @@ static gboolean request_frame_extents_timeout(void* data)
     wxTopLevelWindowGTK* win = static_cast<wxTopLevelWindowGTK*>(data);
     win->m_netFrameExtentsTimerId = 0;
     wxTopLevelWindowGTK::DecorSize decorSize = win->m_decorSize;
-    wxGetFrameExtents(gtk_widget_get_window(win->m_widget),
-        &decorSize.left, &decorSize.right, &decorSize.top, &decorSize.bottom);
+    wxGetFrameExtents(gtk_widget_get_window(win->m_widget), &decorSize);
     win->GTKUpdateDecorSize(decorSize);
     gdk_threads_leave();
     return false;
@@ -963,6 +974,13 @@ bool wxTopLevelWindowGTK::Show( bool show )
     wxCHECK_MSG(m_widget, false, "invalid frame");
 
 #ifdef GDK_WINDOWING_X11
+    // If we already have some decoration value, we must have either reused it
+    // from the cache or it was explicitly set (this is used by wxPersistentTLW
+    // for example) to avoid having to guess it, so skip deferred showing in
+    // this case.
+    if (m_decorSize.left || m_decorSize.right || m_decorSize.top || m_decorSize.bottom)
+        m_deferShow = false;
+
     bool deferShow = show && !m_isShown && m_deferShow;
     if (deferShow)
     {
