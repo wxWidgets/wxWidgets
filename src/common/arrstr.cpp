@@ -596,7 +596,7 @@ namespace
     // ----------------------------------------------------------------------------
     // 
     // Lightweight object returned by wxString::GetNaturalFragment()
-    // Consists of either a string which represents a number, or a string which contains no numerical digits.
+    // Consists of either a number, or a string which contains no numerical digits.
     // Is used by wxString::CompareNatural()
     class wxStringFragment
     {
