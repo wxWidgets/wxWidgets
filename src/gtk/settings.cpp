@@ -24,7 +24,7 @@
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/gtk/private/gtk2-compat.h"
 
-bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
+bool wxGetFrameExtents(GdkWindow* window, wxTopLevelWindow::DecorSize* decorSize);
 
 // ----------------------------------------------------------------------------
 // wxSystemSettings implementation
@@ -876,17 +876,17 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                     // Get the frame extents from the windowmanager.
                     // In most cases the top extent is the titlebar, so we use the bottom extent
                     // for the heights.
-                    int right, bottom;
-                    if (wxGetFrameExtents(window, NULL, &right, NULL, &bottom))
+                    wxTopLevelWindow::DecorSize decorSize;
+                    if (wxGetFrameExtents(window, &decorSize))
                     {
                         switch (index)
                         {
                             case wxSYS_BORDER_X:
                             case wxSYS_EDGE_X:
                             case wxSYS_FRAMESIZE_X:
-                                return right; // width of right extent
+                                return decorSize.right;
                             default:
-                                return bottom; // height of bottom extent
+                                return decorSize.bottom;
                         }
                     }
                 }
@@ -1024,10 +1024,10 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             // titlebar is, but this might lead to interesting behaviours in used code.
             // Reconsider when we have a way to report to the user on which side it is.
             {
-                int top;
-                if (wxGetFrameExtents(window, NULL, NULL, &top, NULL))
+                wxTopLevelWindow::DecorSize decorSize;
+                if (wxGetFrameExtents(window, &decorSize))
                 {
-                    return top; // top frame extent
+                    return decorSize.top; // top frame extent
                 }
             }
 

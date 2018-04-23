@@ -463,14 +463,15 @@ static void notify_gtk_theme_name(GObject*, GParamSpec*, wxTopLevelWindowGTK* wi
 
 // We still need to define a stab for this function as it's used in
 // gtk/settings.cpp
-bool wxGetFrameExtents(GdkWindow*, int*, int*, int*, int*)
+bool wxGetFrameExtents(GdkWindow*, wxTopLevelWindowGTK::DecorSize*)
 {
     return false;
 }
 
 #else // GDK_WINDOWING_X11
 
-bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
+bool wxGetFrameExtents(GdkWindow* window,
+                       wxTopLevelWindowGTK::DecorSize* decorSize)
 {
     GdkDisplay* display = gdk_window_get_display(window);
 
@@ -493,10 +494,10 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     if (success)
     {
         long* p = (long*)data;
-        if (left)   *left   = int(p[0]);
-        if (right)  *right  = int(p[1]);
-        if (top)    *top    = int(p[2]);
-        if (bottom) *bottom = int(p[3]);
+        decorSize->left   = int(p[0]);
+        decorSize->right  = int(p[1]);
+        decorSize->top    = int(p[2]);
+        decorSize->bottom = int(p[3]);
     }
     if (data)
         XFree(data);
@@ -524,8 +525,7 @@ static gboolean property_notify_event(
         }
 
         wxTopLevelWindowGTK::DecorSize decorSize = win->m_decorSize;
-        gs_decorCacheValid = wxGetFrameExtents(event->window,
-            &decorSize.left, &decorSize.right, &decorSize.top, &decorSize.bottom);
+        gs_decorCacheValid = wxGetFrameExtents(event->window, &decorSize);
 
         win->GTKUpdateDecorSize(decorSize);
     }
@@ -542,8 +542,7 @@ static gboolean request_frame_extents_timeout(void* data)
     wxTopLevelWindowGTK* win = static_cast<wxTopLevelWindowGTK*>(data);
     win->m_netFrameExtentsTimerId = 0;
     wxTopLevelWindowGTK::DecorSize decorSize = win->m_decorSize;
-    wxGetFrameExtents(gtk_widget_get_window(win->m_widget),
-        &decorSize.left, &decorSize.right, &decorSize.top, &decorSize.bottom);
+    wxGetFrameExtents(gtk_widget_get_window(win->m_widget), &decorSize);
     win->GTKUpdateDecorSize(decorSize);
     gdk_threads_leave();
     return false;
