@@ -317,8 +317,12 @@ void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
     if (gs_decorCacheValid)
     {
         const DecorSize& decorSize = GetCachedDecorSize();
-        point.x = x - decorSize.left;
-        point.y = y - decorSize.top;
+        // Decoration sizes come directly from X11 and are in physical pixels,
+        // while our position is expressed in GTK+ logical/scaled pixels, which
+        // may be different.
+        const double scale = GetContentScaleFactor();
+        point.x = x - decorSize.left / scale;
+        point.y = y - decorSize.top / scale;
     }
     else
 #endif
