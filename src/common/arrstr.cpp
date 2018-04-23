@@ -648,7 +648,7 @@ namespace
         if ( digitStart == 0 )
         {
             fragment.text = text.Mid(0, digitLength);
-            fragment.text.ToDouble(&fragment.value);
+            fragment.text.ToLong(&fragment.value);
             fragment.type = wxFRAGMENT_TYPE_DIGIT;
 
             text.erase(0, digitLength);
