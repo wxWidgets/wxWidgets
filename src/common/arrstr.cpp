@@ -595,7 +595,7 @@ namespace
     // wxStringFragment
     // ----------------------------------------------------------------------------
     // 
-    // Lightweight object returned by wxString::GetNaturalFragment()
+    // Lightweight object returned by GetNaturalFragment().
     // Represents either a number, or a string which contains no numerical digits.
     class wxStringFragment
     {
