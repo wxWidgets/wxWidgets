@@ -493,7 +493,7 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
         // We need to convert the X11 physical extents to GTK+ "logical" units
         int scale = 1;
 #if GTK_CHECK_VERSION(3,10,0)
-        if (wx_is_at_least_gtk3(10))
+        if (gtk_check_version(3,10,0) == NULL)
             scale = gdk_window_get_scale_factor(window);
 #endif
         long* p = (long*)data;
