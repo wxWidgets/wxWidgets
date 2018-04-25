@@ -28,9 +28,9 @@
 #include "wx/afterstd.h"
 #include "wx/regex.h"
 
-#ifdef __WXMSW__
-    #include "shlwapi.h"
-#elseifdef __GNU__
+#if defined( __WINDOWS__ )
+    #include <shlwapi.h>
+#elif defined( __GNU__ )
     #include <string.h>
 #endif
 
@@ -597,9 +597,8 @@ namespace    // enum, class and functions needed by wxCmpNatural().
     // wxStringFragment
     // ----------------------------------------------------------------------------
     // 
-    // Lightweight object returned by wxString::GetNaturalFragment()
-    // Consists of either a number, or a string which contains no numerical digits.
-    // Is used by wxString::CompareNatural()
+    // Lightweight object returned by GetNaturalFragment().
+    // Represents either a number, or a string which contains no numerical digits.
     class wxStringFragment
     {
     public:
@@ -745,10 +744,10 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 // use the wxWidgets version, wxCmpNatural(). 
 int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2)
 {
-    #ifdef __WXMSW__
+    #if defined( __WINDOWS__ )
         return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
 
-    #elseifdef __GNU__
+    #elif defined( __GNU__ )
         return  strverscmp( s1.wc_str(), s2.wc_str() );
 
     #else
@@ -756,4 +755,3 @@ int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2)
 
     #endif
 }
-
