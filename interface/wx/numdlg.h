@@ -1,9 +1,82 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        numdlg.h
-// Purpose:     interface of global functions
+// Purpose:     interface of wxNumberEntryDialog
 // Author:      wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+    @class wxNumberEntryDialog
+
+    This class represents a dialog that requests a numeric input from the user.
+    It is implemented as a generic wxWidgets dialog.
+
+    @library{wxcore}
+    @category{cmndlg}
+
+    @see @ref overview_cmndlg_numeric
+*/
+class wxNumberEntryDialog : public wxDialog
+{
+public:
+    /**
+        Default constructor.
+
+        Call Create() to really create the dialog later.
+     */
+    wxNumberEntryDialog();
+
+    /**
+        Constructor.
+
+        Use ShowModal() to show the dialog.
+
+        See Create() method for parameter description.
+    */
+    wxNumberEntryDialog(wxWindow *parent,
+                        const wxString& message,
+                        const wxString& prompt,
+                        const wxString& caption,
+                        long value, long min, long max,
+                        const wxPoint& pos = wxDefaultPosition);
+
+    /**
+        @param parent
+            Parent window.
+        @param message
+            Message to show on the dialog.
+        @param prompt
+            The prompt of the dialog.
+        @param caption
+            The caption of the dialog.
+        @param value
+            The default value.
+        @param min
+            The minimal value.
+        @param max
+            The maximal value.
+        @param pos
+            Dialog position.
+    */
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& prompt,
+                const wxString& caption,
+                long value, long min, long max,
+                const wxPoint& pos = wxDefaultPosition);
+
+    /**
+        Returns the value that the user has entered if the user has pressed OK,
+        or the original value if the user has pressed Cancel.
+    */
+    wxString GetValue() const;
+
+};
+
+
+// ============================================================================
+// Global functions/macros
+// ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
 //@{
