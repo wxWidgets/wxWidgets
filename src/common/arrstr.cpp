@@ -28,8 +28,8 @@
 #include "wx/afterstd.h"
 #include "wx/regex.h"
 
-#ifdef __WXMSW__
-    #include "shlwapi.h"
+#ifdef __WINDOWS__
+    #include <shlwapi.h>
 #endif
 
 
@@ -731,7 +731,7 @@ namespace
 
 int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
 #else
     return CompareNaturalFunction( s1, s2 );
