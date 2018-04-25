@@ -30,6 +30,8 @@
 
 #ifdef __WXMSW__
     #include "shlwapi.h"
+#elseifdef __GNU__
+    #include <string.h>
 #endif
 
 
@@ -581,7 +583,7 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep, const wxChar escape
 }
 
 
-namespace
+namespace    // enum, class and functions needed by wxCmpNatural().
 {
     enum wxStringFragmentType
     {
@@ -709,33 +711,49 @@ namespace
         return 0;
     }
 
-
-    int CompareNaturalFunction(const wxString& s1, const wxString& s2)
-    {
-        wxString lhs(s1);
-        wxString rhs(s2);
-
-        int comparison = 0;
-
-        while ( (comparison == 0) && (!lhs.empty() || !rhs.empty()) )
-        {
-            wxStringFragment fragmentL = GetFragment(lhs);
-            wxStringFragment fragmentR = GetFragment(rhs);
-            comparison = CompareFragmentNatural(fragmentL, fragmentR);
-        }
-
-        return comparison;
-    }
-
 } // unnamed namespace
 
 
+
+// ----------------------------------------------------------------------------
+// wxCmpNaturalNative
+// ----------------------------------------------------------------------------
+// 
 int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {
-#ifdef __WXMSW__
-    return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
-#else
-    return CompareNaturalFunction( s1, s2 );
-#endif
+    wxString lhs(s1);
+    wxString rhs(s2);
+
+    int comparison = 0;
+
+    while ( (comparison == 0) && (!lhs.empty() || !rhs.empty()) )
+    {
+        wxStringFragment fragmentL = GetFragment(lhs);
+        wxStringFragment fragmentR = GetFragment(rhs);
+        comparison = CompareFragmentNatural(fragmentL, fragmentR);
+    }
+
+    return comparison;
+}
+
+
+// ----------------------------------------------------------------------------
+// wxCmpNaturalNative
+// ----------------------------------------------------------------------------
+// 
+// If a native version of Natural sort is available, then use that, otherwise
+// use the wxWidgets version, wxCmpNatural(). 
+int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2)
+{
+    #ifdef __WXMSW__
+        return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
+
+    #elseifdef __GNU__
+        return  strverscmp( s1.wc_str(), s2.wc_str() );
+
+    #else
+        return wxCmpNatural( s1, s2 );
+
+    #endif
 }
 

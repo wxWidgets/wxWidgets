@@ -425,6 +425,9 @@ int wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2);
         sorting, the result is that e.g. file names containing numbers are
         sorted in a natural way.
 
+        This function will use an OS native function if one is available,
+        to ensure that the sort order is the same as the OS uses.
+        
         Comparison is case insensitive.
             
         e.g. Sorting using wxDictionaryStringSortAscending() results in:
@@ -464,6 +467,37 @@ int wxNaturalStringSortAscending(const wxString& s1, const wxString& s2);
         @since 3.1.2
     */
 int wxNaturalStringSortDescending(const wxString& s1, const wxString& s2);
+
+
+    /**
+        This is wxWidgets' own implementation of the natural sort comparison
+        function. This will be used whenever an OS native function is not available.
+        
+        Since OS native implementations might differ from each other, the user might
+        wish to use this function which behaves in the same way across all platforms.
+        
+        @since 3.1.2
+    */
+int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2);
+
+
+    /**
+        Comparison function, identical to wxNaturalStringSortAscending().
+        In fact, wxNaturalStringSortAscending() and wxNaturalStringSortDescending()
+        are both implemented using this function.
+        
+        When an OS native natural sort function is available, that will be used,
+        otherwise wxCmpNatural() will be used.
+
+        Be aware that OS native implementations might differ from each other, and
+        might change behaviour from release to release.
+        
+        @see wxNaturalStringSortAscending(),
+             wxNaturalStringSortDescending()
+             
+        @since 3.1.2
+    */
+int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2);
 
 
 // ============================================================================

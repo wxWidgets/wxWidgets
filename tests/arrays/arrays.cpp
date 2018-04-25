@@ -775,32 +775,28 @@ TEST_CASE("wxNaturalStringSortAscending()", "[array][sort][string]")
     wxString s12("07String20");
     wxString s13("007String100");
     
-    CHECK(wxNaturalStringSortAscending(s01, s02) < 0);
-    CHECK(wxNaturalStringSortAscending(s02, s03) < 0);
-    CHECK(wxNaturalStringSortAscending(s03, s04) == 0);         // Check that case is ignored
-
-    CHECK(wxNaturalStringSortAscending(s05, s06) < 0);
-    CHECK(wxNaturalStringSortAscending(s06, s07) < 0);
-    CHECK(wxNaturalStringSortAscending(s07, s08) < 0);
-    CHECK(wxNaturalStringSortAscending(s08, s09) < 0);
-    CHECK(wxNaturalStringSortAscending(s09, s10) < 0);
-    CHECK(wxNaturalStringSortAscending(s11, s12) < 0);
-    CHECK(wxNaturalStringSortAscending(s12, s13) < 0);
-
-    CHECK(wxNaturalStringSortAscending(s01, s01) == 0);         // Check that equality works in all cases
-    CHECK(wxNaturalStringSortAscending(s02, s02) == 0);
-    CHECK(wxNaturalStringSortAscending(s03, s03) == 0);
-    CHECK(wxNaturalStringSortAscending(s04, s04) == 0);
-    CHECK(wxNaturalStringSortAscending(s05, s05) == 0);
-    CHECK(wxNaturalStringSortAscending(s06, s06) == 0);
-    CHECK(wxNaturalStringSortAscending(s07, s07) == 0);
-    CHECK(wxNaturalStringSortAscending(s08, s08) == 0);
-    CHECK(wxNaturalStringSortAscending(s09, s09) == 0);
-    CHECK(wxNaturalStringSortAscending(s10, s10) == 0);
-    CHECK(wxNaturalStringSortAscending(s11, s11) == 0);
-    CHECK(wxNaturalStringSortAscending(s12, s12) == 0);
-    CHECK(wxNaturalStringSortAscending(s13, s13) == 0);
-    
-    CHECK(wxNaturalStringSortDescending(s01, s02) > 0);         // Check that reverse sort works
+    CHECK(wxCmpNatural(s01, s02) < 0);
+    CHECK(wxCmpNatural(s02, s03) < 0);
+    CHECK(wxCmpNatural(s03, s04) == 0);         // Check that case is ignored
+    CHECK(wxCmpNatural(s05, s06) < 0);
+    CHECK(wxCmpNatural(s06, s07) < 0);
+    CHECK(wxCmpNatural(s07, s08) < 0);
+    CHECK(wxCmpNatural(s08, s09) < 0);
+    CHECK(wxCmpNatural(s09, s10) < 0);
+    CHECK(wxCmpNatural(s11, s12) < 0);
+    CHECK(wxCmpNatural(s12, s13) < 0);
+    CHECK(wxCmpNatural(s01, s01) == 0);         // Check that equality works in all cases
+    CHECK(wxCmpNatural(s02, s02) == 0);
+    CHECK(wxCmpNatural(s03, s03) == 0);
+    CHECK(wxCmpNatural(s04, s04) == 0);
+    CHECK(wxCmpNatural(s05, s05) == 0);
+    CHECK(wxCmpNatural(s06, s06) == 0);
+    CHECK(wxCmpNatural(s07, s07) == 0);
+    CHECK(wxCmpNatural(s08, s08) == 0);
+    CHECK(wxCmpNatural(s09, s09) == 0);
+    CHECK(wxCmpNatural(s10, s10) == 0);
+    CHECK(wxCmpNatural(s11, s11) == 0);
+    CHECK(wxCmpNatural(s12, s12) == 0);
+    CHECK(wxCmpNatural(s13, s13) == 0);
 }
 
