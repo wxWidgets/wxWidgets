@@ -205,6 +205,15 @@ is obtained using wxTextEntryDialog::GetValue().
 
 
 
+@section overview_cmndlg_numeric wxNumberEntryDialog Overview
+
+Classes: wxNumberEntryDialog
+
+This is a dialog with a numeric entry field. The value that the user entered
+is obtained using wxNumberEntryDialog::GetValue().
+
+
+
 @section overview_cmndlg_msg wxMessageDialog Overview
 
 Classes: wxMessageDialog
