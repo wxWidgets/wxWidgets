@@ -29,9 +29,11 @@
 #include "wx/regex.h"
 
 #if defined( __WINDOWS__ )
+    #ifdef __MINGW32__
+        #define _WIN32_IE 0x0501
+    #endif
+
     #include <shlwapi.h>
-#elif defined( __GNU__ )
-    #include <string.h>
 #endif
 
 
@@ -744,7 +746,7 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 // use the wxWidgets version, wxCmpNatural(). 
 int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2)
 {
-    #if defined( __WINDOWS__ )
+    #if defined( __WINDOWS__ ) && !defined( __MINGW__ )         // MinGW doesn't seem to support StrCmpLogicalW()
         return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
 
     #else
