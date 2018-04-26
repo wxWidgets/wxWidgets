@@ -747,9 +747,6 @@ int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2)
     #if defined( __WINDOWS__ )
         return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
 
-    #elif defined( __GNU__ )
-        return  strverscmp( s1.wc_str(), s2.wc_str() );
-
     #else
         return wxCmpNatural( s1, s2 );
 
