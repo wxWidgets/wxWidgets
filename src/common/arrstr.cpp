@@ -735,6 +735,17 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 
 
 // ----------------------------------------------------------------------------
+// Declaration of StrCmpLogicalW()
+// ----------------------------------------------------------------------------
+// 
+// In some distributions of MinGW32, this function is exported in the library,
+// but not declared in shlwapi.h. Therefore we declare it here.
+#if defined( __MINGW32_TOOLCHAIN__ )
+    LWSTDAPI_(int) StrCmpLogicalW(LPCWSTR psz1, LPCWSTR psz2);
+#endif
+
+
+// ----------------------------------------------------------------------------
 // wxCmpNaturalNative
 // ----------------------------------------------------------------------------
 // 
@@ -742,7 +753,7 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 // use the wxWidgets version, wxCmpNatural(). 
 int wxCMPFUNC_CONV wxCmpNaturalNative(const wxString& s1, const wxString& s2)
 {
-    #if defined( __WINDOWS__ ) && !defined( __MINGW32_TOOLCHAIN__ )         // MinGW doesn't seem to support StrCmpLogicalW()
+    #if defined( __WINDOWS__ ) 
         return StrCmpLogicalW( s1.wc_str(), s2.wc_str() );
 
     #else
