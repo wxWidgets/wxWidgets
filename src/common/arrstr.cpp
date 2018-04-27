@@ -741,10 +741,7 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 // In some distributions of MinGW32, this function is exported in the library,
 // but not declared in shlwapi.h. Therefore we declare it here.
 #if defined( __MINGW32_TOOLCHAIN__ )
-extern "C"
-{
     extern "C" __declspec(dllimport) int WINAPI StrCmpLogicalW(LPCWSTR psz1, LPCWSTR psz2);
-}
 #endif
 
 
