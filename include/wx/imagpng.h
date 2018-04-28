@@ -19,7 +19,6 @@
 
 #include "wx/image.h"
 #include "wx/versioninfo.h"
-#include <set>
 
 #define wxIMAGE_OPTION_PNG_FORMAT    wxT("PngFormat")
 #define wxIMAGE_OPTION_PNG_BITDEPTH  wxT("PngBitDepth")
