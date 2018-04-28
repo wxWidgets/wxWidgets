@@ -86,48 +86,48 @@ public:
 class CustomTagsDialog : public wxDialog
 {
 public:
-	CustomTagsDialog(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
-	virtual ~CustomTagsDialog();
-	void SetOptionNames(CustomTags* customTags) { m_customTags = customTags; }
-	wxButton* ButtonRemove;
-	wxButton* ButtonOK;
-	wxPanel* Panel1;
-	wxButton* ButtonAdd;
-	wxStaticText* StaticTextName;
-	wxStaticText* StaticTextValue;
-	wxStaticText* StaticTextMessage;
-	wxTextCtrl* TextCtrlValue;
-	wxTextCtrl* TextCtrlName;
-	wxListBox* ListBoxTags;
+    CustomTagsDialog(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
+    virtual ~CustomTagsDialog();
+    void SetOptionNames(CustomTags* customTags) { m_customTags = customTags; }
+    wxButton* ButtonRemove;
+    wxButton* ButtonOK;
+    wxPanel* Panel1;
+    wxButton* ButtonAdd;
+    wxStaticText* StaticTextName;
+    wxStaticText* StaticTextValue;
+    wxStaticText* StaticTextMessage;
+    wxTextCtrl* TextCtrlValue;
+    wxTextCtrl* TextCtrlName;
+    wxListBox* ListBoxTags;
 
 protected:
-	static const long ID_LISTBOXTAGS;
-	static const long ID_STATICTEXTNAME;
-	static const long ID_TEXTCTRLNAME;
-	static const long ID_STATICTEXTMESSAGE;
-	static const long ID_STATICTEXTVALUE;
-	static const long ID_TEXTCTRLVALUE;
-	static const long ID_BUTTONADD;
-	static const long ID_BUTTONREMOVE;
-	static const long ID_BUTTONOK;
-	static const long ID_PANEL1;
+    static const long ID_LISTBOXTAGS;
+    static const long ID_STATICTEXTNAME;
+    static const long ID_TEXTCTRLNAME;
+    static const long ID_STATICTEXTMESSAGE;
+    static const long ID_STATICTEXTVALUE;
+    static const long ID_TEXTCTRLVALUE;
+    static const long ID_BUTTONADD;
+    static const long ID_BUTTONREMOVE;
+    static const long ID_BUTTONOK;
+    static const long ID_PANEL1;
 
 private:
-	void OnListBoxCustomTagsSelect(wxCommandEvent& event);
-	void OnButtonAddClick(wxCommandEvent& event);
-	void OnButtonRemoveClick(wxCommandEvent& event);
-	void OnButtonOKClick(wxCommandEvent& event);
-	void OnInit(wxInitDialogEvent& event);
-	void OnTextCtrlNameText(wxCommandEvent& event);
-	void OnTextCtrlValueText(wxCommandEvent& event);
-	void UpdateControlStatus();
-	void Add(const wxString& name, const wxString& value);
-	std::pair<wxString, wxString> GetListData();
-	wxString GetFormattedListItem(const wxString& name, const wxString& value);
-	int FindListByKey(const wxString& name);
+    void OnListBoxCustomTagsSelect(wxCommandEvent& event);
+    void OnButtonAddClick(wxCommandEvent& event);
+    void OnButtonRemoveClick(wxCommandEvent& event);
+    void OnButtonOKClick(wxCommandEvent& event);
+    void OnInit(wxInitDialogEvent& event);
+    void OnTextCtrlNameText(wxCommandEvent& event);
+    void OnTextCtrlValueText(wxCommandEvent& event);
+    void UpdateControlStatus();
+    void Add(const wxString& name, const wxString& value);
+    std::pair<wxString, wxString> GetListData();
+    wxString GetFormattedListItem(const wxString& name, const wxString& value);
+    int FindListByKey(const wxString& name);
 
-	CustomTags* m_customTags;
-	DECLARE_EVENT_TABLE()
+    CustomTags* m_customTags;
+    DECLARE_EVENT_TABLE()
 };
 
 const long CustomTagsDialog::ID_LISTBOXTAGS = wxNewId();
@@ -195,9 +195,9 @@ enum
 {
     ID_ROTATE_LEFT = wxID_HIGHEST+1,
     ID_ROTATE_RIGHT,
-	ID_RESIZE,
-	ID_CUSTOMTAGS,
-	ID_PAINT_BG
+    ID_RESIZE,
+    ID_CUSTOMTAGS,
+    ID_PAINT_BG
 };
 
 class MyImageFrame : public wxFrame
@@ -207,15 +207,15 @@ public:
     {
         Create(parent, desc, wxBitmap(image, wxBITMAP_SCREEN_DEPTH, scale),
             image.GetImageCount(desc));
-		const wxArrayString& optionNames = image.GetOptionNames();
-		for (wxArrayString::const_iterator it = optionNames.begin(); it != optionNames.end(); ++it)
-		{
-			m_customTags.insert(CustomTags::value_type(*it, image.GetOption(*it)));
-		}
+        const wxArrayString& optionNames = image.GetOptionNames();
+        for (wxArrayString::const_iterator it = optionNames.begin(); it != optionNames.end(); ++it)
+        {
+            m_customTags.insert(CustomTags::value_type(*it, image.GetOption(*it)));
+        }
     }
 
     MyImageFrame(wxFrame *parent, const wxString& desc, const wxBitmap& bitmap)
-	{
+    {
         Create(parent, desc, bitmap);
     }
 
@@ -240,9 +240,9 @@ private:
         menu->AppendCheckItem(ID_PAINT_BG, wxT("&Paint background"),
                               "Uncheck this for transparent images");
         menu->AppendSeparator();
-		menu->Append(ID_RESIZE, wxT("&Fit to window\tCtrl-F"));
-		menu->Append(ID_CUSTOMTAGS, wxT("Change PNG custom &tags\tCtrl-T"));
-		menu->Append(wxID_ZOOM_IN, "Zoom &in\tCtrl-+");
+        menu->Append(ID_RESIZE, wxT("&Fit to window\tCtrl-F"));
+        menu->Append(ID_CUSTOMTAGS, wxT("Change PNG custom &tags\tCtrl-T"));
+        menu->Append(wxID_ZOOM_IN, "Zoom &in\tCtrl-+");
         menu->Append(wxID_ZOOM_OUT, "Zoom &out\tCtrl--");
         menu->Append(wxID_ZOOM_100, "Reset zoom to &100%\tCtrl-1");
         menu->AppendSeparator();
@@ -409,10 +409,10 @@ private:
                                             this);
             if ( sel != -1 )
             {
-				for (CustomTags::const_iterator it = m_customTags.begin(); it != m_customTags.end(); ++it)
-					image.SetOption(it->first, it->second);
+                for (CustomTags::const_iterator it = m_customTags.begin(); it != m_customTags.end(); ++it)
+                    image.SetOption(it->first, it->second);
 
-				image.SetOption(wxIMAGE_OPTION_PNG_FORMAT, pngvalues[sel]);
+                image.SetOption(wxIMAGE_OPTION_PNG_FORMAT, pngvalues[sel]);
                 image.SetOption(wxIMAGE_OPTION_PNG_BITDEPTH, sel % 2 ? 16 : 8);
 
                 // these values are taken from OptiPNG with -o3 switch
@@ -473,15 +473,15 @@ private:
 #endif // wxUSE_FILEDLG
     }
 
-	void OnCustomTags(wxCommandEvent& WXUNUSED(event))
-	{
-		CustomTagsDialog dlg(this);
-		dlg.SetOptionNames(&m_customTags);
-		dlg.ShowModal();
-	}
+    void OnCustomTags(wxCommandEvent& WXUNUSED(event))
+    {
+        CustomTagsDialog dlg(this);
+        dlg.SetOptionNames(&m_customTags);
+        dlg.ShowModal();
+    }
 
-	void OnResize(wxCommandEvent& WXUNUSED(event))
-	{
+    void OnResize(wxCommandEvent& WXUNUSED(event))
+    {
         wxImage img(m_bitmap.ConvertToImage());
 
         const wxSize size = GetClientSize();
@@ -533,7 +533,7 @@ private:
 
     wxBitmap m_bitmap;
     double m_zoom;
-	CustomTags m_customTags;
+    CustomTags m_customTags;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -693,7 +693,7 @@ wxBEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_MENU(wxID_SAVEAS, MyImageFrame::OnSave)
     EVT_MENU_RANGE(ID_ROTATE_LEFT, ID_ROTATE_RIGHT, MyImageFrame::OnRotate)
     EVT_MENU(ID_RESIZE, MyImageFrame::OnResize)
-	EVT_MENU(ID_CUSTOMTAGS, MyImageFrame::OnCustomTags)
+    EVT_MENU(ID_CUSTOMTAGS, MyImageFrame::OnCustomTags)
 
     EVT_MENU(wxID_ZOOM_IN, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_OUT, MyImageFrame::OnZoom)
@@ -1082,82 +1082,82 @@ void MyFrame::OnThumbnail( wxCommandEvent &WXUNUSED(event) )
 
 CustomTagsDialog::CustomTagsDialog(wxWindow* parent, wxWindowID id, const wxPoint&, const wxSize&)
 {
-	m_customTags = NULL;
-	wxFlexGridSizer* FlexGridSizer;
-	wxBoxSizer* BoxSizer2;
-	wxBoxSizer* BoxSizer1;
+    m_customTags = NULL;
+    wxFlexGridSizer* FlexGridSizer;
+    wxBoxSizer* BoxSizer2;
+    wxBoxSizer* BoxSizer1;
 
-	Create(parent, id, _("Custom Tags"), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxDEFAULT_DIALOG_STYLE | wxCLOSE_BOX, _T("id"));
-	SetClientSize(wxDefaultSize);
-	Move(wxDefaultPosition);
-	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
-	ListBoxTags = new wxListBox(this, ID_LISTBOXTAGS, wxDefaultPosition, wxSize(325, 207), 0, 0, 0, wxDefaultValidator, _T("ID_LISTBOXTAGS"));
-	BoxSizer1->Add(ListBoxTags, 1, wxALL | wxEXPAND, 5);
-	FlexGridSizer = new wxFlexGridSizer(0, 2, 0, 0);
-	StaticTextName = new wxStaticText(this, ID_STATICTEXTNAME, _("Name"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXTNAME"));
-	FlexGridSizer->Add(StaticTextName, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	TextCtrlName = new wxTextCtrl(this, ID_TEXTCTRLNAME, wxEmptyString, wxDefaultPosition, wxSize(272, 21), 0, wxDefaultValidator, _T("ID_TEXTCTRLNAME"));
-	FlexGridSizer->Add(TextCtrlName, 1, wxALL | wxEXPAND, 5);
-	StaticTextValue = new wxStaticText(this, ID_STATICTEXTVALUE, _("Value"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXTVALUE"));
-	FlexGridSizer->Add(StaticTextValue, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	TextCtrlValue = new wxTextCtrl(this, ID_TEXTCTRLVALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRLVALUE"));
-	FlexGridSizer->Add(TextCtrlValue, 1, wxALL | wxEXPAND, 5);
-	BoxSizer1->Add(FlexGridSizer, 0, wxALL | wxEXPAND, 5);
-	StaticTextMessage = new wxStaticText(this, ID_STATICTEXTMESSAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXTMESSAGE"));
-	BoxSizer1->Add(StaticTextMessage, 0, wxALL | wxEXPAND, 5);
-	Panel1 = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
-	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
-	ButtonAdd = new wxButton(Panel1, ID_BUTTONADD, _("Add"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTONADD"));
-	BoxSizer2->Add(ButtonAdd, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	ButtonRemove = new wxButton(Panel1, ID_BUTTONREMOVE, _("Remove"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTONREMOVE"));
-	BoxSizer2->Add(ButtonRemove, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	ButtonOK = new wxButton(Panel1, ID_BUTTONOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTONOK"));
-	BoxSizer2->Add(ButtonOK, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	Panel1->SetSizer(BoxSizer2);
-	BoxSizer2->Fit(Panel1);
-	BoxSizer2->SetSizeHints(Panel1);
-	BoxSizer1->Add(Panel1, 0, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
-	BoxSizer1->SetSizeHints(this);
-	Center();
+    Create(parent, id, _("Custom Tags"), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxDEFAULT_DIALOG_STYLE | wxCLOSE_BOX, _T("id"));
+    SetClientSize(wxDefaultSize);
+    Move(wxDefaultPosition);
+    BoxSizer1 = new wxBoxSizer(wxVERTICAL);
+    ListBoxTags = new wxListBox(this, ID_LISTBOXTAGS, wxDefaultPosition, wxSize(325, 207), 0, 0, 0, wxDefaultValidator, _T("ID_LISTBOXTAGS"));
+    BoxSizer1->Add(ListBoxTags, 1, wxALL | wxEXPAND, 5);
+    FlexGridSizer = new wxFlexGridSizer(0, 2, 0, 0);
+    StaticTextName = new wxStaticText(this, ID_STATICTEXTNAME, _("Name"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXTNAME"));
+    FlexGridSizer->Add(StaticTextName, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+    TextCtrlName = new wxTextCtrl(this, ID_TEXTCTRLNAME, wxEmptyString, wxDefaultPosition, wxSize(272, 21), 0, wxDefaultValidator, _T("ID_TEXTCTRLNAME"));
+    FlexGridSizer->Add(TextCtrlName, 1, wxALL | wxEXPAND, 5);
+    StaticTextValue = new wxStaticText(this, ID_STATICTEXTVALUE, _("Value"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXTVALUE"));
+    FlexGridSizer->Add(StaticTextValue, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+    TextCtrlValue = new wxTextCtrl(this, ID_TEXTCTRLVALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRLVALUE"));
+    FlexGridSizer->Add(TextCtrlValue, 1, wxALL | wxEXPAND, 5);
+    BoxSizer1->Add(FlexGridSizer, 0, wxALL | wxEXPAND, 5);
+    StaticTextMessage = new wxStaticText(this, ID_STATICTEXTMESSAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXTMESSAGE"));
+    BoxSizer1->Add(StaticTextMessage, 0, wxALL | wxEXPAND, 5);
+    Panel1 = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
+    BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+    ButtonAdd = new wxButton(Panel1, ID_BUTTONADD, _("Add"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTONADD"));
+    BoxSizer2->Add(ButtonAdd, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+    ButtonRemove = new wxButton(Panel1, ID_BUTTONREMOVE, _("Remove"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTONREMOVE"));
+    BoxSizer2->Add(ButtonRemove, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+    ButtonOK = new wxButton(Panel1, ID_BUTTONOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTONOK"));
+    BoxSizer2->Add(ButtonOK, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+    Panel1->SetSizer(BoxSizer2);
+    BoxSizer2->Fit(Panel1);
+    BoxSizer2->SetSizeHints(Panel1);
+    BoxSizer1->Add(Panel1, 0, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+    SetSizer(BoxSizer1);
+    BoxSizer1->Fit(this);
+    BoxSizer1->SetSizeHints(this);
+    Center();
 
-	Connect(ID_LISTBOXTAGS, wxEVT_COMMAND_LISTBOX_SELECTED, (wxObjectEventFunction)&CustomTagsDialog::OnListBoxCustomTagsSelect);
-	Connect(ID_TEXTCTRLNAME, wxEVT_COMMAND_TEXT_UPDATED, (wxObjectEventFunction)&CustomTagsDialog::OnTextCtrlNameText);
-	Connect(ID_TEXTCTRLVALUE, wxEVT_COMMAND_TEXT_UPDATED, (wxObjectEventFunction)&CustomTagsDialog::OnTextCtrlValueText);
-	Connect(ID_BUTTONADD, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&CustomTagsDialog::OnButtonAddClick);
-	Connect(ID_BUTTONREMOVE, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&CustomTagsDialog::OnButtonRemoveClick);
-	Connect(ID_BUTTONOK, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&CustomTagsDialog::OnButtonOKClick);
-	Connect(wxID_ANY, wxEVT_INIT_DIALOG, (wxObjectEventFunction)&CustomTagsDialog::OnInit);
+    Connect(ID_LISTBOXTAGS, wxEVT_COMMAND_LISTBOX_SELECTED, (wxObjectEventFunction)&CustomTagsDialog::OnListBoxCustomTagsSelect);
+    Connect(ID_TEXTCTRLNAME, wxEVT_COMMAND_TEXT_UPDATED, (wxObjectEventFunction)&CustomTagsDialog::OnTextCtrlNameText);
+    Connect(ID_TEXTCTRLVALUE, wxEVT_COMMAND_TEXT_UPDATED, (wxObjectEventFunction)&CustomTagsDialog::OnTextCtrlValueText);
+    Connect(ID_BUTTONADD, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&CustomTagsDialog::OnButtonAddClick);
+    Connect(ID_BUTTONREMOVE, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&CustomTagsDialog::OnButtonRemoveClick);
+    Connect(ID_BUTTONOK, wxEVT_COMMAND_BUTTON_CLICKED, (wxObjectEventFunction)&CustomTagsDialog::OnButtonOKClick);
+    Connect(wxID_ANY, wxEVT_INIT_DIALOG, (wxObjectEventFunction)&CustomTagsDialog::OnInit);
 
-	wxString knownOptions[] =
-	{
-		wxIMAGE_OPTION_PNG_FORMAT,
-		wxIMAGE_OPTION_PNG_BITDEPTH,
-		wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL,
-		wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL,
-		wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY,
-		wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE,
-		wxIMAGE_OPTION_QUALITY,
-		wxIMAGE_OPTION_FILENAME,
-		wxIMAGE_OPTION_RESOLUTION,
-		wxIMAGE_OPTION_RESOLUTIONX,
-		wxIMAGE_OPTION_RESOLUTIONY,
-		wxIMAGE_OPTION_RESOLUTIONUNIT,
-		wxIMAGE_OPTION_MAX_WIDTH,
-		wxIMAGE_OPTION_MAX_HEIGHT
-	};
-	for (int index = 0; index < sizeof(knownOptions) / sizeof(knownOptions[0]); ++index)
-	{
-		wxString optionName = knownOptions[index];
-		wxASSERT(wxPNGHandler::IsKnownOption(optionName));
-		optionName.MakeLower();
-		wxASSERT(wxPNGHandler::IsKnownOption(optionName));
-		optionName.MakeUpper();
-		wxASSERT(wxPNGHandler::IsKnownOption(optionName));
-		optionName.MakeCapitalized();
-		wxASSERT(wxPNGHandler::IsKnownOption(optionName));
-	}
+    wxString knownOptions[] =
+    {
+        wxIMAGE_OPTION_PNG_FORMAT,
+        wxIMAGE_OPTION_PNG_BITDEPTH,
+        wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL,
+        wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL,
+        wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY,
+        wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE,
+        wxIMAGE_OPTION_QUALITY,
+        wxIMAGE_OPTION_FILENAME,
+        wxIMAGE_OPTION_RESOLUTION,
+        wxIMAGE_OPTION_RESOLUTIONX,
+        wxIMAGE_OPTION_RESOLUTIONY,
+        wxIMAGE_OPTION_RESOLUTIONUNIT,
+        wxIMAGE_OPTION_MAX_WIDTH,
+        wxIMAGE_OPTION_MAX_HEIGHT
+    };
+    for (int index = 0; index < sizeof(knownOptions) / sizeof(knownOptions[0]); ++index)
+    {
+        wxString optionName = knownOptions[index];
+        wxASSERT(wxPNGHandler::IsKnownOption(optionName));
+        optionName.MakeLower();
+        wxASSERT(wxPNGHandler::IsKnownOption(optionName));
+        optionName.MakeUpper();
+        wxASSERT(wxPNGHandler::IsKnownOption(optionName));
+        optionName.MakeCapitalized();
+        wxASSERT(wxPNGHandler::IsKnownOption(optionName));
+    }
 }
 
 CustomTagsDialog::~CustomTagsDialog()
@@ -1166,122 +1166,122 @@ CustomTagsDialog::~CustomTagsDialog()
 
 std::pair<wxString, wxString> CustomTagsDialog::GetListData()
 {
-	wxString name, value;
-	int selection = ListBoxTags->GetSelection();
-	if (selection != wxNOT_FOUND)
-	{
-		wxString tag = ListBoxTags->GetString(selection);
-		int position = tag.Find('=');
-		if (position != wxNOT_FOUND)
-		{
-			name = tag.SubString(0, position - 1);
-			value = tag.SubString(position + 1, tag.length() - 1);
-		}
-	}
-	return std::pair<wxString, wxString>(name, value);
+    wxString name, value;
+    int selection = ListBoxTags->GetSelection();
+    if (selection != wxNOT_FOUND)
+    {
+        wxString tag = ListBoxTags->GetString(selection);
+        int position = tag.Find('=');
+        if (position != wxNOT_FOUND)
+        {
+            name = tag.SubString(0, position - 1);
+            value = tag.SubString(position + 1, tag.length() - 1);
+        }
+    }
+    return std::pair<wxString, wxString>(name, value);
 }
 
 void CustomTagsDialog::UpdateControlStatus()
 {
-	if (GetListData().first.CompareTo(TextCtrlName->GetValue(), wxString::ignoreCase) != 0)
-		ListBoxTags->SetSelection(wxNOT_FOUND);
-	bool knownOption = wxPNGHandler::IsKnownOption(TextCtrlName->GetValue());
-	StaticTextMessage->SetLabel(knownOption ? "Known option name - editing not permitted" : "");
-	ButtonAdd->Enable(!knownOption && TextCtrlName->GetValue().length() && TextCtrlValue->GetValue().length());
-	ButtonRemove->Enable(!knownOption && ListBoxTags->GetSelection() != wxNOT_FOUND);
+    if (GetListData().first.CompareTo(TextCtrlName->GetValue(), wxString::ignoreCase) != 0)
+        ListBoxTags->SetSelection(wxNOT_FOUND);
+    bool knownOption = wxPNGHandler::IsKnownOption(TextCtrlName->GetValue());
+    StaticTextMessage->SetLabel(knownOption ? "Known option name - editing not permitted" : "");
+    ButtonAdd->Enable(!knownOption && TextCtrlName->GetValue().length() && TextCtrlValue->GetValue().length());
+    ButtonRemove->Enable(!knownOption && ListBoxTags->GetSelection() != wxNOT_FOUND);
 }
 
 void CustomTagsDialog::OnListBoxCustomTagsSelect(wxCommandEvent& WXUNUSED(event))
 {
-	std::pair<wxString, wxString> listPair = GetListData();
-	TextCtrlName->SetValue(listPair.first);
-	TextCtrlValue->SetValue(listPair.second);
-	UpdateControlStatus();
+    std::pair<wxString, wxString> listPair = GetListData();
+    TextCtrlName->SetValue(listPair.first);
+    TextCtrlValue->SetValue(listPair.second);
+    UpdateControlStatus();
 }
 
 wxString CustomTagsDialog::GetFormattedListItem(const wxString& name, const wxString& value)
 {
-	return wxString::Format("%s=%s", name, value);
+    return wxString::Format("%s=%s", name, value);
 }
 
 void CustomTagsDialog::Add(const wxString& name, const wxString& value)
 {
-	ListBoxTags->AppendString(GetFormattedListItem(name, value));
+    ListBoxTags->AppendString(GetFormattedListItem(name, value));
 }
 
 int CustomTagsDialog::FindListByKey(const wxString& name)
 {
-	for (int index = 0; index < ListBoxTags->GetCount(); ++index)
-	{
-		wxString tag = ListBoxTags->GetString(index);
-		int position = tag.Find('=');
-		if (position != wxNOT_FOUND)
-		{
-			if (name == tag.SubString(0, position - 1))
-				return index;
-		}
-	}
-	return wxNOT_FOUND;
+    for (int index = 0; index < ListBoxTags->GetCount(); ++index)
+    {
+        wxString tag = ListBoxTags->GetString(index);
+        int position = tag.Find('=');
+        if (position != wxNOT_FOUND)
+        {
+            if (name == tag.SubString(0, position - 1))
+                return index;
+        }
+    }
+    return wxNOT_FOUND;
 }
 
 void CustomTagsDialog::OnButtonAddClick(wxCommandEvent& WXUNUSED(event))
 {
-	bool knownOption = wxPNGHandler::IsKnownOption(TextCtrlName->GetValue());
-	if (knownOption)
-	{
-		wxMessageBox(wxString::Format("Failed to add known PNG option '%s'", TextCtrlName->GetValue()));
-	}
-	else
-	{
-		int existingIndex = FindListByKey(TextCtrlName->GetValue());
-		if (existingIndex != wxNOT_FOUND)
-			ListBoxTags->Delete(existingIndex);
-		CustomTags::iterator it = m_customTags->find(TextCtrlName->GetValue());
-		if (it == m_customTags->end())
-			m_customTags->insert(CustomTags::value_type(TextCtrlName->GetValue(), TextCtrlValue->GetValue()));
-		else
-			it->second = TextCtrlValue->GetValue();
-		Add(TextCtrlName->GetValue(), TextCtrlValue->GetValue());
-		ListBoxTags->SetSelection(FindListByKey(TextCtrlName->GetValue()));
-	}
-	UpdateControlStatus();
+    bool knownOption = wxPNGHandler::IsKnownOption(TextCtrlName->GetValue());
+    if (knownOption)
+    {
+        wxMessageBox(wxString::Format("Failed to add known PNG option '%s'", TextCtrlName->GetValue()));
+    }
+    else
+    {
+        int existingIndex = FindListByKey(TextCtrlName->GetValue());
+        if (existingIndex != wxNOT_FOUND)
+            ListBoxTags->Delete(existingIndex);
+        CustomTags::iterator it = m_customTags->find(TextCtrlName->GetValue());
+        if (it == m_customTags->end())
+            m_customTags->insert(CustomTags::value_type(TextCtrlName->GetValue(), TextCtrlValue->GetValue()));
+        else
+            it->second = TextCtrlValue->GetValue();
+        Add(TextCtrlName->GetValue(), TextCtrlValue->GetValue());
+        ListBoxTags->SetSelection(FindListByKey(TextCtrlName->GetValue()));
+    }
+    UpdateControlStatus();
 }
 
 void CustomTagsDialog::OnButtonRemoveClick(wxCommandEvent& WXUNUSED(event))
 {
-	CustomTags::iterator it = m_customTags->find(TextCtrlName->GetValue());
-	if (it != m_customTags->end())
-		m_customTags->erase(it);
-	ListBoxTags->Delete(ListBoxTags->GetSelection());
-	UpdateControlStatus();
+    CustomTags::iterator it = m_customTags->find(TextCtrlName->GetValue());
+    if (it != m_customTags->end())
+        m_customTags->erase(it);
+    ListBoxTags->Delete(ListBoxTags->GetSelection());
+    UpdateControlStatus();
 }
 
 void CustomTagsDialog::OnButtonOKClick(wxCommandEvent& WXUNUSED(event))
 {
-	EndDialog(wxID_OK);
+    EndDialog(wxID_OK);
 }
 
 void CustomTagsDialog::OnTextCtrlNameText(wxCommandEvent& WXUNUSED(event))
 {
-	ListBoxTags->SetSelection(FindListByKey(TextCtrlName->GetValue()));
-	UpdateControlStatus();
+    ListBoxTags->SetSelection(FindListByKey(TextCtrlName->GetValue()));
+    UpdateControlStatus();
 }
 
 void CustomTagsDialog::OnTextCtrlValueText(wxCommandEvent& WXUNUSED(event))
 {
-	UpdateControlStatus();
+    UpdateControlStatus();
 }
 
 void CustomTagsDialog::OnInit(wxInitDialogEvent& WXUNUSED(event))
 {
-	if (m_customTags != NULL)
-	{
-		for (CustomTags::const_iterator it = m_customTags->begin(); it != m_customTags->end(); ++it)
-		{
-			Add(it->first, it->second);
-		}
-	}
-	UpdateControlStatus();
+    if (m_customTags != NULL)
+    {
+        for (CustomTags::const_iterator it = m_customTags->begin(); it != m_customTags->end(); ++it)
+        {
+            Add(it->first, it->second);
+        }
+    }
+    UpdateControlStatus();
 }
 
 //-----------------------------------------------------------------------------
