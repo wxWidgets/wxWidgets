@@ -502,6 +502,7 @@ public:
     wxString GetOption(const wxString& name) const;
     int GetOptionInt(const wxString& name) const;
     bool HasOption(const wxString& name) const;
+    const wxArrayString& GetOptionNames() const;
 
     unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 ) const;
 

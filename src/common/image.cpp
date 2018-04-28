@@ -2451,6 +2451,11 @@ bool wxImage::HasOption(const wxString& name) const
                      : false;
 }
 
+const wxArrayString& wxImage::GetOptionNames() const
+{
+    return M_IMGDATA->m_optionNames;
+}
+
 // ----------------------------------------------------------------------------
 // image I/O
 // ----------------------------------------------------------------------------

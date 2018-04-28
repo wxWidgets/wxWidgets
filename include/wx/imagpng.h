@@ -19,6 +19,7 @@
 
 #include "wx/image.h"
 #include "wx/versioninfo.h"
+#include <set>
 
 #define wxIMAGE_OPTION_PNG_FORMAT    wxT("PngFormat")
 #define wxIMAGE_OPTION_PNG_BITDEPTH  wxT("PngBitDepth")
@@ -48,6 +49,7 @@ public:
     }
 
     static wxVersionInfo GetLibraryVersionInfo();
+	static bool IsKnownOption(const wxString& optionName);
 
 #if wxUSE_STREAMS
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 ) wxOVERRIDE;
