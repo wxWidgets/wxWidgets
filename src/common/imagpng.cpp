@@ -23,10 +23,10 @@
 
 #if wxUSE_IMAGE && wxUSE_LIBPNG
 
-#include "png.h"
-#include "pngstruct.h"
-#include "pngconf.h"
-#include "pnginfo.h"
+#include "../png/png.h"
+#include "../png/pngstruct.h"
+#include "../png/pngconf.h"
+#include "../png/pnginfo.h"
 #include "wx/imagpng.h"
 #include "wx/versioninfo.h"
 
