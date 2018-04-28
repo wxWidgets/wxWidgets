@@ -947,7 +947,7 @@ void wxAuiManager::UnInit()
     if (m_frame)
     {
         m_frame->RemoveEventHandler(this);
-        m_frame = NULL;
+        m_frame = NULL; // in case window destruction and class destructor both call UnInit
     }
 }
 
