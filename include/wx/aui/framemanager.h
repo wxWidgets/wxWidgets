@@ -605,6 +605,7 @@ protected:
 
     // protected events
     void OnPaint(wxPaintEvent& evt);
+    void OnDestroy(wxWindowDestroyEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnSetCursor(wxSetCursorEvent& evt);

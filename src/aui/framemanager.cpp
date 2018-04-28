@@ -595,6 +595,7 @@ bool wxAuiPaneInfo::IsValid() const
 wxBEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
     EVT_AUI_PANE_BUTTON(wxAuiManager::OnPaneButton)
     EVT_AUI_RENDER(wxAuiManager::OnRender)
+    EVT_WINDOW_DESTROY(wxAuiManager::OnDestroy)
     EVT_PAINT(wxAuiManager::OnPaint)
     EVT_ERASE_BACKGROUND(wxAuiManager::OnEraseBackground)
     EVT_SIZE(wxAuiManager::OnSize)
@@ -946,6 +947,7 @@ void wxAuiManager::UnInit()
     if (m_frame)
     {
         m_frame->RemoveEventHandler(this);
+        m_frame = NULL;
     }
 }
 
@@ -3932,6 +3934,12 @@ void wxAuiManager::Repaint(wxDC* dc)
     // if we created a client_dc, delete it
     if (client_dc)
         delete client_dc;
+}
+
+void wxAuiManager::OnDestroy(wxWindowDestroyEvent& event)
+{
+    if (m_frame == event.GetEventObject())
+        UnInit();
 }
 
 void wxAuiManager::OnPaint(wxPaintEvent& WXUNUSED(event))
