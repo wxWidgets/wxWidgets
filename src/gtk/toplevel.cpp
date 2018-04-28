@@ -973,6 +973,11 @@ bool wxTopLevelWindowGTK::Show( bool show )
     if (deferShow)
     {
         deferShow = m_deferShowAllowed &&
+            // Assume size (from cache or wxPersistentTLW) is correct.
+            // Avoids problems when WM initially provides an incorrect value
+            // for extents, then corrects it later.
+            m_decorSize.top == 0 &&
+
             gs_requestFrameExtentsStatus != RFE_STATUS_BROKEN &&
             !gtk_widget_get_realized(m_widget) &&
             GDK_IS_X11_DISPLAY(gtk_widget_get_display(m_widget)) &&
