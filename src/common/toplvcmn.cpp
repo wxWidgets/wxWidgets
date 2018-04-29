@@ -31,6 +31,8 @@
 
 #include "wx/display.h"
 
+#include "wx/private/tlwgeom.h"
+
 // ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------
@@ -308,6 +310,28 @@ void wxTopLevelWindowBase::DoCentre(int dir)
 
     // -1 could be valid coordinate here if there are several displays
     SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
+}
+
+// ----------------------------------------------------------------------------
+// Saving/restoring geometry
+// ----------------------------------------------------------------------------
+
+bool wxTopLevelWindowBase::SaveGeometry(const GeometrySerializer& ser) const
+{
+    wxTLWGeometry geom;
+    if ( !geom.GetFrom(static_cast<const wxTopLevelWindow*>(this)) )
+        return false;
+
+    return geom.Save(ser);
+}
+
+bool wxTopLevelWindowBase::RestoreToGeometry(GeometrySerializer& ser)
+{
+    wxTLWGeometry geom;
+    if ( !geom.Restore(ser) )
+        return false;
+
+    return geom.ApplyTo(static_cast<wxTopLevelWindow*>(this));
 }
 
 // ----------------------------------------------------------------------------
