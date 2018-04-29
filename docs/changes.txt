@@ -88,6 +88,7 @@ wxMSW:
 
 - Fix hang after clearing wxTAB_TRAVERSAL style on a window with children.
 - Fix handling of AUX2 mouse button events (Trylz).
+- Fix saving/restoring window position for maximized windows.
 
 
 3.1.1: (released 2018-02-19)

@@ -57,6 +57,9 @@ public:
 #define wxPERSIST_TLW_MAXIMIZED "Maximized"
 #define wxPERSIST_TLW_ICONIZED "Iconized"
 
+// MSW has its own native implementation and doesn't use this class.
+#ifndef __WXMSW__
+
 class wxTLWGeometryGeneric : public wxTLWGeometryBase
 {
 public:
@@ -166,8 +169,12 @@ private:
     bool m_maximized;
 };
 
+#endif // !__WXMSW__
+
 #ifdef __WXGTK20__
     #include "wx/gtk/private/tlwgeom.h"
+#elif defined(__WXMSW__)
+    #include "wx/msw/private/tlwgeom.h"
 #else
     class wxTLWGeometry : public wxTLWGeometryGeneric
     {
