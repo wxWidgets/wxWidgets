@@ -57,7 +57,7 @@ public:
         Returns the value that the user has entered if the user has pressed OK,
         or the original value if the user has pressed Cancel.
     */
-    wxString GetValue() const;
+    long GetValue() const;
 };
 
 
