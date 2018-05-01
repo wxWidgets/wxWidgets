@@ -770,7 +770,9 @@ static wxString GetMouseEventDesc(const wxMouseEvent& ev)
     }
     else if ( ev.GetWheelRotation() )
     {
-        return wxString::Format("Wheel rotation %+d", ev.GetWheelRotation());
+        return wxString::Format("%s wheel rotation %+d",
+            ev.GetWheelAxis() == wxMOUSE_WHEEL_VERTICAL ? "Vertical" : "Horizontal",
+            ev.GetWheelRotation());
     }
     else
     {
