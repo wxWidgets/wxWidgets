@@ -1773,7 +1773,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
     {
         // take the dropdown size into account
         if (m_overflowVisible && m_overflowSizerItem)
-            cli_h -= m_overflowSizerItem->GetSize().y;
+            cli_h -= m_overflowSizerItem->GetMinSize().y;
 
         if (rect.y+rect.height < cli_h)
             return true;
@@ -1782,7 +1782,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
     {
         // take the dropdown size into account
         if (m_overflowVisible && m_overflowSizerItem)
-            cli_w -= m_overflowSizerItem->GetSize().x;
+            cli_w -= m_overflowSizerItem->GetMinSize().x;
 
         if (rect.x+rect.width < cli_w)
             return true;
@@ -2024,6 +2024,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
                 m_overflowSizerItem = sizer->Add(overflow_size, 1, 0, wxEXPAND);
             else
                 m_overflowSizerItem = sizer->Add(1, overflow_size, 0, wxEXPAND);
+            m_overflowSizerItem->SetMinSize(m_overflowSizerItem->GetSize());
         }
         else
         {
