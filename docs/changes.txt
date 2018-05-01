@@ -79,6 +79,7 @@ All:
 All (GUI):
 
 - Improve stock items consistency and aesthetics (dhowland).
+- Fix bug with missing items in overflowing AUI toolbar (Maarten Bent).
 
 wxGTK:
 
