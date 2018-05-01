@@ -2245,8 +2245,8 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     if ( fref->GetStrikethrough() )
     {
         CGFloat width = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
-        CGFloat height = CTFontGetXHeight( font );
-        CGPoint points[] = { {0.0, height * 0.6f},  {width, height * 0.6f} };
+        CGFloat height = CTFontGetXHeight( font ) * 0.6;
+        CGPoint points[] = { {0.0, height},  {width, height} };
         CGContextSetStrokeColorWithColor(m_cgContext, col);
         CGContextSetShouldAntialias(m_cgContext, false);
         CGContextSetLineWidth(m_cgContext, 1.0);
