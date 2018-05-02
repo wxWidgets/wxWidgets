@@ -1935,38 +1935,6 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
 bool
 wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
 {
-#if wxUSE_DEFERRED_SIZING
-    // if our parent had prepared a defer window handle for us, use it (unless
-    // we are a top level window)
-    wxWindowMSW * const parent = IsTopLevel() ? NULL : GetParent();
-
-    HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
-    if ( hdwp )
-    {
-        hdwp = ::DeferWindowPos(hdwp, (HWND)hwnd, NULL, x, y, width, height,
-                                SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
-        if ( !hdwp )
-        {
-            wxLogLastError(wxT("DeferWindowPos"));
-        }
-    }
-
-    if ( parent )
-    {
-        // hdwp must be updated as it may have been changed
-        parent->m_hDWP = (WXHANDLE)hdwp;
-    }
-
-    if ( hdwp )
-    {
-        // did deferred move, remember new coordinates of the window as they're
-        // different from what Windows would return for it
-        return true;
-    }
-
-    // otherwise (or if deferring failed) move the window in place immediately
-#endif // wxUSE_DEFERRED_SIZING
-
     // toplevel window's coordinates are mirrored if the TLW is a child of another
     // RTL window and changing width without moving the position would enlarge the
     // window in the wrong direction, so we need to adjust for it
@@ -1986,14 +1954,68 @@ wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
         }
     }
 
-    if ( !::MoveWindow((HWND)hwnd, x, y, width, height, IsShown()) )
+#if wxUSE_DEFERRED_SIZING
+    else if ( MSWIsPositionDirectlySupported(x, y) )
     {
-        wxLogLastError(wxT("MoveWindow"));
+        // if our parent had prepared a defer window handle for us, use it
+        wxWindowMSW * const parent = GetParent();
+
+        HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
+        if ( hdwp )
+        {
+            hdwp = ::DeferWindowPos(hdwp, (HWND)hwnd, NULL, x, y, width, height,
+                                    SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
+            if ( !hdwp )
+            {
+                wxLogLastError(wxT("DeferWindowPos"));
+            }
+        }
+
+        if ( parent )
+        {
+            // hdwp must be updated as it may have been changed
+            parent->m_hDWP = (WXHANDLE)hdwp;
+        }
+
+        if ( hdwp )
+        {
+            // did deferred move, remember new coordinates of the window as they're
+            // different from what Windows would return for it
+            return true;
+        }
+
+        // otherwise (or if deferring failed) move the window in place immediately
     }
+#endif // wxUSE_DEFERRED_SIZING
+
+    MSWMoveWindowToAnyPosition(hwnd, x, y, width, height, IsShown());
 
     // if wxUSE_DEFERRED_SIZING, indicates that we didn't use deferred move,
     // ignored otherwise
     return false;
+}
+
+void wxWindowMSW::MSWMoveWindowToAnyPosition(WXHWND hwnd, int x, int y, int width, int height, bool bRepaint)
+{
+    bool scroll = GetParent() && !MSWIsPositionDirectlySupported(x, y);
+
+    if ( scroll )
+    {
+        // scroll to the actual position (looks like there is no need to Freeze() the parent)
+        ::ScrollWindow(GetHwndOf(GetParent()), -x, -y, NULL, NULL);
+    }
+
+    // move to relative coordinates
+    if ( !::MoveWindow(hwnd, (scroll ? 0 : x), (scroll ? 0 : y), width, height, bRepaint) )
+    {
+        wxLogLastError(wxT("MoveWindow"));
+    }
+
+    if ( scroll )
+    {
+        // scroll back
+        ::ScrollWindow(GetHwndOf(GetParent()), x, y, NULL, NULL);
+    }
 }
 
 void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
@@ -2168,15 +2190,9 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         // and not defer it here as otherwise the value returned by
         // GetClient/WindowRect() wouldn't change as the window wouldn't be
         // really resized
-        if ( !::MoveWindow(GetHwnd(),
-                           rectWin.left,
-                           rectWin.top,
-                           width + widthWin - rectClient.right,
-                           height + heightWin - rectClient.bottom,
-                           TRUE) )
-        {
-            wxLogLastError(wxT("MoveWindow"));
-        }
+        MSWMoveWindowToAnyPosition(GetHwnd(), rectWin.left, rectWin.top,
+                                   width + widthWin - rectClient.right,
+                                   height + heightWin - rectClient.bottom, true);
     }
 }
 
@@ -3897,29 +3913,51 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // do create the window
     wxWindowCreationHook hook(this);
 
-    m_hWnd = (WXHWND)::CreateWindowEx
-                       (
-                        extendedStyle,
-                        wclass,
-                        title ? title : m_windowName.t_str(),
-                        style,
-                        x, y, w, h,
-                        (HWND)MSWGetParent(),
-                        (HMENU)wxUIntToPtr(controlId),
-                        wxGetInstance(),
-                        NULL                        // no extra data
-                       );
+    m_hWnd = MSWCreateWindowAtAnyPosition
+             (
+              extendedStyle,
+              wclass,
+              title ? title : m_windowName.t_str(),
+              style,
+              x, y, w, h,
+              MSWGetParent(),
+              controlId
+             );
 
     if ( !m_hWnd )
     {
-        wxLogSysError(_("Can't create window of class %s"), wclass);
-
         return false;
     }
 
     SubclassWin(m_hWnd);
 
     return true;
+}
+
+WXHWND wxWindowMSW::MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* clName,
+                                                 const wxChar* title, WXDWORD style,
+                                                 int x, int y, int width, int height,
+                                                 WXHWND parent, wxWindowID id)
+{
+    WXHWND hWnd = ::CreateWindowEx(exStyle, clName, title, style, x, y, width, height,
+                                   parent, (HMENU)wxUIntToPtr(id), wxGetInstance(),
+                                   NULL); // no extra data
+
+    if ( !hWnd )
+    {
+        wxLogLastError(wxString::Format
+        (
+            wxT("CreateWindowEx(\"%s\", flags=%08lx, ex=%08lx)"),
+            clName, style, exStyle
+        ));
+    }
+    else if ( !IsTopLevel() && !MSWIsPositionDirectlySupported(x, y) )
+    {
+        // fix position if limited by Short range
+        MSWMoveWindowToAnyPosition(hWnd, x, y, width, height, IsShown());
+    }
+
+    return hWnd;
 }
 
 // ===========================================================================

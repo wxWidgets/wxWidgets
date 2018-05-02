@@ -16,6 +16,7 @@
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/button.h"
+    #include "wx/sizer.h"
 #endif // WX_PRECOMP
 
 #include "asserthelper.h"
@@ -49,6 +50,7 @@ private:
         CPPUNIT_TEST( Children );
         CPPUNIT_TEST( Focus );
         CPPUNIT_TEST( Positioning );
+        CPPUNIT_TEST( PositioningBeyondShortLimit );
         CPPUNIT_TEST( Show );
         CPPUNIT_TEST( Enable );
         CPPUNIT_TEST( FindWindowBy );
@@ -68,6 +70,7 @@ private:
     void Children();
     void Focus();
     void Positioning();
+    void PositioningBeyondShortLimit();
     void Show();
     void Enable();
     void FindWindowBy();
@@ -325,6 +328,47 @@ void WindowTestCase::Positioning()
     CPPUNIT_ASSERT_EQUAL(y, m_window->GetScreenPosition().y);
     CPPUNIT_ASSERT_EQUAL(m_window->GetScreenPosition(),
                          m_window->GetScreenRect().GetTopLeft());
+}
+
+void WindowTestCase::PositioningBeyondShortLimit()
+{
+#ifdef __WXMSW__
+    //Positioning under MSW is limited to short relative coordinates
+
+    //
+    //Test window creation beyond SHRT_MAX
+    int commonDim = 10;
+    wxWindow* w = new wxWindow(m_window, wxID_ANY,
+                               wxPoint(0, SHRT_MAX + commonDim),
+                               wxSize(commonDim, commonDim));
+    CPPUNIT_ASSERT_EQUAL(SHRT_MAX + commonDim, w->GetPosition().y);
+
+    w->Move(0, 0);
+
+    //
+    //Test window moving beyond SHRT_MAX
+    w->Move(0, SHRT_MAX + commonDim);
+    CPPUNIT_ASSERT_EQUAL(SHRT_MAX + commonDim, w->GetPosition().y);
+
+    //
+    //Test window moving below SHRT_MIN
+    w->Move(0, SHRT_MIN - commonDim);
+    CPPUNIT_ASSERT_EQUAL(SHRT_MIN - commonDim, w->GetPosition().y);
+
+    //
+    //Test deferred move beyond SHRT_MAX
+    m_window->SetVirtualSize(-1, SHRT_MAX + 2 * commonDim);
+    wxWindow* bigWin = new wxWindow(m_window, wxID_ANY, wxDefaultPosition,
+                                    //size is also limited by SHRT_MAX
+                                    wxSize(commonDim, SHRT_MAX));
+    wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(bigWin);
+    sizer->AddSpacer(commonDim); //add some space to go beyond SHRT_MAX
+    sizer->Add(w);
+    m_window->SetSizer(sizer);
+    m_window->Layout();
+    CPPUNIT_ASSERT_EQUAL(SHRT_MAX + commonDim, w->GetPosition().y);
+#endif
 }
 
 void WindowTestCase::Show()

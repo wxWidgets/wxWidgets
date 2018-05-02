@@ -298,19 +298,17 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     // create the text window
 
-    m_hwndBuddy = (WXHWND)::CreateWindowEx
-                    (
-                     exStyle,                // sunken border
-                     wxT("EDIT"),             // window class
-                     NULL,                   // no window title
-                     msStyle,                // style (will be shown later)
-                     pos.x, pos.y,           // position
-                     0, 0,                   // size (will be set later)
-                     GetHwndOf(parent),      // parent
-                     (HMENU)-1,              // control id
-                     wxGetInstance(),        // app instance
-                     NULL                    // unused client data
-                    );
+    m_hwndBuddy = MSWCreateWindowAtAnyPosition
+                  (
+                   exStyle,                // sunken border
+                   wxT("EDIT"),            // window class
+                   NULL,                   // no window title
+                   msStyle,                // style (will be shown later)
+                   pos.x, pos.y,           // position
+                   0, 0,                   // size (will be set later)
+                   GetHwndOf(parent),      // parent
+                   -1                      // control id
+                  );
 
     if ( !m_hwndBuddy )
     {

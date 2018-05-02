@@ -333,7 +333,7 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
             w = width;
             h = height;
 
-            ::MoveWindow(GetHwnd(), x, y, width, height, FALSE);
+            MSWMoveWindowToAnyPosition(GetHwnd(), x, y, width, height, false);
         }
     }
 
