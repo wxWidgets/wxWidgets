@@ -627,7 +627,7 @@ void wxDebugReportCompress::SetCompressedFileBaseName(const wxString& name)
 
 wxFileName wxDebugReportCompress::GetSaveLocation() const
 {
-    // Use de default directoy as a basis for the save location, e.g.
+    // Use the default directory as a basis for the save location, e.g.
     // %temp%/someName becomes %temp%/someName.zip.
     wxFileName fn(GetDirectory());
     if (!m_zipDir.empty())
