@@ -16,6 +16,7 @@
 
 #include "wx/string.h"
 #include "wx/arrstr.h"
+#include "wx/filename.h"
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 
@@ -25,6 +26,8 @@ class WXDLLIMPEXP_FWD_XML wxXmlNode;
 
 class WXDLLIMPEXP_QA wxDebugReport
 {
+    friend class wxDebugReportDialog;
+
 public:
     // this is used for the functions which may report either the current state
     // or the state during the last (fatal) exception
@@ -113,6 +116,9 @@ protected:
     // used by Process()
     virtual bool DoProcess();
 
+    // return the location where the report will be saved
+    virtual wxFileName GetSaveLocation() const;
+
 private:
     // name of the report directory
     wxString m_dir;
@@ -147,6 +153,9 @@ public:
 
 protected:
     virtual bool DoProcess() wxOVERRIDE;
+
+    // return the location where the report will be saved
+    wxFileName GetSaveLocation() const wxOVERRIDE;
 
 private:
     // user-specified file directory/base name, use defaults if empty
