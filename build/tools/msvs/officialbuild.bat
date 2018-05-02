@@ -109,6 +109,18 @@ nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUI
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
+set build_dir=%cd%
+
+cd ..\..\utils\wxrc
+
+rmdir %compvers%_mswudll_x64 /s /q
+del %compvers%x64_Release.txt
+nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 TARGET_CPU=AMD64 >> %compvers%x64_Release.txt
+
+if ERRORLEVEL 1 goto ERR_BUILD
+
+cd %build_dir%
+
 @echo 64 bit debug build
 
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X64 /Debug
@@ -128,6 +140,16 @@ if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X86 /Release
 @echo 32 bit release build
 
 nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE >> %compvers%x86_Release.txt
+
+if ERRORLEVEL 1 goto ERR_BUILD
+
+cd ..\..\utils\wxrc
+
+rmdir %compvers%_mswuddll /s /q
+del %compvers%x86_Release.txt
+nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE >> %compvers%x86_Release.txt
+
+cd %build_dir%
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
