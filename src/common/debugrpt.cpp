@@ -630,9 +630,9 @@ wxFileName wxDebugReportCompress::GetSaveLocation() const
     // Use the default directory as a basis for the save location, e.g.
     // %temp%/someName becomes %temp%/someName.zip.
     wxFileName fn(GetDirectory());
-    if (!m_zipDir.empty())
+    if ( !m_zipDir.empty() )
         fn.SetPath(m_zipDir);
-    if (!m_zipName.empty())
+    if ( !m_zipName.empty() )
         fn.SetName(m_zipName);
     fn.SetExt("zip");
     return fn;
