@@ -12,7 +12,7 @@ These building steps are NOT the normal way to build MSys2 MinGW packages.
 But, they are a way the wxWidgets developers can test that wxWidgets
 can build the wxGTK/Win32 libraries under MSys2 MinGW.
 
-For the MSys2 way please see 
+For the MSys2 way please see
   https://github.com/Alexpux/MINGW-packages and
   https://github.com/msys2/msys2/wiki/Creating-packages
 
@@ -20,32 +20,17 @@ Building steps:
 
 #Note: The "#" is used in front of a comment to help the people who cut
 #      and paste these directions.
-#Warning: At the time these directions were written the GTK version 3
-#         was NOT able to create wxGTK/Win32 libraries that were usable.
+#Note: The GTK version 3 directions start after the GTK version 2 end.
 
-#1. Install the mingw32 packages needed to build wxGTK/Win32 using the 
-#   configure/make build method. 
-#   From the MSys2 prompt or MSys2 MinGW prompt:
+#1. Install the mingw32 packages needed to build wxGTK/Win32 using the
+#   configure/make build method.
+#   From the MSys2 MinGW prompt:
 
-#   The 32 bit Mingw packages are prefixed with "mingw-w64-i686-";
-#   Change the prefix to "mingw-w64-x86_64-" if you wish to do 64 bit.
-
-pacman -S --needed --noconfirm make
-pacman -S --needed --noconfirm mingw-w64-i686-libjpeg-turbo
-pacman -S --needed --noconfirm mingw-w64-i686-libpng
-pacman -S --needed --noconfirm mingw-w64-i686-libtiff
-pacman -S --needed --noconfirm mingw-w64-i686-gcc
-pacman -S --needed --noconfirm mingw-w64-i686-pkg-config
+pacman -S --needed --noconfirm make ${MINGW_PACKAGE_PREFIX}-libjpeg-turbo \
+  ${MINGW_PACKAGE_PREFIX}-libpng ${MINGW_PACKAGE_PREFIX}-libtiff \
+  ${MINGW_PACKAGE_PREFIX}-gcc ${MINGW_PACKAGE_PREFIX}-pkg-config
 ## gtk2 can take a long time to update/find fonts
-pacman -S --needed --noconfirm mingw-w64-i686-gtk2
-
-
-# Packages that are needed but are normally installed already.
-pacman -S --needed --noconfirm mingw-w64-i686-gcc-libs
-pacman -S --needed --noconfirm mingw-w64-i686-expat
-pacman -S --needed --noconfirm mingw-w64-i686-xz
-pacman -S --needed --noconfirm mingw-w64-i686-zlib
-pacman -S --needed --noconfirm mingw-w64-i686-gdk-pixbuf2
+pacman -S --needed --noconfirm ${MINGW_PACKAGE_PREFIX}-gtk2
 
 
 #2. Build the wxGTK/Win32 static library
@@ -54,8 +39,8 @@ pacman -S --needed --noconfirm mingw-w64-i686-gdk-pixbuf2
 #2b.Use the cd command to change directory to the wxWidgets top folder.
 
 
-#2c.Create the "build-gtk2-static" folder to build the static libraries
-mkdir -p build-gtk2-static
+#2c.Create the "build-${MSYSTEM_CARCH}-gtk2-static" folder to build the static libraries
+mkdir -p build-${MSYSTEM_CARCH}-gtk2-static
 
 #2d.Configure wxWidgets
 #   Option "--disable-precomp-headers" is NOT needed.
@@ -63,7 +48,7 @@ mkdir -p build-gtk2-static
 #
 #   Remove configure option "--disable-wxdib" to set wxUSE_WXDIB to 1.
 #   The directions docs/msw/gtk.txt results in wxUSE_WXDIB set to 1.
-cd build-gtk2-static && \
+cd build-${MSYSTEM_CARCH}-gtk2-static && \
   ../configure --with-gtk=2 \
     --disable-wxdib \
     --disable-shared \
@@ -71,41 +56,118 @@ cd build-gtk2-static && \
   && cd ..
 
 #2e.clean the wxGTK static libraries
-cd build-gtk2-static && make clean && cd ..
+cd build-${MSYSTEM_CARCH}-gtk2-static && make clean && cd ..
 
 #2f.make the wxGTK static libraries
-cd build-gtk2-static && make && cd ..
+cd build-${MSYSTEM_CARCH}-gtk2-static && make && cd ..
 
 
 #3  Build and run the minimal static sample
 #3a.Clean the minimal sample
-cd build-gtk2-static/samples/minimal && make clean && cd ../../..
+cd build-${MSYSTEM_CARCH}-gtk2-static/samples/minimal && make clean && cd ../../..
 
 #3b.Build the minimal sample
-cd build-gtk2-static/samples/minimal && make && cd ../../..
+cd build-${MSYSTEM_CARCH}-gtk2-static/samples/minimal && make && cd ../../..
 
 #3c.Run the minimal sample
-./build-gtk2-static/samples/minimal/minimal.exe
+./build-${MSYSTEM_CARCH}-gtk2-static/samples/minimal/minimal.exe
 
 
 #4  Build most of the static samples
 #4a.Clean most of the static samples
-cd build-gtk2-static/samples && make clean && cd ../..
+cd build-${MSYSTEM_CARCH}-gtk2-static/samples && make clean && cd ../..
 #4b.Build most of the static samples
-cd build-gtk2-static/samples && make && cd ../..
+cd build-${MSYSTEM_CARCH}-gtk2-static/samples && make && cd ../..
 
 
 #5  Run the drawing static sample
-cd samples/drawing && ../../build-gtk2-static/samples/drawing/drawing.exe && cd ../..
+cd samples/drawing && ../../build-${MSYSTEM_CARCH}-gtk2-static/samples/drawing/drawing.exe && cd ../..
 
 #6  Run the splash static sample
-cd samples/splash && ../../build-gtk2-static/samples/splash/splash.exe && cd ../..
+cd samples/splash && ../../build-${MSYSTEM_CARCH}-gtk2-static/samples/splash/splash.exe && cd ../..
 
 #7  Run the widgets static sample
-cd samples/widgets && ../../build-gtk2-static/samples/widgets/widgets.exe && cd ../..
+cd samples/widgets && ../../build-${MSYSTEM_CARCH}-gtk2-static/samples/widgets/widgets.exe && cd ../..
 
 #8  Run the toolbar static sample
-cd samples/toolbar && ../../build-gtk2-static/samples/toolbar/toolbar.exe && cd ../..
+cd samples/toolbar && ../../build-${MSYSTEM_CARCH}-gtk2-static/samples/toolbar/toolbar.exe && cd ../..
 
 #9  Run the image static sample
-cd samples/image && ../../build-gtk2-static/samples/image/image.exe && cd ../..
+cd samples/image && ../../build-${MSYSTEM_CARCH}-gtk2-static/samples/image/image.exe && cd ../..
+
+
+#1. Install the mingw32 packages needed to build wxGTK/Win32 using the
+#   configure/make build method.
+#   From the MSys2 MinGW prompt:
+
+pacman -S --needed --noconfirm make ${MINGW_PACKAGE_PREFIX}-libjpeg-turbo \
+  ${MINGW_PACKAGE_PREFIX}-libpng ${MINGW_PACKAGE_PREFIX}-libtiff \
+  ${MINGW_PACKAGE_PREFIX}-gcc ${MINGW_PACKAGE_PREFIX}-pkg-config
+## gtk3 can take a long time to update/find fonts
+pacman -S --needed --noconfirm ${MINGW_PACKAGE_PREFIX}-gtk3
+
+
+#2. Build the wxGTK/Win32 static library
+#2a.Open MSys2 MinGW Prompt
+#   (These steps were tested on MinGW32; but, should work under MinGW64)
+#2b.Use the cd command to change directory to the wxWidgets top folder.
+
+
+#2c.Create the "build-${MSYSTEM_CARCH}-gtk3-static" folder to build the static libraries
+mkdir -p build-${MSYSTEM_CARCH}-gtk3-static
+
+#2d.Configure wxWidgets
+#   Option "--disable-precomp-headers" is NOT needed.
+#   It is being used to test for compile issues.
+#
+#   Remove configure option "--disable-wxdib" to set wxUSE_WXDIB to 1.
+#   The directions docs/msw/gtk.txt results in wxUSE_WXDIB set to 1.
+cd build-${MSYSTEM_CARCH}-gtk3-static && \
+  ../configure --with-gtk=3 \
+    --disable-wxdib \
+    --disable-shared \
+    --disable-precomp-headers \
+  && cd ..
+
+#2e.clean the wxGTK static libraries
+cd build-${MSYSTEM_CARCH}-gtk3-static && make clean && cd ..
+
+#2f.make the wxGTK static libraries
+cd build-${MSYSTEM_CARCH}-gtk3-static && make && cd ..
+
+
+#3  Build and run the minimal static sample
+#3a.Clean the minimal sample
+cd build-${MSYSTEM_CARCH}-gtk3-static/samples/minimal && make clean && cd ../../..
+
+#3b.Build the minimal sample
+cd build-${MSYSTEM_CARCH}-gtk3-static/samples/minimal && make && cd ../../..
+
+#3c.Run the minimal sample
+./build-${MSYSTEM_CARCH}-gtk3-static/samples/minimal/minimal.exe
+
+
+#4  Build most of the static samples
+#4a.Clean most of the static samples
+cd build-${MSYSTEM_CARCH}-gtk3-static/samples && make clean && cd ../..
+#4b.Build most of the static samples
+cd build-${MSYSTEM_CARCH}-gtk3-static/samples && make && cd ../..
+
+
+#5  Run the drawing static sample
+cd samples/drawing && ../../build-${MSYSTEM_CARCH}-gtk3-static/samples/drawing/drawing.exe && cd ../..
+
+#6  Run the splash static sample
+cd samples/splash && ../../build-${MSYSTEM_CARCH}-gtk3-static/samples/splash/splash.exe && cd ../..
+
+#7  Run the widgets static sample
+cd samples/widgets && ../../build-${MSYSTEM_CARCH}-gtk3-static/samples/widgets/widgets.exe && cd ../..
+
+#8  Run the toolbar static sample
+cd samples/toolbar && ../../build-${MSYSTEM_CARCH}-gtk3-static/samples/toolbar/toolbar.exe && cd ../..
+
+#9  Run the image static sample
+cd samples/image && ../../build-${MSYSTEM_CARCH}-gtk3-static/samples/image/image.exe && cd ../..
+
+#10 Run the statbar static sample; this fails to do "Status Bar -> Recreate"
+cd samples/statbar && ../../build-${MSYSTEM_CARCH}-gtk3-static/samples/statbar/statbar.exe && cd ../..
