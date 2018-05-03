@@ -13,7 +13,6 @@
 
 // forward declared
 class WXDLLIMPEXP_FWD_CORE wxCollapsibleHeaderCtrl;
-class WXDLLIMPEXP_FWD_CORE wxStaticLine;
 
 #include "wx/containr.h"
 
@@ -80,7 +79,6 @@ protected:
 
     // child controls
     wxCollapsibleHeaderCtrl *m_pButton;
-    wxStaticLine *m_pStaticLine;
     wxWindow *m_pPane;
     wxSizer *m_sz;
 
