@@ -581,15 +581,34 @@ wxDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     double xscale = (double)srcWidth/dstWidth,
            yscale = (double)srcHeight/dstHeight;
 
+    // Shift origin to avoid imprecision of integer destination coordinates
+    const int deviceOriginX = m_deviceOriginX;
+    const int deviceOriginY = m_deviceOriginY;
+    const int deviceLocalOriginX = m_deviceLocalOriginX;
+    const int deviceLocalOriginY = m_deviceLocalOriginY;
+    const int logicalOriginX = m_logicalOriginX;
+    const int logicalOriginY = m_logicalOriginY;
+    m_deviceOriginX = LogicalToDeviceX(xdest);
+    m_deviceOriginY = LogicalToDeviceY(ydest);
+    m_deviceLocalOriginX = 0;
+    m_deviceLocalOriginY = 0;
+    m_logicalOriginX = 0;
+    m_logicalOriginY = 0;
+
     double xscaleOld, yscaleOld;
     GetUserScale(&xscaleOld, &yscaleOld);
     SetUserScale(xscaleOld/xscale, yscaleOld/yscale);
 
-    bool rc = DoBlit(wxCoord(xdest*xscale), wxCoord(ydest*yscale),
-                     wxCoord(dstWidth*xscale), wxCoord(dstHeight*yscale),
+    bool rc = DoBlit(0, 0, srcWidth, srcHeight,
                      source,
                      xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
 
+    m_deviceOriginX = deviceOriginX;
+    m_deviceOriginY = deviceOriginY;
+    m_deviceLocalOriginX = deviceLocalOriginX;
+    m_deviceLocalOriginY = deviceLocalOriginY;
+    m_logicalOriginX = logicalOriginX;
+    m_logicalOriginY = logicalOriginY;
     SetUserScale(xscaleOld, yscaleOld);
 
     return rc;
