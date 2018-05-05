@@ -36,7 +36,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+               long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = wxT("wxSpinCtrl"))
     {
@@ -50,7 +50,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = wxT("wxSpinCtrl"));
 
