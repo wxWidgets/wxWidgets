@@ -588,6 +588,10 @@ wxMSW:
 - Fix handling of AUX2 mouse button events (Trylz).
 - Fix libtiff compilation with MinGW-w32 6.3.
 
+wxOSX:
+
+- Fix building wxMediaCtrl with 10.13 (or later) SDK.
+
 
 3.0.4: (released 2018-03-08)
 ----------------------------

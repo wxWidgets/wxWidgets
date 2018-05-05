@@ -7665,6 +7665,7 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
 
             AC_DEFINE(wxUSE_GSTREAMER)
         else
+            AC_MSG_WARN([wxMediaCtrl can't be built because GStreamer not available])
             USE_MEDIA=0
         fi
 
@@ -7679,37 +7680,66 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
 
             old_CPPFLAGS="$CPPFLAGS"
             CPPFLAGS="-x objective-c++ $CPPFLAGS"
-            if test "$wxOSX_USE_QTKIT" = "no"; then
-                dnl Do not test for QTKit if has been disabled from the command line
-                AC_DEFINE(wxOSX_USE_QTKIT,0)
-                GST_LIBS="-framework AVFoundation -framework CoreMedia"
-            else
-                dnl check if QTKit is available, otherwise force AVFoundation usage
+            dnl check if QTKit is available, unless it was explicitly disabled
+            if test "$wxOSX_USE_QTKIT" != "no"; then
                 AC_CHECK_HEADER([QTKit/QTKit.h],
                                 [
                                     GST_LIBS="-framework QTKit"
                                 ],
                                 [
-                                    AC_DEFINE(wxOSX_USE_QTKIT,0)
                                     wxOSX_USE_QTKIT=no
-                                    GST_LIBS="-framework AVFoundation -framework CoreMedia"
                                 ])
             fi
             if test "$wxOSX_USE_QTKIT" = "no"; then
-                dnl AVKit is only available since OS X 10.9
-                AC_MSG_CHECKING([if AVKit is available])
-                AC_TRY_COMPILE(
-                    [#include "AvailabilityMacros.h"],
+                AC_DEFINE(wxOSX_USE_QTKIT,0)
+
+                dnl AVFoundation is only available since OS X 10.7
+                AC_CACHE_CHECK(
+                    [if AVFoundation is available],
+                    [wx_cv_has_avfoundation],
                     [
-                        #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
-                            // AVKit available
-                        #else
-                            choke me
-                        #endif
-                    ],
-                    [GST_LIBS="$GST_LIBS -framework AVKit"; AC_MSG_RESULT(yes)],
-                    AC_MSG_RESULT(no)
+                        AC_COMPILE_IFELSE([
+                            AC_LANG_PROGRAM(
+                                [#include "AvailabilityMacros.h"],
+                                [
+                                    #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+                                        // AVKit available
+                                    #else
+                                        choke me
+                                    #endif
+                                ],
+                            )],
+                            [wx_cv_has_avfoundation=yes],
+                            [wx_cv_has_avfoundation=no]
+                            )
+                    ]
                 )
+
+                if test "$wx_cv_has_avfoundation" = "yes"; then
+                    GST_LIBS="-framework AVFoundation -framework CoreMedia"
+
+                    dnl AVKit is only available since OS X 10.9
+                    AC_MSG_CHECKING([if AVKit is available])
+                    AC_TRY_COMPILE(
+                        [#include "AvailabilityMacros.h"],
+                        [
+                            #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_9
+                                // AVKit available
+                            #else
+                                choke me
+                            #endif
+                        ],
+                        [GST_LIBS="$GST_LIBS -framework AVKit"; AC_MSG_RESULT(yes)],
+                        AC_MSG_RESULT(no)
+                    )
+                else
+                    AC_MSG_WARN([wxMediaCtrl can't be built because Neither QTKit nor AVFoundation can be used.
+
+    Either use an older SDK with QTKit support or use --with-macosx-version-min
+    configure option specifying 10.7 or or higher to allow using AVFoundation.
+])
+                    USE_MEDIA=0
+                fi
             fi
             CPPFLAGS="$old_CPPFLAGS"
         fi
@@ -7720,10 +7750,10 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         AC_DEFINE(wxUSE_MEDIACTRL)
     else
         if test "$wxUSE_MEDIACTRL" = "yes"; then
-            AC_MSG_ERROR([GStreamer not available])
-        else
-            dnl was set to 'auto'
-            AC_MSG_WARN([GStreamer not available... disabling wxMediaCtrl])
+            AC_MSG_ERROR([wxMediaCtrl was explicitly requested but can't be built.
+
+    Fix the problems reported above or don't use --enable-mediactrl configure option.
+])
         fi
     fi
 fi
