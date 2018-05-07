@@ -92,6 +92,7 @@ wxMSW:
 - Fix saving/restoring window position for maximized windows.
 - Fix stack corruption when using wxStackWalker (srfisk).
 - Fix positioning windows at positions >= SHORT_MAX (Cătălin Răceanu).
+- Honour alignment flags for multiline buttons using custom colours too.
 
 
 3.1.1: (released 2018-02-19)
