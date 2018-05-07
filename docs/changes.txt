@@ -94,6 +94,10 @@ wxMSW:
 - Fix positioning windows at positions >= SHORT_MAX (Cătălin Răceanu).
 - Honour alignment flags for multiline buttons using custom colours too.
 
+wxOSX:
+
+- Fix dispatching pending events (and CallAfter()) in console applications.
+
 
 3.1.1: (released 2018-02-19)
 ----------------------------
