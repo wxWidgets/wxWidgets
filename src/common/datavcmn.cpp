@@ -2619,7 +2619,7 @@ wxDataViewItem wxDataViewTreeStore::GetNthChild( const wxDataViewItem& parent, u
 
     wxDataViewTreeStoreNode* const node = parent_node->GetChildren()[pos];
     if (node)
-        return wxDataViewItem(node->GetData());
+        return node->GetItem();
 
     return wxDataViewItem(0);
 }
