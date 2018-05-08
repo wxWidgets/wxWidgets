@@ -301,9 +301,8 @@ void wxCFEventLoop::OSXDoRun()
                 hasMoreEvents = true;
             }
 
-            if ( Pending() )
+            if ( Dispatch() )
             {
-                Dispatch();
                 hasMoreEvents = true;
             }
 
