@@ -341,6 +341,12 @@
 #define wxUSE_WEBVIEW_IE 0
 #endif
 
+#ifdef __WXMSW__
+#define wxUSE_WEBVIEW_EDGE 0
+#else
+#define wxUSE_WEBVIEW_EDGE 0
+#endif
+
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #define wxUSE_WEBVIEW_WEBKIT 0
 #else

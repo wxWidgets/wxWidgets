@@ -329,6 +329,12 @@
 #cmakedefine01 wxUSE_WEBVIEW_IE
 #endif
 
+#ifdef __WXMSW__
+#cmakedefine01 wxUSE_WEBVIEW_EDGE
+#else
+#cmakedefine01 wxUSE_WEBVIEW_EDGE
+#endif
+
 #if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #cmakedefine01 wxUSE_WEBVIEW_WEBKIT
 #else

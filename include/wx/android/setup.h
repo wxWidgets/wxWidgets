@@ -774,6 +774,17 @@
 #define wxUSE_WEBVIEW_IE 0
 #endif
 
+// Use the Edge wxWebView backend
+//
+// Default is 1 on MSW
+//
+// Recommended setting: 1
+#ifdef __WXMSW__
+#define wxUSE_WEBVIEW_EDGE 1
+#else
+#define wxUSE_WEBVIEW_EDGE 0
+#endif
+
 // Use the WebKit wxWebView backend
 //
 // Default is 1 on GTK and OSX
