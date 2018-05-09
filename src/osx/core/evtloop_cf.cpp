@@ -301,11 +301,6 @@ void wxCFEventLoop::OSXDoRun()
                 hasMoreEvents = true;
             }
 
-            if ( Dispatch() )
-            {
-                hasMoreEvents = true;
-            }
-
             if ( !hasMoreEvents )
                 break;
         }
