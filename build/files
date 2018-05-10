@@ -2781,6 +2781,7 @@ HTML_CMN_HDR =
 # wxWEBVIEW
 
 WEBVIEW_MSW_SRC =
+    src/msw/webview_edge.cpp
     src/msw/webview_ie.cpp
 WEBVIEW_CMN_SRC =
     src/common/webview.cpp
@@ -2788,6 +2789,7 @@ WEBVIEW_CMN_SRC =
     src/common/webviewfshandler.cpp
 
 WEBVIEW_MSW_HDR =
+    wx/msw/webview_edge.h
     wx/msw/webviewhistoryitem_ie.h
     wx/msw/webview_ie.h
     wx/msw/webview_missing.h

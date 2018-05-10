@@ -2829,6 +2829,7 @@ set(HTML_CMN_HDR
 
 set(WEBVIEW_MSW_SRC
     src/msw/webview_ie.cpp
+    src/msw/webview_edge.cpp
 )
 
 set(WEBVIEW_CMN_SRC
@@ -2841,6 +2842,7 @@ set(WEBVIEW_MSW_HDR
     wx/msw/webviewhistoryitem_ie.h
     wx/msw/webview_ie.h
     wx/msw/webview_missing.h
+    wx/msw/webview_edge.h
 )
 
 set(WEBVIEW_CMN_HDR

@@ -23,6 +23,7 @@
 #include "wx/gtk/webview_webkit.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/webview_ie.h"
+#include "wx/msw/webview_edge.h"
 #endif
 
 // DLL options compatibility check:
@@ -32,6 +33,7 @@ WX_CHECK_BUILD_OPTIONS("wxWEBVIEW")
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[] = "wxWebView";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[] = "about:blank";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendIE[] = "wxWebViewIE";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendEdge[] = "wxWebViewEdge";
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendWebKit[] = "wxWebViewWebKit";
 
 #ifdef __WXMSW__
@@ -108,6 +110,15 @@ void wxWebView::InitFactoryMap()
     if(m_factoryMap.find(wxWebViewBackendIE) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendIE, wxSharedPtr<wxWebViewFactory>
                                                    (new wxWebViewFactoryIE));
+#if wxUSE_WEBVIEW_EDGE
+    if (wxWebViewEdge::IsAvailable() &&
+        m_factoryMap.find(wxWebViewBackendEdge) == m_factoryMap.end())
+    {
+        RegisterFactory(wxWebViewBackendEdge, wxSharedPtr<wxWebViewFactory>
+                                                    (new wxWebViewFactoryEdge));
+    }
+#endif // wxUSE_WEBVIEW_EDGE
+
 #else
     if(m_factoryMap.find(wxWebViewBackendWebKit) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendWebKit, wxSharedPtr<wxWebViewFactory>

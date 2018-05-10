@@ -1802,6 +1802,9 @@
 			<File
 				RelativePath="..\..\include\wx\msw\window.h">
 			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\webview_edge.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="Generic Headers"

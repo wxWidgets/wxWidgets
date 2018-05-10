@@ -460,6 +460,7 @@
     <ClCompile Include="..\..\src\common\webviewarchivehandler.cpp" />
     <ClCompile Include="..\..\src\common\webviewfshandler.cpp" />
     <ClCompile Include="..\..\src\msw\webview_ie.cpp" />
+    <ClCompile Include="..\..\src\msw\webview_edge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -496,6 +497,7 @@
     <ClInclude Include="..\..\include\wx\webviewarchivehandler.h" />
     <ClInclude Include="..\..\include\wx\webviewfshandler.h" />
     <ClInclude Include="..\..\include\wx\msw\webview_missing.h" />
+    <ClInclude Include="..\..\include\wx\msw\webview_edge.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -846,6 +846,10 @@
 				RelativePath="..\..\src\msw\webview_ie.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\msw\webview_edge.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Setup Headers"
@@ -1070,6 +1074,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\webviewhistoryitem_ie.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\webview_edge.h"
 				>
 			</File>
 		</Filter>
