@@ -238,6 +238,20 @@ public:
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
 
+    @par wxWEBVIEW_BACKEND_EDGE (MSW)
+
+    The Edge backend uses Microsoft's
+    <a href="https://docs.microsoft.com/en-us/uwp/api/windows.web.ui.iwebviewcontrol">Edge rendering engine</a>.
+    It is available on Windows 10.0.17134 and newer.
+    This backend has currently quite a few features missing but might still be
+    a better choice than IE when just displaying web content. The unsupported
+    features are the following: virtual filesystems, custom urls, RunScript(),
+    text selection, find, source code, history retrieval, set/get zoom.
+
+    Your application should be marked as DPI aware via manifest or
+    <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms633543%28v=vs.85%29.aspx">SetProcessDPIAware()</a>
+    in order to show correctly on high resolution displays.
+
     @par wxWEBVIEW_WEBKIT (GTK)
 
     Under GTK the WebKit backend uses
