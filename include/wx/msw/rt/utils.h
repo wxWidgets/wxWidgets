@@ -18,6 +18,7 @@
 #include "wx/msw/wrapwin.h"
 
 #include <winstring.h>
+#include <inspectable.h>
 
 namespace wxWinRT
 {
@@ -29,6 +30,10 @@ bool WXDLLIMPEXP_CORE Initialize();
 void WXDLLIMPEXP_CORE Uninitialize();
 
 bool WXDLLIMPEXP_CORE GetActivationFactory(const wxString& activatableClassId, REFIID iid, void ** factory);
+
+bool WXDLLIMPEXP_CORE ActivateInstance(const wxString& activatableClassId, IInspectable** instance);
+
+wxString WXDLLIMPEXP_CORE wxStringFromHSTRING(HSTRING str);
 
 // RAII class initializing WinRT in its ctor and undoing it in its dtor.
 class WXDLLIMPEXP_CORE Initializer
