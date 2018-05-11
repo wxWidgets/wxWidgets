@@ -8317,6 +8317,8 @@ bool wxRichTextBuffer::SubmitAction(wxRichTextAction* action)
         {
             GetCommandProcessor()->Store(cmd); // Just store it, without Do()ing anything
         }
+        else
+            delete cmd;
     }
 
     return true;
