@@ -1311,7 +1311,7 @@ void wxGridStringTable::Clear()
         {
             for ( col = 0; col < numCols; col++ )
             {
-                m_data[row][col] = wxEmptyString;
+                m_data[row][col].clear();
             }
         }
     }

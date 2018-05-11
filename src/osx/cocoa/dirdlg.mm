@@ -113,7 +113,7 @@ int wxDirDialog::ShowModal()
 
     wxCFStringRef dir( m_path );
 
-    m_path = wxEmptyString;
+    m_path.clear();
 
     int returnCode = -1;
 

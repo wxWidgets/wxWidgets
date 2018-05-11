@@ -494,7 +494,7 @@ int wxFileDialog::ShowModal()
     wxCFStringRef dir( m_dir );
     wxCFStringRef file( m_fileName );
 
-    m_path = wxEmptyString;
+    m_path.clear();
     m_fileNames.Clear();
     m_paths.Clear();
 

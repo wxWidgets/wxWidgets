@@ -6412,7 +6412,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetHelpText(int childId, wxString* helpTex
         }
         else
         {
-            *helpText = wxEmptyString;
+            helpText->clear();
         }
     }
     return wxACC_OK;

@@ -465,7 +465,7 @@ void wxGenericDirCtrl::Init()
 {
     m_showHidden = false;
     m_currentFilter = 0;
-    m_currentFilterStr = wxEmptyString; // Default: any file
+    m_currentFilterStr.clear(); // Default: any file
     m_treeCtrl = NULL;
     m_filterListCtrl = NULL;
 }

@@ -2815,7 +2815,7 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
                 AppendChild(para);
 
                 lastPara = para;
-                line = wxEmptyString;
+                line.clear();
             }
         }
         else
@@ -4757,7 +4757,7 @@ bool wxRichTextParagraphLayoutBox::FindNextParagraphNumber(wxRichTextParagraph* 
                         text = text.Mid(0, text.Length() - pos - 1);
                     }
                     else
-                        text = wxEmptyString;
+                        text.clear();
                     if (!text.IsEmpty())
                         text += wxT(".");
                     text += wxString::Format(wxT("%d"), nextNumber);
@@ -6297,7 +6297,7 @@ wxRichTextObject* wxRichTextParagraph::FindObjectAtPosition(long position)
 /// The resulting string may be shorter than the range given.
 bool wxRichTextParagraph::GetContiguousPlainText(wxString& text, const wxRichTextRange& range, bool fromStart)
 {
-    text = wxEmptyString;
+    text.clear();
 
     if (fromStart)
     {
@@ -13623,7 +13623,7 @@ void wxTextBoxAttr::Reset()
     m_whitespaceMode = wxTEXT_BOX_ATTR_WHITESPACE_NONE;
     m_collapseMode = wxTEXT_BOX_ATTR_COLLAPSE_NONE;
     m_verticalAlignment = wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_NONE;
-    m_boxStyleName = wxEmptyString;
+    m_boxStyleName.clear();
 
     m_margins.Reset();
     m_padding.Reset();

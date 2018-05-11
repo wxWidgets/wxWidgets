@@ -548,8 +548,8 @@ void ScintillaWX::Paste() {
 
 #if wxUSE_UNICODE
         // free up the old character buffer in case the text is real big
-        data.SetText(wxEmptyString);
-        text = wxEmptyString;
+        text.clear();
+        data.SetText(text);
 #endif
         const size_t len = buf.length();
         SelectionPosition selStart = sel.IsRectangular() ?

@@ -3453,7 +3453,7 @@ void wxDataViewColumn::SetBitmap(const wxBitmap& bitmap)
 {
     // bitmaps and titles cannot exist at the same time - if the bitmap is set
     // the title is removed:
-    m_title = wxEmptyString;
+    m_title.clear();
     wxDataViewColumnBase::SetBitmap(bitmap);
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:bitmap.GetNSImage()];
 }
