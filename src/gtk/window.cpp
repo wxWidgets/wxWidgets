@@ -249,7 +249,7 @@ public:
     // This class has rather unusual "resurrectable" semantics: it is
     // initialized by the ctor as usual, but may then be uninitialized by
     // calling Free() and re-initialized again by calling Reinit().
-    wxWindowGesturesData(wxWindow* win, GtkWidget *widget, int eventsMask)
+    wxWindowGesturesData(wxWindowGTK* win, GtkWidget *widget, int eventsMask)
     {
         Reinit(win, widget, eventsMask);
     }
@@ -259,7 +259,7 @@ public:
         Free();
     }
 
-    void Reinit(wxWindow* win, GtkWidget *widget, int eventsMask);
+    void Reinit(wxWindowGTK* win, GtkWidget *widget, int eventsMask);
     void Free();
 
     unsigned int         m_touchCount;
@@ -2727,7 +2727,7 @@ wxWindowGTK::~wxWindowGTK()
 #endif
 
 #ifdef wxGTK_HAS_GESTURES_SUPPORT
-    wxWindowGestures::EraseForObject(this);
+    wxWindowGestures::EraseForObject(static_cast<wxWindow*>(this));
 #endif // wxGTK_HAS_GESTURES_SUPPORT
 
     if (m_widget)
@@ -2959,7 +2959,7 @@ pan_gesture_begin_callback(GtkGesture* WXUNUSED(gesture), GdkEventSequence* WXUN
 }
 
 static void
-horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindow* win)
 {
     wxWindowGesturesData* const data = wxWindowGestures::FromObject(win);
     if ( !data )
@@ -2990,7 +2990,7 @@ horizontal_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* seque
 }
 
 static void
-vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindowGTK* win)
+vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequence, wxWindow* win)
 {
     wxWindowGesturesData* const data = wxWindowGestures::FromObject(win);
     if ( !data )
@@ -3021,7 +3021,7 @@ vertical_pan_gesture_end_callback(GtkGesture* gesture, GdkEventSequence* sequenc
 }
 
 static void
-pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble offset, wxWindowGTK* win)
+pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble offset, wxWindow* win)
 {
     // The function that retrieves the GdkEventSequence (which will further be used to get the gesture point)
     // should be called only when the gestrure is active
@@ -3093,7 +3093,7 @@ pan_gesture_callback(GtkGesture* gesture, GtkPanDirection direction, gdouble off
 }
 
 static void
-zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindowGTK* win)
+zoom_gesture_callback(GtkGesture* gesture, gdouble scale, wxWindow* win)
 {
     gdouble x, y;
 
@@ -3242,7 +3242,7 @@ long_press_gesture_callback(GtkGesture* WXUNUSED(gesture), gdouble x, gdouble y,
 }
 
 static void
-wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
+wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindow* win)
 {
     wxTwoFingerTapEvent event(win->GetId());
 
@@ -3273,7 +3273,7 @@ wxEmitTwoFingerTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 }
 
 static void
-wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
+wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindow* win)
 {
     wxPressAndTapEvent event(win->GetId());
 
@@ -3309,7 +3309,7 @@ wxEmitPressAndTapEvent(GdkEventTouch* gdk_event, wxWindowGTK* win)
 }
 
 static void
-touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindowGTK* win)
+touch_callback(GtkWidget* WXUNUSED(widget), GdkEventTouch* gdk_event, wxWindow* win)
 {
     wxWindowGesturesData* const data = wxWindowGestures::FromObject(win);
     if ( !data )
@@ -3574,7 +3574,7 @@ bool wxWindowGTK::EnableTouchEvents(int eventsMask)
     // Check if gestures support is also available during run-time.
     if ( gtk_check_version(3, 14, 0) == NULL )
     {
-        wxWindowGesturesData* const dataOld = wxWindowGestures::FromObject(this);
+        wxWindowGesturesData* const dataOld = wxWindowGestures::FromObject(static_cast<wxWindow*>(this));
 
         if ( eventsMask == wxTOUCH_NONE )
         {
@@ -3596,7 +3596,7 @@ bool wxWindowGTK::EnableTouchEvents(int eventsMask)
             {
                 wxWindowGesturesData* const
                     dataNew = new wxWindowGesturesData(this, widget, eventsMask);
-                wxWindowGestures::StoreForObject(this, dataNew);
+                wxWindowGestures::StoreForObject(static_cast<wxWindow*>(this), dataNew);
             }
         }
 
@@ -4377,7 +4377,7 @@ bool wxWindowGTK::GTKHandleFocusIn()
 
     wxFocusEvent eventFocus(wxEVT_SET_FOCUS, GetId());
     eventFocus.SetEventObject(this);
-    eventFocus.SetWindow(gs_lastFocus);
+    eventFocus.SetWindow(static_cast<wxWindow*>(gs_lastFocus));
     gs_lastFocus = this;
 
     GTKProcessEvent(eventFocus);
