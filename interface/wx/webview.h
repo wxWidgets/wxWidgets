@@ -387,6 +387,14 @@ public:
                                 wxSharedPtr<wxWebViewFactory> factory);
 
     /**
+        Allows to check if a specific backend is currently available
+
+        @since 3.1.2
+    */
+    static bool IsBackendAvailable(const wxString& backend);
+
+
+    /**
         Get the title of the current web page, or its URL/path if title is not
         available.
     */

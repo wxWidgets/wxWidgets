@@ -86,6 +86,13 @@ void wxWebView::RegisterFactory(const wxString& backend,
 }
 
 // static
+bool wxWebView::IsBackendAvailable(const wxString& backend)
+{
+    wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
+    return (iter != m_factoryMap.end());
+}
+
+// static 
 wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backend)
 {
     // Initialise the map, it checks internally for existing factories
