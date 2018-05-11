@@ -343,6 +343,7 @@ bool wxLZMAOutputStream::DoFlush(bool finish)
 
             case LZMA_MEM_ERROR:
                 err = wxTRANSLATE("out of memory");
+                break;
 
             default:
                 err = wxTRANSLATE("unknown compression error");
