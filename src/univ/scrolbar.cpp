@@ -1033,7 +1033,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
                         consumer->PerformAction(wxACTION_SCROLL_THUMB_DRAG);
                         m_ofsMouse = GetMouseCoord(scrollbar, event) -
                                      scrollbar->ScrollbarToPixel();
-
+                        wxFALLTHROUGH;
                         // fall through: there is no immediate action
 
                     default:
