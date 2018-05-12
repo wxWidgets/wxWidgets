@@ -611,8 +611,10 @@ void wxAuiMDIChildFrame::SetIcons(const wxIconBundle& icons)
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
 
+    const wxSize sizeIcon(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
+                          wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
     wxBitmap bmp;
-    bmp.CopyFromIcon(icons.GetIcon(-1));
+    bmp.CopyFromIcon(icons.GetIcon(sizeIcon));
 
     wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
     if (pClientWindow != NULL)
@@ -722,11 +724,6 @@ wxAuiMDIClientWindow::wxAuiMDIClientWindow(wxAuiMDIParentFrame* parent, long sty
 bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
 {
     SetWindowStyleFlag(style);
-
-    wxSize caption_icon_size =
-            wxSize(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
-                   wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
-    SetUniformBitmapSize(caption_icon_size);
 
     if (!wxAuiNotebook::Create(parent,
                                wxID_ANY,
