@@ -496,16 +496,13 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
     if (style & wxMINIMIZE)
         m_activateOnCreate = false;
 
-    wxSize cli_size = pClientWindow->GetClientSize();
-
-    // create the window off-screen to prevent flicker
+    // create the window hidden to prevent flicker
+    wxWindow::Show(false);
     wxWindow::Create(pClientWindow,
                     id,
-                    wxPoint(cli_size.x+1, cli_size.y+1),
+                    wxDefaultPosition,
                     size,
                     wxNO_BORDER, name);
-
-    DoShow(false);
 
     SetMDIParentFrame(parent);
 
@@ -715,11 +712,6 @@ bool wxAuiMDIChildFrame::Show(bool show)
 
     // do nothing
     return true;
-}
-
-void wxAuiMDIChildFrame::DoShow(bool show)
-{
-    wxWindow::Show(show);
 }
 
 //-----------------------------------------------------------------------------

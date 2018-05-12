@@ -168,7 +168,6 @@ public:
     // we needed this function to prevent anybody from the outside
     // changing the panel... it messes the UI layout when we would allow it.
     void ApplyMDIChildFrameRect();
-    void DoShow(bool show);
 
 protected:
     wxAuiMDIParentFrame* m_pMDIParentFrame;

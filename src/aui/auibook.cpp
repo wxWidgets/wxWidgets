@@ -930,7 +930,7 @@ static void ShowWnd(wxWindow* wnd, bool show)
     if (wxDynamicCast(wnd, wxAuiMDIChildFrame))
     {
         wxAuiMDIChildFrame* cf = (wxAuiMDIChildFrame*)wnd;
-        cf->DoShow(show);
+        cf->wxWindow::Show(show);
     }
     else
 #endif
