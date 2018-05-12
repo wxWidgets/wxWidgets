@@ -700,14 +700,6 @@ void wxAuiMDIChildFrame::Init()
 
 bool wxAuiMDIChildFrame::Show(bool show)
 {
-    // wxAuiMDIChildFrame uses m_activateOnCreate only to decide whether to
-    // activate the frame when it is created.  After Create() is called,
-    // m_activateOnCreate will never be read again.  Therefore, calling this
-    // function after Create() is pointless and you probably want to call
-    // Activate() instead.
-    wxCHECK_MSG( !GetHandle(), false,
-                 wxS("Show() has no effect after Create(). Do you mean Activate()?") );
-
     m_activateOnCreate = show;
 
     // do nothing
