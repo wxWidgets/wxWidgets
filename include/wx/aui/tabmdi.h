@@ -201,7 +201,6 @@ public:
     virtual bool CreateClient(wxAuiMDIParentFrame *parent,
                               long style = wxVSCROLL | wxHSCROLL);
 
-    virtual int SetSelection(size_t page) wxOVERRIDE;
     virtual wxAuiMDIChildFrame* GetActiveChild();
     virtual void SetActiveChild(wxAuiMDIChildFrame* pChildFrame)
     {

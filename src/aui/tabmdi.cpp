@@ -763,11 +763,6 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
     return true;
 }
 
-int wxAuiMDIClientWindow::SetSelection(size_t nPage)
-{
-    return wxAuiNotebook::SetSelection(nPage);
-}
-
 wxAuiMDIChildFrame* wxAuiMDIClientWindow::GetActiveChild()
 {
     const int sel = GetSelection();
