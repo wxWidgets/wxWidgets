@@ -722,32 +722,6 @@ void wxAuiMDIChildFrame::DoShow(bool show)
     wxWindow::Show(show);
 }
 
-void wxAuiMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    m_mdiNewRect = wxRect(x, y, width, height);
-#ifdef __WXGTK__
-    wxWindow::DoSetSize(x,y,width, height, sizeFlags);
-#else
-    wxUnusedVar(sizeFlags);
-#endif
-}
-
-void wxAuiMDIChildFrame::DoMoveWindow(int x, int y, int width, int height)
-{
-    m_mdiNewRect = wxRect(x, y, width, height);
-}
-
-void wxAuiMDIChildFrame::ApplyMDIChildFrameRect()
-{
-    if (m_mdiCurRect != m_mdiNewRect)
-    {
-        wxWindow::DoMoveWindow(m_mdiNewRect.x, m_mdiNewRect.y,
-                              m_mdiNewRect.width, m_mdiNewRect.height);
-        m_mdiCurRect = m_mdiNewRect;
-    }
-}
-
-
 //-----------------------------------------------------------------------------
 // wxAuiMDIClientWindow
 //-----------------------------------------------------------------------------
@@ -757,7 +731,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAuiMDIClientWindow, wxAuiNotebook);
 wxBEGIN_EVENT_TABLE(wxAuiMDIClientWindow, wxAuiNotebook)
     EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiMDIClientWindow::OnPageChanged)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, wxAuiMDIClientWindow::OnPageClose)
-    EVT_SIZE(wxAuiMDIClientWindow::OnSize)
 wxEND_EVENT_TABLE()
 
 wxAuiMDIClientWindow::wxAuiMDIClientWindow()
@@ -872,14 +845,6 @@ void wxAuiMDIClientWindow::OnPageClose(wxAuiNotebookEvent& evt)
 void wxAuiMDIClientWindow::OnPageChanged(wxAuiNotebookEvent& evt)
 {
     PageChanged(evt.GetOldSelection(), evt.GetSelection());
-}
-
-void wxAuiMDIClientWindow::OnSize(wxSizeEvent& evt)
-{
-    wxAuiNotebook::OnSize(evt);
-
-    for (size_t pos = 0; pos < GetPageCount(); pos++)
-        ((wxAuiMDIChildFrame *)GetPage(pos))->ApplyMDIChildFrameRect();
 }
 
 #endif //wxUSE_AUI

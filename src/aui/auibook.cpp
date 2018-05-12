@@ -1595,14 +1595,6 @@ public:
             }
             // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
             // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
-
-#if wxUSE_MDI
-            if (wxDynamicCast(page.window, wxAuiMDIChildFrame))
-            {
-                wxAuiMDIChildFrame* wnd = (wxAuiMDIChildFrame*)page.window;
-                wnd->ApplyMDIChildFrameRect();
-            }
-#endif
         }
     }
 

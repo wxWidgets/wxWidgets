@@ -162,8 +162,6 @@ public:
 
 protected:
     void Init();
-    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 
 public:
     // This function needs to be called when a size change is confirmed,
@@ -174,8 +172,6 @@ public:
 
 protected:
     wxAuiMDIParentFrame* m_pMDIParentFrame;
-    wxRect m_mdiNewRect;
-    wxRect m_mdiCurRect;
     wxIcon m_icon;
     wxIconBundle m_iconBundle;
     bool m_activateOnCreate;
@@ -218,7 +214,6 @@ protected:
     void PageChanged(int oldSelection, int newSelection);
     void OnPageClose(wxAuiNotebookEvent& evt);
     void OnPageChanged(wxAuiNotebookEvent& evt);
-    void OnSize(wxSizeEvent& evt);
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxAuiMDIClientWindow);
