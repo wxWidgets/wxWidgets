@@ -423,12 +423,10 @@ void wxAuiMDIParentFrame::Tile(wxOrientation orient)
 // wxAuiMDIChildFrame
 //-----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxAuiMDIChildFrame, wxPanel);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAuiMDIChildFrame, wxFrame);
 
-wxBEGIN_EVENT_TABLE(wxAuiMDIChildFrame, wxPanel)
+wxBEGIN_EVENT_TABLE(wxAuiMDIChildFrame, wxFrame)
     EVT_MENU_HIGHLIGHT_ALL(wxAuiMDIChildFrame::OnMenuHighlight)
-    EVT_ACTIVATE(wxAuiMDIChildFrame::OnActivate)
-    EVT_CLOSE(wxAuiMDIChildFrame::OnCloseWindow)
 wxEND_EVENT_TABLE()
 
 wxAuiMDIChildFrame::wxAuiMDIChildFrame()
@@ -501,7 +499,7 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
     wxSize cli_size = pClientWindow->GetClientSize();
 
     // create the window off-screen to prevent flicker
-    wxPanel::Create(pClientWindow,
+    wxWindow::Create(pClientWindow,
                     id,
                     wxPoint(cli_size.x+1, cli_size.y+1),
                     size,
@@ -609,11 +607,6 @@ void wxAuiMDIChildFrame::SetTitle(const wxString& title)
     }
 }
 
-wxString wxAuiMDIChildFrame::GetTitle() const
-{
-    return m_title;
-}
-
 void wxAuiMDIChildFrame::SetIcons(const wxIconBundle& icons)
 {
     // get icon with the system icon size
@@ -689,16 +682,6 @@ void wxAuiMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
 #endif // wxUSE_STATUSBAR
 }
 
-void wxAuiMDIChildFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
-{
-    // do nothing
-}
-
-void wxAuiMDIChildFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
-{
-    Destroy();
-}
-
 void wxAuiMDIChildFrame::SetMDIParentFrame(wxAuiMDIParentFrame* parentFrame)
 {
     m_pMDIParentFrame = parentFrame;
@@ -743,7 +726,7 @@ void wxAuiMDIChildFrame::DoSetSize(int x, int y, int width, int height, int size
 {
     m_mdiNewRect = wxRect(x, y, width, height);
 #ifdef __WXGTK__
-    wxPanel::DoSetSize(x,y,width, height, sizeFlags);
+    wxWindow::DoSetSize(x,y,width, height, sizeFlags);
 #else
     wxUnusedVar(sizeFlags);
 #endif
@@ -758,7 +741,7 @@ void wxAuiMDIChildFrame::ApplyMDIChildFrameRect()
 {
     if (m_mdiCurRect != m_mdiNewRect)
     {
-        wxPanel::DoMoveWindow(m_mdiNewRect.x, m_mdiNewRect.y,
+        wxWindow::DoMoveWindow(m_mdiNewRect.x, m_mdiNewRect.y,
                               m_mdiNewRect.width, m_mdiNewRect.height);
         m_mdiCurRect = m_mdiNewRect;
     }
