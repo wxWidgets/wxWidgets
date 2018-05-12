@@ -92,7 +92,9 @@ MyApp::MyApp()
 namespace CmdLineOption
 {
 
+#if wxUSE_MDI_ARCHITECTURE
 const char * const MDI = "mdi";
+#endif // wxUSE_MDI_ARCHITECTURE
 const char * const SDI = "sdi";
 const char * const SINGLE = "single";
 
@@ -102,8 +104,10 @@ void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
     wxApp::OnInitCmdLine(parser);
 
+#if wxUSE_MDI_ARCHITECTURE
     parser.AddSwitch("", CmdLineOption::MDI,
                      "run in MDI mode: multiple documents, single window");
+#endif // wxUSE_MDI_ARCHITECTURE
     parser.AddSwitch("", CmdLineOption::SDI,
                      "run in SDI mode: multiple documents, multiple windows");
     parser.AddSwitch("", CmdLineOption::SINGLE,
