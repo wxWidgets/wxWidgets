@@ -144,11 +144,7 @@ public:
 
     virtual void SetTitle(const wxString& title);
 
-    virtual void SetIcons(const wxIconBundle& icons);
-    virtual const wxIconBundle& GetIcons() const;
-
-    virtual void SetIcon(const wxIcon& icon);
-    virtual const wxIcon& GetIcon() const;
+    virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
 
     virtual void Activate();
     virtual bool Destroy() wxOVERRIDE;
@@ -171,8 +167,6 @@ public:
 
 protected:
     wxAuiMDIParentFrame* m_pMDIParentFrame;
-    wxIcon m_icon;
-    wxIconBundle m_iconBundle;
     bool m_activateOnCreate;
 
 #if wxUSE_MENUS

@@ -606,25 +606,13 @@ void wxAuiMDIChildFrame::SetTitle(const wxString& title)
 
 void wxAuiMDIChildFrame::SetIcons(const wxIconBundle& icons)
 {
-    // get icon with the system icon size
-    SetIcon(icons.GetIcon(-1));
-    m_iconBundle = icons;
-}
+    wxTDIChildFrame::SetIcons(icons);
 
-const wxIconBundle& wxAuiMDIChildFrame::GetIcons() const
-{
-    return m_iconBundle;
-}
-
-void wxAuiMDIChildFrame::SetIcon(const wxIcon& icon)
-{
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
 
-    m_icon = icon;
-
     wxBitmap bmp;
-    bmp.CopyFromIcon(m_icon);
+    bmp.CopyFromIcon(icons.GetIcon(-1));
 
     wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
     if (pClientWindow != NULL)
@@ -637,12 +625,6 @@ void wxAuiMDIChildFrame::SetIcon(const wxIcon& icon)
         }
     }
 }
-
-const wxIcon& wxAuiMDIChildFrame::GetIcon() const
-{
-    return m_icon;
-}
-
 
 void wxAuiMDIChildFrame::Activate()
 {
