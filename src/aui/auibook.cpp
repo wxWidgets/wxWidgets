@@ -1973,8 +1973,11 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     else
         active_tabctrl->InsertPage(page, info, page_idx);
 
-    UpdateTabCtrlHeight();
-    DoSizing();
+    // Note that we don't need to call DoSizing() if the height has changed, as
+    // it's already called from UpdateTabCtrlHeight() itself in this case.
+    if ( !UpdateTabCtrlHeight() )
+        DoSizing();
+
     active_tabctrl->DoShowHide();
 
     // adjust selected index
