@@ -138,15 +138,15 @@ public:
                 const wxString& name = wxFrameNameStr);
 
 #if wxUSE_MENUS
-    virtual void SetMenuBar(wxMenuBar *menuBar);
-    virtual wxMenuBar *GetMenuBar() const;
+    virtual void SetMenuBar(wxMenuBar *menuBar) wxOVERRIDE;
+    virtual wxMenuBar *GetMenuBar() const wxOVERRIDE;
 #endif // wxUSE_MENUS
 
-    virtual void SetTitle(const wxString& title);
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
     virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
 
-    virtual void Activate();
+    virtual void Activate() wxOVERRIDE;
     virtual bool Destroy() wxOVERRIDE;
 
     virtual bool Show(bool show = true) wxOVERRIDE;
