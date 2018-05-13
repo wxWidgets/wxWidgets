@@ -702,7 +702,18 @@ bool wxAuiMDIChildFrame::Show(bool show)
 {
     m_activateOnCreate = show;
 
-    // do nothing
+    if ( show )
+    {
+        // This is not a real TLW, so it won't get a size event when it's
+        // really "mapped", i.e. appears on the screen for the first time.
+        // Instead, its size had been already set when it was created and we
+        // didn't have any opportunity to lay it out since then, i.e. since
+        // before its children were created. Do it now to allow the same code
+        // that would work with a "real" wxMDIChildFrame to also work with this
+        // class.
+        DoLayout();
+    }
+
     return true;
 }
 
