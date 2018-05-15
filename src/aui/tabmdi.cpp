@@ -820,7 +820,7 @@ int wxAuiMDIClientWindow::SetSelection(size_t nPage)
 wxAuiMDIChildFrame* wxAuiMDIClientWindow::GetActiveChild()
 {
     const int sel = GetSelection();
-    if ( sel == wxNOT_FOUND || sel >= GetPageCount() )
+    if ( sel == wxNOT_FOUND || sel >= (int)GetPageCount() )
         return NULL;
 
     return wxStaticCast(GetPage(sel), wxAuiMDIChildFrame);
