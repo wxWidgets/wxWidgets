@@ -3315,12 +3315,17 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer(const wxString& varianttype,
                                                    int align)
     : wxOSXDataViewDisabledInertRenderer(varianttype, mode, align)
 {
+    DoCreate(align, NSSwitchButton);
+}
+
+void wxDataViewToggleRenderer::DoCreate(int align, int buttonType)
+{
     NSButtonCell* cell;
 
 
     cell = [[NSButtonCell alloc] init];
     [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-    [cell setButtonType:NSSwitchButton];
+    [cell setButtonType:(NSButtonType)buttonType];
     [cell setImagePosition:NSImageOnly];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
@@ -3346,6 +3351,19 @@ wxDataViewToggleRenderer::OSXOnCellChanged(NSObject *value,
 }
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer);
+
+// ---------------------------------------------------------
+// wxDataViewRadioRenderer
+// ---------------------------------------------------------
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewRadioRenderer, wxDataViewToggleRenderer);
+
+wxDataViewRadioRenderer::wxDataViewRadioRenderer(const wxString& varianttype,
+                                                  wxDataViewCellMode mode,
+                                                  int align)
+    : wxDataViewToggleRenderer(varianttype, mode, align, NSRadioButton)
+{
+}
 
 // ---------------------------------------------------------
 // wxDataViewProgressRenderer

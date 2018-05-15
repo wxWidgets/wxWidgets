@@ -1301,13 +1301,17 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     size.IncTo(GetSize());
     cell.SetSize(size);
 
-    wxRendererNative::Get().DrawCheckBox(
-            GetOwner()->GetOwner(),
-            *dc,
-            cell,
-            flags );
+    DoDraw(GetOwner()->GetOwner(), *dc, cell, flags);
 
     return true;
+}
+
+void wxDataViewToggleRenderer::DoDraw(wxWindow* win,
+                                      wxDC& dc,
+                                      const wxRect& cell,
+                                      int flags)
+{
+    wxRendererNative::Get().DrawCheckBox(win, dc, cell, flags);
 }
 
 bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& WXUNUSED(cellRect),
@@ -1331,6 +1335,27 @@ bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& WXUNUSED(cellRect),
 wxSize wxDataViewToggleRenderer::GetSize() const
 {
     return wxRendererNative::Get().GetCheckBoxSize(GetView());
+}
+
+// ----------------------------------------------------------------------------
+// wxDataViewRadioRenderer
+// ----------------------------------------------------------------------------
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewRadioRenderer, wxDataViewToggleRenderer);
+
+wxDataViewRadioRenderer::wxDataViewRadioRenderer(const wxString &varianttype,
+                                                 wxDataViewCellMode mode,
+                                                 int align)
+    : wxDataViewToggleRenderer(varianttype, mode, align)
+{
+}
+
+void wxDataViewRadioRenderer::DoDraw(wxWindow* win,
+                                     wxDC& dc,
+                                     const wxRect& cell,
+                                     int flags)
+{
+    wxRendererNative::Get().DrawRadioBitmap(win, dc, cell, flags);
 }
 
 // ---------------------------------------------------------

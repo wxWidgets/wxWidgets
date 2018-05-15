@@ -1285,11 +1285,67 @@ public:
 
     //@{
     /**
+        Appends a column for rendering a radio button.
+
+        Returns the wxDataViewColumn created in the function or @NULL on
+        failure.
+
+        @note The @a align parameter is applied to both the column header and
+              the column renderer.
+
+        @see wxDataViewRadioRenderer
+
+        @since 3.1.2
+    */
+    wxDataViewColumn* AppendRadioColumn(const wxString& label,
+                                        unsigned int model_column,
+                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                        int width = 30,
+                                        wxAlignment align = wxALIGN_CENTER,
+                                        int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* AppendRadioColumn(const wxBitmap& label,
+                                        unsigned int model_column,
+                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                        int width = 30,
+                                        wxAlignment align = wxALIGN_CENTER,
+                                        int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    //@{
+    /**
         Prepends a column for rendering a toggle. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
 
         @note The @a align parameter is applied to both the column header and
               the column renderer.
+    */
+    wxDataViewColumn* PrependToggleColumn(const wxString& label,
+                                         unsigned int model_column,
+                                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                         int width = 30,
+                                         wxAlignment align = wxALIGN_CENTER,
+                                         int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* PrependToggleColumn(const wxBitmap& label,
+                                         unsigned int model_column,
+                                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                         int width = 30,
+                                         wxAlignment align = wxALIGN_CENTER,
+                                         int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    //@{
+    /**
+        Prepends a column for rendering a radio button.
+
+        Returns the wxDataViewColumn created in the function or @NULL on
+        failure.
+
+        @note The @a align parameter is applied to both the column header and
+              the column renderer.
+
+        @see wxDataViewRadioRenderer
+
+        @since 3.1.2
     */
     wxDataViewColumn* PrependToggleColumn(const wxString& label,
                                          unsigned int model_column,
@@ -1877,6 +1933,7 @@ enum wxDataViewCellRenderState
     - wxDataViewIconTextRenderer,
     - wxDataViewCheckIconTextRenderer,
     - wxDataViewToggleRenderer,
+    - wxDataViewRadioRenderer,
     - wxDataViewProgressRenderer,
     - wxDataViewBitmapRenderer,
     - wxDataViewDateRenderer,
@@ -2292,6 +2349,41 @@ public:
     wxDataViewToggleRenderer(const wxString& varianttype = GetDefaultType(),
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
+};
+
+
+/**
+    @class wxDataViewRadioRenderer
+
+    Renderer class showing a radio button and allowing the user to toggle it.
+
+    Notice that the other items using this renderer are @e not unchecked
+    automatically when an item using this renderer is checked, it's the
+    responsibility of the code using wxDataViewCtrl to do it, by handling
+    ::wxEVT_DATAVIEW_ITEM_VALUE_CHANGED event, in order to present consistent
+    UI. The @ref page_samples_dataview shows how to do it.
+
+    @see wxDataViewToggleRenderer
+
+    @library{wxadv}
+    @category{dvc}
+
+    @since 3.1.2
+*/
+class wxDataViewRadioRenderer : public wxDataViewToggleRenderer
+{
+public:
+    /**
+        Returns the wxVariant type used with this renderer.
+     */
+    static wxString GetDefaultType();
+
+    /**
+        The ctor.
+    */
+    wxDataViewRadioRenderer(const wxString& varianttype = GetDefaultType(),
+                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                            int align = wxDVR_DEFAULT_ALIGNMENT);
 };
 
 
@@ -2900,6 +2992,19 @@ public:
         the parameters.
     */
     wxDataViewColumn *AppendToggleColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+          int width = -1, wxAlignment align = wxALIGN_LEFT,
+          int flags = wxDATAVIEW_COL_RESIZABLE );
+
+    /**
+        Appends a radio column to the control and the store.
+
+        See wxDataViewColumn::wxDataViewColumn for more info about
+        the parameters.
+
+        @since 3.1.2
+    */
+    wxDataViewColumn *AppendRadioColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
           int width = -1, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );

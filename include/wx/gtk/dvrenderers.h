@@ -115,6 +115,23 @@ protected:
 };
 
 // ---------------------------------------------------------
+// wxDataViewRadioRenderer
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewRadioRenderer : public wxDataViewToggleRenderer
+{
+public:
+    static wxString GetDefaultType() { return wxS("bool"); }
+
+    wxDataViewRadioRenderer( const wxString &varianttype = GetDefaultType(),
+                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                             int align = wxDVR_DEFAULT_ALIGNMENT );
+
+protected:
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRadioRenderer);
+};
+
+// ---------------------------------------------------------
 // wxDataViewCustomRenderer
 // ---------------------------------------------------------
 

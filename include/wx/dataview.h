@@ -559,6 +559,10 @@ public:
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *PrependRadioColumn( const wxString &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependProgressColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
@@ -580,6 +584,10 @@ public:
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependToggleColumn( const wxBitmap &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *PrependRadioColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
@@ -608,6 +616,10 @@ public:
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *AppendRadioColumn( const wxString &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendProgressColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
@@ -629,6 +641,10 @@ public:
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *AppendRadioColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
@@ -1125,6 +1141,9 @@ public:
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *AppendRadioColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendProgressColumn( const wxString &label,

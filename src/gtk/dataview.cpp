@@ -2566,6 +2566,23 @@ bool wxDataViewToggleRenderer::GetValue( wxVariant &value ) const
 }
 
 // ---------------------------------------------------------
+// wxDataViewRadioRenderer
+// ---------------------------------------------------------
+
+wxIMPLEMENT_CLASS(wxDataViewRadioRenderer, wxDataViewToggleRenderer);
+
+wxDataViewRadioRenderer::wxDataViewRadioRenderer
+                         (
+                            const wxString &varianttype,
+                            wxDataViewCellMode mode,
+                            int align
+                         )
+    : wxDataViewToggleRenderer(varianttype, mode, align)
+{
+    gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(m_renderer), TRUE);
+}
+
+// ---------------------------------------------------------
 // wxDataViewCustomRenderer
 // ---------------------------------------------------------
 

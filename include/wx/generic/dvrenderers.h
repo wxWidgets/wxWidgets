@@ -147,11 +147,34 @@ public:
                                 const wxDataViewItem& item,
                                 unsigned int col,
                                 const wxMouseEvent *mouseEvent) wxOVERRIDE;
+protected:
+    // This function exists solely in order to be overridden bu
+    // wxDataViewRadioRenderer which customizes just the drawing.
+    virtual void DoDraw(wxWindow* win, wxDC& dc, const wxRect& cell, int flags);
+
 private:
     bool    m_toggle;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);
+};
+
+// ---------------------------------------------------------
+// wxDataViewRadioRenderer
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewRadioRenderer : public wxDataViewToggleRenderer
+{
+public:
+    wxDataViewRadioRenderer( const wxString &varianttype = GetDefaultType(),
+                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                             int align = wxDVR_DEFAULT_ALIGNMENT );
+
+protected:
+    virtual void
+    DoDraw(wxWindow* win, wxDC& dc, const wxRect& cell, int flags) wxOVERRIDE;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRadioRenderer);
 };
 
 // ---------------------------------------------------------
