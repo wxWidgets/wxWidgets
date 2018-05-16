@@ -588,6 +588,10 @@ wxMSW:
 - Fix handling of AUX2 mouse button events (Trylz).
 - Honour alignment flags for multiline buttons using custom colours too.
 
+wxGTK:
+
+- Fix position of popup menus shown in wxListCtrl.
+
 
 3.0.4: (released 2018-03-08)
 ----------------------------
