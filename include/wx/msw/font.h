@@ -94,6 +94,7 @@ public:
     virtual bool GetStrikethrough() const wxOVERRIDE;
     virtual wxString GetFaceName() const wxOVERRIDE;
     virtual wxFontEncoding GetEncoding() const wxOVERRIDE;
+    virtual wxDouble GetLetterSpacing() const wxOVERRIDE;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
 
     virtual void SetPointSize(int pointSize) wxOVERRIDE;
@@ -105,6 +106,7 @@ public:
     virtual void SetUnderlined(bool underlined) wxOVERRIDE;
     virtual void SetStrikethrough(bool strikethrough) wxOVERRIDE;
     virtual void SetEncoding(wxFontEncoding encoding) wxOVERRIDE;
+    virtual void SetLetterSpacing(wxDouble spacing) wxOVERRIDE;
 
     wxDECLARE_COMMON_FONT_METHODS();
 

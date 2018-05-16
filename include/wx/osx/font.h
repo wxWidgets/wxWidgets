@@ -48,6 +48,9 @@ public:
 
         if ( info.IsUsingSizeInPixels() )
             SetPixelSize(info.GetPixelSize());
+
+        if ( info.GetLetterSpacing() )
+            SetLetterSpacing(info.GetLetterSpacing());
     }
 
     wxFont( wxOSXSystemFont systemFont );
@@ -107,6 +110,7 @@ public:
     virtual bool GetStrikethrough() const;
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
+    virtual wxDouble GetLetterSpacing() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
 
     virtual bool IsFixedWidth() const;
@@ -119,6 +123,7 @@ public:
     virtual void SetUnderlined(bool underlined);
     virtual void SetStrikethrough(bool strikethrough);
     virtual void SetEncoding(wxFontEncoding encoding);
+    virtual void SetLetterSpacing(wxDouble spacing);
 
     wxDECLARE_COMMON_FONT_METHODS();
 

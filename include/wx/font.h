@@ -155,6 +155,9 @@ public:
     wxFontInfo& Encoding(wxFontEncoding encoding)
         { m_encoding = encoding; return *this; }
 
+    wxFontInfo& LetterSpacing(wxDouble spacing)
+        { m_spacing = spacing; return *this; }
+
 
     // Set all flags at once.
     wxFontInfo& AllFlags(int flags)
@@ -205,6 +208,7 @@ public:
 
     wxFontEncoding GetEncoding() const { return m_encoding; }
 
+    wxDouble GetLetterSpacing() const { return m_spacing; }
 
     // Default copy ctor, assignment operator and dtor are OK.
 
@@ -215,6 +219,7 @@ private:
         m_family = wxFONTFAMILY_DEFAULT;
         m_flags = wxFONTFLAG_DEFAULT;
         m_encoding = wxFONTENCODING_DEFAULT;
+        m_spacing = 0;
     }
 
     void InitPointSize(int pointSize)
@@ -246,6 +251,7 @@ private:
     wxString m_faceName;
     int m_flags;
     wxFontEncoding m_encoding;
+    wxDouble m_spacing;
 };
 
 // ----------------------------------------------------------------------------
@@ -350,6 +356,8 @@ public:
     virtual wxFontEncoding GetEncoding() const = 0;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const = 0;
 
+    virtual wxDouble GetLetterSpacing() const;
+
     virtual bool IsFixedWidth() const;
 
     wxString GetNativeFontInfoDesc() const;
@@ -368,6 +376,8 @@ public:
     virtual bool SetFaceName( const wxString& faceName );
     void SetNativeFontInfo(const wxNativeFontInfo& info)
         { DoSetNativeFontInfo(info); }
+
+    virtual void SetLetterSpacing(wxDouble spacing);
 
     bool SetNativeFontInfo(const wxString& info);
     bool SetNativeFontInfoUserDesc(const wxString& info);

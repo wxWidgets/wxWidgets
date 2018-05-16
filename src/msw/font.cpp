@@ -161,6 +161,11 @@ public:
         return m_nativeFontInfo.GetEncoding();
     }
 
+    wxDouble GetLetterSpacing() const
+    {
+        return m_nativeFontInfo.GetLetterSpacing();
+    }
+
     WXHFONT GetHFONT() const
     {
         AllocIfNeeded();
@@ -242,6 +247,13 @@ public:
         Free();
 
         m_nativeFontInfo.SetEncoding(encoding);
+    }
+
+    void SetLetterSpacing(wxDouble spacing)
+    {
+        Free();
+
+        m_nativeFontInfo.SetLetterSpacing(spacing);
     }
 
     const wxNativeFontInfo& GetNativeFontInfo() const
@@ -812,6 +824,9 @@ wxFont::wxFont(const wxFontInfo& info)
                                   info.IsStrikethrough(),
                                   info.GetFaceName(),
                                   info.GetEncoding());
+
+    if ( info.GetLetterSpacing() )
+        M_FONTDATA->SetLetterSpacing(info.GetLetterSpacing());
 }
 
 bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
@@ -819,6 +834,9 @@ bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
     UnRef();
 
     m_refData = new wxFontRefData(info, hFont);
+
+    if ( info.GetLetterSpacing() )
+        M_FONTDATA->SetLetterSpacing(info.GetLetterSpacing());
 
     return RealizeResource();
 }
@@ -980,6 +998,13 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     M_FONTDATA->SetEncoding(encoding);
 }
 
+void wxFont::SetLetterSpacing(wxDouble spacing)
+{
+    AllocExclusive();
+
+    M_FONTDATA->SetLetterSpacing(spacing);
+}
+
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
     AllocExclusive();
@@ -1057,6 +1082,13 @@ wxFontEncoding wxFont::GetEncoding() const
     wxCHECK_MSG( IsOk(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
 
     return M_FONTDATA->GetEncoding();
+}
+
+wxDouble wxFont::GetLetterSpacing() const
+{
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
+
+    return M_FONTDATA->GetLetterSpacing();
 }
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const

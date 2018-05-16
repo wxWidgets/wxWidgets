@@ -73,6 +73,7 @@ public:
     void SetStrikethrough(bool strikethrough);
     bool SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
+    void SetLetterSpacing(wxDouble spacing);
 
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
@@ -259,6 +260,11 @@ void wxFontRefData::SetEncoding(wxFontEncoding WXUNUSED(encoding))
     // with GTK+ 2 Pango always uses UTF8 internally, we cannot change it
 }
 
+void wxFontRefData::SetLetterSpacing(wxDouble spacing)
+{
+    m_nativeFontInfo.SetLetterSpacing(spacing);
+}
+
 void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
 {
     m_nativeFontInfo = info;
@@ -283,6 +289,9 @@ wxFont::wxFont(const wxNativeFontInfo& info)
 
     if ( info.GetStrikethrough() )
         SetStrikethrough(true);
+
+    if ( info.GetLetterSpacing() )
+        SetLetterSpacing(info.GetLetterSpacing());
 }
 
 wxFont::wxFont(const wxFontInfo& info)
@@ -299,6 +308,9 @@ wxFont::wxFont(const wxFontInfo& info)
     wxSize pixelSize = info.GetPixelSize();
     if ( pixelSize != wxDefaultSize )
         SetPixelSize(pixelSize);
+
+    if ( info.GetLetterSpacing() )
+        SetLetterSpacing(info.GetLetterSpacing());
 }
 
 bool wxFont::Create( int pointSize,
@@ -395,6 +407,13 @@ wxFontEncoding wxFont::GetEncoding() const
         // Pango always uses UTF8... see also SetEncoding()
 }
 
+wxDouble wxFont::GetLetterSpacing() const
+{
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
+
+    return M_FONTDATA->m_nativeFontInfo.GetLetterSpacing();
+}
+
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( IsOk(), NULL, wxT("invalid font") );
@@ -470,6 +489,13 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     M_FONTDATA->SetEncoding(encoding);
 }
 
+void wxFont::SetLetterSpacing(wxDouble spacing)
+{
+    AllocExclusive();
+
+    M_FONTDATA->SetLetterSpacing(spacing);
+}
+
 void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
 {
     AllocExclusive();
@@ -489,7 +515,7 @@ wxGDIRefData* wxFont::CloneGDIRefData(const wxGDIRefData* data) const
 
 bool wxFont::GTKSetPangoAttrs(PangoLayout* layout) const
 {
-    if (!IsOk() || !(GetUnderlined() || GetStrikethrough()))
+    if (!IsOk() || !(GetUnderlined() || GetStrikethrough() || GetLetterSpacing()))
         return false;
 
     PangoAttrList* attrs = pango_attr_list_new();
@@ -544,6 +570,11 @@ bool wxFont::GTKSetPangoAttrs(PangoLayout* layout) const
     if (GetStrikethrough())
     {
         a = pango_attr_strikethrough_new(true);
+        pango_attr_list_insert(attrs, a);
+    }
+    if (GetLetterSpacing())
+    {
+        a = pango_attr_letter_spacing_new(pango_units_from_double(GetLetterSpacing()));
         pango_attr_list_insert(attrs, a);
     }
 
