@@ -82,44 +82,38 @@ typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 
 #if wxUSE_STD_CONTAINERS
 
-template<class T>
-class wxArray_SortFunction
-{
-public:
-    typedef int (wxCMPFUNC_CONV *CMPFUNC)(T* pItem1, T* pItem2);
-
-    wxArray_SortFunction(CMPFUNC f) : m_f(f) { }
-    bool operator()(const T& i1, const T& i2)
-      { return m_f((T*)&i1, (T*)&i2) < 0; }
-private:
-    CMPFUNC m_f;
-};
-
-template<class T, typename F>
-class wxSortedArray_SortFunction
-{
-public:
-    typedef F CMPFUNC;
-
-    wxSortedArray_SortFunction(CMPFUNC f) : m_f(f) { }
-    bool operator()(const T& i1, const T& i2)
-      { return m_f(i1, i2) < 0; }
-private:
-    CMPFUNC m_f;
-};
-
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
-   typedef int (wxCMPFUNC_CONV *CMPFUN##name)(T pItem1, T pItem2);  \
-   typedef wxSortedArray_SortFunction<T, CMPFUN##name> name##_Predicate; \
-   _WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
-
-#define  _WX_DECLARE_BASEARRAY_2(T, name, predicate, classexp)      \
+class wxArray_FunctorBase##name                                     \
+{                                                                   \
+public:                                                             \
+    wxArray_FunctorBase##name() {}                                  \
+    virtual bool operator()(const T& i1, const T& i2) const = 0;    \
+};                                                                  \
+class wxArray_SortFunction##name : public wxArray_FunctorBase##name \
+{                                                                   \
+public:                                                             \
+    typedef int (wxCMPFUNC_CONV *CMPFUNC)(T* pItem1, T* pItem2);    \
+                                                                    \
+    wxArray_SortFunction##name(CMPFUNC f) : m_f(f) { }              \
+    bool operator()(const T& i1, const T& i2) const                 \
+      { return m_f((T*)&i1, (T*)&i2) < 0; }                         \
+private:                                                            \
+    CMPFUNC m_f;                                                    \
+};                                                                  \
+class wxArray_SortFunctor##name                                     \
+{                                                                   \
+public:                                                             \
+    wxArray_SortFunctor##name(const wxArray_FunctorBase##name *f) : m_f(f) { } \
+    bool operator()(const T& i1, const T& i2) const                 \
+      { return (*m_f)(i1, i2); }                                    \
+private:                                                            \
+    const wxArray_FunctorBase##name *m_f;                           \
+};                                                                  \
 class name : public std::vector<T>                                  \
 {                                                                   \
-  typedef predicate Predicate;                                      \
-  typedef predicate::CMPFUNC SCMPFUNC;                              \
+  typedef wxArray_SortFunction##name Predicate;                     \
 public:                                                             \
-  typedef wxArray_SortFunction<T>::CMPFUNC CMPFUNC;                 \
+  typedef wxArray_SortFunction##name::CMPFUNC CMPFUNC;              \
                                                                     \
 public:                                                             \
   typedef T base_type;                                              \
@@ -167,24 +161,20 @@ public:                                                             \
   }                                                                 \
   int Index(T lItem, CMPFUNC fnCompare) const                       \
   {                                                                 \
-      Predicate p((SCMPFUNC)fnCompare);                             \
-      const_iterator i = std::lower_bound(begin(), end(), lItem, p);\
-      return i != end() && !p(lItem, *i) ? (int)(i - begin())       \
-                                         : wxNOT_FOUND;             \
+      Predicate p(fnCompare);                                       \
+      return IndexFunctor(lItem, &p);                               \
   }                                                                 \
   size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const           \
   {                                                                 \
-      Predicate p((SCMPFUNC)fnCompare);                             \
-      const_iterator i = std::lower_bound(begin(), end(), lItem, p);\
-      return i - begin();                                           \
+      Predicate p(fnCompare);                                       \
+      return IndexForInsertFunctor(lItem, &p);                      \
   }                                                                 \
   void Add(T lItem, size_t nInsert = 1)                             \
     { insert(end(), nInsert, lItem); }                              \
   size_t Add(T lItem, CMPFUNC fnCompare)                            \
   {                                                                 \
-      size_t n = IndexForInsert(lItem, fnCompare);                  \
-      Insert(lItem, n);                                             \
-      return n;                                                     \
+      Predicate p(fnCompare);                                       \
+      return AddFunctor(lItem, &p);                                 \
   }                                                                 \
   void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)          \
     { insert(begin() + uiIndex, nInsert, lItem); }                  \
@@ -199,14 +189,52 @@ public:                                                             \
                                                                     \
   void Sort(CMPFUNC fCmp)                                           \
   {                                                                 \
-    wxArray_SortFunction<T> p(fCmp);                                \
+    wxArray_SortFunction##name p(fCmp);                             \
     std::sort(begin(), end(), p);                                   \
+  }                                                                 \
+protected:                                                          \
+  int IndexFunctor(T lItem, const wxArray_FunctorBase##name *p) const \
+  {                                                                 \
+      wxArray_SortFunctor##name pFunctor(p);                        \
+      const_iterator i = std::lower_bound(begin(), end(), lItem, pFunctor);\
+      return i != end() && !(*p)(lItem, *i) ? (int)(i - begin())    \
+                                            : wxNOT_FOUND;          \
+  }                                                                 \
+  size_t IndexForInsertFunctor(T lItem, const wxArray_FunctorBase##name *p) const \
+  {                                                                 \
+      wxArray_SortFunctor##name pFunctor(p);                        \
+      const_iterator i = std::lower_bound(begin(), end(), lItem, pFunctor);\
+      return i - begin();                                           \
+  }                                                                 \
+  size_t AddFunctor(T lItem, const wxArray_FunctorBase##name *fnCompare) \
+  {                                                                 \
+      size_t n = IndexForInsertFunctor(lItem, fnCompare);           \
+      Insert(lItem, n);                                             \
+      return n;                                                     \
   }                                                                 \
 }
 
 #else // if !wxUSE_STD_CONTAINERS
 
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
+class wxArray_FunctorBase##name                                     \
+{                                                                   \
+public:                                                             \
+    wxArray_FunctorBase##name() {}                                  \
+    virtual int operator()(const T *i1, const T *i2) const = 0;     \
+};                                                                  \
+                                                                    \
+class wxArray_SortFunction##name : public wxArray_FunctorBase##name \
+{                                                                   \
+public:                                                             \
+    typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void *pItem1, const void *pItem2); \
+                                                                    \
+    wxArray_SortFunction##name(CMPFUNC f) : m_f(f) { }              \
+    int operator()(const T *i1, const T *i2) const                  \
+      { return m_f((const void *) i1, (const void *) i2); }         \
+private:                                                            \
+    CMPFUNC m_f;                                                    \
+};                                                                  \
 classexp name                                                       \
 {                                                                   \
   typedef CMPFUNC SCMPFUNC; /* for compatibility wuth wxUSE_STD_CONTAINERS */  \
@@ -302,6 +330,11 @@ public:                                                             \
   bool empty() const { return IsEmpty(); }                          \
   size_type max_size() const { return INT_MAX; }                    \
   size_type size() const { return GetCount(); }                     \
+                                                                    \
+protected:                                                          \
+  int IndexFunctor(T lItem, const wxArray_FunctorBase##name *fnCompare) const;  \
+  size_t IndexForInsertFunctor(T lItem, const wxArray_FunctorBase##name *fnCompare) const; \
+  size_t AddFunctor(T lItem, const wxArray_FunctorBase##name *fnCompare); \
                                                                     \
 private:                                                            \
   void Grow(size_t nIncrement = 0);                                 \
@@ -522,11 +555,37 @@ public:                                                               \
 wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
                        TypeTooBigToBeStoredInSorted##base,            \
                        name);                                         \
+class wxSortedArray_SortFunctor##name : public wxArray_FunctorBase##base \
+{                                                                     \
+public:                                                               \
+  typedef int (wxCMPFUNC_CONV *CMPFUNC_REF)(const T &Item1, const T &Item2);  \
+  typedef int (wxCMPFUNC_CONV *CMPFUNC_VAL)(const T Item1, const T Item2);    \
+                                                                      \
+  wxSortedArray_SortFunctor##name(CMPFUNC_REF fRef)                   \
+    : m_fRef(fRef), m_fVal(NULL) { }                                  \
+  wxSortedArray_SortFunctor##name(CMPFUNC_VAL fVal)                   \
+    : m_fRef(NULL), m_fVal(fVal) { }                                  \
+  bool operator()(const base::base_type& i1, const base::base_type& i2) const \
+    { if ( m_fRef != NULL )                                           \
+        { return m_fRef((const T&) i1, (const T&) i2) < 0; }          \
+      else                                                            \
+        { return m_fVal((const T) i1, (const T) i2) < 0; }            \
+    }                                                                 \
+  int operator()(const base::base_type *i1, const base::base_type *i2) const \
+    { if ( m_fRef != NULL )                                           \
+       { return m_fRef((const T&) *i1, (const T&) *i2); }             \
+     else                                                             \
+       { return m_fVal((const T) *i1, (const T) *i2); }               \
+    }                                                                 \
+private:                                                              \
+  CMPFUNC_REF m_fRef;                                                 \
+  CMPFUNC_VAL m_fVal;                                                 \
+};                                                                    \
 classexp name : public base                                           \
 {                                                                     \
   typedef comptype SCMPFUNC;                                          \
 public:                                                               \
-  name(comptype fn defcomp) { m_fnCompare = fn; }                     \
+  name(comptype fn defcomp) : m_fnCompare(fn) {}                      \
                                                                       \
   name& operator=(const name& src)                                    \
     { base* temp = (base*) this;                                      \
@@ -542,16 +601,16 @@ public:                                                               \
     { return (T&)(base::operator[](size() - 1)); }                    \
                                                                       \
   int Index(T lItem) const                                            \
-    { return base::Index(lItem, (CMPFUNC)m_fnCompare); }              \
+    { return base::IndexFunctor(lItem, &m_fnCompare); }               \
                                                                       \
   size_t IndexForInsert(T lItem) const                                \
-    { return base::IndexForInsert(lItem, (CMPFUNC)m_fnCompare); }     \
+    { return base::IndexForInsertFunctor(lItem, &m_fnCompare); }      \
                                                                       \
   void AddAt(T item, size_t index)                                    \
     { base::insert(begin() + index, item); }                          \
                                                                       \
   size_t Add(T lItem)                                                 \
-    { return base::Add(lItem, (CMPFUNC)m_fnCompare); }                \
+    { return base::AddFunctor(lItem, &m_fnCompare); }                 \
   void push_back(T lItem)                                             \
     { Add(lItem); }                                                   \
                                                                       \
@@ -563,7 +622,7 @@ public:                                                               \
       base::erase(begin() + iIndex); }                                \
                                                                       \
 private:                                                              \
-  comptype m_fnCompare;                                               \
+  wxSortedArray_SortFunctor##name m_fnCompare;                        \
 }
 
 

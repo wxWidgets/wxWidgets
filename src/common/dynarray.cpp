@@ -76,7 +76,13 @@ int name::Index(T lItem, bool bFromEnd) const                               \
 /* add item assuming the array is sorted with fnCompare function */         \
 size_t name::Add(T lItem, CMPFUNC fnCompare)                                \
 {                                                                           \
-  size_t idx = IndexForInsert(lItem, fnCompare);                            \
+  wxArray_SortFunction##name p(fnCompare);                                  \
+  return AddFunctor(lItem, &p);                                             \
+}                                                                           \
+                                                                            \
+size_t name::AddFunctor(T lItem, const wxArray_FunctorBase##name *fnCompare)\
+{                                                                           \
+  size_t idx = IndexForInsertFunctor(lItem, fnCompare);                     \
   Insert(lItem, idx);                                                       \
   return idx;                                                               \
 }                                                                           \
@@ -270,6 +276,12 @@ void name::Insert(T lItem, size_t nIndex, size_t nInsert)                   \
 /* search for a place to insert item into sorted array (binary search) */   \
 size_t name::IndexForInsert(T lItem, CMPFUNC fnCompare) const               \
 {                                                                           \
+  wxArray_SortFunction##name p(fnCompare);                                  \
+  return IndexForInsertFunctor(lItem, &p);                                  \
+}                                                                           \
+                                                                            \
+size_t name::IndexForInsertFunctor(T lItem, const wxArray_FunctorBase##name *fnCompare) const \
+{                                                                           \
   size_t i,                                                                 \
        lo = 0,                                                              \
        hi = m_nCount;                                                       \
@@ -278,8 +290,8 @@ size_t name::IndexForInsert(T lItem, CMPFUNC fnCompare) const               \
   while ( lo < hi ) {                                                       \
     i = (lo + hi)/2;                                                        \
                                                                             \
-    res = (*fnCompare)((const void *)(wxUIntPtr)lItem,                      \
-                       (const void *)(wxUIntPtr)(m_pItems[i]));             \
+    res = (*fnCompare)(&lItem,                                              \
+                       &((m_pItems[i])));                                   \
     if ( res < 0 )                                                          \
       hi = i;                                                               \
     else if ( res > 0 )                                                     \
@@ -296,13 +308,19 @@ size_t name::IndexForInsert(T lItem, CMPFUNC fnCompare) const               \
 /* search for an item in a sorted array (binary search) */                  \
 int name::Index(T lItem, CMPFUNC fnCompare) const                           \
 {                                                                           \
-    size_t n = IndexForInsert(lItem, fnCompare);                            \
+  wxArray_SortFunction##name p(fnCompare);                                  \
+  return IndexFunctor(lItem, &p);                                           \
+}                                                                           \
+                                                                            \
+int name::IndexFunctor(T lItem, const wxArray_FunctorBase##name *fnCompare) const       \
+{                                                                           \
+    size_t n = IndexForInsertFunctor(lItem, fnCompare);                     \
                                                                             \
     return (n >= m_nCount ||                                                \
-           (*fnCompare)((const void *)(wxUIntPtr)lItem,                     \
-                        ((const void *)(wxUIntPtr)m_pItems[n])))            \
-                        ? wxNOT_FOUND                                       \
-                        : (int)n;                                           \
+           (*fnCompare)(&lItem,                                             \
+                       (&(m_pItems[n]))))                                   \
+                       ? wxNOT_FOUND                                        \
+                       : (int)n;                                            \
 }                                                                           \
                                                                             \
 /* removes item from array (by index) */                                    \
