@@ -211,8 +211,6 @@ protected:
     long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
 
-    virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) wxOVERRIDE;
-
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     // return the text for the given column of the given item
