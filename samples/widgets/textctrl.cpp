@@ -913,6 +913,7 @@ void TextWidgetsPage::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
     wxPathList pathlist;
     pathlist.Add(wxT("."));
     pathlist.Add(wxT(".."));
+    pathlist.Add(wxT("../widgets"));
     pathlist.Add(wxT("../../../samples/widgets"));
 
     wxString filename = pathlist.FindValidPath(wxT("textctrl.cpp"));

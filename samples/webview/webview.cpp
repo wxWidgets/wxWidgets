@@ -263,7 +263,7 @@ bool WebApp::OnInit()
 
     // Create the memory files
     wxImage::AddHandler(new wxPNGHandler);
-    wxMemoryFSHandler::AddFile("logo.png", 
+    wxMemoryFSHandler::AddFile("logo.png",
         wxBitmap(wxlogo_xpm), wxBITMAP_TYPE_PNG);
     wxMemoryFSHandler::AddFile("page1.htm",
         "<html><head><title>File System Example</title>"
@@ -741,7 +741,13 @@ void WebFrame::OnMode(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
 {
-    wxFileName helpfile("../help/doc.zip");
+    wxPathList pathlist;
+    pathlist.Add(wxT("."));
+    pathlist.Add(wxT(".."));
+    pathlist.Add(wxT("../help"));
+    pathlist.Add(wxT("../../../samples/help"));
+
+    wxFileName helpfile(pathlist.FindValidPath(wxT("doc.zip")));
     helpfile.MakeAbsolute();
     wxString path = helpfile.GetFullPath();
     //Under MSW we need to flip the slashes
@@ -1207,7 +1213,7 @@ void WebFrame::OnSelectAll(wxCommandEvent& WXUNUSED(evt))
   * Callback invoked when a loading error occurs
   */
 void WebFrame::OnError(wxWebViewEvent& evt)
-{   
+{
 #define WX_ERROR_CASE(type) \
     case type: \
         category = #type; \
