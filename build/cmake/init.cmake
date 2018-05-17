@@ -59,7 +59,7 @@ if(WIN32)
         message(FATAL_ERROR "Unknown WIN32 compiler type")
     endif()
 
-    if(CMAKE_CL_64)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(wxARCH_SUFFIX "_x64")
     endif()
 else()
