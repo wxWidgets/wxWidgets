@@ -109,7 +109,7 @@ else()
 endif()
 set(wxSETUP_HEADER_FILE ${wxSETUP_HEADER_PATH}/wx/setup.h)
 
-if(NOT wxBUILD_CUSTOM_SETUP_HEADER_PATH AND MSVC)
+if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     # Append configuration specific suffix to setup header path
     wx_string_append(wxSETUP_HEADER_PATH "$<$<CONFIG:Debug>:d>")
 endif()
