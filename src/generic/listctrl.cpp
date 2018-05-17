@@ -5360,13 +5360,7 @@ wxColour wxGenericListCtrl::GetForegroundColour() const
 bool wxGenericListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
 {
 #if wxUSE_MENUS
-    // Coordinates here are given in this control coordinates system, but
-    // PopupMenu() wants them in the coordinates system of the window it's
-    // called on, so transform them.
-    ClientToScreen(&x, &y);
-    m_mainWin->ScreenToClient(&x, &y);
-
-    return m_mainWin->PopupMenu( menu, x, y );
+    return wxListCtrlBase::DoPopupMenu( menu, x, y );
 #else
     return false;
 #endif
