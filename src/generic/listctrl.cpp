@@ -1366,13 +1366,6 @@ bool wxListHeaderWindow::SendListEvent(wxEventType type, const wxPoint& pos)
     wxListEvent le( type, parent->GetId() );
     le.SetEventObject( parent );
     le.m_pointDrag = pos;
-
-    // the position should be relative to the parent window, not
-    // this one for compatibility with MSW and common sense: the
-    // user code doesn't know anything at all about this header
-    // window, so why should it get positions relative to it?
-    le.m_pointDrag.y -= GetSize().y;
-
     le.m_col = m_column;
     return !parent->GetEventHandler()->ProcessEvent( le ) || le.IsAllowed();
 }
@@ -2220,7 +2213,13 @@ void wxListMainWindow::SendNotify( size_t line,
 
     // set only for events which have position
     if ( point != wxDefaultPosition )
-        le.m_pointDrag = point;
+    {
+        // the position should be relative to the parent window, not
+        // this one for compatibility with MSW and common sense: the
+        // user code doesn't know anything at all about this window,
+        // so why should it get positions relative to it?
+        le.m_pointDrag = GetPosition() + point;
+    }
 
     // don't try to get the line info for virtual list controls: the main
     // program has it anyhow and if we did it would result in accessing all
