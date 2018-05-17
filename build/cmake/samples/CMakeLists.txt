@@ -189,7 +189,20 @@ if(APPLE)
     # elsewhere we just compile native.cpp directly.
     list(APPEND SAMPLE_WIDGETS_SRC native_wrapper.mm)
 endif()
-wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC} LIBRARIES adv)
+wx_list_add_prefix(WIDGETS_RC_FILES icons/
+    activityindicator.xpm bmpbtn.xpm bmpcombobox.xpm button.xpm
+    checkbox.xpm choice.xpm choicebk.xpm clrpicker.xpm
+    combobox.xpm datepick.xpm dirctrl.xpm dirpicker.xpm
+    filepicker.xpm fontpicker.xpm gauge.xpm header.xpm
+    hyperlnk.xpm listbook.xpm listbox.xpm native.xpm
+    notebook.xpm odcombobox.xpm radiobox.xpm scrolbar.xpm
+    slider.xpm spinbtn.xpm statbmp.xpm statbox.xpm
+    stattext.xpm text.xpm timepick.xpm toggle.xpm
+    )
+wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC} 
+    DATA ${WIDGETS_RC_FILES} textctrl.cpp
+    LIBRARIES adv
+    )
 wx_add_sample(wizard LIBRARIES adv DEPENDS wxUSE_WIZARDDLG)
 wx_add_sample(wrapsizer)
 
