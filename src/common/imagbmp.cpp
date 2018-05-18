@@ -129,7 +129,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
               (format == wxBMP_8BPP_RED) || (format == wxBMP_8BPP_PALETTE) )
     {
         // need to set a wxPalette to use this, HOW TO CHECK IF VALID, SIZE?
-        if ((format == wxBMP_8BPP_PALETTE)
+        if (format == wxBMP_8BPP_PALETTE
 #if wxUSE_PALETTE
                 && !image->HasPalette()
 #endif // wxUSE_PALETTE
