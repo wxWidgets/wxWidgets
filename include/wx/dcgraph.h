@@ -83,7 +83,10 @@ public:
     virtual void SetBrush(const wxBrush& brush) wxOVERRIDE;
     virtual void SetBackground(const wxBrush& brush) wxOVERRIDE;
     virtual void SetBackgroundMode(int mode) wxOVERRIDE;
+
+#if wxUSE_PALETTE
     virtual void SetPalette(const wxPalette& palette) wxOVERRIDE;
+#endif
 
     virtual void DestroyClippingRegion() wxOVERRIDE;
 

@@ -457,10 +457,12 @@ void* wxGCDCImpl::GetHandle() const
     return cgctx;
 }
 
+#if wxUSE_PALETTE
 void wxGCDCImpl::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
 
 }
+#endif
 
 void wxGCDCImpl::SetBackgroundMode( int mode )
 {
