@@ -159,6 +159,7 @@ wxString wxGetOsDescription()
 }
 
 /* static */
+#if wxUSE_DATETIME
 bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
 {
     wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
@@ -169,3 +170,4 @@ bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
     *firstDay = wxDateTime::WeekDay(([calendar firstWeekday] - 1) % 7);
     return true;
 }
+#endif // wxUSE_DATETIME

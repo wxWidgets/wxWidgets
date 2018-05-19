@@ -1863,10 +1863,12 @@ void wxWindowDCImpl::SetBackgroundMode( int mode )
     m_backgroundMode = mode;
 }
 
+#if wxUSE_PALETTE
 void wxWindowDCImpl::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
     wxFAIL_MSG( wxT("wxWindowDCImpl::SetPalette not implemented") );
 }
+#endif
 
 void wxWindowDCImpl::UpdateClipBox()
 {

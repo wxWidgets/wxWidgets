@@ -17,6 +17,7 @@ if(wxBUILD_MONOLITHIC)
     set(wxMONO_LIBS_PUBLIC)
     set(wxMONO_INCLUDE_DIRS_PRIVATE)
     set(wxMONO_INCLUDE_DIRS_PUBLIC)
+    set(wxMONO_NONCOMPILED_CPP_FILES)
 endif()
 
 # Define third party libraries
@@ -39,7 +40,6 @@ endmacro()
 # Define base libraries
 set(LIBS base)
 add_opt_lib(net wxUSE_SOCKETS)
-add_opt_lib(xml wxUSE_XML)
 
 # Define UI libraries
 if(wxUSE_GUI)
@@ -61,6 +61,12 @@ if(wxUSE_GUI)
     add_opt_lib(gl wxUSE_OPENGL)
     add_opt_lib(qa wxUSE_DEBUGREPORT)
 endif() # wxUSE_GUI
+
+# Include XML library last
+# In the monolithic build, where all target properties (include dirs) from different targets are concatenated,
+# wxml might include system expat, which might use Mono, which has it's own copy of png.
+# Thus to ensure wx's core library includes the right png class, core must be processed first before xml
+add_opt_lib(xml wxUSE_XML)
 
 # Include cmake file for every library
 foreach(LIB ${LIBS})
@@ -87,6 +93,10 @@ if(wxBUILD_MONOLITHIC)
             target_compile_definitions(mono ${vis} ${wxMONO_DEFINITIONS_${vis}})
         endif()
     endforeach()
+    foreach(file ${wxMONO_NONCOMPILED_CPP_FILES})
+        set_source_files_properties(${file} PROPERTIES HEADER_FILE_ONLY TRUE)
+    endforeach()
+    wx_finalize_lib(mono)
 endif()
 
 # Propagate variable(s) to parent scope

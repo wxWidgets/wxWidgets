@@ -35,7 +35,7 @@ function(wx_add_demo name)
     if(wxBUILD_SHARED)
         target_compile_definitions(${DEMO_NAME} PRIVATE WXUSINGDLL)
     endif()
-    target_link_libraries(${DEMO_NAME} core ${DEMO_LIBRARIES})
+    wx_exe_link_libraries(${DEMO_NAME} core ${DEMO_LIBRARIES})
     wx_set_common_target_properties(${DEMO_NAME})
     set_target_properties(${DEMO_NAME} PROPERTIES FOLDER "Demos")
     set_target_properties(${DEMO_NAME} PROPERTIES

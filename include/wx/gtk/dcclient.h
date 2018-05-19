@@ -86,7 +86,10 @@ public:
     virtual void SetTextForeground( const wxColour &col ) wxOVERRIDE;
     virtual void SetTextBackground( const wxColour &col ) wxOVERRIDE;
     virtual void SetBackgroundMode( int mode ) wxOVERRIDE;
+
+#if wxUSE_PALETTE
     virtual void SetPalette( const wxPalette& palette ) wxOVERRIDE;
+#endif
 
     virtual void DestroyClippingRegion() wxOVERRIDE;
 
