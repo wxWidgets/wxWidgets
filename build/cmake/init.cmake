@@ -59,7 +59,7 @@ if(WIN32)
         message(FATAL_ERROR "Unknown WIN32 compiler type")
     endif()
 
-    if(CMAKE_CL_64)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(wxARCH_SUFFIX "_x64")
     endif()
 else()
@@ -109,7 +109,7 @@ else()
 endif()
 set(wxSETUP_HEADER_FILE ${wxSETUP_HEADER_PATH}/wx/setup.h)
 
-if(NOT wxBUILD_CUSTOM_SETUP_HEADER_PATH AND MSVC)
+if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     # Append configuration specific suffix to setup header path
     wx_string_append(wxSETUP_HEADER_PATH "$<$<CONFIG:Debug>:d>")
 endif()

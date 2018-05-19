@@ -694,6 +694,8 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
 
     // Get size of existing images in list
     wxSize foundSize = m_combobox->GetBitmapSize();
+    if ( !foundSize.IsFullySpecified() )
+        foundSize = images->GetSize();
 
     for ( i=0; i<strings->size(); i++ )
     {

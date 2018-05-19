@@ -413,7 +413,8 @@ bool MyApp::LoadImages()
     pathList.Add(wxFileName(argv[0]).GetPath());
     pathList.Add(wxT("."));
     pathList.Add(wxT(".."));
-    pathList.Add(wxT("../.."));
+    pathList.Add(wxT("../drawing"));
+    pathList.Add(wxT("../../../samples/drawing"));
 
     wxString path = pathList.FindValidPath(wxT("pat4.bmp"));
     if ( !path )

@@ -381,8 +381,6 @@ bool WidgetsApp::OnInit()
 WidgetsFrame::WidgetsFrame(const wxString& title)
             : wxFrame(NULL, wxID_ANY, title)
 {
-    const bool sizeSet = wxPersistentRegisterAndRestore(this, "Main");
-
     // set the frame icon
     SetIcon(wxICON(sample));
 
@@ -513,6 +511,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
     m_panel->SetSizer(sizerTop);
+
+    const bool sizeSet = wxPersistentRegisterAndRestore(this, "Main");
 
     const wxSize sizeMin = m_panel->GetBestSize();
     if ( !sizeSet )

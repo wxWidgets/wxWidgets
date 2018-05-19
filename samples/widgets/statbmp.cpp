@@ -90,7 +90,13 @@ void StatBmpWidgetsPage::CreateContent()
 
     wxString testImage;
 #if wxUSE_LIBPNG
-    wxFileName fn("../image/toucan.png");
+    wxPathList pathlist;
+    pathlist.Add(wxT("."));
+    pathlist.Add(wxT(".."));
+    pathlist.Add(wxT("../image"));
+    pathlist.Add(wxT("../../../samples/image"));
+
+    wxFileName fn(pathlist.FindValidPath(wxT("toucan.png")));
     if ( fn.FileExists() )
         testImage = fn.GetFullPath();
 #endif // wxUSE_LIBPNG
