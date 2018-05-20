@@ -28,7 +28,7 @@
 #include "wx/unix/utilsx11.h"
 
 #ifdef __WXGTK3__
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 GtkWidget* wxGetTopLevelGTK();
 #endif
 

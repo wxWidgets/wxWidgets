@@ -23,14 +23,13 @@
     #include "wx/icon.h"
 #endif
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
 #endif
 #ifndef __WXGTK3__
     #include "eggtrayicon.h"
 #endif
-#include "wx/gtk/private/gtk2-compat.h"
 
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 

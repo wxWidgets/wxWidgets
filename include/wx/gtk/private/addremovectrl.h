@@ -14,7 +14,7 @@
 #include "wx/bmpbuttn.h"
 #include "wx/toolbar.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 // ----------------------------------------------------------------------------
 // wxAddRemoveImpl

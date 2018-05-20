@@ -83,7 +83,7 @@ using namespace std;
 #endif
 
 #ifdef __WXGTK__
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #include "wx/fontutil.h"
 #ifndef __WXGTK3__
 #include "wx/gtk/dc.h"

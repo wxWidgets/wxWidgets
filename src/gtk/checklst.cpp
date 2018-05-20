@@ -14,7 +14,6 @@
 
 #include "wx/checklst.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/treeview.h"
 

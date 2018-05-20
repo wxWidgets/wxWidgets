@@ -11,7 +11,7 @@
 
 #include "wx/gtk/dcmemory.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 //-----------------------------------------------------------------------------
 // wxMemoryDCImpl

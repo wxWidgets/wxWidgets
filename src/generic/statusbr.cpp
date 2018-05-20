@@ -27,9 +27,7 @@
 #endif
 
 #ifdef __WXGTK20__
-    #include <gtk/gtk.h>
     #include "wx/gtk/private.h"
-    #include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the

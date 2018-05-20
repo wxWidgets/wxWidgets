@@ -13,7 +13,7 @@
 
 #include "wx/gauge.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 //-----------------------------------------------------------------------------
 // wxGauge

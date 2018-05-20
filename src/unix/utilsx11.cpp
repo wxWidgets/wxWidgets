@@ -37,12 +37,9 @@
 #endif
 
 #ifdef __WXGTK__
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
-#ifdef __WXGTK20__
-#include "wx/gtk/private/gtk2-compat.h"     // gdk_window_get_screen()
-#endif
 #endif
 GdkWindow* wxGetTopLevelGDK();
 GtkWidget* wxGetTopLevelGTK();

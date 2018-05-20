@@ -29,7 +29,6 @@
     #include "wx/log.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 // ============================================================================

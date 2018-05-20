@@ -25,7 +25,6 @@
 #include "wx/filepicker.h"
 #include "wx/tooltip.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 // ============================================================================

@@ -17,10 +17,9 @@
     #include "wx/tooltip.h"
 #endif
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
+
+#include <gdk/gdkkeysyms.h>
 
 //-----------------------------------------------------------------------------
 // wxGTKRadioButtonInfo

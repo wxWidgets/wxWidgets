@@ -22,7 +22,6 @@
 #include "wx/utils.h"
 #include "wx/sysopt.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/mnemonics.h"
 

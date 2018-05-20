@@ -143,6 +143,8 @@ protected:
 
 #elif defined(__WXGTK__)
 
+#include <gtk/gtk.h>
+
 class NativeWindow : public wxNativeWindow
 {
 public:

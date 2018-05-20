@@ -29,7 +29,6 @@
 #ifndef WX_PRECOMP
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 // ----------------------------------------------------------------------------

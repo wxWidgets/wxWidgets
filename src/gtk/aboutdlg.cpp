@@ -26,9 +26,7 @@
     #include "wx/window.h"
 #endif //WX_PRECOMP
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // GtkArray: temporary array of GTK strings

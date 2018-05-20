@@ -28,9 +28,8 @@
 #include "wx/vector.h"              // wxVector<wxString>
 
 #ifdef __WXGTK__
-    #include <gtk/gtk.h>
+    #include "wx/gtk/private/wrapgtk.h"
     #include <gdk/gdkx.h>
-    #include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 //=============================================================================
