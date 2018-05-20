@@ -639,8 +639,7 @@ void wxTarEntry::SetMode(int mode)
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
-wxDECLARE_SCOPED_PTR(wxTarEntry, wxTarEntryPtr_)
-wxDEFINE_SCOPED_PTR (wxTarEntry, wxTarEntryPtr_)
+wxDEFINE_SCOPED_PTR_TYPE(wxTarEntry)
 
 wxTarInputStream::wxTarInputStream(wxInputStream& stream,
                                    wxMBConv& conv /*=wxConvLocal*/)
@@ -683,7 +682,7 @@ wxTarEntry *wxTarInputStream::GetNextEntry()
     if (!IsOk())
         return NULL;
 
-    wxTarEntryPtr_ entry(new wxTarEntry);
+    wxTarEntryPtr entry(new wxTarEntry);
 
     entry->SetMode(GetHeaderNumber(TAR_MODE));
     entry->SetUserId(GetHeaderNumber(TAR_UID));
@@ -1099,7 +1098,7 @@ wxTarOutputStream::~wxTarOutputStream()
 
 bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
 {
-    wxTarEntryPtr_ e(entry);
+    wxTarEntryPtr e(entry);
 
     if (!CloseEntry())
         return false;
