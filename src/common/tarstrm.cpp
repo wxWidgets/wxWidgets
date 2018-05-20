@@ -155,8 +155,6 @@ private:
     static void check();
 };
 
-wxDEFINE_SCOPED_PTR_TYPE(wxTarHeaderBlock)
-
 // A table giving the field names and offsets in a tar header block
 const wxTarField wxTarHeaderBlock::fields[] =
 {
