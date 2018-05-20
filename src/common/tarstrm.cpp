@@ -129,8 +129,6 @@ class wxTarHeaderBlock
 public:
     wxTarHeaderBlock()
         { memset(data, 0, sizeof(data)); }
-    wxTarHeaderBlock(const wxTarHeaderBlock& hb)
-        { memcpy(data, hb.data, sizeof(data)); }
 
     bool Read(wxInputStream& in);
     bool Write(wxOutputStream& out);
