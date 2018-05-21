@@ -193,8 +193,6 @@ wxList wxHtmlPrintout::m_Filters;
 
 wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 {
-    m_Renderer = new wxHtmlDCRenderer;
-    m_RendererHdr = new wxHtmlDCRenderer;
     m_NumPages = INT_MAX;
     m_Document = m_BasePath = wxEmptyString; m_BasePathIsDir = true;
     m_Headers[0] = m_Headers[1] = wxEmptyString;
@@ -205,12 +203,6 @@ wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 }
 
 
-
-wxHtmlPrintout::~wxHtmlPrintout()
-{
-    delete m_Renderer;
-    delete m_RendererHdr;
-}
 
 void wxHtmlPrintout::CleanUpStatics()
 {
@@ -315,34 +307,34 @@ void wxHtmlPrintout::OnPreparePrinting()
 
     /* prepare headers/footers renderer: */
 
-    m_RendererHdr->SetDC(GetDC(),
+    m_RendererHdr.SetDC(GetDC(),
                          (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
                          (double)ppiPrinterY / (double)ppiScreenY);
-    m_RendererHdr->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)),
+    m_RendererHdr.SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)),
                           (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom)));
     if (!m_Headers[0].empty())
     {
-        m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[0], 1));
-        m_HeaderHeight = m_RendererHdr->GetTotalHeight();
+        m_RendererHdr.SetHtmlText(TranslateHeader(m_Headers[0], 1));
+        m_HeaderHeight = m_RendererHdr.GetTotalHeight();
     }
     else if (!m_Headers[1].empty())
     {
-        m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[1], 1));
-        m_HeaderHeight = m_RendererHdr->GetTotalHeight();
+        m_RendererHdr.SetHtmlText(TranslateHeader(m_Headers[1], 1));
+        m_HeaderHeight = m_RendererHdr.GetTotalHeight();
     }
     if (!m_Footers[0].empty())
     {
-        m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[0], 1));
-        m_FooterHeight = m_RendererHdr->GetTotalHeight();
+        m_RendererHdr.SetHtmlText(TranslateHeader(m_Footers[0], 1));
+        m_FooterHeight = m_RendererHdr.GetTotalHeight();
     }
     else if (!m_Footers[1].empty())
     {
-        m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[1], 1));
-        m_FooterHeight = m_RendererHdr->GetTotalHeight();
+        m_RendererHdr.SetHtmlText(TranslateHeader(m_Footers[1], 1));
+        m_FooterHeight = m_RendererHdr.GetTotalHeight();
     }
 
     /* prepare main renderer: */
-    m_Renderer->SetDC(GetDC(),
+    m_Renderer.SetDC(GetDC(),
                       (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
                       (double)ppiPrinterY / (double)ppiScreenY);
 
@@ -353,12 +345,12 @@ void wxHtmlPrintout::OnPreparePrinting()
     if ( m_FooterHeight )
         printAreaH -= int(m_FooterHeight + m_MarginSpace * ppmm_v);
 
-    m_Renderer->SetSize(printAreaW, printAreaH);
-    m_Renderer->SetHtmlText(m_Document, m_BasePath, m_BasePathIsDir);
+    m_Renderer.SetSize(printAreaW, printAreaH);
+    m_Renderer.SetHtmlText(m_Document, m_BasePath, m_BasePathIsDir);
 
     if ( CheckFit(wxSize(printAreaW, printAreaH),
-                  wxSize(m_Renderer->GetTotalWidth(),
-                         m_Renderer->GetTotalHeight())) || IsPreview() )
+                  wxSize(m_Renderer.GetTotalWidth(),
+                         m_Renderer.GetTotalHeight())) || IsPreview() )
     {
         // do paginate the document
         CountPages();
@@ -496,12 +488,12 @@ void wxHtmlPrintout::CountPages()
     m_PageBreaks.Add( 0);
     do
     {
-        pos = m_Renderer->Render((int)( ppmm_h * m_MarginLeft),
+        pos = m_Renderer.Render((int)( ppmm_h * m_MarginLeft),
                                  (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
                                  m_PageBreaks,
                                  pos, true, INT_MAX);
         m_PageBreaks.Add( pos);
-    } while (pos < m_Renderer->GetTotalHeight());
+    } while (pos < m_Renderer.GetTotalHeight());
 }
 
 
@@ -529,29 +521,29 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     dc->SetUserScale((double)dc_w / (double)pageWidth,
                      (double)dc_h / (double)pageHeight);
 
-    m_Renderer->SetDC(dc,
+    m_Renderer.SetDC(dc,
                       (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
                       (double)ppiPrinterY / (double)ppiScreenY);
 
     dc->SetBackgroundMode(wxTRANSPARENT);
 
-    m_Renderer->Render((int) (ppmm_h * m_MarginLeft),
+    m_Renderer.Render((int) (ppmm_h * m_MarginLeft),
                          (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight), m_PageBreaks,
                          m_PageBreaks[page-1], false, m_PageBreaks[page]-m_PageBreaks[page-1]);
 
 
-    m_RendererHdr->SetDC(dc,
+    m_RendererHdr.SetDC(dc,
                          (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
                          (double)ppiPrinterY / (double)ppiScreenY);
     if (!m_Headers[page % 2].empty())
     {
-        m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[page % 2], page));
-        m_RendererHdr->Render((int) (ppmm_h * m_MarginLeft), (int) (ppmm_v * m_MarginTop), m_PageBreaks);
+        m_RendererHdr.SetHtmlText(TranslateHeader(m_Headers[page % 2], page));
+        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft), (int) (ppmm_v * m_MarginTop), m_PageBreaks);
     }
     if (!m_Footers[page % 2].empty())
     {
-        m_RendererHdr->SetHtmlText(TranslateHeader(m_Footers[page % 2], page));
-        m_RendererHdr->Render((int) (ppmm_h * m_MarginLeft), (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight), m_PageBreaks);
+        m_RendererHdr.SetHtmlText(TranslateHeader(m_Footers[page % 2], page));
+        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft), (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight), m_PageBreaks);
     }
 }
 
@@ -604,16 +596,16 @@ void wxHtmlPrintout::SetMargins(const wxPageSetupDialogData& pageSetupData)
 void wxHtmlPrintout::SetFonts(const wxString& normal_face, const wxString& fixed_face,
                               const int *sizes)
 {
-    m_Renderer->SetFonts(normal_face, fixed_face, sizes);
-    m_RendererHdr->SetFonts(normal_face, fixed_face, sizes);
+    m_Renderer.SetFonts(normal_face, fixed_face, sizes);
+    m_RendererHdr.SetFonts(normal_face, fixed_face, sizes);
 }
 
 void wxHtmlPrintout::SetStandardFonts(int size,
                                       const wxString& normal_face,
                                       const wxString& fixed_face)
 {
-    m_Renderer->SetStandardFonts(size, normal_face, fixed_face);
-    m_RendererHdr->SetStandardFonts(size, normal_face, fixed_face);
+    m_Renderer.SetStandardFonts(size, normal_face, fixed_face);
+    m_RendererHdr.SetStandardFonts(size, normal_face, fixed_face);
 }
 
 

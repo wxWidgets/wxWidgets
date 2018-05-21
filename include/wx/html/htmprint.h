@@ -121,7 +121,6 @@ class WXDLLIMPEXP_HTML wxHtmlPrintout : public wxPrintout
 {
 public:
     wxHtmlPrintout(const wxString& title = wxT("Printout"));
-    virtual ~wxHtmlPrintout();
 
     void SetHtmlText(const wxString& html, const wxString &basepath = wxEmptyString, bool isdir = true);
             // prepares the class for printing this html document.
@@ -207,7 +206,7 @@ private:
     wxString m_Headers[2], m_Footers[2];
 
     int m_HeaderHeight, m_FooterHeight;
-    wxHtmlDCRenderer *m_Renderer, *m_RendererHdr;
+    wxHtmlDCRenderer m_Renderer, m_RendererHdr;
     float m_MarginTop, m_MarginBottom, m_MarginLeft, m_MarginRight, m_MarginSpace;
 
     // list of HTML filters
