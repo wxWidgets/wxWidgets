@@ -194,9 +194,7 @@ wxList wxHtmlPrintout::m_Filters;
 wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 {
     m_NumPages = INT_MAX;
-    m_Document = m_BasePath = wxEmptyString; m_BasePathIsDir = true;
-    m_Headers[0] = m_Headers[1] = wxEmptyString;
-    m_Footers[0] = m_Footers[1] = wxEmptyString;
+    m_BasePathIsDir = true;
     m_HeaderHeight = m_FooterHeight = 0;
     SetMargins(); // to default values
     SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
