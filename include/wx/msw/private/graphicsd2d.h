@@ -15,6 +15,9 @@
 // Ensure no previous defines interfere with the Direct2D API headers
 #undef GetHwnd
 
+// include before wincodec.h to prevent winsock/winsock2 redefinition warnings
+#include "wx/msw/wrapwin.h"
+
 #include <d2d1.h>
 #include <dwrite.h>
 #include <wincodec.h>
