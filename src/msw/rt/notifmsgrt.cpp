@@ -16,6 +16,8 @@
 #if wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/module.h"
     #include "wx/string.h"
 #endif // WX_PRECOMP
 
