@@ -141,7 +141,7 @@ void wxHtmlDCRenderer::SetStandardFonts(int size,
 }
 
 int wxHtmlDCRenderer::Render(int x, int y,
-                             wxArrayInt& known_pagebreaks,
+                             const wxArrayInt& known_pagebreaks,
                              int from, int dont_render, int to)
 {
     wxCHECK_MSG( m_Cells, 0, "SetHtmlText() must be called before Render()" );
