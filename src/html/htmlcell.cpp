@@ -704,15 +704,13 @@ wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
     if (!m_CanLiveOnPagebreak)
         return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks, pageHeight);
 
-    wxHtmlCell *c = GetFirstChild();
     bool rt = false;
     int pbrk = *pagebreak - m_PosY;
 
-    while (c)
+    for ( wxHtmlCell *c = GetFirstChild(); c; c = c->GetNext() )
     {
         if (c->AdjustPagebreak(&pbrk, known_pagebreaks, pageHeight))
             rt = true;
-        c = c->GetNext();
     }
     if (rt)
         *pagebreak = pbrk + m_PosY;
