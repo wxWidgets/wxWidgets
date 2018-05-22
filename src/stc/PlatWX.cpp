@@ -1953,17 +1953,11 @@ void Window::SetTitle(const char *s) {
 
 // Returns rectangle of monitor pt is on
 PRectangle Window::GetMonitorRect(Point pt) {
-    wxRect rect;
     if (! wid) return PRectangle();
-#if wxUSE_DISPLAY
     // Get the display the point is found on
     int n = wxDisplay::GetFromPoint(wxPoint(wxRound(pt.x), wxRound(pt.y)));
     wxDisplay dpy(n == wxNOT_FOUND ? 0 : n);
-    rect = dpy.GetGeometry();
-#else
-    wxUnusedVar(pt);
-#endif
-    return PRectangleFromwxRect(rect);
+    return PRectangleFromwxRect(dpy.GetGeometry());
 }
 
 //----------------------------------------------------------------------
