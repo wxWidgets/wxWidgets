@@ -44,9 +44,9 @@
 
 #ifndef __WXGTK20__
 
-        #include <X11/extensions/Xinerama.h>
+#include <X11/extensions/Xinerama.h>
 
-    typedef XineramaScreenInfo ScreenInfo;
+typedef XineramaScreenInfo ScreenInfo;
 
 // ----------------------------------------------------------------------------
 // helper class storing information about all screens
