@@ -539,6 +539,8 @@ static inline void wx_gtk_widget_get_preferred_size(GtkWidget* widget, GtkRequis
 }
 #define gtk_widget_get_preferred_size wx_gtk_widget_get_preferred_size
 
+#include <gdk/gdkkeysyms.h>
+
 #if defined(GDK_Alt_L) && !defined(GDK_KEY_Alt_L)
 #define GDK_KEY_Alt_L GDK_Alt_L
 #define GDK_KEY_Alt_R GDK_Alt_R

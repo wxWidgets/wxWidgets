@@ -44,8 +44,6 @@
 #include "wx/private/textmeasure.h"
 using namespace wxGTKImpl;
 
-#include <gdk/gdkkeysyms.h>
-
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #include "wx/x11/private/wrapxkb.h"

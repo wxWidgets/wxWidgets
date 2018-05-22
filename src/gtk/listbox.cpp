@@ -34,8 +34,6 @@
 #include "wx/gtk/private/treeentry_gtk.h"
 #include "wx/gtk/private/treeview.h"
 
-#include <gdk/gdkkeysyms.h>
-
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
