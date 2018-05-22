@@ -33,7 +33,7 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/display_impl.h"
+#include "wx/private/display.h"
 #include "wx/scopedarray.h"
 #include "wx/osx/private.h"
 

@@ -1124,7 +1124,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dialup.h
     wx/dirctrl.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h

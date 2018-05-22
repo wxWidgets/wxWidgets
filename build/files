@@ -967,7 +967,6 @@ GUI_CMN_HDR =
     wx/dirctrl.h
     wx/dirdlg.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h

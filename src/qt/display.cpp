@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/display.h"
-#include "wx/display_impl.h"
+#include "wx/private/display.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include "wx/qt/private/converter.h"

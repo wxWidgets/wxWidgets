@@ -1032,7 +1032,6 @@ set(GUI_CMN_HDR
     wx/dialup.h
     wx/dirctrl.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h

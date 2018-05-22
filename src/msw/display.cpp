@@ -39,7 +39,7 @@
 #include "wx/dynlib.h"
 #include "wx/sysopt.h"
 
-#include "wx/display_impl.h"
+#include "wx/private/display.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/hiddenwin.h"

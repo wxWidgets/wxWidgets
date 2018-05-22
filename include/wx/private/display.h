@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/display_impl.h
+// Name:        wx/private/display.h
 // Purpose:     wxDisplayImpl class declaration
 // Author:      Vadim Zeitlin
 // Created:     2006-03-15
@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DISPLAY_IMPL_H_BASE_
-#define _WX_DISPLAY_IMPL_H_BASE_
+#ifndef _WX_PRIVATE_DISPLAY_H_
+#define _WX_PRIVATE_DISPLAY_H_
 
 #include "wx/gdicmn.h"      // for wxRect
 
@@ -105,5 +105,4 @@ public:
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
 };
 
-#endif // _WX_DISPLAY_IMPL_H_BASE_
-
+#endif // _WX_PRIVATE_DISPLAY_H_

@@ -30,7 +30,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/display.h"
-#include "wx/display_impl.h"
+#include "wx/private/display.h"
 
 #if wxUSE_DISPLAY
 

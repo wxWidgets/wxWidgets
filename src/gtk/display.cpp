@@ -10,7 +10,7 @@
 
 #if wxUSE_DISPLAY
     #include "wx/display.h"
-    #include "wx/display_impl.h"
+    #include "wx/private/display.h"
 #endif
 #include "wx/utils.h" // wxClientDisplayRect
 
