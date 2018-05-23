@@ -77,6 +77,15 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
             "<img width=\"100\" height=\"2500\" src=\"dummy\"/>"
        );
     CHECK( CountPages(pr) == 3 );
+
+    // Test explicit page breaks too.
+    pr.SetHtmlText
+       (
+            "First page"
+            "<div style=\"page-break-before:always\"/>"
+            "Second page"
+       );
+    CHECK( CountPages(pr) == 2 );
 }
 
 #endif //wxUSE_HTML
