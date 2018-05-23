@@ -235,6 +235,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_htmlparser.obj \
 	$(OBJS)\test_gui_htmlwindow.obj \
+	$(OBJS)\test_gui_htmprint.obj \
 	$(OBJS)\test_gui_accelentry.obj \
 	$(OBJS)\test_gui_menu.obj \
 	$(OBJS)\test_gui_guifuncs.obj \
@@ -1228,6 +1229,9 @@ $(OBJS)\test_gui_htmlparser.obj: .\html\htmlparser.cpp
 
 $(OBJS)\test_gui_htmlwindow.obj: .\html\htmlwindow.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\html\htmlwindow.cpp
+
+$(OBJS)\test_gui_htmprint.obj: .\html\htmprint.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\html\htmprint.cpp
 
 $(OBJS)\test_gui_accelentry.obj: .\menu\accelentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\menu\accelentry.cpp

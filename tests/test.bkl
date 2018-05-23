@@ -249,6 +249,7 @@
             image/rawbmp.cpp
             html/htmlparser.cpp
             html/htmlwindow.cpp
+            html/htmprint.cpp
             menu/accelentry.cpp
             menu/menu.cpp
             misc/guifuncs.cpp
