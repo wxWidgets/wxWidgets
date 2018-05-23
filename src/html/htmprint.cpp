@@ -140,36 +140,37 @@ void wxHtmlDCRenderer::SetStandardFonts(int size,
     // else: SetHtmlText() not yet called, no need for relayout
 }
 
-int wxHtmlDCRenderer::Render(int x, int y,
-                             const wxArrayInt& known_pagebreaks,
-                             int from, int dont_render, int to)
+int wxHtmlDCRenderer::FindNextPageBreak(const wxArrayInt& known_pagebreaks,
+                                        int pos)
 {
-    wxCHECK_MSG( m_Cells, 0, "SetHtmlText() must be called before Render()" );
-    wxCHECK_MSG( m_DC, 0, "SetDC() must be called before Render()" );
+    // Stop looking for page breaks if the previous one was already at the end
+    // of the last page.
+    //
+    // For an empty HTML document total height is 0, but we still must have at
+    // least a single page in it, so handle the case of pos == 0 specially.
+    if ( pos != 0 && pos >= GetTotalHeight() )
+        return wxNOT_FOUND;
 
-    int pbreak, hght;
+    pos += m_Height;
+    while (m_Cells->AdjustPagebreak(&pos, known_pagebreaks, m_Height)) {}
+    return pos;
+}
 
-    pbreak = (int)(from + m_Height);
-    while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks, m_Height)) {}
-    hght = pbreak - from;
-    if(to < hght)
-        hght = to;
+void wxHtmlDCRenderer::Render(int x, int y, int from, int to)
+{
+    wxCHECK_RET( m_DC, "SetDC() must be called before Render()" );
 
-    if (!dont_render)
-    {
-        wxHtmlRenderingInfo rinfo;
-        wxDefaultHtmlRenderingStyle rstyle;
-        rinfo.SetStyle(&rstyle);
-        m_DC->SetBrush(*wxWHITE_BRUSH);
-        wxDCClipper clip(*m_DC, x, y, m_Width, hght);
-        m_Cells->Draw(*m_DC,
-                      x, (y - from),
-                      y, y + hght,
-                      rinfo);
-    }
+    const int hght = to == INT_MAX ? m_Height : to - from;
 
-    const int totalHeight = GetTotalHeight();
-    return pbreak < totalHeight ? pbreak : totalHeight;
+    wxHtmlRenderingInfo rinfo;
+    wxDefaultHtmlRenderingStyle rstyle;
+    rinfo.SetStyle(&rstyle);
+    m_DC->SetBrush(*wxWHITE_BRUSH);
+    wxDCClipper clip(*m_DC, x, y, m_Width, hght);
+    m_Cells->Draw(*m_DC,
+                  x, (y - from),
+                  y, y + hght,
+                  rinfo);
 }
 
 int wxHtmlDCRenderer::GetTotalWidth() const
@@ -470,27 +471,16 @@ void wxHtmlPrintout::SetFooter(const wxString& footer, int pg)
 void wxHtmlPrintout::CountPages()
 {
     wxBusyCursor wait;
-    int pageWidth, pageHeight, mm_w, mm_h;
-    float ppmm_h, ppmm_v;
 
-    GetPageSizePixels(&pageWidth, &pageHeight);
-    GetPageSizeMM(&mm_w, &mm_h);
-    ppmm_h = (float)pageWidth / mm_w;
-    ppmm_v = (float)pageHeight / mm_h;
-
-    int pos = 0;
     m_NumPages = 0;
 
     m_PageBreaks.Clear();
-    m_PageBreaks.Add( 0);
-    do
+
+    for ( int pos = 0; pos != wxNOT_FOUND; )
     {
-        pos = m_Renderer.Render((int)( ppmm_h * m_MarginLeft),
-                                 (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
-                                 m_PageBreaks,
-                                 pos, true, INT_MAX);
         m_PageBreaks.Add( pos);
-    } while (pos < m_Renderer.GetTotalHeight());
+        pos = m_Renderer.FindNextPageBreak(m_PageBreaks, pos);
+    }
 }
 
 
@@ -525,8 +515,8 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     dc->SetBackgroundMode(wxTRANSPARENT);
 
     m_Renderer.Render((int) (ppmm_h * m_MarginLeft),
-                         (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight), m_PageBreaks,
-                         m_PageBreaks[page-1], false, m_PageBreaks[page]-m_PageBreaks[page-1]);
+                         (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
+                         m_PageBreaks[page-1], m_PageBreaks[page]);
 
 
     m_RendererHdr.SetDC(dc,
@@ -535,12 +525,12 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     if (!m_Headers[page % 2].empty())
     {
         m_RendererHdr.SetHtmlText(TranslateHeader(m_Headers[page % 2], page));
-        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft), (int) (ppmm_v * m_MarginTop), m_PageBreaks);
+        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft), (int) (ppmm_v * m_MarginTop));
     }
     if (!m_Footers[page % 2].empty())
     {
         m_RendererHdr.SetHtmlText(TranslateHeader(m_Footers[page % 2], page));
-        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft), (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight), m_PageBreaks);
+        m_RendererHdr.Render((int) (ppmm_h * m_MarginLeft), (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight));
     }
 }
 

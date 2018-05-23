@@ -38,10 +38,9 @@ public:
     /**
         Returns the height of the HTML text in pixels.
 
-        This is important if area height (see wxHtmlDCRenderer::SetSize) is
-        smaller that total height and thus the page cannot fit into it. In that
-        case you're supposed to call Render() as long as its return value is
-        smaller than GetTotalHeight()'s.
+        If the height of the area used with this renderer (see
+        wxHtmlDCRenderer::SetSize) is smaller that total height, the renderer
+        will produce more than one page of output.
 
         @see GetTotalWidth()
     */
@@ -52,19 +51,11 @@ public:
 
         @param x,y
             position of upper-left corner of printing rectangle (see SetSize()).
-        @param known_pagebreaks
-            @todo docme
         @param from
             y-coordinate of the very first visible cell.
-        @param dont_render
-            if @true then this method only returns y coordinate of the next page
-            and does not output anything.
         @param to
-            y-coordinate of the last visible cell.
-
-        Returned value is y coordinate of first cell than didn't fit onto page.
-        Use this value as from in next call to Render() in order to print
-        multipages document.
+            y-coordinate of the last visible cell or @c INT_MAX to use the full
+            page height.
 
         @note
         The following three methods @b must always be called before any call to
@@ -72,11 +63,8 @@ public:
         - SetDC()
         - SetSize()
         - SetHtmlText()
-
-        @note Render() changes the DC's user scale and does NOT restore it.
     */
-    int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
-               int dont_render = false, int to = INT_MAX);
+    void Render(int x, int y, int from = 0, int to = INT_MAX);
 
     /**
         Assign DC instance to the renderer.
