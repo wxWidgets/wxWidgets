@@ -161,12 +161,11 @@ int wxHtmlDCRenderer::Render(int x, int y,
         wxDefaultHtmlRenderingStyle rstyle;
         rinfo.SetStyle(&rstyle);
         m_DC->SetBrush(*wxWHITE_BRUSH);
-        m_DC->SetClippingRegion(x, y, m_Width, hght);
+        wxDCClipper clip(*m_DC, x, y, m_Width, hght);
         m_Cells->Draw(*m_DC,
                       x, (y - from),
                       y, y + hght,
                       rinfo);
-        m_DC->DestroyClippingRegion();
     }
 
     if (pbreak < m_Cells->GetHeight()) return pbreak;
