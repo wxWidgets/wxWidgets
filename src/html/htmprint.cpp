@@ -168,8 +168,8 @@ int wxHtmlDCRenderer::Render(int x, int y,
                       rinfo);
     }
 
-    if (pbreak < m_Cells->GetHeight()) return pbreak;
-    else return GetTotalHeight();
+    const int totalHeight = GetTotalHeight();
+    return pbreak < totalHeight ? pbreak : totalHeight;
 }
 
 int wxHtmlDCRenderer::GetTotalWidth() const
