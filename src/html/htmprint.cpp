@@ -152,7 +152,7 @@ int wxHtmlDCRenderer::FindNextPageBreak(const wxArrayInt& known_pagebreaks,
         return wxNOT_FOUND;
 
     pos += m_Height;
-    while (m_Cells->AdjustPagebreak(&pos, known_pagebreaks, m_Height)) {}
+    m_Cells->AdjustPagebreak(&pos, known_pagebreaks, m_Height);
     return pos;
 }
 

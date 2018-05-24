@@ -286,7 +286,6 @@ public:
     // few pixels up.
     //
     // Returned value : true if pagebreak was modified, false otherwise
-    // Usage : while (container->AdjustPagebreak(&p)) {}
     virtual bool AdjustPagebreak(int *pagebreak,
                                  const wxArrayInt& known_pagebreaks,
                                  int pageHeight) const;

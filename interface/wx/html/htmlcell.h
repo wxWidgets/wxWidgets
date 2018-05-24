@@ -198,19 +198,13 @@ public:
         Returns @true if pagebreak was modified, @false otherwise.
 
         @param pagebreak
-            position in pixel of the pagebreak.
+            position in pixels of the pagebreak.
 
         @param known_pagebreaks
             the list of the previous pagebreaks
 
         @param pageHeight
-            the height in pixel of the page drawable area
-
-        Usage:
-        @code
-        while (container->AdjustPagebreak(&p, kp, ph)) {}
-        @endcode
-
+            the height in pixels of the page drawable area
     */
     virtual bool AdjustPagebreak(int* pagebreak,
                                  const wxArrayInt& known_pagebreaks,
