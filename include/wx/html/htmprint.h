@@ -65,7 +65,7 @@ public:
 
     // Finds the next page break after the specified (vertical) position.
     // Returns wxNOT_FOUND if passed in position is the last page break.
-    int FindNextPageBreak(int pos);
+    int FindNextPageBreak(int pos) const;
 
     // [x,y] is position of upper-left corner of printing rectangle (see SetSize)
     // from is y-coordinate of the very first visible cell

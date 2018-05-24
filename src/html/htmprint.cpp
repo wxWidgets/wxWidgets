@@ -140,7 +140,7 @@ void wxHtmlDCRenderer::SetStandardFonts(int size,
     // else: SetHtmlText() not yet called, no need for relayout
 }
 
-int wxHtmlDCRenderer::FindNextPageBreak(int pos)
+int wxHtmlDCRenderer::FindNextPageBreak(int pos) const
 {
     // Stop looking for page breaks if the previous one was already at the end
     // of the last page.
