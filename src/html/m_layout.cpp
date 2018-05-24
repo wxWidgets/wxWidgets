@@ -65,9 +65,7 @@ class wxHtmlPageBreakCell : public wxHtmlCell
 public:
     wxHtmlPageBreakCell() {}
 
-    bool AdjustPagebreak(int* pagebreak,
-                         const wxArrayInt& known_pagebreaks,
-                         int pageHeight) const wxOVERRIDE;
+    bool AdjustPagebreak(int* pagebreak, int pageHeight) const wxOVERRIDE;
 
     void Draw(wxDC& WXUNUSED(dc),
               int WXUNUSED(x), int WXUNUSED(y),
@@ -79,9 +77,7 @@ private:
 };
 
 bool
-wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak,
-                                     const wxArrayInt& WXUNUSED(known_pagebreaks),
-                                     int pageHeight) const
+wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int pageHeight) const
 {
     // Request a page break at the position of this cell if it's on the current
     // page. Note that it's important not to do it unconditionally or we could

@@ -140,8 +140,7 @@ void wxHtmlDCRenderer::SetStandardFonts(int size,
     // else: SetHtmlText() not yet called, no need for relayout
 }
 
-int wxHtmlDCRenderer::FindNextPageBreak(const wxArrayInt& known_pagebreaks,
-                                        int pos)
+int wxHtmlDCRenderer::FindNextPageBreak(int pos)
 {
     // Stop looking for page breaks if the previous one was already at the end
     // of the last page.
@@ -152,7 +151,7 @@ int wxHtmlDCRenderer::FindNextPageBreak(const wxArrayInt& known_pagebreaks,
         return wxNOT_FOUND;
 
     int posNext = pos + m_Height;
-    if ( m_Cells->AdjustPagebreak(&posNext, known_pagebreaks, m_Height) )
+    if ( m_Cells->AdjustPagebreak(&posNext, m_Height) )
     {
         // Check that AdjustPagebreak() returns the page break at a strictly
         // greater position than that of the previous page, otherwise
@@ -486,7 +485,7 @@ void wxHtmlPrintout::CountPages()
     for ( int pos = 0; pos != wxNOT_FOUND; )
     {
         m_PageBreaks.Add( pos);
-        pos = m_Renderer.FindNextPageBreak(m_PageBreaks, pos);
+        pos = m_Renderer.FindNextPageBreak(pos);
     }
 }
 
