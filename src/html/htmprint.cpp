@@ -195,7 +195,7 @@ int wxHtmlDCRenderer::GetTotalHeight() const
 //--------------------------------------------------------------------------------
 
 
-wxList wxHtmlPrintout::m_Filters;
+wxVector<wxHtmlFilter*> wxHtmlPrintout::m_Filters;
 
 wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 {
@@ -210,13 +210,16 @@ wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 
 void wxHtmlPrintout::CleanUpStatics()
 {
-    WX_CLEAR_LIST(wxList, m_Filters);
+    for ( size_t n = 0; n < m_Filters.size(); ++n )
+        delete m_Filters[n];
+
+    m_Filters.clear();
 }
 
 // Adds input filter
 void wxHtmlPrintout::AddFilter(wxHtmlFilter *filter)
 {
-    m_Filters.Append(filter);
+    m_Filters.push_back(filter);
 }
 
 bool
@@ -432,17 +435,15 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
     wxHtmlFilterHTML defaultFilter;
     wxString doc;
 
-    wxList::compatibility_iterator node = m_Filters.GetFirst();
-    while (node)
+    for ( size_t n = 0; n < m_Filters.size(); ++n )
     {
-        wxHtmlFilter *h = (wxHtmlFilter*) node->GetData();
+        wxHtmlFilter* const h = m_Filters[n];
         if (h->CanRead(*ff))
         {
             doc = h->ReadFile(*ff);
             done = true;
             break;
         }
-        node = node->GetNext();
     }
 
     if (!done)

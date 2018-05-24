@@ -200,7 +200,7 @@ private:
     float m_MarginTop, m_MarginBottom, m_MarginLeft, m_MarginRight, m_MarginSpace;
 
     // list of HTML filters
-    static wxList m_Filters;
+    static wxVector<wxHtmlFilter*> m_Filters;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlPrintout);
 };
