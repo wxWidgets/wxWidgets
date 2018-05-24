@@ -184,11 +184,10 @@ private:
     wxString TranslateHeader(const wxString& instr, int page);
             // substitute @PAGENUM@ and @PAGESCNT@ by real values
     void CountPages();
-            // counts pages and fills m_NumPages and m_PageBreaks
+            // fills m_PageBreaks, which indirectly gives the number of pages
 
 
 private:
-    int m_NumPages;
     wxVector<int> m_PageBreaks;
 
     wxString m_Document, m_BasePath;

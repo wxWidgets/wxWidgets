@@ -199,7 +199,6 @@ wxVector<wxHtmlFilter*> wxHtmlPrintout::m_Filters;
 
 wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 {
-    m_NumPages = INT_MAX;
     m_BasePathIsDir = true;
     m_HeaderHeight = m_FooterHeight = 0;
     SetMargins(); // to default values
@@ -391,8 +390,8 @@ bool wxHtmlPrintout::OnPrintPage(int page)
 void wxHtmlPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
 {
     *minPage = 1;
-    if ( m_NumPages >= (signed)m_PageBreaks.size()-1)
-        *maxPage = m_NumPages;
+    if ( m_PageBreaks.empty() )
+        *maxPage = INT_MAX;
     else
         *maxPage = (signed)m_PageBreaks.size()-1;
     *selPageFrom = 1;
@@ -478,8 +477,6 @@ void wxHtmlPrintout::SetFooter(const wxString& footer, int pg)
 void wxHtmlPrintout::CountPages()
 {
     wxBusyCursor wait;
-
-    m_NumPages = 0;
 
     m_PageBreaks.clear();
 
