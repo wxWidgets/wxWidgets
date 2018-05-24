@@ -47,7 +47,37 @@ public:
     int GetTotalHeight() const;
 
     /**
+        Finds the next page break after the specified (vertical) position.
+
+        An example of using this method:
+
+        @code
+        std::vector<int> pages;
+        for ( int pos = 0; pos != wxNOT_FOUND; pos = renderer.FindNextPageBreak(pos) )
+        {
+            pages.push_back(pos);
+        }
+
+        // "pages" vector now contains all page break positions and, in
+        // particular, its size() returns the number of pages
+        @endcode
+
+        @param pos Absolute position of the last page break. For the initial
+            call of this function, it should be 0 and for the subsequent ones
+            it should be the previous return value.
+        @return Position of the next page break or @c wxNOT_FOUND if there are
+            no more of them.
+
+        @since 3.1.2
+    */
+    int FindNextPageBreak(int pos) const;
+
+    /**
         Renders HTML text to the DC.
+
+        When using multi-page documents, FindNextPageBreak() can be used to
+        find the values for @a from and @a to, which should be the consecutive
+        page breaks returned by that function.
 
         @param x,y
             position of upper-left corner of printing rectangle (see SetSize()).
