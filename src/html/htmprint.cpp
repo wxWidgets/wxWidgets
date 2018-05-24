@@ -151,9 +151,16 @@ int wxHtmlDCRenderer::FindNextPageBreak(const wxArrayInt& known_pagebreaks,
     if ( pos != 0 && pos >= GetTotalHeight() )
         return wxNOT_FOUND;
 
-    pos += m_Height;
-    m_Cells->AdjustPagebreak(&pos, known_pagebreaks, m_Height);
-    return pos;
+    int posNext = pos + m_Height;
+    if ( m_Cells->AdjustPagebreak(&posNext, known_pagebreaks, m_Height) )
+    {
+        // Check that AdjustPagebreak() returns the page break at a strictly
+        // greater position than that of the previous page, otherwise
+        // CountPages() would enter into an infinite loop.
+        wxCHECK_MSG( posNext > pos, wxNOT_FOUND, "Bug in AdjustPagebreak()" );
+    }
+
+    return posNext;
 }
 
 void wxHtmlDCRenderer::Render(int x, int y, int from, int to)
