@@ -388,19 +388,19 @@ bool wxHtmlPrintout::OnPrintPage(int page)
 void wxHtmlPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
 {
     *minPage = 1;
-    if ( m_NumPages >= (signed)m_PageBreaks.GetCount()-1)
+    if ( m_NumPages >= (signed)m_PageBreaks.size()-1)
         *maxPage = m_NumPages;
     else
-        *maxPage = (signed)m_PageBreaks.GetCount()-1;
+        *maxPage = (signed)m_PageBreaks.size()-1;
     *selPageFrom = 1;
-    *selPageTo = (signed)m_PageBreaks.GetCount()-1;
+    *selPageTo = (signed)m_PageBreaks.size()-1;
 }
 
 
 
 bool wxHtmlPrintout::HasPage(int pageNum)
 {
-    return pageNum > 0 && (unsigned)pageNum < m_PageBreaks.GetCount();
+    return pageNum > 0 && (unsigned)pageNum < m_PageBreaks.size();
 }
 
 
@@ -480,11 +480,11 @@ void wxHtmlPrintout::CountPages()
 
     m_NumPages = 0;
 
-    m_PageBreaks.Clear();
+    m_PageBreaks.clear();
 
     for ( int pos = 0; pos != wxNOT_FOUND; )
     {
-        m_PageBreaks.Add( pos);
+        m_PageBreaks.push_back(pos);
         pos = m_Renderer.FindNextPageBreak(pos);
     }
 }
@@ -550,7 +550,7 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     num.Printf(wxT("%i"), page);
     r.Replace(wxT("@PAGENUM@"), num);
 
-    num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.GetCount() - 1));
+    num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.size() - 1));
     r.Replace(wxT("@PAGESCNT@"), num);
 
 #if wxUSE_DATETIME

@@ -20,6 +20,7 @@
 
 #include "wx/print.h"
 #include "wx/printdlg.h"
+#include "wx/vector.h"
 
 #include <limits.h> // INT_MAX
 
@@ -188,7 +189,7 @@ private:
 
 private:
     int m_NumPages;
-    wxArrayInt m_PageBreaks;
+    wxVector<int> m_PageBreaks;
 
     wxString m_Document, m_BasePath;
     bool m_BasePathIsDir;
