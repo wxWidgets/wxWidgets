@@ -6866,8 +6866,8 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 // in active frames and dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
 
-int APIENTRY
-wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
+LRESULT APIENTRY
+wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
 {
     DWORD hiWord = HIWORD(lParam);
     if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
@@ -6934,7 +6934,7 @@ void wxSetKeyboardHook(bool doIt)
         wxTheKeyboardHook = ::SetWindowsHookEx
                               (
                                 WH_KEYBOARD,
-                                (HOOKPROC)wxKeyboardHook,
+                                wxKeyboardHook,
                                 NULL,   // must be NULL for process hook
                                 ::GetCurrentThreadId()
                               );
