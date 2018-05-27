@@ -128,9 +128,9 @@ class wxTarHeaderBlock
 {
 public:
     wxTarHeaderBlock()
-        { memset(data, 0, sizeof(data)); }
-    wxTarHeaderBlock(const wxTarHeaderBlock& hb)
-        { memcpy(data, hb.data, sizeof(data)); }
+        { Clear(); }
+
+    void Clear(size_t len = 0) { memset(data, 0, len ? len : sizeof(data)); }
 
     bool Read(wxInputStream& in);
     bool Write(wxOutputStream& out);
@@ -154,8 +154,6 @@ private:
     static const wxTarField fields[];
     static void check();
 };
-
-wxDEFINE_SCOPED_PTR_TYPE(wxTarHeaderBlock)
 
 // A table giving the field names and offsets in a tar header block
 const wxTarField wxTarHeaderBlock::fields[] =
@@ -641,8 +639,7 @@ void wxTarEntry::SetMode(int mode)
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
-wxDECLARE_SCOPED_PTR(wxTarEntry, wxTarEntryPtr_)
-wxDEFINE_SCOPED_PTR (wxTarEntry, wxTarEntryPtr_)
+wxDEFINE_SCOPED_PTR_TYPE(wxTarEntry)
 
 wxTarInputStream::wxTarInputStream(wxInputStream& stream,
                                    wxMBConv& conv /*=wxConvLocal*/)
@@ -685,7 +682,7 @@ wxTarEntry *wxTarInputStream::GetNextEntry()
     if (!IsOk())
         return NULL;
 
-    wxTarEntryPtr_ entry(new wxTarEntry);
+    wxTarEntryPtr entry(new wxTarEntry);
 
     entry->SetMode(GetHeaderNumber(TAR_MODE));
     entry->SetUserId(GetHeaderNumber(TAR_UID));
@@ -1101,7 +1098,7 @@ wxTarOutputStream::~wxTarOutputStream()
 
 bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
 {
-    wxTarEntryPtr_ e(entry);
+    wxTarEntryPtr e(entry);
 
     if (!CloseEntry())
         return false;
@@ -1191,7 +1188,7 @@ bool wxTarOutputStream::CloseEntry()
     if (IsOk()) {
         wxFileOffset size = RoundUpSize(m_pos);
         if (size > m_pos) {
-            memset(m_hdr, 0, size - m_pos);
+            m_hdr->Clear(size - m_pos);
             m_parent_o_stream->Write(m_hdr, size - m_pos);
             m_lasterror = m_parent_o_stream->GetLastError();
         }
@@ -1215,7 +1212,7 @@ bool wxTarOutputStream::Close()
     if (!CloseEntry() || (m_tarsize == 0 && m_endrecWritten))
         return false;
 
-    memset(m_hdr, 0, sizeof(*m_hdr));
+    m_hdr->Clear();
     int count = (RoundUpSize(m_tarsize + 2 * TAR_BLOCKSIZE, m_BlockingFactor)
                     - m_tarsize) / TAR_BLOCKSIZE;
     while (count--)
@@ -1230,7 +1227,7 @@ bool wxTarOutputStream::Close()
 
 bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
 {
-    memset(m_hdr, 0, sizeof(*m_hdr));
+    m_hdr->Clear();
 
     SetHeaderPath(entry.GetName(wxPATH_UNIX));
 
@@ -1276,7 +1273,7 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
         // so prepare a regular header block for the pseudo-file.
         if (!m_hdr2)
             m_hdr2 = new wxTarHeaderBlock;
-        memset(m_hdr2, 0, sizeof(*m_hdr2));
+        m_hdr2->Clear();
 
         // an old tar that doesn't understand extended headers will
         // extract it as a file, so give these fields reasonable values
