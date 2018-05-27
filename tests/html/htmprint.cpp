@@ -51,6 +51,14 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
 {
     wxHtmlPrintout pr;
 
+    // Pagination works in terms of printer page size, which is obtained by
+    // subtracting margins from the total size and margins are expressed in
+    // millimeters, so their conversion to pixels depends on DPI. To ensure
+    // that we get the same results for all values of DPI, get just get rid
+    // of the margins entirely (it would also be possible to adjust them by
+    // the DPI-dependent factor, but it doesn't seem to be worth doing it).
+    pr.SetMargins(0, 0, 0, 0, 0);
+
     wxBitmap bmp(1000, 1000);
     wxMemoryDC dc(bmp);
     pr.SetUp(dc);
