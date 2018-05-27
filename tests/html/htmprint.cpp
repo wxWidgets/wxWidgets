@@ -86,6 +86,19 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
             "Second page"
        );
     CHECK( CountPages(pr) == 2 );
+
+    pr.SetHtmlText
+       (
+            "Something"
+            "<div style=\"page-break-before:always\">"
+                "<div style=\"page-break-before:always\">"
+                    "<div style=\"page-break-before:always\">"
+                        "whatever"
+                    "</div>"
+                "</div>"
+            "</div>"
+       );
+    CHECK( CountPages(pr) == 2 );
 }
 
 #endif //wxUSE_HTML
