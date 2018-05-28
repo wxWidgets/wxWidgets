@@ -1252,7 +1252,7 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
-    if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
+    if ( !wxCheckWindowWndProc(hWnd) )
     {
         wxSetWindowProc(hwnd, wxWndProc);
 
@@ -1289,7 +1289,7 @@ void wxWindowMSW::UnsubclassWin()
 
         if ( m_oldWndProc )
         {
-            if ( !wxCheckWindowWndProc((WXHWND)hwnd, m_oldWndProc) )
+            if ( !wxCheckWindowWndProc((WXHWND)hwnd) )
             {
                 wxSetWindowProc(hwnd, (WNDPROC)m_oldWndProc);
             }
