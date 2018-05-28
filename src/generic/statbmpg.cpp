@@ -35,7 +35,7 @@ bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
         return false;
     m_scaleMode = Scale_None;
     SetBitmap(bitmap);
-    Connect(wxEVT_PAINT, wxPaintEventHandler(wxGenericStaticBitmap::OnPaint));
+    Bind(wxEVT_PAINT, &wxGenericStaticBitmap::OnPaint, this);
     return true;
 }
 

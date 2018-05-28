@@ -252,7 +252,7 @@ public:
             return;
         }
 
-        Connect(wxEVT_TIMER, wxTimerEventHandler(wxRichToolTipPopup::OnTimer));
+        Bind(wxEVT_TIMER, &wxRichToolTipPopup::OnTimer, this);
 
         m_timeout = timeout; // set for use in OnTimer if we have a delay
         m_delayShow = delay != 0;

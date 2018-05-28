@@ -135,24 +135,12 @@ public:
         m_mask(CreateShapeBitmap(path), *wxBLACK)
     {
 
-        m_win->Connect
-               (
-                wxEVT_PAINT,
-                wxPaintEventHandler(wxNonOwnedWindowShapeImplPath::OnPaint),
-                NULL,
-                this
-               );
+        m_win->Bind(wxEVT_PAINT, &wxNonOwnedWindowShapeImplPath::OnPaint, this);
     }
 
     virtual ~wxNonOwnedWindowShapeImplPath()
     {
-        m_win->Disconnect
-               (
-                wxEVT_PAINT,
-                wxPaintEventHandler(wxNonOwnedWindowShapeImplPath::OnPaint),
-                NULL,
-                this
-               );
+        m_win->Unbind(wxEVT_PAINT, &wxNonOwnedWindowShapeImplPath::OnPaint, this);
     }
 
     // Currently we always return false from here, if drawing the border

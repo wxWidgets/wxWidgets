@@ -416,10 +416,9 @@ public:
         m_qtb = qtb;
         m_hwnd = hwnd;
 
-        m_qtb->m_ctrl->Connect(m_qtb->m_ctrl->GetId(),
+        m_qtb->m_ctrl->Bind(
             wxEVT_ERASE_BACKGROUND,
-            wxEraseEventHandler(wxQTMediaEvtHandler::OnEraseBackground),
-            NULL, this);
+            &wxQTMediaEvtHandler::OnEraseBackground, this);
     }
 
     void OnEraseBackground(wxEraseEvent& event);

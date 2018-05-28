@@ -681,11 +681,9 @@ public:
     wxWMP10MediaEvtHandler(wxWMP10MediaBackend *amb) :
        m_amb(amb)
     {
-        m_amb->m_pAX->Connect(m_amb->m_pAX->GetId(),
-            wxEVT_ACTIVEX,
-            wxActiveXEventHandler(wxWMP10MediaEvtHandler::OnActiveX),
-            NULL, this
-                              );
+        m_amb->m_pAX->Bind(wxEVT_ACTIVEX,
+            &wxWMP10MediaEvtHandler::OnActiveX, this,
+            m_amb->m_pAX->GetId());
     }
 
     void OnActiveX(wxActiveXEvent& event);

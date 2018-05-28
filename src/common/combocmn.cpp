@@ -1094,15 +1094,10 @@ wxComboCtrlBase::CreateTextCtrl(int style)
                        style);
 
         // Connecting the events is currently the most reliable way
-        wxWindowID id = m_text->GetId();
-        m_text->Connect(id, wxEVT_TEXT,
-                        wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
-                        NULL, this);
+        m_text->Bind(wxEVT_TEXT, &wxComboCtrlBase::OnTextCtrlEvent, this);
         if ( style & wxTE_PROCESS_ENTER )
         {
-            m_text->Connect(id, wxEVT_TEXT_ENTER,
-                            wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
-                            NULL, this);
+            m_text->Bind(wxEVT_TEXT_ENTER, &wxComboCtrlBase::OnTextCtrlEvent, this);
         }
 
         m_text->SetHint(m_hintText);

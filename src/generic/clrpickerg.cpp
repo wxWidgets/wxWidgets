@@ -57,9 +57,7 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
     }
 
     // and handle user clicks on it
-    Connect(GetId(), wxEVT_BUTTON,
-            wxCommandEventHandler(wxGenericColourButton::OnButtonClick),
-            NULL, this);
+    Bind(wxEVT_BUTTON, &wxGenericColourButton::OnButtonClick, this, GetId());
 
     m_colour = col;
     UpdateColour();

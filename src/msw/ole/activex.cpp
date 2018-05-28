@@ -1131,14 +1131,9 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         wxWindow* pWnd = m_realparent;
         int id = m_realparent->GetId();
 
-        pWnd->Connect(id, wxEVT_SIZE,
-            wxSizeEventHandler(wxActiveXContainer::OnSize), 0, this);
-//        this->Connect(GetId(), wxEVT_PAINT,
-//            wxPaintEventHandler(wxActiveXContainer::OnPaint), 0, this);
-        pWnd->Connect(id, wxEVT_SET_FOCUS,
-            wxFocusEventHandler(wxActiveXContainer::OnSetFocus), 0, this);
-        pWnd->Connect(id, wxEVT_KILL_FOCUS,
-            wxFocusEventHandler(wxActiveXContainer::OnKillFocus), 0, this);
+        pWnd->Bind(wxEVT_SIZE, &wxActiveXContainer::OnSize, this, id);
+        pWnd->Bind(wxEVT_SET_FOCUS, &wxActiveXContainer::OnSetFocus, this, id);
+        pWnd->Bind(wxEVT_KILL_FOCUS, &wxActiveXContainer::OnKillFocus, this, id);
     }
 }
 

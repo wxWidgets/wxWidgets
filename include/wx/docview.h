@@ -712,10 +712,8 @@ public:
         if ( !BaseClass::Create(parent, id, title, pos, size, style, name) )
             return false;
 
-        this->Connect(wxEVT_ACTIVATE,
-                      wxActivateEventHandler(wxDocChildFrameAny::OnActivate));
-        this->Connect(wxEVT_CLOSE_WINDOW,
-                      wxCloseEventHandler(wxDocChildFrameAny::OnCloseWindow));
+        this->Bind(wxEVT_ACTIVATE, &wxDocChildFrameAny::OnActivate, this);
+        this->Bind(wxEVT_CLOSE_WINDOW, &wxDocChildFrameAny::OnCloseWindow, this);
 
         return true;
     }
@@ -867,10 +865,8 @@ public:
         if ( !BaseFrame::Create(frame, id, title, pos, size, style, name) )
             return false;
 
-        this->Connect(wxID_EXIT, wxEVT_MENU,
-                      wxCommandEventHandler(wxDocParentFrameAny::OnExit));
-        this->Connect(wxEVT_CLOSE_WINDOW,
-                      wxCloseEventHandler(wxDocParentFrameAny::OnCloseWindow));
+        this->Bind(wxEVT_MENU, &wxDocParentFrameAny::OnExit, this, wxID_EXIT);
+        this->Bind(wxEVT_CLOSE_WINDOW, &wxDocParentFrameAny::OnCloseWindow, this);
 
         return true;
     }

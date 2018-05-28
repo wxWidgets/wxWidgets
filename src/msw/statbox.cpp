@@ -90,7 +90,7 @@ bool wxStaticBox::Create(wxWindow *parent,
 
     if (!wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
     {
-        Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBox::OnPaint));
+        Bind(wxEVT_PAINT, &wxStaticBox::OnPaint, this);
 
         // Our OnPaint() completely erases our background, so don't do it in
         // WM_ERASEBKGND too to avoid flicker.
