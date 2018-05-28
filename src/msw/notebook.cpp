@@ -81,10 +81,10 @@
 #if USE_NOTEBOOK_ANTIFLICKER
 
 // the pointer to standard spin button wnd proc
-static WXFARPROC gs_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
+static WXWNDPROC gs_wndprocNotebookSpinBtn = NULL;
 
 // the pointer to standard tab control wnd proc
-static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL;
+static WXWNDPROC gs_wndprocNotebook = NULL;
 
 LRESULT APIENTRY
 wxNotebookWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -202,8 +202,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
             if ( ::GetClassInfo(NULL, WC_TABCONTROL, &wc) )
             {
-                gs_wndprocNotebook =
-                    reinterpret_cast<WXFARPROC>(wc.lpfnWndProc);
+                gs_wndprocNotebook = wc.lpfnWndProc;
                 wc.lpszClassName = wxT("_wx_SysTabCtl32");
                 wc.style &= ~(CS_HREDRAW | CS_VREDRAW);
                 wc.hInstance = wxGetInstance();
@@ -996,7 +995,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
             {
                 // subclass the spin button to override WM_ERASEBKGND
                 if ( !gs_wndprocNotebookSpinBtn )
-                    gs_wndprocNotebookSpinBtn = (WXFARPROC)wxGetWindowProc(child);
+                    gs_wndprocNotebookSpinBtn = wxGetWindowProc(child);
 
                 wxSetWindowProc(child, wxNotebookSpinBtnWndProc);
                 m_hasSubclassedUpdown = true;

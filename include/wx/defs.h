@@ -2845,11 +2845,18 @@ typedef wxW64 long         WXLPARAM;
 typedef wxW64 long         WXLRESULT;
 #endif
 
+/*
+   This is defined for compatibility only, it's not really the same thing as
+   FARPROC.
+ */
 #if defined(__GNUWIN32__)
 typedef int             (*WXFARPROC)();
 #else
 typedef int             (__stdcall *WXFARPROC)();
 #endif
+
+typedef WXLRESULT (wxSTDCALL *WXWNDPROC)(WXHWND, WXUINT, WXWPARAM, WXLPARAM);
+
 #endif /*  __WIN32__ */
 
 

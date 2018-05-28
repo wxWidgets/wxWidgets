@@ -206,8 +206,8 @@ public:
     void SubclassWin(WXHWND hWnd);
     void UnsubclassWin();
 
-    WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
-    void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
+    WXWNDPROC MSWGetOldWndProc() const { return m_oldWndProc; }
+    void MSWSetOldWndProc(WXWNDPROC proc) { m_oldWndProc = proc; }
 
     // return true if the window is of a standard (i.e. not wxWidgets') class
     //
@@ -597,7 +597,7 @@ protected:
     WXHWND                m_hWnd;
 
     // the old window proc (we subclass all windows)
-    WXFARPROC             m_oldWndProc;
+    WXWNDPROC             m_oldWndProc;
 
     // additional (MSW specific) flags
     bool                  m_mouseInWindow:1;

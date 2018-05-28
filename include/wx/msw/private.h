@@ -939,7 +939,7 @@ extern WXDLLIMPEXP_CORE int wxGetWindowId(WXHWND hWnd);
 //
 // wndProc parameter is unused and only kept for compatibility
 extern WXDLLIMPEXP_CORE
-bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc = NULL);
+bool wxCheckWindowWndProc(WXHWND hWnd, WXWNDPROC wndProc = NULL);
 
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)

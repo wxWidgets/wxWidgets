@@ -329,8 +329,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // subclass the text ctrl to be able to intercept some events
     gs_spinForTextCtrl[GetBuddyHwnd()] = this;
 
-    m_wndProcBuddy = (WXFARPROC)wxSetWindowProc(GetBuddyHwnd(),
-                                                wxBuddyTextWndProc);
+    m_wndProcBuddy = wxSetWindowProc(GetBuddyHwnd(), wxBuddyTextWndProc);
 
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
