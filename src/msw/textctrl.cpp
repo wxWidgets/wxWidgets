@@ -2262,9 +2262,14 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
             // for plain EDIT controls though), so explicitly work around this
             if ( IsRich() )
             {
+                // wxCurrentPopupMenu stores the popup menu that will receive
+                // WM_COMMAND, but it may be non-NULL even when the underlying
+                // native menu is no longer shown. Use ::IsMenu() to check whether
+                // the menu still exists.
                 extern wxMenu *wxCurrentPopupMenu;
                 if ( wxCurrentPopupMenu &&
-                        wxCurrentPopupMenu->GetInvokingWindow() == this )
+                        wxCurrentPopupMenu->GetInvokingWindow() == this &&
+                        ::IsMenu(GetHmenuOf(wxCurrentPopupMenu)) )
                     ::SetCursor(GetHcursorOf(*wxSTANDARD_CURSOR));
             }
 #endif // wxUSE_MENUS
