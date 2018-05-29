@@ -1060,7 +1060,7 @@ inline wxULongLong operator+(unsigned long l, const wxULongLong& ull) { return u
 
 inline wxLongLong operator-(unsigned long l, const wxULongLong& ull)
 {
-    wxULongLong ret = wxULongLong(l) - ull;
+    const wxULongLong ret = wxULongLong(l) - ull;
     return wxLongLong((wxInt32)ret.GetHi(),ret.GetLo());
 }
 
