@@ -667,6 +667,17 @@ typedef short int WXTYPE;
 #   define wxGCC_WARNING_RESTORE(x)
 #endif
 
+/* Specific macros for -Wcast-function-type warning new in gcc 8. */
+#if wxCHECK_GCC_VERSION(8, 0)
+    #define wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE() \
+        wxGCC_WARNING_SUPPRESS(cast-function-type)
+    #define wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE() \
+        wxGCC_WARNING_RESTORE(cast-function-type)
+#else
+    #define wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+    #define wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+#endif
+
 /*
    Macros to suppress and restore clang warning only when it is valid.
 
