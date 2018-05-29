@@ -993,7 +993,7 @@ public:
       // This is logically equivalent to strlen(str.mb_str()) but avoids
       // actually converting the string to multibyte and just computes the
       // length that it would have after conversion.
-      size_t ofs = wxConvLibc.FromWChar(NULL, 0, str.wc_str(), str.length());
+      const size_t ofs = wxConvLibc.FromWChar(NULL, 0, str.wc_str(), str.length());
       return ofs == wxCONV_FAILED ? 0 : static_cast<ptrdiff_t>(ofs);
   }
 
@@ -2160,17 +2160,17 @@ public:
       // searching (return starting index, or -1 if not found)
   int Find(const wxString& sub) const               // like strstr
   {
-    size_type idx = find(sub);
+    const size_type idx = find(sub);
     return (idx == npos) ? wxNOT_FOUND : (int)idx;
   }
   int Find(const char *sub) const               // like strstr
   {
-    size_type idx = find(sub);
+    const size_type idx = find(sub);
     return (idx == npos) ? wxNOT_FOUND : (int)idx;
   }
   int Find(const wchar_t *sub) const               // like strstr
   {
-    size_type idx = find(sub);
+    const size_type idx = find(sub);
     return (idx == npos) ? wxNOT_FOUND : (int)idx;
   }
 
