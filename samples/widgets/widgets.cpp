@@ -628,9 +628,7 @@ void WidgetsFrame::InitBook()
         }
     }
 
-    Connect( wxID_ANY,
-             wxEVT_COMMAND_WIDGETS_PAGE_CHANGED,
-             wxWidgetsbookEventHandler(WidgetsFrame::OnPageChanged) );
+    Bind(wxEVT_COMMAND_WIDGETS_PAGE_CHANGED, &WidgetsFrame::OnPageChanged, this);
 
     const bool pageSet = wxPersistentRegisterAndRestore(m_book);
 

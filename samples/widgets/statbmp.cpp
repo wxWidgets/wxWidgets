@@ -115,10 +115,8 @@ void StatBmpWidgetsPage::CreateContent()
 
     wxInitAllImageHandlers();
 
-    Connect(wxEVT_FILEPICKER_CHANGED,
-            wxFileDirPickerEventHandler(StatBmpWidgetsPage::OnFileChange));
-    Connect(wxEVT_RADIOBOX,
-            wxCommandEventHandler(StatBmpWidgetsPage::OnRadioChange));
+    Bind(wxEVT_FILEPICKER_CHANGED, &StatBmpWidgetsPage::OnFileChange, this);
+    Bind(wxEVT_RADIOBOX, &StatBmpWidgetsPage::OnRadioChange, this);
 
     m_statbmp = NULL;
     RecreateWidget();
@@ -171,9 +169,8 @@ void StatBmpWidgetsPage::RecreateWidget()
     }
     m_sbsizer->Add(m_statbmp, wxSizerFlags(1).Expand());
     GetSizer()->Layout();
-    m_statbmp->Connect(wxEVT_LEFT_DOWN,
-                       wxMouseEventHandler(StatBmpWidgetsPage::OnMouseEvent),
-                       NULL, this);
+    m_statbmp->Bind(wxEVT_LEFT_DOWN, &StatBmpWidgetsPage::OnMouseEvent, this);
+
     // When switching from generic to native control on wxMSW under Wine,
     // the explicit Refresh() is necessary
     m_statbmp->Refresh();

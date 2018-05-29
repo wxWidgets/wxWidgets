@@ -274,7 +274,7 @@ wxDataObject to achieve this.
 
 This sample demonstrates various features of the wxWidgets events. It
 shows how to dynamic events and connecting/disconnecting the event handlers
-during run time by using wxEvtHandler::Connect() and wxEvtHandler::Disconnect(),
+during run time by using wxEvtHandler::Bind() and wxEvtHandler::Unbind(),
 and also how to use wxWindow::PushEventHandler() and wxWindow::PopEventHandler().
 
 @sampledir{event}

@@ -1969,14 +1969,6 @@ void FormMain::CreateGrid( int style, int extraStyle )
     //m_pPropGridManager->SetSplitterLeft(true);
     //m_pPropGridManager->SetSplitterPosition(137);
 
-    /*
-    // This would setup event handling without event table entries
-    Connect(m_pPropGridManager->GetId(), wxEVT_PG_SELECTED,
-            wxPropertyGridEventHandler(FormMain::OnPropertyGridSelect) );
-    Connect(m_pPropGridManager->GetId(), wxEVT_PG_CHANGED,
-            wxPropertyGridEventHandler(FormMain::OnPropertyGridChange) );
-    */
-
     m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
 
     FinalizePanel(wasCreated);

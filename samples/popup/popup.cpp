@@ -116,9 +116,7 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
     // Keep this code to verify if mouse events work, they're required if
     // you're making a control like a combobox where the items are highlighted
     // under the cursor, the m_panel is set focus in the Popup() function
-    m_panel->Connect(wxEVT_MOTION,
-                     wxMouseEventHandler(SimpleTransientPopup::OnMouse),
-                     NULL, this);
+    m_panel->Bind(wxEVT_MOTION, &SimpleTransientPopup::OnMouse, this);
 
     wxStaticText *text = new wxStaticText( m_panel, wxID_ANY,
                           wxT("wxPopupTransientWindow is a\n")

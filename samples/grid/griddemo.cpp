@@ -719,8 +719,7 @@ void GridFrame::SetTabBehaviour(wxCommandEvent& event)
 {
     // To make any built-in behaviour work, we need to disable the custom TAB
     // handler, otherwise it would be overriding them.
-    grid->Disconnect(wxEVT_GRID_TABBING,
-                     wxGridEventHandler(GridFrame::OnGridCustomTab));
+    grid->Unbind(wxEVT_GRID_TABBING, &GridFrame::OnGridCustomTab, this);
 
     grid->SetTabBehaviour(
             static_cast<wxGrid::TabBehaviour>(event.GetId() - ID_TAB_STOP)
@@ -729,9 +728,7 @@ void GridFrame::SetTabBehaviour(wxCommandEvent& event)
 
 void GridFrame::SetTabCustomHandler(wxCommandEvent&)
 {
-    grid->Connect(wxEVT_GRID_TABBING,
-                  wxGridEventHandler(GridFrame::OnGridCustomTab),
-                  NULL, this);
+    grid->Bind(wxEVT_GRID_TABBING, &GridFrame::OnGridCustomTab, this);
 }
 
 
@@ -2349,10 +2346,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
 
     m_gridBitmap = bmp;
 
-    canvas->Connect( wxEVT_PAINT,
-                     wxPaintEventHandler(GridFrame::OnRenderPaint),
-                     NULL,
-                     this );
+    canvas->Bind( wxEVT_PAINT, &GridFrame::OnRenderPaint, this );
 
     frame->Show();
 }

@@ -48,38 +48,26 @@ ObjrefDialog::ObjrefDialog(wxWindow* parent)
     wxCHECK_RET(nb, "failed to find objref_notebook");
 
     // Connect different event handlers.
-    nb->Connect(wxEVT_NOTEBOOK_PAGE_CHANGED,
-                wxNotebookEventHandler(ObjrefDialog::OnNotebookPageChanged),
-                NULL, this);
+    nb->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED, &ObjrefDialog::OnNotebookPageChanged, this);
 
     // We want to direct UpdateUI events for the ID range 'first_row' to
     // OnUpdateUIFirst(). We could achieve this using first_row[0] and
     // first_row[2], but what if a fourth column were added? It's safer to use
     // the 'typedefs' for the two ends of the range:
     wxNotebookPage *page = nb->GetPage(icons_page);
-    page->Connect(XRCID("first_row[start]"), XRCID("first_row[end]"),
-                  wxEVT_UPDATE_UI,
-                  wxUpdateUIEventHandler(ObjrefDialog::OnUpdateUIFirst),
-                  NULL, this);
-    page->Connect(XRCID("second_row[start]"), XRCID("second_row[end]"),
-                  wxEVT_UPDATE_UI,
-                  wxUpdateUIEventHandler(ObjrefDialog::OnUpdateUISecond),
-                  NULL, this);
-    page->Connect(XRCID("third_row[start]"), XRCID("third_row[end]"),
-                  wxEVT_UPDATE_UI,
-                  wxUpdateUIEventHandler(ObjrefDialog::OnUpdateUIThird),
-                  NULL, this);
+    page->Bind(wxEVT_UPDATE_UI, &ObjrefDialog::OnUpdateUIFirst, this,
+               XRCID("first_row[start]"), XRCID("first_row[end]"));
+    page->Bind(wxEVT_UPDATE_UI, &ObjrefDialog::OnUpdateUISecond, this,
+               XRCID("second_row[start]"), XRCID("second_row[end]"));
+    page->Bind(wxEVT_UPDATE_UI, &ObjrefDialog::OnUpdateUIThird, this,
+               XRCID("third_row[start]"), XRCID("third_row[end]"));
 
     // Connect the id ranges, using the [start] and [end] 'typedefs'
     page = nb->GetPage(calc_page);
-    page->Connect(XRCID("digits[start]"), XRCID("digits[end]"),
-                  wxEVT_BUTTON,
-                  wxCommandEventHandler(ObjrefDialog::OnNumeralClick),
-                  NULL, this);
-    page->Connect(XRCID("operators[start]"), XRCID("operators[end]"),
-                  wxEVT_BUTTON,
-                  wxCommandEventHandler(ObjrefDialog::OnOperatorClick),
-                  NULL, this);
+    page->Bind(wxEVT_BUTTON, &ObjrefDialog::OnNumeralClick, this,
+               XRCID("digits[start]"), XRCID("digits[end]"));
+    page->Bind(wxEVT_BUTTON, &ObjrefDialog::OnOperatorClick, this,
+               XRCID("operators[start]"), XRCID("operators[end]"));
 
 }
 

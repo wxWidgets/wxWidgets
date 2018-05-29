@@ -488,6 +488,55 @@ void MenuTestCase::ChangeBitmap()
     wxDELETE(menu);
 }
 
+#if wxUSE_UIACTIONSIMULATOR
+
+// In C++98 this class can't be defined inside Events() method, unfortunately,
+// as its OnMenu() method wouldn't be usable with template Bind() then.
+class MenuEventHandler : public wxEvtHandler
+{
+public:
+    MenuEventHandler(wxWindow* win)
+        : m_win(win)
+    {
+        m_win->Bind(wxEVT_MENU, &MenuEventHandler::OnMenu, this);
+
+        m_gotEvent = false;
+        m_event = NULL;
+    }
+
+    virtual ~MenuEventHandler()
+    {
+        m_win->Unbind(wxEVT_MENU, &MenuEventHandler::OnMenu, this);
+
+        delete m_event;
+    }
+
+    const wxCommandEvent& GetEvent()
+    {
+        CPPUNIT_ASSERT( m_gotEvent );
+
+        m_gotEvent = false;
+
+        return *m_event;
+    }
+
+private:
+    void OnMenu(wxCommandEvent& event)
+    {
+        CPPUNIT_ASSERT( !m_gotEvent );
+
+        delete m_event;
+        m_event = static_cast<wxCommandEvent*>(event.Clone());
+        m_gotEvent = true;
+    }
+
+    wxWindow* const m_win;
+    wxCommandEvent* m_event;
+    bool m_gotEvent;
+};
+
+#endif // wxUSE_UIACTIONSIMULATOR
+
 void MenuTestCase::Events()
 {
 #ifdef __WXGTK__
@@ -502,55 +551,6 @@ void MenuTestCase::Events()
 #endif // __WXGTK__
 
 #if wxUSE_UIACTIONSIMULATOR
-    class MenuEventHandler : public wxEvtHandler
-    {
-    public:
-        MenuEventHandler(wxWindow* win)
-            : m_win(win)
-        {
-            m_win->Connect(wxEVT_MENU,
-                           wxCommandEventHandler(MenuEventHandler::OnMenu),
-                           NULL,
-                           this);
-
-            m_gotEvent = false;
-            m_event = NULL;
-        }
-
-        virtual ~MenuEventHandler()
-        {
-            m_win->Disconnect(wxEVT_MENU,
-                              wxCommandEventHandler(MenuEventHandler::OnMenu),
-                              NULL,
-                              this);
-
-            delete m_event;
-        }
-
-        const wxCommandEvent& GetEvent()
-        {
-            CPPUNIT_ASSERT( m_gotEvent );
-
-            m_gotEvent = false;
-
-            return *m_event;
-        }
-
-    private:
-        void OnMenu(wxCommandEvent& event)
-        {
-            CPPUNIT_ASSERT( !m_gotEvent );
-
-            delete m_event;
-            m_event = static_cast<wxCommandEvent*>(event.Clone());
-            m_gotEvent = true;
-        }
-
-        wxWindow* const m_win;
-        wxCommandEvent* m_event;
-        bool m_gotEvent;
-    };
-
     MenuEventHandler handler(m_frame);
 
     // Invoke the accelerator.
