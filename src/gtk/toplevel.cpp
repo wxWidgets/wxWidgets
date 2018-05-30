@@ -32,17 +32,15 @@
 #include "wx/evtloop.h"
 #include "wx/sysopt.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk3-compat.h"
+#include "wx/gtk/private/win_gtk.h"
+
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
     #include <X11/Xatom.h>  // XA_CARDINAL
     #include "wx/unix/utilsx11.h"
 #endif
-
-#include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
-#include "wx/gtk/private/gtk3-compat.h"
-#include "wx/gtk/private/win_gtk.h"
 
 // ----------------------------------------------------------------------------
 // data

@@ -64,7 +64,7 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__WXGTK__)
-    #include <gtk/gtk.h>
+    #include "wx/gtk/private/wrapgtk.h"
     #include <gdk/gdkx.h>
     #define GetDisplay()        GDK_DISPLAY()
     #define GetXWindow(wxwin)   GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)

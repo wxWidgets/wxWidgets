@@ -24,8 +24,7 @@
 
 #include "wx/scopeguard.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 //----------------------------------------------------------------------------
 // global data

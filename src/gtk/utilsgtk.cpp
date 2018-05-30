@@ -25,7 +25,7 @@
 #include "wx/gtk/private/timer.h"
 #include "wx/evtloop.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_WIN32
 #include <gdk/gdkwin32.h>
 #endif
@@ -53,8 +53,6 @@
 
     #include "wx/unix/utilsx11.h"
 #endif
-
-#include "wx/gtk/private/gtk2-compat.h"
 
 GdkWindow* wxGetTopLevelGDK();
 

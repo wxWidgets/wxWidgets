@@ -14,11 +14,10 @@
 #endif
 #include "wx/utils.h" // wxClientDisplayRect
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
 #endif
-#include "wx/gtk/private/gtk2-compat.h"
 
 #if !defined(GDK_WINDOWING_WIN32)
 

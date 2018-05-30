@@ -21,7 +21,6 @@
 
 #include "wx/artprov.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 #if !GTK_CHECK_VERSION(2,8,0)

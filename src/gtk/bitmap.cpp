@@ -23,8 +23,6 @@
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private.h"
 
-#include <gtk/gtk.h>
-
 GdkWindow* wxGetTopLevelGDK();
 
 #ifndef __WXGTK3__

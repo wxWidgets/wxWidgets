@@ -104,7 +104,7 @@
 #endif
 
 #if wxUSE_GUI && defined(__WXGTK__)
-    #include <gtk/gtk.h>    // for GTK_XXX_VERSION constants
+    #include "wx/gtk/private/wrapgtk.h"    // for GTK_XXX_VERSION constants
 #endif
 
 #if wxUSE_GUI && defined(__WXQT__)

@@ -23,9 +23,7 @@
     #include "wx/intl.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/dialogcount.h"
 
 extern "C" {

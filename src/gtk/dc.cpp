@@ -19,7 +19,7 @@
 #include "wx/icon.h"
 #include "wx/gtk/dc.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner)
     : wxGCDCImpl(owner)

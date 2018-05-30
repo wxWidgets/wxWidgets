@@ -37,10 +37,7 @@
 
 #include <ctype.h>
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/win_gtk.h"

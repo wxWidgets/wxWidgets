@@ -28,7 +28,6 @@
 #include "wx/apptrait.h"
 #include "wx/fontmap.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 #include "wx/gtk/mimetype.h"

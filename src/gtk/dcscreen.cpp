@@ -11,7 +11,7 @@
 
 #include "wx/gtk/dcscreen.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 //-----------------------------------------------------------------------------
 // wxScreenDCImpl

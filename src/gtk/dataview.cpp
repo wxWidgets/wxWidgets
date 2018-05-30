@@ -32,11 +32,9 @@
 #include "wx/gtk/dcclient.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/gdkconv.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/list.h"
 #include "wx/gtk/private/treeview.h"
 using namespace wxGTKImpl;

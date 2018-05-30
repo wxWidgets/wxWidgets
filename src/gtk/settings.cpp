@@ -20,9 +20,8 @@
 #include "wx/fontutil.h"
 #include "wx/fontenum.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/win_gtk.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
