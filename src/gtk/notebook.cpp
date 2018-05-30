@@ -153,6 +153,13 @@ wxNotebook::wxNotebook( wxWindow *parent, wxWindowID id,
 
 wxNotebook::~wxNotebook()
 {
+    // Ensure that we don't generate page changing events during the
+    // destruction, this is unexpected and may reference the already (half)
+    // destroyed parent window, for example. So make sure our switch_page
+    // callback is not called from inside DeleteAllPages() by disconnecting all
+    // the callbacks associated with this widget.
+    GTKDisconnect(m_widget);
+
     DeleteAllPages();
 }
 
