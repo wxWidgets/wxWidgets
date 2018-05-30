@@ -94,6 +94,7 @@ wxMSW:
 - Fix stack corruption when using wxStackWalker (srfisk).
 - Fix positioning windows at positions >= SHORT_MAX (Cătălin Răceanu).
 - Honour alignment flags for multiline buttons using custom colours too.
+- Support MSVC auto-linking when using monolithic build too (PB).
 
 wxOSX:
 
