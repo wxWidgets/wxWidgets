@@ -162,31 +162,39 @@
     #endif
 #endif // defined(wxMONOLITHIC) && wxMONOLITHIC == 1
 
-#if !defined(wxNO_NET_LIB) && !defined(WXUSINGDLL)
-    #pragma comment(lib, "wsock32")
-#endif
+#if !defined(WXUSINGDLL)
+    #if !defined(wxNO_NET_LIB)
+        #pragma comment(lib, "wsock32")
+    #endif
 
-#if wxUSE_XML && !defined(wxNO_XML_LIB) && !defined(wxNO_EXPAT_LIB) && !defined(WXUSINGDLL)
-    #pragma comment(lib, wx3RD_PARTY_LIB_NAME("expat"))
-#endif
+    #if wxUSE_XML && !defined(wxNO_XML_LIB) && !defined(wxNO_EXPAT_LIB)
+        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("expat"))
+    #endif
 
-#if wxUSE_REGEX && !defined(wxNO_REGEX_LIB) && !defined(WXUSINGDLL)
-    #pragma comment(lib, wx3RD_PARTY_LIB_NAME_U("regex"))
-#endif
-#if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB) && !defined(WXUSINGDLL)
-    #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
-#endif
+    #if wxUSE_REGEX && !defined(wxNO_REGEX_LIB)
+        #pragma comment(lib, wx3RD_PARTY_LIB_NAME_U("regex"))
+    #endif
+    #if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB)
+        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
+    #endif
+#endif // !defined(WXUSINGDLL)
 
 #if wxUSE_GUI
-    #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("jpeg"))
-    #endif
-    #if wxUSE_LIBPNG && !defined(wxNO_PNG_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("png"))
-    #endif
-    #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("tiff"))
-    #endif
+    #if !defined(WXUSINGDLL)
+        #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("jpeg"))
+        #endif
+        #if wxUSE_LIBPNG && !defined(wxNO_PNG_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("png"))
+        #endif
+        #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("tiff"))
+        #endif
+        #if wxUSE_STC && !defined(wxNO_STC_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
+        #endif
+    #endif // !defined(WXUSINGDLL)
+
 
     #if !defined(wxMONOLITHIC) || wxMONOLITHIC == 0
 
@@ -230,10 +238,6 @@
 
     #if wxUSE_GLCANVAS && !defined(wxNO_GL_LIB)
         #pragma comment(lib, wxTOOLKIT_LIB_NAME("gl"))
-    #endif
-
-    #if wxUSE_STC && !defined(wxNO_STC_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
     #endif
 
 #endif // wxUSE_GUI
