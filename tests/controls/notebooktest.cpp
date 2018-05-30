@@ -25,7 +25,7 @@
 class NotebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 {
 public:
-    NotebookTestCase() { }
+    NotebookTestCase() { m_notebook = NULL; m_numPageChanges = 0; }
 
     virtual void setUp();
     virtual void tearDown();
@@ -44,11 +44,17 @@ private:
         wxBOOK_CTRL_BASE_TESTS();
         CPPUNIT_TEST( Image );
         CPPUNIT_TEST( RowCount );
+        CPPUNIT_TEST( NoEventsOnDestruction );
     CPPUNIT_TEST_SUITE_END();
 
     void RowCount();
+    void NoEventsOnDestruction();
+
+    void OnPageChanged(wxNotebookEvent&) { m_numPageChanges++; }
 
     wxNotebook *m_notebook;
+
+    int m_numPageChanges;
 
     wxDECLARE_NO_COPY_CLASS(NotebookTestCase);
 };
@@ -88,6 +94,28 @@ void NotebookTestCase::RowCount()
 
     CPPUNIT_ASSERT( m_notebook->GetRowCount() != 1 );
 #endif
+}
+
+void NotebookTestCase::NoEventsOnDestruction()
+{
+    // We can't use EventCounter helper here as it doesn't deal with the window
+    // it's connected to being destroyed during its life-time, so do it
+    // manually.
+    m_notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED,
+                     &NotebookTestCase::OnPageChanged, this);
+
+    // Normally deleting a page before the selected one results in page
+    // selection changing and the corresponding event.
+    m_notebook->DeletePage(0);
+    CHECK( m_numPageChanges == 1 );
+
+    // But deleting the entire control shouldn't generate any events, yet it
+    // used to do under GTK+ 3 when a page different from the first one was
+    // selected.
+    m_notebook->ChangeSelection(1);
+    m_notebook->Destroy();
+    m_notebook = NULL;
+    CHECK( m_numPageChanges == 1 );
 }
 
 #endif //wxUSE_NOTEBOOK
