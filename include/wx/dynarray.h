@@ -95,11 +95,11 @@ private:
     CMPFUNC m_f;
 };
 
-template<class T, typename F>
+template<class T>
 class wxSortedArray_SortFunction
 {
 public:
-    typedef F CMPFUNC;
+    typedef int (wxCMPFUNC_CONV *CMPFUNC)(T, T);
 
     wxSortedArray_SortFunction(CMPFUNC f) : m_f(f) { }
     bool operator()(const T& i1, const T& i2)
@@ -109,9 +109,7 @@ private:
 };
 
 #define  _WX_DECLARE_BASEARRAY(T, name, classexp)                   \
-   typedef int (wxCMPFUNC_CONV *CMPFUN##name)(T pItem1, T pItem2);  \
-   typedef wxSortedArray_SortFunction<T, CMPFUN##name> name##_Predicate; \
-   _WX_DECLARE_BASEARRAY_2(T, name, name##_Predicate, classexp)
+   _WX_DECLARE_BASEARRAY_2(T, name, wxSortedArray_SortFunction<T>, classexp)
 
 #define  _WX_DECLARE_BASEARRAY_2(T, name, predicate, classexp)      \
 class name : public std::vector<T>                                  \
