@@ -10,7 +10,7 @@
 #ifndef _WX_GTK_PRIVATE_STYLECONTEXT_H_
 #define _WX_GTK_PRIVATE_STYLECONTEXT_H_
 
-#ifdef __WXGTK3__
+#include "wx/gtk/private/widgetpath.h"
 
 class wxGtkStyleContext
 {
@@ -37,10 +37,9 @@ public:
 
 private:
     GtkStyleContext* m_context;
-    GtkWidgetPath* const m_path;
+    wxGtkWidgetPath m_path;
 
     wxDECLARE_NO_COPY_CLASS(wxGtkStyleContext);
 };
 
-#endif // __WXGTK3__
 #endif // _WX_GTK_PRIVATE_STYLECONTEXT_H_

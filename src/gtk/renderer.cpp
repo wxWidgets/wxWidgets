@@ -38,7 +38,9 @@
 #endif
 
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/stylecontext.h"
+#ifdef __WXGTK3__
+    #include "wx/gtk/private/stylecontext.h"
+#endif
 
 #if defined(__WXGTK3__) && !GTK_CHECK_VERSION(3,14,0)
     #define GTK_STATE_FLAG_CHECKED (1 << 11)
