@@ -261,6 +261,13 @@ int wxNotebook::DoSetSelection( size_t page, int flags )
 
 void wxNotebook::GTKOnPageChanged()
 {
+    // Don't generate page changing events during the destruction, this is
+    // unexpected and may reference the already (half) destroyed parent window
+    // for example but we still get GTK+ signals (at least with GTK+ 3), so we
+    // need to ignore them explicitly.
+    if ( IsBeingDeleted() )
+        return;
+
     m_selection = gtk_notebook_get_current_page(GTK_NOTEBOOK(m_widget));
 
     SendPageChangedEvent(m_oldSelection);
