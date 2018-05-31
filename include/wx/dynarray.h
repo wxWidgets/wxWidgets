@@ -164,8 +164,12 @@ public:
     void Alloc(size_t uiSize) { this->reserve(uiSize); }
     void Shrink()
     {
+#if !wxUSE_STD_CONTAINERS || __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+        this->shrink_to_fit();
+#else
         std::vector<T> tmp(*this);
         this->swap(tmp);
+#endif
     }
 
     size_t GetCount() const { return this->size(); }
