@@ -897,6 +897,7 @@ static int GetScrollbarWidth()
         gtk_style_context_get_margin(sc, GTK_STATE_FLAG_NORMAL, &border);
         width += border.left + border.right;
 
+        gtk_widget_path_unref(path);
         StyleContextFree(sc);
     }
     else
