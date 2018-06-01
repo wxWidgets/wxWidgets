@@ -212,52 +212,52 @@ public:
 // ----------------------------------------------------------------------------
 
 #define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, comptype)\
-wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
-                       TypeTooBigToBeStoredInSorted##base,            \
-                       name);                                         \
-classexp name : public base                                           \
-{                                                                     \
-  typedef comptype SCMPFUNC;                                          \
-public:                                                               \
-  name(comptype fn defcomp) { m_fnCompare = fn; }                     \
-                                                                      \
-  name& operator=(const name& src)                                    \
-    { base* temp = (base*) this;                                      \
-      (*temp) = ((const base&)src);                                   \
-      m_fnCompare = src.m_fnCompare;                                  \
-      return *this; }                                                 \
-                                                                      \
-  T& operator[](size_t uiIndex) const                                 \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Item(size_t uiIndex) const                                       \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Last() const                                                     \
-    { return (T&)(base::operator[](size() - 1)); }                    \
-                                                                      \
-  int Index(T lItem) const                                            \
-    { return base::Index(lItem, (CMPFUNC)m_fnCompare); }              \
-                                                                      \
-  size_t IndexForInsert(T lItem) const                                \
-    { return base::IndexForInsert(lItem, (CMPFUNC)m_fnCompare); }     \
-                                                                      \
-  void AddAt(T item, size_t index)                                    \
-    { base::insert(begin() + index, item); }                          \
-                                                                      \
-  size_t Add(T lItem)                                                 \
-    { return base::Add(lItem, (CMPFUNC)m_fnCompare); }                \
-  void push_back(T lItem)                                             \
-    { Add(lItem); }                                                   \
-                                                                      \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
-    { base::erase(begin() + uiIndex, begin() + uiIndex + nRemove); }  \
-  void Remove(T lItem)                                                \
-    { int iIndex = Index(lItem);                                      \
-      wxCHECK_RET( iIndex != wxNOT_FOUND, _WX_ERROR_REMOVE );         \
-      base::erase(begin() + iIndex); }                                \
-                                                                      \
-private:                                                              \
-  comptype m_fnCompare;                                               \
-}
+    typedef wxBaseSortedArray<T, comptype> wxBaseSortedArrayFor##name;        \
+    classexp name : public wxBaseSortedArrayFor##name                         \
+    {                                                                         \
+    public:                                                                   \
+        name(comptype fn defcomp) : wxBaseSortedArrayFor##name(fn) { }        \
+    }
+
+
+template <typename T, typename Cmp>
+class wxBaseSortedArray : public wxBaseArray<T>
+{
+    typedef typename wxBaseArray<T>::CMPFUNC CMPFUNC;
+
+public:
+    explicit wxBaseSortedArray(Cmp fn) : m_fnCompare(fn) { }
+
+    wxBaseSortedArray& operator=(const wxBaseSortedArray& src)
+    {
+        wxBaseArray<T>::operator=(src);
+        m_fnCompare = src.m_fnCompare;
+        return *this;
+    }
+
+    size_t IndexForInsert(T item) const
+    {
+        return this->IndexForInsert(item, (CMPFUNC)m_fnCompare);
+    }
+
+    void AddAt(T item, size_t index)
+    {
+        this->insert(this->begin() + index, item);
+    }
+
+    size_t Add(T item)
+    {
+        return this->wxBaseArray<T>::Add(item, (CMPFUNC)m_fnCompare);
+    }
+
+    void push_back(T item)
+    {
+        Add(item);
+    }
+
+private:
+    Cmp m_fnCompare;
+};
 
 
 // ----------------------------------------------------------------------------
