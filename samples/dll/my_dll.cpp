@@ -147,12 +147,8 @@ MyDllApp::MyDllApp()
     // by shutting the thread down when it's no longer needed, though.
     SetExitOnFrameDelete(false);
 
-    Connect(CMD_SHOW_WINDOW,
-            wxEVT_THREAD,
-            wxThreadEventHandler(MyDllApp::OnShowWindow));
-    Connect(CMD_TERMINATE,
-            wxEVT_THREAD,
-            wxThreadEventHandler(MyDllApp::OnTerminate));
+    Bind(wxEVT_THREAD, &MyDllApp::OnShowWindow, this, CMD_SHOW_WINDOW);
+    Bind(wxEVT_THREAD, &MyDllApp::OnTerminate, this, CMD_TERMINATE);
 }
 
 void MyDllApp::OnShowWindow(wxThreadEvent& event)

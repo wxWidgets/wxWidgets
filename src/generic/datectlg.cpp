@@ -86,9 +86,7 @@ public:
         if ( !tx )
             tx = m_combo;
 
-        tx->Connect(wxEVT_KILL_FOCUS,
-                    wxFocusEventHandler(wxCalendarComboPopup::OnKillTextFocus),
-                    NULL, this);
+        tx->Bind(wxEVT_KILL_FOCUS, &wxCalendarComboPopup::OnKillTextFocus, this);
 
         return true;
     }

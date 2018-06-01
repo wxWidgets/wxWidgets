@@ -366,9 +366,9 @@ bool ScintillaWX::SetIdle(bool on) {
     if (idler.state != on) {
         // connect or disconnect the EVT_IDLE handler
         if (on)
-            stc->Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(wxStyledTextCtrl::OnIdle));
+            stc->Bind(wxEVT_IDLE, &wxStyledTextCtrl::OnIdle, stc);
         else
-            stc->Disconnect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(wxStyledTextCtrl::OnIdle));
+            stc->Unbind(wxEVT_IDLE, &wxStyledTextCtrl::OnIdle, stc);
         idler.state = on;
     }
     return idler.state;

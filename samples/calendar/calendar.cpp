@@ -809,10 +809,9 @@ wxCalendarCtrlBase *MyPanel::DoCreateCalendar(const wxDateTime& dt, long style)
                                       wxDefaultSize,
                                       style);
 
-    calendar->Connect(wxEVT_RIGHT_DOWN,
-                      wxMouseEventHandler(MyFrame::OnCalRClick),
-                      NULL,
-                      ( MyFrame * )wxGetTopLevelParent(this));
+    calendar->Bind(wxEVT_RIGHT_DOWN,
+                   &MyFrame::OnCalRClick,
+                   ( MyFrame * )wxGetTopLevelParent(this));
 
     return calendar;
 }

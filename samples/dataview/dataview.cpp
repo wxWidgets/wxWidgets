@@ -622,9 +622,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[0] =
                 new wxDataViewCtrl( parent, ID_MUSIC_CTRL, wxDefaultPosition,
                                     wxDefaultSize, style );
-            m_ctrl[0]->Connect(wxEVT_CHAR,
-                               wxKeyEventHandler(MyFrame::OnDataViewChar),
-                               NULL, this);
+            m_ctrl[0]->Bind(wxEVT_CHAR, &MyFrame::OnDataViewChar, this);
 
             m_music_model = new MyMusicTreeModel;
             m_ctrl[0]->AssociateModel( m_music_model.get() );

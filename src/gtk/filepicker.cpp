@@ -88,9 +88,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         // we need to know when the dialog has been dismissed clicking OK...
         // NOTE: the "clicked" signal is not available for a GtkFileChooserButton
         //       thus we are forced to use wxFileDialog's event
-        m_dialog->Connect(wxEVT_BUTTON,
-                wxCommandEventHandler(wxFileButton::OnDialogOK),
-                NULL, this);
+        m_dialog->Bind(wxEVT_BUTTON, &wxFileButton::OnDialogOK, this);
 
         m_parent->DoAddChild( this );
 

@@ -111,8 +111,7 @@ bool wxDialog::Create(wxWindow *parent,
     {
         CreateGripper();
 
-        Connect(wxEVT_CREATE,
-                wxWindowCreateEventHandler(wxDialog::OnWindowCreate));
+        Bind(wxEVT_CREATE, &wxDialog::OnWindowCreate, this);
     }
 
     return true;

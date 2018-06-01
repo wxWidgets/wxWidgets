@@ -56,7 +56,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
     statusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 
     // Connect Events
-    this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIFrame::OnClose ) );
+    Bind(wxEVT_CLOSE_WINDOW, &GUIFrame::OnClose, this);
 }
 
 void GUIFrame::AddMenuBar()
@@ -102,11 +102,11 @@ void GUIFrame::AddMenuBar()
     this->SetMenuBar( mbar );
 
     // Connect Events
-    this->Connect( m_menuSeeScr->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
-    this->Connect( m_menuFileQuit->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnQuit ) );
-    this->Connect( m_menuCapFullScreen->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
-    this->Connect( m_menuCapAll->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
-    this->Connect( m_menuHelpAbout->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnAbout ) );
+    Bind(wxEVT_MENU, &GUIFrame::OnSeeScreenshots, this, m_menuSeeScr->GetId());
+    Bind(wxEVT_MENU, &GUIFrame::OnQuit, this, m_menuFileQuit->GetId());
+    Bind(wxEVT_MENU, &GUIFrame::OnCaptureFullScreen, this, m_menuCapFullScreen->GetId());
+    Bind(wxEVT_MENU, &GUIFrame::OnCaptureAllControls, this, m_menuCapAll->GetId());
+    Bind(wxEVT_MENU, &GUIFrame::OnAbout, this, m_menuHelpAbout->GetId());
 }
 
 void GUIFrame::AddPanel_1()
@@ -493,10 +493,10 @@ void GUIFrame::AddPanel_5()
 GUIFrame::~GUIFrame()
 {
     // Disconnect Events
-    this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIFrame::OnClose ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnQuit ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnAbout ) );
+    Unbind(wxEVT_CLOSE_WINDOW, &GUIFrame::OnClose, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnSeeScreenshots, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnQuit, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnCaptureFullScreen, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnCaptureAllControls, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnAbout, this);
 }

@@ -172,11 +172,7 @@ protected:
     // Default ctor sets things up for handling children events correctly.
     wxCompositeWindow()
     {
-        this->Connect
-              (
-                  wxEVT_CREATE,
-                  wxWindowCreateEventHandler(wxCompositeWindow::OnWindowCreate)
-              );
+        this->Bind(wxEVT_CREATE, &wxCompositeWindow::OnWindowCreate, this);
     }
 
 private:
@@ -191,15 +187,11 @@ private:
 
         wxWindow *child = event.GetWindow();
         if ( child == this )
-            return; // not a child, we don't want to Connect() to ourselves
+            return; // not a child, we don't want to bind to ourselves
 
-        child->Connect(wxEVT_SET_FOCUS,
-                       wxFocusEventHandler(wxCompositeWindow::OnSetFocus),
-                       NULL, this);
+        child->Bind(wxEVT_SET_FOCUS, &wxCompositeWindow::OnSetFocus, this);
 
-        child->Connect(wxEVT_KILL_FOCUS,
-                       wxFocusEventHandler(wxCompositeWindow::OnKillFocus),
-                       NULL, this);
+        child->Bind(wxEVT_KILL_FOCUS, &wxCompositeWindow::OnKillFocus, this);
 
         // Some events should be only handled for non-toplevel children. For
         // example, we want to close the control in wxDataViewCtrl when Enter
@@ -213,9 +205,7 @@ private:
             win = win->GetParent();
         }
 
-        child->Connect(wxEVT_CHAR,
-                       wxKeyEventHandler(wxCompositeWindow::OnChar),
-                       NULL, this);
+        child->Bind(wxEVT_CHAR, &wxCompositeWindow::OnChar, this);
     }
 
     void OnChar(wxKeyEvent& event)

@@ -205,12 +205,6 @@ wxMenu* SearchCtrlWidgetsPage::CreateTestMenu()
         wxString tipText = wxString::Format(wxT("tip %i"),i);
         menu->Append(ID_SEARCHMENU+i, itemText, tipText, wxITEM_NORMAL);
     }
-//     target->Connect(
-//         ID_SEARCHMENU,
-//         ID_SEARCHMENU+SEARCH_MENU_SIZE,
-//         wxEVT_MENU,
-//         wxCommandEventHandler(MySearchCtrl::OnSearchMenu)
-//         );
     return menu;
 }
 

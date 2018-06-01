@@ -128,7 +128,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // check if we have an image with alpha or not
     if ( wxTheApp->GetComCtl32Version() < 600 )
     {
-        Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBitmap::DoPaintManually));
+        Bind(wxEVT_PAINT, &wxStaticBitmap::DoPaintManually, this);
     }
 
     return true;

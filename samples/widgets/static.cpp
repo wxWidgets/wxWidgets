@@ -310,9 +310,7 @@ void StaticWidgetsPage::CreateContent()
 
     m_textBox = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
     wxButton *b1 = new wxButton(this, wxID_ANY, "Change &box label");
-    b1->Connect(wxEVT_BUTTON,
-                wxCommandEventHandler(StaticWidgetsPage::OnButtonBoxText),
-                NULL, this);
+    b1->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonBoxText, this);
     sizerMiddle->Add(m_textBox, 0, wxEXPAND|wxALL, 5);
     sizerMiddle->Add(b1, 0, wxLEFT|wxBOTTOM, 5);
 
@@ -320,9 +318,7 @@ void StaticWidgetsPage::CreateContent()
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE|wxHSCROLL);
     wxButton *b2 = new wxButton(this, wxID_ANY, "Change &text label");
-    b2->Connect(wxEVT_BUTTON,
-                wxCommandEventHandler(StaticWidgetsPage::OnButtonLabelText),
-                NULL, this);
+    b2->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonLabelText, this);
     sizerMiddle->Add(m_textLabel, 0, wxEXPAND|wxALL, 5);
     sizerMiddle->Add(b2, 0, wxLEFT|wxBOTTOM, 5);
 
@@ -332,9 +328,7 @@ void StaticWidgetsPage::CreateContent()
                                            wxTE_MULTILINE|wxHSCROLL);
 
     wxButton *b3 = new wxButton(this, wxID_ANY, "Change decorated text label");
-    b3->Connect(wxEVT_BUTTON,
-                wxCommandEventHandler(StaticWidgetsPage::OnButtonLabelWithMarkupText),
-                NULL, this);
+    b3->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonLabelWithMarkupText, this);
     sizerMiddle->Add(m_textLabelWithMarkup, 0, wxEXPAND|wxALL, 5);
     sizerMiddle->Add(b3, 0, wxLEFT|wxBOTTOM, 5);
 
@@ -562,12 +556,8 @@ void StaticWidgetsPage::CreateStatic()
 
     m_sizerStatic->Layout();
 
-    m_statText->Connect(wxEVT_LEFT_UP,
-                        wxMouseEventHandler(StaticWidgetsPage::OnMouseEvent),
-                        NULL, this);
-    staticBox->Connect(wxEVT_LEFT_UP,
-                       wxMouseEventHandler(StaticWidgetsPage::OnMouseEvent),
-                       NULL, this);
+    m_statText->Bind(wxEVT_LEFT_UP, &StaticWidgetsPage::OnMouseEvent, this);
+    staticBox->Bind(wxEVT_LEFT_UP, &StaticWidgetsPage::OnMouseEvent, this);
 
     SetUpWidget();
 }

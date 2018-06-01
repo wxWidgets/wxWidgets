@@ -1018,14 +1018,7 @@ DnDFrame::DnDFrame()
     m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
 
 #if wxUSE_DRAG_AND_DROP
-    m_ctrlDir->Connect
-    (
-        wxID_ANY,
-        wxEVT_TREE_BEGIN_DRAG,
-        wxTreeEventHandler(DnDFrame::OnBeginDrag),
-        NULL,
-        this
-    );
+    m_ctrlDir->Bind(wxEVT_TREE_BEGIN_DRAG, &DnDFrame::OnBeginDrag, this);
 #endif // wxUSE_DRAG_AND_DROP
 
 #if wxUSE_LOG

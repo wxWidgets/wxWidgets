@@ -1514,7 +1514,7 @@ public:
     wxWindow( parent, wxID_ANY, wxPoint(0,0), size )
     {
         m_bitmap = bitmap;
-        Connect( wxEVT_PAINT, wxPaintEventHandler(wxBitmapCanvas::OnPaint) );
+        Bind(wxEVT_PAINT, &wxBitmapCanvas::OnPaint, this);
     }
 
     void OnPaint( wxPaintEvent &WXUNUSED(event) )

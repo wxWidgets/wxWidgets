@@ -1139,10 +1139,8 @@ public:
         m_maxPage =
         m_page = 1;
 
-        Connect(wxEVT_KILL_FOCUS,
-                wxFocusEventHandler(wxPrintPageTextCtrl::OnKillFocus));
-        Connect(wxEVT_TEXT_ENTER,
-                wxCommandEventHandler(wxPrintPageTextCtrl::OnTextEnter));
+        Bind(wxEVT_KILL_FOCUS, &wxPrintPageTextCtrl::OnKillFocus, this);
+        Bind(wxEVT_TEXT_ENTER, &wxPrintPageTextCtrl::OnTextEnter, this);
     }
 
     // Update the pages range, must be called after OnPreparePrinting() as

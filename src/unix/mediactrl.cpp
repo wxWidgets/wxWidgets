@@ -204,8 +204,8 @@ class wxGStreamerMediaEventHandler : public wxEvtHandler
     public:
     wxGStreamerMediaEventHandler(wxGStreamerMediaBackend* be) : m_be(be)
     {
-        this->Connect(wxID_ANY, wxEVT_MEDIA_FINISHED,
-           wxMediaEventHandler(wxGStreamerMediaEventHandler::OnMediaFinish));
+        this->Bind(wxEVT_MEDIA_FINISHED,
+           &wxGStreamerMediaEventHandler::OnMediaFinish, this);
     }
 
     void OnMediaFinish(wxMediaEvent& event);

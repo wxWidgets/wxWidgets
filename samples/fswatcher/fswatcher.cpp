@@ -180,8 +180,7 @@ MyFrame::MyFrame(const wxString& title)
                                   _("If checked, dereference symlinks")
                                  );
     it->Check(false);
-    Connect(MENU_ID_DEREFERENCE, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnFollowLinks));
+    Bind(wxEVT_MENU, &MyFrame::OnFollowLinks, this, MENU_ID_DEREFERENCE);
 #endif // __UNIX__
 
     // the "About" item should be in the help menu
@@ -267,28 +266,18 @@ MyFrame::MyFrame(const wxString& title)
     // event handlers & show
 
     // menu
-    Connect(MENU_ID_CLEAR, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnClear));
-    Connect(MENU_ID_QUIT, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnQuit));
-    Connect(MENU_ID_WATCH, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnWatch));
-    Connect(wxID_ABOUT, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnAbout));
+    Bind(wxEVT_MENU, &MyFrame::OnClear, this, MENU_ID_CLEAR);
+    Bind(wxEVT_MENU, &MyFrame::OnQuit, this, MENU_ID_QUIT);
+    Bind(wxEVT_MENU, &MyFrame::OnWatch, this, MENU_ID_WATCH);
+    Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
 
     // buttons
-    Connect(BTN_ID_ADD, wxEVT_BUTTON,
-            wxCommandEventHandler(MyFrame::OnAdd));
-    Connect(BTN_ID_ADD_TREE, wxEVT_BUTTON,
-            wxCommandEventHandler(MyFrame::OnAddTree));
-    Connect(BTN_ID_REMOVE, wxEVT_BUTTON,
-            wxCommandEventHandler(MyFrame::OnRemove));
-    Connect(BTN_ID_REMOVE, wxEVT_UPDATE_UI,
-            wxUpdateUIEventHandler(MyFrame::OnRemoveUpdateUI));
-    Connect(BTN_ID_REMOVE_ALL, wxEVT_BUTTON,
-            wxCommandEventHandler(MyFrame::OnRemoveAll));
-    Connect(BTN_ID_REMOVE_ALL, wxEVT_UPDATE_UI,
-            wxUpdateUIEventHandler(MyFrame::OnRemoveAllUpdateUI));
+    Bind(wxEVT_BUTTON, &MyFrame::OnAdd, this, BTN_ID_ADD);
+    Bind(wxEVT_BUTTON, &MyFrame::OnAddTree, this, BTN_ID_ADD_TREE);
+    Bind(wxEVT_BUTTON, &MyFrame::OnRemove, this, BTN_ID_REMOVE);
+    Bind(wxEVT_UPDATE_UI, &MyFrame::OnRemoveUpdateUI, this, BTN_ID_REMOVE);
+    Bind(wxEVT_BUTTON, &MyFrame::OnRemoveAll, this, BTN_ID_REMOVE_ALL);
+    Bind(wxEVT_UPDATE_UI, &MyFrame::OnRemoveAllUpdateUI, this, BTN_ID_REMOVE_ALL);
 
     // and show itself (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -306,8 +295,7 @@ bool MyFrame::CreateWatcherIfNecessary()
         return false;
 
     CreateWatcher();
-    Connect(wxEVT_FSWATCHER,
-            wxFileSystemWatcherEventHandler(MyFrame::OnFileSystemEvent));
+    Bind(wxEVT_FSWATCHER, &MyFrame::OnFileSystemEvent, this);
 
     return true;
 }

@@ -584,7 +584,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         }
 #endif
         if ( !contextMenuConnected )
-            Connect(wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(wxTextCtrl::OnContextMenu));
+            Bind(wxEVT_CONTEXT_MENU, &wxTextCtrl::OnContextMenu, this);
     }
     else
 #endif // wxUSE_RICHEDIT

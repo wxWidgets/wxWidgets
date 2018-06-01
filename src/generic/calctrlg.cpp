@@ -278,9 +278,7 @@ void wxGenericCalendarCtrl::CreateMonthComboBox()
                           wxDefaultCoord,
                           wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
 
-    m_comboMonth->Connect(m_comboMonth->GetId(), wxEVT_COMBOBOX,
-                          wxCommandEventHandler(wxGenericCalendarCtrl::OnMonthChange),
-                          NULL, this);
+    m_comboMonth->Bind(wxEVT_COMBOBOX, &wxGenericCalendarCtrl::OnMonthChange, this);
 }
 
 void wxGenericCalendarCtrl::CreateYearSpinCtrl()
@@ -292,13 +290,8 @@ void wxGenericCalendarCtrl::CreateYearSpinCtrl()
                                 wxSP_ARROW_KEYS | wxCLIP_SIBLINGS,
                                 -4300, 10000, GetDate().GetYear());
 
-    m_spinYear->Connect(m_spinYear->GetId(), wxEVT_TEXT,
-                        wxCommandEventHandler(wxGenericCalendarCtrl::OnYearTextChange),
-                        NULL, this);
-
-    m_spinYear->Connect(m_spinYear->GetId(), wxEVT_SPINCTRL,
-                        wxSpinEventHandler(wxGenericCalendarCtrl::OnYearChange),
-                        NULL, this);
+    m_spinYear->Bind(wxEVT_TEXT, &wxGenericCalendarCtrl::OnYearTextChange, this);
+    m_spinYear->Bind(wxEVT_SPINCTRL, &wxGenericCalendarCtrl::OnYearChange, this);
 }
 
 // ----------------------------------------------------------------------------

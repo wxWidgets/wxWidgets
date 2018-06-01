@@ -3022,10 +3022,7 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 {
     gs_popupMenuSelection = wxID_NONE;
 
-    Connect(wxEVT_MENU,
-            wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
-            NULL,
-            this);
+    Bind(wxEVT_MENU, &wxWindowBase::InternalOnPopupMenu, this);
 
     // it is common to construct the menu passed to this function dynamically
     // using some fixed range of ids which could clash with the ids used
@@ -3034,21 +3031,12 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
     // elsewhere in the program code and this is difficult to avoid in the
     // program itself, so instead we just temporarily suspend UI updating while
     // this menu is shown
-    Connect(wxEVT_UPDATE_UI,
-            wxUpdateUIEventHandler(wxWindowBase::InternalOnPopupMenuUpdate),
-            NULL,
-            this);
+    Bind(wxEVT_UPDATE_UI, &wxWindowBase::InternalOnPopupMenuUpdate, this);
 
     PopupMenu(&menu, x, y);
 
-    Disconnect(wxEVT_UPDATE_UI,
-               wxUpdateUIEventHandler(wxWindowBase::InternalOnPopupMenuUpdate),
-               NULL,
-               this);
-    Disconnect(wxEVT_MENU,
-               wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
-               NULL,
-               this);
+    Unbind(wxEVT_UPDATE_UI, &wxWindowBase::InternalOnPopupMenuUpdate, this);
+    Unbind(wxEVT_MENU, &wxWindowBase::InternalOnPopupMenu, this);
 
     return gs_popupMenuSelection;
 }
