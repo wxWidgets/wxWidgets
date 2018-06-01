@@ -27,7 +27,7 @@ using @ifdef_ and not @if_.
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
 @itemdef{__WXGTK__, GTK+}
 @itemdef{__WXGTK127__, GTK+ 1.2.7 or higher}
-@itemdef{__WXGTK20__, GTK+ 2.0 or higher}
+@itemdef{__WXGTK20__, GTK+ 2.0 (2.6) or higher}
 @itemdef{__WXGTK210__, GTK+ 2.10 or higher}
 @itemdef{__WXGTK218__, GTK+ 2.18 or higher}
 @itemdef{__WXGTK220__, GTK+ 2.20 or higher}
