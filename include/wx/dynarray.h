@@ -864,32 +864,34 @@ WX_DEFINE_USER_EXPORTED_ARRAY_LONG(long, wxArrayLong, class WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE);
 
 // -----------------------------------------------------------------------------
-// convenience macros
+// convenience functions: they used to be macros, hence the naming convention
 // -----------------------------------------------------------------------------
 
 // prepend all element of one array to another one; e.g. if first array contains
 // elements X,Y,Z and the second contains A,B,C (in those orders), then the
 // first array will be result as A,B,C,X,Y,Z
-#define WX_PREPEND_ARRAY(array, other)                                        \
-    {                                                                         \
-        size_t wxAAcnt = (other).size();                                      \
-        (array).reserve(wxAAcnt);                                             \
-        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
-        {                                                                     \
-            (array).Insert((other)[wxAAn], wxAAn);                            \
-        }                                                                     \
+template <typename A1, typename A2>
+inline void WX_PREPEND_ARRAY(A1& array, const A2& other)
+{
+    const size_t size = other.size();
+    array.reserve(size);
+    for ( size_t n = 0; n < size; n++ )
+    {
+        array.Insert(other[n], n);
     }
+}
 
 // append all element of one array to another one
-#define WX_APPEND_ARRAY(array, other)                                         \
-    {                                                                         \
-        size_t wxAAcnt = (other).size();                                      \
-        (array).reserve(wxAAcnt);                                             \
-        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
-        {                                                                     \
-            (array).push_back((other)[wxAAn]);                                \
-        }                                                                     \
+template <typename A1, typename A2>
+inline void WX_APPEND_ARRAY(A1& array, const A2& other)
+{
+    size_t size = other.size();
+    array.reserve(size);
+    for ( size_t n = 0; n < size; n++ )
+    {
+        array.push_back(other[n]);
     }
+}
 
 // delete all array elements
 //
@@ -897,15 +899,16 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(void *, wxArrayPtrVoid, class WXDLLIMPEXP_BASE
 //     place where you use this macro, otherwise the proper destructor may not
 //     be called (a decent compiler should give a warning about it, but don't
 //     count on it)!
-#define WX_CLEAR_ARRAY(array)                                                 \
-    {                                                                         \
-        size_t wxAAcnt = (array).size();                                      \
-        for ( size_t wxAAn = 0; wxAAn < wxAAcnt; wxAAn++ )                    \
-        {                                                                     \
-            delete (array)[wxAAn];                                            \
-        }                                                                     \
-                                                                              \
-        (array).clear();                                                      \
+template <typename A>
+inline void WX_CLEAR_ARRAY(A& array)
+{
+    size_t size = array.size();
+    for ( size_t n = 0; n < size; n++ )
+    {
+        delete array[n];
     }
+
+    array.clear();
+}
 
 #endif // _DYNARRAY_H
