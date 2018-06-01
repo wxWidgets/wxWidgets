@@ -237,7 +237,7 @@ public:
 
     size_t IndexForInsert(T item) const
     {
-        return this->IndexForInsert(item, (CMPFUNC)m_fnCompare);
+        return this->wxBaseArray<T>::IndexForInsert(item, (CMPFUNC)m_fnCompare);
     }
 
     void AddAt(T item, size_t index)
@@ -264,63 +264,173 @@ private:
 // _WX_DECLARE_OBJARRAY: an array for pointers to type T with owning semantics
 // ----------------------------------------------------------------------------
 
-#define _WX_DECLARE_OBJARRAY(T, name, base, classexp)                    \
-typedef int (CMPFUNC_CONV *CMPFUNC##T)(T **pItem1, T **pItem2);          \
-classexp name : protected base                                           \
-{                                                                        \
-typedef int (CMPFUNC_CONV *CMPFUNC##base)(void **pItem1, void **pItem2); \
-typedef base base_array;                                                 \
-public:                                                                  \
-  name() { }                                                             \
-  name(const name& src);                                                 \
-  name& operator=(const name& src);                                      \
-                                                                         \
-  ~name();                                                               \
-                                                                         \
-  void Alloc(size_t count) { base::reserve(count); }                     \
-  void reserve(size_t count) { base::reserve(count); }                   \
-  size_t GetCount() const { return base_array::size(); }                 \
-  size_t size() const { return base_array::size(); }                     \
-  bool IsEmpty() const { return base_array::empty(); }                   \
-  bool empty() const { return base_array::empty(); }                     \
-  size_t Count() const { return base_array::size(); }                    \
-  void Shrink() { base::Shrink(); }                                      \
-                                                                         \
-  T& operator[](size_t uiIndex) const                                    \
-    { return *(T*)base::operator[](uiIndex); }                           \
-  T& Item(size_t uiIndex) const                                          \
-    { return *(T*)base::operator[](uiIndex); }                           \
-  T& Last() const                                                        \
-    { return *(T*)(base::operator[](size() - 1)); }                      \
-                                                                         \
-  int Index(const T& lItem, bool bFromEnd = false) const;                \
-                                                                         \
-  void Add(const T& lItem, size_t nInsert = 1);                          \
-  void Add(const T* pItem)                                               \
-    { base::push_back((T*)pItem); }                                      \
-  void push_back(const T* pItem)                                         \
-    { base::push_back((T*)pItem); }                                      \
-  void push_back(const T& lItem)                                         \
-    { Add(lItem); }                                                      \
-                                                                         \
-  void Insert(const T& lItem,  size_t uiIndex, size_t nInsert = 1);      \
-  void Insert(const T* pItem, size_t uiIndex)                            \
-    { base::insert(begin() + uiIndex, (T*)pItem); }                      \
-                                                                         \
-  void Empty() { DoEmpty(); base::clear(); }                             \
-  void Clear() { DoEmpty(); base::clear(); }                             \
-                                                                         \
-  T* Detach(size_t uiIndex)                                              \
-    { T* p = (T*)base::operator[](uiIndex);                              \
-      base::erase(begin() + uiIndex); return p; }                        \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1);                     \
-                                                                         \
-  void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC##base)fCmp); }        \
-                                                                         \
-private:                                                                 \
-  void DoEmpty();                                                        \
-  void DoCopy(const name& src);                                          \
-}
+// This class must be able to be declared with incomplete types, so it doesn't
+// actually use type T in its definition, and relies on a helper template
+// parameter, which is declared by WX_DECLARE_OBJARRAY() and defined by
+// WX_DEFINE_OBJARRAY(), for providing a way to create and destroy objects of
+// type T
+template <typename T, typename Traits>
+class wxBaseObjectArray : private wxBaseArray<T*>
+{
+    typedef wxBaseArray<T*> base;
+
+public:
+    typedef T value_type;
+
+    typedef int (wxCMPFUNC_CONV *CMPFUNC)(T **pItem1, T **pItem2);
+
+    wxBaseObjectArray()
+    {
+    }
+
+    wxBaseObjectArray(const wxBaseObjectArray& src) : base()
+    {
+        DoCopy(src);
+    }
+
+    wxBaseObjectArray& operator=(const wxBaseObjectArray& src)
+    {
+        Empty();
+        DoCopy(src);
+
+        return *this;
+    }
+
+    ~wxBaseObjectArray()
+    {
+        Empty();
+    }
+
+    void Alloc(size_t count) { base::reserve(count); }
+    void reserve(size_t count) { base::reserve(count); }
+    size_t GetCount() const { return base::size(); }
+    size_t size() const { return base::size(); }
+    bool IsEmpty() const { return base::empty(); }
+    bool empty() const { return base::empty(); }
+    size_t Count() const { return base::size(); }
+    void Shrink() { base::Shrink(); }
+
+    T& operator[](size_t uiIndex) const
+    {
+        return *base::operator[](uiIndex);
+    }
+
+    T& Item(size_t uiIndex) const
+    {
+        return *base::operator[](uiIndex);
+    }
+
+    T& Last() const
+    {
+        return *(base::operator[](size() - 1));
+    }
+
+    int Index(const T& item, bool bFromEnd = false) const
+    {
+        if ( bFromEnd )
+        {
+            if ( size() > 0 )
+            {
+                size_t ui = size() - 1;
+                do
+                {
+                    if ( base::operator[](ui) == &item )
+                        return static_cast<int>(ui);
+                    ui--;
+                }
+                while ( ui != 0 );
+            }
+        }
+        else
+        {
+            for ( size_t ui = 0; ui < size(); ++ui )
+            {
+                if( base::operator[](ui) == &item )
+                    return static_cast<int>(ui);
+            }
+        }
+
+        return wxNOT_FOUND;
+    }
+
+    void Add(const T& item, size_t nInsert = 1)
+    {
+        if ( nInsert == 0 )
+            return;
+
+        T* const pItem = Traits::Clone(item);
+
+        const size_t nOldSize = size();
+        if ( pItem != NULL )
+            base::insert(this->end(), nInsert, pItem);
+
+        for ( size_t i = 1; i < nInsert; i++ )
+            base::operator[](nOldSize + i) = Traits::Clone(item);
+    }
+
+    void Add(const T* pItem)
+    {
+        base::push_back(const_cast<T*>(pItem));
+    }
+
+    void push_back(const T* pItem) { Add(pItem); }
+    void push_back(const T& item) { Add(item); }
+
+    void Insert(const T& item,  size_t uiIndex, size_t nInsert = 1)
+    {
+        if ( nInsert == 0 )
+            return;
+
+        T* const pItem = Traits::Clone(item);
+        if ( pItem != NULL )
+            base::insert(this->begin() + uiIndex, nInsert, pItem);
+
+        for ( size_t i = 1; i < nInsert; ++i )
+            base::operator[](uiIndex + i) = Traits::Clone(item);
+    }
+
+    void Insert(const T* pItem, size_t uiIndex)
+    {
+        base::insert(this->begin() + uiIndex, (T*)pItem);
+    }
+
+    void Empty() { DoEmpty(); base::clear(); }
+    void Clear() { DoEmpty(); base::clear(); }
+
+    T* Detach(size_t uiIndex)
+    {
+        T* const p = base::operator[](uiIndex);
+
+        base::erase(this->begin() + uiIndex);
+        return p;
+    }
+
+    void RemoveAt(size_t uiIndex, size_t nRemove = 1)
+    {
+        wxCHECK_RET( uiIndex < size(), "bad index in RemoveAt()" );
+
+        for ( size_t i = 0; i < nRemove; ++i )
+            Traits::Free(base::operator[](uiIndex + i));
+
+        base::erase(this->begin() + uiIndex, this->begin() + uiIndex + nRemove);
+    }
+
+    void Sort(CMPFUNC fCmp) { base::Sort(fCmp); }
+
+private:
+    void DoEmpty()
+    {
+        for ( size_t n = 0; n < size(); ++n )
+            Traits::Free(base::operator[](n));
+    }
+
+    void DoCopy(const wxBaseObjectArray& src)
+    {
+        reserve(src.size());
+        for ( size_t n = 0; n < src.size(); ++n )
+            Add(src[n]);
+    }
+};
 
 // ============================================================================
 // The public macros for declaration and definition of the dynamic arrays
@@ -530,9 +640,22 @@ private:                                                                 \
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)               \
     WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, WXDLLIMPEXP_CORE)
 
-#define WX_DECLARE_OBJARRAY_WITH_DECL(T, name, decl) \
-    typedef T _wxObjArray##name;                            \
-    _WX_DECLARE_OBJARRAY(_wxObjArray##name, name, wxArrayPtrVoid, decl)
+#define WX_DECLARE_OBJARRAY_WITH_DECL(T, name, classdecl)                     \
+    classdecl wxObjectArrayTraitsFor##name                                    \
+    {                                                                         \
+    public:                                                                   \
+        static T* Clone(const T& item);                                       \
+        static void Free(T* p);                                               \
+    };                                                                        \
+    typedef wxBaseObjectArray<T, wxObjectArrayTraitsFor##name>                \
+        wxBaseObjectArrayFor##name;                                           \
+    typedef int (wxCMPFUNC_CONV *CMPFUNC##T)(T **pItem1, T **pItem2);         \
+    classdecl name : public wxBaseObjectArrayFor##name                        \
+    {                                                                         \
+    public:                                                                   \
+        name() : wxBaseObjectArrayFor##name() { }                             \
+        name(const name& src) : wxBaseObjectArrayFor##name(src) { }           \
+    }
 
 #define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode) \
     WX_DECLARE_OBJARRAY_WITH_DECL(T, name, class expmode)
