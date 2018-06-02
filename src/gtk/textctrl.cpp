@@ -1465,8 +1465,15 @@ wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
 {
     if ( !IsMultiLine() )
     {
-        // not supported
-        return wxTE_HT_UNKNOWN;
+        // This is a hack that happens to work pretty well with
+        // wxTimePickerCtrl with some font sizes.
+        if ( pos )
+        {
+            *pos = (double(10 * pt.x) / (0.7 * GetSize().x));
+            if ( *pos > 0 && *pos > long(GetValue().length()) )
+                *pos = GetValue().length();
+        }
+        return wxTE_HT_ON_TEXT;
     }
 
     int x, y;
