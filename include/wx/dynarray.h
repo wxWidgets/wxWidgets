@@ -75,13 +75,11 @@ private:
     CMPFUNC m_f;
 };
 
-template <typename T>
+template <typename T, typename Sorter = wxSortedArray_SortFunction<T> >
 class wxBaseArray : public wxVector<T>
 {
-    typedef wxSortedArray_SortFunction<T> Predicate;
-
 public:
-    typedef typename Predicate::CMPFUNC SCMPFUNC;
+    typedef typename Sorter::CMPFUNC SCMPFUNC;
     typedef typename wxArray_SortFunction<T>::CMPFUNC CMPFUNC;
 
     typedef wxVector<T> base_vec;
@@ -158,7 +156,7 @@ public:
 
     int Index(T lItem, SCMPFUNC fnCompare) const
     {
-        Predicate p(fnCompare);
+        Sorter p(fnCompare);
         const_iterator i = std::lower_bound(this->begin(), this->end(), lItem, p);
         return i != this->end() && !p(lItem, *i) ? (int)(i - this->begin())
                                                  : wxNOT_FOUND;
@@ -166,7 +164,7 @@ public:
 
     size_t IndexForInsert(T lItem, SCMPFUNC fnCompare) const
     {
-        Predicate p(fnCompare);
+        Sorter p(fnCompare);
         const_iterator i = std::lower_bound(this->begin(), this->end(), lItem, p);
         return i - this->begin();
     }
@@ -208,7 +206,7 @@ public:
 
     void Sort(SCMPFUNC fCmp)
     {
-        Predicate p(fCmp);
+        Sorter p(fCmp);
         std::sort(this->begin(), this->end(), p);
     }
 };
@@ -222,31 +220,34 @@ public:
 //    cannot handle types with size greater than pointer because of sorting
 // ----------------------------------------------------------------------------
 
-#define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, comptype)\
-    typedef wxBaseSortedArray<T, comptype> wxBaseSortedArrayFor##name;        \
+#define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp)       \
+    typedef wxBaseSortedArray<T> wxBaseSortedArrayFor##name;                  \
     classexp name : public wxBaseSortedArrayFor##name                         \
     {                                                                         \
     public:                                                                   \
-        name(comptype fn defcomp) : wxBaseSortedArrayFor##name(fn) { }        \
+        name(wxBaseSortedArrayFor##name::SCMPFUNC fn defcomp)                 \
+            : wxBaseSortedArrayFor##name(fn) { }                              \
     }
 
 
-template <typename T, typename Cmp>
-class wxBaseSortedArray : public wxBaseArray<T>
+template <typename T, typename Sorter = wxSortedArray_SortFunction<T> >
+class wxBaseSortedArray : public wxBaseArray<T, Sorter>
 {
 public:
-    explicit wxBaseSortedArray(Cmp fn) : m_fnCompare(fn) { }
+    typedef typename Sorter::CMPFUNC SCMPFUNC;
+
+    explicit wxBaseSortedArray(SCMPFUNC fn) : m_fnCompare(fn) { }
 
     wxBaseSortedArray& operator=(const wxBaseSortedArray& src)
     {
-        wxBaseArray<T>::operator=(src);
+        wxBaseArray<T, Sorter>::operator=(src);
         m_fnCompare = src.m_fnCompare;
         return *this;
     }
 
     size_t IndexForInsert(T item) const
     {
-        return this->wxBaseArray<T>::IndexForInsert(item, m_fnCompare);
+        return this->wxBaseArray<T, Sorter>::IndexForInsert(item, m_fnCompare);
     }
 
     void AddAt(T item, size_t index)
@@ -256,7 +257,7 @@ public:
 
     size_t Add(T item)
     {
-        return this->wxBaseArray<T>::Add(item, m_fnCompare);
+        return this->wxBaseArray<T, Sorter>::Add(item, m_fnCompare);
     }
 
     void push_back(T item)
@@ -265,7 +266,7 @@ public:
     }
 
 private:
-    Cmp m_fnCompare;
+    SCMPFUNC m_fnCompare;
 };
 
 
@@ -572,9 +573,8 @@ private:
 
 #define WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base, expmode)  \
     typedef T _wxArray##name;                                             \
-    typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);       \
     _WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base,             \
-                                wxARRAY_EMPTY, class expmode, SCMPFUNC##name)
+                                  wxARRAY_EMPTY, class expmode)
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_SORTED_TYPEARRAY_CMP: exactly the same as above but the comparison
@@ -599,9 +599,8 @@ private:
 #define WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base, \
                                                      expmode)                \
     typedef T _wxArray##name;                                                \
-    typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);          \
     _WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base, = cmpfunc,     \
-                                class expmode, SCMPFUNC##name)
+                                  class expmode)
 
 // ----------------------------------------------------------------------------
 // WX_DECLARE_OBJARRAY(T, name): this macro generates a new array class
