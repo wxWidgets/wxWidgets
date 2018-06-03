@@ -13,7 +13,7 @@
 
 #include "wx/dataview.h"
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -5313,6 +5313,6 @@ void wxDataViewCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
     GTKApplyStyle(m_treeview, style);
 }
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

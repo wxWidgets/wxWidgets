@@ -728,7 +728,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
     m_editorCtrl->PushEventHandler( handler );
 
-#if defined(__WXGTK20__) && !defined(wxUSE_GENERICDATAVIEWCTRL)
+#if defined(__WXGTK20__) && !defined(wxHAS_GENERIC_DATAVIEWCTRL)
     handler->SetFocusOnIdle();
 #else
     m_editorCtrl->SetFocus();
@@ -3050,7 +3050,7 @@ void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 
 void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
 {
-#if defined(wxUSE_GENERICDATAVIEWCTRL)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL)
     // automatically resize our only column to take the entire control width
     if ( GetColumnCount() )
     {
