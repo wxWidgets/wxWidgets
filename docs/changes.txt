@@ -586,6 +586,7 @@ Major new features in this release
 All (GUI):
 
 - Improve stock items consistency and aesthetics (dhowland).
+- Implement wxTextCtrl::HitTest() for single line controls.
 
 wxMSW:
 
