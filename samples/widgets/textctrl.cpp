@@ -276,11 +276,17 @@ public:
                     int flags)
         : wxTextCtrl(parent, id, value, wxDefaultPosition, wxDefaultSize, flags)
     {
+        Bind(wxEVT_LEFT_DOWN, &WidgetsTextCtrl::OnLeftClick, this);
     }
 
-protected:
-    void OnRightClick(wxMouseEvent& event)
+private:
+    // Show the result of HitTest() at the mouse position if Alt is pressed.
+    void OnLeftClick(wxMouseEvent& event)
     {
+        event.Skip();
+        if ( !event.AltDown() )
+            return;
+
         wxString where;
         wxTextCoord x, y;
         switch ( HitTest(event.GetPosition(), &x, &y) )
@@ -312,12 +318,7 @@ protected:
         }
 
         wxLogMessage(wxT("Mouse is %s (%ld, %ld)"), where.c_str(), x, y);
-
-        event.Skip();
     }
-
-private:
-    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -351,10 +352,6 @@ wxBEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
-wxEND_EVENT_TABLE()
-
-wxBEGIN_EVENT_TABLE(WidgetsTextCtrl, wxTextCtrl)
-    EVT_RIGHT_UP(WidgetsTextCtrl::OnRightClick)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -591,6 +588,17 @@ void TextWidgetsPage::CreateContent()
                           m_textRange
                         ),
                         0, wxALL, 5
+                     );
+
+    sizerMiddleDown->Add
+                     (
+                          new wxStaticText
+                          (
+                            this,
+                            wxID_ANY,
+                            "Alt-click in the text to see HitTest() result"
+                          ),
+                          wxSizerFlags().Border()
                      );
 
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
