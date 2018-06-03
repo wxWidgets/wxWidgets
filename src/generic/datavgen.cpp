@@ -18,7 +18,7 @@
 
 #include "wx/dataview.h"
 
-#ifdef wxUSE_GENERICDATAVIEWCTRL
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
 
 #ifndef WX_PRECOMP
     #ifdef __WXMSW__
@@ -6782,6 +6782,6 @@ wxAccStatus wxDataViewCtrlAccessible::GetSelections(wxVariant* selections)
 }
 #endif // wxUSE_ACCESSIBILITY
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL
