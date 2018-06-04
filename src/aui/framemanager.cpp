@@ -3935,6 +3935,10 @@ void wxAuiManager::Repaint(wxDC* dc)
 void wxAuiManager::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(m_frame);
+
+    dc.SetBackground(GetArtProvider()->GetColor(wxAUI_DOCKART_BACKGROUND_COLOUR));
+    dc.Clear();
+
     Repaint(&dc);
 }
 
