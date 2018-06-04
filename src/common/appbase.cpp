@@ -835,10 +835,16 @@ bool wxAppConsoleBase::OnCmdLineError(wxCmdLineParser& parser)
 bool wxAppConsoleBase::CheckBuildOptions(const char *optionsSignature,
                                          const char *componentName)
 {
-#if 0 // can't use wxLogTrace, not up and running yet
-    printf("checking build options object '%s' (ptr %p) in '%s'\n",
-             optionsSignature, optionsSignature, componentName);
-#endif
+    // Skip the ABI check if explicitly disabled by setting this environment
+    // variable: this can be useful when using a newer g++ version that bumps
+    // up __GXX_ABI_VERSION, but still remains compatible with the ABI subset
+    // that we actually use, as it often happens.
+    wxString value;
+    if ( wxGetEnv("WX_NO_ABI_CHECK", &value) )
+    {
+        if ( value == "1" )
+            return true;
+    }
 
     if ( strcmp(optionsSignature, WX_BUILD_OPTIONS_SIGNATURE) != 0 )
     {

@@ -26,5 +26,17 @@ wxWidgets programs.
         @c /usr/local or @c /usr). You can set WXPREFIX if you are for example
         distributing a binary version of an application and you don't know in advance
         where it will be installed.}
+@itemdef{WX_NO_ABI_CHECK,
+         If set to @c 1, disables the ABI check done during the program startup
+         to verify that the library and the application were compiled using the
+         same compiler, same or compatible compiler version and same build
+         options. This variable should @e not be used lightly, usually the ABI
+         mismatch is a real problem which will result in crashes and other
+         misbehaviour. However sometimes newer compiler versions, not yet
+         released when the code checking for their ABI in wxWidgets was
+         written, preserve the ABI but still are rejected by the ABI check. In
+         this case, the preferred course of action is to update to the latest
+         wxWidgets version but if this is difficult or impossible, this
+         environment variable can be used as a temporary workaround.}
 */
 
