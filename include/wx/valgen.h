@@ -141,18 +141,12 @@ inline bool wxValidatorData::IsOfType()
 }
 
 //-----------------------------------------------------------------------------
-// wxGenericValidator function
+// Helper function for creating generic validators which allows to avoid
+// explicitly specifying the type as it deduces it from its parameter.
 //-----------------------------------------------------------------------------
-//
-// Use this function to create your validators.
-// e.g.:
-//      bool b;
-//      wxString s;
-//      wxGenaricValidator(&b);
-//      wxGenaricValidator(&s);
 
 template<class T>
-wxGenericValidatorType<T> wxGenericValidator(T* value)
+inline wxGenericValidatorType<T> wxGenericValidator(T* value)
 {
     return wxGenericValidatorType<T>(value);
 }
