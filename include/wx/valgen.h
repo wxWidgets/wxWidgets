@@ -15,7 +15,6 @@
 
 #if wxUSE_VALIDATORS
 
-#include "wx/typeinfo.h"
 
 // Internal struct to implement type-erasure idiom.
 struct wxValidatorData
@@ -134,10 +133,9 @@ inline void wxValidatorData::SetValue(const T& value)
 template<class T>
 inline bool wxValidatorData::IsOfType()
 {
-    typedef typename wxGenericValidatorType<T>::Data Data;
-    const Data& data = static_cast<const Data&>(*this);
 
-    return wxTypeId(data.GetValue()) == wxTypeId(T);
+    typedef typename wxGenericValidatorType<T>::Data Data;
+    return dynamic_cast<Data*>(this) != NULL;
 }
 
 //-----------------------------------------------------------------------------

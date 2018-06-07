@@ -81,7 +81,7 @@ public:
     double m_doubleValue;
     float m_percentValue;
 
-    bool m_checkbox_state;
+    int m_checkbox_state;
     int m_radiobox_choice;
 
     int m_spinctrl_int;
