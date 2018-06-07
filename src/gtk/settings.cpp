@@ -31,8 +31,7 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
 // ----------------------------------------------------------------------------
 
 static wxFont gs_fontSystem;
-
-#ifndef __WXGTK3__
+static int gs_scrollWidth;
 static GtkWidget* gs_tlw_parent;
 
 static GtkContainer* ContainerWidget()
@@ -48,10 +47,28 @@ static GtkContainer* ContainerWidget()
     return s_widget;
 }
 
+static GtkWidget* ScrollBarWidget()
+{
+    static GtkWidget* s_widget;
+    if (s_widget == NULL)
+    {
+        s_widget = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, NULL);
+        g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
+        gtk_container_add(ContainerWidget(), s_widget);
+#ifndef __WXGTK3__
+        gtk_widget_ensure_style(s_widget);
+#endif
+    }
+    return s_widget;
+}
+
+#ifndef __WXGTK3__
+
 extern "C" {
 static void style_set(GtkWidget*, GtkStyle*, void*)
 {
     gs_fontSystem = wxNullFont;
+    gs_scrollWidth = 0;
 }
 }
 
@@ -153,6 +170,7 @@ extern "C" {
 static void notify_gtk_theme_name(GObject*, GParamSpec*, void*)
 {
     gs_fontSystem.UnRef();
+    gs_scrollWidth = 0;
     for (int i = wxSYS_COLOUR_MAX; i--;)
         gs_systemColorCache[i].UnRef();
 }
@@ -825,6 +843,47 @@ static int GetBorderWidth(wxSystemMetric index, wxWindow* win)
     return -1;
 }
 
+static int GetScrollbarWidth()
+{
+    int width;
+#ifdef __WXGTK3__
+    if (gtk_check_version(3,20,0) == NULL)
+    {
+        GtkBorder border;
+        GtkWidgetPath* path = gtk_widget_path_new();
+        GtkStyleContext* sc;
+        sc = StyleContext(path, GTK_TYPE_SCROLLBAR, "scrollbar", "scrollbar", "right");
+
+        gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
+
+        sc = StyleContext(sc, path, G_TYPE_NONE, "contents");
+        sc = StyleContext(sc, path, G_TYPE_NONE, "trough");
+        sc = StyleContext(sc, path, G_TYPE_NONE, "slider");
+
+        gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL, "min-width", &width, NULL);
+        width += border.left + border.right;
+
+        gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
+        width += border.left + border.right;
+        gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &border);
+        width += border.left + border.right;
+        gtk_style_context_get_margin(sc, GTK_STATE_FLAG_NORMAL, &border);
+        width += border.left + border.right;
+
+        gtk_widget_path_unref(path);
+        StyleContextFree(sc);
+    }
+    else
+#endif
+    {
+        int slider_width, trough_border;
+        gtk_widget_style_get(ScrollBarWidget(),
+            "slider-width", &slider_width, "trough-border", &trough_border, NULL);
+        width = slider_width + (2 * trough_border);
+    }
+    return width;
+}
+
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
     GdkWindow *window = NULL;
@@ -919,7 +978,9 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 
         case wxSYS_HSCROLL_Y:
         case wxSYS_VSCROLL_X:
-            return 15;
+            if (gs_scrollWidth == 0)
+                gs_scrollWidth = GetScrollbarWidth();
+            return gs_scrollWidth;
 
         case wxSYS_CAPTION_Y:
             if (!window)
@@ -988,11 +1049,10 @@ void wxSystemSettingsModule::OnExit()
         (void*)notify_gtk_theme_name, NULL);
     g_signal_handlers_disconnect_by_func(settings,
         (void*)notify_gtk_font_name, NULL);
-#else
+#endif
     if (gs_tlw_parent)
     {
         gtk_widget_destroy(gs_tlw_parent);
         gs_tlw_parent = NULL;
     }
-#endif
 }
