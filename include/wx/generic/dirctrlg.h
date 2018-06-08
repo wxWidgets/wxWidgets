@@ -20,7 +20,6 @@
 #include "wx/dialog.h"
 #include "wx/dirdlg.h"
 #include "wx/choice.h"
-#include "wx/menu.h"
 
 
 //-----------------------------------------------------------------------------
@@ -51,10 +50,10 @@ enum
     wxDIRCTRL_EDIT_LABELS    = 0x0100,
     // Allow multiple selection
     wxDIRCTRL_MULTIPLE       = 0x0200,
-    // Enable right-click menu
-    wxDIRCTRL_RCLICK_MENU               = 0x0400,           // Create an r-click menu, even if the next two options aren't used.
-    wxDIRCTRL_RCLICK_MENU_SORT_NAME     = 0x0800,
-    wxDIRCTRL_RCLICK_MENU_SORT_DATE     = 0x1000,
+    // Enable popup menu
+    wxDIRCTRL_POPUP_MENU               = 0x0400,           // Create an r-click menu, even if the next two options aren't used.
+    wxDIRCTRL_POPUP_MENU_SORT_NAME     = 0x0800,
+    wxDIRCTRL_POPUP_MENU_SORT_DATE     = 0x1000,
 
     wxDIRCTRL_DEFAULT_STYLE  = wxDIRCTRL_3D_INTERNAL
 };
@@ -63,7 +62,7 @@ enum
 
 class wxDirSortingItem;
 
-typedef bool(*wxDirSortingItemCmpFunction)(const wxDirSortingItem&, const wxDirSortingItem&);
+typedef bool(*wxDirSortingItemSortFunction)(const wxDirSortingItem&, const wxDirSortingItem&);
 
 
 //-----------------------------------------------------------------------------
@@ -133,12 +132,10 @@ public:
     void OnSize(wxSizeEvent &event );
     void OnRightClick(wxTreeEvent& event);
 
-    // Add a new menu item to the popup right-click menu
-    int NewMenuItem(const wxString& label);
-    wxMenu* GetMenu() { return m_rightClickMenu; }
-    wxDirItemData* GetRightClickItemData()
+    wxMenu* GetPopupMenu() { return m_popUpMenu; }
+    wxTreeItemId GetPopupMenuItem()
     {
-        return GetItemData(m_rightClickedItemId);
+        return m_popUpItemId;
     }
 
     // Try to expand as much of the given path as possible.
@@ -222,19 +219,19 @@ private:
     int  GetAvailableID() { return m_availableID++; }
     void PopulateNode(wxTreeItemId node);
     wxDirItemData* GetItemData(wxTreeItemId itemId);
-    void AddRightClickMenuItem(const wxString& label, void(wxGenericDirCtrl::*function)(wxCommandEvent &));
+    void AddPopupMenuItem(const wxString& label, void(wxGenericDirCtrl::*function)(wxCommandEvent &));
     void MenuRename(wxCommandEvent & evt);
     void MenuSortAlpha(wxCommandEvent & evt);
     void MenuSortNameReversed(wxCommandEvent & evt);
     void MenuSortNatural(wxCommandEvent & evt);
     void MenuSortDate(wxCommandEvent & evt);
-    void MenuSortDateReverse(wxCommandEvent & evt);
+    void MenuSortDateReversed(wxCommandEvent & evt);
     void HandleDirMenu();
     void HandleFileMenu();
 
     bool                    m_showHidden;
     wxTreeItemId            m_rootId;
-    wxTreeItemId            m_rightClickedItemId;
+    wxTreeItemId            m_popUpItemId;
     wxString                m_defaultPath; // Starting path
     long                    m_styleEx; // Extended style
     wxString                m_filter;  // Wildcards in same format as per wxFileDialog
@@ -242,7 +239,7 @@ private:
     wxString                m_currentFilterStr; // Current filter string
     wxTreeCtrl*             m_treeCtrl;
     wxDirFilterListCtrl*    m_filterListCtrl;
-    wxMenu*                 m_rightClickMenu;
+    wxMenu*                 m_popUpMenu;
     long                    m_style;
     int                     m_availableID;
 
@@ -252,9 +249,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGenericDirCtrl);
 };
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_MENU_POPPED_UP, wxCommandEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_SELECTIONCHANGED,   wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_FILEACTIVATED,      wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_SHOWING_POPUP_MENU, wxCommandEvent );
 
 #define wx__DECLARE_DIRCTRL_EVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_DIRCTRL_ ## evt, id, wxTreeEventHandler(fn))
@@ -262,9 +259,9 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_MENU_POPPED_UP, wxComm
 #define wx__DECLARE_DIRCTRL_EVT_CMD(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_DIRCTRL_ ## evt, id, wxCommandEventHandler(fn))
 
-#define EVT_DIRCTRL_SELECTIONCHANGED(id, fn) wx__DECLARE_DIRCTRL_EVT(    SELECTIONCHANGED, id, fn)
-#define EVT_DIRCTRL_FILEACTIVATED(   id, fn) wx__DECLARE_DIRCTRL_EVT(    FILEACTIVATED,    id, fn)
-#define EVT_DIRCTRL_MENU_POPPED_UP(  id, fn) wx__DECLARE_DIRCTRL_EVT_CMD(MENU_POPPED_UP,   id, fn)
+#define EVT_DIRCTRL_SELECTIONCHANGED(  id, fn) wx__DECLARE_DIRCTRL_EVT(    SELECTIONCHANGED,   id, fn)
+#define EVT_DIRCTRL_FILEACTIVATED(     id, fn) wx__DECLARE_DIRCTRL_EVT(    FILEACTIVATED,      id, fn)
+#define EVT_DIRCTRL_SHOWING_POPUP_MENU(id, fn) wx__DECLARE_DIRCTRL_EVT_CMD(SHOWING_POPUP_MENU, id, fn)
 
 
 //-----------------------------------------------------------------------------
@@ -370,7 +367,6 @@ extern WXDLLIMPEXP_DATA_CORE(wxFileIconsTable *) wxTheFileIconsTable;
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_DIRCTRL_SELECTIONCHANGED wxEVT_DIRCTRL_SELECTIONCHANGED
 #define wxEVT_COMMAND_DIRCTRL_FILEACTIVATED   wxEVT_DIRCTRL_FILEACTIVATED
-#define wxEVT_COMMAND_DIRCTRL_MENU_POPPED_UP   wxEVT_DIRCTRL_MENU_POPPED_UP
 
 #endif
     // _WX_DIRCTRLG_H_

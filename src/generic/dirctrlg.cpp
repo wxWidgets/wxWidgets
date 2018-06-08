@@ -45,6 +45,7 @@
 #include "wx/dir.h"
 #include "wx/artprov.h"
 #include "wx/mimetype.h"
+#include "wx/scopeguard.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -91,10 +92,10 @@ bool wxIsDriveAvailable(const wxString& dirName);
 // events
 // ----------------------------------------------------------------------------
 
-wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
-wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED,    wxTreeEvent );
-wxDEFINE_EVENT( wxEVT_DIRCTRL_NODE_EXPANDED,    wxCommandEvent);
-wxDEFINE_EVENT( wxEVT_DIRCTRL_MENU_POPPED_UP,   wxCommandEvent);
+wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED,   wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED,      wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_NODE_EXPANDED,      wxCommandEvent);
+wxDEFINE_EVENT( wxEVT_DIRCTRL_SHOWING_POPUP_MENU, wxCommandEvent);
 
 // ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, OSX, UNIX (returns "/")
@@ -278,7 +279,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
 class wxDirSortingItem
 {
 public:
-    wxDirSortingItem(const wxString& lab, const wxDateTime& dt, wxDirSortingItemCmpFunction compareFunc)
+    wxDirSortingItem(const wxString& lab, const wxDateTime& dt, wxDirSortingItemSortFunction compareFunc)
         : label(lab),
         dateTime(dt),
         m_compareFunc(compareFunc)
@@ -299,7 +300,7 @@ public:
     wxString   label;
     wxDateTime dateTime;
 
-    wxDirSortingItemCmpFunction m_compareFunc;
+    wxDirSortingItemSortFunction m_compareFunc;
 };
 
 
@@ -473,10 +474,10 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
         m_filterListCtrl->FillFilterList(filter, defaultFilter);
 
     // Did they ask for sorting by 
-    if ( style & (wxDIRCTRL_RCLICK_MENU           |
+    if ( style & (wxDIRCTRL_POPUP_MENU           |
                   wxDIRCTRL_EDIT_LABELS           |
-                  wxDIRCTRL_RCLICK_MENU_SORT_NAME |
-                  wxDIRCTRL_RCLICK_MENU_SORT_DATE ))
+                  wxDIRCTRL_POPUP_MENU_SORT_NAME |
+                  wxDIRCTRL_POPUP_MENU_SORT_DATE ))
     {
         Bind(wxID_TREECTRL, wxTreeEventHandler(wxGenericDirCtrl::OnRightClick), this, wxEVT_TREE_ITEM_MENU);
     }
@@ -720,13 +721,13 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
 
 
 // Private: Used to add items to the right-click menu each time it's popped up.
-void wxGenericDirCtrl::AddRightClickMenuItem(const wxString& label, void(wxGenericDirCtrl::*function)(wxCommandEvent &))
+void wxGenericDirCtrl::AddPopupMenuItem(const wxString& label, void(wxGenericDirCtrl::*function)(wxCommandEvent &))
 {
-    if (!m_rightClickMenu)
+    if (!m_popUpMenu)
         return;
 
     int id = GetAvailableID();
-    m_rightClickMenu->Append(id, label);
+    m_popUpMenu->Append(id, label);
     Bind(wxEVT_MENU, function, this, id);
 }
 
@@ -736,60 +737,65 @@ void wxGenericDirCtrl::AddRightClickMenuItem(const wxString& label, void(wxGener
 // right items to the menu.
 void wxGenericDirCtrl::HandleDirMenu()
 {
-    m_rightClickMenu = new wxMenu();
+    wxMenu menu;
+    m_popUpMenu = &menu;
+    wxON_BLOCK_EXIT_NULL(m_popUpMenu);
+
+    m_popUpMenu = new wxMenu();
 
     if (HasFlag(wxDIRCTRL_EDIT_LABELS))
     {
-        AddRightClickMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
+        AddPopupMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
     }
 
-    if (HasFlag(wxDIRCTRL_RCLICK_MENU_SORT_NAME))
+    if (HasFlag(wxDIRCTRL_POPUP_MENU_SORT_NAME))
     {
-        AddRightClickMenuItem("Sort by &Name",          &wxGenericDirCtrl::MenuSortAlpha);        // Only directories need the sort options
-        AddRightClickMenuItem("Sort by Na&me reversed", &wxGenericDirCtrl::MenuSortNameReversed);
+        AddPopupMenuItem("Sort by &Name",          &wxGenericDirCtrl::MenuSortAlpha);        // Only directories need the sort options
+        AddPopupMenuItem("Sort by Na&me reversed", &wxGenericDirCtrl::MenuSortNameReversed);
     }
 
-    if (HasFlag(wxDIRCTRL_RCLICK_MENU_SORT_DATE))
+    if (HasFlag(wxDIRCTRL_POPUP_MENU_SORT_DATE))
     {
-        AddRightClickMenuItem("Sort by &Date",         &wxGenericDirCtrl::MenuSortDate);
-        AddRightClickMenuItem("Sort by Da&te reverse", &wxGenericDirCtrl::MenuSortDateReversed);
+        AddPopupMenuItem("Sort by &Date",         &wxGenericDirCtrl::MenuSortDate);
+        AddPopupMenuItem("Sort by Da&te reverse", &wxGenericDirCtrl::MenuSortDateReversed);
     }
 
-    wxCommandEvent event2(wxEVT_DIRCTRL_MENU_POPPED_UP, wxID_MENU_DIR);
+    wxCommandEvent event2(wxEVT_DIRCTRL_SHOWING_POPUP_MENU, wxID_MENU_DIR);
     event2.SetString("Directory Menu");
     GetEventHandler()->SafelyProcessEvent(event2);              // Create an event so that the parent is informed that the menu has
                                                                 // opened. Then the parent can add menu items if they want.
-    PopupMenu(m_rightClickMenu);
+    PopupMenu(m_popUpMenu);
 
-    delete m_rightClickMenu;
+    delete m_popUpMenu;
 }
 
 
 void wxGenericDirCtrl::HandleFileMenu()
 {
-    m_rightClickMenu = new wxMenu();
+    m_popUpMenu = new wxMenu();
 
     if (HasFlag(wxDIRCTRL_EDIT_LABELS))
     {
-        AddRightClickMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
+        AddPopupMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
     }
 
-    wxCommandEvent event2(wxEVT_DIRCTRL_MENU_POPPED_UP, wxID_MENU_FILE);
+    wxCommandEvent event2(wxEVT_DIRCTRL_SHOWING_POPUP_MENU, wxID_MENU_FILE);
     event2.SetString("Directory Menu");
 
     GetEventHandler()->SafelyProcessEvent(event2);
 
-    PopupMenu(m_rightClickMenu);
+    PopupMenu(m_popUpMenu);
 
-    delete m_rightClickMenu;
+    delete m_popUpMenu;
 }
 
 // Decide whether a directory or a file has been clicked, and call
 // the right function to build the wxMenu.
 void wxGenericDirCtrl::OnRightClick(wxTreeEvent& event)
 {
-    m_rightClickedItemId = event.GetItem();
-    wxDirItemData *itemData = GetItemData(m_rightClickedItemId);
+    m_popUpItemId = event.GetItem();
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
+    wxON_BLOCK_EXIT_SET(m_popUpItemId, wxTreeItemId());
 
     if (wxEndsWithPathSeparator(itemData->m_path))     // If this is a directory
     {
@@ -804,12 +810,12 @@ void wxGenericDirCtrl::OnRightClick(wxTreeEvent& event)
 // The following Menu___() functions are bound to right-click popup menu items.
 void wxGenericDirCtrl::MenuRename(wxCommandEvent & evt)
 {
-    m_treeCtrl->EditLabel(m_rightClickedItemId);
+    m_treeCtrl->EditLabel(m_popUpItemId);
 }
 
 void wxGenericDirCtrl::MenuSortAlpha(wxCommandEvent & evt)
 {
-    wxDirItemData *itemData = GetItemData(m_rightClickedItemId);
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
 
     itemData->m_compareFunc = wxDirSortedItemsNameCompare;
 
@@ -821,7 +827,7 @@ void wxGenericDirCtrl::MenuSortAlpha(wxCommandEvent & evt)
 
 void wxGenericDirCtrl::MenuSortNameReversed(wxCommandEvent & evt)
 {
-    wxDirItemData *itemData = GetItemData(m_rightClickedItemId);
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
 
     itemData->m_compareFunc = wxDirSortedItemsNameCompareReverse;
 
@@ -834,7 +840,7 @@ void wxGenericDirCtrl::MenuSortNameReversed(wxCommandEvent & evt)
 
 void wxGenericDirCtrl::MenuSortDate(wxCommandEvent & evt)
 {
-    wxDirItemData *itemData = GetItemData(m_rightClickedItemId);
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
 
     itemData->m_compareFunc = wxDirSortedItemsDateCompare;
 
@@ -846,7 +852,7 @@ void wxGenericDirCtrl::MenuSortDate(wxCommandEvent & evt)
 
 void wxGenericDirCtrl::MenuSortDateReversed(wxCommandEvent & evt)
 {
-    wxDirItemData *itemData = GetItemData(m_rightClickedItemId);
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
 
     itemData->m_compareFunc = wxDirSortedItemsDateCompareReverse;
 
@@ -929,7 +935,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     wxLogNull log;
     d.Open(dirName);
 
-    wxDirSortingItemCmpFunction compareFunc = data->m_compareFunc;
+    wxDirSortingItemSortFunction compareFunc = data->m_compareFunc;
 
     if (d.IsOpened())
     {
@@ -943,7 +949,6 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
                 {
                     newPath = rootPath;
                     newPath.AppendDir(eachFilename);
-                    std::cout << "compareFunc " << compareFunc << std::endl;
                     directoryItems.push_back( wxDirSortingItem(eachFilename, newPath.GetModificationTime(), compareFunc) );
                 }
             }
