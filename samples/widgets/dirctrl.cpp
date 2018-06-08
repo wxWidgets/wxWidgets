@@ -206,18 +206,14 @@ void DirCtrlWidgetsPage::DirProperties(wxCommandEvent &evt)
     wxDirItemData *itemData = m_dirCtrl->GetRightClickItemData();
     wxFileName dirName(itemData->m_path);
 
-    wxString dirInfo;
+    wxString dirInfo = wxString::Printf("Modified: %s\nSize: %.2fMB", modTime.FormatISOCombined(), totalSizeMegabytes);
     wxDateTime modTime = dirName.GetModificationTime();
     wxDir directory(itemData->m_path);
     wxULongLong totalSizeBytes = wxDir::GetTotalSize(itemData->m_path);
     double totalSizeMegabytes = totalSizeBytes.ToDouble() * (1.0 / 1000000.0);
 
-    //dirInfo.Printf("Modified: %s", modTime.FormatISOCombined());
-    dirInfo.Printf("Modified: %s\nSize: %.2fMB", modTime.FormatISOCombined(), totalSizeMegabytes);
-
-    wxDialog  *dlg = new wxMessageDialog(this, dirInfo, wxT("Directory Properties"));
+    wxMessageDialog dlg(this, dirInfo, wxT("Directory Properties"));
     dlg->ShowModal();
-    dlg->Destroy();
 }
 
 void DirCtrlWidgetsPage::FileProperties(wxCommandEvent &evt)
@@ -225,15 +221,12 @@ void DirCtrlWidgetsPage::FileProperties(wxCommandEvent &evt)
     wxDirItemData *itemData = m_dirCtrl->GetRightClickItemData();
     wxFileName fileName(itemData->m_path);
 
-    wxString fileInfo;
+    wxString fileInfo = wxString::Printf("Modified: %s\nSize: %s", modTime.FormatISOCombined(), fileSize);
     wxDateTime  modTime = fileName.GetModificationTime();
     wxString   fileSize = fileName.GetHumanReadableSize();
 
-    fileInfo.Printf("Modified: %s\nSize: %s", modTime.FormatISOCombined(), fileSize);
-
-    wxDialog  *dlg = new wxMessageDialog(this, fileInfo, wxT("File Properties"));
+    wxMessageDialog dlg(this, fileInfo, wxT("File Properties"));
     dlg->ShowModal();
-    dlg->Destroy();
 }
 
 

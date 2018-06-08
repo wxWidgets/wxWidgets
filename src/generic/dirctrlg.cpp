@@ -1,4 +1,4 @@
-    /////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/dirctrlg.cpp
 // Purpose:     wxGenericDirCtrl
 // Author:      Harm van der Heijden, Robert Roebling, Julian Smart
@@ -93,6 +93,7 @@ bool wxIsDriveAvailable(const wxString& dirName);
 
 wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED,    wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_NODE_EXPANDED,    wxCommandEvent);
 wxDEFINE_EVENT( wxEVT_DIRCTRL_MENU_POPPED_UP,   wxCommandEvent);
 
 // ----------------------------------------------------------------------------
@@ -445,8 +446,6 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     treeStyle |= wxTR_NO_LINES;
 #endif
 
-    m_style = style;        // Keep a record of the style, which we'll need in HandleDirMenu()
-
     if (style & wxDIRCTRL_EDIT_LABELS)
         treeStyle |= wxTR_EDIT_LABELS;
 
@@ -479,7 +478,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
                   wxDIRCTRL_RCLICK_MENU_SORT_NAME |
                   wxDIRCTRL_RCLICK_MENU_SORT_DATE ))
     {
-        Connect(wxID_TREECTRL, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, wxTreeEventHandler(wxGenericDirCtrl::OnRightClick));
+        Bind(wxID_TREECTRL, wxTreeEventHandler(wxGenericDirCtrl::OnRightClick), this, wxEVT_TREE_ITEM_MENU);
     }
 
 
@@ -731,19 +730,6 @@ void wxGenericDirCtrl::AddRightClickMenuItem(const wxString& label, void(wxGener
     Bind(wxEVT_MENU, function, this, id);
 }
 
-// Public: Used by the parent to add items to the right-click menu each time it's popped up. The parent
-// will also need to bind a function to the menu item.
-int wxGenericDirCtrl::NewMenuItem(const wxString& label)
-{
-    if (!m_rightClickMenu)
-        return 0;
-
-    int id = GetAvailableID();
-    m_rightClickMenu->Append(id, label);
-    m_rightClickMenu->UpdateUI();
-    return id;
-}
-
 
 // When a directory is right-clicked, we come here and build the wxMenu.
 // Using a copy of the style passed to the constructor, we can add the
@@ -752,21 +738,21 @@ void wxGenericDirCtrl::HandleDirMenu()
 {
     m_rightClickMenu = new wxMenu();
 
-    if (m_style & wxDIRCTRL_EDIT_LABELS)
+    if (HasFlag(wxDIRCTRL_EDIT_LABELS))
     {
         AddRightClickMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
     }
 
-    if (m_style & wxDIRCTRL_RCLICK_MENU_SORT_NAME)
+    if (HasFlag(wxDIRCTRL_RCLICK_MENU_SORT_NAME))
     {
         AddRightClickMenuItem("Sort by &Name",          &wxGenericDirCtrl::MenuSortAlpha);        // Only directories need the sort options
         AddRightClickMenuItem("Sort by Na&me reversed", &wxGenericDirCtrl::MenuSortNameReversed);
     }
 
-    if (m_style & wxDIRCTRL_RCLICK_MENU_SORT_DATE)
+    if (HasFlag(wxDIRCTRL_RCLICK_MENU_SORT_DATE))
     {
         AddRightClickMenuItem("Sort by &Date",         &wxGenericDirCtrl::MenuSortDate);
-        AddRightClickMenuItem("Sort by Da&te reverse", &wxGenericDirCtrl::MenuSortDateReverse);
+        AddRightClickMenuItem("Sort by Da&te reverse", &wxGenericDirCtrl::MenuSortDateReversed);
     }
 
     wxCommandEvent event2(wxEVT_DIRCTRL_MENU_POPPED_UP, wxID_MENU_DIR);
@@ -783,7 +769,7 @@ void wxGenericDirCtrl::HandleFileMenu()
 {
     m_rightClickMenu = new wxMenu();
 
-    if (m_style & wxDIRCTRL_EDIT_LABELS)
+    if (HasFlag(wxDIRCTRL_EDIT_LABELS))
     {
         AddRightClickMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
     }
@@ -858,7 +844,7 @@ void wxGenericDirCtrl::MenuSortDate(wxCommandEvent & evt)
     m_treeCtrl->SelectItem(itemData->GetId());
 }
 
-void wxGenericDirCtrl::MenuSortDateReverse(wxCommandEvent & evt)
+void wxGenericDirCtrl::MenuSortDateReversed(wxCommandEvent & evt)
 {
     wxDirItemData *itemData = GetItemData(m_rightClickedItemId);
 
