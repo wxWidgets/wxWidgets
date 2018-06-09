@@ -76,6 +76,7 @@ enum
     @event{wxEVT_DIRCTRL_MENU_POPPED_UP}
           User has right-clicked on an item. Use this event to dynamically add items to the popup menu.
           For example, context specific menu items.
+          Available since wxWidgets 3.1.2.
     @endEventTable
 */
 class wxGenericDirCtrl : public wxControl
@@ -188,12 +189,19 @@ public:
     virtual wxDirFilterListCtrl* GetFilterListCtrl() const;
 
     /**
-        Returns a pointer to the wxMenu which was popped up when the user right-clicked on an item.
-        This is useful for adding a separator to the menu.
+        Returns a pointer to the wxMenu which popped up when the user right-clicked on an item.
         This function should only be called with the wxEVT_DIRCTRL_MENU_POPPED_UP event handler.
-        See NewMenuItem() for a code example.        
+        Within the event handler, new menu items can be added.
+
+        \code{.cpp}
+            wxMenu *menu = dirTreeCtrl->GetPopupMenu();
+            menu->AppendSeparator();
+            wxWindowID id = wxNewId();
+            menu->Append(id, "Renumber Images");
+            dirTreeCtrl->Bind(wxEVT_MENU, &ImageBrowser::ReNumberImages, this, id);
+        \endcode
     */
-    wxMenu* GetMenu()
+    wxMenu* GetPopupMenu()
     
     /**
         Gets the currently-selected directory or filename.
@@ -215,9 +223,15 @@ public:
     /**
         Get the item data for the item that was right-clicked.
         This function should only be called with the wxEVT_DIRCTRL_MENU_POPPED_UP event handler.
-        See NewMenuItem() for a code example.
+
+        To get the name of the file or directory:
+        \code{.cpp}
+            wxTreeItemId id = dirTreeCtrl->GetPopupMenuItem();
+            wxDirItemData *data = (wxDirItemData*)(dirTreeCtrl->GetTreeCtrl()->GetItemData(id));
+            wxFileName fileName = data->m_path;
+        \endcode
     */
-    wxDirItemData* GetRightClickItemData()
+    wxDirItemData* GetPopupMenuItem()
     
     /**
         Returns the root id for the tree control.
@@ -239,22 +253,6 @@ public:
         used to update the displayed directory content.
     */
     virtual void ReCreateTree();
-
-    /**
-        Add an item to the popup menu. This function should only be called with the wxEVT_DIRCTRL_MENU_POPPED_UP event handler.
-        Returns the ID of the new menu item.
-        
-        See the widgets sample for a full example of the popup menu.
-        \code{.cpp}
-        void MyFrame::DirectoryMenuPopped(wxCommandEvent &evt)
-        {
-            m_dirCtrl->GetMenu()->AppendSeparator();
-            int id = m_dirCtrl->NewMenuItem(wxT("Directory Properties"));
-            m_dirCtrl->Bind(wxEVT_MENU, &MyFrame::DirProperties, this, id);
-        }
-        \endcode
-    */
-    int NewMenuItem(const wxString& label);
     
     /**
         Sets the default path.

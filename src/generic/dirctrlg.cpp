@@ -742,52 +742,48 @@ void wxGenericDirCtrl::HandleDirMenu()
     m_popUpMenu = &menu;
     wxON_BLOCK_EXIT_NULL(m_popUpMenu);
 
-    m_popUpMenu = new wxMenu();
-
     if (HasFlag(wxDIRCTRL_EDIT_LABELS))
     {
-        AddPopupMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
+        AddPopupMenuItem("&Rename",                &wxGenericDirCtrl::MenuRename);
     }
 
     if (HasFlag(wxDIRCTRL_POPUP_MENU_SORT_NAME))
     {
-        AddPopupMenuItem("Sort by &Name",          &wxGenericDirCtrl::MenuSortAlpha);        // Only directories need the sort options
+        AddPopupMenuItem("Sort by &Name",          &wxGenericDirCtrl::MenuSortAlpha);
         AddPopupMenuItem("Sort by Na&me reversed", &wxGenericDirCtrl::MenuSortNameReversed);
     }
 
     if (HasFlag(wxDIRCTRL_POPUP_MENU_SORT_DATE))
     {
-        AddPopupMenuItem("Sort by &Date",         &wxGenericDirCtrl::MenuSortDate);
-        AddPopupMenuItem("Sort by Da&te reverse", &wxGenericDirCtrl::MenuSortDateReversed);
+        AddPopupMenuItem("Sort by &Date",          &wxGenericDirCtrl::MenuSortDate);
+        AddPopupMenuItem("Sort by Da&te reverse",  &wxGenericDirCtrl::MenuSortDateReversed);
     }
 
-    wxCommandEvent event2(wxEVT_DIRCTRL_SHOWING_POPUP_MENU, wxID_MENU_DIR);
+    wxCommandEvent event2(wxEVT_DIRCTRL_SHOWING_POPUP_MENU);
     event2.SetString("Directory Menu");
     GetEventHandler()->SafelyProcessEvent(event2);              // Create an event so that the parent is informed that the menu has
                                                                 // opened. Then the parent can add menu items if they want.
     PopupMenu(m_popUpMenu);
-
-    delete m_popUpMenu;
 }
 
 
 void wxGenericDirCtrl::HandleFileMenu()
 {
-    m_popUpMenu = new wxMenu();
+    wxMenu menu;
+    m_popUpMenu = &menu;
+    wxON_BLOCK_EXIT_NULL(m_popUpMenu);
 
     if (HasFlag(wxDIRCTRL_EDIT_LABELS))
     {
         AddPopupMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
     }
 
-    wxCommandEvent event2(wxEVT_DIRCTRL_SHOWING_POPUP_MENU, wxID_MENU_FILE);
-    event2.SetString("Directory Menu");
+    wxCommandEvent event2(wxEVT_DIRCTRL_SHOWING_POPUP_MENU);
+    event2.SetString("File Menu");
 
     GetEventHandler()->SafelyProcessEvent(event2);
 
     PopupMenu(m_popUpMenu);
-
-    delete m_popUpMenu;
 }
 
 // Decide whether a directory or a file has been clicked, and call
