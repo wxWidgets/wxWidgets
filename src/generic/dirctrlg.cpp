@@ -46,6 +46,7 @@
 #include "wx/artprov.h"
 #include "wx/mimetype.h"
 #include "wx/scopeguard.h"
+#include "wx/menu.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
