@@ -37,6 +37,7 @@
     #include "wx/button.h"
     #include "wx/filedlg.h"
     #include "wx/dir.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/generic/dirctrlg.h"
@@ -167,8 +168,7 @@ wxBEGIN_EVENT_TABLE(DirCtrlWidgetsPage, WidgetsPage)
     EVT_RADIOBOX(wxID_ANY, DirCtrlWidgetsPage::OnRadioBox)
     EVT_DIRCTRL_SELECTIONCHANGED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnSelChanged)
     EVT_DIRCTRL_FILEACTIVATED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnFileActivated)
-    EVT_DIRCTRL_MENU_POPPED_UP(wxID_MENU_DIR,  DirCtrlWidgetsPage::DirMenuPopped)
-    EVT_DIRCTRL_MENU_POPPED_UP(wxID_MENU_FILE, DirCtrlWidgetsPage::FileMenuPopped)
+    EVT_DIRCTRL_SHOWING_POPUP_MENU(0,  DirCtrlWidgetsPage::DirMenuPopped)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -189,44 +189,49 @@ DirCtrlWidgetsPage::DirCtrlWidgetsPage(WidgetsBookCtrl *book,
 
 void DirCtrlWidgetsPage::DirMenuPopped(wxCommandEvent &evt)
 {
-    m_dirCtrl->GetMenu()->AppendSeparator();
-    int id = m_dirCtrl->NewMenuItem(wxT("Directory Properties"));
-    m_dirCtrl->Bind(wxEVT_MENU, &DirCtrlWidgetsPage::DirProperties, this, id);
-}
+    wxMenu *menu = m_dirCtrl->GetPopupMenu();
 
-void DirCtrlWidgetsPage::FileMenuPopped(wxCommandEvent &evt)
-{
-    m_dirCtrl->GetMenu()->AppendSeparator();
-    int id = m_dirCtrl->NewMenuItem(wxT("File Properties"));
-    m_dirCtrl->Bind(wxEVT_MENU, &DirCtrlWidgetsPage::FileProperties, this, id);
+    wxTreeItemId    itemId = m_dirCtrl->GetPopupMenuItem();
+    wxDirItemData  *itemData = (wxDirItemData*)(m_dirCtrl->GetTreeCtrl()->GetItemData(itemId));
+    wxString        dirName(itemData->m_path);
+
+    if (wxEndsWithPathSeparator(dirName))
+    {
+        wxWindowID id = wxNewId();
+        menu->AppendSeparator();
+        menu->Append(id, wxT("Directory Properties"));
+        m_dirCtrl->Bind(wxEVT_MENU, &DirCtrlWidgetsPage::DirProperties, this, id);
+    }
+    else
+    {
+        wxWindowID id = wxNewId();
+        menu->Append(id, wxT("File Properties"));
+        m_dirCtrl->Bind(wxEVT_MENU, &DirCtrlWidgetsPage::FileProperties, this, id);
+    }
 }
 
 void DirCtrlWidgetsPage::DirProperties(wxCommandEvent &evt)
 {
-    wxDirItemData *itemData = m_dirCtrl->GetRightClickItemData();
-    wxFileName dirName(itemData->m_path);
+    wxTreeItemId    id = m_dirCtrl->GetPopupMenuItem();
+    wxDirItemData  *itemData = (wxDirItemData*)(m_dirCtrl->GetTreeCtrl()->GetItemData(id));
+    wxFileName      dirName(itemData->m_path);
+    wxDateTime      modTime = dirName.GetModificationTime();
 
-    wxString dirInfo = wxString::Printf("Modified: %s\nSize: %.2fMB", modTime.FormatISOCombined(), totalSizeMegabytes);
-    wxDateTime modTime = dirName.GetModificationTime();
-    wxDir directory(itemData->m_path);
-    wxULongLong totalSizeBytes = wxDir::GetTotalSize(itemData->m_path);
-    double totalSizeMegabytes = totalSizeBytes.ToDouble() * (1.0 / 1000000.0);
-
+    wxString        dirInfo = wxString::Format("Modified: %s", modTime.FormatISOCombined());
     wxMessageDialog dlg(this, dirInfo, wxT("Directory Properties"));
-    dlg->ShowModal();
+    dlg.ShowModal();
 }
 
 void DirCtrlWidgetsPage::FileProperties(wxCommandEvent &evt)
 {
-    wxDirItemData *itemData = m_dirCtrl->GetRightClickItemData();
-    wxFileName fileName(itemData->m_path);
+    wxTreeItemId    id = m_dirCtrl->GetPopupMenuItem();
+    wxDirItemData  *itemData = (wxDirItemData*)(m_dirCtrl->GetTreeCtrl()->GetItemData(id));
+    wxFileName      dirName(itemData->m_path);
+    wxDateTime      modTime = dirName.GetModificationTime();
 
-    wxString fileInfo = wxString::Printf("Modified: %s\nSize: %s", modTime.FormatISOCombined(), fileSize);
-    wxDateTime  modTime = fileName.GetModificationTime();
-    wxString   fileSize = fileName.GetHumanReadableSize();
-
-    wxMessageDialog dlg(this, fileInfo, wxT("File Properties"));
-    dlg->ShowModal();
+    wxString        dirInfo = wxString::Format("Modified: %s\nSize: %s", modTime.FormatISOCombined(), dirName.GetHumanReadableSize());
+    wxMessageDialog dlg(this, dirInfo, wxT("File Properties"));
+    dlg.ShowModal();
 }
 
 
@@ -285,7 +290,7 @@ void DirCtrlWidgetsPage::CreateContent()
         wxDirDialogDefaultFolderStr,
         wxDefaultPosition,
         wxDefaultSize,
-        wxDIRCTRL_RCLICK_MENU_SORT_NAME | wxDIRCTRL_RCLICK_MENU_SORT_DATE
+        wxDIRCTRL_POPUP_MENU_SORT_NAME | wxDIRCTRL_POPUP_MENU_SORT_DATE
     );
 
     // the 3 panes panes compose the window

@@ -311,8 +311,6 @@ protected:
 // Symbols for accessing individual controls
 #define wxID_TREECTRL          7000
 #define wxID_FILTERLISTCTRL    7001
-#define wxID_MENU_DIR          7002
-#define wxID_MENU_FILE         7003
 
 #endif // wxUSE_DIRDLG
 
