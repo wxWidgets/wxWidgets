@@ -936,7 +936,10 @@ extern WXDLLIMPEXP_CORE int wxGetWindowId(WXHWND hWnd);
 
 // check if hWnd's WNDPROC is wndProc. Return true if yes, false if they are
 // different
-extern WXDLLIMPEXP_CORE bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc);
+//
+// wndProc parameter is unused and only kept for compatibility
+extern WXDLLIMPEXP_CORE
+bool wxCheckWindowWndProc(WXHWND hWnd, WXWNDPROC wndProc = NULL);
 
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
@@ -1055,53 +1058,27 @@ inline void wxFillRect(HWND hwnd, HDC hdc, HBRUSH hbr)
 // 32/64 bit helpers
 // ----------------------------------------------------------------------------
 
-#ifdef __WIN64__
-
-inline void *wxGetWindowProc(HWND hwnd)
-{
-    return (void *)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
-}
-
-inline void *wxGetWindowUserData(HWND hwnd)
-{
-    return (void *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
-}
-
-inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
-{
-    return (WNDPROC)::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)func);
-}
-
-inline void *wxSetWindowUserData(HWND hwnd, void *data)
-{
-    return (void *)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
-}
-
-#else // __WIN32__
-
 // note that the casts to LONG_PTR here are required even on 32-bit machines
 // for the 64-bit warning mode of later versions of MSVC (C4311/4312)
 inline WNDPROC wxGetWindowProc(HWND hwnd)
 {
-    return (WNDPROC)(LONG_PTR)::GetWindowLong(hwnd, GWL_WNDPROC);
+    return (WNDPROC)(LONG_PTR)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
 }
 
 inline void *wxGetWindowUserData(HWND hwnd)
 {
-    return (void *)(LONG_PTR)::GetWindowLong(hwnd, GWL_USERDATA);
+    return (void *)(LONG_PTR)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 }
 
 inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
 {
-    return (WNDPROC)(LONG_PTR)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG_PTR)func);
+    return (WNDPROC)(LONG_PTR)::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)func);
 }
 
 inline void *wxSetWindowUserData(HWND hwnd, void *data)
 {
-    return (void *)(LONG_PTR)::SetWindowLong(hwnd, GWL_USERDATA, (LONG_PTR)data);
+    return (void *)(LONG_PTR)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
 }
-
-#endif // __WIN64__/__WIN32__
 
 #endif // wxUSE_GUI && __WXMSW__
 

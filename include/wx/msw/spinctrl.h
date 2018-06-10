@@ -100,7 +100,7 @@ public:
     // for internal use only
 
     // get the subclassed window proc of the buddy text
-    WXFARPROC GetBuddyWndProc() const { return m_wndProcBuddy; }
+    WXWNDPROC GetBuddyWndProc() const { return m_wndProcBuddy; }
 
     // return the spinctrl object whose buddy is the given window or NULL
     static wxSpinCtrl *GetSpinForTextCtrl(WXHWND hwndBuddy);
@@ -145,7 +145,7 @@ protected:
 
     // the data for the "buddy" text ctrl
     WXHWND     m_hwndBuddy;
-    WXFARPROC  m_wndProcBuddy;
+    WXWNDPROC  m_wndProcBuddy;
 
     // Block text update event after SetValue()
     bool m_blockEvent;

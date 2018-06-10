@@ -81,9 +81,9 @@ typedef int wxEventType;
 
 #define wxEVT_ANY           ((wxEventType)-1)
 
-// this is used to make the event table entry type safe, so that for an event
-// handler only a function with proper parameter list can be given. See also
-// the wxEVENT_HANDLER_CAST-macro.
+// This macro exists for compatibility only (even though it was never public,
+// it still appears in some code using wxWidgets), see public
+// wxEVENT_HANDLER_CAST instead.
 #define wxStaticCastEvent(type, val) static_cast<type>(val)
 
 #define wxDECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
@@ -122,10 +122,30 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
     extern const expdecl wxEventTypeTag< type > name
 
-// Try to cast the given event handler to the correct handler type:
+// The type-erased method signature used for event handling.
+typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 
+template <typename T>
+inline wxEventFunction wxEventFunctionCast(void (wxEvtHandler::*func)(T&))
+{
+    // There is no going around the cast here: we do rely calling the event
+    // handler method, which takes a reference to an object of a class derived
+    // from wxEvent, as if it took wxEvent itself. On all platforms supported
+    // by wxWidgets, this cast is harmless, but it's not a valid cast in C++
+    // and gcc 8 started giving warnings about this (with -Wextra), so suppress
+    // them locally to avoid generating hundreds of them when compiling any
+    // code using event table macros.
+
+    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+
+    return reinterpret_cast<wxEventFunction>(func);
+
+    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+}
+
+// Try to cast the given event handler to the correct handler type:
 #define wxEVENT_HANDLER_CAST( functype, func ) \
-    ( wxObjectEventFunction )( wxEventFunction )wxStaticCastEvent( functype, &func )
+    wxEventFunctionCast(static_cast<functype>(&func))
 
 
 // The tag is a type associated to the event type (which is an integer itself,
@@ -149,9 +169,6 @@ public:
 private:
     wxEventType m_type;
 };
-
-// These are needed for the functor definitions
-typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 
 // We had some trouble with using wxEventFunction
 // in the past so we had introduced wxObjectEventFunction which
@@ -295,8 +312,8 @@ struct HandlerImpl<T, A, true>
     static wxEvtHandler *ConvertToEvtHandler(T *p)
         { return p; }
     static wxEventFunction ConvertToEvtMethod(void (T::*f)(A&))
-        { return static_cast<wxEventFunction>(
-                    reinterpret_cast<void (T::*)(wxEvent&)>(f)); }
+        { return wxEventFunctionCast(
+                    static_cast<void (wxEvtHandler::*)(A&)>(f)); }
 };
 
 // specialization for handlers not deriving from wxEvtHandler
