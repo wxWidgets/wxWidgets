@@ -279,17 +279,20 @@ public:
                                    const wxPoint& pos,
                                    const wxMouseEvent& event);
 
-    // This method used to adjust pagebreak position. The parameter is variable
-    // that contains y-coordinate of page break (= horizontal line that should
-    // not be crossed by words, images etc.). If this cell cannot be divided
-    // into two pieces (each one on another page) then it moves the pagebreak
-    // few pixels up.
+    // This method is called when paginating HTML, e.g. when printing.
+    //
+    // On input, pagebreak contains y-coordinate of page break (i.e. the
+    // horizontal line that should not be crossed by words, images etc.)
+    // relative to the parent cell on entry and may be modified to request a
+    // page break at a position before it if this cell cannot be divided into
+    // two pieces (each one on its own page).
+    //
+    // Note that page break must still happen on the current page, i.e. the
+    // returned value must be strictly greater than "*pagebreak - pageHeight"
+    // and less or equal to "*pagebreak" for the value of pagebreak on input.
     //
     // Returned value : true if pagebreak was modified, false otherwise
-    // Usage : while (container->AdjustPagebreak(&p)) {}
-    virtual bool AdjustPagebreak(int *pagebreak,
-                                 const wxArrayInt& known_pagebreaks,
-                                 int pageHeight) const;
+    virtual bool AdjustPagebreak(int *pagebreak, int pageHeight) const;
 
     // Sets cell's behaviour on pagebreaks (see AdjustPagebreak). Default
     // is true - the cell can be split on two pages
@@ -451,9 +454,7 @@ public:
     virtual void DrawInvisible(wxDC& dc, int x, int y,
                                wxHtmlRenderingInfo& info) wxOVERRIDE;
 
-    virtual bool AdjustPagebreak(int *pagebreak,
-                                 const wxArrayInt& known_pagebreaks,
-                                 int pageHeight) const wxOVERRIDE;
+    virtual bool AdjustPagebreak(int *pagebreak, int pageHeight) const wxOVERRIDE;
 
     // insert cell at the end of m_Cells list
     void InsertCell(wxHtmlCell *cell);

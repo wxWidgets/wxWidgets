@@ -243,6 +243,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_rawbmp.o \
 	test_gui_htmlparser.o \
 	test_gui_htmlwindow.o \
+	test_gui_htmprint.o \
 	test_gui_accelentry.o \
 	test_gui_menu.o \
 	test_gui_guifuncs.o \
@@ -996,6 +997,9 @@ test_gui_htmlparser.o: $(srcdir)/html/htmlparser.cpp $(TEST_GUI_ODEP)
 
 test_gui_htmlwindow.o: $(srcdir)/html/htmlwindow.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/html/htmlwindow.cpp
+
+test_gui_htmprint.o: $(srcdir)/html/htmprint.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/html/htmprint.cpp
 
 test_gui_accelentry.o: $(srcdir)/menu/accelentry.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/menu/accelentry.cpp

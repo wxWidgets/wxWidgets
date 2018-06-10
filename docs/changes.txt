@@ -66,6 +66,12 @@ Changes in behaviour which may result in build errors
 - wx/treebook.h doesn't include wx/treectrl.h (and, via it, wx/textctrl.h) any
   more, include these headers explicitly from your code if necessary.
 
+- wxHtmlDCRenderer::Render() arguments have changed, simply omit the ones not
+  existing in the function signature any more to update the code using it.
+
+- wxHtmlCell::AdjustPagebreak() has lost its "known_pagebreaks" argument,
+  update your code if you override this method (you shouldn't be calling it).
+
 
 3.1.2: (released 2018-??-??)
 ----------------------------

@@ -65,9 +65,7 @@ class wxHtmlPageBreakCell : public wxHtmlCell
 public:
     wxHtmlPageBreakCell() {}
 
-    bool AdjustPagebreak(int* pagebreak,
-                         const wxArrayInt& known_pagebreaks,
-                         int pageHeight) const wxOVERRIDE;
+    bool AdjustPagebreak(int* pagebreak, int pageHeight) const wxOVERRIDE;
 
     void Draw(wxDC& WXUNUSED(dc),
               int WXUNUSED(x), int WXUNUSED(y),
@@ -79,48 +77,18 @@ private:
 };
 
 bool
-wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak,
-                                     const wxArrayInt& known_pagebreaks,
-                                     int WXUNUSED(pageHeight)) const
+wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, int pageHeight) const
 {
-    // When we are counting pages, 'known_pagebreaks' is non-NULL.
-    // That's the only time we change 'pagebreak'. Otherwise, pages
-    // were already counted, 'known_pagebreaks' is NULL, and we don't
-    // do anything except return false.
-    //
-    // We also simply return false if the 'pagebreak' argument is
-    // less than (vertically above) or the same as the current
-    // vertical position. Otherwise we'd be setting a pagebreak above
-    // the current cell, which is incorrect, or duplicating a
-    // pagebreak that has already been set.
-    if( known_pagebreaks.GetCount() == 0 || *pagebreak <= m_PosY)
-    {
-        return false;
-    }
-
-    // m_PosY is only the vertical offset from the parent. The pagebreak
-    // required here is the total page offset, so m_PosY must be added
-    // to the parent's offset and height.
-    int total_height = m_PosY;
-    for ( wxHtmlCell *parent = GetParent(); parent; parent = parent->GetParent() )
-    {
-        total_height += parent->GetPosY();
-    }
-
-
-    // Search the array of pagebreaks to see whether we've already set
-    // a pagebreak here.
-    int where = known_pagebreaks.Index( total_height);
-    // Add a pagebreak only if there isn't one already set here.
-    if( wxNOT_FOUND != where)
-    {
-        return false;
-    }
-    else
+    // Request a page break at the position of this cell if it's on the current
+    // page. Note that it's important not to do it unconditionally or we could
+    // end up in an infinite number of page breaks at this cell position.
+    if ( m_PosY < *pagebreak && m_PosY > *pagebreak - pageHeight )
     {
         *pagebreak = m_PosY;
         return true;
     }
+
+    return false;
 }
 
 

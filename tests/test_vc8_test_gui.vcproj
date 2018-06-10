@@ -1055,6 +1055,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\html\htmprint.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\hyperlinkctrltest.cpp"
 				>
 			</File>

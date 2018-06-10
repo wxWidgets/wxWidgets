@@ -1023,19 +1023,8 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
         return;
     }
 
-    printout->SetPPIScreen(wxGetDisplayPPI());
-    printout->SetPPIPrinter( printDC->GetResolution(),
-                             printDC->GetResolution() );
+    printout->SetUp(*m_dc);
 
-    printout->SetDC(m_dc);
-
-    int w, h;
-    m_dc->GetSize(&w, &h);
-    printout->SetPageSizePixels((int)w, (int)h);
-    printout->SetPaperRectPixels(wxRect(0, 0, w, h));
-    int mw, mh;
-    m_dc->GetSizeMM(&mw, &mh);
-    printout->SetPageSizeMM((int)mw, (int)mh);
     printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined.

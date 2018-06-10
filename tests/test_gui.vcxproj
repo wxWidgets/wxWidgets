@@ -535,6 +535,7 @@
     <ClCompile Include="graphics\measuring.cpp" />
     <ClCompile Include="html\htmlparser.cpp" />
     <ClCompile Include="html\htmlwindow.cpp" />
+    <ClCompile Include="html\htmprint.cpp" />
     <ClCompile Include="image\image.cpp" />
     <ClCompile Include="image\rawbmp.cpp" />
     <ClCompile Include="menu\accelentry.cpp" />
