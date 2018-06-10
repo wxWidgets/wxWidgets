@@ -379,6 +379,7 @@ public:
     }
 
     - (void)textDidChange:(NSNotification *)aNotification;
+    - (void)changeColor:(id)sender;
 
     @end
 
