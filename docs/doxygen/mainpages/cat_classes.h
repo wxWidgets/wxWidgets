@@ -632,13 +632,13 @@ these classes provide a subset or almost complete STL API.
 
 Related Overviews: @ref overview_container
 
-@li wxArray<T>: A type-safe dynamic array implementation (macro based)
+@li wxArray<T>: Legacy dynamic array, use srd::vector or wxVector instead.
 @li wxArrayString: An efficient container for storing wxString objects
 @li wxHashMap<T>: A type-safe hash map implementation (macro based)
 @li wxHashSet<T>: A type-safe hash set implementation(macro based)
 @li wxHashTable: A simple hash table implementation (deprecated, use wxHashMap)
 @li wxList<T>: A type-safe linked list implementation (macro based)
-@li wxVector<T>: Template base vector implementation identical to std::vector
+@li wxVector<T>: Template base vector implementation identical to std::vector.
 
 
 

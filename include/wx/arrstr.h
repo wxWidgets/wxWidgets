@@ -13,6 +13,7 @@
 
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/dynarray.h"
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
     #include <vector>
@@ -49,15 +50,9 @@ wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2)
 
 #if wxUSE_STD_CONTAINERS
 
-#include "wx/dynarray.h"
-
 typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
-typedef wxString _wxArraywxBaseArrayStringBase;
-_WX_DECLARE_BASEARRAY_2(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase,
-                        wxArray_SortFunction<wxString>,
-                        class WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase,
-                                  wxBaseArrayStringBase, WXDLLIMPEXP_BASE);
+                                  wxARRAY_DUMMY_BASE, WXDLLIMPEXP_BASE);
 
 class WXDLLIMPEXP_BASE wxArrayString : public wxArrayStringBase
 {
@@ -86,7 +81,7 @@ public:
 };
 
 _WX_DEFINE_SORTED_TYPEARRAY_2(wxString, wxSortedArrayStringBase,
-                              wxBaseArrayStringBase, = wxStringSortAscending,
+                              wxArrayStringBase, = wxStringSortAscending,
                               class WXDLLIMPEXP_BASE, wxArrayString::CompareFunction);
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
