@@ -1248,11 +1248,11 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
     wxAssociateWinWithHandle(hwnd, this);
 
-    m_oldWndProc = (WXFARPROC)wxGetWindowProc((HWND)hWnd);
+    m_oldWndProc = wxGetWindowProc((HWND)hWnd);
 
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
-    if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
+    if ( !wxCheckWindowWndProc(hWnd) )
     {
         wxSetWindowProc(hwnd, wxWndProc);
 
@@ -1289,9 +1289,9 @@ void wxWindowMSW::UnsubclassWin()
 
         if ( m_oldWndProc )
         {
-            if ( !wxCheckWindowWndProc((WXHWND)hwnd, m_oldWndProc) )
+            if ( !wxCheckWindowWndProc((WXHWND)hwnd) )
             {
-                wxSetWindowProc(hwnd, (WNDPROC)m_oldWndProc);
+                wxSetWindowProc(hwnd, m_oldWndProc);
             }
 
             m_oldWndProc = NULL;
@@ -1322,8 +1322,7 @@ void wxWindowMSW::DissociateHandle()
 }
 
 
-bool wxCheckWindowWndProc(WXHWND hWnd,
-                          WXFARPROC WXUNUSED(wndProc))
+bool wxCheckWindowWndProc(WXHWND hWnd, WXWNDPROC WXUNUSED(wndProc))
 {
     const wxString str(wxGetWindowClass(hWnd));
 
@@ -2408,7 +2407,7 @@ WXLRESULT wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM l
 {
     WXLRESULT rc;
     if ( m_oldWndProc )
-        rc = ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+        rc = ::CallWindowProc(m_oldWndProc, GetHwnd(), nMsg, wParam, lParam);
     else
         rc = ::DefWindowProc(GetHwnd(), nMsg, wParam, lParam);
 
@@ -6867,8 +6866,8 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 // in active frames and dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
 
-int APIENTRY
-wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
+LRESULT APIENTRY
+wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
 {
     DWORD hiWord = HIWORD(lParam);
     if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
@@ -6935,7 +6934,7 @@ void wxSetKeyboardHook(bool doIt)
         wxTheKeyboardHook = ::SetWindowsHookEx
                               (
                                 WH_KEYBOARD,
-                                (HOOKPROC)wxKeyboardHook,
+                                wxKeyboardHook,
                                 NULL,   // must be NULL for process hook
                                 ::GetCurrentThreadId()
                               );

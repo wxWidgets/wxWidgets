@@ -44,6 +44,11 @@ typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 // Array class providing legacy dynamic arrays API on top of wxVector<>
 // ----------------------------------------------------------------------------
 
+// For some reasons lost in the depths of time, sort functions with different
+// signatures are used to sort normal arrays and to keep sorted arrays sorted.
+// These two functors can be used as predicates with std::sort() adapting the
+// sort function to it, whichever signature it uses.
+
 template<class T>
 class wxArray_SortFunction
 {
@@ -52,7 +57,7 @@ public:
 
     wxArray_SortFunction(CMPFUNC f) : m_f(f) { }
     bool operator()(const T& i1, const T& i2)
-      { return m_f((T*)&i1, (T*)&i2) < 0; }
+      { return m_f(const_cast<T*>(&i1), const_cast<T*>(&i2)) < 0; }
 private:
     CMPFUNC m_f;
 };
@@ -74,9 +79,9 @@ template <typename T>
 class wxBaseArray : public wxVector<T>
 {
     typedef wxSortedArray_SortFunction<T> Predicate;
-    typedef int (wxCMPFUNC_CONV *SCMPFUNC)(T, T);
 
 public:
+    typedef typename Predicate::CMPFUNC SCMPFUNC;
     typedef typename wxArray_SortFunction<T>::CMPFUNC CMPFUNC;
 
     typedef wxVector<T> base_vec;
@@ -151,17 +156,17 @@ public:
         return wxNOT_FOUND;
     }
 
-    int Index(T lItem, CMPFUNC fnCompare) const
+    int Index(T lItem, SCMPFUNC fnCompare) const
     {
-        Predicate p((SCMPFUNC)fnCompare);
+        Predicate p(fnCompare);
         const_iterator i = std::lower_bound(this->begin(), this->end(), lItem, p);
         return i != this->end() && !p(lItem, *i) ? (int)(i - this->begin())
                                                  : wxNOT_FOUND;
     }
 
-    size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const
+    size_t IndexForInsert(T lItem, SCMPFUNC fnCompare) const
     {
-        Predicate p((SCMPFUNC)fnCompare);
+        Predicate p(fnCompare);
         const_iterator i = std::lower_bound(this->begin(), this->end(), lItem, p);
         return i - this->begin();
     }
@@ -171,7 +176,7 @@ public:
         this->insert(this->end(), nInsert, lItem);
     }
 
-    size_t Add(T lItem, CMPFUNC fnCompare)
+    size_t Add(T lItem, SCMPFUNC fnCompare)
     {
         size_t n = IndexForInsert(lItem, fnCompare);
         Insert(lItem, n);
@@ -200,6 +205,12 @@ public:
         wxArray_SortFunction<T> p(fCmp);
         std::sort(this->begin(), this->end(), p);
     }
+
+    void Sort(SCMPFUNC fCmp)
+    {
+        Predicate p(fCmp);
+        std::sort(this->begin(), this->end(), p);
+    }
 };
 
 // ============================================================================
@@ -223,8 +234,6 @@ public:
 template <typename T, typename Cmp>
 class wxBaseSortedArray : public wxBaseArray<T>
 {
-    typedef typename wxBaseArray<T>::CMPFUNC CMPFUNC;
-
 public:
     explicit wxBaseSortedArray(Cmp fn) : m_fnCompare(fn) { }
 
@@ -237,7 +246,7 @@ public:
 
     size_t IndexForInsert(T item) const
     {
-        return this->wxBaseArray<T>::IndexForInsert(item, (CMPFUNC)m_fnCompare);
+        return this->wxBaseArray<T>::IndexForInsert(item, m_fnCompare);
     }
 
     void AddAt(T item, size_t index)
@@ -247,7 +256,7 @@ public:
 
     size_t Add(T item)
     {
-        return this->wxBaseArray<T>::Add(item, (CMPFUNC)m_fnCompare);
+        return this->wxBaseArray<T>::Add(item, m_fnCompare);
     }
 
     void push_back(T item)
