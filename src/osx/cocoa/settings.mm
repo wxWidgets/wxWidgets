@@ -74,9 +74,14 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowFrameColor];
         break;
     case wxSYS_COLOUR_WINDOW:
-        return wxColour(wxMacCreateCGColorFromHITheme( 15 /* kThemeBrushDocumentWindowBackground */ )) ;
+        sysColor = [NSColor windowBackgroundColor];
+        break;
     case wxSYS_COLOUR_BTNFACE:
-        return wxColour(wxMacCreateCGColorFromHITheme( 3 /* kThemeBrushDialogBackgroundActive */));
+        if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+            sysColor = [NSColor windowBackgroundColor];
+        else
+            sysColor = [NSColor controlColor];
+        break;
     case wxSYS_COLOUR_LISTBOX:
         sysColor = [NSColor controlBackgroundColor];
         break;
