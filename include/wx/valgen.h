@@ -20,21 +20,26 @@
 #include "wx/meta/convertible.h"
 #include "wx/meta/if.h"
 
-namespace wxPrivate
-{
 
+// wxWindow-derived classes (W) need not to specialize wxDataTransfer<> if
+// a base already has one and the derived just want to forward to its base
+// implementation. if so, all you have to do is specialize this class.
 template<class W>
 struct wxFwdDataTransfer
 {
     typedef void Base;
 };
 
+// wxDataTransfer implements the actual data transfer.
 template<class W>
 struct wxDataTransfer
 {
     static bool To(wxWindow*, void*);
     static bool From(wxWindow*, void*);
 };
+
+namespace wxPrivate
+{
 
 template<class W, typename T>
 struct wxDataTransferHelper

@@ -36,8 +36,6 @@
     #include "../sample.xpm"
 #endif
 
-namespace wxPrivate
-{
 
 #if 0
 
@@ -126,7 +124,6 @@ struct wxDataTransfer<wxListBox>
     }    
 };
 
-} // namespace wxPrivate
 
 // ----------------------------------------------------------------------------
 // Global data
