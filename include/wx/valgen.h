@@ -32,11 +32,6 @@ struct wxFwdDataTransfer
 template<class W>
 struct wxDataTransfer
 {
-    static bool CheckType(wxWindow* win)
-    {
-        return (wxTypeId(*win) == wxTypeId(W));
-    }
-
     static bool To(wxWindow*, void*);
     static bool From(wxWindow*, void*);
 };
@@ -126,8 +121,7 @@ public:
     {
         m_validatorWindow = win; 
 
-        wxASSERT_MSG(
-            wxPrivate::wxDataTransfer<W>::CheckType(m_validatorWindow), "Invalid window type!");
+        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
     }
 
     virtual bool TransferToWindow() wxOVERRIDE

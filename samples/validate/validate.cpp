@@ -52,11 +52,6 @@ struct wxFwdDataTransfer<wxCheckBox>
 template<>
 struct wxDataTransfer<wxCheckBox>
 {
-    static bool CheckType(wxWindow* win)
-    {
-        return dynamic_cast<wxCheckBox*>(win) != NULL;
-    }
-
     static bool To(wxWindow* win, bool* b)
     {
         wxCheckBox* ctrl = static_cast<wxCheckBox*>(win);
@@ -75,11 +70,6 @@ struct wxDataTransfer<wxCheckBox>
 template<>
 struct wxDataTransfer<wxRadioBox>
 {
-    static bool CheckType(wxWindow* win)
-    {
-        return dynamic_cast<wxRadioBox*>(win) != NULL;
-    }
-
     static bool To(wxWindow* win, int* i)
     {
         wxRadioBox* ctrl = static_cast<wxRadioBox*>(win);
@@ -98,11 +88,6 @@ struct wxDataTransfer<wxRadioBox>
 template<>
 struct wxDataTransfer<wxListBox>
 {
-    static bool CheckType(wxWindow* win)
-    {
-        return dynamic_cast<wxListBox*>(win) != NULL;        
-    }
-
     static bool To(wxWindow* win, wxArrayInt* arr)
     {
         wxListBox* ctrl = static_cast<wxListBox*>(win);
