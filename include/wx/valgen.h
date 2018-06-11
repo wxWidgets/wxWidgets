@@ -2,6 +2,7 @@
 // Name:        wx/valgen.h
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
+// Modified by: Ali Kettab (2018-04-07)
 // Created:     Jan 22 1999
 // Copyright:   (c) 1999 Julian Smart (assigned from Kevin)
 // Licence:     wxWindows licence
@@ -14,80 +15,178 @@
 
 #if wxUSE_VALIDATORS
 
-class WXDLLIMPEXP_FWD_BASE wxDateTime;
-class WXDLLIMPEXP_FWD_BASE wxFileName;
+#include "wx/debug.h"
+#include "wx/typeinfo.h"
+#include "wx/meta/convertible.h"
+#include "wx/meta/if.h"
+
+namespace wxPrivate
+{
+
+template<class W>
+struct wxFwdDataTransfer
+{
+    typedef void Base;
+};
+
+template<class W>
+struct wxDataTransfer
+{
+    static bool CheckType(wxWindow* win)
+    {
+        return (wxTypeId(*win) == wxTypeId(W));
+    }
+
+    static bool To(wxWindow*, void*);
+    static bool From(wxWindow*, void*);
+};
+
+template<class W, typename T>
+struct wxDataTransferHelper
+{
+    static bool To(wxWindow* win, void* data)
+    {
+        typedef typename wxFwdDataTransfer<W>::Base Base;
+        typedef wxIsPubliclyDerived<Base, wxWindow> Fwd2Base;
+        typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
+
+        return wxDataTransfer<Window>::To(win, static_cast<T*>(data));
+    }
+
+    static bool From(wxWindow* win, void* data)
+    {
+        typedef typename wxFwdDataTransfer<W>::Base Base;
+        typedef wxIsPubliclyDerived<Base, wxWindow> Fwd2Base;
+        typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
+
+        return wxDataTransfer<Window>::From(win, static_cast<T*>(data));
+    }
+};
+
+} // namespace wxPrivate
 
 // ----------------------------------------------------------------------------
-// wxGenericValidator performs data transfer between many standard controls and
-// variables of the type corresponding to their values.
+// wxGenericValidatorType performs data transfer between many standard controls
+// and variables of the type corresponding to their values.
 //
 // It doesn't do any validation so its name is a slight misnomer.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxGenericValidatorBase: public wxValidator
 {
 public:
-    // Different constructors: each of them creates a validator which can only
-    // be used with some controls, the comments before each constructor
-    // indicate which ones:
-        // wxCheckBox, wxRadioButton, wx(Bitmap)ToggleButton
-    wxGenericValidator(bool* val);
-        // wxChoice, wxGauge, wxRadioBox, wxScrollBar, wxSlider, wxSpinButton
-    wxGenericValidator(int* val);
-        // wxComboBox, wxTextCtrl, wxButton, wxStaticText (read-only)
-    wxGenericValidator(wxString* val);
-        // wxListBox, wxCheckListBox
-    wxGenericValidator(wxArrayInt* val);
-#if wxUSE_DATETIME
-        // wxDatePickerCtrl
-    wxGenericValidator(wxDateTime* val);
-#endif // wxUSE_DATETIME
-        // wxTextCtrl
-    wxGenericValidator(wxFileName* val);
-        // wxTextCtrl
-    wxGenericValidator(float* val);
-        // wxTextCtrl
-    wxGenericValidator(double* val);
 
-    wxGenericValidator(const wxGenericValidator& copyFrom);
+    wxGenericValidatorBase(const wxGenericValidatorBase& val);
 
-    virtual ~wxGenericValidator(){}
+    virtual ~wxGenericValidatorBase(){}
 
     // Make a clone of this validator (or return NULL) - currently necessary
     // if you're passing a reference to a validator.
     // Another possibility is to always pass a pointer to a new validator
     // (so the calling code can use a copy constructor of the relevant class).
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidator(*this); }
-    bool Copy(const wxGenericValidator& val);
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorBase(*this); }
+    bool Copy(const wxGenericValidatorBase& val);
 
     // Called when the value in the window must be validated: this is not used
     // by this class
     virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return true; }
 
-    // Called to transfer data to the window
-    virtual bool TransferToWindow() wxOVERRIDE;
-
-    // Called to transfer data to the window
-    virtual bool TransferFromWindow() wxOVERRIDE;
-
 protected:
-    void Initialize();
+    explicit wxGenericValidatorBase(void* data) : m_data(data){}
 
-    bool*       m_pBool;
-    int*        m_pInt;
-    wxString*   m_pString;
-    wxArrayInt* m_pArrayInt;
-#if wxUSE_DATETIME
-    wxDateTime* m_pDateTime;
-#endif // wxUSE_DATETIME
-    wxFileName* m_pFileName;
-    float*      m_pFloat;
-    double*     m_pDouble;
+    void* m_data;
 
 private:
-    wxDECLARE_CLASS(wxGenericValidator);
-    wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidator);
+    wxDECLARE_CLASS(wxGenericValidatorBase);
+    wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidatorBase);
 };
+
+//-----------------------------------------------------------------------------
+
+template<class W, typename T>
+class wxGenericValidatorType: public wxGenericValidatorBase
+{
+public:
+
+    explicit wxGenericValidatorType(T* data) 
+        : wxGenericValidatorBase(data)
+    {
+    }
+
+    wxGenericValidatorType(const wxGenericValidatorType& val)
+        : wxGenericValidatorBase(val)
+    {
+    }
+
+    virtual ~wxGenericValidatorType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorType(*this); }
+
+    virtual void SetWindow(wxWindow *win) 
+    {
+        m_validatorWindow = win; 
+
+        wxASSERT_MSG(
+            wxPrivate::wxDataTransfer<W>::CheckType(m_validatorWindow), "Invalid window type!");
+    }
+
+    virtual bool TransferToWindow() wxOVERRIDE
+    {
+        return wxPrivate::wxDataTransferHelper<W, T>::To(m_validatorWindow, m_data);
+    }
+
+    virtual bool TransferFromWindow() wxOVERRIDE
+    {
+        return wxPrivate::wxDataTransferHelper<W, T>::From(m_validatorWindow, m_data);
+    }
+};
+
+//-----------------------------------------------------------------------------
+
+#if 0
+
+template<typename T>
+class wxGenericValidatorType<wxWindow, T>: public wxGenericValidatorBase
+{
+public:
+
+    explicit wxGenericValidatorType(T* data)
+        : wxGenericValidatorBase(data)
+    {
+    }
+
+    wxGenericValidatorType(const wxGenericValidatorType& val)
+        : wxGenericValidatorBase(val)
+    {
+    }
+
+    virtual ~wxGenericValidatorType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorType(*this); }
+
+    virtual bool TransferToWindow() wxOVERRIDE
+    {
+        return wxPrivate::wxDataTransferHelper<wxWindow, T>::To(m_validatorWindow, m_data);
+    }
+
+    virtual bool TransferFromWindow() wxOVERRIDE
+    {
+        return wxPrivate::wxDataTransferHelper<wxWindow, T>::From(m_validatorWindow, m_data);
+    }
+};
+
+#endif 
+
+//-----------------------------------------------------------------------------
+// Helper function for creating generic validators which allows to avoid
+// explicitly specifying the type as it deduces it from its parameter.
+//-----------------------------------------------------------------------------
+
+template<class W = wxWindow, typename T>
+inline wxGenericValidatorType<W, T> wxGenericValidator(T* value)
+{
+    return wxGenericValidatorType<W, T>(value);
+}
 
 #endif // wxUSE_VALIDATORS
 

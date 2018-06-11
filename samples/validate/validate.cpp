@@ -36,6 +36,113 @@
     #include "../sample.xpm"
 #endif
 
+namespace wxPrivate
+{
+
+#if 0
+
+template<>
+struct wxFwdDataTransfer<wxCheckBox>
+{
+    typedef wxRadioBox Base;
+};
+
+#endif
+
+template<>
+struct wxDataTransfer<wxCheckBox>
+{
+    static bool CheckType(wxWindow* win)
+    {
+        return dynamic_cast<wxCheckBox*>(win) != NULL;
+    }
+
+    static bool To(wxWindow* win, bool* b)
+    {
+        wxCheckBox* ctrl = static_cast<wxCheckBox*>(win);
+        ctrl->SetValue(*b);
+        return true;
+    }
+
+    static bool From(wxWindow* win, bool* b)
+    {
+        wxCheckBox* ctrl = static_cast<wxCheckBox*>(win);
+        *b = ctrl->GetValue();
+        return true;
+    }
+};
+
+template<>
+struct wxDataTransfer<wxRadioBox>
+{
+    static bool CheckType(wxWindow* win)
+    {
+        return dynamic_cast<wxRadioBox*>(win) != NULL;
+    }
+
+    static bool To(wxWindow* win, int* i)
+    {
+        wxRadioBox* ctrl = static_cast<wxRadioBox*>(win);
+        ctrl->SetSelection(*i);
+        return true;
+    }
+
+    static bool From(wxWindow* win, int* i)
+    { 
+        wxRadioBox* ctrl = static_cast<wxRadioBox*>(win);
+        *i = ctrl->GetSelection();
+        return true;
+    }
+};
+
+template<>
+struct wxDataTransfer<wxListBox>
+{
+    static bool CheckType(wxWindow* win)
+    {
+        return dynamic_cast<wxListBox*>(win) != NULL;        
+    }
+
+    static bool To(wxWindow* win, wxArrayInt* arr)
+    {
+        wxListBox* ctrl = static_cast<wxListBox*>(win);
+        
+        // clear our array
+        arr->Clear();
+
+        // add each selected item to our array
+        size_t i,
+               count = ctrl->GetCount();
+        for ( i = 0; i < count; i++ )
+        {
+            if (ctrl->IsSelected(i))
+                arr->Add(i);
+        }
+
+        return true;
+    }
+
+    static bool From(wxWindow* win, wxArrayInt* arr)
+    {
+        wxListBox* ctrl = static_cast<wxListBox*>(win);
+
+        // clear all selections
+        size_t i,
+               count = ctrl->GetCount();
+        for ( i = 0 ; i < count; i++ )
+            ctrl->Deselect(i);
+
+        // select each item in our array
+        count = arr->GetCount();
+        for ( i = 0 ; i < count; i++ )
+            ctrl->SetSelection(arr->Item(i));
+
+        return true;
+    }    
+};
+
+} // namespace wxPrivate
+
 // ----------------------------------------------------------------------------
 // Global data
 // ----------------------------------------------------------------------------
@@ -273,7 +380,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
                         wxDefaultPosition, wxDefaultSize,
                         3, g_listbox_choices, wxLB_MULTIPLE,
-                        wxGenericValidator(&g_data.m_listbox_choices)),
+                        wxGenericValidator<wxListBox>(&g_data.m_listbox_choices)),
                        1, wxGROW);
 
     m_combobox = new wxComboBox(this, VALIDATE_COMBO, wxEmptyString,
@@ -289,7 +396,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // can be gotten directly from g_data.
     flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"),
                         wxDefaultPosition, wxDefaultSize, 0,
-                        wxGenericValidator(&g_data.m_checkbox_state)),
+                        wxGenericValidator<wxCheckBox>(&g_data.m_checkbox_state)),
                        1, wxALIGN_CENTER|wxALL, 15);
 
     flexgridsizer->AddGrowableCol(0);
@@ -378,7 +485,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, wxT("Pick a color"),
                                     wxDefaultPosition, wxDefaultSize,
                                     3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
-                                    wxGenericValidator(&g_data.m_radiobox_choice)),
+                                    wxGenericValidator<wxRadioBox>(&g_data.m_radiobox_choice)),
                    0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
 
     mainsizer->Add( numSizer, wxSizerFlags().Expand().DoubleBorder() );
