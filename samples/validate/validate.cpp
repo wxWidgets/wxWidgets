@@ -36,8 +36,14 @@
     #include "../sample.xpm"
 #endif
 
+// Notice that the right place to put these (wxDataTransfer<wxWin>) specializations
+// is in the same file where (wxWin) is defined. But for now, i just put them here
+// for testing purposes.
 
 #if 0
+
+// Compile time error as expected:
+// wxCheckBox can't forward to a wxRadioBox (unrelated classes)
 
 template<>
 struct wxFwdDataTransfer<wxCheckBox>
@@ -89,6 +95,24 @@ struct wxDataTransfer<wxListBox>
     static bool To(wxWindow* win, wxArrayInt* arr)
     {
         wxListBox* ctrl = static_cast<wxListBox*>(win);
+
+        // clear all selections
+        size_t i,
+               count = ctrl->GetCount();
+        for ( i = 0 ; i < count; i++ )
+            ctrl->Deselect(i);
+
+        // select each item in our array
+        count = arr->GetCount();
+        for ( i = 0 ; i < count; i++ )
+            ctrl->SetSelection(arr->Item(i));
+
+        return true;
+    }
+
+    static bool From(wxWindow* win, wxArrayInt* arr)
+    {
+        wxListBox* ctrl = static_cast<wxListBox*>(win);
         
         // clear our array
         arr->Clear();
@@ -101,24 +125,6 @@ struct wxDataTransfer<wxListBox>
             if (ctrl->IsSelected(i))
                 arr->Add(i);
         }
-
-        return true;
-    }
-
-    static bool From(wxWindow* win, wxArrayInt* arr)
-    {
-        wxListBox* ctrl = static_cast<wxListBox*>(win);
-
-        // clear all selections
-        size_t i,
-               count = ctrl->GetCount();
-        for ( i = 0 ; i < count; i++ )
-            ctrl->Deselect(i);
-
-        // select each item in our array
-        count = arr->GetCount();
-        for ( i = 0 ; i < count; i++ )
-            ctrl->SetSelection(arr->Item(i));
 
         return true;
     }    

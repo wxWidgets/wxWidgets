@@ -44,21 +44,20 @@ namespace wxPrivate
 template<class W, typename T>
 struct wxDataTransferHelper
 {
+    typedef typename wxFwdDataTransfer<W>::Base Base;
+    typedef wxIsPubliclyDerived<Base, wxWindow> Fwd2Base;
+    typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
+
     static bool To(wxWindow* win, void* data)
     {
-        typedef typename wxFwdDataTransfer<W>::Base Base;
-        typedef wxIsPubliclyDerived<Base, wxWindow> Fwd2Base;
-        typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
+        wxCOMPILE_TIME_ASSERT( 
+            (wxIsPubliclyDerived<W, Window>::value), InvalidBaseForParameterTemplateW );
 
         return wxDataTransfer<Window>::To(win, static_cast<T*>(data));
     }
 
     static bool From(wxWindow* win, void* data)
     {
-        typedef typename wxFwdDataTransfer<W>::Base Base;
-        typedef wxIsPubliclyDerived<Base, wxWindow> Fwd2Base;
-        typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
-
         return wxDataTransfer<Window>::From(win, static_cast<T*>(data));
     }
 };
