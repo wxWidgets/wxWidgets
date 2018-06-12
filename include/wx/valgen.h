@@ -151,7 +151,7 @@ public:
 
     virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorType(*this); }
 
-    virtual void SetWindow(wxWindow *win) 
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
         m_validatorWindow = win; 
 
