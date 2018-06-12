@@ -24,6 +24,15 @@
 // wxWindow-derived classes (W) need not to specialize wxDataTransfer<> if
 // a base already has one and the derived just want to forward to its base
 // implementation. if so, all you have to do is specialize this class.
+// e.g.:
+//
+// template<>
+// struct wxFwdDataTransfer<MyWindow>
+// {
+//     typedef MyWindowBase Base;
+// };
+//
+
 template<class W>
 struct wxFwdDataTransfer
 {
@@ -31,6 +40,27 @@ struct wxFwdDataTransfer
 };
 
 // wxDataTransfer implements the actual data transfer.
+//
+// How it works:
+//--------------
+//  say you have a window 'MyWindow' which can transfer wxStrings and CustomData.
+//  then wxDataTransfer<> specialization for MyWindow would look like this:
+//
+// template<>
+// struct wxDataTransfer<MyWindow>
+// {
+//     static bool To(wxWindow* win, wxStrings* data)
+//     { /*implementation*/ }
+//     static bool From(wxWindow* win, wxStrings* data)
+//     { /*implementation*/ }
+//
+//     static bool To(wxWindow* win, CustomData* data)
+//     { /*implementation*/ }
+//     static bool From(wxWindow* win, CustomData* data)
+//     { /*implementation*/ }
+// };
+//
+
 template<class W>
 struct wxDataTransfer
 {
@@ -142,6 +172,11 @@ public:
 //-----------------------------------------------------------------------------
 
 #if 0
+
+// TODO: (incomplete!)
+// ------
+// Existing code should still compile and work the same.
+// i.e.: const wxValidator& val = wxGenericValidator(&int_var);
 
 template<typename T>
 class wxGenericValidatorType<wxWindow, T>: public wxGenericValidatorBase
