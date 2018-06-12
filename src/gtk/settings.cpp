@@ -23,7 +23,9 @@
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/win_gtk.h"
-#include "wx/gtk/private/stylecontext.h"
+#ifdef __WXGTK3__
+    #include "wx/gtk/private/stylecontext.h"
+#endif // __WXGTK3__
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
@@ -198,7 +200,6 @@ static void notify_gtk_font_name(GObject*, GParamSpec*, void*)
 //-----------------------------------------------------------------------------
 
 wxGtkStyleContext::wxGtkStyleContext()
-    : m_path(gtk_widget_path_new())
 {
     m_context = NULL;
 }
@@ -241,7 +242,6 @@ wxGtkStyleContext& wxGtkStyleContext::Add(const char* objectName)
 
 wxGtkStyleContext::~wxGtkStyleContext()
 {
-    gtk_widget_path_unref(m_path);
     if (m_context == NULL)
         return;
     if (gtk_check_version(3,16,0) == NULL || gtk_check_version(3,4,0))
@@ -320,7 +320,7 @@ wxGtkStyleContext& wxGtkStyleContext::AddTreeviewHeaderButton(int pos)
     AddTreeview().Add("header");
     GtkStyleContext* sc = gtk_style_context_new();
 
-    GtkWidgetPath* siblings = gtk_widget_path_new();
+    wxGtkWidgetPath siblings;
     gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
     gtk_widget_path_iter_set_object_name(siblings, -1, "button");
     gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
@@ -329,7 +329,6 @@ wxGtkStyleContext& wxGtkStyleContext::AddTreeviewHeaderButton(int pos)
     gtk_widget_path_iter_set_object_name(siblings, -1, "button");
 
     gtk_widget_path_append_with_siblings(m_path, siblings, pos);
-    gtk_widget_path_unref(siblings);
 
     gtk_style_context_set_path(sc, m_path);
     gtk_style_context_set_parent(sc, m_context);
