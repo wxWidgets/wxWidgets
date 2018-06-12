@@ -1407,10 +1407,13 @@ void wxPropertyGrid::RegainColours()
     #else
         int colDec = wxPGGetColAvg(col) - 200;
     #endif
-        if ( colDec > 0 )
+        if ( colDec > 0 ) {
             m_colCapBack = wxPGAdjustColour(col,-colDec);
-        else
+        } else if (colDec < -100) {
+            m_colCapBack = col.ChangeLightness(90);
+        } else {
             m_colCapBack = col;
+        }
         m_categoryDefaultCell.GetData()->SetBgCol(m_colCapBack);
     }
 

@@ -151,11 +151,7 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
-#else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
 
     // the baseColour is too pale to use as our base colour,
     // so darken it a bit --
@@ -178,7 +174,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_inactiveCaptionColour = darker1Colour;
     m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
-    m_inactiveCaptionTextColour = *wxBLACK;
+    m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
 
     m_sashBrush = wxBrush(baseColour);
     m_backgroundBrush = wxBrush(baseColour);
@@ -378,17 +374,22 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     wxUnusedVar(window);
     wxUnusedVar(orientation);
 
-    HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
-    CGContextRef cgContext ;
-    wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
-    cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext() ;
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) ) {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(m_sashBrush);
+        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+    } else {
+        HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
+        CGContextRef cgContext ;
+        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+        cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext() ;
 
-    HIThemeSplitterDrawInfo drawInfo ;
-    drawInfo.version = 0 ;
-    drawInfo.state = kThemeStateActive ;
-    drawInfo.adornment = kHIThemeSplitterAdornmentNone ;
-    HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;
-
+        HIThemeSplitterDrawInfo drawInfo ;
+        drawInfo.version = 0 ;
+        drawInfo.state = kThemeStateActive ;
+        drawInfo.adornment = kHIThemeSplitterAdornmentNone ;
+        HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;
+    }
 #elif defined(__WXGTK__)
     // clear out the rectangle first
     dc.SetPen(*wxTRANSPARENT_PEN);
