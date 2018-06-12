@@ -172,6 +172,10 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14) ) {
+        return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
+    }
+    
     const wxCoord x = rect.x;
     const wxCoord y = rect.y;
     const wxCoord w = rect.width;
@@ -373,7 +377,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
             CGContextFillRect(cgContext,splitterRect);
         }
 
-        if ( win->HasFlag(wxSP_3DSASH) )
+        if ( win->HasFlag(wxSP_3DSASH) && !wxPlatformInfo::Get().CheckOSVersion(10, 14) )
         {
             HIThemeSplitterDrawInfo drawInfo;
             drawInfo.version = 0;
