@@ -74,7 +74,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowFrameColor];
         break;
     case wxSYS_COLOUR_WINDOW:
-        sysColor = [NSColor windowBackgroundColor];
+        sysColor = [NSColor controlBackgroundColor];
         break;
     case wxSYS_COLOUR_BTNFACE:
         if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
