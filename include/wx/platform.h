@@ -487,6 +487,9 @@
 #        ifndef MAC_OS_X_VERSION_10_13
 #           define MAC_OS_X_VERSION_10_13 101300
 #        endif
+#        ifndef MAC_OS_X_VERSION_10_14
+#           define MAC_OS_X_VERSION_10_14 101400
+#        endif
 #        if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #            ifndef NSAppKitVersionNumber10_10
 #                define NSAppKitVersionNumber10_10 1343
