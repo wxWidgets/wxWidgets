@@ -175,8 +175,7 @@ public:
 
 // TODO: (incomplete!)
 // ------
-// Existing code should still compile and work the same.
-// i.e.: const wxValidator& val = wxGenericValidator(&int_var);
+// see *NOTE* below...
 
 template<typename T>
 class wxGenericValidatorType<wxWindow, T>: public wxGenericValidatorBase
@@ -211,14 +210,36 @@ public:
 #endif 
 
 //-----------------------------------------------------------------------------
-// Helper function for creating generic validators which allows to avoid
-// explicitly specifying the type as it deduces it from its parameter.
+// convenience functions.
 //-----------------------------------------------------------------------------
 
-template<class W = wxWindow, typename T>
+template<class W, typename T>
 inline wxGenericValidatorType<W, T> wxGenericValidator(T* value)
 {
     return wxGenericValidatorType<W, T>(value);
+}
+
+#if 0
+
+// *NOTE*
+// ------
+// I am not sure if we should supply this overload and implement 
+// wxGenericValidatorType<wxWindow, T> in terms of the old wxGenericValidator
+// (class) implementation so that old code still compile and work unchanged ?
+
+template<typename T>
+inline wxGenericValidatorType<wxWindow, T> wxGenericValidator(T* value)
+{
+    return wxGenericValidatorType<wxWindow, T>(value);
+}
+
+#endif
+
+//
+template<class W, typename T>
+inline void wxSetGenericValidator(W* win, T* value)
+{
+    win->SetValidator( wxGenericValidatorType<W, T>(value) );
 }
 
 #endif // wxUSE_VALIDATORS
