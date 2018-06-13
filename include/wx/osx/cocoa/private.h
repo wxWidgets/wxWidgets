@@ -505,6 +505,18 @@ extern NSLayoutManager* gNSLayoutManager;
 wxString wxStringWithNSString(NSString *nsstring);
 NSString* wxNSStringWithWxString(const wxString &wxstring);
 
+// helper class for setting the current appearance to the
+// effective appearance and restore when exiting scope
+
+class WXDLLIMPEXP_CORE wxOSXEffectiveAppearanceSetter
+{
+public:
+    wxOSXEffectiveAppearanceSetter();
+    ~wxOSXEffectiveAppearanceSetter();
+private:
+    void * formerAppearance;
+};
+
 #endif // wxUSE_GUI
 
 #endif

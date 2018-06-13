@@ -584,5 +584,29 @@ NSString* wxNSStringWithWxString(const wxString &wxstring)
 #endif // wxUSE_UNICODE
 }
 
+// ----------------------------------------------------------------------------
+// helper class for getting the correct system colors according to the
+// appearance in effect
+// ----------------------------------------------------------------------------
+
+wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    {
+        formerAppearance = NSAppearance.currentAppearance;
+        NSAppearance.currentAppearance = NSApp.effectiveAppearance;
+    }
+#endif
+}
+
+wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        NSAppearance.currentAppearance = (NSAppearance*) formerAppearance;
+#endif
+}
+
 #endif
 

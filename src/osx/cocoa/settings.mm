@@ -52,6 +52,8 @@ static int wxOSXGetUserDefault(NSString* key, int defaultValue)
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
+    wxOSXEffectiveAppearanceSetter helper;
+    
     NSColor* sysColor = nil;
     switch( index )
     {
