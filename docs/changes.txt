@@ -107,6 +107,10 @@ wxOSX:
 
 - Fix dispatching pending events (and CallAfter()) in console applications.
 
+wxQt:
+
+- Fix menu bar background colour (Naser Buhamad).
+
 
 3.1.1: (released 2018-02-19)
 ----------------------------
