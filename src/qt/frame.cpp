@@ -178,6 +178,15 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
         sb->GetSize(NULL, &sbh);
         *height -= sbh;
     }
+
+
+    // also for menubar , we must subtract it's height here
+    QMenuBar *qmb = GetQMainWindow()->menuBar();
+    if (height && qmb)
+    {
+        QRect geometry = qmb->geometry();
+        *height -= geometry.height();
+    }
 }
 
 QMainWindow *wxFrame::GetQMainWindow() const
