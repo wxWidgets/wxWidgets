@@ -98,5 +98,7 @@ private:
     void DoAfterItemCountChange();
 };
 
+WX_FWD_DATA_TRANSFER(wxChoice, wxChoiceBase);
+
 #endif
     // _WX_CHOICE_H_

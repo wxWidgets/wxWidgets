@@ -173,4 +173,8 @@ protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxChoice);
 };
 
+WX_FWD_DATA_TRANSFER(wxChoice, wxChoiceBase);
+
+#endif // wxUSE_VALIDATORS
+
 #endif // _WX_CHOICE_H_

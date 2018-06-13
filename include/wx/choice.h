@@ -20,6 +20,7 @@
 #if wxUSE_CHOICE
 
 #include "wx/ctrlsub.h"     // the base class
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // global data
@@ -67,6 +68,43 @@ protected:
 private:
     wxDECLARE_NO_COPY_CLASS(wxChoiceBase);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxChoiceBase>
+{
+    static bool To(wxChoiceBase* choices, int* data)
+    {
+        choices->SetSelection(*data);
+        return true;
+    }
+
+    static bool To(wxChoiceBase* choices, wxString* data)
+    {
+        if ( choices->FindString(*data) != wxNOT_FOUND )
+        {
+            choices->SetStringSelection(*data);
+            return true;
+        }
+        
+        return false;
+    }
+
+    static bool From(wxChoiceBase* choices, int* data)
+    {
+        *data = choices->GetSelection();
+        return true;
+    }
+
+    static bool From(wxChoiceBase* choices, wxString* data)
+    {
+        *data = choices->GetStringSelection();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // include the platform-dependent class definition
