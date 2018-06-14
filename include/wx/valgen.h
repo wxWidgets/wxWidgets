@@ -34,12 +34,12 @@ struct wxDataTransferHelper
 
     static bool To(wxWindow* win, void* data)
     {
-        return wxDataTransfer<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
+        return wxDataTransfer<Window>::To(static_cast<Window*>(win), static_cast<T*>(data));
     }
 
     static bool From(wxWindow* win, void* data)
     {
-        return wxDataTransfer<Window>::From(static_cast<W*>(win), static_cast<T*>(data));
+        return wxDataTransfer<Window>::From(static_cast<Window*>(win), static_cast<T*>(data));
     }
 };
 
