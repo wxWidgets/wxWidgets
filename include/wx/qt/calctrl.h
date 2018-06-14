@@ -91,4 +91,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxCalendarCtrl);
 };
 
+WX_FWD_DATA_TRANSFER(wxCalendarCtrl, wxCalendarCtrlBase);
+
 #endif // _WX_QT_CALCTRL_H_

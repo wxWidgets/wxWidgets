@@ -72,5 +72,7 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+WX_FWD_DATA_TRANSFER(wxCheckListBox, wxCheckListBoxBase);
+
 #endif
 // _WX_CHECKLST_H_

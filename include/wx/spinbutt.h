@@ -22,6 +22,7 @@
 #include "wx/control.h"
 #include "wx/event.h"
 #include "wx/range.h"
+#include "wx/datatransf.h"
 
 #define wxSPIN_BUTTON_NAME wxT("wxSpinButton")
 
@@ -69,6 +70,26 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxSpinButtonBase);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxSpinButtonBase>
+{
+    static bool To(wxSpinButtonBase* btn, int* data)
+    {
+        btn->SetValue(*data);
+        return true;
+    }
+
+    static bool From(wxSpinButtonBase* btn, int* data)
+    {
+        *data = btn->GetValue();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // include the declaration of the real class

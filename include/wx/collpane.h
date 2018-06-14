@@ -17,6 +17,7 @@
 #if wxUSE_COLLPANE
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 // class name
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCollapsiblePaneNameStr[];
@@ -45,6 +46,25 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE = 0;
 };
 
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxCollapsiblePaneBase>
+{
+    static bool To(wxCollapsiblePaneBase* collpane, bool* data)
+    {
+        collpane->Collapse(*data);
+        return true;
+    }
+
+    static bool From(wxCollapsiblePaneBase* collpane, bool* data)
+    {
+        *data = collpane->IsCollapsed();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // event types and macros

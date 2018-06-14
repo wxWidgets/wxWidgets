@@ -65,4 +65,6 @@ protected:
     wxDECLARE_EVENT_TABLE();
 };
 
+WX_FWD_DATA_TRANSFER(wxScrollBar, wxScrollBarBase);
+
 #endif // _WX_SCROLBAR_H_

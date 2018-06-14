@@ -43,6 +43,7 @@ private:
 
 };
 
+WX_FWD_DATA_TRANSFER(wxBitmapToggleButton, wxToggleButtonBase);
 
 
 class WXDLLIMPEXP_CORE wxToggleButton : public wxToggleButtonBase
@@ -74,5 +75,7 @@ public:
 private:
 
 };
+
+WX_FWD_DATA_TRANSFER(wxToggleButton, wxToggleButtonBase);
 
 #endif // _WX_QT_TGLBTN_H_

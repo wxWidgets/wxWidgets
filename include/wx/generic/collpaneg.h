@@ -93,4 +93,6 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+WX_FWD_DATA_TRANSFER(wxGenericCollapsiblePane, wxCollapsiblePaneBase);
+
 #endif // _WX_COLLAPSABLE_PANE_H_GENERIC_

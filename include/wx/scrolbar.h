@@ -16,6 +16,7 @@
 #if wxUSE_SCROLLBAR
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxScrollBarNameStr[];
 
@@ -61,6 +62,26 @@ public:
 private:
     wxDECLARE_NO_COPY_CLASS(wxScrollBarBase);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxScrollBarBase>
+{
+    static bool To(wxScrollBarBase* ctrl, int* data)
+    {
+        ctrl->SetThumbPosition(*data);
+        return true;
+    }
+
+    static bool From(wxScrollBarBase* ctrl, int* data)
+    {
+        *data = ctrl->GetThumbPosition();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/scrolbar.h"

@@ -70,4 +70,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxButton);
 };
 
+WX_FWD_DATA_TRANSFER(wxButton, wxButtonBase);
+
 #endif // _WX_GTK_BUTTON_H_

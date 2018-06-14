@@ -48,9 +48,9 @@ struct wxFwdDataTransfer<T> \
 // template<>
 // struct wxDataTransfer<MyWindow>
 // {
-//     static bool To(wxWindow* win, wxStrings* data)
+//     static bool To(wxWindow* win, wxString* data)
 //     { /*implementation*/ }
-//     static bool From(wxWindow* win, wxStrings* data)
+//     static bool From(wxWindow* win, wxString* data)
 //     { /*implementation*/ }
 //
 //     static bool To(wxWindow* win, CustomData* data)

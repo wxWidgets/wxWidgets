@@ -314,4 +314,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGenericCalendarCtrl);
 };
 
+WX_FWD_DATA_TRANSFER(wxGenericCalendarCtrl, wxCalendarCtrlBase);
+
 #endif // _WX_GENERIC_CALCTRLG_H

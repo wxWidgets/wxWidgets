@@ -29,14 +29,11 @@ template<class W, typename T>
 struct wxDataTransferHelper
 {
     typedef typename wxFwdDataTransfer<W>::Base Base;
-    typedef wxIsPubliclyDerived<Base, wxWindow> Fwd2Base;
+    typedef wxIsPubliclyDerived<W, Base> Fwd2Base;
     typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
 
     static bool To(wxWindow* win, void* data)
     {
-        wxCOMPILE_TIME_ASSERT( 
-            (wxIsPubliclyDerived<W, Window>::value), InvalidBaseForParameterTemplateW );
-
         return wxDataTransfer<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
     }
 

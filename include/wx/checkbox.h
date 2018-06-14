@@ -16,6 +16,7 @@
 #if wxUSE_CHECKBOX
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 
 /*
@@ -161,6 +162,26 @@ protected:
 private:
     wxDECLARE_NO_COPY_CLASS(wxCheckBoxBase);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxCheckBoxBase>
+{
+    static bool To(wxCheckBoxBase* chkbox, bool* data)
+    {
+        chkbox->SetValue(*data);
+        return true;
+    }
+
+    static bool From(wxCheckBoxBase* chkbox, bool* data)
+    {
+        *data = chkbox->GetValue();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // Most ports support 3 state checkboxes so define this by default.
 #define wxHAS_3STATE_CHECKBOX

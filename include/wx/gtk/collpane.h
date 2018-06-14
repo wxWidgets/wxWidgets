@@ -76,4 +76,6 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+WX_FWD_DATA_TRANSFER(wxCollapsiblePane, wxCollapsiblePaneBase);
+
 #endif // _WX_COLLAPSABLE_PANEL_H_GTK_

@@ -135,4 +135,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxListBox);
 };
 
+WX_FWD_DATA_TRANSFER(wxListBox, wxListBoxBase);
+
 #endif // _WX_GTK_LISTBOX_H_

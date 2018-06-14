@@ -16,6 +16,7 @@
 #if wxUSE_BUTTON
 
 #include "wx/anybutton.h"
+#include "wx/datatransf.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
 
@@ -45,6 +46,26 @@ public:
 protected:
     wxDECLARE_NO_COPY_CLASS(wxButtonBase);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxButtonBase>
+{
+    static bool To(wxButtonBase* btn, wxString* data)
+    {
+        btn->SetLabel(*data);
+        return true;
+    }
+
+    static bool From(wxButtonBase* btn, wxString* data)
+    {
+        *data = btn->GetLabel();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/button.h"

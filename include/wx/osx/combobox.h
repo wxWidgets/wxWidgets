@@ -137,4 +137,52 @@ protected:
     wxComboBoxDataArray m_datas;
 };
 
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxComboBox>
+{
+    static bool To(wxComboBox* combo, int* data)
+    {
+        combo->SetSelection(*data);
+        return true;
+    }
+
+    static bool To(wxComboBox* combo, wxString* data)
+    {
+        if ( combo->FindString(*data) != wxNOT_FOUND )
+        {
+            combo->SetStringSelection(*data);
+        }
+        else if ( (combo->GetWindowStyle() & wxCB_READONLY) == 0 )
+        {
+            combo->SetValue(*data);
+        }
+        else
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    static bool From(wxComboBox* combo, int* data)
+    {
+        *data = combo->GetSelection();
+        return true;
+    }
+
+    static bool From(wxComboBox* combo, wxString* data)
+    {
+        if ( combo->GetWindowStyle() & wxCB_READONLY )
+            *data = combo->GetStringSelection();
+        else
+            *data = combo->GetValue();
+
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
+
 #endif // _WX_COMBOBOX_H_

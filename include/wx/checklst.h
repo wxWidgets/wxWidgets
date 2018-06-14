@@ -16,6 +16,7 @@
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/listbox.h"
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // wxCheckListBox: a listbox whose items may be checked
@@ -34,6 +35,43 @@ public:
 
     wxDECLARE_NO_COPY_CLASS(wxCheckListBoxBase);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxCheckListBoxBase>
+{
+    static bool To(wxCheckListBoxBase* chklst, wxArrayInt* arr)
+    {
+        // clear all selections
+        size_t i, count = chklst->GetCount();
+
+        for ( i = 0 ; i < count; ++i )
+            chklst->Check(i, false);
+
+        // select each item in our array
+        count = arr->GetCount();
+        for ( i = 0 ; i < count; ++i )
+            chklst->Check(arr->Item(i));
+
+        return true;
+    }
+
+    static bool From(wxCheckListBoxBase* chklst, wxArrayInt* arr)
+    {        
+        arr->Clear();
+
+        for ( size_t i = 0, count = chklst->GetCount(); i < count; ++i )
+        {
+            if ( chklst->IsChecked(i) )
+                arr->Add(i);
+        }
+
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/checklst.h"

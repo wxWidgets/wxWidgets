@@ -90,6 +90,26 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxSpinCtrl>
+{
+    static bool To(wxSpinCtrl* ctrl, int* data)
+    {
+        ctrl->SetValue(*data);
+        return true;
+    }
+
+    static bool From(wxSpinCtrl* btn, int* data)
+    {
+        *data = ctrl->GetValue();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
+
 #endif
     // wxUSE_SPINCTRL
 

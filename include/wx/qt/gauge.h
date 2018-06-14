@@ -48,4 +48,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxGauge);
 };
 
+WX_FWD_DATA_TRANSFER(wxGauge, wxGaugeBase);
+
 #endif // _WX_QT_GAUGE_H_

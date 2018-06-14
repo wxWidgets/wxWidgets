@@ -17,6 +17,7 @@
 #if wxUSE_FONTPICKERCTRL
 
 #include "wx/pickerbase.h"
+#include "wx/datatransf.h"
 
 
 class WXDLLIMPEXP_FWD_CORE wxFontPickerEvent;
@@ -191,6 +192,25 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxFontPickerCtrl);
 };
 
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxFontPickerCtrl>
+{
+    static bool To(wxFontPickerCtrl* ctrl, wxFont* data)
+    {
+        ctrl->SetSelectedFont(*data);
+        return true;
+    }
+
+    static bool From(wxFontPickerCtrl* ctrl, wxFont* data)
+    {
+        *data = ctrl->GetSelectedFont();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // wxFontPickerEvent: used by wxFontPickerCtrl only

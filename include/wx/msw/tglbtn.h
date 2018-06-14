@@ -65,6 +65,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton);
 };
 
+WX_FWD_DATA_TRANSFER(wxToggleButton, wxToggleButtonBase);
+
 //-----------------------------------------------------------------------------
 // wxBitmapToggleButton
 //-----------------------------------------------------------------------------
@@ -105,6 +107,8 @@ public:
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);
 };
+
+WX_FWD_DATA_TRANSFER(wxBitmapToggleButton, wxToggleButton);
 
 #endif // _WX_TOGGLEBUTTON_H_
 

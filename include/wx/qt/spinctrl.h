@@ -88,6 +88,26 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
 };
 
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxSpinCtrl>
+{
+    static bool To(wxSpinCtrl* ctrl, int* data)
+    {
+        ctrl->SetValue(*data);
+        return true;
+    }
+
+    static bool From(wxSpinCtrl* ctrl, int* data)
+    {
+        *data = ctrl->GetValue();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
+
 class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxSpinCtrlQt< double, QDoubleSpinBox >
 {
 public:
@@ -123,5 +143,25 @@ public:
 private:
     wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxSpinCtrlDouble>
+{
+    static bool To(wxSpinCtrlDouble* ctrl, double* data)
+    {
+        ctrl->SetValue(*data);
+        return true;
+    }
+
+    static bool From(wxSpinCtrlDouble* ctrl, double* data)
+    {
+        *data = ctrl->GetValue();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 #endif // _WX_QT_SPINCTRL_H_

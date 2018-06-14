@@ -198,6 +198,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };
 
+WX_FWD_DATA_TRANSFER(wxScrollBar, wxScrollBarBase);
+
 // ----------------------------------------------------------------------------
 // Standard scrollbar input handler which can be used as a base class
 // ----------------------------------------------------------------------------

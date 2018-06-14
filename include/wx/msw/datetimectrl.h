@@ -85,4 +85,6 @@ protected:
     wxDateTime m_date;
 };
 
+WX_FWD_DATA_TRANSFER(wxDateTimePickerCtrl, wxDateTimePickerCtrlBase);
+
 #endif // _WX_MSW_DATETIMECTRL_H_

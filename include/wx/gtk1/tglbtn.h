@@ -78,6 +78,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleBitmapButton);
 };
 
+WX_FWD_DATA_TRANSFER(wxToggleBitmapButton, wxToggleButtonBase);
+
 //-----------------------------------------------------------------------------
 // wxToggleButton
 //-----------------------------------------------------------------------------
@@ -131,6 +133,26 @@ public:
 private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxToggleButton>
+{
+    static bool To(wxToggleButton* btn, bool* data)
+    {
+        btn->SetValue(*data);
+        return true;
+    }
+
+    static bool From(wxToggleButton* btn, bool* data)
+    {
+        *data = btn->GetValue();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 #endif // _WX_GTK_TOGGLEBUTTON_H_
 

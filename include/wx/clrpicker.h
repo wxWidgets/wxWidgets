@@ -17,6 +17,7 @@
 #if wxUSE_COLOURPICKERCTRL
 
 #include "wx/pickerbase.h"
+#include "wx/datatransf.h"
 
 
 class WXDLLIMPEXP_FWD_CORE wxColourPickerEvent;
@@ -153,6 +154,25 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxColourPickerCtrl);
 };
 
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxColourPickerCtrl>
+{
+    static bool To(wxColourPickerCtrl* clrpckr, wxColour* data)
+    {
+        clrpckr->SetColour(*data);
+        return true;
+    }
+
+    static bool From(wxColourPickerCtrl* clrpckr, wxColour* data)
+    {
+        *data = clrpckr->GetColour();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // wxColourPickerEvent: used by wxColourPickerCtrl only

@@ -13,6 +13,7 @@
 
 #include "wx/window.h"                      // base class declaration
 #include "wx/containr.h"                    // wxControlContainer
+#include "wx/datatransf.h"
 
 class WXDLLIMPEXP_FWD_CORE wxSplitterEvent;
 
@@ -305,6 +306,26 @@ private:
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxSplitterWindow);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxSplitterWindow>
+{
+    static bool To(wxSplitterWindow* splitter, int* data)
+    {
+        splitter->SetSashPosition(*data);
+        return true;
+    }
+
+    static bool From(wxSplitterWindow* splitter, int* data)
+    {
+        *data = splitter->GetSashPosition();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // event class and macros

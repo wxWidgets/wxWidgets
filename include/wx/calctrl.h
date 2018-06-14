@@ -19,6 +19,7 @@
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // wxCalendarCtrl flags
@@ -336,6 +337,25 @@ protected:
     // does the week start on monday based on flags and OS settings?
     bool WeekStartsOnMonday() const;
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxCalendarCtrlBase>
+{
+    static bool To(wxCalendarCtrlBase* ctrl, wxDateTime* data)
+    {
+        return ctrl->SetDate(*data);
+    }
+
+    static bool From(wxCalendarCtrlBase* ctrl, wxDateTime* data)
+    {
+        *data = ctrl->GetDate();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // wxCalendarCtrl

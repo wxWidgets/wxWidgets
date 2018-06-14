@@ -53,6 +53,8 @@ struct wxFwdDataTransfer<wxCheckBox>
 
 #endif
 
+#if 0
+
 template<>
 struct wxDataTransfer<wxCheckBox>
 {
@@ -130,6 +132,7 @@ struct wxDataTransfer<wxListBox>
     }    
 };
 
+#endif
 
 // ----------------------------------------------------------------------------
 // Global data

@@ -107,5 +107,7 @@ protected:
     wxDECLARE_EVENT_TABLE();
 };
 
+WX_FWD_DATA_TRANSFER(wxRadioBox, wxRadioBoxBase);
+
 #endif
     // _WX_RADIOBOX_H_

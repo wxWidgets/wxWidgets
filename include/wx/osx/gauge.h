@@ -49,5 +49,7 @@ class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge);
 };
 
+WX_FWD_DATA_TRANSFER(wxGauge, wxGaugeBase);
+
 #endif
     // _WX_GAUGE_H_
