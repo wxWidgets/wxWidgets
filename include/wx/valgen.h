@@ -32,14 +32,17 @@ struct wxDataTransferHelper
     typedef wxIsPubliclyDerived<W, Base> Fwd2Base;
     typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
 
+    // Note: always cast @param win to the parameter W and not to Window
+    //       as the later may be resolved to a base not derived from wxWindow
+    //       at all and the cast would fail as expected!
     static bool To(wxWindow* win, void* data)
     {
-        return wxDataTransfer<Window>::To(static_cast<Window*>(win), static_cast<T*>(data));
+        return wxDataTransfer<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
     }
 
     static bool From(wxWindow* win, void* data)
     {
-        return wxDataTransfer<Window>::From(static_cast<Window*>(win), static_cast<T*>(data));
+        return wxDataTransfer<Window>::From(static_cast<W*>(win), static_cast<T*>(data));
     }
 };
 
