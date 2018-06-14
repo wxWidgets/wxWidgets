@@ -194,6 +194,18 @@ static void notify_gtk_font_name(GObject*, GParamSpec*, void*)
 // to be creating the widget paths and context hierarchy directly.
 
 //-----------------------------------------------------------------------------
+
+class wxGtkWidgetPath
+{
+public:
+    wxGtkWidgetPath() : m_path(gtk_widget_path_new()) { }
+    ~wxGtkWidgetPath() { gtk_widget_path_free(m_path); }
+    operator GtkWidgetPath*() { return m_path; }
+private:
+    GtkWidgetPath* const m_path;
+};
+
+//-----------------------------------------------------------------------------
 // wxGtkStyleContext
 //-----------------------------------------------------------------------------
 
@@ -241,7 +253,7 @@ wxGtkStyleContext& wxGtkStyleContext::Add(const char* objectName)
 
 wxGtkStyleContext::~wxGtkStyleContext()
 {
-    gtk_widget_path_unref(m_path);
+    gtk_widget_path_free(m_path);
     if (m_context == NULL)
         return;
     if (gtk_check_version(3,16,0) == NULL || gtk_check_version(3,4,0))
@@ -320,7 +332,7 @@ wxGtkStyleContext& wxGtkStyleContext::AddTreeviewHeaderButton(int pos)
     AddTreeview().Add("header");
     GtkStyleContext* sc = gtk_style_context_new();
 
-    GtkWidgetPath* siblings = gtk_widget_path_new();
+    wxGtkWidgetPath siblings;
     gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
     gtk_widget_path_iter_set_object_name(siblings, -1, "button");
     gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
@@ -329,7 +341,6 @@ wxGtkStyleContext& wxGtkStyleContext::AddTreeviewHeaderButton(int pos)
     gtk_widget_path_iter_set_object_name(siblings, -1, "button");
 
     gtk_widget_path_append_with_siblings(m_path, siblings, pos);
-    gtk_widget_path_unref(siblings);
 
     gtk_style_context_set_path(sc, m_path);
     gtk_style_context_set_parent(sc, m_context);
