@@ -14,6 +14,7 @@
 
 #include "wx/statusbr.h"
 #include "wx/platinfo.h"
+#include "wx/settings.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
