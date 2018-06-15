@@ -60,7 +60,7 @@ struct wxDataTransferHelper
     //       from wxWindow, and the cast would fail as a consequence!
     static bool To(wxWindow* win, void* data)
     {
-        wxCOMPILE_TIME_ASSERT( !wxIsVoid<Window>::value, "Window is void !");
+        wxCOMPILE_TIME_ASSERT( (!wxIsVoid<Window>::value), "Window is void !" );
 
         return wxDataTransfer<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
     }
