@@ -162,11 +162,7 @@ wxAuiGenericTabArt::wxAuiGenericTabArt()
     m_fixedTabWidth = 100;
     m_tabCtrlHeight = 0;
 
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
-#else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
 
     // the baseColour is too pale to use as our base colour,
     // so darken it a bit --
@@ -262,9 +258,20 @@ void wxAuiGenericTabArt::DrawBackground(wxDC& dc,
                                         const wxRect& rect)
 {
     // draw background
-
-    wxColor top_color       = m_baseColour.ChangeLightness(90);
-    wxColor bottom_color   = m_baseColour.ChangeLightness(170);
+    int topLightness = 90;
+    int bottomLightness = 170;
+    if ((m_baseColour.Red()) +
+        (m_baseColour.Green()) +
+        (m_baseColour.Blue()) < 128)
+    {
+        //dark mode, we cannot go very light
+        topLightness = 90;
+        bottomLightness = 110;
+    }
+    
+    
+    wxColor top_color       = m_baseColour.ChangeLightness(topLightness);
+    wxColor bottom_color   = m_baseColour.ChangeLightness(bottomLightness);
     wxRect r;
 
    if (m_flags &wxAUI_NB_BOTTOM)
@@ -415,7 +422,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     int drawn_tab_yoff = border_points[1].y;
     int drawn_tab_height = border_points[0].y - border_points[1].y;
 
-
+    
     if (page.active)
     {
         // draw active tab
@@ -427,8 +434,17 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
         dc.DrawRectangle(r.x+1, r.y+1, r.width-1, r.height-4);
 
         // this white helps fill out the gradient at the top of the tab
-        dc.SetPen(*wxWHITE_PEN);
-        dc.SetBrush(*wxWHITE_BRUSH);
+        wxColor gradient = *wxWHITE;
+        if ((m_baseColour.Red()) +
+            (m_baseColour.Green()) +
+            (m_baseColour.Blue()) < 128)
+        {
+            //dark mode, we go darker
+            gradient = m_activeColour.ChangeLightness(70);
+        }
+        
+        dc.SetPen(wxPen(gradient));
+        dc.SetBrush(wxBrush(gradient));
         dc.DrawRectangle(r.x+2, r.y+1, r.width-3, r.height-4);
 
         // these two points help the rounded corners appear more antialiased
@@ -444,7 +460,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
         r.y -= 2;
 
         // draw gradient background
-        wxColor top_color = *wxWHITE;
+        wxColor top_color = gradient;
         wxColor bottom_color = m_activeColour;
         dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
     }
@@ -466,6 +482,15 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
         // -- draw top gradient fill for glossy look
         wxColor top_color = m_baseColour;
         wxColor bottom_color = top_color.ChangeLightness(160);
+        if ((m_baseColour.Red()) +
+            (m_baseColour.Green()) +
+            (m_baseColour.Blue()) < 128)
+        {
+            //dark mode, we go darker
+            top_color = m_activeColour.ChangeLightness(70);
+            bottom_color = m_baseColour;
+        }
+        
         dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
 
         r.y += r.height;
@@ -532,6 +557,14 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
     // draw tab text
+    if (page.active)
+    {
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+    }
+    else
+    {
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+    }
     dc.DrawText(draw_text,
                 text_offset,
                 drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);

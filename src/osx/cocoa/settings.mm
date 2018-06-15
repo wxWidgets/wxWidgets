@@ -49,6 +49,99 @@ static int wxOSXGetUserDefault(NSString* key, int defaultValue)
 // ----------------------------------------------------------------------------
 // colours
 // ----------------------------------------------------------------------------
+/*
+void printColor(const char *name, NSColor *c) {
+    wxColor col(c);
+    printf("%s:   %d %d %d\n", name, col.Red(), col.Green(), col.Blue());
+}
+#define DOCOLOR(A) printColor(#A, [NSColor A])
+ 
+void printColors() {
+    static bool colorsPrinted = false;
+    if (colorsPrinted) {
+        return;
+    }
+    colorsPrinted = true;
+    DOCOLOR(windowBackgroundColor);
+    DOCOLOR(windowFrameColor);
+    DOCOLOR(windowFrameTextColor);
+    DOCOLOR(underPageBackgroundColor);
+    DOCOLOR(controlColor);
+    DOCOLOR(controlHighlightColor);
+    DOCOLOR(controlShadowColor);
+    DOCOLOR(controlBackgroundColor);
+    DOCOLOR(controlTextColor);
+    DOCOLOR(gridColor);
+    DOCOLOR(headerTextColor);
+    DOCOLOR(textColor);
+    DOCOLOR(textBackgroundColor);
+
+    DOCOLOR(shadowColor);
+    DOCOLOR(highlightColor);
+    DOCOLOR(findHighlightColor);
+    
+    DOCOLOR(unemphasizedSelectedTextColor);
+    DOCOLOR(unemphasizedSelectedTextBackgroundColor);
+    DOCOLOR(separatorColor);
+    DOCOLOR(selectedContentBackgroundColor);
+    DOCOLOR(unemphasizedSelectedContentBackgroundColor);
+    //DOCOLOR(controlAccent);
+}
+*/
+/*
+ Original:
+ DocumentWindowBackground: 255 255 255
+ DialogBackground: 236 236 236
+
+ 
+ LightMode:
+ windowBackgroundColor:   231 231 231
+ windowFrameColor:   154 154 154
+ windowFrameTextColor:   0 0 0
+ underPageBackgroundColor:   255 255 255
+ controlColor:   231 231 231
+ controlHighlightColor:   219 219 219
+ controlShadowColor:   0 0 0
+ controlBackgroundColor:   255 255 255
+ controlTextColor:   0 0 0
+ gridColor:   0 0 0
+ headerTextColor:   0 0 0
+ textColor:   0 0 0
+ textBackgroundColor:   255 255 255
+ shadowColor:   0 0 0
+ highlightColor:   255 255 255
+ findHighlightColor:   255 255 11
+ unemphasizedSelectedTextColor:   0 0 0
+ unemphasizedSelectedTextBackgroundColor:   212 212 212
+ separatorColor:   0 0 0
+ selectedContentBackgroundColor:   1 43 207
+ unemphasizedSelectedContentBackgroundColor:   212 212 212
+ 
+ DarkMode:
+ windowBackgroundColor:   38 38 38
+ windowFrameColor:   154 154 154
+ windowFrameTextColor:   255 255 255
+ underPageBackgroundColor:   255 255 255
+ controlColor:   231 231 231
+ controlHighlightColor:   219 219 219
+ controlShadowColor:   0 0 0
+ controlBackgroundColor:   23 23 23
+ controlTextColor:   255 255 255
+ gridColor:   255 255 255
+ headerTextColor:   255 255 255
+ textColor:   255 255 255
+ textBackgroundColor:   23 23 23
+ shadowColor:   0 0 0
+ highlightColor:   165 165 165
+ findHighlightColor:   255 255 11
+ unemphasizedSelectedTextColor:   255 255 255
+ unemphasizedSelectedTextBackgroundColor:   54 54 54
+ separatorColor:   255 255 255
+ selectedContentBackgroundColor:   7 72 211
+ unemphasizedSelectedContentBackgroundColor:   54 54 54
+
+ */
+
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {

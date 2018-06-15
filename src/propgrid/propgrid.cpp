@@ -1407,10 +1407,13 @@ void wxPropertyGrid::RegainColours()
     #else
         int colDec = wxPGGetColAvg(col) - 200;
     #endif
-        if ( colDec > 0 )
+        if ( colDec > 0 ) {
             m_colCapBack = wxPGAdjustColour(col,-colDec);
-        else
+        } else if (colDec < -100) {
+            m_colCapBack = col.ChangeLightness(120);
+        } else {
             m_colCapBack = col;
+        }
         m_categoryDefaultCell.GetData()->SetBgCol(m_colCapBack);
     }
 
@@ -1425,6 +1428,9 @@ void wxPropertyGrid::RegainColours()
         int colDec = -72;
     #endif
         wxColour capForeCol = wxPGAdjustColour(m_colCapBack,colDec,5000,5000,true);
+        if (wxPGGetColAvg(m_colCapBack) < 100) {
+            capForeCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+        }
         m_colCapFore = capForeCol;
         m_categoryDefaultCell.GetData()->SetFgCol(capForeCol);
     }
