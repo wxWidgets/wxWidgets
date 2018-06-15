@@ -36,10 +36,17 @@ namespace wxPrivate
 // so let's do a simple test to see if Window type is resolved to the wrong type.
 
 template<typename T>
-static bool wxIsVoid(){ return false; }
+struct wxIsVoid
+{
+    static const bool value = false;
+};
 
 template<>
-static bool wxIsVoid<void>(){ return true; }
+struct wxIsVoid<void>
+{
+    static const bool value = true;
+};
+
 
 template<class W, typename T>
 struct wxDataTransferHelper
@@ -53,7 +60,7 @@ struct wxDataTransferHelper
     //       from wxWindow, and the cast would fail as a consequence!
     static bool To(wxWindow* win, void* data)
     {
-        wxCOMPILE_TIME_ASSERT( !wxIsVoid<Window>(), "Window is void !");
+        wxCOMPILE_TIME_ASSERT( !wxIsVoid<Window>::value, "Window is void !");
 
         return wxDataTransfer<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
     }
