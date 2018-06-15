@@ -24,6 +24,22 @@
 
 namespace wxPrivate
 {
+// travis-ci failed with this message when compiling dialogs sample:
+// dialogs_dialogs.o: In function `wxPrivate::wxDataTransferHelper<wxSpinCtrl, int>::To(wxWindow*, void*)':
+// dialogs.cpp:(.text._ZN9wxPrivate20wxDataTransferHelperI10wxSpinCtrliE2ToEP8wxWindowPv[wxPrivate::wxDataTransferHelper<wxSpinCtrl, int>::To(wxWindow*, void*)]+0x1f): undefined reference to `wxDataTransfer<void>::To(wxWindow*, void*)'
+// dialogs_dialogs.o: In function `wxPrivate::wxDataTransferHelper<wxSpinCtrl, int>::From(wxWindow*, void*)':
+// dialogs.cpp:(.text._ZN9wxPrivate20wxDataTransferHelperI10wxSpinCtrliE4FromEP8wxWindowPv[wxPrivate::wxDataTransferHelper<wxSpinCtrl, int>::From(wxWindow*, void*)]+0x1f): undefined reference to `wxDataTransfer<void>::From(wxWindow*, void*)'
+//
+// strange instantiations happend here:
+// `wxDataTransfer<void>::To(wxWindow*, void*) and `wxDataTransfer<void>::From(wxWindow*, void*)' !?
+// we expect wxSpinCtrl as a template argument instead of void.
+// so let's do a simple test to see if Window type is resolved to the wrong type.
+
+template<typename T>
+static bool wxIsVoid(){ return false; }
+
+template<>
+static bool wxIsVoid<void>(){ return true; }
 
 template<class W, typename T>
 struct wxDataTransferHelper
@@ -37,6 +53,8 @@ struct wxDataTransferHelper
     //       from wxWindow, and the cast would fail as a consequence!
     static bool To(wxWindow* win, void* data)
     {
+        wxCOMPILE_TIME_ASSERT( !wxIsVoid<Window>(), "Window is void !");
+
         return wxDataTransfer<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
     }
 
