@@ -33,8 +33,8 @@ struct wxDataTransferHelper
     typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
 
     // Note: always cast @param win to the parameter W and not to Window
-    //       as the later may be resolved to a base not derived from wxWindow
-    //       at all and the cast would fail as expected!
+    //       as the latter may be resolved to a base not necessarily derived
+    //       from wxWindow, and the cast would fail as a consequence!
     static bool To(wxWindow* win, void* data)
     {
         return wxDataTransfer<Window>::To(static_cast<W*>(win), static_cast<T*>(data));

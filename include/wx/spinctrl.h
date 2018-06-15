@@ -16,6 +16,7 @@
 #if wxUSE_SPINCTRL
 
 #include "wx/spinbutt.h"        // should make wxSpinEvent visible to the app
+#include "wx/datatransf.h"
 
 // Events
 class WXDLLIMPEXP_FWD_CORE wxSpinDoubleEvent;
