@@ -364,7 +364,9 @@ struct wxDataTransfer<wxSpinCtrl>
 
 #endif // wxUSE_VALIDATORS
 
-#endif // wxHAS_NATIVE_SPINCTRL
+#endif // !wxHAS_NATIVE_SPINCTRL
+
+#if !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
 
 //-----------------------------------------------------------------------------
 // wxSpinCtrlDouble
@@ -465,5 +467,7 @@ struct wxDataTransfer<wxSpinCtrlDouble>
 };
 
 #endif // wxUSE_VALIDATORS
+
+#endif // !wxHAS_NATIVE_SPINCTRLDOUBLE
 
 #endif // _WX_GENERIC_SPINCTRL_H_
