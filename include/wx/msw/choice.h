@@ -175,6 +175,5 @@ protected:
 
 WX_FWD_DATA_TRANSFER(wxChoice, wxChoiceBase);
 
-#endif // wxUSE_VALIDATORS
 
 #endif // _WX_CHOICE_H_
