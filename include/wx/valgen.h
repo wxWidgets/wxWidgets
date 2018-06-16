@@ -37,6 +37,15 @@ struct wxDataTransferHelper
     //       from wxWindow, and the cast would fail as a consequence!
     static bool To(wxWindow* win, void* data)
     {
+        // Travis emits these error messages when compiling dialogs sample (some configs only !):
+        // In function `wxPrivate::wxDataTransferHelper<wxSpinCtrl, int>::To(wxWindow*, void*)':
+        // dialogs.cpp:(.text._ZN9wxPrivate20wxDataTransferHelperI10wxSpinCtrliE2ToEP8wxWindowPv[_ZN9wxPrivate20wxDataTransferHelperI10wxSpinCtrliE2ToEP8wxWindowPv]+0x1f): undefined reference to `wxDataTransfer<void>::To(wxWindow*, void*)'
+        // dialogs_dialogs.o: In function `wxPrivate::wxDataTransferHelper<wxSpinCtrl, int>::From(wxWindow*, void*)':
+        // dialogs.cpp:(.text._ZN9wxPrivate20wxDataTransferHelperI10wxSpinCtrliE4FromEP8wxWindowPv[_ZN9wxPrivate20wxDataTransferHelperI10wxSpinCtrliE4FromEP8wxWindowPv]+0x1f): undefined reference to `wxDataTransfer<void>::From(wxWindow*, void*)'
+        //
+        // Now, i am intrigued to know why would Window be resolved to void instead of wxSpinCtrl (in some configs only !)
+        typedef int (Window::*Mem); // compile time error if Window is not a class type
+
         return wxDataTransfer<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
     }
 
