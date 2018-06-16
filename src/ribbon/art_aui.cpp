@@ -38,7 +38,7 @@ wxRibbonAUIArtProvider::wxRibbonAUIArtProvider()
     : wxRibbonMSWArtProvider(false)
 {
 #if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
+    wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 #else
     wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
@@ -245,7 +245,11 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     m_tab_ctrl_background_colour = LikePrimary(0.9);
     m_tab_ctrl_background_gradient_colour = LikePrimary(1.7);
     m_tab_border_pen = LikePrimary(0.75);
+#ifdef __WXMAC__
+    m_tab_label_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
+#else
     m_tab_label_colour = LikePrimary(0.1);
+#endif
     m_tab_hover_background_top_colour =  primary_hsl.ToRGB();
     m_tab_hover_background_top_gradient_colour = LikePrimary(1.6);
     m_tab_hover_background_brush = m_tab_hover_background_top_colour;
@@ -268,7 +272,11 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     m_button_bar_hover_background_brush = LikeSecondary(1.7);
     m_button_bar_active_background_brush = LikeSecondary(1.4);
     m_button_bar_label_colour = m_tab_label_colour;
+#ifdef __WXMAC__
+    m_button_bar_label_disabled_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+#else
     m_button_bar_label_disabled_colour = m_tab_label_colour;
+#endif
     m_gallery_border_pen = m_tab_border_pen;
     m_gallery_item_border_pen = m_button_bar_hover_border_pen;
     m_gallery_hover_background_brush = LikePrimary(1.2);
