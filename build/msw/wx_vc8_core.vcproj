@@ -3233,6 +3233,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\datatransf.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\dataview.h"
 				>
 			</File>

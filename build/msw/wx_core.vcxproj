@@ -1382,6 +1382,7 @@
     <ClInclude Include="..\..\include\wx\itemattr.h" />
     <ClInclude Include="..\..\include\wx\peninfobase.h" />
     <ClInclude Include="..\..\include\wx\persist\dataview.h" />
+    <ClInclude Include="..\..\include\wx\datatransf.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

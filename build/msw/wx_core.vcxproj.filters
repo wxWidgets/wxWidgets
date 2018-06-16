@@ -1027,6 +1027,9 @@
     <ClInclude Include="..\..\include\wx\dataobj.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\datatransf.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\dc.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
