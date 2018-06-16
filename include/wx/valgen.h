@@ -53,7 +53,7 @@ struct wxDataTransferHelper
 {
     typedef typename wxFwdDataTransfer<W>::Base Base;
     typedef wxIsPubliclyDerived<W, Base> Fwd2Base;
-    typedef typename wxIf<Fwd2Base::value, Base, W>::value Window;
+    typedef typename wxIf<(Fwd2Base::value), Base, W>::value Window;
 
     // Note: always cast @param win to the parameter W and not to Window
     //       as the latter may be resolved to a base not necessarily derived
@@ -70,6 +70,10 @@ struct wxDataTransferHelper
         return wxDataTransfer<Window>::From(static_cast<W*>(win), static_cast<T*>(data));
     }
 };
+
+//
+template<typename T>
+struct wxDataTransferHelper<void, T>;
 
 } // namespace wxPrivate
 
