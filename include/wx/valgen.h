@@ -71,10 +71,6 @@ struct wxDataTransferHelper
     }
 };
 
-//
-template<typename T>
-struct wxDataTransferHelper<void, T>;
-
 } // namespace wxPrivate
 
 // ----------------------------------------------------------------------------
