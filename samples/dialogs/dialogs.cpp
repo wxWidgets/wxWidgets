@@ -3448,7 +3448,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     wxSpinCtrl* spinCtrl12 = new wxSpinCtrl(panel, ID_AUTO_SAVE_MINS, wxEmptyString,
         wxDefaultPosition, wxSize(40, wxDefaultCoord), wxSP_ARROW_KEYS, 1, 60, 1);
 //    spinCtrl12->SetValidator(wxGenericValidator(&m_settingsData.m_autoSaveInterval));
-//    wxSetGenericValidator(spinCtrl12, &m_settingsData.m_autoSaveInterval);
+    wxSetGenericValidator(spinCtrl12, &m_settingsData.m_autoSaveInterval);
 #endif
 
     itemSizer12->Add(checkBox12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
@@ -3524,7 +3524,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     wxSpinCtrl* spinCtrl = new wxSpinCtrl(panel, ID_FONT_SIZE, wxEmptyString, wxDefaultPosition,
         wxSize(80, wxDefaultCoord));
 //    spinCtrl->SetValidator(wxGenericValidator(&m_settingsData.m_titleFontSize));
-//    wxSetGenericValidator(spinCtrl, &m_settingsData.m_titleFontSize);
+    wxSetGenericValidator(spinCtrl, &m_settingsData.m_titleFontSize);
     itemSizer5->Add(spinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
     item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, 5);
