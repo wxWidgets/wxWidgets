@@ -172,6 +172,11 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14) )
+    {
+        if ( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() < 128 )
+            return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
+    }
     const wxCoord x = rect.x;
     const wxCoord y = rect.y;
     const wxCoord w = rect.width;
@@ -334,7 +339,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
     wxOrientation orient,
     int WXUNUSED(flags) )
 {
-    bool hasMetal = win->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL;
+    bool hasMetal = win->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL && !wxPlatformInfo::Get().CheckOSVersion(10, 14);
     SInt32 height;
 
     height = wxRendererNative::Get().GetSplitterParams(win).widthSash;
@@ -360,13 +365,15 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
         wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
         cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
-        HIThemeBackgroundDrawInfo bgdrawInfo;
-        bgdrawInfo.version = 0;
-        bgdrawInfo.state = kThemeStateActive;
-        bgdrawInfo.kind = hasMetal ? kThemeBackgroundMetal : kThemeBackgroundPlacard;
-
         if ( hasMetal )
+        {
+            HIThemeBackgroundDrawInfo bgdrawInfo;
+            bgdrawInfo.version = 0;
+            bgdrawInfo.state = kThemeStateActive;
+            bgdrawInfo.kind = hasMetal ? kThemeBackgroundMetal : kThemeBackgroundPlacard;
+
             HIThemeDrawBackground(&splitterRect, &bgdrawInfo, cgContext, kHIThemeOrientationNormal);
+        }
         else
         {
             CGContextSetFillColorWithColor(cgContext,win->GetBackgroundColour().GetCGColor());
@@ -375,11 +382,14 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
         if ( win->HasFlag(wxSP_3DSASH) )
         {
-            HIThemeSplitterDrawInfo drawInfo;
-            drawInfo.version = 0;
-            drawInfo.state = kThemeStateActive;
-            drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone;
-            HIThemeDrawPaneSplitter( &splitterRect, &drawInfo, cgContext, kHIThemeOrientationNormal );
+            if ( !wxPlatformInfo::Get().CheckOSVersion(10, 14) || wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() > 128  )
+            {
+                HIThemeSplitterDrawInfo drawInfo;
+                drawInfo.version = 0;
+                drawInfo.state = kThemeStateActive;
+                drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone;
+                HIThemeDrawPaneSplitter( &splitterRect, &drawInfo, cgContext, kHIThemeOrientationNormal );
+            }
         }
     }
 }
