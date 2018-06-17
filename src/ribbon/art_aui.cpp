@@ -243,6 +243,11 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     wxRibbonShiftLuminance(secondary_hsl, luminance ## f).ToRGB()
 
     m_tab_ctrl_background_colour = LikePrimary(0.9);
+#ifdef __WXMAC__
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
+        m_tab_ctrl_background_gradient_colour = m_tab_ctrl_background_colour;
+    else
+#endif
     m_tab_ctrl_background_gradient_colour = LikePrimary(1.7);
     m_tab_border_pen = LikePrimary(0.75);
 #ifdef __WXMAC__
@@ -251,9 +256,19 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     m_tab_label_colour = LikePrimary(0.1);
 #endif
     m_tab_hover_background_top_colour =  primary_hsl.ToRGB();
+#ifdef __WXMAC__
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
+        m_tab_hover_background_top_gradient_colour = m_tab_hover_background_top_colour;
+    else
+#endif
     m_tab_hover_background_top_gradient_colour = LikePrimary(1.6);
     m_tab_hover_background_brush = m_tab_hover_background_top_colour;
     m_tab_active_background_colour = m_tab_ctrl_background_gradient_colour;
+#ifdef __WXMAC__
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
+        m_tab_active_background_gradient_colour = m_tab_active_background_colour;
+    else
+#endif
     m_tab_active_background_gradient_colour = primary_hsl.ToRGB();
     m_tab_active_top_background_brush = m_tab_active_background_colour;
     m_panel_label_colour = m_tab_label_colour;
