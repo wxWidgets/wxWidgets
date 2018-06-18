@@ -376,7 +376,7 @@ void wxGCDCImpl::DestroyClippingRegion()
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
 
-    ResetClipping();
+    wxDCImpl::DestroyClippingRegion();
     m_isClipBoxValid = false;
 }
 

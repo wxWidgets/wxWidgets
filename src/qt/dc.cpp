@@ -454,7 +454,7 @@ void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 
 void wxQtDCImpl::DestroyClippingRegion()
 {
-    ResetClipping();
+    wxDCImpl::DestroyClippingRegion();
     m_clippingRegion->Clear();
 
     if (m_qtPainter->isActive())

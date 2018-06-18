@@ -666,7 +666,10 @@ private:
     wxDC       *m_owner;
 
 protected:
-    // unset clipping variables (after clipping region was destroyed)
+    // This method exists for backwards compatibility only (while it's not
+    // documented, there are derived classes using it outside wxWidgets
+    // itself), don't use it in any new code and just call wxDCImpl version of
+    // DestroyClippingRegion() to reset the clipping information instead.
     void ResetClipping()
     {
         m_clipping = false;
