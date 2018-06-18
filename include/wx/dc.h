@@ -453,11 +453,15 @@ public:
     // up to date.
     virtual bool DoGetClippingRect(wxRect& rect) const;
 
+#if WXWIN_COMPATIBILITY_3_0
     // This method is kept for backwards compatibility but shouldn't be used
     // nor overridden in the new code, implement DoGetClippingRect() above
     // instead.
-    virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
-                                  wxCoord *w, wxCoord *h) const;
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
+                                      wxCoord *w, wxCoord *h) const
+    );
+#endif // WXWIN_COMPATIBILITY_3_0
 
     virtual void DestroyClippingRegion() { ResetClipping(); }
 

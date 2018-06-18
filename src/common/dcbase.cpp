@@ -414,6 +414,7 @@ wxRect wxDCImpl::GetLogicalArea() const
 
 bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
 {
+#if WXWIN_COMPATIBILITY_3_0
     // Call the old function for compatibility.
     DoGetClippingBox(&rect.x, &rect.y, &rect.width, &rect.height);
     if ( rect != wxRect(-1, -1, 0, 0) )
@@ -425,6 +426,7 @@ bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
         // is not empty because some implementations seem to do this instead.
         return !rect.IsEmpty() && rect != GetLogicalArea();
     }
+#endif // WXWIN_COMPATIBILITY_3_0
 
     if ( m_clipping )
     {
@@ -443,6 +445,7 @@ bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
     }
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 void wxDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y,
                                 wxCoord *w, wxCoord *h) const
 {
@@ -457,6 +460,7 @@ void wxDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y,
     if ( h )
         *h = 0;
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // ----------------------------------------------------------------------------
 // coordinate conversions and transforms
@@ -1370,12 +1374,12 @@ void wxDC::GetDeviceOrigin(long *x, long *y) const
 
 void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
     {
-        wxCoord xx,yy,ww,hh;
-        m_pimpl->DoGetClippingBox(&xx, &yy, &ww, &hh);
-        if (x) *x = xx;
-        if (y) *y = yy;
-        if (w) *w = ww;
-        if (h) *h = hh;
+        wxRect r;
+        m_pimpl->DoGetClippingRect(r);
+        if (x) *x = r.x;
+        if (y) *y = r.y;
+        if (w) *w = r.width;
+        if (h) *h = r.height;
     }
 
 void wxDC::DrawObject(wxDrawObject* drawobject)

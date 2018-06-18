@@ -574,8 +574,7 @@ void wxMSWDCImpl::UpdateClipBox()
     m_isClipBoxValid = true;
 }
 
-void
-wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+bool wxMSWDCImpl::DoGetClippingRect(wxRect& rect) const
 {
     // check if we should try to retrieve the clipping region possibly not set
     // by our SetClippingRegion() but preset or modified by Windows: this
@@ -589,14 +588,22 @@ wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) co
         self->UpdateClipBox();
     }
 
-    if ( x )
-        *x = m_clipX1;
-    if ( y )
-        *y = m_clipY1;
-    if ( w )
-        *w = m_clipX2 - m_clipX1;
-    if ( h )
-        *h = m_clipY2 - m_clipY1;
+    // Unfortunately we can't just call wxDCImpl::DoGetClippingRect() here
+    // because it wouldn't return the correct result if there is no clipping
+    // region and this DC has a world transform applied to it, as the base
+    // class version doesn't know anything about world transforms and wouldn't
+    // apply it to GetLogicalArea() that it returns in this case.
+    //
+    // We could solve this by overriding GetLogicalArea() in wxMSW and using
+    // DPtoLP() to perform the conversion correctly ourselves, but it's even
+    // simpler to just use the value returned by our UpdateClipBox() which is
+    // already correct in any case, so just do this instead.
+    rect = wxRect(m_clipX1,
+                  m_clipY1,
+                  m_clipX2 - m_clipX1,
+                  m_clipY2 - m_clipY1);
+
+    return m_clipping;
 }
 
 // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
