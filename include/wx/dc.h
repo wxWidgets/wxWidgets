@@ -1459,7 +1459,14 @@ private:
     // Common part of all ctors.
     void Init(const wxRect& r)
     {
+        // GetClippingBox() is supposed to return the rectangle corresponding
+        // to the full DC area and some implementations actually do it, while
+        // others return an empty rectangle instead. Check for both possible
+        // results here to avoid restoring the clipping region unnecessarily in
+        // the dtor.
         m_dc.GetClippingBox(m_oldClipRect);
+        if ( m_oldClipRect == m_dc.GetSize() )
+            m_oldClipRect = wxRect();
         m_dc.SetClippingRegion(r);
     }
 
