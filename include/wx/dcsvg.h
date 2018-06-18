@@ -86,21 +86,9 @@ public:
     virtual wxCoord GetCharHeight() const wxOVERRIDE;
     virtual wxCoord GetCharWidth() const wxOVERRIDE;
 
-    virtual void SetClippingRegion(wxCoord x, wxCoord y,
-                                   wxCoord w, wxCoord h)
-    {
-        DoSetClippingRegion(x, y, w, h);
-    }
-
     virtual void SetPalette(const wxPalette&  WXUNUSED(palette)) wxOVERRIDE
     {
         wxFAIL_MSG(wxT("wxSVGFILEDC::SetPalette not implemented"));
-    }
-
-    virtual void GetClippingBox(wxCoord *x, wxCoord *y,
-                                wxCoord *w, wxCoord *h)
-    {
-        DoGetClippingBox(x, y, w, h);
     }
 
     virtual void SetLogicalFunction(wxRasterOperationMode WXUNUSED(function)) wxOVERRIDE
