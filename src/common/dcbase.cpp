@@ -353,9 +353,6 @@ wxDCImpl::wxDCImpl( wxDC *owner )
                     (double)wxGetDisplaySizeMM().GetWidth();
     m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
                     (double)wxGetDisplaySizeMM().GetHeight();
-
-    ResetBoundingBox();
-    ResetClipping();
 }
 
 wxDCImpl::~wxDCImpl()
