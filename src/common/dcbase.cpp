@@ -406,6 +406,61 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     }
 }
 
+wxRect wxDCImpl::GetLogicalArea() const
+{
+    const wxSize size = GetSize();
+    return wxRect(DeviceToLogicalX(0),
+                  DeviceToLogicalY(0),
+                  DeviceToLogicalXRel(size.x),
+                  DeviceToLogicalYRel(size.y));
+}
+
+bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
+{
+    // Call the old function for compatibility.
+    DoGetClippingBox(&rect.x, &rect.y, &rect.width, &rect.height);
+    if ( rect != wxRect(-1, -1, 0, 0) )
+    {
+        // Custom overridden version of DoGetClippingBox() was called, we need
+        // to check if there is an actual clipping region or not. Normally the
+        // function is supposed to return the whole DC area (in logical
+        // coordinates) in this case, but also check that the clipping region
+        // is not empty because some implementations seem to do this instead.
+        return !rect.IsEmpty() && rect != GetLogicalArea();
+    }
+
+    if ( m_clipping )
+    {
+        rect = wxRect(m_clipX1,
+                      m_clipY1,
+                      m_clipX2 - m_clipX1,
+                      m_clipY2 - m_clipY1);
+
+        return true;
+    }
+    else // No active clipping region.
+    {
+        rect = GetLogicalArea();
+
+        return false;
+    }
+}
+
+void wxDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y,
+                                wxCoord *w, wxCoord *h) const
+{
+    // Dummy implementation just to allow DoGetClippingRect() above to
+    // determine if this version was called or not.
+    if ( x )
+        *x = -1;
+    if ( y )
+        *y = -1;
+    if ( w )
+        *w = 0;
+    if ( h )
+        *h = 0;
+}
+
 // ----------------------------------------------------------------------------
 // coordinate conversions and transforms
 // ----------------------------------------------------------------------------
