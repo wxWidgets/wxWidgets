@@ -140,6 +140,9 @@ wxString wxGetOsDescription()
             case 13:
                 osName = "High Sierra";
                 break;
+            case 14:
+                osName = "Mojave";
+                break;
         };
     }
 #else
