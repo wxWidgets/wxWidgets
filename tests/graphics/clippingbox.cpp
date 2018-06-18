@@ -21,7 +21,9 @@
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/dcgraph.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
+#include "wx/dcsvg.h"
 
+#include "testfile.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -2122,3 +2124,29 @@ void ClippingBoxTestCaseGCBase::RegionsAndPushPopState()
 }
 
 #endif // wxUSE_GRAPHICS_CONTEXT
+
+#if wxUSE_SVG
+
+// We can't reuse the existing tests for wxSVGFileDC as we can't check its
+// output, but we can still at least check the behaviour of GetClippingBox().
+TEST_CASE("ClippingBoxTestCaseSVGDC", "[clip][svgdc]")
+{
+    TestFile tf;
+    wxSVGFileDC dc(tf.GetName(), s_dcSize.x, s_dcSize.y);
+
+    wxRect rect;
+    dc.GetClippingBox(rect);
+    CHECK( rect == wxRect(s_dcSize) );
+
+    const wxRect rectClip(10, 20, 80, 75);
+    dc.SetClippingRegion(rectClip);
+
+    dc.GetClippingBox(rect);
+    CHECK( rect == rectClip );
+
+    dc.DestroyClippingRegion();
+    dc.GetClippingBox(rect);
+    CHECK( rect == wxRect(s_dcSize) );
+}
+
+#endif // wxUSE_SVG
