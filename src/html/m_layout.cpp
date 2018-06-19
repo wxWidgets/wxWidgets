@@ -187,6 +187,12 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
                 m_WParser->OpenContainer();
                 return false;
             }
+            else if(style.IsSameAs(wxT("PAGE-BREAK-INSIDE:AVOID"), false))
+            {
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer()->SetCanLiveOnPagebreak(false);
+                return false;
+            }
             else
             {
                 // Treat other STYLE parameters here when they're supported.

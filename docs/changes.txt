@@ -102,6 +102,7 @@ All (GUI):
 - Add wxHtmlEasyPrinting::SetPromptMode() (pavel-t).
 - Fix possible infinite loop in wxHtmlWindow layout (trivia21).
 - Add "hint" property support to XRC for wxComboBox and wxSearchCtrl.
+- Add support for style="page-break-inside:avoid" to <div> in wxHTML.
 
 wxGTK:
 
