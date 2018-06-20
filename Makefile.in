@@ -780,7 +780,6 @@ ALL_BASE_SOURCES =  \
 	src/common/datetimefmt.cpp \
 	src/common/datstrm.cpp \
 	src/common/dircmn.cpp \
-	src/common/dynarray.cpp \
 	src/common/dynlib.cpp \
 	src/common/dynload.cpp \
 	src/common/encconv.cpp \
@@ -964,7 +963,6 @@ MONODLL_OBJECTS =  \
 	monodll_datetimefmt.o \
 	monodll_datstrm.o \
 	monodll_dircmn.o \
-	monodll_dynarray.o \
 	monodll_dynlib.o \
 	monodll_dynload.o \
 	monodll_encconv.o \
@@ -1107,7 +1105,6 @@ MONOLIB_OBJECTS =  \
 	monolib_datetimefmt.o \
 	monolib_datstrm.o \
 	monolib_dircmn.o \
-	monolib_dynarray.o \
 	monolib_dynlib.o \
 	monolib_dynload.o \
 	monolib_encconv.o \
@@ -1239,7 +1236,6 @@ BASEDLL_OBJECTS =  \
 	basedll_datetimefmt.o \
 	basedll_datstrm.o \
 	basedll_dircmn.o \
-	basedll_dynarray.o \
 	basedll_dynlib.o \
 	basedll_dynload.o \
 	basedll_encconv.o \
@@ -1354,7 +1350,6 @@ BASELIB_OBJECTS =  \
 	baselib_datetimefmt.o \
 	baselib_datstrm.o \
 	baselib_dircmn.o \
-	baselib_dynarray.o \
 	baselib_dynlib.o \
 	baselib_dynload.o \
 	baselib_encconv.o \
@@ -16058,9 +16053,6 @@ monodll_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(MONODLL_ODEP)
 monodll_dircmn.o: $(srcdir)/src/common/dircmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dircmn.cpp
 
-monodll_dynarray.o: $(srcdir)/src/common/dynarray.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dynarray.cpp
-
 monodll_dynlib.o: $(srcdir)/src/common/dynlib.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dynlib.cpp
 
@@ -21319,9 +21311,6 @@ monolib_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(MONOLIB_ODEP)
 
 monolib_dircmn.o: $(srcdir)/src/common/dircmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dircmn.cpp
-
-monolib_dynarray.o: $(srcdir)/src/common/dynarray.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dynarray.cpp
 
 monolib_dynlib.o: $(srcdir)/src/common/dynlib.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dynlib.cpp
@@ -26582,9 +26571,6 @@ basedll_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(BASEDLL_ODEP)
 basedll_dircmn.o: $(srcdir)/src/common/dircmn.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/dircmn.cpp
 
-basedll_dynarray.o: $(srcdir)/src/common/dynarray.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/dynarray.cpp
-
 basedll_dynlib.o: $(srcdir)/src/common/dynlib.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/dynlib.cpp
 
@@ -27061,9 +27047,6 @@ baselib_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(BASELIB_ODEP)
 
 baselib_dircmn.o: $(srcdir)/src/common/dircmn.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/dircmn.cpp
-
-baselib_dynarray.o: $(srcdir)/src/common/dynarray.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/dynarray.cpp
 
 baselib_dynlib.o: $(srcdir)/src/common/dynlib.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/dynlib.cpp
@@ -37615,7 +37598,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/makefile.* $(DISTDIR)/samples
-	$(CP_P) $(SAMPDIR)/Info.plist $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
@@ -37842,7 +37824,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/makefile.* $(DISTDIR)/samples
-	$(CP_P) $(SAMPDIR)/Info.plist $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 

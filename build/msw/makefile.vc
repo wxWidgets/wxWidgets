@@ -402,7 +402,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_datetimefmt.obj \
 	$(OBJS)\monodll_datstrm.obj \
 	$(OBJS)\monodll_dircmn.obj \
-	$(OBJS)\monodll_dynarray.obj \
 	$(OBJS)\monodll_dynlib.obj \
 	$(OBJS)\monodll_dynload.obj \
 	$(OBJS)\monodll_encconv.obj \
@@ -565,7 +564,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_datetimefmt.obj \
 	$(OBJS)\monolib_datstrm.obj \
 	$(OBJS)\monolib_dircmn.obj \
-	$(OBJS)\monolib_dynarray.obj \
 	$(OBJS)\monolib_dynlib.obj \
 	$(OBJS)\monolib_dynload.obj \
 	$(OBJS)\monolib_encconv.obj \
@@ -722,7 +720,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_datetimefmt.obj \
 	$(OBJS)\basedll_datstrm.obj \
 	$(OBJS)\basedll_dircmn.obj \
-	$(OBJS)\basedll_dynarray.obj \
 	$(OBJS)\basedll_dynlib.obj \
 	$(OBJS)\basedll_dynload.obj \
 	$(OBJS)\basedll_encconv.obj \
@@ -866,7 +863,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_datetimefmt.obj \
 	$(OBJS)\baselib_datstrm.obj \
 	$(OBJS)\baselib_dircmn.obj \
-	$(OBJS)\baselib_dynarray.obj \
 	$(OBJS)\baselib_dynlib.obj \
 	$(OBJS)\baselib_dynload.obj \
 	$(OBJS)\baselib_encconv.obj \
@@ -7172,9 +7168,6 @@ $(OBJS)\monodll_datstrm.obj: ..\..\src\common\datstrm.cpp
 $(OBJS)\monodll_dircmn.obj: ..\..\src\common\dircmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\dircmn.cpp
 
-$(OBJS)\monodll_dynarray.obj: ..\..\src\common\dynarray.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\dynarray.cpp
-
 $(OBJS)\monodll_dynlib.obj: ..\..\src\common\dynlib.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\dynlib.cpp
 
@@ -9720,9 +9713,6 @@ $(OBJS)\monolib_datstrm.obj: ..\..\src\common\datstrm.cpp
 
 $(OBJS)\monolib_dircmn.obj: ..\..\src\common\dircmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\dircmn.cpp
-
-$(OBJS)\monolib_dynarray.obj: ..\..\src\common\dynarray.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\dynarray.cpp
 
 $(OBJS)\monolib_dynlib.obj: ..\..\src\common\dynlib.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\dynlib.cpp
@@ -12270,9 +12260,6 @@ $(OBJS)\basedll_datstrm.obj: ..\..\src\common\datstrm.cpp
 $(OBJS)\basedll_dircmn.obj: ..\..\src\common\dircmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\dircmn.cpp
 
-$(OBJS)\basedll_dynarray.obj: ..\..\src\common\dynarray.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\dynarray.cpp
-
 $(OBJS)\basedll_dynlib.obj: ..\..\src\common\dynlib.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\dynlib.cpp
 
@@ -12617,9 +12604,6 @@ $(OBJS)\baselib_datstrm.obj: ..\..\src\common\datstrm.cpp
 
 $(OBJS)\baselib_dircmn.obj: ..\..\src\common\dircmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\dircmn.cpp
-
-$(OBJS)\baselib_dynarray.obj: ..\..\src\common\dynarray.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\dynarray.cpp
 
 $(OBJS)\baselib_dynlib.obj: ..\..\src\common\dynlib.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\dynlib.cpp

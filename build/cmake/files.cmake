@@ -385,7 +385,6 @@ set(BASE_CMN_SRC
     src/common/datetimefmt.cpp
     src/common/datstrm.cpp
     src/common/dircmn.cpp
-    src/common/dynarray.cpp
     src/common/dynlib.cpp
     src/common/dynload.cpp
     src/common/encconv.cpp

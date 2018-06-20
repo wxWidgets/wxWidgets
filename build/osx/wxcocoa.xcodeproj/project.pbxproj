@@ -1028,9 +1028,6 @@
 		5417332FE2DB3CD3A647B15D /* cursor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1F491B8A8376E8E2E8182 /* cursor.cpp */; };
 		5417332FE2DB3CD3A647B15E /* cursor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1F491B8A8376E8E2E8182 /* cursor.cpp */; };
 		5417332FE2DB3CD3A647B15F /* cursor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1F491B8A8376E8E2E8182 /* cursor.cpp */; };
-		54A89D04FF953D55AE8DCCF0 /* dynarray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACC61BA84C6C33D4BCA403ED /* dynarray.cpp */; };
-		54A89D04FF953D55AE8DCCF1 /* dynarray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACC61BA84C6C33D4BCA403ED /* dynarray.cpp */; };
-		54A89D04FF953D55AE8DCCF2 /* dynarray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACC61BA84C6C33D4BCA403ED /* dynarray.cpp */; };
 		5519BA1F2463308FAC4A0C9F /* LexAVS.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 57E4784E521339BEB971D81D /* LexAVS.cxx */; };
 		5519BA1F2463308FAC4A0CA0 /* LexAVS.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 57E4784E521339BEB971D81D /* LexAVS.cxx */; };
 		5519BA1F2463308FAC4A0CA1 /* LexAVS.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 57E4784E521339BEB971D81D /* LexAVS.cxx */; };
@@ -4490,7 +4487,6 @@
 		AC62806DE67F33E18C386D4F /* LexDMAP.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexDMAP.cxx; path = ../../src/stc/scintilla/lexers/LexDMAP.cxx; sourceTree = "<group>"; };
 		AC6359B01A7B35F6B710ACF8 /* uiaction_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uiaction_osx.cpp; path = ../../src/osx/uiaction_osx.cpp; sourceTree = "<group>"; };
 		AC8BB1AABB3D393EBA527060 /* intl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = intl.cpp; path = ../../src/common/intl.cpp; sourceTree = "<group>"; };
-		ACC61BA84C6C33D4BCA403ED /* dynarray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dynarray.cpp; path = ../../src/common/dynarray.cpp; sourceTree = "<group>"; };
 		ADA6B65038FB32F7A3EFBB97 /* ffile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ffile.cpp; path = ../../src/common/ffile.cpp; sourceTree = "<group>"; };
 		AE856D950B8C369EB0FE13BA /* datectlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datectlg.cpp; path = ../../src/generic/datectlg.cpp; sourceTree = "<group>"; };
 		AECB45CEAC093CE4AB4B7E45 /* nonownedwnd.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = nonownedwnd.mm; path = ../../src/osx/cocoa/nonownedwnd.mm; sourceTree = "<group>"; };
@@ -5967,7 +5963,6 @@
 				864438709B363773B8C3382D /* datetimefmt.cpp */,
 				81B3DFBB73573FFDBD320334 /* datstrm.cpp */,
 				EC9B6DFBF2F73917A99361C5 /* dircmn.cpp */,
-				ACC61BA84C6C33D4BCA403ED /* dynarray.cpp */,
 				D272910EC35531E5B4D6E05B /* dynlib.cpp */,
 				93BA27DFFB023F2EBD6295E3 /* dynload.cpp */,
 				C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */,
@@ -7373,7 +7368,6 @@
 				1D726139C977341A97D0C933 /* datetimefmt.cpp in Sources */,
 				E63364B7E727383BA8E2B7EE /* datstrm.cpp in Sources */,
 				3ED6F4B64C283232A79423D1 /* dircmn.cpp in Sources */,
-				54A89D04FF953D55AE8DCCF2 /* dynarray.cpp in Sources */,
 				AD7EEB418C7930CB828EAF89 /* dynlib.cpp in Sources */,
 				0164A65CDB7A334A8E9AA4C1 /* dynload.cpp in Sources */,
 				246B4FF96BA135258FE45F51 /* encconv.cpp in Sources */,
@@ -8082,7 +8076,6 @@
 				1D726139C977341A97D0C932 /* datetimefmt.cpp in Sources */,
 				E63364B7E727383BA8E2B7ED /* datstrm.cpp in Sources */,
 				3ED6F4B64C283232A79423D0 /* dircmn.cpp in Sources */,
-				54A89D04FF953D55AE8DCCF1 /* dynarray.cpp in Sources */,
 				AD7EEB418C7930CB828EAF88 /* dynlib.cpp in Sources */,
 				0164A65CDB7A334A8E9AA4C0 /* dynload.cpp in Sources */,
 				246B4FF96BA135258FE45F50 /* encconv.cpp in Sources */,
@@ -9306,7 +9299,6 @@
 				1D726139C977341A97D0C931 /* datetimefmt.cpp in Sources */,
 				E63364B7E727383BA8E2B7EC /* datstrm.cpp in Sources */,
 				3ED6F4B64C283232A79423CF /* dircmn.cpp in Sources */,
-				54A89D04FF953D55AE8DCCF0 /* dynarray.cpp in Sources */,
 				AD7EEB418C7930CB828EAF87 /* dynlib.cpp in Sources */,
 				0164A65CDB7A334A8E9AA4BF /* dynload.cpp in Sources */,
 				246B4FF96BA135258FE45F4F /* encconv.cpp in Sources */,

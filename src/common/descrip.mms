@@ -89,7 +89,6 @@ OBJECTS = \
 		docmdi.obj,\
 		docview.obj,\
 		dpycmn.obj,\
-		dynarray.obj,\
 		dynlib.obj,\
 		encconv.obj,\
 		event.obj,\
@@ -281,7 +280,6 @@ SOURCES = \
 		docmdi.cpp,\
 		docview.cpp,\
 		dpycmn.cpp,\
-		dynarray.cpp,\
 		dynlib.cpp,\
 		encconv.cpp,\
 		event.cpp,\
@@ -523,7 +521,6 @@ dlgcmn.obj : dlgcmn.cpp
 dobjcmn.obj : dobjcmn.cpp
 docmdi.obj : docmdi.cpp
 docview.obj : docview.cpp
-dynarray.obj : dynarray.cpp
 dynlib.obj : dynlib.cpp
 encconv.obj : encconv.cpp
 event.obj : event.cpp

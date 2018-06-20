@@ -370,7 +370,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_datetimefmt.o \
 	$(OBJS)\monodll_datstrm.o \
 	$(OBJS)\monodll_dircmn.o \
-	$(OBJS)\monodll_dynarray.o \
 	$(OBJS)\monodll_dynlib.o \
 	$(OBJS)\monodll_dynload.o \
 	$(OBJS)\monodll_encconv.o \
@@ -524,7 +523,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_datetimefmt.o \
 	$(OBJS)\monolib_datstrm.o \
 	$(OBJS)\monolib_dircmn.o \
-	$(OBJS)\monolib_dynarray.o \
 	$(OBJS)\monolib_dynlib.o \
 	$(OBJS)\monolib_dynload.o \
 	$(OBJS)\monolib_encconv.o \
@@ -674,7 +672,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_datetimefmt.o \
 	$(OBJS)\basedll_datstrm.o \
 	$(OBJS)\basedll_dircmn.o \
-	$(OBJS)\basedll_dynarray.o \
 	$(OBJS)\basedll_dynlib.o \
 	$(OBJS)\basedll_dynload.o \
 	$(OBJS)\basedll_encconv.o \
@@ -808,7 +805,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_datetimefmt.o \
 	$(OBJS)\baselib_datstrm.o \
 	$(OBJS)\baselib_dircmn.o \
-	$(OBJS)\baselib_dynarray.o \
 	$(OBJS)\baselib_dynlib.o \
 	$(OBJS)\baselib_dynload.o \
 	$(OBJS)\baselib_encconv.o \
@@ -6657,9 +6653,6 @@ $(OBJS)\monodll_datstrm.o: ../../src/common/datstrm.cpp
 $(OBJS)\monodll_dircmn.o: ../../src/common/dircmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_dynarray.o: ../../src/common/dynarray.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_dynlib.o: ../../src/common/dynlib.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9206,9 +9199,6 @@ $(OBJS)\monolib_datstrm.o: ../../src/common/datstrm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_dircmn.o: ../../src/common/dircmn.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_dynarray.o: ../../src/common/dynarray.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_dynlib.o: ../../src/common/dynlib.cpp
@@ -11759,9 +11749,6 @@ $(OBJS)\basedll_datstrm.o: ../../src/common/datstrm.cpp
 $(OBJS)\basedll_dircmn.o: ../../src/common/dircmn.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\basedll_dynarray.o: ../../src/common/dynarray.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\basedll_dynlib.o: ../../src/common/dynlib.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12105,9 +12092,6 @@ $(OBJS)\baselib_datstrm.o: ../../src/common/datstrm.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_dircmn.o: ../../src/common/dircmn.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\baselib_dynarray.o: ../../src/common/dynarray.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_dynlib.o: ../../src/common/dynlib.cpp

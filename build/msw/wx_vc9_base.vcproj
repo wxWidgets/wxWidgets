@@ -866,10 +866,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\common\dynarray.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\common\dynlib.cpp"
 				>
 			</File>
