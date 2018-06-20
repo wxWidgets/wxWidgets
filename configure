@@ -3991,7 +3991,7 @@ case "${host}" in
 
   ;;
 
-  *-*-cygwin* | *-*-mingw32* )
+  *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
                 PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
@@ -29852,7 +29852,7 @@ EOF
                                         HEADER_PAD_OPTION="-headerpad_max_install_names"
       ;;
 
-      *-*-cygwin* | *-*-mingw32* )
+      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         ;;
 
       *-*-hpux* )
@@ -39629,7 +39629,7 @@ fi
 
     LDFLAGS_GUI=
     case ${BAKEFILE_HOST} in
-        *-*-cygwin* | *-*-mingw32* )
+        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         LDFLAGS_GUI="-mwindows"
     esac
 
@@ -40063,7 +40063,7 @@ fi
         fi
       ;;
 
-      *-*-cygwin* | *-*-mingw32* )
+      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         PIC_FLAG=""
         SHARED_LD_CC="\$(CC) -shared -o"
         SHARED_LD_CXX="\$(CXX) -shared -o"
@@ -40308,7 +40308,7 @@ EOF
 
 
     case ${BAKEFILE_HOST} in
-        *-*-cygwin* | *-*-mingw32* )
+        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
                         if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}windres", so it can be a program name with args.
 set dummy ${ac_tool_prefix}windres; ac_word=$2
