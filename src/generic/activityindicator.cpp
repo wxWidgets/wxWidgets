@@ -123,6 +123,7 @@ private:
     {
         wxPaintDC pdc(m_win);
 
+#if wxUSE_GRAPHICS_CONTEXT
         wxScopedPtr<wxGraphicsContext> const
             gc(wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(pdc));
 
@@ -167,6 +168,7 @@ private:
             gc->FillPath(path);
             gc->Rotate(angle);
         }
+#endif // wxUSE_GRAPHICS_CONTEXT
     }
 
     AdvanceTimer m_timer;
