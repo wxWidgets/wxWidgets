@@ -22,6 +22,9 @@
     #include "wx/dcmemory.h"
 #endif // WX_PRECOMP
 
+#include "wx/app.h"
+#include "wx/window.h"
+
 #include "wx/html/htmprint.h"
 
 namespace
@@ -58,6 +61,12 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     // of the margins entirely (it would also be possible to adjust them by
     // the DPI-dependent factor, but it doesn't seem to be worth doing it).
     pr.SetMargins(0, 0, 0, 0, 0);
+
+    // We do need to use DPI-proportional font sizes in order for the text used
+    // in the page-break-inside:avoid test to take the same amount of pixels
+    // for any DPI (12 being the font size used by wxHtmlDCRenderer by default).
+    const int adjFontSize = 12*wxTheApp->GetTopWindow()->GetContentScaleFactor();
+    pr.SetStandardFonts(adjFontSize);
 
     wxBitmap bmp(1000, 1000);
     wxMemoryDC dc(bmp);
@@ -174,6 +183,7 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
                 text
             )
        );
+    INFO("Using base font size " << adjFontSize);
     CHECK( CountPages(pr) == 3 );
 }
 
