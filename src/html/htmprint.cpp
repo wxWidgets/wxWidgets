@@ -33,6 +33,7 @@
 #include "wx/wfstream.h"
 #include "wx/infobar.h"
 
+#include "wx/crt.h"
 
 // default font size of normal text (HTML font size 0) for printing, in points:
 #define DEFAULT_PRINT_FONT_SIZE   12
@@ -159,6 +160,7 @@ int wxHtmlDCRenderer::FindNextPageBreak(int pos) const
         wxCHECK_MSG( posNext > pos, wxNOT_FOUND, "Bug in AdjustPagebreak()" );
     }
 
+    wxPrintf("HTML-DEBUG: Next page break after %d is %d\n", pos, posNext);
     return posNext;
 }
 
