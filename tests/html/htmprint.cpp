@@ -66,7 +66,7 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     // in the page-break-inside:avoid test to take the same amount of pixels
     // for any DPI (12 being the font size used by wxHtmlDCRenderer by default).
     const int adjFontSize = 12*wxTheApp->GetTopWindow()->GetContentScaleFactor();
-    pr.SetStandardFonts(adjFontSize);
+    pr.SetStandardFonts(adjFontSize, "Helvetica");
 
     wxBitmap bmp(1000, 1000);
     wxMemoryDC dc(bmp);
