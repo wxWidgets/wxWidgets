@@ -113,5 +113,7 @@ private :
     wxDECLARE_EVENT_TABLE();
 };
 
+WX_FWD_DATA_TRANSFER(wxSlider, wxSliderBase);
+
 #endif
     // _WX_SLIDER_H_

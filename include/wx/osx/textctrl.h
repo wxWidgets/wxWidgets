@@ -156,4 +156,6 @@ private :
     wxDECLARE_EVENT_TABLE();
 };
 
+WX_FWD_DATA_TRANSFER(wxTextCtrl, wxTextCtrlBase);
+
 #endif // _WX_TEXTCTRL_H_

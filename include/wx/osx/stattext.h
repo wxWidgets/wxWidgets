@@ -53,5 +53,7 @@ protected :
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText);
 };
 
+WX_FWD_DATA_TRANSFER(wxStaticText, wxStaticTextBase);
+
 #endif
     // _WX_STATTEXT_H_

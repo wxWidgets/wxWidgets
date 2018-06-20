@@ -191,5 +191,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxTextCtrl);
 };
 
+WX_FWD_DATA_TRANSFER(wxTextCtrl, wxTextCtrlBase);
+
 #endif // __GTKTEXTCTRLH__
 

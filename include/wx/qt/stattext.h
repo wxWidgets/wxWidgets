@@ -40,4 +40,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS( wxStaticText );
 };
 
+WX_FWD_DATA_TRANSFER(wxStaticText, wxStaticTextBase);
+
 #endif // _WX_QT_STATTEXT_H_

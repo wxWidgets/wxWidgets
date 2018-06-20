@@ -145,5 +145,7 @@ protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider);
 };
 
+WX_FWD_DATA_TRANSFER(wxSlider, wxSliderBase);
+
 #endif // _WX_SLIDER_H_
 

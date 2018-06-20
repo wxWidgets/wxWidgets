@@ -23,6 +23,7 @@
 #include "wx/textentry.h"       // single-line text entry interface
 #include "wx/dynarray.h"        // wxArrayInt
 #include "wx/gdicmn.h"          // wxPoint
+#include "wx/datatransf.h"
 
 #if wxUSE_STD_IOSTREAM
     #include "wx/ioswrap.h"
@@ -765,6 +766,82 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     wxDECLARE_ABSTRACT_CLASS(wxTextCtrlBase);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxTextCtrlBase>
+{
+    static bool To(wxTextCtrlBase* ctrl, wxString* data)
+    {
+        ctrl->SetValue(*data);
+        return true;
+    }
+
+    static bool To(wxTextCtrlBase* ctrl, int* data)
+    {
+        const wxString str = wxString::Format("%d", *data);
+        ctrl->SetValue(str);
+        return true;
+    }
+
+    static bool To(wxTextCtrlBase* ctrl, float* data)
+    {
+        const wxString str = wxString::Format("%g", *data);
+        ctrl->SetValue(str);
+        return true;
+    }
+
+    static bool To(wxTextCtrlBase* ctrl, double* data)
+    {
+        const wxString str = wxString::Format("%g", *data);
+        ctrl->SetValue(str);
+        return true;
+    }
+
+#if 0
+    static bool To(wxTextCtrlBase* ctrl, wxFileName* data)
+    {
+        ctrl->SetValue(data->GetFullPath());
+        return true;
+    }
+#endif
+    
+    static bool From(wxTextCtrlBase* slider, wxString* data)
+    {
+        *data = ctrl->GetValue();
+        return true;
+    }
+
+    static bool From(wxTextCtrlBase* slider, int* data)
+    {
+        *data = wxAtoi(ctrl->GetValue());
+        return true;
+    }
+
+    static bool From(wxTextCtrlBase* slider, float* data)
+    {
+        *data = static_cast<float>(wxAtof(ctrl->GetValue()));
+        return true;
+    }
+
+    static bool From(wxTextCtrlBase* slider, double* data)
+    {
+        *data = wxAtof(ctrl->GetValue());
+        return true;
+    }
+
+#if 0
+    static bool From(wxTextCtrlBase* slider, wxFileName* data)
+    {
+        *data = ctrl->GetValue();
+        return true;
+    }
+#endif
+
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // include the platform-dependent class definition

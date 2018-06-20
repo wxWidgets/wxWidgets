@@ -20,6 +20,7 @@
 #if wxUSE_SLIDER
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // wxSlider flags
@@ -122,6 +123,26 @@ protected:
 private:
     wxDECLARE_NO_COPY_CLASS(wxSliderBase);
 };
+
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxSliderBase>
+{
+    static bool To(wxSliderBase* slider, int* data)
+    {
+        slider->SetValue(*data);
+        return true;
+    }
+
+    static bool From(wxSliderBase* slider, int* data)
+    {
+        *data = slider->GetValue();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // include the real class declaration
