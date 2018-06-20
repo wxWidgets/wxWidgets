@@ -101,7 +101,7 @@ struct wxDataTransfer<wxStaticTextBase>
 
     static bool From(wxStaticTextBase* stxt, wxString* data)
     {
-        *data = stxt->SetLabel();
+        *data = stxt->GetLabel();
         return true;
     }
 };
