@@ -807,32 +807,32 @@ struct wxDataTransfer<wxTextCtrlBase>
     }
 #endif
     
-    static bool From(wxTextCtrlBase* slider, wxString* data)
+    static bool From(wxTextCtrlBase* ctrl, wxString* data)
     {
         *data = ctrl->GetValue();
         return true;
     }
 
-    static bool From(wxTextCtrlBase* slider, int* data)
+    static bool From(wxTextCtrlBase* ctrl, int* data)
     {
         *data = wxAtoi(ctrl->GetValue());
         return true;
     }
 
-    static bool From(wxTextCtrlBase* slider, float* data)
+    static bool From(wxTextCtrlBase* ctrl, float* data)
     {
         *data = static_cast<float>(wxAtof(ctrl->GetValue()));
         return true;
     }
 
-    static bool From(wxTextCtrlBase* slider, double* data)
+    static bool From(wxTextCtrlBase* ctrl, double* data)
     {
         *data = wxAtof(ctrl->GetValue());
         return true;
     }
 
 #if 0
-    static bool From(wxTextCtrlBase* slider, wxFileName* data)
+    static bool From(wxTextCtrlBase* ctrl, wxFileName* data)
     {
         *data = ctrl->GetValue();
         return true;
