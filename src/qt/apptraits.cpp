@@ -15,7 +15,7 @@
 #include "wx/timer.h"
 #include "wx/qt/private/timer.h"
 
-#include <QtGlobal>
+#include <QtCore/QtGlobal>
 
 wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 {

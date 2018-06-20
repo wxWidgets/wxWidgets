@@ -12,7 +12,7 @@
     #pragma hdrstop
 #endif
 
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"

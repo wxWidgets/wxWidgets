@@ -14,7 +14,7 @@
 
 #if wxUSE_TOOLBAR
 
-#include <QActionGroup>
+#include <QtWidgets/QActionGroup>
 #include <QtWidgets/QToolButton>
 
 #ifndef WX_PRECOMP
