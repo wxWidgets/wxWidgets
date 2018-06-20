@@ -73,9 +73,11 @@ private:
         CPPUNIT_TEST( CompareSavedImage );
         CPPUNIT_TEST( SavePNG );
         CPPUNIT_TEST( SaveTIFF );
-        CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( ReadCorruptedTGA );
+#if wxUSE_GIF
+        CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( GIFComment );
+#endif // wxUSE_GIF
         CPPUNIT_TEST( DibPadding );
         CPPUNIT_TEST( BMPFlippingAndRLECompression );
         CPPUNIT_TEST( ScaleCompare );
@@ -89,9 +91,11 @@ private:
     void CompareSavedImage();
     void SavePNG();
     void SaveTIFF();
-    void SaveAnimatedGIF();
     void ReadCorruptedTGA();
+#if wxUSE_GIF
+    void SaveAnimatedGIF();
     void GIFComment();
+#endif // wxUSE_GIF
     void DibPadding();
     void BMPFlippingAndRLECompression();
     void ScaleCompare();
@@ -113,7 +117,9 @@ ImageTestCase::ImageTestCase()
     wxImage::AddHandler(new wxANIHandler);
     wxImage::AddHandler(new wxBMPHandler);
     wxImage::AddHandler(new wxCURHandler);
+#if wxUSE_GIF
     wxImage::AddHandler(new wxGIFHandler);
+#endif // wxUSE_GIF
     wxImage::AddHandler(new wxJPEGHandler);
     wxImage::AddHandler(new wxPCXHandler);
     wxImage::AddHandler(new wxPNMHandler);
@@ -1134,42 +1140,6 @@ void ImageTestCase::SaveTIFF()
     TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 2, &alphaImage);
 }
 
-void ImageTestCase::SaveAnimatedGIF()
-{
-#if wxUSE_PALETTE
-    wxImage image("horse.gif");
-    CPPUNIT_ASSERT( image.IsOk() );
-
-    wxImageArray images;
-    images.Add(image);
-    for (int i = 0; i < 4-1; ++i)
-    {
-        images.Add( images[i].Rotate90() );
-
-        images[i+1].SetPalette(images[0].GetPalette());
-    }
-
-    wxMemoryOutputStream memOut;
-    CPPUNIT_ASSERT( wxGIFHandler().SaveAnimation(images, &memOut) );
-
-    wxGIFHandler handler;
-    wxMemoryInputStream memIn(memOut);
-    CPPUNIT_ASSERT(memIn.IsOk());
-    const int imageCount = handler.GetImageCount(memIn);
-    CPPUNIT_ASSERT_EQUAL(4, imageCount);
-
-    for (int i = 0; i < imageCount; ++i)
-    {
-        wxFileOffset pos = memIn.TellI();
-        CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true, i) );
-        memIn.SeekI(pos);
-
-        wxINFO_FMT("Compare test for GIF frame number %d failed", i);
-        CHECK_THAT(image, RGBSameAs(images[i]));
-    }
-#endif // #if wxUSE_PALETTE
-}
-
 void ImageTestCase::ReadCorruptedTGA()
 {
     static unsigned char corruptTGA[18+1+3] =
@@ -1204,6 +1174,44 @@ void ImageTestCase::ReadCorruptedTGA()
     */
     corruptTGA[18] = 0x7f;
     CPPUNIT_ASSERT( !tgaImage.LoadFile(memIn) );
+}
+
+#if wxUSE_GIF
+
+void ImageTestCase::SaveAnimatedGIF()
+{
+#if wxUSE_PALETTE
+    wxImage image("horse.gif");
+    CPPUNIT_ASSERT( image.IsOk() );
+
+    wxImageArray images;
+    images.Add(image);
+    for (int i = 0; i < 4-1; ++i)
+    {
+        images.Add( images[i].Rotate90() );
+
+        images[i+1].SetPalette(images[0].GetPalette());
+    }
+
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT( wxGIFHandler().SaveAnimation(images, &memOut) );
+
+    wxGIFHandler handler;
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+    const int imageCount = handler.GetImageCount(memIn);
+    CPPUNIT_ASSERT_EQUAL(4, imageCount);
+
+    for (int i = 0; i < imageCount; ++i)
+    {
+        wxFileOffset pos = memIn.TellI();
+        CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true, i) );
+        memIn.SeekI(pos);
+
+        wxINFO_FMT("Compare test for GIF frame number %d failed", i);
+        CHECK_THAT(image, RGBSameAs(images[i]));
+    }
+#endif // #if wxUSE_PALETTE
 }
 
 static void TestGIFComment(const wxString& comment)
@@ -1280,6 +1288,8 @@ void ImageTestCase::GIFComment()
         memIn.SeekI(pos);
     }
 }
+
+#endif // wxUSE_GIF
 
 void ImageTestCase::DibPadding()
 {
