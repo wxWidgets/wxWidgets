@@ -27007,11 +27007,12 @@ pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for QT5" >&5
 $as_echo_n "checking for QT5... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$QT5_CFLAGS"; then
-        pkg_cv_QT5_CFLAGS="$QT5_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$QT5_CFLAGS"; then
+    pkg_cv_QT5_CFLAGS="$QT5_CFLAGS"
+else
+    if test -z "$PKG_CONFIG"; then
+        pkg_failed=untried
+    elif \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test\""; } >&5
   ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test") 2>&5
   ac_status=$?
@@ -27021,15 +27022,14 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$QT5_LIBS"; then
-        pkg_cv_QT5_LIBS="$QT5_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+
+if test -n "$QT5_LIBS"; then
+    pkg_cv_QT5_LIBS="$QT5_LIBS"
+else
+    if test -z "$PKG_CONFIG"; then
+        pkg_failed=untried
+    elif \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test\""; } >&5
   ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test") 2>&5
   ac_status=$?
@@ -27039,9 +27039,6 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
 fi
 
 
