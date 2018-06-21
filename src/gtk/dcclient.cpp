@@ -1914,9 +1914,9 @@ void wxWindowDCImpl::UpdateClipBox()
     m_isClipBoxValid = true;
 }
 
-void wxWindowDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+bool wxWindowDCImpl::DoGetClippingRect(wxRect& rect) const
 {
-    wxCHECK_RET( IsOk(), wxS("invalid window dc") );
+    wxCHECK_MSG( IsOk(), false, wxS("invalid window dc") );
 
     // Check if we should try to retrieve the clipping region possibly not set
     // by our SetClippingRegion() but preset or modified by application: this
@@ -1928,14 +1928,7 @@ void wxWindowDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoor
         self->UpdateClipBox();
     }
 
-    if ( x )
-        *x = m_clipX1;
-    if ( y )
-        *y = m_clipY1;
-    if ( w )
-        *w = m_clipX2 - m_clipX1;
-    if ( h )
-        *h = m_clipY2 - m_clipY1;
+    return wxGTKDCImpl::DoGetClippingRect(rect);
 }
 
 void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )

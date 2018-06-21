@@ -71,7 +71,7 @@ public:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
     virtual void DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height ) wxOVERRIDE;
     virtual void DoSetDeviceClippingRegion( const wxRegion &region ) wxOVERRIDE;
-    virtual void DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const wxOVERRIDE;
+    virtual bool DoGetClippingRect(wxRect& rect) const wxOVERRIDE;
 
     virtual wxCoord GetCharWidth() const wxOVERRIDE;
     virtual wxCoord GetCharHeight() const wxOVERRIDE;
