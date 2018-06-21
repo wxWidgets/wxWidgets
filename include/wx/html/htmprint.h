@@ -273,6 +273,17 @@ public:
     void SetName(const wxString& name) { m_Name = name; }
             // set the printout name
 
+    enum DialogMode
+    {
+        DIALOG_NEVER,
+        DIALOG_ONCE,
+        DIALOG_ALWAYS
+    };
+    DialogMode GetDialogMode() const { return m_dialogMode; }
+            // get the dialog mode
+    void SetDialogMode(DialogMode dialogMode) { m_dialogMode = dialogMode; }
+            // set the dialog mode
+
 protected:
     virtual wxHtmlPrintout *CreatePrintout();
     virtual bool DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2);
@@ -295,6 +306,8 @@ private:
 
     wxString m_Headers[2], m_Footers[2];
     wxWindow *m_ParentWindow;
+
+    DialogMode m_dialogMode;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlEasyPrinting);
 };

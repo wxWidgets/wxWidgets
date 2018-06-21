@@ -196,6 +196,18 @@ class wxHtmlEasyPrinting : public wxObject
 {
 public:
     /**
+        Dialog modes indicate when the print dialog should be shown.
+
+        @see SetDialogMode()
+    */
+    enum DialogMode
+    {
+        DIALOG_NEVER,       //!< Do not show the print dialog.
+        DIALOG_ONCE,        //!< Show the print dialog once and reset to DIALOG_NEVER.
+        DIALOG_ALWAYS       //!< Show the print dialog each time.
+    };
+
+    /**
         Constructor.
 
         @param name
@@ -231,6 +243,14 @@ public:
         You can set its parameters (via SetXXXX methods).
     */
     wxPrintData* GetPrintData();
+
+    /**
+        Returns the current dialog mode.
+
+        @since 3.1.2
+        @see SetDialogMode()
+    */
+    DialogMode GetDialogMode() const;
 
     /**
         Display page setup dialog and allows the user to modify settings.
@@ -339,6 +359,13 @@ public:
         Sets the parent window for dialogs.
     */
     void SetParentWindow(wxWindow* window);
+
+    /**
+        Sets the dialog mode. Default is DIALOG_ALWAYS.
+
+        @since 3.1.2
+    */
+    void SetDialogMode(DialogMode dialogMode);
 
 private:
     /**

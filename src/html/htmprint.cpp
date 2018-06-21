@@ -619,6 +619,8 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWin
     m_PageSetupData->SetMarginBottomRight(wxPoint(25, 25));
 
     SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
+
+    m_dialogMode = DIALOG_ALWAYS;
 }
 
 
@@ -709,7 +711,13 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
     wxPrintDialogData printDialogData(*GetPrintData());
     wxPrinter printer(&printDialogData);
 
-    if (!printer.Print(m_ParentWindow, printout, true))
+    bool dialog = m_dialogMode != DIALOG_NEVER;
+    if (m_dialogMode == DIALOG_ONCE)
+    {
+        m_dialogMode = DIALOG_NEVER;
+    }
+
+    if (!printer.Print(m_ParentWindow, printout, dialog))
     {
         return false;
     }
