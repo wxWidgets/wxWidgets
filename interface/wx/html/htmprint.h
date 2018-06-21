@@ -340,6 +340,32 @@ public:
     */
     void SetParentWindow(wxWindow* window);
 
+    /**
+        Controls when the print dialog should be shown.
+
+        @see SetPromptMode()
+
+        @since 3.1.2
+    */
+    enum PromptMode
+    {
+        Prompt_Never,  //!< Do not show the print dialog.
+        Prompt_Once,   //!< Show the print dialog only the first time.
+        Prompt_Always  //!< Show the print dialog every time (default value).
+    };
+
+    /**
+        Enable or disable showing the dialog before printing.
+
+        The prompt mode determines the value of the @c prompt parameter passed
+        to wxPrinter::Print() when it is called by this class.
+
+        Default prompt mode value is Prompt_Always.
+
+        @since 3.1.2
+    */
+    void SetPromptMode(PromptMode promptMode);
+
 private:
     /**
         Check whether the document fits into the page area.

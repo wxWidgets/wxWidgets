@@ -88,6 +88,7 @@ All (GUI):
 - Fix bug with missing items in overflowing AUI toolbar (Maarten Bent).
 - Revert to left-aligning wxSpinCtrl contents by default.
 - Make wxRibbonButtonBar buttons more customizable (Max Maisel).
+- Add wxHtmlEasyPrinting::SetPromptMode() (pavel-t).
 
 wxGTK:
 
