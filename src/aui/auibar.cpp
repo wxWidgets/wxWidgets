@@ -70,12 +70,7 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
 
 static wxColor GetBaseColor()
 {
-
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
-#else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
 
     // the baseColour is too pale to use as our base colour,
     // so darken it a bit --
@@ -208,8 +203,22 @@ void wxAuiGenericToolBarArt::DrawBackground(
 {
     wxRect rect = _rect;
     rect.height++;
-    wxColour startColour = m_baseColour.ChangeLightness(150);
-    wxColour endColour = m_baseColour.ChangeLightness(90);
+    
+    int startLightness = 150;
+    int endLightness = 90;
+    
+    
+    if ((m_baseColour.Red() < 75)
+        && (m_baseColour.Green() < 75)
+        && (m_baseColour.Blue() < 75))
+    {
+        //dark mode, we cannot go very light
+        startLightness = 110;
+        endLightness = 90;
+    }
+    wxColour startColour = m_baseColour.ChangeLightness(startLightness);
+    wxColour endColour = m_baseColour.ChangeLightness(endLightness);
+
     dc.GradientFillLinear(rect, startColour, endColour, wxSOUTH);
 }
 

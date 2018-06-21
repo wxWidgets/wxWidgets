@@ -380,7 +380,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
             CGContextFillRect(cgContext,splitterRect);
         }
 
-        if ( win->HasFlag(wxSP_3DSASH) )
+        if ( win->HasFlag(wxSP_3DSASH) && !wxPlatformInfo::Get().CheckOSVersion(10, 14) )
         {
             if ( !wxPlatformInfo::Get().CheckOSVersion(10, 14) || wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() > 128  )
             {
