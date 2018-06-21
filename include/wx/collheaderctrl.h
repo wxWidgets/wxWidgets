@@ -15,6 +15,7 @@
 #if wxUSE_COLLPANE
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 // class name
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCollapsibleHeaderCtrlNameStr[];
@@ -66,6 +67,26 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxCollapsibleHeaderCtrlBase);
 };
 
+#if wxUSE_VALIDATORS
+
+template<>
+struct wxDataTransfer<wxCollapsibleHeaderCtrlBase>
+{
+    static bool To(wxCollapsibleHeaderCtrlBase* ctrl, bool* value)
+    {
+        ctrl->SetCollapsed(*value);
+        return true;
+    }
+
+    static bool From(wxCollapsibleHeaderCtrlBase* ctrl, bool* value)
+    {
+        *value = ctrl->IsCollapsed();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
+
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COLLAPSIBLEHEADER_CHANGED, wxCommandEvent);
 
 #define wxCollapsibleHeaderChangedHandler(func) \
@@ -100,6 +121,8 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxCollapsibleHeaderCtrl);
 };
+
+WX_FWD_DATA_TRANSFER(wxCollapsibleHeaderCtrl, wxCollapsibleHeaderCtrlBase);
 
 #endif // wxUSE_COLLPANE
 

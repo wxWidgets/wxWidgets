@@ -47,4 +47,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTimePickerCtrl);
 };
 
+// Just forward to wxDateTimePickerCtrlBase, the ultimate base which implements
+// data transfer for date/time control.
+WX_FWD_DATA_TRANSFER(wxTimePickerCtrl, wxDateTimePickerCtrlBase);
+
 #endif // _WX_OSX_TIMECTRL_H_
