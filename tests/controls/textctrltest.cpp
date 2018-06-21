@@ -59,6 +59,7 @@ private:
         WXUISIM_TEST( MaxLength );
         CPPUNIT_TEST( PositionToXYSingleLine );
         CPPUNIT_TEST( XYToPositionSingleLine );
+        CPPUNIT_TEST( HitTestSingleLine );
         SINGLE_AND_MULTI_TESTS();
 
         // Now switch to the multi-line text controls.
@@ -112,6 +113,7 @@ private:
     void MaxLength();
     void StreamInput();
     void Redirector();
+    void HitTestSingleLine();
     //void ProcessEnter();
     void Url();
     void Style();
@@ -164,12 +166,8 @@ long TextCtrlTestCase::ms_style = 0;
 
 void TextCtrlTestCase::CreateText(long extraStyles)
 {
-    wxSize size;
-    if ( ms_style == wxTE_MULTILINE )
-        size = wxSize(400, TEXT_HEIGHT);
-
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, size,
+                            wxDefaultPosition, wxSize(400, TEXT_HEIGHT),
                             ms_style | extraStyles);
 }
 
@@ -340,6 +338,51 @@ void TextCtrlTestCase::Redirector()
     CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71a", m_text->GetValue());
 
 #endif
+}
+
+void TextCtrlTestCase::HitTestSingleLine()
+{
+    m_text->ChangeValue("Hit me");
+
+    // We don't know the size of the text borders, so we can't really do any
+    // exact tests, just try to verify that the results are roughly as
+    // expected.
+    const wxSize sizeChar = m_text->GetTextExtent("X");
+    const int yMid = sizeChar.y / 2;
+
+    long pos = -1;
+
+    // Hitting a point near the left side of the control should find one of the
+    // first few characters under it.
+    SECTION("Normal")
+    {
+        REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+        CHECK( pos >= 0 );
+        CHECK( pos < 3 );
+    }
+
+    // Hitting a point well beyond the end of the text shouldn't find any valid
+    // character.
+    SECTION("Beyond")
+    {
+        REQUIRE( m_text->HitTest(wxPoint(20*sizeChar.x, yMid), &pos) == wxTE_HT_BEYOND );
+        CHECK( pos == m_text->GetLastPosition() );
+    }
+
+    // Making the control scroll, by ensuring that its contents is too long to
+    // show inside its window, should change the hit test result for the same
+    // position as used above.
+    SECTION("Scrolled")
+    {
+        m_text->ChangeValue(wxString(200, 'X'));
+        m_text->SetInsertionPointEnd();
+
+        // wxGTK must be given an opportunity to lay the text out.
+        wxYield();
+
+        REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+        CHECK( pos > 3 );
+    }
 }
 
 #if 0

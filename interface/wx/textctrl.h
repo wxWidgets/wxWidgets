@@ -1337,7 +1337,7 @@ public:
         parameter is not modified.
 
         Please note that this function is currently only implemented in wxUniv,
-        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        wxMSW and wxGTK ports and always returns @c wxTE_HT_UNKNOWN in the
         other ports.
 
         @beginWxPerlOnly
@@ -1363,7 +1363,7 @@ public:
         parameters are not modified.
 
         Please note that this function is currently only implemented in wxUniv,
-        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        wxMSW and wxGTK ports and always returns @c wxTE_HT_UNKNOWN in the
         other ports.
 
         @beginWxPerlOnly
