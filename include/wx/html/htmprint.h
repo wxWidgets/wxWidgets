@@ -279,9 +279,9 @@ public:
         DIALOG_ONCE,
         DIALOG_ALWAYS
     };
-    DialogMode GetDialogMode() const { return m_dialog; }
+    DialogMode GetDialogMode() const { return m_dialogMode; }
             // get the dialog mode
-    void SetDialogMode(DialogMode dialog) { m_dialog = dialog; }
+    void SetDialogMode(DialogMode dialogMode) { m_dialogMode = dialogMode; }
             // set the dialog mode
 
 protected:
@@ -307,7 +307,7 @@ private:
     wxString m_Headers[2], m_Footers[2];
     wxWindow *m_ParentWindow;
 
-    DialogMode m_dialog;
+    DialogMode m_dialogMode;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlEasyPrinting);
 };

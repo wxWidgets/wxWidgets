@@ -620,7 +620,7 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWin
 
     SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
 
-    m_dialog = DIALOG_ALWAYS;
+    m_dialogMode = DIALOG_ALWAYS;
 }
 
 
@@ -711,8 +711,11 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
     wxPrintDialogData printDialogData(*GetPrintData());
     wxPrinter printer(&printDialogData);
 
-    bool dialog = m_dialog != DIALOG_NEVER;
-    if (m_dialog == DIALOG_ONCE) m_dialog = DIALOG_NEVER;
+    bool dialog = m_dialogMode != DIALOG_NEVER;
+    if (m_dialogMode == DIALOG_ONCE)
+    {
+        m_dialogMode = DIALOG_NEVER;
+    }
 
     if (!printer.Print(m_ParentWindow, printout, dialog))
     {

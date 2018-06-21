@@ -365,7 +365,7 @@ public:
 
         @since 3.1.2
     */
-    void SetDialogMode(DialogMode dialog);
+    void SetDialogMode(DialogMode dialogMode);
 
 private:
     /**
