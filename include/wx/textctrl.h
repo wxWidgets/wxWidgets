@@ -23,6 +23,7 @@
 #include "wx/textentry.h"       // single-line text entry interface
 #include "wx/dynarray.h"        // wxArrayInt
 #include "wx/gdicmn.h"          // wxPoint
+#include "wx/filename.h"
 #include "wx/datatransf.h"
 
 #if wxUSE_STD_IOSTREAM
@@ -799,13 +800,11 @@ struct wxDataTransfer<wxTextCtrlBase>
         return true;
     }
 
-#if 0
     static bool To(wxTextCtrlBase* ctrl, wxFileName* data)
     {
         ctrl->SetValue(data->GetFullPath());
         return true;
     }
-#endif
     
     static bool From(wxTextCtrlBase* ctrl, wxString* data)
     {
@@ -831,14 +830,11 @@ struct wxDataTransfer<wxTextCtrlBase>
         return true;
     }
 
-#if 0
     static bool From(wxTextCtrlBase* ctrl, wxFileName* data)
     {
         *data = ctrl->GetValue();
         return true;
     }
-#endif
-
 };
 
 #endif // wxUSE_VALIDATORS
