@@ -112,8 +112,7 @@ like this:
 ../configure --with-qt --enable-debug \
              QT5_CFLAGS=-I/c/Qt/5.11.0/mingw53_32/include \
              QT5_LIBS="-L/c/Qt/5.11.0/mingw53_32/lib \
-             -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test \
-             -Wl,-rpath,/c/Qt/5.11.0/mingw53_32/lib"
+             -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test"
 
 * Building wxGT on Android
 --------------------------
