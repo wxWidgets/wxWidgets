@@ -183,7 +183,9 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
                 text
             )
        );
-    INFO("Using base font size " << adjFontSize);
+    const wxSize ext = dc.GetTextExtent("Something");
+    WARN("Using base font size " << adjFontSize
+         << ", text extent of \"Something\" is " << ext.x << "x" << ext.y);
     CHECK( CountPages(pr) == 3 );
 }
 
