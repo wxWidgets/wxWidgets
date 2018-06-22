@@ -132,8 +132,11 @@ protected:
                       const wxPoint& pos,
                       const wxSize& size);
 
-    // common part of Iconize(), Maximize() and Restore()
+    // Just a wrapper around MSW ShowWindow().
     void DoShowWindow(int nShowCmd);
+
+    // Return true if the window is iconized at MSW level, ignoring m_showCmd.
+    bool MSWIsIconized() const;
 
     // override those to return the normal window coordinates even when the
     // window is minimized
@@ -156,13 +159,11 @@ protected:
                                           int& x, int& y,
                                           int& w, int& h) const wxOVERRIDE;
 
-
-    // is the window currently iconized?
-    bool m_iconized;
-
-    // should the frame be maximized when it will be shown? set by Maximize()
-    // when it is called while the frame is hidden
-    bool m_maximizeOnShow;
+    // This field contains the show command to use when showing the window the
+    // next time and also indicates whether the window should be considered
+    // being iconized or maximized (which may be different from whether it's
+    // actually iconized or maximized at MSW level).
+    WXUINT m_showCmd;
 
     // Data to save/restore when calling ShowFullScreen
     long                  m_fsStyle; // Passed to ShowFullScreen
