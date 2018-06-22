@@ -208,11 +208,10 @@ void wxAuiGenericToolBarArt::DrawBackground(
 {
     wxRect rect = _rect;
     rect.height++;
-    
+
     int startLightness = 150;
     int endLightness = 90;
-    
-    
+
     if ((m_baseColour.Red() < 75)
         && (m_baseColour.Green() < 75)
         && (m_baseColour.Blue() < 75))
@@ -223,7 +222,7 @@ void wxAuiGenericToolBarArt::DrawBackground(
     }
     wxColour startColour = m_baseColour.ChangeLightness(startLightness);
     wxColour endColour = m_baseColour.ChangeLightness(endLightness);
-    
+
     dc.GradientFillLinear(rect, startColour, endColour, wxSOUTH);
 }
 
