@@ -743,6 +743,12 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
 
 bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 {
+    // We can get a WM_SIZE when restoring a hidden window using
+    // SetWindowPlacement(), don't do anything in this case as our state will
+    // be really updated later, when (and if) we're shown.
+    if ( !IsShown() )
+        return true;
+
     switch ( id )
     {
         case SIZE_RESTORED:

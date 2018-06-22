@@ -116,6 +116,9 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 
+    // This function is only for internal use.
+    void MSWSetShowCommand(WXUINT showCmd) { m_showCmd = showCmd; }
+
 protected:
     // common part of all ctors
     void Init();
