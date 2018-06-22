@@ -17,6 +17,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/dialog.h"
     #include "wx/frame.h"
     #include "wx/textctrl.h"
@@ -32,6 +33,7 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 
 // only run this test on platforms where ShowWithoutActivating is implemented.
 #if defined(__WXMSW__) || defined(__WXMAC__)
+    wxTheApp->GetTopWindow()->SetFocus();
     tlw->ShowWithoutActivating();
     CHECK(tlw->IsShown());
     CHECK(!tlw->IsActive());
@@ -53,19 +55,12 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
     tlw->Hide();
     CHECK(!tlw->IsShown());
 #ifndef __WXGTK__
-    CHECK(tlw->IsActive());
+    CHECK(!tlw->IsActive());
 #endif
 }
 
 TEST_CASE("wxTopLevel::Show", "[tlw][show]")
 {
-    if ( IsAutomaticTest() )
-    {
-        // For some reason, activation test doesn't work when running under
-        // AppVeyor, so skip it to avoid spurious failures.
-        return;
-    }
-
     SECTION("Dialog")
     {
         wxDialog* dialog = new wxDialog(NULL, -1, "Dialog Test");

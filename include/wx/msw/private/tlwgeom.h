@@ -77,12 +77,20 @@ public:
         wxCopyRectToRECT(r, m_placement.rcNormalPosition);
 
         // Maximized/minimized state.
+        //
+        // Note the special case of SW_MINIMIZE: while GetWindowPlacement()
+        // returns SW_SHOWMINIMIZED when the window is iconized, we restore it
+        // as SW_MINIMIZE as this is what the code in wxTLW checks to determine
+        // whether the window is supposed to be iconized or not.
+        //
+        // Just to confuse matters further, note that SW_MAXIMIZE is exactly
+        // the same thing as SW_SHOWMAXIMIZED.
         int tmp;
         UINT& show = m_placement.showCmd;
         if ( ser.RestoreField(wxPERSIST_TLW_MAXIMIZED, &tmp) && tmp )
-            show = SW_SHOWMAXIMIZED;
+            show = SW_MAXIMIZE;
         else if ( ser.RestoreField(wxPERSIST_TLW_ICONIZED, &tmp) && tmp )
-            show = SW_SHOWMINIMIZED;
+            show = SW_MINIMIZE;
         else
             show = SW_SHOWNORMAL;
 
@@ -110,6 +118,18 @@ public:
 
     virtual bool ApplyTo(wxTopLevelWindow* tlw) wxOVERRIDE
     {
+        // There is a subtlety here: if the window is currently hidden,
+        // restoring its geometry shouldn't show it, so we must use SW_HIDE as
+        // show command, but showing it later should restore it to the correct
+        // state, so we need to remember it in wxTLW itself. And even if it's
+        // currently shown, we still need to update its show command, so that
+        // it matches the real window state after SetWindowPlacement() call.
+        tlw->MSWSetShowCommand(m_placement.showCmd);
+        if ( !tlw->IsShown() )
+        {
+            m_placement.showCmd = SW_HIDE;
+        }
+
         if ( !::SetWindowPlacement(GetHwndOf(tlw), &m_placement) )
         {
             wxLogLastError(wxS("SetWindowPlacement"));

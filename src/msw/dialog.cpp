@@ -321,7 +321,7 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             switch ( wParam )
             {
                 case SIZE_MINIMIZED:
-                    m_iconized = true;
+                    m_showCmd = SW_MINIMIZE;
                     break;
 
                 case SIZE_MAXIMIZED:
@@ -331,9 +331,9 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
                     if ( m_hGripper )
                         ShowGripper( wParam == SIZE_RESTORED );
 
-                    if ( m_iconized )
+                    if ( m_showCmd == SW_MINIMIZE )
                         (void)SendIconizeEvent(false);
-                    m_iconized = false;
+                    m_showCmd = SW_RESTORE;
 
                     break;
             }
