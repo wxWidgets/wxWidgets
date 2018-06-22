@@ -61,13 +61,6 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 
 TEST_CASE("wxTopLevel::Show", "[tlw][show]")
 {
-    if ( IsAutomaticTest() )
-    {
-        // For some reason, activation test doesn't work when running under
-        // AppVeyor, so skip it to avoid spurious failures.
-        return;
-    }
-
     SECTION("Dialog")
     {
         wxDialog* dialog = new wxDialog(NULL, -1, "Dialog Test");
