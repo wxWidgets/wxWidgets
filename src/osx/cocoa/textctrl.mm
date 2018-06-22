@@ -436,6 +436,15 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         impl->controlTextDidChange();
 }
 
+
+- (void)changeColor:(id)sender
+{
+   // Define this just to block the color change messages - these are sent from
+   // the shared color/font panel resulting in unwanted changes of color when
+   // shared color panel is used (as when using wxColourPickerCtrl for example).
+}
+
+
 - (void) setEnabled:(BOOL) flag
 {
     // from Technical Q&A QA1461
