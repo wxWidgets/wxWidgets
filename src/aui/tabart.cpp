@@ -272,8 +272,7 @@ void wxAuiGenericTabArt::DrawBackground(wxDC& dc,
         topLightness = 90;
         bottomLightness = 110;
     }
-    
-    
+
     wxColor top_color       = m_baseColour.ChangeLightness(topLightness);
     wxColor bottom_color   = m_baseColour.ChangeLightness(bottomLightness);
     wxRect r;
@@ -446,7 +445,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
             //dark mode, we go darker
             gradient = m_activeColour.ChangeLightness(70);
         }
-        
+
         dc.SetPen(wxPen(gradient));
         dc.SetBrush(wxBrush(gradient));
         dc.DrawRectangle(r.x+2, r.y+1, r.width-3, r.height-4);
@@ -494,7 +493,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
             top_color = m_activeColour.ChangeLightness(70);
             bottom_color = m_baseColour;
         }
-        
+
         dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
 
         r.y += r.height;
@@ -1356,4 +1355,3 @@ void wxAuiSimpleTabArt::SetMeasuringFont(const wxFont& font)
 }
 
 #endif // wxUSE_AUI
-                                                                                                                  
