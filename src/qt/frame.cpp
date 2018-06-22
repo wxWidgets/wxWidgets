@@ -170,22 +170,19 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
 {
     wxWindow::DoGetClientSize(width, height);
 
-    // for a status bar, we must subtract it's height here
-    wxStatusBar *sb = GetStatusBar();
-    if (height && sb)
+    // Adjust the height, taking the status and menu bars into account, if any:
+    if ( height )
     {
-        int sbh = 0;
-        sb->GetSize(NULL, &sbh);
-        *height -= sbh;
-    }
+        if ( wxStatusBar *sb = GetStatusBar() )
+        {
+            *height -= sb->GetSize().y;
+        }
 
 
-    // also for menubar , we must subtract it's height here
-    QMenuBar *qmb = GetQMainWindow()->menuBar();
-    if (height && qmb)
-    {
-        QRect geometry = qmb->geometry();
-        *height -= geometry.height();
+        if ( QMenuBar *qmb = GetQMainWindow()->menuBar() )
+        {
+            *height -= qmb->geometry().height();
+        }
     }
 }
 
