@@ -902,7 +902,8 @@ public:
                               wxTreeItemIcon which = wxTreeItemIcon_Normal);
 
     /**
-        Sets the specified item state. The value of @a state may be:
+        Sets the specified item state. The value of @a state may be an index
+        into the state image list, or one of the special values:
         - @c wxTREE_ITEMSTATE_NONE: to disable the item state (the state image will
             be not displayed).
         - @c wxTREE_ITEMSTATE_NEXT: to set the next item state.
