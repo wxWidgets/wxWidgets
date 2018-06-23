@@ -3258,8 +3258,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             processed = HandleWindowEvent(event);
                 }
             }
-            if (message == WM_SYSKEYDOWN)  // Let Windows still handle the SYSKEYs
-                processed = false;
             break;
 
         case WM_SYSKEYUP:

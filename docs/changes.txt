@@ -42,6 +42,12 @@ Changes in behaviour not resulting in compilation errors
   anymore and GetOrCreateAccessible() may return NULL, indicating that native
   system-provided accessibility should be used.
 
+- wxMSW port doesn't always let the system process WM_SYSKEYDOWN events any
+  more, make sure to call event.Skip() in your wxEVT_KEY_DOWN and/or wxEVT_CHAR
+  event handlers if you want the standard key combinations such as Alt-Space or
+  Alt-F4 to work.
+
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
