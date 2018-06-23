@@ -78,6 +78,10 @@ Changes in behaviour which may result in build errors
 - wxHtmlCell::AdjustPagebreak() has lost its "known_pagebreaks" argument,
   update your code if you override this method (you shouldn't be calling it).
 
+- wxListCtrl::SetItem() overload taking the column index now returns bool and
+  not long. Its return value hasn't changed, however, and is still always
+  either true or false, so normally the existing code should continue to work.
+
 
 3.1.2: (released 2018-??-??)
 ----------------------------
