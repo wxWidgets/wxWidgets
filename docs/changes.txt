@@ -95,6 +95,7 @@ All (GUI):
 - Revert to left-aligning wxSpinCtrl contents by default.
 - Make wxRibbonButtonBar buttons more customizable (Max Maisel).
 - Add wxHtmlEasyPrinting::SetPromptMode() (pavel-t).
+- Fix possible infinite loop in wxHtmlWindow layout (trivia21).
 
 wxGTK:
 
