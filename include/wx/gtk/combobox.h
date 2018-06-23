@@ -172,17 +172,12 @@ struct wxDataTransfer<wxComboBox>
 
     static bool To(wxComboBox* combo, wxString* data)
     {
-        if ( combo->FindString(*data) != wxNOT_FOUND )
+        if ( !combo->SetStringSelection(*data) )
         {
-            combo->SetStringSelection(*data);
-        }
-        else if ( (combo->GetWindowStyle() & wxCB_READONLY) == 0 )
-        {
+            if ( (combo->GetWindowStyle() & wxCB_READONLY) )
+                return false;
+            
             combo->SetValue(*data);
-        }
-        else
-        {
-            return false;
         }
 
         return true;

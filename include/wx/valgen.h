@@ -49,13 +49,10 @@ struct wxDataTransferHelper
 } // namespace wxPrivate
 
 // ----------------------------------------------------------------------------
-// wxGenericValidatorType performs data transfer between many standard controls
-// and variables of the type corresponding to their values.
-//
-// It doesn't do any validation so its name is a slight misnomer.
+// wxGenericValidatorBase 
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericValidatorBase: public wxValidator
+class WXDLLIMPEXP_CORE wxGenericValidatorBase : public wxValidator
 {
 public:
 
@@ -70,8 +67,7 @@ public:
     virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorBase(*this); }
     bool Copy(const wxGenericValidatorBase& val);
 
-    // Called when the value in the window must be validated: this is not used
-    // by this class
+    // Called when the value in the window must be validated: no validation by default.
     virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return true; }
 
 protected:
@@ -84,14 +80,22 @@ private:
     wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidatorBase);
 };
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxGenericValidatorType performs data transfer between many standard controls
+// and variables of the type corresponding to their values.
+//
+// N.B. wxGenericValidatorType doesn't do any validation by default - (as it is
+//      intended to do data transfer only). But if the data should be validated
+//      before doing any transfer, then all you have to do is specialize memfun
+//      Validate ((see samples/validate for an example)).
+// ----------------------------------------------------------------------------
 
 template<class W, typename T>
-class wxGenericValidatorType: public wxGenericValidatorBase
+class wxGenericValidatorType : public wxGenericValidatorBase
 {
 public:
 
-    explicit wxGenericValidatorType(T* data) 
+    explicit wxGenericValidatorType(T* data)
         : wxGenericValidatorBase(data)
     {
     }
@@ -111,6 +115,9 @@ public:
 
         wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
     }
+
+    // No validation by default.
+    virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return true; }
 
     virtual bool TransferToWindow() wxOVERRIDE
     {

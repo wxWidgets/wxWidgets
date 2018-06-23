@@ -30,13 +30,6 @@ struct wxFwdDataTransfer
     typedef void Base;
 };
 
-#define WX_FWD_DATA_TRANSFER(T, BASE) \
-template<> \
-struct wxFwdDataTransfer<T> \
-{ \
-    typedef BASE Base; \
-}
-
 
 // wxDataTransfer implements the actual data transfer.
 //
@@ -66,6 +59,21 @@ struct wxDataTransfer
     static bool To(wxWindow*, void*);
     static bool From(wxWindow*, void*);
 };
+
+//-----------------------------------------------------------------------------
+// Helper macros
+//-----------------------------------------------------------------------------
+
+#define WX_FWD_DATA_TRANSFER(T, BASE) \
+template<> \
+struct wxFwdDataTransfer<T> \
+{ \
+    typedef BASE Base; \
+}
+
+#else // !wxUSE_VALIDATORS
+
+#define WX_FWD_DATA_TRANSFER(T, BASE)
 
 #endif // wxUSE_VALIDATORS
 
