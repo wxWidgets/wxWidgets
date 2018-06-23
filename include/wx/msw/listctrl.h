@@ -158,7 +158,7 @@ public:
     bool SetItem(wxListItem& info);
 
     // Sets a string field at a particular column
-    long SetItem(long index, int col, const wxString& label, int imageId = -1);
+    bool SetItem(long index, int col, const wxString& label, int imageId = -1);
 
     // Gets the item state
     int  GetItemState(long item, long stateMask) const;

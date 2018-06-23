@@ -72,7 +72,7 @@ public:
 
     bool GetItem( wxListItem& info ) const;
     bool SetItem( wxListItem& info ) ;
-    long SetItem( long index, int col, const wxString& label, int imageId = -1 );
+    bool SetItem( long index, int col, const wxString& label, int imageId = -1 );
     int  GetItemState( long item, long stateMask ) const;
     bool SetItemState( long item, long state, long stateMask);
     bool SetItemImage( long item, int image, int selImage = -1 );

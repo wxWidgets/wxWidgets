@@ -4913,7 +4913,7 @@ bool wxGenericListCtrl::SetItem( wxListItem &info )
     return true;
 }
 
-long wxGenericListCtrl::SetItem( long index, int col, const wxString& label, int imageId )
+bool wxGenericListCtrl::SetItem( long index, int col, const wxString& label, int imageId )
 {
     wxListItem info;
     info.m_text = label;
