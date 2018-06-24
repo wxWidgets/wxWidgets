@@ -262,7 +262,7 @@ case "${host}" in
     AC_DEFINE(__UNIXWARE__)
   ;;
 
-  *-*-cygwin* | *-*-mingw32* )
+  *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
     dnl MBN: some of the defines have been moved after toolkit detection
     dnl      because for wxMotif/wxGTK/wxX11 to build on Cygwin
     dnl      USE_UNIX  must be set and not USE_WIN32
@@ -3712,7 +3712,7 @@ EOF
         HEADER_PAD_OPTION="-headerpad_max_install_names"
       ;;
 
-      *-*-cygwin* | *-*-mingw32* )
+      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         ;;
 
       *-*-hpux* )
