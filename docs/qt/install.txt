@@ -91,6 +91,29 @@ cd tests
 make
 ./test_gui
 
+* Building wxQT, using qt-unified-XXX-online installer
+------------------------------------------------------
+
+Download qt-unified-XXX-online installer from the qt website.
+Install the Qt package of your choice (with the same minimum version
+restriction as above).
+The same build instructions above apply, except that you need to explicitly
+pass the include and linker options to configure, which will look something
+like this:
+
+# for Linux:
+../configure --with-qt --enable-debug \
+             QT5_CFLAGS=-I/home/user/Qt/5.11.0/gcc_64/include \
+             QT5_LIBS=QT5_LIBS="-L/home/user/Qt/5.11.0/gcc_64/lib \
+             -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test \
+             -Wl,-rpath,/home/user/Qt/5.11.0/gcc_64/lib"
+
+# for Windows (ran from Git Bash, or any other Unix-like shell):
+../configure --with-qt --enable-debug \
+             QT5_CFLAGS=-I/c/Qt/5.11.0/mingw53_32/include \
+             QT5_LIBS="-L/c/Qt/5.11.0/mingw53_32/lib \
+             -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test"
+
 * Building wxGT on Android
 --------------------------
 

@@ -108,7 +108,7 @@
 #endif
 
 #if wxUSE_GUI && defined(__WXQT__)
-    #include <QtGlobal>       // for QT_VERSION_STR constants
+    #include <QtCore/QtGlobal>       // for QT_VERSION_STR constants
 #endif
 #if wxUSE_BASE
 

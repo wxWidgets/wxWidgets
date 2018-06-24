@@ -3991,7 +3991,7 @@ case "${host}" in
 
   ;;
 
-  *-*-cygwin* | *-*-mingw32* )
+  *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
                 PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
@@ -27007,11 +27007,12 @@ pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for QT5" >&5
 $as_echo_n "checking for QT5... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$QT5_CFLAGS"; then
-        pkg_cv_QT5_CFLAGS="$QT5_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$QT5_CFLAGS"; then
+    pkg_cv_QT5_CFLAGS="$QT5_CFLAGS"
+else
+    if test -z "$PKG_CONFIG"; then
+        pkg_failed=untried
+    elif \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test\""; } >&5
   ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test") 2>&5
   ac_status=$?
@@ -27021,15 +27022,14 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$QT5_LIBS"; then
-        pkg_cv_QT5_LIBS="$QT5_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+
+if test -n "$QT5_LIBS"; then
+    pkg_cv_QT5_LIBS="$QT5_LIBS"
+else
+    if test -z "$PKG_CONFIG"; then
+        pkg_failed=untried
+    elif \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test\""; } >&5
   ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test") 2>&5
   ac_status=$?
@@ -27039,9 +27039,6 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
 fi
 
 
@@ -29855,7 +29852,7 @@ EOF
                                         HEADER_PAD_OPTION="-headerpad_max_install_names"
       ;;
 
-      *-*-cygwin* | *-*-mingw32* )
+      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         ;;
 
       *-*-hpux* )
@@ -39632,7 +39629,7 @@ fi
 
     LDFLAGS_GUI=
     case ${BAKEFILE_HOST} in
-        *-*-cygwin* | *-*-mingw32* )
+        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         LDFLAGS_GUI="-mwindows"
     esac
 
@@ -40066,7 +40063,7 @@ fi
         fi
       ;;
 
-      *-*-cygwin* | *-*-mingw32* )
+      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         PIC_FLAG=""
         SHARED_LD_CC="\$(CC) -shared -o"
         SHARED_LD_CXX="\$(CXX) -shared -o"
@@ -40311,7 +40308,7 @@ EOF
 
 
     case ${BAKEFILE_HOST} in
-        *-*-cygwin* | *-*-mingw32* )
+        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
                         if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}windres", so it can be a program name with args.
 set dummy ${ac_tool_prefix}windres; ac_word=$2

@@ -12,8 +12,8 @@
     #pragma hdrstop
 #endif
 
-#include <QApplication>
-#include <QBitmap>
+#include <QtWidgets/QApplication>
+#include <QtGui/QBitmap>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
