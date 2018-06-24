@@ -1742,7 +1742,7 @@
 #       undef wxUSE_DC_TRANSFORM_MATRIX
 #       define wxUSE_DC_TRANSFORM_MATRIX 0
 #   endif
-#endif /* wxUSE_GRAPHICS_CONTEXT */
+#endif /* wxUSE_DC_TRANSFORM_MATRIX */
 
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
