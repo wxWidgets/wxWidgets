@@ -12,8 +12,8 @@
     #pragma hdrstop
 #endif
 
-#include <QApplication>
-#include <QClipboard>
+#include <QtWidgets/QApplication>
+#include <QtGui/QClipboard>
 
 #include "wx/clipbrd.h"
 #include "wx/scopedarray.h"
