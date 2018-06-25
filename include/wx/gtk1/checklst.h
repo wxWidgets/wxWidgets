@@ -56,6 +56,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 };
 
-WX_FWD_DATA_TRANSFER(wxCheckListBox, wxCheckListBoxBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckListBox, wxCheckListBoxBase);
 
 #endif   //__GTKCHECKLISTH__

@@ -175,6 +175,6 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
-WX_FWD_DATA_TRANSFER(wxListBox, wxListBoxBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxListBox, wxListBoxBase);
 
 #endif // _WX_LISTBOX_H_

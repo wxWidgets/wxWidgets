@@ -78,7 +78,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleBitmapButton);
 };
 
-WX_FWD_DATA_TRANSFER(wxToggleBitmapButton, wxToggleButtonBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxToggleBitmapButton, wxToggleButtonBase);
 
 //-----------------------------------------------------------------------------
 // wxToggleButton
@@ -136,8 +136,8 @@ private:
 
 #if wxUSE_VALIDATORS
 
-// As wxToggleButton does not derive from wxToggleButtonBase, so we
-// can't just use WX_FWD_DATA_TRANSFER(wxToggleButton, wxToggleButtonBase);
+// As wxToggleButton does not derive from wxToggleButtonBase, so we can't just use
+// wxDECLARE_DATA_TRANSFER_FWD(wxToggleButton, wxToggleButtonBase);
 
 template<>
 struct WXDLLIMPEXP_CORE wxDataTransfer<wxToggleButton>

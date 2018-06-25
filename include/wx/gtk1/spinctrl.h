@@ -91,8 +91,8 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
-// As wxSpinCtrl does not derive from wxSpinCtrlBase, so we
-// can't just use WX_FWD_DATA_TRANSFER(wxSpinCtrl, wxSpinCtrlBase);
+// As wxSpinCtrl does not derive from wxSpinCtrlBase, so we can't just use
+// wxDECLARE_DATA_TRANSFER_FWD(wxSpinCtrl, wxSpinCtrlBase);
 
 wxDECLARE_DATA_TRANSFER_SPINCTRL(true);
 

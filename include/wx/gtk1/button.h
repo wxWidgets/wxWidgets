@@ -64,6 +64,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxButton);
 };
 
-WX_FWD_DATA_TRANSFER(wxButton, wxButtonBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxButton, wxButtonBase);
 
 #endif // __GTKBUTTONH__

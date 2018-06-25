@@ -12,46 +12,31 @@
 
 #if wxUSE_VALIDATORS
 
-// wxWindow-derived classes (W) need not to specialize wxDataTransfer<> if
-// a base already has one and the derived just want to forward to its base
-// implementation. if so, all you have to do is specialize this class.
-// e.g.:
+//-----------------------------------------------------------------------------
 //
-// template<>
-// struct wxFwdDataTransfer<MyWindow>
-// {
-//     typedef MyWindowBase Base;
-// };
-//
-
-template<class W>
-struct wxFwdDataTransfer
-{
-    typedef void Base;
-};
-
-
-// wxDataTransfer implements the actual data transfer.
+// wxGenericValidatorType<> just delegates to wxDataTransfer<> to do the actual
+// data transfer (via template specializations)
 //
 // How it works:
-//--------------
-//  say you have a window 'MyWindow' which can transfer wxStrings and CustomData.
-//  then wxDataTransfer<> specialization for MyWindow would look like this:
+// -------------
+// say you have a window 'MyWindow' which can transfer wxStrings and CustomData.
+// then wxDataTransfer<> specialization for MyWindow would look like this:
 //
 // template<>
 // struct wxDataTransfer<MyWindow>
 // {
-//     static bool To(wxWindow* win, wxString* data)
+//     static bool To(MyWindow* win, wxString* data)
 //     { /*implementation*/ }
-//     static bool From(wxWindow* win, wxString* data)
+//     static bool From(MyWindow* win, wxString* data)
 //     { /*implementation*/ }
 //
-//     static bool To(wxWindow* win, CustomData* data)
+//     static bool To(MyWindow* win, CustomData* data)
 //     { /*implementation*/ }
-//     static bool From(wxWindow* win, CustomData* data)
+//     static bool From(MyWindow* win, CustomData* data)
 //     { /*implementation*/ }
 // };
 //
+//-----------------------------------------------------------------------------
 
 template<class W>
 struct wxDataTransfer
@@ -60,11 +45,50 @@ struct wxDataTransfer
     static bool From(wxWindow*, void*);
 };
 
+
+//-----------------------------------------------------------------------------
+//
+// wxDataTransfer<> might be implemented in terms of base class, in which case
+// derived-classes no longer required to reimplement wxDataTransfer<> on their
+// own. Instead, it's enough to specialize wxFwdDataTransfer<> and define the
+// base which already implements wxDataTransfer<> like so:
+//
+// template<>
+// struct wxFwdDataTransfer<MyWindow>
+// {
+//     typedef MyWindowBase Base;
+// };
+//
+// or preferably:
+//
+// wxDECLARE_DATA_TRANSFER_FWD(MyWindow, MyWindowBase);
+//
+// ----------------------------------------------------------------------------
+//
+// N.B. CHAINED FORWARDING is not supported in current implementation.
+//      i.e. if MySpecialWindow derives from MyWindow and MyWindow just forwards
+//           to MyWindowBase, then this declaration won't work:
+//
+//      wxDECLARE_DATA_TRANSFER_FWD(MySpecialWindow, MyWindow);
+//
+//      you have to use this instead:
+//
+//      wxDECLARE_DATA_TRANSFER_FWD(MySpecialWindow, MyWindowBase);
+//
+//-----------------------------------------------------------------------------
+
+template<class W>
+struct wxFwdDataTransfer
+{
+    typedef void Base;
+};
+
+
 //-----------------------------------------------------------------------------
 // Helper macros
 //-----------------------------------------------------------------------------
 
-#define WX_FWD_DATA_TRANSFER(T, BASE) \
+#define wxDECLARE_DATA_TRANSFER_FWD(T, BASE) \
 template<> \
 struct wxFwdDataTransfer<T> \
 { \
@@ -74,6 +98,20 @@ struct wxFwdDataTransfer<T> \
 //=============================================================================
 // implementation only from now on
 //=============================================================================
+
+// NOTE:
+// -----
+// I am not sure which is best:
+//
+// 1) leave these wxDECLARE_DATA_TRANSFER_XXX as they are, in which case we can
+//    leave out all these WXDLLIMPEXP_XXX. as all these declarations are also
+//    just inline implementations.
+//
+// 2) Add a bunch of wxDEFINE_DATA_TRANSFER_XXX macros and make these
+//    wxDECLARE_DATA_TRANSFER_XXX pure declarations only. in that case, the
+//    wxDEFINE_DATA_TRANSFER_XXX should be put in the implementation file where
+//    the class XXX in question reside.
+//
 
 #define wxDECLARE_DATA_TRANSFER_BUTTON()					\
 template<> 													\
@@ -744,7 +782,7 @@ struct WXDLLIMPEXP_ADV wxDataTransfer<wxDateTimePickerCtrlBase>			\
 #define WX_NO_DATA_TRANSFER ((void)0)
 
 
-#define WX_FWD_DATA_TRANSFER(T, BASE) WX_NO_DATA_TRANSFER
+#define wxDECLARE_DATA_TRANSFER_FWD(T, BASE) WX_NO_DATA_TRANSFER
 
 
 #define wxDECLARE_DATA_TRANSFER_BUTTON() WX_NO_DATA_TRANSFER

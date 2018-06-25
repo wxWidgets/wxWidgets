@@ -74,7 +74,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge);
 };
 
-WX_FWD_DATA_TRANSFER(wxGauge, wxGaugeBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxGauge, wxGaugeBase);
 
 #endif // wxUSE_GAUGE
 

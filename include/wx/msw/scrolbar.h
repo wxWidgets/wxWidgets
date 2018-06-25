@@ -70,7 +70,7 @@ protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxScrollBar);
 };
 
-WX_FWD_DATA_TRANSFER(wxScrollBar, wxScrollBarBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxScrollBar, wxScrollBarBase);
 
 #endif
     // _WX_SCROLBAR_H_

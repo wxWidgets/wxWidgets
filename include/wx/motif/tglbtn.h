@@ -50,6 +50,6 @@ private:
     }
 };
 
-WX_FWD_DATA_TRANSFER(wxToggleButton, wxCheckBox);
+wxDECLARE_DATA_TRANSFER_FWD(wxToggleButton, wxCheckBox);
 
 #endif // _WX_TOGGLEBUTTON_H_

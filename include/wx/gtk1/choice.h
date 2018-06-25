@@ -107,6 +107,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxChoice);
 };
 
-WX_FWD_DATA_TRANSFER(wxChoice, wxChoiceBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxChoice, wxChoiceBase);
 
 #endif // __GTKCHOICEH__

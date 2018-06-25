@@ -532,7 +532,7 @@ private:
     friend class wxWrappedLineData;
 };
 
-WX_FWD_DATA_TRANSFER(wxTextCtrl, wxTextCtrlBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxTextCtrl, wxTextCtrlBase);
 
 #endif // _WX_UNIV_TEXTCTRL_H_
 

@@ -146,6 +146,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
-WX_FWD_DATA_TRANSFER(wxCheckBox, wxCheckBoxBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckBox, wxCheckBoxBase);
 
 #endif // _WX_UNIV_CHECKBOX_H_

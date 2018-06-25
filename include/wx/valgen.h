@@ -28,6 +28,10 @@ namespace wxPrivate
 template<class W, typename T>
 struct wxDataTransferHelper
 {
+    // These typedefs help to instantiate the right wxDataTransfer<Window>, i.e.:
+    //      wxDataTransfer<Base> if Base is base of W.
+    //      wxDataTransfer<W> if Base is void.
+
     typedef typename wxFwdDataTransfer<W>::Base Base;
     typedef wxIsPubliclyDerived<W, Base> Fwd2Base;
     typedef typename wxIf<(Fwd2Base::value), Base, W>::value Window;

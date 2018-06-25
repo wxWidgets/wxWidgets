@@ -98,7 +98,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSpinButton);
 };
 
-WX_FWD_DATA_TRANSFER(wxSpinButton, wxSpinButtonBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxSpinButton, wxSpinButtonBase);
 
 // ----------------------------------------------------------------------------
 // wxStdSpinButtonInputHandler: manages clicks on them (use arrows like

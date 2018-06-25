@@ -85,6 +85,6 @@ protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);
 };
 
-WX_FWD_DATA_TRANSFER(wxCheckListBox, wxCheckListBoxBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckListBox, wxCheckListBoxBase);
 
 #endif    //_CHECKLST_H

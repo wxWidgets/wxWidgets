@@ -66,6 +66,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGtkCalendarCtrl);
 };
 
-WX_FWD_DATA_TRANSFER(wxGtkCalendarCtrl, wxCalendarCtrlBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxGtkCalendarCtrl, wxCalendarCtrlBase);
 
 #endif // GTK_CALCTRL_H__

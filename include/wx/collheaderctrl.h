@@ -104,7 +104,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxCollapsibleHeaderCtrl);
 };
 
-WX_FWD_DATA_TRANSFER(wxCollapsibleHeaderCtrl, wxCollapsibleHeaderCtrlBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxCollapsibleHeaderCtrl, wxCollapsibleHeaderCtrlBase);
 
 #endif // wxUSE_COLLPANE
 

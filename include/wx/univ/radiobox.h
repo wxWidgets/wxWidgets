@@ -149,6 +149,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };
 
-WX_FWD_DATA_TRANSFER(wxRadioBox, wxRadioBoxBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxRadioBox, wxRadioBoxBase);
 
 #endif // _WX_UNIV_RADIOBOX_H_

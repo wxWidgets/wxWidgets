@@ -224,6 +224,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };
 
-WX_FWD_DATA_TRANSFER(wxSlider, wxSliderBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxSlider, wxSliderBase);
 
 #endif // _WX_UNIV_SLIDER_H_

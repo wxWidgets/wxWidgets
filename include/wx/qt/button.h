@@ -35,6 +35,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
 
-WX_FWD_DATA_TRANSFER(wxButton, wxButtonBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxButton, wxButtonBase);
 
 #endif // _WX_QT_BUTTON_H_

@@ -40,6 +40,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS( wxSpinButton );
 };
 
-WX_FWD_DATA_TRANSFER(wxSpinButton, wxSpinButtonBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxSpinButton, wxSpinButtonBase);
 
 #endif // _WX_QT_SPINBUTT_H_

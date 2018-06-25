@@ -45,7 +45,7 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
-WX_FWD_DATA_TRANSFER(wxCheckBox, wxCheckBoxBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckBox, wxCheckBoxBase);
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_CORE wxBitmapCheckBox: public wxCheckBox
@@ -81,7 +81,7 @@ public:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapCheckBox);
 };
 
-WX_FWD_DATA_TRANSFER(wxBitmapCheckBox, wxCheckBoxBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxBitmapCheckBox, wxCheckBoxBase);
 
 #endif
     // _WX_CHECKBOX_H_

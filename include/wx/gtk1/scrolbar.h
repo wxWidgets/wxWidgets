@@ -80,7 +80,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };
 
-WX_FWD_DATA_TRANSFER(wxScrollBar, wxScrollBarBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxScrollBar, wxScrollBarBase);
 
 #endif
     // __GTKSCROLLBARH__

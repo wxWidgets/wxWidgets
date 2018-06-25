@@ -69,7 +69,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinButton);
 };
 
-WX_FWD_DATA_TRANSFER(wxSpinButton, wxSpinButtonBase);
+wxDECLARE_DATA_TRANSFER_FWD(wxSpinButton, wxSpinButtonBase);
 
 #endif // wxUSE_SPINBTN
 
