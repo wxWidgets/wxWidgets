@@ -1144,6 +1144,9 @@ void wxWindowMSW::SetScrollbar(int orient,
 
 void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
 {
+    if ( !dx && !dy )
+        return;
+
     RECT rect;
     RECT *pr;
     if ( prect )
