@@ -88,25 +88,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxStaticTextBase);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxStaticTextBase>
-{
-    static bool To(wxStaticTextBase* stxt, wxString* data)
-    {
-        stxt->SetLabel(*data);
-        return true;
-    }
-
-    static bool From(wxStaticTextBase* stxt, wxString* data)
-    {
-        *data = stxt->GetLabel();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_STATICTEXT();
 
 // see wx/generic/stattextg.h for the explanation
 #ifndef wxNO_PORT_STATTEXT_INCLUDE

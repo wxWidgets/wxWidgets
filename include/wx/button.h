@@ -47,25 +47,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxButtonBase);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxButtonBase>
-{
-    static bool To(wxButtonBase* btn, wxString* data)
-    {
-        btn->SetLabel(*data);
-        return true;
-    }
-
-    static bool From(wxButtonBase* btn, wxString* data)
-    {
-        *data = btn->GetLabel();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_BUTTON();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/button.h"

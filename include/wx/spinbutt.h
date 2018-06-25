@@ -71,25 +71,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxSpinButtonBase);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxSpinButtonBase>
-{
-    static bool To(wxSpinButtonBase* btn, int* data)
-    {
-        btn->SetValue(*data);
-        return true;
-    }
-
-    static bool From(wxSpinButtonBase* btn, int* data)
-    {
-        *data = btn->GetValue();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_SPINBUTTON();
 
 // ----------------------------------------------------------------------------
 // include the declaration of the real class

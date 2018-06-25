@@ -122,25 +122,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxGaugeBase);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxGaugeBase>
-{
-    static bool To(wxGaugeBase* gauge, int* data)
-    {
-        gauge->SetValue(*data);
-        return true;
-    }
-
-    static bool From(wxGaugeBase* gauge, int* data)
-    {
-        *data = gauge->GetValue();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_GAUGE();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/gauge.h"

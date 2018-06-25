@@ -35,25 +35,7 @@ public:
     virtual wxDateTime GetValue() const = 0;
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxDateTimePickerCtrlBase>
-{
-    static bool To(wxDateTimePickerCtrlBase* ctrl, wxDateTime* data)
-    {
-        ctrl->SetValue(*data);
-        return true;
-    }
-
-    static bool From(wxDateTimePickerCtrlBase* ctrl, wxDateTime* data)
-    {
-        *data = ctrl->GetValue();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_DATETIMEPICKER();
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/datetimectrl.h"

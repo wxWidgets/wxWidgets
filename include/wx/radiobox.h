@@ -152,25 +152,7 @@ private:
 #endif // wxUSE_HELP
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxRadioBoxBase>
-{
-    static bool To(wxRadioBoxBase* radbox, int* data)
-    {
-        radbox->SetSelection(*data);
-        return true;
-    }
-
-    static bool From(wxRadioBoxBase* radbox, int* data)
-    {
-        *data = radbox->GetSelection();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_RADIOBOX();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/radiobox.h"

@@ -209,25 +209,7 @@ protected:
     wxFileDirPickerWidgetBase *m_pickerIface;
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxFileDirPickerCtrlBase>
-{
-    static bool To(wxFileDirPickerCtrlBase* ctrl, wxString* data)
-    {
-        ctrl->SetPath(*data);
-        return true;
-    }
-
-    static bool From(wxFileDirPickerCtrlBase* ctrl, wxString* data)
-    {
-        *data = ctrl->GetPath();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_FILEDIRPICKER();
 
 #endif  // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
@@ -334,38 +316,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxFilePickerCtrl);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxFilePickerCtrl>
-{
-    static bool To(wxFilePickerCtrl* ctrl, wxFileName* data)
-    {
-        ctrl->SetFileName(*data);
-        return true;
-    }
-
-    static bool From(wxFilePickerCtrl* ctrl, wxFileName* data)
-    {
-        *data = ctrl->GetFileName();
-        return true;
-    }
-
-    // Forward to base implementation for wxString data.
-
-    static bool To(wxFilePickerCtrl* ctrl, wxString* data)
-    {
-        return wxDataTransfer<wxFileDirPickerCtrlBase>::To(ctrl, data);
-    }
-
-    static bool From(wxFilePickerCtrl* ctrl, wxString* data)
-    {
-        return wxDataTransfer<wxFileDirPickerCtrlBase>::From(ctrl, data);
-    }
-
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_FILEPICKER();
 
 #endif      // wxUSE_FILEPICKERCTRL
 
@@ -463,38 +414,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxDirPickerCtrl);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxDirPickerCtrl>
-{
-    static bool To(wxDirPickerCtrl* ctrl, wxFileName* data)
-    {
-        ctrl->SetDirName(*data);
-        return true;
-    }
-
-    static bool From(wxDirPickerCtrl* ctrl, wxFileName* data)
-    {
-        *data = ctrl->GetDirName();
-        return true;
-    }
-
-    // Forward to base implementation for wxString data.
-
-    static bool To(wxDirPickerCtrl* ctrl, wxString* data)
-    {
-        return wxDataTransfer<wxFileDirPickerCtrlBase>::To(ctrl, data);
-    }
-
-    static bool From(wxDirPickerCtrl* ctrl, wxString* data)
-    {
-        return wxDataTransfer<wxFileDirPickerCtrlBase>::From(ctrl, data);
-    }
-
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_DIRPICKER();
 
 #endif      // wxUSE_DIRPICKERCTRL
 

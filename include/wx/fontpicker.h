@@ -192,25 +192,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxFontPickerCtrl);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxFontPickerCtrl>
-{
-    static bool To(wxFontPickerCtrl* ctrl, wxFont* data)
-    {
-        ctrl->SetSelectedFont(*data);
-        return true;
-    }
-
-    static bool From(wxFontPickerCtrl* ctrl, wxFont* data)
-    {
-        *data = ctrl->GetSelectedFont();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_FONTPICKER();
 
 // ----------------------------------------------------------------------------
 // wxFontPickerEvent: used by wxFontPickerCtrl only

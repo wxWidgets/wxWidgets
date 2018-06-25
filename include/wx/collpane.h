@@ -46,25 +46,7 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE = 0;
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxCollapsiblePaneBase>
-{
-    static bool To(wxCollapsiblePaneBase* collpane, bool* data)
-    {
-        collpane->Collapse(*data);
-        return true;
-    }
-
-    static bool From(wxCollapsiblePaneBase* collpane, bool* data)
-    {
-        *data = collpane->IsCollapsed();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_COLLAPSIBLEPANE();
 
 // ----------------------------------------------------------------------------
 // event types and macros

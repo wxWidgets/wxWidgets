@@ -768,76 +768,7 @@ protected:
     wxDECLARE_ABSTRACT_CLASS(wxTextCtrlBase);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxTextCtrlBase>
-{
-    static bool To(wxTextCtrlBase* ctrl, wxString* data)
-    {
-        ctrl->SetValue(*data);
-        return true;
-    }
-
-    static bool To(wxTextCtrlBase* ctrl, int* data)
-    {
-        const wxString str = wxString::Format("%d", *data);
-        ctrl->SetValue(str);
-        return true;
-    }
-
-    static bool To(wxTextCtrlBase* ctrl, float* data)
-    {
-        const wxString str = wxString::Format("%g", *data);
-        ctrl->SetValue(str);
-        return true;
-    }
-
-    static bool To(wxTextCtrlBase* ctrl, double* data)
-    {
-        const wxString str = wxString::Format("%g", *data);
-        ctrl->SetValue(str);
-        return true;
-    }
-
-    static bool To(wxTextCtrlBase* ctrl, wxFileName* data)
-    {
-        ctrl->SetValue(data->GetFullPath());
-        return true;
-    }
-    
-    static bool From(wxTextCtrlBase* ctrl, wxString* data)
-    {
-        *data = ctrl->GetValue();
-        return true;
-    }
-
-    static bool From(wxTextCtrlBase* ctrl, int* data)
-    {
-        *data = wxAtoi(ctrl->GetValue());
-        return true;
-    }
-
-    static bool From(wxTextCtrlBase* ctrl, float* data)
-    {
-        *data = static_cast<float>(wxAtof(ctrl->GetValue()));
-        return true;
-    }
-
-    static bool From(wxTextCtrlBase* ctrl, double* data)
-    {
-        *data = wxAtof(ctrl->GetValue());
-        return true;
-    }
-
-    static bool From(wxTextCtrlBase* ctrl, wxFileName* data)
-    {
-        *data = ctrl->GetValue();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_TEXTCTRL();
 
 // ----------------------------------------------------------------------------
 // include the platform-dependent class definition

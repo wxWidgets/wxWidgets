@@ -136,8 +136,11 @@ private:
 
 #if wxUSE_VALIDATORS
 
+// As wxToggleButton does not derive from wxToggleButtonBase, so we
+// can't just use WX_FWD_DATA_TRANSFER(wxToggleButton, wxToggleButtonBase);
+
 template<>
-struct wxDataTransfer<wxToggleButton>
+struct WXDLLIMPEXP_CORE wxDataTransfer<wxToggleButton>
 {
     static bool To(wxToggleButton* btn, bool* data)
     {

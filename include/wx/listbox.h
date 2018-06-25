@@ -141,61 +141,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxListBoxBase);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxListBoxBase>
-{
-    static bool To(wxListBoxBase* lstbox, int* data)
-    {
-        wxASSERT( (lstbox->GetWindowStyle() & wxLB_SINGLE) );
-
-        lstbox->SetSelection(*data);
-        return true;
-    }
-
-    static bool To(wxListBoxBase* lstbox, wxArrayInt* arr)
-    {
-        wxASSERT( (lstbox->GetWindowStyle() & wxLB_MULTIPLE) );
-
-        size_t i, count = lstbox->GetCount();
-        // clear all selections
-        for ( i = 0 ; i < count; ++i )
-            lstbox->Deselect(i);
-
-        // select each item in our array
-        count = arr->GetCount();
-        for ( i = 0 ; i < count; ++i )
-            lstbox->SetSelection(arr->Item(i));
-
-        return true;
-    }
-
-    static bool From(wxListBoxBase* lstbox, int* data)
-    {
-        // wxASSERT( (lstbox->GetWindowStyle() & wxLB_SINGLE) ); // redundant
-
-        *data = lstbox->GetSelection();
-        return true;
-    }
-
-    static bool From(wxListBoxBase* lstbox, wxArrayInt* arr)
-    {
-        // wxASSERT( (lstbox->GetWindowStyle() & wxLB_MULTIPLE) ); // redundant
-
-        arr->Clear();
-
-        for ( size_t i = 0, count = lstbox->GetCount(); i < count; ++i )
-        {
-            if ( lstbox->IsSelected(i) )
-                arr->Add(i);
-        }
- 
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_LISTBOX();
 
 // ----------------------------------------------------------------------------
 // include the platform-specific class declaration

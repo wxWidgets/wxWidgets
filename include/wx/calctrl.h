@@ -338,24 +338,7 @@ protected:
     bool WeekStartsOnMonday() const;
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxCalendarCtrlBase>
-{
-    static bool To(wxCalendarCtrlBase* ctrl, wxDateTime* data)
-    {
-        return ctrl->SetDate(*data);
-    }
-
-    static bool From(wxCalendarCtrlBase* ctrl, wxDateTime* data)
-    {
-        *data = ctrl->GetDate();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_CALENDAR();
 
 // ----------------------------------------------------------------------------
 // wxCalendarCtrl

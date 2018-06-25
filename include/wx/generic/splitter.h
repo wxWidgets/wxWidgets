@@ -307,25 +307,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxSplitterWindow);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxSplitterWindow>
-{
-    static bool To(wxSplitterWindow* splitter, int* data)
-    {
-        splitter->SetSashPosition(*data);
-        return true;
-    }
-
-    static bool From(wxSplitterWindow* splitter, int* data)
-    {
-        *data = splitter->GetSashPosition();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_SPLITTERWINDOW();
 
 // ----------------------------------------------------------------------------
 // event class and macros

@@ -15,6 +15,7 @@
 #if wxUSE_SPINCTRL
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 //-----------------------------------------------------------------------------
 // wxSpinCtrl
@@ -90,25 +91,10 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
-#if wxUSE_VALIDATORS
+// As wxSpinCtrl does not derive from wxSpinCtrlBase, so we
+// can't just use WX_FWD_DATA_TRANSFER(wxSpinCtrl, wxSpinCtrlBase);
 
-template<>
-struct wxDataTransfer<wxSpinCtrl>
-{
-    static bool To(wxSpinCtrl* ctrl, int* data)
-    {
-        ctrl->SetValue(*data);
-        return true;
-    }
-
-    static bool From(wxSpinCtrl* btn, int* data)
-    {
-        *data = ctrl->GetValue();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_SPINCTRL(true);
 
 #endif
     // wxUSE_SPINCTRL

@@ -63,25 +63,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxScrollBarBase);
 };
 
-#if wxUSE_VALIDATORS
-
-template<>
-struct wxDataTransfer<wxScrollBarBase>
-{
-    static bool To(wxScrollBarBase* ctrl, int* data)
-    {
-        ctrl->SetThumbPosition(*data);
-        return true;
-    }
-
-    static bool From(wxScrollBarBase* ctrl, int* data)
-    {
-        *data = ctrl->GetThumbPosition();
-        return true;
-    }
-};
-
-#endif // wxUSE_VALIDATORS
+wxDECLARE_DATA_TRANSFER_SCROLLBAR();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/scrolbar.h"
