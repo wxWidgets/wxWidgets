@@ -1105,6 +1105,39 @@ void wxWindowMSW::SetScrollbar(int orient,
                                int range,
                                bool refresh)
 {
+#if wxUSE_DEFERRED_SIZING
+    // Work around not documented, but reliably happening, at least under
+    // Windows 7, but with changing the scrollbars in the middle of a deferred
+    // positioning operation: the child windows of a window whose position is
+    // deferred after changing the scrollbar get offset compared to their
+    // correct position, somehow.
+    //
+    // Note that this scenario happens all the time with wxScrolledWindow as
+    // its HandleOnSize(), which calls AdjustScrollbars() and hence this method
+    // indirectly, gets called from WM_SIZE handler, which begins deferring
+    // window positions, and calls Layout() which continues doing it after the
+    // scrollbar update. So one way of reproducing the bug is to have a window
+    // with children, such as wxStaticBox, inside a wxScrolledWindow whose size
+    // gets changed.
+    //
+    // Fix this simply by "flushing" the pending windows positions and starting
+    // a new deferring operation.
+    if ( m_hDWP )
+    {
+        // Do reposition the children already moved.
+        EndRepositioningChildren();
+
+        // And restart another deferred positioning operation as any currently
+        // existing ChildrenRepositioningGuard objects would be confused if we
+        // just removed the HDWP from under them.
+        //
+        // Unfortunately we have to ignore BeginRepositioningChildren() return
+        // value here, there is not much that we can do if it fails (but this
+        // should never happen anyhow).
+        BeginRepositioningChildren();
+    }
+#endif // wxUSE_DEFERRED_SIZING
+
     // We have to set the variables here to make them valid in events
     // triggered by ::SetScrollInfo()
     *(orient == wxHORIZONTAL ? &m_xThumbSize : &m_yThumbSize) = pageSize;
