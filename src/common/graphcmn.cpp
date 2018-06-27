@@ -487,7 +487,7 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
     bool drawClockwiseArc = v1.GetCrossProduct(v2) < 0;
 
     alpha = wxDegToRad(alpha);
-    wxDouble distT = r / (1.0 + cos(alpha)) * sin(alpha); // = r / tan(a/2) =  r / sin(a/2) * cos(a/2)
+    wxDouble distT = r / sin(alpha) * (1.0 + cos(alpha)); // = r / tan(a/2) =  r / sin(a/2) * cos(a/2)
     wxDouble distC = r / sin(alpha / 2.0);
     wxASSERT_MSG( distT <= v1Length && distT <= v2Length,
                   wxS("Radius is too big to fit the arc to given points") );
