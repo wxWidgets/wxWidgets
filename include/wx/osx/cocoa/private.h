@@ -418,7 +418,13 @@ public:
 
     @end
 
-    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c);
+    // this enum declares which methods should not be overridden in the native view classes
+    enum wxOSXSkipOverrides {
+        wxOSXSKIP_NONE = 0x0,
+        wxOSXSKIP_DRAW = 0x1
+    };
+
+    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags = wxOSXSKIP_NONE);
 
     /*
     We need this for ShowModal, as the sheet just disables the parent window and
