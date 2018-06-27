@@ -479,7 +479,6 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
          alpha == 0 || alpha == 180 || r == 0 )
     {
         AddLineToPoint(p1.m_x, p1.m_y);
-        AddLineToPoint(p2.m_x, p2.m_y);
         return;
     }
 
@@ -489,8 +488,6 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
     alpha = wxDegToRad(alpha);
     wxDouble distT = r / sin(alpha) * (1.0 + cos(alpha)); // = r / tan(a/2) =  r / sin(a/2) * cos(a/2)
     wxDouble distC = r / sin(alpha / 2.0);
-    wxASSERT_MSG( distT <= v1Length && distT <= v2Length,
-                  wxS("Radius is too big to fit the arc to given points") );
     // Calculate tangential points
     v1.Normalize();
     v2.Normalize();
@@ -513,7 +510,6 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
 
     AddLineToPoint(t1.m_x, t1.m_y);
     AddArc(c.m_x, c.m_y, r, wxDegToRad(a1), wxDegToRad(a2), drawClockwiseArc);
-    AddLineToPoint(p2.m_x, p2.m_y);
 }
 
 //-----------------------------------------------------------------------------
