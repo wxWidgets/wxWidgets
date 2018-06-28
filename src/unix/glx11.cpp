@@ -494,9 +494,13 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
     GLXContext tempContext = glXCreateContext(dpy, vi, NULL, x11Direct);
     wxCHECK_RET(tempContext, "glXCreateContext failed" );
 
-    PFNGLXCREATECONTEXTATTRIBSARBPROC wx_glXCreateContextAttribsARB
-        = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
-        glXGetProcAddress((GLubyte *)"glXCreateContextAttribsARB");
+    GLXFBConfig* const fbc = win->GetGLXFBConfig();
+    PFNGLXCREATECONTEXTATTRIBSARBPROC wx_glXCreateContextAttribsARB = 0;
+    if (fbc)
+    {
+        wx_glXCreateContextAttribsARB = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
+            glXGetProcAddress((GLubyte*)"glXCreateContextAttribsARB");
+    }
 
     glXDestroyContext( dpy, tempContext );
 
@@ -514,9 +518,6 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
     if ( wx_glXCreateContextAttribsARB )
     {
-        GLXFBConfig *fbc = win->GetGLXFBConfig();
-        wxCHECK_RET( fbc, "Invalid GLXFBConfig for OpenGL" );
-
         m_glContext = wx_glXCreateContextAttribsARB( dpy, fbc[0],
                                 other ? other->m_glContext : None,
                                 x11Direct, contextAttribs );
@@ -534,11 +535,8 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
     if ( !g_ctxErrorOccurred && !m_glContext )
     {
         // Old-way, without context atributes. Up to GL 2.1
-        if ( wxGLCanvas::GetGLXVersion() >= 13 )
+        if (fbc)
         {
-            GLXFBConfig *fbc = win->GetGLXFBConfig();
-            wxCHECK_RET( fbc, "Invalid GLXFBConfig for OpenGL" );
-
             m_glContext = glXCreateNewContext( dpy, fbc[0], renderType,
                                                other ? other->m_glContext : None,
                                                x11Direct );
