@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/datatransf.h
-// Purpose:     .
+// Purpose:     wxDataTransfer<> declaration
 // Author:      Ali Kettab
 // Created:     2018-06-13
 // Copyright:   (c) 2018 Ali Kettab

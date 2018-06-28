@@ -134,73 +134,22 @@ public:
     }
 };
 
-//-----------------------------------------------------------------------------
-
-#if 0
-
-// TODO: (incomplete!)
-// ------
-// see *NOTE* below...
-
-template<typename T>
-class wxGenericValidatorType<wxWindow, T>: public wxGenericValidatorBase
-{
-public:
-
-    explicit wxGenericValidatorType(T* data)
-        : wxGenericValidatorBase(data)
-    {
-    }
-
-    wxGenericValidatorType(const wxGenericValidatorType& val)
-        : wxGenericValidatorBase(val)
-    {
-    }
-
-    virtual ~wxGenericValidatorType(){}
-
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorType(*this); }
-
-    virtual bool TransferToWindow() wxOVERRIDE
-    {
-        return wxPrivate::wxDataTransferHelper<wxWindow, T>::To(m_validatorWindow, m_data);
-    }
-
-    virtual bool TransferFromWindow() wxOVERRIDE
-    {
-        return wxPrivate::wxDataTransferHelper<wxWindow, T>::From(m_validatorWindow, m_data);
-    }
-};
-
-#endif 
 
 //-----------------------------------------------------------------------------
 // convenience functions.
 //-----------------------------------------------------------------------------
 
+// Notice that while the value type can be deduced from the passed parameter,
+// the window type needs to be passed explicitly to be able to create the right
+// wxGenericValidatorType (which is a compile-time type).
+//    
 template<class W, typename T>
 inline wxGenericValidatorType<W, T> wxGenericValidator(T* value)
 {
     return wxGenericValidatorType<W, T>(value);
 }
 
-#if 0
-
-// *NOTE*
-// ------
-// I am not sure if we should supply this overload and implement 
-// wxGenericValidatorType<wxWindow, T> in terms of the old wxGenericValidator
-// (class) implementation so that old code still compile and work unchanged ?
-
-template<typename T>
-inline wxGenericValidatorType<wxWindow, T> wxGenericValidator(T* value)
-{
-    return wxGenericValidatorType<wxWindow, T>(value);
-}
-
-#endif
-
-//
+// A more convenient way to set generic validators 
 template<class W, typename T>
 inline void wxSetGenericValidator(W* win, T* value)
 {

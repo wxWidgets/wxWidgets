@@ -301,7 +301,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
                         wxDefaultPosition, wxDefaultSize,
                         WXSIZEOF(g_listbox_choices), g_listbox_choices, wxLB_MULTIPLE,
-                        wxGenericValidator<wxListBox>(&g_data.m_listbox_choices)),
+                        wxGenericValidator(&g_data.m_listbox_choices)),
                        1, wxGROW);
 
     const wxValidator& comboValidator =
