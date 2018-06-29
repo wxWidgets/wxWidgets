@@ -212,7 +212,7 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 #if wxOSX_USE_IPHONE
         genericRGBColorSpace.reset( CGColorSpaceCreateDeviceRGB() );
 #else
-        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
+        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceSRGB ) );
 #endif
     }
 
