@@ -494,7 +494,7 @@ public:
     wxArrayStringsAdapter(const std::vector<wxString>& strings)
         : m_type(wxSTRING_POINTER), m_size(strings.size())
     {
-        m_data.ptr = &strings[0];
+        m_data.ptr = m_size == 0 ? NULL : &strings[0];
     }
 #endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 
