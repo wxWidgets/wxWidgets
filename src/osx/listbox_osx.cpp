@@ -439,7 +439,7 @@ void wxListBox::MacHandleSelectionChange(int row)
     // Otherwise call DoChangeSingleSelection so GetOldSelection() will return
     // the correct value if row < 0 later.
     const int count = static_cast<int>(GetCount());
-    if ( row < 0 || row > count )
+    if ( row < 0 || row >= count )
     {
         if ( !m_oldSelections.empty() )
         {
