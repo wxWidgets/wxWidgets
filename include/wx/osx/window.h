@@ -278,6 +278,7 @@ public:
     virtual void *OSXGetViewOrWindow() const;
 #endif // Cocoa
 
+    virtual bool        RequiresCGContextRef() { return true; }
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
 

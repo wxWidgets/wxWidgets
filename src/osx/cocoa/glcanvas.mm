@@ -112,9 +112,8 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     return [[NSOpenGLPixelFormat alloc] initWithAttributes:(NSOpenGLPixelFormatAttribute*) attribs];
 }
 
-@interface wxNSCustomOpenGLView : NSView
+@interface wxNSCustomOpenGLView : NSOpenGLView
 {
-    NSOpenGLContext* context;
 }
 
 @end
@@ -137,6 +136,30 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
 }
 
 @end
+
+bool wxGLCanvas::DoCreate(wxWindow *parent,
+                          wxWindowID id,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxString& name)
+{
+
+    DontCreatePeer();
+    
+    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        return false;
+
+    
+    NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
+    wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
+    
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, false, true );
+    SetPeer(c);
+    MacPostControlCreate(pos, size) ;
+    return true;
+}
+
 
 wxGLCanvas::~wxGLCanvas()
 {
