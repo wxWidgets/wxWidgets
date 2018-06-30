@@ -126,10 +126,8 @@ public:
 
     virtual void HandleLineEvent( unsigned int n, bool doubleClick );
 
-    // These are called by wxNSTableView
-    using wxListBoxBase::DoChangeSingleSelection;
-    using wxListBoxBase::CalcAndSendEvent;
-    int GetOldSelection() const { return m_oldSelections.empty() ? wxNOT_FOUND : m_oldSelections[0]; }
+    // This is called by wxNSTableView
+    void MacHandleSelectionChange(int row);
 
 protected:
     // callback for derived classes which may have to insert additional data
