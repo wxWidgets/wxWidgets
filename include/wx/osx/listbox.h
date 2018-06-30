@@ -122,8 +122,6 @@ public:
 
     wxListWidgetImpl* GetListPeer() const;
 
-    bool MacGetBlockEvents() const { return m_blockEvents; }
-
     virtual void HandleLineEvent( unsigned int n, bool doubleClick );
 
     // This is called by wxNSTableView

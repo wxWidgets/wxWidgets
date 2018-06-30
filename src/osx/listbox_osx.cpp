@@ -422,32 +422,32 @@ void wxListBox::HandleLineEvent( unsigned int n, bool doubleClick )
 
 void wxListBox::MacHandleSelectionChange(int row)
 {
+    if ( m_blockEvents )
+        return;
+
     // Correct notification events for multiselection list, like in Carbon version
-    if ( HasMultipleSelection() && !MacGetBlockEvents() )
+    if ( HasMultipleSelection() )
     {
         CalcAndSendEvent();
         return;
     }
 
-    if ( !MacGetBlockEvents() )
+    // OS X can select an item below the last item. In that case keep the old selection because
+    // in wxWidgets API there is no notification event for removing the selection from a single-selection list box.
+    // Otherwise call DoChangeSingleSelection so GetOldSelection() will return the correct value if row < 0 later.
+    if ((row < 0) || (row > (int) GetCount()))
     {
-        // OS X can select an item below the last item. In that case keep the old selection because
-        // in wxWidgets API there is no notification event for removing the selection from a single-selection list box.
-        // Otherwise call DoChangeSingleSelection so GetOldSelection() will return the correct value if row < 0 later.
-        if ((row < 0) || (row > (int) GetCount()))
+        if ( !m_oldSelections.empty() )
         {
-            if ( !m_oldSelections.empty() )
-            {
-                const int oldsel = m_oldSelections[0];
-                if (oldsel >= 0)
-                    SetSelection(oldsel);
-            }
-            return;
+            const int oldsel = m_oldSelections[0];
+            if (oldsel >= 0)
+                SetSelection(oldsel);
         }
-        if ( !DoChangeSingleSelection(row) )
-            return ;
-        HandleLineEvent( row, false );
+        return;
     }
+    if ( !DoChangeSingleSelection(row) )
+        return ;
+    HandleLineEvent( row, false );
 }
 
 //
