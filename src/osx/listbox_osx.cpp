@@ -444,7 +444,7 @@ void wxListBox::MacHandleSelectionChange(int row)
         if ( !m_oldSelections.empty() )
         {
             const int oldsel = m_oldSelections[0];
-            if (oldsel >= 0)
+            if ( oldsel >= 0 && oldsel < count )
                 SetSelection(oldsel);
         }
     }
