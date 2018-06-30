@@ -299,7 +299,7 @@ protected:
 
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     wxListBox* const list = wxDynamicCast(impl->GetWXPeer(), wxListBox);
-    wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+    wxCHECK_RET( list != NULL , "Associated control should be a wxListBox" );
 
     // Correct notification events for multiselection list, like in Carbon version
     if (list->HasMultipleSelection() && !list->MacGetBlockEvents())
