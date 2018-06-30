@@ -2291,7 +2291,17 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     wxpeer->GetUpdateRegion() = updateRgn;
 
     // setting up the drawing context
-    
+    if (!wxpeer->RequiresCGContextRef()) {
+         bool handled = wxpeer->MacDoRedraw( 0 );
+        if ( !handled )
+        {
+            // call super
+            SEL _cmd = @selector(drawRect:);
+            wxOSX_DrawRectHandlerPtr superimpl = (wxOSX_DrawRectHandlerPtr) [[slf superclass] instanceMethodForSelector:_cmd];
+            superimpl(slf, _cmd, *(NSRect*)rect);
+        }
+        return;
+    }
     CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSaveGState( context );
     
