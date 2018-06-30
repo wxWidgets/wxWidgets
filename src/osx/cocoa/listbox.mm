@@ -298,7 +298,7 @@ protected:
     int row = [self selectedRow];
 
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
+    wxListBox* const list = wxDynamicCast(impl->GetWXPeer(), wxListBox);
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
 
     // Correct notification events for multiselection list, like in Carbon version
