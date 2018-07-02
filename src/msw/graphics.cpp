@@ -1280,9 +1280,6 @@ void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
     if ( m_logCurrentPointSet )
     {
         start = m_logCurrentPoint;
-        // After calling AddLine() the native current point
-        // will be updated and can be used.
-        m_logCurrentPointSet = false;
     }
     else
     {
@@ -1296,6 +1293,8 @@ void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
         }
     }
     m_path->AddLine(start.X, start.Y, (REAL)x, (REAL)y);
+    // After calling AddLine() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::CloseSubpath()
@@ -1326,9 +1325,6 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
     if ( m_logCurrentPointSet )
     {
         start = m_logCurrentPoint;
-        // After calling AddBezier() the native current point
-        // will be updated and can be used.
-        m_logCurrentPointSet = false;
     }
     else
     {
@@ -1339,6 +1335,8 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
         }
     }
     m_path->AddBezier(start,c1,c2,end);
+    // After calling AddBezier() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 // gets the last point of the current path, (0,0) if not yet set
@@ -1450,11 +1448,15 @@ void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
 void wxGDIPlusPathData::AddCircle(wxDouble x, wxDouble y, wxDouble r)
 {
     m_path->AddEllipse((REAL)(x-r), (REAL)(y-r), (REAL)(2.0*r), (REAL)(2.0*r));
+    // After calling AddEllipse() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
     m_path->AddEllipse((REAL)x, (REAL)y, (REAL)w, (REAL)h);
+    // After calling AddEllipse() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
