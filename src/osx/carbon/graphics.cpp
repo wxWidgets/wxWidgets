@@ -1240,7 +1240,15 @@ void wxMacCoreGraphicsPathData::CloseSubpath()
 // gets the last point of the current path, (0,0) if not yet set
 void wxMacCoreGraphicsPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 {
-    CGPoint p = CGPathGetCurrentPoint( m_path );
+    CGPoint p;
+    if ( CGPathIsEmpty(m_path) )
+    {
+        p.x = p.y = 0;
+    }
+    else
+    {
+        p = CGPathGetCurrentPoint(m_path);
+    }
     *x = p.x;
     *y = p.y;
 }
