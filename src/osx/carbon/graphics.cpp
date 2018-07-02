@@ -1164,7 +1164,16 @@ void wxMacCoreGraphicsPathData::MoveToPoint( wxDouble x1 , wxDouble y1 )
 
 void wxMacCoreGraphicsPathData::AddLineToPoint( wxDouble x1 , wxDouble y1 )
 {
-    CGPathAddLineToPoint( m_path , NULL , (CGFloat) x1 , (CGFloat) y1 );
+    // This function should behave as MoveToPoint if current point is not yet set
+    // (CGPathAddLineToPoint requires non-empty path).
+    if ( CGPathIsEmpty(m_path) )
+    {
+        MoveToPoint(x1, y1);
+    }
+    else
+    {
+        CGPathAddLineToPoint( m_path , NULL , (CGFloat) x1 , (CGFloat) y1 );
+    }
 }
 
 void wxMacCoreGraphicsPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
