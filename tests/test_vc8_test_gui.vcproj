@@ -1027,6 +1027,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\graphics\graphpath.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sizers\gridsizer.cpp"
 				>
 			</File>

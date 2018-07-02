@@ -183,6 +183,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_boundingbox.o \
 	test_gui_clippingbox.o \
 	test_gui_graphmatrix.o \
+	test_gui_graphpath.o \
 	test_gui_config.o \
 	test_gui_bitmapcomboboxtest.o \
 	test_gui_bitmaptogglebuttontest.o \
@@ -817,6 +818,9 @@ test_gui_clippingbox.o: $(srcdir)/graphics/clippingbox.cpp $(TEST_GUI_ODEP)
 
 test_gui_graphmatrix.o: $(srcdir)/graphics/graphmatrix.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/graphmatrix.cpp
+
+test_gui_graphpath.o: $(srcdir)/graphics/graphpath.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/graphpath.cpp
 
 test_gui_config.o: $(srcdir)/config/config.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/config/config.cpp

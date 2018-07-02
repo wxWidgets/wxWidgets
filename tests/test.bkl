@@ -182,6 +182,7 @@
             graphics/boundingbox.cpp
             graphics/clippingbox.cpp
             graphics/graphmatrix.cpp
+            graphics/graphpath.cpp
             config/config.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
