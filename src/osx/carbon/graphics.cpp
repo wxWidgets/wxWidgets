@@ -1223,6 +1223,12 @@ void wxMacCoreGraphicsPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, wxDo
 
 void wxMacCoreGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
 {
+    // This function should be preceded by MoveToPoint(0, 0)
+    // if current point is not yet set (CGPathAddArcToPoint requires non-empty path).
+    if ( CGPathIsEmpty(m_path) )
+    {
+        MoveToPoint(0, 0);
+    }
     CGPathAddArcToPoint( m_path, NULL , (CGFloat) x1, (CGFloat) y1, (CGFloat) x2, (CGFloat) y2, (CGFloat) r);
 }
 

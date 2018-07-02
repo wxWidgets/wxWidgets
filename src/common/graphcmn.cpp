@@ -455,6 +455,12 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
 {
     wxPoint2DDouble current;
     GetCurrentPoint(&current.m_x, &current.m_y);
+    if ( current == wxPoint(0, 0) )
+    {
+        // (0, 0) is returned by GetCurrentPoint() also when the last point is not yet actually set,
+        // so we should reposition it to (0, 0) to be sure that a last point is initially set.
+        MoveToPoint(0, 0);
+    }
     wxPoint2DDouble p1(x1, y1);
     wxPoint2DDouble p2(x2, y2);
 

@@ -55,6 +55,8 @@ public:
         to the line connecting (@a x1, @a y1) and (@a x2, @a y2).
         If the current point and the starting point of the arc are different,
         a straight line connecting these points is also appended.
+        If there is no current point before the call to AddArcToPoint() this
+        function will behave as if preceded by a call to MoveToPoint(0, 0).
         After this call the current point will be at the ending point
         of the arc.
         @image html drawing-addarctopoint.png
