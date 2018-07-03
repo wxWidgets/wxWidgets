@@ -420,6 +420,40 @@ void wxListBox::HandleLineEvent( unsigned int n, bool doubleClick )
     HandleWindowEvent(event);
 }
 
+void wxListBox::MacHandleSelectionChange(int row)
+{
+    if ( m_blockEvents )
+        return;
+
+    // Correct notification events for multiselection list.
+    if ( HasMultipleSelection() )
+    {
+        CalcAndSendEvent();
+        return;
+    }
+
+    // OS X can select an item below the last item. In that case keep the old
+    // selection because in wxWidgets API there is no notification event for
+    // removing the selection from a single-selection list box.
+    //
+    // Otherwise call DoChangeSingleSelection so GetOldSelection() will return
+    // the correct value if row < 0 later.
+    const int count = static_cast<int>(GetCount());
+    if ( row < 0 || row >= count )
+    {
+        if ( !m_oldSelections.empty() )
+        {
+            const int oldsel = m_oldSelections[0];
+            if ( oldsel >= 0 && oldsel < count )
+                SetSelection(oldsel);
+        }
+    }
+    else if ( DoChangeSingleSelection(row) )
+    {
+        HandleLineEvent( row, false );
+    }
+}
+
 //
 // common list cell value operations
 //
