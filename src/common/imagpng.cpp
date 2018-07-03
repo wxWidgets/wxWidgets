@@ -256,7 +256,9 @@ wxPNGHandler::LoadFile(wxImage *image,
     // VZ: as this function uses setjmp() the only fool-proof error handling
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
 
-    unsigned char **lines = NULL;
+    // allocate the lines pointer dynamically to avoid clobbering by longjmp
+    unsigned char *** const lines_p = new unsigned char ** (NULL);
+    unsigned char ** &lines = *lines_p;
     png_infop info_ptr = (png_infop) NULL;
     wxPNGInfoStruct wxinfo;
 
@@ -400,6 +402,7 @@ wxPNGHandler::LoadFile(wxImage *image,
     for ( i = 0; i < height; i++ )
         free( lines[i] );
     free( lines );
+    delete lines_p;
 
     return true;
 
@@ -421,6 +424,7 @@ error:
 
         free( lines );
     }
+    delete lines_p;
 
     if ( png_ptr )
     {
