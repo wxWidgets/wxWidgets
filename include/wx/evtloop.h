@@ -63,11 +63,8 @@
 class WXDLLIMPEXP_BASE wxEventLoopBase
 {
 public:
-    // trivial, but needed (because of wxEventLoopBase) ctor
     wxEventLoopBase();
-
-    // dtor
-    virtual ~wxEventLoopBase() { }
+    virtual ~wxEventLoopBase();
 
     // use this to check whether the event loop was successfully created before
     // using it
@@ -214,6 +211,9 @@ protected:
 
     // should we exit the loop?
     bool m_shouldExit;
+
+    // is this the outermost loop or is it nested inside another one?
+    const bool m_isOutermost;
 
     // incremented each time on entering Yield() and decremented on leaving it
     int m_yieldLevel;
