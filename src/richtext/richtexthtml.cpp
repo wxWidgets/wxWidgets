@@ -166,7 +166,8 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
 
         CloseLists(-1, str);
 
-        str << wxT("</font>");
+        if (currentParaStyle.HasFont())
+            str << wxT("</font>");
 
         if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
             str << wxT("</body></html>");
