@@ -24,6 +24,13 @@
 #include "wx/scopeguard.h"
 #include "wx/apptrait.h"
 #include "wx/private/eventloopsourcesmanager.h"
+
+// Counts currently existing event loops.
+//
+// As wxEventLoop can be only used from the main thread, there is no need to
+// protect accesses to this variable.
+static int gs_eventLoopCount = 0;
+
 // ----------------------------------------------------------------------------
 // wxEventLoopBase
 // ----------------------------------------------------------------------------
@@ -32,10 +39,17 @@ wxEventLoopBase *wxEventLoopBase::ms_activeLoop = NULL;
 
 wxEventLoopBase::wxEventLoopBase()
 {
+    gs_eventLoopCount++;
+
     m_isInsideRun = false;
     m_shouldExit = false;
     m_yieldLevel = 0;
     m_eventsToProcessInsideYield = wxEVT_CATEGORY_ALL;
+}
+
+wxEventLoopBase::~wxEventLoopBase()
+{
+    gs_eventLoopCount--;
 }
 
 bool wxEventLoopBase::IsMain() const
@@ -254,32 +268,42 @@ int wxEventLoopManual::DoRun()
                 OnNextIteration();
 
                 // generate and process idle events for as long as we don't
-                // have anything else to do
+                // have anything else to do, but stop doing this if Exit() is
+                // called by one of the idle handlers
                 while ( !m_shouldExit && !Pending() && ProcessIdle() )
                     ;
 
+                // if Exit() was called, don't dispatch any more events here
                 if ( m_shouldExit )
-
                     break;
 
                 // a message came or no more idle processing to do, dispatch
                 // all the pending events and call Dispatch() to wait for the
                 // next message
-                if ( !ProcessEvents() )
-                {
-                    // we got WM_QUIT
+                if ( !ProcessEvents() || m_shouldExit )
                     break;
-                }
             }
 
-            // Process the remaining queued messages, both at the level of the
-            // underlying toolkit level (Pending/Dispatch()) and wx level
-            // (Has/ProcessPendingEvents()).
+            // If we exit the outermost loop, process the remaining queued
+            // messages, both at the level of the underlying toolkit level
+            // (Pending/Dispatch()) and wx level (Has/ProcessPendingEvents()).
             //
-            // We do run the risk of never exiting this loop if pending event
+            // Note that we must not do this for nested modal event loops as,
+            // at least in wxMSW, the modality has already been undone when
+            // Exit() was called, and so we could end up with reentrancies such
+            // as starting another modal event loop before exiting this one.
+            // To avoid this we must not dispatch any events after calling
+            // Exit() and, for the nested loops, there is no real reason to do
+            // it anyhow, as the outer loop will still dispatch them.
+            //
+            // Finally, even when doing this in the outermost loop, there is
+            // still the risk of never exiting this loop if pending event
             // handlers endlessly generate new events but they shouldn't do
             // this in a well-behaved program and we shouldn't just discard the
             // events we already have, they might be important.
+            if ( gs_eventLoopCount != 1 )
+                break;
+
             for ( ;; )
             {
                 bool hasMoreEvents = false;

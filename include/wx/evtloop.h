@@ -63,11 +63,8 @@
 class WXDLLIMPEXP_BASE wxEventLoopBase
 {
 public:
-    // trivial, but needed (because of wxEventLoopBase) ctor
     wxEventLoopBase();
-
-    // dtor
-    virtual ~wxEventLoopBase() { }
+    virtual ~wxEventLoopBase();
 
     // use this to check whether the event loop was successfully created before
     // using it
