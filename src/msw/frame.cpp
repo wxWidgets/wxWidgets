@@ -744,10 +744,11 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
 bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 {
     // We can get a WM_SIZE when restoring a hidden window using
-    // SetWindowPlacement(), don't do anything in this case as our state will
-    // be really updated later, when (and if) we're shown.
+    // SetWindowPlacement(), don't do anything here in this case as our state
+    // will be really updated later, when (and if) we're shown. Still let the
+    // base class generate wxEVT_SIZE and perform the layout, however.
     if ( !IsShown() )
-        return true;
+        return false;
 
     switch ( id )
     {
