@@ -81,6 +81,11 @@ protected:
     // From wxTextEntry:
     virtual wxString DoGetValue() const wxOVERRIDE;
 
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
 private:
 
     // From wxTextEntry:

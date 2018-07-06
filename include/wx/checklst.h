@@ -32,6 +32,12 @@ public:
 
     virtual unsigned int GetCheckedItems(wxArrayInt& checkedItems) const;
 
+protected:
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
     wxDECLARE_NO_COPY_CLASS(wxCheckListBoxBase);
 };
 

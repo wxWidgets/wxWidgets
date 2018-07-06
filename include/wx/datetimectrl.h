@@ -17,8 +17,8 @@
 #define wxNEEDS_DATETIMEPICKCTRL
 
 #include "wx/control.h"         // the base class
-
 #include "wx/datetime.h"
+#include "wx/valgen.h"
 
 // ----------------------------------------------------------------------------
 // wxDateTimePickerCtrl: Private common base class of wx{Date,Time}PickerCtrl.
@@ -32,6 +32,23 @@ public:
     // Set/get the date or time (in the latter case, time part is ignored).
     virtual void SetValue(const wxDateTime& dt) = 0;
     virtual wxDateTime GetValue() const = 0;
+
+protected:
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE
+    {
+        wxASSERT_MSG(ptr->IsOfType<wxDateTime>(), "Expected type: 'wxDateTime'");
+        SetValue(ptr->GetValue<wxDateTime>());
+        return true; 
+    }
+
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE
+    {
+        wxASSERT_MSG(ptr->IsOfType<wxDateTime>(), "Expected type: 'wxDateTime'");
+        ptr->SetValue<wxDateTime>(GetValue());
+        return true; 
+    }
+#endif // wxUSE_VALIDATORS
 };
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)

@@ -11,6 +11,7 @@
 #if wxUSE_SPINCTRL
 
 #include "wx/spinctrl.h"
+#include "wx/valgen.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -214,6 +215,24 @@ void wxSpinCtrl::SetValue( const wxString &value )
         qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
 }
 
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrl::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetValue(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxSpinCtrl::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetValue());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
+
 void wxQtSpinBox::valueChanged(int value)
 {
     wxControl *handler = GetHandler();
@@ -274,5 +293,22 @@ void wxSpinCtrlDouble::SetValue( const wxString &value )
         qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
 }
 
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrlDouble::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<double>(), "Expected type: 'double'");
+    SetValue(ptr->GetValue<double>());
+    return true; 
+}
+
+bool wxSpinCtrlDouble::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<double>(), "Expected type: 'double'");
+    ptr->SetValue<double>(GetValue());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_SPINCTRL

@@ -152,6 +152,12 @@ protected:
         m_allowTextEvents = enable;
     }
 
+protected:
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
 private:
     // there are the overridden wxTextEntry methods which should only be called
     // when we do have an edit control so they assert if this is not the case

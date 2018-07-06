@@ -29,6 +29,7 @@
 
 #include "wx/spinctrl.h"
 #include "wx/tooltip.h"
+#include "wx/valgen.h"
 
 #if wxUSE_SPINCTRL
 
@@ -659,6 +660,24 @@ wxString wxSpinCtrl::DoValueToText(double val)
     }
 }
 
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrl::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetValue(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxSpinCtrl::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetValue(wxSPINCTRL_GETVALUE_FIX));
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
+
 #endif // !wxHAS_NATIVE_SPINCTRL
 
 //-----------------------------------------------------------------------------
@@ -699,6 +718,24 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 
     DoSetValue(m_value, SendEvent_None);
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxSpinCtrlDouble::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<double>(), "Expected type: 'double'");
+    SetValue(ptr->GetValue<double>());
+    return true; 
+}
+
+bool wxSpinCtrlDouble::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<double>(), "Expected type: 'double'");
+    ptr->SetValue<double>(GetValue(wxSPINCTRL_GETVALUE_FIX));
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_SPINBTN
 

@@ -27,6 +27,7 @@
 #if wxUSE_SLIDER
 
 #include "wx/slider.h"
+#include "wx/valgen.h"
 
 extern WXDLLEXPORT_DATA(const char) wxSliderNameStr[] = "slider";
 
@@ -107,5 +108,27 @@ wxEMPTY_HANDLERS_TABLE(wxSlider)
 wxCONSTRUCTOR_8( wxSlider, wxWindow*, Parent, wxWindowID, Id, int, Value, \
                  int, Minimum, int, Maximum, wxPoint, Position, wxSize, Size, \
                  long, WindowStyle )
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+#if wxUSE_VALIDATORS
+
+bool wxSliderBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetValue(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxSliderBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetValue());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_SLIDER

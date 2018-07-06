@@ -39,6 +39,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/valgen.h"
+
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
@@ -116,4 +118,45 @@ unsigned int wxCheckListBoxBase::GetCheckedItems(wxArrayInt& checkedItems) const
     return checkedItems.size();
 }
 
-#endif
+#if wxUSE_VALIDATORS
+
+bool wxCheckListBoxBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
+
+    // clear all selections
+    size_t i, count = GetCount();
+
+    for ( i = 0 ; i < count; ++i )
+        Check(i, false);
+
+    const wxArrayInt& arr = ptr->GetValue<wxArrayInt>();
+
+    // select each item in our array
+    count = arr.GetCount();
+    for ( i = 0 ; i < count; ++i )
+        Check(arr.Item(i));
+
+    return true;
+}
+
+bool wxCheckListBoxBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
+
+    wxArrayInt& arr = ptr->GetValue<wxArrayInt>();
+        
+    arr.Clear();
+
+    for ( size_t i = 0, count = GetCount(); i < count; ++i )
+    {
+        if ( IsChecked(i) )
+            arr.Add(i);
+    }
+
+    return true;
+}
+
+#endif // wxUSE_VALIDATORS
+
+#endif // wxUSE_CHECKLISTBOX

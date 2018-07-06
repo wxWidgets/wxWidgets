@@ -58,6 +58,11 @@ public:
     // implementation-only
     bool IsNeeded() const { return GetRange() > GetThumbSize(); }
 
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxScrollBarBase);
 };

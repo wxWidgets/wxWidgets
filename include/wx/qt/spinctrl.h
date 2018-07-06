@@ -78,6 +78,12 @@ public:
     virtual void SetValue(const wxString & val);
     virtual void SetValue(int val) { wxSpinCtrlQt<int,QSpinBox>::SetValue(val); }
 
+protected:
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
 private:
     // Common part of all ctors.
     void Init()
@@ -119,6 +125,12 @@ public:
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
     virtual void SetValue(const wxString & val);
     virtual void SetValue(double val) { wxSpinCtrlQt<double,QDoubleSpinBox>::SetValue(val); }
+
+protected:
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
 private:
     wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );

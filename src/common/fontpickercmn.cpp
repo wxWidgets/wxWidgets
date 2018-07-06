@@ -33,6 +33,7 @@
 
 #include "wx/fontenum.h"
 #include "wx/tokenzr.h"
+#include "wx/valgen.h"
 
 // ============================================================================
 // implementation
@@ -165,6 +166,24 @@ void wxFontPickerCtrl::SetMaxPointSize(unsigned int max)
     m_nMaxPointSize = max;
     SetMinMaxPointSize(m_nMinPointSize, m_nMaxPointSize);
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxFontPickerCtrl::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxFont>(), "Expected type: 'wxFont'");
+    SetSelectedFont(ptr->GetValue<wxFont>());
+    return true;
+}
+
+bool wxFontPickerCtrl::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxFont>(), "Expected type: 'wxFont'");
+    ptr->SetValue<wxFont>(GetSelectedFont());
+    return true;
+}
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl - event handlers

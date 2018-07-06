@@ -22,6 +22,8 @@
 #ifndef WX_PRECOMP
 #endif
 
+#include "wx/valgen.h"
+
 extern WXDLLEXPORT_DATA(const char) wxScrollBarNameStr[] = "scrollBar";
 
 // ----------------------------------------------------------------------------
@@ -85,5 +87,27 @@ wxEMPTY_HANDLERS_TABLE(wxScrollBar)
 
 wxCONSTRUCTOR_5( wxScrollBar, wxWindow*, Parent, wxWindowID, Id, \
                  wxPoint, Position, wxSize, Size, long, WindowStyle )
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+#if wxUSE_VALIDATORS
+
+bool wxScrollBarBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetThumbPosition(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxScrollBarBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetThumbPosition());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_SCROLLBAR

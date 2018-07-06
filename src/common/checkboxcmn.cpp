@@ -26,6 +26,7 @@
 #if wxUSE_CHECKBOX
 
 #include "wx/checkbox.h"
+#include "wx/valgen.h"
 
 extern WXDLLEXPORT_DATA(const char) wxCheckBoxNameStr[] = "check";
 
@@ -86,5 +87,26 @@ wxEMPTY_HANDLERS_TABLE(wxCheckBox)
 wxCONSTRUCTOR_6( wxCheckBox, wxWindow*, Parent, wxWindowID, Id, \
                  wxString, Label, wxPoint, Position, wxSize, Size, long, WindowStyle )
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+#if wxUSE_VALIDATORS
+
+bool wxCheckBoxBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<bool>(), "Expected type: 'bool'");
+    SetValue(ptr->GetValue<bool>());
+    return true; 
+}
+
+bool wxCheckBoxBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<bool>(), "Expected type: 'bool'");
+    ptr->SetValue<bool>(GetValue());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_CHECKBOX

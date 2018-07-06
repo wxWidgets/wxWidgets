@@ -38,6 +38,7 @@
 
 #include "wx/tooltip.h"
 #include "wx/combo.h"
+#include "wx/valgen.h"
 
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
@@ -511,6 +512,56 @@ bool wxComboBox::CanRedo() const
         return false;
 }
 
+#if wxUSE_VALIDATORS
+
+bool wxComboBox::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    if ( ptr->IsOfType<int>() )
+    {
+        SetSelection(ptr->GetValue<int>());
+    }
+    else if ( ptr->IsOfType<wxString>() )
+    {
+        const wxString& str = ptr->GetValue<wxString>();
+
+        if ( FindString(str) != wxNOT_FOUND )
+            SetStringSelection(str);
+
+        if ( (GetWindowStyle() & wxCB_READONLY) == 0 )
+            SetValue(str);
+    }
+    else
+    {
+        wxFAIL_MSG("Expected types: int or wxString");
+        return false;
+    }
+
+    return true;
+}
+
+bool wxComboBox::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    if ( ptr->IsOfType<int>() )
+    {
+        ptr->SetValue<int>(GetSelection());
+    }
+    else if ( ptr->IsOfType<wxString>() )
+    {
+        if ( GetWindowStyle() & wxCB_READONLY )
+            ptr->SetValue<wxString>(GetStringSelection());
+        else
+            ptr->SetValue<wxString>(GetValue());
+    }
+    else
+    {
+        wxFAIL_MSG("Expected types: int or wxString");
+        return false;
+    }
+            
+    return true;
+}
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // wxStdComboBoxInputHandler

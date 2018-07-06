@@ -32,6 +32,8 @@
 #ifndef WX_PRECOMP
 #endif
 
+#include "wx/valgen.h"
+
 const char wxChoiceNameStr[] = "choice";
 
 
@@ -118,6 +120,53 @@ wxSize wxChoiceBase::DoGetBestSize() const
 
     return best;
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxChoiceBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    if ( ptr->IsOfType<int>() )
+    {
+        SetSelection(ptr->GetValue<int>());
+    }
+    else if ( ptr->IsOfType<wxString>() )
+    {
+        const wxString& str = ptr->GetValue<wxString>();
+
+        if ( FindString(str) != wxNOT_FOUND )
+        {
+            SetStringSelection(str);
+        }
+    }
+    else
+    {
+        wxFAIL_MSG("Expected types: 'int or wxString'");
+        return false;
+    }
+        
+    return true;
+}
+
+bool wxChoiceBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    if ( ptr->IsOfType<int>() )
+    {
+        ptr->SetValue<int>(GetSelection());
+    }
+    else if ( ptr->IsOfType<wxString>() )
+    {
+        ptr->SetValue<wxString>(GetStringSelection());
+    }
+    else
+    {
+        wxFAIL_MSG("Expected types: 'int or wxString'");
+        return false;
+    }
+        
+    return true;
+}
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // misc

@@ -201,6 +201,11 @@ protected:
                                             const wxString& message,
                                             const wxString& wildcard) = 0;
 
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
 protected:
 
     // m_picker object as wxFileDirPickerWidgetBase interface
@@ -295,6 +300,11 @@ protected:
                                       wxDefaultPosition, wxDefaultSize,
                                       GetPickerStyle(GetWindowStyle()));
     }
+
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     // extracts the style for our picker from wxFileDirPickerCtrlBase's style
     long GetPickerStyle(long style) const wxOVERRIDE
@@ -394,6 +404,11 @@ protected:
                                      wxDefaultPosition, wxDefaultSize,
                                      GetPickerStyle(GetWindowStyle()));
     }
+
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     // extracts the style for our picker from wxFileDirPickerCtrlBase's style
     long GetPickerStyle(long style) const wxOVERRIDE

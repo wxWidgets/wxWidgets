@@ -165,6 +165,11 @@ protected:
     // resolve ambiguity in base classes
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxRadioBoxBase::GetDefaultBorder(); }
 
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
     // the buttons we contain
     wxSubwindows *m_radioButtons;
 

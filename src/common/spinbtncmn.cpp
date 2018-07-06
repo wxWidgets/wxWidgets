@@ -30,6 +30,7 @@
 #if wxUSE_SPINBTN
 
 #include "wx/spinbutt.h"
+#include "wx/valgen.h"
 
 // ----------------------------------------------------------------------------
 // XTI
@@ -94,5 +95,26 @@ wxCONSTRUCTOR_5( wxSpinButton, wxWindow*, Parent, wxWindowID, Id, \
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent);
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+#if wxUSE_VALIDATORS
+
+bool wxSpinButtonBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetValue(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxSpinButtonBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetValue());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_SPINBTN

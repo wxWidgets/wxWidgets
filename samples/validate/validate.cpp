@@ -27,9 +27,12 @@
 
 #include "validate.h"
 
+#if wxUSE_DATEPICKCTRL
+  #include "wx/datectrl.h"
+#endif // wxUSE_DATEPICKCTRL
+#include "wx/spinctrl.h"
 #include "wx/sizer.h"
 #include "wx/valgen.h"
-#include "wx/valtext.h"
 #include "wx/valnum.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -67,6 +70,11 @@ MyData::MyData()
     m_smallIntValue = 3;
     m_doubleValue = 12354.31;
     m_percentValue = 0.25;
+
+    m_spinctrl_int = 50;
+    m_spinctrl_double = 0.0;
+
+    m_datetime = wxDateTime::Now();
 }
 
 // ----------------------------------------------------------------------------
@@ -224,6 +232,10 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         m_listbox->Append(wxString::Format("small int value: %u", g_data.m_smallIntValue));
         m_listbox->Append(wxString::Format("double value: %.3f", g_data.m_doubleValue));
         m_listbox->Append(wxString::Format("percent value: %.4f", g_data.m_percentValue));
+
+        m_listbox->Append(wxString::Format("spinctrl(int) value: %d", g_data.m_spinctrl_int));
+        m_listbox->Append(wxString::Format("spinctrl(double) value: %.2f", g_data.m_spinctrl_double));
+        m_listbox->Append(wxString(wxT("date: ")) + g_data.m_datetime.FormatISODate());
     }
 }
 
@@ -245,7 +257,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // setup the flex grid sizer
     // -------------------------
 
-    wxFlexGridSizer *flexgridsizer = new wxFlexGridSizer(3, 2, 5, 5);
+    wxFlexGridSizer *flexgridsizer = new wxFlexGridSizer(4, 2, 5, 5);
 
     // Create and add controls to sizers. Note that a member variable
     // of g_data is bound to each control upon construction. There is
@@ -291,6 +303,23 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                         wxDefaultPosition, wxDefaultSize, 0,
                         wxGenericValidator(&g_data.m_checkbox_state)),
                        1, wxALIGN_CENTER|wxALL, 15);
+////
+#if wxUSE_DATEPICKCTRL
+    flexgridsizer->Add(new wxDatePickerCtrl(this, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize,
+                                            wxDP_DEFAULT|wxDP_SHOWCENTURY, wxGenericValidator(&g_data.m_datetime)),
+                       1, wxALIGN_CENTER|wxALL, 15);
+#endif // wxUSE_DATEPICKCTRL
+
+    wxSpinCtrlDouble* spinctrl1 = new wxSpinCtrlDouble(this, wxID_ANY, wxT("Sample spinctrl(double)"),
+        wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0.0, 2.0, g_data.m_spinctrl_double, 0.2);
+    spinctrl1->SetValidator(wxGenericValidator(&g_data.m_spinctrl_double));
+    flexgridsizer->Add(spinctrl1, 1, wxALIGN_CENTER|wxALL, 15);
+
+    wxSpinCtrl* spinctrl2 = new wxSpinCtrl(this, wxID_ANY, wxT("Sample spinctrl(int)"));
+    spinctrl2->SetValidator(wxGenericValidator(&g_data.m_spinctrl_int));
+    flexgridsizer->Add(spinctrl2, 1, wxALIGN_CENTER|wxALL, 15);
+
+////
 
     flexgridsizer->AddGrowableCol(0);
     flexgridsizer->AddGrowableCol(1);

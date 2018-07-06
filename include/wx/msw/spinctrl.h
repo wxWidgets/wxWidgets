@@ -139,6 +139,11 @@ protected:
     // called to ensure that the value is in the correct range
     virtual void NormalizeValue() wxOVERRIDE;
 
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
     // the value of the control before the latest change (which might not have
     // changed anything in fact -- this is why we need this field)
     int m_oldValue;

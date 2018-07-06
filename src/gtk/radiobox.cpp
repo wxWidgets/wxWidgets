@@ -19,6 +19,8 @@
 
 #include "wx/gtk/private.h"
 
+#include "wx/valgen.h"
+
 //-----------------------------------------------------------------------------
 // wxGTKRadioButtonInfo
 //-----------------------------------------------------------------------------
@@ -699,5 +701,23 @@ int wxRadioBox::GetItemFromPoint(const wxPoint& point) const
 
     return wxNOT_FOUND;
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxRadioBox::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetSelection(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxRadioBox::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetSelection());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_RADIOBOX

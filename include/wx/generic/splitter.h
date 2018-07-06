@@ -276,6 +276,10 @@ protected:
     // subwindows
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     wxSplitMode m_splitMode;
     wxWindow*   m_windowOne;

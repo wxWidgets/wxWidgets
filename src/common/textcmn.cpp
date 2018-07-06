@@ -33,6 +33,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/ffile.h"
+#include "wx/filename.h"
+#include "wx/valgen.h"
 
 extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
 
@@ -924,6 +926,76 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 
     return true;
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxTextCtrlBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxString str;
+
+    if ( ptr->IsOfType<wxString>() )
+    {
+        str = ptr->GetValue<wxString>();
+    }
+    else if ( ptr->IsOfType<int>() )
+    {
+        str.Printf("%d", ptr->GetValue<int>());
+    }
+    else if ( ptr->IsOfType<float>() )
+    {
+        str.Printf("%g", ptr->GetValue<float>());
+    }
+    else if ( ptr->IsOfType<double>() )
+    {
+        str.Printf("%g", ptr->GetValue<double>());
+    }
+    else if ( ptr->IsOfType<wxFileName>() )
+    {
+        const wxFileName& fn = ptr->GetValue<wxFileName>();
+        str = fn.GetFullPath();
+    }
+    else
+    {
+        wxFAIL_MSG("Expected types: int, float, double, wxString or wxFileName");
+        return false;
+    }
+
+    SetValue(str);
+    return true;
+}
+
+bool wxTextCtrlBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    if ( ptr->IsOfType<wxString>() )
+    {
+        ptr->SetValue<wxString>(GetValue());
+    }
+    else if ( ptr->IsOfType<int>() )
+    {
+        ptr->SetValue<int>(wxAtoi(GetValue()));
+    }
+    else if ( ptr->IsOfType<float>() )
+    {
+        ptr->SetValue<float>((float)wxAtof(GetValue()));
+    }
+    else if ( ptr->IsOfType<double>() )
+    {
+        ptr->SetValue<double>(wxAtof(GetValue()));
+    }
+    else if ( ptr->IsOfType<wxFileName>() )
+    {
+        ptr->SetValue<wxFileName>(GetValue());
+    }
+    else
+    {
+        wxFAIL_MSG("Expected types: int, float, double, wxString or wxFileName");
+        return false;
+    }
+            
+    return true;
+}
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // file IO functions

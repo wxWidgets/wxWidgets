@@ -30,6 +30,7 @@
 
 #include "wx/gauge.h"
 #include "wx/appprogress.h"
+#include "wx/valgen.h"
 
 const char wxGaugeNameStr[] = "gauge";
 
@@ -219,5 +220,27 @@ void wxGaugeBase::Pulse()
     if ( m_appProgressIndicator )
         m_appProgressIndicator->Pulse();
 }
+
+// ----------------------------------------------------------------------------
+// wxGauge data transfere
+// ----------------------------------------------------------------------------
+
+#if wxUSE_VALIDATORS
+
+bool wxGaugeBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetValue(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxGaugeBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetValue());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_GAUGE

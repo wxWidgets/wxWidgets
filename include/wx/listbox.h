@@ -107,6 +107,11 @@ protected:
     virtual int DoListHitTest(const wxPoint& WXUNUSED(point)) const
         { return wxNOT_FOUND; }
 
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+    
     // Helper for the code generating events in single selection mode: updates
     // m_oldSelections and return true if the selection really changed.
     // Otherwise just returns false.

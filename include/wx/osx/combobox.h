@@ -130,6 +130,11 @@ protected:
 
     virtual void EnableTextChangedEvents(bool enable);
 
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
     // the subcontrols
     wxComboBoxText*     m_text;
     wxComboBoxChoice*   m_choice;

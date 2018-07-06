@@ -16,9 +16,13 @@
 #if wxUSE_VALIDATORS
 
 #include "wx/event.h"
+#include "wx/scopedptr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
+
+// Internal struct defined in "wx/valgen.h"
+struct wxValidatorData;
 
 /*
  A validator has up to three purposes:
@@ -34,6 +38,10 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
 class WXDLLIMPEXP_CORE wxValidator : public wxEvtHandler
 {
+public:
+    // Used by wxGenericValidator only.
+    typedef wxScopedPtr<wxValidatorData> DataPtr;
+
 public:
     wxValidator();
     wxValidator(const wxValidator& other)

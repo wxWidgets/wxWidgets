@@ -39,6 +39,7 @@
 #include "wx/textwrapper.h"
 
 #include "wx/private/markupparser.h"
+#include "wx/valgen.h"
 
 #include <algorithm>
 
@@ -287,5 +288,23 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
 
     return wxControl::Ellipsize(label, dc, mode, sz.GetWidth());
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxStaticTextBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxString>(), "Expected type: 'wxString'");
+    SetLabel(ptr->GetValue<wxString>());
+    return true; 
+}
+
+bool wxStaticTextBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxString>(), "Expected type: 'wxString'");
+    ptr->SetValue<wxString>(GetLabel());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_STATTEXT

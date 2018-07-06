@@ -28,6 +28,7 @@ wxDEFINE_EVENT(wxEVT_TIME_CHANGED, wxDateEvent);
 #if wxUSE_CALENDARCTRL
 
 #include "wx/calctrl.h"
+#include "wx/valgen.h"
 
 // ----------------------------------------------------------------------------
 // XTI
@@ -111,6 +112,12 @@ wxDEFINE_EVENT( wxEVT_CALENDAR_YEAR_CHANGED, wxCalendarEvent );
 
 
 wxCalendarDateAttr wxCalendarDateAttr::m_mark(wxCAL_BORDER_SQUARE);
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxCalendarCtrlBase, wxControl);
 
 bool wxCalendarCtrlBase::EnableMonthChange(bool enable)
 {
@@ -215,6 +222,23 @@ bool wxCalendarCtrlBase::WeekStartsOnMonday() const
         return firstDay == wxDateTime::Mon;
     }
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxCalendarCtrlBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxDateTime>(), "Expected type: 'wxDateTime'");
+    return SetDate(ptr->GetValue<wxDateTime>());
+}
+
+bool wxCalendarCtrlBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxDateTime>(), "Expected type: 'wxDateTime'");
+    ptr->SetValue<wxDateTime>(GetDate());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 #endif // wxUSE_CALENDARCTRL
 

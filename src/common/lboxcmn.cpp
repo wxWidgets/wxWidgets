@@ -34,6 +34,8 @@
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/valgen.h"
+
 extern WXDLLEXPORT_DATA(const char) wxListBoxNameStr[] = "listBox";
 
 // ============================================================================
@@ -315,6 +317,63 @@ void wxListBoxBase::Command(wxCommandEvent& event)
     SetSelection(event.GetInt(), event.GetExtraLong() != 0);
     (void)GetEventHandler()->ProcessEvent(event);
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxListBoxBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    if ( (GetWindowStyle() & wxLB_MULTIPLE) )
+    {
+        wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
+
+        // clear all selections
+        size_t i, count = GetCount();
+
+        // clear all selections
+        for ( i = 0 ; i < count; ++i )
+            Deselect(i);
+
+        const wxArrayInt& arr = ptr->GetValue<wxArrayInt>();
+
+        // select each item in our array
+        count = arr.GetCount();
+        for ( i = 0 ; i < count; ++i )
+            SetSelection(arr.Item(i));
+    }
+    else // wxLB_SINGLE
+    {
+        wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+        SetSelection(ptr->GetValue<int>());
+    }
+
+    return true;
+}
+
+bool wxListBoxBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    if ( (GetWindowStyle() & wxLB_MULTIPLE) )
+    {
+        wxASSERT_MSG(ptr->IsOfType<wxArrayInt>(), "Expected type: 'wxArrayInt'");
+
+        wxArrayInt& arr = ptr->GetValue<wxArrayInt>();       
+        arr.Clear();
+
+        for ( size_t i = 0, count = GetCount(); i < count; ++i )
+        {
+            if ( IsSelected(i) )
+                arr.Add(i);
+        }
+    }
+    else // wxLB_SINGLE
+    {
+        wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+        ptr->SetValue<int>(GetSelection());
+    }
+    
+    return true;
+}
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // SetFirstItem() and such

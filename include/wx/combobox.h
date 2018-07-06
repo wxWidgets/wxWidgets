@@ -63,6 +63,7 @@ public:
     // dropdown is shown and the user selected, but not yet accepted, a value
     // different from the old one in it
     virtual int GetCurrentSelection() const { return GetSelection(); }
+
 };
 
 // ----------------------------------------------------------------------------

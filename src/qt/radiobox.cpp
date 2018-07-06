@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/radiobox.h"
+#include "wx/valgen.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -242,3 +243,20 @@ QWidget *wxRadioBox::GetHandle() const
     return m_qtGroupBox;
 }
 
+#if wxUSE_VALIDATORS
+
+bool wxRadioBox::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetSelection(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxRadioBox::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetSelection());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS

@@ -42,6 +42,8 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
+#include "wx/valgen.h"
+
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxRadioBoxStyle )
@@ -751,6 +753,24 @@ int wxRadioBox::GetItemFromPoint(const wxPoint& pt) const
 
     return wxNOT_FOUND;
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxRadioBox::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    SetSelection(ptr->GetValue<int>());
+    return true; 
+}
+
+bool wxRadioBox::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<int>(), "Expected type: 'int'");
+    ptr->SetValue<int>(GetSelection());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // radio box drawing

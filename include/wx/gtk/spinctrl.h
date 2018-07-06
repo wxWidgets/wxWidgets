@@ -134,6 +134,12 @@ public:
     virtual int GetBase() const wxOVERRIDE { return m_base; }
     virtual bool SetBase(int base) wxOVERRIDE;
 
+protected:
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
 private:
     // Common part of all ctors.
     void Init()
@@ -198,6 +204,12 @@ public:
 
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
+
+protected:
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };

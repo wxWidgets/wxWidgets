@@ -29,6 +29,8 @@
     #include "wx/toplevel.h"
 #endif //WX_PRECOMP
 
+#include "wx/valgen.h"
+
 extern WXDLLEXPORT_DATA(const char) wxButtonNameStr[] = "button";
 
 // ----------------------------------------------------------------------------
@@ -105,6 +107,24 @@ wxWindow *wxButtonBase::SetDefault()
 
     return tlw->SetDefaultItem(this);
 }
+
+#if wxUSE_VALIDATORS
+
+bool wxButtonBase::DoTransferDataToWindow(const wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxString>(), "Expected type: 'wxString'");
+    SetLabel(ptr->GetValue<wxString>());
+    return true; 
+}
+
+bool wxButtonBase::DoTransferDataFromWindow(wxValidator::DataPtr& ptr)
+{
+    wxASSERT_MSG(ptr->IsOfType<wxString>(), "Expected type: 'wxString'");
+    ptr->SetValue<wxString>(GetLabel());
+    return true; 
+}
+
+#endif // wxUSE_VALIDATORS
 
 void wxAnyButtonBase::SetBitmapPosition(wxDirection dir)
 {

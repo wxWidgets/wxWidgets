@@ -63,6 +63,11 @@ public:
     bool IsVertical() const { return (m_windowStyle & wxSP_VERTICAL) != 0; }
 
 protected:
+#if wxUSE_VALIDATORS
+    virtual bool DoTransferDataToWindow(const wxValidator::DataPtr& ptr) wxOVERRIDE;
+    virtual bool DoTransferDataFromWindow(wxValidator::DataPtr& ptr) wxOVERRIDE;
+#endif // wxUSE_VALIDATORS
+
     // the range value
     int   m_min;
     int   m_max;
