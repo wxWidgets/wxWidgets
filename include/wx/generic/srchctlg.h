@@ -172,23 +172,6 @@ public:
     virtual bool DoAutoCompleteFileNames(int flags) wxOVERRIDE;
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
 
-#if 0
-
-    // override streambuf method
-#if wxHAS_TEXT_WINDOW_STREAM
-    int overflow(int i);
-#endif // wxHAS_TEXT_WINDOW_STREAM
-
-    // stream-like insertion operators: these are always available, whether we
-    // were, or not, compiled with streambuf support
-    wxTextCtrl& operator<<(const wxString& s);
-    wxTextCtrl& operator<<(int i);
-    wxTextCtrl& operator<<(long i);
-    wxTextCtrl& operator<<(float f);
-    wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(wxChar c);
-#endif
-
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE;
 
