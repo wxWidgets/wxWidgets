@@ -3280,12 +3280,22 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
         }
     #endif
 
+        // Displaying error dialog box can cause (native) focus changes
+        // so let's preserve the current focus in order to restore it afterwards.
+        wxWindow* focusedWnd = wxWindow::FindFocus();
+
         if ( vfb & wxPG_VFB_SHOW_MESSAGE )
             DoShowPropertyError(property, msg);
 
         if ( vfb & wxPG_VFB_SHOW_MESSAGEBOX )
             /* TRANSLATORS: Caption of message box displaying any property error */
             ::wxMessageBox(msg, _("Property Error"));
+
+        // Restore the focus
+        if ( focusedWnd )
+        {
+            focusedWnd->SetFocus();
+        }
     }
 
     return (vfb & wxPG_VFB_STAY_IN_PROPERTY) ? false : true;
