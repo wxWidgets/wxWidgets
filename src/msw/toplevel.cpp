@@ -648,9 +648,14 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
 
 bool wxTopLevelWindowMSW::IsMaximized() const
 {
-    return IsAlwaysMaximized() ||
-           (::IsZoomed(GetHwnd()) != 0) ||
-           m_showCmd == SW_MAXIMIZE;
+    if ( IsAlwaysMaximized() )
+        return true;
+
+    // If the window is shown, just ask Windows if it's maximized. But hidden
+    // windows are not really maximized, even after Maximize() is called on
+    // them, so for them we check if we're scheduled to maximize the window
+    // when it's shown instead.
+    return IsShown() ? ::IsZoomed(GetHwnd()) != 0 : m_showCmd == SW_MAXIMIZE;
 }
 
 void wxTopLevelWindowMSW::Iconize(bool iconize)
