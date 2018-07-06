@@ -130,7 +130,7 @@ protected:
         // can't use wxBORDER_NONE to calculate a good height, in which case we just have to
         // assume a border in the code above and then subtract the space that would be taken up
         // by a themed border (the thin blue border and the white internal border).
-        size.y -= 4;
+        size.y -= FromDIP(4);
 
         self->SetWindowStyleFlag(flags);
 
@@ -436,15 +436,15 @@ wxSize wxSearchCtrl::DoGetBestClientSize() const
     if ( m_searchButtonVisible || HasMenu() )
     {
         sizeSearch = m_searchButton->GetBestSize();
-        searchMargin = MARGIN;
+        searchMargin = FromDIP(MARGIN);
     }
     if ( m_cancelButtonVisible )
     {
         sizeCancel = m_cancelButton->GetBestSize();
-        cancelMargin = MARGIN;
+        cancelMargin = FromDIP(MARGIN);
     }
 
-    int horizontalBorder = 1 + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
+    int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
 
     // buttons are square and equal to the height of the text control
     int height = sizeText.y;
@@ -470,7 +470,7 @@ void wxSearchCtrl::LayoutControls()
 
     wxSize sizeText = m_text->GetBestSize();
     // make room for the search menu & clear button
-    int horizontalBorder = 1 + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
+    int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
     int x = horizontalBorder;
     width -= horizontalBorder*2;
     if (width < 0) width = 0;
@@ -482,12 +482,12 @@ void wxSearchCtrl::LayoutControls()
     if ( m_searchButtonVisible || HasMenu() )
     {
         sizeSearch = m_searchButton->GetBestSize();
-        searchMargin = MARGIN;
+        searchMargin = FromDIP(MARGIN);
     }
     if ( m_cancelButtonVisible )
     {
         sizeCancel = m_cancelButton->GetBestSize();
-        cancelMargin = MARGIN;
+        cancelMargin = FromDIP(MARGIN);
     }
     m_searchButton->Show( m_searchButtonVisible || HasMenu() );
     m_cancelButton->Show( m_cancelButtonVisible );
@@ -499,7 +499,7 @@ void wxSearchCtrl::LayoutControls()
         searchMargin = 0;
         cancelMargin = 0;
     }
-    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - 1;
+    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - FromDIP(1);
     if (textWidth < 0) textWidth = 0;
 
     // position the subcontrols inside the client area
@@ -514,7 +514,7 @@ void wxSearchCtrl::LayoutControls()
     // of the white border that's part of the theme border. We can also remove a pixel from
     // the height to fit the text control in, because the padding in EDIT_HEIGHT_FROM_CHAR_HEIGHT
     // is already generous.
-    int textY = 1;
+    int textY = FromDIP(1);
 #else
     int textY = 0;
 #endif
@@ -1167,7 +1167,7 @@ void wxSearchCtrl::RecalcBitmaps()
     }
     wxSize sizeText = m_text->GetBestSize();
 
-    int bitmapHeight = sizeText.y - 4;
+    int bitmapHeight = sizeText.y - FromDIP(4);
     int bitmapWidth  = sizeText.y * 20 / 14;
 
     if ( !m_searchBitmapUser )
