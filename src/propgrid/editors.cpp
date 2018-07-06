@@ -1776,12 +1776,7 @@ wxPGCheckBoxEditor::~wxPGCheckBoxEditor()
 
 wxWindow* wxPropertyGrid::GetEditorControl() const
 {
-    wxWindow* ctrl = m_wndEditor;
-
-    if ( !ctrl )
-        return ctrl;
-
-    return ctrl;
+    return  m_wndEditor;
 }
 
 // -----------------------------------------------------------------------
