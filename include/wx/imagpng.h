@@ -48,6 +48,7 @@ public:
     }
 
     static wxVersionInfo GetLibraryVersionInfo();
+    static bool IsKnownOption(const wxString& optionName);
 
 #if wxUSE_STREAMS
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 ) wxOVERRIDE;

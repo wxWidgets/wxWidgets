@@ -23,6 +23,10 @@
 
 #if wxUSE_IMAGE && wxUSE_LIBPNG
 
+#include "../png/png.h"
+#include "../png/pngstruct.h"
+#include "../png/pngconf.h"
+#include "../png/pnginfo.h"
 #include "wx/imagpng.h"
 #include "wx/versioninfo.h"
 
@@ -37,6 +41,8 @@
 
 // For memcpy
 #include <string.h>
+#include <map> // for custom option names
+#include <set> // for custom option names
 
 // ----------------------------------------------------------------------------
 // local functions
@@ -161,6 +167,61 @@ unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y)
     }
 
     return alpha;
+}
+
+// ----------------------------------------------------------------------------
+// Custom option names
+// ----------------------------------------------------------------------------
+
+struct wxStringComparatorCaseInsensitive
+{
+    bool operator() (const wxString& s1, const wxString& s2) const
+    {
+        return s1.CompareTo(s2, wxString::ignoreCase) < 0;
+    }
+};
+typedef std::set<wxString, wxStringComparatorCaseInsensitive> KnownOptionNames;
+
+static const KnownOptionNames& GetKnownOptionNames()
+{
+    static KnownOptionNames knownOptionNames;
+    if (knownOptionNames.empty())
+    {
+#if wxUSE_THREADS
+        static wxMutex mutex;
+        wxMutexLocker lock(mutex);
+        if (knownOptionNames.empty()) // recheck after acquiring the lock
+        {
+#endif
+            knownOptionNames.insert(wxIMAGE_OPTION_PNG_FORMAT);
+            knownOptionNames.insert(wxIMAGE_OPTION_PNG_BITDEPTH);
+            knownOptionNames.insert(wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL);
+            knownOptionNames.insert(wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL);
+            knownOptionNames.insert(wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY);
+            knownOptionNames.insert(wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE);
+            knownOptionNames.insert(wxIMAGE_OPTION_QUALITY);
+            knownOptionNames.insert(wxIMAGE_OPTION_FILENAME);
+            knownOptionNames.insert(wxIMAGE_OPTION_RESOLUTION);
+            knownOptionNames.insert(wxIMAGE_OPTION_RESOLUTIONX);
+            knownOptionNames.insert(wxIMAGE_OPTION_RESOLUTIONY);
+            knownOptionNames.insert(wxIMAGE_OPTION_RESOLUTIONUNIT);
+            knownOptionNames.insert(wxIMAGE_OPTION_MAX_WIDTH);
+            knownOptionNames.insert(wxIMAGE_OPTION_MAX_HEIGHT);
+#if wxUSE_THREADS
+        }
+#endif
+    }
+    return knownOptionNames;
+}
+
+bool wxPNGHandler::IsKnownOption(const wxString& optionName)
+{
+    // Anything that starts with png is considered a known option name
+    if (optionName.length() > 3 && optionName.Left(3).CmpNoCase("png") == 0)
+        return true;
+    const KnownOptionNames& knownOptionNames = GetKnownOptionNames();
+    KnownOptionNames::const_iterator it = knownOptionNames.find(optionName);
+    return it != knownOptionNames.end();
 }
 
 // ----------------------------------------------------------------------------
@@ -323,6 +384,18 @@ wxPNGHandler::LoadFile(wxImage *image,
     }
 
     png_read_image( png_ptr, lines );
+
+    // custom options
+    for (int textIndex = 0; textIndex < info_ptr->num_text; ++textIndex)
+    {
+        if (info_ptr->text[textIndex].compression == PNG_TEXT_COMPRESSION_NONE)
+        {
+            wxString key = info_ptr->text[textIndex].key;
+            wxString value = wxString(info_ptr->text[textIndex].text, info_ptr->text[textIndex].text_length);
+            image->SetOption(key, value);
+        }
+    }
+
     png_read_end( png_ptr, info_ptr );
 
 #if wxUSE_PALETTE
@@ -723,6 +796,29 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         png_set_pHYs( png_ptr, info_ptr, resX, resY, PNG_RESOLUTION_METER );
 
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
+
+    // Add custom options
+    const wxArrayString& optionNames = image->GetOptionNames();
+    typedef std::map<std::string, std::string> CustomOptionsMap;
+    CustomOptionsMap customOptions;
+    for (unsigned int optionIndex = 0; optionIndex < optionNames.GetCount(); ++optionIndex)
+    {
+        if (!IsKnownOption(optionNames[optionIndex]))
+            customOptions.insert(CustomOptionsMap::value_type((const char*)optionNames[optionIndex], (const char*)image->GetOption(optionNames[optionIndex])));
+    }
+    info_ptr->num_text = customOptions.size();
+    info_ptr->max_text = info_ptr->num_text * sizeof(png_text);
+    std::auto_ptr<png_text> infoPtrText(new png_text[info_ptr->num_text]); // auto-free when infoPtrText goes out of scope
+    info_ptr->text = infoPtrText.get();
+    unsigned int textIndex = 0;
+    for (CustomOptionsMap::iterator customIt = customOptions.begin(); customIt != customOptions.end(); ++customIt, ++textIndex)
+    {
+        info_ptr->text[textIndex].compression = PNG_TEXT_COMPRESSION_NONE;
+        info_ptr->text[textIndex].key = const_cast<char*>(customIt->first.c_str()); // auto-free when customOptions goes out of scope
+        info_ptr->text[textIndex].text = const_cast<char*>(customIt->second.c_str()); // auto-free when customOptions goes out of scope
+        info_ptr->text[textIndex].text_length = customIt->second.length();
+    }
+
     png_write_info( png_ptr, info_ptr );
     png_set_shift( png_ptr, &sig_bit );
     png_set_packing( png_ptr );
