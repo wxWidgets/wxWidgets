@@ -905,12 +905,6 @@ bool wxSearchCtrl::DoSaveFile(const wxString& file, int fileType)
     return m_text->DoSaveFile(file, fileType);
 }
 
-// do the window-specific processing after processing the update event
-void wxSearchCtrl::DoUpdateWindowUI(wxUpdateUIEvent& event)
-{
-    wxSearchCtrlBase::DoUpdateWindowUI(event);
-}
-
 bool wxSearchCtrl::ShouldInheritColours() const
 {
     return true;

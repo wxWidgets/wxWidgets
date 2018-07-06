@@ -172,9 +172,6 @@ public:
     virtual bool DoAutoCompleteFileNames(int flags) wxOVERRIDE;
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
 
-    // do the window-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE;
-
     virtual bool ShouldInheritColours() const wxOVERRIDE;
 
     // wxWindow overrides
