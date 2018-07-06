@@ -28,7 +28,7 @@ wx_add_sample(dialup nettest.cpp LIBRARIES net DEPENDS wxUSE_DIALUP_MANAGER)
 wx_add_sample(display DEPENDS wxUSE_DISPLAY)
 wx_add_sample(dnd dnd.cpp RES dnd.rc DATA wxwin.png DEPENDS wxUSE_DRAG_AND_DROP)
 wx_add_sample(docview docview.cpp doc.cpp view.cpp docview.h doc.h view.h
-    RES docview.rc DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
+    RES docview.rc LIBRARIES aui DEPENDS wxUSE_DOC_VIEW_ARCHITECTURE)
 wx_add_sample(dragimag dragimag.cpp dragimag.h RES dragimag.rc
     DATA backgrnd.png shape01.png shape02.png shape03.png
     DEPENDS wxUSE_DRAGIMAGE)
