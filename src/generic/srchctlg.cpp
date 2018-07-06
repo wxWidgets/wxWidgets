@@ -28,8 +28,7 @@
 #if !wxUSE_NATIVE_SEARCH_CONTROL
 
 #include "wx/image.h"
-
-#define WXMAX(a,b) ((a)>(b)?(a):(b))
+#include "wx/utils.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -1013,7 +1012,7 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
     mem.SetPen( wxPen(fg) );
     mem.SetBrush( wxBrush(fg) );
     int handleCornerShift = penWidth * 707 / 1000 / 2; // 707 / 1000 = 0.707 = 1/sqrt(2);
-    handleCornerShift = WXMAX( handleCornerShift, 1 );
+    handleCornerShift = wxMax( handleCornerShift, 1 );
     int handleBase = 4 * x / 20;
     int handleLength = 2*handleBase+1;
     wxPoint handlePolygon[] =
@@ -1112,7 +1111,7 @@ wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
     mem.SetPen( wxPen(bg) );
     mem.SetBrush( wxBrush(bg) );
     int handleCornerShift = penWidth/2;
-    handleCornerShift = WXMAX( handleCornerShift, 1 );
+    handleCornerShift = wxMax( handleCornerShift, 1 );
     wxPoint handlePolygon[] =
     {
         wxPoint(-handleCornerShift,+handleCornerShift),
