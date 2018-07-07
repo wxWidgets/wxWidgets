@@ -2703,8 +2703,12 @@ void FormMain::OnEnableLabelEditing(wxCommandEvent& event)
 #if wxUSE_HEADERCTRL
 void FormMain::OnShowHeader( wxCommandEvent& event )
 {
-    m_pPropGridManager->ShowHeader(event.IsChecked());
-    m_pPropGridManager->SetColumnTitle(2, wxT("Units"));
+    bool show = event.IsChecked();
+    m_pPropGridManager->ShowHeader(show);
+    if ( show )
+    {
+        m_pPropGridManager->SetColumnTitle(2, wxT("Units"));
+    }
 }
 #endif // wxUSE_HEADERCTRL
 
