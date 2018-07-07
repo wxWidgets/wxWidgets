@@ -812,7 +812,7 @@ bool wxPropertyGridManager::DoSelectPage( int index )
 #endif
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnPageChanged(nextPage);
 #endif
 
@@ -929,7 +929,7 @@ void wxPropertyGridManager::SetColumnCount( int colCount, int page )
     GetGrid()->Refresh();
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnPageUpdated();
 #endif
 }
@@ -1347,7 +1347,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
 
     // Header comes after the tool bar
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
     {
         m_pHeaderCtrl->SetSize(0, propgridY, width, wxDefaultCoord);
         propgridY += m_pHeaderCtrl->GetSize().y;
@@ -1900,7 +1900,7 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
     }
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
@@ -1920,7 +1920,7 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
         SetPageSplitterPosition( page, maxW );
 
 #if wxUSE_HEADERCTRL
-        if ( m_showHeader )
+        if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
             m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
     }
@@ -1966,10 +1966,8 @@ void
 wxPropertyGridManager::OnPGColDrag( wxPropertyGridEvent& WXUNUSED(event) )
 {
 #if wxUSE_HEADERCTRL
-    if ( !m_showHeader )
-        return;
-
-    m_pHeaderCtrl->OnColumWidthsChanged();
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
+        m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
 
@@ -2005,7 +2003,7 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
     }
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
@@ -2148,7 +2146,7 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     }
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
@@ -2162,7 +2160,7 @@ void wxPropertyGridManager::SetPageSplitterPosition( int page,
     GetPage(page)->DoSetSplitterPosition( pos, column );
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
