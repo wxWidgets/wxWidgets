@@ -1630,11 +1630,10 @@ void wxPropertyGridManager::RecreateControls()
 #if wxUSE_HEADERCTRL
     if ( m_showHeader )
     {
-        wxPGHeaderCtrl* hc;
 
         if ( !m_pHeaderCtrl )
         {
-            hc = new wxPGHeaderCtrl(this);
+            wxPGHeaderCtrl* hc = new wxPGHeaderCtrl(this);
             hc->Create(this, wxID_ANY);
             m_pHeaderCtrl = hc;
         }
