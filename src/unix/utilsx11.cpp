@@ -37,7 +37,12 @@
 #endif
 
 #ifdef __WXGTK__
+#ifdef __WXGTK20__
 #include "wx/gtk/private/wrapgtk.h"
+#else // GTK+ 1.x
+#include <gtk/gtk.h>
+#define GDK_WINDOWING_X11
+#endif
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
