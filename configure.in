@@ -5419,7 +5419,10 @@ dnl ---------------------------------------------------------------------------
 if test "$wxUSE_SECRETSTORE" = "yes"; then
     dnl The required APIs are always available under MSW and OS X but we must
     dnl have GNOME libsecret under Unix to be able to compile this class.
-    if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
+    if test "$WXGTK1" = "1"; then
+        AC_MSG_WARN([libsecret is incompatible with GTK+ 1, disabled])
+        wxUSE_SECRETSTORE=no
+    elif test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
         PKG_CHECK_MODULES(LIBSECRET, [libsecret-1],
             [
                 CXXFLAGS="$LIBSECRET_CFLAGS $CXXFLAGS"
