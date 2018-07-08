@@ -50,8 +50,9 @@ GdkWindow* wxGetTopLevelGDK();
 GtkWidget* wxGetTopLevelGTK();
 #endif
 
-// Only X11 backend is supported for wxGTK here
-#if !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
+// Only X11 backend is supported for wxGTK here (GTK < 2 has no others)
+#if !defined(__WXGTK__) || \
+    (!defined(__WXGTK20__) || defined(GDK_WINDOWING_X11))
 
 // Various X11 Atoms used in this file:
 static Atom _NET_WM_STATE = 0;
