@@ -37,7 +37,10 @@
 // the margin between the text control and the search/cancel buttons
 static const wxCoord MARGIN = 2;
 
-#define LIGHT_STEP 160
+// arguments to wxColour::ChangeLightness() for making the search/cancel
+// bitmaps foreground colour, respectively
+static const int SEARCH_BITMAP_LIGHTNESS = 140; // slightly lighter
+static const int CANCEL_BITMAP_LIGHTNESS = 160; // a bit more lighter
 
 // ----------------------------------------------------------------------------
 // wxSearchTextCtrl: text control used by search control
@@ -952,7 +955,7 @@ static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
 wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
 {
     wxColour bg = GetBackgroundColour();
-    wxColour fg = GetForegroundColour().ChangeLightness(LIGHT_STEP-20);
+    wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
 
     //===============================================================================
     // begin drawing code
@@ -1055,7 +1058,7 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
 wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
 {
     wxColour bg = GetBackgroundColour();
-    wxColour fg = GetForegroundColour().ChangeLightness(LIGHT_STEP);
+    wxColour fg = GetForegroundColour().ChangeLightness(CANCEL_BITMAP_LIGHTNESS);
 
     //===============================================================================
     // begin drawing code
