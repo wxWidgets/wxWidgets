@@ -284,9 +284,6 @@ void wxSearchCtrl::Init()
     m_menu = NULL;
 #endif // wxUSE_MENUS
 
-    m_searchButtonVisible = true;
-    m_cancelButtonVisible = false;
-
     m_searchBitmapUser = false;
     m_cancelBitmapUser = false;
 #if wxUSE_MENUS
@@ -313,9 +310,6 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     m_searchButton = new wxSearchButton(this,
                                         wxEVT_SEARCH,
                                         m_searchBitmap);
-    m_cancelButton = new wxSearchButton(this,
-                                        wxEVT_SEARCH_CANCEL,
-                                        m_cancelBitmap);
 
     SetBackgroundColour( m_text->GetBackgroundColour() );
     m_text->SetBackgroundColour(wxColour());
@@ -354,13 +348,14 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
 
     if ( m_menu && !hadMenu )
     {
+        m_searchButton->Show();
         m_searchButton->SetBitmapLabel(m_searchMenuBitmap);
         m_searchButton->Refresh();
     }
     else if ( !m_menu && hadMenu )
     {
         m_searchButton->SetBitmapLabel(m_searchBitmap);
-        if ( m_searchButtonVisible )
+        if ( m_searchButton->IsShown() )
         {
             m_searchButton->Refresh();
         }
@@ -377,15 +372,23 @@ wxMenu* wxSearchCtrl::GetMenu()
 
 void wxSearchCtrl::ShowSearchButton( bool show )
 {
-    if ( m_searchButtonVisible == show )
+    if ( show == IsSearchButtonVisible() )
     {
         // no change
         return;
     }
-    m_searchButtonVisible = show;
-    if ( m_searchButtonVisible )
+    if ( show )
     {
         RecalcBitmaps();
+
+        m_searchButton->Show();
+    }
+    else // Requested to hide it.
+    {
+        // Only hide the button if we don't need it for the menu, otherwise it
+        // needs to remain shown.
+        if ( !HasMenu() )
+            m_searchButton->Hide();
     }
 
     LayoutControls();
@@ -393,25 +396,36 @@ void wxSearchCtrl::ShowSearchButton( bool show )
 
 bool wxSearchCtrl::IsSearchButtonVisible() const
 {
-    return m_searchButtonVisible;
+    return m_searchButton->IsShown() || HasMenu();
 }
 
 
 void wxSearchCtrl::ShowCancelButton( bool show )
 {
-    if ( m_cancelButtonVisible == show )
+    if ( show == IsCancelButtonVisible() )
     {
         // no change
         return;
     }
-    m_cancelButtonVisible = show;
+
+    // This button is not shown initially, so create it on demand if necessary,
+    // i.e. if it's the first time we show it.
+    if ( !m_cancelButton )
+    {
+        m_cancelButton = new wxSearchButton(this,
+                                            wxEVT_SEARCH_CANCEL,
+                                            m_cancelBitmap);
+        RecalcBitmaps();
+    }
+
+    m_cancelButton->Show(show);
 
     LayoutControls();
 }
 
 bool wxSearchCtrl::IsCancelButtonVisible() const
 {
-    return m_cancelButtonVisible;
+    return m_cancelButton && m_cancelButton->IsShown();
 }
 
 void wxSearchCtrl::SetDescriptiveText(const wxString& text)
@@ -435,12 +449,12 @@ wxSize wxSearchCtrl::DoGetBestClientSize() const
     wxSize sizeCancel(0,0);
     int searchMargin = 0;
     int cancelMargin = 0;
-    if ( m_searchButtonVisible || HasMenu() )
+    if ( IsSearchButtonVisible() )
     {
         sizeSearch = m_searchButton->GetBestSize();
         searchMargin = FromDIP(MARGIN);
     }
-    if ( m_cancelButtonVisible )
+    if ( IsCancelButtonVisible() )
     {
         sizeCancel = m_cancelButton->GetBestSize();
         cancelMargin = FromDIP(MARGIN);
@@ -481,18 +495,16 @@ void wxSearchCtrl::LayoutControls()
     wxSize sizeCancel(0,0);
     int searchMargin = 0;
     int cancelMargin = 0;
-    if ( m_searchButtonVisible || HasMenu() )
+    if ( IsSearchButtonVisible() )
     {
         sizeSearch = m_searchButton->GetBestSize();
         searchMargin = FromDIP(MARGIN);
     }
-    if ( m_cancelButtonVisible )
+    if ( IsCancelButtonVisible() )
     {
         sizeCancel = m_cancelButton->GetBestSize();
         cancelMargin = FromDIP(MARGIN);
     }
-    m_searchButton->Show( m_searchButtonVisible || HasMenu() );
-    m_cancelButton->Show( m_cancelButtonVisible );
 
     if ( sizeSearch.x + sizeCancel.x > width )
     {
@@ -525,8 +537,11 @@ void wxSearchCtrl::LayoutControls()
     x += textWidth;
     x += cancelMargin;
 
-    m_cancelButton->SetSize(x, (height - sizeCancel.y) / 2,
-                            sizeCancel.x, height);
+    if ( m_cancelButton )
+    {
+        m_cancelButton->SetSize(x, (height - sizeCancel.y) / 2,
+                                sizeCancel.x, height);
+    }
 }
 
 wxWindowList wxSearchCtrl::GetCompositeWindowParts() const
@@ -1185,7 +1200,7 @@ void wxSearchCtrl::RecalcBitmaps()
     }
 #endif // wxUSE_MENUS
 
-    if ( !m_cancelBitmapUser )
+    if ( m_cancelButton && !m_cancelBitmapUser )
     {
         if (
             !m_cancelBitmap.IsOk() ||

@@ -237,9 +237,6 @@ private:
     wxMenu *m_menu;
 #endif // wxUSE_MENUS
 
-    bool m_searchButtonVisible;
-    bool m_cancelButtonVisible;
-
     bool m_searchBitmapUser;
     bool m_cancelBitmapUser;
 #if wxUSE_MENUS
