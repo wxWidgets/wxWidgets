@@ -441,7 +441,7 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
         // so make them as high as it.
         int yText;
         wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
-        yText = EDIT_HEIGHT_FROM_CHAR_HEIGHT(yText);
+        yText = wxGetEditHeightFromCharHeight(yText, btn);
 
         sizeBtn.IncTo(wxSize(-1, yText));
     }

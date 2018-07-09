@@ -82,18 +82,34 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // misc macros
 // ---------------------------------------------------------------------------
 
+#if wxUSE_GUI
+
 #define MEANING_CHARACTER '0'
 #define DEFAULT_ITEM_WIDTH  100
 #define DEFAULT_ITEM_HEIGHT 80
 
-// Scale font to get edit control height
-//#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
-#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (cy+8)
+// Return the height of a native text control corresponding to the given
+// character height (as returned by GetCharHeight() or wxGetCharSize()).
+//
+// The wxWindow parameter must be valid and used for getting the DPI.
+inline int wxGetEditHeightFromCharHeight(int cy, const wxWindow* w)
+{
+    // The value 8 here is empiric, i.e. it's not necessarily correct, but
+    // seems to work relatively well.
+    return cy + w->FromDIP(8);
+}
+
+// Compatibility macro used in the existing code. It assumes that it's called
+// from a method of wxWindow-derived object.
+#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy) \
+    wxGetEditHeightFromCharHeight((cy), this)
 
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
 extern LONG APIENTRY
   wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
+#endif // wxUSE_GUI
 
 // ---------------------------------------------------------------------------
 // useful macros and functions
