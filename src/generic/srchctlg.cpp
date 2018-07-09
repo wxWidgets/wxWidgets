@@ -468,13 +468,6 @@ wxSize wxSearchCtrl::DoGetBestClientSize() const
                   height);
 }
 
-void wxSearchCtrl::DoMoveWindow(int x, int y, int width, int height)
-{
-    wxSearchCtrlBase::DoMoveWindow(x, y, width, height);
-
-    LayoutControls();
-}
-
 void wxSearchCtrl::LayoutControls()
 {
     if ( !m_text )

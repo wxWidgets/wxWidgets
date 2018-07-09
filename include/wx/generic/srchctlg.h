@@ -194,7 +194,6 @@ protected:
 
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 
     virtual void RecalcBitmaps();
 
