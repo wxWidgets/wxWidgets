@@ -504,7 +504,7 @@ void wxSearchCtrl::LayoutControls()
     // position the subcontrols inside the client area
 
     m_searchButton->SetSize(x, (height - sizeSearch.y) / 2,
-                            sizeSearch.x, height);
+                            sizeSearch.x, sizeSearch.y);
     x += sizeSearch.x;
     x += searchMargin;
 
