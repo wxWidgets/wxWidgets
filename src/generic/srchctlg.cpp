@@ -521,7 +521,7 @@ void wxSearchCtrl::LayoutControls()
     // of the white border that's part of the theme border. We can also remove a pixel from
     // the height to fit the text control in, because the padding in EDIT_HEIGHT_FROM_CHAR_HEIGHT
     // is already generous.
-    int textY = FromDIP(1);
+    int textY = FromDIP(2);
 #else
     int textY = 0;
 #endif
