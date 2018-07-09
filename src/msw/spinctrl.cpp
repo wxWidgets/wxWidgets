@@ -726,7 +726,7 @@ int wxSpinCtrl::GetOverlap() const
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize(DEFAULT_ITEM_WIDTH);
+    return DoGetSizeFromTextSize(FromDIP(DEFAULT_ITEM_WIDTH));
 }
 
 wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
