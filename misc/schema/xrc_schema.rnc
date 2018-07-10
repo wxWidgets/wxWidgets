@@ -1446,7 +1446,8 @@ wxSearchCtrl =
         attribute class { "wxSearchCtrl" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
-        [xrc:p="o"] element value {_, t_text }*
+        [xrc:p="o"] element value {_, t_text }* &
+        [xrc:p="o"] element hint      {_, t_text }*
     }
 
 
