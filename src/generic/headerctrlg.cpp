@@ -95,7 +95,7 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
 
     if (m_hover >= count)
         m_hover = COL_NONE;
-    
+
     InvalidateBestSize();
     Refresh();
 }
