@@ -30,21 +30,6 @@
 
 #include "wx/msw/uxtheme.h"
 
-#if wxUSE_UXTHEME
-    // no need to include tmschema.h
-    #ifndef BP_PUSHBUTTON
-        #define BP_PUSHBUTTON 1
-
-        #define PBS_NORMAL    1
-        #define PBS_HOT       2
-        #define PBS_PRESSED   3
-        #define PBS_DISABLED  4
-        #define PBS_DEFAULTED 5
-
-        #define TMT_CONTENTMARGINS 3602
-    #endif
-#endif // wxUSE_UXTHEME
-
 #ifndef ODS_NOFOCUSRECT
     #define ODS_NOFOCUSRECT     0x0200
 #endif

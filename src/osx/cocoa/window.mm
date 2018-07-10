@@ -528,27 +528,33 @@ bool g_lastButtonWasFakeRight = false ;
 - (CGFloat)scrollingDeltaY;
 @end
 
-void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEvent)
+static void
+wxSetupCoordinates(NSView* view, wxCoord &x, wxCoord &y, NSEvent* nsEvent)
 {
     NSRect locationInWindow = NSZeroRect;
     locationInWindow.origin = [nsEvent locationInWindow];
     
     // adjust coordinates for the window of the target view
-    if ( [nsEvent window] != [m_osxView window] )
+    if ( [nsEvent window] != [view window] )
     {
         if ( [nsEvent window] != nil )
             locationInWindow = [[nsEvent window] convertRectToScreen:locationInWindow];
         
-        if ( [m_osxView window] != nil )
-            locationInWindow = [[m_osxView window] convertRectFromScreen:locationInWindow];
+        if ( [view window] != nil )
+            locationInWindow = [[view window] convertRectFromScreen:locationInWindow];
     }
     
-    NSPoint locationInView = [m_osxView convertPoint:locationInWindow.origin fromView:nil];
-    wxPoint locationInViewWX = wxFromNSPoint( m_osxView, locationInView );
+    NSPoint locationInView = [view convertPoint:locationInWindow.origin fromView:nil];
+    wxPoint locationInViewWX = wxFromNSPoint( view, locationInView );
         
     x = locationInViewWX.x;
     y = locationInViewWX.y;
 
+}
+
+void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEvent)
+{
+    wxSetupCoordinates(m_osxView, x, y, nsEvent);
 }
 
 void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
@@ -763,6 +769,30 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     }
 }
 
+static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool enable)
+{
+    if (!impl->GetWXPeer())
+        return;
+
+    if (impl->GetWXPeer()->IsFrozen())
+        impl->SetDrawingEnabled(enable);
+
+    for ( wxWindowList::iterator i = impl->GetWXPeer()->GetChildren().begin();
+          i != impl->GetWXPeer()->GetChildren().end();
+          ++i )
+    {
+        wxWindow *child = *i;
+        if ( child->IsTopLevel() || !child->IsFrozen() )
+            continue;
+
+        // Skip any user panes as they'll handle this themselves
+        if ( !child->GetPeer() || child->GetPeer()->IsUserPane() )
+            continue;
+
+        SetDrawingEnabledIfFrozenRecursive((wxWidgetCocoaImpl *)child->GetPeer(), enable);
+    }
+}
+
 @implementation wxNSView
 
 + (void)initialize
@@ -879,6 +909,24 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         return nil;
 
     return [super hitTest:aPoint];
+}
+
+- (void) viewWillMoveToWindow:(NSWindow *)newWindow
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget( self );
+    if (viewimpl)
+        SetDrawingEnabledIfFrozenRecursive(viewimpl, true);
+
+    [super viewWillMoveToWindow:newWindow];
+}
+
+- (void) viewDidMoveToWindow
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget( self );
+    if (viewimpl)
+        SetDrawingEnabledIfFrozenRecursive(viewimpl, false);
+
+    [super viewDidMoveToWindow];
 }
 
 @end // wxNSView
@@ -1041,6 +1089,71 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
 
     impl->insertText(text, self, _cmd);
 }
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+         return;
+
+    impl->PanGestureEvent(panGestureRecognizer);
+}
+
+void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+         return;
+
+    impl->ZoomGestureEvent(magnificationGestureRecognizer);
+}
+
+void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognizer* rotationGestureRecognizer)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+         return;
+
+    impl->RotateGestureEvent(rotationGestureRecognizer);
+}
+
+void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pressGestureRecognizer)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl ==NULL )
+        return;
+
+    impl->LongPressEvent(pressGestureRecognizer);
+}
+
+void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+        return;
+
+    impl->TouchesBegan(event);
+}
+
+void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+        return;
+
+    impl->TouchesMoved(event);
+}
+
+void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == NULL )
+        return;
+
+    impl->TouchesEnded(event);
+}
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event)
 {
@@ -1428,6 +1541,563 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     m_lastKeyDownEvent = NULL;
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+
+// Class containing data used for gestures support.
+class wxCocoaGesturesImpl
+{
+public:
+    wxCocoaGesturesImpl(wxWidgetCocoaImpl* impl, NSView* view, int eventsMask)
+        : m_win(impl->GetWXPeer()),
+          m_view(view)
+    {
+        m_touchCount = 0;
+        m_lastTouchTime = 0;
+        m_allowedGestures = 0;
+        m_activeGestures = 0;
+        m_initialTouch = NULL;
+
+        Class cls = [m_view class];
+
+        if ( eventsMask & wxTOUCH_PAN_GESTURES )
+        {
+            eventsMask &= ~wxTOUCH_PAN_GESTURES;
+
+            m_panGestureRecognizer =
+            [[NSPanGestureRecognizer alloc] initWithTarget:m_view action: @selector(handlePanGesture:)];
+            if ( !class_respondsToSelector(cls, @selector(handlePanGesture:)) )
+                class_addMethod(cls, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" );
+            [m_view addGestureRecognizer:m_panGestureRecognizer];
+        }
+        else
+        {
+            m_panGestureRecognizer = nil;
+        }
+
+        if ( eventsMask & wxTOUCH_ZOOM_GESTURE )
+        {
+            eventsMask &= ~wxTOUCH_ZOOM_GESTURE;
+
+            m_magnificationGestureRecognizer =
+            [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_view action: @selector(handleZoomGesture:)];
+            if ( !class_respondsToSelector(cls, @selector(handleZoomGesture:)) )
+                class_addMethod(cls, @selector(handleZoomGesture:), (IMP) wxOSX_zoomGestureEvent, "v@:@" );
+            [m_view addGestureRecognizer:m_magnificationGestureRecognizer];
+        }
+        else
+        {
+            m_magnificationGestureRecognizer = nil;
+        }
+
+        if ( eventsMask & wxTOUCH_ROTATE_GESTURE )
+        {
+            eventsMask &= ~wxTOUCH_ROTATE_GESTURE;
+
+            m_rotationGestureRecognizer =
+            [[NSRotationGestureRecognizer alloc] initWithTarget:m_view action: @selector(handleRotateGesture:)];
+            if ( !class_respondsToSelector(cls, @selector(handleRotateGesture:)) )
+                class_addMethod(cls, @selector(handleRotateGesture:), (IMP) wxOSX_rotateGestureEvent, "v@:@" );
+            [m_view addGestureRecognizer:m_rotationGestureRecognizer];
+        }
+        else
+        {
+            m_rotationGestureRecognizer = nil;
+        }
+
+        if ( eventsMask & wxTOUCH_PRESS_GESTURES )
+        {
+            eventsMask &= ~wxTOUCH_PRESS_GESTURES;
+
+            m_pressGestureRecognizer =
+            [[NSPressGestureRecognizer alloc] initWithTarget:m_view action: @selector(handleLongPressGesture:)];
+            if ( !class_respondsToSelector(cls, @selector(handleLongPressGesture:)) )
+                class_addMethod(cls, @selector(handleLongPressGesture:), (IMP) wxOSX_longPressEvent, "v@:@" );
+            [m_view addGestureRecognizer:m_pressGestureRecognizer];
+        }
+        else
+        {
+            m_pressGestureRecognizer = nil;
+        }
+
+        wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
+
+        if ( !class_respondsToSelector(cls, @selector(touchesBeganWithEvent:)) )
+            class_addMethod(cls, @selector(touchesBeganWithEvent:), (IMP) wxOSX_touchesBegan, "v@:@" );
+        if ( !class_respondsToSelector(cls, @selector(touchesMovedWithEvent:)) )
+            class_addMethod(cls, @selector(touchesMovedWithEvent:), (IMP) wxOSX_touchesMoved, "v@:@" );
+        if ( !class_respondsToSelector(cls, @selector(touchesEndedWithEvent:)) )
+            class_addMethod(cls, @selector(touchesEndedWithEvent:), (IMP) wxOSX_touchesEnded, "v@:@" );
+    }
+
+    ~wxCocoaGesturesImpl()
+    {
+        [m_panGestureRecognizer release];
+        [m_magnificationGestureRecognizer release];
+        [m_rotationGestureRecognizer release];
+        [m_pressGestureRecognizer release];
+        [m_initialTouch release];
+    }
+
+    void TouchesBegan(NSEvent* event);
+    void TouchesMoved(NSEvent* event);
+    void TouchesEnded(NSEvent* event);
+
+private:
+    wxWindowMac* const m_win;
+    NSView* const m_view;
+
+    NSPanGestureRecognizer *m_panGestureRecognizer;
+    NSMagnificationGestureRecognizer *m_magnificationGestureRecognizer;
+    NSRotationGestureRecognizer *m_rotationGestureRecognizer;
+    NSPressGestureRecognizer *m_pressGestureRecognizer;
+
+    int m_allowedGestures;
+    int m_activeGestures;
+    unsigned int m_touchCount;
+    unsigned int m_lastTouchTime;
+
+    // Used to keep track of the touch corresponding to "press" in Press and Tap gesture
+    NSTouch* m_initialTouch;
+
+    wxDECLARE_NO_COPY_CLASS(wxCocoaGesturesImpl);
+};
+
+// We keep all existing wxCocoaGesturesImpl objects in a
+// wxWidgetCocoaImpl-indexed map. We do this instead of just having a data
+// member containing wxCocoaGesturesImpl pointer in wxWidgetCocoaImpl
+// itself because most windows don't need it and it seems wasteful to
+// always increase their size unnecessarily.
+
+#include "wx/hashmap.h"
+WX_DECLARE_HASH_MAP(wxWidgetCocoaImpl*, wxCocoaGesturesImpl*,
+                    wxPointerHash, wxPointerEqual,
+                    wxCocoaGesturesImplMap);
+
+#include "wx/private/extfield.h"
+typedef wxExternalField<wxWidgetCocoaImpl,
+                        wxCocoaGesturesImpl,
+                        wxCocoaGesturesImplMap> wxCocoaGestures;
+
+void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecognizer)
+{
+    NSGestureRecognizerState gestureState;
+
+    switch ( [panGestureRecognizer state] )
+    {
+        case NSGestureRecognizerStateBegan:
+             gestureState = NSGestureRecognizerStateBegan;
+             break;
+        case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
+             break;
+        case NSGestureRecognizerStateEnded:
+        case NSGestureRecognizerStateCancelled:
+             gestureState = NSGestureRecognizerStateEnded;
+             break;
+        // Do not process any other states
+        default:
+             return;
+    }
+
+    wxPanGestureEvent wxevent(GetWXPeer()->GetId());
+    wxevent.SetEventObject(GetWXPeer());
+
+    NSPoint nspoint = [panGestureRecognizer locationInView:m_osxView];
+    wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetPosition(pt);
+
+    nspoint = [panGestureRecognizer translationInView:m_osxView];
+    pt = wxFromNSPoint(m_osxView, nspoint);
+
+    static wxPoint s_lastLocation;
+
+    if ( gestureState == NSGestureRecognizerStateBegan )
+    {
+        wxevent.SetGestureStart();
+        s_lastLocation = wxPoint(0, 0);
+    }
+
+    if ( gestureState == NSGestureRecognizerStateEnded )
+    {
+        wxevent.SetGestureEnd();
+    }
+
+    // Set the offset
+    wxevent.SetDelta(pt - s_lastLocation);
+
+    s_lastLocation = pt;
+
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
+void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
+{
+    NSGestureRecognizerState gestureState;
+
+    switch ( [magnificationGestureRecognizer state] )
+    {
+        case NSGestureRecognizerStateBegan:
+             gestureState = NSGestureRecognizerStateBegan;
+             break;
+        case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
+             break;
+        case NSGestureRecognizerStateEnded:
+        case NSGestureRecognizerStateCancelled:
+             gestureState = NSGestureRecognizerStateEnded;
+             break;
+        // Do not process any other states
+        default:
+             return;
+    }
+
+    wxZoomGestureEvent wxevent(GetWXPeer()->GetId());
+    wxevent.SetEventObject(GetWXPeer());
+
+    NSPoint nspoint = [magnificationGestureRecognizer locationInView:m_osxView];
+    wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetPosition(pt);
+
+    if ( gestureState == NSGestureRecognizerStateBegan )
+    {
+        wxevent.SetGestureStart();
+    }
+
+    if ( gestureState == NSGestureRecognizerStateEnded )
+    {
+        wxevent.SetGestureEnd();
+    }
+
+    double magnification = [magnificationGestureRecognizer magnification];
+
+    // Add 1.0 get the magnification.
+    magnification += 1.0;
+
+    wxevent.SetZoomFactor(magnification);
+
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
+void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotationGestureRecognizer)
+{
+    NSGestureRecognizerState gestureState;
+
+    switch ( [rotationGestureRecognizer state] )
+    {
+        case NSGestureRecognizerStateBegan:
+             gestureState = NSGestureRecognizerStateBegan;
+             break;
+        case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
+             break;
+        case NSGestureRecognizerStateEnded:
+        case NSGestureRecognizerStateCancelled:
+             gestureState = NSGestureRecognizerStateEnded;
+             break;
+        // Do not process any other states
+        default:
+             return;
+    }
+
+    wxRotateGestureEvent wxevent(GetWXPeer()->GetId());
+    wxevent.SetEventObject(GetWXPeer());
+
+    NSPoint nspoint = [rotationGestureRecognizer locationInView:m_osxView];
+    wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetPosition(pt);
+
+    if ( gestureState == NSGestureRecognizerStateBegan )
+    {
+        wxevent.SetGestureStart();
+    }
+
+    if ( gestureState == NSGestureRecognizerStateEnded )
+    {
+        wxevent.SetGestureEnd();
+    }
+    // Multiply the returned rotation angle with -1 to obtain the angle in a clockwise sense.
+    double angle = -[rotationGestureRecognizer rotation];
+
+    // If the rotation is anti-clockwise convert the angle to its corresponding positive value in a clockwise sense.
+    if ( angle < 0 )
+    {
+        angle += 2 * M_PI;
+    }
+
+    wxevent.SetRotationAngle(angle);
+
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
+void wxWidgetCocoaImpl::LongPressEvent(NSPressGestureRecognizer* pressGestureRecognizer)
+{
+    NSGestureRecognizerState gestureState;
+
+    switch ( [pressGestureRecognizer state] )
+    {
+        case NSGestureRecognizerStateBegan:
+            gestureState = NSGestureRecognizerStateBegan;
+            break;
+        case NSGestureRecognizerStateChanged:
+            gestureState = NSGestureRecognizerStateChanged;
+            break;
+        case NSGestureRecognizerStateEnded:
+        case NSGestureRecognizerStateCancelled:
+            gestureState = NSGestureRecognizerStateEnded;
+            break;
+            // Do not process any other states
+        default:
+            return;
+    }
+
+    wxLongPressEvent wxevent(GetWXPeer()->GetId());
+    wxevent.SetEventObject(GetWXPeer());
+
+    NSPoint nspoint = [pressGestureRecognizer locationInView:m_osxView];
+    wxPoint pt = wxFromNSPoint(m_osxView, nspoint);
+
+    wxevent.SetPosition(pt);
+
+    if ( gestureState == NSGestureRecognizerStateBegan )
+    {
+        wxevent.SetGestureStart();
+    }
+
+    if ( gestureState == NSGestureRecognizerStateEnded )
+    {
+        wxevent.SetGestureEnd();
+    }
+
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
+enum TrackedGestures
+{
+    two_finger_tap = 0x0001,
+    press_and_tap  = 0x0002
+};
+
+void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
+{
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromObject(this) )
+        gestures->TouchesBegan(event);
+}
+
+void wxCocoaGesturesImpl::TouchesBegan(NSEvent* event)
+{
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseBegan inView:m_view];
+
+    m_touchCount += touches.count;
+    m_allowedGestures &= ~two_finger_tap;
+
+    // Check if 2 fingers are placed together
+    if ( m_touchCount == 2 && touches.count == 2 )
+    {
+        // Two Finger Tap Event may occur in future
+        m_allowedGestures |= two_finger_tap;
+
+        // Cancel Press and Tap Event
+        m_allowedGestures &= ~press_and_tap;
+
+        return;
+    }
+
+    // Time of event in milliseconds
+    const unsigned int eventTimeStamp = event.timestamp * 1000 + 0.5;
+
+    if ( m_touchCount == 1 )
+    {
+        // Save the time of event
+        m_lastTouchTime = eventTimeStamp;
+
+        // Press and Tap may occur in future
+        m_allowedGestures |= press_and_tap;
+
+        NSArray* array = [touches allObjects];
+
+        // Save the touch corresponding to "press"
+        m_initialTouch = [[array objectAtIndex:0] copy];
+    }
+
+    touches = [event touchesMatchingPhase:NSTouchPhaseStationary inView:m_view];
+
+    // Check if 2 fingers are placed within the time interval of 200 milliseconds
+    if ( m_touchCount == 2 && touches.count == 1 && eventTimeStamp - m_lastTouchTime <= wxTwoFingerTimeInterval )
+    {
+        // Two Finger Tap Event may occur in future
+        m_allowedGestures |= two_finger_tap;
+
+        // Cancel Press and Tap
+        m_allowedGestures &= ~press_and_tap;
+
+        [m_initialTouch release];
+    }
+}
+
+void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
+{
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromObject(this) )
+        gestures->TouchesMoved(event);
+}
+
+void wxCocoaGesturesImpl::TouchesMoved(NSEvent* event)
+{
+    // Cancel Two Finger Tap Event if there is any movement
+    m_allowedGestures &= ~two_finger_tap;
+
+    if ( !(m_allowedGestures & press_and_tap) )
+    {
+        return;
+    }
+
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseMoved inView:m_view];
+
+    NSArray* array = [touches allObjects];
+
+    // Iterate through all moving touches to check if the touch corresponding to "press"
+    // in Press and Tap event is moving.
+    for ( int i = 0; i < [array count]; ++i )
+    {
+        NSTouch* touch = [array objectAtIndex:i];
+
+        // Check if this touch and m_initialTouch are same
+        if ( [touch.identity isEqual:m_initialTouch.identity] )
+        {
+            // Process Press and Tap Event if the touch corresponding to "press" is moving
+            // and the gesture is active.
+            if ( m_activeGestures & press_and_tap )
+            {
+                wxPressAndTapEvent wxevent(m_win->GetId());
+                wxevent.SetEventObject(m_win);
+
+                // Get the mouse coordinates
+                wxCoord x, y;
+                wxSetupCoordinates(m_view, x, y, event);
+                wxevent.SetPosition(wxPoint (x,y));
+
+                m_win->HandleWindowEvent(wxevent);
+            }
+
+            // Cancel Press and Tap Event if the touch corresponding to "press" is moving
+            // and the gesture is not active.
+            else
+            {
+                m_allowedGestures &= ~press_and_tap;
+            }
+
+            return;
+        }
+    }
+}
+
+void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
+{
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromObject(this) )
+        gestures->TouchesEnded(event);
+}
+
+void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
+{
+    NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseEnded inView:m_view];
+
+    m_touchCount -= touches.count;
+
+    // Time of event in milliseconds
+    const unsigned int eventTimeStamp = event.timestamp * 1000 + 0.5;
+
+    // Check if 2 fingers are lifted off together or if 2 fingers are lifted off within the time interval of 200 milliseconds
+    if ( (!m_touchCount && (m_allowedGestures & two_finger_tap)) &&
+         (touches.count == 2 ||
+         (touches.count == 1 && eventTimeStamp - m_lastTouchTime <= wxTwoFingerTimeInterval)) )
+    {
+        wxTwoFingerTapEvent wxevent(m_win->GetId());
+        wxevent.SetEventObject(m_win);
+        wxevent.SetGestureStart();
+        wxevent.SetGestureEnd();
+
+        // Get the mouse coordinates
+        wxCoord x, y;
+        wxSetupCoordinates(m_view, x, y, event);
+        wxevent.SetPosition(wxPoint (x,y));
+
+        m_win->HandleWindowEvent(wxevent);
+    }
+
+    // If Two Finger Tap Event is possible in future then save the timestamp to use it when the other touch
+    // leaves the surface.
+    else if ( m_touchCount == 1 && (m_allowedGestures & two_finger_tap) )
+    {
+        m_lastTouchTime = eventTimeStamp;
+    }
+
+    // Check if Press and Tap event is possible.
+    else if ( m_allowedGestures & press_and_tap )
+    {
+        NSArray* array = [touches allObjects];
+
+        // True if touch that ended is the touch corresponding to "press"
+        bool isPressTouch = false;
+
+        // Iterate through all ended touches
+        for( int i = 0; i < [array count]; ++i )
+        {
+            NSTouch* touch = [array objectAtIndex:i];
+
+            // Check if touch that ended is the touch corresponding to "press"
+            if ( [touch.identity isEqual:m_initialTouch.identity] )
+            {
+                isPressTouch = true;
+                break;
+            }
+        }
+
+        // Cancel Press and Tap Event if the touch corresponding to press is ended
+        // and Press and Tap was not active
+        if ( isPressTouch && !(m_activeGestures & press_and_tap) )
+        {
+            m_allowedGestures &= ~press_and_tap;
+            return;
+        }
+
+        wxPressAndTapEvent wxevent(m_win->GetId());
+        wxevent.SetEventObject(m_win);
+
+        // Get the mouse coordinates
+        wxCoord x, y;
+        wxSetupCoordinates(m_view, x, y, event);
+        wxevent.SetPosition(wxPoint (x,y));
+
+        if ( !(m_activeGestures & press_and_tap) )
+        {
+            wxevent.SetGestureStart();
+            m_activeGestures |= press_and_tap;
+        }
+
+        // End Press and Tap Event if the touch corresponding to "press" is lifted off
+        else if ( isPressTouch )
+        {
+            wxevent.SetGestureEnd();
+
+            m_activeGestures &= ~press_and_tap;
+            m_allowedGestures &= ~press_and_tap;
+            [m_initialTouch release];
+        }
+
+        m_win->HandleWindowEvent(wxevent);
+    }
+
+    else
+    {
+        m_allowedGestures &= ~press_and_tap;
+        m_allowedGestures &= ~two_finger_tap;
+        m_activeGestures &= ~press_and_tap;
+    }
+}
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
     bool result = false;
@@ -1491,7 +2161,7 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
    
     // because performKeyEquivalent is going up the entire view hierarchy, we don't have to
     // walk up the ancestors ourselves but let cocoa do it
-    
+#if wxUSE_ACCEL
     int command = m_wxPeer->GetAcceleratorTable()->GetCommand( wxevent );
     if (command != -1)
     {
@@ -1508,7 +2178,8 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
             handled = handler->ProcessEvent( command_event );
         }
     }
-    
+#endif // wxUSE_ACCEL
+
     if ( !handled )
     {
         wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
@@ -1620,84 +2291,96 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     wxpeer->GetUpdateRegion() = updateRgn;
 
     // setting up the drawing context
-    
+    // note that starting from 10.14 this may be NULL in certain views
     CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
-    CGContextSaveGState( context );
-    
-#if OSX_DEBUG_DRAWING
-    CGContextBeginPath( context );
-    CGContextMoveToPoint(context, 0, 0);
-    NSRect bounds = [slf bounds];
-    CGContextAddLineToPoint(context, 10, 0);
-    CGContextMoveToPoint(context, 0, 0);
-    CGContextAddLineToPoint(context, 0, 10);
-    CGContextMoveToPoint(context, bounds.size.width, bounds.size.height);
-    CGContextAddLineToPoint(context, bounds.size.width, bounds.size.height-10);
-    CGContextMoveToPoint(context, bounds.size.width, bounds.size.height);
-    CGContextAddLineToPoint(context, bounds.size.width-10, bounds.size.height);
-    CGContextClosePath( context );
-    CGContextStrokePath(context);
-#endif
-    
-    if ( ![slf isFlipped] )
-    {
-        CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
-        CGContextScaleCTM( context, 1, -1 );
-    }
-    
     wxpeer->MacSetCGContextRef( context );
+    if ( context != NULL )
+    {
+        CGContextSaveGState( context );
+        
+#if OSX_DEBUG_DRAWING
+        CGContextBeginPath( context );
+        CGContextMoveToPoint(context, 0, 0);
+        NSRect bounds = [slf bounds];
+        CGContextAddLineToPoint(context, 10, 0);
+        CGContextMoveToPoint(context, 0, 0);
+        CGContextAddLineToPoint(context, 0, 10);
+        CGContextMoveToPoint(context, bounds.size.width, bounds.size.height);
+        CGContextAddLineToPoint(context, bounds.size.width, bounds.size.height-10);
+        CGContextMoveToPoint(context, bounds.size.width, bounds.size.height);
+        CGContextAddLineToPoint(context, bounds.size.width-10, bounds.size.height);
+        CGContextClosePath( context );
+        CGContextStrokePath(context);
+#endif
+        
+        if ( ![slf isFlipped] )
+        {
+            CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
+            CGContextScaleCTM( context, 1, -1 );
+        }
+    }
 
     bool handled = wxpeer->MacDoRedraw( 0 );
-    CGContextRestoreGState( context );
-
-    CGContextSaveGState( context );
+    if ( context != NULL )
+    {
+        CGContextRestoreGState( context );
+        CGContextSaveGState( context );
+    }
+    
     if ( !handled )
     {
         // call super
         SEL _cmd = @selector(drawRect:);
         wxOSX_DrawRectHandlerPtr superimpl = (wxOSX_DrawRectHandlerPtr) [[slf superclass] instanceMethodForSelector:_cmd];
         superimpl(slf, _cmd, *(NSRect*)rect);
-        CGContextRestoreGState( context );
-        CGContextSaveGState( context );
-    }
-    // as we called restore above, we have to flip again if necessary
-    if ( ![slf isFlipped] )
-    {
-        CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
-        CGContextScaleCTM( context, 1, -1 );
-    }
-
-    if ( isTopLevel )
-    {
-        // We also need to explicitly draw the part of the top level window
-        // outside of its region with transparent colour to ensure that it is
-        // really transparent.
-        if ( clearRgn.IsOk() )
+        if ( context != NULL )
         {
-            wxMacCGContextStateSaver saveState(context);
-            wxWindowDC dc(wxpeer);
-            dc.SetBackground(wxBrush(wxTransparentColour));
-            dc.SetDeviceClippingRegion(clearRgn);
-            dc.Clear();
+            CGContextRestoreGState( context );
+            CGContextSaveGState( context );
         }
-
+    }
+    
+    if ( context != NULL )
+    {
+        // as we called restore above, we have to flip again if necessary
+        if ( ![slf isFlipped] )
+        {
+            CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
+            CGContextScaleCTM( context, 1, -1 );
+        }
+        
+        if ( isTopLevel )
+        {
+            // We also need to explicitly draw the part of the top level window
+            // outside of its region with transparent colour to ensure that it is
+            // really transparent.
+            if ( clearRgn.IsOk() )
+            {
+                wxMacCGContextStateSaver saveState(context);
+                wxWindowDC dc(wxpeer);
+                dc.SetBackground(wxBrush(wxTransparentColour));
+                dc.SetDeviceClippingRegion(clearRgn);
+                dc.Clear();
+            }
+            
 #if wxUSE_GRAPHICS_CONTEXT
-        // If the window shape is defined by a path, stroke the path to show
-        // the window border.
-        const wxGraphicsPath& path = tlwParent->GetShapePath();
-        if ( !path.IsNull() )
-        {
-            CGContextSetLineWidth(context, 1);
-            CGContextSetStrokeColorWithColor(context, wxLIGHT_GREY->GetCGColor());
-            CGContextAddPath(context, (CGPathRef) path.GetNativePath());
-            CGContextStrokePath(context);
-        }
+            // If the window shape is defined by a path, stroke the path to show
+            // the window border.
+            const wxGraphicsPath& path = tlwParent->GetShapePath();
+            if ( !path.IsNull() )
+            {
+                CGContextSetLineWidth(context, 1);
+                CGContextSetStrokeColorWithColor(context, wxLIGHT_GREY->GetCGColor());
+                CGContextAddPath(context, (CGPathRef) path.GetNativePath());
+                CGContextStrokePath(context);
+            }
 #endif // wxUSE_GRAPHICS_CONTEXT
+        }
+        
+        wxpeer->MacPaintChildrenBorders();
+        CGContextRestoreGState( context );
     }
-
-    wxpeer->MacPaintChildrenBorders();
     wxpeer->MacSetCGContextRef( NULL );
-    CGContextRestoreGState( context );
 }
 
 void wxWidgetCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
@@ -1747,7 +2430,7 @@ void wxWidgetCocoaImpl::controlTextDidChange()
 
 #endif
 
-void wxOSXCocoaClassAddWXMethods(Class c)
+void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
 {
 
 #if OBJC_API_VERSION < 2
@@ -1774,7 +2457,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(scrollWheel:), (IMP) wxOSX_mouseEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseEntered:), (IMP) wxOSX_mouseEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseExited:), (IMP) wxOSX_mouseEvent, "v@:@" )
-        
+
     wxOSX_CLASS_ADD_METHOD(c, @selector(magnifyWithEvent:), (IMP)wxOSX_mouseEvent, "v@:@")
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(cursorUpdate:), (IMP) wxOSX_cursorUpdate, "v@:@" )
@@ -1794,7 +2477,9 @@ void wxOSXCocoaClassAddWXMethods(Class c)
 #if !wxOSX_USE_NATIVE_FLIPPED
     wxOSX_CLASS_ADD_METHOD(c, @selector(isFlipped), (IMP) wxOSX_isFlipped, "c@:" )
 #endif
-    wxOSX_CLASS_ADD_METHOD(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_NSRect={_NSPoint=ff}{_NSSize=ff}}" )
+        
+    if ( !(skipFlags & wxOSXSKIP_DRAW) )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_NSRect={_NSPoint=ff}{_NSSize=ff}}" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlAction:), (IMP) wxOSX_controlAction, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlDoubleAction:), (IMP) wxOSX_controlDoubleAction, "v@:@" )
@@ -1861,7 +2546,7 @@ void wxWidgetCocoaImpl::Init()
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
 {
     if ( GetWXPeer() && GetWXPeer()->IsFrozen() )
-        [[m_osxView window] enableFlushWindow];
+        SetDrawingEnabled(true);
     
     RemoveAssociations( this );
 
@@ -1874,6 +2559,10 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
     // gc aware handling
     if ( m_osxView )
         CFRelease(m_osxView);
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    wxCocoaGestures::EraseForObject(this);
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 }
 
 bool wxWidgetCocoaImpl::IsVisible() const
@@ -2373,8 +3062,6 @@ bool wxWidgetCocoaImpl::SetFocus()
     if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
         targetView = [(NSScrollView*) m_osxView documentView];
 
-    // TODO remove if no issues arise: should not raise the window, only assign focus
-    //[[m_osxView window] makeKeyAndOrderFront:nil] ;
     [[m_osxView window] makeFirstResponder: targetView] ;
     return true;
 }
@@ -2405,6 +3092,10 @@ void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
 
 void wxWidgetCocoaImpl::RemoveFromParent()
 {
+    // User panes will be thawed in the removeFromSuperview call below
+    if (!IsUserPane() && m_wxPeer->IsFrozen())
+        SetDrawingEnabled(true);
+
     [m_osxView removeFromSuperview];
 }
 
@@ -2414,8 +3105,9 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
     [container addSubview:m_osxView];
     
-    if( m_wxPeer->IsFrozen() )
-        [[m_osxView window] disableFlushWindow];
+    // User panes will be frozen elsewhere
+    if( m_wxPeer->IsFrozen() && !IsUserPane() )
+        SetDrawingEnabled(false);
 }
 
 void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
@@ -2790,7 +3482,42 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
     NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: NSZeroRect options: options owner: m_osxView userInfo: nil];
     [m_osxView addTrackingArea: area];
     [area release];
- }
+}
+
+bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10) )
+    {
+        if ( IsUserPane() )
+        {
+            if ( eventsMask == wxTOUCH_NONE )
+            {
+                if ( wxCocoaGestures::EraseForObject(this) )
+                {
+                    [m_osxView setAcceptsTouchEvents:NO];
+                }
+                //else: we didn't have any gesture data anyhow
+            }
+            else // We do want to have gesture events.
+            {
+                wxCocoaGestures::StoreForObject
+                (
+                    this,
+                    new wxCocoaGesturesImpl(this, m_osxView, eventsMask)
+                );
+
+                [m_osxView setAcceptsTouchEvents:YES];
+            }
+
+            return true;
+        }
+    }
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+
+    wxUnusedVar(eventsMask);
+    return false;
+}
 
 bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
@@ -2842,8 +3569,9 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 
 bool wxWidgetCocoaImpl::ShouldHandleKeyNavigation(const wxKeyEvent &WXUNUSED(event)) const
 {
-    // Only controls that intercept tabs for different behavior should return false (ie wxTE_PROCESS_TAB)
-    return true;
+    // If the window wants to have all keys, let it have it and don't process
+    // TAB as key navigation event.
+    return !m_wxPeer->HasFlag(wxWANTS_CHARS);
 }
 
 bool wxWidgetCocoaImpl::DoHandleKeyNavigation(const wxKeyEvent &event)
@@ -2915,13 +3643,13 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent(wxevent , event) ;
-    bool result = GetWXPeer()->HandleWindowEvent(wxevent);
-    
+    // Call this before handling the event in case the event handler destroys
+    // this window.
     (void)SetupCursor(event);
 
-    return result;
+    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+    SetupMouseEvent(wxevent , event) ;
+    return GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusSet()
@@ -3029,6 +3757,9 @@ void wxWidgetCocoaImpl::SetFlipped(bool flipped)
 
 void wxWidgetCocoaImpl::SetDrawingEnabled(bool enabled)
 {
+    if ( [m_osxView window] == nil )
+        return;
+
     if ( enabled )
     {
         [[m_osxView window] enableFlushWindow];

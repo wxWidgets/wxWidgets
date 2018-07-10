@@ -200,7 +200,7 @@ enum
     @event{EVT_LIST_BEGIN_RDRAG(id, func)}
            Begin dragging with the right mouse button.
            Processes a @c wxEVT_LIST_BEGIN_RDRAG event type.
-    @event{EVT_BEGIN_LABEL_EDIT(id, func)}
+    @event{EVT_LIST_BEGIN_LABEL_EDIT(id, func)}
            Begin editing a label. This can be prevented by calling Veto().
            Processes a @c wxEVT_LIST_BEGIN_LABEL_EDIT event type.
     @event{EVT_LIST_END_LABEL_EDIT(id, func)}
@@ -1093,13 +1093,19 @@ public:
 
         Using the wxListItem's mask and state mask, you can change only selected
         attributes of a wxListCtrl item.
+
+        @return @true if the item was successfully updated or @false if the
+            update failed for some reason (e.g. an invalid item index).
     */
     bool SetItem(wxListItem& info);
 
     /**
         Sets an item string field at a particular column.
+
+        @return @true if the item was successfully updated or @false if the
+        update failed for some reason (e.g. an invalid item index).
     */
-    long SetItem(long index, int column, const wxString& label, int imageId = -1);
+    bool SetItem(long index, int column, const wxString& label, int imageId = -1);
 
     /**
         Sets the background colour for this item.

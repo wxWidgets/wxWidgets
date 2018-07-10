@@ -1140,7 +1140,6 @@
     <ClInclude Include="..\..\include\wx\msw\treectrl.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\uuid.h" />
     <ClInclude Include="..\..\include\wx\msw\uxtheme.h" />
-    <ClInclude Include="..\..\include\wx\msw\uxthemep.h" />
     <ClInclude Include="..\..\include\wx\msw\window.h" />
     <ClInclude Include="..\..\include\wx\generic\accel.h" />
     <ClInclude Include="..\..\include\wx\generic\busyinfo.h" />
@@ -1235,7 +1234,6 @@
     <ClInclude Include="..\..\include\wx\dragimag.h" />
     <ClInclude Include="..\..\include\wx\effects.h" />
     <ClInclude Include="..\..\include\wx\encinfo.h" />
-    <ClInclude Include="..\..\include\wx\evtloopsrc.h" />
     <ClInclude Include="..\..\include\wx\fdrepdlg.h" />
     <ClInclude Include="..\..\include\wx\filectrl.h" />
     <ClInclude Include="..\..\include\wx\filedlg.h" />
@@ -1383,6 +1381,7 @@
     <ClInclude Include="..\..\include\wx\msw\rt\utils.h" />
     <ClInclude Include="..\..\include\wx\itemattr.h" />
     <ClInclude Include="..\..\include\wx\peninfobase.h" />
+    <ClInclude Include="..\..\include\wx\persist\dataview.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

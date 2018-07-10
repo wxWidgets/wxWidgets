@@ -14,9 +14,6 @@
 // Minimum supported client: Windows 8 and Platform Update for Windows 7
 #define wxD2D_DEVICE_CONTEXT_SUPPORTED 0
 
-// Ensure no previous defines interfere with the Direct2D API headers
-#undef GetHwnd
-
 // We load these functions at runtime from the d2d1.dll.
 // However, since they are also used inside the d2d1.h header we must provide
 // implementations matching the exact declarations. These defines ensures we
@@ -36,9 +33,13 @@
     #pragma warning(disable:4458) // declaration of 'xxx' hides class member
 #endif
 
-#include <d2d1.h>
-#include <dwrite.h>
-#include <wincodec.h>
+#include "wx/msw/private/graphicsd2d.h"
+
+#ifdef __MINGW64_TOOLCHAIN__
+#ifndef DWRITE_E_NOFONT
+#define DWRITE_E_NOFONT _HRESULT_TYPEDEF_(0x88985002L)
+#endif
+#endif
 
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
 #include <D3D11.h>
@@ -219,11 +220,25 @@ wxDirect2D::DWriteCreateFactory_t wxDirect2D::DWriteCreateFactory = NULL;
 DEFINE_GUID(wxIID_IWICImagingFactory,
             0xec5ec8a9, 0xc395, 0x4314, 0x9c, 0x77, 0x54, 0xd7, 0xa9, 0x35, 0xff, 0x70);
 
+DEFINE_GUID(wxIID_ID2D1Factory,
+            0x06152247, 0x6f50, 0x465a, 0x92, 0x45, 0x11, 0x8b, 0xfd, 0x3b, 0x60, 0x07);
+
 DEFINE_GUID(wxIID_IDWriteFactory,
             0xb859ee5a, 0xd838, 0x4b5b, 0xa2, 0xe8, 0x1a, 0xdc, 0x7d, 0x93, 0xdb, 0x48);
 
 DEFINE_GUID(wxIID_IWICBitmapSource,
             0x00000120, 0xa8f2, 0x4877, 0xba, 0x0a, 0xfd, 0x2b, 0x66, 0x45, 0xfb, 0x94);
+
+DEFINE_GUID(GUID_WICPixelFormat32bppPBGRA,
+            0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x10);
+
+DEFINE_GUID(GUID_WICPixelFormat32bppBGR,
+            0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0e);
+
+#ifndef CLSID_WICImagingFactory
+DEFINE_GUID(CLSID_WICImagingFactory,
+            0xcacaf262, 0x9370, 0x4615, 0xa1, 0x3b, 0x9f, 0x55, 0x39, 0xda, 0x4c, 0xa);
+#endif
 
 // Implementation of the Direct2D functions
 HRESULT WINAPI wxD2D1CreateFactory(
@@ -297,6 +312,39 @@ IWICImagingFactory* wxWICImagingFactory()
         wxCHECK_HRESULT_RET_PTR(hr);
     }
     return gs_WICImagingFactory;
+}
+
+static ID2D1Factory* gs_ID2D1Factory = NULL;
+
+ID2D1Factory* wxD2D1Factory()
+{
+    if (!wxDirect2D::Initialize())
+        return NULL;
+
+    if (gs_ID2D1Factory == NULL)
+    {
+        D2D1_FACTORY_OPTIONS factoryOptions = {D2D1_DEBUG_LEVEL_NONE};
+
+        // According to
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ee794287(v=vs.85).aspx
+        // the Direct2D Debug Layer is only available starting with Windows 8
+        // and Visual Studio 2012.
+#if defined(__WXDEBUG__) && defined(__VISUALC__) && wxCHECK_VISUALC_VERSION(11)
+        if ( wxGetWinVersion() >= wxWinVersion_8 )
+        {
+            factoryOptions.debugLevel = D2D1_DEBUG_LEVEL_WARNING;
+        }
+#endif  //__WXDEBUG__
+
+        HRESULT hr = wxDirect2D::D2D1CreateFactory(
+            D2D1_FACTORY_TYPE_SINGLE_THREADED,
+            wxIID_ID2D1Factory,
+            &factoryOptions,
+            reinterpret_cast<void**>(&gs_ID2D1Factory)
+            );
+        wxCHECK_HRESULT_RET_PTR(hr);
+    }
+    return gs_ID2D1Factory;
 }
 
 static IDWriteFactory* gs_IDWriteFactory = NULL;
@@ -3028,7 +3076,7 @@ public:
         wxCHECK_HRESULT_RET(hr);
     }
 
-    void DrawBitmap(ID2D1Image* image, D2D1_POINT_2F offset,
+    void DrawBitmap(ID2D1Bitmap* image, D2D1_POINT_2F offset,
         D2D1_RECT_F imageRectangle, wxInterpolationQuality interpolationQuality,
         wxCompositionMode compositionMode) wxOVERRIDE
     {
@@ -4458,12 +4506,9 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDirect2DRenderer()
 }
 
 wxD2DRenderer::wxD2DRenderer()
+    : m_direct2dFactory(wxD2D1Factory())
 {
-
-    HRESULT result;
-    result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_direct2dFactory);
-
-    if (FAILED(result))
+    if ( m_direct2dFactory.get() == NULL )
     {
         wxFAIL_MSG("Could not create Direct2D Factory.");
     }
@@ -4768,6 +4813,12 @@ public:
         {
             delete gs_D2DRenderer;
             gs_D2DRenderer = NULL;
+        }
+
+        if ( gs_ID2D1Factory )
+        {
+            gs_ID2D1Factory->Release();
+            gs_ID2D1Factory = NULL;
         }
 
         ::CoUninitialize();

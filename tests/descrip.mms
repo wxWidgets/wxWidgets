@@ -2,36 +2,45 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 28 September 2011                                                   *
+# Date : 30 November 2017                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [-.include.wx]
 
 .ifdef __WXMOTIF__
-TEST_CXXFLAGS = /define=(__WXMOTIF__=1,"wxUSE_GUI=0")/name=(as_is,short)\
+TEST_CXXFLAGS = /define=(__WXMOTIF__=1,"wxUSE_GUI=0","CATCH_CONFIG_VARIADIC_MACROS=1")/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)
-TEST_GUI_CXXFLAGS = /define=(__WXMOTIF__=1,"wxUSE_GUI=1")/name=(as_is,short)\
+TEST_GUI_CXXFLAGS = /define=(__WXMOTIF__=1,"wxUSE_GUI=1","CATCH_CONFIG_VARIADIC_MACROS=1")\
+	/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)
 .else
 .ifdef __WXGTK__
 TEST_CXXFLAGS = /define=(__WXGTK__=1,"wxUSE_GUI=0","__USE_STD_IOSTREAM=1",\
-	"_USE_STD_STAT=1")/float=ieee/name=(as_is,short)/ieee=denorm\
-	   /assume=(nostdnew,noglobal_array_new)/include=[]
-TEST_GUI_CXXFLAGS = /define=(__WXGTK__=1,"wxUSE_GUI=1","__USE_STD_IOSTREAM=1")\
+	"_USE_STD_STAT=1","CATCH_CONFIG_VARIADIC_MACROS=1")\
 	/float=ieee/name=(as_is,short)/ieee=denorm\
-	   /assume=(nostdnew,noglobal_array_new)/include=[]
+	   /assume=(nostdnew,noglobal_array_new)/include=[]/list/show=all
+TEST_GUI_CXXFLAGS = /define=(__WXGTK__=1,"wxUSE_GUI=1","__USE_STD_IOSTREAM=1",\
+	"CATCH_CONFIG_VARIADIC_MACROS=1")\
+	/float=ieee/name=(as_is,short)/ieee=denorm\
+	   /assume=(nostdnew,noglobal_array_new)/include=[]/list/show=all
 .else
 .ifdef __WXX11__
-TEST_CXXFLAGS = /define=(__WXX11__=1,__WXUNIVERSAL__==1,"wxUSE_GUI=0")/float=ieee\
+TEST_CXXFLAGS = /define=(__WXX11__=1,__WXUNIVERSAL__==1,"wxUSE_GUI=0",\
+	"CATCH_CONFIG_VARIADIC_MACROS=1")/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
-TEST_GUI_CXXFLAGS = /define=(__WXGTK__=1,"wxUSE_GUI=1")/float=ieee/name=(as_is,short)/ieee=denorm\
+TEST_GUI_CXXFLAGS = /define=(__WXGTK__=1,"wxUSE_GUI=1",\
+	"CATCH_CONFIG_VARIADIC_MACROS=1")\
+	/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
 .else
 .ifdef __WXGTK2__
-TEST_CXXFLAGS = /define=(__WXGTK__=1,VMS_GTK2==1,"wxUSE_GUI=0")/float=ieee\
+TEST_CXXFLAGS = /define=(__WXGTK__=1,VMS_GTK2==1,"wxUSE_GUI=0",\
+	"CATCH_CONFIG_VARIADIC_MACROS=1")/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
-TEST_GUI_CXXFLAGS = /define=(__WXGTK__=1,"wxUSE_GUI=1")/float=ieee/name=(as_is,short)/ieee=denorm\
+TEST_GUI_CXXFLAGS = /define=(__WXGTK__=1,"wxUSE_GUI=1",\
+	"CATCH_CONFIG_VARIADIC_MACROS=1")\
+	/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
 .else
 CXX_DEFINE =
@@ -100,7 +109,6 @@ TEST_OBJECTS1=test_ipc.obj,\
 	test_unicode.obj,\
 	test_crt.obj,\
 	test_vsnprintf.obj,\
-	test_bstream.obj,\
 	test_datastreamtest.obj,\
 	test_ffilestream.obj,\
 	test_fileback.obj,\
@@ -397,9 +405,6 @@ test_crt.obj : [.strings]crt.cpp
 
 test_vsnprintf.obj : [.strings]vsnprintf.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.strings]vsnprintf.cpp
-
-test_bstream.obj : [.streams]bstream.cpp 
-	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.streams]bstream.cpp
 
 test_datastreamtest.obj : [.streams]datastreamtest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.streams]datastreamtest.cpp

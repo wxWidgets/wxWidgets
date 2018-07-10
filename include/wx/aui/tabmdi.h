@@ -11,7 +11,7 @@
 #ifndef _WX_AUITABMDI_H_
 #define _WX_AUITABMDI_H_
 
-#if wxUSE_AUI
+#if wxUSE_AUI && wxUSE_MDI
 
 // ----------------------------------------------------------------------------
 // headers
@@ -21,6 +21,7 @@
 #include "wx/panel.h"
 #include "wx/notebook.h"
 #include "wx/icon.h"
+#include "wx/mdi.h"
 #include "wx/aui/auibook.h"
 
 //-----------------------------------------------------------------------------
@@ -115,7 +116,7 @@ private:
 // wxAuiMDIChildFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_AUI wxAuiMDIChildFrame : public wxPanel
+class WXDLLIMPEXP_AUI wxAuiMDIChildFrame : public wxTDIChildFrame
 {
 public:
     wxAuiMDIChildFrame();
@@ -137,88 +138,35 @@ public:
                 const wxString& name = wxFrameNameStr);
 
 #if wxUSE_MENUS
-    virtual void SetMenuBar(wxMenuBar *menuBar);
-    virtual wxMenuBar *GetMenuBar() const;
+    virtual void SetMenuBar(wxMenuBar *menuBar) wxOVERRIDE;
+    virtual wxMenuBar *GetMenuBar() const wxOVERRIDE;
 #endif // wxUSE_MENUS
 
-    virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle() const;
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
-    virtual void SetIcons(const wxIconBundle& icons);
-    virtual const wxIconBundle& GetIcons() const;
+    virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
 
-    virtual void SetIcon(const wxIcon& icon);
-    virtual const wxIcon& GetIcon() const;
-
-    virtual void Activate();
+    virtual void Activate() wxOVERRIDE;
     virtual bool Destroy() wxOVERRIDE;
 
     virtual bool Show(bool show = true) wxOVERRIDE;
 
-#if wxUSE_STATUSBAR
-    // no status bars
-    virtual wxStatusBar* CreateStatusBar(int WXUNUSED(number) = 1,
-                                         long WXUNUSED(style) = 1,
-                                         wxWindowID WXUNUSED(winid) = 1,
-                                         const wxString& WXUNUSED(name) = wxEmptyString)
-      { return NULL; }
-
-    virtual wxStatusBar *GetStatusBar() const { return NULL; }
-    virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number)=0 ) {}
-    virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
-#endif
-
-#if wxUSE_TOOLBAR
-    // no toolbar bars
-    virtual wxToolBar* CreateToolBar(long WXUNUSED(style),
-                                     wxWindowID WXUNUSED(winid),
-                                     const wxString& WXUNUSED(name))
-        { return NULL; }
-    virtual wxToolBar *GetToolBar() const { return NULL; }
-#endif
-
-
-    // no maximize etc
-    virtual void Maximize(bool WXUNUSED(maximize) = true) { /* Has no effect */ }
-    virtual void Restore() { /* Has no effect */ }
-    virtual void Iconize(bool WXUNUSED(iconize)  = true) { /* Has no effect */ }
-    virtual bool IsMaximized() const { return true; }
-    virtual bool IsIconized() const { return false; }
-    virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style)) { return false; }
-    virtual bool IsFullScreen() const { return false; }
-
-    virtual bool IsTopLevel() const wxOVERRIDE { return false; }
-
     void OnMenuHighlight(wxMenuEvent& evt);
-    void OnActivate(wxActivateEvent& evt);
-    void OnCloseWindow(wxCloseEvent& evt);
 
     void SetMDIParentFrame(wxAuiMDIParentFrame* parent);
     wxAuiMDIParentFrame* GetMDIParentFrame() const;
 
 protected:
     void Init();
-    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 
-    // no size hints
-    virtual void DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
-                                int WXUNUSED(maxW), int WXUNUSED(maxH),
-                                int WXUNUSED(incW), int WXUNUSED(incH)) wxOVERRIDE {}
 public:
     // This function needs to be called when a size change is confirmed,
     // we needed this function to prevent anybody from the outside
     // changing the panel... it messes the UI layout when we would allow it.
     void ApplyMDIChildFrameRect();
-    void DoShow(bool show);
 
 protected:
     wxAuiMDIParentFrame* m_pMDIParentFrame;
-    wxRect m_mdiNewRect;
-    wxRect m_mdiCurRect;
-    wxString m_title;
-    wxIcon m_icon;
-    wxIconBundle m_iconBundle;
     bool m_activateOnCreate;
 
 #if wxUSE_MENUS
@@ -247,7 +195,6 @@ public:
     virtual bool CreateClient(wxAuiMDIParentFrame *parent,
                               long style = wxVSCROLL | wxHSCROLL);
 
-    virtual int SetSelection(size_t page) wxOVERRIDE;
     virtual wxAuiMDIChildFrame* GetActiveChild();
     virtual void SetActiveChild(wxAuiMDIChildFrame* pChildFrame)
     {
@@ -259,12 +206,11 @@ protected:
     void PageChanged(int oldSelection, int newSelection);
     void OnPageClose(wxAuiNotebookEvent& evt);
     void OnPageChanged(wxAuiNotebookEvent& evt);
-    void OnSize(wxSizeEvent& evt);
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxAuiMDIClientWindow);
     wxDECLARE_EVENT_TABLE();
 };
-#endif // wxUSE_AUI
+#endif // wxUSE_AUI && wxUSE_MDI
 
 #endif // _WX_AUITABMDI_H_

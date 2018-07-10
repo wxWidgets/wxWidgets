@@ -122,10 +122,8 @@ wxCalendarCtrl::Create(wxWindow *parent,
     SetHolidayAttrs();
     UpdateMarks();
 
-    Connect(wxEVT_LEFT_DOWN,
-            wxMouseEventHandler(wxCalendarCtrl::MSWOnClick));
-    Connect(wxEVT_LEFT_DCLICK,
-            wxMouseEventHandler(wxCalendarCtrl::MSWOnDoubleClick));
+    Bind(wxEVT_LEFT_DOWN, &wxCalendarCtrl::MSWOnClick, this);
+    Bind(wxEVT_LEFT_DCLICK, &wxCalendarCtrl::MSWOnDoubleClick, this);
 
     return true;
 }

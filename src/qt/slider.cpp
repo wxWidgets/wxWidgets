@@ -12,6 +12,7 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QSlider>
 
 class wxQtSlider : public wxQtEventSignalHandler< QSlider, wxSlider >
 {
@@ -163,7 +164,7 @@ int wxSlider::GetThumbLength() const
 }
 
 
-QSlider *wxSlider::GetHandle() const
+QWidget *wxSlider::GetHandle() const
 {
     return m_qtSlider;
 }

@@ -67,10 +67,9 @@ private:
 // CppUnit macros
 // ----------------------------------------------------------------------------
 
-//CPPUNIT_TEST_SUITE_REGISTRATION( InteractiveInputTestCase );
-    // do not run this test by default!
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( InteractiveInputTestCase, "InteractiveInputTestCase" );
+// Register this test case as hidden, it shouldn't be run by default.
+wxREGISTER_UNIT_TEST_WITH_TAGS(InteractiveInputTestCase,
+                               "[!hide][interactive][input]");
 
 // ============================================================================
 // implementation

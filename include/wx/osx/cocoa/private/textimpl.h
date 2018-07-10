@@ -69,6 +69,7 @@ public :
     virtual void WriteText(const wxString& str) wxOVERRIDE ;
     virtual bool HasOwnContextMenu() const wxOVERRIDE { return true; }
     virtual bool SetHint(const wxString& hint) wxOVERRIDE;
+    virtual void SetJustification() wxOVERRIDE;
 
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE;
     virtual bool becomeFirstResponder(WXWidget slf, void *_cmd) wxOVERRIDE;
@@ -125,6 +126,7 @@ public:
     virtual void EnableAutomaticDashSubstitution(bool enable) wxOVERRIDE;
 
     virtual wxSize GetBestSize() const wxOVERRIDE;
+    virtual void SetJustification() wxOVERRIDE;
 
     virtual void controlTextDidChange() wxOVERRIDE;
 

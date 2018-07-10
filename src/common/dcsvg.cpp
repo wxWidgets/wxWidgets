@@ -121,6 +121,7 @@ wxString wxBrushString(wxColour c, int style = wxBRUSHSTYLE_SOLID)
     return s;
 }
 
+static
 wxString wxGetPenPattern(wxPen& pen)
 {
     wxString s;
@@ -933,6 +934,9 @@ void wxSVGFileDCImpl::DoSetClippingRegion(int x, int y, int width, int height)
 
     m_clipUniqueId++;
     m_clipNestingLevel++;
+
+    // Update the base class m_clip[XY][12] fields too.
+    wxDCImpl::DoSetClippingRegion(x, y, width, height);
 }
 
 void wxSVGFileDCImpl::DestroyClippingRegion()
@@ -957,6 +961,9 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     DoStartNewGraphics();
 
     m_clipUniqueId = 0;
+
+    // Also update the base class clipping region information.
+    wxDCImpl::DestroyClippingRegion();
 }
 
 void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent, wxCoord *externalLeading, const wxFont *font) const

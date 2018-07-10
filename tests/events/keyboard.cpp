@@ -16,9 +16,7 @@
     #pragma hdrstop
 #endif
 
-// FIXME: As all the other tests involving wxUIActionSimulator, this one is
-//        broken under OS X, the test window siply never gets any events.
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
+#if wxUSE_UIACTIONSIMULATOR
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -204,12 +202,12 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( KeyboardEventTestCase );
-        CPPUNIT_TEST( NormalLetter );
-        CPPUNIT_TEST( NormalSpecial );
-        CPPUNIT_TEST( CtrlLetter );
-        CPPUNIT_TEST( CtrlSpecial );
-        CPPUNIT_TEST( ShiftLetter );
-        CPPUNIT_TEST( ShiftSpecial );
+        WXUISIM_TEST( NormalLetter );
+        WXUISIM_TEST( NormalSpecial );
+        WXUISIM_TEST( CtrlLetter );
+        WXUISIM_TEST( CtrlSpecial );
+        WXUISIM_TEST( ShiftLetter );
+        WXUISIM_TEST( ShiftSpecial );
     CPPUNIT_TEST_SUITE_END();
 
     void NormalLetter();

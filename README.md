@@ -45,6 +45,16 @@ is a modified version of LGPL explicitly allowing not distributing the sources
 of an application using the library even in the case of static linking.
 
 
+Building
+--------
+
+For building the library, please see platform-specific documentation under
+`docs/<port>` directory.
+
+If you're building the sources checked out from Git, and not from a released
+versions, please see these additional [Git-specific notes](README-GIT.md).
+
+
 Further information
 -------------------
 

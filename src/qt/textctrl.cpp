@@ -14,6 +14,9 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/utils.h"
 
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QTextEdit>
+
 class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 {
 public:
@@ -290,8 +293,8 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
         QTextCursor cursor = m_qtTextEdit->textCursor();
         *from = cursor.selectionStart();
         *to = cursor.selectionEnd();
-        if(cursor.hasSelection())
-                return;
+        if ( cursor.hasSelection() )
+            return;
     }
     else // single line
     {

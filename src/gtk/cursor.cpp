@@ -18,9 +18,8 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/object.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 GdkWindow* wxGetTopLevelGDK();
 
@@ -175,7 +174,7 @@ wxPoint wxCursor::GetHotSpot() const
 #if GTK_CHECK_VERSION(2,8,0)
     if (GetCursor())
     {
-        if (gtk_check_version(2,8,0) == NULL)
+        if (wx_is_at_least_gtk2(8))
         {
             GdkPixbuf *pixbuf = gdk_cursor_get_image(GetCursor());
             if (pixbuf)

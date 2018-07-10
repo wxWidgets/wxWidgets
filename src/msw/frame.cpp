@@ -261,7 +261,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 // generate an artificial resize event
 void wxFrame::SendSizeEvent(int flags)
 {
-    if ( !m_iconized )
+    if ( !MSWIsIconized() )
     {
         RECT r = wxGetWindowRect(GetHwnd());
 
@@ -667,7 +667,7 @@ void wxFrame::PositionToolBar()
 // on the desktop, but are iconized/restored with it
 void wxFrame::IconizeChildFrames(bool bIconize)
 {
-    m_iconized = bIconize;
+    m_showCmd = bIconize ? SW_MINIMIZE : SW_RESTORE;
 
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
@@ -743,6 +743,13 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
 
 bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 {
+    // We can get a WM_SIZE when restoring a hidden window using
+    // SetWindowPlacement(), don't do anything here in this case as our state
+    // will be really updated later, when (and if) we're shown. Still let the
+    // base class generate wxEVT_SIZE and perform the layout, however.
+    if ( !IsShown() )
+        return false;
+
     switch ( id )
     {
         case SIZE_RESTORED:
@@ -750,7 +757,7 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
             // only do it it if we were iconized before, otherwise resizing the
             // parent frame has a curious side effect of bringing it under it's
             // children
-            if ( !m_iconized )
+            if ( m_showCmd != SW_MINIMIZE )
                 break;
 
             // restore all child frames too
@@ -765,7 +772,7 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
             break;
     }
 
-    if ( !m_iconized )
+    if ( m_showCmd != SW_MINIMIZE )
     {
 #if wxUSE_STATUSBAR
         PositionStatusBar();

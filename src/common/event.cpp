@@ -103,6 +103,13 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureLostEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxGestureEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxPanGestureEvent, wxGestureEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxZoomGestureEvent, wxGestureEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxRotateGestureEvent, wxGestureEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxTwoFingerTapEvent, wxGestureEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxLongPressEvent, wxGestureEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxPressAndTapEvent, wxGestureEvent);
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -133,8 +140,8 @@ class wxEventTableEntryModule: public wxModule
 {
 public:
     wxEventTableEntryModule() { }
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxEventHashTable::ClearAll(); }
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE { wxEventHashTable::ClearAll(); }
 
     wxDECLARE_DYNAMIC_CLASS(wxEventTableEntryModule);
 };
@@ -257,6 +264,14 @@ wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent );
+
+// Gesture events
+wxDEFINE_EVENT( wxEVT_GESTURE_PAN, wxPanGestureEvent );
+wxDEFINE_EVENT( wxEVT_GESTURE_ZOOM, wxZoomGestureEvent );
+wxDEFINE_EVENT( wxEVT_GESTURE_ROTATE, wxRotateGestureEvent );
+wxDEFINE_EVENT( wxEVT_TWO_FINGER_TAP, wxTwoFingerTapEvent );
+wxDEFINE_EVENT( wxEVT_LONG_PRESS, wxLongPressEvent );
+wxDEFINE_EVENT( wxEVT_PRESS_AND_TAP, wxPressAndTapEvent );
 
 // System events
 wxDEFINE_EVENT( wxEVT_SIZE, wxSizeEvent );
@@ -1620,8 +1635,21 @@ void wxEvtHandler::WXConsumeException()
     {
         if ( !wxTheApp || !wxTheApp->OnExceptionInMainLoop() )
         {
-            if ( loop )
-                loop->Exit();
+            // If OnExceptionInMainLoop() returns false, we're supposed to exit
+            // the program and for this we need to exit the main loop, not the
+            // possibly nested one we're running right now.
+            if ( wxTheApp )
+            {
+                wxTheApp->ExitMainLoop();
+            }
+            else
+            {
+                // We must not continue running after an exception, unless
+                // explicitly requested, so if we can't ensure this in any
+                // other way, do it brutally like this.
+                wxAbort();
+            }
+
         }
         //else: continue running current event loop
     }

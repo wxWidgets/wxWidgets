@@ -37,17 +37,7 @@
     #define boolean wxHACK_BOOLEAN
 #endif
 
-extern "C"
-{
-    #if defined(__WXMSW__)
-        #define XMD_H
-    #endif
-    #include "jpeglib.h"
-}
-
-#ifndef HAVE_WXJPEG_BOOLEAN
-typedef boolean wxjpeg_boolean;
-#endif
+#include "jpeglib.h"
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
@@ -103,7 +93,7 @@ CPP_METHODDEF(void) wx_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
 {
 }
 
-CPP_METHODDEF(wxjpeg_boolean) wx_fill_input_buffer ( j_decompress_ptr cinfo )
+CPP_METHODDEF(boolean) wx_fill_input_buffer ( j_decompress_ptr cinfo )
 {
     wx_src_ptr src = (wx_src_ptr) cinfo->src;
 
@@ -386,7 +376,7 @@ CPP_METHODDEF(void) wx_init_destination (j_compress_ptr cinfo)
     dest->pub.free_in_buffer = OUTPUT_BUF_SIZE;
 }
 
-CPP_METHODDEF(wxjpeg_boolean) wx_empty_output_buffer (j_compress_ptr cinfo)
+CPP_METHODDEF(boolean) wx_empty_output_buffer (j_compress_ptr cinfo)
 {
     wx_dest_ptr dest = (wx_dest_ptr) cinfo->dest;
 

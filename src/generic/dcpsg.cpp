@@ -1097,8 +1097,8 @@ void wxPostScriptDCImpl::SetPSFont()
     wxString name;
     switch ( m_font.GetFamily() )
     {
-        case wxTELETYPE:
-        case wxMODERN:
+        case wxFONTFAMILY_TELETYPE:
+        case wxFONTFAMILY_MODERN:
         {
             if (Style == wxFONTSTYLE_ITALIC)
             {
@@ -1116,7 +1116,7 @@ void wxPostScriptDCImpl::SetPSFont()
             }
             break;
         }
-        case wxROMAN:
+        case wxFONTFAMILY_ROMAN:
         {
             if (Style == wxFONTSTYLE_ITALIC)
             {
@@ -1134,12 +1134,12 @@ void wxPostScriptDCImpl::SetPSFont()
             }
             break;
         }
-        case wxSCRIPT:
+        case wxFONTFAMILY_SCRIPT:
         {
             name = wxS("/ZapfChancery-MediumItalic");
             break;
         }
-        case wxSWISS:
+        case wxFONTFAMILY_SWISS:
         default:
         {
             if (Style == wxFONTSTYLE_ITALIC)

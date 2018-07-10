@@ -11,6 +11,8 @@
 #include "wx/dcmemory.h"
 #include "wx/qt/dcmemory.h"
 
+#include <QtGui/QPainter>
+
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
     : wxQtDCImpl( owner )
 {
@@ -33,6 +35,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
 {
     m_qtImage = NULL;
     m_ok = false;
+    m_qtPainter = new QPainter();
 }
 
 wxMemoryDCImpl::~wxMemoryDCImpl()
@@ -67,8 +70,12 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
     m_selected = bitmap;
     if ( bitmap.IsOk() && !bitmap.GetHandle()->isNull() ) {
+        QPixmap pixmap(*bitmap.GetHandle());
+        // apply mask before converting to image
+        if ( bitmap.GetMask() && bitmap.GetMask()->GetHandle() )
+            pixmap.setMask(*bitmap.GetMask()->GetHandle());
         // create the intermediate image for the pixmap:
-        m_qtImage = new QImage( bitmap.GetHandle()->toImage() );
+        m_qtImage = new QImage( pixmap.toImage() );
         // start drawing on the intermediary device:
         m_ok = m_qtPainter->begin( m_qtImage );
 
@@ -76,6 +83,13 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         SetBrush(m_brush);
         SetFont(m_font);
     }
+}
+
+wxBitmap wxMemoryDCImpl::DoGetAsBitmap(const wxRect *subrect) const
+{
+    if ( !subrect )
+        return m_selected;
+    return m_selected.GetSubBitmap(*subrect);
 }
 
 const wxBitmap& wxMemoryDCImpl::GetSelectedBitmap() const

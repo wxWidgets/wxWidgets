@@ -15,6 +15,14 @@
 #define _WX_WINUNDEF_H_
  */
 
+#ifndef wxUSE_UNICODE_WINDOWS_H
+    #ifdef _UNICODE
+        #define wxUSE_UNICODE_WINDOWS_H 1
+    #else
+        #define wxUSE_UNICODE_WINDOWS_H 0
+    #endif
+#endif
+
 // ----------------------------------------------------------------------------
 // windows.h #defines the following identifiers which are also used in wxWin so
 // we replace these symbols with the corresponding inline functions and
@@ -34,7 +42,7 @@
                              HWND hwndParent,
                              DLGPROC pDlgProc)
     {
-        #ifdef _UNICODE
+        #if wxUSE_UNICODE_WINDOWS_H
             return CreateDialogW(hInstance, pTemplate, hwndParent, pDlgProc);
         #else
             return CreateDialogA(hInstance, pTemplate, hwndParent, pDlgProc);
@@ -62,7 +70,7 @@
                             DWORD family,
                             LPCTSTR facename)
     {
-        #ifdef _UNICODE
+        #if wxUSE_UNICODE_WINDOWS_H
             return CreateFontW(height, width, escapement, orientation,
                                weight, italic, underline, strikeout, charset,
                                outprecision, clipprecision, quality,
@@ -90,7 +98,7 @@
                              HINSTANCE hInstance,
                              LPVOID lpParam)
     {
-        #ifdef _UNICODE
+        #if wxUSE_UNICODE_WINDOWS_H
             return CreateWindowW(lpClassName, lpWndClass, dwStyle, x, y, w, h,
                                  hWndParent, hMenu, hInstance, lpParam);
         #else
@@ -107,7 +115,7 @@
 
     inline HMENU LoadMenu(HINSTANCE instance, LPCTSTR name)
     {
-        #ifdef _UNICODE
+        #if wxUSE_UNICODE_WINDOWS_H
             return LoadMenuW(instance, name);
         #else
             return LoadMenuA(instance, name);
@@ -122,7 +130,7 @@
 
     inline HWND APIENTRY FindText(LPFINDREPLACE lpfindreplace)
     {
-        #ifdef _UNICODE
+        #if wxUSE_UNICODE_WINDOWS_H
             return FindTextW(lpfindreplace);
         #else
             return FindTextA(lpfindreplace);
@@ -136,7 +144,7 @@
    #undef GetCharWidth
    inline BOOL  GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
    {
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
       return GetCharWidthW(dc, first, last, buffer);
    #else
       return GetCharWidthA(dc, first, last, buffer);
@@ -148,7 +156,7 @@
 
 #ifdef FindWindow
    #undef FindWindow
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
    inline HWND FindWindow(LPCWSTR classname, LPCWSTR windowname)
    {
       return FindWindowW(classname, windowname);
@@ -165,7 +173,7 @@
 
 #ifdef PlaySound
    #undef PlaySound
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
    inline BOOL PlaySound(LPCWSTR pszSound, HMODULE hMod, DWORD fdwSound)
    {
       return PlaySoundW(pszSound, hMod, fdwSound);
@@ -182,7 +190,7 @@
 
 #ifdef GetClassName
    #undef GetClassName
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
    inline int GetClassName(HWND h, LPWSTR classname, int maxcount)
    {
       return GetClassNameW(h, classname, maxcount);
@@ -199,7 +207,7 @@
 
 #ifdef GetClassInfo
    #undef GetClassInfo
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
    inline BOOL GetClassInfo(HINSTANCE h, LPCWSTR name, LPWNDCLASSW winclass)
    {
       return GetClassInfoW(h, name, winclass);
@@ -216,7 +224,7 @@
 
 #ifdef LoadAccelerators
    #undef LoadAccelerators
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
    inline HACCEL LoadAccelerators(HINSTANCE h, LPCWSTR name)
    {
       return LoadAcceleratorsW(h, name);
@@ -233,7 +241,7 @@
 
 #ifdef DrawText
    #undef DrawText
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
    inline int DrawText(HDC h, LPCWSTR str, int count, LPRECT rect, UINT format)
    {
       return DrawTextW(h, str, count, rect, format);
@@ -252,7 +260,7 @@
 #ifdef StartDoc
    #undef StartDoc
 
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
    inline int StartDoc(HDC h, CONST DOCINFOW* info)
    {
       return StartDocW(h, (DOCINFOW*) info);
@@ -271,7 +279,7 @@
    #undef GetObject
    inline int GetObject(HGDIOBJ h, int i, LPVOID buffer)
    {
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
       return GetObjectW(h, i, buffer);
    #else
       return GetObjectA(h, i, buffer);
@@ -285,7 +293,7 @@
    #undef GetMessage
    inline int GetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
    {
-   #ifdef _UNICODE
+   #if wxUSE_UNICODE_WINDOWS_H
       return GetMessageW(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
    #else
       return GetMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
@@ -298,7 +306,7 @@
     #undef LoadIcon
     inline HICON LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
     {
-        #ifdef _UNICODE
+        #if wxUSE_UNICODE_WINDOWS_H
             return LoadIconW(hInstance, lpIconName);
         #else // ANSI
             return LoadIconA(hInstance, lpIconName);
@@ -311,7 +319,7 @@
     #undef LoadBitmap
     inline HBITMAP LoadBitmap(HINSTANCE hInstance, LPCTSTR lpBitmapName)
     {
-        #ifdef _UNICODE
+        #if wxUSE_UNICODE_WINDOWS_H
             return LoadBitmapW(hInstance, lpBitmapName);
         #else // ANSI
             return LoadBitmapA(hInstance, lpBitmapName);
@@ -323,7 +331,7 @@
 
 #ifdef LoadLibrary
     #undef LoadLibrary
-    #ifdef _UNICODE
+    #if wxUSE_UNICODE_WINDOWS_H
     inline HINSTANCE LoadLibrary(LPCWSTR lpLibFileName)
     {
         return LoadLibraryW(lpLibFileName);
@@ -339,7 +347,7 @@
 // FindResource
 #ifdef FindResource
     #undef FindResource
-    #ifdef _UNICODE
+    #if wxUSE_UNICODE_WINDOWS_H
     inline HRSRC FindResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType)
     {
         return FindResourceW(hModule, lpName, lpType);
@@ -419,26 +427,6 @@
 #endif
 
 // For ming and cygwin
-
-// GetFirstChild
-#ifdef GetFirstChild
-   #undef GetFirstChild
-   inline HWND GetFirstChild(HWND h)
-   {
-      return GetTopWindow(h);
-   }
-#endif
-
-
-// GetNextSibling
-#ifdef GetNextSibling
-   #undef GetNextSibling
-   inline HWND GetNextSibling(HWND h)
-   {
-     return GetWindow(h, GW_HWNDNEXT);
-   }
-#endif
-
 
 #ifdef Yield
     #undef Yield

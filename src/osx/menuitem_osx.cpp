@@ -51,10 +51,14 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
         text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
     }
 
-    wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
     // use accessors for ID and Kind because they might have been changed in the base constructor
+#if wxUSE_ACCEL
+    wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
     m_peer = wxMenuItemImpl::Create( this, pParentMenu, GetId(), text, entry, strHelp, GetKind(), pSubMenu );
     delete entry;
+#else
+    m_peer = wxMenuItemImpl::Create( this, pParentMenu, GetId(), text, NULL, strHelp, GetKind(), pSubMenu );
+#endif // wxUSE_ACCEL/!wxUSE_ACCEL
 }
 
 wxMenuItem::~wxMenuItem()
@@ -194,9 +198,13 @@ void wxMenuItem::UpdateItemText()
         text = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
     }
 
+#if wxUSE_ACCEL
     wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
     GetPeer()->SetLabel( text, entry );
     delete entry ;
+#else
+    GetPeer()->SetLabel( text, NULL );
+#endif // wxUSE_ACCEL/!wxUSE_ACCEL
 }
 
 // ----------------------------------------------------------------------------

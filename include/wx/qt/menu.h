@@ -8,8 +8,8 @@
 #ifndef _WX_QT_MENU_H_
 #define _WX_QT_MENU_H_
 
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
+class QMenu;
+class QMenuBar;
 
 class WXDLLIMPEXP_CORE wxMenu : public wxMenuBase
 {
@@ -48,7 +48,8 @@ public:
     virtual void SetMenuLabel(size_t pos, const wxString& label);
     virtual wxString GetMenuLabel(size_t pos) const;
 
-    virtual QMenuBar *GetHandle() const;
+    QMenuBar *GetQMenuBar() const { return m_qtMenuBar; }
+    virtual QWidget *GetHandle() const;
 
     virtual void Attach(wxFrame *frame);
     virtual void Detach();

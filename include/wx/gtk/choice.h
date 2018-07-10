@@ -101,6 +101,7 @@ protected:
     virtual void DoClear() wxOVERRIDE;
     virtual void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
 
+    virtual bool GTKHandleFocusOut() wxOVERRIDE;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
 

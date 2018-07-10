@@ -61,6 +61,7 @@ class WXDLLIMPEXP_FWD_BASE wxObject;
 
 #include "wx/dynarray.h"
 #include "wx/hashmap.h"
+#include "wx/msgout.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -157,7 +158,11 @@ public:
         line = line_;
         component = component_;
 
-        timestamp = time(NULL);
+        // don't initialize the timestamp yet, we might not need it at all if
+        // the message doesn't end up being logged and otherwise we'll fill it
+        // just before logging it, which won't change it by much and definitely
+        // less than a second resolution of the timestamp
+        timestamp = 0;
 
 #if wxUSE_THREADS
         threadId = wxThread::GetCurrentId();
@@ -716,17 +721,17 @@ private:
 
 
 // log everything to a "FILE *", stderr by default
-class WXDLLIMPEXP_BASE wxLogStderr : public wxLog
+class WXDLLIMPEXP_BASE wxLogStderr : public wxLog,
+                                     protected wxMessageOutputStderr
 {
 public:
     // redirect log output to a FILE
-    wxLogStderr(FILE *fp = NULL);
+    wxLogStderr(FILE *fp = NULL,
+                const wxMBConv &conv = wxConvWhateverWorks);
 
 protected:
     // implement sink function
     virtual void DoLogText(const wxString& msg) wxOVERRIDE;
-
-    FILE *m_fp;
 
     wxDECLARE_NO_COPY_CLASS(wxLogStderr);
 };
@@ -734,11 +739,13 @@ protected:
 #if wxUSE_STD_IOSTREAM
 
 // log everything to an "ostream", cerr by default
-class WXDLLIMPEXP_BASE wxLogStream : public wxLog
+class WXDLLIMPEXP_BASE wxLogStream : public wxLog,
+                                     private wxMessageOutputWithConv
 {
 public:
     // redirect log output to an ostream
-    wxLogStream(wxSTD ostream *ostr = (wxSTD ostream *) NULL);
+    wxLogStream(wxSTD ostream *ostr = (wxSTD ostream *) NULL,
+                const wxMBConv& conv = wxConvWhateverWorks);
 
 protected:
     // implement sink function
@@ -746,6 +753,8 @@ protected:
 
     // using ptr here to avoid including <iostream.h> from this file
     wxSTD ostream *m_ostr;
+
+    wxDECLARE_NO_COPY_CLASS(wxLogStream);
 };
 
 #endif // wxUSE_STD_IOSTREAM
@@ -1157,6 +1166,11 @@ private:
 
     void DoCallOnLog(wxLogLevel level, const wxString& format, va_list argptr)
     {
+        // As explained in wxLogRecordInfo ctor, we don't initialize its
+        // timestamp to avoid calling time() unnecessary, but now that we are
+        // about to log the message, we do need to do it.
+        m_info.timestamp = time(NULL);
+
         wxLog::OnLog(level, wxString::FormatV(format, argptr), m_info);
     }
 

@@ -35,6 +35,8 @@ protected:
     virtual void DrawField(wxDC& dc, int i, int textHeight) wxOVERRIDE;
     virtual void DoUpdateStatusText(int number = 0) wxOVERRIDE;
 
+    virtual void InitColours() wxOVERRIDE;
+
 private:
     wxColour m_textActive, m_textInactive,
              m_bgActiveFrom, m_bgActiveTo,

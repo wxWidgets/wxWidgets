@@ -29,9 +29,8 @@
 #include <sys/stat.h>
 #include <ctype.h>
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -181,12 +180,12 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
 #elif GTK_CHECK_VERSION(2,11,0)
 // gtk+ doesn't support justify before gtk+-2.11.0 with pango-1.17 being available
 // (but if new enough pango isn't available it's a mere gtk warning)
-                if (!gtk_check_version(2,11,0))
+                if (wx_is_at_least_gtk2(11))
                 {
                     align = GTK_JUSTIFY_FILL;
                     break;
                 }
-                // fallthrough
+                wxFALLTHROUGH;
 #endif
             default:
                 align = GTK_JUSTIFY_LEFT;
@@ -216,9 +215,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXINDENT", &para_start, &para_end);
 
         // Convert indent from 1/10th of a mm into pixels
+#ifdef __WXGTK4__
+        GdkMonitor* monitor = gdk_display_get_monitor_at_window(
+            gtk_widget_get_display(text), gtk_widget_get_window(text));
+        GdkRectangle rect;
+        gdk_monitor_get_geometry(monitor, &rect);
+        float factor = float(rect.width) / gdk_monitor_get_width_mm(monitor);
+#else
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         float factor =
             (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
                       gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
+        wxGCC_WARNING_RESTORE()
+#endif
 
         const int indent = (int)(factor * attr.GetLeftIndent());
         const int subIndent = (int)(factor * attr.GetLeftSubIndent());
@@ -273,10 +282,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         if (!tag)
         {
             // Factor to convert from 1/10th of a mm into pixels
+#ifdef __WXGTK4__
+            GdkMonitor* monitor = gdk_display_get_monitor_at_window(
+                gtk_widget_get_display(text), gtk_widget_get_window(text));
+            GdkRectangle rect;
+            gdk_monitor_get_geometry(monitor, &rect);
+            float factor = float(rect.width) / gdk_monitor_get_width_mm(monitor);
+#else
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             float factor =
                 (float)gdk_screen_get_width(gtk_widget_get_screen(text)) /
                           gdk_screen_get_width_mm(gtk_widget_get_screen(text)) / 10;
-
+            wxGCC_WARNING_RESTORE()
+#endif
             PangoTabArray* tabArray = pango_tab_array_new(tabs.GetCount(), TRUE);
             for (size_t i = 0; i < tabs.GetCount(); i++)
                 pango_tab_array_set_tab(tabArray, i, PANGO_TAB_LEFT, (gint)(tabs[i] * factor));
@@ -301,6 +319,14 @@ au_apply_tag_callback(GtkTextBuffer *buffer,
     if(tag == gtk_text_tag_table_lookup(gtk_text_buffer_get_tag_table(buffer), "wxUrl"))
         g_signal_stop_emission_by_name (buffer, "apply_tag");
 }
+}
+
+// Check if the style contains wxTE_PROCESS_TAB and update the given
+// GtkTextView accordingly.
+static void wxGtkSetAcceptsTab(GtkWidget* text, long style)
+{
+    gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(text),
+                                  (style & wxTE_PROCESS_TAB) != 0);
 }
 
 //-----------------------------------------------------------------------------
@@ -444,7 +470,7 @@ extern "C" {
 
 // Normal version used for detecting IME input and generating appropriate
 // events for it.
-void
+static void
 wx_insert_text_callback(GtkTextBuffer* buffer,
                         GtkTextIter* WXUNUSED(end),
                         gchar *text,
@@ -727,8 +753,10 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // new, empty control, see https://trac.wxwidgets.org/ticket/11409
         gtk_entry_get_text((GtkEntry*)m_text);
 
+#ifndef __WXGTK3__
         if (style & wxNO_BORDER)
-            g_object_set (m_text, "has-frame", FALSE, NULL);
+            gtk_entry_set_has_frame((GtkEntry*)m_text, FALSE);
+#endif
 
     }
     g_object_ref(m_widget);
@@ -778,6 +806,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     if (multi_line)
     {
+        wxGtkSetAcceptsTab(m_text, style);
+
         // Handle URLs on multi-line controls with wxTE_AUTO_URL style
         if (style & wxTE_AUTO_URL)
         {
@@ -856,18 +886,14 @@ int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
     if (IsSingleLine())
         return wxTextEntry::GTKIMFilterKeypress(event);
 
-    int result;
+    int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
-#ifndef __WXGTK3__
-    result = false;
-    if (gtk_check_version(2,22,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(22))
     {
         result = gtk_text_view_im_context_filter_keypress(GTK_TEXT_VIEW(m_text), event);
     }
 #else // GTK+ < 2.22
     wxUnusedVar(event);
-    result = false;
 #endif // GTK+ 2.22+
 
     return result;
@@ -966,6 +992,15 @@ void wxTextCtrl::SetWindowStyleFlag(long style)
     if ( (style & wxTE_PROCESS_ENTER) != (styleOld & wxTE_PROCESS_ENTER) )
         GTKSetActivatesDefault();
 
+    if ( IsMultiLine() )
+    {
+        wxGtkSetAcceptsTab(m_text, style);
+    }
+    //else: there doesn't seem to be any way to do it for entries and while we
+    //      could emulate wxTE_PROCESS_TAB for them by handling Tab key events
+    //      explicitly, it doesn't seem to be worth doing it, this style is
+    //      pretty useless with single-line controls.
+
     static const long flagsWrap = wxTE_WORDWRAP | wxTE_CHARWRAP | wxTE_DONTWRAP;
     if ( (style & flagsWrap) != (styleOld & flagsWrap) )
         GTKSetWrapMode();
@@ -1035,10 +1070,17 @@ void wxTextCtrl::WriteText( const wxString &text )
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
     if ( text.empty() )
+    {
+        // We don't need to actually do anything, but we still need to generate
+        // an event expected from this call.
+        SendTextUpdatedEvent(this);
         return;
+    }
 
     // we're changing the text programmatically
     DontMarkDirtyOnNextChange();
+    // make sure marking is re-enabled even if events are suppressed
+    wxON_BLOCK_EXIT_SET(m_dontMarkDirty, false);
 
     // Inserting new text into the control below will emit insert-text signal
     // which assumes that if m_imKeyEvent is set, it is called in response to
@@ -1176,20 +1218,35 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
 {
     if ( IsSingleLine() )
     {
-
-        if ( y != 0 || x >= GTKGetEntryTextLength(GTK_ENTRY(m_text)) )
+        if ( y != 0 || x > GTKGetEntryTextLength(GTK_ENTRY(m_text)) )
             return -1;
 
         return x;
     }
 
+    const gint numLines = gtk_text_buffer_get_line_count (m_buffer);
+
     GtkTextIter iter;
-    if (y >= gtk_text_buffer_get_line_count (m_buffer))
+    if (y >= numLines)
         return -1;
 
     gtk_text_buffer_get_iter_at_line(m_buffer, &iter, y);
-    if (x >= gtk_text_iter_get_chars_in_line (&iter))
+
+    const gint lineLength = gtk_text_iter_get_chars_in_line (&iter);
+    if (x > lineLength)
+    {
+        // This coordinate is always invalid.
         return -1;
+    }
+
+    if (x == lineLength)
+    {
+        // In this case the coordinate is considered to be valid by wx if this
+        // is the last line, as it corresponds to the last position beyond the
+        // last character of the text, and invalid otherwise.
+        if (y != numLines - 1)
+            return -1;
+    }
 
     return gtk_text_iter_get_offset(&iter) + x;
 }
@@ -1408,8 +1465,53 @@ wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
 {
     if ( !IsMultiLine() )
     {
-        // not supported
-        return wxTE_HT_UNKNOWN;
+        // These variables will contain the position inside PangoLayout.
+        int x = pt.x,
+            y = pt.y;
+
+        // Get the offsets of PangoLayout inside the control.
+        //
+        // Note that contrary to what GTK+ documentation implies, the
+        // horizontal offset already accounts for scrolling, i.e. it will be
+        // negative if text is scrolled.
+        gint ofsX = 0,
+             ofsY = 0;
+        gtk_entry_get_layout_offsets(GTK_ENTRY(m_text), &ofsX, &ofsY);
+
+        x -= ofsX;
+        y -= ofsY;
+
+        // And scale the coordinates for Pango.
+        x *= PANGO_SCALE;
+        y *= PANGO_SCALE;
+
+        PangoLayout* const layout = gtk_entry_get_layout(GTK_ENTRY(m_text));
+
+        int idx = -1,
+            ofs = 0;
+        if ( !pango_layout_xy_to_index(layout, x, y, &idx, &ofs) )
+        {
+            // Try to guess why did it fail.
+            if ( x < 0 || y < 0 )
+            {
+                if ( pos )
+                    *pos = 0;
+
+                return wxTE_HT_BEFORE;
+            }
+            else
+            {
+                if ( pos )
+                    *pos = wxTextEntry::GetLastPosition();
+
+                return wxTE_HT_BEYOND;
+            }
+        }
+
+        if ( pos )
+            *pos = idx;
+
+        return wxTE_HT_ON_TEXT;
     }
 
     int x, y;
@@ -1746,8 +1848,13 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     }
     else // have custom attributes
     {
+#ifdef __WXGTK3__
+        style.SetBackgroundColour(*pattr->appearance.rgba[0]);
+        style.SetTextColour(*pattr->appearance.rgba[1]);
+#else
         style.SetBackgroundColour(pattr->appearance.bg_color);
         style.SetTextColour(pattr->appearance.fg_color);
+#endif
 
         const wxGtkString
             pangoFontString(pango_font_description_to_string(pattr->font));
@@ -1769,41 +1876,6 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-#ifdef __WXGTK3__
-    // Preserve selection colors, otherwise the GTK_STATE_FLAG_NORMAL override
-    // will be used, and the selection is invisible
-    const GtkStateFlags selectedFocused =
-        GtkStateFlags(GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
-    // remove any previous override
-    gtk_widget_override_color(m_text, GTK_STATE_FLAG_NORMAL, NULL);
-    gtk_widget_override_color(m_text, selectedFocused, NULL);
-    gtk_widget_override_background_color(m_text, GTK_STATE_FLAG_NORMAL, NULL);
-    gtk_widget_override_background_color(m_text, selectedFocused, NULL);
-    const bool fg_ok = m_foregroundColour.IsOk();
-    const bool bg_ok = m_backgroundColour.IsOk();
-    if (fg_ok || bg_ok)
-    {
-        GdkRGBA *fg_orig, *bg_orig;
-        GtkStyleContext* context = gtk_widget_get_style_context(m_text);
-        gtk_style_context_save(context);
-        if (IsMultiLine())
-            gtk_style_context_add_class(context, GTK_STYLE_CLASS_VIEW);
-        gtk_style_context_set_state(context, selectedFocused);
-        gtk_style_context_get(context, selectedFocused,
-            "color", &fg_orig, "background-color", &bg_orig,
-            NULL);
-        gtk_style_context_restore(context);
-
-        if (fg_ok)
-            gtk_widget_override_color(m_text, selectedFocused, fg_orig);
-        if (bg_ok)
-            gtk_widget_override_background_color(m_text, selectedFocused, bg_orig);
-
-        gdk_rgba_free(fg_orig);
-        gdk_rgba_free(bg_orig);
-    }
-#endif // __WXGTK3__
-
     GTKApplyStyle(m_text, style);
 }
 
@@ -2016,7 +2088,7 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
     SetCursor(wxCursor(wxCURSOR_HAND));
 
     start = end;
-    if(!gtk_text_iter_begins_tag(&start, tag))
+    if (!gtk_text_iter_starts_tag(&start, tag))
         gtk_text_iter_backward_to_tag_toggle(&start, tag);
     if(!gtk_text_iter_ends_tag(&end, tag))
         gtk_text_iter_forward_to_tag_toggle(&end, tag);

@@ -76,10 +76,8 @@ private:
 // CppUnit macros
 // ----------------------------------------------------------------------------
 
-//CPPUNIT_TEST_SUITE_REGISTRATION( InteractiveOutputTestCase );
-    // do not run this test by default!
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( InteractiveOutputTestCase, "InteractiveOutputTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(InteractiveOutputTestCase,
+                               "[!hide][interactive][output]");
 
 // ============================================================================
 // implementation

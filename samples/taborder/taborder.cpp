@@ -134,7 +134,7 @@ public:
                      wxDefaultPosition, wxDefaultSize,
                      flags)
     {
-        Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyTabTextCtrl::OnKeyDown));
+        Bind(wxEVT_KEY_DOWN, &MyTabTextCtrl::OnKeyDown, this);
     }
 
 private:

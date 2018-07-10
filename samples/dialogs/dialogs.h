@@ -28,12 +28,6 @@ of MSW, MAC and OS2
     #define USE_WXUNIVERSAL 0
 #endif
 
-#ifdef WXUSINGDLL
-    #define USE_DLL 1
-#else
-    #define USE_DLL 0
-#endif
-
 #if defined(__WXMSW__)
     #define USE_WXMSW 1
 #else
@@ -58,16 +52,14 @@ of MSW, MAC and OS2
     #define USE_WXGTK 0
 #endif
 
-#define USE_GENERIC_DIALOGS (!USE_WXUNIVERSAL && !USE_DLL)
-
 #define USE_COLOURDLG_GENERIC \
-    ((USE_WXMSW || USE_WXMAC) && USE_GENERIC_DIALOGS && wxUSE_COLOURDLG)
+    ((USE_WXMSW || USE_WXMAC) && USE_WXUNIVERSAL && wxUSE_COLOURDLG)
 #define USE_DIRDLG_GENERIC \
-    ((USE_WXMSW || USE_WXMAC) && USE_GENERIC_DIALOGS && wxUSE_DIRDLG)
+    ((USE_WXMSW || USE_WXMAC) && USE_WXUNIVERSAL && wxUSE_DIRDLG)
 #define USE_FILEDLG_GENERIC \
-    ((USE_WXMSW || USE_WXMAC) && USE_GENERIC_DIALOGS  && wxUSE_FILEDLG)
+    ((USE_WXMSW || USE_WXMAC) && USE_WXUNIVERSAL  && wxUSE_FILEDLG)
 #define USE_FONTDLG_GENERIC \
-    ((USE_WXMSW || USE_WXMACFONTDLG) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
+    ((USE_WXMSW || USE_WXMACFONTDLG) && USE_WXUNIVERSAL && wxUSE_FONTDLG)
 
 // Turn USE_MODAL_PRESENTATION to 0 if there is any reason for not presenting difference
 // between modal and modeless dialogs (ie. not implemented it in your port yet)
@@ -276,6 +268,8 @@ private:
     wxTextCtrl *m_textCheckBox;
     wxCheckBox *m_initialValueCheckBox;
     wxTextCtrl *m_textDetailed;
+    wxTextCtrl *m_textFooter;
+    wxChoice *m_iconsFooter;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -452,6 +446,10 @@ public:
 
 #if wxUSE_PROGRESSDLG
     void ShowProgress(wxCommandEvent& event);
+#ifdef wxHAS_NATIVE_PROGRESSDIALOG
+    void ShowProgressGeneric(wxCommandEvent& event);
+#endif // wxHAS_NATIVE_PROGRESSDIALOG
+    void DoShowProgress(wxGenericProgressDialog& dialog);
 #endif // wxUSE_PROGRESSDLG
     void ShowAppProgress(wxCommandEvent& event);
 
@@ -596,6 +594,7 @@ enum
     DIALOGS_ONTOP,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS,
+    DIALOGS_PROGRESS_GENERIC,
     DIALOGS_APP_PROGRESS,
     DIALOGS_ABOUTDLG_SIMPLE,
     DIALOGS_ABOUTDLG_FANCY,

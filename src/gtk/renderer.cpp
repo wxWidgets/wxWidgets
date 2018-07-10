@@ -37,9 +37,8 @@
 #include "wx/gtk/dc.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/stylecontext.h"
 
 #if defined(__WXGTK3__) && !GTK_CHECK_VERSION(3,14,0)
     #define GTK_STATE_FLAG_CHECKED (1 << 11)
@@ -232,58 +231,18 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 #if GTK_CHECK_VERSION(3,20,0)
     if (gtk_check_version(3,20,0) == NULL)
     {
-        GtkWidgetPath* path = gtk_widget_path_new();
-        GtkStyleContext* parent;
-        GtkStyleContext* sc = gtk_style_context_new();
-
-        gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
-        gtk_widget_path_iter_set_object_name(path, -1, "window");
-        gtk_widget_path_iter_add_class(path, -1, "background");
-        gtk_style_context_set_path(sc, path);
-
-        parent = sc;
-        sc = gtk_style_context_new();
-        gtk_widget_path_append_type(path, GTK_TYPE_TREE_VIEW);
-        gtk_widget_path_iter_set_object_name(path, -1, "treeview");
-        gtk_widget_path_iter_add_class(path, -1, "view");
-        gtk_style_context_set_path(sc, path);
-        gtk_style_context_set_parent(sc, parent);
-        g_object_unref(parent);
-
-        parent = sc;
-        sc = gtk_style_context_new();
-        gtk_widget_path_append_type(path, G_TYPE_NONE);
-        gtk_widget_path_iter_set_object_name(path, -1, "header");
-        gtk_style_context_set_path(sc, path);
-        gtk_style_context_set_parent(sc, parent);
-        g_object_unref(parent);
-
-        parent = sc;
-        sc = gtk_style_context_new();
         int pos = 1;
         if (flags & wxCONTROL_SPECIAL)
             pos = 0;
         if (flags & wxCONTROL_DIRTY)
             pos = 2;
-        GtkWidgetPath* siblings = gtk_widget_path_new();
-        gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
-        gtk_widget_path_iter_set_object_name(siblings, -1, "button");
-        gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
-        gtk_widget_path_iter_set_object_name(siblings, -1, "button");
-        gtk_widget_path_append_type(siblings, GTK_TYPE_BUTTON);
-        gtk_widget_path_iter_set_object_name(siblings, -1, "button");
-        gtk_widget_path_append_with_siblings(path, siblings, pos);
-        gtk_widget_path_unref(siblings);
-        gtk_style_context_set_path(sc, path);
-        gtk_style_context_set_parent(sc, parent);
-        g_object_unref(parent);
-        gtk_widget_path_unref(path);
+
+        wxGtkStyleContext sc;
+        sc.AddTreeviewHeaderButton(pos);
 
         gtk_style_context_set_state(sc, stateTypeToFlags[state]);
         gtk_render_background(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
         gtk_render_frame(sc, cr, rect.x - x_diff, rect.y, rect.width, rect.height);
-
-        g_object_unref(sc);
     }
     else
 #endif
@@ -479,36 +438,14 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
         x_diff = rect.width;
 
 #ifdef __WXGTK3__
-    GtkWidgetPath* path = gtk_widget_path_new();
-    GtkStyleContext* sc = gtk_style_context_new();
-    GtkStyleContext* sc1 = NULL;
-    gtk_widget_path_append_type(path, GTK_TYPE_PANED);
-#if GTK_CHECK_VERSION(3,20,0)
+    wxGtkStyleContext sc;
+    sc.Add(GTK_TYPE_PANED, "paned", "pane-separator", NULL);
     if (gtk_check_version(3,20,0) == NULL)
-    {
-        gtk_widget_path_iter_set_object_name(path, -1, "paned");
-        sc1 = gtk_style_context_new();
-        gtk_style_context_set_path(sc1, path);
-        gtk_widget_path_append_type(path, G_TYPE_NONE);
-        gtk_widget_path_iter_set_object_name(path, -1, "separator");
-        gtk_style_context_set_path(sc, path);
-        gtk_style_context_set_parent(sc, sc1);
-    }
-    else
-#endif
-    {
-        gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PANE_SEPARATOR);
-        gtk_style_context_set_path(sc, path);
-    }
+        sc.Add("separator");
 
     gtk_style_context_set_state(sc,
         flags & wxCONTROL_CURRENT ? GTK_STATE_FLAG_PRELIGHT : GTK_STATE_FLAG_NORMAL);
     gtk_render_handle(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
-
-    gtk_widget_path_unref(path);
-    g_object_unref(sc);
-    if (sc1)
-        g_object_unref(sc1);
 #else
     GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
     if (gdk_window == NULL)
@@ -607,20 +544,11 @@ wxRendererGTK::GetCheckBoxSize(wxWindow *WXUNUSED(win))
 {
 #ifdef __WXGTK3__
     int min_width, min_height;
-    GtkWidgetPath* path = gtk_widget_path_new();
-    GtkStyleContext* sc = gtk_style_context_new();
-    GtkStyleContext* sc1 = NULL;
-    gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
-#if GTK_CHECK_VERSION(3,20,0)
+    wxGtkStyleContext sc;
+    sc.AddCheckButton();
     if (gtk_check_version(3,20,0) == NULL)
     {
-        gtk_widget_path_iter_set_object_name(path, -1, "checkbutton");
-        sc1 = gtk_style_context_new();
-        gtk_style_context_set_path(sc1, path);
-        gtk_widget_path_append_type(path, G_TYPE_NONE);
-        gtk_widget_path_iter_set_object_name(path, -1, "check");
-        gtk_style_context_set_path(sc, path);
-        gtk_style_context_set_parent(sc, sc1);
+        sc.Add("check");
         gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
             "min-width", &min_width, "min-height", &min_height, NULL);
         GtkBorder margin;
@@ -629,9 +557,7 @@ wxRendererGTK::GetCheckBoxSize(wxWindow *WXUNUSED(win))
         min_height += margin.top + margin.bottom;
     }
     else
-#endif
     {
-        gtk_style_context_set_path(sc, path);
         GValue value = G_VALUE_INIT;
         g_value_init(&value, G_TYPE_INT);
         gtk_style_context_get_style_property(sc, "indicator-size", &value);
@@ -641,10 +567,6 @@ wxRendererGTK::GetCheckBoxSize(wxWindow *WXUNUSED(win))
         min_height = min_width;
         g_value_unset(&value);
     }
-    gtk_widget_path_unref(path);
-    g_object_unref(sc);
-    if (sc1)
-        g_object_unref(sc1);
 
     return wxSize(min_width, min_height);
 #else // !__WXGTK3__
@@ -715,27 +637,16 @@ wxRendererGTK::DrawCheckBox(wxWindow* win,
         state |= GTK_STATE_FLAG_PRELIGHT;
 
     int min_width, min_height;
-    GtkWidgetPath* path = gtk_widget_path_new();
-    GtkStyleContext* sc = gtk_style_context_new();
-    GtkStyleContext* sc1 = NULL;
-    gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
-#if GTK_CHECK_VERSION(3,20,0)
+    wxGtkStyleContext sc;
+    sc.AddCheckButton();
     if (gtk_check_version(3,20,0) == NULL)
     {
-        gtk_widget_path_iter_set_object_name(path, -1, "checkbutton");
-        sc1 = gtk_style_context_new();
-        gtk_style_context_set_path(sc1, path);
-        gtk_widget_path_append_type(path, G_TYPE_NONE);
-        gtk_widget_path_iter_set_object_name(path, -1, "check");
-        gtk_style_context_set_path(sc, path);
-        gtk_style_context_set_parent(sc, sc1);
+        sc.Add("check");
         gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
             "min-width", &min_width, "min-height", &min_height, NULL);
     }
     else
-#endif
     {
-        gtk_style_context_set_path(sc, path);
         GValue value = G_VALUE_INIT;
         g_value_init(&value, G_TYPE_INT);
         gtk_style_context_get_style_property(sc, "indicator-size", &value);
@@ -754,11 +665,6 @@ wxRendererGTK::DrawCheckBox(wxWindow* win,
     gtk_style_context_add_class(sc, "check");
     gtk_render_check(sc, cr, x, y, min_width, min_height);
     gtk_style_context_restore(sc);
-
-    gtk_widget_path_unref(path);
-    g_object_unref(sc);
-    if (sc1)
-        g_object_unref(sc1);
 #else
     GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
     if (gdk_window == NULL)
@@ -925,22 +831,12 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
     if (flags & wxCONTROL_DISABLED)
         state = GTK_STATE_FLAG_INSENSITIVE;
 
-    GtkWidgetPath* path = gtk_widget_path_new();
-    GtkStyleContext* sc = gtk_style_context_new();
-    gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
-#if GTK_CHECK_VERSION(3,20,0)
-    if (gtk_check_version(3,20,0) == NULL)
-        gtk_widget_path_iter_set_object_name(path, -1, "entry");
-#endif
-    gtk_widget_path_iter_add_class(path, -1, "entry");
-    gtk_style_context_set_path(sc, path);
+    wxGtkStyleContext sc;
+    sc.Add(GTK_TYPE_ENTRY, "entry", "entry", NULL);
 
     gtk_style_context_set_state(sc, GtkStateFlags(state));
     gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
     gtk_render_frame(sc, drawable, rect.x, rect.y, rect.width, rect.height);
-
-    gtk_widget_path_unref(path);
-    g_object_unref(sc);
 #else
     GtkWidget* entry = wxGTKPrivate::GetTextEntryWidget();
 
@@ -1084,27 +980,18 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect,
         state |= GTK_STATE_FLAG_PRELIGHT;
 
     int min_width, min_height;
-    GtkWidgetPath* path = gtk_widget_path_new();
-    GtkStyleContext* sc = gtk_style_context_new();
-    GtkStyleContext* sc1 = NULL;
-    gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
+    wxGtkStyleContext sc;
+    sc.Add(GTK_TYPE_RADIO_BUTTON, "radiobutton", NULL);
 #if GTK_CHECK_VERSION(3,20,0)
     if (gtk_check_version(3,20,0) == NULL)
     {
-        gtk_widget_path_iter_set_object_name(path, -1, "radiobutton");
-        sc1 = gtk_style_context_new();
-        gtk_style_context_set_path(sc1, path);
-        gtk_widget_path_append_type(path, G_TYPE_NONE);
-        gtk_widget_path_iter_set_object_name(path, -1, "radio");
-        gtk_style_context_set_path(sc, path);
-        gtk_style_context_set_parent(sc, sc1);
+        sc.Add("radio");
         gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
             "min-width", &min_width, "min-height", &min_height, NULL);
     }
     else
 #endif
     {
-        gtk_style_context_set_path(sc, path);
         GValue value = G_VALUE_INIT;
         g_value_init(&value, G_TYPE_INT);
         gtk_style_context_get_style_property(sc, "indicator-size", &value);
@@ -1123,11 +1010,6 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect,
     gtk_style_context_add_class(sc, "radio");
     gtk_render_option(sc, drawable, x, y, min_width, min_height);
     gtk_style_context_restore(sc);
-
-    gtk_widget_path_unref(path);
-    g_object_unref(sc);
-    if (sc1)
-        g_object_unref(sc1);
 #else
     GtkWidget* button = wxGTKPrivate::GetRadioButtonWidget();
 

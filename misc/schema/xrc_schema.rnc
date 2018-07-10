@@ -214,6 +214,7 @@ builtinWindowClasses =
     | wxSlider
     | wxSpinButton
     | wxSpinCtrl
+    | wxSpinCtrlDouble
     | wxSplitterWindow
     | wxSearchCtrl
     | wxStatusBar
@@ -310,6 +311,7 @@ builtinClassesNames =
     | "wxSlider"
     | "wxSpinButton"
     | "wxSpinCtrl"
+    | "wxSpinCtrlDouble"
     | "wxSplitterWindow"
     | "wxSearchCtrl"
     | "wxStatusBar"
@@ -1223,6 +1225,7 @@ wxRadioBox =
                 attribute helptext { t_string }?,
                 attribute enabled  { t_bool }?,
                 attribute hidden   { t_bool }?,
+                attribute label    { t_bool }?,
                 t_text
             }*
         }?
@@ -1410,6 +1413,18 @@ wxSpinCtrl =
         [xrc:p="o"] element min   {_, t_integer }* &
         [xrc:p="o"] element max   {_, t_integer }* &
         [xrc:p="o"] element base  {_, ("10" | "16") }*
+    }
+
+
+wxSpinCtrlDouble =
+    element object {
+        attribute class { "wxSpinCtrlDouble" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element value {_, t_float }* &
+        [xrc:p="o"] element min   {_, t_float }* &
+        [xrc:p="o"] element max   {_, t_float }* &
+        [xrc:p="o"] element inc   {_, t_float}*
     }
 
 
@@ -1864,6 +1879,7 @@ wxStaticBoxSizer_horz =
         stdObjectNodeAttributes &
         stdSizerProperties &
         [xrc:p="important"] element label {_, t_text }* &
+        element windowlabel {windowNode}* &
         [xrc:p="o"] element orient  {_, "wxHORIZONTAL" }* &
         (wxBoxSizer_horz_item | objectRef)*
     }
@@ -1874,6 +1890,7 @@ wxStaticBoxSizer_vert =
         stdObjectNodeAttributes &
         stdSizerProperties &
         [xrc:p="important"] element label {_, t_text }* &
+        element windowlabel {windowNode}* &
         element orient {_, "wxVERTICAL" } &
         (wxBoxSizer_vert_item | objectRef)*
     }

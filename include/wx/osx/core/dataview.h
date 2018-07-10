@@ -63,7 +63,9 @@ public:
   virtual void         Collapse     (wxDataViewItem const& item)                                     = 0; // collapses the passed item in the native control
   virtual void         EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)  = 0; // ensures that the passed item's value in the passed column is visible (column pointer can be NULL)
   virtual unsigned int GetCount     (void) const                                                     = 0; // returns the number of items in the native control
+  virtual int          GetCountPerPage(void) const                                                   = 0; // get number of items that fit into a single page
   virtual wxRect       GetRectangle (wxDataViewItem const& item, wxDataViewColumn const* columnPtr)  = 0; // returns the rectangle that is used by the passed item and column in the native control
+  virtual wxDataViewItem GetTopItem (void) const                                                     = 0; // get top-most visible item
   virtual bool         IsExpanded   (wxDataViewItem const& item) const                               = 0; // checks if the passed item is expanded in the native control
   virtual bool         Reload       (void)                                                           = 0; // clears the native control and reloads all data
   virtual bool         Remove       (wxDataViewItem const& parent, wxDataViewItem const& item)       = 0; // removes an item from the native control

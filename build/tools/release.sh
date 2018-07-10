@@ -37,7 +37,14 @@ trap cleanup INT TERM EXIT
 cleanup
 
 mkdir -p $destdir
-git archive --prefix=$prefix/ HEAD | (cd $destdir; tar x)
+
+# We use GNU tar -i option to allow successfully extracting files from several
+# tar archives concatenated together, without it we'd have to pipe output of
+# each git-archive separately.
+(git archive --prefix=$prefix/ HEAD;
+ git submodule foreach --quiet "cd $root/\$path && git archive --prefix=$prefix/\$path/ HEAD") |
+tar x -C $destdir -i
+
 cd $destdir
 # All setup0.h files are supposed to be renamed to just setup.h when checked
 # out and in the distribution.
@@ -46,7 +53,7 @@ find $prefix/include/wx -type f -name setup0.h | while read f; do
 done
 
 # Compile gettext catalogs.
-make -C $prefix/locale allmo
+make -C $prefix/locale -s MSGFMT=msgfmt allmo
 
 tar cjf $prefix.tar.bz2 $prefix
 

@@ -29,6 +29,8 @@
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
 
+#include "wx/private/jsscriptwrapper.h"
+
 #include <initguid.h>
 #include <wininet.h>
 
@@ -853,25 +855,103 @@ wxString wxWebViewIE::GetPageText() const
     }
 }
 
-void wxWebViewIE::RunScript(const wxString& javascript)
+bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
 {
-    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    // Registry key where emulation level for programs are set
+    static const wxChar* IE_EMULATION_KEY =
+        wxT("SOFTWARE\\Microsoft\\Internet Explorer\\Main")
+        wxT("\\FeatureControl\\FEATURE_BROWSER_EMULATION");
 
-    if(document)
+    wxRegKey key(wxRegKey::HKCU, IE_EMULATION_KEY);
+    if ( !key.Exists() )
     {
-        wxCOMPtr<IHTMLWindow2> window;
-        wxString language = "javascript";
-        HRESULT hr = document->get_parentWindow(&window);
-        if(SUCCEEDED(hr))
+        wxLogWarning(_("Failed to find web view emulation level in the registry"));
+        return false;
+    }
+
+    const wxString programName = wxGetFullModuleName().AfterLast('\\');
+    if ( modernLevel )
+    {
+        // IE8 (8000) is sufficiently modern for our needs, see
+        // https://msdn.microsoft.com/library/ee330730.aspx#browser_emulation
+        // for other values that could be used here.
+        if ( !key.SetValue(programName, 8000) )
         {
-            VARIANT level;
-            VariantInit(&level);
-            V_VT(&level) = VT_EMPTY;
-            window->execScript(wxBasicString(javascript),
-                               wxBasicString(language),
-                               &level);
+            wxLogWarning(_("Failed to set web view to modern emulation level"));
+            return false;
         }
     }
+    else
+    {
+        if ( !key.DeleteValue(programName) )
+        {
+            wxLogWarning(_("Failed to reset web view to standard emulation level"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+static
+bool CallEval(const wxString& code,
+              wxAutomationObject& scriptAO,
+              wxVariant* varResult)
+{
+    wxVariant varCode(code);
+    return scriptAO.Invoke("eval", DISPATCH_METHOD, *varResult, 1, &varCode);
+}
+
+bool wxWebViewIE::RunScript(const wxString& javascript, wxString* output)
+{
+    wxCOMPtr<IHTMLDocument2> document(GetDocument());
+    if ( !document )
+    {
+        wxLogWarning(_("Can't run JavaScript script without a valid HTML document"));
+        return false;
+    }
+
+    IDispatch* scriptDispatch = NULL;
+    if ( FAILED(document->get_Script(&scriptDispatch)) )
+    {
+        wxLogWarning(_("Can't get the JavaScript object"));
+        return false;
+    }
+
+    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+
+    wxAutomationObject scriptAO(scriptDispatch);
+    wxVariant varResult;
+
+    wxString err;
+    if ( !CallEval(wrapJS.GetWrappedCode(), scriptAO, &varResult) )
+    {
+        err = _("failed to evaluate");
+    }
+    else if ( varResult.IsType("bool") && varResult.GetBool() )
+    {
+        if ( output != NULL )
+        {
+            if ( CallEval(wrapJS.GetOutputCode(), scriptAO, &varResult) )
+                *output = varResult.MakeString();
+            else
+                err = _("failed to retrieve execution result");
+        }
+
+        CallEval(wrapJS.GetCleanUpCode(), scriptAO, &varResult);
+    }
+    else // result available but not the expected "true"
+    {
+        err = varResult.MakeString();
+    }
+
+    if ( !err.empty() )
+    {
+        wxLogWarning(_("Error running JavaScript: %s"), varResult.MakeString());
+        return false;
+    }
+
+    return true;
 }
 
 void wxWebViewIE::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)

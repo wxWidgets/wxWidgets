@@ -38,33 +38,54 @@ public:
     /**
         Returns the height of the HTML text in pixels.
 
-        This is important if area height (see wxHtmlDCRenderer::SetSize) is
-        smaller that total height and thus the page cannot fit into it. In that
-        case you're supposed to call Render() as long as its return value is
-        smaller than GetTotalHeight()'s.
+        If the height of the area used with this renderer (see
+        wxHtmlDCRenderer::SetSize) is smaller that total height, the renderer
+        will produce more than one page of output.
 
         @see GetTotalWidth()
     */
     int GetTotalHeight() const;
 
     /**
+        Finds the next page break after the specified (vertical) position.
+
+        An example of using this method:
+
+        @code
+        std::vector<int> pages;
+        for ( int pos = 0; pos != wxNOT_FOUND; pos = renderer.FindNextPageBreak(pos) )
+        {
+            pages.push_back(pos);
+        }
+
+        // "pages" vector now contains all page break positions and, in
+        // particular, its size() returns the number of pages
+        @endcode
+
+        @param pos Absolute position of the last page break. For the initial
+            call of this function, it should be 0 and for the subsequent ones
+            it should be the previous return value.
+        @return Position of the next page break or @c wxNOT_FOUND if there are
+            no more of them.
+
+        @since 3.1.2
+    */
+    int FindNextPageBreak(int pos) const;
+
+    /**
         Renders HTML text to the DC.
+
+        When using multi-page documents, FindNextPageBreak() can be used to
+        find the values for @a from and @a to, which should be the consecutive
+        page breaks returned by that function.
 
         @param x,y
             position of upper-left corner of printing rectangle (see SetSize()).
-        @param known_pagebreaks
-            @todo docme
         @param from
             y-coordinate of the very first visible cell.
-        @param dont_render
-            if @true then this method only returns y coordinate of the next page
-            and does not output anything.
         @param to
-            y-coordinate of the last visible cell.
-
-        Returned value is y coordinate of first cell than didn't fit onto page.
-        Use this value as from in next call to Render() in order to print
-        multipages document.
+            y-coordinate of the last visible cell or @c INT_MAX to use the full
+            page height.
 
         @note
         The following three methods @b must always be called before any call to
@@ -72,11 +93,8 @@ public:
         - SetDC()
         - SetSize()
         - SetHtmlText()
-
-        @note Render() changes the DC's user scale and does NOT restore it.
     */
-    int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
-               int dont_render = false, int to = INT_MAX);
+    void Render(int x, int y, int from = 0, int to = INT_MAX);
 
     /**
         Assign DC instance to the renderer.
@@ -321,6 +339,32 @@ public:
         Sets the parent window for dialogs.
     */
     void SetParentWindow(wxWindow* window);
+
+    /**
+        Controls when the print dialog should be shown.
+
+        @see SetPromptMode()
+
+        @since 3.1.2
+    */
+    enum PromptMode
+    {
+        Prompt_Never,  //!< Do not show the print dialog.
+        Prompt_Once,   //!< Show the print dialog only the first time.
+        Prompt_Always  //!< Show the print dialog every time (default value).
+    };
+
+    /**
+        Enable or disable showing the dialog before printing.
+
+        The prompt mode determines the value of the @c prompt parameter passed
+        to wxPrinter::Print() when it is called by this class.
+
+        Default prompt mode value is Prompt_Always.
+
+        @since 3.1.2
+    */
+    void SetPromptMode(PromptMode promptMode);
 
 private:
     /**

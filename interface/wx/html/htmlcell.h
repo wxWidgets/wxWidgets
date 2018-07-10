@@ -187,34 +187,31 @@ public:
     wxHtmlCell();
 
     /**
-        This method is used to adjust pagebreak position.
-        The first parameter is a variable that contains the y-coordinate of the page break
-        (= horizontal line that should not be crossed by words, images etc.).
-        If this cell cannot be divided into two pieces (each one on another page)
-        then it either moves the pagebreak a few pixels up, if possible, or, if
-        the cell cannot fit on the page at all, then the cell is forced to
-        split unconditionally.
+        This method is called when paginating HTML, e.g.\ when printing.
 
-        Returns @true if pagebreak was modified, @false otherwise.
+        User code should never call this function, but may need to override it
+        in custom HTML cell classes with any specific page breaking
+        requirements.
+
+        On input, @a pagebreak contains y-coordinate of page break (i.e. the
+        horizontal line that should not be crossed by words, images etc.)
+        relative to the parent cell on entry and may be modified to request a
+        page break at a position before it if this cell cannot be divided into
+        two pieces (each one on its own page).
+
+        Note that page break must still happen on the current page, i.e. the
+        returned value must be strictly greater than @code *pagebreak -
+        pageHeight @endcode and less or equal to @c *pagebreak for the value of
+        @a pagebreak on input.
 
         @param pagebreak
-            position in pixel of the pagebreak.
-
-        @param known_pagebreaks
-            the list of the previous pagebreaks
-
+            position in pixels of the pagebreak.
         @param pageHeight
-            the height in pixel of the page drawable area
+            the height in pixels of the page drawable area
 
-        Usage:
-        @code
-        while (container->AdjustPagebreak(&p, kp, ph)) {}
-        @endcode
-
+        @return @true if pagebreak was modified, @false otherwise.
     */
-    virtual bool AdjustPagebreak(int* pagebreak,
-                                 const wxArrayInt& known_pagebreaks,
-                                 int pageHeight) const;
+    virtual bool AdjustPagebreak(int* pagebreak, int pageHeight) const;
 
     /**
         Renders the cell.

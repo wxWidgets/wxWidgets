@@ -75,6 +75,7 @@ public:
     virtual void EnsureVisible(int n) wxOVERRIDE;
 
     virtual int GetTopItem() const wxOVERRIDE;
+    virtual int GetCountPerPage() const wxOVERRIDE;
 
     virtual void Update() wxOVERRIDE;
 

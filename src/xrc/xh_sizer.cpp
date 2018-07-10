@@ -320,14 +320,63 @@ wxSizer*  wxSizerXmlHandler::Handle_wxBoxSizer()
 #if wxUSE_STATBOX
 wxSizer*  wxSizerXmlHandler::Handle_wxStaticBoxSizer()
 {
-    return new wxStaticBoxSizer(
-            new wxStaticBox(m_parentAsWindow,
-                            GetID(),
-                            GetText(wxT("label")),
-                            wxDefaultPosition, wxDefaultSize,
-                            0/*style*/,
-                            GetName()),
-            GetStyle(wxT("orient"), wxHORIZONTAL));
+    wxXmlNode* nodeWindowLabel = GetParamNode(wxS("windowlabel"));
+    wxString const& labelText = GetText(wxS("label"));
+
+    wxStaticBox* box = NULL;
+    if ( nodeWindowLabel )
+    {
+        if ( !labelText.empty() )
+        {
+            ReportError("Either label or windowlabel can be used, but not both");
+            return NULL;
+        }
+
+#ifdef wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+        wxXmlNode* n = nodeWindowLabel->GetChildren();
+        if ( !n )
+        {
+            ReportError("windowlabel must have a window child");
+            return NULL;
+        }
+
+        if ( n->GetNext() )
+        {
+            ReportError("windowlabel can only have a single child");
+            return NULL;
+        }
+
+        wxObject* const item = CreateResFromNode(n, m_parent, NULL);
+        wxWindow* const wndLabel = wxDynamicCast(item, wxWindow);
+        if ( !wndLabel )
+        {
+            ReportError(n, "windowlabel child must be a window");
+            return NULL;
+        }
+
+        box = new wxStaticBox(m_parentAsWindow,
+                              GetID(),
+                              wndLabel,
+                              wxDefaultPosition, wxDefaultSize,
+                              0/*style*/,
+                              GetName());
+#else // !wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+        ReportError("Support for using windows as wxStaticBox labels is "
+                    "missing in this build of wxWidgets.");
+        return NULL;
+#endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX/!wxHAS_WINDOW_LABEL_IN_STATIC_BOX
+    }
+    else // Using plain text label.
+    {
+        box = new wxStaticBox(m_parentAsWindow,
+                              GetID(),
+                              labelText,
+                              wxDefaultPosition, wxDefaultSize,
+                              0/*style*/,
+                              GetName());
+    }
+
+    return new wxStaticBoxSizer(box, GetStyle(wxS("orient"), wxHORIZONTAL));
 }
 #endif // wxUSE_STATBOX
 

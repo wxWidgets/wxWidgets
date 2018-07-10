@@ -22,7 +22,7 @@
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
-#define cairo_public 
+#define cairo_public
 
 #include <cairo.h>
 #include <float.h>
@@ -83,11 +83,12 @@ using namespace std;
 #endif
 
 #ifdef __WXGTK__
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 #include "wx/fontutil.h"
 #ifndef __WXGTK3__
 #include "wx/gtk/dc.h"
 #endif
+#include "wx/gtk/private/object.h"
 #endif
 
 #ifdef __WXQT__
@@ -290,7 +291,7 @@ public:
     void Init();
 
     virtual void Apply( wxGraphicsContext* context ) wxOVERRIDE;
-    virtual wxDouble GetWidth() { return m_width; }
+    wxDouble GetWidth() { return m_width; }
 
 private :
     double m_width;
@@ -319,7 +320,7 @@ public:
                                    const wxGraphicsGradientStops& stops);
 
 protected:
-    virtual void Init();
+    void Init();
 
     // common part of Create{Linear,Radial}GradientBrush()
     void AddGradientStops(const wxGraphicsGradientStops& stops);
@@ -336,7 +337,7 @@ public:
                     const wxColour& col);
     ~wxCairoFontData();
 
-    virtual bool Apply( wxGraphicsContext* context );
+    void Apply( wxGraphicsContext* context );
 #ifdef __WXGTK__
     const wxFont& GetFont() const { return m_wxfont; }
 #endif
@@ -382,10 +383,10 @@ public:
     wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap );
     ~wxCairoBitmapData();
 
-    virtual cairo_surface_t* GetCairoSurface() { return m_surface; }
-    virtual cairo_pattern_t* GetCairoPattern() { return m_pattern; }
-    virtual void* GetNativeBitmap() const wxOVERRIDE { return m_surface; }
-    virtual wxSize GetSize() { return wxSize(m_width, m_height); }
+    cairo_surface_t* GetCairoSurface() { return m_surface; }
+    cairo_pattern_t* GetCairoPattern() { return m_pattern; }
+    void* GetNativeBitmap() const wxOVERRIDE { return m_surface; }
+    wxSize GetSize() { return wxSize(m_width, m_height); }
 
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
@@ -439,7 +440,7 @@ public:
     {
         if ( !m_enableOffset )
             return false;
-        
+
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -477,7 +478,7 @@ public:
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) wxOVERRIDE;
     virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
     virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
-    
+
     virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
     virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
     virtual void Rotate( wxDouble angle ) wxOVERRIDE;
@@ -1012,6 +1013,10 @@ wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
                                  int flags,
                                  const wxColour& col) :
     wxGraphicsObjectRefData(renderer)
+#ifdef __WXGTK__
+    , m_wxfont(wxFontInfo(wxSize(sizeInPixels, sizeInPixels))
+                .AllFlags(flags).FaceName(facename))
+#endif
 {
     InitColour(col);
 
@@ -1045,7 +1050,7 @@ wxCairoFontData::~wxCairoFontData()
 #endif
 }
 
-bool wxCairoFontData::Apply( wxGraphicsContext* context )
+void wxCairoFontData::Apply( wxGraphicsContext* context )
 {
     cairo_t * ctext = (cairo_t*) context->GetNativeContext();
     cairo_set_source_rgba(ctext,m_red,m_green, m_blue,m_alpha);
@@ -1054,14 +1059,14 @@ bool wxCairoFontData::Apply( wxGraphicsContext* context )
     {
         // Nothing to do, the caller uses Pango layout functions to do
         // everything.
-        return true;
+        return;
     }
 #elif defined(__WXMAC__)
     if ( m_font )
     {
         cairo_set_font_face(ctext, m_font);
         cairo_set_font_size(ctext, m_size );
-        return true;
+        return;
     }
 #endif
 
@@ -1069,10 +1074,6 @@ bool wxCairoFontData::Apply( wxGraphicsContext* context )
     // we're using toy Cairo API even under wxGTK/wxMac.
     cairo_select_font_face(ctext, m_fontName, m_slant, m_weight );
     cairo_set_font_size(ctext, m_size );
-
-    // Indicate that we don't use native fonts for the platforms which care
-    // about this (currently only wxGTK).
-    return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -1543,7 +1544,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     }
 
 #if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
-    // if there is a mask, set the alpha bytes in the target buffer to 
+    // if there is a mask, set the alpha bytes in the target buffer to
     // fully transparent or fully opaque
 #if defined(__WXMSW__)
     if (bmp.GetMask() != NULL && !bmp.HasAlpha())
@@ -1781,7 +1782,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 : wxGraphicsContext(renderer)
 {
 #ifdef __WXMSW__
-    // wxMSW contexts always use MM_ANISOTROPIC, which messes up 
+    // wxMSW contexts always use MM_ANISOTROPIC, which messes up
     // text rendering when printing using Cairo. Switch it to MM_TEXT
     // map mode to avoid this problem.
     HDC hdc = (HDC)dc.GetHDC();
@@ -2044,7 +2045,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     if ( adjustTransformFromDC )
         ApplyTransformFromDC(dc);
 #endif // __WXMSW__
-    
+
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
@@ -2407,10 +2408,21 @@ void wxCairoContext::ResetClip()
 void wxCairoContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
 {
     double x1, y1, x2, y2;
-    cairo_clip_extents(m_context, &x1, &y1, &x2, &y2);
-    // Check if we have an empty clipping box.
-    if ( x2 - x1 <= DBL_MIN || y2 - y1 <= DBL_MIN )
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
+    if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 4, 0) )
+    {
+        cairo_clip_extents(m_context, &x1, &y1, &x2, &y2);
+        // Check if we have an empty clipping box.
+        if ( x2 - x1 <= DBL_MIN || y2 - y1 <= DBL_MIN )
+            x1 = x2 = y1 = y2 = 0.0;
+    }
+    else
+#endif // Cairo >= 1.4
+    {
+        // There doesn't seem to be any way to get the clipping box with this
+        // ancient version.
         x1 = x2 = y1 = y2 = 0.0;
+    }
 
     if ( x )
         *x = x1;
@@ -2602,11 +2614,16 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     if ( !data )
         return;
 
-    if ( ((wxCairoFontData*)m_font.GetRefData())->Apply(this) )
-    {
+    wxCairoFontData* const
+        fontData = static_cast<wxCairoFontData*>(m_font.GetRefData());
+
+    fontData->Apply(this);
+
 #ifdef __WXGTK__
-        PangoLayout *layout = pango_cairo_create_layout (m_context);
-        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
+    const wxFont& font = fontData->GetFont();
+    if ( font.IsOk() )
+    {
+        wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
         font.GTKSetPangoAttrs(layout);
@@ -2614,12 +2631,10 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
         cairo_move_to(m_context, x, y);
         pango_cairo_show_layout (m_context, layout);
 
-        g_object_unref (layout);
-
         // Don't use Cairo text API, we already did everything.
         return;
-#endif
     }
+#endif // __WXGTK__
 
     // Cairo's x,y for drawing text is at the baseline, so we need to adjust
     // the position we move to by the ascent.
@@ -2644,16 +2659,26 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     if ( externalLeading )
         *externalLeading = 0;
 
-    if ( str.empty())
+    // We can skip computing the string width and height if it is empty, but
+    // not its descent and/or external leading, which still needs to be
+    // returned even for an empty string.
+    if ( str.empty() && !descent && !externalLeading )
         return;
 
-    if ( ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this) )
-    {
+    wxCairoFontData* const
+        fontData = static_cast<wxCairoFontData*>(m_font.GetRefData());
+
 #ifdef __WXGTK__
+    // Use Pango instead of Cairo toy font API if we have the font.
+    const wxFont& font = fontData->GetFont();
+    if ( font.IsOk() )
+    {
+        // Note that there is no need to call Apply() at all in this case, it
+        // just sets the text colour, but we don't care about this when
+        // measuring its extent.
         int w, h;
 
-        PangoLayout *layout = pango_cairo_create_layout (m_context);
-        const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
+        wxGtkObject<PangoLayout> layout(pango_cairo_create_layout (m_context));
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         const wxCharBuffer data = str.utf8_str();
         if ( !data )
@@ -2673,10 +2698,11 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
             pango_layout_iter_free(iter);
             *descent = h - PANGO_PIXELS(baseline);
         }
-        g_object_unref (layout);
         return;
-#endif
     }
+#endif // __WXGTK__
+
+    fontData->Apply(const_cast<wxCairoContext*>(this));
 
     if (width)
     {
@@ -2720,7 +2746,7 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
     int w = 0;
     if (data.length())
     {
-        PangoLayout* layout = pango_cairo_create_layout(m_context);
+        wxGtkObject<PangoLayout> layout(pango_cairo_create_layout(m_context));
         const wxFont& font = static_cast<wxCairoFontData*>(m_font.GetRefData())->GetFont();
         pango_layout_set_font_description(layout, font.GetNativeFontInfo()->description);
         pango_layout_set_text(layout, data, data.length());
@@ -2732,7 +2758,6 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
             widths.Add(PANGO_PIXELS(w));
         } while (pango_layout_iter_next_cluster(iter));
         pango_layout_iter_free(iter);
-        g_object_unref(layout);
     }
     size_t i = widths.GetCount();
     const size_t len = text.length();

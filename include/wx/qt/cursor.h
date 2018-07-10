@@ -10,13 +10,12 @@
 
 #include "wx/image.h"
 
-#include <QtGui/QCursor>
+class QCursor;
 
 class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 {
 public:
     wxCursor() { }
-    wxCursor( const wxCursor & );
     wxCursor(wxStockCursor id) { InitFromStock(id); }
 #if WXWIN_COMPATIBILITY_2_8
     wxCursor(int id) { InitFromStock((wxStockCursor)id); }
@@ -28,15 +27,17 @@ public:
              int hotSpotX = 0, int hotSpotY = 0);
 #endif
 
-    QCursor m_qtCursor;
-
+    virtual wxPoint GetHotSpot() const;
+    QCursor &GetHandle() const;
+    
 protected:
     void InitFromStock( wxStockCursor cursorId );
 #if wxUSE_IMAGE
     void InitFromImage( const wxImage & image );
 #endif
 
-protected:
+private:
+    void Init();
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 

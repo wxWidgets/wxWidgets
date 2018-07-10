@@ -552,8 +552,10 @@ void VsnprintfTestCase::DoMisc(
     std::string errMsg(errStr.mb_str());
     std::string overflowMsg(overflowStr.mb_str());
 
-    CPPUNIT_ASSERT_MESSAGE(errMsg,
-            (expectedLen == -1 && size_t(n) >= max) || expectedLen == n);
+    if ( size_t(n) < max )
+        CPPUNIT_ASSERT_MESSAGE(errMsg, expectedLen == n);
+    else
+        CPPUNIT_ASSERT_MESSAGE(errMsg, expectedLen == -1);
 
     CPPUNIT_ASSERT_MESSAGE(errMsg, expectedString == buf);
 

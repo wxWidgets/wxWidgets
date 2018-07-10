@@ -69,17 +69,16 @@ void XLocaleTestCase::TestCtor()
     CPPUNIT_ASSERT( wxXLocale("C").IsOk() );
     CPPUNIT_ASSERT( !wxXLocale("bloordyblop").IsOk() );
 
-    if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
-        return;     // you should have french support installed to continue this test!
-
 #ifdef wxHAS_XLOCALE_SUPPORT
-    CPPUNIT_ASSERT( wxXLocale(wxLANGUAGE_FRENCH).IsOk() );
+    if ( wxXLocale(wxLANGUAGE_FRENCH).IsOk() )
+    {
 #ifdef __WINDOWS__
-    CPPUNIT_ASSERT( wxXLocale("french").IsOk() );
+        CPPUNIT_ASSERT( wxXLocale("french").IsOk() );
 #else
-    CPPUNIT_ASSERT( wxXLocale("fr_FR").IsOk() );
+        CPPUNIT_ASSERT( wxXLocale("fr_FR").IsOk() );
 #endif
-#endif
+    }
+#endif // wxHAS_XLOCALE_SUPPORT
 }
 
 void XLocaleTestCase::PreserveLocale()
@@ -225,97 +224,99 @@ void XLocaleTestCase::TestStdlibFunctionsWith(const wxXLocale& loc)
 
 void XLocaleTestCase::TestCtypeFunctions()
 {
-    TestCtypeFunctionsWith(wxCLocale);
+    SECTION("C")
+    {
+        TestCtypeFunctionsWith(wxCLocale);
+    }
 
 #ifdef wxHAS_XLOCALE_SUPPORT
+    SECTION("French")
+    {
+        wxXLocale locFR(wxLANGUAGE_FRENCH);
+        if ( !locFR.IsOk() )
+        {
+            // Not an error, not all systems have French locale support.
+            return;
+        }
 
-    // french
+        TestCtypeFunctionsWith(locFR);
 
-    if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
-        return;     // you should have french support installed to continue this test!
+        CPPUNIT_ASSERT( wxIsalpha_l(wxT('\xe9'), locFR) );
+        CPPUNIT_ASSERT( wxIslower_l(wxT('\xe9'), locFR) );
+        CPPUNIT_ASSERT( !wxIslower_l(wxT('\xc9'), locFR) );
+        CPPUNIT_ASSERT( wxIsupper_l(wxT('\xc9'), locFR) );
+        CPPUNIT_ASSERT( wxIsalpha_l(wxT('\xe7'), locFR) );
+        CPPUNIT_ASSERT( wxIslower_l(wxT('\xe7'), locFR) );
+        CPPUNIT_ASSERT( wxIsupper_l(wxT('\xc7'), locFR) );
+    }
 
-    wxXLocale locFR(wxLANGUAGE_FRENCH);
-    CPPUNIT_ASSERT( locFR.IsOk() ); // doesn't make sense to continue otherwise
+    SECTION("Italian")
+    {
+        wxXLocale locIT(wxLANGUAGE_ITALIAN);
+        if ( !locIT.IsOk() )
+            return;
 
-    TestCtypeFunctionsWith(locFR);
+        TestCtypeFunctionsWith(locIT);
 
-    CPPUNIT_ASSERT( wxIsalpha_l(wxT('\xe9'), locFR) );
-    CPPUNIT_ASSERT( wxIslower_l(wxT('\xe9'), locFR) );
-    CPPUNIT_ASSERT( !wxIslower_l(wxT('\xc9'), locFR) );
-    CPPUNIT_ASSERT( wxIsupper_l(wxT('\xc9'), locFR) );
-    CPPUNIT_ASSERT( wxIsalpha_l(wxT('\xe7'), locFR) );
-    CPPUNIT_ASSERT( wxIslower_l(wxT('\xe7'), locFR) );
-    CPPUNIT_ASSERT( wxIsupper_l(wxT('\xc7'), locFR) );
-
-
-    // italian
-
-    if (!wxLocale::IsAvailable(wxLANGUAGE_ITALIAN))
-        return;     // you should have italian support installed to continue this test!
-
-    wxXLocale locIT(wxLANGUAGE_ITALIAN);
-    CPPUNIT_ASSERT( locIT.IsOk() ); // doesn't make sense to continue otherwise
-
-    TestCtypeFunctionsWith(locIT);
-
-    CPPUNIT_ASSERT( wxIsalpha_l(wxT('\xe1'), locIT) );
-    CPPUNIT_ASSERT( wxIslower_l(wxT('\xe1'), locIT) );
-#endif
+        CPPUNIT_ASSERT( wxIsalpha_l(wxT('\xe1'), locIT) );
+        CPPUNIT_ASSERT( wxIslower_l(wxT('\xe1'), locIT) );
+    }
+#endif // wxHAS_XLOCALE_SUPPORT
 }
 
 void XLocaleTestCase::TestStdlibFunctions()
 {
-    TestStdlibFunctionsWith(wxCLocale);
+    SECTION("C")
+    {
+        TestStdlibFunctionsWith(wxCLocale);
 
 #if wxUSE_UNICODE
-    wchar_t* endptr;
+        wchar_t* endptr;
 #else
-    char* endptr;
+        char* endptr;
 #endif
 
-    // strtod checks specific for C locale
-    endptr = NULL;
-    CPPUNIT_ASSERT_EQUAL( 0.0,        wxStrtod_l(wxT("0.000"), NULL, wxCLocale) );
-    CPPUNIT_ASSERT_EQUAL( 1.234,      wxStrtod_l(wxT("1.234"), NULL, wxCLocale) );
-    CPPUNIT_ASSERT_EQUAL( -1.234E-5,  wxStrtod_l(wxT("-1.234E-5"), NULL, wxCLocale) );
-    CPPUNIT_ASSERT_EQUAL( 365.24,     wxStrtod_l(wxT("365.24 29.53"), &endptr, wxCLocale) );
-    CPPUNIT_ASSERT_EQUAL( 29.53,      wxStrtod_l(endptr, NULL, wxCLocale) );
+        // strtod checks specific for C locale
+        endptr = NULL;
+        CPPUNIT_ASSERT_EQUAL( 0.0,        wxStrtod_l(wxT("0.000"), NULL, wxCLocale) );
+        CPPUNIT_ASSERT_EQUAL( 1.234,      wxStrtod_l(wxT("1.234"), NULL, wxCLocale) );
+        CPPUNIT_ASSERT_EQUAL( -1.234E-5,  wxStrtod_l(wxT("-1.234E-5"), NULL, wxCLocale) );
+        CPPUNIT_ASSERT_EQUAL( 365.24,     wxStrtod_l(wxT("365.24 29.53"), &endptr, wxCLocale) );
+        CPPUNIT_ASSERT_EQUAL( 29.53,      wxStrtod_l(endptr, NULL, wxCLocale) );
+    }
 
 #ifdef wxHAS_XLOCALE_SUPPORT
+    SECTION("French")
+    {
+        wxXLocale locFR(wxLANGUAGE_FRENCH);
+        if ( !locFR.IsOk() )
+            return;
 
-    // french
+        TestCtypeFunctionsWith(locFR);
 
-    if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
-        return;     // you should have french support installed to continue this test!
+        // comma as decimal point:
+        CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), NULL, locFR) );
 
-    wxXLocale locFR(wxLANGUAGE_FRENCH);
-    CPPUNIT_ASSERT( locFR.IsOk() ); // doesn't make sense to continue otherwise
-
-    TestCtypeFunctionsWith(locFR);
-
-    // comma as decimal point:
-    CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), NULL, locFR) );
-
-    // space as thousands separator is not recognized by wxStrtod_l():
-    CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1 234,5"), NULL, locFR) );
+        // space as thousands separator is not recognized by wxStrtod_l():
+        CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1 234,5"), NULL, locFR) );
+    }
 
 
-    // italian
+    SECTION("Italian")
+    {
+        wxXLocale locIT(wxLANGUAGE_ITALIAN);
+        if ( !locIT.IsOk() )
+            return;
 
-    if (!wxLocale::IsAvailable(wxLANGUAGE_ITALIAN))
-        return;     // you should have italian support installed to continue this test!
+        TestStdlibFunctionsWith(locIT);
 
-    wxXLocale locIT(wxLANGUAGE_ITALIAN);
-    CPPUNIT_ASSERT( locIT.IsOk() ); // doesn't make sense to continue otherwise
+        // comma as decimal point:
+        CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), NULL, locIT) );
 
-    TestStdlibFunctionsWith(locIT);
-
-    // comma as decimal point:
-    CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), NULL, locIT) );
-
-    // dot as thousands separator is not recognized by wxStrtod_l():
-    CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1.234,5"), NULL, locIT) );
-#endif
+        // dot as thousands separator is not recognized by wxStrtod_l():
+        CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1.234,5"), NULL, locIT) );
+    }
+#endif // wxHAS_XLOCALE_SUPPORT
 }
 
 #endif // wxUSE_XLOCALE

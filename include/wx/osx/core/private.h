@@ -125,6 +125,8 @@ class wxComboBox;
 class wxNotebook;
 class wxTextCtrl;
 class wxSearchCtrl;
+class wxMenuItem;
+class wxAcceleratorEntry;
 
 WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 
@@ -196,7 +198,7 @@ public :
 protected :
     wxMenu* m_peer;
 
-    wxDECLARE_ABSTRACT_CLASS(wxMenuItemImpl);
+    wxDECLARE_ABSTRACT_CLASS(wxMenuImpl);
 } ;
 #endif
 
@@ -323,6 +325,8 @@ public :
     virtual bool        ButtonClickDidStateChange() = 0;
 
     virtual void        InstallEventHandler( WXWidget control = NULL ) = 0;
+
+    virtual bool        EnableTouchEvents(int eventsMask) = 0;
 
     // Mechanism used to keep track of whether a change should send an event
     // Do SendEvents(false) when starting actions that would trigger programmatic events
@@ -613,6 +617,7 @@ public:
 
     virtual void            ListScrollTo( unsigned int n ) = 0;
     virtual int             ListGetTopItem() const = 0;
+    virtual int             ListGetCountPerPage() const = 0;
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) = 0;
     virtual void            UpdateLineToEnd( unsigned int n) = 0;
 
@@ -695,6 +700,7 @@ public :
     virtual wxSize GetBestSize() const { return wxDefaultSize; }
 
     virtual bool SetHint(const wxString& WXUNUSED(hint)) { return false; }
+    virtual void SetJustification();
 private:
     wxTextEntry * const m_entry;
 

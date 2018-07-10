@@ -10,6 +10,8 @@
 
 #include "wx/checklst.h"
 
+#include <QtWidgets/QListWidgetItem>
+
 wxCheckListBox::wxCheckListBox()
 {
 }

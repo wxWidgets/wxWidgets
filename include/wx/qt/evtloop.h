@@ -8,7 +8,7 @@
 #ifndef _WX_QT_EVTLOOP_H_
 #define _WX_QT_EVTLOOP_H_
 
-#include <QtCore/QTimer>
+class QTimer;
 
 class WXDLLIMPEXP_BASE wxQtEventLoopBase : public wxEventLoopBase
 {
@@ -57,22 +57,5 @@ public:
 #endif // wxUSE_CONSOLE_EVENTLOOP
 
 #endif // wxUSE_GUI
-
-
-class wxQtEventLoopBase;
-
-class wxQtIdleTimer : public QTimer
-{
-
-public:
-    wxQtIdleTimer( wxQtEventLoopBase *eventLoop );
-    virtual bool eventFilter( QObject * watched, QEvent * event  );
-
-private:
-    void idle();
-
-private:
-    wxQtEventLoopBase *m_eventLoop;
-};
 
 #endif // _WX_QT_EVTLOOP_H_

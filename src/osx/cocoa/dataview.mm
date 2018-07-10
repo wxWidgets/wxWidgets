@@ -1881,6 +1881,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_REORDERED, dvc, col);
+    event.SetColumn(newColumnPosition);
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -2033,8 +2034,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
         [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]
       ),
       m_DataSource(NULL),
-      m_OutlineView([[wxCocoaOutlineView alloc] init]),
-      m_removeIndentIfNecessary(false)
+      m_OutlineView([[wxCocoaOutlineView alloc] init])
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
@@ -2089,6 +2089,8 @@ bool wxCocoaDataViewControl::ClearColumns()
     // columns cannot be deleted if there is an outline column in the view;
     // therefore, the whole view is deleted and newly constructed:
     RemoveAssociation(m_OutlineView); // undo InitOutlineView's association
+
+    [m_OutlineView removeFromSuperviewWithoutNeedingDisplay];
     [m_OutlineView release];
     m_OutlineView = [[wxCocoaOutlineView alloc] init];
     [((NSScrollView*) GetWXWidget()) setDocumentView:m_OutlineView];
@@ -2311,6 +2313,27 @@ unsigned int wxCocoaDataViewControl::GetCount() const
     return [m_OutlineView numberOfRows];
 }
 
+int wxCocoaDataViewControl::GetCountPerPage() const
+{
+    NSScrollView *scrollView = [m_OutlineView enclosingScrollView];
+    NSTableHeaderView *headerView = [m_OutlineView headerView];
+    NSRect visibleRect = scrollView.contentView.visibleRect;
+    if ( headerView )
+        visibleRect.size.height -= headerView.visibleRect.size.height;
+    return (int) (visibleRect.size.height / [m_OutlineView rowHeight]);
+}
+
+wxDataViewItem wxCocoaDataViewControl::GetTopItem() const
+{
+    NSScrollView *scrollView = [m_OutlineView enclosingScrollView];
+    NSTableHeaderView *headerView = [m_OutlineView headerView];
+    NSRect visibleRect = scrollView.contentView.visibleRect;
+    if ( headerView )
+        visibleRect.origin.y += headerView.visibleRect.size.height;
+    NSRange range = [m_OutlineView rowsInRect:visibleRect];
+    return wxDataViewItem([[m_OutlineView itemAtRow:range.location] pointer]);
+}
+
 wxRect wxCocoaDataViewControl::GetRectangle(const wxDataViewItem& item, const wxDataViewColumn *columnPtr)
 {
     return wxFromNSRect([m_osxView superview],[m_OutlineView frameOfCellAtColumn:GetColumnPosition(columnPtr)
@@ -2385,11 +2408,13 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
         m_DataSource = NULL;
     [m_OutlineView setDataSource:m_DataSource]; // if there is a data source the data is immediately going to be requested
 
-    // Set this to true to check if we need to remove the indent in the next
-    // OnSize() call: we can't do it directly here because the model might not
-    // be fully initialized yet and so might not know whether it has any items
-    // with children or not.
-    m_removeIndentIfNecessary = true;
+    // By default, the first column is indented to leave enough place for the
+    // expanders, but this looks bad if there are no expanders, so don't use
+    // indent in this case.
+    if ( model && model->IsListModel() )
+    {
+        DoSetIndent(0);
+    }
 
     return true;
 }
@@ -2554,21 +2579,6 @@ void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), 
 
 void wxCocoaDataViewControl::OnSize()
 {
-    if ( m_removeIndentIfNecessary )
-    {
-        m_removeIndentIfNecessary = false;
-
-        const wxDataViewModel* const model = GetDataViewCtrl()->GetModel();
-
-        // By default, the first column is indented to leave enough place for the
-        // expanders, but this looks bad if there are no expanders, so don't use
-        // indent in this case.
-        if ( model && model->IsListModel() )
-        {
-            DoSetIndent(0);
-        }
-    }
-
     if ([m_OutlineView numberOfColumns] == 1)
         [m_OutlineView sizeLastColumnToFit];
 }
@@ -2888,12 +2898,6 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 
 void wxDataViewRenderer::SetEnabled(bool enabled)
 {
-    // setting the appearance to disabled grey should only be done for
-    // the active cells which are disabled, not for the cells which can
-    // never be edited at all
-    if ( GetMode() == wxDATAVIEW_CELL_INERT )
-        enabled = true;
-
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
@@ -3062,7 +3066,7 @@ wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
                                                    wxDataViewCellMode mode,
                                                    int alignment)
-    : wxDataViewRenderer(wxT("string"), mode, alignment),
+    : wxOSXDataViewDisabledInertRenderer(wxT("string"), mode, alignment),
       m_choices(choices)
 {
     NSPopUpButtonCell* cell;
@@ -3309,7 +3313,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer);
 wxDataViewToggleRenderer::wxDataViewToggleRenderer(const wxString& varianttype,
                                                    wxDataViewCellMode mode,
                                                    int align)
-    : wxDataViewRenderer(varianttype,mode)
+    : wxOSXDataViewDisabledInertRenderer(varianttype, mode, align)
 {
     NSButtonCell* cell;
 
@@ -3449,7 +3453,7 @@ void wxDataViewColumn::SetBitmap(const wxBitmap& bitmap)
 {
     // bitmaps and titles cannot exist at the same time - if the bitmap is set
     // the title is removed:
-    m_title = wxEmptyString;
+    m_title.clear();
     wxDataViewColumnBase::SetBitmap(bitmap);
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:bitmap.GetNSImage()];
 }
@@ -3504,23 +3508,27 @@ void wxDataViewColumn::SetSortable(bool sortable)
 
 void wxDataViewColumn::SetSortOrder(bool ascending)
 {
-    if (m_ascending != ascending)
+    NSTableColumn* const tableColumn = m_NativeDataPtr->GetNativeColumnPtr();
+    NSTableView* tableView = [tableColumn tableView];
+
+    wxCHECK_RET( tableView, wxS("Column has to be associated with a table view when the sorting order is set") );
+
+    if ( (m_ascending != ascending) || ([tableColumn sortDescriptorPrototype] == nil) )
     {
         m_ascending = ascending;
-        if (IsSortKey())
-        {
-            // change sorting order:
-            NSArray*          sortDescriptors;
-            NSSortDescriptor* sortDescriptor;
-            NSTableColumn*    tableColumn;
 
-            tableColumn     = m_NativeDataPtr->GetNativeColumnPtr();
-            sortDescriptor  = [[NSSortDescriptor alloc] initWithKey:[[tableColumn sortDescriptorPrototype] key] ascending:m_ascending];
-            sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-            [tableColumn setSortDescriptorPrototype:sortDescriptor];
-            [[tableColumn tableView] setSortDescriptors:sortDescriptors];
-            [sortDescriptor release];
-        }
+        // change sorting order for the native implementation (this will
+        // trigger a call to outlineView:sortDescriptorsDidChange: where the
+        // wxWidget's sort descriptors are going to be set):
+        NSSortDescriptor* const
+            sortDescriptor = [[NSSortDescriptor alloc]
+                                initWithKey:[NSString stringWithFormat:@"%ld",(long)[tableView columnWithIdentifier:[tableColumn identifier]]]
+                                ascending:m_ascending];
+
+        NSArray* sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+        [tableColumn setSortDescriptorPrototype:sortDescriptor];
+        [tableView setSortDescriptors:sortDescriptors];
+        [sortDescriptor release];
     }
 }
 

@@ -327,7 +327,7 @@ void wxNotificationMessageWindow::AddVisibleNotification(wxNotificationMessageWi
 {
     bool found = false;
     for ( wxVector<wxNotificationMessageWindow*>::iterator it = ms_visibleNotifications.begin();
-        it != ms_visibleNotifications.end(); it++ )
+        it != ms_visibleNotifications.end(); ++it )
     {
         if ( *it == notif )
         {
@@ -345,7 +345,7 @@ void wxNotificationMessageWindow::AddVisibleNotification(wxNotificationMessageWi
 void wxNotificationMessageWindow::RemoveVisibleNotification(wxNotificationMessageWindow* notif)
 {
     for ( wxVector<wxNotificationMessageWindow*>::iterator it = ms_visibleNotifications.begin();
-        it != ms_visibleNotifications.end(); it++ )
+        it != ms_visibleNotifications.end(); ++it )
     {
         if ( *it == notif )
         {

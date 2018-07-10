@@ -18,44 +18,18 @@
 
 #include "wx/filefn.h"
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class PathListTestCase : public CppUnit::TestCase
-{
-public:
-    PathListTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( PathListTestCase );
-        CPPUNIT_TEST( FindValidPath );
-    CPPUNIT_TEST_SUITE_END();
-
-    void FindValidPath();
-
-    wxDECLARE_NO_COPY_CLASS(PathListTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( PathListTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( PathListTestCase, "PathListTestCase" );
-
-void PathListTestCase::FindValidPath()
+TEST_CASE("wxPathList::FindValidPath", "[file][path]")
 {
 #ifdef __UNIX__
-    #define CMD_IN_PATH wxT("ls")
+    #define CMD_IN_PATH "ls"
 #else
-    #define CMD_IN_PATH wxT("cmd.exe")
+    #define CMD_IN_PATH "cmd.exe"
 #endif
 
     wxPathList pathlist;
     pathlist.AddEnvList(wxT("PATH"));
     
     wxString path = pathlist.FindValidPath(CMD_IN_PATH);
-    CPPUNIT_ASSERT( !path.empty() );
+    INFO( CMD_IN_PATH " not found in " << wxGetenv("PATH") );
+    CHECK( !path.empty() );
 }
-
-

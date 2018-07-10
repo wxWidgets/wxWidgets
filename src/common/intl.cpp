@@ -208,12 +208,17 @@ wxString wxLanguageInfo::GetLocaleName() const
     const char* const orig = wxSetlocale(LC_ALL, NULL);
 
     const char* const ret = TrySetLocale();
-    if ( !ret )
-        return wxString();
+    wxString retval;
+    if ( ret )
+    {
+        // Note that we must copy the returned value before calling setlocale()
+        // again as the string "ret" points to can (and, at least under Linux
+        // with glibc, actually always will) be changed by this call.
+        retval = ret;
+        wxSetlocale(LC_ALL, orig);
+    }
 
-    wxSetlocale(LC_ALL, orig);
-
-    return ret;
+    return retval;
 }
 
 // ----------------------------------------------------------------------------

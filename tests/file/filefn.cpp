@@ -149,7 +149,7 @@ void FileFunctionsTestCase::GetTempFolder()
 
 void FileFunctionsTestCase::CopyFile()
 {
-    const wxString filename1(wxT("horse.bmp"));
+    const wxString filename1(wxS("horse.xpm"));
     const wxString& filename2 = m_fileNameWork;
 
     const std::string msg =
@@ -162,14 +162,16 @@ void FileFunctionsTestCase::CopyFile()
     wxFFile f1(filename1, wxT("rb")),
             f2(filename2, wxT("rb"));
 
-    CPPUNIT_ASSERT_MESSAGE( msg, f1.IsOpened() && f2.IsOpened() );
+    CPPUNIT_ASSERT_MESSAGE( msg, f1.IsOpened() );
+    CPPUNIT_ASSERT_MESSAGE( msg, f2.IsOpened() );
 
     wxString s1, s2;
-    CPPUNIT_ASSERT_MESSAGE( msg, f1.ReadAll(&s1) && f2.ReadAll(&s2) );
-    CPPUNIT_ASSERT_MESSAGE( msg, (s1.length() == s2.length()) &&
-                    (memcmp(s1.c_str(), s2.c_str(), s1.length()) == 0) );
+    CPPUNIT_ASSERT_MESSAGE( msg, f1.ReadAll(&s1) );
+    CPPUNIT_ASSERT_MESSAGE( msg, f2.ReadAll(&s2) );
+    CPPUNIT_ASSERT_MESSAGE( msg, s1 == s2 );
 
-    CPPUNIT_ASSERT_MESSAGE( msg, f1.Close() && f2.Close() );
+    CPPUNIT_ASSERT_MESSAGE( msg, f1.Close() );
+    CPPUNIT_ASSERT_MESSAGE( msg, f2.Close() );
     CPPUNIT_ASSERT_MESSAGE( msg, wxRemoveFile(filename2) );
 }
 
@@ -395,14 +397,16 @@ void FileFunctionsTestCase::DoConcatFile(const wxString& filePath1,
     // Prepare source data
     wxFFile f1(filePath1, wxT("wb")),
             f2(filePath2, wxT("wb"));
-    CPPUNIT_ASSERT_MESSAGE( msg, f1.IsOpened() && f2.IsOpened() );
+    CPPUNIT_ASSERT_MESSAGE( msg, f1.IsOpened() );
+    CPPUNIT_ASSERT_MESSAGE( msg, f2.IsOpened() );
 
     wxString s1(wxT("1234567890"));
     wxString s2(wxT("abcdefghij"));
     CPPUNIT_ASSERT_MESSAGE( msg, f1.Write(s1) );
     CPPUNIT_ASSERT_MESSAGE( msg, f2.Write(s2) );
 
-    CPPUNIT_ASSERT_MESSAGE( msg, f1.Close() && f2.Close() );
+    CPPUNIT_ASSERT_MESSAGE( msg, f1.Close() );
+    CPPUNIT_ASSERT_MESSAGE( msg, f2.Close() );
 
     // Concatenate source files
     CPPUNIT_ASSERT_MESSAGE( msg, wxConcatFiles(filePath1, filePath2, destFilePath) );
@@ -413,8 +417,8 @@ void FileFunctionsTestCase::DoConcatFile(const wxString& filePath1,
     wxString s3;
     wxFFile f3(destFilePath, wxT("rb"));
     CPPUNIT_ASSERT_MESSAGE( msg, f3.ReadAll(&s3) );
-    CPPUNIT_ASSERT_MESSAGE( msg, (sSrc.length() == s3.length()) &&
-                    (memcmp(sSrc.c_str(), s3.c_str(), sSrc.length()) == 0) );
+    CPPUNIT_ASSERT_MESSAGE( msg, sSrc.length() == s3.length() );
+    CPPUNIT_ASSERT_MESSAGE( msg, memcmp(sSrc.c_str(), s3.c_str(), sSrc.length()) == 0 );
     CPPUNIT_ASSERT_MESSAGE( msg, f3.Close() );
 
     CPPUNIT_ASSERT_MESSAGE( msg, wxRemoveFile(filePath1) );
@@ -516,8 +520,8 @@ void FileFunctionsTestCase::PathOnly()
     CPPUNIT_ASSERT( filename.MakeAbsolute() );
 
     wxString pathOnly = wxPathOnly(filename.GetFullPath());
-    const std::string msg = wxString::Format("Path: %s", pathOnly).ToStdString();
-    CPPUNIT_ASSERT_MESSAGE( msg, wxDirExists(pathOnly) || pathOnly.empty() );
+    if ( !wxDirExists(pathOnly) )
+        CPPUNIT_ASSERT( pathOnly == wxString() );
 }
 
 // Unit tests for Mkdir and Rmdir doesn't cover non-ASCII directory names.

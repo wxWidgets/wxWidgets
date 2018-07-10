@@ -8,7 +8,11 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include <QtOpenGL/QGLWidget>
+#include <GL/gl.h>
+
+class QGLWidget;
+class QGLContext;
+class QGLFormat;
 
 class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
@@ -53,8 +57,6 @@ public:
     virtual bool SwapBuffers();
 
     static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
-
-    virtual QGLWidget *GetHandle() const { return static_cast<QGLWidget *>(m_qtWindow); }
 
 private:
 

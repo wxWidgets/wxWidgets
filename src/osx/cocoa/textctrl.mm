@@ -436,6 +436,15 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         impl->controlTextDidChange();
 }
 
+
+- (void)changeColor:(id)sender
+{
+   // Define this just to block the color change messages - these are sent from
+   // the shared color/font panel resulting in unwanted changes of color when
+   // shared color panel is used (as when using wxColourPickerCtrl for example).
+}
+
+
 - (void) setEnabled:(BOOL) flag
 {
     // from Technical Q&A QA1461
@@ -788,22 +797,22 @@ void wxNSTextViewControl::insertText(NSString* str, WXWidget slf, void *_cmd)
 
 wxString wxNSTextViewControl::GetStringValue() const
 {
+    wxString result;
     if (m_textView)
     {
-        wxString result = wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding());
-        wxMacConvertNewlines13To10( &result ) ;
-        return result;
+        result = wxMacConvertNewlines13To10(
+            wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding()));
     }
-    return wxEmptyString;
+    return result;
 }
+
 void wxNSTextViewControl::SetStringValue( const wxString &str)
 {
-    wxString st = str;
-    wxMacConvertNewlines10To13( &st );
     wxMacEditHelper helper(m_textView);
 
     if (m_textView)
     {
+        wxString st(wxMacConvertNewlines10To13(str));
         [m_textView setString: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
         if ( m_wxPeer->HasFlag(wxTE_AUTO_URL) )
         {
@@ -984,8 +993,7 @@ void wxNSTextViewControl::ShowPosition(long pos)
 
 void wxNSTextViewControl::WriteText(const wxString& str)
 {
-    wxString st = str;
-    wxMacConvertNewlines10To13( &st );
+    wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
     NSEvent* formerEvent = m_lastKeyDownEvent;
     m_lastKeyDownEvent = nil;
@@ -1140,6 +1148,23 @@ wxSize wxNSTextViewControl::GetBestSize() const
                       (int)(rect.size.height + [m_textView textContainerInset].height));
     }
     return wxSize(0,0);
+}
+
+void wxNSTextViewControl::SetJustification()
+{
+    if ( !m_textView )
+        return;
+
+    NSTextAlignment align;
+
+    if ( m_wxPeer->HasFlag(wxTE_RIGHT) )
+        align = NSRightTextAlignment;
+    else if ( m_wxPeer->HasFlag(wxTE_CENTRE) )
+        align = NSCenterTextAlignment;
+    else // wxTE_LEFT == 0
+        align = NSLeftTextAlignment;
+
+    [m_textView setAlignment:align];
 }
 
 // wxNSTextFieldControl
@@ -1423,6 +1448,23 @@ bool wxNSTextFieldControl::SetHint(const wxString& hint)
     wxCFStringRef hintstring(hint);
     [[m_textField cell] setPlaceholderString:hintstring.AsNSString()];
     return true;
+}
+
+void wxNSTextFieldControl::SetJustification()
+{
+    if ( !m_textField )
+        return;
+
+    NSTextAlignment align;
+
+    if ( m_wxPeer->HasFlag(wxTE_RIGHT) )
+        align = NSRightTextAlignment;
+    else if ( m_wxPeer->HasFlag(wxTE_CENTRE) )
+        align = NSCenterTextAlignment;
+    else // wxTE_LEFT == 0
+        align = NSLeftTextAlignment;
+
+    [m_textField setAlignment:align];
 }
 
 //

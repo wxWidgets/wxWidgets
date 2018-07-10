@@ -248,7 +248,7 @@ void LogTestCase::Null()
 void LogTestCase::Component()
 {
     wxLogMessage("Message");
-    CPPUNIT_ASSERT_EQUAL( wxLOG_COMPONENT,
+    CPPUNIT_ASSERT_EQUAL( std::string(wxLOG_COMPONENT),
                           m_log->GetInfo(wxLOG_Message).component );
 
     // completely disable logging for this component

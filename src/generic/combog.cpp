@@ -125,14 +125,7 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
         border = wxBORDER_SIMPLE;
 #elif defined(__WXMSW__)
     if ( !border )
-        // For XP, have 1-width custom border, for older version use sunken
-        /*if ( wxUxThemeEngine::GetIfActive() )
-        {
-            border = wxBORDER_NONE;
-            m_widthCustomBorder = 1;
-        }
-        else*/
-            border = wxBORDER_SUNKEN;
+        border = wxBORDER_SUNKEN;
 #else
 
     //
@@ -203,6 +196,20 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
 
 wxGenericComboCtrl::~wxGenericComboCtrl()
 {
+}
+
+bool wxGenericComboCtrl::HasTransparentBackground()
+{
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+  #ifdef __WXGTK__
+    // Sanity check for GTK+
+    return IsDoubleBuffered();
+  #else
+    return true;
+  #endif
+#else
+    return false;
+#endif
 }
 
 void wxGenericComboCtrl::OnResize()

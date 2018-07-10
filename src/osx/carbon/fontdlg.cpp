@@ -587,7 +587,7 @@ void wxFontDialog::ChangeFont()
 
     wxFontFamily family = FontFamilyStringToInt(facename);
     if (family != wxFONTFAMILY_DEFAULT)
-        facename = wxEmptyString;
+        facename.clear();
 
     m_dialogFont = wxFontInfo(size)
                     .Family(family).FaceName(facename)

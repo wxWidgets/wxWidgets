@@ -24,7 +24,7 @@ for /d %%x in (*) do @(
         echo Running non-GUI unit test
         echo ========================================================================
         echo.
-        %%x\test.exe -t >tmp
+        %%x\test.exe >tmp
         
         REM show the output of the test in the buildbot log:
         type tmp
@@ -48,7 +48,7 @@ for /d %%x in (*) do @(
         echo Running GUI unit test
         echo ========================================================================
         echo.
-        %%x\test_gui.exe -t >tmp
+        %%x\test_gui.exe >tmp
         
         REM show the output of the test in the buildbot log:
         type tmp

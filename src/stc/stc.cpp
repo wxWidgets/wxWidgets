@@ -52,9 +52,7 @@
     #include "wx/file.h"
 #endif
 
-#ifdef __WXGTK__
-    #include "wx/dcbuffer.h"
-#endif
+#include "wx/dcbuffer.h"
 
 #include "ScintillaWX.h"
 
@@ -162,6 +160,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
     EVT_LISTBOX_DCLICK          (wxID_ANY, wxStyledTextCtrl::OnListBox)
+    EVT_MOUSE_CAPTURE_LOST      (wxStyledTextCtrl::OnMouseCaptureLost)
 wxEND_EVENT_TABLE()
 
 
@@ -224,6 +223,18 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
 
     // STC doesn't support RTL languages at all
     SetLayoutDirection(wxLayout_LeftToRight);
+
+    // Rely on native double buffering by default, except under Mac where it
+    // doesn't work for some reason, see #18085.
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER && !defined(__WXMAC__)
+    SetBufferedDraw(false);
+#else
+    SetBufferedDraw(true);
+#endif
+
+#if wxUSE_GRAPHICS_DIRECT2D
+    SetFontQuality(wxSTC_EFF_QUALITY_DEFAULT);
+#endif
 
     return true;
 }
@@ -664,7 +675,6 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(SCI_MARKERDEFINEPIXMAP, markerNumber, (sptr_t)buff);
         delete [] buff;
-        
 }
 
 // Add a set of markers to a line.
@@ -1467,7 +1477,6 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(SCI_REGISTERIMAGE, type, (sptr_t)buff);
         delete [] buff;
-     
 }
 
 // Clear all the registered images.
@@ -2525,6 +2534,18 @@ int wxStyledTextCtrl::GetPhasesDraw() const
 void wxStyledTextCtrl::SetPhasesDraw(int phases)
 {
     SendMsg(SCI_SETPHASESDRAW, phases, 0);
+}
+
+// Choose the quality level for text.
+void wxStyledTextCtrl::SetFontQuality(int fontQuality)
+{
+    SendMsg(SCI_SETFONTQUALITY, fontQuality, 0);
+}
+
+// Retrieve the quality level for text.
+int wxStyledTextCtrl::GetFontQuality() const
+{
+    return SendMsg(SCI_GETFONTQUALITY, 0, 0);
 }
 
 // Scroll so that a display line is at the top of the display.
@@ -4468,7 +4489,7 @@ int wxStyledTextCtrl::GetTechnology() const
 
 // Create an ILoader*.
 void* wxStyledTextCtrl::CreateLoader(int bytes) const {
-         return (void*)(sptr_t)SendMsg(SCI_CREATELOADER, bytes); 
+         return (void*)(sptr_t)SendMsg(SCI_CREATELOADER, bytes);
 }
 
 // Move caret to before first visible character on display line.
@@ -4642,7 +4663,7 @@ wxString wxStyledTextCtrl::GetLexerLanguage() const {
 
 // For private communication between an application and a known lexer.
 void* wxStyledTextCtrl::PrivateLexerCall(int operation, void* pointer) {
-           return (void*)(sptr_t)SendMsg(SCI_PRIVATELEXERCALL, operation, (sptr_t)pointer); 
+           return (void*)(sptr_t)SendMsg(SCI_PRIVATELEXERCALL, operation, (sptr_t)pointer);
 }
 
 // Retrieve a '\\n' separated list of properties understood by the current lexer.
@@ -5163,11 +5184,7 @@ void wxStyledTextCtrl::StartStyling(int start, int unused)
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
-#ifdef __WXGTK__
-    wxBufferedPaintDC dc(this);
-#else
     wxPaintDC dc(this);
-#endif
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 
@@ -5366,6 +5383,11 @@ void wxStyledTextCtrl::OnListBox(wxCommandEvent& WXUNUSED(evt)) {
 
 void wxStyledTextCtrl::OnIdle(wxIdleEvent& evt) {
     m_swx->DoOnIdle(evt);
+}
+
+
+void wxStyledTextCtrl::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(evt)) {
+    m_swx->DoMouseCaptureLost();
 }
 
 

@@ -105,7 +105,7 @@ wxString wxFileDialog::GetPath() const
 {
     wxArrayString paths;
     GetPaths(paths);
-    if (paths.size() == 0)
+    if (paths.empty())
         return "";
 
     return paths[0];
@@ -113,7 +113,7 @@ wxString wxFileDialog::GetPath() const
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const
 {
-    QStringList selectedfiles = GetHandle()->selectedFiles();
+    QStringList selectedfiles = GetQFileDialog()->selectedFiles();
     foreach (QString file, selectedfiles)
         paths.Add(wxQtConvertString(file));
 }
@@ -122,7 +122,7 @@ wxString wxFileDialog::GetFilename() const
 {
     wxArrayString filenames;
     GetFilenames(filenames);
-    if(filenames.size() == 0)
+    if ( filenames.empty() )
         return "";
 
     return filenames[0];
@@ -130,7 +130,7 @@ wxString wxFileDialog::GetFilename() const
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const
 {
-    QStringList selectedfiles = GetHandle()->selectedFiles();
+    QStringList selectedfiles = GetQFileDialog()->selectedFiles();
     foreach (QString file, selectedfiles )
     {
         wxFileName fn = wxQtConvertString(file);
@@ -141,9 +141,9 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
 int wxFileDialog::GetFilterIndex() const
 {
     int index = 0;
-    foreach (QString filter, GetHandle()->nameFilters())
+    foreach (QString filter, GetQFileDialog()->nameFilters())
     {
-        if (filter == GetHandle()->selectedNameFilter())
+        if (filter == GetQFileDialog()->selectedNameFilter())
             return index;
         index++;
     }
@@ -153,17 +153,17 @@ int wxFileDialog::GetFilterIndex() const
 
 void wxFileDialog::SetMessage(const wxString& message)
 {
-    GetHandle()->setLabelText(QFileDialog::LookIn, wxQtConvertString(message));
+    GetQFileDialog()->setLabelText(QFileDialog::LookIn, wxQtConvertString(message));
 }
 
 void wxFileDialog::SetPath(const wxString& path)
 {
-    GetHandle()->selectFile(wxQtConvertString(path));
+    GetQFileDialog()->selectFile(wxQtConvertString(path));
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
 {
-    GetHandle()->setDirectory(wxQtConvertString(dir));
+    GetQFileDialog()->setDirectory(wxQtConvertString(dir));
 }
 
 void wxFileDialog::SetFilename(const wxString& name)
@@ -173,19 +173,19 @@ void wxFileDialog::SetFilename(const wxString& name)
 
 void wxFileDialog::SetWildcard(const wxString& wildCard)
 {
-    GetHandle()->setNameFilter(wxQtConvertString(wildCard));
+    GetQFileDialog()->setNameFilter(wxQtConvertString(wildCard));
 }
 
 void wxFileDialog::SetFilterIndex(int filterIndex)
 {
-    QStringList filters = GetHandle()->nameFilters();
+    QStringList filters = GetQFileDialog()->nameFilters();
     if (filterIndex < 0 || filterIndex >= filters.size())
         return;
 
-    GetHandle()->setNameFilter(filters.at(filterIndex));
+    GetQFileDialog()->setNameFilter(filters.at(filterIndex));
 }
 
-QFileDialog *wxFileDialog::GetHandle() const
+QFileDialog *wxFileDialog::GetQFileDialog() const
 {
     return static_cast<QFileDialog *>(m_qtWindow);
 }
@@ -237,7 +237,7 @@ bool wxDirDialog::Create(wxWindow *parent,
 
 wxString wxDirDialog::GetPath() const
 {
-    QStringList selectedfiles = GetHandle()->selectedFiles();
+    QStringList selectedfiles = GetQFileDialog()->selectedFiles();
     if (selectedfiles.size() > 0)
         return wxQtConvertString(selectedfiles.first());
 
@@ -246,10 +246,10 @@ wxString wxDirDialog::GetPath() const
 
 void wxDirDialog::SetPath(const wxString& path)
 {
-    GetHandle()->selectFile(wxQtConvertString(path));
+    GetQFileDialog()->selectFile(wxQtConvertString(path));
 }
 
-QFileDialog *wxDirDialog::GetHandle() const
+QFileDialog *wxDirDialog::GetQFileDialog() const
 {
     return static_cast<QFileDialog *>(m_qtWindow);
 }

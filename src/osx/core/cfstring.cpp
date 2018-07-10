@@ -24,46 +24,21 @@
 #include <CoreFoundation/CoreFoundation.h>
 
 
-void wxMacConvertNewlines13To10( char * data )
-{
-    char * buf = data ;
-    while( (buf=strchr(buf,0x0d)) != NULL )
-    {
-        *buf = 0x0a ;
-        buf++ ;
-    }
-}
-
-void wxMacConvertNewlines13To10( wxChar16 * data )
-{
-    for ( ; *data; ++data )
-    {
-        if ( *data == 0x0d )
-            *data = 0x0a;
-    }
-}
-
-void wxMacConvertNewlines10To13( char * data )
-{
-    char * buf = data ;
-    while( (buf=strchr(buf,0x0a)) != NULL )
-    {
-        *buf = 0x0d ;
-        buf++ ;
-    }
-}
-
 const wxString sCR((wxChar)13);
 const wxString sLF((wxChar)10);
 
-void wxMacConvertNewlines13To10( wxString * data )
+wxString wxMacConvertNewlines13To10(const wxString& data)
 {
-    data->Replace( sCR,sLF);
+    wxString string(data);
+    string.Replace(sCR, sLF);
+    return string;
 }
 
-void wxMacConvertNewlines10To13( wxString * data )
+wxString wxMacConvertNewlines10To13(const wxString& data)
 {
-    data->Replace( sLF,sCR);
+    wxString string(data);
+    string.Replace(sLF, sCR);
+    return string;
 }
 
 wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
@@ -614,8 +589,7 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
     }
     else
     {
-        wxString str = st ;
-        wxMacConvertNewlines13To10( &str ) ;
+        wxString str(wxMacConvertNewlines13To10(st));
 #if wxUSE_UNICODE
 #if wxUSE_UNICODE_WCHAR
         // native = wchar_t 4 bytes for us
@@ -700,8 +674,7 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
 #endif
 
     delete[] buf ;
-    wxMacConvertNewlines10To13( &result);
-    return result ;
+    return wxMacConvertNewlines10To13(result);
 }
 
 wxString wxCFStringRef::AsString(wxFontEncoding encoding) const

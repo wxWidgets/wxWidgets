@@ -130,6 +130,7 @@ public :
     virtual void            ListScrollTo( unsigned int n ) wxOVERRIDE ;
 
     virtual int             ListGetTopItem() const wxOVERRIDE;
+    virtual int             ListGetCountPerPage() const wxOVERRIDE;
 
     // accessing content
 
@@ -296,24 +297,12 @@ protected:
 
     int row = [self selectedRow];
 
-    if (row == -1) 
-    {
-        // no row selected
-    } 
-    else 
-    {
-        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-        wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
-        wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    wxListBox* const list = wxDynamicCast(impl->GetWXPeer(), wxListBox);
+    wxCHECK_RET( list != NULL , "Associated control should be a wxListBox" );
 
-        if ((row < 0) || (row > (int) list->GetCount()))  // OS X can select an item below the last item
-            return;
-
-        if ( !list->MacGetBlockEvents() )
-            list->HandleLineEvent( row, false );
-    }
-
-} 
+    list->MacHandleSelectionChange(row);
+}
 
 - (void)setFont:(NSFont *)aFont
 {
@@ -542,10 +531,17 @@ void wxListWidgetCocoaImpl::ListScrollTo( unsigned int n )
 
 int wxListWidgetCocoaImpl::ListGetTopItem() const
 {
-     NSScrollView *scrollView = [m_tableView enclosingScrollView];
-     NSRect visibleRect = scrollView.contentView.visibleRect;
-     NSRange range = [m_tableView rowsInRect:visibleRect];
-     return range.location;
+    NSScrollView *scrollView = [m_tableView enclosingScrollView];
+    NSRect visibleRect = scrollView.contentView.visibleRect;
+    NSRange range = [m_tableView rowsInRect:visibleRect];
+    return range.location;
+}
+
+int wxListWidgetCocoaImpl::ListGetCountPerPage() const
+{
+    NSScrollView *scrollView = [m_tableView enclosingScrollView];
+    NSRect visibleRect = scrollView.contentView.visibleRect;
+    return (int) (visibleRect.size.height / [m_tableView rowHeight]);
 }
 
 void wxListWidgetCocoaImpl::UpdateLine( unsigned int WXUNUSED(n), wxListWidgetColumn* WXUNUSED(col) )

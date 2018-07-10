@@ -714,7 +714,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
     {
         m_Table = NULL;
         m_enclosingContainer = NULL;
-        m_tAlign = m_rAlign = wxEmptyString;
+        m_tAlign.clear();
+        m_rAlign.clear();
     }
 
 

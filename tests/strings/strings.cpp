@@ -188,6 +188,8 @@ void StringTestCase::Format()
         "4 world hello world 3",
         wxString::Format("%4$d %2$s %1$s %2$s %3$d", "hello", "world", 3, 4)
     );
+
+    CHECK( wxString::Format("%1$o %1$d %1$x", 20) == "24 20 14" );
 }
 
 void StringTestCase::FormatUnicode()
@@ -1124,11 +1126,11 @@ void StringTestCase::ScopedBuffers()
     // but assigning it to wxCharBuffer makes a full copy
     wxCharBuffer buf(sbuf);
     CPPUNIT_ASSERT( buf.data() != literal );
-    CPPUNIT_ASSERT_EQUAL( literal, buf.data() );
+    CPPUNIT_ASSERT_EQUAL( std::string(literal), buf.data() );
 
     wxCharBuffer buf2 = sbuf;
     CPPUNIT_ASSERT( buf2.data() != literal );
-    CPPUNIT_ASSERT_EQUAL( literal, buf.data() );
+    CPPUNIT_ASSERT_EQUAL( std::string(literal), buf.data() );
 
     // Check that extending the buffer keeps it NUL-terminated.
     size_t len = 10;

@@ -1164,16 +1164,37 @@ void wxMacCoreGraphicsPathData::MoveToPoint( wxDouble x1 , wxDouble y1 )
 
 void wxMacCoreGraphicsPathData::AddLineToPoint( wxDouble x1 , wxDouble y1 )
 {
-    CGPathAddLineToPoint( m_path , NULL , (CGFloat) x1 , (CGFloat) y1 );
+    // This function should behave as MoveToPoint if current point is not yet set
+    // (CGPathAddLineToPoint requires non-empty path).
+    if ( CGPathIsEmpty(m_path) )
+    {
+        MoveToPoint(x1, y1);
+    }
+    else
+    {
+        CGPathAddLineToPoint( m_path , NULL , (CGFloat) x1 , (CGFloat) y1 );
+    }
 }
 
 void wxMacCoreGraphicsPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
 {
+    // This function should be preceded by MoveToPoint(cx1, cy1)
+    // if current point is not yet set (CGPathAddCurveToPoint requires non-empty path).
+    if ( CGPathIsEmpty(m_path) )
+    {
+        MoveToPoint(cx1, cy1);
+    }
     CGPathAddCurveToPoint( m_path , NULL , (CGFloat) cx1 , (CGFloat) cy1 , (CGFloat) cx2, (CGFloat) cy2, (CGFloat) x , (CGFloat) y );
 }
 
 void wxMacCoreGraphicsPathData::AddQuadCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble x, wxDouble y )
 {
+    // This function should be preceded by MoveToPoint(cx1, cy1)
+    // if current point is not yet set (CGPathAddQuadCurveToPoint requires non-empty path).
+    if ( CGPathIsEmpty(m_path) )
+    {
+        MoveToPoint(cx1, cy1);
+    }
     CGPathAddQuadCurveToPoint( m_path , NULL , (CGFloat) cx1 , (CGFloat) cy1 , (CGFloat) x , (CGFloat) y );
 }
 
@@ -1202,6 +1223,12 @@ void wxMacCoreGraphicsPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, wxDo
 
 void wxMacCoreGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
 {
+    // This function should be preceded by MoveToPoint(0, 0)
+    // if current point is not yet set (CGPathAddArcToPoint requires non-empty path).
+    if ( CGPathIsEmpty(m_path) )
+    {
+        MoveToPoint(0, 0);
+    }
     CGPathAddArcToPoint( m_path, NULL , (CGFloat) x1, (CGFloat) y1, (CGFloat) x2, (CGFloat) y2, (CGFloat) r);
 }
 
@@ -1219,7 +1246,15 @@ void wxMacCoreGraphicsPathData::CloseSubpath()
 // gets the last point of the current path, (0,0) if not yet set
 void wxMacCoreGraphicsPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 {
-    CGPoint p = CGPathGetCurrentPoint( m_path );
+    CGPoint p;
+    if ( CGPathIsEmpty(m_path) )
+    {
+        p.x = p.y = 0;
+    }
+    else
+    {
+        p = CGPathGetCurrentPoint(m_path);
+    }
     *x = p.x;
     *y = p.y;
 }
@@ -2245,8 +2280,8 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     if ( fref->GetStrikethrough() )
     {
         CGFloat width = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
-        CGFloat height = CTFontGetXHeight( font );
-        CGPoint points[] = { {0.0, height * 0.6f},  {width, height * 0.6f} };
+        CGFloat height = CTFontGetXHeight( font ) * 0.6;
+        CGPoint points[] = { {0.0, height},  {width, height} };
         CGContextSetStrokeColorWithColor(m_cgContext, col);
         CGContextSetShouldAntialias(m_cgContext, false);
         CGContextSetLineWidth(m_cgContext, 1.0);

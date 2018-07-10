@@ -14,6 +14,8 @@ typedef struct _GdkEventKey GdkEventKey;
 typedef struct _GtkEditable GtkEditable;
 typedef struct _GtkEntry GtkEntry;
 
+class wxTextAutoCompleteData; // private class used only by wxTextEntry itself
+
 // ----------------------------------------------------------------------------
 // wxTextEntry: roughly corresponds to GtkEditable
 // ----------------------------------------------------------------------------
@@ -21,7 +23,8 @@ typedef struct _GtkEntry GtkEntry;
 class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 {
 public:
-    wxTextEntry() { m_isUpperCase = false; }
+    wxTextEntry();
+    virtual ~wxTextEntry();
 
     // implement wxTextEntryBase pure virtual methods
     virtual void WriteText(const wxString& text) wxOVERRIDE;
@@ -76,6 +79,7 @@ protected:
     virtual wxPoint DoGetMargins() const wxOVERRIDE;
 
     virtual bool DoAutoCompleteStrings(const wxArrayString& choices) wxOVERRIDE;
+    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
 
     // Override the base class method to use GtkEntry IM context.
     virtual int GTKIMFilterKeypress(GdkEventKey* event) const;
@@ -89,6 +93,13 @@ private:
 
     // implement this to return the associated GtkEntry
     virtual GtkEntry *GetEntry() const = 0;
+
+    // Various auto-completion-related stuff, only used if any of AutoComplete()
+    // methods are called.
+    wxTextAutoCompleteData *m_autoCompleteData;
+
+    // It needs to call our GetEntry() method.
+    friend class wxTextAutoCompleteData;
 
     bool m_isUpperCase;
 };

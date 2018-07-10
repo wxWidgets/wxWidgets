@@ -6,6 +6,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    The legacy dynamic array class, existing for compatibility only and @e NOT
+    to be used in the new code.
 
     This section describes the so called @e "dynamic arrays". This is a C
     array-like type safe data structure i.e. the member access time is constant

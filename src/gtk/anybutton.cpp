@@ -18,8 +18,7 @@
 
 #include "wx/stockitem.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -356,17 +355,13 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         case State_Focused:
             if ( bitmap.IsOk() )
             {
-                Connect(wxEVT_SET_FOCUS,
-                        wxFocusEventHandler(wxAnyButton::GTKOnFocus));
-                Connect(wxEVT_KILL_FOCUS,
-                        wxFocusEventHandler(wxAnyButton::GTKOnFocus));
+                Bind(wxEVT_SET_FOCUS, &wxAnyButton::GTKOnFocus, this);
+                Bind(wxEVT_KILL_FOCUS, &wxAnyButton::GTKOnFocus, this);
             }
             else // no valid focused bitmap
             {
-                Disconnect(wxEVT_SET_FOCUS,
-                           wxFocusEventHandler(wxAnyButton::GTKOnFocus));
-                Disconnect(wxEVT_KILL_FOCUS,
-                           wxFocusEventHandler(wxAnyButton::GTKOnFocus));
+                Unbind(wxEVT_SET_FOCUS, &wxAnyButton::GTKOnFocus, this);
+                Unbind(wxEVT_KILL_FOCUS, &wxAnyButton::GTKOnFocus, this);
             }
             break;
 
@@ -389,7 +384,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 void wxAnyButton::DoSetBitmapPosition(wxDirection dir)
 {
 #ifdef __WXGTK210__
-    if ( !gtk_check_version(2,10,0) )
+    if ( wx_is_at_least_gtk2(10) )
     {
         GtkPositionType gtkpos;
         switch ( dir )

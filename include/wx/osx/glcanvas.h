@@ -158,6 +158,13 @@ public:
     // implementation-only from now on
 
 protected:
+    bool DoCreate(wxWindow *parent,
+                              wxWindowID id,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                  const wxString& name);
+
     WXGLPixelFormat m_glFormat;
     wxGLAttributes m_GLAttrs;
 

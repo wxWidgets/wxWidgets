@@ -26,6 +26,7 @@
 #if wxUSE_CRASHREPORT
 
 #ifndef WX_PRECOMP
+    #include "wx/wxcrtvararg.h"
 #endif  //WX_PRECOMP
 
 #include "wx/msw/debughlp.h"

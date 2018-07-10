@@ -634,7 +634,7 @@ void RemoveTrailingSeparatorsFromPath(wxString& strPath)
     }
 }
 
-#endif // __WINDOWS_ 
+#endif // __WINDOWS_
 
 bool
 wxFileSystemObjectExists(const wxString& path, int flags)
@@ -2464,7 +2464,7 @@ void wxFileName::SplitPath(const wxString& fullpath,
 wxString wxFileName::StripExtension(const wxString& fullpath)
 {
     wxFileName fn(fullpath);
-    fn.SetExt("");
+    fn.SetExt(wxString());
     return fn.GetFullPath();
 }
 

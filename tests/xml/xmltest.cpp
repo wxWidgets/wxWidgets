@@ -442,7 +442,8 @@ void XmlTestCase::SetRoot()
     // Test for the problem of https://trac.wxwidgets.org/ticket/13135
     doc.SetRoot( root );
     wxXmlNode *docNode = doc.GetDocumentNode();
-    CPPUNIT_ASSERT( docNode && root == docNode->GetChildren() );
+    CPPUNIT_ASSERT( docNode );
+    CPPUNIT_ASSERT( root == docNode->GetChildren() );
     CPPUNIT_ASSERT( doc.IsOk() );
 
     // Other tests.

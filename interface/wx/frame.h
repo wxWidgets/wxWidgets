@@ -427,7 +427,11 @@ public:
     void SetStatusBarPane(int n);
 
     /**
-        Sets the status bar text and redraws the status bar.
+        Sets the status bar text and updates the status bar display.
+
+        This is a simple wrapper for wxStatusBar::SetStatusText() which doesn't
+        do anything if the frame has no status bar, i.e. GetStatusBar() returns
+        @NULL.
 
         @param text
             The text for the status field.

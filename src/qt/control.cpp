@@ -11,6 +11,8 @@
 #include "wx/control.h"
 #include "wx/qt/private/converter.h"
 
+#include <QtWidgets/QWidget>
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow);
 
 wxControl::wxControl()

@@ -382,7 +382,7 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
 #if GTK_CHECK_VERSION(2,12,0)
         // gdk_screen_get_rgba_colormap was added in 2.8, but this code is for
         // compositing which requires 2.12
-        else if (gtk_check_version(2,12,0) == NULL &&
+        else if (wx_is_at_least_gtk2(12) &&
             m_cmap == gdk_screen_get_rgba_colormap(gdk_colormap_get_screen(m_cmap)))
         {
             m_penGC = wxGetPoolGC( m_gdkwindow, wxPEN_COLOUR_ALPHA );
@@ -1863,10 +1863,12 @@ void wxWindowDCImpl::SetBackgroundMode( int mode )
     m_backgroundMode = mode;
 }
 
+#if wxUSE_PALETTE
 void wxWindowDCImpl::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
     wxFAIL_MSG( wxT("wxWindowDCImpl::SetPalette not implemented") );
 }
+#endif
 
 void wxWindowDCImpl::UpdateClipBox()
 {
@@ -1912,9 +1914,9 @@ void wxWindowDCImpl::UpdateClipBox()
     m_isClipBoxValid = true;
 }
 
-void wxWindowDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+bool wxWindowDCImpl::DoGetClippingRect(wxRect& rect) const
 {
-    wxCHECK_RET( IsOk(), wxS("invalid window dc") );
+    wxCHECK_MSG( IsOk(), false, wxS("invalid window dc") );
 
     // Check if we should try to retrieve the clipping region possibly not set
     // by our SetClippingRegion() but preset or modified by application: this
@@ -1926,14 +1928,7 @@ void wxWindowDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoor
         self->UpdateClipBox();
     }
 
-    if ( x )
-        *x = m_clipX1;
-    if ( y )
-        *y = m_clipY1;
-    if ( w )
-        *w = m_clipX2 - m_clipX1;
-    if ( h )
-        *h = m_clipY2 - m_clipY1;
+    return wxGTKDCImpl::DoGetClippingRect(rect);
 }
 
 void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )

@@ -76,6 +76,14 @@ in wxAnimation.
 
 @sampledir{animate}
 
+@section page_samples_archive Archive Sample
+
+This sample shows how you can use wxArchiveClassFactory, wxArchiveOutputStream
+and wxArchiveInputStream. This shows how to process ZIP and TAR archives using
+wxZipOutputStream and wxTarOutputStream
+
+@sampledir{archive}
+
 @section page_samples_artprov Art Provider Sample
 
 This sample shows how you can customize the look of standard
@@ -266,7 +274,7 @@ wxDataObject to achieve this.
 
 This sample demonstrates various features of the wxWidgets events. It
 shows how to dynamic events and connecting/disconnecting the event handlers
-during run time by using wxEvtHandler::Connect() and wxEvtHandler::Disconnect(),
+during run time by using wxEvtHandler::Bind() and wxEvtHandler::Unbind(),
 and also how to use wxWindow::PushEventHandler() and wxWindow::PopEventHandler().
 
 @sampledir{event}

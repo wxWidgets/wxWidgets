@@ -17,6 +17,9 @@ enum
     // right clicking the header
     wxHD_ALLOW_HIDE = 0x0002,
 
+    // force putting column images on right
+    wxHD_BITMAP_ON_RIGHT = 0x0004,
+
     // style used by default when creating the control
     wxHD_DEFAULT_STYLE = wxHD_ALLOW_REORDER
 };
@@ -76,6 +79,11 @@ enum
         user to change the columns visibility on right mouse click. Notice that
         the program can always hide or show the columns, this style only
         affects the users capability to do it.
+    @style{wxHD_BITMAP_ON_RIGHT}
+        The column image, if any, will be shown on the right side if this style
+        is used. Note that this style is only implemented in wxMSW currently
+        and doesn't do anything under the other platforms. It is available
+        since wxWidgets 3.1.1.
     @style{wxHD_DEFAULT_STYLE}
         Symbolic name for the default control style, currently equal to
         @c wxHD_ALLOW_REORDER.

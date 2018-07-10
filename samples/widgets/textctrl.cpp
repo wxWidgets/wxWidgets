@@ -115,6 +115,7 @@ static const struct ControlValues
     bool password;
     bool readonly;
     bool processEnter;
+    bool processTab;
     bool filename;
     bool noVertScrollbar;
 
@@ -130,6 +131,7 @@ static const struct ControlValues
     false,              // not password
     false,              // not readonly
     true,               // do process enter
+    false,              // do not process Tab
     false,              // not filename
     false,              // don't hide vertical scrollbar
     WrapStyle_Word,     // wrap on word boundaries
@@ -149,7 +151,6 @@ class TextWidgetsPage : public WidgetsPage
 public:
     // ctor(s) and dtor
     TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~TextWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_text; }
     virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_text; }
@@ -225,6 +226,7 @@ protected:
     wxCheckBox *m_chkPassword,
                *m_chkReadonly,
                *m_chkProcessEnter,
+               *m_chkProcessTab,
                *m_chkFilename,
                *m_chkNoVertScrollbar;
 
@@ -274,11 +276,17 @@ public:
                     int flags)
         : wxTextCtrl(parent, id, value, wxDefaultPosition, wxDefaultSize, flags)
     {
+        Bind(wxEVT_LEFT_DOWN, &WidgetsTextCtrl::OnLeftClick, this);
     }
 
-protected:
-    void OnRightClick(wxMouseEvent& event)
+private:
+    // Show the result of HitTest() at the mouse position if Alt is pressed.
+    void OnLeftClick(wxMouseEvent& event)
     {
+        event.Skip();
+        if ( !event.AltDown() )
+            return;
+
         wxString where;
         wxTextCoord x, y;
         switch ( HitTest(event.GetPosition(), &x, &y) )
@@ -310,12 +318,7 @@ protected:
         }
 
         wxLogMessage(wxT("Mouse is %s (%ld, %ld)"), where.c_str(), x, y);
-
-        event.Skip();
     }
-
-private:
-    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -349,10 +352,6 @@ wxBEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
-wxEND_EVENT_TABLE()
-
-wxBEGIN_EVENT_TABLE(WidgetsTextCtrl, wxTextCtrl)
-    EVT_RIGHT_UP(WidgetsTextCtrl::OnRightClick)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -389,6 +388,7 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
     m_chkPassword =
     m_chkReadonly =
     m_chkProcessEnter =
+    m_chkProcessTab =
     m_chkFilename =
     m_chkNoVertScrollbar = (wxCheckBox *)NULL;
 
@@ -438,6 +438,9 @@ void TextWidgetsPage::CreateContent()
                     );
     m_chkProcessEnter = CreateCheckBoxAndAddToSizer(
                         sizerLeft, wxT("Process &Enter")
+                    );
+    m_chkProcessTab = CreateCheckBoxAndAddToSizer(
+                        sizerLeft, wxT("Process &Tab")
                     );
     m_chkFilename = CreateCheckBoxAndAddToSizer(
                         sizerLeft, wxT("&Filename control")
@@ -587,6 +590,17 @@ void TextWidgetsPage::CreateContent()
                         0, wxALL, 5
                      );
 
+    sizerMiddleDown->Add
+                     (
+                          new wxStaticText
+                          (
+                            this,
+                            wxID_ANY,
+                            "Alt-click in the text to see HitTest() result"
+                          ),
+                          wxSizerFlags().Border()
+                     );
+
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
     sizerMiddle->Add(sizerMiddleUp, 0, wxGROW);
     sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
@@ -657,6 +671,7 @@ void TextWidgetsPage::Reset()
     m_chkPassword->SetValue(DEFAULTS.password);
     m_chkReadonly->SetValue(DEFAULTS.readonly);
     m_chkProcessEnter->SetValue(DEFAULTS.processEnter);
+    m_chkProcessTab->SetValue(DEFAULTS.processTab);
     m_chkFilename->SetValue(DEFAULTS.filename);
     m_chkNoVertScrollbar->SetValue(DEFAULTS.noVertScrollbar);
 
@@ -691,6 +706,8 @@ void TextWidgetsPage::CreateText()
         flags |= wxTE_READONLY;
     if ( m_chkProcessEnter->GetValue() )
         flags |= wxTE_PROCESS_ENTER;
+    if ( m_chkProcessTab->GetValue() )
+        flags |= wxTE_PROCESS_TAB;
     if ( m_chkNoVertScrollbar->GetValue() )
         flags |= wxTE_NO_VSCROLL;
 
@@ -698,6 +715,7 @@ void TextWidgetsPage::CreateText()
     {
         default:
             wxFAIL_MSG( wxT("unexpected wrap style radio box selection") );
+            wxFALLTHROUGH;
 
         case WrapStyle_None:
             flags |= wxTE_DONTWRAP; // same as wxHSCROLL
@@ -903,6 +921,7 @@ void TextWidgetsPage::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
     wxPathList pathlist;
     pathlist.Add(wxT("."));
     pathlist.Add(wxT(".."));
+    pathlist.Add(wxT("../widgets"));
     pathlist.Add(wxT("../../../samples/widgets"));
 
     wxString filename = pathlist.FindValidPath(wxT("textctrl.cpp"));
@@ -959,6 +978,7 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   (m_chkPassword->GetValue() != DEFAULTS.password) ||
                   (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
                   (m_chkProcessEnter->GetValue() != DEFAULTS.processEnter) ||
+                  (m_chkProcessTab->GetValue() != DEFAULTS.processTab) ||
                   (m_chkFilename->GetValue() != DEFAULTS.filename) ||
                   (m_chkNoVertScrollbar->GetValue() != DEFAULTS.noVertScrollbar) ||
                   (m_radioWrap->GetSelection() != DEFAULTS.wrapStyle) );
@@ -993,7 +1013,7 @@ void TextWidgetsPage::OnTextPasted(wxClipboardTextEvent& event)
 
 void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 {
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX__)
     // We should be able to change text alignment
     // dynamically, without recreating the control.
     if( event.GetEventObject() == m_radioAlign )
@@ -1028,7 +1048,7 @@ void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
     else
 #else
     wxUnusedVar(event);
-#endif // WXMSW || WXGTK
+#endif // WXMSW || WXGTK || WXOSX
     {
         CreateText();
     }

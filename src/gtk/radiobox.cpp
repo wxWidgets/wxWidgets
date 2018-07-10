@@ -17,14 +17,7 @@
     #include "wx/tooltip.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
-
-#include <gdk/gdkkeysyms.h>
-#if GTK_CHECK_VERSION(3,0,0)
-#include <gdk/gdkkeysyms-compat.h>
-#endif
 
 //-----------------------------------------------------------------------------
 // wxGTKRadioButtonInfo
@@ -78,24 +71,24 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
 {
     if (g_blockEventsOnDrag) return FALSE;
 
-    if ( ((gdk_event->keyval == GDK_Tab) ||
-          (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
+    if ( ((gdk_event->keyval == GDK_KEY_Tab) ||
+          (gdk_event->keyval == GDK_KEY_ISO_Left_Tab)) &&
          rb->GetParent() && (rb->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
         wxNavigationKeyEvent new_event;
         new_event.SetEventObject( rb->GetParent() );
         // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
-        new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
+        new_event.SetDirection( (gdk_event->keyval == GDK_KEY_Tab) );
         // CTRL-TAB changes the (parent) window, i.e. switch notebook page
         new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) != 0 );
         new_event.SetCurrentFocus( rb );
         return rb->GetParent()->HandleWindowEvent(new_event);
     }
 
-    if ((gdk_event->keyval != GDK_Up) &&
-        (gdk_event->keyval != GDK_Down) &&
-        (gdk_event->keyval != GDK_Left) &&
-        (gdk_event->keyval != GDK_Right))
+    if ((gdk_event->keyval != GDK_KEY_Up) &&
+        (gdk_event->keyval != GDK_KEY_Down) &&
+        (gdk_event->keyval != GDK_KEY_Left) &&
+        (gdk_event->keyval != GDK_KEY_Right))
     {
         return FALSE;
     }
@@ -110,8 +103,8 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
         return FALSE;
     }
 
-    if ((gdk_event->keyval == GDK_Up) ||
-        (gdk_event->keyval == GDK_Left))
+    if ((gdk_event->keyval == GDK_KEY_Up) ||
+        (gdk_event->keyval == GDK_KEY_Left))
     {
         if (node == rb->m_buttonsInfo.GetFirst())
             node = rb->m_buttonsInfo.GetLast();
@@ -187,6 +180,17 @@ static void gtk_radiobutton_size_allocate( GtkWidget *widget,
 }
 }
 
+#ifndef __WXGTK3__
+extern "C" {
+static gboolean expose_event(GtkWidget* widget, GdkEventExpose*, wxWindow*)
+{
+    const GtkAllocation& a = widget->allocation;
+    gtk_paint_flat_box(gtk_widget_get_style(widget), gtk_widget_get_window(widget),
+        GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, widget, "", a.x, a.y, a.width, a.height);
+    return false;
+}
+}
+#endif
 
 //-----------------------------------------------------------------------------
 // wxRadioBox
@@ -240,11 +244,17 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     GtkRadioButton *rbtn = NULL;
 
+#ifdef __WXGTK3__
+    GtkWidget* grid = gtk_grid_new();
+    gtk_widget_show(grid);
+    gtk_container_add(GTK_CONTAINER(m_widget), grid);
+#else
     GtkWidget *table = gtk_table_new( num_of_rows, num_of_cols, FALSE );
     gtk_table_set_col_spacings( GTK_TABLE(table), 1 );
     gtk_table_set_row_spacings( GTK_TABLE(table), 1 );
     gtk_widget_show( table );
     gtk_container_add( GTK_CONTAINER(m_widget), table );
+#endif
 
     GSList *radio_button_group = NULL;
     for (unsigned int i = 0; i < (unsigned int)n; i++)
@@ -305,6 +315,20 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
         m_buttonsInfo.Append( new wxGTKRadioButtonInfo( rbtn, wxRect() ) );
 
+#ifdef __WXGTK3__
+        int left, top;
+        if (HasFlag(wxRA_SPECIFY_COLS))
+        {
+            left = i % num_of_cols;
+            top = i / num_of_cols;
+        }
+        else
+        {
+            left = i / num_of_rows;
+            top = i % num_of_rows;
+        }
+        gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(rbtn), left, top, 1, 1);
+#else
         if (HasFlag(wxRA_SPECIFY_COLS))
         {
             int left = i%num_of_cols;
@@ -323,6 +347,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             gtk_table_attach( GTK_TABLE(table), GTK_WIDGET(rbtn), left, right, top, bottom,
                   GTK_FILL, GTK_FILL, 1, 1 );
         }
+#endif
 
         ConnectWidget( GTK_WIDGET(rbtn) );
 
@@ -588,6 +613,12 @@ void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
 
         node = node->GetNext();
     }
+
+#ifndef __WXGTK3__
+    g_signal_handlers_disconnect_by_func(m_widget, (void*)expose_event, this);
+    if (m_backgroundColour.IsOk())
+        g_signal_connect(m_widget, "expose-event", G_CALLBACK(expose_event), this);
+#endif
 }
 
 bool wxRadioBox::GTKWidgetNeedsMnemonic() const

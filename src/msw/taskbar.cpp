@@ -92,7 +92,7 @@ struct NotifyIconData : public NOTIFYICONDATA
 {
     NotifyIconData(WXHWND hwnd)
     {
-        memset(this, 0, sizeof(NOTIFYICONDATA));
+        wxZeroMemory(*this);
 
         // Since Vista there is a new member hBalloonIcon which will be used
         // if a user specified icon is specified in ShowBalloon(). For XP 

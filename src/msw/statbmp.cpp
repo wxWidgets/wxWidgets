@@ -36,6 +36,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/dib.h"
+#include "wx/msw/private/winstyle.h"
 
 #include "wx/sysopt.h"
 
@@ -127,7 +128,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // check if we have an image with alpha or not
     if ( wxTheApp->GetComCtl32Version() < 600 )
     {
-        Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBitmap::DoPaintManually));
+        Bind(wxEVT_PAINT, &wxStaticBitmap::DoPaintManually, this);
     }
 
     return true;
@@ -312,9 +313,9 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
         }
     }
 #endif // wxUSE_WXDIB
-    LONG style = ::GetWindowLong( (HWND)GetHWND(), GWL_STYLE ) ;
-    ::SetWindowLong( (HWND)GetHWND(), GWL_STYLE, ( style & ~( SS_BITMAP|SS_ICON ) ) |
-                     ( m_isIcon ? SS_ICON : SS_BITMAP ) );
+    wxMSWWinStyleUpdater(GetHwnd())
+        .TurnOff(SS_BITMAP | SS_ICON)
+        .TurnOn(m_isIcon ? SS_ICON : SS_BITMAP);
 
     MSWReplaceImageHandle((WXLPARAM)handle);
 
@@ -332,7 +333,7 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
             w = width;
             h = height;
 
-            ::MoveWindow(GetHwnd(), x, y, width, height, FALSE);
+            MSWMoveWindowToAnyPosition(GetHwnd(), x, y, width, height, false);
         }
     }
 

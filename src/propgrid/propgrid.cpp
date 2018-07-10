@@ -484,6 +484,11 @@ void wxPropertyGrid::Init2()
     // This helps with flicker
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
+    // Rely on native double-buffering by default.
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+    SetExtraStyle(GetExtraStyle() | wxPG_EX_NATIVE_DOUBLE_BUFFERING);
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
+
     // Hook the top-level parent
     m_tlpClosed = NULL;
     m_tlpClosedTime = 0;
@@ -959,7 +964,13 @@ void wxPropertyGrid::DoSetSelection( const wxArrayPGProperty& newSelection,
 void wxPropertyGrid::MakeColumnEditable( unsigned int column,
                                          bool editable )
 {
-    wxASSERT( column != 1 );
+    // The second column is always editable. To make it read-only is a property
+    // by property decision by setting its wxPG_PROP_READONLY flag.
+    wxASSERT_MSG
+    (
+         column != 1,
+         wxS("Set wxPG_PROP_READONLY property flag instead")
+    );
 
     wxArrayInt& cols = m_pState->m_editableColumns;
 
@@ -1028,13 +1039,8 @@ void wxPropertyGrid::DoBeginLabelEdit( unsigned int colIndex,
                                           0,
                                           colIndex);
 
-    wxWindowID id = tc->GetId();
-    tc->Connect(id, wxEVT_TEXT_ENTER,
-        wxCommandEventHandler(wxPropertyGrid::OnLabelEditorEnterPress),
-        NULL, this);
-    tc->Connect(id, wxEVT_KEY_DOWN,
-        wxKeyEventHandler(wxPropertyGrid::OnLabelEditorKeyPress),
-        NULL, this);
+    tc->Bind(wxEVT_TEXT_ENTER, &wxPropertyGrid::OnLabelEditorEnterPress, this);
+    tc->Bind(wxEVT_KEY_DOWN, &wxPropertyGrid::OnLabelEditorKeyPress, this);
 
     tc->SetFocus();
 
@@ -1153,26 +1159,9 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
 
     if ( exStyle & wxPG_EX_NATIVE_DOUBLE_BUFFERING )
     {
-#if defined(__WXMSW__)
-
-        /*
-        // Don't use WS_EX_COMPOSITED just now.
-        HWND hWnd;
-
-        if ( m_iFlags & wxPG_FL_IN_MANAGER )
-            hWnd = (HWND)GetParent()->GetHWND();
-        else
-            hWnd = (HWND)GetHWND();
-
-        ::SetWindowLong( hWnd, GWL_EXSTYLE,
-                         ::GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_COMPOSITED );
-        */
-
-//#elif defined(__WXGTK20__)
-#endif
         // Only apply wxPG_EX_NATIVE_DOUBLE_BUFFERING if the window
         // truly was double-buffered.
-        if ( !this->IsDoubleBuffered() )
+        if ( !IsDoubleBuffered() )
         {
             exStyle &= ~(wxPG_EX_NATIVE_DOUBLE_BUFFERING);
         }
@@ -1233,9 +1222,7 @@ void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
     // correct top-level window.
     if ( m_tlp )
     {
-        m_tlp->Disconnect( wxEVT_CLOSE_WINDOW,
-                           wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
-                           NULL, this );
+        m_tlp->Unbind(wxEVT_CLOSE_WINDOW, &wxPropertyGrid::OnTLPClose, this);
         m_tlpClosed = m_tlp;
         m_tlpClosedTime = currentTime;
     }
@@ -1246,9 +1233,7 @@ void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
         if ( newTLP != m_tlpClosed ||
              m_tlpClosedTime+250 < currentTime )
         {
-            newTLP->Connect( wxEVT_CLOSE_WINDOW,
-                             wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
-                             NULL, this );
+            newTLP->Bind(wxEVT_CLOSE_WINDOW, &wxPropertyGrid::OnTLPClose, this);
             m_tlpClosed = NULL;
         }
         else
@@ -1440,6 +1425,9 @@ void wxPropertyGrid::RegainColours()
         int colDec = -72;
     #endif
         wxColour capForeCol = wxPGAdjustColour(m_colCapBack,colDec,5000,5000,true);
+        if (wxPGGetColAvg(m_colCapBack) < 100)
+            capForeCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+        
         m_colCapFore = capForeCol;
         m_categoryDefaultCell.GetData()->SetFgCol(capForeCol);
     }
@@ -3292,12 +3280,22 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
         }
     #endif
 
+        // Displaying error dialog box can cause (native) focus changes
+        // so let's preserve the current focus in order to restore it afterwards.
+        wxWindow* focusedWnd = wxWindow::FindFocus();
+
         if ( vfb & wxPG_VFB_SHOW_MESSAGE )
             DoShowPropertyError(property, msg);
 
         if ( vfb & wxPG_VFB_SHOW_MESSAGEBOX )
             /* TRANSLATORS: Caption of message box displaying any property error */
             ::wxMessageBox(msg, _("Property Error"));
+
+        // Restore the focus
+        if ( focusedWnd )
+        {
+            focusedWnd->SetFocus();
+        }
     }
 
     return (vfb & wxPG_VFB_STAY_IN_PROPERTY) ? false : true;
@@ -3934,33 +3932,19 @@ void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd )
 
     if ( argWnd == m_wndEditor )
     {
-        argWnd->Connect(id, wxEVT_MOTION,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseMoveChild),
-            NULL, this);
-        argWnd->Connect(id, wxEVT_LEFT_UP,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseUpChild),
-            NULL, this);
-        argWnd->Connect(id, wxEVT_LEFT_DOWN,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseClickChild),
-            NULL, this);
-        argWnd->Connect(id, wxEVT_RIGHT_UP,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseRightClickChild),
-            NULL, this);
-        argWnd->Connect(id, wxEVT_ENTER_WINDOW,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseEntry),
-            NULL, this);
-        argWnd->Connect(id, wxEVT_LEAVE_WINDOW,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseEntry),
-            NULL, this);
+        argWnd->Bind(wxEVT_MOTION, &wxPropertyGrid::OnMouseMoveChild, this, id);
+        argWnd->Bind(wxEVT_LEFT_UP, &wxPropertyGrid::OnMouseUpChild, this, id);
+        argWnd->Bind(wxEVT_LEFT_DOWN, &wxPropertyGrid::OnMouseClickChild, this, id);
+        argWnd->Bind(wxEVT_RIGHT_UP, &wxPropertyGrid::OnMouseRightClickChild, this, id);
+        argWnd->Bind(wxEVT_ENTER_WINDOW, &wxPropertyGrid::OnMouseEntry, this, id);
+        argWnd->Bind(wxEVT_LEAVE_WINDOW, &wxPropertyGrid::OnMouseEntry, this, id);
     }
 
     wxPropertyGridEditorEventForwarder* forwarder;
     forwarder = new wxPropertyGridEditorEventForwarder(this);
     argWnd->PushEventHandler(forwarder);
 
-    argWnd->Connect(id, wxEVT_KEY_DOWN,
-        wxCharEventHandler(wxPropertyGrid::OnChildKeyDown),
-        NULL, this);
+    argWnd->Bind(wxEVT_KEY_DOWN, &wxPropertyGrid::OnChildKeyDown, this, id);
 }
 
 void wxPropertyGrid::DeletePendingObjects()
@@ -4650,12 +4634,7 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
 
     if ( !HasExtraStyle(wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
     {
-        // Scaled bitmaps only work on Mac currently
-#ifdef __WXOSX_COCOA__
         double scaleFactor = GetContentScaleFactor();
-#else
-        double scaleFactor = 1.0;
-#endif
         int dblh = (m_lineHeight*2);
         if ( !m_doubleBuffer )
         {

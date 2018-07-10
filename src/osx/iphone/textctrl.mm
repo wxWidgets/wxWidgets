@@ -336,23 +336,24 @@ bool wxUITextViewControl::CanFocus() const
 
 wxString wxUITextViewControl::GetStringValue() const
 {
+    wxString result;
     if (m_textView)
     {
-        wxString result = wxCFStringRef::AsString([m_textView text], m_wxPeer->GetFont().GetEncoding());
-        wxMacConvertNewlines13To10( &result ) ;
-        return result;
+        result = wxMacConvertNewlines13To10(
+            wxCFStringRef::AsString([m_textView text], m_wxPeer->GetFont().GetEncoding()));
     }
-    return wxEmptyString;
+    return result;
 }
 
 void wxUITextViewControl::SetStringValue( const wxString &str)
 {
-    wxString st = str;
-    wxMacConvertNewlines10To13( &st );
     wxMacEditHelper helper(m_textView);
 
     if (m_textView)
+    {
+        wxString st(wxMacConvertNewlines10To13(str));
         [m_textView setText: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    }
 }
 
 void wxUITextViewControl::Copy()
@@ -419,8 +420,7 @@ void wxUITextViewControl::SetSelection( long from , long to )
 
 void wxUITextViewControl::WriteText(const wxString& str)
 {
-    wxString st = str;
-    wxMacConvertNewlines10To13( &st );
+    wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
 
     wxCFStringRef insert( st , m_wxPeer->GetFont().GetEncoding() );

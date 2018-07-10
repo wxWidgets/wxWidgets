@@ -8,8 +8,8 @@
 #ifndef _WX_QT_SPINCTRL_H_
 #define _WX_QT_SPINCTRL_H_
 
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QDoubleSpinBox>
+class QSpinBox;
+class QDoubleSpinBox;
 
 // Take advantage of the Qt compile time polymorphy and use a template to avoid
 // copy&paste code for the usage of QSpinBox/QDoubleSpinBox.
@@ -45,7 +45,7 @@ public:
     T GetMax() const;
     T GetIncrement() const;
 
-    virtual Widget *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     Widget *m_qtSpinBox;
@@ -61,7 +61,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+               long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = wxT("wxSpinCtrl"));
 
@@ -70,7 +70,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = wxT("wxSpinCtrl"));
     virtual int GetBase() const wxOVERRIDE { return m_base; }
@@ -97,7 +97,7 @@ public:
                      const wxString& value = wxEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                     long style = wxSP_ARROW_KEYS,
                      double min = 0, double max = 100, double initial = 0,
                      double inc = 1,
                      const wxString& name = wxT("wxSpinCtrlDouble"));
@@ -107,7 +107,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
                 const wxString& name = wxT("wxSpinCtrlDouble"));

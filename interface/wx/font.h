@@ -665,6 +665,39 @@ public:
     const wxNativeFontInfo *GetNativeFontInfo() const;
 
     /**
+        Specify the name of a file containing a TrueType font to be
+        made available to the current application.
+
+        This method can be used to allow this application to use the font from
+        the given file even if it is not globally installed on the system.
+
+        Under OS X this method actually doesn't do anything other than check
+        for the existence of the file in the "Fonts" subdirectory of the
+        application bundle "Resources" directory. You are responsible for
+        actually making the font file available in this directory and setting
+        @c ATSApplicationFontsPath to @c Fonts value in your @c Info.plist
+        file. See also wxStandardPaths::GetResourcesDir().
+
+        Under MSW this method must be called before any wxGraphicsContext
+        objects have been created, otherwise the private font won't be usable
+        from them.
+
+        Under Unix this method requires Pango 1.38 or later and will return @a
+        false and log an error message explaining the problem if this
+        requirement is not satisfied either at compile- or run-time.
+
+        Currently this method is implemented for all major platforms (subject
+        to having Pango 1.38 or later when running configure under Unix) and
+        @c wxUSE_PRIVATE_FONTS is always set to 0 under the other platforms,
+        making this function unavailable at compile-time.
+
+        @return @true if the font was added and can now be used.
+
+        @since 3.1.1
+    */
+    static bool AddPrivateFont(const wxString& filename);
+
+    /**
         Gets the point size.
 
         @see SetPointSize()
@@ -1228,6 +1261,14 @@ public:
                              wxFontWeight weight, bool underline = false,
                              const wxString& facename = wxEmptyString,
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+    /**
+        Finds a font of the given specification, or creates one and adds it to the
+        list. See the @ref wxFont "wxFont constructor" for details of the arguments.
+        
+        @since 3.1.1
+    */
+    wxFont* FindOrCreateFont(const wxFontInfo& fontInfo);
 };
 
 

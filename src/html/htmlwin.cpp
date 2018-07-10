@@ -351,6 +351,8 @@ bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
     SetPage(wxT("<html><body></body></html>"));
 
     SetInitialSize(size);
+    if ( !HasFlag(wxHW_SCROLLBAR_NEVER) )
+        SetScrollRate(wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP);
     return true;
 }
 
@@ -715,20 +717,9 @@ void wxHtmlWindow::OnSetTitle(const wxString& title)
 }
 
 
-// return scroll steps such that a) scrollbars aren't shown needlessly
-// and b) entire content is viewable (i.e. round up)
-static int ScrollSteps(int size, int available)
-{
-    if ( size <= available )
-        return 0;
-    else
-        return (size + wxHTML_SCROLL_STEP - 1) / wxHTML_SCROLL_STEP;
-}
-
-
 void wxHtmlWindow::CreateLayout()
 {
-    // SetScrollbars() results in size change events -- and thus a nested
+    // ShowScrollbars() results in size change events -- and thus a nested
     // CreateLayout() call -- on some platforms. Ignore nested calls, toplevel
     // CreateLayout() will do the right thing eventually.
     static wxRecursionGuardFlag s_flagReentrancy;
@@ -739,88 +730,29 @@ void wxHtmlWindow::CreateLayout()
     if (!m_Cell)
         return;
 
-    int clientWidth, clientHeight;
-    GetClientSize(&clientWidth, &clientHeight);
-
-    const int vscrollbar = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
-    const int hscrollbar = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
-
-    if ( HasScrollbar(wxHORIZONTAL) )
-        clientHeight += hscrollbar;
-
-    if ( HasScrollbar(wxVERTICAL) )
-        clientWidth += vscrollbar;
-
     if ( HasFlag(wxHW_SCROLLBAR_NEVER) )
     {
-        SetScrollbars(1, 1, 0, 0); // always off
-        m_Cell->Layout(clientWidth);
+        m_Cell->Layout(GetClientSize().GetWidth());
     }
-    else // !wxHW_SCROLLBAR_NEVER
+    else // Do show scrollbars if necessary.
     {
-        // Lay the content out with the assumption that it's too large to fit
-        // in the window (this is likely to be the case):
-        m_Cell->Layout(clientWidth - vscrollbar);
+        // Get client width if a vertical scrollbar is shown
+        // (which is usually the case).
+        ShowScrollbars(wxSHOW_SB_DEFAULT, wxSHOW_SB_ALWAYS);
+        const int widthWithVScrollbar = GetClientSize().GetWidth();
 
-        // If the layout is wider than the window, horizontal scrollbar will
-        // certainly be shown. Account for it here for subsequent computations.
-        if ( m_Cell->GetWidth() > clientWidth )
-            clientHeight -= hscrollbar;
+        // Let wxScrolledWindow decide whether it needs to show the vertical
+        // scrollbar for the given contents size.
+        ShowScrollbars(wxSHOW_SB_DEFAULT, wxSHOW_SB_DEFAULT);
+        m_Cell->Layout(widthWithVScrollbar);
+        SetVirtualSize(m_Cell->GetWidth(), m_Cell->GetHeight());
 
-        if ( m_Cell->GetHeight() <= clientHeight )
+        // Check if the vertical scrollbar was hidden.
+        const int newClientWidth = GetClientSize().GetWidth();
+        if ( newClientWidth != widthWithVScrollbar )
         {
-            // we fit into the window, hide vertical scrollbar:
-            SetScrollbars
-            (
-                wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
-                ScrollSteps(m_Cell->GetWidth(), clientWidth - vscrollbar),
-                0
-            );
-            // ...and redo the layout to use the extra space
-            m_Cell->Layout(clientWidth);
-        }
-        else
-        {
-            // If the content doesn't fit into the window by only a small
-            // margin, chances are that it may fit fully with scrollbar turned
-            // off. It's something worth trying but on the other hand, we don't
-            // want to waste too much time redoing the layout (twice!) for
-            // long -- and thus expensive to layout -- pages. The cut-off value
-            // is an arbitrary heuristics.
-            static const int SMALL_OVERLAP = 60;
-            if ( m_Cell->GetHeight() <= clientHeight + SMALL_OVERLAP )
-            {
-                m_Cell->Layout(clientWidth);
-
-                if ( m_Cell->GetHeight() <= clientHeight )
-                {
-                    // Great, we fit in. Hide the scrollbar.
-                    SetScrollbars
-                    (
-                        wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
-                        ScrollSteps(m_Cell->GetWidth(), clientWidth),
-                        0
-                    );
-                    return;
-                }
-                else
-                {
-                    // That didn't work out, go back to previous layout. Note
-                    // that redoing the layout once again here isn't as bad as
-                    // it looks -- thanks to the small cut-off value, it's a
-                    // reasonably small page.
-                    m_Cell->Layout(clientWidth - vscrollbar);
-                }
-            }
-            // else: the page is very long, it will certainly need scrollbar
-
-            SetScrollbars
-            (
-                wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
-                ScrollSteps(m_Cell->GetWidth(), clientWidth - vscrollbar),
-                ScrollSteps(m_Cell->GetHeight(), clientHeight),
-                m_xScrollPosition, m_yScrollPosition
-            );
+            m_Cell->Layout(newClientWidth);
+            SetVirtualSize(m_Cell->GetWidth(), m_Cell->GetHeight());
         }
     }
 }

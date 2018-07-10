@@ -688,9 +688,11 @@ extern "C"
 
 #ifdef wxHAVE_PTHREAD_CLEANUP
     // thread exit function
+    static
     void wxPthreadCleanup(void *ptr);
 #endif // wxHAVE_PTHREAD_CLEANUP
 
+static
 void *wxPthreadStart(void *ptr);
 
 } // extern "C"

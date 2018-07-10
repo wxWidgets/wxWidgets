@@ -42,12 +42,7 @@
 #endif // __WXUNIVERSAL__
 
 #ifdef __WXGTK__
-    #include <gtk/gtk.h>
-    #if GTK_CHECK_VERSION(2,0,0)
-        #include "wx/gtk/private/gtk2-compat.h"
-    #else
-        #define gtk_widget_get_window(x) x->window
-    #endif
+    #include "wx/gtk/private/wrapgtk.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/private.h"
 #elif defined(__WXX11__)
@@ -332,9 +327,15 @@ bool wxPopupTransientWindow::Show( bool show )
     {
 #ifdef __WXGTK3__
         GdkDisplay* display = gtk_widget_get_display(m_widget);
+#ifdef __WXGTK4__
+        gdk_seat_ungrab(gdk_display_get_default_seat(display));
+#else
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         GdkDeviceManager* manager = gdk_display_get_device_manager(display);
         GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
         gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+        wxGCC_WARNING_RESTORE()
+#endif
 #else
         gdk_pointer_ungrab( (guint32)GDK_CURRENT_TIME );
 #endif
@@ -364,18 +365,25 @@ bool wxPopupTransientWindow::Show( bool show )
     {
         gtk_grab_add( m_widget );
 
+        GdkWindow* window = gtk_widget_get_window(m_widget);
+#ifdef __WXGTK4__
+        GdkDisplay* display = gdk_window_get_display(window);
+        GdkSeat* seat = gdk_display_get_default_seat(display);
+        gdk_seat_grab(seat, window, GDK_SEAT_CAPABILITY_POINTER, false, NULL, NULL, NULL, 0);
+#else
         const GdkEventMask mask = GdkEventMask(
             GDK_BUTTON_PRESS_MASK |
             GDK_BUTTON_RELEASE_MASK |
             GDK_POINTER_MOTION_HINT_MASK |
             GDK_POINTER_MOTION_MASK);
-        GdkWindow* window = gtk_widget_get_window(m_widget);
 #ifdef __WXGTK3__
         GdkDisplay* display = gdk_window_get_display(window);
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         GdkDeviceManager* manager = gdk_display_get_device_manager(display);
         GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
         gdk_device_grab(device, window,
             GDK_OWNERSHIP_NONE, true, mask, NULL, unsigned(GDK_CURRENT_TIME));
+        wxGCC_WARNING_RESTORE()
 #else
         gdk_pointer_grab( window, true,
                           mask,
@@ -383,6 +391,7 @@ bool wxPopupTransientWindow::Show( bool show )
                           NULL,
                           (guint32)GDK_CURRENT_TIME );
 #endif
+#endif // !__WXGTK4__
     }
 #endif
 

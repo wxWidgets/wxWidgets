@@ -227,11 +227,14 @@ void FileCtrlWidgetsPage::CreateFileCtrl()
 {
     wxWindowUpdateLocker noUpdates( this );
 
-    const int style =
-        ( m_radioFileCtrlMode->GetSelection() == FileCtrlMode_Open ?
-          wxFC_OPEN : wxFC_SAVE ) |
-        ( m_chkMultiple->IsChecked() ? wxFC_MULTIPLE : 0 ) |
-        ( m_chkNoShowHidden->IsChecked() ? wxFC_NOSHOWHIDDEN : 0 );
+    long style = GetAttrs().m_defaultFlags;
+    style |= m_radioFileCtrlMode->GetSelection() == FileCtrlMode_Open
+                ? wxFC_OPEN
+                : wxFC_SAVE;
+    if ( m_chkMultiple->IsChecked() )
+        style |= wxFC_MULTIPLE;
+    if ( m_chkNoShowHidden->IsChecked() )
+        style |= wxFC_NOSHOWHIDDEN;
 
     wxFileCtrl *fileCtrl = new wxFileCtrl(
                                this,

@@ -89,7 +89,6 @@ class ButtonWidgetsPage : public WidgetsPage
 {
 public:
     ButtonWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~ButtonWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_button; }
     virtual void RecreateWidget() wxOVERRIDE { CreateButton(); }
@@ -457,7 +456,8 @@ void ButtonWidgetsPage::CreateButton()
         if ( m_chkUseBitmapClass->GetValue() )
         {
           bbtn = new wxBitmapButton(this, ButtonPage_Button,
-                                    CreateBitmap(wxT("normal")));
+                                    CreateBitmap(wxT("normal")),
+                                    wxDefaultPosition, wxDefaultSize, flags);
         }
         else
         {

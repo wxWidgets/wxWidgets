@@ -892,10 +892,10 @@ public:
     wxAMMediaEvtHandler(wxAMMediaBackend *amb) :
        m_amb(amb), m_bLoadEventSent(false)
     {
-        m_amb->m_pAX->Connect(m_amb->m_pAX->GetId(),
+        m_amb->m_pAX->Bind(
             wxEVT_ACTIVEX,
-            wxActiveXEventHandler(wxAMMediaEvtHandler::OnActiveX),
-            NULL, this
+            &wxAMMediaEvtHandler::OnActiveX, this,
+            m_amb->m_pAX->GetId()
                               );
     }
 

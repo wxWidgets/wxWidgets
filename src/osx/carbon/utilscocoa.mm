@@ -140,6 +140,48 @@ void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
     }
 }
 
+NSFont* wxFont::OSXGetNSFont() const
+{
+    wxCHECK_MSG( m_refData != NULL , 0, wxT("invalid font") );
+
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
+
+    NSFont *font = const_cast<NSFont*>(reinterpret_cast<const NSFont*>(OSXGetCTFont()));
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
+    // There's a bug in OS X 10.11 (but not present in 10.10 or 10.12) where a
+    // toll-free bridged font may have an attributed of private class __NSCFCharacterSet
+    // that unlike NSCharacterSet doesn't conform to NSSecureCoding. This poses
+    // a problem when such font is used in user-editable content, because some
+    // Asian input methods then crash in 10.11 when editing the string.
+    // As a workaround for this bug, don't use toll-free bridging, but
+    // re-create NSFont from the descriptor instead on buggy OS X versions.
+    int osMajor, osMinor;
+    wxGetOsVersion(&osMajor, &osMinor, NULL);
+    if (osMajor == 10 && osMinor == 11)
+    {
+        return [NSFont fontWithDescriptor:[font fontDescriptor] size:[font pointSize]];
+    }
+#endif // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
+
+    return font;
+}
+
+#endif
+
+#if wxOSX_USE_IPHONE
+
+UIFont* wxFont::OSXGetUIFont() const
+{
+    wxCHECK_MSG( m_refData != NULL , 0, wxT("invalid font") );
+
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
+
+    return const_cast<UIFont*>(reinterpret_cast<const UIFont*>(OSXGetCTFont()));
+}
+
 #endif
 
 // ----------------------------------------------------------------------------
@@ -518,6 +560,52 @@ void  wxMacCocoaHideCursor()
 void  wxMacCocoaShowCursor()
 {
     [NSCursor unhide];
+}
+
+//---------------------------------------------------------
+// helper functions for NSString<->wxString conversion
+//---------------------------------------------------------
+
+wxString wxStringWithNSString(NSString *nsstring)
+{
+#if wxUSE_UNICODE
+    return wxString([nsstring UTF8String], wxConvUTF8);
+#else
+    return wxString([nsstring lossyCString]);
+#endif // wxUSE_UNICODE
+}
+
+NSString* wxNSStringWithWxString(const wxString &wxstring)
+{
+#if wxUSE_UNICODE
+    return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];
+#else
+    return [NSString stringWithCString: wxstring.c_str() length:wxstring.Len()];
+#endif // wxUSE_UNICODE
+}
+
+// ----------------------------------------------------------------------------
+// helper class for getting the correct system colors according to the
+// appearance in effect
+// ----------------------------------------------------------------------------
+
+wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    {
+        formerAppearance = NSAppearance.currentAppearance;
+        NSAppearance.currentAppearance = NSApp.effectiveAppearance;
+    }
+#endif
+}
+
+wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        NSAppearance.currentAppearance = (NSAppearance*) formerAppearance;
+#endif
 }
 
 #endif

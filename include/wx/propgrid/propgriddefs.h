@@ -181,7 +181,7 @@
 #endif
 
 // Use this macro to generate standard custom image height from
-#define wxPG_STD_CUST_IMAGE_HEIGHT(LINEHEIGHT)  (LINEHEIGHT-3)
+#define wxPG_STD_CUST_IMAGE_HEIGHT(LINEHEIGHT)  ((LINEHEIGHT)-3)
 
 // Undefine wxPG_ICON_WIDTH to use supplied xpm bitmaps instead
 // (for tree buttons)
@@ -243,7 +243,7 @@ class wxPGValidationInfo;
 #define wxPG_COLOUR_BLACK       (*wxBLACK)
 
 // Convert Red, Green and Blue to a single 32-bit value.
-#define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
+#define wxPG_COLOUR(R,G,B) ((wxUint32)((R)+((G)<<8)+((B)<<16)))
 
 
 // If property is supposed to have custom-painted image, then returning

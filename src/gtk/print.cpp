@@ -34,7 +34,7 @@
 #include "wx/paper.h"
 #include "wx/modalhook.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 #if GTK_CHECK_VERSION(2,14,0)
 #include <gtk/gtkunixprint.h>
@@ -185,9 +185,7 @@ static GtkPaperSize* wxGetGtkPaperSize(wxPaperSize paperId, const wxSize& size)
         return gtk_paper_size_new(gtk_paper_size_get_default());
 
 #if GTK_CHECK_VERSION(2,12,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,12,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(12))
     {
         // look for a size match in GTK's GtkPaperSize list
         const double w = size.x;
@@ -242,9 +240,7 @@ private:
 
 bool wxGtkPrintModule::OnInit()
 {
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,10,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(10))
     {
         wxPrintFactory::SetPrintFactory( new wxGtkPrintFactory );
     }
@@ -405,9 +401,7 @@ void wxGtkPrintNativeData::SetPrintJob(GtkPrintOperation* job)
 #if GTK_CHECK_VERSION(2,18,0)
     if (job)
     {
-#ifndef __WXGTK3__
-        if (gtk_check_version(2,18,0) == NULL)
-#endif
+        if (wx_is_at_least_gtk2(18))
         {
             gtk_print_operation_set_embed_page_setup(job, true);
         }
@@ -1029,19 +1023,8 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
         return;
     }
 
-    printout->SetPPIScreen(wxGetDisplayPPI());
-    printout->SetPPIPrinter( printDC->GetResolution(),
-                             printDC->GetResolution() );
+    printout->SetUp(*m_dc);
 
-    printout->SetDC(m_dc);
-
-    int w, h;
-    m_dc->GetSize(&w, &h);
-    printout->SetPageSizePixels((int)w, (int)h);
-    printout->SetPaperRectPixels(wxRect(0, 0, w, h));
-    int mw, mh;
-    m_dc->GetSizeMM(&mw, &mh);
-    printout->SetPageSizeMM((int)mw, (int)mh);
     printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined.

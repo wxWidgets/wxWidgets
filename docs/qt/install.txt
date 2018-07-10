@@ -91,6 +91,21 @@ cd tests
 make
 ./test_gui
 
+* Building wxQT, using qt-unified-XXX-online installer
+------------------------------------------------------
+
+Download qt-unified-XXX-online installer from the qt website.
+Install the Qt package of your choice (with the same minimum version
+restriction as above).
+The same build instructions apply, except that you need to explicitly pass
+to configure the Qt dir of the build intended to use as QT5_CUSTOM_DIR, i.e.
+
+# for Linux:
+../configure --with-qt --enable-debug QT5_CUSTOM_DIR=~/Qt/5.11.0/gcc_64
+
+# for Windows (ran from Git Bash, or any other Unix-like shell):
+../configure --with-qt --enable-debug QT5_CUSTOM_DIR=/c/Qt/5.11.0/mingw53_32
+
 * Building wxGT on Android
 --------------------------
 

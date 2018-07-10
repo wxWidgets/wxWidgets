@@ -24,7 +24,7 @@ them). For the platforms with support for precompiled headers, as indicated by
 only include it for the other ones:
 
 @code
-// wxWidgets "Hello world" Program
+// wxWidgets "Hello World" Program
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include <wx/wxprec.h>
@@ -35,11 +35,11 @@ only include it for the other ones:
 @endcode
 
 Practically every app should define a new class derived from wxApp. By
-overriding wxApp's OnInit() virtual method the program can be initialized, e.g.
-by creating a new main window.
+overriding wxApp's OnInit() virtual method the program can be initialized,
+e.g. by creating a new main window.
 
 @code
-class MyApp: public wxApp
+class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
@@ -48,20 +48,20 @@ public:
 
 The main window is created by deriving a class from wxFrame and giving it a
 menu and a status bar in its constructor. Also, any class that wishes to
-respond to any "event" (such as mouse clicks or messages from the menu or a
+respond to an "event" (such as mouse clicks, messages from the menu, or a
 button) must declare an event table using the macro below.
 
-Finally, the way to react to such events must be done in "event handlers" which
-are just functions (or functors, including lambdas if you're using C++11)
+Finally, reacting to such events is done via "event handlers" which are
+just functions (or functors, including lambdas if you're using C++11)
 taking the @c event parameter of the type corresponding to the event being
 handled, e.g. wxCommandEvent for the events from simple controls such as
-buttons, text fields and also menu items. In our sample, we react to three menu
-items, one for our custom menu command and two for the standard "Exit" and
-"About" commands (any program should normally implement the latter two). Notice
-that these handlers don't need to be neither virtual nor public.
+buttons, text fields and also menu items. In our example, we react to three
+menu items: our custom "Hello", and the "Exit" and "About" items (any program
+should normally implement the latter two). Notice that these handlers don't
+need to be virtual or public.
 
 @code
-class MyFrame: public wxFrame
+class MyFrame : public wxFrame
 {
 public:
     MyFrame();
@@ -84,13 +84,13 @@ enum
 };
 @endcode
 
-Notice that you don't need to define identifiers for the "About" and "Exit" as
-wxWidgets already predefines and the standard values such as wxID_ABOUT and
-wxID_EXIT should be used whenever possible, as they can be handled in a special
+Notice that you don't need to define identifiers for "About" and "Exit", as
+wxWidgets already predefines standard values such as wxID_ABOUT and wxID_EXIT.
+You should use these whenever possible, as they can be handled in a special
 way by a particular platform.
 
-As in all programs there must be a "main" function. Under wxWidgets main is
-implemented inside ::wxIMPLEMENT_APP() macro, which creates an application
+As in all programs, there must be a "main" function. Under wxWidgets, main is
+implemented inside the ::wxIMPLEMENT_APP() macro, which creates an application
 instance of the specified class and starts running the GUI event loop. It is
 used simply as:
 
@@ -100,23 +100,23 @@ wxIMPLEMENT_APP(MyApp);
 
 As mentioned above, wxApp::OnInit() is called upon startup and should be used
 to initialize the program, maybe showing a "splash screen" and creating the
-main window (or several). As frames are created hidden by default, to allow
-creating their child windows before showing them, we also need to explicitly
-show it to make it appear on the screen. Finally, we return @true from this
-method to indicate successful initialization:
+main window (or several). Frames are created hidden by default, to allow the
+creation of child windows before displaying them. We thus need to explicitly
+show them. Finally, we return @true from this method to indicate successful
+initialization:
 
 @code
 bool MyApp::OnInit()
 {
     MyFrame *frame = new MyFrame();
-    frame->Show( true );
+    frame->Show(true);
     return true;
 }
 @endcode
 
-In the constructor of the main window (or later on) we create a menu with our
-menu items as well as a status bar to be shown at the bottom of the main
-window. Both have to be associated with the frame with respective calls.
+In the constructor of the main window (or later on), we create a menu with our
+menu items, as well as a status bar to be shown at the bottom of the main
+window. Both have to be bound to the frame with respective calls.
 
 @code
 MyFrame::MyFrame()
@@ -132,39 +132,40 @@ MyFrame::MyFrame()
     menuHelp->Append(wxID_ABOUT);
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append( menuFile, "&File" );
-    menuBar->Append( menuHelp, "&Help" );
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(menuHelp, "&Help");
 
-    SetMenuBar( menuBar );
+    SetMenuBar(menuBar);
 
     CreateStatusBar();
-    SetStatusText( "Welcome to wxWidgets!" );
+    SetStatusText("Welcome to wxWidgets!");
 
     ... continued below ...
 @endcode
 
 Notice that we don't need to specify the labels for the standard menu items
-@c wxID_ABOUT and @c wxID_EXIT, they will be given standard (even correctly
-translated) labels and also standard accelerators correct for the current
-platform making your program behaviour more native. For this reason you should
-prefer reusing the standard ids (see @ref page_stockitems) if possible.
+@c wxID_ABOUT and @c wxID_EXIT — they will be given standard (even correctly
+translated) labels and standard accelerators correct for the current
+platform, making our program behaviour more native. For this reason, you
+should prefer reusing the standard ids (see @ref page_stockitems) where
+possible.
 
-We also have to actually connect our event handlers to the events we want to
-handle in them, by calling Bind() to send all the menu events, identified by
-wxEVT_MENU event type, with the specified ID to the given function. The
+We also have to connect our event handlers to the events we want to handle in
+them. We do this by calling Bind() to send all the menu events (identified by
+wxEVT_MENU event type) with the specified ID to the given function. The
 parameters we pass to Bind() are
 
--# The event type, e.g. wxEVT_MENU or wxEVT_BUTTON or wxEVT_SIZE or one
+-# The event type, e.g. wxEVT_MENU, wxEVT_BUTTON, wxEVT_SIZE, or one
    of many other events used by wxWidgets.
--# Pointer to the member function to call and the object to call it on. In
-   this case we just call our own function, hence we pass `this` for this
-   object itself, but we could call a member function of another object too.
-   And we could could also use a non-member function here, and, in fact,
-   anything that can be called passing it a wxCommandEvent could be used here.
--# The optional identifier allowing to select just some events of wxEVT_MENU
+-# A Pointer to the method to call, and the object to call it on. In
+   this case, we just call our own function, and pass the `this` pointer
+   for the object itself. We could instead call the method of another object,
+   or a non-member function — in fact, any object that can be called with a
+   wxCommandEvent, can be used here.
+-# An optional identifier, allowing us to select just some events of wxEVT_MENU
    type, namely those from the menu item with the given ID, instead of handling
-   all of them in the provided handler. This is especially useful with the menu
-   items and rarely used with other kinds of events.
+   all of them in the provided handler. This is mainly useful with menu items
+   and rarely with other kinds of events.
 
 @code
     ... continued from above ...
@@ -183,7 +184,7 @@ If there is no other main window left, the application will quit.
 @code
 void MyFrame::OnExit(wxCommandEvent& event)
 {
-    Close( true );
+    Close(true);
 }
 @endcode
 
@@ -193,14 +194,14 @@ case a typical "About" window with information about the program.
 @code
 void MyFrame::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox( "This is a wxWidgets' Hello world sample",
-                  "About Hello World", wxOK | wxICON_INFORMATION );
+    wxMessageBox("This is a wxWidgets Hello World example",
+                 "About Hello World", wxOK | wxICON_INFORMATION);
 }
 @endcode
 
 The implementation of custom menu command handler may perform whatever task
 your program needs to do, in this case we will simply show a message from it as
-befits a hello world example:
+befits a Hello World example:
 
 @code
 void MyFrame::OnHello(wxCommandEvent& event)
@@ -223,7 +224,7 @@ void MyFrame::OnHello(wxCommandEvent& event)
 Here is the entire program that can be copied and pasted:
 
 @code
-// wxWidgets "Hello world" Program
+// wxWidgets "Hello World" Program
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include <wx/wxprec.h>
@@ -232,13 +233,13 @@ Here is the entire program that can be copied and pasted:
     #include <wx/wx.h>
 #endif
 
-class MyApp: public wxApp
+class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
 };
 
-class MyFrame: public wxFrame
+class MyFrame : public wxFrame
 {
 public:
     MyFrame();
@@ -259,12 +260,12 @@ wxIMPLEMENT_APP(MyApp);
 bool MyApp::OnInit()
 {
     MyFrame *frame = new MyFrame();
-    frame->Show( true );
+    frame->Show(true);
     return true;
 }
 
 MyFrame::MyFrame()
-        : wxFrame(NULL, wxID_ANY, "Hello World")
+    : wxFrame(NULL, wxID_ANY, "Hello World")
 {
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
@@ -276,13 +277,13 @@ MyFrame::MyFrame()
     menuHelp->Append(wxID_ABOUT);
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append( menuFile, "&File" );
-    menuBar->Append( menuHelp, "&Help" );
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(menuHelp, "&Help");
 
     SetMenuBar( menuBar );
 
     CreateStatusBar();
-    SetStatusText( "Welcome to wxWidgets!" );
+    SetStatusText("Welcome to wxWidgets!");
 
     Bind(wxEVT_MENU, &MyFrame::OnHello, this, ID_Hello);
     Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
@@ -291,13 +292,13 @@ MyFrame::MyFrame()
 
 void MyFrame::OnExit(wxCommandEvent& event)
 {
-    Close( true );
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& event)
 {
-    wxMessageBox( "This is a wxWidgets' Hello world sample",
-                  "About Hello World", wxOK | wxICON_INFORMATION );
+    wxMessageBox("This is a wxWidgets Hello World example",
+                 "About Hello World", wxOK | wxICON_INFORMATION);
 }
 
 void MyFrame::OnHello(wxCommandEvent& event)

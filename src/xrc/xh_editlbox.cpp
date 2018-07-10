@@ -99,10 +99,7 @@ wxObject *wxEditableListBoxXmlHandler::DoCreateResource()
     }
     else if ( m_insideBox && m_node->GetName() == EDITLBOX_ITEM_NAME )
     {
-        wxString str = GetNodeContent(m_node);
-        if ( m_resource->GetFlags() & wxXRC_USE_LOCALE )
-            str = wxGetTranslation(str, m_resource->GetDomain());
-        m_items.push_back(str);
+        m_items.push_back(GetNodeText(m_node, wxXRC_TEXT_NO_ESCAPE));
 
         return NULL;
     }

@@ -13,8 +13,7 @@
 
 #include "wx/gtk/mimetype.h"
 
-#include <gio/gio.h>
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/object.h"
@@ -24,10 +23,9 @@ wxString wxGTKMimeTypesManagerImpl::GetIconFromMimeType(const wxString& mime)
 {
     wxString icon;
 #if GTK_CHECK_VERSION(2,14,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,14,0))
+    if (!wx_is_at_least_gtk2(14))
         return icon;
-#endif
+
     wxGtkString type(g_content_type_from_mime_type(mime.utf8_str()));
 
     wxGtkObject<GIcon> gicon(g_content_type_get_icon(type));

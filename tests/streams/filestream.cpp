@@ -37,7 +37,6 @@ class fileStream : public BaseStreamTestCase<wxFileInputStream, wxFileOutputStre
 {
 public:
     fileStream();
-    virtual ~fileStream();
 
     CPPUNIT_TEST_SUITE(fileStream);
         // Base class stream tests the fileStream supports.
@@ -79,13 +78,6 @@ fileStream::fileStream()
     m_bSeekInvalidBeyondEnd = false;
 }
 
-fileStream::~fileStream()
-{
-    // Remove the temp test file...
-    ::wxRemoveFile(FILENAME_FILEINSTREAM);
-    ::wxRemoveFile(FILENAME_FILEOUTSTREAM);
-}
-
 wxFileInputStream *fileStream::DoCreateInStream()
 {
     wxFileInputStream *pFileInStream = new wxFileInputStream(GetInFileName());
@@ -106,12 +98,37 @@ void fileStream::DoDeleteOutStream()
 
 wxString fileStream::GetInFileName() const
 {
-    static bool bFileCreated = false;
-    if (!bFileCreated)
+    class AutoRemoveFile
     {
-        // Create the file only once
-        bFileCreated = true;
+    public:
+        AutoRemoveFile()
+        {
+            m_created = false;
+        }
 
+        ~AutoRemoveFile()
+        {
+            if ( m_created )
+                wxRemoveFile(FILENAME_FILEINSTREAM);
+        }
+
+        bool ShouldCreate()
+        {
+            if ( m_created )
+                return false;
+
+            m_created = true;
+
+            return true;
+        }
+
+    private:
+        bool m_created;
+    };
+
+    static AutoRemoveFile autoFile;
+    if ( autoFile.ShouldCreate() )
+    {
         // Make sure we have a input file...
         char buf[DATABUFFER_SIZE];
         wxFileOutputStream out(FILENAME_FILEINSTREAM);

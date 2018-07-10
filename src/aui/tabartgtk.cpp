@@ -36,8 +36,6 @@
 #include "wx/gtk/dc.h"
 #include "wx/gtk/private.h"
 
-#include <gtk/gtk.h>
-
 #include "wx/aui/auibook.h"
 #include "wx/aui/tabartgtk.h"
 #include "wx/renderer.h"

@@ -18,7 +18,7 @@
 #if wxUSE_SPLASH
 
 #ifdef __WXGTK20__
-    #include <gtk/gtk.h>
+    #include "wx/gtk/private/wrapgtk.h"
 #endif
 
 #include "wx/splash.h"

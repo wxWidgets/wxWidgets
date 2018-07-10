@@ -540,7 +540,7 @@ bool wxMimeTypesManagerImpl::GetMimeType(const wxString& uti, wxString *mimeType
 
     if( itr == m_utiMap.end() || itr->second.mimeTypes.GetCount() < 1 )
     {
-        *mimeType = wxEmptyString;
+        mimeType->clear();
         return false;
     }
 
@@ -582,7 +582,7 @@ bool wxMimeTypesManagerImpl::GetDescription(const wxString& uti, wxString *desc)
 
     if( itr == m_utiMap.end() || itr->second.description.empty() )
     {
-        *desc = wxEmptyString;
+        desc->clear();
         return false;
     }
 

@@ -11,6 +11,9 @@
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT2
 
+#include "wx/dir.h"
+#include "wx/dynlib.h"
+#include "wx/filename.h"
 #include "wx/stockitem.h"
 #include "wx/gtk/webview_webkit.h"
 #include "wx/gtk/control.h"
@@ -19,7 +22,13 @@
 #include "wx/base64.h"
 #include "wx/log.h"
 #include "wx/gtk/private/webview_webkit2_extension.h"
+#include "wx/gtk/private/string.h"
+#include "wx/gtk/private/webkit.h"
+#include "wx/gtk/private/error.h"
+#include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
+#include <JavaScriptCore/JSValueRef.h>
+#include <JavaScriptCore/JSStringRef.h>
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -58,7 +67,7 @@ wxgtk_webview_webkit_load_changed(GtkWidget *,
 }
 
 static gboolean
-wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
+wxgtk_webview_webkit_navigation(WebKitWebView *,
                                 WebKitPolicyDecision *decision,
                                 wxWebViewWebKit *webKitCtrl)
 {
@@ -84,16 +93,6 @@ wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
         return TRUE;
     }
 
-    if(webKitCtrl->m_guard)
-    {
-        webKitCtrl->m_guard = false;
-        //We set this to make sure that we don't try to load the page again from
-        //the resource request callback
-        webKitCtrl->m_vfsurl = webkit_web_view_get_uri(web_view);
-        webkit_policy_decision_use(decision);
-        return FALSE;
-    }
-
     webKitCtrl->m_busy = true;
 
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
@@ -111,32 +110,6 @@ wxgtk_webview_webkit_navigation(WebKitWebView *web_view,
     }
     else
     {
-        wxString wxuri = uri;
-        wxSharedPtr<wxWebViewHandler> handler;
-        wxVector<wxSharedPtr<wxWebViewHandler> > handlers = webKitCtrl->GetHandlers();
-        //We are not vetoed so see if we match one of the additional handlers
-        for(wxVector<wxSharedPtr<wxWebViewHandler> >::iterator it = handlers.begin();
-            it != handlers.end(); ++it)
-        {
-            if(wxuri.substr(0, (*it)->GetName().length()) == (*it)->GetName())
-            {
-                handler = (*it);
-            }
-        }
-        //If we found a handler we can then use it to load the file directly
-        //ourselves
-        if(handler)
-        {
-            webKitCtrl->m_guard = true;
-            wxFSFile* file = handler->GetFile(wxuri);
-            if(file)
-            {
-                webKitCtrl->SetPage(*file->GetStream(), wxuri);
-            }
-            //We need to throw some sort of error here if file is NULL
-            webkit_policy_decision_ignore(decision);
-            return TRUE;
-        }
         return FALSE;
     }
 }
@@ -316,49 +289,53 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
 }
 
 static void
-wxgtk_webview_webkit_resource_req(WebKitWebView *,
-                                  WebKitWebResource *,
-                                  WebKitURIRequest *request,
-                                  wxWebViewWebKit *webKitCtrl)
+wxgtk_webview_webkit_uri_scheme_request_cb(WebKitURISchemeRequest *request,
+                                           wxWebViewWebKit *webKitCtrl)
 {
-    wxString uri = webkit_uri_request_get_uri(request);
+    const wxString scheme = wxString::FromUTF8(webkit_uri_scheme_request_get_scheme(request));
 
     wxSharedPtr<wxWebViewHandler> handler;
     wxVector<wxSharedPtr<wxWebViewHandler> > handlers = webKitCtrl->GetHandlers();
 
-    //We are not vetoed so see if we match one of the additional handlers
     for(wxVector<wxSharedPtr<wxWebViewHandler> >::iterator it = handlers.begin();
         it != handlers.end(); ++it)
     {
-        if(uri.substr(0, (*it)->GetName().length()) == (*it)->GetName())
+        if(scheme == (*it)->GetName())
         {
             handler = (*it);
         }
     }
-    //If we found a handler we can then use it to load the file directly
-    //ourselves
+
     if(handler)
     {
-        //If it is requsting the page itself then return as we have already
-        //loaded it from the archive
-        if(webKitCtrl->m_vfsurl == uri)
-            return;
+        const wxString uri = wxString::FromUTF8(webkit_uri_scheme_request_get_uri(request));
 
         wxFSFile* file = handler->GetFile(uri);
         if(file)
         {
-            //We load the data into a data url to save it being written out again
-            size_t size = file->GetStream()->GetLength();
-            char *buffer = new char[size];
-            file->GetStream()->Read(buffer, size);
-            wxString data = wxBase64Encode(buffer, size);
-            delete[] buffer;
+            gint64 length = file->GetStream()->GetLength();
+            guint8 *data = g_new(guint8, length);
+            file->GetStream()->Read(data, length);
+            GInputStream *stream = g_memory_input_stream_new_from_data(data,
+                                                                       length,
+                                                                       g_free);
             wxString mime = file->GetMimeType();
-            wxString path = "data:" + mime + ";base64," + data;
-            //Then we can redirect the call
-            webkit_uri_request_set_uri(request, path.utf8_str());
+            webkit_uri_scheme_request_finish(request, stream, length, mime.utf8_str());
         }
-
+        else
+        {
+            wxGtkError error(g_error_new(WEBKIT_NETWORK_ERROR,
+                                         WEBKIT_NETWORK_ERROR_FILE_DOES_NOT_EXIST,
+                                         "File not found: %s", uri.utf8_str().data()));
+            webkit_uri_scheme_request_finish_error(request, error);
+        }
+    }
+    else
+    {
+        wxGtkError error(g_error_new(WEBKIT_NETWORK_ERROR,
+                                     WEBKIT_NETWORK_ERROR_UNKNOWN_PROTOCOL,
+                                     "Unknown scheme: %s", scheme.utf8_str().data()));
+        webkit_uri_scheme_request_finish_error(request, error);
     }
 }
 
@@ -391,14 +368,75 @@ wxgtk_webview_webkit_counted_matches(WebKitFindController *,
     *findCount = match_count;
 }
 
+// This function checks if the specified directory contains our web extension.
+static bool CheckDirectoryForWebExt(const char* dirname)
+{
+    wxDir dir;
+    if ( !wxDir::Exists(dirname) || !dir.Open(dirname) )
+        return false;
+
+    wxString file;
+    bool cont = dir.GetFirst
+                    (
+                        &file,
+                        "webkit2_ext*" + wxDynamicLibrary::GetDllExt(wxDL_MODULE),
+                        wxDIR_FILES
+                    );
+    while ( cont )
+    {
+        wxDynamicLibrary dl;
+        if ( dl.Load(wxFileName(dirname, file).GetFullPath(),
+                     wxDL_VERBATIM | wxDL_LAZY) &&
+                dl.HasSymbol("webkit_web_extension_initialize_with_user_data") )
+        {
+            // Looks like our extension.
+            return true;
+        }
+
+        cont = dir.GetNext(&file);
+    }
+
+    return false;
+}
+
 static void
 wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
 {
     const char *address = g_dbus_server_get_client_address(dbusServer);
     GVariant *user_data = g_variant_new("(s)", address);
-    webkit_web_context_set_web_extensions_directory(context,
-                                                    WX_WEB_EXTENSIONS_DIRECTORY);
+
+    // The first value is the location in which the extension is supposed to be
+    // normally installed, while the other two are used as fallbacks to allow
+    // running the tests and sample using wxWebView before installing it.
+    const char* const directories[] =
+    {
+        WX_WEB_EXTENSIONS_DIRECTORY,
+        "..",
+        "../..",
+    };
+
+    const char* dir = NULL;
+    for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
+    {
+        if ( CheckDirectoryForWebExt(directories[n]) )
+        {
+            dir = directories[n];
+            break;
+        }
+    }
+
+    if ( dir )
+    {
+        webkit_web_context_set_web_extensions_directory(context, dir);
+    }
+    else
+    {
+        wxLogWarning(_("Web extension not found in \"%s\", "
+                       "some wxWebView functionality will be not available"),
+                     WX_WEB_EXTENSIONS_DIRECTORY);
+    }
+
     webkit_web_context_set_web_extensions_initialization_user_data(context,
                                                                    user_data);
 }
@@ -499,38 +537,35 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     }
 
     SetupWebExtensionServer();
-    g_signal_connect_after(webkit_web_context_get_default(),
-                           "initialize-web-extensions",
-                           G_CALLBACK(wxgtk_initialize_web_extensions),
-                           m_dbusServer);
+    g_signal_connect(webkit_web_context_get_default(),
+                     "initialize-web-extensions",
+                     G_CALLBACK(wxgtk_initialize_web_extensions),
+                     m_dbusServer);
 
     m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
     GTKCreateScrolledWindowWith(GTK_WIDGET(m_web_view));
     g_object_ref(m_widget);
 
-    g_signal_connect_after(m_web_view, "decide-policy",
-                           G_CALLBACK(wxgtk_webview_webkit_decide_policy),
-                           this);
+    g_signal_connect(m_web_view, "decide-policy",
+                     G_CALLBACK(wxgtk_webview_webkit_decide_policy),
+                     this);
 
-    g_signal_connect_after(m_web_view, "load-failed",
-                           G_CALLBACK(wxgtk_webview_webkit_load_failed), this);
+    g_signal_connect(m_web_view, "load-failed",
+                     G_CALLBACK(wxgtk_webview_webkit_load_failed), this);
 
-    g_signal_connect_after(m_web_view, "notify::title",
-                           G_CALLBACK(wxgtk_webview_webkit_title_changed), this);
+    g_signal_connect(m_web_view, "notify::title",
+                     G_CALLBACK(wxgtk_webview_webkit_title_changed), this);
 
-    g_signal_connect_after(m_web_view, "resource-load-started",
-                           G_CALLBACK(wxgtk_webview_webkit_resource_req), this);
+    g_signal_connect(m_web_view, "context-menu",
+                     G_CALLBACK(wxgtk_webview_webkit_context_menu), this);
 
-    g_signal_connect_after(m_web_view, "context-menu",
-                           G_CALLBACK(wxgtk_webview_webkit_context_menu), this);
-
-    g_signal_connect_after(m_web_view, "create",
-                           G_CALLBACK(wxgtk_webview_webkit_create_webview), this);
+    g_signal_connect(m_web_view, "create",
+                     G_CALLBACK(wxgtk_webview_webkit_create_webview), this);
 
     WebKitFindController* findctrl = webkit_web_view_get_find_controller(m_web_view);
-    g_signal_connect_after(findctrl, "counted-matches",
-                           G_CALLBACK(wxgtk_webview_webkit_counted_matches),
-                           &m_findCount);
+    g_signal_connect(findctrl, "counted-matches",
+                     G_CALLBACK(wxgtk_webview_webkit_counted_matches),
+                     &m_findCount);
 
     m_parent->DoAddChild( this );
 
@@ -540,9 +575,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     webkit_web_view_load_uri(m_web_view, url.utf8_str());
 
     // last to avoid getting signal too early
-    g_signal_connect_after(m_web_view, "load-changed",
-                           G_CALLBACK(wxgtk_webview_webkit_load_changed),
-                           this);
+    g_signal_connect(m_web_view, "load-changed",
+                     G_CALLBACK(wxgtk_webview_webkit_load_changed),
+                     this);
 
     return true;
 }
@@ -552,7 +587,11 @@ wxWebViewWebKit::~wxWebViewWebKit()
     if (m_web_view)
         GTKDisconnect(m_web_view);
     if (m_dbusServer)
+    {
         g_dbus_server_stop(m_dbusServer);
+        g_signal_handlers_disconnect_by_data(
+            webkit_web_context_get_default(), m_dbusServer);
+    }
     g_clear_object(&m_dbusServer);
     g_clear_object(&m_extension);
 }
@@ -1093,18 +1132,121 @@ wxString wxWebViewWebKit::GetPageText() const
     return wxString();
 }
 
-void wxWebViewWebKit::RunScript(const wxString& javascript)
+extern "C"
 {
+
+static void wxgtk_run_javascript_cb(GObject *,
+                                    GAsyncResult *res,
+                                    void *user_data)
+{
+    g_object_ref(res);
+
+    GAsyncResult** res_out = static_cast<GAsyncResult**>(user_data);
+    *res_out = res;
+}
+
+} // extern "C"
+
+// Run the given script synchronously and return its result in output.
+bool wxWebViewWebKit::RunScriptSync(const wxString& javascript, wxString* output)
+{
+    GAsyncResult *result = NULL;
     webkit_web_view_run_javascript(m_web_view,
-                                   javascript.mb_str(wxConvUTF8),
+                                   javascript.utf8_str(),
                                    NULL,
-                                   NULL,
-                                   NULL);
+                                   wxgtk_run_javascript_cb,
+                                   &result);
+
+    GMainContext *main_context = g_main_context_get_thread_default();
+
+    while ( !result )
+        g_main_context_iteration(main_context, TRUE);
+
+    wxGtkError error;
+    wxWebKitJavascriptResult js_result
+                             (
+                                webkit_web_view_run_javascript_finish
+                                (
+                                    m_web_view,
+                                    result,
+                                    error.Out()
+                                )
+                             );
+
+    // Match g_object_ref() in wxgtk_run_javascript_cb()
+    g_object_unref(result);
+
+    if ( !js_result )
+    {
+        if ( output )
+            *output = error.GetMessage();
+        return false;
+    }
+
+    JSGlobalContextRef context = webkit_javascript_result_get_global_context(js_result);
+    JSValueRef value = webkit_javascript_result_get_value(js_result);
+
+    JSValueRef exception = NULL;
+    wxJSStringRef js_value
+                  (
+                   JSValueIsObject(context, value)
+                       ? JSValueCreateJSONString(context, value, 0, &exception)
+                       : JSValueToStringCopy(context, value, &exception)
+                  );
+
+    if ( exception )
+    {
+        if ( output )
+        {
+            wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
+            *output = ex_value.ToWxString();
+        }
+
+        return false;
+    }
+
+    if ( output != NULL )
+        *output = js_value.ToWxString();
+
+    return true;
+}
+
+bool wxWebViewWebKit::RunScript(const wxString& javascript, wxString* output)
+{
+    wxJSScriptWrapper wrapJS(javascript, &m_runScriptCount);
+
+    // This string is also used as an error indicator: it's cleared if there is
+    // no error or used in the warning message below if there is one.
+    wxString result;
+    if ( RunScriptSync(wrapJS.GetWrappedCode(), &result)
+            && result == wxS("true") )
+    {
+        if ( RunScriptSync(wrapJS.GetOutputCode(), &result) )
+        {
+            if ( output )
+                *output = result;
+            result.clear();
+        }
+
+        RunScriptSync(wrapJS.GetCleanUpCode());
+    }
+
+    if ( !result.empty() )
+    {
+        wxLogWarning(_("Error running JavaScript: %s"), result);
+        return false;
+    }
+
+    return true;
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     m_handlerList.push_back(handler);
+    WebKitWebContext* context = webkit_web_context_get_default();
+    webkit_web_context_register_uri_scheme(context, handler->GetName().utf8_str(),
+                                           (WebKitURISchemeRequestCallback)wxgtk_webview_webkit_uri_scheme_request_cb,
+                                           this, NULL);
 }
 
 void wxWebViewWebKit::EnableContextMenu(bool enable)

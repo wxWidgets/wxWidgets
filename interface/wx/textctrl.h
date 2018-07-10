@@ -945,10 +945,12 @@ public:
            (otherwise pressing Enter key is either processed internally by the
            control or used to activate the default button of the dialog, if any).
     @style{wxTE_PROCESS_TAB}
-           The control will receive @c wxEVT_CHAR events for TAB pressed -
-           normally, TAB is used for passing to the next control in a dialog
-           instead. For the control created with this style, you can still use
-           Ctrl-Enter to pass to the next control from the keyboard.
+           Normally, TAB key is used for keyboard navigation and pressing it in
+           a control switches focus to the next one. With this style, this
+           won't happen and if the TAB is not otherwise processed (e.g. by @c
+           wxEVT_CHAR event handler), a literal TAB character is inserted into
+           the control. Notice that this style has no effect for single-line
+           text controls when using wxGTK.
     @style{wxTE_MULTILINE}
            The text control allows multiple lines. If this style is not
            specified, line break characters should not be used in the controls
@@ -1004,9 +1006,10 @@ public:
     @endStyleTable
 
     Note that alignment styles (wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT) can be
-    changed dynamically after control creation on wxMSW and wxGTK. wxTE_READONLY,
-    wxTE_PASSWORD and wrapping styles can be dynamically changed under wxGTK but
-    not wxMSW. The other styles can be only set during control creation.
+    changed dynamically after control creation on wxMSW, wxGTK and wxOSX.
+    wxTE_READONLY, wxTE_PASSWORD and wrapping styles can be dynamically changed
+    under wxGTK but not wxMSW. The other styles can be only set during control
+    creation.
 
 
     @section textctrl_text_format wxTextCtrl Text Format
@@ -1030,6 +1033,31 @@ public:
     back to the other wxTextCtrl methods. This problem doesn't arise for
     single-line platforms however where the indices in the control do
     correspond to the positions in the value string.
+
+
+    @section textctrl_positions_xy wxTextCtrl Positions and Coordinates
+
+    It is possible to use either linear positions, i.e. roughly (but @e not
+    always exactly, as explained in the previous section) the index of the
+    character in the text contained in the control or X-Y coordinates, i.e.
+    column and line of the character when working with this class and it
+    provides the functions PositionToXY() and XYToPosition() to convert between
+    the two.
+
+    Additionally, a position in the control can be converted to its coordinates
+    in pixels using PositionToCoords() which can be useful to e.g. show a popup
+    menu near the given character. And, in the other direction, HitTest() can
+    be used to find the character under, or near, the given pixel coordinates.
+
+    To be more precise, positions actually refer to the gaps between characters
+    and not the characters themselves. Thus, position 0 is the one before the
+    very first character in the control and so is a valid position even when
+    the control is empty. And if the control contains a single character, it
+    has two valid positions: 0 before this character and 1 -- after it. This,
+    when the documentation of various functions mentions "invalid position", it
+    doesn't consider the position just after the last character of the line to
+    be invalid, only the positions beyond that one (e.g. 2 and greater in the
+    single character example) are actually invalid.
 
 
     @section textctrl_styles wxTextCtrl Styles.
@@ -1309,7 +1337,7 @@ public:
         parameter is not modified.
 
         Please note that this function is currently only implemented in wxUniv,
-        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        wxMSW and wxGTK ports and always returns @c wxTE_HT_UNKNOWN in the
         other ports.
 
         @beginWxPerlOnly
@@ -1335,7 +1363,7 @@ public:
         parameters are not modified.
 
         Please note that this function is currently only implemented in wxUniv,
-        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        wxMSW and wxGTK ports and always returns @c wxTE_HT_UNKNOWN in the
         other ports.
 
         @beginWxPerlOnly

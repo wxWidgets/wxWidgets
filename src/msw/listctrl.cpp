@@ -334,6 +334,10 @@ void wxListCtrl::MSWSetExListStyles()
         // it seems better to enable it by default than disable
         LVS_EX_HEADERDRAGDROP
     );
+
+    // As we use LVS_EX_DOUBLEBUFFER above, we don't need to erase our
+    // background and doing it only results in flicker.
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -719,15 +723,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     else if ( width == wxLIST_AUTOSIZE_USEHEADER)
         width = LVSCW_AUTOSIZE_USEHEADER;
 
-    if ( !ListView_SetColumnWidth(GetHwnd(), col, width) )
-        return false;
-
-    // Failure to explicitly refresh the control with horizontal rules results
-    // in corrupted rules display.
-    if ( HasFlag(wxLC_HRULES) )
-        Refresh();
-
-    return true;
+    return ListView_SetColumnWidth(GetHwnd(), col, width) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -960,7 +956,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     return true;
 }
 
-long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
+bool wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
 {
     wxListItem info;
     info.m_text = label;
@@ -2720,6 +2716,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // ---------------
     switch ( nmhdr->code )
     {
+        case HDN_ITEMCHANGING:
+            // Always let the default handling of this event take place,
+            // otherwise the selected items are not redrawn to correspond to
+            // the new column widths, see #18032.
+            return false;
+
         case LVN_DELETEALLITEMS:
             // always return true to suppress all additional LVN_DELETEITEM
             // notifications - this makes deleting all items from a list ctrl
@@ -3084,48 +3086,88 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     wxSize clientSize = GetClientSize();
-    wxRect itemRect;
+
+    const int countPerPage = GetCountPerPage();
+    if (countPerPage < 0)
+    {
+        // Can be -1 in which case it's useless to try to draw rules.
+        return;
+    }
+
+    const long top = GetTopItem();
+    const long bottom = wxMin(top + countPerPage, itemCount - 1);
+
+    wxRect clipRect;
+    dc.GetClippingBox(clipRect);
 
     if (drawHRules)
     {
-        const long top = GetTopItem();
-        for ( int i = top; i < top + GetCountPerPage() + 1; i++ )
+        wxRect itemRect;
+        for ( long i = top; i <= bottom; i++ )
         {
             if (GetItemRect(i, itemRect))
             {
-                int cy = itemRect.GetTop();
-                if (i != 0) // Don't draw the first one
-                {
-                    dc.DrawLine(0, cy, clientSize.x, cy);
-                }
-                // Draw last line
-                if (i == itemCount - 1)
-                {
-                    cy = itemRect.GetBottom();
-                    dc.DrawLine(0, cy, clientSize.x, cy);
-                    break;
-                }
+                const int cy = itemRect.GetBottom();
+                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);
             }
+        }
+
+        /*
+            The drawing can be clipped horizontally to the rightmost column.
+            This happens when an item is added (and visible) and results in a
+            horizontal rule being clipped instead of drawn across the entire
+            list control. In that case we request for the part to the right of
+            the rightmost column to be drawn as well.
+        */
+        if ( clipRect.GetRight() != clientSize.x - 1 && clipRect.width )
+        {
+            RefreshRect(wxRect(clipRect.GetRight(), clipRect.y,
+                               clientSize.x - clipRect.width, clipRect.height),
+                        false /* don't erase background */);
         }
     }
 
     if (drawVRules)
     {
-        wxRect firstItemRect;
-        GetItemRect(0, firstItemRect);
+        wxRect topItemRect, bottomItemRect;
+        GetItemRect(top, topItemRect);
 
-        if (GetItemRect(itemCount - 1, itemRect))
+        if (GetItemRect(bottom, bottomItemRect))
         {
-            // this is a fix for bug 673394: erase the pixels which we would
-            // otherwise leave on the screen
-            static const int gap = 2;
-            dc.SetPen(*wxTRANSPARENT_PEN);
-            dc.SetBrush(wxBrush(GetBackgroundColour()));
-            dc.DrawRectangle(0, firstItemRect.GetY() - gap,
-                             clientSize.GetWidth(), gap);
+            /*
+                This is a fix for ticket #747: erase the pixels which we would
+                otherwise leave on the screen.
 
-            dc.SetPen(pen);
-            dc.SetBrush(*wxTRANSPARENT_BRUSH);
+                The drawing of the rectangle as a fix to erase trailing pixels
+                when resizing a column is only needed for ComCtl32 prior to
+                6.0, i.e. when not using a manifest in which case 5.82 is used.
+                And even then it only happens when "Show window contents while
+                dragging" is enabled under Windows, resulting in live updates
+                when resizing columns. Note that even with that setting on, at
+                least under Windows 7 and 10 no live updating is done when
+                using ComCtl32 5.82.
+
+                Revision b66c3a67519caa9debfd76e6d74954eaebfa56d9 made this fix
+                almost redundant, except that when you do NOT handle
+                EVT_LIST_COL_DRAGGING (or do and skip the event) the trailing
+                pixels still appear. In case of wanting to reproduce the
+                problem in the listctrl sample: comment out handling oF
+                EVT_LIST_COL_DRAGGING and also set useDrawFix to false and gap
+                to 2 (not 0).
+            */
+
+            static const bool useDrawFix = wxApp::GetComCtl32Version() < 600;
+
+            static const int gap = useDrawFix ? 2 : 0;
+
+            if (useDrawFix)
+            {
+                wxDCPenChanger changePen(dc, *wxTRANSPARENT_PEN);
+                wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
+
+                dc.DrawRectangle(0, topItemRect.GetY() - gap,
+                                 clientSize.GetWidth(), gap);
+            }
 
             const int numCols = GetColumnCount();
             wxVector<int> indexArray(numCols);
@@ -3137,13 +3179,13 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 return;
             }
 
-            int x = itemRect.GetX();
+            int x = bottomItemRect.GetX();
             for (int col = 0; col < numCols; col++)
             {
                 int colWidth = GetColumnWidth(indexArray[col]);
                 x += colWidth ;
-                dc.DrawLine(x-1, firstItemRect.GetY() - gap,
-                            x-1, itemRect.GetBottom());
+                dc.DrawLine(x-1, topItemRect.GetY() - gap,
+                            x-1, bottomItemRect.GetBottom());
             }
         }
     }

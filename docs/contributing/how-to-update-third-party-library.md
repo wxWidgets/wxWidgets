@@ -11,148 +11,66 @@ their maintainers and from time to time we need to replace the versions used
 by wxWidgets with newer versions.
 
 
-1. Vendor branches
-------------------
+1. Submodules
+-------------
 
-Normally all third party libraries should be managed using Subversion vendor
-branches. I.e. we should have the latest version of the library under
-/wx/wxWidgets/vendor directory in the repository. Currently only expat, libpng
-and libtiff are handled like this, while libjpeg and zlib are not. Hopefully
-these exceptions will disappear soon, the rest of this note assumes that we
-are using a vendor branch for the library $(LIB).
+All third party libraries are managed using Git submodules. This includes
+3rdparty/catch and expat, jpeg, png, tiff and zlib subdirectories of src.
 
-We also use $(OLD_VERSION) and $(VERSION) below for the current version of the
-library and the version we are upgrading to. $(OLD_VERSION) can be determined
-by doing
-
-    svn ls https://svn.wxwidgets.org/svn/wx/wxWidgets/vendor/$(LIB)
-
-as normally it's the latest version present in this directory. You can, of
-course, also look at the library sources currently in the trunk to find out
-its version.
+As always with submodules, updating a library involves updating its sources in
+the submodule, pushing this submodule out and then committing the changes in
+the top-level repository.
 
 
-NB: the instructions here are based on the Subversion documentation, see
-http://svnbook.red-bean.com/en/1.6/svn.advanced.vendorbr.html for more
-information about vendor branches.
+2. Updating the submodule
+-------------------------
+
+All submodules use `master` branch for the upstream master and `wx` for the
+version used by wxWidgets. To update the latter, just merge the appropriate
+commit from master into `wx`, e.g.
+
+    $ cd src/expat
+    $ git checkout wx
+    $ git merge R_x_y_z # For the latest x.y.z release
+
+After resolving any conflicts, commit the result, test the build under MSW and
+under Unix using `--disable-sys-libs` configure option, and push the updated
+branch out. Notice that you may want to use the ssh GitHub repository URL
+instead of the default (because more convenient for checking them out) HTTPS
+one:
+
+    $ git push --set-upstream git@github.com:wxWidgets/libexpat.git wx
 
 
-2. Updating the current branch
-------------------------------
+3. Updating the main repository
+-------------------------------
 
-The first thing to do is to checkout a pristine copy of the version currently
-being used, e.g.
+If there are any changes to the source files used by the library, update the
+corresponding `build/bakefiles/$lib.bkl` file (e.g. `expat.bkl` for Expat) and
+rerun bakefile to regenerate most of the makefiles and project files. Currently
+you will need to update `build/msw/wx_wx$lib.vcxproj{,.filters}` files
+manually.
 
-    cd /some/temp/directory
-    svn checkout https://svn.wxwidgets.org/svn/wx/wxWidgets/vendor/$(LIB)/current $(LIB)
-
-Now delete all the old files:
-
-    cd $(LIB)
-    find . -type f -not -path '*/.svn/*' -exec rm {} \;
-
-or, if you are using zsh, just
-
-    rm **/*(.)
-
-Next, get the version of the library you are updating to and unpack it into
-the same directory. Examine "svn status" output and add all the files with "?"
-in the first column using "svn add" and delete all the files with "!" in the
-first column using "svn rm".
-
-Finally commit and tag the new version:
-
-    svn commit -m 'Update $(LIB) to $(VERSION).'
-    svn cp https://svn.wxwidgets.org/svn/wx/wxWidgets/vendor/$(LIB)/current \
-        https://svn.wxwidgets.org/svn/wx/wxWidgets/vendor/$(LIB)/$(VERSION) \
-        -m 'Tagging $(LIB) $(VERSION).'
-
-You can now do
-
-    rm -rf /some/temp/directory/$(LIB)
-
-as it won't be needed any longer.
-
-
-3. Merging the current branch
------------------------------
-
-Now switch to wxWidgets checkout and run
-
-    svn merge ^/wxWidgets/vendor/$(LIB)/$(OLD_VERSION) ^/wxWidgets/vendor/$(LIB)/current src/$(LIBDIR)
-
-Notice that you may need to escape the circumflexes with backslashes if they
-are special for your shell. Also notice that the directory of the library may
-be different from its name, e.g. we use libpng for the vendor branch but just
-png for the name of the directory.
-
-Unless you are very lucky, the merge will result in conflicts and you will
-need to resolve them by examining the differences -- this is the difficult
-part.
-
-Once everything was resolved, test your changes. As building the third party
-libraries is quite different between Unix and Windows, please do it under both
-platforms. Under Windows it's enough to just build everything as usual as the
-built-in libraries are used by default. Please build both static and dynamic
-wxWidgets libraries as some problems arise only in one of those configurations.
-Under Unix you need to configure with --with-$(LIB)=builtin option to ensure
-that the newly updated built-in version of the library is used and not the
-system version. If upgrading an image format library, please build and run the
-image sample. In any case, run the unit tests to check that everything still
-works.
-
-After testing and correcting the problems, simply commit your changes:
-
-    svn commit -m 'Update $(LIB) to $(VERSION).' src/$(LIBDIR)
+Commit these changes and the submodule and create a PR to test them as usual.
 
 
 4. Special instructions for libpng
 ----------------------------------
 
 We use a special hack for libpng as we want to prefix all its symbols with
-"wx_" but don't want to use its build system which makes this easily possible
+`wx_` but don't want to use its build system which makes this easily possible
 (perhaps we should, but for now we don't). So, when upgrading libpng, you need
 to perform an extra step after merging the new version (and before committing
 your changes):
 
 Create a temporary build directory and run libpng configure from it using
---with-libpng-prefix=wx_ option. Then run "make" (actually just "make png.lo"
-is sufficient as we don't really need to build the library) to create
-pnglibconf.h and pngprefix.h files in the build directory. And copy these
-files to src/png subdirectory of the wxWidgets source tree, overwriting the
-versions there.
+`--with-libpng-prefix=wx_` option. Then run `make pnglibconf.h pngprefix.h`
+to create these files in the build directory. Next, search for the line
+containing `PNG_ZLIB_VERNUM` in the `pnglibconf.h` and set it to 0 to disable
+zlib version checks (this looks dangerous but seems to be unavoidable with the
+current build system). And then, finally, copy these files to src/png
+subdirectory of the wxWidgets source tree, overwriting the versions there.
 
 Notice that config.h generated by libpng configure is not used, we build it
-without -DHAVE_CONFIG_H as it works just fine without it on any ANSI C system
+without `-DHAVE_CONFIG_H` as it works just fine without it on any ANSI C system
 (i.e. anywhere by now).
-
-
-EXAMPLES
-----------------------------------
-
-Example updating libpng files under MSW:
-    Since configure looked for zlib, the following 2 steps were also needed:
-    a) get zlib source code (www.zlib.net) to a separate location;
-    b) in zlib root dir run: mingw32-make -fwin32/Makefile.gcc
-       (will generate zlib1.dll)
-1) get libpng source code (libpng.sourceforge.net) to a separate location;
-2) in libpng root dir run:
-   configure --with-libpng-prefix=wx_
-   Alternatively, if configure still cannot find zlib, run:
-   export CPPFLAGS="-I zlib-root-dir"
-   export LDFLAGS="-L zlib-root-dir"
-   configure --with-libpng-prefix=wx_
-3) in libpng root dir run:
-   mingw32-make png.lo
-   (will generate pnglibconf.h and pngprefix.h, among others)
-4) edit pnglibconf.h and change the value of PNG_ZLIB_VERNUM to 0.
-5) copy files from libpng root dir and scripts subfolder to src/png, updating old files only (other new files were not needed);
-6) commit the changes.
-
-
-Example updating libexpat files under MSW:
-1) get libexpat source code (sourceforge.net/projects/expat/files/expat/) to a separate location;
-2) delete all files in src/expat;
-3) copy all files from libexpat to src/expat;
-4) commit the changes, including new and deleted files;
-5) define XML_STATIC in src/expat/lib/expat_external.h, see git log for the exact changes, and apply them in a separate commit.

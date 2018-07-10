@@ -16,6 +16,23 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QSocketNotifier>
+#include <QtCore/QTimer>
+
+#include <QtWidgets/QApplication>
+
+class wxQtIdleTimer : public QTimer
+{
+
+public:
+    wxQtIdleTimer( wxQtEventLoopBase *eventLoop );
+    virtual bool eventFilter( QObject * watched, QEvent * event  );
+
+private:
+    void idle();
+
+private:
+    wxQtEventLoopBase *m_eventLoop;
+};
 
 wxQtIdleTimer::wxQtIdleTimer( wxQtEventLoopBase *eventLoop )
 {
@@ -115,7 +132,9 @@ int wxQtEventLoopBase::DispatchTimeout(unsigned long timeout)
 
 void wxQtEventLoopBase::WakeUp()
 {
-    QAbstractEventDispatcher::instance()->wakeUp();
+    QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
+    if ( instance )
+        instance->wakeUp();
 }
 
 void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)
@@ -224,7 +243,7 @@ wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHa
 {
     wxGUIAppTraits *AppTraits = dynamic_cast<wxGUIAppTraits *>(wxApp::GetTraitsIfExists());
 
-    if(AppTraits)
+    if ( AppTraits )
         return AppTraits->GetEventLoopSourcesManager()->AddSourceForFD(fd, handler, flags);
 
     return NULL;

@@ -5154,6 +5154,27 @@ public:
     void SetPhasesDraw(int phases);
 
     /**
+        Choose the quality level for text.
+
+        The input should be one of the
+        @link wxStyledTextCtrl::wxSTC_EFF_QUALITY_DEFAULT wxSTC_EFF_QUALITY_* @endlink constants.
+        @remarks
+        This method only has any effect with the wxMSW port and when
+        technology has been set to wxSTC_TECHNOLOGY_DIRECTWRITE.
+        @since 3.1.1
+    */
+    void SetFontQuality(int fontQuality);
+
+    /**
+        Retrieve the quality level for text.
+
+        The return value will be one of the
+        @link wxStyledTextCtrl::wxSTC_EFF_QUALITY_DEFAULT wxSTC_EFF_QUALITY_* @endlink constants.
+        @since 3.1.1
+    */
+    int GetFontQuality() const;
+
+    /**
         Change internal focus flag.
     */
     void SetSTCFocus(bool focus);
@@ -5166,8 +5187,10 @@ public:
     /**
         Set the technology used.
 
-        The input should be one of the
-        @link wxStyledTextCtrl::wxSTC_TECHNOLOGY_DEFAULT wxSTC_TECHNOLOGY_* @endlink constants.
+        @remarks
+        For the wxMSW port, the input can be either wxSTC_TECHNOLOGY_DEFAULT
+        or wxSTC_TECHNOLOGY_DIRECTWRITE.  With other ports, this method has
+        no effect.
     */
     void SetTechnology(int technology);
 

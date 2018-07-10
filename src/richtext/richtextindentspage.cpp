@@ -319,7 +319,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     outlineLevelCtrlStrings.Add("8");
     outlineLevelCtrlStrings.Add("9");
     outlineLevelCtrlStrings.Add("10");
-    
+
     m_outlineLevelCtrl->Freeze();
     m_outlineLevelCtrl->Append(outlineLevelCtrlStrings);
     m_outlineLevelCtrl->Thaw();

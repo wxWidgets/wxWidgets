@@ -1375,6 +1375,7 @@ void MyFrame::OnNotebookPageClose(wxAuiNotebookEvent& evt)
 void MyFrame::OnNotebookPageClosed(wxAuiNotebookEvent& evt)
 {
     wxAuiNotebook* ctrl = (wxAuiNotebook*)evt.GetEventObject();
+    wxUnusedVar(ctrl);
 
     // selection should always be a valid index
     wxASSERT_MSG( ctrl->GetSelection() < (int)ctrl->GetPageCount(),

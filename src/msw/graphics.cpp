@@ -960,6 +960,25 @@ wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
 }
 
 //-----------------------------------------------------------------------------
+// Support for adding private fonts
+//-----------------------------------------------------------------------------
+
+#if wxUSE_PRIVATE_FONTS
+
+namespace
+{
+
+Gdiplus::PrivateFontCollection* gs_privateFonts = NULL;
+Gdiplus::FontFamily* gs_pFontFamily = NULL;
+
+} // anonymous namespace
+
+// This function is defined in src/msw/font.cpp.
+extern const wxArrayString& wxGetPrivateFontFileNames();
+
+#endif // wxUSE_PRIVATE_FONTS
+
+//-----------------------------------------------------------------------------
 // wxGDIPlusFont implementation
 //-----------------------------------------------------------------------------
 
@@ -970,7 +989,35 @@ wxGDIPlusFontData::Init(const wxString& name,
                         const wxColour& col,
                         Unit fontUnit)
 {
-    m_font = new Font(name.wc_str(), size, style, fontUnit);
+#if wxUSE_PRIVATE_FONTS
+    // If the user has registered any private fonts, they should be used in
+    // preference to any system-wide ones.
+    m_font = NULL;
+    if ( gs_privateFonts )
+    {
+        const int count = gs_privateFonts->GetFamilyCount();
+
+        // We should find all the families, i.e. "found" should be "count".
+        int found = 0;
+        gs_privateFonts->GetFamilies(count, gs_pFontFamily, &found);
+
+        for ( int j = 0 ; j < found; j++ )
+        {
+            wchar_t familyName[LF_FACESIZE];
+            int rc = gs_pFontFamily[j].GetFamilyName(familyName);
+            if ( rc == 0 && name == familyName )
+            {
+                m_font = new Font(&gs_pFontFamily[j], size, style, fontUnit);
+                break;
+            }
+        }
+    }
+
+    if ( !m_font )
+#endif // wxUSE_PRIVATE_FONTS
+    {
+        m_font = new Font(name.wc_str(), size, style, fontUnit);
+    }
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
 }
@@ -1233,9 +1280,6 @@ void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
     if ( m_logCurrentPointSet )
     {
         start = m_logCurrentPoint;
-        // After calling AddLine() the native current point
-        // will be updated and can be used.
-        m_logCurrentPointSet = false;
     }
     else
     {
@@ -1249,6 +1293,8 @@ void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
         }
     }
     m_path->AddLine(start.X, start.Y, (REAL)x, (REAL)y);
+    // After calling AddLine() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::CloseSubpath()
@@ -1279,9 +1325,6 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
     if ( m_logCurrentPointSet )
     {
         start = m_logCurrentPoint;
-        // After calling AddBezier() the native current point
-        // will be updated and can be used.
-        m_logCurrentPointSet = false;
     }
     else
     {
@@ -1292,6 +1335,8 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
         }
     }
     m_path->AddBezier(start,c1,c2,end);
+    // After calling AddBezier() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 // gets the last point of the current path, (0,0) if not yet set
@@ -1403,11 +1448,15 @@ void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
 void wxGDIPlusPathData::AddCircle(wxDouble x, wxDouble y, wxDouble r)
 {
     m_path->AddEllipse((REAL)(x-r), (REAL)(y-r), (REAL)(2.0*r), (REAL)(2.0*r));
+    // After calling AddEllipse() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
     m_path->AddEllipse((REAL)x, (REAL)y, (REAL)w, (REAL)h);
+    // After calling AddEllipse() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
@@ -2275,6 +2324,23 @@ void wxGDIPlusRenderer::Load()
     {
         wxLogTrace("gdiplus", "successfully initialized GDI+");
         m_loaded = 1;
+
+#if wxUSE_PRIVATE_FONTS
+        // Make private fonts available to GDI+, if any.
+        const wxArrayString& privateFonts = wxGetPrivateFontFileNames();
+        const size_t n = privateFonts.size();
+        if ( n )
+        {
+            gs_privateFonts = new Gdiplus::PrivateFontCollection();
+            for ( size_t i = 0 ; i < n; i++ )
+            {
+                const wxString& fname = privateFonts[i];
+                gs_privateFonts->AddFontFile(fname.t_str());
+            }
+
+            gs_pFontFamily = new Gdiplus::FontFamily[n];
+        }
+#endif // wxUSE_PRIVATE_FONTS
     }
     else
     {
@@ -2289,6 +2355,17 @@ void wxGDIPlusRenderer::Unload()
     {
         GdiplusShutdown(m_gditoken);
         m_gditoken = 0;
+
+#if wxUSE_PRIVATE_FONTS
+        if ( gs_privateFonts )
+        {
+            delete gs_privateFonts;
+            gs_privateFonts = NULL;
+
+            delete[] gs_pFontFamily;
+            gs_pFontFamily = NULL;
+        }
+#endif // wxUSE_PRIVATE_FONTS
     }
     m_loaded = -1; // next Load() will try again
 }

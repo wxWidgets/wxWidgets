@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <makefile>
 
+    <set var="BUNDLE_FONT_RESOURCES">$(SRCDIR)/wxprivate.ttf</set>
+
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="font" template="wx_sample" template_append="wx_append">
@@ -8,5 +10,12 @@
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
+
+    <wx-data id="data">
+        <files>
+            wxprivate.ttf
+        </files>
+    </wx-data>
+
 
 </makefile>

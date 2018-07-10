@@ -227,14 +227,14 @@ void wxRibbonPanel::AddChild(wxWindowBase *child)
     // for children of the window. The panel wants to be in the hovered state
     // whenever the mouse cursor is within its boundary, so the events need to
     // be attached to children too.
-    child->Connect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(wxRibbonPanel::OnMouseEnterChild), NULL, this);
-    child->Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(wxRibbonPanel::OnMouseLeaveChild), NULL, this);
+    child->Bind(wxEVT_ENTER_WINDOW, &wxRibbonPanel::OnMouseEnterChild, this);
+    child->Bind(wxEVT_LEAVE_WINDOW, &wxRibbonPanel::OnMouseLeaveChild, this);
 }
 
 void wxRibbonPanel::RemoveChild(wxWindowBase *child)
 {
-    child->Disconnect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(wxRibbonPanel::OnMouseEnterChild), NULL, this);
-    child->Disconnect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(wxRibbonPanel::OnMouseLeaveChild), NULL, this);
+    child->Unbind(wxEVT_ENTER_WINDOW, &wxRibbonPanel::OnMouseEnterChild, this);
+    child->Unbind(wxEVT_LEAVE_WINDOW, &wxRibbonPanel::OnMouseLeaveChild, this);
 
     wxRibbonControl::RemoveChild(child);
 }
@@ -906,9 +906,8 @@ void wxRibbonPanel::OnKillFocus(wxFocusEvent& evt)
         if(IsAncestorOf(this, receiver))
         {
             m_child_with_focus = receiver;
-            receiver->Connect(wxEVT_KILL_FOCUS,
-                wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus),
-                NULL, this);
+            receiver->Bind(wxEVT_KILL_FOCUS,
+                &wxRibbonPanel::OnChildKillFocus, this);
         }
         else if(receiver == NULL || receiver != m_expanded_dummy)
         {
@@ -922,16 +921,16 @@ void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
     if(m_child_with_focus == NULL)
         return; // Should never happen, but a check can't hurt
 
-    m_child_with_focus->Disconnect(wxEVT_KILL_FOCUS,
-      wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus), NULL, this);
+    m_child_with_focus->Unbind(wxEVT_KILL_FOCUS,
+      &wxRibbonPanel::OnChildKillFocus, this);
     m_child_with_focus = NULL;
 
     wxWindow *receiver = evt.GetWindow();
     if(receiver == this || IsAncestorOf(this, receiver))
     {
         m_child_with_focus = receiver;
-        receiver->Connect(wxEVT_KILL_FOCUS,
-            wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus), NULL, this);
+        receiver->Bind(wxEVT_KILL_FOCUS,
+            &wxRibbonPanel::OnChildKillFocus, this);
         evt.Skip();
     }
     else if(receiver == NULL || receiver != m_expanded_dummy)

@@ -9,7 +9,9 @@
 #ifndef _WX_QT_REGION_H_
 #define _WX_QT_REGION_H_
 
-#include <QtGui/QRegion>
+class QRegion;
+class QRect;
+template<class T> class QVector;
 
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {
@@ -25,7 +27,7 @@ public:
     virtual bool IsEmpty() const;
     virtual void Clear();
 
-    virtual QRegion GetHandle() const;
+    virtual const QRegion &GetHandle() const;
     virtual void QtSetRegion(QRegion region); // Hangs on to this region
 
 protected:
@@ -45,8 +47,6 @@ protected:
     virtual bool DoIntersect(const wxRegion& region);
     virtual bool DoSubtract(const wxRegion& region);
     virtual bool DoXor(const wxRegion& region);
-    
-private:
 };
 
 
@@ -79,7 +79,7 @@ public:
     wxRect GetRect() const;
     
 private:
-    QVector< QRect > *m_qtRects;
+    QVector < QRect > *m_qtRects;
     int m_pos;
 };
 

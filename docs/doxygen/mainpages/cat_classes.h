@@ -632,13 +632,13 @@ these classes provide a subset or almost complete STL API.
 
 Related Overviews: @ref overview_container
 
-@li wxArray<T>: A type-safe dynamic array implementation (macro based)
+@li wxArray<T>: A legacy dynamic array, use std::vector or wxVector instead.
 @li wxArrayString: An efficient container for storing wxString objects
 @li wxHashMap<T>: A type-safe hash map implementation (macro based)
 @li wxHashSet<T>: A type-safe hash set implementation(macro based)
 @li wxHashTable: A simple hash table implementation (deprecated, use wxHashMap)
 @li wxList<T>: A type-safe linked list implementation (macro based)
-@li wxVector<T>: Template base vector implementation identical to std::vector
+@li wxVector<T>: A template-based vector implementation identical to std::vector
 
 
 
@@ -703,6 +703,8 @@ Related overview: @ref overview_stream
 @li wxTempFileOutputStream: Stream to safely replace an existing file
 @li wxStringInputStream: String input stream class
 @li wxStringOutputStream: String output stream class
+@li wxLZMAInputStream: LZMA decompression stream class
+@li wxLZMAOutputStream: LZMA compression stream class
 @li wxZlibInputStream: Zlib and gzip (compression) input stream class
 @li wxZlibOutputStream: Zlib and gzip (compression) output stream class
 @li wxZipInputStream: Input stream for reading from ZIP archives

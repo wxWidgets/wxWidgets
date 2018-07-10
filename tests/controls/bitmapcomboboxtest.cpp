@@ -59,8 +59,8 @@ private:
 
     void Bitmap();
 
-#ifdef __WXGTK__
-    virtual void SimSelect()
+#if defined(__WXGTK__) && wxUSE_UIACTIONSIMULATOR
+    virtual void SimSelect() wxOVERRIDE
     {
         // There is an inexplicable and locally irreproducible failure in this
         // test for wxBitmapComboBox when it runs on the Linux buildbot slaves:

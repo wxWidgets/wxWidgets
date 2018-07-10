@@ -68,7 +68,6 @@ class DatePickerWidgetsPage : public WidgetsPage
 {
 public:
     DatePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~DatePickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_datePicker; }
     virtual void RecreateWidget() wxOVERRIDE { CreateDatePicker(); }
@@ -244,7 +243,7 @@ void DatePickerWidgetsPage::CreateDatePicker()
 
     delete m_datePicker;
 
-    long style = 0;
+    long style = GetAttrs().m_defaultFlags;
     switch ( m_radioKind->GetSelection() )
     {
         case 0:

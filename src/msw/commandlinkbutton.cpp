@@ -79,7 +79,7 @@ bool wxCommandLinkButton::Create(wxWindow *parent,
         return false;
 
     SetMainLabelAndNote(mainLabel, note);
-    SetInitialSize();
+    SetInitialSize(size);
 
     return true;
 }

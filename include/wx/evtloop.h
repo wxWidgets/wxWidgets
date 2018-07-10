@@ -128,8 +128,9 @@ public:
     // idle handling
     // -------------
 
-        // make sure that idle events are sent again
-    virtual void WakeUpIdle();
+        // make sure that idle events are sent again: this is just an obsolete
+        // synonym for WakeUp()
+    void WakeUpIdle() { WakeUp(); }
 
         // this virtual function is called  when the application
         // becomes idle and by default it forwards to wxApp::ProcessIdle() and

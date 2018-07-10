@@ -52,7 +52,9 @@ protected:
     void Set();
     void SetSelection();
     void SetString();
+#if wxUSE_UIACTIONSIMULATOR
     virtual void SimSelect();
+#endif
 
 private:
     wxDECLARE_NO_COPY_CLASS(ItemContainerTestCase);

@@ -746,9 +746,9 @@ public: \
               const wxArrayString& value = wxArrayString() ); \
     ~PROPNAME(); \
     virtual bool OnEvent( wxPropertyGrid* propgrid, \
-                          wxWindow* primary, wxEvent& event ); \
-    virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value ); \
-    virtual wxValidator* DoGetValidator() const; \
+                          wxWindow* primary, wxEvent& event ) wxOVERRIDE; \
+    virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value ) wxOVERRIDE; \
+    virtual wxValidator* DoGetValidator() const wxOVERRIDE; \
 };
 
 #define WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAM) \

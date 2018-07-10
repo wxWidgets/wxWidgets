@@ -34,6 +34,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/messagetype.h"
+#include "wx/gtk/private/mnemonics.h"
 
 // ----------------------------------------------------------------------------
 // local classes
@@ -81,12 +82,8 @@ namespace
 
 inline bool UseNative()
 {
-#ifdef __WXGTK3__
-    return true;
-#else
     // native GtkInfoBar widget is only available in GTK+ 2.18 and later
-    return gtk_check_version(2, 18, 0) == 0;
-#endif
+    return wx_is_at_least_gtk2(18);
 }
 
 } // anonymous namespace
@@ -141,6 +138,7 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
 
     // finish creation and connect to all the signals we're interested in
     m_parent->DoAddChild(this);
+
 
     PostCreation(wxDefaultSize);
 
@@ -212,9 +210,13 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
     GtkWidget *button = gtk_info_bar_add_button
                         (
                             GTK_INFO_BAR(m_widget),
-                            (label.empty()
-                                ? GTKConvertMnemonics(wxGetStockGtkID(btnid))
-                                : label).utf8_str(),
+                            label.empty() ?
+#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+                                wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)))
+#else
+                                wxGetStockGtkID(btnid)
+#endif // GTK >= 3.10 / < 3.10
+                                : wxGTK_CONV(label),
                             btnid
                         );
 

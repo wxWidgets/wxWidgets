@@ -105,6 +105,7 @@ public :
     void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
 
     void                InstallEventHandler( WXWidget control = NULL );
+    bool                EnableTouchEvents(int WXUNUSED(eventsMask)) { return false; }
 
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
 

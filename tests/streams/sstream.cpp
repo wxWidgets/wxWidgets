@@ -119,3 +119,32 @@ void strStream::Output_Check()
 
 // Register the stream sub suite, by using some stream helper macro.
 STREAM_TEST_SUBSUITE_NAMED_REGISTRATION(strStream)
+
+TEST_CASE("wxStringOutputStream::Tell", "[stream]")
+{
+    wxStringOutputStream ss;
+    CHECK( ss.TellO() == 0 );
+
+    const char* const s = "Hello world";
+    const wxFileOffset len = strlen(s);
+
+    ss.Write(s, len);
+    CHECK( ss.TellO() == len );
+
+    wxString str(s);
+    CHECK( wxStringOutputStream(&str).TellO() == len );
+
+
+    wxMBConvUTF16 convUTF16;
+    wxStringOutputStream ss16(NULL, convUTF16);
+    CHECK( ss16.TellO() == 0 );
+
+    const wxCharBuffer s16 = convUTF16.cWC2MB(wxWCharBuffer(str.wc_str()));
+    ss16.Write(s16, s16.length());
+    CHECK( ss16.TellO() == 2*len );
+    CHECK( wxStringOutputStream(&str, convUTF16).TellO() == 2*len );
+
+    // The U+2070D character is represented by a surrogate pair in UTF-16.
+    wxString u2070D = wxString::FromUTF8("\xF0\xA0\x9C\x8D");
+    CHECK( wxStringOutputStream(&u2070D, convUTF16).TellO() == 4 );
+}

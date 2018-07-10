@@ -1,4 +1,4 @@
-February 29, 2016 -- The wxWidgets team is pleased to announce a new
+February 19, 2018 -- The wxWidgets team is pleased to announce a new
 release of our open source framework for the development of native
 cross-platform applications in C++.
 
@@ -13,22 +13,28 @@ improvements and even more bug fixes, please see the change log
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.1/docs/changes.txt
 
 for the incomplete list of the most important ones. Here is the
-maximally condensed summary:
+maximally condensed summary of the changes compared to 3.0:
 
+- New features: support for mouse gesture events (GSoC 2017 project);
+  fractional pen widths in wxGraphicsContext; arbitrary label windows in
+  wxStaticBox; markup in wxDataViewCtrl items text; better support for high DPI
+  monitors; support for ZIP 64 files; much improved accessibility support under
+  MSW.
 - New classes: wxActivityIndicator, wxAddRemoveCtrl,
-  wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker.
+  wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker,
+  wxSecretStore.
 - And methods: wxDateTime::GetWeekBasedYear(), wxListBox::GetTopItem(),
   wxProcess::Activate(), wxTextEntry::ForceUpper(), several ones in
   wxRendererNative, wxStandardPaths::GetUserDir(), wxUIActionSimulator
-  ::Select() and many others. Also new wxEVT_MAGNIFY event.
+  ::Select() and many others.
 - Significant improvements to: wxBusyInfo, wxNotificationMessage.
-- All around better support for high DPI monitors.
-- Much newer versions of bundled 3rd party libraries (notably libpng)
-  and support for GStreamer 1.0 under Unix.
+- Latest versions of all bundled 3rd party libraries, including all the
+  security fixed and support for WebKit 2 and GStreamer 1.7 under Unix.
 - Revamped OpenGL support better suited to modern OpenGL (3.2+).
 - Further C++11 support improvements.
-- Support for latest compilers: MSVS 2015, g++ 5.3, clang 3.8.
-- A lot of bug fixes in wxGTK3 and wxOSX/Cocoa ports.
+- New CMake-based alternative build system.
+- Support for latest compilers: MSVS 2017, g++ 7, clang 6.
+- A lot of bug fixes, especially in wxGTK3 and wxOSX/Cocoa ports.
 - New experimental wxQt port.
 
 

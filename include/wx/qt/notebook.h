@@ -8,7 +8,7 @@
 #ifndef _WX_QT_NOTEBOOK_H_
 #define _WX_QT_NOTEBOOK_H_
 
-#include <QtWidgets/QTabWidget>
+class QTabWidget;
 
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {
@@ -45,7 +45,7 @@ public:
     int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
     int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
 
-    virtual QTabWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     virtual wxWindow *DoRemovePage(size_t page);

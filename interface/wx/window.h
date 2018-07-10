@@ -53,6 +53,68 @@ enum wxShowEffect
 
 
 /**
+    Values for wxWindow::EnableTouchEvents() mask.
+
+    The values other than ::wxTOUCH_NONE and ::wxTOUCH_ALL_GESTURES can be
+    combined together to request enabling events for the specified gestures and
+    for them only.
+
+    @since 3.1.1
+ */
+enum
+{
+    /**
+        Don't generate any touch events.
+     */
+    wxTOUCH_NONE,
+
+    /**
+        Generate wxPanGestureEvent for vertical pans.
+
+        Note that under macOS horizontal pan events are also enabled when this
+        flag is specified.
+     */
+    wxTOUCH_VERTICAL_PAN_GESTURE,
+
+    /**
+        Generate wxPanGestureEvent for horizontal pans.
+
+        Note that under macOS vertical pan events are also enabled when this
+        flag is specified.
+     */
+    wxTOUCH_HORIZONTAL_PAN_GESTURE,
+
+    /**
+        Generate wxPanGestureEvent for any pans.
+
+        This is just a convenient combination of wxTOUCH_VERTICAL_PAN_GESTURE
+        and wxTOUCH_HORIZONTAL_PAN_GESTURE.
+     */
+    wxTOUCH_PAN_GESTURES,
+
+    /**
+        Generate wxZoomGestureEvent.
+     */
+    wxTOUCH_ZOOM_GESTURE,
+
+    /**
+        Generate wxRotateGestureEvent.
+     */
+    wxTOUCH_ROTATE_GESTURE,
+
+    /**
+        Generate events for press or tap gestures such as wxTwoFingerTapEvent,
+        wxLongPressEvent and wxPressAndTapEvent.
+     */
+    wxTOUCH_PRESS_GESTURES,
+
+    /**
+        Enable all supported gesture events.
+     */
+    wxTOUCH_ALL_GESTURES
+};
+
+/**
    flags for SendSizeEvent()
 */
 enum
@@ -886,20 +948,13 @@ public:
     virtual wxSize WindowToClientSize(const wxSize& size) const;
 
     /**
-        Sizes the window so that it fits around its subwindows.
+        Sizes the window to fit its best size.
 
-        This function won't do anything if there are no subwindows and will only really
-        work correctly if sizers are used for the subwindows layout.
+        Using this function is equivalent to setting window size to the return
+        value of GetBestSize().
 
-        Also, if the window has exactly one subwindow it is better (faster and the result
-        is more precise as Fit() adds some margin to account for fuzziness of its calculations)
-        to call:
-
-        @code
-        window->SetClientSize(child->GetSize());
-        @endcode
-
-        instead of calling Fit().
+        Note that, unlike SetSizerAndFit(), this function only changes the
+        current window size and doesn't change its minimal size.
 
         @see @ref overview_windowsizing
     */
@@ -989,7 +1044,7 @@ public:
     static wxPoint FromDIP(const wxPoint& pt, const wxWindow* w);
 
     /// @overload
-    static wxSize FromDIP(int d, const wxWindow* w);
+    static int FromDIP(int d, const wxWindow* w);
 
 
     /**
@@ -1056,7 +1111,7 @@ public:
     static wxPoint ToDIP(const wxPoint& pt, const wxWindow* w);
 
     /// @overload
-    static wxSize ToDIP(int d, const wxWindow* w);
+    static int ToDIP(int d, const wxWindow* w);
 
     /**
         This functions returns the best acceptable minimal size for the window.
@@ -3274,10 +3329,15 @@ public:
     void SetSizer(wxSizer* sizer, bool deleteOld = true);
 
     /**
-        This method calls SetSizer() and then wxSizer::SetSizeHints which sets the initial
-        window size to the size needed to accommodate all sizer elements and sets the
-        size hints which, if this window is a top level one, prevent the user from
-        resizing it to be less than this minimal size.
+        Associate the sizer with the window and set the window size and minimal
+        size accordingly.
+
+        This method calls SetSizer() and then wxSizer::SetSizeHints() which
+        sets the initial window size to the size needed to accommodate all
+        sizer elements and sets the minimal size to the same size, this
+        preventing the user from resizing this window to be less than this
+        minimal size (if it's a top-level window which can be directly resized
+        by the user).
     */
     void SetSizerAndFit(wxSizer* sizer, bool deleteOld = true);
 
@@ -3423,6 +3483,28 @@ public:
             The new y position for the cursor.
     */
     virtual void WarpPointer(int x, int y);
+
+    /**
+        Request generation of touch events for this window.
+
+        Each call to this function supersedes the previous ones, i.e. if you
+        want to receive events for both zoom and rotate gestures, you need to
+        call
+        @code
+            EnableTouchEvents(wxTOUCH_ZOOM_GESTURE | wxTOUCH_ROTATE_GESTURE);
+        @endcode
+        instead of calling it twice in a row as the second call would disable
+        the first gesture.
+
+        @param eventsMask Either wxTOUCH_NONE or wxTOUCH_ALL_GESTURES to
+            disable or enable gesture events for this window.
+
+        @return @true if the specified events were enabled or @false if the
+            current platform doesn't support touch events.
+
+        @since 3.1.1
+     */
+    virtual bool EnableTouchEvents(int eventsMask);
 
     //@}
 
@@ -3743,7 +3825,9 @@ public:
         or panel item label. If @a parent is @NULL, the search will start from all
         top-level frames and dialog boxes; if non-@NULL, the search will be
         limited to the given window hierarchy.
-        The search is recursive in both cases.
+
+        The search is recursive in both cases and, unlike with FindWindow(),
+        recurses into top level child windows too.
 
         @see FindWindow()
 
@@ -3760,10 +3844,14 @@ public:
         and dialog boxes; if non-@NULL, the search will be limited to the given
         window hierarchy.
 
-        The search is recursive in both cases. If no window with such name is found,
-        FindWindowByLabel() is called.
+        The search is recursive in both cases and, unlike FindWindow(),
+        recurses into top level child windows too.
 
-        @see FindWindow()
+        If no window with such name is found, FindWindowByLabel() is called,
+        i.e. the name is interpreted as (internal) name first but if this
+        fails, it's internal as (user-visible) label. As this behaviour may be
+        confusing, it is usually better to use either the FindWindow() overload
+        taking the name or FindWindowByLabel() directly.
 
         @return Window with the given @a name or @NULL if not found.
     */

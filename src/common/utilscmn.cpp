@@ -104,11 +104,11 @@
 #endif
 
 #if wxUSE_GUI && defined(__WXGTK__)
-    #include <gtk/gtk.h>    // for GTK_XXX_VERSION constants
+    #include "wx/gtk/private/wrapgtk.h"    // for GTK_XXX_VERSION constants
 #endif
 
 #if wxUSE_GUI && defined(__WXQT__)
-    #include <QtGlobal>       // for QT_VERSION_STR constants
+    #include <QtCore/QtGlobal>       // for QT_VERSION_STR constants
 #endif
 #if wxUSE_BASE
 
@@ -1415,7 +1415,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxS("Copyright (c) 1995-2017 wxWidgets team"));
+                         wxS("Copyright (c) 1995-2018 wxWidgets team"));
 }
 
 void wxInfoMessageBox(wxWindow* parent)

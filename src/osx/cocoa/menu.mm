@@ -192,14 +192,13 @@ public :
     {
         [m_osxMenu removeItem:(NSMenuItem*) pItem->GetPeer()->GetHMenuItem()];
     }
-
-    virtual void MakeRoot() wxOVERRIDE
+    
+    virtual void MacSetupAppleMenu()
     {
         wxMenu* peer = GetWXPeer();
         
-        [NSApp setMainMenu:m_osxMenu];
         [NSApp setAppleMenu:[[m_osxMenu itemAtIndex:0] submenu]];
-
+        
         wxMenuItem *services = peer->FindItem(wxID_OSX_SERVICES);
         if ( services )
             [NSApp setServicesMenu:services->GetSubMenu()->GetHMenu()];
@@ -208,6 +207,11 @@ public :
         else
             [NSApp setServicesMenu:nil];
 #endif
+    }
+    
+    virtual void MacSetupHelpMenu()
+    {
+        wxMenu* peer = GetWXPeer();
         
         NSMenu* helpMenu = nil;
         int helpid = peer->FindItem(wxApp::s_macHelpMenuTitleName);
@@ -223,6 +227,80 @@ public :
         }
         if ( [NSApp respondsToSelector:@selector(setHelpMenu:)])
             [NSApp setHelpMenu:helpMenu];
+        
+    }
+    
+    virtual NSMenu* MacCreateOrFindWindowMenu()
+    {
+        wxMenu* peer = GetWXPeer();
+        wxString windowMenuTitle = wxStripMenuCodes(_("&Window"));
+        
+        NSMenu* windowMenu = nil;
+        int windowmenuid = peer->FindItem(wxApp::s_macWindowMenuTitleName);
+        if ( windowmenuid == wxNOT_FOUND )
+            windowmenuid = peer->FindItem(_("&Window"));
+        
+        if ( windowmenuid != wxNOT_FOUND )
+        {
+            wxMenuItem* windowMenuItem = peer->FindItem(windowmenuid);
+            
+            if ( windowMenuItem->IsSubMenu() )
+                windowMenu = windowMenuItem->GetSubMenu()->GetHMenu();
+        }
+
+        if ( windowMenu == nil )
+        {
+            windowMenu = [[NSMenu alloc] initWithTitle:wxNSStringWithWxString(windowMenuTitle)];
+            NSMenuItem* windowMenuItem = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(windowMenuTitle) action:nil keyEquivalent:@""];
+            [windowMenuItem setSubmenu:windowMenu];
+            [windowMenu release];
+            [m_osxMenu addItem:windowMenuItem];
+        }
+        return windowMenu;
+    }
+    
+    virtual void MacSetupWindowMenu()
+    {
+        if ( GetWXPeer()->GetMenuBar()->GetAutoWindowMenu() )
+        {
+            NSMenu* windowMenu = MacCreateOrFindWindowMenu();
+            NSMenuItem* item = nil;
+            bool menuWasEmpty = [windowMenu numberOfItems] == 0;
+            if ( !menuWasEmpty )
+                item = [windowMenu itemAtIndex:0];
+            
+            if ( item == nil || [item action] != @selector(performMiniaturize:) )
+            {
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Minimize")) action:@selector(performMiniaturize:) keyEquivalent:@"m"];
+                [windowMenu insertItem:item atIndex:0];
+                [item setEnabled:YES];
+                [item release];
+                
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Zoom")) action:@selector(performZoom:) keyEquivalent:@""];
+                [windowMenu insertItem:item atIndex:1];
+                [item release];
+                
+                [windowMenu insertItem:[NSMenuItem separatorItem] atIndex:2];
+                
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Bring All to Front")) action:@selector(arrangeInFront:) keyEquivalent:@""];
+                [windowMenu insertItem:item atIndex:3];
+                [item release];
+                
+                if ( !menuWasEmpty )
+                    [windowMenu insertItem:[NSMenuItem separatorItem] atIndex:4];
+            }
+            
+            [NSApp setWindowsMenu:windowMenu];
+        }
+    }
+
+    virtual void MakeRoot() wxOVERRIDE
+    {
+        [NSApp setMainMenu:m_osxMenu];
+
+        MacSetupAppleMenu();
+        MacSetupHelpMenu();
+        MacSetupWindowMenu();
         
     }
 

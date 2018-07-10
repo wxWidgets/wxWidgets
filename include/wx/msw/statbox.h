@@ -11,11 +11,16 @@
 #ifndef _WX_MSW_STATBOX_H_
 #define _WX_MSW_STATBOX_H_
 
+#include "wx/compositewin.h"
+
 // Group box
-class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
+class WXDLLIMPEXP_CORE wxStaticBox : public wxCompositeWindowSettersOnly<wxStaticBoxBase>
 {
 public:
-    wxStaticBox() { }
+    wxStaticBox()
+        : wxCompositeWindowSettersOnly<wxStaticBoxBase>()
+    {
+    }
 
     wxStaticBox(wxWindow *parent, wxWindowID id,
                 const wxString& label,
@@ -23,6 +28,18 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr)
+        : wxCompositeWindowSettersOnly<wxStaticBoxBase>()
+    {
+        Create(parent, id, label, pos, size, style, name);
+    }
+
+    wxStaticBox(wxWindow* parent, wxWindowID id,
+                wxWindow* label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString &name = wxStaticBoxNameStr)
+        : wxCompositeWindowSettersOnly<wxStaticBoxBase>()
     {
         Create(parent, id, label, pos, size, style, name);
     }
@@ -34,8 +51,18 @@ public:
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
 
+    bool Create(wxWindow *parent, wxWindowID id,
+                wxWindow* label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxStaticBoxNameStr);
+
     /// Implementation only
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const wxOVERRIDE;
+
+    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
 
@@ -49,6 +76,8 @@ public:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
 
 protected:
+    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
+
     // return the region with all the windows inside this static box excluded
     virtual WXHRGN MSWGetRegionWithoutChildren();
 
@@ -63,8 +92,14 @@ protected:
 
     void OnPaint(wxPaintEvent& event);
 
+private:
+    void PositionLabelWindow();
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox);
 };
+
+// Indicate that we have the ctor overload taking wxWindow as label.
+#define wxHAS_WINDOW_LABEL_IN_STATIC_BOX
 
 #endif // _WX_MSW_STATBOX_H_
 

@@ -84,7 +84,8 @@ void MiscGUIFuncsTestCase::DisplaySize()
 
     // test that display PPI is something reasonable
     sz = wxGetDisplayPPI();
-    CPPUNIT_ASSERT( sz.x < 1000 && sz.y < 1000 );
+    CPPUNIT_ASSERT( sz.x < 1000 );
+    CPPUNIT_ASSERT( sz.y < 1000 );
 }
 
 void MiscGUIFuncsTestCase::URLDataObject()

@@ -361,7 +361,7 @@ public:
     /**
         Sets the page selection.  Calling this method will generate a page change event.
     */
-    size_t SetSelection(size_t new_page);
+    int SetSelection(size_t new_page);
 
     /**
         Sets the tab height. By default, the tab control height is calculated

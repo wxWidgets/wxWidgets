@@ -52,22 +52,30 @@
 // GCC and Intel C++ share same C++ ABI (and possibly others in the future),
 // check if compiler versions are compatible:
 #if defined(__GXX_ABI_VERSION)
-    // The changes between ABI versions 1002 through 1010 (documented at
-    // https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html
-    // under -fabi-version) don't affect wxWidgets, so we allow a library
-    // and an application to differ within that range.
-    #if ((__GXX_ABI_VERSION >= 1002) && (__GXX_ABI_VERSION <= 1010))
-        #define wxGXX_EFFECTIVE_ABI_VERSION 1002
+    // All the changes since ABI version 1002 so far have been insignificant,
+    // so just check for this value, first used for g++ 3.4 and used by default
+    // by all g++ 4 versions, as checking for the exact ABI version simply
+    // results in run-time breakage whenever a new gcc version is released,
+    // even if there are no real problems.
+    #if __GXX_ABI_VERSION >= 1002
+        #define __WX_BO_COMPILER \
+                ",compiler with C++ ABI compatible with gcc 4"
     #else
-        #define wxGXX_EFFECTIVE_ABI_VERSION __GXX_ABI_VERSION
+        #define __WX_BO_COMPILER \
+                ",compiler with C++ ABI " __WX_BO_STRINGIZE(__GXX_ABI_VERSION)
     #endif
-    #define __WX_BO_COMPILER \
-            ",compiler with C++ ABI " __WX_BO_STRINGIZE(wxGXX_EFFECTIVE_ABI_VERSION)
 #elif defined(__GNUG__)
     #define __WX_BO_COMPILER ",GCC " \
             __WX_BO_STRINGIZE(__GNUC__) "." __WX_BO_STRINGIZE(__GNUC_MINOR__)
 #elif defined(__VISUALC__)
-    #define __WX_BO_COMPILER ",Visual C++ " __WX_BO_STRINGIZE(_MSC_VER)
+    // VC15 (a.k.a. MSVS 2017) is ABI-compatible with VC14 (MSVS 2015), so use
+    // the same ABI version for both of them.
+    #if _MSC_VER >= 1900 && _MSC_VER < 2000
+        #define wxMSVC_ABI_VERSION 1900
+    #else
+        #define wxMSVC_ABI_VERSION _MSC_VER
+    #endif
+    #define __WX_BO_COMPILER ",Visual C++ " __WX_BO_STRINGIZE(wxMSVC_ABI_VERSION)
 #elif defined(__INTEL_COMPILER)
     // Notice that this must come after MSVC check as ICC under Windows is
     // ABI-compatible with the corresponding version of the MSVC and we want to

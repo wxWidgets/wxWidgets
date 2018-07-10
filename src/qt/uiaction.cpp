@@ -16,8 +16,8 @@
 #include "wx/private/uiaction.h"
 
 #include <QtTest/QtTestGui>
-#include <QApplication>
-#include <QWidget>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
 
 #include "wx/qt/defs.h"
 #include "wx/qt/private/utils.h"

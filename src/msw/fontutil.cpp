@@ -182,6 +182,7 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
         default:
             wxFAIL_MSG( wxT("unexpected Win32 charset") );
             // fall through and assume the system charset
+            wxFALLTHROUGH;
 
         case DEFAULT_CHARSET:
             fontEncoding = wxFONTENCODING_SYSTEM;

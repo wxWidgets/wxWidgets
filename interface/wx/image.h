@@ -93,6 +93,9 @@ enum wxImagePNGType
 #define wxIMAGE_OPTION_CUR_HOTSPOT_Y                    wxString("HotSpotY")
 
 #define wxIMAGE_OPTION_GIF_COMMENT                      wxString("GifComment")
+#define wxIMAGE_OPTION_GIF_TRANSPARENCY                 wxString("Transparency")
+#define wxIMAGE_OPTION_GIF_TRANSPARENCY_HIGHLIGHT       wxString("Highlight")
+#define wxIMAGE_OPTION_GIF_TRANSPARENCY_UNCHANGED       wxString("Unchanged")
 
 #define wxIMAGE_OPTION_PNG_FORMAT                       wxString("PngFormat")
 #define wxIMAGE_OPTION_PNG_BITDEPTH                     wxString("PngBitDepth")
@@ -320,6 +323,14 @@ public:
             Handler name.
     */
     void SetName(const wxString& name);
+
+    /**
+       Sets the bitmap type for the handler.
+
+       @param mimetype
+           The bitmap type.
+    */
+    void SetType(wxBitmapType type);
 
     /**
         Retrieve the version information about the image library used by this
@@ -1278,6 +1289,19 @@ public:
             @c wxIMAGE_OPTION_TIFF_PHOTOMETRIC and set it to either
             PHOTOMETRIC_MINISWHITE or PHOTOMETRIC_MINISBLACK. The other values
             are taken care of.
+
+        Options specific to wxGIFHandler:
+        @li @c wxIMAGE_OPTION_GIF_TRANSPARENCY: How to deal with transparent pixels.
+            By default, the color of transparent pixels is changed to bright pink, so
+            that if the image is accidentally drawn without transparency, it will be
+            obvious.
+            Normally, this would not be noticed, as these pixels will not be rendered.
+            But in some cases it might be useful to load a GIF without making any
+            modifications to its colours.
+            Use @c wxIMAGE_OPTION_GIF_TRANSPARENCY_UNCHANGED to keep the colors correct.
+            Use @c wxIMAGE_OPTION_GIF_TRANSPARENCY_HIGHLIGHT to convert transparent pixels
+            to pink (default).
+            This option has been added in wxWidgets 3.1.1.
 
         @note
         Be careful when combining the options @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL,

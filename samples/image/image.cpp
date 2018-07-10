@@ -875,7 +875,7 @@ public:
 
         m_bitmap = wxBitmap(m_image);
 
-        Connect(wxEVT_PAINT, wxPaintEventHandler(MyGraphicsFrame::OnPaint));
+        Bind(wxEVT_PAINT, &MyGraphicsFrame::OnPaint, this);
 
         Show();
     }

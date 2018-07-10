@@ -34,8 +34,8 @@
 
 const char wxSearchCtrlNameStr[] = "searchCtrl";
 
-wxDEFINE_EVENT(wxEVT_SEARCHCTRL_CANCEL_BTN, wxCommandEvent);
-wxDEFINE_EVENT(wxEVT_SEARCHCTRL_SEARCH_BTN, wxCommandEvent);
+wxDEFINE_EVENT(wxEVT_SEARCH_CANCEL, wxCommandEvent);
+wxDEFINE_EVENT(wxEVT_SEARCH, wxCommandEvent);
 
 
 #endif // wxUSE_SEARCHCTRL

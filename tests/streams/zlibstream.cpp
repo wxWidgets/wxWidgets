@@ -29,9 +29,6 @@
 
 using std::string;
 
-#define WXTEST_WITH_GZIP_CONDITION(testMethod) \
-    WXTEST_WITH_CONDITION( COMPOSE_TEST_NAME(zlibStream), wxZlibInputStream::CanHandleGZip() && wxZlibOutputStream::CanHandleGZip(), testMethod )
-
 #define DATABUFFER_SIZE 1024
 
 static const wxString FILENAME_GZ = wxT("zlibtest.gz");
@@ -49,13 +46,13 @@ public:
 
     CPPUNIT_TEST_SUITE(zlibStream);
         // Base class stream tests the zlibstream supports.
-        CPPUNIT_TEST_FAIL(Input_GetSize);
+        CPPUNIT_TEST(Input_GetSizeFail);
         CPPUNIT_TEST(Input_GetC);
         CPPUNIT_TEST(Input_Read);
         CPPUNIT_TEST(Input_Eof);
         CPPUNIT_TEST(Input_LastRead);
         CPPUNIT_TEST(Input_CanRead);
-        CPPUNIT_TEST_FAIL(Input_SeekI);
+        CPPUNIT_TEST(Input_SeekIFail);
         CPPUNIT_TEST(Input_TellI);
         CPPUNIT_TEST(Input_Peek);
         CPPUNIT_TEST(Input_Ungetch);
@@ -63,7 +60,7 @@ public:
         CPPUNIT_TEST(Output_PutC);
         CPPUNIT_TEST(Output_Write);
         CPPUNIT_TEST(Output_LastWrite);
-        CPPUNIT_TEST_FAIL(Output_SeekO);
+        CPPUNIT_TEST(Output_SeekOFail);
         CPPUNIT_TEST(Output_TellO);
 
         // Other test specific for zlib stream test case.
@@ -76,16 +73,16 @@ public:
         CPPUNIT_TEST(TestStream_ZLib_NoComp);
         CPPUNIT_TEST(TestStream_ZLib_SpeedComp);
         CPPUNIT_TEST(TestStream_ZLib_BestComp);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_Default);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_NoComp);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_SpeedComp);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_BestComp);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_Dictionary);
-        WXTEST_WITH_GZIP_CONDITION(TestStream_ZLibGZip);
+        CPPUNIT_TEST(TestStream_GZip_Default);
+        CPPUNIT_TEST(TestStream_GZip_NoComp);
+        CPPUNIT_TEST(TestStream_GZip_SpeedComp);
+        CPPUNIT_TEST(TestStream_GZip_BestComp);
+        CPPUNIT_TEST(TestStream_GZip_Dictionary);
+        CPPUNIT_TEST(TestStream_ZLibGZip);
         CPPUNIT_TEST(Decompress_BadData);
         CPPUNIT_TEST(Decompress_wx251_zlib114_Data_NoHeader);
         CPPUNIT_TEST(Decompress_wx251_zlib114_Data_ZLib);
-        WXTEST_WITH_GZIP_CONDITION(Decompress_gzip135Data);
+        CPPUNIT_TEST(Decompress_gzip135Data);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -415,6 +412,7 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
         {
             wxLogError(wxT("Data seems to not be zlib or gzip data!"));
         }
+        break;
     default:
         wxLogError(wxT("Unknown flag, skipping quick test."));
     };
@@ -475,8 +473,8 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
         }
     }
 
-    CPPUNIT_ASSERT_MESSAGE("Could not decompress the compressed data, original and restored value did not match.",
-                           i == value_size && bValueEq);
+    CPPUNIT_ASSERT_EQUAL( i, value_size );
+    CPPUNIT_ASSERT( bValueEq );
 }
 
 wxZlibInputStream *zlibStream::DoCreateInStream()

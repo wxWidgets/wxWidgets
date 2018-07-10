@@ -42,7 +42,6 @@ private:
         CPPUNIT_TEST( Domain );
         CPPUNIT_TEST( Headers );
         CPPUNIT_TEST( DateTimeFmtFrench );
-        CPPUNIT_TEST( DateTimeFmtC );
         CPPUNIT_TEST( IsAvailable );
     CPPUNIT_TEST_SUITE_END();
 
@@ -50,7 +49,6 @@ private:
     void Domain();
     void Headers();
     void DateTimeFmtFrench();
-    void DateTimeFmtC();
     void IsAvailable();
 
     static wxString GetDecimalPoint()
@@ -189,50 +187,27 @@ void IntlTestCase::DateTimeFmtFrench()
 #else
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
     static const char *FRENCH_LONG_DATE_FMT = "%A %d %B %Y";
-#ifdef __WXOSX__
-    static const char *FRENCH_DATE_TIME_FMT = "%A %d %B %Y %H:%M:%S";
-#else
     static const char *FRENCH_DATE_TIME_FMT = "%d/%m/%Y %H:%M:%S";
-#endif
 #endif
 
     WX_ASSERT_EQUAL_FORMAT( "French short date", FRENCH_DATE_FMT,
-                   m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
+                            wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT) );
     WX_ASSERT_EQUAL_FORMAT( "French long date", FRENCH_LONG_DATE_FMT,
-                    m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
-    WX_ASSERT_EQUAL_FORMAT( "French date and time", FRENCH_DATE_TIME_FMT,
-                    m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
-    WX_ASSERT_EQUAL_FORMAT( "French time", "%H:%M:%S",
-                    m_locale->GetInfo(wxLOCALE_TIME_FMT) );
-}
+                            wxLocale::GetInfo(wxLOCALE_LONG_DATE_FMT) );
 
-void IntlTestCase::DateTimeFmtC()
-{
-    // again, glibc uses different defaults
-#ifdef __GLIBC__
-    static const char *C_DATE_FMT = "%m/%d/%y";
-    static const char *C_LONG_DATE_FMT = "%a %b %d %Y";
-    static const char *C_DATE_TIME_FMT = "%a %b %d %H:%M:%S %Y";
-#else
-    static const char *C_DATE_FMT = "%d/%m/%Y";
-    static const char *C_LONG_DATE_FMT = "%A %d %B %Y";
+    const wxString fmtDT = wxLocale::GetInfo(wxLOCALE_DATE_TIME_FMT);
 #ifdef __WXOSX__
-    static const char *C_DATE_TIME_FMT = "%A %d %B %Y %H:%M:%S";
+    // Things are difficult to test under macOS as the format keeps changing,
+    // e.g. at some time between 10.10 and 10.12 a new " à " string appeared in
+    // its middle, so test it piece-wise and hope it doesn't change too much.
+    INFO("French date and time format is \"" << fmtDT << "\"");
+    CHECK( fmtDT.StartsWith("%A %d %B %Y") );
+    CHECK( fmtDT.EndsWith("%H:%M:%S") );
 #else
-    static const char *C_DATE_TIME_FMT = "%d/%m/%Y %H:%M:%S";
+    WX_ASSERT_EQUAL_FORMAT( "French date and time", FRENCH_DATE_TIME_FMT, fmtDT );
 #endif
-#endif
-
-    setlocale(LC_ALL, "C");
-
-    WX_ASSERT_EQUAL_FORMAT( "C short date", C_DATE_FMT,
-                    m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
-    WX_ASSERT_EQUAL_FORMAT( "C long date", C_LONG_DATE_FMT,
-                    m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
-    WX_ASSERT_EQUAL_FORMAT( "C date and time", C_DATE_TIME_FMT,
-                    m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
-    WX_ASSERT_EQUAL_FORMAT( "C time", "%H:%M:%S",
-                    m_locale->GetInfo(wxLOCALE_TIME_FMT) );
+    WX_ASSERT_EQUAL_FORMAT( "French time", "%H:%M:%S",
+                            wxLocale::GetInfo(wxLOCALE_TIME_FMT) );
 }
 
 void IntlTestCase::IsAvailable()

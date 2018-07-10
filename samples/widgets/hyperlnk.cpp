@@ -99,7 +99,7 @@ protected:
 
     // (re)create the hyperctrl
     void CreateHyperlink();
-    void CreateHyperlinkLong(long);
+    void CreateHyperlinkLong(long align);
 
     // the controls
     // ------------
@@ -259,6 +259,9 @@ void HyperlinkWidgetsPage::CreateHyperlink()
 {
     const wxString label = m_hyperlink->GetLabel();
     const wxString url = m_hyperlink->GetURL();
+    long style = GetAttrs().m_defaultFlags;
+
+    style |= wxHL_DEFAULT_STYLE & ~wxBORDER_MASK;
 
     wxGenericHyperlinkCtrl *hyp;
     if (m_checkGeneric->IsChecked())
@@ -266,14 +269,20 @@ void HyperlinkWidgetsPage::CreateHyperlink()
         hyp = new wxGenericHyperlinkCtrl(this,
                                   HyperlinkPage_Ctrl,
                                   label,
-                                  url);
+                                  url,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  style);
     }
     else
     {
         hyp = new wxHyperlinkCtrl(this,
                                   HyperlinkPage_Ctrl,
                                   label,
-                                  url);
+                                  url,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  style);
     }
 
     // update sizer's child window
@@ -287,9 +296,11 @@ void HyperlinkWidgetsPage::CreateHyperlink()
     GetSizer()->Layout();
 }
 
-void HyperlinkWidgetsPage::CreateHyperlinkLong(long style)
+void HyperlinkWidgetsPage::CreateHyperlinkLong(long align)
 {
-    style = (wxHL_DEFAULT_STYLE & ~wxHL_ALIGN_CENTRE)|style;
+    long style = GetAttrs().m_defaultFlags;
+    style |= align;
+    style |= wxHL_DEFAULT_STYLE & ~(wxHL_ALIGN_CENTRE | wxBORDER_MASK);
 
     wxGenericHyperlinkCtrl *hyp;
     if (m_checkGeneric->IsChecked())

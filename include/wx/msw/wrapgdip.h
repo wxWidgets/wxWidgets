@@ -12,17 +12,14 @@
 
 #include "wx/msw/wrapwin.h"
 
-// these macros must be defined before gdiplus.h is included but we explicitly
-// prevent windows.h from defining them in wx/msw/wrapwin.h as they conflict
-// with standard functions of the same name elsewhere, so we have to pay for it
-// by manually redefining them ourselves here
-#ifndef max
-    #define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
+// min and max must be available for gdiplus.h but we cannot define them as
+// macros because they conflict with std::numeric_limits<T>::min and max when
+// compiling with mingw-w64 and -std=c++17. This happens because with c++17,
+// math.h includes bessel_function which requires std::numeric_limits.
 
-#ifndef min
-    #define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
+#include <cmath>
+using std::min;
+using std::max;
 
 // There are many clashes between the names of the member fields and parameters
 // in the standard gdiplus.h header and each of them results in C4458 with

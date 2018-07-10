@@ -304,7 +304,7 @@ bool wxNotebook::InsertPage(size_t nPage,
                  wxT("invalid notebook page in InsertPage()") );
 
     // modify the data
-    m_pages.Insert(pPage, nPage);
+    m_pages.insert(m_pages.begin() + nPage, pPage);
 
     wxString label;
     m_accels.Insert(FindAccelIndex(strText, &label), nPage);
@@ -378,7 +378,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     wxCHECK_MSG( IS_VALID_PAGE(nPage), NULL, wxT("invalid notebook page") );
 
     wxNotebookPage *page = m_pages[nPage];
-    m_pages.RemoveAt(nPage);
+    m_pages.erase(m_pages.begin() + nPage);
     m_titles.RemoveAt(nPage);
     m_accels.RemoveAt(nPage);
     m_widths.RemoveAt(nPage);

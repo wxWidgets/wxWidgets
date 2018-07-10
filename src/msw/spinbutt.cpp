@@ -251,13 +251,31 @@ bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *
 {
     NM_UPDOWN *lpnmud = (NM_UPDOWN *)lParam;
 
-    if (lpnmud->hdr.hwndFrom != GetHwnd()) // make sure it is the right control
+    if ( lpnmud->hdr.hwndFrom != GetHwnd() || // make sure it is the right control
+         lpnmud->hdr.code != UDN_DELTAPOS )   // and the right notification 
         return false;
+
+    int newVal = lpnmud->iPos + lpnmud->iDelta;
+    if ( newVal < m_min )
+    {
+        newVal = HasFlag(wxSP_WRAP) ? m_max : m_min;
+    }
+    else if ( newVal > m_max )
+    {
+        newVal = HasFlag(wxSP_WRAP) ? m_min : m_max;
+    }
+
+    // Don't send an event if the value hasn't actually changed (for compatibility with wxGTK and wxOSX).
+    if ( newVal == lpnmud->iPos )
+    {
+        *result = 1;
+        return true;
+    }
 
     wxSpinEvent event(lpnmud->iDelta > 0 ? wxEVT_SCROLL_LINEUP
                                          : wxEVT_SCROLL_LINEDOWN,
                       m_windowId);
-    event.SetPosition(lpnmud->iPos + lpnmud->iDelta);
+    event.SetPosition(newVal);
     event.SetEventObject(this);
 
     bool processed = HandleWindowEvent(event);

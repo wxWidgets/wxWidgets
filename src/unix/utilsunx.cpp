@@ -1402,7 +1402,8 @@ bool wxUnsetEnv(const wxString& variable)
 
 #include <signal.h>
 
-extern "C" void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
+extern "C" {
+static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
 {
     if ( wxTheApp )
     {
@@ -1411,6 +1412,7 @@ extern "C" void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
     }
 
     abort();
+}
 }
 
 bool wxHandleFatalExceptions(bool doit)

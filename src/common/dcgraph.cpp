@@ -282,6 +282,17 @@ void wxGCDCImpl::UpdateClipBox()
     double x, y, w, h;
     m_graphicContext->GetClipBox(&x, &y, &w, &h);
 
+    // We shouldn't reset m_clipping if the clipping region that we set happens
+    // to be empty (e.g. because its intersection with the previous clipping
+    // region was empty), but we should set it to true if we do have a valid
+    // clipping region and it was false which may happen if the clipping region
+    // set from the outside of wxWidgets code.
+    if ( !m_clipping )
+    {
+        if ( w != 0. && h != 0. )
+            m_clipping = true;
+    }
+
     m_clipX1 = wxRound(x);
     m_clipY1 = wxRound(y);
     m_clipX2 = wxRound(x+w);
@@ -289,9 +300,9 @@ void wxGCDCImpl::UpdateClipBox()
     m_isClipBoxValid = true;
 }
 
-void wxGCDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+bool wxGCDCImpl::DoGetClippingRect(wxRect& rect) const
 {
-    wxCHECK_RET( IsOk(), wxS("wxGCDC::DoGetClippingRegion - invalid GC") );
+    wxCHECK_MSG( IsOk(), false, wxS("wxGCDC::DoGetClippingRegion - invalid GC") );
     // Check if we should retrieve the clipping region possibly not set
     // by SetClippingRegion() but modified by application: this can
     // happen when we're associated with an existing graphics context using
@@ -303,14 +314,7 @@ void wxGCDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h
         self->UpdateClipBox();
     }
 
-    if ( x )
-        *x = m_clipX1;
-    if ( y )
-        *y = m_clipY1;
-    if ( w )
-        *w = m_clipX2 - m_clipX1;
-    if ( h )
-        *h = m_clipY2 - m_clipY1;
+    return wxDCImpl::DoGetClippingRect(rect);
 }
 
 void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
@@ -376,7 +380,7 @@ void wxGCDCImpl::DestroyClippingRegion()
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
 
-    ResetClipping();
+    wxDCImpl::DestroyClippingRegion();
     m_isClipBoxValid = false;
 }
 
@@ -457,10 +461,12 @@ void* wxGCDCImpl::GetHandle() const
     return cgctx;
 }
 
+#if wxUSE_PALETTE
 void wxGCDCImpl::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
 
 }
+#endif
 
 void wxGCDCImpl::SetBackgroundMode( int mode )
 {
@@ -703,7 +709,31 @@ void wxGCDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawPoint - invalid DC") );
 
-    DoDrawLine( x , y , x + 1 , y + 1 );
+    if (!m_logicalFunctionSupported)
+        return;
+
+#if defined(__WXMSW__) && wxUSE_GRAPHICS_GDIPLUS
+    // single point path does not work with GDI+
+    if (m_graphicContext->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer())
+    {
+        const double dx = 0.25 / m_scaleX;
+        const double dy = 0.25 / m_scaleY;
+        m_graphicContext->StrokeLine(x - dx, y - dy, x + dx, y + dy);
+    }
+    else
+#endif
+    {
+#ifdef __WXOSX__
+        m_graphicContext->StrokeLine(x, y, x, y);
+#else
+        wxGraphicsPath path(m_graphicContext->CreatePath());
+        path.MoveToPoint(x, y);
+        path.CloseSubpath();
+        m_graphicContext->StrokePath(path);
+#endif
+    }
+
+    CalcBoundingBox(x, y);
 }
 
 void wxGCDCImpl::DoDrawLines(int n, const wxPoint points[],

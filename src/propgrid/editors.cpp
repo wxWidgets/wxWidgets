@@ -471,6 +471,7 @@ void wxPGTextCtrlEditor::SetControlStringValue( wxPGProperty* property, wxWindow
 }
 
 
+static
 void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
                                  wxTextCtrl* tc )
 {
@@ -957,6 +958,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     }
 }
 
+static
 bool wxPGChoiceEditor_SetCustomPaintWidth( wxPropertyGrid* propGrid, wxPGComboBox* cb, int cmnVal )
 {
     wxPGProperty* property = propGrid->GetSelectedProperty();
@@ -1069,6 +1071,8 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     cb->SetButtonPosition(si.y,0,wxRIGHT);
 #endif // !__WXOSX__
     cb->SetMargins(wxPG_XBEFORETEXT-1);
+
+    cb->SetBackgroundColour(propGrid->GetCellBackgroundColour());
 
     // Set hint text
     cb->SetHint(property->GetHintText());
@@ -1772,12 +1776,7 @@ wxPGCheckBoxEditor::~wxPGCheckBoxEditor()
 
 wxWindow* wxPropertyGrid::GetEditorControl() const
 {
-    wxWindow* ctrl = m_wndEditor;
-
-    if ( !ctrl )
-        return ctrl;
-
-    return ctrl;
+    return  m_wndEditor;
 }
 
 // -----------------------------------------------------------------------

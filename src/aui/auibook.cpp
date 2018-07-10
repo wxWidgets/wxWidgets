@@ -930,7 +930,7 @@ static void ShowWnd(wxWindow* wnd, bool show)
     if (wxDynamicCast(wnd, wxAuiMDIChildFrame))
     {
         wxAuiMDIChildFrame* cf = (wxAuiMDIChildFrame*)wnd;
-        cf->DoShow(show);
+        cf->wxWindow::Show(show);
     }
     else
 #endif
@@ -1595,14 +1595,6 @@ public:
             }
             // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
             // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
-
-#if wxUSE_MDI
-            if (wxDynamicCast(page.window, wxAuiMDIChildFrame))
-            {
-                wxAuiMDIChildFrame* wnd = (wxAuiMDIChildFrame*)page.window;
-                wnd->ApplyMDIChildFrameRect();
-            }
-#endif
         }
     }
 
@@ -1981,8 +1973,11 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     else
         active_tabctrl->InsertPage(page, info, page_idx);
 
-    UpdateTabCtrlHeight();
-    DoSizing();
+    // Note that we don't need to call DoSizing() if the height has changed, as
+    // it's already called from UpdateTabCtrlHeight() itself in this case.
+    if ( !UpdateTabCtrlHeight() )
+        DoSizing();
+
     active_tabctrl->DoShowHide();
 
     // adjust selected index

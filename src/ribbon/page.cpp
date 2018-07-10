@@ -175,6 +175,8 @@ wxRibbonPage::wxRibbonPage(wxRibbonBar* parent,
 wxRibbonPage::~wxRibbonPage()
 {
     delete[] m_size_calc_array;
+    delete m_scroll_left_btn;
+    delete m_scroll_right_btn;
 }
 
 bool wxRibbonPage::Create(wxRibbonBar* parent,
@@ -338,7 +340,8 @@ bool wxRibbonPage::ScrollPixels(int pixels)
         child->SetPosition(wxPoint(x, y));
     }
 
-    ShowScrollButtons();
+    if (ShowScrollButtons())
+        DoActualLayout();
     Refresh();
     return true;
 }
@@ -788,7 +791,7 @@ void wxRibbonPage::HideScrollButtons()
     ShowScrollButtons();
 }
 
-void wxRibbonPage::ShowScrollButtons()
+bool wxRibbonPage::ShowScrollButtons()
 {
     bool show_left = true;
     bool show_right = true;
@@ -891,6 +894,8 @@ void wxRibbonPage::ShowScrollButtons()
     {
         wxDynamicCast(GetParent(), wxRibbonBar)->RepositionPage(this);
     }
+
+    return reposition;
 }
 
 static int GetSizeInOrientation(wxSize size, wxOrientation orientation)
@@ -1002,7 +1007,6 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
 
 bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
 {
-    bool collapsed_something = false;
     while(minimum_amount > 0)
     {
         int largest_size = 0;
@@ -1086,7 +1090,6 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                     largest_panel_size->y -= amount;
                 }
                 minimum_amount -= amount;
-                collapsed_something = true;
             }
             else
             {
@@ -1094,7 +1097,6 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                 wxSize delta = (*largest_panel_size) - smaller;
                 *largest_panel_size = smaller;
                 minimum_amount -= GetSizeInOrientation(delta, direction);
-                collapsed_something = true;
             }
         }
         else
@@ -1102,7 +1104,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
             break;
         }
     }
-    return collapsed_something;
+    return minimum_amount <= 0;
 }
 
 bool wxRibbonPage::DismissExpandedPanel()

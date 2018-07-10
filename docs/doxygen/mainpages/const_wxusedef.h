@@ -148,6 +148,7 @@ library:
 @itemdef{wxUSE_IPV6, Use experimental wxIPV6address and related classes.}
 @itemdef{wxUSE_JOYSTICK, Use wxJoystick class.}
 @itemdef{wxUSE_LIBJPEG, Enables JPEG format support (requires libjpeg).}
+@itemdef{wxUSE_LIBLZMA, Enables LZMA compression support (see @ref page_build_liblzma).}
 @itemdef{wxUSE_LIBPNG, Enables PNG format support (requires libpng). Also requires wxUSE_ZLIB.}
 @itemdef{wxUSE_LIBTIFF, Enables TIFF format support (requires libtiff).}
 @itemdef{wxUSE_LISTBOOK, Use wxListbook class.}
@@ -186,6 +187,7 @@ library:
 @itemdef{wxUSE_POSTSCRIPT, Use wxPostScriptPrinter class.}
 @itemdef{wxUSE_PRINTF_POS_PARAMS, Use wxVsnprintf which supports positional parameters.}
 @itemdef{wxUSE_PRINTING_ARCHITECTURE, Enable printer classes.}
+@itemdef{wxUSE_PRIVATE_FONTS, Implement wxFont::AddPrivateFont() method.}
 @itemdef{wxUSE_PROGRESSDLG, Enables progress dialog classes.}
 @itemdef{wxUSE_PROPGRID, Use wxPropertyGrid library.}
 @itemdef{wxUSE_PROTOCOL, Use wxProtocol and derived classes.}
@@ -304,13 +306,6 @@ library:
 @beginDefList
 @itemdef{wxUSE_GADGETS, Use xmCascadeButtonGadgetClass, xmLabelGadgetClass, xmPushButtonGadgetClass and xmToggleButtonGadgetClass classes.}
 @itemdef{wxUSE_INVISIBLE_RESIZE, See src/motif/dialog.cpp file.}
-@endDefList
-
-
-@section page_wxusedef_cocoa Cocoa Symbols
-
-@beginDefList
-@itemdef{wxUSE_OBJC_UNIQUIFYING, Enable Objective-C class name uniquifying.}
 @endDefList
 
 

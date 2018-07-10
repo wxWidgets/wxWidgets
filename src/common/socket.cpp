@@ -135,7 +135,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent);
 namespace
 {
 
-void SetTimeValFromMS(timeval& tv, unsigned long ms)
+void SetTimeValFromMS(wxTimeVal_t& tv, unsigned long ms)
 {
     tv.tv_sec  = (ms / 1000);
     tv.tv_usec = (ms % 1000) * 1000;
@@ -1304,12 +1304,12 @@ wxSocketBase& wxSocketBase::Discard()
     and it will return a mask indicating which operations can be performed.
  */
 wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
-                                        const timeval *timeout)
+                                        wxTimeVal_t *timeout)
 {
     if ( m_fd == INVALID_SOCKET )
         return (wxSOCKET_LOST_FLAG & flags);
 
-    struct timeval tv;
+    wxTimeVal_t tv;
     if ( timeout )
         tv = *timeout;
     else
@@ -1502,7 +1502,7 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
         else // no event loop or waiting in another thread
         {
             // as explained below, we should always check for wxSOCKET_LOST_FLAG
-            timeval tv;
+            wxTimeVal_t tv;
             SetTimeValFromMS(tv, timeLeft);
             events = m_impl->Select(flags | wxSOCKET_LOST_FLAG, &tv);
         }

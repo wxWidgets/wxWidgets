@@ -1366,13 +1366,6 @@ bool wxListHeaderWindow::SendListEvent(wxEventType type, const wxPoint& pos)
     wxListEvent le( type, parent->GetId() );
     le.SetEventObject( parent );
     le.m_pointDrag = pos;
-
-    // the position should be relative to the parent window, not
-    // this one for compatibility with MSW and common sense: the
-    // user code doesn't know anything at all about this header
-    // window, so why should it get positions relative to it?
-    le.m_pointDrag.y -= GetSize().y;
-
     le.m_col = m_column;
     return !parent->GetEventHandler()->ProcessEvent( le ) || le.IsAllowed();
 }
@@ -2220,7 +2213,13 @@ void wxListMainWindow::SendNotify( size_t line,
 
     // set only for events which have position
     if ( point != wxDefaultPosition )
-        le.m_pointDrag = point;
+    {
+        // the position should be relative to the parent window, not
+        // this one for compatibility with MSW and common sense: the
+        // user code doesn't know anything at all about this window,
+        // so why should it get positions relative to it?
+        le.m_pointDrag = GetPosition() + point;
+    }
 
     // don't try to get the line info for virtual list controls: the main
     // program has it anyhow and if we did it would result in accessing all
@@ -4097,7 +4096,8 @@ void wxListMainWindow::DeleteItem( long lindex )
     // with many items, the vertical scroll position may change so that the new
     // last item is not visible any longer, which is very annoying from the
     // user point of view. Ensure that whatever happens, this item is visible.
-    EnsureVisible(m_current);
+    if ( count > 1 && m_current != (size_t)-1 )
+        EnsureVisible(m_current);
 }
 
 void wxListMainWindow::DeleteColumn( int col )
@@ -4460,6 +4460,7 @@ int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
 static wxListCtrlCompare list_ctrl_compare_func_2;
 static wxIntPtr          list_ctrl_compare_data;
 
+static
 int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData **arg2 )
 {
     wxListLineData *line1 = *arg1;
@@ -4912,7 +4913,7 @@ bool wxGenericListCtrl::SetItem( wxListItem &info )
     return true;
 }
 
-long wxGenericListCtrl::SetItem( long index, int col, const wxString& label, int imageId )
+bool wxGenericListCtrl::SetItem( long index, int col, const wxString& label, int imageId )
 {
     wxListItem info;
     info.m_text = label;
@@ -5460,15 +5461,6 @@ wxColour wxGenericListCtrl::GetBackgroundColour() const
 wxColour wxGenericListCtrl::GetForegroundColour() const
 {
     return m_mainWin ? m_mainWin->GetForegroundColour() : wxColour();
-}
-
-bool wxGenericListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
-{
-#if wxUSE_MENUS
-    return m_mainWin->PopupMenu( menu, x, y );
-#else
-    return false;
-#endif
 }
 
 wxSize wxGenericListCtrl::DoGetBestClientSize() const

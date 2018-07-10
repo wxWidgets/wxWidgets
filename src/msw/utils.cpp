@@ -1090,6 +1090,7 @@ wxString wxGetOsDescription()
                                 break;
                             }
                             //else: must be XP, fall through
+                            wxFALLTHROUGH;
 
                         case 1:
                             str = "Windows XP";

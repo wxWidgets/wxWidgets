@@ -13,6 +13,7 @@
 
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/dynarray.h"
 
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
     #include <vector>
@@ -49,15 +50,9 @@ wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2)
 
 #if wxUSE_STD_CONTAINERS
 
-#include "wx/dynarray.h"
-
 typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
-typedef wxString _wxArraywxBaseArrayStringBase;
-_WX_DECLARE_BASEARRAY_2(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase,
-                        wxArray_SortFunction<wxString>,
-                        class WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase,
-                                  wxBaseArrayStringBase, WXDLLIMPEXP_BASE);
+                                  wxARRAY_DUMMY_BASE, WXDLLIMPEXP_BASE);
 
 class WXDLLIMPEXP_BASE wxArrayString : public wxArrayStringBase
 {
@@ -85,9 +80,25 @@ public:
     }
 };
 
-_WX_DEFINE_SORTED_TYPEARRAY_2(wxString, wxSortedArrayStringBase,
-                              wxBaseArrayStringBase, = wxStringSortAscending,
-                              class WXDLLIMPEXP_BASE, wxArrayString::CompareFunction);
+// Unlike all the other sorted arrays, this one uses a comparison function
+// taking objects by reference rather than value, so define a special functor
+// wrapping it.
+class wxSortedArrayString_SortFunction
+{
+public:
+    typedef int (wxCMPFUNC_CONV *CMPFUNC)(const wxString&, const wxString&);
+
+    explicit wxSortedArrayString_SortFunction(CMPFUNC f) : m_f(f) { }
+
+    bool operator()(const wxString& s1, const wxString& s2)
+      { return m_f(s1, s2) < 0; }
+
+private:
+    CMPFUNC m_f;
+};
+
+typedef wxBaseSortedArray<wxString, wxSortedArrayString_SortFunction>
+    wxSortedArrayStringBase;
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
 {
@@ -483,7 +494,7 @@ public:
     wxArrayStringsAdapter(const std::vector<wxString>& strings)
         : m_type(wxSTRING_POINTER), m_size(strings.size())
     {
-        m_data.ptr = &strings[0];
+        m_data.ptr = m_size == 0 ? NULL : &strings[0];
     }
 #endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 
