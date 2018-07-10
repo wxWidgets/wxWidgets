@@ -4762,14 +4762,12 @@ wxEventType wxNewEventType();
 /**
     Helper macro for definition of custom event table macros.
 
-    This macro must only be used if wxEVENTS_COMPATIBILITY_2_8 is 1, otherwise
-    it is better and more clear to just use the address of the function
-    directly as this is all this macro does in this case. However it needs to
-    explicitly cast @a func to @a functype, which is the type of wxEvtHandler
-    member function taking the custom event argument when
-    wxEVENTS_COMPATIBILITY_2_8 is 0.
+    This macro casts the given event handler to the given function type using
+    @c static_cast to ensure that the actual handler is indeed compatible with
+    it, before (unsafely) casting it to a generic function pointer used by the
+    event tables.
 
-    See wx__DECLARE_EVT0 for an example of use.
+    See wx__DECLARE_EVT1 for an example of use.
 
     @see @ref overview_events_custom_ownclass
  */
