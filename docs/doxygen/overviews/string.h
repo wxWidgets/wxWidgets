@@ -178,10 +178,22 @@ which are deprecated and may disappear in future versions.
 
 @subsection overview_string_implicitconv Implicit conversions
 
-Probably the main trap with using this class is the implicit conversion
-operator to <tt>const char*</tt>. It is advised that you use wxString::c_str()
-instead to clearly indicate when the conversion is done. Specifically, the
-danger of this implicit conversion may be seen in the following code fragment:
+The default behaviour, which can't be changed to avoid breaking compatibility
+with the existing code, is to provide implicit conversions of wxString to
+C-style strings, i.e. <tt>const char*</tt> and/or <tt>const wchar_t*</tt>. As
+explained below, these conversions are dangerous and it is @e strongly
+recommended to predefine @c wxNO_UNSAFE_WXSTRING_CONV for all new projects
+using wxWidgets to disable them. Notice that this preprocessor symbol is
+different from the more usual @c wxUSE_XXX build options, as it only needs to
+be defined when building the application and doesn't require rebuilding the
+library (and so can be used with e.g. system-provided libraries from Linux
+system packages).
+
+If you can't disable the implicit conversions, it is still advised to use
+wxString::c_str() instead of relying on them to clearly indicate when the
+conversion is done as implicit conversions may result in difficult to find
+bugs. For example, some of the dangers of this implicit conversion may be seen
+in the following code fragment:
 
 @code
 // this function converts the input string to uppercase,
@@ -373,6 +385,14 @@ to use UTF-8 internally. wxString still provides the same API in this case, but
 using UTF-8 has performance implications as explained in @ref
 overview_unicode_performance, so it probably shouldn't be enabled for legacy
 code which might contain a lot of index-using loops.
+
+As mentioned in @ref overview_string_implicitconv, @c wxNO_UNSAFE_WXSTRING_CONV
+should be defined by all code using this class to opt-in safer, but not
+backwards-compatible, behaviour of @e not providing dangerous implicit
+conversions to C-style strings. This option is convenient when using standard
+build of the library as it doesn't require rebuilding it, but for custom builds
+it is also possible to set @c wxUSE_UNSAFE_WXSTRING_CONV to 0 in order to
+disable the implicit conversions for all applications using it.
 
 See also @ref page_wxusedef_important for a few other options affecting wxString.
 

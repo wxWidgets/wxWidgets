@@ -45,6 +45,9 @@ library:
     other locales and reduces the library size; useful for embedded systems.}
 @itemdef{wxUSE_GUI, Use the GUI classes; if set to 0 only non-GUI classes are
     available.}
+@itemdef{wxUSE_UNSAFE_WXSTRING_CONV, Defined as 1 by default for compatibility,
+    but can be set to 0 to globally disable unsafe implicit conversions in
+    wxString class. See @ref overview_string_settings for more details.}
 @endDefList
 
 
