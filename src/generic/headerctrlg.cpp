@@ -93,6 +93,11 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
 
     m_numColumns = count;
 
+    // don't leave the column index invalid, this would cause a crash later if
+    // it is used from OnMouse()
+    if ( m_hover >= count )
+        m_hover = COL_NONE;
+
     InvalidateBestSize();
     Refresh();
 }
