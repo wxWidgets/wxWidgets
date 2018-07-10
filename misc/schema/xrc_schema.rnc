@@ -829,6 +829,7 @@ wxComboBox =
         stdWindowProperties &
         [xrc:p="o"] element selection {_, t_integer }* &
         [xrc:p="o"] element value     {_, t_string }* &
+        [xrc:p="o"] element hint      {_, t_text }* &
         element content {
             platform,
             element item {_, t_text }*

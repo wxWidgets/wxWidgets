@@ -100,6 +100,7 @@ All (GUI):
 - Make wxRibbonButtonBar buttons more customizable (Max Maisel).
 - Add wxHtmlEasyPrinting::SetPromptMode() (pavel-t).
 - Fix possible infinite loop in wxHtmlWindow layout (trivia21).
+- Add "hint" property support to XRC for wxComboBox and wxSearchCtrl.
 
 wxGTK:
 
