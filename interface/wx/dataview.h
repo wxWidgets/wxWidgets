@@ -2272,6 +2272,9 @@ public:
 
     This class is used by wxDataViewCtrl to render toggle controls.
 
+    Note that "toggles" can be represented either by check boxes (default) or
+    radio buttons.
+
     @see wxDataViewCheckIconTextRenderer
     @library{wxadv}
     @category{dvc}
@@ -2292,6 +2295,24 @@ public:
     wxDataViewToggleRenderer(const wxString& varianttype = GetDefaultType(),
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
+
+    /**
+        Switch to using radiobutton-like appearance instead of the default
+        checkbox-like one.
+
+        By default, this renderer uses checkboxes to represent the boolean
+        values, but using this method its appearance can be changed to use
+        radio buttons instead.
+
+        Notice that only the appearance is changed, the cells don't really
+        start behaving as radio buttons after a call to ShowAsRadio(), i.e. the
+        application code also needs to react to selecting one of the cells
+        shown by this renderer and clearing all the other ones in the same row
+        or column to actually implement radio button-like behaviour.
+
+        @since 3.1.2
+     */
+    void ShowAsRadio();
 };
 
 
