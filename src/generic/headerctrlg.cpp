@@ -38,7 +38,7 @@
 namespace
 {
 
-const unsigned COL_NONE = (unsigned)-1;
+const int COL_NONE = -1;
 
 } // anonymous namespace
 
@@ -93,6 +93,9 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
 
     m_numColumns = count;
 
+    if (m_hover >= count)
+        m_hover = COL_NONE;
+
     InvalidateBestSize();
     Refresh();
 }
@@ -143,7 +146,7 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 int wxHeaderCtrl::GetColStart(unsigned int idx) const
 {
     int pos = m_scrollOffset;
-    for ( unsigned n = 0; ; n++ )
+    for ( unsigned n = 0; n < m_colIndices.Count(); n++ )
     {
         const unsigned i = m_colIndices[n];
         if ( i == idx )
