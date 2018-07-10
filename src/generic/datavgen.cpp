@@ -1260,6 +1260,7 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
     wxDataViewRenderer( varianttype, mode, align )
 {
     m_toggle = false;
+    m_radio = false;
 }
 
 bool wxDataViewToggleRenderer::SetValue( const wxVariant &value )
@@ -1301,11 +1302,12 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     size.IncTo(GetSize());
     cell.SetSize(size);
 
-    wxRendererNative::Get().DrawCheckBox(
-            GetOwner()->GetOwner(),
-            *dc,
-            cell,
-            flags );
+    wxRendererNative& renderer = wxRendererNative::Get();
+    wxWindow* const win = GetOwner()->GetOwner();
+    if ( m_radio )
+        renderer.DrawRadioBitmap(win, *dc, cell, flags);
+    else
+        renderer.DrawCheckBox(win, *dc, cell, flags);
 
     return true;
 }

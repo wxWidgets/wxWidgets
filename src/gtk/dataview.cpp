@@ -2539,6 +2539,11 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
     SetAlignment(align);
 }
 
+void wxDataViewToggleRenderer::ShowAsRadio()
+{
+    gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(m_renderer), TRUE);
+}
+
 bool wxDataViewToggleRenderer::SetValue( const wxVariant &value )
 {
     bool tmp = value;

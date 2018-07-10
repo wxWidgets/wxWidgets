@@ -3326,6 +3326,11 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer(const wxString& varianttype,
     [cell release];
 }
 
+void wxDataViewToggleRenderer::ShowAsRadio()
+{
+    [GetNativeData()->GetItemCell() setButtonType:NSRadioButton];
+}
+
 bool wxDataViewToggleRenderer::MacRender()
 {
     [GetNativeData()->GetItemCell() setIntValue:GetValue().GetLong()];

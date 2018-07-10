@@ -198,6 +198,8 @@ public:
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
 
+    void ShowAsRadio();
+
     virtual bool MacRender();
 
     virtual void OSXOnCellChanged(NSObject *value,
