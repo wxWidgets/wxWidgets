@@ -2429,7 +2429,7 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
-    DWORD wText = 1;
+    DWORD wText = FromDIP(1);
     ::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0);
     wText += xlen;
 
@@ -2464,7 +2464,7 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     // stand out).
     if ( !HasFlag(wxBORDER_NONE) )
     {
-        wText += 9; // borders and inner margins
+        wText += FromDIP(9); // borders and inner margins
 
         // we have to add the adjustments for the control height only once, not
         // once per line, so do it after multiplication above

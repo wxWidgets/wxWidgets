@@ -178,7 +178,7 @@ void SearchCtrlWidgetsPage::CreateControl()
     long style = GetAttrs().m_defaultFlags;
 
     m_srchCtrl = new wxSearchCtrl(this, -1, wxEmptyString, wxDefaultPosition,
-                                  wxSize(150, -1), style);
+                                  FromDIP(wxSize(150, -1)), style);
 
     m_srchCtrl->Bind(wxEVT_SET_FOCUS, &SearchCtrlWidgetsPage::OnSetFocus, this);
     m_srchCtrl->Bind(wxEVT_KILL_FOCUS, &SearchCtrlWidgetsPage::OnKillFocus, this);
