@@ -1419,6 +1419,15 @@ wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, unsigned int mode
 }
 
 wxDataViewColumn *
+wxDataViewCtrlBase::AppendRadioColumn( const wxString &label, unsigned int model_column,
+                            wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    return AppendColumnWithRenderer<wxDataViewRadioRenderer>(
+                this, label, model_column, mode, width, align, flags
+            );
+}
+
+wxDataViewColumn *
 wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
@@ -1468,6 +1477,15 @@ wxDataViewCtrlBase::AppendToggleColumn( const wxBitmap &label, unsigned int mode
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     return AppendColumnWithRenderer<wxDataViewToggleRenderer>(
+                this, label, model_column, mode, width, align, flags
+            );
+}
+
+wxDataViewColumn *
+wxDataViewCtrlBase::AppendRadioColumn( const wxBitmap &label, unsigned int model_column,
+                            wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    return AppendColumnWithRenderer<wxDataViewRadioRenderer>(
                 this, label, model_column, mode, width, align, flags
             );
 }
@@ -1527,6 +1545,15 @@ wxDataViewCtrlBase::PrependToggleColumn( const wxString &label, unsigned int mod
 }
 
 wxDataViewColumn *
+wxDataViewCtrlBase::PrependRadioColumn( const wxString &label, unsigned int model_column,
+                            wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    return PrependColumnWithRenderer<wxDataViewRadioRenderer>(
+                this, label, model_column, mode, width, align, flags
+            );
+}
+
+wxDataViewColumn *
 wxDataViewCtrlBase::PrependProgressColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
@@ -1576,6 +1603,15 @@ wxDataViewCtrlBase::PrependToggleColumn( const wxBitmap &label, unsigned int mod
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     return PrependColumnWithRenderer<wxDataViewToggleRenderer>(
+                this, label, model_column, mode, width, align, flags
+            );
+}
+
+wxDataViewColumn *
+wxDataViewCtrlBase::PrependRadioColumn( const wxBitmap &label, unsigned int model_column,
+                            wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    return PrependColumnWithRenderer<wxDataViewRadioRenderer>(
                 this, label, model_column, mode, width, align, flags
             );
 }
@@ -2396,6 +2432,18 @@ wxDataViewColumn *wxDataViewListCtrl::AppendToggleColumn( const wxString &label,
 
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewToggleRenderer( wxT("bool"), mode ),
+        GetStore()->GetColumnCount()-1, width, align, flags );
+
+    return wxDataViewCtrl::AppendColumn( ret ) ? ret : NULL;
+}
+
+wxDataViewColumn *wxDataViewListCtrl::AppendRadioColumn( const wxString &label,
+          wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    GetStore()->AppendColumn( wxT("bool") );
+
+    wxDataViewColumn *ret = new wxDataViewColumn( label,
+        new wxDataViewRadioRenderer( wxT("bool"), mode ),
         GetStore()->GetColumnCount()-1, width, align, flags );
 
     return wxDataViewCtrl::AppendColumn( ret ) ? ret : NULL;

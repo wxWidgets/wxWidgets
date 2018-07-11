@@ -94,6 +94,7 @@ All:
 
 All (GUI):
 
+- Add wxDataViewRadioRenderer for using radio buttons in wxDataViewCtrl.
 - Improve stock items consistency and aesthetics (dhowland).
 - Fix bug with missing items in overflowing AUI toolbar (Maarten Bent).
 - Revert to left-aligning wxSpinCtrl contents by default.

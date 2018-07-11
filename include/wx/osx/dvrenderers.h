@@ -204,8 +204,38 @@ public:
                                   const wxDataViewItem& item,
                                   unsigned col);
 
+protected:
+    // This ctor and helper function below exist solely for the use of
+    // wxDataViewRadioRenderer.
+    wxDataViewToggleRenderer(const wxString& varianttype,
+                             wxDataViewCellMode mode,
+                             int align,
+                             int buttonType)
+        : wxOSXDataViewDisabledInertRenderer(varianttype, mode, align)
+    {
+        DoCreate(align, buttonType);
+    }
+
+    void DoCreate(int align, int buttonType);
+
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);
+};
+
+// ---------------------------------------------------------
+// wxDataViewRadioRenderer
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewRadioRenderer
+    : public wxDataViewToggleRenderer
+{
+public:
+    wxDataViewRadioRenderer(const wxString& varianttype = GetDefaultType(),
+                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                            int align = wxDVR_DEFAULT_ALIGNMENT);
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRadioRenderer);
 };
 
 // ---------------------------------------------------------

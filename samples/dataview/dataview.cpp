@@ -108,6 +108,10 @@ private:
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
+
+    // Third (wxDataViewListCtrl) page.
+    void OnListValueChanged(wxDataViewEvent& event);
+
     // Fourth page.
     void OnDeleteTreeItem(wxCommandEvent& event);
     void OnDeleteAllTreeItems(wxCommandEvent& event);
@@ -176,6 +180,9 @@ private:
     wxLog *m_logOld;
 
 private:
+    // Flag used by OnListValueChanged(), see there.
+    bool m_eventFromProgram;
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -449,6 +456,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_ctrl[1] = NULL;
     m_ctrl[2] = NULL;
     m_ctrl[3] = NULL;
+
+    m_eventFromProgram = false;
 
     SetIcon(wxICON(sample));
 
@@ -759,6 +768,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             page2_model->DecRef();
 
             lc->AppendToggleColumn( "Toggle" );
+            lc->AppendRadioColumn( "Radio" );
             lc->AppendTextColumn( "Text" );
             lc->AppendProgressColumn( "Progress" );
 
@@ -767,11 +777,14 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             {
                 data.clear();
                 data.push_back( (i%3) == 0 );
+                data.push_back( i == 7 ); // select a single (random) radio item
                 data.push_back( wxString::Format("row %d", i) );
                 data.push_back( long(5*i) );
 
                 lc->AppendItem( data );
             }
+
+            lc->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &MyFrame::OnListValueChanged, this);
         }
         break;
 
@@ -1388,6 +1401,48 @@ void MyFrame::OnHideAttributes(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnShowAttributes(wxCommandEvent& WXUNUSED(event))
 {
     m_attributes->SetHidden(false);
+}
+
+// ----------------------------------------------------------------------------
+// MyFrame - event handlers for the third (wxDataViewListCtrl) page
+// ----------------------------------------------------------------------------
+
+void MyFrame::OnListValueChanged(wxDataViewEvent& event)
+{
+    // Ignore changes coming from our own SetToggleValue() calls below.
+    if ( m_eventFromProgram )
+    {
+        m_eventFromProgram = false;
+        return;
+    }
+
+    wxDataViewListCtrl* const lc = static_cast<wxDataViewListCtrl*>(m_ctrl[2]);
+
+    const int columnToggle = 1;
+
+    // Handle selecting a radio button by unselecting all the other ones.
+    if ( event.GetColumn() == columnToggle )
+    {
+        const int rowChanged = lc->ItemToRow(event.GetItem());
+        if ( lc->GetToggleValue(rowChanged, columnToggle) )
+        {
+            for ( int row = 0; row < lc->GetItemCount(); ++row )
+            {
+                if ( row != rowChanged )
+                {
+                    m_eventFromProgram = true;
+                    lc->SetToggleValue(false, row, columnToggle);
+                }
+            }
+        }
+        else // The item was cleared.
+        {
+            // Explicitly check it back, we want to always have exactly one
+            // checked radio item in this column.
+            m_eventFromProgram = true;
+            lc->SetToggleValue(true, rowChanged, columnToggle);
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
