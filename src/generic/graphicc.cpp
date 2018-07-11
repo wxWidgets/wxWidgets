@@ -83,7 +83,11 @@ using namespace std;
 #endif
 
 #ifdef __WXGTK__
+#ifdef __WXGTK20__
 #include "wx/gtk/private/wrapgtk.h"
+#else // GTK+ 1.x
+#include <gtk/gtk.h>
+#endif
 #include "wx/fontutil.h"
 #ifndef __WXGTK3__
 #include "wx/gtk/dc.h"

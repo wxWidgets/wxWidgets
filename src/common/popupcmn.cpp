@@ -41,8 +41,11 @@
     #include "wx/scrolbar.h"
 #endif // __WXUNIVERSAL__
 
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
     #include "wx/gtk/private/wrapgtk.h"
+#elif defined(__WXGTK__)
+    #include <gtk/gtk.h>
+    #define gtk_widget_get_window(x) x->window
 #elif defined(__WXMSW__)
     #include "wx/msw/private.h"
 #elif defined(__WXX11__)
