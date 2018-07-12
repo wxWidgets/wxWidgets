@@ -87,7 +87,7 @@
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
+        wxOSXCocoaClassAddWXMethods( self );
     }
 }
 
