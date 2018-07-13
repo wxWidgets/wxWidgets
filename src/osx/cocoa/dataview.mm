@@ -3325,12 +3325,17 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer(const wxString& varianttype,
                                                    int align)
     : wxOSXDataViewDisabledInertRenderer(varianttype, mode, align)
 {
+    DoInitButtonCell(NSSwitchButton);
+}
+
+void wxDataViewToggleRenderer::DoInitButtonCell(int buttonType)
+{
     NSButtonCell* cell;
 
 
     cell = [[NSButtonCell alloc] init];
-    [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-    [cell setButtonType:NSSwitchButton];
+    [cell setAlignment:ConvertToNativeHorizontalTextAlignment(GetAlignment())];
+    [cell setButtonType: static_cast<NSButtonType>(buttonType)];
     [cell setImagePosition:NSImageOnly];
     SetNativeData(new wxDataViewRendererNativeData(cell));
     [cell release];
@@ -3338,7 +3343,11 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer(const wxString& varianttype,
 
 void wxDataViewToggleRenderer::ShowAsRadio()
 {
-    [GetNativeData()->GetItemCell() setButtonType:NSRadioButton];
+    // This is a bit wasteful, as we always create the cell using
+    // NSSwitchButton in the ctor and recreate it here, but modifying the
+    // existing cell doesn't seem to work well and delaying the creation of the
+    // cell until it's used doesn't seem to be worth it, so just recreate it.
+    DoInitButtonCell(NSRadioButton);
 }
 
 bool wxDataViewToggleRenderer::MacRender()
