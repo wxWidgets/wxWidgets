@@ -622,7 +622,11 @@ outlineView:(NSOutlineView*)outlineView
                     (
                      kCFAllocatorDefault,
                      (CFStringRef)[pasteboard stringForType:NSStringPboardType],
+#if defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
+                     kCFStringEncodingUTF16,
+#else
                      kCFStringEncodingUTF8,
+#endif
                      32
                     );
         if (textDataObject->SetData(::CFDataGetLength(osxData),
@@ -850,7 +854,13 @@ outlineView:(NSOutlineView*)outlineView
         wxDataObjectComposite* dataObjects   (new wxDataObjectComposite());
         wxTextDataObject*      textDataObject(new wxTextDataObject());
 
-        osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,(CFStringRef)[pasteboard stringForType:NSStringPboardType],kCFStringEncodingUTF8,32);
+        osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,(CFStringRef)[pasteboard stringForType:NSStringPboardType],
+#if defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
+                                                         kCFStringEncodingUTF16,
+#else
+                                                         kCFStringEncodingUTF8,
+#endif
+                                                         32);
         if (textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData)))
             dataObjects->Add(textDataObject);
         else
