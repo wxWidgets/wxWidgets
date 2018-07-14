@@ -106,6 +106,7 @@ All (GUI):
 wxGTK:
 
 - Implement wxTextCtrl::HitTest() for single line controls.
+- Fix not showing wxInfoBar with GTK+ 3 < 3.22.30.
 - Fix the build with glib < 2.32 (e.g. CentOS 6).
 
 wxMSW:
