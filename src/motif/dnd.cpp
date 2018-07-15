@@ -205,7 +205,7 @@ void wxDropSource::RegisterWindow(void)
         break;
     }
 
-  char *str = WXSTRINGCAST formats;
+  const char *str = formats;
 
   // TODO
 }

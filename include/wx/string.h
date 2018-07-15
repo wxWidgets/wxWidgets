@@ -90,13 +90,6 @@ namespace wxPrivate
 // macros
 // ---------------------------------------------------------------------------
 
-// casts [unfortunately!] needed to call some broken functions which require
-// "char *" instead of "const char *"
-#define   WXSTRINGCAST (wxChar *)(const wxChar *)
-#define   wxCSTRINGCAST (wxChar *)(const wxChar *)
-#define   wxMBSTRINGCAST (char *)(const char *)
-#define   wxWCSTRINGCAST (wchar_t *)(const wchar_t *)
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
