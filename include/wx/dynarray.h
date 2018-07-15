@@ -657,7 +657,6 @@ private:
     };                                                                        \
     typedef wxBaseObjectArray<T, wxObjectArrayTraitsFor##name>                \
         wxBaseObjectArrayFor##name;                                           \
-    typedef int (wxCMPFUNC_CONV *CMPFUNC##T)(T **pItem1, T **pItem2);         \
     classdecl name : public wxBaseObjectArrayFor##name                        \
     {                                                                         \
     public:                                                                   \
