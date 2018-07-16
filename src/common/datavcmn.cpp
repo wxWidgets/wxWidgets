@@ -1683,6 +1683,7 @@ void wxDataViewEvent::Init(wxDataViewCtrlBase* dvc,
     m_dataSize = 0;
     m_dragFlags = 0;
     m_dropEffect = wxDragNone;
+    m_proposedDropIndex = -1;
 #endif // wxUSE_DRAG_AND_DROP
 
     SetEventObject(dvc);

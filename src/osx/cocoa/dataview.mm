@@ -539,9 +539,8 @@ outlineView:(NSOutlineView*)outlineView
     item:(id)item childIndex:(NSInteger)index
 {
     wxUnusedVar(outlineView);
-    wxUnusedVar(index);
     
-    return [self setupAndCallDataViewEvents:wxEVT_DATAVIEW_ITEM_DROP dropInfo:info item:item] != NSDragOperationNone;
+    return [self setupAndCallDataViewEvents:wxEVT_DATAVIEW_ITEM_DROP dropInfo:info item:item proposedChildIndex:index] != NSDragOperationNone;
 }
 
 -(id) outlineView:(NSOutlineView*)outlineView
@@ -680,10 +679,11 @@ outlineView:(NSOutlineView*)outlineView
     wxUnusedVar(outlineView);
     wxUnusedVar(index);
 
-    return [self setupAndCallDataViewEvents:wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE dropInfo:info item:item];
+    return [self setupAndCallDataViewEvents:wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE dropInfo:info item:item proposedChildIndex:index];
 }
 
 -(NSDragOperation) callDataViewEvents:(wxEventType)eventType dataObjects:(wxDataObjectComposite*)dataObjects item:(id)item
+                   proposedChildIndex:(NSInteger)index
 {
     NSDragOperation dragOperation = NSDragOperationNone;
     wxDataViewCtrl* const dvc(implementation->GetDataViewCtrl());
@@ -693,7 +693,20 @@ outlineView:(NSOutlineView*)outlineView
         // copy data into data object:
         event.SetDataObject(dataObjects);
         event.SetDataFormat(implementation->GetDnDDataFormat(dataObjects));
-        event.SetDropEffect(wxDragCopy);
+        event.SetProposedDropIndex(index);
+        if (index == -1)
+        {
+            event.SetDropEffect(wxDragCopy);
+        }
+        else
+        {
+            //if index is not -1, we're going to set the default
+            //for the drop effect to None to be compatible with
+            //the other wxPlatforms that don't support it.  In the
+            //user code for for the event, they can set this to
+            //copy/move or similar to support it.
+            event.SetDropEffect(wxDragNone);
+        }
         wxDataFormatId formatId = event.GetDataFormat().GetType();
         wxMemoryBuffer buffer;
         
@@ -745,6 +758,7 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 -(NSDragOperation) setupAndCallDataViewEvents:(wxEventType)eventType dropInfo:(id<NSDraggingInfo>)info item:(id)item
+                           proposedChildIndex:(NSInteger)index
 {
     NSArray* supportedTypes(
                             [NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]
@@ -774,7 +788,7 @@ outlineView:(NSOutlineView*)outlineView
         {
             wxDataObjectComposite* dataObjects(implementation->GetDnDDataObjects((NSData*)[dataArray objectAtIndex:indexDraggedItem]));
             
-            dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item];
+            dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
             
             if ( dragOperation != NSDragOperationNone )
                 ++indexDraggedItem;
@@ -806,7 +820,7 @@ outlineView:(NSOutlineView*)outlineView
             delete textDataObject;
         // send event if data could be copied:
         
-        dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item];
+        dragOperation = [self callDataViewEvents:eventType dataObjects:dataObjects item:item proposedChildIndex:index];
 
         // clean up:
         ::CFRelease(osxData);
