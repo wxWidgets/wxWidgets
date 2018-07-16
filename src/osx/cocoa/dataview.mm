@@ -850,6 +850,7 @@ outlineView:(NSOutlineView*)outlineView
             wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, dvc, item);
             itemString = ::ConcatenateDataViewItemValues(dvc, item);
             itemObject->Add(new wxTextDataObject(itemString));
+            event.SetDataObject(itemObject);
             // check if event has not been vetoed:
             if (dvc->HandleWindowEvent(event) && event.IsAllowed() && (event.GetDataObject()->GetFormatCount() > 0))
             {
