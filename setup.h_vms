@@ -76,7 +76,7 @@
 #ifdef __WXGTK__
 
 #ifndef VMS_GTK2
-#define GDK_WINDOWING_X11 1
+#define GDK_WINDOWING_X11
 #endif
 
 /* Define this if your version of GTK+ is greater than 1.2.7 */
@@ -510,7 +510,7 @@ typedef pid_t GPid;
 
 #define wxUSE_CARET         1
 
-#define wxUSE_DISPLAY       1
+#define wxUSE_DISPLAY       0
 
 #define wxUSE_GEOMETRY            1
 
