@@ -22,9 +22,7 @@
 
 #include <ctype.h>
 
-#if wxUSE_DISPLAY
 #include "wx/display.h"
-#endif
 
 #include "wx/encconv.h"
 #include "wx/listctrl.h"
