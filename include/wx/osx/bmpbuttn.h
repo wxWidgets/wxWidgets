@@ -20,7 +20,6 @@ class WXDLLIMPEXP_CORE wxBitmapButton : public wxBitmapButtonBase
 public:
     wxBitmapButton()
         {
-            SetMargins(wxDEFAULT_BUTTON_MARGIN, wxDEFAULT_BUTTON_MARGIN);
         }
 
     wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
