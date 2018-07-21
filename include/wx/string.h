@@ -3839,9 +3839,11 @@ public:
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------
 
+// comparison with C-style narrow and wide strings.
 #define wxCMP_WXCHAR_STRING(p, s, op) 0 op s.Cmp(p)
 
-wxDEFINE_ALL_COMPARISONS(const wxChar *, const wxString&, wxCMP_WXCHAR_STRING)
+wxDEFINE_ALL_COMPARISONS(const wchar_t *, const wxString&, wxCMP_WXCHAR_STRING)
+wxDEFINE_ALL_COMPARISONS(const char *, const wxString&, wxCMP_WXCHAR_STRING)
 
 #undef wxCMP_WXCHAR_STRING
 
@@ -3929,17 +3931,6 @@ inline bool wxString::iterator::operator<=(const const_iterator& i) const
     { return i >= *this; }
 inline bool wxString::iterator::operator>=(const const_iterator& i) const
     { return i <= *this; }
-
-// comparison with C string in Unicode build
-#if wxUSE_UNICODE
-
-#define wxCMP_CHAR_STRING(p, s, op) wxString(p) op s
-
-wxDEFINE_ALL_COMPARISONS(const char *, const wxString&, wxCMP_CHAR_STRING)
-
-#undef wxCMP_CHAR_STRING
-
-#endif // wxUSE_UNICODE
 
 // we also need to provide the operators for comparison with wxCStrData to
 // resolve ambiguity between operator(const wxChar *,const wxString &) and
