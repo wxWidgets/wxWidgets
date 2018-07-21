@@ -686,6 +686,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // ... changing the colours and/or fonts
     m_infoBarAdvanced->SetOwnBackgroundColour(0xc8ffff);
+    m_infoBarAdvanced->SetForegroundColour(0x123312);
     m_infoBarAdvanced->SetFont(GetFont().Bold().Larger());
 
     // ... and changing the effect (only does anything under MSW currently)
