@@ -257,29 +257,38 @@ protected:
 // ----------------------------------------------------------------------------
 
 // get the translation of the string in the current locale
-inline const wxString& wxGetTranslation(const wxString& str,
+template<typename TString>
+inline const wxString& wxGetTranslation(TString str,
                                         const wxString& domain = wxString(),
                                         const wxString& context = wxString())
 {
     wxTranslations *trans = wxTranslations::Get();
-    const wxString *transStr = trans ? trans->GetTranslatedString(str, domain, context)
+    const wxString *transStr = trans ? trans->GetTranslatedString(wxString(str), domain, context)
                                      : NULL;
     if ( transStr )
         return *transStr;
     else
         // NB: this function returns reference to a string, so we have to keep
         //     a copy of it somewhere
-        return wxTranslations::GetUntranslatedString(str);
+        return wxTranslations::GetUntranslatedString(wxString(str));
 }
 
-inline const wxString& wxGetTranslation(const wxString& str1,
-                                        const wxString& str2,
+inline const wxString& wxGetTranslation(const char* str,
+                                        const wxString& domain = wxString(),
+                                        const wxString& context = wxString())
+{
+    return wxGetTranslation(wxString::FromUTF8(str), domain, context);
+}
+
+template<typename TString>
+inline const wxString& wxGetTranslation(TString str1,
+                                        TString str2,
                                         unsigned n,
                                         const wxString& domain = wxString(),
                                         const wxString& context = wxString())
 {
     wxTranslations *trans = wxTranslations::Get();
-    const wxString *transStr = trans ? trans->GetTranslatedString(str1, n, domain, context)
+    const wxString *transStr = trans ? trans->GetTranslatedString(wxString(str1), n, domain, context)
                                      : NULL;
     if ( transStr )
         return *transStr;
@@ -287,8 +296,18 @@ inline const wxString& wxGetTranslation(const wxString& str1,
         // NB: this function returns reference to a string, so we have to keep
         //     a copy of it somewhere
         return n == 1
-               ? wxTranslations::GetUntranslatedString(str1)
-               : wxTranslations::GetUntranslatedString(str2);
+               ? wxTranslations::GetUntranslatedString(wxString(str1))
+               : wxTranslations::GetUntranslatedString(wxString(str2));
+}
+
+inline const wxString& wxGetTranslation(const char* str1,
+                                        const char* str2,
+                                        unsigned int n,
+                                        const wxString& domain = wxString(),
+                                        const wxString& context = wxString())
+{
+    return wxGetTranslation(wxString::FromUTF8(str1), wxString::FromUTF8(str2),
+                            n, domain, context);
 }
 
 #else // !wxUSE_INTL
