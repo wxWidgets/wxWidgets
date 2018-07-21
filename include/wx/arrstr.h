@@ -280,9 +280,9 @@ public:
     pointer operator->() const { return m_ptr; }
     itor& operator++() { --m_ptr; return *this; }
     const itor operator++(int)
-      { reverse_iterator tmp = *this; --m_ptr; return tmp; }
+      { const reverse_iterator tmp = *this; --m_ptr; return tmp; }
     itor& operator--() { ++m_ptr; return *this; }
-    const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }
+    const itor operator--(int) { const itor tmp = *this; ++m_ptr; return tmp; }
     bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }
     bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }
   };
@@ -307,9 +307,9 @@ public:
     pointer operator->() const { return m_ptr; }
     itor& operator++() { --m_ptr; return *this; }
     const itor operator++(int)
-      { itor tmp = *this; --m_ptr; return tmp; }
+      { const itor tmp = *this; --m_ptr; return tmp; }
     itor& operator--() { ++m_ptr; return *this; }
-    const itor operator--(int) { itor tmp = *this; ++m_ptr; return tmp; }
+    const itor operator--(int) { const itor tmp = *this; ++m_ptr; return tmp; }
     bool operator ==(const itor& it) const { return m_ptr == it.m_ptr; }
     bool operator !=(const itor& it) const { return m_ptr != it.m_ptr; }
   };
@@ -421,7 +421,7 @@ public:
     wxString* GetStrings()
     {
         if( m_strings ) return m_strings;
-        size_t count = m_array.GetCount();
+        const size_t count = m_array.GetCount();
         m_strings = new wxString[count];
         for( size_t i = 0; i < count; ++i )
             m_strings[i] = m_array[i];

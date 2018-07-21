@@ -207,7 +207,7 @@ public:
         wxCHECK_MSG( m_iocp != INVALID_HANDLE_VALUE, false, "IOCP not init" );
 
         // The special values of 0 will make GetStatus() return Status_Exit.
-        int ret = PostQueuedCompletionStatus(m_iocp, 0, 0, NULL);
+        const int ret = PostQueuedCompletionStatus(m_iocp, 0, 0, NULL);
         if (!ret)
         {
             wxLogSysError(_("Unable to post completion status"));
@@ -244,7 +244,7 @@ public:
         wxCHECK_MSG( count && watch && overlapped, Status_Error,
                      "Output parameters can't be NULL" );
 
-        int ret = GetQueuedCompletionStatus(m_iocp, count, (ULONG_PTR *)watch,
+        const int ret = GetQueuedCompletionStatus(m_iocp, count, (ULONG_PTR *)watch,
                                             overlapped, INFINITE);
         if ( ret != 0 )
         {
