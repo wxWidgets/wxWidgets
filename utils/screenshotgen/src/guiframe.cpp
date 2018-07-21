@@ -148,7 +148,7 @@ void GUIFrame::AddPanel_1()
     m_radioBtn2->SetToolTip( _("wxRadioButton") );
     fgSizer1->Add( m_radioBtn2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
-    m_bpButton1 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_bpButton1 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
     m_bpButton1->SetToolTip( _("wxBitmapButton") );
     m_bpButton1->SetToolTip( _("wxBitmapButton") );
     fgSizer1->Add( m_bpButton1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
