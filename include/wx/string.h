@@ -90,8 +90,9 @@ namespace wxPrivate
 // macros
 // ---------------------------------------------------------------------------
 
-// casts [unfortunately!] needed to call some broken functions which require
-// "char *" instead of "const char *"
+// These macros are not used by wxWidgets itself any longer and are only
+// preserved for compatibility with the user code that might be still using
+// them. Do _not_ use them in the new code, just use const_cast<> instead.
 #define   WXSTRINGCAST (wxChar *)(const wxChar *)
 #define   wxCSTRINGCAST (wxChar *)(const wxChar *)
 #define   wxMBSTRINGCAST (char *)(const char *)
