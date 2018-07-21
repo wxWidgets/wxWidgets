@@ -65,8 +65,8 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     // We do need to use DPI-proportional font sizes in order for the text used
     // in the page-break-inside:avoid test to take the same amount of pixels
     // for any DPI (12 being the font size used by wxHtmlDCRenderer by default).
-    const int adjFontSize = 12*wxTheApp->GetTopWindow()->GetContentScaleFactor();
-    pr.SetStandardFonts(adjFontSize, "Helvetica");
+    const wxFont fontFixedPixelSize(wxFontInfo(wxSize(10, 16)));
+    pr.SetStandardFonts(fontFixedPixelSize.GetPointSize(), "Helvetica");
 
     wxBitmap bmp(1000, 1000);
     wxMemoryDC dc(bmp);
@@ -184,7 +184,7 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
             )
        );
     const wxSize ext = dc.GetTextExtent("Something");
-    WARN("Using base font size " << adjFontSize
+    WARN("Using base font size " << fontFixedPixelSize.GetPointSize()
          << ", text extent of \"Something\" is " << ext.x << "x" << ext.y);
     CHECK( CountPages(pr) == 3 );
 }
