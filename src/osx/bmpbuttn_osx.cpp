@@ -38,16 +38,8 @@ bool wxBitmapButton::Create( wxWindow *parent,
                                      validator, name) )
         return false;
 
-    if ( style & wxBU_AUTODRAW )
-    {
-        m_marginX =
-        m_marginY = wxDEFAULT_BUTTON_MARGIN;
-    }
-    else
-    {
-        m_marginX =
-        m_marginY = 0;
-    }
+    m_marginX =
+    m_marginY = wxDEFAULT_BUTTON_MARGIN;
 
     m_bitmaps[State_Normal] = bitmap;
 

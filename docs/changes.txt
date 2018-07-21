@@ -47,6 +47,10 @@ Changes in behaviour not resulting in compilation errors
   event handlers if you want the standard key combinations such as Alt-Space or
   Alt-F4 to work.
 
+- wxOSX port uses default button margins for wxBitmapButton by default, for
+  consistency with the other ports. You now need to call SetMargins(0, 0)
+  explicitly if you really don't want to have any margins in your buttons.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
