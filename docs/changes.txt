@@ -596,6 +596,7 @@ wxMSW:
 wxGTK:
 
 - Fix position of popup menus shown in wxListCtrl.
+- Fix not showing wxInfoBar with GTK+ 3 < 3.22.29.
 
 
 3.0.4: (released 2018-03-08)
