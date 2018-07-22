@@ -4761,6 +4761,41 @@ int wxGetSystemMetrics(int nIndex, const wxWindow* win)
     return ::GetSystemMetrics(nIndex);
 }
 
+/*extern*/
+bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, const wxWindow* win)
+{
+#if wxUSE_DYNLIB_CLASS
+    const wxTopLevelWindow* tlw = wxGetWinTLW(win);
+
+    if ( tlw )
+    {
+        typedef int (WINAPI * SystemParametersInfoForDpi_t)(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, UINT dpi);
+        static SystemParametersInfoForDpi_t s_pfnSystemParametersInfoForDpi = NULL;
+        static bool s_initDone = false;
+
+        if ( !s_initDone )
+        {
+            wxLoadedDLL dllUser32("user32.dll");
+            wxDL_INIT_FUNC(s_pfn, SystemParametersInfoForDpi, dllUser32);
+            s_initDone = true;
+        }
+
+        if ( s_pfnSystemParametersInfoForDpi )
+        {
+            const int y = ::GetDeviceCaps(::GetDC(tlw->GetHWND()), LOGPIXELSY);
+            if ( s_pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, y) == TRUE )
+            {
+                return true;
+            }
+        }
+    }
+#else
+    wxUnusedVar(win);
+#endif // wxUSE_DYNLIB_CLASS
+
+    return ::SystemParametersInfo(uiAction, uiParam, pvParam, fWinIni) == TRUE;
+}
+
 // ---------------------------------------------------------------------------
 // colours and palettes
 // ---------------------------------------------------------------------------

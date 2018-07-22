@@ -302,6 +302,10 @@ HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
 
 extern int wxGetSystemMetrics(int nIndex, const wxWindow* win);
 
+extern bool wxSystemParametersInfo(UINT uiAction, UINT uiParam,
+                                   PVOID pvParam, UINT fWinIni,
+                                   const wxWindow* win);
+
 #if wxUSE_OWNER_DRAWN
 
 // Draw the bitmap in specified state (this is used by owner drawn controls)
