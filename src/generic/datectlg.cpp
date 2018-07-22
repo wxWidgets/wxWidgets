@@ -296,7 +296,6 @@ wxEND_EVENT_TABLE()
 wxBEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
     EVT_TEXT(wxID_ANY, wxDatePickerCtrlGeneric::OnText)
     EVT_SIZE(wxDatePickerCtrlGeneric::OnSize)
-    EVT_SET_FOCUS(wxDatePickerCtrlGeneric::OnFocus)
 wxEND_EVENT_TABLE()
 
 #ifndef wxHAS_NATIVE_DATEPICKCTRL
@@ -485,12 +484,4 @@ void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
     m_popup->SendDateEvent(dt);
 }
 
-
-void wxDatePickerCtrlGeneric::OnFocus(wxFocusEvent& WXUNUSED(event))
-{
-    m_combo->SetFocus();
-}
-
-
 #endif // wxUSE_DATEPICKCTRL
-
