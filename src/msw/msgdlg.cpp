@@ -396,7 +396,8 @@ void wxMessageDialog::AdjustButtonLabels()
 /* static */
 wxFont wxMessageDialog::GetMessageFont()
 {
-    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics();
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics(win);
     return wxNativeFontInfo(ncm.lfMessageFont);
 }
 

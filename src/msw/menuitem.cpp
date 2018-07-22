@@ -363,7 +363,7 @@ void MenuDrawData::Init()
     else
 #endif // wxUSE_UXTHEME
     {
-        const NONCLIENTMETRICS& metrics = wxMSWImpl::GetNonClientMetrics();
+        const NONCLIENTMETRICS& metrics = wxMSWImpl::GetNonClientMetrics(window);
 
         CheckMargin.cxLeftWidth =
         CheckMargin.cxRightWidth  = wxGetSystemMetrics(SM_CXEDGE, window);
