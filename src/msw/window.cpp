@@ -6951,7 +6951,7 @@ static inline bool wxIsKeyDown(WXWORD vk)
 {
     if ( vk == VK_LBUTTON || vk == VK_RBUTTON )
     {
-        if ( ::GetSystemMetrics(SM_SWAPBUTTON) )
+        if ( wxGetSystemMetrics(SM_SWAPBUTTON) )
         {
             if ( vk == VK_LBUTTON )
                 vk = VK_RBUTTON;

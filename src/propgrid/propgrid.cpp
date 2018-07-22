@@ -1698,8 +1698,8 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
     ImprovedClientToScreen( &x, &y );
 
-    int sw = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_X );
-    int sh = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_Y );
+    int sw = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_X, this);
+    int sh = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_Y, this);
 
     int new_x;
     int new_y;

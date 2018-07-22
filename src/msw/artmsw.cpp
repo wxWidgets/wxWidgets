@@ -288,14 +288,14 @@ wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
     }
     else if ( client == wxART_FRAME_ICON )
     {
-        return wxSize(::GetSystemMetrics(SM_CXSMICON),
-                      ::GetSystemMetrics(SM_CYSMICON));
+        return wxSize(wxGetSystemMetrics(SM_CXSMICON),
+                      wxGetSystemMetrics(SM_CYSMICON));
     }
     else if ( client == wxART_CMN_DIALOG ||
               client == wxART_MESSAGE_BOX )
     {
-        return wxSize(::GetSystemMetrics(SM_CXICON),
-                      ::GetSystemMetrics(SM_CYICON));
+        return wxSize(wxGetSystemMetrics(SM_CXICON),
+                      wxGetSystemMetrics(SM_CYICON));
     }
     else if (client == wxART_BUTTON)
     {

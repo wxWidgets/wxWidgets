@@ -128,8 +128,8 @@ private:
 
 inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 {
-    return bmp.GetWidth() > ::GetSystemMetrics(SM_CXMENUCHECK) ||
-            bmp.GetHeight() > ::GetSystemMetrics(SM_CYMENUCHECK);
+    return bmp.GetWidth() > wxGetSystemMetrics(SM_CXMENUCHECK) ||
+            bmp.GetHeight() > wxGetSystemMetrics(SM_CYMENUCHECK);
 }
 
 } // anonymous namespace
@@ -357,12 +357,12 @@ void MenuDrawData::Init()
         const NONCLIENTMETRICS& metrics = wxMSWImpl::GetNonClientMetrics();
 
         CheckMargin.cxLeftWidth =
-        CheckMargin.cxRightWidth  = ::GetSystemMetrics(SM_CXEDGE);
+        CheckMargin.cxRightWidth  = wxGetSystemMetrics(SM_CXEDGE);
         CheckMargin.cyTopHeight =
-        CheckMargin.cyBottomHeight = ::GetSystemMetrics(SM_CYEDGE);
+        CheckMargin.cyBottomHeight = wxGetSystemMetrics(SM_CYEDGE);
 
-        CheckSize.cx = ::GetSystemMetrics(SM_CXMENUCHECK);
-        CheckSize.cy = ::GetSystemMetrics(SM_CYMENUCHECK);
+        CheckSize.cx = wxGetSystemMetrics(SM_CXMENUCHECK);
+        CheckSize.cy = wxGetSystemMetrics(SM_CYMENUCHECK);
 
         ArrowSize = CheckSize;
 

@@ -521,10 +521,10 @@ wxRendererMSW::DrawTitleBarBitmap(wxWindow *win,
     DoDrawFrameControl(DFC_CAPTION, kind, win, dc, rect, flags);
 }
 
-wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
+wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * win)
 {
-    return wxSize(::GetSystemMetrics(SM_CXMENUCHECK),
-                  ::GetSystemMetrics(SM_CYMENUCHECK));
+    return wxSize(wxGetSystemMetrics(SM_CXMENUCHECK, win),
+                  wxGetSystemMetrics(SM_CYMENUCHECK, win));
 }
 
 int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)

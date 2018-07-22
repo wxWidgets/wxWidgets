@@ -3007,8 +3007,8 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     int cx = abs(m_ptClick.x - x);
                     int cy = abs(m_ptClick.y - y);
 
-                    if ( cx > ::GetSystemMetrics(SM_CXDRAG) ||
-                            cy > ::GetSystemMetrics(SM_CYDRAG) )
+                    if ( cx > wxGetSystemMetrics(SM_CXDRAG, this) ||
+                            cy > wxGetSystemMetrics(SM_CYDRAG, this) )
                     {
                         NM_TREEVIEW tv;
                         wxZeroMemory(tv);
