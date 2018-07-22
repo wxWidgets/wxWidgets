@@ -2718,7 +2718,8 @@ PRectangle wxSTCListBox::GetDesiredRect() const
 
     // Add space for a scrollbar if needed.
     if ( count > desiredVisibleRows )
-        maxw += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+        maxw += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X,
+            const_cast<wxWindow*>(wxDynamicCast(this, wxWindow)));
 
     // Add borders.
     maxw += 2 * m_borderSize;

@@ -1486,9 +1486,9 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
     const DWORD mswStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
     if ( mswStyle & WS_HSCROLL )
-        size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+        size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
     if ( mswStyle & WS_VSCROLL )
-        size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+        size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
 
     // OTOH we have to subtract the size of our borders because the base class
     // public method already adds them, but ListView_ApproximateViewRect()

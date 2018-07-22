@@ -527,8 +527,8 @@ wxSize wxRendererMSW::GetCheckBoxSize(wxWindow* win)
     // that it's valid to avoid surprises when using themes.
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    return wxSize(::GetSystemMetrics(SM_CXMENUCHECK),
-                  ::GetSystemMetrics(SM_CYMENUCHECK));
+    return wxSize(wxGetSystemMetrics(SM_CXMENUCHECK, win),
+                  wxGetSystemMetrics(SM_CYMENUCHECK, win));
 }
 
 int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)

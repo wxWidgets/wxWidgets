@@ -115,7 +115,10 @@ wxSize wxCursorRefData::ms_sizeStd;
 wxCoord wxCursorRefData::GetStandardWidth()
 {
     if ( !ms_sizeStd.x )
-        ms_sizeStd.x = wxSystemSettings::GetMetric(wxSYS_CURSOR_X);
+    {
+        wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+        ms_sizeStd.x = wxSystemSettings::GetMetric(wxSYS_CURSOR_X, win);
+    }
 
     return ms_sizeStd.x;
 }
@@ -123,7 +126,10 @@ wxCoord wxCursorRefData::GetStandardWidth()
 wxCoord wxCursorRefData::GetStandardHeight()
 {
     if ( !ms_sizeStd.y )
-        ms_sizeStd.y = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y);
+    {
+        wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+        ms_sizeStd.y = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, win);
+    }
 
     return ms_sizeStd.y;
 }

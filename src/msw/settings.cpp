@@ -260,7 +260,7 @@ static const int gs_metricsMap[] =
 };
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* win)
 {
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
                  wxT("invalid metric") );
@@ -297,7 +297,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         return -1;
     }
 
-    int rc = ::GetSystemMetrics(indexMSW);
+    int rc = wxGetSystemMetrics(indexMSW, win);
     if ( index == wxSYS_NETWORK_PRESENT )
     {
         // only the last bit is significant according to the MSDN
