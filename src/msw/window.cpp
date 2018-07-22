@@ -4676,6 +4676,39 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 // DPI
 // ---------------------------------------------------------------------------
 
+/*extern*/
+int wxGetSystemMetrics(int nIndex, wxWindow* win)
+{
+    wxTopLevelWindow* tlw = NULL;
+    if (win)
+    {
+        tlw = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
+    }
+    else
+    {
+        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
+        if (window)
+            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+    }
+
+    if (tlw && tlw->IsPerMonitorDPIAware())
+    {
+        wxDynamicLibrary dllUser32;
+        if ( dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+        {
+            typedef int(WINAPI *GetSystemMetricsForDpi_t)(int nIndex, UINT dpi);
+            GetSystemMetricsForDpi_t wxDL_INIT_FUNC(pfn, GetSystemMetricsForDpi, dllUser32);
+
+            if (pfnGetSystemMetricsForDpi)
+            {
+                return pfnGetSystemMetricsForDpi(nIndex, tlw->GetActiveDPI().GetX());
+            }
+        }
+    }
+
+    return ::GetSystemMetrics(nIndex);
+}
+
 void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
 {
     wxSize dpi = wxDefaultSize;
