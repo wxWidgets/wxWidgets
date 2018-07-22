@@ -5958,8 +5958,8 @@ wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
     static int s_linesPerRotation = -1;
     if ( s_linesPerRotation == -1 )
     {
-        if ( !::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0,
-                                     &s_linesPerRotation, 0))
+        if ( !wxSystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0,
+                                     &s_linesPerRotation, 0, this))
         {
             // this is not supposed to happen
             wxLogLastError(wxT("SystemParametersInfo(GETWHEELSCROLLLINES)"));
@@ -5972,8 +5972,8 @@ wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
     static int s_columnsPerRotation = -1;
     if ( s_columnsPerRotation == -1 )
     {
-        if ( !::SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0,
-                                     &s_columnsPerRotation, 0))
+        if ( !wxSystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0,
+                                     &s_columnsPerRotation, 0, this))
         {
             // this setting is not supported on Windows 2000/XP, so use the value of 1
             // http://msdn.microsoft.com/en-us/library/ms997498.aspx

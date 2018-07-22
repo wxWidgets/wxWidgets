@@ -120,7 +120,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         if ( index == wxSYS_COLOUR_MENUBAR )
         {
             BOOL isFlat ;
-            if ( SystemParametersInfo( SPI_GETFLATMENU , 0 ,&isFlat, 0 ) )
+            if ( wxSystemParametersInfo( SPI_GETFLATMENU , 0 ,&isFlat, 0 ) )
             {
                 if ( !isFlat )
                     index = wxSYS_COLOUR_MENU ;
@@ -316,7 +316,7 @@ extern wxFont wxGetCCDefaultFont()
     // font which is also used for the icon titles and not the stock default
     // GUI font
     LOGFONT lf;
-    if ( ::SystemParametersInfo
+    if ( wxSystemParametersInfo
            (
                 SPI_GETICONTITLELOGFONT,
                 sizeof(lf),

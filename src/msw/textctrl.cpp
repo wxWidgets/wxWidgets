@@ -2430,7 +2430,7 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
     DWORD wText = FromDIP(1);
-    ::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0);
+    wxSystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0, m_parent);
     wText += xlen;
 
     int hText = cy;

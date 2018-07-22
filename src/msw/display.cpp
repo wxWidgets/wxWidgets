@@ -515,7 +515,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     // special decorations...
     RECT r;
 
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
+    wxSystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
     if (x)      *x = r.left;
     if (y)      *y = r.top;
     if (width)  *width = r.right - r.left;

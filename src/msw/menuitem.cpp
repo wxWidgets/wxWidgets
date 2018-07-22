@@ -389,7 +389,7 @@ void MenuDrawData::Init()
     }
 
     int value;
-    if ( ::SystemParametersInfo(SPI_GETKEYBOARDCUES, 0, &value, 0) == 0 )
+    if ( wxSystemParametersInfo(SPI_GETKEYBOARDCUES, 0, &value, 0) == 0 )
     {
         // if it's not supported, we must be on an old Windows version
         // which always shows them
