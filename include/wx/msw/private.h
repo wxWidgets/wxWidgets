@@ -300,6 +300,7 @@ extern HICON wxBitmapToHICON(const wxBitmap& bmp);
 extern
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
 
+extern int wxGetSystemMetrics(int nIndex, const wxWindow* win);
 
 #if wxUSE_OWNER_DRAWN
 

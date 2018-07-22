@@ -4702,6 +4702,66 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 }
 
 // ---------------------------------------------------------------------------
+// DPI
+// ---------------------------------------------------------------------------
+
+namespace
+{
+
+static inline const wxTopLevelWindow* wxGetWinTLW(const wxWindow* win)
+{
+    if ( win )
+    {
+        const wxWindow* tlwWin = wxGetTopLevelParent(const_cast<wxWindow*>(win));
+        return wxDynamicCast(tlwWin, wxTopLevelWindow);
+    }
+    else if ( wxTheApp )
+    {
+        wxWindow* window = wxTheApp->GetTopWindow();
+        if ( window )
+        {
+            return wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+        }
+    }
+
+    return NULL;
+}
+
+}
+
+/*extern*/
+int wxGetSystemMetrics(int nIndex, const wxWindow* win)
+{
+#if wxUSE_DYNLIB_CLASS
+    const wxTopLevelWindow* tlw = wxGetWinTLW(win);
+
+    if ( tlw )
+    {
+        typedef int (WINAPI * GetSystemMetricsForDpi_t)(int nIndex, UINT dpi);
+        static GetSystemMetricsForDpi_t s_pfnGetSystemMetricsForDpi = NULL;
+        static bool s_initDone = false;
+
+        if ( !s_initDone )
+        {
+            wxLoadedDLL dllUser32("user32.dll");
+            wxDL_INIT_FUNC(s_pfn, GetSystemMetricsForDpi, dllUser32);
+            s_initDone = true;
+        }
+
+        if ( s_pfnGetSystemMetricsForDpi )
+        {
+            const int y = ::GetDeviceCaps(::GetDC(tlw->GetHWND()), LOGPIXELSY);
+            return s_pfnGetSystemMetricsForDpi(nIndex, (UINT)y);
+        }
+    }
+#else
+    wxUnusedVar(win);
+#endif // wxUSE_DYNLIB_CLASS
+
+    return ::GetSystemMetrics(nIndex);
+}
+
+// ---------------------------------------------------------------------------
 // colours and palettes
 // ---------------------------------------------------------------------------
 
