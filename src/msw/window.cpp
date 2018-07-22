@@ -4709,6 +4709,39 @@ int wxGetSystemMetrics(int nIndex, wxWindow* win)
     return ::GetSystemMetrics(nIndex);
 }
 
+/*extern*/
+bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, wxWindow* win)
+{
+    wxTopLevelWindow* tlw = NULL;
+    if (win)
+    {
+        tlw = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
+    }
+    else
+    {
+        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
+        if (window)
+            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+    }
+
+    if (tlw && tlw->IsPerMonitorDPIAware())
+    {
+        wxDynamicLibrary dllUser32;
+        if (dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+        {
+            typedef int(WINAPI *SystemParametersInfoForDpi_t)(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, UINT dpi);
+            SystemParametersInfoForDpi_t wxDL_INIT_FUNC(pfn, SystemParametersInfoForDpi, dllUser32);
+
+            if (pfnSystemParametersInfoForDpi)
+            {
+                return pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, tlw->GetActiveDPI().GetX());
+            }
+        }
+    }
+
+    return ::SystemParametersInfo(uiAction, uiParam, pvParam, fWinIni);
+}
+
 void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
 {
     wxSize dpi = wxDefaultSize;
