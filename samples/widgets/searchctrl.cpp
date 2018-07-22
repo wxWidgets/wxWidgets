@@ -88,9 +88,6 @@ protected:
     void OnSearch(wxCommandEvent& event);
     void OnSearchCancel(wxCommandEvent& event);
 
-    void OnSetFocus(wxFocusEvent& event);
-    void OnKillFocus(wxFocusEvent& event);
-
     wxMenu* CreateTestMenu();
 
     // (re)create the control
@@ -179,9 +176,6 @@ void SearchCtrlWidgetsPage::CreateControl()
 
     m_srchCtrl = new wxSearchCtrl(this, -1, wxEmptyString, wxDefaultPosition,
                                   FromDIP(wxSize(150, -1)), style);
-
-    m_srchCtrl->Bind(wxEVT_SET_FOCUS, &SearchCtrlWidgetsPage::OnSetFocus, this);
-    m_srchCtrl->Bind(wxEVT_KILL_FOCUS, &SearchCtrlWidgetsPage::OnKillFocus, this);
 }
 
 void SearchCtrlWidgetsPage::RecreateWidget()
@@ -252,20 +246,6 @@ void SearchCtrlWidgetsPage::OnSearch(wxCommandEvent& event)
 void SearchCtrlWidgetsPage::OnSearchCancel(wxCommandEvent& event)
 {
     wxLogMessage("Cancel button pressed.");
-
-    event.Skip();
-}
-
-void SearchCtrlWidgetsPage::OnSetFocus(wxFocusEvent& event)
-{
-    wxLogMessage("Search control got focus");
-
-    event.Skip();
-}
-
-void SearchCtrlWidgetsPage::OnKillFocus(wxFocusEvent& event)
-{
-    wxLogMessage("Search control lost focus");
 
     event.Skip();
 }

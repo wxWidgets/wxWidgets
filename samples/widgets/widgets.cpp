@@ -210,6 +210,10 @@ protected:
     WidgetsPage *CurrentPage();
 
 private:
+    void OnWidgetFocus(wxFocusEvent& event);
+
+    void ConnectToWidgetEvents();
+
     // the panel containing everything
     wxPanel *m_panel;
 
@@ -668,6 +672,19 @@ WidgetsPage *WidgetsFrame::CurrentPage()
     return wxStaticCast(page, WidgetsPage);
 }
 
+void WidgetsFrame::ConnectToWidgetEvents()
+{
+    const Widgets& widgets = CurrentPage()->GetWidgets();
+
+    for ( Widgets::const_iterator it = widgets.begin();
+            it != widgets.end();
+            ++it )
+    {
+        (*it)->Bind(wxEVT_SET_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
+        (*it)->Bind(wxEVT_KILL_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
+    }
+}
+
 WidgetsFrame::~WidgetsFrame()
 {
 #if USE_LOG
@@ -723,7 +740,10 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
         wxWindowUpdateLocker noUpdates(curPage);
         curPage->CreateContent();
         curPage->Layout();
+
+        ConnectToWidgetEvents();
     }
+
     // re-apply the attributes to the widget(s)
     curPage->SetUpWidget();
 
@@ -890,6 +910,9 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
     WidgetsPage *page = CurrentPage();
 
     page->RecreateWidget();
+
+    ConnectToWidgetEvents();
+
     // re-apply the attributes to the widget(s)
     page->SetUpWidget();
 }
@@ -1171,6 +1194,14 @@ void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_MENUS
+
+void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
+{
+    wxLogMessage("Widgets %s focus",
+                 event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
+
+    event.Skip();
+}
 
 // ----------------------------------------------------------------------------
 // WidgetsPageInfo
