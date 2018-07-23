@@ -118,15 +118,16 @@ struct wxPNGImageData
 
     bool Alloc(png_uint_32 width, png_uint_32 height)
     {
-        lines = (unsigned char **)calloc(height, sizeof(unsigned char *));
+        lines = (unsigned char **)malloc(height * sizeof(unsigned char *));
         if ( !lines )
             return false;
 
-        numLines = height;
-        for ( unsigned int n = 0; n < numLines; n++ )
+        for ( png_uint_32 n = 0; n < height; n++ )
         {
             lines[n] = (unsigned char *)malloc( (size_t)(width * 4));
-            if ( !lines[n] )
+            if ( lines[n] )
+                ++numLines;
+            else
                 return false;
         }
 
@@ -365,8 +366,6 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
     if (!image->IsOk())
         return;
 
-    // initialize all line pointers to NULL to ensure that they can be safely
-    // free()d if an error occurs before all of them could be allocated
     if ( !Alloc(width, height) )
         return;
 
