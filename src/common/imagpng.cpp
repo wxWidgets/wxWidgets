@@ -111,6 +111,8 @@ struct wxPNGImageData
     {
         lines = NULL;
         numLines = 0;
+        info_ptr = (png_infop) NULL;
+        png_ptr = (png_structp) NULL;
         ok = false;
     }
 
@@ -137,12 +139,22 @@ struct wxPNGImageData
             free( lines[n] );
 
         free( lines );
+
+        if ( png_ptr )
+        {
+            if ( info_ptr )
+                png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+            else
+                png_destroy_read_struct( &png_ptr, (png_infopp) NULL, (png_infopp) NULL );
+        }
     }
 
     void DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo);
 
     unsigned char** lines;
     png_uint_32 numLines;
+    png_infop info_ptr;
+    png_structp png_ptr;
     bool ok;
 };
 
@@ -306,17 +318,12 @@ void CopyDataFromPNG(wxImage *image,
 void
 wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 {
-    // VZ: as this function uses setjmp() the only fool-proof error handling
-    //     method is to use goto (setjmp is not really C++ dtors friendly...)
-
-    png_infop info_ptr = (png_infop) NULL;
-
     png_uint_32 width, height = 0;
     int bit_depth, color_type, interlace_type;
 
     image->Destroy();
 
-    png_structp png_ptr = png_create_read_struct
+    png_ptr = png_create_read_struct
                           (
                             PNG_LIBPNG_VER_STRING,
                             NULL,
@@ -332,13 +339,10 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 
     info_ptr = png_create_info_struct( png_ptr );
     if (!info_ptr)
-    {
-        png_destroy_read_struct( &png_ptr, (png_infopp) NULL, (png_infopp) NULL );
         return;
-    }
 
     if (setjmp(wxinfo.jmpbuf))
-        goto error;
+        return;
 
     png_read_info( png_ptr, info_ptr );
     png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, NULL, NULL );
@@ -359,12 +363,12 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
     image->Create((int)width, (int)height, (bool) false /* no need to init pixels */);
 
     if (!image->IsOk())
-        goto error;
+        return;
 
     // initialize all line pointers to NULL to ensure that they can be safely
     // free()d if an error occurs before all of them could be allocated
     if ( !Alloc(width, height) )
-        goto error;
+        return;
 
     png_read_image( png_ptr, lines );
     png_read_end( png_ptr, info_ptr );
@@ -441,11 +445,6 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 
     // This will indicate to the caller that loading succeeded.
     ok = true;
-
-error:
-    // Note that we only get here if both png_ptr and info_ptr are valid,
-    // otherwise we just return from this function early.
-    png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
 }
 
 bool
