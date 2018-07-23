@@ -139,6 +139,8 @@ struct wxPNGImageData
         free( lines );
     }
 
+    void DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo);
+
     unsigned char** lines;
     png_uint_32 numLines;
     bool ok;
@@ -299,11 +301,10 @@ void CopyDataFromPNG(wxImage *image,
 // This function uses wxPNGImageData to store some of its "local" variables in
 // order to avoid clobbering these variables by longjmp(): having them inside
 // the stack frame of the caller prevents this from happening. It also
-// "returns" its result via "data" parameter: use its "ok" field to check
+// "returns" its result via wxPNGImageData: use its "ok" field to check
 // whether loading succeeded or failed.
-static
 void
-DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo, wxPNGImageData& data)
+wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 {
     // VZ: as this function uses setjmp() the only fool-proof error handling
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
@@ -362,10 +363,10 @@ DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo, wxPNGImageData& data)
 
     // initialize all line pointers to NULL to ensure that they can be safely
     // free()d if an error occurs before all of them could be allocated
-    if ( !data.Alloc(width, height) )
+    if ( !Alloc(width, height) )
         goto error;
 
-    png_read_image( png_ptr, data.lines );
+    png_read_image( png_ptr, lines );
     png_read_end( png_ptr, info_ptr );
 
 #if wxUSE_PALETTE
@@ -436,10 +437,10 @@ DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo, wxPNGImageData& data)
 
 
     // loaded successfully, now init wxImage with this data
-    CopyDataFromPNG(image, data.lines, width, height, color_type);
+    CopyDataFromPNG(image, lines, width, height, color_type);
 
     // This will indicate to the caller that loading succeeded.
-    data.ok = true;
+    ok = true;
 
 error:
     // Note that we only get here if both png_ptr and info_ptr are valid,
@@ -458,7 +459,7 @@ wxPNGHandler::LoadFile(wxImage *image,
     wxinfo.stream.in = &stream;
 
     wxPNGImageData data;
-    DoLoadPNGFile(image, wxinfo, data);
+    data.DoLoadPNGFile(image, wxinfo);
 
     if ( !data.ok )
     {
