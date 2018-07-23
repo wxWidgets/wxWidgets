@@ -4374,7 +4374,13 @@ bool wxWindowGTK::GTKHandleFocusIn()
         gtk_im_context_focus_in(m_imContext);
 
     gs_currentFocus = this;
-    gs_pendingFocus = NULL;
+
+    if ( gs_pendingFocus )
+    {
+        wxLogTrace(TRACE_FOCUS, "Resetting pending focus %s on focus set",
+                   wxDumpWindow(gs_pendingFocus));
+        gs_pendingFocus = NULL;
+    }
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
@@ -4406,6 +4412,15 @@ bool wxWindowGTK::GTKHandleFocusOut()
     // handler issues a repaint
     const bool retval = m_wxwindow ? true : false;
 
+    // If this window is still the pending focus one, reset that pointer as
+    // we're not going to have focus any longer and DoFindFocus() must not
+    // return this window.
+    if ( gs_pendingFocus == this )
+    {
+        wxLogTrace(TRACE_FOCUS, "Resetting pending focus %s on focus loss",
+                   wxDumpWindow(this));
+        gs_pendingFocus = NULL;
+    }
 
     // NB: If a control is composed of several GtkWidgets and when focus
     //     changes from one of them to another within the same wxWindow, we get
