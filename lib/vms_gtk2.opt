@@ -15,6 +15,5 @@ sys$share:libglib2.exe/share
 sys$share:freetype2shr/share
 sys$share:libfontconfig/share
 sys$share:pthread$rtl.exe/share
-sys$library:libxinerama.olb/lib
 sys$library:decw$xextlibshr.exe/share
 sys$library:decw$xlibshr.exe/share
