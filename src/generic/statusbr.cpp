@@ -231,12 +231,12 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
 
     // eventually ellipsize the text so that it fits the field width
 
-    wxEllipsizeMode ellmode = (wxEllipsizeMode)-1;
+    wxEllipsizeMode ellmode = wxELLIPSIZE_NONE;
     if (HasFlag(wxSTB_ELLIPSIZE_START)) ellmode = wxELLIPSIZE_START;
     else if (HasFlag(wxSTB_ELLIPSIZE_MIDDLE)) ellmode = wxELLIPSIZE_MIDDLE;
     else if (HasFlag(wxSTB_ELLIPSIZE_END)) ellmode = wxELLIPSIZE_END;
 
-    if (ellmode == (wxEllipsizeMode)-1)
+    if (ellmode == wxELLIPSIZE_NONE)
     {
         // if we have the wxSTB_SHOW_TIPS we must set the ellipsized flag even if
         // we don't ellipsize the text but just truncate it
@@ -267,7 +267,7 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
     // draw the text
     dc.DrawText(text, xpos, ypos);
 
-    if (ellmode == (wxEllipsizeMode)-1)
+    if (ellmode == wxELLIPSIZE_NONE)
         dc.DestroyClippingRegion();
 }
 
