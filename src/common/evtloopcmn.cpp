@@ -284,39 +284,55 @@ int wxEventLoopManual::DoRun()
                     break;
             }
 
-            // If we exit the outermost loop, process the remaining queued
-            // messages, both at the level of the underlying toolkit level
-            // (Pending/Dispatch()) and wx level (Has/ProcessPendingEvents()).
-            //
-            // Note that we must not do this for nested modal event loops as,
-            // at least in wxMSW, the modality has already been undone when
-            // Exit() was called, and so we could end up with reentrancies such
-            // as starting another modal event loop before exiting this one.
-            // To avoid this we must not dispatch any events after calling
-            // Exit() and, for the nested loops, there is no real reason to do
-            // it anyhow, as the outer loop will still dispatch them.
-            //
-            // Finally, even when doing this in the outermost loop, there is
-            // still the risk of never exiting this loop if pending event
-            // handlers endlessly generate new events but they shouldn't do
-            // this in a well-behaved program and we shouldn't just discard the
-            // events we already have, they might be important.
-            if ( gs_eventLoopCount != 1 )
-                break;
-
+            // Process any still pending events.
             for ( ;; )
             {
                 bool hasMoreEvents = false;
+
+                // We always dispatch events pending at wx level: it may be
+                // important to do it before the loop exits and e.g. the modal
+                // dialog possibly referenced by these events handlers is
+                // destroyed. It also shouldn't result in the problems
+                // described below for the native events and while there is
+                // still a risk of never existing the loop due to an endless
+                // stream of events generated from the user-defined event
+                // handlers, we consider that well-behaved programs shouldn't
+                // do this -- and if they do, it's better to keep running the
+                // loop than crashing after leaving it.
                 if ( wxTheApp && wxTheApp->HasPendingEvents() )
                 {
                     wxTheApp->ProcessPendingEvents();
                     hasMoreEvents = true;
                 }
 
-                if ( Pending() )
+                // For the underlying toolkit events, we only handle them when
+                // exiting the outermost event loop but not when exiting nested
+                // loops. This is required at least under MSW where, in case of
+                // a nested modal event loop, the modality has already been
+                // undone as Exit() had been already called, so all UI elements
+                // are re-enabled and if we dispatched events from them here,
+                // we could end up reentering the same event handler that had
+                // shown the modal dialog in the first place and showing the
+                // dialog second time before its first instance was destroyed,
+                // resulting in a lot of fun.
+                //
+                // Also, unlike wx events above, it should be fine to dispatch
+                // the native events from the outer event loop, as any events
+                // generated from outside the dialog itself (necessarily, as
+                // the dialog is already hidden and about to be destroyed)
+                // shouldn't reference the dialog. Which is one of the reasons
+                // we still dispatch them in the outermost event loop, to
+                // ensure they're still processed. Another reason is that if we
+                // do have an endless stream of native events, e.g. because we
+                // have a timer with a too short interval, it's arguably better
+                // to keep handling them instead of exiting.
+                if ( gs_eventLoopCount == 1 )
                 {
-                    Dispatch();
-                    hasMoreEvents = true;
+                    if ( Pending() )
+                    {
+                        Dispatch();
+                        hasMoreEvents = true;
+                    }
                 }
 
                 if ( !hasMoreEvents )
