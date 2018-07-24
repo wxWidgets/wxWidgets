@@ -436,8 +436,8 @@ void wxListBox::MacHandleSelectionChange(int row)
     // selection because in wxWidgets API there is no notification event for
     // removing the selection from a single-selection list box.
     //
-    // Otherwise call DoChangeSingleSelection so GetOldSelection() will return
-    // the correct value if row < 0 later.
+    // Otherwise call DoChangeSingleSelection so that m_oldSelections is
+    // updated with the correct value before it's possible used later.
     const int count = static_cast<int>(GetCount());
     if ( row < 0 || row >= count )
     {
