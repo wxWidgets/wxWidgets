@@ -50,7 +50,7 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
 
     // create this button
     if (!wxBitmapButton::Create( parent, id, m_bitmap, pos,
-                           size, style | wxBU_AUTODRAW, validator, name ))
+                           size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxGenericColourButton creation failed") );
         return false;
