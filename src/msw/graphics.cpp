@@ -2335,7 +2335,7 @@ void wxGDIPlusRenderer::Load()
             for ( size_t i = 0 ; i < n; i++ )
             {
                 const wxString& fname = privateFonts[i];
-                gs_privateFonts->AddFontFile(fname.t_str());
+                gs_privateFonts->AddFontFile(fname.wc_str());
             }
 
             gs_pFontFamily = new Gdiplus::FontFamily[n];
