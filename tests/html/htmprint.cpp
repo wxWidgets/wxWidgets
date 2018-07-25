@@ -22,9 +22,6 @@
     #include "wx/dcmemory.h"
 #endif // WX_PRECOMP
 
-#include "wx/app.h"
-#include "wx/window.h"
-
 #include "wx/html/htmprint.h"
 
 namespace
