@@ -59,9 +59,14 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     // the DPI-dependent factor, but it doesn't seem to be worth doing it).
     pr.SetMargins(0, 0, 0, 0, 0);
 
-    // We do need to use DPI-proportional font sizes in order for the text used
-    // in the page-break-inside:avoid test to take the same amount of pixels
-    // for any DPI (12 being the font size used by wxHtmlDCRenderer by default).
+    // Use font size in pixels to make it DPI-independent: if we just used a
+    // normal (say 12pt) font, it would have different height in pixels on 96
+    // and 200 DPI systems, meaning that the text at the end of this test would
+    // take different number of (fixed to 1000px height) pages.
+    //
+    // We could also make the page height proportional to the DPI, but this
+    // would be more complicated as we also wouldn't be able to use hardcoded
+    // height attribute values in the HTML snippets below then.
     const wxFont fontFixedPixelSize(wxFontInfo(wxSize(10, 16)));
     pr.SetStandardFonts(fontFixedPixelSize.GetPointSize(), "Helvetica");
 
