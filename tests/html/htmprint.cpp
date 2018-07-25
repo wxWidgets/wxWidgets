@@ -121,52 +121,52 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
     // should move it entirely to the next page, resulting in one extra page
     // compared to the version without "page-break-inside: avoid".
     static const char* const text =
-"Early in the morning on the fourteenth of the spring month of Nisan the "
-"Procurator of Judea, Pontius Pilate, in a white cloak lined with blood red, "
-"emerged with his shuffling cavalryman's walk into the arcade connecting the two "
-"wings of the palace of Herod the Great. "
-"\n"
-"More than anything else in the world the Procurator hated the smell of attar of "
-"roses.  The omens for the day were bad, as this scent had been haunting him "
-"since dawn. "
-"\n"
-"It seemed to the Procurator that the very cypresses and palms in the garden "
-"were exuding the smell of roses, that this damned stench of roses was even "
-"mingling with the smell of leather tackle and sweat from his mounted bodyguard. "
-"\n"
-"A haze of smoke was drifting toward the arcade across the upper courtyard of "
-"the garden, coming from the wing at the rear of the palace, the quarters of the "
-"first cohort of the XII Legion; known as the \"Lightning,\" it had been "
-"stationed in Jerusalem since the Procurator's arrival.  The same oily perfume "
-"of roses was mixed with the acrid smoke that showed that the centuries' cooks "
-"had started to prepare breakfast "
-"\n"
-"\"Oh, gods, what are you punishing me for?..  No, there's no doubt, I have it "
-"again, this terrible incurable pain...  hemicrania, when half the head aches... "
-"There's no cure for it, nothing helps...  I must try not to move my head...\" "
-"\n"
-"A chair had already been placed on the mosaic floor by the fountain; without a "
-"glance around, the Procurator sat in it and stretched out his hand to one side. "
-"His secretary deferentially laid a piece of parchment in his hand.  Unable to "
-"restrain a grimace of agony, the Procurator gave a fleeting sideways look at "
-"its contents, returned the parchment to his secretary and said painfully, \"The "
-"accused comes from Galilee, does he?  Was the case sent to the tetrarch?\" "
-"\n"
-"\"Yes, Procurator,\" replied the secretary.  \"He declined to confirm the "
-"finding of the court and passed the Sanhedrin's sentence of death to you for "
-"confirmation.\" "
-"\n"
-"The Procurator's cheek twitched, and he said quietly, \"Bring in the accused.\" "
+"Early in the morning on the fourteenth of the spring month of Nisan the<br>"
+"Procurator of Judea, Pontius Pilate, in a white cloak lined with blood red,<br>"
+"emerged with his shuffling cavalryman's walk into the arcade connecting the two<br>"
+"wings of the palace of Herod the Great.<br>"
+"<br>"
+"More than anything else in the world the Procurator hated the smell of attar of<br>"
+"roses.  The omens for the day were bad, as this scent had been haunting him<br>"
+"since dawn.<br>"
+"<br>"
+"It seemed to the Procurator that the very cypresses and palms in the garden<br>"
+"were exuding the smell of roses, that this damned stench of roses was even<br>"
+"mingling with the smell of leather tackle and sweat from his mounted bodyguard.<br>"
+"<br>"
+"A haze of smoke was drifting toward the arcade across the upper courtyard of<br>"
+"the garden, coming from the wing at the rear of the palace, the quarters of the<br>"
+"first cohort of the XII Legion; known as the \"Lightning,\" it had been<br>"
+"stationed in Jerusalem since the Procurator's arrival.  The same oily perfume<br>"
+"of roses was mixed with the acrid smoke that showed that the centuries' cooks<br>"
+"had started to prepare breakfast<br>"
+"<br>"
+"\"Oh, gods, what are you punishing me for?..  No, there's no doubt, I have it<br>"
+"again, this terrible incurable pain...  hemicrania, when half the head aches...<br>"
+"There's no cure for it, nothing helps...  I must try not to move my head...\"<br>"
+"<br>"
+"A chair had already been placed on the mosaic floor by the fountain; without a<br>"
+"glance around, the Procurator sat in it and stretched out his hand to one side.<br>"
+"His secretary deferentially laid a piece of parchment in his hand.  Unable to<br>"
+"restrain a grimace of agony, the Procurator gave a fleeting sideways look at<br>"
+"its contents, returned the parchment to his secretary and said painfully, \"The<br>"
+"accused comes from Galilee, does he?  Was the case sent to the tetrarch?\"<br>"
+"<br>"
+"\"Yes, Procurator,\" replied the secretary.  \"He declined to confirm the<br>"
+"finding of the court and passed the Sanhedrin's sentence of death to you for<br>"
+"confirmation.\"<br>"
+"<br>"
+"The Procurator's cheek twitched, and he said quietly, \"Bring in the accused.\"<br>"
         ;
 
     pr.SetHtmlText
        (
             wxString::Format
             (
-                "<img width=\"100\" height=\"600\" src=\"dummy\"/>"
+                "<img width=\"100\" height=\"500\" src=\"dummy\"/>"
                 "<div>%s</div>"
                 "<br/>"
-                "<img width=\"100\" height=\"600\" src=\"dummy\"/>",
+                "<img width=\"100\" height=\"400\" src=\"dummy\"/>",
                 text
             )
        );
@@ -176,10 +176,10 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
        (
             wxString::Format
             (
-                "<img width=\"100\" height=\"600\" src=\"dummy\"/>"
+                "<img width=\"100\" height=\"500\" src=\"dummy\"/>"
                 "<div style=\"page-break-inside:avoid\">%s</div>"
                 "<br/>"
-                "<img width=\"100\" height=\"600\" src=\"dummy\"/>",
+                "<img width=\"100\" height=\"400\" src=\"dummy\"/>",
                 text
             )
        );

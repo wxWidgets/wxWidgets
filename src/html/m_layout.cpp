@@ -189,9 +189,32 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
             }
             else if(style.IsSameAs(wxT("PAGE-BREAK-INSIDE:AVOID"), false))
             {
+                // As usual, reuse the current container if it's empty.
+                wxHtmlContainerCell *c = m_WParser->GetContainer();
+                if (c->GetFirstChild() != NULL)
+                {
+                    // If not, open a new one.
+                    m_WParser->CloseContainer();
+                    c = m_WParser->OpenContainer();
+                }
+
+                // Force this container to live entirely on the same page.
+                c->SetCanLiveOnPagebreak(false);
+
+                // Use a nested container so that nested tags that close and
+                // reopen a container again close this one, but still remain
+                // inside the outer "unbreakable" container.
+                m_WParser->OpenContainer();
+
+                ParseInner(tag);
+
+                // Close both the inner and the outer containers and reopen the
+                // new current one.
                 m_WParser->CloseContainer();
-                m_WParser->OpenContainer()->SetCanLiveOnPagebreak(false);
-                return false;
+                m_WParser->CloseContainer();
+                m_WParser->OpenContainer();
+
+                return true;
             }
             else
             {
