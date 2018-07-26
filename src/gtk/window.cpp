@@ -3589,7 +3589,9 @@ void wxWindowGTK::SetFocus()
     // Because we want to FindFocus() call immediately following
     // foo->SetFocus() to return foo, we have to keep track of "pending" focus
     // ourselves.
-    gs_pendingFocus = this;
+    gs_pendingFocus = NULL;
+    if (gs_currentFocus != this)
+        gs_pendingFocus = this;
 
     GtkWidget *widget = m_wxwindow ? m_wxwindow : m_focusWidget;
 
