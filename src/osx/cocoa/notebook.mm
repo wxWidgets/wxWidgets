@@ -112,10 +112,18 @@
 @implementation WXCTabViewImageItem : NSTabViewItem
 - (id)init
 {
+    // With 10.12 SDK initWithIdentifier: is declared as taking a non-nil value
+    // and while this was fixed in 10.13 by adding the missing "nullable",
+    // avoid the annoying warning with 10.12 by explicitly disabling it.
+    wxCLANG_WARNING_SUPPRESS(nonnull)
+
     if (self = [super initWithIdentifier:nil])
     {
         m_image = nil;
     }
+
+    wxCLANG_WARNING_RESTORE(nonnull)
+
     return self;
 }
 - (void)dealloc
