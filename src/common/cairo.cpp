@@ -100,6 +100,8 @@
         (cairo_t *cr, double alpha), (cr, alpha) ) \
     m( cairo_path_destroy, \
         (cairo_path_t *path), (path) ) \
+    m( cairo_path_extents, \
+        (cairo_t *cr, double *x1, double *y1, double *x2, double *y2), (cr, x1, y1, x2, y2) ) \
     m( cairo_pattern_add_color_stop_rgba, \
         (cairo_pattern_t *pattern, double offset, double red, double green, double blue, double alpha), (pattern, offset, red, green, blue, alpha) ) \
     m( cairo_pattern_destroy, \

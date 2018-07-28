@@ -1195,7 +1195,17 @@ void wxCairoPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)
 {
     double x1,y1,x2,y2;
 
-    cairo_stroke_extents( m_pathContext, &x1, &y1, &x2, &y2 );
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+    if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 6, 0) )
+    {
+        cairo_path_extents(m_pathContext, &x1, &y1, &x2, &y2);
+    }
+    else
+#endif
+    {
+        cairo_stroke_extents(m_pathContext, &x1, &y1, &x2, &y2);
+    }
+
     if ( x2 < x1 )
     {
         *x = x2;
