@@ -1272,6 +1272,11 @@ void wxMacCoreGraphicsPathData::Transform( const wxGraphicsMatrixData* matrix )
 void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const
 {
     CGRect bounds = CGPathGetBoundingBox( m_path ) ;
+    if ( CGRectIsEmpty(bounds) )
+    {
+        bounds = CGRectZero;
+    }
+
     *x = bounds.origin.x;
     *y = bounds.origin.y;
     *w = bounds.size.width;
