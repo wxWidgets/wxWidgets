@@ -1240,7 +1240,10 @@ void wxMacCoreGraphicsPathData::AddPath( const wxGraphicsPathData* path )
 // closes the current subpath
 void wxMacCoreGraphicsPathData::CloseSubpath()
 {
-    CGPathCloseSubpath( m_path );
+    if ( !CGPathIsEmpty(m_path) )
+    {
+        CGPathCloseSubpath( m_path );
+    }
 }
 
 // gets the last point of the current path, (0,0) if not yet set
