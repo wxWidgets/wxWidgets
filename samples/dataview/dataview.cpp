@@ -147,6 +147,7 @@ private:
     void OnShowAttributes( wxCommandEvent &event);
 
     void OnMultipleSort( wxCommandEvent &event);
+    void OnSortByFirstColumn( wxCommandEvent &event);
 
 #if wxUSE_DRAG_AND_DROP
     void OnBeginDrag( wxDataViewEvent &event );
@@ -363,6 +364,7 @@ enum
     ID_HIDE_ATTRIBUTES  = 204,
     ID_SHOW_ATTRIBUTES  = 205,
     ID_MULTIPLE_SORT    = 206,
+    ID_SORT_BY_FIRST_COLUMN,
 
     // Fourth page.
     ID_DELETE_TREE_ITEM = 400,
@@ -407,6 +409,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_HIDE_ATTRIBUTES, MyFrame::OnHideAttributes)
     EVT_BUTTON( ID_SHOW_ATTRIBUTES, MyFrame::OnShowAttributes)
     EVT_CHECKBOX( ID_MULTIPLE_SORT, MyFrame::OnMultipleSort)
+    EVT_CHECKBOX( ID_SORT_BY_FIRST_COLUMN, MyFrame::OnSortByFirstColumn)
     
     // Fourth page.
     EVT_BUTTON( ID_DELETE_TREE_ITEM, MyFrame::OnDeleteTreeItem )
@@ -559,12 +562,17 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer2->Add( new wxButton( secondPanel, ID_ADD_MANY,    "Add 1000"),               0, wxALL, 10 );
     button_sizer2->Add( new wxButton( secondPanel, ID_HIDE_ATTRIBUTES,    "Hide attributes"), 0, wxALL, 10 );
     button_sizer2->Add( new wxButton( secondPanel, ID_SHOW_ATTRIBUTES,    "Show attributes"), 0, wxALL, 10 );
-    button_sizer2->Add( new wxCheckBox(secondPanel, ID_MULTIPLE_SORT, "Allow multisort"),
-                        wxSizerFlags().Centre().DoubleBorder() );
+
+    wxBoxSizer *sortSizer = new wxBoxSizer(wxHORIZONTAL);
+    sortSizer->Add(new wxCheckBox(secondPanel, ID_SORT_BY_FIRST_COLUMN, "Sort by first column"),
+                   wxSizerFlags().Centre().DoubleBorder());
+    sortSizer->Add(new wxCheckBox(secondPanel, ID_MULTIPLE_SORT, "Allow multisort"),
+                   wxSizerFlags().Centre().DoubleBorder());
 
     wxSizer *secondPanelSz = new wxBoxSizer( wxVERTICAL );
     secondPanelSz->Add(m_ctrl[1], 1, wxGROW|wxALL, 5);
     secondPanelSz->Add(button_sizer2);
+    secondPanelSz->Add(sortSizer);
     secondPanel->SetSizerAndFit(secondPanelSz);
 
 
@@ -1500,3 +1508,11 @@ void MyFrame::OnMultipleSort( wxCommandEvent &event )
         wxLogMessage("Sorting by multiple columns not supported");
 }
 
+void MyFrame::OnSortByFirstColumn(wxCommandEvent& event)
+{
+    wxDataViewColumn* const col = m_ctrl[1]->GetColumn(0);
+    if ( event.IsChecked() )
+        col->SetSortOrder(true /* ascending */);
+    else
+        col->UnsetAsSortKey();
+}
