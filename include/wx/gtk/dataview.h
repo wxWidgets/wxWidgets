@@ -43,6 +43,7 @@ public:
 
     virtual void SetSortable( bool sortable ) wxOVERRIDE;
     virtual void SetSortOrder( bool ascending ) wxOVERRIDE;
+    virtual void UnsetAsSortKey() wxOVERRIDE;
 
     virtual void SetResizeable( bool resizable ) wxOVERRIDE;
     virtual void SetHidden( bool hidden ) wxOVERRIDE;
