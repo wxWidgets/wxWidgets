@@ -1847,11 +1847,17 @@ void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) c
 {
     D2D1_RECT_F bounds;
     ID2D1Geometry *curGeometry = GetFullGeometry();
-    curGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
-    if (x != NULL) *x = bounds.left;
-    if (y != NULL) *y = bounds.top;
-    if (w != NULL) *w = bounds.right - bounds.left;
-    if (h != NULL) *h = bounds.bottom - bounds.top;
+    HRESULT hr = curGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
+    wxCHECK_HRESULT_RET(hr);
+    // Check if bounds are empty
+    if ( bounds.left > bounds.right )
+    {
+        bounds.left = bounds.top = bounds.right = bounds.bottom = 0.0F;
+    }
+    if (x) *x = bounds.left;
+    if (y) *y = bounds.top;
+    if (w) *w = bounds.right - bounds.left;
+    if (h) *h = bounds.bottom - bounds.top;
 }
 
 bool wxD2DPathData::Contains(wxDouble x, wxDouble y, wxPolygonFillMode WXUNUSED(fillStyle)) const
