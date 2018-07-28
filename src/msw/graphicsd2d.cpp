@@ -1450,11 +1450,8 @@ void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
 {
     // Close current sub-path (leaving the figure as is).
     EndFigure(D2D1_FIGURE_END_OPEN);
-    // And open a new sub-path.
-    D2D1_POINT_2F p = D2D1::Point2F(x, y);
-    EnsureFigureOpen(p);
-
-    m_currentPoint = p;
+    // Store new current point
+    m_currentPoint = D2D1::Point2F(x, y);
     m_currentPointSet = true;
 }
 
@@ -1480,10 +1477,10 @@ void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wx
 {
     // If no current point is set then this function should behave
     // as if preceded by a call to MoveToPoint(cx1, cy1).
-    if( m_currentPointSet )
-        EnsureFigureOpen(m_currentPoint);
-    else
+    if( !m_currentPointSet )
         MoveToPoint(cx1, cy1);
+
+    EnsureFigureOpen(m_currentPoint);
 
     D2D1_BEZIER_SEGMENT bezierSegment = {
         { (FLOAT)cx1, (FLOAT)cy1 },
@@ -1536,13 +1533,19 @@ void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAng
     // To ensure compatibility with Cairo an initial
     // line segment to the beginning of the arc needs
     // to be added to the path.
-    if (m_figureOpened)
+    if ( m_figureOpened )
     {
+        AddLineToPoint(start.m_x + x, start.m_y + y);
+    }
+    else if ( m_currentPointSet )
+    {
+        EnsureFigureOpen(m_currentPoint);
         AddLineToPoint(start.m_x + x, start.m_y + y);
     }
     else
     {
         MoveToPoint(start.m_x + x, start.m_y + y);
+        EnsureFigureOpen(m_currentPoint);
     }
 
     D2D1_SWEEP_DIRECTION sweepDirection = clockwise ?
@@ -1626,6 +1629,8 @@ void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     const wxDouble ry = h / 2.0;
 
     MoveToPoint(x + w, y + ry);
+    // Open new subpath
+    EnsureFigureOpen(m_currentPoint);
 
     D2D1_ARC_SEGMENT arcSegmentLower =
     {
