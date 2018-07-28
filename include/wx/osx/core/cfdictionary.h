@@ -19,6 +19,10 @@
 
 #include <CoreFoundation/CFDictionary.h>
 
+#ifndef WX_PRECOMP
+#include "wx/string.h"
+#endif
+
 class wxCFTypeRef : public wxCFRef<CFTypeRef>
 {
 public:
@@ -195,7 +199,7 @@ public:
     
     void SetValue(const void*key, CGFloat v)
     {
-        
+        SetValue( key, wxCFNumberRef(v));
     }
 };
 
