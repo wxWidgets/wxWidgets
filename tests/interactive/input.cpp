@@ -107,8 +107,8 @@ void InteractiveInputTestCase::TestDiskInfo()
         else
         {
             wxPrintf(wxT("%sKb total, %sKb free on '%s'.\n"),
-                    (total / 1024).ToString().c_str(),
-                    (free / 1024).ToString().c_str(),
+                    (total / 1024).ToString(),
+                    (free / 1024).ToString(),
                     pathname);
         }
 
@@ -166,7 +166,7 @@ void InteractiveInputTestCase::TestRegExInteractive()
             }
             else
             {
-                wxPrintf(wxT("Pattern matches at '%s'\n"), re.GetMatch(text).c_str());
+                wxPrintf(wxT("Pattern matches at '%s'\n"), re.GetMatch(text));
 
                 size_t start, len;
                 for ( size_t n = 1; ; n++ )
@@ -177,7 +177,7 @@ void InteractiveInputTestCase::TestRegExInteractive()
                     }
 
                     wxPrintf(wxT("Subexpr %u matched '%s'\n"),
-                             n, wxString(text + start, len).c_str());
+                             n, wxString(text + start, len));
                 }
             }
         }
@@ -235,7 +235,7 @@ void InteractiveInputTestCase::TestFtpInteractive()
     else
     {
         wxPrintf(wxT("--- Connected to %s, current directory is '%s'\n"),
-                 hostname, ftp.Pwd().c_str());
+                 hostname, ftp.Pwd());
     }
 
     wxChar buf[128];
@@ -263,16 +263,16 @@ void InteractiveInputTestCase::TestFtpInteractive()
             wxArrayString files;
             if ( !ftp.GetList(files, wildcard, start == wxT("LIST")) )
             {
-                wxPrintf(wxT("ERROR: failed to get %s of files\n"), start.c_str());
+                wxPrintf(wxT("ERROR: failed to get %s of files\n"), start);
             }
             else
             {
                 wxPrintf(wxT("--- %s of '%s' under '%s':\n"),
-                       start.c_str(), wildcard.c_str(), ftp.Pwd().c_str());
+                         start, wildcard, ftp.Pwd());
                 size_t count = files.GetCount();
                 for ( size_t n = 0; n < count; n++ )
                 {
-                    wxPrintf(wxT("\t%s\n"), files[n].c_str());
+                    wxPrintf(wxT("\t%s\n"), files[n]);
                 }
                 wxPuts(wxT("--- End of the file list"));
             }
@@ -286,7 +286,7 @@ void InteractiveInputTestCase::TestFtpInteractive()
                 wxPrintf(wxT(" (return code %c)"), ch);
             }
 
-            wxPrintf(wxT(", server reply:\n%s\n\n"), ftp.GetLastResult().c_str());
+            wxPrintf(wxT(", server reply:\n%s\n\n"), ftp.GetLastResult());
         }
     }
 
@@ -334,7 +334,7 @@ void InteractiveInputTestCase::TestDateTimeInteractive()
         }
 
         wxPrintf(wxT("%s: day %u, week of month %u/%u, week of year %u\n"),
-                 dt.Format(wxT("%b %d, %Y")).c_str(),
+                 dt.Format(wxT("%b %d, %Y")),
                  dt.GetDayOfYear(),
                  dt.GetWeekOfMonth(wxDateTime::Monday_First),
                  dt.GetWeekOfMonth(wxDateTime::Sunday_First),
