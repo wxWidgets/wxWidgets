@@ -50,8 +50,44 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// font dialog hook proc
+// ----------------------------------------------------------------------------
+
+static
+UINT_PTR CALLBACK
+wxFontDialogHookProc(HWND hwnd,
+                       UINT uiMsg,
+                       WPARAM WXUNUSED(wParam),
+                       LPARAM lParam)
+{
+    if ( uiMsg == WM_INITDIALOG )
+    {
+        CHOOSEFONT *pCH = (CHOOSEFONT *)lParam;
+        wxFontDialog * const
+            dialog = reinterpret_cast<wxFontDialog *>(pCH->lCustData);
+
+        const wxString title = dialog->GetTitle();
+        if ( !title.empty() )
+            ::SetWindowText(hwnd, title.t_str());
+    }
+
+    return 0;
+}
+
+// ----------------------------------------------------------------------------
 // wxFontDialog
 // ----------------------------------------------------------------------------
+
+void wxFontDialog::SetTitle(const wxString& title)
+{
+    m_title = title;
+    wxFontDialogBase::SetTitle(title);
+}
+
+wxString wxFontDialog::GetTitle() const
+{
+    return m_title;
+}
 
 int wxFontDialog::ShowModal()
 {
@@ -60,7 +96,7 @@ int wxFontDialog::ShowModal()
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
     WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
     // It should be OK to always use GDI simulations
-    DWORD flags = CF_SCREENFONTS /* | CF_NOSIMULATIONS */ ;
+    DWORD flags = CF_SCREENFONTS | CF_ENABLEHOOK /* | CF_NOSIMULATIONS */ ;
 
     LOGFONT logFont;
 
@@ -70,6 +106,8 @@ int wxFontDialog::ShowModal()
     chooseFontStruct.lStructSize = sizeof(CHOOSEFONT);
     chooseFontStruct.hwndOwner = hWndParent;
     chooseFontStruct.lpLogFont = &logFont;
+    chooseFontStruct.lCustData = (LPARAM)this;
+    chooseFontStruct.lpfnHook = wxFontDialogHookProc;
 
     if ( m_fontData.m_initialFont.IsOk() )
     {
