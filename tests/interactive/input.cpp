@@ -176,7 +176,7 @@ void InteractiveInputTestCase::TestRegExInteractive()
                         break;
                     }
 
-                    wxPrintf(wxT("Subexpr %u matched '%s'\n"),
+                    wxPrintf(wxT("Subexpr %zu matched '%s'\n"),
                              n, wxString(text + start, len));
                 }
             }

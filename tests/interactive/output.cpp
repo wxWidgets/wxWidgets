@@ -110,8 +110,7 @@ void InteractiveOutputTestCase::TestDllListLoaded()
         size_t len wxDUMMY_INITIALIZE(0);
         if ( details.GetAddress(&addr, &len) )
         {
-            wxPrintf(" %08lx:%08lx",
-                   (unsigned long)addr, (unsigned long)((char *)addr + len));
+            wxPrintf(" %p:%p", addr, (void *)((char *)addr + len));
         }
 
         wxPrintf(" %s\n", details.GetVersion());
@@ -137,7 +136,7 @@ void InteractiveOutputTestCase::TestMimeEnum()
 
     size_t count = wxTheMimeTypesManager->EnumAllFileTypes(mimetypes);
 
-    wxPrintf(wxT("*** All %lu known filetypes: ***\n"), static_cast<unsigned long>(count));
+    wxPrintf(wxT("*** All %zu known filetypes: ***\n"), count);
 
     wxArrayString exts;
     wxString desc;
@@ -261,7 +260,7 @@ void InteractiveOutputTestCase::TestOsInfo()
     wxPrintf(wxT("Running under: %s, version %d.%d\n"),
              wxGetOsDescription(), major, minor);
 
-    wxPrintf(wxT("%ld free bytes of memory left.\n"), wxGetFreeMemory().ToLong());
+    wxPrintf(wxT("%lld free bytes of memory left.\n"), wxGetFreeMemory());
 
     wxPrintf(wxT("Host name is %s (%s).\n"),
              wxGetHostName(), wxGetFullHostName());
@@ -330,7 +329,7 @@ public:
 protected:
     virtual void OnStackFrame(const wxStackFrame& frame)
     {
-        wxPrintf("[%2d] ", (int) frame.GetLevel());
+        wxPrintf("[%2zu] ", frame.GetLevel());
 
         wxString name = frame.GetName();
         if ( !name.empty() )
@@ -339,12 +338,12 @@ protected:
         }
         else
         {
-            wxPrintf("0x%08lx", (unsigned long)frame.GetAddress());
+            wxPrintf("0x%p", frame.GetAddress());
         }
 
         if ( frame.HasSourceLocation() )
         {
-            wxPrintf("\t%s:%d", frame.GetFileName(), (int)frame.GetLine());
+            wxPrintf("\t%s:%zu", frame.GetFileName(), frame.GetLine());
         }
 
         puts("");
@@ -456,7 +455,7 @@ void InteractiveOutputTestCase::TestFSVolume()
         return;
     }
 
-    wxPrintf(wxT("%u mounted volumes found:\n"), count);
+    wxPrintf(wxT("%zu mounted volumes found:\n"), count);
 
     for ( size_t n = 0; n < count; n++ )
     {
@@ -467,7 +466,7 @@ void InteractiveOutputTestCase::TestFSVolume()
             continue;
         }
 
-        wxPrintf(wxT("%u: %s (%s), %s, %s, %s\n"),
+        wxPrintf(wxT("%zu: %s (%s), %s, %s, %s\n"),
                  n + 1,
                  vol.GetDisplayName(),
                  vol.GetName(),
