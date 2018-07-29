@@ -45,7 +45,7 @@ private:
 
 wxThread::ExitCode MyJoinableThread::Entry()
 {
-    unsigned long res = 1;
+    wxUIntPtr res = 1;
     for ( size_t n = 1; n < m_n; n++ )
     {
         res *= n;
@@ -244,7 +244,7 @@ void MiscThreadTestCase::TestJoinable()
     // calc 10! in the background
     MyJoinableThread thread(10);
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread.Run() );
-    CPPUNIT_ASSERT_EQUAL( 362880, (unsigned long)thread.Wait() );
+    CPPUNIT_ASSERT_EQUAL( 362880, (wxUIntPtr)thread.Wait() );
 }
 
 void MiscThreadTestCase::TestDetached()
@@ -285,7 +285,7 @@ void MiscThreadTestCase::TestSemaphore()
 
     for ( size_t n = 0; n < threads.GetCount(); n++ )
     {
-        CPPUNIT_ASSERT_EQUAL( 0, (long)threads[n]->Wait() );
+        CPPUNIT_ASSERT_EQUAL( 0, (wxUIntPtr)threads[n]->Wait() );
         delete threads[n];
     }
 }
