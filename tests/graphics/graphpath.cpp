@@ -385,7 +385,6 @@ static void TestCurrentPoint(wxGraphicsContext* gc)
         const wxDouble y = 140;
         const wxDouble r = 20;
         path.AddCircle(x, y, r);
-        wxPoint2DDouble cp0 = path.GetCurrentPoint();
         path.AddPath(path2);
         wxPoint2DDouble cp = path.GetCurrentPoint();
         WX_CHECK_POINT(cp, cp2, 1E-3);

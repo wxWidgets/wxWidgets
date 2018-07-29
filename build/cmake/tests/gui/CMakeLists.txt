@@ -23,6 +23,7 @@ set(TEST_GUI_SRC
     graphics/boundingbox.cpp
     graphics/clippingbox.cpp
     graphics/graphmatrix.cpp
+    graphics/graphpath.cpp
     config/config.cpp
     controls/bitmapcomboboxtest.cpp
     controls/bitmaptogglebuttontest.cpp
@@ -86,6 +87,7 @@ set(TEST_GUI_SRC
     image/rawbmp.cpp
     html/htmlparser.cpp
     html/htmlwindow.cpp
+    html/htmprint.cpp
     menu/accelentry.cpp
     menu/menu.cpp
     misc/guifuncs.cpp
@@ -97,6 +99,8 @@ set(TEST_GUI_SRC
     # non-GUI test) as sockets behave differently in console and GUI
     # applications.
     net/socket.cpp
+    persistence/tlw.cpp
+    persistence/dataview.cpp
     sizers/boxsizer.cpp
     sizers/gridsizer.cpp
     sizers/wrapsizer.cpp

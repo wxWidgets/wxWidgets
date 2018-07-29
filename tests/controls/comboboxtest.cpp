@@ -37,17 +37,17 @@ class ComboBoxTestCase : public TextEntryTestCase, public ItemContainerTestCase,
 public:
     ComboBoxTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const { return m_combo; }
-    virtual wxWindow *GetTestWindow() const { return m_combo; }
+    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_combo; }
+    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_combo; }
 
-    virtual wxItemContainer *GetContainer() const { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const { return m_combo; }
+    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_combo; }
+    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_combo; }
 
-    virtual void CheckStringSelection(const char * WXUNUSED(sel))
+    virtual void CheckStringSelection(const char * WXUNUSED(sel)) wxOVERRIDE
     {
         // do nothing here, as explained in TextEntryTestCase comment, our
         // GetStringSelection() is the wxChoice, not wxTextEntry, one and there
@@ -64,7 +64,7 @@ private:
 //  TODO on OS X only works interactively
 //   WXUISIM_TEST( Editable );
     CPPUNIT_TEST( Hint );
-    CPPUNIT_TEST( CopyPaste ); 
+    CPPUNIT_TEST( CopyPaste );
     CPPUNIT_TEST( UndoRedo );
 #else
         wxTEXT_ENTRY_TESTS();

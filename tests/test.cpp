@@ -359,9 +359,9 @@ extern bool IsNetworkAvailable()
 
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
-    
+
     wxSocketBase::Initialize();
-    
+
     wxIPV4address addr;
     if (!addr.Hostname("www.google.com") || !addr.Service("www"))
     {
@@ -372,9 +372,9 @@ extern bool IsNetworkAvailable()
     wxSocketClient sock;
     sock.SetTimeout(10);    // 10 secs
     bool online = sock.Connect(addr);
-    
+
     wxSocketBase::Shutdown();
-    
+
     return online;
 }
 

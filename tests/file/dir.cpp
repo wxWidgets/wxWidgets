@@ -32,8 +32,8 @@ class DirTestCase : public CppUnit::TestCase
 public:
     DirTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( DirTestCase );
@@ -181,7 +181,7 @@ void DirTestCase::DirExists()
     {
         const char *dirname;
         bool shouldExist;
-    } testData[] = 
+    } testData[] =
     {
         { ".", true },
         { "..", true },

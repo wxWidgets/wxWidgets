@@ -127,7 +127,7 @@ public:
     {
     }
 
-    virtual void setUp() { wxASSERT( m_dc ); }
+    virtual void setUp() wxOVERRIDE { wxASSERT( m_dc ); }
     virtual wxDC* GetDC(wxMemoryDC* dc) = 0;
 
 protected:

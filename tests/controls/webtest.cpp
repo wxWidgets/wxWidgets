@@ -31,8 +31,8 @@ class WebTestCase : public CppUnit::TestCase
 public:
     WebTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( WebTestCase );

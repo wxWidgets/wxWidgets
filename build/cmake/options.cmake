@@ -43,7 +43,7 @@ endif()
 
 # STL options
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
-wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" OFF "wxUSE_STL" OFF)
+wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON "wxUSE_STL" OFF)
 
 wx_option(wxUSE_UNICODE "compile with Unicode support (NOT RECOMMENDED to be turned off)")
 if(NOT WIN32)

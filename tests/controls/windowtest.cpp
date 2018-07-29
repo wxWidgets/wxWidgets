@@ -31,8 +31,8 @@ class WindowTestCase : public CppUnit::TestCase
 public:
     WindowTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( WindowTestCase );

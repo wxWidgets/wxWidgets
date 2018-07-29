@@ -179,7 +179,7 @@ void ListBaseTestCase::ChangeMode()
 
 void ListBaseTestCase::ItemClick()
 {
-#if wxUSE_UIACTIONSIMULATOR 
+#if wxUSE_UIACTIONSIMULATOR
 
 #ifdef __WXMSW__
     // FIXME: This test fails on MSW buildbot slaves although works fine on
@@ -226,7 +226,7 @@ void ListBaseTestCase::ItemClick()
 
     // when the first item was selected the focus changes to it, but not
     // on subsequent clicks
-    
+
     // FIXME: This test fail under wxGTK & wxOSX because we get 3 FOCUSED events and
     //        2 SELECTED ones instead of the one of each we expect for some
     //        reason, this needs to be debugged as it may indicate a bug in the
