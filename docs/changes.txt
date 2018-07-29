@@ -111,6 +111,7 @@ All (GUI):
 wxGTK:
 
 - Implement wxTextCtrl::HitTest() for single line controls.
+- Implement wxDataViewColumn::UnsetAsSortKey().
 - Fix not showing wxInfoBar with GTK+ 3 < 3.22.29.
 - Fix the build with glib < 2.32 (e.g. CentOS 6).
 
@@ -128,6 +129,7 @@ wxMSW:
 wxOSX:
 
 - Fix dispatching pending events (and CallAfter()) in console applications.
+- Implement wxDataViewColumn::UnsetAsSortKey() (Daniel Kulp).
 
 wxQt:
 

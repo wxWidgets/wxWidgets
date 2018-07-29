@@ -3465,6 +3465,13 @@ void wxDataViewColumn::SetResizeable(bool resizable)
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];
 }
 
+void wxDataViewColumn::UnsetAsSortKey()
+{
+    NSTableColumn* const tableColumn = m_NativeDataPtr->GetNativeColumnPtr();
+    if ( tableColumn )
+        [tableColumn setSortDescriptorPrototype:nil];
+}
+
 void wxDataViewColumn::SetSortable(bool sortable)
 {
     // wxDataViewColumnBase::SetSortable(sortable);
