@@ -56,7 +56,6 @@ set(TEST_SRC
     regex/wxregextest.cpp
     scopeguard/scopeguardtest.cpp
     strings/iostream.cpp
-    strings/hexconv.cpp
     strings/numformatter.cpp
     strings/strings.cpp
     strings/stdstrings.cpp
@@ -66,12 +65,14 @@ set(TEST_SRC
     strings/vararg.cpp
     strings/crt.cpp
     strings/vsnprintf.cpp
+    strings/hexconv.cpp
     streams/datastreamtest.cpp
     streams/ffilestream.cpp
     streams/fileback.cpp
     streams/filestream.cpp
     streams/iostreams.cpp
     streams/largefile.cpp
+    streams/lzmastream.cpp
     streams/memstream.cpp
     streams/socketstream.cpp
     streams/sstream.cpp
