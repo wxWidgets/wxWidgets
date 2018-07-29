@@ -77,8 +77,8 @@ class MenuTestCase : public CppUnit::TestCase
 public:
     MenuTestCase() {}
 
-    virtual void setUp() { CreateFrame(); }
-    virtual void tearDown() { m_frame->Destroy(); }
+    virtual void setUp() wxOVERRIDE { CreateFrame(); }
+    virtual void tearDown() wxOVERRIDE { m_frame->Destroy(); }
 
 private:
     CPPUNIT_TEST_SUITE( MenuTestCase );

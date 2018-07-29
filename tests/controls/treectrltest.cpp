@@ -38,8 +38,8 @@ class TreeCtrlTestCase : public CppUnit::TestCase
 public:
     TreeCtrlTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( TreeCtrlTestCase );

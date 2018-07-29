@@ -41,12 +41,12 @@ class TextCtrlTestCase : public TextEntryTestCase, public CppUnit::TestCase
 public:
     TextCtrlTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const { return m_text; }
-    virtual wxWindow *GetTestWindow() const { return m_text; }
+    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_text; }
+    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_text; }
 
     #define SINGLE_AND_MULTI_TESTS() \
         WXUISIM_TEST( ReadOnly ); \
@@ -223,7 +223,7 @@ void TextCtrlTestCase::ReadOnly()
 
     // SetEditable() is supposed to override wxTE_READONLY
     m_text->SetEditable(true);
-    
+
 #if defined(__WXOSX__) || defined(__WXUNIVERSAL__)
     // a ready only text field might not have been focusable at all
     m_text->SetFocus();

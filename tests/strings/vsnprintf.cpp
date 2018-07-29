@@ -166,7 +166,7 @@ private:
 #endif
     void Unicode();
 
-    template<typename T> 
+    template<typename T>
         void DoBigToSmallBuffer(T *buffer, int size);
     void BigToSmallBuffer();
 
@@ -251,12 +251,12 @@ void VsnprintfTestCase::P()
         CMP3i("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
         CMP3("0000000000000000", "%p", (void*)NULL);
     #endif
-#elif defined(__MINGW32__) 
+#elif defined(__MINGW32__)
     // mingw32 uses MSVC CRT in old versions but is own implementation now
     // which is somewhere in the middle as it uses %8x, so to catch both cases
     // we use case-insensitive comparison here.
-    CMP3("0xabcdef", "%p", (void*)0xABCDEF); 
-    CMP3("0", "%p", (void*)NULL); 
+    CMP3("0xabcdef", "%p", (void*)0xABCDEF);
+    CMP3("0", "%p", (void*)NULL);
 #elif defined(__GNUG__)
     // glibc prints pointers as %#x except for NULL pointers which are printed
     // as '(nil)'.

@@ -26,12 +26,12 @@ class ChoiceTestCase : public ItemContainerTestCase, public CppUnit::TestCase
 public:
     ChoiceTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
-    virtual wxItemContainer *GetContainer() const { return m_choice; }
-    virtual wxWindow *GetContainerWindow() const { return m_choice; }
+    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_choice; }
+    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_choice; }
 
     CPPUNIT_TEST_SUITE( ChoiceTestCase );
         wxITEM_CONTAINER_TESTS();

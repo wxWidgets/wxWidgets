@@ -47,7 +47,7 @@ public:
         m_bmp = wxNullBitmap;
     }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         m_gcdc->ResetBoundingBox();
     }

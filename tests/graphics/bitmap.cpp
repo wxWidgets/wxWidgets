@@ -37,8 +37,8 @@ class BitmapTestCase : public CppUnit::TestCase
 public:
     BitmapTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( BitmapTestCase );

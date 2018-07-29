@@ -30,8 +30,8 @@ class ClientSizeTestCase : public CppUnit::TestCase
 public:
     ClientSizeTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( ClientSizeTestCase );

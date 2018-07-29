@@ -40,7 +40,7 @@ public:
         srand((unsigned)time(NULL));
     }
 
-    virtual void tearDown() { unlink(GetTestFileName()); }
+    virtual void tearDown() wxOVERRIDE { unlink(GetTestFileName()); }
 
 private:
     CPPUNIT_TEST_SUITE( TextFileTestCase );

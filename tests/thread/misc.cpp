@@ -246,7 +246,7 @@ void MiscThreadTestCase::TestJoinable()
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread.Run() );
     CPPUNIT_ASSERT_EQUAL( 362880, (unsigned long)thread.Wait() );
 }
- 
+
 void MiscThreadTestCase::TestDetached()
 {
     static const size_t nThreads = 3;
@@ -330,31 +330,31 @@ void MiscThreadTestCase::TestThreadDelete()
     // terminated will lead to a crash!
 
     MyDetachedThread *thread0 = new MyDetachedThread(30, 'W');
-    CPPUNIT_ASSERT_EQUAL( wxTHREAD_MISC_ERROR, thread0->Delete() );    
+    CPPUNIT_ASSERT_EQUAL( wxTHREAD_MISC_ERROR, thread0->Delete() );
         // delete a thread which didn't start to run yet.
 
     MyDetachedThread *thread1 = new MyDetachedThread(30, 'Y');
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread1->Run() );
     wxMilliSleep(300);
-    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread1->Delete() );      
+    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread1->Delete() );
         // delete a running thread
 
     MyDetachedThread *thread2 = new MyDetachedThread(30, 'Z');
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread2->Run() );
     wxMilliSleep(300);
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread2->Pause() );
-    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread2->Delete() );      
+    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread2->Delete() );
         // delete a sleeping thread
 
     MyJoinableThread thread3(20);
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread3.Run() );
-    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread3.Delete() );       
+    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread3.Delete() );
         // delete a joinable running thread
 
     MyJoinableThread thread4(2);
     CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread4.Run() );
     wxMilliSleep(300);
-    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread4.Delete() );       
+    CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, thread4.Delete() );
         // delete a joinable thread which already terminated
 }
 

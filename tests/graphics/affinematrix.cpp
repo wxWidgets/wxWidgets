@@ -121,7 +121,7 @@ public:
     {
     }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         m_bmpOrig = wxBitmap(m_imgOrig);
         m_bmpUsingMatrix.Create(m_bmpOrig.GetSize(), m_bmpOrig.GetDepth());

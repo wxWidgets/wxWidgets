@@ -95,7 +95,7 @@ void InteractiveInputTestCase::TestDiskInfo()
 
         // kill the last '\n'
         pathname[wxStrlen(pathname) - 1] = 0;
-        
+
         if (pathname[0] == '\0' || wxStrcmp(pathname, "quit") == 0)
             break;
 
@@ -111,7 +111,7 @@ void InteractiveInputTestCase::TestDiskInfo()
                     (free / 1024).ToString().c_str(),
                     pathname);
         }
-        
+
         wxPuts("\n");
     }
 
@@ -128,7 +128,7 @@ void InteractiveInputTestCase::TestDiskInfo()
 
 void InteractiveInputTestCase::TestRegExInteractive()
 {
-#ifdef TEST_REGEX 
+#ifdef TEST_REGEX
     wxPuts(wxT("*** Testing RE interactively ***"));
 
     for ( ;; )
@@ -143,7 +143,7 @@ void InteractiveInputTestCase::TestRegExInteractive()
 
         if (pattern[0] == '\0' || wxStrcmp(pattern, "quit") == 0)
             break;
-            
+
         wxRegEx re;
         if ( !re.Compile(pattern) )
         {
@@ -181,7 +181,7 @@ void InteractiveInputTestCase::TestRegExInteractive()
                 }
             }
         }
-        
+
         wxPuts("\n");
     }
 #endif // TEST_REGEX
@@ -237,7 +237,7 @@ void InteractiveInputTestCase::TestFtpInteractive()
         wxPrintf(wxT("--- Connected to %s, current directory is '%s'\n"),
                  hostname, ftp.Pwd().c_str());
     }
-    
+
     wxChar buf[128];
     for ( ;; )
     {
@@ -250,7 +250,7 @@ void InteractiveInputTestCase::TestFtpInteractive()
 
         if (buf[0] == '\0' || wxStrcmp(buf, "quit") == 0)
             break;
-            
+
         // special handling of LIST and NLST as they require data connection
         wxString start(buf, 4);
         start.MakeUpper();
@@ -316,7 +316,7 @@ void InteractiveInputTestCase::TestDateTimeInteractive()
 
         // kill the last '\n'
         buf[wxStrlen(buf) - 1] = 0;
-        
+
         if ( buf[0] == '\0' || wxStrcmp(buf, "quit") == 0 )
             break;
 
@@ -340,7 +340,7 @@ void InteractiveInputTestCase::TestDateTimeInteractive()
                  dt.GetWeekOfMonth(wxDateTime::Sunday_First),
                  dt.GetWeekOfYear(wxDateTime::Monday_First));
     }
-    
+
     wxPuts("\n");
 #endif // TEST_DATETIME
 }
@@ -375,7 +375,7 @@ void InteractiveInputTestCase::TestSingleIstance()
     {
         wxPrintf(wxT("Failed to init wxSingleInstanceChecker.\n"));
     }
-    
+
     wxPuts("\n");
 #endif // defined(TEST_SNGLINST)
 }

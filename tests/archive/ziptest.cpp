@@ -43,13 +43,13 @@ public:
 
 protected:
     void OnCreateArchive(wxZipOutputStream& zip);
-    
+
     void OnArchiveExtracted(wxZipInputStream& zip, int expectedTotal);
-    
+
     void OnCreateEntry(wxZipOutputStream& zip,
                        TestEntry& testEntry,
                        wxZipEntry *entry);
-    
+
     void OnEntryExtracted(wxZipEntry& entry,
                           const TestEntry& testEntry,
                           wxZipInputStream *arc);
@@ -206,7 +206,7 @@ void ZipPipeTestCase::runTest()
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Zip suite 
+// Zip suite
 
 class ziptest : public ArchiveTestSuite
 {
@@ -218,7 +218,7 @@ public:
 protected:
     CppUnit::Test *makeTest(string descr, int options,
                             bool genericInterface, const wxString& archiver,
-                            const wxString& unarchiver);
+                            const wxString& unarchiver) wxOVERRIDE;
 };
 
 ziptest::ziptest()

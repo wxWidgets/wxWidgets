@@ -33,8 +33,8 @@ class WrapSizerTestCase : public CppUnit::TestCase
 public:
     WrapSizerTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( WrapSizerTestCase );

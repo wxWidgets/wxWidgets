@@ -438,8 +438,8 @@ class FileSystemWatcherTestCase : public CppUnit::TestCase
 public:
     FileSystemWatcherTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 protected:
     wxEventLoopBase* m_loop;
