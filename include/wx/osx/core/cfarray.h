@@ -50,10 +50,7 @@ public:
     {
         wxASSERT(idx < size());
 
-        CFTypeRef val = CFArrayGetValueAtIndex(this->m_ptr, idx);
-        if (val)
-            ::CFRetain(val);
-        return wxCFRefFromGet<E>(val);
+        return wxCFRefFromGet((E)CFArrayGetValueAtIndex(this->m_ptr, idx));
     }
 
     wxCFRef<E> operator[](size_type idx) { return at(idx); }
