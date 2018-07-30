@@ -180,18 +180,33 @@ private:
                 dt = dtOld;
         }
 
-        m_combo->SetText(GetStringValueFor(dt));
-
-        if ( !dt.IsValid() && HasDPFlag(wxDP_ALLOWNONE) )
-            return;
-
-        // notify that we had to change the date after validation
-        if ( (dt.IsValid() && (!dtOld.IsValid() || dt != dtOld)) ||
-                (!dt.IsValid() && dtOld.IsValid()) )
+        if ( dt.IsValid() )
         {
-            if ( dt.IsValid() )
-                SetDate(dt);
-            SendDateEvent(dt);
+            // Set it at wxCalendarCtrl level.
+            SetDate(dt);
+
+            // And show it in the text field.
+            m_combo->SetText(GetStringValue());
+
+            // And if the date has really changed, send an event about it.
+            if ( dt != dtOld )
+                SendDateEvent(dt);
+        }
+        else // Invalid date currently entered.
+        {
+            if ( HasDPFlag(wxDP_ALLOWNONE) )
+            {
+                // Clear the text part to indicate that the date is invalid.
+                // Would it be better to indicate this in some more clear way,
+                // e.g. maybe by using "[none]" or something like this?
+                m_combo->SetText(wxString());
+            }
+            else
+            {
+                // Restore the original value, as we can't have invalid value
+                // in this control.
+                m_combo->SetText(GetStringValue());
+            }
         }
     }
 
