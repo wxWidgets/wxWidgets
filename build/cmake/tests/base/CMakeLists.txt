@@ -92,13 +92,33 @@ set(TEST_SRC
     weakref/evtconnection.cpp
     weakref/weakref.cpp
     xlocale/xlocale.cpp
+
+    testprec.h
+    testableframe.h
+    testdate.h
+    testfile.h
+    archive/archivetest.h
+    streams/bstream.h
     )
 
 if(wxUSE_XML)
     list(APPEND TEST_SRC xml/xmltest.cpp)
 endif()
 
-wx_add_test(test_base ${TEST_SRC})
+set(TEST_DATA
+    intl/fr/internat.mo
+    intl/fr/internat.po
+    intl/ja/internat.mo
+    intl/ja/internat.po
+    horse.bmp
+    horse.png
+    horse.xpm
+    testdata.fc
+    )
+
+wx_add_test(test_base ${TEST_SRC}
+    DATA ${TEST_DATA}
+    )
 target_compile_definitions(test_base PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
 if(wxUSE_SOCKETS)
     wx_exe_link_libraries(test_base net)
