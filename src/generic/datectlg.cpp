@@ -121,6 +121,34 @@ public:
         return m_combo->GetTextCtrl()->IsEmpty();
     }
 
+    // This is public because it is used by wxDatePickerCtrlGeneric itself to
+    // change the date when the text control field changes. The reason it's
+    // done there and not in this class itself is mostly historic.
+    void ChangeDateAndNotifyIfValid()
+    {
+        wxDateTime dt;
+        if ( !ParseDateTime(m_combo->GetValue(), &dt) )
+        {
+            // The user must be in the process of updating the date, don't do
+            // anything -- we'll take care of ensuring it's valid on focus loss
+            // later.
+            return;
+        }
+
+        if ( dt == GetDate() )
+        {
+            // No need to send event if the date hasn't changed.
+            return;
+        }
+
+        // We change the date immediately, as it's more consistent with the
+        // native MSW version and avoids another event on focus loss.
+        SetDate(dt);
+
+        SendDateEvent(dt);
+    }
+
+private:
     bool ParseDateTime(const wxString& s, wxDateTime* pDt)
     {
         wxASSERT(pDt);
@@ -143,8 +171,6 @@ public:
         wxDateEvent event(datePicker, dt, wxEVT_DATE_CHANGED);
         datePicker->GetEventHandler()->ProcessEvent(event);
     }
-
-private:
 
     void OnCalKey(wxKeyEvent & ev)
     {
@@ -488,13 +514,8 @@ void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
     ev.SetId(GetId());
     GetParent()->GetEventHandler()->ProcessEvent(ev);
 
-    // We'll create an additional event if the date is valid.
-    // If the date isn't valid, the user's probably in the middle of typing
-    wxDateTime dt;
-    if ( !m_popup || !m_popup->ParseDateTime(m_combo->GetValue(), &dt) )
-        return;
-
-    m_popup->SendDateEvent(dt);
+    if ( m_popup )
+        m_popup->ChangeDateAndNotifyIfValid();
 }
 
 #endif // wxUSE_DATEPICKCTRL
