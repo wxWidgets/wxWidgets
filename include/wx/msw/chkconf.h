@@ -201,7 +201,9 @@
 #   if !wxUSE_OWNER_DRAWN
 #       undef wxUSE_CHECKLISTBOX
 #       define wxUSE_CHECKLISTBOX 0
-#       undef wxUSE_REARRANGECTRL // requires wxUSE_CHECKLISTBOX
+#   endif
+#   if !wxUSE_CHECKLISTBOX
+#       undef wxUSE_REARRANGECTRL
 #       define wxUSE_REARRANGECTRL 0
 #   endif
 #endif
