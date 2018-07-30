@@ -192,7 +192,8 @@ private:
         if ( (dt.IsValid() && (!dtOld.IsValid() || dt != dtOld)) ||
                 (!dt.IsValid() && dtOld.IsValid()) )
         {
-            SetDate(dt);
+            if ( dt.IsValid() )
+                SetDate(dt);
             SendDateEvent(dt);
         }
     }
