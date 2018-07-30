@@ -145,6 +145,7 @@ BASE_COREFOUNDATION_SRC =
 BASE_COREFOUNDATION_HDR =
     wx/osx/carbon/region.h
     wx/osx/core/cfdataref.h
+    wx/osx/core/cfdictionary.h
     wx/osx/core/cfref.h
     wx/osx/core/cfstring.h
     wx/osx/core/colour.h

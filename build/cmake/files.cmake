@@ -127,6 +127,7 @@ set(BASE_COREFOUNDATION_HDR
     wx/osx/core/evtloop.h
     wx/osx/core/objcid.h
     wx/osx/core/private.h
+    wx/osx/core/cfdictionary.h
 )
 
 set(BASE_OSX_SHARED_SRC
