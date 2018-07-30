@@ -19,6 +19,7 @@
 
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/cfdataref.h"
+#include "wx/osx/core/cfarray.h"
 #include "wx/osx/core/cfdictionary.h"
 
 // platform specific Clang analyzer support

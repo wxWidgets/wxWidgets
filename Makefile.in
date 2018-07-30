@@ -2441,6 +2441,8 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/colour.h \
 	wx/osx/carbon/region.h \
 	wx/osx/core/cfdictionary.h \
+	wx/osx/core/cfarray.h \
+	wx/osx/core/cftype.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2474,7 +2476,9 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/private.h \
 	wx/osx/core/colour.h \
 	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h
+	wx/osx/core/cfdictionary.h \
+	wx/osx/core/cfarray.h \
+	wx/osx/core/cftype.h
 @COND_TOOLKIT_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_COCOA_BASE_OSX_HDR)
 COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2497,7 +2501,9 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/osx/core/private.h \
 	wx/osx/core/colour.h \
 	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h
+	wx/osx/core/cfdictionary.h \
+	wx/osx/core/cfarray.h \
+	wx/osx/core/cftype.h
 @COND_TOOLKIT_GTK@BASE_OSX_HDR = $(COND_TOOLKIT_GTK_BASE_OSX_HDR)
 COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2520,7 +2526,9 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/osx/core/private.h \
 	wx/osx/core/colour.h \
 	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h
+	wx/osx/core/cfdictionary.h \
+	wx/osx/core/cfarray.h \
+	wx/osx/core/cftype.h
 @COND_TOOLKIT_X11@BASE_OSX_HDR = $(COND_TOOLKIT_X11_BASE_OSX_HDR)
 COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2543,7 +2551,9 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/osx/core/private.h \
 	wx/osx/core/colour.h \
 	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h
+	wx/osx/core/cfdictionary.h \
+	wx/osx/core/cfarray.h \
+	wx/osx/core/cftype.h
 @COND_TOOLKIT_MOTIF@BASE_OSX_HDR = $(COND_TOOLKIT_MOTIF_BASE_OSX_HDR)
 COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2566,7 +2576,9 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/osx/core/private.h \
 	wx/osx/core/colour.h \
 	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h
+	wx/osx/core/cfdictionary.h \
+	wx/osx/core/cfarray.h \
+	wx/osx/core/cftype.h
 @COND_TOOLKIT_@BASE_OSX_HDR = $(COND_TOOLKIT__BASE_OSX_HDR)
 @COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(BASE_OSX_HDR)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \

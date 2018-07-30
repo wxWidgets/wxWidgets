@@ -128,6 +128,8 @@ set(BASE_COREFOUNDATION_HDR
     wx/osx/core/objcid.h
     wx/osx/core/private.h
     wx/osx/core/cfdictionary.h
+    wx/osx/core/cfarray.h
+    wx/osx/core/cftype.h
 )
 
 set(BASE_OSX_SHARED_SRC

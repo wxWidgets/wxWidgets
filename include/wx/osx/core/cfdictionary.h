@@ -11,133 +11,28 @@
  @abstract   wxCFDictionaryRef class
  */
 
-#ifndef _WX_OSX_COREFOUNDATION_CFICTIONARYREF_H__
-#define _WX_OSX_COREFOUNDATION_CFICTIONARYREF_H__
+#ifndef _WX_OSX_COREFOUNDATION_CFDICTIONARYREF_H__
+#define _WX_OSX_COREFOUNDATION_CFDICTIONARYREF_H__
 
 #include "wx/osx/core/cfref.h"
 #include "wx/osx/core/cfstring.h"
+#include "wx/osx/core/cftype.h"
 
 #include <CoreFoundation/CFDictionary.h>
-
-#ifndef WX_PRECOMP
-#include "wx/string.h"
-#endif
-
-class wxCFTypeRef : public wxCFRef<CFTypeRef>
-{
-public:
-    typedef wxCFRef<CFTypeRef> super_type;
-
-    wxCFTypeRef(CFTypeRef d)
-        : super_type(d)
-    {
-    }
-
-    template <typename V>
-    bool GetValue(V* ptr) const;
-
-    template <typename V>
-    bool GetValue(V* ptr, V defaultValue) const
-    {
-        bool hasKey = GetValue(ptr);
-
-        if (!hasKey)
-            *ptr = defaultValue;
-
-        return hasKey;
-    }
-
-    template <typename V>
-    bool GetValue(V& ref) const
-    {
-        return GetValue(&ref);
-    }
-
-    template <typename V>
-    bool GetValue(V& ref, V defaultValue) const
-    {
-        bool hasKey = GetValue(ref);
-
-        if (!hasKey)
-            ref = defaultValue;
-
-        return hasKey;
-    }
-
-    // spezialization through overload
-    
-    bool GetValue(CGFloat* ptr) const
-    {
-        if ( m_ptr )
-            CFNumberGetValue((CFNumberRef)m_ptr, kCFNumberCGFloatType, ptr);
-        
-        return m_ptr;
-    }
-
-    bool GetValue(int32_t* ptr) const
-    {
-        if ( m_ptr )
-            CFNumberGetValue((CFNumberRef)m_ptr, kCFNumberSInt32Type, ptr);
-        
-        return m_ptr;
-    }
-    
-    bool GetValue(uint32_t* ptr) const
-    {
-        if ( m_ptr )
-            CFNumberGetValue((CFNumberRef)m_ptr, kCFNumberSInt32Type, ptr);
-        
-        return m_ptr;
-    }
-    
-    bool GetValue(int64_t* ptr) const
-    {
-        if ( m_ptr )
-            CFNumberGetValue((CFNumberRef)m_ptr, kCFNumberSInt64Type, ptr);
-        
-        return m_ptr;
-    }
-    
-    bool GetValue(uint64_t* ptr) const
-    {
-        if ( m_ptr )
-            CFNumberGetValue((CFNumberRef)m_ptr, kCFNumberSInt64Type, ptr);
-        
-        return m_ptr;
-    }
-
-    bool GetValue(wxString *s) const
-    {
-        if ( m_ptr )
-            *s = wxCFStringRef::AsString((CFStringRef)m_ptr);
-        
-        return m_ptr;
-        
-    }
-
-};
-
-class wxCFNumberRef : public wxCFTypeRef
-{
-public:
-    wxCFNumberRef(CGFloat v)
-    : wxCFTypeRef(CFNumberCreate( NULL, kCFNumberCGFloatType, &v))
-    {
-    }
-    
-    wxCFNumberRef(int v)
-    : wxCFTypeRef(CFNumberCreate( NULL, kCFNumberIntType, &v))
-    {
-    }
-};
 
 /*! @class wxCFDictionaryRef
  @discussion Properly retains/releases reference to CoreFoundation data objects
  */
-template<typename T> class wxCFDictionaryRefCommon : public wxCFRef< T >
+template <typename T>
+class wxCFDictionaryRefCommon : public wxCFRef<T>
 {
 public:
     typedef wxCFRef<T> super_type;
+
+    explicit wxCFDictionaryRefCommon()
+        : super_type()
+    {
+    }
 
     /*! @method     wxCFDictionaryRef
      @abstract   Assumes ownership of r and creates a reference to it.
@@ -151,8 +46,9 @@ public:
      using an operator refType() in a different ref-holding class type.
      */
     explicit wxCFDictionaryRefCommon(T r)
-    :   super_type(r)
-    {}
+        : super_type(r)
+    {
+    }
 
     /*! @method     wxCFDictionaryRef
      @abstract   Copies a ref holder of the same type
@@ -161,47 +57,69 @@ public:
      the object will be explicitly retained by this new ref.
      */
     wxCFDictionaryRefCommon(const wxCFDictionaryRefCommon& otherRef)
-    :  super_type( otherRef )
-    {}
-
-    wxCFTypeRef GetValue(const void *key)
+        : super_type(otherRef)
     {
-        CFTypeRef val = CFDictionaryGetValue( this->m_ptr, key);
-        if ( val )
+    }
+
+    wxCFTypeRef GetValue(const void* key)
+    {
+        CFTypeRef val = CFDictionaryGetValue(this->m_ptr, key);
+        if (val)
             ::CFRetain(val);
         return val;
     }
 };
 
-class wxCFDictionaryRef : public wxCFDictionaryRefCommon< CFDictionaryRef >
+class wxCFMutableDictionaryRef;
+
+class wxCFDictionaryRef : public wxCFDictionaryRefCommon<CFDictionaryRef>
 {
 public:
+    wxCFDictionaryRef()
+    {
+    }
+
     explicit wxCFDictionaryRef(CFDictionaryRef r)
-    :   wxCFDictionaryRefCommon(r)
-    {}
+        : wxCFDictionaryRefCommon(r)
+    {
+    }
+
+    wxCFDictionaryRef& operator=(const wxCFMutableDictionaryRef& other);
 };
 
-class wxCFMutableDictionaryRef : public wxCFDictionaryRefCommon< CFMutableDictionaryRef >
+class wxCFMutableDictionaryRef : public wxCFDictionaryRefCommon<CFMutableDictionaryRef>
 {
 public:
-    wxCFMutableDictionaryRef() : wxCFDictionaryRefCommon(CFDictionaryCreateMutable(kCFAllocatorDefault, 0,&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks))
+    wxCFMutableDictionaryRef()
+        : wxCFDictionaryRefCommon(CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks))
     {
     }
 
     explicit wxCFMutableDictionaryRef(CFMutableDictionaryRef r)
-    :   wxCFDictionaryRefCommon(r)
-    {}
+        : wxCFDictionaryRefCommon(r)
+    {
+    }
 
-    void SetValue(const void *key, const void *data)
+    void SetValue(const void* key, const void* data)
     {
-        CFDictionarySetValue( this->m_ptr, key, data);
+        CFDictionarySetValue(this->m_ptr, key, data);
     }
-    
-    void SetValue(const void*key, CGFloat v)
+
+    void SetValue(const void* key, CGFloat v)
     {
-        SetValue( key, wxCFNumberRef(v));
+        SetValue(key, wxCFNumberRef(v));
     }
+
+    friend class wxCFDictionaryRef;
 };
 
-#endif //ifndef _WX_OSX_COREFOUNDATION_CFICTIONARYREF_H__
+inline wxCFDictionaryRef& wxCFDictionaryRef::operator=(const wxCFMutableDictionaryRef& otherRef)
+{
+    wxCFRetain(otherRef.m_ptr);
+    wxCFRelease(m_ptr);
+    m_ptr = (CFDictionaryRef)otherRef.m_ptr;
 
+    return *this;
+}
+
+#endif //ifndef _WX_OSX_COREFOUNDATION_CFDICTIONARYREF_H__

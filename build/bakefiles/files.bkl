@@ -200,6 +200,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/colour.h
     wx/osx/carbon/region.h
     wx/osx/core/cfdictionary.h
+    wx/osx/core/cfarray.h
+    wx/osx/core/cftype.h
 </set>
 
 <!-- Base files used by OS X ports (not Carbon) -->
