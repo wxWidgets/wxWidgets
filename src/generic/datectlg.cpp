@@ -125,12 +125,9 @@ public:
     {
         wxASSERT(pDt);
 
-        if ( !s.empty() )
-        {
-            pDt->ParseFormat(s, m_format);
-            if ( !pDt->IsValid() )
-                return false;
-        }
+        pDt->ParseFormat(s, m_format);
+        if ( !pDt->IsValid() )
+            return false;
 
         return true;
     }
@@ -253,7 +250,7 @@ private:
     virtual void SetStringValue(const wxString& s) wxOVERRIDE
     {
         wxDateTime dt;
-        if ( !s.empty() && ParseDateTime(s, &dt) )
+        if ( ParseDateTime(s, &dt) )
             SetDate(dt);
         //else: keep the old value
     }
