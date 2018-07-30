@@ -45,7 +45,7 @@ exit /b 0
 :cmake
 if "%CONFIGURATION%"=="" set CONFIGURATION=Release
 cd ..\build_cmake
-ctest -V -C %CONFIGURATION% -R "test_[base|gui]" --interactive-debug-mode 0 .
+ctest -V -C %CONFIGURATION% -R "test_[base|gui]" --output-on-failure --interactive-debug-mode 0 .
 if %errorlevel% NEQ 0 goto :error
 goto :eof
 
