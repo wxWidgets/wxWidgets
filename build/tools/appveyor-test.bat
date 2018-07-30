@@ -9,27 +9,27 @@ goto %TOOLSET%
 :msbuild
 PATH=C:\projects\wxwidgets\lib\vc_x64_dll;%PATH%
 .\vc_x64_mswudll\test.exe
-if errorlevel 1 goto :error
+if %errorlevel% NEQ 0 goto :error
 .\vc_x64_mswudll\test_gui.exe
 goto :eof
 
 :nmake
 if "%BUILD%"=="debug" set debug_suffix=d
 .\vc_mswu%debug_suffix%\test.exe
-if errorlevel 1 goto :error
+if %errorlevel% NEQ 0 goto :error
 .\vc_mswu%debug_suffix%\test_gui.exe
 goto :eof
 
 :mingw
 .\gcc_mswud\test.exe
-if errorlevel 1 goto :error
+if %errorlevel% NEQ 0 goto :error
 .\gcc_mswud\test_gui.exe
 goto :eof
 
 :msys2
 PATH=C:\projects\wxwidgets\lib;%PATH%
 .\test.exe
-if errorlevel 1 goto :error
+if %errorlevel% NEQ 0 goto :error
 .\test_gui.exe
 goto :eof
 
@@ -46,7 +46,7 @@ exit /b 0
 if "%CONFIGURATION%"=="" set CONFIGURATION=Release
 cd ..\build_cmake
 ctest -V -C %CONFIGURATION% -R "test_[base|gui]" --interactive-debug-mode 0 .
-if errorlevel 1 goto :error
+if %errorlevel% NEQ 0 goto :error
 goto :eof
 
 :error
