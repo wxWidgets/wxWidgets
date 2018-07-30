@@ -124,6 +124,7 @@ wxMSW:
 - Fix positioning windows at positions >= SHORT_MAX (Cătălin Răceanu).
 - Honour alignment flags for multiline buttons using custom colours too.
 - Support MSVC auto-linking when using monolithic build too (PB).
+- Implement wxFontDialog::SetTitle() (Vitaly Stakhovsky).
 - Fix build in ANSI (non-Unicode) mode.
 
 wxOSX:
