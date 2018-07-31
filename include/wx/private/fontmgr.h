@@ -70,7 +70,7 @@ public:
 
         @param ptSize   point size of the font to create; note that this is
                         a float and not integer, it should be wxFont's point
-                        size multipled by wxDC's scale factor
+                        size multiplied by wxDC's scale factor
         @param aa       should the font be antialiased?
      */
     virtual wxFontInstance *GetFontInstance(float ptSize, bool aa);
@@ -98,7 +98,7 @@ public:
     /// Returns name of the bundle
     virtual wxString GetName() const = 0;
 
-    /// Returns true if the font is fixe-width
+    /// Returns true if the font is fixed-width
     virtual bool IsFixed() const = 0;
 
     /// Type of faces in the bundle

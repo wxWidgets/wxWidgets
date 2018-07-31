@@ -29,7 +29,7 @@
 //
 // The ActiveX control itself is particularly stubborn, calling
 // IOleInPlaceSite::OnPosRectChange every file change trying to set itself
-// to something different then what we told it to before.
+// to something different from what we told it to before.
 //
 // The docs are at
 // http://msdn.microsoft.com/library/en-us/wmplay10/mmp_sdk/windowsmediaplayer10sdk.asp
