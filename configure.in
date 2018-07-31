@@ -87,6 +87,7 @@ USE_SYSV=                           dnl any System V
 USE_VMS=
 USE_ULTRIX=
 USE_UNIXWARE=
+USE_HAIKU=
 
 dnl hardware platform
 USE_ALPHA=
@@ -292,6 +293,12 @@ case "${host}" in
     dnl leave USE_UNIX on - BeOS is sufficiently Unix-like for this
     USE_BEOS=1
     AC_DEFINE(__BEOS__)
+  ;;
+
+  *-*-haiku* )
+    USE_HAIKU=1
+    AC_DEFINE(__HAIKU__)
+    DEFAULT_DEFAULT_wxUSE_QT=1
   ;;
 
   *)
@@ -4483,7 +4490,7 @@ fi
 WX_CHECK_FUNCS(strtok_r, [], [], [#define _REENTRANT])
 
 dnl check for inet_addr and inet_aton (these may live either in libc, or in
-dnl libnsl or libresolv or libsocket)
+dnl libnsl or libresolv or libsocket or libnetwork under Haiku)
 INET_LINK=
 AC_CHECK_FUNCS(inet_addr,
     AC_DEFINE(HAVE_INET_ADDR),
@@ -4495,7 +4502,12 @@ AC_CHECK_FUNCS(inet_addr,
                     INET_LINK="resolv",
                     [
                         AC_CHECK_LIB(socket, inet_addr,
-                            INET_LINK="socket"
+                            INET_LINK="socket",
+                            [
+				AC_CHECK_LIB(network, inet_addr,
+                                   INET_LINK="network"
+                                )
+                            ]
                         )
                     ]
                 )
@@ -5043,7 +5055,17 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
       AX_FUNC_WHICH_GETHOSTBYNAME_R
       if test "x$ac_cv_func_which_gethostbyname_r" = "xno" -o \
               "x$ac_cv_func_which_gethostbyname_r" = "xunknown" ; then
-          AC_CHECK_FUNC(gethostbyname, [ AC_DEFINE(HAVE_GETHOSTBYNAME) ])
+          AC_CHECK_FUNC(gethostbyname, [ AC_DEFINE(HAVE_GETHOSTBYNAME) ],
+              [
+                  dnl Under HaikuOS it is not yet detected
+                  case "${host}" in
+                  *-*-haiku* )
+                    AC_DEFINE(HAVE_GETHOSTBYNAME)
+                    AC_MSG_WARN([Defining HAVE_GETHOSTBYNAME unconditionally under ${host}.])
+                    ;;
+                  esac
+              ]
+           )
       fi
       dnl A similar test for getservbyname_r
       dnl I'm tempted to just not do this test which is taking much time and
@@ -5052,7 +5074,17 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
       AC_raf_FUNC_WHICH_GETSERVBYNAME_R
       if test "x$ac_cv_func_which_getservbyname_r" = "xno" -o \
               "x$ac_cv_func_which_getservbyname_r" = "xunknown" ; then
-          AC_CHECK_FUNCS(getservbyname,[ AC_DEFINE(HAVE_GETSERVBYNAME) ])
+          AC_CHECK_FUNCS(getservbyname,[ AC_DEFINE(HAVE_GETSERVBYNAME) ],
+              [
+                  dnl Under HaikuOS it is not yet detected
+                  case "${host}" in
+                  *-*-haiku* )
+                    AC_DEFINE(HAVE_GETSERVBYNAME)
+                    AC_MSG_WARN([Defining HAVE_GETSERVBYNAME unconditionally under ${host}.])
+                    ;;
+                  esac
+              ]
+           )
       fi
       dnl For gethostbyaddr_r, we currently do no separate test, instead, we
       dnl silently assume it's available exactly if gethostbyname_r is
@@ -6083,8 +6115,16 @@ if test "$wxUSE_SOCKETS" = "yes"; then
                         INET_LINK="$INET_LINK -lsocket"
                     fi,
                     [
-                        AC_MSG_WARN([socket library not found - sockets will be disabled])
-                        wxUSE_SOCKETS=no
+                        dnl under Haiku, socket is in libnetwork
+                        AC_CHECK_LIB(network, socket,
+                            if test "$INET_LINK" != " -lnetwork"; then
+                                INET_LINK="$INET_LINK -lnetwork"
+                            fi,
+                            [
+                                AC_MSG_WARN([socket library not found - sockets will be disabled])
+                                wxUSE_SOCKETS=no
+                            ]
+                        )
                     ]
                 )
             ]

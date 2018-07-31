@@ -3807,6 +3807,7 @@ USE_OSF=                            USE_SGI=
 USE_SOLARIS=                        USE_SUN=                            USE_SUNOS=                          USE_SVR4=                           USE_SYSV=                           USE_VMS=
 USE_ULTRIX=
 USE_UNIXWARE=
+USE_HAIKU=
 
 USE_ALPHA=
 
@@ -4020,6 +4021,13 @@ case "${host}" in
         USE_BEOS=1
     $as_echo "#define __BEOS__ 1" >>confdefs.h
 
+  ;;
+
+  *-*-haiku* )
+    USE_HAIKU=1
+    $as_echo "#define __HAIKU__ 1" >>confdefs.h
+
+    DEFAULT_DEFAULT_wxUSE_QT=1
   ;;
 
   *)
@@ -32013,6 +32021,50 @@ fi
 $as_echo "$ac_cv_lib_socket_inet_addr" >&6; }
 if test "x$ac_cv_lib_socket_inet_addr" = xyes; then :
   INET_LINK="socket"
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_addr in -lnetwork" >&5
+$as_echo_n "checking for inet_addr in -lnetwork... " >&6; }
+if ${ac_cv_lib_network_inet_addr+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lnetwork  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char inet_addr ();
+int
+main ()
+{
+return inet_addr ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_network_inet_addr=yes
+else
+  ac_cv_lib_network_inet_addr=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_network_inet_addr" >&5
+$as_echo "$ac_cv_lib_network_inet_addr" >&6; }
+if test "x$ac_cv_lib_network_inet_addr" = xyes; then :
+  INET_LINK="network"
+
+fi
+
+
 
 fi
 
@@ -33454,6 +33506,18 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 if test "x$ac_cv_func_gethostbyname" = xyes; then :
    $as_echo "#define HAVE_GETHOSTBYNAME 1" >>confdefs.h
 
+else
+
+                                    case "${host}" in
+                  *-*-haiku* )
+                    $as_echo "#define HAVE_GETHOSTBYNAME 1" >>confdefs.h
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Defining HAVE_GETHOSTBYNAME unconditionally under ${host}." >&5
+$as_echo "$as_me: WARNING: Defining HAVE_GETHOSTBYNAME unconditionally under ${host}." >&2;}
+                    ;;
+                  esac
+
+
 fi
 
       fi
@@ -33581,6 +33645,18 @@ if test "x$ac_cv_func_getservbyname" = xyes; then :
 #define HAVE_GETSERVBYNAME 1
 _ACEOF
   $as_echo "#define HAVE_GETSERVBYNAME 1" >>confdefs.h
+
+else
+
+                                    case "${host}" in
+                  *-*-haiku* )
+                    $as_echo "#define HAVE_GETSERVBYNAME 1" >>confdefs.h
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Defining HAVE_GETSERVBYNAME unconditionally under ${host}." >&5
+$as_echo "$as_me: WARNING: Defining HAVE_GETSERVBYNAME unconditionally under ${host}." >&2;}
+                    ;;
+                  esac
+
 
 fi
 done
@@ -36140,9 +36216,55 @@ if test "x$ac_cv_lib_socket_socket" = xyes; then :
                     fi
 else
 
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: socket library not found - sockets will be disabled" >&5
+                                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for socket in -lnetwork" >&5
+$as_echo_n "checking for socket in -lnetwork... " >&6; }
+if ${ac_cv_lib_network_socket+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lnetwork  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char socket ();
+int
+main ()
+{
+return socket ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_network_socket=yes
+else
+  ac_cv_lib_network_socket=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_network_socket" >&5
+$as_echo "$ac_cv_lib_network_socket" >&6; }
+if test "x$ac_cv_lib_network_socket" = xyes; then :
+  if test "$INET_LINK" != " -lnetwork"; then
+                                INET_LINK="$INET_LINK -lnetwork"
+                            fi
+else
+
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: socket library not found - sockets will be disabled" >&5
 $as_echo "$as_me: WARNING: socket library not found - sockets will be disabled" >&2;}
-                        wxUSE_SOCKETS=no
+                                wxUSE_SOCKETS=no
+
+
+fi
+
 
 
 fi
@@ -40090,7 +40212,7 @@ fi
       ;;
 
       powerpc-apple-macos* | \
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
+      *-*-freebsd* | *-*-openbsd* | *-*-haiku* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
       *-*-mirbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
@@ -40130,7 +40252,7 @@ fi
     SONAME_FLAG=
 
     case "${BAKEFILE_HOST}" in
-      *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
+      *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-haiku* | *-*-netbsd* | \
       *-*-k*bsd*-gnu | *-*-mirbsd* | *-*-gnu* )
         if test "x$SUNCXX" = "xyes"; then
             SONAME_FLAG="-h "
