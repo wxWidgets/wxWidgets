@@ -505,7 +505,7 @@ public:
 
     /**
         Partial equality test. If @a weakTest is @true, attributes of this object do not
-        have to be present if those attributes of @a dim sare present. If @a weakTest is
+        have to be present if those attributes of @a dims are present. If @a weakTest is
         @false, the function will fail if an attribute is present in @a dims but not
         in this object.
 

@@ -429,7 +429,7 @@ public:
            //
            // Result of several hours and days of bug hunting -
            // this is called by an object when it wants to resize
-           // itself to something different then our parent window -
+           // itself to something different from our parent window -
            // don't let it :)
            //
 //            m_window->m_oleInPlaceObject->SetObjectRects(
