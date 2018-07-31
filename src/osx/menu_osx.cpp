@@ -136,7 +136,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *item, size_t pos)
     // Update radio groups if we're inserting a new menu item.
     // Inserting radio and non-radio item has a different impact
     // on radio groups, so we have to handle each case separately.
-    // (Inserting a radio item in the middle of exisiting groups extends this group,
+    // (Inserting a radio item in the middle of existing groups extends this group,
     // but inserting a non-radio item breaks it into two subgroups.)
     bool check = false;
     if ( item->IsRadio() )
@@ -151,7 +151,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *item, size_t pos)
     {
         if ( m_radioData->UpdateOnInsertNonRadio(pos) )
         {
-            // One of the exisiting groups has been split into two subgroups.
+            // One of the existing groups has been split into two subgroups.
             wxFAIL_MSG(wxS("Inserting non-radio item inside a radio group?"));
         }
     }

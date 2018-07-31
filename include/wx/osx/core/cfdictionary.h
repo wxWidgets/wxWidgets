@@ -41,7 +41,7 @@ public:
      to transfer ownership of that reference to this ref holder.  If the object comes from
      a Create or Copy method then this is the correct behaviour.  If the object comes from
      a Get method then you must CFRetain it yourself before passing it to this constructor.
-     A handy way to do this is to use the non-member wxCFRefFromGet factory funcion.
+     A handy way to do this is to use the non-member wxCFRefFromGet factory function.
      This method is templated and takes an otherType *p.  This prevents implicit conversion
      using an operator refType() in a different ref-holding class type.
      */

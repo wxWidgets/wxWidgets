@@ -2058,7 +2058,7 @@ void wxWindowDCImpl::SetDCClipping( WXRegion userRegion )
                           m_clipRegion );
     }
     // intersect the user region, if any, with the
-    // exisiting clip region
+    // existing clip region
     else // if( userRegion )
     {
         if( !m_clipRegion )
