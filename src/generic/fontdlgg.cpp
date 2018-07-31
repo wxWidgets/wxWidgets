@@ -376,6 +376,7 @@ void wxGenericFontDialog::CreateWidgets()
     if (ShowToolTips())
         itemChoice7->SetToolTip(_("The font family."));
     itemBoxSizer5->Add(itemChoice7, 0, wxALIGN_LEFT|wxALL, 5);
+    m_familyChoice = itemChoice7;
 
     wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer8, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
@@ -387,6 +388,7 @@ void wxGenericFontDialog::CreateWidgets()
     if (ShowToolTips())
         itemChoice10->SetToolTip(_("The font style."));
     itemBoxSizer8->Add(itemChoice10, 0, wxALIGN_LEFT|wxALL, 5);
+    m_styleChoice = itemChoice10;
 
     wxBoxSizer* itemBoxSizer11 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer11, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
@@ -398,9 +400,11 @@ void wxGenericFontDialog::CreateWidgets()
     if (ShowToolTips())
         itemChoice13->SetToolTip(_("The font weight."));
     itemBoxSizer11->Add(itemChoice13, 0, wxALIGN_LEFT|wxALL, 5);
+    m_weightChoice = itemChoice13;
 
     wxBoxSizer* itemBoxSizer14 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer14, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
+    m_colourChoice = NULL;
     if (m_fontData.GetEnableEffects())
     {
         wxStaticText* itemStaticText15 = new wxStaticText( this, wxID_STATIC, _("C&olour:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -415,6 +419,7 @@ void wxGenericFontDialog::CreateWidgets()
         if (ShowToolTips())
             itemChoice16->SetToolTip(_("The font colour."));
         itemBoxSizer14->Add(itemChoice16, 0, wxALIGN_LEFT|wxALL, 5);
+        m_colourChoice = itemChoice16;
     }
 
     wxBoxSizer* itemBoxSizer17 = new wxBoxSizer(wxVERTICAL);
@@ -429,14 +434,17 @@ void wxGenericFontDialog::CreateWidgets()
         spinCtrl->SetToolTip(_("The font point size."));
 
     itemBoxSizer17->Add(spinCtrl, 0, wxALIGN_LEFT|wxALL, 5);
+    m_pointSizeSpin = spinCtrl;
 #else
     wxChoice* itemChoice19 = new wxChoice( this, wxID_FONT_SIZE, wxDefaultPosition, wxDefaultSize, 40, pointSizes, 0 );
     itemChoice19->SetHelpText(_("The font point size."));
     if (ShowToolTips())
         itemChoice19->SetToolTip(_("The font point size."));
     itemBoxSizer17->Add(itemChoice19, 0, wxALIGN_LEFT|wxALL, 5);
+    m_pointSizeChoice = itemChoice19;
 #endif
 
+    m_underLineCheckBox = NULL;
     if (m_fontData.GetEnableEffects())
     {
         wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxVERTICAL);
@@ -447,6 +455,7 @@ void wxGenericFontDialog::CreateWidgets()
         if (ShowToolTips())
             itemCheckBox21->SetToolTip(_("Whether the font is underlined."));
         itemBoxSizer20->Add(itemCheckBox21, 0, wxALIGN_LEFT|wxALL, 5);
+        m_underLineCheckBox = itemCheckBox21;
     }
 
     if (!is_pda)
@@ -492,12 +501,6 @@ void wxGenericFontDialog::CreateWidgets()
     itemBoxSizer25->Add(itemButton28, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 #endif
 
-    m_familyChoice = (wxChoice*) FindWindow(wxID_FONT_FAMILY);
-    m_styleChoice = (wxChoice*) FindWindow(wxID_FONT_STYLE);
-    m_weightChoice = (wxChoice*) FindWindow(wxID_FONT_WEIGHT);
-    m_colourChoice = (wxChoice*) FindWindow(wxID_FONT_COLOUR);
-    m_underLineCheckBox = (wxCheckBox*) FindWindow(wxID_FONT_UNDERLINE);
-
     m_familyChoice->SetStringSelection( wxFontFamilyIntToString(m_dialogFont.GetFamily()) );
     m_styleChoice->SetStringSelection(wxFontStyleIntToString(m_dialogFont.GetStyle()));
     m_weightChoice->SetStringSelection(wxFontWeightIntToString(m_dialogFont.GetWeight()));
@@ -517,9 +520,8 @@ void wxGenericFontDialog::CreateWidgets()
     }
 
 #if USE_SPINCTRL_FOR_POINT_SIZE
-    spinCtrl->SetValue(m_dialogFont.GetPointSize());
+    m_pointSizeSpin->SetValue(m_dialogFont.GetPointSize());
 #else
-    m_pointSizeChoice = (wxChoice*) FindWindow(wxID_FONT_SIZE);
     m_pointSizeChoice->SetSelection(m_dialogFont.GetPointSize()-1);
 #endif
 
@@ -578,8 +580,7 @@ void wxGenericFontDialog::DoChangeFont()
     wxFontWeight fontWeight = wxFontWeightStringToInt(m_weightChoice->GetStringSelection());
     wxFontStyle fontStyle = wxFontStyleStringToInt(m_styleChoice->GetStringSelection());
 #if USE_SPINCTRL_FOR_POINT_SIZE
-    wxSpinCtrl* fontSizeCtrl = wxDynamicCast(FindWindow(wxID_FONT_SIZE), wxSpinCtrl);
-    int fontSize = fontSizeCtrl->GetValue();
+    int fontSize = m_pointSizeSpin->GetValue();
 #else
     int fontSize = wxAtoi(m_pointSizeChoice->GetStringSelection());
 #endif
