@@ -78,7 +78,9 @@ private:
     wxChoice *m_colourChoice;
     wxCheckBox *m_underLineCheckBox;
 
-#if !USE_SPINCTRL_FOR_POINT_SIZE
+#if USE_SPINCTRL_FOR_POINT_SIZE
+    wxSpinCtrl *m_pointSizeSpin;
+#else
     wxChoice   *m_pointSizeChoice;
 #endif
 
