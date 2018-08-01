@@ -1617,9 +1617,12 @@ protected:
 
 inline bool wxDateTime::IsInStdRange() const
 {
-    // currently we don't know what is the real type of time_t so prefer to err
-    // on the safe side and limit it to 32 bit values which is safe everywhere
-    return m_time >= 0l && (m_time / TIME_T_FACTOR) < wxINT32_MAX;
+    // we don't know what is the real type of time_t but we can test that the
+    // round trip works
+    wxLongLong_t seconds = m_time.GetValue() / TIME_T_FACTOR;
+    return
+      static_cast<wxLongLong_t>(static_cast<time_t>(seconds))
+      == seconds;
 }
 
 /* static */
