@@ -416,7 +416,6 @@ void wxGenericFontDialog::CreateWidgets()
         if (ShowToolTips())
             m_colourChoice->SetToolTip(_("The font colour."));
         itemBoxSizer14->Add(m_colourChoice, 0, wxALIGN_LEFT|wxALL, 5);
-        m_colourChoice = m_colourChoice;
     }
 
     wxBoxSizer* itemBoxSizer17 = new wxBoxSizer(wxVERTICAL);
