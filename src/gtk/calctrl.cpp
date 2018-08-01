@@ -198,7 +198,9 @@ bool wxGtkCalendarCtrl::EnableMonthChange(bool enable)
 
 bool wxGtkCalendarCtrl::SetDate(const wxDateTime& date)
 {
-    if ( date.IsValid() && !IsInValidRange(date) )
+    wxCHECK_MSG( date.IsValid(), false, "invalid date" );
+
+    if ( !IsInValidRange(date) )
         return false;
 
     g_signal_handlers_block_by_func(m_widget,
