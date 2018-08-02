@@ -346,13 +346,6 @@ wxFont::~wxFont()
 // accessors
 // ----------------------------------------------------------------------------
 
-int wxFont::GetPointSize() const
-{
-    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
-
-    return M_FONTDATA->m_nativeFontInfo.GetPointSize();
-}
-
 float wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
