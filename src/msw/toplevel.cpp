@@ -192,7 +192,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
             //    the taskbar normally)
             //
             // The second one is solved here by using WS_EX_APPWINDOW flag, the
-            // first one is dealt with in our MSWGetParent() method
+            // first one is dealt within our MSWGetParent() method
             // implementation
             if ( !(style & wxFRAME_NO_TASKBAR) && GetParent() )
             {

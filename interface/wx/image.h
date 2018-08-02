@@ -245,7 +245,7 @@ public:
     wxBitmapType GetType() const;
 
     /**
-        Loads a image from a stream, putting the resulting data into @a image.
+        Loads an image from a stream, putting the resulting data into @a image.
 
         If the image file contains more than one image and the image handler is
         capable of retrieving these individually, @a index indicates which image
@@ -269,7 +269,7 @@ public:
                           bool verbose = true, int index = -1);
 
     /**
-        Saves a image in the output stream.
+        Saves an image in the output stream.
 
         @param image
             The image object which is to be affected by this operation.

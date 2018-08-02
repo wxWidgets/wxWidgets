@@ -749,7 +749,7 @@ public:
         Returns @true if the font is a fixed width (or monospaced) font,
         @false if it is a proportional one or font is invalid.
 
-        Note that this function under some platforms is different than just testing
+        Note that this function under some platforms is different from just testing
         for the font family being equal to @c wxFONTFAMILY_TELETYPE because native
         platform-specific functions are used for the check (resulting in a more
         accurate return value).

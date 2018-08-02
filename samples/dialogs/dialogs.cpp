@@ -3855,7 +3855,7 @@ void TestRichMessageDialog::AddAdditionalTextOptions(wxSizer *sizer)
     wxSizer * const sizerMsgs = new wxStaticBoxSizer(wxVERTICAL, this,
                                                      "&Additional Elements");
 
-    // add a option to show a check box.
+    // add an option to show a check box.
     wxSizer * const sizerCheckBox = new wxBoxSizer(wxHORIZONTAL);
     sizerCheckBox->Add(new wxStaticText(this, wxID_ANY, "&Check box:"),
                        wxSizerFlags().Centre().Border(wxRIGHT));

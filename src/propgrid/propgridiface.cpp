@@ -796,7 +796,7 @@ TRET wxPropertyGridInterface::GetPropertyValueAs##BIGNAME( wxPGPropArg id ) cons
     return (TRET)value.Get##BIGNAME(); \
 }
 
-// String is different than others.
+// String is different from others.
 wxString wxPropertyGridInterface::GetPropertyValueAsString( wxPGPropArg id ) const
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
