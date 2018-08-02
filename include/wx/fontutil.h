@@ -189,7 +189,7 @@ private:
 
     // native font description
     wxCFRef<CTFontDescriptorRef> m_descriptor;
-    void            CreateCTFontDescriptor();
+    void          CreateCTFontDescriptor();
 
     // these attributes are not part of a CTFont
     bool          m_underlined;

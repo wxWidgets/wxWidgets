@@ -349,7 +349,7 @@ wxFont::~wxFont()
 float wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
-    
+
     return M_FONTDATA->m_nativeFontInfo.GetFractionalPointSize();
 }
 
@@ -670,3 +670,4 @@ bool wxFontBase::AddPrivateFont(const wxString& filename)
 }
 
 #endif // wxUSE_PRIVATE_FONTS
+

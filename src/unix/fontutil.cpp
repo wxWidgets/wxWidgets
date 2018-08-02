@@ -258,13 +258,13 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 {
     // deal with compatibility constants
-    if (weight >= 90 && weight <= 92)
+    if ( weight >= 90 && weight <= 92 )
     {
-        if (weight == 90 /* wxNORMAL */)
+        if ( weight == 90 /* wxNORMAL */ )
             weight = wxFONTWEIGHT_NORMAL;
-        else if (weight == 91 /* wxLIGHT */)
+        else if ( weight == 91 /* wxLIGHT */ )
             weight = wxFONTWEIGHT_LIGHT;
-        else if (weight == 92 /* wxBOLD */)
+        else if ( weight == 92 /* wxBOLD */ )
             weight = wxFONTWEIGHT_BOLD;
     }
 
@@ -272,7 +272,7 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
     wxASSERT(weight % 100 == 0);
 
     wxFontWeight formerWeight = GetWeight();
-    if (formerWeight != weight)
+    if ( formerWeight != weight )
         SetNumericWeight(weight);
 }
 
