@@ -208,6 +208,19 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
 
 #endif // WXWIN_COMPATIBILITY_2_8
 
+static bool IsAvailable()
+{
+#ifdef GDK_WINDOWING_X11
+    if ( !GDK_IS_X11_DISPLAY(gdk_display_get_default()) )
+#endif
+    {
+        wxSafeShowMessage(_("Fatal Error"), _("wxGLCanvas is only supported on X11 currently.  You may be able to\nwork around this by setting environment variable GDK_BACKEND=x11 before starting\nyour program."));
+        return false;
+    }
+
+    return true;
+}
+
 bool wxGLCanvas::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxPoint& pos,
@@ -217,6 +230,9 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         const int *attribList,
                         const wxPalette& palette)
 {
+    if ( !IsAvailable() )
+        return false;
+
 #if wxUSE_PALETTE
     wxASSERT_MSG( !palette.IsOk(), wxT("palettes not supported") );
 #endif // wxUSE_PALETTE
