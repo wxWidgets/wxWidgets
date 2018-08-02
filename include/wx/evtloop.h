@@ -296,7 +296,7 @@ private:
     #include "wx/dfb/evtloop.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/evtloop.h"
-    #elif defined(__WXQT__)
+#elif defined(__WXQT__)
     #include "wx/qt/evtloop.h"
 #else // other platform
 
