@@ -5615,7 +5615,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_qt_dcscreen.o \
 	monodll_defs.o \
 	monodll_qt_dialog.o \
-	monodll_unix_dialup.o \
 	monodll_qt_display.o \
 	monodll_qt_dnd.o \
 	monodll_qt_evtloop.o \
@@ -6136,8 +6135,6 @@ COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_qt_dataview.o \
 	monodll_dvrenderer.o \
 	monodll_dvrenderers.o \
-	monodll_unix_joystick.o \
-	monodll_unix_sound.o \
 	monodll_qt_taskbar.o \
 	monodll_taskbarcmn.o \
 	monodll_qt_utils.o \
@@ -6267,8 +6264,6 @@ COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monodll_qt_dataview.o \
 	monodll_dvrenderer.o \
 	monodll_dvrenderers.o \
-	monodll_unix_joystick.o \
-	monodll_unix_sound.o \
 	monodll_qt_taskbar.o \
 	monodll_taskbarcmn.o \
 	monodll_qt_utils.o \
@@ -7698,7 +7693,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_qt_dcscreen.o \
 	monolib_defs.o \
 	monolib_qt_dialog.o \
-	monolib_unix_dialup.o \
 	monolib_qt_display.o \
 	monolib_qt_dnd.o \
 	monolib_qt_evtloop.o \
@@ -8219,8 +8213,6 @@ COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	monolib_qt_dataview.o \
 	monolib_dvrenderer.o \
 	monolib_dvrenderers.o \
-	monolib_unix_joystick.o \
-	monolib_unix_sound.o \
 	monolib_qt_taskbar.o \
 	monolib_taskbarcmn.o \
 	monolib_qt_utils.o \
@@ -8350,8 +8342,6 @@ COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	monolib_qt_dataview.o \
 	monolib_dvrenderer.o \
 	monolib_dvrenderers.o \
-	monolib_unix_joystick.o \
-	monolib_unix_sound.o \
 	monolib_qt_taskbar.o \
 	monolib_taskbarcmn.o \
 	monolib_qt_utils.o \
@@ -9927,7 +9917,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_qt_dcscreen.o \
 	coredll_defs.o \
 	coredll_qt_dialog.o \
-	coredll_unix_dialup.o \
 	coredll_qt_display.o \
 	coredll_qt_dnd.o \
 	coredll_qt_evtloop.o \
@@ -11443,7 +11432,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_qt_dcscreen.o \
 	corelib_defs.o \
 	corelib_qt_dialog.o \
-	corelib_unix_dialup.o \
 	corelib_qt_display.o \
 	corelib_qt_dnd.o \
 	corelib_qt_evtloop.o \
@@ -12033,8 +12021,6 @@ COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 	advdll_qt_dataview.o \
 	advdll_dvrenderer.o \
 	advdll_dvrenderers.o \
-	advdll_unix_joystick.o \
-	advdll_unix_sound.o \
 	advdll_qt_taskbar.o \
 	advdll_taskbarcmn.o \
 	advdll_utils.o \
@@ -12164,8 +12150,6 @@ COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	advdll_qt_dataview.o \
 	advdll_dvrenderer.o \
 	advdll_dvrenderers.o \
-	advdll_unix_joystick.o \
-	advdll_unix_sound.o \
 	advdll_qt_taskbar.o \
 	advdll_taskbarcmn.o \
 	advdll_utils.o \
@@ -12353,8 +12337,6 @@ COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 	advlib_qt_dataview.o \
 	advlib_dvrenderer.o \
 	advlib_dvrenderers.o \
-	advlib_unix_joystick.o \
-	advlib_unix_sound.o \
 	advlib_qt_taskbar.o \
 	advlib_taskbarcmn.o \
 	advlib_utils.o \
@@ -12484,8 +12466,6 @@ COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	advlib_qt_dataview.o \
 	advlib_dvrenderer.o \
 	advlib_dvrenderers.o \
-	advlib_unix_joystick.o \
-	advlib_unix_sound.o \
 	advlib_qt_taskbar.o \
 	advlib_taskbarcmn.o \
 	advlib_utils.o \
@@ -18072,9 +18052,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
-
 @COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
@@ -21084,9 +21061,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
@@ -21113,9 +21087,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
@@ -23330,9 +23301,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
 @COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
@@ -26343,9 +26311,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
@@ -26372,9 +26337,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
@@ -28664,9 +28626,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
 @COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
@@ -32412,9 +32371,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
-
 @COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
@@ -35445,9 +35401,6 @@ advdll_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@advdll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
-@COND_TOOLKIT_QT@advdll_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
-
 @COND_TOOLKIT_MOTIF@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
@@ -35474,9 +35427,6 @@ advdll_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_X11@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
-
-@COND_TOOLKIT_QT@advdll_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_MOTIF@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
@@ -35958,9 +35908,6 @@ advlib_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@advlib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
-@COND_TOOLKIT_QT@advlib_unix_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
-
 @COND_TOOLKIT_MOTIF@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
@@ -35987,9 +35934,6 @@ advlib_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_X11@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
-
-@COND_TOOLKIT_QT@advlib_unix_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_MOTIF@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp

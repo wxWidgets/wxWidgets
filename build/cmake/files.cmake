@@ -285,7 +285,6 @@ set(QT_SRC
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
-    src/unix/dialup.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
     src/qt/evtloop.cpp
@@ -361,8 +360,6 @@ set(ADVANCED_QT_SRC
     src/qt/dataview.cpp
     src/qt/dvrenderer.cpp
     src/qt/dvrenderers.cpp
-    src/unix/joystick.cpp
-    src/unix/sound.cpp
     src/qt/taskbar.cpp
     src/common/taskbarcmn.cpp
     src/qt/utils.cpp

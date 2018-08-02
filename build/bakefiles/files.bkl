@@ -363,7 +363,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
-    src/unix/dialup.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
     src/qt/evtloop.cpp
@@ -439,8 +438,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/dataview.cpp
     src/qt/dvrenderer.cpp
     src/qt/dvrenderers.cpp
-    src/unix/joystick.cpp
-    src/unix/sound.cpp
     src/qt/taskbar.cpp
     src/common/taskbarcmn.cpp
     src/qt/utils.cpp
