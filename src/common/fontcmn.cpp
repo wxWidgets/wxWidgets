@@ -829,7 +829,14 @@ wxString wxNativeFontInfo::ToUserString() const
 
     switch ( GetWeight() )
     {
-         case wxFONTWEIGHT_THIN:
+        default:
+            wxFAIL_MSG( wxT("unknown font weight") );
+            wxFALLTHROUGH;
+        
+        case wxFONTWEIGHT_NORMAL:
+            break;
+
+        case wxFONTWEIGHT_THIN:
             desc << _(" thin");
             break;
 
@@ -837,8 +844,6 @@ wxString wxNativeFontInfo::ToUserString() const
             desc << _(" extralight");
             break;
 
-        case wxFONTWEIGHT_NORMAL:
-            break;
 
         case wxFONTWEIGHT_LIGHT:
             desc << _(" light");
@@ -867,10 +872,6 @@ wxString wxNativeFontInfo::ToUserString() const
         case wxFONTWEIGHT_EXTRAHEAVY:
             desc << _(" extraheavy");
             break;
-            
-        default:
-            wxFAIL_MSG( wxT("unknown font weight") );
-            wxFALLTHROUGH;
     }
 
     switch ( GetStyle() )
