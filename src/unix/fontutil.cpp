@@ -257,24 +257,6 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 
 void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 {
-    switch (weight)
-    {
-        case wxFONTWEIGHT_BOLD:
-            pango_font_description_set_weight(description, PANGO_WEIGHT_BOLD);
-            break;
-        case wxFONTWEIGHT_LIGHT:
-            pango_font_description_set_weight(description, PANGO_WEIGHT_LIGHT);
-            break;
-        default:
-            wxFAIL_MSG( "unknown font weight" );
-            // fall through
-        case wxFONTWEIGHT_NORMAL:
-            pango_font_description_set_weight(description, PANGO_WEIGHT_NORMAL);
-    }
-}
-
-void wxNativeFontInfo::SetWeight(wxFontWeight weight)
-{
     // deal with compatibility constants
     if (weight >= 90 && weight <= 92)
     {
@@ -296,7 +278,7 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 
 void wxNativeFontInfo::SetNumericWeight(int weight)
 {
-    pango_font_description_set_weight(description, weight);
+    pango_font_description_set_weight(description, (PangoWeight) weight);
 }
 
 void wxNativeFontInfo::SetUnderlined(bool underlined)
