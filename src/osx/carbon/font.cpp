@@ -855,7 +855,7 @@ void wxNativeFontInfo::Init(float size,
     m_familyName = faceName;
 
     m_ctSize = size == -1 || size == wxDEFAULT
-        ? wxNORMAL_FONT->GetPointSize()
+        ? wxNORMAL_FONT->GetFractionalPointSize()
         : size;
 
     m_style = style;
@@ -1140,40 +1140,40 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style_)
     }
 }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight_)
+void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 {
     // deal with compatibility constants
-    if (weight_ >= 90 and weight_ <= 92)
+    if (weight >= 90 && weight <= 92)
     {
-        if (weight_ == 90 /* wxNORMAL */)
-            weight_ = wxFONTWEIGHT_NORMAL;
-        else if (weight_ == 91 /* wxLIGHT */)
-            weight_ = wxFONTWEIGHT_LIGHT;
+        if (weight == 90 /* wxNORMAL */)
+            weight = wxFONTWEIGHT_NORMAL;
+        else if (weight == 91 /* wxLIGHT */)
+            weight = wxFONTWEIGHT_LIGHT;
         else if (weight_ == 92 /* wxBOLD */)
-            weight_ = wxFONTWEIGHT_BOLD;
+            weight = wxFONTWEIGHT_BOLD;
     }
 
-    wxASSERT(weight_ > wxFONTWEIGHT_INVALID || weight_ <= wxFONTWEIGHT_MAX);
-    wxASSERT(weight_ % 100 == 0);
+    wxASSERT(weight > wxFONTWEIGHT_INVALID || weight <= wxFONTWEIGHT_MAX);
+    wxASSERT(weight % 100 == 0);
 
     wxFontWeight formerWeight = GetWeight();
-    if (formerWeight != weight_)
-        SetNumericWeight(weight_);
+    if (formerWeight != weight)
+        SetNumericWeight(weight);
 }
 
-void wxNativeFontInfo::SetNumericWeight(int weight_)
+void wxNativeFontInfo::SetNumericWeight(int weight)
 {
     int formerWeight = GetNumericWeight();
-    if (formerWeight != weight_)
+    if (formerWeight != weight)
     {
         Free();
-        m_ctWeight = WXWeightToCT(weight_);
+        m_ctWeight = WXWeightToCT(weight);
     }
 }
 
-void wxNativeFontInfo::SetUnderlined(bool underlined_)
+void wxNativeFontInfo::SetUnderlined(bool underlined)
 {
-    m_underlined = underlined_;
+    m_underlined = underlined;
 }
 
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
