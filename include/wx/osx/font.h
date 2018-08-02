@@ -51,6 +51,7 @@ public:
     }
 
     wxFont( wxOSXSystemFont systemFont );
+    wxFont(CTFontRef font);
 
 #if wxOSX_USE_COCOA
     wxFont(WX_NSFont nsfont);
@@ -99,10 +100,11 @@ public:
     virtual ~wxFont();
 
     // implement base class pure virtuals
-    virtual int GetPointSize() const;
+    virtual float GetFractionalPointSize() const;
     virtual wxSize GetPixelSize() const;
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
+    virtual int GetNumericWeight() const;
     virtual bool GetUnderlined() const;
     virtual bool GetStrikethrough() const;
     virtual wxString GetFaceName() const;
@@ -111,10 +113,11 @@ public:
 
     virtual bool IsFixedWidth() const;
 
-    virtual void SetPointSize(int pointSize);
+    virtual void SetPointSize(float pointSize);
     virtual void SetFamily(wxFontFamily family);
     virtual void SetStyle(wxFontStyle style);
     virtual void SetWeight(wxFontWeight weight);
+    virtual void SetNumericWeight(int weight);
     virtual bool SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
     virtual void SetStrikethrough(bool strikethrough);
@@ -148,7 +151,6 @@ public:
 
 #if wxOSX_USE_COCOA
     WX_NSFont OSXGetNSFont() const;
-    static void SetNativeInfoFromNSFont(WX_NSFont nsfont, wxNativeFontInfo* info);
 #endif
 
 #if wxOSX_USE_IPHONE

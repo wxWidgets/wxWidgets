@@ -834,10 +834,10 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_underlined = font.GetUnderlined();
     m_strikethrough = font.GetStrikethrough();
 
-    m_ctFont.reset( wxCFRetain( font.OSXGetCTFont() ) );
-    m_ctFontAttributes.reset( wxCFRetain( font.OSXGetCTFontAttributes() ) );
+    m_ctFont = wxCFRetain(font.OSXGetCTFont());
+    m_ctFontAttributes = wxCFRetain(font.OSXGetCTFontAttributes());
 #if wxOSX_USE_IPHONE
-    m_uiFont.reset( wxCFRetain( font.OSXGetUIFont() ) );
+    m_uiFont = font.OSXGetUIFont();
 #endif
 }
 

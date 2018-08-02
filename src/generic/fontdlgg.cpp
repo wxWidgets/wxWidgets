@@ -94,10 +94,24 @@ static const wxChar *wxFontWeightIntToString(int weight)
 {
     switch (weight)
     {
+        case wxFONTWEIGHT_THIN:
+            return wxT("Thin");
+        case wxFONTWEIGHT_EXTRALIGHT:
+            return wxT("ExtraLight");
         case wxFONTWEIGHT_LIGHT:
             return wxT("Light");
+        case wxFONTWEIGHT_MEDIUM:
+            return wxT("Medium");
+        case wxFONTWEIGHT_SEMIBOLD:
+            return wxT("SemiBold");
         case wxFONTWEIGHT_BOLD:
             return wxT("Bold");
+        case wxFONTWEIGHT_EXTRABOLD:
+            return wxT("ExtraBold");
+        case wxFONTWEIGHT_HEAVY:
+            return wxT("Heavy");
+        case wxFONTWEIGHT_EXTRAHEAVY:
+            return wxT("ExtraHeavy");
         case wxFONTWEIGHT_NORMAL:
         default:
             return wxT("Normal");
@@ -172,10 +186,24 @@ static wxFontWeight wxFontWeightStringToInt(const wxString& weight)
 {
     if (weight.empty())
         return wxFONTWEIGHT_NORMAL;
-    if (wxStrcmp(weight, wxT("Bold")) == 0)
-        return wxFONTWEIGHT_BOLD;
+    else if (wxStrcmp(weight, wxT("Thin")) == 0)
+        return wxFONTWEIGHT_THIN;
+    else if (wxStrcmp(weight, wxT("ExtraLight")) == 0)
+        return wxFONTWEIGHT_EXTRALIGHT;
     else if (wxStrcmp(weight, wxT("Light")) == 0)
-        return wxFONTWEIGHT_LIGHT;
+        return wxFONTWEIGHT_THIN;
+    else if (wxStrcmp(weight, wxT("Medium")) == 0)
+        return wxFONTWEIGHT_MEDIUM;
+    else if (wxStrcmp(weight, wxT("SemiBold")) == 0)
+        return wxFONTWEIGHT_SEMIBOLD;
+    else if (wxStrcmp(weight, wxT("Bold")) == 0)
+        return wxFONTWEIGHT_BOLD;
+    else if (wxStrcmp(weight, wxT("ExtraBold")) == 0)
+        return wxFONTWEIGHT_EXTRABOLD;
+    else if (wxStrcmp(weight, wxT("Heavy")) == 0)
+        return wxFONTWEIGHT_HEAVY;
+    else if (wxStrcmp(weight, wxT("ExtraHeavy")) == 0)
+        return wxFONTWEIGHT_EXTRAHEAVY;
     else
         return wxFONTWEIGHT_NORMAL;
 }
