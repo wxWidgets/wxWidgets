@@ -626,7 +626,6 @@ void wxGenericTreeItem::DeleteChildren(wxGenericTreeCtrl *tree)
     for ( size_t n = 0; n < count; n++ )
     {
         wxGenericTreeItem *child = m_children[n];
-        tree->SendDeleteEvent(child);
 
         child->DeleteChildren(tree);
         if ( child == tree->m_select_me )
