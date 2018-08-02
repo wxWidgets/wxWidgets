@@ -1149,7 +1149,7 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
             weight = wxFONTWEIGHT_NORMAL;
         else if (weight == 91 /* wxLIGHT */)
             weight = wxFONTWEIGHT_LIGHT;
-        else if (weight_ == 92 /* wxBOLD */)
+        else if (weight == 92 /* wxBOLD */)
             weight = wxFONTWEIGHT_BOLD;
     }
 
