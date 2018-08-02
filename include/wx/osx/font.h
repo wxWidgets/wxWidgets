@@ -108,7 +108,7 @@ public:
     virtual bool GetUnderlined() const wxOVERRIDE;
     virtual bool GetStrikethrough() const wxOVERRIDE;
     virtual wxString GetFaceName() const wxOVERRIDE;
-    virtual wxFontEncoding GetEncoding() cons wxOVERRIDEt;
+    virtual wxFontEncoding GetEncoding() const wxOVERRIDE;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
 
     virtual bool IsFixedWidth() const;
