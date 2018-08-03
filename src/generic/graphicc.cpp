@@ -2015,7 +2015,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         // context operations on our own.
         // Bug 96482 was fixed in Cairo 1.15.12 so this workaround needs
         // to be applied only for older Cairo versions.
-#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 15, 12)
         if ( cairo_version() < CAIRO_VERSION_ENCODE(1, 15, 12) )
         {
             wxCoord orgX, orgY;
@@ -2029,7 +2028,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
                 adjustTransformFromDC = true;
             }
         }
-#endif // Cairo < 1.15.12
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
         if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 15, 4) )
@@ -2159,7 +2157,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
     // DC to Cairo and to apply original DC transformation to the Cairo
     // context operations on our own.
     // We believe this bug will be fixed in the next Cairo version.
-#if CAIRO_VERSION <= CAIRO_VERSION_ENCODE(1, 15, 2)
     if ( cairo_version() <= CAIRO_VERSION_ENCODE(1, 15, 2) )
     {
         POINT devOrg;
@@ -2188,7 +2185,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
             adjustTransformFromDC = true;
         }
     }
-#endif // Cairo <= 1.15.2
     m_mswSurface = cairo_win32_surface_create(handle);
     Init( cairo_create(m_mswSurface) );
     if ( adjustTransformFromDC )
