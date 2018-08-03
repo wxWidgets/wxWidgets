@@ -54,7 +54,7 @@ wxAddRemoveCtrl::Create(wxWindow* parent,
         return false;
 
     // We don't do anything here, the buttons are created when we're given the
-    // adaptor to use them within SetAdaptor().
+    // adaptor to use them with SetAdaptor().
     return true;
 }
 

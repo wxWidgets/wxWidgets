@@ -120,7 +120,7 @@ public:
     // instead of generic wxDC::DrawLabel(), so is more suitable for use in
     // controls that already use DrawItemText() for its items.
     //
-    // The meaning of the flags here is different from in wxMarkupText too:
+    // The meaning of the flags here is different than in wxMarkupText too:
     // they're passed to DrawItemText().
     //
     // Currently the only supported ellipsize modes are wxELLIPSIZE_NONE and
