@@ -2156,8 +2156,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
     // bug 96482) so in this case we would need to pass non-transformed
     // DC to Cairo and to apply original DC transformation to the Cairo
     // context operations on our own.
-    // We believe this bug will be fixed in the next Cairo version.
-    if ( cairo_version() <= CAIRO_VERSION_ENCODE(1, 15, 2) )
+    if ( cairo_version() < CAIRO_VERSION_ENCODE(1, 15, 12) )
     {
         POINT devOrg;
         ::GetViewportOrgEx(handle, &devOrg);
