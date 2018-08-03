@@ -234,7 +234,7 @@ bool wxFontBase::IsFixedWidth() const
 
 int wxFontBase::GetPointSize() const
 {
-    return int(GetFractionalPointSize()+0.5);
+    return wxRound(GetFractionalPointSize());
 }
 
 
@@ -1095,7 +1095,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         {
             SetStyle(wxFONTSTYLE_ITALIC);
         }
-        else if ( token.ToULong(&size )
+        else if ( token.ToULong(&size ) )
         {
             SetPointSize(size);
             pointsizefound = true;

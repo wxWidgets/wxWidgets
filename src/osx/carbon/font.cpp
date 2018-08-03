@@ -273,9 +273,6 @@ namespace
 
 void wxFontRefData::Init()
 {
-    // free additional allocated resources first
-    Free();
-    
     m_info.Init();
 }
 
@@ -341,9 +338,9 @@ void wxFontRefData::Alloc()
     wxCHECK_RET(m_info.GetPointSize() > 0, wxT("Point size should not be zero."));
 
     // use font caching, we cache a font with a certain size and a font with just any size for faster creation
-    wxString lookupnameNoSize = wxString::Format("%s_%d_%d", m_info.GetFamilyName(), (int)m_info.GetStyle(), (int)m_info.GetNumericWeight());
+    wxString lookupnameNoSize = wxString::Format("%s_%d_%d", m_info.GetFamilyName(), (int)m_info.GetStyle(), m_info.GetNumericWeight());
 
-    wxString lookupnameWithSize = wxString::Format("%s_%d_%d_%.2f", m_info.GetFamilyName(), (int)m_info.GetStyle(), (int)m_info.GetNumericWeight(), m_info.GetFractionalPointSize());
+    wxString lookupnameWithSize = wxString::Format("%s_%d_%d_%.2f", m_info.GetFamilyName(), (int)m_info.GetStyle(), m_info.GetNumericWeight(), m_info.GetFractionalPointSize());
 
     static std::map<wxString, CachedFontEntry> fontcache;
 
@@ -1028,7 +1025,7 @@ wxString wxNativeFontInfo::ToString() const
 
 int wxNativeFontInfo::GetPointSize() const
 {
-    return int(GetFractionalPointSize() + 0.5);
+    return wxRound(GetFractionalPointSize());
 }
 
 float wxNativeFontInfo::GetFractionalPointSize() const

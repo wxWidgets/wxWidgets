@@ -450,7 +450,7 @@ void wxNativeFontInfo::Init()
 
 int wxNativeFontInfo::GetPointSize() const
 {
-    return int(GetFractionalPointSize() + 0.5);
+    return wxRound(GetFractionalPointSize());
 }
 
 float wxNativeFontInfo::GetFractionalPointSize() const
