@@ -321,8 +321,8 @@ public:
     int  GetLevel() const                       { return m_level; }
     void WXZIPFIX SetLevel(int level);
 
-    void SetFormat(wxZipArchiveFormat format)   { m_format = format; };
-    wxZipArchiveFormat GetFormat() const        { return m_format; };
+    void SetFormat(wxZipArchiveFormat format)   { m_format = format; }
+    wxZipArchiveFormat GetFormat() const        { return m_format; }
 
 protected:
     virtual size_t WXZIPFIX OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
