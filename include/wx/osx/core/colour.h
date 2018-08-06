@@ -29,8 +29,6 @@ public:
     // default copy ctor and dtor are ok
 
     // accessors
-    virtual bool IsOk() const wxOVERRIDE;
-
     virtual ChannelType Red() const wxOVERRIDE;
     virtual ChannelType Green() const wxOVERRIDE;
     virtual ChannelType Blue() const wxOVERRIDE;
@@ -58,7 +56,7 @@ public:
     // Quickdraw RGBColor
     // ------------------
     wxColour(const RGBColor& col);
-   void GetRGBColor( RGBColor *col ) const;
+    void GetRGBColor( RGBColor *col ) const;
 #endif
 
 #if wxOSX_USE_COCOA
@@ -82,11 +80,11 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
 
-class wxColorRefData : public wxGDIRefData
+class wxColourRefData : public wxGDIRefData
 {
 public:
-    wxColorRefData() {}
-    virtual ~wxColorRefData();
+    wxColourRefData() {}
+    virtual ~wxColourRefData() {}
     
     virtual CGFloat Red() const = 0;
     virtual CGFloat Green() const = 0;
@@ -95,7 +93,7 @@ public:
     
     virtual CGColorRef GetCGColor() const = 0;
     
-    virtual wxColorRefData* Clone() const = 0;
+    virtual wxColourRefData* Clone() const = 0;
     
 #if wxOSX_USE_COCOA
     virtual WX_NSColor GetNSColor() const;

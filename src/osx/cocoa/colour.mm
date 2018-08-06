@@ -13,7 +13,7 @@
 
 #include "wx/osx/private.h"
 
-class wxNSColorRefData : public wxColorRefData
+class wxNSColorRefData : public wxColourRefData
 {
 public:
     wxNSColorRefData(WX_NSColor color);
@@ -22,8 +22,6 @@ public:
 
     virtual ~wxNSColorRefData();
     
-    virtual bool IsOk() const wxOVERRIDE { return m_nsColour != NULL; }
-    
     virtual CGFloat Red() const wxOVERRIDE;
     virtual CGFloat Green() const wxOVERRIDE;
     virtual CGFloat Blue() const wxOVERRIDE;
@@ -31,7 +29,7 @@ public:
     
     CGColorRef GetCGColor() const wxOVERRIDE;
     
-    virtual wxColorRefData* Clone() const wxOVERRIDE { return new wxNSColorRefData(*this); }
+    virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxNSColorRefData(*this); }
     
     virtual WX_NSColor GetNSColor() const wxOVERRIDE;
 private:
@@ -95,69 +93,65 @@ CGFloat wxNSColorRefData::Alpha() const
 CGColorRef wxNSColorRefData::GetCGColor() const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 8) )
+    if (wxPlatformInfo::Get().CheckOSVersion(10, 8))
         return [m_nsColour CGColor];
 #endif
     CGColorRef cgcolor = NULL;
-    
+
     // Simplest case is when we can directly get the RGBA components:
-    if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
+    if (NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace])
     {
         CGFloat components[4];
         [colRGBA getRed:&components[0] green:&components[1] blue:&components[2] alpha:&components[3]];
-        
-        cgcolor = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
+
+        cgcolor = CGColorCreate(wxMacGetGenericRGBColorSpace(), components);
     }
     // Some colours use patterns, we can handle them with the help of CGColorRef
-    else if ( NSColor* colPat = [m_nsColour colorUsingColorSpaceName:NSPatternColorSpace] )
+    else if (NSColor* colPat = [m_nsColour colorUsingColorSpaceName:NSPatternColorSpace])
     {
         NSImage* const nsimage = [colPat patternImage];
-        if ( nsimage )
+        if (nsimage)
         {
             NSSize size = [nsimage size];
             NSRect r = NSMakeRect(0, 0, size.width, size.height);
             CGImageRef cgimage = [nsimage CGImageForProposedRect:&r context:nil hints:nil];
-            if ( cgimage )
+            if (cgimage)
             {
                 // Callbacks for CGPatternCreate()
                 struct PatternCreateCallbacks
                 {
-                    static void Draw(void *info, CGContextRef ctx)
+                    static void Draw(void* info, CGContextRef ctx)
                     {
-                        CGImageRef image = (CGImageRef) info;
-                        CGContextDrawImage
-                        (
-                         ctx,
-                         CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)),
-                         image
-                         );
+                        CGImageRef image = (CGImageRef)info;
+                        CGContextDrawImage(
+                            ctx,
+                            CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)),
+                            image);
                     }
-                    
-                    static void Release(void * WXUNUSED(info))
+
+                    static void Release(void* WXUNUSED(info))
                     {
                         // Do not release the image here, we don't own it as it
                         // comes from NSImage.
                     }
                 };
-                
-                const CGPatternCallbacks callbacks =
-                {
+
+                const CGPatternCallbacks callbacks = {
                     /* version: */ 0,
                     &PatternCreateCallbacks::Draw,
                     &PatternCreateCallbacks::Release
                 };
-                
-                CGPatternRef pattern = CGPatternCreate
-                (
-                 cgimage,
-                 CGRectMake(0, 0, size.width, size.height),
-                 CGAffineTransformMake(1, 0, 0, 1, 0, 0),
-                 size.width,
-                 size.height,
-                 kCGPatternTilingConstantSpacing,
-                 /* isColored: */ true,
-                 &callbacks
-                 );
+
+                CGPatternRef pattern = CGPatternCreate(
+                                            cgimage,
+                                            CGRectMake(0, 0, size.width, size.height),
+                                            CGAffineTransformMake(1, 0, 0, 1, 0, 0),
+                                            size.width,
+                                            size.height,
+                                            kCGPatternTilingConstantSpacing,
+                                            /* isColored: */ true,
+                                            &callbacks
+                                       );
                 CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
                 CGFloat components[1] = { 1.0 };
                 cgcolor = CGColorCreateWithPattern(space, pattern, components);
@@ -178,7 +172,7 @@ CGColorRef wxNSColorRefData::GetCGColor() const
     return cgcolor;
 }
 
-WX_NSColor wxColorRefData::GetNSColor() const
+WX_NSColor wxColourRefData::GetNSColor() const
 {
     return [NSColor colorWithCalibratedRed:Red() green:Green() blue:Blue() alpha:Alpha() ];
 }
