@@ -129,9 +129,18 @@ wxCGColorRefData::wxCGColorRefData(CGColorRef col)
     }
     else if (model != kCGColorSpaceModelRGB)
     {
-        rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, NULL);
-        noComp = CGColorGetNumberOfComponents(rgbacol);
-        components = CGColorGetComponents(rgbacol);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
+        if (wxPlatformInfo::Get().CheckOSVersion(10, 11))
+        {
+            rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, NULL);
+            noComp = CGColorGetNumberOfComponents(rgbacol);
+            components = CGColorGetComponents(rgbacol);
+        }
+        else
+#endif
+        {
+            isRGB = false;
+        }
     }
 
     if (isRGB)
