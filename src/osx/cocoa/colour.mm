@@ -13,39 +13,103 @@
 
 #include "wx/osx/private.h"
 
-// Helper function to avoid writing too many casts in wxColour ctor.
-static inline wxColour::ChannelType NSColorChannelToWX(CGFloat c)
+class wxNSColorRefData : public wxColorRefData
 {
-    return static_cast<wxColour::ChannelType>(c * 255 + 0.5);
+public:
+    wxNSColorRefData(WX_NSColor color);
+    
+    wxNSColorRefData(const wxNSColorRefData& other);
+
+    virtual ~wxNSColorRefData();
+    
+    virtual bool IsOk() const wxOVERRIDE { return m_nsColour != NULL; }
+    
+    virtual CGFloat Red() const wxOVERRIDE;
+    virtual CGFloat Green() const wxOVERRIDE;
+    virtual CGFloat Blue() const wxOVERRIDE;
+    virtual CGFloat Alpha() const wxOVERRIDE;
+    
+    CGColorRef GetCGColor() const wxOVERRIDE;
+    
+    virtual wxColorRefData* Clone() const wxOVERRIDE { return new wxNSColorRefData(*this); }
+    
+    virtual WX_NSColor GetNSColor() const wxOVERRIDE;
+private:
+    WX_NSColor m_nsColour;
+    
+    wxDECLARE_NO_ASSIGN_CLASS(wxNSColorRefData);
+};
+
+wxNSColorRefData::wxNSColorRefData(WX_NSColor color)
+{
+    m_nsColour = [color retain];
 }
 
-wxColour::wxColour(WX_NSColor col)
+wxNSColorRefData::wxNSColorRefData(const wxNSColorRefData& other)
+{
+    m_nsColour = [other.m_nsColour retain];
+}
+
+wxNSColorRefData::~wxNSColorRefData()
+{
+    [m_nsColour release];
+}
+
+WX_NSColor wxNSColorRefData::GetNSColor() const
+{
+    return m_nsColour;
+}
+
+CGFloat wxNSColorRefData::Red() const
+{
+    if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
+        return [colRGBA redComponent];
+    
+    return 0.0;
+}
+
+CGFloat wxNSColorRefData::Green() const
+{
+    if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
+        return [colRGBA greenComponent];
+    
+    return 0.0;
+}
+
+CGFloat wxNSColorRefData::Blue() const
+{
+    if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
+        return [colRGBA blueComponent];
+    
+    return 0.0;
+}
+
+CGFloat wxNSColorRefData::Alpha() const
+{
+    if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
+        return [colRGBA alphaComponent];
+    
+    return 0.0;
+}
+
+CGColorRef wxNSColorRefData::GetCGColor() const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
     if ( wxPlatformInfo::Get().CheckOSVersion(10, 8) )
-    {
-        CGColorRef cgcolor = [col CGColor];
-        CFRetain(cgcolor);
-        InitCGColorRef(cgcolor);
-        return ;
-    }
+        return [m_nsColour CGColor];
 #endif
-        
+    CGColorRef cgcolor = NULL;
+    
     // Simplest case is when we can directly get the RGBA components:
-    if ( NSColor* colRGBA = [col colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
+    if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
     {
-        InitRGBA
-        (
-             NSColorChannelToWX([colRGBA redComponent]),
-             NSColorChannelToWX([colRGBA greenComponent]),
-             NSColorChannelToWX([colRGBA blueComponent]),
-             NSColorChannelToWX([colRGBA alphaComponent])
-        );
-        return;
+        CGFloat components[4];
+        [colRGBA getRed:&components[0] green:&components[1] blue:&components[2] alpha:&components[3]];
+        
+        cgcolor = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
     }
-
     // Some colours use patterns, we can handle them with the help of CGColorRef
-    if ( NSColor* colPat = [col colorUsingColorSpaceName:NSPatternColorSpace] )
+    else if ( NSColor* colPat = [m_nsColour colorUsingColorSpaceName:NSPatternColorSpace] )
     {
         NSImage* const nsimage = [colPat patternImage];
         if ( nsimage )
@@ -63,57 +127,65 @@ wxColour::wxColour(WX_NSColor col)
                         CGImageRef image = (CGImageRef) info;
                         CGContextDrawImage
                         (
-                            ctx,
-                            CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)),
-                            image
-                        );
+                         ctx,
+                         CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)),
+                         image
+                         );
                     }
-
+                    
                     static void Release(void * WXUNUSED(info))
                     {
                         // Do not release the image here, we don't own it as it
                         // comes from NSImage.
                     }
                 };
-
+                
                 const CGPatternCallbacks callbacks =
                 {
                     /* version: */ 0,
                     &PatternCreateCallbacks::Draw,
                     &PatternCreateCallbacks::Release
                 };
-
+                
                 CGPatternRef pattern = CGPatternCreate
-                                       (
-                                            cgimage,
-                                            CGRectMake(0, 0, size.width, size.height),
-                                            CGAffineTransformMake(1, 0, 0, 1, 0, 0),
-                                            size.width,
-                                            size.height,
-                                            kCGPatternTilingConstantSpacing,
-                                            /* isColored: */ true,
-                                            &callbacks
-                                       );
+                (
+                 cgimage,
+                 CGRectMake(0, 0, size.width, size.height),
+                 CGAffineTransformMake(1, 0, 0, 1, 0, 0),
+                 size.width,
+                 size.height,
+                 kCGPatternTilingConstantSpacing,
+                 /* isColored: */ true,
+                 &callbacks
+                 );
                 CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
                 CGFloat components[1] = { 1.0 };
-                CGColorRef cgcolor = CGColorCreateWithPattern(space, pattern, components);
+                cgcolor = CGColorCreateWithPattern(space, pattern, components);
                 CGColorSpaceRelease(space);
                 CGPatternRelease(pattern);
-
-                InitCGColorRef(cgcolor);
-                return;
             }
         }
     }
 
-    // Don't assert here, this will more likely than not result in a crash as
-    // colours are often created in drawing code which will be called again
-    // when the assert dialog is shown, resulting in a recursive assertion
-    // failure and, hence, a crash.
-    NSLog(@"Failed to convert NSColor \"%@\" to wxColour.", col);
+    if (cgcolor == NULL)
+    {
+        // Don't assert here, this will more likely than not result in a crash as
+        // colours are often created in drawing code which will be called again
+        // when the assert dialog is shown, resulting in a recursive assertion
+        // failure and, hence, a crash.
+        NSLog(@"Failed to convert NSColor \"%@\" to CGColorRef.", m_nsColour);
+    }
+    return cgcolor;
 }
 
-WX_NSColor wxColour::OSXGetNSColor() const
+WX_NSColor wxColorRefData::GetNSColor() const
 {
-    return [NSColor colorWithCalibratedRed:m_red / 255.0 green:m_green / 255.0 blue:m_blue / 255.0 alpha:m_alpha / 255.0];
+    return [NSColor colorWithCalibratedRed:Red() green:Green() blue:Blue() alpha:Alpha() ];
 }
+
+wxColour::wxColour(WX_NSColor col)
+{
+    m_refData = new wxNSColorRefData(col);
+}
+
+
