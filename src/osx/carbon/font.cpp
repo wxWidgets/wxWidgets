@@ -56,31 +56,31 @@ public:
     float GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
 
     wxFontFamily GetFamily() const { return m_info.GetFamily(); }
-    
+
     wxFontStyle GetStyle() const { return m_info.GetStyle(); }
-    
+
     wxFontWeight GetWeight() const { return m_info.GetWeight(); }
-    
+
     int GetNumericWeight() const { return m_info.GetNumericWeight(); }
-    
+
     bool GetUnderlined() const { return m_info.GetUnderlined(); }
 
     bool GetStrikethrough() const { return m_info.GetStrikethrough(); }
-    
+
     wxString GetFaceName() const { return m_info.GetFaceName(); }
-    
+
     wxFontEncoding GetEncoding() const { return m_info.GetEncoding(); }
-    
+
     bool IsFixedWidth() const;
-    
+
     CTFontRef OSXGetCTFont() const;
-    
+
     CFDictionaryRef OSXGetCTFontAttributes() const;
-    
+
     CGFontRef OSXGetCGFont() const;
-    
+
     const wxNativeFontInfo& GetNativeFontInfo() const;
-    
+
     void SetPointSize(float size)
     {
         if (GetFractionalPointSize() != size)
@@ -89,7 +89,7 @@ public:
             Free();
         }
     }
-    
+
     void SetFamily(wxFontFamily family)
     {
         if (m_info.GetFamily() != family)
@@ -143,7 +143,7 @@ public:
             Free();
         }
     }
-    
+
     void SetFaceName(const wxString& facename)
     {
         if (m_info.GetFaceName() != facename)
@@ -211,7 +211,7 @@ namespace
         0.620, // 900
         0.750, // 1000
     };
-    
+
     int CTWeightToWX(CGFloat weight)
     {
         for (int i = 0; i < kCTWeightsCount; ++i)
@@ -221,50 +221,50 @@ namespace
         }
         return 1000;
     }
-    
+
     CGFloat WXWeightToCT(int w)
     {
         if (w < 0)
             w = 0;
         else if (w > 1000)
             w = 1000;
-        
+
         return gCTWeights[w / 100];
     }
-    
+
     wxString FamilyToFaceName(wxFontFamily family)
     {
         wxString faceName;
-        
+
         switch (family)
         {
             case wxFONTFAMILY_DEFAULT:
                 faceName = wxT("Lucida Grande");
                 break;
-                
+
             case wxFONTFAMILY_SCRIPT:
             case wxFONTFAMILY_ROMAN:
             case wxFONTFAMILY_DECORATIVE:
                 faceName = wxT("Times");
                 break;
-                
+
             case wxFONTFAMILY_SWISS:
                 faceName = wxT("Helvetica");
                 break;
-                
+
             case wxFONTFAMILY_MODERN:
             case wxFONTFAMILY_TELETYPE:
                 faceName = wxT("Courier");
                 break;
-                
+
             default:
                 faceName = wxT("Times");
                 break;
         }
-        
+
         return faceName;
     }
-    
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -317,7 +317,7 @@ struct CachedFontEntry
     {
         used = false;
     }
-    
+
     wxCFRef<CTFontRef> font;
     wxCFMutableDictionaryRef fontAttributes;
     wxCFRef<CGFontRef> cgFont;
@@ -372,12 +372,12 @@ void wxFontRefData::Alloc()
             const CGAffineTransform* remainingTransform = NULL;
             if ( m_info.GetStyle() != wxFONTSTYLE_NORMAL && m_info.GetCTSlant(m_info.GetCTFontDescriptor()) < 0.01 )
                 remainingTransform = &kSlantTransform;
-            
+
             wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetPointSize(), remainingTransform);
-            
+
             // emulate weigth if necessary
             int difference = m_info.GetNumericWeight() - CTWeightToWX(wxNativeFontInfo::GetCTWeight(font));
-            
+
             SetFont(font);
             if ( difference != 0)
             {
@@ -389,7 +389,7 @@ void wxFontRefData::Alloc()
                     width = -1.0 / (1+(-difference/100));
                 m_ctFontAttributes.SetValue(kCTStrokeWidthAttributeName, -0.3 );
             }
-            
+
             m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
             entryWithSize.font = m_ctFont;
             entryWithSize.cgFont = m_cgFont;
@@ -761,12 +761,12 @@ void wxNativeFontInfo::Init()
     m_underlined = false;
     m_strikethrough = false;
     m_encoding = wxFONTENCODING_UTF8;
-    
+
     m_ctWeight = 0.0;
     m_style = wxFONTSTYLE_NORMAL;
     m_ctSize = 0.0;
     m_family = wxFONTFAMILY_DEFAULT;
-    
+
     m_styleName.clear();
     m_familyName.clear();
 }
@@ -776,11 +776,11 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
     Init();
 
     m_descriptor = info.m_descriptor;
-    
+
     m_underlined = info.m_underlined;
     m_strikethrough = info.m_strikethrough;
     m_encoding = info.m_encoding;
-    
+
     m_ctWeight = info.m_ctWeight;
     m_style = info.m_style;
     m_ctSize = info.m_ctSize;
@@ -800,27 +800,27 @@ void wxNativeFontInfo::InitFromFont(CTFontRef font)
 void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
 {
     Init();
-    
+
     m_descriptor.reset(wxCFRetain(desc));
 
     m_ctWeight = GetCTWeight(desc);
     m_style = GetCTSlant(desc) > 0.01 ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontSizeAttribute)).GetValue(m_ctSize, 0.0);
-    
+
     // determine approximate family
-    
+
     CTFontSymbolicTraits symbolicTraits;
     wxCFDictionaryRef traits((CFDictionaryRef)CTFontDescriptorCopyAttribute(desc, kCTFontTraitsAttribute));
     traits.GetValue(kCTFontSymbolicTrait).GetValue((int32_t*)&symbolicTraits, 0);
-    
+
     m_family = wxFONTFAMILY_DEFAULT;
-    
+
     if (symbolicTraits & kCTFontTraitMonoSpace)
         m_family = wxFONTFAMILY_TELETYPE;
     else
     {
         uint32_t stylisticClass = symbolicTraits & kCTFontTraitClassMask;
-        
+
         if (stylisticClass == kCTFontSansSerifClass)
             m_family = wxFONTFAMILY_SWISS;
         else if (stylisticClass == kCTFontScriptsClass)
@@ -847,7 +847,7 @@ void wxNativeFontInfo::Init(float size,
     wxFontEncoding encoding)
 {
     Init();
-    
+
     m_family = family;
     m_familyName = faceName;
 
@@ -857,7 +857,7 @@ void wxNativeFontInfo::Init(float size,
 
     m_style = style;
     m_ctWeight = WXWeightToCT(weight);
-    
+
     m_underlined = underlined;
     m_strikethrough = strikethrough;
     m_encoding = encoding;
@@ -882,12 +882,12 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
     wxCFMutableDictionaryRef attributes;
 
     // build all attributes that define our font.
-    
+
     wxString fontfamilyname = m_familyName;
     if ( fontfamilyname.empty() )
         fontfamilyname = FamilyToFaceName(m_family);
 
-    
+
     CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, wxCFStringRef(fontfamilyname));
 
     wxCFMutableDictionaryRef traits;
@@ -895,10 +895,10 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
         traits.SetValue(kCTFontSymbolicTrait, kCTFontItalicTrait);
 
     traits.SetValue(kCTFontWeightTrait,m_ctWeight);
-    
+
     attributes.SetValue(kCTFontTraitsAttribute,traits.get());
     attributes.SetValue(kCTFontSizeAttribute, m_ctSize);
-    
+
     // Create the font descriptor with our attributes
     descriptor = CTFontDescriptorCreateWithAttributes(attributes);
     wxASSERT(descriptor != NULL);
@@ -942,7 +942,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     long l, version;
 
     Init();
-    
+
     wxStringTokenizer tokenizer(s, wxT(";"));
 
     wxString token = tokenizer.GetNextToken();
@@ -1045,6 +1045,7 @@ int wxNativeFontInfo::GetNumericWeight() const
 
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
+    // round to nearest hundredth = wxFONTWEIGHT_ constant
     int weight = ((GetNumericWeight() + 50) / 100) * 100;
 
     if (weight < wxFONTWEIGHT_THIN)
@@ -1088,7 +1089,7 @@ wxString wxNativeFontInfo::GetFaceName() const
     wxString style;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontStyleNameAttribute)).GetValue(style);
 #endif
-    
+
     return m_familyName;
 }
 
@@ -1114,7 +1115,7 @@ void wxNativeFontInfo::SetPointSize(float pointsize)
     if (GetPointSize() != pointsize)
     {
         m_ctSize = pointsize;
-        
+
         if ( m_descriptor)
         {
             wxCFMutableDictionaryRef attributes;
@@ -1130,7 +1131,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style_)
     bool newIsItalic = style_ != wxFONTSTYLE_NORMAL;
 
     m_style = style_;
-    
+
     if (formerIsItalic != newIsItalic)
     {
         Free();
@@ -1267,13 +1268,13 @@ if (!success)
 // for debugging purposes only, lists all faces of this font's family
 {
     printf("\nPrint All Font Faces:\n");
-    
+
     wxCFRef<CTFontDescriptorRef> desc = CTFontDescriptorCreateWithNameAndSize(wxCFStringRef(GetFamilyName()), 0.0);
     wxCFMutableArrayRef<CTFontDescriptorRef> array;
     array.push_back(desc.get());
     wxCFRef<CTFontCollectionRef> fontcollection = CTFontCollectionCreateWithFontDescriptors(array, NULL);
     wxCFArrayRef<CTFontDescriptorRef> fontdescs = CTFontCollectionCreateMatchingFontDescriptors(fontcollection);
-    
+
     for (size_t i = 0, count = fontdescs.size(); i < count; ++i)
     {
         wxCFRef<CTFontDescriptorRef> variant = fontdescs[i];
@@ -1291,9 +1292,9 @@ else
 {
     CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     m_ctFontAttributes.reset(dict);
-    
+
     wxStringToStringHashMap::const_iterator it = gs_FontFamilyToPSName.find(m_info.GetFaceName());
-    
+
     if ( it != gs_FontFamilyToPSName.end() )
     {
         m_ctFont.reset(CTFontCreateWithName( wxCFStringRef(it->second), m_info.GetPointSize() , NULL ));
@@ -1308,7 +1309,7 @@ else
 #endif
         m_info.UpdateNamesMap(m_info.GetFaceName(), m_ctFont);
     }
-    
+
     if ( m_ctFont.get() == NULL )
     {
         // TODO try fallbacks according to font type
@@ -1324,7 +1325,7 @@ else
             {
                 CTFontSymbolicTraits remainingTraits = traits;
                 const CGAffineTransform* remainingTransform = NULL;
-                
+
                 if( remainingTraits & kCTFontItalicTrait )
                 {
                     remainingTraits &= ~kCTFontItalicTrait;
@@ -1344,7 +1345,7 @@ else
                         }
                     }
                 }
-                
+
                 // we have to emulate bold
                 if ( remainingTraits & kCTFontBoldTrait )
                 {
@@ -1352,12 +1353,12 @@ else
                     const float strokewidth = -3.0;
                     CFDictionarySetValue(dict, kCTStrokeWidthAttributeName, CFNumberCreate( NULL, kCFNumberFloatType, &strokewidth));
                 }
-                
+
                 if ( fontWithTraits == NULL )
                 {
                     fontWithTraits = CTFontCreateCopyWithAttributes( m_ctFont, m_info.GetPointSize(), remainingTransform, NULL );
                 }
-                
+
             }
             if ( fontWithTraits != NULL )
                 m_ctFont.reset(fontWithTraits);
@@ -1365,7 +1366,7 @@ else
     }
     CFDictionarySetValue(dict, kCTFontAttributeName, m_ctFont.get() );
     CFDictionarySetValue(dict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
-    
+
     entry.font = m_ctFont;
     entry.fontAttributes = m_ctFontAttributes;
 }

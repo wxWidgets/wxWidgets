@@ -478,6 +478,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
 
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
+    // round to nearest hundredth = wxFONTWEIGHT_ constant
     int weight = ((GetNumericWeight() + 50) / 100) * 100;
 
     if (weight < wxFONTWEIGHT_THIN)
@@ -1058,7 +1059,7 @@ wxFontStyle wxFont::GetStyle() const
 
 wxFontWeight wxFont::GetWeight() const
 {
-    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, "invalid font" );
 
     return M_FONTDATA->GetWeight();
 }

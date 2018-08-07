@@ -133,6 +133,7 @@ int wxNativeFontInfo::GetNumericWeight() const
 
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
+    // round to nearest hundredth = wxFONTWEIGHT_ constant
     int weight = ((GetNumericWeight() + 50) / 100) * 100;
 
     if (weight < wxFONTWEIGHT_THIN)
@@ -782,7 +783,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
 int wxNativeFontInfo::GetNumericWeight() const
 {
     const wxString weight = GetXFontComponent(wxXLFD_WEIGHT).MakeLower();
-    if (weight == wxT("thin") || weight == wxT("ultralight"))  
+    if (weight == wxT("thin") || weight == wxT("ultralight"))
         return wxFONTWEIGHT_THIN;
     else if (weight == wxT("extralight"))
         return wxFONTWEIGHT_EXTRALIGHT;
@@ -808,6 +809,7 @@ int wxNativeFontInfo::GetNumericWeight() const
 
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
+    // round to nearest hundredth = wxFONTWEIGHT_ constant
     int weight = ((GetNumericWeight() + 50) / 100) * 100;
 
     if (weight < wxFONTWEIGHT_THIN)

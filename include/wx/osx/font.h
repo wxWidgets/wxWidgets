@@ -111,7 +111,7 @@ public:
     virtual wxFontEncoding GetEncoding() const wxOVERRIDE;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
 
-    virtual bool IsFixedWidth() const;
+    virtual bool IsFixedWidth() const wxOVERRIDE;
 
     virtual void SetPointSize(float pointSize) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
