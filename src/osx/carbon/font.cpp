@@ -44,9 +44,9 @@ public:
     wxFontRefData(const wxFontRefData& data);
 
     wxFontRefData(const wxNativeFontInfo& info)
-        : m_info(info)
     {
         Init();
+        m_info.Init(info);
     }
 
     wxFontRefData(CTFontRef font);
