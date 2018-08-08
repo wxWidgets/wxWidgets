@@ -142,10 +142,31 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
         extern const expdecl wxEventType name
 #endif // wxHAS_EVENT_BIND/!wxHAS_EVENT_BIND
 
+// The type-erased method signature used for event handling.
+typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
+
+template <typename T>
+inline wxEventFunction wxEventFunctionCast(void (wxEvtHandler::*func)(T&))
+{
+    // There is no going around the cast here: we do rely calling the event
+    // handler method, which takes a reference to an object of a class derived
+    // from wxEvent, as if it took wxEvent itself. On all platforms supported
+    // by wxWidgets, this cast is harmless, but it's not a valid cast in C++
+    // and gcc 8 started giving warnings about this (with -Wextra), so suppress
+    // them locally to avoid generating hundreds of them when compiling any
+    // code using event table macros.
+
+    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+
+    return reinterpret_cast<wxEventFunction>(func);
+
+    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+}
+
 // Try to cast the given event handler to the correct handler type:
 
 #define wxEVENT_HANDLER_CAST( functype, func ) \
-    ( wxObjectEventFunction )( wxEventFunction )wxStaticCastEvent( functype, &func )
+    wxEventFunctionCast(static_cast<functype>(&func))
 
 
 #ifdef wxHAS_EVENT_BIND
@@ -327,8 +348,8 @@ struct HandlerImpl<T, A, true>
     static wxEvtHandler *ConvertToEvtHandler(T *p)
         { return p; }
     static wxEventFunction ConvertToEvtMethod(void (T::*f)(A&))
-        { return static_cast<wxEventFunction>(
-                    reinterpret_cast<void (T::*)(wxEvent&)>(f)); }
+        { return wxEventFunctionCast(
+                    static_cast<void (wxEvtHandler::*)(A&)>(f)); }
 };
 
 // specialization for handlers not deriving from wxEvtHandler
