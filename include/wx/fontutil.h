@@ -124,20 +124,7 @@ public:
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
-    wxNativeFontInfo( float size,
-                  wxFontFamily family,
-                  wxFontStyle style,
-                  wxFontWeight weight,
-                  bool underlined,
-                  bool strikethrough,
-                  const wxString& faceName,
-                  wxFontEncoding encoding)
-    {
-        Init(size, family, style, weight,
-             underlined, strikethrough,
-             faceName, encoding);
-    }
-
+ 
     ~wxNativeFontInfo() { Free(); }
 
     wxNativeFontInfo& operator=(const wxNativeFontInfo& info)
@@ -153,14 +140,6 @@ public:
     void InitFromFont(CTFontRef font);
     void InitFromFontDescriptor(CTFontDescriptorRef font);
     void Init(const wxNativeFontInfo& info);
-    void Init(float size,
-                  wxFontFamily family,
-                  wxFontStyle style,
-                  wxFontWeight weight,
-                  bool underlined,
-                  bool strikethrough,
-                  const wxString& faceName ,
-                  wxFontEncoding encoding);
 
     void Free();
     

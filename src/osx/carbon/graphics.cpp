@@ -2892,13 +2892,10 @@ wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
                                       int flags,
                                       const wxColour& col)
 {
-    // This implementation is not ideal as we don't support fractional font
-    // sizes right now, but it's the simplest one.
-    //
     // Notice that under Mac we always use 72 DPI so the font size in pixels is
     // the same as the font size in points and we can pass it directly to wxFont
     // ctor.
-    wxFont font(wxRound(sizeInPixels),
+    wxFont font((float)sizeInPixels,
                 wxFONTFAMILY_DEFAULT,
                 flags & wxFONTFLAG_ITALIC ? wxFONTSTYLE_ITALIC
                                           : wxFONTSTYLE_NORMAL,
