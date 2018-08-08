@@ -434,6 +434,8 @@ bool wxGenericCalendarCtrl::EnableMonthChange(bool enable)
 
 bool wxGenericCalendarCtrl::SetDate(const wxDateTime& date)
 {
+    wxCHECK_MSG( date.IsValid(), false, "invalid date" );
+
     bool retval = true;
 
     bool sameMonth = m_date.GetMonth() == date.GetMonth(),
