@@ -863,7 +863,7 @@ private:
             Node* m_init;                                                   \
         public:                                                             \
             typedef const_reference reference_type;                         \
-            typedef const ptr_type pointer_type;                            \
+            typedef const value_type* pointer_type;                         \
                                                                             \
             const_iterator(Node* node, Node* init)                          \
                 : m_node(node), m_init(init) { }                            \
@@ -955,7 +955,7 @@ private:
             Node* m_init;                                                   \
         public:                                                             \
             typedef const_reference reference_type;                         \
-            typedef const ptr_type pointer_type;                            \
+            typedef const value_type* pointer_type;                         \
                                                                             \
             const_reverse_iterator(Node* node, Node* init)                  \
                 : m_node(node), m_init(init) { }                            \
