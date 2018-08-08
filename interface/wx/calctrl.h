@@ -469,7 +469,8 @@ public:
 
         The @a date parameter must be valid and in the currently valid range as
         set by SetDateRange(), otherwise the current date is not changed and
-        the function returns @false.
+        the function returns @false and, additionally, triggers an assertion
+        failure if the date is invalid.
     */
     virtual bool SetDate(const wxDateTime& date);
 
