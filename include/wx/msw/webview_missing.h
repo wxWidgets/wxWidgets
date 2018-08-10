@@ -945,3 +945,10 @@ public:
 
 /* end of WinInet.h */
 
+/* MsHtmHst.h */
+
+#ifndef DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION
+#define DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION 0x04000000
+#endif
+
+/* end of MsHtmHst.h */
