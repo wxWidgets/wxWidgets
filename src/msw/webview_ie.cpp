@@ -34,6 +34,10 @@
 #include <initguid.h>
 #include <wininet.h>
 
+#ifndef DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION
+#define DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION  0x04000000
+#endif
+
 /* These GUID definitions are our own implementation to support interfaces
  * normally in urlmon.h. See include/wx/msw/webview_ie.h
  */
@@ -1635,7 +1639,7 @@ HRESULT wxSTDCALL DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
 HRESULT wxSTDCALL DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
 {
     //don't show 3d border and enable themes.
-    pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_THEME;
+    pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_THEME | DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION;
     return S_OK;
 }
 
