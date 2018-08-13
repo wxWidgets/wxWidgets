@@ -103,7 +103,9 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureLostEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent);
-    wxIMPLEMENT_DYNAMIC_CLASS(wxGestureEvent, wxEvent);
+    wxIMPLEMENT_ABSTRACT_CLASS(wxTouchEventBase, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxMultiTouchEvent, wxTouchEventBase);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxGestureEvent, wxTouchEventBase);
     wxIMPLEMENT_DYNAMIC_CLASS(wxPanGestureEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxZoomGestureEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxRotateGestureEvent, wxGestureEvent);
@@ -264,6 +266,12 @@ wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent );
+
+// MultiTouch Events
+wxDEFINE_EVENT( wxEVT_TOUCH_BEGIN, wxMultiTouchEvent );
+wxDEFINE_EVENT( wxEVT_TOUCH_MOVE, wxMultiTouchEvent );
+wxDEFINE_EVENT( wxEVT_TOUCH_END, wxMultiTouchEvent );
+wxDEFINE_EVENT( wxEVT_TOUCH_CANCEL, wxMultiTouchEvent );
 
 // Gesture events
 wxDEFINE_EVENT( wxEVT_GESTURE_PAN, wxPanGestureEvent );

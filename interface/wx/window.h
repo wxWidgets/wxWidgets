@@ -111,7 +111,12 @@ enum
     /**
         Enable all supported gesture events.
      */
-    wxTOUCH_ALL_GESTURES
+    wxTOUCH_ALL_GESTURES,
+
+    /**
+        Enable raw multitouch events
+     */
+    wxTOUCH_RAW_EVENTS
 };
 
 /**

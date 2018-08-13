@@ -128,7 +128,9 @@ enum
     wxTOUCH_ZOOM_GESTURE            = 0x0004,
     wxTOUCH_ROTATE_GESTURE          = 0x0008,
     wxTOUCH_PRESS_GESTURES          = 0x0010,
-    wxTOUCH_ALL_GESTURES            = 0x001f
+    wxTOUCH_ALL_GESTURES            = 0x001f,
+
+    wxTOUCH_RAW_EVENTS              = 0x0020
 };
 
 // flags for SendSizeEvent()
