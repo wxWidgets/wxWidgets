@@ -317,8 +317,10 @@ public:
     virtual void DeleteAllItems();
 
     /**
-        Deletes all children of the given item (but not the item itself). Note
-        that this will @b not generate any events unlike Delete() method.
+        Deletes all children of the given item (but not the item itself).
+
+        A @c wxEVT_TREE_DELETE_ITEM event will be generated for every item
+        being deleted.
 
         If you have called SetItemHasChildren(), you may need to call it again
         since DeleteChildren() does not automatically clear the setting.

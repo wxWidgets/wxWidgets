@@ -45,6 +45,7 @@ private:
     CPPUNIT_TEST_SUITE( TreeCtrlTestCase );
         WXUISIM_TEST( ItemClick );
         CPPUNIT_TEST( DeleteItem );
+        CPPUNIT_TEST( DeleteChildren );
         WXUISIM_TEST( LabelEdit );
         WXUISIM_TEST( KeyDown );
 #ifndef __WXGTK__
@@ -72,6 +73,7 @@ private:
 
     void ItemClick();
     void DeleteItem();
+    void DeleteChildren();
     void LabelEdit();
     void KeyDown();
 #ifndef __WXGTK__
@@ -273,6 +275,16 @@ void TreeCtrlTestCase::DeleteItem()
     // are not generated.
 
     CPPUNIT_ASSERT_EQUAL(1, deleteitem.GetCount());
+}
+
+void TreeCtrlTestCase::DeleteChildren()
+{
+    EventCounter deletechildren(m_tree, wxEVT_TREE_DELETE_ITEM);
+
+    m_tree->AppendItem(m_child1, "another grandchild");
+    m_tree->DeleteChildren(m_child1);
+
+    CHECK( deletechildren.GetCount() == 2 );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
