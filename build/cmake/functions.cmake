@@ -753,8 +753,17 @@ macro(wx_dependent_option option doc default depends force)
 endmacro()
 
 # wx_add_test(<name> [src...])
+# Optionally:
+# DATA followed by required data files
+# RES followed by WIN32 .rc files
 function(wx_add_test name)
-    wx_list_add_prefix(test_src "${wxSOURCE_DIR}/tests/" ${ARGN})
+    cmake_parse_arguments(TEST "" "" "DATA;RES" ${ARGN})
+    wx_list_add_prefix(test_src "${wxSOURCE_DIR}/tests/" ${TEST_UNPARSED_ARGUMENTS})
+    if(WIN32 AND TEST_RES)
+        foreach(res ${TEST_RES})
+            list(APPEND test_src ${wxSOURCE_DIR}/tests/${res})
+        endforeach()
+    endif()
     if(wxBUILD_PRECOMP AND MSVC)
         # Add dummy source file to be used by cotire for PCH creation
         list(INSERT test_src 0 "${wxSOURCE_DIR}/tests/dummy.cpp")
@@ -764,6 +773,17 @@ function(wx_add_test name)
     wx_exe_link_libraries(${name} base)
     if(wxBUILD_SHARED)
         target_compile_definitions(${name} PRIVATE WXUSINGDLL)
+    endif()
+    if(TEST_DATA)
+        # Copy data files to output directory
+        foreach(data_file ${TEST_DATA})
+            list(APPEND cmds COMMAND ${CMAKE_COMMAND}
+                -E copy ${wxSOURCE_DIR}/tests/${data_file}
+                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_file})
+        endforeach()
+        add_custom_command(
+            TARGET ${name} ${cmds}
+            COMMENT "Copying test data files...")
     endif()
     wx_set_common_target_properties(${name})
     set_target_properties(${name} PROPERTIES FOLDER "Tests")
