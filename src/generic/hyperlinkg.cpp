@@ -66,14 +66,14 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
 
-    // set to non empty strings both the url and the label
+    // set to non-empty strings both the url and the label
     SetURL(url.empty() ? label : url);
     SetLabel(label.empty() ? url : label);
 
     Init();
     SetForegroundColour(m_normalColour);
 
-    // by default the font of an hyperlink control is underlined
+    // by default the font of a hyperlink control is underlined
     wxFont f = GetFont();
     f.SetUnderlined(true);
     SetFont(f);
@@ -84,7 +84,7 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     // connect our event handlers:
     // NOTE: since this class is the base class of the GTK+'s native implementation
     //       of wxHyperlinkCtrl, we cannot use the static macros in wxBEGIN/wxEND_EVENT_TABLE
-    //       blocks, otherwise the GTK+'s native impl of wxHyperlinkCtrl would not
+    //       blocks; otherwise, the GTK+'s native impl of wxHyperlinkCtrl would not
     //       behave correctly (as we intercept events doing things which interfere
     //       with GTK+'s native handling):
 
