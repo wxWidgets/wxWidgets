@@ -310,9 +310,11 @@ public:
     virtual void Delete(const wxTreeItemId& item);
 
     /**
-        Deletes all items in the control. Note that this may not generate
-        @c EVT_TREE_DELETE_ITEM events under some Windows versions although
-        normally such event is generated for each removed item.
+        Deletes all items in the control.
+
+        This function generates @c wxEVT_TREE_DELETE_ITEM events for each item
+        being deleted, including the root one if it is shown, i.e. unless
+        wxTR_HIDE_ROOT style is used.
     */
     virtual void DeleteAllItems();
 
