@@ -90,7 +90,7 @@ some simple explanations of things.
     sizers when determining what the requirements of each item in the sizer is,
     and is used for calculating the overall minimum needs of the sizer.
 
-@li wxWindow::SetInitialSize(): this is a little different than the typical size
+@li wxWindow::SetInitialSize(): this is a little different from the typical size
     setters. Rather than just setting an "initial size" attribute it actually sets
     the minimal size to the value passed in, blends that value with the best size,
     and then sets the size of the widget to be the result.

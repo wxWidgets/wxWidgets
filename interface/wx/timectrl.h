@@ -150,11 +150,11 @@ public:
         The date part of @a dt is ignored, only the time part is displayed in
         the control. The @a dt object must however be valid.
 
-        In particular notice that it is a bad idea to use default wxDateTime
+        In particular, notice that it is a bad idea to use default wxDateTime
         constructor from hour, minute and second values as it uses the today
-        date for the date part which means that some times can be invalid if
+        date for the date part, which means that sometimes can be invalid if
         today happens to be the day of DST change. For example, when switching
-        to summer time the time 2:00 typically doesn't exist as the clocks jump
+        to summer time, the time 2:00 typically doesn't exist as the clocks jump
         directly to 3:00. To avoid this problem, use a fixed date on which DST
         is known not to change (e.g. Jan 1, 2012) for the date part of the
         argument or use SetTime().

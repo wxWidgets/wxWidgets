@@ -177,7 +177,7 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
         }
         else if ( transparency == wxIMAGE_OPTION_GIF_TRANSPARENCY_UNCHANGED )
         {
-            // Leave the GIF exactly as as it was, just adjust (in the least
+            // Leave the GIF exactly as it was, just adjust (in the least
             // noticeable way, by just flipping a single bit) non-transparent
             // pixels colour,
             for (i = 0; i < GetNcolours(frame); i++)

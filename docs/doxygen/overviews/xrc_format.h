@@ -1349,7 +1349,7 @@ must be of wxMDIChildFrame type.
 wxMDIChildFrame supports the same properties that @ref xrc_wxfrane and
 @ref xrc_wxmdiparentframe do.
 
-wxMDIChildFrame can only be used as as immediate child of @ref
+wxMDIChildFrame can only be used as immediate child of @ref
 xrc_wxmdiparentframe.
 
 wxMDIChildFrame may have optional children: either exactly one
