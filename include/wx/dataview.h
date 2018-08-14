@@ -144,21 +144,24 @@ public:
     {
         m_bold = false;
         m_italic = false;
+        m_strikethrough = false;
     }
 
     // setters
     void SetColour(const wxColour& colour) { m_colour = colour; }
     void SetBold( bool set ) { m_bold = set; }
     void SetItalic( bool set ) { m_italic = set; }
+    void SetStrikethrough( bool set ) { m_strikethrough = set; }
     void SetBackgroundColour(const wxColour& colour)  { m_bgColour = colour; }
 
     // accessors
     bool HasColour() const { return m_colour.IsOk(); }
     const wxColour& GetColour() const { return m_colour; }
 
-    bool HasFont() const { return m_bold || m_italic; }
+    bool HasFont() const { return m_bold || m_italic || m_strikethrough; }
     bool GetBold() const { return m_bold; }
     bool GetItalic() const { return m_italic; }
+    bool GetStrikethrough() const { return m_strikethrough; }
 
     bool HasBackgroundColour() const { return m_bgColour.IsOk(); }
     const wxColour& GetBackgroundColour() const { return m_bgColour; }
@@ -172,6 +175,7 @@ private:
     wxColour m_colour;
     bool     m_bold;
     bool     m_italic;
+    bool     m_strikethrough;
     wxColour m_bgColour;
 };
 

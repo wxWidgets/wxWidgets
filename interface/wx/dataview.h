@@ -703,6 +703,17 @@ public:
     */
     void SetItalic(bool set);
 
+    /**
+        Call this to indicate that the item shall be displayed in strikethrough
+        text.
+
+        Currently this attribute is only supported in the generic version of
+        wxDataViewCtrl and ignored by the native GTK+ and OS X implementations.
+
+        @since 3.1.2
+    */
+    void SetStrikethrough( bool set );
+
 
     /**
        Returns true if the colour property has been set.
