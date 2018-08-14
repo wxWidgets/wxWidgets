@@ -1635,7 +1635,7 @@ HRESULT wxSTDCALL DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
 HRESULT wxSTDCALL DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
 {
     //don't show 3d border and enable themes.
-    pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_THEME;
+    pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_THEME | DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION;
     return S_OK;
 }
 
