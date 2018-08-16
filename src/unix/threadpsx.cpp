@@ -987,14 +987,7 @@ wxThreadInternal::~wxThreadInternal()
 {
 }
 
-#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
-    #define WXUNUSED_STACKSIZE(identifier)  identifier
-#else
-    #define WXUNUSED_STACKSIZE(identifier)  WXUNUSED(identifier)
-#endif
-
-wxThreadError wxThreadInternal::Create(wxThread *thread,
-                                       unsigned int WXUNUSED_STACKSIZE(stackSize))
+wxThreadError wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 {
     if ( GetState() != STATE_NEW )
     {
@@ -1002,13 +995,15 @@ wxThreadError wxThreadInternal::Create(wxThread *thread,
         return wxTHREAD_RUNNING;
     }
 
-    // set up the thread attribute: right now, we only set thread priority
+    // set up the thread attribute: such as priority and stack size
     pthread_attr_t attr;
     pthread_attr_init(&attr);
 
 #ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
     if (stackSize)
       pthread_attr_setstacksize(&attr, stackSize);
+#else
+    wxUnusedVar(stackSize);
 #endif
 
 #ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
