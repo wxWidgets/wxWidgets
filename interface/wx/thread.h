@@ -1252,6 +1252,9 @@ public:
         be only set after creating the thread with CreateThread(). But under
         all platforms this method can be called either before launching the
         thread using Run() or after doing it.
+
+        Please note that currently this function is not implemented when using
+        the default (@c SCHED_OTHER) scheduling policy under POSIX systems.
     */
     void SetPriority(unsigned int priority);
 
