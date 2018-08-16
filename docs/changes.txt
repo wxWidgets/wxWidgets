@@ -96,7 +96,7 @@ All:
 - Make wxList and wxVector iterators conform to input iterator requirements.
 - Fix MT-safety problem when reading and writing from wxSocket (jkubalik).
 - Fix build issues under HaikuOS (mill-j).
-- Fix problem with wx-config installation under NetBSD (wiz).
+- Fix problem with wx-config installation and use under NetBSD (wiz).
 
 All (GUI):
 
