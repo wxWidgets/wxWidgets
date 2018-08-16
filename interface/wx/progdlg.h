@@ -55,8 +55,9 @@
 
     @beginStyleTable
     @style{wxPD_APP_MODAL}
-           Make the progress dialog modal. If this flag is not given, it is
-           only "locally" modal - that is the input to the parent window is
+           Make the progress dialog application-modal, i.e. disable all
+           application windows while it is shown. If this flag is not given, it
+           is only "locally" modal -- that is the input to the parent window is
            disabled, but not to the other ones.
     @style{wxPD_AUTO_HIDE}
            Causes the progress dialog to disappear from screen as soon as the
