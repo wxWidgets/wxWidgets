@@ -3846,16 +3846,21 @@ void wxGrid::CancelMouseCapture()
     // cancel operation currently in progress, whatever it is
     if ( m_winCapture )
     {
-        m_isDragging = false;
-        m_startDragPos = wxDefaultPosition;
-
-        m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-        m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
-        m_winCapture = NULL;
+        DoAfterDraggingEnd();
 
         // remove traces of whatever we drew on screen
         Refresh();
     }
+}
+
+void wxGrid::DoAfterDraggingEnd()
+{
+    m_isDragging = false;
+    m_startDragPos = wxDefaultPosition;
+
+    m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+    m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
+    m_winCapture = NULL;
 }
 
 void wxGrid::ChangeCursorMode(CursorMode mode,

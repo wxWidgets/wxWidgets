@@ -2218,6 +2218,10 @@ private:
     // SetColPos() and ResetColPos())
     void RefreshAfterColPosChange();
 
+    // reset the variables used during dragging operations after it ended
+    // because we lost mouse capture
+    void DoAfterDraggingEnd();
+
 
     // return the position (not index) of the column at the given logical pixel
     // position
