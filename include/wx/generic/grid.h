@@ -2218,9 +2218,13 @@ private:
     // SetColPos() and ResetColPos())
     void RefreshAfterColPosChange();
 
-    // reset the variables used during dragging operations after it ended
-    // because we lost mouse capture
+    // reset the variables used during dragging operations after it ended,
+    // either because we called EndDraggingIfNecessary() ourselves or because
+    // we lost mouse capture
     void DoAfterDraggingEnd();
+
+    // release the mouse capture if it's currently captured
+    void EndDraggingIfNecessary();
 
 
     // return the position (not index) of the column at the given logical pixel
@@ -2242,8 +2246,12 @@ private:
     // process row/column resizing drag event
     void DoGridLineDrag(wxMouseEvent& event, const wxGridOperations& oper);
 
-    // process mouse drag event in the grid window
-    void DoGridDragEvent(wxMouseEvent& event, const wxGridCellCoords& coords);
+    // process mouse drag event in the grid window, return false if starting
+    // dragging was vetoed by the user-defined wxEVT_GRID_CELL_BEGIN_DRAG
+    // handler
+    bool DoGridDragEvent(wxMouseEvent& event,
+                         const wxGridCellCoords& coords,
+                         bool isFirstDrag);
 
     // process different clicks on grid cells
     void DoGridCellLeftDown(wxMouseEvent& event,
