@@ -1005,6 +1005,12 @@ static bool SetThreadPriority(pthread_attr_t& attr, int prio)
         return false;
     }
 
+    // TODO: on most (all?) systems, thread priorities can't be used with
+    //       SCHED_OTHER policy, so we need to check if this is the current
+    //       policy and change it to something else (SCHED_FIFO or SCHED_RR?)
+    //       in order to be able to actually change the priority as without
+    //       doing it the code below just not going to work.
+
 #ifdef __VMS__
    /* the pthread.h contains too many spaces. This is a work-around */
 # undef sched_get_priority_max
