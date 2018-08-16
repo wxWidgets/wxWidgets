@@ -338,6 +338,18 @@ macro(wx_test_enable_precomp target_name)
     endif()
 endmacro()
 
+# Enable precompiled headers for samples
+macro(wx_sample_enable_precomp target_name)
+    if(wxBUILD_PRECOMP)
+        target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
+        set_target_properties(${target_name} PROPERTIES
+            COTIRE_CXX_PREFIX_HEADER_INIT "${wxSOURCE_DIR}/include/wx/wxprec.h")
+        wx_target_enable_precomp(${target_name})
+    elseif(MSVC)
+        target_compile_definitions(${target_name} PRIVATE NOPCH)
+    endif()
+endmacro()
+
 # Enable precompiled headers for wx libraries
 macro(wx_finalize_lib target_name)
     set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
@@ -629,8 +641,6 @@ function(wx_add_sample name)
     if(SAMPLE_DEFINITIONS)
         target_compile_definitions(${target_name} PRIVATE ${SAMPLE_DEFINITIONS})
     endif()
-    # Disable precompile headers for samples
-    target_compile_definitions(${target_name} PRIVATE NOPCH)
     if(SAMPLE_DATA)
         # TODO: handle data files differently for OS X bundles
         # Copy data files to output directory
@@ -667,6 +677,7 @@ function(wx_add_sample name)
         wx_string_append(folder "/${SAMPLE_FOLDER}")
     endif()
     wx_set_common_target_properties(${target_name})
+    wx_sample_enable_precomp(${target_name})
     set_target_properties(${target_name} PROPERTIES
         FOLDER ${folder}
         )
