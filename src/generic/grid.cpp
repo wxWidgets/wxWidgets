@@ -2418,7 +2418,6 @@ void wxGrid::Init()
     m_selection = NULL;
     m_defaultCellAttr = NULL;
     m_typeRegistry = NULL;
-    m_winCapture = NULL;
 
     m_rowLabelWidth  = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
     m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
