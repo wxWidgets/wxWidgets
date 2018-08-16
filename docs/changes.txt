@@ -96,6 +96,7 @@ All:
 - Make wxList and wxVector iterators conform to input iterator requirements.
 - Fix MT-safety problem when reading and writing from wxSocket (jkubalik).
 - Fix build issues under HaikuOS (mill-j).
+- Avoid spurious errors on thread creation under NetBSD.
 
 All (GUI):
 
