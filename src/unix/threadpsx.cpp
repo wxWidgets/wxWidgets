@@ -985,6 +985,74 @@ wxThreadInternal::~wxThreadInternal()
 {
 }
 
+static bool SetThreadPriority(pthread_attr_t& attr, int prio)
+{
+    if ( prio == wxPRIORITY_DEFAULT )
+    {
+        // Don't even try to do anything, there is no need for it and it could
+        // result in failures if we don't handle setting the priority correctly
+        // under the current platform, see e.g. #18195.
+        return true;
+    }
+
+#ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
+    int policy;
+    if ( pthread_attr_getschedpolicy(&attr, &policy) != 0 )
+    {
+        wxLogError(_("Cannot retrieve thread scheduling policy."));
+        return false;
+    }
+
+#ifdef __VMS__
+   /* the pthread.h contains too many spaces. This is a work-around */
+# undef sched_get_priority_max
+#undef sched_get_priority_min
+#define sched_get_priority_max(_pol_) \
+     (_pol_ == SCHED_OTHER ? PRI_FG_MAX_NP : PRI_FIFO_MAX)
+#define sched_get_priority_min(_pol_) \
+     (_pol_ == SCHED_OTHER ? PRI_FG_MIN_NP : PRI_FIFO_MIN)
+#endif
+
+    int max_prio = sched_get_priority_max(policy),
+        min_prio = sched_get_priority_min(policy);
+
+    if ( min_prio == -1 || max_prio == -1 )
+    {
+        wxLogError(_("Cannot get priority range for scheduling policy %d."),
+                   policy);
+        return false;
+    }
+
+    if ( max_prio == min_prio )
+    {
+        // notify the programmer that this doesn't work here
+        wxLogWarning(_("Thread priority setting is ignored."));
+        return false;
+    }
+
+    struct sched_param sp;
+    if ( pthread_attr_getschedparam(&attr, &sp) != 0 )
+    {
+        wxFAIL_MSG(wxT("pthread_attr_getschedparam() failed"));
+        return false;
+    }
+
+    sp.sched_priority = min_prio + (prio*(max_prio - min_prio))/100;
+
+    if ( pthread_attr_setschedparam(&attr, &sp) != 0 )
+    {
+        wxFAIL_MSG(wxT("pthread_attr_setschedparam(priority) failed"));
+        return false;
+    }
+
+    return true;
+#else // !HAVE_THREAD_PRIORITY_FUNCTIONS
+    wxUnusedVar(attr);
+
+    return false;
+#endif // HAVE_THREAD_PRIORITY_FUNCTIONS
+}
+
 wxThreadError wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 {
     if ( GetState() != STATE_NEW )
@@ -1004,59 +1072,13 @@ wxThreadError wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
     wxUnusedVar(stackSize);
 #endif
 
-#ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
-    int policy;
-    if ( pthread_attr_getschedpolicy(&attr, &policy) != 0 )
+    if ( !SetThreadPriority(attr, GetPriority()) )
     {
-        wxLogError(_("Cannot retrieve thread scheduling policy."));
+        // We currently ignore the failure to set the thread priority as it
+        // seems better to create a thread with default priority than to
+        // not create one at all.
+        wxLogDebug("Failed to set thread priority to %d", GetPriority());
     }
-
-#ifdef __VMS__
-   /* the pthread.h contains too many spaces. This is a work-around */
-# undef sched_get_priority_max
-#undef sched_get_priority_min
-#define sched_get_priority_max(_pol_) \
-     (_pol_ == SCHED_OTHER ? PRI_FG_MAX_NP : PRI_FIFO_MAX)
-#define sched_get_priority_min(_pol_) \
-     (_pol_ == SCHED_OTHER ? PRI_FG_MIN_NP : PRI_FIFO_MIN)
-#endif
-
-    int max_prio = sched_get_priority_max(policy),
-        min_prio = sched_get_priority_min(policy),
-        prio = GetPriority();
-
-    if ( min_prio == -1 || max_prio == -1 )
-    {
-        wxLogError(_("Cannot get priority range for scheduling policy %d."),
-                   policy);
-    }
-    else if ( max_prio == min_prio )
-    {
-        if ( prio != wxPRIORITY_DEFAULT )
-        {
-            // notify the programmer that this doesn't work here
-            wxLogWarning(_("Thread priority setting is ignored."));
-        }
-        //else: we have default priority, so don't complain
-
-        // anyhow, don't do anything because priority is just ignored
-    }
-    else
-    {
-        struct sched_param sp;
-        if ( pthread_attr_getschedparam(&attr, &sp) != 0 )
-        {
-            wxFAIL_MSG(wxT("pthread_attr_getschedparam() failed"));
-        }
-
-        sp.sched_priority = min_prio + (prio*(max_prio - min_prio))/100;
-
-        if ( pthread_attr_setschedparam(&attr, &sp) != 0 )
-        {
-            wxFAIL_MSG(wxT("pthread_attr_setschedparam(priority) failed"));
-        }
-    }
-#endif // HAVE_THREAD_PRIORITY_FUNCTIONS
 
 #ifdef HAVE_PTHREAD_ATTR_SETSCOPE
     // this will make the threads created by this process really concurrent
