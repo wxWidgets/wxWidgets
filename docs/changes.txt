@@ -583,6 +583,10 @@ Major new features in this release
 3.0.5 (released 2018-??-??)
 ---------------------------
 
+All:
+
+- Fix problem with wx-config installation under NetBSD (wiz).
+
 All (GUI):
 
 - Improve stock items consistency and aesthetics (dhowland).
