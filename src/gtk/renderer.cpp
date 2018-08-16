@@ -755,19 +755,17 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
         if (win->GetLayoutDirection() == wxLayout_RightToLeft)
             x_diff = rect.width;
 
-        GtkWidget* treeWidget = wxGTKPrivate::GetTreeWidget();
-
 #ifdef __WXGTK3__
-        GtkStyleContext* sc = gtk_widget_get_style_context(treeWidget);
-        gtk_style_context_save(sc);
+        wxGtkStyleContext sc;
+        sc.Add(GTK_TYPE_TREE_VIEW, "treeview", "view", "cell", NULL);
         int state = GTK_STATE_FLAG_SELECTED;
         if (flags & wxCONTROL_FOCUSED)
             state |= GTK_STATE_FLAG_FOCUSED;
         gtk_style_context_set_state(sc, GtkStateFlags(state));
-        gtk_style_context_add_class(sc, GTK_STYLE_CLASS_CELL);
         gtk_render_background(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
-        gtk_style_context_restore(sc);
 #else
+        GtkWidget* treeWidget = wxGTKPrivate::GetTreeWidget();
+
         // the wxCONTROL_FOCUSED state is deduced
         // directly from the m_wxwindow by GTK+
         gtk_paint_flat_box(gtk_widget_get_style(treeWidget),
