@@ -772,7 +772,7 @@ AC_ARG_WITH(jpeg12-lib,
 	    AS_HELP_STRING([--with-jpeg12-lib=LIBRARY],
 			   [path to libjpeg 12bit library]),,)
 
-if test "x$enable_jpeg12" == "xyes" ; then
+if test "x$enable_jpeg12" = "xyes" ; then
 
   if test "x$with_jpeg12_lib" != "x" ; then
     LIBS="$with_jpeg12_lib $LIBS"

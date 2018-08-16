@@ -18145,7 +18145,7 @@ if test "${with_jpeg12_lib+set}" = set; then :
 fi
 
 
-if test "x$enable_jpeg12" == "xyes" ; then
+if test "x$enable_jpeg12" = "xyes" ; then
 
   if test "x$with_jpeg12_lib" != "x" ; then
     LIBS="$with_jpeg12_lib $LIBS"

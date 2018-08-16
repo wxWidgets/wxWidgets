@@ -585,7 +585,7 @@ Major new features in this release
 
 All:
 
-- Fix problem with wx-config installation under NetBSD (wiz).
+- Fix problem with wx-config installation and use under NetBSD (wiz).
 
 All (GUI):
 
