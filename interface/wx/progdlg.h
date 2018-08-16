@@ -105,7 +105,11 @@ public:
             In the generic implementation the progress bar is constructed
             only if this value is greater than zero.
         @param parent
-            Parent window.
+            Parent window. It will be disabled while this dialog is shown if
+            non-null (whether @c wxPD_APP_MODAL is specified or not). Note that
+            if you specify null parent and don't use @c wxPD_APP_MODAL, you
+            need to take care to avoid reentrancies, i.e. avoiding showing the
+            progress dialog again while this one is shown.
         @param style
             The dialog style. See wxProgressDialog.
     */
