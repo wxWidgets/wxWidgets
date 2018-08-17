@@ -1027,7 +1027,7 @@ void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event))
     int icon;
     if ( res == -1 )
     {
-        msg = "Invalid number entered or dialog cancelled.");
+        msg = "Invalid number entered or dialog cancelled.";
         icon = wxICON_HAND;
     }
     else
