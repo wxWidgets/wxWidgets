@@ -371,7 +371,7 @@ void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 
     // and also a hint indicating where it is going to be inserted if it's
     // dropped now
-    unsigned int col = FindColumnAtPoint(xPhysical);
+    unsigned int col = FindColumnAtPoint(xPhysical - m_scrollOffset);
     if ( col != COL_NONE )
     {
         static const int DROP_MARKER_WIDTH = 4;
@@ -414,7 +414,7 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
     ReleaseMouse();
 
     const int colOld = m_colBeingReordered,
-              colNew = FindColumnAtPoint(xPhysical);
+              colNew = FindColumnAtPoint(xPhysical - m_scrollOffset);
 
     m_colBeingReordered = COL_NONE;
 
@@ -427,7 +427,7 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
         event.SetEventObject(this);
         event.SetColumn(colOld);
 
-        const unsigned pos = GetColumnPos(FindColumnAtPoint(xPhysical));
+        const unsigned pos = GetColumnPos(colNew);
         event.SetNewOrder(pos);
 
         if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
