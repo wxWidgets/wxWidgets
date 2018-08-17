@@ -6,7 +6,7 @@
 // Copyright:   (c) Julian Smart
 //              (c) 2004 ABX
 //              (c) Vadim Zeitlin
-// Licence:     wxWindows licence
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -2839,23 +2839,21 @@ static void InitAboutInfoAll(wxAboutDialogInfo& info)
     info.AddDeveloper("A.N. Other");
 
     // or we can add several persons at once like this
-    static const wxChar *docwriters[] =
-    {
-        wxT("First D. Writer"),
-        wxT("Second One"),
-    };
+    wxArrayString docwriters;
+    docwriters.Add("First D. Writer");
+    docwriters.Add("Second One");
 
-    info.SetDocWriters(wxArrayString(WXSIZEOF(docwriters), docwriters));
+    info.SetDocWriters(docwriters);
     info.SetLicence(wxString::FromAscii(
-"                wxWindows Library Licence, Version 3.1\n"
+"                wxWidgets Library Licence, Version 3.1\n"
 "                ======================================\n"
 "\n"
-"  Copyright (c) 1998-2005 Julian Smart, Robert Roebling et al\n"
+"  Copyright (c) 1998-2018 Julian Smart, Robert Roebling et al\n"
 "\n"
 "  Everyone is permitted to copy and distribute verbatim copies\n"
 "  of this licence document, but changing it is not allowed.\n"
 "\n"
-"                       WXWINDOWS LIBRARY LICENCE\n"
+"                       WXWIDGETS LIBRARY LICENCE\n"
 "     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n"
 "\n"
 "                    ...and so on and so forth...\n"
@@ -3037,22 +3035,22 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
         wxFindReplaceDialog *dlg = event.GetDialog();
 
         int idMenu;
-        const wxChar *txt;
+        const wxString txt;
         if ( dlg == m_dlgFind )
         {
-            txt = wxT("Find");
+            txt = "Find";
             idMenu = DIALOGS_FIND;
             m_dlgFind = NULL;
         }
         else if ( dlg == m_dlgReplace )
         {
-            txt = wxT("Replace");
+            txt = "Replace";
             idMenu = DIALOGS_REPLACE;
             m_dlgReplace = NULL;
         }
         else
         {
-            txt = wxT("Unknown");
+            txt = "Unknown";
             idMenu = wxID_ANY;
 
             wxFAIL_MSG( "unexpected event" );
