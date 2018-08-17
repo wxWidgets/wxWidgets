@@ -8,7 +8,7 @@
 #############################################################################
 
 include(CMakeDependentOption)
-include(CMakeParseArguments)           # For compatiblity with CMake < 3.4
+include(CMakeParseArguments)           # For compatibility with CMake < 3.4
 include(ExternalProject)
 if(CMAKE_GENERATOR STREQUAL "Xcode")
     # wxWidgets does not use the unity features of cotire so we can
@@ -546,7 +546,7 @@ endfunction()
 # IMPORTANT does not require wxBUILD_SAMPLES=ALL
 # RES followed by WIN32 .rc files
 #
-# Additinally the following variables may be set before calling wx_add_sample:
+# Additionally the following variables may be set before calling wx_add_sample:
 # wxSAMPLE_SUBDIR subdirectory in the samples/ folder to use as base
 # wxSAMPLE_FOLDER IDE sub folder to be used for the samples
 function(wx_add_sample name)

@@ -76,7 +76,7 @@ if(MSVC OR MINGW)
     endif()
 
     if(MSVC)
-        # Include generator expression to supress default Debug/Release pair
+        # Include generator expression to suppress default Debug/Release pair
         set(wxPLATFORM_LIB_DIR "$<1:/>${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}")
     else()
         set(wxPLATFORM_LIB_DIR "/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}")

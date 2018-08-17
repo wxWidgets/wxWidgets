@@ -403,7 +403,6 @@ if(WIN32)
         set(wxUSE_WINRT_DEFAULT OFF)
     endif()
     wx_option(wxUSE_WINRT "enable WinRT support" ${wxUSE_WINRT_DEFAULT})
-    
 endif()
 
 # this one is not really MSW-specific but it exists mainly to be turned off
