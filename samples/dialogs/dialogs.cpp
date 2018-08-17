@@ -2841,8 +2841,8 @@ static void InitAboutInfoAll(wxAboutDialogInfo& info)
     // or we can add several persons at once like this
     static const wxChar *docwriters[] =
     {
-        "First D. Writer",
-        "Second One",
+        wxT("First D. Writer"),
+        wxT("Second One"),
     };
 
     info.SetDocWriters(wxArrayString(WXSIZEOF(docwriters), docwriters));
@@ -3040,19 +3040,19 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
         const wxChar *txt;
         if ( dlg == m_dlgFind )
         {
-            txt = "Find";
+            txt = wxT("Find");
             idMenu = DIALOGS_FIND;
             m_dlgFind = NULL;
         }
         else if ( dlg == m_dlgReplace )
         {
-            txt = "Replace";
+            txt = wxT("Replace");
             idMenu = DIALOGS_REPLACE;
             m_dlgReplace = NULL;
         }
         else
         {
-            txt = "Unknown";
+            txt = wxT("Unknown");
             idMenu = wxID_ANY;
 
             wxFAIL_MSG( "unexpected event" );
