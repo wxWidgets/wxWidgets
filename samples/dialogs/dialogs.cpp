@@ -591,8 +591,8 @@ bool MyApp::OnInit()
     menuDlg->AppendSeparator();
 #endif // wxUSE_RICHTOOLTIP
 
-    menuDlg->Append(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG, "&Standard Buttons Sizer Dialog"));
-    menuDlg->Append(DIALOGS_TEST_DEFAULT_ACTION, "&Test dialog default action"));
+    menuDlg->Append(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG, "&Standard Buttons Sizer Dialog");
+    menuDlg->Append(DIALOGS_TEST_DEFAULT_ACTION, "&Test dialog default action");
     menuDlg->AppendCheckItem(DIALOGS_MODAL_HOOK, "Enable modal dialog hook");
 
     menuDlg->AppendSeparator();
