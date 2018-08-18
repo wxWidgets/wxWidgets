@@ -564,13 +564,19 @@ enum wxStandardID
 {
     /**
        This id delimits the lower bound of the range used by automatically-generated ids
-       (i.e. those used when wxID_ANY is specified during construction).
+       (i.e.\ those used when wxID_ANY is specified during construction).
+
+       It is defined as a relatively large negative number and its exact value
+       is platform-dependent.
      */
     wxID_AUTO_LOWEST,
 
     /**
        This id delimits the upper bound of the range used by automatically-generated ids
-       (i.e. those used when wxID_ANY is specified during construction).
+       (i.e.\ those used when wxID_ANY is specified during construction).
+
+       It is defined as a relatively small negative number and its exact value
+       is platform-dependent.
      */
     wxID_AUTO_HIGHEST,
 
