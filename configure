@@ -32035,16 +32035,6 @@ $as_echo "$as_me: WARNING: wxMutex won't be recursive on this platform" >&2;}
         fi
       fi
 
-      if test "$wxUSE_COMPILER_TLS" = "auto"; then
-          if test "$USE_NETBSD" = 1; then
-              { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling TLS under NetBSD, please contact wx-dev if it works now" >&5
-$as_echo "$as_me: WARNING: Disabling TLS under NetBSD, please contact wx-dev if it works now" >&2;}
-              wxUSE_COMPILER_TLS=no
-          else
-              wxUSE_COMPILER_TLS=yes
-          fi
-      fi
-
       if test "$wxUSE_COMPILER_TLS" = "yes"; then
                     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for __thread keyword" >&5
 $as_echo_n "checking for __thread keyword... " >&6; }
