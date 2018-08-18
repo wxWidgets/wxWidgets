@@ -15,10 +15,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/progdlg.h"
-    #include "wx/stdpaths.h"
     #include "wx/wx.h"
 #endif
 
+#include "wx/stdpaths.h"
 #include "wx/taskbarbutton.h"
 
 enum

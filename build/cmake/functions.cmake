@@ -8,7 +8,7 @@
 #############################################################################
 
 include(CMakeDependentOption)
-include(CMakeParseArguments)           # For compatiblity with CMake < 3.4
+include(CMakeParseArguments)           # For compatibility with CMake < 3.4
 include(ExternalProject)
 if(CMAKE_GENERATOR STREQUAL "Xcode")
     # wxWidgets does not use the unity features of cotire so we can
@@ -314,25 +314,30 @@ macro(wx_add_library name)
     endif()
 endmacro()
 
-# Enable cotire for target if precompiled headers are enabled
+# Enable cotire for target, use optional second argument for prec. header
 macro(wx_target_enable_precomp target_name)
-    if(wxBUILD_PRECOMP)
-        if(APPLE AND ${target_name} STREQUAL "wxscintilla")
-            # TODO: workaround/fix cotire issue with wxscintilla when using Xcode
-        else()
-            set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
-            cotire(${target_name})
-        endif()
+    target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
+    if(NOT ${ARGV1} STREQUAL "")
+        set_target_properties(${target_name} PROPERTIES
+            COTIRE_CXX_PREFIX_HEADER_INIT ${ARGV1})
     endif()
+    set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+    cotire(${target_name})
 endmacro()
 
 # Enable precompiled headers for tests
 macro(wx_test_enable_precomp target_name)
     if(wxBUILD_PRECOMP)
-        target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
-        set_target_properties(${target_name} PROPERTIES
-            COTIRE_CXX_PREFIX_HEADER_INIT "${wxSOURCE_DIR}/tests/testprec.h")
-        wx_target_enable_precomp(${target_name})
+        wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/tests/testprec.h")
+    elseif(MSVC)
+        target_compile_definitions(${target_name} PRIVATE NOPCH)
+    endif()
+endmacro()
+
+# Enable precompiled headers for samples
+macro(wx_sample_enable_precomp target_name)
+    if(wxBUILD_PRECOMP)
+        wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     elseif(MSVC)
         target_compile_definitions(${target_name} PRIVATE NOPCH)
     endif()
@@ -343,10 +348,7 @@ macro(wx_finalize_lib target_name)
     set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
     if(wxBUILD_PRECOMP)
         if(TARGET ${target_name})
-            target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
-            set_target_properties(${target_name} PROPERTIES
-                COTIRE_CXX_PREFIX_HEADER_INIT "${wxSOURCE_DIR}/include/wx/wxprec.h")
-            wx_target_enable_precomp(${target_name})
+        wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
         endif()
     elseif(MSVC)
         wx_lib_compile_definitions(${target_name} PRIVATE NOPCH)
@@ -544,7 +546,7 @@ endfunction()
 # IMPORTANT does not require wxBUILD_SAMPLES=ALL
 # RES followed by WIN32 .rc files
 #
-# Additinally the following variables may be set before calling wx_add_sample:
+# Additionally the following variables may be set before calling wx_add_sample:
 # wxSAMPLE_SUBDIR subdirectory in the samples/ folder to use as base
 # wxSAMPLE_FOLDER IDE sub folder to be used for the samples
 function(wx_add_sample name)
@@ -629,8 +631,6 @@ function(wx_add_sample name)
     if(SAMPLE_DEFINITIONS)
         target_compile_definitions(${target_name} PRIVATE ${SAMPLE_DEFINITIONS})
     endif()
-    # Disable precompile headers for samples
-    target_compile_definitions(${target_name} PRIVATE NOPCH)
     if(SAMPLE_DATA)
         # TODO: handle data files differently for OS X bundles
         # Copy data files to output directory
@@ -667,6 +667,7 @@ function(wx_add_sample name)
         wx_string_append(folder "/${SAMPLE_FOLDER}")
     endif()
     wx_set_common_target_properties(${target_name})
+    wx_sample_enable_precomp(${target_name})
     set_target_properties(${target_name} PROPERTIES
         FOLDER ${folder}
         )
