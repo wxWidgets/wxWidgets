@@ -4930,15 +4930,6 @@ if test "$TOOLKIT" != "MSW"; then
         fi
       fi
 
-      if test "$wxUSE_COMPILER_TLS" = "auto"; then
-          if test "$USE_NETBSD" = 1; then
-              AC_MSG_WARN([Disabling TLS under NetBSD, please contact wx-dev if it works now])
-              wxUSE_COMPILER_TLS=no
-          else
-              wxUSE_COMPILER_TLS=yes
-          fi
-      fi
-
       if test "$wxUSE_COMPILER_TLS" = "yes"; then
           dnl test for compiler thread-specific variables support
           AC_CACHE_CHECK([for __thread keyword],
