@@ -3035,7 +3035,7 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
         wxFindReplaceDialog *dlg = event.GetDialog();
 
         int idMenu;
-        const wxString txt;
+        wxString txt;
         if ( dlg == m_dlgFind )
         {
             txt = "Find";
