@@ -597,6 +597,11 @@ enum wxStandardID
     */
     wxID_ANY = -1,
 
+    /**
+        Start of the range reserved for wxWidgets-defined IDs.
+
+        Don't define custom IDs in the range from wxID_LOWEST to wxID_HIGHEST.
+     */
     wxID_LOWEST = 4999,
 
     wxID_OPEN,
@@ -744,6 +749,15 @@ enum wxStandardID
     /** IDs used by generic file ctrl (4 consecutive starting from this value) */
     wxID_FILECTRL = 5950,
 
+    /**
+        End of the range reserved for wxWidgets-defined IDs.
+
+        Don't define custom IDs in the range from wxID_LOWEST to wxID_HIGHEST.
+
+        When using an enum to define a number of custom IDs, assigning the
+        value of @c wxID_HIGHEST+1 to the first element ensures that none of
+        the enum elements will conflict with any standard IDs.
+     */
     wxID_HIGHEST = 5999
 };
 
