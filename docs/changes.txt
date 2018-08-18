@@ -130,6 +130,7 @@ wxMSW:
 - Support MSVC auto-linking when using monolithic build too (PB).
 - Implement wxFontDialog::SetTitle() (Vitaly Stakhovsky).
 - Fix build in ANSI (non-Unicode) mode.
+- Improve wxNotebook themed background drawing (Arrigo Marchiori).
 
 wxOSX:
 

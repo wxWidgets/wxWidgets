@@ -1095,30 +1095,40 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 
 WXHBRUSH wxNotebook::QueryBgBitmap()
 {
-    wxRect r = GetPageSize();
-    if ( r.IsEmpty() )
+    RECT rc;
+    ::GetClientRect(GetHwnd(), &rc);
+    if ( ::IsRectEmpty(&rc) )
         return 0;
 
     wxUxThemeHandle theme(this, L"TAB");
     if ( !theme )
         return 0;
 
-    RECT rc;
-    wxCopyRectToRECT(r, rc);
-
     WindowHDC hDC(GetHwnd());
+
+    RECT rcBg;
+    ::GetThemeBackgroundContentRect(theme,
+                                    (HDC) hDC,
+                                    9, /* TABP_PANE */
+                                    0,
+                                    &rc,
+                                    &rcBg);
+
+    m_bgBrushAdj = wxPoint(rcBg.left, rcBg.top);
+    ::OffsetRect(&rcBg, -rcBg.left, -rcBg.top);
+
     ::GetThemeBackgroundExtent
                             (
                                 theme,
                                 (HDC) hDC,
                                 9 /* TABP_PANE */,
                                 0,
-                                &rc,
+                                &rcBg,
                                 &rc
                             );
 
     MemoryHDC hDCMem(hDC);
-    CompatibleBitmap hBmp(hDC, rc.right, rc.bottom);
+    CompatibleBitmap hBmp(hDC, rcBg.right, rcBg.bottom);
 
     {
         SelectInHDC selectBmp(hDCMem, hBmp);
