@@ -97,6 +97,7 @@ All:
 - Fix MT-safety problem when reading and writing from wxSocket (jkubalik).
 - Fix build issues under HaikuOS (mill-j).
 - Fix problem with wx-config installation and use under NetBSD (wiz).
+- Avoid spurious errors on thread creation under NetBSD.
 
 All (GUI):
 
