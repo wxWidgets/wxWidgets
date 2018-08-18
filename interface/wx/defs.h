@@ -557,8 +557,9 @@ enum wxBackgroundStyle
 
     Notice that some, but @em not all, of these IDs are also stock IDs, i.e.
     you can use them for the button or menu items without specifying the label
-    which will be provided by the underlying platform itself. See @ref page_stockitems "the
-    list of stock items" for the subset of standard IDs which are stock IDs as well.
+    which will be provided by the underlying platform itself. See
+    @ref page_stockitems "the list of stock items" for the subset of standard
+    IDs which are stock IDs as well.
 */
 enum wxStandardID
 {
