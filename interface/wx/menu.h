@@ -546,6 +546,8 @@ public:
 
         @param id
             The menu command identifier.
+            See @ref overview_windowids for more information about IDs (same
+            considerations apply to both window and menu item IDs).
         @param item
             The string to appear on the menu item.
             See wxMenuItem::SetItemLabel() for more details.
