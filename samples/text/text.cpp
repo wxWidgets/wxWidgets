@@ -1219,7 +1219,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
                          wxTextAttr(*wxGREEN, wxNullColour, *wxITALIC_FONT));
-    m_textrich->SetDefaultStyle(wxTextAttr());
+    wxTextAttr attr;
+    attr.SetLeftIndent( 50 );
+    m_textrich->SetDefaultStyle( attr );
     m_textrich->AppendText(wxT("\n\nFirst 10 characters should be in red\n"));
     m_textrich->AppendText(wxT("Next 10 characters should be in blue\n"));
     m_textrich->AppendText(wxT("Next 10 characters should be normal\n"));

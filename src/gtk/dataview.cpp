@@ -2275,6 +2275,23 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_unset( &gvalue );
     }
 
+    if (attr.GetStrikethrough())
+    {
+        GValue gvalue = G_VALUE_INIT;
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, TRUE );
+        g_object_set_property( G_OBJECT(renderer), "strikethrough", &gvalue );
+        g_value_unset( &gvalue );
+    }
+    else
+    {
+        GValue gvalue = G_VALUE_INIT;
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "strikethrough-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
     if (attr.HasBackgroundColour())
     {
         GValue gvalue = G_VALUE_INIT;

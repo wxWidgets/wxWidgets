@@ -718,7 +718,7 @@ public:
         text.
 
         Currently this attribute is only supported in the generic version of
-        wxDataViewCtrl and ignored by the native GTK+ and OS X implementations.
+        wxDataViewCtrl and GTK and ignored by the native OS X implementations.
 
         @since 3.1.2
     */
