@@ -110,7 +110,7 @@ All (GUI):
 - Fix possible infinite loop in wxHtmlWindow layout (trivia21).
 - Add "hint" property support to XRC for wxComboBox and wxSearchCtrl.
 - Add support for style="page-break-inside:avoid" to <div> in wxHTML.
-- Add strike-through support to wxDataViewItem attributes (approach).
+- Support strike-through in wxDataViewItem attributes (approach, Igor Korot).
 
 wxGTK:
 
