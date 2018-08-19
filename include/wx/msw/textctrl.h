@@ -277,6 +277,10 @@ private:
     // the simple EDIT controls
     virtual WXHWND GetEditHWND() const wxOVERRIDE { return m_hWnd; }
 
+#if wxUSE_OLE
+    virtual void MSWProcessSpecialKey(wxKeyEvent& event) wxOVERRIDE;
+#endif // wxUSE_OLE
+
     void OnKeyDown(wxKeyEvent& event);
 
     // Used by EN_MAXTEXT handler to increase the size limit (will do nothing

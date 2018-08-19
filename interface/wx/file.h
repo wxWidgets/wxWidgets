@@ -95,11 +95,14 @@ public:
     /**
         Returns the length of the file.
 
-        This method may return ::wxInvalidOffset if the length couldn't be
-        determined or 0 even for non-empty files if the file is not seekable.
+        Returns ::wxInvalidOffset if the length couldn't be determined.
 
-        In general, the only way to determine if the file for which this function
-        returns 0 is really empty or not is to try reading from it.
+        Please also note that there is @e no guarantee that reading that many
+        bytes from the file will always succeed. While this is true for regular
+        files (unless the file size has been changed by another process in
+        between Length() and Read() calls), some special files, such as most
+        files under @c /sys or @c /proc directories under Linux, don't actually
+        contain as much data as their size indicates.
     */
     wxFileOffset Length() const;
 
@@ -376,6 +379,8 @@ public:
 
     /**
         Reads the entire contents of the file into a string.
+
+        Since wxWidgets 3.1.1 this method also works for unseekable files.
 
         @param str
             Non-@NULL pointer to a string to read data into.

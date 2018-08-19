@@ -133,7 +133,15 @@ wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
 
 void wxGenericProgressDialog::SetTopParent(wxWindow* parent)
 {
-    m_parentTop = GetParentForModalDialog(parent, GetWindowStyle());
+    m_parent = parent;
+
+    // Notice that we intentionally do not use GetParentForModalDialog() here
+    // as we don't want to disable the main application window if null parent
+    // was given (and GetParentForModalDialog() would fall back to it in this
+    // case). This allows creating modeless progress dialog, which can be
+    // useful even though it is also dangerous because it can easily result in
+    // unwanted reentrancies.
+    m_parentTop = parent;
 }
 
 bool wxGenericProgressDialog::Create( const wxString& title,
@@ -144,13 +152,9 @@ bool wxGenericProgressDialog::Create( const wxString& title,
 {
     SetTopParent(parent);
 
-    m_parentTop = wxGetTopLevelParent(parent);
     m_pdStyle = style;
 
-    wxWindow* const
-        realParent = GetParentForModalDialog(parent, GetWindowStyle());
-
-    if (!wxDialog::Create(realParent, wxID_ANY, title, wxDefaultPosition, wxDefaultSize, GetWindowStyle()))
+    if (!wxDialog::Create(m_parentTop, wxID_ANY, title, wxDefaultPosition, wxDefaultSize, GetWindowStyle()))
         return false;
 
     SetMaximum(maximum);
@@ -160,11 +164,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     // even if this means we have to start it ourselves (this happens most
     // commonly during the program initialization, e.g. for the progress
     // dialogs shown from overridden wxApp::OnInit()).
-    if ( !wxEventLoopBase::GetActive() )
-    {
-        m_tempEventLoop = new wxEventLoop;
-        wxEventLoop::SetActive(m_tempEventLoop);
-    }
+    EnsureActiveEventLoopExists();
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // we have to remove the "Close" button from the title bar then as it is
@@ -361,6 +361,15 @@ wxString wxGenericProgressDialog::GetFormattedTime(unsigned long timeInSec)
     }
 
     return timeAsHMS;
+}
+
+void wxGenericProgressDialog::EnsureActiveEventLoopExists()
+{
+    if ( !wxEventLoopBase::GetActive() )
+    {
+        m_tempEventLoop = new wxEventLoop;
+        wxEventLoop::SetActive(m_tempEventLoop);
+    }
 }
 
 wxStaticText *
@@ -695,6 +704,21 @@ wxGenericProgressDialog::~wxGenericProgressDialog()
 
     if ( m_tempEventLoop )
     {
+        // If another event loop has been installed as active during the life
+        // time of this object, we shouldn't deactivate it, but we also can't
+        // delete our m_tempEventLoop in this case because it risks leaving the
+        // new event loop with a dangling pointer, which it will set back as
+        // the active loop when it exits, resulting in a crash. So we have no
+        // choice but to just leak this pointer then, which is, of course, bad
+        // and usually easily avoidable by just destroying the progress dialog
+        // sooner, so warn the programmer about it.
+        wxCHECK_RET
+        (
+            wxEventLoopBase::GetActive() == m_tempEventLoop,
+            "current event loop must not be changed during "
+            "wxGenericProgressDialog lifetime"
+        );
+
         wxEventLoopBase::SetActive(NULL);
         delete m_tempEventLoop;
     }
@@ -765,7 +789,16 @@ void wxGenericProgressDialog::UpdateMessage(const wxString &newmsg)
 {
     if ( !newmsg.empty() && newmsg != m_msg->GetLabel() )
     {
+        const wxSize sizeOld = m_msg->GetSize();
+
         m_msg->SetLabel(newmsg);
+
+        if ( m_msg->GetSize().x > sizeOld.x )
+        {
+            // Resize the dialog to fit its new, longer contents instead of
+            // just truncating it.
+            Fit();
+        }
 
         // allow the window to repaint:
         // NOTE: since we yield only for UI events with this call, there

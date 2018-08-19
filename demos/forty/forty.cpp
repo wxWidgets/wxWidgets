@@ -112,7 +112,7 @@ const wxBrush& FortyApp::BackgroundBrush()
 {
     if (!m_backgroundBrush)
     {
-        m_backgroundBrush = new wxBrush(BackgroundColour(), wxSOLID);
+        m_backgroundBrush = new wxBrush(BackgroundColour());
     }
 
     return *m_backgroundBrush;

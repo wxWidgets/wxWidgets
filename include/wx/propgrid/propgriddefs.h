@@ -30,6 +30,8 @@
 // Here are some platform dependent defines
 // NOTE: More in propertygrid.cpp
 //
+// NB: Only define wxPG_TEXTCTRLXADJUST for platforms that do not
+//     (yet) support wxTextEntry::SetMargins() for the left margin.
 
 #if defined(__WXMSW__)
 
@@ -37,6 +39,9 @@
     #define wxPG_XBEFORETEXT            4
     // space between vertical line and value editor control
     #define wxPG_XBEFOREWIDGET          1
+
+    // left margin can be set with wxTextEntry::SetMargins()
+    #undef wxPG_TEXTCTRLXADJUST
 
     // comment to use bitmap buttons
     #define wxPG_ICON_WIDTH             9
@@ -67,9 +72,8 @@
     #define wxPG_XBEFOREWIDGET          1
 
     // x position adjustment for wxTextCtrl (and like)
-    // NB: Only define wxPG_TEXTCTRLXADJUST for platforms that do not
-    //     (yet) support wxTextEntry::SetMargins() for the left margin.
-    //#define wxPG_TEXTCTRLXADJUST        3
+    // left margin can be set with wxTextEntry::SetMargins()
+    #undef wxPG_TEXTCTRLXADJUST
 
     // comment to use bitmap buttons
     #define wxPG_ICON_WIDTH             9
@@ -100,7 +104,8 @@
     #define wxPG_XBEFOREWIDGET          1
 
     // x position adjustment for wxTextCtrl (and like)
-    #define wxPG_TEXTCTRLXADJUST        0
+    // left margin cannot be set with wxTextEntry::SetMargins()
+    #define wxPG_TEXTCTRLXADJUST        1
 
     // comment to use bitmap buttons
     #define wxPG_ICON_WIDTH             11
@@ -131,6 +136,7 @@
     #define wxPG_XBEFOREWIDGET          1
 
     // x position adjustment for wxTextCtrl (and like)
+    // left margin cannot be set with wxTextEntry::SetMargins()
     #define wxPG_TEXTCTRLXADJUST        3
 
     // comment to use bitmap buttons
@@ -175,7 +181,7 @@
 #endif
 
 // Use this macro to generate standard custom image height from
-#define wxPG_STD_CUST_IMAGE_HEIGHT(LINEHEIGHT)  (LINEHEIGHT-3)
+#define wxPG_STD_CUST_IMAGE_HEIGHT(LINEHEIGHT)  ((LINEHEIGHT)-3)
 
 // Undefine wxPG_ICON_WIDTH to use supplied xpm bitmaps instead
 // (for tree buttons)
@@ -237,7 +243,7 @@ class wxPGValidationInfo;
 #define wxPG_COLOUR_BLACK       (*wxBLACK)
 
 // Convert Red, Green and Blue to a single 32-bit value.
-#define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
+#define wxPG_COLOUR(R,G,B) ((wxUint32)((R)+((G)<<8)+((B)<<16)))
 
 
 // If property is supposed to have custom-painted image, then returning

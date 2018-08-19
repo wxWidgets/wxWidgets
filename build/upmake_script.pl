@@ -10,6 +10,7 @@ use FindBin qw($Bin);
 
 use Makefile::Update;
 use Makefile::Update::Bakefile0;
+use Makefile::Update::CMakefile;
 use Makefile::Update::MSBuild;
 use Makefile::Update::VCProj;
 
@@ -53,8 +54,12 @@ my $vars = read_files_list($files);
 
 if (!$only_msvs) {
     if (call_upmake("$Bin/bakefiles/files.bkl", \&update_bakefile_0, $vars)) {
-        print qq{Don't forget to run "bakefile_gen -b wx.bkl".\n} if $verbose;
+        print qq{Don't forget to run "bakefile_gen -b wx.bkl".\n};
     }
+}
+
+if (!$only_msvs && !$only_bkl) {
+    call_upmake("$Bin/cmake/files.cmake", \&update_cmakefile, $vars);
 }
 
 if (!$only_bkl) {

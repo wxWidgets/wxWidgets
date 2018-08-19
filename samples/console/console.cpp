@@ -40,12 +40,13 @@ static const wxCmdLineEntryDesc cmdLineDesc[] =
 {
     { wxCMD_LINE_SWITCH, "h", "help", "show this help message",
         wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-    { wxCMD_LINE_SWITCH, "d", "dummy", "a dummy switch" },
+    { wxCMD_LINE_SWITCH, "d", "dummy", "a dummy switch",
+        wxCMD_LINE_VAL_NONE, 0 },
     { wxCMD_LINE_SWITCH, "s", "secret", "a secret switch",
         wxCMD_LINE_VAL_NONE, wxCMD_LINE_HIDDEN },
     // ... your other command line options here...
 
-    { wxCMD_LINE_NONE }
+    wxCMD_LINE_DESC_END
 };
 
 int main(int argc, char **argv)

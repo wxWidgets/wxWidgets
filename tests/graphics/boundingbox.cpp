@@ -47,7 +47,7 @@ public:
         m_bmp = wxNullBitmap;
     }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         m_gcdc->ResetBoundingBox();
     }
@@ -203,7 +203,7 @@ void GCDCBoundingBoxTestCase::DrawEllipticArc()
 void GCDCBoundingBoxTestCase::DrawPoint()
 {
     m_gcdc->DrawPoint(20, 20);
-    AssertBox(20, 20, 1, 1);
+    AssertBox(20, 20, 0, 0);
 }
 
 void GCDCBoundingBoxTestCase::DrawLines()

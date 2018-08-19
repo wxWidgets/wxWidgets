@@ -22,6 +22,8 @@
 #include "wx/dcclient.h"
 #include "wx/qt/dcclient.h"
 
+#include <QtWidgets/QScrollArea>
+#include <QtGui/QPainter>
 
 //##############################################################################
 
@@ -29,6 +31,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
     : wxQtDCImpl( owner )
 {
     m_window = NULL;
+    m_qtImage = NULL;
     m_ok = false;
     m_qtPainter = new QPainter();
 }
@@ -37,6 +40,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
     m_window = win;
+    m_qtImage = NULL;
     m_qtPainter = m_window->QtGetPainter();
     // if we're not inside a Paint event, painter will invalid
     m_ok = m_qtPainter != NULL;

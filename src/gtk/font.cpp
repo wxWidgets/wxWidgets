@@ -20,6 +20,7 @@
 #include "wx/font.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
@@ -551,3 +552,101 @@ bool wxFont::GTKSetPangoAttrs(PangoLayout* layout) const
 
     return true;
 }
+
+
+// ----------------------------------------------------------------------------
+// Support for adding private fonts
+// ----------------------------------------------------------------------------
+
+#if wxUSE_PRIVATE_FONTS
+
+#include "wx/fontenum.h"
+#include "wx/module.h"
+#include "wx/gtk/private.h"
+#include "wx/gtk/private/object.h"
+
+#include <fontconfig/fontconfig.h>
+#include <pango/pangofc-fontmap.h>
+
+extern PangoContext* wxGetPangoContext();
+
+namespace
+{
+
+FcConfig* gs_fcConfig = NULL;
+
+// Module used to clean up the global FcConfig.
+class wxFcConfigDestroyModule : public wxModule
+{
+public:
+    wxFcConfigDestroyModule() { }
+
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE
+    {
+        if ( gs_fcConfig )
+        {
+            FcConfigDestroy(gs_fcConfig);
+            gs_fcConfig = NULL;
+        }
+    }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxFcConfigDestroyModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxFcConfigDestroyModule, wxModule);
+
+} // anonymous namespace
+
+bool wxFontBase::AddPrivateFont(const wxString& filename)
+{
+    // We already checked that we have the required functions at compile-time,
+    // but we should also check if they're available at run-time in case we use
+    // older versions of them than the ones we were compiled with.
+    if ( wx_pango_version_check(1,38,0) != NULL )
+    {
+        wxLogError(_("Using private fonts is not supported on this system: "
+                     "Pango library is too old, 1.38 or later required."));
+        return false;
+    }
+
+    if ( !gs_fcConfig )
+    {
+        gs_fcConfig = FcInitLoadConfigAndFonts();
+        if ( !gs_fcConfig )
+        {
+            wxLogError(_("Failed to create font configuration object."));
+            return false;
+        }
+    }
+
+    if ( !FcConfigAppFontAddFile(gs_fcConfig,
+            reinterpret_cast<const FcChar8*>(
+                static_cast<const char*>(filename.utf8_str())
+            )) )
+    {
+        wxLogError(_("Failed to add custom font \"%s\"."), filename);
+        return false;
+    }
+
+    wxGtkObject<PangoContext> context(wxGetPangoContext());
+    PangoFontMap* const fmap = pango_context_get_font_map(context);
+    if ( !fmap || !PANGO_IS_FC_FONT_MAP(fmap) )
+    {
+        wxLogError(_("Failed to register font configuration using private fonts."));
+        return false;
+    }
+
+    PangoFcFontMap* const fcfmap = PANGO_FC_FONT_MAP(fmap);
+    pango_fc_font_map_set_config(fcfmap, gs_fcConfig);
+
+    // Ensure that the face names defined by private fonts are recognized by
+    // our SetFaceName() which uses wxFontEnumerator to check if the name is in
+    // the list of available faces.
+    wxFontEnumerator::InvalidateCache();
+
+    return true;
+}
+
+#endif // wxUSE_PRIVATE_FONTS

@@ -8,13 +8,8 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
-#include <gtk/gtk.h>
-#include "wx/gtk/private/win_gtk.h"
-
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/win_gtk.h"
 
 /*
 wxPizza is a custom GTK+ widget derived from GtkFixed.  A custom widget

@@ -27,13 +27,13 @@ class SelStoreTestCase : public CppUnit::TestCase
 public:
     SelStoreTestCase() { m_store = NULL; }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         m_store = new wxSelectionStore;
         m_store->SetItemCount(NUM_ITEMS);
     }
 
-    virtual void tearDown()
+    virtual void tearDown() wxOVERRIDE
     {
         delete m_store;
         m_store = NULL;

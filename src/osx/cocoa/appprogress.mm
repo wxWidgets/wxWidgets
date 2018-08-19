@@ -26,12 +26,13 @@
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
+    if (self = [super init])
+    {
         m_dockTile = [NSApplication sharedApplication].dockTile;
         NSImageView* iv = [[NSImageView alloc] init];
         [iv setImage:[NSApplication sharedApplication].applicationIconImage];
         [m_dockTile setContentView:iv];
+        [iv release];
         
         m_progIndicator = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(0.0f, 16.0f, m_dockTile.size.width, 24.)];
         m_progIndicator.style = NSProgressIndicatorBarStyle;

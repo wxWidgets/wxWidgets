@@ -32,8 +32,8 @@ class ButtonTestCase : public CppUnit::TestCase
 public:
     ButtonTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( ButtonTestCase );
@@ -164,7 +164,7 @@ void ButtonTestCase::Bitmap()
     CPPUNIT_ASSERT(!m_button->GetBitmap().IsOk());
 
 
-    m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION, 
+    m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION,
                                                wxART_OTHER,
                                                wxSize(32, 32)));
 

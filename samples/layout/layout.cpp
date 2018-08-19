@@ -270,10 +270,8 @@ MyProportionsFrame::MyProportionsFrame(wxFrame *parent)
     SetSizerAndFit(sizerTop);
 
     // and connect the events
-    Connect(wxEVT_TEXT,
-                wxCommandEventHandler(MyProportionsFrame::OnProportionUpdated));
-    Connect(wxEVT_SPINCTRL,
-            wxSpinEventHandler(MyProportionsFrame::OnProportionChanged));
+    Bind(wxEVT_TEXT, &MyProportionsFrame::OnProportionUpdated, this);
+    Bind(wxEVT_SPINCTRL, &MyProportionsFrame::OnProportionChanged, this);
 }
 
 void MyProportionsFrame::UpdateProportions()

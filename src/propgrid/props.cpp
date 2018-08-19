@@ -348,6 +348,7 @@ bool wxIntProperty::IntToValue( wxVariant& variant, int value, int WXUNUSED(argF
 // back to it when mode is wxPG_PROPERTY_VALIDATION_SATURATE or wxPG_PROPERTY_VALIDATION_WRAP.
 // For argument 'value' of type 'double' there is a specialized function (below).
 //
+namespace {
 template<typename T>
 bool NumericValidation( const wxPGProperty* property,
                         T& value,
@@ -549,6 +550,7 @@ bool NumericValidation( const wxPGProperty* property,
     }
     return true;
 }
+} // namespace
 
 #if wxUSE_LONGLONG
 bool wxIntProperty::DoValidation( const wxPGProperty* property,
@@ -2469,38 +2471,25 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
         arr.push_back(ArrayGet(i));
     m_elb->SetStrings(arr);
 
+    m_elbSubPanel = m_elb->GetNewButton()->GetParent();
+
     // Connect event handlers
-    wxButton* but;
     wxListCtrl* lc = m_elb->GetListCtrl();
 
-    but = m_elb->GetNewButton();
-    m_elbSubPanel = but->GetParent();
-    but->Connect(but->GetId(), wxEVT_BUTTON,
-        wxCommandEventHandler(wxPGArrayEditorDialog::OnAddClick),
-        NULL, this);
+    m_elb->GetNewButton()->Bind(wxEVT_BUTTON,
+                                &wxPGArrayEditorDialog::OnAddClick, this);
+    m_elb->GetDelButton()->Bind(wxEVT_BUTTON,
+                                &wxPGArrayEditorDialog::OnDeleteClick, this);
+    m_elb->GetUpButton()->Bind(wxEVT_BUTTON,
+                               &wxPGArrayEditorDialog::OnUpClick, this);
+    m_elb->GetDownButton()->Bind(wxEVT_BUTTON,
+                                 &wxPGArrayEditorDialog::OnDownClick, this);
 
-    but = m_elb->GetDelButton();
-    but->Connect(but->GetId(), wxEVT_BUTTON,
-        wxCommandEventHandler(wxPGArrayEditorDialog::OnDeleteClick),
-        NULL, this);
+    lc->Bind(wxEVT_LIST_BEGIN_LABEL_EDIT,
+             &wxPGArrayEditorDialog::OnBeginLabelEdit, this);
 
-    but = m_elb->GetUpButton();
-    but->Connect(but->GetId(), wxEVT_BUTTON,
-        wxCommandEventHandler(wxPGArrayEditorDialog::OnUpClick),
-        NULL, this);
-
-    but = m_elb->GetDownButton();
-    but->Connect(but->GetId(), wxEVT_BUTTON,
-        wxCommandEventHandler(wxPGArrayEditorDialog::OnDownClick),
-        NULL, this);
-
-    lc->Connect(lc->GetId(), wxEVT_LIST_BEGIN_LABEL_EDIT,
-        wxListEventHandler(wxPGArrayEditorDialog::OnBeginLabelEdit),
-        NULL, this);
-
-    lc->Connect(lc->GetId(), wxEVT_LIST_END_LABEL_EDIT,
-        wxListEventHandler(wxPGArrayEditorDialog::OnEndLabelEdit),
-        NULL, this);
+    lc->Bind(wxEVT_LIST_END_LABEL_EDIT,
+             &wxPGArrayEditorDialog::OnEndLabelEdit, this);
 
     topsizer->Add(m_elb, wxSizerFlags(1).Expand().Border(0, spacing));
 

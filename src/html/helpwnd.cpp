@@ -829,7 +829,7 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
 
     int foundcnt = 0;
     wxString foundstr;
-    wxString book = wxEmptyString;
+    wxString book;
 
     if (!m_Splitter->IsSplit())
     {
@@ -1073,7 +1073,7 @@ void wxHtmlHelpWindow::ReadCustomization(wxConfigBase *cfg, const wxString& path
     wxString oldpath;
     wxString tmp;
 
-    if (path != wxEmptyString)
+    if (!path.empty())
     {
         oldpath = cfg->GetPath();
         cfg->SetPath(wxT("/") + path);
@@ -1122,7 +1122,7 @@ void wxHtmlHelpWindow::ReadCustomization(wxConfigBase *cfg, const wxString& path
     if (m_HtmlWin)
         m_HtmlWin->ReadCustomization(cfg);
 
-    if (path != wxEmptyString)
+    if (!path.empty())
         cfg->SetPath(oldpath);
 }
 
@@ -1131,7 +1131,7 @@ void wxHtmlHelpWindow::WriteCustomization(wxConfigBase *cfg, const wxString& pat
     wxString oldpath;
     wxString tmp;
 
-    if (path != wxEmptyString)
+    if (!path.empty())
     {
         oldpath = cfg->GetPath();
         cfg->SetPath(wxT("/") + path);
@@ -1170,7 +1170,7 @@ void wxHtmlHelpWindow::WriteCustomization(wxConfigBase *cfg, const wxString& pat
     if (m_HtmlWin)
         m_HtmlWin->WriteCustomization(cfg);
 
-    if (path != wxEmptyString)
+    if (!path.empty())
         cfg->SetPath(oldpath);
 }
 #endif // wxUSE_CONFIG
@@ -1495,7 +1495,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
 
                 item = m_HtmlWin->GetOpenedPageTitle();
                 url = m_HtmlWin->GetOpenedPage();
-                if (item == wxEmptyString)
+                if (item.empty())
                     item = url.AfterLast(wxT('/'));
                 if (m_BookmarksPages.Index(url) == wxNOT_FOUND)
                 {
@@ -1612,7 +1612,7 @@ void wxHtmlHelpWindow::DoIndexFind()
 {
     wxString sr = m_IndexText->GetLineText(0);
     sr.MakeLower();
-    if (sr == wxEmptyString)
+    if (sr.empty())
     {
         DoIndexAll();
     }

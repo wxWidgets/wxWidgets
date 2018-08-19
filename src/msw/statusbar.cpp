@@ -287,12 +287,12 @@ void wxStatusBar::DoUpdateStatusText(int nField)
     wxString text = GetStatusText(nField);
 
     // do we need to ellipsize this string?
-    wxEllipsizeMode ellmode = (wxEllipsizeMode)-1;
+    wxEllipsizeMode ellmode = wxELLIPSIZE_NONE;
     if (HasFlag(wxSTB_ELLIPSIZE_START)) ellmode = wxELLIPSIZE_START;
     else if (HasFlag(wxSTB_ELLIPSIZE_MIDDLE)) ellmode = wxELLIPSIZE_MIDDLE;
     else if (HasFlag(wxSTB_ELLIPSIZE_END)) ellmode = wxELLIPSIZE_END;
 
-    if (ellmode == (wxEllipsizeMode)-1)
+    if (ellmode == wxELLIPSIZE_NONE)
     {
         // if we have the wxSTB_SHOW_TIPS we must set the ellipsized flag even if
         // we don't ellipsize the text but just truncate it
@@ -393,7 +393,7 @@ const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
         // pane. Notice that it's not the value returned by SB_GETBORDERS
         // which, at least on this Windows 2003 system, returns {0, 2, 2}
 #if wxUSE_UXTHEME
-        if ( wxUxThemeEngine::GetIfActive() )
+        if ( wxUxThemeIsActive() )
         {
             s_metrics.gripWidth = 20;
             s_metrics.textMargin = 8;
@@ -450,7 +450,7 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
             r.left -= 2;
         }
 
-        wxUxThemeEngine::Get()->GetThemeBackgroundContentRect(theme, NULL,
+        ::GetThemeBackgroundContentRect(theme, NULL,
                                                               1 /* SP_PANE */, 0,
                                                               &r, &r);
     }

@@ -164,7 +164,7 @@ wxString wxFileTipProvider::GetTip()
 
         // Break if tip isn't a comment, and isn't an empty string
         // (or only stray space characters).
-        if ( !tip.StartsWith(wxT("#")) && (tip.Trim() != wxEmptyString) )
+        if ( !tip.StartsWith(wxT("#")) && !tip.Trim().empty() )
         {
             break;
         }

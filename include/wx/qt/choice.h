@@ -8,7 +8,7 @@
 #ifndef _WX_QT_CHOICE_H_
 #define _WX_QT_CHOICE_H_
 
-#include <QtWidgets/QComboBox>
+class QComboBox;
 
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
@@ -56,7 +56,7 @@ public:
     virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
-    virtual QComboBox *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,

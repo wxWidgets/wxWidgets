@@ -28,18 +28,11 @@
     #include "wx/tooltip.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/eventsdisabler.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/treeentry_gtk.h"
 #include "wx/gtk/private/treeview.h"
-
-#include <gdk/gdkkeysyms.h>
-#ifdef __WXGTK3__
-#include <gdk/gdkkeysyms-compat.h>
-#endif
 
 //-----------------------------------------------------------------------------
 // data
@@ -133,9 +126,9 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
                                 GdkEventKey *gdk_event,
                                 wxListBox *listbox )
 {
-    if ((gdk_event->keyval == GDK_Return) ||
-        (gdk_event->keyval == GDK_ISO_Enter) ||
-        (gdk_event->keyval == GDK_KP_Enter))
+    if ((gdk_event->keyval == GDK_KEY_Return) ||
+        (gdk_event->keyval == GDK_KEY_ISO_Enter) ||
+        (gdk_event->keyval == GDK_KEY_KP_Enter))
     {
         int index = -1;
         if (!listbox->HasMultipleSelection())
@@ -765,9 +758,7 @@ int wxListBox::GetTopItem() const
 #if GTK_CHECK_VERSION(2,8,0)
     wxGtkTreePath start;
     if (
-#ifndef __WXGTK3__
-        gtk_check_version(2,8,0) == NULL &&
-#endif
+        wx_is_at_least_gtk2(8) &&
         gtk_tree_view_get_visible_range(m_treeview, start.ByRef(), NULL))
     {
         gint *ptr = gtk_tree_path_get_indices(start);
@@ -778,6 +769,37 @@ int wxListBox::GetTopItem() const
 #endif
 
     return idx;
+}
+
+int wxListBox::GetCountPerPage() const
+{
+    wxGtkTreePath path;
+    GtkTreeViewColumn *column;
+
+    if ( !gtk_tree_view_get_path_at_pos
+          (
+            m_treeview,
+            0,
+            0,
+            path.ByRef(),
+            &column,
+            NULL,
+            NULL
+          ) )
+    {
+        return -1;
+    }
+
+    GdkRectangle rect;
+    gtk_tree_view_get_cell_area(m_treeview, path, column, &rect);
+
+    if ( !rect.height )
+        return -1;
+
+    GdkRectangle vis;
+    gtk_tree_view_get_visible_rect(m_treeview, &vis);
+
+    return vis.height / rect.height;
 }
 
 // ----------------------------------------------------------------------------

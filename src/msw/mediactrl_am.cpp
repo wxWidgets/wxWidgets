@@ -892,10 +892,10 @@ public:
     wxAMMediaEvtHandler(wxAMMediaBackend *amb) :
        m_amb(amb), m_bLoadEventSent(false)
     {
-        m_amb->m_pAX->Connect(m_amb->m_pAX->GetId(),
+        m_amb->m_pAX->Bind(
             wxEVT_ACTIVEX,
-            wxActiveXEventHandler(wxAMMediaEvtHandler::OnActiveX),
-            NULL, this
+            &wxAMMediaEvtHandler::OnActiveX, this,
+            m_amb->m_pAX->GetId()
                               );
     }
 
@@ -1127,7 +1127,7 @@ bool wxAMMediaBackend::Load(const wxURI& location, const wxURI& proxy)
     if(pPlay)
     {
         pPlay->put_UseHTTPProxy(VARIANT_TRUE);
-        pPlay->put_HTTPProxyHost(wxBasicString(proxy.GetServer()).Get());
+        pPlay->put_HTTPProxyHost(wxBasicString(proxy.GetServer()));
         pPlay->put_HTTPProxyPort(wxAtoi(proxy.GetPort()));
         pPlay->Release();
     }
@@ -1150,9 +1150,9 @@ bool wxAMMediaBackend::DoLoad(const wxString& location)
     // the docs say its async and put_FileName is not -
     // but in practice they both seem to be async anyway
     if(GetMP())
-        hr = GetMP()->Open( wxBasicString(location).Get() );
+        hr = GetMP()->Open( wxBasicString(location) );
     else
-        hr = GetAM()->put_FileName( wxBasicString(location).Get() );
+        hr = GetAM()->put_FileName( wxBasicString(location) );
 
     if(FAILED(hr))
     {
@@ -1530,7 +1530,9 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
 //---------------------------------------------------------------------------
 void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 {
-    switch(event.GetDispatchId())
+    // cast to unsigned long to fix narrowing error with case 0xfffffd9f
+    // when using clang
+    switch (static_cast<unsigned long>(event.GetDispatchId()))
     {
     case 0x00000001: // statechange in IActiveMovie
     case 0x00000bc4: // playstatechange in IMediaPlayer

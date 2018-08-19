@@ -756,8 +756,24 @@ public:
     /**
         Constructs a log target which sends all the log messages to the given
         output stream. If it is @NULL, the messages are sent to @c cerr.
+        The messages will be written in the encoding specified by the
+        given @c wxMBConv.
+
+        The @a conv argument is only available in wxWidgets 3.1.1 and later.
+
+        @note
+            In practice, it is only advisable to specify @c wxConvUTF8 as
+            the @a conv.
+            If using @c wxMBConvUTF16(), the file should be opened in
+            @c std::ios::binary mode.
+
+        @warning
+            If a log message contains any characters that cannot be converted
+            to the character set given by @a conv, that message will be
+            silently ignored, i.e. it will not be written at all.
     */
-    wxLogStream(std::ostream *ostr = NULL);
+    wxLogStream(std::ostream *ostr = NULL,
+                const wxMBConv &conv = wxConvWhateverWorks);
 };
 
 
@@ -782,8 +798,24 @@ public:
     /**
         Constructs a log target which sends all the log messages to the given
         @c FILE. If it is @NULL, the messages are sent to @c stderr.
+        The messages will be written in the encoding specified by the
+        given @c wxMBConv.
+
+		The @a conv argument is only available in wxWidgets 3.1.1 and later.
+
+        @note
+            In practice, it is only advisable to specify @c wxConvUTF8 as
+            the @a conv.
+            If using @c wxMBConvUTF16(), the file should be opened in
+            @c "wb" mode.
+
+        @warning
+            If a log message contains any characters that cannot be converted
+            to the character set given by @a conv, that message will be
+            silently ignored, i.e. it will not be written at all.
     */
-    wxLogStderr(FILE* fp = NULL);
+    wxLogStderr(FILE *fp = NULL,
+                const wxMBConv &conv = wxConvWhateverWorks);
 };
 
 

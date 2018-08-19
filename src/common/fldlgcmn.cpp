@@ -86,7 +86,6 @@ bool wxFileDialogBase::Create(wxWindow *parent,
 #endif
 
     m_windowStyle = style;
-    m_filterIndex = 0;
 
     if (!HasFdFlag(wxFD_OPEN) && !HasFdFlag(wxFD_SAVE))
         m_windowStyle |= wxFD_OPEN;     // wxFD_OPEN is the default
@@ -191,7 +190,7 @@ wxSize wxFileDialogBase::GetExtraControlSize()
     // create the extra control in an empty dialog just to find its size: this
     // is not terribly efficient but we do need to know the size before
     // creating the native dialog and this seems to be the only way
-    wxDialog dlg(NULL, wxID_ANY, "");
+    wxDialog dlg(NULL, wxID_ANY, wxString());
     return (*m_extraControlCreator)(&dlg)->GetSize();
 }
 

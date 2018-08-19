@@ -172,7 +172,7 @@ public:
 
         ShowWithEffect(m_effect, m_timeout);
 
-        Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(EffectFrame::OnClose));
+        Bind(wxEVT_CLOSE_WINDOW, &EffectFrame::OnClose, this);
     }
 
 private:

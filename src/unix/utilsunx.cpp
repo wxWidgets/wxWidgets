@@ -247,6 +247,10 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
 // Shutdown or reboot the PC
 bool wxShutdown(int flags)
 {
+#if defined(__WXOSX__) && wxOSX_USE_IPHONE
+    wxUnusedVar(flags);
+    return false;
+#else
     flags &= ~wxSHUTDOWN_FORCE;
 
     wxChar level;
@@ -270,6 +274,7 @@ bool wxShutdown(int flags)
     }
 
     return system(wxString::Format("init %c", level).mb_str()) == 0;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -696,7 +701,7 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
         //       have more opened descriptions than this number). Unfortunately
         //       there is no good portable solution for closing all descriptors
         //       above a certain threshold but non-portable solutions exist for
-        //       most platforms, see [http://stackoverflow.com/questions/899038/
+        //       most platforms, see [https://stackoverflow.com/questions/899038/
         //          getting-the-highest-allocated-file-descriptor]
         for ( int fd = 0; fd < (int)FD_SETSIZE; ++fd )
         {
@@ -1209,7 +1214,12 @@ wxMemorySize wxGetFreeMemory()
                     {
                         unsigned long cached;
                         if ( sscanf(buf, "Cached: %lu", &cached) == 1 )
-                            memFree += cached;
+                        {
+                            if ( cached > ULONG_MAX-memFree )
+                                memFree = ULONG_MAX;
+                            else
+                                memFree += cached;
+                        }
                     }
 
                     // values here are always expressed in kB and we want bytes
@@ -1392,7 +1402,8 @@ bool wxUnsetEnv(const wxString& variable)
 
 #include <signal.h>
 
-extern "C" void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
+extern "C" {
+static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
 {
     if ( wxTheApp )
     {
@@ -1401,6 +1412,7 @@ extern "C" void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
     }
 
     abort();
+}
 }
 
 bool wxHandleFatalExceptions(bool doit)

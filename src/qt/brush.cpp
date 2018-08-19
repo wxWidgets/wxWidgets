@@ -95,7 +95,7 @@ wxBrush::wxBrush()
 wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setColor(col.GetHandle());
+    M_BRUSHDATA.setColor(col.GetQColor());
     M_BRUSHDATA.setStyle(ConvertBrushStyle(style));
     M_STYLEDATA = style;
 }
@@ -103,7 +103,7 @@ wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setColor(col.GetHandle());
+    M_BRUSHDATA.setColor(col.GetQColor());
     M_BRUSHDATA.setStyle(ConvertBrushStyle((wxBrushStyle)style));
     M_STYLEDATA = (wxBrushStyle)style;
 }
@@ -122,7 +122,7 @@ wxBrush::wxBrush(const wxBitmap& stipple)
 void wxBrush::SetColour(const wxColour& col)
 {
     AllocExclusive();
-    M_BRUSHDATA.setColor(col.GetHandle());
+    M_BRUSHDATA.setColor(col.GetQColor());
 }
 
 void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)

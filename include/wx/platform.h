@@ -44,13 +44,17 @@
 #    ifndef MAC_OS_X_VERSION_10_12
 #       define MAC_OS_X_VERSION_10_12 101200
 #    endif
-#    ifndef NSAppKitVersionNumber10_10
-#       define NSAppKitVersionNumber10_10 1343
+#    ifndef MAC_OS_X_VERSION_10_13
+#       define MAC_OS_X_VERSION_10_13 101300
 #    endif
-#    ifndef NSAppKitVersionNumber10_11
-#       define NSAppKitVersionNumber10_11 1404
+#    if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#        ifndef NSAppKitVersionNumber10_10
+#            define NSAppKitVersionNumber10_10 1343
+#        endif
+#        ifndef NSAppKitVersionNumber10_11
+#            define NSAppKitVersionNumber10_11 1404
+#        endif
 #    endif
-#    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
 #    endif
@@ -79,10 +83,6 @@
     /* Select wxMSW under Windows if no other port is specified. */
 #   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
 #       define __WXMSW__
-#   endif
-
-#   if !defined(__WINDOWS__)
-#       define __WINDOWS__
 #   endif
 
 #   ifndef _WIN32
@@ -484,11 +484,19 @@
 #        ifndef MAC_OS_X_VERSION_10_12
 #           define MAC_OS_X_VERSION_10_12 101200
 #        endif
-#        ifndef NSAppKitVersionNumber10_10
-#           define NSAppKitVersionNumber10_10 1343
+#        ifndef MAC_OS_X_VERSION_10_13
+#           define MAC_OS_X_VERSION_10_13 101300
 #        endif
-#        ifndef NSAppKitVersionNumber10_11
-#           define NSAppKitVersionNumber10_11 1404
+#        ifndef MAC_OS_X_VERSION_10_14
+#           define MAC_OS_X_VERSION_10_14 101400
+#        endif
+#        if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#            ifndef NSAppKitVersionNumber10_10
+#                define NSAppKitVersionNumber10_10 1343
+#            endif
+#            ifndef NSAppKitVersionNumber10_11
+#                define NSAppKitVersionNumber10_11 1404
+#            endif
 #        endif
 #    else
 #        error "only mach-o configurations are supported"

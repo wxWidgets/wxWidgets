@@ -779,7 +779,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                         <item tooltip="E=mc^2">Energy 98.3</item>
                                         <item helptext="Favourite chukcha's radio">CHUM FM</item>
                                         <item>92FM</item>
-                                        <item hidden="1">Very quite station</item>
+                                        <item hidden="1">Very quiet station</item>
                                     </content>
                                 </object>
                             </object>
@@ -983,6 +983,58 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxStaticBoxSizer">
                                     <orient>wxVERTICAL</orient>
                                     <label>Internet options</label>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <style>wxRB_GROUP</style>
+                                            <label>Use _proxy</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <label>Use _VPN</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <label>Use _Tor</label>
+                                            <value>1</value>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticBoxSizer">
+                                    <orient>wxVERTICAL</orient>
+                                    <windowlabel>
+                                        <object class="wxCheckBox">
+                                            <label>Enable quantum mechanics</label>
+                                            <checked>1</checked>
+                                        </object>
+                                    </windowlabel>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <style>wxRB_GROUP</style>
+                                            <label>Cat is dead</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxRadioButton">
+                                            <label>Cat is alive</label>
+                                            <value>1</value>
+                                        </object>
+                                    </object>
                                 </object>
                             </object>
                         </object>

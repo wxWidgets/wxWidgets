@@ -396,7 +396,7 @@ void wxEmulatorContainer::OnEraseBackground(wxEraseEvent& event)
         dc = new wxClientDC(this);
     }
 
-    dc->SetBackground(wxBrush(wxGetApp().m_emulatorInfo.m_emulatorBackgroundColour, wxSOLID));
+    dc->SetBackground(wxBrush(wxGetApp().m_emulatorInfo.m_emulatorBackgroundColour));
     dc->Clear();
 
     if (!event.GetDC())

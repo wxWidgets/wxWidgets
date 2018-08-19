@@ -594,6 +594,13 @@ bool wxDebugReport::DoProcess()
     return true;
 }
 
+wxFileName wxDebugReport::GetSaveLocation() const
+{
+    wxFileName fn;
+    fn.SetPath(GetDirectory());
+    return fn;
+}
+
 // ============================================================================
 // wxDebugReport-derived classes
 // ============================================================================
@@ -618,6 +625,19 @@ void wxDebugReportCompress::SetCompressedFileBaseName(const wxString& name)
     m_zipName = name;
 }
 
+wxFileName wxDebugReportCompress::GetSaveLocation() const
+{
+    // Use the default directory as a basis for the save location, e.g.
+    // %temp%/someName becomes %temp%/someName.zip.
+    wxFileName fn(GetDirectory());
+    if ( !m_zipDir.empty() )
+        fn.SetPath(m_zipDir);
+    if ( !m_zipName.empty() )
+        fn.SetName(m_zipName);
+    fn.SetExt("zip");
+    return fn;
+}
+
 bool wxDebugReportCompress::DoProcess()
 {
 #define HAS_FILE_STREAMS (wxUSE_STREAMS && (wxUSE_FILE || wxUSE_FFILE))
@@ -626,19 +646,8 @@ bool wxDebugReportCompress::DoProcess()
     if ( !count )
         return false;
 
-    // create the compressed report file outside of the directory with the
-    // report files as it will be deleted by wxDebugReport dtor but we want to
-    // keep this one: for this we simply treat the directory name as the name
-    // of the file so that its last component becomes our base name
-    wxFileName fn(GetDirectory());
-    if ( !m_zipDir.empty() )
-        fn.SetPath(m_zipDir);
-    if ( !m_zipName.empty() )
-        fn.SetName(m_zipName);
-    fn.SetExt("zip");
-
     // create the streams
-    const wxString ofullPath = fn.GetFullPath();
+    const wxString ofullPath = GetSaveLocation().GetFullPath();
 #if wxUSE_FFILE
     wxFFileOutputStream os(ofullPath, wxT("wb"));
 #elif wxUSE_FILE

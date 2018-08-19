@@ -117,6 +117,7 @@ public:
     wxWebView()
     {
         m_showMenu = true;
+        m_runScriptCount = 0;
     }
 
     virtual ~wxWebView() {}
@@ -161,7 +162,7 @@ public:
     virtual void Print() = 0;
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) = 0;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
-    virtual void RunScript(const wxString& javascript) = 0;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
     virtual void SetEditable(bool enable = true) = 0;
     void SetPage(const wxString& html, const wxString& baseUrl)
     {
@@ -222,6 +223,10 @@ public:
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) = 0;
+
+    // Count the number of calls to RunScript() in order to prevent
+    // the_same variable from being used twice in more than one call.
+    int m_runScriptCount;
 
 private:
     static void InitFactoryMap();

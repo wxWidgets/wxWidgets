@@ -146,14 +146,10 @@ public:
         m_hasCapture = false;
         m_spins = 1;
 
-        Connect( wxEVT_LEFT_DOWN,
-                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
-        Connect( wxEVT_LEFT_UP,
-                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
-        Connect( wxEVT_MOTION,
-                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
-        Connect( wxEVT_MOUSE_CAPTURE_LOST,
-          wxMouseCaptureLostEventHandler(wxPGSpinButton::OnMouseCaptureLost) );
+        Bind(wxEVT_LEFT_DOWN, &wxPGSpinButton::OnMouseEvent, this);
+        Bind(wxEVT_LEFT_UP, &wxPGSpinButton::OnMouseEvent, this);
+        Bind(wxEVT_MOTION, &wxPGSpinButton::OnMouseEvent, this);
+        Bind(wxEVT_MOUSE_CAPTURE_LOST, &wxPGSpinButton::OnMouseCaptureLost, this);
     }
 
     int GetSpins() const

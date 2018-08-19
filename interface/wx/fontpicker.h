@@ -110,6 +110,13 @@ public:
     unsigned int GetMaxPointSize() const;
 
     /**
+        Returns the minimum point size value allowed for the user-chosen font.
+
+        @since 3.1.1
+    */
+    unsigned int GetMinPointSize() const;
+
+    /**
         Returns the currently selected colour.
 
         Note that the colour of the font can only be set by the user under
@@ -136,6 +143,15 @@ public:
         font size when huge fonts do not make much sense.
     */
     void SetMaxPointSize(unsigned int max);
+
+    /**
+        Sets the minimum point size value allowed for the user-chosen font.
+
+        The default value is 0.
+
+        @since 3.1.1
+    */
+    void SetMinPointSize(unsigned int min);
 
     /**
         Sets the font colour.

@@ -73,11 +73,13 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 
 - (id)init
 {
-    self = [super init];
-    dragFinished = NO;
-    resultCode = NSDragOperationNone;
-    impl = 0;
-    m_dragFlags = wxDrag_CopyOnly;
+    if ( self = [super init] )
+    {
+        dragFinished = NO;
+        resultCode = NSDragOperationNone;
+        impl = 0;
+        m_dragFlags = wxDrag_CopyOnly;
+    }
     return self;
 }
 

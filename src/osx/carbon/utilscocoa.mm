@@ -99,7 +99,6 @@ void* wxMacCocoaRetain( void* obj )
 #if wxOSX_USE_COCOA
 wxFont::wxFont(WX_NSFont nsfont)
 {
-    [nsfont retain];
     wxNativeFontInfo info;
     SetNativeInfoFromNSFont(nsfont, &info);
     Create(info);
@@ -141,195 +140,46 @@ void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
     }
 }
 
-WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
+NSFont* wxFont::OSXGetNSFont() const
 {
-    NSFont* nsfont = nil;
-    switch( font )
-    {
-        case wxOSX_SYSTEM_FONT_NORMAL:
-            nsfont = [NSFont systemFontOfSize:[NSFont systemFontSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_BOLD:
-            nsfont = [NSFont boldSystemFontOfSize:[NSFont systemFontSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_SMALL:
-            nsfont = [NSFont systemFontOfSize:[NSFont smallSystemFontSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_SMALL_BOLD:
-            nsfont = [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_MINI:
-            nsfont = [NSFont systemFontOfSize:
-                [NSFont systemFontSizeForControlSize:NSMiniControlSize]];
-            break;
-       case wxOSX_SYSTEM_FONT_MINI_BOLD:
-            nsfont = [NSFont boldSystemFontOfSize:
-                [NSFont systemFontSizeForControlSize:NSMiniControlSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_LABELS:
-            nsfont = [NSFont labelFontOfSize:[NSFont labelFontSize]];
-            break;
-       case wxOSX_SYSTEM_FONT_VIEWS:
-            nsfont = [NSFont controlContentFontOfSize:0];
-            break;
-        default:
-            break;
-    }
-    [nsfont retain];
-    SetNativeInfoFromNSFont(nsfont, info);
-    return nsfont;
-}
+    wxCHECK_MSG( m_refData != NULL , 0, wxT("invalid font") );
 
-static const NSAffineTransformStruct kSlantNSTransformStruct = { 1, 0, static_cast<CGFloat>(tan(wxDegToRad(11))), 1, 0, 0  };
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
 
-WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
-{
-    NSFont* nsFont;
-    int weight = 5;
-    NSFontTraitMask traits = 0;
-    if (info->m_weight == wxFONTWEIGHT_BOLD)
-    {
-        traits |= NSBoldFontMask;
-        weight = 9;
-    }
-    else if (info->m_weight == wxFONTWEIGHT_LIGHT)
-        weight = 3;
+    NSFont *font = const_cast<NSFont*>(reinterpret_cast<const NSFont*>(OSXGetCTFont()));
 
-    if (info->m_style == wxFONTSTYLE_ITALIC || info->m_style == wxFONTSTYLE_SLANT)
-        traits |= NSItalicFontMask;
-    
-    nsFont = [[NSFontManager sharedFontManager] fontWithFamily:wxCFStringRef(info->m_faceName).AsNSString() 
-        traits:traits weight:weight size:info->m_pointSize];
-    
-    if ( nsFont == nil )
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
+    // There's a bug in OS X 10.11 (but not present in 10.10 or 10.12) where a
+    // toll-free bridged font may have an attributed of private class __NSCFCharacterSet
+    // that unlike NSCharacterSet doesn't conform to NSSecureCoding. This poses
+    // a problem when such font is used in user-editable content, because some
+    // Asian input methods then crash in 10.11 when editing the string.
+    // As a workaround for this bug, don't use toll-free bridging, but
+    // re-create NSFont from the descriptor instead on buggy OS X versions.
+    int osMajor, osMinor;
+    wxGetOsVersion(&osMajor, &osMinor, NULL);
+    if (osMajor == 10 && osMinor == 11)
     {
-        NSFontTraitMask remainingTraits = traits;
-        nsFont = [[NSFontManager sharedFontManager] fontWithFamily:wxCFStringRef(info->m_faceName).AsNSString() 
-                                                            traits:0 weight:5 size:info->m_pointSize];
-        if ( nsFont == nil )
-        {
-            if ( info->m_weight == wxFONTWEIGHT_BOLD )
-            {
-                nsFont = [NSFont boldSystemFontOfSize:info->m_pointSize];
-                remainingTraits &= ~NSBoldFontMask;
-            }
-            else
-                nsFont = [NSFont systemFontOfSize:info->m_pointSize];
-        }
-        
-        // fallback - if in doubt, let go of the bold attribute
-        if ( nsFont && (remainingTraits & NSItalicFontMask) )
-        {
-            NSFont* nsFontWithTraits = nil;
-            if ( remainingTraits & NSBoldFontMask)
-            {
-                nsFontWithTraits = [[NSFontManager sharedFontManager] convertFont:nsFont toHaveTrait:NSBoldFontMask];
-                if ( nsFontWithTraits == nil )
-                {
-                    nsFontWithTraits = [[NSFontManager sharedFontManager] convertFont:nsFont toHaveTrait:NSItalicFontMask];
-                    if ( nsFontWithTraits != nil )
-                        remainingTraits &= ~NSItalicFontMask;
-                }
-                else
-                {
-                    remainingTraits &= ~NSBoldFontMask;
-                }
-            }
-            // the code below causes crashes, because fontDescriptorWithMatrix is not returning a valid font descriptor
-            // it adds a NSCTFontMatrixAttribute as well which cannot be disposed of correctly by the autorelease pool
-            // so at the moment we have to disable this and cannot synthesize italic fonts if they are not available on the system
-#if 0
-            if ( remainingTraits & NSItalicFontMask )
-            {
-                if ( nsFontWithTraits == nil )
-                    nsFontWithTraits = nsFont;
-                
-                NSAffineTransform* transform = [NSAffineTransform transform];
-                [transform setTransformStruct:kSlantNSTransformStruct];
-                [transform scaleBy:info->m_pointSize];
-                NSFontDescriptor* italicDesc = [[nsFontWithTraits fontDescriptor] fontDescriptorWithMatrix:transform];
-                if ( italicDesc != nil )
-                {
-                    NSFont* f = [NSFont fontWithDescriptor:italicDesc size:(CGFloat)(info->m_pointSize)];
-                    if ( f != nil )
-                        nsFontWithTraits = f;
-                }
-            }
-#endif
-            if ( nsFontWithTraits != nil )
-                nsFont = nsFontWithTraits;
-        }
+        return [NSFont fontWithDescriptor:[font fontDescriptor] size:[font pointSize]];
     }
-            
-    wxASSERT_MSG(nsFont != nil,wxT("Couldn't create nsFont")) ;
-    wxMacCocoaRetain(nsFont);
-    return nsFont;
+#endif // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12
+
+    return font;
 }
 
 #endif
 
 #if wxOSX_USE_IPHONE
 
-WX_UIFont wxFont::OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info)
+UIFont* wxFont::OSXGetUIFont() const
 {
-    UIFont* uifont;
-    switch( font )
-    {
-        case wxOSX_SYSTEM_FONT_NORMAL:
-            uifont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_BOLD:
-            uifont = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_MINI:
-        case wxOSX_SYSTEM_FONT_SMALL:
-            uifont = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_MINI_BOLD:
-        case wxOSX_SYSTEM_FONT_SMALL_BOLD:
-            uifont = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-            break;
-        case wxOSX_SYSTEM_FONT_VIEWS:
-        case wxOSX_SYSTEM_FONT_LABELS:
-            uifont = [UIFont systemFontOfSize:[UIFont labelFontSize]];
-            break;
-        default:
-            break;
-    }
-    [uifont retain];
-    if ( info->m_faceName.empty())
-    {
-        wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
-        wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
-        bool underlined = false;
-        bool strikethrough = false;
+    wxCHECK_MSG( m_refData != NULL , 0, wxT("invalid font") );
 
-        int size = (int) ([uifont pointSize]+0.5);
-        /*
-        NSFontSymbolicTraits traits = [desc symbolicTraits];
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
 
-        if ( traits & NSFontBoldTrait )
-            fontweight = wxFONTWEIGHT_BOLD ;
-        else
-            fontweight = wxFONTWEIGHT_NORMAL ;
-        if ( traits & NSFontItalicTrait )
-            fontstyle = wxFONTSTYLE_ITALIC ;
-        */
-        wxCFStringRef fontname( wxCFRetain([uifont familyName]) );
-        info->Init(size, wxFONTFAMILY_DEFAULT, fontstyle, fontweight,
-                   underlined, strikethrough,
-                   fontname.AsString(), wxFONTENCODING_DEFAULT);
-
-    }
-    return uifont;
-}
-
-WX_UIFont wxFont::OSXCreateUIFont(const wxNativeFontInfo* info)
-{
-    UIFont* uiFont;
-    uiFont = [UIFont fontWithName:wxCFStringRef(info->m_faceName).AsNSString() size:info->m_pointSize];
-    wxMacCocoaRetain(uiFont);
-    return uiFont;
+    return const_cast<UIFont*>(reinterpret_cast<const UIFont*>(OSXGetCTFont()));
 }
 
 #endif
@@ -359,9 +209,7 @@ WXWindow wxOSXGetKeyWindow()
 
 WX_UIImage  wxOSXGetUIImageFromCGImage( CGImageRef image )
 {
-    UIImage  *newImage = [UIImage imageWithCGImage:image];
-    [newImage autorelease];
-    return( newImage );
+    return  [UIImage imageWithCGImage:image];
 }
 
 wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& size)
@@ -403,7 +251,6 @@ wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(
     return wxBitmap( [NSImage imageNamed:cfname.AsNSString()] );
 }
 
-//  From "Cocoa Drawing Guide:Working with Images"
 WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor, bool isTemplate )
 {
     NSRect      imageRect    = NSMakeRect(0.0, 0.0, 0.0, 0.0);
@@ -412,25 +259,10 @@ WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor, bo
     imageRect.size.height = CGImageGetHeight(image)/scaleFactor;
     imageRect.size.width = CGImageGetWidth(image)/scaleFactor;
 
-    // Create a new image to receive the Quartz image data.
-    NSImage  *newImage = [[NSImage alloc] initWithSize:imageRect.size];
-    [newImage lockFocus];
-
-    // Get the Quartz context and draw.
-    CGContextRef  imageContext = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
-    CGContextDrawImage( imageContext, *(CGRect*)&imageRect, image );
-    [newImage unlockFocus];
-
+    NSImage* newImage = [[NSImage alloc] initWithCGImage:image size:imageRect.size];
+    
     [newImage setTemplate:isTemplate];
 
-    /*
-        // Create a bitmap rep from the image...
-        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
-        // Create an NSImage and add the bitmap rep to it...
-        NSImage *image = [[NSImage alloc] init];
-        [image addRepresentation:bitmapRep];
-        [bitmapRep release];
-    */
     [newImage autorelease];
     return( newImage );
 }
@@ -728,6 +560,54 @@ void  wxMacCocoaHideCursor()
 void  wxMacCocoaShowCursor()
 {
     [NSCursor unhide];
+}
+
+//---------------------------------------------------------
+// helper functions for NSString<->wxString conversion
+//---------------------------------------------------------
+
+wxString wxStringWithNSString(NSString *nsstring)
+{
+#if wxUSE_UNICODE
+    return wxString([nsstring UTF8String], wxConvUTF8);
+#else
+    return wxString([nsstring lossyCString]);
+#endif // wxUSE_UNICODE
+}
+
+NSString* wxNSStringWithWxString(const wxString &wxstring)
+{
+#if wxUSE_UNICODE
+    return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];
+#else
+    return [NSString stringWithCString: wxstring.c_str() length:wxstring.Len()];
+#endif // wxUSE_UNICODE
+}
+
+// ----------------------------------------------------------------------------
+// helper class for getting the correct system colors according to the
+// appearance in effect
+// ----------------------------------------------------------------------------
+
+wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    {
+        formerAppearance = NSAppearance.currentAppearance;
+        NSAppearance.currentAppearance = NSApp.effectiveAppearance;
+    }
+#else
+    wxUnusedVar(formerAppearance);
+#endif
+}
+
+wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        NSAppearance.currentAppearance = (NSAppearance*) formerAppearance;
+#endif
 }
 
 #endif

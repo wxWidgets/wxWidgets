@@ -50,20 +50,19 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
 
     // create this button
     if (!wxBitmapButton::Create( parent, id, m_bitmap, pos,
-                           size, style | wxBU_AUTODRAW, validator, name ))
+                           size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxGenericColourButton creation failed") );
         return false;
     }
 
     // and handle user clicks on it
-    Connect(GetId(), wxEVT_BUTTON,
-            wxCommandEventHandler(wxGenericColourButton::OnButtonClick),
-            NULL, this);
+    Bind(wxEVT_BUTTON, &wxGenericColourButton::OnButtonClick, this, GetId());
 
     m_colour = col;
     UpdateColour();
     InitColourData();
+    ms_data.SetChooseAlpha((style & wxCLRP_SHOW_ALPHA) != 0);
 
     return true;
 }

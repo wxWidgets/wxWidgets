@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/msw/wrapwin.h"
+
 #if wxUSE_DISPLAY
 
 #include "wx/display.h"
@@ -38,7 +40,6 @@
 #include "wx/sysopt.h"
 
 #include "wx/display_impl.h"
-#include "wx/msw/wrapwin.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/hiddenwin.h"

@@ -25,6 +25,7 @@ Differentiate between labels and variables
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include "ILexer.h"
 #include "Scintilla.h"

@@ -34,17 +34,17 @@ class BitmapComboBoxTestCase : public TextEntryTestCase,
 public:
     BitmapComboBoxTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const { return m_combo; }
-    virtual wxWindow *GetTestWindow() const { return m_combo; }
+    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_combo; }
+    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_combo; }
 
-    virtual wxItemContainer *GetContainer() const { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const { return m_combo; }
+    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_combo; }
+    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_combo; }
 
-    virtual void CheckStringSelection(const char * WXUNUSED(sel))
+    virtual void CheckStringSelection(const char * WXUNUSED(sel)) wxOVERRIDE
     {
         // do nothing here, as explained in TextEntryTestCase comment, our
         // GetStringSelection() is the wxChoice, not wxTextEntry, one and there
@@ -59,8 +59,8 @@ private:
 
     void Bitmap();
 
-#ifdef __WXGTK__
-    virtual void SimSelect()
+#if defined(__WXGTK__) && wxUSE_UIACTIONSIMULATOR
+    virtual void SimSelect() wxOVERRIDE
     {
         // There is an inexplicable and locally irreproducible failure in this
         // test for wxBitmapComboBox when it runs on the Linux buildbot slaves:

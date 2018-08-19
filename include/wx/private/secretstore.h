@@ -79,14 +79,14 @@ class wxSecretStoreImpl : public wxRefCounter
 {
 public:
     virtual bool Save(const wxString& service,
-                      const wxString& user,
-                      const wxSecretValueImpl& secret,
+                      const wxString& username,
+                      const wxSecretValueImpl& password,
                       wxString& errmsg) = 0;
-    virtual wxSecretValueImpl* Load(const wxString& service,
-                                    const wxString& user,
-                                    wxString& errmsg) const = 0;
+    virtual bool Load(const wxString& service,
+                      wxString* username,
+                      wxSecretValueImpl** password,
+                      wxString& errmsg) const = 0;
     virtual bool Delete(const wxString& service,
-                        const wxString& user,
                         wxString& errmsg) = 0;
 };
 

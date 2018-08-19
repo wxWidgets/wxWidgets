@@ -294,7 +294,7 @@ public:
         Converts the array to a wxVariant with the list type, regardless of the
         underlying SAFEARRAY type.
 
-        If the array is multidimensional, it is flattened using the alghoritm
+        If the array is multidimensional, it is flattened using the algorithm
         originally employed in wxConvertOleToVariant().
     */
     bool ConvertToVariant(wxVariant& variant) const
@@ -327,7 +327,7 @@ public:
         Converts an array to an ArrayString.
 
         Can be called only for wxSafeArray<VT_BSTR>. If the array is
-        multidimensional, it is flattened using the alghoritm originally
+        multidimensional, it is flattened using the algorithm originally
         employed in wxConvertOleToVariant().
     */
     bool ConvertToArrayString(wxArrayString& strings) const

@@ -42,12 +42,12 @@
 #endif
 
 #ifdef __WXGTK__
-#include <gtk/gtk.h>
 #include "wx/renderer.h"
 #ifdef __WXGTK20__
-   #include "wx/gtk/private/gtk2-compat.h"
+    #include "wx/gtk/private/wrapgtk.h"
 #else
-   #define gtk_widget_is_drawable GTK_WIDGET_DRAWABLE
+    #include <gtk/gtk.h>
+    #define gtk_widget_is_drawable GTK_WIDGET_DRAWABLE
 #endif
 #ifdef __WXGTK3__
     #include "wx/graphics.h"
@@ -157,7 +157,7 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
 #if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
+    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 #else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
@@ -183,7 +183,11 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_inactiveCaptionColour = darker1Colour;
     m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
+#ifdef __WXMAC__
+    m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+#else
     m_inactiveCaptionTextColour = *wxBLACK;
+#endif
 
     m_sashBrush = wxBrush(baseColour);
     m_backgroundBrush = wxBrush(baseColour);
@@ -383,16 +387,25 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     wxUnusedVar(window);
     wxUnusedVar(orientation);
 
-    HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
-    CGContextRef cgContext ;
-    wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
-    cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext() ;
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14) && wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() < 128 )
+    {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(m_sashBrush);
+        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+    }
+    else
+    {
+        HIRect splitterRect = CGRectMake( rect.x , rect.y , rect.width , rect.height );
+        CGContextRef cgContext ;
+        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+        cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext() ;
 
-    HIThemeSplitterDrawInfo drawInfo ;
-    drawInfo.version = 0 ;
-    drawInfo.state = kThemeStateActive ;
-    drawInfo.adornment = kHIThemeSplitterAdornmentNone ;
-    HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;
+        HIThemeSplitterDrawInfo drawInfo ;
+        drawInfo.version = 0 ;
+        drawInfo.state = kThemeStateActive ;
+        drawInfo.adornment = kHIThemeSplitterAdornmentNone ;
+        HIThemeDrawPaneSplitter( &splitterRect , &drawInfo , cgContext , kHIThemeOrientationNormal ) ;
+    }
 
 #elif defined(__WXGTK__)
     // clear out the rectangle first

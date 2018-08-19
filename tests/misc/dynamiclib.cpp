@@ -77,7 +77,7 @@ void DynamicLibraryTestCase::Load()
 
     typedef int (wxSTDCALL *wxStrlenType)(const char *);
     wxStrlenType pfnStrlen = (wxStrlenType)lib.GetSymbol(FUNC_NAME);
-    
+
     wxString errMsg = wxString::Format("ERROR: function '%s' wasn't found in '%s'.\n",
                                        FUNC_NAME, LIB_NAME);
     CPPUNIT_ASSERT_MESSAGE( errMsg.ToStdString(), pfnStrlen );

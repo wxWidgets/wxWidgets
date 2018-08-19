@@ -526,7 +526,7 @@ void wxMediaBackendCommonBase::QueueStopEvent()
 
 //
 // Force link default backends in -
-// see http://wiki.wxwidgets.org/wiki.pl?RTTI
+// see https://wiki.wxwidgets.org/RTTI
 //
 #include "wx/html/forcelnk.h"
 

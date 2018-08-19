@@ -132,6 +132,8 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
+    void ShowAsRadio() { m_radio = true; }
+
     virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 #if wxUSE_ACCESSIBILITY
@@ -149,6 +151,7 @@ public:
                                 const wxMouseEvent *mouseEvent) wxOVERRIDE;
 private:
     bool    m_toggle;
+    bool    m_radio;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);

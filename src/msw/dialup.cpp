@@ -49,7 +49,6 @@ wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 // Doesn't yet compile under BC++
 // Wine: no wininet.h
 #if (!defined(__BORLANDC__) || (__BORLANDC__>=0x550)) && \
-    (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION(0, 5)) && \
     !defined(__WINE__)
 
 #include <ras.h>

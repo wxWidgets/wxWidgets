@@ -25,23 +25,41 @@
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
 #ifndef WX_PRECOMP
+    #include "wx/event.h"
     #include "wx/textentry.h"
-    #include "wx/window.h"
     #include "wx/textctrl.h"
+    #include "wx/window.h"
 #endif //WX_PRECOMP
 
-#include <gtk/gtk.h>
+#include "wx/textcompleter.h"
+
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/object.h"
 #include "wx/gtk/private/string.h"
+
+//-----------------------------------------------------------------------------
+//  helper function to get the length of the text
+//-----------------------------------------------------------------------------
+
+static unsigned int GetEntryTextLength(GtkEntry* entry)
+{
+#if GTK_CHECK_VERSION(2, 14, 0)
+    if ( wx_is_at_least_gtk2(14) )
+    {
+        return gtk_entry_get_text_length(entry);
+    }
+#endif // GTK+ 2.14+
+
+    return strlen(gtk_entry_get_text(entry));
+}
 
 // ============================================================================
 // signal handlers implementation
 // ============================================================================
 
 // "insert_text" handler for GtkEntry
-extern "C"
-void
+extern "C" {
+static void
 wx_gtk_insert_text_callback(GtkEditable *editable,
                             const gchar * new_text,
                             gint new_text_length,
@@ -61,7 +79,7 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
     // check that we don't overflow the max length limit if we have it
     if ( text_max_length )
     {
-        const int text_length = gtk_entry_get_text_length(entry);
+        const int text_length = GetEntryTextLength(entry);
 
         // We can't use new_text_length as it is in bytes while we want to count
         // characters (in first approximation, anyhow...).
@@ -129,6 +147,19 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
     }
 }
 
+// GTK+ does not expose any mechanism that we can really rely on to detect if/when
+// the completion popup is shown or hidden. And the sole reliable way (for now) to
+// know its state is to connect to the "grab-notify" signal and be notified then
+// for its state. this is the best we can do for now than any other alternative.
+// (GtkEntryCompletion grabs/ungrabs keyboard and mouse events on popups/popdowns).
+
+static void
+wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
+                                 gboolean was_grabbed,
+                                 wxTextAutoCompleteData *data);
+
+} // extern "C"
+
 //-----------------------------------------------------------------------------
 //  clipboard events: "copy-clipboard", "cut-clipboard", "paste-clipboard"
 //-----------------------------------------------------------------------------
@@ -176,9 +207,316 @@ wx_gtk_paste_clipboard_callback( GtkWidget *widget, wxWindow *win )
 
 } // extern "C"
 
+// Base class for wxTextAutoCompleteFixed and wxTextAutoCompleteDynamic below.
+class wxTextAutoCompleteData
+{
+public:
+    // This method is only implemented by wxTextAutoCompleteFixed and will just
+    // return false for wxTextAutoCompleteDynamic.
+    virtual bool ChangeStrings(const wxArrayString& strings) = 0;
+
+    // Conversely, this one is only implemented for wxTextAutoCompleteDynamic
+    // and will just return false (without taking ownership of the argument!)
+    // for wxTextAutoCompleteFixed.
+    virtual bool ChangeCompleter(wxTextCompleter* completer) = 0;
+
+    // We should toggle off wxTE_PROCESS_ENTER flag of our wxTextEntry while
+    // the completion popup is shown to let it see Enter event and process it
+    // on its own (e.g. to dismiss itself). This is done by "grab-notify" signal
+    // see wxTextCtrl::OnChar()
+    void ToggleProcessEnterFlag(bool toggleOff)
+    {
+        wxWindow* const win = GetEditableWindow(m_entry);
+
+        long flags = win->GetWindowStyleFlag();
+        if ( toggleOff )
+        {
+            // Store the original window flags before we change them.
+            m_hadProcessEnterFlag = (flags & wxTE_PROCESS_ENTER) != 0;
+            if ( !m_hadProcessEnterFlag )
+            {
+                // No need to do anything, it was already off.
+                return;
+            }
+
+            flags &= ~wxTE_PROCESS_ENTER;
+        }
+        else // Restore the original flags.
+        {
+            if ( !m_hadProcessEnterFlag )
+            {
+                // We hadn't turned it off, no need to turn it back on.
+                return;
+            }
+
+            flags |= wxTE_PROCESS_ENTER;
+        }
+
+        win->SetWindowStyleFlag(flags);
+    }
+
+    virtual ~wxTextAutoCompleteData()
+    {
+        // Note that we must not use m_entry here because this could result in
+        // using an already half-destroyed wxTextEntry when we're destroyed
+        // from its dtor (which is executed after wxTextCtrl dtor, which had
+        // already destroyed the actual entry). So use the stored widget
+        // instead and only after checking that it is still valid.
+        if ( GTK_IS_ENTRY(m_widgetEntry) )
+        {
+            gtk_entry_set_completion(m_widgetEntry, NULL);
+
+            g_signal_handlers_disconnect_by_data(m_widgetEntry, this);
+        }
+    }
+
+protected:
+    // Check if completion can be used with this entry.
+    static bool CanComplete(wxTextEntry* entry)
+    {
+        // If this check fails, this is probably a multiline wxTextCtrl which
+        // doesn't have any associated GtkEntry.
+        return GTK_IS_ENTRY(entry->GetEntry());
+    }
+
+    explicit wxTextAutoCompleteData(wxTextEntry* entry)
+        : m_entry(entry),
+          m_widgetEntry(entry->GetEntry())
+    {
+        // This will be really set in ToggleProcessEnterFlag().
+        m_hadProcessEnterFlag = false;
+
+        GtkEntryCompletion* const completion = gtk_entry_completion_new();
+
+        gtk_entry_completion_set_text_column (completion, 0);
+        gtk_entry_set_completion(m_widgetEntry, completion);
+
+        g_signal_connect (m_widgetEntry, "grab-notify",
+                          G_CALLBACK (wx_gtk_entry_parent_grab_notify),
+                          this);
+    }
+
+    // Provide access to wxTextEntry::GetEditableWindow() to the derived
+    // classes: we can call it because this class is a friend of wxTextEntry,
+    // but the derived classes can't do it directly.
+    static wxWindow* GetEditableWindow(wxTextEntry* entry)
+    {
+        return entry->GetEditableWindow();
+    }
+
+    // Helper function for appending a string to GtkListStore.
+    void AppendToStore(GtkListStore* store, const wxString& s)
+    {
+        GtkTreeIter iter;
+        gtk_list_store_append (store, &iter);
+        gtk_list_store_set (store, &iter, 0, (const gchar *)s.utf8_str(), -1);
+    }
+
+    // Really change the completion model (which may be NULL).
+    void UseModel(GtkListStore* store)
+    {
+        GtkEntryCompletion* const c = gtk_entry_get_completion(m_widgetEntry);
+        gtk_entry_completion_set_model (c, GTK_TREE_MODEL(store));
+        gtk_entry_completion_complete (c);
+    }
+
+
+    // The text entry we're associated with.
+    wxTextEntry * const m_entry;
+
+    // And its GTK widget.
+    GtkEntry* const m_widgetEntry;
+
+    // True if the window had wxTE_PROCESS_ENTER flag before we turned it off
+    // in ToggleProcessEnterFlag().
+    bool m_hadProcessEnterFlag;
+
+    wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
+};
+
+// This class simply forwards to GtkListStore.
+class wxTextAutoCompleteFixed : public wxTextAutoCompleteData
+{
+public:
+    // Factory function, may return NULL if entry is invalid.
+    static wxTextAutoCompleteFixed* New(wxTextEntry *entry)
+    {
+        if ( !CanComplete(entry) )
+            return NULL;
+
+        return new wxTextAutoCompleteFixed(entry);
+    }
+
+    virtual bool ChangeStrings(const wxArrayString& strings) wxOVERRIDE
+    {
+        wxGtkObject<GtkListStore> store(gtk_list_store_new (1, G_TYPE_STRING));
+
+        for ( wxArrayString::const_iterator i = strings.begin();
+              i != strings.end();
+              ++i )
+        {
+            AppendToStore(store, *i);
+        }
+
+        UseModel(store);
+
+        return true;
+    }
+
+    virtual bool ChangeCompleter(wxTextCompleter*) wxOVERRIDE
+    {
+        return false;
+    }
+
+private:
+    // Ctor is private, use New() to create objects of this type.
+    explicit wxTextAutoCompleteFixed(wxTextEntry *entry)
+        : wxTextAutoCompleteData(entry)
+    {
+    }
+
+    wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteFixed);
+};
+
+// Dynamic completion using the provided custom wxTextCompleter.
+class wxTextAutoCompleteDynamic : public wxTextAutoCompleteData
+{
+public:
+    static wxTextAutoCompleteDynamic* New(wxTextEntry *entry)
+    {
+        if ( !CanComplete(entry) )
+            return NULL;
+
+        wxWindow * const win = GetEditableWindow(entry);
+        if ( !win )
+            return NULL;
+
+        return new wxTextAutoCompleteDynamic(entry, win);
+    }
+
+    virtual ~wxTextAutoCompleteDynamic()
+    {
+        delete m_completer;
+
+        m_win->Unbind(wxEVT_TEXT, &wxTextAutoCompleteDynamic::OnEntryChanged, this);
+    }
+
+    virtual bool ChangeStrings(const wxArrayString&) wxOVERRIDE
+    {
+        return false;
+    }
+
+    // Takes ownership of the pointer which must be non-NULL.
+    virtual bool ChangeCompleter(wxTextCompleter *completer) wxOVERRIDE
+    {
+        delete m_completer;
+        m_completer = completer;
+
+        DoUpdateCompletionModel();
+
+        return true;
+    }
+
+private:
+    // Ctor is private, use New() to create objects of this type.
+    explicit wxTextAutoCompleteDynamic(wxTextEntry *entry, wxWindow *win)
+        : wxTextAutoCompleteData(entry),
+          m_win(win)
+    {
+        m_completer = NULL;
+
+        win->Bind(wxEVT_TEXT, &wxTextAutoCompleteDynamic::OnEntryChanged, this);
+    }
+
+    void OnEntryChanged(wxCommandEvent& event)
+    {
+        DoUpdateCompletionModel();
+
+        event.Skip();
+    }
+
+    // Recreate the model to contain all completions for the current prefix.
+    void DoUpdateCompletionModel()
+    {
+        const wxString& prefix = m_entry->GetValue();
+
+        if ( m_completer->Start(prefix) )
+        {
+            wxGtkObject<GtkListStore> store(gtk_list_store_new (1, G_TYPE_STRING));
+
+            for (;;)
+            {
+                const wxString s = m_completer->GetNext();
+                if ( s.empty() )
+                    break;
+
+                AppendToStore(store, s);
+            }
+
+            UseModel(store);
+        }
+        else
+        {
+            UseModel(NULL);
+        }
+    }
+
+
+    // Custom completer.
+    wxTextCompleter *m_completer;
+
+    // The associated window, we need to store it to unbind our event handler.
+    wxWindow* const m_win;
+
+    wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteDynamic);
+};
+
+extern "C"
+{
+
+static void
+wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
+                                 gboolean was_grabbed,
+                                 wxTextAutoCompleteData *data)
+{
+    g_return_if_fail (GTK_IS_ENTRY(widget));
+
+    bool toggleOff = false;
+
+    if ( gtk_widget_has_focus(widget) )
+    {
+        // If was_grabbed is FALSE that means the topmost grab widget ancestor
+        // of our GtkEntry becomes shadowed by a call to gtk_grab_add()
+        // which means that the GtkEntryCompletion popup window is actually
+        // shown on screen.
+
+        if ( !was_grabbed )
+            toggleOff = true;
+    }
+
+    data->ToggleProcessEnterFlag(toggleOff);
+}
+
+} // extern "C"
+
 // ============================================================================
 // wxTextEntry implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// initialization and destruction
+// ----------------------------------------------------------------------------
+
+wxTextEntry::wxTextEntry()
+{
+    m_autoCompleteData = NULL;
+    m_isUpperCase = false;
+}
+
+wxTextEntry::~wxTextEntry()
+{
+    delete m_autoCompleteData;
+}
 
 // ----------------------------------------------------------------------------
 // text operations
@@ -241,6 +579,12 @@ wxString wxTextEntry::DoGetValue() const
 void wxTextEntry::Remove(long from, long to)
 {
     gtk_editable_delete_text(GetEditable(), from, to);
+}
+
+// static
+unsigned int wxTextEntry::GTKGetEntryTextLength(GtkEntry* entry)
+{
+    return GetEntryTextLength(entry);
 }
 
 // ----------------------------------------------------------------------------
@@ -320,7 +664,7 @@ long wxTextEntry::GetLastPosition() const
     long pos = -1;
     GtkEntry* entry = (GtkEntry*)GetEditable();
     if (GTK_IS_ENTRY(entry))
-        pos = gtk_entry_get_text_length(entry);
+        pos = GetEntryTextLength(entry);
 
     return pos;
 }
@@ -345,7 +689,7 @@ void wxTextEntry::SetSelection(long from, long to)
 #ifndef __WXGTK3__
     // avoid reported problem with RHEL 5 GTK+ 2.10 where selection is reset by
     // a clipboard callback, see #13277
-    if (gtk_check_version(2,12,0))
+    if (!wx_is_at_least_gtk2(12))
     {
         GtkEntry* entry = GTK_ENTRY(GetEditable());
         if (to < 0)
@@ -388,30 +732,60 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 
 bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
 {
-    GtkEntry* const entry = (GtkEntry*)GetEditable();
-    wxCHECK_MSG(GTK_IS_ENTRY(entry), false, "auto completion doesn't work with this control");
-
-    GtkListStore * const store = gtk_list_store_new(1, G_TYPE_STRING);
-    GtkTreeIter iter;
-
-    for ( wxArrayString::const_iterator i = choices.begin();
-          i != choices.end();
-          ++i )
+    // Try to update the existing data first.
+    if ( !m_autoCompleteData || !m_autoCompleteData->ChangeStrings(choices) )
     {
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter,
-                           0, (const gchar *)i->utf8_str(),
-                           -1);
+        delete m_autoCompleteData;
+        m_autoCompleteData = NULL;
+
+        // If it failed, try creating a new object for fixed completion.
+        wxTextAutoCompleteFixed* const ac = wxTextAutoCompleteFixed::New(this);
+        if ( !ac )
+            return false;
+
+        ac->ChangeStrings(choices);
+
+        m_autoCompleteData = ac;
     }
 
-    GtkEntryCompletion * const completion = gtk_entry_completion_new();
-    gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(store));
-    gtk_entry_completion_set_text_column(completion, 0);
-    gtk_entry_set_completion(entry, completion);
-    g_object_unref(completion);
     return true;
 }
 
+bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
+{
+    // First deal with the case when we just want to disable auto-completion.
+    if ( !completer )
+    {
+        if ( m_autoCompleteData )
+        {
+            delete m_autoCompleteData;
+            m_autoCompleteData = NULL;
+        }
+        //else: Nothing to do, we hadn't used auto-completion even before.
+    }
+    else // Have a valid completer.
+    {
+        // As above, try to update the completer of the existing object first
+        // and fall back on creating a new one.
+        if ( !m_autoCompleteData ||
+                !m_autoCompleteData->ChangeCompleter(completer) )
+        {
+            delete m_autoCompleteData;
+            m_autoCompleteData = NULL;
+
+            wxTextAutoCompleteDynamic* const
+                ac = wxTextAutoCompleteDynamic::New(this);
+            if ( !ac )
+                return false;
+
+            ac->ChangeCompleter(completer);
+
+            m_autoCompleteData = ac;
+        }
+    }
+
+    return true;
+}
 // ----------------------------------------------------------------------------
 // editable status
 // ----------------------------------------------------------------------------
@@ -468,18 +842,14 @@ void wxTextEntry::ForceUpper()
 
 int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
 {
-    int result;
+    int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
-#ifndef __WXGTK3__
-    result = false;
-    if (gtk_check_version(2,22,0) == NULL)
-#endif
+    if (wx_is_at_least_gtk2(22))
     {
         result = gtk_entry_im_context_filter_keypress(GetEntry(), event);
     }
 #else // GTK+ < 2.22
     wxUnusedVar(event);
-    result = false;
 #endif // GTK+ 2.22+
 
     return result;
@@ -502,16 +872,15 @@ bool wxTextEntry::GTKEntryOnInsertText(const char* text)
 
 bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 {
-#if GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,10,0) && !defined(__WXGTK4__)
     GtkEntry* entry = GetEntry();
 
     if ( !entry )
         return false;
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,10,0))
+    if ( !wx_is_at_least_gtk2(10) )
         return false;
-#endif
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     const GtkBorder* oldBorder = gtk_entry_get_inner_border(entry);
     GtkBorder newBorder;
 
@@ -536,6 +905,7 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
         newBorder.top = margins.y;
 
     gtk_entry_set_inner_border(entry, &newBorder);
+    wxGCC_WARNING_RESTORE()
 
     return true;
 #else
@@ -547,15 +917,15 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 wxPoint wxTextEntry::DoGetMargins() const
 {
     wxPoint point(-1, -1);
-#if GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,10,0) && !defined(__WXGTK4__)
     GtkEntry* entry = GetEntry();
     if (entry)
     {
-#ifndef __WXGTK3__
-        if (gtk_check_version(2,10,0) == NULL)
-#endif
+        if (wx_is_at_least_gtk2(10))
         {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             const GtkBorder* border = gtk_entry_get_inner_border(entry);
+            wxGCC_WARNING_RESTORE()
             if (border)
             {
                 point.x = border->left;

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 Februsary 2017                                                   *
+# Date : 29 June 2017                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -89,7 +89,6 @@ OBJECTS = \
 		docmdi.obj,\
 		docview.obj,\
 		dpycmn.obj,\
-		dynarray.obj,\
 		dynlib.obj,\
 		encconv.obj,\
 		event.obj,\
@@ -177,6 +176,7 @@ OBJECTS1=fs_inet.obj,\
 		stream.obj,\
 		string.obj,\
 		stringimpl.obj,\
+		stringops.obj,\
 		strvararg.obj,\
 		sysopt.obj
 
@@ -280,7 +280,6 @@ SOURCES = \
 		docmdi.cpp,\
 		docview.cpp,\
 		dpycmn.cpp,\
-		dynarray.cpp,\
 		dynlib.cpp,\
 		encconv.cpp,\
 		event.cpp,\
@@ -378,6 +377,7 @@ SOURCES = \
 		sysopt.cpp,\
 		string.cpp,\
 		stringimpl.cpp,\
+		stringops.cpp,\
 		tbarbase.cpp,\
 		textbuf.cpp,\
 		textcmn.cpp,\
@@ -521,7 +521,6 @@ dlgcmn.obj : dlgcmn.cpp
 dobjcmn.obj : dobjcmn.cpp
 docmdi.obj : docmdi.cpp
 docview.obj : docview.cpp
-dynarray.obj : dynarray.cpp
 dynlib.obj : dynlib.cpp
 encconv.obj : encconv.cpp
 event.obj : event.cpp
@@ -617,6 +616,7 @@ strvararg.obj : strvararg.cpp
 sysopt.obj : sysopt.cpp
 string.obj : string.cpp
 stringimpl.obj : stringimpl.cpp
+stringops.obj : stringops.cpp
 tbarbase.obj : tbarbase.cpp
 textbuf.obj : textbuf.cpp
 textcmn.obj : textcmn.cpp

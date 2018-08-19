@@ -72,14 +72,14 @@ FUNC_FOR_CMD = 1
 GENERATE_PROVISIONAL_ITEMS = 0
 
 # No wxSTC value will be generated for the following Scintilla values.
-notMappedSciValues = {
+notMappedSciValues = set([
     'SC_TECHNOLOGY_DIRECTWRITERETAIN',
     'SC_TECHNOLOGY_DIRECTWRITEDC',
     'INDIC0_MASK',
     'INDIC1_MASK',
     'INDIC2_MASK',
     'INDICS_MASK'
-}
+])
 
 # Map some generic typenames to wx types, using return value syntax
 retTypeMap = {
@@ -228,8 +228,7 @@ methodOverrideMap = {
         strm.CopyTo(buff, len);
         buff[len] = 0;
         SendMsg(%s, markerNumber, (sptr_t)buff);
-        delete [] buff;
-        '''
+        delete [] buff;'''
     ),
 
     'GetMargins' : ('GetMarginCount', 0, 0),
@@ -552,8 +551,7 @@ methodOverrideMap = {
         strm.CopyTo(buff, len);
         buff[len] = 0;
         SendMsg(%s, type, (sptr_t)buff);
-        delete [] buff;
-     '''
+        delete [] buff;'''
     ),
 
     'SetHScrollBar' : ('SetUseHorizontalScrollBar', 0, 0),
@@ -895,8 +893,6 @@ methodOverrideMap = {
          return stc2wx(buf);'''
     ),
 
-    'SetFontQuality' : (None, 0, 0),
-    'GetFontQuality' : (None, 0, 0),
     'SetSelection' : (None, 0, 0),
 
     'GetCharacterPointer' : (0,
@@ -1051,7 +1047,7 @@ methodOverrideMap = {
     (0,
      'void* %s(int bytes) const;',
      """void* %s(int bytes) const {
-         return (void*)(sptr_t)SendMsg(%s, bytes); """
+         return (void*)(sptr_t)SendMsg(%s, bytes);"""
     ),
 
     'GetRepresentation' :
@@ -1072,7 +1068,7 @@ methodOverrideMap = {
      (0,
       'void* %s(int operation, void* pointer);',
       """void* %s(int operation, void* pointer) {
-           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer); """
+           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer);"""
      ),
 
     'GetSubStyleBases' :

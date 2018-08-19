@@ -3743,7 +3743,11 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         m_dragCount = 0;
 
-        if (item == NULL) return;  /* we hit the blank area */
+        if ( item == NULL )
+        {
+            event.Skip();
+            return;
+        }
 
         if ( event.RightDown() )
         {

@@ -269,7 +269,7 @@ void UnicodeTestCase::ConversionWithNULs()
     static const size_t lenNulString = 10;
 
     wxString szTheString(L"The\0String", wxConvLibc, lenNulString);
-    wxCharBuffer theBuffer = szTheString.mb_str();
+    wxCharBuffer theBuffer = szTheString.mb_str(wxConvLibc);
 
     CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String",
                     lenNulString + 1) == 0 );

@@ -158,7 +158,7 @@ public:
     bool SetItem(wxListItem& info);
 
     // Sets a string field at a particular column
-    long SetItem(long index, int col, const wxString& label, int imageId = -1);
+    bool SetItem(long index, int col, const wxString& label, int imageId = -1);
 
     // Gets the item state
     int  GetItemState(long item, long stateMask) const;
@@ -346,8 +346,11 @@ public:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
     virtual bool MSWShouldPreProcessMessage(WXMSG* msg) wxOVERRIDE;
 
+#if WXWIN_COMPATIBILITY_3_0
     // bring the control in sync with current m_windowStyle value
+    wxDEPRECATED_MSG("useless and will be removed in the future, use SetWindowStyleFlag() instead")
     void UpdateStyle();
+#endif // WXWIN_COMPATIBILITY_3_0
 
     // Event handlers
     ////////////////////////////////////////////////////////////////////////////
@@ -376,6 +379,8 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    virtual bool MSWShouldSetDefaultFont() const wxOVERRIDE { return false; }
 
     // Implement constrained best size calculation.
     virtual int DoGetBestClientHeight(int width) const wxOVERRIDE

@@ -36,7 +36,7 @@ public:
     virtual void SetValue(bool state);
     virtual bool GetValue() const;
 
-    virtual QPushButton *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);
@@ -57,7 +57,7 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxCheckBoxNameStr);
-    
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& label,
@@ -69,7 +69,7 @@ public:
     virtual void SetValue(bool state);
     virtual bool GetValue() const;
 
-    virtual QPushButton *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 private:
 

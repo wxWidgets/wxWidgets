@@ -20,6 +20,7 @@
 
 #include "wx/print.h"
 #include "wx/printdlg.h"
+#include "wx/vector.h"
 
 #include <limits.h> // INT_MAX
 
@@ -62,30 +63,19 @@ public:
                           const wxString& normal_face = wxEmptyString,
                           const wxString& fixed_face = wxEmptyString);
 
+    // Finds the next page break after the specified (vertical) position.
+    // Returns wxNOT_FOUND if passed in position is the last page break.
+    int FindNextPageBreak(int pos) const;
+
     // [x,y] is position of upper-left corner of printing rectangle (see SetSize)
     // from is y-coordinate of the very first visible cell
     // to is y-coordinate of the next following page break, if any
-    // Returned value is y coordinate of first cell than didn't fit onto page.
-    // Use this value as 'from' in next call to Render in order to print multiple pages
-    // document
-    // If dont_render is TRUE then nothing is rendered into DC and it only counts
-    // pixels and return y coord of the next page
-    //
-    // known_pagebreaks and number_of_pages are used only when counting pages;
-    // otherwise, their default values should be used. Their purpose is to
-    // support pagebreaks using a subset of CSS2's <DIV>. The <DIV> handler
-    // needs to know what pagebreaks have already been set so that it doesn't
-    // set the same pagebreak twice.
-    //
-    // CAUTION! Render() changes DC's user scale and does NOT restore it!
-    int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
-               int dont_render = false, int to = INT_MAX);
+    void Render(int x, int y, int from = 0, int to = INT_MAX);
 
     // returns total width of the html document
     int GetTotalWidth() const;
 
     // returns total height of the html document
-    // (compare Render's return value with this)
     int GetTotalHeight() const;
 
 private:
@@ -121,7 +111,6 @@ class WXDLLIMPEXP_HTML wxHtmlPrintout : public wxPrintout
 {
 public:
     wxHtmlPrintout(const wxString& title = wxT("Printout"));
-    virtual ~wxHtmlPrintout();
 
     void SetHtmlText(const wxString& html, const wxString &basepath = wxEmptyString, bool isdir = true);
             // prepares the class for printing this html document.
@@ -195,23 +184,22 @@ private:
     wxString TranslateHeader(const wxString& instr, int page);
             // substitute @PAGENUM@ and @PAGESCNT@ by real values
     void CountPages();
-            // counts pages and fills m_NumPages and m_PageBreaks
+            // fills m_PageBreaks, which indirectly gives the number of pages
 
 
 private:
-    int m_NumPages;
-    wxArrayInt m_PageBreaks;
+    wxVector<int> m_PageBreaks;
 
     wxString m_Document, m_BasePath;
     bool m_BasePathIsDir;
     wxString m_Headers[2], m_Footers[2];
 
     int m_HeaderHeight, m_FooterHeight;
-    wxHtmlDCRenderer *m_Renderer, *m_RendererHdr;
+    wxHtmlDCRenderer m_Renderer, m_RendererHdr;
     float m_MarginTop, m_MarginBottom, m_MarginLeft, m_MarginRight, m_MarginSpace;
 
     // list of HTML filters
-    static wxList m_Filters;
+    static wxVector<wxHtmlFilter*> m_Filters;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlPrintout);
 };
@@ -285,6 +273,16 @@ public:
     void SetName(const wxString& name) { m_Name = name; }
             // set the printout name
 
+    // Controls showing the dialog when printing: by default, always shown.
+    enum PromptMode
+    {
+        Prompt_Never,
+        Prompt_Once,
+        Prompt_Always
+    };
+
+    void SetPromptMode(PromptMode promptMode) { m_promptMode = promptMode; }
+
 protected:
     virtual wxHtmlPrintout *CreatePrintout();
     virtual bool DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2);
@@ -307,6 +305,8 @@ private:
 
     wxString m_Headers[2], m_Footers[2];
     wxWindow *m_ParentWindow;
+
+    PromptMode m_promptMode;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlEasyPrinting);
 };

@@ -13,7 +13,6 @@
 
 #include "wx/stattext.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
@@ -108,7 +107,13 @@ bool wxStaticText::Create(wxWindow *parent,
 
     // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
+#ifdef __WXGTK4__
+    g_object_set(m_widget, "xalign", labelAlignments[justify], NULL);
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
+    wxGCC_WARNING_RESTORE()
+#endif
 
     gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
 
@@ -132,18 +137,16 @@ void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid static text") );
 
-    InvalidateBestSize();
-
     (this->*setter)(GTK_LABEL(m_widget), label);
 
-    // adjust the label size to the new label unless disabled
-    if ( !HasFlag(wxST_NO_AUTORESIZE) &&
-         !IsEllipsized() )  // if ellipsization is ON, then we don't want to get resized!
-        SetSize( GetBestSize() );
+    AutoResizeIfNecessary();
 }
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    if ( label == m_labelOrig )
+        return;
+
     m_labelOrig = label;
 
     GTKDoSetLabel(&wxStaticText::GTKSetLabelForLabel, label);
@@ -171,7 +174,8 @@ bool wxStaticText::SetFont( const wxFont &font )
     const bool wasUnderlined = GetFont().GetUnderlined();
     const bool wasStrickenThrough = GetFont().GetStrikethrough();
 
-    bool ret = wxControl::SetFont(font);
+    if ( !wxControl::SetFont(font) )
+        return false;
 
     const bool isUnderlined = GetFont().GetUnderlined();
     const bool isStrickenThrough = GetFont().GetStrikethrough();
@@ -213,12 +217,9 @@ bool wxStaticText::SetFont( const wxFont &font )
         gtk_label_set_use_underline(GTK_LABEL(m_widget), !isUnderlined);
     }
 
-    // adjust the label size to the new label unless disabled
-    if (!HasFlag(wxST_NO_AUTORESIZE))
-    {
-        SetSize( GetBestSize() );
-    }
-    return ret;
+    AutoResizeIfNecessary();
+
+    return true;
 }
 
 wxSize wxStaticText::DoGetBestSize() const

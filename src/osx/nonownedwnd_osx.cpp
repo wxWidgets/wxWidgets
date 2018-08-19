@@ -36,8 +36,6 @@
 // trace mask for activation tracing messages
 #define TRACE_ACTIVATE "activation"
 
-wxWindow* g_MacLastWindow = NULL ;
-
 clock_t wxNonOwnedWindow::s_lastFlush = 0;
 
 // unified title and toolbar constant - not in Tiger headers, so we duplicate it here
@@ -99,6 +97,7 @@ void wxNonOwnedWindow::Init()
 {
     m_nowpeer = NULL;
     m_isNativeWindowWrapper = false;
+    m_ignoreResizing = false;
 }
 
 bool wxNonOwnedWindow::Create(wxWindow *parent,
@@ -308,6 +307,9 @@ void wxNonOwnedWindow::HandleResized( double WXUNUSED(timestampsec) )
 
 void wxNonOwnedWindow::HandleResizing( double WXUNUSED(timestampsec), wxRect* rect )
 {
+    if ( m_ignoreResizing )
+        return;
+
     wxRect r = *rect ;
 
     // this is a EVT_SIZING not a EVT_SIZE type !

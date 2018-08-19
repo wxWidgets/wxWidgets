@@ -26,12 +26,8 @@
 
 class WXDLLIMPEXP_FWD_BASE wxString;
 
-WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( wxString *data ) ;
-WXDLLIMPEXP_BASE void wxMacConvertNewlines10To13( wxString *data ) ;
-
-WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( char * data ) ;
-WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( wxChar16 * data ) ;
-WXDLLIMPEXP_BASE void wxMacConvertNewlines10To13( char * data ) ;
+WXDLLIMPEXP_BASE wxString wxMacConvertNewlines13To10(const wxString& data);
+WXDLLIMPEXP_BASE wxString wxMacConvertNewlines10To13(const wxString& data);
 
 WXDLLIMPEXP_BASE wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
 WXDLLIMPEXP_BASE wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;

@@ -35,6 +35,8 @@ public:
 
     wxPen(const wxBitmap& stipple, int width);
 
+    wxPen(const wxPenInfo& info);
+
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }
 

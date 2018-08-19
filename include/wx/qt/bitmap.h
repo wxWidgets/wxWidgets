@@ -86,13 +86,14 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxBitmap);
 };
 
-class WXDLLIMPEXP_CORE wxMask : public wxObject
+class WXDLLIMPEXP_CORE wxMask : public wxMaskBase
 {
 public:
     wxMask();
 
     // Copy constructor
     wxMask(const wxMask &mask);
+    wxMask& operator=(const wxMask &mask);
 
     // Construct a mask from a bitmap and a colour indicating the transparent
     // area
@@ -104,18 +105,19 @@ public:
 
     // Construct a mask from a mono bitmap (copies the bitmap).
     wxMask(const wxBitmap& bitmap);
-
-
     virtual ~wxMask();
-
-    bool Create(const wxBitmap& bitmap, const wxColour& colour);
-    bool Create(const wxBitmap& bitmap, int paletteIndex);
-    bool Create(const wxBitmap& bitmap);
-
-    wxBitmap GetBitmap() const;
 
     // Implementation
     QBitmap *GetHandle() const;
+
+protected:
+    // this function is called from Create() to free the existing mask data
+    void FreeData();
+    // by the public wrappers
+    bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour);
+    bool InitFromMonoBitmap(const wxBitmap& bitmap);
+
+    wxBitmap GetBitmap() const;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS(wxMask);

@@ -20,6 +20,10 @@
 
 #define wxIMAGE_OPTION_GIF_COMMENT wxT("GifComment")
 
+#define wxIMAGE_OPTION_GIF_TRANSPARENCY           wxS("Transparency")
+#define wxIMAGE_OPTION_GIF_TRANSPARENCY_HIGHLIGHT wxS("Highlight")
+#define wxIMAGE_OPTION_GIF_TRANSPARENCY_UNCHANGED wxS("Unchanged")
+
 struct wxRGB;
 struct GifHashTableType;
 class WXDLLIMPEXP_FWD_CORE wxImageArray; // anidecod.h

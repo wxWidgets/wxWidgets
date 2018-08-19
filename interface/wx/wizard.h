@@ -504,7 +504,7 @@ public:
     virtual bool HasNextPage(wxWizardPage* page);
 
     /**
-        Returns @true if this page is not the last one in the wizard.
+        Returns @true if this page is not the first one in the wizard.
         The base class version implements this by calling
         @ref wxWizardPage::GetPrev "page->GetPrev" but this could be
         undesirable if, for example, the pages are created on demand only.

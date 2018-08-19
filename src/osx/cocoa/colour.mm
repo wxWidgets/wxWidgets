@@ -21,6 +21,16 @@ static inline wxColour::ChannelType NSColorChannelToWX(CGFloat c)
 
 wxColour::wxColour(WX_NSColor col)
 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 8) )
+    {
+        CGColorRef cgcolor = [col CGColor];
+        CFRetain(cgcolor);
+        InitCGColorRef(cgcolor);
+        return ;
+    }
+#endif
+        
     // Simplest case is when we can directly get the RGBA components:
     if ( NSColor* colRGBA = [col colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
     {

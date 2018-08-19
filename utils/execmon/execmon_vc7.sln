@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "execmon", "execmon_vc7.vcproj", "{C52B1010-5B36-55C4-90F9-F6DCD0DF1DAB}"
 EndProject

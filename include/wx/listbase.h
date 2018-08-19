@@ -92,15 +92,15 @@ int (wxCALLBACK *wxListCtrlCompare)(wxIntPtr item1, wxIntPtr item2, wxIntPtr sor
 #define wxLIST_STATE_SOURCE         0x0100      // Not used
 
 // Hit test flags, used in HitTest
-#define wxLIST_HITTEST_ABOVE            0x0001  // Above the client area.
-#define wxLIST_HITTEST_BELOW            0x0002  // Below the client area.
-#define wxLIST_HITTEST_NOWHERE          0x0004  // In the client area but below the last item.
-#define wxLIST_HITTEST_ONITEMICON       0x0020  // On the bitmap associated with an item.
-#define wxLIST_HITTEST_ONITEMLABEL      0x0080  // On the label (string) associated with an item.
-#define wxLIST_HITTEST_ONITEMRIGHT      0x0100  // In the area to the right of an item.
-#define wxLIST_HITTEST_ONITEMSTATEICON  0x0200  // On the state icon for a tree view item that is in a user-defined state.
-#define wxLIST_HITTEST_TOLEFT           0x0400  // To the left of the client area.
-#define wxLIST_HITTEST_TORIGHT          0x0800  // To the right of the client area.
+#define wxLIST_HITTEST_ABOVE            0x0001  // Above the control's client area.
+#define wxLIST_HITTEST_BELOW            0x0002  // Below the control's client area.
+#define wxLIST_HITTEST_NOWHERE          0x0004  // Inside the control's client area but not over an item.
+#define wxLIST_HITTEST_ONITEMICON       0x0020  // Over an item's icon.
+#define wxLIST_HITTEST_ONITEMLABEL      0x0080  // Over an item's text.
+#define wxLIST_HITTEST_ONITEMRIGHT      0x0100  // Not used
+#define wxLIST_HITTEST_ONITEMSTATEICON  0x0200  // Over the checkbox of an item.
+#define wxLIST_HITTEST_TOLEFT           0x0400  // To the left of the control's client area.
+#define wxLIST_HITTEST_TORIGHT          0x0800  // To the right of the control's client area.
 
 #define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL | wxLIST_HITTEST_ONITEMSTATEICON)
 
@@ -414,7 +414,7 @@ public:
     // Header attributes support: only implemented in wxMSW currently.
     virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr)) { return false; }
 
-    // Checkboxes support: only implemented in wxMSW currently.
+    // Checkboxes support.
     virtual bool HasCheckBoxes() const { return false; }
     virtual bool EnableCheckBoxes(bool WXUNUSED(enable) = true) { return false; }
     virtual bool IsItemChecked(long WXUNUSED(item)) const { return false; }

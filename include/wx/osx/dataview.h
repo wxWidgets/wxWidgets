@@ -60,6 +60,7 @@ public:
     virtual void SetMinWidth   (int minWidth);
     virtual void SetReorderable(bool reorderable);
     virtual void SetResizeable (bool resizable);
+    virtual void UnsetAsSortKey();
     virtual void SetSortable   (bool sortable);
     virtual void SetSortOrder  (bool ascending);
     virtual void SetTitle      (wxString const& title);
@@ -172,10 +173,13 @@ public:
   virtual bool IsExpanded(const wxDataViewItem & item) const wxOVERRIDE;
 
   virtual unsigned int GetCount() const;
+  virtual int GetCountPerPage() const wxOVERRIDE;
   virtual wxRect GetItemRect(const wxDataViewItem& item,
                              const wxDataViewColumn* columnPtr = NULL) const wxOVERRIDE;
   virtual int GetSelectedItemsCount() const wxOVERRIDE;
   virtual int GetSelections(wxDataViewItemArray& sel) const wxOVERRIDE;
+
+  virtual wxDataViewItem GetTopItem() const wxOVERRIDE;
 
   virtual void HitTest(const wxPoint& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const wxOVERRIDE;
 

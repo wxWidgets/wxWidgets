@@ -25,7 +25,8 @@ typedef wxTextOutputStream& (*__wxTextOutputManip)(wxTextOutputStream&);
 WXDLLIMPEXP_BASE wxTextOutputStream &endl( wxTextOutputStream &stream );
 
 
-#define wxEOT wxT('\4') // the End-Of-Text control code (used only inside wxTextInputStream)
+// Obsolete constant defined only for compatibility, not used.
+#define wxEOT wxT('\4')
 
 // If you're scanning through a file using wxTextInputStream, you should check for EOF _before_
 // reading the next item (word / number), because otherwise the last item may get lost.
@@ -58,7 +59,7 @@ public:
     double   ReadDouble();
     wxString ReadLine();
     wxString ReadWord();
-    wxChar   GetChar() { wxChar c = NextChar(); return (wxChar)(c != wxEOT ? c : 0); }
+    wxChar   GetChar();
 
     wxString GetStringSeparators() const { return m_separators; }
     void SetStringSeparators(const wxString &c) { m_separators = c; }
@@ -83,7 +84,22 @@ public:
 protected:
     wxInputStream &m_input;
     wxString m_separators;
-    char m_lastBytes[10]; // stores the bytes that were read for the last character
+
+    // Data possibly (see m_validXXX) read from the stream but not decoded yet.
+    // This is necessary because GetChar() may only return a single character
+    // but we may get more than one character when decoding raw input bytes.
+    char m_lastBytes[10];
+
+    // The bytes [0, m_validEnd) of m_lastBytes contain the bytes read by the
+    // last GetChar() call (this interval may be empty if GetChar() hasn't been
+    // called yet). The bytes [0, m_validBegin) have been already decoded and
+    // returned to caller or stored in m_lastWChar in the particularly
+    // egregious case of decoding a non-BMP character when using UTF-16 for
+    // wchar_t. Finally, the bytes [m_validBegin, m_validEnd) remain to be
+    // decoded and returned during the next call (again, this interval can, and
+    // usually will, be empty too if m_validBegin == m_validEnd).
+    size_t m_validBegin,
+           m_validEnd;
 
 #if wxUSE_UNICODE
     wxMBConv *m_conv;
@@ -100,8 +116,6 @@ protected:
 
     bool   EatEOL(const wxChar &c);
     void   UngetLast(); // should be used instead of wxInputStream::Ungetch() because of Unicode issues
-    // returns EOT (\4) if there is a stream error, or end of file
-    wxChar NextChar();   // this should be used instead of GetC() because of Unicode issues
     wxChar NextNonSeparators();
 
     wxDECLARE_NO_COPY_CLASS(wxTextInputStream);

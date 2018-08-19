@@ -8,7 +8,7 @@
 #ifndef _WX_QT_DIRDLG_H_
 #define _WX_QT_DIRDLG_H_
 
-#include <QtWidgets/QFileDialog>
+class QFileDialog;
 
 class WXDLLIMPEXP_CORE wxDirDialog : public wxDirDialogBase
 {
@@ -36,9 +36,9 @@ public:     // overrides from wxGenericDirDialog
     wxString GetPath() const wxOVERRIDE;
     void SetPath(const wxString& path) wxOVERRIDE;
 
-    virtual QFileDialog *GetHandle() const;
-
 private:
+
+    virtual QFileDialog *GetQFileDialog() const;
 
     wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };

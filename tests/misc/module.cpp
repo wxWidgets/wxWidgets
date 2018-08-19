@@ -116,5 +116,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ModuleTestCase, "ModuleTestCase" );
 void ModuleTestCase::LoadOrder()
 {
     // module D is the only one with no dependencies and so should load as first (and so on):
-    CPPUNIT_ASSERT_EQUAL( "ModuleDModuleCModuleBModuleA", g_strLoadOrder );
+    CPPUNIT_ASSERT_EQUAL( std::string("ModuleDModuleCModuleBModuleA"),
+                          g_strLoadOrder );
 }

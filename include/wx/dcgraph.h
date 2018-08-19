@@ -83,7 +83,10 @@ public:
     virtual void SetBrush(const wxBrush& brush) wxOVERRIDE;
     virtual void SetBackground(const wxBrush& brush) wxOVERRIDE;
     virtual void SetBackgroundMode(int mode) wxOVERRIDE;
+
+#if wxUSE_PALETTE
     virtual void SetPalette(const wxPalette& palette) wxOVERRIDE;
+#endif
 
     virtual void DestroyClippingRegion() wxOVERRIDE;
 
@@ -192,8 +195,7 @@ public:
     virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE;
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height) wxOVERRIDE;
-    virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
-                                  wxCoord *w, wxCoord *h) const wxOVERRIDE;
+    virtual bool DoGetClippingRect(wxRect& rect) const wxOVERRIDE;
 
     virtual void DoGetTextExtent(const wxString& string,
         wxCoord *x, wxCoord *y,

@@ -73,7 +73,6 @@ class CheckBoxWidgetsPage : public WidgetsPage
 {
 public:
     CheckBoxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~CheckBoxWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_checkbox; }
     virtual void RecreateWidget() wxOVERRIDE { CreateCheckbox(); }

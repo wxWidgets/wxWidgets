@@ -21,6 +21,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QPushButton>
+
 class wxQtToggleButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
 {
 
@@ -94,7 +96,7 @@ bool wxBitmapToggleButton::GetValue() const
     return m_qtPushButton->isChecked();
 }
 
-QPushButton *wxBitmapToggleButton::GetHandle() const
+QWidget *wxBitmapToggleButton::GetHandle() const
 {
     return m_qtPushButton;
 }
@@ -144,7 +146,7 @@ bool wxToggleButton::GetValue() const
     return m_qtPushButton->isChecked();
 }
 
-QPushButton *wxToggleButton::GetHandle() const
+QWidget *wxToggleButton::GetHandle() const
 {
     return m_qtPushButton;
 }

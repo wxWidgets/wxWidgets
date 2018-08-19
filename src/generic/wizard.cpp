@@ -734,7 +734,7 @@ wxSize wxWizard::GetPageSize() const
     if ( m_statbmp )
     {
         // make the page at least as tall as the bitmap
-        pageSize.IncTo(wxSize(0, m_bitmap.GetHeight()));
+        pageSize.IncTo(wxSize(0, m_bitmap.GetScaledHeight()));
     }
 
     if ( m_usingSizer )
@@ -948,10 +948,10 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
         wxSize pageSize = m_sizerPage->GetSize();
         if (pageSize == wxSize(0,0))
             pageSize = GetPageSize();
-        int bitmapWidth = wxMax(bmp.GetWidth(), GetMinimumBitmapWidth());
+        int bitmapWidth = wxMax(bmp.GetScaledWidth(), GetMinimumBitmapWidth());
         int bitmapHeight = pageSize.y;
 
-        if (!m_statbmp->GetBitmap().IsOk() || m_statbmp->GetBitmap().GetHeight() != bitmapHeight)
+        if (!m_statbmp->GetBitmap().IsOk() || m_statbmp->GetBitmap().GetScaledHeight() != bitmapHeight)
         {
             wxBitmap bitmap(bitmapWidth, bitmapHeight);
             {
@@ -971,16 +971,16 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
                     if (GetBitmapPlacement() & wxWIZARD_HALIGN_LEFT)
                         x = 0;
                     else if (GetBitmapPlacement() & wxWIZARD_HALIGN_RIGHT)
-                        x = bitmapWidth - bmp.GetWidth();
+                        x = bitmapWidth - bmp.GetScaledWidth();
                     else
-                        x = (bitmapWidth - bmp.GetWidth())/2;
+                        x = (bitmapWidth - bmp.GetScaledWidth())/2;
 
                     if (GetBitmapPlacement() & wxWIZARD_VALIGN_TOP)
                         y = 0;
                     else if (GetBitmapPlacement() & wxWIZARD_VALIGN_BOTTOM)
-                        y = bitmapHeight - bmp.GetHeight();
+                        y = bitmapHeight - bmp.GetScaledHeight();
                     else
-                        y = (bitmapHeight - bmp.GetHeight())/2;
+                        y = (bitmapHeight - bmp.GetScaledHeight())/2;
 
                     dc.DrawBitmap(bmp, x, y, true);
                     dc.SelectObject(wxNullBitmap);
@@ -996,8 +996,8 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
 
 bool wxWizard::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
 {
-    int w = bitmap.GetWidth();
-    int h = bitmap.GetHeight();
+    int w = bitmap.GetScaledWidth();
+    int h = bitmap.GetScaledHeight();
 
     wxMemoryDC dcMem;
 
@@ -1007,7 +1007,7 @@ bool wxWizard::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
     for (i = rect.x; i < rect.x + rect.width; i += w)
     {
         for (j = rect.y; j < rect.y + rect.height; j+= h)
-            dc.Blit(i, j, bitmap.GetWidth(), bitmap.GetHeight(), & dcMem, 0, 0);
+            dc.Blit(i, j, bitmap.GetScaledWidth(), bitmap.GetScaledHeight(), & dcMem, 0, 0);
     }
     dcMem.SelectObject(wxNullBitmap);
 

@@ -884,7 +884,7 @@ public:
                                wxVariant value, long argFlags = 0 );
 
     /**
-        Sets property attribute for all applicapple properties.
+        Sets property attribute for all applicable properties.
         Be sure to use this method only after all properties have been
         added to the grid.
 

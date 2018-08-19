@@ -43,9 +43,6 @@
     <ClCompile Include="..\..\src\jpeg\jcparam.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\jpeg\jcphuff.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\jpeg\jcprepct.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,9 +91,6 @@
     <ClCompile Include="..\..\src\jpeg\jdmerge.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\jpeg\jdphuff.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\jpeg\jdpostct.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -127,9 +121,6 @@
     <ClCompile Include="..\..\src\jpeg\jidctint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\jpeg\jidctred.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\jpeg\jmemmgr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -143,6 +134,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\jpeg\jutils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jpeg\jaricom.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jpeg\jcarith.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\jpeg\jdarith.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

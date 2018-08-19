@@ -70,6 +70,12 @@ public:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
 
 protected:
+    // Hook for common controls for which we don't want to set the default font
+    // as if we do set it, the controls don't update their font size
+    // automatically in response to WM_SETTINGCHANGE if it's changed in the
+    // display properties in the control panel, so avoid doing this for them.
+    virtual bool MSWShouldSetDefaultFont() const { return true; }
+
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE;
 

@@ -13,6 +13,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QTabWidget>
+
 class wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
 {
 public:
@@ -148,7 +150,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
         m_qtTabWidget->insertTab( n, page->GetHandle(), wxQtConvertString( text ));
     }
 
-    m_pages.Insert(page, n);
+    m_pages.insert(m_pages.begin() + n, page);
     m_images.insert(m_images.begin() + n, imageId);
 
     // reenable firing qt signals as internal wx initialization was completed
@@ -199,7 +201,7 @@ wxWindow *wxNotebook::DoRemovePage(size_t page)
     return QtRetrieveWindowPointer( qtWidget );
 }
 
-QTabWidget *wxNotebook::GetHandle() const
+QWidget *wxNotebook::GetHandle() const
 {
     return m_qtTabWidget;
 }

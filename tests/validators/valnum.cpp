@@ -30,8 +30,8 @@ class NumValidatorTestCase : public CppUnit::TestCase
 public:
     NumValidatorTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( NumValidatorTestCase );

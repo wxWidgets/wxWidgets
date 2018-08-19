@@ -5,6 +5,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+/// Magic constant which tells (to some functions) to automatically calculate
+/// the appropriate size
+#define wxGRID_AUTOSIZE (-1)
+
+
 /**
     @class wxGridCellRenderer
 
@@ -69,8 +75,8 @@ public:
 
         @since 3.1.0
     */
-    virtual wxSize GetBestHeight(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
-                               int row, int col, int width);
+    virtual int GetBestHeight(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                              int row, int col, int width);
 
     /**
         Get the preferred width of the cell at the given height.
@@ -79,8 +85,8 @@ public:
 
         @since 3.1.0
     */
-    virtual wxSize GetBestWidth(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
-                               int row, int col, int height);
+    virtual int GetBestWidth(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                             int row, int col, int height);
 
 protected:
     /**
@@ -4245,7 +4251,7 @@ public:
         wxGridTableBase::DeleteRows(). See InsertRows() for further
         information.
 
-        @return @true on success or @false if appending rows failed.
+        @return @true on success or @false if deleting rows failed.
     */
     bool DeleteRows(int pos = 0, int numRows = 1, bool updateLabels = true);
 
@@ -4639,7 +4645,7 @@ protected:
     /**
         Get the minimal width of the given column/row.
 
-        The value returned by this function may be different than that returned
+        The value returned by this function may be different from that returned
         by GetColMinimalAcceptableWidth() if SetColMinimalWidth() had been
         called for this column.
     */
@@ -4658,7 +4664,7 @@ protected:
     /**
         Returns the minimal size for the given column.
 
-        The value returned by this function may be different than that returned
+        The value returned by this function may be different from that returned
         by GetRowMinimalAcceptableHeight() if SetRowMinimalHeight() had been
         called for this row.
     */

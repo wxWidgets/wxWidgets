@@ -988,10 +988,11 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         {
             default:
                 wxFAIL_MSG( wxT("unexpected WaitForInputIdle() return code") );
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_FAILED:
                 wxLogLastError(wxT("WaitForInputIdle() in wxExecute"));
+                wxFALLTHROUGH;
 
             case WAIT_TIMEOUT:
                 wxLogDebug(wxT("Timeout too small in WaitForInputIdle"));

@@ -12,8 +12,9 @@
 #define _WX_QT_FRAME_H_
 
 #include "wx/frame.h"
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QScrollArea>
+
+class QMainWindow;
+class QScrollArea;
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
@@ -45,12 +46,8 @@ public:
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
 
-    virtual QMainWindow *GetHandle() const
-    {
-        return static_cast<QMainWindow*>(m_qtWindow);
-    }
-
-    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const;
+    QMainWindow *GetQMainWindow() const;
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 protected:
     virtual void DoGetClientSize(int *width, int *height) const;

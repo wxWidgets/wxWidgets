@@ -423,12 +423,10 @@ void wxAuiMDIParentFrame::Tile(wxOrientation orient)
 // wxAuiMDIChildFrame
 //-----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxAuiMDIChildFrame, wxPanel);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAuiMDIChildFrame, wxFrame);
 
-wxBEGIN_EVENT_TABLE(wxAuiMDIChildFrame, wxPanel)
+wxBEGIN_EVENT_TABLE(wxAuiMDIChildFrame, wxFrame)
     EVT_MENU_HIGHLIGHT_ALL(wxAuiMDIChildFrame::OnMenuHighlight)
-    EVT_ACTIVATE(wxAuiMDIChildFrame::OnActivate)
-    EVT_CLOSE(wxAuiMDIChildFrame::OnCloseWindow)
 wxEND_EVENT_TABLE()
 
 wxAuiMDIChildFrame::wxAuiMDIChildFrame()
@@ -498,16 +496,13 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
     if (style & wxMINIMIZE)
         m_activateOnCreate = false;
 
-    wxSize cli_size = pClientWindow->GetClientSize();
-
-    // create the window off-screen to prevent flicker
-    wxPanel::Create(pClientWindow,
+    // create the window hidden to prevent flicker
+    wxWindow::Show(false);
+    wxWindow::Create(pClientWindow,
                     id,
-                    wxPoint(cli_size.x+1, cli_size.y+1),
+                    wxDefaultPosition,
                     size,
                     wxNO_BORDER, name);
-
-    DoShow(false);
 
     SetMDIParentFrame(parent);
 
@@ -609,32 +604,17 @@ void wxAuiMDIChildFrame::SetTitle(const wxString& title)
     }
 }
 
-wxString wxAuiMDIChildFrame::GetTitle() const
-{
-    return m_title;
-}
-
 void wxAuiMDIChildFrame::SetIcons(const wxIconBundle& icons)
 {
-    // get icon with the system icon size
-    SetIcon(icons.GetIcon(-1));
-    m_iconBundle = icons;
-}
+    wxTDIChildFrame::SetIcons(icons);
 
-const wxIconBundle& wxAuiMDIChildFrame::GetIcons() const
-{
-    return m_iconBundle;
-}
-
-void wxAuiMDIChildFrame::SetIcon(const wxIcon& icon)
-{
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
     wxASSERT_MSG(pParentFrame, wxT("Missing MDI Parent Frame"));
 
-    m_icon = icon;
-
+    const wxSize sizeIcon(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
+                          wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
     wxBitmap bmp;
-    bmp.CopyFromIcon(m_icon);
+    bmp.CopyFromIcon(icons.GetIcon(sizeIcon));
 
     wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
     if (pClientWindow != NULL)
@@ -647,12 +627,6 @@ void wxAuiMDIChildFrame::SetIcon(const wxIcon& icon)
         }
     }
 }
-
-const wxIcon& wxAuiMDIChildFrame::GetIcon() const
-{
-    return m_icon;
-}
-
 
 void wxAuiMDIChildFrame::Activate()
 {
@@ -689,16 +663,6 @@ void wxAuiMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
 #endif // wxUSE_STATUSBAR
 }
 
-void wxAuiMDIChildFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
-{
-    // do nothing
-}
-
-void wxAuiMDIChildFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
-{
-    Destroy();
-}
-
 void wxAuiMDIChildFrame::SetMDIParentFrame(wxAuiMDIParentFrame* parentFrame)
 {
     m_pMDIParentFrame = parentFrame;
@@ -720,50 +684,22 @@ void wxAuiMDIChildFrame::Init()
 
 bool wxAuiMDIChildFrame::Show(bool show)
 {
-    // wxAuiMDIChildFrame uses m_activateOnCreate only to decide whether to
-    // activate the frame when it is created.  After Create() is called,
-    // m_activateOnCreate will never be read again.  Therefore, calling this
-    // function after Create() is pointless and you probably want to call
-    // Activate() instead.
-    wxCHECK_MSG( !GetHandle(), false,
-                 wxS("Show() has no effect after Create(). Do you mean Activate()?") );
-
     m_activateOnCreate = show;
 
-    // do nothing
+    if ( show )
+    {
+        // This is not a real TLW, so it won't get a size event when it's
+        // really "mapped", i.e. appears on the screen for the first time.
+        // Instead, its size had been already set when it was created and we
+        // didn't have any opportunity to lay it out since then, i.e. since
+        // before its children were created. Do it now to allow the same code
+        // that would work with a "real" wxMDIChildFrame to also work with this
+        // class.
+        DoLayout();
+    }
+
     return true;
 }
-
-void wxAuiMDIChildFrame::DoShow(bool show)
-{
-    wxWindow::Show(show);
-}
-
-void wxAuiMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    m_mdiNewRect = wxRect(x, y, width, height);
-#ifdef __WXGTK__
-    wxPanel::DoSetSize(x,y,width, height, sizeFlags);
-#else
-    wxUnusedVar(sizeFlags);
-#endif
-}
-
-void wxAuiMDIChildFrame::DoMoveWindow(int x, int y, int width, int height)
-{
-    m_mdiNewRect = wxRect(x, y, width, height);
-}
-
-void wxAuiMDIChildFrame::ApplyMDIChildFrameRect()
-{
-    if (m_mdiCurRect != m_mdiNewRect)
-    {
-        wxPanel::DoMoveWindow(m_mdiNewRect.x, m_mdiNewRect.y,
-                              m_mdiNewRect.width, m_mdiNewRect.height);
-        m_mdiCurRect = m_mdiNewRect;
-    }
-}
-
 
 //-----------------------------------------------------------------------------
 // wxAuiMDIClientWindow
@@ -774,7 +710,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAuiMDIClientWindow, wxAuiNotebook);
 wxBEGIN_EVENT_TABLE(wxAuiMDIClientWindow, wxAuiNotebook)
     EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiMDIClientWindow::OnPageChanged)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, wxAuiMDIClientWindow::OnPageClose)
-    EVT_SIZE(wxAuiMDIClientWindow::OnSize)
 wxEND_EVENT_TABLE()
 
 wxAuiMDIClientWindow::wxAuiMDIClientWindow()
@@ -789,11 +724,6 @@ wxAuiMDIClientWindow::wxAuiMDIClientWindow(wxAuiMDIParentFrame* parent, long sty
 bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
 {
     SetWindowStyleFlag(style);
-
-    wxSize caption_icon_size =
-            wxSize(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
-                   wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
-    SetUniformBitmapSize(caption_icon_size);
 
     if (!wxAuiNotebook::Create(parent,
                                wxID_ANY,
@@ -812,15 +742,10 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
     return true;
 }
 
-int wxAuiMDIClientWindow::SetSelection(size_t nPage)
-{
-    return wxAuiNotebook::SetSelection(nPage);
-}
-
 wxAuiMDIChildFrame* wxAuiMDIClientWindow::GetActiveChild()
 {
     const int sel = GetSelection();
-    if ( sel == wxNOT_FOUND )
+    if ( sel == wxNOT_FOUND || sel >= (int)GetPageCount() )
         return NULL;
 
     return wxStaticCast(GetPage(sel), wxAuiMDIChildFrame);
@@ -889,14 +814,6 @@ void wxAuiMDIClientWindow::OnPageClose(wxAuiNotebookEvent& evt)
 void wxAuiMDIClientWindow::OnPageChanged(wxAuiNotebookEvent& evt)
 {
     PageChanged(evt.GetOldSelection(), evt.GetSelection());
-}
-
-void wxAuiMDIClientWindow::OnSize(wxSizeEvent& evt)
-{
-    wxAuiNotebook::OnSize(evt);
-
-    for (size_t pos = 0; pos < GetPageCount(); pos++)
-        ((wxAuiMDIChildFrame *)GetPage(pos))->ApplyMDIChildFrameRect();
 }
 
 #endif //wxUSE_AUI

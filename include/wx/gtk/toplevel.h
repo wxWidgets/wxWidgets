@@ -9,6 +9,8 @@
 #ifndef _WX_GTK_TOPLEVEL_H_
 #define _WX_GTK_TOPLEVEL_H_
 
+class WXDLLIMPEXP_FWD_CORE wxGUIEventLoop;
+
 //-----------------------------------------------------------------------------
 // wxTopLevelWindowGTK
 //-----------------------------------------------------------------------------
@@ -80,7 +82,7 @@ public:
     // viewable from within modal dialogs
     virtual void AddGrab();
     virtual void RemoveGrab();
-    virtual bool IsGrabbed() const { return m_grabbed; }
+    virtual bool IsGrabbed() const;
 
 
     virtual void Refresh( bool eraseBackground = true,
@@ -158,7 +160,7 @@ private:
     bool m_isIconized;
 
     // is the frame currently grabbed explicitly by the application?
-    bool m_grabbed;
+    wxGUIEventLoop* m_grabbedEventLoop;
 
     bool m_updateDecorSize;
     bool m_deferShowAllowed;

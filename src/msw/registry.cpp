@@ -757,11 +757,10 @@ bool wxRegKey::DeleteSelf()
 #if wxUSE_DYNLIB_CLASS
   wxDynamicLibrary dllAdvapi32(wxT("advapi32"));
   // Minimum supported OS for RegDeleteKeyEx: Vista, XP Pro x64, Win Server 2008, Win Server 2003 SP1
-  if(dllAdvapi32.HasSymbol(wxT("RegDeleteKeyEx")))
+  typedef LONG (WINAPI *RegDeleteKeyEx_t)(HKEY, LPCTSTR, REGSAM, DWORD);
+  RegDeleteKeyEx_t wxDL_INIT_FUNC_AW(pfn, RegDeleteKeyEx, dllAdvapi32);
+  if (pfnRegDeleteKeyEx)
   {
-    typedef LONG (WINAPI *RegDeleteKeyEx_t)(HKEY, LPCTSTR, REGSAM, DWORD);
-    wxDYNLIB_FUNCTION(RegDeleteKeyEx_t, RegDeleteKeyEx, dllAdvapi32);
-
     m_dwLastError = (*pfnRegDeleteKeyEx)((HKEY) m_hRootKey, m_strKey.t_str(),
         GetMSWViewFlags(m_viewMode),
         0);    // This parameter is reserved and must be zero.

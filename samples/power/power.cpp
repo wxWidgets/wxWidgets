@@ -266,7 +266,7 @@ wxEND_EVENT_TABLE()
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit()
+    virtual bool OnInit() wxOVERRIDE
     {
         new MyFrame;
 

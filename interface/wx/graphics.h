@@ -50,9 +50,16 @@ public:
     //@}
 
     /**
-        Appends a an arc to two tangents connecting (current) to (@a x1,@a y1)
-        and (@a x1,@a y1) to (@a x2,@a y2), also a straight line from (current)
-        to (@a x1,@a y1).
+        Adds an arc (of a circle with radius @a r) that is tangent
+        to the line connecting current point and (@a x1, @a y1) and
+        to the line connecting (@a x1, @a y1) and (@a x2, @a y2).
+        If the current point and the starting point of the arc are different,
+        a straight line connecting these points is also appended.
+        If there is no current point before the call to AddArcToPoint() this
+        function will behave as if preceded by a call to MoveToPoint(0, 0).
+        After this call the current point will be at the ending point
+        of the arc.
+        @image html drawing-addarctopoint.png
     */
     virtual void AddArcToPoint(wxDouble x1, wxDouble y1, wxDouble x2,
                                wxDouble y2, wxDouble r);
@@ -253,7 +260,7 @@ enum wxInterpolationQuality
     /** default interpolation, based on type of context, in general medium quality */
     wxINTERPOLATION_DEFAULT,
     /** no interpolation */
-    wxINTERPOLATION_NONE, 
+    wxINTERPOLATION_NONE,
     /** fast interpolation, suited for interactivity */
     wxINTERPOLATION_FAST,
     /** better quality */
@@ -331,7 +338,7 @@ public:
     wxImage ConvertToImage() const;
 
     /**
-        Return the pointer to the native bitmap data. (CGImageRef for Core Graphics, 
+        Return the pointer to the native bitmap data. (CGImageRef for Core Graphics,
         cairo_surface_t for Cairo, Bitmap* for GDI+.)
 
         @since 2.9.4
@@ -677,8 +684,19 @@ public:
 
     /**
         Creates a native pen from a wxPen.
+
+        Prefer to use the overload taking wxGraphicsPenInfo unless you already
+        have a wxPen as constructing one only to pass it to this method is
+        wasteful.
     */
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
+    wxGraphicsPen CreatePen(const wxPen& pen) const;
+
+    /**
+        Creates a native pen from a wxGraphicsPenInfo.
+
+        @since 3.1.1
+    */
+    wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) const;
 
     /**
         Sets the pen used for stroking.
@@ -1415,9 +1433,11 @@ public:
     virtual wxGraphicsPath CreatePath() = 0;
 
     /**
-        Creates a native pen from a wxPen.
+        Creates a native pen from its description.
+
+        @since 3.1.1
     */
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) = 0;
 
     /**
         Creates a native brush with a radial gradient.
@@ -1524,6 +1544,49 @@ class wxGraphicsFont : public wxGraphicsObject
 {
 public:
 
+};
+
+
+
+/**
+    @class wxGraphicsPenInfo
+
+    This class is a helper used for wxGraphicsPen creation using named parameter
+    idiom: it allows to specify various wxGraphicsPen attributes using the chained
+    calls to its clearly named methods instead of passing them in the fixed
+    order to wxGraphicsPen constructors.
+
+    Typically you would use wxGraphicsPenInfo with a wxGraphicsContext, e.g. to
+    start drawing with a dotted blue pen slightly wider than normal you could
+    write the following:
+    @code
+    wxGraphicsContext ctx = wxGraphicsContext::Create(dc);
+
+    ctx.SetPen(wxGraphicsPenInfo(*wxBLUE).Width(1.25).Style(wxPENSTYLE_DOT));
+    @endcode
+
+    @since 3.1.1
+ */
+class wxGraphicsPenInfo
+{
+public:
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(),
+                               wxDouble width = 1.0,
+                               wxPenStyle style = wxPENSTYLE_SOLID);
+
+    wxGraphicsPenInfo& Colour(const wxColour& col);
+
+    wxGraphicsPenInfo& Width(wxDouble width);
+
+    wxGraphicsPenInfo& Style(wxPenStyle style);
+
+    wxGraphicsPenInfo& Stipple(const wxBitmap& stipple);
+
+    wxGraphicsPenInfo& Dashes(int nb_dashes, const wxDash *dash);
+
+    wxGraphicsPenInfo& Join(wxPenJoin join);
+
+    wxGraphicsPenInfo& Cap(wxPenCap cap);
 };
 
 

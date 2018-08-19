@@ -23,8 +23,6 @@
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private.h"
 
-#include <gtk/gtk.h>
-
 GdkWindow* wxGetTopLevelGDK();
 
 #ifndef __WXGTK3__
@@ -522,7 +520,7 @@ wxBitmap::wxBitmap(GdkPixmap* pixmap)
 wxBitmap::wxBitmap(const wxCursor& cursor)
 {
 #if GTK_CHECK_VERSION(2,8,0)
-    if (gtk_check_version(2,8,0) == NULL)
+    if (wx_is_at_least_gtk2(8))
     {
         GdkPixbuf *pixbuf = gdk_cursor_get_image(cursor.GetCursor());
         *this = wxBitmap(pixbuf);

@@ -8,8 +8,7 @@
 #ifndef _WX_QT_DC_H_
 #define _WX_QT_DC_H_
 
-#include <QtGui/QPainter>
-
+class QPainter;
 class QImage;
 
 class WXDLLIMPEXP_FWD_CORE wxRegion;
@@ -112,6 +111,8 @@ public:
     virtual void* GetHandle() const { return (void*) m_qtPainter; }
 
 protected:
+    virtual QImage *GetQImage() { return m_qtImage; }
+    
     QPainter *m_qtPainter;
     QImage *m_qtImage;
 
@@ -125,8 +126,8 @@ private:
         wxQtINVERT
     };
     wxQtRasterColourOp m_rasterColourOp;
-    QColor m_qtPenColor;
-    QColor m_qtBrushColor;
+    QColor *m_qtPenColor;
+    QColor *m_qtBrushColor;
     void ApplyRasterColourOp();
     
 };

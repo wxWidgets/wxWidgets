@@ -1428,6 +1428,7 @@ void wxQuantize::DoQuantize(unsigned w, unsigned h, unsigned char **in_rows, uns
     j_decompress dec;
     my_cquantize_ptr cquantize;
 
+    dec.colormap = NULL;
     dec.output_width = w;
     dec.desired_number_of_colors = desiredNoColours;
     prepare_range_limit_table(&dec);

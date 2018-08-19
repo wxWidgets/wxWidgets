@@ -12,6 +12,7 @@
 #define _WX_GENERIC_DATECTRL_H_
 
 #include "wx/compositewin.h"
+#include "wx/containr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 
@@ -19,7 +20,7 @@ class WXDLLIMPEXP_FWD_ADV wxCalendarCtrl;
 class WXDLLIMPEXP_FWD_ADV wxCalendarComboPopup;
 
 class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric
-    : public wxCompositeWindow<wxDatePickerCtrlBase>
+    : public wxCompositeWindow< wxNavigationEnabled<wxDatePickerCtrlBase> >
 {
 public:
     // creating the control
@@ -79,7 +80,6 @@ private:
 
     void OnText(wxCommandEvent &event);
     void OnSize(wxSizeEvent& event);
-    void OnFocus(wxFocusEvent& event);
 
 #ifdef __WXOSX_COCOA__
     virtual void OSXGenerateEvent(const wxDateTime& WXUNUSED(dt)) wxOVERRIDE { }

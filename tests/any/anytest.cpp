@@ -21,6 +21,18 @@
 
 #include <math.h>
 
+namespace Catch
+{
+    template <>
+    struct StringMaker<wxVariant>
+    {
+        static std::string convert(const wxVariant& v)
+        {
+            return v.MakeString().ToStdString(wxConvUTF8);
+        }
+    };
+}
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -666,7 +678,7 @@ public:
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
-                              wxAnyValueBuffer& dst) const
+                              wxAnyValueBuffer& dst) const wxOVERRIDE
     {
         MyClass value = GetValue(src);
 

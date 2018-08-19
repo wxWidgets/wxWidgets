@@ -17,8 +17,7 @@
     #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -111,77 +110,10 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         *height = 0;
 }
 
-#if wxUSE_MENUS && wxUSE_ACCEL
-// Helper for wxCreateAcceleratorTableForMenuBar
-static void wxAddAccelerators(wxList& accelEntries, wxMenu* menu)
-{
-    size_t i;
-    for (i = 0; i < menu->GetMenuItems().GetCount(); i++)
-    {
-        wxMenuItem* item = (wxMenuItem*) menu->GetMenuItems().Item(i)->GetData();
-        if (item->GetSubMenu())
-        {
-            wxAddAccelerators(accelEntries, item->GetSubMenu());
-        }
-        else if (!item->GetItemLabel().IsEmpty())
-        {
-            wxAcceleratorEntry* entry = wxAcceleratorEntry::Create(item->GetItemLabel());
-            if (entry)
-            {
-                entry->Set(entry->GetFlags(), entry->GetKeyCode(), item->GetId());
-                accelEntries.Append((wxObject*) entry);
-            }
-        }
-    }
-}
-
-// Create an accelerator table consisting of all the accelerators
-// from the menubar in the given menus
-static wxAcceleratorTable wxCreateAcceleratorTableForMenuBar(wxMenuBar* menuBar)
-{
-    wxList accelEntries;
-
-    size_t i;
-    for (i = 0; i < menuBar->GetMenuCount(); i++)
-    {
-        wxAddAccelerators(accelEntries, menuBar->GetMenu(i));
-    }
-
-    size_t n = accelEntries.GetCount();
-
-    if (n == 0)
-        return wxAcceleratorTable();
-
-    wxAcceleratorEntry* entries = new wxAcceleratorEntry[n];
-
-    for (i = 0; i < accelEntries.GetCount(); i++)
-    {
-        wxAcceleratorEntry* entry = (wxAcceleratorEntry*) accelEntries.Item(i)->GetData();
-        entries[i] = (*entry);
-        delete entry;
-
-    }
-
-    wxAcceleratorTable table(n, entries);
-    delete[] entries;
-
-    return table;
-}
-#endif // wxUSE_MENUS && wxUSE_ACCEL
-
 bool wxFrame::ShowFullScreen(bool show, long style)
 {
     if (!wxFrameBase::ShowFullScreen(show, style))
         return false;
-
-#if wxUSE_MENUS && wxUSE_ACCEL
-    if (show && GetMenuBar())
-    {
-        wxAcceleratorTable table(wxCreateAcceleratorTableForMenuBar(GetMenuBar()));
-        if (table.IsOk())
-            SetAcceleratorTable(table);
-    }
-#endif // wxUSE_MENUS && wxUSE_ACCEL
 
     wxWindow* const bar[] = {
 #if wxUSE_MENUS

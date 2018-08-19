@@ -92,7 +92,11 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // update internal arg[cv] as DFB may have removed processed options:
     this->argc = argc;
+#if wxUSE_UNICODE
+    this->argv.Init(argc, argv);
+#else
     this->argv = argv;
+#endif
 
     if ( !wxIDirectFB::Get() )
         return false;

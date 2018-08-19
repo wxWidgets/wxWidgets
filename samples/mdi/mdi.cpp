@@ -220,14 +220,14 @@ MyFrame::MyFrame()
 #endif // wxUSE_ACCEL
 
     // connect it only now, after creating m_textWindow
-    Connect(wxEVT_SIZE, wxSizeEventHandler(MyFrame::OnSize));
+    Bind(wxEVT_SIZE, &MyFrame::OnSize, this);
 }
 
 MyFrame::~MyFrame()
 {
     // and disconnect it to prevent accessing already deleted m_textWindow in
     // the size event handler if it's called during destruction
-    Disconnect(wxEVT_SIZE, wxSizeEventHandler(MyFrame::OnSize));
+    Unbind(wxEVT_SIZE, &MyFrame::OnSize, this);
 
     // also prevent its use as log target
     delete wxLog::SetActiveTarget(NULL);

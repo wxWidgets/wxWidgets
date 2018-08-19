@@ -14,9 +14,8 @@
 
 #include "wx/toolbar.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -242,11 +241,17 @@ arrow_button_press_event(GtkToggleButton* button, GdkEventButton* event, wxToolB
 
 void wxToolBar::AddChildGTK(wxWindowGTK* child)
 {
+    GtkToolItem* item = gtk_tool_item_new();
+#ifdef __WXGTK3__
+    gtk_widget_set_valign(child->m_widget, GTK_ALIGN_CENTER);
+    gtk_widget_set_halign(child->m_widget, GTK_ALIGN_CENTER);
+    gtk_container_add(GTK_CONTAINER(item), child->m_widget);
+#else
     GtkWidget* align = gtk_alignment_new(0.5, 0.5, 0, 0);
     gtk_widget_show(align);
     gtk_container_add(GTK_CONTAINER(align), child->m_widget);
-    GtkToolItem* item = gtk_tool_item_new();
     gtk_container_add(GTK_CONTAINER(item), align);
+#endif
     // position will be corrected in DoInsertTool if necessary
     gtk_toolbar_insert(GTK_TOOLBAR(gtk_bin_get_child(GTK_BIN(m_widget))), item, -1);
 }
@@ -271,14 +276,28 @@ void wxToolBarTool::CreateDropDown()
 {
     gtk_tool_item_set_homogeneous(m_item, false);
     GtkOrientation orient = GTK_ORIENTATION_HORIZONTAL;
-    GtkArrowType arrowType = GTK_ARROW_DOWN;
     if (GetToolBar()->HasFlag(wxTB_LEFT | wxTB_RIGHT))
-    {
         orient = GTK_ORIENTATION_VERTICAL;
-        arrowType = GTK_ARROW_RIGHT;
-    }
     GtkWidget* box = gtk_box_new(orient, 0);
-    GtkWidget* arrow = gtk_arrow_new(arrowType, GTK_SHADOW_NONE);
+    GtkWidget* arrow;
+    if (wx_is_at_least_gtk3(14))
+    {
+        const char* icon = "pan-down-symbolic";
+        if (orient == GTK_ORIENTATION_VERTICAL)
+            icon = "pan-end-symbolic";
+        arrow = gtk_image_new_from_icon_name(icon, GTK_ICON_SIZE_BUTTON);
+    }
+#ifndef __WXGTK4__
+    else
+    {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        GtkArrowType arrowType = GTK_ARROW_DOWN;
+        if (orient == GTK_ORIENTATION_VERTICAL)
+            arrowType = GTK_ARROW_RIGHT;
+        arrow = gtk_arrow_new(arrowType, GTK_SHADOW_NONE);
+        wxGCC_WARNING_RESTORE()
+    }
+#endif
     GtkWidget* tool_button = gtk_bin_get_child(GTK_BIN(m_item));
     g_object_ref(tool_button);
     gtk_container_remove(GTK_CONTAINER(m_item), tool_button);
@@ -334,7 +353,7 @@ void wxToolBarTool::SetLabel(const wxString& label)
         {
             wxString newLabel = wxControl::RemoveMnemonics(label);
             gtk_tool_button_set_label(GTK_TOOL_BUTTON(m_item),
-                                      wxGTK_CONV(newLabel));
+                                      wxGTK_CONV_SYS(newLabel));
             // To show the label for toolbar with wxTB_HORZ_LAYOUT.
             gtk_tool_item_set_is_important(m_item, true);
         }
@@ -408,7 +427,7 @@ bool wxToolBar::Create( wxWindow *parent,
 
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
 #ifndef __WXGTK3__
-    if (gtk_check_version(2, 12, 0))
+    if (!wx_is_at_least_gtk2(12))
     {
         m_tooltips = gtk_tooltips_new();
         g_object_ref(m_tooltips);
@@ -417,6 +436,10 @@ bool wxToolBar::Create( wxWindow *parent,
 #endif
     GtkSetStyle();
 
+#ifdef __WXGTK4__
+    m_widget = m_toolbar;
+#else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if ((style & wxTB_DOCKABLE)
 #ifdef __WXGTK3__
         // using GtkHandleBox prevents toolbar from drawing with GTK+ >= 3.19.7
@@ -439,8 +462,10 @@ bool wxToolBar::Create( wxWindow *parent,
         m_widget = gtk_event_box_new();
         ConnectWidget( m_widget );
     }
-    g_object_ref(m_widget);
     gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar));
+    wxGCC_WARNING_RESTORE()
+#endif // !__WXGTK4__
+    g_object_ref(m_widget);
     gtk_widget_show(GTK_WIDGET(m_toolbar));
 
     m_parent->DoAddChild( this );
@@ -580,7 +605,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             if (!HasFlag(wxTB_NO_TOOLTIPS) && !tool->GetShortHelp().empty())
             {
 #if GTK_CHECK_VERSION(2, 12, 0)
-                if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
+                if (wx_is_at_least_gtk2(12))
                 {
                     gtk_tool_item_set_tooltip_text(tool->m_item,
                         wxGTK_CONV(tool->GetShortHelp()));
@@ -625,7 +650,11 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             wxWindow* control = tool->GetControl();
             if (gtk_widget_get_parent(control->m_widget) == NULL)
                 AddChildGTK(control);
+#ifdef __WXGTK3__
+            tool->m_item = GTK_TOOL_ITEM(gtk_widget_get_parent(control->m_widget));
+#else
             tool->m_item = GTK_TOOL_ITEM(gtk_widget_get_parent(gtk_widget_get_parent(control->m_widget)));
+#endif
             if (gtk_toolbar_get_item_index(m_toolbar, tool->m_item) != int(pos))
             {
                 g_object_ref(tool->m_item);
@@ -754,7 +783,7 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
         if (tool->m_item)
         {
 #if GTK_CHECK_VERSION(2, 12, 0)
-            if (GTK_CHECK_VERSION(3,0,0) || gtk_check_version(2,12,0) == NULL)
+            if (wx_is_at_least_gtk2(12))
             {
                 gtk_tool_item_set_tooltip_text(tool->m_item,
                     wxGTK_CONV(helpString));

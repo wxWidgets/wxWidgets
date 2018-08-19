@@ -104,11 +104,6 @@ public:
     // attributes and returns true.
     bool GTKSetPangoAttrs(PangoLayout* layout) const;
 
-    // implementation from now on
-    void Unshare();
-
-    // no data :-)
-
 protected:
     virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info ) wxOVERRIDE;
 

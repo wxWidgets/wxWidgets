@@ -94,7 +94,7 @@ public:
     virtual wxRect GetPaperRect() const wxOVERRIDE;
 
     virtual void* GetHandle() const wxOVERRIDE { return NULL; }
-    
+
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col,
                      wxFloodFillStyle style = wxFLOOD_SURFACE) wxOVERRIDE;

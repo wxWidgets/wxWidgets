@@ -34,8 +34,7 @@
 #include "wx/private/eventloopsourcesmanager.h"
 #include "wx/apptrait.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 GdkWindow* wxGetTopLevelGDK();
 

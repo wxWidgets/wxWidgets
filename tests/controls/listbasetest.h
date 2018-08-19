@@ -33,6 +33,7 @@ protected:
         CPPUNIT_TEST( ItemFormatting ); \
         WXUISIM_TEST( EditLabel ); \
         CPPUNIT_TEST( ImageList ); \
+        CPPUNIT_TEST( HitTest ); \
         CPPUNIT_TEST( Sort )
 
     void ColumnsOrder();
@@ -48,6 +49,7 @@ protected:
     void ItemFormatting();
     void EditLabel();
     void ImageList();
+    void HitTest();
     void Sort();
 
     wxDECLARE_NO_COPY_CLASS(ListBaseTestCase);

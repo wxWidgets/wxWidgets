@@ -49,7 +49,7 @@ private:
     void RecordingDefaultsTest();
 
     // return the number of values we (attempted to) read
-    int ReadValues(wxConfig *config, bool has_values);
+    size_t ReadValues(wxConfig *config, bool has_values);
 
     wxDECLARE_NO_COPY_CLASS(ConfigTestCase);
 };
@@ -135,9 +135,9 @@ void ConfigTestCase::ReadWriteLocalTest()
     delete config;
 }
 
-int ConfigTestCase::ReadValues(wxConfig *config, bool has_values)
+size_t ConfigTestCase::ReadValues(wxConfig *config, bool has_values)
 {
-    int read = 0;
+    size_t read = 0;
     bool r;
 
     wxString string1 = config->Read(wxT("string1"), wxT("abc"));
@@ -202,7 +202,7 @@ void ConfigTestCase::RecordingDefaultsTest()
     ReadValues(config, false);
     CPPUNIT_ASSERT_EQUAL( 0, config->GetNumberOfEntries() );
     config->SetRecordDefaults(true);
-    int read = ReadValues(config, false);
+    size_t read = ReadValues(config, false);
     CPPUNIT_ASSERT_EQUAL( read, config->GetNumberOfEntries() );
     ReadValues(config, true);
     config->DeleteAll();

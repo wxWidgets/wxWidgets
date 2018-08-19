@@ -10,6 +10,9 @@
 #ifndef _WX_TEXTCOMPLETER_H_
 #define _WX_TEXTCOMPLETER_H_
 
+#include "wx/defs.h"
+#include "wx/arrstr.h"
+
 // ----------------------------------------------------------------------------
 // wxTextCompleter: used by wxTextEnter::AutoComplete()
 // ----------------------------------------------------------------------------

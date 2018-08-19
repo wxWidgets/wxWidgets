@@ -75,58 +75,41 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
     typedef FARPROC WndProcCast;
 #endif
 
-
 #define CASTWNDPROC (WndProcCast)
 
-
-
-// ---------------------------------------------------------------------------
-// some stuff for old Windows versions (FIXME: what does it do here??)
-// ---------------------------------------------------------------------------
-
-#if !defined(APIENTRY)  // NT defines APIENTRY, 3.x not
-    #define APIENTRY FAR PASCAL
-#endif
-
-/*
- * Decide what window classes we're going to use
- * for this combination of CTl3D/FAFA settings
- */
-
-#define STATIC_CLASS     wxT("STATIC")
-#define STATIC_FLAGS     (SS_LEFT|WS_CHILD|WS_VISIBLE)
-#define CHECK_CLASS      wxT("BUTTON")
-#define CHECK_FLAGS      (BS_AUTOCHECKBOX|WS_TABSTOP|WS_CHILD)
-#define CHECK_IS_FAFA    FALSE
-#define RADIO_CLASS      wxT("BUTTON")
-#define RADIO_FLAGS      (BS_AUTORADIOBUTTON|WS_CHILD|WS_VISIBLE)
-#define RADIO_SIZE       20
-#define RADIO_IS_FAFA    FALSE
-#define PURE_WINDOWS
-#define GROUP_CLASS      wxT("BUTTON")
-#define GROUP_FLAGS      (BS_GROUPBOX|WS_CHILD|WS_VISIBLE)
-
-/*
-#define BITCHECK_FLAGS   (FB_BITMAP|FC_BUTTONDRAW|FC_DEFAULT|WS_VISIBLE)
-#define BITRADIO_FLAGS   (FC_BUTTONDRAW|FB_BITMAP|FC_RADIO|WS_CHILD|WS_VISIBLE)
-*/
 
 // ---------------------------------------------------------------------------
 // misc macros
 // ---------------------------------------------------------------------------
 
+#if wxUSE_GUI
+
 #define MEANING_CHARACTER '0'
 #define DEFAULT_ITEM_WIDTH  100
 #define DEFAULT_ITEM_HEIGHT 80
 
-// Scale font to get edit control height
-//#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
-#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (cy+8)
+// Return the height of a native text control corresponding to the given
+// character height (as returned by GetCharHeight() or wxGetCharSize()).
+//
+// The wxWindow parameter must be valid and used for getting the DPI.
+inline int wxGetEditHeightFromCharHeight(int cy, const wxWindow* w)
+{
+    // The value 8 here is empiric, i.e. it's not necessarily correct, but
+    // seems to work relatively well.
+    return cy + w->FromDIP(8);
+}
+
+// Compatibility macro used in the existing code. It assumes that it's called
+// from a method of wxWindow-derived object.
+#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy) \
+    wxGetEditHeightFromCharHeight((cy), this)
 
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
 extern LONG APIENTRY
   wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
+#endif // wxUSE_GUI
 
 // ---------------------------------------------------------------------------
 // useful macros and functions
@@ -153,7 +136,7 @@ extern LONG APIENTRY
 #endif
 
 // close the handle in the class dtor
-template <wxUIntPtr INVALID_VALUE = (wxUIntPtr)INVALID_HANDLE_VALUE>
+template <wxUIntPtr INVALID_VALUE>
 class AutoHANDLE
 {
 public:
@@ -178,7 +161,7 @@ protected:
     // implicitly convertible to HANDLE, which is a pointer.
     static HANDLE InvalidHandle()
     {
-        return static_cast<HANDLE>(INVALID_VALUE);
+        return reinterpret_cast<HANDLE>(INVALID_VALUE);
     }
 
     void DoClose()
@@ -899,11 +882,9 @@ inline wxString wxGetFullModuleName()
 //      0x0603      Windows 8.1 (currently only returned for 8.1 if program has a manifest indicating 8.1 support)
 //      0x1000      Windows 10 (currently only returned for 10 if program has a manifest indicating 10 support)
 //
-// for the other Windows versions 0 is currently returned
+// for the other Windows versions wxWinVersion_Unknown is currently returned.
 enum wxWinVersion
 {
-    wxWinVersion_Unknown = 0,
-
     wxWinVersion_3 = 0x0300,
     wxWinVersion_NT3 = wxWinVersion_3,
 
@@ -930,7 +911,11 @@ enum wxWinVersion
     wxWinVersion_8 = 0x602,
     wxWinVersion_8_1 = 0x603,
 
-    wxWinVersion_10 = 0x1000
+    wxWinVersion_10 = 0x1000,
+
+    // Any version we can't recognize will be later than the last currently
+    // known one, so give it a value greater than any in the known range.
+    wxWinVersion_Unknown = 0x7fff
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
@@ -967,7 +952,10 @@ extern WXDLLIMPEXP_CORE int wxGetWindowId(WXHWND hWnd);
 
 // check if hWnd's WNDPROC is wndProc. Return true if yes, false if they are
 // different
-extern WXDLLIMPEXP_CORE bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc);
+//
+// wndProc parameter is unused and only kept for compatibility
+extern WXDLLIMPEXP_CORE
+bool wxCheckWindowWndProc(WXHWND hWnd, WXWNDPROC wndProc = NULL);
 
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
@@ -976,19 +964,9 @@ inline bool wxStyleHasBorder(long style)
                      wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
-inline long wxGetWindowExStyle(const wxWindowMSW *win)
-{
-    return ::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE);
-}
-
 inline bool wxHasWindowExStyle(const wxWindowMSW *win, long style)
 {
-    return (wxGetWindowExStyle(win) & style) != 0;
-}
-
-inline long wxSetWindowExStyle(const wxWindowMSW *win, long style)
-{
-    return ::SetWindowLong(GetHwndOf(win), GWL_EXSTYLE, style);
+    return (::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE) & style) != 0;
 }
 
 // Common helper of wxUpdate{,Edit}LayoutDirection() below: sets or clears the
@@ -1096,53 +1074,27 @@ inline void wxFillRect(HWND hwnd, HDC hdc, HBRUSH hbr)
 // 32/64 bit helpers
 // ----------------------------------------------------------------------------
 
-#ifdef __WIN64__
-
-inline void *wxGetWindowProc(HWND hwnd)
-{
-    return (void *)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
-}
-
-inline void *wxGetWindowUserData(HWND hwnd)
-{
-    return (void *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
-}
-
-inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
-{
-    return (WNDPROC)::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)func);
-}
-
-inline void *wxSetWindowUserData(HWND hwnd, void *data)
-{
-    return (void *)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
-}
-
-#else // __WIN32__
-
 // note that the casts to LONG_PTR here are required even on 32-bit machines
 // for the 64-bit warning mode of later versions of MSVC (C4311/4312)
 inline WNDPROC wxGetWindowProc(HWND hwnd)
 {
-    return (WNDPROC)(LONG_PTR)::GetWindowLong(hwnd, GWL_WNDPROC);
+    return (WNDPROC)(LONG_PTR)::GetWindowLongPtr(hwnd, GWLP_WNDPROC);
 }
 
 inline void *wxGetWindowUserData(HWND hwnd)
 {
-    return (void *)(LONG_PTR)::GetWindowLong(hwnd, GWL_USERDATA);
+    return (void *)(LONG_PTR)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 }
 
 inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
 {
-    return (WNDPROC)(LONG_PTR)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG_PTR)func);
+    return (WNDPROC)(LONG_PTR)::SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)func);
 }
 
 inline void *wxSetWindowUserData(HWND hwnd, void *data)
 {
-    return (void *)(LONG_PTR)::SetWindowLong(hwnd, GWL_USERDATA, (LONG_PTR)data);
+    return (void *)(LONG_PTR)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
 }
-
-#endif // __WIN64__/__WIN32__
 
 #endif // wxUSE_GUI && __WXMSW__
 

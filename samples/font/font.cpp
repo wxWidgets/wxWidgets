@@ -29,6 +29,7 @@
 #include "wx/fontmap.h"
 #include "wx/encconv.h"
 #include "wx/splitter.h"
+#include "wx/stdpaths.h"
 #include "wx/textfile.h"
 #include "wx/settings.h"
 
@@ -130,6 +131,7 @@ public:
     void OnSetFamily(wxCommandEvent& event);
     void OnSetFaceName(wxCommandEvent& event);
     void OnSetEncoding(wxCommandEvent& event);
+    void OnPrivateFont(wxCommandEvent& event);
 
 protected:
     bool DoEnumerateFamilies(bool fixedWidthOnly,
@@ -212,6 +214,8 @@ enum
     Font_SetFamily,
     Font_SetFaceName,
     Font_SetEncoding,
+
+    Font_Private,
     Font_Max
 };
 
@@ -265,6 +269,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_EnumFamilies, MyFrame::OnEnumerateFamilies)
     EVT_MENU(Font_EnumFixedFamilies, MyFrame::OnEnumerateFixedFamilies)
     EVT_MENU(Font_EnumEncodings, MyFrame::OnEnumerateEncodings)
+    EVT_MENU(Font_Private, MyFrame::OnPrivateFont)
 wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -287,6 +292,7 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+    wxString privfont = argv[0].BeforeLast('/');
 
     // Create the main application window
     MyFrame *frame = new MyFrame(wxT("Font wxWidgets demo"),
@@ -381,7 +387,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                          wxT("Default font for user interface objects such as menus and dialog boxes. "));
     menuSelect->Append(Font_SystemSettings, wxT("System fonts"), menuSettingFonts);
 
-
     menuSelect->AppendSeparator();
     menuSelect->Append(Font_EnumFamilies, wxT("Enumerate font &families\tCtrl-F"));
     menuSelect->Append(Font_EnumFixedFamilies,
@@ -391,6 +396,45 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuSelect->Append(Font_EnumFamiliesForEncoding,
                      wxT("Find font for en&coding...\tCtrl-C"),
                      wxT("Find font families for given encoding"));
+
+#if wxUSE_PRIVATE_FONTS
+    // Try to use a private font, under most platforms we just look for it in
+    // the current directory but under OS X it must be in a specific location
+    // so look for it there.
+    //
+    // For OS X you also need to ensure that you actually do put wxprivate.ttf
+    // in font.app/Contents/Resources/Fonts and add the following snippet
+    //
+    //     <plist version="0.9">
+    //       <dict>
+    //         ...
+    //         <key>ATSApplicationFontsPath</key>
+    //         <string>Fonts</string>
+    //         ...
+    //       </dict>
+    //     </plist>
+    //
+    // to your font.app/Contents/Info.plist.
+
+    wxString privfont;
+#ifdef __WXOSX__
+    privfont << wxStandardPaths::Get().GetResourcesDir() << "/Fonts/";
+#endif
+    privfont << "wxprivate.ttf";
+
+    if ( !wxFont::AddPrivateFont(privfont) )
+    {
+        wxLogWarning("Failed to add private font from \"%s\"", privfont);
+    }
+    else
+    {
+        menuSelect->AppendSeparator();
+        menuSelect->Append(Font_Private,
+                           "Select private font",
+                           "Select a font available only in this application");
+    }
+#endif // wxUSE_PRIVATE_FONTS
+
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -476,7 +520,7 @@ protected:
 
     private:
         wxArrayString m_facenames;
-} fontEnumerator;
+};
 
 bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
                                   wxFontEncoding encoding,
@@ -870,6 +914,20 @@ void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
         wxColour colour = retData.GetColour();
 
         DoChangeFont(font, colour);
+    }
+}
+
+void MyFrame::OnPrivateFont(wxCommandEvent& WXUNUSED(event))
+{
+    wxFont font(GetCanvas()->GetTextFont());
+    if (font.SetFaceName("wxprivate"))
+    {
+        wxASSERT_MSG( font.IsOk(), wxT("The font should now be valid")) ;
+        DoChangeFont(font);
+    }
+    else
+    {
+        wxLogError("Failed to use private font.");
     }
 }
 

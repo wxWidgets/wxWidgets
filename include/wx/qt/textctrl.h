@@ -8,8 +8,9 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QTextEdit>
+class QLineEdit;
+class QTextEdit;
+class QScrollArea;
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {

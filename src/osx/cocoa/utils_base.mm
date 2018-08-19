@@ -16,6 +16,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
+    #include "wx/datetime.h"
 #endif
 
 #include "wx/apptrait.h"
@@ -136,6 +137,12 @@ wxString wxGetOsDescription()
             case 12:
                 osName = "Sierra";
                 break;
+            case 13:
+                osName = "High Sierra";
+                break;
+            case 14:
+                osName = "Mojave";
+                break;
         };
     }
 #else
@@ -154,3 +161,16 @@ wxString wxGetOsDescription()
     return osDesc;
 }
 
+/* static */
+#if wxUSE_DATETIME
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    [calendar setLocale:[NSLocale autoupdatingCurrentLocale]];
+
+    *firstDay = wxDateTime::WeekDay(([calendar firstWeekday] - 1) % 7);
+    return true;
+}
+#endif // wxUSE_DATETIME

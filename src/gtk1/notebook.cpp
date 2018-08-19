@@ -586,7 +586,6 @@ bool wxNotebook::DeleteAllPages()
 
     wxASSERT_MSG( GetPageCount() == 0, wxT("all pages must have been deleted") );
 
-    InvalidateBestSize();
     return wxNotebookBase::DeleteAllPages();
 }
 
@@ -661,7 +660,7 @@ bool wxNotebook::InsertPage( size_t position,
     else
         m_pagesData.Insert( position, nb_page );
 
-    m_pages.Insert(win, position);
+    m_pages.insert(m_pages.begin() + position, win);
 
     nb_page->m_box = gtk_hbox_new( FALSE, 1 );
     gtk_container_border_width( GTK_CONTAINER(nb_page->m_box), 2 );

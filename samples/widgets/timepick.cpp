@@ -64,7 +64,6 @@ class TimePickerWidgetsPage : public WidgetsPage
 {
 public:
     TimePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~TimePickerWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_timePicker; }
     virtual void RecreateWidget() wxOVERRIDE { CreateTimePicker(); }
@@ -196,7 +195,11 @@ void TimePickerWidgetsPage::CreateTimePicker()
 
     delete m_timePicker;
 
-    m_timePicker = new wxTimePickerCtrl(this, TimePickerPage_Picker, value);
+    long style = GetAttrs().m_defaultFlags;
+
+    m_timePicker = new wxTimePickerCtrl(this, TimePickerPage_Picker, value,
+                                        wxDefaultPosition, wxDefaultSize,
+                                        style);
 
     m_sizerTimePicker->Add(0, 0, 1, wxCENTRE);
     m_sizerTimePicker->Add(m_timePicker, 1, wxCENTRE);

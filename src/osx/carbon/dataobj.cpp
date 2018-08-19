@@ -489,11 +489,15 @@ bool wxDataObject::GetFromPasteboard( void * pb )
 
                                     if (dataFormat.GetType() == wxDF_TEXT)
                                     {
-                                        wxMacConvertNewlines13To10((char*) buf);
+                                        for (char* p = static_cast<char*>(buf); *p; p++)
+                                            if (*p == '\r')
+                                                *p = '\n';
                                     }
                                     else if (dataFormat.GetType() == wxDF_UNICODETEXT)
                                     {
-                                        wxMacConvertNewlines13To10((wxChar16*) buf);
+                                        for (wxChar16* p = static_cast<wxChar16*>(buf); *p; p++)
+                                            if (*p == '\r')
+                                                *p = '\n';
                                     }
                                     SetData( flavorFormat, flavorDataSize, buf );
                                     transferred = true;

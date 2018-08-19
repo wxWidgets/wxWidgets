@@ -35,6 +35,7 @@
 
 #include "wx/appprogress.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -190,8 +191,7 @@ void wxGauge::SetIndeterminateMode()
     // Switch the control into indeterminate mode if necessary.
     if ( !IsInIndeterminateMode() )
     {
-        const long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, style | PBS_MARQUEE);
+        wxMSWWinStyleUpdater(GetHwnd()).TurnOn(PBS_MARQUEE);
         ::SendMessage(GetHwnd(), PBM_SETMARQUEE, TRUE, 0);
     }
 }
@@ -200,9 +200,8 @@ void wxGauge::SetDeterminateMode()
 {
     if ( IsInIndeterminateMode() )
     {
-        const long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
         ::SendMessage(GetHwnd(), PBM_SETMARQUEE, FALSE, 0);
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, style & ~PBS_MARQUEE);
+        wxMSWWinStyleUpdater(GetHwnd()).TurnOff(PBS_MARQUEE);
     }
 }
 

@@ -111,8 +111,7 @@ bool wxDialog::Create(wxWindow *parent,
     {
         CreateGripper();
 
-        Connect(wxEVT_CREATE,
-                wxWindowCreateEventHandler(wxDialog::OnWindowCreate));
+        Bind(wxEVT_CREATE, &wxDialog::OnWindowCreate, this);
     }
 
     return true;
@@ -181,17 +180,17 @@ int wxDialog::ShowModal()
 
     wxASSERT_MSG( !IsModal(), wxT("ShowModal() can't be called twice") );
 
+    wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                       new wxDialogModalData(this));
+
     Show();
 
     // EndModal may have been called from InitDialog handler (called from
     // inside Show()) and hidden the dialog back again
     if ( IsShown() )
-    {
-        // enter and run the modal loop
-        wxDialogModalDataTiedPtr modalData(&m_modalData,
-                                           new wxDialogModalData(this));
         modalData->RunLoop();
-    }
+    else
+        m_modalData->ExitLoop();
 
     return GetReturnCode();
 }
@@ -319,17 +318,24 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             break;
 
         case WM_SIZE:
-            if ( m_hGripper )
+            switch ( wParam )
             {
-                switch ( wParam )
-                {
-                    case SIZE_MAXIMIZED:
-                        ShowGripper(false);
-                        break;
+                case SIZE_MINIMIZED:
+                    m_showCmd = SW_MINIMIZE;
+                    break;
 
-                    case SIZE_RESTORED:
-                        ShowGripper(true);
-                }
+                case SIZE_MAXIMIZED:
+                    wxFALLTHROUGH;
+
+                case SIZE_RESTORED:
+                    if ( m_hGripper )
+                        ShowGripper( wParam == SIZE_RESTORED );
+
+                    if ( m_showCmd == SW_MINIMIZE )
+                        (void)SendIconizeEvent(false);
+                    m_showCmd = SW_RESTORE;
+
+                    break;
             }
 
             // the Windows dialogs unfortunately are not meant to be resizable

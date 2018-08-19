@@ -10,7 +10,7 @@
 
 #include "wx/dialog.h"
 
-#include <QtWidgets/QColorDialog>
+class QColorDialog;
 
 class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {
@@ -23,9 +23,8 @@ public:
 
     wxColourData &GetColourData();
 
-    QColorDialog *GetHandle() const { return static_cast<QColorDialog *>(m_qtWindow); }
-
 private:
+    QColorDialog *GetQColorDialog() const;
 
     wxColourData m_data;
 };

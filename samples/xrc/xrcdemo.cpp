@@ -75,8 +75,12 @@ bool MyApp::OnInit()
     // load a handler for that image type. This example uses XPMs & a gif, but
     // if you want PNGs, then add a PNG handler, etc. See wxImage::AddHandler()
     // documentation for the types of image handlers available.
+#if wxUSE_XPM
     wxImage::AddHandler(new wxXPMHandler);
+#endif
+#if wxUSE_GIF
     wxImage::AddHandler(new wxGIFHandler);
+#endif
 
     // Initialize all the XRC handlers. Always required (unless you feel like
     // going through and initializing a handler of each control type you will

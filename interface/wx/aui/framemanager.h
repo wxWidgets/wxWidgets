@@ -332,14 +332,36 @@ public:
 
     /**
         LoadPaneInfo() is similar to LoadPerspective, with the exception that it
-        only loads information about a single pane.  It is used in combination with
-        SavePaneInfo().
+        only loads information about a single pane.
+     
+        This method writes the serialized data into the passed pane. Pointers to
+        UI elements are not modified.
+
+        @notice This operation also changes the name in the pane information!
+     
+        @sa LoadPerspective
+        @sa SavePaneInfo().
+        @sa SavePerspective
     */
     void LoadPaneInfo(wxString pane_part, wxAuiPaneInfo& pane);
 
     /**
-        Loads a saved perspective. If update is @true, wxAuiManager::Update()
-        is automatically invoked, thus realizing the saved perspective on screen.
+        Loads a saved perspective.
+     
+        A perspective is the layout state of an AUI managed window.
+     
+        All currently existing panes that have an object in "perspective"
+        with the same name ("equivalent") will receive the layout parameters of the object in
+        "perspective". Existing panes that do not have an equivalent in "perspective" remain
+        unchanged, objects in "perspective" having no equivalent in the manager are ignored.
+
+        @param perspective Serialized layout information of a perspective (excl. pointers to UI elements).
+        @param update      If update is @true, wxAuiManager::Update() is automatically invoked,
+                           thus realizing the specified perspective on screen.
+     
+        @sa LoadPaneInfo
+        @sa LoadPerspective
+        @sa SavePerspective
     */
     bool LoadPerspective(const wxString& perspective,
                          bool update = true);
@@ -361,17 +383,26 @@ public:
 
     /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
-        saves information about a single pane.  It is used in combination with
-        LoadPaneInfo().
+        saves information about a single pane.
+     
+        @param pane Pane whose layout parameters should be serialized.
+        @return     The serialized layout parameters of the pane are returned within
+                    the string. Information about the pointers to UI elements stored
+                    in the pane are not serialized.
+     
+        @sa LoadPaneInfo
+        @sa LoadPerspective
+        @sa SavePerspective
     */
-    wxString SavePaneInfo(wxAuiPaneInfo& pane);
+    wxString SavePaneInfo(const wxAuiPaneInfo& pane);
 
     /**
         Saves the entire user interface layout into an encoded wxString, which
         can then be stored by the application (probably using wxConfig).
-
-        When a perspective is restored using LoadPerspective(), the entire user
-        interface will return to the state it was when the perspective was saved.
+     
+        @sa LoadPerspective
+        @sa LoadPaneInfo
+        @sa SavePaneInfo
     */
     wxString SavePerspective();
 
@@ -873,8 +904,12 @@ public:
     wxAuiPaneInfo& Row(int row);
 
     /**
-        Write the safe parts of a newly loaded PaneInfo structure "source" into "this"
-        used on loading perspectives etc.
+        Write the safe parts of a PaneInfo object "source" into "this".
+        "Safe parts" are all non-UI elements (e.g. all layout determining parameters like the
+        size, position etc.). "Unsafe parts" (pointers to button, frame and window) are not
+        modified by this write operation.
+	 
+        @remark This method is used when loading perspectives.
     */
     void SafeSet(wxAuiPaneInfo source);
 

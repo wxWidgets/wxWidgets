@@ -37,7 +37,6 @@ class ffileStream : public BaseStreamTestCase<wxFFileInputStream, wxFFileOutputS
 {
 public:
     ffileStream();
-    virtual ~ffileStream();
 
     CPPUNIT_TEST_SUITE(ffileStream);
         // Base class stream tests the ffileStream supports.
@@ -66,9 +65,9 @@ protected:
 
 private:
     // Implement base class functions.
-    virtual wxFFileInputStream  *DoCreateInStream();
-    virtual wxFFileOutputStream *DoCreateOutStream();
-    virtual void DoDeleteOutStream();
+    virtual wxFFileInputStream  *DoCreateInStream() wxOVERRIDE;
+    virtual wxFFileOutputStream *DoCreateOutStream() wxOVERRIDE;
+    virtual void DoDeleteOutStream() wxOVERRIDE;
 
 private:
     wxString GetInFileName() const;
@@ -78,13 +77,6 @@ ffileStream::ffileStream()
 {
     m_bSeekInvalidBeyondEnd = false;
     m_bEofAtLastRead = false;
-}
-
-ffileStream::~ffileStream()
-{
-    // Remove the temp test file...
-    ::wxRemoveFile(FILENAME_FFILEINSTREAM);
-    ::wxRemoveFile(FILENAME_FFILEOUTSTREAM);
 }
 
 wxFFileInputStream *ffileStream::DoCreateInStream()
@@ -107,12 +99,37 @@ void ffileStream::DoDeleteOutStream()
 
 wxString ffileStream::GetInFileName() const
 {
-    static bool bFileCreated = false;
-    if (!bFileCreated)
+    class AutoRemoveFile
     {
-        // Create the file only once
-        bFileCreated = true;
+    public:
+        AutoRemoveFile()
+        {
+            m_created = false;
+        }
 
+        ~AutoRemoveFile()
+        {
+            if ( m_created )
+                wxRemoveFile(FILENAME_FFILEINSTREAM);
+        }
+
+        bool ShouldCreate()
+        {
+            if ( m_created )
+                return false;
+
+            m_created = true;
+
+            return true;
+        }
+
+    private:
+        bool m_created;
+    };
+
+    static AutoRemoveFile autoFile;
+    if ( autoFile.ShouldCreate() )
+    {
         // Make sure we have a input file...
         char buf[DATABUFFER_SIZE];
         wxFFileOutputStream out(FILENAME_FFILEINSTREAM);

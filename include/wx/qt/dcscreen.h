@@ -17,9 +17,11 @@ public:
 
     ~wxScreenDCImpl();
 
+protected:
     virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
 
-private:
+    virtual QImage *GetQImage();
 
     wxDECLARE_ABSTRACT_CLASS(wxScreenDCImpl);
 };

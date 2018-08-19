@@ -47,7 +47,7 @@ class MyClient;
 class MyApp : public wxApp
 {
 public:
-    MyApp() { Connect(wxEVT_IDLE, wxIdleEventHandler(MyApp::OnIdle)); }
+    MyApp() { Bind(wxEVT_IDLE, &MyApp::OnIdle, this); }
 
     virtual bool OnInit() wxOVERRIDE;
     virtual int OnExit() wxOVERRIDE;

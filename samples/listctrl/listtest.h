@@ -100,11 +100,7 @@ public:
     MyFrame(const wxChar *title);
     virtual ~MyFrame();
 
-    void DoSize();
-
 protected:
-    void OnSize(wxSizeEvent& event);
-
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnListView(wxCommandEvent& event);

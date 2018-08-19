@@ -982,7 +982,7 @@ wxMenuItem *wxMenuBarBase::FindItem(int itemid, wxMenu **menu) const
     wxMenuItem *item = NULL;
     size_t count = GetMenuCount(), i;
     wxMenuList::const_iterator it;
-    for ( i = 0, it = m_menus.begin(); !item && (i < count); i++, it++ )
+    for ( i = 0, it = m_menus.begin(); !item && (i < count); i++, ++it )
     {
         item = (*it)->FindItem(itemid, menu);
     }

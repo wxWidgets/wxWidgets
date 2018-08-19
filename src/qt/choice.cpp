@@ -74,7 +74,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    return Create( parent, id, pos, size, choices.size(), &choices[ 0 ], style,
+    return Create( parent, id, pos, size, choices.size(), choices.size() ? &choices[ 0 ] : NULL, style,
         validator, name );
 }
 
@@ -174,7 +174,7 @@ void wxChoice::DoDeleteOneItem(unsigned int pos)
     m_qtComboBox->removeItem(pos);
 }
 
-QComboBox *wxChoice::GetHandle() const
+QWidget *wxChoice::GetHandle() const
 {
     return m_qtComboBox;
 }

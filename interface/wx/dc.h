@@ -764,8 +764,30 @@ public:
 
         @remarks
         Clipping region is given in logical coordinates.
+
+        @param x If non-@NULL, filled in with the logical horizontal coordinate
+            of the top left corner of the clipping region if the function
+            returns true or 0 otherwise.
+        @param y If non-@NULL, filled in with the logical vertical coordinate
+            of the top left corner of the clipping region if the function
+            returns true or 0 otherwise.
+        @param width If non-@NULL, filled in with the width of the clipping
+            region if the function returns true or the device context width
+            otherwise.
+        @param height If non-@NULL, filled in with the height of the clipping
+            region if the function returns true or the device context height
+            otherwise.
+        @return @true if there is a clipping region or @false if there is no
+            active clipping region (note that this return value is available
+            only since wxWidgets 3.1.2, this function didn't return anything in
+            the previous versions).
     */
-    void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
+    bool GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
+
+    /**
+        @overload
+    */
+    bool GetClippingBox(wxRect& rect) const;
 
     /**
         Sets the clipping region for this device context to the intersection of
@@ -1669,11 +1691,10 @@ public:
     }
     @endcode
 
-    @note Unlike other similar classes such as wxDCFontChanger, wxDCClipper
-        currently doesn't restore the previously active clipping region when it
-        is destroyed but simply resets clipping on the associated wxDC. This
-        may be changed in the future wxWidgets versions but has to be taken
-        into account explicitly in the current one.
+    @note Since 3.1.1 wxDCClipper restores the previously active clipping
+        region when it is destroyed. Previously it reset clipping on the
+        associated wxDC and this has to be taken into account explicitly in
+        previous wxWidgets versions.
 
     @library{wxcore}
     @category{gdi}

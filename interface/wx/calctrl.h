@@ -8,7 +8,7 @@
 enum
 {
     // show Sunday as the first day of the week (default)
-    wxCAL_SUNDAY_FIRST               = 0x0000,
+    wxCAL_SUNDAY_FIRST               = 0x0080,
 
     // show Monday as the first day of the week
     wxCAL_MONDAY_FIRST               = 0x0001,
@@ -254,6 +254,11 @@ enum wxCalendarHitTestResult
     month is changed, so you will often want to update them in
     @c EVT_CALENDAR_PAGE_CHANGED event handler.
 
+    If neither the @c wxCAL_SUNDAY_FIRST or @c wxCAL_MONDAY_FIRST style is given,
+    the first day of the week is determined from operating system's settings,
+    if possible. The native wxGTK calendar chooses the first weekday based on
+    locale, and these styles have no effect on it.
+
     @beginStyleTable
     @style{wxCAL_SUNDAY_FIRST}
            Show Sunday as the first day in the week (not in wxGTK)
@@ -464,7 +469,8 @@ public:
 
         The @a date parameter must be valid and in the currently valid range as
         set by SetDateRange(), otherwise the current date is not changed and
-        the function returns @false.
+        the function returns @false and, additionally, triggers an assertion
+        failure if the date is invalid.
     */
     virtual bool SetDate(const wxDateTime& date);
 

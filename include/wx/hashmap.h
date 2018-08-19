@@ -81,7 +81,7 @@ class WXDLLIMPEXP_BASE _wxHashTableBase2
 {
 public:
     typedef void (*NodeDtor)(_wxHashTable_NodeBase*);
-    typedef unsigned long (*BucketFromNode)(_wxHashTableBase2*,_wxHashTable_NodeBase*);
+    typedef size_t (*BucketFromNode)(_wxHashTableBase2*,_wxHashTable_NodeBase*);
     typedef _wxHashTable_NodeBase* (*ProcessNode)(_wxHashTable_NodeBase*);
 protected:
     static _wxHashTable_NodeBase* DummyProcessNode(_wxHashTable_NodeBase* node);

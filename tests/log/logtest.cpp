@@ -159,8 +159,8 @@ class LogTestCase : public CppUnit::TestCase
 public:
     LogTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( LogTestCase );
@@ -248,7 +248,7 @@ void LogTestCase::Null()
 void LogTestCase::Component()
 {
     wxLogMessage("Message");
-    CPPUNIT_ASSERT_EQUAL( wxLOG_COMPONENT,
+    CPPUNIT_ASSERT_EQUAL( std::string(wxLOG_COMPONENT),
                           m_log->GetInfo(wxLOG_Message).component );
 
     // completely disable logging for this component

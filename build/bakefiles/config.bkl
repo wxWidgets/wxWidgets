@@ -374,30 +374,11 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         </description>
     </option>
 
-    <!-- unit tests support: -->
-    <option name="CPPUNIT_CFLAGS">
-        <default-value></default-value>
-        <description>
-Compiler flags needed to compile test suite in tests directory. If you want
-to run the tests, set it so that the compiler can find CppUnit headers.
-        </description>
-    </option>
-
-    <option name="CPPUNIT_LIBS">
-        <default-value></default-value>
-        <description>
-Linker flags needed to link test suite in tests directory. If you want
-to run the tests, include CppUnit library here.
-        </description>
-    </option>
-
-
     <!-- ================================================================== -->
     <!--                             Autoconf                               -->
     <!-- ================================================================== -->
 
     <if cond="FORMAT=='autoconf'">
-        <option name="DEREZ"/>
         <option name="TOOLKIT"/>
         <option name="TOOLKIT_LOWERCASE"/>
         <option name="TOOLKIT_VERSION"/>

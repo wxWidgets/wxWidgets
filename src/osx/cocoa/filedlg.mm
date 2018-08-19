@@ -68,8 +68,10 @@
 
 - (id) init
 {
-    self = [super init];
-    _dialog = NULL;
+    if ( self = [super init] )
+    {
+        _dialog = NULL;
+    }
     return self;
 }
 
@@ -312,7 +314,7 @@ void wxFileDialog::ShowWindowModal()
     if (GetParent())
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
 
-    wxASSERT_MSG(parentWindow, "Window modal display requires parent.");
+    wxCHECK_RET(parentWindow, "Window modal display requires parent.");
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
@@ -388,7 +390,7 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
             if ( m_firstFileTypeFilter >= 0 )
                 m_filterChoice->SetSelection(m_firstFileTypeFilter);
         }
-        m_filterChoice->Connect(wxEVT_CHOICE, wxCommandEventHandler(wxFileDialog::OnFilterSelected), NULL, this);
+        m_filterChoice->Bind(wxEVT_CHOICE, &wxFileDialog::OnFilterSelected, this);
     }
         
     if(extracontrol)
@@ -492,7 +494,7 @@ int wxFileDialog::ShowModal()
     wxCFStringRef dir( m_dir );
     wxCFStringRef file( m_fileName );
 
-    m_path = wxEmptyString;
+    m_path.clear();
     m_fileNames.Clear();
     m_paths.Clear();
 

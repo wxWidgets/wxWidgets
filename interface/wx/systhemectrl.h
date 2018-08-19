@@ -59,7 +59,7 @@ template <class C>
 class wxSystemThemedControl : public C
 {
 public:
-    /// Trival default constructor.
+    /// Trivial default constructor.
     wxSystemThemedControl();
 
     /**

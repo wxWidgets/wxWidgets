@@ -32,6 +32,9 @@
 #include "wx/settings.h" // system settings
 #include "wx/string.h"   // strings support
 #include "wx/image.h"    // images support
+#if wxUSE_PRINTING_ARCHITECTURE
+#include "wx/paper.h"
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 //! application headers
 #include "defsext.h"     // Additional definitions
@@ -92,10 +95,10 @@ class App: public wxApp {
 
 public:
     //! the main function called during application start
-    virtual bool OnInit ();
+    virtual bool OnInit () wxOVERRIDE;
 
     //! application exit function
-    virtual int OnExit ();
+    virtual int OnExit () wxOVERRIDE;
 
 private:
     //! frame window
@@ -217,7 +220,14 @@ bool App::OnInit () {
 #if wxUSE_PRINTING_ARCHITECTURE
     // initialize print data and setup
     g_printData = new wxPrintData;
+    wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
+    g_printData->SetPaperId(paper->GetId());
+    g_printData->SetPaperSize(paper->GetSize());
+    g_printData->SetOrientation(wxPORTRAIT);
+
     g_pageSetupData = new wxPageSetupDialogData;
+    // copy over initial paper size from print record
+    (*g_pageSetupData) = *g_printData;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
     // create application frame
@@ -752,7 +762,7 @@ public:
         SetWrapMode(wxSTC_WRAP_WORD);
         SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
     }
-    virtual bool SetFont(const wxFont& font)
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE
     {
         StyleSetFont(wxSTC_STYLE_DEFAULT, (wxFont&)font);
         return wxStyledTextCtrl::SetFont(font);

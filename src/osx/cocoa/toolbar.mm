@@ -368,10 +368,12 @@ private:
 
 - (id)initWithItemIdentifier: (NSString*) identifier
 {
-    self = [super initWithItemIdentifier:identifier];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
+    if ( self = [super initWithItemIdentifier:identifier] )
+    {
+        impl = NULL;
+        [self setTarget: self];
+        [self setAction: @selector(clickedAction:)];
+    }
     return self;
 }
 
@@ -406,8 +408,11 @@ private:
 
 - (id)init
 {
-    m_isSelectable = false;
-    return [super init];
+    if ( self = [super init] )
+    {
+        m_isSelectable = false;
+    }
+    return self;
 }
 
 - (void)setSelectable:(bool) value
@@ -469,8 +474,7 @@ private:
 
 - (id)initWithIdentifier:(NSString *)identifier
 {
-    self = [super initWithIdentifier:identifier];
-    if (self)
+    if (self = [super initWithIdentifier:identifier])
     {
         toolbarDelegate = [[wxNSToolbarDelegate alloc] init];
         [self setDelegate:toolbarDelegate];
@@ -492,10 +496,12 @@ private:
 
 - (id)initWithFrame:(NSRect)frame
 {
-    self = [super initWithFrame:frame];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
+    if ( self = [super initWithFrame:frame] )
+    {
+        impl = NULL;
+        [self setTarget: self];
+        [self setAction: @selector(clickedAction:)];
+    }
     return self;
 }
 
@@ -602,7 +608,7 @@ void wxToolBarTool::UpdateImages()
 
         dc.SelectObject(m_alternateBitmap);
         // This color corresponds to OS X Yosemite's rendering of selected toolbar items
-        // See also http://trac.wxwidgets.org/ticket/16645
+        // See also https://trac.wxwidgets.org/ticket/16645
         wxColour grey(0xB9, 0xB9, 0xB9);
         dc.SetPen(grey);
         dc.SetBrush(grey);
@@ -1667,7 +1673,10 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
         
         wxRect rect(0,0,w,h);
         
-        dc.GradientFillLinear( rect , wxColour( 0xCC,0xCC,0xCC ), wxColour( 0xA8,0xA8,0xA8 ) , wxSOUTH );
+        //  TODO determine whether to use flat appearance in earlier system
+        if ( !wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+            dc.GradientFillLinear( rect , wxColour( 0xCC,0xCC,0xCC ), wxColour( 0xA8,0xA8,0xA8 ) , wxSOUTH );
+        
         dc.SetPen( wxPen( wxColour( 0x51,0x51,0x51 ) ) );
         if ( HasFlag(wxTB_LEFT) )
             dc.DrawLine(w-1, 0, w-1, h);

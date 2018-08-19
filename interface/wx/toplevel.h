@@ -351,6 +351,94 @@ public:
     void Restore();
 
     /**
+        Class used with SaveGeometry() and RestoreToGeometry().
+
+        This is an abstract base class, i.e. to use it you must define a
+        derived class implementing the pure virtual SaveField() and
+        RestoreField() methods.
+
+        For example, if you wished to store the window geometry in a database,
+        you could derive a class saving fields such as "width" or "height" in a
+        table in this database and restoring them from it later.
+
+        @since 3.1.2
+     */
+    class GeometrySerializer
+    {
+        /**
+            Save a single field with the given value.
+
+            Note that if this function returns @false, SaveGeometry() supposes
+            that saving the geometry failed and returns @false itself, without
+            even trying to save anything else.
+
+            @param name uniquely identifies the field but is otherwise
+                arbitrary.
+            @param value value of the field (can be positive or negative, i.e.
+                it can't be assumed that a value like -1 is invalid).
+
+            @return @true if the field was saved or @false if saving it failed,
+                resulting in wxTopLevelWindow::SaveGeometry() failure.
+         */
+        virtual bool SaveField(const wxString& name, int value) const = 0;
+
+        /**
+            Try to restore a single field.
+
+            Unlike for SaveField(), returning @false from this function may
+            indicate that the value simply wasn't present and doesn't prevent
+            RestoreToGeometry() from continuing with trying to restore the
+            other values.
+
+            @param name uniquely identifies the field
+            @param value non-@NULL pointer to the value to be filled by this
+                function
+
+            @return @true if the value was retrieved or @false if it wasn't
+                found or an error occurred.
+         */
+        virtual bool RestoreField(const wxString& name, int* value) = 0;
+    };
+
+    /**
+        Restores the window to the previously saved geometry.
+
+        This is a companion function to SaveGeometry() and can be called later
+        to restore the window to the geometry it had when it was saved.
+
+        @param ser An object implementing GeometrySerializer virtual methods.
+
+        @return @true if any (and, usually, but not necessarily, all) of the
+            window geometry attributes were restored or @false if there was no
+            saved geometry information at all or restoring it failed.
+
+        @since 3.1.2
+     */
+    bool RestoreToGeometry(GeometrySerializer& ser);
+
+    /**
+        Save the current window geometry to allow restoring it later.
+
+        After calling this function, window geometry is saved in the provided
+        serializer and calling RestoreToGeometry() with the same serializer
+        later (i.e. usually during a subsequent program execution) would
+        restore the window to the same position, size, maximized/minimized
+        state etc.
+
+        This function is used by wxPersistentTLW, so it is not necessary to use
+        it if the goal is to just save and restore window geometry in the
+        simplest possible way. However is more flexibility is required, it can
+        be also used directly with a custom serializer object.
+
+        @param ser An object implementing GeometrySerializer virtual methods.
+
+        @return @true if the geometry was saved, @false if doing it failed
+
+        @since 3.1.2
+     */
+    bool SaveGeometry(const GeometrySerializer& ser) const;
+
+    /**
         Changes the default item for the panel, usually @a win is a button.
 
         @see GetDefaultItem()

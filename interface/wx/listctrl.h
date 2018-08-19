@@ -47,15 +47,14 @@
 #define wxLIST_STATE_CUT            0x0008      // MSW only
 
 /// Hit test flags, used in HitTest
-#define wxLIST_HITTEST_ABOVE            0x0001  // Above the client area.
-#define wxLIST_HITTEST_BELOW            0x0002  // Below the client area.
-#define wxLIST_HITTEST_NOWHERE          0x0004  // In the client area but below the last item.
-#define wxLIST_HITTEST_ONITEMICON       0x0020  // On the bitmap associated with an item.
-#define wxLIST_HITTEST_ONITEMLABEL      0x0080  // On the label (string) associated with an item.
-#define wxLIST_HITTEST_ONITEMRIGHT      0x0100  // In the area to the right of an item.
-#define wxLIST_HITTEST_ONITEMSTATEICON  0x0200  // On the state icon for a tree view item that is in a user-defined state.
-#define wxLIST_HITTEST_TOLEFT           0x0400  // To the left of the client area.
-#define wxLIST_HITTEST_TORIGHT          0x0800  // To the right of the client area.
+#define wxLIST_HITTEST_ABOVE            0x0001  // Above the control's client area.
+#define wxLIST_HITTEST_BELOW            0x0002  // Below the control's client area.
+#define wxLIST_HITTEST_NOWHERE          0x0004  // Inside the control's client area but not over an item.
+#define wxLIST_HITTEST_ONITEMICON       0x0020  // Over an item's icon.
+#define wxLIST_HITTEST_ONITEMLABEL      0x0080  // Over an item's text.
+#define wxLIST_HITTEST_ONITEMSTATEICON  0x0200  // Over the checkbox of an item.
+#define wxLIST_HITTEST_TOLEFT           0x0400  // To the left of the control's client area.
+#define wxLIST_HITTEST_TORIGHT          0x0800  // To the right of the control's client area.
 
 #define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL | wxLIST_HITTEST_ONITEMSTATEICON)
 
@@ -201,7 +200,7 @@ enum
     @event{EVT_LIST_BEGIN_RDRAG(id, func)}
            Begin dragging with the right mouse button.
            Processes a @c wxEVT_LIST_BEGIN_RDRAG event type.
-    @event{EVT_BEGIN_LABEL_EDIT(id, func)}
+    @event{EVT_LIST_BEGIN_LABEL_EDIT(id, func)}
            Begin editing a label. This can be prevented by calling Veto().
            Processes a @c wxEVT_LIST_BEGIN_LABEL_EDIT event type.
     @event{EVT_LIST_END_LABEL_EDIT(id, func)}
@@ -369,6 +368,13 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListCtrlNameStr);
 
+    /**
+       Delete all columns in the list control.
+
+       @return @true if all columns were successfully deleted, @false otherwise.
+    */
+    bool DeleteAllColumns();
+    
     /**
         Deletes all items in the list control.
 
@@ -809,16 +815,14 @@ public:
         the specified point.
 
         @a flags will be a combination of the following flags:
-        - wxLIST_HITTEST_ABOVE: Above the client area.
-        - wxLIST_HITTEST_BELOW: Below the client area.
-        - wxLIST_HITTEST_NOWHERE: In the client area but below the last item.
-        - wxLIST_HITTEST_ONITEMICON: On the bitmap associated with an item.
-        - wxLIST_HITTEST_ONITEMLABEL: On the label (string) associated with an item.
-        - wxLIST_HITTEST_ONITEMRIGHT: In the area to the right of an item.
-        - wxLIST_HITTEST_ONITEMSTATEICON: On the state icon for a tree view item
-          that is in a user-defined state.
-        - wxLIST_HITTEST_TOLEFT: To the right of the client area.
-        - wxLIST_HITTEST_TORIGHT: To the left of the client area.
+        - wxLIST_HITTEST_ABOVE: Above the control's client area.
+        - wxLIST_HITTEST_BELOW: Below the control's client area.
+        - wxLIST_HITTEST_TOLEFT: To the left of the control's client area.
+        - wxLIST_HITTEST_TORIGHT: To the right of the control's client area.
+        - wxLIST_HITTEST_NOWHERE: Inside the control's client area but not over an item.
+        - wxLIST_HITTEST_ONITEMICON: Over an item's icon.
+        - wxLIST_HITTEST_ONITEMLABEL: Over an item's text.
+        - wxLIST_HITTEST_ONITEMSTATEICON: Over the checkbox of an item.
         - wxLIST_HITTEST_ONITEM: Combination of @c wxLIST_HITTEST_ONITEMICON,
           @c wxLIST_HITTEST_ONITEMLABEL, @c wxLIST_HITTEST_ONITEMSTATEICON.
 
@@ -1089,13 +1093,19 @@ public:
 
         Using the wxListItem's mask and state mask, you can change only selected
         attributes of a wxListCtrl item.
+
+        @return @true if the item was successfully updated or @false if the
+            update failed for some reason (e.g. an invalid item index).
     */
     bool SetItem(wxListItem& info);
 
     /**
         Sets an item string field at a particular column.
+
+        @return @true if the item was successfully updated or @false if the
+        update failed for some reason (e.g. an invalid item index).
     */
-    long SetItem(long index, int column, const wxString& label, int imageId = -1);
+    bool SetItem(long index, int column, const wxString& label, int imageId = -1);
 
     /**
         Sets the background colour for this item.

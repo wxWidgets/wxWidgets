@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 25 April 2017                                                      *
+ * Date : 18 May 2018                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -76,7 +76,7 @@
 #ifdef __WXGTK__
 
 #ifndef VMS_GTK2
-#define GDK_WINDOWING_X11 1
+#define GDK_WINDOWING_X11
 #endif
 
 /* Define this if your version of GTK+ is greater than 1.2.7 */
@@ -208,6 +208,8 @@ typedef pid_t GPid;
 
 #define wxUSE_UNSAFE_WXSTRING_CONV 1
 
+#define wxUSE_REPRODUCIBLE_BUILD 1
+
 #ifndef wxUSE_UNICODE
 #if defined( __WXX11__ )
     #define wxUSE_UNICODE 0
@@ -327,6 +329,8 @@ typedef pid_t GPid;
 
 #define wxUSE_ZLIB          1
 
+#define wxUSE_LIBLZMA       1
+
 #define wxUSE_APPLE_IEEE          0
 
 #define wxUSE_JOYSTICK            0
@@ -389,27 +393,11 @@ typedef pid_t GPid;
 #define wxUSE_WEBVIEW_WEBKIT2 0
 #endif
 
-#ifdef _MSC_VER
-#   if _MSC_VER >= 1310
-
-
+#if defined(_MSC_VER) || \
+    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
 #define wxUSE_GRAPHICS_CONTEXT 0
-#   else
-
-
-#       define wxUSE_GRAPHICS_CONTEXT 0
-#   endif
 #else
-
-
-
-
-
-#ifdef __WXGTK3__
-#   define wxUSE_GRAPHICS_CONTEXT 1
-#else
-#   define wxUSE_GRAPHICS_CONTEXT 1
-#endif
+#define wxUSE_GRAPHICS_CONTEXT 1
 #endif
 
 #define wxUSE_CONTROLS     1
@@ -533,6 +521,14 @@ typedef pid_t GPid;
 #define wxUSE_MENUS         1
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
+
+#ifndef VMS_GTK2
+#define wxUSE_PRIVATE_FONTS 0
+#else
+/* wxUSE_PRIVATE_FONTS needs a newer version of PANGO than presently *
+ * available for OpenVMS                                             */
+#define wxUSE_PRIVATE_FONTS 0
+#endif
 
 #if defined (__WXMOTIF__)
 #define wxUSE_RICHTOOLTIP 0
@@ -979,11 +975,6 @@ typedef pid_t GPid;
 #define wxUSE_WEBKIT 1
 
 /*
- * Objective-C class name uniquifying
- */
-#define wxUSE_OBJC_UNIQUIFYING 0
-
-/*
  * The const keyword is being introduced more in wxWindows.
  * You can use this setting to maintain backward compatibility.
  * If 0: will use const wherever possible.
@@ -1397,6 +1388,9 @@ typedef pid_t GPid;
 
 /* Define if setpriority() is available. */
 #undef HAVE_SETPRIORITY
+
+/* Define if xlocale.h header file exists. */
+#undef HAVE_XLOCALE_H
 
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T

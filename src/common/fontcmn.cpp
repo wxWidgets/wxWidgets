@@ -1136,5 +1136,3 @@ bool wxFromString(const wxString& str, wxFontBase *font)
 
     return font->SetNativeFontInfo(str);
 }
-
-

@@ -14,10 +14,11 @@
     #include "wx/anybutton.h"
 #endif
 
+#include <QtWidgets/QPushButton>
+
 #include "wx/bitmap.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
-
 
 class wxQtPushButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
 {
@@ -64,7 +65,7 @@ void wxAnyButton::SetLabel( const wxString &label )
     m_qtPushButton->setText( wxQtConvertString( label ));
 }
 
-QPushButton *wxAnyButton::GetHandle() const
+QWidget *wxAnyButton::GetHandle() const
 {
     return m_qtPushButton;
 }

@@ -806,7 +806,7 @@ wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathCompon
     fullURLRef = CFURLCreateFromFSRef(NULL, fsRef);
     if ( fullURLRef == NULL)
         return wxEmptyString;
-    
+
     if ( additionalPathComponent )
     {
         CFURLRef parentURLRef = fullURLRef ;
@@ -866,7 +866,7 @@ void wxMacFilename2FSSpec( const wxString& path , FSSpec *spec )
     FSRef fsRef;
     wxMacPathToFSRef( path , &fsRef );
     err = FSGetCatalogInfo(&fsRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
-    verify_noerr( err );
+    __Verify_noErr(err);
 }
 #endif
 

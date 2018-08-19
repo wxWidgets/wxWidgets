@@ -55,8 +55,13 @@ struct wxLanguageInfo
     /// @onlyfor{wxmsw}
     wxUint32 GetLCID() const;
 
-    /// Return the locale name corresponding to this language usable with
-    /// @c setlocale() on the current system.
+    /**
+        Return the locale name corresponding to this language usable with
+        @c setlocale() on the current system.
+
+        If setting locale for this language is not supported, the returned
+        string is empty.
+     */
     wxString GetLocaleName() const;
 };
 
@@ -508,3 +513,11 @@ public:
     */
     bool IsOk() const;
 };
+
+
+
+/**
+   Get the current locale object (note that it may be NULL!)
+*/
+wxLocale* wxGetLocale();
+

@@ -101,6 +101,8 @@ public:     // overrides
 protected:
     wxDialog *m_dialog;
 
+    virtual void DoApplyWidgetStyle(GtkRcStyle*) wxOVERRIDE;
+
 private:
     // common part of all ctors
     void Init() { m_dialog = NULL; }
@@ -169,6 +171,8 @@ public:     // overrides
 
 protected:
     wxDialog *m_dialog;
+
+    virtual void DoApplyWidgetStyle(GtkRcStyle*) wxOVERRIDE;
 
 public:    // used by the GTK callback only
 

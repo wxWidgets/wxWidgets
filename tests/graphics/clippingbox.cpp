@@ -21,7 +21,9 @@
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/dcgraph.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
+#include "wx/dcsvg.h"
 
+#include "testfile.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -125,7 +127,7 @@ public:
     {
     }
 
-    virtual void setUp() { wxASSERT( m_dc ); }
+    virtual void setUp() wxOVERRIDE { wxASSERT( m_dc ); }
     virtual wxDC* GetDC(wxMemoryDC* dc) = 0;
 
 protected:
@@ -244,11 +246,7 @@ protected:
 // For GTK+ 3 wxDC is equivalent to wxGCDC
 // and hence doesn't need to be tested individually.
 #if !defined(__WXGTK3__)
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseDC );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseDC, "ClippingBoxTestCaseDC" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseDC, "[clip][dc]");
 #endif // !__WXGTK3__
 
 #if wxUSE_GRAPHICS_CONTEXT
@@ -342,11 +340,7 @@ protected:
 // For MSW we have individual test cases for each graphics renderer
 // so we don't need to test wxGCDC with default renderer.
 #ifndef __WXMSW__
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCDC );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCDC, "ClippingBoxTestCaseGCDC" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseGCDC, "[clip][gcdc]");
 #endif // !__WXMSW__
 
 #ifdef __WXMSW__
@@ -403,11 +397,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGCDCGDIPlus);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCDCGDIPlus );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCDCGDIPlus, "ClippingBoxTestCaseGCDCGDIPlus" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseGCDCGDIPlus, "[clip][gcdc][gdi+]");
 
 #endif // wxUSE_GRAPHICS_GDIPLUS
 
@@ -472,11 +462,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGCDCDirect2D);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCDCDirect2D );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCDCDirect2D, "ClippingBoxTestCaseGCDCDirect2D" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseGCDCDirect2D, "[clip][gcdc][d2d]");
 
 #endif // wxUSE_GRAPHICS_DIRECT2D
 
@@ -533,11 +519,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGCDCCairo);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCDCCairo );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCDCCairo, "ClippingBoxTestCaseGCDCCairo" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseGCDCCairo, "[clip][gc][cairo]");
 
 #endif // wxUSE_CAIRO
 
@@ -646,33 +628,32 @@ void ClippingBoxTestCaseBase::CheckClipRect(int x, int y, int width, int height)
         for( int py = ymin; py <= ymax; py++ )
             for( int px = xmin; px <= xmax; px++ )
             {
-                wxColour c;
                 unsigned char r = img.GetRed(px, py);
                 unsigned char g = img.GetGreen(px, py);
                 unsigned char b = img.GetBlue(px, py);
-                c.Set(r, g, b);
+                const wxColour col(r, g, b);
 
                 wxString msgColour;
                 if ( px >= x && px <= x + (width-1) &&
                      py >= y && py <= y + (height-1) )
                 {
                     // Pixel inside the box.
-                    if ( c != s_fgColour )
+                    if ( col != s_fgColour )
                     {
                         msgColour =
                             wxString::Format(wxS("Invalid colour drawn at (%i, %i): Actual: %s  Expected: %s"),
-                                    px, py, c.GetAsString().mbc_str(), s_fgColour.GetAsString().mbc_str());
+                                    px, py, col.GetAsString().mbc_str(), s_fgColour.GetAsString().mbc_str());
 
                     }
                 }
                 else
                 {
                     // Pixel outside the box.
-                    if ( c != s_bgColour )
+                    if ( col != s_bgColour )
                     {
                         msgColour =
                             wxString::Format(wxS("Invalid colour drawn at (%i, %i): Actual: %s  Expected: %s"),
-                                    px, py, c.GetAsString().mbc_str(), s_bgColour.GetAsString().mbc_str());
+                                    px, py, col.GetAsString().mbc_str(), s_bgColour.GetAsString().mbc_str());
                     }
                 }
 
@@ -1201,14 +1182,15 @@ void ClippingBoxTestCaseDCBase::OneDevRegionNonRect()
 
     // Draw image with reference triangle.
     wxBitmap bmpRef(s_dcSize);
-    wxMemoryDC* memDC = new wxMemoryDC(bmpRef);
-    wxDC* dcRef = GetDC(memDC);
+    wxMemoryDC memDC(bmpRef);
+    wxDC* dcRef = GetDC(&memDC);
     dcRef->SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     dcRef->Clear();
     dcRef->SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     dcRef->SetPen(wxPen(s_fgColour));
     dcRef->DrawPolygon(WXSIZEOF(poly), poly);
-    delete dcRef;
+    if ( dcRef != &memDC )
+        delete dcRef;
 
     m_dc->SetDeviceOrigin(10, 15);
     m_dc->SetUserScale(0.5, 1.5);
@@ -1619,11 +1601,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGCGDIPlus);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCGDIPlus );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCGDIPlus, "ClippingBoxTestCaseGCGDIPlus" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseGCGDIPlus, "[clip][gc][gdi+]");
 
 #endif // wxUSE_GRAPHICS_GDIPLUS
 
@@ -1673,11 +1651,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGCDirect2D);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCDirect2D );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCDirect2D, "ClippingBoxTestCaseGCDirect2D" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseGCDirect2D, "[clip][gc][d2d]");
 
 #endif // wxUSE_GRAPHICS_DIRECT2D
 
@@ -1718,11 +1692,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGCCairo);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCCairo );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCCairo, "ClippingBoxTestCaseGCCairo" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseGCCairo, "[clip][gc][cairo]");
 
 #endif // wxUSE_CAIRO
 
@@ -1761,11 +1731,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(ClippingBoxTestCaseGCCoreGraphics);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ClippingBoxTestCaseGCCoreGraphics );
-
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ClippingBoxTestCaseGCCoreGraphics, "ClippingBoxTestCaseGCCoreGraphics" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ClippingBoxTestCaseGCCoreGraphics, "[clip][gc][cg]");
 
 #endif // __WXOSX__
 
@@ -2158,3 +2124,29 @@ void ClippingBoxTestCaseGCBase::RegionsAndPushPopState()
 }
 
 #endif // wxUSE_GRAPHICS_CONTEXT
+
+#if wxUSE_SVG
+
+// We can't reuse the existing tests for wxSVGFileDC as we can't check its
+// output, but we can still at least check the behaviour of GetClippingBox().
+TEST_CASE("ClippingBoxTestCaseSVGDC", "[clip][svgdc]")
+{
+    TestFile tf;
+    wxSVGFileDC dc(tf.GetName(), s_dcSize.x, s_dcSize.y);
+
+    wxRect rect;
+    dc.GetClippingBox(rect);
+    CHECK( rect == wxRect(s_dcSize) );
+
+    const wxRect rectClip(10, 20, 80, 75);
+    dc.SetClippingRegion(rectClip);
+
+    dc.GetClippingBox(rect);
+    CHECK( rect == rectClip );
+
+    dc.DestroyClippingRegion();
+    dc.GetClippingBox(rect);
+    CHECK( rect == wxRect(s_dcSize) );
+}
+
+#endif // wxUSE_SVG

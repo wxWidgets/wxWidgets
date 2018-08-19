@@ -183,6 +183,7 @@ void MeasuringTextTestCase::GraphicsGetTextExtent()
     context->SetFont(font, *wxBLACK);
     double width, height, descent, externalLeading = 0.0;
     context->GetTextExtent("x", &width, &height, &descent, &externalLeading);
+    delete context;
 
     // TODO: Determine a way to make these tests more robust.
     CPPUNIT_ASSERT(width > 0.0);

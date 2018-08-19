@@ -684,6 +684,10 @@ protected:
     // override base class method to use GUI traits
     virtual wxAppTraits *CreateTraits() wxOVERRIDE;
 
+    // Helper method deleting all existing top level windows: this is used
+    // during the application shutdown.
+    void DeleteAllTLWs();
+
 
     // the main top level window (may be NULL)
     wxWindow *m_topWindow;

@@ -334,6 +334,10 @@ void wxListCtrl::MSWSetExListStyles()
         // it seems better to enable it by default than disable
         LVS_EX_HEADERDRAGDROP
     );
+
+    // As we use LVS_EX_DOUBLEBUFFER above, we don't need to erase our
+    // background and doing it only results in flicker.
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -393,16 +397,16 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxLC_SORT_DESCENDING )
         wstyle |= LVS_SORTDESCENDING;
 
-#if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( style & wxLC_VIRTUAL )
     {
         wstyle |= LVS_OWNERDATA;
     }
-#endif // ancient cygwin
 
     return wstyle;
 }
 
+#if WXWIN_COMPATIBILITY_3_0
+// Deprecated
 void wxListCtrl::UpdateStyle()
 {
     if ( GetHwnd() )
@@ -428,11 +432,12 @@ void wxListCtrl::UpdateStyle()
 
             // if we switched to the report view, set the extended styles for
             // it too
-            if ( !(dwStyleOld & LVS_REPORT) && (dwStyleNew & LVS_REPORT) )
+            if ( (dwStyleOld & LVS_TYPEMASK) != LVS_REPORT && (dwStyleNew & LVS_TYPEMASK) == LVS_REPORT )
                 MSWSetExListStyles();
         }
     }
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
 void wxListCtrl::FreeAllInternalData()
 {
@@ -502,9 +507,24 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 {
     if ( flag != m_windowStyle )
     {
-        wxListCtrlBase::SetWindowStyleFlag(flag);
+        const bool wasInReportView = InReportView();
 
-        UpdateStyle();
+        // we don't have wxVSCROLL style, but the list control may have it,
+        // don't change it then in the call to parent's SetWindowStyleFlags()
+        DWORD dwStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+        flag &= ~(wxHSCROLL | wxVSCROLL);
+        if ( dwStyle & WS_HSCROLL )
+            flag |= wxHSCROLL;
+        if ( dwStyle & WS_VSCROLL )
+            flag |= wxVSCROLL;
+        wxListCtrlBase::SetWindowStyleFlag(flag);
+        // As it was said, we don't have wxSCROLL style
+        m_windowStyle &= ~(wxHSCROLL | wxVSCROLL);
+
+        // if we switched to the report view, set the extended styles for
+        // it too
+        if ( !wasInReportView && InReportView() )
+            MSWSetExListStyles();
 
         Refresh();
     }
@@ -669,16 +689,10 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
         }
     }
 
-    // the column images were not supported in older versions but how to check
-    // for this? we can't use _WIN32_IE because we always define it to a very
-    // high value, so see if another symbol which is only defined starting from
-    // comctl32.dll 4.70 is available
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         item.m_image = lvCol.iImage;
     }
-#endif // LVCOLUMN::iImage exists
 
     return success;
 }
@@ -709,15 +723,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     else if ( width == wxLIST_AUTOSIZE_USEHEADER)
         width = LVSCW_AUTOSIZE_USEHEADER;
 
-    if ( !ListView_SetColumnWidth(GetHwnd(), col, width) )
-        return false;
-
-    // Failure to explicitly refresh the control with horizontal rules results
-    // in corrupted rules display.
-    if ( HasFlag(wxLC_HRULES) )
-        Refresh();
-
-    return true;
+    return ListView_SetColumnWidth(GetHwnd(), col, width) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -950,7 +956,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     return true;
 }
 
-long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
+bool wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
 {
     wxListItem info;
     info.m_text = label;
@@ -1780,35 +1786,53 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 
     flags = 0;
 
-    if ( hitTestInfo.flags & LVHT_ABOVE )
-        flags |= wxLIST_HITTEST_ABOVE;
-    if ( hitTestInfo.flags & LVHT_BELOW )
-        flags |= wxLIST_HITTEST_BELOW;
-    if ( hitTestInfo.flags & LVHT_TOLEFT )
-        flags |= wxLIST_HITTEST_TOLEFT;
-    if ( hitTestInfo.flags & LVHT_TORIGHT )
-        flags |= wxLIST_HITTEST_TORIGHT;
-
-    if ( hitTestInfo.flags & LVHT_NOWHERE )
-        flags |= wxLIST_HITTEST_NOWHERE;
-
-    // note a bug or at least a very strange feature of comtl32.dll (tested
-    // with version 4.0 under Win95 and 6.0 under Win 2003): if you click to
-    // the right of the item label, ListView_HitTest() returns a combination of
-    // LVHT_ONITEMICON, LVHT_ONITEMLABEL and LVHT_ONITEMSTATEICON -- filter out
-    // the bits which don't make sense
-    if ( hitTestInfo.flags & LVHT_ONITEMLABEL )
+    // test whether an actual item was hit or not
+    if ( hitTestInfo.flags == LVHT_ONITEMICON )
     {
-        flags |= wxLIST_HITTEST_ONITEMLABEL;
-
-        // do not translate LVHT_ONITEMICON here, as per above
+        flags = wxLIST_HITTEST_ONITEMICON;
     }
-    else
+    // note a bug in comctl32.dll:
+    // 1) in report mode, when there are 2 or more columns, if you click to the
+    //    right of the first column, ListView_HitTest() returns LVHT_ONITEM
+    //    (LVHT_ONITEMICON|LVHT_ONITEMLABEL|LVHT_ONITEMSTATEICON).
+    else if ( hitTestInfo.flags & LVHT_ONITEMLABEL )
     {
-        if ( hitTestInfo.flags & LVHT_ONITEMICON )
-            flags |= wxLIST_HITTEST_ONITEMICON;
-        if ( hitTestInfo.flags & LVHT_ONITEMSTATEICON )
-            flags |= wxLIST_HITTEST_ONITEMSTATEICON;
+        flags = wxLIST_HITTEST_ONITEMLABEL;
+    }
+    // note another bug in comctl32.dll:
+    // 2) LVHT_ONITEMSTATEICON and LVHT_ABOVE have the same value. However, the
+    //    former (used for the checkbox when LVS_EX_CHECKBOXES is used) can
+    //    only occur when y >= 0, while the latter ("above the control's client
+    //    area") can only occur when y < 0.
+    else if ( (hitTestInfo.flags == LVHT_ONITEMSTATEICON) && point.y >= 0 )
+    {
+        flags = wxLIST_HITTEST_ONITEMSTATEICON;
+    }
+    else if ( hitTestInfo.flags == LVHT_NOWHERE )
+    {
+        flags = wxLIST_HITTEST_NOWHERE;
+    }
+
+    if ( flags ) // any flags found so far couldn't be combined with others
+        return item;
+
+    // outside an item, values could be combined
+    if ( (hitTestInfo.flags & LVHT_ABOVE) && point.y < 0 ) // see second MS bug
+    {
+        flags = wxLIST_HITTEST_ABOVE;
+    }
+    else if ( hitTestInfo.flags & LVHT_BELOW )
+    {
+        flags = wxLIST_HITTEST_BELOW;
+    }
+
+    if ( hitTestInfo.flags & LVHT_TOLEFT )
+    {
+        flags |= wxLIST_HITTEST_TOLEFT;
+    }
+    else if ( hitTestInfo.flags & LVHT_TORIGHT )
+    {
+        flags |= wxLIST_HITTEST_TORIGHT;
     }
 
     return item;
@@ -2483,12 +2507,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-#ifdef NM_CUSTOMDRAW
             case NM_CUSTOMDRAW:
                 *result = OnCustomDraw(lParam);
 
                 return *result != CDRF_DODEFAULT;
-#endif // _WIN32_IE >= 0x300
 
             case LVN_ODCACHEHINT:
                 {
@@ -2638,13 +2660,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         wxStrlcpy(lvi.pszText, text.c_str(), lvi.cchTextMax);
                     }
 
-                    // see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW
                     if ( lvi.mask & LVIF_IMAGE )
                     {
                         lvi.iImage = OnGetItemColumnImage(item, lvi.iSubItem);
                     }
-#endif // NM_CUSTOMDRAW
 
                     // even though we never use LVM_SETCALLBACKMASK, we still
                     // can get messages with LVIF_STATE in lvi.mask under Vista
@@ -2697,6 +2716,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // ---------------
     switch ( nmhdr->code )
     {
+        case HDN_ITEMCHANGING:
+            // Always let the default handling of this event take place,
+            // otherwise the selected items are not redrawn to correspond to
+            // the new column widths, see #18032.
+            return false;
+
         case LVN_DELETEALLITEMS:
             // always return true to suppress all additional LVN_DELETEITEM
             // notifications - this makes deleting all items from a list ctrl
@@ -2751,9 +2776,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // ----------------------------------------------------------------------------
 // custom draw stuff
 // ----------------------------------------------------------------------------
-
-// see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
 
 static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 {
@@ -3039,8 +3061,6 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
     return CDRF_DODEFAULT;
 }
 
-#endif // NM_CUSTOMDRAW supported
-
 // Necessary for drawing hrules and vrules, if specified
 void wxListCtrl::OnPaint(wxPaintEvent& event)
 {
@@ -3066,48 +3086,88 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     wxSize clientSize = GetClientSize();
-    wxRect itemRect;
+
+    const int countPerPage = GetCountPerPage();
+    if (countPerPage < 0)
+    {
+        // Can be -1 in which case it's useless to try to draw rules.
+        return;
+    }
+
+    const long top = GetTopItem();
+    const long bottom = wxMin(top + countPerPage, itemCount - 1);
+
+    wxRect clipRect;
+    dc.GetClippingBox(clipRect);
 
     if (drawHRules)
     {
-        const long top = GetTopItem();
-        for ( int i = top; i < top + GetCountPerPage() + 1; i++ )
+        wxRect itemRect;
+        for ( long i = top; i <= bottom; i++ )
         {
             if (GetItemRect(i, itemRect))
             {
-                int cy = itemRect.GetTop();
-                if (i != 0) // Don't draw the first one
-                {
-                    dc.DrawLine(0, cy, clientSize.x, cy);
-                }
-                // Draw last line
-                if (i == itemCount - 1)
-                {
-                    cy = itemRect.GetBottom();
-                    dc.DrawLine(0, cy, clientSize.x, cy);
-                    break;
-                }
+                const int cy = itemRect.GetBottom();
+                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);
             }
+        }
+
+        /*
+            The drawing can be clipped horizontally to the rightmost column.
+            This happens when an item is added (and visible) and results in a
+            horizontal rule being clipped instead of drawn across the entire
+            list control. In that case we request for the part to the right of
+            the rightmost column to be drawn as well.
+        */
+        if ( clipRect.GetRight() != clientSize.x - 1 && clipRect.width )
+        {
+            RefreshRect(wxRect(clipRect.GetRight(), clipRect.y,
+                               clientSize.x - clipRect.width, clipRect.height),
+                        false /* don't erase background */);
         }
     }
 
     if (drawVRules)
     {
-        wxRect firstItemRect;
-        GetItemRect(0, firstItemRect);
+        wxRect topItemRect, bottomItemRect;
+        GetItemRect(top, topItemRect);
 
-        if (GetItemRect(itemCount - 1, itemRect))
+        if (GetItemRect(bottom, bottomItemRect))
         {
-            // this is a fix for bug 673394: erase the pixels which we would
-            // otherwise leave on the screen
-            static const int gap = 2;
-            dc.SetPen(*wxTRANSPARENT_PEN);
-            dc.SetBrush(wxBrush(GetBackgroundColour()));
-            dc.DrawRectangle(0, firstItemRect.GetY() - gap,
-                             clientSize.GetWidth(), gap);
+            /*
+                This is a fix for ticket #747: erase the pixels which we would
+                otherwise leave on the screen.
 
-            dc.SetPen(pen);
-            dc.SetBrush(*wxTRANSPARENT_BRUSH);
+                The drawing of the rectangle as a fix to erase trailing pixels
+                when resizing a column is only needed for ComCtl32 prior to
+                6.0, i.e. when not using a manifest in which case 5.82 is used.
+                And even then it only happens when "Show window contents while
+                dragging" is enabled under Windows, resulting in live updates
+                when resizing columns. Note that even with that setting on, at
+                least under Windows 7 and 10 no live updating is done when
+                using ComCtl32 5.82.
+
+                Revision b66c3a67519caa9debfd76e6d74954eaebfa56d9 made this fix
+                almost redundant, except that when you do NOT handle
+                EVT_LIST_COL_DRAGGING (or do and skip the event) the trailing
+                pixels still appear. In case of wanting to reproduce the
+                problem in the listctrl sample: comment out handling oF
+                EVT_LIST_COL_DRAGGING and also set useDrawFix to false and gap
+                to 2 (not 0).
+            */
+
+            static const bool useDrawFix = wxApp::GetComCtl32Version() < 600;
+
+            static const int gap = useDrawFix ? 2 : 0;
+
+            if (useDrawFix)
+            {
+                wxDCPenChanger changePen(dc, *wxTRANSPARENT_PEN);
+                wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
+
+                dc.DrawRectangle(0, topItemRect.GetY() - gap,
+                                 clientSize.GetWidth(), gap);
+            }
 
             const int numCols = GetColumnCount();
             wxVector<int> indexArray(numCols);
@@ -3119,13 +3179,13 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 return;
             }
 
-            int x = itemRect.GetX();
+            int x = bottomItemRect.GetX();
             for (int col = 0; col < numCols; col++)
             {
                 int colWidth = GetColumnWidth(indexArray[col]);
                 x += colWidth ;
-                dc.DrawLine(x-1, firstItemRect.GetY() - gap,
-                            x-1, itemRect.GetBottom());
+                dc.DrawLine(x-1, topItemRect.GetY() - gap,
+                            x-1, bottomItemRect.GetBottom());
             }
         }
     }
@@ -3442,8 +3502,6 @@ static void wxConvertToMSWListCol(HWND hwndList,
             lvCol.cx = item.m_width;
     }
 
-    // see comment at the end of wxListCtrl::GetColumn()
-#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         lvCol.mask |= LVCF_IMAGE;
@@ -3477,7 +3535,6 @@ static void wxConvertToMSWListCol(HWND hwndList,
 
         lvCol.iImage = item.m_image;
     }
-#endif // _WIN32_IE >= 0x0300
 }
 
 #endif // wxUSE_LISTCTRL

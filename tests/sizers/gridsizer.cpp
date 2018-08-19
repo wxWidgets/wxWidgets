@@ -33,8 +33,8 @@ class GridSizerTestCase : public CppUnit::TestCase
 public:
     GridSizerTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( GridSizerTestCase );

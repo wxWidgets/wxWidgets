@@ -38,6 +38,12 @@
 // implementation
 // ============================================================================
 
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+    #define SetMinMaxPointSize(min, max)
+#else
+    #define SetMinMaxPointSize(min, max)  GetPickerWidget()->GetFontData()->SetRange((min), (max))
+#endif
+
 const char wxFontPickerCtrlNameStr[] = "fontpicker";
 const char wxFontPickerWidgetNameStr[] = "fontpickerwidget";
 
@@ -68,9 +74,7 @@ bool wxFontPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     // complete sizer creation
     wxPickerBase::PostCreation();
 
-    m_picker->Connect(wxEVT_FONTPICKER_CHANGED,
-            wxFontPickerEventHandler(wxFontPickerCtrl::OnFontChange),
-            NULL, this);
+    m_picker->Bind(wxEVT_FONTPICKER_CHANGED, &wxFontPickerCtrl::OnFontChange, this);
 
     return true;
 }
@@ -150,7 +154,17 @@ void wxFontPickerCtrl::UpdateTextCtrlFromPicker()
     m_text->ChangeValue(Font2String(GetPickerWidget()->GetSelectedFont()));
 }
 
+void wxFontPickerCtrl::SetMinPointSize(unsigned int min)
+{
+    m_nMinPointSize = min;
+    SetMinMaxPointSize(m_nMinPointSize, m_nMaxPointSize);
+}
 
+void wxFontPickerCtrl::SetMaxPointSize(unsigned int max)
+{
+    m_nMaxPointSize = max;
+    SetMinMaxPointSize(m_nMinPointSize, m_nMaxPointSize);
+}
 
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl - event handlers

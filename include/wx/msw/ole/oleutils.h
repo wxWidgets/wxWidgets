@@ -38,7 +38,7 @@
 // return true if ok, false otherwise
 inline bool wxOleInitialize()
 {
-    HRESULT
+    const HRESULT
     hr = ::OleInitialize(NULL);
 
     // RPC_E_CHANGED_MODE indicates that OLE had been already initialized
@@ -66,19 +66,43 @@ inline void wxOleUninitialize()
 class WXDLLIMPEXP_CORE wxBasicString
 {
 public:
-    // ctors & dtor
-    wxBasicString(const wxString& str);
-    wxBasicString(const wxBasicString& bstr);
-    ~wxBasicString();
+    // Constructs with the owned BSTR set to NULL
+    wxBasicString() : m_bstrBuf(NULL) {}
 
+    // Constructs with the owned BSTR created from a wxString
+    wxBasicString(const wxString& str)
+        : m_bstrBuf(SysAllocString(str.wc_str(*wxConvCurrent))) {}
+
+    // Constructs with the owned BSTR as a copy of the BSTR owned by bstr
+    wxBasicString(const wxBasicString& bstr) : m_bstrBuf(bstr.Copy()) {}
+
+    // Frees the owned BSTR
+    ~wxBasicString() { SysFreeString(m_bstrBuf); }
+
+    // Creates the owned BSTR from a wxString
+    void AssignFromString(const wxString& str);
+
+    // Returns the owned BSTR and gives up its ownership,
+    // the caller is responsible for freeing it
+    BSTR Detach();
+
+    // Returns a copy of the owned BSTR,
+    // the caller is responsible for freeing it
+    BSTR Copy() const { return SysAllocString(m_bstrBuf); }
+
+    // Returns the address of the owned BSTR, not to be called
+    // when wxBasicString already contains a non-NULL BSTR
+    BSTR* ByRef();
+
+    // Sets its BSTR to a copy of the BSTR owned by bstr
     wxBasicString& operator=(const wxBasicString& bstr);
 
-    // accessors
-        // just get the string
+    /// Returns the owned BSTR while keeping its ownership
     operator BSTR() const { return m_bstrBuf; }
-        // retrieve a copy of our string - caller must SysFreeString() it later!
-    BSTR Get() const { return SysAllocString(m_bstrBuf); }
 
+    // retrieve a copy of our string - caller must SysFreeString() it later!
+    wxDEPRECATED_MSG("use Copy() instead")
+    BSTR Get() const { return Copy(); }
 private:
     // actual string
     BSTR m_bstrBuf;

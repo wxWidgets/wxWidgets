@@ -277,7 +277,7 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
 
 // this function is a wrapper around strftime(3) adding error checking
 // NOTE: not static because used by datetimefmt.cpp
-wxString CallStrftime(const wxString& format, const tm* tm)
+wxString wxCallStrftime(const wxString& format, const tm* tm)
 {
     wxChar buf[4096];
     // Create temp wxString here to work around mingw/cygwin bug 1046059
@@ -330,7 +330,7 @@ static void ReplaceDefaultYearMonthWithCurrent(int *year,
 
 // fill the struct tm with default values
 // NOTE: not static because used by datetimefmt.cpp
-void InitTm(struct tm& tm)
+void wxInitTm(struct tm& tm)
 {
     // struct tm may have etxra fields (undocumented and with unportable
     // names) which, nevertheless, must be set to 0
@@ -339,6 +339,33 @@ void InitTm(struct tm& tm)
     tm.tm_mday = 1;   // mday 0 is invalid
     tm.tm_year = 76;  // any valid year
     tm.tm_isdst = -1; // auto determine
+}
+
+// Internal helper function called only for times outside of standard time_t
+// range.
+//
+// It is just a hack to work around the fact that we can't call IsDST() and
+// related methods from GetTm() for the reasons explained there.
+static int GetDSTOffset(wxLongLong t)
+{
+    bool isDST = false;
+
+    switch ( wxDateTime::GetCountry() )
+    {
+        case wxDateTime::UK:
+            // We don't need to check for the end value in 1971 as this is
+            // inside the standard range, so check just for beginning of the
+            // permanent BST period in UK, see IsDST().
+            if ( t < 0 &&
+                    t >= wxDateTime(27, wxDateTime::Oct, 1968).GetValue() )
+                isDST = true;
+            break;
+
+        default:
+            break;
+    }
+
+    return isDST ? wxDateTime::DST_OFFSET : 0;
 }
 
 // ============================================================================
@@ -456,9 +483,8 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
     switch ( tz )
     {
         case wxDateTime::Local:
-            // get the offset from C RTL: it returns the difference GMT-local
-            // while we want to have the offset _from_ GMT, hence the '-'
-            m_offset = -wxGetTimeZone();
+            // Use a special value for local time zone.
+            m_offset = -1;
             break;
 
         case wxDateTime::GMT_12:
@@ -503,6 +529,13 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
     }
 }
 
+long wxDateTime::TimeZone::GetOffset() const
+{
+    // get the offset from C RTL: it returns the difference GMT-local
+    // while we want to have the offset _from_ GMT, hence the '-'
+    return m_offset == -1 ? -wxGetTimeZone() : m_offset;
+}
+
 // ----------------------------------------------------------------------------
 // static functions
 // ----------------------------------------------------------------------------
@@ -540,6 +573,55 @@ bool wxDateTime::IsLeapYear(int year, wxDateTime::Calendar cal)
         return false;
     }
 }
+
+#ifdef __WINDOWS__
+#include "wx/msw/registry.h"
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    wxRegKey key(wxRegKey::HKCU, "Control Panel\\International");
+    wxString val;
+
+    if ( key.Exists() && key.HasValue("iFirstDayOfWeek") )
+    {
+        key.QueryValue("iFirstDayOfWeek", val);
+        *firstDay = wxDateTime::WeekDay((wxAtoi(val) + 1) % 7);
+        return true;
+    }
+    else
+    {
+        *firstDay = wxDateTime::Sun;
+        return false;
+    }
+}
+
+#elif defined(__APPLE__)
+// implementation in utils_base.mm
+#elif defined(HAVE_NL_TIME_FIRST_WEEKDAY)
+
+#include <langinfo.h>
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    *firstDay = wxDateTime::WeekDay((*nl_langinfo(_NL_TIME_FIRST_WEEKDAY) - 1) % 7);
+    return true;
+}
+
+#else
+
+/* static */
+bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
+{
+    wxCHECK_MSG( firstDay, false, wxS("output parameter must be non-null") );
+    *firstDay = wxDateTime::Sun;
+    return false;
+}
+
+#endif
 
 /* static */
 int wxDateTime::GetCentury(int year)
@@ -700,10 +782,10 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
     // notice that we must set all the fields to avoid confusing libc (GNU one
     // gets confused to a crash if we don't do this)
     tm tm;
-    InitTm(tm);
+    wxInitTm(tm);
     tm.tm_mon = month;
 
-    return CallStrftime(flags == Name_Abbr ? wxT("%b") : wxT("%B"), &tm);
+    return wxCallStrftime(flags == Name_Abbr ? wxS("%b") : wxS("%B"), &tm);
 #else // !wxHAS_STRFTIME
     return GetEnglishMonthName(month, flags);
 #endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
@@ -739,7 +821,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
     // after adding wday to it below we still have a valid date, e.g. don't
     // take 28 here!)
     tm tm;
-    InitTm(tm);
+    wxInitTm(tm);
     tm.tm_mday = 21;
     tm.tm_mon = Nov;
     tm.tm_year = 99;
@@ -751,7 +833,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
     (void)mktime(&tm);
 
     // ... and call strftime()
-    return CallStrftime(flags == Name_Abbr ? wxT("%a") : wxT("%A"), &tm);
+    return wxCallStrftime(flags == Name_Abbr ? wxS("%a") : wxS("%A"), &tm);
 #else // !wxHAS_STRFTIME
     return GetEnglishWeekDayName(wday, flags);
 #endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
@@ -761,7 +843,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
 void wxDateTime::GetAmPmStrings(wxString *am, wxString *pm)
 {
     tm tm;
-    InitTm(tm);
+    wxInitTm(tm);
     wxChar buffer[64];
     // @Note: Do not call 'CallStrftime' here! CallStrftime checks the return code
     // and causes an assertion failed if the buffer is to small (which is good) - OR -
@@ -805,8 +887,9 @@ wxDateTime::Country wxDateTime::GetCountry()
         struct tm tmstruct;
         struct tm *tm = wxLocaltime_r(&t, &tmstruct);
 
-        wxString tz = CallStrftime(wxT("%Z"), tm);
-        if ( tz == wxT("WET") || tz == wxT("WEST") )
+        wxString tz = wxCallStrftime(wxS("%Z"), tm);
+        if ( tz == wxT("WET") || tz == wxT("WEST") ||
+                tz == wxT("BST") || tz == wxT("GMT") )
         {
             ms_country = UK;
         }
@@ -1315,7 +1398,7 @@ wxDateTime wxDateTime::GetDateOnly() const
 wxDateTime& wxDateTime::SetFromDOS(unsigned long ddt)
 {
     struct tm tm;
-    InitTm(tm);
+    wxInitTm(tm);
 
     long year = ddt & 0xFE000000;
     year >>= 25;
@@ -1381,6 +1464,24 @@ unsigned long wxDateTime::GetAsDOS() const
 // time_t <-> broken down time conversions
 // ----------------------------------------------------------------------------
 
+const tm* wxTryGetTm(tm& tmstruct, time_t t, const wxDateTime::TimeZone& tz)
+{
+    if ( tz.IsLocal() )
+    {
+        // we are working with local time
+        return wxLocaltime_r(&t, &tmstruct);
+    }
+    else
+    {
+        t += (time_t)tz.GetOffset();
+#if !defined(__VMS__) // time is unsigned so avoid warning
+        if ( t < 0 )
+            return NULL;
+#endif
+        return wxGmtime_r(&t, &tmstruct);
+    }
+}
+
 wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
 {
     wxASSERT_MSG( IsValid(), wxT("invalid wxDateTime") );
@@ -1388,39 +1489,9 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
     time_t time = GetTicks();
     if ( time != (time_t)-1 )
     {
-        // use C RTL functions
+        // Try to use the RTL.
         struct tm tmstruct;
-        tm *tm;
-        if ( tz.GetOffset() == -wxGetTimeZone() )
-        {
-            // we are working with local time
-            tm = wxLocaltime_r(&time, &tmstruct);
-
-            // should never happen
-            wxCHECK_MSG( tm, Tm(), wxT("wxLocaltime_r() failed") );
-        }
-        else
-        {
-            time += (time_t)tz.GetOffset();
-#if defined(__VMS__) // time is unsigned so avoid warning
-            int time2 = (int) time;
-            if ( time2 >= 0 )
-#else
-            if ( time >= 0 )
-#endif
-            {
-                tm = wxGmtime_r(&time, &tmstruct);
-
-                // should never happen
-                wxCHECK_MSG( tm, Tm(), wxT("wxGmtime_r() failed") );
-            }
-            else
-            {
-                tm = (struct tm *)NULL;
-            }
-        }
-
-        if ( tm )
+        if ( const tm* tm = wxTryGetTm(tmstruct, time, tz) )
         {
             // adjust the milliseconds
             Tm tm2(*tm, tz);
@@ -1431,10 +1502,20 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         //else: use generic code below
     }
 
+    long secDiff = tz.GetOffset();
+
+    // We need to account for DST as always when converting to broken down time
+    // components, but we can't call IsDST() from here because this would
+    // result in infinite recursion as IsDST() starts by calling GetYear()
+    // which just calls back to this function. So call a special function which
+    // is used just here to determine the DST offset to add.
+    if ( tz.IsLocal() )
+        secDiff += GetDSTOffset(m_time);
+
+    wxLongLong timeMidnight = m_time + secDiff * 1000;
+
     // remember the time and do the calculations with the date only - this
     // eliminates rounding errors of the floating point arithmetics
-
-    wxLongLong timeMidnight = m_time + tz.GetOffset() * 1000;
 
     long timeOnly = (timeMidnight % MILLISECONDS_PER_DAY).ToLong();
 
@@ -1721,10 +1802,7 @@ wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags)
         return *this;
     }
 
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     // the logic below based on comparing weekday and wdayThis works if Sun (0)
     // is the first day in the week, but breaks down for Monday_First case so
@@ -1879,10 +1957,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
 wxDateTime::wxDateTime_t
 wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
 {
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     Tm tm(GetTm(tz));
     wxDateTime_t nDayInYear = GetDayOfYearFromTm(tm);
@@ -1969,10 +2044,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
     const wxDateTime dateFirst = wxDateTime(1, tm.mon, tm.year);
     const wxDateTime::WeekDay wdFirst = dateFirst.GetWeekDay();
 
-    if ( flags == Default_First )
-    {
-        flags = GetCountry() == USA ? Sunday_First : Monday_First;
-    }
+    UseEffectiveWeekDayFlags(flags);
 
     // compute offset of dateFirst from the beginning of the week
     int firstOffset;
@@ -2046,10 +2118,28 @@ int wxDateTime::IsDST(wxDateTime::Country country) const
     {
         int year = GetYear();
 
-        if ( !IsDSTApplicable(year, country) )
+        country = GetCountry();
+        switch ( country )
         {
-            // no DST time in this year in this country
-            return -1;
+            case UK:
+                // There is a special, but important, case of UK which was
+                // permanently on BST, i.e. using DST, during this period. It
+                // is important because it covers Unix epoch and without
+                // accounting for the DST during it, various tests done around
+                // the epoch time would fail in BST time zone (only!).
+                if ( IsEarlierThan(wxDateTime(31, Oct, 1971)) &&
+                        IsLaterThan(wxDateTime(27, Oct, 1968)) )
+                {
+                    return true;
+                }
+                wxFALLTHROUGH;
+
+            default:
+                if ( !IsDSTApplicable(year, country) )
+                {
+                    // no DST time in this year in this country
+                    return -1;
+                }
         }
 
         return IsBetween(GetBeginDST(year, country), GetEndDST(year, country));
@@ -2060,11 +2150,11 @@ wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
 {
     long secDiff = wxGetTimeZone() + tz.GetOffset();
 
-    // We are converting from the local time, but local time zone does not
-    // include the DST offset (as it varies depending on the date), so we have
-    // to handle DST manually, unless a special flag inhibiting this was
-    // specified.
-    if ( !noDST && (IsDST() == 1) )
+    // We are converting from the local time to some other time zone, but local
+    // time zone does not include the DST offset (as it varies depending on the
+    // date), so we have to handle DST manually, unless a special flag
+    // inhibiting this was specified.
+    if ( !noDST && (IsDST() == 1) && !tz.IsLocal() )
     {
         secDiff -= DST_OFFSET;
     }
@@ -2077,12 +2167,22 @@ wxDateTime& wxDateTime::MakeFromTimezone(const TimeZone& tz, bool noDST)
     long secDiff = wxGetTimeZone() + tz.GetOffset();
 
     // See comment in MakeTimezone() above, the logic here is exactly the same.
-    if ( !noDST && (IsDST() == 1) )
+    if ( !noDST && (IsDST() == 1) && !tz.IsLocal() )
     {
         secDiff -= DST_OFFSET;
     }
 
     return Subtract(wxTimeSpan::Seconds(secDiff));
+}
+
+void wxDateTime::UseEffectiveWeekDayFlags(WeekFlags &flags) const
+{
+    if ( flags == Default_First )
+    {
+        WeekDay firstDay;
+        GetFirstWeekDay(&firstDay);
+        flags = firstDay == Sun ? Sunday_First : Monday_First;
+    }
 }
 
 // ============================================================================

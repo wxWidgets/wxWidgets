@@ -1067,7 +1067,7 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
         return;
 #endif
 
-    // Fixing ticket: http://trac.wxwidgets.org/ticket/9563
+    // Fixing ticket: https://trac.wxwidgets.org/ticket/9563
     // When a child inside a wxControlContainer receives a focus, the
     // wxControlContainer generates an artificial wxChildFocusEvent for
     // itself, telling its parent that 'it' received the focus. The effect is

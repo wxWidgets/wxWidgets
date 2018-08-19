@@ -934,6 +934,9 @@ public:
             be returned.
         @param label
             The label of the button.
+        @param text_min_width
+            The minimum width of the button label.
+            Set this to 0 if it is not used.
         @param bitmap_size_large
             The size of all "large" bitmaps on the button bar.
         @param bitmap_size_small
@@ -953,11 +956,40 @@ public:
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
+                        wxCoord text_min_width,
                         wxSize bitmap_size_large,
                         wxSize bitmap_size_small,
                         wxSize* button_size,
                         wxRect* normal_region,
                         wxRect* dropdown_region) = 0;
+
+    /**
+        Gets the width of the string if it is used as
+        a wxRibbonButtonBar button label.
+
+        @param dc
+            A device context to use when one is required for size calculations.
+        @param label
+            The string whose width shall be calculated.
+        @param kind
+            The kind of button.
+        @param size
+            The size-class to calculate the size for. Buttons on a button bar
+            can have three distinct sizes: wxRIBBON_BUTTONBAR_BUTTON_SMALL,
+            wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, and wxRIBBON_BUTTONBAR_BUTTON_LARGE.
+            If the requested size-class is not applicable, then NULL should
+            be returned.
+
+        @return Width of the given label text in pixel.
+
+        @note This function only works with single-line strings.
+
+        @since 3.1.2
+    */
+    virtual wxCoord GetButtonBarButtonTextWidth(
+                        wxDC& dc, const wxString& label,
+                        wxRibbonButtonKind kind,
+                        wxRibbonButtonBarButtonState size) = 0;
     
     /**
         Calculate the size of a minimised ribbon panel.
@@ -1208,6 +1240,7 @@ public:
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
+                        wxCoord text_min_width,
                         wxSize bitmap_size_large,
                         wxSize bitmap_size_small,
                         wxSize* button_size,

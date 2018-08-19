@@ -257,7 +257,7 @@ inline size_t wxStrlcpy(char *dest, const char *src, size_t n)
     {
         if ( n-- > len )
             n = len;
-        wxCRT_StrncpyA(dest, src, n);
+        wxTmemcpy(dest, src, n);
         dest[n] = '\0';
     }
 
@@ -270,7 +270,7 @@ inline size_t wxStrlcpy(wchar_t *dest, const wchar_t *src, size_t n)
     {
         if ( n-- > len )
             n = len;
-        wxCRT_StrncpyW(dest, src, n);
+        wxTmemcpy(dest, src, n);
         dest[n] = L'\0';
     }
 
@@ -905,13 +905,16 @@ WX_STRTOX_FUNC(wxULongLong_t, wxStrtoull, wxCRT_StrtoullA, wxCRT_StrtoullW)
 
 #undef WX_STRTOX_FUNC
 
-
+// ios doesn't export system starting from iOS 11 anymore and usage was critical before
+#if defined(__WXOSX__) && wxOSX_USE_IPHONE
+#else
 // mingw32 doesn't provide _tsystem() even though it provides other stdlib.h
 // functions in their wide versions
 #ifdef wxCRT_SystemW
 inline int wxSystem(const wxString& str) { return wxCRT_SystemW(str.wc_str()); }
 #else
 inline int wxSystem(const wxString& str) { return wxCRT_SystemA(str.mb_str()); }
+#endif
 #endif
 
 inline char* wxGetenv(const char *name) { return wxCRT_GetenvA(name); }
