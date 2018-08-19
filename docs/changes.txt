@@ -111,6 +111,7 @@ All (GUI):
 - Add "hint" property support to XRC for wxComboBox and wxSearchCtrl.
 - Add support for style="page-break-inside:avoid" to <div> in wxHTML.
 - Support strike-through in wxDataViewItem attributes (approach, Igor Korot).
+- Allow distinguishing between user- and script-opened windows in wxWebView.
 
 wxGTK:
 
