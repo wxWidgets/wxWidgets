@@ -172,6 +172,7 @@ int wxHeaderCtrl::GetColEnd(unsigned int idx) const
 unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
 {
     int pos = 0;
+    const int xLogical = ( x - m_scrollOffset );
     const unsigned count = GetColumnCount();
     for ( unsigned n = 0; n < count; n++ )
     {
@@ -186,7 +187,7 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
         // line separating it from the next column
         //
         // TODO: don't hardcode sensitivity
-        if ( col.IsResizeable() && abs(x - pos) < 8 )
+        if ( col.IsResizeable() && abs(xLogical - pos) < 8 )
         {
             if ( onSeparator )
                 *onSeparator = true;
@@ -194,7 +195,7 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
         }
 
         // inside this column?
-        if ( x < pos )
+        if ( xLogical < pos )
         {
             if ( onSeparator )
                 *onSeparator = false;
@@ -371,7 +372,7 @@ void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 
     // and also a hint indicating where it is going to be inserted if it's
     // dropped now
-    unsigned int col = FindColumnAtPoint(xPhysical - m_scrollOffset);
+    unsigned int col = FindColumnAtPoint(xPhysical);
     if ( col != COL_NONE )
     {
         static const int DROP_MARKER_WIDTH = 4;
@@ -414,7 +415,7 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
     ReleaseMouse();
 
     const int colOld = m_colBeingReordered,
-              colNew = FindColumnAtPoint(xPhysical - m_scrollOffset);
+              colNew = FindColumnAtPoint(xPhysical);
 
     m_colBeingReordered = COL_NONE;
 
@@ -595,7 +596,6 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 
     // account for the control displacement
     const int xPhysical = mevent.GetX();
-    const int xLogical = xPhysical - m_scrollOffset;
 
     // first deal with the [continuation of any] dragging operations in
     // progress
@@ -630,7 +630,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     bool onSeparator;
     const unsigned col = mevent.Leaving()
                             ? (onSeparator = false, COL_NONE)
-                            : FindColumnAtPoint(xLogical, &onSeparator);
+                            : FindColumnAtPoint(xPhysical, &onSeparator);
 
 
     // update the highlighted column if it changed
