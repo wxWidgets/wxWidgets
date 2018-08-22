@@ -135,6 +135,7 @@ wxMSW:
 - Implement wxFontDialog::SetTitle() (Vitaly Stakhovsky).
 - Fix build in ANSI (non-Unicode) mode.
 - Improve wxNotebook themed background drawing (Arrigo Marchiori).
+- Send wxEVT_WEBVIEW_NAVIGATING when redirecting (Josue Andrade Gomes).
 
 wxOSX:
 
