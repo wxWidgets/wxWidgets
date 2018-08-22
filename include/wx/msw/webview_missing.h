@@ -945,3 +945,24 @@ public:
 
 /* end of WinInet.h */
 
+/* ShObjldl_core.h */
+
+typedef enum _wxNWMF
+{
+    wxNWMF_UNLOADING = 0x1,
+    wxNWMF_USERINITED = 0x2,
+    wxNWMF_FIRST = 0x4,
+    wxNWMF_OVERRIDEKEY = 0x8,
+    wxNWMF_SHOWHELP = 0x10,
+    wxNWMF_HTMLDIALOG = 0x20,
+    wxNWMF_FROMDIALOGCHILD = 0x40,
+    wxNWMF_USERREQUESTED = 0x80,
+    wxNWMF_USERALLOWED = 0x100,
+    wxNWMF_FORCEWINDOW = 0x10000,
+    wxNWMF_FORCETAB = 0x20000,
+    wxNWMF_SUGGESTWINDOW = 0x40000,
+    wxNWMF_SUGGESTTAB = 0x80000,
+    wxNWMF_INACTIVETAB = 0x100000
+} _wxNWMF;
+
+/* end of ShObjldl_core.h */

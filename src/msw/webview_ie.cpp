@@ -1477,7 +1477,7 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
 
             wxWebViewNavigationActionFlags navFlags = wxWEBVIEW_NAV_ACTION_OTHER;
 
-            if(flags & NWMF_USERINITED || flags & NWMF_USERREQUESTED)
+            if(flags & wxNWMF_USERINITED || flags & wxNWMF_USERREQUESTED)
                 navFlags = wxWEBVIEW_NAV_ACTION_USER;
 
             wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
