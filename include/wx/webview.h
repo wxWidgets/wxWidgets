@@ -149,7 +149,7 @@ public:
                           long style = 0,
                           const wxString& name = wxWebViewNameStr);
 
-    static void RegisterFactory(const wxString& backend, 
+    static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);
 
     // General methods

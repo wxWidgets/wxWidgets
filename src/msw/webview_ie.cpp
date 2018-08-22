@@ -134,7 +134,7 @@ wxWebViewIE::~wxWebViewIE()
 
         for(unsigned int i = 0; i < m_factories.size(); i++)
         {
-            session->UnregisterNameSpace(m_factories[i], 
+            session->UnregisterNameSpace(m_factories[i],
                                         (m_factories[i]->GetName()).wc_str());
             m_factories[i]->Release();
         }
@@ -1030,7 +1030,7 @@ wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
 
 bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
 {
-    wxCOMPtr<IHTMLElement> elm1 = elm;   
+    wxCOMPtr<IHTMLElement> elm1 = elm;
     bool is_visible = true;
     //This method is not perfect but it does discover most of the hidden elements.
     //so if a better solution is found, then please do improve.
@@ -1046,7 +1046,7 @@ bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
                 wxBasicString visibility_bstr;
 
                 //Check if the object has the style display:none.
-                if((style->get_display(display_bstr.ByRef()) != S_OK) || 
+                if((style->get_display(display_bstr.ByRef()) != S_OK) ||
                     wxString(display_bstr).IsSameAs(wxS("none"), false))
                 {
                     is_visible = false;
@@ -1092,7 +1092,7 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
             wxCOMPtr<wxIMarkupPointer> ptrBegin, ptrEnd;
             wxBasicString attr_bstr(wxS("style=\"background-color:#ffff00\""));
             wxBasicString text_bstr(text);
-            
+
             pIMS->CreateMarkupPointer(&ptrBegin);
             pIMS->CreateMarkupPointer(&ptrEnd);
 
@@ -1633,10 +1633,10 @@ HRESULT wxSTDCALL DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
     wxUnusedVar(ppt);
     wxUnusedVar(pcmdtReserved);
     wxUnusedVar(pdispReserved);
-    if(m_browser->IsContextMenuEnabled()) 
-        return E_NOTIMPL; 
-    else 
-        return S_OK; 
+    if(m_browser->IsContextMenuEnabled())
+        return E_NOTIMPL;
+    else
+        return S_OK;
 }
 
 HRESULT wxSTDCALL DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
@@ -1706,7 +1706,7 @@ HRESULT wxSTDCALL DocHostUIHandler::TranslateAccelerator(LPMSG lpMsg,
     {
         // check control is down but that it isn't right-alt which is mapped to
         // alt + ctrl
-        if(GetKeyState(VK_CONTROL) & 0x8000 && 
+        if(GetKeyState(VK_CONTROL) & 0x8000 &&
          !(GetKeyState(VK_MENU) & 0x8000))
         {
             //skip the accelerators used by the control
