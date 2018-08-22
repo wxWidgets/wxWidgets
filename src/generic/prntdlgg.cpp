@@ -569,7 +569,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
                 wxStringTokenizer tok2( tmp, wxT(" ") );
                 tmp = tok2.GetNextToken();  // "printer"
                 tmp = tok2.GetNextToken();  // "hp_deskjet930c"
-                tmp = wxEmptyString;
+                tmp.clear();
                 while (tok2.HasMoreTokens())
                 {
                     tmp += tok2.GetNextToken();

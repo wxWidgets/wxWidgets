@@ -185,7 +185,8 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
     }
     else if (tag.GetName() == wxT("OBJECT"))
     {
-        m_name = m_page = wxEmptyString;
+        m_name.clear();
+        m_page.clear();
         ParseInner(tag);
 
 #if 0
@@ -845,7 +846,7 @@ bool wxHtmlSearchStatus::Search()
         return false;
     }
 
-    m_Name = wxEmptyString;
+    m_Name.clear();
     m_CurItem = NULL;
     thepage = m_Data->m_contents[i].page;
 
