@@ -828,7 +828,14 @@ void WebFrame::OnDocumentLoaded(wxWebViewEvent& evt)
   */
 void WebFrame::OnNewWindow(wxWebViewEvent& evt)
 {
-    wxLogMessage("%s", "New window; url='" + evt.GetURL() + "'");
+    wxString flag = " (other)";
+
+    if(evt.GetNavigationAction() == wxWEBVIEW_NAV_ACTION_USER)
+    {
+        flag = " (user)";
+    }
+
+    wxLogMessage("%s", "New window; url='" + evt.GetURL() + "'" + flag);
 
     //If we handle new window events then just load them in this window as we
     //are a single window browser

@@ -22,6 +22,7 @@
 #include <exdispid.h>
 #include <exdisp.h>
 #include <mshtml.h>
+#include <shobjidl.h>
 #include "wx/msw/registry.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/ole/safearray.h"
@@ -1472,9 +1473,15 @@ void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)
         case DISPID_NEWWINDOW3:
         {
             wxString url = evt[4].GetString();
+            long flags = evt[2].GetLong();
+
+            wxWebViewNavigationActionFlags navFlags = wxWEBVIEW_NAV_ACTION_OTHER;
+
+            if(flags & NWMF_USERINITED || flags & NWMF_USERREQUESTED)
+                navFlags = wxWEBVIEW_NAV_ACTION_USER;
 
             wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
-                                 GetId(), url, wxEmptyString);
+                                 GetId(), url, wxEmptyString, navFlags);
             event.SetEventObject(this);
             HandleWindowEvent(event);
 
