@@ -65,7 +65,6 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
                         for (m = 0; m < 7; m++)
                         {
                             m_FontsTable[i][j][k][l][m] = NULL;
-                            m_FontsFacesTable[i][j][k][l][m] = wxEmptyString;
 #if !wxUSE_UNICODE
                             m_FontsEncTable[i][j][k][l][m] = wxFONTENCODING_DEFAULT;
 #endif

@@ -151,7 +151,6 @@ class HP_TagHandler : public wxHtmlTagHandler
         {
             m_data = NULL;
             m_book = b;
-            m_name = m_page = wxEmptyString;
             m_level = 0;
             m_id = wxID_ANY;
             m_count = 0;
@@ -656,10 +655,10 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
     wxString title = _("noname"),
              safetitle,
-             start = wxEmptyString,
-             contents = wxEmptyString,
-             index = wxEmptyString,
-             charset = wxEmptyString;
+             start,
+             contents,
+             index,
+             charset;
 
     fi = fsys.OpenFile(book);
     if (fi == NULL)
