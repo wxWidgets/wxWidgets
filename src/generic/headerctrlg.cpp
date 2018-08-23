@@ -172,6 +172,7 @@ int wxHeaderCtrl::GetColEnd(unsigned int idx) const
 unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
 {
     int pos = 0;
+    int xLogical = ( x - m_scrollOffset );
     const unsigned count = GetColumnCount();
     for ( unsigned n = 0; n < count; n++ )
     {
@@ -186,7 +187,7 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
         // line separating it from the next column
         //
         // TODO: don't hardcode sensitivity
-        if ( col.IsResizeable() && abs(x - pos) < 8 )
+        if ( col.IsResizeable() && abs(xLogical - pos) < 8 )
         {
             if ( onSeparator )
                 *onSeparator = true;
@@ -194,7 +195,7 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
         }
 
         // inside this column?
-        if ( x < pos )
+        if ( xLogical < pos )
         {
             if ( onSeparator )
                 *onSeparator = false;
@@ -427,7 +428,7 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
         event.SetEventObject(this);
         event.SetColumn(colOld);
 
-        const unsigned pos = GetColumnPos(FindColumnAtPoint(xPhysical));
+        const unsigned pos = GetColumnPos(colNew);
         event.SetNewOrder(pos);
 
         if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
@@ -595,7 +596,6 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 
     // account for the control displacement
     const int xPhysical = mevent.GetX();
-    const int xLogical = xPhysical - m_scrollOffset;
 
     // first deal with the [continuation of any] dragging operations in
     // progress
@@ -630,7 +630,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     bool onSeparator;
     const unsigned col = mevent.Leaving()
                             ? (onSeparator = false, COL_NONE)
-                            : FindColumnAtPoint(xLogical, &onSeparator);
+                            : FindColumnAtPoint(xPhysical, &onSeparator);
 
 
     // update the highlighted column if it changed
