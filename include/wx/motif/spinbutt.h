@@ -71,5 +71,7 @@ private:
     int m_pos;
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxSpinButton, wxSpinButtonBase);
+
 #endif
 // _WX_SPINBUTT_H_

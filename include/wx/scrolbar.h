@@ -16,6 +16,7 @@
 #if wxUSE_SCROLLBAR
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxScrollBarNameStr[];
 
@@ -61,6 +62,8 @@ public:
 private:
     wxDECLARE_NO_COPY_CLASS(wxScrollBarBase);
 };
+
+wxDECLARE_DATA_TRANSFER_SCROLLBAR();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/scrolbar.h"

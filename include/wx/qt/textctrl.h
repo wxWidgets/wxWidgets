@@ -77,4 +77,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxTextCtrl, wxTextCtrlBase);
+
 #endif // _WX_QT_TEXTCTRL_H_

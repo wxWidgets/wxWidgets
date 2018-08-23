@@ -51,6 +51,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxToggleButton, wxToggleButtonBase);
 
 class WXDLLIMPEXP_CORE wxBitmapToggleButton : public wxToggleButton
 {
@@ -80,6 +81,8 @@ public:
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapToggleButton);
 };
+
+wxDECLARE_DATA_TRANSFER_FWD(wxBitmapToggleButton, wxToggleButton);
 
 #endif // _WX_TOGGLEBUTTON_H_
 

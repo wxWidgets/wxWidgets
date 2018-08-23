@@ -200,6 +200,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxListBox);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxListBox, wxListBoxBase);
+
 #endif // wxUSE_LISTBOX
 
 #endif

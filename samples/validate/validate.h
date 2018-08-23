@@ -16,6 +16,8 @@
 #include "wx/listbox.h"
 #include "wx/string.h"
 
+#define USE_CUSTOM_VALIDATOR 0
+
 // Define a new application type
 class MyApp : public wxApp
 {
@@ -48,7 +50,6 @@ public:
             const wxSize& size = wxDefaultSize,
             const long style = wxDEFAULT_DIALOG_STYLE);
 
-    bool TransferDataToWindow() wxOVERRIDE;
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
 
@@ -84,6 +85,8 @@ public:
     int m_radiobox_choice;
 };
 
+#if USE_CUSTOM_VALIDATOR
+
 class MyComboBoxValidator : public wxValidator
 {
 public:
@@ -101,6 +104,13 @@ public:
 protected:
     wxString* m_var;
 };
+
+#else
+
+// Just specialize wxGenericValidatorType<wxComboBox, wxString>::Validate()
+// to get the same functionality as MyComboBoxValidator class above.
+
+#endif // USE_CUSTOM_VALIDATOR
 
 enum
 {

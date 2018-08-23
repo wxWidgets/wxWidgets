@@ -16,6 +16,7 @@
 #if wxUSE_CHECKBOX
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 
 /*
@@ -161,6 +162,8 @@ protected:
 private:
     wxDECLARE_NO_COPY_CLASS(wxCheckBoxBase);
 };
+
+wxDECLARE_DATA_TRANSFER_CHECKBOX();
 
 // Most ports support 3 state checkboxes so define this by default.
 #define wxHAS_3STATE_CHECKBOX

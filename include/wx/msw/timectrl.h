@@ -59,4 +59,8 @@ protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTimePickerCtrl);
 };
 
+// wxDateTimePickerCtrlBase is the ultimate base which implements
+// data transfer for date/time control.
+wxDECLARE_DATA_TRANSFER_FWD(wxTimePickerCtrl, wxDateTimePickerCtrlBase);
+
 #endif // _WX_MSW_TIMECTRL_H_

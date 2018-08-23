@@ -307,4 +307,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxListBox);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxListBox, wxListBoxBase);
+
 #endif // _WX_UNIV_LISTBOX_H_

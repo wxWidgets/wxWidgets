@@ -892,6 +892,7 @@ GUI_CMN_HDR =
     wx/ctrlsub.h
     wx/cursor.h
     wx/custombgwin.h
+    wx/datatransf.h
     wx/dc.h
     wx/dcclient.h
     wx/dcgraph.h

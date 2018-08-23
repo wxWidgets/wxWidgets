@@ -58,4 +58,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS( wxSlider );
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxSlider, wxSliderBase);
+
 #endif // _WX_QT_SLIDER_H_

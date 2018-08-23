@@ -64,4 +64,6 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxStaticText, wxStaticTextBase);
+
 #endif // _WX_UNIV_STATTEXT_H_

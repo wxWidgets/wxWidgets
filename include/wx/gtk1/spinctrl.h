@@ -15,6 +15,7 @@
 #if wxUSE_SPINCTRL
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 //-----------------------------------------------------------------------------
 // wxSpinCtrl
@@ -89,6 +90,11 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
     wxDECLARE_EVENT_TABLE();
 };
+
+// As wxSpinCtrl does not derive from wxSpinCtrlBase, so we can't just use
+// wxDECLARE_DATA_TRANSFER_FWD(wxSpinCtrl, wxSpinCtrlBase);
+
+wxDECLARE_DATA_TRANSFER_SPINCTRL(true);
 
 #endif
     // wxUSE_SPINCTRL

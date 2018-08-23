@@ -62,4 +62,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxToggleButton, wxToggleButtonBase);
+
 #endif // _WX_UNIV_TGLBTN_H_

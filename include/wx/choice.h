@@ -20,6 +20,7 @@
 #if wxUSE_CHOICE
 
 #include "wx/ctrlsub.h"     // the base class
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // global data
@@ -67,6 +68,8 @@ protected:
 private:
     wxDECLARE_NO_COPY_CLASS(wxChoiceBase);
 };
+
+wxDECLARE_DATA_TRANSFER_CHOICE();
 
 // ----------------------------------------------------------------------------
 // include the platform-dependent class definition

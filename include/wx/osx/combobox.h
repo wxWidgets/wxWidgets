@@ -137,4 +137,6 @@ protected:
     wxComboBoxDataArray m_datas;
 };
 
+wxDECLARE_DATA_TRANSFER_COMBOBOX();
+
 #endif // _WX_COMBOBOX_H_

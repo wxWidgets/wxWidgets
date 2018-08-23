@@ -51,5 +51,7 @@ private:
     virtual void DoMoveWindow(int x, int y, int width, int height);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxGauge, wxGaugeBase);
+
 #endif
 // _WX_GAUGE_H_

@@ -1096,6 +1096,7 @@ set(GUI_CMN_HDR
     wx/xpmdecod.h
     wx/xpmhand.h
     wx/xrc/xmlreshandler.h
+    wx/datatransf.h
 )
 
 set(UNIX_SRC

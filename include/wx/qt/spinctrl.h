@@ -88,6 +88,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
 };
 
+wxDECLARE_DATA_TRANSFER_SPINCTRL(true);
+
 class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxSpinCtrlQt< double, QDoubleSpinBox >
 {
 public:
@@ -123,5 +125,7 @@ public:
 private:
     wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );
 };
+
+wxDECLARE_DATA_TRANSFER_SPINCTRLDOUBLE(true);
 
 #endif // _WX_QT_SPINCTRL_H_

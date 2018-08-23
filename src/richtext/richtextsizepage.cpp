@@ -686,7 +686,7 @@ void wxRichTextSizePage::CreateControls()
 
 #if wxUSE_VALIDATORS
     // Set validators
-    m_positionModeCtrl->SetValidator( wxGenericValidator(& m_positionMode) );
+    wxSetGenericValidator(m_positionModeCtrl, & m_positionMode);
 #endif
 ////@end wxRichTextSizePage content construction
 

@@ -81,4 +81,6 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxSlider, wxSliderBase);
+
 #endif // _WX_GTK_SLIDER_H_

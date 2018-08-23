@@ -44,4 +44,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckBox, wxCheckBoxBase);
+
 #endif // _WX_QT_CHECKBOX_H_

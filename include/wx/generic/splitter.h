@@ -13,6 +13,7 @@
 
 #include "wx/window.h"                      // base class declaration
 #include "wx/containr.h"                    // wxControlContainer
+#include "wx/datatransf.h"
 
 class WXDLLIMPEXP_FWD_CORE wxSplitterEvent;
 
@@ -305,6 +306,8 @@ private:
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxSplitterWindow);
 };
+
+wxDECLARE_DATA_TRANSFER_SPLITTERWINDOW();
 
 // ----------------------------------------------------------------------------
 // event class and macros

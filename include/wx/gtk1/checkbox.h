@@ -62,4 +62,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckBox, wxCheckBoxBase);
+
 #endif // __GTKCHECKBOXH__

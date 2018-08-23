@@ -17,6 +17,7 @@
 #if wxUSE_COLLPANE
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 // class name
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCollapsiblePaneNameStr[];
@@ -45,6 +46,7 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE = 0;
 };
 
+wxDECLARE_DATA_TRANSFER_COLLAPSIBLEPANE();
 
 // ----------------------------------------------------------------------------
 // event types and macros

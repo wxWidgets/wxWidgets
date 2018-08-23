@@ -90,4 +90,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckListBox, wxCheckListBoxBase);
+
 #endif // _WX_MAC_CHECKLST_H_

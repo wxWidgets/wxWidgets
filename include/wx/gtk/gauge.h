@@ -73,5 +73,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxGauge);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxGauge, wxGaugeBase);
+
 #endif
     // _WX_GTK_GAUGE_H_

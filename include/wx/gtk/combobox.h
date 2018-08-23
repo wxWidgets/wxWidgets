@@ -159,4 +159,6 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+wxDECLARE_DATA_TRANSFER_COMBOBOX();
+
 #endif // _WX_GTK_COMBOBOX_H_

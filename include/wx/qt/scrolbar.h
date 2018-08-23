@@ -51,5 +51,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxScrollBar, wxScrollBarBase);
 
 #endif // _WX_QT_SCROLBAR_H_

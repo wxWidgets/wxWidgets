@@ -168,6 +168,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxSpinCtrl);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxSpinCtrl, wxSpinButton);
+
 #endif // wxUSE_SPINCTRL
 
 #endif // _WX_MSW_SPINCTRL_H_

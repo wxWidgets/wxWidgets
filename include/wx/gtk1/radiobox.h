@@ -132,4 +132,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxRadioBox, wxRadioBoxBase);
+
 #endif // _WX_GTK_RADIOBOX_H_

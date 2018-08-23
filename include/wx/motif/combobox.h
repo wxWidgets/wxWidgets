@@ -129,4 +129,6 @@ public:
     wxDECLARE_DYNAMIC_CLASS(wxComboBox);
 };
 
+wxDECLARE_DATA_TRANSFER_COMBOBOX();
+
 #endif // _WX_COMBOBOX_H_

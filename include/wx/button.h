@@ -16,6 +16,7 @@
 #if wxUSE_BUTTON
 
 #include "wx/anybutton.h"
+#include "wx/datatransf.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
 
@@ -45,6 +46,8 @@ public:
 protected:
     wxDECLARE_NO_COPY_CLASS(wxButtonBase);
 };
+
+wxDECLARE_DATA_TRANSFER_BUTTON();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/button.h"

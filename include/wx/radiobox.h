@@ -16,6 +16,7 @@
 #if wxUSE_RADIOBOX
 
 #include "wx/ctrlsub.h"
+#include "wx/datatransf.h"
 
 #if wxUSE_TOOLTIPS
 
@@ -150,6 +151,8 @@ private:
     wxArrayString m_itemsHelpTexts;
 #endif // wxUSE_HELP
 };
+
+wxDECLARE_DATA_TRANSFER_RADIOBOX();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/radiobox.h"

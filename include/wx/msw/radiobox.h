@@ -180,5 +180,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxRadioBox);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxRadioBox, wxRadioBoxBase);
+
 #endif
     // _WX_RADIOBOX_H_

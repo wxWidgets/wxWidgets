@@ -98,6 +98,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSpinButton);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxSpinButton, wxSpinButtonBase);
+
 // ----------------------------------------------------------------------------
 // wxStdSpinButtonInputHandler: manages clicks on them (use arrows like
 // wxStdScrollBarInputHandler) and processes keyboard events too

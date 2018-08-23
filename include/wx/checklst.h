@@ -16,6 +16,7 @@
 #if wxUSE_CHECKLISTBOX
 
 #include "wx/listbox.h"
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // wxCheckListBox: a listbox whose items may be checked
@@ -34,6 +35,8 @@ public:
 
     wxDECLARE_NO_COPY_CLASS(wxCheckListBoxBase);
 };
+
+wxDECLARE_DATA_TRANSFER_CHECKLISTBOX();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/checklst.h"

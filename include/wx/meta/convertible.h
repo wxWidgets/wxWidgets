@@ -20,6 +20,14 @@ struct wxConvertibleTo_SizeHelper
     static int  Match(...);
 };
 
+// Partial specialization to exclude conversion to void from being considered 
+// as this is certainly not the intent of wxConvertibleTo<>.
+template <class D>
+struct wxConvertibleTo_SizeHelper<D, void>
+{
+    static int Match(void* pb);
+};
+
 // Helper to decide if an object of type D is convertible to type B (the test
 // succeeds in particular when D derives from B)
 template <class D, class B>

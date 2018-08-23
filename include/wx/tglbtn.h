@@ -18,6 +18,7 @@
 
 #include "wx/event.h"
 #include "wx/anybutton.h"     // base class
+#include "wx/datatransf.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 
@@ -67,6 +68,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxToggleButtonBase);
 };
 
+wxDECLARE_DATA_TRANSFER_TOGGLEBUTTON();
 
 #define EVT_TOGGLEBUTTON(id, fn) \
     wx__DECLARE_EVT1(wxEVT_TOGGLEBUTTON, id, wxCommandEventHandler(fn))

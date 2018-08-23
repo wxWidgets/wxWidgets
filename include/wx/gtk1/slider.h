@@ -70,4 +70,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxSlider, wxSliderBase);
+
 #endif // __GTKSLIDERH__

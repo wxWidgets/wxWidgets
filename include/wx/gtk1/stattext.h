@@ -52,4 +52,6 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxStaticText, wxStaticTextBase);
+
 #endif // __GTKSTATICTEXTH__

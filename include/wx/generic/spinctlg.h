@@ -344,7 +344,11 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
 };
 
-#endif // wxHAS_NATIVE_SPINCTRL
+wxDECLARE_DATA_TRANSFER_SPINCTRL(false);
+
+#endif // !wxHAS_NATIVE_SPINCTRL
+
+#if !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
 
 //-----------------------------------------------------------------------------
 // wxSpinCtrlDouble
@@ -425,5 +429,9 @@ private:
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };
+
+wxDECLARE_DATA_TRANSFER_SPINCTRLDOUBLE(false);
+
+#endif // !wxHAS_NATIVE_SPINCTRLDOUBLE
 
 #endif // _WX_GENERIC_SPINCTRL_H_

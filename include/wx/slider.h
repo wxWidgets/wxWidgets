@@ -20,6 +20,7 @@
 #if wxUSE_SLIDER
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // wxSlider flags
@@ -122,6 +123,8 @@ protected:
 private:
     wxDECLARE_NO_COPY_CLASS(wxSliderBase);
 };
+
+wxDECLARE_DATA_TRANSFER_SLIDER();
 
 // ----------------------------------------------------------------------------
 // include the real class declaration

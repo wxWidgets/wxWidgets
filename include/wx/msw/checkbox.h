@@ -77,4 +77,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckBox, wxCheckBoxBase);
+
 #endif // _WX_CHECKBOX_H_

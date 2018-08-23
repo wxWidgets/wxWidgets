@@ -146,6 +146,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
 };
 
+wxDECLARE_DATA_TRANSFER_SPINCTRL(true);
+
 //-----------------------------------------------------------------------------
 // wxSpinCtrlDouble - a double valued spin control
 //-----------------------------------------------------------------------------
@@ -201,5 +203,7 @@ public:
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };
+
+wxDECLARE_DATA_TRANSFER_SPINCTRLDOUBLE(true);
 
 #endif // _WX_GTK_SPINCTRL_H_

@@ -59,5 +59,7 @@ protected:
     WXWidget              m_labelWidget;
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxStaticText, wxStaticTextBase);
+
 #endif
 // _WX_STATTEXT_H_

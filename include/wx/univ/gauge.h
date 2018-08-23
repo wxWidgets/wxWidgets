@@ -71,4 +71,6 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxGauge);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxGauge, wxGaugeBase);
+
 #endif // _WX_UNIV_GAUGE_H_

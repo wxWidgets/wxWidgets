@@ -100,5 +100,7 @@ private:
     void SetSelectionPolicy();
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxListBox, wxListBoxBase);
+
 #endif
 // _WX_LISTBOX_H_

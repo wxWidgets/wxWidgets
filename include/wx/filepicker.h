@@ -17,6 +17,8 @@
 
 #include "wx/pickerbase.h"
 #include "wx/filename.h"
+#include "wx/datatransf.h"
+
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 class WXDLLIMPEXP_FWD_CORE wxFileDirPickerEvent;
@@ -207,6 +209,8 @@ protected:
     wxFileDirPickerWidgetBase *m_pickerIface;
 };
 
+wxDECLARE_DATA_TRANSFER_FILEDIRPICKER();
+
 #endif  // wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
 
@@ -312,6 +316,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxFilePickerCtrl);
 };
 
+wxDECLARE_DATA_TRANSFER_FILEPICKER();
+
 #endif      // wxUSE_FILEPICKERCTRL
 
 
@@ -407,6 +413,8 @@ protected:
 private:
     wxDECLARE_DYNAMIC_CLASS(wxDirPickerCtrl);
 };
+
+wxDECLARE_DATA_TRANSFER_DIRPICKER();
 
 #endif      // wxUSE_DIRPICKERCTRL
 

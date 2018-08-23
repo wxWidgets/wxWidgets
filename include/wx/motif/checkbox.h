@@ -57,5 +57,7 @@ public:
     wxEventType m_evtType;
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxCheckBox, wxCheckBoxBase);
+
 #endif
 // _WX_CHECKBOX_H_

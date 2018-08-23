@@ -20,6 +20,7 @@
 #if wxUSE_LISTBOX
 
 #include "wx/ctrlsub.h"         // base class
+#include "wx/datatransf.h"
 
 // forward declarations are enough here
 class WXDLLIMPEXP_FWD_BASE wxArrayInt;
@@ -139,6 +140,8 @@ protected:
 private:
     wxDECLARE_NO_COPY_CLASS(wxListBoxBase);
 };
+
+wxDECLARE_DATA_TRANSFER_LISTBOX();
 
 // ----------------------------------------------------------------------------
 // include the platform-specific class declaration

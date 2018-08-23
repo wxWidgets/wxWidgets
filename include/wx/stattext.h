@@ -16,6 +16,7 @@
 #if wxUSE_STATTEXT
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 /*
  * wxStaticText flags
@@ -86,6 +87,8 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
 private:
     wxDECLARE_NO_COPY_CLASS(wxStaticTextBase);
 };
+
+wxDECLARE_DATA_TRANSFER_STATICTEXT();
 
 // see wx/generic/stattextg.h for the explanation
 #ifndef wxNO_PORT_STATTEXT_INCLUDE

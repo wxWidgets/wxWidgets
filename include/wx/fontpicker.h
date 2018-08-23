@@ -17,6 +17,7 @@
 #if wxUSE_FONTPICKERCTRL
 
 #include "wx/pickerbase.h"
+#include "wx/datatransf.h"
 
 
 class WXDLLIMPEXP_FWD_CORE wxFontPickerEvent;
@@ -191,6 +192,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxFontPickerCtrl);
 };
 
+wxDECLARE_DATA_TRANSFER_FONTPICKER();
 
 // ----------------------------------------------------------------------------
 // wxFontPickerEvent: used by wxFontPickerCtrl only

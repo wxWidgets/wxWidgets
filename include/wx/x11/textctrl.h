@@ -311,6 +311,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxTextCtrl);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxTextCtrl, wxTextCtrlBase);
+
 //-----------------------------------------------------------------------------
 // this is superfluous here but helps to compile
 //-----------------------------------------------------------------------------

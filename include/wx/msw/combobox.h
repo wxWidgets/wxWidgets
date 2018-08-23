@@ -179,6 +179,8 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+wxDECLARE_DATA_TRANSFER_COMBOBOX();
+
 #endif // wxUSE_COMBOBOX
 
 #endif // _WX_COMBOBOX_H_

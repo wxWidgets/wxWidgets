@@ -16,6 +16,7 @@
 #if wxUSE_GAUGE
 
 #include "wx/control.h"
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // wxGauge style flags
@@ -120,6 +121,8 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxGaugeBase);
 };
+
+wxDECLARE_DATA_TRANSFER_GAUGE();
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/gauge.h"

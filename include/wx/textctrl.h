@@ -23,6 +23,8 @@
 #include "wx/textentry.h"       // single-line text entry interface
 #include "wx/dynarray.h"        // wxArrayInt
 #include "wx/gdicmn.h"          // wxPoint
+#include "wx/filename.h"
+#include "wx/datatransf.h"
 
 #if wxUSE_STD_IOSTREAM
     #include "wx/ioswrap.h"
@@ -765,6 +767,8 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     wxDECLARE_ABSTRACT_CLASS(wxTextCtrlBase);
 };
+
+wxDECLARE_DATA_TRANSFER_TEXTCTRL();
 
 // ----------------------------------------------------------------------------
 // include the platform-dependent class definition

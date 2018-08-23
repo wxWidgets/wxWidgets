@@ -78,6 +78,8 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleBitmapButton);
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxToggleBitmapButton, wxToggleButtonBase);
+
 //-----------------------------------------------------------------------------
 // wxToggleButton
 //-----------------------------------------------------------------------------
@@ -131,6 +133,29 @@ public:
 private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
 };
+
+#if wxUSE_VALIDATORS
+
+// As wxToggleButton does not derive from wxToggleButtonBase, so we can't just use
+// wxDECLARE_DATA_TRANSFER_FWD(wxToggleButton, wxToggleButtonBase);
+
+template<>
+struct WXDLLIMPEXP_CORE wxDataTransfer<wxToggleButton>
+{
+    static bool To(wxToggleButton* btn, bool* data)
+    {
+        btn->SetValue(*data);
+        return true;
+    }
+
+    static bool From(wxToggleButton* btn, bool* data)
+    {
+        *data = btn->GetValue();
+        return true;
+    }
+};
+
+#endif // wxUSE_VALIDATORS
 
 #endif // _WX_GTK_TOGGLEBUTTON_H_
 

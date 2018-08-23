@@ -22,6 +22,7 @@
 #include "wx/control.h"
 #include "wx/event.h"
 #include "wx/range.h"
+#include "wx/datatransf.h"
 
 #define wxSPIN_BUTTON_NAME wxT("wxSpinButton")
 
@@ -69,6 +70,8 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxSpinButtonBase);
 };
+
+wxDECLARE_DATA_TRANSFER_SPINBUTTON();
 
 // ----------------------------------------------------------------------------
 // include the declaration of the real class

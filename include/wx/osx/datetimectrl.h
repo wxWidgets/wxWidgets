@@ -30,4 +30,6 @@ protected:
     wxDateTimeWidgetImpl* GetDateTimePeer() const;
 };
 
+wxDECLARE_DATA_TRANSFER_FWD(wxDateTimePickerCtrl, wxDateTimePickerCtrlBase);
+
 #endif // _WX_OSX_DATETIMECTRL_H_

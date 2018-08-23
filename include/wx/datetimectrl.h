@@ -19,6 +19,7 @@
 #include "wx/control.h"         // the base class
 
 #include "wx/datetime.h"
+#include "wx/datatransf.h"
 
 // ----------------------------------------------------------------------------
 // wxDateTimePickerCtrl: Private common base class of wx{Date,Time}PickerCtrl.
@@ -33,6 +34,8 @@ public:
     virtual void SetValue(const wxDateTime& dt) = 0;
     virtual wxDateTime GetValue() const = 0;
 };
+
+wxDECLARE_DATA_TRANSFER_DATETIMEPICKER();
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/datetimectrl.h"
