@@ -172,7 +172,7 @@ int wxHeaderCtrl::GetColEnd(unsigned int idx) const
 unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
 {
     int pos = 0;
-    const int xLogical = ( x - m_scrollOffset );
+    int xLogical = ( x - m_scrollOffset );
     const unsigned count = GetColumnCount();
     for ( unsigned n = 0; n < count; n++ )
     {
