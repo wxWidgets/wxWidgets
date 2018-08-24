@@ -795,7 +795,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
             }
         }
 
-        SendEvent(id, checked);
+        item->GetMenu()->SendEvent(id, checked);
     }
 
     return true;
