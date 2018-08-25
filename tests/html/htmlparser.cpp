@@ -24,37 +24,8 @@
 
 #include "wx/html/winpars.h"
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class HtmlParserTestCase : public CppUnit::TestCase
-{
-public:
-    HtmlParserTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( HtmlParserTestCase );
-        CPPUNIT_TEST( Invalid );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Invalid();
-
-    wxDECLARE_NO_COPY_CLASS(HtmlParserTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( HtmlParserTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( HtmlParserTestCase, "HtmlParserTestCase" );
-
-// ----------------------------------------------------------------------------
-// tests themselves
-// ----------------------------------------------------------------------------
-
 // Test that parsing invalid HTML simply fails but doesn't crash for example.
-void HtmlParserTestCase::Invalid()
+TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
 {
     class NullParser : public wxHtmlWinParser
     {
