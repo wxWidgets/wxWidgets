@@ -445,7 +445,7 @@ protected:
 class WXDLLIMPEXP_HTML wxHtmlContainerCell : public wxHtmlCell
 {
 public:
-    wxHtmlContainerCell(wxHtmlContainerCell *parent);
+    explicit wxHtmlContainerCell(wxHtmlContainerCell *parent);
     virtual ~wxHtmlContainerCell();
 
     virtual void Layout(int w) wxOVERRIDE;

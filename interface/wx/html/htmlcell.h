@@ -471,7 +471,7 @@ public:
     /**
         Constructor. @a parent is pointer to parent container or @NULL.
     */
-    wxHtmlContainerCell(wxHtmlContainerCell* parent);
+    explicit wxHtmlContainerCell(wxHtmlContainerCell* parent);
 
     /**
         Detach a child cell.
