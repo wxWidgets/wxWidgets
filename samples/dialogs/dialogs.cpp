@@ -6,7 +6,7 @@
 // Copyright:   (c) Julian Smart
 //              (c) 2004 ABX
 //              (c) Vadim Zeitlin
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -2845,7 +2845,7 @@ static void InitAboutInfoAll(wxAboutDialogInfo& info)
 
     info.SetDocWriters(docwriters);
     info.SetLicence(wxString::FromAscii(
-"                wxWidgets Library Licence, Version 3.1\n"
+"                wxWindows Library Licence, Version 3.1\n"
 "                ======================================\n"
 "\n"
 "  Copyright (c) 1998-2018 Julian Smart, Robert Roebling et al\n"
@@ -2853,7 +2853,7 @@ static void InitAboutInfoAll(wxAboutDialogInfo& info)
 "  Everyone is permitted to copy and distribute verbatim copies\n"
 "  of this licence document, but changing it is not allowed.\n"
 "\n"
-"                       WXWIDGETS LIBRARY LICENCE\n"
+"                       WXWINDOWS LIBRARY LICENCE\n"
 "     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n"
 "\n"
 "                    ...and so on and so forth...\n"
