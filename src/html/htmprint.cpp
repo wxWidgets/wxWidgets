@@ -70,6 +70,7 @@ wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
     m_DC = NULL;
     m_Width = m_Height = 0;
     m_Cells = NULL;
+    m_ownsCells = false;
     m_Parser = new wxHtmlWinParser();
     m_FS = new wxFileSystem();
     m_Parser->SetFS(m_FS);
@@ -80,7 +81,9 @@ wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
 
 wxHtmlDCRenderer::~wxHtmlDCRenderer()
 {
-    if (m_Cells) delete m_Cells;
+    if ( m_ownsCells )
+        delete m_Cells;
+
     if (m_Parser) delete m_Parser;
     if (m_FS) delete m_FS;
 }
@@ -110,12 +113,31 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
     wxCHECK_RET( m_DC, "SetDC() must be called before SetHtmlText()" );
     wxCHECK_RET( m_Width, "SetSize() must be called before SetHtmlText()" );
 
-    wxDELETE(m_Cells);
-
     m_FS->ChangePathTo(basepath, isdir);
-    m_Cells = (wxHtmlContainerCell*) m_Parser->Parse(html);
+
+    wxHtmlContainerCell* const cell = (wxHtmlContainerCell*) m_Parser->Parse(html);
+    wxCHECK_RET( cell, "Failed to parse HTML" );
+
+    DoSetHtmlCell(cell);
+
+    m_ownsCells = true;
+}
+
+void wxHtmlDCRenderer::DoSetHtmlCell(wxHtmlContainerCell* cell)
+{
+    if ( m_ownsCells )
+        delete m_Cells;
+
+    m_Cells = cell;
     m_Cells->SetIndent(0, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
     m_Cells->Layout(m_Width);
+}
+
+void wxHtmlDCRenderer::SetHtmlCell(wxHtmlContainerCell& cell)
+{
+    DoSetHtmlCell(&cell);
+
+    m_ownsCells = false;
 }
 
 
