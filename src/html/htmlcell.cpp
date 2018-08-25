@@ -1159,6 +1159,43 @@ void wxHtmlContainerCell::InsertCell(wxHtmlCell *f)
 
 
 
+void wxHtmlContainerCell::Detach(wxHtmlCell *cell)
+{
+    wxHtmlCell* const firstChild = GetFirstChild();
+    if ( cell == firstChild )
+    {
+        m_Cells = cell->GetNext();
+        if ( m_LastCell == cell )
+            m_LastCell = NULL;
+    }
+    else // Not the first child.
+    {
+        for ( wxHtmlCell* prev = firstChild;; )
+        {
+            wxHtmlCell* const next = prev->GetNext();
+
+            // We can't reach the end of the children list without finding this
+            // cell, normally.
+            wxCHECK_RET( next,  "Detaching cell which is not our child" );
+
+            if ( cell == next )
+            {
+                prev->SetNext(cell->GetNext());
+                if ( m_LastCell == cell )
+                    m_LastCell = prev;
+                break;
+            }
+
+            prev = next;
+        }
+    }
+
+    cell->SetParent(NULL);
+    cell->SetNext(NULL);
+}
+
+
+
 void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
 {
     wxString alg;

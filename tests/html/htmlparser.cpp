@@ -46,4 +46,64 @@ TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
     p.Parse("<!---");
 }
 
+TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
+{
+    wxMemoryDC dc;
+
+    wxHtmlContainerCell* const top = new wxHtmlContainerCell(NULL);
+    wxHtmlContainerCell* const cont = new wxHtmlContainerCell(NULL);
+    wxHtmlCell* const cell1 = new wxHtmlWordCell("Hello", dc);
+    wxHtmlCell* const cell2 = new wxHtmlColourCell(*wxRED);
+    wxHtmlCell* const cell3 = new wxHtmlWordCell("world", dc);
+
+    cont->InsertCell(cell1);
+    cont->InsertCell(cell2);
+    cont->InsertCell(cell3);
+    top->InsertCell(cont);
+
+    SECTION("container")
+    {
+        top->Detach(cont);
+        CHECK( top->GetFirstChild() == NULL );
+
+        delete cont;
+    }
+
+    SECTION("first-child")
+    {
+        cont->Detach(cell1);
+        CHECK( cont->GetFirstChild() == cell2 );
+
+        delete cell1;
+    }
+
+    SECTION("middle-child")
+    {
+        cont->Detach(cell2);
+        CHECK( cont->GetFirstChild() == cell1 );
+        CHECK( cell1->GetNext() == cell3 );
+
+        delete cell2;
+    }
+
+    SECTION("last-child")
+    {
+        cont->Detach(cell3);
+        CHECK( cont->GetFirstChild() == cell1 );
+        CHECK( cell1->GetNext() == cell2 );
+        CHECK( cell2->GetNext() == NULL );
+
+        delete cell3;
+    }
+
+    SECTION("invalid")
+    {
+        WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE
+        (
+            "Expected assertion for detaching non-child",
+            top->Detach(cell1);
+        );
+    }
+}
+
 #endif //wxUSE_HTML

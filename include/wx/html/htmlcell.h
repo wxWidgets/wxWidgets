@@ -459,6 +459,11 @@ public:
     // insert cell at the end of m_Cells list
     void InsertCell(wxHtmlCell *cell);
 
+    // Detach a child cell. After calling this method, it's the caller
+    // responsibility to destroy this cell (possibly by calling InsertCell()
+    // with it to attach it elsewhere).
+    void Detach(wxHtmlCell *cell);
+
     // sets horizontal/vertical alignment
     void SetAlignHor(int al) {m_AlignHor = al; m_LastLayout = -1;}
     int GetAlignHor() const {return m_AlignHor;}
