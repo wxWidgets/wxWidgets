@@ -71,9 +71,7 @@ wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
     m_Width = m_Height = 0;
     m_Cells = NULL;
     m_ownsCells = false;
-    m_Parser = new wxHtmlWinParser();
-    m_FS = new wxFileSystem();
-    m_Parser->SetFS(m_FS);
+    m_Parser.SetFS(&m_FS);
     SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
 }
 
@@ -83,9 +81,6 @@ wxHtmlDCRenderer::~wxHtmlDCRenderer()
 {
     if ( m_ownsCells )
         delete m_Cells;
-
-    if (m_Parser) delete m_Parser;
-    if (m_FS) delete m_FS;
 }
 
 
@@ -93,7 +88,7 @@ wxHtmlDCRenderer::~wxHtmlDCRenderer()
 void wxHtmlDCRenderer::SetDC(wxDC *dc, double pixel_scale, double font_scale)
 {
     m_DC = dc;
-    m_Parser->SetDC(m_DC, pixel_scale, font_scale);
+    m_Parser.SetDC(m_DC, pixel_scale, font_scale);
 }
 
 
@@ -113,9 +108,9 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
     wxCHECK_RET( m_DC, "SetDC() must be called before SetHtmlText()" );
     wxCHECK_RET( m_Width, "SetSize() must be called before SetHtmlText()" );
 
-    m_FS->ChangePathTo(basepath, isdir);
+    m_FS.ChangePathTo(basepath, isdir);
 
-    wxHtmlContainerCell* const cell = (wxHtmlContainerCell*) m_Parser->Parse(html);
+    wxHtmlContainerCell* const cell = (wxHtmlContainerCell*) m_Parser.Parse(html);
     wxCHECK_RET( cell, "Failed to parse HTML" );
 
     DoSetHtmlCell(cell);
@@ -144,7 +139,7 @@ void wxHtmlDCRenderer::SetHtmlCell(wxHtmlContainerCell& cell)
 void wxHtmlDCRenderer::SetFonts(const wxString& normal_face, const wxString& fixed_face,
                                 const int *sizes)
 {
-    m_Parser->SetFonts(normal_face, fixed_face, sizes);
+    m_Parser.SetFonts(normal_face, fixed_face, sizes);
 
     if ( m_Cells )
         m_Cells->Layout(m_Width);
@@ -155,7 +150,7 @@ void wxHtmlDCRenderer::SetStandardFonts(int size,
                                         const wxString& normal_face,
                                         const wxString& fixed_face)
 {
-    m_Parser->SetStandardFonts(size, normal_face, fixed_face);
+    m_Parser.SetStandardFonts(size, normal_face, fixed_face);
 
     if ( m_Cells )
         m_Cells->Layout(m_Width);

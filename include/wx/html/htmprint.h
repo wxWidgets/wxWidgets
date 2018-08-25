@@ -87,8 +87,8 @@ private:
     void DoSetHtmlCell(wxHtmlContainerCell* cell);
 
     wxDC *m_DC;
-    wxHtmlWinParser *m_Parser;
-    wxFileSystem *m_FS;
+    wxFileSystem m_FS;
+    wxHtmlWinParser m_Parser;
     wxHtmlContainerCell *m_Cells;
     int m_Width, m_Height;
     bool m_ownsCells;
