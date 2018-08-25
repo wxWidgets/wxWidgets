@@ -506,6 +506,9 @@ public:
 
     /**
         Inserts a new cell into the container.
+
+        Note that the container takes ownership of the cell and will delete it
+        when it itself is destroyed.
     */
     void InsertCell(wxHtmlCell* cell);
 
