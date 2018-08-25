@@ -594,7 +594,9 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSelect(wxCommandEvent& WXUNUSED(event))
 {
-    m_treeCtrl->SelectItem(m_treeCtrl->GetFocusedItem());
+    const wxTreeItemId focus = m_treeCtrl->GetFocusedItem();
+    if ( focus.IsOk() )
+        m_treeCtrl->SelectItem(focus);
 }
 
 void MyFrame::OnSelectRoot(wxCommandEvent& WXUNUSED(event))
