@@ -70,8 +70,11 @@
 /build/msw/.vs/
 
 # /build/osx
-/build/osx/wxcocoa.xcodeproj/xcuserdata
-/build/osx/wxiphone.xcodeproj/xcuserdata
+**/*.xcodeproj/*
+!**/*.xcodeproj/project.pbxproj
+!**/*.xcodeproj/xcshareddata/
+!**/*.xcworkspace/contents.xcworkspacedata
+/build/osx/build
 /build/osx/setup/cocoa/include/wx/setup.h
 /build/osx/setup/iphone/include/wx/setup.h
 
