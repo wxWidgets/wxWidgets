@@ -148,7 +148,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     forceUpper = true;
 }
 
-- (NSString *)stringForObjectValue:(id)anObject 
+- (NSString *)stringForObjectValue:(id)anObject
 {
     if(![anObject isKindOfClass:[NSString class]])
         return nil;
@@ -173,14 +173,16 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         }
     }
 
-    if ( forceUpper )
+    // wxTextEntryFormatter is always associated with single-line text entry (through wxNSTextFieldControl)
+    // so all new line characters should be replaced with spaces (like it is done in single-line NSCell).
+    NSString* lineStr = [*partialStringPtr stringByReplacingOccurrencesOfString: @"\n" withString: @" "];
+
+    NSString* newStr = forceUpper ? [lineStr uppercaseString] : lineStr;
+
+    if ( ![*partialStringPtr isEqual:newStr] )
     {
-        NSString* upper = [*partialStringPtr uppercaseString];
-        if ( ![*partialStringPtr isEqual:upper] )
-        {
-            *partialStringPtr = upper;
-            return NO;
-        }
+        *partialStringPtr = newStr;
+        return NO;
     }
 
     return YES;
@@ -1190,6 +1192,8 @@ void wxNSTextFieldControl::Init(WXWidget w)
     [m_textField setDelegate: tf];
     m_selStart = m_selEnd = 0;
     m_hasEditor = [w isKindOfClass:[NSTextField class]];
+
+    GetFormatter(); // we always need to at least replace new line characters with spaces
 }
 
 wxNSTextFieldControl::~wxNSTextFieldControl()
@@ -1470,7 +1474,6 @@ void wxNSTextFieldControl::SetJustification()
 //
 //
 //
-
 wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
@@ -1508,10 +1511,11 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         }
                 
         NSTextFieldCell* cell = [v cell];
-        [cell setUsesSingleLineMode:YES];
+        [cell setWraps:NO];
+        [cell setScrollable:YES];
 
         c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
-        
+
         if ( (style & wxNO_BORDER) || (style & wxSIMPLE_BORDER) )
         {
             // under 10.7 the textcontrol can draw its own focus

@@ -20187,7 +20187,7 @@ $as_echo_n "checking SDK deployment version... " >&6; }
         MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" buildSettings | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
 
         # If that failed, try again with the new key
-        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" == "x"; then
+        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
 
             MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
 
@@ -33023,16 +33023,6 @@ $as_echo "$as_me: WARNING: wxMutex won't be recursive on this platform" >&2;}
         fi
       fi
 
-      if test "$wxUSE_COMPILER_TLS" = "auto"; then
-          if test "$USE_NETBSD" = 1; then
-              { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling TLS under NetBSD, please contact wx-dev if it works now" >&5
-$as_echo "$as_me: WARNING: Disabling TLS under NetBSD, please contact wx-dev if it works now" >&2;}
-              wxUSE_COMPILER_TLS=no
-          else
-              wxUSE_COMPILER_TLS=yes
-          fi
-      fi
-
       if test "$wxUSE_COMPILER_TLS" = "yes"; then
                     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for __thread keyword" >&5
 $as_echo_n "checking for __thread keyword... " >&6; }
@@ -40129,7 +40119,7 @@ $as_echo "$bakefile_cv_gcc31" >&6; }
             SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
         fi
 
-        if test "x$GCC" == "xyes"; then
+        if test "x$GCC" = "xyes"; then
             PIC_FLAG="-dynamic -fPIC"
         fi
         if test "x$XLCC" = "xyes"; then

@@ -17,7 +17,7 @@
 
 #include "wx/webview.h"
 
-#if defined(__WXOSX__) 
+#if defined(__WXOSX__)
 #include "wx/osx/webview_webkit.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/webview_webkit.h"
@@ -65,8 +65,8 @@ wxWebView* wxWebView::New(const wxString& backend)
 
 // static
 wxWebView* wxWebView::New(wxWindow* parent, wxWindowID id, const wxString& url,
-                          const wxPoint& pos, const wxSize& size, 
-                          const wxString& backend, long style, 
+                          const wxPoint& pos, const wxSize& size,
+                          const wxString& backend, long style,
                           const wxString& name)
 {
     wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
@@ -79,13 +79,13 @@ wxWebView* wxWebView::New(wxWindow* parent, wxWindowID id, const wxString& url,
 }
 
 // static
-void wxWebView::RegisterFactory(const wxString& backend, 
+void wxWebView::RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory)
 {
     m_factoryMap[backend] = factory;
 }
 
-// static 
+// static
 wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backend)
 {
     // Initialise the map, it checks internally for existing factories
@@ -93,7 +93,7 @@ wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backe
 
     return m_factoryMap.find(backend);
 }
- 
+
 // static
 void wxWebView::InitFactoryMap()
 {

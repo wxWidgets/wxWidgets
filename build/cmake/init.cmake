@@ -51,10 +51,12 @@ set(wxARCH_SUFFIX)
 
 # TODO: include compiler version in wxCOMPILER_PREFIX ?
 if(WIN32)
-    if(MSVC)
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         set(wxCOMPILER_PREFIX "vc")
-    elseif(CMAKE_COMPILER_IS_GNUCXX)
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         set(wxCOMPILER_PREFIX "gcc")
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        set(wxCOMPILER_PREFIX "clang")
     else()
         message(FATAL_ERROR "Unknown WIN32 compiler type")
     endif()
@@ -74,7 +76,7 @@ if(MSVC OR MINGW)
     endif()
 
     if(MSVC)
-        # Include generator expression to supress default Debug/Release pair
+        # Include generator expression to suppress default Debug/Release pair
         set(wxPLATFORM_LIB_DIR "$<1:/>${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}")
     else()
         set(wxPLATFORM_LIB_DIR "/${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}_${lib_suffix}")

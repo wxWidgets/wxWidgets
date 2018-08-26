@@ -3516,7 +3516,6 @@ void wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem *item)
 {
     // let owner know that the edit was cancelled
     wxTreeEvent le(wxEVT_TREE_END_LABEL_EDIT, this, item);
-    le.m_label = wxEmptyString;
     le.m_editCancelled = true;
 
     GetEventHandler()->ProcessEvent( le );

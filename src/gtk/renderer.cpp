@@ -760,7 +760,10 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
 #ifdef __WXGTK3__
         GtkStyleContext* sc = gtk_widget_get_style_context(treeWidget);
         gtk_style_context_save(sc);
-        gtk_style_context_set_state(sc, GTK_STATE_FLAG_SELECTED);
+        int state = GTK_STATE_FLAG_SELECTED;
+        if (flags & wxCONTROL_FOCUSED)
+            state |= GTK_STATE_FLAG_FOCUSED;
+        gtk_style_context_set_state(sc, GtkStateFlags(state));
         gtk_style_context_add_class(sc, GTK_STYLE_CLASS_CELL);
         gtk_render_background(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
         gtk_style_context_restore(sc);

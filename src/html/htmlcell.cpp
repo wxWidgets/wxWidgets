@@ -638,7 +638,6 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_AlignVer = wxHTML_ALIGN_BOTTOM;
     m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
     m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
-    m_BkColour = wxNullColour;
     m_Border = 0;
     m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;

@@ -4645,7 +4645,7 @@ protected:
     /**
         Get the minimal width of the given column/row.
 
-        The value returned by this function may be different than that returned
+        The value returned by this function may be different from that returned
         by GetColMinimalAcceptableWidth() if SetColMinimalWidth() had been
         called for this column.
     */
@@ -4664,7 +4664,7 @@ protected:
     /**
         Returns the minimal size for the given column.
 
-        The value returned by this function may be different than that returned
+        The value returned by this function may be different from that returned
         by GetRowMinimalAcceptableHeight() if SetRowMinimalHeight() had been
         called for this row.
     */

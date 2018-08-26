@@ -612,7 +612,6 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWin
     m_Name = name;
     m_PrintData = NULL;
     m_PageSetupData = new wxPageSetupDialogData;
-    m_Headers[0] = m_Headers[1] = m_Footers[0] = m_Footers[1] = wxEmptyString;
 
     m_PageSetupData->EnableMargins(true);
     m_PageSetupData->SetMarginTopLeft(wxPoint(25, 25));

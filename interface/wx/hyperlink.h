@@ -18,7 +18,7 @@
 
     @beginEventTable{wxHyperlinkEvent}
     @event{EVT_HYPERLINK(id, func)}
-        User clicked on an hyperlink.
+        User clicked on a hyperlink.
     @endEventTable
 
     @library{wxadv}

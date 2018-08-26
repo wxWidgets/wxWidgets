@@ -60,6 +60,10 @@ const int LABEL_HORZ_OFFSET = 9;
 const int LABEL_HORZ_BORDER = 2;
 const int LABEL_VERT_BORDER = 2;
 
+// Offset of the box contents from left/right/bottom edge (top one is
+// different, see GetBordersForSizer()). This one is completely arbitrary.
+const int CHILDREN_OFFSET = 5;
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -192,10 +196,29 @@ wxSize wxStaticBox::DoGetBestSize() const
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
-    wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
+    // Base class version doesn't leave enough space at the top when the label
+    // is empty, so we can't use it here, even though the code is pretty
+    // similar.
+    if ( m_labelWin )
+    {
+        *borderTop = m_labelWin->GetSize().y;
+    }
+    else if ( !GetLabel().empty() )
+    {
+        *borderTop = GetCharHeight();
+    }
+    else // No label window nor text.
+    {
+        // This is completely arbitrary, but using the full char height in
+        // this case too seems bad as it leaves too much space at the top
+        // (although it does have the advantage of aligning the controls
+        // inside static boxes with and without labels vertically).
+        *borderTop = 2*FromDIP(CHILDREN_OFFSET);
+    }
 
-    // need extra space, don't know how much but this seems to be enough
     *borderTop += FromDIP(LABEL_VERT_BORDER);
+
+    *borderOther = FromDIP(CHILDREN_OFFSET);
 }
 
 bool wxStaticBox::SetBackgroundColour(const wxColour& colour)
