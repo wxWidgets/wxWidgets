@@ -84,6 +84,7 @@
 #    define WXMAKINGDLL_MEDIA
 #    define WXMAKINGDLL_STC
 #    define WXMAKINGDLL_WEBVIEW
+#    define WXMAKINGDLL_WEBVIEW_CHROMIUM
 #endif /* WXMAKINGDLL */
 
 /*
@@ -265,6 +266,17 @@
 #else /* not making nor using DLL */
 #    define WXDLLIMPEXP_WEBVIEW
 #    define WXDLLIMPEXP_DATA_WEBVIEW(type) type
+#endif
+
+#ifdef WXMAKINGDLL_WEBVIEW_CHROMIUM
+#    define WXDLLIMPEXP_WEBVIEW_CHROMIUM WXEXPORT
+#    define WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(type) WXEXPORT type
+#elif defined(WXUSINGDLL)
+#    define WXDLLIMPEXP_WEBVIEW_CHROMIUM WXIMPORT
+#    define WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(type) WXIMPORT type
+#else /* not making nor using DLL */
+#    define WXDLLIMPEXP_WEBVIEW_CHROMIUM
+#    define WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(type) type
 #endif
 
 /*

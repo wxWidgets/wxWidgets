@@ -21,7 +21,8 @@
     #include "wx/wx.h"
 #endif
 
-#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE
+#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_WEBKIT2 && !wxUSE_WEBVIEW_IE && \
+    !wxUSE_WEBVIEW_CHROMIUM
 #error "A wxWebView backend is required by this sample"
 #endif
 
@@ -39,6 +40,10 @@
 #include "wx/filesys.h"
 #include "wx/fs_arc.h"
 #include "wx/fs_mem.h"
+
+#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
+#include "wx/webview_chromium.h"
+#endif
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -366,7 +371,18 @@ WebFrame::WebFrame(const wxString& url) :
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
     // Create the webview
-    m_browser = wxWebView::New(this, wxID_ANY, url);
+    m_browser = wxWebView::New(this, wxID_ANY, url
+#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
+        , wxDefaultPosition,
+#ifdef __WXOSX__
+        // OSX implementation currently cannot handle the default size
+        wxSize(800, 600)
+#else
+        wxDefaultSize
+#endif
+        , wxWebViewBackendChromium
+#endif
+    );
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
     //We register the wxfs:// protocol for testing purposes

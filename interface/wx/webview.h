@@ -262,6 +262,11 @@ public:
     class. This backend has full support for custom schemes and virtual file
     systems.
 
+    @par wxWEBVIEW_CHROMIUM (MSW, OSX, GTK)
+
+    The Chromium Embedded Framework backend has to be enabled when building wxWidgets,
+    see wxWebViewChromium for additional usage and build instructions.
+
     @section async Asynchronous Notifications
 
     Many of the methods in wxWebView are asynchronous, i.e. they return
@@ -545,6 +550,10 @@ public:
 
         - When using WebKit under macOS, code execution is limited to at most
           10MiB of memory and 10 seconds of execution time.
+
+        - When using Chromium backend, retrieving the result of JavaScript
+          execution is unsupported and this function will always return false
+          if @a output is non-null to indicate this.
 
         - When using IE backend under MSW, scripts can only be executed when
           the current page is fully loaded (i.e. @c wxEVT_WEBVIEW_LOADED event

@@ -56,6 +56,11 @@
         autoconf,borland,dmars_smake,dmars,mingw,watcom
     </del-formats>
 
+    <!-- wxWebViewChromium supports only a subset of the compilers -->
+    <del-formats files="../../samples/webview_chromium/webview_chromium.bkl">
+        borland,mingw,msevc4prj,msvs2003prj,msvs2005prj,msvs2008prj
+    </del-formats>
+
     <!-- Default flags (for all formats and bakefiles): -->
     <add-flags>-Iformats</add-flags>
 
@@ -234,7 +239,7 @@
     <add-formats files="../../samples/*/*.bkl,../../samples/*/*/*.bkl">
         gnu
     </add-formats>
-    <del-formats files="../../samples/flash/flash.bkl,../../samples/mfc/mfc.bkl">
+    <del-formats files="../../samples/flash/flash.bkl,../../samples/mfc/mfc.bkl,../../samples/webview_chromium/webview_chromium.bkl">
         gnu
     </del-formats>
     <add-flags files="../../samples/*/*.bkl,../../samples/*/*/*.bkl"

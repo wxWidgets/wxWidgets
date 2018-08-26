@@ -670,6 +670,7 @@ COND_WITH_PLUGIN_SDL_1
 COND_WINDOWS_IMPLIB_1
 COND_USE_XRC_1
 COND_USE_WEBVIEW_WEBKIT2_1
+COND_USE_WEBVIEW_CHROMIUM_1
 COND_USE_THREADS_1
 COND_USE_THREADS_0
 COND_USE_STC_1
@@ -779,6 +780,7 @@ COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_UNIX_1
 COND_PLATFORM_UNIX_0
 COND_PLATFORM_OS2_1
+COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1
 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1
 COND_PLATFORM_MACOSX_1_USE_OPENGL_1
 COND_PLATFORM_MACOSX_1_USE_GUI_1
@@ -792,6 +794,7 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
+COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1
 COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0
 COND_PLATFORM_MACOSX_1
 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1
@@ -803,6 +806,7 @@ COND_MONOLITHIC_1_SHARED_1
 COND_MONOLITHIC_1_SHARED_0
 COND_MONOLITHIC_1
 COND_MONOLITHIC_0_USE_XRC_1
+COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1
 COND_MONOLITHIC_0_USE_WEBVIEW_1
 COND_MONOLITHIC_0_USE_STC_1
 COND_MONOLITHIC_0_USE_RICHTEXT_1
@@ -819,6 +823,7 @@ COND_MONOLITHIC_0_SHARED_1_USE_STC_1
 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1
 COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1
+COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1
@@ -831,6 +836,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_STC_1
 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1
 COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1
+COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1
@@ -1232,6 +1238,7 @@ enable_printarch
 enable_svg
 enable_webkit
 enable_webview
+enable_webviewchromium
 enable_graphics_ctx
 enable_clipboard
 enable_dnd
@@ -2172,6 +2179,7 @@ Optional Features:
   --enable-svg            use wxSVGFileDC device context
   --enable-webkit         use wxWebKitCtrl (Mac-only, use wxWebView instead)
   --enable-webview        use wxWebView library
+  --enable-webviewchromium        use wxWebView Chromium backend
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
@@ -8806,6 +8814,35 @@ fi
 
 
           eval "$wx_cv_use_webview"
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-webviewchromium was given.
+if test "${enable_webviewchromium+set}" = set; then :
+  enableval=$enable_webviewchromium;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=yes'
+                          else
+                            wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=no'
+                          fi
+
+else
+
+                          wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=${'DEFAULT_wxUSE_WEBVIEW_CHROMIUM":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webviewchromium"
 
 
 if test "$wxUSE_MAC" != 1; then
@@ -37802,7 +37839,7 @@ if test "$wxUSE_RICHTEXT" = "yes"; then
 fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
-    USE_WEBVIEW_WEBKIT=0
+            FOUND_WEBVIEW_BACKEND=0
     USE_WEBVIEW_WEBKIT2=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
@@ -37952,13 +37989,15 @@ fi
 	echo "$WEBKIT_PKG_ERRORS" >&5
 
 
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
-$as_echo "$as_me: WARNING: webkitgtk not found." >&2;}
+                                    wxUSE_WEBVIEW_WEBKIT="no"
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKitGTK+ not found" >&5
+$as_echo "$as_me: WARNING: WebKitGTK+ not found" >&2;}
 
 elif test $pkg_failed = untried; then
 
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
-$as_echo "$as_me: WARNING: webkitgtk not found." >&2;}
+                                    wxUSE_WEBVIEW_WEBKIT="no"
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKitGTK+ not found" >&5
+$as_echo "$as_me: WARNING: WebKitGTK+ not found" >&2;}
 
 else
 	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
@@ -37966,7 +38005,9 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                    USE_WEBVIEW_WEBKIT=1
+                                    FOUND_WEBVIEW_BACKEND=1
+                                    $as_echo "#define wxUSE_WEBVIEW_WEBKIT 1" >>confdefs.h
+
                                     CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
                                     EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
 
@@ -37982,11 +38023,14 @@ fi
 "
 if test "x$ac_cv_header_WebKit_HIWebView_h" = xyes; then :
 
-                                USE_WEBVIEW_WEBKIT=1
+                                FOUND_WEBVIEW_BACKEND=1
+                                $as_echo "#define wxUSE_WEBVIEW_WEBKIT 1" >>confdefs.h
+
                                 WEBKIT_LINK="-framework WebKit"
 
 else
 
+                                wxUSE_WEBVIEW_WEBKIT="no"
                                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKit headers not found" >&5
 $as_echo "$as_me: WARNING: WebKit headers not found" >&2;}
 
@@ -37997,36 +38041,47 @@ fi
         fi
     fi
 
-    wxUSE_WEBVIEW="no"
-    if test "$wxUSE_GTK" = 1 -o "$wxUSE_MAC" = 1; then
-        if test "$USE_WEBVIEW_WEBKIT" = 1; then
-            wxUSE_WEBVIEW="yes"
-            $as_echo "#define wxUSE_WEBVIEW_WEBKIT 1" >>confdefs.h
+    if test "$wxUSE_MSW" = 1 -a "$wxUSE_WEBVIEW_IE" = "yes"; then
+                        FOUND_WEBVIEW_BACKEND=1
+        $as_echo "#define wxUSE_WEBVIEW_IE 1" >>confdefs.h
 
-        elif test "$USE_WEBVIEW_WEBKIT2" = 1; then
-            wxUSE_WEBVIEW="yes"
-            $as_echo "#define wxUSE_WEBVIEW_WEBKIT2 1" >>confdefs.h
-
-        else
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKit not available, disabling wxWebView" >&5
-$as_echo "$as_me: WARNING: WebKit not available, disabling wxWebView" >&2;}
-        fi
-    elif test "$wxUSE_MSW" = 1; then
-        if test "$wxUSE_WEBVIEW_IE" = "yes"; then
-                                    wxUSE_WEBVIEW="yes"
-            $as_echo "#define wxUSE_WEBVIEW_IE 1" >>confdefs.h
-
-        fi
+    else
+        wxUSE_WEBVIEW_IE="no"
     fi
+    if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+                old_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="-I$srcdir/3rdparty/cef $CPPFLAGS"
+        ac_fn_c_check_header_mongrel "$LINENO" "include/cef_version.h" "ac_cv_header_include_cef_version_h" "$ac_includes_default"
+if test "x$ac_cv_header_include_cef_version_h" = xyes; then :
+
+                            FOUND_WEBVIEW_BACKEND=1
+                            USE_WEBVIEW_CHROMIUM=1
+                            $as_echo "#define wxUSE_WEBVIEW_CHROMIUM 1" >>confdefs.h
+
+
+else
+
+                            wxUSE_WEBVIEW_CHROMIUM="no"
+                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Chromium headers not found" >&5
+$as_echo "$as_me: WARNING: Chromium headers not found" >&2;}
+
 fi
 
-if test "$wxUSE_WEBVIEW" = "yes"; then
-    USE_WEBVIEW=1
-    $as_echo "#define wxUSE_WEBVIEW 1" >>confdefs.h
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
-else
-    USE_WEBVIEW=0
+        CPPFLAGS="$old_CPPFLAGS"
+    fi
+    if test "$FOUND_WEBVIEW_BACKEND" = 1; then
+        wxUSE_WEBVIEW="yes"
+        USE_WEBVIEW=1
+        $as_echo "#define wxUSE_WEBVIEW 1" >>confdefs.h
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
+    else
+        USE_WEBVIEW=0
+        wxUSE_WEBVIEW="no"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No wxWebView backends found, disabling wxWebView" >&5
+$as_echo "$as_me: WARNING: No wxWebView backends found, disabling wxWebView" >&2;}
+    fi
 fi
 
 
@@ -40797,6 +40852,11 @@ EOF
         COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_1=""
     fi
 
+    COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1=""
+    fi
+
     COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_PROPGRID" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1=""
@@ -40855,6 +40915,11 @@ EOF
     COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_WEBVIEW" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1=""
+    fi
+
+    COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1="#"
@@ -40937,6 +41002,11 @@ EOF
         COND_MONOLITHIC_0_USE_WEBVIEW_1=""
     fi
 
+    COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1=""
+    fi
+
     COND_MONOLITHIC_0_USE_XRC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_XRC" = "x1" ; then
         COND_MONOLITHIC_0_USE_XRC_1=""
@@ -40990,6 +41060,11 @@ EOF
     COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$PLATFORM_WIN32" = "x1" -a "x$SHARED" = "x0" ; then
         COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0=""
+    fi
+
+    COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$SHARED" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
@@ -41055,6 +41130,11 @@ EOF
     COND_PLATFORM_MACOSX_1_USE_SOVERSION_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_SOVERSION" = "x1" ; then
         COND_PLATFORM_MACOSX_1_USE_SOVERSION_1=""
+    fi
+
+    COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_PLATFORM_OS2_1="#"
@@ -41600,6 +41680,11 @@ EOF
     COND_USE_THREADS_1="#"
     if test "x$USE_THREADS" = "x1" ; then
         COND_USE_THREADS_1=""
+    fi
+
+    COND_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_USE_WEBVIEW_WEBKIT2_1="#"
@@ -43407,6 +43492,21 @@ echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
-
+echo $ECHO_N "                                       webview            ${wxUSE_WEBVIEW}$ECHO_C"
+if test "$wxUSE_WEBVIEW" = "yes"; then
+    echo $ECHO_N " (with backends:$ECHO_C"
+    if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
+        echo $ECHO_N " WebKit$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_IE" = "yes"; then
+        echo $ECHO_N " IE$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        echo $ECHO_N " Chromium$ECHO_C"
+    fi
+    echo ")"
+else
+    echo
+fi
 echo ""
 
