@@ -435,9 +435,26 @@ void wxModalEventLoop::OSXDoRun()
 #if OSX_USE_MODAL_SESSION
     if ( m_modalWindow )
     {
+        bool restoreWorksWhenModal = false;
+        wxDialog* const parentDialog = wxDynamicCast(wxGetTopLevelParent(m_modalWindow->GetParent()), wxDialog);
+        NSWindow* parentWindow = parentDialog && parentDialog->IsModal() ? parentDialog->GetWXWindow() : nil;
+        if ( parentWindow != nil )
+        {
+            if ( [parentWindow isKindOfClass:[NSPanel class]] &&  [(NSPanel*)parentWindow worksWhenModal] == YES )
+            {
+                [(NSPanel*)parentWindow setWorksWhenModal:NO];
+                restoreWorksWhenModal = true;
+            }
+        }
+ 
         BeginModalSession(m_modalWindow);
         wxCFEventLoop::OSXDoRun();
         EndModalSession();
+        
+        if ( restoreWorksWhenModal )
+        {
+            [(NSPanel*)parentWindow setWorksWhenModal:YES];
+        }
     }
     else
 #endif
