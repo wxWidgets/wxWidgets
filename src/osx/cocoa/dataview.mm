@@ -2520,7 +2520,7 @@ void wxCocoaDataViewControl::SetRowHeight(int height)
 
 int wxCocoaDataViewControl::GetDefaultRowHeight() const
 {
-    // Custom setup of NSLayoutManager is necessary to match NSTableView sizing.
+    // Custom setup of NSLayoutManager is necessary to match NSTableView sizing.
     // See https://stackoverflow.com/questions/17095927/dynamically-changing-row-height-after-font-size-of-entire-nstableview-nsoutlin
     NSLayoutManager *lm = [[NSLayoutManager alloc] init];
     [lm setTypesetterBehavior:NSTypesetterBehavior_10_2_WithCompatibility];
