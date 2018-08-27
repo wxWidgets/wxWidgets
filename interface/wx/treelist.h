@@ -50,7 +50,7 @@ enum
 
     @see wxTreeListCtrl
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3
@@ -79,7 +79,7 @@ public:
 
     @see wxTreeListCtrl
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3
@@ -252,7 +252,7 @@ extern const wxTreeListItem wxTLI_LAST;
         if you need to know it.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @since 2.9.3

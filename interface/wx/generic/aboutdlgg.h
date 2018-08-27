@@ -43,7 +43,7 @@
     }
     @endcode
 
-    @library{wxadv}
+    @library{wxcore}
     @category{cmndlg}
 
     @see wxAboutDialogInfo
