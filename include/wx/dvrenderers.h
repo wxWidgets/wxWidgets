@@ -27,13 +27,13 @@
     rest of the renderer classes.
  */
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewCustomRenderer;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCustomRenderer;
 
 // ----------------------------------------------------------------------------
 // wxDataViewIconText: helper class used by wxDataViewIconTextRenderer
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewIconText : public wxObject
+class WXDLLIMPEXP_CORE wxDataViewIconText : public wxObject
 {
 public:
     wxDataViewIconText( const wxString &text = wxEmptyString,
@@ -75,13 +75,13 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxDataViewIconText);
 };
 
-DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
+DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_CORE)
 
 // ----------------------------------------------------------------------------
 // wxDataViewCheckIconText: value class used by wxDataViewCheckIconTextRenderer
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCheckIconText : public wxDataViewIconText
+class WXDLLIMPEXP_CORE wxDataViewCheckIconText : public wxDataViewIconText
 {
 public:
     wxDataViewCheckIconText(const wxString& text = wxString(),
@@ -101,7 +101,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxDataViewCheckIconText);
 };
 
-DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_ADV)
+DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_CORE)
 
 // ----------------------------------------------------------------------------
 // wxDataViewRendererBase
@@ -123,7 +123,7 @@ enum wxDataViewCellRenderState
 };
 
 // helper for fine-tuning rendering of values depending on row's state
-class WXDLLIMPEXP_ADV wxDataViewValueAdjuster
+class WXDLLIMPEXP_CORE wxDataViewValueAdjuster
 {
 public:
     virtual ~wxDataViewValueAdjuster() {}
@@ -132,7 +132,7 @@ public:
     virtual wxVariant MakeHighlighted(const wxVariant& value) const { return value; }
 };
 
-class WXDLLIMPEXP_ADV wxDataViewRendererBase: public wxObject
+class WXDLLIMPEXP_CORE wxDataViewRendererBase: public wxObject
 {
 public:
     wxDataViewRendererBase( const wxString &varianttype,
@@ -300,7 +300,7 @@ private:
 // wxDataViewCustomRendererBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCustomRendererBase
+class WXDLLIMPEXP_CORE wxDataViewCustomRendererBase
     : public wxDataViewCustomRendererRealBase
 {
 public:
@@ -426,7 +426,7 @@ private:
 // wxDataViewSpinRenderer
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewSpinRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_CORE wxDataViewSpinRenderer: public wxDataViewCustomRenderer
 {
 public:
     wxDataViewSpinRenderer( int min, int max,
@@ -456,7 +456,7 @@ private:
 // wxDataViewChoiceRenderer
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewChoiceRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_CORE wxDataViewChoiceRenderer: public wxDataViewCustomRenderer
 {
 public:
     wxDataViewChoiceRenderer( const wxArrayString &choices,
@@ -485,7 +485,7 @@ private:
 // wxDataViewChoiceByIndexRenderer
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewChoiceByIndexRenderer: public wxDataViewChoiceRenderer
+class WXDLLIMPEXP_CORE wxDataViewChoiceByIndexRenderer: public wxDataViewChoiceRenderer
 {
 public:
     wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
@@ -512,7 +512,7 @@ public:
 // ----------------------------------------------------------------------------
 
 #if wxUSE_DATEPICKCTRL
-class WXDLLIMPEXP_ADV wxDataViewDateRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_CORE wxDataViewDateRenderer: public wxDataViewCustomRenderer
 {
 public:
     static wxString GetDefaultType() { return wxS("datetime"); }
@@ -545,7 +545,7 @@ typedef wxDataViewTextRenderer wxDataViewDateRenderer;
 // wxDataViewCheckIconTextRenderer: 3-state checkbox + text + optional icon
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCheckIconTextRenderer
+class WXDLLIMPEXP_CORE wxDataViewCheckIconTextRenderer
     : public wxDataViewCustomRenderer
 {
 public:

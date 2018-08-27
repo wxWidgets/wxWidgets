@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 sound: $(SOUND_OBJECTS)
-	$(CXX) -o $@ $(SOUND_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base`
+	$(CXX) -o $@ $(SOUND_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 sound_sound.o: ./sound.cpp
 	$(CXX) -c -o $@ $(SOUND_CXXFLAGS) $(CPPDEPS) $<

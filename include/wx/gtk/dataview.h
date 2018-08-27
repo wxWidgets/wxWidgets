@@ -11,7 +11,7 @@
 
 #include "wx/list.h"
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlInternal;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCtrlInternal;
 
 struct _GtkTreePath;
 
@@ -19,7 +19,7 @@ struct _GtkTreePath;
 // wxDataViewColumn
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
+class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
     wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer,
@@ -94,13 +94,13 @@ private:
 };
 
 WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
-                          class WXDLLIMPEXP_ADV);
+                          class WXDLLIMPEXP_CORE);
 
 // ---------------------------------------------------------
 // wxDataViewCtrl
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase
+class WXDLLIMPEXP_CORE wxDataViewCtrl: public wxDataViewCtrlBase
 {
 public:
     wxDataViewCtrl()

@@ -145,16 +145,10 @@
 #    define WXDLLIMPEXP_INLINE_CORE
 #endif
 
-#ifdef WXMAKINGDLL_ADV
-#    define WXDLLIMPEXP_ADV WXEXPORT
-#    define WXDLLIMPEXP_DATA_ADV(type) WXEXPORT type
-#elif defined(WXUSINGDLL)
-#    define WXDLLIMPEXP_ADV WXIMPORT
-#    define WXDLLIMPEXP_DATA_ADV(type) WXIMPORT type
-#else /* not making nor using DLL */
-#    define WXDLLIMPEXP_ADV
-#    define WXDLLIMPEXP_DATA_ADV(type) type
-#endif
+/* Advanced library doesn't exist any longer, but its macros are preserved for
+   compatibility. Do not use them in the new code. */
+#define WXDLLIMPEXP_ADV WXDLLIMPEXP_CORE
+#define WXDLLIMPEXP_DATA_ADV(type) WXDLLIMPEXP_DATA_CORE(type)
 
 #ifdef WXMAKINGDLL_QA
 #    define WXDLLIMPEXP_QA WXEXPORT
@@ -277,7 +271,6 @@
     #define WXDLLIMPEXP_FWD_BASE
     #define WXDLLIMPEXP_FWD_NET
     #define WXDLLIMPEXP_FWD_CORE
-    #define WXDLLIMPEXP_FWD_ADV
     #define WXDLLIMPEXP_FWD_QA
     #define WXDLLIMPEXP_FWD_HTML
     #define WXDLLIMPEXP_FWD_GL
@@ -294,7 +287,6 @@
     #define WXDLLIMPEXP_FWD_BASE      WXDLLIMPEXP_BASE
     #define WXDLLIMPEXP_FWD_NET       WXDLLIMPEXP_NET
     #define WXDLLIMPEXP_FWD_CORE      WXDLLIMPEXP_CORE
-    #define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_ADV
     #define WXDLLIMPEXP_FWD_QA        WXDLLIMPEXP_QA
     #define WXDLLIMPEXP_FWD_HTML      WXDLLIMPEXP_HTML
     #define WXDLLIMPEXP_FWD_GL        WXDLLIMPEXP_GL
@@ -308,6 +300,9 @@
     #define WXDLLIMPEXP_FWD_STC       WXDLLIMPEXP_STC
     #define WXDLLIMPEXP_FWD_WEBVIEW   WXDLLIMPEXP_WEBVIEW
 #endif
+
+/* This macro continues to exist for backwards compatibility only. */
+#define WXDLLIMPEXP_FWD_ADV       WXDLLIMPEXP_FWD_CORE
 
 /* for backwards compatibility, define suffix-less versions too */
 #define WXDLLEXPORT WXDLLIMPEXP_CORE

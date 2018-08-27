@@ -266,7 +266,6 @@
         <define>WXMAKINGDLL_XRC</define>
         <sources>$(XRC_SRC)</sources>
         <library>$(htmldll_library_link)</library>
-        <library>advdll</library>
         <library>coredll</library>
         <library>xmldll</library>
         <library>basedll</library>
@@ -292,7 +291,6 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_AUI</define>
         <sources>$(AUI_SRC)</sources>
-        <library>advdll</library>
         <library>coredll</library>
         <library>basedll</library>
         <msvc-headers>$(AUI_HDR)</msvc-headers>
@@ -317,7 +315,6 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_RIBBON</define>
         <sources>$(RIBBON_SRC)</sources>
-        <library>advdll</library>
         <library>coredll</library>
         <library>basedll</library>
         <msvc-headers>$(RIBBON_HDR)</msvc-headers>
@@ -342,7 +339,6 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_PROPGRID</define>
         <sources>$(PROPGRID_SRC)</sources>
-        <library>advdll</library>
         <library>coredll</library>
         <library>basedll</library>
         <msvc-headers>$(PROPGRID_HDR)</msvc-headers>
@@ -367,7 +363,6 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_RICHTEXT</define>
         <sources>$(RICHTEXT_SRC)</sources>
-        <library>advdll</library>
         <library>$(htmldll_library_link)</library>
         <library>xmldll</library>
         <library>coredll</library>

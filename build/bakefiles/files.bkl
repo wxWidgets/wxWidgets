@@ -329,6 +329,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/clrpickerg.h
     wx/generic/fontpickerg.h
     wx/generic/caret.h
+    wx/qt/calctrl.h
+    wx/generic/animate.h
+    wx/qt/dvrenderer.h
+    wx/qt/taskbar.h
+    wx/generic/activityindicator.h
+    wx/qt/dataview.h
+    wx/qt/dvrenderers.h
 </set>
 
 <set var="QT_SRC" hints="files">
@@ -420,31 +427,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
-</set>
-
-<set var="ADVANCED_QT_HDR" hints="files">
-    wx/generic/animate.h
-    wx/qt/calctrl.h
-    wx/qt/dataview.h
-    wx/qt/dvrenderer.h
-    wx/qt/dvrenderers.h
-    wx/qt/taskbar.h
-    wx/generic/activityindicator.h
-</set>
-
-<set var="ADVANCED_QT_SRC" hints="files">
-    src/generic/animateg.cpp
-    src/qt/calctrl.cpp
-    src/qt/converter.cpp
-    src/qt/dataview.cpp
-    src/qt/dvrenderer.cpp
-    src/qt/dvrenderers.cpp
-    src/unix/joystick.cpp
-    src/unix/sound.cpp
-    src/qt/taskbar.cpp
     src/common/taskbarcmn.cpp
-    src/qt/utils.cpp
+    src/unix/joystick.cpp
+    src/qt/taskbar.cpp
+    src/qt/dvrenderer.cpp
+    src/generic/animateg.cpp
+    src/qt/dataview.cpp
+    src/unix/sound.cpp
     src/generic/activityindicator.cpp
+    src/qt/calctrl.cpp
+    src/qt/dvrenderers.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
@@ -956,6 +948,41 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
     src/xrc/xmlreshandler.cpp
+    src/generic/splash.cpp
+    src/generic/notifmsgg.cpp
+    src/generic/odcombo.cpp
+    src/common/calctrlcmn.cpp
+    src/generic/grideditors.cpp
+    src/common/bmpcboxcmn.cpp
+    src/generic/grid.cpp
+    src/generic/gridctrl.cpp
+    src/generic/hyperlinkg.cpp
+    src/generic/helpext.cpp
+    src/generic/sashwin.cpp
+    src/generic/gridsel.cpp
+    src/common/addremovectrl.cpp
+    src/generic/tipdlg.cpp
+    src/generic/aboutdlgg.cpp
+    src/common/gridcmn.cpp
+    src/common/richtooltipcmn.cpp
+    src/generic/datectlg.cpp
+    src/generic/bannerwindow.cpp
+    src/generic/treelist.cpp
+    src/common/datavcmn.cpp
+    src/common/animatecmn.cpp
+    src/common/odcombocmn.cpp
+    src/common/hyperlnkcmn.cpp
+    src/generic/propdlg.cpp
+    src/generic/bmpcboxg.cpp
+    src/generic/richtooltipg.cpp
+    src/generic/timectrlg.cpp
+    src/generic/commandlinkbuttong.cpp
+    src/common/notifmsgcmn.cpp
+    src/generic/wizard.cpp
+    src/generic/datavgen.cpp
+    src/generic/editlbox.cpp
+    src/generic/laywin.cpp
+    src/generic/calctrlg.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1194,6 +1221,57 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/collheaderctrl.h
     wx/itemattr.h
     wx/peninfobase.h
+    wx/dataview.h
+    wx/generic/helpext.h
+    wx/sashwin.h
+    wx/tipdlg.h
+    wx/generic/propdlg.h
+    wx/generic/bmpcbox.h
+    wx/datetimectrl.h
+    wx/grid.h
+    wx/generic/grid.h
+    wx/wizard.h
+    wx/generic/grideditors.h
+    wx/generic/dataview.h
+    wx/generic/wizard.h
+    wx/generic/dvrenderers.h
+    wx/dateevt.h
+    wx/editlbox.h
+    wx/splash.h
+    wx/bmpcbox.h
+    wx/generic/gridctrl.h
+    wx/addremovectrl.h
+    wx/generic/notifmsg.h
+    wx/odcombo.h
+    wx/animate.h
+    wx/generic/hyperlink.h
+    wx/dcbuffer.h
+    wx/joystick.h
+    wx/timectrl.h
+    wx/hyperlink.h
+    wx/generic/aboutdlgg.h
+    wx/taskbar.h
+    wx/generic/timectrl.h
+    wx/commandlinkbutton.h
+    wx/richtooltip.h
+    wx/sound.h
+    wx/generic/laywin.h
+    wx/generic/splash.h
+    wx/generic/calctrlg.h
+    wx/generic/sashwin.h
+    wx/treelist.h
+    wx/notifmsg.h
+    wx/datectrl.h
+    wx/laywin.h
+    wx/generic/gridsel.h
+    wx/aboutdlg.h
+    wx/dvrenderers.h
+    wx/generic/datectrl.h
+    wx/bannerwindow.h
+    wx/activityindicator.h
+    wx/generic/dvrenderer.h
+    wx/calctrl.h
+    wx/propdlg.h
 </set>
 
 <!-- ====================================================================== -->
@@ -1217,12 +1295,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/fontutil.cpp
     src/unix/uiactionx11.cpp
     src/unix/utilsx11.cpp
+    src/unix/sound.cpp
+    src/common/taskbarcmn.cpp
+    src/unix/joystick.cpp
+    src/unix/taskbarx11.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
     wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
+    wx/unix/sound.h
+    wx/unix/taskbarx11.h
+    wx/unix/joystick.h
 </set>
 
 
@@ -1244,6 +1329,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/utilswin.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
+    src/msw/sound.cpp
+    src/msw/joystick.cpp
+    src/common/taskbarcmn.cpp
 </set>
 <set var="GTK_WIN32_HDR" hints="files">
     wx/generic/caret.h
@@ -1255,6 +1343,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/uuid.h
     wx/msw/dib.h
     wx/unix/fontutil.h
+    wx/msw/sound.h
+    wx/msw/joystick.h
+    wx/msw/taskbar.h
 </set>
 <set var="GTK_PLATFORM_SRC" hints="files">
     <if cond="PLATFORM_UNIX=='1'">$(XWIN_LOWLEVEL_SRC)</if>
@@ -1394,11 +1485,22 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/textentry.cpp
     src/gtk/tglbtn.cpp
     src/gtk/treeentry_gtk.c
+    src/gtk/activityindicator.cpp
+    src/gtk/calctrl.cpp
+    src/gtk/hyperlink.cpp
+    src/gtk/aboutdlg.cpp
+    src/gtk/notifmsg.cpp
+    src/gtk/taskbar.cpp
+    src/gtk/dataview.cpp
+    src/gtk/bmpcbox.cpp
+    src/gtk/animate.cpp
 </set>
 <set var="GTK2_SRC" hints="files">
     $(GTK_SRC)
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
+    src/generic/activityindicator.cpp
+    src/gtk/eggtrayicon.c
 </set>
 <set var="GTK_HDR" hints="files">
     wx/generic/fdrepdlg.h
@@ -1451,6 +1553,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/textctrl.h
     wx/gtk/textentry.h
     wx/gtk/tglbtn.h
+    wx/gtk/animate.h
+    wx/gtk/hyperlink.h
+    wx/gtk/taskbar.h
+    wx/gtk/dvrenderers.h
+    wx/generic/activityindicator.h
+    wx/gtk/activityindicator.h
+    wx/gtk/calctrl.h
+    wx/gtk/bmpcbox.h
+    wx/gtk/dataview.h
+    wx/gtk/dvrenderer.h
 </set>
 <set var="GTK2_HDR" hints="files">
     $(GTK_HDR)
@@ -1572,6 +1684,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/toolbar.cpp
     src/gtk1/textctrl.cpp
     src/gtk1/tglbtn.cpp
+    src/gtk1/taskbar.cpp
+    src/generic/activityindicator.cpp
+    src/gtk1/eggtrayicon.c
+    src/generic/animateg.cpp
 </set>
 <set var="GTK1_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1619,6 +1735,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk1/textctrl.h
     wx/gtk1/tglbtn.h
     wx/gtk1/treectrl.h
+    wx/generic/animate.h
+    wx/generic/activityindicator.h
 </set>
 
 
@@ -1713,6 +1831,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statline.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
+    src/generic/animateg.cpp
+    src/generic/activityindicator.cpp
 </set>
 <set var="MOTIF_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1783,6 +1903,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/toolbar.h
     wx/motif/toplevel.h
     wx/motif/window.h
+    wx/generic/animate.h
+    wx/generic/animateanimate.h
 </set>
 
 
@@ -1917,6 +2039,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/window.cpp
     src/msw/graphicsd2d.cpp
     src/msw/rt/utilsrt.cpp
+    src/common/taskbarcmn.cpp
+    src/msw/helpchm.cpp
+    src/msw/taskbar.cpp
+    src/msw/helpwin.cpp
+    src/msw/joystick.cpp
+    src/msw/aboutdlg.cpp
+    src/msw/notifmsg.cpp
+    src/msw/richtooltip.cpp
+    src/msw/sound.cpp
+    src/msw/ole/automtn.cpp
+    src/msw/rt/notifmsgrt.cpp
+    src/generic/activityindicator.cpp
+    src/msw/ole/uuid.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -1924,18 +2059,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
     wx/msw/htmlhelp.h
-</set>
-
-<set var="MSW_DESKTOP_LOWLEVEL_SRC" hints="files">
-    src/msw/helpchm.cpp
-    src/msw/helpwin.cpp
-    src/msw/ole/automtn.cpp
-    src/msw/ole/uuid.cpp
-</set>
-
-<set var="MSW_DESKTOP_LOWLEVEL_HDR" hints="files">
-    wx/msw/helpchm.h
+    wx/generic/activityindicator.h
     wx/msw/helpwin.h
+    wx/msw/taskbar.h
+    wx/msw/helpchm.h
+    wx/msw/sound.h
+    wx/msw/joystick.h
 </set>
 
 <set var="MSW_SRC" hints="files">
@@ -1999,6 +2128,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/treectrl.cpp
     src/msw/systhemectrl.cpp
     src/msw/customdraw.cpp
+    src/generic/animateg.cpp
+    src/msw/commandlinkbutton.cpp
+    src/msw/bmpcbox.cpp
+    src/msw/hyperlink.cpp
+    src/msw/calctrl.cpp
+    src/msw/datectrl.cpp
+    src/msw/datetimectrl.cpp
+    src/msw/timectrl.cpp
+    src/msw/datecontrols.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2098,6 +2236,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/treectrl.h
     wx/msw/window.h
     wx/msw/rt/utils.h
+    wx/msw/hyperlink.h
+    wx/msw/bmpcbox.h
+    wx/generic/animate.h
+    wx/msw/commandlinkbutton.h
+    wx/msw/datetimectrl.h
+    wx/msw/timectrl.h
+    wx/msw/datectrl.h
+    wx/msw/calctrl.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -2467,6 +2613,22 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/window.mm
     src/osx/cocoa/settings.mm
     src/osx/cocoa/overlay.mm
+    src/osx/cocoa/aboutdlg.mm
+    src/generic/animateg.cpp
+    src/osx/dataview_osx.cpp
+    src/osx/cocoa/notifmsg.mm
+    src/osx/cocoa/taskbar.mm
+    src/osx/datectrl_osx.cpp
+    src/osx/cocoa/datetimectrl.mm
+    src/osx/core/sound.cpp
+    src/osx/sound_osx.cpp
+    src/osx/datetimectrl_osx.cpp
+    src/osx/core/hidjoystick.cpp
+    src/osx/carbon/sound.cpp
+    src/osx/cocoa/dataview.mm
+    src/osx/timectrl_osx.cpp
+    src/common/taskbarcmn.cpp
+    src/osx/cocoa/activityindicator.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
@@ -2474,6 +2636,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/cocoa/private.h
     wx/generic/region.h
     wx/osx/cocoa/stdpaths.h
+    wx/osx/sound.h
+    wx/generic/animate.h
+    wx/osx/dvrenderer.h
+    wx/osx/cocoa/dataview.h
+    wx/osx/dvrenderers.h
+    wx/osx/taskbarosx.h
+    wx/osx/activityindicator.h
+    wx/osx/joystick.h
+    wx/osx/dataview.h
+    wx/osx/datectrl.h
+    wx/osx/timectrl.h
+    wx/osx/datetimectrl.h
+    wx/osx/core/joystick.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2502,6 +2677,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/window.mm
     src/osx/cocoa/stdpaths.mm
     src/osx/iphone/settings.mm
+    src/osx/sound_osx.cpp
+    src/osx/core/sound.cpp
+    src/generic/animateg.cpp
 </set>
 
 <set var="OSX_IPHONE_HDR" hints="files">
@@ -2509,6 +2687,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/generic/region.h
+    wx/generic/animate.h
+    wx/osx/sound.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2527,12 +2707,35 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MSW'">
         src/msw/evtloop.cpp
     </if>
+<!--
+    Including src/generic/animateg.cpp hre unconditionally results in bakefile
+    errors when not fixing the value of TOOLKIT to MSW in msvc format, see #15327.
+-->
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
+        src/generic/animateg.cpp
+    </if>
+    <if cond="TOOLKIT=='MSW'">
+        src/generic/animateg.cpp
+    </if>
+    <if cond="TOOLKIT=='X11'">
+        src/generic/animateg.cpp
+    </if>
 </set>
 <set var="UNIV_PLATFORM_HDR" hints="files">
     <if cond="TOOLKIT=='MSW'">
         wx/msw/evtloop.h
     </if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
+        wx/generic/animate.h
+    </if>
+    <if cond="TOOLKIT=='MSW'">
+        wx/generic/animate.h
+    </if>
+    <if cond="TOOLKIT=='X11'">
+        wx/generic/animate.h
+    </if>
 </set>
+
 <set var="UNIV_SRC" hints="files">
     $(UNIV_PLATFORM_SRC)
     src/generic/accel.cpp
@@ -2647,320 +2850,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/univ/toplevel.h
     wx/univ/window.h
     wx/generic/activityindicator.h
-</set>
-
-<!-- ====================================================================== -->
-<!--                               wxAdvanced                               -->
-<!-- ====================================================================== -->
-
-<set var="ADVANCED_CMN_SRC" hints="files">
-    src/common/animatecmn.cpp
-    src/common/bmpcboxcmn.cpp
-    src/common/calctrlcmn.cpp
-    src/common/datavcmn.cpp
-    src/common/gridcmn.cpp
-    src/common/hyperlnkcmn.cpp
-    src/common/odcombocmn.cpp
-    src/common/richtooltipcmn.cpp
-    src/generic/aboutdlgg.cpp
-    src/generic/bannerwindow.cpp
-    src/generic/bmpcboxg.cpp
-    src/generic/calctrlg.cpp
-    src/generic/commandlinkbuttong.cpp
-    src/generic/datavgen.cpp
-    src/generic/datectlg.cpp
-    src/generic/editlbox.cpp
-    src/generic/grid.cpp
-    src/generic/gridctrl.cpp
-    src/generic/grideditors.cpp
-    src/generic/gridsel.cpp
-    src/generic/helpext.cpp
-    src/generic/hyperlinkg.cpp
-    src/generic/laywin.cpp
-    src/generic/notifmsgg.cpp
-    src/generic/odcombo.cpp
-    src/generic/propdlg.cpp
-    src/generic/richtooltipg.cpp
-    src/generic/sashwin.cpp
-    src/generic/splash.cpp
-    src/generic/timectrlg.cpp
-    src/generic/tipdlg.cpp
-    src/generic/treelist.cpp
-    src/generic/wizard.cpp
-    src/common/addremovectrl.cpp
-    src/common/notifmsgcmn.cpp
-</set>
-
-<set var="ADVANCED_CMN_HDR" hints="files">
-    wx/aboutdlg.h
-    wx/animate.h
-    wx/bannerwindow.h
-    wx/bmpcbox.h
-    wx/calctrl.h
-    wx/commandlinkbutton.h
-    wx/dataview.h
-    wx/datectrl.h
-    wx/dateevt.h
-    wx/datetimectrl.h
-    wx/dcbuffer.h
-    wx/dvrenderers.h
-    wx/editlbox.h
-    wx/generic/aboutdlgg.h
-    wx/generic/bmpcbox.h
-    wx/generic/calctrlg.h
-    wx/generic/datectrl.h
-    wx/generic/dataview.h
-    wx/generic/dvrenderer.h
-    wx/generic/dvrenderers.h
-    wx/generic/grid.h
-    wx/generic/gridctrl.h
-    wx/generic/grideditors.h
-    wx/generic/gridsel.h
-    wx/generic/helpext.h
-    wx/generic/hyperlink.h
-    wx/generic/laywin.h
-    wx/generic/notifmsg.h
-    wx/generic/propdlg.h
-    wx/generic/sashwin.h
-    wx/generic/splash.h
-    wx/generic/timectrl.h
-    wx/generic/wizard.h
-    wx/grid.h
-    wx/hyperlink.h
-    wx/joystick.h
-    wx/laywin.h
-    wx/notifmsg.h
-    wx/odcombo.h
-    wx/propdlg.h
-    wx/richtooltip.h
-    wx/sashwin.h
-    wx/sound.h
-    wx/splash.h
-    wx/taskbar.h
-    wx/timectrl.h
-    wx/tipdlg.h
-    wx/treelist.h
-    wx/wizard.h
-    wx/addremovectrl.h
-    wx/activityindicator.h
-</set>
-
-<set var="ADVANCED_MSW_SRC" hints="files">
-    src/common/taskbarcmn.cpp
-    src/msw/aboutdlg.cpp
-    src/msw/notifmsg.cpp
-    src/msw/richtooltip.cpp
-    src/msw/sound.cpp
-    src/msw/taskbar.cpp
-    src/msw/rt/notifmsgrt.cpp
-    src/generic/activityindicator.cpp
-</set>
-<set var="ADVANCED_MSW_HDR" hints="files">
-    wx/msw/sound.h
-    wx/msw/taskbar.h
-    wx/generic/activityindicator.h
-</set>
-
-<!-- not used with wxUniv -->
-<set var="ADVANCED_MSW_NATIVE_SRC" hints="files">
-    src/generic/animateg.cpp
-    src/msw/bmpcbox.cpp
-    src/msw/calctrl.cpp
-    src/msw/commandlinkbutton.cpp
-    src/msw/datecontrols.cpp
-    src/msw/datectrl.cpp
-    src/msw/datetimectrl.cpp
-    src/msw/hyperlink.cpp
-    src/msw/timectrl.cpp
-</set>
-<set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
-    wx/generic/animate.h
-    wx/msw/bmpcbox.h
-    wx/msw/commandlinkbutton.h
-    wx/msw/calctrl.h
-    wx/msw/datectrl.h
-    wx/msw/datetimectrl.h
-    wx/msw/hyperlink.h
-    wx/msw/timectrl.h
-</set>
-
-<!-- not built on WindowsCE: -->
-<set var="ADVANCED_MSW_DESKTOP_SRC" hints="files">
-    src/msw/joystick.cpp
-</set>
-<set var="ADVANCED_MSW_DESKTOP_HDR" hints="files">
-    wx/msw/joystick.h
-</set>
-
-<set var="ADVANCED_OSX_COCOA_SRC" hints="files">
-    src/common/taskbarcmn.cpp
-    src/generic/animateg.cpp
-    src/osx/datetimectrl_osx.cpp
-    src/osx/datectrl_osx.cpp
-    src/osx/sound_osx.cpp
-    src/osx/timectrl_osx.cpp
-    src/osx/carbon/sound.cpp
-    src/osx/core/sound.cpp
-    src/osx/cocoa/aboutdlg.mm
-    src/osx/dataview_osx.cpp
-    src/osx/cocoa/dataview.mm
-    src/osx/cocoa/datetimectrl.mm
-    src/osx/cocoa/taskbar.mm
-    src/osx/core/hidjoystick.cpp
-    src/osx/cocoa/activityindicator.mm
-    src/osx/cocoa/notifmsg.mm
-</set>
-
-<set var="ADVANCED_OSX_COCOA_HDR" hints="files">
-    wx/generic/animate.h
-    wx/osx/activityindicator.h
-    wx/osx/dataview.h
-    wx/osx/datectrl.h
-    wx/osx/datetimectrl.h
-    wx/osx/dvrenderer.h
-    wx/osx/dvrenderers.h
-    wx/osx/joystick.h
-    wx/osx/sound.h
-    wx/osx/taskbarosx.h
-    wx/osx/timectrl.h
-    wx/osx/core/joystick.h
-    wx/osx/cocoa/dataview.h
-</set>
-
-<set var="ADVANCED_OSX_IPHONE_SRC" hints="files">
-    src/generic/animateg.cpp
-    src/osx/sound_osx.cpp
-    src/osx/core/sound.cpp
-</set>
-
-<set var="ADVANCED_OSX_IPHONE_HDR" hints="files">
-    wx/generic/animate.h
-    wx/osx/sound.h
-</set>
-
-<set var="ADVANCED_COCOA_SRC" hints="files">
-    src/cocoa/taskbar.mm
-    src/common/taskbarcmn.cpp
-    src/generic/animateg.cpp
-    src/osx/core/hidjoystick.cpp
-</set>
-
-<set var="ADVANCED_COCOA_HDR" hints="files">
-    wx/cocoa/taskbar.h
-    wx/generic/animate.h
-    wx/osx/core/joystick.h
-</set>
-
-
-<set var="ADVANCED_UNIX_SRC" hints="files">
-    src/common/taskbarcmn.cpp
-    src/unix/joystick.cpp
-    src/unix/sound.cpp
-    src/unix/taskbarx11.cpp
-</set>
-<set var="ADVANCED_UNIX_HDR" hints="files">
-    wx/unix/joystick.h
-    wx/unix/sound.h
-    wx/unix/taskbarx11.h
-</set>
-
-<set var="ADVANCED_MOTIF_SRC" hints="files">
-    src/generic/animateg.cpp
-    src/generic/activityindicator.cpp
-</set>
-
-<set var="ADVANCED_MOTIF_HDR" hints="files">
-    wx/generic/animate.h
-    wx/generic/animateanimate.h
-</set>
-
-<set var="ADVANCED_GTK_WIN32_SRC" hints="files">
-    src/common/taskbarcmn.cpp
-    src/msw/joystick.cpp
-    src/msw/sound.cpp
-</set>
-<set var="ADVANCED_GTK_WIN32_HDR" hints="files">
-    wx/msw/joystick.h
-    wx/msw/sound.h
-    wx/msw/taskbar.h
-</set>
-<set var="ADVANCED_GTK_PLATFORM_SRC" hints="files">
-    <if cond="PLATFORM_UNIX=='1'">$(ADVANCED_UNIX_SRC)</if>
-    <if cond="PLATFORM_MACOSX=='1'">$(ADVANCED_UNIX_SRC)</if>
-    <if cond="PLATFORM_WIN32=='1'">$(ADVANCED_GTK_WIN32_SRC)</if>
-</set>
-<set var="ADVANCED_GTK_PLATFORM_HDR" hints="files">
-    <if cond="PLATFORM_UNIX=='1'">$(ADVANCED_UNIX_HDR)</if>
-    <if cond="PLATFORM_MACOSX=='1'">$(ADVANCED_UNIX_HDR)</if>
-    <if cond="PLATFORM_WIN32=='1'">$(ADVANCED_GTK_WIN32_HDR)</if>
-</set>
-<set var="ADVANCED_GTK_SRC" hints="files">
-    $(ADVANCED_GTK_PLATFORM_SRC)
-    src/gtk/notifmsg.cpp
-    src/gtk/taskbar.cpp
-</set>
-<set var="ADVANCED_GTK2_SRC" hints="files">
-    $(ADVANCED_GTK_SRC)
-    src/gtk/eggtrayicon.c
-    src/generic/activityindicator.cpp
-</set>
-<set var="ADVANCED_GTK_HDR" hints="files">
-    $(ADVANCED_GTK_PLATFORM_HDR)
-    wx/gtk/taskbar.h
-    wx/generic/activityindicator.h
-</set>
-<set var="ADVANCED_GTK2_HDR" hints="files">
-    $(ADVANCED_GTK_HDR)
-</set>
-
-<set var="ADVANCED_GTK_NATIVE_SRC" hints="files">
-    src/gtk/aboutdlg.cpp
-    src/gtk/animate.cpp
-    src/gtk/bmpcbox.cpp
-    src/gtk/calctrl.cpp
-    src/gtk/dataview.cpp
-    src/gtk/hyperlink.cpp
-    src/gtk/activityindicator.cpp
-</set>
-<set var="ADVANCED_GTK_NATIVE_HDR" hints="files">
-    wx/gtk/animate.h
-    wx/gtk/bmpcbox.h
-    wx/gtk/calctrl.h
-    wx/gtk/dataview.h
-    wx/gtk/dvrenderer.h
-    wx/gtk/dvrenderers.h
-    wx/gtk/hyperlink.h
-    wx/gtk/activityindicator.h
-</set>
-
-<set var="ADVANCED_GTK1_SRC" hints="files">
-    src/generic/animateg.cpp
-    src/gtk1/eggtrayicon.c
-    src/gtk1/taskbar.cpp
-    src/generic/activityindicator.cpp
-</set>
-<set var="ADVANCED_GTK1_HDR" hints="files">
-    wx/generic/animate.h
-    wx/generic/activityindicator.h
-</set>
-
-<set var="ADVANCED_UNIV_SRC" hints="files">
-<!--
-    Including src/generic/animateg.cpp hre unconditionally results in bakefile
-    errors when not fixing the value of TOOLKIT to MSW in msvc format, see #15327.
--->
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
-        src/generic/animateg.cpp
-    </if>
-    <if cond="TOOLKIT=='MSW'">
-        src/generic/animateg.cpp
-    </if>
-    <if cond="TOOLKIT=='X11'">
-        src/generic/animateg.cpp
-    </if>
-</set>
-<set var="ADVANCED_UNIV_HDR" hints="files">
-    wx/generic/animate.h
 </set>
 
 <!-- ====================================================================== -->
@@ -3645,7 +3534,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK2_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC) $(MSW_DESKTOP_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
@@ -3657,7 +3546,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_HDR)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_HDR) $(MSW_DESKTOP_LOWLEVEL_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
@@ -3701,56 +3590,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         </if>
     </set>
 
-    <!-- wxAdvanced files: -->
-    <set var="ADVANCED_PLATFORM_SRC" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC) $(ADVANCED_MSW_DESKTOP_SRC)</if>
-        <if cond="TOOLKIT=='OSX_COCOA'">$(ADVANCED_OSX_COCOA_SRC)</if>
-        <if cond="TOOLKIT=='OSX_IPHONE'">$(ADVANCED_OSX_IPHONE_SRC)</if>
-        <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_SRC)</if>
-        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC) $(ADVANCED_MOTIF_SRC)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4'">$(ADVANCED_GTK_SRC)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_SRC)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK2_SRC)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
-        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
-        <if cond="TOOLKIT=='QT'">$(ADVANCED_QT_SRC)</if>
-    </set>
-    <set var="ADVANCED_PLATFORM_HDR" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_DESKTOP_HDR)</if>
-        <if cond="TOOLKIT=='OSX_COCOA'">$(ADVANCED_OSX_COCOA_HDR)</if>
-        <if cond="TOOLKIT=='OSX_IPHONE'">$(ADVANCED_OSX_IPHONE_HDR)</if>
-        <if cond="TOOLKIT=='COCOA'">$(ADVANCED_COCOA_HDR)</if>
-        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR) $(ADVANCED_MOTIF_HDR)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4'">$(ADVANCED_GTK_HDR)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_HDR)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK2_HDR)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
-        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
-        <if cond="TOOLKIT=='QT'">$(ADVANCED_QT_HDR)</if>
-    </set>
-
-    <!-- wxAdv files not used by wxUniv -->
-    <set var="ADVANCED_PLATFORM_NATIVE_SRC" hints="files">
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4'">$(ADVANCED_GTK_NATIVE_SRC)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_NATIVE_SRC)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_NATIVE_SRC)</if>
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_SRC)</if>
-    </set>
-    <set var="ADVANCED_PLATFORM_NATIVE_HDR" hints="files">
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4'">$(ADVANCED_GTK_NATIVE_HDR)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_NATIVE_HDR)</if>
-        <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_NATIVE_HDR)</if>
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_HDR)</if>
-    </set>
-
-    <set var="ADVANCED_SRC" hints="files">
-        <if cond="WXUNIV=='0'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_PLATFORM_NATIVE_SRC)</if>
-        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_UNIV_SRC)</if>
-    </set>
-    <set var="ADVANCED_HDR" hints="files">
-        <if cond="WXUNIV=='0'">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_PLATFORM_NATIVE_HDR)</if>
-        <if cond="WXUNIV=='1'">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR) $(ADVANCED_UNIV_HDR)</if>
-    </set>
+    <!-- wxAdvanced: empty, kept only for backwards compatibility -->
+    <set var="ADVANCED_SRC" hints="files"/>
+    <set var="ADVANCED_HDR" hints="files"/>
 
     <!-- wxMedia files: -->
     <set var="MEDIA_PLATFORM_SRC" hints="files">
@@ -3787,7 +3629,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(GUI_CMN_HDR)
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
-            $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
+            $(MEDIA_HDR) $(HTML_HDR)
             $(OPENGL_HDR) $(QA_HDR) $(XRC_HDR) $(AUI_HDR) $(PROPGRID_HDR)
             $(RIBBON_HDR) $(RICHTEXT_HDR) $(STC_HDR) $(WEBVIEW_HDR)
         </if>

@@ -21,7 +21,7 @@
 #include "wx/imaglist.h"
 #include "wx/window.h"
 
-class WXDLLIMPEXP_FWD_ADV wxAnimation;
+class WXDLLIMPEXP_FWD_CORE wxAnimation;
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XML wxXmlResource;

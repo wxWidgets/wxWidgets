@@ -27,7 +27,7 @@
 #define wxHL_ALIGN_CENTRE       0x0008
 #define wxHL_DEFAULT_STYLE      (wxHL_CONTEXTMENU|wxNO_BORDER|wxHL_ALIGN_CENTRE)
 
-extern WXDLLIMPEXP_DATA_ADV(const char) wxHyperlinkCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxHyperlinkCtrlNameStr[];
 
 
 // ----------------------------------------------------------------------------
@@ -44,7 +44,7 @@ extern WXDLLIMPEXP_DATA_ADV(const char) wxHyperlinkCtrlNameStr[];
 // just like a wxCommandEvent.
 //
 // Use the EVT_HYPERLINK() to catch link events.
-class WXDLLIMPEXP_ADV wxHyperlinkCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxHyperlinkCtrlBase : public wxControl
 {
 public:
 
@@ -85,15 +85,15 @@ public:
 // wxHyperlinkEvent
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_ADV wxHyperlinkEvent;
+class WXDLLIMPEXP_FWD_CORE wxHyperlinkEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_HYPERLINK, wxHyperlinkEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_HYPERLINK, wxHyperlinkEvent );
 
 //
 // An event fired when the user clicks on the label in a hyperlink control.
 // See HyperlinkControl for details.
 //
-class WXDLLIMPEXP_ADV wxHyperlinkEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxHyperlinkEvent : public wxCommandEvent
 {
 public:
     wxHyperlinkEvent() {}
@@ -142,7 +142,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
 #else
     #include "wx/generic/hyperlink.h"
 
-    class WXDLLIMPEXP_ADV wxHyperlinkCtrl : public wxGenericHyperlinkCtrl
+    class WXDLLIMPEXP_CORE wxHyperlinkCtrl : public wxGenericHyperlinkCtrl
     {
     public:
         wxHyperlinkCtrl() { }
