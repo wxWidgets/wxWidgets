@@ -559,6 +559,8 @@ int wxFileDialog::ShowModal()
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
+    OSXBeginModalDialog();
+
     if ( HasFlag(wxFD_SAVE) )
     {
         NSSavePanel* sPanel = [NSSavePanel savePanel];
@@ -627,6 +629,9 @@ int wxFileDialog::ShowModal()
             
         ModalFinishedCallback(oPanel, returnCode);
     }
+    
+    OSXEndModalDialog();
+
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 

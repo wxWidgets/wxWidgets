@@ -86,9 +86,9 @@ int wxFontDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    wxDialog::OSXBeginModalDialog();
+    OSXBeginModalDialog();
     int retval = RunMixedFontDialog(this);
-    wxDialog::OSXEndModalDialog();
+    OSXEndModalDialog();
 
     return retval ;
 }
