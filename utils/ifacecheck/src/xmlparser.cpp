@@ -613,7 +613,7 @@ wxMethodPtrArray wxClass::RecursiveUpwardFindMethodsNamed(const wxString& name,
             if (!parent) {
                 wxLogError("Could not find parent '%s' of class '%s'...",
                          m_parents[i], GetName());
-                return false;
+                return wxMethodPtrArray();
             }
 
             wxMethodPtrArray temp = parent->RecursiveUpwardFindMethodsNamed(name, allclasses);
