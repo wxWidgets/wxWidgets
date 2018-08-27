@@ -43,7 +43,7 @@ add_opt_lib(net wxUSE_SOCKETS)
 
 # Define UI libraries
 if(wxUSE_GUI)
-    list(APPEND LIBS core adv)
+    list(APPEND LIBS core)
     foreach(lib
         aui
         html
