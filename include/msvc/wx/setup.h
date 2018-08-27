@@ -200,10 +200,6 @@
 
         #pragma comment(lib, wxTOOLKIT_LIB_NAME("core"))
 
-        #ifndef wxNO_ADV_LIB
-            #pragma comment(lib, wxTOOLKIT_LIB_NAME("adv"))
-        #endif
-
         #if wxUSE_HTML && !defined(wxNO_HTML_LIB)
             #pragma comment(lib, wxTOOLKIT_LIB_NAME("html"))
         #endif       
