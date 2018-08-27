@@ -169,6 +169,19 @@ public:
                      bool isdir = true);
 
     /**
+        Associate the given HTML contents to the renderer.
+
+        This is similar to SetHtmlText(), but is more efficient as the text can
+        be parsed only once, using wxHtmlParser::Parse(), and then passed to
+        wxHtmlDCRenderer multiple times or already reused for other purposes.
+
+        Note that @a cell will be modified (e.g. laid out) by this function.
+
+        @since 3.1.2
+     */
+    void SetHtmlCell(wxHtmlContainerCell& cell);
+
+    /**
         Set size of output rectangle, in pixels. Note that you @b can't change
         width of the rectangle between calls to Render() !
         (You can freely change height.)
