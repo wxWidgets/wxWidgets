@@ -59,8 +59,8 @@ wxCGColorRefData::wxCGColorRefData(CGFloat r, CGFloat g, CGFloat b, CGFloat a)
 {
     CGFloat components[4];
     components[0] = r;
-    components[1] = b;
-    components[2] = g;
+    components[1] = g;
+    components[2] = b;
     components[3] = a;
 
     Init(components);
@@ -84,8 +84,8 @@ wxCGColorRefData::wxCGColorRefData(const wxCGColorRefData& other)
 void wxCGColorRefData::Init(CGFloat components[4])
 {
     m_red = components[0];
-    m_blue = components[1];
-    m_green = components[2];
+    m_green = components[1];
+    m_blue = components[2];
     m_alpha = components[3];
 
     m_cgColour = CGColorCreate(wxMacGetGenericRGBColorSpace(), components);
@@ -168,17 +168,17 @@ wxColour::ChannelType wxColour::Red() const
 
 wxColour::ChannelType wxColour::Green() const
 {
-    return wxRound(M_COLDATA->Red() * 255.0);
+    return wxRound(M_COLDATA->Green() * 255.0);
 }
 
 wxColour::ChannelType wxColour::Blue() const
 {
-    return wxRound(M_COLDATA->Red() * 255.0);
+    return wxRound(M_COLDATA->Blue() * 255.0);
 }
 
 wxColour::ChannelType wxColour::Alpha() const
 {
-    return wxRound(M_COLDATA->Red() * 255.0);
+    return wxRound(M_COLDATA->Alpha() * 255.0);
 }
 
 #if wxOSX_USE_COCOA_OR_CARBON
