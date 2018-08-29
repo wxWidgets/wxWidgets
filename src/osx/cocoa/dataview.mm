@@ -3266,6 +3266,107 @@ void wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer);
 
 // ---------------------------------------------------------
+// wxDataViewCheckIconTextRenderer
+// ---------------------------------------------------------
+
+IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_ADV)
+
+wxIMPLEMENT_CLASS(wxDataViewCheckIconText, wxDataViewIconText);
+
+wxDataViewCheckIconTextRenderer::wxDataViewCheckIconTextRenderer(
+                                                                                                   wxDataViewCellMode mode,
+                                                                                                   int align
+)
+: wxDataViewRenderer(GetDefaultType(), mode,mode)
+{
+    m_allow3rdStateForUser = false;
+    
+    NSButtonCell* cell;
+    
+    cell = [[NSButtonCell alloc] init];
+    [cell setAlignment:ConvertToNativeHorizontalTextAlignment(GetAlignment())];
+    [cell setButtonType: NSSwitchButton];
+    [cell setImagePosition:NSImageLeft];
+    [cell setAllowsMixedState:YES];
+    SetNativeData(new wxDataViewRendererNativeData(cell));
+    [cell release];
+}
+
+void wxDataViewCheckIconTextRenderer::Allow3rdStateForUser(bool allow)
+{
+    m_allow3rdStateForUser = allow;
+}
+
+bool wxDataViewCheckIconTextRenderer::MacRender()
+{
+    wxDataViewCheckIconText checkIconText;
+    
+    checkIconText << GetValue();
+
+    NSButtonCell* cell = (NSButtonCell*) GetNativeData()->GetItemCell();
+
+    int nativecbvalue = 0;
+    switch ( checkIconText.GetCheckedState() )
+    {
+        case wxCHK_CHECKED:
+            nativecbvalue = 1;
+            break;
+        case wxCHK_UNDETERMINED:
+            nativecbvalue = -1;
+            break;
+        case wxCHK_UNCHECKED:
+            nativecbvalue = 0;
+            break;
+    }
+ 	[cell setIntValue:nativecbvalue];
+	[cell setTitle:wxCFStringRef(checkIconText.GetText()).AsNSString()];
+
+    return true;
+}
+
+void wxDataViewCheckIconTextRenderer::OSXOnCellChanged(NSObject *value,
+                                                  const wxDataViewItem& item,
+                                                  unsigned col)
+{
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    
+    // The icon can't be edited so get its old value and reuse it.
+    wxVariant valueOld;
+    model->GetValue(valueOld, item, col);
+    
+    wxDataViewCheckIconText checkIconText;
+    checkIconText << valueOld;
+    
+    wxCheckBoxState checkedState ;
+    switch ( ObjectToLong(value) )
+    {
+        case 1:
+            checkedState = wxCHK_CHECKED;
+            break;
+            
+        case 0:
+            checkedState = wxCHK_UNCHECKED;
+            break;
+            
+        case -1:
+            checkedState = m_allow3rdStateForUser ? wxCHK_UNDETERMINED : wxCHK_CHECKED;
+            break;
+    }
+ 
+    checkIconText.SetCheckedState(checkedState);
+
+    wxVariant valueIconText;
+    valueIconText << checkIconText;
+    
+    if ( !Validate(valueIconText) )
+        return;
+    
+    model->ChangeValue(valueIconText, item, col);
+}
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewCheckIconTextRenderer,wxDataViewRenderer);
+
+// ---------------------------------------------------------
 // wxDataViewToggleRenderer
 // ---------------------------------------------------------
 wxDataViewToggleRenderer::wxDataViewToggleRenderer(const wxString& varianttype,

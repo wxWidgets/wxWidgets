@@ -185,6 +185,39 @@ private:
 };
 
 // ---------------------------------------------------------
+// wxDataViewIconTextRenderer
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewCheckIconTextRenderer
+: public wxDataViewRenderer
+{
+public:
+    static wxString GetDefaultType() { return wxS("wxDataViewCheckIconText"); }
+    
+    explicit wxDataViewCheckIconTextRenderer
+    (
+     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+     int align = wxDVR_DEFAULT_ALIGNMENT
+     );
+    
+    // This renderer can always display the 3rd ("indeterminate") checkbox
+    // state if the model contains cells with wxCHK_UNDETERMINED value, but it
+    // doesn't allow the user to set it by default. Call this method to allow
+    // this to happen.
+    void Allow3rdStateForUser(bool allow = true);
+    
+    virtual bool MacRender();
+    
+    virtual void OSXOnCellChanged(NSObject *value,
+                                  const wxDataViewItem& item,
+                                  unsigned col);
+    
+    bool m_allow3rdStateForUser;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCheckIconTextRenderer);
+};
+
+// ---------------------------------------------------------
 // wxDataViewToggleRenderer
 // ---------------------------------------------------------
 

@@ -545,6 +545,8 @@ typedef wxDataViewTextRenderer wxDataViewDateRenderer;
 // wxDataViewCheckIconTextRenderer: 3-state checkbox + text + optional icon
 // ----------------------------------------------------------------------------
 
+#ifndef __WXOSX__
+
 class WXDLLIMPEXP_ADV wxDataViewCheckIconTextRenderer
     : public wxDataViewCustomRenderer
 {
@@ -595,6 +597,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCheckIconTextRenderer);
 };
 
+#endif
 
 // this class is obsolete, its functionality was merged in
 // wxDataViewTextRenderer itself now, don't use it any more
