@@ -31,6 +31,8 @@
 #include <map>
 #include <string>
 
+#define TRACE_CTFONT "ctfont"
+
 class WXDLLEXPORT wxFontRefData : public wxGDIRefData
 {
 public:
@@ -1104,21 +1106,32 @@ wxString wxNativeFontInfo::GetStyleName() const
 
 wxString wxNativeFontInfo::GetFaceName() const
 {
-#if 0
+#if wxDEBUG_LEVEL >= 2
     // for debugging: show all different font names
     wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_descriptor, 12, NULL);
-    wxString familname;
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(familname);
+    wxString familyname;
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(familyname);
+    wxLogTrace(TRACE_CTFONT,"FontFamilyName: %s",familyname.c_str());
+
     wxString name;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(name);
+    wxLogTrace(TRACE_CTFONT,"FontName: %s",name.c_str());
+
     wxString psname;
     wxCFTypeRef(CTFontCopyPostScriptName(font)).GetValue(psname);
+    wxLogTrace(TRACE_CTFONT,"PostScriptName: %s",psname.c_str());
+
     wxString fullname;
     wxCFTypeRef(CTFontCopyFullName(font)).GetValue(fullname);
+    wxLogTrace(TRACE_CTFONT,"FullName: %s",fullname.c_str());
+
     wxString display;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontDisplayNameAttribute)).GetValue(display);
+    wxLogTrace(TRACE_CTFONT,"DisplayName: %s",display.c_str());
+
     wxString style;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontStyleNameAttribute)).GetValue(style);
+    wxLogTrace(TRACE_CTFONT,"StyleName: %s",style.c_str());
 #endif
 
     return m_familyName;
@@ -1251,158 +1264,4 @@ void wxNativeFontInfo::UpdateNamesMap(const wxString& familyName, CTFontRef font
     }
 }
 
-// code that still may be useful
-
-#if 0
-wxCFMutableDictionaryRef traits;
-traits.SetValue(kCTFontWeightTrait, weight);
-traits.SetValue(kCTFontSlantTrait, GetCTSlant(m_descriptor));
-
-wxCFMutableDictionaryRef attributes;
-attributes.SetValue(kCTFontTraitsAttribute, traits.get());
-attributes.SetValue(kCTFontFamilyNameAttribute, wxCFStringRef(GetFamilyName()));
-attributes.SetValue(kCTFontSizeAttribute, (CGFloat)GetPointSize());
-
-bool success = false;
-
-wxCFRef<CTFontDescriptorRef> newdesc = CTFontDescriptorCreateWithAttributes(attributes);
-if (newdesc)
-{
-    // let the system create a font with these attributes and compare the result
-    wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(newdesc, 12, NULL);
-    if (font)
-    {
-        CGFloat realWeight = GetCTWeight(font);
-        if (fabs(realWeight - weight) < 0.2)
-        {
-            m_descriptor = newdesc;
-            success = true;
-        }
-    }
-}
-
-if (!success)
-{
-    if (weight > GetCTWeight(m_descriptor))
-    {
-        m_emulateWidth = true;
-        m_strokeWidth = -3.0;
-    }
-    else
-    {
-        m_emulateWidth = true;
-        m_strokeWidth = -0.3;
-    }
-}
-#endif
-#if 0
-// for debugging purposes only, lists all faces of this font's family
-{
-    printf("\nPrint All Font Faces:\n");
-
-    wxCFRef<CTFontDescriptorRef> desc = CTFontDescriptorCreateWithNameAndSize(wxCFStringRef(GetFamilyName()), 0.0);
-    wxCFMutableArrayRef<CTFontDescriptorRef> array;
-    array.push_back(desc.get());
-    wxCFRef<CTFontCollectionRef> fontcollection = CTFontCollectionCreateWithFontDescriptors(array, NULL);
-    wxCFArrayRef<CTFontDescriptorRef> fontdescs = CTFontCollectionCreateMatchingFontDescriptors(fontcollection);
-
-    for (size_t i = 0, count = fontdescs.size(); i < count; ++i)
-    {
-        wxCFRef<CTFontDescriptorRef> variant = fontdescs[i];
-        CFShow(variant);
-        printf("Weight is %f and slant is %f\n", GetCTWeight(variant), GetCTSlant(variant));
-    }
-}
-#endif
-#if 0
-if (m_ctFont)
-{
-    // use cached version
-}
-else
-{
-    CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    m_ctFontAttributes.reset(dict);
-
-    wxStringToStringHashMap::const_iterator it = gs_FontFamilyToPSName.find(m_info.GetFaceName());
-
-    if ( it != gs_FontFamilyToPSName.end() )
-    {
-        m_ctFont.reset(CTFontCreateWithName( wxCFStringRef(it->second), m_info.GetPointSize() , NULL ));
-    }
-    else
-    {
-#if wxOSX_USE_FACENAMES
-        m_ctFont.reset(CTFontCreateWithName(wxCFStringRef(m_info.GetFaceName()), m_info.GetPointSize() , NULL ));
-#else
-        wxCFRef<CTFontDescriptorRef> desc(wxMacCreateCTFontDescriptor(wxCFStringRef(m_info.m_faceName),0));
-        m_ctFont.reset(CTFontCreateWithFontDescriptor(desc, m_info.m_pointSize , NULL ));
-#endif
-        m_info.UpdateNamesMap(m_info.GetFaceName(), m_ctFont);
-    }
-
-    if ( m_ctFont.get() == NULL )
-    {
-        // TODO try fallbacks according to font type
-        m_ctFont.reset(CTFontCreateUIFontForLanguage( kCTFontSystemFontType, m_info.GetPointSize() , NULL ));
-    }
-    else
-    {
-        if ( traits != 0 )
-        {
-            // attempt native font variant, if not available, fallback to italic emulation mode and remove bold
-            CTFontRef fontWithTraits = CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, NULL, traits, traits );
-            if ( fontWithTraits == NULL )
-            {
-                CTFontSymbolicTraits remainingTraits = traits;
-                const CGAffineTransform* remainingTransform = NULL;
-
-                if( remainingTraits & kCTFontItalicTrait )
-                {
-                    remainingTraits &= ~kCTFontItalicTrait;
-                    remainingTransform = &kSlantTransform;
-                    if ( remainingTraits & kCTFontBoldTrait )
-                    {
-                        // first try an emulated oblique with an existing bold font
-                        fontWithTraits = CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, remainingTransform, remainingTraits, remainingTraits );
-                        if ( fontWithTraits == NULL )
-                        {
-                            // try native oblique, emulate bold later
-                            fontWithTraits = CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, NULL, kCTFontItalicTrait, kCTFontItalicTrait );
-                        }
-                        else
-                        {
-                            remainingTraits &= ~kCTFontBoldTrait;
-                        }
-                    }
-                }
-
-                // we have to emulate bold
-                if ( remainingTraits & kCTFontBoldTrait )
-                {
-                    // 3 times as thick, negative value because we want effect on stroke and fill (not only stroke)
-                    const float strokewidth = -3.0;
-                    CFDictionarySetValue(dict, kCTStrokeWidthAttributeName, CFNumberCreate( NULL, kCFNumberFloatType, &strokewidth));
-                }
-
-                if ( fontWithTraits == NULL )
-                {
-                    fontWithTraits = CTFontCreateCopyWithAttributes( m_ctFont, m_info.GetPointSize(), remainingTransform, NULL );
-                }
-
-            }
-            if ( fontWithTraits != NULL )
-                m_ctFont.reset(fontWithTraits);
-                }
-    }
-    CFDictionarySetValue(dict, kCTFontAttributeName, m_ctFont.get() );
-    CFDictionarySetValue(dict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
-
-    entry.font = m_ctFont;
-    entry.fontAttributes = m_ctFontAttributes;
-}
-
-m_cgFont.reset(CTFontCopyGraphicsFont(m_ctFont, NULL));
-}
-#endif
 
