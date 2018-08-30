@@ -2898,7 +2898,8 @@ wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
     // Notice that under Mac we always use 72 DPI so the font size in pixels is
     // the same as the font size in points and we can pass it directly to wxFont
     // ctor.
-    wxFont font(wxRound(sizeInPixels),
+    int size = wxRound(sizeInPixels);
+    wxFont font(size,
                 wxFONTFAMILY_DEFAULT,
                 flags & wxFONTFLAG_ITALIC ? wxFONTSTYLE_ITALIC
                                           : wxFONTSTYLE_NORMAL,
@@ -2906,6 +2907,9 @@ wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
                                         : wxFONTWEIGHT_NORMAL,
                 (flags & wxFONTFLAG_UNDERLINED) != 0,
                 facename);
+    if (size == wxDEFAULT) {
+        font.SetPointSize(size);
+    }
 
     if ( flags & wxFONTFLAG_STRIKETHROUGH )
         font.MakeStrikethrough();

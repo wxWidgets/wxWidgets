@@ -137,6 +137,9 @@ void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
         info->Init(size,fontFamily,fontstyle,fontweight,underlined, strikethrough,
                    wxCFStringRef::AsString([theFont familyName]), wxFONTENCODING_DEFAULT);
 
+        if (size == wxDEFAULT) {
+            info->SetPointSize(size);
+        }
     }
 }
 
