@@ -22,7 +22,6 @@
 #include <exdispid.h>
 #include <exdisp.h>
 #include <mshtml.h>
-#include <shobjidl.h>
 #include "wx/msw/registry.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/ole/safearray.h"
