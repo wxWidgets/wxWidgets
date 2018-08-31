@@ -200,7 +200,6 @@ void VarArgTestCase::Sscanf()
 {
     int i = 0;
     char str[20];
-    wchar_t wstr[20];
 
     wxString input("42 test");
 
@@ -208,10 +207,18 @@ void VarArgTestCase::Sscanf()
     CPPUNIT_ASSERT( i == 42 );
     CPPUNIT_ASSERT( wxString(str) == "test" );
 
+#if !(defined(__MINGW32__) && \
+      defined(__USE_MINGW_ANSI_STDIO) && __USE_MINGW_ANSI_STDIO == 1)
+    // disable this test on mingw with __USE_MINGW_ANSI_STDIO=1
+    // to prevent a segmentation fault. See:
+    // https://sourceforge.net/p/mingw-w64/mailman/message/36118530/
+    wchar_t wstr[20];
+
     i = 0;
     wxSscanf(input, L"%d %s", &i, &wstr);
     CPPUNIT_ASSERT( i == 42 );
     CPPUNIT_ASSERT( wxString(wstr) == "test" );
+#endif
 }
 
 void VarArgTestCase::RepeatedPrintf()

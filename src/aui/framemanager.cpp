@@ -3998,7 +3998,7 @@ void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
 {
     // determine cursor
     wxAuiDockUIPart* part = HitTest(event.GetX(), event.GetY());
-    wxCursor cursor = wxNullCursor;
+    wxCursor cursor;
 
     if (part)
     {

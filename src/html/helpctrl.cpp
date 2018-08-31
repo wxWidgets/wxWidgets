@@ -58,7 +58,7 @@ void wxHtmlHelpController::Init(int style)
     m_helpDialog = NULL;
 #if wxUSE_CONFIG
     m_Config = NULL;
-    m_ConfigRoot = wxEmptyString;
+    m_ConfigRoot.clear();
 #endif // wxUSE_CONFIG
     m_titleFormat = _("Help: %s");
     m_FrameStyle = style;

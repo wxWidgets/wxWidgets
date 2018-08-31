@@ -29,7 +29,7 @@ sources before using it.
 
 If you use CMake, please see
 
-    https://docs.wxwidgets.org/trunk/overview_cmake.html
+    http://docs.wxwidgets.org/trunk/overview_cmake.html
 
 for building wxWidgets using it.
 
@@ -499,7 +499,7 @@ Building Applications Using wxWidgets
 
 If you want to use CMake for building your project, please see
 
-    https://docs.wxwidgets.org/trunk/overview_cmake.html#cmake_apps
+    http://docs.wxwidgets.org/trunk/overview_cmake.html#cmake_apps
 
 Otherwise follow the instructions below for "manual" setup of your project.
 

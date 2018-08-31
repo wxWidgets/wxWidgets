@@ -153,7 +153,10 @@ public:
         @param item2
             Second item to compare.
         @param column
-            The column holding the items to be compared.
+            The column holding the items to be compared. If the model class
+            overrides HasDefaultCompare() to return @true, this parameter will
+            be @c (unsigned)-1 when sorting items if no column is selected for
+            sorting them.
         @param ascending
             Indicates whether the sort is being performed in ascending or
             descending order.
@@ -273,7 +276,14 @@ public:
 
         If any other order (e.g. by index or order of appearance) is required,
         then this should be used.
+
+        Note that if this method is overridden to return @true, the
+        implementation of Compare() should be ready to accept @c (unsigned)-1
+        as the value for the column index parameter.
+
         See wxDataViewIndexListModel for a model which makes use of this.
+
+        @see Compare()
     */
     virtual bool HasDefaultCompare() const;
 
@@ -702,6 +712,17 @@ public:
         Call this to indicate that the item shall be displayed in italic text.
     */
     void SetItalic(bool set);
+
+    /**
+        Call this to indicate that the item shall be displayed in strikethrough
+        text.
+
+        Currently this attribute is only supported in the generic version of
+        wxDataViewCtrl and GTK and ignored by the native OS X implementations.
+
+        @since 3.1.2
+    */
+    void SetStrikethrough( bool set );
 
 
     /**

@@ -134,7 +134,14 @@ wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
 void wxGenericProgressDialog::SetTopParent(wxWindow* parent)
 {
     m_parent = parent;
-    m_parentTop = GetParentForModalDialog(parent, GetWindowStyle());
+
+    // Notice that we intentionally do not use GetParentForModalDialog() here
+    // as we don't want to disable the main application window if null parent
+    // was given (and GetParentForModalDialog() would fall back to it in this
+    // case). This allows creating modeless progress dialog, which can be
+    // useful even though it is also dangerous because it can easily result in
+    // unwanted reentrancies.
+    m_parentTop = parent;
 }
 
 bool wxGenericProgressDialog::Create( const wxString& title,

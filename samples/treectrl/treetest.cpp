@@ -240,7 +240,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     style_menu->AppendCheckItem(TreeTest_TogTwist, wxT("Toggle &twister buttons"));
     style_menu->AppendCheckItem(TreeTest_ToggleButtons, wxT("Toggle image &buttons"));
     style_menu->AppendSeparator();
-    style_menu->AppendCheckItem(TreeTest_TogLines, wxT("Toggle &connecting lines"));
+    style_menu->AppendCheckItem(TreeTest_TogLines, wxT("Toggle &no lines"));
     style_menu->AppendCheckItem(TreeTest_TogRootLines, wxT("Toggle &lines at root"));
     style_menu->AppendCheckItem(TreeTest_TogHideRoot, wxT("Toggle &hidden root"));
     style_menu->AppendCheckItem(TreeTest_TogBorder, wxT("Toggle &item border"));
@@ -387,7 +387,7 @@ void MyFrame::CreateTreeWithDefStyle()
     wxMenuBar *mbar = GetMenuBar();
     mbar->Check(TreeTest_TogButtons, (style & wxTR_HAS_BUTTONS) != 0);
     mbar->Check(TreeTest_TogButtons, (style & wxTR_TWIST_BUTTONS) != 0);
-    mbar->Check(TreeTest_TogLines, (style & wxTR_NO_LINES) == 0);
+    mbar->Check(TreeTest_TogLines, (style & wxTR_NO_LINES) != 0);
     mbar->Check(TreeTest_TogRootLines, (style & wxTR_LINES_AT_ROOT) != 0);
     mbar->Check(TreeTest_TogHideRoot, (style & wxTR_HIDE_ROOT) != 0);
     mbar->Check(TreeTest_TogEdit, (style & wxTR_EDIT_LABELS) != 0);
@@ -594,7 +594,9 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSelect(wxCommandEvent& WXUNUSED(event))
 {
-    m_treeCtrl->SelectItem(m_treeCtrl->GetFocusedItem());
+    const wxTreeItemId focus = m_treeCtrl->GetFocusedItem();
+    if ( focus.IsOk() )
+        m_treeCtrl->SelectItem(focus);
 }
 
 void MyFrame::OnSelectRoot(wxCommandEvent& WXUNUSED(event))

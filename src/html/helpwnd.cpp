@@ -268,7 +268,7 @@ void wxHtmlHelpWindow::Init(wxHtmlHelpData* data)
 
 #if wxUSE_CONFIG
     m_Config = NULL;
-    m_ConfigRoot = wxEmptyString;
+    m_ConfigRoot.clear();
 #endif // wxUSE_CONFIG
 
     m_Cfg.x = m_Cfg.y = wxDefaultCoord;
@@ -278,7 +278,8 @@ void wxHtmlHelpWindow::Init(wxHtmlHelpData* data)
     m_Cfg.navig_on = true;
 
     m_NormalFonts = m_FixedFonts = NULL;
-    m_NormalFace = m_FixedFace = wxEmptyString;
+    m_NormalFace.clear();
+    m_FixedFace.clear();
 #ifdef __WXMSW__
     m_FontSize = 10;
 #else

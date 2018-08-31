@@ -652,9 +652,12 @@ outlineView:(NSOutlineView*)outlineView
     for (NSUInteger i=0; i<noOfDescriptors; ++i)
     {
         NSSortDescriptor* const newDescriptor = [newDescriptors objectAtIndex:i];
+        wxDataViewColumn* const sortingColumn = dvc->GetColumn([[newDescriptor key] intValue]);
+
+        sortingColumn->SetSortOrderVariable([newDescriptor ascending]);
 
         [wxSortDescriptors addObject:[[[wxSortDescriptorObject alloc] initWithModelPtr:model
-            sortingColumnPtr:dvc->GetColumn([[newDescriptor key] intValue])
+            sortingColumnPtr:sortingColumn
             ascending:[newDescriptor ascending]] autorelease]];
     }
     [(wxCocoaOutlineDataSource*)[outlineView dataSource] setSortDescriptors:wxSortDescriptors];
@@ -2517,7 +2520,7 @@ void wxCocoaDataViewControl::SetRowHeight(int height)
 
 int wxCocoaDataViewControl::GetDefaultRowHeight() const
 {
-    // Custom setup of NSLayoutManager is necessary to match NSTableView sizing.
+    // Custom setup of NSLayoutManager is necessary to match NSTableView sizing.
     // See https://stackoverflow.com/questions/17095927/dynamically-changing-row-height-after-font-size-of-entire-nstableview-nsoutlin
     NSLayoutManager *lm = [[NSLayoutManager alloc] init];
     [lm setTypesetterBehavior:NSTypesetterBehavior_10_2_WithCompatibility];

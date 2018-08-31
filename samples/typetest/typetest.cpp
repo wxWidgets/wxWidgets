@@ -987,19 +987,19 @@ void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
     wxString text;
 
     wxInt32 var = 0xF1F2F3F4;
-    text = wxEmptyString;
+    text.clear();
     text.Printf( wxT("Value of wxInt32 is now: %#x.\n\n"), var );
     textCtrl.WriteText( text );
 
-    text = wxEmptyString;
+    text.clear();
     text.Printf( wxT("Value of swapped wxInt32 is: %#x.\n\n"), wxINT32_SWAP_ALWAYS( var ) );
     textCtrl.WriteText( text );
 
-    text = wxEmptyString;
+    text.clear();
     text.Printf( wxT("Value of wxInt32 swapped on little endian is: %#x.\n\n"), wxINT32_SWAP_ON_LE( var ) );
     textCtrl.WriteText( text );
 
-    text = wxEmptyString;
+    text.clear();
     text.Printf( wxT("Value of wxInt32 swapped on big endian is: %#x.\n\n"), wxINT32_SWAP_ON_BE( var ) );
     textCtrl.WriteText( text );
 }

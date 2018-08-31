@@ -582,7 +582,7 @@ enum wxPG_INTERNAL_FLAGS
     wxPG_FL_VALUE_CHANGE_IN_EVENT       = 0x10000000,
     // Editor control width should not change on resize
     wxPG_FL_FIXED_WIDTH_EDITOR          = 0x20000000,
-    // Width of panel can be different than width of grid
+    // Width of panel can be different from width of grid
     wxPG_FL_HAS_VIRTUAL_WIDTH           = 0x40000000,
     // Prevents RecalculateVirtualSize re-entrancy
     wxPG_FL_RECALCULATING_VIRTUAL_SIZE  = 0x80000000

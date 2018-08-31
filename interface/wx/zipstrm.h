@@ -598,11 +598,11 @@ public:
         Set the format of the archive.
 
         The normal zip format is limited to single files and the complete
-        archive smaller than 4GB with less then 65k files. If any of these
+        archive smaller than 4GB with less than 65k files. If any of these
         limits are exceeded, this class will automatically create a ZIP64 file,
         so in most situations calling SetFormat() is not necessary.
 
-        However to support single entries with more than 4GB of data
+        However, to support single entries with more than 4GB of data
         (compressed or original) whose sizes are unknown when adding the
         entry with PutNextEntry(), the format has to be set to
         wxZIP_FORMAT_ZIP64 before adding such entries.

@@ -199,7 +199,7 @@ wx_list_add_prefix(WIDGETS_RC_FILES icons/
     slider.xpm spinbtn.xpm statbmp.xpm statbox.xpm
     stattext.xpm text.xpm timepick.xpm toggle.xpm
     )
-wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC} 
+wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC}
     DATA ${WIDGETS_RC_FILES} textctrl.cpp
     LIBRARIES adv
     )
@@ -258,7 +258,7 @@ if(WIN32)
     if(MSVC)
         wx_add_sample(flash)
     endif()
-    #TODO: renable when sample is fixed
+    #TODO: reenable when sample is fixed
     #wx_add_sample(mfc mfctest.cpp mfctest.h resource.h stdafx.h RES mfctest.rc)
     wx_add_sample(nativdlg nativdlg.cpp nativdlg.h resource.h RES nativdlg.rc)
     wx_add_sample(oleauto DEPENDS wxUSE_OLE)

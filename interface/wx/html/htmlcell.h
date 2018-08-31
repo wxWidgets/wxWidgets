@@ -471,7 +471,21 @@ public:
     /**
         Constructor. @a parent is pointer to parent container or @NULL.
     */
-    wxHtmlContainerCell(wxHtmlContainerCell* parent);
+    explicit wxHtmlContainerCell(wxHtmlContainerCell* parent);
+
+    /**
+        Detach a child cell.
+
+        Detaching a cell removes it from this container and allows to reattach
+        it to another one by using InsertCell(). Alternatively, this method can
+        be used to selectively remove some elements of the HTML document tree
+        by deleting the cell after calling it.
+
+        @param cell Must be non-null and an immediate child of this cell.
+
+        @since 3.1.2
+     */
+    void Detach(wxHtmlCell* cell);
 
     /**
         Returns container's horizontal alignment.
@@ -506,6 +520,9 @@ public:
 
     /**
         Inserts a new cell into the container.
+
+        Note that the container takes ownership of the cell and will delete it
+        when it itself is destroyed.
     */
     void InsertCell(wxHtmlCell* cell);
 

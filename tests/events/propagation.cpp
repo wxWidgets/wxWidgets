@@ -445,10 +445,13 @@ wxMenu* CreateTestMenu(wxFrame* frame)
 // reliable than using wxUIActionSimulator and currently works in all ports as
 // they all call wxMenuBase::SendEvent() from their respective menu event
 // handlers.
-#define ASSERT_MENU_EVENT_RESULT(menu, result) \
-    g_str.clear();                             \
-    menu->SendEvent(wxID_APPLY);               \
+#define ASSERT_MENU_EVENT_RESULT_FOR(cmd, menu, result) \
+    g_str.clear();                                      \
+    menu->SendEvent(cmd);                               \
     CHECK( g_str == result )
+
+#define ASSERT_MENU_EVENT_RESULT(menu, result) \
+    ASSERT_MENU_EVENT_RESULT_FOR(wxID_APPLY, menu, result)
 
 void EventPropagationTestCase::MenuEvent()
 {
@@ -471,6 +474,17 @@ void EventPropagationTestCase::MenuEvent()
                           wxEvtHandler::SetNextHandler, (wxEvtHandler*)NULL );
     ASSERT_MENU_EVENT_RESULT( menu, "aomA" );
 
+
+    // Check that a handler can also be attached to a submenu.
+    wxMenu* const submenu = new wxMenu;
+    submenu->Append(wxID_ABOUT);
+    menu->Append(wxID_ANY, "Submenu", submenu);
+
+    TestMenuEvtHandler hs('s'); // 's' for "submenu"
+    submenu->SetNextHandler(&hs);
+    wxON_BLOCK_EXIT_OBJ1( *submenu,
+                          wxEvtHandler::SetNextHandler, (wxEvtHandler*)NULL );
+    ASSERT_MENU_EVENT_RESULT_FOR( wxID_ABOUT, submenu, "aosomA" );
 
     // Test that the event handler associated with the menu bar gets the event.
     TestMenuEvtHandler hb('b'); // 'b' for "menu Bar"

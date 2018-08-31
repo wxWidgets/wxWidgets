@@ -87,6 +87,8 @@ wxFont wxDataViewItemAttr::GetEffectiveFont(const wxFont& font) const
         f.MakeBold();
     if ( GetItalic() )
         f.MakeItalic();
+    if ( GetStrikethrough() )
+        f.MakeStrikethrough();
     return f;
 }
 

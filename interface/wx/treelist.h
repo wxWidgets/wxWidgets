@@ -212,6 +212,9 @@ extern const wxTreeListItem wxTLI_LAST;
     @style{wxTL_USER_3STATE}
         Same as wxTL_3STATE but the user can also set the checkboxes to the
         undetermined state. Implies wxTL_3STATE.
+    @style{wxTL_NO_HEADER}
+        Don't show the column headers, that are shown by default. Notice that
+        this style is only available since wxWidgets 2.9.5.
     @style{wxTL_DEFAULT_STYLE}
         Style used by the control by default, just wxTL_SINGLE currently.
     @endStyleTable
