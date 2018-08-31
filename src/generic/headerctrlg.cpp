@@ -490,6 +490,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #endif
 
     wxAutoBufferedPaintDC dc(this);
+    dc.Clear();
 
     // account for the horizontal scrollbar offset in the parent window
     dc.SetDeviceOrigin(m_scrollOffset, 0);
